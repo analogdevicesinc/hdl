@@ -5,7 +5,7 @@
 // a stream of output data without missing words.
 //////////////////////////////////////////////////////////////////////////////////
 
-// `timescale 1ps / 1ps
+`timescale 1ps / 1ps
 `default_nettype none
 
 module fill_holes #(
@@ -45,10 +45,11 @@ module fill_holes #(
   logic [$clog2((NUM_WORDS*3)+1)-1:0]       non_holes_cnt;
   genvar jj;
 
-  always @(posedge clk) begin
-    if(reset) begin
+  always_ff @(posedge clk) begin
+    if (reset) begin
       in_holes_d <= '0;
-      in_valid_d <=  '0;
+      in_valid_d <= '0;
+      in_data_d <= 'X;
     end else begin
       in_holes_d <= in_holes;
       in_data_d <= {in_data_d[2:1], in_data};
@@ -57,7 +58,7 @@ module fill_holes #(
   end
 
   // Count of non-holes words from 0 to jj for each word jj
-  for(jj=0;jj<NUM_WORDS;jj=jj+1) begin : move_holes_gen
+  for (jj=0; jj < NUM_WORDS; jj=jj+1) begin : move_holes_gen
     int kk;
     always_comb begin
       if(jj==0) begin
@@ -80,7 +81,7 @@ module fill_holes #(
     end
 
     // Register shifted data words
-    always @(posedge clk) begin
+    always_ff @(posedge clk) begin
       word_sel_d[jj] <= word_sel[jj];
       data_filled[jj*WORD_LENGTH+:WORD_LENGTH] <= in_data_d[3][word_sel_d[jj]*WORD_LENGTH+:WORD_LENGTH];
     end
@@ -95,7 +96,7 @@ module fill_holes #(
   assign non_holes_cnt_filled = non_holes_cnt_total_per_word_d[NUM_WORDS-1];
 
   // Register non-holes count
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     if(reset) begin
       non_holes_cnt_filled_valid <= '0;
       non_holes_cnt_filled_d <= 'X;
@@ -106,10 +107,11 @@ module fill_holes #(
   end
 
   // Concatenate input data to create output data
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     if(reset) begin
       non_holes_cnt <= '0;
       out_valid <= 1'b0;
+      data_stored <= 'X;
     end else begin
       non_holes_cnt <= non_holes_cnt_comb;
       out_valid <= non_holes_cnt_comb >= NUM_WORDS;

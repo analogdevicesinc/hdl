@@ -31,6 +31,7 @@ proc adi_axi_fsrc_rx_create {ip_name num_of_lanes num_of_converters samples_per_
     # Input/Output ports
     create_bd_pin -dir I -type clk ${ip_name}/link_clk
     create_bd_pin -dir I -type rst ${ip_name}/reset
+    create_bd_pin -dir I -type rst ${ip_name}/cpack_reset
     create_bd_pin -dir I ${ip_name}/adc_data_in_valid
     create_bd_pin -dir O ${ip_name}/adc_data_out_valid
     for {set i 0} {$i < $num_of_converters} {incr i} {
@@ -70,6 +71,7 @@ proc adi_axi_fsrc_rx_create {ip_name num_of_lanes num_of_converters samples_per_
 
     ad_connect ${ip_name}/link_clk           ${ip_name}/axi_fsrc_rx/clk
     ad_connect ${ip_name}/reset              ${ip_name}/axi_fsrc_rx/reset
+    ad_connect ${ip_name}/cpack_reset        ${ip_name}/axi_fsrc_rx/cpack_reset
     ad_connect ${ip_name}/data_concat/dout   ${ip_name}/axi_fsrc_rx/data_in
     ad_connect ${ip_name}/adc_data_in_valid  ${ip_name}/axi_fsrc_rx/data_in_valid
     ad_connect ${ip_name}/adc_data_out_valid ${ip_name}/axi_fsrc_rx/data_out_valid
