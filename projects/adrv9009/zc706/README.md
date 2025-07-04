@@ -1,4 +1,8 @@
+<!-- no_no_os -->
+
 # ADRV9009/ZC706 HDL Project
+
+- VADJ with which it was tested in hardware: 2.5V
 
 ## Building the project
 
