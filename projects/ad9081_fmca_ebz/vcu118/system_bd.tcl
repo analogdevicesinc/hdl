@@ -156,7 +156,8 @@ create_bd_port -dir I spi_2_sdi_i
 ad_ip_instance axi_quad_spi axi_spi_2
 ad_ip_parameter axi_spi_2 CONFIG.C_USE_STARTUP 0
 ad_ip_parameter axi_spi_2 CONFIG.C_NUM_SS_BITS 1
-ad_ip_parameter axi_spi_2 CONFIG.C_SCK_RATIO 8
+ad_ip_parameter axi_spi_2 CONFIG.C_SCK_RATIO 16
+ad_ip_parameter axi_spi_2 CONFIG.Multiples16 64
 
 ad_connect spi_2_csn_i axi_spi_2/ss_i
 ad_connect spi_2_csn_o axi_spi_2/ss_o
