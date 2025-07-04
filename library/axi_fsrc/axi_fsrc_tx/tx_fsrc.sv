@@ -84,7 +84,7 @@ module tx_fsrc #(
   for (ii = 0; ii < NUM_OF_CHANNELS; ii=ii+1) begin : in_fifo_gen
       fifo_sync_2deep #(
         .DWIDTH             (CHANNEL_WIDTH),
-        .DORESET            (1'b0),
+        .DORESET            (1'b1),
         .REGISTER_INTERFACE (1'b1)
       ) in_fifo (
         .aclk           (clk),
@@ -184,7 +184,7 @@ module tx_fsrc #(
   for (ii = 0; ii < NUM_OF_CHANNELS; ii=ii+1) begin : out_fifo_gen
     fifo_sync_2deep #(
       .DWIDTH             (CHANNEL_WIDTH),
-      .DORESET            (1'b0),
+      .DORESET            (1'b1),
       .REGISTER_INTERFACE (1'b1)
     ) out_fifo (
       .aclk           (clk),
