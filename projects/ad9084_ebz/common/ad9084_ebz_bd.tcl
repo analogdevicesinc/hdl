@@ -1267,6 +1267,7 @@ ad_connect cpack_rst_logic/res util_apollo_cpack/reset
 
 if {$FSRC_ENABLE} {
   ad_connect rx_device_clk_rstgen/peripheral_reset fsrc_rx/reset
+  ad_connect cpack_rst_logic/res fsrc_rx/cpack_reset
 }
 
 if {$ASYMMETRIC_A_B_MODE} {
