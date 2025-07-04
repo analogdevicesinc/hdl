@@ -619,7 +619,6 @@ ad_ip_instance util_upack2 util_apollo_upack [list \
 
 if {$FSRC_ENABLE} {
   ad_ip_instance axi_fsrc_tx fsrc_tx
-
   ad_ip_parameter fsrc_tx CONFIG.NUM_OF_CHANNELS     $TX_NUM_OF_CONVERTERS
   ad_ip_parameter fsrc_tx CONFIG.SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL
   ad_ip_parameter fsrc_tx CONFIG.SAMPLE_DATA_WIDTH   $TX_DMA_SAMPLE_WIDTH
@@ -692,9 +691,10 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   if {$FSRC_ENABLE} {
     ad_ip_instance axi_fsrc_tx fsrc_tx_b
-    ad_ip_parameter fsrc_tx_b CONFIG.DATA_WIDTH  $dac_b_data_width
-    ad_ip_parameter fsrc_tx_b CONFIG.NP          $TX_B_DMA_SAMPLE_WIDTH
-    ad_ip_parameter fsrc_tx_b CONFIG.ACCUM_WIDTH $FSRC_ACCUM_WIDTH
+    ad_ip_parameter fsrc_tx_b CONFIG.NUM_OF_CHANNELS     $TX_B_NUM_OF_CONVERTERS
+    ad_ip_parameter fsrc_tx_b CONFIG.SAMPLES_PER_CHANNEL $TX_B_SAMPLES_PER_CHANNEL
+    ad_ip_parameter fsrc_tx_b CONFIG.SAMPLE_DATA_WIDTH   $TX_B_DMA_SAMPLE_WIDTH
+    ad_ip_parameter fsrc_tx_b CONFIG.ACCUM_WIDTH         $FSRC_ACCUM_WIDTH
 
     ad_connect fsrc_tx_b/tx_data_start fsrc_ctrl/tx_data_start
   }
