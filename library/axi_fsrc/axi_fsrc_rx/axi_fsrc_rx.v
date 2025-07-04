@@ -38,12 +38,13 @@ module axi_fsrc_rx #(
   parameter SAMPLES_PER_CHANNEL = 1,
   parameter SAMPLE_DATA_WIDTH = 16
 ) (
-  input                       clk,
-  input                       reset,
-  input      data_in_valid,
-  input      [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] data_in,
-  output reg data_out_valid,
-  output reg [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] data_out,
+  input  clk,
+  input  reset,
+  input  cpack_reset,
+  input  data_in_valid,
+  input  [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] data_in,
+  output data_out_valid,
+  output [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] data_out,
 
   // axi interface
   input                       s_axi_aclk,
@@ -90,9 +91,12 @@ module axi_fsrc_rx #(
   wire [13:0] up_waddr_s;
   wire [31:0] up_wdata_s;
 
-  wire                  enable;
-  wire [DATA_WIDTH-1:0] data_out_s;
-  wire                  data_out_valid_s;
+  wire enable;
+  wire reset_s;
+
+  reg [DATA_WIDTH-1:0] data_in_d;
+  reg                  data_in_valid_d;
+  assign reset_s = reset || cpack_reset;
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -148,19 +152,28 @@ module axi_fsrc_rx #(
 
   rx_fsrc_remove_invalid #(
     .DATA_WIDTH (DATA_WIDTH),
+    .NUM_OF_CHANNELS (NUM_OF_CHANNELS),
     .NP (NP)
   ) remove_invalid (
     .clk (clk),
-    .reset (reset),
+    .reset (reset_s),
     .fsrc_en (enable),
-    .in_data (data_in),
-    .in_valid (data_in_valid),
-    .out_data (data_out_s),
-    .out_valid (data_out_valid_s));
+    .in_data (data_in_d),
+    .in_valid (data_in_valid_d),
+    .out_data (data_out),
+    .out_valid (data_out_valid));
 
   always @(posedge clk) begin
-    data_out <= data_out_s;
-    data_out_valid <= data_out_valid_s;
+    if (reset_s) begin
+      data_in_valid_d <= 1'b0;
+    end else begin
+      data_in_valid_d <= data_in_valid;
+    end
   end
+
+  always @(posedge clk) begin
+    data_in_d <= data_in;
+  end
+
 
 endmodule
