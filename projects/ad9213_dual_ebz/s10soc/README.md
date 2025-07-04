@@ -1,4 +1,8 @@
-# AD9213-DUAL-EBZ HDL Project
+<!-- no_build_example, no_no_os, no_dts -->
+
+# AD9213-DUAL-EBZ/S10SOC HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
