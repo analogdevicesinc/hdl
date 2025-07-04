@@ -1,13 +1,17 @@
-# AD9694-FMC HDL Project
+<!-- no_no_os -->
+
+# AD9695-FMC/ZCU102 HDL Project
 
 :warning: For the 625MSPS variant, additional changes need to be done, which currently are not supported by our reference design!
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
 The parameters configurable through the `make` command, can be found below, as well as in the **system_project.tcl** file; it contains the default configuration.
 
 ```
-cd projects/ad9694_fmc/zcu102
+cd projects/ad9695_fmc/zcu102
 make
 ```
 
