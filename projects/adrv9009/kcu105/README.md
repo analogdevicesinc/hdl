@@ -1,4 +1,8 @@
+<!-- no_no_os -->
+
 # ADRV9009/KCU105 HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
