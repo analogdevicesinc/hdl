@@ -1,4 +1,8 @@
+<!-- no_build_example, no_dts -->
+
 # AD9656-FMC/ZCU102 HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
