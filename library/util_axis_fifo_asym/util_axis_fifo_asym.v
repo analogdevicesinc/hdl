@@ -76,7 +76,7 @@ module util_axis_fifo_asym #(
   // bus width ratio
   localparam RATIO = (RATIO_TYPE) ? S_DATA_WIDTH/M_DATA_WIDTH : M_DATA_WIDTH/S_DATA_WIDTH;
 
-  // atomic parameters - NOTE: depth is always defined by the slave attributes
+  // atomic parameters - NOTE: depth is defined by the slave attributes by default
   localparam A_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
   localparam A_ADDRESS = (ADDRESS_WIDTH_PERSPECTIVE) ?
     ((FIFO_LIMITED) ? ((RATIO_TYPE) ? (ADDRESS_WIDTH-$clog2(RATIO)) : ADDRESS_WIDTH) : ADDRESS_WIDTH) :
@@ -271,14 +271,7 @@ module util_axis_fifo_asym #(
     end
 
   endgenerate
-
-  // slave handshake counter
-
-  reg s_axis_tlast_d = 0;
-  always @(posedge s_axis_aclk) begin
-    s_axis_tlast_d <= s_axis_tlast;
-  end
-
+  
   generate
     if (RATIO == 1) begin
       initial begin
