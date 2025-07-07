@@ -188,7 +188,7 @@ module axi_fsrc_tx #(
     .debug_flags (debug_flags),
 
     .enable (enable),
-    .start(start_s),
+    .start (start_s),
     .stop (stop),
     .conv_mask (conv_mask),
     .accum_set_val (accum_set_val),
