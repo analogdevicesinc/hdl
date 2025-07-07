@@ -35,18 +35,6 @@ add_instance spi_engine_interconnect_0 spi_engine_interconnect
 set_instance_parameter_value spi_engine_interconnect_0 {DATA_WIDTH} {32}
 set_instance_parameter_value spi_engine_interconnect_0 {NUM_OF_SDI} {1}
 
-# bridges
-
-add_instance clock_bridge_0 altera_clock_bridge
-set_instance_parameter_value clock_bridge_0 {EXPLICIT_CLOCK_RATE} {0.0}
-set_instance_parameter_value clock_bridge_0 {NUM_CLOCK_OUTPUTS} {1}
-
-add_instance reset_bridge_0 altera_reset_bridge
-set_instance_parameter_value reset_bridge_0 {ACTIVE_LOW_RESET} {1}
-set_instance_parameter_value reset_bridge_0 {NUM_RESET_OUTPUTS} {1}
-set_instance_parameter_value reset_bridge_0 {SYNCHRONOUS_EDGES} {none}
-set_instance_parameter_value reset_bridge_0 {USE_RESET_REQUEST} {0}
-
 # spi_engine_offload
 
 add_instance spi_engine_offload_0 spi_engine_offload
@@ -111,7 +99,6 @@ add_interface ad469x_spi_sdi        conduit end
 add_interface ad469x_spi_sdo        conduit end
 add_interface ad469x_spi_trigger    conduit end
 add_interface ad469x_spi_cnv        conduit end
-add_interface ad469x_spi_resetn     reset source
 
 set_interface_property ad469x_spi_cs      EXPORT_OF spi_engine_execution_0.if_cs
 set_interface_property ad469x_spi_sclk    EXPORT_OF spi_engine_execution_0.if_sclk
@@ -119,15 +106,8 @@ set_interface_property ad469x_spi_sdi     EXPORT_OF spi_engine_execution_0.if_sd
 set_interface_property ad469x_spi_sdo     EXPORT_OF spi_engine_execution_0.if_sdo
 set_interface_property ad469x_spi_trigger EXPORT_OF spi_engine_offload_0.if_trigger
 set_interface_property ad469x_spi_cnv     EXPORT_OF ad469x_trigger_gen.if_pwm_0
-set_interface_property ad469x_spi_resetn  EXPORT_OF reset_bridge_0.out_reset
-
-add_connection axi_spi_engine_0.if_spi_resetn reset_bridge_0.in_reset
 
 # clocks
-
-add_interface ad469x_spi_clk            clock source
-set_interface_property ad469x_spi_clk   EXPORT_OF clock_bridge_0.out_clk
-
 
 add_connection sys_clk.clk spi_clk_pll.refclk
 add_connection sys_clk.clk spi_clk_pll_reconfig.mgmt_clk
