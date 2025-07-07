@@ -25,7 +25,7 @@ module tx_fsrc_sample_en_gen #(
 
   genvar ii;
 
-  for(ii=0; ii<NUM_SAMPLES; ii=ii+1) begin : accum_gen
+  for (ii=0; ii < NUM_SAMPLES; ii=ii+1) begin : accum_gen
     accum_set #(
       .WIDTH  (ACCUM_WIDTH)
     ) accum_set (
