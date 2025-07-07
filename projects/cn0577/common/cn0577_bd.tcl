@@ -1,9 +1,21 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# ltc2387
+# env params
+
+set ADC_RES $ad_project_params(ADC_RES);    # ADC resolution; default 18 bits
+if {$ADC_RES == 16} {
+  set OUT_RES 16
+} else {
+  # if ADC_RES == 18
+  set OUT_RES 32
+}
+set TWOLANES $ad_project_params(TWOLANES);  # two-lane mode (1) or one-lane mode (0); default two-lane
+
+# ltc2387 i/o
+
 create_bd_port -dir I ref_clk
 create_bd_port -dir O sampling_clk
 create_bd_port -dir I dco_p
@@ -18,9 +30,9 @@ create_bd_port -dir O clk_gate
 # adc peripheral
 
 ad_ip_instance axi_ltc2387 axi_ltc2387
-ad_ip_parameter axi_ltc2387 CONFIG.ADC_RES 18
-ad_ip_parameter axi_ltc2387 CONFIG.OUT_RES 32
-ad_ip_parameter axi_ltc2387 CONFIG.TWOLANES $two_lanes
+ad_ip_parameter axi_ltc2387 CONFIG.ADC_RES $ADC_RES
+ad_ip_parameter axi_ltc2387 CONFIG.OUT_RES $OUT_RES
+ad_ip_parameter axi_ltc2387 CONFIG.TWOLANES $TWOLANES
 ad_ip_parameter axi_ltc2387 CONFIG.ADC_INIT_DELAY 27
 
 # axi pwm gen
@@ -43,7 +55,7 @@ ad_ip_parameter axi_ltc2387_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ltc2387_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ltc2387_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_DATA_WIDTH_SRC $OUT_RES
 ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # connections
