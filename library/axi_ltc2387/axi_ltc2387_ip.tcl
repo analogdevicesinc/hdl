@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -38,8 +38,7 @@ ipx::infer_bus_interface ref_clk xilinx.com:signal:clock_rtl:1.0 $cc
 ipx::infer_bus_interface dco_p xilinx.com:signal:clock_rtl:1.0 $cc
 ipx::infer_bus_interface dco_n xilinx.com:signal:clock_rtl:1.0 $cc
 
-ipgui::add_static_text -name {Warning} -component $cc -parent $page0 -text {In one-lane mode, only 18-bit resolution is supported!
-Output data width (OUT_RES) depends on ADC_RES!}
+ipgui::add_static_text -name {Warning} -component $cc -parent $page0 -text {In one-lane mode, only 18-bit resolution is supported!}
 
 ipx::add_user_parameter ADC_RES $cc
 set_property value_resolve_type user [ipx::get_user_parameters ADC_RES -of_objects $cc]
@@ -57,24 +56,6 @@ set_property -dict [list \
   "value_validation_type" "list" \
   "value_validation_list" "18 16" \
 ] [ipx::get_user_parameters ADC_RES -of_objects $cc]
-
-# OUT_RES depends on the value of ADC_RES, and is set in the project
-ipx::add_user_parameter OUT_RES $cc
-set_property value_resolve_type user [ipx::get_user_parameters OUT_RES -of_objects $cc]
-ipgui::add_param -name "OUT_RES" -component $cc -parent $page0
-set_property -dict [list \
-  "display_name" "OUT_RES" \
-  "layout" "horizontal" \
-  "tooltip" "Output data width" \
-  "widget" "radioGroup" \
-] [ipgui::get_guiparamspec -name "OUT_RES" -component $cc]
-
-set_property -dict [list \
-  "value" "32" \
-  "value_format" "long" \
-  "value_validation_type" "list" \
-  "value_validation_list" "32 16" \
-] [ipx::get_user_parameters OUT_RES -of_objects $cc]
 
 ipx::add_user_parameter TWOLANES $cc
 set_property value_resolve_type user [ipx::get_user_parameters TWOLANES -of_objects $cc]

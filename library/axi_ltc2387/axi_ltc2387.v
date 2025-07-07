@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -52,7 +52,7 @@ module axi_ltc2387 #(
   parameter OUT_RES = 32, // 32-bit for ADC_RES=18 or 16-bit for ADC_RES=16
   parameter TWOLANES = 1
 ) (
-  input                     delay_clk,
+  input                    delay_clk,
 
   // adc interface
 
@@ -159,7 +159,7 @@ module axi_ltc2387 #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .IO_DELAY_GROUP (IO_DELAY_GROUP),
     .DELAY_REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY),
-    .RESOLUTION (ADC_RES),
+    .ADC_RES (ADC_RES),
     .IODELAY_CTRL (IODELAY_CTRL),
     .TWOLANES (TWOLANES)
   ) i_if (
