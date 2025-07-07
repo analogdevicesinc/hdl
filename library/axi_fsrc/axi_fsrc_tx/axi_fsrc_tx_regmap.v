@@ -52,6 +52,9 @@ module axi_fsrc_tx_regmap #(
   output [ACCUM_WIDTH-1:0] accum_add_val,
   output reg [NUM_SAMPLES-1:0][ACCUM_WIDTH-1:0] accum_set_val,
 
+  // debug interface
+  input [31:0]   debug_flags,
+
   // axi interface
   input                   up_rstn,
   input                   up_clk,
@@ -71,6 +74,7 @@ module axi_fsrc_tx_regmap #(
   wire [31:0] enable_s;
   wire [31:0] ctrl_transmit;
   wire [31:0] conv_mask_s;
+  wire [31:0] up_debug_flags_s;
 
   wire stop_s;
   wire start_s;
@@ -165,6 +169,7 @@ module axi_fsrc_tx_regmap #(
           14'ha:   up_rdata <= up_accum_set_val_s;
           14'hb:   up_rdata <= up_accum_set_val_2_s;
           14'hc:   up_rdata <= ACCUM_WIDTH;
+          14'hd:   up_rdata <= up_debug_flags_s;
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -212,6 +217,14 @@ module axi_fsrc_tx_regmap #(
     .in_bits({up_accum_set_val_2_s, up_accum_set_val_s, up_accum_set_val_addr_s, up_accum_set_val_apply_s}),
     .out_clk(clk),
     .out_bits({accum_set_val_s, accum_set_val_addr, accum_set_val_apply}));
+
+  sync_bits #(
+    .NUM_OF_BITS (32),
+    .ASYNC_CLK (1)
+  ) debug_flags_sync (
+    .in_bits(debug_flags),
+    .out_clk(up_clk),
+    .out_bits(up_debug_flags_s));
 
   genvar j;
   for (j=0; j < NUM_SAMPLES; j=j+1) begin : set_val_gen

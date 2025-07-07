@@ -104,6 +104,7 @@ module axi_fsrc_tx #(
   wire        start_s;
   wire        accum_set;
   wire [15:0] conv_mask;
+  wire [31:0] debug_flags;
   wire [ACCUM_WIDTH-1:0] accum_add_val;
   wire [NUM_SAMPLES-1:0][ACCUM_WIDTH-1:0] accum_set_val;
 
@@ -157,6 +158,7 @@ module axi_fsrc_tx #(
     .conv_mask (conv_mask),
     .accum_add_val (accum_add_val),
     .accum_set_val (accum_set_val),
+    .debug_flags (debug_flags),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -182,6 +184,8 @@ module axi_fsrc_tx #(
   ) i_tx_fsrc (
     .clk (clk),
     .reset (reset),
+
+    .debug_flags (debug_flags),
 
     .enable (enable),
     .start(start_s),

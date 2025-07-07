@@ -14,8 +14,10 @@ module tx_fsrc #(
   parameter ACCUM_WIDTH = 64,
   parameter NUM_SAMPLES = 16
 )(
-  input  wire                                         clk,
-  input  wire                                         reset,
+  input  wire clk,
+  input  wire reset,
+
+  output reg [31:0] debug_flags,
 
   input  wire                                         enable,
   input  wire                                         start,
@@ -58,6 +60,7 @@ module tx_fsrc #(
   logic                   fsrc_data_en;
   logic [NUM_OF_CHANNELS-1:0] in_ready_s;
   logic [NUM_OF_CHANNELS-1:0] out_valid_s;
+  logic debug_enable;
 
   wire [NUM_OF_CHANNELS-1:0][CHANNEL_WIDTH-1:0] in_data_arr;
   wire [NUM_OF_CHANNELS-1:0][CHANNEL_WIDTH-1:0] out_data_arr;
@@ -78,6 +81,7 @@ module tx_fsrc #(
       end else if (start & in_valid) begin
         fsrc_data_en <= 1'b1;
       end
+      debug_enable <= enable;
     end
   end
 
@@ -201,6 +205,15 @@ module tx_fsrc #(
     );
   end
   assign out_valid = |out_valid_s;
+
+  always @(posedge clk) begin
+    debug_flags[31:5] <= 'b0;
+    debug_flags[4] <= in_valid;
+    debug_flags[3] <= out_ready;
+    debug_flags[2] <= holes_ready;
+    debug_flags[1] <= fsrc_data_en;
+    debug_flags[0] <= debug_enable;
+  end
 
 endmodule
 
