@@ -51,7 +51,7 @@ Supported carriers
    :class: note
 
    - ``*`` removed; last release that supports this project on this carrier is
-      :git-hdl:`hdl_2023_r2 <hdl_2023_r2:projects/ad6676_evb/vc707>`
+     :git-hdl:`hdl_2023_r2 <hdl_2023_r2:projects/ad6676_evb/vc707>`
 
 Block design
 -------------------------------------------------------------------------------
