@@ -13,7 +13,7 @@ module tx_fsrc #(
   parameter DATA_WIDTH = 256,
   parameter ACCUM_WIDTH = 64,
   parameter NUM_SAMPLES = 16
-)(
+) (
   input  wire clk,
   input  wire reset,
 
@@ -78,7 +78,7 @@ module tx_fsrc #(
     end else begin
       if (~enable || stop) begin
         fsrc_data_en <= 1'b0;
-      end else if (start & in_valid) begin
+      end else if (start) begin
         fsrc_data_en <= 1'b1;
       end
       debug_enable <= enable;
@@ -107,7 +107,7 @@ module tx_fsrc #(
   assign in_ready = |in_ready_s;
 
   always_ff @(posedge clk) begin
-    if(reset) begin
+    if (reset) begin
       fsrc_in_single_valid <= 1'b0;
     end else begin
       fsrc_in_single_valid <= enable && &(in_fifo_out_valid_next | ~conv_mask);
@@ -139,7 +139,7 @@ module tx_fsrc #(
   end
 
   always_ff @(posedge clk) begin
-    if(reset) begin
+    if (reset) begin
       fsrc_out_ready <= 1'b0;
     end else begin
       fsrc_out_ready <= enable && &(out_fifo_in_ready_next | ~conv_mask);
@@ -207,12 +207,18 @@ module tx_fsrc #(
   assign out_valid = |out_valid_s;
 
   always @(posedge clk) begin
-    debug_flags[31:5] <= 'b0;
-    debug_flags[4] <= in_valid;
-    debug_flags[3] <= out_ready;
-    debug_flags[2] <= holes_ready;
-    debug_flags[1] <= fsrc_data_en;
-    debug_flags[0] <= debug_enable;
+    debug_flags[31:8] <= 'b0;
+    debug_flags[7] <= in_valid;
+    debug_flags[6] <= out_ready;
+    debug_flags[5] <= holes_ready;
+    debug_flags[4] <= fsrc_data_en;
+    debug_flags[3] <= debug_enable;
+  end
+
+  always @(*) begin
+    debug_flags[2] <= enable;
+    debug_flags[1] <= reset;
+    debug_flags[0] <= 1'b1;
   end
 
 endmodule
