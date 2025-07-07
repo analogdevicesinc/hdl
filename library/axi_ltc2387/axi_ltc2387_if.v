@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -44,7 +44,7 @@ module axi_ltc2387_if #(
   parameter IODELAY_CTRL = 1,
   parameter DELAY_REFCLK_FREQUENCY = 200,
   parameter TWOLANES = 1,    // 0 for one-lane, 1 for two lanes
-  parameter RESOLUTION = 18  // 16 or 18 bits
+  parameter ADC_RES = 18  // 16 or 18 bits
 ) (
 
   // delay interface
@@ -68,12 +68,12 @@ module axi_ltc2387_if #(
   input             db_p,
   input             db_n,
 
-  output reg                  adc_valid,
-  output reg [RESOLUTION-1:0] adc_data
+  output reg               adc_valid,
+  output reg [ADC_RES-1:0] adc_data
 );
 
-  localparam ONE_L_WIDTH = (RESOLUTION == 18) ? 9 : 8;
-  localparam TWO_L_WIDTH = (RESOLUTION == 18) ? 5 : 4;
+  localparam ONE_L_WIDTH = (ADC_RES == 18) ? 9 : 8;
+  localparam TWO_L_WIDTH = (ADC_RES == 18) ? 5 : 4;
   localparam WIDTH = (TWOLANES == 0) ? ONE_L_WIDTH : TWO_L_WIDTH;
 
   // internal wires
@@ -100,7 +100,7 @@ module axi_ltc2387_if #(
     adc_valid <= 1'b0;
     clk_gate_d <= {clk_gate_d[1:0], clk_gate};
     if (clk_gate_d[1] == 1'b1 && clk_gate_d[0] == 1'b0) begin
-      if (RESOLUTION == 18) begin
+      if (ADC_RES == 18) begin
         adc_data <= adc_data_int;
         adc_valid <= 1'b1;
       end else begin
@@ -139,7 +139,7 @@ module axi_ltc2387_if #(
     assign adc_data_int[1] = da_p_int_s;
     assign adc_data_int[0] = da_n_int_s;
   end else begin
-    if (RESOLUTION == 18) begin
+    if (ADC_RES == 18) begin
       assign adc_data_int[17] = adc_data_da_p[3];
       assign adc_data_int[16] = adc_data_db_p[3];
       assign adc_data_int[15] = adc_data_da_n[3];
