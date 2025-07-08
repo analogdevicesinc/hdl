@@ -15,8 +15,9 @@ set ip [ipl::general -ip $ip -display_name "AXI_DMA ADI"]
 set ip [ipl::general -ip $ip -supported_products {*}]
 set ip [ipl::general -ip $ip -supported_platforms {esi radiant}]
 set ip [ipl::general -ip $ip -href "https://analogdevicesinc.github.io/hdl/library/axi_dmac/index.html"]
+set version [ipl::set_ip_version_from_file -file "axi_dmac_regmap.v"]
 set ip [ipl::general \
-    -vlnv "analog.com:ip:axi_dmac:1.0" \
+    -vlnv "analog.com:ip:axi_dmac:$version" \
     -category "ADI" \
     -keywords "ADI IP" \
     -min_radiant_version "2023.2" \

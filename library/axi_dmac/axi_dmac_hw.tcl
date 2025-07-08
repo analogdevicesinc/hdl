@@ -56,6 +56,7 @@ ad_ip_files axi_dmac [list \
   axi_dmac.v \
   axi_dmac_constr.sdc \
 ]
+ad_set_ip_version_from_file "axi_dmac_regmap.v"
 
 # Disable dual-clock RAM read-during-write behaviour warning.
 set_qip_strings { "set_instance_assignment -name MESSAGE_DISABLE 276027 -entity axi_dmac_burst_memory" }
