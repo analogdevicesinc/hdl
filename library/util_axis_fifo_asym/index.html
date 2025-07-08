@@ -7,9 +7,9 @@
 
     <title>Asymmetric AXI Stream FIFO &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=c218d0f6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=25ed7d6a" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script defer="" src="../../_static/app.umd.js?v=5e042acc"></script>
+    <script defer="" src="../../_static/app.umd.js?v=80d097f0"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -488,17 +488,9 @@ clock domain.</p>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td class="range"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">FIFO_LIMITED</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">REDUCED_FIFO</span></code></td>
 <td class="description"><section>
-<p>Enable the address limit that is set to the FIFO with respect to the specified address size</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
-<td class="range"><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ADDRESS_WIDTH_PERSPECTIVE</span></code></td>
-<td class="description"><section>
-<p>Sets address size from the perspective of Master (1) or Slave (0)</p>
+<p>Reduce the FIFO size when master and slave data widths are not equal</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
@@ -654,7 +646,7 @@ clock domain.</p>
 </td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_level</span></code></td>
-<td><p>out [31:0]</p></td>
+<td><p>out [4:0]</p></td>
 <td><p></p></td>
 <td class="description"><section>
 <p>Indicates how much data is in the FIFO</p>
@@ -720,13 +712,11 @@ blocks are calculated as follows:</p>
 <span class="k">localparam</span><span class="w"> </span><span class="n">RATIO_TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">S_DATA_WIDTH</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">M_DATA_WIDTH</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mh">1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mh">0</span><span class="p">;</span>
 <span class="c1">// bus width ratio</span>
 <span class="k">localparam</span><span class="w"> </span><span class="n">RATIO</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">RATIO_TYPE</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">S_DATA_WIDTH</span><span class="o">/</span><span class="n">M_DATA_WIDTH</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">M_DATA_WIDTH</span><span class="o">/</span><span class="n">S_DATA_WIDTH</span><span class="p">;</span>
-<span class="c1">// atomic parameters - NOTE: depth is defined by master or slave and limitation attributes</span>
+<span class="c1">// atomic parameters</span>
 <span class="k">localparam</span><span class="w"> </span><span class="n">A_WIDTH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">RATIO_TYPE</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">M_DATA_WIDTH</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">S_DATA_WIDTH</span><span class="p">;</span>
-<span class="k">localparam</span><span class="w"> </span><span class="n">A_ADDRESS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ADDRESS_WIDTH_PERSPECTIVE</span><span class="p">)</span><span class="w"> </span><span class="o">?</span>
-<span class="w">    </span><span class="p">((</span><span class="n">FIFO_LIMITED</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">((</span><span class="n">RATIO_TYPE</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">(</span><span class="n">ADDRESS_WIDTH</span><span class="o">-</span><span class="n">$clog2</span><span class="p">(</span><span class="n">RATIO</span><span class="p">))</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">ADDRESS_WIDTH</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">ADDRESS_WIDTH</span><span class="p">)</span><span class="w"> </span><span class="o">:</span>
-<span class="w">    </span><span class="p">((</span><span class="n">FIFO_LIMITED</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">((</span><span class="n">RATIO_TYPE</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">ADDRESS_WIDTH</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">ADDRESS_WIDTH</span><span class="o">-</span><span class="n">$clog2</span><span class="p">(</span><span class="n">RATIO</span><span class="p">)))</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">ADDRESS_WIDTH</span><span class="p">);</span>
-<span class="k">localparam</span><span class="w"> </span><span class="n">A_ALMOST_FULL_THRESHOLD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">RATIO_TYPE</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">ALMOST_FULL_THRESHOLD</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">ALMOST_FULL_THRESHOLD</span><span class="o">/</span><span class="n">RATIO</span><span class="p">);</span>
-<span class="k">localparam</span><span class="w"> </span><span class="n">A_ALMOST_EMPTY_THRESHOLD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">RATIO_TYPE</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">(</span><span class="n">ALMOST_EMPTY_THRESHOLD</span><span class="o">/</span><span class="n">RATIO</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">ALMOST_EMPTY_THRESHOLD</span><span class="p">;</span>
+<span class="k">localparam</span><span class="w"> </span><span class="n">A_ADDRESS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">REDUCED_FIFO</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">(</span><span class="n">ADDRESS_WIDTH</span><span class="o">-</span><span class="n">$clog2</span><span class="p">(</span><span class="n">RATIO</span><span class="p">))</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">ADDRESS_WIDTH</span><span class="p">;</span>
+<span class="k">localparam</span><span class="w"> </span><span class="n">A_ALMOST_FULL_THRESHOLD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">REDUCED_FIFO</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">((</span><span class="n">ALMOST_FULL_THRESHOLD</span><span class="o">+</span><span class="n">RATIO</span><span class="o">-</span><span class="mh">1</span><span class="p">)</span><span class="o">/</span><span class="n">RATIO</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">ALMOST_FULL_THRESHOLD</span><span class="p">;</span>
+<span class="k">localparam</span><span class="w"> </span><span class="n">A_ALMOST_EMPTY_THRESHOLD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">REDUCED_FIFO</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">((</span><span class="n">ALMOST_EMPTY_THRESHOLD</span><span class="o">+</span><span class="n">RATIO</span><span class="o">-</span><span class="mh">1</span><span class="p">)</span><span class="o">/</span><span class="n">RATIO</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">ALMOST_EMPTY_THRESHOLD</span><span class="p">;</span>
 </pre></div>
 </div>
 <section id="status-signal-delays">
@@ -749,10 +739,10 @@ case of a full FIFO all the write operations are suspended. In case of an
 empty FIFO all the read operations are suspended.</p></li>
 <li><p>ALMOST_EMPTY/ALMOST_FULL - It can be used to foresee a potential FULL or
 EMPTY state, asserting before the EMPTY/FULL before a predefined number of
-word. The offset between ALMOST_EMPTY and EMPTY, and between ALMOST_FULL and
+words. The offset between ALMOST_EMPTY and EMPTY, and between ALMOST_FULL and
 FULL can be set by using the parameters ALMOST_EMPTY_THRESHOLD and
-ALMOST_FULL_THRESHOLD. The offset values are automatically adjusted
-according to M_DATA_WIDTH and S_DATA_WIDTH ratio.</p></li>
+ALMOST_FULL_THRESHOLD. The offset values are automatically adjusted according
+to M_DATA_WIDTH and S_DATA_WIDTH ratio when REDUCED_FIFO is enabled.</p></li>
 <li><p>S_AXIS_ROOM - Indicate how many word can be written in the FIFO at the
 current moment, until the FIFO become FULL.</p></li>
 <li><p>M_AXIS_LEVEL - Indicate how many word can be read from the FIFO at the
@@ -761,25 +751,14 @@ current moment, until the FIFO become EMPTY.</p></li>
 </section>
 <section id="fifo-depth-calculation">
 <h3>FIFO Depth Calculation<a class="headerlink" href="#fifo-depth-calculation" title="Permalink to this heading"></a></h3>
-<p>The FIFO Depth is calculated based on parameters M_DATA_WIDTH, S_DATA_WIDTH,
-ADDRESS_WIDTH, FIFO_LIMITED and ADDRESS_WIDTH_PERSPECTIVE:</p>
+<p>The FIFO Depth is calculated based on M_DATA_WIDTH, S_DATA_WIDTH,
+ADDRESS_WIDTH and REDUCED_FIFO parameters:</p>
 <ul class="simple">
-<li><p>ADDRESS_WIDTH_PERSPECTIVE is 1 and FIFO_LIMITED is 1 - This means that the
-address specified is from the perspective of the Master interface. Since
-the limit is enabled the FIFO size will be reduced if the S_DATA_WIDTH
-is &gt; M_DATA_WIDTH, leading to a smaller FIFO implementation.</p></li>
-<li><p>ADDRESS_WIDTH_PERSPECTIVE is 1 and FIFO_LIMITED is 0 - This means that the
-address specified is from the perspective of the Master interface. Since
-the limit is disabled the FIFO size will remain the same if the S_DATA_WIDTH
-is &gt; M_DATA_WIDTH, leading to a bigger FIFO implementation.</p></li>
-<li><p>ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 1 - This means that the
-address specified is from the perspective of the Slave interface. Since
-the limit is enabled the FIFO size will be reduced if the S_DATA_WIDTH
-is &lt; M_DATA_WIDTH, leading to a smaller FIFO implementation.</p></li>
-<li><p>ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 0 - This means that the
-address specified is from the perspective of the Slave interface. Since
-the limit is disabled the FIFO size will remain the same if the S_DATA_WIDTH
-is &lt; M_DATA_WIDTH, leading to a bigger FIFO implementation.</p></li>
+<li><p>When M_DATA_WIDTH and S_DATA_WIDTH are equal or REDUCED_FIFO is disabled, the
+ADDRESS_WIDTH specified is not changed.</p></li>
+<li><p>When M_DATA_WIDTH and S_DATA_WIDTH are not equal and the REDUCED_FIFO is
+enabled, the ADDRESS_WIDTH is reduced by log2 ratio of the master and slave
+data widths.</p></li>
 </ul>
 </section>
 </section>
