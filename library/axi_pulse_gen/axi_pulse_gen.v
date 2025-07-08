@@ -72,7 +72,7 @@ module axi_pulse_gen #(
 
   localparam [31:0] CORE_VERSION = {16'h0000,     /* MAJOR */
                                      8'h01,       /* MINOR */
-                                     8'h00};      /* PATCH */ // 0.01.0
+                                     8'h00};      /* PATCH */
   localparam [31:0] CORE_MAGIC = 32'h504c5347;    // PLSG
 
   // internal signals
