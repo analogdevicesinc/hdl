@@ -297,10 +297,10 @@ module axi_tdd_regmap #(
       up_rack <= up_rreq;
       if (up_rreq == 1'b1) begin
         case (up_raddr)
-          ADDR_TDD_VERSION         : up_rdata <= PCORE_VERSION;
+          ADDR_TDD_VERSION         : up_rdata <= CORE_VERSION;
           ADDR_TDD_ID              : up_rdata <= ID[31:0];
           ADDR_TDD_SCRATCH         : up_rdata <= up_scratch;
-          ADDR_TDD_IDENTIFICATION  : up_rdata <= PCORE_MAGIC;
+          ADDR_TDD_IDENTIFICATION  : up_rdata <= CORE_MAGIC;
           ADDR_TDD_INTERFACE       : up_rdata <= status_synth_params_s;
           ADDR_TDD_DEF_POLARITY    : up_rdata <= status_def_polarity_s;
           ADDR_TDD_CONTROL         : up_rdata <= {27'b0, up_tdd_sync_soft,
