@@ -304,6 +304,10 @@ the ``VERSION`` register for feature handling across versions. The patch number
 shouldn't have to be handled by software drivers, if it seems necessary to,
 consider incrementing the minor number instead.
 
+Due to AMD Xilinx old default IP core version, many IP cores bindings start at
+1.00.a. For compatibility, the patch value is kept, but should be treated as
+decimal instead of character.
+
 Xilinx
 --------------------------------------------------------------------------------
 
