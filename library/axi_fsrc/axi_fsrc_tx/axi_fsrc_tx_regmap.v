@@ -84,7 +84,6 @@ module axi_fsrc_tx_regmap #(
   reg [31:0] scratch_reg;
   reg [31:0] enable_reg;
   reg [31:0] ctrl_transmit_reg;
-  reg [31:0] conv_mask_reg;
   reg [31:0] accum_add_val_0_reg;
   reg [31:0] accum_add_val_1_reg;
   reg  [3:0] accum_set_val_addr_reg;
@@ -98,7 +97,7 @@ module axi_fsrc_tx_regmap #(
       scratch_reg <= 'd0;
       enable_reg <= 'd0;
       ctrl_transmit_reg <= 'd0;
-      conv_mask_reg <= 'd0;
+      conv_mask <= 'd0;
       accum_add_val_0_reg <= 'd0;
       accum_add_val_1_reg <= 'd0;
       accum_set_val_addr_reg <= 'd0;
@@ -119,7 +118,7 @@ module axi_fsrc_tx_regmap #(
         ctrl_transmit_reg <= 'd0;
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h6)) begin
-       conv_mask_reg <= up_wdata[15:0];
+       conv_mask <= up_wdata[15:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h7)) begin
         accum_add_val_0_reg <= up_wdata;
@@ -156,7 +155,7 @@ module axi_fsrc_tx_regmap #(
           14'h3:   up_rdata <= CORE_MAGIC;
           14'h4:   up_rdata <= enable_reg;
           14'h5:   up_rdata <= ctrl_transmit_reg;
-          14'h6:   up_rdata <= conv_mask_reg;
+          14'h6:   up_rdata <= conv_mask;
           14'h7:   up_rdata <= accum_add_val_0_reg;
           14'h8:   up_rdata <= accum_add_val_1_reg;
           14'h9:   up_rdata <= {28'b0, accum_set_val_addr_reg};
