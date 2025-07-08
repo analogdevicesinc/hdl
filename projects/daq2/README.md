@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD-FMCDAQ2-EBZ](https://www.analog.com/eval-ad-fmcdaq2-ebz)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/daq2/index.html
+- Evaluation board VADJ range: 1.8V - 2.5V
 
 ## Supported parts
 
