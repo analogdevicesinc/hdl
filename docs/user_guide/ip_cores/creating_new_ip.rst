@@ -308,6 +308,11 @@ Due to AMD Xilinx old default IP core version, many IP cores bindings start at
 1.00.a. For compatibility, the patch value is kept, but should be treated as
 decimal instead of character.
 
+The IP-XACT version must have the format ``<major>.<minor>.<patch>``, e.g.
+``1.2.3`` (**no** ``v`` prefix). To set the IP-XACT version based on the
+``CORE_VERSION`` parameter, use the ``set_ip_version_from_file`` method
+(prefixed by each vendor format), passing the file that defines the parameter.
+
 Xilinx
 --------------------------------------------------------------------------------
 
