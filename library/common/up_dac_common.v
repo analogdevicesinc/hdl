@@ -125,7 +125,9 @@ module up_dac_common #(
 
   // parameters
 
-  localparam  VERSION = 32'h00090262;
+  localparam [31:0] CORE_VERSION = {16'h0009,     /* MAJOR */
+                                     8'h02,       /* MINOR */
+                                     8'h62};      /* PATCH */
 
   // internal registers
 
@@ -454,7 +456,7 @@ module up_dac_common #(
       up_rack_int <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[6:0])
-          7'h00: up_rdata_int <= VERSION;
+          7'h00: up_rdata_int <= CORE_VERSION;
           7'h01: up_rdata_int <= ID;
           7'h02: up_rdata_int <= up_scratch;
           7'h03: up_rdata_int <= CONFIG;
