@@ -287,6 +287,22 @@ use the generic adc/dac templates that include all available registers:
 * :git-hdl:`docs/regmap/adi_regmap_axi_adc_template.txt`
 * :git-hdl:`docs/regmap/adi_regmap_axi_dac_template.txt`
 
+Versioning
+--------------------------------------------------------------------------------
+
+IP cores versions should follow `Semantic Versioning <https://semver.org/>`
+``v<major>.<minor>.<patch>`` format.
+A fix increases the patch number, a feature the minor number, and a breaking
+change the major number. The first stable release version should be higher or
+equal to v1.0.0.
+
+Device tree bindings take the major number, for example, for *axi_my_ip* v1.2.3,
+the *dt-binding* and *compatible* should be *adi,axi-my-ip-1*.
+Per the last paragraph, *adi,axi-my-ip-0* is **never** appropriate.
+Software drivers parse the ``VERSION`` register for feature handling across
+versions. The patch number shouldn't have to be handled by software drivers, if
+it seems necessary to, consider incrementing the minor number instead.
+
 Xilinx
 --------------------------------------------------------------------------------
 
