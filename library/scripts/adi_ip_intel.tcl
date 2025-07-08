@@ -407,6 +407,32 @@ proc ad_ip_files {pname pfiles {pfunction ""}} {
   }
 }
 
+## Set IP version from CORE_VERSION.
+#
+# \param[file] - The file that defines CORE_VERSION
+#
+proc ad_set_ip_version_from_file {file} {
+
+  set f [open $file]
+  set data [read $f]
+  close $f
+
+  regsub -all {/\*.*?\*/} $data "" data
+  regsub -all {\n} $data " " data
+  regsub -all {\s+} $data " " data
+  set pattern {CORE_VERSION\s*=\s*\{16'h([0-9A-Fa-f]+),\s*8'h([0-9A-Fa-f]+),\s*8'h([0-9A-Fa-f]+)\};}
+  set match [regexp $pattern $data match hex_major hex_minor hex_patch]
+
+  if {$match} {
+    set major [expr 0x$hex_major]
+    set minor [expr 0x$hex_minor]
+    set patch [expr 0x$hex_patch]
+    set_module_property VERSION $major.$minor.$patch
+  } else {
+    send_message WARNING "Failed to get CORE_VERSION from $file to set version"
+  }
+}
+
 ## Infer an AXI4 Lite memory mapped interface.
 #
 # \param[aclk] - name of the interface clock
