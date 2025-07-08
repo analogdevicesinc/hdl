@@ -36,7 +36,7 @@ module tx_fsrc_make_holes #(
   logic in_valid_d;
   logic holes_xfer;
   logic holes_valid_d;
-  logic [2:1][NUM_OF_CHANNELS-1:0]                        holes_data_d;
+  logic [1:0][NUM_OF_CHANNELS-1:0] holes_data_d;
   logic [SAMPLES_PER_CHANNEL-1:0] [$clog2(SAMPLES_PER_CHANNEL+1)-1:0] non_holes_cnt_total_per_word;
   logic [SAMPLES_PER_CHANNEL-1:0] [$clog2(SAMPLES_PER_CHANNEL+1)-1:0] non_holes_cnt_total_per_word_d;
   logic [$clog2(SAMPLES_PER_CHANNEL+1)-1:0]                   non_holes_cnt_total;
@@ -101,14 +101,18 @@ module tx_fsrc_make_holes #(
   assign holes_ready = !reset && (!holes_valid_d || data_shift_holes_xfer);
 
   always_ff @(posedge clk) begin
-    if(holes_xfer) begin
-      holes_data_d[1] <= holes_data;
+    if (reset) begin
+      holes_data_d[0] <= 'b0;
+    end else if (holes_xfer) begin
+      holes_data_d[0] <= holes_data;
     end
   end
 
   always_ff @(posedge clk) begin
-    if (data_shift_holes_xfer) begin
-      holes_data_d[2] <= holes_data_d[1];
+    if (reset) begin
+      holes_data_d[1] <= 'b0;
+    end else if (data_shift_holes_xfer) begin
+      holes_data_d[1] <= holes_data_d[0];
     end
   end
 
@@ -117,9 +121,9 @@ module tx_fsrc_make_holes #(
     int kk;
     always_comb begin
       if (jj==0) begin
-        non_holes_cnt_total_per_word[jj] = !holes_data_d[1][0];
+        non_holes_cnt_total_per_word[jj] = !holes_data_d[0][0];
       end else begin
-        non_holes_cnt_total_per_word[jj] = non_holes_cnt_total_per_word[jj-1] + !holes_data_d[1][jj];
+        non_holes_cnt_total_per_word[jj] = non_holes_cnt_total_per_word[jj-1] + !holes_data_d[0][jj];
       end
     end
 
@@ -197,8 +201,10 @@ module tx_fsrc_make_holes #(
     // Create output bus
     for (jj = 0; jj < SAMPLES_PER_CHANNEL; jj=jj+1) begin : out_data_gen
       always_ff @(posedge clk) begin
-        if (data_out_xfer) begin
-          out_data[ii][jj*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= holes_data_d[2][jj] ? HOLE_VALUE : data_stored[ii][non_holes_cnt_total_per_word_d[jj]];
+        if (reset) begin
+          out_data[ii][jj*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= HOLE_VALUE;
+        end if (data_out_xfer) begin
+          out_data[ii][jj*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= holes_data_d[1][jj] ? HOLE_VALUE : data_stored[ii][non_holes_cnt_total_per_word_d[jj]];
         end
       end
     end
