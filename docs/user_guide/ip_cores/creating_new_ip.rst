@@ -13,7 +13,7 @@ and ``axi_led_control_intel`` for Intel.
 Verilog File
 --------------------------------------------------------------------------------
 
-Lets say you want to make a new IP with the name ``<module_name>``.
+Let's say you want to make a new IP with the name ``<module_name>``.
 You must edit the verilog file so that it has the same name (e.g. ``axi_led_control.v``).
 After that, feel free to write the verilog code for your purpose.
 You can also use other instances of modules, but be sure to include them after,
@@ -177,9 +177,9 @@ Examples:
 Importing with Using Method
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The ``USING`` method allows to look-up a register map to import register and
+The ``USING`` method allows looking up a register map to import register and
 fields.
-A register map can look-up multiple register maps by repeating the method for
+A register map can look up multiple register maps by repeating the method for
 each register map, for example:
 
 .. code::
@@ -235,7 +235,7 @@ Some considerations:
 
 * Imported registers shall have non-imported fields, for example, when importing
   a register that is reserved for custom implementation.
-* Imported fields must be inside a imported register, since the field name is not
+* Imported fields must be inside an imported register, since the field name is not
   unique.
 * Multiple fields can be imported from a single ``FIELD`` group.
 * Multiple register maps can be used for lookup. Add each in a different ``USING``
@@ -813,7 +813,7 @@ trying to simulate most of the available options when creating a new IP.
 
       # Generating the IP given as first parameter on the path given as the second
       # parameter. Without the second parameter the IP will be generated in
-      # ./ltt directory and  in the default IP download directory of
+      # ./ltt directory and in the default IP download directory of
       # Lattice Propel Builder (~/PropelIPLocal) if the LATTICE_DEFAULT_PATHS
       # env variable is exported like:
       # 'export LATTICE_DEFAULT_PATHS=1' before running the script or running make.
