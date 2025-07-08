@@ -57,7 +57,9 @@ module up_pmod #(
   output  reg             up_rack
 );
 
-  localparam      PCORE_VERSION = 32'h00010001;
+  localparam [31:0] CORE_VERSION = {16'h0001,     /* MAJOR */
+                                     8'h00,       /* MINOR */
+                                     8'h01};      /* PATCH */
 
   // internal registers
 
