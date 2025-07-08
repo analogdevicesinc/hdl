@@ -92,7 +92,9 @@ module data_offload_regmap #(
 
   // local parameters
 
-  localparam [31:0] CORE_VERSION = 32'h00010061;  // 1.00.a
+  localparam [31:0] CORE_VERSION = {16'h0000,     /* MAJOR */
+                                     8'h01,       /* MINOR */
+                                     8'h61};      /* PATCH */
   localparam [31:0] CORE_MAGIC = 32'h44414F46;    // DAOF
 
   localparam [33:0] MEM_SIZE = 1 << MEM_SIZE_LOG2;
