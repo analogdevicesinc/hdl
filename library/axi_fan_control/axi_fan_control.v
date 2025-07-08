@@ -87,7 +87,7 @@ module axi_fan_control #(
   //local parameters
   localparam [31:0] CORE_VERSION            = {16'h0001,     /* MAJOR */
                                                 8'h00,       /* MINOR */
-                                                8'h61};      /* PATCH */ // 0.0.0
+                                                8'h61};      /* PATCH */
   localparam [31:0] CORE_MAGIC              = 32'h46414E43;    // FANC
 
   localparam        CLK_FREQUENCY           = 100000000;
