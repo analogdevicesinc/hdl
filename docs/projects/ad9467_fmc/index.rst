@@ -34,6 +34,9 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
+.. warning::
+    The VADJ for the FPGA carrier must be set to 2.5V.
+
 The PN9/PN23 sequences are not compatible with O.150. Please use the
 equations given in the reference design. They follow the polynomial
 equations as in O.150, but ONLY the MSB is inverted.
