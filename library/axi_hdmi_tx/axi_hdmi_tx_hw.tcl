@@ -42,6 +42,7 @@ ad_ip_files axi_hdmi_tx [list \
   axi_hdmi_tx.v \
   axi_hdmi_tx_constr.sdc \
   ]
+ad_set_ip_version_from_file "$ad_hdl_dir/library/common/up_hdmi_tx.v"
 
 # parameters
 
