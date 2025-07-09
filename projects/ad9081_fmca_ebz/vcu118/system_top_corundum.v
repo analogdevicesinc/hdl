@@ -528,8 +528,6 @@ module system_top_corundum #(
     .mdio_mdio_io (mdio_mdio),
     .sgmii_phyclk_clk_n (phy_clk_n),
     .sgmii_phyclk_clk_p (phy_clk_p),
-    // .i2c_scl_io (iic_scl),
-    // .i2c_sda_io (iic_sda),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .uart_sin (uart_sin),

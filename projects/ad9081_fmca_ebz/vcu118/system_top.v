@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -293,8 +293,6 @@ module system_top #(
     .mdio_mdio_io (mdio_mdio),
     .sgmii_phyclk_clk_n (phy_clk_n),
     .sgmii_phyclk_clk_p (phy_clk_p),
-    // .i2c_scl_io (iic_scl),
-    // .i2c_sda_io (iic_sda),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
     .uart_sin (uart_sin),
