@@ -22,6 +22,7 @@ adi_ip_files data_offload [list \
 ##set_property source_mgmt_mode DisplayOnly [current_project]
 
 adi_ip_properties data_offload
+adi_set_ip_version_from_file "data_offload_regmap.v"
 adi_ip_ttcl data_offload "data_offload_constr.ttcl"
 adi_ip_sim_ttcl data_offload "data_offload_sv.ttcl"
 
