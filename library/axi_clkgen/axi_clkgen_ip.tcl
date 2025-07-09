@@ -23,6 +23,7 @@ set_property used_in_synthesis false [get_files ./bd/bd.tcl]
 set_property used_in_synthesis false [get_files $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl]
 
 adi_ip_properties axi_clkgen
+adi_set_ip_version_from_file "$ad_hdl_dir/library/common/up_clkgen.v"
 adi_ip_bd axi_clkgen "bd/bd.tcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_clkgen} [ipx::current_core]
