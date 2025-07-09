@@ -20,6 +20,7 @@ add_files -fileset [get_filesets sources_1] [list \
 set_property source_mgmt_mode DisplayOnly [current_project]
 
 adi_ip_properties_lite axi_jesd204_common
+adi_set_ip_version_from_file "jesd204_up_common.v"
 
 adi_ip_add_core_dependencies [list \
   analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
