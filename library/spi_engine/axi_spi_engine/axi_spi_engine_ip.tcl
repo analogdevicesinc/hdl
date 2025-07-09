@@ -19,6 +19,7 @@ adi_ip_files axi_spi_engine [list \
 ]
 
 adi_ip_properties axi_spi_engine
+adi_set_ip_version_from_file "axi_spi_engine.v"
 adi_ip_ttcl axi_spi_engine "axi_spi_engine_constr.ttcl"
 
 adi_ip_add_core_dependencies [list \
