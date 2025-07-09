@@ -25,6 +25,7 @@ ad_ip_files axi_tdd [list\
   axi_tdd_sync_gen.sv \
   axi_tdd.sv \
   axi_tdd_constr.sdc]
+ad_set_ip_version_from_file "axi_tdd_pkg.sv"
 
 # parameters
 
