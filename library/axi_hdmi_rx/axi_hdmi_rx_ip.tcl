@@ -28,6 +28,7 @@ adi_ip_files axi_hdmi_rx [list \
   "axi_hdmi_rx_core.v" ]
 
 adi_ip_properties axi_hdmi_rx
+adi_set_ip_version_from_file "$ad_hdl_dir/library/common/up_hdmi_rx.v"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_hdmi_rx} [ipx::current_core]
 
