@@ -15,6 +15,7 @@ adi_ip_files axi_clock_monitor [list \
   "axi_clock_monitor.v" ]
 
 adi_ip_properties axi_clock_monitor
+adi_set_ip_version_from_file "axi_clock_monitor.v"
 
 set cc [ipx::current_core]
 set_property display_name {AXI Clock Monitor} $cc
