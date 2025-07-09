@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -118,7 +118,6 @@ module system_top_corundum #(
   input         sysref2_n,
   input         sysref2_p,
   output [1:0]  txen,
-
 
   // GT REF CLK
   input          qsfp_mgt_refclk_p,
@@ -303,22 +302,20 @@ module system_top_corundum #(
   assign ptp_rst = qsfp_rst[0];
 
   IBUFDS_GTE4 ibufds_gte4_qsfp_mgt_refclk_0_inst (
-      .I     (qsfp_mgt_refclk_p),
-      .IB    (qsfp_mgt_refclk_n),
-      .CEB   (1'b0),
-      .O     (qsfp_mgt_refclk),
-      .ODIV2 (qsfp_mgt_refclk_int)
-  );
+    .I     (qsfp_mgt_refclk_p),
+    .IB    (qsfp_mgt_refclk_n),
+    .CEB   (1'b0),
+    .O     (qsfp_mgt_refclk),
+    .ODIV2 (qsfp_mgt_refclk_int));
 
   BUFG_GT bufg_gt_qsfp_mgt_refclk_0_inst (
-      .CE      (qsfp_gtpowergood),
-      .CEMASK  (1'b1),
-      .CLR     (1'b0),
-      .CLRMASK (1'b1),
-      .DIV     (3'd0),
-      .I       (qsfp_mgt_refclk_int),
-      .O       (qsfp_mgt_refclk_bufg)
-  );
+    .CE      (qsfp_gtpowergood),
+    .CEMASK  (1'b1),
+    .CLR     (1'b0),
+    .CLRMASK (1'b1),
+    .DIV     (3'd0),
+    .I       (qsfp_mgt_refclk_int),
+    .O       (qsfp_mgt_refclk_bufg));
 
   // Flash
   wire clk_125mhz;
@@ -344,13 +341,13 @@ module system_top_corundum #(
   reg qspi1_cs_reg;
 
   always @(posedge clk_250mhz) begin
-      qspi_clk_reg <= qspi_clk_int;
-      qspi0_dq_o_reg <= qspi0_dq_o_int;
-      qspi0_dq_oe_reg <= qspi0_dq_oe_int;
-      qspi0_cs_reg <= qspi0_cs_int;
-      qspi1_dq_o_reg <= qspi1_dq_o_int;
-      qspi1_dq_oe_reg <= qspi1_dq_oe_int;
-      qspi1_cs_reg <= qspi1_cs_int;
+    qspi_clk_reg <= qspi_clk_int;
+    qspi0_dq_o_reg <= qspi0_dq_o_int;
+    qspi0_dq_oe_reg <= qspi0_dq_oe_int;
+    qspi0_cs_reg <= qspi0_cs_int;
+    qspi1_dq_o_reg <= qspi1_dq_o_int;
+    qspi1_dq_oe_reg <= qspi1_dq_oe_int;
+    qspi1_cs_reg <= qspi1_cs_int;
   end
 
   assign qspi1_dq[0] = qspi1_dq_oe_reg[0] ? qspi1_dq_o_reg[0] : 1'bz;
@@ -360,35 +357,31 @@ module system_top_corundum #(
   assign qspi1_cs = qspi1_cs_reg;
 
   sync_signal #(
-      .WIDTH(8),
-      .N(2)
-  )
-  flash_sync_signal_inst (
-      .clk(clk_250mhz),
-      .in({qspi1_dq, qspi0_dq_int}),
-      .out({qspi1_dq_i_int, qspi0_dq_i_int})
-  );
+    .WIDTH(8),
+    .N(2)
+  ) flash_sync_signal_inst (
+    .clk(clk_250mhz),
+    .in({qspi1_dq, qspi0_dq_int}),
+    .out({qspi1_dq_i_int, qspi0_dq_i_int}));
 
-  STARTUPE3
-  startupe3_inst (
-      .CFGCLK(),
-      .CFGMCLK(),
-      .DI(qspi0_dq_int),
-      .DO(qspi0_dq_o_reg),
-      .DTS(~qspi0_dq_oe_reg),
-      .EOS(),
-      .FCSBO(qspi0_cs_reg),
-      .FCSBTS(1'b0),
-      .GSR(1'b0),
-      .GTS(1'b0),
-      .KEYCLEARB(1'b1),
-      .PACK(1'b0),
-      .PREQ(),
-      .USRCCLKO(qspi_clk_reg),
-      .USRCCLKTS(1'b0),
-      .USRDONEO(1'b0),
-      .USRDONETS(1'b1)
-  );
+  STARTUPE3 startupe3_inst (
+    .CFGCLK(),
+    .CFGMCLK(),
+    .DI(qspi0_dq_int),
+    .DO(qspi0_dq_o_reg),
+    .DTS(~qspi0_dq_oe_reg),
+    .EOS(),
+    .FCSBO(qspi0_cs_reg),
+    .FCSBTS(1'b0),
+    .GSR(1'b0),
+    .GTS(1'b0),
+    .KEYCLEARB(1'b1),
+    .PACK(1'b0),
+    .PREQ(),
+    .USRCCLKO(qspi_clk_reg),
+    .USRCCLKTS(1'b0),
+    .USRDONEO(1'b0),
+    .USRDONETS(1'b1));
 
   // FPGA boot
   wire fpga_boot;
@@ -442,68 +435,67 @@ module system_top_corundum #(
   assign icap_di_rev[24] = icap_di_reg[31];
 
   always @(posedge clk_125mhz) begin
-      case (icap_state)
-          0: begin
-              icap_state <= 0;
-              icap_csib_reg <= 1'b1;
-              icap_rdwrb_reg <= 1'b0;
-              icap_di_reg <= 32'hffffffff; // dummy word
+    case (icap_state)
+      0: begin
+        icap_state <= 0;
+        icap_csib_reg <= 1'b1;
+        icap_rdwrb_reg <= 1'b0;
+        icap_di_reg <= 32'hffffffff; // dummy word
 
-              if (fpga_boot_sync_reg_2 && icap_avail) begin
-                  icap_state <= 1;
-                  icap_csib_reg <= 1'b0;
-                  icap_rdwrb_reg <= 1'b0;
-                  icap_di_reg <= 32'hffffffff; // dummy word
-              end
-          end
-          1: begin
-              icap_state <= 2;
-              icap_csib_reg <= 1'b0;
-              icap_rdwrb_reg <= 1'b0;
-              icap_di_reg <= 32'hAA995566; // sync word
-          end
-          2: begin
-              icap_state <= 3;
-              icap_csib_reg <= 1'b0;
-              icap_rdwrb_reg <= 1'b0;
-              icap_di_reg <= 32'h20000000; // type 1 noop
-          end
-          3: begin
-              icap_state <= 4;
-              icap_csib_reg <= 1'b0;
-              icap_rdwrb_reg <= 1'b0;
-              icap_di_reg <= 32'h30008001; // write 1 word to CMD
-          end
-          4: begin
-              icap_state <= 5;
-              icap_csib_reg <= 1'b0;
-              icap_rdwrb_reg <= 1'b0;
-              icap_di_reg <= 32'h0000000F; // IPROG
-          end
-          5: begin
-              icap_state <= 0;
-              icap_csib_reg <= 1'b0;
-              icap_rdwrb_reg <= 1'b0;
-              icap_di_reg <= 32'h20000000; // type 1 noop
-          end
-      endcase
+        if (fpga_boot_sync_reg_2 && icap_avail) begin
+          icap_state <= 1;
+          icap_csib_reg <= 1'b0;
+          icap_rdwrb_reg <= 1'b0;
+          icap_di_reg <= 32'hffffffff; // dummy word
+        end
+      end
+      1: begin
+        icap_state <= 2;
+        icap_csib_reg <= 1'b0;
+        icap_rdwrb_reg <= 1'b0;
+        icap_di_reg <= 32'hAA995566; // sync word
+      end
+      2: begin
+        icap_state <= 3;
+        icap_csib_reg <= 1'b0;
+        icap_rdwrb_reg <= 1'b0;
+        icap_di_reg <= 32'h20000000; // type 1 noop
+      end
+      3: begin
+        icap_state <= 4;
+        icap_csib_reg <= 1'b0;
+        icap_rdwrb_reg <= 1'b0;
+        icap_di_reg <= 32'h30008001; // write 1 word to CMD
+      end
+      4: begin
+        icap_state <= 5;
+        icap_csib_reg <= 1'b0;
+        icap_rdwrb_reg <= 1'b0;
+        icap_di_reg <= 32'h0000000F; // IPROG
+      end
+      5: begin
+        icap_state <= 0;
+        icap_csib_reg <= 1'b0;
+        icap_rdwrb_reg <= 1'b0;
+        icap_di_reg <= 32'h20000000; // type 1 noop
+      end
+    endcase
 
-      fpga_boot_sync_reg_0 <= fpga_boot;
-      fpga_boot_sync_reg_1 <= fpga_boot_sync_reg_0;
-      fpga_boot_sync_reg_2 <= fpga_boot_sync_reg_1;
+    fpga_boot_sync_reg_0 <= fpga_boot;
+    fpga_boot_sync_reg_1 <= fpga_boot_sync_reg_0;
+    fpga_boot_sync_reg_2 <= fpga_boot_sync_reg_1;
   end
 
   ICAPE3
   icape3_inst (
-      .AVAIL(icap_avail),
-      .CLK(clk_125mhz),
-      .CSIB(icap_csib_reg),
-      .I(icap_di_rev),
-      .O(),
-      .PRDONE(),
-      .PRERROR(),
-      .RDWRB(icap_rdwrb_reg)
-  );
+    .AVAIL(icap_avail),
+    .CLK(clk_125mhz),
+    .CSIB(icap_csib_reg),
+    .I(icap_di_rev),
+    .O(),
+    .PRDONE(),
+    .PRERROR(),
+    .RDWRB(icap_rdwrb_reg));
 
   system_wrapper i_system_wrapper (
     .clk_125mhz (clk_125mhz),

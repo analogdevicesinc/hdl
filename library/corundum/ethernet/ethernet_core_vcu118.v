@@ -179,11 +179,11 @@ module ethernet_core_vcu118 #(
   output wire                                     qspi_1_cs
 );
 
-genvar n;
+  genvar n;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// FPGA TOP
-////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  // FPGA TOP
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // QSFP DRP
   wire [QSFP_CNT*24-1:0]              qsfp_drp_addr;
@@ -237,122 +237,116 @@ genvar n;
   wire [QSFP_CNT*8-1:0]               qsfp_rx_pfc_req;
   wire [QSFP_CNT*8-1:0]               qsfp_rx_pfc_ack;
 
-generate
+  generate
 
-  for (n = 0; n < QSFP_CNT; n = n + 1) begin : qsfp
+    for (n = 0; n < QSFP_CNT; n = n + 1) begin : qsfp
 
-    sync_reset #(
-      .N(4)
-    )
-    qsfp_sync_reset_inst (
-      .clk(qsfp_mgt_refclk_bufg[n +: 1]),
-      .rst(rst_125mhz),
-      .out(qsfp_rst[n +: 1])
-    );
+      sync_reset #(
+        .N(4)
+      ) qsfp_sync_reset_inst (
+        .clk(qsfp_mgt_refclk_bufg[n +: 1]),
+        .rst(rst_125mhz),
+        .out(qsfp_rst[n +: 1]));
 
-    cmac_gty_wrapper #(
-      .DRP_CLK_FREQ_HZ(125000000),
-      .AXIS_DATA_WIDTH(AXIS_DATA_WIDTH),
-      .AXIS_KEEP_WIDTH(AXIS_KEEP_WIDTH),
-      .TX_SERDES_PIPELINE(0),
-      .RX_SERDES_PIPELINE(0),
-      .RX_CLK_FROM_TX(ETH_RX_CLK_FROM_TX),
-      .RS_FEC_ENABLE(ETH_RS_FEC_ENABLE)
-    )
-    qsfp_cmac_inst (
-      .xcvr_ctrl_clk(clk_125mhz),
-      .xcvr_ctrl_rst(qsfp_rst[n +: 1]),
+      cmac_gty_wrapper #(
+        .DRP_CLK_FREQ_HZ(125000000),
+        .AXIS_DATA_WIDTH(AXIS_DATA_WIDTH),
+        .AXIS_KEEP_WIDTH(AXIS_KEEP_WIDTH),
+        .TX_SERDES_PIPELINE(0),
+        .RX_SERDES_PIPELINE(0),
+        .RX_CLK_FROM_TX(ETH_RX_CLK_FROM_TX),
+        .RS_FEC_ENABLE(ETH_RS_FEC_ENABLE)
+      ) qsfp_cmac_inst (
+        .xcvr_ctrl_clk(clk_125mhz),
+        .xcvr_ctrl_rst(qsfp_rst[n +: 1]),
 
-      /*
-      * Common
-      */
-      .xcvr_gtpowergood_out(qsfp_gtpowergood[n +: 1]),
-      .xcvr_ref_clk(qsfp_mgt_refclk[n +: 1]),
+        /*
+        * Common
+        */
+        .xcvr_gtpowergood_out(qsfp_gtpowergood[n +: 1]),
+        .xcvr_ref_clk(qsfp_mgt_refclk[n +: 1]),
 
-      /*
-      * DRP
-      */
-      .drp_clk(qsfp_drp_clk[n +: 1]),
-      .drp_rst(qsfp_drp_rst[n +: 1]),
-      .drp_addr(qsfp_drp_addr[n*24 +: 24]),
-      .drp_di(qsfp_drp_di[n*16 +: 16]),
-      .drp_en(qsfp_drp_en[n +: 1]),
-      .drp_we(qsfp_drp_we[n +: 1]),
-      .drp_do(qsfp_drp_do[n*16 +: 16]),
-      .drp_rdy(qsfp_drp_rdy[n +: 1]),
+        /*
+        * DRP
+        */
+        .drp_clk(qsfp_drp_clk[n +: 1]),
+        .drp_rst(qsfp_drp_rst[n +: 1]),
+        .drp_addr(qsfp_drp_addr[n*24 +: 24]),
+        .drp_di(qsfp_drp_di[n*16 +: 16]),
+        .drp_en(qsfp_drp_en[n +: 1]),
+        .drp_we(qsfp_drp_we[n +: 1]),
+        .drp_do(qsfp_drp_do[n*16 +: 16]),
+        .drp_rdy(qsfp_drp_rdy[n +: 1]),
 
-      /*
-      * Serial data
-      */
-      .xcvr_txp(qsfp_tx_p[n*4 +: 4]),
-      .xcvr_txn(qsfp_tx_n[n*4 +: 4]),
-      .xcvr_rxp(qsfp_rx_p[n*4 +: 4]),
-      .xcvr_rxn(qsfp_rx_n[n*4 +: 4]),
+        /*
+        * Serial data
+        */
+        .xcvr_txp(qsfp_tx_p[n*4 +: 4]),
+        .xcvr_txn(qsfp_tx_n[n*4 +: 4]),
+        .xcvr_rxp(qsfp_rx_p[n*4 +: 4]),
+        .xcvr_rxn(qsfp_rx_n[n*4 +: 4]),
 
-      /*
-      * CMAC connections
-      */
-      .tx_clk(qsfp_tx_clk[n +: 1]),
-      .tx_rst(qsfp_tx_rst[n +: 1]),
+        /*
+        * CMAC connections
+        */
+        .tx_clk(qsfp_tx_clk[n +: 1]),
+        .tx_rst(qsfp_tx_rst[n +: 1]),
 
-      .tx_axis_tdata(qsfp_tx_axis_tdata[n*AXIS_DATA_WIDTH +: AXIS_DATA_WIDTH]),
-      .tx_axis_tkeep(qsfp_tx_axis_tkeep[n*AXIS_KEEP_WIDTH +: AXIS_KEEP_WIDTH]),
-      .tx_axis_tvalid(qsfp_tx_axis_tvalid[n +: 1]),
-      .tx_axis_tready(qsfp_tx_axis_tready[n +: 1]),
-      .tx_axis_tlast(qsfp_tx_axis_tlast[n +: 1]),
-      .tx_axis_tuser(qsfp_tx_axis_tuser[n*(16+1) +: (16+1)]),
+        .tx_axis_tdata(qsfp_tx_axis_tdata[n*AXIS_DATA_WIDTH +: AXIS_DATA_WIDTH]),
+        .tx_axis_tkeep(qsfp_tx_axis_tkeep[n*AXIS_KEEP_WIDTH +: AXIS_KEEP_WIDTH]),
+        .tx_axis_tvalid(qsfp_tx_axis_tvalid[n +: 1]),
+        .tx_axis_tready(qsfp_tx_axis_tready[n +: 1]),
+        .tx_axis_tlast(qsfp_tx_axis_tlast[n +: 1]),
+        .tx_axis_tuser(qsfp_tx_axis_tuser[n*(16+1) +: (16+1)]),
 
-      .tx_ptp_time(qsfp_tx_ptp_time[n*80 +: 80]),
-      .tx_ptp_ts(qsfp_tx_ptp_ts[n*80 +: 80]),
-      .tx_ptp_ts_tag(qsfp_tx_ptp_ts_tag[n*16 +: 16]),
-      .tx_ptp_ts_valid(qsfp_tx_ptp_ts_valid[n +: 1]),
+        .tx_ptp_time(qsfp_tx_ptp_time[n*80 +: 80]),
+        .tx_ptp_ts(qsfp_tx_ptp_ts[n*80 +: 80]),
+        .tx_ptp_ts_tag(qsfp_tx_ptp_ts_tag[n*16 +: 16]),
+        .tx_ptp_ts_valid(qsfp_tx_ptp_ts_valid[n +: 1]),
 
-      .tx_enable(qsfp_tx_enable[n +: 1]),
-      .tx_lfc_en(qsfp_tx_lfc_en[n +: 1]),
-      .tx_lfc_req(qsfp_tx_lfc_req[n +: 1]),
-      .tx_pfc_en(qsfp_tx_pfc_en[n*8 +: 8]),
-      .tx_pfc_req(qsfp_tx_pfc_req[n*8 +: 8]),
+        .tx_enable(qsfp_tx_enable[n +: 1]),
+        .tx_lfc_en(qsfp_tx_lfc_en[n +: 1]),
+        .tx_lfc_req(qsfp_tx_lfc_req[n +: 1]),
+        .tx_pfc_en(qsfp_tx_pfc_en[n*8 +: 8]),
+        .tx_pfc_req(qsfp_tx_pfc_req[n*8 +: 8]),
 
-      .rx_clk(qsfp_rx_clk[n +: 1]),
-      .rx_rst(qsfp_rx_rst[n +: 1]),
+        .rx_clk(qsfp_rx_clk[n +: 1]),
+        .rx_rst(qsfp_rx_rst[n +: 1]),
 
-      .rx_axis_tdata(qsfp_rx_axis_tdata[n*AXIS_DATA_WIDTH +: AXIS_DATA_WIDTH]),
-      .rx_axis_tkeep(qsfp_rx_axis_tkeep[n*AXIS_KEEP_WIDTH +: AXIS_KEEP_WIDTH]),
-      .rx_axis_tvalid(qsfp_rx_axis_tvalid[n +: 1]),
-      .rx_axis_tlast(qsfp_rx_axis_tlast[n +: 1]),
-      .rx_axis_tuser(qsfp_rx_axis_tuser[n*(80+1) +: (80+1)]),
+        .rx_axis_tdata(qsfp_rx_axis_tdata[n*AXIS_DATA_WIDTH +: AXIS_DATA_WIDTH]),
+        .rx_axis_tkeep(qsfp_rx_axis_tkeep[n*AXIS_KEEP_WIDTH +: AXIS_KEEP_WIDTH]),
+        .rx_axis_tvalid(qsfp_rx_axis_tvalid[n +: 1]),
+        .rx_axis_tlast(qsfp_rx_axis_tlast[n +: 1]),
+        .rx_axis_tuser(qsfp_rx_axis_tuser[n*(80+1) +: (80+1)]),
 
-      .rx_ptp_clk(qsfp_rx_ptp_clk[n +: 1]),
-      .rx_ptp_rst(qsfp_rx_ptp_rst[n +: 1]),
-      .rx_ptp_time(qsfp_rx_ptp_time[n*80 +: 80]),
+        .rx_ptp_clk(qsfp_rx_ptp_clk[n +: 1]),
+        .rx_ptp_rst(qsfp_rx_ptp_rst[n +: 1]),
+        .rx_ptp_time(qsfp_rx_ptp_time[n*80 +: 80]),
 
-      .rx_enable(qsfp_rx_enable[n +: 1]),
-      .rx_status(qsfp_rx_status[n +: 1]),
-      .rx_lfc_en(qsfp_rx_lfc_en[n +: 1]),
-      .rx_lfc_req(qsfp_rx_lfc_req[n +: 1]),
-      .rx_lfc_ack(qsfp_rx_lfc_ack[n +: 1]),
-      .rx_pfc_en(qsfp_rx_pfc_en[n*8 +: 8]),
-      .rx_pfc_req(qsfp_rx_pfc_req[n*8 +: 8]),
-      .rx_pfc_ack(qsfp_rx_pfc_ack[n*8 +: 8])
-    );
+        .rx_enable(qsfp_rx_enable[n +: 1]),
+        .rx_status(qsfp_rx_status[n +: 1]),
+        .rx_lfc_en(qsfp_rx_lfc_en[n +: 1]),
+        .rx_lfc_req(qsfp_rx_lfc_req[n +: 1]),
+        .rx_lfc_ack(qsfp_rx_lfc_ack[n +: 1]),
+        .rx_pfc_en(qsfp_rx_pfc_en[n*8 +: 8]),
+        .rx_pfc_req(qsfp_rx_pfc_req[n*8 +: 8]),
+        .rx_pfc_ack(qsfp_rx_pfc_ack[n*8 +: 8]));
 
-    sync_signal #(
-      .WIDTH(2),
-      .N(2)
-    )
-    sync_signal_inst (
-      .clk(clk),
-      .in({qsfp_modprsl[n +: 1], qsfp_intl[n +: 1]}),
-      .out({qsfp_modprsl_int[n +: 1], qsfp_intl_int[n +: 1]})
-    );
+      sync_signal #(
+        .WIDTH(2),
+        .N(2)
+      ) sync_signal_inst (
+        .clk(clk),
+        .in({qsfp_modprsl[n +: 1], qsfp_intl[n +: 1]}),
+        .out({qsfp_modprsl_int[n +: 1], qsfp_intl_int[n +: 1]}));
 
-  end
+    end
 
-endgenerate
+  endgenerate
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// FPGA CORE IMPLEMENTATION
-////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
+  // FPGA CORE IMPLEMENTATION
+  ////////////////////////////////////////////////////////////////////////////////////////////////////
 
   localparam RB_BASE_ADDR = 16'h1000;
   localparam RBB = RB_BASE_ADDR & {AXIL_CTRL_ADDR_WIDTH{1'b1}};
@@ -601,55 +595,53 @@ endgenerate
     end
   end
 
-generate
+  generate
 
-  for (n = 0; n < QSFP_CNT; n = n + 1) begin : drp
+    for (n = 0; n < QSFP_CNT; n = n + 1) begin : drp
 
-    rb_drp #(
-      .DRP_ADDR_WIDTH(24),
-      .DRP_DATA_WIDTH(16),
-      .DRP_INFO({8'h09, 8'h03, 8'd2, 8'd4}),
-      .REG_ADDR_WIDTH(AXIL_CSR_ADDR_WIDTH),
-      .REG_DATA_WIDTH(AXIL_CTRL_DATA_WIDTH),
-      .REG_STRB_WIDTH(AXIL_CTRL_STRB_WIDTH),
-      .RB_BASE_ADDR(RB_DRP_QSFP_BASE + n*16'h20),
-      .RB_NEXT_PTR(RB_DRP_QSFP_BASE + (n+1)*16'h20)
-    )
-    qsfp_rb_drp_inst (
-      .clk(clk),
-      .rst(rst),
+      rb_drp #(
+        .DRP_ADDR_WIDTH(24),
+        .DRP_DATA_WIDTH(16),
+        .DRP_INFO({8'h09, 8'h03, 8'd2, 8'd4}),
+        .REG_ADDR_WIDTH(AXIL_CSR_ADDR_WIDTH),
+        .REG_DATA_WIDTH(AXIL_CTRL_DATA_WIDTH),
+        .REG_STRB_WIDTH(AXIL_CTRL_STRB_WIDTH),
+        .RB_BASE_ADDR(RB_DRP_QSFP_BASE + n*16'h20),
+        .RB_NEXT_PTR(RB_DRP_QSFP_BASE + (n+1)*16'h20)
+      ) qsfp_rb_drp_inst (
+        .clk(clk),
+        .rst(rst),
 
-      /*
-      * Register interface
-      */
-      .reg_wr_addr(ctrl_reg_wr_addr),
-      .reg_wr_data(ctrl_reg_wr_data),
-      .reg_wr_strb(ctrl_reg_wr_strb),
-      .reg_wr_en(ctrl_reg_wr_en),
-      .reg_wr_wait(qsfp_drp_reg_wr_wait[n +: 1]),
-      .reg_wr_ack(qsfp_drp_reg_wr_ack[n +: 1]),
-      .reg_rd_addr(ctrl_reg_rd_addr),
-      .reg_rd_en(ctrl_reg_rd_en),
-      .reg_rd_data(qsfp_drp_reg_rd_data[n*AXIL_CTRL_DATA_WIDTH +: AXIL_CTRL_DATA_WIDTH]),
-      .reg_rd_wait(qsfp_drp_reg_rd_wait[n +: 1]),
-      .reg_rd_ack(qsfp_drp_reg_rd_ack[n +: 1]),
+        /*
+        * Register interface
+        */
+        .reg_wr_addr(ctrl_reg_wr_addr),
+        .reg_wr_data(ctrl_reg_wr_data),
+        .reg_wr_strb(ctrl_reg_wr_strb),
+        .reg_wr_en(ctrl_reg_wr_en),
+        .reg_wr_wait(qsfp_drp_reg_wr_wait[n +: 1]),
+        .reg_wr_ack(qsfp_drp_reg_wr_ack[n +: 1]),
+        .reg_rd_addr(ctrl_reg_rd_addr),
+        .reg_rd_en(ctrl_reg_rd_en),
+        .reg_rd_data(qsfp_drp_reg_rd_data[n*AXIL_CTRL_DATA_WIDTH +: AXIL_CTRL_DATA_WIDTH]),
+        .reg_rd_wait(qsfp_drp_reg_rd_wait[n +: 1]),
+        .reg_rd_ack(qsfp_drp_reg_rd_ack[n +: 1]),
 
-      /*
-      * DRP
-      */
-      .drp_clk(qsfp_drp_clk[n +: 1]),
-      .drp_rst(qsfp_drp_rst[n +: 1]),
-      .drp_addr(qsfp_drp_addr[n*24 +: 24]),
-      .drp_di(qsfp_drp_di[n*16 +: 16]),
-      .drp_en(qsfp_drp_en[n +: 1]),
-      .drp_we(qsfp_drp_we[n +: 1]),
-      .drp_do(qsfp_drp_do[n*16 +: 16]),
-      .drp_rdy(qsfp_drp_rdy[n +: 1])
-    );
+        /*
+        * DRP
+        */
+        .drp_clk(qsfp_drp_clk[n +: 1]),
+        .drp_rst(qsfp_drp_rst[n +: 1]),
+        .drp_addr(qsfp_drp_addr[n*24 +: 24]),
+        .drp_di(qsfp_drp_di[n*16 +: 16]),
+        .drp_en(qsfp_drp_en[n +: 1]),
+        .drp_we(qsfp_drp_we[n +: 1]),
+        .drp_do(qsfp_drp_do[n*16 +: 16]),
+        .drp_rdy(qsfp_drp_rdy[n +: 1]));
 
-  end
+    end
 
-endgenerate
+  endgenerate
 
   wire [QSFP_CNT*AXIS_TX_USER_WIDTH-1:0]    qsfp_tx_axis_tuser_int;
   wire [QSFP_CNT*PTP_TS_WIDTH-1:0]              qsfp_tx_ptp_time_int;
@@ -687,8 +679,7 @@ endgenerate
     .AXIS_KEEP_WIDTH(AXIS_KEEP_WIDTH),
     .AXIS_TX_USER_WIDTH(AXIS_TX_USER_WIDTH),
     .AXIS_RX_USER_WIDTH(AXIS_RX_USER_WIDTH)
-  )
-  mqnic_port_map_mac_axis_inst (
+  ) mqnic_port_map_mac_axis_inst (
     // towards MAC
     .mac_tx_clk(qsfp_tx_clk),
     .mac_tx_rst(qsfp_tx_rst),
@@ -791,7 +782,6 @@ endgenerate
     .rx_lfc_ack(eth_rx_lfc_ack),
     .rx_pfc_en(eth_rx_pfc_en),
     .rx_pfc_req(eth_rx_pfc_req),
-    .rx_pfc_ack(eth_rx_pfc_ack)
-  );
+    .rx_pfc_ack(eth_rx_pfc_ack));
 
 endmodule
