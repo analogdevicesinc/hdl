@@ -83,6 +83,7 @@ module system_top #(
 
   input         nco_sync,
   input         dma_start,
+  output        sync_start_debug,
 
   // FMC HPC IOs
   input  [1:0]  agc0,
@@ -425,5 +426,6 @@ module system_top #(
   end
 
   assign ext_sync_at_sysref = sync_pendign & sysref_edge;
+  assign sync_start_debug = ext_sync_at_sysref;
 
 endmodule

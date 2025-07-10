@@ -98,7 +98,7 @@ set_property         -dict {PACKAGE_PIN AK35 IOSTANDARD LVCMOS18 PULLTYPE PULLUP
 # PMOD0 connections (NCO Sync and DMA Sync Start signals)
 set_property         -dict {PACKAGE_PIN AY14  IOSTANDARD LVCMOS18                                    } [get_ports nco_sync                  ]    ; ## PMOD0_0 J52.1
 set_property         -dict {PACKAGE_PIN AY15  IOSTANDARD LVCMOS18                                    } [get_ports dma_start                 ]    ; ## PMOD0_1 J52.3
-# set_property         -dict {PACKAGE_PIN AW15  IOSTANDARD LVCMOS18                                    } [get_ports pmod0_2                   ]    ; ## PMOD0_2 J52.5
+set_property         -dict {PACKAGE_PIN AW15  IOSTANDARD LVCMOS18                                    } [get_ports sync_start_debug          ]    ; ## PMOD0_2 J52.5
 # set_property         -dict {PACKAGE_PIN AV15  IOSTANDARD LVCMOS18                                    } [get_ports pmod0_3                   ]    ; ## PMOD0_3 J52.7
 
 # set_property         -dict {PACKAGE_PIN AV16  IOSTANDARD LVCMOS18                                    } [get_ports pmod0_4                   ]    ; ## PMOD0_4 J52.2
