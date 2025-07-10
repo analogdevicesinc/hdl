@@ -14,6 +14,8 @@ M_VIVADO := vivado -mode batch -source
 
 XML_FLIST := if_ctrl_reg.xml
 XML_FLIST += if_ctrl_reg_rtl.xml
+XML_FLIST += if_csr.xml
+XML_FLIST += if_csr_rtl.xml
 XML_FLIST += if_ptp.xml
 XML_FLIST += if_ptp_rtl.xml
 XML_FLIST += if_flow_control_tx.xml
@@ -32,6 +34,8 @@ XML_FLIST += if_qspi.xml
 XML_FLIST += if_qspi_rtl.xml
 XML_FLIST += if_qsfp.xml
 XML_FLIST += if_qsfp_rtl.xml
+XML_FLIST += if_sfp.xml
+XML_FLIST += if_sfp_rtl.xml
 XML_FLIST += if_i2c.xml
 XML_FLIST += if_i2c_rtl.xml
 XML_FLIST += if_axis_dma_desc.xml

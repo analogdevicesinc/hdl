@@ -21,6 +21,27 @@ adi_if_ports  input  -1   ctrl_reg_rd_data none    0
 adi_if_ports  input   1   ctrl_reg_rd_wait none    0
 adi_if_ports  input   1   ctrl_reg_rd_ack  none    0
 
+adi_if_define if_csr
+adi_if_ports  output -1   axil_csr_awaddr  none    0
+adi_if_ports  output -1   axil_csr_awprot  none    0
+adi_if_ports  output  1   axil_csr_awvalid none    0
+adi_if_ports  input   1   axil_csr_awready none    0
+adi_if_ports  output -1   axil_csr_wdata   none    0
+adi_if_ports  output -1   axil_csr_wstrb   none    0
+adi_if_ports  output 1    axil_csr_wvalid  none    0
+adi_if_ports  input   1   axil_csr_wready  none    0
+adi_if_ports  input  -1   axil_csr_bresp   none    0
+adi_if_ports  input   1   axil_csr_bvalid  none    0
+adi_if_ports  output 1    axil_csr_bready  none    0
+adi_if_ports  output -1   axil_csr_araddr  none    0
+adi_if_ports  output -1   axil_csr_arprot  none    0
+adi_if_ports  output 1    axil_csr_arvalid none    0
+adi_if_ports  input  1    axil_csr_arready none    0
+adi_if_ports  input  -1   axil_csr_rdata   none    0
+adi_if_ports  input  -1   axil_csr_rresp   none    0
+adi_if_ports  input  1    axil_csr_rvalid  none    0
+adi_if_ports  output 1    axil_csr_rready  none    0
+
 adi_if_define if_ptp
 adi_if_ports  output   1   ptp_td_sd            none    0
 adi_if_ports  output   1   ptp_pps              none    0
@@ -95,6 +116,18 @@ adi_if_ports  input  -1   modprsl     none    0
 adi_if_ports  input  -1   intl        none    0
 adi_if_ports  output -1   lpmode      none    0
 adi_if_ports  output -1   gtpowergood none    0
+
+adi_if_define if_sfp
+adi_if_ports  output -1   tx_p         none    0
+adi_if_ports  output -1   tx_n         none    0
+adi_if_ports  input  -1   rx_p         none    0
+adi_if_ports  input  -1   rx_n         none    0
+adi_if_ports  input  -1   mgt_refclk_p none    0
+adi_if_ports  input  -1   mgt_refclk_n none    0
+adi_if_ports  output -1   tx_disable   none    0
+adi_if_ports  input  -1   tx_fault     none    0
+adi_if_ports  input  -1   rx_los       none    0
+adi_if_ports  input  -1   mod_abs      none    0
 
 adi_if_define if_i2c
 adi_if_ports  input   1   scl_i none    0
