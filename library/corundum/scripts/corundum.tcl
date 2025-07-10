@@ -196,7 +196,9 @@ ad_ip_instance corundum_core corundum_core [list \
   AXIS_IF_RX_USER_WIDTH_APP $AXIS_IF_RX_USER_WIDTH_APP \
 ]
 
-ad_ip_instance ethernet ethernet_core [list \
+set board [string tolower $::env(BOARD)]
+
+ad_ip_instance ethernet_${board} ethernet_core [list \
   TDMA_BER_ENABLE $TDMA_BER_ENABLE \
   QSFP_CNT $QSFP_CNT \
   IF_COUNT $IF_COUNT \

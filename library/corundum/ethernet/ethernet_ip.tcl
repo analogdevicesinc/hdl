@@ -8,10 +8,15 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 global VIVADO_IP_LIBRARY
 
-adi_ip_create ethernet
-
 if [info exists ::env(BOARD)] {
   set board $::env(BOARD)
+  set board_lowercase [string tolower $board]
+  set ethernet_ip "ethernet_${board_lowercase}"
+
+  adi_ip_create $ethernet_ip $board_lowercase
+
+  cd ./$board_lowercase
+
   if [string equal $board VCU118] {
     set_property part xcvu9p-flga2104-2L-e [current_project]
 
@@ -20,7 +25,7 @@ if [info exists ::env(BOARD)] {
 
     # Corundum sources
     adi_ip_files ethernet_core_vcu118 [list \
-      "ethernet_core_vcu118.v" \
+      "../ethernet_core_vcu118.v" \
       "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
       "$ad_hdl_dir/../corundum/fpga/common/rtl/mqnic_port_map_mac_axis.v" \
       "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/rtl/sync_reset.v" \
@@ -37,13 +42,13 @@ if [info exists ::env(BOARD)] {
   error "Missing BOARD environment variable definition from Makefile!"
 }
 
-adi_ip_properties_lite ethernet
-set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum} [ipx::current_core]
+adi_ip_properties_lite $ethernet_ip
 
 set cc [ipx::current_core]
 
-set_property display_name "Corundum Ethernet" $cc
+set_property display_name "Corundum Ethernet $board" $cc
 set_property description "Corundum Ethernet Core IP" $cc
+set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum} [ipx::current_core]
 
 # Remove all inferred interfaces and address spaces
 ipx::remove_all_bus_interface [ipx::current_core]

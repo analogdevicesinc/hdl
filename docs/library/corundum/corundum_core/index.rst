@@ -74,4 +74,4 @@ repository, which needs to be cloned alongside the HDL repository.
 References
 --------------------------------------------------------------------------------
 
-* HDL IP core at :git-hdl:`library/corundum`
+* HDL IP core at :git-hdl:`library/corundum/corundum_core`
