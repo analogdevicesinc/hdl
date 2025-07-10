@@ -35,6 +35,24 @@ if [info exists ::env(BOARD)] {
       "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_pad.v" \
       "$ad_hdl_dir/../corundum/fpga/common/rtl/mac_ts_insert.v" \
     ]
+  } elseif [string equal $board XCVU11P] {
+    set_property part xcvu11p-flgb2104-2-i [current_project]
+
+    source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
+    source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
+
+    # Corundum sources
+    adi_ip_files ethernet_core_vcu118 [list \
+      "../ethernet_core_vcu118.v" \
+      "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/mqnic_port_map_mac_axis.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/rtl/sync_reset.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_wrapper.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_ch_wrapper.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/rb_drp.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_pad.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/mac_ts_insert.v" \
+    ]
   } else {
     error "$board board is not supported!"
   }
