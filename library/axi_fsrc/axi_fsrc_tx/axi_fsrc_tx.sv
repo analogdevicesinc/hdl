@@ -78,7 +78,6 @@ module axi_fsrc_tx #(
   localparam [31:0] CORE_VERSION = {16'h0000,     /* MAJOR */
                                      8'h01,       /* MINOR */
                                      8'h00};      /* PATCH */
-                                                  // 0.01.0
   localparam [31:0] CORE_MAGIC = 32'h504c5347;    // FSRC
 
   localparam DATA_WIDTH = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL * SAMPLE_DATA_WIDTH;
