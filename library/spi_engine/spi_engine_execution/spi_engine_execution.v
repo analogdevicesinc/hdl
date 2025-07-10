@@ -48,6 +48,7 @@ module spi_engine_execution #(
 ) (
   input clk,
   input resetn,
+  input s_offload_active,
 
   output reg active,
 
@@ -57,7 +58,7 @@ module spi_engine_execution #(
 
   input sdo_data_valid,
   output sdo_data_ready,
-  input [(DATA_WIDTH-1):0] sdo_data,
+  input [(DATA_WIDTH)-1:0] sdo_data,
 
   input sdi_data_ready,
   output sdi_data_valid,
@@ -69,7 +70,7 @@ module spi_engine_execution #(
 
   input echo_sclk,
   output reg sclk,
-  output reg sdo,
+  output reg [NUM_OF_SDI-1:0] sdo,
   output reg sdo_t,
   input [NUM_OF_SDI-1:0] sdi,
   output reg [NUM_OF_CS-1:0] cs,
@@ -88,6 +89,8 @@ module spi_engine_execution #(
   localparam REG_CLK_DIV = 2'b00;
   localparam REG_CONFIG = 2'b01;
   localparam REG_WORD_LENGTH = 2'b10;
+  localparam REG_SPI_LANE_CONFIG = 2'b11;
+  localparam ALL_ACTIVE_LANE_MASK = (2 ** NUM_OF_SDI) - 1; //by default all lanes are enabled
 
   localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
                                  DATA_WIDTH > 8  ? 4 : 3;
@@ -122,8 +125,7 @@ module spi_engine_execution #(
   reg [7:0] word_length = DATA_WIDTH;
   reg [7:0] last_bit_count = DATA_WIDTH-1;
   reg [7:0] left_aligned = 8'b0;
-
-  assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
+  reg [7:0] spi_lane_mask =  ALL_ACTIVE_LANE_MASK;
 
   reg [15:0] cmd_d1;
 
@@ -139,7 +141,7 @@ module spi_engine_execution #(
   wire sdo_enabled_io;
   wire sdi_enabled_io;
 
-  wire sdo_int_s;
+  wire [NUM_OF_SDI-1:0] sdo_int_s;
 
   wire last_bit;
   wire echo_last_bit;
@@ -149,12 +151,13 @@ module spi_engine_execution #(
   wire [2:0] inst = cmd[14:12];
   wire [2:0] inst_d1 = cmd_d1[14:12];
 
+  //command decoder
   wire exec_cmd = cmd_ready && cmd_valid;
   wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
-  wire exec_cs_inv_cmd = exec_cmd && inst == CMD_CS_INV;
-  wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
   wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
+  wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
   wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
+  wire exec_cs_inv_cmd = exec_cmd && inst == CMD_CS_INV;
   wire exec_sync_cmd = exec_misc_cmd && cmd[8] == MISC_SYNC;
 
   wire trigger_tx;
@@ -173,17 +176,23 @@ module spi_engine_execution #(
   wire sdo_io_ready;
 
   (* direct_enable = "yes" *) wire cs_gen;
+  
+  assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
 
   spi_engine_execution_shiftreg #(
     .DEFAULT_SPI_CFG(DEFAULT_SPI_CFG),
+    .ALL_ACTIVE_LANE_MASK(ALL_ACTIVE_LANE_MASK),
     .DATA_WIDTH(DATA_WIDTH),
     .NUM_OF_SDI(NUM_OF_SDI),
     .SDI_DELAY(SDI_DELAY),
     .ECHO_SCLK(ECHO_SCLK),
-    .CMD_TRANSFER(CMD_TRANSFER)
+    .CMD_TRANSFER(CMD_TRANSFER),
+    .CMD_WRITE(CMD_WRITE),
+    .REG_SPI_LANE_CONFIG(REG_SPI_LANE_CONFIG)
   ) shiftreg (
     .clk(clk),
     .resetn(resetn),
+    .s_offload_active(s_offload_active),
     .sdi(sdi),
     .sdo_int(sdo_int_s),
     .echo_sclk(echo_sclk),
@@ -199,6 +208,7 @@ module spi_engine_execution #(
     .sdo_idle_state(sdo_idle_state),
     .left_aligned(left_aligned),
     .word_length(word_length),
+    .spi_lane_mask(spi_lane_mask),
     .sdo_io_ready(sdo_io_ready),
     .echo_last_bit(echo_last_bit),
     .transfer_active(transfer_active),
@@ -223,8 +233,9 @@ module spi_engine_execution #(
   assign sdi_enabled_io = (exec_transfer_cmd) ? cmd[9] : sdi_enabled;
 
   always @(posedge clk) begin
-    if (cmd_ready & cmd_valid)
-     cmd_d1 <= cmd;
+    if (cmd_ready & cmd_valid) begin
+      cmd_d1 <= cmd;
+    end
   end
 
   always @(posedge clk) begin
@@ -249,6 +260,7 @@ module spi_engine_execution #(
       clk_div <= DEFAULT_CLK_DIV;
       word_length <= DATA_WIDTH;
       left_aligned <= 8'b0;
+      spi_lane_mask <= ALL_ACTIVE_LANE_MASK;
     end else if (exec_write_cmd == 1'b1) begin
       if (cmd[9:8] == REG_CONFIG) begin
         cpha <= cmd[0];
@@ -261,6 +273,8 @@ module spi_engine_execution #(
         // the max value of this reg must be DATA_WIDTH
         word_length <= cmd[7:0];
         left_aligned <= DATA_WIDTH - cmd[7:0]; // needed 1 cycle before transfer_active goes high
+      end else if (cmd[9:8] == REG_SPI_LANE_CONFIG) begin
+        spi_lane_mask <= cmd[7:0]; //max number of spi lanes == 8
       end
     end
   end
@@ -403,9 +417,9 @@ module spi_engine_execution #(
   assign sync = cmd_d1[7:0];
 
   assign io_ready1 = (sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
-          (sdo_enabled_io == 1'b0 || sdo_io_ready == 1'b1);
+                     (sdo_enabled_io == 1'b0 || sdo_io_ready == 1'b1);
   assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
-          (sdo_enabled_io == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
+                     (sdo_enabled_io == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
 
   always @(posedge clk) begin
     if (idle == 1'b1) begin
@@ -468,11 +482,11 @@ module spi_engine_execution #(
     if (resetn == 1'b0) begin
       transfer_done <= 1'b0;
     end else begin
-       if (ECHO_SCLK) begin
+      if (ECHO_SCLK) begin
         transfer_done <= echo_last_bit && echo_last_transfer;
-       end else begin
+      end else begin
         transfer_done <= (wait_for_io && io_ready1 && last_transfer) || (!wait_for_io && transfer_active && end_of_word && last_transfer );
-       end
+      end
     end
   end
 
