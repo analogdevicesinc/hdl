@@ -156,6 +156,7 @@ module system_top #(
 
   output         nco_sync,
   output         dma_start,
+  output         sync_start_debug,
 
   input          trig_in,
   output         resetb
@@ -234,11 +235,6 @@ module system_top #(
     .IB (ref_clk_replica_n),
     .O (ref_clk_replica),
     .ODIV2 ());
-
-  IBUFDS i_ibufds_sysref_in (
-    .I (sysref_in_p),
-    .IB (sysref_in_n),
-    .O (sysref));
 
   OBUFDS i_obufds_sysref_a (
     .I (1'b0),
@@ -355,6 +351,8 @@ module system_top #(
   assign nco_sync   = trig_channel[0];
   assign dma_start  = trig_channel[1];
   assign resetb     = gpio_o[62];
+
+  assign sync_start_debug = trig_channel[2];
 
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
     .dio_t (gpio_t[16:0]),
