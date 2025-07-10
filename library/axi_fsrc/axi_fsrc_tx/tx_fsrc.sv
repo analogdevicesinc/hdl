@@ -207,11 +207,23 @@ module tx_fsrc #(
   assign out_valid = |out_valid_s;
 
   always @(posedge clk) begin
-    debug_flags[31:8] <= 'b0;
-    debug_flags[7] <= in_valid;
+    debug_flags[31:15] <= 'b0;
+
+    debug_flags[14] <= holes_n[3];
+    debug_flags[13] <= holes_n[2];
+    debug_flags[12] <= holes_n[1];
+    debug_flags[11] <= holes_n[0];
+
+    debug_flags[11] <= 'b0;
+    debug_flags[10] <= 'b0;
+    debug_flags[9] <= in_valid;
+    debug_flags[8] <= in_ready;
+
+    debug_flags[7] <= out_valid;
     debug_flags[6] <= out_ready;
     debug_flags[5] <= holes_ready;
     debug_flags[4] <= fsrc_data_en;
+
     debug_flags[3] <= debug_enable;
   end
 

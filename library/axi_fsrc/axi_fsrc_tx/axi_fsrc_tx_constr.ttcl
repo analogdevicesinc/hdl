@@ -14,82 +14,33 @@ set_property ASYNC_REG TRUE \
   [get_cells -hier {*cdc_sync_stage2_reg*}]
 
 set_false_path \
-  -to [get_cells -hierarchical -filter {NAME=~*/i_regmap/*fsrc_enable_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_enable_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/enable_sync/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
-  -to [get_cells -hierarchical -filter {NAME=~*/i_regmap/*fsrc_stop_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_ctrl_transmit_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/ctrl_transmit_sync/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
-  -to [get_cells -hierarchical -filter {NAME=~*/i_regmap/*fsrc_accum_set_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_conv_mask_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/conv_mask_sync/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
-  -to [get_cells -hierarchical -filter {NAME=~*/i_regmap/*link_ctrl_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_accum_add_val_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/accum_add_val_sync/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
-  -from [get_pins -hierarchical * -filter {NAME=~*i_regmap/*fsrc_enable_sync/out_toggle_d1_reg/C}] \
-  -to [get_pins -hierarchical * -filter {NAME=~*i_regmap/*fsrc_enable_sync/cdc_sync_stage1_reg[0]/D}]
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_accum_set_val_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/accum_set_val_sync/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
-  -from [get_pins -hierarchical * -filter {NAME=~*i_regmap/*fsrc_stop_sync/out_toggle_d1_reg/C}] \
-  -to [get_pins -hierarchical * -filter {NAME=~*i_regmap/*fsrc_stop_sync/cdc_sync_stage1_reg[0]/D}]
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_accum_set_val_addr_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/accum_set_val_addr_sync/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*jesd204b_tx_config_sync/cdc_hold_reg*}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*jesd204b_tx_config_sync/out_data_reg*}]
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_accum_set_val_apply_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/accum_set_val_addr_sync/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*jesd204b_tx_config_sync/in_toggle_d1_reg}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*jesd204b_tx_config_sync/i_sync_out/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*jesd204b_tx_config_sync/out_toggle_d1_reg}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*jesd204b_tx_config_sync/i_sync_in/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*ctrl_transmit_sync/cdc_hold_reg*}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*ctrl_transmit_sync/out_data_reg*}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*ctrl_transmit_sync/in_toggle_d1_reg}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*ctrl_transmit_sync/i_sync_out/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*ctrl_transmit_sync/out_toggle_d1_reg}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*ctrl_transmit_sync/i_sync_in/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*link_ctrl_sync/cdc_hold_reg*}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*link_ctrl_sync/out_data_reg*}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*link_ctrl_sync/in_toggle_d1_reg}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*link_ctrl_sync/i_sync_out/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*link_ctrl_sync/out_toggle_d1_reg}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*link_ctrl_sync/i_sync_in/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_add_val_sync/cdc_hold_reg*}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_add_val_sync/out_data_reg*}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_add_val_sync/in_toggle_d1_reg}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_add_val_sync/i_sync_out/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_add_val_sync/out_toggle_d1_reg}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_add_val_sync/i_sync_in/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_set_val_sync/cdc_hold_reg*}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_set_val_sync/out_data_reg*}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_set_val_sync/in_toggle_d1_reg}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_set_val_sync/i_sync_out/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_set_val_sync/out_toggle_d1_reg}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*fsrc_accum_set_val_sync/i_sync_in/cdc_sync_stage1_reg[*]}]
-
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/debug_flags_sync/cdc_sync_stage2_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_tx_fsrc/debug_flags_reg[*]}

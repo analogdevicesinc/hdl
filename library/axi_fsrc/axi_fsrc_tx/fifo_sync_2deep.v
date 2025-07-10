@@ -33,7 +33,7 @@ module fifo_sync_2deep #(
   assign s_tready_next = !(|cnt) || fifo_re || (!cnt[1] && !fifo_we);
   assign m_tvalid_next = cnt[1] || fifo_we || (cnt[0] && !fifo_re);
 
-  if(!REGISTER_INTERFACE) begin : no_reg_gen
+  if (!REGISTER_INTERFACE) begin : no_reg_gen
     assign  s_tready  = ~cnt[1];
     assign  m_tvalid  = |cnt;
     assign  m_tdata   = data[rptr];
@@ -43,7 +43,7 @@ module fifo_sync_2deep #(
     reg [DWIDTH-1:0]  dout;
 
     always @(posedge aclk) begin
-      if(~aresetn) begin
+      if (~aresetn) begin
         s_tready_r <= 1'b0;
         m_tvalid_r <= 1'b0;
       end else begin
@@ -58,7 +58,7 @@ module fifo_sync_2deep #(
       end else begin
         if ((cnt == 2'b00) && fifo_we) begin
           dout <= s_tdata;
-        end else if(fifo_re) begin
+        end else if (fifo_re) begin
           if (cnt == 2'b01) begin
             dout <= s_tdata;
           end else begin
@@ -77,7 +77,7 @@ module fifo_sync_2deep #(
     if(~aresetn) begin
       cnt <= 2'd0;
     end else begin
-      case({fifo_we,fifo_re})
+      case ({fifo_we,fifo_re})
       2'b01   : cnt <= cnt - 1;
       2'b10   : cnt <= cnt + 1;
       default : cnt <= cnt;
