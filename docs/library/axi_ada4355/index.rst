@@ -48,6 +48,9 @@ Configuration Parameters
      - Core ID should be unique for each IP in the system
    * - FPGA_TECHNOLOGY
      - Used to select between FPGA devices, auto set in project.
+   * - BUFMRCE_EN
+     - Used to select between evaluation boards that are differentiated
+       by how the frame clock signals are distributed.
 
 Interface
 --------------------------------------------------------------------------------
@@ -83,6 +86,8 @@ Interface
      - Received data output
    * - adc_dovf
      - Data overflow. Must be connected to the DMA
+   * - up_adc_pn_err
+     - Error monitoring
    * - s_axi
      - Standard AXI Slave Memory Map interface
 

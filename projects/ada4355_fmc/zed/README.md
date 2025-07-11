@@ -1,8 +1,38 @@
-# ADA4355 Zed HDL Project
+<!-- no_build_example, no_dts, no_no_os -->
 
-## Building the project
+# ADA4355-FMC/ZED HDL Project
+
+- VADJ with which it was tested in hardware: 2.5V
+
+The parameters configurable through the `make` command, can be found below, as well as in the **system_project.tcl** file; it contains the default
+configuration.
 
 ```
-cd projects/ada4355/zed
+cd projects/ada4355_fmc/zed
 make
+```
+
+This project supports two evaluation boards, which are differentiated by how the frame clock signals are distributed.
+
+For the older evaluation board, the XDC constraints are not optimized for ISERDES, as the frame clock signals are located in a different I/O bank from the other related signals. To address this, a BUFMRCE buffer is used to distribute the frame clock to all ISERDES instances.
+
+The overwritable parameters from the environment:
+
+- BUFMRCE_EN - Specifies the eval-board type
+  - 0 - Eval-Board with optimized xdc
+  - 1 - Eval-Board with non optimized xdc
+
+### Example configurations
+
+#### BUFMRCE_EN disabled (default)
+
+This specific command is equivalent to running `make` only:
+
+```
+make BUFMRCE_EN=0
+```
+#### BUFMRCE_EN enabled
+
+```
+make BUFMRCE_EN=1
 ```
