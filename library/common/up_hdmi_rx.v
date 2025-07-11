@@ -75,7 +75,9 @@ module up_hdmi_rx #(
   output  reg             up_rack
 );
 
-  localparam  PCORE_VERSION = 32'h00040063;
+  localparam [31:0] CORE_VERSION = {16'h0004,     /* MAJOR */
+                                     8'h00,       /* MINOR */
+                                     8'h63};      /* PATCH */
 
   // internal registers
 
@@ -203,7 +205,7 @@ module up_hdmi_rx #(
       up_rack <= up_rreq_s;
       if(up_rreq_s == 1'b1) begin
         case (up_raddr[11:0])
-          12'h000: up_rdata <= PCORE_VERSION;
+          12'h000: up_rdata <= CORE_VERSION;
           12'h001: up_rdata <= ID;
           12'h002: up_rdata <= up_scratch;
           12'h010: up_rdata <= {31'h0, up_resetn};

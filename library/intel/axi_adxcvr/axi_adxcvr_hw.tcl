@@ -24,6 +24,7 @@ ad_ip_files axi_adxcvr [list \
   axi_adxcvr_up.v \
   axi_adxcvr.v \
 ]
+ad_set_ip_version_from_file "axi_adxcvr_up.v"
 
 # parameters
 

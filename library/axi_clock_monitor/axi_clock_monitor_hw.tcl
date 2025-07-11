@@ -19,6 +19,7 @@ ad_ip_files axi_clock_monitor [list \
   $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \
   axi_clock_monitor.v \
 ]
+ad_set_ip_version_from_file "axi_clock_monitor.v"
 
 # parameters
 

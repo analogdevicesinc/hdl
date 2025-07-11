@@ -21,6 +21,7 @@ adi_ip_files axi_gpreg [list \
 set_property FILE_TYPE SystemVerilog [get_files "axi_gpreg.v"]
 
 adi_ip_properties axi_gpreg
+adi_set_ip_version_from_file "axi_gpreg.v"
 adi_ip_ttcl axi_gpreg "axi_gpreg_constr.ttcl"
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_IO')) > 0} \

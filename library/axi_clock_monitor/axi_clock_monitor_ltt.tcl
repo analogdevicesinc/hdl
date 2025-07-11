@@ -10,9 +10,10 @@ set mod_data [ipl::parse_module ./axi_clock_monitor.v]
 set ip $::ipl::ip
 
 set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
+set version [ipl::set_ip_version_from_file -file "axi_clock_monitor.v"]
 
 set ip [ipl::general \
-    -vlnv "analog.com:ip:axi_clock_monitor:1.0" \
+    -vlnv "analog.com:ip:axi_clock_monitor:$version" \
     -display_name "ADI AXI clock monitor" \
     -supported_products {*} \
     -supported_platforms {esi radiant} \

@@ -22,6 +22,7 @@ ad_ip_files axi_pwm_gen [list \
   axi_pwm_gen_regmap.sv \
   axi_pwm_gen_1.v \
   axi_pwm_gen.sv]
+ad_set_ip_version_from_file "axi_pwm_gen.sv"
 
 # parameters
 

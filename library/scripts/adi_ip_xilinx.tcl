@@ -415,6 +415,33 @@ proc adi_ip_properties {ip_name} {
   ipx::save_core
 }
 
+## Set IP version from CORE_VERSION.
+#
+# \param[file] - The file that defines CORE_VERSION
+#
+proc adi_set_ip_version_from_file {file} {
+
+  set cc [ipx::current_core]
+  set f [open $file]
+  set data [read $f]
+  close $f
+
+  regsub -all {/\*.*?\*/} $data "" data
+  regsub -all {\n} $data " " data
+  regsub -all {\s+} $data " " data
+  set pattern {CORE_VERSION\s*=\s*\{16'h([0-9A-Fa-f]+),\s*8'h([0-9A-Fa-f]+),\s*8'h([0-9A-Fa-f]+)\};}
+  set match [regexp $pattern $data match hex_major hex_minor hex_patch]
+
+  if {$match} {
+    set major [expr 0x$hex_major]
+    set minor [expr 0x$hex_minor]
+    set patch [expr 0x$hex_patch]
+    set_property version $major.$minor.$patch $cc
+  } else {
+    puts [format "WARNING: Failed to get CORE_VERSION from %s to set version" $file]
+  }
+}
+
 ## Create/overwrite temporary files containing particular build case dependencies.
 #
 #  DO NOT USE FOR: axi_dmac/jesd204/axi_clkgen

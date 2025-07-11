@@ -91,7 +91,9 @@ module axi_clock_monitor #(
 
   // local parameters
 
-  localparam  PCORE_VERSION = 1;
+  localparam [31:0] CORE_VERSION = {16'h0000,     /* MAJOR */
+                                     8'h00,       /* MINOR */
+                                     8'h01};      /* PATCH */
   localparam [7:0] DIV_VALUE = (DIV_RATE == 4'd1) ? "1" :
                                (DIV_RATE == 4'd2) ? "2" :
                                (DIV_RATE == 4'd3) ? "3" :
@@ -192,7 +194,7 @@ module axi_clock_monitor #(
       if (up_rreq_s == 1'b1) begin
         case (up_raddr_i_s[4:0])
           /* Standard registers */
-          5'h00: up_rdata_int <= PCORE_VERSION;
+          5'h00: up_rdata_int <= CORE_VERSION;
           5'h01: up_rdata_int <= ID;
 
           /* Core configuration */

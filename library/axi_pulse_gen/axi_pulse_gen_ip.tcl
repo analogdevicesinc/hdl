@@ -21,6 +21,7 @@ adi_ip_files axi_pulse_gen [list \
 
 adi_ip_properties axi_pulse_gen
 adi_ip_ttcl axi_pulse_gen "axi_pulse_gen_constr.ttcl"
+adi_set_ip_version_from_file "axi_pulse_gen.v"
 
 adi_ip_add_core_dependencies [list \
 	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \

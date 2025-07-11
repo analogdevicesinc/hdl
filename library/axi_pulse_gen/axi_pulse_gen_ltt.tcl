@@ -11,8 +11,10 @@ set ip $::ipl::ip
 
 set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
 
+set version [ipl::set_ip_version_from_file -file "axi_pulse_gen.v"]
+
 set ip [ipl::general \
-    -vlnv "analog.com:ip:axi_pulse_gen:1.0" \
+    -vlnv "analog.com:ip:axi_pulse_gen:$version" \
     -display_name "ADI AXI Pulse generator" \
     -supported_products {*} \
     -supported_platforms {esi radiant} \
