@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+// Copyright 2024 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -181,15 +181,15 @@ module system_top (
     .sfp_tx_n (sfp_tx_n),
     .sfp_tx_p (sfp_tx_p),
     .sfp_tx_disable (sfp_tx_disable),
-    .sfp_tx_fault(sfp_tx_fault),
-    .sfp_rx_los(sfp_rx_los),
-    .sfp_mod_abs(sfp_mod_abs),
-    .sfp_iic_scl_io(sfp_i2c_scl),
-    .sfp_iic_sda_io(sfp_i2c_sda),
-    .tca_iic_scl_io(tca_i2c_scl),
-    .tca_iic_sda_io(tca_i2c_sda),
-    .led(),
-    .sfp_led(sfp_led),
+    .sfp_tx_fault (sfp_tx_fault),
+    .sfp_rx_los (sfp_rx_los),
+    .sfp_mod_abs (sfp_mod_abs),
+    .sfp_i2c_scl (sfp_i2c_scl),
+    .sfp_i2c_sda (sfp_i2c_sda),
+    .tca_iic_scl_io (tca_i2c_scl),
+    .tca_iic_sda_io (tca_i2c_sda),
+    .led (),
+    .sfp_led (sfp_led),
     .spi0_csn (ad9545_cs),
     .spi0_miso (ad9545_miso),
     .spi0_mosi (ad9545_mosi),

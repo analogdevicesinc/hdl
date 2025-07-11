@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -52,22 +52,47 @@ adi_project ad9081_fmca_ebz_vcu118 0 [list \
   TX_NUM_LINKS      [get_env_param TX_NUM_LINKS       1 ] \
   RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL 64 ] \
   TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL 64 ] \
+  CORUNDUM          [get_env_param CORUNDUM           0 ] \
 ]
 
 adi_project_files ad9081_fmca_ebz_vcu118 [list \
-  "system_top.v" \
   "system_constr.xdc"\
   "timing_constr.xdc"\
   "../../../library/common/ad_3w_spi.v"\
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
+  "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" \
+]
+
+if {[get_env_param CORUNDUM 0] == 1} {
+  adi_project_files apollo_som_vu11p [list \
+    "system_constr_corundum.xdc" \
+    "system_top_corundum.v" \
+    "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/boot.xdc" \
+    "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
+  ]
+
+  add_files -fileset constrs_1 -norecurse [list \
+    "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/rb_drp.tcl" \
+    "$ad_hdl_dir/library/corundum/scripts/sync_reset.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/cmac_gty_wrapper.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/cmac_gty_ch_wrapper.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_port.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl" \
+  ]
+} else {
+  adi_project_files apollo_som_vu11p [list \
+    "system_top.v" \
+  ]
+}
 
 # Avoid critical warning in OOC mode from the clock definitions
 # since at that stage the submodules are not stiched together yet
 if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
-
-set_property strategy Performance_RefinePlacement [get_runs impl_1]
 
 adi_project_run ad9081_fmca_ebz_vcu118
