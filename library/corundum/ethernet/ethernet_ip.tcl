@@ -9,33 +9,46 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 global VIVADO_IP_LIBRARY
 
 if [info exists ::env(BOARD)] {
-  set board $::env(BOARD)
-  set board_lowercase [string tolower $board]
-  set ethernet_ip "ethernet_$board_lowercase"
+  set board [string tolower $::env(BOARD)]
+  set ethernet_ip "ethernet_$board"
 
-  adi_ip_create $ethernet_ip $board_lowercase
+  adi_ip_create ethernet_$board $board
 
-  cd ./$board_lowercase
+  cd ./$board
 
-  if [string equal $board VCU118] {
-    set_property part xcvu9p-flga2104-2L-e [current_project]
-    source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
-    source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
-  } elseif [string equal $board K26] {
-    set_property part xck26-sfvc784-2LVI-i [current_project]
-    # Corundum instantiates both eth_xcvr_gth_full and eth_xcvr_gth_channel,
-    # but only the latter is used at our target configuration
-    source $ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/ip/eth_xcvr_gth.tcl
-    set rm_gth_chn eth_xcvr_gth_channel
-    set rm_gth_chn [ \
-      get_files "[pwd]/ethernet_k26.srcs/sources_1/ip/$rm_gth_chn/$rm_gth_chn.xci"
-    ]
-    if {$rm_gth_chn ne ""} {
-      export_ip_user_files -of_objects $rm_gth_chn -no_script -reset -force -quiet
-      remove_files $rm_gth_chn
+  switch $board {
+    "vcu118" {
+      set_property part xcvu9p-flga2104-2L-e [current_project]
     }
-  } else {
-    error "$board board is not supported!"
+    "xcvu11p" {
+      set_property part xcvu11p-flgb2104-2-i [current_project]
+    }
+    "k26" {
+      set_property part xck26-sfvc784-2LVI-i [current_project]
+    }
+    default {
+      error "$board board is not supported!"
+    }
+  }
+  switch $board {
+    "vcu118" -
+    "xcvu11p" {
+      source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
+      source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
+    }
+    "k26" {
+      # Corundum instantiates both eth_xcvr_gth_full and eth_xcvr_gth_channel,
+      # but only the latter is used at our target configuration
+      source $ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/ip/eth_xcvr_gth.tcl
+      set rm_gth_chn eth_xcvr_gth_channel
+      set rm_gth_chn [ \
+        get_files "[pwd]/ethernet_k26.srcs/sources_1/ip/$rm_gth_chn/$rm_gth_chn.xci"
+      ]
+      if {$rm_gth_chn ne ""} {
+        export_ip_user_files -of_objects $rm_gth_chn -no_script -reset -force -quiet
+        remove_files $rm_gth_chn
+      }
+    }
   }
 } else {
   error "Missing BOARD environment variable definition from makefile!"
@@ -91,7 +104,8 @@ if [string equal $board VCU118] {
   error "Missing board type"
 }
 
-adi_ip_properties_lite $ethernet_ip
+adi_ip_properties_lite ethernet_$board
+
 set cc [ipx::current_core]
 set_property display_name "Corundum Ethernet $board" $cc
 set_property description "Corundum Ethernet Core IP" $cc
