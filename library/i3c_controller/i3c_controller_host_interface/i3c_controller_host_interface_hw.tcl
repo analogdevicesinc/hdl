@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -30,9 +30,20 @@ ad_ip_files i3c_controller_host_interface [list \
 
 # Parameters
 
+ad_ip_parameter CMD_FIFO_ADDRESS_WIDTH INTEGER 4
+ad_ip_parameter CMDR_FIFO_ADDRESS_WIDTH INTEGER 4
+ad_ip_parameter SDO_FIFO_ADDRESS_WIDTH INTEGER 5
+ad_ip_parameter SDI_FIFO_ADDRESS_WIDTH INTEGER 5
+ad_ip_parameter IBI_FIFO_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter ID INTEGER 0
+ad_ip_parameter DA INTEGER 49
 ad_ip_parameter ASYNC_CLK INTEGER 0
 ad_ip_parameter OFFLOAD INTEGER 0
+ad_ip_parameter PID_MANUF_ID INTEGER 0
+ad_ip_parameter PID_TYPE_SELECTOR INTEGER 0
+ad_ip_parameter PID_PART_ID INTEGER 0
+ad_ip_parameter PID_INSTANCE_ID INTEGER 0
+ad_ip_parameter PID_EXTRA_ID INTEGER 0
 
 proc p_elaboration {} {
 

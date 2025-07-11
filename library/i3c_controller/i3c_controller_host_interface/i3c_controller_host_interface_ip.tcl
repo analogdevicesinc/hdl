@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -105,6 +105,46 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters ID -of_objects $cc]
 
+## CMD_FIFO_ADDRESS_WIDTH
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "16" \
+ ] \
+ [ipx::get_user_parameters CMD_FIFO_ADDRESS_WIDTH -of_objects $cc]
+
+## CMDR_FIFO_ADDRESS_WIDTH
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "16" \
+ ] \
+ [ipx::get_user_parameters CMDR_FIFO_ADDRESS_WIDTH -of_objects $cc]
+
+## SDO_FIFO_ADDRESS_WIDTH
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "16" \
+ ] \
+ [ipx::get_user_parameters SDO_FIFO_ADDRESS_WIDTH -of_objects $cc]
+
+## SDI_FIFO_ADDRESS_WIDTH
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "16" \
+ ] \
+ [ipx::get_user_parameters SDI_FIFO_ADDRESS_WIDTH -of_objects $cc]
+
+## IBI_FIFO_ADDRESS_WIDTH
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "16" \
+ ] \
+ [ipx::get_user_parameters IBI_FIFO_ADDRESS_WIDTH -of_objects $cc]
+
 foreach {k v} { \
         "ASYNC_CLK" "false" \
         "OFFLOAD" "false" \
@@ -150,6 +190,83 @@ set_property -dict [list \
   "display_name" "Offload engine" \
   "tooltip" "\[OFFLOAD\] Allows to offload output data to a external receiver, like a DMA" \
 ] [ipgui::get_guiparamspec -name "OFFLOAD" -component $cc]
+
+## Command stream FIFO depth configuration
+set cmd_stream_fifo_group [ipgui::add_group -name "Command stream FIFO configuration" -component $cc \
+    -parent $page0 -display_name "Command stream FIFO configuration" ]
+
+ipgui::add_param -name "CMD_FIFO_ADDRESS_WIDTH" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "Command FIFO address width" \
+  "tooltip" "\[CMD_FIFO_ADDRESS_WIDTH\] Define the depth of the FIFO" \
+] [ipgui::get_guiparamspec -name "CMD_FIFO_ADDRESS_WIDTH" -component $cc]
+
+ipgui::add_param -name "CMDR_FIFO_ADDRESS_WIDTH" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "CMDR FIFO address width" \
+  "tooltip" "\[CMDR_FIFO_ADDRESS_WIDTH\] Define the depth of the FIFO" \
+] [ipgui::get_guiparamspec -name "CMDR_FIFO_ADDRESS_WIDTH" -component $cc]
+
+ipgui::add_param -name "SDO_FIFO_ADDRESS_WIDTH" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "SDO FIFO address width" \
+  "tooltip" "\[SDO_FIFO_ADDRESS_WIDTH\] Define the depth of the FIFO" \
+] [ipgui::get_guiparamspec -name "SDO_FIFO_ADDRESS_WIDTH" -component $cc]
+
+ipgui::add_param -name "SDI_FIFO_ADDRESS_WIDTH" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "SDI FIFO address width" \
+  "tooltip" "\[SDI_FIFO_ADDRESS_WIDTH\] Define the depth of the FIFO" \
+] [ipgui::get_guiparamspec -name "SDI_FIFO_ADDRESS_WIDTH" -component $cc]
+
+ipgui::add_param -name "IBI_FIFO_ADDRESS_WIDTH" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "IBI FIFO address width" \
+  "tooltip" "\[IBI_FIFO_ADDRESS_WIDTH\] Define the depth of the FIFO" \
+] [ipgui::get_guiparamspec -name "SDI_FIFO_ADDRESS_WIDTH" -component $cc]
+
+## Provisioned ID and dynamic address configuration
+set cmd_stream_fifo_group [ipgui::add_group -name "Provisioned ID and dynamic address configuration" -component $cc \
+    -parent $page0 -display_name "Provisioned ID and dynamic address configuration" ]
+
+ipgui::add_param -name "DA" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "Dynamic address" \
+  "tooltip" "\[DA\] Controller dynamic address, used only for conformity, has no effect." \
+] [ipgui::get_guiparamspec -name "DA" -component $cc]
+
+ipgui::add_param -name "PID_MANUF_ID" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "PID - Manufacturer ID" \
+  "tooltip" "\[PID_MANUF_ID\] MIPI Manufacturer ID" \
+] [ipgui::get_guiparamspec -name "PID_MANUF_ID" -component $cc]
+
+ipgui::add_param -name "PID_TYPE_SELECTOR" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "PID - Type selector" \
+  "tooltip" "\[PID_TYPE_SELECTOR\] 1'b1: Random Value, 1'b0: Vendor Fixed Value" \
+] [ipgui::get_guiparamspec -name "PID_TYPE_SELECTOR" -component $cc]
+
+
+ipgui::add_param -name "PID_PART_ID" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "PID - Part ID" \
+  "tooltip" "\[PID_PART_ID\] Device identifier, use the same for all instances of this controller" \
+] [ipgui::get_guiparamspec -name "PID_PART_ID" -component $cc]
+
+
+ipgui::add_param -name "PID_INSTANCE_ID" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "PID - Instance ID" \
+  "tooltip" "\[PID_INSTANCE_ID\] Identify the individual device" \
+] [ipgui::get_guiparamspec -name "PID_INSTANCE_ID" -component $cc]
+
+
+ipgui::add_param -name "PID_EXTRA_ID" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "PID - Extra ID" \
+  "tooltip" "\[PID_EXTRA_ID\] Extra characteristics field" \
+] [ipgui::get_guiparamspec -name "PID_EXTRA_ID" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
