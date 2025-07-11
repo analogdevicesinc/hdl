@@ -12,7 +12,7 @@
 
 `timescale 1ns/100ps
 
-module ethernet_core_vcu118 #(
+module ethernet_vcu118 #(
   // Board configuration
   parameter TDMA_BER_ENABLE = 0,
 
