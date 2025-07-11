@@ -267,6 +267,10 @@ Example block design for Single link; M=2; L=8; JESD204C
       $     TX_JESD_S=4       \
       $     TX_JESD_NP=8
 
+  In the case of :adi:`VCU118` board, a CORUNDUM parameter is also available,
+  which enables or disables the Corundum Network Stack. By default it is
+  disabled, set to 0. To enable it, set the value to 1.
+
 The Rx link is operating with the following parameters:
 
 - Rx Deframer parameters: L=8, M=2, F=1, S=2, NP=16, N=16 (Quick Config 0x13)
@@ -347,6 +351,7 @@ The following are the parameters of this project that can be configured:
   kilosamples per converter (M)
 - [ADC/DAC]_DO_MEM_TYPE
 - Check out this guide on more details regarding these parameters: :ref:`axi_tdd`
+- CORUNDUM: enables the Corundum Network Stack
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -407,6 +412,16 @@ axi_mxfe_tx_dma      $INTF_CFG!="RX"                   0x7C43_0000     0x9C43_00
 mxfe_tx_data_offload $INTF_CFG!="RX"                   0x7C44_0000     0x9C44_0000 0xBC44_00000
 axi_tdd_0            $TDD_SUPPORT==1                   0x7C46_0000     0x9C46_0000 0xBC46_00000
 ==================== ================================= =============== =========== ============
+
+In case of :adi:`VCU118`, additional CPU interconnects may be present in the
+system.
+
+=================== ==================== ===========
+Instance            Depends on parameter Microblaze
+=================== ==================== ===========
+corundum_core       $CORUNDUM==1         0x5000_0000
+corundum_gpio_reset $CORUNDUM==1         0x5200_0000
+=================== ==================== ===========
 
 For the Intel carriers, only a part of the CPU interrupts are specified,
 as the rest depend on the values of $TX_NUM_OF_LANES and $TRANSCEIVER_TYPE
@@ -534,6 +549,14 @@ axi_mxfe_rx_jesd 11  55         87          107          139
 axi_mxfe_tx_jesd 10  54         86          106          138
 ================ === ========== =========== ============ =============
 
+In case of :adi:`VCU118`, additional interrupts may be present in the system.
+
+================ ======
+Instance name    HDL MB
+================ ======
+corundum_core    5
+================ ======
+
 Building the HDL project
 -------------------------------------------------------------------------------
 
@@ -640,6 +663,8 @@ for that project (ad9081_fmca_ebz/$carrier or ad9082_fmca_ebz/$carrier).
    +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
    | DAC_DO_MEM_TYPE   |      --- |      --- |    --- |    --- |    --- |      2 |   --- |    --- |
    +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | CORUNDUM          |      --- |      --- |    --- |    --- |      0 |    --- |   --- |    --- |
+   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
 
 .. collapsible:: Default values of the ``make`` parameters for AD9082-FMCA-EBZ
 
@@ -704,6 +729,16 @@ then the folder name will be:
 because of truncation of some keywords so the name will not exceed the limits
 of the Operating System (``JESD``, ``LANE``, etc. are removed) of 260
 characters.
+
+In case of the :adi:`VCU118`, if the Corundum Network Stack needs to be added,
+run the make command such as:
+
+``make CORUNDUM=1``
+
+.. note::
+
+   Other build parameters may be added to the make command as shown in the
+   previous example with multiple prameters when using the Corundum system.
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -848,6 +883,12 @@ HDL related
    * - JESD204_TPL_DAC
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      - :ref:`ad_ip_jesd204_tpl_dac`
+   * - CORUNDUM_CORE
+     - :git-hdl:`library/corundum/corundum_core`
+     - :ref:`corundum_core`
+   * - ETHERNET_CORE
+     - :git-hdl:`library/corundum/ethernet`
+     - :ref:`corundum_ethernet_core`
 
 - :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
 - :ref:`jesd204`

@@ -1,53 +1,33 @@
 .. _corundum:
 
-Corundum
+Corundum Network Stack
 ================================================================================
 
-.. hdl-component-diagram::
+.. toctree::
+   :hidden:
 
-The :git-hdl:`Corundum <library/corundum>` IP core
-repackages `Corundum NIC <https://github.com/corundum/corundum>`__ as an IP Core.
+   Corundum Core <corundum_core/index>
+   Corundum Ethernet Core <ethernet/index>
 
-Features
+The :git-hdl:`Corundum <library/corundum>` framework repackages
+`Corundum NIC <https://github.com/ucsdsysnet/corundum>`__ into 2 separate IP
+cores. These cores are the :ref:`corundum_core`, which is common in all projects
+that use the Corundum Network Stack and the :ref:`corundum_ethernet_core`, which
+is specific to each FPGA board and encompasses the Ethernet physical layer and
+other auxiliary structures such as SPI and I2C that are required by the Corundum
+system.
+
+Sub-modules
 --------------------------------------------------------------------------------
 
-* AXI-based configuration
-* Vivado compatible
+* :ref:`corundum_core`
+* :ref:`corundum_ethernet_core`
 
-Files
+Software support
 --------------------------------------------------------------------------------
 
-.. list-table::
-   :header-rows: 1
-
-   * - Name
-     - Description
-   * - :git-hdl:`library/corundum/corundum.v`
-     - Verilog source for the Corundum top module.
-   * - :git-hdl:`library/corundum/corundum_ip.tcl`
-     - TCL script to generate the Vivado IP-integrator project.
-
-Configuration Parameters
---------------------------------------------------------------------------------
-
-.. hdl-parameters::
-
-Interface
---------------------------------------------------------------------------------
-
-.. hdl-interfaces::
-
-Building
---------------------------------------------------------------------------------
-
-This project uses `Corundum NIC <https://github.com/corundum/corundum>`_
-and it needs to be cloned alongside this repository.
-
-.. code::
-
-   hdl/../> git clone https://github.com/corundum/corundum.git
-   hdl/../corundum/> git checkout ed4a26e2cbc0a429c45d5cd5ddf1177f86838914
-   hdl/library/corundum> make &
+* :git-linux:`Linux Driver <staging/corundum:drivers/net/mqnic/mqnic_main.c>`:
+  Linux driver for the Corundum Network Stack.
 
 .. admonition:: Publications
 
@@ -64,7 +44,4 @@ and it needs to be cloned alongside this repository.
 References
 --------------------------------------------------------------------------------
 
-* HDL IP core at :git-hdl:`library/corundum`
-* HDL project at :git-hdl:`projects/ad_gmsl2eth_sl`
-* :ref:`ad_gmsl2eth_sl`
-* :adi:`AD-GMSL2ETH-SL`
+* HDL IP cores at :git-hdl:`library/corundum`
