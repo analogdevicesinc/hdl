@@ -55,9 +55,6 @@ Supported carriers
      - :xilinx:`VCU118`
      - FMC+
    * -
-     - :xilinx:`VCU128`
-     - FMC+
-   * -
      - :xilinx:`ZCU102`
      - FMC HPC0
    * -
