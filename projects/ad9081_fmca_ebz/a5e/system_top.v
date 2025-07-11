@@ -261,7 +261,7 @@ module system_top #(
     .sys_clk_clk                                             (sys_clk),
     .sys_hps_io_hps_osc_clk                                  (hps_osc_clk),
 
-    .sys_rst_reset_n                                         (sys_resetn),
+    .sys_rst_reset_n                                         (sys_reset_n),
     .rst_ninit_done                                          (ninit_done),
     .h2f_reset_reset                                         (h2f_reset),
 
