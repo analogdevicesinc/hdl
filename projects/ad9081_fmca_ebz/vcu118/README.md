@@ -15,7 +15,7 @@ All of the RX/TX link modes can be found in the [AD9081 data sheet](https://www.
 
 The overwritable parameters from the environment are:
 
-- JESD_MODE: link layer encoder mode used; 
+- JESD_MODE: link layer encoder mode used;
   - 8B10B - 8b10b link layer defined in JESD204B
   - 64B66B - 64b66b link layer defined in JESD204C
 - [RX/TX]_LANE_RATE: lane rate of the [RX/TX] link (RX: MxFE to FPGA/TX: FPGA to MxFE)
@@ -25,6 +25,7 @@ The overwritable parameters from the environment are:
 - [RX/TX]_JESD_NP: [RX/TX] number of bits per sample, only 16 is supported
 - [RX/TX]_NUM_LINKS: [RX/TX] number of links, which matches the number of MxFE devices
 - [RX/TX]_KS_PER_CHANNEL: [RX/TX] number of samples stored in internal buffers in kilosamples per converter (M), for each channel in a block RAM, for a contiguous capture
+- CORUNDUM: includes and enables the Corundum Network Stack in the design
 
 ### Example configurations
 
@@ -158,3 +159,26 @@ TX_NUM_LINKS=1
 ```
 
 Corresponding device tree: [vcu118_ad9081_204c_txmode_24_rxmode_26_lr_24_75Gbps.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_ad9081_204c_txmode_24_rxmode_26_lr_24_75Gbps.dts)
+
+#### JESD204B subclass 1, TX mode 9, RX mode 10 (default) with Corundum Network Stack
+
+This specific command is equivalent to running `make CORUNDUM=1`:
+
+```
+make JESD_MODE=8B10B \
+RX_LANE_RATE=10 \
+TX_LANE_RATE=10 \
+RX_JESD_M=8 \
+RX_JESD_L=4 \
+RX_JESD_S=1 \
+RX_JESD_NP=16 \
+RX_NUM_LINKS=1 \
+TX_JESD_M=8 \
+TX_JESD_L=4 \
+TX_JESD_S=1 \
+TX_JESD_NP=16 \
+TX_NUM_LINKS=1 \
+RX_KS_PER_CHANNEL=64 \
+TX_KS_PER_CHANNEL=64 \
+CORUNDUM = 1
+```

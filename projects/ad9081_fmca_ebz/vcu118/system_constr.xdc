@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -17,11 +17,11 @@ set_property         -dict {PACKAGE_PIN M35  IOSTANDARD LVCMOS18                
 set_property         -dict {PACKAGE_PIN L35  IOSTANDARD LVCMOS18                                     } [get_ports agc3[1]                   ]    ; ## IO_L24N_T3U_N11_45
 set_property         -dict {PACKAGE_PIN P36  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports clkin6_n                  ]    ; ## IO_L14N_T2L_N3_GC_45
 set_property         -dict {PACKAGE_PIN P35  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports clkin6_p                  ]    ; ## IO_L14P_T2L_N2_GC_45
-set_property         -dict {PACKAGE_PIN AM39                                                         } [get_ports clkin8_n                  ]    ; ## MGTREFCLK1N_120 
-set_property         -dict {PACKAGE_PIN AM38                                                         } [get_ports clkin8_p                  ]    ; ## MGTREFCLK1P_120 
-set_property         -dict {PACKAGE_PIN AK39                                                         } [get_ports fpga_refclk_in_n          ]    ; ## MGTREFCLK0N_121 
-set_property         -dict {PACKAGE_PIN AK38                                                         } [get_ports fpga_refclk_in_p          ]    ; ## MGTREFCLK0P_121 
-set_property         -dict {PACKAGE_PIN V39                                                          } [get_ports fpga_refclk_in_replica_n  ]    ; ## MGTREFCLK0N_126 
+set_property         -dict {PACKAGE_PIN AM39                                                         } [get_ports clkin8_n                  ]    ; ## MGTREFCLK1N_120
+set_property         -dict {PACKAGE_PIN AM38                                                         } [get_ports clkin8_p                  ]    ; ## MGTREFCLK1P_120
+set_property         -dict {PACKAGE_PIN AK39                                                         } [get_ports fpga_refclk_in_n          ]    ; ## MGTREFCLK0N_121
+set_property         -dict {PACKAGE_PIN AK38                                                         } [get_ports fpga_refclk_in_p          ]    ; ## MGTREFCLK0P_121
+set_property         -dict {PACKAGE_PIN V39                                                          } [get_ports fpga_refclk_in_replica_n  ]    ; ## MGTREFCLK0N_126
 set_property         -dict {PACKAGE_PIN V38                                                          } [get_ports fpga_refclk_in_replica_p  ]    ; ## MGTREFCLK0P_126
 set_property  -quiet -dict {PACKAGE_PIN AL46                                                         } [get_ports rx_data_n[2]              ]    ; ## MGTYRXN2_121               FPGA_SERDIN_0_N
 set_property  -quiet -dict {PACKAGE_PIN AL45                                                         } [get_ports rx_data_p[2]              ]    ; ## MGTYRXP2_121               FPGA_SERDIN_0_P
@@ -55,7 +55,7 @@ set_property  -quiet -dict {PACKAGE_PIN T43                                     
 set_property  -quiet -dict {PACKAGE_PIN T42                                                          } [get_ports tx_data_p[4]              ]    ; ## MGTYTXP0_126               FPGA_SERDOUT_6_P
 set_property  -quiet -dict {PACKAGE_PIN AL41                                                         } [get_ports tx_data_n[3]              ]    ; ## MGTYTXN3_121               FPGA_SERDOUT_7_N
 set_property  -quiet -dict {PACKAGE_PIN AL40                                                         } [get_ports tx_data_p[3]              ]    ; ## MGTYTXP3_121               FPGA_SERDOUT_7_P
-set_property  -quiet -dict {PACKAGE_PIN AK32 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_n[0]          ]    ; ## IO_L14N_T2L_N3_GC_43       
+set_property  -quiet -dict {PACKAGE_PIN AK32 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_n[0]          ]    ; ## IO_L14N_T2L_N3_GC_43
 set_property  -quiet -dict {PACKAGE_PIN AJ32 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_p[0]          ]    ; ## IO_L14P_T2L_N2_GC_43
 set_property  -quiet -dict {PACKAGE_PIN AT40 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_n[1]          ]    ; ## IO_L4N_T0U_N7_DBC_AD7N_43
 set_property  -quiet -dict {PACKAGE_PIN AT39 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_p[1]          ]    ; ## IO_L4P_T0U_N6_DBC_AD7P_43
@@ -93,7 +93,4 @@ set_property         -dict {PACKAGE_PIN AL32 IOSTANDARD LVDS     DIFF_TERM_ADV T
 set_property         -dict {PACKAGE_PIN AJ33 IOSTANDARD LVCMOS18                                     } [get_ports txen[0]                   ]    ; ## IO_L19P_T3L_N0_DBC_AD9P_43
 set_property         -dict {PACKAGE_PIN AK33 IOSTANDARD LVCMOS18                                     } [get_ports txen[1]                   ]    ; ## IO_L19N_T3L_N1_DBC_AD9N_43
 
-set_property         -dict {PACKAGE_PIN AK35 IOSTANDARD LVCMOS18 PULLTYPE PULLUP                     } [get_ports vadj_1v8_pgood            ]    ; ## IO_T1U_N12_43_AK35 
-
-
-
+set_property         -dict {PACKAGE_PIN AK35 IOSTANDARD LVCMOS18 PULLTYPE PULLUP                     } [get_ports vadj_1v8_pgood            ]    ; ## IO_T1U_N12_43_AK35
