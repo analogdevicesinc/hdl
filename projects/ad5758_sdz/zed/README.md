@@ -2,6 +2,8 @@
 
 ## Building the project
 
+- VADJ with which it was tested in hardware: 3.3V
+
 ```
 cd projects/ad5758_sdz/zed
 make
