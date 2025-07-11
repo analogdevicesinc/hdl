@@ -48,6 +48,9 @@ Configuration Parameters
      - Core ID should be unique for each IP in the system
    * - FPGA_TECHNOLOGY
      - Used to select between FPGA devices, auto set in project.
+   * - BUFMRCE_EN
+     - Used to select between pinouts that are differentiated
+       by how the frame clock signals are distributed.
 
 Interface
 --------------------------------------------------------------------------------
@@ -59,7 +62,7 @@ Interface
    * - fco_p
      - LVDS input positive side of differential data frame signal
    * - fco_n
-     - LVDS input negative side of differential data frame signal  
+     - LVDS input negative side of differential data frame signal
    * - dco_p
      - LVDS input positive side of differential reference clock signal
    * - dco_n
@@ -83,6 +86,8 @@ Interface
      - Received data output
    * - adc_dovf
      - Data overflow. Must be connected to the DMA
+   * - up_adc_pn_err
+     - Error monitoring
    * - s_axi
      - Standard AXI Slave Memory Map interface
 
@@ -96,7 +101,7 @@ The axi_ada4355 operates as follows:
   a 1:8 ratio.
 * The LVDS data frame is also deserialized by the
   :git-hdl:`ad_serdes_in <library/xilinx/common/ad_serdes_in.v>` module with
-  a 1:8 ratio.  
+  a 1:8 ratio.
 * After deserialization, data is aligned using data_frame and a fixed pattern.
 
 Register Map
