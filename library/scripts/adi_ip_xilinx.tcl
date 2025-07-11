@@ -251,10 +251,15 @@ proc adi_ip_add_core_dependencies {vlnvs} {
 }
 
 ## Create a project which will be packed as an IP.
+#  If the library has variants, for example, requires to target a specific
+#  family during creation, a second parameter is passed to store the library in
+#  a sub-folder. Still, in most cases, device specific steps should be delegate
+#  to the pre-synthesis step.
 #
 # \param[ip_name] - IP name
+# \param[folder_name] - Sub-folder to store the IP
 #
-proc adi_ip_create {ip_name {folder_name {}}} {
+proc adi_ip_create {ip_name {folder_name "." }} {
 
   global ad_hdl_dir
   global ad_ghdl_dir
@@ -278,11 +283,7 @@ proc adi_ip_create {ip_name {folder_name {}}} {
     }
   }
 
-  if {$folder_name == {}} {
-    create_project $ip_name . -force
-  } else {
-    create_project $ip_name $folder_name -force
-  }
+  create_project $ip_name $folder_name -force
 
 
   ## Load custom message severity definitions
