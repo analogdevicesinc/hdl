@@ -253,7 +253,7 @@ proc adi_ip_add_core_dependencies {vlnvs} {
 #
 # \param[ip_name] - IP name
 #
-proc adi_ip_create {ip_name} {
+proc adi_ip_create {ip_name {folder_name {}}} {
 
   global ad_hdl_dir
   global ad_ghdl_dir
@@ -277,7 +277,12 @@ proc adi_ip_create {ip_name} {
     }
   }
 
-  create_project $ip_name . -force
+  if {$folder_name == {}} {
+    create_project $ip_name . -force
+  } else {
+    create_project $ip_name $folder_name -force
+  }
+
 
   ## Load custom message severity definitions
 
