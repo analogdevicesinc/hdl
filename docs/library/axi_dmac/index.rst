@@ -856,19 +856,6 @@ Analog Devices recommends to use the provided software drivers.
 - :dokuwiki:`Analog Device AXI-DMAC DMA Controller Linux Driver
   <resources/tools-software/linux-drivers/axi-dmac>`
 
-Known Issues
---------------------------------------------------------------------------------
-
-1. When max bytes per burst matches the data width of destination interface an
-erroneous extra beat is inserted after every valid beat on the destination side.
-Example configuration:
-
-* axi mm -> axi stream
-* max bytes per burst = 128
-* destination width = 1024 bits
-
-Workaround: increase the max bytes per burst to larger than 128
-
 Technical Support
 --------------------------------------------------------------------------------
 
