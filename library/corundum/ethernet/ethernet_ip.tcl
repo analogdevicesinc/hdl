@@ -9,76 +9,85 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 global VIVADO_IP_LIBRARY
 
 if [info exists ::env(BOARD)] {
-  set board $::env(BOARD)
-  set board_lowercase [string tolower $board]
-  set ethernet_ip "ethernet_$board_lowercase"
-
-  adi_ip_create $ethernet_ip $board_lowercase
-  
-  cd ./$board_lowercase
-
-  if [string equal $board VCU118] {
-    set_property part xcvu9p-flga2104-2L-e [current_project]
-    source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
-    source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
-  } elseif [string equal $board K26] {
-    set_property part xck26-sfvc784-2LVI-i [current_project]
-    source "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/ip/eth_xcvr_gth.tcl"
-  } else {
-    error "$board board is not supported!"
-  }
+  set board [string tolower $::env(BOARD)]
 } else {
   error "Missing BOARD environment variable definition from makefile!"
 }
 
-if [string equal $board VCU118] {
-# Corundum sources
-  adi_ip_files ethernet [list \
-    "../ethernet_core_vcu118.v" \
-    "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
-    "$ad_hdl_dir/../corundum/fpga/common/rtl/mqnic_port_map_mac_axis.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/rtl/sync_reset.v" \
-    "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_wrapper.v" \
-    "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_ch_wrapper.v" \
-    "$ad_hdl_dir/../corundum/fpga/common/rtl/rb_drp.v" \
-    "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_pad.v" \
-    "$ad_hdl_dir/../corundum/fpga/common/rtl/mac_ts_insert.v" \
-  ]
-} elseif [string equal $board K26] {
-  adi_ip_files ethernet [list \
-    "../ethernet_core_k26.v" \
-    "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/rtl/sync_signal.v" \
-    "$ad_hdl_dir/../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_quad_wrapper.v" \
-    "$ad_hdl_dir/../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_wrapper.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_tx_if.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_tx.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_frame_sync.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_if.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_ber_mon.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_watchdog.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/xgmii_baser_dec_64.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/xgmii_baser_enc_64.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/axis_xgmii_rx_32.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/axis_xgmii_tx_32.v" \
-    "$ad_hdl_dir/../corundum/fpga/common/rtl/mqnic_port_map_phy_xgmii.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/rtl/sync_reset.v" \
-    "$ad_hdl_dir/../corundum/fpga/common/rtl/rb_drp.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_mac_10g.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/axis_xgmii_rx_64.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/axis_xgmii_tx_64.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/lfsr.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/mac_ctrl_rx.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/mac_ctrl_tx.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/mac_pause_ctrl_rx.v" \
-    "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/mac_pause_ctrl_tx.v" \
-  ]
-} else {
-  error "Missing board type"
+adi_ip_create ethernet_$board $board
+
+cd ./$board
+
+switch $board {
+  "vcu118" {
+    set_property part xcvu9p-flga2104-2L-e [current_project]
+  }
+  "xcvu11p" {
+    set_property part xcvu11p-flgb2104-2-i [current_project]
+  }
+  "k26" {
+    set_property part xck26-sfvc784-2LVI-i [current_project]
+  }
+  default {
+    error "$board board is not supported!"
+  }
+}
+switch $board {
+  "vcu118" -
+  "xcvu11p" {
+    source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
+    source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
+
+    # Corundum sources
+    adi_ip_files ethernet_vcu118 [list \
+      "../ethernet_vcu118.v" \
+      "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/mqnic_port_map_mac_axis.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/rtl/sync_reset.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_wrapper.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_ch_wrapper.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/rb_drp.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_pad.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/mac_ts_insert.v" \
+    ]
+  }
+  "k26" {
+    source "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/ip/eth_xcvr_gth.tcl"
+
+    adi_ip_files ethernet [list \
+      "../ethernet_core_k26.v" \
+      "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/rtl/sync_signal.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_quad_wrapper.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_wrapper.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_tx_if.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_tx.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_frame_sync.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_if.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_ber_mon.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g_rx_watchdog.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/xgmii_baser_dec_64.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/xgmii_baser_enc_64.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/axis_xgmii_rx_32.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/axis_xgmii_tx_32.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/mqnic_port_map_phy_xgmii.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/rtl/sync_reset.v" \
+      "$ad_hdl_dir/../corundum/fpga/common/rtl/rb_drp.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_mac_10g.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/axis_xgmii_rx_64.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/axis_xgmii_tx_64.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/lfsr.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/mac_ctrl_rx.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/mac_ctrl_tx.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/mac_pause_ctrl_rx.v" \
+      "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/mac_pause_ctrl_tx.v" \
+    ]
+  }
 }
 
-adi_ip_properties_lite $ethernet_ip
+adi_ip_properties_lite ethernet_$board
+
 set cc [ipx::current_core]
 set_property display_name "Corundum Ethernet $board" $cc
 set_property description "Corundum Ethernet Core IP" $cc
