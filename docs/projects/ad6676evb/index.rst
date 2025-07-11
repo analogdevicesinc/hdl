@@ -41,11 +41,17 @@ Supported carriers
      - Carrier
      - FMC slot
    * - :adi:`EVAL-AD6676`
-     - :xilinx:`VC707`
+     - :xilinx:`VC707` *
      - FMC1 HPC
    * -
      - :xilinx:`ZC706`
      - FMC HPC
+
+.. admonition:: Legend
+   :class: note
+
+   - ``*`` removed; last release that supports this project on this carrier is
+     :git-hdl:`hdl_2023_r2 <hdl_2023_r2:projects/ad6676evb/vc707>`
 
 Block design
 -------------------------------------------------------------------------------
@@ -247,26 +253,16 @@ the HDL repository.
 
 **Linux/Cygwin/WSL**
 
-Building the VC707/ZC706 project with the default configuration,
+Building the ZC706 project with the default configuration,
 RX_JESD_L=2 lanes.
-
-.. shell:: bash
-
-   $cd hdl/projects/ad6676evb/vc707
-   $make
 
 .. shell:: bash
 
    $cd hdl/projects/ad6676evb/zc706
    $make
 
-Building the VC707/ZC706 project with the other available configuration,
+Building the ZC706 project with the other available configuration,
 with just **one lane**:
-
-.. shell:: bash
-
-   $cd hdl/projects/ad6676evb/vc707
-   $make RX_JESD_L=1
 
 .. shell:: bash
 
