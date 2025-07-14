@@ -13,7 +13,7 @@ and ``axi_led_control_intel`` for Intel.
 Verilog File
 --------------------------------------------------------------------------------
 
-Lets say you want to make a new IP with the name ``<module_name>``.
+Let's say you want to make a new IP with the name ``<module_name>``.
 You must edit the verilog file so that it has the same name (e.g. ``axi_led_control.v``).
 After that, feel free to write the verilog code for your purpose.
 You can also use other instances of modules, but be sure to include them after,
@@ -177,9 +177,9 @@ Examples:
 Importing with Using Method
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The ``USING`` method allows to look-up a register map to import register and
+The ``USING`` method allows looking up a register map to import register and
 fields.
-A register map can look-up multiple register maps by repeating the method for
+A register map can look up multiple register maps by repeating the method for
 each register map, for example:
 
 .. code::
@@ -235,7 +235,7 @@ Some considerations:
 
 * Imported registers shall have non-imported fields, for example, when importing
   a register that is reserved for custom implementation.
-* Imported fields must be inside a imported register, since the field name is not
+* Imported fields must be inside an imported register, since the field name is not
   unique.
 * Multiple fields can be imported from a single ``FIELD`` group.
 * Multiple register maps can be used for lookup. Add each in a different ``USING``
@@ -286,6 +286,32 @@ use the generic adc/dac templates that include all available registers:
 * :git-hdl:`docs/regmap/adi_regmap_common_template.txt`
 * :git-hdl:`docs/regmap/adi_regmap_axi_adc_template.txt`
 * :git-hdl:`docs/regmap/adi_regmap_axi_dac_template.txt`
+
+Versioning
+--------------------------------------------------------------------------------
+
+IP cores versions should follow `Semantic Versioning <https://semver.org/>`
+``v<major>.<minor>.<patch>`` format.
+A fix increases the patch number, a feature the minor number, and a breaking
+change the major number. The first stable release version should be higher or
+equal to v1.0.0.
+
+Device tree compatible take the major number prefixed by ``v``, for example,
+for *axi_my_ip* v1.2.3, the *compatible* is *adi,axi-my-ip-v1* and the
+*dt-binding* filename is *adi,axi-my-ip.yaml* (no major suffix). Per the last
+paragraph, *adi,axi-my-ip-v0* is **never** appropriate. Software drivers parse
+the ``VERSION`` register for feature handling across versions. The patch number
+shouldn't have to be handled by software drivers, if it seems necessary to,
+consider incrementing the minor number instead.
+
+Due to AMD Xilinx old default IP core version, many IP cores bindings start at
+1.00.a. For compatibility, the patch value is kept, but should be treated as
+decimal instead of character.
+
+The IP-XACT version must have the format ``<major>.<minor>.<patch>``, e.g.
+``1.2.3`` (**no** ``v`` prefix). To set the IP-XACT version based on the
+``CORE_VERSION`` parameter, use the ``set_ip_version_from_file`` method
+(prefixed by each vendor format), passing the file that defines the parameter.
 
 Xilinx
 --------------------------------------------------------------------------------
@@ -813,7 +839,7 @@ trying to simulate most of the available options when creating a new IP.
 
       # Generating the IP given as first parameter on the path given as the second
       # parameter. Without the second parameter the IP will be generated in
-      # ./ltt directory and  in the default IP download directory of
+      # ./ltt directory and in the default IP download directory of
       # Lattice Propel Builder (~/PropelIPLocal) if the LATTICE_DEFAULT_PATHS
       # env variable is exported like:
       # 'export LATTICE_DEFAULT_PATHS=1' before running the script or running make.

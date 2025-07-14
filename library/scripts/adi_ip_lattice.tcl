@@ -842,6 +842,48 @@ namespace eval ipl {
     }
 
 ###############################################################################
+## Returns the semantic version of the IP Core. It takes a single parameter,
+## the file that defines CORE_VERSION, where the value is extracted from.
+#
+# \opt[ip] -ip $ip
+# \opt[file] -file "axi_some_ip.v"
+###############################################################################
+    proc set_ip_version_from_file {args} {
+        array set opt [list -ip "$::ipl::ip" \
+            -file "" \
+        {*}$args]
+
+        set optl {
+            -ip
+        }
+        set argl {}
+        foreach op $optl {
+            set argl [list {*}$argl $op $opt($op)]
+        }
+        set file $opt(-file)
+
+        set f [open $file]
+        set data [read $f]
+        close $f
+
+        regsub -all {/\*.*?\*/} $data "" data
+        regsub -all {\n} $data " " data
+        regsub -all {\s+} $data " " data
+        set pattern {CORE_VERSION\s*=\s*\{16'h([0-9A-Fa-f]+),\s*8'h([0-9A-Fa-f]+),\s*8'h([0-9A-Fa-f]+)\};}
+        set match [regexp $pattern $data match hex_major hex_minor hex_patch]
+
+        if {$match} {
+            set major [expr 0x$hex_major]
+            set minor [expr 0x$hex_minor]
+            set patch [expr 0x$hex_patch]
+            return $major.$minor.$patch
+        } else {
+            puts "WARNING, Failed to get CORE_VERSION from $file to set version"
+            return "1.0"
+        }
+    }
+
+###############################################################################
 ## Sets the IP structure with the specified general IP parameters.
 ## You can check the Lattice Propel IP Packager documentation for parameter
 ## use cases at: https://www.latticesemi.com/view_document?document_id=54003

@@ -19,6 +19,7 @@ ad_ip_files axi_spi_engine [list\
   $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \
   axi_spi_engine_constr.sdc \
   axi_spi_engine.v]
+ad_set_ip_version_from_file "axi_spi_engine.v"
 
 # parameters
 

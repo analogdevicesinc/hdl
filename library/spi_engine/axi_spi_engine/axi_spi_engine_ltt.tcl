@@ -8,12 +8,13 @@ source $ad_hdl_dir/library/scripts/adi_ip_lattice.tcl
 
 set mod_data [ipl::parse_module ./axi_spi_engine.v]
 set ip $::ipl::ip
+set version [ipl::set_ip_version_from_file -file "axi_spi_engine.v"]
 
 set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
 # set ip [ipl::add_parameters_from_module -ip $ip -mod_data $mod_data]
 
 set ip [ipl::general \
-    -vlnv "analog.com:ip:axi_spi_engine:1.0" \
+    -vlnv "analog.com:ip:vlnv "analog.com:ip:axi_spi_engine:$version" \
     -category "ADI" \
     -keywords "ADI IP" \
     -min_radiant_version "2023.2" \

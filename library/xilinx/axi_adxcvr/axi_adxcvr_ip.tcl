@@ -21,6 +21,7 @@ set_property used_in_simulation false [get_files $ad_hdl_dir/library/scripts/adi
 set_property used_in_synthesis false [get_files $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl]
 
 adi_ip_properties axi_adxcvr
+adi_set_ip_version_from_file "axi_adxcvr_up.v"
 adi_ip_infer_mm_interfaces axi_adxcvr
 
 adi_init_bd_tcl

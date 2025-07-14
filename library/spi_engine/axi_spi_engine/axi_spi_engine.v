@@ -133,7 +133,9 @@ module axi_spi_engine #(
   input [7:0] offload_sync_data
 );
 
-  localparam PCORE_VERSION = 'h010501;
+  localparam [31:0] CORE_VERSION = {16'h0001,     /* MAJOR */
+                                     8'h05,       /* MINOR */
+                                     8'h01};      /* PATCH */
   localparam S_AXI = 0;
   localparam UP_FIFO = 1;
 
@@ -342,7 +344,7 @@ module axi_spi_engine #(
   reg [7:0] cmd_fifo_address_width = CMD_FIFO_ADDRESS_WIDTH;
   always @(posedge clk) begin
     case (up_raddr_s)
-      8'h00: up_rdata_ff <= PCORE_VERSION;
+      8'h00: up_rdata_ff <= CORE_VERSION;
       8'h01: up_rdata_ff <= ID;
       8'h02: up_rdata_ff <= up_scratch;
       8'h03: up_rdata_ff <= {8'b0, NUM_OF_SDI, DATA_WIDTH};

@@ -27,6 +27,7 @@ ad_ip_files i3c_controller_host_interface [list \
   i3c_controller_unpack.v \
   i3c_controller_write_ibi.v \
 ]
+ad_set_ip_version_from_file "i3c_controller_regmap.v"
 
 # Parameters
 

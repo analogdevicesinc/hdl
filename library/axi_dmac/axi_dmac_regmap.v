@@ -147,7 +147,9 @@ module axi_dmac_regmap #(
   input [31:0] dbg_ids1
 );
 
-  localparam PCORE_VERSION = 'h00040564;
+  localparam [31:0] CORE_VERSION = {16'h0004,     /* MAJOR */
+                                     8'h05,       /* MINOR */
+                                     8'h64};      /* PATCH */
   localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
   localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
 
@@ -245,7 +247,7 @@ module axi_dmac_regmap #(
   always @(posedge s_axi_aclk) begin
     if (up_rreq == 1'b1) begin
       case (up_raddr)
-      9'h000: up_rdata <= PCORE_VERSION;
+      9'h000: up_rdata <= CORE_VERSION;
       9'h001: up_rdata <= ID;
       9'h002: up_rdata <= up_scratch;
       9'h003: up_rdata <= 32'h444d4143; // "DMAC"

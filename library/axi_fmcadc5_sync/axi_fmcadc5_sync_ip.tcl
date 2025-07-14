@@ -17,6 +17,7 @@ adi_ip_files axi_fmcadc5_sync [list \
   "axi_fmcadc5_sync.v" ]
 
 adi_ip_properties axi_fmcadc5_sync
+adi_set_ip_version_from_file "axi_fmcadc5_sync.v"
 
 adi_init_bd_tcl
 adi_ip_bd axi_fmcadc5_sync "bd/bd.tcl"

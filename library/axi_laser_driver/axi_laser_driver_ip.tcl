@@ -18,6 +18,7 @@ adi_ip_files axi_laser_driver [list \
   "axi_laser_driver.v"]
 
 adi_ip_properties axi_laser_driver
+adi_set_ip_version_from_file "axi_laser_driver.v"
 adi_ip_ttcl axi_laser_driver "../axi_pulse_gen/axi_pulse_gen_constr.ttcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_laser_driver} [ipx::current_core]
