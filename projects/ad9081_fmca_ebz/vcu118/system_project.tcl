@@ -64,7 +64,7 @@ adi_project_files ad9081_fmca_ebz_vcu118 [list \
 ]
 
 if {[get_env_param CORUNDUM 0] == 1} {
-  adi_project_files apollo_som_vu11p [list \
+  adi_project_files ad9081_fmca_ebz_vcu118 [list \
     "system_constr_corundum.xdc" \
     "system_top_corundum.v" \
     "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/boot.xdc" \
@@ -84,7 +84,7 @@ if {[get_env_param CORUNDUM 0] == 1} {
     "$ad_hdl_dir/../corundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl" \
   ]
 } else {
-  adi_project_files apollo_som_vu11p [list \
+  adi_project_files ad9081_fmca_ebz_vcu118 [list \
     "system_top.v" \
   ]
 }
