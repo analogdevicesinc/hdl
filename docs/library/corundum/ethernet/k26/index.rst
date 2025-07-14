@@ -5,6 +5,14 @@ Corundum Ethernet Core for K26
 
 .. hdl-component-diagram::
 
+The :git-hdl:`Corundum Ethernet Core <library/corundum/corundum_ethernet_core_k26>`
+is used by the Corundum Network Stack. This Ethernet Core is specific to the K26
+FPGA board and encompasses the Ethernet physical layer and other auxiliary
+structures such as SPI and I2C that are required by the Corundum system. The
+configurations are based on
+`Corundum NIC <https://github.com/ucsdsysnet/corundum>`__ reference designs that
+were adapted to suit the ADI workflow.
+
 Files
 --------------------------------------------------------------------------------
 

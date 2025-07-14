@@ -12,7 +12,7 @@
 
 `timescale 1ns/100ps
 
-module ethernet_core #(
+module ethernet_k26 #(
 
   // Structural configuration
   parameter IF_COUNT = 1,
