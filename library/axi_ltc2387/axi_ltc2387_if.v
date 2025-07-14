@@ -200,25 +200,31 @@ module axi_ltc2387_if #(
     .delay_rst (delay_rst),
     .delay_locked (delay_locked));
 
-  ad_data_in #(
-    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-    .IDDR_CLK_EDGE ("OPPOSITE_EDGE"),
-    .IODELAY_CTRL (0),
-    .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
-  ) i_rx_db (
-    .rx_clk (dco),
-    .rx_data_in_p (db_p),
-    .rx_data_in_n (db_n),
-    .rx_data_p (db_p_int_s),
-    .rx_data_n (db_n_int_s),
-    .up_clk (up_clk),
-    .up_dld (up_dld[1]),
-    .up_dwdata (up_dwdata[9:5]),
-    .up_drdata (up_drdata[9:5]),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
-    .delay_locked ());
+  // instantiate only if TWOLANES
+  if (TWOLANES) begin
+    ad_data_in #(
+      .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+      .IDDR_CLK_EDGE ("OPPOSITE_EDGE"),
+      .IODELAY_CTRL (0),
+      .IODELAY_GROUP (IO_DELAY_GROUP),
+      .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+    ) i_rx_db (
+      .rx_clk (dco),
+      .rx_data_in_p (db_p),
+      .rx_data_in_n (db_n),
+      .rx_data_p (db_p_int_s),
+      .rx_data_n (db_n_int_s),
+      .up_clk (up_clk),
+      .up_dld (up_dld[1]),
+      .up_dwdata (up_dwdata[9:5]),
+      .up_drdata (up_drdata[9:5]),
+      .delay_clk (delay_clk),
+      .delay_rst (delay_rst),
+      .delay_locked ());
+  end else begin
+    assign db_p_int_s = 1'b0;
+    assign db_n_int_s = 1'b0;
+  end
 
   // clock
 
