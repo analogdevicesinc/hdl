@@ -3,58 +3,36 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-source ../../../scripts/adi_env.tcl
+source ../../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 global VIVADO_IP_LIBRARY
 
-if [info exists ::env(BOARD)] {
-  set board [string tolower $::env(BOARD)]
+adi_ip_create ethernet_xcvu11p
 
-  adi_ip_create ethernet_$board $board
+set_property part xcvu11p-flgb2104-2-i [current_project]
 
-  cd ./$board
+source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
+source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
 
-  switch $board {
-    "vcu118" {
-      set_property part xcvu9p-flga2104-2L-e [current_project]
-    }
-    "xcvu11p" {
-      set_property part xcvu11p-flgb2104-2-i [current_project]
-    }
-    default {
-      error "$board board is not supported!"
-    }
-  }
-  switch $board {
-    "vcu118" -
-    "xcvu11p" {
-      source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
-      source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
+# Corundum sources
+adi_ip_files ethernet_xcvu11p [list \
+  "ethernet_xcvu11p.v" \
+  "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/mqnic_port_map_mac_axis.v" \
+  "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/rtl/sync_reset.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_wrapper.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_ch_wrapper.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/rb_drp.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_pad.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/mac_ts_insert.v" \
+]
 
-      # Corundum sources
-      adi_ip_files ethernet_vcu118 [list \
-        "../ethernet_vcu118.v" \
-        "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
-        "$ad_hdl_dir/../corundum/fpga/common/rtl/mqnic_port_map_mac_axis.v" \
-        "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/rtl/sync_reset.v" \
-        "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_wrapper.v" \
-        "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_ch_wrapper.v" \
-        "$ad_hdl_dir/../corundum/fpga/common/rtl/rb_drp.v" \
-        "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_pad.v" \
-        "$ad_hdl_dir/../corundum/fpga/common/rtl/mac_ts_insert.v" \
-      ]
-    }
-  }
-} else {
-  error "Missing BOARD environment variable definition from Makefile!"
-}
-
-adi_ip_properties_lite ethernet_$board
+adi_ip_properties_lite ethernet_xcvu11p
 
 set cc [ipx::current_core]
 
-set_property display_name "Corundum Ethernet $board" $cc
+set_property display_name "Corundum Ethernet XCVU11P" $cc
 set_property description "Corundum Ethernet Core IP" $cc
 set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum} [ipx::current_core]
 
