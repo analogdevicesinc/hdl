@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -101,7 +101,13 @@ module axi_ltc2387_channel #(
 
   assign adc_pn_err_s = adc_pn_err;
 
-  // expected pattern
+  // expected patterns:
+  // 18-bit, one-lane: 10 1000 0001 1111 1100
+  // 16-bit, one-lane: 10 1000 0001 1111 11
+  // 18-bit, two-lane: 11 0011 0000 1111 1100
+  // 16-bit, one-lane: 11 0011 0000 1111 11
+  // basically, the 16-bit variant doesn't have the LSBs 00
+  // so we can sum this up as the 16-bit expected pattern + 2 zeroes for the 18-bit one
 
   generate
     if (TWOLANES == 1) begin
