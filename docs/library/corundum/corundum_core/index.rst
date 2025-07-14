@@ -51,11 +51,17 @@ Building
 
 This IP uses `Corundum NIC <https://github.com/ucsdsysnet/corundum>`_
 repository, which needs to be cloned alongside the HDL repository.
+Do a git checkout to the latest tested version (commit - 37f2607).
+When the 10G-based implementation (e.g., in case of K26) is used,
+apply the indicated patch.
 
 .. shell::
 
    ~/workspace
    $git clone https://github.com/ucsdsysnet/corundum.git
+   $cd corundum
+   $git checkout 37f2607
+   $git apply ../hdl/library/corundum/patch_axis_xgmii_rx_64.patch
    $cd hdl/library/corundum/corundum_core
    $make
 
