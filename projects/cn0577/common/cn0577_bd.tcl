@@ -70,8 +70,11 @@ ad_connect dco_p      axi_ltc2387/dco_p
 ad_connect dco_n      axi_ltc2387/dco_n
 ad_connect da_p       axi_ltc2387/da_p
 ad_connect da_n       axi_ltc2387/da_n
-ad_connect db_p       axi_ltc2387/db_p
-ad_connect db_n       axi_ltc2387/db_n
+
+if {$TWOLANES == "1"} {
+  ad_connect db_p       axi_ltc2387/db_p
+  ad_connect db_n       axi_ltc2387/db_n
+}
 
 ad_connect ref_clk                axi_ltc2387_dma/fifo_wr_clk
 ad_connect axi_ltc2387/adc_valid  axi_ltc2387_dma/fifo_wr_en
