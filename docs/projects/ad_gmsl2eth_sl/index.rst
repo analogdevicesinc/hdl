@@ -71,24 +71,23 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-========================  ===========
-Instance                  Address
-========================  ===========
-mipi_csi2_rx_subsyst_0    0x84A0_0000
-mipi_csi2_rx_subsyst_1    0x84A2_0000
-axi_iic_mipi              0x84A4_0000
-v_frmbuf_wr_0             0x84A6_0000
-v_frmbuf_wr_1             0x84A8_0000
-v_frmbuf_wr_2             0x84AA_0000
-v_frmbuf_wr_3             0x84AC_0000
-v_frmbuf_wr_4             0x84AE_0000
-v_frmbuf_wr_5             0x84B0_0000
-v_frmbuf_wr_6             0x84B2_0000
-v_frmbuf_wr_7             0x84B4_0000
-axi_pwm_gen_0             0x84B6_0000
-corundum/s_axil_ctrl      0xA000_0000
-corundum/s_axil_app_ctrl  0xA800_0000
-========================  ===========
+============================================      ===========
+Instance                                          Address
+============================================      ===========
+mipi_csi2_rx_subsyst_0                            0x84A0_0000
+mipi_csi2_rx_subsyst_1                            0x84A2_0000
+axi_iic_mipi                                      0x84A4_0000
+v_frmbuf_wr_0                                     0x84A6_0000
+v_frmbuf_wr_1                                     0x84A8_0000
+v_frmbuf_wr_2                                     0x84AA_0000
+v_frmbuf_wr_3                                     0x84AC_0000
+v_frmbuf_wr_4                                     0x84AE_0000
+v_frmbuf_wr_5                                     0x84B0_0000
+v_frmbuf_wr_6                                     0x84B2_0000
+v_frmbuf_wr_7                                     0x84B4_0000
+axi_pwm_gen_0                                     0x84B6_0000
+corundum_hierarchy/corundum_core/s_axil_ctrl      0xA000_0000
+============================================      ===========
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -211,7 +210,7 @@ v_frmbuf_wr4/interrupt   8  104          136
 v_frmbuf_wr5/interrupt   7   96          128
 v_frmbuf_wr6/interrupt   6   95          127
 v_frmbuf_wr7/interrupt   5   94          126
-combined_corundum_irq    4   93          125
+corundum_hierarcy/irq    4   93          125
 ======================= === ============ =============
 
 Building the HDL project
@@ -225,8 +224,24 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository, and then build the project as follows:.
 
-This project uses `Corundum NIC <https://github.com/corundum/corundum>`_
+This project uses `Corundum NIC <https://github.com/ucsdsysnet/corundum>`_
 and it needs to be cloned alongside this repository.
+Do a git checkout to the latest tested version (commit - 37f2607).
+When the 10G-based implementation (e.g., in case of K26) is used,
+apply the indicated patch.
+
+**Linux/Cygwin/WSL**
+
+.. shell::
+
+   $git clone https://github.com/ucsdsysnet/corundum.git
+   $cd corundum
+   $git checkout 37f2607
+   $git apply ../hdl/library/corundum/patch_axis_xgmii_rx_64.patch
+   $cd ../hdl/projects/ad_gmsl2eth_sl/k26
+   $make
+
+A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
 .. admonition:: Publications
 
@@ -239,17 +254,6 @@ and it needs to be cloned alongside this repository.
 .. _FCCM Paper: https://www.cse.ucsd.edu/~snoeren/papers/corundum-fccm20.pdf
 .. _FCCM Presentation: https://www.fccm.org/past/2020/forums/topic/corundum-an-open-source-100-gbps-nic/
 .. _Thesis: https://escholarship.org/uc/item/3mc9070t
-
-**Linux/Cygwin/WSL**
-
-.. shell::
-
-   $git clone https://github.com/corundum/corundum.git
-   $git checkout ed4a26e2cbc0a429c45d5cd5ddf1177f86838914
-   $cd hdl/projects/ad_gmsl2eth_sl/k26
-   $make
-
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
 Resources
 -------------------------------------------------------------------------------
@@ -289,7 +293,7 @@ HDL related
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
      - :ref:`axi_sysid`
-   * - CORUNDUM
+   * - CORUNDUM_NETSTACK
      - :git-hdl:`library/corundum`
      - :ref:`corundum`
    * - SYSID_ROM
