@@ -99,7 +99,7 @@ adi_ip_files corundum_core [list \
 set_property verilog_define {APP_CUSTOM_PARAMS_ENABLE APP_CUSTOM_PORTS_ENABLE} [current_fileset]
 
 adi_ip_properties_lite corundum_core
-set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum} [ipx::current_core]
+set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum/corundum_core} [ipx::current_core]
 
 set cc [ipx::current_core]
 
@@ -855,7 +855,7 @@ adi_if_infer_bus analog.com:interface:if_axis_stat slave m_axis_stat_app [list \
 
 # Bus-clock association
 
-adi_add_bus_clock "clk" "m_axi:s_axil_app_ctrl:s_axil_ctrl:m_axil_csr:s_axis_sync_tx_app:m_axis_sync_tx_app:s_axis_sync_rx_app:m_axis_sync_rx_app:s_axis_if_tx_app:m_axis_if_tx_app:s_axis_if_rx_app:m_axis_if_rx_app:m_axil_ctrl_app" "rst"
+adi_add_bus_clock "clk" "m_axi:s_axil_ctrl:m_axil_csr:s_axis_sync_tx_app:m_axis_sync_tx_app:s_axis_sync_rx_app:m_axis_sync_rx_app:s_axis_if_tx_app:m_axis_if_tx_app:s_axis_if_rx_app:m_axis_if_rx_app:m_axil_ctrl_app" "rst"
 adi_add_bus_clock "ddr_clk" "m_axi_ddr:m_axi_ddr_app" "ddr_rst"
 adi_add_bus_clock "hbm_clk" "m_axi_hbm:m_axi_hbm_app" "hbm_rst"
 adi_add_bus_clock "tx_clk" "m_axis_tx:s_axis_direct_tx_app:m_axis_direct_tx_app" "tx_rst"

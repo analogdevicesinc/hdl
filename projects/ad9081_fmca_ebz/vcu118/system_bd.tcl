@@ -149,18 +149,6 @@ ad_ip_parameter axi_ddr_cntrl CONFIG.C0_DDR4_BOARD_INTERFACE ddr4_sdram_c1_062
 
 if {$ad_project_params(CORUNDUM) == "1"} {
 
-  set INPUT_CHANNELS $RX_NUM_OF_CONVERTERS
-  set INPUT_SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL
-  set INPUT_SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH
-
-  set INPUT_WIDTH [expr $INPUT_CHANNELS*$INPUT_SAMPLES_PER_CHANNEL*$INPUT_SAMPLE_DATA_WIDTH]
-
-  set OUTPUT_CHANNELS $TX_NUM_OF_CONVERTERS
-  set OUTPUT_SAMPLES $TX_SAMPLES_PER_CHANNEL
-  set OUTPUT_SAMPLE_WIDTH $TX_DMA_SAMPLE_WIDTH
-
-  set OUTPUT_WIDTH [expr $OUTPUT_CHANNELS*$OUTPUT_SAMPLES*$OUTPUT_SAMPLE_WIDTH]
-
   source $ad_hdl_dir/library/corundum/scripts/corundum_vcu118_cfg.tcl
   set APP_ENABLE 0
   source $ad_hdl_dir/library/corundum/scripts/corundum.tcl
@@ -215,6 +203,18 @@ if {$ad_project_params(CORUNDUM) == "1"} {
   ad_cpu_interrupt "ps-5" "mb-5" corundum_hierarchy/irq
 
   if {$APP_ENABLE == 1} {
+    set INPUT_CHANNELS $RX_NUM_OF_CONVERTERS
+    set INPUT_SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL
+    set INPUT_SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH
+
+    set INPUT_WIDTH [expr $INPUT_CHANNELS*$INPUT_SAMPLES_PER_CHANNEL*$INPUT_SAMPLE_DATA_WIDTH]
+
+    set OUTPUT_CHANNELS $TX_NUM_OF_CONVERTERS
+    set OUTPUT_SAMPLES $TX_SAMPLES_PER_CHANNEL
+    set OUTPUT_SAMPLE_WIDTH $TX_DMA_SAMPLE_WIDTH
+
+    set OUTPUT_WIDTH [expr $OUTPUT_CHANNELS*$OUTPUT_SAMPLES*$OUTPUT_SAMPLE_WIDTH]
+
     ad_cpu_interconnect 0x51000000 corundum_hierarchy s_axil_application
 
     ad_ip_instance util_cpack2 util_corundum_cpack [list \
