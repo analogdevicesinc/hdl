@@ -258,7 +258,7 @@ proc adi_ip_add_core_dependencies {vlnvs} {
 # \param[ip_name] - IP name
 # \param[folder_name] - Sub-folder to store the IP
 #
-proc adi_ip_create {ip_name {folder_name "." }} {
+proc adi_ip_create {ip_name} {
 
   global ad_hdl_dir
   global ad_ghdl_dir
@@ -282,7 +282,7 @@ proc adi_ip_create {ip_name {folder_name "." }} {
     }
   }
 
-  create_project $ip_name $folder_name -force
+  create_project $ip_name . -force
 
 
   ## Load custom message severity definitions
