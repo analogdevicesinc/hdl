@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="This flow is not supported by us in Cygwin! Use Linux terminal or WSL instead, or the not recommended option -&gt; Building the BOOT.BIN in Vivado GUI." name="description" />
 
     <title>Build the boot image BOOT.BIN &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../index.html">
@@ -219,7 +220,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_extract/index.html">Util Extract</a></li>
@@ -230,7 +238,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -358,12 +366,12 @@ Content on this topic
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p><span class="red">This flow is not supported by us in Cygwin!</span> Use Linux terminal or
-<a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL</a> instead, or
+<a class="icon link reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank">WSL</a> instead, or
 the <strong>not recommended</strong> option -&gt;
 <a class="reference internal" href="build_hdl.html#build-hdl-cygwin"><span class="std std-ref">Building the BOOT.BIN in Vivado GUI</span></a>.</p>
 </div>
 <p>The boot image <code class="docutils literal notranslate"><span class="pre">BOOT.BIN</span></code> is built using the
-<a class="reference external" href="https://www.xilinx.com/support/documents/sw_manuals/xilinx2022_2/ug1283-bootgen-user-guide.pdf">AMD Xilinx Bootgen tool</a>
+<a class="icon link reference external" href="https://www.xilinx.com/support/documents/sw_manuals/xilinx2022_2/ug1283-bootgen-user-guide.pdf" target="_blank">AMD Xilinx Bootgen tool</a>
 which requires several input files.</p>
 <p>For <strong>ease of use</strong>, we provide a bash shell script which allows
 building the BOOT.BIN from <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code> (generated from building the
@@ -381,9 +389,9 @@ the <code class="docutils literal notranslate"><span class="pre">$PATH</span></c
 <p>Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
 cross-compiler for <code class="docutils literal notranslate"><span class="pre">arm</span></code> exists before running the script.
 For more information about cross compilers, see
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/zynq">Building the Zynq Linux kernel and devicetrees from source</a>.</p>
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/zynq" target="_blank">Building the Zynq Linux kernel and devicetrees from source</a>.</p>
 <p>The script used is
-<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynq_boot_bin/build_boot_bin.sh">build_boot_bin.sh</a>,
+<a class="icon link reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynq_boot_bin/build_boot_bin.sh" target="_blank">build_boot_bin.sh</a>,
 which needs to be downloaded on your computer.</p>
 <p>The script can take 3 parameters:</p>
 <ul class="simple">
@@ -396,7 +404,7 @@ which needs to be downloaded on your computer.</p>
 <p>The u-boot can be taken from the <em>bootgen_sysfiles.tgz</em> archive located in
 the project folder of the ADI Kuiper Linux image from the SD card.</p>
 <p>Keep in mind that <strong>the u-boot is FPGA-specific</strong>!</p>
-<p>See the beginning of <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
+<p>See the beginning of <a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" target="_blank" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
 instructions on how to obtain the ADI Kuiper image.</p>
 </div>
 <p>The script can be saved in the folder local to the project (for
@@ -425,14 +433,14 @@ The folder follows the pattern: <em>hdl/projects/$ADI_PART/$CARRIER/output_boot_
 </section>
 <section id="for-zynq-ultrascale-mp">
 <span id="build-boot-bin-zynqmp"></span><h2>For Zynq UltraScale+ MP<a class="headerlink" href="#for-zynq-ultrascale-mp" title="Permalink to this heading"></a></h2>
-<p>This section applies to the ZynqMP-based carriers (<a class="reference external" href="https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-ultrascale-plus-mpsoc.html">Zynq UltraScale+ MPSoC</a>),
-usually <a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a> in our systems, but not limited to this one only.</p>
+<p>This section applies to the ZynqMP-based carriers (<a class="icon link reference external" href="https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-ultrascale-plus-mpsoc.html" target="_blank">Zynq UltraScale+ MPSoC</a>),
+usually <a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a> in our systems, but not limited to this one only.</p>
 <p>Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
 cross-compiler for <code class="docutils literal notranslate"><span class="pre">arm64</span></code> exists before running the script.
 For more information about cross compilers, see
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/zynqmp">Building the ZynqMP / MPSoC Linux kernel and devicetrees from source</a>.</p>
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/zynqmp" target="_blank">Building the ZynqMP / MPSoC Linux kernel and devicetrees from source</a>.</p>
 <p>The script used is
-<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynqmp_boot_bin/build_zynqmp_boot_bin.sh">build_zynqmp_boot_bin.sh</a>,
+<a class="icon link reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynqmp_boot_bin/build_zynqmp_boot_bin.sh" target="_blank">build_zynqmp_boot_bin.sh</a>,
 which needs to be downloaded on your computer.</p>
 <p>The script can take 4 parameters (the last one is optional):</p>
 <ul class="simple">
@@ -447,7 +455,7 @@ which needs to be downloaded on your computer.</p>
 archive located in the project folder of the ADI Kuiper Linux image from
 the SD card.</p>
 <p>Keep in mind that <strong>the u-boot is FPGA-specific</strong>!</p>
-<p>See the beginning of <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
+<p>See the beginning of <a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" target="_blank" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
 instructions on how to obtain the ADI Kuiper image.</p>
 </div>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
@@ -474,14 +482,14 @@ The folder follows the pattern: <em>hdl/projects/$ADI_PART/$CARRIER/output_boot_
 </section>
 <section id="for-versal">
 <span id="build-boot-bin-versal"></span><h2>For Versal<a class="headerlink" href="#for-versal" title="Permalink to this heading"></a></h2>
-<p>This section applies only to the Versal carriers: <a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a> and
-<a class="reference external" href="https://www.xilinx.com/VPK180">VPK180</a>.</p>
+<p>This section applies only to the Versal carriers: <a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a> and
+<a class="icon link reference external" href="https://www.xilinx.com/VPK180" target="_blank">VPK180</a>.</p>
 <p>Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
 cross-compiler for <code class="docutils literal notranslate"><span class="pre">arm64</span></code> exists before running the script.
 For more information about cross compilers, see
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/zynqmp">Building the ZynqMP / MPSoC Linux kernel and devicetrees from source</a>.</p>
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/zynqmp" target="_blank">Building the ZynqMP / MPSoC Linux kernel and devicetrees from source</a>.</p>
 <p>The script used is
-<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/versal_boot_bin/build_versal_boot_bin.sh">build_versal_boot_bin.sh</a>,
+<a class="icon link reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/versal_boot_bin/build_versal_boot_bin.sh" target="_blank">build_versal_boot_bin.sh</a>,
 which needs to be downloaded on your computer.</p>
 <p>The script can take 4 parameters:</p>
 <ul class="simple">
@@ -496,7 +504,7 @@ which needs to be downloaded on your computer.</p>
 archive located in the project folder of the ADI Kuiper Linux image from
 the SD card.</p>
 <p>Keep in mind that <strong>the u-boot is FPGA-specific</strong>!</p>
-<p>See the beginning of <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
+<p>See the beginning of <a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" target="_blank" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
 instructions on how to obtain the ADI Kuiper image.</p>
 </div>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
@@ -524,15 +532,15 @@ The folder follows the pattern: <em>hdl/projects/$ADI_PART/$CARRIER/output_boot_
 <section id="more-information">
 <h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <p>(NOT RECOMMENDED) If you’re in for the long story, check out the
-<a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/A">AMD Xilinx wiki</a> pages.</p>
+<a class="icon link reference external" href="https://xilinx-wiki.atlassian.net/wiki/A" target="_blank">AMD Xilinx wiki</a> pages.</p>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="0d336428113ed265df51a908f8dd9882f649603a" name="0d336428113ed265df51a908f8dd9882f649603a" type="checkbox"></input><label for="0d336428113ed265df51a908f8dd9882f649603a"><p>For more details on the long story (NOT RECOMMENDED)</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <ul class="simple">
-<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841798/Build+FSBL">How to build the FSBL</a></p></li>
-<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841976/Prepare+boot+image">How to build the BOOT image</a></p></li>
-<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842462/Build+PMU+Firmware">How to build the PMU firmware (for ZynqMP)</a></p></li>
-<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842305/Build+ARM+Trusted+Firmware+ATF">How to build the Arm Trusted Firmware (for ZynqMP)</a></p></li>
+<li><p><a class="icon link reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841798/Build+FSBL" target="_blank">How to build the FSBL</a></p></li>
+<li><p><a class="icon link reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841976/Prepare+boot+image" target="_blank">How to build the BOOT image</a></p></li>
+<li><p><a class="icon link reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842462/Build+PMU+Firmware" target="_blank">How to build the PMU firmware (for ZynqMP)</a></p></li>
+<li><p><a class="icon link reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842305/Build+ARM+Trusted+Firmware+ATF" target="_blank">How to build the Arm Trusted Firmware (for ZynqMP)</a></p></li>
 </ul>
 </div>
 </div>

@@ -4,17 +4,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The AD Direct Digital Synthesis (DDS) module is used to generate sine waves on a clock (referenced to sampling clock)." name="description" />
 
     <title>AD Direct Digital Synthesis &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
-    <script defer="" src="../../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=a81630d9"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Corundum" href="../../corundum/index.html" />
+    <link rel="next" title="Corundum Network Stack" href="../../corundum/index.html" />
     <link rel="prev" title="CN0363 Phase Data Sync" href="../../cn0363/cn0363_phase_data_sync.html" />
    
   
@@ -61,7 +62,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../../index.html">
@@ -236,7 +237,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../../corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_extract/index.html">Util Extract</a></li>
@@ -247,7 +255,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -372,7 +380,7 @@ Content on this topic
             
   <section id="ad-direct-digital-synthesis">
 <span id="ad-dds"></span><h1>AD Direct Digital Synthesis<a class="headerlink" href="#ad-direct-digital-synthesis" title="Permalink to this heading"></a></h1>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v">AD Direct Digital Synthesis (DDS)</a> module
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v" target="_blank">AD Direct Digital Synthesis (DDS)</a> module
 is used to generate sine waves on a clock (referenced to sampling clock).</p>
 <p>Typically, in the reference designs each HDL DAC interface IP has a DDS for every
 channel.</p>
@@ -393,7 +401,7 @@ which determines a timely overflow (the actual period of the resulting signal).<
 of FPGA resources out of the DDS modules.</p>
 <p>Currently in the reference designs, there is support for 2 types of phase to
 amplitude converters, polynomial and
-<a class="reference external" href="https://en.wikibooks.org/wiki/Digital_Circuits/CORDIC">CORDIC</a>. The
+<a class="icon link reference external" href="https://en.wikibooks.org/wiki/Digital_Circuits/CORDIC" target="_blank">CORDIC</a>. The
 polynomial type uses more DSPs and way less LUTs and FFs in comparison to the
 CORDIC. Regarding precision/accuracy, CORDIC is better.</p>
 <div class="admonition note">
@@ -1121,13 +1129,13 @@ other words as a phase offset.</p>
 </section>
 <section id="id1">
 <h3>ad_dds<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v">ad_dds</a>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v" target="_blank">ad_dds</a>
 is the main module, it contains the phase accumulators and the phase to
 amplitude converters.</p>
 <img alt="../../../_images/dds_dual_tone.svg" src="../../../_images/dds_dual_tone.svg" /></section>
 <section id="ad-dds-2">
 <h3>ad_dds_2<a class="headerlink" href="#ad-dds-2" title="Permalink to this heading"></a></h3>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_2.v">ad_dds_2</a>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_2.v" target="_blank">ad_dds_2</a>
 contains two phase to amplitude converters. The resulting waveforms will be
 summed. The resulting waveform must have a maximum amplitude level of 0x8000
 -1. When only one tone is desired, both tones must have the same frequency word
@@ -1136,7 +1144,7 @@ channels, it should not be more than 0x400 -1 for each channel.</p>
 </section>
 <section id="ad-dds-1">
 <h3>ad_dds_1<a class="headerlink" href="#ad-dds-1" title="Permalink to this heading"></a></h3>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_1.v">ad_dds_1</a>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_1.v" target="_blank">ad_dds_1</a>
 contains the phase to amplitude converter and an “amplifier”. The phase to
 amplitude converter is always generating a full scale sine wave. Because the
 data format is two’s complement, for a 16-bit data angle, min value will be
@@ -1144,9 +1152,9 @@ data format is two’s complement, for a 16-bit data angle, min value will be
 <img alt="../../../_images/ad_dds_1.svg" src="../../../_images/ad_dds_1.svg" /></section>
 <section id="ad-dds-sine">
 <h3>ad_dds_sine_*<a class="headerlink" href="#ad-dds-sine" title="Permalink to this heading"></a></h3>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_sine.v">ad_dds_sine</a>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_sine.v" target="_blank">ad_dds_sine</a>
 and
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_sine_cordic.v">ad_dds_sine_cordic</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_sine_cordic.v" target="_blank">ad_dds_sine_cordic</a>
 are the available phase to amplitude converters.</p>
 </section>
 </section>
@@ -1199,9 +1207,9 @@ direct impact on this clock period delay.</p>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v">library/common/ad_dds.v</a> and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_1.v">library/common/ad_dds_1.v</a>
-and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_2.v">library/common/ad_dds_2.v</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/dds">Direct digital synthesis on wiki</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v" target="_blank">library/common/ad_dds.v</a> and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_1.v" target="_blank">library/common/ad_dds_1.v</a>
+and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_2.v" target="_blank">library/common/ad_dds_2.v</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/dds" target="_blank">Direct digital synthesis on wiki</a></p></li>
 </ul>
 </section>
 </section>
@@ -1211,7 +1219,7 @@ and <a class="icon git reference external" href="https://github.com/analogdevice
               <div class="related">
                 &nbsp;
     <a href="../../cn0363/cn0363_phase_data_sync.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">CN0363 Phase Data Sync</a>
-    <a href="../../corundum/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">Corundum</a>
+    <a href="../../corundum/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">Corundum Network Stack</a>
               </div>
           
         </div>

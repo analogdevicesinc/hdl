@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The support for FMCADC5 HDL project has been discontinued, the latest release branch where it can be found is hdl_2021_r2. This page is left for legacy purposes only." name="description" />
 
     <title>FMCADC5 HDL Project (OBSOLETE) &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script defer="" src="../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../index.html">
@@ -238,7 +239,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_extract/index.html">Util Extract</a></li>
@@ -249,7 +257,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -376,20 +384,20 @@ Content on this topic
 <span id="fmcadc5"></span><h1>FMCADC5 HDL Project (OBSOLETE)<a class="headerlink" href="#fmcadc5-hdl-project-obsolete" title="Permalink to this heading"></a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>The support for <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/projects/fmcadc5">FMCADC5</a> HDL project
+<p>The support for <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/projects/fmcadc5" target="_blank">FMCADC5</a> HDL project
 has been discontinued, the latest release branch where it can be found is
 <code class="docutils literal notranslate"><span class="pre">hdl_2021_r2</span></code>. This page is left for legacy purposes only.</p>
 </div>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD-FMCADC5-EBZ">AD-FMCADC5-EBZ</a> is a high-speed single channel data acquisition board
-featuring two <a class="icon adi reference external" href="https://www.analog.com/AD9625">AD9625</a> ADCs. The board is provisioned to sample the
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD-FMCADC5-EBZ" target="_blank">AD-FMCADC5-EBZ</a> is a high-speed single channel data acquisition board
+featuring two <a class="icon adi reference external" href="https://www.analog.com/AD9625" target="_blank">AD9625</a> ADCs. The board is provisioned to sample the
 single input at an effective sampling rate of 5GSPS, with both the ADCs running
 at 2.5GHz and sampling at both edges (the clocks are 180 out of phase to each
 other).</p>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD-FMCADC5-EBZ">AD-FMCADC5-EBZ</a> is a double FMC wide board and requires two fully
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD-FMCADC5-EBZ" target="_blank">AD-FMCADC5-EBZ</a> is a double FMC wide board and requires two fully
 populated (transceivers mainly) FMC connectors on the carrier (such as
-<a class="reference external" href="https://www.xilinx.com/VC707">VC707</a>).</p>
+<a class="icon link reference external" href="https://www.xilinx.com/VC707" target="_blank">VC707</a>).</p>
 <p>The board’s primary purpose is to demonstrate the capabilities of the devices
 on board quickly and easily by providing a seamless interface to an FMC carrier
 platform and running the reference design on the carrier FPGA. The board is
@@ -399,19 +407,19 @@ The analog signal is connected to J18.</p>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD-FMCADC5-EBZ">AD-FMCADC5-EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD-FMCADC5-EBZ" target="_blank">AD-FMCADC5-EBZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9625">AD9625</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9625" target="_blank">AD9625</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.xilinx.com/VC707">VC707</a> on FMC HPC1 and HPC2</p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/VC707" target="_blank">VC707</a> on FMC HPC1 and HPC2</p></li>
 </ul>
 </section>
 <section id="block-design">
@@ -434,7 +442,7 @@ alignment and 10B to 8B conversion), the JESD-IP then aligns individual lanes
 and outputs data with a fixed latency using SYSREF. The SYSREF resets the LMFC,
 thus the receiver knows from the time it receives the SYSREF pulse to the first
 received ILA data the latency of the system. After this the samples hit the
-<a class="icon adi reference external" href="https://www.analog.com/AD9625">AD9625</a> core.</p>
+<a class="icon adi reference external" href="https://www.analog.com/AD9625" target="_blank">AD9625</a> core.</p>
 <p>The cores receive two samples from each of the devices. Now it needs to know
 which samples goes first (in time) and which one follows it. That is, the
 samples are to be interleaved in the same order they were sampled in absolute
@@ -455,7 +463,7 @@ samples. The FIFO supports deskewing of up to 8 samples. The ADC pack simply
 interleaves these samples assuming device-0 is first in order. The software
 needs to make sure that device-0 always samples SYSREF half a clock ahead
 of device-1. This is done with a calibration routine.</p>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9625">AD9625</a> supports time stamp insertion at the LSB of the sample (and
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9625" target="_blank">AD9625</a> supports time stamp insertion at the LSB of the sample (and
 is the ONLY option in certain lane configurations). This changes the devices
 to 11-bit converters. The HDL design does NOT support this. It supports time
 stamp insertion in the CS bits ONLY. The converter resolution remains as
@@ -468,7 +476,7 @@ and software.</p>
 </section>
 <section id="clock-configuration">
 <h3>Clock configuration<a class="headerlink" href="#clock-configuration" title="Permalink to this heading"></a></h3>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD-FMCADC5-EBZ">AD-FMCADC5-EBZ</a> uses a 2.5GHz crystal. The two <a class="icon adi reference external" href="https://www.analog.com/AD9625">AD9625</a> devices
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD-FMCADC5-EBZ" target="_blank">AD-FMCADC5-EBZ</a> uses a 2.5GHz crystal. The two <a class="icon adi reference external" href="https://www.analog.com/AD9625" target="_blank">AD9625</a> devices
 are clocked from the same clock source, but 180 degrees out of phase.</p>
 </section>
 <section id="cpu-memory-interconnects-addresses">
@@ -669,12 +677,12 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributed the bit/elf files of this project as part of the
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>
 until the 2021_R2 release. The prebuilt files can be found in the previous link.
 Afterwards, it was discontinued.</p>
 <p>But, if you want to build the sources, ADI makes them available on the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
+<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository and checkout the last release branch where this project
 still exists, <code class="docutils literal notranslate"><span class="pre">hdl_2021_r2</span></code>.</p>
 <p>Then go to the hdl/projects/fmcadc5/vc707 location and run the make
@@ -704,19 +712,19 @@ command.</p>
 <section id="systems-related">
 <h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcadc5-ebz/quickstart/microblaze">AD-FMCADC5 Microblaze Quick start guide</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcadc5-ebz/quickstart/microblaze" target="_blank">AD-FMCADC5 Microblaze Quick start guide</a></p></li>
 </ul>
 </section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9625">AD9625</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9625" target="_blank">AD9625</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/projects/fmcadc5">FMCADC5 HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/projects/fmcadc5" target="_blank">FMCADC5 HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -733,57 +741,57 @@ command.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>AXI_AD9625</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/axi_ad9625">library/axi_ad9625</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/axi_ad9625" target="_blank">library/axi_ad9625</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_FMCADC5_SYNC</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/axi_fmcadc5_sync">library/axi_fmcadc5_sync</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/axi_fmcadc5_sync" target="_blank">library/axi_fmcadc5_sync</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_MFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/util_mfifo">library/util_mfifo</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/util_mfifo" target="_blank">library/util_mfifo</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_DMAC</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SYSID</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/axi_sysid">library/axi_sysid</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>SYSID_ROM</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/sysid_rom">library/sysid_rom</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_ADCFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/util_adcfifo">library/util_adcfifo</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/util_adcfifo" target="_blank">library/util_adcfifo</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_ADXCVR for AMD</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/xilinx/util_adxcvr">library/xilinx/util_adxcvr</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/xilinx/util_adxcvr" target="_blank">library/xilinx/util_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR core for AMD Xilinx devices</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_ADXCVR for AMD</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/xilinx/axi_adxcvr" target="_blank">library/xilinx/axi_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">AMD Xilinx Devices</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_JESD204_RX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/library/jesd204/axi_jesd204_rx" target="_blank">library/jesd204/axi_jesd204_rx</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/generic_jesd_bds">[Wiki] Generic JESD204B block designs</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/generic_jesd_bds" target="_blank">[Wiki] Generic JESD204B block designs</a></p></li>
 <li><p><a class="reference internal" href="../../library/jesd204/index.html#jesd204"><span class="std std-ref">JESD204 Interface Framework</span></a></p></li>
 </ul>
 </section>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/hdl_2021_r2/arch/microblaze/boot/dts/vc707_fmcadc5.dts">FMCADC5/VC707 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/hdl_2021_r2/arch/microblaze/boot/dts/vc707_fmcadc5.dts" target="_blank">FMCADC5/VC707 Linux device tree</a></p></li>
 </ul>
 </section>
 </section>
@@ -795,17 +803,17 @@ command.</p>
 </section>
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
-<p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
-using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
-<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
-<p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc.
-from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">Linux GitHub repository</a>, the team will offer support
-on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
-<p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/">No-OS GitHub repository</a>, the team will offer support on the
-<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>
+<p>For questions regarding the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> Linux device drivers, device trees, etc.
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/" target="_blank">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers" target="_blank">EngineerZone</a> Linux software drivers forum.</p>
+<p>For questions concerning the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> No-OS drivers, from our
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/" target="_blank">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers" target="_blank">EngineerZone</a> microcontroller No-OS drivers forum.</p>
 <p>It should be noted, that the older the tools’ versions and release branches
-are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
+are, the lower the chances to receive support from <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> engineers.</p>
 </section>
 </section>
 

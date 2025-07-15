@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The support for AXI AD9643 IP has been discontinued, the latest tested release being hdl_2016_r1. This page is for legacy purposes only." name="description" />
 
     <title>AXI AD9643 (OBSOLETE) &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script defer="" src="../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../index.html">
@@ -224,7 +225,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_extract/index.html">Util Extract</a></li>
@@ -235,7 +243,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -362,12 +370,12 @@ Content on this topic
 <span id="axi-ad9643"></span><h1>AXI AD9643 (OBSOLETE)<a class="headerlink" href="#axi-ad9643-obsolete" title="Permalink to this heading"></a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>The support for <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643">AXI AD9643</a> IP
+<p>The support for <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643" target="_blank">AXI AD9643</a> IP
 has been discontinued, the latest tested release being <code class="docutils literal notranslate"><span class="pre">hdl_2016_r1</span></code>.
 This page is for legacy purposes only.</p>
 </div>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643">AXI AD9643</a> IP core was used
-to interface the <a class="icon adi reference external" href="https://www.analog.com/AD9643">AD9643</a> dual ADC. An AXI Memory Map interface was used
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643" target="_blank">AXI AD9643</a> IP core was used
+to interface the <a class="icon adi reference external" href="https://www.analog.com/AD9643" target="_blank">AD9643</a> dual ADC. An AXI Memory Map interface was used
 for configuration. The data is outputted using a FIFO interface.</p>
 <p>More about the generic framework interfacing ADCs can be read in <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a>.</p>
 <section id="features">
@@ -389,22 +397,22 @@ for configuration. The data is outputted using a FIFO interface.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643.v">library/axi_ad9643/axi_ad9643.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643.v" target="_blank">library/axi_ad9643/axi_ad9643.v</a></p></td>
 <td><p>Verilog source for the AXI AD9643.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643_channel.v">library/axi_ad9643/axi_ad9643_channel.v</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643_channel.v" target="_blank">library/axi_ad9643/axi_ad9643_channel.v</a></p></td>
 <td><p>Verilog source for the AXI AD9643 channel.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643_if.v">library/axi_ad9643/axi_ad9643_if.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643_if.v" target="_blank">library/axi_ad9643/axi_ad9643_if.v</a></p></td>
 <td><p>Verilog source for the interface module of AXI AD9643.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643_ip.tcl">library/axi_ad9643/axi_ad9643_ip.tcl</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643_ip.tcl" target="_blank">library/axi_ad9643/axi_ad9643_ip.tcl</a></p></td>
 <td><p>Tcl script for creating the AXI AD9643 module.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643_pnmon.v">library/axi_ad9643/axi_ad9643_pnmon.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643_pnmon.v" target="_blank">library/axi_ad9643/axi_ad9643_pnmon.v</a></p></td>
 <td><p>Verilog source for the PN monitor of AXI AD9643.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643_constr.xdc">library/axi_ad9643/axi_ad9643_constr.xdc</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643/axi_ad9643_constr.xdc" target="_blank">library/axi_ad9643/axi_ad9643_constr.xdc</a></p></td>
 <td><p>Constraints file for the AXI AD9643.</p></td>
 </tr>
 </tbody>
@@ -594,9 +602,9 @@ monitoring and control of the ADC.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>This IP was developed as part of the
-<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms1-ebz">FMCOMMS1 reference design (obsolete)</a>.</p>
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms1-ebz" target="_blank">FMCOMMS1 reference design (obsolete)</a>.</p>
 </div>
-<p>The control of the <a class="icon adi reference external" href="https://www.analog.com/AD9643">AD9643</a> chip is done through a SPI interface, which
+<p>The control of the <a class="icon adi reference external" href="https://www.analog.com/AD9643" target="_blank">AD9643</a> chip is done through a SPI interface, which
 is needed at system level.</p>
 <p>The ADC interface signals must be connected directly to the top file of the
 design, as I/O primitives are part of the IP.</p>
@@ -839,8 +847,8 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FPGA_INFO</span></code></td>
 <td class="description bold"><section>
 <p>FPGA device information
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl" target="_blank">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl" target="_blank">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
 </section>
 </td>
 </tr>
@@ -2159,13 +2167,13 @@ Where n is from 0 to 15.</p>
 <h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>No-OS software for this IP can be found as part of the FMCOMMS1 reference
-design at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/2016_R1/fmcomms1">here</a></p></li>
+design at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/2016_R1/fmcomms1" target="_blank">here</a></p></li>
 </ul>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643">library/axi_ad9643</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/library/axi_ad9643" target="_blank">library/axi_ad9643</a></p></li>
 </ul>
 </section>
 </section>

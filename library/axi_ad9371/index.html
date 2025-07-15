@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The support for AXI AD9371 has been discontinued, the latest tested release being hdl_2019_r2. This page is for legacy purposes only." name="description" />
 
     <title>AXI AD9371 (OBSOLETE) &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script defer="" src="../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../_static/app.umd.js?v=a81630d9"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -61,7 +62,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../index.html">
@@ -226,7 +227,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_extract/index.html">Util Extract</a></li>
@@ -237,7 +245,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -364,7 +372,7 @@ Content on this topic
 <span id="axi-ad9371"></span><h1>AXI AD9371 (OBSOLETE)<a class="headerlink" href="#axi-ad9371-obsolete" title="Permalink to this heading"></a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>The support for <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371">AXI AD9371</a>
+<p>The support for <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371" target="_blank">AXI AD9371</a>
 has been discontinued, the latest tested release being <code class="docutils literal notranslate"><span class="pre">hdl_2019_r2</span></code>.
 This page is for legacy purposes only.</p>
 </div>
@@ -373,8 +381,8 @@ This page is for legacy purposes only.</p>
 <p>This page has a great historical background. The same functionalities are
 implemented using the generic JESD204 TPL IPs.</p>
 </div>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371">AXI AD9371</a> IP core can be used
-to interface the <a class="icon adi reference external" href="https://www.analog.com/AD9371">AD9371</a> device. An AXI Memory Map interface is used for
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371" target="_blank">AXI AD9371</a> IP core can be used
+to interface the <a class="icon adi reference external" href="https://www.analog.com/AD9371" target="_blank">AD9371</a> device. An AXI Memory Map interface is used for
 configuration. Data is sent in a format that can be transmitted by Xilinx’s
 JESD IP.</p>
 <p>More about the generic framework interfacing ADCs and DACs, that contains the
@@ -401,43 +409,43 @@ JESD IP.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371.v">library/axi_ad9371/axi_ad9371.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371.v" target="_blank">library/axi_ad9371/axi_ad9371.v</a></p></td>
 <td><p>Verilog source for the AXI AD9371.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_ip.tcl">library/axi_ad9371/axi_ad9371_ip.tcl</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_ip.tcl" target="_blank">library/axi_ad9371/axi_ad9371_ip.tcl</a></p></td>
 <td><p>TCL script to generate the Vivado IP-integrator project.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_hw.tcl">library/axi_ad9371/axi_ad9371_hw.tcl</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_hw.tcl" target="_blank">library/axi_ad9371/axi_ad9371_hw.tcl</a></p></td>
 <td><p>TCL script to generate the Quartus IP-integrator project.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_constr.xdc">library/axi_ad9371/axi_ad9371_constr.xdc</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_constr.xdc" target="_blank">library/axi_ad9371/axi_ad9371_constr.xdc</a></p></td>
 <td><p>Constraint file of the IP.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_rx.v">library/axi_ad9371/axi_ad9371_rx.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_rx.v" target="_blank">library/axi_ad9371/axi_ad9371_rx.v</a></p></td>
 <td><p>Verilog source for the AXI AD9371 RX component.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_rx_channel.v">library/axi_ad9371/axi_ad9371_rx_channel.v</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_rx_channel.v" target="_blank">library/axi_ad9371/axi_ad9371_rx_channel.v</a></p></td>
 <td><p>Verilog source for the AXI AD9371 RX channel.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_rx_os.v">library/axi_ad9371/axi_ad9371_rx_os.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_rx_os.v" target="_blank">library/axi_ad9371/axi_ad9371_rx_os.v</a></p></td>
 <td><p>Verilog source for the AXI AD9371 RX channel observation component.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_tx.v">library/axi_ad9371/axi_ad9371_tx.v</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_tx.v" target="_blank">library/axi_ad9371/axi_ad9371_tx.v</a></p></td>
 <td><p>Verilog source for the AXI AD9371 TX component.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_tx_channel.v">library/axi_ad9371/axi_ad9371_tx_channel.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371/axi_ad9371_tx_channel.v" target="_blank">library/axi_ad9371/axi_ad9371_tx_channel.v</a></p></td>
 <td><p>Verilog source for the AXI AD9371 TX channel.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v">library/common/up_adc_common.v</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v" target="_blank">library/common/up_adc_common.v</a></p></td>
 <td><p>Verilog source for the ADC Common regmap.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v">library/common/up_adc_channel.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v" target="_blank">library/common/up_adc_channel.v</a></p></td>
 <td><p>Verilog source for the ADC Channel regmap.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_common.v">library/common/up_dac_common.v</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_common.v" target="_blank">library/common/up_dac_common.v</a></p></td>
 <td><p>Verilog source for the DAC Common regmap.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_channel.v">library/common/up_dac_channel.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_channel.v" target="_blank">library/common/up_dac_channel.v</a></p></td>
 <td><p>Verilog source for the DAC Channel regmap.</p></td>
 </tr>
 </tbody>
@@ -615,7 +623,7 @@ supports just 2 channels</p></li>
 <li><p>Delay Control and DAC Common register map</p></li>
 </ul>
 </li>
-<li><p>AXI to uP interface wrapper modules (more details <a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/up_if">here</a>)</p></li>
+<li><p>AXI to uP interface wrapper modules (more details <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/up_if" target="_blank">here</a>)</p></li>
 </ul>
 </section>
 <section id="register-map">
@@ -850,8 +858,8 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FPGA_INFO</span></code></td>
 <td class="description bold"><section>
 <p>FPGA device information
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl" target="_blank">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl" target="_blank">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
 </section>
 </td>
 </tr>
@@ -3455,12 +3463,12 @@ Where n is from 0 to 2.</p>
 </div></section>
 <section id="design-guidelines">
 <h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Permalink to this heading"></a></h2>
-<p>The IP was developed part of the <a class="icon adi reference external" href="https://www.analog.com/AD9371">AD9371</a> chip, that can be found on
-<a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9371">EVAL-ADRV9371</a>.</p>
-<p>The control of the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371">AXI AD9371</a> chip
+<p>The IP was developed part of the <a class="icon adi reference external" href="https://www.analog.com/AD9371" target="_blank">AD9371</a> chip, that can be found on
+<a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9371" target="_blank">EVAL-ADRV9371</a>.</p>
+<p>The control of the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371" target="_blank">AXI AD9371</a> chip
 is done through a SPI interface, using ACE software. The ACE
 (Analysis - Control- Evaluate) software provides a graphical user interface for
-configuring and controlling the <a class="icon adi reference external" href="https://www.analog.com/AD9371">AD9371</a>, allowing for easy setup and
+configuring and controlling the <a class="icon adi reference external" href="https://www.analog.com/AD9371" target="_blank">AD9371</a>, allowing for easy setup and
 evaluation of the DAC’s performance.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -3472,47 +3480,47 @@ evaluation of the DAC’s performance.</p>
 <ul class="simple">
 <li><p>Linux device driver at:</p>
 <ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/drivers/iio/adc/ad9371.c">drivers/iio/adc/ad9371.c</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/drivers/iio/adc/ad9371_conv.c">drivers/iio/adc/ad9371_conv.c</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/drivers/iio/adc/ad9371.c" target="_blank">drivers/iio/adc/ad9371.c</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/drivers/iio/adc/ad9371_conv.c" target="_blank">drivers/iio/adc/ad9371_conv.c</a></p></li>
 </ul>
 </li>
 <li><p>Linux device tree at:</p>
 <ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm/boot/dts/adi-adrv9371.dtsi">arch/arm/boot/dts/adi-adrv9371.dtsi</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/microblaze/boot/dts/adi-adrv9371.dtsi">arch/microblaze/boot/dts/adi-adrv9371.dtsi</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm64/boot/dts/xilinx/adi-adrv9371.dtsi">arch/arm64/boot/dts/xilinx/adi-adrv9371.dtsi</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/nios2/boot/dts/a10gx_adrv9371.dts">arch/nios2/boot/dts/a10gx_adrv9371.dts</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/microblaze/boot/dts/kcu105_adrv9371x.dts">arch/microblaze/boot/dts/kcu105_adrv9371x.dts</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm/boot/dts/zynq-zc706-adv7511-adrv9371.dts">arch/arm/boot/dts/zynq-zc706-adv7511-adrv9371.dts</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts">arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371.dts">arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371.dts</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm/boot/dts/zynq-zc706-adv7511-adrv9371-jesd204-fsm.dts">arch/arm/boot/dts/zynq-zc706-adv7511-adrv9371-jesd204-fsm.dts</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371-jesd204-fsm.dts">arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371-jesd204-fsm.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm/boot/dts/adi-adrv9371.dtsi" target="_blank">arch/arm/boot/dts/adi-adrv9371.dtsi</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/microblaze/boot/dts/adi-adrv9371.dtsi" target="_blank">arch/microblaze/boot/dts/adi-adrv9371.dtsi</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm64/boot/dts/xilinx/adi-adrv9371.dtsi" target="_blank">arch/arm64/boot/dts/xilinx/adi-adrv9371.dtsi</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/nios2/boot/dts/a10gx_adrv9371.dts" target="_blank">arch/nios2/boot/dts/a10gx_adrv9371.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/microblaze/boot/dts/kcu105_adrv9371x.dts" target="_blank">arch/microblaze/boot/dts/kcu105_adrv9371x.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm/boot/dts/zynq-zc706-adv7511-adrv9371.dts" target="_blank">arch/arm/boot/dts/zynq-zc706-adv7511-adrv9371.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts" target="_blank">arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371.dts" target="_blank">arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm/boot/dts/zynq-zc706-adv7511-adrv9371-jesd204-fsm.dts" target="_blank">arch/arm/boot/dts/zynq-zc706-adv7511-adrv9371-jesd204-fsm.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371-jesd204-fsm.dts" target="_blank">arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371-jesd204-fsm.dts</a></p></li>
 </ul>
 </li>
-<li><p>No-OS project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/2019_r2/projects/ad9371">projects/ad9371</a></p></li>
+<li><p>No-OS project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/2019_r2/projects/ad9371" target="_blank">projects/ad9371</a></p></li>
 </ul>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371">library/axi_ad9371</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9371">AD9371</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9371">EVAL-ADRV9371</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos/prerequisites">[Wiki] Prerequisites for AD9371 based boards</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_ad9371">[Wiki] AXI_AD9371 (Obsolete)</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos">[Wiki] AD9371 &amp; AD9375 Prototyping Platform User Guide</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/ad9371_plugin">[Wiki] AD9371 Plugin Description</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9371">[Wiki] AD9371, AD9375 highly integrated, wideband RF transceiver Linux device driver</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/ad9371_advanced_plugin">[Wiki] AD9371/AD9375 Advanced Plugin</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos/ad9371">[Wiki] AD9371 detailed Block Diagram</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9371-customization">[Wiki] AD9371/AD9375 Device Driver Customization</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/ad9371_osc_main">[Wiki] IIO OSC AD9371 Capture Window</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos/no-os-setup">[Wiki] AD9371/AD9375 No-OS Setup</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos/software/basic_iq_datafiles">[Wiki] AD9371 Basic IQ Datafiles</a></p></li>
-<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf">Zynq-7000 SoC Overview</a></p></li>
-<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf">Zynq-7000 SoC Packaging and Pinout</a></p></li>
-<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf">7 Series libraries</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r2/library/axi_ad9371" target="_blank">library/axi_ad9371</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9371" target="_blank">AD9371</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9371" target="_blank">EVAL-ADRV9371</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos/prerequisites" target="_blank">[Wiki] Prerequisites for AD9371 based boards</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_ad9371" target="_blank">[Wiki] AXI_AD9371 (Obsolete)</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos" target="_blank">[Wiki] AD9371 &amp; AD9375 Prototyping Platform User Guide</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/ad9371_plugin" target="_blank">[Wiki] AD9371 Plugin Description</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9371" target="_blank">[Wiki] AD9371, AD9375 highly integrated, wideband RF transceiver Linux device driver</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/ad9371_advanced_plugin" target="_blank">[Wiki] AD9371/AD9375 Advanced Plugin</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos/ad9371" target="_blank">[Wiki] AD9371 detailed Block Diagram</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9371-customization" target="_blank">[Wiki] AD9371/AD9375 Device Driver Customization</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/ad9371_osc_main" target="_blank">[Wiki] IIO OSC AD9371 Capture Window</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos/no-os-setup" target="_blank">[Wiki] AD9371/AD9375 No-OS Setup</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos/software/basic_iq_datafiles" target="_blank">[Wiki] AD9371 Basic IQ Datafiles</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf" target="_blank">Zynq-7000 SoC Overview</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf" target="_blank">Zynq-7000 SoC Packaging and Pinout</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf" target="_blank">7 Series libraries</a></p></li>
 </ul>
 </section>
 </section>

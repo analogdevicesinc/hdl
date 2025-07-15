@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="When contributing to this repository, please first discuss the change you wish to make, via the issue tracker before making a pull request. We will let you know if we want to have it supported on our repo. If not, depending on the case, we might propose you to have it added to our Third party forks list." name="description" />
 
     <title>Contributing to HDL repository &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../index.html">
@@ -219,7 +220,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_extract/index.html">Util Extract</a></li>
@@ -230,7 +238,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -356,11 +364,11 @@ Content on this topic
   <section id="contributing-to-hdl-repository">
 <span id="contributing"></span><h1>Contributing to HDL repository<a class="headerlink" href="#contributing-to-hdl-repository" title="Permalink to this heading"></a></h1>
 <p>When contributing to this repository, please first discuss the change you wish
-to make, via the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/issues">issue tracker</a>
+to make, via the <a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/issues" target="_blank">issue tracker</a>
 before making a pull request. We will let you know if we want to have it
 supported on our repo. If not, depending on the case, we might propose you to
 have it added to our <a class="reference internal" href="third_party.html#third-party"><span class="std std-ref">Third party forks</span></a> list.</p>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repo</a> is the place where <a class="icon adi reference external" href="https://www.analog.com//">ADI</a> provides FPGA reference
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repo</a> is the place where <a class="icon adi reference external" href="https://www.analog.com//" target="_blank">ADI</a> provides FPGA reference
 designs for selected hardware, featuring some of our products interfacing to
 publicly-available FPGA evaluation boards. Alongside these, we have custom IP
 cores designed to facilitate the creation of these projects — modular
@@ -370,12 +378,12 @@ separate and unique license terms (specified inside the file).
 The user should read each of these license terms and understand the freedoms
 and responsibilities that he or she has by using them.</p>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE">LICENSE</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_ADIBSD">LICENSE_ADIBSD</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_ADIJESD204">LICENSE_ADIJESD204</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_BSD-1-Clause">LICENSE_BSD-1-Clause</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_GPL2">LICENSE_GPL2</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_LGPL">LICENSE_LGPL</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE" target="_blank">LICENSE</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_ADIBSD" target="_blank">LICENSE_ADIBSD</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_ADIJESD204" target="_blank">LICENSE_ADIJESD204</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_BSD-1-Clause" target="_blank">LICENSE_BSD-1-Clause</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_GPL2" target="_blank">LICENSE_GPL2</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_LGPL" target="_blank">LICENSE_LGPL</a></p></li>
 </ul>
 <section id="pull-request-rules">
 <h2>Pull request rules<a class="headerlink" href="#pull-request-rules" title="Permalink to this heading"></a></h2>
@@ -383,24 +391,24 @@ and responsibilities that he or she has by using them.</p>
 <li><p>Commit message includes a “Signed-off-by: [name] &lt; email &gt;” to the commit
 message. This ensures you have the rights to submit your code, by agreeing
 to the
-<a class="reference external" href="https://developercertificate.org/">Developer Certificate of Origin</a>.
+<a class="icon link reference external" href="https://developercertificate.org/" target="_blank">Developer Certificate of Origin</a>.
 If you can not agree to the DCO, don’t submit a pull request, as we can
 not accept it.</p></li>
 <li><p>For first-time contributors, you will be asked by <strong>CLAssistant</strong> to
-“sign our <a class="reference external" href="https://cla-assistant.io/analogdevicesinc/hdl?pullRequest=959">Contributor License Agreement</a>
+“sign our <a class="icon link reference external" href="https://cla-assistant.io/analogdevicesinc/hdl?pullRequest=959" target="_blank">Contributor License Agreement</a>
 before we can accept your contribution.”</p></li>
 <li><p>Commit should be “atomic”, meaning it should do one thing only.
 A pull request should only contain multiple commits if that is required
 to fix the bug or implement the feature.</p></li>
 <li><p>Commits should have good commit messages. Check out
-<a class="reference external" href="https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project">The git book</a>
+<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project" target="_blank">The git book</a>
 for some pointers and tools to use.</p></li>
 <li><p>Typically, the title of the commit should have the path to the changed files, and
 then explaining in a few words what has been done, like
 <em>projects/ad9081_fmca_ebz/zcu102: Add missing clock constraint</em></p></li>
 <li><p>Write a concise PR description, containing all the needed details</p></li>
 <li><p>Pull requests will be merged only after they have been reviewed, tested and
-approved by the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/.github/CODEOWNERS">code owners</a>.</p></li>
+approved by the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/.github/CODEOWNERS" target="_blank">code owners</a>.</p></li>
 </ol>
 </section>
 <section id="before-opening-the-pull-request">
@@ -408,7 +416,7 @@ approved by the <a class="icon git reference external" href="https://github.com/
 <ol class="arabic simple">
 <li><p>Create a fork of this repository. If you are not sure on how to do this,
 check out
-<a class="reference external" href="https://help.github.com/en/github/getting-started-with-github/fork-a-repo">GitHub help</a></p></li>
+<a class="icon link reference external" href="https://help.github.com/en/github/getting-started-with-github/fork-a-repo" target="_blank">GitHub help</a></p></li>
 <li><p>Here you will make your contributions on a branch. From time to time,
 rebase it onto main, to make sure you have the latest code available</p></li>
 <li><p>Check the <a class="reference internal" href="#contributing-code-related-check-list"><span class="std std-ref">Code-related check list</span></a>
@@ -417,7 +425,7 @@ section while still in the development phase</p></li>
 <ul class="simple">
 <li><p>Update the corresponding <strong>docs/regmap text files</strong></p></li>
 <li><p>The IPs typically should follow
-<a class="reference external" href="https://semver.org/">Semantic Versioning 2.0.0</a></p></li>
+<a class="icon link reference external" href="https://semver.org/" target="_blank">Semantic Versioning 2.0.0</a></p></li>
 </ul>
 </li>
 <li><p>Update <strong>Makefile</strong> files of the affected projects</p></li>
@@ -443,7 +451,7 @@ should be created, following our <a class="reference internal" href="docs_guidel
 <ol class="arabic simple">
 <li><p>Create a pull request on this repository. If you are not sure on how to
 do this, check out
-<a class="reference external" href="https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork">GitHub help</a></p></li>
+<a class="icon link reference external" href="https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork" target="_blank">GitHub help</a></p></li>
 <li><p>In the description of the PR:</p>
 <ul class="simple">
 <li><p>Motivate the additions/changes/deletions to the code</p></li>
@@ -486,7 +494,7 @@ Conversation tab.</p></li>
 that are already on main), <strong>do not resolve the conflicts using Git GUI!</strong>
 This way, you will insert a merge commit into the commit history.
 <strong>We do not want merge commits.</strong> Thus, open a terminal and resolve
-it there (see <a class="reference external" href="https://stackoverflow.com/a/162056">this discussion</a>)</p></li>
+it there (see <a class="icon link reference external" href="https://stackoverflow.com/a/162056" target="_blank">this discussion</a>)</p></li>
 </ol>
 </section>
 <section id="code-related-check-list">
@@ -496,9 +504,9 @@ it there (see <a class="reference external" href="https://stackoverflow.com/a/16
 Makefiles, etc., we have our own guidelines and you must check them out:
 <a class="reference internal" href="hdl_coding_guidelines.html#hdl-coding-guidelines"><span class="std std-ref">ADI HDL coding guidelines</span></a>.</p></li>
 <li><p>We also created a
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/.github/scripts/check_guideline.py">script</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/.github/scripts/check_guideline.py" target="_blank">script</a>
 to check some of those rules. To see which ones and how to use the script,
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/.github/scripts/readme_check_guideline.md">click here</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/.github/scripts/readme_check_guideline.md" target="_blank">click here</a>
 (this is part of our GitHub actions check as well, and if this fails,
 the PR will not be approved).</p></li>
 <li><p>Check if in the meantime there were any <strong>changes to the common IPs</strong>
@@ -511,13 +519,13 @@ and IP cores.</p></li>
 </ol>
 <p>Resources:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://cbea.ms/git-commit/">How to write a good commit message</a>
-and <a class="reference external" href="https://gist.github.com/rsp/057481db4dbd999bb7077f211f53f212">another resource</a></p></li>
-<li><p><a class="reference external" href="https://github.blog/2022-06-30-write-better-commits-build-better-projects/">Write better commits, build better projects</a></p></li>
-<li><p><a class="reference external" href="https://dhwthompson.com/2019/my-favourite-git-commit">Good commit example (but extreme one)</a></p></li>
-<li><p><a class="reference external" href="https://opensource.com/article/18/6/anatomy-perfect-pull-request">How should a PR look like</a>
-and <a class="reference external" href="https://github.blog/2015-01-21-how-to-write-the-perfect-pull-request/">anatomy of a PR</a></p></li>
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/master/Documentation/process/submitting-patches.rst">Submitting patches</a></p></li>
+<li><p><a class="icon link reference external" href="https://cbea.ms/git-commit/" target="_blank">How to write a good commit message</a>
+and <a class="icon link reference external" href="https://gist.github.com/rsp/057481db4dbd999bb7077f211f53f212" target="_blank">another resource</a></p></li>
+<li><p><a class="icon link reference external" href="https://github.blog/2022-06-30-write-better-commits-build-better-projects/" target="_blank">Write better commits, build better projects</a></p></li>
+<li><p><a class="icon link reference external" href="https://dhwthompson.com/2019/my-favourite-git-commit" target="_blank">Good commit example (but extreme one)</a></p></li>
+<li><p><a class="icon link reference external" href="https://opensource.com/article/18/6/anatomy-perfect-pull-request" target="_blank">How should a PR look like</a>
+and <a class="icon link reference external" href="https://github.blog/2015-01-21-how-to-write-the-perfect-pull-request/" target="_blank">anatomy of a PR</a></p></li>
+<li><p><a class="icon link reference external" href="https://github.com/analogdevicesinc/linux/blob/master/Documentation/process/submitting-patches.rst" target="_blank">Submitting patches</a></p></li>
 </ul>
 </section>
 </section>

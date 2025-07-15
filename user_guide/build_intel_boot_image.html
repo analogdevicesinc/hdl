@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="This page is dedicated to the building process of boot image for supported Intel/Altera projects. One key file specific to these projects is the bootloader. Its role is to initialize the system after the BootROM runs. It bridges the gap between the limited functionality of the BootROM and the end user application, configuring the system as needed before the larger application can run." name="description" />
 
     <title>Generating HDL boot image for Intel projects &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../index.html">
@@ -252,7 +253,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_extract/index.html">Util Extract</a></li>
@@ -263,7 +271,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -397,9 +405,9 @@ the larger application can run.</p>
 <p>In the following links you can find more details on the process and the
 necessary components:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.intel.com/content/dam/support/us/en/programmable/support-resources/bulk-container/pdfs/literature/hb/arria-v/av-5400a.pdf">Booting and Configuration</a></p></li>
-<li><p><a class="reference external" href="https://community.intel.com/t5/FPGA-Wiki/SocBootFromFPGA/ta-p/735773">SocBootFromFPGA</a></p></li>
-<li><p><a class="reference external" href="https://www.intel.com/content/www/us/en/support/programmable/support-resources/design-guidance/soc-bootloader.html">Intel Bootloader</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.intel.com/content/dam/support/us/en/programmable/support-resources/bulk-container/pdfs/literature/hb/arria-v/av-5400a.pdf" target="_blank">Booting and Configuration</a></p></li>
+<li><p><a class="icon link reference external" href="https://community.intel.com/t5/FPGA-Wiki/SocBootFromFPGA/ta-p/735773" target="_blank">SocBootFromFPGA</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/support/programmable/support-resources/design-guidance/soc-bootloader.html" target="_blank">Intel Bootloader</a></p></li>
 </ul>
 <section id="necessary-files-for-booting-up-an-hdl-project">
 <h2>Necessary files for booting up an HDL project<a class="headerlink" href="#necessary-files-for-booting-up-an-hdl-project" title="Permalink to this heading"></a></h2>
@@ -454,7 +462,7 @@ later in the Intel boot flow with the U-Boot image update.</p>
 <h2>Using Kuiper Linux pre-built images<a class="headerlink" href="#using-kuiper-linux-pre-built-images" title="Permalink to this heading"></a></h2>
 <p>The built and tested files can be found in our ADI Kuiper Linux release, which
 can be obtained from
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes">here</a>.</p>
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes" target="_blank">here</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Make sure to always use the latest version of Kuiper Linux. If the desired
@@ -593,9 +601,9 @@ the other).</p>
 built. Follow these instructions to write the file to your SD card, depending
 on the operating system that you use (Windows or Linux):</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/socfpga">[Wiki] Building the Intel SoC-FPGA kernel and devicetrees from source</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/zynq_images/linux_hosts">[Wiki] Linux Download and setting up the image</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/zynq_images/windows_hosts">[Wiki] Formatting and Flashing SD Cards using Windows</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/socfpga" target="_blank">[Wiki] Building the Intel SoC-FPGA kernel and devicetrees from source</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/zynq_images/linux_hosts" target="_blank">[Wiki] Linux Download and setting up the image</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/zynq_images/windows_hosts" target="_blank">[Wiki] Formatting and Flashing SD Cards using Windows</a></p></li>
 </ul>
 </div>
 <p>Proceed by cloning the repository, setting the environment to an ARM architecture
@@ -633,8 +641,8 @@ were checked-out.</p>
 <section id="adrv9371-arria-10">
 <span id="build-intel-boot-image-arria10"></span><h3>ADRV9371/Arria 10<a class="headerlink" href="#adrv9371-arria-10" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/a10soc">projects/adrv9371x/a10soc</a></p></li>
-<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts">arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts</a></p></li>
+<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/a10soc" target="_blank">projects/adrv9371x/a10soc</a></p></li>
+<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts" target="_blank">arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts</a></p></li>
 </ul>
 <section id="building-the-linux-kernel-image-and-the-devicetree">
 <h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#building-the-linux-kernel-image-and-the-devicetree" title="Permalink to this heading"></a></h4>
@@ -755,10 +763,10 @@ and always confirm with <code class="docutils literal notranslate"><span class="
 <div class="clear-left"></div></div></div></section>
 <section id="building-the-preloader-and-bootloader-image">
 <h4>Building the Preloader and Bootloader Image<a class="headerlink" href="#building-the-preloader-and-bootloader-image" title="Permalink to this heading"></a></h4>
-<p>This flow applies starting with release <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/">2021_R1</a> /
+<p>This flow applies starting with release <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/" target="_blank">2021_R1</a> /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
 of this page on wiki
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images">Altera SOC Quick Start Guide</a>.</p>
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images" target="_blank">Altera SOC Quick Start Guide</a>.</p>
 <p>In the HDL project directory, create the <code class="docutils literal notranslate"><span class="pre">software/bootloader</span></code> folder and
 clone the <code class="docutils literal notranslate"><span class="pre">u-boot-socfpga</span></code> image:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
@@ -1068,8 +1076,8 @@ sdz           8:48  1   29.1G  0 disk
 <section id="arradio-terasic-c5-soc">
 <span id="build-intel-boot-image-c5soc"></span><h3>ARRADIO/Terasic C5 SoC<a class="headerlink" href="#arradio-terasic-c5-soc" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/arradio/c5soc">projects/arradio/c5soc</a></p></li>
-<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts">arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts</a></p></li>
+<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/arradio/c5soc" target="_blank">projects/arradio/c5soc</a></p></li>
+<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts" target="_blank">arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts</a></p></li>
 </ul>
 <section id="id1">
 <h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
@@ -1190,10 +1198,10 @@ and always confirm with <code class="docutils literal notranslate"><span class="
 <div class="clear-left"></div></div></div></section>
 <section id="id3">
 <h4>Building the Preloader and Bootloader Image<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
-<p>This flow applies starting with release <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/">2021_R1</a> /
+<p>This flow applies starting with release <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/" target="_blank">2021_R1</a> /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
 of this page on wiki
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images">Altera SOC Quick Start Guide</a>.</p>
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images" target="_blank">Altera SOC Quick Start Guide</a>.</p>
 <p>In the HDL project directory, create the <code class="docutils literal notranslate"><span class="pre">software/bootloader</span></code> folder and
 clone the <code class="docutils literal notranslate"><span class="pre">u-boot-socfpga</span></code> image. Before that, create a new BSP settings file:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
@@ -1562,8 +1570,8 @@ sdz           8:48  1   29.1G  0 disk
 <section id="cn0540-de10nano">
 <span id="build-intel-boot-image-de10nano"></span><h3>CN0540/DE10Nano<a class="headerlink" href="#cn0540-de10nano" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0540/de10nano">projects/cn0540/de10nano</a></p></li>
-<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts">arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts</a></p></li>
+<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0540/de10nano" target="_blank">projects/cn0540/de10nano</a></p></li>
+<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts" target="_blank">arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts</a></p></li>
 </ul>
 <section id="id5">
 <h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h4>
@@ -1684,10 +1692,10 @@ and always confirm with <code class="docutils literal notranslate"><span class="
 <div class="clear-left"></div></div></div></section>
 <section id="id7">
 <h4>Building the Preloader and Bootloader Image<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h4>
-<p>This flow applies starting with release <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/">2021_R1</a> /
+<p>This flow applies starting with release <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/" target="_blank">2021_R1</a> /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
 of this page on wiki
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images">Altera SOC Quick Start Guide</a>.</p>
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images" target="_blank">Altera SOC Quick Start Guide</a>.</p>
 <p>In the HDL project directory, create the <code class="docutils literal notranslate"><span class="pre">software/bootloader</span></code> folder and
 clone the <code class="docutils literal notranslate"><span class="pre">u-boot-socfpga</span></code> image. Before that, create a new BSP settings file:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
@@ -2008,8 +2016,8 @@ sdz           8:48  1   29.1G  0 disk
 <section id="ad9081-agilex-7">
 <span id="build-intel-boot-image-fm87"></span><h3>AD9081/Agilex 7<a class="headerlink" href="#ad9081-agilex-7" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/fm87">projects/ad9081_fmca_ebz/fm87</a></p></li>
-<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts">../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts</a></p></li>
+<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/fm87" target="_blank">projects/ad9081_fmca_ebz/fm87</a></p></li>
+<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts" target="_blank">../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts</a></p></li>
 </ul>
 <section id="get-aarch64-none-linux-gnu-and-set-cross-compile-and-arch-variables">
 <h4>Get aarch64-none-linux-gnu and set CROSS_COMPILE and ARCH variables<a class="headerlink" href="#get-aarch64-none-linux-gnu-and-set-cross-compile-and-arch-variables" title="Permalink to this heading"></a></h4>

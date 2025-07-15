@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The goal of this tutorial is to present the process of adding SPI Engine support for an ADI precision converter or family of converters using a few simple steps. The target carrier is the Digilent Cora Z7S board using a PMOD connector." name="description" />
 
     <title>SPI Engine Tutorial - PulSAR-ADC &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script defer="" src="../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../_static/app.umd.js?v=a81630d9"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -61,7 +62,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../index.html">
@@ -231,7 +232,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_extract/index.html">Util Extract</a></li>
@@ -242,7 +250,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -376,7 +384,7 @@ The target carrier is the Digilent Cora Z7S board using a PMOD connector.</p>
 <h2>Evaluating the target device<a class="headerlink" href="#evaluating-the-target-device" title="Permalink to this heading"></a></h2>
 <p>The aim of this project is to provide support for a family of ADCs which come in
 the form of
-<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods">pulsar-adc-pmods</a>.
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods" target="_blank">pulsar-adc-pmods</a>.
 They all share the same interface and the same PCB, the differences being found
 in their performance. The table below offers a comparison between the timing
 parameters of the SPI interface for these devices. Using this table we can see
@@ -535,7 +543,7 @@ different “downgraded” configurations.</p>
 <h2>SPI Engine hierarchy instantiation<a class="headerlink" href="#spi-engine-hierarchy-instantiation" title="Permalink to this heading"></a></h2>
 <p>The SPI Engine can be implemented in two ways, either by placing and connecting
 each IP individually or by using the function provided by the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/scripts/spi_engine.tcl">library/spi_engine/scripts/spi_engine.tcl</a> script.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/scripts/spi_engine.tcl" target="_blank">library/spi_engine/scripts/spi_engine.tcl</a> script.</p>
 <p>Using the script ensures that the correct connections are being made and that
 the IP cores will receive the correct parameter configuration since certain
 parameters need to be set to the same value. The function takes the following
@@ -603,7 +611,7 @@ timing. This IP can also be configured from software to output 100MHz.</p>
 <h2>AD7984 Timing diagram<a class="headerlink" href="#ad7984-timing-diagram" title="Permalink to this heading"></a></h2>
 <p>The operation mode that will be implemented using the SPI Engine in offload mode
 is the <span class="math notranslate nohighlight">\(\overline{CS}\)</span> Mode, 3-Wire with Busy Indicator Serial Interface Timing (SDI High),
-as shown in <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/AD7984.pdf">AD7984</a>,
+as shown in <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/AD7984.pdf" target="_blank">AD7984</a>,
 page 18, figure 30.</p>
 <p>Key timing characteristics:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">18</span><span class="w"> </span>bit<span class="w"> </span>transfers
@@ -693,9 +701,9 @@ the SPI Engine.</p>
 <section id="testbench">
 <h2>Testbench<a class="headerlink" href="#testbench" title="Permalink to this heading"></a></h2>
 <p>To check the overall performance of the design and also to expose any major
-bugs, the system can be tested using a testbench from <a class="icon git reference external" href="https://github.com/analogdevicesinc/testbenches/tree/main/">ADI Testbenches repository</a>.</p>
+bugs, the system can be tested using a testbench from <a class="icon git reference external" href="https://github.com/analogdevicesinc/testbenches/tree/main/" target="_blank">ADI Testbenches repository</a>.</p>
 <p>The testbench framework is designed to use the same bd.tcl as the actual project
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/testbenches/tree/main/pulsar_adc_pmdz/system_bd.tcl#L50">pulsar_adc_pmdz/system_bd.tcl#L50</a></p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/testbenches/tree/main/pulsar_adc_pmdz/system_bd.tcl#L50" target="_blank">pulsar_adc_pmdz/system_bd.tcl#L50</a></p>
 <p>The setup assumes the testbenches repo is cloned inside the hdl repo. To build
 the testbench project simply run <code class="code docutils literal notranslate"><span class="pre">make</span> <span class="pre">cfg1</span></code> from the
 <em>hdl/testbenches/pulsar_adc_pmdz/</em> folder. Besides exposing possible bugs,

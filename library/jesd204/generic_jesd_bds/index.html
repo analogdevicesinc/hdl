@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Using the generic building blocks from the ADI IP library, together with the JESD framework, parametrizable block designs can be built to interface ADI ADCs and DACs in various JESD modes." name="description" />
 
     <title>Generic JESD204 block designs &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
-    <script defer="" src="../../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../../index.html">
@@ -234,7 +235,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../../corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_extract/index.html">Util Extract</a></li>
@@ -245,7 +253,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -434,7 +442,7 @@ JESD operation mode.</p>
 <p>To switch to other modes, the generic block designs can be reconfigured by
 changing its parameters. These parameters map to the JESD link parameters.
 See the example below taken from
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/common/adrv9009_bd.tcl">this block design</a>:</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/common/adrv9009_bd.tcl" target="_blank">this block design</a>:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># TX parameters</span>
 <span class="k">set</span><span class="w"> </span>TX_NUM_OF_LANES<span class="w"> </span><span class="mi">4</span><span class="w">      </span><span class="k">;</span><span class="w"> </span><span class="c"># L</span>
 <span class="k">set</span><span class="w"> </span>TX_NUM_OF_CONVERTERS<span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="k">;</span><span class="w"> </span><span class="c"># M</span>
@@ -554,7 +562,7 @@ can deframe the 2 frames.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Such a parametrizable block design was built for the ADRV9009 prototyping
-platform and can be found <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/common/adrv9009_bd.tcl">here</a>.</p>
+platform and can be found <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/common/adrv9009_bd.tcl" target="_blank">here</a>.</p>
 </div>
 </section>
 </section>
@@ -582,17 +590,17 @@ of the LinkClock speed.</p>
 <a class="reference internal image-reference" href="../../../_images/jesd204_generic_rx_f8.svg"><img alt="Generic JESD204 RX path example with F=8" class="align-center" src="../../../_images/jesd204_generic_rx_f8.svg" width="600" /></a>
 <p>Such a parametrizable block design that supports also F=8 was built for the
 ADRV9009 prototyping platform, and can be found
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/dev_adrv9009_less_lanes/projects/adrv9009/common/adrv9009_bd.tcl">here</a>.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/dev_adrv9009_less_lanes/projects/adrv9009/common/adrv9009_bd.tcl" target="_blank">here</a>.</p>
 </section>
 </section>
 <section id="software-related">
 <h2>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl">ADC Linux driver documentation</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl">DAC Linux driver documentation</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_jesd204_tx">ADI JESD204B/C Transmit Peripheral Linux driver documentation</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx">ADI JESD204B/C Receive Peripheral Linux driver documentation</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_adxcvr">ADI JESD204B/C AXI_ADXCVR Highspeed Transceivers Linux driver documentation</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl" target="_blank">ADC Linux driver documentation</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl" target="_blank">DAC Linux driver documentation</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_jesd204_tx" target="_blank">ADI JESD204B/C Transmit Peripheral Linux driver documentation</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx" target="_blank">ADI JESD204B/C Receive Peripheral Linux driver documentation</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_adxcvr" target="_blank">ADI JESD204B/C AXI_ADXCVR Highspeed Transceivers Linux driver documentation</a></p></li>
 </ul>
 </section>
 </section>

@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Please note that ADI only provides the source files necessary to create and build the reference designs &amp; already-built files for booting up the setup with the reference design." name="description" />
 
     <title>Build an HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../index.html">
@@ -261,7 +262,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_extract/index.html">Util Extract</a></li>
@@ -272,7 +280,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -403,7 +411,7 @@ Content on this topic
 <p class="admonition-title">Warning</p>
 <p>Please note that ADI only provides the source files necessary to create
 and build the reference designs &amp;
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes">already-built files</a>
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes" target="_blank">already-built files</a>
 for booting up the setup with the reference design.</p>
 <p>You are responsible for modifying and building the modified projects.</p>
 </div>
@@ -415,7 +423,7 @@ independently.</strong></p>
 <p>In case you <strong>don’t want to manually build</strong> the reference design projects,
 you can get the already built &amp; tested files from our ADI Kuiper Linux
 release (contains HDL + Linux boot files) from
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes">here</a>.</p>
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes" target="_blank">here</a>.</p>
 <p>The build process depends on certain software and tools, which you could use
 in many ways. We use <strong>command line</strong> and mostly <strong>Linux systems</strong>.</p>
 <div class="admonition important">
@@ -442,33 +450,33 @@ be described:</p>
 <section id="needed-tools">
 <span id="build-hdl-needed-tools"></span><h2>1. Needed tools<a class="headerlink" href="#needed-tools" title="Permalink to this heading"></a></h2>
 <ol class="arabic simple">
-<li><p>Install the required FPGA design suite. We use <a class="reference external" href="https://www.xilinx.com/support/download.html">AMD Xilinx Vivado</a>,
-<a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html">Intel Quartus Prime Pro and Standard</a>, <a class="reference external" href="https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant">Lattice Radiant</a> and
-<a class="reference external" href="https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/LatticePropel">Lattice Propel</a>.
+<li><p>Install the required FPGA design suite. We use <a class="icon link reference external" href="https://www.xilinx.com/support/download.html" target="_blank">AMD Xilinx Vivado</a>,
+<a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html" target="_blank">Intel Quartus Prime Pro and Standard</a>, <a class="icon link reference external" href="https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant" target="_blank">Lattice Radiant</a> and
+<a class="icon link reference external" href="https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/LatticePropel" target="_blank">Lattice Propel</a>.
 You can find information about the proper version in the section
 <a class="reference internal" href="#build-hdl-tool-versions"><span class="std std-ref">Tool versions</span></a>.
 Make sure that you’re always using the latest release.</p></li>
 <li><p>The <strong>required</strong> Vivado/Quartus/Propel/Radiant version can be found in:</p>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl">scripts/adi_env.tcl</a></p></li>
-<li><p>or in the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">release notes</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl" target="_blank">scripts/adi_env.tcl</a></p></li>
+<li><p>or in the <a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/releases" target="_blank">release notes</a></p></li>
 </ul>
 </li>
 <li><p>Download the tools from the following links:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html">AMD tools</a>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html" target="_blank">AMD tools</a>
 (make sure you’re downloading the proper installer.
 For full installation, it is better to choose the one that downloads
 and installs both Vivado and Vitis at the same time)</p></li>
-<li><p><a class="reference external" href="https://www.intel.com/content/www/us/en/programmable/downloads/download-center.html">Intel tools</a></p></li>
-<li><p><a class="reference external" href="https://www.latticesemi.com/en/Products/DesignSoftwareAndIP">Lattice tools</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/programmable/downloads/download-center.html" target="_blank">Intel tools</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.latticesemi.com/en/Products/DesignSoftwareAndIP" target="_blank">Lattice tools</a></p></li>
 </ul>
 </li>
 <li><p>After you have installed the above-mentioned tools, you will need the
 paths to those directories in the following steps, so have them in a
 note.</p></li>
-<li><p>We are using <a class="reference external" href="https://git-scm.com/">git</a> for version control and
-<a class="reference external" href="https://www.gnu.org/software/make/">GNU Make</a> to build the
+<li><p>We are using <a class="icon link reference external" href="https://git-scm.com/" target="_blank">git</a> for version control and
+<a class="icon link reference external" href="https://www.gnu.org/software/make/" target="_blank">GNU Make</a> to build the
 projects. Depending on what OS you’re using, you have these options:</p></li>
 </ol>
 </section>
@@ -477,21 +485,21 @@ projects. Depending on what OS you’re using, you have these options:</p></li>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>We offer support only for
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">the latest 2 releases</a>
-from our repository, and the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">main</a> branch.</p>
+<a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/releases" target="_blank">the latest 2 releases</a>
+from our repository, and the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">main</a> branch.</p>
 </div>
 <p>These designs are built upon ADI’s generic HDL reference designs framework.
 ADI distributes the bit/elf files of these projects as part of the
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>.
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
 If you want to build the sources, ADI makes them available on the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
+<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the repository. This is the best method to get the sources.</p>
 <p>Here, we are cloning the repository inside a directory called <strong>adi</strong>.
 Please refer to the <a class="reference internal" href="git_repository.html#git-repository"><span class="std std-ref">HDL Git repository</span></a> section for more details.</p>
 <p>Cloning is now done using HTTPS and a classic PAT (Personal Access Token).
 More details on how to do this,
-<a class="reference external" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">here</a>.</p>
+<a class="icon link reference external" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" target="_blank">here</a>.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
@@ -547,7 +555,7 @@ load_amd<span class="w"> </span><span class="o">()</span>
 <p>Even though it’s convenient, we discourage adding the source scripts to
 .bashrc files outside of wrapper methods, as multiple vendor environments
 may conflict with each other.</p>
-<p>Then, <a class="reference external" href="https://linuxcommand.org/lc3_man_pages/sourceh.html">re-source your bashrc</a>
+<p>Then, <a class="icon link reference external" href="https://linuxcommand.org/lc3_man_pages/sourceh.html" target="_blank">re-source your bashrc</a>
 for the current session (or open a new one) and call the defined method:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
@@ -618,7 +626,7 @@ package name.</p>
 <h3>3b. Windows environment setup<a class="headerlink" href="#b-windows-environment-setup" title="Permalink to this heading"></a></h3>
 <section id="wsl">
 <h4>WSL<a class="headerlink" href="#wsl" title="Permalink to this heading"></a></h4>
-<p><a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install/">WSL</a> (or Windows
+<p><a class="icon link reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install/" target="_blank">WSL</a> (or Windows
 Subsystem for Linux) is both a UNIX-like environment and a command-line
 interface for Microsoft Windows. You need to install the Ubuntu distribution.</p>
 <p>To be able to access the GUI, <strong>WSL2 is recommended</strong>. This is done using
@@ -682,7 +690,7 @@ the installation path, choose the location where WSL is installed
 <p>Also, to get the best performance, you must clone your HDL repository in
 the WSL file system. For example: <code class="docutils literal notranslate"><span class="pre">\\wsl.localhost\Ubuntu\home\username\hdl</span></code>.</p>
 <p>For more information you can consult the following link:
-<a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/filesystems#file-storage-and-performance-across-file-systems">WSL Storage</a>.</p>
+<a class="icon link reference external" href="https://learn.microsoft.com/en-us/windows/wsl/filesystems#file-storage-and-performance-across-file-systems" target="_blank">WSL Storage</a>.</p>
 <p>Download the Linux version of Vitis (Vivado comes in the same package with
 Vitis), then one by one, do the following commands in the WSL terminal:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/Downloads$
@@ -706,7 +714,7 @@ terminate called after throwing an instance of &#39;std::runtime_error&#39;
 /tools/Xilinx/Vivado/2023.2/bin/rdiArgs.sh: line 312:  4105 Aborted                 &quot;$RDI_PROG&quot; &quot;$@&quot;
 </pre></div>
 </div>
-<p>See <a class="reference external" href="https://adaptivesupport.amd.com/s/question/0D54U00006FYojlSAD/vivado-20222-on-ubuntu-with-error-lcall-cannot-change-locale-enusutf8?language=en_US">here</a>
+<p>See <a class="icon link reference external" href="https://adaptivesupport.amd.com/s/question/0D54U00006FYojlSAD/vivado-20222-on-ubuntu-with-error-lcall-cannot-change-locale-enusutf8?language=en_US" target="_blank">here</a>
 a thread on the Xilinx community.</p>
 <p>Next, run:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/Downloads$
@@ -849,7 +857,7 @@ current environment, for example:</p>
 <div class="clear-left"></div></div></div></section>
 <section id="cygwin-not-recommended">
 <span id="build-hdl-cygwin"></span><h4>Cygwin (NOT RECOMMENDED)<a class="headerlink" href="#cygwin-not-recommended" title="Permalink to this heading"></a></h4>
-<p>Using <a class="reference external" href="https://www.cygwin.com/">Cygwin</a> is not recommended anymore, and if
+<p>Using <a class="icon link reference external" href="https://www.cygwin.com/" target="_blank">Cygwin</a> is not recommended anymore, and if
 one encounters issues with this flow, we will not offer support for this.</p>
 <p><span class="red">We do not offer support on Cygwin-related issues or on Vivado/Vitis issues!</span></p>
 <p>Please note, that using Cygwin to build the HDL project has limitations!
@@ -1007,7 +1015,7 @@ hdl/projects/ad9081_fmca_ebz/zcu102/ad9081_fmca_ebz_zcu102.sdk/system_top.xsa).<
 <p>Before building any project, you <strong>must</strong>:</p>
 <ol class="arabic simple">
 <li><p>check the Vivado version needed by entering the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl">hdl/scripts/adi_env.tcl</a> file. If you do
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl" target="_blank">hdl/scripts/adi_env.tcl</a> file. If you do
 not want to use that (although <strong>we strongly advise you to use it</strong>)
 then you have the alternative of setting <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">ADI_IGNORE_VERSION_CHECK=1</span></code>
 before building the project. Otherwise your project will fail.</p></li>
@@ -1224,10 +1232,10 @@ RAM memory to build your FPGA design.</p>
 (XCVU9P device) requires 20GB (typical memory) and a peak of 32GB RAM
 memory. The following link shows the typical and peak Vivado memory usage
 per target device:
-<a class="reference external" href="https://www.xilinx.com/products/design-tools/vivado/vivado-ml.html#memory">MemoryUsage</a>.</p>
+<a class="icon link reference external" href="https://www.xilinx.com/products/design-tools/vivado/vivado-ml.html#memory" target="_blank">MemoryUsage</a>.</p>
 <p>This problem can be solved if a linux Swap file is created. You can
 find more information about what a swap file is at this link:
-<a class="reference external" href="https://linuxize.com/post/create-a-linux-swap-file/">SwapFile</a></p>
+<a class="icon link reference external" href="https://linuxize.com/post/create-a-linux-swap-file/" target="_blank">SwapFile</a></p>
 <p>To create a swap file you can use the following commands:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
@@ -1379,8 +1387,8 @@ this contains the most relevant information that you need to provide.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc/*.sof
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>You may now use this <strong>sopcinfo</strong> file as the input to your <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/">no-OS</a>
-and/or <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">Linux</a> build.</p>
+<div class="clear-left"></div></div></div><p>You may now use this <strong>sopcinfo</strong> file as the input to your <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/" target="_blank">no-OS</a>
+and/or <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/" target="_blank">Linux</a> build.</p>
 <p>The <strong>sof</strong> file is used to program the device.</p>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="366f5e2be26231237dea59259d35751175a06a6a" name="366f5e2be26231237dea59259d35751175a06a6a" type="checkbox"></input><label for="366f5e2be26231237dea59259d35751175a06a6a"><p>Building an Intel project in WSL - known issues</p>
@@ -1399,7 +1407,7 @@ synthesizing some IPs. These errors may appear because your device does
 not have enough RAM memory to build your FPGA design. This problem can
 be solved if you create a Linux Swap file.</p>
 <p>You can find more information about what a swap file is at this link:
-<a class="reference external" href="https://linuxize.com/post/create-a-linux-swap-file/">SwapFile</a>.</p>
+<a class="icon link reference external" href="https://linuxize.com/post/create-a-linux-swap-file/" target="_blank">SwapFile</a>.</p>
 <p>Depending on the size of the project, more or less virtual memory must
 be allocated. If you type in the search bar <strong>System Information</strong>, you
 can see Total Physical Memory and Total Virtual Memory of your system.
@@ -1621,7 +1629,7 @@ successfully built.</p>
 <h3>Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command<a class="headerlink" href="#supported-targets-of-make-command" title="Permalink to this heading"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><a class="reference external" href="https://www.gnu.org/software/make/manual/make.html">Make</a> is a build
+<p><a class="icon link reference external" href="https://www.gnu.org/software/make/manual/make.html" target="_blank">Make</a> is a build
 automation tool, which uses <strong>Makefile(s)</strong> to define a set of
 directives (‘rules’) about how to compile and/or link a program
 (‘targets’).</p>
@@ -1672,9 +1680,9 @@ e.g. <code class="docutils literal notranslate"><span class="pre">component.xml<
 <section id="preparing-the-sd-card">
 <span id="build-hdl-boot-file"></span><h2>5. Preparing the SD card<a class="headerlink" href="#preparing-the-sd-card" title="Permalink to this heading"></a></h2>
 <p>First, you have to write the SD card with the
-<a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/index.html" title="(in System Level Documentation)"><span class="xref std std-doc">ADI Kuiper image</span></a>.
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/index.html" target="_blank" title="(in System Level Documentation)"><span class="xref std std-doc">ADI Kuiper image</span></a>.
 Check this
-<a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span class="xref std std-ref">tutorial</span></a>.</p>
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" target="_blank" title="(in System Level Documentation)"><span class="xref std std-ref">tutorial</span></a>.</p>
 <p>Once you are done with that, you can go on with the following steps.</p>
 <section id="for-amd-fpgas">
 <h3>For AMD FPGAs<a class="headerlink" href="#for-amd-fpgas" title="Permalink to this heading"></a></h3>
@@ -1709,7 +1717,7 @@ found in <em>zynqmp-common</em></p></li>
 </section>
 <section id="b-for-intel-fpgas">
 <h3>5b. For Intel FPGAs<a class="headerlink" href="#b-for-intel-fpgas" title="Permalink to this heading"></a></h3>
-<p>Check out <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images">this guide</a>.</p>
+<p>Check out <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images" target="_blank">this guide</a>.</p>
 </section>
 </section>
 <section id="tools-and-their-versions">
@@ -1856,19 +1864,19 @@ not work across versions. We can only assure you that they are tested and
 <strong>work only for the versions we specify</strong>.</p>
 <p>The projects are usually upgraded to the latest tools after they are
 publicly released. The used tool versions can be found in the
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">release notes</a>
+<a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/releases" target="_blank">release notes</a>
 for each branch. The script, which builds the project always double
 checks the used tools version, and notifies the user if he or she is trying
 to use an unsupported version of tools.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>There are several ways to find out which tool version you should use.
-The easiest way is to check the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">release
+The easiest way is to check the <a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/releases" target="_blank">release
 notes</a>. You may
 also check out or browse the desired branch, and verify the tool version
 in the base Tcl script or in hdl/scripts/adi_env.tcl
-(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl#L18">for Vivado version</a>
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl#L34">or for Quartus version</a>),
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl#L18" target="_blank">for Vivado version</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl#L34" target="_blank">or for Quartus version</a>),
 which builds the projects.</p>
 </div>
 </section>
@@ -1876,9 +1884,9 @@ which builds the projects.</p>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images">Altera SoC quick start guide</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms8-ebz/quickstart/a10soc">Arria 10 SoC quick start guide</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers-all">Building the ADI Linux
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images" target="_blank">Altera SoC quick start guide</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms8-ebz/quickstart/a10soc" target="_blank">Arria 10 SoC quick start guide</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers-all" target="_blank">Building the ADI Linux
 kernel</a></p></li>
 </ul>
 </section>

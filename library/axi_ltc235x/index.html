@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The AXI LTC235X IP core can be used to interface the LTC2358-18, LTC2358-16, and similar devices using an FPGA. The core has a AXI Memory Map interface for configuration, supports the CMOS and LVDS interfaces of the device, and has a simple FIFO interface for the DMAC. This documentation only covers the IP core and requires that one must be familiar with the devices for a complete and better understanding." name="description" />
 
     <title>AXI LTC235X &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script defer="" src="../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../index.html">
@@ -233,7 +234,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_extract/index.html">Util Extract</a></li>
@@ -244,7 +252,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -369,8 +377,8 @@ Content on this topic
             
   <section id="axi-ltc235x">
 <span id="id1"></span><h1>AXI LTC235X<a class="headerlink" href="#axi-ltc235x" title="Permalink to this heading"></a></h1>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x">AXI LTC235X</a> IP core can be used to
-interface the <a class="icon adi reference external" href="https://www.analog.com/LTC2358-18">LTC2358-18</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2358-16">LTC2358-16</a>, and similar devices
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x" target="_blank">AXI LTC235X</a> IP core can be used to
+interface the <a class="icon adi reference external" href="https://www.analog.com/LTC2358-18" target="_blank">LTC2358-18</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2358-16" target="_blank">LTC2358-16</a>, and similar devices
 using an FPGA. The core has a AXI Memory Map interface for configuration,
 supports the CMOS and LVDS interfaces of the device, and has a simple
 FIFO interface for the DMAC. This documentation only covers the IP core
@@ -384,8 +392,8 @@ familiar with the device for a complete and better understanding.</p>
 <ul class="simple">
 <li><p>AXI based configuration</p></li>
 <li><p>Quartus Prime compatible</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2358-18">LTC2358-18</a>. No support yet for <a class="icon adi reference external" href="https://www.analog.com/LTC2358-16">LTC2358-16</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2357-18">LTC2357-18</a>,
-<a class="icon adi reference external" href="https://www.analog.com/LTC2357-16">LTC2357-16</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2353-18">LTC2353-18</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2353-16">LTC2353-16</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2358-18" target="_blank">LTC2358-18</a>. No support yet for <a class="icon adi reference external" href="https://www.analog.com/LTC2358-16" target="_blank">LTC2358-16</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2357-18" target="_blank">LTC2357-18</a>,
+<a class="icon adi reference external" href="https://www.analog.com/LTC2357-16" target="_blank">LTC2357-16</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2353-18" target="_blank">LTC2353-18</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2353-16" target="_blank">LTC2353-16</a></p></li>
 <li><p>CMOS and LVDS Mode</p></li>
 <li><p>SoftSpan configuration</p></li>
 </ul>
@@ -400,19 +408,19 @@ familiar with the device for a complete and better understanding.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x.v">library/axi_ltc235x/axi_ltc235x.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x.v" target="_blank">library/axi_ltc235x/axi_ltc235x.v</a></p></td>
 <td><p>Verilog source for the module</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x_cmos.v">library/axi_ltc235x/axi_ltc235x_cmos.v</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x_cmos.v" target="_blank">library/axi_ltc235x/axi_ltc235x_cmos.v</a></p></td>
 <td><p>Verilog source for CMOS Interface</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x_lvds.v">library/axi_ltc235x/axi_ltc235x_lvds.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x_lvds.v" target="_blank">library/axi_ltc235x/axi_ltc235x_lvds.v</a></p></td>
 <td><p>Verilog source for LVDS Interface</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v">library/common/up_adc_common.v</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v" target="_blank">library/common/up_adc_common.v</a></p></td>
 <td><p>Verilog source for the ADC Common regmap</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v">library/common/up_adc_channel.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v" target="_blank">library/common/up_adc_channel.v</a></p></td>
 <td><p>Verilog source for the ADC Channel regmap</p></td>
 </tr>
 </tbody>
@@ -675,13 +683,13 @@ familiar with the device for a complete and better understanding.</p>
 </section>
 <section id="detailed-description">
 <h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
-<p>The top module <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x.v">library/axi_ltc235x/axi_ltc235x.v</a> instantiates:</p>
+<p>The top module <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x.v" target="_blank">library/axi_ltc235x/axi_ltc235x.v</a> instantiates:</p>
 <ul class="simple">
-<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x_cmos.v">(CMOS) interface module</a></p></li>
-<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x_lcds.v">(LVDS) interface module</a></p></li>
-<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v">ADC channel register map</a></p></li>
-<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v">ADC common register map</a></p></li>
-<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_axi.v">AXI handling interface</a></p></li>
+<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x_cmos.v" target="_blank">(CMOS) interface module</a></p></li>
+<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x/axi_ltc235x_lcds.v" target="_blank">(LVDS) interface module</a></p></li>
+<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v" target="_blank">ADC channel register map</a></p></li>
+<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v" target="_blank">ADC common register map</a></p></li>
+<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_axi.v" target="_blank">AXI handling interface</a></p></li>
 </ul>
 <section id="interface-module-description">
 <h3>Interface module description<a class="headerlink" href="#interface-module-description" title="Permalink to this heading"></a></h3>
@@ -932,8 +940,8 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FPGA_INFO</span></code></td>
 <td class="description bold"><section>
 <p>FPGA device information
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl" target="_blank">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl" target="_blank">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
 </section>
 </td>
 </tr>
@@ -2252,7 +2260,7 @@ Where n is from 0 to 15.</p>
 <h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Permalink to this heading"></a></h2>
 <p>The control of the chip is done through the CMOS/LVDS interface at system level.
 The SoftSpan ID register per channel in
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v">up_adc_channel</a> can be configured.
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v" target="_blank">up_adc_channel</a> can be configured.
 The SoftSpan ID of all the channels are sent to the ADC through the interface
 module on every conversion.</p>
 <p>The <a class="reference internal" href="#axi-ltc235x-interface"><span class="std std-ref">Interface</span></a> must be connected directly to the top file of the
@@ -2267,17 +2275,17 @@ available in your system, you can create your IP starting from the interface mod
 <section id="software-support">
 <h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ltc2358.c">drivers/iio/adc/ltc2358.c</a></p></li>
-<li><p>LTC235X Linux device tree at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_sockit_dc2677a.dts">arch/arm/boot/dts/socfpga_cyclone5_sockit_dc2677a.dts</a></p></li>
+<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ltc2358.c" target="_blank">drivers/iio/adc/ltc2358.c</a></p></li>
+<li><p>LTC235X Linux device tree at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_sockit_dc2677a.dts" target="_blank">arch/arm/boot/dts/socfpga_cyclone5_sockit_dc2677a.dts</a></p></li>
 </ul>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x">library/axi_ltc235x</a></p></li>
-<li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dc2677a">projects/dc2677a</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x" target="_blank">library/axi_ltc235x</a></p></li>
+<li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dc2677a" target="_blank">projects/dc2677a</a></p></li>
 <li><p>HDL project documentation at <a class="reference internal" href="../../projects/dc2677a/index.html#dc2677a"><span class="std std-ref">DC2677A HDL project</span></a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2358-18">LTC2358-18</a> 18-bit 15 MSPS</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2358-18" target="_blank">LTC2358-18</a> 18-bit 15 MSPS</p></li>
 </ul>
 </section>
 </section>

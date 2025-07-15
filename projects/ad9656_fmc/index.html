@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The AD9656 is a quad 16-bit, 125 MSPS analog-to-digital converter (ADC) featuring an on-chip sample and hold circuit. It is designed to be low cost, low power and compact, making it easy to use." name="description" />
 
     <title>AD9656-FMC HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script defer="" src="../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../index.html">
@@ -237,7 +238,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_extract/index.html">Util Extract</a></li>
@@ -248,7 +256,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -375,10 +383,10 @@ Content on this topic
 <span id="ad9656-fmc"></span><h1>AD9656-FMC HDL project<a class="headerlink" href="#ad9656-fmc-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a> is a quad 16-bit, 125 MSPS analog-to-digital converter (ADC)
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9656" target="_blank">AD9656</a> is a quad 16-bit, 125 MSPS analog-to-digital converter (ADC)
 featuring an on-chip sample and hold circuit. It is designed to be low cost, low
 power and compact, making it easy to use.</p>
-<p><a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a> operates at a conversion rate of up to 125 MSPS, optimized for
+<p><a class="icon adi reference external" href="https://www.analog.com/AD9656" target="_blank">AD9656</a> operates at a conversion rate of up to 125 MSPS, optimized for
 excellent dynamic performance and low power consumption, which is crucial for
 applications requiring a small package size. It requires a single 1.8 V power
 supply and supports LVPECL, CMOS, and LVDS-compatible sample rate clocks for
@@ -396,13 +404,13 @@ specific system requirements</p>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9656">EVAL-AD9656</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9656" target="_blank">EVAL-AD9656</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9656" target="_blank">AD9656</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -421,8 +429,8 @@ specific system requirements</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9656">EVAL-AD9656</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9656" target="_blank">EVAL-AD9656</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a></p></td>
 <td><p>FMC HPC0</p></td>
 </tr>
 </tbody>
@@ -451,11 +459,11 @@ specific system requirements</p>
 </section>
 <section id="clock-scheme">
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a> ADC’s default clock input is from an on-board 125MHz crystal
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9656" target="_blank">AD9656</a> ADC’s default clock input is from an on-board 125MHz crystal
 oscillator, which goes through a transformer-coupled circuit to minimize jitter.
-The <a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a> has an internal clock divider (ratios 1-8) for higher
+The <a class="icon adi reference external" href="https://www.analog.com/AD9656" target="_blank">AD9656</a> has an internal clock divider (ratios 1-8) for higher
 frequency clocks.</p>
-<p>There are two ways to configure the clock source for <a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a>:</p>
+<p>There are two ways to configure the clock source for <a class="icon adi reference external" href="https://www.analog.com/AD9656" target="_blank">AD9656</a>:</p>
 <ol class="arabic simple">
 <li><p>Default Configuration (On-board Oscillator):</p>
 <ul class="simple">
@@ -473,7 +481,7 @@ typically ~2.8V p-p or 13 dBm sine wave input.</p></li>
 </ul>
 </li>
 </ol>
-<p>For more details, check <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9656">EVAL-AD9656</a> schematic.</p>
+<p>For more details, check <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9656" target="_blank">EVAL-AD9656</a> schematic.</p>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
@@ -578,10 +586,10 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>.
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
 If you want to build the sources, ADI makes them available on the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
+<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
@@ -596,7 +604,7 @@ the HDL repository.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>Below are the parameters that are used to configure this project, on <a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a>.</p>
+<div class="clear-left"></div></div></div><p>Below are the parameters that are used to configure this project, on <a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a>.</p>
 <ul class="simple">
 <li><p>JESD_MODE <span class="red">8B10B</span></p></li>
 <li><p>RX_NUM_OF_LANES 4</p></li>
@@ -613,15 +621,15 @@ guide.</p>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>Product datasheets: <a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/ad9656-125ebz">[Wiki] Evaluating the AD9656 ADC converter</a></p></li>
+<li><p>Product datasheets: <a class="icon adi reference external" href="https://www.analog.com/AD9656" target="_blank">AD9656</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/ad9656-125ebz" target="_blank">[Wiki] Evaluating the AD9656 ADC converter</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9656/reference_hdl">[Wiki] AD9656 HDL Reference Design</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9656_fmc">AD9656-FMC HDL project source code</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9656/reference_hdl" target="_blank">[Wiki] AD9656 HDL Reference Design</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9656_fmc" target="_blank">AD9656-FMC HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -638,39 +646,39 @@ guide.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>AXI_DMAC</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SYSID</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AD_IP_JESD204_TPL_ADC</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc" target="_blank">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_JESD204_RX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx" target="_blank">library/jesd204/axi_jesd204_rx</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>JESD204_RX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx" target="_blank">library/jesd204/axi_jesd204_rx</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>SYSID_ROM</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_CPACK2</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2" target="_blank">library/util_pack/util_cpack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_ADXCVR</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr" target="_blank">library/xilinx/axi_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr"><span class="std std-ref">AXI ADXCVR</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_ADXCVR</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr">library/xilinx/util_adxcvr</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr" target="_blank">library/xilinx/util_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR core for AMD Xilinx devices</span></a></p></td>
 </tr>
 </tbody>
@@ -680,8 +688,8 @@ guide.</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad9656">No-OS project</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad9656/ad9656.c">No-OS driver ad9656.c</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad9656" target="_blank">No-OS project</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad9656/ad9656.c" target="_blank">No-OS driver ad9656.c</a></p></li>
 </ul>
 </section>
 </section>
@@ -693,17 +701,17 @@ guide.</p>
 </section>
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
-<p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
-using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
-<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
-<p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc.
-from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">Linux GitHub repository</a>, the team will offer support
-on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
-<p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/">No-OS GitHub repository</a>, the team will offer support on the
-<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>
+<p>For questions regarding the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> Linux device drivers, device trees, etc.
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/" target="_blank">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers" target="_blank">EngineerZone</a> Linux software drivers forum.</p>
+<p>For questions concerning the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> No-OS drivers, from our
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/" target="_blank">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers" target="_blank">EngineerZone</a> microcontroller No-OS drivers forum.</p>
 <p>It should be noted, that the older the tools’ versions and release branches
-are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
+are, the lower the chances to receive support from <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> engineers.</p>
 </section>
 </section>
 

@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The ADALM2000 (M2K), is built around the XC7Z010 Xilinx Zynq FPGA." name="description" />
 
     <title>M2K HDL Project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script defer="" src="../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../index.html">
@@ -238,7 +239,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_extract/index.html">Util Extract</a></li>
@@ -249,7 +257,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -376,26 +384,26 @@ Content on this topic
 <span id="m2k"></span><h1>M2K HDL Project<a class="headerlink" href="#m2k-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/ADALM2000">ADALM2000</a> (M2K), is built around the XC7Z010 Xilinx Zynq FPGA.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/ADALM2000" target="_blank">ADALM2000</a> (M2K), is built around the XC7Z010 Xilinx Zynq FPGA.</p>
 <p>Booting is done from a 32MB QSPI FLASH, connected directly to the PS7 block.</p>
 <p>The system memory is 512MB RAM, which is also used for the file system. The DDR
 interface is a 16 bits interface running at 500 MHz. The frequency was chosen so
 that a single PLL runs inside of the PS7 block generating all the required PS7
 clocks, consuming minimum power.</p>
 <p>The FPGA drives 16 GPIOs for the logic analyzer, 2 GPIOs for triggers, a 14 pin
-interface to the <a class="icon adi reference external" href="https://www.analog.com/AD9963">AD9963</a>’s ADC and a 14 pin interface to the <a class="icon adi reference external" href="https://www.analog.com/AD9963">AD9963</a>’s
+interface to the <a class="icon adi reference external" href="https://www.analog.com/AD9963" target="_blank">AD9963</a>’s ADC and a 14 pin interface to the <a class="icon adi reference external" href="https://www.analog.com/AD9963" target="_blank">AD9963</a>’s
 DAC. It also has several generic GPIOs, an SPI and an I2C interface for
 configuring the board.</p>
 <p>The control GPIOs and the SPI are driven by the PS7 block in order to minimize
 the PL resource usage.</p>
 <p>The I2C is implemented by an AXI I2C IP because the PS7 I2C has several
 limitations, which makes it not suitable for this project.</p>
-<p>The oscilloscope related logic transfers data from the <a class="icon adi reference external" href="https://www.analog.com/AD9963">AD9963</a> chip with
-the <a class="icon adi reference external" href="https://www.analog.com/AD9963">AD9963</a> TRX interface goes through the decimation block, the analog
+<p>The oscilloscope related logic transfers data from the <a class="icon adi reference external" href="https://www.analog.com/AD9963" target="_blank">AD9963</a> chip with
+the <a class="icon adi reference external" href="https://www.analog.com/AD9963" target="_blank">AD9963</a> TRX interface goes through the decimation block, the analog
 triggering block, the history FIFO and streams data to memory using the DMA.</p>
 <p>The analog waveform generator transfers data from the memory using two DMAs, then goes
-through the interpolation block and ends with the <a class="icon adi reference external" href="https://www.analog.com/AD9963">AD9963</a> TX interface,
-which transfers data to the <a class="icon adi reference external" href="https://www.analog.com/AD9963">AD9963</a> chip. Two DMAs are used in order to
+through the interpolation block and ends with the <a class="icon adi reference external" href="https://www.analog.com/AD9963" target="_blank">AD9963</a> TX interface,
+which transfers data to the <a class="icon adi reference external" href="https://www.analog.com/AD9963" target="_blank">AD9963</a> chip. Two DMAs are used in order to
 have different orders of magnitude for the frequency of the two AWG channels,
 without needing to transfer a very large number of samples.</p>
 <p>The logic analyzer and pattern generator logic are mostly implemented in the
@@ -404,13 +412,13 @@ same IP to which a history FIFO and DMAs are added.</p>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADALM2000">ADALM2000</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADALM2000" target="_blank">ADALM2000</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9363">AD9363</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9363" target="_blank">AD9363</a></p></li>
 </ul>
 </section>
 <section id="block-design">
@@ -441,14 +449,14 @@ path to memory (same for HP2 and HP3).</p>
 <input class="collapsible_input" id="4ba5abccd1dffed2a4a169125d128b99b31bf8cd" name="4ba5abccd1dffed2a4a169125d128b99b31bf8cd" type="checkbox"></input><label for="4ba5abccd1dffed2a4a169125d128b99b31bf8cd"><p>AXI_AD9963</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>The <a class="reference internal" href="../../library/axi_ad9963/index.html#axi-ad9963"><span class="std std-ref">AXI_AD9963</span></a> IP is implementing the interfacing with
-the <a class="icon adi reference external" href="https://www.analog.com/AD9963">AD9963</a> chip. It features a dual 12-bit ADC working up to
+the <a class="icon adi reference external" href="https://www.analog.com/AD9963" target="_blank">AD9963</a> chip. It features a dual 12-bit ADC working up to
 100MSPS and a dual 12-bit DAC with up to 170MSPS. It also features a DLL,
 which can provide the clock for both the ADC and the DAC path.</p>
 <p>The TRX (ADC) interface is set at 100 MSPS, full duplex mode, double data
-rate (DDR), two channels. The clock comes from the <a class="icon adi reference external" href="https://www.analog.com/AD9963">AD9963</a> chip. The
+rate (DDR), two channels. The clock comes from the <a class="icon adi reference external" href="https://www.analog.com/AD9963" target="_blank">AD9963</a> chip. The
 IO standard is CMOS at 3.3V.</p>
 <p>The TX (DAC) interface works at 75 MSPS data rate with interpolation by 2 on
-the <a class="icon adi reference external" href="https://www.analog.com/AD9963">AD9963</a> chip. The DAC path inside <a class="icon adi reference external" href="https://www.analog.com/AD9963">AD9963</a> chip works at
+the <a class="icon adi reference external" href="https://www.analog.com/AD9963" target="_blank">AD9963</a> chip. The DAC path inside <a class="icon adi reference external" href="https://www.analog.com/AD9963" target="_blank">AD9963</a> chip works at
 150MHz, pushing part of the spurs outside the 100MHz bandwidth. Given that
 the reference clock for AD9963 is 100MHz and DACs maximum sampling rate is
 170MSPS, this is the best option available. The 75MHz clock is not available
@@ -1120,10 +1128,10 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>.
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
 If you want to build the sources, ADI makes them available on the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
+<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository.</p>
 <p>Go to the hdl/projects/<strong>m2k</strong> location and run the make
 command.</p>
@@ -1145,7 +1153,7 @@ guide.</p>
 </section>
 <section id="building-the-m2k-firmware">
 <h2>Building the M2K firmware<a class="headerlink" href="#building-the-m2k-firmware" title="Permalink to this heading"></a></h2>
-<p>Check out the build section from the README.md: <a class="reference external" href="https://github.com/analogdevicesinc/m2k-fw">https://github.com/analogdevicesinc/m2k-fw</a>.</p>
+<p>Check out the build section from the README.md: <a class="icon link reference external" href="https://github.com/analogdevicesinc/m2k-fw" target="_blank">https://github.com/analogdevicesinc/m2k-fw</a>.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
@@ -1153,25 +1161,25 @@ guide.</p>
 <h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <p>Here you can find the quick start guides available for this evaluation board:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/m2k/users/quick_start">[Wiki] M2K Quick Start</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/m2k/users/reference_manual">[Wiki] M2K Reference Manual</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/m2k/users/quick_start" target="_blank">[Wiki] M2K Quick Start</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/m2k/users/reference_manual" target="_blank">[Wiki] M2K Reference Manual</a></p></li>
 </ul>
 <p>Other useful information:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/m2k/developers">[Wiki] ADALM2000 for Developers</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/m2k/users">[Wiki] ADALM2000 for End Users</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/m2k/developers" target="_blank">[Wiki] ADALM2000 for Developers</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/m2k/users" target="_blank">[Wiki] ADALM2000 for End Users</a></p></li>
 </ul>
 </section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9963">AD9963</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9963" target="_blank">AD9963</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/m2k">M2K HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/m2k" target="_blank">M2K HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -1188,35 +1196,35 @@ guide.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>AXI_AD9963</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9963">library/axi_ad9963</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9963" target="_blank">library/axi_ad9963</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_ad9963/index.html#axi-ad9963"><span class="std std-ref">AXI AD9963</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_ADC_DECIMATE</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adc_decimate">library/axi_adc_decimate</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adc_decimate" target="_blank">library/axi_adc_decimate</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_adc_decimate/index.html#axi-adc-decimate"><span class="std std-ref">AXI ADC Decimate</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_ADC_TRIGGER</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adc_trigger">library/axi_adc_trigger</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adc_trigger" target="_blank">library/axi_adc_trigger</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_adc_trigger/index.html#axi-adc-trigger"><span class="std std-ref">AXI ADC Trigger</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_DAC_INTERPOLATE</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dac_interpolate">library/axi_dac_interpolate</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dac_interpolate" target="_blank">library/axi_dac_interpolate</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dac_interpolate/index.html#axi-dac-interpolate"><span class="std std-ref">AXI DAC Interpolate</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_DMAC</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_LOGIC_ANALYZER</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_logic_analyzer">library/axi_logic_analyzer</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_logic_analyzer" target="_blank">library/axi_logic_analyzer</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_logic_analyzer/index.html#axi-logic-analyzer"><span class="std std-ref">AXI Logic Analyzer</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_RD_WR_COMBINER</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_rd_wr_combiner">library/axi_rd_wr_combiner</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_rd_wr_combiner" target="_blank">library/axi_rd_wr_combiner</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_VAR_FIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_var_fifo">library/util_var_fifo</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_var_fifo" target="_blank">library/util_var_fifo</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_var_fifo/index.html#util-var-fifo"><span class="std std-ref">Util VAR FIFO</span></a></p></td>
 </tr>
 </tbody>
@@ -1226,11 +1234,11 @@ guide.</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-m2k-revb.dts">M2K Rev.B Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-m2k-revc.dts">M2K Rev.C Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-m2k-revd.dts">M2K Rev.D Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-m2k-reve.dts">M2K Rev.E Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-m2k-revf.dts">M2K Rev.F Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-m2k-revb.dts" target="_blank">M2K Rev.B Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-m2k-revc.dts" target="_blank">M2K Rev.C Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-m2k-revd.dts" target="_blank">M2K Rev.D Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-m2k-reve.dts" target="_blank">M2K Rev.E Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-m2k-revf.dts" target="_blank">M2K Rev.F Linux device tree</a></p></li>
 </ul>
 </section>
 </section>
@@ -1242,17 +1250,17 @@ guide.</p>
 </section>
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
-<p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
-using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
-<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
-<p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc.
-from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">Linux GitHub repository</a>, the team will offer support
-on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
-<p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/">No-OS GitHub repository</a>, the team will offer support on the
-<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>
+<p>For questions regarding the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> Linux device drivers, device trees, etc.
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/" target="_blank">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers" target="_blank">EngineerZone</a> Linux software drivers forum.</p>
+<p>For questions concerning the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> No-OS drivers, from our
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/" target="_blank">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers" target="_blank">EngineerZone</a> microcontroller No-OS drivers forum.</p>
 <p>It should be noted, that the older the tools’ versions and release branches
-are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
+are, the lower the chances to receive support from <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> engineers.</p>
 </section>
 </section>
 

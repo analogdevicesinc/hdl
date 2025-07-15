@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The 7 Series and Ultrascale FPGAs Transceivers Wizard can be used to configure the transceivers inside the util_adxcvr core. In general in all reference designs the gigabit transceivers are configured to the highest supported line rate of the device. If the user wants to use their system with a different line rate, she needs to reconfigure the transceivers. This can be done by software, which does the reconfiguration through the DRP interface of the transceivers. Due the complexity of the transceivers, it can happen that the user needs to do addition settings in HDL using the Wizard. The following wiki provides a short guide on how to use the wizard to generate a transceiver configuration for a JESD204B interface." name="description" />
 
     <title>Xilinx FPGAs Transceivers Wizard &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
-    <script defer="" src="../../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../../index.html">
@@ -250,7 +251,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../../corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_extract/index.html">Util Extract</a></li>
@@ -261,7 +269,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -400,14 +408,14 @@ configuration for a JESD204B interface.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>To learn more about the 7 Series FPGAs transceivers and the Wizard, please
-read the <a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug476_7Series_Transceivers.pdf">UG476</a>
-and <a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/pg168-gtwizard.pdf">PG168</a>.
+read the <a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug476_7Series_Transceivers.pdf" target="_blank">UG476</a>
+and <a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/pg168-gtwizard.pdf" target="_blank">PG168</a>.
 To learn more about the Ultrascale and Ultrascale+ FPGAs transceivers and
 the Wizard, please read the
-<a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug476_7Series_Transceivers.pdf">UG476</a>,
-<a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug576-ultrascale-gth-transceivers.pdf">UG576</a>,
-<a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug578-ultrascale-gty-transceivers.pdf">UG578</a>
-and <a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/pg168-gtwizard.pdf">PG168</a>.</p>
+<a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug476_7Series_Transceivers.pdf" target="_blank">UG476</a>,
+<a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug576-ultrascale-gth-transceivers.pdf" target="_blank">UG576</a>,
+<a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug578-ultrascale-gty-transceivers.pdf" target="_blank">UG578</a>
+and <a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/pg168-gtwizard.pdf" target="_blank">PG168</a>.</p>
 </div>
 <section id="required-features-by-the-jesd204b">
 <h2>Required features by the JESD204B<a class="headerlink" href="#required-features-by-the-jesd204b" title="Permalink to this heading"></a></h2>
@@ -502,8 +510,8 @@ be left to their default values.</p>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>These instances should be compared with the COMMON and CHANNEL instances used in
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr/util_adxcvr_xcm.v">util_adxcvr_xcm.v</a> and
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr/util_adxcvr_xch.v">util_adxcvr_xch.v</a>.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr/util_adxcvr_xcm.v" target="_blank">util_adxcvr_xcm.v</a> and
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr/util_adxcvr_xch.v" target="_blank">util_adxcvr_xch.v</a>.</p>
 </section>
 </section>
 <section id="ultrascale-fpgas-transceiver-wizard">
@@ -572,13 +580,13 @@ which instanciates the previous file and sets the required attributes.</p>
 </div>
 <div class="clear-left"></div></div></div><div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The example above is for the project <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/zcu102">DAQ2 with ZCU102</a>
+<p>The example above is for the project <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/zcu102" target="_blank">DAQ2 with ZCU102</a>
 and with a component name “gth_jesd204”.</p>
 </div>
 <p>These generated attributes values should be compared with the values used with
 the COMMON and CHANNEL instances in
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr/util_adxcvr_xcm.v">util_adxcvr_xcm.v</a>
-and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr/util_adxcvr_xch.v">util_adxcvr_xch.v</a> .</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr/util_adxcvr_xcm.v" target="_blank">util_adxcvr_xcm.v</a>
+and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr/util_adxcvr_xch.v" target="_blank">util_adxcvr_xch.v</a> .</p>
 </section>
 </section>
 </section>

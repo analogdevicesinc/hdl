@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="SPI Engine is a highly flexible and powerful SPI controller framework. It consist out of multiple sub-modules which communicate over well defined interfaces. This allows a high degree of flexibility and re-usability while at the same time staying highly customizable and easily extensible." name="description" />
 
     <title>SPI Engine &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script defer="" src="../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../index.html">
@@ -223,7 +224,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_extract/index.html">Util Extract</a></li>
@@ -234,7 +242,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -401,7 +409,7 @@ in a offload module.</p></li>
 <section id="software">
 <h2>Software<a class="headerlink" href="#software" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/spi/spi_engine">Linux Driver</a>:
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/spi/spi_engine" target="_blank">Linux Driver</a>:
 Linux driver for the SPI Engine framework.</p></li>
 <li><p><a class="reference internal" href="instruction-format.html#spi-engine-instruction-format"><span class="std std-ref">SPI Engine Instruction Set Specification</span></a>: Overview of the SPI Engine Instruction
 format.</p></li>
@@ -413,33 +421,33 @@ format.</p></li>
 make use of its interfaces and are intended to be used together with the SPI engine
 framework.</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/util_sigma_delta_spi">util-sigma-delta-spi</a>:
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/peripherals/util_sigma_delta_spi" target="_blank">util-sigma-delta-spi</a>:
 Helper module for interfacing ADCs from the Analog Devices Sigma-Delta family.</p></li>
 </ul>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/eval-cn0363-pmdz">CN0363</a>:
-Colorimeter application using the <a class="icon adi reference external" href="https://www.analog.com/AD7175-2">AD7175-2</a> Sigma-Delta ADC.</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adaq7980-sdz">adaq7980-sdz</a>:
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/eval-cn0363-pmdz" target="_blank">CN0363</a>:
+Colorimeter application using the <a class="icon adi reference external" href="https://www.analog.com/AD7175-2" target="_blank">AD7175-2</a> Sigma-Delta ADC.</p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/adaq7980-sdz" target="_blank">adaq7980-sdz</a>:
 A 16-bit ADC subsystem with four common signal processing and conditioning blocks.</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/ad5766">ad5766</a>:
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/ad5766" target="_blank">ad5766</a>:
 16-channel, 16-/12-bit, voltage output Digital-to-Analog Converters (DAC).</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/eval-cn0363-pmdz">CN0363</a>:
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/eval-cn0363-pmdz" target="_blank">CN0363</a>:
 The AD7768-1 is a low power, high performance, Σ-Δ analog-to-digital converter (ADC).</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad40xx_fmc">projects/ad40xx_fmc</a>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad40xx_fmc" target="_blank">projects/ad40xx_fmc</a>
 Evaluation Board for the AD4000 Series 16-/18-/20-Bit Precision SAR ADCs.</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad469x">AD469x</a>:
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad469x" target="_blank">AD469x</a>:
 16-Bit, 16-Channel, 500 kSPS/1 MSPS, Easy Drive Multiplexed SAR ADC.</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad463x/hdl">AD4630-24 / AD4030-24 / AD4630-16</a>:
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad463x/hdl" target="_blank">AD4630-24 / AD4030-24 / AD4630-16</a>:
 16/24-Bit, 2 MSPS Single or Dual Channel SAR ADC.</p></li>
 </ul>
 </section>
 <section id="additional-resources">
 <h2>Additional Resources<a class="headerlink" href="#additional-resources" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference download external" download="" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi-engine3.pdf"><code class="xref download docutils literal notranslate"><span class="pre">Presentation:</span> <span class="pre">SPI</span> <span class="pre">Engine</span> <span class="pre">Design</span> <span class="pre">Philosophy</span></code></a>.</p></li>
+<li><p><a class="icon reference download external" download="" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi-engine3.pdf"><code class="xref download docutils literal notranslate"><span class="pre">Presentation:</span> <span class="pre">SPI</span> <span class="pre">Engine</span> <span class="pre">Design</span> <span class="pre">Philosophy</span></code></a>.</p></li>
 <li><p><a class="reference internal" href="pipeline-delays.html#spi-engine-pipeline-delays"><span class="std std-ref">SPI Engine Pipeline Delays</span></a></p></li>
 <li><p><a class="reference internal" href="tutorial.html#spi-engine-tutorial"><span class="std std-ref">SPI Engine Tutorial - PulSAR-ADC</span></a>.</p></li>
 </ul>
@@ -447,17 +455,17 @@ Evaluation Board for the AD4000 Series 16-/18-/20-Bit Precision SAR ADCs.</p></l
 <section id="software-support">
 <h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>No-OS project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/axi_core/spi_engine">drivers/axi_core/spi_engine</a></p></li>
-<li><p>No-OS driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/axi_core/spi_engine/spi_engine.c">drivers/axi_core/spi_engine/spi_engine.c</a></p></li>
-<li><p>Linux project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/spi">drivers/spi</a></p></li>
-<li><p>Linux driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/spi/spi-axi-spi-engine.c">drivers/spi/spi-axi-spi-engine.c</a></p></li>
+<li><p>No-OS project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/axi_core/spi_engine" target="_blank">drivers/axi_core/spi_engine</a></p></li>
+<li><p>No-OS driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/axi_core/spi_engine/spi_engine.c" target="_blank">drivers/axi_core/spi_engine/spi_engine.c</a></p></li>
+<li><p>Linux project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/spi" target="_blank">drivers/spi</a></p></li>
+<li><p>Linux driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/spi/spi-axi-spi-engine.c" target="_blank">drivers/spi/spi-axi-spi-engine.c</a></p></li>
 </ul>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine">library/spi_engine</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/spi_engine">SPI Engine on wiki</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine" target="_blank">library/spi_engine</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/peripherals/spi_engine" target="_blank">SPI Engine on wiki</a></p></li>
 </ul>
 </section>
 </section>

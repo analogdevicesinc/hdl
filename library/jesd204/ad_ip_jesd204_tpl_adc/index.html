@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The ADC JESD204B/C Transport Peripheral implements the transport level handling of a JESD204B/C transmitter device. It is compatible with a wide range of Analog Devices high-speed analog-to-digital converters." name="description" />
 
     <title>ADC JESD204B/C Transport Peripheral &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
-    <script defer="" src="../../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../../index.html">
@@ -244,7 +245,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../../corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_extract/index.html">Util Extract</a></li>
@@ -255,7 +263,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -409,10 +417,10 @@ binary);</p></li>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>To instantiate it, you need to use the procedure
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/scripts/jesd204.tcl#L305">adi_tpl_jesd204_rx_create</a></p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/scripts/jesd204.tcl#L305" target="_blank">adi_tpl_jesd204_rx_create</a></p>
 </div>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v">ad_ip_jesd204_tpl_adc.v</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v" target="_blank">ad_ip_jesd204_tpl_adc.v</a></p></li>
 </ul>
 </section>
 <section id="block-diagram">
@@ -1086,8 +1094,8 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FPGA_INFO</span></code></td>
 <td class="description bold"><section>
 <p>FPGA device information
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl" target="_blank">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl" target="_blank">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
 </section>
 </td>
 </tr>
@@ -2670,7 +2678,7 @@ from using custom low-level software for interfacing the peripheral.</p>
 supported by the peripheral: 1, 2, 4</p>
 <ul class="simple">
 <li><p>Starting from
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/commit/454b900f90081fb95be857114e768f662178c8bd">this</a>
+<a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/commit/454b900f90081fb95be857114e768f662178c8bd" target="_blank">this</a>
 commit this restriction no longer applies.</p></li>
 </ul>
 </section>
@@ -2679,71 +2687,71 @@ commit this restriction no longer applies.</p></li>
 <section id="jesd204b-analog-to-digital-converters">
 <h3>JESD204B Analog-to-Digital Converters<a class="headerlink" href="#jesd204b-analog-to-digital-converters" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6673">AD6673</a>: 80 MHz Bandwidth, Dual IF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6674">AD6674</a>: 385 MHz BW IF Diversity Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6676">AD6676</a>: Wideband IF Receiver Subsystem</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6677">AD6677</a>: 80 MHz Bandwidth, IF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6684">AD6684</a>: 135 MHz Quad IF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6688">AD6688</a>: RF Diversity and 1.2GHz BW Observation
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6673" target="_blank">AD6673</a>: 80 MHz Bandwidth, Dual IF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6674" target="_blank">AD6674</a>: 385 MHz BW IF Diversity Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6676" target="_blank">AD6676</a>: Wideband IF Receiver Subsystem</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6677" target="_blank">AD6677</a>: 80 MHz Bandwidth, IF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6684" target="_blank">AD6684</a>: 135 MHz Quad IF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6688" target="_blank">AD6688</a>: RF Diversity and 1.2GHz BW Observation
 Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9207">AD9207</a>: 12-Bit, 6 GSPS, JESD204B/JESD204C
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9207" target="_blank">AD9207</a>: 12-Bit, 6 GSPS, JESD204B/JESD204C
 Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9208">AD9208</a>: 14-Bit, 3GSPS, JESD204B,
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9208" target="_blank">AD9208</a>: 14-Bit, 3GSPS, JESD204B,
 Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9209">AD9209</a>: 12-Bit, 4GSPS, JESD204B/C, Quad
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9209" target="_blank">AD9209</a>: 12-Bit, 4GSPS, JESD204B/C, Quad
 Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9213">AD9213</a>: 12-Bit, 10.25 GSPS, JESD204B, RF
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9213" target="_blank">AD9213</a>: 12-Bit, 10.25 GSPS, JESD204B, RF
 Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9234">AD9234</a>: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9234" target="_blank">AD9234</a>: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
 Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9250">AD9250</a>: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Dual
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9250" target="_blank">AD9250</a>: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Dual
 Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9625">AD9625</a>: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS,
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9625" target="_blank">AD9625</a>: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS,
 1.3 V/2.5 V Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a>: Quad, 16-Bit, 125 MSPS JESD204B 1.8 V
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9656" target="_blank">AD9656</a>: Quad, 16-Bit, 125 MSPS JESD204B 1.8 V
 Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9680">AD9680</a>: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9680" target="_blank">AD9680</a>: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500
 MSPS JESD204B, Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9683">AD9683</a>: 14-Bit, 170 MSPS/250 MSPS, JESD204B,
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9683" target="_blank">AD9683</a>: 14-Bit, 170 MSPS/250 MSPS, JESD204B,
 Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9690">AD9690</a>: 14-Bit, 500 MSPS / 1 GSPS JESD204B,
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9690" target="_blank">AD9690</a>: 14-Bit, 500 MSPS / 1 GSPS JESD204B,
 Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9691">AD9691</a>: 14-Bit, 1.25 GSPS JESD204B,
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9691" target="_blank">AD9691</a>: 14-Bit, 1.25 GSPS JESD204B,
 Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9694">AD9694</a>: 14-Bit, 500 MSPS JESD204B, Quad
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9694" target="_blank">AD9694</a>: 14-Bit, 500 MSPS JESD204B, Quad
 Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9695">AD9695</a>: 14-Bit, 1300 MSPS/625 MSPS,
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9695" target="_blank">AD9695</a>: 14-Bit, 1300 MSPS/625 MSPS,
 JESD204B, Dual Analog-to-Digital Converter Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9083">AD9083</a>: 16-Channel, 125 MHz Bandwidth, JESD204B
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9083" target="_blank">AD9083</a>: 16-Channel, 125 MHz Bandwidth, JESD204B
 Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9094">AD9094</a>: 8-Bit, 1 GSPS, JESD204B, Quad
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9094" target="_blank">AD9094</a>: 8-Bit, 1 GSPS, JESD204B, Quad
 Analog-to-Digital Converter</p></li>
 </ul>
 </section>
 <section id="jesd204b-rf-transceivers">
 <h3>JESD204B RF Transceivers<a class="headerlink" href="#jesd204b-rf-transceivers" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9371">AD9371</a>: SDR Integrated, Dual RF Transceiver with
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9371" target="_blank">AD9371</a>: SDR Integrated, Dual RF Transceiver with
 Observation Path</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9375">AD9375</a>: SDR Integrated, Dual RF Transceiver with
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9375" target="_blank">AD9375</a>: SDR Integrated, Dual RF Transceiver with
 Observation Path and DPD</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9009">ADRV9009</a>: SDR Integrated, Dual RF Transceiver
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9009" target="_blank">ADRV9009</a>: SDR Integrated, Dual RF Transceiver
 with Observation Path</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9008-1">ADRV9008-1</a>: SDR Integrated, Dual RF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9008-2">ADRV9008-2</a>: SDR Integrated, Dual RF
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9008-1" target="_blank">ADRV9008-1</a>: SDR Integrated, Dual RF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9008-2" target="_blank">ADRV9008-2</a>: SDR Integrated, Dual RF
 Transmitter with Observation Path</p></li>
 </ul>
 </section>
 <section id="jesd204b-c-mixed-signal-front-ends">
 <h3>JESD204B/C Mixed-Signal Front Ends<a class="headerlink" href="#jesd204b-c-mixed-signal-front-ends" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a>: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081" target="_blank">AD9081</a>: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
 Quad, 12-Bit, 4GSPS RFADC</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9082">AD9082</a>: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9082" target="_blank">AD9082</a>: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
 DUAL, 12-Bit, 6GSPS RFADC</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9986">AD9986</a>: 4T2R Direct RF Transmitter and
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9986" target="_blank">AD9986</a>: 4T2R Direct RF Transmitter and
 Observation Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9988">AD9988</a>: 4T4R Direct RF Receiver and Transmitter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9988" target="_blank">AD9988</a>: 4T4R Direct RF Receiver and Transmitter</p></li>
 </ul>
 </section>
 </section>
@@ -2759,7 +2767,7 @@ Observation Receiver</p></li>
 <h2>Technical Support<a class="headerlink" href="#technical-support" title="Permalink to this heading"></a></h2>
 <p>Analog Devices will provide limited online support for anyone using the core
 with Analog Devices components (ADC, DAC, Video, Audio, etc) via the
-<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a>.</p>
+<a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a>.</p>
 </section>
 </section>
 

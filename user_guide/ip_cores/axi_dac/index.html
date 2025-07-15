@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="This page presents a generic framework, which is used to design and develop an AXI based IP core for interfacing a Digital to Analog Converter (DAC) device with a high speed serial (JESD204B) or source synchronous parallel interface (LVDS/CMOS). This is a generic framework, there can be minor differences on each and every IP, the user should study this wiki page along with the IP’s wiki page." name="description" />
 
     <title>Generic AXI DAC &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
-    <script defer="" src="../../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=a81630d9"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -61,7 +62,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../../index.html">
@@ -229,7 +230,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../../../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../library/util_extract/index.html">Util Extract</a></li>
@@ -240,7 +248,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -378,7 +386,7 @@ unsupported devices.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Any kind of feedback regarding the DAC IP architecture or the following
-document is highly appreciated and can be addressed through the <a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a>
+document is highly appreciated and can be addressed through the <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a>
 community forum.</p>
 </div>
 <section id="files">
@@ -391,10 +399,10 @@ community forum.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_common.v">library/common/up_dac_common.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_common.v" target="_blank">library/common/up_dac_common.v</a></p></td>
 <td><p>Verilog source for the DAC Common regmap.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_channel.v">library/common/up_dac_channel.v</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_channel.v" target="_blank">library/common/up_dac_channel.v</a></p></td>
 <td><p>Verilog source for the DAC Channel regmap.</p></td>
 </tr>
 </tbody>
@@ -425,7 +433,7 @@ PHY module look like: <code class="docutils literal notranslate"><span class="pr
 </div>
 <p>Currently the Transmit PHY supports two different transmit interface:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/ssd_if">Source synchronous (CMOS or LVDS) interface</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/ssd_if" target="_blank">Source synchronous (CMOS or LVDS) interface</a></p></li>
 <li><p><a class="reference internal" href="../../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a> <a class="footnote-reference brackets" href="#f1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></li>
 </ul>
 <p>All these interfaces are supported on both Altera (Intel) and Xilinx devices.</p>
@@ -460,8 +468,8 @@ This interface is used to interconnect the different memory mapped module pieces
 <h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <p>A generic AXI DAC core have at least three different interfaces:</p>
 <ul class="simple">
-<li><p>The physical data interface (<a class="reference external" href="https://en.wikipedia.org/wiki/LVDS">LVDS</a> or
-<a class="reference external" href="https://en.wikipedia.org/wiki/CMOS">CMOS</a>) or the JESD204B data interface
+<li><p>The physical data interface (<a class="icon link reference external" href="https://en.wikipedia.org/wiki/LVDS" target="_blank">LVDS</a> or
+<a class="icon link reference external" href="https://en.wikipedia.org/wiki/CMOS" target="_blank">CMOS</a>) or the JESD204B data interface
 from the link layer.</p></li>
 <li><p>Read FIFO interface for the transmit or source module (e.g. DMA).</p></li>
 <li><p>AXI Slave Memory Mapped interface for register map access.</p></li>
@@ -584,7 +592,7 @@ Management Units, PLLs, Gigabit Transceivers etc.)</p></li>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The DAC Common register map is implemented in the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_common.v">library/common/up_dac_common.v</a> verilog file.
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_common.v" target="_blank">library/common/up_dac_common.v</a> verilog file.
 To find the instantiation of this module search for <code class="docutils literal notranslate"><span class="pre">up_dac_common</span></code> inside
 the IP’s directory.</p>
 </div>
@@ -596,7 +604,7 @@ see <a class="reference internal" href="#axi-dac-dac-channel"><span class="std s
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The DAC Channel register map is implemented in the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_channel.v">library/common/up_dac_channel.v</a> verilog file.
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_channel.v" target="_blank">library/common/up_dac_channel.v</a> verilog file.
 To find the instantiation of this module search for <code class="docutils literal notranslate"><span class="pre">up_dac_channel</span></code> inside
 the IP’s directory.</p>
 </div>
@@ -832,8 +840,8 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FPGA_INFO</span></code></td>
 <td class="description bold"><section>
 <p>FPGA device information
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl" target="_blank">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl" target="_blank">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
 </section>
 </td>
 </tr>
@@ -2228,7 +2236,7 @@ Otherwise will be the last set up value.</p>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_ad9361">AXI_AD9361 IP Description</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_ad9361" target="_blank">AXI_AD9361 IP Description</a></p></li>
 </ul>
 </section>
 </section>

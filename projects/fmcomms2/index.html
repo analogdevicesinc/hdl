@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The AD-FMCOMMS2/3/4/5-EBZ are a high-speed analog modules designed to showcase the AD9361 or AD9364, a high performance, highly integrated RF agile transceiver intended for use in RF applications." name="description" />
 
     <title>FMCOMMS2/3/4 HDL Project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script defer="" src="../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../index.html">
@@ -239,7 +240,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_extract/index.html">Util Extract</a></li>
@@ -250,7 +258,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -378,20 +386,20 @@ Content on this topic
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The AD-FMCOMMS2/3/4/5-EBZ are a high-speed analog modules designed to showcase
-the <a class="icon adi reference external" href="https://www.analog.com/AD9361">AD9361</a> or <a class="icon adi reference external" href="https://www.analog.com/AD9364">AD9364</a>, a high performance, highly integrated RF
+the <a class="icon adi reference external" href="https://www.analog.com/AD9361" target="_blank">AD9361</a> or <a class="icon adi reference external" href="https://www.analog.com/AD9364" target="_blank">AD9364</a>, a high performance, highly integrated RF
 agile transceiver intended for use in RF applications.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9361">AD9361</a> consists of 2 receive and 2 transmit paths (2 Rx, 2 Tx).</p>
-<p>The only difference between <a class="icon adi reference external" href="https://www.analog.com/AD9361">AD9361</a> and <a class="icon adi reference external" href="https://www.analog.com/AD9364">AD9364</a> (1 Rx, 1 Tx) is
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9361" target="_blank">AD9361</a> consists of 2 receive and 2 transmit paths (2 Rx, 2 Tx).</p>
+<p>The only difference between <a class="icon adi reference external" href="https://www.analog.com/AD9361" target="_blank">AD9361</a> and <a class="icon adi reference external" href="https://www.analog.com/AD9364" target="_blank">AD9364</a> (1 Rx, 1 Tx) is
 the number of channels. Software, HDL, pinout, etc - is all the same.</p>
 </div>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9361">AD9361</a> and <a class="icon adi reference external" href="https://www.analog.com/AD9364">AD9364</a> chips operate in the 70MHz to 6GHz range,
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9361" target="_blank">AD9361</a> and <a class="icon adi reference external" href="https://www.analog.com/AD9364" target="_blank">AD9364</a> chips operate in the 70MHz to 6GHz range,
 covering most licensed and unlicensed bands. The boards, due to discrete
 external components may have less performance on some of the RF input/output
-connectors (for example - the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS2">FMCOMMS2</a> and specific
-connectors on the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS5">FMCOMMS5</a> are specifically tuned
-to 2.4GHz). The <a class="icon adi reference external" href="https://www.analog.com/AD9361">AD9361</a> and <a class="icon adi reference external" href="https://www.analog.com/AD9364">AD9364</a> both supports channel
+connectors (for example - the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS2" target="_blank">FMCOMMS2</a> and specific
+connectors on the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS5" target="_blank">FMCOMMS5</a> are specifically tuned
+to 2.4GHz). The <a class="icon adi reference external" href="https://www.analog.com/AD9361" target="_blank">AD9361</a> and <a class="icon adi reference external" href="https://www.analog.com/AD9364" target="_blank">AD9364</a> both supports channel
 bandwidths from less than 200kHz to 56MHz by both changing sample rate, and by
 changing digital filters, and decimation inside the device itself.</p>
 <p>The digital interface consists of 12 bits of DDR data and supports full duplex
@@ -402,17 +410,17 @@ share a single clock. The data is sent or received based on the configuration
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS2">FMCOMMS2</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS3">FMCOMMS3</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS4-EBZ">FMCOMMS4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS2" target="_blank">FMCOMMS2</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS3" target="_blank">FMCOMMS3</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS4-EBZ" target="_blank">FMCOMMS4</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9361">AD9361</a>, in <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS2">FMCOMMS2</a>,
-<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS3">FMCOMMS3</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9364">AD9364</a>, in <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS4-EBZ">FMCOMMS4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9361" target="_blank">AD9361</a>, in <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS2" target="_blank">FMCOMMS2</a>,
+<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS3" target="_blank">FMCOMMS3</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9364" target="_blank">AD9364</a>, in <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS4-EBZ" target="_blank">FMCOMMS4</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -432,31 +440,31 @@ share a single clock. The data is sent or received based on the configuration
 </thead>
 <tbody>
 <tr class="row-even"><td><p>FMCOMMS2/3/4</p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/KC705">KC705</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/KC705" target="_blank">KC705</a></p></td>
 <td><p>FMC LPC</p></td>
 </tr>
 <tr class="row-odd"><td></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/KCU105">KCU105</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/KCU105" target="_blank">KCU105</a></p></td>
 <td><p>FMC LPC</p></td>
 </tr>
 <tr class="row-even"><td></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/VC707">VC707</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/VC707" target="_blank">VC707</a></p></td>
 <td><p>FMC HPC1</p></td>
 </tr>
 <tr class="row-odd"><td></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/ZC702">ZC702</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC702" target="_blank">ZC702</a></p></td>
 <td><p>FMC LPC</p></td>
 </tr>
 <tr class="row-even"><td></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></td>
 <td><p>FMC LPC</p></td>
 </tr>
 <tr class="row-odd"><td></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a></p></td>
 <td><p>FMC HPC0</p></td>
 </tr>
 <tr class="row-even"><td></td>
-<td><p><a class="reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board">ZedBoard</a></p></td>
+<td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
 <td><p>FMC LPC</p></td>
 </tr>
 </tbody>
@@ -482,7 +490,7 @@ DDR via VDMA. The internal DDS phase and frequency are programmable.</p>
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
 <p>The clocks are managed by the device and are software programmable. Please
 refer to the device data sheet for the various clocks within the device.</p>
-<p>The board provides a 40MHz crystal for the <a class="icon adi reference external" href="https://www.analog.com/AD9361">AD9361</a>.</p>
+<p>The board provides a 40MHz crystal for the <a class="icon adi reference external" href="https://www.analog.com/AD9361" target="_blank">AD9361</a>.</p>
 <p>Please note that the clock divider module in this project does a divide-by 2
 operation to get the desired clock for a single channel in case of mode 1R1T
 (2x RF channels), and a divide-by 4 in case of 2R2T (4x RF channels).</p>
@@ -490,7 +498,7 @@ operation to get the desired clock for a single channel in case of mode 1R1T
 </section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361">AD9361 IP</a> in this HDL project is configured
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361" target="_blank">AD9361 IP</a> in this HDL project is configured
 to work only in LVDS interface; it supports two configuration modes:</p>
 <ul class="simple">
 <li><p>2R2T - 2x receive and 2x transmit RF channels</p></li>
@@ -498,7 +506,7 @@ to work only in LVDS interface; it supports two configuration modes:</p>
 </ul>
 <p>Both support only the <strong>dual port half duplex</strong> operating mode. The maximum
 data rate (for combined I and Q words) is 61.44MSPS in DDR. For more details
-about these modes, check the <a class="reference external" href="https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf">AD9361 Reference Manual</a>, Table 48 “Maximum Data
+about these modes, check the <a class="icon link reference external" href="https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf" target="_blank">AD9361 Reference Manual</a>, Table 48 “Maximum Data
 Rates and Signal Bandwidths”.</p>
 </section>
 <section id="cpu-memory-interconnects-addresses">
@@ -650,8 +658,8 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><strong>*</strong> - used only in
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms2/zed/system_top.v">Zed</a> and
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms2/zc702/system_top.v">ZC702</a> projects.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms2/zed/system_top.v" target="_blank">Zed</a> and
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms2/zc702/system_top.v" target="_blank">ZC702</a> projects.</p>
 <p><code class="docutils literal notranslate"><span class="pre">gpio_muxout_tx</span></code> is connected to PMOD JA1.3, used for LO PLL0 TX at ADF4351
 and <code class="docutils literal notranslate"><span class="pre">gpio_muxout_rx</span></code> is connected to PMOD JA1.9, used for LO PLL0 RX at
 ADF4351.</p>
@@ -695,10 +703,10 @@ ADF4351.</p>
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>.
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
 If you want to build the sources, ADI makes them available on the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
+<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository.</p>
 <p>When building the project for FMCOMMS3/4, it is the same as for FMCOMMS2.
 The only difference is in the Linux device tree, but in HDL there is no
@@ -725,39 +733,39 @@ command.</p>
 <h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <p>Here you can find the quick start guides available for these evaluation boards:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/quickstart/zynq">ZC702/ZC706/Zed</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/quickstart/zynqmp">ZCU102</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/quickstart/microblaze">KC705/VC707</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/quickstart/zynq" target="_blank">ZC702/ZC706/Zed</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/quickstart/zynqmp" target="_blank">ZCU102</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/quickstart/microblaze" target="_blank">KC705/VC707</a></p></li>
 </ul>
 <p>Other useful information:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz">[Wiki] FMCOMMS2 User Guide</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/basic_iq_datafiles">[Wiki] FMCOMMS2/3/4/5 basic IQ data files</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/card_specification">[Wiki] FMCOMMS2/4/5 Specifications</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options">[Wiki] Configuration options for AD9361/AD9364</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal-filter">[Wiki] AD9361 filter response</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz" target="_blank">[Wiki] FMCOMMS2 User Guide</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/basic_iq_datafiles" target="_blank">[Wiki] FMCOMMS2/3/4/5 basic IQ data files</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/card_specification" target="_blank">[Wiki] FMCOMMS2/4/5 Specifications</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options" target="_blank">[Wiki] Configuration options for AD9361/AD9364</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal-filter" target="_blank">[Wiki] AD9361 filter response</a></p></li>
 </ul>
 </section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf">AD9361 reference manual</a></p></li>
+<li><p><a class="icon link reference external" href="https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf" target="_blank">AD9361 reference manual</a></p></li>
 <li><p>Product datasheets:</p>
 <ul>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9361">AD9361</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9364">AD9364</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9361" target="_blank">AD9361</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9364" target="_blank">AD9364</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/ad9361">[Wiki] About AD9361/AD9363/AD9364</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation">[Wiki] About I/Q rotation</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options">[Wiki] Configuration options for</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/tuning">[Wiki] Tuning the AD9361/AD9364</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/ad9361" target="_blank">[Wiki] About AD9361/AD9363/AD9364</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation" target="_blank">[Wiki] About I/Q rotation</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options" target="_blank">[Wiki] Configuration options for</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/tuning" target="_blank">[Wiki] Tuning the AD9361/AD9364</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms2">FMCOMMS2/3/4 HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms2" target="_blank">FMCOMMS2/3/4 HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -774,51 +782,51 @@ command.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>AXI_AD9361</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361">library/axi_ad9361</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361" target="_blank">library/axi_ad9361</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_ad9361/index.html#axi-ad9361"><span class="std std-ref">AXI AD9361</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_DMAC</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SYSID</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>SYSID_ROM</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_CPACK2</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2" target="_blank">library/util_pack/util_cpack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_UPACK2</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2">library/util_pack/util_upack2</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">library/util_pack/util_upack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_RFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_rfifo">library/util_rfifo</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_rfifo" target="_blank">library/util_rfifo</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_rfifo/index.html#util-rfifo"><span class="std std-ref">Util RFIFO</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_WFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_wfifo">library/util_wfifo</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_wfifo" target="_blank">library/util_wfifo</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_wfifo/index.html#util-wfifo"><span class="std std-ref">Util WFIFO</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_TDD_SYNC</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_tdd_sync">library/util_tdd_sync</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_tdd_sync" target="_blank">library/util_tdd_sync</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_CLKDIV</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_clkdiv">library/xilinx/util_clkdiv</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_clkdiv" target="_blank">library/xilinx/util_clkdiv</a></p></td>
 <td><p>—</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/fmcomms2_fir_filt">[Wiki] Integrate FIR filters into the FMCOMMS2 HDL design</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/partial">[Wiki] Partial reconfiguration with FMCOMMS2</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/fmcomms2_fir_filt" target="_blank">[Wiki] Integrate FIR filters into the FMCOMMS2 HDL design</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/partial" target="_blank">[Wiki] Partial reconfiguration with FMCOMMS2</a></p></li>
 </ul>
 </section>
 <section id="software-related">
@@ -827,30 +835,30 @@ command.</p>
 <input class="collapsible_input" id="3d9144e2c4e2b5c82b54a8740a8c85dc893f9714" name="3d9144e2c4e2b5c82b54a8740a8c85dc893f9714" type="checkbox"></input><label for="3d9144e2c4e2b5c82b54a8740a8c85dc893f9714"><p>Click here to see the list of Linux device trees available.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/kc705_fmcomms2-3.dts">FMCOMMS2/3 KC705 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/vc707_fmcomms2-3.dts">FMCOMMS2/3 VC707 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/kcu105_fmcomms2-3.dts">FMCOMMS2/3 KCU105 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9361-fmcomms2-3.dts">FMCOMMS2/3 ZedBoard Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc702-adv7511-ad9361-fmcomms2-3.dts">FMCOMMS2/3 ZC702 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9361-fmcomms2-3.dts">FMCOMMS2/3 ZC706 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9361-fmcomms2-3.dts">FMCOMMS2/3 ZCU102 (rev10) Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB-ad9361-fmcomms2-3.dts">FMCOMMS2/3 ZCU102 (revB) Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/kc705_fmcomms4.dts">FMCOMMS4 KC705 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/vc707_fmcomms4.dts">FMCOMMS4 VC707 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/kcu105_fmcomms4.dts">FMCOMMS4 KCU105 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9364-fmcomms4.dts">FMCOMMS4 ZedBoard Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc702-adv7511-ad9364-fmcomms4.dts">FMCOMMS4 ZC702 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9364-fmcomms4.dts">FMCOMMS4 ZC706 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB-ad9364-fmcomms4.dts">FMCOMMS4 ZCU102 (revB) Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9364-fmcomms4.dts">FMCOMMS4 ZCU102 (rev10) Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/kc705_fmcomms2-3.dts" target="_blank">FMCOMMS2/3 KC705 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/vc707_fmcomms2-3.dts" target="_blank">FMCOMMS2/3 VC707 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/kcu105_fmcomms2-3.dts" target="_blank">FMCOMMS2/3 KCU105 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9361-fmcomms2-3.dts" target="_blank">FMCOMMS2/3 ZedBoard Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc702-adv7511-ad9361-fmcomms2-3.dts" target="_blank">FMCOMMS2/3 ZC702 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9361-fmcomms2-3.dts" target="_blank">FMCOMMS2/3 ZC706 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9361-fmcomms2-3.dts" target="_blank">FMCOMMS2/3 ZCU102 (rev10) Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB-ad9361-fmcomms2-3.dts" target="_blank">FMCOMMS2/3 ZCU102 (revB) Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/kc705_fmcomms4.dts" target="_blank">FMCOMMS4 KC705 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/vc707_fmcomms4.dts" target="_blank">FMCOMMS4 VC707 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/kcu105_fmcomms4.dts" target="_blank">FMCOMMS4 KCU105 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9364-fmcomms4.dts" target="_blank">FMCOMMS4 ZedBoard Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc702-adv7511-ad9364-fmcomms4.dts" target="_blank">FMCOMMS4 ZC702 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9364-fmcomms4.dts" target="_blank">FMCOMMS4 ZC706 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB-ad9364-fmcomms4.dts" target="_blank">FMCOMMS4 ZCU102 (revB) Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9364-fmcomms4.dts" target="_blank">FMCOMMS4 ZCU102 (rev10) Linux device tree</a></p></li>
 </ul>
 </div>
 </div>
 </div><ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal">[Wiki] AD9361 no-OS software documentation</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9361">[Wiki] AD9361 Linux device driver documentation</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/linux">[Wiki] FMCOMMS2/3/4/5 Linux support</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/fmcomms2_plugin">[Wiki] AD936x IIO Oscilloscope plugin description</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal" target="_blank">[Wiki] AD9361 no-OS software documentation</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9361" target="_blank">[Wiki] AD9361 Linux device driver documentation</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/linux" target="_blank">[Wiki] FMCOMMS2/3/4/5 Linux support</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/fmcomms2_plugin" target="_blank">[Wiki] AD936x IIO Oscilloscope plugin description</a></p></li>
 </ul>
 </section>
 </section>
@@ -862,17 +870,17 @@ command.</p>
 </section>
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
-<p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
-using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
-<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
-<p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc.
-from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">Linux GitHub repository</a>, the team will offer support
-on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
-<p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/">No-OS GitHub repository</a>, the team will offer support on the
-<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>
+<p>For questions regarding the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> Linux device drivers, device trees, etc.
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/" target="_blank">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers" target="_blank">EngineerZone</a> Linux software drivers forum.</p>
+<p>For questions concerning the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> No-OS drivers, from our
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/" target="_blank">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers" target="_blank">EngineerZone</a> microcontroller No-OS drivers forum.</p>
 <p>It should be noted, that the older the tools’ versions and release branches
-are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
+are, the lower the chances to receive support from <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> engineers.</p>
 </section>
 </section>
 

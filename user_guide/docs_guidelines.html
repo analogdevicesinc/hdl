@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="This documentation is built with Sphinx and all source code is available at the path docs." name="description" />
 
     <title>Documentation guidelines &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../index.html">
@@ -218,7 +219,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_extract/index.html">Util Extract</a></li>
@@ -229,7 +237,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -354,11 +362,11 @@ Content on this topic
             
   <section id="documentation-guidelines">
 <span id="docs-guidelines"></span><h1>Documentation guidelines<a class="headerlink" href="#documentation-guidelines" title="Permalink to this heading"></a></h1>
-<p>This documentation is built with <a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a> and
-all source code is available at the path <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs">docs</a>.</p>
+<p>This documentation is built with <a class="icon link reference external" href="https://www.sphinx-doc.org" target="_blank">Sphinx</a> and
+all source code is available at the path <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs" target="_blank">docs</a>.</p>
 <p>To contribute to it, open a pull request with the changes to
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">this repository</a>, just make sure to read the general
-<a class="reference external" href="https://analogdevicesinc.github.io/doctools/docs_guidelines/index.html#docs-guidelines" title="(in Doctools vmain)"><span>Documentation guidelines</span></a> first <strong>and</strong> the additional guidelines
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">this repository</a>, just make sure to read the general
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/doctools/docs_guidelines/index.html#docs-guidelines" target="_blank" title="(in Doctools vmain)"><span>Documentation guidelines</span></a> first <strong>and</strong> the additional guidelines
 below specific to the HDL repository.</p>
 <section id="before-creating-a-new-page">
 <h2>Before creating a new page<a class="headerlink" href="#before-creating-a-new-page" title="Permalink to this heading"></a></h2>
@@ -373,7 +381,7 @@ newer than 23 version. If not, update it by running the following command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pip<span class="w"> </span>--upgrade
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>Then install the necessary documentation tools by running (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">HDL</a>
+<div class="clear-left"></div></div></div><p>Then install the necessary documentation tools by running (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">HDL</a>
 repository is the working directory):</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
@@ -451,18 +459,18 @@ a HDL specific Sphinx documentation page.</p>
 <h2>Templates<a class="headerlink" href="#templates" title="Permalink to this heading"></a></h2>
 <p>Templates are available:</p>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/library/template_ip">docs/library/template_ip</a> (<a class="reference internal" href="../library/template_ip/index.html#template-ip"><span class="std std-ref">rendered</span></a>).</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/library/template_framework">docs/library/template_framework</a> (<a class="reference internal" href="../library/template_framework/index.html#template-framework"><span class="std std-ref">rendered</span></a>).</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/projects/template">docs/projects/template</a> (<a class="reference internal" href="../projects/template/index.html#template-project"><span class="std std-ref">rendered</span></a>).</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/library/template_ip" target="_blank">docs/library/template_ip</a> (<a class="reference internal" href="../library/template_ip/index.html#template-ip"><span class="std std-ref">rendered</span></a>).</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/library/template_framework" target="_blank">docs/library/template_framework</a> (<a class="reference internal" href="../library/template_framework/index.html#template-framework"><span class="std std-ref">rendered</span></a>).</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/projects/template" target="_blank">docs/projects/template</a> (<a class="reference internal" href="../projects/template/index.html#template-project"><span class="std std-ref">rendered</span></a>).</p></li>
 </ul>
 <p>Remove the <code class="docutils literal notranslate"><span class="pre">:orphan:</span></code> in the first line, it is to hide the templates from the
-<a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree">TOC tree</a>,
+<a class="icon link reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree" target="_blank">TOC tree</a>,
 and make sure to remove any placeholder text and instructive comment.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The old wiki uses <a class="reference external" href="https://www.dokuwiki.org/dokuwiki">dokuwiki</a>. When
+<p>The old wiki uses <a class="icon link reference external" href="https://www.dokuwiki.org/dokuwiki" target="_blank">dokuwiki</a>. When
 importing text from there, consider <code class="docutils literal notranslate"><span class="pre">pandoc</span></code> and the tips accross the
-<a class="reference external" href="https://analogdevicesinc.github.io/doctools/docs_guidelines/index.html#docs-guidelines" title="(in Doctools vmain)"><span>Documentation guidelines</span></a> to convert it to reST.</p>
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/doctools/docs_guidelines/index.html#docs-guidelines" target="_blank" title="(in Doctools vmain)"><span>Documentation guidelines</span></a> to convert it to reST.</p>
 </div>
 </section>
 <section id="common-sections">

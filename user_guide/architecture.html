@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Every HDL design of a reference project can be divided into:" name="description" />
 
     <title>HDL Architecture &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../index.html">
@@ -256,7 +257,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_extract/index.html">Util Extract</a></li>
@@ -267,7 +275,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -403,7 +411,7 @@ on the system);</p></li>
 <li><p>these designs are specific to each carrier, making them <strong>carrier
 dependent</strong>;</p></li>
 <li><p>it describes part of the <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module;</p></li>
-<li><p>located in <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">projects/common</a>; one for each carrier;</p></li>
+<li><p>located in <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">projects/common</a>; one for each carrier;</p></li>
 <li><p>here we do most of the PS configuration, add SPI, I2C and GPIOs;</p></li>
 <li><p>in some cases, we have scripts to instantiate the PL DDR as ADC offload
 memory or DAC offload memory.</p></li>
@@ -436,8 +444,8 @@ the base design of the carrier first (#1), then the base design of the
 evaluation board (#2).</p>
 <section id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h3>
-<p>Take <a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS2-EBZ">FMCOMMS2</a> with
-<a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a>;
+<p>Take <a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS2-EBZ" target="_blank">FMCOMMS2</a> with
+<a class="icon link reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html" target="_blank">ZedBoard</a>;
 the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> file will have the following designs sourced to be used:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>zed<span class="o">/</span>zed_system_bd.tcl
 <span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>common<span class="o">/</span>fmcomms2_bd.tcl
@@ -477,18 +485,18 @@ cores.</p>
 <th class="head"><p><strong>FPGA</strong></p></th>
 <th class="head"><p><strong>SoC</strong></p></th>
 <th class="head"><p><strong>FPGA</strong></p></th>
-<th class="head"><p><a class="reference external" href="https://www.xilinx.com/an/adaptive-compute-acceleration-platforms.html">ACAP</a></p></th>
+<th class="head"><p><a class="icon link reference external" href="https://www.xilinx.com/an/adaptive-compute-acceleration-platforms.html" target="_blank">ACAP</a></p></th>
 <th class="head"><p><strong>FPGA</strong></p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/docs/programmable/683458/current/hard-processor-system-hps.html">HPS</a></p></td>
-<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/programmable/processor/nios-ii.html">NIOS II</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/intellectual-property/processing_system7.html">PS7</a>
-<a class="reference external" href="https://www.xilinx.com/products/intellectual-property/zynq-ultra-ps-e.html">PS8</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/design-tools/microblaze.html">MicroBlaze</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/silicon-devices/acap/versal.html">Versal</a></p></td>
-<td><p><a class="reference external" href="https://www.latticesemi.com/products/designsoftwareandip/intellectualproperty/ipcore/ipcores04/risc-v-rx-cpu">riscv-rx</a></p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/docs/programmable/683458/current/hard-processor-system-hps.html" target="_blank">HPS</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/programmable/processor/nios-ii.html" target="_blank">NIOS II</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/products/intellectual-property/processing_system7.html" target="_blank">PS7</a>
+<a class="icon link reference external" href="https://www.xilinx.com/products/intellectual-property/zynq-ultra-ps-e.html" target="_blank">PS8</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/products/design-tools/microblaze.html" target="_blank">MicroBlaze</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/products/silicon-devices/acap/versal.html" target="_blank">Versal</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.latticesemi.com/products/designsoftwareandip/intellectualproperty/ipcore/ipcores04/risc-v-rx-cpu" target="_blank">riscv-rx</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -499,13 +507,13 @@ ARM® Cortex® - A9 MPCore™ processor, they also have other integrated
 peripherals and memory interfaces. For more information please visit
 the manufacturer’s website, listed in the table above.</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">PS7</span></code> — <a class="reference external" href="https://docs.xilinx.com/v/u/en-US/pg082-processing-system7">Zynq-7000 SoC Processing
+<li><p><code class="docutils literal notranslate"><span class="pre">PS7</span></code> — <a class="icon link reference external" href="https://docs.xilinx.com/v/u/en-US/pg082-processing-system7" target="_blank">Zynq-7000 SoC Processing
 System</a>
 (<code class="docutils literal notranslate"><span class="pre">processing_system7</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">PS8</span></code> — <a class="reference external" href="https://docs.xilinx.com/viewer/book-attachment/xFC3qkokxbD~75kj6nPLuw/2o4flzqn5OqWHaMHwpG3Qg">Zynq UltraScale+ MPSoC Processing
+<li><p><code class="docutils literal notranslate"><span class="pre">PS8</span></code> — <a class="icon link reference external" href="https://docs.xilinx.com/viewer/book-attachment/xFC3qkokxbD~75kj6nPLuw/2o4flzqn5OqWHaMHwpG3Qg" target="_blank">Zynq UltraScale+ MPSoC Processing
 System</a>
 (<code class="docutils literal notranslate"><span class="pre">zynq_ultra_ps_e</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Versal</span></code> — <a class="reference external" href="https://docs.xilinx.com/r/en-US/pg352-cips/Overview">Versal ACAP
+<li><p><code class="docutils literal notranslate"><span class="pre">Versal</span></code> — <a class="icon link reference external" href="https://docs.xilinx.com/r/en-US/pg352-cips/Overview" target="_blank">Versal ACAP
 CIPS</a>
 (<code class="docutils literal notranslate"><span class="pre">versal_cips</span></code>)</p></li>
 </ul>
@@ -513,7 +521,7 @@ CIPS</a>
 <section id="memory-interface-controller">
 <h3>Memory interface controller<a class="headerlink" href="#memory-interface-controller" title="Permalink to this heading"></a></h3>
 <p>In almost all cases, the carrier board is not made and designed by
-<a class="icon adi reference external" href="https://www.analog.com/">Analog Devices</a>, so the external memory solution of the system is
+<a class="icon adi reference external" href="https://www.analog.com/" target="_blank">Analog Devices</a>, so the external memory solution of the system is
 given.</p>
 <p>Meaning, <strong>we cannot support, modify or alter this important part</strong> of the
 system. In several cases we even have system limitations because of it
@@ -523,9 +531,9 @@ data throughput).</p>
 memory solutions for Intel and AMD:</p>
 <ul class="simple">
 <li><p>Intel’s memory interfaces:
-<a class="reference external" href="https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html">https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html</a></p></li>
+<a class="icon link reference external" href="https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html" target="_blank">https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html</a></p></li>
 <li><p>AMD’s memory interfaces:
-<a class="reference external" href="https://www.xilinx.com/products/intellectual-property/mig.html#documentation">https://www.xilinx.com/products/intellectual-property/mig.html#documentation</a></p></li>
+<a class="icon link reference external" href="https://www.xilinx.com/products/intellectual-property/mig.html#documentation" target="_blank">https://www.xilinx.com/products/intellectual-property/mig.html#documentation</a></p></li>
 </ul>
 </section>
 <section id="peripheral-interfaces">
@@ -540,7 +548,7 @@ have the naming of the ports depending on the microprocessor used.</p>
 <p>The memory addresses that will be used by software are based on the HDL
 addresses of the IP register map, to which an offset is added, depending
 on the architecture of the used FPGA (see also
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_board.tcl">ad_cpu_interconnect procedure</a>;
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_board.tcl" target="_blank">ad_cpu_interconnect procedure</a>;
 architecture is specified by <code class="docutils literal notranslate"><span class="pre">sys_zynq</span></code> variable, for AMD FPGAs).</p>
 <p><strong>Zynq-7000 and 7 Series</strong></p>
 <p>Because this was the original target, this is the reference
@@ -585,9 +593,9 @@ peripherals of the carrier board.</p>
 </section>
 <section id="hdmi">
 <h4>HDMI<a class="headerlink" href="#hdmi" title="Permalink to this heading"></a></h4>
-<p>There is HDMI support for all carriers which are using the <a class="icon adi reference external" href="https://www.analog.com/ADV7511">ADV7511</a>
+<p>There is HDMI support for all carriers which are using the <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a>
 as HDMI transmitter. The HDMI transmitter core can be found
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">here (axi_hdmi_tx)</a>.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx" target="_blank">here (axi_hdmi_tx)</a>.</p>
 </section>
 <section id="gpios">
 <h4>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h4>
@@ -600,7 +608,7 @@ can be found on the FMC board;</p></li>
 </ul>
 <p>When some of these GPIOs are not used, the input pins should have the
 output pins driven to them, so that
-<a class="reference external" href="https://www.xilinx.com/products/design-tools/vivado.html">Vivado</a> will not complain about
+<a class="icon link reference external" href="https://www.xilinx.com/products/design-tools/vivado.html" target="_blank">Vivado</a> will not complain about
 inputs not being assigned to.</p>
 <p>Depending on the processor type, add these values to the GPIO number
 from the HDL project to obtain the final number used in software:</p>
@@ -859,7 +867,7 @@ might be used in the base design of the carrier!</p>
 <h2>Board design and capabilities<a class="headerlink" href="#board-design-and-capabilities" title="Permalink to this heading"></a></h2>
 <section id="amd-platforms">
 <span id="architecture-amd-platforms"></span><h3>AMD platforms<a class="headerlink" href="#amd-platforms" title="Permalink to this heading"></a></h3>
-<p>The board files of these carriers can be found <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">here</a>.</p>
+<p>The board files of these carriers can be found <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">here</a>.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -880,91 +888,91 @@ might be used in the base design of the carrier!</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/AC701">AC701</a> **</p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/AC701" target="_blank">AC701</a> **</p></td>
 <td><p>JTAG</p></td>
 <td><p>HPC (2 GTP &#64; 6.6 Gbps)</p></td>
 <td><p>—</p></td>
 <td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
 <td><p>Artix-7</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development">Cora Z7S</a></p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a></p></td>
 <td><p>SD card</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>Zynq-7000</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/KCU105">KCU105</a></p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KCU105" target="_blank">KCU105</a></p></td>
 <td><p>JTAG</p></td>
 <td><p>HPC (8 GTH &#64; 16.3 Gbps)</p></td>
 <td><p>LPC (1 GTH &#64; 16.3 Gbps)</p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Kintex UltraScale</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed">Microzed</a> **</p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed" target="_blank">Microzed</a> **</p></td>
 <td><p>JTAG</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>Zynq-7000</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/VC709">VC709</a> **</p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC709" target="_blank">VC709</a> **</p></td>
 <td><p>JTAG</p></td>
 <td><p>HPC (10 GTH &#64; 13.1 Gbps)</p></td>
 <td><p>—</p></td>
 <td><p><strong>*1.8V</strong></p></td>
 <td><p>Virtex-7</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a></p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a></p></td>
 <td><p>SD card</p></td>
 <td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
 <td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
 <td><p><strong>*1.5V</strong>/1.2V</p></td>
 <td><p>Versal AI Core</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a></p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a></p></td>
 <td><p>JTAG</p></td>
 <td><p>FMC+ (24 GTY &#64; 28.21 Gbps)</p></td>
 <td><p>LPC</p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Virtex UltraScale+</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VMK180">VMK180</a></p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VMK180" target="_blank">VMK180</a></p></td>
 <td><p>SD card</p></td>
 <td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
 <td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
 <td><p><strong>*1.5V</strong>/1.2V</p></td>
 <td><p>Versal Prime Series</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/VPK180">VPK180</a></p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VPK180" target="_blank">VPK180</a></p></td>
 <td><p>SD card</p></td>
 <td><p>FMC+ (8 GTYP &#64; 32.75 Gbps)</p></td>
 <td><p>—</p></td>
 <td><p><strong>*1.5V</strong>/1.2V</p></td>
 <td><p>Versal Premium</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/ZC702">ZC702</a></p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC702" target="_blank">ZC702</a></p></td>
 <td><p>SD card</p></td>
 <td><p>LPC</p></td>
 <td><p>LPC</p></td>
 <td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
 <td><p>Zynq-7000</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a></p></td>
 <td><p>SD card</p></td>
 <td><p>HPC (8 GTH &#64; 16.3 Gbps)</p></td>
 <td><p>HPC (8 GTH &#64; 16.3 Gbps)</p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Zynq UltraScale+ MP SoC</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board">ZedBoard</a></p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
 <td><p>SD card</p></td>
 <td><p>LPC</p></td>
 <td><p>—</p></td>
 <td><p>3.3V/2.5V/<strong>*1.8V</strong></p></td>
 <td><p>Zynq-7000</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard">LFCPNX-EVN</a></p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard" target="_blank">LFCPNX-EVN</a></p></td>
 <td><p>JTAG | SPI flash</p></td>
 <td><p>HPC</p></td>
 <td><p>—</p></td>
@@ -997,7 +1005,7 @@ both the carrier and the device(s)</p>
 <section id="discontinued-amd-platforms">
 <h3>Discontinued AMD platforms<a class="headerlink" href="#discontinued-amd-platforms" title="Permalink to this heading"></a></h3>
 <p>Projects with these carriers can still be found on our repository, as well as
-their <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">board files</a>.</p>
+their <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">board files</a>.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -1018,28 +1026,28 @@ their <a class="icon git reference external" href="https://github.com/analogdevi
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/KC705">KC705</a></p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KC705" target="_blank">KC705</a></p></td>
 <td><p>JTAG</p></td>
 <td><p>HPC (4 GTX &#64; 10.3125 Gbps)</p></td>
 <td><p>LPC (1 GTX &#64; 10.3125 Gbps)</p></td>
 <td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
 <td><p>Kintex-7</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VC707">VC707</a></p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC707" target="_blank">VC707</a></p></td>
 <td><p>JTAG</p></td>
 <td><p>HPC (8 GTX &#64; 12.5 Gbps)</p></td>
 <td><p>HPC (8 GTX &#64; 12.5 Gbps)</p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Virtex-7</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/VCU128">VCU128</a></p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU128" target="_blank">VCU128</a></p></td>
 <td><p>JTAG</p></td>
 <td><p>FMC+ (24 GTY &#64; 28.21 Gbps)</p></td>
 <td><p>—</p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Virtex UltraScale+ HBM</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a></p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></td>
 <td><p>SD card</p></td>
 <td><p>HPC (8 GTX &#64; 10.3125 Gbps)</p></td>
 <td><p>LPC (1 GTX &#64; 10.3125 Gbps)</p></td>
@@ -1066,27 +1074,27 @@ their <a class="icon git reference external" href="https://github.com/analogdevi
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html">A10GX</a> ** (Arria 10 GX)</p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html" target="_blank">A10GX</a> ** (Arria 10 GX)</p></td>
 <td><p>FMC LPC ()</p></td>
 <td><p>FMC HPC (8 x 17.4 Gbps)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html">A10SoC</a> (Arria 10 SoC)</p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a> (Arria 10 SoC)</p></td>
 <td><p>FMC HPC (8)</p></td>
 <td><p>FMC LPC (8)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html">S10SoC</a> (Stratix 10 SoC)</p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a> (Stratix 10 SoC)</p></td>
 <td><p>FMC+ (24 &#64; 28.3 Gbps)</p></td>
 <td><p>FMC+ (24 &#64; 28.3 Gbps)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html">C5SoC</a> (Cyclone V SoC)</p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html" target="_blank">C5SoC</a> (Cyclone V SoC)</p></td>
 <td><p>HSMC</p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html">DE10-Nano</a></p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html" target="_blank">DE10-Nano</a></p></td>
 <td><p>Arduino shield</p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html">FM87</a> (Agilex 7 I-Series)</p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a> (Agilex 7 I-Series)</p></td>
 <td><p>FMC+ (16 &#64; 32 Gbps)</p></td>
 <td><p>FMC+ (16 &#64; 32 Gbps)</p></td>
 </tr>
@@ -1114,19 +1122,19 @@ in older releases</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html">A10GX</a></p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html" target="_blank">A10GX</a></p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.35V/1.2V</p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.35V/1.2V</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html">A10SoC</a></p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a></p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.35V/1.25V/1.2V/1.1V</p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.35V/1.2V/1.1V</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html">S10SoC</a></p></td>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a></p></td>
 <td><p><strong>*3.3V</strong>/1.8V/1.2V</p></td>
 <td><p><strong>*3.3V</strong>/1.8V/1.2V</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html">FM87</a></p></td>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a></p></td>
 <td><p><strong>*1.2V</strong></p></td>
 <td><p><strong>*1.2V</strong></p></td>
 </tr>

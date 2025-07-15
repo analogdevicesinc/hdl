@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="All the HDL sources can be found in the following git repository:" name="description" />
 
     <title>HDL Git repository &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script defer="" src="../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../index.html">
@@ -221,7 +222,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_extract/index.html">Util Extract</a></li>
@@ -232,7 +240,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -358,29 +366,29 @@ Content on this topic
   <section id="hdl-git-repository">
 <span id="git-repository"></span><h1>HDL Git repository<a class="headerlink" href="#hdl-git-repository" title="Permalink to this heading"></a></h1>
 <p>All the HDL sources can be found in the following git repository:</p>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">ADI HDL repository</a></p>
-<p>We assume that the user is familiar with <a class="reference external" href="https://git-scm.com/">git</a>.
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">ADI HDL repository</a></p>
+<p>We assume that the user is familiar with <a class="icon link reference external" href="https://git-scm.com/" target="_blank">git</a>.
 Knows how to
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the repository, how to check its
-<a class="reference external" href="https://git-scm.com/docs/git-status">status</a> or how to
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging">switch</a>
+<a class="icon link reference external" href="https://git-scm.com/docs/git-status" target="_blank">status</a> or how to
+<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging" target="_blank">switch</a>
 between branches.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A basic git knowledge is required in order to work with these source files,
 if you do not have any, don’t worry!</p>
 <p>There are a lot of great resources and tutorials about git all over the
-<a class="reference external" href="http://lmgtfy.com/?q=git+tutorial">web</a>.</p>
+<a class="icon link reference external" href="http://lmgtfy.com/?q=git+tutorial" target="_blank">web</a>.</p>
 </div>
 <p>If you want to pull down the sources as soon as possible, just do the
 following few steps:</p>
 <ol class="arabic simple">
-<li><p>Install Git from <a class="reference external" href="https://git-scm.com/">here</a></p></li>
+<li><p>Install Git from <a class="icon link reference external" href="https://git-scm.com/" target="_blank">here</a></p></li>
 <li><p>Open up Git bash, change your current directory to a place where you
 want to keep the hdl source</p></li>
 <li><p>Clone the repository using
-<a class="reference external" href="https://help.github.com/articles/cloning-a-repository/">these</a>
+<a class="icon link reference external" href="https://help.github.com/articles/cloning-a-repository/" target="_blank">these</a>
 instructions</p></li>
 </ol>
 <div class="admonition note">
@@ -411,7 +419,7 @@ hdl modules, which are required to build the projects</p></li>
 <li><p><strong>projects</strong> with all the currently supported projects</p></li>
 <li><p><strong>scripts</strong> with our environment scripts that set tools versions, etc.</p></li>
 </ul>
-<p>The file <strong>.gitattributes</strong> is used to properly <a class="reference external" href="https://help.github.com/articles/dealing-with-line-endings/">handle
+<p>The file <strong>.gitattributes</strong> is used to properly <a class="icon link reference external" href="https://help.github.com/articles/dealing-with-line-endings/" target="_blank">handle
 different</a>
 line endings. And the <strong>.gitignore</strong> specifies intentionally untracked
 files that Git should ignore. The root <strong>Makefile</strong> can be used to build
@@ -505,24 +513,24 @@ the <a class="reference internal" href="build_hdl.html#build-hdl"><span class="s
 <section id="repository-releases-and-branches">
 <h2>Repository releases and branches<a class="headerlink" href="#repository-releases-and-branches" title="Permalink to this heading"></a></h2>
 <p>The repository may contain multiple branches and tags. The
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">main</a> branch
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">main</a> branch
 is the development branch (latest sources, but not stable). If you check
 out this branch, some builds may fail. If you are not into any kind of
 experimentation, you should only check out one of the release branch.</p>
 <p>All our release branches have the following naming convention:
 <strong>hdl_</strong>[year_of_release]<strong>_r</strong>[1 or 2]. (e.g.
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2014_r2/">hdl_2014_r2</a>)</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2014_r2/" target="_blank">hdl_2014_r2</a>)</p>
 <p>ADI does two releases each year when all the projects get an update to
 support the latest tools and get additional new features. ** The
 main branch is always synchronized with the latest release.** If you
-are in doubt, ask us on <a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a>.</p>
+are in doubt, ask us on <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You can find the release notes on the GitHub page of the
 repository:</p>
-<p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">https://github.com/analogdevicesinc/hdl/releases</a></p>
+<p><a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/releases" target="_blank">https://github.com/analogdevicesinc/hdl/releases</a></p>
 <p>The latest version of tools used on main can be found at:
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl">scripts/adi_env.tcl</a> (<em>required_vivado_version</em> and
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl" target="_blank">scripts/adi_env.tcl</a> (<em>required_vivado_version</em> and
 <em>required_quartus_version</em> variables). For Intel Quartus Standard, the version
 is specified in each project that uses it, depending on the carrier.</p>
 </div>

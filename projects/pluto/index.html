@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The ADALM-PLUTO Active Learning Module (PlutoSDR) is an easy to use tool available from Analog Devices Inc. (ADI) that can be used to introduce fundamentals of Software Defined Radio (SDR) or Radio Frequency (RF) or Communications as advanced topics in electrical engineering in a self or instructor lead setting." name="description" />
 
     <title>PLUTO HDL Project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=25ed7d6a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fc454092" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
-    <script defer="" src="../../_static/app.umd.js?v=80d097f0"></script>
+    <script defer="" src="../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -60,7 +61,7 @@
     </div>
     <div id="right">
       <span>
-        <a id="logo-org" href="https://analog.com"></a>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
         <a id="logo" href="../../index.html">
@@ -238,7 +239,14 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/corundum/index.html">Corundum</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_extract/index.html">Util Extract</a></li>
@@ -249,7 +257,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -376,14 +384,14 @@ Content on this topic
 <span id="pluto"></span><h1>PLUTO HDL Project<a class="headerlink" href="#pluto-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/ADALM-PLUTO">ADALM-PLUTO</a> Active Learning Module (PlutoSDR) is an easy to use tool
+<p>The <a class="icon adi reference external" href="https://www.analog.com/ADALM-PLUTO" target="_blank">ADALM-PLUTO</a> Active Learning Module (PlutoSDR) is an easy to use tool
 available from Analog Devices Inc. (ADI) that can be used to introduce
-fundamentals of <a class="reference external" href="https://en.wikipedia.org/wiki/Software-defined_radio">Software Defined Radio (SDR)</a>
-or <a class="reference external" href="https://en.wikipedia.org/wiki/Radio_frequency">Radio Frequency (RF)</a>
-or <a class="reference external" href="https://en.wikipedia.org/wiki/Communication_theory">Communications</a>
+fundamentals of <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Software-defined_radio" target="_blank">Software Defined Radio (SDR)</a>
+or <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Radio_frequency" target="_blank">Radio Frequency (RF)</a>
+or <a class="icon link reference external" href="https://en.wikipedia.org/wiki/Communication_theory" target="_blank">Communications</a>
 as advanced topics in electrical engineering in a self or instructor lead
 setting.</p>
-<p>Based on the <a class="icon adi reference external" href="https://www.analog.com/AD9363">AD9363</a>, it offers one receive channel and one transmit
+<p>Based on the <a class="icon adi reference external" href="https://www.analog.com/AD9363" target="_blank">AD9363</a>, it offers one receive channel and one transmit
 channel which can be operated in full duplex, capable of generating or
 measuring RF analog signals from 325 to 3800 MHz, at up to 61.44 Mega Samples
 per Second (MSPS) with a 20 MHz bandwidth. The PlutoSDR is completely
@@ -399,13 +407,13 @@ is what you received.</p>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADALM-PLUTO">ADALM-PLUTO</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADALM-PLUTO" target="_blank">ADALM-PLUTO</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9363">AD9363</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9363" target="_blank">AD9363</a></p></li>
 </ul>
 </section>
 <section id="block-design">
@@ -421,13 +429,13 @@ generated for each RF.</p>
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
 <p>The clocks are managed by the device and are software programmable. Please
 refer to the device data sheet for the various clocks within the device.</p>
-<p>The board provides a 40MHz crystal for the <a class="icon adi reference external" href="https://www.analog.com/AD9363">AD9363</a>. For more details
-about the clocking, check the <a class="reference external" href="https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf">AD9361 Reference Manual</a>, page 14, “Reference
+<p>The board provides a 40MHz crystal for the <a class="icon adi reference external" href="https://www.analog.com/AD9363" target="_blank">AD9363</a>. For more details
+about the clocking, check the <a class="icon link reference external" href="https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf" target="_blank">AD9361 Reference Manual</a>, page 14, “Reference
 Clock Requirements”.</p>
 </section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361">AD9361 IP</a> in this HDL project is configured
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361" target="_blank">AD9361 IP</a> in this HDL project is configured
 to work only in CMOS interface; it supports two configuration modes:</p>
 <ul class="simple">
 <li><p>2R2T - 2x receive and 2x transmit RF channels</p></li>
@@ -435,7 +443,7 @@ to work only in CMOS interface; it supports two configuration modes:</p>
 </ul>
 <p>Both support only the <strong>dual port half duplex</strong> operating mode. The maximum
 data rate (for combined I and Q words) is 61.44MSPS in DDR. For more details
-about these modes, check the <a class="reference external" href="https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf">AD9361 Reference Manual</a>, Table 48 “Maximum Data
+about these modes, check the <a class="icon link reference external" href="https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf" target="_blank">AD9361 Reference Manual</a>, Table 48 “Maximum Data
 Rates and Signal Bandwidths”.</p>
 <p>The following are the parameters of this project that can be configured:</p>
 <ul class="simple">
@@ -734,10 +742,10 @@ _MRCC_34</p></td>
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
-<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>.
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
 If you want to build the sources, ADI makes them available on the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
+<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository.</p>
 <p>Go to the hdl/projects/<strong>pluto</strong> location and run the make
 command.</p>
@@ -763,29 +771,29 @@ guide.</p>
 <h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <p>Here you can find the quick start guides available for this evaluation board:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/pluto/users/quick_start">[Wiki] PlutoSDR Quick Start</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/pluto/users/quick_start" target="_blank">[Wiki] PlutoSDR Quick Start</a></p></li>
 </ul>
 <p>Other useful information:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/pluto">[Wiki] ADALM-PLUTO Overview</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/pluto/users">[Wiki] ADALM-PLUTO for End Users</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/pluto" target="_blank">[Wiki] ADALM-PLUTO Overview</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/pluto/users" target="_blank">[Wiki] ADALM-PLUTO for End Users</a></p></li>
 </ul>
 </section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf">AD9361 reference manual</a></p></li>
-<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9363">AD9363</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/ad9361">[Wiki] About AD9361/AD9363/AD9364</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation">[Wiki] About I/Q rotation</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options">[Wiki] Configuration options for</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/tuning">[Wiki] Tuning the AD9361/AD9364</a></p></li>
+<li><p><a class="icon link reference external" href="https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf" target="_blank">AD9361 reference manual</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9363" target="_blank">AD9363</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/ad9361" target="_blank">[Wiki] About AD9361/AD9363/AD9364</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation" target="_blank">[Wiki] About I/Q rotation</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options" target="_blank">[Wiki] Configuration options for</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/hardware/tuning" target="_blank">[Wiki] Tuning the AD9361/AD9364</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/pluto">PLUTO HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/pluto" target="_blank">PLUTO HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -802,46 +810,46 @@ guide.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>AXI_AD9361</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361">library/axi_ad9361</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361" target="_blank">library/axi_ad9361</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_ad9361/index.html#axi-ad9361"><span class="std std-ref">AXI AD9361</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_DMAC</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_TDD</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_tdd">library/axi_tdd</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_tdd" target="_blank">library/axi_tdd</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_tdd/index.html#axi-tdd"><span class="std std-ref">AXI TDD</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_CPACK2</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2" target="_blank">library/util_pack/util_cpack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_UPACK2</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2">library/util_pack/util_upack2</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">library/util_pack/util_upack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_CLKDIV</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_clkdiv">library/xilinx/util_clkdiv</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_clkdiv" target="_blank">library/xilinx/util_clkdiv</a></p></td>
 <td><p>—</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/pluto/devs/fpga">[Wiki] Accessing Pluto’s FPGA Over JTAG</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/pluto/devs/fpga" target="_blank">[Wiki] Accessing Pluto’s FPGA Over JTAG</a></p></li>
 </ul>
 </section>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-pluto-sdr-revb.dts">PLUTO SDR rev. B Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-pluto-sdr-revc.dts">PLUTO SDR rev. C Linux device tree</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/pluto/drivers/linux">[Wiki] Linux Drivers</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/pluto/drivers/linux">[Wiki] Windows Drivers</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/fmcomms2_plugin">[Wiki] AD936x IIO Oscilloscope plugin description</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/pluto/help_support">[Wiki] Pluto Support</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/university/tools/pluto/troubleshooting">[Wiki] ADALM-PLUTO Troubleshooting</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-pluto-sdr-revb.dts" target="_blank">PLUTO SDR rev. B Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-pluto-sdr-revc.dts" target="_blank">PLUTO SDR rev. C Linux device tree</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/pluto/drivers/linux" target="_blank">[Wiki] Linux Drivers</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/pluto/drivers/linux" target="_blank">[Wiki] Windows Drivers</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/fmcomms2_plugin" target="_blank">[Wiki] AD936x IIO Oscilloscope plugin description</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/pluto/help_support" target="_blank">[Wiki] Pluto Support</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/university/tools/pluto/troubleshooting" target="_blank">[Wiki] ADALM-PLUTO Troubleshooting</a></p></li>
 </ul>
 </section>
 </section>
@@ -853,17 +861,17 @@ guide.</p>
 </section>
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
-<p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
-using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
-<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
-<p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc.
-from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">Linux GitHub repository</a>, the team will offer support
-on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
-<p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/">No-OS GitHub repository</a>, the team will offer support on the
-<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>
+<p>For questions regarding the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> Linux device drivers, device trees, etc.
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/" target="_blank">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers" target="_blank">EngineerZone</a> Linux software drivers forum.</p>
+<p>For questions concerning the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> No-OS drivers, from our
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/" target="_blank">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers" target="_blank">EngineerZone</a> microcontroller No-OS drivers forum.</p>
 <p>It should be noted, that the older the tools’ versions and release branches
-are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
+are, the lower the chances to receive support from <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> engineers.</p>
 </section>
 </section>
 
