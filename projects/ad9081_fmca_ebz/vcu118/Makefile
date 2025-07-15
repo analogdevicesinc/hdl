@@ -59,6 +59,7 @@ LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/util_adxcvr
 LIB_DEPS += corundum/corundum_core
 LIB_DEPS += corundum/ethernet
+LIB_DEPS += corundum/application_core
 
 export BOARD := VCU118
 

@@ -156,15 +156,15 @@ if {$ad_project_params(CORUNDUM) == "1"} {
   set INPUT_WIDTH [expr $INPUT_CHANNELS*$INPUT_SAMPLES_PER_CHANNEL*$INPUT_SAMPLE_DATA_WIDTH]
 
   set OUTPUT_CHANNELS $TX_NUM_OF_CONVERTERS
-  set OUTPUT_SAMPLES $TX_SAMPLES_PER_CHANNEL
-  set OUTPUT_SAMPLE_WIDTH $TX_DMA_SAMPLE_WIDTH
+  set OUTPUT_SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL
+  set OUTPUT_SAMPLE_DATA_WIDTH $TX_DMA_SAMPLE_WIDTH
 
-  set OUTPUT_WIDTH [expr $OUTPUT_CHANNELS*$OUTPUT_SAMPLES*$OUTPUT_SAMPLE_WIDTH]
+  set OUTPUT_WIDTH [expr $OUTPUT_CHANNELS*$OUTPUT_SAMPLES_PER_CHANNEL*$OUTPUT_SAMPLE_DATA_WIDTH]
 
   set CPU MB
 
   source $ad_hdl_dir/library/corundum/scripts/corundum_vcu118_cfg.tcl
-  set APP_ENABLE 0
+  # set APP_ENABLE 0
   source $ad_hdl_dir/library/corundum/scripts/corundum.tcl
 
   ad_ip_parameter axi_dp_interconnect CONFIG.NUM_CLKS 3
@@ -280,6 +280,13 @@ if {$ad_project_params(CORUNDUM) == "1"} {
     }
 
     ad_connect output_enable_concat_corundum/dout corundum_hierarchy/output_enable
+
+    delete_bd_objs [get_bd_intf_nets axi_mem_interconnect_M00_AXI]
+    ad_ip_instance axi_register_slice axi_mem_reg_slc
+    ad_connect axi_mem_reg_slc/M_AXI axi_ddr_cntrl/C0_DDR4_S_AXI
+    ad_connect axi_mem_reg_slc/S_AXI axi_mem_interconnect/M00_AXI
+    ad_connect axi_mem_reg_slc/aclk axi_ddr_cntrl/c0_ddr4_ui_clk
+    ad_connect axi_mem_reg_slc/aresetn axi_ddr_cntrl_rstgen/peripheral_aresetn
   }
 
 }
