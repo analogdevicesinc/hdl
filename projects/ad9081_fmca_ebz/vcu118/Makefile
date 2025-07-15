@@ -67,6 +67,7 @@ ifeq ($(CORUNDUM), 1)
 
 	LIB_DEPS += corundum/corundum_core
 	LIB_DEPS += corundum/ethernet/vcu118
+	LIB_DEPS += corundum/application_core
 endif
 
 include ../../scripts/project-xilinx.mk
