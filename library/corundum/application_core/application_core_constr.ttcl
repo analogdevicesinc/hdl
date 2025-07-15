@@ -126,7 +126,7 @@ set_bus_skew \
   -to [get_pins -filter {REF_PIN_NAME == D} -of_objects [get_cells -hier -filter {NAME =~ *application_tx_inst/*cdc_scale_fifo/*i_raddr_sync_gray/cdc_sync_stage1_reg[*]}]] \
   $corundum_input_clk_period
 
-application RX side
+# application RX side
 ##########################################
 
 # output enable
