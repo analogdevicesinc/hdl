@@ -474,7 +474,7 @@ HDL Example Projects
   - (AD9081) :git-hdl:`AMD Xilinx ZC706 <projects/ad9081_fmca_ebz/zc706>`
   - (AD9081) :git-hdl:`AMD Xilinx ZCU102 <projects/ad9081_fmca_ebz/zcu102>`
   - (AD9081) :git-hdl:`AMD Xilinx VCU118 <projects/ad9081_fmca_ebz/vcu118>`
-  - (AD9081) :git-hdl:`AMD Xilinx VCU128 <projects/ad9081_fmca_ebz/vcu128>`
+  - (AD9081) :git-hdl:`AMD Xilinx VCU128 (RETIRED) <hdl_2023_r2:projects/ad9081_fmca_ebz/vcu128>`
   - (AD9081) :git-hdl:`AMD Xilinx VCK190 <projects/ad9081_fmca_ebz/vck190>`
   - (AD9082) :git-hdl:`AMD Xilinx VCK190 <projects/ad9082_fmca_ebz/vck190>`
   - (AD9082) :git-hdl:`AMD Xilinx VCU118 <projects/ad9082_fmca_ebz/vcu118>`
