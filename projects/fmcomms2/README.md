@@ -8,6 +8,7 @@ Here are some pointers to help you:
   - [EVAL-AD-FMCOMMS4](https://www.analog.com/eval-ad-fmcomms4) (uses AD9364)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/fmcomms2/index.html
+- Evaluation boards VADJ range: 1.8V - 2.5V
 
 ## Supported parts
 

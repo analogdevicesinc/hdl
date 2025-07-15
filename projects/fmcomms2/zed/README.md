@@ -1,4 +1,8 @@
+<!-- no_build_example, no_no_os -->
+
 # FMCOMMS2/ZED HDL Project
+
+- VADJ with which it was tested in hardware: 2.5V
 
 ## Building the project
 
