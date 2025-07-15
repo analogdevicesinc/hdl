@@ -55,6 +55,8 @@ module util_axis_fifo #(
   output [ADDRESS_WIDTH-1:0] m_axis_level,
   output m_axis_empty,
   output m_axis_almost_empty,
+  output m_axis_full,
+  output m_axis_almost_full,
 
   input s_axis_aclk,
   input s_axis_aresetn,
@@ -64,6 +66,8 @@ module util_axis_fifo #(
   input [DATA_WIDTH/8-1:0] s_axis_tkeep,
   input s_axis_tlast,
   output [ADDRESS_WIDTH-1:0] s_axis_room,
+  output s_axis_empty,
+  output s_axis_almost_empty,
   output s_axis_full,
   output s_axis_almost_full
 );
@@ -109,7 +113,11 @@ module util_axis_fifo #(
         assign m_axis_level = ~m_axis_ready;
         assign m_axis_empty = 0;
         assign m_axis_almost_empty = 0;
+        assign m_axis_full = 0;
+        assign m_axis_almost_full = 0;
         assign s_axis_ready = s_axis_raddr == s_axis_waddr;
+        assign s_axis_empty = 0;
+        assign s_axis_almost_empty = 0;
         assign s_axis_full = 0;
         assign s_axis_almost_full = 0;
         assign s_axis_room = s_axis_ready;
@@ -188,7 +196,11 @@ module util_axis_fifo #(
       assign s_axis_ready = m_axis_ready | ~m_axis_valid;
       assign m_axis_empty = 1'b0;
       assign m_axis_almost_empty = 1'b0;
+      assign m_axis_full = 1'b0;
+      assign m_axis_almost_full = 1'b0;
       assign m_axis_level = 1'b0;
+      assign s_axis_empty  = 1'b0;
+      assign s_axis_almost_empty  = 1'b0;
       assign s_axis_full  = 1'b0;
       assign s_axis_almost_full  = 1'b0;
       assign s_axis_room  = 1'b0;
@@ -271,10 +283,14 @@ module util_axis_fifo #(
       .m_axis_level(m_axis_level),
       .m_axis_empty(m_axis_empty),
       .m_axis_almost_empty(m_axis_almost_empty),
+      .m_axis_full(m_axis_full),
+      .m_axis_almost_full(m_axis_almost_full),
       .s_axis_aclk(s_axis_aclk),
       .s_axis_aresetn(s_axis_aresetn),
       .s_axis_ready(s_axis_ready),
       .s_axis_valid(s_axis_valid),
+      .s_axis_empty(s_axis_empty),
+      .s_axis_almost_empty(s_axis_almost_empty),
       .s_axis_full(s_axis_full),
       .s_axis_almost_full(s_axis_almost_full),
       .s_axis_waddr(s_axis_waddr),
