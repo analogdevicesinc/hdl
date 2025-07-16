@@ -47,7 +47,6 @@ online_wavedrom_js_url = "https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0"
 
 html_theme = 'cosmic'
 html_static_path = ['sources']
-html_css_files = ["custom.css"]
 html_favicon = path.join("sources", "icon.svg")
 
 html_theme_options = {
