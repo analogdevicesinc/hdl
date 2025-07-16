@@ -9,7 +9,6 @@
     <title>JESD204B/C Link Transmit Peripheral &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=fc454092" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <script defer="" src="../../../_static/app.umd.js?v=a81630d9"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -2586,7 +2585,7 @@ control signal, but not the TVALID flow control signal. The behavior of the
 interface is as if the TVALID signal was always asserted. This means as soon as
 tx_ready is asserted a continuous stream of user data must be provided on
 tx_data.</p>
-<img alt="../../../_images/wavedrom-14.svg" src="../../../_images/wavedrom-14.svg" /><p>After reset and during link initialization the <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code> signal is
+<img alt="../../../_images/wavedrom-11.svg" src="../../../_images/wavedrom-11.svg" /><p>After reset and during link initialization the <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code> signal is
 de-asserted. As soon as the <a class="reference internal" href="#axi-jesd204-tx-user-data-phase"><span class="std std-ref">User Data Phase</span></a> is
 entered the <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code> will be asserted to indicate that the peripheral is now
 accepting and processing the data from the <code class="docutils literal notranslate"><span class="pre">tx_data</span></code> signal. The <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code>
@@ -2946,7 +2945,7 @@ configuration interface.</p>
 <p>All other octets of the ILAS sequence will contain the numerical value
 corresponding to the position of the octet in the ILAS sequence (E.g. the fifth
 octet of the first multi-frame contains the value 4).</p>
-<img alt="../../../_images/wavedrom-24.svg" src="../../../_images/wavedrom-24.svg" /><p>By default the ILAS is transmitted for a duration of 4 multi-frames. After the
+<img alt="../../../_images/wavedrom-21.svg" src="../../../_images/wavedrom-21.svg" /><p>By default the ILAS is transmitted for a duration of 4 multi-frames. After the
 last ILAS multi-frame the peripheral switches to the DATA phase.</p>
 <p>If the peripheral is configured for continuous ILAS operation it will instead
 remain in the ILAS phase indefinitely. In continuous ILAS mode the peripheral

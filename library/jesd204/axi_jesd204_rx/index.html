@@ -9,7 +9,6 @@
     <title>JESD204B/C Link Receive Peripheral &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=fc454092" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <script defer="" src="../../../_static/app.umd.js?v=a81630d9"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
@@ -2897,7 +2896,7 @@ a reduced AXI4-Stream interface and only features the TVALID flow control
 signal, but not the TREADY flow control signal. The behavior of the interface is
 as if the TREADY signal was always asserted. This means as soon as <code class="docutils literal notranslate"><span class="pre">rx_valid</span></code>
 is asserted, a continuous stream of user data must be accepted from <code class="docutils literal notranslate"><span class="pre">rx_data</span></code>.</p>
-<img alt="../../../_images/wavedrom-13.svg" src="../../../_images/wavedrom-13.svg" /><p>After reset and during link initialization, the <code class="docutils literal notranslate"><span class="pre">rx_valid</span></code> signal is
+<img alt="../../../_images/wavedrom-1.svg" src="../../../_images/wavedrom-1.svg" /><p>After reset and during link initialization, the <code class="docutils literal notranslate"><span class="pre">rx_valid</span></code> signal is
 deasserted. As soon as the User Data Phase is entered, the <code class="docutils literal notranslate"><span class="pre">rx_valid</span></code> will be
 asserted to indicate that the peripheral is now providing the processed data
 at the <code class="docutils literal notranslate"><span class="pre">rx_data</span></code> signal. The <code class="docutils literal notranslate"><span class="pre">rx_valid</span></code> signal stays asserted until the link
@@ -3087,7 +3086,7 @@ opportunity point relative to the local-multi frame-clock (LMFC)/
 local-multiblock-clock (LEMC). A setting of 0 indicates that the release
 opportunity is aligned to the LMFC/LEMC edge. A setting of X indicates that it
 trails the LMFC/LEMC edge by X octets.</p>
-<img alt="../../../_images/wavedrom-23.svg" src="../../../_images/wavedrom-23.svg" /><p>The <code class="docutils literal notranslate"><span class="pre">BUFFER_DELAY</span></code> field must be set to a multiple of 4. Writing a value that
+<img alt="../../../_images/wavedrom-2.svg" src="../../../_images/wavedrom-2.svg" /><p>The <code class="docutils literal notranslate"><span class="pre">BUFFER_DELAY</span></code> field must be set to a multiple of 4. Writing a value that
 is not a multiple of 4 will be rounded down to the next multiple of 4. For
 correct operation, the <code class="docutils literal notranslate"><span class="pre">BUFFER_DELAY</span></code> field must also be set to a value
 smaller than the number of octets per multi-frame (<code class="docutils literal notranslate"><span class="pre">F</span></code>x<code class="docutils literal notranslate"><span class="pre">K</span></code>).</p>
