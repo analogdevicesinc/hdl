@@ -69,10 +69,10 @@ DMA source
 
 In cases of high sample rates where the required data rate exceeds the PS-PL
 interface's available throughput, the data is transmitted in a loop from a
-local buffer (:git-hdl:`dac_fifo <projects/dac_fmc_ebz/common/dac_fmc_ebz_bd.tcl#L57>`)
-which is loaded once with the DMA from the PS DDR.
+local buffer (:git-hdl:`data_offload <library/data_offload>`) which is loaded
+once with the DMA data from the PS DDR.
 
-For lower sample rates, the :git-hdl:`DAC FIFO <library/util_dacfifo>`
+For lower sample rates, the :git-hdl:`data_offload <library/data_offload>`
 can be placed in bypass mode, in which case the DMA must stream the data
 from the PS memory.
 
@@ -310,6 +310,7 @@ dac_jesd204_xcvr                     0x44A6_0000      0x84A6_0000
 dac_jesd204_transport                0x44A0_4000      0x84A0_4000
 dac_jesd204_link                     0x44A9_0000      0x84A9_0000
 dac_dma                              0x7C42_0000      0x9C42_0000
+dac_data_offload                     0x7C43_0000      0x9C43_0000
 ===================================  ===============  ===========
 
 =================================== ===========
@@ -372,7 +373,7 @@ GPIOs
 +=================+=================+========+=======+===============+===============+===============+
 | pmod_gpio[3:0]* | INOUT           | 51-48  | ---   | 128-125       | 51-48         | ---           |
 +-----------------+-----------------+--------+-------+---------------+---------------+---------------+
-| dac_fifo_bypass | OUTPUT          | 40     | 40    | 117           | 40            | 8             |
+| dac_fifo_bypass | OUTPUT          | ---    | 40    | ---           | ---           | 8             |
 +-----------------+-----------------+--------+-------+---------------+---------------+---------------+
 | dac_ctrl[4]     | INOUT           | 25     | ---   | 102           | 25            | ---           |
 +-----------------+-----------------+--------+-------+---------------+---------------+---------------+
@@ -536,9 +537,9 @@ HDL related
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
      - :ref:`axi_sysid`
-   * - UTIL_DACFIFO
-     - :git-hdl:`library/util_dacfifo`
-     - ---
+   * - DATA_OFFLOAD
+     - :git-hdl:`library/data_offload`
+     - :ref:`data_offload`
    * - UTIL_UPACK2
      - :git-hdl:`library/util_pack/util_upack2`
      - :ref:`util_cpack2`
