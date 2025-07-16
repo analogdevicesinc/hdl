@@ -15,7 +15,6 @@ version = '' # documentation version, will be printed on the cover page
 extensions = [
     'sphinx.ext.todo',
     'adi_doctools',
-    'rst2pdf.pdfbuilder'
 ]
 
 needs_extensions = {
