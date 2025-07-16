@@ -45,7 +45,7 @@ set p_prcfg_status ""
 # \param[parameter_list] - a list of global parameters (parameters of the
 # system_top module)
 #
-# Supported carrier names are: ac701, kc705, vc707, vcu118, kcu105, zed,
+# Supported carrier names are: ac701, kc705, vcu118, kcu105, zed,
 # microzed, zc702, zc706, mitx405, zcu102.
 #
 proc adi_project {project_name {mode 0} {parameter_list {}} } {
@@ -61,10 +61,6 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   if [regexp "_kc705" $project_name] {
     set device "xc7k325tffg900-2"
     set board [lindex [lsearch -all -inline [get_board_parts] *kc705*] end]
-  }
-  if [regexp "_vc707" $project_name] {
-    set device "xc7vx485tffg1761-2"
-    set board [lindex [lsearch -all -inline [get_board_parts] *vc707*] end]
   }
   if [regexp "_vcu118" $project_name] {
     set device "xcvu9p-flga2104-2L-e"

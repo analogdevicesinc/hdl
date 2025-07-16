@@ -495,7 +495,7 @@ HDL Example Projects
 
 - :ref:`AD6676EVB Reference Design <ad6676evb>` on:
 
-  - :git-hdl:`AMD Xilinx VC707 <projects/ad6676evb/vc707>`
+  - :git-hdl:`AMD Xilinx VC707 (RETIRED) <hdl_2023_r2:projects/ad6676evb/vc707>`
   - :git-hdl:`AMD Xilinx ZC706 <projects/ad6676evb/zc706>`
 
 - :ref:`AD9083-EVB Reference Design <ad9083_evb>` on:
