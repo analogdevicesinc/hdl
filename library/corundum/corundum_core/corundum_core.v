@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: BSD-2-Clause-Views
 /*
  * Copyright (c) 2023 The Regents of the University of California
- * Copyright (c) 2024 Analog Devices, Inc. All rights reserved
+ * Copyright (c) 2025 Analog Devices, Inc. All rights reserved
  */
 /*
  * This file repackages Corundum MQNIC Core AXI with the sole purpose of
