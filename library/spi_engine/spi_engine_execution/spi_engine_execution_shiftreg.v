@@ -38,26 +38,32 @@
 module spi_engine_execution_shiftreg #(
 
   parameter DEFAULT_SPI_CFG = 0,
+  parameter ALL_ACTIVE_LANE_MASK = 8'hFF,
   parameter DATA_WIDTH = 8,
   parameter NUM_OF_SDI = 1,
   parameter [1:0] SDI_DELAY = 2'b00,
   parameter ECHO_SCLK = 0,
-  parameter [2:0]CMD_TRANSFER = 3'b000
+  parameter [2:0] CMD_TRANSFER = 3'b000,
+  parameter [2:0] CMD_WRITE = 3'b010,
+  parameter [1:0] REG_SPI_LANE_CONFIG = 2'b11
 ) (
   input   clk,
   input   resetn,
 
+  //interconnect interface
+  input s_offload_active,
+
   // spi io
   input   [NUM_OF_SDI-1:0]  sdi,
-  output                    sdo_int,
+  output  [NUM_OF_SDI-1:0]  sdo_int,
   input                     echo_sclk,
 
   // spi data
-  input   [(DATA_WIDTH-1):0]  sdo_data,
-  input                       sdo_data_valid,
-  output                      sdo_data_ready,
+  input   [(DATA_WIDTH)-1:0]              sdo_data,
+  input                                   sdo_data_valid,
+  output                                  sdo_data_ready,
 
-  output  [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
+  output  [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
   output reg                              sdi_data_valid,
   input                                   sdi_data_ready,
 
@@ -68,6 +74,7 @@ module spi_engine_execution_shiftreg #(
   input           sdo_idle_state,
   input   [ 7:0]  left_aligned,
   input   [ 7:0]  word_length,
+  input   [ 7:0]  spi_lane_mask,
 
   // timing from main fsm
   output      sdo_io_ready,
@@ -80,54 +87,69 @@ module spi_engine_execution_shiftreg #(
 );
 
   reg [             7:0] sdi_counter    = 8'b0;
-  reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
   reg [   SDI_DELAY+1:0] trigger_rx_d   = {(SDI_DELAY+2){1'b0}};
-  reg [(DATA_WIDTH-1):0] aligned_sdo_data, sdo_data_reg;
-  reg data_sdo_v;
-  wire sdo_toshiftreg;
+  wire  data_sdo_v; //data_sdo_v == existence of valid data
+  wire sdo_toshiftreg; //it is using the valid data for shifting in this cycle
   wire last_sdi_bit;
   wire trigger_rx_s;
   wire [2:0] current_instr = current_cmd[14:12];
+  wire sdo_data_ready_int;
 
-  // sdo data handshake
-  assign sdo_data_ready = (!data_sdo_v) || sdo_toshiftreg;
+  // sdo_data_ready_int is active when two conditions are true:
+  //   ((!data_sdo_v) || (sdo_toshiftreg))
+  //      there's room for storing sdo data
+  //    AND
+  //    (s_offload_active || current_instr == CMD_TRANSFER)
+  //      when s_offload_active, it is possible to prefetch
+  //      when !s_offload_active, it is waiting for write instruction
+  assign sdo_data_ready_int = ((!data_sdo_v) || (sdo_toshiftreg)) && (s_offload_active || current_instr == CMD_TRANSFER);
+  assign sdo_data_ready = sdo_data_ready_int;
   assign sdo_io_ready = data_sdo_v;
-  always @(posedge clk ) begin
-    if (resetn == 1'b0) begin
-      data_sdo_v <= 1'b0;
-    end else begin
-      if (sdo_data_ready && sdo_data_valid) begin
-        data_sdo_v <= 1'b1;
-        sdo_data_reg <= sdo_data;
-      end else if (sdo_toshiftreg) begin
-        data_sdo_v <= 1'b0;
+
+  wire [(NUM_OF_SDI * DATA_WIDTH)-1:0] aligned_sdo_data;
+  spi_engine_execution_shiftreg_data_assemble #(
+    .ALL_ACTIVE_LANE_MASK(ALL_ACTIVE_LANE_MASK),
+    .DATA_WIDTH(DATA_WIDTH),
+    .NUM_OF_SDI(NUM_OF_SDI),
+    .CMD_WRITE(CMD_WRITE),
+    .REG_SPI_LANE_CONFIG(REG_SPI_LANE_CONFIG)
+  ) sdo_data_assemble (
+    .clk (clk),
+    .resetn (resetn),
+    .data (sdo_data),
+    .data_ready (sdo_data_ready_int),
+    .data_valid (sdo_data_valid),
+    .current_cmd (current_cmd),
+    .lane_mask (spi_lane_mask),
+    .idle_state (sdo_idle_state),
+    .left_aligned (left_aligned),
+    .transfer_active (transfer_active),
+    .trigger_tx (trigger_tx),
+    .first_bit (first_bit),
+    .sdo_enabled(sdo_enabled),
+    .data_assembled (aligned_sdo_data),
+    .last_handshake (data_sdo_v)
+  );
+
+  genvar i;
+  for (i = 0; i < NUM_OF_SDI; i = i + 1) begin: g_sdo_shift_reg
+    // Load the SDO parallel data into the SDO shift register.
+    reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
+    always @(posedge clk) begin
+      if (!sdo_enabled || (current_instr != CMD_TRANSFER)) begin
+        data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
+      end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
+        if (first_bit == 1'b1) begin
+          data_sdo_shift <= spi_lane_mask[i] ? aligned_sdo_data[i * DATA_WIDTH+:DATA_WIDTH] : {DATA_WIDTH{sdo_idle_state}};
+        end else begin
+          data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
+        end
       end
     end
+    
+    assign sdo_int[i] = data_sdo_shift[DATA_WIDTH-1];
   end
 
-  // pipelined shifter for sdo_data
-  always @(posedge clk ) begin
-    if (resetn == 1'b0) begin
-      aligned_sdo_data <= 0;
-    end else begin
-      aligned_sdo_data <= sdo_data_reg << left_aligned;
-    end
-  end
-
-  // Load the SDO parallel data into the SDO shift register. In case of a custom
-  // data width, additional bit shifting must done at load.
-  always @(posedge clk) begin
-    if (!sdo_enabled || (current_instr != CMD_TRANSFER)) begin
-      data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
-    end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
-      if (first_bit == 1'b1) begin
-        data_sdo_shift <= aligned_sdo_data;
-      end else begin
-        data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
-      end
-    end
-  end
-  assign sdo_int = data_sdo_shift[DATA_WIDTH-1];
   assign sdo_toshiftreg = (transfer_active && trigger_tx && first_bit && sdo_enabled);
 
   // In case of an interface with high clock rate (SCLK > 50MHz), the latch of
@@ -149,7 +171,6 @@ module spi_engine_execution_shiftreg #(
   // used to latch the MISO lines, improving the overall timing margin of the
   // interface.
 
-  genvar i;
   // NOTE: SPI configuration (CPOL/PHA) is only hardware configurable at this point, unless ECHO_SCLK=0
   generate
   if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
@@ -226,10 +247,6 @@ module spi_engine_execution_shiftreg #(
 
     end
 
-    assign sdi_data = sdi_data_latch;
-    assign last_sdi_bit = last_sdi_bit_r;
-    assign echo_last_bit =  !last_sdi_bit_m[3] && last_sdi_bit_m[2];
-
     // sdi_data_valid is synchronous to SPI clock, so synchronize the
     // last_sdi_bit to SPI clock
 
@@ -241,6 +258,10 @@ module spi_engine_execution_shiftreg #(
         last_sdi_bit_m <= {last_sdi_bit_m, last_sdi_bit};
       end
     end
+
+    assign sdi_data = sdi_data_latch;
+    assign last_sdi_bit = last_sdi_bit_r;
+    assign echo_last_bit =  !last_sdi_bit_m[3] && last_sdi_bit_m[2];
 
     always @(posedge clk) begin
       if (cs_activate) begin

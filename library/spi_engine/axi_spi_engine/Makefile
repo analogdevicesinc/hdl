@@ -20,6 +20,7 @@ XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl.xml
 XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl_rtl.xml
 
 XILINX_LIB_DEPS += util_axis_fifo
+XILINX_LIB_DEPS += util_axis_fifo_asym
 XILINX_LIB_DEPS += util_cdc
 
 XILINX_INTERFACE_DEPS += spi_engine/interfaces
