@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD-FMCOMMS8-EBZ](https://www.analog.com/eval-ad-fmcomms8-ebz)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms8-ebz/quick-start-guide
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/fmcomms8/index.html
+- Evaluation board VADJ: 1.8V
 
 ## Supported parts
 
