@@ -7,6 +7,7 @@
    - [EVAL-AD738xFMCZ](https://www.analog.com/eval-ad738xfmcz)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad738x
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad738x_fmc/index.html
+- Evaluation boards VADJ range: 1.65V - 3.6V
 
 ## Supported parts
 
