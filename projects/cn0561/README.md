@@ -3,6 +3,8 @@
 - Evaluation board product page: TO BE ADDED
 - System documentation: TO BE ADDED
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/cn0561/index.html
+- Evaluation board VADJ for FMC connector: 1.8V
+- Evaluation board VIO for ARDUINO connector: 3.3V
 
 ## Supported parts
 
