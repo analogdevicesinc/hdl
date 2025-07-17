@@ -53,6 +53,6 @@ adi_project_files stingray_adrv9009zu11eg [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
  ]
 
-set_property strategy Performance_Explore [get_runs impl_1]
+set_property strategy Performance_ExploreWithRemap [get_runs impl_1]
 
 adi_project_run stingray_adrv9009zu11eg
