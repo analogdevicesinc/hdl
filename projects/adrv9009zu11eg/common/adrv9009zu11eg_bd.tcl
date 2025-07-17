@@ -21,6 +21,7 @@ if {[info exists FMCOMMS8]} {
 }
 
 set TDD_SUPPORT $ad_project_params(TDD_SUPPORT)
+set SHARED_DEVCLK $ad_project_params(SHARED_DEVCLK)
 
 set DATAPATH_WIDTH 4
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
@@ -108,6 +109,9 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 200
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL2_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__FREQMHZ 12.288
+ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL3_ENABLE 1
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL3_REF_CTRL__SRCSEL {IOPLL}
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL3_REF_CTRL__FREQMHZ 10
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__IRQ0 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__IRQ1 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__GPIO_EMIO__PERIPHERAL__ENABLE 1
@@ -298,11 +302,10 @@ ad_ip_instance axi_dmac axi_adrv9009_som_tx_dma
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_TYPE_DEST 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_SLICE_DEST 1
-# ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
-# ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
-# ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
+ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_data_width
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
@@ -356,7 +359,7 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_2D_TRANSFER 0
-# ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_adrv9009_som_rx_dma MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
@@ -691,7 +694,7 @@ ad_connect tx_sysref_0 tx_adrv9009_som_tpl_core/dac_tpl_core/dac_sync_in
 ad_connect  core_clk_b rx_adrv9009_som_tpl_core/link_clk
 ad_connect  core_clk_b util_som_rx_cpack/clk
 ad_connect  core_clk_b  $adc_offload_name/s_axis_aclk
-ad_connect  core_clk_a axi_adrv9009_som_rx_dma/s_axis_aclk
+ad_connect  core_clk_b axi_adrv9009_som_rx_dma/s_axis_aclk
 
 ad_connect  axi_adrv9009_som_rx_jesd/rx_sof rx_adrv9009_som_tpl_core/link_sof
 ad_connect  axi_adrv9009_som_rx_jesd/rx_data_tdata rx_adrv9009_som_tpl_core/link_data
@@ -884,10 +887,6 @@ if {$TDD_SUPPORT} {
 
   ad_connect axi_tdd_0/tdd_channel_0 $dac_offload_name/sync_ext
   ad_connect axi_tdd_0/tdd_channel_1 $adc_offload_name/sync_ext
-
-  ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 1
-  ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_LENGTH_WIDTH 30
-  ad_connect axi_tdd_0/tdd_channel_1 axi_adrv9009_som_rx_dma/s_axis_user
 } else {
   ad_connect GND $dac_offload_name/sync_ext
   ad_connect GND $adc_offload_name/sync_ext
