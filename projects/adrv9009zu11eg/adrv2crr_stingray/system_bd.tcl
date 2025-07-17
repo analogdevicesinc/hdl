@@ -175,6 +175,7 @@ if {$TDD_SUPPORT} {
   ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_LENGTH_WIDTH 30
 
   ad_connect axi_tdd_0/sync_in tdd_sync
+  ad_connect axi_tdd_0/tdd_channel_1 axi_adrv9009_som_rx_dma/s_axis_user
   ad_connect axi_tdd_0/tdd_channel_2 tdd_enabled
   ad_connect axi_tdd_0/tdd_channel_3 tdd_rx_en
   ad_connect axi_tdd_0/tdd_channel_4 tdd_tx_en
