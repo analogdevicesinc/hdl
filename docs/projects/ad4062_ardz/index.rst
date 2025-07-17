@@ -1,13 +1,12 @@
-.. _ad4052_ardz:
+.. _ad4062_ardz:
 
-AD4052-ARDZ HDL project
+AD4062-ARDZ HDL project
 ================================================================================
 
 Overview
 --------------------------------------------------------------------------------
 
-The HDL reference design for the :adi:`AD4050`, :adi:`AD4052`, :adi:`AD4056`, and
-:adi:`AD4058`.
+The HDL reference design for the :adi:`AD4060`, :adi:`AD4062`.
 They are versatile, 16-bit/12-bit, successive approximation register (SAR)
 analog-to-digital converters (ADCs) that enable low-power, high-density data
 acquisition solutions without sacrificing precision. These ADCs offer a unique
@@ -15,31 +14,24 @@ balance of performance and power efficiency, plus innovative features for
 seamlessly switching between high-resolution and low-power modes tailored to the
 immediate needs of the system.
 
-The :adi:`AD4050`/:adi:`AD4052`/:adi:`AD4056`/:adi:`AD4058` are ideal for
-battery-powered, compact data acquisition and edge sensing applications.
+The :adi:`AD4060 <eval-ad4060-eval-ad4062>`/:adi:`AD4062 <eval-ad4060-eval-ad4062>`
+evaluation boards enable quick and easy evaluation of the performance and
+features of the :adi:`AD4060` or the :adi:`AD4062`, respectively.
 
-The :adi:`EVAL-AD4050-ARDZ`/:adi:`EVAL-AD4052-ARDZ` evaluation boards enable
-quick and easy evaluation of the performance and features of the :adi:`AD4050`
-or the :adi:`AD4052`, respectively.
-
-This project has a :ref:`spi_engine` instance to control and acquire data from
-the precision ADC.
-This instance provides support for capturing continuous samples at the maximum
-sample rate.
+This project has an :ref:`i3c_controller` instance to control and acquire data
+from the precision ADC.
 
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD4050-ARDZ`
--  :adi:`EVAL-AD4052-ARDZ`
+-  :adi:`EVAL-AD4060`
+-  :adi:`EVAL-AD4062`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD4050`
--  :adi:`AD4052`
--  :adi:`AD4056`
--  :adi:`AD4058`
+-  :adi:`AD4060`
+-  :adi:`AD4062`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -57,10 +49,19 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ad4052_hdl.svg
+.. image:: ad4062_hdl.svg
    :width: 800
    :align: center
-   :alt: AD4052-ARDZ block diagram
+   :alt: AD4062-ARDZ block diagram
+
+Configuration modes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``OFFLOAD`` parameter is used to enable the offload interface, as well as
+adding the :ref:`axi_dmac` and :ref:`axi_pwm_gen` to the design.
+
+- 0 - no offload (default)
+- 1 - with default
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -70,79 +71,61 @@ added to the base address from HDL (see more at :ref:`architecture`).
 
 .. table:: Cora Z7S
 
-   ========================  ===========
-   Instance                  Address
-   ========================  ===========
-   spi_adc_axi_regmap        0x44A0_0000
-   spi_adc_dmac              0x44A3_0000
-   axi_iic_eeprom            0x44A4_0000
-   spi_clkgen                0x44A7_0000
-   adc_trigger_gen           0x44B0_0000
-   ========================  ===========
+   ===============  ===========
+   Instance         Address
+   ===============  ===========
+   i3c_controller   0x44A0_0000
+   i3c_offload_dma  0x44A3_0000
+   i3c_offload_pwm  0x44B0_0000
+   ===============  ===========
 
 .. table:: DE10-Nano
 
-   ========================  ===========
-   Instance                  Address
-   ========================  ===========
-   axi_dmac_0                0x0002_0000
-   axi_spi_engine_0          0x0003_0000
-   pwm_trigger               0x0004_0000
-   spi_clk_pll_reconfig      0x0005_0000
-   ========================  ===========
+   ===============  ===========
+   Instance         Address
+   ===============  ===========
+   i3c_offload_dma  0x0002_0000
+   i3c_controller   0x0003_0000
+   i3c_offload_pwm  0x0004_0000
+   ===============  ===========
 
-I2C connections
+I3C/I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table:: Cora Z7s
    :header-rows: 1
 
-   * - I2C type
-     - I2C manager instance
-     - Alias
-     - Address
-     - Device Address
-     - I2C subordinate
-   * - PS
-     - axi_iic_eeprom
-     - axi_iic_eeprom_io
-     - 0x44A4_0000
+   * - I2C/I3C subordinate
+     - address
+     - I3C manager
+   * - EEPROM
      - 0x52
-     - EEPROM
+     - i3c_controller
+   * - ADC
+     - i3c_controller
+     - Provisioned PID
 
 .. list-table:: DE10-Nano
    :header-rows: 1
 
-   * - I2C type
-     - I2C manager instance
-     - Alias
-     - Address
-     - Device Address
-     - I2C subordinate
-   * - PS
-     - i2c1
-     - sys_hps_i2c1
-     - ---
+   * - I2C/I3C subordinate
+     - EEPROM
+     - I3C manager
+   * - EEPROM
      - 0x52
-     - ---
+     - i3c_controller
+   * - ADC
+     - i3c_controller
+     - Provisioned PID
+
+.. caution::
+
+   By default, the DE10-Nano does not populate the passive pull-up in the SDA
+   lane (DNI). Either populate the DE10-Nano's resistor R1 with a 2.2k ohm
+   resistor, or use the ``WEAK_PULL_UP_RESISTOR`` to the ``i3c_sda`` pin.
 
 Device address considering the EEPROM address pins ``A0=0``, ``A1=1``, ``A2=0``.
-
-SPI connections
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 1
-
-   * - SPI type
-     - SPI manager instance
-     - SPI subordinate
-     - CS
-   * - PL
-     - axi_spi_engine
-     - ad4052
-     - 0
+For the ADC, check the part datasheet and the set address pins.
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -163,10 +146,6 @@ The Software GPIO number is calculated as follows:
      - (from FPGA view)
      -
      - Zynq-7000
-   * - adc_cnv
-     - OUTPUT
-     - 34
-     - 88
    * - adc_gp1
      - INOUT
      - 33
@@ -189,11 +168,7 @@ The Software GPIO number is calculated as follows:
    * -
      - (from FPGA view)
      -
-     - DE10-Nano
-   * - adc_cnv
-     - OUTPUT
-     - 34
-     - 2
+     -
    * - adc_gp1
      - INPUT
      - 33
@@ -212,15 +187,14 @@ Below are the Programmable Logic interrupts used in this project.
 Instance name       HDL Linux Zynq Actual Zynq
 =================== === ========== ===========
 axi_adc_dma         13  57         89
-spi_adc_axi_regmap  12  56         88
-axi_iic_eeprom      11  55         87
+i3c_controller      12  56         88
 =================== === ========== ===========
 
 ================ === =============== ================
 Instance name    HDL Linux DE10-Nano Actual DE10-Nano
 ================ === =============== ================
-axi_dmac_0       4   44               76
-axi_spi_engine_0 3   43               75
+i3c_controller   5   45              77
+axi_dmac         4   44              76
 ================ === =============== ================
 
 Building the HDL project
@@ -238,12 +212,12 @@ the HDL repository, and then build the project as follows:
 
 .. shell::
 
-   $cd hdl/projects/ad4052_ardz/coraz7s
+   $cd hdl/projects/ad4062_ardz/coraz7s
    $make
 
 .. shell::
 
-   $cd hdl/projects/ad4052_ardz/de10nano
+   $cd hdl/projects/ad4062_ardz/de10nano
    $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -256,13 +230,13 @@ Hardware related
 
 - Product datasheets:
 
-  - :adi:`AD4050`
-  - :adi:`AD4052`
+  - :adi:`AD4060`
+  - :adi:`AD4062`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD4052-ARDZ HDL project source code <projects/ad4052-ardz>`
+-  :git-hdl:`AD4062-ARDZ HDL project source code <projects/ad4062-ardz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -271,33 +245,24 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
+   * - AXI_SYSID
+     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
+     - :ref:`here <axi_sysid>`
    * - AXI_PWM_GEN
      - :git-hdl:`library/axi_pwm_gen <library/axi_pwm_gen>`
      - :ref:`here <axi_pwm_gen>`
-   * - AXI_CLKGEN
-     - :git-hdl:`library/axi_dmac <library/axi_clkgen>` *
-     - :ref:`here <axi_clkgen>`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac <library/axi_dmac>`
      - :ref:`here <axi_dmac>`
    * - AXI_HDMI_TX
-     - :git-hdl:`library/axi_hdmi_tx <library/axi_hdmi_tx>` **
+     - :git-hdl:`library/axi_hdmi_tx <library/axi_hdmi_tx>` *
      - :ref:`here <axi_hdmi_tx>`
-   * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
-     - :ref:`here <axi_sysid>`
-   * - AXI_SPI_ENGINE
-     - :git-hdl:`library/spi_engine/axi_spi_engine <library/spi_engine/axi_spi_engine>`
-     - :ref:`here <spi_engine axi>`
-   * - SPI_ENGINE_EXECUTION
-     - :git-hdl:`library/spi_engine/spi_engine_execution <library/spi_engine/spi_engine_execution>`
-     - :ref:`here <spi_engine execution>`
-   * - SPI_ENGINE_INTERCONNECT
-     - :git-hdl:`library/spi_engine/spi_engine_interconnect <library/spi_engine/spi_engine_interconnect>`
-     - :ref:`here <spi_engine interconnect>`
-   * - SPI_ENGINE_OFFLOAD
-     - :git-hdl:`library/spi_engine/spi_engine_offload`
-     - :ref:`here <spi_engine offload>`
+   * - I3C_CONTROLLER_HOST_INTERFACE
+     - :git-hdl:`library/i3c_controller/i3c_controller_host_interface`
+     - :ref:`here <i3c_controller host_interface>`
+   * - I3C_CONTROLLER_CORE
+     - :git-hdl:`library/i3c_controller/i3c_controller_core`
+     - :ref:`here <i3c_controller core>`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom <library/sysid_rom>`
      - :ref:`here <axi_sysid>`
@@ -305,15 +270,9 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for Cora Z7S
-   -   ``**`` instantiated only for DE10-Nano
+   - ``*`` instantiated only for DE10-Nano
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
-
-Software related
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-- :git-linux:`AD4052 Linux driver ad4052.c <drivers/iio/adc/ad4052.c>`
+-  :ref:`I3C Controller documentation <i3c_controller>`
 
 .. include:: ../common/more_information.rst
 
