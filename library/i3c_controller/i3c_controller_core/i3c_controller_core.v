@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,7 +40,6 @@
 
 module i3c_controller_core #(
   parameter MAX_DEVS = 16,
-  parameter CLK_MOD = 0,
   parameter I2C_MOD = 0
 ) (
   input         clk,
@@ -111,8 +110,7 @@ module i3c_controller_core #(
   wire i2c_mode;
 
   i3c_controller_framing #(
-    .MAX_DEVS(MAX_DEVS),
-    .CLK_MOD(CLK_MOD)
+    .MAX_DEVS(MAX_DEVS)
   ) i_i3c_controller_framing (
     .reset_n(reset_n),
     .clk(clk),
@@ -171,7 +169,6 @@ module i3c_controller_core #(
     .rmap_ibi_config(rmap_ibi_config));
 
   i3c_controller_bit_mod #(
-    .CLK_MOD(CLK_MOD),
     .I2C_MOD(I2C_MOD)
   ) i_i3c_controller_bit_mod (
     .reset_n(reset_n),

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -36,9 +36,20 @@
 `timescale 1ns/100ps
 
 module i3c_controller_host_interface #(
+  parameter CMD_FIFO_ADDRESS_WIDTH = 4,
+  parameter CMDR_FIFO_ADDRESS_WIDTH = 4,
+  parameter SDO_FIFO_ADDRESS_WIDTH = 5,
+  parameter SDI_FIFO_ADDRESS_WIDTH = 5,
+  parameter IBI_FIFO_ADDRESS_WIDTH = 4,
   parameter ID = 0,
+  parameter DA = 7'h31,
   parameter ASYNC_CLK = 0,
-  parameter OFFLOAD = 1
+  parameter OFFLOAD = 1,
+  parameter PID_MANUF_ID = 15'b0,
+  parameter PID_TYPE_SELECTOR = 1'b1,
+  parameter PID_PART_ID = 16'b0,
+  parameter PID_INSTANCE_ID = 4'b0,
+  parameter PID_EXTRA_ID = 12'b0
 ) (
   input  clk,
   output reset_n,
@@ -140,9 +151,20 @@ module i3c_controller_host_interface #(
   endgenerate
 
   i3c_controller_regmap #(
+    .CMD_FIFO_ADDRESS_WIDTH(CMD_FIFO_ADDRESS_WIDTH),
+    .CMDR_FIFO_ADDRESS_WIDTH(CMDR_FIFO_ADDRESS_WIDTH),
+    .SDO_FIFO_ADDRESS_WIDTH(SDO_FIFO_ADDRESS_WIDTH),
+    .SDI_FIFO_ADDRESS_WIDTH(SDI_FIFO_ADDRESS_WIDTH),
+    .IBI_FIFO_ADDRESS_WIDTH(IBI_FIFO_ADDRESS_WIDTH),
     .ID(ID),
+    .DA(DA),
+    .ASYNC_CLK(ASYNC_CLK),
     .OFFLOAD(OFFLOAD),
-    .ASYNC_CLK(ASYNC_CLK)
+    .PID_MANUF_ID(PID_MANUF_ID),
+    .PID_TYPE_SELECTOR(PID_TYPE_SELECTOR),
+    .PID_PART_ID(PID_PART_ID),
+    .PID_INSTANCE_ID(PID_INSTANCE_ID),
+    .PID_EXTRA_ID(PID_EXTRA_ID)
   ) i_i3c_controller_regmap (
     .s_axi_aclk(s_axi_aclk),
     .s_axi_aresetn(s_axi_aresetn),

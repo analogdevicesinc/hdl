@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -37,13 +37,22 @@
 
 `include "i3c_controller_regmap.vh"
 
-`define ADDRESS_WIDTH 8
-
 module i3c_controller_regmap #(
+  parameter CMD_FIFO_ADDRESS_WIDTH = 4,
+  parameter CMDR_FIFO_ADDRESS_WIDTH = 4,
+  parameter SDO_FIFO_ADDRESS_WIDTH = 5,
+  parameter SDI_FIFO_ADDRESS_WIDTH = 5,
+  parameter IBI_FIFO_ADDRESS_WIDTH = 4,
   parameter ID = 0,
+  parameter DA = 7'h31,
   parameter ASYNC_CLK = 0,
   parameter OFFLOAD = 1,
-  parameter DATA_WIDTH = 32
+  parameter DATA_WIDTH = 32,
+  parameter PID_MANUF_ID = 15'b0,
+  parameter PID_TYPE_SELECTOR = 1'b1,
+  parameter PID_PART_ID = 16'b0,
+  parameter PID_INSTANCE_ID = 4'b0,
+  parameter PID_EXTRA_ID = 12'b0
 ) (
 
   // Slave AXI interface
@@ -115,21 +124,27 @@ module i3c_controller_regmap #(
   output     [3:0] rmap_dev_char_data
 );
 
-  localparam PCORE_VERSION = 'h00000100;
+  localparam [31:0] CORE_VERSION = {16'h0001,     /* MAJOR */
+                                     8'h00,       /* MINOR */
+                                     8'h00};      /* PATCH */
 
   reg [31:0] up_scratch  = 32'h00; // Scratch register
+  reg [31:0] up_pid_l  = {PID_PART_ID, PID_INSTANCE_ID, PID_EXTRA_ID};
+  reg [31:0] up_pid_h  = {16'd0, PID_MANUF_ID, PID_TYPE_SELECTOR};
+  reg [6:0]  up_da  = DA;
+  reg [7:0]  up_bcr = 'h40;
+  reg [7:0]  up_dcr = 'h00;
   reg        up_sw_reset = 1'b1;
   reg [31:0] up_rdata_ff = 32'd0;
   reg        up_wack_ff  = 1'b0;
   reg        up_rack_ff  = 1'b0;
 
-  // Holds DAA trigger High until sdo_fifo_empty goes Low,
-  // meaning DA got written.
-  reg        daa_trigger_lock;
-
-  reg        daa_pending;
+  reg        cmdr_fifo_valid_r;
+  reg        ibi_fifo_valid_r;
+  reg        daa_trigger_r;
   reg        cmdr_pending;
   reg        ibi_pending;
+  reg        daa_pending;
 
   reg  [`I3C_REGMAP_IRQ_WIDTH:0] up_irq_mask = 8'h0;
   reg  [6:0] ops;
@@ -138,7 +153,7 @@ module i3c_controller_regmap #(
 
   // CMD FIFO
 
-  wire [`ADDRESS_WIDTH-1:0] cmd_fifo_room;
+  wire [CMD_FIFO_ADDRESS_WIDTH-1:0] cmd_fifo_room;
   wire cmd_fifo_almost_empty;
   wire up_cmd_fifo_almost_empty;
 
@@ -149,7 +164,7 @@ module i3c_controller_regmap #(
   // CMDR FIFO
 
   wire cmdr_fifo_data_msb_s;
-  wire [`ADDRESS_WIDTH-1:0] cmdr_fifo_level;
+  wire [CMDR_FIFO_ADDRESS_WIDTH-1:0] cmdr_fifo_level;
   wire cmdr_fifo_almost_full;
   wire up_cmdr_fifo_almost_full;
 
@@ -160,7 +175,7 @@ module i3c_controller_regmap #(
 
   // SDO FIFO
 
-  wire [`ADDRESS_WIDTH-1:0] sdo_fifo_room;
+  wire [SDO_FIFO_ADDRESS_WIDTH-1:0] sdo_fifo_room;
   wire sdo_fifo_almost_empty;
   wire up_sdo_fifo_almost_empty;
 
@@ -172,7 +187,7 @@ module i3c_controller_regmap #(
   // SDI FIFO
 
   wire sdi_fifo_data_msb_s;
-  wire [`ADDRESS_WIDTH-1:0] sdi_fifo_level;
+  wire [SDI_FIFO_ADDRESS_WIDTH-1:0] sdi_fifo_level;
   wire sdi_fifo_almost_full;
   wire up_sdi_fifo_almost_full;
 
@@ -184,7 +199,7 @@ module i3c_controller_regmap #(
   // IBI FIFO
 
   wire ibi_fifo_data_msb_s;
-  wire [`ADDRESS_WIDTH-1:0] ibi_fifo_level;
+  wire [IBI_FIFO_ADDRESS_WIDTH-1:0] ibi_fifo_level;
   wire ibi_fifo_almost_full;
   wire up_ibi_fifo_almost_full;
 
@@ -305,8 +320,9 @@ module i3c_controller_regmap #(
       up_wack_ff <= up_wreq_s;
       if (up_wreq_s) begin
         case (up_waddr_s[7:0])
-          `I3C_REGMAP_ENABLE:  up_sw_reset <= up_wdata_s[0];
-          `I3C_REGMAP_SCRATCH: up_scratch <= up_wdata_s;
+          `I3C_REGMAP_ENABLE:     up_sw_reset <= up_wdata_s[0];
+          `I3C_REGMAP_SCRATCH:    up_scratch <= up_wdata_s;
+          `I3C_REGMAP_DCR_BCR_DA: up_da <= up_wdata_s[22:16];
         endcase
       end
     end
@@ -357,10 +373,13 @@ module i3c_controller_regmap #(
 
   always @(posedge s_axi_aclk) begin
     case (up_raddr_s[7:0])
-      `I3C_REGMAP_VERSION:        up_rdata_ff <= PCORE_VERSION;
+      `I3C_REGMAP_VERSION:        up_rdata_ff <= CORE_VERSION;
       `I3C_REGMAP_DEVICE_ID:      up_rdata_ff <= ID;
       `I3C_REGMAP_SCRATCH:        up_rdata_ff <= up_scratch;
       `I3C_REGMAP_ENABLE:         up_rdata_ff <= up_sw_reset;
+      `I3C_REGMAP_PID_L:          up_rdata_ff <= up_pid_l;
+      `I3C_REGMAP_PID_H:          up_rdata_ff <= up_pid_h;
+      `I3C_REGMAP_DCR_BCR_DA:     up_rdata_ff <= {up_da, up_bcr, up_dcr};
       `I3C_REGMAP_IRQ_MASK:       up_rdata_ff <= up_irq_mask;
       `I3C_REGMAP_IRQ_PENDING:    up_rdata_ff <= up_irq_pending;
       `I3C_REGMAP_IRQ_SOURCE:     up_rdata_ff <= up_irq_source;
@@ -519,37 +538,34 @@ module i3c_controller_regmap #(
 
   always @(posedge s_axi_aclk) begin
     if (up_sw_resetn == 1'b0) begin
-      daa_trigger_lock <= 1'b0;
       daa_pending <= 1'b0;
       cmdr_pending <= 1'b0;
       ibi_pending <= 1'b0;
     end else begin
-      if (cmdr_fifo_valid == 1'b1) begin
+      if (cmdr_fifo_valid == 1'b1 && cmdr_fifo_valid_r == 1'b0) begin
         cmdr_pending <= 1'b1;
       end else if (up_wreq_s == 1'b1 &&
         up_waddr_s[7:0] == `I3C_REGMAP_IRQ_PENDING &&
         up_wdata_s[`I3C_REGMAP_IRQ_CMDR_PENDING] == 1'b1) begin
         cmdr_pending <= 1'b0;
       end
-      if (ibi_fifo_valid == 1'b1) begin
+      if (ibi_fifo_valid == 1'b1 && ibi_fifo_valid_r == 1'b0) begin
         ibi_pending <= 1'b1;
       end else if (up_wreq_s == 1'b1 &&
         up_waddr_s[7:0] == `I3C_REGMAP_IRQ_PENDING &&
         up_wdata_s[`I3C_REGMAP_IRQ_IBI_PENDING] == 1'b1) begin
         ibi_pending <= 1'b0;
       end
-      if (daa_trigger_lock == 1'b1) begin
+      if (daa_trigger == 1'b1 && daa_trigger_r == 1'b0) begin
         daa_pending <= 1'b1;
       end else if (up_wreq_s == 1'b1 &&
         up_waddr_s[7:0] == `I3C_REGMAP_IRQ_PENDING &&
         up_wdata_s[`I3C_REGMAP_IRQ_DAA_PENDING] == 1'b1) begin
         daa_pending <= 1'b0;
       end
-      if (daa_trigger) begin
-        daa_trigger_lock <= 1'b1;
-      end else if (sdo_valid_w) begin
-        daa_trigger_lock <= 1'b0;
-      end
+      cmdr_fifo_valid_r <= cmdr_fifo_valid;
+      ibi_fifo_valid_r <= ibi_fifo_valid;
+      daa_trigger_r <= daa_trigger;
     end
   end
 
@@ -576,7 +592,7 @@ module i3c_controller_regmap #(
 
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
-    .ADDRESS_WIDTH(`ADDRESS_WIDTH),
+    .ADDRESS_WIDTH(CMD_FIFO_ADDRESS_WIDTH),
     .ASYNC_CLK(ASYNC_CLK),
     .M_AXIS_REGISTERED(0),
     .ALMOST_EMPTY_THRESHOLD(1),
@@ -608,7 +624,7 @@ module i3c_controller_regmap #(
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
     .ASYNC_CLK(ASYNC_CLK),
-    .ADDRESS_WIDTH(`ADDRESS_WIDTH),
+    .ADDRESS_WIDTH(CMDR_FIFO_ADDRESS_WIDTH),
     .M_AXIS_REGISTERED(0),
     .ALMOST_EMPTY_THRESHOLD(1),
     .ALMOST_FULL_THRESHOLD(31)
@@ -641,7 +657,7 @@ module i3c_controller_regmap #(
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
     .ASYNC_CLK(ASYNC_CLK),
-    .ADDRESS_WIDTH(`ADDRESS_WIDTH),
+    .ADDRESS_WIDTH(SDO_FIFO_ADDRESS_WIDTH),
     .M_AXIS_REGISTERED(0),
     .ALMOST_EMPTY_THRESHOLD(1),
     .ALMOST_FULL_THRESHOLD(1)
@@ -676,7 +692,7 @@ module i3c_controller_regmap #(
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
     .ASYNC_CLK(ASYNC_CLK),
-    .ADDRESS_WIDTH(`ADDRESS_WIDTH),
+    .ADDRESS_WIDTH(SDI_FIFO_ADDRESS_WIDTH),
     .M_AXIS_REGISTERED(0),
     .ALMOST_EMPTY_THRESHOLD(1),
     .ALMOST_FULL_THRESHOLD(31)
@@ -705,7 +721,7 @@ module i3c_controller_regmap #(
   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
     .ASYNC_CLK(ASYNC_CLK),
-    .ADDRESS_WIDTH(`ADDRESS_WIDTH),
+    .ADDRESS_WIDTH(IBI_FIFO_ADDRESS_WIDTH),
     .M_AXIS_REGISTERED(0),
     .ALMOST_EMPTY_THRESHOLD(1),
     .ALMOST_FULL_THRESHOLD(31)
