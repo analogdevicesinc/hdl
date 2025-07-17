@@ -335,8 +335,8 @@ set_property  -dict [list \
 set group [ipgui::add_group -name "Application control" -component $cc \
   -parent $page3 -display_name "Application control"]
 
-ipgui::add_param -name "ETH_RX_CLK_FROM_TX" -component $cc -parent $page3
-set p [ipgui::get_guiparamspec -name "ETH_RX_CLK_FROM_TX" -component $cc]
+ipgui::add_param -name "AXIL_IF_CTRL_ADDR_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXIL_IF_CTRL_ADDR_WIDTH" -component $cc]
 ipgui::move_param -component $cc -order 0 $p -parent $group
 set_property  -dict [list \
   "display_name" "AXI4 Lite interface control address width" \
