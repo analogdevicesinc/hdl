@@ -126,8 +126,8 @@ module data_offload_regmap #(
       up_wack <= up_wreq;
       up_scratch <= 'd0;
       up_sw_resetn <= AUTO_BRINGUP;
-      up_oneshot <= ~TX_OR_RXN_PATH;
-      up_bypass <= 'd0;
+      up_oneshot <= (TX_OR_RXN_PATH == 0)? 1'b0 : ~TX_OR_RXN_PATH;
+      up_bypass <= (TX_OR_RXN_PATH == 0)? 1'b1 : 1'b0;
       up_sync <= 'd0;
       up_sync_config <= 'd0;
       up_transfer_length <= {MEM_SIZE_LOG2{1'b1}};
@@ -160,8 +160,8 @@ module data_offload_regmap #(
       end
       /* Control Register */
       if ((up_wreq == 1'b1) && (up_waddr[13:0] == 14'h22)) begin
-        up_oneshot <= up_wdata[1];
-        up_bypass <= up_wdata[0] & HAS_BYPASS;
+        up_oneshot <= (TX_OR_RXN_PATH == 0)? 1'b0 : up_wdata[1];
+        up_bypass <= (TX_OR_RXN_PATH == 0)? 1'b1 : (up_wdata[0] & HAS_BYPASS);
       end
       /* SYNC Offload Register - self cleared, one pulse signal */
       if ((up_wreq == 1'b1) && (up_waddr[13:0] == 14'h40)) begin
