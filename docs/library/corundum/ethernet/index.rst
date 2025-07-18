@@ -7,6 +7,7 @@ Corundum Ethernet Core
    :hidden:
 
    VCU118 <vcu118/index>
+   K26 <k26/index>
 
 The :git-hdl:`Corundum Ethernet Core <library/corundum/ethernet_core>` is used
 by the Corundum Network Stack. The Ethernet Core is specific to each FPGA board
@@ -19,12 +20,14 @@ Depending on the board for which the IP is built, different HDL component
 diagrams will be available.
 
 * :ref:`corundum_ethernet_core_vcu118`
+* :ref:`corundum_ethernet_core_k26`
 
 Features
 --------------------------------------------------------------------------------
 
-* Supports 100G Ethernet-based systems that uses the CMAC core on the VCU118
-  board
+* Supports 10/100 GbE implementations as follows: 100 GbE by leveraging on the
+  Xilinx's CMAC IP core (on the VCU118 evaluation kit) and 10 GbE by using
+  Corundum's support (on the K26-based AD-GMSL2ETH-SL evaluation kit).
 
 Files
 --------------------------------------------------------------------------------
