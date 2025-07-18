@@ -146,7 +146,6 @@ module system_top #(
 
   // lane interface
   input                   clkin6,
-  input                   clkin10,
   input                   fpga_refclk_in,
   input   [RX_JESD_L-1:0] rx_data,
   output  [TX_JESD_L-1:0] tx_data,
@@ -192,8 +191,8 @@ module system_top #(
   wire [ 1:0]   usb31_io_usb_ctrl_s;
   wire          pma_cu_clk;
   wire          refclk_fail_stat;
-  wire          refclk_rdy_data;
-  wire          syspll_c0_clk;
+  wire          syspll_clk;
+  wire          syspll_lock;
 
   wire  [ 7:0]  spi_csn_s;
   wire          spi_clk;
@@ -231,7 +230,7 @@ module system_top #(
   assign gpio_i[31:12] = gpio_o[31:12];
 
   // assignmnets
-  assign sys_reset_n    = sys_resetn & ~h2f_reset & ~ninit_done;
+  assign sys_reset_n = sys_resetn & ~h2f_reset & ~ninit_done;
 
   assign usb31_io_usb_ctrl = usb31_io_usb_ctrl_s[1];
 
@@ -363,6 +362,14 @@ module system_top #(
 
     .gts_reset_src_rs_priority_src_rs_priority               ('h0),
 
+    .o_pll_lock_o_pll_lock                                   (syspll_lock),
+    .o_syspll_c0_clk                                         (syspll_clk),
+
+    .system_pll_lock_system_pll_lock                         (syspll_lock),
+    .system_pll_clk_clk                                      (syspll_clk),
+    .refclk_xcvr_clk                                         (fpga_refclk_in),
+    .i_refclk_rdy_data                                       (1'b1),
+
     // FMC HPC
     .sys_spi_MISO                                            (spi_miso),
     .sys_spi_MOSI                                            (spi_mosi),
@@ -379,7 +386,7 @@ module system_top #(
     .rx_ref_clk_clk                                          (fpga_refclk_in),
     .rx_sync_export                                          (fpga_syncout_0),
     .rx_sysref_export                                        (sysref2),
-    .rx_device_clk_clk                                       (clkin10),
+    .rx_device_clk_clk                                       (clkin6),
     .mxfe_gpio_export                                        ({fpga_syncout_1_n,  // 14
                                                                fpga_syncout_1_p,  // 13
                                                                fpga_syncin_1_n,   // 12

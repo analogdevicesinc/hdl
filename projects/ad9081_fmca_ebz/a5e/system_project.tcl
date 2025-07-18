@@ -63,12 +63,11 @@ source $ad_hdl_dir/projects/common/a5e/a5e_system_assign.tcl
 
 set_global_assignment -name VERILOG_FILE ../../../library/common/ad_3w_spi.v
 
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V SSTL"  -to fpga_syncin_0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V SSTL"  -to fpga_syncout_0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V SSTL"  -to sysref2
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V SSTL"  -to clkin6
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V SSTL"  -to clkin10
-set_instance_assignment -name IO_STANDARD "HCSL"                     -to fpga_refclk_in
+set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to fpga_syncin_0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to fpga_syncout_0
+set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to sysref2
+set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to clkin6
+set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)"          -to fpga_refclk_in
 
 set_location_assignment PIN_AG83  -to "agc0[0]"             ; ## D20  LA17_CC_P
 set_location_assignment PIN_AC83  -to "agc0[1]"             ; ## D21  LA17_CC_N
@@ -80,43 +79,42 @@ set_location_assignment PIN_Y77   -to "agc3[0]"             ; ## H25  LA21_P
 set_location_assignment PIN_Y74   -to "agc3[1]"             ; ## H26  LA21_N
 set_location_assignment PIN_T55   -to "clkin6(n)"           ; ## G03  CLK1_M2C_N
 set_location_assignment PIN_P55   -to "clkin6"              ; ## G02  CLK1_M2C_P
-set_location_assignment PIN_B42   -to "clkin10(n)"          ; ## G07  LA00_N_CC
-set_location_assignment PIN_A45   -to "clkin10"             ; ## G06  LA00_P_CC
-set_location_assignment PIN_AP16  -to "fpga_refclk_in"      ; ## D04  GBTCLK0_M2C_P
+set_location_assignment PIN_AV16  -to "fpga_refclk_in"      ; ## D04  GBTCLK1_M2C_P
+set_location_assignment PIN_AV21  -to "fpga_refclk_in(n)"   ; ## D05  GBTCLK1_M2C_N
 
-set_location_assignment PIN_AV1   -to "rx_data[0]"          ; ## C06  DP0_M2C_P
-set_location_assignment PIN_AV3   -to "rx_data_n[0]"        ; ## C07  DP0_M2C_N
-set_location_assignment PIN_AT1   -to "rx_data[1]"          ; ## A02  DP1_M2C_P
-set_location_assignment PIN_AT3   -to "rx_data_n[1]"        ; ## A03  DP1_M2C_N
-set_location_assignment PIN_AP1   -to "rx_data[2]"          ; ## A06  DP2_M2C_P
-set_location_assignment PIN_AP3   -to "rx_data_n[2]"        ; ## A07  DP2_M2C_N
-set_location_assignment PIN_AM1   -to "rx_data[3]"          ; ## A10  DP3_M2C_P
-set_location_assignment PIN_AM3   -to "rx_data_n[3]"        ; ## A11  DP3_M2C_N
-set_location_assignment PIN_BF1   -to "rx_data[4]"          ; ## A14  DP4_M2C_P
-set_location_assignment PIN_BF3   -to "rx_data_n[4]"        ; ## A15  DP4_M2C_N
-set_location_assignment PIN_BD1   -to "rx_data[5]"          ; ## A18  DP5_M2C_P
-set_location_assignment PIN_BD3   -to "rx_data_n[5]"        ; ## A19  DP5_M2C_N
-set_location_assignment PIN_BB1   -to "rx_data[6]"          ; ## B16  DP6_M2C_P
-set_location_assignment PIN_BB3   -to "rx_data_n[6]"        ; ## B17  DP6_M2C_N
-set_location_assignment PIN_AY1   -to "rx_data[7]"          ; ## B12  DP7_M2C_P
-set_location_assignment PIN_AY3   -to "rx_data_n[7]"        ; ## B13  DP7_M2C_N
+# set_location_assignment PIN_AV1   -to "rx_data[0]"          ; ## C06  DP0_M2C_P
+# set_location_assignment PIN_AV3   -to "rx_data_n[0]"        ; ## C07  DP0_M2C_N
+# set_location_assignment PIN_AT1   -to "rx_data[1]"          ; ## A02  DP1_M2C_P
+# set_location_assignment PIN_AT3   -to "rx_data_n[1]"        ; ## A03  DP1_M2C_N
+# set_location_assignment PIN_AP1   -to "rx_data[2]"          ; ## A06  DP2_M2C_P
+# set_location_assignment PIN_AP3   -to "rx_data_n[2]"        ; ## A07  DP2_M2C_N
+# set_location_assignment PIN_AM1   -to "rx_data[3]"          ; ## A10  DP3_M2C_P
+# set_location_assignment PIN_AM3   -to "rx_data_n[3]"        ; ## A11  DP3_M2C_N
+set_location_assignment PIN_BF1   -to "rx_data[0]"          ; ## A14  DP4_M2C_P
+set_location_assignment PIN_BF3   -to "rx_data_n[0]"        ; ## A15  DP4_M2C_N
+set_location_assignment PIN_BD1   -to "rx_data[1]"          ; ## A18  DP5_M2C_P
+set_location_assignment PIN_BD3   -to "rx_data_n[1]"        ; ## A19  DP5_M2C_N
+set_location_assignment PIN_BB1   -to "rx_data[2]"          ; ## B16  DP6_M2C_P
+set_location_assignment PIN_BB3   -to "rx_data_n[2]"        ; ## B17  DP6_M2C_N
+set_location_assignment PIN_AY1   -to "rx_data[3]"          ; ## B12  DP7_M2C_P
+set_location_assignment PIN_AY3   -to "rx_data_n[3]"        ; ## B13  DP7_M2C_N
 
-set_location_assignment PIN_AU7   -to "tx_data[0]"          ; ## C02  DP0_C2M_P
-set_location_assignment PIN_AU10  -to "tx_data_n[0]"        ; ## C03  DP0_C2M_N
-set_location_assignment PIN_AR7   -to "tx_data[1]"          ; ## A22  DP1_C2M_P
-set_location_assignment PIN_AR10  -to "tx_data_n[1]"        ; ## A23  DP1_C2M_N
-set_location_assignment PIN_AN7   -to "tx_data[2]"          ; ## A26  DP2_C2M_P
-set_location_assignment PIN_AN10  -to "tx_data_n[2]"        ; ## A27  DP2_C2M_N
-set_location_assignment PIN_AL7   -to "tx_data[3]"          ; ## A30  DP3_C2M_P
-set_location_assignment PIN_AL10  -to "tx_data_n[3]"        ; ## A31  DP3_C2M_N
-set_location_assignment PIN_BE7   -to "tx_data[4]"          ; ## A34  DP4_C2M_P
-set_location_assignment PIN_BE10  -to "tx_data_n[4]"        ; ## A35  DP4_C2M_N
-set_location_assignment PIN_BC7   -to "tx_data[5]"          ; ## A38  DP5_C2M_P
-set_location_assignment PIN_BC10  -to "tx_data_n[5]"        ; ## A39  DP5_C2M_N
-set_location_assignment PIN_BA7   -to "tx_data[6]"          ; ## B36  DP6_C2M_P
-set_location_assignment PIN_BA10  -to "tx_data_n[6]"        ; ## B37  DP6_C2M_N
-set_location_assignment PIN_AW7   -to "tx_data[7]"          ; ## B32  DP7_C2M_P
-set_location_assignment PIN_AW10  -to "tx_data_n[7]"        ; ## B33  DP7_C2M_N
+# set_location_assignment PIN_AU7   -to "tx_data[0]"          ; ## C02  DP0_C2M_P
+# set_location_assignment PIN_AU10  -to "tx_data_n[0]"        ; ## C03  DP0_C2M_N
+# set_location_assignment PIN_AR7   -to "tx_data[1]"          ; ## A22  DP1_C2M_P
+# set_location_assignment PIN_AR10  -to "tx_data_n[1]"        ; ## A23  DP1_C2M_N
+# set_location_assignment PIN_AN7   -to "tx_data[2]"          ; ## A26  DP2_C2M_P
+# set_location_assignment PIN_AN10  -to "tx_data_n[2]"        ; ## A27  DP2_C2M_N
+# set_location_assignment PIN_AL7   -to "tx_data[3]"          ; ## A30  DP3_C2M_P
+# set_location_assignment PIN_AL10  -to "tx_data_n[3]"        ; ## A31  DP3_C2M_N
+set_location_assignment PIN_BE7   -to "tx_data[0]"          ; ## A34  DP4_C2M_P
+set_location_assignment PIN_BE10  -to "tx_data_n[0]"        ; ## A35  DP4_C2M_N
+set_location_assignment PIN_BC7   -to "tx_data[1]"          ; ## A38  DP5_C2M_P
+set_location_assignment PIN_BC10  -to "tx_data_n[1]"        ; ## A39  DP5_C2M_N
+set_location_assignment PIN_BA7   -to "tx_data[2]"          ; ## B36  DP6_C2M_P
+set_location_assignment PIN_BA10  -to "tx_data_n[2]"        ; ## B37  DP6_C2M_N
+set_location_assignment PIN_AW7   -to "tx_data[3]"          ; ## B32  DP7_C2M_P
+set_location_assignment PIN_AW10  -to "tx_data_n[3]"        ; ## B33  DP7_C2M_N
 
 set_location_assignment PIN_A51   -to "fpga_syncin_0(n)"    ; ## H08  LA02_N
 set_location_assignment PIN_B51   -to "fpga_syncin_0"       ; ## H07  LA02_P

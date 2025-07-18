@@ -50,6 +50,22 @@ if [info exists ad_project_dir] {
   source ../common/ad9081_fmca_ebz_qsys.tcl
 }
 
+# GTS PLL
+add_instance gts_pll intel_systemclk_gts
+set_instance_parameter_value gts_pll syspll_mod_0 {User Configuration}
+set_instance_parameter_value gts_pll syspll_freq_mhz_0 $syspll_freq
+set_instance_parameter_value gts_pll refclk_xcvr_freq_mhz_0 $jesd204_ref_clock
+
+add_interface i_refclk_rdy conduit end
+add_interface o_pll_lock   conduit end
+add_interface refclk_xcvr  clock sink
+add_interface o_syspll_c0  clock source
+
+set_interface_property i_refclk_rdy EXPORT_OF gts_pll.i_refclk_rdy
+set_interface_property o_pll_lock   EXPORT_OF gts_pll.o_pll_lock
+set_interface_property refclk_xcvr  EXPORT_OF gts_pll.refclk_xcvr
+set_interface_property o_syspll_c0  EXPORT_OF gts_pll.o_syspll_c0
+
 #system ID
 set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}
 set_instance_parameter_value rom_sys_0 {PATH_TO_FILE} "$mem_init_sys_file_path/mem_init_sys.txt"

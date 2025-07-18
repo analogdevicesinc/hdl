@@ -124,6 +124,12 @@ if {$EXTERNAL_PHY} {
 
   add_interface gts_reset_src_rs_priority conduit end
   set_interface_property gts_reset_src_rs_priority EXPORT_OF jesd204_phy.gts_reset_src_rs_priority
+
+  add_interface system_pll_clk clock sink
+  set_interface_property system_pll_clk EXPORT_OF jesd204_phy.system_pll_clk
+
+  add_interface system_pll_lock conduit end
+  set_interface_property system_pll_lock EXPORT_OF jesd204_phy.system_pll_lock
 }
 
 # RX JESD204 PHY-Link layer
@@ -464,9 +470,14 @@ if {!$EXTERNAL_PHY} {
     ad_cpu_interconnect 0x000D0000 mxfe_tx_jesd204.lane_pll_reconfig
   }
 } else {
-  ad_cpu_interconnect 0x00000000 jesd204_phy.reconfig_avmm "avl_mm_bridge_0" 0x10000000 25
+  # One bridge for rx_adxcvr, the other for tx_adxcvr
+  ad_cpu_interconnect 0x00000000 jesd204_phy.reconfig_avmm "avl_mm_bridge_0" 0x01000000 22
+  # ad_cpu_interconnect 0x00000000 jesd204_phy.reconfig_avmm "avl_mm_bridge_1" 0x02000000 22
+  set_instance_parameter_value avl_mm_bridge_0 {MAX_PENDING_RESPONSES} {1}
+  # set_instance_parameter_value avl_mm_bridge_1 {MAX_PENDING_RESPONSES} {1}
   add_connection sys_clk.clk jesd204_phy.reconfig_clk
   add_connection sys_clk.clk_reset jesd204_phy.reconfig_reset
+
 }
 
 ad_cpu_interconnect 0x000C0000 mxfe_rx_jesd204.link_reconfig
