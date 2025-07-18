@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD4170-4](https://www.analog.com/eval-ad4170-4)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad4170
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad4170_asdz/index.html
+- Evaluation board VIO: 3.3V
 
 ## Supported parts
 
