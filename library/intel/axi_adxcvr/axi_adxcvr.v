@@ -117,7 +117,7 @@ module axi_adxcvr #(
   ) i_pll_locked_cdc (
     .in_bits(up_pll_locked),
     .out_clk(up_clk),
-    .out_resetn(1'b1),
+    .out_resetn(up_rstn),
     .out_bits(up_pll_locked_s));
 
   sync_bits #(
@@ -126,7 +126,7 @@ module axi_adxcvr #(
   ) i_rx_lockedtodata_cdc (
     .in_bits(up_rx_lockedtodata),
     .out_clk(up_clk),
-    .out_resetn(1'b1),
+    .out_resetn(up_rstn),
     .out_bits(up_rx_lockedtodata_s));
 
   sync_bits #(
@@ -135,7 +135,7 @@ module axi_adxcvr #(
   ) i_ready_cdc (
     .in_bits(up_ready),
     .out_clk(up_clk),
-    .out_resetn(1'b1),
+    .out_resetn(up_rstn),
     .out_bits(up_ready_s));
 
   sync_bits #(
@@ -144,7 +144,7 @@ module axi_adxcvr #(
   ) i_reset_ack_cdc (
     .in_bits(up_reset_ack),
     .out_clk(up_clk),
-    .out_resetn(1'b1),
+    .out_resetn(up_rstn),
     .out_bits(up_reset_ack_s));
 
   // instantiations
