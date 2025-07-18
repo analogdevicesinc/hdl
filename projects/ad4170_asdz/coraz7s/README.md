@@ -1,4 +1,8 @@
-# AD4170-ASDZ/Cora-Z7S HDL Project
+<!-- no_build_example, no_dts -->
+
+# AD4170-ASDZ/CORAZ7S HDL Project
+
+- VIO with which it was tested in hardware: 3.3V
 
 ## Building the project
 
