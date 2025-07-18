@@ -257,7 +257,7 @@ proc jesd204_phy_glue_elab {} {
     glue_add_if 1 reconfig_avmm avalon sink true
     set_interface_property reconfig_avmm associatedClock reconfig_clk
     set_interface_property reconfig_avmm associatedReset reconfig_reset
-    set_interface_property reconfig_avmm maximumPendingReadTransactions 1
+    set_interface_property reconfig_avmm maximumPendingReadTransactions 4
 
     glue_add_if_port 1 reconfig_avmm reconfig_write write Input 1 true write
     glue_add_if_port 1 reconfig_avmm reconfig_read read Input 1 true read
@@ -296,6 +296,9 @@ proc jesd204_phy_glue_elab {} {
 
   if {[string equal $device "Agilex 5"]} {
     # For Agilex 5 we instantiate a duplex PHY
+
+    glue_add_if 1 system_pll_clk clock sink true
+    glue_add_if_port 1 system_pll_clk system_pll_clk clk Input 1 true clk
 
     # TX glue signals
     glue_add_if $num_of_lanes tx_coreclkin clock sink true

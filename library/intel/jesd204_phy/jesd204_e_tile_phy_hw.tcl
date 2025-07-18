@@ -77,8 +77,9 @@ proc jesd204_e_tile_phy_composition_callback {} {
   add_instance native_phy intel_directphy_gts
   set_instance_parameter_value native_phy duplex_mode {duplex}
   set_instance_parameter_value native_phy xcvr_type "FGT"
+  set_instance_parameter_value native_phy syspll_outclk_freq_mhz $phy_clk_frequency
   set_instance_parameter_value native_phy num_xcvr_per_sys $num_of_lanes
-  set_instance_parameter_value native_phy clocking_mode "xcvr"
+  set_instance_parameter_value native_phy clocking_mode "syspll"
   set_instance_parameter_value native_phy pma_modulation "NRZ"
   set_instance_parameter_value native_phy pma_data_rate $lane_rate
   set_instance_parameter_value native_phy pma_width $pma_width
@@ -86,7 +87,7 @@ proc jesd204_e_tile_phy_composition_callback {} {
 
   # TX side parameters
   set_instance_parameter_value native_phy tx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
-  set_instance_parameter_value native_phy pmaif_tx_fifo_mode_s "register"
+  set_instance_parameter_value native_phy pmaif_tx_fifo_mode_s "elastic"
   set_instance_parameter_value native_phy pldif_tx_double_width_transfer_enable 1
   set_instance_parameter_value native_phy pldif_tx_fifo_mode "phase_comp"
   set_instance_parameter_value native_phy pldif_tile_tx_fifo_mode "phase_comp"
@@ -102,7 +103,7 @@ proc jesd204_e_tile_phy_composition_callback {} {
 
   # RX side parameters
   set_instance_parameter_value native_phy rx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
-  set_instance_parameter_value native_phy pmaif_rx_fifo_mode_s "register"
+  set_instance_parameter_value native_phy pmaif_rx_fifo_mode_s "elastic"
   set_instance_parameter_value native_phy pldif_rx_double_width_transfer_enable 1
   set_instance_parameter_value native_phy rx_cdr_rxuserclk_enable 1
   set_instance_parameter_value native_phy rx_cdr_rxuserclk_div $usr_pll_div
@@ -137,11 +138,18 @@ proc jesd204_e_tile_phy_composition_callback {} {
   set_instance_parameter_value phy_glue LINK_MODE $link_mode
 
   # Connect PHY to GLUE
+
   add_interface rx_ref_clk clock sink
   set_interface_property rx_ref_clk EXPORT_OF phy_glue.rx_ref_clk
 
   add_interface tx_ref_clk clock sink
   set_interface_property tx_ref_clk EXPORT_OF phy_glue.tx_ref_clk
+
+  add_interface system_pll_clk clock sink
+  set_interface_property system_pll_clk EXPORT_OF phy_glue.system_pll_clk
+
+  add_interface system_pll_lock conduit end
+  set_interface_property system_pll_lock EXPORT_OF native_phy.i_system_pll_lock
 
   add_interface tx_reset conduit end
   set_interface_property tx_reset EXPORT_OF native_phy.i_tx_reset
@@ -179,7 +187,6 @@ proc jesd204_e_tile_phy_composition_callback {} {
 
   add_connection phy_glue.phy_tx_coreclkin native_phy.i_tx_coreclkin
   add_connection phy_glue.phy_rx_coreclkin native_phy.i_rx_coreclkin
-
   # Reconfig interface
   add_connection phy_glue.phy_reconfig_clk native_phy.i_reconfig_clk
   add_connection phy_glue.phy_reconfig_reset native_phy.i_reconfig_reset
@@ -197,6 +204,9 @@ proc jesd204_e_tile_phy_composition_callback {} {
   # connect ref clock and output clock from - to GLUE
   add_connection phy_glue.phy_tx_ref_clk native_phy.i_tx_pll_refclk_p
   add_connection phy_glue.phy_rx_ref_clk native_phy.i_rx_cdr_refclk_p
+  add_connection phy_glue.phy_system_pll_clk native_phy.i_system_pll_clk
+
+  # add_connection phy_glue.phy_refclk_xcvr gts_pll.refclk_xcvr
 
   foreach x [list clkout2 clkout] {
     add_connection phy_glue.phy_tx_${x} native_phy.o_tx_${x}
