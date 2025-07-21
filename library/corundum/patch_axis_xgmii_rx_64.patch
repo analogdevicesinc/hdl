@@ -1,0 +1,23 @@
+diff --git a/fpga/lib/eth/rtl/axis_xgmii_rx_64.v b/fpga/lib/eth/rtl/axis_xgmii_rx_64.v
+index 132decf6..334fe752 100644
+--- a/fpga/lib/eth/rtl/axis_xgmii_rx_64.v
++++ b/fpga/lib/eth/rtl/axis_xgmii_rx_64.v
+@@ -135,14 +135,15 @@ reg [DATA_WIDTH-1:0] m_axis_tdata_reg = {DATA_WIDTH{1'b0}}, m_axis_tdata_next;
+ reg [KEEP_WIDTH-1:0] m_axis_tkeep_reg = {KEEP_WIDTH{1'b0}}, m_axis_tkeep_next;
+ reg m_axis_tvalid_reg = 1'b0, m_axis_tvalid_next;
+ reg m_axis_tlast_reg = 1'b0, m_axis_tlast_next;
+-reg [USER_WIDTH-1:0] m_axis_tuser_reg = {USER_WIDTH{1'b0}}, m_axis_tuser_next;
++reg [95:0] m_axis_tuser_reg = {96{1'b0}};
++reg [95:0] m_axis_tuser_next = {96{1'b0}};
+ 
+ reg [1:0] start_packet_reg = 2'b00;
+ reg error_bad_frame_reg = 1'b0, error_bad_frame_next;
+ reg error_bad_fcs_reg = 1'b0, error_bad_fcs_next;
+ 
+-reg [PTP_TS_WIDTH-1:0] ptp_ts_reg = 0;
+-reg [PTP_TS_WIDTH-1:0] ptp_ts_adj_reg = 0;
++reg [95:0] ptp_ts_reg = 0;
++reg [95:0] ptp_ts_adj_reg = 0;
+ reg ptp_ts_borrow_reg = 0;
+ 
+ reg [31:0] crc_state = 32'hFFFFFFFF;
