@@ -16,6 +16,8 @@ create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:aximm_rtl:1.0 m_axi
 create_bd_pin -dir I -type clk clk_corundum
 create_bd_pin -dir I -type rst rst_corundum
 
+create_bd_pin -dir O -type intr irq
+
 if [info exists ::env(CPU)] {
   set CPU $::env(CPU)
 } else {
@@ -27,7 +29,7 @@ if [info exists ::env(BOARD)] {
   if [string equal $board VCU118] {
     create_bd_pin -dir O -from 0 -to 0 -type rst qsfp_rst
     create_bd_pin -dir O fpga_boot
-    create_bd_pin -dir I -type clk qspi_clk
+    create_bd_pin -dir O -type clk qspi_clk
     create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi0
     create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi1
     create_bd_pin -dir I -type rst ptp_rst
@@ -35,12 +37,19 @@ if [info exists ::env(BOARD)] {
     create_bd_pin -dir I -type clk qsfp_mgt_refclk_bufg
     create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
     create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
-    create_bd_pin -dir I -type clk ddr_clk
-    create_bd_pin -dir I -type clk hbm_clk
-    create_bd_pin -dir I -type rst ddr_rst
-    create_bd_pin -dir I -type rst hbm_rst
-    create_bd_pin -dir I ddr_status
-    create_bd_pin -dir I hbm_status
+
+    if {$DDR_ENABLE == 1} {
+      create_bd_pin -dir I -type clk ddr_clk
+      create_bd_pin -dir I -type rst ddr_rst
+      create_bd_pin -dir I ddr_status
+    }
+
+    if {$HBM_ENABLE == 1} {
+      create_bd_pin -dir I -type clk hbm_clk
+      create_bd_pin -dir I -type rst hbm_rst
+      create_bd_pin -dir I hbm_status
+    }
+
     create_bd_pin -dir I -type clk clk_125mhz
     create_bd_pin -dir I -type rst rst_125mhz
   } else {
@@ -62,8 +71,6 @@ if [info exists ::env(BOARD)] {
 } else {
   error "Missing BOARD environment variable definition from makefile!"
 }
-
-create_bd_pin -dir O -type intr irq
 
 if [string equal $board K26] {
   ad_ip_instance corundum_core corundum_core [list \
@@ -145,7 +152,7 @@ if [string equal $board K26] {
     STAT_INC_WIDTH $STAT_INC_WIDTH \
     STAT_ID_WIDTH $STAT_ID_WIDTH
   ]
-  
+
   ad_ip_instance ethernet_k26 ethernet_core [list \
     IF_COUNT $IF_COUNT \
     PORTS_PER_IF $PORTS_PER_IF \
@@ -376,6 +383,8 @@ ad_connect corundum_core/irq irq
 ad_connect ethernet_core/clk clk_corundum
 ad_connect ethernet_core/rst rst_corundum
 
+ad_connect ethernet_core/ctrl_reg corundum_core/ctrl_reg
+
 if [string equal $board K26] {
   ad_connect ethernet_core/sfp_rx_p sfp_rx_p
   ad_connect ethernet_core/sfp_rx_n sfp_rx_n
@@ -417,17 +426,20 @@ if [string equal $board K26] {
   ad_connect corundum_core/ptp_rst ptp_rst
   ad_connect corundum_core/ptp_sample_clk clk_125mhz
 
-  ad_connect corundum_core/hbm_clk hbm_clk
-  ad_connect corundum_core/hbm_rst hbm_rst
-  ad_connect corundum_core/ddr_clk ddr_clk
-  ad_connect corundum_core/ddr_rst ddr_rst
-  ad_connect corundum_core/ddr_status ddr_status
-  ad_connect corundum_core/hbm_status hbm_status
+  if {$HBM_ENABLE == 1} {
+    ad_connect corundum_core/hbm_clk hbm_clk
+    ad_connect corundum_core/hbm_rst hbm_rst
+    ad_connect corundum_core/hbm_status hbm_status
+  }
+
+  if {$DDR_ENABLE == 1} {
+    ad_connect corundum_core/ddr_clk ddr_clk
+    ad_connect corundum_core/ddr_rst ddr_rst
+    ad_connect corundum_core/ddr_status ddr_status
+  }
 
   ad_connect corundum_core/s_axis_stat_tvalid GND
 }
-
-ad_connect ethernet_core/ctrl_reg corundum_core/ctrl_reg
 
 if {$APP_ENABLE == 1} {
   ad_ip_instance application_core application_core [list \
@@ -645,7 +657,6 @@ if {$APP_ENABLE == 1} {
   if {$APP_STAT_ENABLE} {
     ad_connect application_core/m_axis_stat corundum_core/m_axis_stat_app
   }
-
 }
 
 current_bd_instance /

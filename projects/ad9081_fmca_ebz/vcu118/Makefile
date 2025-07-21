@@ -61,5 +61,6 @@ LIB_DEPS += corundum/corundum_core
 LIB_DEPS += corundum/ethernet
 
 export BOARD := VCU118
+export CPU := MB
 
 include ../../scripts/project-xilinx.mk
