@@ -1,5 +1,5 @@
 # PULSAR-LVDS-ADC HDL Project
- 
+
 - Evaluation boards product page:
   - [EVAL-AD7625](https://www.analog.com/eval-ad7625)
   - [EVAL-AD7626](https://www.analog.com/eval-ad7626)
@@ -7,7 +7,8 @@
   - [EVAL-AD7961](https://www.analog.com/eval-ad7961)
 - System documentation: TO BE ADDED
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/pulsar_lvds_adc/index.html
- 
+- Evaluation boards VADJ: 2.5V
+
 ## Supported parts
 
 | Part name                               | Description                                      |
