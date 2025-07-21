@@ -161,8 +161,6 @@ if {$ad_project_params(CORUNDUM) == "1"} {
 
   set OUTPUT_WIDTH [expr $OUTPUT_CHANNELS*$OUTPUT_SAMPLES*$OUTPUT_SAMPLE_WIDTH]
 
-  set CPU MB
-
   source $ad_hdl_dir/library/corundum/scripts/corundum_vcu118_cfg.tcl
   set APP_ENABLE 0
   source $ad_hdl_dir/library/corundum/scripts/corundum.tcl
