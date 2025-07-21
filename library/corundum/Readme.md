@@ -1,14 +1,13 @@
 # Corundum IP Core
 
-This IP Core repackages [Corundum NIC](https://github.com/corundum/corundum) as an IP Core.
+This IP Core repackages [Corundum NIC](https://github.com/ucsdsysnet/corundum) as an IP Core.
 
 ## Building
 
-Clone the [Corundum NIC](https://github.com/corundum/corundum) repository alongside this repository.
+Clone the [Corundum NIC](https://github.com/ucsdsysnet/corundum) repository alongside this repository.
 
 ```
-hdl/../> git clone https://github.com/corundum/corundum.git
-hdl/../corundum/> git checkout ed4a26e2cbc0a429c45d5cd5ddf1177f86838914
+hdl/../> git clone https://github.com/ucsdsysnet/corundum.git
 hdl/library/corundum> make &
 ```
 
