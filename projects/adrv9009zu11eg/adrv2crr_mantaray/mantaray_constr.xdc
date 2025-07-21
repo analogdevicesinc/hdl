@@ -22,6 +22,15 @@ set_property -dict {PACKAGE_PIN AJ24 IOSTANDARD LVCMOS18                        
 set_property -dict {PACKAGE_PIN H31  IOSTANDARD LVCMOS18                                    } [get_ports stingray0_pmod1_5V_CTRL    ]; ## LA13_P
 set_property -dict {PACKAGE_PIN H32  IOSTANDARD LVCMOS18                                    } [get_ports stingray0_pmod1_PWR_UP_DOWN]; ## LA13_N
 
+set_property DRIVE 12 [get_ports stingray0_pmod1_CSB1]
+set_property DRIVE 12 [get_ports stingray0_pmod1_CSB2]
+set_property DRIVE 12 [get_ports stingray0_pmod1_CSB3]
+set_property DRIVE 12 [get_ports stingray0_pmod1_CSB4]
+set_property DRIVE 12 [get_ports stingray0_pmod1_CSB5]
+set_property DRIVE 12 [get_ports stingray0_pmod0_MOSI]
+set_property DRIVE 12 [get_ports stingray0_pmod0_MISO]
+set_property DRIVE 12 [get_ports stingray0_pmod0_SCLK]
+
 # Stingray 1
 set_property -dict {PACKAGE_PIN AR25 IOSTANDARD LVCMOS18                                    } [get_ports stingray1_pmod0_PA_ON      ]; ## LA04_P
 set_property -dict {PACKAGE_PIN AT25 IOSTANDARD LVCMOS18                                    } [get_ports stingray1_pmod0_MOSI       ]; ## LA04_N
@@ -41,6 +50,14 @@ set_property -dict {PACKAGE_PIN AM24 IOSTANDARD LVCMOS18                        
 set_property -dict {PACKAGE_PIN G35  IOSTANDARD LVCMOS18                                    } [get_ports stingray1_pmod1_5V_CTRL    ]; ## LA17_P
 set_property -dict {PACKAGE_PIN G36  IOSTANDARD LVCMOS18                                    } [get_ports stingray1_pmod1_PWR_UP_DOWN]; ## LA17_N
 
+set_property DRIVE 12 [get_ports stingray1_pmod1_CSB1]
+set_property DRIVE 12 [get_ports stingray1_pmod1_CSB2]
+set_property DRIVE 12 [get_ports stingray1_pmod1_CSB3]
+set_property DRIVE 12 [get_ports stingray1_pmod1_CSB4]
+set_property DRIVE 12 [get_ports stingray1_pmod1_CSB5]
+set_property DRIVE 12 [get_ports stingray1_pmod0_MOSI]
+set_property DRIVE 12 [get_ports stingray1_pmod0_MISO]
+set_property DRIVE 12 [get_ports stingray1_pmod0_SCLK]
 
 # XUD #1 custom break out board
 # FMC
