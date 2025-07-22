@@ -14,4 +14,5 @@ set_property ASYNC_REG TRUE \
   [get_cells -hier {*cdc_sync_stage2_reg*}]
 
 set_false_path \
-  -to [get_cells -hierarchical -filter {NAME=~*/i_regmap/*fsrc_enable_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_enable_s_reg*}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/enable_sync/cdc_sync_stage1_reg[*]}]

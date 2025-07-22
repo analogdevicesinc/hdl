@@ -62,8 +62,8 @@ adi_project ad9084_ebz_vck190 0 [list \
   TX_JESD_S           [get_env_param TX_JESD_S            1 ] \
   TX_JESD_NP          [get_env_param TX_JESD_NP          16 ] \
   TX_NUM_LINKS        [get_env_param TX_NUM_LINKS         2 ] \
-  RX_KS_PER_CHANNEL   [get_env_param RX_KS_PER_CHANNEL   64 ] \
-  TX_KS_PER_CHANNEL   [get_env_param TX_KS_PER_CHANNEL   64 ] \
+  RX_KS_PER_CHANNEL   [get_env_param RX_KS_PER_CHANNEL    8 ] \
+  TX_KS_PER_CHANNEL   [get_env_param TX_KS_PER_CHANNEL    8 ] \
   ASYMMETRIC_A_B_MODE [get_env_param ASYMMETRIC_A_B_MODE  0 ] \
   RX_B_LANE_RATE      [get_env_param RX_B_LANE_RATE  20.625 ] \
   TX_B_LANE_RATE      [get_env_param TX_B_LANE_RATE  20.625 ] \
@@ -75,8 +75,8 @@ adi_project ad9084_ebz_vck190 0 [list \
   TX_B_JESD_L         [get_env_param TX_B_JESD_L          4 ] \
   TX_B_JESD_S         [get_env_param TX_B_JESD_S          1 ] \
   TX_B_JESD_NP        [get_env_param TX_B_JESD_NP        16 ] \
-  RX_B_KS_PER_CHANNEL [get_env_param RX_B_KS_PER_CHANNEL 64 ] \
-  TX_B_KS_PER_CHANNEL [get_env_param TX_B_KS_PER_CHANNEL 64 ] \
+  RX_B_KS_PER_CHANNEL [get_env_param RX_B_KS_PER_CHANNEL  8 ] \
+  TX_B_KS_PER_CHANNEL [get_env_param TX_B_KS_PER_CHANNEL  8 ] \
 ]
 
 adi_project_files ad9084_ebz_vck190 [list \

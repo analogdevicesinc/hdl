@@ -12,6 +12,7 @@ adi_ip_files axi_fsrc_tx [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "$ad_hdl_dir/library/util_cdc/sync_data.v" \
+  "$ad_hdl_dir/library/common/ad_perfect_shuffle.v" \
   "pulse_sync.v" \
   "fifo_sync_2deep.v" \
   "accum_set.sv" \

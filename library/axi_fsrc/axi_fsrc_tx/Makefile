@@ -8,6 +8,7 @@ LIBRARY_NAME := axi_fsrc_tx
 
 GENERIC_DEPS += ../../common/ad_rst.v
 GENERIC_DEPS += ../../common/up_axi.v
+GENERIC_DEPS += ../../common/ad_perfect_shuffle.v
 GENERIC_DEPS += ../../util_cdc/sync_bits.v
 GENERIC_DEPS += ../../util_cdc/sync_data.v
 

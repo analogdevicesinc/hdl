@@ -223,20 +223,29 @@ module axi_fsrc_tx_regmap #(
     .out_bits(accum_set_val_s));
 
   sync_bits #(
-    .NUM_OF_BITS (5),
+    .NUM_OF_BITS (4),
     .ASYNC_CLK (1)
   ) accum_set_val_addr_sync (
-    .in_bits({up_accum_set_val_addr[3:0], up_accum_set_val_apply}),
+    .in_bits(up_accum_set_val_addr[3:0]),
     .out_resetn(~reset),
     .out_clk(clk),
-    .out_bits({accum_set_val_addr_s, accum_set_val_apply_s}));
+    .out_bits(accum_set_val_addr_s));
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) accum_set_val_apply_sync (
+    .in_bits(up_accum_set_val_apply),
+    .out_resetn(~reset),
+    .out_clk(clk),
+    .out_bits(accum_set_val_apply_s));
 
   sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) debug_flags_sync (
     .in_bits(debug_flags),
-    .out_resetn(~reset),
+    .out_resetn(up_rstn),
     .out_clk(up_clk),
     .out_bits(up_debug_flags));
 
