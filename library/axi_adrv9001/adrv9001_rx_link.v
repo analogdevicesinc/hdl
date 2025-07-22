@@ -298,7 +298,7 @@ module adrv9001_rx_link #(
     .idata (rx_data8_1_aligned),
     .sof (rx_data8_strobe_aligned[7]),
     .odata (rx_data16_1_packed),
-    .ovalid (rx_data16_1_paked_valid),
+    .ovalid (rx_data16_1_packed_valid),
     .osof (rx_data16_1_packed_osof));
 
   adrv9001_pack #(
