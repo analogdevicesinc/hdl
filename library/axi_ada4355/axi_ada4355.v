@@ -36,7 +36,8 @@
 module axi_ada4355 #(
 
   parameter   ID = 0,
-  parameter   FPGA_TECHNOLOGY = 0
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   BUFMRCE_EN = 0
 ) (
 
   // ADC interface
@@ -266,7 +267,8 @@ module axi_ada4355 #(
 
   axi_ada4355_if #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
-    .IODELAY_CTRL(1)
+    .IODELAY_CTRL(1),
+    .BUFMRCE_EN(BUFMRCE_EN)
   ) i_ada4355_interface (
     .dco_n(dco_n),
     .dco_p(dco_p),

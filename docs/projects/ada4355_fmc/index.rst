@@ -66,6 +66,32 @@ The data path and clock domains are depicted in the below diagram:
    :align: center
    :alt: ADA4355_FMC/ZedBoard block diagram
 
+Configuration modes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The BUFMRCE_EN configuration parameter defines the type of evaluation board
+used, which are differentiated by how the frame clock signals are distributed.
+For the older evaluation board, the XDC constraints are not optimized for
+ISERDES, as the frame clock signals are located in a different I/O bank from
+the other related signals. To address this, a BUFMRCE buffer is used to
+distribute the frame clock to all ISERDES instances.
+
+By default it is set to 0. Depending on the type of evaluation board, some
+hardware modifications need to be done on the board and/or ``make`` command:
+
+In case of the Eval-Board with optimized xdc:
+
+.. shell:: bash
+
+   $make BUFMRCE_EN=0
+
+In case of the Eval-Board with non optimized xdc:
+
+.. shell:: bash
+
+   $make BUFMRCE_EN=1
+
+
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -121,19 +147,55 @@ The Software GPIO number is calculated as follows:
      - (from FPGA view)
      -
      - Zynq-7000
-   * - gpio_1p8va_en
+   * - apd_supp_en **
+     - INOUT
+     - 42
+     - 96
+   * - trig_fmc_out **
+     - INOUT
+     - 41
+     - 95
+   * - trig_fmc_in **
+     - INOUT
+     - 40
+     - 94
+   * - freq_sel1 **
+     - INOUT
+     - 39
+     - 93
+   * - gain_sel3 **
+     - INOUT
+     - 38
+     - 92
+   * - gpio_test **
+     - INOUT
+     - 37
+     - 91
+   * - gpio_1p8va_en *
      - IN
      - 37
      - 91
-   * - gain_sel2
+   * - gain_sel2 **
+     - INOUT
+     - 36
+     - 90
+   * - gain_sel2 *
      - IN
      - 36
      - 90
-   * - gpio_1p8vd_en
+   * - gpio_vld_en **
      - INOUT
      - 35
      - 89
-   * - fsel
+   * - gpio_1p8vd_en *
+     - INOUT
+     - 35
+     - 89
+   * - freq_sel0 **
+     - INOUT
+     - 34
+     - 88
+   * - fsel *
      - INOUT
      - 34
      - 88
@@ -145,6 +207,12 @@ The Software GPIO number is calculated as follows:
      - INOUT
      - 32
      - 86
+
+.. admonition:: Legend
+   :class: note
+
+   - ``*`` instantiated only for BUFMRCE_EN=1
+   - ``**`` instantiated only for BUFMRCE_EN=0
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -188,12 +256,38 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
+Examples on how to build the project:
+
 **Linux/Cygwin/WSL**
+
+Example for building with the default configuration:
 
 .. shell::
 
    $cd hdl/projects/ada4355_fmc/zed
    $make
+
+Example for building with parameters:
+
+.. shell::
+
+   $cd hdl/projects/ada4355_fmc/zed
+   $make BUFMRCE_EN=0
+
+Default values of the ``make`` parameters for ADA4355-FMC:
+
+- BUFMRCE_EN: 0
+
+The result of the build, if parameters were used, will be in a folder named
+by the configuration used.
+
+If the following command was run
+
+``make BUFMRCE_EN=0``
+
+then the folder name will be: ``BUFMRCEEN0``.
+
+Check `Configuration modes`_ for more details.
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
