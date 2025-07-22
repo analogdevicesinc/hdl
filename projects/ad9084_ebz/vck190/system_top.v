@@ -110,8 +110,8 @@ module system_top #(
   output         sysref_b_n,
   input          sysref_p,
   input          sysref_n,
-  input          sysref_in_p,
-  input          sysref_in_n,
+  inout          sysref_in_p,
+  inout          sysref_in_n,
 
   output         spi2_sclk,
   inout          spi2_sdio,
@@ -180,6 +180,8 @@ module system_top #(
   wire    [ 7:0]  data_to_fabric;
   wire    [ 7:0]  hsci_data_in;
 
+  wire    [ 2:0]  trig_channel;
+
   assign iic_rstn = 1'b1;
   wire gt_reset;
   wire rx_reset_pll_and_datapath;
@@ -211,10 +213,10 @@ module system_top #(
     .O (ref_clk),
     .ODIV2 ());
 
-  IBUFDS i_ibufds_sysref_in (
-    .I (sysref_in_p),
-    .IB (sysref_in_n),
-    .O (sysref));
+  // IBUFDS i_ibufds_sysref_in (
+  //   .I (sysref_in_p),
+  //   .IB (sysref_in_n),
+  //   .O (sysref));
 
   OBUFDS i_obufds_sysref_a (
     .I (1'b0),
@@ -305,10 +307,10 @@ module system_top #(
 
   assign gpio_i[53] = trig_in;
 
-  assign trig_a[0]  = gpio_o[58];
-  assign trig_a[1]  = gpio_o[59];
-  assign trig_b[0]  = gpio_o[60];
-  assign trig_b[1]  = gpio_o[61];
+  assign trig_a[0]  = trig_channel[0];
+  assign trig_a[1]  = trig_channel[0];
+  assign trig_b[0]  = trig_channel[0];
+  assign trig_b[1]  = trig_channel[0];
   assign resetb     = gpio_o[62];
 
   assign gpio_i[64] = rx_resetdone;
@@ -436,6 +438,13 @@ module system_top #(
     .hsci_data_in (hsci_data_in),
     .data_from_fabric (data_from_fabric),
     .data_to_fabric (data_to_fabric),
+
+    .adf4030_bsync_p      (sysref_in_p),
+    .adf4030_bsync_n      (sysref_in_n),
+    .adf4030_clk          (rx_device_clk),
+    .adf4030_trigger      (aux_gpio),
+    .adf4030_sysref       (sysref),
+    .adf4030_trig_channel (trig_channel),
 
     .rx_sync_0 (rx_syncout[0]),
     .tx_sync_0 (tx_syncin[0]),

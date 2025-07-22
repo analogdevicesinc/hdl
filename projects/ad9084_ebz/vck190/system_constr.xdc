@@ -142,3 +142,7 @@ set_property   -dict {PACKAGE_PIN AU17  IOSTANDARD LVDS15	  DIFF_TERM_ADV TERM_1
 set_property   -dict {PACKAGE_PIN AV17  IOSTANDARD LVDS15	  DIFF_TERM_ADV TERM_100    } [get_ports hsci_do_n	        ]    ;  ## FMC2_LA28_N   # Bank 708
 
 set_property CLOCK_DEDICATED_ROUTE ANY_CMT_REGION [get_nets i_system_wrapper/system_i/axi_hsci_clkgen/inst/i_mmcm_drp/clk_0]
+
+set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/I.*]
+set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/T.*]
+

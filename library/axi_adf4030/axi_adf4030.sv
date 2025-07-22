@@ -1,6 +1,7 @@
 `timescale 1ns / 1ps
 
 module axi_adf4030 #(
+  parameter FPGA_FAMILY = 0,
   // Peripheral ID
   parameter ID = 0,
 
@@ -38,6 +39,8 @@ module axi_adf4030 #(
   output logic [31:0]              s_axi_rdata,
   input  logic                     s_axi_rready
 );
+
+  localparam SIM_DEVICE = (FPGA_FAMILY == 6) ? "VERSAL_AI_CORE" : "ULTRASCALE" ;
 
   logic        external_bsync;
   logic        internal_bsync;
@@ -79,7 +82,7 @@ module axi_adf4030 #(
   logic [CHANNEL_COUNT-1:0] trig_channel_s;
 
   IOBUFDS_DCIEN #( 
-    .SIM_DEVICE      ("ULTRASCALE"),
+    .SIM_DEVICE      (SIM_DEVICE),
     .USE_IBUFDISABLE ("TRUE")
   ) IOBUFDS_inst (
    .O              (external_bsync),
