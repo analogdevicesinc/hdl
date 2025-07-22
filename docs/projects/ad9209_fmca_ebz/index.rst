@@ -171,58 +171,28 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+===========  =========  =======  =======
+GPIO signal  Direction  HDL no.  Versal
+===========  =========  =======  =======
+rxen[1:0]    OUT        57:56    25:24
+rstb         OUT        55       23
+hmc_sync     OUT        54       22
+irqb[1:0]    IN         53:52    21:20
+agc3[1:0]    IN         51:50    19:18
+agc2[1:0]    IN         49:48    17:16
+agc1[1:0]    IN         47:46    15:14
+agc0[1:0]    IN         45:44    13:12
+hmc_gpio1    INOUT      43       11
+gpio[10:0]   INOUT      42:32    10:0
+===========  =========  =======  =======
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Versal
-   * - rxen[1:0]
-     - OUT
-     - 57:56
-     - 135:134
-   * - rstb
-     - OUT
-     - 55
-     - 133
-   * - hmc_sync
-     - OUT
-     - 54
-     - 132
-   * - irqb[1:0]
-     - IN
-     - 53:52
-     - 131:130
-   * - agc3[1:0]
-     - IN
-     - 51:50
-     - 129:128
-   * - agc2[1:0]
-     - IN
-     - 49:48
-     - 127:126
-   * - agc1[1:0]
-     - IN
-     - 47:46
-     - 125:124
-   * - agc0[1:0]
-     - IN
-     - 45:44
-     - 123:122
-   * - hmc_gpio1
-     - INOUT
-     - 43
-     - 121
-   * - gpio[10:0]
-     - INOUT
-     - 42:32
-     - 120:110
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Versal = Software GPIOs, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

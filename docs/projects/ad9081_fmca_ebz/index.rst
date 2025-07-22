@@ -471,75 +471,30 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+===========  =========  =======  =========  ===================  ======
+GPIO signal  Direction  HDL no.  Zynq-7000  Zynq UltraScale+ MP  Versal
+===========  =========  =======  =========  ===================  ======
+txen[1:0]    OUT        59:58    113:112    137:136              27:26
+rxen[1:0]    OUT        57:56    111:110    135:134              25:24
+rstb         OUT        55       109        133                  23
+hmc_sync     OUT        54       108        132                  22
+irqb[1:0]    IN         53:52    107:106    131:130              21:20
+agc3[1:0]    IN         51:50    105:104    129:128              19:18
+agc2[1:0]    IN         49:48    103:102    127:126              17:16
+agc1[1:0]    IN         47:46    101:100    125:124              15:14
+agc0[1:0]    IN         45:44    99:98      123:122              13:12
+hmc_gpio1    INOUT      43       97         121                  11
+gpio[10:0]   INOUT      42:32    96:86      120:110              10:0
+===========  =========  =======  =========  ===================  ======
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - txen[1:0]
-     - OUT
-     - 59:58
-     - 113:112
-     - 137:136
-   * - rxen[1:0]
-     - OUT
-     - 57:56
-     - 111:110
-     - 135:134
-   * - rstb
-     - OUT
-     - 55
-     - 109
-     - 133
-   * - hmc_sync
-     - OUT
-     - 54
-     - 108
-     - 132
-   * - irqb[1:0]
-     - IN
-     - 53:52
-     - 107:106
-     - 131:130
-   * - agc3[1:0]
-     - IN
-     - 51:50
-     - 105:104
-     - 129:128
-   * - agc2[1:0]
-     - IN
-     - 49:48
-     - 103:102
-     - 127:126
-   * - agc1[1:0]
-     - IN
-     - 47:46
-     - 101:100
-     - 125:124
-   * - agc0[1:0]
-     - IN
-     - 45:44
-     - 99:98
-     - 123:122
-   * - hmc_gpio1
-     - INOUT
-     - 43
-     - 97
-     - 121
-   * - gpio[10:0]
-     - INOUT
-     - 42:32
-     - 96:86
-     - 120:110
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, Zynq UltraScale+ MP, Versal are Software GPIOs, to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
