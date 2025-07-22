@@ -50,8 +50,6 @@ module axi_adrv9001_sync_ctrl #(
 
   input       [ 9:0]      rx1_mcs_to_strobe_delay,
   input       [ 9:0]      rx2_mcs_to_strobe_delay,
-  input       [15:0]      rx1_stamp_delay,
-  input       [15:0]      rx2_stamp_delay,
 
   // control signals
 
@@ -111,8 +109,6 @@ module axi_adrv9001_sync_ctrl #(
   wire  [31:0]    status_s;
   wire  [ 9:0]    up_rx1_mcs_to_strobe_delay;
   wire  [ 9:0]    up_rx2_mcs_to_strobe_delay;
-  wire  [15:0]    up_rx1_stamp_delay;
-  wire  [15:0]    up_rx2_stamp_delay;
   wire            up_xfer_done_s;
 
   // decode block select
@@ -204,8 +200,6 @@ module axi_adrv9001_sync_ctrl #(
           4'ha: up_rdata_int <= up_mcs_sync_pulse_6_delay;
           4'hb: up_rdata_int <= {22'd0,up_rx1_mcs_to_strobe_delay};
           4'hc: up_rdata_int <= {22'd0,up_rx2_mcs_to_strobe_delay};
-          4'hd: up_rdata_int <= {16'd0,up_rx1_stamp_delay};
-          4'he: up_rdata_int <= {16'd0,up_rx2_stamp_delay};
           default: up_rdata_int <= 0;
         endcase
       end else begin
@@ -221,28 +215,24 @@ module axi_adrv9001_sync_ctrl #(
     .rst(ref_rst_s));
 
   up_xfer_status #(
-    .DATA_WIDTH(26)
+    .DATA_WIDTH(10)
   ) i_xfer_rx1_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_status ({up_rx1_mcs_to_strobe_delay,
-                      up_rx1_stamp_delay}),
+    .up_data_status ({up_rx1_mcs_to_strobe_delay}),
     .d_rst (rx1_rst),
     .d_clk (rx1_clk),
-    .d_data_status ({rx1_mcs_to_strobe_delay,
-                     rx1_stamp_delay}));
+    .d_data_status ({rx1_mcs_to_strobe_delay}));
 
   up_xfer_status #(
     .DATA_WIDTH(26)
   ) i_xfer_rx2_status (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_data_status ({up_rx2_mcs_to_strobe_delay,
-                      up_rx2_stamp_delay}),
+    .up_data_status ({up_rx2_mcs_to_strobe_delay}),
     .d_rst (rx2_rst),
     .d_clk (rx2_clk),
-    .d_data_status ({rx2_mcs_to_strobe_delay,
-                     rx2_stamp_delay}));
+    .d_data_status ({rx2_mcs_to_strobe_delay}));
 
   up_xfer_cntrl #(
     .DATA_WIDTH(256)
