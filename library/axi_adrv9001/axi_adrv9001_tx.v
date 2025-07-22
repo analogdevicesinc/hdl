@@ -178,7 +178,6 @@ module axi_adrv9001_tx #(
     wire    [  4:0]   up_rack_s;
     wire    [ 31:0]   up_rdata_s[0:4];
 
-
     // rate counters and data sync signals
 
     sync_bits i_rate_sync_in (

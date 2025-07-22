@@ -261,7 +261,6 @@ module axi_adrv9001_core #(
   wire           rx1_rst_cdc_s;
   wire           tx1_rst_s;
   wire           tx1_rst_cdc_s;
-  wire           dac_sync_armed_cdc_s;
 
   wire           adc_sync_1;
   wire           adc_sync_2;
@@ -403,41 +402,6 @@ module axi_adrv9001_core #(
     .sync_in (adc_2_transfer_sync_d2 | adc_sync_2),
     .sync_armed (adc_2_armed_s)
   );
-
-  // workaround for  rx ch MCS to strobe delay measurment
-  // TODO move in the core part
-  reg [15:0] adc_1_I_ch_pattern = 16'h7e51;
-  reg [15:0] adc_2_I_ch_pattern = 16'h7e54;
-  reg [15:0] trx1_loopback_delay = 0;
-  reg [15:0] trx2_loopback_delay = 0;
-  reg        match_1 = 1'b0;
-  reg        match_2 = 1'b0;
-
-  always @(posedge rx1_clk) begin
-    if (adc_1_armed_s) begin
-      trx1_loopback_delay <= 0;
-      match_1 <= 1'b0;
-    end else if (adc_1_I_ch_pattern != rx1_data_i && match_1 == 1'b0) begin
-      trx1_loopback_delay <= trx1_loopback_delay + 1;
-      match_1 <= 1'b0;
-    end else begin
-      trx1_loopback_delay <= trx1_loopback_delay;
-      match_1 <= 1'b1;
-    end
-  end
-
-  always @(posedge rx2_clk) begin
-    if (adc_2_armed_s) begin
-      trx2_loopback_delay <= 0;
-      match_2 <= 1'b0;
-    end else if (adc_2_I_ch_pattern != rx2_data_i && match_2 == 1'b0) begin
-      trx2_loopback_delay <= trx2_loopback_delay + 1;
-      match_2 <= 1'b0;
-    end else begin
-      trx2_loopback_delay <= trx2_loopback_delay;
-      match_2 <= 1'b1;
-    end
-  end
 
   // adc DMA sync start
   assign adc_1_start_sync = ~adc_1_armed_s;
@@ -712,7 +676,7 @@ module axi_adrv9001_core #(
     .dac_sync_out (dac_sync_out_2),
     .dac_ext_sync_arm (dac_2_ext_sync_arm),
     .dac_ext_sync_disarm (dac_2_ext_sync_disarm),
-    .dac_sync_in_status (dac_sync_armed_cdc_s),
+    .dac_sync_in_status (dac_sync_armed_cd_2_s),
     .dac_valid (dac_2_valid),
     .dac_enable_i0 (dac_2_enable_i0),
     .dac_data_i0 (dac_2_data_i0[15:0]),
@@ -861,8 +825,6 @@ module axi_adrv9001_core #(
     .sync_config (sync_config),
     .rx1_mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
     .rx2_mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
-    .rx1_stamp_delay (trx1_loopback_delay),
-    .rx2_stamp_delay (trx2_loopback_delay),
     .mcs_sync_pulse_width (mcs_sync_pulse_width),
     .mcs_sync_pulse_1_delay (mcs_sync_pulse_1_delay),
     .mcs_sync_pulse_2_delay (mcs_sync_pulse_2_delay),
