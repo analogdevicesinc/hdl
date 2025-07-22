@@ -38,6 +38,7 @@
 module system_top #(
     parameter TX_NUM_LINKS = 1,
     parameter RX_NUM_LINKS = 1,
+    parameter SHARED_DEVCLK = 0,
     parameter ASYMMETRIC_A_B_MODE = 1
   ) (
 
@@ -198,6 +199,9 @@ module system_top #(
   wire            rx_device_clk;
   wire            tx_b_device_clk;
   wire            rx_b_device_clk;
+  wire            rx_device_clk_internal;
+  wire            rx_b_device_clk_internal;
+  wire            tx_b_device_clk_internal;
 
   wire            tmp_sync;
 
@@ -295,7 +299,7 @@ module system_top #(
 
   BUFG i_rx_device_clk (
     .I (clkin0),
-    .O (rx_device_clk));
+    .O (rx_device_clk_internal));
 
   BUFG i_tx_device_clk (
     .I (clkin1),
@@ -303,16 +307,20 @@ module system_top #(
 
   BUFG_GT i_rx_b_device_clk (
     .I (clkin2),
-    .O (rx_b_device_clk));
+    .O (rx_b_device_clk_internal));
 
   BUFG_GT i_tx_b_device_clk (
     .I (clkin3),
-    .O (tx_b_device_clk));
+    .O (tx_b_device_clk_internal));
 
   BUFG i_selectio_clk_in(
     .I (selectio_clk_in),
     .O (pll_inclk));
   // spi
+
+  assign rx_device_clk   = SHARED_DEVCLK ? tx_device_clk : rx_device_clk_internal;
+  assign rx_b_device_clk = SHARED_DEVCLK ? tx_device_clk : rx_b_device_clk_internal;
+  assign tx_b_device_clk = SHARED_DEVCLK ? tx_device_clk : tx_b_device_clk_internal;
 
   assign spi2_cs[5:0] = spi_csn[5:0];
   assign spi2_sclk    = spi_clk;

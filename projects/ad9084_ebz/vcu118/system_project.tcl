@@ -69,6 +69,7 @@ adi_project ad9084_ebz_vcu118 0 [list \
   TX_B_JESD_NP        [get_env_param TX_B_JESD_NP        12 ] \
   RX_B_KS_PER_CHANNEL [get_env_param RX_B_KS_PER_CHANNEL 32 ] \
   TX_B_KS_PER_CHANNEL [get_env_param TX_B_KS_PER_CHANNEL 32 ] \
+  SHARED_DEVCLK       [get_env_param SHARED_DEVCLK        1 ] \
 ]
 
 adi_project_files ad9084_ebz_vcu118 [list \
