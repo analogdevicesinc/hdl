@@ -64,12 +64,23 @@ module tx_fsrc #(
 
   wire [NUM_OF_CHANNELS-1:0][CHANNEL_WIDTH-1:0] in_data_arr;
   wire [NUM_OF_CHANNELS-1:0][CHANNEL_WIDTH-1:0] out_data_arr;
+  wire                      [   DATA_WIDTH-1:0] deinterleaved_data;
+  wire                      [   DATA_WIDTH-1:0] out_data_deinterleaved;
+
+  /* Data from the offload should come interleaved */
+  ad_perfect_shuffle #(
+    .NUM_GROUPS (SAMPLES_PER_CHANNEL),
+    .WORDS_PER_GROUP (NUM_OF_CHANNELS),
+    .WORD_WIDTH (SAMPLE_DATA_WIDTH)
+  ) i_deinterleave (
+    .data_in (in_data),
+    .data_out (deinterleaved_data));
 
   /* Map a flat array to a 2d array of data per channel and vice-versa */
   genvar ii;
   for (ii = 0; ii < NUM_OF_CHANNELS; ii = ii + 1) begin
-    assign in_data_arr[ii] = in_data[ii*CHANNEL_WIDTH+:CHANNEL_WIDTH];
-    assign out_data[ii*CHANNEL_WIDTH+:CHANNEL_WIDTH] = out_data_arr[ii];
+    assign in_data_arr[ii] = deinterleaved_data[ii*CHANNEL_WIDTH+:CHANNEL_WIDTH];
+    assign out_data_deinterleaved[ii*CHANNEL_WIDTH+:CHANNEL_WIDTH] = out_data_arr[ii];
   end
 
   always @(posedge clk) begin
@@ -232,6 +243,15 @@ module tx_fsrc #(
     debug_flags[1] <= reset;
     debug_flags[0] <= 1'b1;
   end
+
+  /* Since we are connecting to upack, the data needs to be interleaved again */
+  ad_perfect_shuffle #(
+    .NUM_GROUPS (NUM_OF_CHANNELS),
+    .WORDS_PER_GROUP (SAMPLES_PER_CHANNEL),
+    .WORD_WIDTH (SAMPLE_DATA_WIDTH)
+  ) i_interleave (
+    .data_in (out_data_deinterleaved),
+    .data_out (out_data));
 
 endmodule
 
