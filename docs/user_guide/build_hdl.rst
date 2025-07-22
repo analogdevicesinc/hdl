@@ -55,23 +55,30 @@ be described:
 1. Needed tools
 -------------------------------------------------------------------------------
 
-#. Install the required FPGA design suite. We use `AMD Xilinx Vivado`_,
-   `Intel Quartus Prime Pro and Standard`_, `Lattice Radiant`_ and
-   `Lattice Propel`_.
-   You can find information about the proper version in the section
-   :ref:`build_hdl tool-versions`.
-   Make sure that you're always using the latest release.
+We offer reference designs for our evaluation boards, on three FPGA platforms:
+from AMD Xilinx, from Intel and from Lattice.
+
+Each one of these platforms has their own FPGA design suites:
+
+- AMD Xilinx with `AMD Xilinx Vivado and Vitis`_ (HDL and software)
+- Intel with `Intel Quartus Prime Pro and Standard`_
+- Lattice with `Lattice Radiant`_ and `Lattice Propel`_
+
 #. The **required** Vivado/Quartus/Propel/Radiant version can be found in:
 
-   -  :git-hdl:`scripts/adi_env.tcl`
-   -  or in the `release notes <https://github.com/analogdevicesinc/hdl/releases>`__
+   - :git-hdl:`scripts/adi_env.tcl`
+   - or in the `release notes <https://github.com/analogdevicesinc/hdl/releases>`__
 
-#. Download the tools from the following links:
+   More details can be found at :ref:`build_hdl tool-versions`.
+   Make sure that you're always using the latest release.
 
-   -  :xilinx:`AMD tools <support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html>`
+#. Download and install the **Linux version** of the FPGA design suite that
+   you want to use, from the following links:
+
+   -  :xilinx:`AMD tools <support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html>` *
       (make sure you're downloading the proper installer.
       For full installation, it is better to choose the one that downloads
-      and installs both Vivado and Vitis at the same time)
+      and installs **both Vivado and Vitis** at the same time)
    -  :intel:`Intel tools <content/www/us/en/programmable/downloads/download-center.html>`
    -  `Lattice tools <https://www.latticesemi.com/en/Products/DesignSoftwareAndIP>`__
 
@@ -81,6 +88,12 @@ be described:
 #. We are using `git <https://git-scm.com/>`__ for version control and
    `GNU Make <https://www.gnu.org/software/make/>`__ to build the
    projects. Depending on what OS you're using, you have these options:
+
+.. admonition:: Legend
+
+   \* - the Linux version is required for the tools, because even if you're OS
+   is Windows, you need to use WSL and install the tools under WSL (Windows
+   Subsystem for Linux).
 
 .. _build_hdl setup-repo:
 
@@ -101,7 +114,8 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the repository. This is the best method to get the sources.
 
-Here, we are cloning the repository inside a directory called **adi**.
+Here, we are cloning the repository inside the home directory of your Linux
+file system.
 Please refer to the :ref:`git_repository` section for more details.
 
 Cloning is now done using HTTPS and a classic PAT (Personal Access Token).
@@ -110,7 +124,9 @@ More details on how to do this,
 
 .. shell:: bash
 
+   ~/
    $git clone https://github.com/analogdevicesinc/hdl.git
+   $cd hdl
 
 If you use WSL, you must clone your HDL repository in the WSL file system.
 For example ``\\wsl.localhost\Ubuntu\home\username\hdl``.
@@ -169,6 +185,7 @@ for the current session (or open a new one) and call the defined method:
 
 .. shell:: bash
 
+   ~/hdl
    $source ~/.bashrc
    $load_amd
 
@@ -190,10 +207,10 @@ For AMD Xilinx Vivado:
 .. shell:: bash
 
    ~/hdl
-   $source /opt/Xilinx/Vivado/202x.x/settings64.sh
+   $source /opt/Xilinx/Vivado/2023.2/settings64.sh
 
-   $export PATH=$PATH:/opt/Xilinx/Vivado/202x.x/bin:/opt/Xilinx/Vitis/202x.x/bin
-   $export PATH=$PATH:/opt/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+   $export PATH=$PATH:/opt/Xilinx/Vivado/2023.2/bin:/opt/Xilinx/Vitis/2023.2/bin
+   $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/nt/bin
 
 For Intel Quartus:
 
@@ -207,8 +224,8 @@ For Lattice:
 .. shell:: bash
 
    ~/hdl
-   $export PATH=$PATH:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
-   $export PATH=$PATH:/opt/lscc/radiant/202x.x/bin/lin64
+   $export PATH=$PATH:/opt/lscc/propel/2023.2/builder/rtf/bin/lin64
+   $export PATH=$PATH:/opt/lscc/radiant/2023.2/bin/lin64
 
 3b. Windows environment setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -258,13 +275,13 @@ In the link above, you can find the installation guide for WSL on Windows.
 .. collapsible:: How to install the tools in WSL
 
    Before building any project,
-   :red:`it is necessary to install the Linux version for Vivado, in the WSL file system`,
-   because on the Ubuntu distribution on WSL you cannot
-   run projects from on the Windows version of them. When you have to choose
-   the installation path, choose the location where WSL is installed
-   ``\\wsl.localhost\Ubuntu\opt``.
+   :red:`it is necessary to install the Linux version for Vivado & Vitis, in the WSL file system`,
+   because on the Ubuntu distribution on WSL you cannot run projects from on
+   the Windows version of them. When you have to choose
+   the installation path, choose the location where WSL is installed, in its
+   /opt folder ``\\wsl.localhost\Ubuntu\opt``.
 
-   Also, to get the best performance, you must clone your HDL repository in
+   Also, to get the best performance, you **must clone** your HDL repository in
    the WSL file system. For example: ``\\wsl.localhost\Ubuntu\home\username\hdl``.
 
    For more information you can consult the following link:
@@ -279,10 +296,13 @@ In the link above, you can find the installation guide for WSL on Windows.
       $chmod +x FPGAs_AdaptiveSoCs_Unified_2023.2_1113_1001_Lin64.bin
       $sudo ./FPGAs_AdaptiveSoCs_Unified_2023.2_1113_1001_Lin64.bin
 
+   The installation directory for AMD Xilinx Vivado & Vitis we chose to be
+   ``/opt/Xilinx``.
+
    Now, you may have noticed that the installation raised a couple of
    warnings, such as:
 
-   .. code-block::
+   .. shell:: bash
 
       $/tools/Xilinx/Vivado/2023.2/bin/rdiArgs.sh: line 31: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory
       /bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
@@ -302,25 +322,27 @@ In the link above, you can find the installation guide for WSL on Windows.
       $cd /opt/Xilinx/Vitis/2023.2/scripts
       $sudo ./installLibs.sh
       $sudo apt-get install libxrender1 libxtst6 libxi6
-      $sudo apt-get install libtinfo5 # to be used only in case you have issues with missing libtinfo5 when building a project
+      $sudo apt-get install libtinfo5
+      $wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb
+      $sudo apt install ./libtinfo5_6.3-2ubuntu0.1_amd64.deb
 
    Then you need to add the following paths to your $PATH environment variable:
 
    .. shell:: bash
 
-      $export PATH=$PATH:/opt/path_to/Xilinx/Vivado/202x.x/bin
-      $export PATH=$PATH:/opt/path_to/Xilinx/Vivado_HLS/202x.x/bin
+      $export PATH=$PATH:/opt/Xilinx/Vivado/2023.2/bin
+      $export PATH=$PATH:/opt/Xilinx/Vivado_HLS/2023.2/bin
 
-      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/bin
-      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
-      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
-      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
-      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
-      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/bin
+      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/nt/bin
+      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/arm/nt/bin
+      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_be/bin
+      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_le/bin
+      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin
 
-.. collapsible:: Alternatives to Cygwin/WSL/Linux terminal
+.. collapsible:: Alternatives to WSL/Linux terminal
 
-   If you do not want to use neither Cygwin nor WSL, there might still be some
+   If you do not want to use WSL/Linux/Cygwin, there might still be some
    alternative. There are ``make`` alternatives for **Windows Command
    Prompt**, minimalist GNU for Windows (**MinGW**), or the **Cygwin
    variations** installed by the tools itself.
@@ -329,7 +351,7 @@ In the link above, you can find the installation guide for WSL on Windows.
    Some of these may not be fully functional with our scripts and/or projects.
    If you are an Intel user, the **Nios II Command Shell** does support make.
    If you are an AMD user, use the **gnuwin** installed as part of the SDK,
-   usually at ``C:\Xilinx\Vitis\202x.x\gnuwin\bin``.
+   usually at ``C:\Xilinx\Vitis\2023.2\gnuwin\bin``.
 
 **How to verify your environment setup**
 
@@ -373,14 +395,14 @@ the Vivado Tcl console building mode to build the BOOT.BIN (see
    .. shell:: bash
 
       ~/hdl
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado/202x.x/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado/2023.2/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado_HLS/2023.2/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/microblaze/nt/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/arm/nt/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_be/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_le/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin
 
    For Intel Quartus:
 
@@ -394,8 +416,8 @@ the Vivado Tcl console building mode to build the BOOT.BIN (see
    .. shell:: bash
 
       ~/hdl
-      $export PATH=$PATH:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
-      $export PATH=$PATH:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
+      $export PATH=$PATH:/cygdrive/c/lscc/propel/2023.2/builder/rtf/bin/nt64
+      $export PATH=$PATH:/cygdrive/c/lscc/radiant/2023.2/bin/nt64
 
 .. collapsible::  Building the libraries and the project in Vivado GUI
 
@@ -488,7 +510,7 @@ in hardware using the Vivado version
 :ref:`specific for that branch <build_hdl needed-tools>`.
 
 Simply put, to build a project you just run ``make`` in your Linux terminal
-or in Cygwin. For more details, please read the rest of the documentation.
+or in WSL. For more details, please read the rest of the documentation.
 
 To clean only a project or an IP core before building it again,
 run ``make clean``.
@@ -502,7 +524,7 @@ project, run ``make clean-all``.
 
 An AMD project is built the same way as an Intel project. The only
 exception is that there are a few 'sub-make(s)' for the library
-components. The way of building a project in Cygwin and WSL is almost the same.
+components.
 
 You just need to go to the hdl/projects folder, choose the ADI part that you
 want to use, then enter the folder of the FPGA carrier that you want, and run
@@ -900,7 +922,7 @@ The **sof** file is used to program the device.
 .. warning::
 
    Instantiating IPs in Propel Builder CLI or GUI does not work in WSL for an
-   unknown compatibility reason. You can use Cygwin on Windows or a normal
+   unknown compatibility reason. You can use WSL/Cygwin on Windows or a normal
    Linux installation.
 
 .. warning::
@@ -1311,7 +1333,7 @@ ignored, they won't affect the functionality of the IP or the project.
 However, you may not be able to archive these projects. The irony is
 that it does copy these files to the project area, but ignores them.
 
-.. _AMD Xilinx Vivado: https://www.xilinx.com/support/download.html
+.. _AMD Xilinx Vivado and Vitis: https://www.xilinx.com/support/download.html
 
 .. _Intel Quartus Prime Pro and Standard: https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html
 
