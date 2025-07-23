@@ -1,4 +1,6 @@
-ADRV9001 DUAL HDL Project
+.. _adrv9001_dual:
+
+ADRV9001-DUAL HDL Project
 ===============================================================================
 
 Overview
@@ -24,7 +26,7 @@ Supported boards
 Supported devices
 -------------------------------------------------------------------------------
 
-- :adi:`ADRV9002`, in :adi:`ADRV9002NP/W2/PCBZ <EVAL-ADRV9002>`,
+- :adi:`ADRV9002`, in :adi:`ADRV9002NP/W2/PCBZ <EVAL-ADRV9002>`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -69,39 +71,42 @@ The :git-hdl:`AXI ADRV9001 IP <library/axi_adrv9001>` in this HDL project is
 configured to work in LVDS and CMOS interface; it supports two configuration
 modes:
 
-- 2R2T - 2x Rx and 2x Tx independent control and DMAs for the two RF channels
-- 1R1T - 1x Rx and 1x Tx common control and DMAs for the two RF channels also
+- 2R2T - 2x RX and 2x TX independent control and DMAs for the two RF channels
+- 1R1T - 1x RX and 1x TX common control and DMAs for the two RF channels also
   noted as R1_MODE
 
-For any mode the number of RF channels(two) doesn't change only the controlling
-instance and the DMAs.
+For any mode, the number of RF channels (two) doesn't change --- only the
+controlling instance and the DMAs do.
 
 The design has four receive paths and four transmit paths.
-Two of the receive paths (Rx12) have four channels and the other (Rx2) two
-channels. These only work independently, not concomitantly.
-One must chose between two active paths (2R2T), or just the Rx12 (1R1T) path,
-which has four active channels, while Rx2 is disabled.
-The same applies to the transmit path but in the other direction.
 
-When only the Rx12 path is active with four channels mode, the axi_adrv9001
-core will take ownership of both of its source synchronous interfaces.
+Two of the receive paths (RX12) have four channels and the other (RX2) two
+channels. These only work independently, not concomitantly.
+
+One must choose between two active paths (2R2T), or just the RX12 (1R1T) path,
+which has four active channels, while RX2 is disabled.
+
+The same applies to the transmit path, but in the other direction.
+
+When only the RX12 path is active with four channels mode, the axi_adrv9001
+core will take ownership of both of its source-synchronous interfaces.
 The requirement in this case is that both interfaces, of an axi_adrv9001 core,
 run at the same rate.
 
-Regarding the INDEPENDENT_1R1T_SUPPORT and COMMON_2R2T_SUPPORT parameters,
+Regarding the ``INDEPENDENT_1R1T_SUPPORT`` and ``COMMON_2R2T_SUPPORT`` parameters
 related to the above modes, their purpose is to remove the unused data paths,
 reducing in this way the resource utilisation. By default all modes/paths are
 available.
 
-For more info see the parameter description section of :ref:`axi_adrv9001`.
+For more info, see the Parameter Description section of :ref:`axi_adrv9001`.
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The clocks are managed by the ADRV9002 devices and are software programmable.
-Please refer to the device datasheet for the various clocks within the device.
+The clocks are managed by the :adi:`ADRV9002` devices and are software-programmable.
+Please refer to the device data sheet for the various clocks within the device.
 
-Independently a board provides a 38.4MHz crystal for the :adi:`ADRV9002`.
+Independently, a board provides a 38.4MHz crystal for the :adi:`ADRV9002`.
 An external reference clock can also be used.
 
 CPU/Memory interconnects addresses
@@ -227,12 +232,38 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
+This project has the following `make` parameters:
+
+- CMOS_LVDS_N - selects the interface type
+  - 0 = LVDS (default)
+  - 1 = CMOS
+- USE_RX_CLK_FOR_TX1 - selects the clock to drive the TX1 SSI interface
+  - 0 = TX1 dedicated clock (default)
+  - 1 = RX1 SSI clock
+  - 2 = RX2 SSI clock
+- USE_RX_CLK_FOR_TX2 - selects the clock to drive the TX2 SSI interface
+  - 0 = TX2 dedicated clock (default)
+  - 1 = RX1 SSI clock
+  - 2 = RX2 SSI clock
+
 **Linux/Cygwin/WSL**
 
-.. shell::
+Building the default configuration (LVDS):
+
+.. shell:: bash
 
    $cd hdl/projects/adrv9001_dual/zcu102
    $make
+
+Example configuration with CMOS:
+
+.. shell:: bash
+
+   ~/hdl/projects/adrv9001_dual/zcu102
+   $make CMOS_LVDS_N=1
+
+The result of the build, if parameters were used, will be in a folder named
+by the configuration used ``CMOSLVDSN1``.
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -242,18 +273,12 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here you can find the quick start guides available for these evaluation boards:
-
-- :dokuwiki:`ZCU102 <resources/eval/user-guides/adrv9002_dual/quickstart/zynqmp>`
-
-Other useful information:
-
 - :dokuwiki:`[Wiki] ADRV9001/2 User Guide <resources/eval/user-guides/adrv9001>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`ADRV9001 HDL project source code <projects/adrv9001>`
+- :git-hdl:`ADRV9001_DUAL HDL project source code <projects/adrv9001_dual>`
 
 .. list-table::
    :widths: 30 35 35
@@ -289,11 +314,6 @@ Software related
 
 - :dokuwiki:`[Wiki] ADRV9002 Device Driver Customization <resources/tools-software/linux-drivers/iio-transceiver/adrv9002-customization>`
 - :dokuwiki:`[Wiki] ADRV9002 Integrated Dual RF Transceiver Linux device driver <resources/tools-software/linux-drivers/iio-transceiver/adrv9002>`
-
-List of Linux device trees (to be dev).
-
-- :git-linux:`adrv9002 ZCU102 (rev10) Linux device tree <arch/arm/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002-dual.dts>`
-- :git-linux:`adrv9002 ZCU102 (rev10) Linux device 2rx2tx tree <arch/arm/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002-dual-rx2tx2.dts>`
 
 .. include:: ../common/more_information.rst
 
