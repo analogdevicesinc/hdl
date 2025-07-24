@@ -41,9 +41,10 @@ package axi_tdd_pkg;
     WAITING = 2'b10,
     RUNNING = 2'b11} state_t;
 
-  localparam
-    PCORE_VERSION = 32'h00020062,
-    PCORE_MAGIC   = 32'h5444444E; // "TDDN", big endian
+  localparam [31:0] CORE_VERSION = {16'h0002,     /* MAJOR */
+                                     8'h00,       /* MINOR */
+                                     8'h62};      /* PATCH */
+  localparam CORE_MAGIC   = 32'h5444444E; // "TDDN", big endian
 
   // register address offset
   localparam

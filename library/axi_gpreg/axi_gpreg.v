@@ -115,7 +115,9 @@ module axi_gpreg #(
 
   // version
 
-  localparam  [31:0]  PCORE_VERSION = 32'h00040063;
+  localparam [31:0] CORE_VERSION = {16'h0004,     /* MAJOR */
+                                     8'h00,       /* MINOR */
+                                     8'h63};      /* PATCH */
   localparam  integer BUF_ENABLE[7:0] = {BUF_ENABLE_7, BUF_ENABLE_6, BUF_ENABLE_5, BUF_ENABLE_4,
     BUF_ENABLE_3, BUF_ENABLE_2, BUF_ENABLE_1, BUF_ENABLE_0};
 

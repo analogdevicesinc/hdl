@@ -21,6 +21,7 @@ adi_ip_files axi_tdd [list \
   "axi_tdd.sv" ]
 
 adi_ip_properties axi_tdd
+adi_set_ip_version_from_file "axi_tdd_pkg.sv"
 adi_ip_ttcl axi_tdd "axi_tdd_constr.ttcl"
 set_property display_name "ADI AXI TDD Controller" [ipx::current_core]
 set_property description "ADI AXI TDD Controller" [ipx::current_core]

@@ -20,6 +20,7 @@ adi_ip_files axi_pwm_gen [list \
   "axi_pwm_gen.sv"]
 
 adi_ip_properties axi_pwm_gen
+adi_set_ip_version_from_file "axi_pwm_gen.sv"
 adi_ip_ttcl axi_pwm_gen "axi_pwm_gen_constr.ttcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen} [ipx::current_core]

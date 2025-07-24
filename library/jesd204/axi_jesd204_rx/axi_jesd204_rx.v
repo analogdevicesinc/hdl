@@ -90,7 +90,9 @@ module axi_jesd204_rx #(
   input [31:0] status_synth_params2
 );
 
-  localparam PCORE_VERSION = 32'h00010761; // 1.07.a
+  localparam [31:0] CORE_VERSION = {16'h0001,     /* MAJOR */
+                                     8'h07,       /* MINOR */
+                                     8'h61};      /* PATCH */
   localparam PCORE_MAGIC = 32'h32303452; // 204R
 
   /* Register interface signals */

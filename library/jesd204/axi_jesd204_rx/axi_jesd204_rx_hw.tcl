@@ -30,6 +30,7 @@ ad_ip_files axi_jesd204_rx [list \
   $ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl \
   $ad_hdl_dir/library/intel/common/up_clock_mon_constr.sdc \
 ]
+ad_set_ip_version_from_file "axi_jesd204_rx.v"
 
 # parameters
 

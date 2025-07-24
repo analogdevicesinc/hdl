@@ -117,7 +117,9 @@ module axi_fmcadc5_sync #(
 
   // version
 
-  localparam  [31:0]  PCORE_VERSION = 32'h00040063;
+  localparam [31:0] CORE_VERSION = {16'h0004,     /* MAJOR */
+                                     8'h00,       /* MINOR */
+                                     8'h63};      /* PATCH */
 
   // internal registers
 

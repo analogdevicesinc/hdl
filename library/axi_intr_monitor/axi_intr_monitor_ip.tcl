@@ -13,6 +13,7 @@ adi_ip_files axi_intr_monitor [list \
   "axi_intr_monitor.v" ]
 
 adi_ip_properties axi_intr_monitor
+adi_set_ip_version_from_file "axi_intr_monitor.v"
 
 ipx::infer_bus_interface irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
 

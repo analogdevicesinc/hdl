@@ -27,6 +27,7 @@ ad_ip_files axi_laser_driver [list \
   "axi_laser_driver_constr.sdc" \
   "axi_laser_driver_regmap.v" \
   "axi_laser_driver.v"]
+ad_set_ip_version_from_file "axi_laser_driver.v"
 
 # IP parameters
 

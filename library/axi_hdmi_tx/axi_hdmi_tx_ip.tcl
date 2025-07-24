@@ -31,6 +31,7 @@ adi_ip_files axi_hdmi_tx [list \
   "axi_hdmi_tx.v" ]
 
 adi_ip_properties axi_hdmi_tx
+adi_set_ip_version_from_file "$ad_hdl_dir/library/common/up_hdmi_tx.v"
 
 adi_init_bd_tcl
 adi_ip_bd axi_hdmi_tx "bd/bd.tcl"

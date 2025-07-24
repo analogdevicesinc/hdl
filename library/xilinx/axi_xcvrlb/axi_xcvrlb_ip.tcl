@@ -19,6 +19,7 @@ adi_ip_files axi_xcvrlb [list \
   "axi_xcvrlb.v" ]
 
 adi_ip_properties_lite axi_xcvrlb
+adi_set_ip_version_from_file "axi_xcvrlb.v"
 
 adi_init_bd_tcl
 adi_ip_bd axi_xcvrlb "bd/bd.tcl"

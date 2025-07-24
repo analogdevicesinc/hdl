@@ -20,6 +20,7 @@ adi_ip_files axi_jesd204_tx [list \
 set_property source_mgmt_mode DisplayOnly [current_project]
 
 adi_ip_properties axi_jesd204_tx
+adi_set_ip_version_from_file "axi_jesd204_tx.v"
 
 adi_ip_ttcl axi_jesd204_tx "axi_jesd204_tx_ooc.ttcl"
 

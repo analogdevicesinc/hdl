@@ -77,7 +77,9 @@ module up_clkgen #(
   output  reg             up_rack
 );
 
-  localparam  PCORE_VERSION = 32'h00050063;
+  localparam [31:0] CORE_VERSION = {16'h0005,     /* MAJOR */
+                                     8'h00,       /* MINOR */
+                                     8'h63};      /* PATCH */
 
   // internal registers
 
@@ -165,7 +167,7 @@ module up_clkgen #(
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
         case (up_raddr[7:0])
-          8'h00: up_rdata <= PCORE_VERSION;
+          8'h00: up_rdata <= CORE_VERSION;
           8'h01: up_rdata <= ID;
           8'h02: up_rdata <= up_scratch;
           8'h07: up_rdata <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]

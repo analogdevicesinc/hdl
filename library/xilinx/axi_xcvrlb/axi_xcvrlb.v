@@ -102,7 +102,9 @@ module axi_xcvrlb #(
 
   // parameters
 
-  localparam  [31:0]  VERSION = 32'h00100161;
+  localparam [31:0] CORE_VERSION = {16'h0010,     /* MAJOR */
+                                     8'h01,       /* MINOR */
+                                     8'h61};      /* PATCH */
 
   // defaults
 
@@ -149,7 +151,7 @@ module axi_xcvrlb #(
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
         case (up_raddr_s)
-          10'h000: up_rdata <= VERSION;
+          10'h000: up_rdata <= CORE_VERSION;
           10'h002: up_rdata <= up_scratch;
           10'h004: up_rdata <= {31'd0, up_resetn};
           10'h005: up_rdata <= up_status;

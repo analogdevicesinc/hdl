@@ -135,7 +135,9 @@ module axi_adxcvr_up #(
 
   // parameters
 
-  localparam  [31:0]  VERSION = 32'h00110561;
+  localparam [31:0] CORE_VERSION = {16'h0011,     /* MAJOR */
+                                     8'h05,       /* MINOR */
+                                     8'h61};      /* PATCH */
 
   // internal registers
 
@@ -530,7 +532,7 @@ module axi_adxcvr_up #(
       up_rreq_d <= up_rreq;
       if (up_rreq == 1'b1) begin
         case (up_raddr)
-          10'h000: up_rdata_d <= VERSION;
+          10'h000: up_rdata_d <= CORE_VERSION;
           10'h001: up_rdata_d <= ID;
           10'h002: up_rdata_d <= up_scratch;
           10'h004: up_rdata_d <= {30'd0, up_bufstatus_rst, up_resetn};

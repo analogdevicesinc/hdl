@@ -115,7 +115,9 @@ module i3c_controller_regmap #(
   output     [3:0] rmap_dev_char_data
 );
 
-  localparam PCORE_VERSION = 'h00000100;
+  localparam [31:0] CORE_VERSION = {16'h0000,     /* MAJOR */
+                                     8'h01,       /* MINOR */
+                                     8'h00};      /* PATCH */
 
   reg [31:0] up_scratch  = 32'h00; // Scratch register
   reg        up_sw_reset = 1'b1;
@@ -357,7 +359,7 @@ module i3c_controller_regmap #(
 
   always @(posedge s_axi_aclk) begin
     case (up_raddr_s[7:0])
-      `I3C_REGMAP_VERSION:        up_rdata_ff <= PCORE_VERSION;
+      `I3C_REGMAP_VERSION:        up_rdata_ff <= CORE_VERSION;
       `I3C_REGMAP_DEVICE_ID:      up_rdata_ff <= ID;
       `I3C_REGMAP_SCRATCH:        up_rdata_ff <= up_scratch;
       `I3C_REGMAP_ENABLE:         up_rdata_ff <= up_sw_reset;

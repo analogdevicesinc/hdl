@@ -63,7 +63,9 @@ module axi_intr_monitor (
   input   [ 2:0]  s_axi_arprot
 );
 
-  parameter VERSION = 32'h00010000;
+  localparam [31:0] CORE_VERSION = {16'h0001,     /* MAJOR */
+                                     8'h00,       /* MINOR */
+                                     8'h00};      /* PATCH */
 
   reg     [31:0]  up_rdata                    = 'd0;
   reg             up_wack                     = 'd0;
@@ -170,7 +172,7 @@ module axi_intr_monitor (
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
         case (up_raddr_s[3:0])
-          4'h0: up_rdata <= VERSION;
+          4'h0: up_rdata <= CORE_VERSION;
           4'h1: up_rdata <= scratch;
           4'h2: up_rdata <= control;
           4'h3: up_rdata <= {31'h0,interrupt};
