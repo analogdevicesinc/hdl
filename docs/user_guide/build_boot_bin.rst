@@ -25,13 +25,16 @@ project) and ``u-boot.elf`` (from the SD card with Kuiper image).
 
    Check the :ref:`Enviroment <build_hdl environment>` section of :ref:`build_hdl`.
 
+As prerequisites, you need to have ``xlsclients`` from the ``x11-utils`` package
+installed in your Linux/WSL system.
+
 .. _build_boot_bin zynq:
 
 For Zynq
 -------------------------------------------------------------------------------
 
 This section applies to the Zynq-based carriers from
-:ref:`our list <architecture amd-platforms>`, but not limited to them only.
+:ref:`our list <architecture amd-platforms>`.
 
 Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
 cross-compiler for ``arm`` exists before running the script.
@@ -58,8 +61,14 @@ The script can take 3 parameters:
    See the beginning of :external+documentation:ref:`kuiper sdcard` for
    instructions on how to obtain the ADI Kuiper image.
 
-The script can be saved in the folder local to the project (for
-example, hdl/projects/fmcomms2/zed) and to be run from there.
+If you didn't use ``make`` parameters when building the project, then
+the script can be saved in the **folder local to the project** (for
+example, hdl/projects/$ADI_PART/$CARRIER) and **to be run from there**.
+
+If you did use ``make`` parameters, then you need to go to the build folder
+that was created based on the parameters you gave,
+(would look like this hdl/projects/$ADI_PART/$CARRIER/$param1_param2),
+save it there and **run it from there**.
 
 .. shell:: bash
 
@@ -69,7 +78,11 @@ example, hdl/projects/fmcomms2/zed) and to be run from there.
 
 The build output (``BOOT.BIN``) can be found in the local directory
 ``output_boot_bin`` where you ran the command.
-The folder follows the pattern: *hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*.
+
+The folder follows the following pattern if ``make`` parameters were not used
+*hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*, and this pattern if
+parameters were used
+*hdl/projects/$ADI_PART/$CARRIER/$PARAM1_PARAM2/output_boot_bin*.
 
 .. _build_boot_bin zynqmp:
 
@@ -106,6 +119,15 @@ The script can take 4 parameters (the last one is optional):
    See the beginning of :external+documentation:ref:`kuiper sdcard` for
    instructions on how to obtain the ADI Kuiper image.
 
+If you didn't use ``make`` parameters when building the project, then
+the script can be saved in the **folder local to the project** (for
+example, hdl/projects/$ADI_PART/$CARRIER) and **to be run from there**.
+
+If you did use ``make`` parameters, then you need to go to the build folder
+that was created based on the parameters you gave,
+(would look like this hdl/projects/$ADI_PART/$CARRIER/$param1_param2),
+save it there and **run it from there**.
+
 .. shell:: bash
 
    $cd hdl/projects/fmcomms2/zcu102
@@ -114,7 +136,10 @@ The script can take 4 parameters (the last one is optional):
 
 The build output (``BOOT.BIN``) can be found in the local directory
 ``output_boot_bin`` where you ran the command.
-The folder follows the pattern: *hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*.
+The folder follows the following pattern if ``make`` parameters were not used
+*hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*, and this pattern if
+parameters were used
+*hdl/projects/$ADI_PART/$CARRIER/$PARAM1_PARAM2/output_boot_bin*.
 
 .. _build_boot_bin versal:
 
@@ -151,6 +176,15 @@ The script can take 4 parameters:
    See the beginning of :external+documentation:ref:`kuiper sdcard` for
    instructions on how to obtain the ADI Kuiper image.
 
+If you didn't use ``make`` parameters when building the project, then
+the script can be saved in the **folder local to the project** (for
+example, hdl/projects/$ADI_PART/$CARRIER) and **to be run from there**.
+
+If you did use ``make`` parameters, then you need to go to the build folder
+that was created based on the parameters you gave,
+(would look like this hdl/projects/$ADI_PART/$CARRIER/$param1_param2),
+save it there and **run it from there**.
+
 .. shell:: bash
 
    $cd hdl/projects/ad9081_fmca_ebz/vck190
@@ -159,7 +193,11 @@ The script can take 4 parameters:
 
 The build output (``BOOT.BIN``) can be found in the local directory
 ``output_boot_bin`` where you ran the command.
-The folder follows the pattern: *hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*.
+The folder follows the following pattern if ``make`` parameters were not used
+*hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*, and this pattern if
+parameters were used
+*hdl/projects/$ADI_PART/$CARRIER/$PARAM1_PARAM2/output_boot_bin*.
+
 
 More information
 -------------------------------------------------------------------------------
