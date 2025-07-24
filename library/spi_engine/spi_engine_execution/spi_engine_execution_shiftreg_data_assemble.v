@@ -11,6 +11,7 @@ module spi_engine_execution_shiftreg_data_assemble #(
     input                                  data_ready,
     input                                  data_valid,
     input                           [15:0] current_cmd,
+    input                                  spi_lane_cmd,
     input                            [7:0] lane_mask,
     input                                  idle_state,
     input                            [7:0] left_aligned,
@@ -33,15 +34,12 @@ reg  [             (DATA_WIDTH)-1:0] data_reg;
 reg  [                          3:0] count_active_lanes = 0;
 
 wire       sdo_toshiftreg         = (transfer_active && trigger_tx && first_bit && sdo_enabled);
-wire [2:0] current_instr          = current_cmd[14:12];
-wire [1:0] configuration_register = current_cmd[9:8];
-wire       exec_lane_config_cmd   = ((current_instr == CMD_WRITE) && (configuration_register == REG_SPI_LANE_CONFIG));
 
-integer num_active_lanes     = NUM_OF_SDI;
-integer lane_index           = 0;
-integer lane_index_d         = 0;
+reg [3:0] num_active_lanes     = NUM_OF_SDI;
+reg [3:0] lane_index           = 0;
+reg [3:0] lane_index_d         = 0;
 integer valid_index          = 0;
-integer valid_indices [0:7];
+reg [3:0] valid_indices [0:7];
 
 assign data_assembled = aligned_data;
 assign last_handshake = last_handshake_int;
@@ -70,15 +68,16 @@ end
 
 // data line counter and stores activated lines
 // it returns valid_indices array necessary for correct buffering of data
-integer i;
-integer j;
-integer mask_index;
+reg [3:0] i;
+reg [3:0] j;
+reg [3:0] mask_index;
 always @(posedge clk) begin
     if (resetn == 1'b0) begin
+        num_active_lanes <= NUM_OF_SDI;
         mask_index <= 0;
         j <= 0;
     end else begin
-        if (exec_lane_config_cmd) begin
+        if (spi_lane_cmd) begin
             count_active_lanes = 0;
             i = 0;
             j <= 0;

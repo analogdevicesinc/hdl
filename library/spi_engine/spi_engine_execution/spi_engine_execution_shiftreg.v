@@ -71,6 +71,8 @@ module spi_engine_execution_shiftreg #(
   input           sdo_enabled,
   input           sdi_enabled,
   input   [15:0]  current_cmd,
+  input           exec_cmd,
+  input           spi_lane_cmd,
   input           sdo_idle_state,
   input   [ 7:0]  left_aligned,
   input   [ 7:0]  word_length,
@@ -92,7 +94,6 @@ module spi_engine_execution_shiftreg #(
   wire sdo_toshiftreg; //it is using the valid data for shifting in this cycle
   wire last_sdi_bit;
   wire trigger_rx_s;
-  wire [2:0] current_instr = current_cmd[14:12];
   wire sdo_data_ready_int;
 
   // sdo_data_ready_int is active when two conditions are true:
@@ -102,7 +103,7 @@ module spi_engine_execution_shiftreg #(
   //    (s_offload_active || current_instr == CMD_TRANSFER)
   //      when s_offload_active, it is possible to prefetch
   //      when !s_offload_active, it is waiting for write instruction
-  assign sdo_data_ready_int = ((!data_sdo_v) || (sdo_toshiftreg)) && (s_offload_active || current_instr == CMD_TRANSFER);
+  assign sdo_data_ready_int = ((!data_sdo_v) || (sdo_toshiftreg)) && (s_offload_active || exec_cmd);
   assign sdo_data_ready = sdo_data_ready_int;
   assign sdo_io_ready = data_sdo_v;
 
@@ -120,6 +121,7 @@ module spi_engine_execution_shiftreg #(
     .data_ready (sdo_data_ready_int),
     .data_valid (sdo_data_valid),
     .current_cmd (current_cmd),
+    .spi_lane_cmd(spi_lane_cmd),
     .lane_mask (spi_lane_mask),
     .idle_state (sdo_idle_state),
     .left_aligned (left_aligned),
@@ -136,7 +138,7 @@ module spi_engine_execution_shiftreg #(
     // Load the SDO parallel data into the SDO shift register.
     reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
     always @(posedge clk) begin
-      if (!sdo_enabled || (current_instr != CMD_TRANSFER)) begin
+      if (!sdo_enabled || !exec_cmd) begin
         data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
       end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
         if (first_bit == 1'b1) begin
