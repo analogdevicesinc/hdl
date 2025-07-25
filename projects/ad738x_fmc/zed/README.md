@@ -1,4 +1,8 @@
+<!-- no_no_os -->
+
 # AD738X-FMC/ZED HDL Project
+
+- VADJ with which it was tested in hardware: 2.5V
 
 ## Building the project
 
@@ -14,7 +18,6 @@ The overwritable parameters from the environment:
 - ALERT_SPI_N pin can operate as a serial data output pin or alert indication output depending on its value:
    - 0 - SDOB-SDOD
    - 1 - ALERT
-
 - NUM_OF_SDI - Defines the number of SDI lines used: 1, 2, 4
 
 For the ALERT functionality, the following parameter will be used in `make` command: ALERT_SPI_N.
@@ -22,12 +25,11 @@ For the serial data output functionality, the following parameters will be used 
 
 ### Example configurations
 
-#### Default mode
+#### Default configuration
 
 This specific command is equivalent to running `make` only:
 
 ```
-cd projects/ad738x_fmc/zed
 make ALERT_SPI_N=0 NUM_OF_SDI=1
 ```
 
