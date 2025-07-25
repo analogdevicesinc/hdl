@@ -51,10 +51,17 @@ ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 8
 ad_connect $sys_cpu_clk spi_clkgen/clk
 ad_connect spi_clk spi_clkgen/clk_0
 
+ad_ip_instance util_vector_logic cnv_gate
+ad_ip_parameter cnv_gate CONFIG.C_SIZE 1
+ad_ip_parameter cnv_gate CONFIG.C_OPERATION {and}
+
+ad_connect cnv_gate/Op1 axi_ad738x_dma/s_axis_xfer_req
+ad_connect cnv_gate/Op2 spi_trigger_gen/pwm_0
+
 ad_connect spi_clk spi_trigger_gen/ext_clk
 ad_connect $sys_cpu_clk spi_trigger_gen/s_axi_aclk
 ad_connect sys_cpu_resetn spi_trigger_gen/s_axi_aresetn
-ad_connect spi_trigger_gen/pwm_0 $hier_spi_engine/trigger
+ad_connect cnv_gate/Res $hier_spi_engine/trigger
 
 ad_connect axi_ad738x_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
 ad_connect $hier_spi_engine/m_spi ad738x_spi
