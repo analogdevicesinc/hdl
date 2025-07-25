@@ -292,8 +292,8 @@ Software related
 
 List of Linux device trees (to be dev).
 
-- :git-linux:`adrv9002 ZCU102 (rev10) Linux device tree <arch/arm/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002-dual.dts>`
-- :git-linux:`adrv9002 ZCU102 (rev10) Linux device 2rx2tx tree <arch/arm/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002-dual-rx2tx2.dts>`
+- :git-linux:`adrv9002 ZCU102 (rev10) Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002.dts>`
+- :git-linux:`adrv9002 ZCU102 (rev10) Linux device 2rx2tx tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002-rx2tx2.dts>`
 
 .. include:: ../common/more_information.rst
 
