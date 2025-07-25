@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -57,7 +57,7 @@ module dest_axi_mm #(
 
   input                             bl_valid,
   output                            bl_ready,
-  input [BEATS_PER_BURST_WIDTH-1:0] measured_last_burst_length,
+  input [BEATS_PER_BURST_WIDTH:0] measured_last_burst_length,
 
   input                               enable,
   output                              enabled,
