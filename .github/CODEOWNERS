@@ -23,6 +23,9 @@
 # Code owners for ad4052_ardz folder
 /projects/ad4052_ardz/     sergiu.arpadi@analog.com  laez.barbosa@analog.com
 
+# Code owners for ad4062_ardz folder
+/projects/ad4062_ardz/     jorge.marques@analog.com  sergiu.arpadi@analog.com
+
 # Code owners for ad408x_fmc_evb folder
 /projects/ad408x_fmc_evb/  paul.pop@analog.com  vilmoscsaba.jozsa@analog.com
 
