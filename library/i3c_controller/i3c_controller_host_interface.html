@@ -260,6 +260,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4052_ardz/index.html">AD4052-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4062_ardz/index.html">AD4062-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad408x_fmc_evb/index.html">AD408X-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad411x_ad717x/index.html">AD411x-AD717x</a></li>
@@ -421,10 +422,40 @@ runtime.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ADDRESS_WIDTH</span></code></td>
+<td class="description"><p>Command FIFO address width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CMDR_FIFO_ADDRESS_WIDTH</span></code></td>
+<td class="description"><p>CMDR FIFO address width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ADDRESS_WIDTH</span></code></td>
+<td class="description"><p>SDO FIFO address width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">5</span></code></td>
+<td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_ADDRESS_WIDTH</span></code></td>
+<td class="description"><p>IBI FIFO address width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">5</span></code></td>
+<td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">IBI_FIFO_ADDRESS_WIDTH</span></code></td>
+<td class="description"><p>Ibi Fifo Address Width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><p>Core ID.</p></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td class="range"><p>From 0 to 255.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DA</span></code></td>
+<td class="description"><p>Dynamic address.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b0110001</span></code></td>
+<td class="range"><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK</span></code></td>
 <td class="description"><p>Asynchronous core clock.</p></td>
@@ -434,6 +465,31 @@ runtime.</p>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">OFFLOAD</span></code></td>
 <td class="description"><p>Offload engine.</p></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PID_MANUF_ID</span></code></td>
+<td class="description"><p>PID - Manufacturer ID.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b000000000000000</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PID_TYPE_SELECTOR</span></code></td>
+<td class="description"><p>PID - Type selector.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PID_PART_ID</span></code></td>
+<td class="description"><p>PID - Part ID.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0000</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PID_INSTANCE_ID</span></code></td>
+<td class="description"><p>PID - Instance ID.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b0000</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PID_EXTRA_ID</span></code></td>
+<td class="description"><p>PID - Extra ID.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h000</span></code></td>
 <td class="range"><p></p></td>
 </tr>
 </tbody>
@@ -978,12 +1034,116 @@ For proper operation, the bit needs to be set to 0.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x20</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x15</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x54</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">PID_L</span></code></td>
+<td class="description bold"><section>
+<p>Least significant part of Provisioned ID. The PID value has no effect and is
+present only for conformity with the bus specification.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PART_ID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">PART_​ID</span></code></td>
+<td class="description"><section>
+<p>Device identifier, use the same for all instances of this controller unless <code class="docutils literal notranslate"><span class="pre">TYPE_SELECTOR</span></code>
+is set to 1’b1.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:12]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">INSTANCE_ID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">INSTANCE_​ID</span></code></td>
+<td class="description"><section>
+<p>Identify the individual device.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[11:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">EXTRA_ID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">EXTRA_​ID</span></code></td>
+<td class="description"><section>
+<p>Extra characteristics field.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x16</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x58</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">PID_H</span></code></td>
+<td class="description bold"><section>
+<p>Most significant part of Provisioned ID. The PID value has no effect and is
+present only for conformity with bus specification.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MANUF_ID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">MANUF_​ID</span></code></td>
+<td class="description"><section>
+<p>MIPI Manufacturer ID.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TYPE_SELECTOR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TYPE_​SELECTOR</span></code></td>
+<td class="description"><section>
+<p>1’b1: Random Value, 1’b0: Vendor Fixed Value.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x17</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x5c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DCR_BCR_DA</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[22:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DA</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">DA</span></code></td>
+<td class="description"><section>
+<p>Controller dynamic address, used only for conformity, has no effect.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BCR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
+<td class="description"><section>
+<p>Bus characteristics register.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DCR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>Device characteristics register.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x20</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x80</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IRQ_MASK</span></code></td>
 <td class="description bold"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAA_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -993,7 +1153,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1003,7 +1163,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1013,7 +1173,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_ALMOST_FULL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1023,7 +1183,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_ALMOST_FULL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1033,7 +1193,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_ALMOST_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1043,7 +1203,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_ALMOST_FULL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1053,7 +1213,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_ALMOST_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1063,12 +1223,12 @@ For proper operation, the bit needs to be set to 0.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x21</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x21</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x84</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code></td>
 <td class="description bold"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1082,12 +1242,12 @@ address in the pipeline.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x22</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x22</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x88</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code></td>
 <td class="description bold"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1097,12 +1257,12 @@ address in the pipeline.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x30</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x30</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ROOM</span></code></td>
 <td class="description bold"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ROOM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1112,12 +1272,12 @@ address in the pipeline.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x31</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x31</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc4</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CMDR_FIFO_LEVEL</span></code></td>
 <td class="description bold"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_FIFO_LEVEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1127,12 +1287,12 @@ address in the pipeline.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x32</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x32</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc8</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ROOM</span></code></td>
 <td class="description bold"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ROOM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1142,12 +1302,12 @@ address in the pipeline.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x33</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x33</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xcc</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_LEVEL</span></code></td>
 <td class="description bold"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_LEVEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1157,12 +1317,12 @@ address in the pipeline.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x34</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x34</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xd0</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IBI_FIFO_LEVEL</span></code></td>
 <td class="description bold"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_FIFO_LEVEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1172,7 +1332,7 @@ address in the pipeline.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x35</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x35</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xd4</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CMD_FIFO</span></code></td>
 <td class="description bold"><section>
@@ -1186,7 +1346,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[22]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_IS_CCC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
@@ -1196,7 +1356,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[21]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_BCAST_HEADER</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
@@ -1206,7 +1366,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[20]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_SR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
@@ -1216,7 +1376,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[19:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_BUFFER_LENGHT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
@@ -1226,7 +1386,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_DA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
@@ -1236,7 +1396,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_RNW</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
@@ -1246,7 +1406,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x36</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x36</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xd8</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CMDR_FIFO</span></code></td>
 <td class="description bold"><section>
@@ -1256,7 +1416,7 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_FIFO_ERROR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1266,7 +1426,7 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[19:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_FIFO_BUFFER_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1276,7 +1436,7 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_FIFO_SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1286,7 +1446,7 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x37</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x37</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xdc</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDO_FIFO</span></code></td>
 <td class="description bold"><section>
@@ -1296,35 +1456,35 @@ is discarded. Reading from this register always returns 0x00000000.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_BYTE_3</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_BYTE_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_BYTE_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_BYTE_0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x38</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x38</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xe0</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDI_FIFO</span></code></td>
 <td class="description bold"><section>
@@ -1334,14 +1494,14 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x39</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x39</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xe4</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IBI_FIFO</span></code></td>
 <td class="description bold"><section>
@@ -1351,7 +1511,7 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:17]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_FIFO_DA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1361,7 +1521,7 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_FIFO_MDB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1371,7 +1531,7 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_FIFO_SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1381,12 +1541,12 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3a</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3a</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xe8</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FIFO_STATUS</span></code></td>
 <td class="description bold"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1396,7 +1556,7 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1406,7 +1566,7 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1416,7 +1576,7 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x100</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OPS</span></code></td>
 <td class="description bold"><section>
@@ -1424,7 +1584,7 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OPS_STATUS_NOP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -1435,7 +1595,7 @@ It is not idle bus condition since it set right after the Stop.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[6:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OPS_SPEED_GRADE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1450,7 +1610,7 @@ Speed with 100MHz driver clock are:
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OPS_OFFLOAD_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1460,7 +1620,7 @@ Speed with 100MHz driver clock are:
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OPS_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1470,7 +1630,7 @@ Speed with 100MHz driver clock are:
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x50</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x50</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x140</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IBI_CONFIG</span></code></td>
 <td class="description bold"><section>
@@ -1478,7 +1638,7 @@ Speed with 100MHz driver clock are:
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_CONFIG_LISTEN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
@@ -1491,7 +1651,7 @@ This should be set to 1 during normal operation, even if IBI_CONFIG_ENABLE is di
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_CONFIG_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
@@ -1508,7 +1668,7 @@ rejected as they come.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x60</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x60</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x180</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DEV_CHAR</span></code></td>
 <td class="description bold"><section>
@@ -1518,7 +1678,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:9]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_ADDR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1528,7 +1688,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_WEN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
@@ -1538,7 +1698,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_HAS_IBI_PAYLOAD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1549,7 +1709,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_IS_IBI_CAPABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1560,7 +1720,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_IS_ATTACHED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1570,7 +1730,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_IS_I2C</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1581,7 +1741,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xb0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xb0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2c0</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_CMD_n</span></code></td>
 <td class="description bold"><section>
@@ -1591,7 +1751,7 @@ Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_CMD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1601,7 +1761,7 @@ Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x300</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_n</span></code></td>
 <td class="description bold"><section>
@@ -1617,28 +1777,28 @@ Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_3</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>

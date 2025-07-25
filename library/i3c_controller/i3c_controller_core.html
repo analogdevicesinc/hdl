@@ -254,6 +254,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4052_ardz/index.html">AD4052-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4062_ardz/index.html">AD4062-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad408x_fmc_evb/index.html">AD408X-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad411x_ad717x/index.html">AD411x-AD717x</a></li>
@@ -419,17 +420,9 @@ low-level I3C bus transactions.</p>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">16</span></code></td>
 <td class="range"><p>From 1 to 16.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CLK_MOD</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">I2C_MOD</span></code></td>
 <td class="description"><section>
-<p>Clock cycles per bus bit at maximun speed (12.5MHz), set to:  * 0: 8 clock cycles at 100MHz input clock. * 1: 4 clock cycles at 50MHz input clock.</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
-<td class="range"><p>8 (0), 4 (1)</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">I2C_MOD</span></code></td>
-<td class="description"><section>
-<p>Further divide open drain speed by power of two, to support slow I2C devices.  For example, with input clock 100MHz and CLK_MOD=0:  * 0: 1.5626MHz (no division). * 2 390.6kHz. * 4 97.6kHz.</p>
+<p>Further divide open drain speed by power of two, to support slow I2C devices.  For example, with input clock 100MHz:  * 0: 1.5626MHz (no division). * 2 390.6kHz. * 4 97.6kHz.</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
