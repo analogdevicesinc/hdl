@@ -5,6 +5,7 @@
   - [EVAL-AD5767](https://www.analog.com/eval-ad5767)
 - System documentation: TO BE ADDED
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad5766_sdz/index.html
+- Evaluation board VADJ range: 1.7V - 5.5V
  
 ## Supported parts
 
