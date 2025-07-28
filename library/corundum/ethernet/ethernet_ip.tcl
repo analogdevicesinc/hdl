@@ -14,7 +14,7 @@ if [info exists ::env(BOARD)] {
   set ethernet_ip "ethernet_$board_lowercase"
 
   adi_ip_create $ethernet_ip $board_lowercase
- 
+
   cd ./$board_lowercase
 
   if [string equal $board VCU118] {
@@ -115,7 +115,7 @@ adi_add_bus "axis_eth_tx" "slave" \
     {"axis_eth_tx_tuser" "TUSER"} \
   ]
 
-adi_add_bus_clock "eth_tx_clk" "axis_eth_tx" "eth_tx_rst"
+adi_add_bus_clock "eth_tx_clk" "axis_eth_tx" "eth_tx_rst" "master" "master"
 
 adi_add_bus "axis_eth_rx" "master" \
   "xilinx.com:interface:axis_rtl:1.0" \
@@ -129,7 +129,7 @@ adi_add_bus "axis_eth_rx" "master" \
     {"axis_eth_rx_tuser" "TUSER"} \
   ]
 
-adi_add_bus_clock "eth_rx_clk" "axis_eth_rx" "eth_rx_rst"
+adi_add_bus_clock "eth_rx_clk" "axis_eth_rx" "eth_rx_rst" "master" "master"
 
 adi_if_infer_bus analog.com:interface:if_ctrl_reg slave ctrl_reg [list \
   "ctrl_reg_wr_addr ctrl_reg_wr_addr" \
@@ -172,7 +172,7 @@ adi_if_infer_bus analog.com:interface:if_axis_tx_ptp slave axis_tx_ptp [list \
   "ready axis_eth_tx_ptp_ts_ready" \
 ]
 
-adi_add_bus_clock "eth_tx_clk" "axis_tx_ptp" "eth_tx_rst"
+adi_add_bus_clock "eth_tx_clk" "axis_tx_ptp" "eth_tx_rst" "master" "master"
 
 if [string equal $board VCU118] {
   adi_if_infer_bus analog.com:interface:if_qspi master qspi0 [list \
@@ -225,8 +225,8 @@ if [string equal $board VCU118] {
     "ptp_ts_step eth_rx_ptp_ts_step" \
   ]
 
-  adi_add_bus_clock "eth_tx_ptp_clk" "ethernet_ptp_tx" "eth_tx_ptp_rst"
-  adi_add_bus_clock "eth_rx_ptp_clk" "ethernet_ptp_rx" "eth_rx_ptp_rst"
+  adi_add_bus_clock "eth_tx_ptp_clk" "ethernet_ptp_tx" "eth_tx_ptp_rst" "master" "master"
+  adi_add_bus_clock "eth_rx_ptp_clk" "ethernet_ptp_rx" "eth_rx_ptp_rst" "master" "master"
 } elseif [string equal $board K26] {
   ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
   set reset_intf_main [ipx::infer_bus_interface rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
@@ -264,8 +264,8 @@ if [string equal $board VCU118] {
     "ptp_ts_step eth_rx_ptp_ts_step" \
   ]
 
-  adi_add_bus_clock "eth_tx_clk" "ethernet_ptp_tx" "eth_tx_rst"
-  adi_add_bus_clock "eth_rx_clk" "ethernet_ptp_rx" "eth_rx_rst"
+  adi_add_bus_clock "eth_tx_clk" "ethernet_ptp_tx" "eth_tx_rst" "master" "master"
+  adi_add_bus_clock "eth_rx_clk" "ethernet_ptp_rx" "eth_rx_rst" "master" "master"
 
   adi_if_infer_bus analog.com:interface:if_flow_control_tx slave flow_control_tx [list \
     "tx_enable           eth_tx_enable" \
@@ -320,7 +320,7 @@ if [string equal $board VCU118] {
     {"sda_t" "SDA_T"} \
   }
 
-  adi_add_bus "s_axil_csr" "master" \
+  adi_add_bus "s_axil_csr" "slave" \
     "xilinx.com:interface:aximm_rtl:1.0" \
     "xilinx.com:interface:aximm:1.0" \
     {
@@ -540,8 +540,8 @@ if [string equal $board K26] {
   set group [ipgui::add_group -name "Application control" -component $cc \
     -parent $page3 -display_name "Application control"]
 
-  ipgui::add_param -name "ETH_RX_CLK_FROM_TX" -component $cc -parent $page3
-  set p [ipgui::get_guiparamspec -name "ETH_RX_CLK_FROM_TX" -component $cc]
+  ipgui::add_param -name "AXIL_IF_CTRL_ADDR_WIDTH" -component $cc -parent $page3
+  set p [ipgui::get_guiparamspec -name "AXIL_IF_CTRL_ADDR_WIDTH" -component $cc]
   ipgui::move_param -component $cc -order 0 $p -parent $group
   set_property -dict [list \
     "display_name" "AXI4 Lite interface control address width" \
