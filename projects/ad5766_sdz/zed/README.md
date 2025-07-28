@@ -1,4 +1,8 @@
-# AD5766-SDZ/Zed HDL Project
+<!-- no_build_example, no_dts -->
+
+# AD5766-SDZ/ZED HDL Project
+
+- VADJ with which it was tested in hardware: 2.5V
 
 ## Building the project
 
@@ -8,5 +12,3 @@ make
 ```
 
 Corresponding No-OS project: [ad5766_sdz](https://github.com/analogdevicesinc/hdl/tree/main/projects/ad5766_sdz)
-
-Corresponding Linux driver: [ad5766_c](https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/dac/ad5766.c)
