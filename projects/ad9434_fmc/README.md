@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD9434](https://www.analog.com/eval-ad9434)
 - System documentation: https://wiki.analog.com/resources/fpga/xilinx/fmc/ad9434
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad9434_fmc/index.html
+- Evaluation board VADJ: 2.5V
 
 ## Supported parts
 
