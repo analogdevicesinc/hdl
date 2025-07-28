@@ -1,4 +1,8 @@
+<!-- no_build_example, no_no_os -->
+
 # AD408X-FMC-EVB/ZED HDL Project
+
+- VADJ with which it was tested in hardware: 2.5V
 
 ## Building the project
 
