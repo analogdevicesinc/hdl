@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   sodipodi:docname="ad738x_hdl_spi_engine.svg"
-   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="ad738x_spi_engine_hdl.svg"
+   inkscape:version="1.4.2 (1:1.4.2+202505120738+ebf0e940d0)"
    style="shape-rendering:crispEdges"
    id="svg6470"
    version="1.1"
@@ -981,6 +981,81 @@
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
          transform="scale(0.4)" />
     </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1216-3"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1214-6"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker2458-7"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path2456-5"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker2056-8"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path2054-7"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1216-9-9-6-3-9"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1214-1-9-0-7-1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker2056-6"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path2054-2"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.4)" />
+    </marker>
   </defs>
   <sodipodi:namedview
      inkscape:document-rotation="0"
@@ -988,17 +1063,17 @@
      inkscape:snap-page="true"
      showguides="false"
      inkscape:window-maximized="1"
-     inkscape:window-y="1342"
-     inkscape:window-x="2392"
-     inkscape:window-height="1122"
+     inkscape:window-y="0"
+     inkscape:window-x="1920"
+     inkscape:window-height="1046"
      inkscape:window-width="1920"
      units="px"
      showgrid="true"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g11134"
      inkscape:document-units="px"
-     inkscape:cy="432.74723"
-     inkscape:cx="230.28831"
-     inkscape:zoom="5.0306504"
+     inkscape:cy="428.70713"
+     inkscape:cx="384.57138"
+     inkscape:zoom="1.7786035"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -1245,12 +1320,12 @@
       <rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
-         y="-47.869339"
-         x="111.03619"
-         height="357.02173"
-         width="442.59018"
+         y="-47.858974"
+         x="111.04656"
+         height="365.24539"
+         width="442.56943"
          id="rect6078"
-         style="display:inline;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:1.87258077;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.87258077, 5.61774231;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new" />
+         style="display:inline;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:1.89398;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.89398, 5.68194;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new" />
       <rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
@@ -1558,59 +1633,6 @@
          id="path1206-1-0-95-1-9"
          d="M 528.80556,134.16268 H 681.5959"
          style="display:inline;opacity:1;fill:none;stroke:#000000;stroke-width:2.04598;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2-0);shape-rendering:crispEdges;enable-background:new" />
-      <rect
-         y="237.0224"
-         x="426.3736"
-         height="55"
-         width="101.80218"
-         id="rect35512-6-1-2"
-         style="display:inline;opacity:1;fill:#e5e5e5;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.74916497;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;shape-rendering:crispEdges;enable-background:new" />
-      <text
-         id="text2401-1-7-3-9-9-74-3-7"
-         y="260.33099"
-         x="477.07156"
-         style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
-         xml:space="preserve"><tspan
-           style="text-align:center;text-anchor:middle"
-           id="tspan5318-6"
-           y="260.33099"
-           x="477.07156"
-           sodipodi:role="line">AXI PULSE</tspan><tspan
-           style="text-align:center;text-anchor:middle"
-           id="tspan4332"
-           y="280.33099"
-           x="477.07156"
-           sodipodi:role="line">GEN</tspan></text>
-      <rect
-         y="326.54099"
-         x="148.18681"
-         height="55"
-         width="117"
-         id="rect35512-6-1-2-4"
-         style="display:inline;opacity:1;fill:#e5e5e5;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.74916497;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;shape-rendering:crispEdges;enable-background:new" />
-      <text
-         id="text2401-1-7-3-9-9-74-3-7-8"
-         y="359.84958"
-         x="157.3665"
-         style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
-         xml:space="preserve"><tspan
-           id="tspan4332-2"
-           y="359.84958"
-           x="157.3665"
-           sodipodi:role="line">AXI CLKGEN</tspan></text>
-      <text
-         inkscape:export-ydpi="96"
-         inkscape:export-xdpi="96"
-         id="text6100-7-7"
-         y="297.50888"
-         x="246.37025"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
-         xml:space="preserve"><tspan
-           id="tspan5125-0-2"
-           style="stroke-width:1"
-           y="297.50888"
-           x="246.37025"
-           sodipodi:role="line"> spi_clk = 160MHz</tspan></text>
       <text
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
@@ -1656,22 +1678,103 @@
          id="path2052"
          d="m 270.27694,168.23546 h 20.36044 v -36.06498 h 16.96703"
          style="fill:none;stroke:#000000;stroke-width:1.74916;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker2056)" />
+      <rect
+         y="248.14017"
+         x="168.47841"
+         height="55"
+         width="101.80218"
+         id="rect35512-6-1-2"
+         style="display:inline;fill:#e5e5e5;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.74916;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;shape-rendering:crispEdges;enable-background:new" />
+      <text
+         id="text2401-1-7-3-9-9-74-3-7"
+         y="271.44876"
+         x="219.17636"
+         style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
+         xml:space="preserve"><tspan
+           style="text-align:center;text-anchor:middle"
+           id="tspan5318-6"
+           y="271.44876"
+           x="219.17636"
+           sodipodi:role="line">AXI PULSE</tspan><tspan
+           style="text-align:center;text-anchor:middle"
+           id="tspan4332"
+           y="291.44876"
+           x="219.17636"
+           sodipodi:role="line">GEN</tspan></text>
+      <rect
+         y="327.20242"
+         x="147.96086"
+         height="55"
+         width="117"
+         id="rect35512-6-1-2-4"
+         style="display:inline;fill:#e5e5e5;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.74916;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;shape-rendering:crispEdges;enable-background:new" />
+      <text
+         id="text2401-1-7-3-9-9-74-3-7-8"
+         y="360.51102"
+         x="157.14055"
+         style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
+         xml:space="preserve"><tspan
+           id="tspan4332-2"
+           y="360.51102"
+           x="157.14055"
+           sodipodi:role="line">AXI CLKGEN</tspan></text>
       <path
          sodipodi:nodetypes="ccc"
          id="path2454"
-         d="m 265.18683,357.57658 h 25.45055 v -48.68771"
-         style="fill:none;stroke:#000000;stroke-width:1.74916;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2458)" />
+         d="m 264.96087,354.63153 h 25.45055 v -30.42602"
+         style="display:inline;fill:none;stroke:#000000;stroke-width:1.74916;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2458-7);shape-rendering:crispEdges;enable-background:new" />
       <path
          sodipodi:nodetypes="ccc"
          id="path2856"
-         d="m 53.098922,303.47912 v 54.09746 h 89.925268"
-         style="fill:none;stroke:#000000;stroke-width:1.74916;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216)" />
+         d="m 52.872957,302.33732 v 54.09747 h 89.925273"
+         style="display:inline;fill:none;stroke:#000000;stroke-width:1.74916;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-3);shape-rendering:crispEdges;enable-background:new" />
       <path
-         sodipodi:nodetypes="ccc"
+         sodipodi:nodetypes="cccc"
          inkscape:connector-curvature="0"
-         id="path1"
-         d="m 425.72973,262.68507 -212.68271,-0.161 -0.0795,-52.64843"
-         style="display:inline;opacity:1;fill:none;stroke:#000000;stroke-width:1.97949;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2-9);shape-rendering:crispEdges;enable-background:new" />
+         id="path1206-9-7-0-71-7"
+         d="m 121.43274,229.53495 h 176.82944 v 18.03249 h 19.91156"
+         style="display:inline;fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-9);shape-rendering:crispEdges;enable-background:new" />
+      <rect
+         y="230.51938"
+         x="326.26547"
+         height="55"
+         width="101.80218"
+         id="rect35512-6-1-2-6"
+         style="display:inline;fill:#e5e5e5;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.74916;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;shape-rendering:crispEdges;enable-background:new" />
+      <text
+         id="text2401-1-7-3-9-9-74-3-7-2"
+         y="262.84421"
+         x="376.96344"
+         style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
+         xml:space="preserve"><tspan
+           style="text-align:center;text-anchor:middle"
+           id="tspan4332-1"
+           y="262.84421"
+           x="376.96344"
+           sodipodi:role="line">AND GATE</tspan></text>
+      <path
+         sodipodi:nodetypes="cccc"
+         id="path2052-2"
+         d="m 318.87286,274.61617 h -20.61068 v 0 h -27.14725"
+         style="display:inline;fill:none;stroke:#000000;stroke-width:1.74916;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker2056-8);shape-rendering:crispEdges;enable-background:new" />
+      <text
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         id="text6100-7-7"
+         y="313.61578"
+         x="332.42221"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
+         xml:space="preserve"><tspan
+           id="tspan5125-0-2"
+           style="stroke-width:1"
+           y="313.61578"
+           x="332.42221"
+           sodipodi:role="line"> spi_clk = 160MHz</tspan></text>
+      <path
+         sodipodi:nodetypes="cccc"
+         id="path2052-1"
+         d="m 271.07027,194.61178 h 175.87941 v 63.1137 h -19.51209"
+         style="display:inline;fill:none;stroke:#000000;stroke-width:1.74916;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker2056-6);shape-rendering:crispEdges;enable-background:new" />
     </g>
     <g
        transform="matrix(1.4208528,0,0,1.4208528,-279.98358,-157.21811)"
@@ -2016,12 +2119,12 @@
     <text
        id="text2401-61-1-54-8-2-5-4"
        y="908.15179"
-       x="70.486816"
+       x="110.48682"
        style="font-style:normal;font-weight:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"><tspan
          style="font-size:10.6667px"
          y="908.15179"
-         x="70.486816"
+         x="110.48682"
          id="tspan2399-9-2-70-3-0-6-2"
          sodipodi:role="line">trigger</tspan></text>
   </g>
