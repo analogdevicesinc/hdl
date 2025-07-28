@@ -202,13 +202,14 @@ proc adi_add_multi_bus {num bus_name_prefix mode abs_type bus_type port_maps dep
 # \param[reset_signal_name] - Reset signal name
 # \param[reset_signal_mode] - Reset mode (master/slave)
 #
-proc adi_add_bus_clock {clock_signal_name bus_inf_name {reset_signal_name ""} {reset_signal_mode "slave"}} {
+proc adi_add_bus_clock {clock_signal_name bus_inf_name {reset_signal_name ""} {reset_signal_mode "slave"} {clock_signal_mode "slave"}} {
   set bus_inf_name_clean [string map {":" "_"} $bus_inf_name]
   set clock_inf_name [format "%s%s" $bus_inf_name_clean "_signal_clock"]
   set clock_inf [ipx::add_bus_interface $clock_inf_name [ipx::current_core]]
   set_property abstraction_type_vlnv "xilinx.com:signal:clock_rtl:1.0" $clock_inf
   set_property bus_type_vlnv "xilinx.com:signal:clock:1.0" $clock_inf
   set_property display_name $clock_inf_name $clock_inf
+  set_property interface_mode $clock_signal_mode $clock_inf
   set clock_map [ipx::add_port_map "CLK" $clock_inf]
   set_property physical_name $clock_signal_name $clock_map
 
