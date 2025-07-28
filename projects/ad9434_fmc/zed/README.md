@@ -1,4 +1,8 @@
-# AD9434-FMC/Zed HDL Project
+<!-- no_build_example, no_no_os -->
+
+# AD9434-FMC/ZED HDL Project
+
+- VADJ with which it was tested in hardware: 2.5V
 
 ## Building the project
 
