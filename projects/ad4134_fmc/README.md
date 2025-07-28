@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD4134](https://www.analog.com/eval-ad4134)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad4134/hdl
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad4134_fmc/index.html
+- Evaluation board VADJ: 1.8V
 
 ## Supported parts
 
