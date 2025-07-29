@@ -1132,7 +1132,9 @@ else:
                 print(message)
 
     lw = []
+    
     check_project_name_vs_path(modified_files, lw, edit_files)
+
     if (len(lw) > 0):
             guideline_ok = False
             print("\n -> Project name vs path check:")
