@@ -1,4 +1,8 @@
+<!-- no_no_os -->
+
 # DAC-FMC-EBZ/ZCU102 HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
@@ -45,7 +49,7 @@ Corresponding device tree: [zynqmp-zcu102-rev10-ad9154-fmc-ebz.dts](https://gith
 #### ADI_DAC_DEVICE=AD9144, ADI_DAC_MODE=04
 
 ```
-make ADI_DAC_DEVICE=AD9154 ADI_DAC_MODE=04
+make ADI_DAC_DEVICE=AD9144 ADI_DAC_MODE=04
 ``` 
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9144-fmc-ebz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9144-fmc-ebz.dts)
