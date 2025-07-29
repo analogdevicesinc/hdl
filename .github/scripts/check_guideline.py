@@ -208,6 +208,56 @@ def check_project_name_vs_path(modified_files, lw, edit_files=False):
 
 ###############################################################################
 #
+# Normalize the file edges by removing empty lines at the start and end,
+# ensuring exactly one newline at the end, and optionally editing the file.
+# If edit_files is True, the file will be modified.
+###############################################################################
+def normalize_file_edges(file_path, lw, edit_files):
+    try:
+        with open(file_path, 'r') as f:
+            lines = f.readlines()
+
+        if not lines:
+            return
+
+        changed = False
+
+        # Remove empty lines at the start
+        while lines and lines[0].strip() == "":
+            if edit_files:
+                lines.pop(0)
+                changed = True
+            lw.append(f"{file_path} : empty line at beginning of file")
+        
+        # Remove extra empty lines at the end
+        while len(lines) > 1 and lines[-1].strip() == "" and lines[-2].strip() == "":
+            if edit_files:
+                lines.pop()
+                changed = True
+            lw.append(f"{file_path} : multiple empty lines at end of file")
+
+        # Ensure exactly one newline at the end
+        if edit_files:
+            if not lines[-1].endswith('\n'):
+                lines[-1] += '\n'
+                changed = True
+                lw.append(f"{file_path} : missing final newline, added")
+        else:
+            if not lines[-1].endswith('\n'):
+                lw.append(f"{file_path} : file does not end with a newline")
+
+        # If something changed, write back the cleaned content
+        if changed:
+            with open(file_path, 'w') as f:
+                f.writelines(lines)
+            lw.append(f"{file_path} : normalized file edges")
+
+    except Exception as e:
+        lw.append(f"{file_path} : ERROR while normalizing edges - {e}")
+
+
+###############################################################################
+#
 # Check if there are lines after `endmodule and two consecutive empty lines,
 # and if there are and edit_files is true, delete them.
 ###############################################################################
@@ -687,9 +737,11 @@ def get_and_check_module (module_path, lw, edit_files):
                 for line in list_of_lines:
 
                     # GC: check for whitespace at the end of the line w\o \n
-                    aux_line = line[:-1]
-                    aux_line = aux_line.rstrip()
+                    # aux_line = line[:-1]
+                    # aux_line = aux_line.rstrip()
 
+                    # f.write(aux_line + "\n")
+                    aux_line = line.rstrip()
                     f.write(aux_line + "\n")
             if (extra_chars):
                 lw.append(module_path + " : removed extra spaces at the end of lines")
@@ -1024,6 +1076,7 @@ xilinx_modules.append("BUFGCTRL")
 xilinx_modules.append("BUFGMUX")
 #xilinx_modules.append("BUFGMUX_1")
 xilinx_modules.append("BUFGMUX_CTRL")
+xilinx_modules.append("BUFH")
 xilinx_modules.append("BUFIO")
 xilinx_modules.append("BUFR")
 xilinx_modules.append("GTHE3_CHANNEL")
@@ -1134,6 +1187,9 @@ else:
     lw = []
     
     check_project_name_vs_path(modified_files, lw, edit_files)
+    for file_path in modified_files:
+        #enforce_final_newline(file_path, lw, edit_files)
+        normalize_file_edges(file_path, lw, edit_files)
 
     if (len(lw) > 0):
             guideline_ok = False
