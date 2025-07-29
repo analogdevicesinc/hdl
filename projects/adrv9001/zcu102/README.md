@@ -1,4 +1,8 @@
+<!-- no_build_example, no_no_os -->
+
 # ADRV9001/ZCU102 HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
