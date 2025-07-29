@@ -3,6 +3,7 @@
 - Evaluation board product page: [ADALM-PLUTO](https://www.analog.com/adalm-pluto)
 - System documentation: https://wiki.analog.com/university/tools/pluto/users/quick_start
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/pluto/index.html
+- Evaluation board VADJ: 1.8V
 
 ## Supported parts
 
