@@ -187,20 +187,20 @@ def check_project_name_vs_path(modified_files, lw, edit_files=False):
                 changed = False
                 with open(tcl_path, "r") as tclf:
                     for line in tclf:
-                        m = re.match(r'\s*set\s+project_name\s+(\S+)', line)
+                        m = re.match(r'\s*adi_project\s+(\S+)', line)
                         if m:
                             found = True
                             found_name = m.group(1)
                             if found_name != expected_name:
-                                lw.append(f"{tcl_path} : project_name '{found_name}' does not match expected '{expected_name}'")
+                                lw.append(f"{tcl_path} : adi_project '{found_name}' does not match expected '{expected_name}'")
                                 if edit_files:
-                                    line = re.sub(r'(set\s+project_name\s+)\S+', r'\1' + expected_name, line)
+                                    line = re.sub(r'(\s*adi_project\s+)\S+', r'\1' + expected_name, line)
                                     changed = True
                         lines.append(line)
                 if edit_files and found and changed:
                     with open(tcl_path, "w") as tclf:
                         tclf.writelines(lines)
-                    lw.append(f"{tcl_path} : project_name updated to '{expected_name}'")
+                    lw.append(f"{tcl_path} : adi_project updated to '{expected_name}'")
                 checked_projects.add(folder)
                 break
             folder = os.path.dirname(folder)
