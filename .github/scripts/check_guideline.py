@@ -208,6 +208,22 @@ def check_project_name_vs_path(modified_files, lw, edit_files=False):
 
 ###############################################################################
 #
+# Check if the file ends with a newline character.
+# If it does not, append a newline character to the end of the file if
+# edit_files is True.
+###############################################################################
+def check_file_ends_with_newline(module_path, list_of_lines, lw, edit_files):
+    if not list_of_lines:
+        return
+    if not list_of_lines[-1].endswith('\n'):
+        lw.append(f"{module_path} : file does not end with a newline")
+        if edit_files:
+            list_of_lines[-1] = list_of_lines[-1] + '\n'
+            lw.append(f"{module_path} : newline added at end of file")
+
+
+###############################################################################
+#
 # Check if there are lines after `endmodule and two consecutive empty lines,
 # and if there are and edit_files is true, delete them.
 ###############################################################################
@@ -676,6 +692,7 @@ def get_and_check_module (module_path, lw, edit_files):
     # (and delete them, if desired)
     prev_length = len(list_of_lines)
     check_extra_lines (module_path, list_of_lines, lw, edit_files)
+    check_file_ends_with_newline(module_path, list_of_lines, lw, edit_files)
 
     if (edit_files):
         # if at least one of the things was edited
