@@ -228,6 +228,7 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../corundum_core/index.html">Corundum Core</a></li>
 <li class="toctree-l3 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1" checked=""/><div class="collapse"><a class="current reference internal" href="#">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="vcu118/index.html">VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="k26/index.html">K26</a></li>
 </ul>
 </li>
 </ul>
@@ -375,12 +376,14 @@ designs that were adapted to suit the ADI workflow.</p>
 diagrams will be available.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="vcu118/index.html#corundum-ethernet-core-vcu118"><span class="std std-ref">Corundum Ethernet Core for VCU118</span></a></p></li>
+<li><p><a class="reference internal" href="k26/index.html#corundum-ethernet-core-k26"><span class="std std-ref">Corundum Ethernet Core for K26</span></a></p></li>
 </ul>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>Supports 100G Ethernet-based systems that uses the CMAC core on the VCU118
-board</p></li>
+<li><p>Supports 10/100 GbE implementations as follows: 100 GbE by leveraging on the
+Xilinx’s CMAC IP core (on the VCU118 evaluation kit) and 10 GbE by using
+Corundum’s support (on the K26-based AD-GMSL2ETH-SL evaluation kit).</p></li>
 </ul>
 </section>
 <section id="files">
@@ -401,7 +404,10 @@ ports will be available.</p>
 <section id="building">
 <h2>Building<a class="headerlink" href="#building" title="Permalink to this heading"></a></h2>
 <p>This IP uses <a class="icon link reference external" href="https://github.com/ucsdsysnet/corundum" target="_blank">Corundum NIC</a>
-repository, which needs to be cloned alongside the HDL repository.</p>
+repository, which needs to be cloned alongside the HDL repository.
+Do a git checkout to the latest tested version (commit - 37f2607).
+When the 10G-based implementation (e.g., in case of K26) is used,
+apply the indicated patch.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/workspace$
 </pre></div>
 </div>
@@ -409,6 +415,24 @@ repository, which needs to be cloned alongside the HDL repository.</p>
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/workspace$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>corundum
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/workspace/corundum$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>37f2607
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/workspace/corundum$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>apply<span class="w"> </span>../hdl/library/corundum/patch_axis_xgmii_rx_64.patch
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/workspace/corundum$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/library/corundum/ethernet_core

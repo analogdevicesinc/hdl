@@ -243,6 +243,7 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../../library/corundum/corundum_core/index.html">Corundum Core</a></li>
 <li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/k26/index.html">K26</a></li>
 </ul>
 </li>
 </ul>
@@ -482,11 +483,8 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <tr class="row-odd"><td><p>axi_pwm_gen_0</p></td>
 <td><p>0x84B6_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>corundum/s_axil_ctrl</p></td>
+<tr class="row-even"><td><p>corundum_hierarchy/corundum_core/s_axil_ctrl</p></td>
 <td><p>0xA000_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>corundum/s_axil_app_ctrl</p></td>
-<td><p>0xA800_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -708,7 +706,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <td><p>94</p></td>
 <td><p>126</p></td>
 </tr>
-<tr class="row-odd"><td><p>combined_corundum_irq</p></td>
+<tr class="row-odd"><td><p>corundum_hierarcy/irq</p></td>
 <td><p>4</p></td>
 <td><p>93</p></td>
 <td><p>125</p></td>
@@ -727,34 +725,40 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
 <a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository, and then build the project as follows:.</p>
-<p>This project uses <a class="icon link reference external" href="https://github.com/corundum/corundum" target="_blank">Corundum NIC</a>
-and it needs to be cloned alongside this repository.</p>
-<div class="admonition-publications admonition">
-<p class="admonition-title">Publications</p>
-<p>The following papers pertain to the Corundum source code:</p>
-<ul class="simple">
-<li><p>J- A. Forencich, A. C. Snoeren, G. Porter, G. Papen, Corundum: An Open-Source 100-Gbps NIC, in FCCM’20.
-(<a class="icon link reference external" href="https://www.cse.ucsd.edu/~snoeren/papers/corundum-fccm20.pdf" target="_blank">FCCM Paper</a>, <a class="icon link reference external" href="https://www.fccm.org/past/2020/forums/topic/corundum-an-open-source-100-gbps-nic/" target="_blank">FCCM Presentation</a>)</p></li>
-<li><p>J- A. Forencich, System-Level Considerations for Optical Switching in Data Center Networks. (<a class="icon link reference external" href="https://escholarship.org/uc/item/3mc9070t" target="_blank">Thesis</a>)</p></li>
-</ul>
-</div>
+<p>This project uses <a class="icon link reference external" href="https://github.com/ucsdsysnet/corundum" target="_blank">Corundum NIC</a>
+and it needs to be cloned alongside this repository.
+Do a git checkout to the latest tested version (commit - 37f2607).
+When the 10G-based implementation (e.g., in case of K26) is used,
+apply the indicated patch.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/corundum/corundum.git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ucsdsysnet/corundum.git
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>ed4a26e2cbc0a429c45d5cd5ddf1177f86838914
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>corundum
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/corundum$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad_gmsl2eth_sl/k26
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>37f2607
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/corundum$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>apply<span class="w"> </span>../hdl/library/corundum/patch_axis_xgmii_rx_64.patch
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/corundum$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>../hdl/projects/ad_gmsl2eth_sl/k26
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad_gmsl2eth_sl/k26$
@@ -764,6 +768,15 @@ and it needs to be cloned alongside this repository.</p>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<div class="admonition-publications admonition">
+<p class="admonition-title">Publications</p>
+<p>The following papers pertain to the Corundum source code:</p>
+<ul class="simple">
+<li><p>J- A. Forencich, A. C. Snoeren, G. Porter, G. Papen, Corundum: An Open-Source 100-Gbps NIC, in FCCM’20.
+(<a class="icon link reference external" href="https://www.cse.ucsd.edu/~snoeren/papers/corundum-fccm20.pdf" target="_blank">FCCM Paper</a>, <a class="icon link reference external" href="https://www.fccm.org/past/2020/forums/topic/corundum-an-open-source-100-gbps-nic/" target="_blank">FCCM Presentation</a>)</p></li>
+<li><p>J- A. Forencich, System-Level Considerations for Optical Switching in Data Center Networks. (<a class="icon link reference external" href="https://escholarship.org/uc/item/3mc9070t" target="_blank">Thesis</a>)</p></li>
+</ul>
+</div>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
@@ -815,7 +828,7 @@ and it needs to be cloned alongside this repository.</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>CORUNDUM</p></td>
+<tr class="row-odd"><td><p>CORUNDUM_NETSTACK</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/corundum" target="_blank">library/corundum</a></p></td>
 <td><p><a class="reference internal" href="../../library/corundum/index.html#corundum"><span class="std std-ref">Corundum Network Stack</span></a></p></td>
 </tr>

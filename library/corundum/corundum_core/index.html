@@ -228,6 +228,7 @@ Content on this topic
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Corundum Core</a></li>
 <li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../ethernet/vcu118/index.html">VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../ethernet/k26/index.html">K26</a></li>
 </ul>
 </li>
 </ul>
@@ -439,7 +440,10 @@ Application Core.</p></td>
 <section id="building">
 <h2>Building<a class="headerlink" href="#building" title="Permalink to this heading"></a></h2>
 <p>This IP uses <a class="icon link reference external" href="https://github.com/ucsdsysnet/corundum" target="_blank">Corundum NIC</a>
-repository, which needs to be cloned alongside the HDL repository.</p>
+repository, which needs to be cloned alongside the HDL repository.
+Do a git checkout to the latest tested version (commit - 37f2607).
+When the 10G-based implementation (e.g., in case of K26) is used,
+apply the indicated patch.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/workspace$
 </pre></div>
 </div>
@@ -449,10 +453,22 @@ repository, which needs to be cloned alongside the HDL repository.</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/workspace$
 </pre></div>
 </div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>corundum
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/workspace/corundum$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>37f2607
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/workspace/corundum$
+</pre></div>
+</div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/library/corundum/corundum_core
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/workspace/hdl/library/corundum/corundum_core$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/workspace/corundum/hdl/library/corundum/corundum_core$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
