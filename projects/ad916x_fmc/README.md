@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD916X-FMCZ](https://www.analog.com/eval-ad916x)
 - System documentation: to be added
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad916x_fmc/index.html
+- Evaluation board VADJ range: 1.2V - 1.8V
 
 ## Supported parts
 

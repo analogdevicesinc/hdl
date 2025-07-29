@@ -1,6 +1,10 @@
-# AD916x-FMC/ZCU102 HDL Project
+<!-- no_no_os -->
+
+# AD916X-FMC/ZCU102 HDL Project
 
 ## Building the project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 The parameters configurable through the `make` command, can be found below.
 
