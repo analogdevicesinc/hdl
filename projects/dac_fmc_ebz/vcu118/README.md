@@ -1,6 +1,10 @@
+<!-- no_dts, no_no_os -->
+
 # DAC-FMC-EBZ/VCU118 HDL Project
 
 ## Building the project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 The parameters configurable through the `make` command, can be found below, as well as in the **common/config.tcl** file; it contains the default configuration.
 
