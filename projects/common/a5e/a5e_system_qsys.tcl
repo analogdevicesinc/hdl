@@ -358,7 +358,7 @@ set_instance_parameter_value sys_hps USB1_Mode {default}
 set_instance_parameter_value sys_hps USB1_PinMuxing {IO}
 set_instance_parameter_value sys_hps User0_clk_enable {1}
 set_instance_parameter_value sys_hps User0_clk_freq {250}
-set_instance_parameter_value sys_hps User0_clk_src_select {7}
+set_instance_parameter_value sys_hps User0_clk_src_select {1}
 set_instance_parameter_value sys_hps User1_clk_enable {0}
 set_instance_parameter_value sys_hps User1_clk_freq {500.0}
 set_instance_parameter_value sys_hps User1_clk_src_select {7}
@@ -426,8 +426,6 @@ add_connection sys_clk.clk sys_hps.hps2fpga_axi_clock
 add_connection sys_clk.clk_reset sys_hps.hps2fpga_axi_reset
 add_connection sys_clk.clk sys_hps.lwhps2fpga_axi_clock
 add_connection sys_clk.clk_reset sys_hps.lwhps2fpga_axi_reset
-# add_connection sys_clk.clk sys_hps.fpga2hps_clock
-# add_connection sys_clk.clk_reset sys_hps.fpga2hps_reset
 add_connection sys_clk.clk sys_hps.usb31_phy_reconfig_clk
 add_connection sys_clk.clk_reset sys_hps.usb31_phy_reconfig_rst
 
@@ -629,9 +627,12 @@ add_connection emif_hps.io96b0_to_hps sys_hps.io96b0_to_hps
 # add_instance sys_hps_cache_coherency altera_ace5lite_cache_coherency_translator
 # set_instance_parameter_value sys_hps_cache_coherency F2H_ADDRESS_WIDTH {32}
 
-# add_connection sys_clk.clk sys_hps_cache_coherency.clock
-# add_connection sys_clk.clk_reset sys_hps_cache_coherency.reset
+# add_connection sys_dma_clk.clk sys_hps_cache_coherency.clock
+# add_connection sys_dma_clk.clk_reset sys_hps_cache_coherency.reset
 # add_connection sys_hps_cache_coherency.m0 sys_hps.fpga2hps
+
+# add_connection sys_dma_clk.clk sys_hps.fpga2hps_clock
+# add_connection sys_dma_clk.clk_reset sys_hps.fpga2hps_reset
 
 # jtag
 
@@ -662,18 +663,26 @@ set_interface_property pr_rom_data_nc EXPORT_OF axi_sysid_0.if_pr_rom_data
 
 # cpu/hps handling
 
-proc ad_dma_interconnect {m_port} {
+proc ad_dma_interconnect {m_port {m_addr 0x00000000} {data_width 128}} {
     # We cannot enable the f2sdram bridge if we don't use it
     # So we instantiate it as disabled and only enable it
     # if we are using it in the design
     set f2sdram_data_width [get_instance_parameter_value sys_hps f2sdram_data_width]
     if {$f2sdram_data_width == 0} {
-      set_instance_parameter_value sys_hps f2sdram_data_width {256}
+      set_instance_parameter_value sys_hps f2sdram_data_width $data_width
       add_connection sys_dma_clk.clk sys_hps.f2sdram_axi_clock
       add_connection sys_dma_clk.clk_reset sys_hps.f2sdram_axi_reset
+
+      # This adapter is needed, otherwise the bridge doesn't work...
+      add_instance f2sdram_adapter f2sdram_adapter
+      set_instance_parameter_value f2sdram_adapter {DATA_WIDTH} $data_width
+
+      add_connection sys_dma_clk.clk f2sdram_adapter.clock
+      add_connection sys_dma_clk.clk_reset f2sdram_adapter.reset
+      add_connection f2sdram_adapter.axi4_man sys_hps.f2sdram
     }
-    add_connection ${m_port} sys_hps.f2sdram
-    set_connection_parameter_value ${m_port}/sys_hps.f2sdram baseAddress {0x0}
+    add_connection ${m_port} f2sdram_adapter.axi4_sub
+    set_connection_parameter_value ${m_port}/f2sdram_adapter.axi4_sub baseAddress ${m_addr}
 }
 
 proc ad_cpu_interrupt {m_irq m_port} {
@@ -760,8 +769,6 @@ set_interface_property sys_spi EXPORT_OF sys_spi.external
 set_interface_property o_pma_cu_clk EXPORT_OF gts_reset.o_pma_cu_clk
 set_interface_property i_refclk_bus_out EXPORT_OF gts_reset.i_refclk_bus_out
 set_interface_property o_shoreline_refclk_fail_stat EXPORT_OF gts_reset.o_shoreline_refclk_fail_stat
-
-# set_interface_property h2f_warm_reset_handshake EXPORT_OF sys_hps.h2f_warm_reset_handshake
 
 set_interface_property f2h_irq1_in EXPORT_OF sys_hps.fpga2hps_interrupt_irq1
 set_interface_property usb31_io EXPORT_OF sys_hps.usb31_io

@@ -12,4 +12,6 @@ M_DEPS += ../../common/a5e/a5e_system_assign.tcl
 LIB_DEPS += axi_sysid
 LIB_DEPS += sysid_rom
 
+INTEL_LIB_DEPS += intel/common/f2sdram_adapter
+
 include ../../scripts/project-intel.mk
