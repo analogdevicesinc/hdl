@@ -337,6 +337,7 @@ assign mode       = adc_custom_control[4:2];
     .DRP_WIDTH(DELAY_CTRL_DRP_WIDTH),
     .BASE_ADDRESS(6'h02)
   ) i_delay_cntrl (
+    .core_rst(1'b0),
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked),
