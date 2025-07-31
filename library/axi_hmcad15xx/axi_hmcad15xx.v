@@ -44,7 +44,7 @@ module axi_hmcad15xx #(
   parameter   DEV_PACKAGE = 0,
   parameter   ADC_DATAPATH_DISABLE = 0,
   parameter   IO_DELAY_GROUP = "adc_if_delay_group",
-  parameter   IODELAY_CTRL = 1,
+  parameter   IODELAY_CTRL = 0,
   parameter   POLARITY_MASK = 8'h00
 ) (
 
@@ -235,7 +235,6 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   endgenerate
 
   // adc interface
-
   wire             delay_locked;
   wire [7:0]       adc_custom_control;
   wire [1:0]       resolution;
