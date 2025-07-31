@@ -81,6 +81,7 @@ always @(posedge clk) begin
             count_active_lanes = 0;
             i = 0;
             j <= 0;
+            mask_index <= 0;
             for (i = 0; i < NUM_OF_SDI; i = i + 1) begin
                 count_active_lanes = count_active_lanes + current_cmd[i];
             end
