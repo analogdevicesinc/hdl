@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-CN0363](https://www.analog.com/cn0363)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/eval-cn0363-pmdz 
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/cn0363/index.html
+- Evaluation board VADJ: 3.3V
 
 ## Supported parts
 
