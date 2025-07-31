@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-CN0585-FMCZ](https://www.analog.com/cn0585)
 - System documentation: TO BE ADDED
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/cn0585/index.html
+- Evaluation board VADJ range: 1.2V - 3.3V
 
 ## Supported parts
 
