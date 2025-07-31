@@ -400,7 +400,11 @@ add_connection mxfe_rx_cpack.if_packed_fifo_wr_data $adc_fifo_name.if_adc_wdata
 add_connection $adc_fifo_name.if_dma_xfer_req mxfe_rx_dma.if_s_axis_xfer_req
 add_connection $adc_fifo_name.m_axis mxfe_rx_dma.s_axis
 # RX dma to HPS
-ad_dma_interconnect mxfe_rx_dma.m_dest_axi
+if {$TRANSCEIVER_TYPE == "E-Tile"} {
+  ad_dma_interconnect mxfe_rx_dma.m_dest_axi 0x0000000 $adc_dma_data_width
+} else {
+  ad_dma_interconnect mxfe_rx_dma.m_dest_axi
+}
 
 # TX link to tpl
 add_connection mxfe_tx_tpl.link_data mxfe_tx_jesd204.link_data
@@ -416,7 +420,11 @@ add_connection $dac_fifo_name.if_dac_dunf mxfe_tx_tpl.if_dac_dunf
 add_connection mxfe_tx_dma.if_m_axis_xfer_req $dac_fifo_name.if_dma_xfer_req
 add_connection mxfe_tx_dma.m_axis $dac_fifo_name.s_axis
 # TX dma to HPS
-ad_dma_interconnect mxfe_tx_dma.m_src_axi
+if {$TRANSCEIVER_TYPE == "E-Tile"} {
+  ad_dma_interconnect mxfe_tx_dma.m_src_axi 0x0000000 $dac_dma_data_width
+} else {
+  ad_dma_interconnect mxfe_tx_dma.m_src_axi
+}
 
 # reconfiguration interface sharing for A10soc
 
@@ -443,7 +451,7 @@ if {$TRANSCEIVER_TYPE != "F-Tile" && $TRANSCEIVER_TYPE != "E-Tile"} {
 ## NOTE: if bridge is used, the address will be bridge_base_addr + peripheral_base_addr
 #
 if {!$EXTERNAL_PHY} {
-  if {$TRANSCEIVER_TYPE == "F-Tile" || $TRANSCEIVER_TYPE == "E-Tile"} {
+  if {$TRANSCEIVER_TYPE == "F-Tile"} {
     ad_cpu_interconnect 0x00000000 mxfe_rx_jesd204.phy_reconfig "avl_mm_bridge_0" 0x10000000 25
     ad_cpu_interconnect 0x00800000 mxfe_tx_jesd204.phy_reconfig "avl_mm_bridge_0"
   } else {
@@ -477,7 +485,6 @@ if {!$EXTERNAL_PHY} {
   # set_instance_parameter_value avl_mm_bridge_1 {MAX_PENDING_RESPONSES} {1}
   add_connection sys_clk.clk jesd204_phy.reconfig_clk
   add_connection sys_clk.clk_reset jesd204_phy.reconfig_reset
-
 }
 
 ad_cpu_interconnect 0x000C0000 mxfe_rx_jesd204.link_reconfig
