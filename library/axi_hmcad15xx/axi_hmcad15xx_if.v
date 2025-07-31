@@ -39,7 +39,7 @@ module axi_hmcad15xx_if #(
   parameter          DRP_WIDTH = 5,
   parameter          NUM_LANES = 9,  // Data lanes + frame lane
   parameter          FPGA_TECHNOLOGY = 0,
-  parameter          IODELAY_CTRL = 1,
+  parameter          IODELAY_CTRL = 0,
   parameter          IO_DELAY_GROUP = "adc_if_delay_group",
   parameter          REFCLK_FREQUENCY = 200,
   parameter          POLARITY_MASK = 8'h00
@@ -67,12 +67,12 @@ module axi_hmcad15xx_if #(
 
   // delay control signals
   input                                     up_clk,
-  input       [NUM_LANES-1:0]               up_dld,
-  input       [DRP_WIDTH*NUM_LANES-1:0]     up_dwdata,
-  output      [DRP_WIDTH*NUM_LANES-1:0]     up_drdata,
-  input                                     delay_clk,
-  input                                     delay_rst,
-  output                                    delay_locked
+  (* MARK_DEBUG = "TRUE" *)  input       [NUM_LANES-1:0]               up_dld,
+  (* MARK_DEBUG = "TRUE" *)  input       [DRP_WIDTH*NUM_LANES-1:0]     up_dwdata,
+  (* MARK_DEBUG = "TRUE" *)  output      [DRP_WIDTH*NUM_LANES-1:0]     up_drdata,
+  (* MARK_DEBUG = "TRUE" *)  input                                     delay_clk,
+  (* MARK_DEBUG = "TRUE" *)  input                                     delay_rst,
+  (* MARK_DEBUG = "TRUE" *)  output                                    delay_locked
 
 );
 
@@ -140,8 +140,7 @@ end
 ad_serdes_in # (
   .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
   .IODELAY_GROUP(IO_DELAY_GROUP),
-  .IODELAY_CTRL(0),
-  .IODELAY_ENABLE(0),
+  .IODELAY_CTRL(IODELAY_CTRL),
   .DATA_WIDTH(NUM_LANES),
   .DRP_WIDTH(DRP_WIDTH),
   .EXT_SERDES_RESET(1),
@@ -187,7 +186,7 @@ ad_serdes_in # (
   assign {frame_data[1],serdes_data[7][1],serdes_data[6][1],serdes_data[5][1],serdes_data[4][1],serdes_data[3][1],serdes_data[2][1],serdes_data[1][1],serdes_data[0][1]} = data_s6;  //
   assign {frame_data[0],serdes_data[7][0],serdes_data[6][0],serdes_data[5][0],serdes_data[4][0],serdes_data[3][0],serdes_data[2][0],serdes_data[1][0],serdes_data[0][0]} = data_s7;  // oldest bit received
 
-wire [15:0] data_out [0:7];
+(* MARK_DEBUG = "TRUE" *) wire [15:0] data_out [0:7];
 wire [ 7:0] data_en;
 
   generate
@@ -223,7 +222,7 @@ if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
   end
 end
 
-reg               wr_en8_reg;
+(* MARK_DEBUG = "TRUE" *) reg               wr_en8_reg;
 reg               wr_en14_reg;
 reg  [127:0]      wr_data14_reg;
 reg               wr_en_reg;
