@@ -140,7 +140,7 @@ ad_ip_parameter hmcad15xx_a2_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_instance axi_hmcad15xx axi_hmcad15xx_a1_adc
 ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.IODELAY_CTRL 1
 ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.NUM_CHANNELS 4
-ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.POLARITY_MASK 255
+ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.POLARITY_MASK 239
 
 ad_connect axi_hmcad15xx_a1_adc/s_axi_aclk    sys_cpu_clk
 ad_connect axi_hmcad15xx_a1_adc/clk_in_p      clk_in_a1_p
