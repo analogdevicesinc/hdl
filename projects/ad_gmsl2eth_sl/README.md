@@ -3,6 +3,7 @@
 - Evaluation board product page: [AD-GMSL2ETH-SL](https://www.analog.com/ad-gmsl2eth-sl)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad-gmsl2eth-sl
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad_gmsl2eth_sl/index.html
+- Evaluation board VADJ: 1.8V
 
 ## Supported parts
 
