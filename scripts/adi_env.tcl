@@ -8,6 +8,8 @@ set ad_hdl_dir [file normalize [file join [file dirname [info script]] "../"]]
 
 if [info exists ::env(ADI_HDL_DIR)] {
   set ad_hdl_dir [file normalize $::env(ADI_HDL_DIR)]
+} else {
+  set env(ADI_HDL_DIR) $ad_hdl_dir
 }
 
 if [info exists ::env(ADI_GHDL_DIR)] {
