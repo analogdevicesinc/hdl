@@ -116,8 +116,18 @@ If an application attempts to read data while the FIFO is empty undefined data
 is returned and the state of the FIFO remains unmodified.
 It is possible to read the first entry in the SDI FIFO without removing it by
 reading from the SDI_FIFO_PEEK register.
+It is important to point out that each read represents one lane of the SPI. So,
+for ``NUM_OF_SDI`` lanes it is necessary to read ``NUM_OF_SDI`` times. Reading
+always starts from lane 0.
 The number of valid entries in the SDI FIFO register can be queried by reading
-the SDI_FIFO_LEVEL register.
+the SDI_FIFO_LEVEL register. This value must be a multiple of ``NUM_OF_SDI``.
+
+Data can be inserted into the SDO FIFO by writing to the SDO_FIFO register
+**only the valid lanes**. For example, if there are 4 lanes and just 2 of them
+are enabled, then the programmer must write 2 values to this register. The
+remaining lanes will contain ``SDO_DEFAULT`` value defined in 
+:ref:`spi_engine execution`. The number of valid lanes are defined in
+:ref:`spi_engine configuration-registers`.
 
 If the peripheral is disabled by setting the ENABLE register to 0 any data
 stored in the FIFOs is discarded and the state of the FIFO is reset.
