@@ -1,7 +1,11 @@
+<!-- no_build_example, no_no_os -->
+
 # ADRV9361Z7035/CCFMC-LVDS HDL Project
 
 CCFMC_LVDS means [ADRV1CRR-FMC](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/adrv1crr-fmc.html)
 to be used with LVDS version of the signals.
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
