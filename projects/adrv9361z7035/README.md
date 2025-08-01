@@ -3,6 +3,7 @@
 - Evaluation board product page: [ADRV9361-Z7035](https://www.analog.com/adrv9361-z7035)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/adrv936x_rfsom
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adrv9361z7035/index.html
+- Evaluation board VADJ range: 1.2V - 1.8V
 
 ## Supported parts
 
