@@ -6,7 +6,6 @@
 
 PROJECT_NAME := fmcomms8_zcu102
 
-M_DEPS += ../common/fmcomms8_spi.v
 M_DEPS += ../common/fmcomms8_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
@@ -14,6 +13,7 @@ M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
