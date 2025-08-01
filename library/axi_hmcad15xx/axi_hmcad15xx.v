@@ -113,9 +113,6 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   reg  [31:0] up_rdata = 'd0;
   reg         up_rack = 'd0;
   reg         up_wack = 'd0;
-  reg [31:0]  up_rdata_r;
-  reg         up_rack_r;
-  reg         up_wack_r;
 
   // internal signals
 
@@ -151,18 +148,6 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   assign adc_enable_2 = adc_enable[2];
   assign adc_enable_3 = adc_enable[3];
 
-  integer j;
-
-  always @(*) begin
-    up_rdata_r = 'h00;
-    up_rack_r = 'h00;
-    up_wack_r = 'h00;
-    for (j = 0; j <= 5; j=j+1) begin
-      up_rack_r = up_rack_r | up_rack_s[j];
-      up_wack_r = up_wack_r | up_wack_s[j];
-      up_rdata_r = up_rdata_r | up_rdata_s[j];
-    end
-  end
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -170,9 +155,9 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
       up_rack <= 'd0;
       up_wack <= 'd0;
     end else begin
-      up_rdata <= up_rdata_r;
-      up_rack <= up_rack_r;
-      up_wack <= up_wack_r;
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3] | up_rdata_s[4] | up_rdata_s[5];
+      up_rack  <= up_rack_s[0]  | up_rack_s[1]  | up_rack_s[2]  | up_rack_s[3]  | up_rack_s[4]  | up_rack_s[5];
+      up_wack  <= up_wack_s[0]  | up_wack_s[1]  | up_wack_s[2]  | up_wack_s[3]  | up_wack_s[4]  | up_wack_s[5];
     end
   end
 
