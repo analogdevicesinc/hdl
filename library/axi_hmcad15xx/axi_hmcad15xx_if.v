@@ -168,8 +168,7 @@ ad_serdes_in # (
   .up_drdata(up_drdata),
   .delay_clk(delay_clk),
   .delay_rst(delay_rst),
-  .delay_locked(delay_locked)
-);
+  .delay_locked(delay_locked));
 
 
 
