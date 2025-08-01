@@ -553,9 +553,15 @@ proc adi_project_run {project_name} {
   if { [string match "*VIOLATED*" $timing_string] == 1 ||
        [string match "*Timing constraints are not met*" $timing_string] == 1} {
     write_hw_platform -fixed -force  -include_bit -file ${actual_project_name}.sdk/system_top_bad_timing.xsa
+    if {[info exists ::env(ADI_GENERATE_BIN)]} {
+      write_bitstream -bin_file ${actual_project_name}.sdk/system_top_bad_timing.bit
+    }
     return -code error [format "ERROR: Timing Constraints NOT met!"]
   } else {
     write_hw_platform -fixed -force  -include_bit -file ${actual_project_name}.sdk/system_top.xsa
+    if {[info exists ::env(ADI_GENERATE_BIN)]} {
+      write_bitstream -bin_file ${actual_project_name}.sdk/system_top.bit
+    }
   }
 }
 
@@ -700,4 +706,3 @@ proc adi_project_verify {project_name} {
     return -code error [format "ERROR: Timing Constraints NOT met!"]
   }
 }
-
