@@ -58,6 +58,7 @@ module axi_hmcad15xx_if #(
 
   input   [ 1:0]         resolution,
   input   [ 2:0]         mode,
+  input   [ 7:0]         polarity_mask_s,
 
   // data path interface
 
@@ -194,7 +195,7 @@ wire [ 7:0] data_en;
         sample_assembly  sample_assembly_inst (
           .clk(adc_clk_div),
           .frame(frame_data),
-          .data_in(serdes_data[i] ^ POLARITY_MASK),
+          .data_in(serdes_data[i] ^ polarity_mask_s),
           .resolution(resolution),
           .data_en(data_en[i]),
           .data_out(data_out[i])
