@@ -28,8 +28,14 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-- :xilinx:`KC705` LPC slot
+- :xilinx:`KC705` LPC slot *
 - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
+
+.. admonition:: Legend
+   :class: note
+
+   - ``*`` removed; last release that supports this project on this carrier is
+     :git-hdl:`hdl_2023_r2 <hdl_2023_r2:projects/ad9467_fmc/kc705>`
 
 Block design
 -------------------------------------------------------------------------------
