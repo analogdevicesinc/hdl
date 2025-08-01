@@ -224,9 +224,12 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   wire [7:0]       adc_custom_control;
   wire [1:0]       resolution;
   wire [2:0]       mode;
+  wire [7:0]       polarity_mask_s;
+  wire [31:0]      adc_config_wr;
 
-assign resolution = adc_custom_control[1:0];
-assign mode       = adc_custom_control[4:2];
+assign resolution      = adc_custom_control[1:0];
+assign mode            = adc_custom_control[4:2];
+assign polarity_mask_s = adc_config_wr[7:0];
 
   axi_hmcad15xx_if  #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
@@ -248,6 +251,7 @@ assign mode       = adc_custom_control[4:2];
     .adc_valid (adc_valid),
     .adc_data (adc_data),
     .resolution(resolution),
+    .polarity_mask_s(polarity_mask_s),
     .mode(mode),
     .up_dld(up_dld),
     .up_dwdata(up_dwdata),
@@ -296,7 +300,7 @@ assign mode       = adc_custom_control[4:2];
     .up_drp_rdata (32'd0),
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
-    .adc_config_wr (),
+    .adc_config_wr (adc_config_wr),
     .adc_config_ctrl (),
     .adc_config_rd ('d0),
     .adc_ctrl_status ('d0),
