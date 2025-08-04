@@ -41,7 +41,7 @@ module axi_dmac_regmap_request #(
   parameter BYTES_PER_BEAT_WIDTH_SRC = 1,
   parameter BYTES_PER_BEAT_WIDTH_SG = 1,
   parameter BYTES_PER_BURST_WIDTH = 7,
-  parameter DMA_AXI_ADDR_WIDTH = 32,
+  parameter DMA_AXI_ADDR_WIDTH = 64,
   parameter DMA_LENGTH_WIDTH = 24,
   parameter DMA_LENGTH_ALIGN = 3,
   parameter DMA_CYCLIC = 0,

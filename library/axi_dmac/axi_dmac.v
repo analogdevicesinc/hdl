@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -60,7 +60,7 @@ module axi_dmac #(
   parameter DMA_AXI_PROTOCOL_SG = 0,
   parameter DMA_TYPE_DEST = 0,
   parameter DMA_TYPE_SRC = 2,
-  parameter DMA_AXI_ADDR_WIDTH = 32,
+  parameter DMA_AXI_ADDR_WIDTH = 64,
   parameter MAX_BYTES_PER_BURST = 128,
   parameter FIFO_SIZE = 8, // In bursts
   parameter AXI_ID_WIDTH_SRC = 1,

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -39,7 +39,7 @@ module src_axi_mm #(
 
   parameter ID_WIDTH = 3,
   parameter DMA_DATA_WIDTH = 64,
-  parameter DMA_ADDR_WIDTH = 32,
+  parameter DMA_ADDR_WIDTH = 64,
   parameter BYTES_PER_BEAT_WIDTH = 3,
   parameter BEATS_PER_BURST_WIDTH = 4,
   parameter AXI_LENGTH_WIDTH = 8,
