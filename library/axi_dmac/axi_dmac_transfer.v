@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -46,7 +46,7 @@ module axi_dmac_transfer #(
   parameter BYTES_PER_BEAT_WIDTH_SG = $clog2(DMA_DATA_WIDTH_SG/8),
   parameter DMA_TYPE_DEST = 0,
   parameter DMA_TYPE_SRC = 2,
-  parameter DMA_AXI_ADDR_WIDTH = 32,
+  parameter DMA_AXI_ADDR_WIDTH = 64,
   parameter DMA_2D_TRANSFER = 0,
   parameter DMA_2D_TLAST_MODE = 0,
   parameter DMA_SG_TRANSFER = 0,
