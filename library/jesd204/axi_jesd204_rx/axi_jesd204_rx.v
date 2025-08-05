@@ -91,11 +91,11 @@ module axi_jesd204_rx #(
   input [31:0] status_synth_params2
 );
 
-  localparam PCORE_VERSION = 32'h00010761; // 1.07.a
+  localparam PCORE_VERSION = 32'h00010861; // 1.08.a
   localparam PCORE_MAGIC = 32'h32303452; // 204R
-  
+
   localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
-  
+
   /* Register interface signals */
   reg [31:0] up_rdata = 'h0;
   reg up_wack = 1'b0;
@@ -246,9 +246,9 @@ module axi_jesd204_rx #(
 
   jesd204_up_sysref #(
     .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2)
-  ) i_up_sysref (           
-    .up_clk(s_axi_aclk),            
-    .up_reset(up_reset),            
+  ) i_up_sysref (
+    .up_clk(s_axi_aclk),
+    .up_reset(up_reset),
 
     .core_clk(core_clk),
     .device_clk(device_clk),
