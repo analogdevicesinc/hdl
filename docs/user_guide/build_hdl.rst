@@ -745,6 +745,9 @@ Starting with Vivado 2019.3, the output file extension was changed from
    script will create a board design in IPI (IP Integrator), generate all the
    IP targets, synthesize the netlist and implementation.
 
+You can set the ADI_GENERATE_BIN environment variable to write the binary bit file
+without header **.bin** and the binary bit file **.bit**.
+
 4b. Building an Intel project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
