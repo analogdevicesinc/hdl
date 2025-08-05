@@ -99,7 +99,7 @@ module jesd204_tx #(
   localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
   localparam CW = DATA_PATH_WIDTH * NUM_LANES;
   localparam HW = 2 * NUM_LANES;
-  localparam INPUT_PIPELINE_WIDTH = (LINK_MODE[0] == 1) ? (1+(NUM_LANES*(1+(DATA_PATH_WIDTH*19)))) : (4+(64*NUM_LANES));
+  localparam INPUT_PIPELINE_WIDTH = (LINK_MODE[0] == 1) ? (1+(NUM_LANES*(1+(DATA_PATH_WIDTH*21)))) : (4+(64*NUM_LANES));
 
 wire [DW-1:0] tx_data_r;
 wire          tx_ready_r;
@@ -338,27 +338,20 @@ wire          tx_ready_r;
 
   if (LINK_MODE[0] == 1) begin : mode_8b10b
 
-  reg [DATA_PATH_WIDTH-1:0] tx_eof_fm_d3;
-  reg [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d3;
   wire [NUM_LANES-1:0] lane_cgs_enable;
   wire [DW-1:0] ilas_data;
   wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk;
 
-  wire [DATA_PATH_WIDTH-1:0] tx_eof_fm_d3_r;
-  wire [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d3_r;
+  wire [DATA_PATH_WIDTH-1:0] tx_eof_fm_d2_r;
+  wire [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d2_r;
   wire [NUM_LANES-1:0] lane_cgs_enable_r;
   wire [DW-1:0] ilas_data_r;
   wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk_r;
 
   wire cfg_generate_eomf = 1'b1;
 
-  assign input_pipeline_in = {tx_ready, gearbox_data, ilas_charisk, ilas_data, lane_cgs_enable, tx_eomf_fm_d3, tx_eof_fm_d3};
-  assign {tx_ready_r, tx_data_r, ilas_charisk_r, ilas_data_r, lane_cgs_enable_r, tx_eomf_fm_d3_r, tx_eof_fm_d3_r} = input_pipeline_out;
-
-  always @(posedge clk) begin
-    tx_eof_fm_d3 <= tx_eof_fm_d2;
-    tx_eomf_fm_d3 <= tx_eomf_fm_d2;
-  end
+  assign input_pipeline_in = {link_tx_ready, gearbox_data, ilas_charisk, ilas_data, lane_cgs_enable, tx_eomf_fm_d2, tx_eof_fm_d2};
+  assign {tx_ready_r, tx_data_r, ilas_charisk_r, ilas_data_r, lane_cgs_enable_r, tx_eomf_fm_d2_r, tx_eof_fm_d2_r} = input_pipeline_out;
 
   jesd204_tx_ctrl #(
     .NUM_LANES(NUM_LANES),
@@ -413,8 +406,8 @@ wire          tx_ready_r;
     ) i_lane (
       .clk(clk),
 
-      .eof(tx_eof_fm_d3_r),
-      .eomf(tx_eomf_fm_d3_r),
+      .eof(tx_eof_fm_d2_r),
+      .eomf(tx_eomf_fm_d2_r),
 
       .cgs_enable(lane_cgs_enable_r[i]),
 
