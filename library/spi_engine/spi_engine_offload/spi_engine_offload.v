@@ -42,7 +42,7 @@ module spi_engine_offload #(
   parameter CMD_MEM_ADDRESS_WIDTH = 4,
   parameter SDO_MEM_ADDRESS_WIDTH = 4,
   parameter DATA_WIDTH = 8, // Valid data widths values are 8/16/24/32
-  parameter NUM_OF_SDI = 1,
+  parameter NUM_OF_SDIO = 1,
   parameter SDO_STREAMING = 0
 ) (
   input ctrl_clk,
@@ -80,7 +80,7 @@ module spi_engine_offload #(
 
   input sdi_data_valid,
   output sdi_data_ready,
-  input [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
+  input [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data,
 
   input sync_valid,
   output sync_ready,
@@ -88,7 +88,7 @@ module spi_engine_offload #(
 
   output offload_sdi_valid,
   input offload_sdi_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH)-1:0] offload_sdi_data,
+  output [(NUM_OF_SDIO * DATA_WIDTH)-1:0] offload_sdi_data,
 
   output interconnect_dir
 );
