@@ -85,11 +85,11 @@ set ip [ipl::set_parameter -ip $ip \
     -group1 {General Configuration} \
     -group2 Config]
 set ip [ipl::set_parameter -ip $ip \
-    -id NUM_OF_SDI \
+    -id NUM_OF_SDIO \
     -type param \
     -value_type int \
     -conn_mod spi_engine_execution \
-    -title {Number of MISO} \
+    -title {Number of MISO/MOSI} \
     -default 1 \
     -output_formatter nostr \
     -value_range {(1, 8)} \

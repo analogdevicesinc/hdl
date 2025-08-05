@@ -38,7 +38,7 @@
 module spi_engine_interconnect #(
 
   parameter DATA_WIDTH = 8, // Valid data widths values are 8/16/24/32
-  parameter NUM_OF_SDI = 1
+  parameter NUM_OF_SDIO = 1
 ) (
   input clk,
   input resetn,
@@ -56,7 +56,7 @@ module spi_engine_interconnect #(
 
   input m_sdi_valid,
   output m_sdi_ready,
-  input [(NUM_OF_SDI * DATA_WIDTH-1):0] m_sdi_data,
+  input [(NUM_OF_SDIO * DATA_WIDTH-1):0] m_sdi_data,
 
   input m_sync_valid,
   output m_sync_ready,
@@ -72,7 +72,7 @@ module spi_engine_interconnect #(
 
   output s0_sdi_valid,
   input s0_sdi_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] s0_sdi_data,
+  output [(NUM_OF_SDIO * DATA_WIDTH-1):0] s0_sdi_data,
 
   output s0_sync_valid,
   input s0_sync_ready,
@@ -88,7 +88,7 @@ module spi_engine_interconnect #(
 
   output s1_sdi_valid,
   input s1_sdi_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] s1_sdi_data,
+  output [(NUM_OF_SDIO * DATA_WIDTH-1):0] s1_sdi_data,
 
   output s1_sync_valid,
   input s1_sync_ready,
