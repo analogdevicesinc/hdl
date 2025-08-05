@@ -5,14 +5,13 @@
 
 # env params
 
-set ADC_RES $ad_project_params(ADC_RES);    # ADC resolution; default 18 bits
-if {$ADC_RES == 16} {
-  set OUT_RES 16
-} else {
-  # if ADC_RES == 18
-  set OUT_RES 32
-}
 set TWOLANES $ad_project_params(TWOLANES);  # two-lane mode (1) or one-lane mode (0); default two-lane
+set ADC_RES $ad_project_params(ADC_RES);    # ADC resolution; default 18 bits
+set OUT_RES [expr {$ADC_RES == 16 ? 16 : 32}]
+set CLK_GATE_WIDTH [expr {($TWOLANES == 0 && $ADC_RES == 18) ? 9 : \
+                          ($TWOLANES == 0 && $ADC_RES == 16) ? 8 : \
+                          ($TWOLANES == 1 && $ADC_RES == 18) ? 5 : \
+                          4}]
 
 # ltc2387 i/o
 
@@ -41,7 +40,7 @@ ad_ip_instance axi_pwm_gen axi_pwm_gen
 ad_ip_parameter axi_pwm_gen CONFIG.N_PWMS 2
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_WIDTH 1
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_PERIOD 8
-ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_WIDTH 5
+ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_WIDTH $CLK_GATE_WIDTH
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_PERIOD 8
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_OFFSET 0
 
