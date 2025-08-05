@@ -33,7 +33,7 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
   ad_ip_instance spi_engine_execution $execution
   ad_ip_parameter $execution CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter $execution CONFIG.NUM_OF_CS $num_cs
-  ad_ip_parameter $execution CONFIG.NUM_OF_SDI $num_sdi
+  ad_ip_parameter $execution CONFIG.NUM_OF_SDIO $num_sdi
   ad_ip_parameter $execution CONFIG.SDO_DEFAULT 1
   ad_ip_parameter $execution CONFIG.SDI_DELAY $sdi_delay
   ad_ip_parameter $execution CONFIG.ECHO_SCLK $echo_sclk
@@ -41,7 +41,7 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
   ad_ip_instance axi_spi_engine $axi_regmap
   ad_ip_parameter $axi_regmap CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter $axi_regmap CONFIG.NUM_OFFLOAD 1
-  ad_ip_parameter $axi_regmap CONFIG.NUM_OF_SDI $num_sdi
+  ad_ip_parameter $axi_regmap CONFIG.NUM_OF_SDIO $num_sdi
   ad_ip_parameter $axi_regmap CONFIG.ASYNC_SPI_CLK $async_spi_clk
   ad_ip_parameter $axi_regmap CONFIG.OFFLOAD0_CMD_MEM_ADDRESS_WIDTH $cmd_mem_addr_width
   ad_ip_parameter $axi_regmap CONFIG.OFFLOAD0_SDO_MEM_ADDRESS_WIDTH $data_mem_addr_width
@@ -53,14 +53,14 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
   ad_ip_instance spi_engine_offload $offload
   ad_ip_parameter $offload CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter $offload CONFIG.ASYNC_SPI_CLK 0
-  ad_ip_parameter $offload CONFIG.NUM_OF_SDI $num_sdi
+  ad_ip_parameter $offload CONFIG.NUM_OF_SDIO $num_sdi
   ad_ip_parameter $offload CONFIG.CMD_MEM_ADDRESS_WIDTH $cmd_mem_addr_width
   ad_ip_parameter $offload CONFIG.SDO_MEM_ADDRESS_WIDTH $data_mem_addr_width
   ad_ip_parameter $offload CONFIG.SDO_STREAMING $sdo_streaming
 
   ad_ip_instance spi_engine_interconnect $interconnect
   ad_ip_parameter $interconnect CONFIG.DATA_WIDTH $data_width
-  ad_ip_parameter $interconnect CONFIG.NUM_OF_SDI $num_sdi
+  ad_ip_parameter $interconnect CONFIG.NUM_OF_SDIO $num_sdi
 
   ad_connect $axi_regmap/spi_engine_offload_ctrl0 $offload/spi_engine_offload_ctrl
   ad_connect $offload/m_interconnect_ctrl $interconnect/s_interconnect_ctrl

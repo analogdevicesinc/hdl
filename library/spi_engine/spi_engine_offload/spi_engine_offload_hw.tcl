@@ -20,13 +20,13 @@ ad_ip_parameter ASYNC_TRIG INTEGER 0
 ad_ip_parameter CMD_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter SDO_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter DATA_WIDTH INTEGER 8
-ad_ip_parameter NUM_OF_SDI INTEGER 1
+ad_ip_parameter NUM_OF_SDIO INTEGER 1
 ad_ip_parameter SDO_STREAMING INTEGER 0
 
 proc p_elaboration {} {
 
   set data_width [get_parameter_value DATA_WIDTH]
-  set num_of_sdi [get_parameter_value NUM_OF_SDI]
+  set num_of_sdi [get_parameter_value NUM_OF_SDIO]
   set disabled_intfs {}
 
   # control interface

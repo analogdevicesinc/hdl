@@ -14,12 +14,12 @@ ad_ip_files spi_engine_interconnect [list\
 # parameters
 
 ad_ip_parameter DATA_WIDTH INTEGER 8
-ad_ip_parameter NUM_OF_SDI INTEGER 1
+ad_ip_parameter NUM_OF_SDIO INTEGER 1
 
 proc p_elaboration {} {
 
   set data_width [get_parameter_value DATA_WIDTH]
-  set num_of_sdi [get_parameter_value NUM_OF_SDI]
+  set num_of_sdi [get_parameter_value NUM_OF_SDIO]
 
   # clock and reset interface
 
