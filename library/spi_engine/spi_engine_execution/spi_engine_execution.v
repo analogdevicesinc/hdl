@@ -41,7 +41,7 @@ module spi_engine_execution #(
   parameter DEFAULT_SPI_CFG = 0,
   parameter DEFAULT_CLK_DIV = 0,
   parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
-  parameter NUM_OF_SDI = 1,
+  parameter NUM_OF_SDIO = 1,
   parameter [0:0] SDO_DEFAULT = 1'b0,
   parameter ECHO_SCLK = 0,
   parameter [1:0] SDI_DELAY = 2'b00
@@ -62,7 +62,7 @@ module spi_engine_execution #(
 
   input sdi_data_ready,
   output sdi_data_valid,
-  output [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
+  output [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data,
 
   input sync_ready,
   output reg sync_valid,
@@ -70,9 +70,9 @@ module spi_engine_execution #(
 
   input echo_sclk,
   output reg sclk,
-  output reg [NUM_OF_SDI-1:0] sdo,
+  output reg [NUM_OF_SDIO-1:0] sdo,
   output reg sdo_t,
-  input [NUM_OF_SDI-1:0] sdi,
+  input [NUM_OF_SDIO-1:0] sdi,
   output reg [NUM_OF_CS-1:0] cs,
   output reg three_wire
 );
@@ -86,11 +86,12 @@ module spi_engine_execution #(
   localparam MISC_SYNC = 1'b0;
   localparam MISC_SLEEP = 1'b1;
 
-  localparam REG_CLK_DIV = 2'b00;
-  localparam REG_CONFIG = 2'b01;
-  localparam REG_WORD_LENGTH = 2'b10;
-  localparam REG_SPI_LANE_CONFIG = 2'b11;
-  localparam ALL_ACTIVE_LANE_MASK = (2 ** NUM_OF_SDI) - 1; //by default all lanes are enabled
+  localparam REG_CLK_DIV = 3'b000;
+  localparam REG_CONFIG = 3'b001;
+  localparam REG_WORD_LENGTH = 3'b010;
+  localparam REG_SDI_LANE_CONFIG = 3'b011;
+  localparam REG_SDO_LANE_CONFIG = 3'b100;
+  localparam ALL_ACTIVE_LANE_MASK = (2 ** NUM_OF_SDIO) - 1; //by default all lanes are enabled
 
   localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
                                  DATA_WIDTH > 8  ? 4 : 3;
@@ -125,7 +126,7 @@ module spi_engine_execution #(
   reg [7:0] word_length = DATA_WIDTH;
   reg [7:0] last_bit_count = DATA_WIDTH-1;
   reg [7:0] left_aligned = 8'b0;
-  reg [7:0] spi_lane_mask =  ALL_ACTIVE_LANE_MASK;
+  reg [7:0] sdo_lane_mask =  ALL_ACTIVE_LANE_MASK;
 
   reg cpha = DEFAULT_SPI_CFG[0];
   reg cpol = DEFAULT_SPI_CFG[1];
@@ -140,7 +141,7 @@ module spi_engine_execution #(
   wire sdo_enabled_io;
   wire sdi_enabled_io;
 
-  wire [NUM_OF_SDI-1:0] sdo_int_s;
+  wire [NUM_OF_SDIO-1:0] sdo_int_s;
 
   reg last_bit;
   wire echo_last_bit;
@@ -153,7 +154,6 @@ module spi_engine_execution #(
   wire       exec_transfer_cmd    = exec_cmd && inst == CMD_TRANSFER;
   wire       exec_chipselect_cmd  = exec_cmd && inst == CMD_CHIPSELECT;
   wire       exec_write_cmd       = exec_cmd && inst == CMD_WRITE;
-  wire       exec_lane_config_cmd = exec_write_cmd && cmd[9:8] == REG_SPI_LANE_CONFIG;
   wire       exec_misc_cmd        = exec_cmd && inst == CMD_MISC;
   wire       exec_cs_inv_cmd      = exec_cmd && inst == CMD_CS_INV;
   wire       exec_sync_cmd        = exec_misc_cmd && cmd[8] == MISC_SYNC;
@@ -165,7 +165,7 @@ module spi_engine_execution #(
   reg        cmd_d1_sleep_instr;
   reg        exec_transfer_cmd_reg = 1'b0; //avoid comparison in the shiftreg
   reg        exec_write_cmd_reg = 1'b0; //avoid comparison in the shiftreg data assemble
-  reg        exec_lane_config_cmd_reg = 1'b0; //avoid comparison in the shiftreg data assemble
+  reg        exec_sdo_lane_config_reg = 1'b0; //avoid comparison in the shiftreg data assemble
   reg        exec_chipselect_cmd_reg = 1'b0; //avoid comparison cs_gen
   reg        cmd_d1_time_is_zero;
 
@@ -189,12 +189,11 @@ module spi_engine_execution #(
     .DEFAULT_SPI_CFG(DEFAULT_SPI_CFG),
     .ALL_ACTIVE_LANE_MASK(ALL_ACTIVE_LANE_MASK),
     .DATA_WIDTH(DATA_WIDTH),
-    .NUM_OF_SDI(NUM_OF_SDI),
+    .NUM_OF_SDIO(NUM_OF_SDIO),
     .SDI_DELAY(SDI_DELAY),
     .ECHO_SCLK(ECHO_SCLK),
     .CMD_TRANSFER(CMD_TRANSFER),
-    .CMD_WRITE(CMD_WRITE),
-    .REG_SPI_LANE_CONFIG(REG_SPI_LANE_CONFIG)
+    .CMD_WRITE(CMD_WRITE)
   ) shiftreg (
     .clk(clk),
     .resetn(resetn),
@@ -212,11 +211,11 @@ module spi_engine_execution #(
     .sdi_enabled(sdi_enabled),
     .current_cmd(cmd_d1),
     .exec_cmd(exec_transfer_cmd_reg),
-    .spi_lane_cmd(exec_lane_config_cmd_reg),
+    .exec_sdo_lane_cmd(exec_sdo_lane_config_reg),
     .sdo_idle_state(sdo_idle_state),
     .left_aligned(left_aligned),
     .word_length(word_length),
-    .spi_lane_mask(spi_lane_mask),
+    .sdo_lane_mask(sdo_lane_mask),
     .sdo_io_ready(sdo_io_ready),
     .echo_last_bit(echo_last_bit),
     .transfer_active(transfer_active),
@@ -252,7 +251,7 @@ module spi_engine_execution #(
       exec_transfer_cmd_reg    <= (inst == CMD_TRANSFER);
       exec_write_cmd_reg       <= (inst == CMD_WRITE);
       exec_chipselect_cmd_reg  <= (inst == CMD_CHIPSELECT);
-      exec_lane_config_cmd_reg <= (inst == CMD_WRITE) && (cmd[9:8] == REG_SPI_LANE_CONFIG);
+      exec_sdo_lane_config_reg <= (inst == CMD_WRITE) && (cmd[10:8] == REG_SDO_LANE_CONFIG);
     end else begin
       sleep_counter_compare <= sleep_counter == cmd_d1_time && clk_div_last && sleep_counter_increment;
     end
@@ -280,10 +279,10 @@ module spi_engine_execution #(
       clk_div        <= DEFAULT_CLK_DIV;
       word_length    <= DATA_WIDTH;
       left_aligned   <= 0;
-      spi_lane_mask  <= ALL_ACTIVE_LANE_MASK;
+      sdo_lane_mask  <= ALL_ACTIVE_LANE_MASK;
     end else begin
       if (exec_write_cmd) begin
-        case (cmd[9:8])
+        case (cmd[10:8])
           REG_CLK_DIV         : begin
                                   clk_div        <= cmd[7:0];
                                 end
@@ -299,9 +298,9 @@ module spi_engine_execution #(
                                   // needed 1 cycle before transfer_active goes high
                                   left_aligned   <= DATA_WIDTH - cmd[7:0];
                                 end
-          REG_SPI_LANE_CONFIG : begin
+          REG_SDO_LANE_CONFIG : begin
                                   //max number of spi lanes is 8
-                                  spi_lane_mask  <= cmd[7:0];
+                                  sdo_lane_mask  <= cmd[7:0];
                                 end
         endcase
       end
@@ -355,7 +354,7 @@ module spi_engine_execution #(
     end else begin
       first_bit <= ((bit_counter + ntx_rx == 0) || (bit_counter == word_length-1));
       last_bit <= (bit_counter == last_bit_count);
-      
+
       if (clk_div_last && ~wait_for_io) begin
         if (last_bit && transfer_active && ntx_rx) begin
           bit_counter <= 0;

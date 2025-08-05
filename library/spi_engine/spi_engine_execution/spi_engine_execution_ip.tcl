@@ -84,13 +84,13 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters NUM_OF_CS -of_objects $cc]
 
-## NUM_OF_SDI
+## NUM_OF_SDIO
 set_property -dict [list \
   "value_validation_type" "range_long" \
   "value_validation_range_minimum" "1" \
   "value_validation_range_maximum" "8" \
  ] \
- [ipx::get_user_parameters NUM_OF_SDI -of_objects $cc]
+ [ipx::get_user_parameters NUM_OF_SDIO -of_objects $cc]
 
 ## DEFAULT_SPI_CFG
 set_property -dict [list \
@@ -166,11 +166,11 @@ set_property -dict [list \
   "tooltip" "\[NUM_OF_CS\] Define the number of chip select lines" \
 ] [ipgui::get_guiparamspec -name "NUM_OF_CS" -component $cc]
 
-ipgui::add_param -name "NUM_OF_SDI" -component $cc -parent $general_group
+ipgui::add_param -name "NUM_OF_SDIO" -component $cc -parent $general_group
 set_property -dict [list \
-  "display_name" "Number of MISO lines" \
-  "tooltip" "\[NUM_OF_SDI\] Define the number of MISO lines" \
-] [ipgui::get_guiparamspec -name "NUM_OF_SDI" -component $cc]
+  "display_name" "Number of MISO/MOSI lines" \
+  "tooltip" "\[NUM_OF_SDIO\] Define the number of MISO/MOSI lines" \
+] [ipgui::get_guiparamspec -name "NUM_OF_SDIO" -component $cc]
 
 set spi_config_group [ipgui::add_group -name "SPI Configuration" -component $cc \
     -parent $page0 -display_name "SPI Configuration" ]
@@ -191,11 +191,11 @@ set_property -dict [list \
 set mosi_miso_config_group [ipgui::add_group -name "MOSI/MISO Configuration" -component $cc \
     -parent $page0 -display_name "MOSI/MISO Configuration" ]
 
-ipgui::add_param -name "NUM_OF_SDI" -component $cc -parent $mosi_miso_config_group
+ipgui::add_param -name "NUM_OF_SDIO" -component $cc -parent $mosi_miso_config_group
 set_property -dict [list \
-  "display_name" "Number of MISO" \
-  "tooltip" "\[NUM_OF_SDI\] Define the number of MISO lines"
-] [ipgui::get_guiparamspec -name "NUM_OF_SDI" -component $cc]
+  "display_name" "Number of MISO/MOSI" \
+  "tooltip" "\[NUM_OF_SDIO\] Define the number of MISO/MOSI lines"
+] [ipgui::get_guiparamspec -name "NUM_OF_SDIO" -component $cc]
 
 ipgui::add_param -name "SDI_DELAY" -component $cc -parent $mosi_miso_config_group
 set_property -dict [list \
