@@ -125,7 +125,7 @@ In case of the **SERIAL** interface:
    - JP5 - Position A - Serial interface
    - JP5 - Position B - Parallel interface
 
-The NUM_OF_SDI configuration parameter defines the number of SDI lines used:
+The NUM_OF_SDIO configuration parameter defines the number of SDI lines used:
 **{1, 2, 4, 8}**. By default is set to 8.
 
 The ADC_N_BITS configuration parameter specifies the ADC resolution:

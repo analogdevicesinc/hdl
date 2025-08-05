@@ -85,7 +85,7 @@ The following are the parameters of this project that can be configured:
   - 0 - parallel (default)
   - 1 - serial
 
-- NUM_OF_SDI: number of SDI lines used, **only in serial interface mode**;
+- NUM_OF_SDIO: number of SDI lines used, **only in serial interface mode**;
 
   - 1 - one SDI line
   - 2 - two SDI lines (default)
@@ -264,14 +264,14 @@ the HDL repository, and then build the project as follows:.
 .. shell::
 
    $cd hdl/projects/ad7616_sdz/zed
-   $make INTF=1 NUM_OF_SDI=2
+   $make INTF=1 NUM_OF_SDIO=2
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:
 
 if the following command was run
 
-``make INTF=1 NUM_OF_SDI=2``
+``make INTF=1 NUM_OF_SDIO=2``
 
 then the folder name will be:
 
