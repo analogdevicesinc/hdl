@@ -48,6 +48,7 @@ module jesd204_rx_lane_64b #(
   reg  [11:0] crc12_calculated_prev;
 
   wire [63:0] phy_data_r;
+  wire [11:0] crc12_received_r;
   wire [63:0] data_descrambled_s;
   wire [63:0] data_descrambled;
   wire [63:0] data_descrambled_reordered;
@@ -110,16 +111,18 @@ module jesd204_rx_lane_64b #(
     .event_unexpected_eoemb(event_unexpected_eoemb));
 
   util_pipeline_stage #(
-    .WIDTH(65),
+    .WIDTH(1+12+64),
     .REGISTERED(1)
   ) i_pipeline_crc12 (
     .clk(clk),
     .in({
         eomb,
+        crc12_received,
         phy_data
       }),
     .out({
         eomb_r,
+        crc12_received_r,
         phy_data_r
       }));
 
@@ -154,7 +157,7 @@ module jesd204_rx_lane_64b #(
     end
   end
 
-  assign event_crc12_mismatch = crc12_rdy && eomb_r && (crc12_calculated_prev != crc12_received);
+  assign event_crc12_mismatch = crc12_rdy && eomb_r && (crc12_calculated_prev != crc12_received_r);
 
   assign err_cnt_rst = reset || ctrl_err_statistics_reset;
 
