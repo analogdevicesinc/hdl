@@ -179,10 +179,10 @@ An example of instantiation, using the default values for ``cmd_mem_addr_width``
 .. code:: tcl
 
    #                 name         data_width async_spi_clk num_csn num_sdi     sdi_delay  echo_sclk
-   spi_engine_create "spi_ad463x" 32         1             1       $NUM_OF_SDI 0          1
+   spi_engine_create "spi_ad463x" 32         1             1       $NUM_OF_SDIO 0          1
    ad_ip_parameter spi_ad463x/execution CONFIG.DEFAULT_SPI_CFG 1   ;
 
-   ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_0 $NUM_OF_SDI
+   ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_0 $NUM_OF_SDIO
    ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_1 $CAPTURE_ZONE
    ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_2 $CLK_MODE
    ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_3 $DDR_EN
