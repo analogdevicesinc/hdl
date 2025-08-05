@@ -48,7 +48,7 @@ module axi_spi_engine #(
   parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH = 4,
   parameter ID = 0,
   parameter [15:0] DATA_WIDTH = 8,
-  parameter [ 7:0] NUM_OF_SDI = 1,
+  parameter [ 7:0] NUM_OF_SDIO = 1,
   parameter CFG_INFO_0 = 0,
   parameter CFG_INFO_1 = 0,
   parameter CFG_INFO_2 = 0,
@@ -110,7 +110,7 @@ module axi_spi_engine #(
 
   output sdi_data_ready,
   input sdi_data_valid,
-  input [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
+  input [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data,
 
   output sync_ready,
   input sync_valid,
@@ -136,7 +136,7 @@ module axi_spi_engine #(
   localparam PCORE_VERSION = 'h010600;
   localparam S_AXI = 0;
   localparam UP_FIFO = 1;
-  localparam max_num_of_reads = NUM_OF_SDI-1;
+  localparam max_num_of_reads = NUM_OF_SDIO-1;
 
   wire clk;
   wire rstn;
@@ -158,8 +158,8 @@ module axi_spi_engine #(
   wire sdo_fifo_in_valid;
 
   wire [31:0] sdi_fifo_level;
-  reg  [NUM_OF_SDI*DATA_WIDTH/8-1:0] sdi_fifo_tkeep_int;
-  wire [NUM_OF_SDI*DATA_WIDTH/8-1:0] sdi_fifo_tkeep;
+  reg  [NUM_OF_SDIO*DATA_WIDTH/8-1:0] sdi_fifo_tkeep_int;
+  wire [NUM_OF_SDIO*DATA_WIDTH/8-1:0] sdi_fifo_tkeep;
   wire sdi_fifo_almost_full;
   wire up_sdi_fifo_almost_full;
 
@@ -167,6 +167,7 @@ module axi_spi_engine #(
   wire sdi_fifo_out_ready;
   reg  find_next_valid_fifo_value;
   wire sdi_fifo_out_valid;
+  reg [3:0] sdi_out_counter;
 
   wire [7:0] sync_fifo_data;
   wire sync_fifo_valid;
@@ -331,7 +332,7 @@ module axi_spi_engine #(
       8'h00: up_rdata_ff <= PCORE_VERSION;
       8'h01: up_rdata_ff <= ID;
       8'h02: up_rdata_ff <= up_scratch;
-      8'h03: up_rdata_ff <= {8'b0, NUM_OF_SDI, DATA_WIDTH};
+      8'h03: up_rdata_ff <= {8'b0, NUM_OF_SDIO, DATA_WIDTH};
       8'h04: up_rdata_ff <= {16'b0, offload_sdo_mem_address_width, offload_cmd_mem_address_width};
       8'h05: up_rdata_ff <= {sdi_fifo_address_width, sdo_fifo_address_width, sync_fifo_address_width, cmd_fifo_address_width};
       8'h10: up_rdata_ff <= up_sw_reset;
@@ -435,7 +436,7 @@ module axi_spi_engine #(
   assign sdo_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h39;
   assign sdo_fifo_in_data = up_wdata_s[DATA_WIDTH-1:0];
 
-   util_axis_fifo #(
+  util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
     .ASYNC_CLK(ASYNC_SPI_CLK),
     .ADDRESS_WIDTH(SDO_FIFO_ADDRESS_WIDTH),
@@ -469,10 +470,10 @@ module axi_spi_engine #(
   integer i;
   always @(posedge spi_clk) begin
     if (!spi_resetn) begin
-      sdi_fifo_tkeep_int <= {(NUM_OF_SDI*DATA_WIDTH/8){1'b1}};
+      sdi_fifo_tkeep_int <= {(NUM_OF_SDIO*DATA_WIDTH/8){1'b1}};
     end else begin
       if (cmd_valid && cmd_data[15:8] == 8'h23) begin
-         for (i = 0; i < NUM_OF_SDI; i = i + 1) begin
+         for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin
           sdi_fifo_tkeep_int[i*DATA_WIDTH/8+:DATA_WIDTH/8] <= {DATA_WIDTH/8{cmd_data[i]}};
          end
       end
@@ -482,7 +483,7 @@ module axi_spi_engine #(
 
   util_axis_fifo_asym #(
     .ASYNC_CLK(ASYNC_SPI_CLK),
-    .S_DATA_WIDTH(NUM_OF_SDI * DATA_WIDTH),
+    .S_DATA_WIDTH(NUM_OF_SDIO * DATA_WIDTH),
     .M_DATA_WIDTH(DATA_WIDTH),
     .ADDRESS_WIDTH(SDO_FIFO_ADDRESS_WIDTH),
     .M_AXIS_REGISTERED(0),
@@ -502,7 +503,6 @@ module axi_spi_engine #(
     .s_axis_tkeep(sdi_fifo_tkeep),
     .s_axis_full(),
     .s_axis_almost_full(sdi_fifo_almost_full),
-    
     .m_axis_aclk(clk),
     .m_axis_aresetn(up_sw_resetn),
     .m_axis_ready(sdi_fifo_out_ready || find_next_valid_fifo_value),
@@ -516,8 +516,6 @@ module axi_spi_engine #(
 
   assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h3a;
 
-  reg [3:0] sdi_out_counter;
-  reg find_next_valid_fifo_value;
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
       up_rack_ff <= 'd0;

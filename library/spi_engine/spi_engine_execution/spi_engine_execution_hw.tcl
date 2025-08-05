@@ -20,14 +20,14 @@ ad_ip_parameter NUM_OF_CS INTEGER 1
 ad_ip_parameter DEFAULT_SPI_CFG INTEGER 0
 ad_ip_parameter DEFAULT_CLK_DIV INTEGER 0
 ad_ip_parameter DATA_WIDTH INTEGER 8
-ad_ip_parameter NUM_OF_SDI INTEGER 1
+ad_ip_parameter NUM_OF_SDIO INTEGER 1
 ad_ip_parameter SDI_DELAY INTEGER 0
 ad_ip_parameter SDO_DEFAULT INTEGER 0
 
 proc p_elaboration {} {
 
   set data_width [get_parameter_value DATA_WIDTH]
-  set num_of_sdi [get_parameter_value NUM_OF_SDI]
+  set num_of_sdi [get_parameter_value NUM_OF_SDIO]
   set num_of_cs [get_parameter_value NUM_OF_CS]
 
   # clock and reset interface
