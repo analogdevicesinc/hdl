@@ -33,7 +33,7 @@ ad_ip_parameter OFFLOAD0_CMD_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter ID INTEGER 0
 ad_ip_parameter DATA_WIDTH INTEGER 8
-ad_ip_parameter NUM_OF_SDI INTEGER 1
+ad_ip_parameter NUM_OF_SDIO INTEGER 1
 
 proc p_elaboration {} {
 
@@ -41,7 +41,7 @@ proc p_elaboration {} {
 
   set mm_if_type [get_parameter_value "MM_IF_TYPE"]
 
-  set num_of_sdi [get_parameter_value NUM_OF_SDI]
+  set num_of_sdi [get_parameter_value NUM_OF_SDIO]
   set data_width [get_parameter_value DATA_WIDTH]
 
   # interrupt
