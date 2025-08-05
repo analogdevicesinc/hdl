@@ -59,6 +59,11 @@ set_parameter_property NUM_OUTPUT_PIPELINE DISPLAY_NAME "Number of output pipeli
 set_parameter_property NUM_OUTPUT_PIPELINE ALLOWED_RANGES 0:3
 set_parameter_property NUM_OUTPUT_PIPELINE HDL_PARAMETER true
 
+add_parameter NUM_INPUT_PIPELINE INTEGER 0
+set_parameter_property NUM_INPUT_PIPELINE DISPLAY_NAME "Number of input pipeline stages"
+set_parameter_property NUM_INPUT_PIPELINE ALLOWED_RANGES 0:3
+set_parameter_property NUM_INPUT_PIPELINE HDL_PARAMETER true
+
 add_parameter ASYNC_CLK BOOLEAN false
 set_parameter_property ASYNC_CLK DISPLAY_NAME "Link and device clock asynchronous"
 set_parameter_property ASYNC_CLK HDL_PARAMETER true
