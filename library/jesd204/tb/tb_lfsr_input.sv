@@ -1,6 +1,12 @@
+// ***************************************************************************
+// ***************************************************************************
+// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// SPDX short identifier: ADIJESD204
+// ***************************************************************************
+// ***************************************************************************
+
 `timescale 1ns / 100ps
 `default_nettype none
-
 
 module tb_lfsr_input;
 
@@ -44,7 +50,7 @@ module tb_lfsr_input;
 
 
 
-  
+
 
   initial begin
     for(ii = 0; ii < INPUT_DATA_WIDTH; ii = ii + 1) begin

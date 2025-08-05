@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017, 2018, 2021 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017, 2018, 2021, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -63,64 +63,29 @@ set_false_path \
 set_false_path \
   -to [get_pins {i_up_common/up_core_reset_ext_synchronizer_vector_reg[*]/PRE}]
 
-# set_max_delay -datapath_only \
-#   -from [get_pins {i_up_common/up_cfg_*_reg*/C}] \
-#   -to [get_pins {i_up_common/core_cfg_*_reg*/D}] \
-#   [get_property -min PERIOD $core_clk]
-
-# set_max_delay -datapath_only \
-#   -from [get_pins {i_up_common/up_cfg_*_reg*/C}] \
-#   -to [get_pins {i_up_common/device_cfg_*_reg*/D}] \
-#   [get_property -min PERIOD $device_clk]
-
-# set_max_delay -datapath_only \
-#   -from [get_pins {i_up_tx/up_cfg_ilas_data_*_reg*/C}] \
-#   -to [get_cells {i_up_tx/*core_ilas_config_data_reg*}] \
-#   [get_property -min PERIOD $core_clk]
-
-# set_max_delay -datapath_only \
-#   -from [get_pins {i_up_tx/up_cfg_*_reg*/C}] \
-#   -to [get_pins {i_up_common/core_extra_cfg_reg[*]/D}] \
-#   [get_property -min PERIOD $core_clk]
-
-# set_max_delay -datapath_only \
-#   -from [get_pins {i_up_tx/up_cfg_*_reg*/C}] \
-#   -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}] \
-#   [get_property -min PERIOD $device_clk]
-
-# set_max_delay -datapath_only \
-#   -from [get_pins {i_up_sysref/up_cfg_*_reg*/C}] \
-#   -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}] \
-#   [get_property -min PERIOD $device_clk]
-
-
-
+set_false_path \
+  -from [get_pins {i_up_common/up_cfg_*_reg*/C}] \
+  -to [get_pins {i_up_common/core_cfg_*_reg*/D}]
 
 set_false_path \
   -from [get_pins {i_up_common/up_cfg_*_reg*/C}] \
-  -to [get_pins {i_up_common/core_cfg_*_reg*/D}] 
-
-set_false_path \
-  -from [get_pins {i_up_common/up_cfg_*_reg*/C}] \
-  -to [get_pins {i_up_common/device_cfg_*_reg*/D}] 
+  -to [get_pins {i_up_common/device_cfg_*_reg*/D}]
 
 set_false_path \
   -from [get_pins {i_up_tx/up_cfg_ilas_data_*_reg*/C}] \
-  -to [get_cells {i_up_tx/*core_ilas_config_data_reg*}] 
+  -to [get_cells {i_up_tx/*core_ilas_config_data_reg*}]
 
 set_false_path \
   -from [get_pins {i_up_tx/up_cfg_*_reg*/C}] \
-  -to [get_pins {i_up_common/core_extra_cfg_reg[*]/D}] 
+  -to [get_pins {i_up_common/core_extra_cfg_reg[*]/D}]
 
 set_false_path \
   -from [get_pins {i_up_tx/up_cfg_*_reg*/C}] \
-  -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}] 
+  -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}]
 
 set_false_path \
   -from [get_pins {i_up_sysref/up_cfg_*_reg*/C}] \
-  -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}] 
-
-
+  -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}]
 
 set_false_path \
   -from [get_pins {i_up_tx/i_cdc_manual_sync_request/out_toggle_d1_reg/C}] \

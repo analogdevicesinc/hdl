@@ -1,0 +1,9 @@
+#!/bin/bash
+
+export SIMULATOR=modelsim
+
+SOURCE="tb_lfsr_input.sv"
+SOURCE+=" ../jesd204_common/lfsr_input.sv"
+
+cd `dirname $0`
+source ../../common/tb/run_tb.sh
