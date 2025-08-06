@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -12,6 +12,31 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 #   Use over-writable parameters from the environment.
 #
+#    e.g.
+#      make PLL_TYPE=QPLL0 REF_CLK=245.75 LANE_RATE=9.83
+
+# Parameter description:
+#   LANE_RATE: Value of lane rate [gbps]
+#   REF_CLK: Value of the reference clock [MHz] (usually LANE_RATE/20 or LANE_RATE/40)
+#   PLL_TYPE: The PLL used for driving the link [CPLL/QPLL0/QPLL1]
+#
+#   e.g. call for make with parameters
+#   set xcvr_config_paths [adi_xcvr_project [list \
+#     LANE_RATE 9.83\
+#     REF_CLK 245.75\
+#     PLL_TYPE QPLL0\
+#   ]]
+# The function returns a dictionary with the paths to the `cfng` file
+# containing the modified parameters and to the `_common.v` file for extracting the value of the `QPLL_FBDIV_TOP` parameter for GTXE2.
+
+global xcvr_config_paths
+
+set xcvr_config_paths [adi_xcvr_project [list \
+  LANE_RATE [get_env_param LANE_RATE  9.83] \
+  REF_CLK   [get_env_param REF_CLK  245.75] \
+  PLL_TYPE  [get_env_param PLL_TYPE  QPLL0] \
+]]
+
 # Parameter description:
 #   [TX/RX/RX_OS]_JESD_M : Number of converters per link
 #   [TX/RX/RX_OS]_JESD_L : Number of lanes per link
@@ -43,3 +68,4 @@ set_property strategy Performance_RefinePlacement [get_runs impl_1]
 set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE ExploreWithAggressiveHoldFix [get_runs impl_1]
 
 adi_project_run adrv9026_vcu118
+
