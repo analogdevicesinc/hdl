@@ -65,24 +65,23 @@ module system_top (
 
   inout           iic_ard_scl,
   inout           iic_ard_sda,
-  
+
   output          resetb,
   output          ldacb_tgp,
   output          shdn,
-  
+
   output          spi_sclk,
   output          spi_csb,
   output          spi_sdo,
   input           spi_sdi
 );
-
   // internal signals
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
   assign gpio_i[63:34]  = gpio_o[63:34];
-  
+
   //Control
   assign resetb = gpio_o[32];
   assign shdn   = gpio_o[33];
@@ -133,14 +132,14 @@ module system_top (
     .gpio_t (gpio_t),
 
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (spi_sclk),
-    .spi0_csn_0_o (spi_csb),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (spi_sdi),
+    .spi0_sdi_i (),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (spi_sdo),
+    .spi0_sdo_o (),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -150,9 +149,17 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o(),
+    
+    .axi_quad_spi_clk_i(1'b0),
+    .axi_quad_spi_clk_o(spi_sclk),
+    .axi_quad_spi_sdo_i(1'b0),
+    .axi_quad_spi_sdo_o(spi_sdo),
+    .axi_quad_spi_sdi_i(spi_sdi),
+    .axi_quad_spi_csn_i(1'b1),
+    .axi_quad_spi_csn_o(spi_csb),
+
     .iic_ard_scl_io (iic_ard_scl),
     .iic_ard_sda_io (iic_ard_sda),
     .ldacb_tgp(ldacb_tgp));
 
 endmodule
-
