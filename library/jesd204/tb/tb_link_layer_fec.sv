@@ -10,7 +10,6 @@
 `default_nettype none
 
 module tb_link_layer_fec;
-
   localparam NUM_LANES=2;
   localparam NUM_LINKS=1;
   localparam SCR = 0;
@@ -29,8 +28,9 @@ module tb_link_layer_fec;
   // localparam NEXT_ERROR_BITS = 64'h0000000000000000;
   localparam REPORT_GOOD_DATA = 1'b1;
 
-  reg                             clk = 1'b0;
-  reg                             sysref = 1'b0;
+  parameter VCD_FILE = {"tb_link_layer_fec.vcd"};
+  `include "tb_base.v"
+
   logic                           rst;
   logic [INPUT_DATA_WIDTH-1:0]    DATA_VALUE_REVERSED;
   logic [INPUT_DATA_WIDTH-1:0]    data;
@@ -238,6 +238,7 @@ module tb_link_layer_fec;
         cur_tx_data = tx_data_q.pop_front();
         if(cur_tx_data !== rx_data) begin
           $error("RX Cycle: %d Data mismatch. Expected: %X  Observed: %X", rx_cycle_cnt, cur_tx_data, rx_data);
+          failed = 1'b1;
         end else if(REPORT_GOOD_DATA) begin
           $display("RX Cycle: %d Good data:%X", rx_cycle_cnt, cur_tx_data);
         end

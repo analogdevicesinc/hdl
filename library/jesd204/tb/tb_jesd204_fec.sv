@@ -24,13 +24,15 @@ module tb_jesd204_fec;
   localparam ERROR_BITS =  64'h1FF000; // Bits of decoder input data to corrupt
   localparam FEC_ERROR_BITS = '0; // {1'b1, 25'b0};
 
+  parameter VCD_FILE = {"tb_jesd204_fec.vcd"};
+  `include "tb_base.v"
+
   logic [INPUT_DATA_WIDTH-1:0]    DATA_VALUE_REVERSED;
   logic [INPUT_DATA_WIDTH-1:0]    data;
 
   logic [FEC_WIDTH-1:0]           fec;
   logic [FEC_WIDTH-1:0]           fec_saved;
   logic [FEC_WIDTH-1:0]           decode_fec_in;
-  reg                             clk = 1'b0;
   logic                           rst;
   logic                           fec_in_valid;
   logic                           shift_en;
