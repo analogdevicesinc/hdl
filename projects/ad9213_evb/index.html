@@ -8,8 +8,8 @@
 
     <title>AD9213-EVB HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=04bde29a" />
-    <script async="async" src="../../_static/app.umd.js?v=470d438e"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=3f4bd1a2" />
+    <script async="async" src="../../_static/app.umd.js?v=75bad8ae"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -388,7 +388,7 @@ Content on this topic
 <p>The receive chain transports the captured samples from ADC to the system
 memory (DDR). Before transferring the data to DDR the samples are stored
 in a buffer implemented on block rams from the FPGA fabric
-(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_adcfifo" target="_blank">util_adcfifo</a>).</p>
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">data_offload</a>).</p>
 <p>All cores from the receive chain are programmable through
 an AXI-Lite interface.</p>
 </section>
@@ -480,6 +480,9 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tr>
 <tr class="row-odd"><td><p>axi_ad9213_dma</p></td>
 <td><p>0x7C42_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>ad9213_data_offload</p></td>
+<td><p>0x7C43_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -642,27 +645,31 @@ command by typing in your command prompt:</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_SYSID</p></td>
+<tr class="row-odd"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">library/data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>SYSID_ROM</p></td>
+<tr class="row-odd"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_ADXCVR</p></td>
+<tr class="row-even"><td><p>UTIL_ADXCVR</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr" target="_blank">library/xilinx/util_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR core for AMD Xilinx devices</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_ADXCVR</p></td>
+<tr class="row-odd"><td><p>AXI_ADXCVR</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr" target="_blank">library/xilinx/axi_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">AMD Xilinx Devices</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_JESD204_RX</p></td>
+<tr class="row-even"><td><p>AXI_JESD204_RX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx" target="_blank">library/jesd204/axi_jesd204_rx</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>JESD204_TPL_ADC</p></td>
+<tr class="row-odd"><td><p>JESD204_TPL_ADC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc" target="_blank">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a></p></td>
 </tr>

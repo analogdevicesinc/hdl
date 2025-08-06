@@ -8,8 +8,8 @@
 
     <title>Util WFIFO &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=04bde29a" />
-    <script async="async" src="../../_static/app.umd.js?v=470d438e"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=3f4bd1a2" />
+    <script async="async" src="../../_static/app.umd.js?v=75bad8ae"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -364,11 +364,7 @@ Content on this topic
   <section id="util-wfifo">
 <span id="id1"></span><h1>Util WFIFO<a class="headerlink" href="#util-wfifo" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330.0 282" width="330.0" class="no-background"><style>
-                a {
-                    text-decoration: none;
-                }
-                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="294.0" height="228" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-din_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">din_clk</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-din_rst"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">din_rst</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dout_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">dout_clk</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dout_rstn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">dout_rstn</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">dout_ovf</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">din_enable_*</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">din_valid_*</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">din_data_*</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="54">din_ovf</text></a><g transform="translate(312.0,46.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="78">dout_enable_*</text></a><g transform="translate(312.0,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="102">dout_valid_*</text></a><g transform="translate(312.0,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="126">dout_data_*</text></a><g transform="translate(312.0,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="294.0" height="228" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="165.0" y="266">util_wfifo</text></svg></section>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 516 276" width="516" class="no-background"><rect x="18" y="18" width="480" height="240" rx="18" stroke="#666" fill="none" stroke-width="3" stroke-dasharray="8 16" stroke-linecap="round"/><text style="font: 64px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="94.4">?</text><text style="font: 16px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="150.4">util_wfifo IP-XACT not found.</text><text style="font: 12.0px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="178.4">Generate it and the documentation:</text><text style="font: 12.0px monospace" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="198.4">(cd library/util_wfifo; make)</text><text style="font: 12.0px monospace" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="218.4">(cd docs; make html)</text></svg></section>
 </div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_wfifo" target="_blank">Util WFIFO</a> core
 is designed to downscale the clock rate of the RX data path.
 There are scenarios when the device clock (interface clock) is too high (above
@@ -423,42 +419,32 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
-<th class="head"><p>Default Value</p></th>
-<th class="head"><p>Choices/Range</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_CHANNELS</span></code></td>
-<td class="description"><section>
+<td><section>
 <p>The number of channels of the device.</p>
 </section>
 </td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
-<td class="range"><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DIN_DATA_WIDTH</span></code></td>
-<td class="description"><section>
+<td><section>
 <p>The bus width of the input data (DMA bus width).</p>
 </section>
 </td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">32</span></code></td>
-<td class="range"><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DOUT_DATA_WIDTH</span></code></td>
-<td class="description"><section>
+<td><section>
 <p>The bus width of the output data (device core’s data interface bus width).</p>
 </section>
 </td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">64</span></code></td>
-<td class="range"><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DIN_ADDRESS_WIDTH</span></code></td>
-<td class="description"><section>
+<td><section>
 <p>The address width of the internal memory of the FIFO.</p>
 </section>
 </td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
-<td class="range"><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -467,190 +453,65 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </div></section>
 <section id="interface">
 <h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
-<div><section id="bus-interface-din_clk">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="151f94c14c0c6d290df3fcf85a2a18cee68240c5" name="151f94c14c0c6d290df3fcf85a2a18cee68240c5" type="checkbox"></input><label for="151f94c14c0c6d290df3fcf85a2a18cee68240c5"><div><p>din_clk</p>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
+<div><div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">din_clk</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="bus-interface-din_rst">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="7f9b6de0773ef717f76118b4db4ef5c728c4d7e4" name="7f9b6de0773ef717f76118b4db4ef5c728c4d7e4" type="checkbox"></input><label for="7f9b6de0773ef717f76118b4db4ef5c728c4d7e4"><div><p>din_rst</p>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">din_rst</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="bus-interface-dout_clk">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="ad1cc594e662033758dff0b3fe5e02ef689cd67a" name="ad1cc594e662033758dff0b3fe5e02ef689cd67a" type="checkbox"></input><label for="ad1cc594e662033758dff0b3fe5e02ef689cd67a"><div><p>dout_clk</p>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dout_clk</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="bus-interface-dout_rstn">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="b48f3e794fea20c6e8800afb463b3adf527bdf0a" name="b48f3e794fea20c6e8800afb463b3adf527bdf0a" type="checkbox"></input><label for="b48f3e794fea20c6e8800afb463b3adf527bdf0a"><div><p>dout_rstn</p>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dout_rstn</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="ports">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="bdac503094d77e45801c31c2a97261527906e5b1" name="bdac503094d77e45801c31c2a97261527906e5b1" type="checkbox"></input><label for="bdac503094d77e45801c31c2a97261527906e5b1"><p>Ports</p>
-<div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">din_ovf</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Input data overflow.</p>
-</section>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dout_ovf</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Output data overflow.</p>
-</section>
-</td>
-</tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">din_enable_*</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Enable.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">din_valid_*</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Valid.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">din_data_*</span></code></td>
-<td><p>in [31:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Data.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dout_enable_*</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">din_ovf</span></code></td>
+<td><section>
+<p>Input data overflow.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dout_enable_*</span></code></td>
+<td><section>
 <p>Enable.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dout_valid_*</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dout_valid_*</span></code></td>
+<td><section>
 <p>Valid.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dout_data_*</span></code></td>
-<td><p>out [63:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dout_data_*</span></code></td>
+<td><section>
 <p>Data.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dout_ovf</span></code></td>
+<td><section>
+<p>Output data overflow.</p>
 </section>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-</div>
-</section>
 </div></section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>

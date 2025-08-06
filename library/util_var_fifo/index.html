@@ -8,8 +8,8 @@
 
     <title>Util VAR FIFO &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=04bde29a" />
-    <script async="async" src="../../_static/app.umd.js?v=470d438e"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=3f4bd1a2" />
+    <script async="async" src="../../_static/app.umd.js?v=75bad8ae"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -366,11 +366,7 @@ Content on this topic
   <section id="util-var-fifo">
 <span id="id1"></span><h1>Util VAR FIFO<a class="headerlink" href="#util-var-fifo" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 349.2 282" width="349.2" class="no-background"><style>
-                a {
-                    text-decoration: none;
-                }
-                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="313.2" height="228" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">clk</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-rst"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">rst</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">depth</text></a><g transform="translate(18,94.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">data_in</text></a><g transform="translate(18,118.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">data_in_valid</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">dout_r</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="54">data_out</text></a><g transform="translate(331.2,46.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="78">data_out_valid</text></a><g transform="translate(331.2,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="102">wea_w</text></a><g transform="translate(331.2,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="126">en_w</text></a><g transform="translate(331.2,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="150">addr_w</text></a><g transform="translate(331.2,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="174">din_w</text></a><g transform="translate(331.2,166.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="198">en_r</text></a><g transform="translate(331.2,190.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="222">addr_r</text></a><g transform="translate(331.2,214.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="313.2" height="228" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="174.6" y="266">util_var_fifo</text></svg></section>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 516 276" width="516" class="no-background"><rect x="18" y="18" width="480" height="240" rx="18" stroke="#666" fill="none" stroke-width="3" stroke-dasharray="8 16" stroke-linecap="round"/><text style="font: 64px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="94.4">?</text><text style="font: 16px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="150.4">util_var_fifo IP-XACT not found.</text><text style="font: 12.0px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="178.4">Generate it and the documentation:</text><text style="font: 12.0px monospace" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="198.4">(cd library/util_var_fifo; make)</text><text style="font: 12.0px monospace" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="218.4">(cd docs; make html)</text></svg></section>
 </div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_var_fifo" target="_blank">Util VAR FIFO</a> core
 controls an external BRAM memory through which it allows
 the storage of a variable number of samples before triggering.</p>
@@ -405,26 +401,20 @@ the storage of a variable number of samples before triggering.</p>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
-<th class="head"><p>Default Value</p></th>
-<th class="head"><p>Choices/Range</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DATA_WIDTH</span></code></td>
-<td class="description"><section>
+<td><section>
 <p>Data width of the FIFO. The BRAM generator parameters should match this.</p>
 </section>
 </td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">32</span></code></td>
-<td class="range"><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ADDRESS_WIDTH</span></code></td>
-<td class="description"><section>
+<td><section>
 <p>The BRAM generator parameters should match this. Gives the maximum depth of the FIFO</p>
 </section>
 </td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">13</span></code></td>
-<td class="range"><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -433,168 +423,94 @@ the storage of a variable number of samples before triggering.</p>
 </div></section>
 <section id="interface">
 <h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
-<div><section id="bus-interface-clk">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="b10950e799e1db5f5b9cdb76e3b70f6feb599b9b" name="b10950e799e1db5f5b9cdb76e3b70f6feb599b9b" type="checkbox"></input><label for="b10950e799e1db5f5b9cdb76e3b70f6feb599b9b"><div><p>clk</p>
-<section>
-<p>Clock input. Should be synchronous to the input and the output data.</p>
-</section>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
+<div><div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">clk</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="bus-interface-rst">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="404aa264f1f3f9267348b322282e7d1879e14c44" name="404aa264f1f3f9267348b322282e7d1879e14c44" type="checkbox"></input><label for="404aa264f1f3f9267348b322282e7d1879e14c44"><div><p>rst</p>
-<section>
-<p>Reset input. Should be synchronous clk clock</p>
-</section>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rst</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="ports">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="408af03e435169fc945261e1851ffdb3a37363db" name="408af03e435169fc945261e1851ffdb3a37363db" type="checkbox"></input><label for="408af03e435169fc945261e1851ffdb3a37363db"><p>Ports</p>
-<div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">clk</span></code></td>
+<td><section>
+<p>Clock input. Should be synchronous to the input and the output data.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rst</span></code></td>
+<td><section>
+<p>Reset input. Should be synchronous clk clock</p>
+</section>
+</td>
+</tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">depth</span></code></td>
-<td><p>in [31:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Controls the depth of the FIFO. Should be less than the maximum depth. Controlled by an outside IP.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">data_in</span></code></td>
-<td><p>in [31:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Data to be stored.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">data_in_valid</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Valid for the input data.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">data_out</span></code></td>
-<td><p>out [31:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Data forwarded to the DMA.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">data_out_valid</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Valid for the output data.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">wea_w</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Write signal.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">en_w</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Write enable signal.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">addr_w</span></code></td>
-<td><p>out [12:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Address for the write pointer.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">din_w</span></code></td>
-<td><p>out [31:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Data to be written to the BRAM.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">en_r</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Read enable signal.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">addr_r</span></code></td>
-<td><p>out [12:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Address for the read pointer.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dout_r</span></code></td>
-<td><p>in [31:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
+<td><section>
 <p>Data read from the BRAM.</p>
 </section>
 </td>
@@ -602,9 +518,6 @@ the storage of a variable number of samples before triggering.</p>
 </tbody>
 </table>
 </div>
-</div>
-</div>
-</section>
 </div></section>
 <section id="detailed-description">
 <h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>

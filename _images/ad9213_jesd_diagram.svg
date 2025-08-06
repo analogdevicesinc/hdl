@@ -225,7 +225,7 @@
  </g>
  <g transform="translate(-17.512)" shape-rendering="crispEdges">
   <rect x="169.91" y="215.14" width="34.503" height="196.4" enable-background="new" fill="#d2e6eb" stroke="#0f3296" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <text transform="rotate(-90)" x="-313.30087" y="193.42647" enable-background="new" fill="#000000" font-family="Arial" letter-spacing="0px" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-313.30087" y="193.42647" font-family="Arial" font-size="17.5px" font-weight="bold" text-align="center" text-anchor="middle" style="line-height:1.25">UTIL_ADC FIFO</tspan></text>
+  <text transform="rotate(-90)" x="-313.30087" y="193.42647" enable-background="new" fill="#000000" font-family="Arial" letter-spacing="0px" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-313.30087" y="193.42647" font-family="Arial" font-size="17.5px" font-weight="bold" text-align="center" text-anchor="middle" style="line-height:1.25">DATA_OFFLOAD</tspan></text>
  </g>
  <g transform="translate(4.4971)" shape-rendering="crispEdges">
   <rect x="50.5" y="215.14" width="34.503" height="196.4" enable-background="new" fill="#d2e6eb" stroke="#0f3296" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
