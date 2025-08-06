@@ -9,11 +9,13 @@
 `default_nettype none
 
 module tb_lfsr_input;
-
   localparam LFSR_WIDTH = 26;
   localparam [LFSR_WIDTH:1] RESET_VAL = {LFSR_WIDTH{1'b0}};
   localparam [LFSR_WIDTH:1] LFSR_POLYNOMIAL = 26'h2210110;
   localparam MAX_SHIFT_CNT = 64;
+
+  parameter VCD_FILE = {"tb_lfsr_input.vcd"};
+  `include "tb_base.v"
 
   // localparam INPUT_DATA_WIDTH = 64;
   // localparam logic [INPUT_DATA_WIDTH-1:0] DATA_VALUE = 64'h8001020305050423;
@@ -25,7 +27,6 @@ module tb_lfsr_input;
 
   logic [MAX_SHIFT_CNT-1:0]           data_out;
   logic [LFSR_WIDTH:1]                shift_reg;
-  reg                                 clk = 1'b0;
   logic                               rst;
   logic                               shift_en;
   logic [$clog2(MAX_SHIFT_CNT)-1:0]   shift_cnt;

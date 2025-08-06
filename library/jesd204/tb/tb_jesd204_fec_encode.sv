@@ -18,11 +18,13 @@ module tb_jesd204_fec_encode;
   localparam INPUT_DATA_WIDTH = 2048;
   localparam logic [INPUT_DATA_WIDTH-1:0] DATA_VALUE = {1'b1, 2047'b0};
 
+  parameter VCD_FILE = {"tb_jesd204_fec_encode.vcd"};
+  `include "tb_base.v"
+
   logic [INPUT_DATA_WIDTH-1:0]    DATA_VALUE_REVERSED;
   logic [DATA_WIDTH-1:0]          data;
 
   logic [FEC_WIDTH-1:0]           fec;
-  reg                             clk = 1'b0;
   logic                           rst;
   logic                           shift_en;
   logic [DATA_WIDTH-1:0]          data_in;
