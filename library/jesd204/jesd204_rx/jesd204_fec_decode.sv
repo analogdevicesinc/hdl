@@ -54,7 +54,6 @@ module jesd204_fec_decode #(
   logic [BUFFER_ADDR_WIDTH-1:0]               buf_rd_addr;
   logic [DATA_WIDTH-1:0]                      buf_wr_data;
   logic [DATA_WIDTH-1:0]                      buf_rd_data;
-  // logic [DATA_WIDTH-1:0]                      buf_rd_data_d;
   logic [3:1]                                 eomb_d;
   logic                                       data_in_en;
   logic                                       fec_in_en;
@@ -222,7 +221,6 @@ module jesd204_fec_decode #(
 
   always_ff @(posedge clk) begin
     error_syndrome_next_d <= error_syndrome_next;
-    // buf_rd_data_d <= buf_rd_data;
   end
 
   // Error is trapped if the MSb of the syndrome is 1 and bits 16:0 of the syndrome are 0
