@@ -183,7 +183,7 @@ digital interface:
 - 0 - SPI mode
 - 1 - Echo-clock or Master clock mode
 
-The NUM_OF_SDI configuration parameter defines the number of MOSI lines of the
+The NUM_OF_SDIO configuration parameter defines the number of MOSI lines of the
 SPI interface:
 
 - 1 - Interleaved mode
@@ -351,14 +351,14 @@ the HDL repository, and then build the project as follows:.
 .. shell::
 
    $cd hdl/projects/ad4630_fmc/zed
-   $make NUM_OF_SDI=4 CAPTURE_ZONE=2
+   $make NUM_OF_SDIO=4 CAPTURE_ZONE=2
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:
 
 if the following command was run
 
-``make NUM_OF_SDI=4 CAPTURE_ZONE=2``
+``make NUM_OF_SDIO=4 CAPTURE_ZONE=2``
 
 then the folder name will be:
 
