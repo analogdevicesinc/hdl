@@ -16,10 +16,10 @@ if {![info exists ad_project_params(ALERT_SPI_N)]} {
   set ALERT_SPI_N $ad_project_params(ALERT_SPI_N)
 }
 
-if {![info exists ad_project_params(NUM_OF_SDI)]} {
-  set NUM_OF_SDI 1
+if {![info exists ad_project_params(NUM_OF_SDIO)]} {
+  set NUM_OF_SDIO 1
 } else {
-  set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
+  set NUM_OF_SDIO $ad_project_params(NUM_OF_SDIO)
 }
 
 if {![info exists ad_project_params(DATA_WIDTH)]} {
@@ -28,9 +28,9 @@ if {![info exists ad_project_params(DATA_WIDTH)]} {
   set DATA_WIDTH $ad_project_params(DATA_WIDTH)
 }
 
-puts "ad738x_pb.tcl: Using ALERT_SPI_N=$ALERT_SPI_N, NUM_OF_SDI=$NUM_OF_SDI, DATA_WIDTH=$DATA_WIDTH"
+puts "ad738x_pb.tcl: Using ALERT_SPI_N=$ALERT_SPI_N, NUM_OF_SDIO=$NUM_OF_SDIO, DATA_WIDTH=$DATA_WIDTH"
 
-set DMA_WIDTH_SRC [expr ${NUM_OF_SDI} * $DATA_WIDTH]
+set DMA_WIDTH_SRC [expr ${NUM_OF_SDIO} * $DATA_WIDTH]
 
 adi_ip_update $project_name -vlnv {latticesemi.com:module:pll0:1.9.1} \
   -meta_vlnv {latticesemi.com:module:pll:1.9.1} \
@@ -63,7 +63,7 @@ adi_ip_instance -vlnv {analog.com:ip:axi_spi0:1.0} \
     DATA_WIDTH:$DATA_WIDTH,
     MM_IF_TYPE:0,
     OFFLOAD_EN:1,
-    NUM_OF_SDI:$NUM_OF_SDI
+    NUM_OF_SDIO:$NUM_OF_SDIO
   }] \
   -ip_iname "axi_spi0_inst"
 adi_ip_instance -vlnv {analog.com:ip:pwm0:1.0} \
@@ -83,7 +83,7 @@ adi_ip_instance -vlnv {analog.com:ip:spi_offload0:1.0} \
   -cfg_value [subst {
     ASYNC_SPI_CLK:0,
     DATA_WIDTH:$DATA_WIDTH,
-    NUM_OF_SDI:$NUM_OF_SDI
+    NUM_OF_SDIO:$NUM_OF_SDIO
   }] \
   -ip_iname "spi_offload0_inst"
 adi_ip_instance -vlnv {analog.com:ip:dmac0:1.0} \
@@ -107,22 +107,22 @@ adi_ip_instance -vlnv {analog.com:ip:spi_interc0:1.0} \
   -meta_vlnv {analog.com:ip:spi_engine_interconnect:1.0} \
   -cfg_value [subst {
     DATA_WIDTH:$DATA_WIDTH,
-    NUM_OF_SDI:$NUM_OF_SDI
+    NUM_OF_SDIO:$NUM_OF_SDIO
   }] \
   -ip_iname "spi_interc0_inst"
 adi_ip_instance -vlnv {analog.com:ip:spi_exec0:1.0} \
   -meta_vlnv {analog.com:ip:spi_engine_execution:1.0} \
   -cfg_value [subst {
     DATA_WIDTH:$DATA_WIDTH,
-    NUM_OF_SDI:$NUM_OF_SDI,
+    NUM_OF_SDIO:$NUM_OF_SDIO,
     SDI_DELAY:1
   }] \
   -ip_iname "spi_exec0_inst"
 
 sbp_add_port -direction out spi_master0_cs
 sbp_add_port -direction out spi_master0_sclk
-if { $NUM_OF_SDI > 1 } {
-sbp_add_port -from [expr $NUM_OF_SDI - 1] -to 0 -direction in spi_master0_sdi
+if { $NUM_OF_SDIO > 1 } {
+sbp_add_port -from [expr $NUM_OF_SDIO - 1] -to 0 -direction in spi_master0_sdi
 } else {
   sbp_add_port -direction in spi_master0_sdi
 }

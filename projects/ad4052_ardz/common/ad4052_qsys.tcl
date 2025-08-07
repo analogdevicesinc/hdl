@@ -115,7 +115,6 @@ add_connection sys_dma_clk.clk_reset axi_dmac_0.m_dest_axi_reset
 # interfaces
 
 add_connection ${spi_engine_hier}_offload.offload_sdi axi_dmac_0.s_axis
-
 # cpu interconnects
 
 ad_cpu_interconnect 0x00020000 axi_dmac_0.s_axi

@@ -19,7 +19,7 @@ adi_ip_instance -vlnv {analog.com:sim_model:sdo_sim:1.0} \
         TRI_STATE_BETWEEN_FRAMES:1,
         SIGNED:0,
         SPI_MODE:3,
-        SDO_LANES:$NUM_OF_SDI
+        SDO_LANES:$NUM_OF_SDIO
     } ] \
     -ip_iname "sdo_sim_inst"
 
@@ -40,7 +40,7 @@ sbp_connect_net ${project_name}_v/dut_inst/spi_master0_cs \
     ${project_name}_v/sdo_sim_inst/cs_n
 sbp_connect_net ${project_name}_v/dut_inst/spi_master0_sclk \
     ${project_name}_v/sdo_sim_inst/sclk
-if {$NUM_OF_SDI > 1} {
+if {$NUM_OF_SDIO > 1} {
     sbp_connect_net ${project_name}_v/sdo_sim_inst/sdo \
         ${project_name}_v/dut_inst/spi_master0_sdi
 } else {

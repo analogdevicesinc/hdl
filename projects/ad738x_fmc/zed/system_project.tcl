@@ -11,12 +11,12 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 # ALERT_SPI_N - SDOB-SDOD/ALERT pin can operate as a serial data output pin or alert indication output
 #  - Options : SDOB-SDOD(0)/ALERT(1)
-# NUM_OF_SDI - Number of SDI lines used
+# NUM_OF_SDIO - Number of SDI lines used
 #  - Options : 1,2,4
 
 adi_project ad738x_fmc_zed 0 [list \
   ALERT_SPI_N [get_env_param ALERT_SPI_N  0]\
-  NUM_OF_SDI [get_env_param NUM_OF_SDI    1] ]
+  NUM_OF_SDIO [get_env_param NUM_OF_SDIO    1] ]
 
 adi_project_files ad738x_fmc_zed [list \
     "$ad_hdl_dir/library/common/ad_iobuf.v" \
@@ -24,7 +24,7 @@ adi_project_files ad738x_fmc_zed [list \
     "system_constr.xdc" \
     "system_top.v" ]
 
-switch [get_env_param NUM_OF_SDI 1] {
+switch [get_env_param NUM_OF_SDIO 1] {
   1 {
     adi_project_files ad738x_fmc_zed [list \
       "system_constr_1sdi.xdc" ]

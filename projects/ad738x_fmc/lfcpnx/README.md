@@ -28,7 +28,7 @@ The overwritable parameters from the environment:
 
 - ALERT_SPI_N - If set to 1 the sdi[1] and sdi[3] ports are connected to gpio
   inputs and there is only a single accessible SPI sdi[0] data line for serial data.
-- NUM_OF_SDI - Defines the number of SDI lines used: 1, 2, 4 (if the ALERT_SPI_N=0).
+- NUM_OF_SDIO - Defines the number of SDI lines used: 1, 2, 4 (if the ALERT_SPI_N=0).
 - SYSMEM_INIT_FILE - The file path to the system memory initialization file
   (<path_to>/<sysmem_file>.mem). It can be used to build a project with an
   already initialized system memory, otherwise you can load it using the
@@ -41,7 +41,7 @@ The overwritable parameters from the environment:
 This specific command is equivalent to running `make` only:
 
 ```
-make ALERT_SPI_N=0 NUM_OF_SDI=1
+make ALERT_SPI_N=0 NUM_OF_SDIO=1
 ```
 
 #### Default configuration with SYSMEM_INIT_FILE

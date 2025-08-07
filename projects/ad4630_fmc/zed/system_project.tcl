@@ -59,16 +59,16 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 
 if {[get_env_param INTERLEAVE_MODE 0] == 1} {
-  set NUM_OF_SDI      1
+  set NUM_OF_SDIO      1
 } else {
-  set NUM_OF_SDI      [expr {[get_env_param NUM_OF_CHANNEL 2] * [get_env_param LANES_PER_CHANNEL 2]}]
+  set NUM_OF_SDIO      [expr {[get_env_param NUM_OF_CHANNEL 2] * [get_env_param LANES_PER_CHANNEL 2]}]
 }
 
 adi_project ad4630_fmc_zed 0 [list \
   CLK_MODE           [get_env_param CLK_MODE           0] \
   LANES_PER_CHANNEL  [get_env_param LANES_PER_CHANNEL  2] \
   NUM_OF_CHANNEL     [get_env_param NUM_OF_CHANNEL     2] \
-  NUM_OF_SDI         $NUM_OF_SDI                          \
+  NUM_OF_SDIO        $NUM_OF_SDIO                         \
   CAPTURE_ZONE       [get_env_param CAPTURE_ZONE       2] \
   DDR_EN             [get_env_param DDR_EN             0] \
   INTERLEAVE_MODE    [get_env_param INTERLEAVE_MODE    0] ]
