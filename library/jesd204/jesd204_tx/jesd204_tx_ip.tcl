@@ -15,12 +15,15 @@ adi_ip_files jesd204_tx [list \
   "jesd204_tx_header.v" \
   "jesd204_tx_gearbox.v" \
   "jesd204_tx_ctrl.v" \
+  "jesd204_fec_encode.sv" \
+  "../jesd204_common/lfsr_input.sv" \
   "jesd204_tx_constr.ttcl" \
   "jesd204_tx_ooc.ttcl" \
   "jesd204_tx.xdc" \
   "../../common/ad_pack.v" \
   "../../common/ad_upack.v" \
   "../../common/util_pipeline_stage.v" \
+  "../../common/ad_mem_dist.v" \
   "jesd204_tx.v" \
   "bd/bd.tcl"
 ]
