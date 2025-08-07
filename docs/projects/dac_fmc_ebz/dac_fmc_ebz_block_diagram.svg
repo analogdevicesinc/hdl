@@ -2173,14 +2173,14 @@
        transform="rotate(-90)"
        id="text5788-1"
        y="148.09898"
-       x="-467.20032"
+       x="-492.20016"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-opacity:1"
          y="148.09898"
-         x="-467.20032"
+         x="-492.20016"
          id="tspan5790-5"
-         sodipodi:role="line">DAC FIFO</tspan></text>
+         sodipodi:role="line">DATA OFFLOAD</tspan></text>
     <g
        id="g5132-0-6-5-2"
        style="display:inline;fill:#0f3296;fill-opacity:1;stroke:#0f3296;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
