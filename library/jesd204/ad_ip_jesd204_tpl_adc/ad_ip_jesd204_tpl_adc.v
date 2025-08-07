@@ -53,7 +53,8 @@ module ad_ip_jesd204_tpl_adc #(
   parameter EXT_SYNC = 0,
   parameter PNMON_ENABLE = 1,
   parameter PN7_ENABLE = 1,
-  parameter PN15_ENABLE = 1
+  parameter PN15_ENABLE = 1,
+  parameter NUM_PIPELINE_STAGES = 0
 ) (
 
   // jesd interface
@@ -211,7 +212,8 @@ module ad_ip_jesd204_tpl_adc #(
     .EXT_SYNC (EXT_SYNC),
     .PNMON_ENABLE (PNMON_ENABLE),
     .PN7_ENABLE (PN7_ENABLE),
-    .PN15_ENABLE(PN15_ENABLE)
+    .PN15_ENABLE(PN15_ENABLE),
+    .NUM_PIPELINE_STAGES (NUM_PIPELINE_STAGES)
   ) i_core (
     .clk (link_clk),
 
