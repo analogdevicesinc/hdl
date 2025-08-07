@@ -193,6 +193,7 @@ module system_top #(
   wire          refclk_fail_stat;
   wire          syspll_clk;
   wire          syspll_lock;
+  wire          dacfifo_bypass;
 
   wire  [ 7:0]  spi_csn_s;
   wire          spi_clk;
@@ -223,6 +224,8 @@ module system_top #(
   assign rxen[1]    = gpio_o[57];
   assign txen[0]    = gpio_o[58];
   assign txen[1]    = gpio_o[59];
+
+  assign dacfifo_bypass = gpio_o[60];
 
   // Unused GPIOs
   assign gpio_i[63:54] = gpio_o[63:54];
@@ -369,6 +372,7 @@ module system_top #(
     .system_pll_clk_clk                                      (syspll_clk),
     .refclk_xcvr_clk                                         (fpga_refclk_in),
     .i_refclk_rdy_data                                       (1'b1),
+    .dacfifo_bypass_bypass                                   (dacfifo_bypass),
 
     // FMC HPC
     .sys_spi_MISO                                            (spi_miso),

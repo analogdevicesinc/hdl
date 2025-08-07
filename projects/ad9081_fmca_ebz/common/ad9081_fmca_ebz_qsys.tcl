@@ -207,6 +207,9 @@ set_instance_parameter_value mxfe_rx_cpack {SAMPLE_DATA_WIDTH} $RX_DMA_SAMPLE_WI
 ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
 ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 
+add_interface dacfifo_bypass conduit end
+set_interface_property dacfifo_bypass EXPORT_OF $dac_fifo_name.if_bypass
+
 # RX and TX DMA instance and connections
 
 add_instance mxfe_tx_dma axi_dmac
@@ -215,16 +218,16 @@ set_instance_parameter_value mxfe_tx_dma {DMA_DATA_WIDTH_SRC} $dac_dma_data_widt
 set_instance_parameter_value mxfe_tx_dma {DMA_DATA_WIDTH_DEST} $dac_dma_data_width
 set_instance_parameter_value mxfe_tx_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value mxfe_tx_dma {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value mxfe_tx_dma {AXI_SLICE_DEST} {0}
-set_instance_parameter_value mxfe_tx_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value mxfe_tx_dma {AXI_SLICE_DEST} {1}
+set_instance_parameter_value mxfe_tx_dma {AXI_SLICE_SRC} {1}
 set_instance_parameter_value mxfe_tx_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value mxfe_tx_dma {CYCLIC} {1}
 set_instance_parameter_value mxfe_tx_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value mxfe_tx_dma {DMA_TYPE_SRC} {0}
-set_instance_parameter_value mxfe_tx_dma {FIFO_SIZE} {16}
+# set_instance_parameter_value mxfe_tx_dma {FIFO_SIZE} {8}
 set_instance_parameter_value mxfe_tx_dma {HAS_AXIS_TLAST} {1}
 set_instance_parameter_value mxfe_tx_dma {DMA_AXI_PROTOCOL_SRC} {0}
-set_instance_parameter_value mxfe_tx_dma {MAX_BYTES_PER_BURST} {2048}
+set_instance_parameter_value mxfe_tx_dma {MAX_BYTES_PER_BURST} {4096}
 
 add_instance mxfe_rx_dma axi_dmac
 set_instance_parameter_value mxfe_rx_dma {ID} {0}
@@ -232,15 +235,15 @@ set_instance_parameter_value mxfe_rx_dma {DMA_DATA_WIDTH_SRC} $adc_dma_data_widt
 set_instance_parameter_value mxfe_rx_dma {DMA_DATA_WIDTH_DEST} $adc_dma_data_width
 set_instance_parameter_value mxfe_rx_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value mxfe_rx_dma {DMA_2D_TRANSFER} {0}
-set_instance_parameter_value mxfe_rx_dma {AXI_SLICE_DEST} {0}
-set_instance_parameter_value mxfe_rx_dma {AXI_SLICE_SRC} {0}
+set_instance_parameter_value mxfe_rx_dma {AXI_SLICE_DEST} {1}
+set_instance_parameter_value mxfe_rx_dma {AXI_SLICE_SRC} {1}
 set_instance_parameter_value mxfe_rx_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value mxfe_rx_dma {CYCLIC} {0}
 set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_SRC} {1}
-set_instance_parameter_value mxfe_rx_dma {FIFO_SIZE} {16}
+# set_instance_parameter_value mxfe_rx_dma {FIFO_SIZE} {8}
 set_instance_parameter_value mxfe_rx_dma {DMA_AXI_PROTOCOL_DEST} {0}
-set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {2048}
+set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {4096}
 
 # mxfe gpio
 

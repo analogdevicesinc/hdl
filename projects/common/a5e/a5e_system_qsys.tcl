@@ -358,7 +358,7 @@ set_instance_parameter_value sys_hps USB1_Mode {default}
 set_instance_parameter_value sys_hps USB1_PinMuxing {IO}
 set_instance_parameter_value sys_hps User0_clk_enable {1}
 set_instance_parameter_value sys_hps User0_clk_freq {250}
-set_instance_parameter_value sys_hps User0_clk_src_select {1}
+set_instance_parameter_value sys_hps User0_clk_src_select {7}
 set_instance_parameter_value sys_hps User1_clk_enable {0}
 set_instance_parameter_value sys_hps User1_clk_freq {500.0}
 set_instance_parameter_value sys_hps User1_clk_src_select {7}
