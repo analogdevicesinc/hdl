@@ -153,7 +153,28 @@ Code-related check list
 #.  If it's the case, to update all the README files of the affected projects
     and IP cores.
 
-Resources:
+.. _contributing devicetree-bindings-drivers:
+
+Devicetree bindings & drivers
+-------------------------------------------------------------------------------
+
+The IPs typically follow `Semantic Versioning 2.0.0 <https://semver.org/>`__
+and his information must be used in devicetree bindings and drivers to assert
+compatibility. The first stable release version should be higher or equal to
+v1.0.0 and all fields should be treated as decimals.
+
+Devicetree compatibles take the major number prefixed by **v**, for example,
+the **compatible** of *axi_my_ip* v1.2.3 is **adi,axi-my-ip-v1** and the
+**dt-binding** filename is **adi,axi-my-ip.yaml** (no major suffix). Per the
+last paragraph, *adi,axi-my-ip-v0* is **never** appropriate.
+
+Software drivers must parse the **VERSION** register for feature handling
+across versions. The patch number shouldn't have to be handled by software
+drivers, if it seems necessary to, consider incrementing the minor number
+instead.
+
+Related resources
+-------------------------------------------------------------------------------
 
 -  `How to write a good commit message <https://cbea.ms/git-commit/>`__
    and `another resource <https://gist.github.com/rsp/057481db4dbd999bb7077f211f53f212>`__
