@@ -21,7 +21,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # INTF  - Defines the interface type (serial OR parallel)
 #       - 0 - parallel (default)
 #       - 1 - serial
-# NUM_OF_SDI - Number of SDI lines used when **serial interface** is set
+# NUM_OF_SDIO - Number of SDI lines used when **serial interface** is set
 #       - 1 - one SDI line
 #       - 2 - two SDI lines (default)
 #
@@ -33,11 +33,11 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##--------------------------------------------------------------
 
 set INTF [get_env_param INTF 0]
-set NUM_OF_SDI [get_env_param NUM_OF_SDI 2]
+set NUM_OF_SDIO [get_env_param NUM_OF_SDIO 2]
 
 adi_project ad7616_sdz_zed 0 [list \
    INTF $INTF \
-   NUM_OF_SDI $NUM_OF_SDI \
+   NUM_OF_SDIO $NUM_OF_SDIO \
 ]
 
 adi_project_files ad7616_sdz_zed [list \
@@ -45,7 +45,7 @@ adi_project_files ad7616_sdz_zed [list \
 
 switch $INTF {
   1 {
-    switch $NUM_OF_SDI {
+    switch $NUM_OF_SDIO {
       1 {
         adi_project_files ad7616_sdz_zed [list \
         "system_top_si.v" \

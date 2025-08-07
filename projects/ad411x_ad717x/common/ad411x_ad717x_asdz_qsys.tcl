@@ -18,21 +18,21 @@ add_instance axi_spi_engine_0 axi_spi_engine
 set_instance_parameter_value axi_spi_engine_0 {ASYNC_SPI_CLK} {1}
 set_instance_parameter_value axi_spi_engine_0 {DATA_WIDTH}    {32}
 set_instance_parameter_value axi_spi_engine_0 {MM_IF_TYPE}    {0}
-set_instance_parameter_value axi_spi_engine_0 {NUM_OF_SDI}    {1}
+set_instance_parameter_value axi_spi_engine_0 {NUM_OF_SDIO}    {1}
 set_instance_parameter_value axi_spi_engine_0 {NUM_OFFLOAD}   {1}
 
 # spi_engine_execution
 
 add_instance spi_engine_execution_0 spi_engine_execution
 set_instance_parameter_value spi_engine_execution_0 {DATA_WIDTH} {32}
-set_instance_parameter_value spi_engine_execution_0 {NUM_OF_SDI} {1}
+set_instance_parameter_value spi_engine_execution_0 {NUM_OF_SDIO} {1}
 set_instance_parameter_value spi_engine_execution_0 {SDI_DELAY} {0}
 
 # spi_engine_interconnect
 
 add_instance spi_engine_interconnect_0 spi_engine_interconnect
 set_instance_parameter_value spi_engine_interconnect_0 {DATA_WIDTH} {32}
-set_instance_parameter_value spi_engine_interconnect_0 {NUM_OF_SDI} {1}
+set_instance_parameter_value spi_engine_interconnect_0 {NUM_OF_SDIO} {1}
 
 # spi_engine_offload
 
@@ -40,7 +40,7 @@ add_instance spi_engine_offload_0 spi_engine_offload
 set_instance_parameter_value spi_engine_offload_0 {ASYNC_TRIG}    {1}
 set_instance_parameter_value spi_engine_offload_0 {ASYNC_SPI_CLK} {0}
 set_instance_parameter_value spi_engine_offload_0 {DATA_WIDTH}    {32}
-set_instance_parameter_value spi_engine_offload_0 {NUM_OF_SDI}    {1}
+set_instance_parameter_value spi_engine_offload_0 {NUM_OF_SDIO}    {1}
 
 # util_sigma_delta_spi
 
