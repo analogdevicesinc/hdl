@@ -15,6 +15,6 @@ ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 set sys_cstring "ALERT_SPI_N=$ad_project_params(ALERT_SPI_N)\
-NUM_OF_SDI=$ad_project_params(NUM_OF_SDI)"
+NUM_OF_SDIO=$ad_project_params(NUM_OF_SDIO)"
 
 sysid_gen_sys_init_file $sys_cstring
