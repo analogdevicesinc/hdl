@@ -5,13 +5,13 @@
 
 # system level parameters
 set INTF $ad_project_params(INTF)
-set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
+set NUM_OF_SDIO $ad_project_params(NUM_OF_SDIO)
 set ADC_N_BITS $ad_project_params(ADC_N_BITS)
 set ADC_TO_DMA_N_BITS [expr {$ADC_N_BITS == 16 ? 16 : 32}]
 set TOTAL_N_BITS_DMA [expr {$ADC_TO_DMA_N_BITS*8}]
 
 puts "build parameters: INTF: $INTF"
-puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI"
+puts "build parameters: NUM_OF_SDIO: $NUM_OF_SDIO"
 puts "build parameters: ADC_N_BITS: $ADC_N_BITS"
 
 # control lines
@@ -119,7 +119,7 @@ switch $INTF {
     set data_width    32
     set async_spi_clk 1
     set num_cs        1
-    set num_sdi       $NUM_OF_SDI
+    set num_sdi       $NUM_OF_SDIO
     set num_sdo       1
     set sdi_delay     1
 

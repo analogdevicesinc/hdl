@@ -14,12 +14,12 @@ All of the configuration modes can be found in the chosen chips's data sheet. We
 - INTF - Defines the operation interface
   - 0 - Parallel
   - 1 - Serial
-- NUM_OF_SDI - Defines the number of SDI lines used: 1, 2, 4 or 8
+- NUM_OF_SDIO - Defines the number of SDI lines used: 1, 2, 4 or 8
 - ADC_N_BITS - Specifies the ADC resolution: 16 or 18 bits (only for the Parallel Interface)
 
 For the serial interface (INTF=1), the following parameters will be used in make command:
 - INTF
-- NUM_OF_SDI.
+- NUM_OF_SDIO.
 
 For the parallel interface (INTF=0), the following parameters will be used in make command:
 - INTF
@@ -47,25 +47,25 @@ make INTF=0 ADC_N_BITS=18
 #### Serial interface with 1 SDI line
 
 ```
-make INTF=1 NUM_OF_SDI=1
+make INTF=1 NUM_OF_SDIO=1
 ```
 
 #### Serial interface with 2 SDI lines
 
 ```
-make INTF=1 NUM_OF_SDI=2
+make INTF=1 NUM_OF_SDIO=2
 ```
 
 #### Serial interface with 4 SDI lines
 
 ```
-make INTF=1 NUM_OF_SDI=4
+make INTF=1 NUM_OF_SDIO=4
 ```
 
 #### Serial interface with 8 SDI lines
 
 ```
-make INTF=1 NUM_OF_SDI=8
+make INTF=1 NUM_OF_SDIO=8
 ```
 
 Corresponding no-OS project: [ad7606x-fmc](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7606x-fmc)
