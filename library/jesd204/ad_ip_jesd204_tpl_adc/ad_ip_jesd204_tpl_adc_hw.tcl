@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2022, 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2022, 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -47,6 +47,12 @@ ad_ip_parameter OCTETS_PER_BEAT INTEGER 4 true [list \
   DISPLAY_NAME "Datapath width" \
   DISPLAY_UNITS "octets" \
   ALLOWED_RANGES {4 6 8 12} \
+  GROUP $group \
+]
+
+ad_ip_parameter NUM_PIPELINE_STAGES INTEGER 0 true [list \
+  DISPLAY_NAME "Number of pipeline stages inside the deframer" \
+  ALLOWED_RANGES {0 1 2} \
   GROUP $group \
 ]
 
