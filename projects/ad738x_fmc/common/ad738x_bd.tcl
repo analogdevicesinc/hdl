@@ -6,10 +6,10 @@
 # system level parameter
 
 set ALERT_SPI_N $ad_project_params(ALERT_SPI_N)
-set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
+set NUM_OF_SDIO $ad_project_params(NUM_OF_SDIO)
 
 puts "build parameter: ALERT_SPI_N: $ALERT_SPI_N"
-puts "build parameter: NUM_OF_SDI: $NUM_OF_SDI"
+puts "build parameter: NUM_OF_SDIO: $NUM_OF_SDIO"
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad738x_spi
 
@@ -18,7 +18,7 @@ source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 set data_width    32
 set async_spi_clk 1
 set num_cs        1
-set num_sdi       [expr {$ALERT_SPI_N ? 1 : $NUM_OF_SDI}]
+set num_sdi       [expr {$ALERT_SPI_N ? 1 : $NUM_OF_SDIO}]
 set num_sdo       1
 set sdi_delay     1
 set echo_sclk     0

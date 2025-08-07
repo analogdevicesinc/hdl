@@ -25,8 +25,8 @@ The overwritable parameters from the environment are:
 
 - CLK_MODE: clocking mode of the device's digital interface
   - 0 - SPI (default)
-  - 1 - Echo-clock or Master clock 
-- NUM_OF_SDI: the number of MISO lines of the SPI interface
+  - 1 - Echo-clock or Master clock
+- NUM_OF_SDIO: the number of MOSI lines of the SPI interface
   - 1 - Interleaved
   - 2 - 1LPC
   - 4 - 2LPC (default)
@@ -50,7 +50,7 @@ The overwritable parameters from the environment are:
 This specific command is equivalent to running `make` only:
 
 ```
-make CLK_MODE=0 NUM_OF_SDI=4 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
+make CLK_MODE=0 NUM_OF_SDIO=4 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
 ```
 
 Corresponding device trees:
@@ -60,7 +60,7 @@ Corresponding device trees:
 #### Clock mode SPI, MISO lines 2, Capture zone 2, SDR
 
 ```
-make CLK_MODE=0 NUM_OF_SDI=2 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
+make CLK_MODE=0 NUM_OF_SDIO=2 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
 ```
 
 Corresponding device trees:
@@ -80,43 +80,43 @@ make CLK_MODE=0 NUM_OF_SDI=4 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
 #### Clock mode SPI, MISO lines 8, Capture zone 2, SDR
 
 ```
-make CLK_MODE=0 NUM_OF_SDI=8 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
+make CLK_MODE=0 NUM_OF_SDIO=8 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
 ```
 
 #### Clock mode ECHO, MISO lines 2, Capture zone 2, SDR
 
 ```
-make CLK_MODE=1 NUM_OF_SDI=2 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
+make CLK_MODE=1 NUM_OF_SDIO=2 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
 ```
 
 #### Clock mode ECHO, MISO lines 4, Capture zone 2, SDR
 
 ```
-make CLK_MODE=1 NUM_OF_SDI=4 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
+make CLK_MODE=1 NUM_OF_SDIO=4 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
 ```
 
 #### Clock mode ECHO, MISO lines 8, Capture zone 2, SDR
 
 ```
-make CLK_MODE=1 NUM_OF_SDI=8 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
+make CLK_MODE=1 NUM_OF_SDIO=8 CAPTURE_ZONE=2 DDR_EN=0 NO_REORDER=0
 ```
 
 #### Clock mode ECHO, MISO lines 2, Capture zone 2, DDR
 
 ```
-make CLK_MODE=1 NUM_OF_SDI=2 CAPTURE_ZONE=2 DDR_EN=1 NO_REORDER=0
+make CLK_MODE=1 NUM_OF_SDIO=2 CAPTURE_ZONE=2 DDR_EN=1 NO_REORDER=0
 ```
 
 #### Clock mode ECHO, MISO lines 4, Capture zone 2, DDR
 
 ```
-make CLK_MODE=1 NUM_OF_SDI=4 CAPTURE_ZONE=2 DDR_EN=1 NO_REORDER=0
+make CLK_MODE=1 NUM_OF_SDIO=4 CAPTURE_ZONE=2 DDR_EN=1 NO_REORDER=0
 ```
 
 #### Clock mode ECHO, MISO lines 8, Capture zone 2, DDR
 
 ```
-make CLK_MODE=1 NUM_OF_SDI=8 CAPTURE_ZONE=2 DDR_EN=1 NO_REORDER=0
+make CLK_MODE=1 NUM_OF_SDIO=8 CAPTURE_ZONE=2 DDR_EN=1 NO_REORDER=0
 ```
 
 #### Clock mode SPI, MISO lines 1, Capture zone 1, SDR (AD4030)
