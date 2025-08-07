@@ -37,7 +37,7 @@
 
 module system_top #(
   parameter ALERT_SPI_N = 0,
-  parameter NUM_OF_SDI = 4
+  parameter NUM_OF_SDIO = 4
 ) (
   input           clk_125,
   input           resetn,
@@ -72,7 +72,7 @@ module system_top #(
   wire    [31:0]  gpio1_i;
   wire    [31:0]  gpio1_en_o;
 
-  wire    [NUM_OF_SDI-1:0]   sdi_bus_i;
+  wire    [NUM_OF_SDIO-1:0]   sdi_bus_i;
 
   assign leds_0_to_23 = gpio0_o[23:0];
   assign gpio0_i[31:24] = dip_sw_1_to_8;
@@ -82,7 +82,7 @@ module system_top #(
   assign gpio1_i[28] = ALERT_SPI_N ? sdi_bus[1] : 0;
   assign gpio1_i[29] = ALERT_SPI_N ? sdi_bus[3] : 0;
 
-  assign sdi_bus_i = (ALERT_SPI_N == 0) ? sdi_bus[NUM_OF_SDI-1:0] : sdi_bus[0];
+  assign sdi_bus_i = (ALERT_SPI_N == 0) ? sdi_bus[NUM_OF_SDIO-1:0] : sdi_bus[0];
 
   ad738x_fmc_lfcpnx ad738x_fmc_lfcpnx_inst (
     .gpio0_o(gpio0_o),
