@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -94,7 +94,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 0.050
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY0 0.241
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 0.240
 
-ad_ip_instance xlconcat sys_concat_intc
+ad_ip_instance ilconcat sys_concat_intc
 ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
 ad_ip_instance proc_sys_reset sys_rstgen
@@ -212,7 +212,7 @@ ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 ad_add_interpolation_filter "tx_fir_interpolator" 8 2 1 {61.44} {7.68} \
                              "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
-ad_ip_instance xlslice interp_slice
+ad_ip_instance ilslice interp_slice
 ad_ip_instance util_upack2 tx_upack
 
 ad_ip_instance axi_dmac axi_ad9361_adc_dma
@@ -227,7 +227,7 @@ ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 
 ad_add_decimation_filter "rx_fir_decimator" 8 2 1 {61.44} {61.44} \
                          "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
-ad_ip_instance xlslice decim_slice
+ad_ip_instance ilslice decim_slice
 ad_ip_instance util_cpack2 cpack
 
 # connections
@@ -298,7 +298,7 @@ ad_connect axi_ad9361/dac_data_q1 tx_upack/fifo_rd_data_3
 
 ad_connect tx_upack/s_axis  axi_ad9361_dac_dma/m_axis
 
-ad_ip_instance util_vector_logic logic_or [list \
+ad_ip_instance ilvector_logic logic_or [list \
   C_OPERATION {or} \
   C_SIZE 1]
 
@@ -332,7 +332,7 @@ ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
                             $TDD_SYNC_EXT \
                             $TDD_SYNC_EXT_CDC
 
-ad_ip_instance util_vector_logic logic_inv [list \
+ad_ip_instance ilvector_logic logic_inv [list \
   C_OPERATION {not} \
   C_SIZE 1]
 
@@ -380,4 +380,3 @@ ad_connect sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 ad_cpu_interrupt ps-13 mb-13 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
 ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
-

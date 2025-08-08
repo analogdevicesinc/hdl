@@ -263,7 +263,7 @@ if {$HSCI_ENABLE} {
     ad_connect hsci_phy/t_data_out GND
     ad_connect hsci_phy/t_clk_out GND
 
-    ad_ip_instance xlconcat hsci_pll_locked_concat [list \
+    ad_ip_instance ilconcat hsci_pll_locked_concat [list \
      NUM_PORTS ${HSCI_BANKS} \
     ]
     ad_connect hsci_pll_locked_concat/In0  hsci_phy/bank0_pll_locked
@@ -391,10 +391,10 @@ if {$ADI_PHY_SEL} {
   ad_connect tx_resetdone jesd204_phy/tx_resetdone
 
   # gt powergood
-  ad_ip_instance xlconcat gt_powergood_concat [list \
+  ad_ip_instance ilconcat gt_powergood_concat [list \
    NUM_PORTS 2 \
   ]
-  ad_ip_instance util_reduced_logic gt_powergood_and [list \
+  ad_ip_instance ilreduced_logic gt_powergood_and [list \
      C_SIZE $num_quads \
   ]
   ad_connect jesd204_phy/gtpowergood gt_powergood_concat/In0
@@ -1119,7 +1119,7 @@ if {$ASYMMETRIC_A_B_MODE == 0} {
 }
 
 # Reset pack cores
-ad_ip_instance util_reduced_logic cpack_rst_logic
+ad_ip_instance ilreduced_logic cpack_rst_logic
 ad_ip_parameter cpack_rst_logic config.c_operation {or}
 ad_ip_parameter cpack_rst_logic config.c_size {3}
 
@@ -1129,7 +1129,7 @@ ad_ip_parameter rx_do_rstout_logic config.c_size {1}
 
 ad_connect $adc_data_offload_name/s_axis_tready rx_do_rstout_logic/Op1
 
-ad_ip_instance xlconcat cpack_reset_sources
+ad_ip_instance ilconcat cpack_reset_sources
 ad_ip_parameter cpack_reset_sources config.num_ports {3}
 ad_connect rx_device_clk_rstgen/peripheral_reset cpack_reset_sources/in0
 ad_connect rx_apollo_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources/in1
@@ -1139,7 +1139,7 @@ ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
 ad_connect cpack_rst_logic/res util_apollo_cpack/reset
 
 if {$ASYMMETRIC_A_B_MODE} {
-  ad_ip_instance util_reduced_logic cpack_b_rst_logic
+  ad_ip_instance ilreduced_logic cpack_b_rst_logic
   ad_ip_parameter cpack_b_rst_logic config.c_operation {or}
   ad_ip_parameter cpack_b_rst_logic config.c_size {3}
 
@@ -1149,7 +1149,7 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   ad_connect $adc_b_data_offload_name/s_axis_tready rx_b_do_rstout_logic/Op1
 
-  ad_ip_instance xlconcat cpack_b_reset_sources
+  ad_ip_instance ilconcat cpack_b_reset_sources
   ad_ip_parameter cpack_b_reset_sources config.num_ports {3}
   ad_connect rx_b_device_clk_rstgen/peripheral_reset cpack_b_reset_sources/in0
   ad_connect rx_b_apollo_tpl_core/adc_tpl_core/adc_rst cpack_b_reset_sources/in1
@@ -1160,11 +1160,11 @@ if {$ASYMMETRIC_A_B_MODE} {
 }
 
 # Reset unpack cores
-ad_ip_instance util_reduced_logic upack_rst_logic
+ad_ip_instance ilreduced_logic upack_rst_logic
 ad_ip_parameter upack_rst_logic config.c_operation {or}
 ad_ip_parameter upack_rst_logic config.c_size {2}
 
-ad_ip_instance xlconcat upack_reset_sources
+ad_ip_instance ilconcat upack_reset_sources
 ad_ip_parameter upack_reset_sources config.num_ports {2}
 ad_connect tx_device_clk_rstgen/peripheral_reset upack_reset_sources/in0
 ad_connect tx_apollo_tpl_core/dac_tpl_core/dac_rst upack_reset_sources/in1
@@ -1173,11 +1173,11 @@ ad_connect upack_reset_sources/dout upack_rst_logic/op1
 ad_connect upack_rst_logic/res util_apollo_upack/reset
 
 if {$ASYMMETRIC_A_B_MODE} {
-  ad_ip_instance util_reduced_logic upack_b_rst_logic
+  ad_ip_instance ilreduced_logic upack_b_rst_logic
   ad_ip_parameter upack_b_rst_logic config.c_operation {or}
   ad_ip_parameter upack_b_rst_logic config.c_size {2}
 
-  ad_ip_instance xlconcat upack_b_reset_sources
+  ad_ip_instance ilconcat upack_b_reset_sources
   ad_ip_parameter upack_b_reset_sources config.num_ports {2}
   ad_connect tx_b_device_clk_rstgen/peripheral_reset upack_b_reset_sources/in0
   ad_connect tx_b_apollo_tpl_core/dac_tpl_core/dac_rst upack_b_reset_sources/in1

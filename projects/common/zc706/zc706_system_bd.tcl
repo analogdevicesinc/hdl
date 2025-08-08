@@ -74,7 +74,7 @@ ad_ip_instance axi_iic axi_iic_main
 ad_ip_parameter axi_iic_main CONFIG.USE_BOARD_FLOW true
 ad_ip_parameter axi_iic_main CONFIG.IIC_BOARD_INTERFACE Custom
 
-ad_ip_instance xlconcat sys_concat_intc
+ad_ip_instance ilconcat sys_concat_intc
 ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
 ad_ip_instance proc_sys_reset sys_rstgen
@@ -237,4 +237,3 @@ ad_cpu_interconnect 0x70e00000 axi_hdmi_core
 ad_cpu_interconnect 0x75c00000 axi_spdif_tx_core
 ad_mem_hp0_interconnect sys_cpu_clk sys_ps7/S_AXI_HP0
 ad_mem_hp0_interconnect sys_cpu_clk axi_hdmi_dma/m_src_axi
-
