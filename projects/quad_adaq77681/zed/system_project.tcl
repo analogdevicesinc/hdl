@@ -4,7 +4,8 @@ source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 adi_project quad_adaq77681_zed 0 [list \
-  NUM_OF_SDI [get_env_param NUM_OF_SDI 4]]
+  NUM_OF_SDIO [get_env_param NUM_OF_SDIO 4] \
+  NUM_OF_CS [get_env_param NUM_OF_CS 4]]
 
 adi_project_files quad_adaq77681_zed [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
