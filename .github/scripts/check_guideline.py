@@ -170,94 +170,6 @@ def get_file_name (module_path):
 
 ###############################################################################
 #
-# Check if the project name in the system_project.tcl file matches the
-# expected name, which is the relative path from the projects folder,
-###############################################################################
-def check_project_name_vs_path(modified_files, lw, edit_files=False):
-    checked_projects = set()
-    for f in modified_files:
-        folder = os.path.dirname(f)
-        while folder.startswith("projects") and folder != "projects":
-            tcl_path = os.path.join(folder, "system_project.tcl")
-            if os.path.exists(tcl_path) and folder not in checked_projects:
-                rel_path = os.path.relpath(folder, "projects")
-                expected_name = rel_path.replace(os.sep, "_")
-                lines = []
-                found = False
-                changed = False
-                with open(tcl_path, "r") as tclf:
-                    for line in tclf:
-                        m = re.match(r'\s*adi_project\s+(\S+)', line)
-                        if m:
-                            found = True
-                            found_name = m.group(1)
-                            if found_name != expected_name:
-                                lw.append(f"{tcl_path} : adi_project '{found_name}' does not match expected '{expected_name}'")
-                                if edit_files:
-                                    line = re.sub(r'(\s*adi_project\s+)\S+', r'\1' + expected_name, line)
-                                    changed = True
-                        lines.append(line)
-                if edit_files and found and changed:
-                    with open(tcl_path, "w") as tclf:
-                        tclf.writelines(lines)
-                    lw.append(f"{tcl_path} : adi_project updated to '{expected_name}'")
-                checked_projects.add(folder)
-                break
-            folder = os.path.dirname(folder)
-
-
-###############################################################################
-#
-# Normalize the file edges by removing empty lines at the start and end,
-# ensuring exactly one newline at the end, and optionally editing the file.
-# If edit_files is True, the file will be modified.
-###############################################################################
-def normalize_file_edges(file_path, lw, edit_files):
-    try:
-        with open(file_path, 'r') as f:
-            lines = f.readlines()
-
-        if not lines:
-            return
-
-        changed = False
-
-        # Remove empty lines at the start
-        while lines and lines[0].strip() == "":
-            if edit_files:
-                lines.pop(0)
-                changed = True
-            lw.append(f"{file_path} : empty line at beginning of file")
-        
-        # Remove extra empty lines at the end
-        while len(lines) > 1 and lines[-1].strip() == "" and lines[-2].strip() == "":
-            if edit_files:
-                lines.pop()
-                changed = True
-            lw.append(f"{file_path} : multiple empty lines at end of file")
-
-        # Ensure exactly one newline at the end
-        if edit_files:
-            if not lines[-1].endswith('\n'):
-                lines[-1] += '\n'
-                changed = True
-                lw.append(f"{file_path} : missing final newline, added")
-        else:
-            if not lines[-1].endswith('\n'):
-                lw.append(f"{file_path} : file does not end with a newline")
-
-        # If something changed, write back the cleaned content
-        if changed:
-            with open(file_path, 'w') as f:
-                f.writelines(lines)
-            lw.append(f"{file_path} : normalized file edges")
-
-    except Exception as e:
-        lw.append(f"{file_path} : ERROR while normalizing edges - {e}")
-
-
-###############################################################################
-#
 # Check if there are lines after `endmodule and two consecutive empty lines,
 # and if there are and edit_files is true, delete them.
 ###############################################################################
@@ -737,11 +649,9 @@ def get_and_check_module (module_path, lw, edit_files):
                 for line in list_of_lines:
 
                     # GC: check for whitespace at the end of the line w\o \n
-                    # aux_line = line[:-1]
-                    # aux_line = aux_line.rstrip()
+                    aux_line = line[:-1]
+                    aux_line = aux_line.rstrip()
 
-                    # f.write(aux_line + "\n")
-                    aux_line = line.rstrip()
                     f.write(aux_line + "\n")
             if (extra_chars):
                 lw.append(module_path + " : removed extra spaces at the end of lines")
@@ -754,6 +664,94 @@ def get_and_check_module (module_path, lw, edit_files):
         lw.pop()
 
     return module_name
+
+
+###############################################################################
+#
+# Normalize the file edges by removing empty lines at the start and end,
+# ensuring exactly one newline at the end, and optionally editing the file.
+# If edit_files is True, the file will be modified.
+###############################################################################
+def normalize_file_edges(file_path, lw, edit_files):
+    try:
+        with open(file_path, 'r') as f:
+            lines = f.readlines()
+
+        if not lines:
+            return
+
+        changed = False
+
+        # Remove empty lines at the start
+        if lines and lines[0].strip() == "":
+            lw.append(f"{file_path} : empty line at beginning of file")
+            if edit_files:
+                while lines and lines[0].strip() == "":
+                    lines.pop(0)
+                    changed = True
+                
+        
+        # Remove extra empty lines at the end
+        if len(lines) > 1 and lines[-1].strip() == "" and lines[-2].strip() == "":
+            lw.append(f"{file_path} : multiple empty lines at end of file")
+            if edit_files:
+                while len(lines) > 1 and lines[-1].strip() == "" and lines[-2].strip() == "":
+                    lines.pop()
+                    changed = True
+
+        # Ensure exactly one newline at the end
+        if not lines[-1].endswith('\n'):
+            lw.append(f"{file_path} : file does not end with a newline")
+            if edit_files:
+                lines[-1] += '\n'
+                changed = True
+
+        # If something changed, write back the cleaned content
+        if changed:
+            with open(file_path, 'w') as f:
+                f.writelines(lines)
+            lw.append(f"{file_path} : normalized file edges")
+
+    except Exception as e:
+        lw.append(f"{file_path} : ERROR while normalizing edges - {e}")
+
+
+###############################################################################
+#
+# Check if the project name in the system_project.tcl file matches the
+# expected name, which is the relative path from the projects folder,
+###############################################################################
+def check_project_name_vs_path(modified_files, lw, edit_files=False):
+    checked_projects = set()
+    for f in modified_files:
+        folder = os.path.dirname(f)
+        while folder.startswith("projects") and folder != "projects":
+            tcl_path = os.path.join(folder, "system_project.tcl")
+            if os.path.exists(tcl_path) and folder not in checked_projects:
+                rel_path = os.path.relpath(folder, "projects")
+                expected_name = rel_path.replace(os.sep, "_")
+                lines = []
+                found = False
+                changed = False
+                with open(tcl_path, "r") as tclf:
+                    for line in tclf:
+                        m = re.match(r'\s*adi_project\s+(\S+)', line)
+                        if m:
+                            found = True
+                            found_name = m.group(1)
+                            if found_name != expected_name:
+                                lw.append(f"{tcl_path} : adi_project '{found_name}' does not match expected '{expected_name}'")
+                                if edit_files:
+                                    line = re.sub(r'(\s*adi_project\s+)\S+', r'\1' + expected_name, line)
+                                    changed = True
+                        lines.append(line)
+                if edit_files and found and changed:
+                    with open(tcl_path, "w") as tclf:
+                        tclf.writelines(lines)
+                    lw.append(f"{tcl_path} : adi_project updated to '{expected_name}'")
+                checked_projects.add(folder)
+                break
+            folder = os.path.dirname(folder)
 
 
 ###############################################################################
@@ -888,7 +886,7 @@ def set_occurrence_lines (occurrence_item, list_of_lines):
 
 ###############################################################################
 #
-# Check for the guideline rules applied to the module instaces and output
+# Check for the guideline rules applied to the module instances and output
 # warnings for each line, if any.
 ###############################################################################
 def check_guideline_instances (occurrence_item, lw):
@@ -1076,7 +1074,6 @@ xilinx_modules.append("BUFGCTRL")
 xilinx_modules.append("BUFGMUX")
 #xilinx_modules.append("BUFGMUX_1")
 xilinx_modules.append("BUFGMUX_CTRL")
-xilinx_modules.append("BUFH")
 xilinx_modules.append("BUFIO")
 xilinx_modules.append("BUFR")
 xilinx_modules.append("GTHE3_CHANNEL")
@@ -1183,17 +1180,25 @@ else:
             print ("\n -> For %s in:" % module_path)
             for message in lw:
                 print(message)
-
-    lw = []
     
-    check_project_name_vs_path(modified_files, lw, edit_files)
+    lw = []
+
     for file_path in modified_files:
-        #enforce_final_newline(file_path, lw, edit_files)
         normalize_file_edges(file_path, lw, edit_files)
+    
+    if (len(lw) > 0):
+            guideline_ok = False
+            # print("\n -> Project name vs path check:")
+            for message in lw:
+                print(message)
+    
+    lw = []
+
+    check_project_name_vs_path(modified_files, lw, edit_files)
 
     if (len(lw) > 0):
             guideline_ok = False
-            print("\n -> Project name vs path check:")
+            print("\n Project name vs path check:")
             for message in lw:
                 print(message)
 
