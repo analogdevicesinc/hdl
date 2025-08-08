@@ -9,6 +9,7 @@
   - [EVAL-AD917x](https://www.analog.com/eval-AD9172)
 - System documentation: TO BE ADDED
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/dac_fmc_ebz/index.html
+- Evaluation board VADJ range: 1.8V - 2.5V
 
 ## Supported parts
 
