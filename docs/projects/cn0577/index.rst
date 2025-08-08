@@ -60,6 +60,11 @@ Configuration modes
   - 1 - two-lane output mode (default)
   - 0 - one-lane output mode
 
+- ADC_RES: resolution in bits
+
+  - 18 - 18 bits ADC resolution (default)
+  - 16 - 16 bits ADC resoluton
+
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
