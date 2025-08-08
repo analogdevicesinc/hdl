@@ -1,9 +1,10 @@
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
 # system level parameters
-set NUM_OF_SDI  $ad_project_params(NUM_OF_SDI)
+set NUM_OF_SDIO  $ad_project_params(NUM_OF_SDIO)
+set NUM_OF_CS  $ad_project_params(NUM_OF_CS)
 
-puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI"
+puts "build parameters: NUM_OF_SDIO: $NUM_OF_SDIO"
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 quad_adaq77681_spi
 
@@ -13,8 +14,8 @@ create_bd_port -dir O               quad_adaq77681_xtal2_mclk
 
 set data_width    32
 set async_spi_clk 1
-set num_cs        4
-set num_sdi       $NUM_OF_SDI
+set num_cs        $NUM_OF_CS
+set num_sdi       $NUM_OF_SDIO
 set num_sdo       1
 set sdi_delay     1
 set echo_sclk     0
@@ -45,7 +46,7 @@ ad_ip_parameter axi_qadc_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_qadc_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_qadc_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_qadc_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_qadc_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $NUM_OF_SDI * $data_width]
+ad_ip_parameter axi_qadc_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $NUM_OF_SDIO * $data_width]
 ad_ip_parameter axi_qadc_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 ad_connect quad_adaq77681_mclk_refclk mclk_clkgen/clk
