@@ -97,8 +97,8 @@ set dac_data_width [expr 8*$TX_TPL_DATA_PATH_WIDTH*$TX_NUM_OF_LANES*$TX_DMA_SAMP
 set dac_dma_data_width $dac_data_width
 set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
 
-if {$EXTERNAL_PHY && $RX_NUM_OF_LANES != $TX_NUM_OF_LANES} {
-  send_message error "Only duplex modes are supported for External PHY."
+if {$EXTERNAL_PHY && $RX_NUM_OF_LANES < $TX_NUM_OF_LANES} {
+  send_message error "In duplex mode RX_NUM_OF_LANES >= TX_NUM_OF_LANES!"
 }
 
 # JESD204 clock bridges
@@ -227,7 +227,7 @@ set_instance_parameter_value mxfe_tx_dma {DMA_TYPE_SRC} {0}
 # set_instance_parameter_value mxfe_tx_dma {FIFO_SIZE} {8}
 set_instance_parameter_value mxfe_tx_dma {HAS_AXIS_TLAST} {1}
 set_instance_parameter_value mxfe_tx_dma {DMA_AXI_PROTOCOL_SRC} {0}
-set_instance_parameter_value mxfe_tx_dma {MAX_BYTES_PER_BURST} {4096}
+set_instance_parameter_value mxfe_tx_dma {MAX_BYTES_PER_BURST} {2048}
 
 add_instance mxfe_rx_dma axi_dmac
 set_instance_parameter_value mxfe_rx_dma {ID} {0}
@@ -243,7 +243,7 @@ set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_SRC} {1}
 # set_instance_parameter_value mxfe_rx_dma {FIFO_SIZE} {8}
 set_instance_parameter_value mxfe_rx_dma {DMA_AXI_PROTOCOL_DEST} {0}
-set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {4096}
+set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {2048}
 
 # mxfe gpio
 
@@ -360,7 +360,14 @@ if {!$EXTERNAL_PHY} {
   add_connection mxfe_tx_jesd204.reset     jesd204_phy.tx_reset
   add_connection jesd204_phy.tx_reset_ack  mxfe_tx_jesd204.reset_ack
   add_connection jesd204_phy.tx_ready      mxfe_tx_jesd204.ready
-  add_connection jesd204_phy.tx_pll_locked mxfe_tx_jesd204.tx_pll_locked
+
+  # Export those two so we can have TX_L < RX_L otherwise Quartus complains about
+  # the number of bits mismatch...
+  add_interface phy_tx_pll_locked conduit end
+  set_interface_property phy_tx_pll_locked EXPORT_OF jesd204_phy.tx_pll_locked
+
+  add_interface tx_pll_locked conduit end
+  set_interface_property tx_pll_locked EXPORT_OF mxfe_tx_jesd204.tx_pll_locked
 
   for {set i 0} {$i < $TX_NUM_OF_LANES} {incr i} {
     add_connection mxfe_tx_jesd204.tx_phy${i} jesd204_phy.phy_tx_${i}

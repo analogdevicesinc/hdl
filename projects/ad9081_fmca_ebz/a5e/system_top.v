@@ -194,6 +194,7 @@ module system_top #(
   wire          syspll_clk;
   wire          syspll_lock;
   wire          dacfifo_bypass;
+  wire [ 3:0]   phy_tx_pll_locked_o_tx_pll_locked;
 
   wire  [ 7:0]  spi_csn_s;
   wire          spi_clk;
@@ -373,6 +374,8 @@ module system_top #(
     .refclk_xcvr_clk                                         (fpga_refclk_in),
     .i_refclk_rdy_data                                       (1'b1),
     .dacfifo_bypass_bypass                                   (dacfifo_bypass),
+    .phy_tx_pll_locked_o_tx_pll_locked                       (phy_tx_pll_locked_o_tx_pll_locked),
+    .tx_pll_locked_o_tx_pll_locked                           (phy_tx_pll_locked_o_tx_pll_locked[TX_JESD_L-1:0]),
 
     // FMC HPC
     .sys_spi_MISO                                            (spi_miso),
