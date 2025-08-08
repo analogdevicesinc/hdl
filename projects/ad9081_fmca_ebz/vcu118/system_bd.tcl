@@ -240,15 +240,15 @@ if {$ad_project_params(CORUNDUM) == "1"} {
     ad_connect corundum_hierarchy/input_axis_tdata util_corundum_cpack/packed_fifo_wr_data
     ad_connect corundum_hierarchy/input_axis_tready util_corundum_cpack/packed_fifo_wr_overflow
 
-    ad_ip_instance util_reduced_logic cpack_rst_logic_corundum
+    ad_ip_instance ilreduced_logic cpack_rst_logic_corundum
     ad_ip_parameter cpack_rst_logic_corundum config.c_operation {or}
     ad_ip_parameter cpack_rst_logic_corundum config.c_size {4}
 
-    ad_ip_instance util_vector_logic rx_do_rstout_logic_corundum
+    ad_ip_instance ilvector_logic rx_do_rstout_logic_corundum
     ad_ip_parameter rx_do_rstout_logic_corundum config.c_operation {not}
     ad_ip_parameter rx_do_rstout_logic_corundum config.c_size {1}
 
-    ad_ip_instance xlconcat cpack_reset_sources_corundum
+    ad_ip_instance ilconcat cpack_reset_sources_corundum
     ad_ip_parameter cpack_reset_sources_corundum config.num_ports {4}
 
     ad_connect corundum_hierarchy/input_axis_tready rx_do_rstout_logic_corundum/Op1
@@ -261,7 +261,7 @@ if {$ad_project_params(CORUNDUM) == "1"} {
     ad_connect cpack_reset_sources_corundum/dout cpack_rst_logic_corundum/op1
     ad_connect cpack_rst_logic_corundum/res util_corundum_cpack/reset
 
-    ad_ip_instance xlconcat input_enable_concat_corundum
+    ad_ip_instance ilconcat input_enable_concat_corundum
     ad_ip_parameter input_enable_concat_corundum config.num_ports $INPUT_CHANNELS
 
     for {set i 0} {$i<$INPUT_CHANNELS} {incr i} {
@@ -270,7 +270,7 @@ if {$ad_project_params(CORUNDUM) == "1"} {
 
     ad_connect input_enable_concat_corundum/dout corundum_hierarchy/input_enable
 
-    ad_ip_instance xlconcat output_enable_concat_corundum
+    ad_ip_instance ilconcat output_enable_concat_corundum
     ad_ip_parameter output_enable_concat_corundum config.num_ports $OUTPUT_CHANNELS
 
     for {set i 0} {$i<$OUTPUT_CHANNELS} {incr i} {

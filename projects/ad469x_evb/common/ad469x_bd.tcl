@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -84,11 +84,11 @@ ad_connect spi_clk $hier_spi_engine/spi_clk
 ad_connect $hier_spi_engine/m_spi ad469x_spi
 ad_connect axi_ad469x_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
 
-ad_ip_instance util_vector_logic cnv_gate
+ad_ip_instance ilvector_logic cnv_gate
 ad_ip_parameter cnv_gate CONFIG.C_SIZE 1
 ad_ip_parameter cnv_gate CONFIG.C_OPERATION {and}
 
-ad_ip_instance util_vector_logic cnv_gate_gpio
+ad_ip_instance ilvector_logic cnv_gate_gpio
 ad_ip_parameter cnv_gate_gpio CONFIG.C_SIZE 1
 ad_ip_parameter cnv_gate_gpio CONFIG.C_OPERATION {or}
 

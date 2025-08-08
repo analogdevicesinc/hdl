@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -73,7 +73,7 @@ ad_connect util_sigma_delta_spi/data_ready $hier_spi_engine/trigger
 ad_connect util_sigma_delta_spi/m_spi spi
 
 ad_ip_instance c_counter_binary phase_gen
-ad_ip_instance xlslice phase_slice
+ad_ip_instance ilslice phase_slice
 create_bd_port -dir O excitation
 
 set excitation_freq 1020
@@ -148,7 +148,7 @@ current_bd_instance /processing
 	ad_ip_parameter lpf	CONFIG.Has_ARESETn true
 	ad_ip_parameter lpf	CONFIG.Reset_Data_Vector false
 
-  ad_ip_instance util_vector_logic overflow_or
+  ad_ip_instance ilvector_logic overflow_or
 	ad_ip_parameter overflow_or	CONFIG.C_SIZE 1
 	ad_ip_parameter overflow_or	CONFIG.C_OPERATION or
 

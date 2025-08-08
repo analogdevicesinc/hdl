@@ -137,7 +137,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_FREQ_MHZ {500.0}
 
 ad_ip_instance axi_iic axi_iic_main
 
-ad_ip_instance xlconcat sys_concat_intc
+ad_ip_instance ilconcat sys_concat_intc
 ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
 ad_ip_instance proc_sys_reset sys_rstgen
@@ -229,7 +229,7 @@ ad_ip_parameter bram_adc CONFIG.Write_Width_B 32
 ad_ip_parameter bram_adc CONFIG.Read_Width_B 32
 ad_ip_parameter bram_adc CONFIG.Write_Depth_A 8192
 
-create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 ad9963_adc_concat
+create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilconcat ad9963_adc_concat
 
 ad_ip_instance axi_dmac ad9963_adc_dmac
 ad_ip_parameter ad9963_adc_dmac CONFIG.DMA_DATA_WIDTH_SRC 32

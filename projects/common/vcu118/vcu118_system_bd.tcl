@@ -139,7 +139,7 @@ ad_ip_parameter axi_gpio CONFIG.C_INTERRUPT_PRESENT 1
 ad_ip_instance axi_intc axi_intc
 ad_ip_parameter axi_intc CONFIG.C_HAS_FAST 0
 
-ad_ip_instance xlconcat sys_concat_intc
+ad_ip_instance ilconcat sys_concat_intc
 ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 17
 
 # ddr4
@@ -304,4 +304,3 @@ create_bd_addr_seg -range 0x80000 -offset 0x0 [get_bd_addr_spaces sys_mb/Data] \
   [get_bd_addr_segs sys_dlmb_cntlr/SLMB/Mem] SEG_dlmb_cntlr
 create_bd_addr_seg -range 0x80000 -offset 0x0 [get_bd_addr_spaces sys_mb/Instruction] \
   [get_bd_addr_segs sys_ilmb_cntlr/SLMB/Mem] SEG_ilmb_cntlr
-
