@@ -102,7 +102,7 @@ ad_ip_parameter axi_gpio CONFIG.C_INTERRUPT_PRESENT 1
 ad_ip_instance axi_intc axi_intc
 ad_ip_parameter axi_intc CONFIG.C_HAS_FAST 0
 
-ad_ip_instance xlconcat sys_concat_intc
+ad_ip_instance ilconcat sys_concat_intc
 ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
 # linear flash

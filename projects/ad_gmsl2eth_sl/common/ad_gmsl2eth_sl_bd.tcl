@@ -534,7 +534,7 @@ assign_bd_address -offset 0xA000_0000 [get_bd_addr_segs \
   corundum_hierarchy/corundum_core/s_axil_ctrl/Reg
 ] -target_address_space sys_ps8/Data
 
-ad_ip_instance util_reduced_logic util_reduced_logic_0
+ad_ip_instance ilreduced_logic util_reduced_logic_0
 ad_ip_parameter util_reduced_logic_0 CONFIG.C_OPERATION {or}
 ad_ip_parameter util_reduced_logic_0 CONFIG.C_SIZE {8}
 

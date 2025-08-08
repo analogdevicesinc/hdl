@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -23,7 +23,7 @@ set xcvr_instance NONE
 
 set use_smartconnect 1
 
-## Add an instance of an IP to the block design.
+## Add an instance of an IP or inline_hdl to the block design.
 #
 # \param[i_ip] - name of the IP
 # \param[i_name] - name of the instance
@@ -31,9 +31,13 @@ set use_smartconnect 1
 # pairs
 #
 proc ad_ip_instance {i_ip i_name {i_params {}}} {
-
-  set cell [create_bd_cell -type ip -vlnv [get_ipdefs -all -filter "VLNV =~ *:${i_ip}:* && \
-    design_tool_contexts =~ *IPI* && UPGRADE_VERSIONS == \"\""] ${i_name}]
+  set ip_type ip
+  set ip_def [get_ipdefs -all -filter "VLNV =~ *:${i_ip}:* && \
+    design_tool_contexts =~ *IPI* && UPGRADE_VERSIONS == \"\""]
+  if {[string match "*inline_hdl*" $ip_def]} {
+    set ip_type inline_hdl
+  }
+  set cell [create_bd_cell -type ${ip_type} -vlnv ${ip_def} ${i_name}]
   if {$i_params != {}} {
     set config {}
     # Add CONFIG. prefix to all config options
@@ -119,7 +123,7 @@ proc ad_connect_int_get_const {name width} {
   set cell [get_bd_cells -quiet $cell_name]
   if {$cell eq ""} {
     # Create new constant source
-    ad_ip_instance xlconstant $cell_name
+    ad_ip_instance ilconstant $cell_name
     set cell [get_bd_cells -quiet $cell_name]
     set_property CONFIG.CONST_WIDTH $width $cell
     set_property CONFIG.CONST_VAL $value $cell

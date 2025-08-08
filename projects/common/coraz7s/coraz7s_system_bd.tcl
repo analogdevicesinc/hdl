@@ -54,7 +54,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_SPI0_SPI0_IO EMIO
 ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_PERIPHERAL_ENABLE 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_SPI1_IO EMIO
 
-ad_ip_instance xlconcat sys_concat_intc
+ad_ip_instance ilconcat sys_concat_intc
 ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
 ad_ip_instance proc_sys_reset sys_rstgen

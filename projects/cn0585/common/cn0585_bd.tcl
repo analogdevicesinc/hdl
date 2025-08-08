@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -108,7 +108,7 @@ ad_ip_parameter axi_pwm_gen CONFIG.PULSE_3_WIDTH 1
 
 # constant 1
 
-create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 const_vcc_1
+create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilconstant const_vcc_1
 
 # sys_rstgen
 

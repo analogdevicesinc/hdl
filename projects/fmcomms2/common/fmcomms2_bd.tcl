@@ -70,12 +70,12 @@ ad_connect tdd_sync_i util_ad9361_tdd_sync/sync_in
 # interface clock divider to generate sampling clock
 # interface runs at 4x in 2r2t mode, and 2x in 1r1t mode
 
-ad_ip_instance xlconcat util_ad9361_divclk_sel_concat
+ad_ip_instance ilconcat util_ad9361_divclk_sel_concat
 ad_ip_parameter util_ad9361_divclk_sel_concat CONFIG.NUM_PORTS 2
 ad_connect axi_ad9361/adc_r1_mode util_ad9361_divclk_sel_concat/In0
 ad_connect axi_ad9361/dac_r1_mode util_ad9361_divclk_sel_concat/In1
 
-ad_ip_instance util_reduced_logic util_ad9361_divclk_sel
+ad_ip_instance ilreduced_logic util_ad9361_divclk_sel
 ad_ip_parameter util_ad9361_divclk_sel CONFIG.C_SIZE 2
 ad_connect util_ad9361_divclk_sel_concat/dout util_ad9361_divclk_sel/Op1
 
@@ -242,4 +242,3 @@ if {$CACHE_COHERENCY} {
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-13 axi_ad9361_dac_dma/irq
-
