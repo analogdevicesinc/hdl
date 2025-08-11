@@ -1,0 +1,61 @@
+####################################################################################
+## Copyright (c) 2025 Analog Devices, Inc.
+### SPDX short identifier: BSD-1-Clause
+## Auto-generated, do not modify!
+####################################################################################
+
+LIBRARY_NAME := application_core
+
+XILINX_DEPS += application_core_ip.tcl
+
+GENERIC_DEPS += application_core.v
+GENERIC_DEPS += application_tx.v
+GENERIC_DEPS += application_rx.v
+GENERIC_DEPS += header_checker.v
+GENERIC_DEPS += header_inserter.v
+GENERIC_DEPS += header_extractor.v
+GENERIC_DEPS += packetizer.v
+GENERIC_DEPS += udp_header.v
+GENERIC_DEPS += ip_header.v
+GENERIC_DEPS += ethernet_header.v
+GENERIC_DEPS += udp_header_mask.v
+GENERIC_DEPS += ip_header_mask.v
+GENERIC_DEPS += ethernet_header_mask.v
+GENERIC_DEPS += prbs.v
+GENERIC_DEPS += prbs_gen.v
+GENERIC_DEPS += prbs_mon.v
+GENERIC_DEPS += ber_tester_tx.v
+GENERIC_DEPS += ber_tester_rx.v
+GENERIC_DEPS += ber_tester.v
+GENERIC_DEPS += application_regmap.v
+GENERIC_DEPS += macro_definitions.vh
+GENERIC_DEPS += ../../common/ad_rst.v
+GENERIC_DEPS += ../../common/up_axi.v
+
+XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc
+XILINX_DEPS += application_core_constr.ttcl
+
+XILINX_DEPS += ../interfaces/if_ptp.xml
+XILINX_DEPS += ../interfaces/if_ptp_rtl.xml
+XILINX_DEPS += ../interfaces/if_axis_tx_ptp.xml
+XILINX_DEPS += ../interfaces/if_axis_tx_ptp_rtl.xml
+XILINX_DEPS += ../interfaces/if_jtag.xml
+XILINX_DEPS += ../interfaces/if_jtag_rtl.xml
+XILINX_DEPS += ../interfaces/if_gpio.xml
+XILINX_DEPS += ../interfaces/if_gpio_rtl.xml
+XILINX_DEPS += ../interfaces/if_axis_dma_desc.xml
+XILINX_DEPS += ../interfaces/if_axis_dma_desc_rtl.xml
+XILINX_DEPS += ../interfaces/if_axis_dma_desc_status.xml
+XILINX_DEPS += ../interfaces/if_axis_dma_desc_status_rtl.xml
+XILINX_DEPS += ../interfaces/if_dma_ram.xml
+XILINX_DEPS += ../interfaces/if_dma_ram_rtl.xml
+XILINX_DEPS += ../interfaces/if_axis_stat.xml
+XILINX_DEPS += ../interfaces/if_axis_stat_rtl.xml
+
+XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_axis_fifo
+XILINX_LIB_DEPS += util_axis_fifo_asym
+
+XILINX_INTERFACE_DEPS += corundum/interfaces
+
+include ../../scripts/library.mk

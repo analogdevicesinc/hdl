@@ -55,6 +55,8 @@ module util_axis_fifo_asym #(
   output m_axis_tlast,
   output m_axis_empty,
   output m_axis_almost_empty,
+  output m_axis_full,
+  output m_axis_almost_full,
   output [ADDRESS_WIDTH-1:0] m_axis_level,
 
   input s_axis_aclk,
@@ -64,6 +66,8 @@ module util_axis_fifo_asym #(
   input [S_DATA_WIDTH-1:0] s_axis_data,
   input [S_DATA_WIDTH/8-1:0] s_axis_tkeep,
   input s_axis_tlast,
+  output s_axis_empty,
+  output s_axis_almost_empty,
   output s_axis_full,
   output s_axis_almost_full,
   output [ADDRESS_WIDTH-1:0] s_axis_room
@@ -92,6 +96,8 @@ module util_axis_fifo_asym #(
   wire [RATIO-1:0] m_axis_tlast_int_s;
   wire [RATIO-1:0] m_axis_empty_int_s;
   wire [RATIO-1:0] m_axis_almost_empty_int_s;
+  wire [RATIO-1:0] m_axis_full_int_s;
+  wire [RATIO-1:0] m_axis_almost_full_int_s;
   wire [RATIO*A_ADDRESS-1:0] m_axis_level_int_s;
 
   wire [RATIO-1:0] s_axis_ready_int_s;
@@ -99,6 +105,8 @@ module util_axis_fifo_asym #(
   wire [RATIO*A_WIDTH-1:0] s_axis_data_int_s;
   wire [RATIO*A_WIDTH/8-1:0] s_axis_tkeep_int_s;
   wire [RATIO-1:0] s_axis_tlast_int_s;
+  wire [RATIO-1:0] s_axis_empty_int_s;
+  wire [RATIO-1:0] s_axis_almost_empty_int_s;
   wire [RATIO-1:0] s_axis_full_int_s;
   wire [RATIO-1:0] s_axis_almost_full_int_s;
   wire [RATIO*A_ADDRESS-1:0] s_axis_room_int_s;
@@ -129,6 +137,8 @@ module util_axis_fifo_asym #(
         .m_axis_level   (m_axis_level_int_s[A_ADDRESS*i+:A_ADDRESS]),
         .m_axis_empty   (m_axis_empty_int_s[i]),
         .m_axis_almost_empty (m_axis_almost_empty_int_s[i]),
+        .m_axis_full   (m_axis_full_int_s[i]),
+        .m_axis_almost_full (m_axis_almost_full_int_s[i]),
         .s_axis_aclk    (s_axis_aclk),
         .s_axis_aresetn (s_axis_aresetn),
         .s_axis_ready   (s_axis_ready_int_s[i]),
@@ -137,6 +147,8 @@ module util_axis_fifo_asym #(
         .s_axis_tkeep   (s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
         .s_axis_tlast   (s_axis_tlast_int_s[i]),
         .s_axis_room    (s_axis_room_int_s[A_ADDRESS*i+:A_ADDRESS]),
+        .s_axis_empty    (s_axis_empty_int_s[i]),
+        .s_axis_almost_empty (s_axis_almost_empty_int_s[i]),
         .s_axis_full    (s_axis_full_int_s[i]),
         .s_axis_almost_full (s_axis_almost_full_int_s[i]));
     end
@@ -167,6 +179,8 @@ module util_axis_fifo_asym #(
       // if every instance is ready, the interface is ready
       assign s_axis_ready = &(s_axis_ready_int_s);
       // if one of the atomic instance is full, s_axis_full is asserted
+      assign s_axis_empty = |s_axis_empty_int_s;
+      assign s_axis_almost_empty = |s_axis_almost_empty_int_s;
       assign s_axis_full = |s_axis_full_int_s;
       assign s_axis_almost_full = |s_axis_almost_full_int_s;
       // the FIFO has the same room as the atomic FIFO
@@ -198,11 +212,13 @@ module util_axis_fifo_asym #(
       assign s_axis_ready = (s_axis_tlast) ? &(s_axis_ready_int_s) : s_axis_ready_int_s >> s_axis_counter;
 
       // FULL/ALMOST_FULL is driven by the current atomic instance
+      assign s_axis_almost_empty = s_axis_almost_empty_int_s >> s_axis_counter;
       assign s_axis_almost_full = s_axis_almost_full_int_s >> s_axis_counter;
 
       // the FIFO has the same room as the last atomic instance
       // (NOTE: this is not the real room value, rather the value will be updated
       // after every RATIO number of writes)
+      assign s_axis_empty = s_axis_empty_int_s[RATIO-1];
       assign s_axis_full = s_axis_full_int_s[RATIO-1];
       assign s_axis_room = {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS], {$clog2(RATIO){1'b1}}};
 
@@ -232,6 +248,8 @@ module util_axis_fifo_asym #(
       assign m_axis_level = {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}};
       assign m_axis_almost_empty = m_axis_almost_empty_int_s[RATIO-1];
       assign m_axis_empty = m_axis_empty_int_s[RATIO-1];
+      assign m_axis_almost_full = m_axis_almost_full_int_s[RATIO-1];
+      assign m_axis_full = m_axis_full_int_s[RATIO-1];
 
     end else begin : big_master
 
@@ -259,6 +277,8 @@ module util_axis_fifo_asym #(
       // if one of the atomic instance is empty, m_axis_empty should be asserted
       assign m_axis_empty = |m_axis_empty_int_s;
       assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
+      assign m_axis_full = |m_axis_full_int_s;
+      assign m_axis_almost_full = |m_axis_almost_full_int_s;
 
       // the FIFO has the same room as the atomic FIFO
       assign m_axis_level = m_axis_level_int_s[A_ADDRESS-1:0];
