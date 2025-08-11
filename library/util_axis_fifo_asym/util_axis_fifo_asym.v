@@ -215,7 +215,9 @@ module util_axis_fifo_asym #(
     if (RATIO_TYPE) begin : small_master
 
       for (i=0; i<RATIO; i=i+1) begin
-        assign m_axis_ready_int_s[i] = (m_axis_counter == i) ? m_axis_ready : 1'b0;
+        // When TKEEP_EN, we need to discard the data from the internal FIFOs for which tkeep=0.
+        // Thus we still need to assert m_axis_ready_int_s for that internal FIFO even without an actual AXI handshake.
+        assign m_axis_ready_int_s[i] = (m_axis_counter == i) ? (m_axis_ready ||  (TKEEP_EN && !(|m_axis_tkeep))) : 0;
       end
 
       assign m_axis_data = m_axis_data_int_s >> (m_axis_counter*A_WIDTH) ;
@@ -316,7 +318,10 @@ module util_axis_fifo_asym #(
         if (!m_axis_aresetn) begin
           m_axis_counter <= 0;
         end else begin
-          if (m_axis_ready && m_axis_valid_int) begin
+          // When using tkeep, we might have an internally "valid" data beat without any actually valid bytes.
+          // This will result in m_axis_valid being actually low for the external world.
+          // In this case (tkeep is all 0), we need to increment the counter without waiting for m_axis_ready.
+          if ((m_axis_ready && m_axis_valid) || (TKEEP_EN && m_axis_valid_int && !(|m_axis_tkeep))) begin
             m_axis_counter <= m_axis_counter + 1'b1;
           end
         end
