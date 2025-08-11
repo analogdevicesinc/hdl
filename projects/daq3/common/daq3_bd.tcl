@@ -11,6 +11,7 @@
 #
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/library/xilinx/scripts/xcvr_automation.tcl
 
 # TX parameters
 set TX_NUM_OF_LANES $ad_project_params(TX_JESD_L)      ; # L
@@ -116,16 +117,14 @@ if {$sys_zynq == 0 || $sys_zynq == 1} {
 
 # shared transceiver core
 
-ad_ip_instance util_adxcvr util_daq3_xcvr
-ad_ip_parameter util_daq3_xcvr CONFIG.RX_NUM_OF_LANES $MAX_RX_NUM_OF_LANES
-ad_ip_parameter util_daq3_xcvr CONFIG.TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES
-ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_REFCLK_DIV 1
-ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV_RATIO 1
-ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV 0x30; # 20
-ad_ip_parameter util_daq3_xcvr CONFIG.RX_OUT_DIV 1
-ad_ip_parameter util_daq3_xcvr CONFIG.TX_OUT_DIV 1
-ad_ip_parameter util_daq3_xcvr CONFIG.RX_DFE_LPM_CFG 0x0904
-ad_ip_parameter util_daq3_xcvr CONFIG.RX_CDR_CFG 0x0B000023FF10400020
+global xcvr_config_paths
+
+set util_adxcvr_parameters [adi_xcvr_parameters $xcvr_config_paths [list \
+  RX_NUM_OF_LANES $MAX_RX_NUM_OF_LANES \
+  TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES \
+]]
+
+ad_ip_instance util_adxcvr util_daq3_xcvr $util_adxcvr_parameters
 
 ad_connect  $sys_cpu_resetn util_daq3_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_daq3_xcvr/up_clk

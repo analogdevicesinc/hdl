@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 #
 # CPLL - generate reference clocks for a given Lane Rate
@@ -486,6 +486,7 @@ proc get_diff_params { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} {keep_ip "
 
   set current_dir [pwd]
   set project_name [get_property NAME [current_project]]
+  set hdl_projects_path [file normalize [file join $current_dir "../.."]]
 
   ## Generate configurations
   ad_gth_generator $lane_rate_l $pll_type $ref_clk_l
@@ -493,42 +494,49 @@ proc get_diff_params { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} {keep_ip "
   ## Call parser script gtwiz_parser.pl
   cd $project_name\.gen/sources_1/ip
   # exec $::env(ADI_HDL_DIR)/projects/scripts/gtwiz_parser.pl $gt_type
+  # exec ../../../../../scripts/gtwiz_parser.pl $gt_type
   # catch exception for the next line. If it catches something, come back to $current_dir
-  if { [catch { exec ../../../../../scripts/gtwiz_parser.pl $gt_type } e] } {
-    cd $current_dir
-    puts "Some error has occured: \n$e";
-  } else {
-    exec ../../../../../scripts/gtwiz_parser.pl $gt_type
-    cd $current_dir
-
-    ## if keep_ip not true, remove from the project the generated IPs and delete them
-    if {$keep_ip ne "true"} {
-      foreach lane_rate $lane_rate_l {
-        foreach ref_clk  $ref_clk_l {
-          set lane_rate_txt [string replace $lane_rate [string first . $lane_rate] [string first . $lane_rate] "_"]
-          set ref_clk_txt [lindex [split $ref_clk "."] 0]
-
-          ## Get the paths to generated IP so that it can be removed
-          set src_path $current_dir/$project_name\.srcs/sources_1/ip
-          set gen_path $current_dir/$project_name\.gen/sources_1/ip
-          set ip_name [eval exec ls $src_path | grep $gt_type\_$pll_type\_$lane_rate_txt\_$ref_clk_txt]
-          set ip_path_src $src_path\/$ip_name
-          set ip_path_gen $gen_path\/$ip_name
-          set xci_file $ip_path_src/$ip_name\.xci
-
-          ## Remove the generated IP after the differences were written
-          export_ip_user_files -of_objects  [get_files $xci_file] -no_script -reset -force -quiet
-          remove_files  -fileset $ip_name $xci_file
-          file delete -force $ip_path_src
-          file delete -force $ip_path_gen
-        }
-      }
+  set dst_path [pwd]
+  if {[file tail $dst_path] eq "ip"} {
+    if { [catch { exec $hdl_projects_path/scripts/gtwiz_parser.pl $gt_type } e] } {
+      cd $current_dir
+      puts "Some error has occured: \n$e";
     } else {
-    puts "\ngenerated files can be find at $project_name\.gen/sources_1/ip"
+      exec $hdl_projects_path/scripts/gtwiz_parser.pl $gt_type
+      cd $current_dir
+
+      ## if keep_ip not true, remove from the project the generated IPs and delete them
+      if {$keep_ip ne "true"} {
+        foreach lane_rate $lane_rate_l {
+          foreach ref_clk  $ref_clk_l {
+            set lane_rate_txt [string replace $lane_rate [string first . $lane_rate] [string first . $lane_rate] "_"]
+            set ref_clk_txt [lindex [split $ref_clk "."] 0]
+
+            ## Get the paths to generated IP so that it can be removed
+            set src_path $current_dir/$project_name\.srcs/sources_1/ip
+            set gen_path $current_dir/$project_name\.gen/sources_1/ip
+            set ip_name [eval exec ls $src_path | grep $gt_type\_$pll_type\_$lane_rate_txt\_$ref_clk_txt]
+            set ip_path_src $src_path\/$ip_name
+            set ip_path_gen $gen_path\/$ip_name
+            set xci_file $ip_path_src/$ip_name\.xci
+
+            ## Remove the generated IP after the differences were written
+            export_ip_user_files -of_objects  [get_files $xci_file] -no_script -reset -force -quiet
+            remove_files  -fileset $ip_name $xci_file
+            file delete -force $ip_path_src
+            file delete -force $ip_path_gen
+          }
+        }
+      } else {
+      puts "\ngenerated files can be find at $project_name\.gen/sources_1/ip"
+      }
+
+
+      puts "\nconfiguration file for the tranciever is $project_name\.gen/sources_1/ip/$gt_type\_cfng.txt"
     }
-
-
-    puts "\nconfiguration file for the tranciever is $project_name\.gen/sources_1/ip/$gt_type\_cfng.txt"
+  } else {
+    puts "For running the parser script you should be in ip directory"
   }
+
 
 }

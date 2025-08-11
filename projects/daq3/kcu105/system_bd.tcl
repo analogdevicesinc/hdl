@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2015-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -33,8 +33,6 @@ DAC_FIFO_ADDR_WIDTH=$dac_fifo_address_width"
 
 sysid_gen_sys_init_file $sys_cstring
 
-ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV 20
-ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_REFCLK_DIV 1
-ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG0 0x67f8
-ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG1 0xa4ac
-ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG2 0x0007
+ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_ad9680_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter axi_ad9680_dma CONFIG.MAX_BYTES_PER_BURST 4096
