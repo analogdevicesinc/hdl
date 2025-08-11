@@ -316,7 +316,7 @@ module util_axis_fifo_asym #(
         if (!m_axis_aresetn) begin
           m_axis_counter <= 0;
         end else begin
-          if (m_axis_ready && m_axis_valid_int) begin
+          if ((m_axis_ready && m_axis_valid) || (m_axis_valid_int && !(|m_axis_tkeep))) begin
             m_axis_counter <= m_axis_counter + 1'b1;
           end
         end
