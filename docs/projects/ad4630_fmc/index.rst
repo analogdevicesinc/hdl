@@ -37,12 +37,12 @@ integrates all critical power supply and reference bypass capacitors, reducing
 the footprint and system component count, and lessening sensitivity to board
 layout.
 
-The ADAQ4224 is a μModule® precision data acquisition (DAQ) signal chain
-solution that reduces the development cycle of a precision measurement system
-by transferring the signal chain design challenge of component selection,
+The :adi:`ADAQ4224` and :adi:`ADAQ4216` is a μModule® precision data acquisition (DAQ)
+signal chain solution that reduces the development cycle of a precision measurement
+system by transferring the signal chain design challenge of component selection,
 optimization, and layout from the designer to the device. With a guaranteed
-maximum ±TBD ppm INL and no missing codes at 24 bits, the ADAQ4224 achieves
-unparalleled precision from −40°C to +85°C.
+maximum ±1.0 ppm INL and no missing codes at 24 bits, the :adi:`ADAQ4224` and
+:adi:`ADAQ4216` achieves unparalleled precision from −40°C to +105°C.
 
 The HDL reference design for the :adi:`EVAL-AD4630_FMCZ` and
 :adi:`EVAL-AD4030_FMCZ` provides all the interfaces that are necessary to
@@ -70,6 +70,7 @@ Supported boards
 - :adi:`EVAL-AD4630-16FMCZ`
 - :adi:`EVAL-AD4630-24FMCZ`
 - :adi:`EVAL-ADAQ4224-FMCZ`
+- :adi:`EVAL-ADAQ4216-FMCZ`
 - :adi:`EV-ISO-4224-FMCZ`
 
 Supported devices
@@ -79,6 +80,7 @@ Supported devices
 - :adi:`AD4630-16`
 - :adi:`AD4630-24`
 - :adi:`ADAQ4224`
+- :adi:`ADAQ4216`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -382,6 +384,8 @@ Hardware related
   - :adi:`AD4030-24`
   - :adi:`AD4630-16`
   - :adi:`AD4630-24`
+  - :adi:`ADAQ4224`
+  - :adi:`ADAQ4216`
 - :dokuwiki:`[Wiki] AD4630/AD4030 Evaluation Board User Guide <resources/eval/ad4630-24-eval-board>`
 
 HDL related
