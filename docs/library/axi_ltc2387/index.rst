@@ -7,8 +7,7 @@ AXI LTC2387
    :path: library/axi_ltc2387
 
 The :git-hdl:`AXI LTC2387 <library/axi_ltc2387>` IP core can be used to
-interface :adi:`LTC2387-18`, :adi:`LTC2387-16`, :adi:`LTC2386-18`,
-:adi:`LTC2385-18` and :adi:`ADAQ23878` devices.
+interface :adi:`LTC2387-18`, :adi:`LTC2387-16` and :adi:`ADAQ23878` devices.
 
 This documentation only covers the IP core and requires that one must be
 familiar with the device for a complete and better understanding.
@@ -166,8 +165,6 @@ References
 * HDL project documentation at :ref:`cn0577`
 * :adi:`LTC2387-18` 18-bit 15 MSPS
 * :adi:`LTC2387-16` 16-bit 15 MSPS
-* :adi:`LTC2386-18` 18-bit 10 MSPS
-* :adi:`LTC2385-18` 18-bit 5 MSPS
 * :adi:`ADAQ23878` 18-bit 15 MSPS
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`.
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`.
