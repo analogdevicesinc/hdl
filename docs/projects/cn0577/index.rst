@@ -7,9 +7,9 @@ Overview
 -------------------------------------------------------------------------------
 
 The :adi:`CN0577` provides an analog front-end and an FMC
-digital interface for :adi:`LTC2387-18`, its core. It is a low noise, high
-speed successive approximation register (SAR) ADC with a resolution of 18 bits
-and sampling rate up to 15MSPS.
+digital interface for :adi:`LTC2387-18`/ :adi:`LTC2387-16` its core. It is a low
+noise, high speed successive approximation register (SAR) ADC with a resolution
+of 18/16 bits and sampling rate up to 15MSPS.
 
 :adi:`CN0577` includes an on-board reference oscillator and a
 retiming circuit to minimize signal-to-noise ratio (SNR) degradation due to the
@@ -30,6 +30,7 @@ Supported devices
 
 - :adi:`ADAQ23876`
 - :adi:`LTC2387-18`
+- :adi:`LTC2387-16`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -59,6 +60,11 @@ Configuration modes
 
   - 1 - two-lane output mode (default)
   - 0 - one-lane output mode
+
+- ADC_RES: resolution in bits
+
+  - 18 - 18 bits ADC resolution (default)
+  - 16 - 16 bits ADC resoluton
 
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -183,6 +189,7 @@ Hardware related
 - Product datasheets:
 
   - :adi:`LTC2387-18`
+  - :adi:`LTC2387-16`
 
 - `Circuit Note CN0577 <https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0577.pdf>`__
 
