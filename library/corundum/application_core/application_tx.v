@@ -327,8 +327,7 @@ module application_tx #(
     .ALMOST_FULL_THRESHOLD($clog2(2**13 * 8 / INPUT_WIDTH)),
     .TLAST_EN(0),
     .TKEEP_EN(1),
-    .FIFO_LIMITED(0),
-    .ADDRESS_WIDTH_PERSPECTIVE(1)
+    .REDUCED_FIFO(0)
   ) cdc_scale_fifo (
     .m_axis_aclk(clk),
     .m_axis_aresetn(rstn_output_gated),

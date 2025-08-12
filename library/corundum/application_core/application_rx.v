@@ -379,8 +379,7 @@ module application_rx #(
     .ALMOST_FULL_THRESHOLD(0),
     .TLAST_EN(0),
     .TKEEP_EN(0),
-    .FIFO_LIMITED(0),
-    .ADDRESS_WIDTH_PERSPECTIVE(1)
+    .REDUCED_FIFO(0)
   ) cdc_scale_fifo (
     .m_axis_aclk(output_clk),
     .m_axis_aresetn(output_rstn),
