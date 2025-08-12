@@ -186,6 +186,7 @@ ad_serdes_in # (
   assign {frame_data[1],serdes_data[7][1],serdes_data[6][1],serdes_data[5][1],serdes_data[4][1],serdes_data[3][1],serdes_data[2][1],serdes_data[1][1],serdes_data[0][1]} = data_s6;  //
   assign {frame_data[0],serdes_data[7][0],serdes_data[6][0],serdes_data[5][0],serdes_data[4][0],serdes_data[3][0],serdes_data[2][0],serdes_data[1][0],serdes_data[0][0]} = data_s7;  // oldest bit received
 
+(* MARK_DEBUG = "TRUE" *) wire [15:0] sample_assembly_out [0:7];
 (* MARK_DEBUG = "TRUE" *) wire [15:0] data_out [0:7];
 wire [ 7:0] data_en;
 
@@ -195,10 +196,10 @@ wire [ 7:0] data_en;
         sample_assembly  sample_assembly_inst (
           .clk(adc_clk_div),
           .frame(frame_data),
-          .data_in(serdes_data[i] ^ polarity_mask_s),
+          .data_in(serdes_data[i]),
           .resolution(resolution),
           .data_en(data_en[i]),
-          .data_out(data_out[i])
+          .data_out(sample_assembly_out[i])
         );
       end
   endgenerate
@@ -206,6 +207,15 @@ wire [ 7:0] data_en;
  //==========================================================================
  // Arrange samples in capture format
  //==========================================================================
+
+assign data_out[0] = {16{polarity_mask_s[0]}}^sample_assembly_out[0];
+assign data_out[1] = {16{polarity_mask_s[1]}}^sample_assembly_out[1];
+assign data_out[2] = {16{polarity_mask_s[2]}}^sample_assembly_out[2];
+assign data_out[3] = {16{polarity_mask_s[3]}}^sample_assembly_out[3];
+assign data_out[4] = {16{polarity_mask_s[4]}}^sample_assembly_out[4];
+assign data_out[5] = {16{polarity_mask_s[5]}}^sample_assembly_out[5];
+assign data_out[6] = {16{polarity_mask_s[6]}}^sample_assembly_out[6];
+assign data_out[7] = {16{polarity_mask_s[7]}}^sample_assembly_out[7];
 
 always @(posedge adc_clk_div) begin
 if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
