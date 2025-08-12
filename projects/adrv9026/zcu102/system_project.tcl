@@ -16,6 +16,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   RX-OS disabled:        make
 #   RX-OS LinkSharing:     make ORX_ENABLE=1 LINK_SHARING=1 RX_OS_JESD_M=8 RX_OS_JESD_L=4 RX_OS_JESD_S=1
 #   RX-OS Non-LinkSharing: make ORX_ENABLE=1 LINK_SHARING=0 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_JESD_M=4 RX_JESD_L=2
+#                          make ORX_ENABLE=1 LINK_SHARING=0 RX_OS_JESD_M=2 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_JESD_M=8 RX_JESD_L=2 TX_JESD_L=2
 #
 # Parameter description:
 #   JESD_MODE : Used link layer encoder mode
