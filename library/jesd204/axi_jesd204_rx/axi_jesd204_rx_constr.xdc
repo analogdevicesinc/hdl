@@ -15,6 +15,7 @@ set_property ASYNC_REG TRUE \
 set_property ASYNC_REG TRUE \
   [get_cells -hier {up_reset_vector_reg*}] \
   [get_cells -hier {core_reset_vector_reg*}] \
+  [get_cells -hier {device_reset_vector_reg*}] \
   [get_cells -hier {up_reset_synchronizer_vector_reg*}] \
   [get_cells -hier {up_core_reset_ext_synchronizer_vector_reg*}]
 
