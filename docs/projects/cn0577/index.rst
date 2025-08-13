@@ -7,9 +7,9 @@ Overview
 -------------------------------------------------------------------------------
 
 The :adi:`CN0577` provides an analog front-end and an FMC
-digital interface for :adi:`LTC2387-18`/ :adi:`LTC2387-16` its core. It is a low
+digital interface for :adi:`LTC2387-18`, its core. It is a low
 noise, high speed successive approximation register (SAR) ADC with a resolution
-of 18/16 bits and sampling rate up to 15MSPS.
+of 18 bits and sampling rate up to 15MSPS.
 
 :adi:`CN0577` includes an on-board reference oscillator and a
 retiming circuit to minimize signal-to-noise ratio (SNR) degradation due to the
@@ -28,9 +28,7 @@ Supported boards
 Supported devices
 -------------------------------------------------------------------------------
 
-- :adi:`ADAQ23876`
 - :adi:`LTC2387-18`
-- :adi:`LTC2387-16`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -41,6 +39,7 @@ Block design
 -------------------------------------------------------------------------------
 
 .. warning::
+
     The VADJ for the Zedboard must be set to 2.5V.
 
 Block diagram
@@ -48,7 +47,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../cn0577/cn0577_zed_block_diagram.svg
+.. image:: cn0577_zed_block_diagram.svg
    :width: 800
    :align: center
    :alt: CN0577/ZedBoard block diagram
@@ -60,11 +59,6 @@ Configuration modes
 
   - 1 - two-lane output mode (default)
   - 0 - one-lane output mode
-
-- ADC_RES: resolution in bits
-
-  - 18 - 18 bits ADC resolution (default)
-  - 16 - 16 bits ADC resoluton
 
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -189,7 +183,6 @@ Hardware related
 - Product datasheets:
 
   - :adi:`LTC2387-18`
-  - :adi:`LTC2387-16`
 
 - `Circuit Note CN0577 <https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0577.pdf>`__
 
