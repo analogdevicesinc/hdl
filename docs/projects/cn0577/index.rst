@@ -28,7 +28,6 @@ Supported boards
 Supported devices
 -------------------------------------------------------------------------------
 
-- :adi:`ADAQ23876`
 - :adi:`LTC2387-18`
 
 Supported carriers
@@ -40,6 +39,7 @@ Block design
 -------------------------------------------------------------------------------
 
 .. warning::
+
     The VADJ for the Zedboard must be set to 2.5V.
 
 Block diagram
@@ -47,7 +47,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../cn0577/cn0577_zed_block_diagram.svg
+.. image:: cn0577_zed_block_diagram.svg
    :width: 800
    :align: center
    :alt: CN0577/ZedBoard block diagram
