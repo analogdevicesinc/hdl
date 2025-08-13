@@ -332,10 +332,16 @@ module util_adxcvr_xch #(
     .out_clk (up_clk),
     .out_bits (up_tx_rst_done));
 
+  reg [2:0] up_tx_rate_reg;
+
+  always @(posedge up_clk) begin
+    up_tx_rate_reg <= up_tx_rate;
+  end
+
   sync_bits #(
     .NUM_OF_BITS(3)
   ) i_sync_bits_rx_rate (
-    .in_bits (up_rx_rate),
+    .in_bits (up_tx_rate_reg),
     .out_resetn (1'b1),
     .out_clk (rx_clk),
     .out_bits (rx_rate));
@@ -355,11 +361,19 @@ module util_adxcvr_xch #(
   wire [ 3:0] rx_prbssel;
   reg         rx_prbserr_sticky = 1'b0;
 
+  reg [ 3:0] up_rx_prbssel_reg;
+  reg        up_rx_prbscntreset_reg;
+
+  always @(posedge up_clk) begin
+    up_rx_prbssel_reg <= up_rx_prbssel;
+    up_rx_prbscntreset_reg <= up_rx_prbscntreset;
+  end
+
   sync_bits #(
     .NUM_OF_BITS(5)
   ) i_sync_bits_rx_prbs_in (
-    .in_bits ({up_rx_prbssel,
-               up_rx_prbscntreset}),
+    .in_bits ({up_rx_prbssel_reg,
+               up_rx_prbscntreset_reg}),
     .out_resetn (1'b1),
     .out_clk (rx_clk),
     .out_bits ({rx_prbssel,
@@ -387,11 +401,19 @@ module util_adxcvr_xch #(
   wire        tx_prbsforceerr;
   wire [ 3:0] tx_prbssel;
 
+  reg up_tx_prbssel_reg;
+  reg up_tx_prbsforceerr_reg;
+
+  always @(posedge up_clk) begin
+    up_tx_prbssel_reg <= up_tx_prbssel;
+    up_tx_prbsforceerr_reg <= up_tx_prbsforceerr;
+  end
+
   sync_bits #(
     .NUM_OF_BITS(5)
   ) i_sync_bits_tx_prbs_in (
-    .in_bits ({up_tx_prbssel,
-               up_tx_prbsforceerr}),
+    .in_bits ({up_tx_prbssel_reg,
+               up_tx_prbsforceerr_reg}),
     .out_resetn (1'b1),
     .out_clk (tx_clk),
     .out_bits ({tx_prbssel,
@@ -407,10 +429,16 @@ module util_adxcvr_xch #(
   wire [ 1:0] tx_bufstatus;
   wire [ 1:0] tx_bufstatus_s;
 
+  reg up_rx_bufstatus_rst_reg;
+
+  always @(posedge up_clk) begin
+    up_rx_bufstatus_rst_reg <= up_rx_bufstatus_rst;
+  end
+
   sync_bits #(
     .NUM_OF_BITS(1)
   ) i_sync_bits_rx_bufstatus_in (
-    .in_bits (up_rx_bufstatus_rst),
+    .in_bits (up_rx_bufstatus_rst_reg),
     .out_resetn (1'b1),
     .out_clk (rx_clk),
     .out_bits (rx_bufstatus_rst));

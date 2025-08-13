@@ -136,7 +136,7 @@ module jesd204_rx #(
   reg buffer_release_n = 1'b1;
   reg buffer_release_d1 = 1'b0;
   wire [NUM_LANES-1:0] buffer_ready_n;
-  wire all_buffer_ready_n;
+  reg all_buffer_ready_n;
   wire dev_all_buffer_ready_n;
 
   reg eof_reset = 1'b1;
@@ -177,7 +177,9 @@ module jesd204_rx #(
     end
   end
 
-  assign all_buffer_ready_n = |(buffer_ready_n & ~cfg_lanes_disable);
+  always @(posedge clk) begin
+    all_buffer_ready_n <= |(buffer_ready_n & ~cfg_lanes_disable);
+  end
 
   sync_bits #(
     .NUM_OF_BITS (1),

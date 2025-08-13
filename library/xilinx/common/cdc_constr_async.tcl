@@ -8,4 +8,5 @@ set_property -quiet -dict { \
   ASYNC_REG TRUE \
   SRL_STYLE REGISTER \
   DONT_TOUCH TRUE \
-} [get_cells -quiet -hier -regexp -filter {NAME =~ \S*cdc_sync_stage_reg\[\d+\]\[\d+\]\S*}]
+} [get_cells -quiet -hier -regexp -filter {NAME =~ \S*cdc_sync_stage_reg\[\d+\]\S*}]
+# } [get_cells -quiet -hier -regexp -filter {NAME =~ \S*cdc_sync_stage_reg\[\d+\]\[\d+\]\S*}]

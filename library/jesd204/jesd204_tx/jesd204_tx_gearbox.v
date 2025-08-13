@@ -44,12 +44,17 @@ module jesd204_tx_gearbox #(
   wire [D_LOG2-1:0]  out_in_addr;
   wire [MEM_W-1:0]  mem_wr_data;
   wire [NUM_LANES-1:0] data_ready;
+  reg output_ready_reg;
   wire output_ready_sync;
   wire addr_reset;
   wire packer_reset;
 
+  always @(posedge link_clk) begin
+    output_ready_reg <= output_ready;
+  end
+
   sync_bits i_sync_ready (
-    .in_bits(output_ready),
+    .in_bits(output_ready_reg),
     .out_resetn(~device_reset),
     .out_clk(device_clk),
     .out_bits(output_ready_sync));
