@@ -13,10 +13,8 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # - 0: in one-lane mode
 #
 # ADC_RES: parameter describing the ADC input resolution
-# - 18: 18 bits (default)
-# - 16: 16 bits
-#
-# in one-lane mode (TWOLANES=0), only the 18-bit resolution is supported! (ADC_RES=16)
+# - 18: 18 bits (default) (for LTC2387-18 -> CN0577)
+# - 16: 16 bits (for LTC2387-16)
 
 adi_project cn0577_zed 0 [list \
   TWOLANES  [get_env_param TWOLANES  1 ] \

@@ -19,8 +19,8 @@ The overwritable parameters from the environment are:
   - 1 - two-lane mode used (default)
   - 0 - one-lane mode used
 - ADC_RES: the resolution of the ADC input data;
-  - 18 - the resolution is 18 bits (default)
-  - 16 - the resolution is 16 bits
+  - 18 - the resolution is 18 bits (default) (for LTC2387-18 -> CN0577)
+  - 16 - the resolution is 16 bits (for LTC2387-16)
 
 ### Example configurations
 
@@ -40,20 +40,4 @@ Corresponding device tree: [zynq-zed-adv7511-cn0577.dts](https://github.com/anal
 ```
 make TWOLANES=0 \
 ADC_RES=18
-```
-
-#### Two lanes, 16-bit resolution
-
-```
-make TWOLANES=1 \
-ADC_RES=16
-```
-
-Corresponding device tree: [zynq-zed-adv7511-adaq23875.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23875.dts)
-
-#### One lane, 16-bit resolution
-
-```
-make TWOLANES=0 \
-ADC_RES=16
 ```
