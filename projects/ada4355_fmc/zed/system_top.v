@@ -106,8 +106,8 @@ module system_top (
   inout         freq_sel1,
   inout         gpio_vld_en,
   inout         gpio_test,
-  inout         trig_fmc_in,
-  inout         trig_fmc_out,
+  input         trig_fmc_in,
+  output        trig_fmc_out,
   inout         apd_supp_en,
 
   // ADC SPI
@@ -148,14 +148,12 @@ module system_top (
     .dio_p({gpio_bd[31:0]}));
 
   ad_iobuf #(
-    .DATA_WIDTH(11)
+    .DATA_WIDTH(9)
   ) i_iobuf_ada4355_gpio (
-    .dio_t(gpio_t[42:32]),
-    .dio_i(gpio_o[42:32]),
-    .dio_o(gpio_i[42:32]),
+    .dio_t(gpio_t[40:32]),
+    .dio_i(gpio_o[40:32]),
+    .dio_o(gpio_i[40:32]),
     .dio_p({apd_supp_en,
-            trig_fmc_out,
-            trig_fmc_in,
             freq_sel1,
             gain_sel3,
             gpio_test,
