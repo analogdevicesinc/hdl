@@ -389,7 +389,7 @@ In this tutorial, we will make a led control IP, using AXI. In this case,
 and <code class="docutils literal notranslate"><span class="pre">axi_led_control_intel</span></code> for Intel.</p>
 <section id="verilog-file">
 <h2>Verilog File<a class="headerlink" href="#verilog-file" title="Permalink to this heading"></a></h2>
-<p>Lets say you want to make a new IP with the name <code class="docutils literal notranslate"><span class="pre">&lt;module_name&gt;</span></code>.
+<p>Consider you want to make a new IP with the name <code class="docutils literal notranslate"><span class="pre">&lt;module_name&gt;</span></code>.
 You must edit the verilog file so that it has the same name (e.g. <code class="docutils literal notranslate"><span class="pre">axi_led_control.v</span></code>).
 After that, feel free to write the verilog code for your purpose.
 You can also use other instances of modules, but be sure to include them after,
@@ -533,9 +533,9 @@ ENDFIELD
 </ul>
 <section id="importing-with-using-method">
 <span id="hdl-regmap-using"></span><h3>Importing with Using Method<a class="headerlink" href="#importing-with-using-method" title="Permalink to this heading"></a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">USING</span></code> method allows to look-up a register map to import register and
+<p>The <code class="docutils literal notranslate"><span class="pre">USING</span></code> method allows looking up a register map to import register and
 fields.
-A register map can look-up multiple register maps by repeating the method for
+A register map can look up multiple register maps by repeating the method for
 each register map, for example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TITLE</span>
 <span class="n">USING</span> <span class="n">COMMON_REGS</span>
@@ -583,7 +583,7 @@ setting the source register map:</p>
 <ul class="simple">
 <li><p>Imported registers shall have non-imported fields, for example, when importing
 a register that is reserved for custom implementation.</p></li>
-<li><p>Imported fields must be inside a imported register, since the field name is not
+<li><p>Imported fields must be inside an imported register, since the field name is not
 unique.</p></li>
 <li><p>Multiple fields can be imported from a single <code class="docutils literal notranslate"><span class="pre">FIELD</span></code> group.</p></li>
 <li><p>Multiple register maps can be used for lookup. Add each in a different <code class="docutils literal notranslate"><span class="pre">USING</span></code>
@@ -876,7 +876,7 @@ structure set by <code class="docutils literal notranslate"><span class="pre">ip
 <p>The following section is a generic example for creating IPs which is
 trying to simulate most of the available options when creating a new IP.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="d72ff231fd1945980deeb0fec546523011b24c63" name="d72ff231fd1945980deeb0fec546523011b24c63" type="checkbox"></input><label for="d72ff231fd1945980deeb0fec546523011b24c63"><p>Detailed template for the &lt;top_module_name&gt;_ltt.tcl file</p>
+<input class="collapsible_input" id="700a2a90c95e43961533654fe249c2b9989e7219" name="700a2a90c95e43961533654fe249c2b9989e7219" type="checkbox"></input><label for="700a2a90c95e43961533654fe249c2b9989e7219"><p>Detailed template for the &lt;top_module_name&gt;_ltt.tcl file</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_lattice.tcl
@@ -1109,7 +1109,7 @@ set ip [ipl::add_interface -ip $ip \
 
 # Generating the IP given as first parameter on the path given as the second
 # parameter. Without the second parameter the IP will be generated in
-# ./ltt directory and  in the default IP download directory of
+# ./ltt directory and in the default IP download directory of
 # Lattice Propel Builder (~/PropelIPLocal) if the LATTICE_DEFAULT_PATHS
 # env variable is exported like:
 # &#39;export LATTICE_DEFAULT_PATHS=1&#39; before running the script or running make.

@@ -96,6 +96,8 @@
 <li><a class="reference internal" href="#before-opening-the-pull-request">Before opening the pull request</a></li>
 <li><a class="reference internal" href="#when-opening-the-pull-request">When opening the pull request</a></li>
 <li><a class="reference internal" href="#code-related-check-list">Code-related check list</a></li>
+<li><a class="reference internal" href="#devicetree-bindings-drivers">Devicetree bindings &amp; drivers</a></li>
+<li><a class="reference internal" href="#related-resources">Related resources</a></li>
 </ul>
 </li>
 </ul>
@@ -516,7 +518,24 @@ as a dependency in its corresponding Makefile file (of the affected project).</p
 <li><p>If it’s the case, to update all the README files of the affected projects
 and IP cores.</p></li>
 </ol>
-<p>Resources:</p>
+</section>
+<section id="devicetree-bindings-drivers">
+<span id="contributing-devicetree-bindings-drivers"></span><h2>Devicetree bindings &amp; drivers<a class="headerlink" href="#devicetree-bindings-drivers" title="Permalink to this heading"></a></h2>
+<p>The IPs typically follow <a class="icon link reference external" href="https://semver.org/" target="_blank">Semantic Versioning 2.0.0</a>
+and his information must be used in devicetree bindings and drivers to assert
+compatibility. The first stable release version should be higher or equal to
+v1.0.0 and all fields should be treated as decimals.</p>
+<p>Devicetree compatibles take the major number prefixed by <strong>v</strong>, for example,
+the <strong>compatible</strong> of <em>axi_my_ip</em> v1.2.3 is <strong>adi,axi-my-ip-v1</strong> and the
+<strong>dt-binding</strong> filename is <strong>adi,axi-my-ip.yaml</strong> (no major suffix). Per the
+last paragraph, <em>adi,axi-my-ip-v0</em> is <strong>never</strong> appropriate.</p>
+<p>Software drivers must parse the <strong>VERSION</strong> register for feature handling
+across versions. The patch number shouldn’t have to be handled by software
+drivers, if it seems necessary to, consider incrementing the minor number
+instead.</p>
+</section>
+<section id="related-resources">
+<h2>Related resources<a class="headerlink" href="#related-resources" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://cbea.ms/git-commit/" target="_blank">How to write a good commit message</a>
 and <a class="icon link reference external" href="https://gist.github.com/rsp/057481db4dbd999bb7077f211f53f212" target="_blank">another resource</a></p></li>
