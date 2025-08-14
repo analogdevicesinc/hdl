@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -55,7 +55,7 @@ module data_mover #(
 
   output reg bl_valid = 'b0,
   input bl_ready,
-  output reg [BEATS_PER_BURST_WIDTH-1:0] measured_last_burst_length,
+  output [BEATS_PER_BURST_WIDTH:0] measured_last_burst_length,
 
   output block_descr_to_dst,
 
@@ -77,7 +77,7 @@ module data_mover #(
 
   input req_valid,
   output req_ready,
-  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+  input [BEATS_PER_BURST_WIDTH:0] req_last_burst_length,
   input req_sync_transfer_start,
   input req_xlast
 );
@@ -86,16 +86,11 @@ module data_mover #(
 
 `include "inc_id.vh"
 
-  reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_length = 'h00;
-  reg [BEATS_PER_BURST_WIDTH-1:0] beat_counter = 'h00;
-  reg [BEATS_PER_BURST_WIDTH-1:0] beat_counter_minus_one = 'h0;
   reg [ID_WIDTH-1:0] id = 'h00;
   reg [ID_WIDTH-1:0] id_next = 'h00;
 
   reg pending_burst = 1'b0;
   reg active = 1'b0;
-  reg last_eot = 1'b0;
-  reg last_non_eot = 1'b0;
   reg needs_sync = 1'b0;
 
   wire has_sync;
@@ -109,7 +104,6 @@ module data_mover #(
   assign response_id = id;
   assign source_id = id;
   assign source_eot = eot || early_tlast;
-  assign last = eot ? last_eot : last_non_eot;
 
   assign has_sync = ~needs_sync | s_axi_sync;
 
@@ -197,40 +191,61 @@ module data_mover #(
   // request got accepted.
   // In case the data mover is not active accept a new descriptor only when the
   // upstream logic incremented its id (pending_burst is set).
-  assign last_load = m_axi_valid && last_eot && eot;
   assign req_ready = (last_load && ~early_tlast) ||
                      ((~active && ~transfer_abort_s) && pending_burst) ||
                      (transfer_abort_s && rewind_req_ready);
 
-  always @(posedge clk) begin
-    if (req_ready) begin
-      last_eot <= req_last_burst_length == 'h0;
-      last_non_eot <= 1'b0;
-      beat_counter <= 'h1;
-    end else if (m_axi_valid == 1'b1) begin
-      last_eot <= beat_counter == last_burst_length;
-      last_non_eot <= beat_counter == BEAT_COUNTER_MAX;
-      beat_counter <= beat_counter + 1'b1;
-    end
-  end
+  generate if (BEATS_PER_BURST_WIDTH > 0) begin
+    reg last_eot = 1'b0;
+    reg last_non_eot = 1'b0;
+    reg [BEATS_PER_BURST_WIDTH-1:0] _measured_last_burst_length = 'h00;
+    reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_length = 'h00;
+    reg [BEATS_PER_BURST_WIDTH-1:0] beat_counter = 'h00;
+    reg [BEATS_PER_BURST_WIDTH-1:0] beat_counter_minus_one = 'h0;
 
-  always @(posedge clk) begin
-    if (req_ready)
-      last_burst_length <= req_last_burst_length;
-  end
-
-  always @(posedge clk) begin
-    if (req_ready) begin
-      beat_counter_minus_one <= 'h0;
-    end else if (m_axi_valid == 1'b1) begin
-      beat_counter_minus_one <= beat_counter;
+    always @(posedge clk) begin
+      if (req_ready) begin
+        last_eot <= req_last_burst_length == 'h0;
+        last_non_eot <= 1'b0;
+        beat_counter <= 'h1;
+      end else if (m_axi_valid == 1'b1) begin
+        last_eot <= beat_counter == last_burst_length;
+        last_non_eot <= beat_counter == BEAT_COUNTER_MAX;
+        beat_counter <= beat_counter + 1'b1;
+      end
     end
-  end
+
+    always @(posedge clk) begin
+      if (req_ready)
+        last_burst_length <= req_last_burst_length[BEATS_PER_BURST_WIDTH-1:0];
+    end
+
+    always @(posedge clk) begin
+      if (req_ready) begin
+        beat_counter_minus_one <= 'h0;
+      end else if (m_axi_valid == 1'b1) begin
+        beat_counter_minus_one <= beat_counter;
+      end
+    end
+
+    always @(posedge clk) begin
+      if (last_load || early_tlast) begin
+        _measured_last_burst_length <= beat_counter_minus_one;
+      end
+    end
+
+    assign last = eot ? last_eot : last_non_eot;
+    assign last_load = m_axi_valid & last_eot & eot;
+    assign measured_last_burst_length = {1'b0, _measured_last_burst_length};
+  end else begin
+    assign last = 1'b1;
+    assign last_load = m_axi_valid & eot;
+    assign measured_last_burst_length = 1'b0;
+  end endgenerate
 
   always @(posedge clk) begin
     if (last_load || early_tlast) begin
       bl_valid <= 1'b1;
-      measured_last_burst_length <= beat_counter_minus_one;
     end else if (bl_ready) begin
       bl_valid <= 1'b0;
     end
