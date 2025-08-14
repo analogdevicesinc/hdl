@@ -79,13 +79,13 @@ frame clock to all ISERDES instances.
 By default it is set to 0. Depending on the pinout, some hardware modifications
 need to be done on the board and/or ``make`` command:
 
-In case of the pinout with optimized xdc:
+In case of the pinout with optimized constraints:
 
 .. shell:: bash
 
    $make BUFMRCE_EN=0
 
-In case of the pinout with non optimized xdc:
+In case of the pinout with non optimized constraints:
 
 .. shell:: bash
 
