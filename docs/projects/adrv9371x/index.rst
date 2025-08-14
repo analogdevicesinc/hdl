@@ -167,6 +167,7 @@ axi_adrv9009_rx_jesd      0x44AA_0000     0x84AA_0000
 axi_adrv9009_rx_os_jesd   0x44AB_0000     0x84AB_0000
 axi_adrv9009_rx_dma       0x7C40_0000     0x9C40_0000
 axi_adrv9009_tx_dma       0x7C42_0000     0x9C42_0000
+ad9371_data_offload       0x7C43_0000     0x9C43_0000
 axi_adrv9009_rx_os_dma    0x7C44_0000     0x9C44_0000
 axi_adrv9009_rx_clkgen    0x43C1_0000     0x83C1_0000
 axi_adrv9009_tx_clkgen    0x43C0_0000     0x83C0_0000
@@ -421,12 +422,12 @@ HDL related
    * - UTIL_CPACK2
      - :git-hdl:`library/util_pack/util_cpack2`
      - :ref:`util_upack2`
-   * - AXI_DACFIFO
-     - :git-hdl:`library/xilinx/axi_dacfifo`
-     - :ref:`util_axis_fifo`
-   * - UTIL_DACFIFO
-     - :git-hdl:`library/util_dacfifo`
-     - :ref:`util_rfifo`
+   * - DATA_OFFLOAD
+     - :git-hdl:`library/data_offload`
+     - :ref:`data_offload`
+   * - UTIL_DO_RAM
+     - :git-hdl:`library/util_do_ram`
+     - :ref:`data_offload`
    * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen`
      - :ref:`axi_clkgen`
