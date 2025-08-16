@@ -70,7 +70,7 @@ DATA_WIDTH
 ENDREG
 
 FIELD
-[7:4] NUM_OF_SDI
+[23:16] NUM_OF_SDI
 NUM_OF_SDI
 RO
 Number of SDI.
@@ -78,7 +78,7 @@ It is equal with the maximum supported SDI lines in bits.
 ENDFIELD
 
 FIELD
-[3:0] DATA_WIDTH
+[15:0] DATA_WIDTH
 DATA_WIDTH
 RO
 Data width of the SDI/SDO parallel interface.
