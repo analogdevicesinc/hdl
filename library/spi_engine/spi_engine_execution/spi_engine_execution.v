@@ -126,6 +126,7 @@ module spi_engine_execution #(
   reg [7:0] word_length = DATA_WIDTH;
   reg [7:0] last_bit_count = DATA_WIDTH-1;
   reg [7:0] left_aligned = 8'b0;
+  reg [7:0] sdi_lane_mask =  ALL_ACTIVE_LANE_MASK;
   reg [7:0] sdo_lane_mask =  ALL_ACTIVE_LANE_MASK;
 
   reg cpha = DEFAULT_SPI_CFG[0];
@@ -279,6 +280,7 @@ module spi_engine_execution #(
       clk_div        <= DEFAULT_CLK_DIV;
       word_length    <= DATA_WIDTH;
       left_aligned   <= 0;
+      sdi_lane_mask  <= ALL_ACTIVE_LANE_MASK;
       sdo_lane_mask  <= ALL_ACTIVE_LANE_MASK;
     end else begin
       if (exec_write_cmd) begin
@@ -297,6 +299,9 @@ module spi_engine_execution #(
                                   word_length    <= cmd[7:0];
                                   // needed 1 cycle before transfer_active goes high
                                   left_aligned   <= DATA_WIDTH - cmd[7:0];
+                                end
+          REG_SDI_LANE_CONFIG : begin
+                                  sdi_lane_mask  <= cmd[7:0];
                                 end
           REG_SDO_LANE_CONFIG : begin
                                   //max number of spi lanes is 8
