@@ -11,14 +11,14 @@ set i3c_clk clk_fpga_0
 
 # Input data driven the peripherals toggles every 4 cycles max (PP) of the capture clock
 # gets registered by rx_reg
-set_multicycle_path -from [get_ports i3c_sda] -to [get_clocks $i3c_clk] -setup 4
-set_multicycle_path -from [get_ports i3c_sda] -to [get_clocks $i3c_clk] -hold 3
+set_multicycle_path -from [get_ports iic_ard_sda] -to [get_clocks $i3c_clk] -setup 4
+set_multicycle_path -from [get_ports iic_ard_sda] -to [get_clocks $i3c_clk] -hold 3
 
 # Output data toggles every 2 cycles max of the capture clock (PP)
-set_multicycle_path -from [get_clocks $i3c_clk] -to [get_ports i3c_sda] -setup 2
-set_multicycle_path -from [get_clocks $i3c_clk] -to [get_ports i3c_sda] -hold 1
-set_multicycle_path -from [get_clocks $i3c_clk] -to [get_ports i3c_scl] -setup 2
-set_multicycle_path -from [get_clocks $i3c_clk] -to [get_ports i3c_scl] -hold 1
+set_multicycle_path -from [get_clocks $i3c_clk] -to [get_ports iic_ard_sda] -setup 2
+set_multicycle_path -from [get_clocks $i3c_clk] -to [get_ports iic_ard_sda] -hold 1
+set_multicycle_path -from [get_clocks $i3c_clk] -to [get_ports iic_ard_scl] -setup 2
+set_multicycle_path -from [get_clocks $i3c_clk] -to [get_ports iic_ard_scl] -hold 1
 
 # Notes
 # tcr/tcf rising/fall time for SCL is 150e06 * 1 / fSCL, at fSCL = 12.5 MHz => 12ns, at fSCL = 6.25 MHz, 24ns.
@@ -29,11 +29,11 @@ set tsco_max   12;
 set tsco_min    8;
 set trc_dly_max 1;
 set trc_dly_min 0;
-set_input_delay  -clock $i3c_clk -max [expr $tsco_max + $trc_dly_max] [get_ports i3c_sda]
-set_input_delay  -clock $i3c_clk -min [expr $tsco_min + $trc_dly_min] [get_ports i3c_sda]
+set_input_delay  -clock $i3c_clk -max [expr $tsco_max + $trc_dly_max] [get_ports iic_ard_sda]
+set_input_delay  -clock $i3c_clk -min [expr $tsco_min + $trc_dly_min] [get_ports iic_ard_sda]
 set tsu         2;
 set thd         0;
-set_output_delay -clock $i3c_clk -max [expr $trc_dly_max + $tsu] [get_ports i3c_sda]
-set_output_delay -clock $i3c_clk -min [expr $trc_dly_min - $thd] [get_ports i3c_sda]
-set_output_delay -clock $i3c_clk -max [expr $trc_dly_max + $tsu] [get_ports i3c_scl]
-set_output_delay -clock $i3c_clk -min [expr $trc_dly_min - $thd] [get_ports i3c_scl]
+set_output_delay -clock $i3c_clk -max [expr $trc_dly_max + $tsu] [get_ports iic_ard_sda]
+set_output_delay -clock $i3c_clk -min [expr $trc_dly_min - $thd] [get_ports iic_ard_sda]
+set_output_delay -clock $i3c_clk -max [expr $trc_dly_max + $tsu] [get_ports iic_ard_scl]
+set_output_delay -clock $i3c_clk -min [expr $trc_dly_min - $thd] [get_ports iic_ard_scl]
