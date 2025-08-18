@@ -322,13 +322,15 @@ module system_top #(
   assign rx_b_device_clk = SHARED_DEVCLK ? tx_device_clk : rx_b_device_clk_internal;
   assign tx_b_device_clk = SHARED_DEVCLK ? tx_device_clk : tx_b_device_clk_internal;
 
-  assign spi2_cs[5:0] = spi_csn[5:0];
+  assign spi2_cs[1:0] = spi_csn[1:0];
+  assign spi2_cs[4]   = spi_csn[2];
   assign spi2_sclk    = spi_clk;
 
   ad9084_ebz_spi #(
-    .NUM_OF_SLAVES(6)
+    .NUM_OF_SLAVES(3),
+    .IS_4WIRE(3'b101)
   ) i_spi (
-    .spi_csn (spi_csn),
+    .spi_csn (spi_csn[2:0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_sdio),
     .spi_miso (spi_sdo),

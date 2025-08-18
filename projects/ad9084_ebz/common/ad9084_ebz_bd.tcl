@@ -513,7 +513,7 @@ ad_ip_parameter axi_apollo_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_apollo_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_data_width
 if {$ADI_PHY_SEL} {
-  ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_data_width
+  ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(1024, $adc_data_width)]
 } else {
   # Versal limitation
   ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_data_width)]
@@ -614,7 +614,7 @@ ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_apollo_tx_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_apollo_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 if {$ADI_PHY_SEL} {
-  ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_data_width
+  ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(1024, $dac_data_width)]
 } else {
   # Versal limitation
   ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(512, $dac_data_width)]
@@ -819,16 +819,24 @@ if {$ASYMMETRIC_A_B_MODE} {
   }
 } else {
   set max_lane_map {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23}
-  # set lane_map {}
+  set lane_map {}
 
-  # for {set i 0}  {$i < $RX_NUM_LINKS} {incr i} {
-  #   for {set j 0}  {$j < $RX_JESD_L} {incr j} {
-  #     set cur_lane [expr $i*$MAX_RX_LANES_PER_LINK+$j]
-  #     lappend lane_map [lindex $max_lane_map $cur_lane]
-  #   }
-  # }
+  for {set i 0}  {$i < $RX_NUM_LINKS} {incr i} {
+    for {set j 0}  {$j < $RX_JESD_L} {incr j} {
+      set cur_lane [expr $i*$MAX_RX_LANES_PER_LINK+$j]
+      lappend lane_map [lindex $max_lane_map $cur_lane]
+    }
+  }
+
+  for {set i 0}  {$i < $RX_NUM_LINKS} {incr i} {
+    for {set j $RX_JESD_L}  {$j < $MAX_RX_LANES_PER_LINK} {incr j} {
+      set cur_lane [expr $i*$MAX_RX_LANES_PER_LINK+$j]
+      lappend lane_map [lindex $max_lane_map $cur_lane]
+    }
+  }
+
   if {$ADI_PHY_SEL} {
-    ad_xcvrcon  util_apollo_xcvr axi_apollo_rx_xcvr axi_apollo_rx_jesd $max_lane_map {} rx_device_clk $MAX_RX_LANES
+    ad_xcvrcon  util_apollo_xcvr axi_apollo_rx_xcvr axi_apollo_rx_jesd $lane_map {} rx_device_clk $MAX_RX_LANES
     create_bd_port -dir I rx_sysref_12
     create_bd_port -dir O rx_sync_12
   }
@@ -850,16 +858,34 @@ if {$ASYMMETRIC_A_B_MODE} {
   }
 } else {
   set max_lane_map {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23}
-  # set lane_map {}
+  set lane_map {}
 
-  # for {set i 0}  {$i < $TX_NUM_LINKS} {incr i} {
-  #   for {set j 0}  {$j < $TX_JESD_L} {incr j} {
-  #     set cur_lane [expr $i*$MAX_TX_LANES_PER_LINK+$j]
-  #     lappend lane_map [lindex $max_lane_map $cur_lane]
-  #   }
-  # }
+ for {set i 0}  {$i < $TX_NUM_LINKS} {incr i} {
+    for {set j 0}  {$j < $TX_JESD_L} {incr j} {
+      set cur_lane [expr $i*$MAX_TX_LANES_PER_LINK+$j]
+      lappend lane_map [lindex $max_lane_map $cur_lane]
+    }
+  }
+
+  for {set i 0}  {$i < $TX_NUM_LINKS} {incr i} {
+    for {set j $TX_JESD_L}  {$j < $MAX_TX_LANES_PER_LINK} {incr j} {
+      set cur_lane [expr $i*$MAX_TX_LANES_PER_LINK+$j]
+      lappend lane_map [lindex $max_lane_map $cur_lane]
+    }
+  }
+
   if {$ADI_PHY_SEL} {
-    ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_xcvr axi_apollo_tx_jesd $max_lane_map {} tx_device_clk $MAX_TX_LANES
+    ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_xcvr axi_apollo_tx_jesd $lane_map {} tx_device_clk $MAX_TX_LANES
+
+    if {$TX_JESD_L == 8} {
+      delete_bd_objs [get_bd_intf_nets axi_apollo_tx_xcvr_up_cm_8]
+      delete_bd_objs [get_bd_intf_nets axi_apollo_tx_xcvr_up_cm_12]
+      connect_bd_intf_net [get_bd_intf_pins axi_apollo_tx_xcvr/up_cm_8] [get_bd_intf_pins util_apollo_xcvr/up_cm_12]
+      connect_bd_intf_net [get_bd_intf_pins axi_apollo_tx_xcvr/up_cm_12] [get_bd_intf_pins util_apollo_xcvr/up_cm_16]
+    } elseif {$TX_JESD_L == 4} {
+      delete_bd_objs [get_bd_intf_nets axi_apollo_tx_xcvr_up_cm_4]
+      connect_bd_intf_net [get_bd_intf_pins axi_apollo_tx_xcvr/up_cm_4] [get_bd_intf_pins util_apollo_xcvr/up_cm_12]
+    }
     create_bd_port -dir I tx_sysref_12
     create_bd_port -dir I tx_sync_12
   }
