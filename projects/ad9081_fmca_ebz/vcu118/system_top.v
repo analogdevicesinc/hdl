@@ -39,7 +39,8 @@ module system_top #(
   parameter TX_JESD_L = 8,
   parameter TX_NUM_LINKS = 1,
   parameter RX_JESD_L = 8,
-  parameter RX_NUM_LINKS = 1
+  parameter RX_NUM_LINKS = 1,
+  parameter SHARED_DEVCLK = 0
 ) (
   input         sys_rst,
   input         sys_clk_p,
@@ -152,6 +153,7 @@ module system_top #(
   wire            clkin8;
   wire            tx_device_clk;
   wire            rx_device_clk;
+  wire            rx_device_clk_internal;
 
   wire            spi_2_clk;
   wire            spi_2_csn;
@@ -227,8 +229,9 @@ module system_top #(
 
   BUFG_GT i_rx_device_clk (
     .I (clkin8),
-    .O (rx_device_clk));
+    .O (rx_b_device_clk_internal));
 
+  assign rx_device_clk = SHARED_DEVCLK ? tx_device_clk : rx_device_clk_internal;
   // spi
 
   assign spi0_csb   = spi_csn[0];
