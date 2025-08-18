@@ -562,6 +562,10 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <td><p>0x7C42_0000</p></td>
 <td><p>0x9C42_0000</p></td>
 </tr>
+<tr class="row-even"><td><p>adrv9026_data_offload</p></td>
+<td><p>0x7C43_0000</p></td>
+<td><p>0x9C43_0000</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1104,47 +1108,51 @@ following table.</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_SYSID</p></td>
+<tr class="row-odd"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">library/data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>SYSID_ROM</p></td>
+<tr class="row-odd"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_UPACK2</p></td>
+<tr class="row-even"><td><p>UTIL_UPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">library/util_pack/util_upack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_CPACK2</p></td>
+<tr class="row-odd"><td><p>UTIL_CPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2" target="_blank">library/util_pack/util_cpack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_ADXCVR for AMD</p></td>
+<tr class="row-even"><td><p>UTIL_ADXCVR for AMD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr" target="_blank">library/xilinx/util_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR core for AMD Xilinx devices</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_ADXCVR for Intel</p></td>
+<tr class="row-odd"><td><p>AXI_ADXCVR for Intel</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/intel/axi_adxcvr" target="_blank">library/intel/axi_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-intel"><span class="std std-ref">Intel Devices</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_ADXCVR for AMD</p></td>
+<tr class="row-even"><td><p>AXI_ADXCVR for AMD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr" target="_blank">library/xilinx/axi_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">AMD Xilinx Devices</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_JESD204_RX</p></td>
+<tr class="row-odd"><td><p>AXI_JESD204_RX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx" target="_blank">library/jesd204/axi_jesd204_rx</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_JESD204_TX</p></td>
+<tr class="row-even"><td><p>AXI_JESD204_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_tx" target="_blank">library/jesd204/axi_jesd204_tx</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>JESD204_TPL_ADC</p></td>
+<tr class="row-odd"><td><p>JESD204_TPL_ADC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc" target="_blank">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>JESD204_TPL_DAC</p></td>
+<tr class="row-even"><td><p>JESD204_TPL_DAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_dac" target="_blank">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
 </tr>
