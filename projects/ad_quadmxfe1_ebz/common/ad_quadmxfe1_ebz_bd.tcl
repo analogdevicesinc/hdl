@@ -572,6 +572,13 @@ ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_rst cpack_reset_logic/op1
 ad_connect rx_do_rstout_logic/res cpack_reset_logic/op2
 ad_connect cpack_reset_logic/res util_mxfe_cpack/reset
 
+ad_ip_instance util_vector_logic manual_sync_or [list \
+      C_SIZE 1 \
+      C_OPERATION {or} \
+    ]
+ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out manual_sync_or/Op1
+ad_connect manual_sync_or/Res rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+
 #
 # rx tpl to cpack
 #
@@ -677,6 +684,8 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 }
 
 ad_connect ext_sync tx_mxfe_tpl_core/dac_tpl_core/dac_sync_in
+ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out manual_sync_or/Op2
+ad_connect manual_sync_or/Res tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in
 
 #
 # data offload to upack
