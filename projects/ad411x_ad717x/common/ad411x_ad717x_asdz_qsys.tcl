@@ -12,6 +12,12 @@ set_instance_parameter_value axi_dmac_0 {CYCLIC} {0}
 set_instance_parameter_value axi_dmac_0 {DMA_DATA_WIDTH_SRC} {32}
 set_instance_parameter_value axi_dmac_0 {DMA_DATA_WIDTH_DEST} {128}
 
+# pwm (WIP hack to simulate eval board being ready)
+
+add_instance pwm_trigger axi_pwm_gen
+set_instance_parameter_value pwm_trigger {PULSE_0_PERIOD} {20000}
+set_instance_parameter_value pwm_trigger {PULSE_0_WIDTH} {15000}
+
 # axi_spi_engine
 
 add_instance axi_spi_engine_0 axi_spi_engine
@@ -55,6 +61,7 @@ add_interface ad411x_spi_sdi        conduit end
 add_interface ad411x_spi_sdo        conduit end
 add_interface ad411x_spi_trigger    conduit end
 add_interface ad411x_spi_resetn     reset source
+add_interface fake_trigger          conduit end
 
 set_interface_property ad411x_spi_cs      EXPORT_OF util_sigma_delta_spi.if_m_cs
 set_interface_property ad411x_spi_sclk    EXPORT_OF util_sigma_delta_spi.if_m_sclk
@@ -62,10 +69,14 @@ set_interface_property ad411x_spi_sdi     EXPORT_OF util_sigma_delta_spi.if_m_sd
 set_interface_property ad411x_spi_sdo     EXPORT_OF util_sigma_delta_spi.if_m_sdo
 set_interface_property ad411x_spi_trigger EXPORT_OF util_sigma_delta_spi.if_data_ready
 
+set_interface_property fake_trigger       EXPORT_OF pwm_trigger.if_pwm_0
+
+
 # clocks
 
 add_connection sys_clk.clk axi_spi_engine_0.s_axi_clock
 add_connection sys_clk.clk axi_dmac_0.s_axi_clock
+add_connection sys_clk.clk pwm_trigger.s_axi_clock
 
 # util_sigma_delta_connection
 
@@ -89,6 +100,7 @@ add_connection sys_dma_clk.clk spi_engine_offload_0.if_ctrl_clk
 add_connection sys_dma_clk.clk spi_engine_offload_0.if_spi_clk
 add_connection sys_dma_clk.clk axi_dmac_0.if_s_axis_aclk
 add_connection sys_dma_clk.clk axi_dmac_0.m_dest_axi_clock
+add_connection sys_dma_clk.clk pwm_trigger.if_ext_clk
 
 # resets
 
@@ -100,6 +112,8 @@ add_connection axi_spi_engine_0.if_spi_resetn spi_engine_interconnect_0.if_reset
 add_connection axi_spi_engine_0.if_spi_resetn spi_engine_offload_0.if_spi_resetn
 
 add_connection sys_dma_clk.clk_reset axi_dmac_0.m_dest_axi_reset
+add_connection sys_dma_clk.clk_reset pwm_trigger.s_axi_reset
+
 
 # interfaces
 
@@ -132,6 +146,7 @@ add_connection spi_engine_offload_0.offload_sdi axi_dmac_0.s_axis
 
 ad_cpu_interconnect 0x00020000 axi_dmac_0.s_axi
 ad_cpu_interconnect 0x00030000 axi_spi_engine_0.s_axi
+ad_cpu_interconnect 0x00040000 pwm_trigger.s_axi
 
 # dma interconnect
 ad_dma_interconnect axi_dmac_0.m_dest_axi

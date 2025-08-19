@@ -144,6 +144,9 @@ module system_top (
   wire        i2c0_out_clk;
   wire        i2c0_scl_in_clk;
 
+  wire        spi_miso_modif;
+  wire        pwm_trigger;
+
   // adc control gpio assign
 
   assign gpio_i[63:35] = gpio_o[63:35];
@@ -157,6 +160,8 @@ module system_top (
   assign gpio_i[32] = sync_error;
   assign gpio_i[33] = error;
   assign gpio_i[34] = spi_miso;
+
+  assign spi_miso_modif = spi_miso && pwm_trigger;
 
   // IO Buffers for I2C
 
@@ -257,8 +262,9 @@ module system_top (
     .sys_gpio_out_export (gpio_o[63:32]),
     .ad411x_spi_cs_m_cs(spi_csn),
     .ad411x_spi_sclk_clk(spi_clk),
-    .ad411x_spi_sdi_m_sdi(spi_miso),
+    .ad411x_spi_sdi_m_sdi(spi_miso_modif),
     .ad411x_spi_sdo_m_sdo(spi_mosi),
+    .fake_trigger_if_pwm(pwm_trigger),
     .axi_hdmi_tx_0_hdmi_if_h_clk (hdmi_out_clk),
     .axi_hdmi_tx_0_hdmi_if_h24_hsync (hdmi_hsync),
     .axi_hdmi_tx_0_hdmi_if_h24_vsync (hdmi_vsync),
