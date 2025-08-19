@@ -76,7 +76,7 @@ Therefore, the external clocks given to AXI_AD485x IP are:
 
 - in CMOS mode:
 
-  - external_clk = 100MHz
+  - external_clk = 200MHz
 
 .. image:: ad485x_fmcz_clock_path.svg
    :width: 800
