@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -12,6 +12,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 global VIVADO_IP_LIBRARY
 
 adi_ip_create axi_ad485x
+
 adi_ip_files axi_ad485x [list \
     "$ad_hdl_dir/library/common/ad_edge_detect.v" \
     "$ad_hdl_dir/library/common/ad_datafmt.v" \
@@ -39,6 +40,9 @@ adi_ip_files axi_ad485x [list \
     "axi_ad485x.v" ]
 
 adi_ip_properties axi_ad485x
+
+# Register the ttcl constraint template to be generated as XDC
+adi_ip_ttcl axi_ad485x "axi_ad485x_constr.ttcl"
 
 set cc [ipx::current_core]
 

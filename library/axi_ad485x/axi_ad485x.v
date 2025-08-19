@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -379,7 +379,7 @@ module axi_ad485x #(
         .clk (adc_clk_s),
         .adc_enable (adc_enable_s),
         .adc_crc_enable (adc_crc_enable_s),
-        .packet_format (packet_format),
+        .packet_format_in (packet_format),
         .oversampling_en (oversampling_en),
         .scki (scki),
         .scko (scko_s),
