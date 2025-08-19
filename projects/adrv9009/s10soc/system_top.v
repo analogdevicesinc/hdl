@@ -155,7 +155,6 @@ module system_top (
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
   wire    [  7:0]   spi_csn_s;
-  wire              dac_fifo_bypass;
   wire              ninit_done_s;
   wire              h2f_reset_s;
   wire              sys_resetn_s;
@@ -179,7 +178,6 @@ module system_top (
   assign gpio_i[59:52] = gpio_o[59:52];
   assign gpio_i[63:60] = gpio_o[63:60];
 
-  assign dac_fifo_bypass     = gpio_o[60];
   assign ad9528_reset_b      = gpio_o[59];
   assign ad9528_sysref_req   = gpio_o[58];
   assign adrv9009_tx1_enable = gpio_o[57];
@@ -276,7 +274,6 @@ module system_top (
     .sys_spi_SS_n                         ( spi_csn_s ),
     .adrv9009_gpio_export                 ( adrv9009_gpio ),
     .tx_serial_data_tx_serial_data        ( tx_serial_data ),
-    .tx_fifo_bypass_bypass                ( dac_fifo_bypass ),
     .tx_ref_clk_clk                       ( ref_clk1 ),
     .tx_sync_export                       ( tx_sync ),
     .tx_sysref_export                     ( sysref ),
