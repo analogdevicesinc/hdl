@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -27,9 +27,8 @@ set RX_OS_SAMPLE_WIDTH 16     ; # N/NP
 set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 32 / \
                                    ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
-set dac_fifo_name avl_adrv9009_tx_fifo
-set dac_data_width 128
-set dac_dma_data_width 128
+set dac_data_offload_name adi_adrv9009_data_offload
+set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
 
 # NOTE: The real lane rate is 2457.6 Gbps (Tx) and 4915.2 Gbps (RX/Rx_Obs),
 # with a real reference clock frequency of 122.88 MHz. A round up needed
@@ -148,7 +147,7 @@ add_instance axi_adrv9009_tx_upack util_upack2
 set_instance_parameter_value axi_adrv9009_tx_upack {NUM_OF_CHANNELS} $TX_NUM_OF_CONVERTERS
 set_instance_parameter_value axi_adrv9009_tx_upack {SAMPLES_PER_CHANNEL} $TX_SAMPLES_PER_CHANNEL
 set_instance_parameter_value axi_adrv9009_tx_upack {SAMPLE_DATA_WIDTH} $TX_SAMPLE_WIDTH
-set_instance_parameter_value axi_adrv9009_tx_upack {INTERFACE_TYPE} {1}
+set_instance_parameter_value axi_adrv9009_tx_upack {INTERFACE_TYPE} {0}
 add_connection adrv9009_tx_jesd204.link_clk axi_adrv9009_tx_upack.clk
 add_connection adrv9009_tx_jesd204.link_reset axi_adrv9009_tx_upack.reset
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
@@ -177,27 +176,29 @@ for {set i 0} {$i < $RX_OS_NUM_OF_CONVERTERS} {incr i} {
 }
 add_connection axi_adrv9009_rx_os_cpack.if_fifo_wr_overflow axi_adrv9009_rx_os.if_adc_dovf
 
-# dac fifo
+# dac data offload
 
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
+add_instance $dac_data_offload_name adi_data_offload
+set_instance_parameter_value $dac_data_offload_name {DATAPATH_TYPE} {1}
+set_instance_parameter_value $dac_data_offload_name {MEM_TYPE} $dac_data_offload_type
+set_instance_parameter_value $dac_data_offload_name {MEM_SIZE} $dac_data_offload_size
+set_instance_parameter_value $dac_data_offload_name {SOURCE_DWIDTH} $dac_data_width
+set_instance_parameter_value $dac_data_offload_name {DESTINATION_DWIDTH} $dac_data_width
+set_instance_parameter_value $dac_data_offload_name {AXI_DATA_WIDTH} $dac_axi_data_width
 
-add_interface tx_fifo_bypass conduit end
-set_interface_property tx_fifo_bypass EXPORT_OF avl_adrv9009_tx_fifo.if_bypass
-
-add_connection adrv9009_tx_jesd204.link_clk avl_adrv9009_tx_fifo.if_dac_clk
-add_connection adrv9009_tx_jesd204.link_reset avl_adrv9009_tx_fifo.if_dac_rst
-add_connection axi_adrv9009_tx_upack.if_packed_fifo_rd_en avl_adrv9009_tx_fifo.if_dac_valid
-add_connection avl_adrv9009_tx_fifo.if_dac_data axi_adrv9009_tx_upack.if_packed_fifo_rd_data
-add_connection avl_adrv9009_tx_fifo.if_dac_dunf axi_adrv9009_tx.if_dac_dunf
+add_connection sys_clk.clk $dac_data_offload_name.sys_clk
+add_connection sys_clk.clk_reset $dac_data_offload_name.sys_resetn
+add_connection adrv9009_tx_jesd204.link_clk $dac_data_offload_name.m_axis_aclk
+add_connection adrv9009_tx_jesd204.link_reset $dac_data_offload_name.m_axis_aresetn
+add_connection $dac_data_offload_name.m_axis axi_adrv9009_tx_upack.s_axis
+#add_connection $dac_data_offload_name.sync_ext GND
 
 # dac & adc dma
 
 add_instance axi_adrv9009_tx_dma axi_dmac
 set_instance_parameter_value axi_adrv9009_tx_dma {ID} {0}
 set_instance_parameter_value axi_adrv9009_tx_dma {DMA_DATA_WIDTH_SRC} {128}
-set_instance_parameter_value axi_adrv9009_tx_dma {DMA_DATA_WIDTH_DEST} [expr $TX_SAMPLE_WIDTH * \
-                                                                             $TX_NUM_OF_CONVERTERS * \
-                                                                             $TX_SAMPLES_PER_CHANNEL]
+set_instance_parameter_value axi_adrv9009_tx_dma {DMA_DATA_WIDTH_DEST} $dac_data_width
 set_instance_parameter_value axi_adrv9009_tx_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_adrv9009_tx_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value axi_adrv9009_tx_dma {AXI_SLICE_DEST} {0}
@@ -208,12 +209,13 @@ set_instance_parameter_value axi_adrv9009_tx_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_adrv9009_tx_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_adrv9009_tx_dma {FIFO_SIZE} {16}
 set_instance_parameter_value axi_adrv9009_tx_dma {HAS_AXIS_TLAST} {1}
+set_instance_parameter_value axi_adrv9009_tx_dma {HAS_AXIS_TKEEP} {1}
 
-add_connection sys_dma_clk.clk avl_adrv9009_tx_fifo.if_dma_clk
-add_connection sys_dma_clk.clk_reset avl_adrv9009_tx_fifo.if_dma_rst
+add_connection sys_dma_clk.clk $dac_data_offload_name.s_axis_aclk
+add_connection sys_dma_clk.clk_reset $dac_data_offload_name.s_axis_aresetn
 add_connection sys_dma_clk.clk axi_adrv9009_tx_dma.if_m_axis_aclk
-add_connection axi_adrv9009_tx_dma.m_axis avl_adrv9009_tx_fifo.s_axis
-add_connection axi_adrv9009_tx_dma.if_m_axis_xfer_req avl_adrv9009_tx_fifo.if_dma_xfer_req
+add_connection axi_adrv9009_tx_dma.m_axis $dac_data_offload_name.s_axis
+add_connection axi_adrv9009_tx_dma.if_m_axis_xfer_req $dac_data_offload_name.init_req
 add_connection sys_clk.clk axi_adrv9009_tx_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_adrv9009_tx_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_adrv9009_tx_dma.m_src_axi_clock
@@ -326,6 +328,7 @@ ad_cpu_interconnect 0x00060000 axi_adrv9009_rx.s_axi
 ad_cpu_interconnect 0x00064000 axi_adrv9009_tx.s_axi
 ad_cpu_interconnect 0x00068000 axi_adrv9009_rx_os.s_axi
 ad_cpu_interconnect 0x00070000 avl_adrv9009_gpio.s1
+ad_cpu_interconnect 0x00080000 $dac_data_offload_name.s_axi
 
 # dma interconnects
 
