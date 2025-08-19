@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -60,9 +60,9 @@ ad_ip_parameter adc_clkgen CONFIG.VCO_DIV 1
 ad_connect  sys_200m_clk adc_clkgen/clk
 if {$LVDS_CMOS_N == "0"} {
   # CMOS setup
-  # clk0 = 100M
-  ad_ip_parameter adc_clkgen CONFIG.VCO_MUL 5
-  ad_ip_parameter adc_clkgen CONFIG.CLK0_DIV 10
+  # clk0 = 200M
+  ad_ip_parameter adc_clkgen CONFIG.VCO_MUL 6
+  ad_ip_parameter adc_clkgen CONFIG.CLK0_DIV 6
   ad_connect adc_clk adc_clkgen/clk_0
 } else {
   # LVDS setup
