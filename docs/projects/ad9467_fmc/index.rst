@@ -41,6 +41,7 @@ Block design
 -------------------------------------------------------------------------------
 
 .. warning::
+
     The VADJ for the FPGA carrier must be set to 2.5V.
 
 The PN9/PN23 sequences are not compatible with O.150. Please use the
@@ -71,21 +72,21 @@ AD9467 FMC card block diagram
 The block diagram of the AD9467-FMC evaluation board is depicted below:
 
 .. image:: ad9467_fmc_card.svg
-   :width: 800
+   :width: 600
    :align: center
    :alt: AD9467-FMC card diagram
 
 The reference design is built on an ARM/Microblaze based system tailored
 for Linux.
 
-Through an SPI interface, the software can access the AD9467/AD9517-4
-registers, given the possibility to initialize and configure the ADC
-and/or clock chip.
+Through an SPI interface, the software can access the :adi:`AD9467` and the
+:adi:`AD9517-4` registers, having the possibility to initialize and configure
+the ADC and/or clock chip.
 
-The LVDS interface captures and buffers data from the ADC. The DMA
-interface then transfers the samples to the external DDR-DRAM. The
-capture is initiated by the software. The status of capture (overflow,
-over the range) are reported back to the software.
+The :git-hdl:`LVDS interface <library/axi_ad9467/axi_ad9467_if.v>` captures
+and buffers data from the ADC. The DMA interface then transfers the samples
+to the external DDR-DRAM. The capture is initiated by the software. The status
+of capture (overflow, over the range) are reported back to the software.
 
 Clock selection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -123,7 +124,7 @@ A **differential LVPECL or LVDS clock driver** can also be used to clock
 the ADC input using the AD9517.
 
 - Populate (C304, C305) for LVPECL clock driver **or** (C306, C307) for
-   LVDS clock driver, with 0.1 µF capacitors
+  LVDS clock driver, with 0.1 µF capacitors
 - Remove C209 and C210 to disconnect the default clock path inputs
 
 The :adi:`AD9517` has many SPI-selectable options that are set to a default
@@ -167,6 +168,10 @@ Depending on the carrier, the SPI connections are as follows:
      - spi0
      - AD9467
      - 0
+   * - PS
+     - spi0
+     - AD9517-4
+     - 1
    * - MicroBlaze
      - spi_*
      - AD9467
@@ -218,10 +223,10 @@ Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Product datasheet: :adi:`AD9467`
-- The schematic of the board can be found
-  :dokuwiki:`here <_media/resources/fpga/xilinx/fmc/02-041710-01-c-1.pdf>`,
-  or :dokuwiki:`here <_media/resources/fpga/xilinx/fmc/9467fmc01c_sch.pdf>`
-  for older versions.
+- The schematic of the new board can be found
+  :dokuwiki:`here <_media/resources/fpga/xilinx/fmc/02-041710-01-c-1.pdf>`
+  (for older versions,
+  :dokuwiki:`here <_media/resources/fpga/xilinx/fmc/9467fmc01c_sch.pdf>`)
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -244,13 +249,13 @@ HDL related
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
-   * - AXI_HDMI_TX
+   * - AXI_HDMI_TX *
      - :git-hdl:`library/axi_hdmi_tx`
      - :ref:`axi_hdmi_tx`
-   * - AXI_I2S_ADI
+   * - AXI_I2S_ADI *
      - :git-hdl:`library/axi_i2s_adi`
      - ---
-   * - AXI_SPDIF_TX
+   * - AXI_SPDIF_TX *
      - :git-hdl:`library/axi_spdif_tx`
      - ---
    * - AXI_SYSID
@@ -259,18 +264,24 @@ HDL related
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
      - :ref:`axi_sysid`
-   * - UTIL_I2C_MIXER
+   * - UTIL_I2C_MIXER *
      - :git-hdl:`library/util_i2c_mixer`
      - ---
+
+.. admonition:: Legend
+   :class: note
+
+   - ``*`` instantiated only for Zedboard
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`AD9467-FMC KC705 Linux device tree <arch/microblaze/boot/dts/kc705_ad9467_fmc.dts>`
+- :git-linux:`AD9467-FMC KC705 Linux device tree (2023_R2 release) <2023_R2:arch/microblaze/boot/dts/kc705_ad9467_fmc.dts>`
 - :git-linux:`AD9467-FMC ZedBoard Linux device tree zynq-zed-adv7511-ad9467-fmc-250ebz.dts <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9467-fmc-250ebz.dts>`
 - :git-linux:`Linux driver ad9467.c <drivers/iio/adc/ad9467.c>`
 - :dokuwiki:`[Wiki] AD9467-FMC on ZedBoard using ACE </resources/eval/ad9467-fmc-250ebz-zedboard>`
-- :git-no-os:`No-OS project <projects/ad9467>` and :git-no-os:`No-OS driver <drivers/adc/ad9467>`
+- :git-no-os:`AD9467 no-OS project <projects/ad9467>` and
+  :git-no-os:`AD9467 no-OS driver <drivers/adc/ad9467>`
 
 .. include:: ../common/more_information.rst
 
