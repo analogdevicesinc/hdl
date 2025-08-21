@@ -78,7 +78,6 @@ add_connection spi_engine_execution_0.if_sdi util_sigma_delta_spi.if_s_sdi
 add_connection spi_engine_execution_0.if_sdo util_sigma_delta_spi.if_s_sdo
 add_connection spi_engine_execution_0.if_sdo_t util_sigma_delta_spi.if_s_sdo_t
 add_connection spi_engine_offload_0.if_trigger util_sigma_delta_spi.if_data_ready
-add_connection spi_engine_execution_0.if_active util_sigma_delta_spi.if_spi_active
 
 # add_connection axi_spi_engine_0.
 
