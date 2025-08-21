@@ -58,8 +58,7 @@ the ADC, or it can be connected to a HDL block, like the
 transaction to read the converted signal.
 
 The data ready condition is only detected if the chip-select signal (which is
-connected to the converter) is asserted and the ``spi_active`` signal is
-de-asserted and both signals have been in that state for **at least**
+connected to the converter) is asserted has been in that state for **at least**
 ``IDLE_TIMEOUT`` clock cycles.
 
 The timeout is used to avoid spurious signal detection and the ``IDLE_TIMEOUT``
