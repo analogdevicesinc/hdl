@@ -3,13 +3,13 @@
 
 <svg
    width="625"
-   height="600"
-   viewBox="0 0 625 600"
+   height="550"
+   viewBox="0 0 625 550"
    version="1.1"
    id="svg6470"
    style="shape-rendering:crispEdges"
-   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
-   sodipodi:docname="cn0577.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   sodipodi:docname="cn0577_zed_block_diagram.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -32,7 +32,7 @@
          inkscape:connector-curvature="0"
          id="path20710"
          d="M 5.77,0 -2.88,5 V -5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="scale(0.4)" />
     </marker>
     <marker
@@ -47,7 +47,7 @@
          inkscape:connector-curvature="0"
          id="path10779"
          d="M 5.77,0 -2.88,5 V -5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="scale(0.4)" />
     </marker>
     <marker
@@ -62,7 +62,7 @@
          inkscape:connector-curvature="0"
          id="path9009"
          d="M 5.77,0 -2.88,5 V -5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="scale(0.4)" />
     </marker>
     <marker
@@ -77,7 +77,7 @@
          inkscape:connector-curvature="0"
          id="path8777"
          d="M 5.77,0 -2.88,5 V -5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="scale(0.4)" />
     </marker>
     <marker
@@ -91,7 +91,7 @@
        inkscape:collect="always">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214"
          inkscape:connector-curvature="0" />
@@ -108,7 +108,7 @@
       <path
          id="path4660"
          d="M 5.77,0 -2.88,5 V -5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="scale(-0.4)"
          inkscape:connector-curvature="0" />
     </marker>
@@ -123,7 +123,7 @@
       <path
          id="path4669"
          d="M 5.77,0 -2.88,5 V -5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="scale(0.4)"
          inkscape:connector-curvature="0" />
     </marker>
@@ -140,7 +140,7 @@
          inkscape:connector-curvature="0"
          id="path4660-1"
          d="M 5.77,0 -2.88,5 V -5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="scale(-0.4)" />
     </marker>
     <marker
@@ -156,7 +156,7 @@
          inkscape:connector-curvature="0"
          id="path4669-5"
          d="M 5.77,0 -2.88,5 V -5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="scale(0.4)" />
     </marker>
     <marker
@@ -171,7 +171,7 @@
          inkscape:connector-curvature="0"
          id="path4660-1-6"
          d="M 5.77,0 -2.88,5 V -5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="scale(-0.4)" />
     </marker>
     <marker
@@ -187,7 +187,7 @@
          inkscape:connector-curvature="0"
          id="path4669-5-5"
          d="M 5.77,0 -2.88,5 V -5 Z"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="scale(0.4)" />
     </marker>
     <marker
@@ -200,7 +200,7 @@
        inkscape:stockid="TriangleInL">
       <path
          transform="scale(-0.8)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path16078"
          inkscape:connector-curvature="0" />
@@ -215,7 +215,7 @@
        inkscape:stockid="TriangleInL">
       <path
          transform="scale(-0.8)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path16078-6"
          inkscape:connector-curvature="0" />
@@ -230,7 +230,7 @@
        inkscape:stockid="TriangleInL">
       <path
          transform="scale(-0.8)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path16078-4"
          inkscape:connector-curvature="0" />
@@ -245,7 +245,7 @@
        inkscape:stockid="TriangleInL">
       <path
          transform="scale(-0.8)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path16078-4-0"
          inkscape:connector-curvature="0" />
@@ -260,7 +260,7 @@
        inkscape:stockid="TriangleInL">
       <path
          transform="scale(-0.8)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path16078-4-0-3"
          inkscape:connector-curvature="0" />
@@ -275,7 +275,7 @@
        inkscape:stockid="TriangleInL">
       <path
          transform="scale(-0.8)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path16078-4-0-3-4"
          inkscape:connector-curvature="0" />
@@ -290,7 +290,7 @@
        inkscape:stockid="TriangleInL">
       <path
          transform="scale(-0.8)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path16078-4-0-5"
          inkscape:connector-curvature="0" />
@@ -323,7 +323,7 @@
        inkscape:stockid="TriangleInM">
       <path
          transform="scale(-0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path10935-1"
          inkscape:connector-curvature="0" />
@@ -338,7 +338,7 @@
        inkscape:stockid="TriangleInM">
       <path
          transform="scale(-0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path10935-1-1"
          inkscape:connector-curvature="0" />
@@ -353,7 +353,7 @@
        inkscape:stockid="TriangleInM">
       <path
          transform="scale(-0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path10935-1-9"
          inkscape:connector-curvature="0" />
@@ -368,7 +368,7 @@
        inkscape:stockid="TriangleInL">
       <path
          transform="scale(-0.8)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path16078-4-0-3-45"
          inkscape:connector-curvature="0" />
@@ -393,7 +393,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-1"
          inkscape:connector-curvature="0" />
@@ -408,7 +408,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3"
          inkscape:connector-curvature="0" />
@@ -423,7 +423,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-1-4"
          inkscape:connector-curvature="0" />
@@ -438,7 +438,7 @@
        inkscape:stockid="TriangleInM">
       <path
          transform="scale(-0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path10935-1-14"
          inkscape:connector-curvature="0" />
@@ -453,7 +453,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7"
          inkscape:connector-curvature="0" />
@@ -468,7 +468,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-3"
          inkscape:connector-curvature="0" />
@@ -483,7 +483,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-35"
          inkscape:connector-curvature="0" />
@@ -498,7 +498,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-5"
          inkscape:connector-curvature="0" />
@@ -513,7 +513,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-7"
          inkscape:connector-curvature="0" />
@@ -528,7 +528,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-35-8"
          inkscape:connector-curvature="0" />
@@ -543,7 +543,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-1-6"
          inkscape:connector-curvature="0" />
@@ -558,7 +558,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-5"
          inkscape:connector-curvature="0" />
@@ -573,7 +573,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-6"
          inkscape:connector-curvature="0" />
@@ -588,7 +588,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-6-2"
          inkscape:connector-curvature="0" />
@@ -603,7 +603,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-7-8"
          inkscape:connector-curvature="0" />
@@ -618,7 +618,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-6-3"
          inkscape:connector-curvature="0" />
@@ -633,7 +633,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-7-8-4"
          inkscape:connector-curvature="0" />
@@ -648,7 +648,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-7-8-0"
          inkscape:connector-curvature="0" />
@@ -663,7 +663,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-7-8-1"
          inkscape:connector-curvature="0" />
@@ -678,7 +678,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-7-8-0-6"
          inkscape:connector-curvature="0" />
@@ -693,7 +693,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-7-8-0-7"
          inkscape:connector-curvature="0" />
@@ -708,7 +708,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-7-8-0-7-6"
          inkscape:connector-curvature="0" />
@@ -723,7 +723,7 @@
        inkscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
-         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path1214-3-7-7-8-0-7-7"
          inkscape:connector-curvature="0" />
@@ -847,23 +847,27 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4142136"
-     inkscape:cx="451.48767"
-     inkscape:cy="188.0904"
+     inkscape:cx="235.82011"
+     inkscape:cy="278.60006"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
-     inkscape:window-width="1920"
-     inkscape:window-height="1018"
-     inkscape:window-x="-6"
-     inkscape:window-y="-6"
+     inkscape:window-width="1680"
+     inkscape:window-height="979"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:pagecheckerboard="0"
-     inkscape:snap-text-baseline="false">
+     inkscape:snap-text-baseline="false"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
-       id="grid7015" />
+       id="grid7015"
+       originx="0"
+       originy="0" />
   </sodipodi:namedview>
   <metadata
      id="metadata6467">
@@ -886,8 +890,8 @@
        id="rect4477"
        width="545.4068"
        height="441.17999"
-       x="10.62466"
-       y="532.0343"
+       x="27.624659"
+       y="464.0343"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
@@ -895,7 +899,7 @@
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path4518"
-       d="M 325.19076,543.09283 V 523.93246"
+       d="M 342.19076,475.09283 V 455.93246"
        style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM);marker-end:url(#TriangleOutM);shape-rendering:crispEdges;enable-background:new"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
@@ -904,7 +908,7 @@
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path4518-5"
-       d="M 351.30766,543.08625 V 524.02546"
+       d="M 368.30766,475.08625 V 456.02546"
        style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM-7);marker-end:url(#TriangleOutM-2);shape-rendering:crispEdges;enable-background:new"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
@@ -913,7 +917,7 @@
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path4518-5-9"
-       d="M 377.42456,543.06461 V 523.90446"
+       d="M 394.42456,475.06461 V 455.90446"
        style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM-7-1);marker-end:url(#TriangleOutM-2-8);shape-rendering:crispEdges;enable-background:new"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
@@ -924,14 +928,14 @@
        id="rect4136"
        width="420.3652"
        height="75.00399"
-       x="-443.34177"
-       y="547.59076"
+       x="-460.34177"
+       y="479.59076"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
-       d="M 415.80614,548.25687 V 622.7674"
+       d="M 432.80614,480.25687 V 554.7674"
        id="path4179"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
@@ -939,7 +943,7 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
-       d="M 390.17575,548.25687 V 622.7674"
+       d="M 407.17575,480.25687 V 554.7674"
        id="path4179-9"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
@@ -947,7 +951,7 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
-       d="M 287.6542,548.25687 V 622.7674"
+       d="M 304.6542,480.25687 V 554.7674"
        id="path4179-0"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
@@ -955,7 +959,7 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
-       d="M 313.2846,548.25687 V 622.7674"
+       d="M 330.2846,480.25687 V 554.7674"
        id="path4179-4"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
@@ -963,7 +967,7 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
-       d="M 338.91499,548.25687 V 622.7674"
+       d="M 355.91499,480.25687 V 554.7674"
        id="path4179-7"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
@@ -971,7 +975,7 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
-       d="M 364.54535,548.25687 V 622.7674"
+       d="M 381.54535,480.25687 V 554.7674"
        id="path4179-41"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
@@ -979,7 +983,7 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
-       d="M 262.02381,548.25687 V 622.7674"
+       d="M 279.02381,480.25687 V 554.7674"
        id="path4179-0-3"
        inkscape:connector-curvature="0"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
@@ -988,76 +992,76 @@
     <text
        transform="matrix(0,-1.0072219,0.99282988,0,0,0)"
        id="text4229"
-       y="358.34357"
-       x="-604.0733"
+       y="375.46634"
+       x="-536.56085"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.25px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold'"
-         y="358.34357"
-         x="-604.0733"
+         y="375.46634"
+         x="-536.56085"
          id="tspan4231"
          sodipodi:role="line">Ethernet</tspan></text>
     <text
        transform="matrix(0,-1.0072219,0.99282988,0,0,0)"
        id="text4233"
-       y="383.14096"
-       x="-596.82782"
+       y="400.26373"
+       x="-529.31537"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.25px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold'"
-         y="383.14096"
-         x="-596.82782"
+         y="400.26373"
+         x="-529.31537"
          id="tspan4235"
          sodipodi:role="line">UART</tspan></text>
     <text
        transform="matrix(0,-1.0072219,0.99282988,0,0,0)"
        id="text4237"
-       y="333.3576"
-       x="-596.57513"
+       y="350.48038"
+       x="-529.06268"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.25px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold'"
-         y="333.3576"
-         x="-596.57513"
+         y="350.48038"
+         x="-529.06268"
          id="tspan4239"
          sodipodi:role="line">DDRx</tspan></text>
     <text
        transform="matrix(0,-1.0072219,0.99282988,0,0,0)"
        id="text4241"
-       y="434.77075"
-       x="-589.81305"
+       y="451.89352"
+       x="-522.3006"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.25px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold'"
-         y="434.77075"
-         x="-589.81305"
+         y="451.89352"
+         x="-522.3006"
          id="tspan4243"
          sodipodi:role="line">SPI</tspan></text>
     <text
        transform="matrix(0,-1.0072219,0.99282988,0,0,0)"
        id="text4245"
-       y="410.30182"
-       x="-589.74713"
+       y="427.42459"
+       x="-522.23468"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.25px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold'"
-         y="410.30182"
-         x="-589.74713"
+         y="427.42459"
+         x="-522.23468"
          id="tspan4247"
          sodipodi:role="line">I<tspan
    style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.25px;font-family:Arial;-inkscape-font-specification:'Arial Bold';baseline-shift:super"
@@ -1065,43 +1069,43 @@
     <text
        transform="matrix(0,-1.0072219,0.99282988,0,0,0)"
        id="text4251"
-       y="306.7854"
-       x="-607.27582"
+       y="323.90817"
+       x="-539.76337"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.25px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold'"
-         y="306.7854"
-         x="-607.27582"
+         y="323.90817"
+         x="-539.76337"
          id="tspan4253"
          sodipodi:role="line">Interrupts</tspan></text>
     <text
        transform="scale(0.99282988,1.0072219)"
        id="text4311"
-       y="474.38336"
-       x="131.22955"
+       y="406.87094"
+       x="148.35233"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"><tspan
-         y="474.38336"
-         x="131.22955"
+         y="406.87094"
+         x="148.35233"
          id="tspan4313"
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold'" /></text>
     <text
        transform="matrix(0,-1.0072219,0.99282988,0,0,0)"
        id="text4301"
-       y="279.97314"
-       x="-596.29773"
+       y="297.09592"
+       x="-528.78528"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.25px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold'"
-         y="279.97314"
-         x="-596.29773"
+         y="297.09592"
+         x="-528.78528"
          id="tspan4303"
          sodipodi:role="line">Timer</tspan></text>
     <rect
@@ -1109,16 +1113,16 @@
        id="rect4589"
        width="14.849245"
        height="15.909902"
-       x="21.734486"
-       y="509.14258"
+       x="38.734486"
+       y="441.14258"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:12px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-       x="40.718426"
-       y="520.58875"
+       x="57.718426"
+       y="452.58875"
        id="text4595"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
@@ -1126,23 +1130,23 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:1px"
          sodipodi:role="line"
          id="tspan4597"
-         x="40.718426"
-         y="520.58875">Receive path</tspan></text>
+         x="57.718426"
+         y="452.58875">Receive path</tspan></text>
     <rect
        style="display:inline;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.84016;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;shape-rendering:crispEdges;enable-background:new"
        id="rect4487"
        width="25.117281"
        height="201.04466"
-       x="35.977032"
-       y="659.02948"
+       x="52.977032"
+       y="591.02948"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14.6667px;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-       x="-852.49829"
-       y="52.79821"
+       x="-784.49829"
+       y="69.79821"
        id="text4489"
        transform="rotate(-90)"
        inkscape:export-xdpi="224.36"
@@ -1150,30 +1154,30 @@
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"><tspan
          sodipodi:role="line"
          id="tspan4491"
-         x="-852.49829"
-         y="52.79821"
+         x="-784.49829"
+         y="69.79821"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14.6667px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1px">MEMORY INTERCONNECT</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:12px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:0.858696;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-       x="499.26367"
-       y="587.47174"
+       x="516.26367"
+       y="519.47174"
        id="text4482"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"><tspan
          sodipodi:role="line"
-         x="499.26367"
-         y="587.47174"
+         x="516.26367"
+         y="519.47174"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:20px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.858696;stroke-width:1px"
          id="tspan3725">Zed</tspan></text>
     <rect
-       style="display:inline;vector-effect:none;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:1.60126;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.60126, 4.80379;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       style="display:inline;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.5,4.50000966;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        id="rect6078"
        width="428.09134"
        height="264.95596"
-       x="118.16975"
-       y="636.04218"
+       x="135.16974"
+       y="568.04218"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png" />
@@ -1182,16 +1186,16 @@
        id="rect4488"
        width="28.897602"
        height="320.47269"
-       x="541.09644"
-       y="646.815"
+       x="558.09644"
+       y="578.815"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:12px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-       x="-887.53528"
-       y="562.20752"
+       x="-819.53528"
+       y="579.20752"
        id="text4491"
        transform="rotate(-90)"
        inkscape:export-xdpi="224.36"
@@ -1199,22 +1203,22 @@
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"><tspan
          sodipodi:role="line"
          id="tspan4493"
-         x="-887.53528"
-         y="562.20752"
+         x="-819.53528"
+         y="579.20752"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1px">FMC CONNECTOR</tspan></text>
     <rect
-       style="display:inline;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:2.03381;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2.03381, 6.10143;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       style="display:inline;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.5,4.5;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        id="rect6057"
        width="82.288788"
        height="266.51028"
-       x="22.922415"
-       y="636.08453"
+       x="39.922413"
+       y="568.08453"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png" />
     <rect
-       y="687.60101"
-       x="95.803452"
+       y="619.60101"
+       x="140.80345"
        height="142.46696"
        width="34.580547"
        id="rect5786"
@@ -1225,40 +1229,40 @@
     <text
        transform="rotate(-90)"
        id="text5788"
-       y="119.07897"
-       x="-781.67645"
+       y="166.07896"
+       x="-713.67645"
        style="font-style:normal;font-weight:normal;font-size:12px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#28170b;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#28170b;stroke:none;stroke-width:1px;stroke-opacity:1"
-         y="119.07897"
-         x="-781.67645"
+         y="166.07896"
+         x="-713.67645"
          id="tspan5790"
          sodipodi:role="line">DMA</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
-       x="28.93198"
-       y="883.30823"
+       x="45.93198"
+       y="815.30823"
        id="text6100-6"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"><tspan
          sodipodi:role="line"
          id="tspan6098-9"
-         x="28.93198"
-         y="883.30823"
+         x="45.93198"
+         y="815.30823"
          style="stroke-width:1"> DMA_clk</tspan><tspan
          sodipodi:role="line"
-         x="28.93198"
-         y="896.6416"
+         x="45.93198"
+         y="828.6416"
          style="stroke-width:1"
          id="tspan5123">= 100MHz</tspan></text>
     <g
        id="g1985"
-       transform="matrix(0.80242547,0,0,0.80242536,43.738336,186.74488)"
+       transform="matrix(0.80242547,0,0,0.80242536,60.738336,118.74488)"
        style="opacity:1"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
@@ -1290,20 +1294,20 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.12px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.948749;shape-rendering:crispEdges;enable-background:new"
-       x="110.38141"
-       y="946.08258"
+       x="126.50691"
+       y="874.3949"
        id="text6100"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        transform="scale(1.0542308,0.94855889)"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"><tspan
          sodipodi:role="line"
-         x="110.38141"
-         y="946.08258"
+         x="126.50691"
+         y="874.3949"
          style="stroke-width:0.948749"
          id="tspan5125">  ref_clk = 120MHz</tspan></text>
     <g
-       transform="matrix(0.82578137,0,0,1.1597906,565.54345,-132.03695)"
+       transform="matrix(0.82578137,0,0,1.1597906,582.54345,-200.03695)"
        style="display:inline;shape-rendering:crispEdges;enable-background:new"
        id="adc_core"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
@@ -1335,22 +1339,22 @@
     <text
        transform="scale(0.99282988,1.0072219)"
        id="text4311-0"
-       y="586.00903"
-       x="81.823318"
+       y="518.49658"
+       x="98.946091"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold'"
-         y="586.00903"
-         x="81.823318"
+         y="518.49658"
+         x="98.946091"
          id="tspan4313-9"
          sodipodi:role="line">ARM (Zynq) </tspan></text>
     <g
        id="g5654"
        style="display:inline;fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-       transform="matrix(1.0318157,0,0,0.9991105,-71.535198,213.28604)"
+       transform="matrix(1.9187911,0,0,0.97850243,-170.52233,156.54282)"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
@@ -1362,23 +1366,37 @@
          sodipodi:nodetypes="cccccccc" />
     </g>
     <g
+       id="g5654-5"
+       style="display:inline;fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       transform="matrix(1.9187911,0,0,0.97850243,-73.61911,155.97969)"
+       inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5656-6"
+         d="m 130.73937,546.2302 10.03208,14.84925 v -6.80591 l 107.88859,-3e-5 0.13029,-16.08362 -108.01888,3e-5 v -6.80591 l -10.03208,14.84925"
+         style="fill:#a01414;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         sodipodi:nodetypes="cccccccc" />
+    </g>
+    <g
        id="g5654-2"
        style="display:inline;fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-       transform="matrix(1.7478534,0,0,1,-85.40762,-12.51405)" />
+       transform="matrix(1.7478534,0,0,1,-68.40762,-80.514048)" />
     <text
        id="text11366-4-8"
-       y="661.4364"
-       x="243.93425"
+       y="593.4364"
+       x="260.93423"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"><tspan
          id="tspan11370-7-5"
-         y="661.4364"
-         x="243.93425"
+         y="593.4364"
+         x="260.93423"
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle" /></text>
     <g
        id="g21139"
-       transform="translate(-55.471435,640.29394)"
+       transform="translate(-38.471435,572.29394)"
        style="shape-rendering:crispEdges"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
@@ -1409,7 +1427,7 @@
     </g>
     <g
        id="g15320"
-       transform="translate(-56.178492,598.29393)"
+       transform="translate(-39.178492,530.29393)"
        style="shape-rendering:crispEdges"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
@@ -1439,22 +1457,8 @@
            sodipodi:role="line">DCO</tspan></text>
     </g>
     <g
-       id="g5654-7"
-       style="display:inline;fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-       transform="matrix(4.217274,0,0,0.93103254,-415.11183,250.04341)"
-       inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
-       inkscape:export-xdpi="224.36"
-       inkscape:export-ydpi="224.36">
-      <path
-         inkscape:connector-curvature="0"
-         id="path5656-3"
-         d="m 129.5988,546.58376 9.92857,14.85359 v -6.8079 l 49.94304,-3e-5 V 538.5411 l -49.94304,3e-5 v -6.8079 l -9.92857,14.85359"
-         style="fill:#a01414;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         sodipodi:nodetypes="cccccccc" />
-    </g>
-    <g
        id="g15302"
-       transform="translate(-54.876492,620.29393)"
+       transform="translate(-37.876492,552.29393)"
        style="shape-rendering:crispEdges"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
@@ -1485,7 +1489,7 @@
     </g>
     <g
        id="g8767"
-       transform="matrix(0.9352963,0,0,0.96441782,26.977577,574.7614)"
+       transform="matrix(0.9352963,0,0,0.96441782,43.977577,506.7614)"
        style="shape-rendering:crispEdges"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
@@ -1515,7 +1519,7 @@
     </g>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.67532;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker9011);shape-rendering:crispEdges"
-       d="M 540.00287,937.22593 H 377.58982"
+       d="M 557.00287,869.22593 H 394.58982"
        id="path8769"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -1525,34 +1529,34 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
-       x="442.34183"
-       y="932.80933"
+       x="459.34183"
+       y="864.80933"
        id="text6100-2"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"><tspan
          sodipodi:role="line"
-         x="442.34183"
-         y="932.80933"
+         x="459.34183"
+         y="864.80933"
          style="stroke-width:1"
          id="tspan5125-2">ref_clk = 120MHz</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
-       x="450.1532"
-       y="914.40479"
+       x="467.1532"
+       y="846.40479"
        id="text6100-2-2"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"><tspan
          sodipodi:role="line"
-         x="450.1532"
-         y="914.40479"
+         x="467.1532"
+         y="846.40479"
          style="stroke-width:1"
          id="tspan5125-2-3">sampling_clk</tspan></text>
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:1.67757;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM-7-1);shape-rendering:crispEdges;enable-background:new"
-       d="M 534.99836,955.51888 H 372.97298"
+       d="M 551.99836,887.51888 H 389.97298"
        id="path8769-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -1562,62 +1566,62 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
-       x="253.91887"
-       y="897.04523"
+       x="270.91885"
+       y="829.04523"
        id="text6100-2-7"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"><tspan
          sodipodi:role="line"
-         x="253.91887"
-         y="897.04523"
+         x="270.91885"
+         y="829.04523"
          style="stroke-width:1"
          id="tspan10617">clk_gate</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
-       x="467.45453"
-       y="953.14862"
+       x="484.45453"
+       y="885.14862"
        id="text2401-1-7-3-9-9-8"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          sodipodi:role="line"
          id="tspan2399-1-6-6-1-2-4"
-         x="467.45453"
-         y="953.14862"
+         x="484.45453"
+         y="885.14862"
          style="font-size:13.3333px">CNV</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
-       x="339.99365"
-       y="958.20453"
+       x="356.99365"
+       y="890.20453"
        id="text2401-1-7-3-9-9-8-2"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          sodipodi:role="line"
          id="tspan2399-1-6-6-1-2-4-1"
-         x="339.99365"
-         y="958.20453"
+         x="356.99365"
+         y="890.20453"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">pwm_0</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
-       x="239.58711"
-       y="937.4884"
+       x="256.5871"
+       y="869.4884"
        id="text2401-1-7-3-9-9-8-2-6"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          sodipodi:role="line"
          id="tspan2399-1-6-6-1-2-4-1-4"
-         x="239.58711"
-         y="937.4884"
+         x="256.5871"
+         y="869.4884"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">pwm_1</tspan></text>
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:1.87739;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-8-3);shape-rendering:crispEdges;enable-background:new"
-       d="M 249.30008,928.81363 V 867.6954"
+       d="M 266.30008,860.81363 V 799.6954"
        id="path1206-7-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -1626,7 +1630,7 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:1.85372;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-8-3-7);shape-rendering:crispEdges;enable-background:new"
-       d="M 395.13177,936.41227 V 867.94466"
+       d="M 412.13177,868.41227 V 799.94466"
        id="path1206-7-8-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -1635,7 +1639,7 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:1.67;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-8-3-7-3);shape-rendering:crispEdges;enable-background:new"
-       d="m 444.18334,917.91826 90.85185,-0.068"
+       d="m 461.18334,849.91826 90.85185,-0.068"
        id="path1206-7-8-6-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -1644,7 +1648,7 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:1.67;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-8-3-7-3-9);shape-rendering:crispEdges;enable-background:new"
-       d="m 396.25241,912.65051 23.62529,-0.13276"
+       d="m 413.25241,844.65051 23.62529,-0.13276"
        id="path1206-7-8-6-5-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -1654,7 +1658,7 @@
     <g
        style="display:inline;shape-rendering:crispEdges;enable-background:new"
        id="ddr"
-       transform="matrix(1.4208528,0,0,1.4208526,-244.92472,-130.17999)"
+       transform="matrix(1.4208528,0,0,1.4208526,-227.92472,-198.17999)"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
@@ -1763,7 +1767,7 @@
     <g
        style="display:inline;shape-rendering:crispEdges;enable-background:new"
        id="g8892"
-       transform="translate(-28.163807,52.767899)"
+       transform="translate(-11.163807,-15.232099)"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
@@ -1872,7 +1876,7 @@
     </g>
     <g
        id="uart"
-       transform="matrix(0,-0.41475982,0.41475987,0,209.58161,713.45429)"
+       transform="matrix(0,-0.41475982,0.41475987,0,226.58161,645.45429)"
        style="display:inline;stroke-width:2.41103;stroke-miterlimit:4;stroke-dasharray:none;shape-rendering:crispEdges;enable-background:new"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
@@ -1970,7 +1974,7 @@
     <g
        id="g6577"
        style="display:inline;shape-rendering:crispEdges;enable-background:new"
-       transform="matrix(1.3748693,0,0,1.4504246,-289.82364,-133.60361)"
+       transform="matrix(1.3748693,0,0,1.4504246,-272.82364,-201.60361)"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
@@ -2009,8 +2013,8 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:16.2453px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.01533;shape-rendering:crispEdges;enable-background:new"
-       x="71.227119"
-       y="776.89001"
+       x="99.763809"
+       y="707.78601"
        id="text2401-61-1-54-8"
        transform="scale(1.0162353,0.98402408)"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
@@ -2018,27 +2022,27 @@
        inkscape:export-ydpi="224.36"><tspan
          sodipodi:role="line"
          id="tspan2399-9-2-70-3"
-         x="71.227119"
-         y="776.89001"
+         x="99.763809"
+         y="707.78601"
          style="stroke-width:1.01533">64</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
-       x="275.12854"
-       y="763.64124"
+       x="292.12854"
+       y="695.64124"
        id="text2401-61-1-5-5"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          sodipodi:role="line"
          id="tspan2399-9-2-7-4"
-         x="275.12854"
-         y="763.64124">16/18</tspan></text>
+         x="292.12854"
+         y="695.64124">16/18</tspan></text>
     <ellipse
        style="fill:#000000;fill-opacity:1;stroke:#3e6de1;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;shape-rendering:crispEdges"
        id="path5471-9"
-       cx="395.13211"
-       cy="936.41241"
+       cx="412.13211"
+       cy="868.41241"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
@@ -2047,8 +2051,8 @@
     <ellipse
        style="fill:#000000;fill-opacity:1;stroke:#3e6de1;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;shape-rendering:crispEdges"
        id="path5471-9-9"
-       cx="395.31796"
-       cy="912.87549"
+       cx="412.31796"
+       cy="844.87549"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
@@ -2057,8 +2061,8 @@
     <ellipse
        style="fill:#000000;fill-opacity:1;stroke:#3e6de1;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;shape-rendering:crispEdges"
        id="path5471-9-9-1"
-       cx="249.3004"
-       cy="921.71436"
+       cx="266.30038"
+       cy="853.71436"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
@@ -2066,7 +2070,7 @@
        ry="3.5355327" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1.69524;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 425.26086,907.90074 v 19.8121 c 8.38158,-0.42783 17.58955,-2.88272 17.68176,-9.58651 0.0937,-6.80791 -7.94565,-10.21886 -17.68176,-10.22559 z"
+       d="m 442.26086,839.90074 v 19.8121 c 8.38158,-0.42783 17.58955,-2.88272 17.68176,-9.58651 0.0937,-6.80791 -7.94565,-10.21886 -17.68176,-10.22559 z"
        id="path5279"
        sodipodi:nodetypes="ccac"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
@@ -2074,7 +2078,7 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:1.67136;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-8-3-7-3-1);shape-rendering:crispEdges;enable-background:new"
-       d="m 250.19127,922.11084 169.79493,-0.0444"
+       d="m 267.19127,854.11084 169.79493,-0.0444"
        id="path1206-7-8-6-5-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
