@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -57,11 +57,11 @@ proc create_reset_logic {
   set max_lanes [expr max($rx_num_lanes, $tx_num_lanes)]
   set num_quads [expr int(ceil(1.0 * $max_lanes / 4))]
 
-  ad_ip_instance xlconcat ${ip_name}/concat_powergood [list \
+  ad_ip_instance ilconcat ${ip_name}/concat_powergood [list \
    NUM_PORTS $num_quads \
  ]
 
-  ad_ip_instance util_reduced_logic ${ip_name}/and_powergood [list \
+  ad_ip_instance ilreduced_logic ${ip_name}/and_powergood [list \
     C_SIZE $num_quads \
   ]
 
@@ -87,10 +87,10 @@ proc create_reset_logic {
       ad_connect ${ip_name}/${tx_bridge}/gt_ilo_reset ${ip_name}/gt_quad_base_${quad_index}/ch${ch_index}_iloreset
     }
   }
-  ad_ip_instance xlconcat ${ip_name}/xlconcat_iloresetdone [list \
+  ad_ip_instance ilconcat ${ip_name}/xlconcat_iloresetdone [list \
       NUM_PORTS ${rx_num_lanes} \
   ]
-  ad_ip_instance util_reduced_logic ${ip_name}/and_iloresetdone [list \
+  ad_ip_instance ilreduced_logic ${ip_name}/and_iloresetdone [list \
       C_SIZE ${rx_num_lanes} \
   ]
   for {set j 0} {$j < ${rx_num_lanes}} {incr j} {
@@ -101,10 +101,10 @@ proc create_reset_logic {
   ad_connect ${ip_name}/xlconcat_iloresetdone/dout ${ip_name}/and_iloresetdone/Op1
   ad_connect ${ip_name}/and_iloresetdone/Res ${ip_name}/${rx_bridge}/ilo_resetdone
   if {$asymmetric_mode} {
-    ad_ip_instance xlconcat ${ip_name}/xlconcat_iloresetdone_tx [list \
+    ad_ip_instance ilconcat ${ip_name}/xlconcat_iloresetdone_tx [list \
       NUM_PORTS ${tx_num_lanes} \
     ]
-    ad_ip_instance util_reduced_logic ${ip_name}/and_iloresetdone_tx [list \
+    ad_ip_instance ilreduced_logic ${ip_name}/and_iloresetdone_tx [list \
         C_SIZE ${tx_num_lanes} \
     ]
     for {set j 0} {$j < ${tx_num_lanes}} {incr j} {
@@ -122,10 +122,10 @@ proc create_reset_logic {
   }
 
   set num_cplllocks [expr 2 * ${num_quads}]
-  ad_ip_instance xlconcat ${ip_name}/concat_cplllock [list \
+  ad_ip_instance ilconcat ${ip_name}/concat_cplllock [list \
       NUM_PORTS ${num_cplllocks} \
   ]
-  ad_ip_instance util_reduced_logic ${ip_name}/and_cplllock [list \
+  ad_ip_instance ilreduced_logic ${ip_name}/and_cplllock [list \
       C_SIZE ${num_cplllocks} \
   ]
 
@@ -142,7 +142,7 @@ proc create_reset_logic {
     ad_connect ${ip_name}/and_cplllock/Res ${ip_name}/${tx_bridge}/gt_lcpll_lock
   }
 
-  ad_ip_instance xlconcat ${ip_name}/concat_phystatus [list \
+  ad_ip_instance ilconcat ${ip_name}/concat_phystatus [list \
     NUM_PORTS ${rx_num_lanes} \
   ]
   for {set j 0} {$j < ${rx_num_lanes}} {incr j} {
@@ -153,7 +153,7 @@ proc create_reset_logic {
   }
   ad_connect ${ip_name}/concat_phystatus/dout ${ip_name}/${rx_bridge}/ch_phystatus_in
   if {$asymmetric_mode} {
-    ad_ip_instance xlconcat ${ip_name}/concat_phystatus_tx [list \
+    ad_ip_instance ilconcat ${ip_name}/concat_phystatus_tx [list \
       NUM_PORTS ${rx_num_lanes} \
     ]
     for {set j 0} {$j < ${rx_num_lanes}} {incr j} {

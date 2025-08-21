@@ -338,7 +338,7 @@ ad_connect  adrv9009_tx_device_clk_rstgen/peripheral_reset util_adrv9009_tx_upac
 if {$TX_NUM_OF_CONVERTERS <= 2} {
   ad_connect  tx_fir_interpolator/valid_out_0  util_adrv9009_tx_upack/fifo_rd_en
 } else {
-  ad_ip_instance util_vector_logic logic_or [list \
+  ad_ip_instance ilvector_logic logic_or [list \
   C_OPERATION {or} \
   C_SIZE 1]
 

@@ -93,7 +93,7 @@ ad_ip_parameter axi_iic_main CONFIG.IIC_BOARD_INTERFACE Custom
 
 ad_ip_instance util_i2c_mixer sys_i2c_mixer
 
-ad_ip_instance xlconcat sys_concat_intc
+ad_ip_instance ilconcat sys_concat_intc
 ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
 ad_ip_instance proc_sys_reset sys_rstgen
@@ -101,7 +101,7 @@ ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance proc_sys_reset sys_200m_rstgen
 ad_ip_parameter sys_200m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
-ad_ip_instance util_vector_logic sys_logic_inv
+ad_ip_instance ilvector_logic sys_logic_inv
 ad_ip_parameter sys_logic_inv CONFIG.C_SIZE 1
 ad_ip_parameter sys_logic_inv CONFIG.C_OPERATION not
 

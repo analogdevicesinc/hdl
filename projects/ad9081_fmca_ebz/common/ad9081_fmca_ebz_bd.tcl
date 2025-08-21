@@ -614,7 +614,7 @@ if {$INTF_CFG != "TX"} {
   ad_connect ext_sync_in rx_mxfe_tpl_core/adc_tpl_core/adc_sync_in
   if {$INTF_CFG == "RXTX"} {
     # Rx & Tx
-    ad_ip_instance util_vector_logic manual_sync_or [list \
+    ad_ip_instance ilvector_logic manual_sync_or [list \
       C_SIZE 1 \
       C_OPERATION {or} \
     ]
@@ -625,17 +625,17 @@ if {$INTF_CFG != "TX"} {
     ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_in
   }
   # Reset pack cores
-  ad_ip_instance util_reduced_logic cpack_rst_logic
+  ad_ip_instance ilreduced_logic cpack_rst_logic
   ad_ip_parameter cpack_rst_logic config.c_operation {or}
   ad_ip_parameter cpack_rst_logic config.c_size {3}
 
-  ad_ip_instance util_vector_logic rx_do_rstout_logic
+  ad_ip_instance ilvector_logic rx_do_rstout_logic
   ad_ip_parameter rx_do_rstout_logic config.c_operation {not}
   ad_ip_parameter rx_do_rstout_logic config.c_size {1}
 
   ad_connect $adc_data_offload_name/s_axis_tready rx_do_rstout_logic/Op1
 
-  ad_ip_instance xlconcat cpack_reset_sources
+  ad_ip_instance ilconcat cpack_reset_sources
   ad_ip_parameter cpack_reset_sources config.num_ports {3}
   ad_connect rx_device_clk_rstgen/peripheral_reset cpack_reset_sources/in0
   ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources/in1
@@ -657,11 +657,11 @@ if {$INTF_CFG != "RX"} {
     ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in
   }
   # Reset upack cores
-  ad_ip_instance util_reduced_logic upack_rst_logic
+  ad_ip_instance ilreduced_logic upack_rst_logic
   ad_ip_parameter upack_rst_logic config.c_operation {or}
   ad_ip_parameter upack_rst_logic config.c_size {2}
 
-  ad_ip_instance xlconcat upack_reset_sources
+  ad_ip_instance ilconcat upack_reset_sources
   ad_ip_parameter upack_reset_sources config.num_ports {2}
   ad_connect tx_device_clk_rstgen/peripheral_reset upack_reset_sources/in0
   ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_rst upack_reset_sources/in1

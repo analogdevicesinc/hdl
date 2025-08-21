@@ -170,7 +170,7 @@ ad_connect  gpio_t sys_ps8/emio_gpio_t
 
 # spi
 
-ad_ip_instance xlconcat spi0_csn_concat
+ad_ip_instance ilconcat spi0_csn_concat
 ad_ip_parameter spi0_csn_concat CONFIG.NUM_PORTS 3
 ad_connect  sys_ps8/emio_spi0_ss_o_n spi0_csn_concat/In0
 ad_connect  sys_ps8/emio_spi0_ss1_o_n spi0_csn_concat/In1
@@ -194,10 +194,10 @@ ad_connect  sys_cpu_clk rom_sys_0/clk
 
 # interrupts
 
-ad_ip_instance xlconcat sys_concat_intc_0
+ad_ip_instance ilconcat sys_concat_intc_0
 ad_ip_parameter sys_concat_intc_0 CONFIG.NUM_PORTS 8
 
-ad_ip_instance xlconcat sys_concat_intc_1
+ad_ip_instance ilconcat sys_concat_intc_1
 ad_ip_parameter sys_concat_intc_1 CONFIG.NUM_PORTS 8
 
 ad_connect  sys_concat_intc_0/dout sys_ps8/pl_ps_irq0
