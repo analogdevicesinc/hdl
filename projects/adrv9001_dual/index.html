@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta content="This design allows controlling, receiving and transmitting sample stream from/to two ADRV9001/ADRV9002 devices(2x eval b) through four independent source synchronous interfaces for each direction and for each device. Supports both CMOS and LVDS interface, but not in the same time. The selection of the I/O standard must be done with a parameter during build." name="description" />
 
-    <title>ADRV9001 DUAL HDL Project &#8212; HDL  documentation</title>
+    <title>ADRV9001-DUAL HDL Project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=3f4bd1a2" />
     <script async="async" src="../../_static/app.umd.js?v=75bad8ae"></script>
@@ -91,7 +91,7 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">ADRV9001 DUAL HDL Project</a><ul>
+<li><a class="reference internal" href="#">ADRV9001-DUAL HDL Project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
@@ -380,7 +380,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="adrv9001-dual-hdl-project">
-<h1>ADRV9001 DUAL HDL Project<a class="headerlink" href="#adrv9001-dual-hdl-project" title="Permalink to this heading"></a></h1>
+<span id="adrv9001-dual"></span><h1>ADRV9001-DUAL HDL Project<a class="headerlink" href="#adrv9001-dual-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>This design allows controlling, receiving and transmitting sample stream
@@ -403,7 +403,7 @@ The complete list of supported modes can be consulted in the
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9002" target="_blank">ADRV9002</a>, in <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9002" target="_blank">ADRV9002NP/W2/PCBZ</a>,</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9002" target="_blank">ADRV9002</a>, in <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9002" target="_blank">ADRV9002NP/W2/PCBZ</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -450,33 +450,33 @@ via VDMA. The internal DDS phase and frequency are programmable.</p>
 configured to work in LVDS and CMOS interface; it supports two configuration
 modes:</p>
 <ul class="simple">
-<li><p>2R2T - 2x Rx and 2x Tx independent control and DMAs for the two RF channels</p></li>
-<li><p>1R1T - 1x Rx and 1x Tx common control and DMAs for the two RF channels also
+<li><p>2R2T - 2x RX and 2x TX independent control and DMAs for the two RF channels</p></li>
+<li><p>1R1T - 1x RX and 1x TX common control and DMAs for the two RF channels also
 noted as R1_MODE</p></li>
 </ul>
-<p>For any mode the number of RF channels(two) doesn’t change only the controlling
-instance and the DMAs.</p>
-<p>The design has four receive paths and four transmit paths.
-Two of the receive paths (Rx12) have four channels and the other (Rx2) two
-channels. These only work independently, not concomitantly.
-One must chose between two active paths (2R2T), or just the Rx12 (1R1T) path,
-which has four active channels, while Rx2 is disabled.
-The same applies to the transmit path but in the other direction.</p>
-<p>When only the Rx12 path is active with four channels mode, the axi_adrv9001
-core will take ownership of both of its source synchronous interfaces.
+<p>For any mode, the number of RF channels (two) doesn’t change — only the
+controlling instance and the DMAs do.</p>
+<p>The design has four receive paths and four transmit paths.</p>
+<p>Two of the receive paths (RX12) have four channels and the other (RX2) two
+channels. These only work independently, not concomitantly.</p>
+<p>One must choose between two active paths (2R2T), or just the RX12 (1R1T) path,
+which has four active channels, while RX2 is disabled.</p>
+<p>The same applies to the transmit path, but in the other direction.</p>
+<p>When only the RX12 path is active with four channels mode, the axi_adrv9001
+core will take ownership of both of its source-synchronous interfaces.
 The requirement in this case is that both interfaces, of an axi_adrv9001 core,
 run at the same rate.</p>
-<p>Regarding the INDEPENDENT_1R1T_SUPPORT and COMMON_2R2T_SUPPORT parameters,
+<p>Regarding the <code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span></code> and <code class="docutils literal notranslate"><span class="pre">COMMON_2R2T_SUPPORT</span></code> parameters
 related to the above modes, their purpose is to remove the unused data paths,
 reducing in this way the resource utilisation. By default all modes/paths are
 available.</p>
-<p>For more info see the parameter description section of <a class="reference internal" href="../../library/axi_adrv9001/index.html#axi-adrv9001"><span class="std std-ref">AXI ADRV9001</span></a>.</p>
+<p>For more info, see the Parameter Description section of <a class="reference internal" href="../../library/axi_adrv9001/index.html#axi-adrv9001"><span class="std std-ref">AXI ADRV9001</span></a>.</p>
 </section>
 <section id="clock-scheme">
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
-<p>The clocks are managed by the ADRV9002 devices and are software programmable.
-Please refer to the device datasheet for the various clocks within the device.</p>
-<p>Independently a board provides a 38.4MHz crystal for the <a class="icon adi reference external" href="https://www.analog.com/ADRV9002" target="_blank">ADRV9002</a>.
+<p>The clocks are managed by the <a class="icon adi reference external" href="https://www.analog.com/ADRV9002" target="_blank">ADRV9002</a> devices and are software-programmable.
+Please refer to the device data sheet for the various clocks within the device.</p>
+<p>Independently, a board provides a 38.4MHz crystal for the <a class="icon adi reference external" href="https://www.analog.com/ADRV9002" target="_blank">ADRV9002</a>.
 An external reference clock can also be used.</p>
 </section>
 <section id="cpu-memory-interconnects-addresses">
@@ -892,7 +892,22 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
 <a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository.</p>
+<p>This project has the following <cite>make</cite> parameters:</p>
+<ul class="simple">
+<li><p>CMOS_LVDS_N - selects the interface type
+- 0 = LVDS (default)
+- 1 = CMOS</p></li>
+<li><p>USE_RX_CLK_FOR_TX1 - selects the clock to drive the TX1 SSI interface
+- 0 = TX1 dedicated clock (default)
+- 1 = RX1 SSI clock
+- 2 = RX2 SSI clock</p></li>
+<li><p>USE_RX_CLK_FOR_TX2 - selects the clock to drive the TX2 SSI interface
+- 0 = TX2 dedicated clock (default)
+- 1 = RX1 SSI clock
+- 2 = RX2 SSI clock</p></li>
+</ul>
 <p><strong>Linux/Cygwin/WSL</strong></p>
+<p>Building the default configuration (LVDS):</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
@@ -905,17 +920,21 @@ the HDL repository.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<div class="clear-left"></div></div></div><p>Example configuration with CMOS:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv9001_dual/zcu102$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">CMOS_LVDS_N</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The result of the build, if parameters were used, will be in a folder named
+by the configuration used <code class="docutils literal notranslate"><span class="pre">CMOSLVDSN1</span></code>.</p>
+<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <section id="systems-related">
 <h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
-<p>Here you can find the quick start guides available for these evaluation boards:</p>
-<ul class="simple">
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9002_dual/quickstart/zynqmp" target="_blank">ZCU102</a></p></li>
-</ul>
-<p>Other useful information:</p>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9001" target="_blank">[Wiki] ADRV9001/2 User Guide</a></p></li>
 </ul>
@@ -923,7 +942,7 @@ the HDL repository.</p>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9001" target="_blank">ADRV9001 HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9001_dual" target="_blank">ADRV9001_DUAL HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -976,11 +995,6 @@ the HDL repository.</p>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/adrv9002-customization" target="_blank">[Wiki] ADRV9002 Device Driver Customization</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/adrv9002" target="_blank">[Wiki] ADRV9002 Integrated Dual RF Transceiver Linux device driver</a></p></li>
-</ul>
-<p>List of Linux device trees (to be dev).</p>
-<ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002-dual.dts" target="_blank">adrv9002 ZCU102 (rev10) Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002-dual-rx2tx2.dts" target="_blank">adrv9002 ZCU102 (rev10) Linux device 2rx2tx tree</a></p></li>
 </ul>
 </section>
 </section>

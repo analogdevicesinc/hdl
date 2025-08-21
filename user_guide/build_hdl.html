@@ -448,25 +448,30 @@ be described:</p>
 </section>
 <section id="needed-tools">
 <span id="build-hdl-needed-tools"></span><h2>1. Needed tools<a class="headerlink" href="#needed-tools" title="Permalink to this heading"></a></h2>
-<ol class="arabic simple">
-<li><p>Install the required FPGA design suite. We use <a class="icon link reference external" href="https://www.xilinx.com/support/download.html" target="_blank">AMD Xilinx Vivado</a>,
-<a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html" target="_blank">Intel Quartus Prime Pro and Standard</a>, <a class="icon link reference external" href="https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant" target="_blank">Lattice Radiant</a> and
-<a class="icon link reference external" href="https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/LatticePropel" target="_blank">Lattice Propel</a>.
-You can find information about the proper version in the section
-<a class="reference internal" href="#build-hdl-tool-versions"><span class="std std-ref">Tool versions</span></a>.
-Make sure that you’re always using the latest release.</p></li>
+<p>We offer reference designs for our evaluation boards, on three FPGA platforms:
+from AMD Xilinx, from Intel and from Lattice.</p>
+<p>Each one of these platforms has their own FPGA design suites:</p>
+<ul class="simple">
+<li><p>AMD Xilinx with <a class="icon link reference external" href="https://www.xilinx.com/support/download.html" target="_blank">AMD Xilinx Vivado and Vitis</a> (HDL and software)</p></li>
+<li><p>Intel with <a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html" target="_blank">Intel Quartus Prime Pro and Standard</a></p></li>
+<li><p>Lattice with <a class="icon link reference external" href="https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant" target="_blank">Lattice Radiant</a> and <a class="icon link reference external" href="https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/LatticePropel" target="_blank">Lattice Propel</a></p></li>
+</ul>
+<ol class="arabic">
 <li><p>The <strong>required</strong> Vivado/Quartus/Propel/Radiant version can be found in:</p>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl" target="_blank">scripts/adi_env.tcl</a></p></li>
 <li><p>or in the <a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/releases" target="_blank">release notes</a></p></li>
 </ul>
+<p>More details can be found at <a class="reference internal" href="#build-hdl-tool-versions"><span class="std std-ref">Tool versions</span></a>.
+Make sure that you’re always using the latest release.</p>
 </li>
-<li><p>Download the tools from the following links:</p>
+<li><p>Download and install the <strong>Linux version</strong> of the FPGA design suite that
+you want to use, from the following links:</p>
 <ul class="simple">
-<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html" target="_blank">AMD tools</a>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html" target="_blank">AMD tools</a> *
 (make sure you’re downloading the proper installer.
 For full installation, it is better to choose the one that downloads
-and installs both Vivado and Vitis at the same time)</p></li>
+and installs <strong>both Vivado and Vitis</strong> at the same time)</p></li>
 <li><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/programmable/downloads/download-center.html" target="_blank">Intel tools</a></p></li>
 <li><p><a class="icon link reference external" href="https://www.latticesemi.com/en/Products/DesignSoftwareAndIP" target="_blank">Lattice tools</a></p></li>
 </ul>
@@ -478,6 +483,12 @@ note.</p></li>
 <a class="icon link reference external" href="https://www.gnu.org/software/make/" target="_blank">GNU Make</a> to build the
 projects. Depending on what OS you’re using, you have these options:</p></li>
 </ol>
+<div class="admonition-legend admonition">
+<p class="admonition-title">Legend</p>
+<p>* - the Linux version is required for the tools, because even if you’re OS
+is Windows, you need to use WSL and install the tools under WSL (Windows
+Subsystem for Linux).</p>
+</div>
 </section>
 <section id="setup-the-hdl-repository">
 <span id="build-hdl-setup-repo"></span><h2>2. Setup the HDL repository<a class="headerlink" href="#setup-the-hdl-repository" title="Permalink to this heading"></a></h2>
@@ -494,15 +505,22 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
 <a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the repository. This is the best method to get the sources.</p>
-<p>Here, we are cloning the repository inside a directory called <strong>adi</strong>.
+<p>Here, we are cloning the repository inside the home directory of your Linux
+file system.
 Please refer to the <a class="reference internal" href="git_repository.html#git-repository"><span class="std std-ref">HDL Git repository</span></a> section for more details.</p>
 <p>Cloning is now done using HTTPS and a classic PAT (Personal Access Token).
 More details on how to do this,
 <a class="icon link reference external" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" target="_blank">here</a>.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/analogdevicesinc/hdl.git
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>If you use WSL, you must clone your HDL repository in the WSL file system.
@@ -556,13 +574,13 @@ load_amd<span class="w"> </span><span class="o">()</span>
 may conflict with each other.</p>
 <p>Then, <a class="icon link reference external" href="https://linuxcommand.org/lc3_man_pages/sourceh.html" target="_blank">re-source your bashrc</a>
 for the current session (or open a new one) and call the defined method:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/.bashrc
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>load_amd
@@ -582,7 +600,7 @@ package name.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>/opt/Xilinx/Vivado/202x.x/settings64.sh
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>/opt/Xilinx/Vivado/2023.2/settings64.sh
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
@@ -591,13 +609,13 @@ package name.</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vivado/202x.x/bin:/opt/Xilinx/Vitis/202x.x/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vivado/2023.2/bin:/opt/Xilinx/Vitis/2023.2/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/nt/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>For Intel Quartus:</p>
@@ -611,13 +629,13 @@ package name.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/propel/2023.2/builder/rtf/bin/lin64
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/radiant/202x.x/bin/lin64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/radiant/2023.2/bin/lin64
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></section>
@@ -678,15 +696,15 @@ Codename:       jammy
 <div class="clear-left"></div></div></div></div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="63b718c0aff00a6cfe53689e2953b4a605021e20" name="63b718c0aff00a6cfe53689e2953b4a605021e20" type="checkbox"></input><label for="63b718c0aff00a6cfe53689e2953b4a605021e20"><p>How to install the tools in WSL</p>
+<input class="collapsible_input" id="4388787f5fea16b10f81568c8694e91b20eaa537" name="4388787f5fea16b10f81568c8694e91b20eaa537" type="checkbox"></input><label for="4388787f5fea16b10f81568c8694e91b20eaa537"><p>How to install the tools in WSL</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>Before building any project,
-<span class="red">it is necessary to install the Linux version for Vivado, in the WSL file system</span>,
-because on the Ubuntu distribution on WSL you cannot
-run projects from on the Windows version of them. When you have to choose
-the installation path, choose the location where WSL is installed
-<code class="docutils literal notranslate"><span class="pre">\\wsl.localhost\Ubuntu\opt</span></code>.</p>
-<p>Also, to get the best performance, you must clone your HDL repository in
+<span class="red">it is necessary to install the Linux version for Vivado &amp; Vitis, in the WSL file system</span>,
+because on the Ubuntu distribution on WSL you cannot run projects from on
+the Windows version of them. When you have to choose
+the installation path, choose the location where WSL is installed, in its
+/opt folder <code class="docutils literal notranslate"><span class="pre">\\wsl.localhost\Ubuntu\opt</span></code>.</p>
+<p>Also, to get the best performance, you <strong>must clone</strong> your HDL repository in
 the WSL file system. For example: <code class="docutils literal notranslate"><span class="pre">\\wsl.localhost\Ubuntu\home\username\hdl</span></code>.</p>
 <p>For more information you can consult the following link:
 <a class="icon link reference external" href="https://learn.microsoft.com/en-us/windows/wsl/filesystems#file-storage-and-performance-across-file-systems" target="_blank">WSL Storage</a>.</p>
@@ -704,16 +722,23 @@ Vitis), then one by one, do the following commands in the WSL terminal:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>./FPGAs_AdaptiveSoCs_Unified_2023.2_1113_1001_Lin64.bin
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>Now, you may have noticed that the installation raised a couple of
+<div class="clear-left"></div></div></div><p>The installation directory for AMD Xilinx Vivado &amp; Vitis we chose to be
+<code class="docutils literal notranslate"><span class="pre">/opt/Xilinx</span></code>.</p>
+<p>Now, you may have noticed that the installation raised a couple of
 warnings, such as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$/tools/Xilinx/Vivado/2023.2/bin/rdiArgs.sh: line 31: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory
-/bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-terminate called after throwing an instance of &#39;std::runtime_error&#39;
-  what():  locale::facet::_S_create_c_locale name not valid
-/tools/Xilinx/Vivado/2023.2/bin/rdiArgs.sh: line 312:  4105 Aborted                 &quot;$RDI_PROG&quot; &quot;$@&quot;
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>See <a class="icon link reference external" href="https://adaptivesupport.amd.com/s/question/0D54U00006FYojlSAD/vivado-20222-on-ubuntu-with-error-lcall-cannot-change-locale-enusutf8?language=en_US" target="_blank">here</a>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/tools/Xilinx/Vivado/2023.2/bin/rdiArgs.sh:<span class="w"> </span>line<span class="w"> </span><span class="m">31</span>:<span class="w"> </span>warning:<span class="w"> </span>setlocale:<span class="w"> </span>LC_ALL:<span class="w"> </span>cannot<span class="w"> </span>change<span class="w"> </span>locale<span class="w"> </span><span class="o">(</span>en_US.UTF-8<span class="o">)</span>:<span class="w"> </span>No<span class="w"> </span>such<span class="w"> </span>file<span class="w"> </span>or<span class="w"> </span>directory
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>terminate called after throwing an instance of &#39;std::runtime_error&#39;
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span> what():  locale::facet::_S_create_c_locale name not valid
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>See <a class="icon link reference external" href="https://adaptivesupport.amd.com/s/question/0D54U00006FYojlSAD/vivado-20222-on-ubuntu-with-error-lcall-cannot-change-locale-enusutf8?language=en_US" target="_blank">here</a>
 a thread on the Xilinx community.</p>
 <p>Next, run:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/Downloads$
@@ -743,20 +768,32 @@ a thread on the Xilinx community.</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/opt/Xilinx/Vitis/2023.2/scripts$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libtinfo5<span class="w"> </span><span class="c1"># to be used only in case you have issues with missing libtinfo5 when building a project</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libtinfo5
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/opt/Xilinx/Vitis/2023.2/scripts$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/opt/Xilinx/Vitis/2023.2/scripts$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>./libtinfo5_6.3-2ubuntu0.1_amd64.deb
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Then you need to add the following paths to your $PATH environment variable:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vivado/202x.x/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vivado/2023.2/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vivado_HLS/202x.x/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vivado_HLS/2023.2/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
@@ -765,45 +802,45 @@ a thread on the Xilinx community.</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/2023.2/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/nt/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/2023.2/gnu/arm/nt/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_be/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_le/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/2023.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="b77f04415df3131d4396ebc514b3111f2864c90b" name="b77f04415df3131d4396ebc514b3111f2864c90b" type="checkbox"></input><label for="b77f04415df3131d4396ebc514b3111f2864c90b"><p>Alternatives to Cygwin/WSL/Linux terminal</p>
+<input class="collapsible_input" id="e6b6f234c655223e4eea3ff8ea31f143b782572f" name="e6b6f234c655223e4eea3ff8ea31f143b782572f" type="checkbox"></input><label for="e6b6f234c655223e4eea3ff8ea31f143b782572f"><p>Alternatives to WSL/Linux terminal</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
-<p>If you do not want to use neither Cygwin nor WSL, there might still be some
+<p>If you do not want to use WSL/Linux/Cygwin, there might still be some
 alternative. There are <code class="docutils literal notranslate"><span class="pre">make</span></code> alternatives for <strong>Windows Command
 Prompt</strong>, minimalist GNU for Windows (<strong>MinGW</strong>), or the <strong>Cygwin
 variations</strong> installed by the tools itself.
@@ -811,7 +848,7 @@ variations</strong> installed by the tools itself.
 <p>Some of these may not be fully functional with our scripts and/or projects.
 If you are an Intel user, the <strong>Nios II Command Shell</strong> does support make.
 If you are an AMD user, use the <strong>gnuwin</strong> installed as part of the SDK,
-usually at <code class="docutils literal notranslate"><span class="pre">C:\Xilinx\Vitis\202x.x\gnuwin\bin</span></code>.</p>
+usually at <code class="docutils literal notranslate"><span class="pre">C:\Xilinx\Vitis\2023.2\gnuwin\bin</span></code>.</p>
 </div>
 </div>
 </div><p><strong>How to verify your environment setup</strong></p>
@@ -864,7 +901,7 @@ One cannot build the boot file needed for the setup, but instead should use
 the Vivado Tcl console building mode to build the BOOT.BIN (see
 “Building the BOOT.BIN in Vivado GUI”).</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="b2bff5a458dc76475714e877c36fbe06d70cc944" name="b2bff5a458dc76475714e877c36fbe06d70cc944" type="checkbox"></input><label for="b2bff5a458dc76475714e877c36fbe06d70cc944"><p>Installation paths for tools in Cygwin</p>
+<input class="collapsible_input" id="a992d65c293186b9f47ee3025d780bc7d060d332" name="a992d65c293186b9f47ee3025d780bc7d060d332" type="checkbox"></input><label for="a992d65c293186b9f47ee3025d780bc7d060d332"><p>Installation paths for tools in Cygwin</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
@@ -874,49 +911,49 @@ the Vivado Tcl console building mode to build the BOOT.BIN (see
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado/202x.x/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado/2023.2/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado_HLS/2023.2/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/2023.2/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/microblaze/nt/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/arm/nt/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_be/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_le/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>For Intel Quartus:</p>
@@ -930,13 +967,13 @@ the Vivado Tcl console building mode to build the BOOT.BIN (see
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/propel/2023.2/builder/rtf/bin/nt64
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/radiant/2023.2/bin/nt64
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></div>
@@ -1028,7 +1065,7 @@ guarantee</strong> that the project will build ok. The projects are built and te
 in hardware using the Vivado version
 <a class="reference internal" href="#build-hdl-needed-tools"><span class="std std-ref">specific for that branch</span></a>.</p>
 <p>Simply put, to build a project you just run <code class="docutils literal notranslate"><span class="pre">make</span></code> in your Linux terminal
-or in Cygwin. For more details, please read the rest of the documentation.</p>
+or in WSL. For more details, please read the rest of the documentation.</p>
 <p>To clean only a project or an IP core before building it again,
 run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code>.
 To clean both the already built IP cores which the project depends on and the
@@ -1037,7 +1074,7 @@ project, run <code class="docutils literal notranslate"><span class="pre">make</
 <span id="build-hdl-build-amd-project"></span><h3>4a. Building an AMD project<a class="headerlink" href="#a-building-an-amd-project" title="Permalink to this heading"></a></h3>
 <p>An AMD project is built the same way as an Intel project. The only
 exception is that there are a few ‘sub-make(s)’ for the library
-components. The way of building a project in Cygwin and WSL is almost the same.</p>
+components.</p>
 <p>You just need to go to the hdl/projects folder, choose the ADI part that you
 want to use, then enter the folder of the FPGA carrier that you want, and run
 <code class="docutils literal notranslate"><span class="pre">make</span></code> to build the project.</p>
@@ -1489,7 +1526,7 @@ implementation.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Instantiating IPs in Propel Builder CLI or GUI does not work in WSL for an
-unknown compatibility reason. You can use Cygwin on Windows or a normal
+unknown compatibility reason. You can use WSL/Cygwin on Windows or a normal
 Linux installation.</p>
 </div>
 <div class="admonition warning">
@@ -1733,9 +1770,9 @@ on these tools.</p>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="123a0f253b45748ca2c817e9f2048dcb605e68b6" name="123a0f253b45748ca2c817e9f2048dcb605e68b6" type="checkbox"></input><label for="123a0f253b45748ca2c817e9f2048dcb605e68b6"><p>Click here to see the tools from Intel, AMD and Lattice</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper colwidths-auto docutils container" id="id3">
-<table class="docutils align-default" id="id3">
-<caption><span class="caption-text">Tools from Intel and AMD</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
+<div class="table-wrapper colwidths-auto docutils container" id="id2">
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Tools from Intel and AMD</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Notes</p></th>
 <th class="head"><p>Intel</p></th>
@@ -1798,9 +1835,9 @@ slow and frustrating process)</span></p></td>
 </tbody>
 </table>
 </div>
-<div class="table-wrapper colwidths-auto docutils container" id="id4">
-<table class="docutils align-default" id="id4">
-<caption><span class="caption-text">Tools from Lattice</span><a class="headerlink" href="#id4" title="Permalink to this table"></a></caption>
+<div class="table-wrapper colwidths-auto docutils container" id="id3">
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Tools from Lattice</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Notes</p></th>
 <th class="head"><p>Lattice</p></th>

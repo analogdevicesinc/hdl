@@ -449,16 +449,16 @@ If that occurs, try setting the “capture select” bit (register 0x0A, bit to 
 <section id="ad9467-fmc-card-block-diagram">
 <h4>AD9467 FMC card block diagram<a class="headerlink" href="#ad9467-fmc-card-block-diagram" title="Permalink to this heading"></a></h4>
 <p>The block diagram of the AD9467-FMC evaluation board is depicted below:</p>
-<a class="reference internal image-reference" href="../../_images/ad9467_fmc_card.svg"><img alt="AD9467-FMC card diagram" class="align-center" src="../../_images/ad9467_fmc_card.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad9467_fmc_card.svg"><img alt="AD9467-FMC card diagram" class="align-center" src="../../_images/ad9467_fmc_card.svg" width="600" /></a>
 <p>The reference design is built on an ARM/Microblaze based system tailored
 for Linux.</p>
-<p>Through an SPI interface, the software can access the AD9467/AD9517-4
-registers, given the possibility to initialize and configure the ADC
-and/or clock chip.</p>
-<p>The LVDS interface captures and buffers data from the ADC. The DMA
-interface then transfers the samples to the external DDR-DRAM. The
-capture is initiated by the software. The status of capture (overflow,
-over the range) are reported back to the software.</p>
+<p>Through an SPI interface, the software can access the <a class="icon adi reference external" href="https://www.analog.com/AD9467" target="_blank">AD9467</a> and the
+<a class="icon adi reference external" href="https://www.analog.com/AD9517-4" target="_blank">AD9517-4</a> registers, having the possibility to initialize and configure
+the ADC and/or clock chip.</p>
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9467/axi_ad9467_if.v" target="_blank">LVDS interface</a> captures
+and buffers data from the ADC. The DMA interface then transfers the samples
+to the external DDR-DRAM. The capture is initiated by the software. The status
+of capture (overflow, over the range) are reported back to the software.</p>
 </section>
 </section>
 <section id="clock-selection">
@@ -491,11 +491,8 @@ Vectron (VCC6-QCD-250M000).</p>
 <p>A <strong>differential LVPECL or LVDS clock driver</strong> can also be used to clock
 the ADC input using the AD9517.</p>
 <ul class="simple">
-<li><dl class="simple">
-<dt>Populate (C304, C305) for LVPECL clock driver <strong>or</strong> (C306, C307) for</dt><dd><p>LVDS clock driver, with 0.1 µF capacitors</p>
-</dd>
-</dl>
-</li>
+<li><p>Populate (C304, C305) for LVPECL clock driver <strong>or</strong> (C306, C307) for
+LVDS clock driver, with 0.1 µF capacitors</p></li>
 <li><p>Remove C209 and C210 to disconnect the default clock path inputs</p></li>
 </ul>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/AD9517" target="_blank">AD9517</a> has many SPI-selectable options that are set to a default
@@ -555,7 +552,12 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <td><p>AD9467</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>MicroBlaze</p></td>
+<tr class="row-odd"><td><p>PS</p></td>
+<td><p>spi0</p></td>
+<td><p>AD9517-4</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>MicroBlaze</p></td>
 <td><p>spi_*</p></td>
 <td><p>AD9467</p></td>
 <td><p>0</p></td>
@@ -629,10 +631,10 @@ location and run the make command by typing in your command prompt:</p>
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9467" target="_blank">AD9467</a></p></li>
-<li><p>The schematic of the board can be found
-<a class="icon dokuwiki reference external" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/02-041710-01-c-1.pdf" target="_blank">here</a>,
-or <a class="icon dokuwiki reference external" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/9467fmc01c_sch.pdf" target="_blank">here</a>
-for older versions.</p></li>
+<li><p>The schematic of the new board can be found
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/02-041710-01-c-1.pdf" target="_blank">here</a>
+(for older versions,
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/_media/resources/fpga/xilinx/fmc/9467fmc01c_sch.pdf" target="_blank">here</a>)</p></li>
 </ul>
 </section>
 <section id="hdl-related">
@@ -666,15 +668,15 @@ for older versions.</p></li>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_HDMI_TX</p></td>
+<tr class="row-odd"><td><p>AXI_HDMI_TX *</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx" target="_blank">library/axi_hdmi_tx</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">AXI HDMI TX</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_I2S_ADI</p></td>
+<tr class="row-even"><td><p>AXI_I2S_ADI *</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi" target="_blank">library/axi_i2s_adi</a></p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
+<tr class="row-odd"><td><p>AXI_SPDIF_TX *</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx" target="_blank">library/axi_spdif_tx</a></p></td>
 <td><p>—</p></td>
 </tr>
@@ -686,22 +688,29 @@ for older versions.</p></li>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
+<tr class="row-even"><td><p>UTIL_I2C_MIXER *</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer" target="_blank">library/util_i2c_mixer</a></p></td>
 <td><p>—</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for Zedboard</p></li>
+</ul>
+</div>
 </section>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/kc705_ad9467_fmc.dts" target="_blank">AD9467-FMC KC705 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2023_R2/arch/microblaze/boot/dts/kc705_ad9467_fmc.dts" target="_blank">AD9467-FMC KC705 Linux device tree (2023_R2 release)</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9467-fmc-250ebz.dts" target="_blank">AD9467-FMC ZedBoard Linux device tree zynq-zed-adv7511-ad9467-fmc-250ebz.dts</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad9467.c" target="_blank">Linux driver ad9467.c</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/ad9467-fmc-250ebz-zedboard" target="_blank">[Wiki] AD9467-FMC on ZedBoard using ACE</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9467" target="_blank">No-OS project</a> and <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad9467" target="_blank">No-OS driver</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9467" target="_blank">AD9467 no-OS project</a> and
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad9467" target="_blank">AD9467 no-OS driver</a></p></li>
 </ul>
 </section>
 </section>

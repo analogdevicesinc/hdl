@@ -979,98 +979,107 @@ for more details).</p>
 </section>
 <section id="gpios">
 <h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
-<div class="table-wrapper colwidths-given docutils container">
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 25.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 15.0%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
 <th class="head"><p>Direction</p></th>
-<th class="head"><p>HDL GPIO EMIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
-</tr>
-<tr class="row-even"><th class="head"></th>
-<th class="head"><p>(from FPGA view)</p></th>
-<th class="head"></th>
+<th class="head"><p>HDL no.</p></th>
 <th class="head"><p>Zynq-7000</p></th>
-<th class="head"><p>Zynq MP</p></th>
+<th class="head"><p>Zynq UltraScale+ MP</p></th>
+<th class="head"><p>Versal</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>txen[1:0]</p></td>
+<tr class="row-even"><td><p>txen[1:0]</p></td>
 <td><p>OUT</p></td>
 <td><p>59:58</p></td>
 <td><p>113:112</p></td>
 <td><p>137:136</p></td>
+<td><p>27:26</p></td>
 </tr>
-<tr class="row-even"><td><p>rxen[1:0]</p></td>
+<tr class="row-odd"><td><p>rxen[1:0]</p></td>
 <td><p>OUT</p></td>
 <td><p>57:56</p></td>
 <td><p>111:110</p></td>
 <td><p>135:134</p></td>
+<td><p>25:24</p></td>
 </tr>
-<tr class="row-odd"><td><p>rstb</p></td>
+<tr class="row-even"><td><p>rstb</p></td>
 <td><p>OUT</p></td>
 <td><p>55</p></td>
 <td><p>109</p></td>
 <td><p>133</p></td>
+<td><p>23</p></td>
 </tr>
-<tr class="row-even"><td><p>hmc_sync</p></td>
+<tr class="row-odd"><td><p>hmc_sync</p></td>
 <td><p>OUT</p></td>
 <td><p>54</p></td>
 <td><p>108</p></td>
 <td><p>132</p></td>
+<td><p>22</p></td>
 </tr>
-<tr class="row-odd"><td><p>irqb[1:0]</p></td>
+<tr class="row-even"><td><p>irqb[1:0]</p></td>
 <td><p>IN</p></td>
 <td><p>53:52</p></td>
 <td><p>107:106</p></td>
 <td><p>131:130</p></td>
+<td><p>21:20</p></td>
 </tr>
-<tr class="row-even"><td><p>agc3[1:0]</p></td>
+<tr class="row-odd"><td><p>agc3[1:0]</p></td>
 <td><p>IN</p></td>
 <td><p>51:50</p></td>
 <td><p>105:104</p></td>
 <td><p>129:128</p></td>
+<td><p>19:18</p></td>
 </tr>
-<tr class="row-odd"><td><p>agc2[1:0]</p></td>
+<tr class="row-even"><td><p>agc2[1:0]</p></td>
 <td><p>IN</p></td>
 <td><p>49:48</p></td>
 <td><p>103:102</p></td>
 <td><p>127:126</p></td>
+<td><p>17:16</p></td>
 </tr>
-<tr class="row-even"><td><p>agc1[1:0]</p></td>
+<tr class="row-odd"><td><p>agc1[1:0]</p></td>
 <td><p>IN</p></td>
 <td><p>47:46</p></td>
 <td><p>101:100</p></td>
 <td><p>125:124</p></td>
+<td><p>15:14</p></td>
 </tr>
-<tr class="row-odd"><td><p>agc0[1:0]</p></td>
+<tr class="row-even"><td><p>agc0[1:0]</p></td>
 <td><p>IN</p></td>
 <td><p>45:44</p></td>
 <td><p>99:98</p></td>
 <td><p>123:122</p></td>
+<td><p>13:12</p></td>
 </tr>
-<tr class="row-even"><td><p>hmc_gpio1</p></td>
+<tr class="row-odd"><td><p>hmc_gpio1</p></td>
 <td><p>INOUT</p></td>
 <td><p>43</p></td>
 <td><p>97</p></td>
 <td><p>121</p></td>
+<td><p>11</p></td>
 </tr>
-<tr class="row-odd"><td><p>gpio[10:0]</p></td>
+<tr class="row-even"><td><p>gpio[10:0]</p></td>
 <td><p>INOUT</p></td>
 <td><p>42:32</p></td>
 <td><p>96:86</p></td>
 <td><p>120:110</p></td>
+<td><p>10:0</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p>GPIO signal = name of the GPIO in the HDL project</p></li>
+<li><p>Direction = from the FPGA point of view</p></li>
+<li><p>HDL no. = HDL GPIO EMIO</p></li>
+<li><p>Zynq-7000, Zynq UltraScale+ MP, Versal are Software GPIOs, to be used in
+device trees</p></li>
+</ul>
 </div>
 </section>
 <section id="interrupts">
