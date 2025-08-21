@@ -37,24 +37,30 @@ source ../../scripts/adi_project_intel.tcl
 #
 
 adi_project ad9081_fmca_ebz_a5e [list \
-  JESD_MODE         [get_env_param JESD_MODE      8B10B ] \
-  RX_LANE_RATE      [get_env_param RX_LANE_RATE     9.6 ] \
-  TX_LANE_RATE      [get_env_param TX_LANE_RATE     9.6 ] \
-  REF_CLK_RATE      [get_env_param REF_CLK_RATE     240 ] \
-  DEVICE_CLK_RATE   [get_env_param DEVICE_CLK_RATE  240 ] \
-  RX_JESD_M         [get_env_param RX_JESD_M          8 ] \
-  RX_JESD_L         [get_env_param RX_JESD_L          4 ] \
-  RX_JESD_S         [get_env_param RX_JESD_S          1 ] \
-  RX_JESD_NP        [get_env_param RX_JESD_NP        16 ] \
-  RX_NUM_LINKS      [get_env_param RX_NUM_LINKS       1 ] \
-  TX_JESD_M         [get_env_param TX_JESD_M          4 ] \
-  TX_JESD_L         [get_env_param TX_JESD_L          2 ] \
-  TX_JESD_S         [get_env_param TX_JESD_S          1 ] \
-  TX_JESD_NP        [get_env_param TX_JESD_NP        16 ] \
-  TX_NUM_LINKS      [get_env_param TX_NUM_LINKS       1 ] \
-  RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL  1 ] \
-  TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL  1 ] \
-  DDS_DISABLED      [get_env_param DDS_DISABLED       1 ] \
+  JESD_MODE            [get_env_param JESD_MODE        8B10B ] \
+  RX_LANE_RATE         [get_env_param RX_LANE_RATE       9.6 ] \
+  TX_LANE_RATE         [get_env_param TX_LANE_RATE       9.6 ] \
+  REF_CLK_RATE         [get_env_param REF_CLK_RATE       240 ] \
+  DEVICE_CLK_RATE      [get_env_param DEVICE_CLK_RATE    240 ] \
+  RX_JESD_M            [get_env_param RX_JESD_M            8 ] \
+  RX_JESD_L            [get_env_param RX_JESD_L            2 ] \
+  RX_JESD_S            [get_env_param RX_JESD_S            1 ] \
+  RX_JESD_NP           [get_env_param RX_JESD_NP          16 ] \
+  RX_NUM_LINKS         [get_env_param RX_NUM_LINKS         1 ] \
+  RX_OS_JESD_M         [get_env_param RX_OS_JESD_M         2 ] \
+  RX_OS_JESD_L         [get_env_param RX_OS_JESD_L         2 ] \
+  RX_OS_JESD_S         [get_env_param RX_OS_JESD_S         1 ] \
+  RX_OS_JESD_NP        [get_env_param RX_OS_JESD_NP       16 ] \
+  RX_OS_NUM_LINKS      [get_env_param RX_OS_NUM_LINKS      1 ] \
+  TX_JESD_M            [get_env_param TX_JESD_M            4 ] \
+  TX_JESD_L            [get_env_param TX_JESD_L            2 ] \
+  TX_JESD_S            [get_env_param TX_JESD_S            1 ] \
+  TX_JESD_NP           [get_env_param TX_JESD_NP          16 ] \
+  TX_NUM_LINKS         [get_env_param TX_NUM_LINKS         1 ] \
+  RX_KS_PER_CHANNEL    [get_env_param RX_KS_PER_CHANNEL    1 ] \
+  TX_KS_PER_CHANNEL    [get_env_param TX_KS_PER_CHANNEL    1 ] \
+  RX_OS_KS_PER_CHANNEL [get_env_param RX_OS_KS_PER_CHANNEL 1 ] \
+  DDS_DISABLED         [get_env_param DDS_DISABLED         1 ] \
 ]
 
 source $ad_hdl_dir/projects/common/a5e/a5e_system_assign.tcl
@@ -65,6 +71,7 @@ set_global_assignment -name VERILOG_FILE ../../../library/common/ad_3w_spi.v
 
 set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to fpga_syncin_0
 set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to fpga_syncout_0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to fpga_syncout_1
 set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to sysref2
 set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to clkin6
 set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)"          -to fpga_refclk_in
@@ -94,10 +101,10 @@ set_location_assignment PIN_BF1   -to "rx_data[0]"          ; ## A14  DP4_M2C_P
 set_location_assignment PIN_BF3   -to "rx_data_n[0]"        ; ## A15  DP4_M2C_N
 set_location_assignment PIN_BD1   -to "rx_data[1]"          ; ## A18  DP5_M2C_P
 set_location_assignment PIN_BD3   -to "rx_data_n[1]"        ; ## A19  DP5_M2C_N
-set_location_assignment PIN_BB1   -to "rx_data[2]"          ; ## B16  DP6_M2C_P
-set_location_assignment PIN_BB3   -to "rx_data_n[2]"        ; ## B17  DP6_M2C_N
-set_location_assignment PIN_AY1   -to "rx_data[3]"          ; ## B12  DP7_M2C_P
-set_location_assignment PIN_AY3   -to "rx_data_n[3]"        ; ## B13  DP7_M2C_N
+set_location_assignment PIN_BB1   -to "rx_os_data[0]"       ; ## B16  DP6_M2C_P
+set_location_assignment PIN_BB3   -to "rx_os_data_n[0]"     ; ## B17  DP6_M2C_N
+set_location_assignment PIN_AY1   -to "rx_os_data[1]"       ; ## B12  DP7_M2C_P
+set_location_assignment PIN_AY3   -to "rx_os_data_n[1]"     ; ## B13  DP7_M2C_N
 
 # set_location_assignment PIN_AU7   -to "tx_data[0]"          ; ## C02  DP0_C2M_P
 # set_location_assignment PIN_AU10  -to "tx_data_n[0]"        ; ## C03  DP0_C2M_N
@@ -122,8 +129,8 @@ set_location_assignment PIN_B54   -to "fpga_syncin_1_n"     ; ## G10  LA03_N
 set_location_assignment PIN_A54   -to "fpga_syncin_1_p"     ; ## G09  LA03_P
 set_location_assignment PIN_A48   -to "fpga_syncout_0(n)"   ; ## D09  LA01_CC_N
 set_location_assignment PIN_B45   -to "fpga_syncout_0"      ; ## D08  LA01_CC_P
-set_location_assignment PIN_F44   -to "fpga_syncout_1_n"    ; ## C11  LA06_N
-set_location_assignment PIN_D44   -to "fpga_syncout_1_p"    ; ## C10  LA06_P
+set_location_assignment PIN_F44   -to "fpga_syncout_1(n)"   ; ## C11  LA06_N
+set_location_assignment PIN_D44   -to "fpga_syncout_1"      ; ## C10  LA06_P
 set_location_assignment PIN_V58   -to "gpio[0]"             ; ## H19  LA15_P
 set_location_assignment PIN_T58   -to "gpio[1]"             ; ## H20  LA15_N
 set_location_assignment PIN_B85   -to "gpio[2]"             ; ## H22  LA19_P
@@ -166,6 +173,12 @@ for {set j 0} {$j < $rx_num_lanes} {incr j} {
   set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_data_n[$j]
 }
 
+set rx_os_num_lanes [get_env_param RX_OS_JESD_L 8]
+for {set j 0} {$j < $rx_os_num_lanes} {incr j} {
+  set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_os_data[$j]
+  set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_os_data_n[$j]
+}
+
 set_instance_assignment -name IO_STANDARD "1.2 V" -to agc0[0]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to agc0[1]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to agc1[0]
@@ -187,8 +200,8 @@ set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[9]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[10]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_syncin_1_p
 set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_syncin_1_n
-set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_syncout_1_p
-set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_syncout_1_n
+# set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_syncout_1_p
+# set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_syncout_1_n
 set_instance_assignment -name IO_STANDARD "1.2 V" -to hmc_gpio1
 set_instance_assignment -name IO_STANDARD "1.2 V" -to hmc_sync
 set_instance_assignment -name IO_STANDARD "1.2 V" -to irqb[0]

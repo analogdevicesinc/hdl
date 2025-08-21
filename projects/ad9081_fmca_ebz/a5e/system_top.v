@@ -47,6 +47,11 @@ module system_top #(
   parameter RX_JESD_S          = 1,
   parameter RX_JESD_NP         = 16,
   parameter RX_NUM_LINKS       = 1,
+  parameter RX_OS_JESD_M       = 8,
+  parameter RX_OS_JESD_L       = 8,
+  parameter RX_OS_JESD_S       = 1,
+  parameter RX_OS_JESD_NP      = 16,
+  parameter RX_OS_NUM_LINKS    = 1,
   parameter TX_JESD_M          = 8,
   parameter TX_JESD_L          = 8,
   parameter TX_JESD_S          = 1,
@@ -54,6 +59,7 @@ module system_top #(
   parameter TX_NUM_LINKS       = 1,
   parameter RX_KS_PER_CHANNEL  = 32,
   parameter TX_KS_PER_CHANNEL  = 32,
+  parameter RX_OS_KS_PER_CHANNEL = 32,
   parameter DDS_DISABLED       = 0
 ) (
 
@@ -148,15 +154,18 @@ module system_top #(
   input                   clkin6,
   input                   fpga_refclk_in,
   input   [RX_JESD_L-1:0] rx_data,
+  input   [RX_OS_JESD_L-1:0] rx_os_data,
   output  [TX_JESD_L-1:0] tx_data,
   input   [RX_JESD_L-1:0] rx_data_n,
+  input   [RX_OS_JESD_L-1:0] rx_os_data_n,
   output  [TX_JESD_L-1:0] tx_data_n,
   input                   fpga_syncin_0,
   input                   fpga_syncin_1_n,
   input                   fpga_syncin_1_p,
   output                  fpga_syncout_0,
-  input                   fpga_syncout_1_n,
-  input                   fpga_syncout_1_p,
+  output                  fpga_syncout_1,
+  // input                   fpga_syncout_1_n,
+  // input                   fpga_syncout_1_p,
   input                   sysref2,
 
   // spi
@@ -182,6 +191,9 @@ module system_top #(
   output  [1:0]           txen
 );
 
+  localparam NUM_BANKS = (RX_JESD_L + RX_OS_JESD_L) > 4 ? 2 : 1;
+  localparam PHY_OS_PMA_CLK_IDX = RX_JESD_L >= 4 ? 1 : 0;
+
   // internal signals
   wire  [63:0]  gpio_i;
   wire  [63:0]  gpio_o;
@@ -195,6 +207,12 @@ module system_top #(
   wire          syspll_lock;
   wire          dacfifo_bypass;
   wire [ 3:0]   phy_tx_pll_locked_o_tx_pll_locked;
+  wire [RX_JESD_L+RX_OS_JESD_L-1:0] gts_reset_o_src_rs_grant_src_rs_grant;
+  wire [RX_JESD_L+RX_OS_JESD_L-1:0] gts_reset_i_src_rs_req_src_rs_req;
+  wire [NUM_BANKS-1:0]              gts_reset_o_pma_cu_clk_clk;
+  wire                              gts_reset_i_refclk_bus_out_refclk_bus_out;
+  wire                              jesd204_phy_o_refclk_bus_out_refclk_bus_out;
+  wire                              jesd204_phy_os_o_refclk_bus_out_refclk_bus_out;
 
   wire  [ 7:0]  spi_csn_s;
   wire          spi_clk;
@@ -259,6 +277,8 @@ module system_top #(
   assign spi_miso = ~spi_csn_s[0] ? spi0_miso :
                     ~spi_csn_s[1] ? spi_hmc_miso :
                     1'b0;
+
+  assign gts_reset_i_refclk_bus_out_refclk_bus_out = jesd204_phy_o_refclk_bus_out_refclk_bus_out & jesd204_phy_os_o_refclk_bus_out_refclk_bus_out;
 
   system_bd i_system_bd (
     .sys_clk_clk                                             (sys_clk),
@@ -364,13 +384,29 @@ module system_top #(
     .sys_gpio_in_export                                      (gpio_i[63:32]),
     .sys_gpio_out_export                                     (gpio_o[63:32]),
 
+    .gts_reset_o_src_rs_grant_src_rs_grant                   (gts_reset_o_src_rs_grant_src_rs_grant),
     .gts_reset_src_rs_priority_src_rs_priority               ('h0),
+    .gts_reset_i_src_rs_req_src_rs_req                       (gts_reset_i_src_rs_req_src_rs_req),
+    .gts_reset_o_pma_cu_clk_clk                              (gts_reset_o_pma_cu_clk_clk),
+    .gts_reset_i_refclk_bus_out_refclk_bus_out               (gts_reset_i_refclk_bus_out_refclk_bus_out),
+
+    .jesd204_phy_i_pma_cu_clk_clk                            (gts_reset_o_pma_cu_clk_clk[0]),
+    .jesd204_phy_i_src_rs_grant_src_rs_grant                 (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L-1:0]),
+    .jesd204_phy_o_src_rs_req_src_rs_req                     (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L-1:0]),
+    .jesd204_phy_o_refclk_bus_out_refclk_bus_out             (jesd204_phy_o_refclk_bus_out_refclk_bus_out),
+
+    .jesd204_phy_os_i_pma_cu_clk_clk                         (gts_reset_o_pma_cu_clk_clk[PHY_OS_PMA_CLK_IDX]),
+    .jesd204_phy_os_i_src_rs_grant_src_rs_grant              (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
+    .jesd204_phy_os_o_src_rs_req_src_rs_req                  (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
+    .jesd204_phy_os_o_refclk_bus_out_refclk_bus_out          (jesd204_phy_os_o_refclk_bus_out_refclk_bus_out),
 
     .o_pll_lock_o_pll_lock                                   (syspll_lock),
     .o_syspll_c0_clk                                         (syspll_clk),
 
     .system_pll_lock_system_pll_lock                         (syspll_lock),
     .system_pll_clk_clk                                      (syspll_clk),
+    .system_pll_lock_os_system_pll_lock                      (syspll_lock),
+    .system_pll_clk_os_clk                                   (syspll_clk),
     .refclk_xcvr_clk                                         (fpga_refclk_in),
     .i_refclk_rdy_data                                       (1'b1),
     .dacfifo_bypass_bypass                                   (dacfifo_bypass),
@@ -393,9 +429,15 @@ module system_top #(
     .rx_ref_clk_clk                                          (fpga_refclk_in),
     .rx_sync_export                                          (fpga_syncout_0),
     .rx_sysref_export                                        (sysref2),
+    .rx_os_ref_clk_clk                                       (fpga_refclk_in),
+    .tx_os_ref_clk_clk                                       (fpga_refclk_in),
+    .rx_os_serial_data_i_rx_serial_data                      (rx_os_data[RX_OS_JESD_L-1:0]),
+    .rx_os_serial_data_n_i_rx_serial_data_n                  (rx_os_data_n[RX_OS_JESD_L-1:0]),
+    .rx_os_sync_export                                       (fpga_syncout_1),
+    .rx_os_sysref_export                                     (sysref2),
     .rx_device_clk_clk                                       (clkin6),
-    .mxfe_gpio_export                                        ({fpga_syncout_1_n,  // 14
-                                                               fpga_syncout_1_p,  // 13
+    .mxfe_gpio_export                                        ({1'b0,              // 14
+                                                               1'b0,              // 13
                                                                fpga_syncin_1_n,   // 12
                                                                fpga_syncin_1_p,   // 11
                                                                gpio}));           // 10:0

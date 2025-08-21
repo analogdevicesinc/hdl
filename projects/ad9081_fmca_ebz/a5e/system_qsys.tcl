@@ -5,6 +5,8 @@
 
 ## ADC FIFO depth in samples per converter
 set adc_fifo_samples_per_converter [expr $ad_project_params(RX_KS_PER_CHANNEL)*1024]
+## ADC OS FIFO depth in samples per converter
+set adc_os_fifo_samples_per_converter [expr $ad_project_params(RX_OS_KS_PER_CHANNEL)*1024]
 ## DAC FIFO depth in samples per converter
 set dac_fifo_samples_per_converter [expr $ad_project_params(TX_KS_PER_CHANNEL)*1024]
 

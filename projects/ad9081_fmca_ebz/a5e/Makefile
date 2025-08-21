@@ -16,13 +16,15 @@ M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
-LIB_DEPS += intel/adi_jesd204
-LIB_DEPS += intel/jesd204c/jesd204_f_tile_adapter_rx
-LIB_DEPS += intel/jesd204c/jesd204_f_tile_adapter_tx
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_dac
 LIB_DEPS += sysid_rom
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
+
+INTEL_LIB_DEPS += intel/adi_jesd204
+INTEL_LIB_DEPS += intel/jesd204c/jesd204_f_tile_adapter_rx
+INTEL_LIB_DEPS += intel/jesd204c/jesd204_f_tile_adapter_tx
+INTEL_LIB_DEPS += intel/common/f2sdram_adapter
 
 include ../../scripts/project-intel.mk

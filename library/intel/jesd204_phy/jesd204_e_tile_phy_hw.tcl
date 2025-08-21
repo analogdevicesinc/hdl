@@ -23,6 +23,7 @@ ad_ip_parameter NUM_OF_LANES POSITIVE 4 false
 ad_ip_parameter INPUT_PIPELINE_STAGES INTEGER 0 false
 ad_ip_parameter LANE_INVERT INTEGER 0 false
 ad_ip_parameter EXTERNAL_LINK_CLK BOOLEAN false false
+ad_ip_parameter INSTANTIATE_RESET_CONTROLLER BOOLEAN true false
 
 proc jesd204_e_tile_phy_composition_callback {} {
   set device [get_parameter_value "DEVICE"]
@@ -34,6 +35,7 @@ proc jesd204_e_tile_phy_composition_callback {} {
   set register_inputs [get_parameter_value "INPUT_PIPELINE_STAGES"]
   set lane_invert [get_parameter_value "LANE_INVERT"]
   set external_link_clk [get_parameter_value "EXTERNAL_LINK_CLK"]
+  set instantiate_reset_controller [get_parameter_value "INSTANTIATE_RESET_CONTROLLER"]
 
   if {$device != "Agilex 5"} {
     send_message error "Only Agilex 5 is supported."
@@ -115,18 +117,33 @@ proc jesd204_e_tile_phy_composition_callback {} {
   set_instance_parameter_value native_phy pldif_rx_clkout2_div 2
   set_instance_parameter_value native_phy rx_serdes_adapt_mode {auto}
 
-  # GTS Reset IP
-  add_instance gts_reset_phy intel_srcss_gts
-  set_instance_parameter_value gts_reset_phy NUM_BANKS_SHORELINE [expr int(ceil($num_of_lanes / 4.0))]
-  set_instance_parameter_value gts_reset_phy NUM_LANES_SHORELINE $num_of_lanes
+  if {$instantiate_reset_controller} {
+    # GTS Reset IP
+    add_instance gts_reset_phy intel_srcss_gts
+    set_instance_parameter_value gts_reset_phy NUM_BANKS_SHORELINE [expr int(ceil($num_of_lanes / 4.0))]
+    set_instance_parameter_value gts_reset_phy NUM_LANES_SHORELINE $num_of_lanes
 
-  add_connection gts_reset_phy.o_pma_cu_clk native_phy.i_pma_cu_clk
-  add_connection gts_reset_phy.o_src_rs_grant native_phy.i_src_rs_grant
-  add_connection native_phy.o_src_rs_req gts_reset_phy.i_src_rs_req
-  add_connection native_phy.o_refclk_bus_out gts_reset_phy.i_refclk_bus_out
+    add_connection gts_reset_phy.o_pma_cu_clk native_phy.i_pma_cu_clk
+    add_connection gts_reset_phy.o_src_rs_grant native_phy.i_src_rs_grant
+    add_connection native_phy.o_src_rs_req gts_reset_phy.i_src_rs_req
+    add_connection native_phy.o_refclk_bus_out gts_reset_phy.i_refclk_bus_out
 
-  add_interface gts_reset_src_rs_priority conduit end
-  set_interface_property gts_reset_src_rs_priority EXPORT_OF gts_reset_phy.i_src_rs_priority
+    add_interface gts_reset_src_rs_priority conduit end
+    set_interface_property gts_reset_src_rs_priority EXPORT_OF gts_reset_phy.i_src_rs_priority
+  } else {
+    # Use external reset controller
+    add_interface o_src_rs_req conduit end
+    set_interface_property o_src_rs_req EXPORT_OF native_phy.o_src_rs_req
+
+    add_interface o_refclk_bus_out conduit end
+    set_interface_property o_refclk_bus_out EXPORT_OF native_phy.o_refclk_bus_out
+
+    add_interface i_pma_cu_clk conduit end
+    set_interface_property i_pma_cu_clk EXPORT_OF native_phy.i_pma_cu_clk
+
+    add_interface i_src_rs_grant conduit end
+    set_interface_property i_src_rs_grant EXPORT_OF native_phy.i_src_rs_grant
+  }
 
   # Instantiate PHY glues (RX and TX)
   add_instance phy_glue jesd204_phy_glue

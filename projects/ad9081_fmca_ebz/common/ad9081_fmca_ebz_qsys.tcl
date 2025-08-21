@@ -41,8 +41,46 @@ set RX_SAMPLES_PER_FRAME $RX_JESD_S
 set RX_SAMPLE_WIDTH      $RX_JESD_NP
 set RX_DMA_SAMPLE_WIDTH  16
 
+set RX_OCTETS_PER_FRAME    [expr $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_FRAME * $RX_SAMPLE_WIDTH / (8 * $RX_NUM_OF_LANES)] ; # F
+if {$RX_OCTETS_PER_FRAME > $RX_TPL_DATA_PATH_WIDTH} {
+  set RX_TPL_DATA_PATH_WIDTH $RX_OCTETS_PER_FRAME
+}
+
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8*$RX_TPL_DATA_PATH_WIDTH / \
                                 ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
+
+
+# RX OS parameters
+set RX_OS_NUM_OF_LINKS $ad_project_params(RX_OS_NUM_LINKS)
+
+# RX OS JESD parameter per link
+set RX_OS_JESD_M     $ad_project_params(RX_OS_JESD_M)
+set RX_OS_JESD_L     $ad_project_params(RX_OS_JESD_L)
+set RX_OS_JESD_S     $ad_project_params(RX_OS_JESD_S)
+set RX_OS_JESD_NP    $ad_project_params(RX_OS_JESD_NP)
+
+if {$JESD_MODE == "8B10B"} {
+  set RX_OS_DATA_PATH_WIDTH 4
+  set RX_OS_TPL_DATA_PATH_WIDTH 4
+  if {$RX_OS_JESD_NP==12} {
+    set RX_OS_TPL_DATA_PATH_WIDTH 6
+  }
+} else {
+  set RX_OS_DATA_PATH_WIDTH 8
+  set RX_OS_TPL_DATA_PATH_WIDTH 8
+  if {$RX_OS_JESD_NP==12} {
+    set RX_OS_TPL_DATA_PATH_WIDTH 12
+  }
+}
+
+set RX_OS_NUM_OF_LANES      [expr $RX_OS_JESD_L * $RX_OS_NUM_OF_LINKS]
+set RX_OS_NUM_OF_CONVERTERS [expr $RX_OS_JESD_M * $RX_OS_NUM_OF_LINKS]
+set RX_OS_SAMPLES_PER_FRAME $RX_OS_JESD_S
+set RX_OS_SAMPLE_WIDTH      $RX_OS_JESD_NP
+set RX_OS_DMA_SAMPLE_WIDTH  16
+
+set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8*$RX_OS_TPL_DATA_PATH_WIDTH / \
+                                ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)]
 
 # TX parameters
 set TX_NUM_OF_LINKS $ad_project_params(TX_NUM_LINKS)
@@ -92,6 +130,11 @@ set adc_data_width [expr 8*$RX_TPL_DATA_PATH_WIDTH*$RX_NUM_OF_LANES*$RX_DMA_SAMP
 set adc_dma_data_width $adc_data_width
 set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
 
+set adc_os_fifo_name mxfe_os_adc_fifo
+set adc_os_data_width [expr 8*$RX_OS_TPL_DATA_PATH_WIDTH*$RX_OS_NUM_OF_LANES*$RX_OS_DMA_SAMPLE_WIDTH/$RX_OS_SAMPLE_WIDTH]
+set adc_os_dma_data_width $adc_os_data_width
+set adc_os_fifo_address_width [expr int(ceil(log(($adc_os_fifo_samples_per_converter*$RX_OS_NUM_OF_CONVERTERS) / ($adc_os_data_width/$RX_OS_DMA_SAMPLE_WIDTH))/log(2)))]
+
 set dac_fifo_name mxfe_dac_fifo
 set dac_data_width [expr 8*$TX_TPL_DATA_PATH_WIDTH*$TX_NUM_OF_LANES*$TX_DMA_SAMPLE_WIDTH/$TX_SAMPLE_WIDTH]
 set dac_dma_data_width $dac_data_width
@@ -121,15 +164,64 @@ if {$EXTERNAL_PHY} {
   set_instance_parameter_value jesd204_phy {NUM_OF_LANES} $RX_NUM_OF_LANES
   set_instance_parameter_value jesd204_phy {INPUT_PIPELINE_STAGES} {2}
   set_instance_parameter_value jesd204_phy {EXTERNAL_LINK_CLK} {1}
+  set_instance_parameter_value jesd204_phy {INSTANTIATE_RESET_CONTROLLER} {0}
 
-  add_interface gts_reset_src_rs_priority conduit end
-  set_interface_property gts_reset_src_rs_priority EXPORT_OF jesd204_phy.gts_reset_src_rs_priority
+  # add_interface gts_reset_src_rs_priority conduit end
+  # set_interface_property gts_reset_src_rs_priority EXPORT_OF jesd204_phy.gts_reset_src_rs_priority
 
   add_interface system_pll_clk clock sink
   set_interface_property system_pll_clk EXPORT_OF jesd204_phy.system_pll_clk
 
   add_interface system_pll_lock conduit end
   set_interface_property system_pll_lock EXPORT_OF jesd204_phy.system_pll_lock
+
+
+  add_instance jesd204_phy_os jesd204_e_tile_phy
+  set_instance_parameter_value jesd204_phy_os {LINK_MODE} $LINK_MODE
+  set_instance_parameter_value jesd204_phy_os {LANE_RATE} $RX_LANE_RATE
+  set_instance_parameter_value jesd204_phy_os {REFCLK_FREQUENCY} $REF_CLK_RATE
+  set_instance_parameter_value jesd204_phy_os {NUM_OF_LANES} $RX_OS_NUM_OF_LANES
+  set_instance_parameter_value jesd204_phy_os {INPUT_PIPELINE_STAGES} {2}
+  set_instance_parameter_value jesd204_phy_os {EXTERNAL_LINK_CLK} {1}
+  set_instance_parameter_value jesd204_phy_os {INSTANTIATE_RESET_CONTROLLER} {0}
+
+  # add_interface gts_reset_src_rs_priority_os conduit end
+  # set_interface_property gts_reset_src_rs_priority_os EXPORT_OF jesd204_phy_os.gts_reset_src_rs_priority
+
+  add_interface system_pll_clk_os clock sink
+  set_interface_property system_pll_clk_os EXPORT_OF jesd204_phy_os.system_pll_clk
+
+  add_interface system_pll_lock_os conduit end
+  set_interface_property system_pll_lock_os EXPORT_OF jesd204_phy_os.system_pll_lock
+
+  # GTS reset IP
+  add_instance gts_reset_phy intel_srcss_gts
+  set_instance_parameter_value gts_reset_phy NUM_BANKS_SHORELINE [expr int(ceil(($RX_NUM_OF_LANES + $RX_OS_NUM_OF_LANES) / 4.0))]
+  set_instance_parameter_value gts_reset_phy NUM_LANES_SHORELINE [expr $RX_NUM_OF_LANES + $RX_OS_NUM_OF_LANES]
+
+  add_interface gts_reset_o_pma_cu_clk conduit end
+  add_interface gts_reset_o_src_rs_grant conduit end
+  add_interface gts_reset_i_src_rs_req conduit end
+  add_interface gts_reset_i_refclk_bus_out conduit end
+  add_interface gts_reset_src_rs_priority conduit end
+
+  set_interface_property gts_reset_o_pma_cu_clk EXPORT_OF gts_reset_phy.o_pma_cu_clk
+  set_interface_property gts_reset_o_src_rs_grant EXPORT_OF gts_reset_phy.o_src_rs_grant
+  set_interface_property gts_reset_i_src_rs_req EXPORT_OF gts_reset_phy.i_src_rs_req
+  set_interface_property gts_reset_i_refclk_bus_out EXPORT_OF gts_reset_phy.i_refclk_bus_out
+  set_interface_property gts_reset_src_rs_priority EXPORT_OF gts_reset_phy.i_src_rs_priority
+
+  foreach phy {jesd204_phy jesd204_phy_os} {
+    add_interface ${phy}_i_pma_cu_clk conduit end
+    add_interface ${phy}_i_src_rs_grant conduit end
+    add_interface ${phy}_o_src_rs_req conduit end
+    add_interface ${phy}_o_refclk_bus_out conduit end
+
+    set_interface_property ${phy}_i_pma_cu_clk EXPORT_OF ${phy}.i_pma_cu_clk
+    set_interface_property ${phy}_i_src_rs_grant EXPORT_OF ${phy}.i_src_rs_grant
+    set_interface_property ${phy}_o_src_rs_req EXPORT_OF ${phy}.o_src_rs_req
+    set_interface_property ${phy}_o_refclk_bus_out EXPORT_OF ${phy}.o_refclk_bus_out
+  }
 }
 
 # RX JESD204 PHY-Link layer
@@ -160,6 +252,35 @@ set_instance_parameter_value mxfe_rx_tpl {CONVERTER_RESOLUTION} $RX_SAMPLE_WIDTH
 set_instance_parameter_value mxfe_rx_tpl {TWOS_COMPLEMENT} {1}
 set_instance_parameter_value mxfe_rx_tpl {OCTETS_PER_BEAT} $RX_TPL_DATA_PATH_WIDTH
 set_instance_parameter_value mxfe_rx_tpl {DMA_BITS_PER_SAMPLE} $RX_DMA_SAMPLE_WIDTH
+
+# RX OS JESD204 PHY-Link layer
+
+add_instance mxfe_rx_os_jesd204 adi_jesd204
+set_instance_parameter_value mxfe_rx_os_jesd204 {ID} {0}
+set_instance_parameter_value mxfe_rx_os_jesd204 {LINK_MODE} $LINK_MODE
+set_instance_parameter_value mxfe_rx_os_jesd204 {TX_OR_RX_N} {0}
+set_instance_parameter_value mxfe_rx_os_jesd204 {SOFT_PCS} {true}
+set_instance_parameter_value mxfe_rx_os_jesd204 {LANE_RATE} $RX_LANE_RATE
+set_instance_parameter_value mxfe_rx_os_jesd204 {SYSCLK_FREQUENCY} {100.0}
+set_instance_parameter_value mxfe_rx_os_jesd204 {REFCLK_FREQUENCY} $REF_CLK_RATE
+set_instance_parameter_value mxfe_rx_os_jesd204 {INPUT_PIPELINE_STAGES} {2}
+set_instance_parameter_value mxfe_rx_os_jesd204 {NUM_OF_LANES} $RX_OS_NUM_OF_LANES
+set_instance_parameter_value mxfe_rx_os_jesd204 {EXT_DEVICE_CLK_EN} {1}
+set_instance_parameter_value mxfe_rx_os_jesd204 {TPL_DATA_PATH_WIDTH} $RX_OS_TPL_DATA_PATH_WIDTH
+set_instance_parameter_value mxfe_rx_os_jesd204 {DATA_PATH_WIDTH} $RX_OS_DATA_PATH_WIDTH
+set_instance_parameter_value mxfe_rx_os_jesd204 {EXTERNAL_PHY} $EXTERNAL_PHY
+# set_instance_parameter_value mxfe_rx_jesd204 {LANE_MAP} {5 7 0 1 2 3 4 6}
+
+
+add_instance mxfe_rx_os_tpl ad_ip_jesd204_tpl_adc
+set_instance_parameter_value mxfe_rx_os_tpl {ID} {0}
+set_instance_parameter_value mxfe_rx_os_tpl {NUM_CHANNELS} $RX_OS_NUM_OF_CONVERTERS
+set_instance_parameter_value mxfe_rx_os_tpl {NUM_LANES} $RX_OS_NUM_OF_LANES
+set_instance_parameter_value mxfe_rx_os_tpl {BITS_PER_SAMPLE} $RX_OS_SAMPLE_WIDTH
+set_instance_parameter_value mxfe_rx_os_tpl {CONVERTER_RESOLUTION} $RX_OS_SAMPLE_WIDTH
+set_instance_parameter_value mxfe_rx_os_tpl {TWOS_COMPLEMENT} {1}
+set_instance_parameter_value mxfe_rx_os_tpl {OCTETS_PER_BEAT} $RX_OS_TPL_DATA_PATH_WIDTH
+set_instance_parameter_value mxfe_rx_os_tpl {DMA_BITS_PER_SAMPLE} $RX_OS_DMA_SAMPLE_WIDTH
 
 # TX JESD204 PHY+Link
 
@@ -202,10 +323,16 @@ set_instance_parameter_value mxfe_rx_cpack {NUM_OF_CHANNELS} $RX_NUM_OF_CONVERTE
 set_instance_parameter_value mxfe_rx_cpack {SAMPLES_PER_CHANNEL} $RX_SAMPLES_PER_CHANNEL
 set_instance_parameter_value mxfe_rx_cpack {SAMPLE_DATA_WIDTH} $RX_DMA_SAMPLE_WIDTH
 
+add_instance mxfe_rx_os_cpack util_cpack2
+set_instance_parameter_value mxfe_rx_os_cpack {NUM_OF_CHANNELS} $RX_OS_NUM_OF_CONVERTERS
+set_instance_parameter_value mxfe_rx_os_cpack {SAMPLES_PER_CHANNEL} $RX_OS_SAMPLES_PER_CHANNEL
+set_instance_parameter_value mxfe_rx_os_cpack {SAMPLE_DATA_WIDTH} $RX_OS_DMA_SAMPLE_WIDTH
+
 # RX and TX data offload buffers
 
-ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
+ad_adcfifo_create $adc_fifo_name    $adc_data_width    $adc_dma_data_width    $adc_fifo_address_width
+ad_adcfifo_create $adc_os_fifo_name $adc_os_data_width $adc_os_dma_data_width $adc_os_fifo_address_width
+ad_dacfifo_create $dac_fifo_name    $dac_data_width    $dac_dma_data_width    $dac_fifo_address_width
 
 add_interface dacfifo_bypass conduit end
 set_interface_property dacfifo_bypass EXPORT_OF $dac_fifo_name.if_bypass
@@ -245,6 +372,22 @@ set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_SRC} {1}
 set_instance_parameter_value mxfe_rx_dma {DMA_AXI_PROTOCOL_DEST} {0}
 set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {2048}
 
+add_instance mxfe_rx_os_dma axi_dmac
+set_instance_parameter_value mxfe_rx_os_dma {ID} {0}
+set_instance_parameter_value mxfe_rx_os_dma {DMA_DATA_WIDTH_SRC} $adc_os_dma_data_width
+set_instance_parameter_value mxfe_rx_os_dma {DMA_DATA_WIDTH_DEST} $adc_os_dma_data_width
+set_instance_parameter_value mxfe_rx_os_dma {DMA_LENGTH_WIDTH} {24}
+set_instance_parameter_value mxfe_rx_os_dma {DMA_2D_TRANSFER} {0}
+set_instance_parameter_value mxfe_rx_os_dma {AXI_SLICE_DEST} {1}
+set_instance_parameter_value mxfe_rx_os_dma {AXI_SLICE_SRC} {1}
+set_instance_parameter_value mxfe_rx_os_dma {SYNC_TRANSFER_START} {0}
+set_instance_parameter_value mxfe_rx_os_dma {CYCLIC} {0}
+set_instance_parameter_value mxfe_rx_os_dma {DMA_TYPE_DEST} {0}
+set_instance_parameter_value mxfe_rx_os_dma {DMA_TYPE_SRC} {1}
+# set_instance_parameter_value mxfe_rx_dma {FIFO_SIZE} {8}
+set_instance_parameter_value mxfe_rx_os_dma {DMA_AXI_PROTOCOL_DEST} {0}
+set_instance_parameter_value mxfe_rx_os_dma {MAX_BYTES_PER_BURST} {2048}
+
 # mxfe gpio
 
 add_instance mxfe_gpio altera_avalon_pio
@@ -265,6 +408,9 @@ set_interface_property mxfe_gpio EXPORT_OF mxfe_gpio.external_connection
 add_connection sys_clk.clk mxfe_rx_jesd204.sys_clk
 add_connection sys_clk.clk mxfe_rx_tpl.s_axi_clock
 add_connection sys_clk.clk mxfe_rx_dma.s_axi_clock
+add_connection sys_clk.clk mxfe_rx_os_jesd204.sys_clk
+add_connection sys_clk.clk mxfe_rx_os_tpl.s_axi_clock
+add_connection sys_clk.clk mxfe_rx_os_dma.s_axi_clock
 add_connection sys_clk.clk mxfe_tx_jesd204.sys_clk
 add_connection sys_clk.clk mxfe_tx_tpl.s_axi_clock
 add_connection sys_clk.clk mxfe_tx_dma.s_axi_clock
@@ -272,6 +418,9 @@ add_connection sys_clk.clk mxfe_tx_dma.s_axi_clock
 add_connection sys_clk.clk_reset mxfe_rx_jesd204.sys_resetn
 add_connection sys_clk.clk_reset mxfe_rx_tpl.s_axi_reset
 add_connection sys_clk.clk_reset mxfe_rx_dma.s_axi_reset
+add_connection sys_clk.clk_reset mxfe_rx_os_jesd204.sys_resetn
+add_connection sys_clk.clk_reset mxfe_rx_os_tpl.s_axi_reset
+add_connection sys_clk.clk_reset mxfe_rx_os_dma.s_axi_reset
 add_connection sys_clk.clk_reset mxfe_tx_jesd204.sys_resetn
 add_connection sys_clk.clk_reset mxfe_tx_tpl.s_axi_reset
 add_connection sys_clk.clk_reset mxfe_tx_dma.s_axi_reset
@@ -280,11 +429,16 @@ add_connection sys_clk.clk_reset mxfe_tx_dma.s_axi_reset
 
 add_connection rx_device_clk.out_clk mxfe_rx_jesd204.device_clk
 add_connection rx_device_clk.out_clk mxfe_rx_tpl.link_clk
+add_connection rx_device_clk.out_clk mxfe_rx_os_jesd204.device_clk
+add_connection rx_device_clk.out_clk mxfe_rx_os_tpl.link_clk
 if {$EXTERNAL_PHY} {
   add_connection mxfe_rx_jesd204.link_clk jesd204_phy.rx_link_clock
+  add_connection mxfe_rx_jesd204.link_clk jesd204_phy_os.rx_link_clock
 }
 add_connection rx_device_clk.out_clk mxfe_rx_cpack.clk
 add_connection rx_device_clk.out_clk $adc_fifo_name.if_adc_clk
+add_connection rx_device_clk.out_clk mxfe_rx_os_cpack.clk
+add_connection rx_device_clk.out_clk $adc_os_fifo_name.if_adc_clk
 
 
 add_connection tx_device_clk.out_clk mxfe_tx_jesd204.device_clk
@@ -299,6 +453,9 @@ add_connection tx_device_clk.out_clk $dac_fifo_name.if_dac_clk
 add_connection mxfe_rx_jesd204.link_reset mxfe_rx_cpack.reset
 add_connection mxfe_rx_jesd204.link_reset $adc_fifo_name.if_adc_rst
 
+add_connection mxfe_rx_jesd204.link_reset mxfe_rx_os_cpack.reset
+add_connection mxfe_rx_jesd204.link_reset $adc_os_fifo_name.if_adc_rst
+
 add_connection mxfe_tx_jesd204.link_reset mxfe_tx_upack.reset
 add_connection mxfe_tx_jesd204.link_reset $dac_fifo_name.if_dac_rst
 
@@ -309,6 +466,12 @@ add_connection sys_dma_clk.clk mxfe_rx_dma.if_s_axis_aclk
 add_connection sys_dma_clk.clk mxfe_rx_dma.m_dest_axi_clock
 
 add_connection sys_dma_clk.clk_reset mxfe_rx_dma.m_dest_axi_reset
+
+add_connection sys_dma_clk.clk $adc_os_fifo_name.if_dma_clk
+add_connection sys_dma_clk.clk mxfe_rx_os_dma.if_s_axis_aclk
+add_connection sys_dma_clk.clk mxfe_rx_os_dma.m_dest_axi_clock
+
+add_connection sys_dma_clk.clk_reset mxfe_rx_os_dma.m_dest_axi_reset
 
 add_connection sys_dma_clk.clk $dac_fifo_name.if_dma_clk
 add_connection sys_dma_clk.clk mxfe_tx_dma.if_m_axis_aclk
@@ -323,6 +486,8 @@ add_connection sys_dma_clk.clk_reset $dac_fifo_name.if_dma_rst
 
 add_interface rx_sysref       conduit end
 add_interface rx_sync         conduit end
+add_interface rx_os_sysref    conduit end
+add_interface rx_os_sync      conduit end
 add_interface rx_device_clk   clock   sink
 add_interface tx_sysref       conduit end
 add_interface tx_sync         conduit end
@@ -330,19 +495,25 @@ add_interface tx_device_clk   clock   sink
 
 set_interface_property rx_sysref        EXPORT_OF mxfe_rx_jesd204.sysref
 set_interface_property rx_sync          EXPORT_OF mxfe_rx_jesd204.sync
+set_interface_property rx_os_sysref     EXPORT_OF mxfe_rx_os_jesd204.sysref
+set_interface_property rx_os_sync       EXPORT_OF mxfe_rx_os_jesd204.sync
 set_interface_property rx_device_clk    EXPORT_OF rx_device_clk.in_clk
 set_interface_property tx_sysref        EXPORT_OF mxfe_tx_jesd204.sysref
 set_interface_property tx_sync          EXPORT_OF mxfe_tx_jesd204.sync
 set_interface_property tx_device_clk    EXPORT_OF tx_device_clk.in_clk
 
-add_interface rx_ref_clk      clock   sink
-add_interface rx_serial_data  conduit end
-add_interface tx_ref_clk      clock   sink
-add_interface tx_serial_data  conduit end
+add_interface rx_ref_clk         clock   sink
+add_interface rx_serial_data     conduit end
+add_interface rx_os_ref_clk      clock   sink
+add_interface tx_os_ref_clk      clock   sink
+add_interface rx_os_serial_data  conduit end
+add_interface tx_ref_clk         clock   sink
+add_interface tx_serial_data     conduit end
 
 if {$TRANSCEIVER_TYPE == "F-Tile" || $TRANSCEIVER_TYPE == "E-Tile"} {
-  add_interface tx_serial_data_n   conduit end
-  add_interface rx_serial_data_n   conduit end
+  add_interface tx_serial_data_n     conduit end
+  add_interface rx_serial_data_n     conduit end
+  add_interface rx_os_serial_data_n  conduit end
 }
 
 if {!$EXTERNAL_PHY} {
@@ -379,16 +550,30 @@ if {!$EXTERNAL_PHY} {
   add_connection jesd204_phy.rx_ready      mxfe_rx_jesd204.ready
   add_connection jesd204_phy.rx_is_lockedtodata mxfe_rx_jesd204.rx_is_lockedtodata
 
+  add_connection mxfe_rx_os_jesd204.if_up_rst jesd204_phy_os.rx_link_reset
+  add_connection mxfe_rx_os_jesd204.reset     jesd204_phy_os.rx_reset
+  add_connection jesd204_phy_os.rx_reset_ack  mxfe_rx_os_jesd204.reset_ack
+  add_connection jesd204_phy_os.rx_ready      mxfe_rx_os_jesd204.ready
+  add_connection jesd204_phy_os.rx_is_lockedtodata mxfe_rx_os_jesd204.rx_is_lockedtodata
+
   for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
     add_connection jesd204_phy.phy_rx_${i} mxfe_rx_jesd204.rx_phy${i}
   }
 
-  set_interface_property rx_ref_clk       EXPORT_OF jesd204_phy.rx_ref_clk
-  set_interface_property rx_serial_data   EXPORT_OF jesd204_phy.rx_serial_data
-  set_interface_property rx_serial_data_n EXPORT_OF jesd204_phy.rx_serial_data_n
-  set_interface_property tx_ref_clk       EXPORT_OF jesd204_phy.tx_ref_clk
-  set_interface_property tx_serial_data   EXPORT_OF jesd204_phy.tx_serial_data
-  set_interface_property tx_serial_data_n EXPORT_OF jesd204_phy.tx_serial_data_n
+  for {set i 0} {$i < $RX_OS_NUM_OF_LANES} {incr i} {
+    add_connection jesd204_phy_os.phy_rx_${i} mxfe_rx_os_jesd204.rx_phy${i}
+  }
+
+  set_interface_property rx_ref_clk          EXPORT_OF jesd204_phy.rx_ref_clk
+  set_interface_property rx_serial_data      EXPORT_OF jesd204_phy.rx_serial_data
+  set_interface_property rx_serial_data_n    EXPORT_OF jesd204_phy.rx_serial_data_n
+  set_interface_property rx_os_ref_clk       EXPORT_OF jesd204_phy_os.rx_ref_clk
+  set_interface_property rx_os_serial_data   EXPORT_OF jesd204_phy_os.rx_serial_data
+  set_interface_property rx_os_serial_data_n EXPORT_OF jesd204_phy_os.rx_serial_data_n
+  set_interface_property tx_os_ref_clk       EXPORT_OF jesd204_phy_os.tx_ref_clk
+  set_interface_property tx_ref_clk          EXPORT_OF jesd204_phy.tx_ref_clk
+  set_interface_property tx_serial_data      EXPORT_OF jesd204_phy.tx_serial_data
+  set_interface_property tx_serial_data_n    EXPORT_OF jesd204_phy.tx_serial_data_n
 }
 
 #
@@ -412,6 +597,27 @@ add_connection $adc_fifo_name.m_axis mxfe_rx_dma.s_axis
 # RX dma to HPS
 if {$TRANSCEIVER_TYPE == "E-Tile"} {
   ad_dma_interconnect mxfe_rx_dma.m_dest_axi 0x0000000 $adc_dma_data_width
+} else {
+  ad_dma_interconnect mxfe_rx_dma.m_dest_axi
+}
+
+# RX OS link to tpl
+add_connection mxfe_rx_os_jesd204.link_sof mxfe_rx_os_tpl.if_link_sof
+add_connection mxfe_rx_os_jesd204.link_data mxfe_rx_os_tpl.link_data
+# RX OS tpl to cpack
+for {set i 0} {$i < $RX_OS_NUM_OF_CONVERTERS} {incr i} {
+  add_connection mxfe_rx_os_tpl.adc_ch_$i mxfe_rx_os_cpack.adc_ch_$i
+}
+add_connection mxfe_rx_os_tpl.if_adc_dovf $adc_os_fifo_name.if_adc_wovf
+# RX OS cpack to offload
+add_connection mxfe_rx_os_cpack.if_packed_fifo_wr_en $adc_os_fifo_name.if_adc_wr
+add_connection mxfe_rx_os_cpack.if_packed_fifo_wr_data $adc_os_fifo_name.if_adc_wdata
+# RX OS offload to dma
+add_connection $adc_os_fifo_name.if_dma_xfer_req mxfe_rx_os_dma.if_s_axis_xfer_req
+add_connection $adc_os_fifo_name.m_axis mxfe_rx_os_dma.s_axis
+# RX OS dma to HPS
+if {$TRANSCEIVER_TYPE == "E-Tile"} {
+  ad_dma_interconnect mxfe_rx_os_dma.m_dest_axi 0x0000000 $adc_os_dma_data_width
 } else {
   ad_dma_interconnect mxfe_rx_dma.m_dest_axi
 }
@@ -490,13 +696,20 @@ if {!$EXTERNAL_PHY} {
 } else {
   # One bridge for rx_adxcvr, the other for tx_adxcvr
   ad_cpu_interconnect 0x00000000 jesd204_phy.reconfig_avmm "avl_mm_bridge_0" 0x01000000 22
+  ad_cpu_interconnect 0x00200000 jesd204_phy_os.reconfig_avmm "avl_mm_bridge_0"
   # ad_cpu_interconnect 0x00000000 jesd204_phy.reconfig_avmm "avl_mm_bridge_1" 0x02000000 22
   set_instance_parameter_value avl_mm_bridge_0 {MAX_PENDING_RESPONSES} {1}
   # set_instance_parameter_value avl_mm_bridge_1 {MAX_PENDING_RESPONSES} {1}
   add_connection sys_clk.clk jesd204_phy.reconfig_clk
   add_connection sys_clk.clk_reset jesd204_phy.reconfig_reset
+  add_connection sys_clk.clk jesd204_phy_os.reconfig_clk
+  add_connection sys_clk.clk_reset jesd204_phy_os.reconfig_reset
 }
 
+ad_cpu_interconnect 0x000B0000 mxfe_rx_os_jesd204.link_reconfig
+ad_cpu_interconnect 0x000B4000 mxfe_rx_os_jesd204.link_management
+ad_cpu_interconnect 0x000B8000 mxfe_rx_os_tpl.s_axi
+ad_cpu_interconnect 0x000BC000 mxfe_rx_os_dma.s_axi
 ad_cpu_interconnect 0x000C0000 mxfe_rx_jesd204.link_reconfig
 ad_cpu_interconnect 0x000C4000 mxfe_rx_jesd204.link_management
 ad_cpu_interconnect 0x000C8000 mxfe_tx_jesd204.link_reconfig
@@ -511,6 +724,8 @@ ad_cpu_interconnect 0x000E0000 mxfe_gpio.s1
 ## interrupts
 #
 
+ad_cpu_interrupt  9  mxfe_rx_os_dma.interrupt_sender
+ad_cpu_interrupt 10  mxfe_rx_os_jesd204.interrupt
 ad_cpu_interrupt 11  mxfe_rx_dma.interrupt_sender
 ad_cpu_interrupt 12  mxfe_tx_dma.interrupt_sender
 ad_cpu_interrupt 13  mxfe_rx_jesd204.interrupt
