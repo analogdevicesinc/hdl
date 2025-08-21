@@ -98,6 +98,7 @@
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
+<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
@@ -446,6 +447,31 @@ double data rate (DDR) operation.</p>
 <p>The data path and clock domains are depicted in the below diagram:</p>
 <a class="reference internal image-reference" href="../../_images/ada4355_fmc_zed_block_diagram.svg"><img alt="ADA4355_FMC/ZedBoard block diagram" class="align-center" src="../../_images/ada4355_fmc_zed_block_diagram.svg" width="800" /></a>
 </section>
+<section id="configuration-modes">
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
+<p>The BUFMRCE_EN configuration parameter defines the pinout used which is
+differentiated by how the frame clock signals are distributed.
+For one pinout version, the XDC constraints are not optimized for ISERDES,
+as the frame clock signals are located in a different I/O bank from the other
+related signals. To address this, a BUFMRCE buffer is used to distribute the
+frame clock to all ISERDES instances.</p>
+<p>By default it is set to 0. Depending on the pinout, some hardware modifications
+need to be done on the board and/or <code class="docutils literal notranslate"><span class="pre">make</span></code> command:</p>
+<p>In case of the pinout with optimized constraints:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>In case of the pinout with non-optimized constraints:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
@@ -531,38 +557,90 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>gpio_1p8va_en</p></td>
+<tr class="row-odd"><td><p>apd_supp_en **</p></td>
+<td><p>INOUT</p></td>
+<td><p>42</p></td>
+<td><p>96</p></td>
+</tr>
+<tr class="row-even"><td><p>trig_fmc_out **</p></td>
+<td><p>OUT</p></td>
+<td><p>41</p></td>
+<td><p>95</p></td>
+</tr>
+<tr class="row-odd"><td><p>trig_fmc_in **</p></td>
+<td><p>IN</p></td>
+<td><p>40</p></td>
+<td><p>94</p></td>
+</tr>
+<tr class="row-even"><td><p>freq_sel1 **</p></td>
+<td><p>INOUT</p></td>
+<td><p>39</p></td>
+<td><p>93</p></td>
+</tr>
+<tr class="row-odd"><td><p>gain_sel3 **</p></td>
+<td><p>INOUT</p></td>
+<td><p>38</p></td>
+<td><p>92</p></td>
+</tr>
+<tr class="row-even"><td><p>gpio_test **</p></td>
+<td><p>INOUT</p></td>
+<td><p>37</p></td>
+<td><p>91</p></td>
+</tr>
+<tr class="row-odd"><td><p>gpio_1p8va_en *</p></td>
 <td><p>IN</p></td>
 <td><p>37</p></td>
 <td><p>91</p></td>
 </tr>
-<tr class="row-even"><td><p>gain_sel2</p></td>
+<tr class="row-even"><td><p>gain_sel2 **</p></td>
+<td><p>INOUT</p></td>
+<td><p>36</p></td>
+<td><p>90</p></td>
+</tr>
+<tr class="row-odd"><td><p>gain_sel2 *</p></td>
 <td><p>IN</p></td>
 <td><p>36</p></td>
 <td><p>90</p></td>
 </tr>
-<tr class="row-odd"><td><p>gpio_1p8vd_en</p></td>
+<tr class="row-even"><td><p>gpio_vld_en **</p></td>
 <td><p>INOUT</p></td>
 <td><p>35</p></td>
 <td><p>89</p></td>
 </tr>
-<tr class="row-even"><td><p>fsel</p></td>
+<tr class="row-odd"><td><p>gpio_1p8vd_en *</p></td>
+<td><p>INOUT</p></td>
+<td><p>35</p></td>
+<td><p>89</p></td>
+</tr>
+<tr class="row-even"><td><p>freq_sel0 **</p></td>
 <td><p>INOUT</p></td>
 <td><p>34</p></td>
 <td><p>88</p></td>
 </tr>
-<tr class="row-odd"><td><p>gain_sel1</p></td>
+<tr class="row-odd"><td><p>fsel *</p></td>
+<td><p>INOUT</p></td>
+<td><p>34</p></td>
+<td><p>88</p></td>
+</tr>
+<tr class="row-even"><td><p>gain_sel1</p></td>
 <td><p>INOUT</p></td>
 <td><p>33</p></td>
 <td><p>87</p></td>
 </tr>
-<tr class="row-even"><td><p>gain_sel0</p></td>
+<tr class="row-odd"><td><p>gain_sel0</p></td>
 <td><p>INOUT</p></td>
 <td><p>32</p></td>
 <td><p>86</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for BUFMRCE_EN=1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for BUFMRCE_EN=0</p></li>
+</ul>
 </div>
 </section>
 <section id="interrupts">
@@ -630,6 +708,7 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
+<p>Example for building with the default configuration (BUFMRCE_EN=0):</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
@@ -642,7 +721,20 @@ the HDL repository.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<div class="clear-left"></div></div></div><p>Example for building with parameters:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ada4355_fmc/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The result of the build, if parameters were used, will be in a folder named
+by the configuration used.</p>
+<p>If the following command was run</p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">BUFMRCE_EN=1</span></code></p>
+<p>then the folder name will be: <code class="docutils literal notranslate"><span class="pre">BUFMRCEEN1</span></code>.</p>
+<p>Check <a class="reference internal" href="#configuration-modes">Configuration modes</a> for more details.</p>
+<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
