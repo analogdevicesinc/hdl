@@ -30,7 +30,6 @@ proc p_elaboration {} {
   ad_interface clock    clk    input 1
   ad_interface reset-n  resetn input 1 if_clk
 
-  ad_interface signal spi_active input 1 active
   ad_interface signal data_ready output 1 if_pwm
 
   ad_interface clock s_sclk   input 1 sclk
