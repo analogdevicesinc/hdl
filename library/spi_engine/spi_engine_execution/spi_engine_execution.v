@@ -49,8 +49,6 @@ module spi_engine_execution #(
   input clk,
   input resetn,
 
-  output reg active,
-
   output cmd_ready,
   input cmd_valid,
   input [15:0] cmd,
@@ -225,17 +223,6 @@ module spi_engine_execution #(
   always @(posedge clk) begin
     if (cmd_ready & cmd_valid)
      cmd_d1 <= cmd;
-  end
-
-  always @(posedge clk) begin
-    if (resetn == 1'b0) begin
-      active <= 1'b0;
-    end else begin
-      if (exec_cmd == 1'b1)
-        active <= 1'b1;
-      else if (sync_ready == 1'b1 && sync_valid == 1'b1)
-        active <= 1'b0;
-    end
   end
 
   // Load the interface configurations from the 'Configuration Write'
