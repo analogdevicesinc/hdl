@@ -91,6 +91,7 @@ set a1_dv_are               [expr $a1_tlvds/2];             # Data valid after t
 set a1_dv_bfe               [expr $a1_tlvds/2 - $a1_tdata]; # Data valid before the falling clock edge
 set a1_dv_afe               [expr $a1_tlvds/2];             # Data valid after the falling clock edge
 set a1_input_ports          "data_in_a1_p[*]";     # List of input ports
+set fclk_a1_input_ports     "fclk_a1_p";     # List of input ports
 
 set a2_input_clock          ref_clk_a2;      # Name of input clock
 set a2_input_clock_period   4;    # Period of input clock (full-period)
@@ -101,17 +102,34 @@ set a2_dv_are               [expr $a2_tlvds/2];             # Data valid after t
 set a2_dv_bfe               [expr $a2_tlvds/2 - $a2_tdata]; # Data valid before the falling clock edge
 set a2_dv_afe               [expr $a2_tlvds/2];             # Data valid after the falling clock edge
 set a2_input_ports          "data_in_a2_p[*]";     # List of input ports
+set fclk_a2_input_ports     "fclk_a2_p";     # List of input ports
 
 # # Input Delay Constraint
+
 set_input_delay -clock $a1_input_clock -max [expr $a1_input_clock_period/2 - $a1_dv_bfe]    [get_ports $a1_input_ports];
 set_input_delay -clock $a1_input_clock -min $a1_dv_are                                      [get_ports $a1_input_ports];
 set_input_delay -clock $a1_input_clock -max [expr $a1_input_clock_period/2 - $a1_dv_bre]    [get_ports $a1_input_ports] -clock_fall -add_delay;
 set_input_delay -clock $a1_input_clock -min $a1_dv_afe                                      [get_ports $a1_input_ports] -clock_fall -add_delay;
 
+set_input_delay -clock $a1_input_clock -max [expr $a1_input_clock_period/2 - $a1_dv_bfe]    [get_ports $fclk_a1_input_ports];
+set_input_delay -clock $a1_input_clock -min $a1_dv_are                                      [get_ports $fclk_a1_input_ports];
+set_input_delay -clock $a1_input_clock -max [expr $a1_input_clock_period/2 - $a1_dv_bre]    [get_ports $fclk_a1_input_ports] -clock_fall -add_delay;
+set_input_delay -clock $a1_input_clock -min $a1_dv_afe                                      [get_ports $fclk_a1_input_ports] -clock_fall -add_delay;
+
+
 set_input_delay -clock $a2_input_clock -max [expr $a2_input_clock_period/2 - $a2_dv_bfe]    [get_ports $a2_input_ports];
 set_input_delay -clock $a2_input_clock -min $a2_dv_are                                      [get_ports $a2_input_ports];
 set_input_delay -clock $a2_input_clock -max [expr $a2_input_clock_period/2 - $a2_dv_bre]    [get_ports $a2_input_ports] -clock_fall -add_delay;
 set_input_delay -clock $a2_input_clock -min $a2_dv_afe                                      [get_ports $a2_input_ports] -clock_fall -add_delay;
+
+set_input_delay -clock $a2_input_clock -max [expr $a2_input_clock_period/2 - $a2_dv_bfe]    [get_ports $fclk_a2_input_ports];
+set_input_delay -clock $a2_input_clock -min $a2_dv_are                                      [get_ports $fclk_a2_input_ports];
+set_input_delay -clock $a2_input_clock -max [expr $a2_input_clock_period/2 - $a2_dv_bre]    [get_ports $fclk_a2_input_ports] -clock_fall -add_delay;
+set_input_delay -clock $a2_input_clock -min $a2_dv_afe                                      [get_ports $fclk_a2_input_ports] -clock_fall -add_delay;
+
+
+
+
 
 set_property IDELAY_VALUE 13 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a1_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
 set_property IDELAY_VALUE 13 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a2_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
