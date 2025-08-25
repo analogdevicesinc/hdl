@@ -74,6 +74,7 @@ Contents
    ADRV9009 <adrv9009/index>
    ADRV9009-ZU11EG <adrv9009zu11eg/index>
    ADRV9026 <adrv9026/index>
+   ADRV903x <adrv903x/index>
    ADRV904x <adrv904x/index>
    ADRV9361Z7035 <adrv9361z7035/index>
    ADRV9364Z7020 <adrv9364z7020/index>
