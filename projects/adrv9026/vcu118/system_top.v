@@ -166,8 +166,6 @@ module system_top (
 
   assign gpio_i[25:17] = gpio_o[25:17];
 
-  assign rx_os_sync = 1'b0;
-
   // instantiations
 
   IBUFDS_GTE4 i_ibufds_rx_ref_clk (
@@ -192,7 +190,7 @@ module system_top (
     .OB (rx_sync_n));
 
   OBUFDS i_obufds_rx_os_sync (
-    .I (rx_os_sync),
+    .I (~rx_os_sync),
     .O (rx_os_sync_p),
     .OB (rx_os_sync_n));
 
@@ -319,8 +317,11 @@ module system_top (
     .rx_data_3_n (rx_data_n[3]),
     .rx_data_3_p (rx_data_p[3]),
     .rx_ref_clk_0 (ref_clk),
+    .rx_os_ref_clk_0 (ref_clk),
     .rx_sync_0 (rx_sync),
+    .rx_os_sync (rx_os_sync),
     .rx_sysref_0 (sysref),
+    .rx_os_sysref (sysref),
     .tx_data_0_n (tx_data_n[0]),
     .tx_data_0_p (tx_data_p[0]),
     .tx_data_1_n (tx_data_n[1]),
