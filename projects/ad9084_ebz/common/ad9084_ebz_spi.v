@@ -38,7 +38,7 @@
 module ad9084_ebz_spi #(
 
   parameter NUM_OF_SLAVES = 8,
-  parameter [NUM_OF_SLAVES-1:0] IS_4WIRE = {NUM_OF_SLAVES{1'b0}}
+  parameter [NUM_OF_SLAVES-1:0] IS_4WIRE = 8'b00000001
 ) (
   input  [NUM_OF_SLAVES-1:0] spi_csn,
   input                      spi_clk,
@@ -53,31 +53,19 @@ module ad9084_ebz_spi #(
   reg     [ 5:0]  spi_count = 'd0;
   reg             spi_rd_wr_n = 'd0;
   reg             spi_enable = 'd0;
-  reg             use_4wire  = 1'b0;
 
   // internal signals
 
   wire            spi_csn_s;
   wire            spi_enable_s;
 
+  wire            any_4wire_sel;
+  wire            any_3wire_sel;
+
   // check on rising edge and change on falling edge
 
-  assign spi_csn_s = &spi_csn;
+  assign spi_csn_s = & spi_csn;
   assign spi_enable_s = spi_enable & ~spi_csn_s;
-
-  // latch mode when a CSN asserts
-  integer i;
-  always @(posedge spi_clk or posedge spi_csn_s) begin
-    if (spi_csn_s) begin
-      use_4wire <= 1'b0;
-    end else begin
-      // when any slave is active, capture its mode
-      for (i = 0; i < NUM_OF_SLAVES; i = i+1) begin
-        if (spi_csn[i] == 1'b0)
-          use_4wire <= IS_4WIRE[i];
-      end
-    end
-  end
 
   always @(posedge spi_clk or posedge spi_csn_s) begin
     if (spi_csn_s == 1'b1) begin
@@ -95,14 +83,17 @@ module ad9084_ebz_spi #(
     if (spi_csn_s == 1'b1) begin
       spi_enable <= 1'b0;
     end else begin
-      if (spi_count == 6'd15) begin
+      if (spi_count == 6'd16) begin
         spi_enable <= spi_rd_wr_n;
       end
     end
   end
 
-  // io buffer
-  assign spi_miso = (use_4wire) ? spi_miso_in : spi_sdio;
+  assign any_4wire_sel = |(~spi_csn & IS_4WIRE);
+  assign any_3wire_sel = |(~spi_csn & ~IS_4WIRE);
+
+  assign spi_miso = (any_4wire_sel) ? spi_miso_in :
+                    (any_3wire_sel) ? spi_sdio    : 1'bz;
   assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule
