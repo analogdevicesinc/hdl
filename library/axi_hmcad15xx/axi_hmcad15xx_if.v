@@ -68,19 +68,43 @@ module axi_hmcad15xx_if #(
 
   // delay control signals
   input                                     up_clk,
-  (* MARK_DEBUG = "TRUE" *)  input       [NUM_LANES-1:0]               up_dld,
-  (* MARK_DEBUG = "TRUE" *)  input       [DRP_WIDTH*NUM_LANES-1:0]     up_dwdata,
-  (* MARK_DEBUG = "TRUE" *)  output      [DRP_WIDTH*NUM_LANES-1:0]     up_drdata,
-  (* MARK_DEBUG = "TRUE" *)  input                                     delay_clk,
-  (* MARK_DEBUG = "TRUE" *)  input                                     delay_rst,
-  (* MARK_DEBUG = "TRUE" *)  output                                    delay_locked
+  input       [NUM_LANES-1:0]               up_dld,
+  input       [(DRP_WIDTH*NUM_LANES)-1:0]   up_dwdata,
+  output      [(DRP_WIDTH*NUM_LANES)-1:0]   up_drdata,
+  input                                     delay_clk,
+  input                                     delay_rst,
+  output                                    delay_locked
 
 );
 
+wire [15:0]  sample_assembly_out [0:7];
+wire [ 7:0]  serdes_data [0:7];
+wire         adc_clk_in_fast;
+wire [15:0]  data_out [0:7];
+wire         adc_clk_div;
+wire [ 7:0]  frame_data;
+wire         clk_in_s;
+wire [ 7:0]  data_en;
+wire [ 8:0]  data_s0;
+wire [ 8:0]  data_s1;
+wire [ 8:0]  data_s2;
+wire [ 8:0]  data_s3;
+wire [ 8:0]  data_s4;
+wire [ 8:0]  data_s5;
+wire [ 8:0]  data_s6;
+wire [ 8:0]  data_s7;
 
-wire clk_in_s;
-wire adc_clk_in_fast;
-wire adc_clk_div;
+reg  [127:0] wr_data14_reg;
+reg          wr_en14_reg;
+reg          wr_en8_reg;
+reg  [127:0] wr_data_int;
+reg  [127:0] wr_data_reg;
+reg          wr_en_reg;
+
+
+assign adc_valid   = (resolution == 2'b00) ? wr_en8_reg  : (resolution != 2'b11) ? wr_en_reg : (wr_en14_reg && data_en[0]);
+assign adc_data    = (resolution != 2'b11) ? wr_data_reg :  wr_data14_reg;
+assign adc_clk     = adc_clk_div;
 
 IBUFDS i_clk_in_ibuf(
   .I (clk_in_p),
@@ -88,8 +112,8 @@ IBUFDS i_clk_in_ibuf(
   .O(clk_in_s));
 
 BUFIO i_clk_buf(
-  .I(clk_in_s),
-  .O(adc_clk_in_fast));
+ .I(clk_in_s),
+ .O(adc_clk_in_fast));
 
  BUFR #(
    .BUFR_DIVIDE("4")
@@ -99,58 +123,17 @@ BUFIO i_clk_buf(
    .I(clk_in_s),
    .O(adc_clk_div));
 
-
-  assign adc_clk = adc_clk_div;
-
-wire [8:0] data_s0;
-wire [8:0] data_s1;
-wire [8:0] data_s2;
-wire [8:0] data_s3;
-wire [8:0] data_s4;
-wire [8:0] data_s5;
-wire [8:0] data_s6;
-wire [8:0] data_s7;
-
-
-  // Min 2 div_clk cycles once div_clk is running after deassertion of sync
-  // Control externally the reset of serdes for precise timing
-
-reg  [5:0]  serdes_reset = 6'b000110;
-reg  [1:0]  serdes_valid = 2'b00;
-
-wire serdes_reset_s;
-
-
-always @(posedge adc_clk_div or posedge adc_rst) begin
-  if(adc_rst) begin
-    serdes_reset <= 6'b000110;
-  end else begin
-    serdes_reset <= {serdes_reset[4:0],1'b0};
-  end
-end
-assign serdes_reset_s = serdes_reset[5];
-
-always @(posedge adc_clk_div) begin
-  if(serdes_reset_s) begin
-    serdes_valid <= 2'b00;
-  end else begin
-    serdes_valid <= {serdes_valid[0],1'b1};
-  end
-end
-
 ad_serdes_in # (
   .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
   .IODELAY_GROUP(IO_DELAY_GROUP),
   .IODELAY_CTRL(IODELAY_CTRL),
   .DATA_WIDTH(NUM_LANES),
   .DRP_WIDTH(DRP_WIDTH),
-  .EXT_SERDES_RESET(1),
   .SERDES_FACTOR(8),
   .DDR_OR_SDR_N(1),
   .CMOS_LVDS_N(0)
 ) ad_serdes_data_inst (
-  .rst(serdes_reset_s),
-  .ext_serdes_rst(serdes_reset_s),
+  .rst(adc_rst),
   .clk(adc_clk_in_fast),
   .div_clk(adc_clk_div),
   .data_s0(data_s0),
@@ -171,12 +154,6 @@ ad_serdes_in # (
   .delay_rst(delay_rst),
   .delay_locked(delay_locked));
 
-
-
-
-  wire [7:0] frame_data;
-  wire [7:0] serdes_data [0:7];
-
   assign {frame_data[7],serdes_data[7][7],serdes_data[6][7],serdes_data[5][7],serdes_data[4][7],serdes_data[3][7],serdes_data[2][7],serdes_data[1][7],serdes_data[0][7]} = data_s0;  //latest bit received
   assign {frame_data[6],serdes_data[7][6],serdes_data[6][6],serdes_data[5][6],serdes_data[4][6],serdes_data[3][6],serdes_data[2][6],serdes_data[1][6],serdes_data[0][6]} = data_s1;  //
   assign {frame_data[5],serdes_data[7][5],serdes_data[6][5],serdes_data[5][5],serdes_data[4][5],serdes_data[3][5],serdes_data[2][5],serdes_data[1][5],serdes_data[0][5]} = data_s2;  //
@@ -185,10 +162,6 @@ ad_serdes_in # (
   assign {frame_data[2],serdes_data[7][2],serdes_data[6][2],serdes_data[5][2],serdes_data[4][2],serdes_data[3][2],serdes_data[2][2],serdes_data[1][2],serdes_data[0][2]} = data_s5;  //
   assign {frame_data[1],serdes_data[7][1],serdes_data[6][1],serdes_data[5][1],serdes_data[4][1],serdes_data[3][1],serdes_data[2][1],serdes_data[1][1],serdes_data[0][1]} = data_s6;  //
   assign {frame_data[0],serdes_data[7][0],serdes_data[6][0],serdes_data[5][0],serdes_data[4][0],serdes_data[3][0],serdes_data[2][0],serdes_data[1][0],serdes_data[0][0]} = data_s7;  // oldest bit received
-
-(* MARK_DEBUG = "TRUE" *) wire [15:0] sample_assembly_out [0:7];
-(* MARK_DEBUG = "TRUE" *) wire [15:0] data_out [0:7];
-wire [ 7:0] data_en;
 
   generate
     genvar i;
@@ -232,13 +205,6 @@ if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
   end
 end
 
-(* MARK_DEBUG = "TRUE" *) reg               wr_en8_reg;
-reg               wr_en14_reg;
-reg  [127:0]      wr_data14_reg;
-reg               wr_en_reg;
-reg  [127:0]      wr_data_int;
-reg  [127:0]      wr_data_reg;
-
  always @(posedge adc_clk_div) begin
     if(adc_rst) begin
        wr_en8_reg    <= 1'b0;
@@ -256,8 +222,6 @@ reg  [127:0]      wr_data_reg;
     wr_data_reg <= wr_data_int;
  end
 
- assign wr_clk      = adc_clk_div;
- assign adc_valid   = (resolution == 2'b00) ? wr_en8_reg  : (resolution != 2'b11) ? wr_en_reg : (wr_en14_reg && data_en[0]);
- assign adc_data    = (resolution != 2'b11) ? wr_data_reg :  wr_data14_reg;
+
 
 endmodule
