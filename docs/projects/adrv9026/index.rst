@@ -52,33 +52,181 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagrams:
 
-Example block design for Single link; M=8; L=4
+Example block design for Single link and RX OBS disabled
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: adrv9026_zcu102_jesd204b.svg
+.. image:: adrv9026_block_diagram.svg
    :width: 800
    :align: center
    :alt: ADRV9026 JESD204B M=8 L=4 block diagram
 
+.. collapsible:: Click here for details on the block diagram modules
+
+   .. list-table::
+      :widths: 10 20 35 35
+      :header-rows: 1
+
+      * - Block name
+        - IP name
+        - Documentation
+        - Additional info
+      * - AXI_ADXCVR
+        - :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
+        - :ref:`axi_adxcvr`
+        - 2 instances, one for Rx and one for Tx
+      * - AXI_CLKGEN
+        - :git-hdl:`axi_clkgen <library/axi_clkgen>`
+        - :ref:`axi_clkgen`
+        - 2 instances, one for Rx and one for Tx
+      * - AXI_DMAC
+        - :git-hdl:`axi_dmac <library/axi_dmac>`
+        - :ref:`axi_dmac`
+        - 2 instances, one for Rx and one for Tx
+      * - DATA_OFFLOAD
+        - :git-hdl:`data_offload <library/data_offload>`
+        - :ref:`data_offload`
+        - 1 instance for Tx
+      * - RX JESD LINK
+        - axi_adrv9026_rx_jesd
+        - :ref:`axi_jesd204_rx`
+        - Instantiaded by ``adi_axi_jesd204_rx_create`` procedure
+      * - RX JESD TPL
+        - rx_adrv9026_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_adc`
+        - Instantiated by ``adi_tpl_jesd204_rx_create`` procedure
+      * - TX JESD LINK
+        - axi_adrv9026_tx_jesd
+        - :ref:`axi_jesd204_tx`
+        - Instantiaded by ``adi_axi_jesd204_tx_create`` procedure
+      * - TX JESD TPL
+        - tx_adrv9026_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_dac`
+        - Instantiated by ``adi_tpl_jesd204_tx_create`` procedure
+      * - UTIL_UPACK
+        - :git-hdl:`util_upack2 <library/util_pack/util_upack2>`
+        - :ref:`util_upack2`
+        - ---
+      * - UTIL_CPACK
+        - :git-hdl:`util_cpack2 <library/util_pack/util_cpack2>`
+        - :ref:`util_cpack2`
+        - ---
+
 The Rx links (ADC Path) operate with the following parameters:
 
-- Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
-- Sample Rate: 250 MSPS
+- Rx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
 - Dual link: No
-- RX_DEVICE_CLK: 250 MHz (Lane Rate/40)
-- REF_CLK: 500MHz (Lane Rate/20)
-- JESD204B Lane Rate: 10Gbps
-- QPLL0 or CPLL
+- RX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- CPLL
 
 The Tx links (DAC Path) operate with the following parameters:
 
-- Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
-- Sample Rate: 250 MSPS
+- Tx Deramer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
 - Dual link: No
-- TX_DEVICE_CLK: 250 MHz (Lane Rate/40)
-- REF_CLK: 500MHz (Lane Rate/20)
-- JESD204B Lane Rate: 10Gbps
-- QPLL0 or CPLL
+- TX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- QPLL0
+
+Example block design for Single link and RX OBS in Non-LinkSharing mode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: adrv9026_nls_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: ADRV9026 JESD204B NLS block diagram
+
+.. collapsible:: Click here for details on the block diagram modules
+
+   .. list-table::
+      :widths: 10 20 35 35
+      :header-rows: 1
+
+      * - Block name
+        - IP name
+        - Documentation
+        - Additional info
+      * - AXI_ADXCVR
+        - :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
+        - :ref:`axi_adxcvr`
+        - 3 instances, one for Rx, one for Rx-os and one for Tx
+      * - AXI_CLKGEN
+        - :git-hdl:`axi_clkgen <library/axi_clkgen>`
+        - :ref:`axi_clkgen`
+        - 3 instances, one for Rx, one for Rx-os and one for Tx
+      * - AXI_DMAC
+        - :git-hdl:`axi_dmac <library/axi_dmac>`
+        - :ref:`axi_dmac`
+        - 3 instances, one for Rx, one for Rx-os and one for Tx
+      * - DATA_OFFLOAD
+        - :git-hdl:`data_offload <library/data_offload>`
+        - :ref:`data_offload`
+        - 1 instance for Tx
+      * - RX JESD LINK
+        - axi_adrv9026_rx_jesd
+        - :ref:`axi_jesd204_rx`
+        - Instantiaded by ``adi_axi_jesd204_rx_create`` procedure
+      * - RX JESD TPL
+        - rx_adrv9026_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_adc`
+        - Instantiated by ``adi_tpl_jesd204_rx_create`` procedure
+      * - RX OS JESD LINK
+        - axi_adrv9026_rx_os_jesd
+        - :ref:`axi_jesd204_rx`
+        - Instantiaded by ``adi_axi_jesd204_rx_create`` procedure
+      * - RX OS JESD TPL
+        - rx_os_adrv9026_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_adc`
+        - Instantiated by ``adi_tpl_jesd204_rx_create`` procedure
+      * - TX JESD LINK
+        - axi_adrv9026_tx_jesd
+        - :ref:`axi_jesd204_tx`
+        - Instantiaded by ``adi_axi_jesd204_tx_create`` procedure
+      * - TX JESD TPL
+        - tx_adrv9026_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_dac`
+        - Instantiated by ``adi_tpl_jesd204_tx_create`` procedure
+      * - UTIL_UPACK
+        - :git-hdl:`util_upack2 <library/util_pack/util_upack2>`
+        - :ref:`util_upack2`
+        - ---
+      * - UTIL_CPACK
+        - :git-hdl:`util_cpack2 <library/util_pack/util_cpack2>`
+        - :ref:`util_cpack2`
+        - 2 instances one for Rx and one for Rx-os
+
+The Rx links (ADC Path) operate with the following parameters:
+
+- Rx Framer parameters: L=2, M=4, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- CPLL
+
+The ORx links (ADC Obs Path) operate with the following parameters:
+
+- Rx Obs Framer parameters: L=2, M=4, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- RX_OS_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- CPLL
+
+The Tx links (DAC Path) operate with the following parameters:
+
+- Tx Deramer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- QPLL0
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -102,15 +250,20 @@ The following are the parameters of this project that can be configured:
 
 - JESD_MODE: used link layer encoder mode
 
-   - 64B66B - 64b66b link layer defined in JESD204C
-   - 8B10B - 8b10b link layer defined in JESD204B
+  - 64B66B - 64b66b link layer defined in JESD204C
+  - 8B10B  - 8b10b link layer defined in JESD204B
 
-- RX_LANE_RATE: lane rate of the Rx link
-- TX_LANE_RATE: lane rate of the Tx link
-- [RX/TX]_JESD_M: number of converters per link
-- [RX/TX]_JESD_L: number of lanes per link
-- [RX/TX]_JESD_S: number of samples per frame
-- [RX/TX]_NUM_LINKS: number of links
+- ORX_ENABLE: Additional data path for RX-OS
+
+  - 0 - Disabled (used for profiles with RX-OS disabled)
+  - 1 - Enabled (used for profiles with RX-OS enabled)
+
+- TX_LANE_RATE: Transceiver line rate of the TX link
+- RX_LANE_RATE: Transceiver line rate of the RX link
+- [RX/TX/RX_OS]_JESD_M: number of converters per link
+- [RX/TX/RX_OS]_JESD_L: number of lanes per link
+- [RX/TX/RX_OS]_JESD_S: number of samples per frame
+- [RX/TX/RX_OS]_NUM_LINKS: number of links
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -126,19 +279,26 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-===================== =============== ===========
-Instance              Zynq/Microblaze ZynqMP     
-===================== =============== ===========
-rx_adrv9026_tpl_core  0x44A0_0000     0x84A0_0000
-tx_adrv9026_tpl_core  0x44A0_4000     0x84A0_4000
-axi_adrv9026_rx_xcvr  0x44A6_0000     0x84A6_0000
-axi_adrv9026_tx_xcvr  0x44A8_0000     0x84A8_0000
-axi_adrv9026_tx_jesd  0x44A9_0000     0x84A9_0000
-axi_adrv9026_rx_jesd  0x44AA_0000     0x84AA_0000
-axi_adrv9026_rx_dma   0x7C40_0000     0x9C40_0000
-axi_adrv9026_tx_dma   0x7C42_0000     0x9C42_0000
-adrv9026_data_offload 0x7C43_0000     0x9C43_0000
-===================== =============== ===========
+========================= =============== ===========
+Instance                  Zynq/Microblaze ZynqMP
+========================= =============== ===========
+rx_adrv9026_tpl_core      0x44A0_0000     0x84A0_0000
+tx_adrv9026_tpl_core      0x44A0_4000     0x84A0_4000
+rx_os_adrv9026_tpl_core   0x44A0_8000     0x84A0_8000
+axi_adrv9026_rx_xcvr      0x44A6_0000     0x84A6_0000
+axi_adrv9026_tx_xcvr      0x44A8_0000     0x84A8_0000
+axi_adrv9026_rx_os_xcvr   0x45A6_0000     0x85A6_0000
+axi_adrv9026_tx_jesd      0x44A9_0000     0x84A9_0000
+axi_adrv9026_rx_jesd      0x44AA_0000     0x84AA_0000
+axi_adrv9026_rx_os_jesd   0x45AA_0000     0x85AA_0000
+axi_adrv9026_rx_dma       0x7C40_0000     0x9C40_0000
+axi_adrv9026_tx_dma       0x7C42_0000     0x9C42_0000
+axi_adrv9026_rx_os_dma    0x7C80_0000     0x9C80_0000
+axi_adrv9026_tx_clkgen    0x43C0_0000     0x83C0_0000
+axi_adrv9026_rx_clkgen    0x43C1_0000     0x83C1_0000
+axi_adrv9026_rx_os_clkgen 0x43C2_0000     0x83C2_0000
+adrv9026_data_offload     0x7C43_0000     0x9C43_0000
+========================= =============== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -352,26 +512,30 @@ Interrupts
 
 Below are the Programmable Logic interrupts used in this project.
 
-==================== === ============ =============
-Instance name        HDL Linux ZynqMP Actual ZynqMP
-==================== === ============ =============
-axi_adrv9026_tx_jesd 10  106          138
-axi_adrv9026_rx_jesd 11  107          139
-axi_adrv9026_tx_dma  13  109          141
-axi_adrv9026_rx_dma  14  110          142
-==================== === ============ =============
+======================= === ============ =============
+Instance name           HDL Linux ZynqMP Actual ZynqMP
+======================= === ============ =============
+axi_adrv9026_tx_jesd    10  106          138
+axi_adrv9026_rx_jesd    11  107          139
+axi_adrv9026_rx_os_jesd 12  108          140
+axi_adrv9026_tx_dma     13  109          141
+axi_adrv9026_rx_dma     14  110          142
+axi_adrv9026_rx_os_dma  15  111          143
+======================= === ============ =============
 
 Microblaze
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-==================== === ============
-Instance name        HDL Microblaze
-==================== === ============
-axi_adrv9026_tx_jesd 15  15
-axi_adrv9026_rx_jesd 14  14
-axi_adrv9026_tx_dma  13  13
-axi_adrv9026_rx_dma  12  12
-==================== === ============
+======================= === ============
+Instance name           HDL Microblaze
+======================= === ============
+axi_adrv9026_tx_jesd    7   7
+axi_adrv9026_rx_jesd    8   8
+axi_adrv9026_rx_os_jesd 15  15
+axi_adrv9026_tx_dma     12  12
+axi_adrv9026_rx_dma     13  13
+axi_adrv9026_rx_os_dma  14  14
+======================= === ============
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -402,26 +566,40 @@ configure this project, depending on the carrier used.
    +-------------------+------------------------------------------------------+
    | Parameter         | Default value of the parameters depending on carrier |
    +-------------------+---------------------------+--------------------------+
-   |                   |                ZCU102/A10SoC/VCU118                  |
-   +===================+======================================================+
-   | JESD_MODE         |                       8B10B                          |
-   +-------------------+------------------------------------------------------+
-   | RX_LANE_RATE      |                         10                           |
-   +-------------------+------------------------------------------------------+
-   | TX_LANE_RATE      |                         10                           |
-   +-------------------+------------------------------------------------------+
-   | RX_JESD_M         |                          8                           |
-   +-------------------+------------------------------------------------------+
-   | RX_JESD_L         |                          4                           |
-   +-------------------+------------------------------------------------------+
-   | RX_JESD_S         |                          1                           |
-   +-------------------+------------------------------------------------------+
-   | TX_JESD_M         |                          8                           |
-   +-------------------+------------------------------------------------------+
-   | TX_JESD_L         |                          4                           |
-   +-------------------+------------------------------------------------------+
-   | TX_JESD_S         |                          1                           |
-   +-------------------+------------------------------------------------------+
+   |                   |       ZCU102/VCU118       |          A10SoC          |
+   +===================+===========================+==========================+
+   | JESD_MODE         |          8B10B            |           8B10B          |
+   +-------------------+---------------------------+--------------------------+
+   | ORX_ENABLE        |             0             |                          |
+   +-------------------+---------------------------+--------------------------+
+   | RX_LANE_RATE      |           9.83            |            9.83          |
+   +-------------------+---------------------------+--------------------------+
+   | TX_LANE_RATE      |           9.83            |            9.83          |
+   +-------------------+---------------------------+--------------------------+
+   | TX_NUM_LINKS      |             1             |             1            |
+   +-------------------+---------------------------+--------------------------+
+   | RX_NUM_LINKS      |             1             |             1            |
+   +-------------------+---------------------------+--------------------------+
+   | RX_OS_NUM_LINKS   |             1             |                          |
+   +-------------------+---------------------------+--------------------------+
+   | RX_JESD_M         |             8             |             8            |
+   +-------------------+---------------------------+--------------------------+
+   | RX_JESD_L         |             4             |             4            |
+   +-------------------+---------------------------+--------------------------+
+   | RX_JESD_S         |             1             |             1            |
+   +-------------------+---------------------------+--------------------------+
+   | TX_JESD_M         |             8             |             8            |
+   +-------------------+---------------------------+--------------------------+
+   | TX_JESD_L         |             4             |             4            |
+   +-------------------+---------------------------+--------------------------+
+   | TX_JESD_S         |             1             |             1            |
+   +-------------------+---------------------------+--------------------------+
+   | RX_OS_JESD_M      |             0             |                          |
+   +-------------------+---------------------------+--------------------------+
+   | RX_OS_JESD_L      |             0             |                          |
+   +-------------------+---------------------------+--------------------------+
+   | RX_OS_JESD_S      |             0             |                          |
+   +-------------------+---------------------------+--------------------------+
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -495,6 +673,9 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
+   * - AXI_CLKGEN
+     - :git-hdl:`library/axi_clkgen`
+     - :ref:`axi_clkgen`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
