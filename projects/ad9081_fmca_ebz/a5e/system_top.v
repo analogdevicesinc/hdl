@@ -152,6 +152,7 @@ module system_top #(
 
   // lane interface
   input                   clkin6,
+  input                   clkin10,
   input                   fpga_refclk_in,
   input   [RX_JESD_L-1:0] rx_data,
   input   [RX_OS_JESD_L-1:0] rx_os_data,
@@ -433,6 +434,7 @@ module system_top #(
     .tx_os_ref_clk_clk                                       (fpga_refclk_in),
     .rx_os_serial_data_i_rx_serial_data                      (rx_os_data[RX_OS_JESD_L-1:0]),
     .rx_os_serial_data_n_i_rx_serial_data_n                  (rx_os_data_n[RX_OS_JESD_L-1:0]),
+    .rx_os_device_clk_clk                                    (clkin10),
     .rx_os_sync_export                                       (fpga_syncout_1),
     .rx_os_sysref_export                                     (sysref2),
     .rx_device_clk_clk                                       (clkin6),

@@ -79,6 +79,11 @@ set RX_OS_SAMPLES_PER_FRAME $RX_OS_JESD_S
 set RX_OS_SAMPLE_WIDTH      $RX_OS_JESD_NP
 set RX_OS_DMA_SAMPLE_WIDTH  16
 
+set RX_OS_OCTETS_PER_FRAME    [expr $RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLES_PER_FRAME * $RX_OS_SAMPLE_WIDTH / (8 * $RX_OS_NUM_OF_LANES)] ; # F
+if {$RX_OS_OCTETS_PER_FRAME > $RX_OS_TPL_DATA_PATH_WIDTH} {
+  set RX_OS_TPL_DATA_PATH_WIDTH $RX_OS_OCTETS_PER_FRAME
+}
+
 set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8*$RX_OS_TPL_DATA_PATH_WIDTH / \
                                 ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)]
 
@@ -111,6 +116,11 @@ set TX_NUM_OF_CONVERTERS [expr $TX_JESD_M * $TX_NUM_OF_LINKS]
 set TX_SAMPLES_PER_FRAME $TX_JESD_S
 set TX_SAMPLE_WIDTH      $TX_JESD_NP
 set TX_DMA_SAMPLE_WIDTH  16
+
+set TX_OCTETS_PER_FRAME    [expr $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_FRAME * $TX_SAMPLE_WIDTH / (8 * $TX_NUM_OF_LANES)] ; # F
+if {$TX_OCTETS_PER_FRAME > $TX_TPL_DATA_PATH_WIDTH} {
+  set TX_TPL_DATA_PATH_WIDTH $TX_OCTETS_PER_FRAME
+}
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8*$TX_TPL_DATA_PATH_WIDTH / \
                                 ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
@@ -147,10 +157,13 @@ if {$EXTERNAL_PHY && $RX_NUM_OF_LANES < $TX_NUM_OF_LANES} {
 # JESD204 clock bridges
 
 add_instance tx_device_clk altera_clock_bridge
-set_instance_parameter_value tx_device_clk {EXPLICIT_CLOCK_RATE} $DEVICE_CLK_RATE
+set_instance_parameter_value tx_device_clk {EXPLICIT_CLOCK_RATE} [expr $DEVICE_CLK_RATE * $TX_DATA_PATH_WIDTH / $TX_TPL_DATA_PATH_WIDTH]
 
 add_instance rx_device_clk altera_clock_bridge
-set_instance_parameter_value rx_device_clk {EXPLICIT_CLOCK_RATE} $DEVICE_CLK_RATE
+set_instance_parameter_value rx_device_clk {EXPLICIT_CLOCK_RATE} [expr $DEVICE_CLK_RATE * $RX_DATA_PATH_WIDTH / $RX_TPL_DATA_PATH_WIDTH]
+
+add_instance rx_os_device_clk altera_clock_bridge
+set_instance_parameter_value rx_os_device_clk {EXPLICIT_CLOCK_RATE} [expr $DEVICE_CLK_RATE * $RX_OS_DATA_PATH_WIDTH / $RX_OS_TPL_DATA_PATH_WIDTH ]
 
 #
 ## IP instantions and configuration
@@ -429,22 +442,21 @@ add_connection sys_clk.clk_reset mxfe_tx_dma.s_axi_reset
 
 add_connection rx_device_clk.out_clk mxfe_rx_jesd204.device_clk
 add_connection rx_device_clk.out_clk mxfe_rx_tpl.link_clk
-add_connection rx_device_clk.out_clk mxfe_rx_os_jesd204.device_clk
-add_connection rx_device_clk.out_clk mxfe_rx_os_tpl.link_clk
+add_connection rx_os_device_clk.out_clk mxfe_rx_os_jesd204.device_clk
+add_connection rx_os_device_clk.out_clk mxfe_rx_os_tpl.link_clk
 if {$EXTERNAL_PHY} {
-  add_connection mxfe_rx_jesd204.link_clk jesd204_phy.rx_link_clock
-  add_connection mxfe_rx_jesd204.link_clk jesd204_phy_os.rx_link_clock
+  add_connection jesd204_phy.rx_clkout jesd204_phy.rx_link_clock
+  add_connection jesd204_phy_os.rx_clkout jesd204_phy_os.rx_link_clock
 }
 add_connection rx_device_clk.out_clk mxfe_rx_cpack.clk
 add_connection rx_device_clk.out_clk $adc_fifo_name.if_adc_clk
-add_connection rx_device_clk.out_clk mxfe_rx_os_cpack.clk
-add_connection rx_device_clk.out_clk $adc_os_fifo_name.if_adc_clk
-
+add_connection rx_os_device_clk.out_clk mxfe_rx_os_cpack.clk
+add_connection rx_os_device_clk.out_clk $adc_os_fifo_name.if_adc_clk
 
 add_connection tx_device_clk.out_clk mxfe_tx_jesd204.device_clk
 add_connection tx_device_clk.out_clk mxfe_tx_tpl.link_clk
 if {$EXTERNAL_PHY} {
-  add_connection mxfe_tx_jesd204.link_clk jesd204_phy.tx_link_clock
+  add_connection jesd204_phy.tx_clkout jesd204_phy.tx_link_clock
 }
 add_connection tx_device_clk.out_clk mxfe_tx_upack.clk
 add_connection tx_device_clk.out_clk $dac_fifo_name.if_dac_clk
@@ -484,14 +496,15 @@ add_connection sys_dma_clk.clk_reset $dac_fifo_name.if_dma_rst
 ## Exported signals
 #
 
-add_interface rx_sysref       conduit end
-add_interface rx_sync         conduit end
-add_interface rx_os_sysref    conduit end
-add_interface rx_os_sync      conduit end
-add_interface rx_device_clk   clock   sink
-add_interface tx_sysref       conduit end
-add_interface tx_sync         conduit end
-add_interface tx_device_clk   clock   sink
+add_interface rx_sysref        conduit end
+add_interface rx_sync          conduit end
+add_interface rx_os_sysref     conduit end
+add_interface rx_os_sync       conduit end
+add_interface rx_device_clk    clock   sink
+add_interface rx_os_device_clk clock   sink
+add_interface tx_sysref        conduit end
+add_interface tx_sync          conduit end
+add_interface tx_device_clk    clock   sink
 
 set_interface_property rx_sysref        EXPORT_OF mxfe_rx_jesd204.sysref
 set_interface_property rx_sync          EXPORT_OF mxfe_rx_jesd204.sync
@@ -501,6 +514,7 @@ set_interface_property rx_device_clk    EXPORT_OF rx_device_clk.in_clk
 set_interface_property tx_sysref        EXPORT_OF mxfe_tx_jesd204.sysref
 set_interface_property tx_sync          EXPORT_OF mxfe_tx_jesd204.sync
 set_interface_property tx_device_clk    EXPORT_OF tx_device_clk.in_clk
+set_interface_property rx_os_device_clk EXPORT_OF rx_os_device_clk.in_clk
 
 add_interface rx_ref_clk         clock   sink
 add_interface rx_serial_data     conduit end

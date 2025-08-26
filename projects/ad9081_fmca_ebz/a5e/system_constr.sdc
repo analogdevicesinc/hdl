@@ -5,7 +5,21 @@
 
 create_clock -period "10.0000 ns"   -name sys_clk_100mhz      [get_ports {sys_clk}]
 create_clock -period "4.16667 ns"   -name ref_clk             [get_ports {fpga_refclk_in}]
-create_clock -period "4.16667 ns"   -name device_clk          [get_ports {clkin6}]
+create_clock -period "8.33334 ns"   -name device_clk          [get_ports {clkin6}]
+create_clock -period "4.16667 ns"   -name obs_device_clk      [get_ports {clkin10}]
+
+# Ignore these paths since the data is moving through an async fifo inside the link layer
+set_clock_groups -asynchronous \
+    -group [get_clocks device_clk] \
+    -group [get_clocks {i_system_bd|jesd204_phy|jesd204_phy|native_phy|sip_inst|o_rx_clkout[0]}]
+
+set_clock_groups -asynchronous \
+    -group [get_clocks device_clk] \
+    -group [get_clocks {i_system_bd|jesd204_phy|jesd204_phy|native_phy|sip_inst|o_tx_clkout[0]}]
+
+set_clock_groups -asynchronous \
+    -group [get_clocks obs_device_clk] \
+    -group [get_clocks {i_system_bd|jesd204_phy_os|jesd204_phy_os|native_phy|sip_inst|o_rx_clkout[0]}]
 
 derive_clock_uncertainty
 

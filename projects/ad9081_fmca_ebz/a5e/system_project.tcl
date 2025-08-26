@@ -52,7 +52,7 @@ adi_project ad9081_fmca_ebz_a5e [list \
   RX_OS_JESD_S         [get_env_param RX_OS_JESD_S         1 ] \
   RX_OS_JESD_NP        [get_env_param RX_OS_JESD_NP       16 ] \
   RX_OS_NUM_LINKS      [get_env_param RX_OS_NUM_LINKS      1 ] \
-  TX_JESD_M            [get_env_param TX_JESD_M            4 ] \
+  TX_JESD_M            [get_env_param TX_JESD_M            8 ] \
   TX_JESD_L            [get_env_param TX_JESD_L            2 ] \
   TX_JESD_S            [get_env_param TX_JESD_S            1 ] \
   TX_JESD_NP           [get_env_param TX_JESD_NP          16 ] \
@@ -74,6 +74,7 @@ set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -t
 set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to fpga_syncout_1
 set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to sysref2
 set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to clkin6
+set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to clkin10
 set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)"          -to fpga_refclk_in
 
 set_location_assignment PIN_AG83  -to "agc0[0]"             ; ## D20  LA17_CC_P
@@ -86,6 +87,8 @@ set_location_assignment PIN_Y77   -to "agc3[0]"             ; ## H25  LA21_P
 set_location_assignment PIN_Y74   -to "agc3[1]"             ; ## H26  LA21_N
 set_location_assignment PIN_T55   -to "clkin6(n)"           ; ## G03  CLK1_M2C_N
 set_location_assignment PIN_P55   -to "clkin6"              ; ## G02  CLK1_M2C_P
+set_location_assignment PIN_B42   -to "clkin10(n)"          ; ## G07  LA00_N_CC
+set_location_assignment PIN_A45   -to "clkin10"             ; ## G06  LA00_P_CC
 set_location_assignment PIN_AV16  -to "fpga_refclk_in"      ; ## D04  GBTCLK1_M2C_P
 set_location_assignment PIN_AV21  -to "fpga_refclk_in(n)"   ; ## D05  GBTCLK1_M2C_N
 
