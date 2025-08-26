@@ -27,10 +27,6 @@ set_property -dict {PACKAGE_PIN R21 IOSTANDARD LVCMOS33} [get_ports {ad9740_data
 set_property -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS33} [get_ports adf4351_spi_csn]
 set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS33} [get_ports adf4351_spi_clk]
 set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33} [get_ports adf4351_spi_mosi]
-#set_property -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS33}                 [get_ports adf4351_le]      ; ## G16 FMC-LA12_N
-
-
-
 
 # clocks
 create_clock -period 4.761 -name ad9740_clk [get_ports ad9740_clk_p]
@@ -38,35 +34,26 @@ create_clock -period 4.761 -name ad9740_clk [get_ports ad9740_clk_p]
 # Reconfigure the pins from Bank 34 and Bank 35 to use LVCMOS33 since VADJ must be set to 3.3V
 
 # otg
+set_property IOSTANDARD LVCMOS33 [get_ports otg_vbusoc]
 
 # gpio (switches, leds and such)
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[0]]       ; ## BTNC
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[1]]       ; ## BTND
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[2]]       ; ## BTNL
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[3]]       ; ## BTNR
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[4]]       ; ## BTNU
 
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[11]]      ; ## SW0
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[12]]      ; ## SW1
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[13]]      ; ## SW2
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[14]]      ; ## SW3
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[15]]      ; ## SW4
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[16]]      ; ## SW5
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[17]]      ; ## SW6
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[18]]      ; ## SW7
 
-
-
-create_debug_core u_ila_0 ila
-set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
-set_property ALL_PROBE_SAME_MU_CNT 4 [get_debug_cores u_ila_0]
-set_property C_ADV_TRIGGER true [get_debug_cores u_ila_0]
-set_property C_DATA_DEPTH 8192 [get_debug_cores u_ila_0]
-set_property C_EN_STRG_QUAL true [get_debug_cores u_ila_0]
-set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
-set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
-set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
-set_property port_width 1 [get_debug_ports u_ila_0/clk]
-connect_debug_port u_ila_0/clk [get_nets [list i_system_wrapper/system_i/sys_ps7/inst/FCLK_CLK0]]
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
-set_property port_width 1 [get_debug_ports u_ila_0/probe0]
-connect_debug_port u_ila_0/probe0 [get_nets [list adf4351_spi_clk_OBUF]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
-set_property port_width 1 [get_debug_ports u_ila_0/probe1]
-connect_debug_port u_ila_0/probe1 [get_nets [list adf4351_spi_csn_OBUF]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe2]
-set_property port_width 1 [get_debug_ports u_ila_0/probe2]
-connect_debug_port u_ila_0/probe2 [get_nets [list adf4351_spi_mosi_OBUF]]
-set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
-set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
-set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
-connect_debug_port dbg_hub/clk [get_nets u_ila_0_FCLK_CLK0]
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[27]]      ; ## XADC-GIO0
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[28]]      ; ## XADC-GIO1
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[29]]      ; ## XADC-GIO2
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[30]]      ; ## XADC-GIO3
+set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[31]]      ; ## OTG-RESETN
