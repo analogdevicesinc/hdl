@@ -472,7 +472,7 @@ module axi_spi_engine #(
     if (!spi_resetn) begin
       sdi_fifo_tkeep_int <= {(NUM_OF_SDIO*DATA_WIDTH/8){1'b1}};
     end else begin
-      if (cmd_valid && cmd_data[15:8] == 8'h23) begin
+      if (cmd_valid && cmd_ready && cmd_data[15:8] == 8'h23) begin
          for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin
           sdi_fifo_tkeep_int[i*DATA_WIDTH/8+:DATA_WIDTH/8] <= {DATA_WIDTH/8{cmd_data[i]}};
          end
