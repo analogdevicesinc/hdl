@@ -159,7 +159,7 @@ module spi_engine_execution_shiftreg_data_assemble #(
           lane_index <= 0;
         end
         lane_index_d <= lane_index;
-        valid_index <= (lane_mask == ALL_ACTIVE_LANE_MASK) ? lane_index : valid_indices[lane_index_d];
+        valid_index <= valid_indices[lane_index];
       end else if (sdo_toshiftreg) begin
         last_handshake_int <= 1'b0;
       end
