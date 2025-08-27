@@ -104,14 +104,14 @@ ad_connect axi_ad9361_1/tdd_sync GND
 # interface clock divider to generate sampling clock
 # interface runs at 4x in 2r2t mode, and 2x in 1r1t mode
 
-ad_ip_instance xlconcat util_ad9361_divclk_sel_concat
+ad_ip_instance ilconcat util_ad9361_divclk_sel_concat
 ad_ip_parameter util_ad9361_divclk_sel_concat CONFIG.NUM_PORTS 4
 ad_connect axi_ad9361_0/adc_r1_mode util_ad9361_divclk_sel_concat/In0
 ad_connect axi_ad9361_0/dac_r1_mode util_ad9361_divclk_sel_concat/In1
 ad_connect axi_ad9361_1/adc_r1_mode util_ad9361_divclk_sel_concat/In2
 ad_connect axi_ad9361_1/dac_r1_mode util_ad9361_divclk_sel_concat/In3
 
-ad_ip_instance util_reduced_logic util_ad9361_divclk_sel
+ad_ip_instance ilreduced_logic util_ad9361_divclk_sel
 ad_ip_parameter util_ad9361_divclk_sel CONFIG.C_SIZE 4
 ad_connect util_ad9361_divclk_sel_concat/dout util_ad9361_divclk_sel/Op1
 
