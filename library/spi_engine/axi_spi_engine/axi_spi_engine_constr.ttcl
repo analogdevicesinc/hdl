@@ -32,4 +32,25 @@ set_false_path -quiet \
 set_false_path -quiet \
   -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_fifo_status/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
 
+set_false_path -quiet \
+  -from [get_cells -hierarchical -filter {NAME =~ *i_sdi_output_read_sync/in_toggle_d1_reg*}] \
+  -to   [get_cells -hierarchical -filter {NAME =~ *i_sdi_output_read_sync/i_sync_out/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -from [get_cells -hierarchical -filter {NAME =~ *i_sdi_output_read_sync/out_toggle_d1_reg*}] \
+  -to   [get_cells -hierarchical -filter {NAME =~ *i_sdi_output_read_sync/i_sync_in/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -from [get_cells -hierarchical -filter {NAME =~ *i_sdi_level_sync/cdc_hold_reg*}] \
+  -to   [get_cells -hierarchical -filter {NAME =~ *i_sdi_level_sync/out_data_reg*}]
+
+set_false_path -quiet \
+  -from [get_cells -hierarchical -filter {NAME =~ *i_sdi_level_sync/in_toggle_d1_reg*}] \
+  -to   [get_cells -hierarchical -filter {NAME =~ *i_sdi_level_sync/i_sync_out/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -from [get_cells -hierarchical -filter {NAME =~ *i_sdi_level_sync/out_toggle_d1_reg*}] \
+  -to   [get_cells -hierarchical -filter {NAME =~ *i_sdi_level_sync/i_sync_in/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+
 <: } :>
