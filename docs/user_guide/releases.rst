@@ -87,8 +87,8 @@ Release branches
      - List of supported projects and IP cores
      - BOOT partition files
    * - :git-hdl:`main <main:/>`
-     - Quartus Pro 24.2
-     - Vivado 2024.2
+     - Quartus Pro 25.1.0
+     - Vivado 2025.1
      - ---
      - ---
      - `main <https://swdownloads.analog.com/cse/boot_partition_files/main/latest_boot.txt>`__
