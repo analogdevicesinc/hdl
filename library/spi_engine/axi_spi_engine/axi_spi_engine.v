@@ -165,9 +165,7 @@ module axi_spi_engine #(
 
   wire [DATA_WIDTH-1:0] sdi_fifo_out_data;
   wire sdi_fifo_out_ready;
-  reg  find_next_valid_fifo_value;
   wire sdi_fifo_out_valid;
-  reg [3:0] sdi_out_counter;
 
   wire [7:0] sync_fifo_data;
   wire sync_fifo_valid;
@@ -505,7 +503,7 @@ module axi_spi_engine #(
     .s_axis_almost_full(sdi_fifo_almost_full),
     .m_axis_aclk(clk),
     .m_axis_aresetn(up_sw_resetn),
-    .m_axis_ready(sdi_fifo_out_ready || find_next_valid_fifo_value),
+    .m_axis_ready(sdi_fifo_out_ready),
     .m_axis_valid(sdi_fifo_out_valid),
     .m_axis_data(sdi_fifo_out_data),
     .m_axis_tlast(),
@@ -520,30 +518,7 @@ module axi_spi_engine #(
     if (rstn == 1'b0) begin
       up_rack_ff <= 'd0;
     end else begin
-      if (sdi_fifo_out_ready || find_next_valid_fifo_value) begin
-        up_rack_ff <= sdi_fifo_out_valid;
-      end else begin
-        up_rack_ff <= up_rreq_s;
-      end
-    end
-  end
-
-  //the current logic is considering that there is only one active lane in the set of lanes
-  always @(posedge clk) begin
-    if (!up_sw_resetn) begin
-      find_next_valid_fifo_value <= 1'b0;
-      sdi_out_counter <= 4'hf;
-    end else if (sdi_fifo_out_ready) begin
-      find_next_valid_fifo_value <= ~sdi_fifo_out_valid; //only in the next cycle it is possible to check if it is necessary a new read
-      sdi_out_counter <= sdi_fifo_out_valid ? 4'hf : 0;
-    end else begin
-      if (!sdi_fifo_out_valid && sdi_out_counter < max_num_of_reads) begin
-        find_next_valid_fifo_value <= 1'b1;
-        sdi_out_counter <= sdi_out_counter + 1'b1;
-      end else begin
-        find_next_valid_fifo_value <= 1'b0;
-        sdi_out_counter <= 4'hf;
-      end
+      up_rack_ff <= up_rreq_s;
     end
   end
 
