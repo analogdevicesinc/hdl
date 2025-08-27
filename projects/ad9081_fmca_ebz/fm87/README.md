@@ -1,4 +1,8 @@
+<!-- no_dts, no_no_os -->
+
 # AD9081-FMCA-EBZ/FM87 HDL Project
+
+- VADJ with which it was tested in hardware: 1.2V
 
 ## Building the project
 
