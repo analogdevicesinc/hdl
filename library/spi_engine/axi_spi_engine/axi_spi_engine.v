@@ -196,6 +196,14 @@ module axi_spi_engine #(
   reg  [7:0] offload_sync_id = 'h00;
   reg        offload_sync_id_pending = 1'b0;
 
+  reg   [2:0] active_lane_count = 1;
+  reg  [SDI_FIFO_ADDRESS_WIDTH-1:0] sdi_input_level = 0;
+  reg  [SDI_FIFO_ADDRESS_WIDTH-1:0] sdi_input_level_next;
+  wire [SDI_FIFO_ADDRESS_WIDTH-1:0] sdi_level_s;
+  wire        sdi_output_read;
+  wire        sdi_output_read_sync;
+
+
   generate if (MM_IF_TYPE == S_AXI) begin
 
     // assign clock and reset
@@ -343,7 +351,7 @@ module axi_spi_engine #(
       8'h31: up_rdata_ff <= offload_sync_id;
       8'h34: up_rdata_ff <= cmd_fifo_room;
       8'h35: up_rdata_ff <= sdo_fifo_room;
-      8'h36: up_rdata_ff <= (sdi_fifo_out_valid == 1) ? sdi_fifo_level + 1 : sdi_fifo_level; /* because of first-word-fall-through */
+      8'h36: up_rdata_ff <= sdi_level_s;
       8'h3a: up_rdata_ff <= sdi_fifo_out_data[DATA_WIDTH-1:0];
       8'h3c: up_rdata_ff <= sdi_fifo_out_data[DATA_WIDTH-1:0]; /* PEEK register */
       8'h40: up_rdata_ff <= {offload0_enable_reg};
@@ -471,21 +479,41 @@ module axi_spi_engine #(
   always @(posedge spi_clk) begin
     if (!spi_resetn) begin
       sdi_fifo_tkeep_int <= {(NUM_OF_SDIO*DATA_WIDTH/8){1'b1}};
+      active_lane_count  <= 1;
     end else begin
       if (cmd_valid && cmd_ready && cmd_data[15:8] == 8'h23) begin
-         for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin
+        for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin
           sdi_fifo_tkeep_int[i*DATA_WIDTH/8+:DATA_WIDTH/8] <= {DATA_WIDTH/8{cmd_data[i]}};
-         end
+        end
+        active_lane_count <= (cmd_data[7:0] == 8'h01) ? 1 : NUM_OF_SDIO;
       end
     end
   end
   assign sdi_fifo_tkeep = sdi_fifo_tkeep_int;
 
+  always @(*) begin
+    sdi_input_level_next = sdi_input_level;
+    if (sdi_data_ready && sdi_data_valid) begin
+      sdi_input_level_next = sdi_input_level_next + active_lane_count;
+    end
+    if (sdi_output_read_sync) begin
+      sdi_input_level_next = sdi_input_level_next - 1;
+    end
+  end
+
+  always @(posedge spi_clk) begin
+    if (!spi_resetn) begin
+      sdi_input_level <= 0;
+    end else begin
+      sdi_input_level <= sdi_input_level_next;
+    end
+  end
+
   util_axis_fifo_asym #(
     .ASYNC_CLK(ASYNC_SPI_CLK),
     .S_DATA_WIDTH(NUM_OF_SDIO * DATA_WIDTH),
     .M_DATA_WIDTH(DATA_WIDTH),
-    .ADDRESS_WIDTH(SDO_FIFO_ADDRESS_WIDTH),
+    .ADDRESS_WIDTH(SDI_FIFO_ADDRESS_WIDTH),
     .M_AXIS_REGISTERED(0),
     .ALMOST_EMPTY_THRESHOLD(1),
     .ALMOST_FULL_THRESHOLD(1),
@@ -515,6 +543,7 @@ module axi_spi_engine #(
     .m_axis_almost_empty());
 
   assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h3a;
+  assign sdi_output_read = (sdi_fifo_out_ready || find_next_valid_fifo_value) && sdi_fifo_out_valid;
 
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
@@ -739,5 +768,25 @@ module axi_spi_engine #(
     .out_resetn (up_sw_resetn),
     .out_clk (clk),
     .out_bits ({up_cmd_fifo_almost_empty, up_sdi_fifo_almost_full, up_sdo_fifo_almost_empty}));
+
+  sync_event #(
+    .NUM_OF_EVENTS (1),
+    .ASYNC_CLK (ASYNC_SPI_CLK)
+  ) i_sdi_output_read_sync (
+    .in_clk    (clk),
+    .in_event  (sdi_output_read),
+    .out_clk   (spi_clk),
+    .out_event (sdi_output_read_sync));
+
+  sync_data #(
+    .NUM_OF_BITS  (SDI_FIFO_ADDRESS_WIDTH),
+    .ASYNC_CLK    (ASYNC_SPI_CLK)
+  ) i_sdi_level_sync (
+    .in_clk   (spi_clk),
+    .in_data  (sdi_input_level),
+    .out_clk  (clk),
+    .out_data (sdi_level_s)
+  );
+
 
 endmodule
