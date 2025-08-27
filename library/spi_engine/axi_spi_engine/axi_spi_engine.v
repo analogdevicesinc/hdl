@@ -478,7 +478,7 @@ module axi_spi_engine #(
   integer i;
   always @(posedge spi_clk) begin
     if (!spi_resetn) begin
-      sdi_fifo_tkeep_int <= {(NUM_OF_SDIO*DATA_WIDTH/8){1'b1}};
+      sdi_fifo_tkeep_int <= {{(NUM_OF_SDIO-1)*(DATA_WIDTH/8){1'b0}},{(DATA_WIDTH/8){1'b1}}};
       active_lane_count  <= 1;
     end else begin
       if (cmd_valid && cmd_ready && cmd_data[15:8] == 8'h23) begin
