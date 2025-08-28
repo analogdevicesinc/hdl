@@ -166,6 +166,7 @@ ad_connect adc_reset ad485x_adc_pack/reset
 ad_connect axi_ad485x/adc_valid ad485x_adc_pack/fifo_wr_en
 ad_connect ad485x_adc_pack/packed_fifo_wr ad485x_dma/fifo_wr
 ad_connect ad485x_adc_pack/fifo_wr_overflow axi_ad485x/adc_dovf
+ad_connect ad485x_adc_pack/packed_sync ad485x_dma/sync
 
 for {set i 0} {$i < $numb_of_ch} {incr i} {
   ad_connect axi_ad485x/adc_data_$i ad485x_adc_pack/fifo_wr_data_$i
