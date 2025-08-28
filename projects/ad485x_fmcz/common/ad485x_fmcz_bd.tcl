@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -60,9 +60,9 @@ ad_ip_parameter adc_clkgen CONFIG.VCO_DIV 1
 ad_connect  sys_200m_clk adc_clkgen/clk
 if {$LVDS_CMOS_N == "0"} {
   # CMOS setup
-  # clk0 = 100M
-  ad_ip_parameter adc_clkgen CONFIG.VCO_MUL 5
-  ad_ip_parameter adc_clkgen CONFIG.CLK0_DIV 10
+  # clk0 = 200M
+  ad_ip_parameter adc_clkgen CONFIG.VCO_MUL 6
+  ad_ip_parameter adc_clkgen CONFIG.CLK0_DIV 6
   ad_connect adc_clk adc_clkgen/clk_0
 } else {
   # LVDS setup
@@ -166,6 +166,7 @@ ad_connect adc_reset ad485x_adc_pack/reset
 ad_connect axi_ad485x/adc_valid ad485x_adc_pack/fifo_wr_en
 ad_connect ad485x_adc_pack/packed_fifo_wr ad485x_dma/fifo_wr
 ad_connect ad485x_adc_pack/fifo_wr_overflow axi_ad485x/adc_dovf
+ad_connect ad485x_adc_pack/packed_sync ad485x_dma/sync
 
 for {set i 0} {$i < $numb_of_ch} {incr i} {
   ad_connect axi_ad485x/adc_data_$i ad485x_adc_pack/fifo_wr_data_$i
