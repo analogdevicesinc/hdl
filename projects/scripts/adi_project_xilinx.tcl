@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -27,6 +27,17 @@ set ADI_USE_INCR_COMP 1
 
 ## Set to enable power optimization
 set ADI_POWER_OPTIMIZATION 0
+
+## Set to generate .bin (for selmap)
+if {![info exists ::env(ADI_GENERATE_BIN)]} {
+  set ADI_GENERATE_BIN 0
+} else {
+  if {[string equal $::env(ADI_GENERATE_BIN) n]} {
+     set ADI_GENERATE_BIN 0
+  } else {
+     set ADI_GENERATE_BIN 1
+  }
+}
 
 ## Initialize global variables
 set p_board "not-applicable"
@@ -335,9 +346,11 @@ proc adi_project_files {project_name project_files} {
 proc adi_project_run {project_name} {
 
   global ad_project_dir
+  global sys_zynq
   global ADI_POWER_OPTIMIZATION
   global ADI_USE_OOC_SYNTHESIS
   global ADI_MAX_OOC_JOBS
+  global ADI_GENERATE_BIN
 
   if {![info exists ::env(ADI_PROJECT_DIR)]} {
     set actual_project_name $project_name
@@ -549,14 +562,24 @@ proc adi_project_run {project_name} {
   if { [string match "*VIOLATED*" $timing_string] == 1 ||
        [string match "*Timing constraints are not met*" $timing_string] == 1} {
     write_hw_platform -fixed -force  -include_bit -file ${actual_project_name}.sdk/system_top_bad_timing.xsa
-    if {[info exists ::env(ADI_GENERATE_BIN)]} {
-      write_bitstream -bin_file ${actual_project_name}.sdk/system_top_bad_timing.bit
+    # Generate .bin file only for non Versal designs
+    if {$ADI_GENERATE_BIN == 1} {
+      if {$sys_zynq == 3} {
+        puts "Bin generation skipped, Versal families do not support it."
+      } else {
+        write_bitstream -bin_file ${actual_project_name}.sdk/system_top_bad_timing.bit
+      }
     }
     return -code error [format "ERROR: Timing Constraints NOT met!"]
   } else {
     write_hw_platform -fixed -force  -include_bit -file ${actual_project_name}.sdk/system_top.xsa
-    if {[info exists ::env(ADI_GENERATE_BIN)]} {
-      write_bitstream -bin_file ${actual_project_name}.sdk/system_top.bit
+    # Generate .bin file only for non Versal designs
+    if {$ADI_GENERATE_BIN == 1} {
+      if {$sys_zynq == 3} {
+        puts "Bin generation skipped, Versal families do not support it."
+      } else {
+        write_bitstream -bin_file ${actual_project_name}.sdk/system_top.bit
+      }
     }
   }
 }
