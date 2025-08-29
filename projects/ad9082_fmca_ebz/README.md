@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD9082](https://www.analog.com/eval-ad9082)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz/quickstart
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad9081_fmca_ebz/index.html
+- Evaluation board VADJ range: 1.2V - 2.5V
 
 ## Supported parts
 
