@@ -1,4 +1,8 @@
+<!-- no_no_os -->
+
 # AD9081-FMCA-EBZ-X-BAND/ZCU102 HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
@@ -17,7 +21,7 @@ If other configurations are desired, then the parameters from the HDL project (s
 
 The overwritable parameters from the environment:
 
-- JESD_MODE - link layer encoder mode used; 
+- JESD_MODE - link layer encoder mode used;
   - 8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical layer
   - 64B66B - 64b66b link layer defined in JESD204C, uses Xilinx IP as Physical layer
 - [RX/TX]_LANE_RATE - lane rate of the [RX/TX] link (RX: MxFE to FPGA/TX: FPGA to MxFE)
@@ -42,7 +46,22 @@ The overwritable parameters from the environment:
 This specific command is equivalent to running `make` only:
 
 ```
-make JESD_MODE=8B10B RX_LANE_RATE=10 TX_LANE_RATE=10 RX_JESD_M=8 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1 TDD_SUPPORT=1 SHARED_DEVCLK=1 TDD_CHANNEL_CNT=6 TDD_SYNC_WIDTH=0 TDD_SYNC_INT=0 TDD_SYNC_EXT=1 TDD_SYNC_EXT_CDC=1
+make JESD_MODE=8B10B \
+RX_LANE_RATE=10 \
+TX_LANE_RATE=10 \
+RX_JESD_M=8 \
+RX_JESD_L=4 \
+RX_JESD_S=1 \
+TX_JESD_M=8 \
+TX_JESD_L=4 \
+TX_JESD_S=1 \
+TDD_SUPPORT=1 \
+SHARED_DEVCLK=1 \
+TDD_CHANNEL_CNT=6 \
+TDD_SYNC_WIDTH=0 \
+TDD_SYNC_INT=0 \
+TDD_SYNC_EXT=1 \
+TDD_SYNC_EXT_CDC=1
 ```
 
 Corresponding device trees:
