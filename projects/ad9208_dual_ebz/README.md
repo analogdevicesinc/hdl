@@ -1,8 +1,9 @@
 # AD9208-DUAL-EBZ HDL Project
 
-- Evaluation board product page: [EVAL-ADAD9208](https://www.analog.com/eval-ad9208)
+- Evaluation board product page: [EVAL-AD9208](https://www.analog.com/eval-ad9208)
 - System documentation: TO BE ADDED
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad9208_dual_ebz/index.html
+- Evaluation board VADJ range: 1.1V - 3.6V
 
 ## Supported parts
 
