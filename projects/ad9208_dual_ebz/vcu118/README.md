@@ -1,4 +1,8 @@
+<!-- no_build_example, no_no_os -->
+
 # AD9208-DUAL-EBZ/VCU118 HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
@@ -11,7 +15,7 @@ All of the RX link modes can be found in the [AD9208 data sheet](https://www.ana
 
 If other configurations are desired, then the parameters from the HDL project (found in *common/ad9208_dual_ebz_bd.tcl*) need to be changed, as well as the Linux/no-OS project configurations.
 
-The available configuration:
+The fixed configuration:
 
 - JESD_MODE: link layer encoder mode used;
   - 8B10B - 8b10b link layer defined in JESD204B
