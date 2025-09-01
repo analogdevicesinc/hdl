@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,27 +35,24 @@
 
 `timescale 1ns/100ps
 
-module axi_ad974x_if #(
-
-  parameter   FPGA_TECHNOLOGY = 0
-) (
+module axi_ad974x_if (
 
   // dac interface
 
-  input            clk_in,  // 210MHz
-  output  [13:0]   dac_data_out,
+  input               clk_in,
+  output reg [13:0]   dac_data_out,
 
   // internal resets
 
-  input            dac_rst,
+  input               reset_in,
 
   // data interface
 
-  input  [15:0]   dac_data_in
+  input   [15:0]      dac_data_in
 );
 
   always @(posedge clk_in) begin
-    if (dac_rst == 1'b1) begin
+    if (reset_in == 1'b1) begin
       dac_data_out[13:0] <= 14'h0;
     end else begin
       dac_data_out[13:0] <= dac_data_in[13:0]; 

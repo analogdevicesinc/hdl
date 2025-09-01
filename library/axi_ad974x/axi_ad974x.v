@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -41,32 +41,15 @@ module axi_ad974x #(
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   FPGA_FAMILY = 0,
   parameter   SPEED_GRADE = 0,
-  parameter   DEV_PACKAGE = 0,
-  parameter   DDS_DISABLE = 0,
-  parameter   DDS_TYPE = 1,
-  parameter   DDS_CORDIC_DW = 16,
-  parameter   DDS_CORDIC_PHASE_DW = 16
+  parameter   DEV_PACKAGE = 0
 ) (
 
-  // DAC INTERFACE
+  // dac interface
 
   input         dac_clk,
-
-  input  [31:0] dma_data,
-  input         valid_in_dma,
-  input         valid_in_dma_sec,
-  output        dac_data_ready,
-
-  input  [15:0] data_in_a,
-  input  [15:0] data_in_b,
-  input         valid_in_a,
-  input         valid_in_b,
-
-  // sync transfer between 2 DAC'S
-
-  input  external_sync,
-  output sync_ext_device,
-
+  input  [15:0] dma_data,
+  output [13:0] dac_data,
+ 
   // axi interface
 
   input         s_axi_aclk,
@@ -109,78 +92,31 @@ module axi_ad974x #(
   wire [31:0] up_rdata_s;
   wire        up_rack_s;
 
-  wire [ 7:0] address;
-  wire [23:0] data_read;
-  wire [23:0] data_write;
-  wire [ 1:0] multi_io_mode;
-  wire        sdr_ddr_n;
-  wire        symb_8_16b;
-  wire        transfer_data;
-  wire        stream;
-  wire [31:0] dac_data;
-  wire        dac_valid;
-  wire        if_busy;
-  wire        dac_ext_sync_arm;
-
   // signal name changes
 
   assign up_clk   = s_axi_aclk;
   assign up_rstn  = s_axi_aresetn;
 
   // device interface
+
   axi_ad974x_if axi_ad974x_interface (
     .clk_in(dac_clk),
     .reset_in(dac_rst_s),
-    .dac_data(dac_data),
-    .dac_data_valid(dac_valid),
-    .dac_data_valid_ext(valid_in_dma_sec),
-    .dac_data_ready(dac_data_ready),
-    .address(address),
-    .data_read(data_read),
-    .data_write(data_write),
-    .multi_io_mode(multi_io_mode),
-    .sdr_ddr_n(sdr_ddr_n),
-    .symb_8_16b(symb_8_16b),
-    .transfer_data(transfer_data),
-    .stream(stream),
-    .if_busy(if_busy),
-    .external_sync(external_sync),
-    .external_sync_arm(dac_ext_sync_arm),
-    .sync_ext_device(sync_ext_device));
+    .dac_data_in(dma_data),
+    .dac_data_out(dac_data));
 
   // core
+
   axi_ad974x_core #(
     .ID(ID),
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .FPGA_FAMILY(FPGA_FAMILY),
     .SPEED_GRADE(SPEED_GRADE),
-    .DEV_PACKAGE(DEV_PACKAGE),
-    .DDS_DISABLE(DDS_DISABLE),
-    .DDS_TYPE(DDS_TYPE),
-    .DDS_CORDIC_DW(DDS_CORDIC_DW),
-    .DDS_CORDIC_PHASE_DW(DDS_CORDIC_PHASE_DW)
+    .DEV_PACKAGE(DEV_PACKAGE)
   ) axi_ad974x_up_core (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
-    .adc_data_in_a(data_in_a),
-    .adc_data_in_b(data_in_b),
     .dma_data(dma_data),
-    .adc_valid_in_a(valid_in_a),
-    .adc_valid_in_b(valid_in_b),
-    .valid_in_dma(valid_in_dma),
-    .dac_data_ready(dac_data_ready),
-    .dac_data(dac_data),
-    .dac_valid(dac_valid),
-    .address(address),
-    .data_read(data_read),
-    .data_write(data_write),
-    .multi_io_mode(multi_io_mode),
-    .sdr_ddr_n(sdr_ddr_n),
-    .symb_8_16b(symb_8_16b),
-    .transfer_data(transfer_data),
-    .stream(stream),
-    .dac_ext_sync_arm(dac_ext_sync_arm),
-    .if_busy(if_busy),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_wreq(up_wreq_s),

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -37,32 +37,18 @@
 
 module axi_ad974x_channel #(
 
-  parameter   CHANNEL_ID = 32'h0,
-  parameter   DDS_DISABLE = 0,
-  parameter   DDS_TYPE = 1,
-  parameter   DDS_CORDIC_DW = 16,
-  parameter   DDS_CORDIC_PHASE_DW = 16
+  parameter   CHANNEL_ID = 32'h0
 ) (
 
   // dac interface
 
   input                   dac_clk,
   input                   dac_rst,
-  output                  dac_data_valid,
   output       [15:0]     dac_data,
 
   // input sources
 
   input        [15:0]     dma_data,
-  input        [15:0]     adc_data,
-  input                   valid_in_adc,
-  input                   valid_in_dma,
-  input                   dac_data_ready,
-
-  // processor interface
-
-  input                   dac_data_sync,
-  input                   dac_dfmt_type,
 
   // bus interface
 
@@ -80,61 +66,26 @@ module axi_ad974x_channel #(
 
   // internal signals
 
-  wire    [15:0]   formatted_dma_data;
   wire    [ 3:0]   dac_data_sel_s;
 
-  wire    [15:0]   dac_dds_data_s;
-  wire    [15:0]   dac_dds_scale_1_s;
-  wire    [15:0]   dac_dds_init_1_s;
-  wire    [15:0]   dac_dds_incr_1_s;
-  wire    [15:0]   dac_dds_scale_2_s;
-  wire    [15:0]   dac_dds_init_2_s;
-  wire    [15:0]   dac_dds_incr_2_s;
-  wire    [15:0]   dac_pat_data_1_s;
-  wire    [15:0]   dac_pat_data_2_s;
-
-  reg     [15:0]   ramp_pattern = 16'h0000;
-  reg              ramp_valid   = 1'b0;
+  reg     [15:0]   ramp_pattern;
   reg     [15:0]   dac_data_int;
-  reg              dac_data_valid_int;
 
   assign dac_data       = dac_data_int;
-  assign dac_data_valid = dac_data_valid_int;
-
-  assign formatted_dma_data [15]   = dac_dfmt_type ^ dma_data[15];
-  assign formatted_dma_data [14:0] = dma_data[14:0];
 
   always @ (*) begin
     case(dac_data_sel_s)
-      4'h0 :
-      begin
-        dac_data_int       = dac_dds_data_s;
-        dac_data_valid_int = 1'b1;
-      end
       4'h2 :
       begin
-        dac_data_int       = formatted_dma_data;
-        dac_data_valid_int = valid_in_dma;
-      end
-      4'h3 :
-      begin
-        dac_data_int       = 16'b0;
-        dac_data_valid_int = 1'b1;
-      end
-      4'h8 :
-      begin
-        dac_data_int       = 16'b0;
-        dac_data_valid_int = 1'b1;
+        dac_data_int       = dma_data;
       end
       4'hb :
       begin
         dac_data_int       = ramp_pattern;
-        dac_data_valid_int = ramp_valid;
       end
       default :
       begin
         dac_data_int       = 16'b0;
-        dac_data_valid_int = 1'b1;
       end
     endcase
   end
@@ -142,37 +93,12 @@ module axi_ad974x_channel #(
   // ramp generator
 
   always @(posedge dac_clk) begin
-    ramp_valid <= 1'b1;
-    if(dac_data_ready == 1'b1) begin
-        ramp_pattern <= ramp_pattern + 1'b1;
-    end else begin
-      ramp_pattern <= ramp_pattern;
-    end
     if(ramp_pattern == 16'hffff || dac_rst == 1'b1) begin
-      ramp_pattern <= 16'h0;
+        ramp_pattern <= 16'h0;
+    end else begin
+      ramp_pattern <= ramp_pattern + 1'b1;
     end
   end
-
-  ad_dds #(
-    .DISABLE (DDS_DISABLE),
-    .DDS_DW (16),
-    .PHASE_DW (16),
-    .DDS_TYPE (DDS_TYPE),
-    .CORDIC_DW (DDS_CORDIC_DW),
-    .CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
-    .CLK_RATIO (1)
-  ) i_dds (
-    .clk (dac_clk),
-    .dac_dds_format (dac_dfmt_type),
-    .dac_data_sync (dac_data_sync),
-    .dac_valid (dac_data_ready),
-    .tone_1_scale (dac_dds_scale_1_s),
-    .tone_2_scale (dac_dds_scale_2_s),
-    .tone_1_init_offset (dac_dds_init_1_s),
-    .tone_2_init_offset (dac_dds_init_2_s),
-    .tone_1_freq_word (dac_dds_incr_1_s),
-    .tone_2_freq_word (dac_dds_incr_2_s),
-    .dac_dds_data (dac_dds_data_s));
 
   // single channel processor
 
@@ -182,14 +108,14 @@ module axi_ad974x_channel #(
   ) dac_channel (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst),
-    .dac_dds_scale_1(dac_dds_scale_1_s),
-    .dac_dds_init_1(dac_dds_init_1_s),
-    .dac_dds_incr_1(dac_dds_incr_1_s),
-    .dac_dds_scale_2(dac_dds_scale_2_s),
-    .dac_dds_init_2(dac_dds_init_2_s),
-    .dac_dds_incr_2(dac_dds_incr_2_s),
-    .dac_pat_data_1(dac_pat_data_1_s),
-    .dac_pat_data_2(dac_pat_data_2_s),
+    .dac_dds_scale_1(),
+    .dac_dds_init_1(),
+    .dac_dds_incr_1(),
+    .dac_dds_scale_2(),
+    .dac_dds_init_2(),
+    .dac_dds_incr_2(),
+    .dac_pat_data_1(),
+    .dac_pat_data_2(),
     .dac_data_sel(dac_data_sel_s),
     .dac_mask_enable(),
     .dac_iq_mode(),
