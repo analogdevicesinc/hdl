@@ -8,8 +8,8 @@
 
     <title>PULSAR-ADC HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=9d1cc31f" />
-    <script async="async" src="../../_static/app.umd.js?v=da3838b9"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=37266688" />
+    <script async="async" src="../../_static/app.umd.js?v=8f62bab2"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -106,6 +106,7 @@
 <li><a class="reference internal" href="#pulsar-adc-fmc">PulSAR_ADC_FMC</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#design-configuration">Design configuration</a></li>
 <li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
@@ -403,8 +404,7 @@ products are available in their respective data sheets and should be consulted
 when utilizing the boards.</p>
 <section id="with-pmod">
 <h3>With PMOD<a class="headerlink" href="#with-pmod" title="Permalink to this heading"></a></h3>
-<p>ADAQ40xx families is also part of the family of PulSAR converters with PMOD
-connector.</p>
+<p>The ADAQ40xx family is also part of the PulSAR converters with PMOD connector.</p>
 <p>This type of boards come with the <a class="icon adi reference external" href="https://www.analog.com/EVAL-PMD-IB1Z" target="_blank">EVAL-PMD-IB1Z</a> PMOD to
 field programmable gate array (FPGA) mezzanine card (FMC) interposer board that
 interfaces with the system demonstration controller board.</p>
@@ -532,11 +532,80 @@ task of sending data across digital isolation.</p>
 <a class="reference internal image-reference" href="../../_images/pulsar_adc_fmc_hdl.svg"><img alt="PulSAR_ADC_FMC block diagram" class="align-center" src="../../_images/pulsar_adc_fmc_hdl.svg" width="800" /></a>
 </section>
 </section>
+<section id="design-configuration">
+<h3>Design configuration<a class="headerlink" href="#design-configuration" title="Permalink to this heading"></a></h3>
+<p>The reference design uses a clock generator for the division of the SPI clock
+and a PWM generator for the conversion signal. The required parameters can be
+set in the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/pulsar_adc/common/pulsar_adc_bd.tcl" target="_blank">pulsar_adc_pmdz_bd.tcl</a>
+file using the following values, where the <code class="docutils literal notranslate"><span class="pre">PULSE_0_PERIOD</span></code> is computed as
+<code class="docutils literal notranslate"><span class="pre">Tcyc_min</span> <span class="pre">/</span> <span class="pre">Tspi_clk</span></code>:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Part</p></th>
+<th class="head"><p>PULSE_0_PERIOD</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AD7942</p></td>
+<td><p>640</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7946</p></td>
+<td><p>320</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7988-1</p></td>
+<td><p>1600</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7685</p></td>
+<td><p>640</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7687</p></td>
+<td><p>640</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7691</p></td>
+<td><p>640</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7686</p></td>
+<td><p>320</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7688</p></td>
+<td><p>320</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7693</p></td>
+<td><p>320</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7988-5</p></td>
+<td><p>320</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7980</p></td>
+<td><p>160</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7983</p></td>
+<td><p>120</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7690</p></td>
+<td><p>250</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7982</p></td>
+<td><p>160</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7984</p></td>
+<td><p>120</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
 <p>The Zedboard-based PulSAR ADC project can be built to use either the FMC
-connector or the Pmod JA connector.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">FMC_N_PMOD</span></code> parameter is used to select between the them:</p>
+connector or the PMOD JA connector.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">FMC_N_PMOD</span></code> parameter is used to select between them:</p>
 <ul class="simple">
 <li><p>0 - for PMOD</p></li>
 <li><p>1 - for FMC (default)</p></li>
@@ -788,8 +857,14 @@ the HDL repository, and then build the project as follows:.</p>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Build examples:</p>
-<p>Zedboard Pmod support</p>
+<p>Zedboard PMOD support</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/pulsar_adc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/pulsar_adc/zed$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">FMC_N_PMOD</span><span class="o">=</span><span class="m">0</span>
@@ -799,6 +874,12 @@ the HDL repository, and then build the project as follows:.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/pulsar_adc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/pulsar_adc/zed$
+</pre></div>
+</div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">FMC_N_PMOD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">SPI_OP_MODE</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>-<span class="w"> </span>builds<span class="w"> </span>standard<span class="w"> </span>FMC<span class="w"> </span>version
 </pre></div>
 </div>
@@ -806,11 +887,23 @@ the HDL repository, and then build the project as follows:.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/pulsar_adc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/pulsar_adc/zed$
+</pre></div>
+</div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">FMC_N_PMOD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">SPI_OP_MODE</span><span class="o">=</span><span class="m">1</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Zedboard FMC support for AD7944 chain mode or 3-wire “single”</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/pulsar_adc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/pulsar_adc/zed$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">FMC_N_PMOD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">SPI_OP_MODE</span><span class="o">=</span><span class="m">2</span>
@@ -821,6 +914,12 @@ by the used configuration. If the following command was run</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/pulsar_adc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/pulsar_adc/zed$
+</pre></div>
+</div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">FMC_N_PMOD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">SPI_OP_MODE</span><span class="o">=</span><span class="m">0</span>
 </pre></div>
 </div>
@@ -828,7 +927,7 @@ by the used configuration. If the following command was run</p>
 <p><code class="docutils literal notranslate"><span class="pre">FMC_N_PMOD1_SPI_OP_MODE0</span></code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For the CoraZ7S-based projects, the build is donw without parameters!</p>
+<p>For the CoraZ7S-based projects, the build is done without parameters!</p>
 </div>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>

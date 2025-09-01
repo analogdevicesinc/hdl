@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The AXI LTC2387 IP core can be used to interface LTC2387-18, LTC2386-18, LTC2385-18 and ADAQ23878 devices." name="description" />
+<meta content="The AXI LTC2387 IP core can be used to interface LTC2387-18, LTC2387-16 and ADAQ23878 devices." name="description" />
 
     <title>AXI LTC2387 &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=9d1cc31f" />
-    <script async="async" src="../../_static/app.umd.js?v=da3838b9"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=37266688" />
+    <script async="async" src="../../_static/app.umd.js?v=8f62bab2"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -379,8 +379,7 @@ Content on this topic
                 }
                 </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="265.2" height="348" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-ref_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">ref_clk</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dco_p"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">dco_p</text></a><g transform="translate(18,142.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dco_n"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">dco_n</text></a><g transform="translate(18,166.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">delay_clk</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">clk_gate</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="246">da_p</text></a><g transform="translate(18,238.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="270">da_n</text></a><g transform="translate(18,262.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="294">db_p</text></a><g transform="translate(18,286.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="318">db_n</text></a><g transform="translate(18,310.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="342">adc_dovf</text></a><g transform="translate(18,334.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="265.2" y="54">adc_valid</text></a><g transform="translate(283.2,46.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="265.2" y="78">adc_data</text></a><g transform="translate(283.2,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="265.2" height="348" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="150.6" y="386">axi_ltc2387</text></svg></section>
 </div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc2387" target="_blank">AXI LTC2387</a> IP core can be used to
-interface <a class="icon adi reference external" href="https://www.analog.com/LTC2387-18" target="_blank">LTC2387-18</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2386-18" target="_blank">LTC2386-18</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2385-18" target="_blank">LTC2385-18</a> and
-<a class="icon adi reference external" href="https://www.analog.com/ADAQ23878" target="_blank">ADAQ23878</a> devices.</p>
+interface <a class="icon adi reference external" href="https://www.analog.com/LTC2387-18" target="_blank">LTC2387-18</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2387-16" target="_blank">LTC2387-16</a> and <a class="icon adi reference external" href="https://www.analog.com/ADAQ23878" target="_blank">ADAQ23878</a> devices.</p>
 <p>This documentation only covers the IP core and requires that one must be
 familiar with the device for a complete and better understanding.</p>
 <p>More about the generic framework interfacing ADCs can be read in <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a>.</p>
@@ -499,19 +498,19 @@ familiar with the device for a complete and better understanding.</p>
 <td class="range"><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ADC_RES</span></code></td>
-<td class="description"><p>ADC_RES.</p></td>
+<td class="description"><p>ADC resolution.</p></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">18</span></code></td>
-<td class="range"><p>18, 16</p></td>
+<td class="range"><p>16, 18</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">OUT_RES</span></code></td>
-<td class="description"><p>OUT_RES.</p></td>
+<td class="description"><p>Output data width.</p></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">32</span></code></td>
-<td class="range"><p>32, 16</p></td>
+<td class="range"><p>16, 32</p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TWOLANES</span></code></td>
-<td class="description"><p>Twolanes.</p></td>
+<td class="description"><p>Lane mode.</p></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
-<td class="range"><p>1, 0</p></td>
+<td class="range"><p>0, 1</p></td>
 </tr>
 </tbody>
 </table>
@@ -796,12 +795,12 @@ familiar with the device for a complete and better understanding.</p>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">db_p</span></code></td>
 <td><p>in</p></td>
-<td><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">TWOLANES</span> <span class="pre">==</span> <span class="pre">1</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">db_n</span></code></td>
 <td><p>in</p></td>
-<td><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">TWOLANES</span> <span class="pre">==</span> <span class="pre">1</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_valid</span></code></td>
@@ -832,15 +831,10 @@ familiar with the device for a complete and better understanding.</p>
 version of the chip, is done by the <cite>ADC_RES</cite> and <cite>OUT_RES</cite> parameters of
 the modules.</p>
 <ul class="simple">
-<li><p>For the 18-bit, ADC_RES=18 (=&gt; OUT_RES=32; addresses should be on a nb. of
+<li><p>For the 18-bit, ADC_RES=18 (=&gt; OUT_RES=32; addresses should be on a no. of
 bits power of 2)</p></li>
 <li><p>For the 16-bit, ADC_RES=16 (=&gt; OUT_RES=16)</p></li>
 </ul>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>When using the ONE LANE configuration (TWOLANES=0), the only resolution
-supported is 18 bits!</p>
-</div>
 </section>
 <section id="detailed-description">
 <h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
@@ -2431,7 +2425,8 @@ Where n is from 0 to 15.</p>
 system level.
 The <a class="reference internal" href="#axi-ltc2387-interface"><span class="std std-ref">Interface</span></a> must be connected directly to the top file of
 the design, as I/O primitives are part of the IP.</p>
-<p>The example design uses a DMA to move the data from the output of the IP to memory.</p>
+<p>The example design uses a DMA to move the data from the output of the IP to
+memory.</p>
 <p>If the data needs to be processed in HDL before moving to the memory, it can be
 done at the output of the IP (at the system level) or inside the ADC interface
 module (at the IP level).</p>
@@ -2455,8 +2450,7 @@ from the interface module.</p>
 <li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0577" target="_blank">projects/cn0577</a></p></li>
 <li><p>HDL project documentation at <a class="reference internal" href="../../projects/cn0577/index.html#cn0577"><span class="std std-ref">CN0577 HDL project</span></a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2387-18" target="_blank">LTC2387-18</a> 18-bit 15 MSPS</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2386-18" target="_blank">LTC2386-18</a> 18-bit 10 MSPS</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2385-18" target="_blank">LTC2385-18</a> 18-bit 5 MSPS</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2387-16" target="_blank">LTC2387-16</a> 16-bit 15 MSPS</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ23878" target="_blank">ADAQ23878</a> 18-bit 15 MSPS</p></li>
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf" target="_blank">Zynq-7000 SoC Overview</a>.</p></li>
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf" target="_blank">Zynq-7000 SoC Packaging and Pinout</a>.</p></li>
