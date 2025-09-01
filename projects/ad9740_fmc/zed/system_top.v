@@ -209,9 +209,9 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .ad9740_clk (ad9740_clk),
-    .ad9740_data (ad9740_data),
-    .ad9740_ready (ad9740_ready),
+    .ad974x_clk (ad9740_clk),
+    .ad974x_data (ad9740_data),
+    .ad974x_ready (ad9740_ready),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
