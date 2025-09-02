@@ -7,10 +7,10 @@ proc util_cdc_sync_bits_constr {inst {from {}}} {
   if {$from != {}} {
     set_false_path \
       -from [get_registers $from] \
-      -to   [get_registers [format "%s%s" ${inst} {|cdc_sync_stage1[0]}]]
+      -to   [get_registers [format "%s%s" ${inst} {|cdc_sync_stage1[*]}]]
   } else {
     set_false_path \
-      -to   [get_registers [format "%s%s" ${inst} {|cdc_sync_stage1[0]}]]
+      -to   [get_registers [format "%s%s" ${inst} {|cdc_sync_stage1[*]}]]
   }
 }
 
