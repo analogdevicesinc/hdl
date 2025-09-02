@@ -4,6 +4,7 @@
   - [EVAL-AD4060/EVAL-AD4062](https://www.analog.com/eval-ad4060-eval-ad4062)
 - System documentation:TO BE ADDED
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad4062_ardz/index.html
+- Evaluation board VIO: 3.3V
 
 ## Supported parts
 
