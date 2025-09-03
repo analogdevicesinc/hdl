@@ -254,6 +254,7 @@ module spi_engine_execution #(
       exec_chipselect_cmd_reg  <= (inst == CMD_CHIPSELECT);
       exec_sdo_lane_config_reg <= (inst == CMD_WRITE) && (cmd[10:8] == REG_SDO_LANE_CONFIG);
     end else begin
+      exec_sdo_lane_config_reg <= 1'b0;
       sleep_counter_compare <= sleep_counter == cmd_d1_time && clk_div_last && sleep_counter_increment;
     end
   end
