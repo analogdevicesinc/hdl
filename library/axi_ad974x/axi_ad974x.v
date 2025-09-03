@@ -81,6 +81,10 @@ module axi_ad974x #(
   wire up_clk;
   wire up_rstn;
 
+  // internal data signals
+
+  wire [13:0] dac_data_s;
+
   // internal signals
 
   wire        up_wreq_s;
@@ -100,9 +104,9 @@ module axi_ad974x #(
   // device interface
 
   axi_ad974x_if axi_ad974x_interface (
-    .clk_in(dac_clk),
+    .dac_clk_in(dac_clk),
     .reset_in(dac_rst_s),
-    .dac_data_in(dma_data),
+    .dac_data_in(dac_data_s),
     .dac_data_out(dac_data));
 
   // core
@@ -116,6 +120,7 @@ module axi_ad974x #(
   ) axi_ad974x_up_core (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
+    .dac_data(dac_data_s),
     .dma_data(dma_data),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
