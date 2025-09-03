@@ -272,17 +272,17 @@ module system_top #(
   inout         fmc_bob_xud1_gpio2,
   inout         fmc_bob_xud1_gpio3,
   inout         fmc_bob_xud1_gpio4,
-  inout         fmc_bob_xud1_gpio5
+  inout         fmc_bob_xud1_gpio5,
 
   // Debug TDD
-  // output debug_tdd_sync,
-  // output debug_tdd_enabled,
-  // output debug_tdd_rx_en,
-  // output debug_tdd_tx_en,
-  // output debug_tdd_tx_stingray_en,
-  // output debug_tdd_channel_0,
-  // output debug_tdd_channel_1,
-  // output debug_tdd_sync_out
+  output debug_tdd_sync,
+  output debug_tdd_enabled,
+  output debug_tdd_rx_en,
+  output debug_tdd_tx_en,
+  output debug_tdd_tx_stingray_en,
+  output debug_tdd_channel_0,
+  output debug_tdd_channel_1,
+  output debug_tdd_sync_out
 );
 
   // internal signals
@@ -884,12 +884,12 @@ module system_top #(
     end
 
     // Debug TDD
-    // assign debug_tdd_sync           = tdd_sync;
-    // assign debug_tdd_enabled        = tdd_enabled;
-    // assign debug_tdd_rx_en          = tdd_rx_en;
-    // assign debug_tdd_tx_en          = tdd_tx_en;
-    // assign debug_tdd_tx_stingray_en = tdd_tx_stingray_en;
-    // assign debug_tdd_channel_0      = tdd_channel_0;
-    // assign debug_tdd_channel_1      = tdd_channel_1;
-    // assign debug_tdd_sync_out       = tdd_sync_out;
+    assign debug_tdd_sync           = tdd_sync;
+    assign debug_tdd_enabled        = tdd_enabled;
+    assign debug_tdd_rx_en          = tdd_rx_en;
+    assign debug_tdd_tx_en          = tdd_tx_en;
+    assign debug_tdd_tx_stingray_en = tdd_tx_stingray_en;
+    assign debug_tdd_channel_0      = tdd_channel_0;
+    assign debug_tdd_channel_1      = tdd_channel_1;
+    assign debug_tdd_sync_out       = tdd_sync_out;
 endmodule
