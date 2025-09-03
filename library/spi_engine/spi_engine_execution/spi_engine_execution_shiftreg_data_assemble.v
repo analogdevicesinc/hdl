@@ -72,7 +72,6 @@ module spi_engine_execution_shiftreg_data_assemble #(
   reg [                           3:0] count_active_lanes = 0;
   reg [                           3:0] num_active_lanes   = NUM_OF_SDIO;
   reg [                           3:0] lane_index         = 0;
-  reg [                           3:0] lane_index_d       = 0;
   reg [                           3:0] valid_indices [0:7];
 
   wire sdo_toshiftreg = (transfer_active && trigger_tx && first_bit && sdo_enabled);
@@ -147,7 +146,6 @@ module spi_engine_execution_shiftreg_data_assemble #(
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       lane_index <= 0;
-      lane_index_d <= 0;
       valid_index <= 0;
       last_handshake_int <= 1'b0;
     end else begin
@@ -158,7 +156,6 @@ module spi_engine_execution_shiftreg_data_assemble #(
         end else begin
           lane_index <= 0;
         end
-        lane_index_d <= lane_index;
         valid_index <= valid_indices[lane_index];
       end else if (sdo_toshiftreg) begin
         last_handshake_int <= 1'b0;
