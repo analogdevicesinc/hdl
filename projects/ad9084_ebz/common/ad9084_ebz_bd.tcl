@@ -339,7 +339,7 @@ if {$ADI_PHY_SEL} {
   ad_ip_parameter axi_apollo_tx_xcvr CONFIG.QPLL_ENABLE 1
   ad_ip_parameter axi_apollo_tx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
 } else {
-  source ../common/versal_transceiver.tcl
+  source $ad_hdl_dir/library/xilinx/scripts/versal_xcvr_subsystem.tcl
 
   # Reset gpios
   create_bd_port -dir O gt_powergood
@@ -372,7 +372,7 @@ if {$ADI_PHY_SEL} {
 
   set REF_CLK_RATE $ad_project_params(REF_CLK_RATE)
   # instantiate versal phy
-  create_versal_phy jesd204_phy $JESD_MODE $RX_NUM_OF_LANES $TX_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX
+  create_versal_jesd_xcvr_subsystem jesd204_phy $JESD_MODE $RX_NUM_OF_LANES $TX_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX
   # reset generator
   ad_ip_instance proc_sys_reset rx_device_clk_rstgen
   ad_connect rx_device_clk rx_device_clk_rstgen/slowest_sync_clk
@@ -425,7 +425,7 @@ if {$ASYMMETRIC_A_B_MODE} {
     ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.SYS_CLK_SEL 0x2 ; # QPLL1
   } else {
     # instantiate versal phy
-    create_versal_phy jesd204_phy_b $JESD_MODE $RX_B_NUM_OF_LANES $TX_B_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX
+    create_versal_jesd_xcvr_subsystem jesd204_phy_b $JESD_MODE $RX_B_NUM_OF_LANES $TX_B_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX
 
     ad_connect gt_b_reset jesd204_phy_b/gtreset_in
     ad_connect gt_b_reset_rx_datapath jesd204_phy_b/gtreset_rx_datapath
