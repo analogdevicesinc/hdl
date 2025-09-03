@@ -104,8 +104,6 @@ module axi_ad974x #(
   // device interface
 
   axi_ad974x_if axi_ad974x_interface (
-    .dac_clk_in(dac_clk),
-    .reset_in(dac_rst_s),
     .dac_data_in(dac_data_s),
     .dac_data_out(dac_data));
 

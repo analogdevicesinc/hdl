@@ -44,7 +44,7 @@ module axi_ad974x_channel #(
 
   input                   dac_clk,
   input                   dac_rst,
-  output       [15:0]     dac_data,
+  output       [13:0]     dac_data,
 
   // input sources
 
@@ -67,9 +67,11 @@ module axi_ad974x_channel #(
   // internal signals
 
   wire    [ 3:0]   dac_data_sel_s;
+ 
+  reg     [13:0]   dma_pattern;   
+  reg     [13:0]   ramp_pattern;
 
-  reg     [15:0]   ramp_pattern;
-  reg     [15:0]   dac_data_int;
+  reg     [13:0]   dac_data_int;
 
   assign dac_data       = dac_data_int;
 
@@ -77,7 +79,7 @@ module axi_ad974x_channel #(
     case(dac_data_sel_s)
       4'h2 :
       begin
-        dac_data_int       = dma_data;
+        dac_data_int       = dma_pattern;
       end
       4'hb :
       begin
@@ -90,11 +92,21 @@ module axi_ad974x_channel #(
     endcase
   end
 
-  // ramp generator
+  // dma data
+  
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dma_pattern <= 14'h0;
+    end else begin
+      dma_pattern[13:0] <= dma_data[13:0]; 
+    end
+  end
+
+  // ramp data generator
 
   always @(posedge dac_clk) begin
-    if(ramp_pattern == 16'hffff || dac_rst == 1'b1) begin
-        ramp_pattern <= 16'h0;
+    if(ramp_pattern == 14'h3fff || dac_rst == 1'b1) begin
+        ramp_pattern <= 14'h0;
     end else begin
       ramp_pattern <= ramp_pattern + 1'b1;
     end

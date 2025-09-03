@@ -39,24 +39,13 @@ module axi_ad974x_if (
 
   // dac interface
 
-  input               dac_clk_in,
-  output reg [13:0]   dac_data_out,
-
-  // internal resets
-
-  input               reset_in,
+  output [13:0]   dac_data_out,
 
   // data interface
 
-  input   [15:0]      dac_data_in
+  input  [13:0]   dac_data_in
 );
 
-  always @(posedge dac_clk_in) begin
-    if (reset_in == 1'b1) begin
-      dac_data_out[13:0] <= 14'h0;
-    end else begin
-      dac_data_out[13:0] <= dac_data_in[13:0]; 
-    end
-  end
+  assign dac_data_out = dac_data_in;
   
 endmodule
