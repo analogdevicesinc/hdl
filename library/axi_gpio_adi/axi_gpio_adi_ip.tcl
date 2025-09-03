@@ -16,6 +16,15 @@ adi_ip_properties axi_gpio_adi
 
 #set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_fan_control} [ipx::current_core]
 
-set cc [ipx::current_core]
+adi_add_bus "gpio" "master" \
+	"xilinx.com:interface:gpio_rtl:1.0" \
+	"xilinx.com:interface:gpio:1.0" \
+	[list \
+    {"gpio_io_o" "TRI_O"} \
+    {"gpio_io_t" "TRI_T"} \
+    {"gpio_io_i" "TRI_I"} \
+]
 
+
+set cc [ipx::current_core]
 ipx::save_core $cc
