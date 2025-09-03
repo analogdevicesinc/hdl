@@ -66,9 +66,6 @@ create_clock -name refclk0 -period  $rx_link_clk_period [get_ports ref_clk_p]
 create_clock -name rx_device_clk     -period  $rx_device_clk_period [get_ports clk_m2c_p[0]]
 create_clock -name tx_device_clk     -period  $tx_device_clk_period [get_ports clk_m2c_p[1]]
 
-# hsci input clock
-create_clock -name hsci_clk_out      -period  1.25 [get_ports hsci_cko_p]
-
 # Constraint SYSREFs
 # Assumption is that REFCLK and SYSREF have similar propagation delay,
 # and the SYSREF is a source synchronous Edge-Aligned signal to REFCLK
