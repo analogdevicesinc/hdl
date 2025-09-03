@@ -37,18 +37,21 @@ ad_ip_parameter ltc2378_trigger_gen CONFIG.PULSE_0_PERIOD 180
 ad_ip_parameter ltc2378_trigger_gen CONFIG.PULSE_0_WIDTH 1
 
 # trigger to BUSY's negative edge
-create_bd_cell -type module -reference sync_bits busy_sync
-create_bd_cell -type module -reference ad_edge_detect busy_capture
-set_property -dict [list CONFIG.EDGE 1] [get_bd_cells busy_capture]
+#create_bd_cell -type module -reference sync_bits busy_sync
+#create_bd_cell -type module -reference ad_edge_detect busy_capture
+#set_property -dict [list CONFIG.EDGE 1] [get_bd_cells busy_capture]
 
-ad_connect spi_clk busy_capture/clk
-ad_connect busy_capture/rst GND
+#ad_connect spi_clk busy_capture/clk
+#ad_connect busy_capture/rst GND
 
-ad_connect busy_sync/out_resetn $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn
-ad_connect spi_clk busy_sync/out_clk
-ad_connect busy_sync/in_bits ltc2378_spi_busy
-ad_connect busy_sync/out_bits busy_capture/signal_in
-ad_connect busy_capture/signal_out $hier_spi_engine/${hier_spi_engine}_offload/trigger
+#ad_connect busy_sync/out_resetn $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn
+#ad_connect spi_clk busy_sync/out_clk
+#ad_connect busy_sync/in_bits ltc2378_spi_busy
+#ad_connect busy_sync/out_bits busy_capture/signal_in
+#ad_connect busy_capture/signal_in ltc2378_spi_busy
+#ad_connect busy_capture/signal_out $hier_spi_engine/${hier_spi_engine}_offload/trigger
+
+ad_connect ltc2378_spi_busy $hier_spi_engine/${hier_spi_engine}_offload/trigger
 
 ad_connect spi_clk ltc2378_trigger_gen/ext_clk
 ad_connect $sys_cpu_clk ltc2378_trigger_gen/s_axi_aclk
