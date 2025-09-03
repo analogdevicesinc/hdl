@@ -70,7 +70,6 @@ ad_connect util_sigma_delta_spi/resetn $hier_spi_engine/resetn
 
 ad_connect $hier_spi_engine/m_spi util_sigma_delta_spi/s_spi
 ad_connect util_sigma_delta_spi/data_ready $hier_spi_engine/trigger
-ad_connect $hier_spi_engine/${hier_spi_engine}_execution/active util_sigma_delta_spi/spi_active
 ad_connect util_sigma_delta_spi/m_spi spi
 
 ad_ip_instance c_counter_binary phase_gen
