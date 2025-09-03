@@ -6,7 +6,6 @@
 
 PROJECT_NAME := ad9084_ebz_vpk180
 
-M_DEPS += ../common/versal_transceiver.tcl
 M_DEPS += ../common/versal_hsci_phy.tcl
 M_DEPS += ../common/ad9084_ebz_spi.v
 M_DEPS += ../../scripts/adi_pd.tcl
@@ -15,6 +14,7 @@ M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
 M_DEPS += ../../common/vpk180/vpk180_system_constr.xdc
 M_DEPS += ../../common/vpk180/vpk180_system_bd.tcl
 M_DEPS += ../../ad9084_ebz/common/ad9084_ebz_bd.tcl
+M_DEPS += ../../../library/xilinx/scripts/versal_xcvr_subsystem.tcl
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
 M_DEPS += ../../../library/util_cdc/sync_bits.v
 M_DEPS += ../../../library/common/ad_iobuf.v
