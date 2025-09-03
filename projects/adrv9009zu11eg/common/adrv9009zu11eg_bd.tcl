@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -21,7 +21,6 @@ if {[info exists FMCOMMS8]} {
 }
 
 set TDD_SUPPORT $ad_project_params(TDD_SUPPORT)
-set SHARED_DEVCLK $ad_project_params(SHARED_DEVCLK)
 
 set DATAPATH_WIDTH 4
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
@@ -109,9 +108,6 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 200
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL2_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__FREQMHZ 12.288
-ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL3_ENABLE 1
-ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL3_REF_CTRL__SRCSEL {IOPLL}
-ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL3_REF_CTRL__FREQMHZ 10
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__IRQ0 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__IRQ1 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__GPIO_EMIO__PERIPHERAL__ENABLE 1
@@ -302,10 +298,11 @@ ad_ip_instance axi_dmac axi_adrv9009_som_tx_dma
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_TYPE_DEST 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.CYCLIC 1
-ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_SLICE_DEST 1
-ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_LENGTH_WIDTH 24
+# ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
+# ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
+# ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_data_width
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
@@ -359,10 +356,13 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_LENGTH_WIDTH 24
+# ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_som_rx_dma MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.CACHE_COHERENT 1
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_AXCACHE 0b1111
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_obs_xcvr
 ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.NUM_OF_LANES $MAX_RX_OS_NUM_OF_LANES
@@ -694,7 +694,7 @@ ad_connect tx_sysref_0 tx_adrv9009_som_tpl_core/dac_tpl_core/dac_sync_in
 ad_connect  core_clk_b rx_adrv9009_som_tpl_core/link_clk
 ad_connect  core_clk_b util_som_rx_cpack/clk
 ad_connect  core_clk_b  $adc_offload_name/s_axis_aclk
-ad_connect  core_clk_b axi_adrv9009_som_rx_dma/s_axis_aclk
+ad_connect  core_clk_a axi_adrv9009_som_rx_dma/s_axis_aclk
 
 ad_connect  axi_adrv9009_som_rx_jesd/rx_sof rx_adrv9009_som_tpl_core/link_sof
 ad_connect  axi_adrv9009_som_rx_jesd/rx_data_tdata rx_adrv9009_som_tpl_core/link_data
@@ -720,6 +720,7 @@ ad_connect  axi_adrv9009_som_obs_jesd/rx_data_tdata obs_adrv9009_som_tpl_core/li
 ad_connect  axi_adrv9009_som_obs_jesd/rx_data_tvalid obs_adrv9009_som_tpl_core/link_valid
 ad_connect  core_clk_a util_som_obs_cpack/clk
 ad_connect  obs_adrv9009_som_tpl_core/adc_tpl_core/adc_rst util_som_obs_cpack/reset
+ad_connect  obs_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_in GND
 ad_connect  core_clk_a axi_adrv9009_som_obs_dma/fifo_wr_clk
 
 ad_connect  obs_adrv9009_som_tpl_core/adc_valid_0 util_som_obs_cpack/fifo_wr_en
@@ -729,7 +730,6 @@ for {set i 0} {$i < $RX_OS_NUM_OF_CONVERTERS} {incr i} {
 }
 ad_connect  obs_adrv9009_som_tpl_core/adc_dovf util_som_obs_cpack/fifo_wr_overflow
 ad_connect  util_som_obs_cpack/packed_fifo_wr axi_adrv9009_som_obs_dma/fifo_wr
-ad_connect  util_som_obs_cpack/packed_sync axi_adrv9009_som_obs_dma/sync
 
 ad_connect  util_som_rx_cpack/packed_fifo_wr_data $adc_offload_name/s_axis_tdata
 ad_connect  util_som_rx_cpack/packed_fifo_wr_en $adc_offload_name/s_axis_tvalid
@@ -844,12 +844,6 @@ ad_cpu_interrupt ps-11 mb-14 axi_adrv9009_som_obs_jesd/irq
 ad_cpu_interrupt ps-12 mb-13 axi_adrv9009_som_tx_jesd/irq
 ad_cpu_interrupt ps-13 mb-12 axi_adrv9009_som_rx_jesd/irq
 
-create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
-    [get_bd_addr_spaces axi_adrv9009_som_obs_dma/m_dest_axi] [get_bd_addr_segs sys_ps8/SAXIGP3/HP1_DDR_LOW] SEG_sys_ps8_HP1_DDR_LOW
-create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
-    [get_bd_addr_spaces axi_adrv9009_som_rx_dma/m_dest_axi] [get_bd_addr_segs sys_ps8/SAXIGP4/HP2_DDR_LOW] SEG_sys_ps8_HP2_DDR_LOW
-create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
-    [get_bd_addr_spaces axi_adrv9009_som_tx_dma/m_src_axi] [get_bd_addr_segs sys_ps8/SAXIGP5/HP3_DDR_LOW] SEG_sys_ps8_HP3_DDR_LOW
 create_bd_addr_seg -range 0x80000000 -offset 0x80000000 \
     [get_bd_addr_spaces $dac_offload_name/storage_unit/MAXI_0] [get_bd_addr_segs ddr4_1/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_1_C0_DDR4_ADDRESS_BLOCK
 

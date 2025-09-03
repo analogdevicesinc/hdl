@@ -85,11 +85,11 @@ set_property -dict {PACKAGE_PIN C37 IOSTANDARD LVCMOS18                         
 # set_property         -dict {PACKAGE_PIN C37  IOSTANDARD LVCMOS18                                    } [get_ports fmc_bob_xud1_imu_gpio3  ]; ## LA25_P
 # set_property         -dict {PACKAGE_PIN B38  IOSTANDARD LVCMOS18                                    } [get_ports fmc_bob_xud1_imu_rst    ]; ## LA25_N
 
-# set_property         -dict {PACKAGE_PIN E35  IOSTANDARD LVCMOS18                                    } [get_ports debug_tdd_sync                 ]; ## LA28_P
-# set_property         -dict {PACKAGE_PIN D35  IOSTANDARD LVCMOS18                                    } [get_ports debug_tdd_enabled              ]; ## LA28_N
-# set_property         -dict {PACKAGE_PIN E32  IOSTANDARD LVCMOS18                                    } [get_ports debug_tdd_rx_en                ]; ## LA29_P
-# set_property         -dict {PACKAGE_PIN E33  IOSTANDARD LVCMOS18                                    } [get_ports debug_tdd_tx_en                ]; ## LA29_N
-# set_property         -dict {PACKAGE_PIN AK22 IOSTANDARD LVCMOS18                                    } [get_ports debug_tdd_tx_stingray_en       ]; ## LA30_P
-# set_property         -dict {PACKAGE_PIN AK23 IOSTANDARD LVCMOS18                                    } [get_ports debug_tdd_channel_0            ]; ## LA30_N
-# set_property         -dict {PACKAGE_PIN A32  IOSTANDARD LVCMOS18                                    } [get_ports debug_tdd_channel_1            ]; ## LA31_P
-# set_property         -dict {PACKAGE_PIN A33  IOSTANDARD LVCMOS18                                    } [get_ports debug_tdd_sync_out             ]; ## LA31_N
+set_property         -dict {PACKAGE_PIN E35  IOSTANDARD LVCMOS18                            } [get_ports debug_tdd_sync                 ]; ## LA28_P
+set_property         -dict {PACKAGE_PIN D35  IOSTANDARD LVCMOS18                            } [get_ports debug_tdd_enabled              ]; ## LA28_N
+set_property         -dict {PACKAGE_PIN E32  IOSTANDARD LVCMOS18                            } [get_ports debug_tdd_rx_en                ]; ## LA29_P
+set_property         -dict {PACKAGE_PIN E33  IOSTANDARD LVCMOS18                            } [get_ports debug_tdd_tx_en                ]; ## LA29_N
+set_property         -dict {PACKAGE_PIN AK22 IOSTANDARD LVCMOS18                            } [get_ports debug_tdd_tx_stingray_en       ]; ## LA30_P
+set_property         -dict {PACKAGE_PIN AK23 IOSTANDARD LVCMOS18                            } [get_ports debug_tdd_channel_0            ]; ## LA30_N
+set_property         -dict {PACKAGE_PIN A32  IOSTANDARD LVCMOS18                            } [get_ports debug_tdd_channel_1            ]; ## LA31_P
+set_property         -dict {PACKAGE_PIN A33  IOSTANDARD LVCMOS18                            } [get_ports debug_tdd_sync_out             ]; ## LA31_N
