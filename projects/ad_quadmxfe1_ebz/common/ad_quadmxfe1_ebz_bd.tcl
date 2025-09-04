@@ -226,11 +226,11 @@ ad_data_offload_create $adc_offload_name \
 ad_ip_parameter $adc_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
 ad_connect $adc_offload_name/sync_ext GND
 
-ad_ip_instance util_vector_logic rx_do_rstout_logic
+ad_ip_instance ilvector_logic rx_do_rstout_logic
 ad_ip_parameter rx_do_rstout_logic config.c_operation {not}
 ad_ip_parameter rx_do_rstout_logic config.c_size {1}
 
-ad_ip_instance util_vector_logic cpack_reset_logic
+ad_ip_instance ilvector_logic cpack_reset_logic
 ad_ip_parameter cpack_reset_logic config.c_operation {or}
 ad_ip_parameter cpack_reset_logic config.c_size {1}
 
@@ -477,8 +477,8 @@ ad_connect  axi_mxfe_rx_jesd/rx_axi/device_reset jesd204_phy_125_126/rx_reset_gt
 #
 if {$ADI_PHY_SEL == 0} {
 # Rx Physical lanes to PHY
-ad_ip_instance xlconcat rx_concat_7_0_p [list NUM_PORTS {8}]
-ad_ip_instance xlconcat rx_concat_7_0_n [list NUM_PORTS {8}]
+ad_ip_instance ilconcat rx_concat_7_0_p [list NUM_PORTS {8}]
+ad_ip_instance ilconcat rx_concat_7_0_n [list NUM_PORTS {8}]
 
 ad_connect  rx_data_0_p rx_concat_7_0_p/In0
 ad_connect  rx_data_1_p rx_concat_7_0_p/In1
@@ -501,8 +501,8 @@ ad_connect  rx_data_7_n rx_concat_7_0_n/In7
 ad_connect  jesd204_phy_121_122/rxp_in rx_concat_7_0_p/dout
 ad_connect  jesd204_phy_121_122/rxn_in rx_concat_7_0_n/dout
 
-ad_ip_instance xlconcat rx_concat_15_8_p [list NUM_PORTS {8}]
-ad_ip_instance xlconcat rx_concat_15_8_n [list NUM_PORTS {8}]
+ad_ip_instance ilconcat rx_concat_15_8_p [list NUM_PORTS {8}]
+ad_ip_instance ilconcat rx_concat_15_8_n [list NUM_PORTS {8}]
 
 ad_connect  rx_data_8_p rx_concat_15_8_p/In0
 ad_connect  rx_data_9_p rx_concat_15_8_p/In1
@@ -611,13 +611,13 @@ if {$ADI_PHY_SEL == 0} {
 # Tx Physical lanes to PHY
 #
 for {set i 0} {$i < $MAX_TX_LANES} {incr i} {
-  ad_ip_instance xlslice txp_out_slice_$i [list \
+  ad_ip_instance ilslice txp_out_slice_$i [list \
     DIN_TO [expr $i % 8] \
     DIN_FROM [expr $i % 8] \
     DIN_WIDTH {8} \
     DOUT_WIDTH {1} \
   ]
-  ad_ip_instance xlslice txn_out_slice_$i [list \
+  ad_ip_instance ilslice txn_out_slice_$i [list \
     DIN_TO [expr $i % 8] \
     DIN_FROM [expr $i % 8] \
     DIN_WIDTH {8} \
@@ -749,4 +749,3 @@ ad_cpu_interrupt ps-12 mb-13 axi_mxfe_tx_dma/irq
 ad_cpu_interrupt ps-11 mb-14 axi_mxfe_rx_jesd/irq
 ad_cpu_interrupt ps-10 mb-15 axi_mxfe_tx_jesd/irq
 ad_cpu_interrupt ps-14 mb-8  axi_gpio_2/ip2intc_irpt
-

@@ -235,12 +235,12 @@ ad_ip_parameter util_adrv904x_xcvr CONFIG.PPF0_CFG 0xF00
 ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CP 0xFF
 ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CP_G3 0xF
 ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_LPF 0x31D
-ad_ip_parameter util_adrv904x_xcvr CONFIG.RXDFE_KH_CFG2 {0x2631} 
-ad_ip_parameter util_adrv904x_xcvr CONFIG.RXDFE_KH_CFG3 {0x411C} 
-ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_WIDEMODE_CDR {"01"} 
-ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_XMODE_SEL {"0"} 
-ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG0 {0x0000} 
-ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG1 {0x0000} 
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXDFE_KH_CFG2 {0x2631}
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXDFE_KH_CFG3 {0x411C}
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_WIDEMODE_CDR {"01"}
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_XMODE_SEL {"0"}
+ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG0 {0x0000}
+ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG1 {0x0000}
 
 # xcvr interfaces
 
@@ -335,7 +335,7 @@ create_bd_port -dir I ext_sync_in
 ad_ip_parameter rx_adrv904x_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
 ad_connect ext_sync_in rx_adrv904x_tpl_core/adc_tpl_core/adc_sync_in
 
-ad_ip_instance util_vector_logic manual_sync_or [list \
+ad_ip_instance ilvector_logic manual_sync_or [list \
     C_SIZE 1 \
     C_OPERATION {or} \
 ]

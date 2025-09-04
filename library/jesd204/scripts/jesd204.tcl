@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2022 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2022, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -226,24 +226,24 @@ proc adi_tpl_jesd204_tx_create {ip_name num_of_lanes num_of_converters samples_p
       # Concatenation and slicer cores
       # xconcat limited to 32 input ports
       for {set i 0} {$i < $num_of_converters} {incr i 32} {
-      ad_ip_instance xlconcat "${ip_name}/data_concat[expr $i/32]" [list \
+      ad_ip_instance ilconcat "${ip_name}/data_concat[expr $i/32]" [list \
         NUM_PORTS [expr min(32,$num_of_converters-$i)] \
         ]
       }
       # main concat
       if {$num_of_converters > 32} {
-       ad_ip_instance xlconcat "${ip_name}/data_concat" [list \
+       ad_ip_instance ilconcat "${ip_name}/data_concat" [list \
         NUM_PORTS [expr int(ceil(double($num_of_converters)/32))] \
         ]
       }
 
       for {set i 0} {$i < $num_of_converters} {incr i} {
-        ad_ip_instance xlslice "${ip_name}/enable_slice_${i}" [list \
+        ad_ip_instance ilslice "${ip_name}/enable_slice_${i}" [list \
           DIN_WIDTH $num_of_converters \
           DIN_FROM $i \
           DIN_TO $i \
         ]
-        ad_ip_instance xlslice "${ip_name}/valid_slice_${i}" [list \
+        ad_ip_instance ilslice "${ip_name}/valid_slice_${i}" [list \
           DIN_WIDTH $num_of_converters \
           DIN_FROM $i \
           DIN_TO $i \
@@ -357,18 +357,18 @@ proc adi_tpl_jesd204_rx_create {ip_name num_of_lanes num_of_converters samples_p
     if {$num_of_converters > 1} {
       # Slicer cores
       for {set i 0} {$i < $num_of_converters} {incr i} {
-        ad_ip_instance xlslice ${ip_name}/data_slice_$i [list \
+        ad_ip_instance ilslice ${ip_name}/data_slice_$i [list \
           DIN_WIDTH [expr $dma_sample_width*$samples_per_channel*$num_of_converters] \
           DIN_FROM [expr $dma_sample_width*$samples_per_channel*($i+1)-1] \
           DIN_TO [expr $dma_sample_width*$samples_per_channel*$i] \
         ]
 
-        ad_ip_instance xlslice "${ip_name}/enable_slice_${i}" [list \
+        ad_ip_instance ilslice "${ip_name}/enable_slice_${i}" [list \
           DIN_WIDTH $num_of_converters \
           DIN_FROM $i \
           DIN_TO $i \
         ]
-        ad_ip_instance xlslice "${ip_name}/valid_slice_${i}" [list \
+        ad_ip_instance ilslice "${ip_name}/valid_slice_${i}" [list \
           DIN_WIDTH $num_of_converters \
           DIN_FROM $i \
           DIN_TO $i \
@@ -449,5 +449,3 @@ proc adi_jesd204_calc_tpl_width {link_datapath_width jesd_l jesd_m jesd_s jesd_n
   }
 
 }
-
-

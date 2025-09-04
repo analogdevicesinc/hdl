@@ -72,7 +72,7 @@ ad_ip_instance axi_iic axi_iic_main
 ad_ip_parameter axi_iic_main CONFIG.USE_BOARD_FLOW true
 ad_ip_parameter axi_iic_main CONFIG.IIC_BOARD_INTERFACE IIC_MAIN
 
-ad_ip_instance xlconcat sys_concat_intc
+ad_ip_instance ilconcat sys_concat_intc
 ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
 ad_ip_instance proc_sys_reset sys_rstgen

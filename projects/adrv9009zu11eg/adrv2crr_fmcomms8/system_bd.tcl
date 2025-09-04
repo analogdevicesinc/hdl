@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -32,7 +32,7 @@ create_bd_port -dir I spi1_miso
 set_property -dict [list CONFIG.PSU__SPI1__PERIPHERAL__ENABLE {1} CONFIG.PSU__SPI1__PERIPHERAL__IO {EMIO}] [get_bd_cells sys_ps8]
 set_property -dict [list CONFIG.PSU__SPI1__GRP_SS1__ENABLE {1} CONFIG.PSU__SPI1__GRP_SS2__ENABLE {1}] [get_bd_cells sys_ps8]
 
-ad_ip_instance xlconcat spi1_csn_concat
+ad_ip_instance ilconcat spi1_csn_concat
 ad_ip_parameter spi1_csn_concat CONFIG.NUM_PORTS 3
 ad_connect  sys_ps8/emio_spi1_ss_o_n spi1_csn_concat/In0
 ad_connect  sys_ps8/emio_spi1_ss1_o_n spi1_csn_concat/In1

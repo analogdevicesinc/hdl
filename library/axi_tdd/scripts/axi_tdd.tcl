@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -42,7 +42,7 @@ proc ad_tdd_gen_create {ip_name
    ]
 
   for {set i 0} {$i < $num_of_channels} {incr i} {
-    ad_ip_instance xlslice "${ip_name}/tdd_ch_slice_${i}" [list \
+    ad_ip_instance ilslice "${ip_name}/tdd_ch_slice_${i}" [list \
       DIN_WIDTH $num_of_channels \
       DIN_FROM $i \
       DIN_TO $i \

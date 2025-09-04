@@ -199,9 +199,9 @@ ad_connect  sys_cpu_clk rom_sys_0/clk
 
 # interrupts
 
-ad_ip_instance xlconcat sys_concat_intc_0
+ad_ip_instance ilconcat sys_concat_intc_0
 ad_ip_parameter sys_concat_intc_0 CONFIG.NUM_PORTS 8
-ad_ip_instance xlconcat sys_concat_intc_1
+ad_ip_instance ilconcat sys_concat_intc_1
 ad_ip_parameter sys_concat_intc_1 CONFIG.NUM_PORTS 8
 
 ad_connect  sys_concat_intc_0/dout sys_ps8/pl_ps_irq0
