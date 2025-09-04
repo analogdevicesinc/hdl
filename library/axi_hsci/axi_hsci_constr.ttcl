@@ -1,0 +1,20 @@
+###############################################################################
+## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*hsci_master_top/hsci_master_logic/hsci_master_regs_regs/O_reg[hsci_bram_start_address][data][*]/C}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*hsci_master_top/hsci_mcore/enc0/enc_addr_reg[*]/D}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*hsci_master_top/hsci_master_logic/hsci_master_regs_regs/O_reg[hsci_xfer_num][data][*]/C}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*hsci_master_top/hsci_mcore/enc0/m_xfer_num_reg[*]/D}]
+
+set_false_path -from [get_cells -filter IS_SEQUENTIAL -hierarchical -regexp ".*O_reg.*"] -to [get_clocks -of_objects [get_ports {hsci_pclk}]]
