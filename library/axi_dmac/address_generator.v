@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -39,7 +39,7 @@ module address_generator #(
 
   parameter ID_WIDTH = 3,
   parameter DMA_DATA_WIDTH = 64,
-  parameter DMA_ADDR_WIDTH = 32,
+  parameter DMA_ADDR_WIDTH = 64,
   parameter BEATS_PER_BURST_WIDTH = 4,
   parameter BYTES_PER_BEAT_WIDTH = $clog2(DMA_DATA_WIDTH/8),
   parameter LENGTH_WIDTH = 8,
