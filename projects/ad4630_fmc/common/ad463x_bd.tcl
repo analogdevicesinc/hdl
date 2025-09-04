@@ -5,13 +5,13 @@
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 # system level parameters
-set NUM_OF_SDI  $ad_project_params(NUM_OF_SDI)
+set NUM_OF_SDIO  $ad_project_params(NUM_OF_SDIO)
 set CAPTURE_ZONE $ad_project_params(CAPTURE_ZONE)
 set CLK_MODE $ad_project_params(CLK_MODE)
 set DDR_EN $ad_project_params(DDR_EN)
 set NO_REORDER $ad_project_params(NO_REORDER)
 
-puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI ; CAPTURE_ZONE: $CAPTURE_ZONE ; CLK_MODE: $CLK_MODE ; DDR_EN: $DDR_EN ; NO_REORDER: $NO_REORDER"
+puts "build parameters: NUM_OF_SDIO: $NUM_OF_SDIO ; CAPTURE_ZONE: $CAPTURE_ZONE ; CLK_MODE: $CLK_MODE ; DDR_EN: $DDR_EN ; NO_REORDER: $NO_REORDER"
 
 # block design ports and interfaces
 # specify the CNV generator's reference clock frequency in MHz
@@ -30,7 +30,7 @@ set max17687_sync_freq 400000
 create_bd_port -dir O ad463x_spi_sclk
 create_bd_port -dir O ad463x_spi_cs
 create_bd_port -dir O ad463x_spi_sdo
-create_bd_port -dir I -from [expr $NUM_OF_SDI-1] -to 0 ad463x_spi_sdi
+create_bd_port -dir I -from [expr $NUM_OF_SDIO-1] -to 0 ad463x_spi_sdi
 
 create_bd_port -dir I ad463x_echo_sclk
 
@@ -51,12 +51,12 @@ ad_connect spi_clk spi_clkgen/clk_0
 
 # create a SPI Engine architecture
 
-#spi_engine_create "spi_ad463x" 32         1             1       $NUM_OF_SDI 0          1
+#spi_engine_create "spi_ad463x" 32         1             1       $NUM_OF_SDIO 0          1
 
 set data_width    32
 set async_spi_clk 1
 set num_cs        1
-set num_sdi       $NUM_OF_SDI
+set num_sdi       $NUM_OF_SDIO
 set num_sdo       1
 set sdi_delay     1
 set echo_sclk     1
@@ -67,7 +67,7 @@ spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $
 
 ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_execution CONFIG.DEFAULT_SPI_CFG 1   ; # latching MISO on negative edge - hardware only
 
-ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_0 $NUM_OF_SDI
+ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_0 $NUM_OF_SDIO
 ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_1 $CAPTURE_ZONE
 ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_2 $CLK_MODE
 ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_3 $DDR_EN
@@ -94,8 +94,17 @@ ad_ip_parameter sync_generator CONFIG.PULSE_0_WIDTH [expr int(ceil(double($max17
 
 if {$NO_REORDER == 0} {
 
-  ad_ip_instance spi_axis_reorder data_reorder
-  ad_ip_parameter data_reorder CONFIG.NUM_OF_LANES $NUM_OF_SDI
+ad_ip_instance spi_axis_reorder data_reorder
+ad_ip_parameter data_reorder CONFIG.NUM_OF_LANES $NUM_OF_SDIO
+
+} elseif {$NO_REORDER == 1} {
+
+    if {$CAPTURE_ZONE == 2} {
+      puts "ERROR: Invalid configuration - Disabling Reorder IP is invalid for Capture Zone 2."
+      exit 2
+    }
+
+}
 
 } elseif {$NO_REORDER == 1} {
 
@@ -186,7 +195,7 @@ if {$CAPTURE_ZONE == 1} {
       ## SDI is latched by the data capture
       ad_ip_instance ad463x_data_capture data_capture
       ad_ip_parameter data_capture CONFIG.DDR_EN $DDR_EN
-      ad_ip_parameter data_capture CONFIG.NUM_OF_LANES $NUM_OF_SDI
+      ad_ip_parameter data_capture CONFIG.NUM_OF_LANES $NUM_OF_SDIO
 
       ad_connect spi_clk data_capture/clk
       ad_connect ad463x_spi_cs data_capture/csn
