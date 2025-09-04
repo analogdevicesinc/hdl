@@ -206,9 +206,9 @@ ad_connect  axi_adrv9001_1/dac_2_clk adrv1_util_dac_2_upack/clk
 
 ad_connect adrv1_ref_clk           axi_adrv9001_1/ref_clk
 
-ad_connect tx_output_enable  axi_adrv9001_1/tx_output_enable
+ad_connect tx_output_enable        axi_adrv9001_1/tx_output_enable
 
-ad_connect mssi_sync         axi_adrv9001_1/mssi_sync
+ad_connect mssi_sync               axi_adrv9001_1/mssi_sync_in
 
 ad_connect adrv1_rx1_dclk_in_n     axi_adrv9001_1/rx1_dclk_in_n_NC
 ad_connect adrv1_rx1_dclk_in_p     axi_adrv9001_1/rx1_dclk_in_p_dclk_in
@@ -424,9 +424,9 @@ ad_connect  axi_adrv9001_2/dac_2_clk adrv2_util_dac_2_upack/clk
 
 ad_connect adrv1_ref_clk           axi_adrv9001_2/ref_clk
 
-ad_connect tx_output_enable  axi_adrv9001_2/tx_output_enable
+ad_connect tx_output_enable        axi_adrv9001_2/tx_output_enable
 
-ad_connect mssi_sync         axi_adrv9001_2/mssi_sync
+ad_connect mssi_sync               axi_adrv9001_2/mssi_sync_in
 
 ad_connect adrv2_rx1_dclk_in_n     axi_adrv9001_2/rx1_dclk_in_n_NC
 ad_connect adrv2_rx1_dclk_in_p     axi_adrv9001_2/rx1_dclk_in_p_dclk_in
