@@ -1,6 +1,6 @@
 <!-- no_build_example, no_no_os, no_dts -->
 
-# AD9213/VCU118 HDL Project
+# AD9213-EVB/VCU118 HDL Project
 
 - VADJ with which it was tested in hardware: 1.8V
 

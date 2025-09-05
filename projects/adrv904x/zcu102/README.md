@@ -1,6 +1,6 @@
 <!-- no_no_os -->
 
-# ARDV904x/ZCU102 HDL Project
+# ADRV904X/ZCU102 HDL Project
 
 - VADJ with which it was tested in hardware: 1.8V
 
