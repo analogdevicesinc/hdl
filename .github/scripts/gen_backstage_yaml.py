@@ -206,10 +206,11 @@ def write_hdl_library_yaml(
     source_location = source_location_.format(org=args.org, repo=args.repo,
                                               tag=tag)
     key_ = key.replace('/', '-')
+    short_key_ = key[key.rfind('/')+1:]
     t: Dict = yaml_template()
     m = t['metadata']
     a = m['annotations']
-    m['name'] = f"hdl-library-{key_}"
+    m['name'] = f"hdl-library-{short_key_}"
     if tag != "main":
         t['spec']['subcomponentOf'] = m['name']
         m['name'] = m['name'] + '-' + tag
@@ -253,7 +254,7 @@ def write_hdl_library_yaml(
     if m['description'] is None:
         m['description'] = m['title']
 
-    file = path.join(dir_, f"library-{key_}-catalog-info.yaml")
+    file = path.join(dir_, f"library-{short_key_}-catalog-info.yaml")
     with open(file, 'w', encoding='utf-8') as f:
         yaml.dump(t, f, default_flow_style=False, sort_keys=False,
                   allow_unicode=True)
