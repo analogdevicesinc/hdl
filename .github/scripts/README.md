@@ -2,7 +2,7 @@
 
 These scripts are used for checking the integrity and correctness of the files across the HDL repository. The first script called **check_for_missing_readme_md.sh** is used to check the correctness of the README files only while the second script called **check_guideline.py** has the sole role of checking if our guidelines are implemented across the other files.
 
-## User guide for [check_for_missing_readme_md.sh](https://github.com/analogdevicesinc/hdl/blob/main/.github/scripts/check_for_missing_readme_md.sh)
+## User guide for [check_readme.sh](https://github.com/analogdevicesinc/hdl/blob/main/.github/scripts/check_readme.sh)
 
 ### Prerequisites
 
@@ -61,13 +61,24 @@ is_special_carrier() {
 
 #### 4. Required sections
 
-- **Main board README** must contain:
+- **Main board README** MUST contain:
   - `Building the project`
   - `Supported parts`
-- **Carrier README** must contain:
+- **Carrier README** SHOULD contain all the below sub-sections*:
   - `Building the project`
   - `Example configurations`
   - A mention of a **default configuration** under the `Example configurations` section
+
+```
+* If it's not possible, you MUST include the following flags, depedinding on your case (on what sub-section cannot be included):
+  - no_build_example: this project doesn't have the Example configurations section, so it doesn't have build parameters
+  - no_dts: this project doesn't have a device tree associated
+  - no_no_os: this project doesn't have a no-OS project associated
+
+Include these flags on the first line of the README.md file, as a MarkDown comment, like this (depeding on what you can't include):
+
+<!-- no_build_example, no_dts, no_no_os -->
+```
 
 #### 5. Forbidden content
 
