@@ -1,4 +1,4 @@
-# JUPITER_SDR HDL Project
+# JUPITER-SDR HDL Project
 
 - Evaluation board product page: [AD-JUPITER-EBZ](https://www.analog.com/ad-jupiter-ebz)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/jupiter_sdr/reference_hdl 
