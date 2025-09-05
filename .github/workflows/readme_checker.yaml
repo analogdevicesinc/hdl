@@ -1,11 +1,11 @@
 ##############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2023, 2025 Analog Devices, Inc. All rights reserved.
 #
 ## GitHub action script for the check_for_missing_readme_md.sh script located
 ## in .github/scripts
 ##############################################################################
 
-name: Lint
+name: README checker
 
 on:
   pull_request:
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.2.2
       - name: Check for README.md files
         run: |
-          bash ./.github/scripts/check_for_missing_readme_md.sh
+          bash ./.github/scripts/check_readme.sh
