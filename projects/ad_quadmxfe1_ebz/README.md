@@ -1,4 +1,4 @@
-# QUAD-MxFE HDL Project
+# AD-QUADMXFE1-EBZ HDL Project
 
 - Evaluation board product page: [QUAD-MxFE](https://www.analog.com/quad-mxfe)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/quadmxfe
