@@ -1,4 +1,4 @@
-# AD7768-1-EVB HDL Project
+# AD77681EVB HDL Project
 
 - Evaluation boards product page:
   - [EVAL-AD7768-1-EVB](https://www.analog.com/eval-ad7768-1)

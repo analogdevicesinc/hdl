@@ -1,4 +1,4 @@
-# AD6676-EVB HDL Project
+# AD6676EVB HDL Project
 
 - Evaluation board product page: [EVAL-AD6676](https://www.analog.com/eval-AD6676)
 - System documentation: https://wiki.analog.com/resources/eval/ad6676-wideband_rx_subsystem_ad6676ebz
