@@ -1,6 +1,6 @@
 <!-- no_build_example, no_no_os -->
 
-# AD9083_EVB/A10SOC HDL Project
+# AD9083-EVB/A10SOC HDL Project
 
 - VADJ with which it was tested in hardware: 1.8V
 

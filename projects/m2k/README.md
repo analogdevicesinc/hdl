@@ -1,4 +1,4 @@
-# ADALM2000 HDL Project
+# M2K HDL Project
 
 - Board product page: [ADALM2000](https://www.analog.com/adalm2000)
 - System documentation: https://wiki.analog.com/university/tools/m2k/users/quick_start

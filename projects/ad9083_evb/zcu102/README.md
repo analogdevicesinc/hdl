@@ -1,6 +1,6 @@
 <!-- no_no_os -->
 
-# AD9083_EVB/ZCU102 HDL Project
+# AD9083-EVB/ZCU102 HDL Project
 
 - VADJ with which it was tested in hardware: 1.8V
 
