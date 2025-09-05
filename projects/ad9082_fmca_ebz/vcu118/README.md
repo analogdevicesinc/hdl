@@ -1,4 +1,8 @@
+<!-- no_no_os -->
+
 # AD9082-FMCA-EBZ/VCU118 HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
@@ -15,7 +19,7 @@ All of the RX/TX link modes can be found in the [AD9082 data sheet](https://www.
 
 The overwritable parameters from the environment are:
 
-- JESD_MODE: link layer encoder mode used; 
+- JESD_MODE: link layer encoder mode used;
   - 8B10B - 8b10b link layer defined in JESD204B
   - 64B66B - 64b66b link layer defined in JESD204C
 - [RX/TX]_LANE_RATE: lane rate of the [RX/TX] link (RX: MxFE to FPGA/TX: FPGA to MxFE)
