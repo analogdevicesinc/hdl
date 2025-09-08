@@ -136,5 +136,28 @@ set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_4 \
         [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O]] \
   ]
 
+set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_5 \
+  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_1_phy/i_div_clk_buf/O]] \
+        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O]] \
+  ]
+
+set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_6 \
+  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_2_phy/i_div_clk_buf/O]] \
+        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O]] \
+  ]
+
+set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_7 \
+  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_1_phy/i_div_clk_buf/O]] \
+        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O]] \
+  ]
+
+set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_8 \
+  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_2_phy/i_div_clk_buf/O]] \
+        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O]] \
+  ]
+
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports adrv1_tx1_strobe_in_p]
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports adrv1_tx2_idata_in_p]
+
+set_false_path -to [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_sync/mssi_sync_in_d_reg/D]
+set_false_path -to [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_sync/mssi_sync_in_d_reg/D]
