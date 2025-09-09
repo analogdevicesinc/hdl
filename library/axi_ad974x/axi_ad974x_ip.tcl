@@ -48,8 +48,8 @@ ipx::infer_bus_interface dac_clk xilinx.com:signal:clock_rtl:1.0 $cc
 adi_add_bus "s_axis" "slave" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \
-  [list {"dac_data_ready" "TREADY"} \
-    {"valid_in_dma" "TVALID"} \
+  [list {"dma_ready" "TREADY"} \
+    {"dma_valid" "TVALID"} \
     {"dma_data" "TDATA"}]
 adi_add_bus_clock "dac_clk" "s_axis"
 

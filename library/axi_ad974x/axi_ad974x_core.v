@@ -40,7 +40,11 @@ module axi_ad974x_core #(
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   FPGA_FAMILY = 0,
   parameter   SPEED_GRADE = 0,
-  parameter   DEV_PACKAGE = 0
+  parameter   DEV_PACKAGE = 0,
+  parameter   DDS_DISABLE = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   DDS_CORDIC_DW = 14,
+  parameter   DDS_CORDIC_PHASE_DW = 14
 ) (
 
   // dac interface
@@ -48,6 +52,8 @@ module axi_ad974x_core #(
   input         dac_clk,
   output        dac_rst,
   input  [15:0] dma_data,
+  input         dma_ready,
+  input         dma_valid,
   output [13:0] dac_data,
 
   // processor interface
@@ -76,6 +82,8 @@ module axi_ad974x_core #(
 
   wire [15:0] dac_data_channel_0;
   wire        dac_rst_s;
+  wire        dac_data_sync;
+  wire        dac_dfmt_type;
 
   // defaults
 
@@ -99,12 +107,20 @@ module axi_ad974x_core #(
   // dac channel 0
 
   axi_ad974x_channel #(
-    .CHANNEL_ID(0)
+    .CHANNEL_ID(0),
+    .DDS_DISABLE(DDS_DISABLE),
+    .DDS_TYPE(DDS_TYPE),
+    .DDS_CORDIC_DW(DDS_CORDIC_DW),
+    .DDS_CORDIC_PHASE_DW(DDS_CORDIC_PHASE_DW)
   ) axi_ad974x_channel_0 (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
     .dac_data(dac_data_channel_0),
     .dma_data(dma_data[15:0]),
+    .dma_ready(dma_ready),
+    .dma_valid(dma_valid),
+    .dac_data_sync(dac_data_sync),
+    .dac_dfmt_type(dac_dfmt_type),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_wreq(up_wreq),
@@ -133,7 +149,7 @@ module axi_ad974x_core #(
     .dac_sdr_ddr_n(),
     .dac_symb_op(),
     .dac_symb_8_16b(),
-    .dac_sync(),
+    .dac_sync(dac_data_sync),
     .dac_ext_sync_arm(),
     .dac_ext_sync_disarm(),
     .dac_ext_sync_manual_req(),

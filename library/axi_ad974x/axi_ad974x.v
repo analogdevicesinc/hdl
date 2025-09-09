@@ -41,13 +41,19 @@ module axi_ad974x #(
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   FPGA_FAMILY = 0,
   parameter   SPEED_GRADE = 0,
-  parameter   DEV_PACKAGE = 0
+  parameter   DEV_PACKAGE = 0,
+  parameter   DDS_DISABLE = 0,
+  parameter   DDS_TYPE = 1,
+  parameter   DDS_CORDIC_DW = 14,
+  parameter   DDS_CORDIC_PHASE_DW = 14
 ) (
 
   // dac interface
 
   input         dac_clk,
   input  [15:0] dma_data,
+  input         dma_valid,
+  output        dma_ready,
   output [13:0] dac_data,
  
   // axi interface
@@ -114,12 +120,18 @@ module axi_ad974x #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .FPGA_FAMILY(FPGA_FAMILY),
     .SPEED_GRADE(SPEED_GRADE),
-    .DEV_PACKAGE(DEV_PACKAGE)
+    .DEV_PACKAGE(DEV_PACKAGE),
+    .DDS_DISABLE(DDS_DISABLE),
+    .DDS_TYPE(DDS_TYPE),
+    .DDS_CORDIC_DW(DDS_CORDIC_DW),
+    .DDS_CORDIC_PHASE_DW(DDS_CORDIC_PHASE_DW)
   ) axi_ad974x_up_core (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
     .dac_data(dac_data_s),
     .dma_data(dma_data),
+    .dma_ready(dma_ready),
+    .dma_valid(dma_valid),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_wreq(up_wreq_s),
