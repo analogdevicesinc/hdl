@@ -112,8 +112,7 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:34] = 30'b0;
-  assign ad9740_ready = gpio_o[32];
+  assign gpio_i[63:32] = 32'b0;
 
   IBUFDS i_ad9740_clk_ibuf_ds (
     .I (ad9740_clk_p),
@@ -149,6 +148,8 @@ module system_top (
     .dio_p(iic_mux_sda));
 
   system_wrapper i_system_wrapper (
+    .ad974x_clk (ad9740_clk),
+    .ad974x_data (ad9740_data),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
@@ -191,6 +192,8 @@ module system_top (
     .iic_mux_sda_i (iic_mux_sda_i_s),
     .iic_mux_sda_o (iic_mux_sda_o_s),
     .iic_mux_sda_t (iic_mux_sda_t_s),
+    .otg_vbusoc (otg_vbusoc),
+    .spdif (spdif),
     .spi0_clk_i (1'b0),
     .spi0_clk_o (adf4351_spi_clk),
     .spi0_csn_0_o (adf4351_spi_csn),
@@ -208,11 +211,6 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o (),
-    .ad974x_clk (ad9740_clk),
-    .ad974x_data (ad9740_data),
-    .ad974x_ready (ad9740_ready),
-    .otg_vbusoc (otg_vbusoc),
-    .spdif (spdif));
+    .spi1_sdo_o ());
 
 endmodule
