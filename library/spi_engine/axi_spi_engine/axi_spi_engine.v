@@ -107,11 +107,10 @@ module axi_spi_engine #(
   input sdo_data_ready,
   output sdo_data_valid,
   output [(DATA_WIDTH)-1:0] sdo_data,
-  output [(DATA_WIDTH)-1:0] sdo_data,
 
   output sdi_data_ready,
   input sdi_data_valid,
-  input [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
+  input [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data,
 
   output sync_ready,
   input sync_valid,
