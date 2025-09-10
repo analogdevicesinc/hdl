@@ -6,6 +6,7 @@
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
+set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/scripts/auto_timing_fix.tcl]
 
 adi_project fmcomms2_zc706
 adi_project_files fmcomms2_zc706 [list \
