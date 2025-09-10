@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2024 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -20,6 +20,7 @@ M_DEPS += ../../../library/common/util_pulse_gen.v
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_bus_mux.v
 
+LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
 LIB_DEPS += data_offload

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -48,6 +48,8 @@ module system_top (
   output      [ 7:0]      tx_data_n,
   output                  rx_sync_p,
   output                  rx_sync_n,
+  output                  rx_os_sync_p,
+  output                  rx_os_sync_n,
   input                   tx_sync_p,
   input                   tx_sync_n,
   input                   tx_sync_1_p,
@@ -94,6 +96,7 @@ module system_top (
   wire        [94:0]      gpio_t;
   wire        [ 2:0]      spi_csn;
   wire                    rx_sync;
+  wire                    rx_os_sync;
   wire                    tx_sync;
   wire                    sysref;
   wire                    ref_clk0;
@@ -133,6 +136,11 @@ module system_top (
     .I (rx_sync),
     .O (rx_sync_p),
     .OB (rx_sync_n));
+
+  OBUFDS i_obufds_rx_os_sync (
+    .I (rx_os_sync),
+    .O (rx_os_sync_p),
+    .OB (rx_os_sync_n));
 
   OBUFDS i_obufds_sysref_out (
     .I (sysref_out),
@@ -211,8 +219,11 @@ module system_top (
     .rx_data_7_p (rx_data_p[7]),
     .rx_ref_clk_0 (ref_clk0),
     .rx_ref_clk_1 (ref_clk0),
+    .rx_os_ref_clk_0 (ref_clk),
     .rx_sync_0 (rx_sync),
+    .rx_os_sync (rx_os_sync),
     .rx_sysref_0 (sysref),
+    .rx_os_sysref (sysref),
     .spi0_sclk (spi_clk),
     .spi0_csn (spi_csn),
     .spi0_miso (spi_miso),
