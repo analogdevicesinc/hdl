@@ -324,6 +324,7 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
 # \param[project_files] - list of project files
 #
 proc adi_project_files {project_name project_files} {
+  global ADI_POST_ROUTE_SCRIPT
 
   foreach pfile $project_files {
     if {[string range $pfile [expr 1 + [string last . $pfile]] end] == "xdc"} {
@@ -333,6 +334,10 @@ proc adi_project_files {project_name project_files} {
     } else {
       add_files -norecurse -fileset sources_1 $pfile
     }
+  }
+
+  if {[info exists ADI_POST_ROUTE_SCRIPT]} {
+    add_files -fileset utils_1 -norecurse ${ADI_POST_ROUTE_SCRIPT}
   }
 
   # NOTE: top file name is always system_top
@@ -351,6 +356,12 @@ proc adi_project_run {project_name} {
   global ADI_USE_OOC_SYNTHESIS
   global ADI_MAX_OOC_JOBS
   global ADI_GENERATE_BIN
+  global ADI_POST_ROUTE_SCRIPT
+
+  if {[info exists ::env(ADI_MAX_THREADS)]} {
+    set_param general.maxThreads ${::env(ADI_MAX_THREADS)}
+    puts "INFO: maxThreads set to ${::env(ADI_MAX_THREADS)}"
+  }
 
   if {![info exists ::env(ADI_PROJECT_DIR)]} {
     set actual_project_name $project_name
@@ -383,6 +394,10 @@ proc adi_project_run {project_name} {
   }
 
   set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
+
+  if {[info exists ADI_POST_ROUTE_SCRIPT]} {
+    set_property STEPS.ROUTE_DESIGN.TCL.POST [ get_files ${ADI_POST_ROUTE_SCRIPT} -of [get_fileset utils_1] ] [get_runs impl_1]
+  }
 
   launch_runs impl_1 -to_step write_bitstream
   wait_on_run impl_1
