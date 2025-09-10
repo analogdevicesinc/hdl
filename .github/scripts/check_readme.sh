@@ -170,5 +170,5 @@ done
 
 if [ "$fail" -eq 1 ]; then
     echo "Something occurred! Check the output of the script."
-    exit 0
+    exit 1
 fi
