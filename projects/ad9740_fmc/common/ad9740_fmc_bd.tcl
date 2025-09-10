@@ -6,7 +6,7 @@
 # bd ports
 
 create_bd_port -dir I ad974x_clk
-create_bd_port -dir O -from 15 -to 0 ad974x_data
+create_bd_port -dir O -from 13 -to 0 ad974x_data
 
 # dma
 
@@ -35,6 +35,7 @@ ad_connect sys_rstgen/peripheral_aresetn ad974x_dma/m_src_axi_aresetn
 # data path
 
 ad_connect ad974x_dma/m_axis ad974x_dac/s_axis
+ad_connect ad974x_dac/dac_data ad974x_data
 
 # AXI address definitions
 
