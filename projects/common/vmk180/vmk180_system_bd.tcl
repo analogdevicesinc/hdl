@@ -170,7 +170,7 @@ set sys_dma_resetn        [get_bd_nets sys_350m_resetn]
 
 #
 
-ad_ip_instance xlconcat spi0_csn_sources
+ad_ip_instance ilconcat spi0_csn_sources
 ad_ip_parameter spi0_csn_sources config.num_ports {3}
 ad_connect spi0_csn_sources/dout spi0_csn
 
@@ -185,7 +185,7 @@ ad_connect  sys_cips/spi0_ss1_o spi0_csn_sources/in1
 ad_connect  sys_cips/spi0_ss2_o spi0_csn_sources/in2
 ad_connect  sys_cips/spi0_ss_i  VCC
 
-ad_ip_instance xlconcat spi1_csn_sources
+ad_ip_instance ilconcat spi1_csn_sources
 ad_ip_parameter spi1_csn_sources config.num_ports {3}
 ad_connect spi1_csn_sources/dout spi1_csn
 
@@ -212,4 +212,3 @@ ad_connect  sys_cpu_clk                 rom_sys_0/clk
 ad_cpu_interconnect 0x45000000 axi_sysid_0
 
 # interrupts
-

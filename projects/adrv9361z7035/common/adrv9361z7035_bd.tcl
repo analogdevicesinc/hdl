@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -100,13 +100,13 @@ ad_ip_instance axi_iic axi_iic_main
 ad_ip_parameter axi_iic_main CONFIG.USE_BOARD_FLOW true
 ad_ip_parameter axi_iic_main CONFIG.IIC_BOARD_INTERFACE Custom
 
-ad_ip_instance xlconcat sys_concat_intc
+ad_ip_instance ilconcat sys_concat_intc
 ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 
 ad_ip_instance proc_sys_reset sys_rstgen
 ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
-ad_ip_instance util_vector_logic sys_logic_inv
+ad_ip_instance ilvector_logic sys_logic_inv
 ad_ip_parameter sys_logic_inv CONFIG.C_SIZE 1
 ad_ip_parameter sys_logic_inv CONFIG.C_OPERATION not
 
@@ -226,12 +226,12 @@ ad_connect gps_pps axi_ad9361/gps_pps
 # interface clock divider to generate sampling clock
 # interface runs at 4x in 2r2t mode, and 2x in 1r1t mode
 
-ad_ip_instance xlconcat util_ad9361_divclk_sel_concat
+ad_ip_instance ilconcat util_ad9361_divclk_sel_concat
 ad_ip_parameter util_ad9361_divclk_sel_concat CONFIG.NUM_PORTS 2
 ad_connect axi_ad9361/adc_r1_mode util_ad9361_divclk_sel_concat/In0
 ad_connect axi_ad9361/dac_r1_mode util_ad9361_divclk_sel_concat/In1
 
-ad_ip_instance util_reduced_logic util_ad9361_divclk_sel
+ad_ip_instance ilreduced_logic util_ad9361_divclk_sel
 ad_ip_parameter util_ad9361_divclk_sel CONFIG.C_SIZE 2
 ad_connect util_ad9361_divclk_sel_concat/dout util_ad9361_divclk_sel/Op1
 
@@ -473,5 +473,3 @@ proc cfg_ad9361_interface {cmos_or_lvds} {
   }
 
 }
-
-
