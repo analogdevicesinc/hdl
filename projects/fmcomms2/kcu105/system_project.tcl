@@ -6,18 +6,20 @@
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
+set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timing_fix_xilinx.tcl]
+set BOARD_NAME kcu105
 
-adi_project fmcomms2_kcu105
-adi_project_files fmcomms2_kcu105 [list \
+adi_project fmcomms2_${BOARD_NAME}
+adi_project_files fmcomms2_${BOARD_NAME} [list \
   "system_top.v" \
   "system_constr.xdc"\
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/kcu105/kcu105_system_constr.xdc" \
-  "$ad_hdl_dir/projects/common/kcu105/kcu105_system_lutram_constr.xdc" ]
+  "$ad_hdl_dir/projects/common/${BOARD_NAME}/${BOARD_NAME}_system_constr.xdc" \
+  "$ad_hdl_dir/projects/common/${BOARD_NAME}/${BOARD_NAME}_system_lutram_constr.xdc" ]
 
-## To improve timing in DDR4 MIG
-set_property strategy Performance_RefinePlacement [get_runs impl_1]
-set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE ExploreWithAggressiveHoldFix [get_runs impl_1]
+## fmcomms2 design is presenting hold time violations on some paths
+## set the strategy to spread logic and help with hold time fixes
+set_property strategy Congestion_SpreadLogic_high [get_runs impl_1]
 
-adi_project_run fmcomms2_kcu105
+adi_project_run fmcomms2_${BOARD_NAME}
 source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
