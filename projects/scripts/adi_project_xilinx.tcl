@@ -324,6 +324,7 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
 # \param[project_files] - list of project files
 #
 proc adi_project_files {project_name project_files} {
+  global ADI_POST_ROUTE_SCRIPT
 
   foreach pfile $project_files {
     if {[string range $pfile [expr 1 + [string last . $pfile]] end] == "xdc"} {
@@ -335,6 +336,10 @@ proc adi_project_files {project_name project_files} {
     }
   }
 
+  if {[info exists ADI_POST_ROUTE_SCRIPT]} {
+    add_files -fileset utils_1 -norecurse ${ADI_POST_ROUTE_SCRIPT}
+  }
+
   # NOTE: top file name is always system_top
   set_property top system_top [current_fileset]
 }
@@ -343,6 +348,31 @@ proc adi_project_files {project_name project_files} {
 #
 # \param[project_name] - name of the project
 #
+# Additional configuration flags are:
+# - ADI_EXTRACT_PORTS - If set, extracts port properties from a predefined list
+#   of IPs into 'ports_properties.txt'.
+# - ADI_GENERATE_BIN - If set, generates a binary bitstream file (.bin)
+#   in addition to the .xsa hardware platform.
+# - ADI_GENERATE_UTILIZATION - If set, generates CSV and log files detailing
+#   resource utilization for the design and specific IPs.
+# - ADI_GENERATE_XPA - If set, runs a Xilinx Power Analysis (XPA) and generates
+#   a summary report.
+# - ADI_MAX_OOC_JOBS - Specifies the number of parallel jobs to use for
+#   Out-of-Context (OOC) synthesis.
+# - ADI_MAX_THREADS - Specifies the maximum number of threads for Vivado
+#   operations. Default value is 8.
+# - ADI_NO_BITSTREAM_COMPRESSION - If set, disables compression of the final
+#   bitstream file.
+# - ADI_POST_ROUTE_SCRIPT - Specifies the path to a Tcl script to be executed
+#   after the routing design step.
+# - ADI_POWER_OPTIMIZATION - If set to 1, enables power optimization during the
+#   implementation run.
+# - ADI_PROJECT_DIR - Specifies a base directory for output files such as logs
+#   and reports.
+# - ADI_SKIP_SYNTHESIS - If set, the entire procedure will exit before starting
+#   synthesis.
+# - ADI_USE_OOC_SYNTHESIS - If set to 1, launches synthesis for OOC IP modules
+#   in parallel.
 proc adi_project_run {project_name} {
 
   global ad_project_dir
@@ -351,6 +381,12 @@ proc adi_project_run {project_name} {
   global ADI_USE_OOC_SYNTHESIS
   global ADI_MAX_OOC_JOBS
   global ADI_GENERATE_BIN
+  global ADI_POST_ROUTE_SCRIPT
+
+  if {[info exists ::env(ADI_MAX_THREADS)]} {
+    set_param general.maxThreads ${::env(ADI_MAX_THREADS)}
+    puts "INFO: maxThreads set to ${::env(ADI_MAX_THREADS)}"
+  }
 
   if {![info exists ::env(ADI_PROJECT_DIR)]} {
     set actual_project_name $project_name
@@ -383,6 +419,10 @@ proc adi_project_run {project_name} {
   }
 
   set_param board.repoPaths [get_property LOCAL_ROOT_DIR [xhub::get_xstores xilinx_board_store]]
+
+  if {[info exists ADI_POST_ROUTE_SCRIPT]} {
+    set_property STEPS.ROUTE_DESIGN.TCL.POST [ get_files ${ADI_POST_ROUTE_SCRIPT} -of [get_fileset utils_1] ] [get_runs impl_1]
+  }
 
   launch_runs impl_1 -to_step write_bitstream
   wait_on_run impl_1
