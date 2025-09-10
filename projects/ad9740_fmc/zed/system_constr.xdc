@@ -24,9 +24,10 @@ set_property -dict {PACKAGE_PIN R20 IOSTANDARD LVCMOS33} [get_ports {ad9740_data
 set_property -dict {PACKAGE_PIN R21 IOSTANDARD LVCMOS33} [get_ports {ad9740_data[0]}]
 
 # adf4351 interface
-set_property -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS33} [get_ports adf4351_spi_csn]
-set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS33} [get_ports adf4351_spi_clk]
-set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33} [get_ports adf4351_spi_mosi]
+set_property -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS33} [get_ports adf4351_csn]
+set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS33} [get_ports adf4351_clk]
+set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33} [get_ports adf4351_mosi]
+set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS33} [get_ports adf4351_ce]
 
 # clocks
 create_clock -period 4.761 -name ad9740_clk [get_ports ad9740_clk_p]

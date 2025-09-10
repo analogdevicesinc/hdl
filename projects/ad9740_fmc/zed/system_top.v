@@ -85,9 +85,10 @@ module system_top (
   
   // adf4351 interface
   
-  output          adf4351_spi_csn,
-  output          adf4351_spi_clk,
-  output          adf4351_spi_mosi,
+  output          adf4351_csn,
+  output          adf4351_clk,
+  output          adf4351_mosi,
+  output          adf4351_ce,
   
   // ad974x interface
 
@@ -113,6 +114,7 @@ module system_top (
   // instantiations
 
   assign gpio_i[63:32] = 32'b0;
+  assign adf4351_ce = 1'b1;
 
   IBUFDS i_ad9740_clk_ibuf_ds (
     .I (ad9740_clk_p),
@@ -195,14 +197,14 @@ module system_top (
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (adf4351_spi_clk),
-    .spi0_csn_0_o (adf4351_spi_csn),
+    .spi0_clk_o (adf4351_clk),
+    .spi0_csn_0_o (adf4351_csn),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
     .spi0_sdi_i (1'b0),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (adf4351_spi_mosi),
+    .spi0_sdo_o (adf4351_mosi),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),

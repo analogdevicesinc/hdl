@@ -22,7 +22,7 @@ D15       FMC-LA09_N     DB00               ad9740_data[0]      LVCMOS33    #N/A
 
 # adf4351
 
-H7        FMC-LA02_P     ADF4351_CLK        adf4351_spi_clk     LVCMOS33    #N/A
-H8        FMC-LA02_N     ADF4351_CS			#N/A				LVCMOS33    #N/A
-G16       FMC-LA12_N     ADF4351_LE         adf4351_spi_csn     LVCMOS33    #N/A
-H16       FMC-LA11_P     ADF4351_D          adf4351_spi_mosi    LVCMOS33    #N/A
+H7        FMC-LA02_P     ADF4351_CLK        adf4351_clk         LVCMOS33    #N/A
+H8        FMC-LA02_N     ADF4351_CS         adf4351_ce          LVCMOS33    #N/A
+G16       FMC-LA12_N     ADF4351_LE         adf4351_csn         LVCMOS33    #N/A
+H16       FMC-LA11_P     ADF4351_D          adf4351_mosi        LVCMOS33    #N/A
