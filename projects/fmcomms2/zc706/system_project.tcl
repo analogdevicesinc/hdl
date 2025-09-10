@@ -15,6 +15,10 @@ adi_project_files fmcomms2_zc706 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zc706/zc706_system_constr.xdc" ]
 
+## fmcomms2 design is presenting hold time violations on some paths
+## set the strategy to spread logic and help with hold time fixes
+set_property strategy Congestion_SpreadLogic_high [get_runs impl_1]
+
 adi_project_run fmcomms2_zc706
 source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
 

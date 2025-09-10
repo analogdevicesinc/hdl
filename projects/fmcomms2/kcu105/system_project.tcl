@@ -16,9 +16,9 @@ adi_project_files fmcomms2_kcu105 [list \
   "$ad_hdl_dir/projects/common/kcu105/kcu105_system_constr.xdc" \
   "$ad_hdl_dir/projects/common/kcu105/kcu105_system_lutram_constr.xdc" ]
 
-## To improve timing in DDR4 MIG
-set_property strategy Performance_RefinePlacement [get_runs impl_1]
-set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE ExploreWithAggressiveHoldFix [get_runs impl_1]
+## fmcomms2 design is presenting hold time violations on some paths
+## set the strategy to spread logic and help with hold time fixes
+set_property strategy Congestion_SpreadLogic_high [get_runs impl_1]
 
 adi_project_run fmcomms2_kcu105
 source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
