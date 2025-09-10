@@ -348,6 +348,31 @@ proc adi_project_files {project_name project_files} {
 #
 # \param[project_name] - name of the project
 #
+# Additional configuration flags are:
+# - ADI_EXTRACT_PORTS - If set, extracts port properties from a predefined list
+#   of IPs into 'ports_properties.txt'.
+# - ADI_GENERATE_BIN - If set, generates a binary bitstream file (.bin)
+#   in addition to the .xsa hardware platform.
+# - ADI_GENERATE_UTILIZATION - If set, generates CSV and log files detailing
+#   resource utilization for the design and specific IPs.
+# - ADI_GENERATE_XPA - If set, runs a Xilinx Power Analysis (XPA) and generates
+#   a summary report.
+# - ADI_MAX_OOC_JOBS - Specifies the number of parallel jobs to use for
+#   Out-of-Context (OOC) synthesis.
+# - ADI_MAX_THREADS - Specifies the maximum number of threads for Vivado
+#   operations. Default value is 8.
+# - ADI_NO_BITSTREAM_COMPRESSION - If set, disables compression of the final
+#   bitstream file.
+# - ADI_POST_ROUTE_SCRIPT - Specifies the path to a Tcl script to be executed
+#   after the routing design step.
+# - ADI_POWER_OPTIMIZATION - If set to 1, enables power optimization during the
+#   implementation run.
+# - ADI_PROJECT_DIR - Specifies a base directory for output files such as logs
+#   and reports.
+# - ADI_SKIP_SYNTHESIS - If set, the entire procedure will exit before starting
+#   synthesis.
+# - ADI_USE_OOC_SYNTHESIS - If set to 1, launches synthesis for OOC IP modules
+#   in parallel.
 proc adi_project_run {project_name} {
 
   global ad_project_dir
