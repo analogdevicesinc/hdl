@@ -52,8 +52,8 @@ module axi_ad974x_core #(
   input         dac_clk,
   output        dac_rst,
   input  [15:0] dma_data,
-  input         dma_ready,
   input         dma_valid,
+  output        dma_ready,
   output [13:0] dac_data,
 
   // processor interface

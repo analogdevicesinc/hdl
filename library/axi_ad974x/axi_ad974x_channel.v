@@ -53,8 +53,8 @@ module axi_ad974x_channel #(
   // input sources
 
   input        [15:0]     dma_data,
-  input                   dma_ready,
   input                   dma_valid,
+  output reg              dma_ready,
   
   // processor interface
   
@@ -96,6 +96,8 @@ module axi_ad974x_channel #(
   assign dac_data       = dac_data_int;
 
   always @ (*) begin
+    dma_ready <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
+
     case(dac_data_sel_s)
       4'h0 :
       begin
@@ -123,7 +125,7 @@ module axi_ad974x_channel #(
   // dma data
   
   always @(posedge dac_clk) begin
-    if (dac_rst == 1'b1) begin
+    if (dma_valid == 0'b1 || dac_rst == 1'b1) begin
       dma_pattern <= 14'h0;
     end else begin
       dma_pattern[13:0] <= dma_data[13:0]; 
