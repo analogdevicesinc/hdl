@@ -286,27 +286,69 @@ module axi_adrv9001_core #(
   reg            dac_2_transfer_sync_d1 = 1'b0;
   reg            dac_2_transfer_sync_d2 = 1'b0;
 
+  // workaround registers
+  reg rx1_r1_mode_d;
+  reg rx1_symb_op_d;
+  reg rx1_symb_8_16b_d;
+  reg rx1_sdr_ddr_n_d;
+  reg rx1_single_lane_d;
+  reg rx1_rst_d;
+  reg adc_sync_2_d;
+  reg adc_1_ext_sync_disarm_cdc_d;
+  reg adc_1_ext_sync_arm_cdc_d;
+
+  reg tx1_r1_mode_d;
+  reg tx1_symb_op_d;
+  reg tx1_symb_8_16b_d;
+  reg tx1_sdr_ddr_n_d;
+  reg tx1_single_lane_d;
+  reg tx1_rst_cdc_s_d;
+  // end of workaround registers
+
   // rx1_r1_mode and tx1_r1_mode considered static during operation
   // rx1_r1_mode should be 0 only when rx1_clk and rx2_clk have the same frequency
   // tx1_r1_mode should be 0 only when tx1_clk and tx2_clk have the same frequency
 
-  sync_bits #(
-    .NUM_OF_BITS (8),
-    .ASYNC_CLK (1)
-  ) i_rx1_ctrl_sync (
-    .in_bits ({up_rx1_r1_mode,rx1_symb_op,rx1_symb_8_16b,rx1_sdr_ddr_n,rx1_single_lane,rx1_rst,adc_sync_1,adc_1_ext_sync_arm,adc_1_ext_sync_disarm}),
-    .out_clk (rx2_clk),
-    .out_resetn (rx2_if_rst),
-    .out_bits ({rx1_r1_mode,rx1_symb_op_s,rx1_symb_8_16b_s,rx1_sdr_ddr_n_s,rx1_single_lane_s,rx1_rst_s,adc_sync_2,adc_1_ext_sync_arm_cdc_s,adc_1_ext_sync_disarm_cdc_s}));
+  always @(posedge rx2_clk) begin
+    rx1_r1_mode_d <= up_rx1_r1_mode;
+    rx1_symb_op_d <= rx1_symb_op;
+    rx1_symb_8_16b_d <= rx1_symb_8_16b;
+    rx1_sdr_ddr_n_d <= rx1_sdr_ddr_n;
+    rx1_single_lane_d <= rx1_single_lane;
+    rx1_rst_d <= rx1_rst;
+    adc_sync_2_d <= adc_sync_1;
+    adc_1_ext_sync_disarm_cdc_d <= adc_1_ext_sync_disarm;
+    adc_1_ext_sync_arm_cdc_d <= adc_1_ext_sync_arm;
+  end
 
-  sync_bits #(
-    .NUM_OF_BITS (6),
-    .ASYNC_CLK (1)
-  ) i_tx1_ctrl_sync (
-    .in_bits ({up_tx1_r1_mode,tx1_symb_op,tx1_symb_8_16b,tx1_sdr_ddr_n,tx1_single_lane,tx1_rst_s}),
-    .out_clk (tx2_clk),
-    .out_resetn (tx2_if_rst),
-    .out_bits ({tx1_r1_mode,tx1_symb_op_s,tx1_symb_8_16b_s,tx1_sdr_ddr_n_s,tx1_single_lane_s,tx1_rst_cdc_s}));
+  assign rx1_r1_mode = rx1_r1_mode_d;
+  assign rx1_symb_op_s = rx1_symb_op_d;
+  assign rx1_symb_8_16b_s = rx1_symb_8_16b_d;
+  assign rx1_sdr_ddr_n_s = rx1_sdr_ddr_n_d;
+  assign rx1_single_lane_s = rx1_single_lane_d;
+  assign rx1_rst_s = rx1_rst_d;
+  assign adc_sync_2 = adc_sync_2_d;
+  assign adc_1_ext_sync_disarm_cdc_s = adc_1_ext_sync_disarm_cdc_d;
+  assign adc_1_ext_sync_arm_cdc_s = adc_1_ext_sync_arm_cdc_d;
+
+  always @(posedge rx2_clk) begin
+    tx1_r1_mode_d <= up_tx1_r1_mode;
+    tx1_symb_op_d <= tx1_symb_op;
+    tx1_symb_8_16b_d <= tx1_symb_8_16b;
+    tx1_sdr_ddr_n_d <= tx1_sdr_ddr_n;
+    tx1_single_lane_d <= tx1_single_lane;
+    tx1_rst_cdc_s_d <= tx1_rst_s;
+    adc_sync_2_d <= adc_sync_1;
+    adc_1_ext_sync_disarm_cdc_d <= adc_1_ext_sync_disarm;
+    adc_1_ext_sync_arm_cdc_d <= adc_1_ext_sync_arm;
+  end
+
+  assign tx1_r1_mode = tx1_r1_mode_d;
+  assign tx1_symb_op_s = tx1_symb_op_d;
+  assign tx1_symb_8_16b_s = tx1_symb_8_16b_d;
+  assign tx1_sdr_ddr_n_s = tx1_sdr_ddr_n_d;
+  assign tx1_single_lane_s = tx1_single_lane_d;
+  assign tx1_rst_cdc_s = tx1_rst_cdc_s_d;
 
   assign rx2_rst = rx1_r1_mode ? rx2_rst_loc : rx1_rst_s;
   assign rx2_single_lane = rx1_r1_mode ? rx2_single_lane_loc : rx1_single_lane_s;
