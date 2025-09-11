@@ -272,7 +272,7 @@ module system_top #(
 
   // spi
   assign spi2_cs[1:0] = spi_csn[1:0];
-  assign spi2_cs[4] = spi_csn[2];
+  assign spi2_cs[4]   = spi_csn[2];
   assign spi2_sclk    = spi_clk;
 
   ad9084_ebz_spi #(
