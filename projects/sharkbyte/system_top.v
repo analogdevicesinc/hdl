@@ -60,13 +60,7 @@ module system_top (
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
 
-  // JTAG
-  // input           jtag_tck,
-  // input           jtag_tdi,
-  // input           jtag_tms,
-  // output          jtag_tdo,   // ? how to connect them? 
-  
-  // I2C - ?
+
   inout           iic_scl,
   inout           iic_sca,
 
@@ -84,7 +78,7 @@ module system_top (
   input           fclk_a1_n, // new
 
   input           fclk_a2_p,
-  input           fclk_a2_n, 
+  input           fclk_a2_n,
 
   input   [7:0]   data_in_a1_p, // new, name should be changed in BD, from previous name
   input   [7:0]   data_in_a1_n, // and modify the IP too
@@ -93,6 +87,7 @@ module system_top (
 
   output          spi_a1_csn,
   output          spi_a2_csn,
+  output          pll_csn,
   output          spi_clk,
   output          spi_sdata
 );
@@ -115,16 +110,6 @@ module system_top (
     .dio_i (gpio_o[0]),
     .dio_o (gpio_i[0]),
     .dio_p (ad9696_ldac));
-
-  // ad_3w_spi #(
-  //   .NUM_OF_SLAVES(2)
-  // ) i_spi (
-  //   .spi_csn ({spi_a1_csn, spi_a2_csn}),
-  //   .spi_clk (spi_clk),
-  //   .spi_mosi (spi_mosi_s),
-  //   .spi_miso (spi_miso_s),
-  //   .spi_sdio (spi_sdio),
-  //   .spi_dir ());
 
   assign gpio_i[17:1] = gpio_o[17:1];
   assign ps_gpio[6:0] = ps_gpio[6:0];
@@ -159,7 +144,7 @@ module system_top (
     .spi0_clk_o (spi_clk),
     .spi0_csn_0_o (spi_a1_csn), // 1st ADC
     .spi0_csn_1_o (spi_a2_csn), // 2nd ADC
-    .spi0_csn_2_o (),
+    .spi0_csn_2_o (pll_csn), // ADF4355
     .spi0_csn_i (1'b1),
     .spi0_sdi_i (1'b0),
     .spi0_sdo_i (1'b0),
@@ -169,7 +154,7 @@ module system_top (
     .clk_in_a1_n (clk_in_a1_n),
     .clk_in_a2_p (clk_in_a2_p),
     .clk_in_a2_n (clk_in_a2_n),
-    
+
     .fclk_a1_p (fclk_a1_p),
     .fclk_a1_n (fclk_a1_n),
     .fclk_a2_p (fclk_a2_p),
