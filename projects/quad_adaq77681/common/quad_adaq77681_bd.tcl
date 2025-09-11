@@ -23,6 +23,7 @@ set echo_sclk     0
 set hier_spi_engine quad_adaq77681
 
 spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
+ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_offload CONFIG.ASYNC_TRIG 1
 
 ad_ip_instance axi_clkgen spi_clkgen
 ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 10
