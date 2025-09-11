@@ -146,6 +146,7 @@ set_property -dict {PACKAGE_PIN L13 IOSTANDARD LVCMOS25} [get_ports ad9696_ldac]
 
 # SPI
 
+set_property -dict {PACKAGE_PIN F14 IOSTANDARD LVCMOS25} [get_ports pll_csn]
 set_property -dict {PACKAGE_PIN F12 IOSTANDARD LVCMOS25} [get_ports spi_a1_csn]
 set_property -dict {PACKAGE_PIN E13 IOSTANDARD LVCMOS25} [get_ports spi_a2_csn]
 set_property -dict {PACKAGE_PIN E11 IOSTANDARD LVCMOS25} [get_ports spi_clk]
