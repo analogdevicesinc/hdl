@@ -1,30 +1,30 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad9081_fmca_ebz_zc706
+PROJECT_NAME := ad9084_ebz_vcu118
 
 M_DEPS += timing_constr.xdc
+M_DEPS += ../common/versal_hsci_phy.tcl
+M_DEPS += ../common/ad9084_ebz_spi.v
 M_DEPS += ../../scripts/adi_pd.tcl
-M_DEPS += ../../common/zc706/zc706_system_constr.xdc
-M_DEPS += ../../common/zc706/zc706_system_bd.tcl
-M_DEPS += ../../common/xilinx/data_offload_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
 M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
-M_DEPS += ../../ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
-M_DEPS += ../../../library/xilinx/scripts/versal_xcvr_subsystem.tcl
+M_DEPS += ../../common/vcu118/vcu118_system_constr.xdc
+M_DEPS += ../../common/vcu118/vcu118_system_bd.tcl
+M_DEPS += ../../ad9084_ebz/common/ad9084_ebz_bd.tcl
+M_DEPS += ../../../library/xilinx/common/ad_rst_constr.xdc
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
-M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
+M_DEPS += ../../../library/common/ad_rst.v
 M_DEPS += ../../../library/common/ad_iobuf.v
-M_DEPS += ../../../library/common/ad_3w_spi.v
-M_DEPS += ../../../library/axi_tdd/scripts/axi_tdd.tcl
+M_DEPS += ../../../projects/common/xilinx/data_offload_bd.tcl
+M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
-LIB_DEPS += axi_hdmi_tx
-LIB_DEPS += axi_spdif_tx
+LIB_DEPS += axi_hsci
 LIB_DEPS += axi_sysid
 LIB_DEPS += axi_tdd
 LIB_DEPS += data_offload
@@ -43,6 +43,7 @@ LIB_DEPS += util_do_ram
 LIB_DEPS += util_hbm
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
+LIB_DEPS += util_tdd_sync
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/util_adxcvr
 
