@@ -35,11 +35,11 @@ jobs:
       - name: Print changed files
         run: |
           echo "::group::Click here to see the Changed files"
-          echo "${{ steps.changed_files.outputs.all_changed_files }}"
+          echo "${{ steps.changed_files.outputs.added_modified_renamed }}"
           echo "::endgroup::"
       - name: Executing Py script for guideline check
         id: execution
         # -p flag means that files will be specified with their relative path
         run: |
-          python ./.github/scripts/check_guideline.py -p ${{ steps.changed_files.outputs.all_changed_files }}
+          python ./.github/scripts/check_guideline.py -p ${{ steps.changed_files.outputs.added_modified_renamed }}
         shell: sh

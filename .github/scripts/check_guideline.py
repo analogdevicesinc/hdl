@@ -66,6 +66,9 @@ def is_multiline_comment (line):
         else:
             return False
 
+def is_cmt(line):
+    return is_comment(line) or is_multiline_comment(line)
+
 def is_paramdef (line):
     rparameter = re.compile(r'^\s*parameter\s.*')
     if (rparameter.match(line)):
@@ -110,149 +113,253 @@ def string_in_list (module_path, modified_files):
     return False
 
 
+# write lines to file
+def rewrite_file(path, lines):
+    with open(path, "w") as f:
+        for line in lines:
+            f.write(line.rstrip() + "\n")
+
+
 # get the indentation of a line
 def indent_of(s: str) -> int:
     return len(s) - len(s.lstrip())
 
 
-# split code from single-line comment (//)
-def _util_split_code_comment_sl(raw: str):
+# return an even indentation width, at least base_min.
+def even_indent(n: int, base_min: int = 2) -> int:
+    n2 = max(base_min, n)
+    return n2 if (n2 % 2 == 0) else (n2 + 1)
+
+
+# split line into code and comment parts, return tuple (code, comment)
+def split_code_comment_sl(raw: str):
     code, sep, cmt = raw.rstrip("\n").partition("//")
     return code.rstrip(), (sep + cmt).rstrip() if sep else ""
 
 
-# emit warning for a specific line in file
-def _util_emit_line_warning(lw, path, base_line_nb, start_idx, abs_idx, msg: str):
+# append formatted warning for a specific line to the list
+def emit_line_warning(lw, path, base_line_nb, start_idx, abs_idx, msg: str):
     real_ln = base_line_nb + (abs_idx - start_idx)
     lw.append(f"{path} : {real_ln} {msg}")
 
 
 # compare two lists of lines and emit warnings for each differing line
-def _util_diff_line_warnings(lw, path, base_line_nb, start_idx, old_lines, new_lines, msg: str):
+def diff_line_warnings(lw, path, base_line_nb, start_idx, old_lines, new_lines, msg: str):
     m = min(len(old_lines), len(new_lines))
     for k in range(m):
         old = (old_lines[k].rstrip("\n")).rstrip()
         neu = (new_lines[k].rstrip("\n")).rstrip()
         if old != neu:
-            _util_emit_line_warning(lw, path, base_line_nb, start_idx, start_idx + k, msg)
+            emit_line_warning(lw, path, base_line_nb, start_idx, start_idx + k, msg)
 
 
 # find the line index where a statement ends (with ';'), starting from start_i
-def _util_stmt_end_line(lines, start_i: int) -> int:
-    depth = 0; in_block = False; in_line = False
+def stmt_end_line(lines, start_i: int) -> int:
+    depth = 0
+    in_block = False
+    in_line = False
     for j in range(start_i, len(lines)):
-        s = lines[j]; i = 0
+        s = lines[j]
+        i = 0
         while i < len(s):
-            ch = s[i]; nxt = s[i+1] if i+1 < len(s) else ""
-            if in_line: break
+            ch = s[i]
+            nxt = s[i+1] if i+1 < len(s) else ""
+            if in_line:
+                break
             if in_block:
-                if ch == "*" and nxt == "/": in_block = False; i += 2; continue
-                i += 1; continue
-            if ch == "/" and nxt == "/": in_line = True; i += 2; continue
-            if ch == "/" and nxt == "*": in_block = True; i += 2; continue
-            if ch in "([{": depth += 1
-            elif ch in ")]}": depth = max(0, depth - 1)
-            elif ch == ";" and depth == 0: return j
+                if ch == "*" and nxt == "/":
+                     in_block = False
+                     i += 2
+                     continue
+                i += 1
+                continue
+            if ch == "/" and nxt == "/":
+                 in_line = True
+                 i += 2
+                 continue
+            if ch == "/" and nxt == "*":
+                 in_block = True
+                 i += 2
+                 continue
+            if ch in "([{":
+                depth += 1
+            elif ch in ")]}":
+                depth = max(0, depth - 1)
+            elif ch == ";" and depth == 0:
+                return j
             i += 1
     return -1
 
 
 # split a text by top-level commas (not inside (), [], {}, nor in comments)
-def _util_split_top_level_commas(text: str):
+def split_top_level_commas(text: str):
     parts, buf = [], []
-    depth = 0; in_block = False; in_line = False
-    i = 0; L = len(text)
+    depth = 0
+    in_block = False
+    in_line = False
+    i = 0
+    L = len(text)
     while i < L:
-        ch = text[i]; nxt = text[i+1] if i+1 < L else ""
+        ch = text[i]
+        nxt = text[i+1] if i+1 < L else ""
         if in_line:
             buf.append(ch)
             if ch == "\n": in_line = False
-            i += 1; continue
+            i += 1
+            continue
         if in_block:
             buf.append(ch)
-            if ch == "*" and nxt == "/": buf.append("/"); i += 2; continue
-            i += 1; continue
-        if ch == "/" and nxt == "/": in_line = True; buf.append("//"); i += 2; continue
-        if ch == "/" and nxt == "*": in_block = True; buf.append("/*"); i += 2; continue
-        if ch in "([{": depth += 1; buf.append(ch); i += 1; continue
-        if ch in ")]}": depth = max(0, depth - 1); buf.append(ch); i += 1; continue
+            if ch == "*" and nxt == "/":
+                 buf.append("/")
+                 i += 2
+                 continue
+            i += 1
+            continue
+        if ch == "/" and nxt == "/":
+             in_line = True
+             buf.append("//")
+             i += 2
+             continue
+        if ch == "/" and nxt == "*":
+             in_block = True
+             buf.append("/*")
+             i += 2
+             continue
+        if ch in "([{":
+             depth += 1
+             buf.append(ch)
+             i += 1
+             continue
+        if ch in ")]}":
+             depth = max(0, depth - 1)
+             buf.append(ch)
+             i += 1
+             continue
         if ch == "," and depth == 0:
-            parts.append("".join(buf)); buf = []; i += 1; continue
-        buf.append(ch); i += 1
+            parts.append("".join(buf))
+            buf = []
+            i += 1
+            continue
+        buf.append(ch)
+        i += 1
     parts.append("".join(buf))
     return parts
 
 
 # find the position of the top-level assignment '=' (not '==', '!=', '<=', '>=')
-def _util_find_assign_eq_top(code: str) -> int:
-    depth = 0; i = 0; L = len(code)
+def find_assign_eq_top(code: str) -> int:
+    depth = 0
+    i = 0
+    L = len(code)
     while i < L:
-        ch = code[i]; nxt = code[i+1] if i+1 < L else ""; prv = code[i-1] if i-1 >= 0 else ""
-        if ch in "([{": depth += 1; i += 1; continue
-        if ch in ")]}": depth = max(0, depth - 1); i += 1; continue
-        if ch == "=" and depth == 0 and nxt != "=" and prv not in "<>!": return i
+        ch = code[i]
+        nxt = code[i+1] if i+1 < L else ""
+        prv = code[i-1] if i-1 >= 0 else ""
+        if ch in "([{":
+             depth += 1
+             i += 1
+             continue
+        if ch in ")]}":
+             depth = max(0, depth - 1)
+             i += 1
+             continue
+        if ch == "=" and depth == 0 and nxt != "=" and prv not in "<>!":
+            return i
         i += 1
     return -1
 
 
 # strip trailing ';' or ',' and spaces
-def _util_strip_trailing_semicol(line: str) -> str:
+def strip_trailing_semicol(line: str) -> str:
     return re.sub(r"[;,]\s*$", "", line.rstrip())
 
 
 # normalize soft spacing around '=' in a code segment, keep comment if any
-def _util_soft_norm_eq_keep_cmt(seg: str) -> str:
+def soft_norm_eq_keep_cmt(seg: str) -> str:
     code, sep, cmt = seg.partition("//")
     s = code.rstrip()
-    eq = _util_find_assign_eq_top(s)
+    eq = find_assign_eq_top(s)
     if eq != -1:
-        if eq > 0 and s[eq-1] != " ": s = s[:eq] + " " + s[eq:]; eq += 1
-        if eq + 1 < len(s) and s[eq+1] != " ": s = s[:eq+1] + " " + s[eq+1:]
+        if eq > 0 and s[eq-1] != " ":
+            s = s[:eq] + " " + s[eq:]
+            eq += 1
+        if eq + 1 < len(s) and s[eq+1] != " ":
+            s = s[:eq+1] + " " + s[eq+1:]
     out = s.rstrip()
-    if sep: out += " //" + cmt.strip()
+    if sep:
+        out += " //" + cmt.strip()
     return out
 
 
 # find the span of the top-level {...} block (not in comments)
-def _util_find_top_level_brace_span(lines, start_i: int, end_i: int):
-    depth = 0; in_block = False; in_line = False
+def find_top_level_brace_span(lines, start_i: int, end_i: int):
+    depth = 0
+    in_block = False
+    in_line = False
     open_pos = None
     for j in range(start_i, end_i + 1):
-        s = lines[j]; i = 0; L = len(s)
+        s = lines[j]
+        i = 0
+        L = len(s)
         while i < L:
-            ch = s[i]; nxt = s[i+1] if i+1 < L else ""
-            if in_line: break
+            ch = s[i] 
+            nxt = s[i+1] if i+1 < L else ""
+            if in_line: 
+                break
             if in_block:
-                if ch == "*" and nxt == "/": in_block = False; i += 2; continue
-                i += 1; continue
-            if ch == "/" and nxt == "/": in_line = True; i += 2; continue
-            if ch == "/" and nxt == "*": in_block = True; i += 2; continue
-            if ch == "{" and depth == 0: open_pos = (j, i); depth = 1; i += 1; continue
-            if ch == "{" and depth > 0: depth += 1; i += 1; continue
+                if ch == "*" and nxt == "/": 
+                    in_block = False 
+                    i += 2 
+                    continue
+                i += 1 
+                continue
+            if ch == "/" and nxt == "/": 
+                in_line = True 
+                i += 2
+                continue
+            if ch == "/" and nxt == "*": 
+                in_block = True
+                i += 2
+                continue
+            if ch == "{" and depth == 0: 
+                open_pos = (j, i)
+                depth = 1
+                i += 1
+                continue
+            if ch == "{" and depth > 0: 
+                depth += 1
+                i += 1
+                continue
             if ch == "}":
                 depth = max(0, depth - 1)
-                if depth == 0 and open_pos is not None: return open_pos + (j, i)
-                i += 1; continue
-            if ch in "([<": depth += 1
-            elif ch in ")]>": depth = max(0, depth - 1)
+                if depth == 0 and open_pos is not None: 
+                    return open_pos + (j, i)
+                i += 1
+                continue
+            if ch in "([<": 
+                depth += 1
+            elif ch in ")]>": 
+                depth = max(0, depth - 1)
             i += 1
     return None
 
 
 # extract text between {...} from lines[open_l][open_c] to lines[close_l][close_c]
-def _util_extract_between_braces(lines, open_l, open_c, close_l, close_c) -> str:
-    # strict între '{' și '}' (fără a include '}'/';' ori textul de după)
+def extract_between_braces(lines, open_l, open_c, close_l, close_c) -> str:
+    # strictly between '{' and '}' (excluding '}'/';' or any text after)
     if open_l == close_l:
         return lines[open_l][open_c+1:close_c]
     chunks = [lines[open_l][open_c+1:]]
+
     if close_l - open_l > 1:
         chunks.extend(lines[open_l+1:close_l])
     chunks.append(lines[close_l][:close_c])
+
     return "".join(chunks)
 
 
 # replace lines[start_idx:end_idx+1] with new_block_lines, return original span
-def _util_replace_block_atomic(lines, start_idx, end_idx, new_block_lines):
+def replace_block_atomic(lines, start_idx, end_idx, new_block_lines):
     orig_span = lines[start_idx:end_idx+1]
     del lines[start_idx:end_idx+1]
     for ln in reversed(new_block_lines):
@@ -261,10 +368,38 @@ def _util_replace_block_atomic(lines, start_idx, end_idx, new_block_lines):
 
 
 # find the index of the first non-space/tab character in code
-def _util_first_token_start(code: str) -> int:
+def first_token_start(code: str) -> int:
     for k, ch in enumerate(code):
-        if not ch.isspace(): return k
+        if not ch.isspace():
+            return k
     return 0
+
+# align '=' across a list of 'segments' (strings without terminators).
+# keeps the original trailing '//' comment (if present).
+def _align_equals_segments(segments):
+    triples = []
+    max_lhs = 0
+    for seg in segments:
+        code, sep, cmt = seg.partition("//")
+        s = code.rstrip()
+        eq = find_assign_eq_top(s)
+        if eq == -1:
+            triples.append((None, s.rstrip(), (" //" + cmt.strip()) if sep else ""))
+            continue
+        lhs = s[:eq].rstrip()
+        rhs = s[eq+1:].lstrip()
+        max_lhs = max(max_lhs, len(lhs))
+        triples.append((lhs, rhs, (" //" + cmt.strip()) if sep else ""))
+
+    aligned = []
+    for lhs, rhs, cmt in triples:
+        if lhs is None:
+            aligned.append((rhs + cmt).rstrip())
+        else:
+            pad = " " * (max_lhs - len(lhs))
+            aligned.append(f"{lhs}{pad} = {rhs}{cmt}".rstrip())
+
+    return aligned
 
 
 ###############################################################################
@@ -491,7 +626,7 @@ def header_check_allowed (module_path):
 # until the current year
 # or just the current year, if this is the first commit.
 ###############################################################################
-def check_copyright (list_of_lines, lw, edit_files):
+def check_copyright (file_path: str, list_of_lines, lw, edit_files):
 
     currentYear = datetime.now().year
 #    license_header = """// ***************************************************************************
@@ -619,7 +754,6 @@ def check_copyright (list_of_lines, lw, edit_files):
 #  - last item without trailing comma
 #  - closing on the same line: '} TypeName;'
 #  - inline closing comment moved to next line (except one-liner case)
-# Emits classic-style warnings on the precise lines; applies edits if edit_files.
 ###############################################################################
 def _check_typedef_block(idx, line_nb, list_of_lines, lw, edit_files, state):
 
@@ -629,45 +763,46 @@ def _check_typedef_block(idx, line_nb, list_of_lines, lw, edit_files, state):
 
     line = list_of_lines[idx]
 
-    # intrare într-un typedef nou?
+    # detect typedef block start
     if not re.match(r"^\s*typedef\s+(enum|struct|union)\b", line):
         return idx, line_nb
 
+    # base indentation (normalize to even ≥ 2 if editing)
     base_indent = indent_of(line)
-
-    # 1) indentare de bază >= 2
-    if base_indent < 2:
-        _util_emit_line_warning(lw, path, line_nb, idx, idx,
-                                "typedef indentation must be >= 2")
+    desired_indent = even_indent(base_indent, 2)
+    if base_indent != desired_indent:
+        emit_line_warning(lw, path, line_nb, idx, idx,
+                                f"typedef indentation should be multiple of 2 and ≥ 2 (now {base_indent})")
         if edit_files:
-            list_of_lines[idx] = (" " * 2) + line.lstrip()
+            list_of_lines[idx] = (" " * desired_indent) + line.lstrip()
             line = list_of_lines[idx]
-            base_indent = 2
+            base_indent = desired_indent
             state["edited"] = True
 
-    # 2) găsește sfârșitul statement-ului (';' la nivel top)
-    end_idx = _util_stmt_end_line(list_of_lines, idx)
+    # find the statement end line (';' at top level)
+    end_idx = stmt_end_line(list_of_lines, idx)
     if end_idx == -1:
-        return idx, line_nb  # incomplet — amânăm
+        return idx, line_nb # incomplete typedef
 
-    # 3) span-ul acoladelor top-level
-    span = _util_find_top_level_brace_span(list_of_lines, idx, end_idx)
+    # locate top-level brace span '{ ... }'
+    span = find_top_level_brace_span(list_of_lines, idx, end_idx)
     if span is None:
-        # nu normalizăm dacă nu găsim {…}
+        # do not normalize if no brace initializer is found
         return idx, line_nb
 
     open_l, open_c, close_l, close_c = span
     is_one_line = (open_l == close_l)
 
-    # 4) părți: header (până la '{'), interior, trailer după '}'
+    # split parts: header (up to '{'), inside text, and trailer after '}'
     header_line = list_of_lines[open_l][:open_c]
-    inside_text = _util_extract_between_braces(list_of_lines, open_l, open_c, close_l, close_c)
+    inside_text = extract_between_braces(list_of_lines, open_l, open_c, close_l, close_c)
 
+     # collect text after '}' up to end of statement (may span multiple lines)
     trailer_after = list_of_lines[close_l][close_c+1: (len(list_of_lines[close_l]) if end_idx == close_l else None)]
     if close_l < end_idx:
         trailer_after = (trailer_after or "") + "".join(list_of_lines[close_l+1:end_idx+1])
 
-    # extrage TypeName; + comentariu inline (dacă e pe aceeași linie cu '}')
+    # extract TypeName; and optional inline //comment appearing after '}'
     m_t = re.search(r"\}\s*([A-Za-z_]\w*)\s*;\s*(//.*)?", "}" + trailer_after)
     typename = None
     inline_cmt = ""
@@ -681,97 +816,101 @@ def _check_typedef_block(idx, line_nb, list_of_lines, lw, edit_files, state):
             typename = m_next.group(1)
             next_line_had_typename = True
     if not typename:
-        return idx, line_nb  # fără tip → renunțăm
+        return idx, line_nb
 
-    # ---------------- WARNINGS punctuale ----------------
-
-    # A) exact un spațiu înainte de '{'
+    # exactly one space before '{'
     if header_line.strip():
         trailing_spaces = len(header_line) - len(header_line.rstrip(" "))
         if trailing_spaces != 1:
-            _util_emit_line_warning(lw, path, line_nb, idx, open_l,
+            emit_line_warning(lw, path, line_nb, idx, open_l,
                                     "one space required before '{' in typedef")
 
-    # B) one-liner: toate itemele pe o singură linie — trebuie separate pe linii diferite
+    # no one-liner: items must be on separate lines
     if is_one_line:
-        _util_emit_line_warning(lw, path, line_nb, idx, open_l,
+        emit_line_warning(lw, path, line_nb, idx, open_l,
                                 "typedef items must be on separate lines")
     else:
-        # dacă primul item apare pe aceeași linie cu '{' (caz semi-one-liner), cere mutare pe linie nouă
+        # first item must not share the '{' line
         after_open = list_of_lines[open_l][open_c+1:]
-        code_after, _ = _util_split_code_comment_sl(after_open)
+        code_after, _ = split_code_comment_sl(after_open)
         if code_after.strip():
-            _util_emit_line_warning(lw, path, line_nb, idx, open_l,
+            emit_line_warning(lw, path, line_nb, idx, open_l,
                                     "first item in typedef must start on a new line")
 
-    # C) linii interne: indent = base + 2 (nu se aplică în one-liner)
+    # inner lines: indent must be base + 2 (skip comments/empty/backticks)
     if not is_one_line:
         for j in range(open_l + 1, close_l):
             s = list_of_lines[j]
-            if only_spaces_or_tabs(s) or is_comment(s) or is_multiline_comment(s) or ("`" in s):
+            if only_spaces_or_tabs(s) or is_cmt(s) or ("`" in s):
                 continue
             if "{" in s or "}" in s:
                 continue
             if indent_of(s) < (base_indent + 2):
-                _util_emit_line_warning(lw, path, line_nb, idx, j,
+                emit_line_warning(lw, path, line_nb, idx, j,
                                         "inner line in typedef must be indented by +2 spaces")
 
-    # D) ultima intrare să NU aibă virgulă (funcționează și când ultimul item e pe linia lui '}')
-    def _last_enum_line_and_code():
-        for j in range(close_l, open_l, -1):
-            s = list_of_lines[j]
-            seg = s[:close_c] if j == close_l else s
-            code, _ = _util_split_code_comment_sl(seg)
-            code = code.rstrip()
-            if not code:
-                continue
-            return j, code
-        return None, ""
-    j_last, last_code = _last_enum_line_and_code()
+    # find last code line before '}' to check if it ends with ','
+    j_last = None
+    last_code = ""
+    for j in range(close_l, open_l, -1):
+        s = list_of_lines[j]
+        seg = s[:close_c] if j == close_l else s
+        code, _ = split_code_comment_sl(seg)
+        code = code.rstrip()
+        if code:
+            j_last, last_code = j, code
+            break
+
     if j_last is not None and last_code.endswith(","):
-        _util_emit_line_warning(lw, path, line_nb, idx, j_last,
+        emit_line_warning(lw, path, line_nb, idx, j_last,
                                 "last entry in typedef must not end with ','")
 
-    # E) '}' aliniat cu indentul typedef
+    # '}' must align with the typedef line indentation
     if indent_of(list_of_lines[close_l]) != base_indent:
-        _util_emit_line_warning(lw, path, line_nb, idx, close_l,
+        emit_line_warning(lw, path, line_nb, idx, close_l,
                                 "'}' in typedef must align with typedef line")
 
-    # F) închiderea pe aceeași linie: '} TypeName;'
+    # closing must be on the same line as '} TypeName;
     if next_line_had_typename:
-        _util_emit_line_warning(lw, path, line_nb, idx, close_l + 1,
+        emit_line_warning(lw, path, line_nb, idx, close_l + 1,
                                 "typedef closing must be on the same line as '} TypeName;'")
 
-    # G) comentariul inline după închidere → mutat pe linie separată (NU raportăm suplimentar în one-liner)
+     # inline comment after the closing is moved to next line (for multi-line case)
     if inline_cmt and not is_one_line:
-        _util_emit_line_warning(lw, path, line_nb, idx, close_l,
+        emit_line_warning(lw, path, line_nb, idx, close_l,
                                 "move inline comment to the next line")
 
-    # header canonic: un spațiu înainte de '{'; comentariul de header (dacă e) pe linie separată la +2
-    h_code, h_cmt = _util_split_code_comment_sl(header_line or "")
+    # header: enforce single space before '{'; keep any header //comment on its own line at +2
+    h_code, h_cmt = split_code_comment_sl(header_line or "")
     h_code = h_code.rstrip()
+
     canonical = []
     canonical.append((" " * base_indent) + h_code.lstrip() + " {\n")
+
+    # header // comment moved to next line (indented by base + 2)
     if h_cmt:
         canonical.append((" " * (base_indent + 2)) + h_cmt.strip() + "\n")
 
-    # itemii interni: separă la nivel top pe virgule, curăță ';' și păstrează virgula doar la non-ultimele
-    raw_items = [it.strip() for it in _util_split_top_level_commas(inside_text)]
+     # split inner text by top-level commas; strip trailing ';'; keep ',' only for non-last items
+    raw_items = [it.strip() for it in split_top_level_commas(inside_text)]
     items = [it for it in raw_items if it]
     for k, it in enumerate(items):
         comma = "," if k < len(items) - 1 else ""
-        canonical.append((" " * (base_indent + 2)) + _util_strip_trailing_semicol(it) + comma + "\n")
+        canonical.append((" " * (base_indent + 2)) + strip_trailing_semicol(it) + comma + "\n")
 
-    # închidere + tip pe aceeași linie; comentariul inline mutat jos doar în varianta multi-line
+    # closing and type on the same line
     canonical.append((" " * base_indent) + f"}} {typename};\n")
+
+    # move inline closing comment to a new line (multi-line only)
     if inline_cmt and not is_one_line:
         canonical.append((" " * base_indent) + inline_cmt + "\n")
 
     new_block = canonical
     old_block = list_of_lines[idx:end_idx+1]
 
+    # replace atomically if changes are needed
     if edit_files and old_block != new_block:
-        _util_replace_block_atomic(list_of_lines, idx, end_idx, new_block)
+        replace_block_atomic(list_of_lines, idx, end_idx, new_block)
         state["edited"] = True
 
     return idx, line_nb
@@ -779,99 +918,130 @@ def _check_typedef_block(idx, line_nb, list_of_lines, lw, edit_files, state):
 
 ###############################################################################
 #
-#
+# Check/normalize a localparam block.
+# Handles both list-style and brace-initializer style:
+#  - Base indent must be even and ≥ base_min_indent (default 2)
+#  - For brace style:
+#      * header and '{' on same line, with first item glued right after '{'
+#      * inner items at +2 indent, aligned by a column anchor
+#      * comments aligned after longest code + 4 spaces
+#      * last item ends with '};' (final comment, if any, is attached here)
+#  - For list style:
+#      * 'localparam' on its own line
+#      * each item on its own line at +2 indent
+#      * alignment of '=' across items
+# If edit_files is True, the block is reformatted as needed.
 ###############################################################################
 def _check_localparam_block(idx, line_nb, list_of_lines, lw, edit_files, state,
-                            base_min_indent=2, align_equals=True, brace_comment_gap=2):
+                            base_min_indent=2, align_equals=True, brace_comment_gap=4):
 
     path = state.get("path", "<file>")
-    if idx >= len(list_of_lines): return idx, line_nb
-    if not re.match(r"^\s*localparam\b", list_of_lines[idx]): return idx, line_nb
-
-    start_idx = idx
-    end_idx = _util_stmt_end_line(list_of_lines, start_idx)
-    if end_idx == -1:
-        _util_emit_line_warning(lw, path, line_nb, start_idx, start_idx, "unterminated localparam (missing ';')")
+    if idx >= len(list_of_lines):
+        return idx, line_nb
+    if not re.match(r"^\s*localparam\b", list_of_lines[idx]):
         return idx, line_nb
 
-    base_indent = indent_of(list_of_lines[start_idx])
-    desired_base  = max(base_indent, base_min_indent)
+    # compute statement span (from 'localparam' to terminating ';')
+    start_idx = idx
+    end_idx = stmt_end_line(list_of_lines, start_idx)
+    if end_idx == -1:
+        emit_line_warning(lw, path, line_nb, start_idx, start_idx, "unterminated localparam (missing ';')")
+        return idx, line_nb
+
+    base_indent   = indent_of(list_of_lines[start_idx])
+    desired_base  = even_indent(base_indent)
     desired_inner = desired_base + 2
 
-    code0, _ = _util_split_code_comment_sl(list_of_lines[start_idx])
+    code0, _ = split_code_comment_sl(list_of_lines[start_idx])
 
-    # 1) one-liner simplu
+    # Case 1: one-liner without commas - only indent check
     if ";" in code0 and "," not in code0 and ("\n" not in list_of_lines[start_idx]):
-        if base_indent < base_min_indent:
-            _util_emit_line_warning(lw, path, line_nb, start_idx, start_idx,
-                                    f"indent for 'localparam' must be ≥ {base_min_indent} spaces")
+        if base_indent != desired_base:
+            emit_line_warning(lw, path, line_nb, start_idx, start_idx,
+                                    f"indent for 'localparam' must be multiple of 2 and ≥ {base_min_indent}")
             if edit_files:
                 list_of_lines[start_idx] = (" " * desired_base) + list_of_lines[start_idx].lstrip()
                 state["edited"] = True
         return idx, line_nb
 
-    # helpers
-    def _norm_cmt(s: str) -> str:
-        return re.sub(r"\s+", " ", (s or "")).strip()
-
-    # 2) inițializator cu acolade {…} — (fix existent + gard anti-dublare)
-    brace_span = _util_find_top_level_brace_span(list_of_lines, start_idx, end_idx)
+   # Case 2: brace-initializer form (= '{ ... };)
+    brace_span = find_top_level_brace_span(list_of_lines, start_idx, end_idx)
     if brace_span is not None:
         open_l, open_c, close_l, close_c = brace_span
 
-        fixed_header_lines = []
+        # collect header tokens before '{'
+        header_tokens = []
         if open_l > start_idx:
             for h in range(start_idx, open_l):
-                hline = list_of_lines[h]
-                if hline.strip() and indent_of(hline) < desired_base:
-                    _util_emit_line_warning(lw, path, line_nb, start_idx, h,
-                                            f"indent for 'localparam' header must be ≥ {base_min_indent} spaces")
-                    if edit_files:
-                        hline = (" " * desired_base) + hline.lstrip()
-                fixed_header_lines.append(hline if hline.endswith("\n") else hline + "\n")
+                code_h, _ = split_code_comment_sl(list_of_lines[h])
+                t = code_h.strip()
+                if t:
+                    header_tokens.append(t)
 
-        open_line = list_of_lines[open_l]
+        # use the indent of the initial 'localparam' line as anchor
+        open_line   = list_of_lines[open_l]
         open_indent = indent_of(open_line)
-        new_open_indent = max(open_indent, desired_base)
-        if open_indent < desired_base:
-            _util_emit_line_warning(lw, path, line_nb, start_idx, open_l,
-                                    f"indent for 'localparam' header must be ≥ {base_min_indent} spaces")
+        new_open_indent = even_indent(base_indent)
+        if open_indent != new_open_indent:
+            emit_line_warning(lw, path, line_nb, start_idx, open_l,
+                                    f"indent for 'localparam' header must be multiple of 2 and ≥ {base_min_indent}")
 
-        token_before_brace = open_line[open_indent:open_c]
-        header_prefix = (" " * new_open_indent) + token_before_brace + "{"
+        token_before_brace = open_line[open_indent:open_c].strip()
+        if token_before_brace:
+            header_tokens.append(token_before_brace)
+
+        header_head = " ".join(header_tokens).rstrip()
+
+        if header_head.endswith("= '"):
+            # case: = '{...};
+            header_prefix = (" " * new_open_indent) + header_head + "{"
+        else:
+            # case: = {...};
+            header_prefix = (" " * new_open_indent) + header_head + " {"
+
         header_prefix_len = len(header_prefix)
 
+        desired_base  = new_open_indent
+        desired_inner = desired_base + 2
         inner_indent      = " " * desired_inner
         inner_indent_len  = len(inner_indent)
 
-        inner_text = _util_extract_between_braces(list_of_lines, open_l, open_c, close_l, close_c)
+        inner_text = extract_between_braces(list_of_lines, open_l, open_c, close_l, close_c)
 
-        # parse items
+        # split inner text by top-level commas, keeping comments attached to items
         items = []
         buf = []
         depth = 0
-        i = 0; L = len(inner_text)
+        i = 0
+        L = len(inner_text)
         trailing_cmt_for_prev = ""
         at_item_start = True
 
+        # helper: push current buffer as item (if any)
         def flush_item():
             nonlocal trailing_cmt_for_prev
             if trailing_cmt_for_prev and items:
                 c = items[-1]["cmt"]
                 items[-1]["cmt"] = (c + (" " if c and not c.endswith(" ") else "") + trailing_cmt_for_prev.strip()).strip()
             trailing_cmt_for_prev = ""
-            code = "".join(buf).strip(); buf.clear()
+            code = "".join(buf).strip()
+            buf.clear()
             if code: items.append({"code": code, "cmt": "", "apos": 0})
 
+        # scan inner text char by char
         while i < L:
-            ch = inner_text[i]; nxt = inner_text[i+1] if i+1 < L else ""
+            ch = inner_text[i]
+            nxt = inner_text[i+1] if i+1 < L else ""
+
             if ch == "/" and nxt == "/":
                 j = i + 2
                 while j < L and inner_text[j] != "\n": j += 1
                 cmt_text = "//" + inner_text[i+2:j]
                 if at_item_start: trailing_cmt_for_prev += " " + cmt_text
                 else: buf.append(cmt_text)
-                i = j; continue
+                i = j
+                continue
+
             if ch == "/" and nxt == "*":
                 j = i + 2
                 while j+1 < L and not (inner_text[j] == "*" and inner_text[j+1] == "/"): j += 1
@@ -879,66 +1049,105 @@ def _check_localparam_block(idx, line_nb, list_of_lines, lw, edit_files, state,
                 cmt_text = inner_text[i:j2]
                 if at_item_start: trailing_cmt_for_prev += " " + cmt_text
                 else: buf.append(cmt_text)
-                i = j2; continue
-            if ch == "\n": buf.append(ch); i += 1; continue
-            if ch in "([{": depth += 1; buf.append(ch); at_item_start = False; i += 1; continue
-            if ch in ")]}": depth = max(0, depth - 1); buf.append(ch); at_item_start = False; i += 1; continue
-            if ch == "," and depth == 0:
-                flush_item(); at_item_start = True; i += 1; continue
-            if not ch.isspace(): at_item_start = False
-            buf.append(ch); i += 1
-        flush_item()
-        if not items: return idx, line_nb
+                i = j2
+                continue
 
-        # normalize + ancoră
-        def _split_trailing_comment(code: str):
-            code_sl, sep_sl, cmt_sl = code.partition("//")
-            if sep_sl: return code_sl.rstrip(), "//" + cmt_sl.strip()
-            m = re.search(r"(.*?)(/\*.*?\*/)\s*$", code, flags=re.S)
-            if m: return m.group(1).rstrip(), m.group(2).strip()
-            return code.rstrip(), ""
+            if ch == "\n":
+                buf.append(ch)
+                i += 1
+                continue
+            if ch in "([{":
+                 depth += 1
+                 buf.append(ch)
+                 at_item_start = False
+                 i += 1
+                 continue
+            if ch in ")]}":
+                 depth = max(0, depth - 1)
+                 buf.append(ch)
+                 at_item_start = False
+                 i += 1
+                 continue
+
+            if ch == "," and depth == 0:
+                flush_item()
+                at_item_start = True
+                i += 1
+                continue
+
+            if not ch.isspace():
+                at_item_start = False
+            buf.append(ch)
+            i += 1
+
+        flush_item()
+        if not items:
+            return idx, line_nb
 
         for it in items:
-            code0 = _util_strip_trailing_semicol(it["code"])
-            code1, cmt_extra = _split_trailing_comment(code0)
-            it["code"] = _util_soft_norm_eq_keep_cmt(code1)
+            code0 = strip_trailing_semicol(it["code"])
+
+            code_sl, sep_sl, cmt_sl = code0.partition("//")
+            if sep_sl:
+                code1 = code_sl.rstrip()
+                cmt_extra = "//" + cmt_sl.strip()
+            else:
+                m = re.search(r"(.*?)(/\*.*?\*/)\s*$", code0)
+                if m:
+                    code1 = m.group(1).rstrip()
+                    cmt_extra = m.group(2).strip()
+                else:
+                    code1 = code0.rstrip()
+                    cmt_extra = ""
+
+            it["code"] = soft_norm_eq_keep_cmt(code1)
             if cmt_extra:
                 it["cmt"] = (it["cmt"] + " " + cmt_extra).strip() if it["cmt"] else cmt_extra
             it["apos"] = max(0, it["code"].find("'"))
 
+        # determine alignment anchor column (apostrophe or first token)
         braces_same_line = (open_l == close_l)
         if braces_same_line:
-            anchor_abs = header_prefix_len + (items[0]["apos"] if items[0]["apos"] > 0 else _util_first_token_start(items[0]["code"]))
+            anchor_abs = header_prefix_len + (items[0]["apos"] if items[0]["apos"] > 0 else first_token_start(items[0]["code"]))
         else:
             tail = list_of_lines[open_l][open_c+1:]
-            p_apos = tail.find("'"); p_coma = tail.find(",")
-            anchor_abs = header_prefix_len + (p_apos if (p_apos != -1 and (p_coma == -1 or p_apos < p_coma))
-                                              else _util_first_token_start(items[0]["code"]))
+            p_apos = tail.find("'")
+            p_coma = tail.find(",")
+            if p_apos != -1 and (p_coma == -1 or p_apos < p_coma):
+                anchor_abs = header_prefix_len + p_apos
+            else:
+                anchor_abs = header_prefix_len + first_token_start(items[0]["code"])
 
+        # pre-render each line and measure longest code (for comment alignment)
         prelim = []
-        first_comment_abs_col = None
         max_abs_pre_len = 0
+
         for k, it in enumerate(items):
-            base = (it["apos"] if it["apos"] > 0 else _util_first_token_start(it["code"]))
+            base = (it["apos"] if it["apos"] > 0 else first_token_start(it["code"]))
             if k == 0:
                 curr_base_abs = header_prefix_len + base
-                prefix = header_prefix
+                prefix = header_prefix         # glue first item to '{'
             else:
                 curr_base_abs = inner_indent_len + base
                 prefix = inner_indent
+
+            # left padding to meet common anchor
             need = max(0, anchor_abs - curr_base_abs)
             pre_noprefix = (" " * need) + it["code"]
+
+            # add ',' for non-last items, '};' for last item
             suff = "," if k < len(items) - 1 else "};"
             pre_noprefix += suff
+
             abs_pre_len = len(prefix) + len(pre_noprefix)
-            if it["cmt"] and first_comment_abs_col is None:
-                first_comment_abs_col = abs_pre_len + max(1, brace_comment_gap)
             prelim.append((prefix, pre_noprefix, it["cmt"], abs_pre_len))
-            max_abs_pre_len = max(max_abs_pre_len, abs_pre_len)
+            if abs_pre_len > max_abs_pre_len:
+                max_abs_pre_len = abs_pre_len
 
-        comment_abs_col = first_comment_abs_col if first_comment_abs_col is not None else (max_abs_pre_len + max(1, brace_comment_gap))
+        # final comment column = longest code + max(4, gap)
+        comment_abs_col = max_abs_pre_len + max(4, brace_comment_gap)
 
-        # atașează comentariul de după ';' doar dacă nu e deja la ultimul element
+        # attach final comment (after ';') to last item
         last_stmt_raw = list_of_lines[end_idx].rstrip("\n")
         _, _, final_cmt_sl = last_stmt_raw.partition("//")
         if final_cmt_sl.strip():
@@ -946,70 +1155,70 @@ def _check_localparam_block(idx, line_nb, list_of_lines, lw, edit_files, state,
         else:
             mblk = re.search(r";\s*(/\*.*?\*/)\s*$", last_stmt_raw)
             final_cmt = mblk.group(1) if mblk else ""
-
         if final_cmt:
             pfx, pre_np, cmt, abs_len = prelim[-1]
-            if _norm_cmt(final_cmt) not in _norm_cmt(cmt):
-                cmt = (cmt + " " + final_cmt).strip() if cmt else final_cmt
+            cmt = (cmt + " " + final_cmt).strip() if cmt else final_cmt
             prelim[-1] = (pfx, pre_np, cmt, abs_len)
 
+        # construct the new normalized block
         new_block_lines = []
-        new_block_lines.extend(fixed_header_lines)
         for pfx, pre_np, cmt, abs_len in prelim:
             line = pfx + pre_np
             if cmt:
-                pad = " " * max(1, comment_abs_col - abs_len)
+                pad = " " * (comment_abs_col - abs_len)
                 line += pad + cmt
             new_block_lines.append(line + "\n")
 
+        # replace block atomically if edit_files and changes are needed
         old_block = list_of_lines[start_idx:end_idx+1]
         old_norm  = [(ln.rstrip() + "\n") for ln in old_block]
         new_norm  = new_block_lines
         if old_norm != new_norm:
-            _util_diff_line_warnings(lw, path, line_nb, start_idx, old_norm, new_norm,
-                                     "reflow brace-initializer: enforce min indent 2; first on '{' line; align items; align comments; move '};' to last")
+            diff_line_warnings(
+                lw, path, line_nb, start_idx, old_norm, new_norm,
+                "normalize localparam {..}: header with '{' and first item; even indent >=2; align items; comments at longest+4; '};' on last"
+            )
             if edit_files:
-                orig_span = _util_replace_block_atomic(list_of_lines, start_idx, end_idx, new_block_lines)
+                replace_block_atomic(list_of_lines, start_idx, end_idx, new_block_lines)
                 state["edited"] = True
-                after = start_idx + len(new_block_lines)
-                if list_of_lines[after:after+len(orig_span)] == orig_span:
-                    del list_of_lines[after:after+len(orig_span)]
-                delta = len(new_block_lines) - len(orig_span)
+                delta = len(new_block_lines) - len(old_block)
                 return start_idx + len(new_block_lines) - 1, line_nb + delta
         return idx, line_nb
 
-    # 3) LISTĂ CLASICĂ (fără { }) — comentariul final se atașează O SINGURĂ DATĂ, post-build
+    # Case 3: list form without braces
     mkw = re.search(r"\blocalparam\b", code0)
     raw_after_kw = code0[mkw.end():] if mkw else ""
     joined = raw_after_kw + "".join(list_of_lines[start_idx+1:end_idx+1])
     cut = joined.rfind(";")
     body = joined[:cut] if cut != -1 else joined
 
-    parts_raw = [p.strip() for p in _util_split_top_level_commas(body)]
+    # split by commas at top level
+    parts_raw = [p.strip() for p in split_top_level_commas(body)]
     is_list = len(parts_raw) > 1 or (start_idx != end_idx)
     if not is_list: return idx, line_nb
 
     had_issue = False
-    if base_indent < base_min_indent:
-        _util_emit_line_warning(lw, path, line_nb, start_idx, start_idx,
-                                f"indent for 'localparam' must be ≥ {base_min_indent} spaces"); had_issue = True
+    if base_indent != desired_base:
+        emit_line_warning(lw, path, line_nb, start_idx, start_idx,
+                                f"indent for 'localparam' must be multiple of 2 and >= {base_min_indent}")
+        had_issue = True
     if raw_after_kw.strip():
-        _util_emit_line_warning(lw, path, line_nb, start_idx, start_idx,
+        emit_line_warning(lw, path, line_nb, start_idx, start_idx,
                                 "localparam list must start on a new line"); had_issue = True
 
     for j in range(start_idx + 1, end_idx + 1):
         s = list_of_lines[j]
-        code_j, cmt_j = _util_split_code_comment_sl(s)
+        code_j, cmt_j = split_code_comment_sl(s)
         if code_j.strip() == "" and cmt_j: continue
         if code_j.strip() == "": continue
         if indent_of(s) != desired_inner:
-            _util_emit_line_warning(lw, path, line_nb, start_idx, j,
-                                    "items in localparam list must be indented by +2 spaces (from 'localparam')"); had_issue = True
+            emit_line_warning(lw, path, line_nb, start_idx, j,
+                                    "items in localparam list must be indented by +2 spaces (from 'localparam')")
+            had_issue = True
 
-    parts_clean = [_util_strip_trailing_semicol(p) for p in parts_raw if p]
-    parts_soft  = [_util_soft_norm_eq_keep_cmt(p) for p in parts_clean]
+    parts_clean = [strip_trailing_semicol(p) for p in parts_raw if p]
+    parts_soft  = [soft_norm_eq_keep_cmt(p) for p in parts_clean]
 
-    # Comentariul de pe linia cu ';' (dacă există)
     last_stmt_raw = list_of_lines[end_idx].rstrip("\n")
     _, _, final_cmt_sl = last_stmt_raw.partition("//")
     if final_cmt_sl.strip():
@@ -1018,43 +1227,17 @@ def _check_localparam_block(idx, line_nb, list_of_lines, lw, edit_files, state,
         mblk = re.search(r";\s*(/\*.*?\*/)\s*$", last_stmt_raw)
         final_cmt = mblk.group(1) if mblk else ""
 
-    def _build_block_from_segments(segments):
-        lines = [(" " * desired_base) + "localparam\n"]
-        for k, seg in enumerate(segments):
-            term = "," if k < len(segments) - 1 else ";"
-            # IMPORTANT: aici NU atașăm comentariul final
-            lines.append((" " * desired_inner) + seg + term + "\n")
-        return lines
+    chosen_segments = _align_equals_segments(parts_soft) if align_equals else parts_soft
 
-    def _align_equals_segments(segments):
-        triples = []; max_lhs = 0
-        for seg in segments:
-            code, sep, cmt = seg.partition("//")
-            s = code.rstrip(); eq = _util_find_assign_eq_top(s)
-            if eq == -1:
-                triples.append((None, s.rstrip(), (" //" + cmt.strip()) if sep else "")); continue
-            lhs = s[:eq].rstrip(); rhs = s[eq+1:].lstrip()
-            max_lhs = max(max_lhs, len(lhs))
-            triples.append((lhs, rhs, (" //" + cmt.strip()) if sep else ""))
-        aligned = []
-        for lhs, rhs, cmt in triples:
-            if lhs is None:
-                aligned.append((rhs + cmt).rstrip())
-            else:
-                pad = " " * (max_lhs - len(lhs))
-                aligned.append(f"{lhs}{pad} = {rhs}{cmt}".rstrip())
-        return aligned
+    # build normalized block inline (no inner helper)
+    new_block_aligned = []
+    new_block_aligned.append((" " * desired_base) + "localparam\n")
+    for k, seg in enumerate(chosen_segments):
+        term = "," if k < len(chosen_segments) - 1 else ";"
+        cmt  = (" " + final_cmt) if (k == len(chosen_segments) - 1 and final_cmt) else ""
+        new_block_aligned.append((" " * desired_inner) + seg + term + cmt + "\n")
 
-    new_block_soft = _build_block_from_segments(parts_soft)
-    new_block_aligned = _build_block_from_segments(_align_equals_segments(parts_soft)) if align_equals else new_block_soft
-
-    # Atașează comentariul final O SINGURĂ DATĂ la ultima linie (dacă nu există deja)
-    if final_cmt:
-        last_line = new_block_aligned[-1].rstrip("\n")
-        # dacă ultima linie NU conține deja un comentariu identic, îl adăugăm
-        if _norm_cmt(final_cmt) not in _norm_cmt(last_line):
-            new_block_aligned[-1] = last_line + " " + final_cmt + "\n"
-
+    # replace if different or layout issues found
     old_block = list_of_lines[start_idx:end_idx+1]
     old_len   = len(old_block)
     old_norm  = [(ln.rstrip() + "\n") for ln in old_block]
@@ -1068,8 +1251,6 @@ def _check_localparam_block(idx, line_nb, list_of_lines, lw, edit_files, state,
             return start_idx + len(new_block_aligned) - 1, line_nb + delta
 
     return idx, line_nb
-
-
 
 
 ###############################################################################
@@ -1092,7 +1273,7 @@ def get_and_check_module (module_path, lw, edit_files):
     ## do not check the license status for the files that must be avoided,
     ## since it doesn't apply
     if (header_check_allowed(module_path)):
-        header_status = check_copyright(list_of_lines, lw, edit_files)
+        header_status = check_copyright(module_path, list_of_lines, lw, edit_files)
         # GC: check if the license header is updated
         if (header_status == -1):
             edited = False
@@ -1134,7 +1315,7 @@ def get_and_check_module (module_path, lw, edit_files):
         if (pos_endmodule != -1):
             passed_endmodule = True
         
-        # typedef inside of the module
+        # typedef, locaparam inside of the module
         if passed_module and (not passed_endmodule):
             idx, line_nb = _check_typedef_block(idx, line_nb, list_of_lines, lw, edit_files, typedef_state)
             idx, line_nb = _check_localparam_block(idx, line_nb, list_of_lines, lw, edit_files, typedef_state)
@@ -1235,7 +1416,7 @@ def get_and_check_module (module_path, lw, edit_files):
         if (name_found and end_line == -1):
             pos_closing = line.find(");")
 
-            if (pos_closing >= 0):  #mai trebuie sa adaug sa setez un flag ca sa se actualizeze continutul
+            if (pos_closing >= 0):
                 if idx > 0:
                     prev_line = list_of_lines[idx - 1].rstrip("\n")
                     if prev_line.rstrip().endswith(","):
@@ -1267,7 +1448,7 @@ def get_and_check_module (module_path, lw, edit_files):
         ## if it's a regular line
         if ((pos_module == -1) and (pos_endmodule == -1)
             and (not only_spaces_or_tabs(line))
-            and (not is_comment(line)) and (not is_multiline_comment(line))
+            and (not is_cmt(line))
             and passed_module and (not passed_endmodule)
             and (line.find("`") == -1)):
             indent_nb = len(line) - len(line.lstrip())
@@ -1360,15 +1541,7 @@ def get_and_check_module (module_path, lw, edit_files):
             or (header_status == 1) or typedef_state["edited"]
             or changed_extra):
 
-            # then rewrite the file
-            with open(module_path, "w") as f:
-                for line in list_of_lines:
-
-                    # GC: check for whitespace at the end of the line w\o \n
-                    aux_line = line[:-1]
-                    aux_line = aux_line.rstrip()
-
-                    f.write(aux_line + "\n")
+            rewrite_file(module_path, list_of_lines)
 
             if extra_chars:
                 lw.append(module_path + " : removed extra spaces at the end of lines")
@@ -1392,7 +1565,7 @@ def get_and_check_module (module_path, lw, edit_files):
 # Similar to get_and_check_module but adapted for package-specific rules.
 # This can modify the files if edit_files is true.
 # Return the string containing the package name and print errors if guideline
-#        is not respected.
+# is not respected.
 ###############################################################################
 def get_and_check_package(package_path, lw, edit_files):
 
@@ -1405,7 +1578,7 @@ def get_and_check_package(package_path, lw, edit_files):
 
     # Do not check license for files that must be avoided
     if header_check_allowed(package_path):
-        header_status = check_copyright(list_of_lines, lw, edit_files)
+        header_status = check_copyright(package_path, list_of_lines, lw, edit_files)
         if header_status == -1:
             lw.append(f"{package_path} : copyright text doesn't match the pattern")
     else:
@@ -1421,10 +1594,7 @@ def get_and_check_package(package_path, lw, edit_files):
     changed_pkg_line = -1
     changed_endpkg_line = -1
 
-    def is_cmt(line):
-        return is_comment(line) or is_multiline_comment(line)
-
-    # typedef normalization state (same shape as in get_and_check_module)
+    # typedef normalization state
     typedef_state = {
         "open": False,
         "base_indent": 0,
@@ -1438,7 +1608,7 @@ def get_and_check_package(package_path, lw, edit_files):
         pos_package    = line.find("package")
         pos_endpackage = line.find("endpackage")
 
-        # trailing spaces (same as modules)
+        # trailing spaces
         if re.search(r" +$", line) is not None:
             extra_chars = True
             lw.append(package_path + " : " + str(line_nb) + " extra spaces at the end of line")
@@ -1495,10 +1665,9 @@ def get_and_check_package(package_path, lw, edit_files):
                     list_of_lines[idx] = "endpackage\n"
                     changed_endpkg_line = line_nb
 
-        # ===== inside package body =====
         inside_pkg = passed_package and (not passed_endpackage)
         if inside_pkg:
-            # typedef normalization (delegated to _check_typedef_block)
+            # typedef, localparam normalization
             idx, line_nb = _check_typedef_block(idx, line_nb, list_of_lines, lw, edit_files, typedef_state)
             idx, line_nb = _check_localparam_block(idx, line_nb, list_of_lines, lw, edit_files, typedef_state)
 
@@ -1510,7 +1679,6 @@ def get_and_check_package(package_path, lw, edit_files):
                     if indent_nb < 2:
                         lw.append(package_path + " : " + str(line_nb) + " no indentation found (need ≥ 2 spaces)")
 
-        # ===== end inside package =====
         line_nb += 1
 
     # remove extra lines after endpackage / empty lines
@@ -1524,12 +1692,7 @@ def get_and_check_package(package_path, lw, edit_files):
             or (header_status == 1) or typedef_state["edited"] 
             or changed_extra):
 
-            with open(package_path, "w") as f:
-                for line in list_of_lines:
-                    # same as module: trim trailing spaces when writing
-                    aux_line = line[:-1]
-                    aux_line = aux_line.rstrip()
-                    f.write(aux_line + "\n")
+            rewrite_file(package_path, list_of_lines)
 
             if extra_chars:
                 lw.append(package_path + " : removed extra spaces at the end of lines")
@@ -1547,65 +1710,14 @@ def get_and_check_package(package_path, lw, edit_files):
     return package_name
 
 
-
-###############################################################################
-#
-# Normalize the file edges by removing empty lines at the start and end,
-# ensuring exactly one newline at the end, and optionally editing the file.
-# If edit_files is True, the file will be modified.
-###############################################################################
-# def normalize_file_edges(file_path, lw, edit_files):
-#     try:
-#         with open(file_path, 'r') as f:
-#             lines = f.readlines()
-
-#         if not lines:
-#             return
-
-#         changed = False
-
-#         # Remove empty lines at the start
-#         if lines and lines[0].strip() == "":
-#             lw.append(f"{file_path} : empty line at beginning of file")
-#             if edit_files:
-#                 while lines and lines[0].strip() == "":
-#                     lines.pop(0)
-#                     changed = True
-                
-        
-#         # Remove extra empty lines at the end
-#         if len(lines) > 1 and lines[-1].strip() == "":# and lines[-2].strip() == "":
-#             lw.append(f"{file_path} : multiple empty lines at end of file")
-#             if edit_files:
-#                 while len(lines) > 1 and lines[-1].strip() == "":# and lines[-2].strip() == "":
-#                     lines.pop()
-#                     changed = True
-
-#         # Ensure exactly one newline at the end
-#         if not lines[-1].endswith('\n'):
-#             lw.append(f"{file_path} : file does not end with a newline")
-#             if edit_files:
-#                 lines[-1] += '\n'
-#                 changed = True
-
-#         # If something changed, write back the cleaned content
-#         if changed:
-#             with open(file_path, 'w') as f:
-#                 f.writelines(lines)
-#             lw.append(f"{file_path} : normalized file edges")
-
-#     except Exception as e:
-#         lw.append(f"{file_path} : ERROR while normalizing edges - {e}")
-
+# Global cache: projects that were already checked for system_project.tcl
+PROJECTS_CHECKED = set()
 
 ###############################################################################
 #
 # Check if the project name in the system_project.tcl file matches the
 # expected name, which is the relative path from the projects folder,
 ###############################################################################
-# Global cache: projects that were already checked for system_project.tcl
-PROJECTS_CHECKED = set()
-
 def check_project_name_vs_path(modified_files, lw, edit_files=False, checked_projects=None):
 
     if checked_projects is None:
@@ -1681,7 +1793,7 @@ def find_occurrences (directory, module_name, list_of_files):
 
             ## the file with the module definition is not accepted and
             ## neither the files that have to be avoided
-            if (search and file != (module_name + ".v")):
+            if search and file not in (module_name + ".v", module_name + ".sv"):
                 with codecs.open(fullpath, 'r', encoding='utf-8', errors='ignore') as f:
                     line_nb = 1
 
@@ -2070,10 +2182,8 @@ else:
                 if (file_path.find("library") != -1):
                     guideline_ok = False
                     error_files.append(file_path)
-            # verifică numele proiectului vs. path și pune warning-urile în același lw
+            # check if the project name matches the path and add warnings to the same lw list
             check_project_name_vs_path([file_path], lw, edit_files, checked_projects=PROJECTS_CHECKED)
-            # print("Normalizing file edges for: %s" % file_path)
-            #normalize_file_edges(file_path, lw, edit_files)
 
         ## system_top modules won't be instantiated anywhere in other
         ## Verilog or SystemVerilog files
@@ -2089,28 +2199,6 @@ else:
             print ("\n -> For %s in:" % file_path)
             for message in lw:
                 print(message)
-    
-    # lw = []
-
-    # for file_path in modified_files:
-    #     print("Normalizing file edges for: %s" % file_path)
-    #     normalize_file_edges(file_path, lw, edit_files)
-    
-    # if (len(lw) > 0):
-    #         guideline_ok = False
-    #         # print("\n -> Project name vs path check:")
-    #         for message in lw:
-    #             print(message)
-    
-    # lw = []
-
-    # check_project_name_vs_path(modified_files, lw, edit_files)
-
-    # if (len(lw) > 0):
-    #         guideline_ok = False
-    #         print("\n Project name vs path check:")
-    #         for message in lw:
-    #             print(message)
 
     for file_name in xilinx_modules:
         lw = []
