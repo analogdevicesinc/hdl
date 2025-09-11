@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -54,6 +54,37 @@ module axi_tdd_counter #(
   output axi_tdd_pkg::state_t          tdd_cstate,
   output logic                         tdd_endof_frame
 );
+
+  typedef enum logic [1:0] {
+    IDLE    = 2'b00,
+    ARMED   = 2'b01,
+    WAITING = 2'b10,
+    RUNNING = 2'b11
+  } state_t;
+  //jkh
+
+  typedef enum logic [1:0] {
+    IDLE    = 2'b00,
+    ARMED   = 2'b01,
+    WAITING = 2'b10,
+    RUNNING = 2'b11
+  } state_t;
+
+  typedef enum logic [1:0] {
+    IDLE    = 2'b00,
+    ARMED   = 2'b01,
+    WAITING = 2'b10,
+    RUNNING = 2'b11
+  } state_t;
+  //gttt
+
+  typedef enum logic [1:0] {
+    IDLE    = 2'b00,
+    ARMED   = 2'b01,
+    WAITING = 2'b10,
+    RUNNING = 2'b11
+  } state_t;
+  //gttt
 
   // package import
   import axi_tdd_pkg::*;

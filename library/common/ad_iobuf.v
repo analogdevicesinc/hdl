@@ -41,7 +41,7 @@ module ad_iobuf #(
 ) (
   input       [(DATA_WIDTH-1):0]  dio_t,
   input       [(DATA_WIDTH-1):0]  dio_i,
-  output      [(DATA_WIDTH-1):0]  dio_o,
+  output      [(DATA_WIDTH-1):0]  d
   inout       [(DATA_WIDTH-1):0]  dio_p
 );
 
