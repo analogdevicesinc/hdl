@@ -126,7 +126,7 @@ module i3c_controller_regmap #(
 
   localparam [31:0] CORE_VERSION = {16'h0001,     /* MAJOR */
                                      8'h00,       /* MINOR */
-                                     8'h00};      /* PATCH */
+                                     8'h01};      /* PATCH */
 
   reg [31:0] up_scratch  = 32'h00; // Scratch register
   reg [31:0] up_pid_l  = {PID_PART_ID, PID_INSTANCE_ID, PID_EXTRA_ID};
