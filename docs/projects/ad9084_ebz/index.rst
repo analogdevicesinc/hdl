@@ -1,6 +1,6 @@
 .. _ad9084_ebz:
 
-AD9084-EBZ (Apollo) HDL project
+AD9084-EBZ HDL project
 ===============================================================================
 
 Overview
@@ -68,10 +68,6 @@ Supported carriers
      - FMC+
      - 24 (12 per Apollo side)
    * -
-     - :xilinx:`VCU128`
-     - FMC+
-     - 24 (12 per Apollo side)
-   * -
      - :xilinx:`VCK190`
      - FMC2
      - 8 (4 per Apollo side)
@@ -82,60 +78,63 @@ Supported carriers
 
 Block design
 -------------------------------------------------------------------------------
+
 .. important::
 
-  The Apollo chip is split into two sides, each side having up to 12 JESD lanes and 4 converters:
+   The Apollo chip is split into two sides, each side having up to 12 JESD
+   lanes and 4 converters:
 
-  - Side A
-  - Side B
+   - Side A
+   - Side B
 
-  The ``ASYMMETRIC_A_B_MODE`` parameter is used to enable the asymmetric A/B mode
-  where each Apollo side has a separate JESD link inside the block design.
+   The ``ASYMMETRIC_A_B_MODE`` parameter is used to enable the asymmetric A/B
+   mode where each Apollo side has a separate JESD link inside the block design.
 
-  If the ASYMMETRIC_A_B_MODE parameter is set to 0, the block design will merge
-  the two sides into a single link.
+   If the ASYMMETRIC_A_B_MODE parameter is set to 0, the block design will merge
+   the two sides into a single link.
 
-  Given the following JESD204 configuration and assuming that **ASYMMETRIC_A_B_MODE = 0**:
+   Given the following JESD204 configuration and assuming that
+   **ASYMMETRIC_A_B_MODE = 0**:
 
-  - L = 8
-  - M = 4
-  - S = 1
-  - N = NP = 16
-  - **NUM_LINKS = 2**
+   - L = 8
+   - M = 4
+   - S = 1
+   - N = NP = 16
+   - **NUM_LINKS = 2**
 
-  The resulted design will configure each Apollo side with the following
-  parameters, but will merge the two sides into a single JESD link inside the
-  design:
+   The resulted design will configure each Apollo side with the following
+   parameters, but will merge the two sides into a single JESD link inside the
+   design:
 
-  - L = 8
-  - M = 4
-  - S = 1
-  - N = NP = 16
+   - L = 8
+   - M = 4
+   - S = 1
+   - N = NP = 16
 
-  If however, **NUM_LINKS = 1**, the design will configure each side with the
-  following parameters:
+   If however, **NUM_LINKS = 1**, the design will configure each side with the
+   following parameters:
 
-  - L = 4
-  - M = 2
-  - S = 1
-  - N = NP = 16
+   - L = 4
+   - M = 2
+   - S = 1
+   - N = NP = 16
 
-  Given the following JESD204 configuration and assuming that
-  **ASYMMETRIC_A_B_MODE = 1**:
+   Given the following JESD204 configuration and assuming that
+   **ASYMMETRIC_A_B_MODE = 1**:
 
-  - L = 8
-  - M = 4
-  - S = 1
-  - N = NP = 16
-  - **NUM_LINKS is ignored**
+   - L = 8
+   - M = 4
+   - S = 1
+   - N = NP = 16
+   - **NUM_LINKS is ignored**
 
-  The resulted design will configure each Apollo side with the following
-  parameters, each having it's own JESD link inside the design:
+   The resulted design will configure each Apollo side with the following
+   parameters, each having it's own JESD link inside the design:
 
-  - L = 8
-  - M = 4
-  - S = 1
-  - N = NP = 16
+   - L = 8
+   - M = 4
+   - S = 1
+   - N = NP = 16
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -194,7 +193,9 @@ The Tx link is operating with the following parameters:
 - QPLL1
 
 .. important::
-  Because of the two Apollo sides, the total number of lanes in the design is 16 and the total number of converters is 8.
+
+  Because of the two Apollo sides, the total number of lanes in the design is
+  16 and the total number of converters is 8.
 
 Example block design for ASYMMETRIC_A_B_MODE=1; M=4; L=8; JESD204C
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -293,16 +294,24 @@ The following are the parameters of this project that can be configured:
   - 8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
     Layer
 - HSCI_ENABLE: enables the HSCI IP (Xilinx only)
-- ASYMMETRIC_A_B_MODE: enables the asymmetric A/B mode where each Apollo side has a separate JESD link (Xilinx only)
-- RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA) (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
-- TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE) (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
+- ASYMMETRIC_A_B_MODE: enables the asymmetric A/B mode where each Apollo side
+  has a separate JESD link (Xilinx only)
+- RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
+  (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
+- TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)
+  (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
 - REF_CLK_RATE: the rate of the reference clock (Versal and Intel only)
 - DEVICE_CLK_RATE: the rate of the device clock (Intel only)
-- [RX/TX]_JESD_M: number of converters per link (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
-- [RX/TX]_JESD_L: number of lanes per link (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
-- [RX/TX]_JESD_S: number of samples per frame (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
-- [RX/TX]_JESD_NP: number of bits per sample (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
-- [RX/TX]_NUM_LINKS: number of links (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
+- [RX/TX]_JESD_M: number of converters per link
+  (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
+- [RX/TX]_JESD_L: number of lanes per link
+  (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
+- [RX/TX]_JESD_S: number of samples per frame
+  (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
+- [RX/TX]_JESD_NP: number of bits per sample
+  (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
+- [RX/TX]_NUM_LINKS: number of links
+  (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
 - [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
   kilosamples per converter (M) (A or A&B link if ASYMMETRIC_A_B_MODE = 0)
 - RX_B_LANE_RATE: lane rate of the Rx link (MxFE to FPGA) (B link)
@@ -344,9 +353,11 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
+added to the base address from HDL
+(see more at :ref:`architecture cpu-intercon-addr`).
 
-Depending on the values of parameters $ASYMMETRIC_A_B_MODE, $ADI_PHY_SEL and $HSCI_ENABLE,
+Depending on the values of parameters $ASYMMETRIC_A_B_MODE, $ADI_PHY_SEL
+and $HSCI_ENABLE,
 some IPs are instatiated and some are not.
 
 Check-out the table below to find out the conditions.
@@ -617,8 +628,7 @@ Example for building the project with parameters:
 
 **Linux/Cygwin/WSL**
 
-.. shell::
-  :show-user:
+.. shell:: bash
 
   $cd hdl/projects/ad9084_ebz/vck190
   $make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5     \
@@ -644,77 +654,77 @@ for that project (ad9084_ebz/$carrier).
 
 .. collapsible:: Default values of the make parameters for AD9084-EBZ
 
-   +---------------------+---------------------------------------------+
-   | Parameter           | Default value of the parameters             |
-   |                     +--------+--------+---------+--------+--------+
-   |                     |  FM87  | VCU118 | VCU128  | VCK190 | VPK180 |
-   +=====================+========+========+=========+========+========+
-   | JESD_MODE           | 64B66B | 64B66B |  64B66B | 64B66B | 64B66B |
-   +---------------------+--------+--------+---------+--------+--------+
-   | ENABLE_HSCI         |:red:`-`|      1 | :red:`-`|     1* |     1* |
-   +---------------------+--------+--------+---------+--------+--------+
-   | REF_CLK_RATE*       |  312.5 |    --- |     --- |  312.5 |  312.5 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | DEVICE_CLK_RATE**   |  312.5 |    --- |     --- |    --- |    --- |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_LANE_RATE        | 20.625 | 20.625 | 10.3125 | 20.625 | 20.625 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_LANE_RATE        | 20.625 | 20.625 | 10.3125 | 20.625 | 20.625 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_JESD_M           |      4 |      4 |       4 |      4 |      4 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_JESD_L           |      8 |      8 |       8 |      4 |      4 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_JESD_S           |      1 |      1 |       1 |      1 |      1 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_JESD_NP          |     16 |     16 |      16 |     16 |     16 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_NUM_LINKS        |      2 |      1 |       1 |      2 |      2 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_JESD_M           |      4 |      4 |       4 |      4 |      4 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_JESD_L           |      8 |      8 |       8 |      4 |      4 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_JESD_S           |      1 |      1 |       1 |      1 |      1 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_JESD_NP          |     16 |     16 |      16 |     16 |     16 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_NUM_LINKS        |      2 |      1 |       1 |      2 |      2 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_KS_PER_CHANNEL   |     16 |     32 |   65536 |     64 |     64 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_KS_PER_CHANNEL   |     16 |     32 |   65536 |     64 |     64 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | ASYMMETRIC_A_B_MODE |:red:`-`|      1 |       1 |      0 |      0 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_B_LANE_RATE      |:red:`-`| 20.625 | 10.3125 | 20.625 | 20.625 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_B_LANE_RATE      |:red:`-`| 20.625 | 10.3125 | 20.625 | 20.625 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_B_JESD_M         |:red:`-`|      4 |       4 |      4 |      4 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_B_JESD_L         |:red:`-`|      8 |       8 |      4 |      4 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_B_JESD_S         |:red:`-`|      1 |       1 |      1 |      1 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_B_JESD_NP        |:red:`-`|     16 |      16 |     16 |     16 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_B_JESD_M         |:red:`-`|      4 |       4 |      4 |      4 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_B_JESD_L         |:red:`-`|      8 |       8 |      4 |      4 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_B_JESD_S         |:red:`-`|      1 |       1 |      1 |      1 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_B_JESD_NP        |:red:`-`|     16 |      16 |     16 |     16 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | RX_B_KS_PER_CHANNEL |:red:`-`|     32 |   65536 |     64 |     64 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | TX_B_KS_PER_CHANNEL |:red:`-`|     32 |   65536 |     64 |     64 |
-   +---------------------+--------+--------+---------+--------+--------+
-   | ADC_DO_MEM_TYPE     |    --- |    --- |       2 |    --- |    --- |
-   +---------------------+--------+--------+---------+--------+--------+
-   | DAC_DO_MEM_TYPE     |    --- |    --- |       2 |    --- |    --- |
-   +---------------------+--------+--------+---------+--------+--------+
+   +---------------------+-----------------------------------+
+   | Parameter           | Default value of the parameters   |
+   |                     +--------+--------+--------+--------+
+   |                     |  FM87  | VCU118 | VCK190 | VPK180 |
+   +=====================+========+========+========+========+
+   | JESD_MODE           | 64B66B | 64B66B | 64B66B | 64B66B |
+   +---------------------+--------+--------+--------+--------+
+   | ENABLE_HSCI         |:red:`-`|      1 |     1* |     1* |
+   +---------------------+--------+--------+--------+--------+
+   | REF_CLK_RATE*       |  312.5 |    --- |  312.5 |  312.5 |
+   +---------------------+--------+--------+--------+--------+
+   | DEVICE_CLK_RATE**   |  312.5 |    --- |    --- |    --- |
+   +---------------------+--------+--------+--------+--------+
+   | RX_LANE_RATE        | 20.625 | 20.625 | 20.625 | 20.625 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_LANE_RATE        | 20.625 | 20.625 | 20.625 | 20.625 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_JESD_M           |      4 |      4 |      4 |      4 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_JESD_L           |      8 |      8 |      4 |      4 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_JESD_S           |      1 |      1 |      1 |      1 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_JESD_NP          |     16 |     16 |     16 |     16 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_NUM_LINKS        |      2 |      1 |      2 |      2 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_JESD_M           |      4 |      4 |      4 |      4 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_JESD_L           |      8 |      8 |      4 |      4 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_JESD_S           |      1 |      1 |      1 |      1 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_JESD_NP          |     16 |     16 |     16 |     16 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_NUM_LINKS        |      2 |      1 |      2 |      2 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_KS_PER_CHANNEL   |     16 |     32 |     64 |     64 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_KS_PER_CHANNEL   |     16 |     32 |     64 |     64 |
+   +---------------------+--------+--------+--------+--------+
+   | ASYMMETRIC_A_B_MODE |:red:`-`|      1 |      0 |      0 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_B_LANE_RATE      |:red:`-`| 20.625 | 20.625 | 20.625 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_B_LANE_RATE      |:red:`-`| 20.625 | 20.625 | 20.625 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_B_JESD_M         |:red:`-`|      4 |      4 |      4 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_B_JESD_L         |:red:`-`|      8 |      4 |      4 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_B_JESD_S         |:red:`-`|      1 |      1 |      1 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_B_JESD_NP        |:red:`-`|     16 |     16 |     16 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_B_JESD_M         |:red:`-`|      4 |      4 |      4 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_B_JESD_L         |:red:`-`|      8 |      4 |      4 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_B_JESD_S         |:red:`-`|      1 |      1 |      1 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_B_JESD_NP        |:red:`-`|     16 |     16 |     16 |
+   +---------------------+--------+--------+--------+--------+
+   | RX_B_KS_PER_CHANNEL |:red:`-`|     32 |     64 |     64 |
+   +---------------------+--------+--------+--------+--------+
+   | TX_B_KS_PER_CHANNEL |:red:`-`|     32 |     64 |     64 |
+   +---------------------+--------+--------+--------+--------+
+   | ADC_DO_MEM_TYPE     |    --- |    --- |    --- |    --- |
+   +---------------------+--------+--------+--------+--------+
+   | DAC_DO_MEM_TYPE     |    --- |    --- |    --- |    --- |
+   +---------------------+--------+--------+---------+-------+
 
    .. admonition:: Legend
       :class: note
@@ -728,7 +738,8 @@ by the configuration used:
 
 if the following command was run
 
-``make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5 RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1 TX_JESD_NP=16``
+``make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5 RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1
+RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1 TX_JESD_NP=16``
 
 then the folder name will be:
 
@@ -737,7 +748,8 @@ because of truncation of some keywords so the name will not exceed the limits
 of the Operating System (``JESD``, ``LANE``, etc. are removed) of 260
 characters.
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+A more comprehensive build guide can be found in the :ref:`build_hdl`
+user guide.
 
 Software considerations
 -------------------------------------------------------------------------------
@@ -752,39 +764,39 @@ e.g physical lane 2 from ADC from A side connects to logical lane 1
 from the VCU118. Therefore the crossbar from the device must be set
 accordingly.
 
-============== =============== =============== =============== ===============
-ADC A phy Lane VCU118          VCU128          VCK190 / VPK180 FM87
-============== =============== =============== =============== ===============
-0              7               11              5               11
-1              5               3               1               9
-2              1               8               3               8
-3              2               9               7               10
-4              11              7               N/C             7
-5              3               5               N/C             3
-6              8               1               N/C             1
-7              9               2               N/C             5
-8              10              10              N/C             N/C
-9              6               6               N/C             N/C
-10             4               4               N/C             N/C
-11             0               0               N/C             N/C
-============== =============== =============== =============== ===============
+============== =============== =============== ===============
+ADC A phy Lane VCU118          VCK190 / VPK180 FM87
+============== =============== =============== ===============
+0              7               5               11
+1              5               1               9
+2              1               3               8
+3              2               7               10
+4              11              N/C             7
+5              3               N/C             3
+6              8               N/C             1
+7              9               N/C             5
+8              10              N/C             N/C
+9              6               N/C             N/C
+10             4               N/C             N/C
+11             0               N/C             N/C
+============== =============== =============== ===============
 
-============== =============== =============== =============== ===============
-ADC B phy Lane VCU118          VCU128          VCK190 / VPK180 FM87
-============== =============== =============== =============== ===============
-0              10              3               1               11
-1              6               2               7               9
-2              4               5               10              8
-3              0               7               3               5
-4              3               8               N/C             3
-5              2               1               N/C             10
-6              5               11              N/C             7
-7              7               9               N/C             1
-8              8               10              N/C             N/C
-9              1               6               N/C             N/C
-10             11              4               N/C             N/C
-11             9               0               N/C             N/C
-============== =============== =============== =============== ===============
+============== =============== =============== ===============
+ADC B phy Lane VCU118          VCK190 / VPK180 FM87
+============== =============== =============== ===============
+0              10              1               11
+1              6               7               9
+2              4               10              8
+3              0               3               5
+4              3               N/C             3
+5              2               N/C             10
+6              5               N/C             7
+7              7               N/C             1
+8              8               N/C             N/C
+9              1               N/C             N/C
+10             11              N/C             N/C
+11             9               N/C             N/C
+============== =============== =============== ===============
 
 DAC - crossbar config
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -796,39 +808,39 @@ e.g physical lane 2 from DAC from A side connects to logical lane 9
 from the VCU118. Therefore the crossbar from the device must be set
 accordingly.
 
-============== =============== =============== =============== ===============
-DAC A phy Lane VCU118          VCU128          VCK190 / VPK180 FM87
-============== =============== =============== =============== ===============
-0              10              5               11              2
-1              8               1               3               1
-2              9               3               8               5
-3              11              7               9               7
-4              5               10              N/C             9
-5              1               8               N/C             8
-6              3               9               N/C             3
-7              7               11              N/C             11
-8              4               4               N/C             N/C
-9              6               6               N/C             N/C
-10             2               2               N/C             N/C
-11             0               0               N/C             N/C
-============== =============== =============== =============== ===============
+============== =============== =============== ===============
+DAC A phy Lane VCU118          VCK190 / VPK180 FM87
+============== =============== =============== ===============
+0              10              11              2
+1              8               3               1
+2              9               8               5
+3              11              9               7
+4              5               N/C             9
+5              1               N/C             8
+6              3               N/C             3
+7              7               N/C             11
+8              4               N/C             N/C
+9              6               N/C             N/C
+10             2               N/C             N/C
+11             0               N/C             N/C
+============== =============== =============== ===============
 
-============== =============== =============== =============== ===============
-DAC B phy Lane VCU118          VCU128          VCK190 / VPK180 FM87
-============== =============== =============== =============== ===============
-0              4               1               3               9
-1              6               7               2               11
-2              2               10              5               1
-3              0               3               7               8
-4              1               5               N/C             7
-5              7               8               N/C             5
-6              10              9               N/C             2
-7              3               11              N/C             3
-8              5               4               N/C             N/C
-9              8               6               N/C             N/C
-10             9               2               N/C             N/C
-11             11              0               N/C             N/C
-============== =============== =============== =============== ===============
+============== =============== =============== ===============
+DAC B phy Lane VCU118          VCK190 / VPK180 FM87
+============== =============== =============== ===============
+0              4               3               9
+1              6               2               11
+2              2               5               1
+3              0               7               8
+4              1               N/C             7
+5              7               N/C             5
+6              10              N/C             2
+7              3               N/C             3
+8              5               N/C             N/C
+9              8               N/C             N/C
+10             9               N/C             N/C
+11             11              N/C             N/C
+============== =============== =============== ===============
 
 Resources
 -------------------------------------------------------------------------------
@@ -859,13 +871,10 @@ Here you can find the quick start guides available for these evaluation boards:
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Product datasheets:
+- Product datasheet: :adi:`AD9084`
 
-  - :adi:`AD9084`
-
-..
-  - :adi:`UG-1578, Device User Guide <media/en/technical-documentation/user-guides/ad9084.pdf>`
-  - :adi:`UG-1829, Evaluation Board User Guide <media/en/technical-documentation/user-guides/eval-ad9081-9082-9986-9988-ug-1829.pdf>`
+  - :adi:`UG-1578, AD9084/AD9088 Device User Guide <media/en/technical-documentation/user-guides/ad9084-ad9088-device-ug-2300.pdf>`
+  - :adi:`UG-2326, Evaluating the AD9084 Apollo MxFE Quad, 16-Bit 28GSPS RF DAC and Quad 12-Bit, 20GSPS RF ADC <media/en/technical-documentation/user-guides/eval-ad9084-ug-2326.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -916,7 +925,7 @@ HDL related
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      - :ref:`ad_ip_jesd204_tpl_dac`
 
-- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`generic_jesd_bds`
 - :ref:`jesd204`
 
 Software related
