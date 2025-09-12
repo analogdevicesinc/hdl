@@ -72,7 +72,8 @@ module system_top (
   input           adc_spi_miso_rdyn,
   output          adc_spi_mosi,
   output          adc_spi_csn,
-  output          adc_syncn
+  output          adc_syncn,
+  input           adc_int
 );
 
   // internal signals
@@ -103,6 +104,7 @@ module system_top (
 
   assign gpio_i[63:34] = gpio_o[63:34];
   assign gpio_i[32] = adc_spi_miso_rdyn;
+  assign gpio_i[31] = adc_int;
 
   ad_iobuf #(
     .DATA_WIDTH (1)
@@ -114,7 +116,7 @@ module system_top (
 
   // board specific gpios
 
-  assign gpio_i[31:8] = gpio_o[31:8];
+  assign gpio_i[30:8] = gpio_o[30:8];
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -165,5 +167,5 @@ module system_top (
     .spi1_sdo_o (),
     .iic_ard_scl_io (iic_ard_scl),
     .iic_ard_sda_io (iic_ard_sda));
-  
+
 endmodule
