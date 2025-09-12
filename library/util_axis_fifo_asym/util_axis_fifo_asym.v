@@ -152,8 +152,13 @@ module util_axis_fifo_asym #(
 
         if (TKEEP_EN) begin
 
+          // tlast is asserted for the atomic fifo instances on the following conditions:
+          // - for the most significant instance, tlast is the input tlast if any of the tkeep bits is asserted (so we are not suppressing this transfer)
+          // - for the other instances, we store the input tlast if all the following instances have tkeep=0 for all bits (so all null bytes)
+          // thus, the tlast is stored on the most significant instance that has non-null bytes (meaning not all tkeep bits are 0).
+          // if all bytes are null (tkeep=0) for all instances, the least significant instance will store tlast.
           assign s_axis_tlast_int_s[i] = (i==RATIO-1) ? ((|s_axis_tkeep[M_DATA_WIDTH/8*i+:M_DATA_WIDTH/8]) ? s_axis_tlast : 1'b0) :
-            (((|s_axis_tkeep[M_DATA_WIDTH/8*i+:M_DATA_WIDTH/8]) & (~(|s_axis_tkeep[M_DATA_WIDTH/8*(i+1)+:M_DATA_WIDTH/8]))) ? s_axis_tlast : 1'b0);
+            (((~(|s_axis_tkeep[M_DATA_WIDTH/8*(i+1)+:(RATIO-i-1)*M_DATA_WIDTH/8]))) ? s_axis_tlast : 1'b0);
 
         end else begin
 
@@ -225,7 +230,17 @@ module util_axis_fifo_asym #(
 
       // VALID/EMPTY/ALMOST_EMPTY is driven by the current atomic instance
       assign m_axis_valid_int = m_axis_valid_int_s >> m_axis_counter;
-      assign m_axis_valid = m_axis_valid_int & (|m_axis_tkeep);
+
+      // When TLAST_EN=1, we still have to assert m_axis_valid when tlast is
+      // high even if all bytes are null due to tkeep. AXI-Streaming only allows
+      // us to suppress transfers with all tkeep bits deasserted if tlast is
+      // also deasserted.
+      if (TLAST_EN) begin
+        assign m_axis_valid = m_axis_valid_int & ((|m_axis_tkeep) || m_axis_tlast);
+      end else begin
+        assign m_axis_valid = m_axis_valid_int & (|m_axis_tkeep);
+      end
+
       assign m_axis_tlast = m_axis_tlast_int_s >> m_axis_counter;
 
       // the FIFO has the same level as the last atomic instance
