@@ -285,15 +285,13 @@ module system_top #(
   assign spi2_cs[5:0] = spi_csn[5:0];
   assign spi2_sclk    = spi_clk;
 
-  ad9084_ebz_spi #(
-    .NUM_OF_SLAVES(2),
-    .IS_4WIRE(2'b01)
+  ad_3w_spi #(
+    .NUM_OF_SLAVES(3)
   ) i_spi (
-    .spi_csn (spi_csn[1:0]),
+    .spi_csn (spi_csn[2:0]),
     .spi_clk (spi_clk),
     .spi_mosi (spi_sdio),
     .spi_miso (spi_sdo),
-    .spi_miso_in (spi2_sdo),
     .spi_sdio (spi2_sdio));
 
   assign dut_csb  = apollo_spi_csn[0];
