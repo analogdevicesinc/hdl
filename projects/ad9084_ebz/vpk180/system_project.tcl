@@ -77,9 +77,9 @@ adi_project_files ad9084_ebz_vpk180 [list \
   "system_top.v" \
   "system_constr.xdc" \
   "timing_constr.tcl" \
-  "../common/ad9084_ebz_spi.v" \
-  "../common/versal_transceiver.tcl" \
   "../common/versal_hsci_phy.tcl" \
+  "../common/versal_transceiver.tcl" \
+  "$ad_hdl_dir/library/common/ad_3w_spi.v" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vpk180/vpk180_system_constr.xdc" ]
 
