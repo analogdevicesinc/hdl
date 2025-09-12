@@ -6,7 +6,6 @@
 
 PROJECT_NAME := ad9084_ebz_fm87
 
-M_DEPS += ../common/ad9084_ebz_spi.v
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/intel/adcfifo_qsys.tcl
 M_DEPS += ../../common/fm87/system_qsys.tcl
