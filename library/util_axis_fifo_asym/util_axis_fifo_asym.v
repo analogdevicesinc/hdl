@@ -117,7 +117,8 @@ module util_axis_fifo_asym #(
         .ALMOST_EMPTY_THRESHOLD (A_ALMOST_EMPTY_THRESHOLD),
         .ALMOST_FULL_THRESHOLD (A_ALMOST_FULL_THRESHOLD),
         .TKEEP_EN (TKEEP_EN),
-        .TLAST_EN (TLAST_EN)
+        .TLAST_EN (TLAST_EN),
+        .REMOVE_NULL_BEAT_EN(0)
       ) i_fifo (
         .m_axis_aclk    (m_axis_aclk),
         .m_axis_aresetn (m_axis_aresetn),
