@@ -8,7 +8,6 @@ PROJECT_NAME := ad9084_ebz_vcu118
 
 M_DEPS += timing_constr.xdc
 M_DEPS += ../common/versal_hsci_phy.tcl
-M_DEPS += ../common/ad9084_ebz_spi.v
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
 M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
@@ -19,6 +18,7 @@ M_DEPS += ../../../library/xilinx/common/ad_rst_constr.xdc
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
 M_DEPS += ../../../library/common/ad_rst.v
 M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_3w_spi.v
 M_DEPS += ../../../projects/common/xilinx/data_offload_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 

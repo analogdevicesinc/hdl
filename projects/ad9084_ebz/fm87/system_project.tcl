@@ -70,7 +70,6 @@ source $ad_hdl_dir/projects/common/fm87/fm87_plddr_system_assign.tcl
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_3w_spi.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/projects/common/fm87/gpio_slave.v
-set_global_assignment -name VERILOG_FILE ../common/ad9084_ebz_spi.v
 
 set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)"    -to fpga_refclk_in
 set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to syncinb_a0
