@@ -1823,8 +1823,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.0000001"
-     inkscape:cx="501.99999"
-     inkscape:cy="203.49999"
+     inkscape:cx="500.49997"
+     inkscape:cy="323.49998"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1932,16 +1932,16 @@
        inkscape:export-xdpi="96"
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:5.58431px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-       x="47.822815"
+       x="44.647812"
        y="-124.55183"
        id="text17738"
        transform="rotate(-90)"
        inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
          sodipodi:role="line"
          id="tspan17736"
-         x="47.822815"
+         x="44.647812"
          y="-124.55183"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.14381px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-width:0.465361px;stroke-opacity:1">HMC_7044</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8.14381px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-width:0.465361px;stroke-opacity:1">HMC7044</tspan></text>
     <g
        id="g35957"
        transform="matrix(2.1609131,0,0,1.378867,-168.57366,-56.933613)"
