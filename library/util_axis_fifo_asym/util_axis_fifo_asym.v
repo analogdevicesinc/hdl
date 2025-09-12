@@ -153,8 +153,18 @@ module util_axis_fifo_asym #(
 
         if (TKEEP_EN) begin
 
-          assign s_axis_tlast_int_s[i] = (i==RATIO-1) ? ((|s_axis_tkeep[M_DATA_WIDTH/8*i+:M_DATA_WIDTH/8]) ? s_axis_tlast : 1'b0) :
-            (((|s_axis_tkeep[M_DATA_WIDTH/8*i+:M_DATA_WIDTH/8]) & (~(|s_axis_tkeep[M_DATA_WIDTH/8*(i+1)+:M_DATA_WIDTH/8]))) ? s_axis_tlast : 1'b0);
+          // tlast is asserted for the atomic fifo instances on the following conditions:
+          // - for the most significant instance, tlast is the input tlast if any of the tkeep bits for the instance is asserted (so we are not suppressing this transfer)
+          // - for the least significat instance, tlast is the input tlast if no tkeep bits are asserted for any instance (transfer is all null bytes)
+          // - for the other instances, we store the input tlast if all the following instances have tkeep=0 for all bits and no less significant instance has stored it
+          // thus, the tlast is stored on the most significant instance that has non-null bytes (meaning not all tkeep bits are 0), if there are any.
+          if (i==RATIO-1) begin
+            assign s_axis_tlast_int_s[i] = (|s_axis_tkeep[M_DATA_WIDTH/8*i+:M_DATA_WIDTH/8]) ? s_axis_tlast : 1'b0;
+          end else if (i==0) begin
+            assign s_axis_tlast_int_s[i] = (~|s_axis_tkeep) ? s_axis_tlast : 1'b0;
+          end else begin
+            assign s_axis_tlast_int_s[i] = (~(|s_axis_tkeep[(S_DATA_WIDTH/8)-1:(M_DATA_WIDTH/8)*(i+1)]) && ~|s_axis_tlast_int_s[i-1:0]) ? s_axis_tlast : 1'b0;
+          end
 
         end else begin
 
@@ -226,7 +236,17 @@ module util_axis_fifo_asym #(
 
       // VALID/EMPTY/ALMOST_EMPTY is driven by the current atomic instance
       assign m_axis_valid_int = m_axis_valid_int_s >> m_axis_counter;
-      assign m_axis_valid = m_axis_valid_int & (|m_axis_tkeep);
+
+      // When TLAST_EN=1, we still have to assert m_axis_valid when tlast is
+      // high even if all bytes are null due to tkeep. AXI-Streaming only allows
+      // us to suppress transfers with all tkeep bits deasserted if tlast is
+      // also deasserted.
+      if (TLAST_EN) begin
+        assign m_axis_valid = m_axis_valid_int & ((|m_axis_tkeep) || m_axis_tlast);
+      end else begin
+        assign m_axis_valid = m_axis_valid_int & (|m_axis_tkeep);
+      end
+
       assign m_axis_tlast = m_axis_tlast_int_s >> m_axis_counter;
 
       // the FIFO has the same level as the last atomic instance
