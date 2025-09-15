@@ -54,3 +54,7 @@ set_false_path \
   -from [get_pins -hierarchical * -filter {NAME=~*i_sync/transfer_busy*/C}] \
   -to [get_pins -hierarchical * -filter {NAME=~*i_core/dac_*_transfer_sync_d*/D}]
 
+# workaround
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*_common/up_*c_r1_mode_reg/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_core/*_r1_mode_d_reg*/D}]
