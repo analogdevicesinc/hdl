@@ -38,8 +38,11 @@ ad_ip_parameter axi_ltc2387 CONFIG.ADC_INIT_DELAY 27
 
 ad_ip_instance axi_pwm_gen axi_pwm_gen
 ad_ip_parameter axi_pwm_gen CONFIG.N_PWMS 2
+# pwm0 - cnv
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_WIDTH 1
+# period 8 when 120MHz clock (120MHz/8=15MSPS)
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_0_PERIOD 8
+# pwm1 - clk_gate
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_WIDTH $CLK_GATE_WIDTH
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_PERIOD 8
 ad_ip_parameter axi_pwm_gen CONFIG.PULSE_1_OFFSET 0
