@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -62,6 +62,9 @@ module system_top (
 
   inout   [ 1:0]  btn,
   inout   [ 5:0]  led,
+
+  inout           iic_ard_scl,
+  inout           iic_ard_sda,
 
   // ad7190 spi pins
 
@@ -159,6 +162,8 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o ());
+    .spi1_sdo_o (),
+    .iic_ard_scl_io (iic_ard_scl),
+    .iic_ard_sda_io (iic_ard_sda));
 
 endmodule
