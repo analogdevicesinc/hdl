@@ -107,6 +107,7 @@ module adrv9001_rx #(
   wire [NUM_LANES-1:0] data_s7;
   wire                 adc_clk_in_fast;
   wire                 mcs_6th_pulse_s;
+  wire                 adc_clk_div_s;
 
   // internal registers
 
@@ -116,6 +117,9 @@ module adrv9001_rx #(
   reg       reset_m1;
   reg       reset;
   reg       bufdiv_clr = 1'b0;
+  reg [2:0] state_cnt = 7;
+  reg [2:0] bufdiv_clr_state = 3;
+  reg       bufdiv_ce = 1'b1;
   reg       serdes_reset = 1'b0;
   reg       serdes_next_reset = 1'b0;
   reg [7:0] serdes_min_reset_cycle = 8'hff;
@@ -132,7 +136,7 @@ module adrv9001_rx #(
     .DRP_WIDTH (DRP_WIDTH),
     .SERDES_FACTOR (8)
   ) i_serdes (
-    .rst (adc_rst | serdes_reset),
+    .rst (serdes_reset),
     .clk (adc_clk_in_fast),
     .div_clk (adc_clk_div),
     .data_s0 (data_s0),
@@ -156,7 +160,7 @@ module adrv9001_rx #(
   generate
   if (CMOS_LVDS_N == 0) begin
 
-    IBUFGDS i_clk_in_ibuf (
+    IBUFDS i_clk_in_ibuf (
       .I (rx_dclk_in_p_dclk_in),
       .IB (rx_dclk_in_n_NC),
       .O (clk_in_s));
@@ -211,9 +215,37 @@ module adrv9001_rx #(
 
   always @(posedge clk_in_s, posedge mssi_sync_d2) begin
     if (mssi_sync_d2 == 1'b1) begin
-      bufdiv_clr <= 1'b1;
-    end else begin
+      bufdiv_ce <= 1'b0;
       bufdiv_clr <= 1'b0;
+      bufdiv_clr_state <= 3'd0;
+      state_cnt <= 3'd7;
+    end else begin
+      if (bufdiv_ce == 1'b0) begin
+        if (state_cnt == 3'd0) begin
+          bufdiv_clr_state <= bufdiv_clr_state + 1;
+        end else begin
+          state_cnt <= state_cnt - 3'd1;
+        end
+      end
+
+      case (bufdiv_clr_state)
+        3'd0 : begin
+          bufdiv_ce <= 1'b0;
+          bufdiv_clr <= 1'b0;
+        end
+        3'd1 : begin
+          bufdiv_ce <= 1'b0;
+          bufdiv_clr <= 1'b1;
+        end
+        3'd2 : begin
+          bufdiv_ce <= 1'b0;
+          bufdiv_clr <= 1'b0;
+        end
+        default: begin
+          bufdiv_ce <= 1'b1;
+          bufdiv_clr <= 1'b0;
+        end
+      endcase
     end
   end
 
@@ -316,14 +348,14 @@ module adrv9001_rx #(
   if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
     wire adc_clk_div_s;
 
-    BUFIO i_clk_buf (
+    BUFG i_clk_buf (
       .I (clk_in_s),
       .O (adc_clk_in_fast));
 
     BUFR #(
       .BUFR_DIVIDE("4")
     ) i_div_clk_buf (
-      .CE (1'b1),
+      .CE (bufdiv_ce),
       .CLR (bufdiv_clr),
       .I (clk_in_s),
       .O (adc_clk_div_s));
