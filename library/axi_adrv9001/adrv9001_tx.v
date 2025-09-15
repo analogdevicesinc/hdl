@@ -96,6 +96,7 @@ module adrv9001_tx #(
   wire [NUM_LANES-1:0] data_s5;
   wire [NUM_LANES-1:0] data_s6;
   wire [NUM_LANES-1:0] data_s7;
+  wire                 dac_clk_div_s;
 
   // internal registers
 
@@ -105,10 +106,12 @@ module adrv9001_tx #(
   reg        reset_m1;
   reg        reset;
   reg        bufdiv_clr = 1'b0;
+  reg [2:0]  state_cnt = 7;
+  reg [2:0]  bufdiv_clr_state = 3;
+  reg        bufdiv_ce = 1'b1;
+  reg [7:0]  serdes_min_reset_cycle = 8'hff;
   reg        serdes_reset = 1'b0;
   reg        serdes_next_reset = 1'b0;
-
-  reg [7:0] serdes_min_reset_cycle = 8'hff;
 
   ad_serdes_out #(
     .CMOS_LVDS_N (CMOS_LVDS_N),
@@ -117,7 +120,7 @@ module adrv9001_tx #(
     .SERDES_FACTOR(8),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)
   ) i_serdes (
-    .rst (dac_rst|serdes_reset),
+    .rst (serdes_reset),
     .clk (dac_fast_clk),
     .div_clk (dac_clk_div),
     .data_oe (tx_output_enable & dac_data_valid),
@@ -136,7 +139,7 @@ module adrv9001_tx #(
   generate
   if (CMOS_LVDS_N == 0) begin
 
-    IBUFGDS i_dac_clk_in_ibuf (
+    IBUFDS i_dac_clk_in_ibuf (
       .I (tx_dclk_in_p_dclk_in),
       .IB (tx_dclk_in_n_NC),
       .O (tx_dclk_in_s));
@@ -194,9 +197,37 @@ module adrv9001_tx #(
 
   always @(posedge dac_fast_clk, posedge mssi_sync_d2) begin
     if (mssi_sync_d2 == 1'b1) begin
-      bufdiv_clr <= 1'b1;
-    end else begin
+      bufdiv_ce <= 1'b0;
       bufdiv_clr <= 1'b0;
+      bufdiv_clr_state <= 3'd0;
+      state_cnt <= 3'd7;
+    end else begin
+      if (bufdiv_ce == 1'b0) begin
+        if (state_cnt == 3'd0) begin
+          bufdiv_clr_state <= bufdiv_clr_state + 1;
+        end else begin
+          state_cnt <= state_cnt - 3'd1;
+        end
+      end
+
+      case (bufdiv_clr_state)
+        3'd0 : begin
+          bufdiv_ce <= 1'b0;
+          bufdiv_clr <= 1'b0;
+        end
+        3'd1 : begin
+          bufdiv_ce <= 1'b0;
+          bufdiv_clr <= 1'b1;
+        end
+        3'd2 : begin
+          bufdiv_ce <= 1'b0;
+          bufdiv_clr <= 1'b0;
+        end
+        default: begin
+          bufdiv_ce <= 1'b1;
+          bufdiv_clr <= 1'b0;
+        end
+      endcase
     end
   end
 
@@ -238,10 +269,8 @@ module adrv9001_tx #(
   if (USE_RX_CLK_FOR_TX == 0) begin
 
     if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
-
-      wire dac_clk_div_s;
       // SERDES fast clock
-      BUFIO i_dac_clk_in_gbuf (
+      BUFG i_dac_clk_in_gbuf (
         .I (tx_dclk_in_s),
         .O (dac_fast_clk));
 
@@ -249,7 +278,7 @@ module adrv9001_tx #(
       BUFR #(
         .BUFR_DIVIDE("4")
       ) i_dac_div_clk_rbuf (
-        .CE (1'b1),
+        .CE (bufdiv_ce),
         .CLR (bufdiv_clr),
         .I (tx_dclk_in_s),
         .O (dac_clk_div_s));
