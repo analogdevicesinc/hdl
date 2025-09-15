@@ -16,13 +16,13 @@ set CACHE_COHERENCY false
 
 ad_mem_hp0_interconnect $sys_cpu_clk sys_ps8/S_AXI_HP0
 
-## Add the 330MHz clock generator for the DMAs
+## Add the 333MHz clock generator for the DMAs
 
 ad_ip_instance clk_wiz dma_clk_wiz
 ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
 ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
 ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
-ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 330
+ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 332.9
 ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
 
 ad_connect  $sys_cpu_clk     dma_clk_wiz/clk_in1
@@ -38,7 +38,7 @@ unset sys_dma_resetn
 
 set sys_dma_clk     [get_bd_nets sys_dma_clk_wiz]
 
-## Add the reset instance for the 330MHz clock and connect it to the sys_dma_reset/sys_dma_resetn
+## Add the reset instance for the 333MHz clock and connect it to the sys_dma_reset/sys_dma_resetn
 
 ad_ip_instance proc_sys_reset sys_dma_wiz_rstgen
 

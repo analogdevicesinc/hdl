@@ -39,8 +39,8 @@ module util_axis_fifo #(
   parameter ADDRESS_WIDTH = 5,
   parameter ASYNC_CLK = 1,
   parameter M_AXIS_REGISTERED = 1,
-  parameter [ADDRESS_WIDTH-1:0] ALMOST_EMPTY_THRESHOLD = 16,
-  parameter [ADDRESS_WIDTH-1:0] ALMOST_FULL_THRESHOLD = 16,
+  parameter [ADDRESS_WIDTH:0] ALMOST_EMPTY_THRESHOLD = 16,
+  parameter [ADDRESS_WIDTH:0] ALMOST_FULL_THRESHOLD = 16,
   parameter TLAST_EN = 0,
   parameter TKEEP_EN = 0,
   parameter REMOVE_NULL_BEAT_EN = 0
@@ -52,7 +52,7 @@ module util_axis_fifo #(
   output [DATA_WIDTH-1:0] m_axis_data,
   output [DATA_WIDTH/8-1:0] m_axis_tkeep,
   output m_axis_tlast,
-  output [ADDRESS_WIDTH-1:0] m_axis_level,
+  output [ADDRESS_WIDTH:0] m_axis_level,
   output m_axis_empty,
   output m_axis_almost_empty,
 
@@ -63,7 +63,7 @@ module util_axis_fifo #(
   input [DATA_WIDTH-1:0] s_axis_data,
   input [DATA_WIDTH/8-1:0] s_axis_tkeep,
   input s_axis_tlast,
-  output [ADDRESS_WIDTH-1:0] s_axis_room,
+  output [ADDRESS_WIDTH:0] s_axis_room,
   output s_axis_full,
   output s_axis_almost_full
 );

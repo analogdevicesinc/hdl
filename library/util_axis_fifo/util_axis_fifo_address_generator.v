@@ -38,8 +38,8 @@
 module util_axis_fifo_address_generator #(
   parameter ASYNC_CLK = 0,                // single or double clocked FIFO
   parameter ADDRESS_WIDTH = 4,            // address width, effective FIFO depth
-  parameter [ADDRESS_WIDTH-1:0] ALMOST_EMPTY_THRESHOLD = 16,
-  parameter [ADDRESS_WIDTH-1:0] ALMOST_FULL_THRESHOLD = 16
+  parameter [ADDRESS_WIDTH:0] ALMOST_EMPTY_THRESHOLD = 16,
+  parameter [ADDRESS_WIDTH:0] ALMOST_FULL_THRESHOLD = 16
 ) (
 
   // Read interface - Sink side
@@ -50,8 +50,8 @@ module util_axis_fifo_address_generator #(
   output m_axis_valid,
   output m_axis_empty,
   output m_axis_almost_empty,
-  output [ADDRESS_WIDTH-1:0] m_axis_raddr,
-  output [ADDRESS_WIDTH-1:0] m_axis_level,
+  output [ADDRESS_WIDTH:0] m_axis_raddr,
+  output [ADDRESS_WIDTH:0] m_axis_level,
 
   // Write interface - Source side
 
@@ -61,8 +61,8 @@ module util_axis_fifo_address_generator #(
   input s_axis_valid,
   output  s_axis_full,
   output  s_axis_almost_full,
-  output [ADDRESS_WIDTH-1:0] s_axis_waddr,
-  output [ADDRESS_WIDTH-1:0] s_axis_room
+  output [ADDRESS_WIDTH:0] s_axis_waddr,
+  output [ADDRESS_WIDTH:0] s_axis_room
 );
 
   localparam FIFO_DEPTH = {ADDRESS_WIDTH{1'b1}};
@@ -80,7 +80,6 @@ module util_axis_fifo_address_generator #(
 
   wire m_axis_read_s;
   wire m_axis_valid_s;
-  wire [ADDRESS_WIDTH-1:0] m_axis_level_s;
 
   // Write address counter
 
@@ -108,8 +107,8 @@ module util_axis_fifo_address_generator #(
 
   // Output assignments
 
-  assign s_axis_waddr = s_axis_waddr_reg[ADDRESS_WIDTH-1:0];
-  assign m_axis_raddr = m_axis_raddr_reg[ADDRESS_WIDTH-1:0];
+  assign s_axis_waddr = {1'b0, s_axis_waddr_reg[ADDRESS_WIDTH-1:0]};
+  assign m_axis_raddr = {1'b0, m_axis_raddr_reg[ADDRESS_WIDTH-1:0]};
 
   // CDC circuits for double clock configuration
 

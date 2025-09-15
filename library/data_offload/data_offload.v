@@ -148,10 +148,9 @@ module data_offload #(
 
   // local parameters -- to make the code more readable
 
-  localparam  SRC_ADDR_WIDTH_BYPASS = (SRC_DATA_WIDTH > DST_DATA_WIDTH) ? 4 : 4 + $clog2(SRC_DATA_WIDTH/DST_DATA_WIDTH);
-  localparam  DST_ADDR_WIDTH_BYPASS = (SRC_DATA_WIDTH <= DST_DATA_WIDTH) ? 4 + $clog2(DST_DATA_WIDTH/SRC_DATA_WIDTH) : 4;
-
-  localparam SRC_BEAT_BYTE = $clog2(SRC_DATA_WIDTH/8);
+  localparam ADDR_WIDTH_BYPASS = (SRC_DATA_WIDTH > DST_DATA_WIDTH) ? (ASYNC_CLK ? 4 : 0) + $clog2(SRC_DATA_WIDTH/DST_DATA_WIDTH) :
+                                 (SRC_DATA_WIDTH < DST_DATA_WIDTH) ? (ASYNC_CLK ? 4 : 0) + $clog2(DST_DATA_WIDTH/SRC_DATA_WIDTH) :
+                                                                     (ASYNC_CLK ? 4 : 0);
 
   // NOTE: Clock domain prefixes
   //    src_*  - AXI4 Stream Slave interface's clock domain
@@ -251,7 +250,7 @@ module data_offload #(
   // it's supported just with the FIFO interface
   util_axis_fifo_asym #(
     .S_DATA_WIDTH (SRC_DATA_WIDTH),
-    .ADDRESS_WIDTH (SRC_ADDR_WIDTH_BYPASS),
+    .ADDRESS_WIDTH (ADDR_WIDTH_BYPASS),
     .M_DATA_WIDTH (DST_DATA_WIDTH),
     .ASYNC_CLK (ASYNC_CLK)
   ) i_bypass_fifo (

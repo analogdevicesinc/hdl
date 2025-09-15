@@ -78,6 +78,7 @@ module util_axis_fifo_asym #(
   // atomic parameters
   localparam A_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
   localparam A_ADDRESS = (REDUCED_FIFO) ? (ADDRESS_WIDTH-$clog2(RATIO)) : ADDRESS_WIDTH;
+  localparam A_ADDRESS_WIDTH = (A_ADDRESS) ? A_ADDRESS : A_ADDRESS+1;
   localparam A_ALMOST_FULL_THRESHOLD = (REDUCED_FIFO) ? ((ALMOST_FULL_THRESHOLD+RATIO-1)/RATIO) : ALMOST_FULL_THRESHOLD;
   localparam A_ALMOST_EMPTY_THRESHOLD = (REDUCED_FIFO) ? ((ALMOST_EMPTY_THRESHOLD+RATIO-1)/RATIO) : ALMOST_EMPTY_THRESHOLD;
 
@@ -92,7 +93,7 @@ module util_axis_fifo_asym #(
   wire [RATIO-1:0] m_axis_tlast_int_s;
   wire [RATIO-1:0] m_axis_empty_int_s;
   wire [RATIO-1:0] m_axis_almost_empty_int_s;
-  wire [RATIO*A_ADDRESS-1:0] m_axis_level_int_s;
+  wire [RATIO*A_ADDRESS:0] m_axis_level_int_s;
 
   wire [RATIO-1:0] s_axis_ready_int_s;
   wire [RATIO-1:0] s_axis_valid_int_s;
@@ -101,7 +102,7 @@ module util_axis_fifo_asym #(
   wire [RATIO-1:0] s_axis_tlast_int_s;
   wire [RATIO-1:0] s_axis_full_int_s;
   wire [RATIO-1:0] s_axis_almost_full_int_s;
-  wire [RATIO*A_ADDRESS-1:0] s_axis_room_int_s;
+  wire [RATIO*A_ADDRESS:0] s_axis_room_int_s;
 
   wire m_axis_valid_int;
 
@@ -126,7 +127,7 @@ module util_axis_fifo_asym #(
         .m_axis_data    (m_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
         .m_axis_tlast   (m_axis_tlast_int_s[i]),
         .m_axis_tkeep   (m_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
-        .m_axis_level   (m_axis_level_int_s[A_ADDRESS*i+:A_ADDRESS]),
+        .m_axis_level   (m_axis_level_int_s[A_ADDRESS*i+:A_ADDRESS_WIDTH]),
         .m_axis_empty   (m_axis_empty_int_s[i]),
         .m_axis_almost_empty (m_axis_almost_empty_int_s[i]),
         .s_axis_aclk    (s_axis_aclk),
@@ -136,7 +137,7 @@ module util_axis_fifo_asym #(
         .s_axis_data    (s_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
         .s_axis_tkeep   (s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
         .s_axis_tlast   (s_axis_tlast_int_s[i]),
-        .s_axis_room    (s_axis_room_int_s[A_ADDRESS*i+:A_ADDRESS]),
+        .s_axis_room    (s_axis_room_int_s[A_ADDRESS*i+:A_ADDRESS_WIDTH]),
         .s_axis_full    (s_axis_full_int_s[i]),
         .s_axis_almost_full (s_axis_almost_full_int_s[i]));
     end
@@ -170,7 +171,7 @@ module util_axis_fifo_asym #(
       assign s_axis_full = |s_axis_full_int_s;
       assign s_axis_almost_full = |s_axis_almost_full_int_s;
       // the FIFO has the same room as the atomic FIFO
-      assign s_axis_room = s_axis_room_int_s[A_ADDRESS-1:0];
+      assign s_axis_room = s_axis_room_int_s[A_ADDRESS:0];
 
     end else begin : small_slave
 
@@ -204,7 +205,7 @@ module util_axis_fifo_asym #(
       // (NOTE: this is not the real room value, rather the value will be updated
       // after every RATIO number of writes)
       assign s_axis_full = s_axis_full_int_s[RATIO-1];
-      assign s_axis_room = {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS], {$clog2(RATIO){1'b1}}};
+      assign s_axis_room = {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS_WIDTH], {$clog2(RATIO){1'b1}}};
 
     end
 
@@ -229,7 +230,7 @@ module util_axis_fifo_asym #(
       // the FIFO has the same level as the last atomic instance
       // (NOTE: this is not the real level value, rather the value will be updated
       // after every RATIO number of reads)
-      assign m_axis_level = {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}};
+      assign m_axis_level = {m_axis_level_int_s[A_ADDRESS:0], {$clog2(RATIO){1'b0}}};
       assign m_axis_almost_empty = m_axis_almost_empty_int_s[RATIO-1];
       assign m_axis_empty = m_axis_empty_int_s[RATIO-1];
 
@@ -261,7 +262,7 @@ module util_axis_fifo_asym #(
       assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
 
       // the FIFO has the same room as the atomic FIFO
-      assign m_axis_level = m_axis_level_int_s[A_ADDRESS-1:0];
+      assign m_axis_level = m_axis_level_int_s[A_ADDRESS:0];
 
       assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
 
