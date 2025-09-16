@@ -85,6 +85,18 @@ module util_axis_fifo_asym #(
   reg [$clog2(RATIO)-1:0] s_axis_counter;
   reg [$clog2(RATIO)-1:0] m_axis_counter;
 
+  // FIFO level signals
+  reg                      s_axis_ready_d;
+  reg                      s_axis_valid_d;
+  reg  [              2:0] word_counter;
+  reg  [              2:0] num_of_words;
+  reg  [ADDRESS_WIDTH-1:0] s_input_level;
+  reg  [ADDRESS_WIDTH-1:0] s_input_room;
+  reg  [ADDRESS_WIDTH-1:0] s_input_level_next;
+  reg  [ADDRESS_WIDTH-1:0] s_input_room_next;
+  wire [ADDRESS_WIDTH-1:0] m_output_level;
+  wire                     sdi_output_read_sync;
+
   wire [RATIO-1:0] m_axis_ready_int_s;
   wire [RATIO-1:0] m_axis_valid_int_s;
   wire [RATIO*A_WIDTH-1:0] m_axis_data_int_s;
@@ -145,6 +157,46 @@ module util_axis_fifo_asym #(
 
   // write or slave logic
   generate
+
+    integer j;
+    always @(posedge s_axis_aclk) begin
+      if (!s_axis_aresetn) begin
+        num_of_words        <= 1;
+        s_axis_ready_d      <= 0;
+        s_axis_valid_d      <= 0;
+      end else begin
+        s_axis_ready_d      <= s_axis_ready;
+        s_axis_valid_d      <= s_axis_valid;
+        word_counter         = 0;
+        for (j = 0; j < RATIO; j = j + 1) begin
+          word_counter = word_counter + (|s_axis_tkeep[M_DATA_WIDTH/8*j+:M_DATA_WIDTH/8]);
+        end
+        num_of_words <= word_counter;
+      end
+    end
+
+    always @(posedge s_axis_aclk) begin
+      if (!s_axis_aresetn) begin
+        s_input_level <= 0;
+        s_input_room  <= {ADDRESS_WIDTH{1'b1}};
+      end else begin
+        s_input_room <= s_input_room_next;
+        s_input_level <= s_input_level_next;
+      end
+    end
+
+    always @(*) begin
+      s_input_level_next = s_input_level;
+      s_input_room_next  = s_input_room;
+      if (s_axis_ready_d && s_axis_valid_d) begin
+        s_input_level_next = s_input_level_next + num_of_words;
+        s_input_room_next  = s_input_room_next  - 1;
+      end
+      if (sdi_output_read_sync) begin
+        s_input_level_next = s_input_level_next - 1;
+        s_input_room_next  = s_input_room_next  + num_of_words;
+      end
+    end
 
     if (RATIO_TYPE) begin : big_slave
 
@@ -210,12 +262,18 @@ module util_axis_fifo_asym #(
 
       // FULL/ALMOST_FULL is driven by the current atomic instance
       assign s_axis_almost_full = s_axis_almost_full_int_s >> s_axis_counter;
-
-      // the FIFO has the same room as the last atomic instance
-      // (NOTE: this is not the real room value, rather the value will be updated
-      // after every RATIO number of writes)
       assign s_axis_full = s_axis_full_int_s[RATIO-1];
-      assign s_axis_room = {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS], {$clog2(RATIO){1'b1}}};
+
+      // FIFO room behavior relies on the TKEEP_EN parameter
+      //    When TKEEP_EN == 0, the FIFO has the same room as
+      //    the last atomic instance multiplied by RATIO. The
+      //    value of the room is only updated every RATIO reads.
+      //    s_axis_room == {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS], {$clog2(RATIO){1'b1}}}
+      //
+      //    When TKEEP_EN == 1, it is using a counter whose decrement
+      //    relies on the tkeep.
+      //    s_axis_room == s_input_room
+      assign s_axis_room = (TKEEP_EN) ? s_input_room : {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS], {$clog2(RATIO){1'b1}}};
 
     end
 
@@ -232,7 +290,7 @@ module util_axis_fifo_asym #(
       end
 
       assign m_axis_data = m_axis_data_int_s >> (m_axis_counter*A_WIDTH) ;
-      assign m_axis_tkeep = m_axis_tkeep_int_s >> (m_axis_counter*A_WIDTH/8) ;
+      assign m_axis_tkeep = m_axis_tkeep_int_s >> (m_axis_counter*A_WIDTH/8); //m_axis_tkeep is always high when TKEEP_EN == 0
 
       // VALID/EMPTY/ALMOST_EMPTY is driven by the current atomic instance
       assign m_axis_valid_int = m_axis_valid_int_s >> m_axis_counter;
@@ -249,12 +307,28 @@ module util_axis_fifo_asym #(
 
       assign m_axis_tlast = m_axis_tlast_int_s >> m_axis_counter;
 
-      // the FIFO has the same level as the last atomic instance
-      // (NOTE: this is not the real level value, rather the value will be updated
-      // after every RATIO number of reads)
-      assign m_axis_level = {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}};
+      // FIFO level behavior relies on the TKEEP_EN parameter
+      //    When TKEEP_EN == 0, the FIFO has the same level as
+      //    the last atomic instance multiplied by RATIO. The
+      //    value of the level is only updated every RATIO reads.
+      //    m_axis_level == {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}}
+      //
+      //    When TKEEP_EN == 1, it is using a counter whose increment
+      //    relies on the tkeep.
+      //    m_axis_level == m_output_level
+      assign m_axis_level = (TKEEP_EN) ? m_output_level : {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}};
       assign m_axis_almost_empty = m_axis_almost_empty_int_s[RATIO-1];
       assign m_axis_empty = m_axis_empty_int_s[RATIO-1];
+
+      sync_data #(
+        .NUM_OF_BITS  (ADDRESS_WIDTH),
+        .ASYNC_CLK    (ASYNC_CLK)
+      ) i_sdi_level_sync (
+        .in_clk   (s_axis_aclk),
+        .in_data  (s_input_level),
+        .out_clk  (m_axis_aclk),
+        .out_data (m_output_level)
+      );
 
     end else begin : big_master
 
@@ -265,14 +339,13 @@ module util_axis_fifo_asym #(
       for (i=0; i<RATIO; i=i+1) begin
         assign m_axis_tkeep[i*A_WIDTH/8+:A_WIDTH/8] = ((m_axis_tlast_int_s[i:0] == 0) ||
                                                       (m_axis_tlast_int_s[i])) ?
-                                                    m_axis_tkeep_int_s[i*A_WIDTH/8+:A_WIDTH/8] :
-                                                    {(A_WIDTH/8){1'b0}};
+                                                        m_axis_tkeep_int_s[i*A_WIDTH/8+:A_WIDTH/8] :
+                                                        {(A_WIDTH/8){1'b0}};
       end
 
       assign m_axis_data = m_axis_data_int_s;
       // if every instance has a valid data, the interface has valid data,
       // otherwise valid is asserted only if TLAST is asserted
-      // assign m_axis_valid_int = (|(m_axis_tlast_int_s & m_axis_valid_int_s)) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
       if (TLAST_EN) begin
         assign m_axis_valid_int = (|(m_axis_tlast_int_s & m_axis_valid_int_s)) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
       end else begin
@@ -290,12 +363,21 @@ module util_axis_fifo_asym #(
 
     end
 
+    sync_event #(
+      .NUM_OF_EVENTS (1),
+      .ASYNC_CLK (ASYNC_CLK)
+    ) i_sdi_output_read_sync (
+      .in_clk    (m_axis_aclk),
+      .in_event  (m_axis_ready & m_axis_valid),
+      .out_clk   (s_axis_aclk),
+      .out_event (sdi_output_read_sync));
+
   endgenerate
 
   generate
     if (RATIO == 1) begin
       initial begin
-        s_axis_counter = 1'b1;
+        s_axis_counter = 1'b1; //s_axis_counter == 1 is never executed in small_slave
       end
     end else if (RATIO > 1) begin
       if (RATIO_TYPE) begin
