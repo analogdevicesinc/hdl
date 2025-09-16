@@ -156,6 +156,24 @@ The **sys_zynq** constant variable should be set in the following way:
    with the note that you need to manually enable all the functions needed in
    the system.
 
+You need to populate the following lists with information regarding your FPGA
+in the file :git-hdl:`library/scripts/adi_xilinx_device_info_enc.tcl`;
+but keep in mind, if some of the information already exists in a list,
+do not duplicate it!
+
+- fpga_technology_list: we added ``{ ultrascale+ 3 }`` for ZCU102
+- fpga_family_list: we added ``{ zynq          4 }`` for ZCU102
+- speed_grade_list: we added ``{ -2      20 }`` for ZCU102
+- dev_package_list: we added ``{ ff      3  }`` for ZCU102
+
+Then, in the same file, under the ``adi_device_spec`` procedure, you'd need to
+add a regular expression containing the part name (``^xc.u`` in our example,
+to match other UltraScale+ boards that fit, as well) under the FPGA_TECHNOLOGY
+case.
+
+Project flow
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 The entry point for project creation is ``system_project.tcl``. Some support
 scripts are first loaded (:git-hdl:`scripts/adi_env.tcl`) then the project is
 created (
