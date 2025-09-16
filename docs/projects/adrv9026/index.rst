@@ -228,6 +228,108 @@ The Tx links (DAC Path) operate with the following parameters:
 - JESD204B Lane Rate: 9.83 Gbps
 - QPLL0
 
+Example block design for JESD204C and RX OBS in Non-LinkSharing mode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: adrv9026_jesd204c_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: ADRV9026 JESD204C block diagram
+
+.. caution::
+
+   For ZCU102 with JESD204C: REF_CLK --> 491.52 MHz (link_clk is connected to
+   out_clk_div2 outputs of the util_adxcvr).
+
+.. collapsible:: Click here for details on the block diagram modules
+
+   .. list-table::
+      :widths: 10 20 35 35
+      :header-rows: 1
+
+      * - Block name
+        - IP name
+        - Documentation
+        - Additional info
+      * - AXI_ADXCVR
+        - :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
+        - :ref:`axi_adxcvr`
+        - 3 instances, one for Rx, one for Rx-os and one for Tx
+      * - AXI_CLKGEN
+        - :git-hdl:`axi_clkgen <library/axi_clkgen>`
+        - :ref:`axi_clkgen`
+        - 3 instances, one for Rx, one for Rx-os and one for Tx
+      * - AXI_DMAC
+        - :git-hdl:`axi_dmac <library/axi_dmac>`
+        - :ref:`axi_dmac`
+        - 3 instances, one for Rx, one for Rx-os and one for Tx
+      * - DATA_OFFLOAD
+        - :git-hdl:`data_offload <library/data_offload>`
+        - :ref:`data_offload`
+        - 1 instance for Tx
+      * - RX JESD LINK
+        - axi_adrv9026_rx_jesd
+        - :ref:`axi_jesd204_rx`
+        - Instantiaded by ``adi_axi_jesd204_rx_create`` procedure
+      * - RX JESD TPL
+        - rx_adrv9026_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_adc`
+        - Instantiated by ``adi_tpl_jesd204_rx_create`` procedure
+      * - RX OS JESD LINK
+        - axi_adrv9026_rx_os_jesd
+        - :ref:`axi_jesd204_rx`
+        - Instantiaded by ``adi_axi_jesd204_rx_create`` procedure
+      * - RX OS JESD TPL
+        - rx_os_adrv9026_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_adc`
+        - Instantiated by ``adi_tpl_jesd204_rx_create`` procedure
+      * - TX JESD LINK
+        - axi_adrv9026_tx_jesd
+        - :ref:`axi_jesd204_tx`
+        - Instantiaded by ``adi_axi_jesd204_tx_create`` procedure
+      * - TX JESD TPL
+        - tx_adrv9026_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_dac`
+        - Instantiated by ``adi_tpl_jesd204_tx_create`` procedure
+      * - UTIL_CPACK
+        - :git-hdl:`util_cpack2 <library/util_pack/util_cpack2>`
+        - :ref:`util_cpack2`
+        - 2 instances one for Rx and one for Rx-os
+      * - UTIL_UPACK
+        - :git-hdl:`util_upack2 <library/util_pack/util_upack2>`
+        - :ref:`util_upack2`
+        - ---
+
+The Rx links (ADC Path) operate with the following parameters:
+
+- Rx Framer parameters: L=2, M=8, F=8, S=1, NP=16, E=1, K=32
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)
+- REF_CLK: 245.76 MHz (Lane Rate/66)
+- JESD204C Lane Rate: 16.22 Gbps
+- QPLL0
+
+The ORx links (ADC Obs Path) operate with the following parameters:
+
+- Rx Obs Framer parameters: L=2, M=4, F=4, S=1, NP=16, E=1, K=64
+- Sample Rate: 491.52 MSPS
+- Dual link: No
+- RX_OS_DEVICE_CLK: 245.76 MHz (Lane Rate/66)
+- REF_CLK: 245.76 MHz (Lane Rate/66)
+- JESD204C Lane Rate: 16.22 Gbps
+- QPLL0
+
+The Tx links (DAC Path) operate with the following parameters:
+
+- Tx Deramer parameters: L=4, M=8, F=4, S=1, NP=16, E=1, K=64
+- Sample Rate: 491.52 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)
+- REF_CLK: 245.76 MHz (Lane Rate/66)
+- JESD204C Lane Rate: 16.22 Gbps
+- QPLL0
+
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -263,6 +365,7 @@ The following are the parameters of this project that can be configured:
 - [RX/TX/RX_OS]_JESD_M: number of converters per link
 - [RX/TX/RX_OS]_JESD_L: number of lanes per link
 - [RX/TX/RX_OS]_JESD_S: number of samples per frame
+- [RX/TX/RX_OS]_JESD_NP: number of bits per sample
 - [RX/TX/RX_OS]_NUM_LINKS: number of links
 
 Clock scheme
@@ -570,7 +673,7 @@ configure this project, depending on the carrier used.
    +===================+===========================+==========================+
    | JESD_MODE         |          8B10B            |           8B10B          |
    +-------------------+---------------------------+--------------------------+
-   | ORX_ENABLE        |             0             |                          |
+   | ORX_ENABLE        |             0             |            ---           |
    +-------------------+---------------------------+--------------------------+
    | RX_LANE_RATE      |           9.83            |            9.83          |
    +-------------------+---------------------------+--------------------------+
@@ -580,7 +683,7 @@ configure this project, depending on the carrier used.
    +-------------------+---------------------------+--------------------------+
    | RX_NUM_LINKS      |             1             |             1            |
    +-------------------+---------------------------+--------------------------+
-   | RX_OS_NUM_LINKS   |             1             |                          |
+   | RX_OS_NUM_LINKS   |             1             |            ---           |
    +-------------------+---------------------------+--------------------------+
    | RX_JESD_M         |             8             |             8            |
    +-------------------+---------------------------+--------------------------+
@@ -588,17 +691,23 @@ configure this project, depending on the carrier used.
    +-------------------+---------------------------+--------------------------+
    | RX_JESD_S         |             1             |             1            |
    +-------------------+---------------------------+--------------------------+
+   | RX_JESD_NP        |            16             |            ---           |
+   +-------------------+---------------------------+--------------------------+
    | TX_JESD_M         |             8             |             8            |
    +-------------------+---------------------------+--------------------------+
    | TX_JESD_L         |             4             |             4            |
    +-------------------+---------------------------+--------------------------+
    | TX_JESD_S         |             1             |             1            |
    +-------------------+---------------------------+--------------------------+
-   | RX_OS_JESD_M      |             0             |                          |
+   | TX_JESD_NP        |            16             |            ---           |
    +-------------------+---------------------------+--------------------------+
-   | RX_OS_JESD_L      |             0             |                          |
+   | RX_OS_JESD_M      |             0             |            ---           |
    +-------------------+---------------------------+--------------------------+
-   | RX_OS_JESD_S      |             0             |                          |
+   | RX_OS_JESD_L      |             0             |            ---           |
+   +-------------------+---------------------------+--------------------------+
+   | RX_OS_JESD_S      |             0             |            ---           |
+   +-------------------+---------------------------+--------------------------+
+   | RX_JESD_NP        |             0             |            ---           |
    +-------------------+---------------------------+--------------------------+
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
