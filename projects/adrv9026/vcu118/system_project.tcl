@@ -13,8 +13,11 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # Use over-writable parameters from the environment.
 #
 # e.g.
-#   RX-OS disabled:        make
-#   RX-OS Non-LinkSharing: make ORX_ENABLE=1 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_JESD_M=4 RX_JESD_L=2
+#   RX-OS disabled: make
+#   RX-OS Non-LinkSharing:
+#    - JESD204B: make ORX_ENABLE=1 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_M=4 RX_JESD_L=2
+#    - JESD204C: make JESD_MODE=64B66B ORX_ENABLE=1 TX_LANE_RATE=16.22 RX_LANE_RATE=16.22 \
+                 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=2
 #
 # Parameter description:
 #   JESD_MODE : Used link layer encoder mode
@@ -29,6 +32,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   [TX/RX/RX_OS]_JESD_M : Number of converters per link
 #   [TX/RX/RX_OS]_JESD_L : Number of lanes per link
 #   [TX/RX/RX_OS]_JESD_S : Number of samples per frame
+#   [TX/RX/RX_OS]_JESD_NP : Number of bits per sample
 
 adi_project adrv9026_vcu118 0 [list \
   JESD_MODE           [get_env_param JESD_MODE      8B10B ] \
@@ -41,12 +45,15 @@ adi_project adrv9026_vcu118 0 [list \
   TX_JESD_M           [get_env_param TX_JESD_M          8 ] \
   TX_JESD_L           [get_env_param TX_JESD_L          4 ] \
   TX_JESD_S           [get_env_param TX_JESD_S          1 ] \
+  TX_JESD_NP          [get_env_param TX_JESD_NP        16 ] \
   RX_JESD_M           [get_env_param RX_JESD_M          8 ] \
   RX_JESD_L           [get_env_param RX_JESD_L          4 ] \
   RX_JESD_S           [get_env_param RX_JESD_S          1 ] \
+  RX_JESD_NP          [get_env_param RX_JESD_NP        16 ] \
   RX_OS_JESD_M        [get_env_param RX_OS_JESD_M       0 ] \
   RX_OS_JESD_L        [get_env_param RX_OS_JESD_L       0 ] \
   RX_OS_JESD_S        [get_env_param RX_OS_JESD_S       0 ] \
+  RX_OS_JESD_NP       [get_env_param RX_OS_JESD_NP      0 ] \
 ]
 
 adi_project_files adrv9026_vcu118 [list \
