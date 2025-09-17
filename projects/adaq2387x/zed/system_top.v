@@ -95,10 +95,7 @@ module system_top (
   input                   db_p,
   output                  cnv_p,
   output                  cnv_n,
-  output                  cnv_en,
-  output                  pd_cntrl,
-  output                  testpat_cntrl,
-  output                  twolanes_cntrl
+  output                  cnv_en
 );
 
   // internal signals
@@ -121,11 +118,10 @@ module system_top (
   wire          sampling_clk_s;
   wire          ltc_clk;
 
-  assign gpio_i[63:34] = gpio_o[63:34];
+  assign gpio_i[63:32] = gpio_o[63:32];
 
   // hardcode GPIO to always use two lanes configuration
 
-  assign twolanes_cntrl = 1'b1;
   assign cnv_en = cnv;
 
   // instantiations
@@ -170,14 +166,6 @@ module system_top (
     .O (cnv_p),
     .OB (cnv_n),
     .I (cnv_s));
-
-  ad_iobuf #(
-    .DATA_WIDTH (2)
-  ) iobuf_gpio_adaq2387x (
-    .dio_i (gpio_o[33:32]),
-    .dio_o (gpio_i[33:32]),
-    .dio_t (gpio_t[33:32]),
-    .dio_p ({pd_cntrl, testpat_cntrl}));
 
   ad_iobuf #(
     .DATA_WIDTH (32)
