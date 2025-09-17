@@ -721,8 +721,16 @@ ad_ip_instance clk_wiz dma_clk_wiz
 ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
 ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
 ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
-ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 332.9
 ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
+
+# Read the value exported by Make, in case of Corundum build
+# Default: 332.9
+# revert back
+set freq 332.9
+if {[info exists ::env(DMA_CLKOUT1_REQUESTED_OUT_FREQ)]} {
+    set freq $::env(DMA_CLKOUT1_REQUESTED_OUT_FREQ)
+}
+ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ $freq
 
 ad_connect sys_cpu_clk dma_clk_wiz/clk_in1
 ad_connect sys_cpu_resetn dma_clk_wiz/resetn

@@ -32,4 +32,34 @@ LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/axi_dacfifo
 LIB_DEPS += xilinx/util_adxcvr
 
+CORUNDUM ?= 0
+
+ifeq ($(CORUNDUM), 1)
+	export BOARD := ADRV9009ZU11EG
+	export CPU := ZynqMP
+	export DMA_CLKOUT1_REQUESTED_OUT_FREQ := 250
+
+	M_DEPS += system_constr_corundum.xdc
+	M_DEPS += system_bd_corundum.tcl
+
+	M_DEPS += $(ADI_HDL_DIR)/library/corundum/scripts/corundum_adrv9009zu11eg_cfg.tcl
+	M_DEPS += $(ADI_HDL_DIR)/library/corundum/scripts/corundum.tcl
+	M_DEPS += $(ADI_HDL_DIR)/library/corundum/scripts/sync_reset.tcl
+
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/rb_drp.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/mqnic_port.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/lib/eth/syn/vivado/ptp_clock_cdc.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl
+
+	LIB_DEPS += corundum/corundum_core
+	LIB_DEPS += corundum/ethernet/adrv9009zu11eg
+endif
+
 include ../../scripts/project-xilinx.mk
