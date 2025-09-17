@@ -27,12 +27,6 @@ set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_port
 set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports db_p]           ; ## H10  FMC_LA04_P      IO_L15P_T2_DQS_34
 set_property -dict {PACKAGE_PIN M22 IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports db_n]           ; ## H11  FMC_LA04_N      IO_L15N_T2_DQS_34
 
-# control signals
-
-#set_property -dict {PACKAGE_PIN J20 IOSTANDARD LVCMOS25} [get_ports pd_cntrl]                     ; ## G18  FMC_LA16_P      IO_L9P_T1_DQS_34
-#set_property -dict {PACKAGE_PIN G20 IOSTANDARD LVCMOS25} [get_ports testpat_cntrl]                ; ## G21  FMC_LA20_P      IO_L22P_T3_AD7P_35
-#set_property -dict {PACKAGE_PIN G19 IOSTANDARD LVCMOS25} [get_ports twolanes_cntrl]               ; ## G24  FMC_LA22_P      IO_L20P_T3_AD6P_35
-
 # 100MHz clock
 set clk_period  10
 # differential propagation delay for ref_clk
