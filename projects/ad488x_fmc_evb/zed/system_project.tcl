@@ -14,4 +14,6 @@ adi_project_files ad488x_fmc_evb_zed [list \
   "system_constr.xdc" \
   "system_top.v" ]
 
+set_property PROCESSING_ORDER LATE [get_files system_constr.xdc]
+
 adi_project_run ad488x_fmc_evb_zed
