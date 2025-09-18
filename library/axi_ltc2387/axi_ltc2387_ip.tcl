@@ -26,6 +26,7 @@ adi_ip_files axi_ltc2387 [list \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "axi_ltc2387_if.v" \
+  "axi_ltc2387_constr.xdc" \
   "axi_ltc2387_channel.v" \
   "axi_ltc2387.v" ]
 
