@@ -52,9 +52,6 @@ Signal and Interface Pins
      - All other signals are synchronous to this clock.
    * - resetn
      - Resets the internal state machine of the core.
-   * - active
-     - Indicates whether the peripheral is currently active and processing
-       commands.
    * - ctrl
      - :ref:`spi_engine control-interface` subordinate.
        SPI Engine Control stream that contains commands and data for the
@@ -72,8 +69,6 @@ SPI Engine command stream into low-level SPI bus access.
 
 Communication with a command stream generator happens via the ``ctrl``
 interface and the low-level SPI access is handled on the ``spi`` interface.
-The ``active`` signal is asserted as long as the peripheral is busy executing
-incoming commands.
 
 Internally the SPI Engine execution module consists of an instruction encoder
 that translates the incoming commands into an internal control signal, a
