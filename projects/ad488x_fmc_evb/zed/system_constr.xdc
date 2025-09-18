@@ -78,3 +78,7 @@ create_clock -period 2.500 -name dco_clk  [get_ports adca_dco_p]
 create_clock -period 2.500 -name ref_clk  [get_ports adca_clk_p]
 create_clock -period 2.500 -name dco_clk1 [get_ports adcb_dco_p]
 create_clock -period 2.500 -name ref_clk1 [get_ports adcb_clk_p]
+
+##by default IOB is TRUE and this register is not being driven by any IO element
+
+set_property IOB FALSE [get_cells -hierarchical -regexp {.*ad4080_b_spi.*IO0_I_REG$}];

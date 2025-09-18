@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -68,21 +68,20 @@ set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS25} [get_ports dac_0_spi_sd
 set_property -dict {PACKAGE_PIN N18 IOSTANDARD LVCMOS25} [get_ports dac_0_spi_sdio[1]]         ; ## H17  FMC_LA11_N     IO_L5N_T0_34
 set_property -dict {PACKAGE_PIN P20 IOSTANDARD LVCMOS25} [get_ports dac_0_spi_sdio[2]]         ; ## G15  FMC_LA12_P     IO_L18P_T2_34
 set_property -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS25} [get_ports dac_0_spi_sdio[3]]         ; ## G16  FMC_LA12_N     IO_L18N_T2_34
-       
+
 set_property -dict {PACKAGE_PIN E21 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_cs]              ; ## C26  FMC_LA27_P     IO_L17P_T2_AD5P_35
 set_property -dict {PACKAGE_PIN D21 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_sclk]            ; ## C27  FMC_LA27_N     IO_L17N_T2_AD5N_35
 set_property -dict {PACKAGE_PIN A16 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_sdio[0]]         ; ## H31  FMC_LA28_P     IO_L9P_T1_DQS_AD3P_35
 set_property -dict {PACKAGE_PIN A17 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_sdio[1]]         ; ## H32  FMC_LA28_N     IO_L9N_T1_DQS_AD3N_35
 set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_sdio[2]]         ; ## G30  FMC_LA29_P     IO_L11P_T1_SRCC_35
 set_property -dict {PACKAGE_PIN C18 IOSTANDARD LVCMOS25} [get_ports dac_1_spi_sdio[3]]         ; ## G31  FMC_LA29_N     IO_L11N_T1_SRCC_35
-       
-# spi       
-       
+
+# spi
 set_property -dict {PACKAGE_PIN L17 IOSTANDARD LVCMOS25} [get_ports spi_miso]                  ; ## D17  FMC_LA13_P     IO_L4P_T0_34
 set_property -dict {PACKAGE_PIN M17 IOSTANDARD LVCMOS25} [get_ports spi_mosi]                  ; ## D18  FMC_LA13_N     IO_L4N_T0_34
 set_property -dict {PACKAGE_PIN J16 IOSTANDARD LVCMOS25} [get_ports spi_sck]                   ; ## H19  FMC_LA15_P     IO_L2P_T0_34
 set_property -dict {PACKAGE_PIN J17 IOSTANDARD LVCMOS25} [get_ports spi_csb[0]]                ; ## H20  FMC_LA15_N     IO_L2N_T0_34
-set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS25} [get_ports spi_csb[1]]                ; ## H34  FMC_LA30_P     IO_L7P_T1_AD2P_35   
+set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS25} [get_ports spi_csb[1]]                ; ## H34  FMC_LA30_P     IO_L7P_T1_AD2P_35
 
 # control signals
 
@@ -139,6 +138,10 @@ set_input_delay -clock dco_3 -max  $data_delay [get_ports rx_db_p[3]]
 set_input_delay -clock dco_3 -min -$data_delay [get_ports rx_db_p[3]]
 set_input_delay -clock dco_3 -clock_fall -max -add_delay  $data_delay [get_ports rx_db_p[3]]
 set_input_delay -clock dco_3 -clock_fall -min -add_delay -$data_delay [get_ports rx_db_p[3]]
+
+##by default IOB is TRUE and this register is not being driven by any IO element
+
+set_property IOB FALSE [get_cells -hierarchical -regexp {.*max_spi.*IO0_I_REG$}];
 
 set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387_0/inst/i_if/i_rx_da/i_rx_data_idelay]
 set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387_0/inst/i_if/i_rx_db/i_rx_data_idelay]

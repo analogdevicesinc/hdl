@@ -153,8 +153,13 @@ create_clock -period 2.500 -name dco_clk      [get_ports dco_p]
 
 set_input_delay -clock [get_clocks global_clk_0] 1.600 [get_ports rx_sysref_*]
 
-# Create SPI clock
+##by default IOB is TRUE and this register is not being driven by any IO element
+set_property IOB FALSE [get_cells -hierarchical -regexp {.*hmc7044_spi.*IO0_I_REG$}];
+set_property IOB FALSE [get_cells -hierarchical -regexp {.*ad4080_spi.*IO0_I_REG$}];
+set_property IOB FALSE [get_cells -hierarchical -regexp {.*adl5580_spi.*IO0_I_REG$}];
+set_property IOB FALSE [get_cells -hierarchical -regexp {.*ltc2664_spi.*IO0_I_REG$}];
 
+# Create SPI clock
 create_generated_clock -name adl5580_spi_clk -source [get_pins i_system_wrapper/system_i/adl5580_spi/ext_spi_clk] -divide_by 2 [get_pins i_system_wrapper/system_i/adl5580_spi/sck_o]
 create_generated_clock -name hmc7044_spi_clk -source [get_pins i_system_wrapper/system_i/hmc7044_spi/ext_spi_clk] -divide_by 2 [get_pins i_system_wrapper/system_i/hmc7044_spi/sck_o]
 
