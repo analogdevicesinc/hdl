@@ -34,8 +34,6 @@ proc p_elaboration {} {
   ad_interface clock   clk     input 1
   ad_interface reset-n resetn  input 1 if_clk
 
-  ad_interface signal active output 1
-
   # command interface
 
   add_interface cmd axi4stream end
