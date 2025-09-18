@@ -32,9 +32,6 @@ set clk_period  10
 # differential propagation delay for ref_clk
 set tref_early  0.3
 set tref_late   1.5
-# differential propagation delay for virt_clk
-set tvirt_early 0
-set tvirt_late  0.225
 # data delay (dco to da/db skew 200ps)
 set data_delay  0.200
 
@@ -42,17 +39,13 @@ set data_delay  0.200
 
 create_clock -period $clk_period -name dco      [get_ports dco_p]
 create_clock -period $clk_period -name ref_clk  [get_ports ref_clk_p]
-# creating a virtual clock to constrain cnv_en
-create_clock -period $clk_period -name virt_clk
 
 # clock latencies
 
 # minimum source latency values
 set_clock_latency -source -early $tref_early  [get_clocks ref_clk]
-set_clock_latency -source -early $tvirt_early [get_clocks virt_clk]
 # maximum source latency values
 set_clock_latency -source -late  $tref_late   [get_clocks ref_clk]
-set_clock_latency -source -late  $tvirt_late  [get_clocks virt_clk]
 
 # input delays
 
@@ -65,16 +58,6 @@ set_input_delay -clock dco -max  $data_delay [get_ports db_p]
 set_input_delay -clock dco -min -$data_delay [get_ports db_p]
 set_input_delay -clock dco -clock_fall -max -add_delay  $data_delay [get_ports db_p]
 set_input_delay -clock dco -clock_fall -min -add_delay -$data_delay [get_ports db_p]
-
-# output delays
-
-set_output_delay -clock [get_clocks virt_clk] -max 2    [get_ports cnv_en]
-set_output_delay -clock [get_clocks virt_clk] -min -0.3 [get_ports cnv_en]
-
-# multicycle paths
-
-set_multicycle_path 2 -setup -end   -from ref_clk -to virt_clk
-set_multicycle_path 1 -hold  -start -from ref_clk -to virt_clk
 
 set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387/inst/i_if/i_rx_db/i_rx_data_idelay]
 set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387/inst/i_if/i_rx_da/i_rx_data_idelay]
