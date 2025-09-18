@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -156,14 +156,14 @@ module system_top #(
   wire          ad469x_spi_cs_s;
 
   wire          spi_trigger;
-  wire          spi_clk_s;
-  wire          spi_resetn;
-  wire          spi_trigger_ed;
   wire          dma_xfer_req;
 
   assign ad469x_spi_cnv = (SPI_4WIRE == 0) ? ad469x_spi_cnv_s : ad469x_spi_cs_s;
   assign ad469x_spi_cs = ad469x_spi_cs_s;
   assign ad469x_spi_cnv_s = (spi_pwm & dma_xfer_req) | gpio_o[35];
+
+ //invert signal since we want to trigger on negedge, and spi engine expects a posedge
+  assign spi_trigger = ~ad469x_busy_alt_gp0;
 
   // adc control gpio assign
 
@@ -205,22 +205,6 @@ module system_top #(
     .oe(i2c0_out_data),
     .o(i2c0_sda),
     .io(hdmi_i2c_sda));
-
-  sync_bits #(
-    .ASYNC_CLK(1)
-  ) i_sync_bits (
-    .in_bits (ad469x_busy_alt_gp0),
-    .out_resetn (~spi_resetn),
-    .out_clk (spi_clk_s),
-    .out_bits (spi_trigger_ed));
-
-  ad_edge_detect#(
-    .EDGE(1)
-  ) i_ad_edge_detect (
-    .clk (spi_clk_s),
-    .rst (1'b0),
-    .signal_in (spi_trigger_ed),
-    .signal_out (spi_trigger));
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
@@ -297,8 +281,6 @@ module system_top #(
     .ad469x_spi_sclk_clk (ad469x_spi_sclk),
     .ad469x_spi_sdi_sdi (ad469x_spi_sdi),
     .ad469x_spi_sdo_sdo (ad469x_spi_sdo),
-    .ad469x_spi_resetn_reset_n (spi_resetn),
-    .ad469x_spi_clk_clk (spi_clk_s),
     .ad469x_spi_cnv_if_pwm (spi_pwm),
     .ad469x_spi_trigger_if_pwm(spi_trigger),
     .dma_xfer_req_xfer_req(dma_xfer_req),
