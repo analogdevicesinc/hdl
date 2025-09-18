@@ -16,6 +16,8 @@ adi_project_files admx6001_ebz_vcu118 [list \
   "system_constr.xdc" \
   "system_top.v" ]
 
+set_property PROCESSING_ORDER LATE [get_files system_constr.xdc]
+
 ## To improve timing in DDR4 MIG
 set_property strategy Performance_SpreadSLLs [get_runs impl_1]
 
