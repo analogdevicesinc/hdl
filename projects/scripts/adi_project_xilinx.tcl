@@ -318,7 +318,7 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
 
 }
 
-## Add source files to an exiting project.
+## Add source files to an existing project.
 #
 # \param[project_name] - name of the project
 # \param[project_files] - list of project files
