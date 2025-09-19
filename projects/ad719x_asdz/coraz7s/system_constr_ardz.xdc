@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -13,3 +13,4 @@ set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS33} [get_ports adc_spi_miso
 set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS33} [get_ports adc_spi_mosi];        # IO_L12N_T1_MRCC_35 Sch=ck_io[11]
 set_property -dict {PACKAGE_PIN U15 IOSTANDARD LVCMOS33} [get_ports adc_spi_csn];         # IO_L11N_T1_SRCC_34 Sch=ck_io[10]
 set_property -dict {PACKAGE_PIN V17 IOSTANDARD LVCMOS33} [get_ports adc_syncn];           # IO_L21P_T3_DQS_34 Sch=ck_io[4]
+set_property -dict {PACKAGE_PIN T14 IOSTANDARD LVCMOS33} [get_ports adc_int];             # IO_L5P_T0_34 Sch=ck_io[2]
