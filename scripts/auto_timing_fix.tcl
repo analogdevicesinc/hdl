@@ -70,7 +70,7 @@ if {[llength $worst_path] == 0} {
     if {$final_wns >= 0} {
         puts "INFO: ATF: auto timing fix SUCCESS after ${attempt} attempts - final WNS is ${final_wns} ns."
     } elseif {$final_wns <= $ADI_AUTOFIX_WNS_THRESHOLD} {
-        puts "WARNING: ATF: WNS (${wns} ns) excedes threshold (${ADI_AUTOFIX_WNS_THRESHOLD} ns). Automatic fix aborted."
+        puts "WARNING: ATF: WNS (${wns} ns) exceeds threshold (${ADI_AUTOFIX_WNS_THRESHOLD} ns). Automatic fix aborted."
     } else {
         puts "WARNING: ATF: auto timing fix FAILURE after ${attempt} attempts - final WNS is ${final_wns} ns."
     }
