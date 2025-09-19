@@ -17,18 +17,24 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # - 18: 18 bits, ADAQ23878 (default)
 # - 16: 16 bits, ADAQ23875 & ADAQ23876
 #
+# USE_MMCM: parameter used to select between the 100MHz ref_clk or passing it
+#           through a clk_wizard and increase it to 120Mhz
+# - 1: use the default clocking scheme
+# - 0: use the clk_wizard to increase the clk frequency
+#
 # The valid configurations for each supported evaluation board, depending on
 # the above parameters, are:
 #
-# Eval board | ADC_RES | TWOLANES |
-# =================================
-# ADAQ23875  | 16      | 0 or 1   |
-# ADAQ23876  | 16      | 0 or 1   |
-# ADAQ23878  | 18      | 0 or 1   |
+# Eval board | ADC_RES | TWOLANES | USE_MMCM |
+# ============================================
+# ADAQ23875  | 16      | 0 or 1   | 0 or 1   |
+# ADAQ23876  | 16      | 0 or 1   | 0 or 1   |
+# ADAQ23878  | 18      | 0 or 1   | 0 or 1   |
 
 adi_project adaq2387x_zed 0 [list \
   TWOLANES  [get_env_param TWOLANES  1 ] \
   ADC_RES   [get_env_param ADC_RES  18 ] \
+  USE_MMCM  [get_env_param ADC_RES   0 ] \
 ]
 
 adi_project_files adaq2387x_zed [list \

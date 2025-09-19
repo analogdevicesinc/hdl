@@ -7,6 +7,7 @@
 
 set TWOLANES $ad_project_params(TWOLANES);  # two-lane mode (1) or one-lane mode (0); default two-lane
 set ADC_RES $ad_project_params(ADC_RES);    # ADC resolution; default 18 bits
+set USE_MMCM $ad_project_params(USE_MMCM);  # ref_clk frequency: 120MHz (1) or 100MHz (0); default 0
 set OUT_RES [expr {$ADC_RES == 16 ? 16 : 32}]
 set CLK_GATE_WIDTH [expr {($TWOLANES == 0 && $ADC_RES == 18) ? 9 : \
                           ($TWOLANES == 0 && $ADC_RES == 16) ? 8 : \
@@ -61,25 +62,34 @@ ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # clk wizard
 
-create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0
+if {$USE_MMCM == "1"} {
+  create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0
 
-set_property -dict [list \
-  CONFIG.PRIM_IN_FREQ {100.000} \
-  CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {120.000} \
-  CONFIG.MMCM_CLKFBOUT_MULT_F {50.250} \
-  CONFIG.MMCM_CLKOUT0_DIVIDE_F {8.375} \
-  CONFIG.MMCM_DIVCLK_DIVIDE {5} \
-] [get_bd_cells clk_wiz_0]
+  set_property -dict [list \
+    CONFIG.PRIM_IN_FREQ {100.000} \
+    CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {120.000} \
+    CONFIG.MMCM_CLKFBOUT_MULT_F {50.250} \
+    CONFIG.MMCM_CLKOUT0_DIVIDE_F {8.375} \
+    CONFIG.MMCM_DIVCLK_DIVIDE {5} \
+  ] [get_bd_cells clk_wiz_0]
+
+  ad_connect ref_clk                      clk_wiz_0/clk_in1
+  ad_connect sys_rstgen/peripheral_reset  clk_wiz_0/reset
+  ad_connect clk_wiz_0/clk_out1           sampling_clk
+  ad_connect clk_wiz_0/clk_out1           axi_ltc2387/ref_clk
+  ad_connect clk_wiz_0/clk_out1           axi_ltc2387_dma/fifo_wr_clk
+  ad_connect clk_wiz_0/clk_out1           axi_pwm_gen/ext_clk
+} else {
+  ad_connect ref_clk  sampling_clk
+  ad_connect ref_clk  axi_ltc2387/ref_clk
+  ad_connect ref_clk  axi_ltc2387_dma/fifo_wr_clk
+  ad_connect ref_clk  axi_pwm_gen/ext_clk
+}
 
 # connections
 
-ad_connect ref_clk  clk_wiz_0/clk_in1
-ad_connect sys_rstgen/peripheral_reset  clk_wiz_0/reset
-ad_connect clk_wiz_0/clk_out1 sampling_clk
-
 ad_connect sys_200m_clk axi_ltc2387/delay_clk
 
-ad_connect clk_wiz_0/clk_out1  axi_ltc2387/ref_clk
 ad_connect clk_gate            axi_ltc2387/clk_gate
 ad_connect dco_p               axi_ltc2387/dco_p
 ad_connect dco_n               axi_ltc2387/dco_n
@@ -91,14 +101,12 @@ if {$TWOLANES == "1"} {
   ad_connect db_n       axi_ltc2387/db_n
 }
 
-ad_connect clk_wiz_0/clk_out1     axi_ltc2387_dma/fifo_wr_clk
 ad_connect axi_ltc2387/adc_valid  axi_ltc2387_dma/fifo_wr_en
 ad_connect axi_ltc2387/adc_data   axi_ltc2387_dma/fifo_wr_din
 ad_connect axi_ltc2387/adc_dovf   axi_ltc2387_dma/fifo_wr_overflow
 
 ad_connect cnv                 axi_pwm_gen/pwm_0
 ad_connect clk_gate            axi_pwm_gen/pwm_1
-ad_connect clk_wiz_0/clk_out1  axi_pwm_gen/ext_clk
 ad_connect sys_cpu_resetn      axi_pwm_gen/s_axi_aresetn
 ad_connect sys_cpu_clk         axi_pwm_gen/s_axi_aclk
 
