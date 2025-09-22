@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -227,6 +227,9 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to agc2[0]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to agc2[1]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to agc3[0]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to agc3[1]
+
+set_global_assignment -name MESSAGE_DISABLE 15714
+set_global_assignment -name MESSAGE_DISABLE 24605
 
 # transceiver calibration clock
 set_global_assignment -name DEVICE_INITIALIZATION_CLOCK OSC_CLK_1_125MHZ
