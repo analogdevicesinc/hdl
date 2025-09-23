@@ -44,7 +44,7 @@ module axi_fsrc_tx #(
   input start,
 
   input      s_axis_valid,
-  output reg s_axis_ready,
+  output     s_axis_ready,
   input      [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] s_axis_data,
 
   output reg m_axis_valid,
@@ -170,7 +170,6 @@ module axi_fsrc_tx #(
     .up_rdata (up_rdata_s),
     .up_rack (up_rack_s));
 
-  wire                   data_in_ready_s;
   wire                   data_out_valid_s;
   wire [DATA_WIDTH-1:0]  data_out_s;
 
@@ -194,7 +193,7 @@ module axi_fsrc_tx #(
     .accum_set (accum_set),
     .accum_add_val (accum_add_val),
 
-    .in_ready (data_in_ready_s),
+    .in_ready (s_axis_ready),
     .in_data (s_axis_data),
     .in_valid (s_axis_valid),
 
@@ -205,7 +204,6 @@ module axi_fsrc_tx #(
   always @(posedge clk) begin
     m_axis_data <= data_out_s;
     m_axis_valid <= data_out_valid_s;
-    s_axis_ready <= data_in_ready_s;
   end
 
   assign start_s = (start & ext_trig_en) | reg_start_s;
