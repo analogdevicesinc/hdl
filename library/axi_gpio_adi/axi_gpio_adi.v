@@ -75,9 +75,10 @@ module axi_gpio_adi (
 
   reg        [31:0] gpio_out_reg;
   reg        [31:0] gpio_dir_reg;  // 1 = output, 0 = input
+  //(* dont_touch = "true" *) 
   reg        [31:0] up_rdata;
-  reg               up_rack;
-  reg               up_wack;
+  reg        up_rack;
+  reg        up_wack;
   reg               up_resetn;
 
   wire       [31:0] up_irq_pending;
@@ -131,7 +132,6 @@ module axi_gpio_adi (
     .up_rack        (up_rack)
   );
 
-
   // Reset
 
   always @(posedge up_clk) begin
@@ -178,11 +178,16 @@ module axi_gpio_adi (
       up_rack <= up_rreq_s;
       if (up_rreq_s) begin
         case (up_raddr_s)
-          8'h21: up_rdata <= gpio_out_reg;
-          8'h22: up_rdata <= gpio_io_i;
-          8'h24: up_rdata <= gpio_dir_reg;
+          8'h21: up_rdata[31:0] <= gpio_out_reg[31:0];
+          8'h22: up_rdata[31:0] <= gpio_io_i[31:0];
+          8'h24: up_rdata[31:0] <= gpio_dir_reg[31:0];
           default: up_rdata <= 32'd0;
         endcase
+        //modificare cod
+      //up_rdata[31:0] <= gpio_io_i[31:0];
+      if (|up_rdata) begin
+        up_rack <= up_rack; // dummy logic
+      end
       end
     end
   end
