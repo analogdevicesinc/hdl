@@ -133,7 +133,7 @@ module axi_spi_engine #(
   input [7:0] offload_sync_data
 );
 
-  localparam PCORE_VERSION = 'h010600;
+  localparam PCORE_VERSION = 'h020000;
   localparam S_AXI = 0;
   localparam UP_FIFO = 1;
   localparam max_num_of_reads = NUM_OF_SDIO-1;
