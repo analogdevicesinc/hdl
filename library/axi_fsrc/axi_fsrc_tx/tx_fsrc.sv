@@ -130,7 +130,7 @@ module tx_fsrc #(
       in_fifo_out_ready = '0;
     end else begin
       if (enable) begin
-        in_fifo_out_ready = fsrc_in_single_valid;
+        in_fifo_out_ready = fsrc_in_single_valid & fsrc_in_single_ready;
       end else begin
         in_fifo_out_ready = |out_fifo_in_ready;
       end

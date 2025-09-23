@@ -36,7 +36,7 @@ module tx_fsrc_make_holes #(
   logic in_valid_d;
   logic holes_xfer;
   logic holes_valid_d;
-  logic [1:0][NUM_OF_CHANNELS-1:0] holes_data_d;
+  logic [1:0][SAMPLES_PER_CHANNEL-1:0] holes_data_d;
   logic [SAMPLES_PER_CHANNEL-1:0] [$clog2(SAMPLES_PER_CHANNEL+1)-1:0] non_holes_cnt_total_per_word;
   logic [SAMPLES_PER_CHANNEL-1:0] [$clog2(SAMPLES_PER_CHANNEL+1)-1:0] non_holes_cnt_total_per_word_d;
   logic [$clog2(SAMPLES_PER_CHANNEL+1)-1:0]                   non_holes_cnt_total;
