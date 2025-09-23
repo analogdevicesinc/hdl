@@ -1,0 +1,28 @@
+FMC_pin   FMC_port       Schematic_name     System_top_name     IOSTANDARD  Termination
+
+# ad9744
+
+H4        FMC-CLK0_P     REFCLK_P           ad9740_clk_p        TMDS_33     #N/A
+H5        FMC-CLK0_N     REFCLK_N           ad9740_clk_n        TMDS_33     #N/A
+
+G9        FMC-LA03_P     DB13               ad9740_data[13]     LVCMOS33    #N/A
+G10       FMC-LA03_N     DB12               ad9740_data[12]     LVCMOS33    #N/A
+H10       FMC-LA04_P     DB11               ad9740_data[11]     LVCMOS33    #N/A
+C10       FMC-LA06_P     DB10               ad9740_data[10]     LVCMOS33    #N/A
+H11       FMC-LA04_N     DB09               ad9740_data[9]      LVCMOS33    #N/A
+D11       FMC-LA05_P     DB08               ad9740_data[8]      LVCMOS33    #N/A
+G12       FMC-LA08_P     DB07               ad9740_data[7]      LVCMOS33    #N/A
+H13       FMC-LA07_P     DB06               ad9740_data[6]      LVCMOS33    #N/A
+G13       FMC-LA08_N     DB05               ad9740_data[5]      LVCMOS33    #N/A
+H14       FMC-LA07_N     DB04               ad9740_data[4]      LVCMOS33    #N/A
+C11       FMC-LA06_N     DB03               ad9740_data[3]      LVCMOS33    #N/A
+D12       FMC-LA05_N     DB02               ad9740_data[2]      LVCMOS33    #N/A
+D14       FMC-LA09_P     DB01               ad9740_data[1]      LVCMOS33    #N/A
+D15       FMC-LA09_N     DB00               ad9740_data[0]      LVCMOS33    #N/A
+
+# adf4351
+
+H7        FMC-LA02_P     ADF4351_CLK        adf4351_clk         LVCMOS33    #N/A
+H8        FMC-LA02_N     ADF4351_CS         adf4351_ce          LVCMOS33    #N/A
+G16       FMC-LA12_N     ADF4351_LE         adf4351_csn         LVCMOS33    #N/A
+H16       FMC-LA11_P     ADF4351_D          adf4351_mosi        LVCMOS33    #N/A
