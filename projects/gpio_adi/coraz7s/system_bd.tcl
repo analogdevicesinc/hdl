@@ -3,7 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-source $ad_hdl_dir/projects/common/coraz7s/coraz7s_system_bd.tcl
+source $ad_hdl_dir/projects/gpio_adi/common/coraz7s_system_bd_gpio.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 global ad_project_params
