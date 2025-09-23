@@ -1,7 +1,10 @@
 # AD4630-FMC HDL Project
 
 - Evaluation board product page:
-  - [EVAL-AD4630-FMC](https://www.analog.com/eval-ad4630-24)
+  - [EVAL-AD4030-24FMCZ](https://www.analog.com/eval-ad4030-24)
+  - [EVAL-AD4630-16FMCZ](https://www.analog.com/eval-ad4630-16)
+  - [EVAL-AD4630-24FMCZ](https://www.analog.com/eval-ad4630-24)
+  - [EVAL-ADAQ4216-FMCZ](https://www.analog.com/eval-adaq4216-fmcz)
   - [EVAL-ADAQ4224-FMCZ](https://www.analog.com/eval-adaq4224-fmcz)
   - [EV-ISO-4224-FMCZ](https://www.analog.com/ev-iso-4224-fmcz)
 - System documentation: TO BE ADDED
