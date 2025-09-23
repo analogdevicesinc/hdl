@@ -77,7 +77,7 @@ ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_3
 set sampling_cycle [expr int(ceil(double($cnv_ref_clk * 1000000) / $adc_sampling_rate))]
 
 ## setup the pulse period for the MAX17687 and LT8608 SYNC signal
-set max17687_cycle [expr int(ceil(double($cnv_ref_clk * 1000000) / $max17687_sync_freq))] 
+set max17687_cycle [expr int(ceil(double($cnv_ref_clk * 1000000) / $max17687_sync_freq))]
 
 ad_ip_instance axi_pwm_gen cnv_generator
 ad_ip_parameter cnv_generator CONFIG.N_PWMS 2
@@ -93,26 +93,13 @@ ad_ip_parameter sync_generator CONFIG.PULSE_0_PERIOD $max17687_cycle
 ad_ip_parameter sync_generator CONFIG.PULSE_0_WIDTH [expr int(ceil(double($max17687_cycle) / 2))]
 
 if {$NO_REORDER == 0} {
-
-ad_ip_instance spi_axis_reorder data_reorder
-ad_ip_parameter data_reorder CONFIG.NUM_OF_LANES $NUM_OF_SDIO
-
+  ad_ip_instance spi_axis_reorder data_reorder
+  ad_ip_parameter data_reorder CONFIG.NUM_OF_LANES $NUM_OF_SDIO
 } elseif {$NO_REORDER == 1} {
-
-    if {$CAPTURE_ZONE == 2} {
-      puts "ERROR: Invalid configuration - Disabling Reorder IP is invalid for Capture Zone 2."
-      exit 2
-    }
-
-}
-
-} elseif {$NO_REORDER == 1} {
-
-    if {$CAPTURE_ZONE == 2} {
-      puts "ERROR: Invalid configuration - Disabling Reorder IP is invalid for Capture Zone 2."
-      exit 2
-    }
-
+  if {$CAPTURE_ZONE == 2} {
+    puts "ERROR: Invalid configuration - Disabling Reorder IP is invalid for Capture Zone 2."
+    exit 2
+  }
 }
 
 # dma to receive data stream
@@ -126,13 +113,13 @@ ad_ip_parameter axi_ad463x_dma CONFIG.AXI_SLICE_SRC 1
 if {$NO_REORDER == 0} {
   ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 } elseif {$NO_REORDER == 1} {
-    if {$NUM_OF_SDI == 1} {
-      ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 32
-    } elseif {$NUM_OF_SDI == 2} {
-      ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
-    }
+  if {$NUM_OF_SDIO == 1} {
+    ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+  } elseif {$NUM_OF_SDIO == 2} {
+    ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+  }
 }
-  
+
 ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # Trigger for SPI offload
@@ -212,10 +199,8 @@ if {$CAPTURE_ZONE == 1} {
   }
 
 } else {
-
   puts "ERROR: Invalid capture zone, please choose 1 or 2."
   exit 2
-
 }
 ad_connect ad463x_cnv cnv_generator/pwm_1
 ad_connect max17687_sync_clk sync_generator/pwm_0
