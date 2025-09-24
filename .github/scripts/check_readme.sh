@@ -22,7 +22,7 @@ format_carrier_name() {
     echo "$1" | tr '[:lower:]' '[:upper:]'
 }
 
-# Function to detect special carriers (e.g., ccbob_cmos, ccfmc_lvds)
+# Function to detect special carriers
 is_special_carrier() {
     case "$1" in
         ccbob_*|ccfmc_*|ccpackrf_*|adrv2crr_fmc|adrv2crr_fmcomms8|adrv2crr_fmcxmwbr1)
@@ -32,6 +32,12 @@ is_special_carrier() {
             return 1
             ;;
     esac
+}
+
+# Function to extract flags from first line of README
+extract_flags() {
+    local file=$1
+    head -n 1 "$file" | sed -e 's/<!--//' -e 's/-->//' | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
 }
 
 # Function to validate README content
@@ -59,6 +65,13 @@ check_readme() {
 
     local local_fail=0
 
+    # Extract flags
+    flags=$(extract_flags "$file")
+
+    has_flag() {
+        echo "$flags" | grep -q "$1"
+    }
+
     # Check title (skip for special carriers)
     if [ "$is_main_readme" -eq 0 ] && is_special_carrier "$carrier"; then
         :
@@ -70,27 +83,31 @@ check_readme() {
     fi
 
     if [ "$is_main_readme" -eq 1 ]; then
-        if ! grep -q "Building the project" "$file"; then
-            echo "    ✖ Missing section \"Building the project\""
-            local_fail=1
+        if ! echo "$flags" | grep -q "no_build_example"; then
+            if ! grep -q "Building the project" "$file"; then
+                echo "    ✖ Missing section \"Building the project\""
+                local_fail=1
+            fi
         fi
         if ! grep -q "Supported parts" "$file"; then
             echo "    ✖ Missing section \"Supported parts\""
             local_fail=1
         fi
     else
-        for section in "Building the project" "Example configurations"; do
-            if ! grep -q "$section" "$file"; then
-                echo "    ✖ Missing section \"$section\""
-                local_fail=1
-            fi
-        done
+        if ! echo "$flags" | grep -q "no_build_example"; then
+            for section in "Building the project" "Example configurations"; do
+                if ! grep -q "$section" "$file"; then
+                    echo "    ✖ Missing section \"$section\""
+                    local_fail=1
+                fi
+            done
 
-        if grep -q "Example configurations" "$file"; then
-            local default_check=$(awk '/Example configurations/{flag=1;next}/^`/{flag=0}flag' "$file" | grep -i "default")
-            if [ -z "$default_check" ]; then
-                echo "    ✖ Under 'Example configurations' there's no mention of a default configuration"
-                local_fail=1
+            if grep -q "Example configurations" "$file"; then
+                local default_check=$(awk '/Example configurations/{flag=1;next}/^`/{flag=0}flag' "$file" | grep -i "default")
+                if [ -z "$default_check" ]; then
+                    echo "    ✖ Under 'Example configurations' there's no mention of a default configuration"
+                    local_fail=1
+                fi
             fi
         fi
     fi
@@ -114,7 +131,7 @@ check_readme() {
     fi
 }
 
-# Main loop: iterate over each project
+# Main loop
 for project in projects/*; do
     [ -d "$project" ] || continue
     project_name=$(basename "$project")
@@ -153,4 +170,5 @@ done
 
 if [ "$fail" -eq 1 ]; then
     echo "Something occurred! Check the output of the script."
+    exit 1
 fi

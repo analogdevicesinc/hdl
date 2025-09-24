@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -147,9 +147,6 @@ module system_top (
   wire          i2c0_scl_in_clk;
 
   wire          spi_trigger;
-  wire          spi_clk_s;
-  wire          spi_resetn;
-  wire          spi_trigger_ed;
 
   // adc control gpio assign
 
@@ -159,6 +156,9 @@ module system_top (
   assign ltc2308_cs = gpio_o[34];
 
   assign gpio_i[33:32] = ad4170_dig_aux[1:0];
+
+  //invert signal since we want to trigger on negedge, and spi engine expects a posedge
+  assign spi_trigger = ~gpio_i[32];
 
   // bd gpio
 
@@ -190,22 +190,6 @@ module system_top (
     .oe(i2c0_out_data),
     .o(i2c0_sda),
     .io(hdmi_i2c_sda));
-
-  sync_bits #(
-    .ASYNC_CLK(1)
-  ) i_sync_bits (
-    .in_bits (gpio_i[32]),
-    .out_resetn (~spi_resetn),
-    .out_clk (spi_clk_s),
-    .out_bits (spi_trigger_ed));
-
-  ad_edge_detect#(
-    .EDGE(1)
-  ) i_ad_edge_detect (
-    .clk (spi_clk_s),
-    .rst (1'b0),
-    .signal_in (spi_trigger_ed),
-    .signal_out (spi_trigger));
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
@@ -283,8 +267,6 @@ module system_top (
     .ad4170_spi_sdi_sdi (ad4170_spi_miso),
     .ad4170_spi_sdo_sdo (ad4170_spi_mosi),
     .ad4170_spi_trigger_if_pwm (spi_trigger),
-    .ad4170_spi_resetn_reset_n (spi_resetn),
-    .ad4170_spi_clk_clk (spi_clk_s),
     .sys_spi_MISO (1'b0),
     .sys_spi_MOSI (),
     .sys_spi_SCLK (),

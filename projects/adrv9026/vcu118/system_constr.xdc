@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -94,3 +94,6 @@ set_property -dict {PACKAGE_PIN AP37 IOSTANDARD LVCMOS18} [get_ports spi_mosi]  
 
 create_clock -name ref_clk   -period  4.00 [get_ports ref_clk_p]
 create_clock -name core_clk  -period  4.00 [get_ports core_clk_p]
+
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets i_core_clk_ibufds_1/O]
+set_property CLOCK_DEDICATED_ROUTE BACKBONE [get_nets core_clk]

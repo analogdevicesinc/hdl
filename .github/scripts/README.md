@@ -1,55 +1,49 @@
 # Guidelines & files check scripts
 
-These scripts are used for checking the integrity and correctness of the files across the HDL repository. The first script called **check_for_missing_readme_md.sh** is used to check the correctness of the README files only while the second script called **check_guideline.py** has the sole role of checking if our guidelines are implemented across the other files. 
+These scripts are used for checking the integrity and correctness of the files across the HDL repository. The first script called **check_for_missing_readme_md.sh** is used to check the correctness of the README files only while the second script called **check_guideline.py** has the sole role of checking if our guidelines are implemented across the other files.
 
-## User guide for [check_for_missing_readme_md.sh](https://github.com/analogdevicesinc/hdl/blob/main/.github/scripts/check_for_missing_readme_md.sh)
+## User guide for [check_readme.sh](https://github.com/analogdevicesinc/hdl/blob/main/.github/scripts/check_readme.sh)
 
 ### Prerequisites
 
-* The script must be run from the root of the HDL repository (e.g., `/hdl`).
-* It assumes a directory structure like:
-  * `projects/<board>/README.md`.
-  * `projects/<board>/<carrier>/README.md`.
-* It requires `bash` or `sh`, but it does **not** require any external dependencies.
+- The script must be run from the root of the HDL repository (e.g., `/hdl`);
+- It assumes a directory structure like:
+  - `projects/<board>/README.md`
+  - `projects/<board>/<carrier>/README.md`
+- It requires `bash` or `sh`, but it **does not** require any external dependencies.
 
 ### Purpose
 
 This script ensures that all HDL project directories contain properly formatted `README.md` files and that they follow documentation conventions.
 
----
-
 ### Rules that are checked
 
 #### 1. Presence of README files
 
-* Each board directory (e.g., `projects/adrv9009zu11eg/`) must contain a `README.md`.
-* Each carrier subdirectory (e.g., `projects/adrv9009zu11eg/zcu102/`) must also contain a `README.md`.
+- Each board directory (e.g., `projects/adrv9009zu11eg/`) must contain a `README.md`;
+- Each carrier subdirectory (e.g., `projects/adrv9009zu11eg/zcu102/`) must also contain a `README.md`.
 
 #### 2. Title format
 
-* The main board README must have a title in the format:  
-  `<BOARD-NAME> HDL Project`  
-  Example: `# ADRV9009ZU11EG HDL Project`
-
-* Carrier README titles must follow the format:  
-  `<BOARD-NAME>/<CARRIER-NAME> HDL Project`  
-  Example: `ADRV9009ZU11EG/ZCU102 HDL Project`
-
-* **Board names** are uppercased and underscores are replaced with hyphens (e.g., `ad9081_fmca_ebz` → `AD9081-FMCA-EBZ`).
-* **Carrier names** are uppercased as-is (e.g., `de10nano` → `DE10NANO`), except for special carriers.
+- The main board README must have a title in the format: `<BOARD-NAME> HDL Project`.
+  Example: `# ADRV9009ZU11EG HDL Project`;
+- Carrier README titles must follow the format: `<BOARD-NAME>/<CARRIER-NAME> HDL Project`
+  Example: `ADRV9009ZU11EG/ZCU102 HDL Project`;
+- **Board names** are uppercased and underscores are replaced with hyphens (e.g., `ad9081_fmca_ebz` → `AD9081-FMCA-EBZ`);
+- **Carrier names** are uppercased as-is (e.g., `de10nano` → `DE10NANO`), except for special carriers.
 
 #### 3. Special carrier exceptions
 
 The following carriers are allowed to use underscore in their README titles and are not flagged for title mismatches:
 
-* `ccbob_*`
-* `ccfmc_*`
-* `ccpackrf_*`
-* `adrv2crr_fmc`
-* `adrv2crr_fmcomms8`
-* `adrv2crr_fmcxmwbr1`
+- `ccbob_*`
+- `ccfmc_*`
+- `ccpackrf_*`
+- `adrv2crr_fmc`
+- `adrv2crr_fmcomms8`
+- `adrv2crr_fmcxmwbr1`
 
-Based on the case, you can add special carriers by modifying the script. The difficulty of parsing so many carriers and other names is great, so it's easier to have a special-list for special carrier names.
+Based on the case, you can add special carriers by modifying the script.
 
 ```sh
 # Function to detect special carriers (e.g., ccbob_cmos, ccfmc_lvds)
@@ -67,139 +61,144 @@ is_special_carrier() {
 
 #### 4. Required sections
 
-* **Main board README** must contain:
-  - `Building the project`
-  - `Supported parts`
+- **Main board README** MUST contain:
+  - `Building the project`
+  - `Supported parts`
+- **Carrier README** SHOULD contain all the below sub-sections*:
+  - `Building the project`
+  - `Example configurations`
+  - A mention of a **default configuration** under the `Example configurations` section
 
-* **Carrier README** must contain:
-  - `Building the project`
-  - `Example configurations`
-  - A mention of a **default configuration** under the `Example configurations` section
+```
+* If it's not possible, you MUST include the following flags, depedinding on your case (on what sub-section cannot be included):
+  - no_build_example: this project doesn't have the Example configurations section, so it doesn't have build parameters
+  - no_dts: this project doesn't have a device tree associated
+  - no_no_os: this project doesn't have a no-OS project associated
+
+Include these flags on the first line of the README.md file, as a MarkDown comment, like this (depeding on what you can't include):
+
+<!-- no_build_example, no_dts, no_no_os -->
+```
 
 #### 5. Forbidden content
 
-* Links to the following are not allowed:
+- Links to the following are not allowed:
   - `https://wiki.analog.com/resources/tools-software/linux-drivers-all`
   - `https://wiki.analog.com/linux`
-
-* Empty Markdown links like `` or `([ ])` are flagged.
-
----
+- Empty Markdown links like `` or `([ ])` are flagged.
 
 ### Output
 
 The script prints a summary for each board and carrier, indicating:
 
-* ✔ if the README is valid
-* ✖ if there are issues, with a description of what’s missing or incorrect
+- ✔ if the README is valid
+- ✖ if there are issues, with a description of what’s missing or incorrect
 
 At the end, if any issues are found, it prints: **Something occurred! Check the output of the script.**
 
----
-
-### How to run (from /hdl)
+### Example of running
 
 ```sh
+cd hdl/
 source .github/scripts/check_for_missing_readme_md.sh
 ```
+
+---
 
 ## User guide for [check_guideline.py](https://github.com/analogdevicesinc/hdl/tree/main/.github/scripts/check_guideline.py)
 
 ### Prerequisites
 
-* the script must be run while being in the root directory (/hdl)
-* clean the repository to remove the files generated by Vivado
-* it will be run only on Verilog files that do not contain "tb" in their path
-* doesn't run on SystemVerilog files
-* uses Python 3.x
+- the script must be run while being in the root directory (/hdl)
+- clean the repository to remove the files generated by Vivado
+- it will be run only on Verilog files that do not contain "tb" in their path
+- doesn't run on SystemVerilog files
+- uses Python 3.x
 
 ### Rules that are checked
 
-These rules can be found in the [HDL coding guideline](https://github.com/analogdevicesinc/hdl/blob/main/docs/hdl_coding_guideline.md).
+These rules can be found in the [HDL coding guidelines](https://analogdevicesinc.github.io/hdl/user_guide/hdl_coding_guidelines.html).
 
 #### 1. License header
 
 It checks if the license header is up-to-date, containing the current year in
 the year range. Exceptions are the JESD files and the ones specified in the
-`avoid_list` string list.  
+`avoid_list` string list.
 If `-e` option is added, the script can update the year range.
 
 #### 2. Two or more consecutive empty lines
 
-It checks in the whole file if there are two or more consecutive empty lines.  
+It checks in the whole file if there are two or more consecutive empty lines.
 If `-e` option is added, the script can remove them and leave only one empty line.
 
 #### 3. Trailing whitespace
 
-It checks if there are whitespace characters at the end of the lines.  
+It checks if there are whitespace characters at the end of the lines.
 If `-e` option is added, then they can be removed.
 
 #### 4. Lines after `endmodule` tag
 
-It checks if there are  lines after it.  
+It checks if there are  lines after it.
 If `-e` option is added, the script can remove them.
 
 #### 5. Parentheses around the module declaration
 
 It checks if the parentheses around the module declaration (meaning `) (` for
-the parameters' list) are on an empty line, right after the last parameter.  
+the parameters' list) are on an empty line, right after the last parameter.
 It also checks for the closing parenthesis at the module declaration (meaning `);`)
-to be on an empty line, at the beginning, right after the last I/O port line.  
+to be on an empty line, at the beginning, right after the last I/O port line.
 If `-e` option is added, the script can put them in their proper place.
 
 #### 6. Indentation of code
 
-It checks if all lines (except for the ones that are commented) have an indentation 
-of two or multiple of two spaces.  
-Other exceptions to this are the `module` line, the `endmodule` line, the `) (` 
+It checks if all lines (except for the ones that are commented) have an indentation
+of two or multiple of two spaces.
+Other exceptions to this are the `module` line, the `endmodule` line, the `) (`
 and the `);` from the module declaration.
 
 #### 7. Position of the module instances
 
-It checks if the parameters' list (if that's the case) is in proper position, 
-meaning that the position of `#` is checked, the parameters to be specified each 
-on its own line, the parentheses around the instance name and the closing parenthesis 
+It checks if the parameters' list (if that's the case) is in proper position,
+meaning that the position of `#` is checked, the parameters to be specified each
+on its own line, the parentheses around the instance name and the closing parenthesis
 of the module instance.
 
-_NOTE_: these rules are marked in the script with **GC** (stands for Guideline Check) 
+_NOTE_: these rules are marked in the script with **GC** (stands for Guideline Check)
 in the comments.
 
 ### Changes done by the script to your files
 
 If one wants the script to make changes in files, they will be regarding:
-* license header, except for JESD files and the ones specified in `avoid_list`
-* two or more consecutive empty lines
-* trailing whitespaces
-* lines after `endmodule` tag
-* parentheses around the module declaration (meaning `) (` for the parameters'
+
+- license header, except for JESD files and the ones specified in `avoid_list`
+- two or more consecutive empty lines
+- trailing whitespaces
+- lines after `endmodule` tag
+- parentheses around the module declaration (meaning `) (` for the parameters'
   list and `);` for when closing the declaration)
 
 ### Ways to run the script
 
-1. With no arguments: `python3 check_guideline.py`  
-Checks all files with the properties specified above. 
+1. With no arguments: `python3 check_guideline.py`
+Checks all files with the properties specified above.
 Does not modify the files.
 
 2. With arguments:
-  1. `-e` with no file specified  
-    Checks all files with the properties specified above. Additionally, 
-    it modifies the module definition parentheses according to the guideline.
-
-  2. `-m`
-    Checks files that are given as arguments (by their names including the
-    extension).
-
-  3. `-me`
-    Checks files that are given as arguments (by their names including the
-    extension) and modifies the files where the guideline is not respected.
-
-  4. `-p`
-    Checks files that are given as arguments (by their relative path) and
-    modifies the files where the guideline is not respected.
-
-  5. `-pe`
-    Checks files that are given as arguments (by their relative path) and
-    modifies the files where the guideline is not respected.
+    1. `-e` with no file specified
+      Checks all files with the properties specified above. Additionally,
+      it modifies the module definition parentheses according to the guideline.
+    2. `-m`
+      Checks files that are given as arguments (by their names including the
+      extension).
+    3. `-me`
+      Checks files that are given as arguments (by their names including the
+      extension) and modifies the files where the guideline is not respected.
+    4. `-p`
+      Checks files that are given as arguments (by their relative path) and
+      modifies the files where the guideline is not respected.
+    5. `-pe`
+      Checks files that are given as arguments (by their relative path) and
+      modifies the files where the guideline is not respected.
 
 ### Examples of running
 

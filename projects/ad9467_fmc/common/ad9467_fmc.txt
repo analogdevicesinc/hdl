@@ -1,0 +1,31 @@
+FMC_pin    FMC_port       Schematic_name   System_top_name      IOSTANDARD   Termination
+
+# ad9467
+
+G6         LA00_P_CC      D0/1_T           adc_data_in_p[0]       LVDS_25    DIFF_TERM TRUE
+G7         LA00_N_CC      D0/1_C           adc_data_in_n[0]       LVDS_25    DIFF_TERM TRUE
+D8         LA01_P_CC      D2/3_T           adc_data_in_p[1]       LVDS_25    DIFF_TERM TRUE
+D9         LA01_N_CC      D2/3_C           adc_data_in_n[1]       LVDS_25    DIFF_TERM TRUE
+H7         LA02_P         D4/5_T           adc_data_in_p[2]       LVDS_25    DIFF_TERM TRUE
+H8         LA02_N         D4/5_C           adc_data_in_n[2]       LVDS_25    DIFF_TERM TRUE
+G9         LA03_P         D6/7_T           adc_data_in_p[3]       LVDS_25    DIFF_TERM TRUE
+G10        LA03_N         D6/7_C           adc_data_in_n[3]       LVDS_25    DIFF_TERM TRUE
+H10        LA04_P         D8/9_T           adc_data_in_p[4]       LVDS_25    DIFF_TERM TRUE
+H11        LA04_N         D8/9_C           adc_data_in_n[4]       LVDS_25    DIFF_TERM TRUE
+D11        LA05_P         D10/11_T         adc_data_in_p[5]       LVDS_25    DIFF_TERM TRUE
+D12        LA05_N         D10/11_C         adc_data_in_n[5]       LVDS_25    DIFF_TERM TRUE
+C10        LA06_P         D12/13_T         adc_data_in_p[6]       LVDS_25    DIFF_TERM TRUE
+C11        LA06_N         D12/13_C         adc_data_in_n[6]       LVDS_25    DIFF_TERM TRUE
+H13        LA07_P         D14/15_T         adc_data_in_p[7]       LVDS_25    DIFF_TERM TRUE
+H14        LA07_N         D14/15_C         adc_data_in_n[7]       LVDS_25    DIFF_TERM TRUE
+
+G12        LA08_P         OR_T             adc_data_or_p          LVDS_25    DIFF_TERM TRUE
+G13        LA08_N         OR_C             adc_data_or_n          LVDS_25    DIFF_TERM TRUE
+
+H4         CLK0_M2C_P     DCO_T            adc_clk_in_p           LVDS_25    DIFF_TERM TRUE
+H5         CLK0_M2C_N     DCO_C            adc_clk_in_n           LVDS_25    DIFF_TERM TRUE
+
+H37        LA32_P         SDIO             spi_sdio               LVCMOS25   #N/A
+H38        LA32_N         SCLK             spi_clk                LVCMOS25   #N/A
+G36        LA33_P         AD9517_CSB       spi_csn_clk            LVCMOS25   #N/A
+G37        LA33_N         CSB              spi_csn_adc            LVCMOS25   #N/A

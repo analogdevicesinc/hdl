@@ -1,4 +1,8 @@
+<!-- no_no_os -->
+
 # AD9082-FMCA-EBZ/ZCU102 HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
@@ -52,7 +56,7 @@ TX_NUM_LINKS=1
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9082-m4-l8.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9082-m4-l8.dts)
 
 
-#### JESD24C, TX mode 20, RX mode 19, subclass 1
+#### JESD204C, TX mode 20, RX mode 19, subclass 1
 
 ```
 make JESD_MODE=64B66B \

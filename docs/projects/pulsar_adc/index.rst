@@ -20,8 +20,7 @@ when utilizing the boards.
 With PMOD
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ADAQ40xx families is also part of the family of PulSAR converters with PMOD
-connector.
+The ADAQ40xx family is also part of the PulSAR converters with PMOD connector.
 
 This type of boards come with the :adi:`EVAL-PMD-IB1Z` PMOD to
 field programmable gate array (FPGA) mezzanine card (FMC) interposer board that
@@ -160,13 +159,60 @@ PulSAR_ADC_FMC
    :align: center
    :alt: PulSAR_ADC_FMC block diagram
 
+Design configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The reference design uses a clock generator for the division of the SPI clock
+and a PWM generator for the conversion signal. The required parameters can be
+set in the
+:git-hdl:`pulsar_adc_pmdz_bd.tcl <projects/pulsar_adc/common/pulsar_adc_bd.tcl>`
+file using the following values, where the ``PULSE_0_PERIOD`` is computed as
+``Tcyc_min / Tspi_clk``:
+
+.. list-table::
+   :widths: 30 30
+   :header-rows: 1
+
+   * - Part
+     - PULSE_0_PERIOD
+   * - AD7942
+     - 640
+   * - AD7946
+     - 320
+   * - AD7988-1
+     - 1600
+   * - AD7685
+     - 640
+   * - AD7687
+     - 640
+   * - AD7691
+     - 640
+   * - AD7686
+     - 320
+   * - AD7688
+     - 320
+   * - AD7693
+     - 320
+   * - AD7988-5
+     - 320
+   * - AD7980
+     - 160
+   * - AD7983
+     - 120
+   * - AD7690
+     - 250
+   * - AD7982
+     - 160
+   * - AD7984
+     - 120
+
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Zedboard-based PulSAR ADC project can be built to use either the FMC
-connector or the Pmod JA connector.
+connector or the PMOD JA connector.
 
-The ``FMC_N_PMOD`` parameter is used to select between the them:
+The ``FMC_N_PMOD`` parameter is used to select between them:
 
 - 0 - for PMOD
 - 1 - for FMC (default)
@@ -329,28 +375,32 @@ the HDL repository, and then build the project as follows:.
 
 Build examples:
 
-Zedboard Pmod support
+Zedboard PMOD support
 
 .. shell:: bash
 
+   $cd hdl/projects/pulsar_adc/zed
    $make FMC_N_PMOD=0
 
 Zedboard standard configuration FMC support (default)
 
 .. shell:: bash
 
+   $cd hdl/projects/pulsar_adc/zed
    $make FMC_N_PMOD=1 SPI_OP_MODE=0 - builds standard FMC version
 
 Zedboard FMC support for AD7944 4-wire mode ("multi")
 
 .. shell:: bash
 
+   $cd hdl/projects/pulsar_adc/zed
    $make FMC_N_PMOD=1 SPI_OP_MODE=1
 
 Zedboard FMC support for AD7944 chain mode or 3-wire "single"
 
 .. shell:: bash
 
+   $cd hdl/projects/pulsar_adc/zed
    $make FMC_N_PMOD=1 SPI_OP_MODE=2
 
 The result of the build, if parameters were used, will be in a folder named
@@ -358,6 +408,7 @@ by the used configuration. If the following command was run
 
 .. shell:: bash
 
+   $cd hdl/projects/pulsar_adc/zed
    $make FMC_N_PMOD=1 SPI_OP_MODE=0
 
 then the folder name will be:
@@ -366,7 +417,7 @@ then the folder name will be:
 
 .. note::
 
-   For the CoraZ7S-based projects, the build is donw without parameters!
+   For the CoraZ7S-based projects, the build is done without parameters!
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 

@@ -124,7 +124,6 @@ module system_top (
 
   assign gpio_i[94:69] = gpio_o[94:69];
   assign gpio_i[31:21] = gpio_o[31:21];
-  assign rx_os_sync = 1'b0;
 
   // instantiations
 
@@ -150,7 +149,7 @@ module system_top (
     .OB (rx_sync_n));
 
   OBUFDS i_obufds_rx_os_sync (
-    .I (rx_os_sync),
+    .I (~rx_os_sync),
     .O (rx_os_sync_p),
     .OB (rx_os_sync_n));
 
@@ -234,8 +233,11 @@ module system_top (
     .rx_data_3_n (rx_data_n[3]),
     .rx_data_3_p (rx_data_p[3]),
     .rx_ref_clk_0 (ref_clk),
+    .rx_os_ref_clk_0 (ref_clk),
     .rx_sync_0 (rx_sync),
+    .rx_os_sync (rx_os_sync),
     .rx_sysref_0 (sysref),
+    .rx_os_sysref (sysref),
     .spi0_sclk (spi_clk),
     .spi0_csn (spi_csn),
     .spi0_miso (spi_miso),

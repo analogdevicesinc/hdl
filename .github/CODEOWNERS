@@ -257,9 +257,6 @@
 # Code owners for pulsar_adc_pmdz folder
 /projects/pulsar_adc_pmdz/  sergiu.arpadi@analog.com  pop.ioan-daniel@analog.com
 
-# Code owners for usrpe31x folder
-/projects/usrpe31x/         andrei.grozav@analog.com
-
 ##### Code owners for IPs (if no one specified, global owners applies) #####
 
 # Code owner for ad463x_data_capture IP

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2015-2023, 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -44,8 +44,6 @@ module util_sigma_delta_spi #(
   input clk,
   input resetn,
 
-  input spi_active,
-
   input s_sclk,
   input s_sdo,
   input s_sdo_t,
@@ -62,15 +60,15 @@ module util_sigma_delta_spi #(
 );
 
  /*
-  * For converters from the ADI SigmaDelta family the data ready interrupt signal
-  * uses the same physical wire as the the DOUT signal for the SPI bus. This
-  * module extracts the data ready signal from the SPI bus and makes sure to
-  * suppress false positives. The data ready signal is indicated by the converter
-  * by pulling DOUT low. This will only happen if the CS pin for the converter is
-  * low and no SPI transfer is active. There is a small delay between the end of
-  * the SPI transfer and the point where the converter starts to indicate the
-  * data ready signal. IDLE_TIMEOUT allows to specify the amount of clock cycles
-  * the bus needs to be idle before the data ready signal is detected.
+  * For converters from the ADI SigmaDelta family the data ready interrupt
+  * signal uses the same physical wire as the the DOUT signal for the SPI bus.
+  * This module extracts the data ready signal from the SPI bus and makes sure
+  * to suppress false positives. The data ready signal is indicated by the
+  * converter by pulling DOUT low. This will only happen if the CS pin for the
+  * converter is low. There is a small delay between the end of the SPI transfer
+  * and the point where the converter starts to indicate the data ready signal.
+  * IDLE_TIMEOUT allows to specify the amount of clock cycles the bus needs to
+  * be idle before the data ready signal is detected.
   */
 
   assign m_sclk = s_sclk;
@@ -86,7 +84,7 @@ module util_sigma_delta_spi #(
     if (resetn == 1'b0) begin
       counter <= IDLE_TIMEOUT;
     end else begin
-      if (s_cs[CS_PIN] == 1'b0 && spi_active == 1'b0) begin
+      if (s_cs[CS_PIN] == 1'b0) begin
         if (counter != 'h00)
           counter <= counter - 1'b1;
       end else begin

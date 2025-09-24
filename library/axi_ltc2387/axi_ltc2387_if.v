@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -44,7 +44,7 @@ module axi_ltc2387_if #(
   parameter IODELAY_CTRL = 1,
   parameter DELAY_REFCLK_FREQUENCY = 200,
   parameter TWOLANES = 1,    // 0 for one-lane, 1 for two lanes
-  parameter RESOLUTION = 18  // 16 or 18 bits
+  parameter ADC_RES = 18  // 16 or 18 bits
 ) (
 
   // delay interface
@@ -68,12 +68,12 @@ module axi_ltc2387_if #(
   input             db_p,
   input             db_n,
 
-  output reg                  adc_valid,
-  output reg [RESOLUTION-1:0] adc_data
+  output reg               adc_valid,
+  output reg [ADC_RES-1:0] adc_data
 );
 
-  localparam ONE_L_WIDTH = (RESOLUTION == 18) ? 9 : 8;
-  localparam TWO_L_WIDTH = (RESOLUTION == 18) ? 5 : 4;
+  localparam ONE_L_WIDTH = (ADC_RES == 18) ? 9 : 8;
+  localparam TWO_L_WIDTH = (ADC_RES == 18) ? 5 : 4;
   localparam WIDTH = (TWOLANES == 0) ? ONE_L_WIDTH : TWO_L_WIDTH;
 
   // internal wires
@@ -100,7 +100,7 @@ module axi_ltc2387_if #(
     adc_valid <= 1'b0;
     clk_gate_d <= {clk_gate_d[1:0], clk_gate};
     if (clk_gate_d[1] == 1'b1 && clk_gate_d[0] == 1'b0) begin
-      if (RESOLUTION == 18) begin
+      if (ADC_RES == 18) begin
         adc_data <= adc_data_int;
         adc_valid <= 1'b1;
       end else begin
@@ -113,8 +113,13 @@ module axi_ltc2387_if #(
   always @(posedge dco) begin
     adc_data_da_p <= {adc_data_da_p[WIDTH-1:0], da_p_int_s};
     adc_data_da_n <= {adc_data_da_n[WIDTH-1:0], da_n_int_s};
-    adc_data_db_p <= {adc_data_db_p[WIDTH-1:0], db_p_int_s};
-    adc_data_db_n <= {adc_data_db_n[WIDTH-1:0], db_n_int_s};
+    if (TWOLANES) begin
+      adc_data_db_p <= {adc_data_db_p[WIDTH-1:0], db_p_int_s};
+      adc_data_db_n <= {adc_data_db_n[WIDTH-1:0], db_n_int_s};
+    end else begin
+      adc_data_db_p <= 'd0;
+      adc_data_db_n <= 'd0;
+    end
   end
 
   // bits rearrangement
@@ -139,7 +144,7 @@ module axi_ltc2387_if #(
     assign adc_data_int[1] = da_p_int_s;
     assign adc_data_int[0] = da_n_int_s;
   end else begin
-    if (RESOLUTION == 18) begin
+    if (ADC_RES == 18) begin
       assign adc_data_int[17] = adc_data_da_p[3];
       assign adc_data_int[16] = adc_data_db_p[3];
       assign adc_data_int[15] = adc_data_da_n[3];
@@ -200,25 +205,34 @@ module axi_ltc2387_if #(
     .delay_rst (delay_rst),
     .delay_locked (delay_locked));
 
-  ad_data_in #(
-    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-    .IDDR_CLK_EDGE ("OPPOSITE_EDGE"),
-    .IODELAY_CTRL (0),
-    .IODELAY_GROUP (IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
-  ) i_rx_db (
-    .rx_clk (dco),
-    .rx_data_in_p (db_p),
-    .rx_data_in_n (db_n),
-    .rx_data_p (db_p_int_s),
-    .rx_data_n (db_n_int_s),
-    .up_clk (up_clk),
-    .up_dld (up_dld[1]),
-    .up_dwdata (up_dwdata[9:5]),
-    .up_drdata (up_drdata[9:5]),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rst),
-    .delay_locked ());
+  // instantiate only if TWOLANES
+  if (TWOLANES) begin
+    ad_data_in #(
+      .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+      .IDDR_CLK_EDGE ("OPPOSITE_EDGE"),
+      .IODELAY_CTRL (0),
+      .IODELAY_GROUP (IO_DELAY_GROUP),
+      .REFCLK_FREQUENCY (DELAY_REFCLK_FREQUENCY)
+    ) i_rx_db (
+      .rx_clk (dco),
+      .rx_data_in_p (db_p),
+      .rx_data_in_n (db_n),
+      .rx_data_p (db_p_int_s),
+      .rx_data_n (db_n_int_s),
+      .up_clk (up_clk),
+      .up_dld (up_dld[1]),
+      .up_dwdata (up_dwdata[9:5]),
+      .up_drdata (up_drdata[9:5]),
+      .delay_clk (delay_clk),
+      .delay_rst (delay_rst),
+      .delay_locked ());
+  end else begin
+    // when in one-lane mode, tie them to 0,
+    // otherwise the input pin of input buffer
+    // will have an illegal connection to logic constant value
+    assign db_p_int_s = 1'b0;
+    assign db_n_int_s = 1'b0;
+  end
 
   // clock
 

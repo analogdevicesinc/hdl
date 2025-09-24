@@ -1,4 +1,4 @@
-# ADRV9009-ZU11EG HDL Project
+# ADRV9009ZU11EG HDL Project
 
 - Evaluation board product page: [ADRV9009-ZU11EG](https://www.analog.com/adrv9009-zu11eg)
 - System documentation: https://analogdevicesinc.github.io/documentation/eval/user-guide/transceiver/adrv9009/index.html

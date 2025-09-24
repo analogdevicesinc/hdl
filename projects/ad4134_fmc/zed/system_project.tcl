@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -12,7 +12,6 @@ adi_project ad4134_fmc_zed
 adi_project_files ad4134_fmc_zed [list \
     "$ad_hdl_dir/library/common/ad_iobuf.v" \
     "system_top.v" \
-    "system_constr.xdc" \
-    "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
+    "system_constr.xdc"]
 
 adi_project_run ad4134_fmc_zed

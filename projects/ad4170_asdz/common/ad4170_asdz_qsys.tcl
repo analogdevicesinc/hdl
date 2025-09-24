@@ -35,18 +35,6 @@ add_instance spi_engine_interconnect_0 spi_engine_interconnect
 set_instance_parameter_value spi_engine_interconnect_0 {DATA_WIDTH} {32}
 set_instance_parameter_value spi_engine_interconnect_0 {NUM_OF_SDI} {1}
 
-# bridges
-
-add_instance clock_bridge_0 altera_clock_bridge
-set_instance_parameter_value clock_bridge_0 {EXPLICIT_CLOCK_RATE} {0.0}
-set_instance_parameter_value clock_bridge_0 {NUM_CLOCK_OUTPUTS} {1}
-
-add_instance reset_bridge_0 altera_reset_bridge
-set_instance_parameter_value reset_bridge_0 {ACTIVE_LOW_RESET} {1}
-set_instance_parameter_value reset_bridge_0 {NUM_RESET_OUTPUTS} {1}
-set_instance_parameter_value reset_bridge_0 {SYNCHRONOUS_EDGES} {none}
-set_instance_parameter_value reset_bridge_0 {USE_RESET_REQUEST} {0}
-
 # spi_engine_offload
 
 add_instance spi_engine_offload_0 spi_engine_offload
@@ -62,21 +50,14 @@ add_interface ad4170_spi_cs         conduit end
 add_interface ad4170_spi_sdi        conduit end
 add_interface ad4170_spi_sdo        conduit end
 add_interface ad4170_spi_trigger    conduit end
-add_interface ad4170_spi_resetn     reset source
 
 set_interface_property ad4170_spi_cs      EXPORT_OF spi_engine_execution_0.if_cs
 set_interface_property ad4170_spi_sclk    EXPORT_OF spi_engine_execution_0.if_sclk
 set_interface_property ad4170_spi_sdi     EXPORT_OF spi_engine_execution_0.if_sdi
 set_interface_property ad4170_spi_sdo     EXPORT_OF spi_engine_execution_0.if_sdo
 set_interface_property ad4170_spi_trigger EXPORT_OF spi_engine_offload_0.if_trigger
-set_interface_property ad4170_spi_resetn  EXPORT_OF reset_bridge_0.out_reset
-
-add_connection axi_spi_engine_0.if_spi_resetn reset_bridge_0.in_reset
 
 # clocks
-
-add_interface ad4170_spi_clk        clock source
-set_interface_property ad4170_spi_clk     EXPORT_OF clock_bridge_0.out_clk
 
 add_connection sys_clk.clk axi_spi_engine_0.s_axi_clock
 add_connection sys_clk.clk axi_dmac_0.s_axi_clock
@@ -88,7 +69,6 @@ add_connection sys_dma_clk.clk spi_engine_offload_0.if_ctrl_clk
 add_connection sys_dma_clk.clk spi_engine_offload_0.if_spi_clk
 add_connection sys_dma_clk.clk axi_dmac_0.if_s_axis_aclk
 add_connection sys_dma_clk.clk axi_dmac_0.m_dest_axi_clock
-add_connection sys_dma_clk.clk clock_bridge_0.in_clk
 
 # resets
 
@@ -108,15 +88,15 @@ add_connection spi_engine_execution_0.sdi_data spi_engine_interconnect_0.m_sdi
 add_connection spi_engine_interconnect_0.m_sdo spi_engine_execution_0.sdo_data
 add_connection spi_engine_execution_0.sync spi_engine_interconnect_0.m_sync
 
-add_connection axi_spi_engine_0.cmd spi_engine_interconnect_0.s0_cmd
-add_connection spi_engine_interconnect_0.s0_sdi axi_spi_engine_0.sdi_data
-add_connection axi_spi_engine_0.sdo_data spi_engine_interconnect_0.s0_sdo
-add_connection spi_engine_interconnect_0.s0_sync axi_spi_engine_0.sync
+add_connection axi_spi_engine_0.cmd spi_engine_interconnect_0.s1_cmd
+add_connection spi_engine_interconnect_0.s1_sdi axi_spi_engine_0.sdi_data
+add_connection axi_spi_engine_0.sdo_data spi_engine_interconnect_0.s1_sdo
+add_connection spi_engine_interconnect_0.s1_sync axi_spi_engine_0.sync
 
-add_connection spi_engine_offload_0.cmd spi_engine_interconnect_0.s1_cmd
-add_connection spi_engine_interconnect_0.s1_sdi  spi_engine_offload_0.sdi_data
-add_connection spi_engine_offload_0.sdo_data spi_engine_interconnect_0.s1_sdo
-add_connection spi_engine_interconnect_0.s1_sync spi_engine_offload_0.sync
+add_connection spi_engine_offload_0.cmd spi_engine_interconnect_0.s0_cmd
+add_connection spi_engine_interconnect_0.s0_sdi  spi_engine_offload_0.sdi_data
+add_connection spi_engine_offload_0.sdo_data spi_engine_interconnect_0.s0_sdo
+add_connection spi_engine_interconnect_0.s0_sync spi_engine_offload_0.sync
 add_connection spi_engine_offload_0.m_interconnect_ctrl spi_engine_interconnect_0.s_interconnect_ctrl
 
 add_connection spi_engine_offload_0.ctrl_cmd_wr       axi_spi_engine_0.offload0_cmd

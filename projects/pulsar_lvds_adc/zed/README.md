@@ -1,6 +1,6 @@
 <!-- no_dts -->
 
-# PULSAR_LVDS_ADC/ZED HDL Project
+# PULSAR-LVDS-ADC/ZED HDL Project
 
 - VADJ with which it was tested in hardware: 2.5V
 
