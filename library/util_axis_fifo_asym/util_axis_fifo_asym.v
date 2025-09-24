@@ -155,7 +155,7 @@ module util_axis_fifo_asym #(
 
           // tlast is asserted for the atomic fifo instances on the following conditions:
           // - for the most significant instance, tlast is the input tlast if any of the tkeep bits for the instance is asserted (so we are not suppressing this transfer)
-          // - for the least significat instance, tlast is the input tlast if no tkeep bits are asserted for any instance (transfer is all null bytes)
+          // - for the least significant instance, tlast is the input tlast if no tkeep bits are asserted for any instance (transfer is all null bytes)
           // - for the other instances, we store the input tlast if all the following instances have tkeep=0 for all bits and no less significant instance has stored it
           // thus, the tlast is stored on the most significant instance that has non-null bytes (meaning not all tkeep bits are 0), if there are any.
           if (i==RATIO-1) begin
