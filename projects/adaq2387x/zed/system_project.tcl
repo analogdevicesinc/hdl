@@ -34,8 +34,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 adi_project adaq2387x_zed 0 [list \
   TWOLANES  [get_env_param TWOLANES  1 ] \
   ADC_RES   [get_env_param ADC_RES  18 ] \
-  USE_MMCM  [get_env_param ADC_RES   0 ] \
-]
+  USE_MMCM  [get_env_param ADC_RES   0 ]]
 
 adi_project_files adaq2387x_zed [list \
   "system_top.v" \
