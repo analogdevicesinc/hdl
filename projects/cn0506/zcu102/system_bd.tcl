@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -28,6 +28,8 @@ set INTF_CFG [get_env_param INTF_CFG RGMII]
 switch $INTF_CFG {
   MII {
     source ../common/mii_bd.tcl
+    create_bd_port -dir O -from 2 -to 0 emio_enet0_speed_mode
+    create_bd_port -dir O -from 2 -to 0 emio_enet1_speed_mode
 
     set_property -dict [list \
       CONFIG.PSU__ENET0__GRP_MDIO__ENABLE {1} \
@@ -43,6 +45,9 @@ switch $INTF_CFG {
     make_bd_intf_pins_external  [get_bd_intf_pins sys_ps8/MDIO_ENET0]
     make_bd_intf_pins_external  [get_bd_intf_pins sys_ps8/GMII_ENET1]
     make_bd_intf_pins_external  [get_bd_intf_pins sys_ps8/MDIO_ENET1]
+
+    ad_connect sys_ps8/emio_enet0_speed_mode emio_enet0_speed_mode
+    ad_connect sys_ps8/emio_enet1_speed_mode emio_enet1_speed_mode
   }
   RGMII {
     source ../common/rgmii_bd.tcl
