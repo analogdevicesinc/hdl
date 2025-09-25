@@ -64,6 +64,8 @@ module util_axis_fifo_asym #(
   output [TDEST_WIDTH-1:0]    m_axis_tdest,
   output                      m_axis_empty,
   output                      m_axis_almost_empty,
+  output                      m_axis_full,
+  output                      m_axis_almost_full,
   output [ADDRESS_WIDTH+9:0]  m_axis_level,
 
   input                       s_axis_aclk,
@@ -77,6 +79,8 @@ module util_axis_fifo_asym #(
   input  [TUSER_WIDTH-1:0]    s_axis_tuser,
   input  [TID_WIDTH-1:0]      s_axis_tid,
   input  [TDEST_WIDTH-1:0]    s_axis_tdest,
+  output                      s_axis_empty,
+  output                      s_axis_almost_empty,
   output                      s_axis_full,
   output                      s_axis_almost_full,
   output [ADDRESS_WIDTH+9:0]  s_axis_room
@@ -112,6 +116,8 @@ module util_axis_fifo_asym #(
   wire [RATIO*A_TDEST_WIDTH-1:0]   m_axis_tdest_int_s;
   wire [RATIO-1:0]                 m_axis_empty_int_s;
   wire [RATIO-1:0]                 m_axis_almost_empty_int_s;
+  wire [RATIO-1:0]                 m_axis_full_int_s;
+  wire [RATIO-1:0]                 m_axis_almost_full_int_s;
   wire [RATIO*A_ADDRESS_WIDTH-1:0] m_axis_level_int_s;
 
   wire [RATIO-1:0]                 s_axis_ready_int_s;
@@ -123,6 +129,8 @@ module util_axis_fifo_asym #(
   wire [RATIO*A_TUSER_WIDTH-1:0]   s_axis_tuser_int_s;
   wire [RATIO*A_TID_WIDTH-1:0]     s_axis_tid_int_s;
   wire [RATIO*A_TDEST_WIDTH-1:0]   s_axis_tdest_int_s;
+  wire [RATIO-1:0]                 s_axis_empty_int_s;
+  wire [RATIO-1:0]                 s_axis_almost_empty_int_s;
   wire [RATIO-1:0]                 s_axis_full_int_s;
   wire [RATIO-1:0]                 s_axis_almost_full_int_s;
   wire [RATIO*A_ADDRESS_WIDTH-1:0] s_axis_room_int_s;
@@ -134,47 +142,51 @@ module util_axis_fifo_asym #(
   generate
     for (i=0; i<RATIO; i=i+1) begin
       util_axis_fifo #(
-        .DATA_WIDTH (A_DATA_WIDTH),
-        .ADDRESS_WIDTH (A_ADDRESS_WIDTH),
-        .ASYNC_CLK (ASYNC_CLK),
-        .M_AXIS_REGISTERED (M_AXIS_REGISTERED),
-        .ALMOST_EMPTY_THRESHOLD (A_ALMOST_EMPTY_THRESHOLD),
-        .ALMOST_FULL_THRESHOLD (A_ALMOST_FULL_THRESHOLD),
-        .TLAST_EN (TLAST_EN),
-        .TKEEP_EN (TKEEP_EN),
-        .TSTRB_EN (TSTRB_EN),
+        .DATA_WIDTH(A_DATA_WIDTH),
+        .ADDRESS_WIDTH(A_ADDRESS_WIDTH),
+        .ASYNC_CLK(ASYNC_CLK),
+        .M_AXIS_REGISTERED(M_AXIS_REGISTERED),
+        .ALMOST_EMPTY_THRESHOLD(A_ALMOST_EMPTY_THRESHOLD),
+        .ALMOST_FULL_THRESHOLD(A_ALMOST_FULL_THRESHOLD),
+        .TLAST_EN(TLAST_EN),
+        .TKEEP_EN(TKEEP_EN),
+        .TSTRB_EN(TSTRB_EN),
         .TUSER_WIDTH((TUSER_WIDTH > 0) ? A_TUSER_WIDTH : 0),
         .TID_WIDTH(TID_WIDTH),
         .TDEST_WIDTH(TDEST_WIDTH)
       ) i_fifo (
-        .m_axis_aclk    (m_axis_aclk),
-        .m_axis_aresetn (m_axis_aresetn),
-        .m_axis_ready   (m_axis_ready_int_s[i]),
-        .m_axis_valid   (m_axis_valid_int_s[i]),
-        .m_axis_data    (m_axis_data_int_s[A_DATA_WIDTH*i+:A_DATA_WIDTH]),
-        .m_axis_tkeep   (m_axis_tkeep_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
-        .m_axis_tstrb   (m_axis_tstrb_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
-        .m_axis_tlast   (m_axis_tlast_int_s[i]),
-        .m_axis_tuser   (m_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH]),
-        .m_axis_tid     (m_axis_tid_int_s[A_TID_WIDTH*i+:A_TID_WIDTH]),
-        .m_axis_tdest   (m_axis_tdest_int_s[A_TDEST_WIDTH*i+:A_TDEST_WIDTH]),
-        .m_axis_level   (m_axis_level_int_s[A_ADDRESS_WIDTH*i+:A_ADDRESS_WIDTH]),
-        .m_axis_empty   (m_axis_empty_int_s[i]),
-        .m_axis_almost_empty (m_axis_almost_empty_int_s[i]),
-        .s_axis_aclk    (s_axis_aclk),
-        .s_axis_aresetn (s_axis_aresetn),
-        .s_axis_ready   (s_axis_ready_int_s[i]),
-        .s_axis_valid   (s_axis_valid_int_s[i]),
-        .s_axis_data    (s_axis_data_int_s[A_DATA_WIDTH*i+:A_DATA_WIDTH]),
-        .s_axis_tkeep   (s_axis_tkeep_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
-        .s_axis_tstrb   (s_axis_tstrb_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
-        .s_axis_tlast   (s_axis_tlast_int_s[i]),
-        .s_axis_tuser   (s_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH]),
-        .s_axis_tid     (s_axis_tid_int_s[A_TID_WIDTH*i+:A_TID_WIDTH]),
-        .s_axis_tdest   (s_axis_tdest_int_s[A_TDEST_WIDTH*i+:A_TDEST_WIDTH]),
-        .s_axis_room    (s_axis_room_int_s[A_ADDRESS_WIDTH*i+:A_ADDRESS_WIDTH]),
-        .s_axis_full    (s_axis_full_int_s[i]),
-        .s_axis_almost_full (s_axis_almost_full_int_s[i]));
+        .m_axis_aclk(m_axis_aclk),
+        .m_axis_aresetn(m_axis_aresetn),
+        .m_axis_ready(m_axis_ready_int_s[i]),
+        .m_axis_valid(m_axis_valid_int_s[i]),
+        .m_axis_data(m_axis_data_int_s[A_DATA_WIDTH*i+:A_DATA_WIDTH]),
+        .m_axis_tkeep(m_axis_tkeep_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
+        .m_axis_tstrb(m_axis_tstrb_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
+        .m_axis_tlast(m_axis_tlast_int_s[i]),
+        .m_axis_tuser(m_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH]),
+        .m_axis_tid(m_axis_tid_int_s[A_TID_WIDTH*i+:A_TID_WIDTH]),
+        .m_axis_tdest(m_axis_tdest_int_s[A_TDEST_WIDTH*i+:A_TDEST_WIDTH]),
+        .m_axis_level(m_axis_level_int_s[A_ADDRESS_WIDTH*i+:A_ADDRESS_WIDTH]),
+        .m_axis_empty(m_axis_empty_int_s[i]),
+        .m_axis_almost_empty(m_axis_almost_empty_int_s[i]),
+        .m_axis_full(m_axis_full_int_s[i]),
+        .m_axis_almost_full(m_axis_almost_full_int_s[i]),
+        .s_axis_aclk(s_axis_aclk),
+        .s_axis_aresetn(s_axis_aresetn),
+        .s_axis_ready(s_axis_ready_int_s[i]),
+        .s_axis_valid(s_axis_valid_int_s[i]),
+        .s_axis_data(s_axis_data_int_s[A_DATA_WIDTH*i+:A_DATA_WIDTH]),
+        .s_axis_tkeep(s_axis_tkeep_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
+        .s_axis_tstrb(s_axis_tstrb_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
+        .s_axis_tlast(s_axis_tlast_int_s[i]),
+        .s_axis_tuser(s_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH]),
+        .s_axis_tid(s_axis_tid_int_s[A_TID_WIDTH*i+:A_TID_WIDTH]),
+        .s_axis_tdest(s_axis_tdest_int_s[A_TDEST_WIDTH*i+:A_TDEST_WIDTH]),
+        .s_axis_room(s_axis_room_int_s[A_ADDRESS_WIDTH*i+:A_ADDRESS_WIDTH]),
+        .s_axis_empty(s_axis_empty_int_s[i]),
+        .s_axis_almost_empty(s_axis_almost_empty_int_s[i]),
+        .s_axis_full(s_axis_full_int_s[i]),
+        .s_axis_almost_full(s_axis_almost_full_int_s[i]));
     end
   endgenerate
 
@@ -246,6 +258,8 @@ module util_axis_fifo_asym #(
       assign s_axis_ready = &(s_axis_ready_int_s);
 
       // if one of the atomic instance is full, s_axis_full is asserted
+      assign s_axis_empty = |s_axis_empty_int_s;
+      assign s_axis_almost_empty = |s_axis_almost_empty_int_s;
       assign s_axis_full = |s_axis_full_int_s;
       assign s_axis_almost_full = |s_axis_almost_full_int_s;
       // the FIFO has the same room as the atomic FIFO
@@ -332,10 +346,12 @@ module util_axis_fifo_asym #(
       end
 
       // FULL/ALMOST_FULL is driven by the current atomic instance
+      assign s_axis_almost_empty = s_axis_almost_empty_int_s >> s_axis_counter;
       assign s_axis_almost_full = s_axis_almost_full_int_s >> s_axis_counter;
       // the FIFO has the same room as the last atomic instance
       // (NOTE: this is not the real room value, rather the value will be updated
       // after every RATIO number of writes)
+      assign s_axis_empty = s_axis_empty_int_s[RATIO-1];
       assign s_axis_full = s_axis_full_int_s[RATIO-1];
       assign s_axis_room = {s_axis_room_int_s[A_ADDRESS_WIDTH*(RATIO-1)+:A_ADDRESS_WIDTH], {$clog2(RATIO){1'b1}}-s_axis_counter};
 
@@ -407,6 +423,8 @@ module util_axis_fifo_asym #(
       assign m_axis_level = {m_axis_level_int_s[A_ADDRESS_WIDTH-1:0], m_axis_counter};
       assign m_axis_almost_empty = m_axis_almost_empty_int_s[RATIO-1];
       assign m_axis_empty = m_axis_empty_int_s[RATIO-1];
+      assign m_axis_almost_full = m_axis_almost_full_int_s[RATIO-1];
+      assign m_axis_full = m_axis_full_int_s[RATIO-1];
 
     end else begin : big_master
 
@@ -481,6 +499,8 @@ module util_axis_fifo_asym #(
       // if one of the atomic instance is empty, m_axis_empty should be asserted
       assign m_axis_empty = |m_axis_empty_int_s;
       assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
+      assign m_axis_full = |m_axis_full_int_s;
+      assign m_axis_almost_full = |m_axis_almost_full_int_s;
       // the FIFO has the same room as the atomic FIFO
       assign m_axis_level = m_axis_level_int_s[A_ADDRESS_WIDTH-1:0];
 
