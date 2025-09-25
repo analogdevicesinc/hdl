@@ -53,6 +53,7 @@ adi_project ad9081_fmca_ebz_vcu118 0 [list \
   RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL 64 ] \
   TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL 64 ] \
   CORUNDUM          [get_env_param CORUNDUM           0 ] \
+  APP_ENABLE        [get_env_param APP_ENABLE         0 ] \
 ]
 
 adi_project_files ad9081_fmca_ebz_vcu118 [list \

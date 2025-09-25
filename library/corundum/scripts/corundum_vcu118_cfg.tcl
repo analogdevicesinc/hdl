@@ -122,7 +122,6 @@ set AXI_HBM_FIXED_BURST 0
 set AXI_HBM_WRAP_BURST 0
 
 # Application block configuration
-set APP_ENABLE 1
 set APP_ID 0x12340001
 set APP_CTRL_ENABLE 1
 set APP_DMA_ENABLE 1

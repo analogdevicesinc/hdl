@@ -3,6 +3,12 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+if {[info exists ad_project_params(APP_ENABLE)]} {
+  if {$ad_project_params(APP_ENABLE) == "1"} {
+    set APP_ENABLE 1
+  }
+}
+
 source $ad_hdl_dir/library/corundum/scripts/corundum_common_cfg.tcl
 
 create_bd_cell -type hier corundum_hierarchy

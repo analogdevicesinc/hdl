@@ -162,7 +162,6 @@ if {$ad_project_params(CORUNDUM) == "1"} {
   set OUTPUT_WIDTH [expr $OUTPUT_CHANNELS*$OUTPUT_SAMPLES_PER_CHANNEL*$OUTPUT_SAMPLE_DATA_WIDTH]
 
   source $ad_hdl_dir/library/corundum/scripts/corundum_vcu118_cfg.tcl
-  # set APP_ENABLE 0
   source $ad_hdl_dir/library/corundum/scripts/corundum.tcl
 
   ad_ip_parameter axi_dp_interconnect CONFIG.NUM_CLKS 3
@@ -214,7 +213,7 @@ if {$ad_project_params(CORUNDUM) == "1"} {
 
   ad_cpu_interrupt "ps-5" "mb-5" corundum_hierarchy/irq
 
-  if {$APP_ENABLE == 1} {
+  if {$ad_project_params(APP_ENABLE) == "1"} {
     ad_cpu_interconnect 0x51000000 corundum_hierarchy s_axil_application
 
     ad_ip_instance util_cpack2 util_corundum_cpack [list \
