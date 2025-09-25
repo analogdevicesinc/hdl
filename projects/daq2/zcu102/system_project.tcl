@@ -6,6 +6,7 @@
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
+set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/scripts/auto_timing_fix.tcl]
 set BOARD_NAME zcu102
 
 # get_env_param retrieves parameter value from the environment if exists,
