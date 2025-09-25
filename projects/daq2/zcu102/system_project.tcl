@@ -38,7 +38,8 @@ adi_project_files daq2_${BOARD_NAME} [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/${BOARD_NAME}/${BOARD_NAME}_system_constr.xdc" ]
 
-adi_project_run daq2_${BOARD_NAME}
+## daq2 design is presenting hold time violations on some paths
+## set the strategy to spread logic and help with hold time fixes
+set_property strategy Congestion_SpreadLogic_high [get_runs impl_1]
 
-## To improve timing in the axi_ad9680_offload component
-set_property strategy Performance_Retiming [get_runs impl_1]
+adi_project_run daq2_${BOARD_NAME}
