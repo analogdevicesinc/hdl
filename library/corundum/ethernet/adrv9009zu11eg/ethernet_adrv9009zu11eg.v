@@ -3,12 +3,6 @@
  * Copyright (c) 2023 The Regents of the University of California
  * Copyright (c) 2025 Analog Devices, Inc. All rights reserved
  */
-/*
- * This file repackages Corundum MQNIC Core AXI with the sole purpose of
- * providing it as an IP Core.
- * The original file can be refereed at:
- * https://github.com/ucsdsysnet/corundum/blob/master/fpga/common/rtl/mqnic_core_axi.v
- */
 
 `timescale 1ns/100ps
 
@@ -67,8 +61,7 @@ module ethernet_adrv9009zu11eg #(
   /*
    * GPIO
    */
-  output wire [1:0]                                 led,
-  output wire [1:0]                                 qsfp_led,
+  output wire [3:0]                                 qsfp_led,
 
   /*
    * Ethernet: SFP+

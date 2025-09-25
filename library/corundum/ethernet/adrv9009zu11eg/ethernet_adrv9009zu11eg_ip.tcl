@@ -224,31 +224,6 @@ adi_if_infer_bus analog.com:interface:if_i2c master iic [list \
   "sda_t i2c_sda_t" \
 ]
 
-# adi_add_bus "s_axil_csr" "slave" \
-#   "xilinx.com:interface:aximm_rtl:1.0" \
-#   "xilinx.com:interface:aximm:1.0" \
-#   {
-#     {"s_axil_csr_awaddr" "AWADDR"} \
-#     {"s_axil_csr_awprot" "AWPROT"} \
-#     {"s_axil_csr_awvalid" "AWVALID"} \
-#     {"s_axil_csr_awready" "AWREADY"} \
-#     {"s_axil_csr_wdata" "WDATA"} \
-#     {"s_axil_csr_wstrb" "WSTRB"} \
-#     {"s_axil_csr_wvalid" "WVALID"} \
-#     {"s_axil_csr_wready" "WREADY"} \
-#     {"s_axil_csr_bresp" "BRESP"} \
-#     {"s_axil_csr_bvalid" "BVALID"} \
-#     {"s_axil_csr_bready" "BREADY"} \
-#     {"s_axil_csr_araddr" "ARADDR"} \
-#     {"s_axil_csr_arprot" "ARPROT"} \
-#     {"s_axil_csr_arvalid" "ARVALID"} \
-#     {"s_axil_csr_arready" "ARREADY"} \
-#     {"s_axil_csr_rdata" "RDATA"} \
-#     {"s_axil_csr_rresp" "RRESP"} \
-#     {"s_axil_csr_rvalid" "RVALID"} \
-#     {"s_axil_csr_rready" "RREADY"} \
-#   }
-
 adi_if_infer_bus analog.com:interface:if_ptp slave ptp_clock [list \
   "ptp_td_sd            ptp_td_sd" \
   "ptp_pps              ptp_pps" \

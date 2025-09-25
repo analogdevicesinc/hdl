@@ -240,7 +240,7 @@ module system_top (
   input  wire         qsfp_intl,
   output wire         qsfp_lpmode,
 
-  output        [3:0] led_qsfp
+  output        [3:0] qsfp_led
 );
 
   // internal signals
@@ -427,7 +427,7 @@ module system_top (
   wire [0:0] qsfp_rst;
   wire [7:0] led;
 
-  assign led_qsfp = led[7:4];
+  assign qsfp_led = led[7:4];
 
   wire ptp_rst;
 
