@@ -34,10 +34,10 @@ set_property -dict {PACKAGE_PIN G19 IOSTANDARD LVCMOS25} [get_ports twolanes_cnt
 
 # 120MHz clock
 set clk_period  8.333
-# differential propagation delay for ref_clk
+# differential propagation delay for ref_clk (LVDS_CLK coming from ADN4661, tPHLD)
 set tref_early  0.3
 set tref_late   1.5
-# differential propagation delay for virt_clk
+# differential propagation delay for virt_clk (the clock that enters ADG3241 has propagation delay until it exits it and goes to SN47LVC2G74; see ADG data sheet Propagation Delay A to B)
 set tvirt_early 0
 set tvirt_late  0.225
 # data delay
