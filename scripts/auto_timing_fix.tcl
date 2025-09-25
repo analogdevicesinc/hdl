@@ -26,6 +26,7 @@ if {![info exists ADI_AUTOFIX_MAX_ATTEMPTS]} {
     puts "INFO: ATF: ADI_AUTOFIX_MAX_ATTEMPTS not set, using default of $ADI_AUTOFIX_MAX_ATTEMPTS"
 }
 
+write_checkpoint -force "AutoTimingFix_before_system_top_placed.dcp"
 while {$attempt < $ADI_AUTOFIX_MAX_ATTEMPTS} {
     # Get the single worst timing path object in the design
     set worst_path [get_timing_paths -nworst 1 -max_paths 1 -delay_type min_max]
@@ -42,7 +43,6 @@ while {$attempt < $ADI_AUTOFIX_MAX_ATTEMPTS} {
         break ; # Abort automatic fix due to WNS threshold
     }
     # Attempt fix via phys_opt_design
-    write_checkpoint -force "AutoTimingFix_${attempt}_before_system_top_placed.dcp"
     if {$delay_type eq "min"} {
         phys_opt_design -hold_fix
     } elseif {$delay_type eq "max"} {
@@ -53,7 +53,6 @@ while {$attempt < $ADI_AUTOFIX_MAX_ATTEMPTS} {
     }
 }
 
-write_checkpoint -force "AutoTimingFix_${attempt}_final_system_top_placed.dcp"
 report_timing_summary -delay_type min_max -max_paths 5 -nworst 1 -file "AutoTimingFix_${attempt}_final_timing_summary.txt"
 
 # Print a final report
@@ -69,10 +68,13 @@ if {[llength $worst_path] == 0} {
     set final_wns [get_property SLACK $worst_path]
     if {$final_wns >= 0} {
         puts "INFO: ATF: auto timing fix SUCCESS after ${attempt} attempts - final WNS is ${final_wns} ns."
+        write_checkpoint -force "AutoTimingFix_success_system_top_placed.dcp"
     } elseif {$final_wns <= $ADI_AUTOFIX_WNS_THRESHOLD} {
         puts "WARNING: ATF: WNS (${wns} ns) exceeds threshold (${ADI_AUTOFIX_WNS_THRESHOLD} ns). Automatic fix aborted."
+        write_checkpoint -force "AutoTimingFix_aborted_system_top_placed.dcp"
     } else {
         puts "WARNING: ATF: auto timing fix FAILURE after ${attempt} attempts - final WNS is ${final_wns} ns."
+        write_checkpoint -force "AutoTimingFix_failure_system_top_placed.dcp"
     }
 }
 
