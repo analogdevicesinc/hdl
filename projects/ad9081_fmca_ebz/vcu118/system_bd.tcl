@@ -144,9 +144,6 @@ if {$ad_project_params(JESD_MODE) == "64B66B"} {
 
 }
 
-ad_ip_parameter axi_ddr_cntrl CONFIG.C0_CLOCK_BOARD_INTERFACE default_250mhz_clk1
-ad_ip_parameter axi_ddr_cntrl CONFIG.C0_DDR4_BOARD_INTERFACE ddr4_sdram_c1_062
-
 if {$ad_project_params(CORUNDUM) == "1"} {
 
   source $ad_hdl_dir/library/corundum/scripts/corundum_vcu118_cfg.tcl
