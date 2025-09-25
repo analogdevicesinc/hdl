@@ -15,7 +15,7 @@ set BOARD_NAME zc706
 #   Use over-writable parameters from the environment.
 #
 #    e.g.
-#      make RX_JESD_L=4 RX_JESD_M=2 TX_JESD_L=4 TX_JESD_M=2 
+#      make RX_JESD_L=4 RX_JESD_M=2 TX_JESD_L=4 TX_JESD_M=2
 
 # Parameter description:
 #   [RX/TX]_JESD_M : Number of converters per link
