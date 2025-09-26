@@ -7,10 +7,12 @@ Overview
 -------------------------------------------------------------------------------
 
 The AD719x-ASDZ HDL project supports the EVAL-AD719xASDZ family, comprised of
-:adi:`EVAL-AD7190ASDZ`, :adi:`EVAL-AD7193ASDZ` and :adi:`EVAL-AD7195ASDZ`, each
-evaluation kit featuring its own chip, the :adi:`AD7190`, :adi:`AD7193` and
-:adi:`AD7195` respectively - 4.8 kHz ultralow noise 24-bit sigma-delta ADC,
-each with its own particularities.
+:adi:`EVAL-AD7190ASDZ`, :adi:`EVAL-AD7193ASDZ` , :adi:`EVAL-AD7195ASDZ`, 
+:adi:`EVAL-AD4131-8` ,  :adi:`EVAL-AD4130-8` , :adi:`EVAL-AD4129-8` each
+evaluation kit featuring its own chip, the :adi:`AD7190`, :adi:`AD7193` ,
+:adi:`AD7195` , :adi:`AD4131-4` , :adi:`AD4131-8` , :adi:`AD4130-4` , 
+:adi:`AD4129-4` , :adi:`AD4129-8` respectively - 4.8 kHz ultralow noise
+sigma-delta ADC, each with its own particularities.
 
 The on-chip low noise gain stage means that signals of small amplitude can
 interface directly to the ADC. The internal clock option provides a compact
@@ -24,6 +26,10 @@ Supported boards
 - :adi:`EVAL-AD7193ASDZ`
 - :adi:`EVAL-AD7194ASDZ`
 - :adi:`EVAL-AD7195ASDZ`
+- :adi:`EVAL-AD4131-8`
+- :adi:`EVAL-AD4130-8`
+- :adi:`EVAL-AD4129-8`
+
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -33,6 +39,11 @@ Supported devices
 - :adi:`AD7193`
 - :adi:`AD7194`
 - :adi:`AD7195`
+- :adi:`AD4131-4`
+- :adi:`AD4131-8`
+- :adi:`AD4130-4`
+- :adi:`AD4129-4`
+- :adi:`AD4129-8`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -74,6 +85,16 @@ Supported carriers
    * -
      - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield
+   * - :adi:`EVAL-AD4131-8`
+     - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
+     - PMOD JA/Arduino shield
+   * - :adi:`EVAL-AD4130-8`
+     - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
+     - PMOD JA/Arduino shield
+   * - :adi:`EVAL-AD4129-8`
+     - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
+     - PMOD JA/Arduino shield
+     
 
 Block design
 -------------------------------------------------------------------------------
@@ -123,6 +144,10 @@ GPIOs
      - OUT
      - 32
      - 86
+    * - adc_int **
+     - OUT
+     - 31
+     - 85    
 
 .. admonition:: Legend
    :class: note
@@ -131,6 +156,9 @@ GPIOs
    on the Cora Z7S project it exists only when the project was built with
    ``ARDZ_PMOD_N=1`` parameter (used when connecting the eval. board through
    the Arduino header)
+  ``**`` - ``adc_int`` exists on the Cora Z7S project only when the project was 
+  built with ``ARDZ_PMOD_N=1`` parameter (used when connecting the eval. board 
+  through the Arduino header)
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -201,11 +229,19 @@ Hardware related
   - :adi:`AD7193`
   - :adi:`AD7194`
   - :adi:`AD7195`
+  - :adi:`AD4131-8`
+  - :adi:`AD4131-4`
+  - :adi:`AD4130-4`
+  - :adi:`AD4129-4`
+  - :adi:`AD4129-8`
   - :adi:`EVAL-AD7190ASDZ`
   - :adi:`EVAL-AD7192ASDZ`
   - :adi:`EVAL-AD7193ASDZ`
   - :adi:`EVAL-AD7194ASDZ`
   - :adi:`EVAL-AD7195ASDZ`
+  - :adi:`EVAL-AD4131-8`
+  - :adi:`EVAL-AD4130-8`
+  - :adi:`EVAL-AD4129-8`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
