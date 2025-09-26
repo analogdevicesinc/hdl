@@ -1,4 +1,4 @@
-<!-- no_no_os -->
+<!-- no_build_example, no_dts, no_no_os -->
 
 # AD9084-EBZ/FM87 HDL Project
 
