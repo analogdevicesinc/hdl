@@ -1105,9 +1105,9 @@ e.g. ``component.xml`` and ``.lock`` files.
 -------------------------------------------------------------------------------
 
 First, you have to write the SD card with the
-:external+documentation:doc:`ADI Kuiper image <linux/kuiper/index>`.
+:external+adi-kuiper-gen:doc:`ADI Kuiper image <index>`.
 Check this
-:external+documentation:ref:`tutorial <kuiper sdcard>`.
+:external+adi-kuiper-gen:ref:`tutorial <quick-start>`.
 
 Once you are done with that, you can go on with the following steps.
 
