@@ -133,23 +133,25 @@ module spi_engine_execution_shiftreg #(
     .last_handshake (data_sdo_v));
 
   genvar i;
-  for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin: g_sdo_shift_reg
-    // Load the SDO parallel data into the SDO shift register.
-    reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
-    always @(posedge clk) begin
-      if (!sdo_enabled || !exec_cmd) begin
-        data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
-      end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
-        if (first_bit == 1'b1) begin
-          data_sdo_shift <= sdo_lane_mask[i] ? aligned_sdo_data[i * DATA_WIDTH+:DATA_WIDTH] : {DATA_WIDTH{sdo_idle_state}};
-        end else begin
-          data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
+  generate
+    for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin: g_sdo_shift_reg
+      // Load the SDO parallel data into the SDO shift register.
+      reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
+      always @(posedge clk) begin
+        if (!sdo_enabled || !exec_cmd) begin
+          data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
+        end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
+          if (first_bit == 1'b1) begin
+            data_sdo_shift <= sdo_lane_mask[i] ? aligned_sdo_data[i * DATA_WIDTH+:DATA_WIDTH] : {DATA_WIDTH{sdo_idle_state}};
+          end else begin
+            data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
+          end
         end
       end
-    end
 
-    assign sdo_int[i] = data_sdo_shift[DATA_WIDTH-1];
-  end
+      assign sdo_int[i] = data_sdo_shift[DATA_WIDTH-1];
+    end
+  endgenerate
 
   assign sdo_toshiftreg = (transfer_active && trigger_tx && first_bit && sdo_enabled);
 

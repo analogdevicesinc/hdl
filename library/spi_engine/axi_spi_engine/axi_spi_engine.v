@@ -473,8 +473,6 @@ module axi_spi_engine #(
     .m_axis_empty(),
     .m_axis_almost_empty(sdo_fifo_almost_empty));
 
-  assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h3a;
-
   integer i;
   always @(posedge spi_clk) begin
     if (!spi_resetn) begin
@@ -787,6 +785,5 @@ module axi_spi_engine #(
     .out_clk  (clk),
     .out_data (sdi_level_s)
   );
-
 
 endmodule
