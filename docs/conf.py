@@ -6,7 +6,7 @@ from os import path
 
 repository = 'hdl'
 project = 'HDL'
-copyright = '2024, Analog Devices, Inc.'
+copyright = '2023-2025, Analog Devices, Inc.'
 author = 'Analog Devices, Inc.'
 version = '' # documentation version, will be printed on the cover page
 
@@ -26,7 +26,15 @@ source_suffix = '.rst'
 
 # -- External docs configuration ----------------------------------------------
 
-interref_repos = ['doctools', 'documentation', 'pyadi-iio']
+interref_repos = [
+        'adi-kuiper-gen',
+        'doctools',
+        'documentation',
+        'no-OS',
+        'precision-converters-firmware',
+        'pyadi-iio',
+        'scopy',
+]
 
 # -- Custom extensions configuration ------------------------------------------
 
