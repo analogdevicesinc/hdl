@@ -31,15 +31,6 @@ source ../../../projects/scripts/adi_project_intel.tcl
 #   [RX/TX]_JESD_NP : Number of bits per sample
 #   [RX/TX]_NUM_LINKS : Number of links - only when ASYMMETRIC_A_B_MODE = 0
 #   [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M)
-#   ASYMMETRIC_A_B_MODE : When set, each Apollo side has its own JESD link
-#   RX_B_LANE_RATE :  Lane rate of the Rx link ( Apollo to FPGA ) for B side
-#   TX_B_LANE_RATE :  Lane rate of the Tx link ( FPGA to Apollo ) for B side
-#   [RX/TX]_B_JESD_M : Number of converters per link for B side
-#   [RX/TX]_B_JESD_L : Number of lanes per link for B side
-#   [RX/TX]_B_JESD_NP : Number of bits per sample for B side
-#   [RX/TX]_B_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M) for B side
-#
-# !!! Requires the following hdl branch: https://github.com/analogdevicesinc/hdl/tree/dev_fm87_avlfifo
 #
 
 adi_project ad9084_ebz_fm87 [list \
