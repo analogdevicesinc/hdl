@@ -4,12 +4,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="This is a stub page, content will be updated shortly." name="description" />
+<meta content="The AD9084-EBZ reference design (also known as Apollo) is a processor based (e.g. Microblaze) embedded system. This reference design works with EVAL-AD9084. The design consists from a receive and a transmit chain." name="description" />
 
-    <title>AD9084-EBZ (Apollo) HDL project &#8212; HDL  documentation</title>
+    <title>AD9084-EBZ HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=8d0b0339" />
     <script async="async" src="../../_static/app.umd.js?v=2f9373fc"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -91,15 +92,20 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AD9084-EBZ (Apollo) HDL project</a><ul>
+<li><a class="reference internal" href="#">AD9084-EBZ HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
-<li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
+<li><a class="reference internal" href="#block-diagram">Block diagram</a><ul>
+<li><a class="reference internal" href="#example-block-design-for-asymmetric-a-b-mode-0-m-4-l-8-num-links-2-jesd204c">Example block design for ASYMMETRIC_A_B_MODE=0; M=4; L=8; NUM_LINKS=2; JESD204C</a></li>
+<li><a class="reference internal" href="#example-block-design-for-asymmetric-a-b-mode-1-m-4-l-8-jesd204c">Example block design for ASYMMETRIC_A_B_MODE=1; M=4; L=8; JESD204C</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#clock-scheme">Clock scheme</a><ul>
+<li><a class="reference internal" href="#vcu118">VCU118</a></li>
 <li><a class="reference internal" href="#limitations">Limitations</a></li>
 </ul>
 </li>
@@ -111,11 +117,19 @@
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
 <li><a class="reference internal" href="#software-considerations">Software considerations</a><ul>
+<li><a class="reference internal" href="#adc-crossbar-config">ADC - crossbar config</a></li>
+<li><a class="reference internal" href="#dac-crossbar-config">DAC - crossbar config</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resources">Resources</a><ul>
+<li><a class="reference internal" href="#systems-related">Systems related</a></li>
 <li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
 <li><a class="reference internal" href="#hdl-related">HDL related</a></li>
 <li><a class="reference internal" href="#software-related">Software related</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#more-information">More information</a></li>
+<li><a class="reference internal" href="#support">Support</a></li>
 </ul>
 </li>
 </ul>
@@ -380,65 +394,1582 @@ Content on this topic
 </div>
           <div class="body" role="main">
             
-  <section id="ad9084-ebz-apollo-hdl-project">
-<span id="ad9084-ebz"></span><h1>AD9084-EBZ (Apollo) HDL project<a class="headerlink" href="#ad9084-ebz-apollo-hdl-project" title="Permalink to this heading"></a></h1>
-<div class="admonition attention">
-<p class="admonition-title">Attention</p>
-<p>This is a stub page, content will be updated shortly.</p>
-</div>
+  <section id="ad9084-ebz-hdl-project">
+<span id="ad9084-ebz"></span><h1>AD9084-EBZ HDL project<a class="headerlink" href="#ad9084-ebz-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9084" target="_blank">AD9084-EBZ</a> reference design
+(also known as Apollo) is a processor based
+(e.g. Microblaze) embedded system.
+This reference design works with <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9084" target="_blank">EVAL-AD9084</a>.
+The design consists from a receive and a transmit chain.</p>
+<p>The <strong>receive chain</strong> transports the captured samples from ADC to the system
+memory (DDR). Before transferring the data to DDR, the samples are stored
+in a buffer implemented on BRAMs from the FPGA fabric
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_adcfifo" target="_blank">util_adcfifo</a>).
+The space allocated in the buffer for each channel
+depends on the number of currently active channels. It goes up to M x
+64k samples if a single channel is selected or 64k samples per channel
+if all channels are selected.</p>
+<p>The <strong>transmit chain</strong> transports samples from the system memory to the DAC
+devices. Before streaming out the data to the DAC through the JESD link,
+the samples first are loaded into a buffer
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_dacfifo" target="_blank">util_dacfifo</a>) which will
+cyclically stream the samples at the <code class="docutils literal notranslate"><span class="pre">tx_device_clk</span></code> data rate. The space
+allocated in the transmit buffer for each channel depends on the number
+of currently active channels. It goes up to M x 64k samples if a single
+channel is selected or 64k samples per channel if all channels are
+selected.</p>
+<p>All cores from the receive and transmit chains are programmable through
+an AXI-Lite interface.</p>
+<p>The transmit and receive chains can operate at different data rates
+having separate <code class="docutils literal notranslate"><span class="pre">rx_device_clk</span></code>/<code class="docutils literal notranslate"><span class="pre">tx_device_clk</span></code> and corresponding lane rates
+but must share the same reference clock.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9084" target="_blank">AD9084-EBZ</a> evaluation board</p></li>
+</ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9084" target="_blank">AD9084</a></p></li>
+</ul>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
+<th class="head"><p>Carrier</p></th>
+<th class="head"><p>FMC slot</p></th>
+<th class="head"><p>Maximum number of lanes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9084" target="_blank">AD9084-EBZ</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a></p></td>
+<td><p>FMCB</p></td>
+<td><p>16 (8 per Apollo side)</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a></p></td>
+<td><p>FMC+</p></td>
+<td><p>24 (12 per Apollo side)</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a></p></td>
+<td><p>FMC2</p></td>
+<td><p>8 (4 per Apollo side)</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/VPK180" target="_blank">VPK180</a></p></td>
+<td><p>FMC+</p></td>
+<td><p>8 (4 per Apollo side)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The Apollo chip is split into two sides, each side having up to 12 JESD
+lanes and 4 converters:</p>
+<ul class="simple">
+<li><p>Side A</p></li>
+<li><p>Side B</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">ASYMMETRIC_A_B_MODE</span></code> parameter is used to enable the asymmetric A/B
+mode where each Apollo side has a separate JESD link inside the block design.</p>
+<p>If the ASYMMETRIC_A_B_MODE parameter is set to 0, the block design will merge
+the two sides into a single link.</p>
+<p>Given the following JESD204 configuration and assuming that
+<strong>ASYMMETRIC_A_B_MODE = 0</strong>:</p>
+<ul class="simple">
+<li><p>L = 8</p></li>
+<li><p>M = 4</p></li>
+<li><p>S = 1</p></li>
+<li><p>N = NP = 16</p></li>
+<li><p><strong>NUM_LINKS = 2</strong></p></li>
+</ul>
+<p>The resulted design will configure each Apollo side with the following
+parameters, but will merge the two sides into a single JESD link inside the
+design:</p>
+<ul class="simple">
+<li><p>L = 8</p></li>
+<li><p>M = 4</p></li>
+<li><p>S = 1</p></li>
+<li><p>N = NP = 16</p></li>
+</ul>
+<p>If however, <strong>NUM_LINKS = 1</strong>, the design will configure each side with the
+following parameters:</p>
+<ul class="simple">
+<li><p>L = 4</p></li>
+<li><p>M = 2</p></li>
+<li><p>S = 1</p></li>
+<li><p>N = NP = 16</p></li>
+</ul>
+<p>Given the following JESD204 configuration and assuming that
+<strong>ASYMMETRIC_A_B_MODE = 1</strong>:</p>
+<ul class="simple">
+<li><p>L = 8</p></li>
+<li><p>M = 4</p></li>
+<li><p>S = 1</p></li>
+<li><p>N = NP = 16</p></li>
+<li><p><strong>NUM_LINKS is ignored</strong></p></li>
+</ul>
+<p>The resulted design will configure each Apollo side with the following
+parameters, each having it’s own JESD link inside the design:</p>
+<ul class="simple">
+<li><p>L = 8</p></li>
+<li><p>M = 4</p></li>
+<li><p>S = 1</p></li>
+<li><p>N = NP = 16</p></li>
+</ul>
+</div>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
+<p>The data path and clock domains are depicted in the below diagrams:</p>
+<section id="example-block-design-for-asymmetric-a-b-mode-0-m-4-l-8-num-links-2-jesd204c">
+<h4>Example block design for ASYMMETRIC_A_B_MODE=0; M=4; L=8; NUM_LINKS=2; JESD204C<a class="headerlink" href="#example-block-design-for-asymmetric-a-b-mode-0-m-4-l-8-num-links-2-jesd204c" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9084_204c_M4L8.svg"><img alt="AD9084-FMC JESD204C ASYMMETRIC_A_B_MODE=0 M=4 L=8 NUM_LINKS=2 block diagram" class="align-center" src="../../_images/ad9084_204c_M4L8.svg" width="800" /></a>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Build instructions:</strong></p>
+<p>The project must be built with the following parameters:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">JESD_MODE</span><span class="o">=</span>64B66B<span class="w">  </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">20</span>.625<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_LANE_RATE</span><span class="o">=</span><span class="m">20</span>.625<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_NUM_LINKS</span><span class="o">=</span><span class="m">2</span><span class="w">    </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_NUM_LINKS</span><span class="o">=</span><span class="m">2</span><span class="w">    </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">ASYMMETRIC_A_B_MODE</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></div>
+<p>The Rx link is operating with the following parameters on each Apollo side:</p>
+<ul class="simple">
+<li><p>Rx Deframer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Mode 47)</p></li>
+<li><p>Sample Rate: 2500 MSPS</p></li>
+<li><p>RX_DEVICE_CLK: 312.5 MHz (Lane Rate/66)</p></li>
+<li><p>REF_CLK: 625 MHz (Lane Rate/33)</p></li>
+<li><p>JESD204C Lane Rate: 20.625 Gbps</p></li>
+<li><p>QPLL1</p></li>
+</ul>
+<p>The Tx link is operating with the following parameters:</p>
+<ul class="simple">
+<li><p>Tx Framer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Mode 47)</p></li>
+<li><p>Sample Rate: 2500 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>TX_DEVICE_CLK: 312.5 MHz (Lane Rate/66)</p></li>
+<li><p>REF_CLK: 625 MHz (Lane Rate/33)</p></li>
+<li><p>JESD204C Lane Rate: 20.625 Gbps</p></li>
+<li><p>QPLL1</p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Because of the two Apollo sides, the total number of lanes in the design is
+16 and the total number of converters is 8.</p>
+</div>
+</section>
+<section id="example-block-design-for-asymmetric-a-b-mode-1-m-4-l-8-jesd204c">
+<h4>Example block design for ASYMMETRIC_A_B_MODE=1; M=4; L=8; JESD204C<a class="headerlink" href="#example-block-design-for-asymmetric-a-b-mode-1-m-4-l-8-jesd204c" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9084_204c_M4L8_asymmetric.svg"><img alt="AD9084-FMC JESD204C ASYMMETRIC_A_B_MODE=1 M=4 L=8 NUM_LINKS=2 block diagram" class="align-center" src="../../_images/ad9084_204c_M4L8_asymmetric.svg" width="800" /></a>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Build instructions:</strong></p>
+<p>The project must be built with the following parameters:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">JESD_MODE</span><span class="o">=</span>64B66B<span class="w">  </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">20</span>.625<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_LANE_RATE</span><span class="o">=</span><span class="m">20</span>.625<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">ASYMMETRIC_A_B_MODE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_B_LANE_RATE</span><span class="o">=</span><span class="m">20</span>.625<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_B_LANE_RATE</span><span class="o">=</span><span class="m">20</span>.625<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_B_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_B_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_B_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_B_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w">   </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_B_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_B_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_B_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_B_JESD_NP</span><span class="o">=</span><span class="m">16</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></div>
+<p>The Rx link is operating with the following parameters on each Apollo side:</p>
+<ul class="simple">
+<li><p>Rx Deframer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Mode 47)</p></li>
+<li><p>Sample Rate: 2500 MSPS</p></li>
+<li><p>RX_DEVICE_CLK: 312.5 MHz (Lane Rate/66)</p></li>
+<li><p>REF_CLK: 625 MHz (Lane Rate/33)</p></li>
+<li><p>JESD204C Lane Rate: 20.625 Gbps</p></li>
+<li><p>QPLL1</p></li>
+</ul>
+<p>The Tx link is operating with the following parameters:</p>
+<ul class="simple">
+<li><p>Tx Framer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Mode 47)</p></li>
+<li><p>Sample Rate: 2500 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>TX_DEVICE_CLK: 312.5 MHz (Lane Rate/66)</p></li>
+<li><p>REF_CLK: 625 MHz (Lane Rate/33)</p></li>
+<li><p>JESD204C Lane Rate: 20.625 Gbps</p></li>
+<li><p>QPLL1</p></li>
+</ul>
+</section>
 </section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
+<p>The block design supports configuration of parameters and scales.</p>
+<p>We have listed a couple of examples at section <a class="reference internal" href="#ad9084-ebz-build"><span class="std std-ref">Building the HDL project</span></a> and
+the default modes for each project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The parameters for Rx or Tx links can be changed from the
+<strong>system_project.tcl</strong> file, located in
+hdl/projects/ad9084_ebz/$CARRIER/system_project.tcl</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>For JESD204B:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[Lane Rate = \frac{IQ Sample Rate * M * NP * \frac{10}{8}}{L}\]</div>
+</div>
+<p>For JESD204C:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[Lane Rate = \frac{IQ Sample Rate * M * NP * \frac{66}{64}}{L}\]</div>
+</div>
+</div>
+<p>The following are the parameters of this project that can be configured:</p>
+<ul class="simple">
+<li><p>JESD_MODE: used link layer encoder mode</p>
+<ul>
+<li><p>64B66B - 64b66b link layer defined in JESD204C, uses ADI IP as Physical
+Layer (except for Versal / Intel)</p></li>
+<li><p>8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
+Layer</p></li>
+</ul>
+</li>
+<li><p>HSCI_ENABLE: enables the HSCI IP (Xilinx only)</p></li>
+<li><p>ASYMMETRIC_A_B_MODE: enables the asymmetric A/B mode where each Apollo side
+has a separate JESD link (Xilinx only)</p></li>
+<li><p>RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
+(A or A&amp;B link if ASYMMETRIC_A_B_MODE = 0)</p></li>
+<li><p>TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)
+(A or A&amp;B link if ASYMMETRIC_A_B_MODE = 0)</p></li>
+<li><p>REF_CLK_RATE: the rate of the reference clock (Versal and Intel only)</p></li>
+<li><p>DEVICE_CLK_RATE: the rate of the device clock (Intel only)</p></li>
+<li><p>[RX/TX]_JESD_M: number of converters per link
+(A or A&amp;B link if ASYMMETRIC_A_B_MODE = 0)</p></li>
+<li><p>[RX/TX]_JESD_L: number of lanes per link
+(A or A&amp;B link if ASYMMETRIC_A_B_MODE = 0)</p></li>
+<li><p>[RX/TX]_JESD_S: number of samples per frame
+(A or A&amp;B link if ASYMMETRIC_A_B_MODE = 0)</p></li>
+<li><p>[RX/TX]_JESD_NP: number of bits per sample
+(A or A&amp;B link if ASYMMETRIC_A_B_MODE = 0)</p></li>
+<li><p>[RX/TX]_NUM_LINKS: number of links
+(A or A&amp;B link if ASYMMETRIC_A_B_MODE = 0)</p></li>
+<li><p>[RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
+kilosamples per converter (M) (A or A&amp;B link if ASYMMETRIC_A_B_MODE = 0)</p></li>
+<li><p>RX_B_LANE_RATE: lane rate of the Rx link (MxFE to FPGA) (B link)</p></li>
+<li><p>TX_B_LANE_RATE: lane rate of the Tx link (FPGA to MxFE) (B link)</p></li>
+<li><p>[RX/TX]_B_JESD_M: number of converters per link (B link)</p></li>
+<li><p>[RX/TX]_B_JESD_L: number of lanes per link (B link)</p></li>
+<li><p>[RX/TX]_B_JESD_S: number of samples per frame (B link)</p></li>
+<li><p>[RX/TX]_B_JESD_NP: number of bits per sample (B link)</p></li>
+<li><p>[RX/TX]_B_NUM_LINKS: number of links (B link)</p></li>
+<li><p>[RX/TX]_B_KS_PER_CHANNEL: Number of samples stored in internal buffers in
+kilosamples per converter (M) (B link)</p></li>
+</ul>
 </section>
 <section id="clock-scheme">
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
+<p>The clock sources depend on the carrier that is used:</p>
+<section id="vcu118">
+<h4><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a><a class="headerlink" href="#vcu118" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9084_clock_scheme_vcu118.svg"><img alt="AD9084-EBZ VCU118 clock scheme" class="align-center" src="../../_images/ad9084_clock_scheme_vcu118.svg" width="800" /></a>
+</section>
 <section id="limitations">
 <h4>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading"></a></h4>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For the parameter selection, the following restrictions apply:</p>
+<ul class="simple">
+<li><p>NP = 8, 12, 16</p></li>
+<li><p>F = 1, 2, 3, 4, 6, 8</p></li>
+<li><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx-restrictions"><span class="std std-ref">JESD204B/C Link Rx peripheral &gt; restrictions</span></a></p></li>
+<li><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx-restrictions"><span class="std std-ref">JESD204B/C Link Tx peripheral &gt; restrictions</span></a></p></li>
+</ul>
+</div>
 </section>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
+<p>The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL
+(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
+<p>Depending on the values of parameters $ASYMMETRIC_A_B_MODE, $ADI_PHY_SEL
+and $HSCI_ENABLE,
+some IPs are instatiated and some are not.</p>
+<p>Check-out the table below to find out the conditions.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Depends on parameter</p></th>
+<th class="head"><p>Microblaze</p></th>
+<th class="head"><p>ZynqMP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>apollo_rx_xcvr</p></td>
+<td><p>$ADI_PHY_SEL==1</p></td>
+<td><p>0x44A6_0000</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_rx_jesd</p></td>
+<td></td>
+<td><p>0x44A9_0000</p></td>
+<td><p>0xA4A9_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>rx_apollo_tpl_core</p></td>
+<td></td>
+<td><p>0x44A1_0000</p></td>
+<td><p>0xA4A1_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_rx_dma</p></td>
+<td></td>
+<td><p>0x7C42_0000</p></td>
+<td><p>0xBC42_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>apollo_rx_data_offload</p></td>
+<td></td>
+<td><p>0x7C45_0000</p></td>
+<td><p>0xBC45_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_rx_b_xcvr</p></td>
+<td><p>$ADI_PHY_SEL==1 &amp; $ASYMMETRIC_A_B_MODE==1</p></td>
+<td><p>0x44AA_0000</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-even"><td><p>apollo_rx_b_jesd</p></td>
+<td><p>$ASYMMETRIC_A_B_MODE==1</p></td>
+<td><p>0x44AC_0000</p></td>
+<td><p>0xA4AC_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>rx_b_apollo_tpl_core</p></td>
+<td><p>$ASYMMETRIC_A_B_MODE==1</p></td>
+<td><p>0x44AB_0000</p></td>
+<td><p>0xA4AB_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>apollo_rx_b_dma</p></td>
+<td><p>$ASYMMETRIC_A_B_MODE==1</p></td>
+<td><p>0x7C47_0000</p></td>
+<td><p>0xBC47_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_rx_b_data_offload</p></td>
+<td><p>$ASYMMETRIC_A_B_MODE==1</p></td>
+<td><p>0x7C4A_0000</p></td>
+<td><p>0xBC4A_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>apollo_tx_xcvr</p></td>
+<td><p>$ADI_PHY_SEL==1</p></td>
+<td><p>0x44B6_0000</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_tx_jesd</p></td>
+<td></td>
+<td><p>0x44B9_0000</p></td>
+<td><p>0xA4B9_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>tx_apollo_tpl_core</p></td>
+<td></td>
+<td><p>0x44B1_0000</p></td>
+<td><p>0xA4B1_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_tx_dma</p></td>
+<td></td>
+<td><p>0x7C43_0000</p></td>
+<td><p>0xBC43_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>apollo_tx_data_offload</p></td>
+<td></td>
+<td><p>0x7C44_0000</p></td>
+<td><p>0xBC44_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_tx_b_xcvr</p></td>
+<td><p>$ADI_PHY_SEL==1 &amp; $ASYMMETRIC_A_B_MODE==1</p></td>
+<td><p>0x44BA_0000</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-even"><td><p>apollo_tx_b_jesd</p></td>
+<td><p>$ASYMMETRIC_A_B_MODE==1</p></td>
+<td><p>0x44BC_0000</p></td>
+<td><p>0xA4BC_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>tx_b_apollo_tpl_core</p></td>
+<td><p>$ASYMMETRIC_A_B_MODE==1</p></td>
+<td><p>0x44BB_0000</p></td>
+<td><p>0xA4BB_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>apollo_tx_b_dma</p></td>
+<td><p>$ASYMMETRIC_A_B_MODE==1</p></td>
+<td><p>0x7C48_0000</p></td>
+<td><p>0xBC48_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_tx_b_data_offload</p></td>
+<td><p>$ASYMMETRIC_A_B_MODE==1</p></td>
+<td><p>0x7C49_0000</p></td>
+<td><p>0xBC44_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_hsci</p></td>
+<td><p>$HSCI_ENABLE==1</p></td>
+<td><p>0x7C50_0000</p></td>
+<td><p>0xBC50_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_hsci_clkgen</p></td>
+<td><p>$HSCI_ENABLE==1</p></td>
+<td><p>0x44AD_0000</p></td>
+<td><p>0xA4AD_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_spi_2</p></td>
+<td></td>
+<td><p>0x44A8_0000</p></td>
+<td><p>0xA4A8_0000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For the Intel carriers, only a part of the CPU interrupts are specified,
+as the rest depend on the values of $TX_NUM_OF_LANES
+(see <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9084_ebz/common/ad9084_ebz_qsys.tcl" target="_blank">projects/ad9084_ebz/common/ad9084_ebz_qsys.tcl</a>
+for more details).</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Intel</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>apollo_rx_jesd204.link_reconfig</p></td>
+<td><p>0x000C_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_rx_jesd204.link_management</p></td>
+<td><p>0x000C_4000</p></td>
+</tr>
+<tr class="row-even"><td><p>apollo_tx_jesd204.link_reconfig</p></td>
+<td><p>0x000C_8000</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_tx_jesd204.link_management</p></td>
+<td><p>0x000C_C000</p></td>
+</tr>
+<tr class="row-even"><td><p>apollo_rx_tpl.s_axi</p></td>
+<td><p>0x000D_2000</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_tx_tpl.s_axi</p></td>
+<td><p>0x000D_4000</p></td>
+</tr>
+<tr class="row-even"><td><p>apollo_rx_dma.s_axi</p></td>
+<td><p>0x000D_8000</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_tx_dma.s_axi</p></td>
+<td><p>0x000D_C000</p></td>
+</tr>
+<tr class="row-even"><td><p>apollo_gpio.s1</p></td>
+<td><p>0x000E_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>apollo_spi.spi_control_port</p></td>
+<td><p>0x000E_A000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 <section id="spi-connections">
 <h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>SPI type</p></th>
+<th class="head"><p>SPI manager instance</p></th>
+<th class="head"><p>SPI subordinate</p></th>
+<th class="head"><p>CS</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PS</p></td>
+<td><p>spi0</p></td>
+<td><p>ADF4382</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>PS</p></td>
+<td><p>spi0</p></td>
+<td><p>HMC7044</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>axi_spi_2</p></td>
+<td><p>AD9084</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 <section id="gpios">
 <h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
+<p>The following table lists the GPIO signals used in this project that
+are connected to the Apollo evaluation board and are common between
+all the carriers.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Apollo GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"></th>
+<th class="head"><p>Microblaze</p></th>
+<th class="head"><p>ZynqMP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>resetb</p></td>
+<td><p>OUT</p></td>
+<td><p>62</p></td>
+<td><p>62</p></td>
+<td><p>30</p></td>
+</tr>
+<tr class="row-even"><td><p>trig_b[1:0]</p></td>
+<td><p>OUT</p></td>
+<td><p>61:60</p></td>
+<td><p>61:60</p></td>
+<td><p>29:28</p></td>
+</tr>
+<tr class="row-odd"><td><p>trig_a[1:0]</p></td>
+<td><p>OUT</p></td>
+<td><p>59:58</p></td>
+<td><p>59:58</p></td>
+<td><p>27:26</p></td>
+</tr>
+<tr class="row-even"><td><p>trig_in</p></td>
+<td><p>IN</p></td>
+<td><p>53</p></td>
+<td><p>53</p></td>
+<td><p>21</p></td>
+</tr>
+<tr class="row-odd"><td><p>aux_gpio</p></td>
+<td><p>INOUT</p></td>
+<td><p>48</p></td>
+<td><p>48</p></td>
+<td><p>16</p></td>
+</tr>
+<tr class="row-even"><td><p>gpio[30:15]</p></td>
+<td><p>INOUT</p></td>
+<td><p>47:32</p></td>
+<td><p>47:32</p></td>
+<td><p>15:0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The following table lists the GPIO signals that are only present
+in the Versal projects.</p>
+<p>They are used from the linux kernel to
+control the reset sequence of the GTY/GTYP transceivers.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Versal transceivers GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"></th>
+<th class="head"><p>ZynqMP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>tx_reset_datapath</p></td>
+<td><p>IN</p></td>
+<td><p>71</p></td>
+<td><p>39</p></td>
+</tr>
+<tr class="row-even"><td><p>rx_reset_datapath</p></td>
+<td><p>IN</p></td>
+<td><p>70</p></td>
+<td><p>38</p></td>
+</tr>
+<tr class="row-odd"><td><p>tx_reset_pll_and_datapath</p></td>
+<td><p>IN</p></td>
+<td><p>69</p></td>
+<td><p>37</p></td>
+</tr>
+<tr class="row-even"><td><p>rx_reset_pll_and_datapath</p></td>
+<td><p>IN</p></td>
+<td><p>68</p></td>
+<td><p>36</p></td>
+</tr>
+<tr class="row-odd"><td><p>gt_reset</p></td>
+<td><p>IN</p></td>
+<td><p>67</p></td>
+<td><p>35</p></td>
+</tr>
+<tr class="row-even"><td><p>mst_resetdone</p></td>
+<td><p>OUT</p></td>
+<td><p>66</p></td>
+<td><p>34</p></td>
+</tr>
+<tr class="row-odd"><td><p>tx_resetdone</p></td>
+<td><p>OUT</p></td>
+<td><p>65</p></td>
+<td><p>33</p></td>
+</tr>
+<tr class="row-even"><td><p>rx_resetdone</p></td>
+<td><p>OUT</p></td>
+<td><p>64</p></td>
+<td><p>32</p></td>
+</tr>
+<tr class="row-odd"><td><p>tx_b_reset_datapath</p></td>
+<td><p>IN</p></td>
+<td><p>79</p></td>
+<td><p>47</p></td>
+</tr>
+<tr class="row-even"><td><p>rx_b_reset_datapath</p></td>
+<td><p>IN</p></td>
+<td><p>78</p></td>
+<td><p>46</p></td>
+</tr>
+<tr class="row-odd"><td><p>tx_b_reset_pll_and_datapath</p></td>
+<td><p>IN</p></td>
+<td><p>77</p></td>
+<td><p>45</p></td>
+</tr>
+<tr class="row-even"><td><p>rx_b_reset_pll_and_datapath</p></td>
+<td><p>IN</p></td>
+<td><p>76</p></td>
+<td><p>44</p></td>
+</tr>
+<tr class="row-odd"><td><p>gt_b_reset</p></td>
+<td><p>IN</p></td>
+<td><p>75</p></td>
+<td><p>43</p></td>
+</tr>
+<tr class="row-even"><td><p>mst_b_resetdone</p></td>
+<td><p>OUT</p></td>
+<td><p>74</p></td>
+<td><p>42</p></td>
+</tr>
+<tr class="row-odd"><td><p>tx_b_resetdone</p></td>
+<td><p>OUT</p></td>
+<td><p>73</p></td>
+<td><p>41</p></td>
+</tr>
+<tr class="row-even"><td><p>rx_b_resetdone</p></td>
+<td><p>OUT</p></td>
+<td><p>72</p></td>
+<td><p>40</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The following table lists the GPIOs that are only preset on the Intel
+carriers.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Intel GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"></th>
+<th class="head"><p>ZynqMP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>tx_fifo_bypass_bypass</p></td>
+<td><p>IN</p></td>
+<td><p>63</p></td>
+<td><p>31</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
+<p>Below are the Programmable Logic interrupts used in this project.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance name</p></th>
+<th class="head"><p>HDL</p></th>
+<th class="head"><p>Linux Microblaze</p></th>
+<th class="head"><p>Linux ZynqMP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>axi_apollo_rx_dma</p></td>
+<td><p>13</p></td>
+<td><p>13</p></td>
+<td><p>97</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_apollo_tx_dma</p></td>
+<td><p>12</p></td>
+<td><p>12</p></td>
+<td><p>96</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_apollo_rx_jesd</p></td>
+<td><p>11</p></td>
+<td><p>11</p></td>
+<td><p>95</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_apollo_tx_jesd</p></td>
+<td><p>10</p></td>
+<td><p>10</p></td>
+<td><p>94</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_spi_2</p></td>
+<td><p>9</p></td>
+<td><p>9</p></td>
+<td><p>93</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_apollo_rx_b_dma</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td><p>88</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_apollo_tx_b_dma</p></td>
+<td><p>3</p></td>
+<td><p>3</p></td>
+<td><p>87</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_apollo_rx_b_jesd</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>86</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_apollo_tx_b_jesd</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>85</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
+<span id="ad9084-ebz-build"></span><h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
+<p>The design is built upon ADI’s generic HDL reference design framework.
+ADI distributes the bit/elf files of these projects as part of the
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
+If you want to build the sources, ADI makes them available on the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
+<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
+the HDL repository.</p>
+<p>Then go to the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9084_ebz" target="_blank">projects/ad9084_ebz</a>
+location and run the make command by typing in you command prompt:</p>
+<p>Example for building the project with parameters:</p>
+<p><strong>Linux/Cygwin/WSL</strong></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad9084_ebz/vck190
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad9084_ebz/vck190$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">2</span>.5<span class="w"> </span><span class="nv">TX_LANE_RATE</span><span class="o">=</span><span class="m">2</span>.5<span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w">   </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w"> </span><span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">TX_JESD_NP</span><span class="o">=</span><span class="m">16</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The following dropdowns contain tables with the parameters that can be used to
+configure this project, depending on the carrier used.
+Where a cell contains a — (dash) it means that the parameter doesn’t exist
+for that project (ad9084_ebz/$carrier).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For the parameter selection, the following restrictions apply:</p>
+<ul class="simple">
+<li><p>NP = 8, 12, 16</p></li>
+<li><p>F = 1, 2, 3, 4, 6, 8</p></li>
+<li><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx-restrictions"><span class="std std-ref">JESD204B/C Link Rx peripheral &gt; restrictions</span></a></p></li>
+<li><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx-restrictions"><span class="std std-ref">JESD204B/C Link Tx peripheral &gt; restrictions</span></a></p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">NP</span></code> notation is equivalent with <code class="docutils literal notranslate"><span class="pre">N'</span></code></p>
+</div>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="6c48f096e1eb0f4fd22995b4a449a2d57ed540b9" name="6c48f096e1eb0f4fd22995b4a449a2d57ed540b9" type="checkbox"></input><label for="6c48f096e1eb0f4fd22995b4a449a2d57ed540b9"><p>Default values of the make parameters for AD9084-EBZ</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" rowspan="2"><p>Parameter</p></th>
+<th class="head" colspan="5"><p>Default value of the parameters</p></th>
+</tr>
+<tr class="row-even"><th class="head"><p>FM87</p></th>
+<th class="head"><p>VCU118</p></th>
+<th class="head"><p>VCK190</p></th>
+<th class="head" colspan="2"><p>VPK180</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>JESD_MODE</p></td>
+<td><p>64B66B</p></td>
+<td><p>64B66B</p></td>
+<td><p>64B66B</p></td>
+<td colspan="2"><p>64B66B</p></td>
+</tr>
+<tr class="row-even"><td><p>ENABLE_HSCI</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>1</p></td>
+<td><p>1*</p></td>
+<td colspan="2"><p>1*</p></td>
+</tr>
+<tr class="row-odd"><td><p>REF_CLK_RATE*</p></td>
+<td><p>312.5</p></td>
+<td><p>—</p></td>
+<td><p>312.5</p></td>
+<td colspan="2"><p>312.5</p></td>
+</tr>
+<tr class="row-even"><td><p>DEVICE_CLK_RATE**</p></td>
+<td><p>312.5</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_LANE_RATE</p></td>
+<td><p>20.625</p></td>
+<td><p>20.625</p></td>
+<td><p>20.625</p></td>
+<td colspan="2"><p>20.625</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_LANE_RATE</p></td>
+<td><p>20.625</p></td>
+<td><p>20.625</p></td>
+<td><p>20.625</p></td>
+<td colspan="2"><p>20.625</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_JESD_M</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_JESD_L</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_JESD_S</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td colspan="2"><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_JESD_NP</p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+<td colspan="2"><p>16</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_NUM_LINKS</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+<td><p>2</p></td>
+<td colspan="2"><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_JESD_M</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_JESD_L</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_JESD_S</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td colspan="2"><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_JESD_NP</p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+<td colspan="2"><p>16</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_NUM_LINKS</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+<td><p>2</p></td>
+<td colspan="2"><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_KS_PER_CHANNEL</p></td>
+<td><p>16</p></td>
+<td><p>32</p></td>
+<td><p>64</p></td>
+<td colspan="2"><p>64</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_KS_PER_CHANNEL</p></td>
+<td><p>16</p></td>
+<td><p>32</p></td>
+<td><p>64</p></td>
+<td colspan="2"><p>64</p></td>
+</tr>
+<tr class="row-odd"><td><p>ASYMMETRIC_A_B_MODE</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td colspan="2"><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_B_LANE_RATE</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>20.625</p></td>
+<td><p>20.625</p></td>
+<td colspan="2"><p>20.625</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_B_LANE_RATE</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>20.625</p></td>
+<td><p>20.625</p></td>
+<td colspan="2"><p>20.625</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_B_JESD_M</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_B_JESD_L</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>8</p></td>
+<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_B_JESD_S</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td colspan="2"><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_B_JESD_NP</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+<td colspan="2"><p>16</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_B_JESD_M</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_B_JESD_L</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>8</p></td>
+<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_B_JESD_S</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td colspan="2"><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_B_JESD_NP</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>16</p></td>
+<td><p>16</p></td>
+<td colspan="2"><p>16</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_B_KS_PER_CHANNEL</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>32</p></td>
+<td><p>64</p></td>
+<td colspan="2"><p>64</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_B_KS_PER_CHANNEL</p></td>
+<td><p><span class="red">-</span></p></td>
+<td><p>32</p></td>
+<td><p>64</p></td>
+<td colspan="2"><p>64</p></td>
+</tr>
+<tr class="row-even"><td><p>ADC_DO_MEM_TYPE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>DAC_DO_MEM_TYPE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td colspan="3"><p>— |    —</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<p><span class="red">-</span> — this feature is not supported</p>
+<p><cite>*</cite> — can be disabled</p>
+</div>
+</div>
+</div>
+</div><p>The result of the build, if parameters were used, will be in a folder named
+by the configuration used:</p>
+<p>if the following command was run</p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">RX_LANE_RATE=2.5</span> <span class="pre">TX_LANE_RATE=2.5</span> <span class="pre">RX_JESD_L=8</span> <span class="pre">RX_JESD_M=4</span> <span class="pre">RX_JESD_S=1</span>
+<span class="pre">RX_JESD_NP=16</span> <span class="pre">TX_JESD_L=8</span> <span class="pre">TX_JESD_M=4</span> <span class="pre">TX_JESD_S=1</span> <span class="pre">TX_JESD_NP=16</span></code></p>
+<p>then the folder name will be:</p>
+<p><code class="docutils literal notranslate"><span class="pre">RXRATE2_5_TXRATE2_5_RXL8_RXM4_RXS1_RXNP16_TXL8_TXM4_TXS1_TXNP16</span></code>
+because of truncation of some keywords so the name will not exceed the limits
+of the Operating System (<code class="docutils literal notranslate"><span class="pre">JESD</span></code>, <code class="docutils literal notranslate"><span class="pre">LANE</span></code>, etc. are removed) of 260
+characters.</p>
+<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a>
+user guide.</p>
 </section>
 <section id="software-considerations">
 <h2>Software considerations<a class="headerlink" href="#software-considerations" title="Permalink to this heading"></a></h2>
+<section id="adc-crossbar-config">
+<h3>ADC - crossbar config<a class="headerlink" href="#adc-crossbar-config" title="Permalink to this heading"></a></h3>
+<p>Due to physical constraints, Rx lanes are reordered as described in the
+following table.</p>
+<p>e.g physical lane 2 from ADC from A side connects to logical lane 1
+from the VCU118. Therefore the crossbar from the device must be set
+accordingly.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ADC A phy Lane</p></th>
+<th class="head"><p>VCU118</p></th>
+<th class="head"><p>VCK190 / VPK180</p></th>
+<th class="head"><p>FM87</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>7</p></td>
+<td><p>5</p></td>
+<td><p>11</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>5</p></td>
+<td><p>1</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>1</p></td>
+<td><p>3</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>2</p></td>
+<td><p>7</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>11</p></td>
+<td><p>N/C</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>3</p></td>
+<td><p>N/C</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>8</p></td>
+<td><p>N/C</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>9</p></td>
+<td><p>N/C</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>10</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>6</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>4</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>0</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ADC B phy Lane</p></th>
+<th class="head"><p>VCU118</p></th>
+<th class="head"><p>VCK190 / VPK180</p></th>
+<th class="head"><p>FM87</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>10</p></td>
+<td><p>1</p></td>
+<td><p>11</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>6</p></td>
+<td><p>7</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>4</p></td>
+<td><p>10</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>0</p></td>
+<td><p>3</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>3</p></td>
+<td><p>N/C</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>2</p></td>
+<td><p>N/C</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>5</p></td>
+<td><p>N/C</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>7</p></td>
+<td><p>N/C</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>1</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>11</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>9</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="dac-crossbar-config">
+<h3>DAC - crossbar config<a class="headerlink" href="#dac-crossbar-config" title="Permalink to this heading"></a></h3>
+<p>Due to physical constraints, Tx lanes are reordered as described in the
+following table.</p>
+<p>e.g physical lane 2 from DAC from A side connects to logical lane 9
+from the VCU118. Therefore the crossbar from the device must be set
+accordingly.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DAC A phy Lane</p></th>
+<th class="head"><p>VCU118</p></th>
+<th class="head"><p>VCK190 / VPK180</p></th>
+<th class="head"><p>FM87</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>10</p></td>
+<td><p>11</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>8</p></td>
+<td><p>3</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>9</p></td>
+<td><p>8</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>11</p></td>
+<td><p>9</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>5</p></td>
+<td><p>N/C</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>1</p></td>
+<td><p>N/C</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>3</p></td>
+<td><p>N/C</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>7</p></td>
+<td><p>N/C</p></td>
+<td><p>11</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>4</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>6</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>2</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>0</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DAC B phy Lane</p></th>
+<th class="head"><p>VCU118</p></th>
+<th class="head"><p>VCK190 / VPK180</p></th>
+<th class="head"><p>FM87</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>4</p></td>
+<td><p>3</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>6</p></td>
+<td><p>2</p></td>
+<td><p>11</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>5</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>0</p></td>
+<td><p>7</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>1</p></td>
+<td><p>N/C</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>7</p></td>
+<td><p>N/C</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>10</p></td>
+<td><p>N/C</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>3</p></td>
+<td><p>N/C</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>5</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>8</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>9</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>11</p></td>
+<td><p>N/C</p></td>
+<td><p>N/C</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
+<section id="systems-related">
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9084_ebz" target="_blank">[Wiki] AD9084 Prototyping Platform User Guide</a></p></li>
+<li><p>Here you can find all the quick start guides on wiki documentation
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9084_ebz/quickstart" target="_blank">[Wiki] AD9084 Quick Start Guides</a></p></li>
+</ul>
+<p>Here you can find the quick start guides available for these evaluation boards:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
+<th class="head"><p>Microblaze</p></th>
+<th class="head"><p>Versal</p></th>
+<th class="head"><p>Agilex 7</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AD9084</p></td>
+<td><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9084_ebz/quickstart/microblaze" target="_blank">VCU118</a></p></td>
+<td><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9084_ebz/quickstart/versal" target="_blank">VCK190/VMK180/VPK180</a></p></td>
+<td><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9084_ebz/quickstart/fm87" target="_blank">FM87</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9084" target="_blank">AD9084</a></p>
+<ul>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/ad9084-ad9088-device-ug-2300.pdf" target="_blank">UG-1578, AD9084/AD9088 Device User Guide</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad9084-ug-2326.pdf" target="_blank">UG-2326, Evaluating the AD9084 Apollo MxFE Quad, 16-Bit 28GSPS RF DAC and Quad 12-Bit, 20GSPS RF ADC</a></p></li>
+</ul>
+</li>
+</ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9084_ebz" target="_blank">ad9084_ebz HDL project source code</a></p></li>
+</ul>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>IP name</p></th>
+<th class="head"><p>Source code link</p></th>
+<th class="head"><p>Documentation link</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AXI_DMAC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_SYSID</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>SYSID_ROM</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_CPACK2</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2" target="_blank">library/util_pack/util_cpack2</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_UPACK2</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">library/util_pack/util_upack2</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_ADXCVR for AMD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr" target="_blank">library/xilinx/util_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR core for AMD Xilinx devices</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_ADXCVR for Intel</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/intel/axi_adxcvr" target="_blank">library/intel/axi_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-intel"><span class="std std-ref">Intel Devices</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_ADXCVR for AMD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr" target="_blank">library/xilinx/axi_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">AMD Xilinx Devices</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_JESD204_RX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx" target="_blank">library/jesd204/axi_jesd204_rx</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_JESD204_TX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_tx" target="_blank">library/jesd204/axi_jesd204_tx</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>JESD204_TPL_ADC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc" target="_blank">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>JESD204_TPL_DAC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_dac" target="_blank">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../library/jesd204/generic_jesd_bds/index.html#generic-jesd-bds"><span class="std std-ref">Generic JESD204 block designs</span></a></p></li>
+<li><p><a class="reference internal" href="../../library/jesd204/index.html#jesd204"><span class="std std-ref">JESD204 Interface Framework</span></a></p></li>
+</ul>
 </section>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/ad9084" target="_blank">[Wiki] AD9084-EBZ Linux driver wiki page</a></p></li>
+<li><p>Python support:</p>
+<ul>
+<li><p><a class="icon link reference external" href="https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9084.html" target="_blank">AD9084 class documentation</a></p></li>
+<li><p><a class="icon link reference external" href="https://analogdevicesinc.github.io/pyadi-iio/" target="_blank">PyADI-IIO documentation</a></p></li>
+</ul>
+</li>
+</ul>
 </section>
+</section>
+<section id="more-information">
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
+</ul>
+</section>
+<section id="support">
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
+<p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>
+<p>For questions regarding the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> Linux device drivers, device trees, etc.
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/" target="_blank">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers" target="_blank">EngineerZone</a> Linux software drivers forum.</p>
+<p>For questions concerning the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> No-OS drivers, from our
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/" target="_blank">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers" target="_blank">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<p>It should be noted, that the older the tools’ versions and release branches
+are, the lower the chances to receive support from <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> engineers.</p>
 </section>
 </section>
 
@@ -457,7 +1988,7 @@ Content on this topic
   <label id="cancel-area-show-toc" for="input-show-toc"></label>
   <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
     <footer>
-      &#169;2024, Analog Devices, Inc.
+      &#169;2023-2025, Analog Devices, Inc.
       
       |
       Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>

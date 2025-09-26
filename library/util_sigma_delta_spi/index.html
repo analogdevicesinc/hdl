@@ -577,7 +577,7 @@ the ADC, or it can be connected to a HDL block, like the
 <a class="reference internal" href="../spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload</span></a> block that will generate a SPI
 transaction to read the converted signal.</p>
 <p>The data ready condition is only detected if the chip-select signal (which is
-connected to the converter) has been asserted for <a href="#id2"><span class="problematic" id="id3">**</span></a>at least**``IDLE_TIMEOUT``
+connected to the converter) has been asserted for <strong>at least</strong> <code class="docutils literal notranslate"><span class="pre">IDLE_TIMEOUT</span></code>
 clock cycles.</p>
 <p>The timeout is used to avoid spurious signal detection and the <code class="docutils literal notranslate"><span class="pre">IDLE_TIMEOUT</span></code>
 parameter should be configured so that the period it takes to complete
@@ -609,7 +609,7 @@ as specified in the data sheet for the converter.</p>
   <label id="cancel-area-show-toc" for="input-show-toc"></label>
   <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
     <footer>
-      &#169;2024, Analog Devices, Inc.
+      &#169;2023-2025, Analog Devices, Inc.
       
       |
       Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
