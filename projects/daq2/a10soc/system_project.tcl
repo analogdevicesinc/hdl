@@ -134,6 +134,8 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_sdio
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_dir
 
+set_global_assignment -name MESSAGE_DISABLE 15714
+
 # set optimization to get a better timing closure
 set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
 set_global_assignment -name PLACEMENT_EFFORT_MULTIPLIER 1.2
