@@ -14,6 +14,7 @@ ad_ip_files axi_spi_engine [list\
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/util_cdc/sync_gray.v \
   $ad_hdl_dir/library/common/ad_mem.v \
+  $ad_hdl_dir/library/util_axis_fifo_asym/util_axis_fifo_asym.v \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/common/ad_rst.v \
   $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \

@@ -43,6 +43,13 @@ proc p_elaboration {} {
   set_interface_property m_cmd associatedClock if_clk
   set_interface_property m_cmd associatedReset if_resetn
 
+  # offload active master interface
+
+  add_interface m_offload_active_ctrl conduit end
+  add_interface_port m_offload_active_ctrl m_offload_active interconnect_dir output 1
+  set_interface_property m_offload_active_ctrl associatedClock if_clk
+  set_interface_property m_offload_active_ctrl associatedReset if_resetn
+
   # SDO data master interface
 
   add_interface m_sdo axi4stream start
