@@ -3,18 +3,17 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-source ../../../scripts/adi_env.tcl
 # Primary clock definitions
 
 # Set clocks depending on the requested LANE_RATE paramter from the util_adxcvr block
 # Maximum values for Link clock:
 # 204B - 15.5 Gbps /40 = 387.5MHz
 # 204C - 24.75 Gbps /66 = 375MHz
-set jesd_mode [get_env_param JESD_MODE 64B66B]
-set link_mode [expr {$jesd_mode=="64B66B"?2:1}]
+set jesd_mode [dict get [get_property IP_LR0_SETTINGS [get_cells i_system_wrapper/system_i/jesd204_phy/gt_bridge_ip_0/inst]] INTERNAL_PRESET]
+set link_mode [expr {$jesd_mode=="JESD204_64B66B" ? 2:1}]
 
-set rx_lane_rate [get_env_param RX_LANE_RATE 20.625]
-set tx_lane_rate [get_env_param TX_LANE_RATE 20.625]
+set rx_lane_rate [dict get [get_property IP_LR0_SETTINGS [get_cells i_system_wrapper/system_i/jesd204_phy/gt_bridge_ip_0/inst]] RX_LINE_RATE]
+set tx_lane_rate [dict get [get_property IP_LR0_SETTINGS [get_cells i_system_wrapper/system_i/jesd204_phy/gt_bridge_ip_0/inst]] TX_LINE_RATE]
 
 set rx_link_clk [expr $rx_lane_rate*1000/[expr {$link_mode==2?66:40}]]
 set tx_link_clk [expr $tx_lane_rate*1000/[expr {$link_mode==2?66:40}]]
@@ -31,29 +30,6 @@ set rx_device_clk [expr $rx_link_clk*$rx_ll_width/$rx_tpl_width]
 set tx_device_clk [expr $tx_link_clk*$tx_ll_width/$tx_tpl_width]
 set rx_device_clk_period [expr 1000/$rx_device_clk]
 set tx_device_clk_period [expr 1000/$tx_device_clk]
-
-set ASYMMETRIC_A_B_MODE [get_env_param ASYMMETRIC_A_B_MODE 0]
-
-if {$ASYMMETRIC_A_B_MODE} {
-  set rx_b_lane_rate [get_env_param RX_B_LANE_RATE 20.625]
-  set tx_b_lane_rate [get_env_param TX_B_LANE_RATE 20.625]
-
-  set rx_b_link_clk [expr $rx_b_lane_rate*1000/[expr {$link_mode==2?66:40}]]
-  set tx_b_link_clk [expr $tx_b_lane_rate*1000/[expr {$link_mode==2?66:40}]]
-
-  set rx_b_link_clk_period [expr 1000/$rx_b_link_clk]
-  set tx_b_link_clk_period [expr 1000/$tx_b_link_clk]
-
-  set rx_b_ll_width   [get_property DATA_PATH_WIDTH     [get_cells i_system_wrapper/system_i/axi_apollo_rx_b_jesd/rx/inst]]
-  set tx_b_ll_width   [get_property DATA_PATH_WIDTH     [get_cells i_system_wrapper/system_i/axi_apollo_tx_b_jesd/tx/inst]]
-  set rx_b_tpl_width  [get_property TPL_DATA_PATH_WIDTH [get_cells i_system_wrapper/system_i/axi_apollo_rx_b_jesd/rx/inst]]
-  set tx_b_tpl_width  [get_property TPL_DATA_PATH_WIDTH [get_cells i_system_wrapper/system_i/axi_apollo_tx_b_jesd/tx/inst]]
-
-  set rx_b_device_clk [expr $rx_b_link_clk*$rx_b_ll_width/$rx_b_tpl_width]
-  set tx_b_device_clk [expr $tx_b_link_clk*$tx_b_ll_width/$tx_b_tpl_width]
-  set rx_b_device_clk_period [expr 1000/$rx_b_device_clk]
-  set tx_b_device_clk_period [expr 1000/$tx_b_device_clk]
-}
 
 # refclk and refclk_replica are connect to the same source on the PCB
 # Set reference clock to same frequency as the link clock,
