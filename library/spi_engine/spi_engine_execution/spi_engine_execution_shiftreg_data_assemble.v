@@ -69,8 +69,6 @@ module spi_engine_execution_shiftreg_data_assemble #(
   reg                                  last_handshake_int;
   reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] aligned_data;
   reg [              (DATA_WIDTH)-1:0] data_reg;
-  reg [                           3:0] count_active_lanes = 0;
-  reg [                           3:0] num_active_lanes   = NUM_OF_SDIO;
   reg [                           3:0] lane_index         = 0;
   reg [                           3:0] valid_indices [0:7];
 
@@ -105,27 +103,19 @@ module spi_engine_execution_shiftreg_data_assemble #(
 
   // data line counter and stores activated lines
   // it returns valid_indices array necessary for correct buffering of data
-  reg [3:0] i;
   reg [3:0] j;
   reg [3:0] mask_index;
   reg       index_ready_reg;
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
-      num_active_lanes <= NUM_OF_SDIO;
       index_ready_reg <= 1'b0;
       mask_index <= 0;
       j <= 0;
     end else begin
       if (exec_sdo_lane_cmd) begin
-        count_active_lanes = 0;
-        i = 0;
         j <= 0;
         index_ready_reg <= 1'b0;
         mask_index <= 0;
-        for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin
-          count_active_lanes = count_active_lanes + current_cmd[i];
-        end
-        num_active_lanes <= count_active_lanes;
       end else begin
         if (j < NUM_OF_SDIO) begin
           if (lane_mask[j]) begin
@@ -140,7 +130,7 @@ module spi_engine_execution_shiftreg_data_assemble #(
   end
 
   // handshake counter
-  // it will increment up to num_active_lanes
+  // it will increment up to mask_index
   // The last handshake is used by external logic to enable sdo_io_ready
   // retrieves the correct lane_index used to align data
   always @(posedge clk) begin
@@ -150,8 +140,8 @@ module spi_engine_execution_shiftreg_data_assemble #(
       last_handshake_int <= 1'b0;
     end else begin
       if (data_ready && data_valid) begin
-        last_handshake_int <= (lane_index == (num_active_lanes-1)) ? 1'b1 : 1'b0;
-        if (lane_index < (num_active_lanes-1)) begin
+        last_handshake_int <= (lane_index == (mask_index-1)) ? 1'b1 : 1'b0;
+        if (lane_index < (mask_index-1)) begin
           lane_index <= lane_index + 1;
         end else begin
           lane_index <= 0;
