@@ -78,9 +78,9 @@ adi_project_files ad9084_ebz_vcu118 [list \
   "system_constr.xdc"\
   "timing_constr.xdc"\
   "../common/hsci_phy_top.sv"\
-  "../common/ad9084_ebz_spi.v"\
   "$ad_hdl_dir/library/common/ad_rst.v"\
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_3w_spi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc"\
   "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
 create_ip -name high_speed_selectio_wiz -vendor xilinx.com -library ip -version 3.6 -module_name high_speed_selectio_wiz_0
