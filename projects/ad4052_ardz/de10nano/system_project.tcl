@@ -39,6 +39,8 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc_cnv
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc_gp0
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to adc_gp1
 
+#ad4052 requires both options for closing time
+set_global_assignment -name OPTIMIZATION_TECHNIQUE SPEED
 set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
 
 execute_flow -compile
