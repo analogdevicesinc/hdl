@@ -108,7 +108,7 @@ module util_axis_fifo_asym #(
   // instantiate the FIFOs
   genvar i;
   generate
-    for (i=0; i<RATIO; i=i+1) begin
+    for (i=0; i<RATIO; i=i+1) begin: gen_fifo_instances
       util_axis_fifo #(
         .DATA_WIDTH (A_WIDTH),
         .ADDRESS_WIDTH (A_ADDRESS),
@@ -148,7 +148,7 @@ module util_axis_fifo_asym #(
 
     if (RATIO_TYPE) begin : big_slave
 
-      for (i=0; i<RATIO; i=i+1) begin
+      for (i=0; i<RATIO; i=i+1) begin: gen_tlast_big_slave
         assign s_axis_valid_int_s[i] = s_axis_valid & s_axis_ready;
 
         if (TKEEP_EN) begin
@@ -177,7 +177,7 @@ module util_axis_fifo_asym #(
 
       reg [RATIO-1:0] s_axis_valid_int_d = {RATIO{1'b0}};
 
-      for (i=0; i<RATIO; i=i+1) begin
+      for (i=0; i<RATIO; i=i+1) begin: gen_tlast_small_slave
         assign s_axis_data_int_s[A_WIDTH*i+:A_WIDTH] = s_axis_data;
         assign s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8] = (s_axis_counter == i) ? s_axis_tkeep : {A_WIDTH/8{1'b0}};
         assign s_axis_tlast_int_s[i] = (s_axis_counter == i) ? s_axis_tlast : 1'b0;
@@ -215,7 +215,7 @@ module util_axis_fifo_asym #(
   generate
     if (RATIO_TYPE) begin : small_master
 
-      for (i=0; i<RATIO; i=i+1) begin
+      for (i=0; i<RATIO; i=i+1) begin: gen_ready_small_master
         assign m_axis_ready_int_s[i] = (m_axis_counter == i) ? m_axis_ready : 1'b0;
       end
 
@@ -236,11 +236,11 @@ module util_axis_fifo_asym #(
 
     end else begin : big_master
 
-      for (i=0; i<RATIO; i=i+1) begin
+      for (i=0; i<RATIO; i=i+1) begin: gen_ready_big_master
         assign m_axis_ready_int_s[i] = m_axis_ready & (&m_axis_valid_int_s);
       end
 
-      for (i=0; i<RATIO; i=i+1) begin
+      for (i=0; i<RATIO; i=i+1) begin: gen_tkeep_big_master
         assign m_axis_tkeep[i*A_WIDTH/8+:A_WIDTH/8] = ((m_axis_tlast_int_s[i:0] == 0) ||
                                                       (m_axis_tlast_int_s[i])) ?
                                                     m_axis_tkeep_int_s[i*A_WIDTH/8+:A_WIDTH/8] :
