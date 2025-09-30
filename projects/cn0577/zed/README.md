@@ -18,9 +18,6 @@ The overwritable parameters from the environment are:
 - TWOLANES: whether to use two lanes or one lane mode;
   - 1 - two-lane mode used (default)
   - 0 - one-lane mode used
-- ADC_RES: the resolution of the ADC input data;
-  - 18 - the resolution is 18 bits (default)
-  - 16 - the resolution is 16 bits
 
 ### Example configurations
 
@@ -29,8 +26,7 @@ The overwritable parameters from the environment are:
 This specific command is equivalent to running `make` only:
 
 ```
-make TWOLANES=1 \
-ADC_RES=18
+make TWOLANES=1
 ```
 
 Corresponding device tree: [zynq-zed-adv7511-cn0577.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-cn0577.dts)
@@ -38,22 +34,5 @@ Corresponding device tree: [zynq-zed-adv7511-cn0577.dts](https://github.com/anal
 #### One lane, 18-bit resolution
 
 ```
-make TWOLANES=0 \
-ADC_RES=18
-```
-
-#### Two lanes, 16-bit resolution
-
-```
-make TWOLANES=1 \
-ADC_RES=16
-```
-
-Corresponding device tree: [zynq-zed-adv7511-adaq23875.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23875.dts)
-
-#### One lane, 16-bit resolution
-
-```
-make TWOLANES=0 \
-ADC_RES=16
+make TWOLANES=0
 ```
