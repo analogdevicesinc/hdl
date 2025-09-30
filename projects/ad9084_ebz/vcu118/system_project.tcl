@@ -27,6 +27,8 @@ set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timi
 #
 #   RX_LANE_RATE :  Lane rate of the Rx link ( Apollo to FPGA )
 #   TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to Apollo )
+#   HSCI_ENABLE : If set, adds and enables the HSCI core in the design
+#   AION_ENABLE : If set, adds and enables the AION core in the design
 #   [RX/TX]_JESD_M : Number of converters per link
 #   [RX/TX]_JESD_L : Number of lanes per link
 #   [RX/TX]_JESD_NP : Number of bits per sample
@@ -45,6 +47,7 @@ adi_project ad9084_ebz_vcu118 0 [list \
   JESD_MODE           [get_env_param JESD_MODE       64B66B ] \
   RX_LANE_RATE        [get_env_param RX_LANE_RATE    20.625 ] \
   TX_LANE_RATE        [get_env_param TX_LANE_RATE    20.625 ] \
+  AION_ENABLE         [get_env_param AION_ENABLE          1 ] \
   RX_JESD_M           [get_env_param RX_JESD_M            4 ] \
   RX_JESD_L           [get_env_param RX_JESD_L            8 ] \
   RX_JESD_S           [get_env_param RX_JESD_S            1 ] \

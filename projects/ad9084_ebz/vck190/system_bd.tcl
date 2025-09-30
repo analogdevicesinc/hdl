@@ -41,6 +41,8 @@ set TRANSCEIVER_TYPE GTY
 set HSCI_BANKS 2
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]
+set AION_ENABLE [ expr { [info exists ad_project_params(AION_ENABLE)] \
+                          ? $ad_project_params(AION_ENABLE) : 1 } ]
 
 source $ad_hdl_dir/projects/ad9084_ebz/common/ad9084_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
