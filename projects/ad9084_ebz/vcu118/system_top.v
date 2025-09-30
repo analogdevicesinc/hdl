@@ -38,7 +38,8 @@
 module system_top #(
   parameter TX_NUM_LINKS = 1,
   parameter RX_NUM_LINKS = 1,
-  parameter ASYMMETRIC_A_B_MODE = 1
+  parameter ASYMMETRIC_A_B_MODE = 1,
+  parameter AION_ENABLE = 1
 ) (
   input         sys_rst,
   input         sys_clk_p,
@@ -123,8 +124,8 @@ module system_top #(
   output         sysref_b_n,
   input          sysref_p,
   input          sysref_n,
-  input          sysref_in_p,
-  input          sysref_in_n,
+  inout          sysref_in_p,
+  inout          sysref_in_n,
 
   output         spi2_sclk,
   inout          spi2_sdio,
@@ -150,6 +151,9 @@ module system_top #(
 
   output [ 1:0]  trig_a,
   output [ 1:0]  trig_b,
+
+  output         nco_sync,
+  output         dma_start,
 
   input          trig_in,
   output         resetb
@@ -208,6 +212,9 @@ module system_top #(
   wire    [ 7:0]  hsci_data_in;
   wire    [ 7:0]  hsci_data_out;
 
+  wire    [ 2:0]  trig_channel;
+  wire            adf4030_sysref;
+
   assign iic_rstn = 1'b1;
 
   // instantiations
@@ -226,10 +233,15 @@ module system_top #(
     .O (ref_clk_replica),
     .ODIV2 ());
 
-  IBUFDS i_ibufds_sysref_in (
-    .I (sysref_in_p),
-    .IB (sysref_in_n),
-    .O (sysref));
+  generate if (AION_ENABLE == 1) begin
+    assign sysref = adf4030_sysref;
+  end else begin
+    IBUFDS i_ibufds_sysref_in (
+      .I (sysref_in_p),
+      .IB (sysref_in_n),
+      .O (sysref));
+  end
+  endgenerate
 
   OBUFDS i_obufds_sysref_a (
     .I (1'b0),
@@ -315,7 +327,7 @@ module system_top #(
   ad_3w_spi #(
     .NUM_OF_SLAVES(3)
   ) i_spi (
-    .spi_csn (spi_csn[2:0]),
+    .spi_csn ({spi_csn[4], spi_csn[1:0]}),
     .spi_clk (spi_clk),
     .spi_mosi (spi_sdio),
     .spi_miso (spi_sdo),
@@ -340,10 +352,12 @@ module system_top #(
 
   assign gpio_i[53] = trig_in;
 
-  assign trig_a[0]  = gpio_o[58];
-  assign trig_a[1]  = gpio_o[59];
-  assign trig_b[0]  = gpio_o[60];
-  assign trig_b[1]  = gpio_o[61];
+  assign trig_a[0]  = trig_channel[0];
+  assign trig_a[1]  = trig_channel[0];
+  assign trig_b[0]  = trig_channel[0];
+  assign trig_b[1]  = trig_channel[0];
+  assign nco_sync   = trig_channel[0];
+  assign dma_start  = trig_channel[1];
   assign resetb     = gpio_o[62];
 
   ad_iobuf #(
@@ -594,6 +608,15 @@ module system_top #(
     .hsci_dly_rdy_bsc_tx (hsci_dly_rdy_bsc_tx),
     .hsci_vtc_rdy_bsc_rx (hsci_vtc_rdy_bsc_rx),
     .hsci_dly_rdy_bsc_rx (hsci_dly_rdy_bsc_rx),
+
+    .adf4030_bsync_p      (sysref_in_p),
+    .adf4030_bsync_n      (sysref_in_n),
+    .adf4030_clk          (rx_device_clk),
+    .adf4030_trigger      (aux_gpio),
+    .adf4030_sysref       (adf4030_sysref),
+    .adf4030_trig_channel (trig_channel),
+
+    .ext_sync_in(trig_channel[2]),
 
     .rx_sync_0 (rx_syncout[0]),
     .tx_sync_0 (tx_syncin[0]),

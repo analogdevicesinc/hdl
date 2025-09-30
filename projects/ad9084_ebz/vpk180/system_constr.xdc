@@ -124,3 +124,5 @@ set_property   -dict {PACKAGE_PIN BR41  IOSTANDARD LVDS15	    DIFF_TERM_ADV TERM
 set_property   -dict {PACKAGE_PIN BT40  IOSTANDARD LVDS15	    DIFF_TERM_ADV TERM_100  } [get_ports hsci_cko_n	        ]    ;  ## FMCP1_LA31_N  BANK 709
 set_property   -dict {PACKAGE_PIN BR37  IOSTANDARD LVDS15	    DIFF_TERM_ADV TERM_100  } [get_ports hsci_do_p	        ]    ;  ## FMCP1_LA28_P  BANK 709
 set_property   -dict {PACKAGE_PIN BR38  IOSTANDARD LVDS15	    DIFF_TERM_ADV TERM_100  } [get_ports hsci_do_n	        ]    ;  ## FMCP1_LA28_N  BANK 709
+
+set_false_path -through [get_cells -hierarchical * -filter {NAME=~*IOBUFDS_inst*}]

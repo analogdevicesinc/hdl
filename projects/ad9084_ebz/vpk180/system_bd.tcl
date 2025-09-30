@@ -28,6 +28,8 @@ set TRANSCEIVER_TYPE GTYP
 set HSCI_BANKS 1
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]
+set AION_ENABLE [ expr { [info exists ad_project_params(AION_ENABLE)] \
+                          ? $ad_project_params(AION_ENABLE) : 1 } ]
 
 adi_project_files ad9084_ebz_vpk180 [list \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \

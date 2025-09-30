@@ -22,6 +22,8 @@ if {$ASYMMETRIC_A_B_MODE} {
 
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]
+set AION_ENABLE [ expr { [info exists ad_project_params(AION_ENABLE)] \
+                          ? $ad_project_params(AION_ENABLE) : 1 } ]
 set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
                           ? $ad_project_params(TDD_SUPPORT) : 0 } ]
 set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
@@ -301,6 +303,31 @@ if {$HSCI_ENABLE} {
       ad_connect axi_hsci_0/hsci_pll_reset hsci_phy/bank${i}_pll_rst_pll
     }
   }
+}
+
+create_bd_port -dir IO adf4030_bsync_p
+create_bd_port -dir IO adf4030_bsync_n
+create_bd_port -dir I adf4030_clk
+create_bd_port -dir I adf4030_trigger
+create_bd_port -dir O adf4030_sysref
+create_bd_port -dir O -from 2 -to 0 adf4030_trig_channel
+
+##AXI_ADF4030 IP
+if {$AION_ENABLE} {
+  ad_ip_instance axi_adf4030 axi_adf4030_0
+  ad_ip_parameter axi_adf4030_0 CONFIG.CHANNEL_COUNT 3
+
+  ad_connect axi_adf4030_0/bsync_p adf4030_bsync_p
+  ad_connect axi_adf4030_0/bsync_n adf4030_bsync_n
+  ad_connect axi_adf4030_0/device_clk adf4030_clk
+  ad_connect axi_adf4030_0/trigger adf4030_trigger
+  ad_connect axi_adf4030_0/sysref adf4030_sysref
+  ad_connect axi_adf4030_0/trig_channel adf4030_trig_channel
+} else {
+  ad_ip_instance ilconstant adf4030_gnd
+  ad_ip_parameter adf4030_gnd CONFIG.CONST_VAL 0
+  ad_ip_parameter adf4030_gnd CONFIG.CONST_WIDTH 3
+  ad_connect adf4030_gnd/dout adf4030_trig_channel
 }
 
 # common xcvr
@@ -1009,6 +1036,11 @@ if {$HSCI_ENABLE} {
   ad_cpu_interconnect 0x44ad0000 axi_hsci_clkgen
   ad_cpu_interconnect 0x7c500000 axi_hsci_0
 }
+
+if {$AION_ENABLE} {
+  ad_cpu_interconnect 0x7c600000 axi_adf4030_0
+}
+
 # Reserved for TDD! 0x7c460000
 
 if {$ASYMMETRIC_A_B_MODE} {
