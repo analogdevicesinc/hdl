@@ -52,6 +52,7 @@ module axi_ltc2387 #(
   parameter OUT_RES = 32, // 32-bit for ADC_RES=18 or 16-bit for ADC_RES=16
   parameter TWOLANES = 1
 ) (
+  input                    ila_clk_in,
   input                    delay_clk,
 
   // adc interface
@@ -163,6 +164,7 @@ module axi_ltc2387 #(
     .IODELAY_CTRL (IODELAY_CTRL),
     .TWOLANES (TWOLANES)
   ) i_if (
+    .ila_clk_in (ila_clk_in),
     .clk (ref_clk),
     .clk_gate (clk_gate),
     .da_p (da_p),

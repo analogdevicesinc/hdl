@@ -47,6 +47,8 @@ module axi_ltc2387_if #(
   parameter ADC_RES = 18  // 16 or 18 bits
 ) (
 
+  input             ila_clk_in,
+
   // delay interface
 
   input             up_clk,
@@ -246,5 +248,24 @@ module axi_ltc2387_if #(
     .CE (1'b1),
     .I (dco_s),
     .O (dco));
+
+    // instantiate the ILA core inside of a module in the IP
+
+    my_ila i_ila (
+    .clk(ila_clk_in),
+    .probe0(clk_gate),
+    .probe1(dco_p),
+    .probe2(dco_n),
+    .probe3(delay_locked),
+    .probe4(clk_gate_d),
+    .probe5(adc_valid),
+    .probe6(adc_data),
+    .probe7(da_p_int_s),
+    .probe8(da_n_int_s),
+    .probe9(dco),
+    .probe10(dco_s),
+    .probe11(adc_data_int),
+    .probe12(adc_data_da_p),
+    .probe13(adc_data_da_n));
 
 endmodule
