@@ -308,7 +308,7 @@ Physical Layer
 Physical layer peripherals are responsible for interfacing and configuring the
 high-speed serial transceivers. Currently, we have support for GTXE2, GTHE3,
 GTHE4, GTYE4 for AMD Xilinx, GTY and GTYP transceivers for AMD Versal
-and Arria 10 transceivers for Intel.
+and Arria 10, Stratix 10 H-Tile, Agilex 7 F-Tile transceivers for Intel.
 
 - :ref:`axi_adxcvr`: JESD204B/C Gigabit
   Transceiver Register Configuration Peripheral
