@@ -48,15 +48,15 @@ adi_project ad9084_ebz_vcu118 0 [list \
   RX_JESD_L           [get_env_param RX_JESD_L            8 ] \
   RX_JESD_S           [get_env_param RX_JESD_S            1 ] \
   RX_JESD_NP          [get_env_param RX_JESD_NP          16 ] \
-  RX_NUM_LINKS        [get_env_param RX_NUM_LINKS         1 ] \
+  RX_NUM_LINKS        [get_env_param RX_NUM_LINKS         2 ] \
   TX_JESD_M           [get_env_param TX_JESD_M            4 ] \
   TX_JESD_L           [get_env_param TX_JESD_L            8 ] \
   TX_JESD_S           [get_env_param TX_JESD_S            1 ] \
   TX_JESD_NP          [get_env_param TX_JESD_NP          16 ] \
-  TX_NUM_LINKS        [get_env_param TX_NUM_LINKS         1 ] \
+  TX_NUM_LINKS        [get_env_param TX_NUM_LINKS         2 ] \
   RX_KS_PER_CHANNEL   [get_env_param RX_KS_PER_CHANNEL   32 ] \
   TX_KS_PER_CHANNEL   [get_env_param TX_KS_PER_CHANNEL   32 ] \
-  ASYMMETRIC_A_B_MODE [get_env_param ASYMMETRIC_A_B_MODE  1 ] \
+  ASYMMETRIC_A_B_MODE [get_env_param ASYMMETRIC_A_B_MODE  0 ] \
   RX_B_LANE_RATE      [get_env_param RX_B_LANE_RATE  20.625 ] \
   TX_B_LANE_RATE      [get_env_param TX_B_LANE_RATE  20.625 ] \
   RX_B_JESD_M         [get_env_param RX_B_JESD_M          4 ] \

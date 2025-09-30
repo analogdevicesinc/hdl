@@ -36,9 +36,9 @@
 `timescale 1ns/100ps
 
 module system_top #(
-  parameter TX_NUM_LINKS = 1,
-  parameter RX_NUM_LINKS = 1,
-  parameter ASYMMETRIC_A_B_MODE = 1
+  parameter TX_NUM_LINKS = 2,
+  parameter RX_NUM_LINKS = 2,
+  parameter ASYMMETRIC_A_B_MODE = 0
 ) (
   input         sys_rst,
   input         sys_clk_p,
