@@ -66,21 +66,21 @@ module ethernet_adrv9009zu11eg #(
   /*
    * Ethernet: SFP+
    */
-  input  wire                            qsfp_mgt_refclk_p,
-  input  wire                            qsfp_mgt_refclk_n,
-  output wire [3:0]                      qsfp_tx_p,
-  output wire [3:0]                      qsfp_tx_n,
-  input  wire [3:0]                      qsfp_rx_p,
-  input  wire [3:0]                      qsfp_rx_n,
+  input  wire                             qsfp_mgt_refclk_p,
+  input  wire                             qsfp_mgt_refclk_n,
+  output wire [3:0]                       qsfp_tx_p,
+  output wire [3:0]                       qsfp_tx_n,
+  input  wire [3:0]                       qsfp_rx_p,
+  input  wire [3:0]                       qsfp_rx_n,
 
-  output wire [3:0]                      qsfp_modsell,
-  output wire [3:0]                      qsfp_resetl,
-  input  wire [3:0]                      qsfp_modprsl,
-  input  wire [3:0]                      qsfp_intl,
-  output wire [3:0]                      qsfp_lpmode,
-  output wire [3:0]                      qsfp_gtpowergood,
+  output wire                             qsfp_modsell,
+  output wire                             qsfp_resetl,
+  input  wire                             qsfp_modprsl,
+  input  wire                             qsfp_intl,
+  output wire                             qsfp_lpmode,
+  output wire                             qsfp_gtpowergood,
 
-  output wire [3:0]                      qsfp_rst,
+  output wire                             qsfp_rst,
 
   input  wire [AXIL_CSR_ADDR_WIDTH-1:0]            ctrl_reg_wr_addr,
   input  wire [AXIL_CTRL_DATA_WIDTH-1:0]           ctrl_reg_wr_data,
@@ -189,12 +189,15 @@ module ethernet_adrv9009zu11eg #(
   output wire                                      s_axis_stat_tvalid,
   input  wire                                      s_axis_stat_tready,
 
-  input  wire                                      scl_i,
-  output reg                                       scl_o,
-  output reg                                       scl_t,
-  input  wire                                      sda_i,
-  output reg                                       sda_o,
-  output reg                                       sda_t
+  /*
+  * I2C
+  */
+  input  wire                                     i2c_scl_i,
+  output reg                                     i2c_scl_o,
+  output reg                                     i2c_scl_t,
+  input  wire                                     i2c_sda_i,
+  output reg                                     i2c_sda_o,
+  output reg                                     i2c_sda_t
 );
 
   wire qsfp_iic_scl_i_w;
@@ -222,10 +225,10 @@ module ethernet_adrv9009zu11eg #(
   reg qsfp_iic_sda_o_reg = 1'b1;
 
   always @(posedge clk) begin
-    scl_o <= qsfp_iic_scl_o_w;
-    scl_t <= qsfp_iic_scl_t_w;
-    sda_o <= qsfp_iic_sda_o_w;
-    sda_t <= qsfp_iic_sda_t_w;
+    i2c_scl_o <= qsfp_iic_scl_o_w;
+    i2c_scl_t <= qsfp_iic_scl_t_w;
+    i2c_sda_o <= qsfp_iic_sda_o_w;
+    i2c_sda_t <= qsfp_iic_sda_t_w;
   end
 
   assign qsfp_iic_scl_o_w = qsfp_iic_scl_o_reg;
@@ -723,19 +726,24 @@ module ethernet_adrv9009zu11eg #(
   wire qsfp_drp_reg_rd_wait;
   wire qsfp_drp_reg_rd_ack;
 
+  wire qsfp_modprsl_int;
+  wire qsfp_intl_int;
+
   reg ctrl_reg_wr_ack_reg = 1'b0;
   reg [AXIL_CTRL_DATA_WIDTH-1:0] ctrl_reg_rd_data_reg = {AXIL_CTRL_DATA_WIDTH{1'b0}};
   reg ctrl_reg_rd_ack_reg = 1'b0;
 
-  reg qsfp_tx_disable_reg = 1'b0;
+  reg qsfp_reset_reg = 1'b0;
+  reg qsfp_lpmode_reg = 1'b0;
+
+  reg i2c_scl_o_reg = 1'b1;
+  reg i2c_sda_o_reg = 1'b1;
 
   assign ctrl_reg_wr_wait = qsfp_drp_reg_wr_wait;
   assign ctrl_reg_wr_ack = ctrl_reg_wr_ack_reg | qsfp_drp_reg_wr_ack;
   assign ctrl_reg_rd_data = ctrl_reg_rd_data_reg | qsfp_drp_reg_rd_data;
   assign ctrl_reg_rd_wait = qsfp_drp_reg_rd_wait;
   assign ctrl_reg_rd_ack = ctrl_reg_rd_ack_reg | qsfp_drp_reg_rd_ack;
-
-  assign qsfp_tx_disable = qsfp_tx_disable_reg;
 
   always @(posedge clk) begin
     ctrl_reg_wr_ack_reg <= 1'b0;
@@ -760,8 +768,8 @@ module ethernet_adrv9009zu11eg #(
         RBB+8'h1C: begin
           // XCVR GPIO: control 0123
           if (ctrl_reg_wr_strb[0]) begin
-            qsfp_reset_reg[0] <= ctrl_reg_wr_data[4];
-            qsfp_lpmode_reg[0] <= ctrl_reg_wr_data[5];
+            qsfp_reset_reg <= ctrl_reg_wr_data[4];
+            qsfp_lpmode_reg <= ctrl_reg_wr_data[5];
           end
         end
         default: ctrl_reg_wr_ack_reg <= 1'b0;
@@ -789,10 +797,10 @@ module ethernet_adrv9009zu11eg #(
         RBB+8'h18: ctrl_reg_rd_data_reg <= RB_BASE_ADDR+8'h20;       // XCVR GPIO: Next header
         RBB+8'h1C: begin
           // XCVR GPIO: control 0123
-          ctrl_reg_rd_data_reg[0] <= !qsfp_modprsl_int[0];
-          ctrl_reg_rd_data_reg[1] <= !qsfp_intl_int[0];
-          ctrl_reg_rd_data_reg[4] <= qsfp_reset_reg[0];
-          ctrl_reg_rd_data_reg[5] <= qsfp_lpmode_reg[0];
+          ctrl_reg_rd_data_reg[0] <= !qsfp_modprsl_int;
+          ctrl_reg_rd_data_reg[1] <= !qsfp_intl_int;
+          ctrl_reg_rd_data_reg[4] <= qsfp_reset_reg;
+          ctrl_reg_rd_data_reg[5] <= qsfp_lpmode_reg;
         end
         default: ctrl_reg_rd_ack_reg <= 1'b0;
       endcase

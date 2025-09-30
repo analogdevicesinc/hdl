@@ -4,17 +4,11 @@
 ###############################################################################
 
 # Corundum NIC
-create_bd_port -dir I -from 3 -to 0 qsfp_rx_p
-create_bd_port -dir I -from 3 -to 0 qsfp_rx_n
-create_bd_port -dir O -from 3 -to 0 qsfp_tx_p
-create_bd_port -dir O -from 3 -to 0 qsfp_tx_n
+create_bd_intf_port -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
+
+create_bd_port -dir O -from 0 -to 0 -type rst qsfp_rst
 create_bd_port -dir I qsfp_mgt_refclk_p
 create_bd_port -dir I qsfp_mgt_refclk_n
-
-create_bd_port -dir O qsfp_tx_disable
-create_bd_port -dir I qsfp_tx_fault
-create_bd_port -dir I qsfp_rx_los
-create_bd_port -dir I qsfp_mod_abs
 
 create_bd_port -dir O -from 3 -to 0 qsfp_led
 
@@ -172,10 +166,8 @@ set_property verilog_define {APP_CUSTOM_PORTS_ENABLE APP_CUSTOM_PARAMS_ENABLE} [
 ad_connect corundum_hierarchy/clk_corundum sys_dma_clk
 # ad_connect corundum_hierarchy/rst_corundum sys_dma_rstgen/peripheral_reset
 
-ad_connect corundum_hierarchy/qsfp_rx_p qsfp_rx_p
-ad_connect corundum_hierarchy/qsfp_rx_n qsfp_rx_n
-ad_connect corundum_hierarchy/qsfp_tx_p qsfp_tx_p
-ad_connect corundum_hierarchy/qsfp_tx_n qsfp_tx_n
+ad_connect corundum_hierarchy/qsfp qsfp
+ad_connect corundum_hierarchy/qsfp_rst qsfp_rst
 ad_connect corundum_hierarchy/qsfp_mgt_refclk_p qsfp_mgt_refclk_p
 ad_connect corundum_hierarchy/qsfp_mgt_refclk_n qsfp_mgt_refclk_n
 

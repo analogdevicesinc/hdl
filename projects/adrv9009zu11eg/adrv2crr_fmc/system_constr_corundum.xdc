@@ -3,10 +3,10 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set_property -dict {PACKAGE_PIN  AJ16 IOSTANDARD LVCMOS18} [get_ports led_qsfp[0]]
-set_property -dict {PACKAGE_PIN  AH16 IOSTANDARD LVCMOS18} [get_ports led_qsfp[1]]
-set_property -dict {PACKAGE_PIN  AJ12 IOSTANDARD LVCMOS18} [get_ports led_qsfp[2]]
-set_property -dict {PACKAGE_PIN  AK12 IOSTANDARD LVCMOS18} [get_ports led_qsfp[3]]
+set_property -dict {PACKAGE_PIN  AJ16 IOSTANDARD LVCMOS18} [get_ports qsfp_led[0]] ;
+set_property -dict {PACKAGE_PIN  AH16 IOSTANDARD LVCMOS18} [get_ports qsfp_led[1]] ;
+set_property -dict {PACKAGE_PIN  AJ12 IOSTANDARD LVCMOS18} [get_ports qsfp_led[2]] ;
+set_property -dict {PACKAGE_PIN  AK12 IOSTANDARD LVCMOS18} [get_ports qsfp_led[3]] ;
 
 set_property -dict {PACKAGE_PIN  AU11 IOSTANDARD LVCMOS18 } [get_ports qsfp_resetl  ] ;
 set_property -dict {PACKAGE_PIN  AL12 IOSTANDARD LVCMOS18 PULLUP true } [get_ports qsfp_modprsl ] ;

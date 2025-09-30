@@ -60,10 +60,6 @@ module system_top (
   inout               gpio_3_exp_n, //RESET_HMC7044
   inout               gpio_3_exp_p, //RESET_AD9545
   inout               gpio_4_exp_n, //VCXO_SELECT
-  output              led_gpio_0,
-  output              led_gpio_1,
-  output              led_gpio_2,
-  output              led_gpio_3,
   inout               dip_gpio_0,
   inout               dip_gpio_1,
   inout               dip_gpio_2,
@@ -225,7 +221,6 @@ module system_top (
   output [3:0]   qsfp_tx_n,
   input  [3:0]   qsfp_rx_p,
   input  [3:0]   qsfp_rx_n,
-  output         qsfp_tx_disable,
 
   // GT REF CLK
   input          qsfp_mgt_refclk_p,
@@ -234,13 +229,12 @@ module system_top (
   /*
   * Ethernet: QSFP28
   */
-  output wire         qsfp_modsell,
   output wire         qsfp_resetl,
   input  wire         qsfp_modprsl,
   input  wire         qsfp_intl,
   output wire         qsfp_lpmode,
 
-  output        [3:0] qsfp_led
+  output [3:0]        qsfp_led
 );
 
   // internal signals
@@ -268,6 +262,11 @@ module system_top (
   wire            spi_mosi;
   wire            spi0_miso;
   wire            spi_miso_s;
+
+  wire           led_gpio_0;
+  wire           led_gpio_1;
+  wire           led_gpio_2;
+  wire           led_gpio_3;
 
   reg  [7:0]     spi_3_to_8_csn;
 
@@ -421,33 +420,11 @@ module system_top (
 
   //QSFP
 
-  wire [0:0] qsfp_gtpowergood;
-  wire [0:0] qsfp_mgt_refclk;
-  wire [0:0] qsfp_mgt_refclk_bufg;
-  wire [0:0] qsfp_rst;
-  wire [7:0] led;
-
-  assign qsfp_led = led[7:4];
-
+  wire qsfp_gtpowergood;
+  wire qsfp_rst;
   wire ptp_rst;
 
-  assign ptp_rst = qsfp_rst[0];
-
-  IBUFDS_GTE4 ibufds_gte4_qsfp_mgt_refclk_0_inst (
-    .I     (qsfp_mgt_refclk_p),
-    .IB    (qsfp_mgt_refclk_n),
-    .CEB   (1'b0),
-    .O     (qsfp_mgt_refclk),
-    .ODIV2 (qsfp_mgt_refclk_int));
-
-  BUFG_GT bufg_gt_qsfp_mgt_refclk_0_inst (
-    .CE      (qsfp_gtpowergood),
-    .CEMASK  (1'b1),
-    .CLR     (1'b0),
-    .CLRMASK (1'b1),
-    .DIV     (3'd0),
-    .I       (qsfp_mgt_refclk_int),
-    .O       (qsfp_mgt_refclk_bufg));
+  assign ptp_rst = qsfp_rst;
 
   IBUFDS_GTE4 i_ibufds_ref_clk_1 (
     .CEB (1'd0),
@@ -547,22 +524,19 @@ module system_top (
     .ref_clk_a(ref_clk_a),
     .ref_clk_b(ref_clk_b),
     // QSFP
-    .ptp_rst (ptp_rst),
     .qsfp_rst (qsfp_rst),
     .qsfp_gtpowergood (qsfp_gtpowergood),
     .qsfp_intl (qsfp_intl), //
     .qsfp_lpmode (qsfp_lpmode), //
-    .qsfp_mgt_refclk (qsfp_mgt_refclk),
-    .qsfp_mgt_refclk_bufg (qsfp_mgt_refclk_bufg),
+    .qsfp_mgt_refclk_p (qsfp_mgt_refclk_p),
+    .qsfp_mgt_refclk_n (qsfp_mgt_refclk_n),
     .qsfp_modprsl (qsfp_modprsl), //
-    .qsfp_modsell (qsfp_modsell), //
     .qsfp_resetl (qsfp_resetl), //
     .qsfp_rx_n (qsfp_rx_n),
     .qsfp_rx_p (qsfp_rx_p),
     .qsfp_tx_n (qsfp_tx_n),
     .qsfp_tx_p (qsfp_tx_p),
-    .qsfp_tx_disable (qsfp_tx_disable),
-    .led (led),
+    .qsfp_led (qsfp_led),
     //
     .rx_data_0_n (rx_data_a_n[0]),
     .rx_data_0_p (rx_data_a_p[0]),

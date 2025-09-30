@@ -55,7 +55,7 @@ if [info exists ::env(BOARD)] {
     create_bd_pin -dir I -type rst rst_125mhz
   }  elseif [string equal $board ADRV9009ZU11EG] {
 
-    create_bd_pin -dir O -from 3 -to 0 -type rst qsfp_rst
+    create_bd_pin -dir O -type rst qsfp_rst
     create_bd_pin -dir I qsfp_mgt_refclk_p
     create_bd_pin -dir I qsfp_mgt_refclk_n
 
@@ -516,7 +516,6 @@ if [string equal $board K26] {
 
   ad_connect ethernet_core/ptp_clock corundum_core/ptp_clock
   ad_connect corundum_core/ptp_clk ethernet_core/ptp_clk
-  ad_connect corundum_core/ptp_rst ethernet_core/ptp_rst
   ad_connect corundum_core/ptp_sample_clk ethernet_core/ptp_sample_clk
   ad_connect corundum_core/s_axis_stat ethernet_core/m_axis_stat
 } else {

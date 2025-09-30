@@ -17,7 +17,7 @@ source $ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/ip/eth_xcvr_gth.tcl
 # Corundum sources
 adi_ip_files ethernet_adrv9009zu11eg [list \
   "ethernet_adrv9009zu11eg.v" \
-  "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/rtl/sync_signal.v" \
+  "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/rtl/sync_signal.v" \
   "$ad_hdl_dir/../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_quad_wrapper.v" \
   "$ad_hdl_dir/../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_wrapper.v" \
   "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/eth_phy_10g.v" \
