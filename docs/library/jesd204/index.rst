@@ -12,6 +12,7 @@ JESD204 Interface Framework
    ADC JESD204B/C Transport Peripheral <ad_ip_jesd204_tpl_adc/index>
    DAC JESD204B/C Transport Peripheral <ad_ip_jesd204_tpl_dac/index>
    Xilinx FPGAs Transceivers Wizard <xgt_wizard/index>
+   AMD Versal Adaptive SoC Transceiver Subsystem <versal_transceiver_subsystem/index>
    Troubleshooting JESD204 TX links <troubleshoot/troubleshoot_jesd204_tx>
 
 The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface
@@ -306,12 +307,15 @@ Physical Layer
 
 Physical layer peripherals are responsible for interfacing and configuring the
 high-speed serial transceivers. Currently, we have support for GTXE2, GTHE3,
-GTHE4, GTYE4 for AMD Xilinx and Arria 10 transceivers for Intel.
+GTHE4, GTYE4 for AMD Xilinx, GTY and GTYP transceivers for AMD Versal
+and Arria 10 transceivers for Intel.
 
-- :ref:`axi_adxcvr`: JESD204B Gigabit
+- :ref:`axi_adxcvr`: JESD204B/C Gigabit
   Transceiver Register Configuration Peripheral
-- :ref:`UTIL_ADXCVR <util_adxcvr>`: JESD204B Gigabit
+- :ref:`UTIL_ADXCVR <util_adxcvr>`: JESD204B/C Gigabit
   Transceiver Interface Peripheral for AMD Xilinx FPGAs
+- :ref:`AMD Versal Adaptive SoC Transceiver Subsystem <versal_transceiver_subsystem>`: JESD204B/C
+  Gigabit Transceiver Interface Peripheral for AMD Xilinx Versal FPGAs
 
 Link Layer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
