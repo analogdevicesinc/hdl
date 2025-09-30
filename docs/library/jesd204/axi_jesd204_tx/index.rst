@@ -90,7 +90,7 @@ Files
 .. important::
 
    To use this wrapper in your project, you need to use the procedure
-   :git-hdl:`adi_tpl_jesd204_tx_create <library/jesd204/scripts/jesd204.tcl#L6>`
+   :git-hdl:`adi_axi_jesd204_tx_create <library/jesd204/scripts/jesd204.tcl#L6>`
    to instantiate it.
 
 .. list-table::
