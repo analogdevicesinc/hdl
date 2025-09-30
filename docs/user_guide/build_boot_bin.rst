@@ -203,7 +203,7 @@ More information
 -------------------------------------------------------------------------------
 
 (NOT RECOMMENDED) If you're in for the long story, check out the
-`AMD Xilinx wiki <https://xilinx-wiki.atlassian.net/wiki/A>`__ pages.
+`AMD Xilinx wiki <https://xilinx-wiki.atlassian.net/wiki/spaces/A/overview>`__ pages.
 
 .. collapsible:: For more details on the long story (NOT RECOMMENDED)
 
