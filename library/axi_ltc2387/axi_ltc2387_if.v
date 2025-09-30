@@ -254,18 +254,16 @@ module axi_ltc2387_if #(
     my_ila i_ila (
     .clk(ila_clk_in),
     .probe0(clk_gate),
-    .probe1(dco_p),
-    .probe2(dco_n),
-    .probe3(delay_locked),
-    .probe4(clk_gate_d),
-    .probe5(adc_valid),
-    .probe6(adc_data),
-    .probe7(da_p_int_s),
-    .probe8(da_n_int_s),
-    .probe9(dco),
-    .probe10(dco_s),
-    .probe11(adc_data_int),
-    .probe12(adc_data_da_p),
-    .probe13(adc_data_da_n));
+    .probe1(delay_locked),
+    .probe2(clk_gate_d),
+    .probe3(adc_valid),
+    .probe4(adc_data),
+    .probe5(da_p_int_s),
+    .probe6(da_n_int_s),
+    .probe7(dco),
+    .probe8(dco_s),
+    .probe9(adc_data_int),
+    .probe10(adc_data_da_p),
+    .probe11(adc_data_da_n));
 
 endmodule
