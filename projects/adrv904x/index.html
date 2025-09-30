@@ -98,7 +98,8 @@
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a><ul>
-<li><a class="reference internal" href="#example-block-design-for-single-link-m-16-l-8">Example block design for Single link; M=16; L=8</a></li>
+<li><a class="reference internal" href="#example-block-design-for-single-link-and-rx-obs-disabled">Example block design for Single link and RX OBS disabled</a></li>
+<li><a class="reference internal" href="#example-block-design-for-single-link-and-rx-obs-in-non-linksharing-mode">Example block design for Single link and RX OBS in Non-LinkSharing mode</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
@@ -439,10 +440,84 @@ stations.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagrams:</p>
-<section id="example-block-design-for-single-link-m-16-l-8">
-<h4>Example block design for Single link; M=16; L=8<a class="headerlink" href="#example-block-design-for-single-link-m-16-l-8" title="Permalink to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/adrv904x_zcu102_jesd204c.svg"><img alt="ADRV904x JESD204C M=16 L=8 block diagram" class="align-center" src="../../_images/adrv904x_zcu102_jesd204c.svg" width="800" /></a>
-<p>The Rx links (ADC Path) operate with the following parameters:</p>
+<section id="example-block-design-for-single-link-and-rx-obs-disabled">
+<h4>Example block design for Single link and RX OBS disabled<a class="headerlink" href="#example-block-design-for-single-link-and-rx-obs-disabled" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/adrv904x_block_diagram.svg"><img alt="ADRV904x JESD204C M=16 L=8 block diagram" class="align-center" src="../../_images/adrv904x_block_diagram.svg" width="800" /></a>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="e91b735948dd04c6b394908f36eb6eaca1604d64" name="e91b735948dd04c6b394908f36eb6eaca1604d64" type="checkbox"></input><label for="e91b735948dd04c6b394908f36eb6eaca1604d64"><p>Click here for details on the block diagram modules</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Block name</p></th>
+<th class="head"><p>IP name</p></th>
+<th class="head"><p>Documentation</p></th>
+<th class="head"><p>Additional info</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AXI_ADXCVR</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr" target="_blank">axi_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr"><span class="std std-ref">AXI ADXCVR</span></a></p></td>
+<td><p>2 instances, one for Rx and one for Tx</p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_CLKGEN</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen" target="_blank">axi_clkgen</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
+<td><p>2 instances, one for Rx and one for Tx</p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_DMAC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">axi_dmac</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
+<td><p>2 instances, one for Rx and one for Tx</p></td>
+</tr>
+<tr class="row-odd"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
+<td><p>2 instances, one for Rx and one for Tx</p></td>
+</tr>
+<tr class="row-even"><td><p>RX JESD LINK</p></td>
+<td><p>axi_adrv904x_rx_jesd</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
+<td><p>Instantiaded by <code class="docutils literal notranslate"><span class="pre">adi_axi_jesd204_rx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX JESD TPL</p></td>
+<td><p>rx_adrv904x_tpl_core</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a></p></td>
+<td><p>Instantiated by <code class="docutils literal notranslate"><span class="pre">adi_tpl_jesd204_rx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-even"><td><p>TX JESD LINK</p></td>
+<td><p>axi_adrv904x_tx_jesd</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a></p></td>
+<td><p>Instantiaded by <code class="docutils literal notranslate"><span class="pre">adi_axi_jesd204_tx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX JESD TPL</p></td>
+<td><p>tx_adrv904x_tpl_core</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
+<td><p>Instantiated by <code class="docutils literal notranslate"><span class="pre">adi_tpl_jesd204_tx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_UPACK</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">util_upack2</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_CPACK</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2" target="_blank">util_cpack2</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div><p>The Rx links (ADC Path) operate with the following parameters:</p>
 <ul class="simple">
 <li><p>Rx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16</p></li>
 <li><p>Sample Rate: 491.52 MSPS</p></li>
@@ -459,6 +534,124 @@ stations.</p>
 <li><p>Dual link: No</p></li>
 <li><p>TX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)</p></li>
 <li><p>REF_CLK: 491.52 MHz (Lane Rate/33)</p></li>
+<li><p>JESD204C Lane Rate: 16.22 Gbps</p></li>
+<li><p>QPLL0</p></li>
+</ul>
+</section>
+<section id="example-block-design-for-single-link-and-rx-obs-in-non-linksharing-mode">
+<h4>Example block design for Single link and RX OBS in Non-LinkSharing mode<a class="headerlink" href="#example-block-design-for-single-link-and-rx-obs-in-non-linksharing-mode" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/adrv904x_nls_block_diagram.svg"><img alt="ADRV904x JESD204C NLS block diagram" class="align-center" src="../../_images/adrv904x_nls_block_diagram.svg" width="800" /></a>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="06066d4c6b823c443295b769eb525b10daa54612" name="06066d4c6b823c443295b769eb525b10daa54612" type="checkbox"></input><label for="06066d4c6b823c443295b769eb525b10daa54612"><p>Click here for details on the block diagram modules</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Block name</p></th>
+<th class="head"><p>IP name</p></th>
+<th class="head"><p>Documentation</p></th>
+<th class="head"><p>Additional info</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AXI_ADXCVR</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr" target="_blank">axi_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr"><span class="std std-ref">AXI ADXCVR</span></a></p></td>
+<td><p>3 instances, one for Rx, one for Rx-os and one for Tx</p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_CLKGEN</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen" target="_blank">axi_clkgen</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
+<td><p>3 instances, one for Rx, one for Rx-os and one for Tx</p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_DMAC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">axi_dmac</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
+<td><p>3 instances, one for Rx, one for Rx-os and one for Tx</p></td>
+</tr>
+<tr class="row-odd"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
+<td><p>3 instances, one for Rx, one for Rx-os and one for Tx</p></td>
+</tr>
+<tr class="row-even"><td><p>RX JESD LINK</p></td>
+<td><p>axi_adrv904x_rx_jesd</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
+<td><p>Instantiaded by <code class="docutils literal notranslate"><span class="pre">adi_axi_jesd204_rx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX JESD TPL</p></td>
+<td><p>rx_adrv904x_tpl_core</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a></p></td>
+<td><p>Instantiated by <code class="docutils literal notranslate"><span class="pre">adi_tpl_jesd204_rx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-even"><td><p>RX OS JESD LINK</p></td>
+<td><p>axi_adrv904x_rx_os_jesd</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
+<td><p>Instantiaded by <code class="docutils literal notranslate"><span class="pre">adi_axi_jesd204_rx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX OS JESD TPL</p></td>
+<td><p>rx_os_adrv904x_tpl_core</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a></p></td>
+<td><p>Instantiated by <code class="docutils literal notranslate"><span class="pre">adi_tpl_jesd204_rx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-even"><td><p>TX JESD LINK</p></td>
+<td><p>axi_adrv904x_tx_jesd</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a></p></td>
+<td><p>Instantiaded by <code class="docutils literal notranslate"><span class="pre">adi_axi_jesd204_tx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX JESD TPL</p></td>
+<td><p>tx_adrv904x_tpl_core</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
+<td><p>Instantiated by <code class="docutils literal notranslate"><span class="pre">adi_tpl_jesd204_tx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_UPACK</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">util_upack2</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_CPACK</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2" target="_blank">util_cpack2</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
+<td><p>2 instances one for Rx and one for Rx-os</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div><p>The Rx links (ADC Path) operate with the following parameters:</p>
+<ul class="simple">
+<li><p>Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16</p></li>
+<li><p>Sample Rate: 491.52 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>RX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)</p></li>
+<li><p>REF_CLK: 491.52 MHz</p></li>
+<li><p>JESD204C Lane Rate: 16.22 Gbps</p></li>
+<li><p>QPLL0</p></li>
+</ul>
+<p>The Tx links (DAC Path) operate with the following parameters:</p>
+<ul class="simple">
+<li><p>Tx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16</p></li>
+<li><p>Sample Rate: 491.52 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>TX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)</p></li>
+<li><p>REF_CLK: 491.52 MHz</p></li>
+<li><p>JESD204C Lane Rate: 16.22 Gbps</p></li>
+<li><p>QPLL0</p></li>
+</ul>
+<p>The ORx links (ADC Obs Path) operate with the following parameters:</p>
+<ul class="simple">
+<li><p>ORx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16</p></li>
+<li><p>Sample Rate: 491.52 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>ORX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)</p></li>
+<li><p>REF_CLK: 491.52 MHz</p></li>
 <li><p>JESD204C Lane Rate: 16.22 Gbps</p></li>
 <li><p>QPLL0</p></li>
 </ul>
@@ -481,22 +674,26 @@ hdl/projects/adrv904x/$CARRIER/system_project.tcl</p>
 \[Lane Rate = Sample Rate*\frac{M}{L}*N'* \frac{66}{64}\]</div>
 </div>
 <p>The following are the parameters of this project that can be configured:</p>
-<ul>
+<ul class="simple">
 <li><p>JESD_MODE: used link layer encoder mode</p>
-<blockquote>
-<div><ul class="simple">
+<ul>
 <li><p>64B66B - 64b66b link layer defined in JESD204C</p></li>
 <li><p>8B10B  - 8b10b link layer defined in JESD204B</p></li>
 </ul>
-</div></blockquote>
+</li>
+<li><p>ORX_ENABLE: Additional data path for RX-OS</p>
+<ul>
+<li><p>0 - Disabled (used for profiles with RX-OS disabled)</p></li>
+<li><p>1 - Enabled (used for profiles with RX-OS enabled)</p></li>
+</ul>
 </li>
 <li><p>RX_LANE_RATE: lane rate of the Rx link</p></li>
 <li><p>TX_LANE_RATE: lane rate of the Tx link</p></li>
-<li><p>[RX/TX]_JESD_M: number of converters per link</p></li>
-<li><p>[RX/TX]_JESD_L: number of lanes per link</p></li>
-<li><p>[RX/TX]_JESD_S: number of samples per frame</p></li>
-<li><p>[RX/TX]_JESD_NP: number of bits per sample</p></li>
-<li><p>[RX/TX]_NUM_LINKS: number of links</p></li>
+<li><p>[RX/TX/RX_OS]_JESD_M: number of converters per link</p></li>
+<li><p>[RX/TX/RX_OS]_JESD_L: number of lanes per link</p></li>
+<li><p>[RX/TX/RX_OS]_JESD_S: number of samples per frame</p></li>
+<li><p>[RX/TX/RX_OS]_JESD_NP: number of bits per sample</p></li>
+<li><p>[RX/TX/RX_OS]_NUM_LINKS: number of links</p></li>
 </ul>
 </section>
 <section id="clock-scheme">
@@ -521,11 +718,17 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <tr class="row-odd"><td><p>axi_adrv904x_rx_jesd</p></td>
 <td><p>0x84AA_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_adrv904x_tx_dma</p></td>
+<tr class="row-even"><td><p>axi_adrv904x_rx_os_jesd</p></td>
+<td><p>0x85AA_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv904x_tx_dma</p></td>
 <td><p>0x9C42_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_adrv904x_rx_dma</p></td>
+<tr class="row-even"><td><p>axi_adrv904x_rx_dma</p></td>
 <td><p>0x9C40_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv904x_rx_os_dma</p></td>
+<td><p>0x9C80_0000</p></td>
 </tr>
 <tr class="row-even"><td><p>tx_adrv904x_tpl_core</p></td>
 <td><p>0x84A0_4000</p></td>
@@ -533,11 +736,32 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <tr class="row-odd"><td><p>rx_adrv904x_tpl_core</p></td>
 <td><p>0x84A0_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_adrv904x_tx_xcvr</p></td>
+<tr class="row-even"><td><p>rx_os_adrv904x_tpl_core</p></td>
+<td><p>0x84A0_8000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv904x_tx_xcvr</p></td>
 <td><p>0x84A8_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_adrv904x_rx_xcvr</p></td>
+<tr class="row-even"><td><p>axi_adrv904x_rx_xcvr</p></td>
 <td><p>0x84A6_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv904x_rx_os_xcvr</p></td>
+<td><p>0x85A6_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_adrv904x_tx_clkgen</p></td>
+<td><p>0x83C0_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv904x_rx_clkgen</p></td>
+<td><p>0x83C1_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_adrv904x_rx_os_clkgen</p></td>
+<td><p>0x83C2_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv904x_tx_data_offload</p></td>
+<td><p>0x9C44_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv904x_rx_data_offload</p></td>
+<td><p>0x9C45_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -700,15 +924,25 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <td><p>107</p></td>
 <td><p>139</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_adrv904x_tx_dma</p></td>
-<td><p>13</p></td>
+<tr class="row-even"><td><p>axi_adrv904x_rx_os_jesd</p></td>
+<td><p>12</p></td>
 <td><p>108</p></td>
 <td><p>140</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_adrv904x_rx_dma</p></td>
-<td><p>14</p></td>
+<tr class="row-odd"><td><p>axi_adrv904x_tx_dma</p></td>
+<td><p>13</p></td>
 <td><p>109</p></td>
 <td><p>141</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_adrv904x_rx_dma</p></td>
+<td><p>14</p></td>
+<td><p>110</p></td>
+<td><p>142</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv904x_rx_os_dma</p></td>
+<td><p>15</p></td>
+<td><p>111</p></td>
+<td><p>143</p></td>
 </tr>
 </tbody>
 </table>
@@ -744,45 +978,66 @@ configure this project, depending on the carrier used.
 Where a cell contains a — (dash) it means that the parameter doesn’t exist
 for that project (adrv904x/carrier or adrv904x/carrier).</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="5a5f2550ea7b4f01d4845ae8a8e43668858f4ec2" name="5a5f2550ea7b4f01d4845ae8a8e43668858f4ec2" type="checkbox"></input><label for="5a5f2550ea7b4f01d4845ae8a8e43668858f4ec2"><p>Default values of the ``make`` parameters for ADRV904x</p>
+<input class="collapsible_input" id="ce163fb4a1d920f5cc4646e1250e9e2783523579" name="ce163fb4a1d920f5cc4646e1250e9e2783523579" type="checkbox"></input><label for="ce163fb4a1d920f5cc4646e1250e9e2783523579"><p>Default values of the ``make`` parameters for ADRV904x</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
-<th class="head" colspan="2"><p>Default value of the parameters depending on carrier</p></th>
+<th class="head"><p>Default value of the parameters depending on carrier</p></th>
 </tr>
 <tr class="row-even"><th class="head"></th>
-<th class="head" colspan="2"><p>ZCU102</p></th>
+<th class="head"><p>ZCU102</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-odd"><td><p>JESD_MODE</p></td>
-<td colspan="2"><p>64B66B</p></td>
+<td><p>64B66B</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_LANE_RATE</p></td>
-<td colspan="2"><p>16.22</p></td>
+<tr class="row-even"><td><p>ORX_ENABLE</p></td>
+<td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX_LANE_RATE</p></td>
-<td colspan="2"><p>16.22</p></td>
+<tr class="row-odd"><td><p>RX_LANE_RATE</p></td>
+<td><p>16.22</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_LANE_RATE</p></td>
+<td><p>16.22</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_NUM_LINKS</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_NUM_LINKS</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_OS_NUM_LINKS</p></td>
+<td><p>1</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_JESD_M</p></td>
-<td colspan="2"><p>16</p></td>
+<td><p>16</p></td>
 </tr>
 <tr class="row-odd"><td><p>RX_JESD_L</p></td>
-<td colspan="2"><p>8</p></td>
+<td><p>8</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_JESD_S</p></td>
-<td colspan="2"><p>1</p></td>
+<td><p>1</p></td>
 </tr>
 <tr class="row-odd"><td><p>TX_JESD_M</p></td>
-<td colspan="2"><p>16</p></td>
+<td><p>16</p></td>
 </tr>
 <tr class="row-even"><td><p>TX_JESD_L</p></td>
-<td colspan="2"><p>8</p></td>
+<td><p>8</p></td>
 </tr>
 <tr class="row-odd"><td><p>TX_JESD_S</p></td>
-<td colspan="2"><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_OS_JESD_M</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_OS_JESD_L</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_OS_JESD_S</p></td>
+<td><p>0</p></td>
 </tr>
 </tbody>
 </table>
@@ -806,28 +1061,28 @@ following table.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
-<td><p>5</p></td>
+<td><p>0</p></td>
 </tr>
 <tr class="row-odd"><td><p>1</p></td>
-<td><p>6</p></td>
-</tr>
-<tr class="row-even"><td><p>2</p></td>
-<td><p>4</p></td>
-</tr>
-<tr class="row-odd"><td><p>3</p></td>
-<td><p>7</p></td>
-</tr>
-<tr class="row-even"><td><p>4</p></td>
-<td><p>2</p></td>
-</tr>
-<tr class="row-odd"><td><p>5</p></td>
-<td><p>3</p></td>
-</tr>
-<tr class="row-even"><td><p>6</p></td>
 <td><p>1</p></td>
 </tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>6</p></td>
+</tr>
 <tr class="row-odd"><td><p>7</p></td>
-<td><p>0</p></td>
+<td><p>7</p></td>
 </tr>
 </tbody>
 </table>
@@ -846,28 +1101,28 @@ following table.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
-<td><p>0</p></td>
-</tr>
-<tr class="row-odd"><td><p>1</p></td>
-<td><p>1</p></td>
-</tr>
-<tr class="row-even"><td><p>2</p></td>
-<td><p>2</p></td>
-</tr>
-<tr class="row-odd"><td><p>3</p></td>
-<td><p>3</p></td>
-</tr>
-<tr class="row-even"><td><p>4</p></td>
 <td><p>7</p></td>
 </tr>
-<tr class="row-odd"><td><p>5</p></td>
+<tr class="row-odd"><td><p>1</p></td>
 <td><p>6</p></td>
 </tr>
-<tr class="row-even"><td><p>6</p></td>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
 <td><p>5</p></td>
 </tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>0</p></td>
+</tr>
 <tr class="row-odd"><td><p>7</p></td>
-<td><p>4</p></td>
+<td><p>2</p></td>
 </tr>
 </tbody>
 </table>
@@ -926,55 +1181,59 @@ following table.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>AXI_DMAC</p></td>
+<tr class="row-even"><td><p>AXI_CLKGEN</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen" target="_blank">library/axi_clkgen</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_SYSID</p></td>
+<tr class="row-even"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>SYSID_ROM</p></td>
+<tr class="row-odd"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_CPACK2</p></td>
+<tr class="row-even"><td><p>UTIL_CPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2" target="_blank">library/util_pack/util_cpack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_UPACK2</p></td>
+<tr class="row-odd"><td><p>UTIL_UPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">library/util_pack/util_upack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>DATA_OFFLOAD</p></td>
+<tr class="row-even"><td><p>DATA_OFFLOAD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">library/data_offload</a></p></td>
 <td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_DO_RAM</p></td>
+<tr class="row-odd"><td><p>UTIL_DO_RAM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_do_ram" target="_blank">library/util_do_ram</a></p></td>
 <td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_ADXCVR for AMD</p></td>
+<tr class="row-even"><td><p>UTIL_ADXCVR for AMD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr" target="_blank">library/xilinx/util_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR core for AMD Xilinx devices</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_ADXCVR for AMD</p></td>
+<tr class="row-odd"><td><p>AXI_ADXCVR for AMD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr" target="_blank">library/xilinx/axi_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">AMD Xilinx Devices</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_JESD204_RX</p></td>
+<tr class="row-even"><td><p>AXI_JESD204_RX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx" target="_blank">library/jesd204/axi_jesd204_rx</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_JESD204_TX</p></td>
+<tr class="row-odd"><td><p>AXI_JESD204_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_tx" target="_blank">library/jesd204/axi_jesd204_tx</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>JESD204_TPL_ADC</p></td>
+<tr class="row-even"><td><p>JESD204_TPL_ADC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc" target="_blank">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>JESD204_TPL_DAC</p></td>
+<tr class="row-odd"><td><p>JESD204_TPL_DAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_dac" target="_blank">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
 </tr>
