@@ -86,6 +86,19 @@ if {$USE_MMCM == "1"} {
   ad_connect ref_clk  axi_pwm_gen/ext_clk
 }
 
+
+# debug
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_1
+set_property -dict [list \
+  CONFIG.PRIM_IN_FREQ {100.000} \
+  CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {200.000} \
+] [get_bd_cells clk_wiz_1]
+
+ad_connect ref_clk   clk_wiz_1/clk_in1
+ad_connect sys_rstgen/peripheral_reset  clk_wiz_1/reset
+ad_connect clk_wiz_1/clk_out1  axi_ltc2387/ila_clk_in
+
 # connections
 
 ad_connect sys_200m_clk axi_ltc2387/delay_clk
