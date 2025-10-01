@@ -282,8 +282,9 @@ module system_top #(
     .O (tx_device_clk));
 
   // spi
-  assign spi2_cs[5:0] = spi_csn[5:0];
   assign spi2_sclk    = spi_clk;
+  assign spi2_cs[1:0] = spi_csn[1:0];
+  assign spi2_cs[4]   = spi_csn[2];
 
   ad_3w_spi #(
     .NUM_OF_SLAVES(3)
