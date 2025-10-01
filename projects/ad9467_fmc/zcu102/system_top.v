@@ -39,7 +39,7 @@ module system_top (
 
   input   [12:0]  gpio_bd_i,
   output  [ 7:0]  gpio_bd_o,
-  
+
   input                   adc_clk_in_n,
   input                   adc_clk_in_p,
   input       [ 7:0]      adc_data_in_n,
