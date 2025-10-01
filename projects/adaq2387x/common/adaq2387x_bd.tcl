@@ -93,6 +93,8 @@ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_1
 set_property -dict [list \
   CONFIG.PRIM_IN_FREQ {100.000} \
   CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {200.000} \
+  CONFIG.CLKOUT1_REQUESTED_PHASE {45} \
+  CONFIG.MMCM_CLKOUT0_PHASE {45.000} \
 ] [get_bd_cells clk_wiz_1]
 
 ad_connect ref_clk   clk_wiz_1/clk_in1

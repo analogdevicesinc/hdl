@@ -80,6 +80,12 @@ module axi_ltc2387_if #(
 
   // internal wires
 
+  (* keep = "true" *) wire            da_p_int_s_dbg;
+  (* keep = "true" *) wire            da_n_int_s_dbg;
+  (* keep = "true" *) wire [17:0]     adc_data_int_dbg;
+  (* keep = "true" *) wire [WIDTH:0]  adc_data_da_p_dbg;
+  (* keep = "true" *) wire [WIDTH:0]  adc_data_da_n_dbg;
+
   wire            da_p_int_s;
   wire            da_n_int_s;
   wire            db_p_int_s;
@@ -97,8 +103,13 @@ module axi_ltc2387_if #(
   reg      [2:0]  clk_gate_d = 'b0;
 
   // assignments
+  assign da_p_int_s_dbg = da_p_int_s;
+  assign da_n_int_s_dbg = da_n_int_s;
+  assign adc_data_int_dbg = adc_data_int;
+  assign adc_data_da_p_dbg = adc_data_da_p;
+  assign adc_data_da_n_dbg = adc_data_da_n;
 
-  always @(posedge clk) begin
+always @(posedge clk) begin
     adc_valid <= 1'b0;
     clk_gate_d <= {clk_gate_d[1:0], clk_gate};
     if (clk_gate_d[1] == 1'b1 && clk_gate_d[0] == 1'b0) begin
@@ -258,12 +269,12 @@ module axi_ltc2387_if #(
     .probe2(clk_gate_d),
     .probe3(adc_valid),
     .probe4(adc_data),
-    .probe5(da_p_int_s),
-    .probe6(da_n_int_s),
+    .probe5(da_p_int_s_dbg),
+    .probe6(da_n_int_s_dbg),
     .probe7(dco),
     .probe8(dco_s),
-    .probe9(adc_data_int),
-    .probe10(adc_data_da_p),
-    .probe11(adc_data_da_n));
+    .probe9(adc_data_int_dbg),
+    .probe10(adc_data_da_p_dbg),
+    .probe11(adc_data_da_n_dbg));
 
 endmodule
