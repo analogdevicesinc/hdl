@@ -53,8 +53,7 @@ similar ways, they are obligated to comply to the terms and conditions of
 the :git-hdl:`Software License Agreement <LICENSE_ADIJESD204>`.
 This core is released under two different licenses. You may choose either:
 
-- Commercial licenses may be purchased from :adi:`ADI <>` or any
-  authorized distributor by ordering
+- Commercial licenses may be purchased from :adi:`ADI <>` by ordering
   :adi:`IP-JESD204 <en/design-center/evaluation-hardware-and-software/jesd204-interface-framework.html>`.
   This will allow you to use the core in a closed system.
 - GPL 2, this allows you to use the core for any purpose, but you must release
