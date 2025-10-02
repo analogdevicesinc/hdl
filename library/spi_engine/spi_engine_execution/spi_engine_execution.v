@@ -49,30 +49,30 @@ module spi_engine_execution #(
   input clk,
   input resetn,
 
-  output reg active,
+ (* mark_debug = "true" *) output reg active,
 
-  output cmd_ready,
-  input cmd_valid,
-  input [15:0] cmd,
+ (* mark_debug = "true" *) output cmd_ready,
+ (* mark_debug = "true" *) input cmd_valid,
+ (* mark_debug = "true" *)input [15:0] cmd,
 
-  input sdo_data_valid,
-  output sdo_data_ready,
-  input [(DATA_WIDTH-1):0] sdo_data,
+ (* mark_debug = "true" *) input sdo_data_valid,
+  (* mark_debug = "true" *)output sdo_data_ready,
+ (* mark_debug = "true" *) input [(DATA_WIDTH-1):0] sdo_data,
 
-  input sdi_data_ready,
-  output sdi_data_valid,
-  output [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
+ (* mark_debug = "true" *) input sdi_data_ready,
+ (* mark_debug = "true" *) output sdi_data_valid,
+ (* mark_debug = "true" *) output [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
 
-  input sync_ready,
-  output reg sync_valid,
-  output [7:0] sync,
+ (* mark_debug = "true" *) input sync_ready,
+ (* mark_debug = "true" *) output reg sync_valid,
+ (* mark_debug = "true" *) output [7:0] sync,
 
   input echo_sclk,
-  output reg sclk,
-  output reg sdo,
+ (* mark_debug = "true" *) output reg sclk,
+ (* mark_debug = "true" *) output reg sdo,
   output reg sdo_t,
-  input [NUM_OF_SDI-1:0] sdi,
-  output reg [NUM_OF_CS-1:0] cs,
+ (* mark_debug = "true" *) input [NUM_OF_SDI-1:0] sdi,
+ (* mark_debug = "true" *) output reg [NUM_OF_CS-1:0] cs,
   output reg three_wire
 );
 

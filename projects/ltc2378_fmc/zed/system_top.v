@@ -88,9 +88,9 @@ module system_top (
   input           ltc2378_spi_sdi,
   output          ltc2378_spi_sdo,
   output          ltc2378_spi_sclk,
-  output          ltc2378_spi_cnv,
+ (* mark_debug = "true" *) output          ltc2378_spi_cnv,
 
-  input           ltc2378_spi_busy,
+ //(* mark_debug = "true" *) input           ltc2378_spi_busy,
   inout           ltc2378_chain,
   inout           ltc2378_dcgn
 );
@@ -187,13 +187,13 @@ system_wrapper i_system_wrapper (
     .iic_mux_sda_i (iic_mux_sda_i_s),
     .iic_mux_sda_o (iic_mux_sda_o_s),
     .iic_mux_sda_t (iic_mux_sda_t_s),
-    .ltc2378_spi_sdo (ltc237_spi_sdo),
+    .ltc2378_spi_sdo (ltc2378_spi_sdo),
     .ltc2378_spi_sdo_t (),
     .ltc2378_spi_sdi (ltc2378_spi_sdi),
-    .ltc2378_spi_cs (/**/),
+    .ltc2378_spi_cs (ltc2378_spi_cnv),
     .ltc2378_spi_sclk (ltc2378_spi_sclk),
-    .ltc2378_spi_busy(~ltc2378_spi_busy),
-    .ltc2378_spi_cnv(ltc2378_spi_cnv),
+    //.ltc2378_spi_busy(ltc2378_spi_busy),
+    .ltc2378_spi_cnv(/*ltc2378_spi_cnv*/),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 

@@ -5,7 +5,7 @@
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ltc2378_spi
 
-create_bd_port -dir I ltc2378_spi_busy
+#create_bd_port -dir I ltc2378_spi_busy
 create_bd_port -dir O ltc2378_spi_cnv
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
@@ -22,6 +22,8 @@ set hier_spi_engine spi_ltc2378
 
 spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
 
+ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_offload CONFIG.ASYNC_TRIG 1
+
 # clkgen - 180 MHz
 ad_ip_instance axi_clkgen spi_clkgen
 ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 5
@@ -33,10 +35,12 @@ ad_connect spi_clk spi_clkgen/clk_0
 
 # pwm generator
 ad_ip_instance axi_pwm_gen ltc2378_trigger_gen
-ad_ip_parameter ltc2378_trigger_gen CONFIG.PULSE_0_PERIOD 180
-ad_ip_parameter ltc2378_trigger_gen CONFIG.PULSE_0_WIDTH 1
+ad_ip_parameter ltc2378_trigger_gen CONFIG.ASYNC_CLK_EN 0 ;# deactivate ASYNC_CLK_EN isf we do not use the ext_clk
+ad_ip_parameter ltc2378_trigger_gen CONFIG.PULSE_0_PERIOD 100 ;# 100 x 10ns = 1000
+ad_ip_parameter ltc2378_trigger_gen CONFIG.PULSE_0_WIDTH 2 ;# 2 x 10ns // refference is s_axi_clock = 100MHz = 10 ns
 
 # trigger to BUSY's negative edge
+
 #create_bd_cell -type module -reference sync_bits busy_sync
 #create_bd_cell -type module -reference ad_edge_detect busy_capture
 #set_property -dict [list CONFIG.EDGE 1] [get_bd_cells busy_capture]
@@ -48,14 +52,16 @@ ad_ip_parameter ltc2378_trigger_gen CONFIG.PULSE_0_WIDTH 1
 #ad_connect spi_clk busy_sync/out_clk
 #ad_connect busy_sync/in_bits ltc2378_spi_busy
 #ad_connect busy_sync/out_bits busy_capture/signal_in
-#ad_connect busy_capture/signal_in ltc2378_spi_busy
 #ad_connect busy_capture/signal_out $hier_spi_engine/${hier_spi_engine}_offload/trigger
 
-ad_connect ltc2378_spi_busy $hier_spi_engine/${hier_spi_engine}_offload/trigger
+#ad_connect ltc2378_spi_cnv $hier_spi_engine/${hier_spi_engine}_offload/trigger
 
-ad_connect spi_clk ltc2378_trigger_gen/ext_clk
+#ad_connect spi_clk ltc2378_trigger_gen/ext_clk
 ad_connect $sys_cpu_clk ltc2378_trigger_gen/s_axi_aclk
 ad_connect sys_cpu_resetn ltc2378_trigger_gen/s_axi_aresetn
+#ad_connect ltc2378_trigger_gen/pwm_0 ltc2378_spi_cnv
+
+ad_connect ltc2378_trigger_gen/pwm_0 $hier_spi_engine/${hier_spi_engine}_offload/trigger
 ad_connect ltc2378_trigger_gen/pwm_0 ltc2378_spi_cnv
 
 # dma to receive data stream

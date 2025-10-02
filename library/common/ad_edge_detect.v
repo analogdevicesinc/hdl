@@ -44,8 +44,8 @@ module ad_edge_detect #(
   input                   clk,
   input                   rst,
 
-  input                   signal_in,
-  output  reg             signal_out
+ (* mark_debug = "true" *) input                   signal_in,
+ (* mark_debug = "true" *) output  reg             signal_out
 );
 
   localparam  POS_EDGE = 0;
