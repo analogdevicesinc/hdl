@@ -35,9 +35,9 @@
 `timescale 1ns/1ps
 
 module util_axis_fifo #(
+  parameter ASYNC_CLK = 1,
   parameter DATA_WIDTH = 64,
   parameter ADDRESS_WIDTH = 5,
-  parameter ASYNC_CLK = 1,
   parameter M_AXIS_REGISTERED = 1,
   parameter [ADDRESS_WIDTH-1:0] ALMOST_EMPTY_THRESHOLD = 16,
   parameter [ADDRESS_WIDTH-1:0] ALMOST_FULL_THRESHOLD = 16,

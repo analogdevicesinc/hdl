@@ -37,11 +37,11 @@
 module util_axis_fifo_asym #(
   parameter ASYNC_CLK = 1,
   parameter S_DATA_WIDTH = 64,
-  parameter ADDRESS_WIDTH = 5,
   parameter M_DATA_WIDTH = 128,
+  parameter ADDRESS_WIDTH = 5,
   parameter M_AXIS_REGISTERED = 1,
-  parameter ALMOST_EMPTY_THRESHOLD = 4,
-  parameter ALMOST_FULL_THRESHOLD = 4,
+  parameter [ADDRESS_WIDTH-1:0] ALMOST_EMPTY_THRESHOLD = 4,
+  parameter [ADDRESS_WIDTH-1:0] ALMOST_FULL_THRESHOLD = 4,
   parameter TKEEP_EN = 0,
   parameter TSTRB_EN = 0,
   parameter TLAST_EN = 0,
@@ -152,6 +152,9 @@ module util_axis_fifo_asym #(
         .TLAST_EN(TLAST_EN),
         .TKEEP_EN(TKEEP_EN),
         .TSTRB_EN(TSTRB_EN),
+        .TUSER_EN(TUSER_EN),
+        .TID_EN(TID_EN),
+        .TDEST_EN(TDEST_EN),
         .TUSER_WIDTH(A_TUSER_WIDTH),
         .TID_WIDTH(TID_WIDTH),
         .TDEST_WIDTH(TDEST_WIDTH)
@@ -232,7 +235,7 @@ module util_axis_fifo_asym #(
           assign s_axis_tuser_int_s = s_axis_tuser;
         end else begin
           for (i=0; i<RATIO; i=i+1) begin
-            assign s_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH] = s_axis_tuser[A_TUSER_WIDTH*i+:A_TUSER_WIDTH];
+            assign s_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH] = s_axis_tuser;
           end
         end
       end else begin

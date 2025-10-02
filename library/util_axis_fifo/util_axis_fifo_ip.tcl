@@ -242,7 +242,7 @@ set_property -dict [list \
 	"display_name" "User signal width" \
 	"tooltip" "\[TUSER_WIDTH\] TUSER signal bus width." \
 ] [ipgui::get_guiparamspec -name "TUSER_WIDTH" -component $cc]
-set_property driver_value 0 [ipx::get_ports s_axis_tuser -of_objects $cc]
+set_property driver_value 1 [ipx::get_ports s_axis_tuser -of_objects $cc]
 
 ipgui::add_param -name "TID_EN" -component $cc -parent $interface_group
 set_property -dict [list \
@@ -254,7 +254,7 @@ set_property -dict [list \
 	"display_name" "ID signal width" \
 	"tooltip" "\[TID_WIDTH\] TID signal bus width." \
 ] [ipgui::get_guiparamspec -name "TID_WIDTH" -component $cc]
-set_property driver_value 0 [ipx::get_ports s_axis_tid -of_objects $cc]
+set_property driver_value 1 [ipx::get_ports s_axis_tid -of_objects $cc]
 
 ipgui::add_param -name "TDEST_EN" -component $cc -parent $interface_group
 set_property -dict [list \
@@ -266,7 +266,7 @@ set_property -dict [list \
 	"display_name" "Destination signal width" \
 	"tooltip" "\[TDEST_WIDTH\] TDEST signal bus width." \
 ] [ipgui::get_guiparamspec -name "TDEST_WIDTH" -component $cc]
-set_property driver_value 0 [ipx::get_ports s_axis_tdest -of_objects $cc]
+set_property driver_value 1 [ipx::get_ports s_axis_tdest -of_objects $cc]
 
 set other_group [ipgui::add_group -name "Other Features" -component $cc \
 	-parent $page0 -display_name "Other Features" ]
