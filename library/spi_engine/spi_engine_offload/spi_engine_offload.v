@@ -64,7 +64,7 @@ module spi_engine_offload #(
   input spi_clk,
   input spi_resetn,
 
- (* mark_debug = "true" *) input trigger,
+  input trigger,
 
   output cmd_valid,
   input cmd_ready,
