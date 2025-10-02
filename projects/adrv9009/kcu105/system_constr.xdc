@@ -97,3 +97,7 @@ set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[1]]
 set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[0]]
 set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[1]]
 set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[2]]
+
+# Hold time constraints for critical paths
+set_max_delay -datapath_only -from [get_clocks mmcm_clkout1] -to [get_clocks mmcm_clkout0] 5.0
+set_min_delay -from [get_clocks mmcm_clkout1] -to [get_clocks mmcm_clkout0] 1.0
