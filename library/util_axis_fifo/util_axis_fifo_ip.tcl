@@ -58,11 +58,11 @@ adi_set_ports_dependency "s_axis_tkeep" \
 adi_set_ports_dependency "s_axis_tstrb" \
 	"(spirit:decode(id('MODELPARAM_VALUE.TSTRB_EN')) = 1)"
 adi_set_ports_dependency "s_axis_tuser" \
-	"(spirit:decode(id('MODELPARAM_VALUE.TUSER_WIDTH')) > 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.TUSER_EN')) = 1)"
 adi_set_ports_dependency "s_axis_tid" \
-	"(spirit:decode(id('MODELPARAM_VALUE.TID_WIDTH')) > 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.TID_EN')) = 1)"
 adi_set_ports_dependency "s_axis_tdest" \
-	"(spirit:decode(id('MODELPARAM_VALUE.TDEST_WIDTH')) > 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.TDEST_EN')) = 1)"
 
 adi_add_bus "m_axis" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
@@ -86,11 +86,11 @@ adi_set_ports_dependency "m_axis_tkeep" \
 adi_set_ports_dependency "m_axis_tstrb" \
 	"(spirit:decode(id('MODELPARAM_VALUE.TSTRB_EN')) = 1)"
 adi_set_ports_dependency "m_axis_tuser" \
-	"(spirit:decode(id('MODELPARAM_VALUE.TUSER_WIDTH')) > 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.TUSER_EN')) = 1)"
 adi_set_ports_dependency "m_axis_tid" \
-	"(spirit:decode(id('MODELPARAM_VALUE.TID_WIDTH')) > 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.TID_EN')) = 1)"
 adi_set_ports_dependency "m_axis_tdest" \
-	"(spirit:decode(id('MODELPARAM_VALUE.TDEST_WIDTH')) > 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.TDEST_EN')) = 1)"
 
 adi_add_bus_clock "m_axis_aclk" "m_axis" "m_axis_aresetn"
 adi_add_bus_clock "s_axis_aclk" "s_axis" "s_axis_aresetn"
@@ -123,17 +123,17 @@ set_property -dict [list \
 
 set_property -dict [list \
 	"value_validation_type" "range_long" \
-	"value_validation_range_minimum" "0" \
+	"value_validation_range_minimum" "1" \
 ] [ipx::get_user_parameters TUSER_WIDTH -of_objects $cc]
 
 set_property -dict [list \
 	"value_validation_type" "range_long" \
-	"value_validation_range_minimum" "0" \
+	"value_validation_range_minimum" "1" \
 ] [ipx::get_user_parameters TID_WIDTH -of_objects $cc]
 
 set_property -dict [list \
 	"value_validation_type" "range_long" \
-	"value_validation_range_minimum" "0" \
+	"value_validation_range_minimum" "1" \
 ] [ipx::get_user_parameters TDEST_WIDTH -of_objects $cc]
 
 set_property -dict [list \
@@ -145,10 +145,13 @@ set_property -dict [list \
 ] [ipx::get_user_parameters ASYNC_CLK -of_objects $cc]
 
 foreach {k v} { \
-	"M_AXIS_REGISTERED"   "true" \
-	"TLAST_EN"            "false" \
 	"TKEEP_EN"            "false" \
 	"TSTRB_EN"            "false" \
+	"TLAST_EN"            "false" \
+	"TUSER_EN"            "false" \
+	"TID_EN"              "false" \
+	"TDEST_EN"            "false" \
+	"M_AXIS_REGISTERED"   "true" \
 	"REMOVE_NULL_BEAT_EN" "false" \
 } { \
   set_property -dict [list \
@@ -208,6 +211,20 @@ set_property -dict [list \
 	"tooltip" "\[ALMOST_EMPTY_THRESHOLD\] The offset between the almost empty assertion and empty assertion in number of FIFO words." \
 ] [ipgui::get_guiparamspec -name "ALMOST_EMPTY_THRESHOLD" -component $cc]
 
+ipgui::add_param -name "TKEEP_EN" -component $cc -parent $interface_group
+set_property -dict [list \
+	"display_name" "TKEEP Enable" \
+	"tooltip" "\[TKEEP_EN\] Enable the TKEEP for the AXI stream interface, for data byte qualification for each AXIS transaction, indicating if bytes are part of the data stream." \
+] [ipgui::get_guiparamspec -name "TKEEP_EN" -component $cc]
+set_property driver_value 0 [ipx::get_ports s_axis_tkeep -of_objects $cc]
+
+ipgui::add_param -name "TSTRB_EN" -component $cc -parent $interface_group
+set_property -dict [list \
+	"display_name" "TSTRB Enable" \
+	"tooltip" "\[TSTRB_EN\] Enable the TSTRB for the AXI stream interface, for data byte qualification for each AXIS transaction, indicating data or position bytes." \
+] [ipgui::get_guiparamspec -name "TSTRB_EN" -component $cc]
+set_property driver_value 0 [ipx::get_ports s_axis_tstrb -of_objects $cc]
+
 ipgui::add_param -name "TLAST_EN" -component $cc -parent $interface_group
 set_property -dict [list \
 	"display_name" "TLAST Enable" \
@@ -215,20 +232,11 @@ set_property -dict [list \
 ] [ipgui::get_guiparamspec -name "TLAST_EN" -component $cc]
 set_property driver_value 1 [ipx::get_ports s_axis_tlast -of_objects $cc]
 
-ipgui::add_param -name "TKEEP_EN" -component $cc -parent $interface_group
+ipgui::add_param -name "TUSER_EN" -component $cc -parent $interface_group
 set_property -dict [list \
-	"display_name" "TKEEP Enable" \
-	"tooltip" "\[TKEEP_EN\] Enable the TKEEP for the AXI stream interface, for data byte qualification for each AXIS beat, indicating if bytes are part of the data stream." \
-] [ipgui::get_guiparamspec -name "TKEEP_EN" -component $cc]
-set_property driver_value 0 [ipx::get_ports s_axis_tkeep -of_objects $cc]
-
-ipgui::add_param -name "TSTRB_EN" -component $cc -parent $interface_group
-set_property -dict [list \
-	"display_name" "TSTRB Enable" \
-	"tooltip" "\[TSTRB_EN\] Enable the TSTRB for the AXI stream interface, for data byte qualification for each AXIS beat, indicating data or position bytes." \
-] [ipgui::get_guiparamspec -name "TSTRB_EN" -component $cc]
-set_property driver_value 0 [ipx::get_ports s_axis_tstrb -of_objects $cc]
-
+	"display_name" "TUSER Enable" \
+	"tooltip" "\[TUSER_EN\] Enable the TUSER for the AXI stream interface, which is a user-defined sideband information that can be byte or transaction specific." \
+] [ipgui::get_guiparamspec -name "TUSER_EN" -component $cc]
 ipgui::add_param -name "TUSER_WIDTH" -component $cc -parent $interface_group
 set_property -dict [list \
 	"display_name" "User signal width" \
@@ -236,6 +244,11 @@ set_property -dict [list \
 ] [ipgui::get_guiparamspec -name "TUSER_WIDTH" -component $cc]
 set_property driver_value 0 [ipx::get_ports s_axis_tuser -of_objects $cc]
 
+ipgui::add_param -name "TID_EN" -component $cc -parent $interface_group
+set_property -dict [list \
+	"display_name" "TID Enable" \
+	"tooltip" "\[TID_EN\] Enable the TID for the AXI stream interface, which is a data stream identifier." \
+] [ipgui::get_guiparamspec -name "TID_EN" -component $cc]
 ipgui::add_param -name "TID_WIDTH" -component $cc -parent $interface_group
 set_property -dict [list \
 	"display_name" "ID signal width" \
@@ -243,6 +256,11 @@ set_property -dict [list \
 ] [ipgui::get_guiparamspec -name "TID_WIDTH" -component $cc]
 set_property driver_value 0 [ipx::get_ports s_axis_tid -of_objects $cc]
 
+ipgui::add_param -name "TDEST_EN" -component $cc -parent $interface_group
+set_property -dict [list \
+	"display_name" "TDEST Enable" \
+	"tooltip" "\[TDEST_EN\] Enable the TDEST for the AXI stream interface, which provides routing information for the data stream." \
+] [ipgui::get_guiparamspec -name "TDEST_EN" -component $cc]
 ipgui::add_param -name "TDEST_WIDTH" -component $cc -parent $interface_group
 set_property -dict [list \
 	"display_name" "Destination signal width" \
@@ -262,7 +280,7 @@ set_property -dict [list \
 ipgui::add_param -name "REMOVE_NULL_BEAT_EN" -component $cc -parent $other_group
 set_property -dict [list \
 	"display_name" "Remove Null Beat Enable" \
-	"tooltip" "\[REMOVE_NULL_BEAT_EN\] Filteres out all the beats with a null TKEEP qualifier." \
+	"tooltip" "\[REMOVE_NULL_BEAT_EN\] Filteres out all the transactions with a null TKEEP qualifier." \
 ] [ipgui::get_guiparamspec -name "REMOVE_NULL_BEAT_EN" -component $cc]
 set_property enablement_tcl_expr {$TKEEP_EN == "true"} [ipx::get_user_parameters REMOVE_NULL_BEAT_EN -of_objects $cc]
 

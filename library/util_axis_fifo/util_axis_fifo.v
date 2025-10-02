@@ -41,12 +41,15 @@ module util_axis_fifo #(
   parameter M_AXIS_REGISTERED = 1,
   parameter [ADDRESS_WIDTH-1:0] ALMOST_EMPTY_THRESHOLD = 16,
   parameter [ADDRESS_WIDTH-1:0] ALMOST_FULL_THRESHOLD = 16,
-  parameter TLAST_EN = 0,
   parameter TKEEP_EN = 0,
   parameter TSTRB_EN = 0,
-  parameter TUSER_WIDTH = 0,
-  parameter TID_WIDTH = 0,
-  parameter TDEST_WIDTH = 0,
+  parameter TLAST_EN = 0,
+  parameter TUSER_EN = 0,
+  parameter TID_EN = 0,
+  parameter TDEST_EN = 0,
+  parameter TUSER_WIDTH = 1,
+  parameter TID_WIDTH = 1,
+  parameter TDEST_WIDTH = 1,
   parameter REMOVE_NULL_BEAT_EN = 0
 ) (
   input                      m_axis_aclk,
@@ -85,12 +88,12 @@ module util_axis_fifo #(
 );
 
   localparam MEM_WORD = DATA_WIDTH +
-                        ((TKEEP_EN)        ? (DATA_WIDTH/8) : 0) +
-                        ((TSTRB_EN)        ? (DATA_WIDTH/8) : 0) +
-                        ((TLAST_EN)        ? 1              : 0) +
-                        ((TUSER_WIDTH > 0) ? TUSER_WIDTH    : 0) +
-                        ((TID_WIDTH > 0)   ? TID_WIDTH      : 0) +
-                        ((TDEST_WIDTH > 0) ? TDEST_WIDTH    : 0);
+                        ((TKEEP_EN) ? (DATA_WIDTH/8) : 0) +
+                        ((TSTRB_EN) ? (DATA_WIDTH/8) : 0) +
+                        ((TLAST_EN) ? 1              : 0) +
+                        ((TUSER_EN) ? TUSER_WIDTH    : 0) +
+                        ((TID_EN)   ? TID_WIDTH      : 0) +
+                        ((TDEST_EN) ? TDEST_WIDTH    : 0);
 
   wire [MEM_WORD-1:0] s_axis_data_int_s;
   wire [MEM_WORD-1:0] m_axis_data_int_s;
@@ -166,20 +169,6 @@ module util_axis_fifo #(
 
       assign m_axis_data = cdc_sync_fifo_ram;
 
-      // TLAST support
-      if (TLAST_EN) begin
-        reg axis_tlast_d;
-
-        always @(posedge s_axis_aclk) begin
-          if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1) begin
-            axis_tlast_d <= s_axis_tlast;
-          end
-        end
-        assign m_axis_tlast = axis_tlast_d;
-      end else begin
-        assign m_axis_tlast = 1'b1;
-      end
-
       // TKEEP support
       if (TKEEP_EN) begin
         reg [DATA_WIDTH/8-1:0] axis_tkeep_d;
@@ -219,8 +208,22 @@ module util_axis_fifo #(
         end
       end
 
+      // TLAST support
+      if (TLAST_EN) begin
+        reg axis_tlast_d;
+
+        always @(posedge s_axis_aclk) begin
+          if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1) begin
+            axis_tlast_d <= s_axis_tlast;
+          end
+        end
+        assign m_axis_tlast = axis_tlast_d;
+      end else begin
+        assign m_axis_tlast = 1'b1;
+      end
+
       // TUSER support
-      if (TUSER_WIDTH > 0) begin
+      if (TUSER_EN) begin
         reg [TUSER_WIDTH-1:0] axis_tuser_d;
 
         always @(posedge s_axis_aclk) begin
@@ -230,11 +233,11 @@ module util_axis_fifo #(
         end
         assign m_axis_tuser = axis_tuser_d;
       end else begin
-        assign m_axis_tuser = 2'b00;
+        assign m_axis_tuser = {TUSER_WIDTH{1'b0}};
       end
 
       // TID support
-      if (TID_WIDTH > 0) begin
+      if (TID_EN) begin
         reg [TID_WIDTH-1:0] axis_tid_d;
 
         always @(posedge s_axis_aclk) begin
@@ -244,11 +247,11 @@ module util_axis_fifo #(
         end
         assign m_axis_tid = axis_tid_d;
       end else begin
-        assign m_axis_tuser = 2'b00;
+        assign m_axis_tuser = {TID_WIDTH{1'b0}};
       end
 
       // TDEST support
-      if (TDEST_WIDTH > 0) begin
+      if (TDEST_EN) begin
         reg [TDEST_WIDTH-1:0] axis_tdest_d;
 
         always @(posedge s_axis_aclk) begin
@@ -258,7 +261,7 @@ module util_axis_fifo #(
         end
         assign m_axis_tdest = axis_tdest_d;
       end else begin
-        assign m_axis_tdest = 2'b00;
+        assign m_axis_tdest = {TDEST_WIDTH{1'b0}};
       end
 
     end /* zerodeep */
@@ -298,24 +301,6 @@ module util_axis_fifo #(
       assign s_axis_full  = 1'b0;
       assign s_axis_almost_full  = 1'b0;
       assign s_axis_room  = 1'b0;
-
-      // TLAST support
-      if (TLAST_EN) begin
-        reg  axis_tlast_d;
-
-        always @(posedge s_axis_aclk) begin
-          if (!s_axis_aresetn) begin
-            axis_tlast_d <= 1'b0;
-          end else begin
-            if (s_axis_ready) begin
-              axis_tlast_d <= s_axis_tlast;
-            end
-          end
-        end
-        assign m_axis_tlast = axis_tlast_d;
-      end else begin
-        assign m_axis_tlast = 1'b1;
-      end
 
       // TKEEP support
       if (TKEEP_EN) begin
@@ -368,8 +353,26 @@ module util_axis_fifo #(
         end
       end
 
+      // TLAST support
+      if (TLAST_EN) begin
+        reg  axis_tlast_d;
+
+        always @(posedge s_axis_aclk) begin
+          if (!s_axis_aresetn) begin
+            axis_tlast_d <= 1'b0;
+          end else begin
+            if (s_axis_ready) begin
+              axis_tlast_d <= s_axis_tlast;
+            end
+          end
+        end
+        assign m_axis_tlast = axis_tlast_d;
+      end else begin
+        assign m_axis_tlast = 1'b1;
+      end
+
       // TUSER support
-      if (TUSER_WIDTH > 0) begin
+      if (TUSER_EN) begin
         reg [TUSER_WIDTH-1:0] axis_tuser_d;
 
         always @(posedge s_axis_aclk) begin
@@ -383,11 +386,11 @@ module util_axis_fifo #(
         end
         assign m_axis_tuser = axis_tuser_d;
       end else begin
-        assign m_axis_tuser = 2'b00;
+        assign m_axis_tuser = {TUSER_WIDTH{1'b0}};
       end
 
       // TID support
-      if (TID_WIDTH > 0) begin
+      if (TID_EN) begin
         reg [TID_WIDTH-1:0] axis_tid_d;
 
         always @(posedge s_axis_aclk) begin
@@ -401,11 +404,11 @@ module util_axis_fifo #(
         end
         assign m_axis_tid = axis_tid_d;
       end else begin
-        assign m_axis_tid = 2'b00;
+        assign m_axis_tid = {TID_WIDTH{1'b0}};
       end
 
       // TDEST support
-      if (TDEST_WIDTH > 0) begin
+      if (TDEST_EN) begin
         reg [TDEST_WIDTH-1:0] axis_tdest_d;
 
         always @(posedge s_axis_aclk) begin
@@ -419,7 +422,7 @@ module util_axis_fifo #(
         end
         assign m_axis_tdest = axis_tdest_d;
       end else begin
-        assign m_axis_tdest = 2'b00;
+        assign m_axis_tdest = {TDEST_WIDTH{1'b0}};
       end
 
     end /* !ASYNC_CLK */
@@ -497,13 +500,13 @@ module util_axis_fifo #(
                               ((TLAST_EN) ? 1 : 0);
 
     localparam MEM_WORD_USER = MEM_WORD_LAST +
-                              ((TUSER_WIDTH > 0) ? TUSER_WIDTH : 0);
+                              ((TUSER_EN) ? TUSER_WIDTH : 0);
 
     localparam MEM_WORD_ID = MEM_WORD_USER +
-                            ((TID_WIDTH > 0) ? TID_WIDTH : 0);
+                            ((TID_EN) ? TID_WIDTH : 0);
 
     localparam MEM_WORD_DEST = MEM_WORD_ID +
-                              ((TDEST_WIDTH > 0) ? TDEST_WIDTH : 0);
+                              ((TDEST_EN) ? TDEST_WIDTH : 0);
 
     assign s_axis_data_int_s[DATA_WIDTH-1-:DATA_WIDTH] = s_axis_data;
     assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1-:DATA_WIDTH];
@@ -533,25 +536,25 @@ module util_axis_fifo #(
       assign m_axis_tlast = 1'b1;
     end
 
-    if (TUSER_WIDTH > 0) begin
+    if (TUSER_EN) begin
       assign s_axis_data_int_s[MEM_WORD_USER-1-:TUSER_WIDTH] = s_axis_tuser;
       assign m_axis_tuser = m_axis_data_int_s[MEM_WORD_USER-1-:TUSER_WIDTH];
     end else begin
-      assign m_axis_tuser = 2'b00;
+      assign m_axis_tuser = {TUSER_WIDTH{1'b0}};
     end
 
-    if (TID_WIDTH > 0) begin
+    if (TID_EN) begin
       assign s_axis_data_int_s[MEM_WORD_ID-1-:TID_WIDTH] = s_axis_tid;
       assign m_axis_tid = m_axis_data_int_s[MEM_WORD_ID-1-:TID_WIDTH];
     end else begin
-      assign m_axis_tid = 2'b00;
+      assign m_axis_tid = {TID_WIDTH{1'b0}};
     end
 
-    if (TDEST_WIDTH > 0) begin
+    if (TDEST_EN) begin
       assign s_axis_data_int_s[MEM_WORD_DEST-1-:TDEST_WIDTH] = s_axis_tdest;
       assign m_axis_tdest = m_axis_data_int_s[MEM_WORD_DEST-1-:TDEST_WIDTH];
     end else begin
-      assign m_axis_tdest = 2'b00;
+      assign m_axis_tdest = {TDEST_WIDTH{1'b0}};
     end
 
     if (ASYNC_CLK == 1) begin : async_clocks /* Asynchronous WRITE/READ clocks */
