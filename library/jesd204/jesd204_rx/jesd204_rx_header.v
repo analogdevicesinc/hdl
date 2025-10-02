@@ -145,14 +145,14 @@ module jesd204_rx_header (
 
   assign invalid_sequence = (invalid_eoemb || invalid_eomb);
 
-// FEC signal is available before EOMB
-always @(posedge clk) begin
-  if (reset == 1'b1) begin
-    valid_fec <= 1'b0;
-  end else begin
-    valid_fec <= next_state[BIT_EMB_LOCK] && (sh_count[4:0] == 26);
+  // FEC signal is available before EOMB
+  always @(posedge clk) begin
+    if (reset == 1'b1) begin
+      valid_fec <= 1'b0;
+    end else begin
+      valid_fec <= next_state[BIT_EMB_LOCK] && (sh_count[4:0] == 26);
+    end
   end
-end
 
   always @(posedge clk) begin
     if (reset == 1'b1) begin

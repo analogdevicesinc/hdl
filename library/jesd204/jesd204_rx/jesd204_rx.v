@@ -19,6 +19,7 @@ module jesd204_rx #(
   parameter ENABLE_FRAME_ALIGN_ERR_RESET = 0,
   parameter ENABLE_CHAR_REPLACE = 0,
   parameter ENABLE_FEC = 0,
+  parameter EXPORT_UNCORRECTED_DATA = 0,
   parameter ASYNC_CLK = 1,
   parameter TPL_DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4
 ) (
@@ -49,6 +50,7 @@ module jesd204_rx #(
   output phy_en_char_align,
 
   output [TPL_DATA_PATH_WIDTH*8*NUM_LANES-1:0] rx_data,
+  output [TPL_DATA_PATH_WIDTH*8*NUM_LANES-1:0] rx_data_uncorrected,
   output rx_valid,
   output [TPL_DATA_PATH_WIDTH-1:0] rx_eof,
   output [TPL_DATA_PATH_WIDTH-1:0] rx_sof,
@@ -151,6 +153,7 @@ module jesd204_rx #(
   wire [NUM_LANES-1:0] phy_block_sync_r;
 
   wire [ODW-1:0] rx_data_s;
+  wire [ODW-1:0] rx_data_uncorrected_s;
 
   wire rx_valid_s = buffer_release_d1;
 
@@ -456,6 +459,7 @@ module jesd204_rx #(
     .lane_latency(status_lane_latency));
 
   assign status_lane_emb_state = 'b0;
+  assign rx_data_uncorrected = 'b0;
 
   end
 
@@ -504,6 +508,7 @@ module jesd204_rx #(
     jesd204_rx_lane_64b #(
       .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
       .ENABLE_FEC(ENABLE_FEC),
+      .EXPORT_UNCORRECTED_DATA (EXPORT_UNCORRECTED_DATA),
       .TPL_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
       .ASYNC_CLK(ASYNC_CLK)
     ) i_lane (
@@ -523,6 +528,7 @@ module jesd204_rx #(
       .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
 
       .rx_data(rx_data_s[TPL_D_STOP:TPL_D_START]),
+      .rx_data_uncorrected(rx_data_uncorrected_s[TPL_D_STOP:TPL_D_START]),
 
       .buffer_release_n(buffer_release_n),
       .buffer_ready_n(buffer_ready_n[i]),
@@ -553,6 +559,17 @@ module jesd204_rx #(
   assign status_lane_ifs_ready = {NUM_LANES{1'b1}};
   assign event_frame_alignment_error = 1'b0;
 
+  if (EXPORT_UNCORRECTED_DATA == 1) begin
+    util_pipeline_stage #(
+      .WIDTH(ODW),
+      .REGISTERED(NUM_OUTPUT_PIPELINE)
+    ) i_output_pipeline_stage_uncorrected (
+      .clk(device_clk),
+      .in(rx_data_uncorrected_s),
+      .out(rx_data_uncorrected));
+    end
+  end else begin
+    assign rx_data_uncorrected = 'b0;
   end
 
   endgenerate

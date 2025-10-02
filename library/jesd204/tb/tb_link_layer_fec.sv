@@ -13,12 +13,14 @@ module tb_link_layer_fec;
   localparam NUM_LANES=2;
   localparam NUM_LINKS=1;
   localparam SCR = 0;
+  localparam ENABLE_FEC = 1;
+  localparam HEADER_MODE = (ENABLE_FEC) ? 2'b10 : 2'b00; // 2'b10 = FEC, 2'b00 = No FEC
   localparam DATA_PATH_WIDTH = 8;
   localparam DATA_WIDTH = DATA_PATH_WIDTH*8;
 
   localparam INPUT_DATA_WIDTH = 2048*9*2;
   localparam INPUT_DATA_CYCLES = INPUT_DATA_WIDTH/DATA_WIDTH;
-  localparam logic [INPUT_DATA_WIDTH-1:0] DATA_VALUE = {2{{2048{1'b1}}, 1'b1, 2047'b0, {64{32'h12345678}}, {2048{1'b1}}, 2047'b0, 1'b1, {64{32'hABCDEF01}}, {64{32'h23456789}}, {2048{1'b1}}, 1'b1, 2047'b0}};
+  // localparam logic [INPUT_DATA_WIDTH-1:0] DATA_VALUE = {2{{2048{1'b1}}, 1'b1, 2047'b0, {64{32'h12345678}}, {2048{1'b1}}, 2047'b0, 1'b1, {64{32'hABCDEF01}}, {64{32'h23456789}}, {2048{1'b1}}, 1'b1, 2047'b0}};
   localparam ERROR_CYCLE = (32*8)+4;    // Cycle of decoder data input to corrupt
   // localparam RECOVERABLE_ERROR_BITS = 64'h1FF000;
   localparam RECOVERABLE_ERROR_BITS = 64'h8000000000000000;
@@ -26,9 +28,17 @@ module tb_link_layer_fec;
   localparam ERROR_BITS =  RECOVERABLE_ERROR_BITS; // Bits of decoder input data to corrupt
   localparam NEXT_ERROR_BITS = 64'h1;
   // localparam NEXT_ERROR_BITS = 64'h0000000000000000;
-  localparam REPORT_GOOD_DATA = 1'b1;
+  localparam REPORT_GOOD_DATA = 1'b0;
+
+  logic [INPUT_DATA_WIDTH-1:0] DATA_VALUE;
+  initial begin
+  for (int i = 0; i < (INPUT_DATA_WIDTH / DATA_WIDTH); i++) begin
+    DATA_VALUE[i*DATA_WIDTH +: DATA_WIDTH] = i;
+  end
+end
 
   parameter VCD_FILE = {"tb_link_layer_fec.vcd"};
+
   `include "tb_base.v"
 
   logic                           rst;
@@ -40,6 +50,7 @@ module tb_link_layer_fec;
   int ii;
   int tx_cycle_cnt;
   int rx_cycle_cnt;
+  int total_cycles;
   genvar jj;
 
   logic [NUM_LANES-1:0] tx_cfg_lanes_disable;
@@ -99,6 +110,7 @@ module tb_link_layer_fec;
   logic  rx_lmfc_clk;
   logic  phy_en_char_align;
   logic  [DATA_PATH_WIDTH*8*NUM_LANES-1:0] rx_data;
+  logic  [DATA_PATH_WIDTH*8*NUM_LANES-1:0] rx_data_uncorrected;
   logic  rx_valid;
   logic  [DATA_PATH_WIDTH-1:0] rx_eof;
   logic  [DATA_PATH_WIDTH-1:0] rx_sof;
@@ -144,7 +156,7 @@ module tb_link_layer_fec;
       data_in = data[0+:DATA_WIDTH];
       @(posedge clk);
       #0;
-      if(tx_ready && (data_in_cnt < INPUT_DATA_CYCLES)) begin
+      if (tx_ready && (data_in_cnt < INPUT_DATA_CYCLES)) begin
         data = data >> DATA_WIDTH;
         data_in_cnt = data_in_cnt + 1;
       end
@@ -165,11 +177,11 @@ module tb_link_layer_fec;
   // The first 7 multiblocks of data are dropped, one by TX, 6 by RX
   // TODO: is this dependent on TX data pattern when scrambling is disabled?
   initial begin
-    tx_data_dropped = 1'b1;
+    tx_data_dropped = 1;
     forever begin
       @(negedge clk);
-      if(tx_ready && (data_in_cnt >= (32 * 7))) begin
-        tx_data_dropped = 1'b0;
+      if(tx_ready && data_in_cnt >= ((6 + ENABLE_FEC) * 32)) begin
+        tx_data_dropped = 0;
       end
     end
   end
@@ -207,7 +219,9 @@ module tb_link_layer_fec;
 
   assign tx_data = {NUM_LANES{data_in_swap}};
 
-  assign rx_phy_data = (tx_cycle_cnt == ERROR_CYCLE) ? (tx_phy_data ^ ERROR_BITS) : (tx_cycle_cnt == ERROR_CYCLE+1) ? (tx_phy_data ^ NEXT_ERROR_BITS) : tx_phy_data;
+  assign rx_phy_data = (ENABLE_FEC && tx_cycle_cnt == ERROR_CYCLE) ? (tx_phy_data ^ ERROR_BITS) :
+                       (ENABLE_FEC && tx_cycle_cnt == ERROR_CYCLE+1) ? (tx_phy_data ^ NEXT_ERROR_BITS) :
+                       tx_phy_data;
   // assign rx_phy_data = tx_phy_data;
   assign rx_phy_header = tx_phy_header;
 
@@ -229,18 +243,22 @@ module tb_link_layer_fec;
 
   initial begin
     rx_cycle_cnt = 0;
+    total_cycles = 0;
     forever begin
       @(negedge clk);
+      total_cycles = total_cycles + 1;
+      $display("Total Cycles: %d", total_cycles);
       if(rx_valid) begin
+        $display("RX Cycle: %d Data: %X Uncorrected: %X", rx_cycle_cnt, rx_data, rx_data_uncorrected);
         if(tx_data_q.size() == 0) begin
           $finish;
         end
         cur_tx_data = tx_data_q.pop_front();
         if(cur_tx_data !== rx_data) begin
-          $error("RX Cycle: %d Data mismatch. Expected: %X  Observed: %X", rx_cycle_cnt, cur_tx_data, rx_data);
+          $error("RX Cycle: %d Data mismatch. Expected: %X  Observed: %X Uncorrected: %X", rx_cycle_cnt, cur_tx_data, rx_data, rx_data_uncorrected);
           failed = 1'b1;
         end else if(REPORT_GOOD_DATA) begin
-          $display("RX Cycle: %d Good data:%X", rx_cycle_cnt, cur_tx_data);
+          $display("RX Cycle: %d Good data:%X Uncorrected: %X", rx_cycle_cnt, cur_tx_data, rx_data_uncorrected);
         end
         rx_cycle_cnt = rx_cycle_cnt + 1;
       end
@@ -253,7 +271,7 @@ module tb_link_layer_fec;
     .FRAMES_PER_MULTIFRAME(32),
     .SCR            (SCR),
     .LINK_MODE      (2),
-    .HEADER_MODE    (2)
+    .HEADER_MODE    (HEADER_MODE)
   ) jesd204_tx_static_config (
     .clk                               (clk),
     .cfg_lanes_disable                 (tx_cfg_lanes_disable),
@@ -284,7 +302,7 @@ module tb_link_layer_fec;
     .NUM_INPUT_PIPELINE                   (1),
     .NUM_OUTPUT_PIPELINE                  (0),
     .LINK_MODE                            (2),
-    .ENABLE_FEC                           (1),
+    .ENABLE_FEC                           (ENABLE_FEC),
     .DATA_PATH_WIDTH                      (DATA_PATH_WIDTH)
   ) jesd204_tx (
     .clk                                  (clk),
@@ -340,7 +358,7 @@ module tb_link_layer_fec;
     .FRAMES_PER_MULTIFRAME             (32),
     .SCR                               (SCR),
     .LINK_MODE                         (2),
-    .HEADER_MODE                       (2),
+    .HEADER_MODE                       (HEADER_MODE),
     .SYSREF_DISABLE                    (0)
   ) jesd204_rx_static_config(
     .clk                                  (clk),
@@ -366,7 +384,8 @@ module tb_link_layer_fec;
   jesd204_rx #(
     .NUM_LANES                            (NUM_LANES),
     .LINK_MODE                            (2),
-    .ENABLE_FEC                           (1)
+    .ENABLE_FEC                           (ENABLE_FEC),
+    .EXPORT_UNCORRECTED_DATA              (ENABLE_FEC)
   ) jesd204_rx (
     .clk                                  (clk),
     .reset                                (rst),
@@ -388,6 +407,7 @@ module tb_link_layer_fec;
     .sync                                 (),
     .phy_en_char_align                    (),
     .rx_data                              (rx_data),
+    .rx_data_uncorrected                  (rx_data_uncorrected),
     .rx_valid                             (rx_valid),
     .rx_eof                               (rx_eof),
     .rx_sof                               (rx_sof),

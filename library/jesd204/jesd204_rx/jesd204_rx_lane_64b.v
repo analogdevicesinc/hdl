@@ -10,6 +10,7 @@
 module jesd204_rx_lane_64b #(
   parameter ELASTIC_BUFFER_SIZE = 256,
   parameter ENABLE_FEC = 1'b0,
+  parameter EXPORT_UNCORRECTED_DATA = 0,
   parameter TPL_DATA_PATH_WIDTH = 8,
   parameter ASYNC_CLK = 0
 ) (
@@ -24,6 +25,7 @@ module jesd204_rx_lane_64b #(
   input phy_block_sync,
 
   output [TPL_DATA_PATH_WIDTH*8-1:0] rx_data,
+  output [TPL_DATA_PATH_WIDTH*8-1:0] rx_data_uncorrected,
 
   output reg buffer_ready_n = 'b1,
   input all_buffer_ready_n,
@@ -292,6 +294,74 @@ module jesd204_rx_lane_64b #(
     for (i = 0; i < 64; i = i + 8) begin: g_link_data
       assign data_descrambled_reordered[i+:8] = data_descrambled[64-1-i-:8];
     end
+  endgenerate
+
+  generate if (EXPORT_UNCORRECTED_DATA == 1) begin
+    // uncorrected data from FEC
+    wire [63:0] data_scrambled_uncorrected_s;
+    wire [63:0] data_descrambled_uncorrected;
+    wire [63:0] data_descrambled_uncorrected_reordered;
+    reg         buffer_ready_n_unordered = 1'b1;
+
+    jesd204_scrambler_64b #(
+      .WIDTH(64),
+      .DESCRAMBLE(1)
+    ) i_descrambler_uncorrected (
+      .clk(clk),
+      .reset(reset),
+      .enable(~cfg_disable_scrambler),
+      .data_in(phy_data),
+      .data_out(data_scrambled_uncorrected_s));
+
+    util_pipeline_stage #(
+      .WIDTH(64),
+      .REGISTERED(1)
+    ) i_pipeline_stage2_uncorrected (
+      .clk(clk),
+      .in({
+          data_scrambled_uncorrected_s
+      }),
+      .out({
+          data_descrambled_uncorrected
+      }));
+
+      always @(posedge clk) begin
+        if (reset | ~emb_lock) begin
+          buffer_ready_n_unordered <= 1'b1;
+        end else begin
+          if(buffer_not_ready_next) begin
+            buffer_ready_n_unordered <= 1'b1;
+          end else if(buffer_ready_next) begin
+            buffer_ready_n_unordered <= 1'b0;
+          end
+        end
+      end
+
+    genvar j;
+    for (j = 0; j < 64; j = j + 8) begin: g_link_data_uncorrected
+      assign data_descrambled_uncorrected_reordered[j+:8] = data_descrambled_uncorrected[64-1-j-:8];
+    end
+
+    elastic_buffer #(
+      .IWIDTH(64),
+      .OWIDTH(TPL_DATA_PATH_WIDTH*8),
+      .SIZE(ELASTIC_BUFFER_SIZE),
+      .ASYNC_CLK(ASYNC_CLK)
+    ) i_elastic_buffer_uncorrected (
+      .clk(clk),
+      .reset(reset),
+
+      .device_clk(device_clk),
+      .device_reset(device_reset),
+
+      .wr_data(data_descrambled_uncorrected_reordered),
+      .rd_data(rx_data_uncorrected),
+
+      .ready_n(buffer_ready_n_unordered),
+      .do_release_n(buffer_release_n));
+  end else begin
+    assign rx_data_uncorrected = 'b0;
+  end
   endgenerate
 
 endmodule
