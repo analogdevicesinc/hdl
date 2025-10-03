@@ -3,8 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-source ../../../projects/scripts/adi_board.tcl
-
 # Parameter description:
 #   ip_name : The name of the created ip
 #   jesd_mode : Used physical layer encoder mode
