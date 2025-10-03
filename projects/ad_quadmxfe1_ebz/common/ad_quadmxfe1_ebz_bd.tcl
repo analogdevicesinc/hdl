@@ -224,6 +224,7 @@ ad_data_offload_create $adc_offload_name \
                        $adc_data_width
 
 ad_ip_parameter $adc_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+ad_ip_parameter $adc_offload_name/i_data_offload CONFIG.HAS_BYPASS 0
 ad_connect $adc_offload_name/sync_ext GND
 
 ad_ip_instance ilvector_logic rx_do_rstout_logic
@@ -283,6 +284,7 @@ ad_data_offload_create $dac_offload_name \
                        $dac_data_width
 
 ad_ip_parameter $dac_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+ad_ip_parameter $dac_offload_name/i_data_offload CONFIG.HAS_BYPASS 0
 ad_connect $dac_offload_name/sync_ext GND
 
 ad_ip_instance util_pad tx_util_pad [list \
