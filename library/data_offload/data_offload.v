@@ -235,7 +235,6 @@ module data_offload #(
                         (dst_bypass_s) ? data_bypass_s  : s_storage_axis_data;
   assign m_axis_last  = (dst_bypass_s) ? 1'b0           : s_storage_axis_last;
   assign m_axis_tkeep = (dst_bypass_s) ? {DST_DATA_WIDTH/8{1'b1}} : s_storage_axis_tkeep;
-
   assign s_axis_ready =  src_bypass_s ? ready_bypass_s : (wr_ready & m_storage_axis_ready);
 
   assign m_storage_axis_valid = s_axis_valid & wr_ready;
@@ -248,32 +247,38 @@ module data_offload #(
   // Bypass module instance -- the same FIFO, just a smaller depth
   // NOTE: Generating an overflow is making sense just in BYPASS mode, and
   // it's supported just with the FIFO interface
-  util_axis_fifo_asym #(
-    .S_DATA_WIDTH (SRC_DATA_WIDTH),
-    .ADDRESS_WIDTH (SRC_ADDR_WIDTH_BYPASS),
-    .M_DATA_WIDTH (DST_DATA_WIDTH),
-    .ASYNC_CLK (1)
-  ) i_bypass_fifo (
-    .m_axis_aclk (m_axis_aclk),
-    .m_axis_aresetn (dst_rstn),
-    .m_axis_ready (m_axis_ready),
-    .m_axis_valid (valid_bypass_s),
-    .m_axis_data  (data_bypass_s),
-    .m_axis_tlast (),
-    .m_axis_empty (),
-    .m_axis_almost_empty (),
-    .m_axis_tkeep (),
-    .m_axis_level (),
-    .s_axis_aclk  (s_axis_aclk),
-    .s_axis_aresetn (src_rstn),
-    .s_axis_ready (ready_bypass_s),
-    .s_axis_valid (s_axis_valid & src_bypass_s),
-    .s_axis_data  (s_axis_data),
-    .s_axis_tlast (),
-    .s_axis_full  (),
-    .s_axis_almost_full (),
-    .s_axis_tkeep (),
-    .s_axis_room ());
+  generate if (HAS_BYPASS) begin
+    util_axis_fifo_asym #(
+      .S_DATA_WIDTH (SRC_DATA_WIDTH),
+      .ADDRESS_WIDTH (SRC_ADDR_WIDTH_BYPASS),
+      .M_DATA_WIDTH (DST_DATA_WIDTH),
+      .ASYNC_CLK (1)
+    ) i_bypass_fifo (
+      .m_axis_aclk (m_axis_aclk),
+      .m_axis_aresetn (dst_rstn),
+      .m_axis_ready (m_axis_ready),
+      .m_axis_valid (valid_bypass_s),
+      .m_axis_data  (data_bypass_s),
+      .m_axis_tlast (),
+      .m_axis_empty (),
+      .m_axis_almost_empty (),
+      .m_axis_tkeep (),
+      .m_axis_level (),
+      .s_axis_aclk  (s_axis_aclk),
+      .s_axis_aresetn (src_rstn),
+      .s_axis_ready (ready_bypass_s),
+      .s_axis_valid (s_axis_valid & src_bypass_s),
+      .s_axis_data  (s_axis_data),
+      .s_axis_tlast (),
+      .s_axis_full  (),
+      .s_axis_almost_full (),
+      .s_axis_tkeep (),
+      .s_axis_room ());
+  end else begin
+      assign valid_bypass_s = 1'b0;
+      assign data_bypass_s = 'd0;
+      assign ready_bypass_s = 1'b0;
+  end endgenerate
 
   // register map
 
