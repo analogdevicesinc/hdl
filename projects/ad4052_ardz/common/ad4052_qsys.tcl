@@ -17,21 +17,21 @@ add_instance axi_spi_engine_0 axi_spi_engine
 set_instance_parameter_value axi_spi_engine_0 {ASYNC_SPI_CLK} {1}
 set_instance_parameter_value axi_spi_engine_0 {DATA_WIDTH} {32}
 set_instance_parameter_value axi_spi_engine_0 {MM_IF_TYPE} {0}
-set_instance_parameter_value axi_spi_engine_0 {NUM_OF_SDI} {1}
+set_instance_parameter_value axi_spi_engine_0 {NUM_OF_SDIO} {1}
 set_instance_parameter_value axi_spi_engine_0 {NUM_OFFLOAD} {1}
 
 # spi_engine_execution
 
 add_instance spi_engine_execution_0 spi_engine_execution
 set_instance_parameter_value spi_engine_execution_0 {DATA_WIDTH} {32}
-set_instance_parameter_value spi_engine_execution_0 {NUM_OF_SDI} {1}
+set_instance_parameter_value spi_engine_execution_0 {NUM_OF_SDIO} {1}
 set_instance_parameter_value spi_engine_execution_0 {SDI_DELAY} {0}
 
 # spi_engine_interconnect
 
 add_instance spi_engine_interconnect_0 spi_engine_interconnect
 set_instance_parameter_value spi_engine_interconnect_0 {DATA_WIDTH} {32}
-set_instance_parameter_value spi_engine_interconnect_0 {NUM_OF_SDI} {1}
+set_instance_parameter_value spi_engine_interconnect_0 {NUM_OF_SDIO} {1}
 
 # spi_engine_offload
 
@@ -39,7 +39,7 @@ add_instance spi_engine_offload_0 spi_engine_offload
 set_instance_parameter_value spi_engine_offload_0 {ASYNC_TRIG} {1}
 set_instance_parameter_value spi_engine_offload_0 {ASYNC_SPI_CLK} {0}
 set_instance_parameter_value spi_engine_offload_0 {DATA_WIDTH} {32}
-set_instance_parameter_value spi_engine_offload_0 {NUM_OF_SDI} {1}
+set_instance_parameter_value spi_engine_offload_0 {NUM_OF_SDIO} {1}
 
 # axi_pwm_gen
 
@@ -139,6 +139,7 @@ add_connection sys_dma_clk.clk_reset axi_dmac_0.m_dest_axi_reset
 add_connection spi_engine_interconnect_0.m_cmd spi_engine_execution_0.cmd
 add_connection spi_engine_execution_0.sdi_data spi_engine_interconnect_0.m_sdi
 add_connection spi_engine_interconnect_0.m_sdo spi_engine_execution_0.sdo_data
+add_connection spi_engine_interconnect_0.m_offload_active_ctrl spi_engine_execution_0.s_offload_active_ctrl
 add_connection spi_engine_execution_0.sync spi_engine_interconnect_0.m_sync
 
 add_connection axi_spi_engine_0.cmd spi_engine_interconnect_0.s1_cmd

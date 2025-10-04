@@ -36,7 +36,7 @@
 `timescale 1ns/100ps
 
 module system_top #(
-  parameter NUM_OF_SDI = 2
+  parameter NUM_OF_SDIO = 2
 ) (
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
@@ -86,7 +86,7 @@ module system_top #(
 
   // ad463x SPI configuration interface
 
-  input [NUM_OF_SDI-1:0]  ad463x_spi_sdi,
+  input [NUM_OF_SDIO-1:0]  ad463x_spi_sdi,
   output          ad463x_spi_sdo,
   output          ad463x_spi_sclk,
   output          ad463x_spi_cs,

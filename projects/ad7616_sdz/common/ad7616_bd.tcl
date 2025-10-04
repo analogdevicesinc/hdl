@@ -7,10 +7,10 @@
 # system level parameter
 
 set INTF $ad_project_params(INTF)
-set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
+set NUM_OF_SDIO $ad_project_params(NUM_OF_SDIO)
 
 puts "build parameters: INTF: $INTF"
-puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI"
+puts "build parameters: NUM_OF_SDIO: $NUM_OF_SDIO"
 
 # control lines
 
@@ -54,7 +54,7 @@ if {$INTF == 1} {
   set data_width    16
   set async_spi_clk 1
   set num_cs        1
-  set num_sdi       $NUM_OF_SDI
+  set num_sdi       $NUM_OF_SDIO
   set sdi_delay     1
   set hier_spi_engine spi_ad7616
 
