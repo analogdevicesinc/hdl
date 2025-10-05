@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="Using the generic building blocks from the ADI IP library, together with the JESD framework, parametrizable block designs can be built to interface ADI ADCs and DACs in various JESD modes." name="description" />
+<meta content="The Versal Transceiver Subsystem can be used to configure the GTY and GTYP for Versal ACAP devices. In general, across all reference designs, the gigabit transceivers are configured specifically to the Lane rate of the HDL build. This guide provides instructions on using the wizard to generate a transceiver configuration for JESD204B/C interfaces on Versal devices." name="description" />
 
-    <title>Generic JESD204 block designs &#8212; HDL  documentation</title>
+    <title>Versal Adaptive SoC Transceiver Subsystem &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=02e51da6" />
     <script async="async" src="../../../_static/app.umd.js?v=a9cc9f1c"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="JESD204B/C Link Transmit Peripheral" href="../axi_jesd204_tx/index.html" />
-    <link rel="prev" title="JESD204 Interface Framework" href="../index.html" />
+    <link rel="next" title="Troubleshooting JESD204B TX links" href="../troubleshoot/troubleshoot_jesd204_tx.html" />
+    <link rel="prev" title="Xilinx FPGAs Transceivers Wizard" href="../xgt_wizard/index.html" />
    
   
   
@@ -91,26 +91,24 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Generic JESD204 block designs</a><ul>
-<li><a class="reference internal" href="#link-parameters">Link parameters</a><ul>
-<li><a class="reference internal" href="#changing-the-link-parameters">Changing the link parameters</a></li>
+<li><a class="reference internal" href="#">Versal Adaptive SoC Transceiver Subsystem</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#versal-acap-transceiver-architecture">Versal ACAP Transceiver Architecture</a><ul>
+<li><a class="reference internal" href="#required-features-by-the-jesd204b">Required features by the JESD204B</a></li>
+<li><a class="reference internal" href="#required-features-by-the-jesd204c">Required features by the JESD204C</a></li>
+<li><a class="reference internal" href="#lane-rate-and-refclk-selection">Lane Rate and RefClk Selection</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#generic-tx-path">Generic TX path</a><ul>
-<li><a class="reference internal" href="#example-1-tx-link-with-l-4-m-1-s-1-f-2-np-16">Example 1: TX link with L=4, M=1, S=1, F=2, NP=16</a></li>
-<li><a class="reference internal" href="#example-2-tx-link-with-l-4-m-4-s-1-f-2-np-16">Example 2: TX link with L=4, M=4, S=1, F=2, NP=16</a></li>
+<li><a class="reference internal" href="#versal-adaptive-soc-transceiver-subsystem-wrapper">Versal Adaptive SoC Transceiver Subsystem wrapper</a><ul>
+<li><a class="reference internal" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-transmit-peripheral-adapter">Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Transmit Peripheral adapter</a></li>
+<li><a class="reference internal" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-receive-peripheral-adapter">Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Receive Peripheral adapter</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#generic-rx-path">Generic RX path</a><ul>
-<li><a class="reference internal" href="#example-rx-link-with-l-4-m-1-s-1-f-2-np-16">Example: RX link with L=4, M=1, S=1, F=2, NP=16</a></li>
+<li><a class="reference internal" href="#example-vivado-block-design-for-a-jesd204c-interface-on-vck190">Example Vivado block design for a JESD204C interface on VCK190</a><ul>
+<li><a class="reference internal" href="#signal-description">Signal Description</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#jesd204-modes-with-f-8">JESD204 modes with F=8</a><ul>
-<li><a class="reference internal" href="#example-tx-link-with-l-1-m-4-s-1-f-8-np-16">Example: TX link with L=1, M=4, S=1, F=8, NP=16</a></li>
-<li><a class="reference internal" href="#example-rx-link-with-l-1-m-4-s-1-f-8-np-16">Example: RX link with L=1, M=4, S=1, F=8, NP=16</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#software-related">Software related</a></li>
+<li><a class="reference internal" href="#example-usage-of-the-versal-transceiver-subsystem-wrapper-in-a-jesd204b-c-design">Example usage of the Versal Transceiver Subsystem wrapper in a JESD204B/C design</a></li>
 </ul>
 </li>
 </ul>
@@ -175,13 +173,13 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Generic JESD204 block designs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../generic_jesd_bds/index.html">Generic JESD204 block designs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../xgt_wizard/index.html">Xilinx FPGAs Transceivers Wizard</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../versal_transceiver_subsystem/index.html">AMD Versal Adaptive SoC Transceiver Subsystem</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">AMD Versal Adaptive SoC Transceiver Subsystem</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../troubleshoot/troubleshoot_jesd204_tx.html">Troubleshooting JESD204 TX links</a></li>
 </ul>
 </li>
@@ -376,231 +374,251 @@ Content on this topic
 </div>
           <div class="body" role="main">
             
-  <section id="generic-jesd204-block-designs">
-<span id="generic-jesd-bds"></span><h1>Generic JESD204 block designs<a class="headerlink" href="#generic-jesd204-block-designs" title="Permalink to this heading"></a></h1>
-<p>Using the generic building blocks from the
-<a class="reference internal" href="../../index.html#library"><span class="std std-ref">ADI IP library</span></a>, together with the
-<a class="reference internal" href="../index.html#jesd204"><span class="std std-ref">JESD framework</span></a>, parametrizable block designs can be built to
-interface ADI ADCs and DACs in various JESD modes.</p>
-<section id="link-parameters">
-<h2>Link parameters<a class="headerlink" href="#link-parameters" title="Permalink to this heading"></a></h2>
+  <section id="versal-adaptive-soc-transceiver-subsystem">
+<span id="versal-transceiver-subsystem"></span><h1>Versal Adaptive SoC Transceiver Subsystem<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem" title="Permalink to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<p>The Versal Transceiver Subsystem can be used to configure the GTY and GTYP for
+Versal ACAP devices. In general, across all reference designs, the gigabit
+transceivers are configured specifically to the Lane rate of the HDL build.
+This guide provides instructions on using the wizard to generate a transceiver
+configuration for JESD204B/C interfaces on Versal devices.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To learn more about Versal ACAP transceivers and the Wizard, please consult:</p>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://docs.amd.com/r/en-US/am002-versal-gty-transceivers" target="_blank">Versal Adaptive SoC GTY and GTYP Transceivers Architecture Manual (AM002)</a></p></li>
+<li><p><a class="icon link reference external" href="https://docs.amd.com/r/en-US/pg442-gtwiz-versal" target="_blank">Versal Adaptive SoC Transceiver Subsystem Product Guide (PG442)</a></p></li>
+</ul>
+</div>
+</section>
+<section id="versal-acap-transceiver-architecture">
+<h2>Versal ACAP Transceiver Architecture<a class="headerlink" href="#versal-acap-transceiver-architecture" title="Permalink to this heading"></a></h2>
+<p>Versal ACAP devices feature advanced GTY and GTYP transceivers that support:</p>
+<ul class="simple">
+<li><p>Lane rates from 1.2 Gb/s up to 28.21 Gb/s (GTY) and 32.0 Gb/s (GTYP)</p></li>
+<li><p>Multiple PLL options: LCPLL and RPLL for flexible clocking</p></li>
+<li><p>Enhanced performance and power efficiency compared to UltraScale+</p></li>
+<li><p>Native JESD204B and JESD204C protocol support</p></li>
+</ul>
+<section id="required-features-by-the-jesd204b">
+<h3>Required features by the JESD204B<a class="headerlink" href="#required-features-by-the-jesd204b" title="Permalink to this heading"></a></h3>
+<p>The following features are required for a JESD204B interface:</p>
+<ul class="simple">
+<li><p>LCPLL for clock generation</p></li>
+<li><p>8B/10B encoding and decoding</p></li>
+<li><p>TX and RX buffer to solve rate and phase differences between XCLK
+(PMA parallel clock) and USRCLK (link clock)</p></li>
+<li><p>RX Equalization and CDR</p></li>
+<li><p>RX Byte and Word alignment</p></li>
+</ul>
+</section>
+<section id="required-features-by-the-jesd204c">
+<h3>Required features by the JESD204C<a class="headerlink" href="#required-features-by-the-jesd204c" title="Permalink to this heading"></a></h3>
+<p>The following features are required for a JESD204C interface:</p>
+<ul class="simple">
+<li><p>LCPLL for clock generation</p></li>
+<li><p>64B/66B async encoding and decoding</p></li>
+<li><p>TX and RX buffer to solve rate and phase differences between XCLK
+(PMA parallel clock) and USRCLK (link clock)</p></li>
+<li><p>RX Equalization and CDR</p></li>
+</ul>
+</section>
+<section id="lane-rate-and-refclk-selection">
+<span id="id1"></span><h3>Lane Rate and RefClk Selection<a class="headerlink" href="#lane-rate-and-refclk-selection" title="Permalink to this heading"></a></h3>
+<p>In our reference designs, we usually use the following relationship between
+the Lane rate and the reference clock:</p>
+<ul class="simple">
+<li><p>For JESD204B: Reference clock = Lane Rate / 40</p></li>
+<li><p>For JESD204C: Reference clock = Lane Rate / 66</p></li>
+</ul>
+</section>
+</section>
+<section id="versal-adaptive-soc-transceiver-subsystem-wrapper">
+<h2>Versal Adaptive SoC Transceiver Subsystem wrapper<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-wrapper" title="Permalink to this heading"></a></h2>
+<p>In our reference designs, we use a
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/scripts/versal_xcvr_subsystem.tcl" target="_blank">versal_xcvr_subsystem.tcl</a>
+as a wrapper to instantiate and configure the Versal Transceiver Subsystem IP
+core.</p>
+<p>The script takes the following parameters:</p>
+<ul class="simple">
+<li><p>ip_name - Name of the IP core instance</p></li>
+<li><p>jesd_mode:</p>
+<ul>
+<li><p>8b10b - JESD204B</p></li>
+<li><p>64b66b - JESD204C</p></li>
+</ul>
+</li>
+<li><p>rx_no_lanes - Number of RX lanes</p></li>
+<li><p>tx_no_lanes - Number of TX lanes</p></li>
+<li><p>rx_lane_rate - RX lane rate in Gb/s</p></li>
+<li><p>tx_lane_rate - TX lane rate in Gb/s</p></li>
+<li><p>ref_clock - Reference clock frequency in MHz (see
+<a class="reference internal" href="#lane-rate-and-refclk-selection">Lane Rate and RefClk Selection</a>)</p></li>
+<li><p>transceiver - GTY or GTYP</p></li>
+<li><p>intf_cfg:</p>
+<ul>
+<li><p>RX - Simplex RX</p></li>
+<li><p>TX - Simplex TX</p></li>
+<li><p>RXTX - Simplex RX + Simplex TX</p></li>
+</ul>
+</li>
+</ul>
+<section id="versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-transmit-peripheral-adapter">
+<h3>Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Transmit Peripheral adapter<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-transmit-peripheral-adapter" title="Permalink to this heading"></a></h3>
+<p>In order to connect the Versal Transceiver Subsystem to the
+<a class="reference internal" href="../axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a>, we provide a
+Link-to-Phy adapter.</p>
+<p>This adapter is needed to convert the 64B/66B or 8B/10B encoded data from the
+link layer to the format expected by the transceiver subsystem (physical layer).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>L</p></td>
-<td><p>Number of lanes</p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_tx/jesd204_versal_gt_adapter_tx.v" target="_blank">versal_gt_adapter_tx.v</a></p></td>
+<td><p>Verilog source for the TX Link-to-Phy adapter for Versal.</p></td>
 </tr>
-<tr class="row-odd"><td><p>M</p></td>
-<td><p>Number of converters</p></td>
-</tr>
-<tr class="row-even"><td><p>F</p></td>
-<td><p>Octets per Frame per Lane</p></td>
-</tr>
-<tr class="row-odd"><td><p>S</p></td>
-<td><p>Samples per Converter per Frame</p></td>
-</tr>
-<tr class="row-even"><td><p>NP/N’</p></td>
-<td><p>Total number of Bits per Sample</p></td>
-</tr>
-<tr class="row-odd"><td><p>N</p></td>
-<td><p>Converter Resolution</p></td>
-</tr>
-<tr class="row-even"><td><p>K</p></td>
-<td><p>Frames per Multiframe</p></td>
-</tr>
-<tr class="row-odd"><td><p>HD</p></td>
-<td><p>High Density User Data Format</p></td>
-</tr>
-<tr class="row-even"><td><p>E</p></td>
-<td><p>Number of multiblocks in an extended multiblock</p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_tx/jesd204_versal_gt_adapter_tx_ip.tcl" target="_blank">versal_gt_adapter_tx_ip.tcl</a></p></td>
+<td><p>TCL script to generate the Vivado IP-integrator project for the
+TX Link-to-Phy adapter for Versal.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>In JESD links, the following equations must hold:</p>
-<blockquote>
-<div><p><strong>M * S * NP = L * F * 8</strong></p>
-</div></blockquote>
-<p>or</p>
-<blockquote>
-<div><p><strong>M / L = (F / S) * (8 / NP)</strong></p>
-</div></blockquote>
-</div>
-<section id="changing-the-link-parameters">
-<h3>Changing the link parameters<a class="headerlink" href="#changing-the-link-parameters" title="Permalink to this heading"></a></h3>
-<p>Usually, projects are built and configured to exercise the ADC/DAC devices at
-maximum capability using all available lanes — this corresponds to a single
-JESD operation mode.</p>
-<p>To switch to other modes, the generic block designs can be reconfigured by
-changing its parameters. These parameters map to the JESD link parameters.
-See the example below taken from
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/common/adrv9009_bd.tcl" target="_blank">this block design</a>:</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># TX parameters</span>
-<span class="k">set</span><span class="w"> </span>TX_NUM_OF_LANES<span class="w"> </span><span class="mi">4</span><span class="w">      </span><span class="k">;</span><span class="w"> </span><span class="c"># L</span>
-<span class="k">set</span><span class="w"> </span>TX_NUM_OF_CONVERTERS<span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="k">;</span><span class="w"> </span><span class="c"># M</span>
-<span class="k">set</span><span class="w"> </span>TX_SAMPLES_PER_FRAME<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">;</span><span class="w"> </span><span class="c"># S</span>
-<span class="k">set</span><span class="w"> </span>TX_SAMPLE_WIDTH<span class="w"> </span><span class="mi">16</span><span class="w">     </span><span class="k">;</span><span class="w"> </span><span class="c"># N/NP</span>
-
-<span class="k">set</span><span class="w"> </span>TX_SAMPLES_PER_CHANNEL<span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">;</span><span class="w"> </span><span class="c"># L * 32 / (M * N)</span>
-</pre></div>
-</div>
-<div class="admonition caution">
-<p class="admonition-title">Caution</p>
-<p>Changing the parameters “number of lanes” requires updating the top-level
-file and the constraints file as well! If the number of lanes is reduced,
-both files must be updated to remove references to the unused lanes.</p>
+</section>
+<section id="versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-receive-peripheral-adapter">
+<h3>Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Receive Peripheral adapter<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-receive-peripheral-adapter" title="Permalink to this heading"></a></h3>
+<p>In order to connect the Versal Transceiver Subsystem to the
+<a class="reference internal" href="../axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a>, we provide a
+Phy-to-Link adapter.</p>
+<p>This adapter is needed to convert the 64B/66B or 8B/10B encoded data from the
+transceiver subsystem (physical layer) to the format expected by the link layer.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_rx/jesd204_versal_gt_adapter_rx.v" target="_blank">versal_gt_adapter_rx.v</a></p></td>
+<td><p>Verilog source for the RX Link-to-Phy adapter for Versal.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_rx/lane_align.v" target="_blank">lane_align.v</a></p></td>
+<td><p>Verilog source for the lane alignment module (JESD204B) for Versal.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_rx/jesd204_versal_gt_adapter_rx_ip.tcl" target="_blank">versal_gt_adapter_rx_ip.tcl</a></p></td>
+<td><p>TCL script to generate the Vivado IP-integrator project for the
+RX Link-to-Phy adapter for Versal.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </section>
 </section>
-<section id="generic-tx-path">
-<h2>Generic TX path<a class="headerlink" href="#generic-tx-path" title="Permalink to this heading"></a></h2>
-<p>The following diagram presents a generic JESD TX path from the Application Layer
-to the FPGA boundary. The application layer is connected to the TX path through
-the DAC Transport Layer, which for each converter it accepts a data beat on
-every cycle. The width of data beat is defined by the SPC and NP parameter.</p>
-<p>SPC represents the number of samples per converter per data clock cycle.
-SPC must be a natural number (greater than one and a whole number).</p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_path.svg"><img alt="Generic JESD204 TX path" class="align-center" src="../../../_images/jesd204_generic_tx_path.svg" width="700" /></a>
-<p>On each clock cycle, the Link layer accepts 32 bits per every lane as a
-constraint from the physical layer that is configured to 32-bit mode.
-This means that for each clock cycle, the application layer must provide
-enough samples for each converter such that the Transport Layer can fill
-32 bits of data for each lane.</p>
-<p>Due to this constraint, the following equation must hold:</p>
-<p><strong>L * 32 = M * NP * SPC</strong></p>
-<p>In such designs, the following constraints apply to the Transport Layer:</p>
-<ul class="simple">
-<li><p>F = {1, 2, 4}</p></li>
-<li><p>NP = {8, 16}</p></li>
-</ul>
-<div class="admonition important" id="generic-jesd-bds-tx-general-rules">
-<p class="admonition-title">Important</p>
-<p>Some general rules that <strong>always should hold</strong>:</p>
-<ul class="simple">
-<li><p><strong>LaneRate = SampleRate * (10/8) * (M/L) * NP</strong></p></li>
-<li><p><strong>SampleRate = DAC_rate/Total_interpolation</strong></p></li>
-<li><p><strong>Link Clock = Lane Rate / 40</strong></p></li>
-<li><p>If OUTDIV_CLK is used: <strong>Link Clock = (RefClock)/((OutClkSel == 4)? 2 : (OutClkSel == 3)? 1 : 1)</strong></p></li>
-</ul>
+<section id="example-vivado-block-design-for-a-jesd204c-interface-on-vck190">
+<h2>Example Vivado block design for a JESD204C interface on VCK190<a class="headerlink" href="#example-vivado-block-design-for-a-jesd204c-interface-on-vck190" title="Permalink to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Direction</p></th>
+<th class="head"><p>JESD mode</p></th>
+<th class="head"><p>Lane rate</p></th>
+<th class="head"><p>Number of lanes</p></th>
+<th class="head"><p>Number of converters</p></th>
+<th class="head"><p>Converter resolution</p></th>
+<th class="head"><p>Reference clock</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RX</p></td>
+<td><p>JESD204C</p></td>
+<td><p>24.7 Gb/s</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>16 bits</p></td>
+<td><p>375 MHz</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX</p></td>
+<td><p>JESD204C</p></td>
+<td><p>24.7 Gb/s</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>16 bits</p></td>
+<td><p>375 MHz</p></td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>Where:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">M</span></code> - “adi,converters-per-device”, device tree property from “axi-jesd204-tx” node</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">L</span></code> - number of lanes per link, parameter of JESD IP</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">NP</span></code> - “adi,bits-per-sample” device tree property from “axi-jesd204-tx” node</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">RefClock</span></code> - reference clock for the transceivers</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">SampleRate</span></code> - rate of the samples that feeds the JESD link</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">DAC_rate</span></code> - DAC raw sample rate after interpolation</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Total_interpolation</span></code> - product of selected interpolations on the datapath,
-e.g: <code class="docutils literal notranslate"><span class="pre">DAC_interpolation</span> <span class="pre">*</span> <span class="pre">Channel_interpolation</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">OutClkSel</span></code> - “adi,out-clk-select” device tree property from XCVR node</p></li>
-</ul>
-<p>More information on the DAC Transport Layer can be found in
-<a class="reference internal" href="../ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a> page.</p>
-<p>The Link layer consists of L number of lanes which form the link.
-More information on the TX Link layer can be found in
-<a class="reference internal" href="../axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a> page.</p>
-<section id="example-1-tx-link-with-l-4-m-1-s-1-f-2-np-16">
-<h3>Example 1: TX link with L=4, M=1, S=1, F=2, NP=16<a class="headerlink" href="#example-1-tx-link-with-l-4-m-1-s-1-f-2-np-16" title="Permalink to this heading"></a></h3>
-<p>In this mode, the Transport Layer will output 2 frames in every clock cycle
-(32 bits / (F*8) = 2).
-The Application Layer must provide 8 samples each cycle to be able to fill
-the 2 frames.</p>
-<p><strong>SPC = (L*32) / (M*NP) = (4*32) / (1*16) = 128/16 = 8</strong></p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_path_ex1.svg"><img alt="Generic JESD204 TX path example 1" class="align-center" src="../../../_images/jesd204_generic_tx_path_ex1.svg" width="600" /></a>
-</section>
-<section id="example-2-tx-link-with-l-4-m-4-s-1-f-2-np-16">
-<h3>Example 2: TX link with L=4, M=4, S=1, F=2, NP=16<a class="headerlink" href="#example-2-tx-link-with-l-4-m-4-s-1-f-2-np-16" title="Permalink to this heading"></a></h3>
-<p>In this mode the Transport Layer will output two frames in every clock cycle.
-32 bits / (F*8) = 2.
-The Application Layer must provide 8 samples each cycle to be able to fill the
-2 frames.</p>
-<p><strong>SPC = (L*32) / (M*NP) = (4*32) / (4*16) = 128/64 = 2</strong></p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_path_ex2.svg"><img alt="Generic JESD204 TX path example 2" class="align-center" src="../../../_images/jesd204_generic_tx_path_ex2.svg" width="600" /></a>
-</section>
-</section>
-<section id="generic-rx-path">
-<h2>Generic RX path<a class="headerlink" href="#generic-rx-path" title="Permalink to this heading"></a></h2>
-<p>The following diagram presents a generic JESD RX path from the Application Layer
-to the FPGA boundary. The Application Layer is connected to the RX path through
-the ADC Transport Layer, which for each converter generates a data beat on
-every cycle. The width of data beat is defined by the SPC and NP parameter.
-SPC represents the number of samples per converter per data clock cycle.
-SPC must be a natural number (greater than one and a whole number).</p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_rx_path.svg"><img alt="Generic JESD204 RX path" class="align-center" src="../../../_images/jesd204_generic_rx_path.svg" width="700" /></a>
-<p>On each clock cycle, the Link layer generates 32 bits per every lane as it is
-constrained from the Physical Layer that is configured to 32-bit mode. This
-means that for each clock cycle, the Application Layer must accept enough
-samples for each converter so the Transport Layer use 32 bits of data from
-each lane.</p>
-<p>In such designs, the following constraints apply to the Transport Layer:</p>
-<ul class="simple">
-<li><p>F = {1, 2, 4}</p></li>
-<li><p>NP = {8, 16}</p></li>
-</ul>
-<p>More information on the ADC Transport layer can be found in
-<a class="reference internal" href="../ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a> page.</p>
-<p>The Link layer consists from L number of lanes which form the link.
-More information on the RX Link layer can be found in
-<a class="reference internal" href="../axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a> page.</p>
-<section id="example-rx-link-with-l-4-m-1-s-1-f-2-np-16">
-<h3>Example: RX link with L=4, M=1, S=1, F=2, NP=16<a class="headerlink" href="#example-rx-link-with-l-4-m-1-s-1-f-2-np-16" title="Permalink to this heading"></a></h3>
-<p>In this mode the Transport Layer will accept two frames in every clock cycle.
-32 bits / (F*8) = 2;
-The Application Layer must accept 8 samples each cycle so the transport layer
-can deframe the 2 frames.</p>
-<p><strong>SPC = (L*32) / (M*NP) = (4*32) / (1*16) = 128/16 = 8</strong></p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_rx_path_ex1.svg"><img alt="Generic JESD204 RX path example 1" class="align-center" src="../../../_images/jesd204_generic_rx_path_ex1.svg" width="600" /></a>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Such a parametrizable block design was built for the ADRV9009 prototyping
-platform and can be found <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/common/adrv9009_bd.tcl" target="_blank">here</a>.</p>
+<a class="reference internal image-reference" href="../../../_images/block_diagram.png"><img alt="JESD204B/C Physical Layer" class="align-center" src="../../../_images/block_diagram.png" style="width: 1000px;" /></a>
+<section id="signal-description">
+<h3>Signal Description<a class="headerlink" href="#signal-description" title="Permalink to this heading"></a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GT_REFCLK</p></td>
+<td><p>Reference clock input to the transceivers</p></td>
+</tr>
+<tr class="row-odd"><td><p>gtpowergood</p></td>
+<td><p>Power good output from the transceivers, the reset inputs are only
+valid when this signal is high</p></td>
+</tr>
+<tr class="row-even"><td><p>gtreset_in</p></td>
+<td><p>Master reset input to the transceivers</p></td>
+</tr>
+<tr class="row-odd"><td><p>gtreset_[rx/tx]_datapath</p></td>
+<td><p>RX/TX datapath reset input to the transceivers</p></td>
+</tr>
+<tr class="row-even"><td><p>gtreset_[rx/tx]_pll_and_datapath</p></td>
+<td><p>RX/TX PLL and datapath reset input to the transceivers</p></td>
+</tr>
+<tr class="row-odd"><td><p>[rx/tx]_resetdone</p></td>
+<td><p>RX/TX reset done output from the transceivers, indicates that the reset
+sequence has completed</p></td>
+</tr>
+<tr class="row-even"><td><p>rxusrclk_out</p></td>
+<td><p>RX user clock output, the JESD204 link clock (24.75 Gbps / 66 = 375 MHz
+in this example)</p></td>
+</tr>
+<tr class="row-odd"><td><p>txusrclk_out</p></td>
+<td><p>TX user clock output, the JESD204 link clock (24.75 Gbps / 66 = 375 MHz
+in this example)</p></td>
+</tr>
+<tr class="row-even"><td><p>rx_0_[n/p]</p></td>
+<td><p>RX differential serial data inputs</p></td>
+</tr>
+<tr class="row-odd"><td><p>tx_0_[n/p]</p></td>
+<td><p>TX differential serial data outputs</p></td>
+</tr>
+<tr class="row-even"><td><p>rx_[0/1]</p></td>
+<td><p>RX parallel data output for the link layer</p></td>
+</tr>
+<tr class="row-odd"><td><p>tx_[0/1]</p></td>
+<td><p>TX parallel data input from the link layer</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </section>
 </section>
-<section id="jesd204-modes-with-f-8">
-<h2>JESD204 modes with F=8<a class="headerlink" href="#jesd204-modes-with-f-8" title="Permalink to this heading"></a></h2>
-<p>In a period of LinkClk, the Link layer always handles 32 bits per lane.
-The Transport Layer running at a same clock rate can fill the 32 bits with
-frames of 1,2 or 4 bytes.</p>
-<p>However, for a link with L=1, M=4, NP=16 the minimum number of bytes per
-frame that must be supported is 8 (F=8).</p>
-<section id="example-tx-link-with-l-1-m-4-s-1-f-8-np-16">
-<h3>Example: TX link with L=1, M=4, S=1, F=8, NP=16<a class="headerlink" href="#example-tx-link-with-l-1-m-4-s-1-f-8-np-16" title="Permalink to this heading"></a></h3>
-<p>To fulfill the requirement that in every DataClk period for each converter
-from the Application Layer a sample must be accepted (64 bits in this case),
-DataClk must be run with half the speed of the LinkClk.</p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_f8.svg"><img alt="Generic JESD204 TX path example with F=8" class="align-center" src="../../../_images/jesd204_generic_tx_f8.svg" width="600" /></a>
-<p>The rate adaptation and synchronization is done with a gearbox which receives
-its clocks from a PLL that ensures its output clocks are in phase.</p>
-</section>
-<section id="example-rx-link-with-l-1-m-4-s-1-f-8-np-16">
-<h3>Example: RX link with L=1, M=4, S=1, F=8, NP=16<a class="headerlink" href="#example-rx-link-with-l-1-m-4-s-1-f-8-np-16" title="Permalink to this heading"></a></h3>
-<p>The RX path is similar to the TX. In order the transport layer to produce a
-sample per converter in every clock cycle the Data clock must be ran at half
-of the LinkClock speed.</p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_rx_f8.svg"><img alt="Generic JESD204 RX path example with F=8" class="align-center" src="../../../_images/jesd204_generic_rx_f8.svg" width="600" /></a>
-<p>Such a parametrizable block design that supports also F=8 was built for the
-ADRV9009 prototyping platform, and can be found
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/dev_adrv9009_less_lanes/projects/adrv9009/common/adrv9009_bd.tcl" target="_blank">here</a>.</p>
-</section>
-</section>
-<section id="software-related">
-<h2>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h2>
-<ul class="simple">
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl" target="_blank">ADC Linux driver documentation</a></p></li>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl" target="_blank">DAC Linux driver documentation</a></p></li>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_jesd204_tx" target="_blank">ADI JESD204B/C Transmit Peripheral Linux driver documentation</a></p></li>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx" target="_blank">ADI JESD204B/C Receive Peripheral Linux driver documentation</a></p></li>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_adxcvr" target="_blank">ADI JESD204B/C AXI_ADXCVR Highspeed Transceivers Linux driver documentation</a></p></li>
-</ul>
+<section id="example-usage-of-the-versal-transceiver-subsystem-wrapper-in-a-jesd204b-c-design">
+<h2>Example usage of the Versal Transceiver Subsystem wrapper in a JESD204B/C design<a class="headerlink" href="#example-usage-of-the-versal-transceiver-subsystem-wrapper-in-a-jesd204b-c-design" title="Permalink to this heading"></a></h2>
+<p>One example of usage of the Versal Transceiver Subsystem wrapper can be found
+in the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/" target="_blank">ad9081_fmca_ebz</a>
+reference design:
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl#L212" target="_blank">adi_axi_jesd204_rx_create</a>.</p>
+<p>The wrapper is called with all the necessary parameters to configure the
+transceivers for a specific use case.</p>
 </section>
 </section>
 
@@ -608,8 +626,8 @@ ADRV9009 prototyping platform, and can be found
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">JESD204 Interface Framework</a>
-    <a href="../axi_jesd204_tx/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">JESD204B/C Link Transmit Peripheral</a>
+    <a href="../xgt_wizard/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Xilinx FPGAs Transceivers Wizard</a>
+    <a href="../troubleshoot/troubleshoot_jesd204_tx.html" title="Next document (Alt+Shift+RightArrow)" class="next">Troubleshooting JESD204B TX links</a>
               </div>
           
         </div>

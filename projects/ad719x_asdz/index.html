@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The AD719x-ASDZ HDL project supports the EVAL-AD719xASDZ family, comprised of EVAL-AD7190ASDZ, EVAL-AD7193ASDZ and EVAL-AD7195ASDZ, each evaluation kit featuring its own chip, the AD7190, AD7193 and AD7195 respectively - 4.8 kHz ultralow noise 24-bit sigma-delta ADC, each with its own particularities." name="description" />
+<meta content="The AD719x-ASDZ HDL project supports the EVAL-AD719xASDZ family, comprised of EVAL-AD7190ASDZ, EVAL-AD7193ASDZ, EVAL-AD7195ASDZ, as well as the EVAL-AD4131-8, EVAL-AD4130-8 and EVAL-AD4129-8." name="description" />
 
     <title>AD719X-ASDZ HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
@@ -186,6 +186,7 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/xgt_wizard/index.html">Xilinx FPGAs Transceivers Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/versal_transceiver_subsystem/index.html">AMD Versal Adaptive SoC Transceiver Subsystem</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/troubleshoot/troubleshoot_jesd204_tx.html">Troubleshooting JESD204 TX links</a></li>
 </ul>
 </li>
@@ -385,10 +386,13 @@ Content on this topic
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The AD719x-ASDZ HDL project supports the EVAL-AD719xASDZ family, comprised of
-<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190ASDZ" target="_blank">EVAL-AD7190ASDZ</a>, <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193ASDZ" target="_blank">EVAL-AD7193ASDZ</a> and <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195ASDZ" target="_blank">EVAL-AD7195ASDZ</a>, each
-evaluation kit featuring its own chip, the <a class="icon adi reference external" href="https://www.analog.com/AD7190" target="_blank">AD7190</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7193" target="_blank">AD7193</a> and
-<a class="icon adi reference external" href="https://www.analog.com/AD7195" target="_blank">AD7195</a> respectively - 4.8 kHz ultralow noise 24-bit sigma-delta ADC,
-each with its own particularities.</p>
+<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190ASDZ" target="_blank">EVAL-AD7190ASDZ</a>, <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193ASDZ" target="_blank">EVAL-AD7193ASDZ</a>, <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195ASDZ" target="_blank">EVAL-AD7195ASDZ</a>,
+as well as the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4131-8" target="_blank">EVAL-AD4131-8</a>, <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4130-8" target="_blank">EVAL-AD4130-8</a> and
+<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4129-8" target="_blank">EVAL-AD4129-8</a>.</p>
+<p>Each evaluation kit features its own chip, the <a class="icon adi reference external" href="https://www.analog.com/AD7190" target="_blank">AD7190</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7193" target="_blank">AD7193</a>,
+<a class="icon adi reference external" href="https://www.analog.com/AD7195" target="_blank">AD7195</a>, <a class="icon adi reference external" href="https://www.analog.com/AD4131-4" target="_blank">AD4131-4</a>, <a class="icon adi reference external" href="https://www.analog.com/AD4131-8" target="_blank">AD4131-8</a>, <a class="icon adi reference external" href="https://www.analog.com/AD4130-4" target="_blank">AD4130-4</a>,
+<a class="icon adi reference external" href="https://www.analog.com/AD4129-4" target="_blank">AD4129-4</a> and <a class="icon adi reference external" href="https://www.analog.com/AD4129-8" target="_blank">AD4129-8</a> respectively - 4.8 kHz ultralow noise
+sigma-delta ADC, each with its own particularities.</p>
 <p>The on-chip low noise gain stage means that signals of small amplitude can
 interface directly to the ADC. The internal clock option provides a compact
 solution for low BW requirements.</p>
@@ -401,6 +405,9 @@ solution for low BW requirements.</p>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193ASDZ" target="_blank">EVAL-AD7193ASDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7194ASDZ" target="_blank">EVAL-AD7194ASDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195ASDZ" target="_blank">EVAL-AD7195ASDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4131-8" target="_blank">EVAL-AD4131-8</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4130-8" target="_blank">EVAL-AD4130-8</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4129-8" target="_blank">EVAL-AD4129-8</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
@@ -411,6 +418,11 @@ solution for low BW requirements.</p>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7193" target="_blank">AD7193</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7194" target="_blank">AD7194</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7195" target="_blank">AD7195</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4131-4" target="_blank">AD4131-4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4131-8" target="_blank">AD4131-8</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4130-4" target="_blank">AD4130-4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4129-4" target="_blank">AD4129-4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4129-8" target="_blank">AD4129-8</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -468,6 +480,18 @@ solution for low BW requirements.</p>
 <tr class="row-odd"><td></td>
 <td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html" target="_blank">DE10-Nano</a></p></td>
 <td><p>Arduino shield</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4131-8" target="_blank">EVAL-AD4131-8</a></p></td>
+<td><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a></p></td>
+<td><p>PMOD JA/Arduino shield</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4130-8" target="_blank">EVAL-AD4130-8</a></p></td>
+<td><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a></p></td>
+<td><p>PMOD JA/Arduino shield</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4129-8" target="_blank">EVAL-AD4129-8</a></p></td>
+<td><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a></p></td>
+<td><p>PMOD JA/Arduino shield</p></td>
 </tr>
 </tbody>
 </table>
@@ -535,15 +559,25 @@ solution for low BW requirements.</p>
 <td><p>32</p></td>
 <td><p>86</p></td>
 </tr>
+<tr class="row-even"><td><p>adc_int **</p></td>
+<td><p>OUT</p></td>
+<td><p>31</p></td>
+<td><p>85</p></td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
-<p><code class="docutils literal notranslate"><span class="pre">*</span></code> - <code class="docutils literal notranslate"><span class="pre">adc_syncn</span></code> exists all the time on the DE10-Nano project, <strong>but</strong>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> - <code class="docutils literal notranslate"><span class="pre">adc_syncn</span></code> exists all the time on the DE10-Nano project, <strong>but</strong>
 on the Cora Z7S project it exists only when the project was built with
 <code class="docutils literal notranslate"><span class="pre">ARDZ_PMOD_N=1</span></code> parameter (used when connecting the eval. board through
-the Arduino header)</p>
+the Arduino header)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> - <code class="docutils literal notranslate"><span class="pre">adc_int</span></code> exists on the Cora Z7S project only when the project
+as built with <code class="docutils literal notranslate"><span class="pre">ARDZ_PMOD_N=1</span></code> parameter (used when connecting the eval.
+board through the Arduino header)</p></li>
+</ul>
 </div>
 </section>
 </section>
@@ -576,7 +610,8 @@ connected to Cora Z7S through PMOD JA:</p>
 <div class="clear-left"></div></div></div><p>The other possible way to connect the supported boards to CoraZ7S, is through
 the Arduino header, for which the project needs to be built with the parameter
 <code class="docutils literal notranslate"><span class="pre">ARDZ_PMOD_N=1</span></code>.</p>
-<p>The built project will be located at hdl/projects/ad719x_asdz/coraz7s/<strong>ARDZPMODN1</strong>.</p>
+<p>The built project will be located at
+hdl/projects/ad719x_asdz/coraz7s/<strong>ARDZPMODN1</strong>.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
@@ -627,11 +662,19 @@ to the other one — the SYNCN, which is used for synchronizing multiple devices
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7193" target="_blank">AD7193</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7194" target="_blank">AD7194</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7195" target="_blank">AD7195</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4131-8" target="_blank">AD4131-8</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4131-4" target="_blank">AD4131-4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4130-4" target="_blank">AD4130-4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4129-4" target="_blank">AD4129-4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4129-8" target="_blank">AD4129-8</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190ASDZ" target="_blank">EVAL-AD7190ASDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7192ASDZ" target="_blank">EVAL-AD7192ASDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193ASDZ" target="_blank">EVAL-AD7193ASDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7194ASDZ" target="_blank">EVAL-AD7194ASDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195ASDZ" target="_blank">EVAL-AD7195ASDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4131-8" target="_blank">EVAL-AD4131-8</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4130-8" target="_blank">EVAL-AD4130-8</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4129-8" target="_blank">EVAL-AD4129-8</a></p></li>
 </ul>
 </li>
 </ul>
