@@ -71,7 +71,7 @@ adi_add_bus "axis_eth_tx" "slave" \
     {"axis_eth_tx_tuser" "TUSER"} \
   ]
 
-adi_add_bus_clock "eth_tx_clk" "axis_eth_tx" "eth_tx_rst" "master" "master"
+adi_add_bus_clock "eth_tx_clk" "axis_eth_tx:axis_tx_ptp" "eth_tx_rst" "master" "master"
 
 adi_add_bus "axis_eth_rx" "master" \
   "xilinx.com:interface:axis_rtl:1.0" \
@@ -128,8 +128,6 @@ adi_if_infer_bus analog.com:interface:if_axis_tx_ptp slave axis_tx_ptp [list \
   "ready axis_eth_tx_ptp_ts_ready" \
 ]
 
-adi_add_bus_clock "eth_tx_clk" "axis_tx_ptp" "eth_tx_rst" "master" "master"
-
 ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 set reset_intf_main [ipx::infer_bus_interface rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
 set reset_polarity_main [ipx::add_bus_parameter "POLARITY" $reset_intf_main]
@@ -138,8 +136,8 @@ set_property value "ACTIVE_HIGH" $reset_polarity_main
 ipx::infer_bus_interface ptp_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface ptp_sample_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 
-ipx::infer_bus_interface eth_tx_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-ipx::infer_bus_interface eth_rx_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+# ipx::infer_bus_interface eth_tx_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+# ipx::infer_bus_interface eth_rx_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 
 set reset_intf_ptp [ipx::infer_bus_interface ptp_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
 set reset_polarity_ptp [ipx::add_bus_parameter "POLARITY" $reset_intf_ptp]
@@ -240,6 +238,31 @@ adi_if_infer_bus analog.com:interface:if_ptp slave ptp_clock [list \
   "ptp_perout_pulse     ptp_perout_pulse" \
 ]
 
+adi_add_bus "s_axil_csr" "slave" \
+  "xilinx.com:interface:aximm_rtl:1.0" \
+  "xilinx.com:interface:aximm:1.0" \
+  {
+    {"s_axil_csr_awaddr" "AWADDR"} \
+    {"s_axil_csr_awprot" "AWPROT"} \
+    {"s_axil_csr_awvalid" "AWVALID"} \
+    {"s_axil_csr_awready" "AWREADY"} \
+    {"s_axil_csr_wdata" "WDATA"} \
+    {"s_axil_csr_wstrb" "WSTRB"} \
+    {"s_axil_csr_wvalid" "WVALID"} \
+    {"s_axil_csr_wready" "WREADY"} \
+    {"s_axil_csr_bresp" "BRESP"} \
+    {"s_axil_csr_bvalid" "BVALID"} \
+    {"s_axil_csr_bready" "BREADY"} \
+    {"s_axil_csr_araddr" "ARADDR"} \
+    {"s_axil_csr_arprot" "ARPROT"} \
+    {"s_axil_csr_arvalid" "ARVALID"} \
+    {"s_axil_csr_arready" "ARREADY"} \
+    {"s_axil_csr_rdata" "RDATA"} \
+    {"s_axil_csr_rresp" "RRESP"} \
+    {"s_axil_csr_rvalid" "RVALID"} \
+    {"s_axil_csr_rready" "RREADY"} \
+  }
+
 ## Customize GUI page
 
 # Remove the automatically generated GUI page
@@ -338,8 +361,8 @@ set_property -dict [list \
 
 ## Dependencies
 
-# adi_set_bus_dependency "s_axil_csr" "s_axil_csr" \
-#   "(spirit:decode(id('PARAM_VALUE.AXIL_CSR_ENABLE')) = 1)"
+adi_set_bus_dependency "s_axil_csr" "s_axil_csr" \
+  "(spirit:decode(id('PARAM_VALUE.AXIL_CSR_ENABLE')) = 1)"
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

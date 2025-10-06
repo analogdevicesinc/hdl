@@ -43,121 +43,121 @@ set TX_RAM_SIZE "32768"
 set RX_RAM_SIZE "32768"
 
 # FW ID block
-ad_ip_parameter corundum_hierarchy CONFIG.FPGA_ID [format "32'h%08x" $fpga_id]
-ad_ip_parameter corundum_hierarchy CONFIG.FW_ID [format "32'h%08x" $fw_id]
-ad_ip_parameter corundum_hierarchy CONFIG.FW_VER [format "32'h%02x%02x%02x%02x" {*}[split $fw_ver .-] 0 0 0 0]
-ad_ip_parameter corundum_hierarchy CONFIG.BOARD_ID [format "32'h%04x%04x" $board_vendor_id $board_device_id]
-ad_ip_parameter corundum_hierarchy CONFIG.BOARD_VER [format "32'h%02x%02x%02x%02x" {*}[split $board_ver .-] 0 0 0 0]
-ad_ip_parameter corundum_hierarchy CONFIG.BUILD_DATE  "32'd${build_date}"
-ad_ip_parameter corundum_hierarchy CONFIG.GIT_HASH  "32'h${git_hash}"
-ad_ip_parameter corundum_hierarchy CONFIG.RELEASE_INFO  [format "32'h%08x" $release_info]
+# ad_ip_parameter corundum_hierarchy CONFIG.FPGA_ID [format "32'h%08x" $fpga_id]
+# ad_ip_parameter corundum_hierarchy CONFIG.FW_ID [format "32'h%08x" $fw_id]
+# ad_ip_parameter corundum_hierarchy CONFIG.FW_VER [format "32'h%02x%02x%02x%02x" {*}[split $fw_ver .-] 0 0 0 0]
+# ad_ip_parameter corundum_hierarchy CONFIG.BOARD_ID [format "32'h%04x%04x" $board_vendor_id $board_device_id]
+# ad_ip_parameter corundum_hierarchy CONFIG.BOARD_VER [format "32'h%02x%02x%02x%02x" {*}[split $board_ver .-] 0 0 0 0]
+# ad_ip_parameter corundum_hierarchy CONFIG.BUILD_DATE  "32'd${build_date}"
+# ad_ip_parameter corundum_hierarchy CONFIG.GIT_HASH  "32'h${git_hash}"
+# # ad_ip_parameter corundum_hierarchy CONFIG.RELEASE_INFO  [format "32'h%08x" $release_info]
 
-# Board configuration
-ad_ip_parameter corundum_hierarchy CONFIG.TDMA_BER_ENABLE "0"
+# # Board configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.TDMA_BER_ENABLE "0"
 
-# Structural configuration
-ad_ip_parameter corundum_hierarchy CONFIG.IF_COUNT "1"
-ad_ip_parameter corundum_hierarchy CONFIG.PORTS_PER_IF $PORTS_PER_IF
-ad_ip_parameter corundum_hierarchy CONFIG.SCHED_PER_IF $PORTS_PER_IF
-ad_ip_parameter corundum_hierarchy CONFIG.PORT_MASK "0"
+# # Structural configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.IF_COUNT "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.PORTS_PER_IF $PORTS_PER_IF
+# ad_ip_parameter corundum_hierarchy CONFIG.SCHED_PER_IF $PORTS_PER_IF
+# ad_ip_parameter corundum_hierarchy CONFIG.PORT_MASK "0"
 
-# Clock configuration
-ad_ip_parameter corundum_hierarchy CONFIG.CLK_PERIOD_NS_NUM "4"
-ad_ip_parameter corundum_hierarchy CONFIG.CLK_PERIOD_NS_DENOM "1"
+# # Clock configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.CLK_PERIOD_NS_NUM "4"
+# ad_ip_parameter corundum_hierarchy CONFIG.CLK_PERIOD_NS_DENOM "1"
 
-# PTP configuration
-ad_ip_parameter corundum_hierarchy CONFIG.PTP_CLOCK_PIPELINE "0"
-ad_ip_parameter corundum_hierarchy CONFIG.PTP_CLOCK_CDC_PIPELINE "0"
-ad_ip_parameter corundum_hierarchy CONFIG.PTP_PORT_CDC_PIPELINE "0"
-ad_ip_parameter corundum_hierarchy CONFIG.PTP_PEROUT_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.PTP_PEROUT_COUNT "1"
+# # PTP configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.PTP_CLOCK_PIPELINE "0"
+# ad_ip_parameter corundum_hierarchy CONFIG.PTP_CLOCK_CDC_PIPELINE "0"
+# ad_ip_parameter corundum_hierarchy CONFIG.PTP_PORT_CDC_PIPELINE "0"
+# ad_ip_parameter corundum_hierarchy CONFIG.PTP_PEROUT_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.PTP_PEROUT_COUNT "1"
 
-# Queue manager configuration
-ad_ip_parameter corundum_hierarchy CONFIG.EVENT_QUEUE_OP_TABLE_SIZE "32"
-ad_ip_parameter corundum_hierarchy CONFIG.TX_QUEUE_OP_TABLE_SIZE "32"
-ad_ip_parameter corundum_hierarchy CONFIG.RX_QUEUE_OP_TABLE_SIZE "32"
-ad_ip_parameter corundum_hierarchy CONFIG.CQ_OP_TABLE_SIZE "32"
-ad_ip_parameter corundum_hierarchy CONFIG.EQN_WIDTH "6"
-ad_ip_parameter corundum_hierarchy CONFIG.TX_QUEUE_INDEX_WIDTH $TX_QUEUE_INDEX_WIDTH
-ad_ip_parameter corundum_hierarchy CONFIG.RX_QUEUE_INDEX_WIDTH $RX_QUEUE_INDEX_WIDTH
-ad_ip_parameter corundum_hierarchy CONFIG.CQN_WIDTH $CQN_WIDTH
-ad_ip_parameter corundum_hierarchy CONFIG.EQ_PIPELINE "3"
-ad_ip_parameter corundum_hierarchy CONFIG.TX_QUEUE_PIPELINE $TX_QUEUE_PIPELINE
-ad_ip_parameter corundum_hierarchy CONFIG.RX_QUEUE_PIPELINE $RX_QUEUE_PIPELINE
-ad_ip_parameter corundum_hierarchy CONFIG.CQ_PIPELINE [expr 3 + max($CQN_WIDTH - 12, 0)]
+# # Queue manager configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.EVENT_QUEUE_OP_TABLE_SIZE "32"
+# ad_ip_parameter corundum_hierarchy CONFIG.TX_QUEUE_OP_TABLE_SIZE "32"
+# ad_ip_parameter corundum_hierarchy CONFIG.RX_QUEUE_OP_TABLE_SIZE "32"
+# ad_ip_parameter corundum_hierarchy CONFIG.CQ_OP_TABLE_SIZE "32"
+# ad_ip_parameter corundum_hierarchy CONFIG.EQN_WIDTH "6"
+# ad_ip_parameter corundum_hierarchy CONFIG.TX_QUEUE_INDEX_WIDTH $TX_QUEUE_INDEX_WIDTH
+# ad_ip_parameter corundum_hierarchy CONFIG.RX_QUEUE_INDEX_WIDTH $RX_QUEUE_INDEX_WIDTH
+# ad_ip_parameter corundum_hierarchy CONFIG.CQN_WIDTH $CQN_WIDTH
+# ad_ip_parameter corundum_hierarchy CONFIG.EQ_PIPELINE "3"
+# ad_ip_parameter corundum_hierarchy CONFIG.TX_QUEUE_PIPELINE $TX_QUEUE_PIPELINE
+# ad_ip_parameter corundum_hierarchy CONFIG.RX_QUEUE_PIPELINE $RX_QUEUE_PIPELINE
+# ad_ip_parameter corundum_hierarchy CONFIG.CQ_PIPELINE [expr 3 + max($CQN_WIDTH - 12, 0)]
 
-# TX and RX engine configuration
-ad_ip_parameter corundum_hierarchy CONFIG.TX_DESC_TABLE_SIZE $TX_DESC_TABLE_SIZE
-ad_ip_parameter corundum_hierarchy CONFIG.RX_DESC_TABLE_SIZE $RX_DESC_TABLE_SIZE
-ad_ip_parameter corundum_hierarchy CONFIG.RX_INDIR_TBL_ADDR_WIDTH [expr min($RX_QUEUE_INDEX_WIDTH, 8)]
+# # TX and RX engine configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.TX_DESC_TABLE_SIZE $TX_DESC_TABLE_SIZE
+# ad_ip_parameter corundum_hierarchy CONFIG.RX_DESC_TABLE_SIZE $RX_DESC_TABLE_SIZE
+# ad_ip_parameter corundum_hierarchy CONFIG.RX_INDIR_TBL_ADDR_WIDTH [expr min($RX_QUEUE_INDEX_WIDTH, 8)]
 
-# Scheduler configuration
-ad_ip_parameter corundum_hierarchy CONFIG.TX_SCHEDULER_OP_TABLE_SIZE $TX_DESC_TABLE_SIZE
-ad_ip_parameter corundum_hierarchy CONFIG.TX_SCHEDULER_PIPELINE $TX_QUEUE_PIPELINE
-ad_ip_parameter corundum_hierarchy CONFIG.TDMA_INDEX_WIDTH "6"
+# # Scheduler configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.TX_SCHEDULER_OP_TABLE_SIZE $TX_DESC_TABLE_SIZE
+# ad_ip_parameter corundum_hierarchy CONFIG.TX_SCHEDULER_PIPELINE $TX_QUEUE_PIPELINE
+# ad_ip_parameter corundum_hierarchy CONFIG.TDMA_INDEX_WIDTH "6"
 
-# Interface configuration
-ad_ip_parameter corundum_hierarchy CONFIG.PTP_TS_ENABLE "0"
-ad_ip_parameter corundum_hierarchy CONFIG.TX_CPL_FIFO_DEPTH "32"
-ad_ip_parameter corundum_hierarchy CONFIG.TX_CHECKSUM_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.RX_HASH_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.RX_CHECKSUM_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.TX_FIFO_DEPTH "32768"
-ad_ip_parameter corundum_hierarchy CONFIG.RX_FIFO_DEPTH "32768"
-ad_ip_parameter corundum_hierarchy CONFIG.MAX_TX_SIZE "9214"
-ad_ip_parameter corundum_hierarchy CONFIG.MAX_RX_SIZE "9214"
-ad_ip_parameter corundum_hierarchy CONFIG.TX_RAM_SIZE $TX_RAM_SIZE
-ad_ip_parameter corundum_hierarchy CONFIG.RX_RAM_SIZE $RX_RAM_SIZE
+# # Interface configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.PTP_TS_ENABLE "0"
+# ad_ip_parameter corundum_hierarchy CONFIG.TX_CPL_FIFO_DEPTH "32"
+# ad_ip_parameter corundum_hierarchy CONFIG.TX_CHECKSUM_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.RX_HASH_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.RX_CHECKSUM_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.TX_FIFO_DEPTH "32768"
+# ad_ip_parameter corundum_hierarchy CONFIG.RX_FIFO_DEPTH "32768"
+# ad_ip_parameter corundum_hierarchy CONFIG.MAX_TX_SIZE "9214"
+# ad_ip_parameter corundum_hierarchy CONFIG.MAX_RX_SIZE "9214"
+# ad_ip_parameter corundum_hierarchy CONFIG.TX_RAM_SIZE $TX_RAM_SIZE
+# ad_ip_parameter corundum_hierarchy CONFIG.RX_RAM_SIZE $RX_RAM_SIZE
 
-# Application block configuration
-ad_ip_parameter corundum_hierarchy CONFIG.APP_ID "32'h00000000"
-ad_ip_parameter corundum_hierarchy CONFIG.APP_ENABLE "0"
-ad_ip_parameter corundum_hierarchy CONFIG.APP_CTRL_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.APP_DMA_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.APP_AXIS_DIRECT_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.APP_AXIS_SYNC_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.APP_AXIS_IF_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.APP_STAT_ENABLE "1"
+# # Application block configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.APP_ID "32'h00000000"
+# ad_ip_parameter corundum_hierarchy CONFIG.APP_ENABLE "0"
+# ad_ip_parameter corundum_hierarchy CONFIG.APP_CTRL_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.APP_DMA_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.APP_AXIS_DIRECT_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.APP_AXIS_SYNC_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.APP_AXIS_IF_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.APP_STAT_ENABLE "1"
 
-# AXI DMA interface configuration
-ad_ip_parameter corundum_hierarchy CONFIG.AXI_DATA_WIDTH [get_property CONFIG.PSU__SAXIGP0__DATA_WIDTH [get_bd_cells sys_ps8]]
-ad_ip_parameter corundum_hierarchy CONFIG.AXI_ADDR_WIDTH 64
-ad_ip_parameter corundum_hierarchy CONFIG.AXI_ID_WIDTH 6
+# # AXI DMA interface configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.AXI_DATA_WIDTH [get_property CONFIG.PSU__SAXIGP0__DATA_WIDTH [get_bd_cells sys_ps8]]
+# ad_ip_parameter corundum_hierarchy CONFIG.AXI_ADDR_WIDTH 64
+# ad_ip_parameter corundum_hierarchy CONFIG.AXI_ID_WIDTH 6
 
-# DMA interface configuration
-ad_ip_parameter corundum_hierarchy CONFIG.DMA_IMM_ENABLE "0"
-ad_ip_parameter corundum_hierarchy CONFIG.DMA_IMM_WIDTH "32"
-ad_ip_parameter corundum_hierarchy CONFIG.DMA_LEN_WIDTH "16"
-ad_ip_parameter corundum_hierarchy CONFIG.DMA_TAG_WIDTH "16"
-ad_ip_parameter corundum_hierarchy CONFIG.RAM_ADDR_WIDTH [expr int(ceil(log(max($TX_RAM_SIZE, $RX_RAM_SIZE))/log(2)))]
-ad_ip_parameter corundum_hierarchy CONFIG.RAM_PIPELINE "2"
-ad_ip_parameter corundum_hierarchy CONFIG.AXI_DMA_MAX_BURST_LEN 16
+# # DMA interface configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.DMA_IMM_ENABLE "0"
+# ad_ip_parameter corundum_hierarchy CONFIG.DMA_IMM_WIDTH "32"
+# ad_ip_parameter corundum_hierarchy CONFIG.DMA_LEN_WIDTH "16"
+# ad_ip_parameter corundum_hierarchy CONFIG.DMA_TAG_WIDTH "16"
+# ad_ip_parameter corundum_hierarchy CONFIG.RAM_ADDR_WIDTH [expr int(ceil(log(max($TX_RAM_SIZE, $RX_RAM_SIZE))/log(2)))]
+# ad_ip_parameter corundum_hierarchy CONFIG.RAM_PIPELINE "2"
+# ad_ip_parameter corundum_hierarchy CONFIG.AXI_DMA_MAX_BURST_LEN 16
 
-# AXI lite interface configuration (control)
-ad_ip_parameter corundum_hierarchy CONFIG.AXIL_CTRL_DATA_WIDTH 32
-ad_ip_parameter corundum_hierarchy CONFIG.AXIL_CTRL_ADDR_WIDTH 24
+# # AXI lite interface configuration (control)
+# ad_ip_parameter corundum_hierarchy CONFIG.AXIL_CTRL_DATA_WIDTH 32
+# ad_ip_parameter corundum_hierarchy CONFIG.AXIL_CTRL_ADDR_WIDTH 24
 
-# AXI lite interface configuration (application control)
-ad_ip_parameter corundum_hierarchy CONFIG.AXIL_APP_CTRL_DATA_WIDTH 32
-ad_ip_parameter corundum_hierarchy CONFIG.AXIL_APP_CTRL_ADDR_WIDTH 24
+# # AXI lite interface configuration (application control)
+# ad_ip_parameter corundum_hierarchy CONFIG.AXIL_APP_CTRL_DATA_WIDTH 32
+# ad_ip_parameter corundum_hierarchy CONFIG.AXIL_APP_CTRL_ADDR_WIDTH 24
 
-# Interrupt configuration
-ad_ip_parameter corundum_hierarchy CONFIG.IRQ_COUNT $IRQ_SIZE
-ad_ip_parameter corundum_hierarchy CONFIG.IRQ_STRETCH "10"
+# # Interrupt configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.IRQ_COUNT $IRQ_SIZE
+# ad_ip_parameter corundum_hierarchy CONFIG.IRQ_STRETCH "10"
 
-# Ethernet interface configuration
-ad_ip_parameter corundum_hierarchy CONFIG.AXIS_ETH_TX_PIPELINE "0"
-ad_ip_parameter corundum_hierarchy CONFIG.AXIS_ETH_TX_TS_PIPELINE "0"
-ad_ip_parameter corundum_hierarchy CONFIG.AXIS_ETH_TX_FIFO_PIPELINE "2"
-ad_ip_parameter corundum_hierarchy CONFIG.AXIS_ETH_RX_PIPELINE "0"
-ad_ip_parameter corundum_hierarchy CONFIG.AXIS_ETH_RX_FIFO_PIPELINE "2"
+# # Ethernet interface configuration
+# ad_ip_parameter corundum_hierarchy CONFIG.AXIS_ETH_TX_PIPELINE "0"
+# ad_ip_parameter corundum_hierarchy CONFIG.AXIS_ETH_TX_TS_PIPELINE "0"
+# ad_ip_parameter corundum_hierarchy CONFIG.AXIS_ETH_TX_FIFO_PIPELINE "2"
+# ad_ip_parameter corundum_hierarchy CONFIG.AXIS_ETH_RX_PIPELINE "0"
+# ad_ip_parameter corundum_hierarchy CONFIG.AXIS_ETH_RX_FIFO_PIPELINE "2"
 
-# Statistics counter subsystem
-ad_ip_parameter corundum_hierarchy CONFIG.STAT_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.STAT_DMA_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.STAT_AXI_ENABLE "1"
-ad_ip_parameter corundum_hierarchy CONFIG.STAT_INC_WIDTH "24"
-ad_ip_parameter corundum_hierarchy CONFIG.STAT_ID_WIDTH "12"
+# # Statistics counter subsystem
+# ad_ip_parameter corundum_hierarchy CONFIG.STAT_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.STAT_DMA_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.STAT_AXI_ENABLE "1"
+# ad_ip_parameter corundum_hierarchy CONFIG.STAT_INC_WIDTH "24"
+# ad_ip_parameter corundum_hierarchy CONFIG.STAT_ID_WIDTH "12"
 
 connect_bd_net [get_bd_ports qsfp_led] [get_bd_pins corundum_hierarchy/ethernet_core/qsfp_led]
 
@@ -179,9 +179,9 @@ set fifo_num_bytes 4
 set fifo_tdest_width 4
 set fifo_tuser_width 2
 
-set axi_clk_freq [get_property CONFIG.FREQ_HZ [get_bd_pins sys_ps8/pl_clk1]]
-set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins corundum_hierarchy/m_axi]
-set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins corundum_hierarchy/s_axil_corundum]
+# set axi_clk_freq [get_property CONFIG.FREQ_HZ [get_bd_pins sys_ps8/pl_clk1]]
+# set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins corundum_hierarchy/m_axi]
+# set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins corundum_hierarchy/s_axil_corundum]
 
 ad_ip_instance axi_interconnect smartconnect_corundum
 ad_ip_parameter smartconnect_corundum CONFIG.NUM_MI 2
