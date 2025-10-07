@@ -92,6 +92,8 @@ module axi_ltc2387_if #(
   wire            db_n_int_s;
   wire            dco;
   wire            dco_s;
+  wire            dco_s_int;
+  wire            dco_ss_int;
   wire   [17:0]   adc_data_int;
 
   // internal registers
@@ -249,9 +251,23 @@ always @(posedge clk) begin
 
   // clock
 
-  IBUFGDS i_rx_clk_ibuf (
+  IBUFDS i_rx_clk_ibuf (
     .I (dco_p),
     .IB (dco_n),
+    .O (dco_s_int));
+
+  //BUFMR i_rx_clk_bufmr (
+  //  .I (dco_s_int),
+  //  .O (dco_s));
+
+  BUFR i_clk_bufr (
+    .CLR (1'b0),
+    .CE (1'b1),
+    .I (dco_s_int),
+    .O (dco_ss_int));
+
+  BUFG i_clk_bufg (
+    .I (dco_ss_int),
     .O (dco_s));
 
   BUFR i_clk_gbuf (
