@@ -19,8 +19,8 @@ ad_ip_parameter DEVICE STRING "Agilex 7" false
 ad_ip_files jesd204_f_tile_adapter_rx [list \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/jesd204/jesd204_common/sync_header_align.v \
-  bitslip.v \
-  gearbox_64b66b.v \
+  $ad_hdl_dir/library/jesd204/jesd204_common/bitslip.v \
+  $ad_hdl_dir/library/jesd204/jesd204_common/gearbox_64b66b.v \
   jesd204_f_tile_adapter_rx.v \
   jesd204_f_tile_adapter_rx_constr.sdc \
 ]
