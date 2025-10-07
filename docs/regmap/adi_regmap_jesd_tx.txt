@@ -407,7 +407,7 @@ RO
 ENDFIELD
 
 FIELD
-[18:16] 0x00000000
+[23:16] 0x00000000
 OCTETS_PER_FRAME
 RW
 Number of octets per frame - 1 (F).
