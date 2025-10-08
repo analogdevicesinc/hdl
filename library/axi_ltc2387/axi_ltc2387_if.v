@@ -287,10 +287,8 @@ always @(posedge clk) begin
     .probe4(adc_data),
     .probe5(da_p_int_s_dbg),
     .probe6(da_n_int_s_dbg),
-    .probe7(dco),
-    .probe8(dco_s),
-    .probe9(adc_data_int_dbg),
-    .probe10(adc_data_da_p_dbg),
-    .probe11(adc_data_da_n_dbg));
+    .probe7(adc_data_int_dbg),
+    .probe8(adc_data_da_p_dbg),
+    .probe9(adc_data_da_n_dbg));
 
 endmodule
