@@ -73,7 +73,12 @@ module spi_engine_execution #(
   output reg sdo_t,
   input [NUM_OF_SDI-1:0] sdi,
   output reg [NUM_OF_CS-1:0] cs,
-  output reg three_wire
+  output reg three_wire,
+
+  (* dont_touch = "yes" *) output reg ila_sclk,
+  (* dont_touch = "yes" *) output reg ila_sdo,
+  (* dont_touch = "yes" *) output reg [NUM_OF_SDI-1:0] ila_sdi,
+  (* dont_touch = "yes" *) output reg [NUM_OF_CS-1:0] ila_cs
 );
 
   localparam CMD_TRANSFER = 3'b000;
@@ -106,6 +111,11 @@ module spi_engine_execution #(
   reg clk_div_last;
 
   reg [(BIT_COUNTER_WIDTH+8):0] counter = 'h00;
+
+  (* dont_touch = "yes" *) reg ila_sclk_s;
+  (* dont_touch = "yes" *) reg ila_sdo_s;
+  (* dont_touch = "yes" *) reg [NUM_OF_SDI-1:0] ila_sdi_s;
+  (* dont_touch = "yes" *) reg [NUM_OF_CS-1:0] ila_cs_s;
 
   wire [7:0] sleep_counter = counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)];
   wire [1:0] cs_sleep_counter = counter[(BIT_COUNTER_WIDTH+2):(BIT_COUNTER_WIDTH+1)];
@@ -325,8 +335,10 @@ module spi_engine_execution #(
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       cs <= 'hff;
+      ila_cs_s <= 'hff;
     end else if (cs_gen) begin
       cs <= cmd_d1[NUM_OF_CS-1:0]^cs_inv_mask_reg[NUM_OF_CS-1:0];
+      ila_cs_s <= cmd_d1[NUM_OF_CS-1:0]^cs_inv_mask_reg[NUM_OF_CS-1:0];
     end
   end
 
@@ -633,6 +645,15 @@ module spi_engine_execution #(
     sclk <= sclk_int;
     sdo <= sdo_int_s;
     sdo_t <= sdo_t_int;
+    ila_sclk_s  <= sclk_int;
+    ila_sdo_s   <= sdo_int_s;
+  end
+
+  always @(posedge clk ) begin
+    ila_sclk    <= ila_sclk_s;
+    ila_sdo     <= ila_sdo_s;
+    ila_sdi     <= sdi;
+    ila_cs      <= ila_cs_s;
   end
 
 endmodule
