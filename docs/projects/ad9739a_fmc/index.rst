@@ -214,10 +214,10 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`AD9739A-FMC Linux driver <hdl_2021_r2:drivers/iio/frequency/ad9739a.c>`
-- :git-linux:`AD9739A-FMC Linux device tree <hdl_2021_r2:arch/arm/boot/dts/zynq-zc706-adv7511-ad9739a-fmc.dts>`
-- :git-no-os:`AD9739A-FMC No-Os project <hdl_2021_r2:drivers/dac/ad9739a>`
-- :git-no-os:`AD9739A-FMC No-Os driver <hdl_2021_r2:drivers/dac/ad9739a/ad9739a.c>`
+- :git-linux:`AD9739A-FMC Linux driver <2021_R2:drivers/iio/frequency/ad9739a.c>`
+- :git-linux:`AD9739A-FMC Linux device tree <2021_R2:arch/arm/boot/dts/zynq-zc706-adv7511-ad9739a-fmc.dts>`
+- :git-no-os:`AD9739A-FMC No-Os project <2021_R2:drivers/dac/ad9739a>`
+- :git-no-os:`AD9739A-FMC No-Os driver <2021_R2:drivers/dac/ad9739a/ad9739a.c>`
 
 .. include:: ../common/more_information.rst
 
