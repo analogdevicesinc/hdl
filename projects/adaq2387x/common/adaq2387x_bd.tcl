@@ -67,10 +67,7 @@ if {$USE_MMCM == "1"} {
 
   set_property -dict [list \
     CONFIG.PRIM_IN_FREQ {100.000} \
-    CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {120.000} \
-    CONFIG.MMCM_CLKFBOUT_MULT_F {50.250} \
-    CONFIG.MMCM_CLKOUT0_DIVIDE_F {8.375} \
-    CONFIG.MMCM_DIVCLK_DIVIDE {5} \
+    CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {240.000} \
   ] [get_bd_cells clk_wiz_0]
 
   ad_connect ref_clk                      clk_wiz_0/clk_in1
@@ -92,7 +89,7 @@ if {$USE_MMCM == "1"} {
 create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_1
 set_property -dict [list \
   CONFIG.PRIM_IN_FREQ {100.000} \
-  CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {200.000} \
+  CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {240.000} \
   CONFIG.CLKOUT1_REQUESTED_PHASE {45} \
   CONFIG.MMCM_CLKOUT0_PHASE {45.000} \
 ] [get_bd_cells clk_wiz_1]

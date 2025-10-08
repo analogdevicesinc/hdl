@@ -35,6 +35,13 @@ set tref_late   1.5
 # data delay (dco to da/db skew 200ps)
 set data_delay  0.200
 
+# data delay for 240MHz clk
+# data_delay_max is computed as: 4.16 ns period + 4.16ns / 2 + 200ps skew) = 6.44ns (the tool recommended 3.56ns)
+set data_delay_max 3.56
+# data_delay_min is computes as: 4.16ns / 2 + 200ps skew = 2.28ns
+set data_delay_min 2.28
+
+
 # clocks
 
 create_clock -period $clk_period -name dco      [get_ports dco_p]
@@ -49,10 +56,10 @@ set_clock_latency -source -late  $tref_late   [get_clocks ref_clk]
 
 # input delays
 
-set_input_delay -clock dco -max  $data_delay [get_ports da_p]
-set_input_delay -clock dco -min -$data_delay [get_ports da_p]
-set_input_delay -clock dco -clock_fall -max -add_delay  $data_delay [get_ports da_p]
-set_input_delay -clock dco -clock_fall -min -add_delay -$data_delay [get_ports da_p]
+set_input_delay -clock dco -max  $data_delay_max [get_ports da_p]
+set_input_delay -clock dco -min -$data_delay_min [get_ports da_p]
+set_input_delay -clock dco -clock_fall -max -add_delay  $data_delay_max [get_ports da_p]
+set_input_delay -clock dco -clock_fall -min -add_delay -$data_delay_min [get_ports da_p]
 
 set_input_delay -clock dco -max  $data_delay [get_ports db_p]
 set_input_delay -clock dco -min -$data_delay [get_ports db_p]
