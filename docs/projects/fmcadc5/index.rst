@@ -318,7 +318,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`FMCADC5/VC707 Linux device tree <hdl_2021_r2:arch/microblaze/boot/dts/vc707_fmcadc5.dts>`
+- :git-linux:`FMCADC5/VC707 Linux device tree <2021_R2:arch/microblaze/boot/dts/vc707_fmcadc5.dts>`
 
 .. include:: ../common/more_information.rst
 
