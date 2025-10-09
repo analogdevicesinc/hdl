@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -38,6 +38,7 @@ if {!$SIDE_B_ONLY} {
 set ADI_PHY_SEL 0
 set MAX_NUMBER_OF_QUADS 3
 set TRANSCEIVER_TYPE GTY
+set EXTERNAL_LINK_CLK 0
 set HSCI_BANKS 2
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]
