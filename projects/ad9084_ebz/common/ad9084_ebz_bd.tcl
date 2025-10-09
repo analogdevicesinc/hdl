@@ -1,10 +1,14 @@
 ###############################################################################
-## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 if {![info exists ADI_PHY_SEL]} {
   set ADI_PHY_SEL 1
+}
+
+if {![info exists EXTERNAL_LINK_CLK]} {
+  set EXTERNAL_LINK_CLK 0
 }
 
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
@@ -379,8 +383,9 @@ if {$ADI_PHY_SEL} {
   create_bd_port -dir I -from [expr $RX_NUM_LINKS - 1] -to 0 tx_sync_0
 
   set REF_CLK_RATE $ad_project_params(REF_CLK_RATE)
+  set CONSECUTIVE_QUAD_MODE [expr { $ASYMMETRIC_A_B_MODE == 1 ? true : false }]
   # instantiate versal phy
-  create_versal_jesd_xcvr_subsystem jesd204_phy $JESD_MODE $RX_NUM_OF_LANES $TX_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX false
+  create_versal_jesd_xcvr_subsystem jesd204_phy $JESD_MODE $RX_NUM_OF_LANES $TX_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX $CONSECUTIVE_QUAD_MODE $EXTERNAL_LINK_CLK
   # reset generator
   ad_ip_instance proc_sys_reset rx_device_clk_rstgen
   ad_connect rx_device_clk rx_device_clk_rstgen/slowest_sync_clk
@@ -433,7 +438,7 @@ if {$ASYMMETRIC_A_B_MODE} {
     ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.SYS_CLK_SEL 0x2 ; # QPLL1
   } else {
     # instantiate versal phy
-    create_versal_jesd_xcvr_subsystem jesd204_phy_b $JESD_MODE $RX_B_NUM_OF_LANES $TX_B_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX
+    create_versal_jesd_xcvr_subsystem jesd204_phy_b $JESD_MODE $RX_B_NUM_OF_LANES $TX_B_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX $CONSECUTIVE_QUAD_MODE $EXTERNAL_LINK_CLK
 
     ad_connect gt_b_reset jesd204_phy_b/gtreset_in
     ad_connect gt_b_reset_rx_datapath jesd204_phy_b/gtreset_rx_datapath
@@ -712,10 +717,6 @@ if {$ADI_PHY_SEL} {
   if {$JESD_MODE == "8B10B"} {
     ad_connect axi_apollo_rx_jesd/phy_en_char_align jesd204_phy/en_char_align
     ad_connect axi_apollo_rx_jesd/sync rx_sync_0
-  } else {
-    ad_connect GND jesd204_phy/en_char_align
-  }
-  if {$JESD_MODE == "8B10B"} {
     ad_connect axi_apollo_tx_jesd/sync tx_sync_0
   }
 
@@ -741,11 +742,7 @@ if {$ADI_PHY_SEL} {
     if {$JESD_MODE == "8B10B"} {
     ad_connect axi_apollo_rx_b_jesd/phy_en_char_align jesd204_phy_b/en_char_align
     ad_connect axi_apollo_rx_b_jesd/sync rx_sync_12
-    } else {
-      ad_connect GND jesd204_phy_b/en_char_align
-    }
-    if {$JESD_MODE == "8B10B"} {
-      ad_connect axi_apollo_tx_b_jesd/sync tx_sync_0
+    ad_connect axi_apollo_tx_b_jesd/sync tx_sync_0
     }
   }
 

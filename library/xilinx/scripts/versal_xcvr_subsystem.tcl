@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -19,7 +19,6 @@ set ::LANES_PER_QUAD 4
 #       RXTX : Duplex mode
 #       RX   : Rx link only
 #       TX   : Tx link only
-#
 # Returns: Nothing. Creates and configures a gtwiz_versal IP instance.
 proc create_xcvr_subsystem {
   {ip_name xcvr}
@@ -41,11 +40,12 @@ proc create_xcvr_subsystem {
   if {$direction ni {RXTX RX TX}} {
     error "Invalid direction '$direction'. Must be RXTX, RX, or TX."
   }
-  if {$transceiver ni {GTY GTYP}} {
+  if {$transceiver ni {GTY GTYP GTM}} {
     error "Invalid transceiver '$transceiver'. Must be GTY or GTYP."
   }
 
-  set is_64b66b [expr {$jesd_mode == "64B66B"}]
+  set preset                   ${transceiver}-JESD204_${jesd_mode}
+  set is_64b66b                [expr {$jesd_mode == "64B66B"}]
   set clk_divider              [expr {$is_64b66b ? 66 : 40}]
   set datapath_width           [expr {$is_64b66b ? 64 : 32}]
   set internal_datapath_width  [expr {$is_64b66b ? 64 : 40}]
@@ -53,6 +53,11 @@ proc create_xcvr_subsystem {
   set comma_mask               [expr {$is_64b66b ? "0000000000" : "1111111111"}]
   set comma_p_enable           [expr {$is_64b66b ? false : false}]
   set comma_m_enable           [expr {$is_64b66b ? false : false}]
+  if {$transceiver == "GTM"} {
+    set preset                 ${transceiver}-NRZ_JESD
+    set clk_divider            [expr {$jesd_mode == "64B66B" ? 64 : 40}]
+  }
+
   set rx_progdiv_clock         [format %.3f [expr {$rx_lane_rate * 1000.0 / $clk_divider}]]
   set tx_progdiv_clock         [format %.3f [expr {$tx_lane_rate * 1000.0 / $clk_divider}]]
 
@@ -71,10 +76,12 @@ proc create_xcvr_subsystem {
 
   # RX parameters
   dict set xcvr_param RX_LINE_RATE ${rx_lane_rate}
-  dict set xcvr_param RX_DATA_DECODING ${data_encoding}
+  dict set xcvr_param RX_DATA_DECODING [expr {$transceiver != "GTM" ? $data_encoding : "RAW"}]
+  dict set xcvr_param RX_USER_DATA_WIDTH [expr {$transceiver != "GTM" ? $datapath_width : $internal_datapath_width}]
   dict set xcvr_param RX_REFCLK_FREQUENCY ${ref_clock}
-  dict set xcvr_param RX_USER_DATA_WIDTH ${datapath_width}
-  dict set xcvr_param RX_INT_DATA_WIDTH ${internal_datapath_width}
+  if {$transceiver != "GTM"} {
+    dict set xcvr_param RX_INT_DATA_WIDTH ${internal_datapath_width}
+  }
   dict set xcvr_param RX_OUTCLK_SOURCE {RXPROGDIVCLK}
   dict set xcvr_param RXRECCLK_FREQ_VAL ${rx_progdiv_clock}
   dict set xcvr_param RXPROGDIV_FREQ_VAL ${rx_progdiv_clock}
@@ -88,21 +95,24 @@ proc create_xcvr_subsystem {
 
   # TX parameters
   dict set xcvr_param TX_LINE_RATE ${tx_lane_rate}
-  dict set xcvr_param TX_DATA_ENCODING ${data_encoding}
+  dict set xcvr_param TX_DATA_ENCODING [expr {$transceiver != "GTM" ? $data_encoding : "RAW"}]
+  dict set xcvr_param TX_USER_DATA_WIDTH [expr {$transceiver != "GTM" ? $datapath_width : $internal_datapath_width}]
   dict set xcvr_param TX_REFCLK_FREQUENCY ${ref_clock}
-  dict set xcvr_param TX_USER_DATA_WIDTH ${datapath_width}
-  dict set xcvr_param TX_INT_DATA_WIDTH ${internal_datapath_width}
-  dict set xcvr_param TXPROGDIV_FREQ_VAL ${tx_progdiv_clock}
+  if {$transceiver != "GTM"} {
+    dict set xcvr_param TX_INT_DATA_WIDTH ${internal_datapath_width}
+  }
   dict set xcvr_param TX_OUTCLK_SOURCE {TXPROGDIVCLK}
+  dict set xcvr_param TXPROGDIV_FREQ_VAL ${tx_progdiv_clock}
   dict set xcvr_param TX_PLL_TYPE {LCPLL}
 
   set phy_params [dict create]
   dict set phy_params CONFIG.ENABLE_REG_INTERFACE {true}
   dict set phy_params CONFIG.REG_CONF_INTF {AXI_LITE}
+  dict set phy_params CONFIG.GT_TYPE ${transceiver}
   dict set phy_params CONFIG.NO_OF_QUADS ${num_quads}
   dict set phy_params CONFIG.NO_OF_INTERFACE {1}
   dict set phy_params CONFIG.LOCATE_BUFG {EXAMPLE_DESIGN}
-  dict set phy_params CONFIG.INTF0_PRESET ${transceiver}-JESD204_${jesd_mode}
+  dict set phy_params CONFIG.INTF0_PRESET ${preset}
   dict set phy_params CONFIG.INTF0_GT_SETTINGS(LR0_SETTINGS) ${xcvr_param}
   if {$direction != "RXTX"} {
     dict set phy_params CONFIG.INTF0_GT_DIRECTION SIMPLEX_${direction}
@@ -117,7 +127,7 @@ proc create_xcvr_subsystem {
     dict set phy_params CONFIG.INTF1_GT_DIRECTION {SIMPLEX_TX}
     dict set phy_params CONFIG.INTF0_NO_OF_LANES $rx_no_lanes
     dict set phy_params CONFIG.INTF1_NO_OF_LANES $tx_no_lanes
-    dict set phy_params CONFIG.INTF1_PRESET ${transceiver}-JESD204_${jesd_mode}
+    dict set phy_params CONFIG.INTF1_PRESET ${preset}
     dict set phy_params CONFIG.INTF1_GT_SETTINGS(LR0_SETTINGS) ${xcvr_param}
   }
 
@@ -205,15 +215,18 @@ proc create_xcvr_subsystem {
 # Parameter description:
 #   ip_name : The name of the created ip
 #   xcvr : The name of the transceiver instance inside the ip
+#   transceiver: Transceiver type (GTY / GTYP / GTM)
 #   intf : Interface number
 #   num_lanes : Number of lanes
 #   link_mode : 1 for 8b10b, 2 for 64b66b
-#   usrclk : The usrclk signal to use as the link clock
+#   usrclk : The usrclk signal to use as the link clock (LR / 66)
 #   rx_or_tx : "RX" or "TX"
 #   lane_offset : Offset to apply to lane numbering (default 0)
+#   phy_clk: The clock signals use as the PHY clk (GTM only) (LR / 64)
+#   phy_rstn: The signal used to reset the 64b/66b gearboxes (GTM only)
 #
 # Returns: Nothing. Creates pins and connections for the datapath.
-proc xcvr_connect_datapath {ip_name xcvr intf num_lanes link_mode usrclk rx_or_tx {lane_offset 0}} {
+proc xcvr_connect_datapath {ip_name transceiver xcvr intf num_lanes link_mode usrclk rx_or_tx {lane_offset 0} {phy_clk {}} {phy_rstn {}}} {
   global LANES_PER_QUAD
 
   if {$rx_or_tx ni {RX TX}} {
@@ -222,6 +235,7 @@ proc xcvr_connect_datapath {ip_name xcvr intf num_lanes link_mode usrclk rx_or_t
 
   set is_rx [expr {$rx_or_tx == "RX"}]
   set dir_lower [string tolower $rx_or_tx]
+  set quad_usrclk [expr {($transceiver != "GTM" || $link_mode == 1)? ${usrclk} : ${phy_clk}}]
 
   # Connect differential pairs (grouped by quad)
   for {set j 0} {$j < $num_lanes} {incr j $LANES_PER_QUAD} {
@@ -248,15 +262,19 @@ proc xcvr_connect_datapath {ip_name xcvr intf num_lanes link_mode usrclk rx_or_t
     if {$is_rx} {
       ad_ip_instance jesd204_versal_gt_adapter_rx ${ip_name}/${dir_lower}_adapt_${idx} [list \
         LINK_MODE $link_mode \
+        TRANSCEIVER $transceiver \
       ]
       ad_connect ${ip_name}/${dir_lower}_adapt_${idx}/RX_GT_IP_Interface ${ip_name}/${xcvr}/INTF${intf}_RX${j}_GT_IP_Interface
 
       create_bd_intf_pin -mode Master -vlnv xilinx.com:display_jesd204:jesd204_rx_bus_rtl:1.0 ${ip_name}/${dir_lower}${idx}
       ad_connect ${ip_name}/${dir_lower}${idx} ${ip_name}/${dir_lower}_adapt_${idx}/RX
-      ad_connect ${ip_name}/${dir_lower}_adapt_${idx}/en_char_align ${ip_name}/en_char_align
+      if {$link_mode == 1} {
+        ad_connect ${ip_name}/${dir_lower}_adapt_${idx}/en_char_align ${ip_name}/en_char_align
+      }
     } else {
       ad_ip_instance jesd204_versal_gt_adapter_tx ${ip_name}/${dir_lower}_adapt_${idx} [list \
         LINK_MODE $link_mode \
+        TRANSCEIVER $transceiver \
       ]
       ad_connect ${ip_name}/${dir_lower}_adapt_${idx}/TX_GT_IP_Interface ${ip_name}/${xcvr}/INTF${intf}_TX${j}_GT_IP_Interface
 
@@ -264,8 +282,15 @@ proc xcvr_connect_datapath {ip_name xcvr intf num_lanes link_mode usrclk rx_or_t
       ad_connect ${ip_name}/${dir_lower}${idx} ${ip_name}/${dir_lower}_adapt_${idx}/TX
     }
 
-    ad_connect ${ip_name}/${dir_lower}_adapt_${idx}/usr_clk ${usrclk}
-    ad_connect ${ip_name}/${xcvr}/QUAD${quad_idx}_${rx_or_tx}${lane_idx}_usrclk ${usrclk}
+    ad_connect ${usrclk} ${ip_name}/${dir_lower}_adapt_${idx}/usr_clk
+    ad_connect ${quad_usrclk} ${ip_name}/${xcvr}/QUAD${quad_idx}_${rx_or_tx}${lane_idx}_usrclk
+
+    if {$phy_clk != {} && $transceiver == "GTM"} {
+      ad_connect ${phy_clk} ${ip_name}/${dir_lower}_adapt_${idx}/phy_clk
+    }
+    if {$phy_rstn != {} && $transceiver == "GTM"} {
+      ad_connect ${phy_rstn} ${ip_name}/${dir_lower}_adapt_${idx}/phy_rstn
+    }
   }
 }
 
@@ -371,6 +396,9 @@ proc xcvr_create_resetdone_logic {ip_name xcvr_list intf dir} {
 #   transceiver : Type of transceiver to use (GTY or GTYP)
 #   intf_cfg : Direction of the transceivers (RXTX, RX, or TX)
 #   consecutive_quad_mode : true to use consecutive quads for RX and TX, false to split RX and TX across different quads
+#   external_link_clk : applies to GTM and JESD204C:
+#       - when not set a clk_wizard is added to generate the LR / 66 clock for the gearbox
+#       - when set the LR / 66 clock is expected to be external to the subsystem and connected from the BD
 #
 # Returns: Nothing. Creates a hierarchical block with the complete transceiver subsystem.
 proc create_versal_jesd_xcvr_subsystem {
@@ -384,6 +412,7 @@ proc create_versal_jesd_xcvr_subsystem {
   {transceiver GTY}
   {intf_cfg RXTX}
   {consecutive_quad_mode true}
+  {external_link_clk 0}
 } {
   global LANES_PER_QUAD
 
@@ -392,14 +421,14 @@ proc create_versal_jesd_xcvr_subsystem {
     error "Invalid intf_cfg '$intf_cfg'. Must be RXTX, RX, or TX."
   }
 
-  set rx_quads     [expr {int(ceil(1.0 * $rx_no_lanes / $LANES_PER_QUAD))}]
-  set tx_quads     [expr {int(ceil(1.0 * $tx_no_lanes / $LANES_PER_QUAD))}]
-  set num_quads    [expr {max($rx_quads, $tx_quads)}]
-  set link_mode    [expr {$jesd_mode == "64B66B" ? 2 : 1}]
-  set max_no_lanes [expr {max($rx_no_lanes, $tx_no_lanes)}]
-
-  set has_rx [expr {$intf_cfg != "TX"}]
-  set has_tx [expr {$intf_cfg != "RX"}]
+  set rx_quads          [expr {int(ceil(1.0 * $rx_no_lanes / $LANES_PER_QUAD))}]
+  set tx_quads          [expr {int(ceil(1.0 * $tx_no_lanes / $LANES_PER_QUAD))}]
+  set num_quads         [expr {max($rx_quads, $tx_quads)}]
+  set link_mode         [expr {$jesd_mode == "64B66B" ? 2 : 1}]
+  set max_no_lanes      [expr {max($rx_no_lanes, $tx_no_lanes)}]
+  set has_rx            [expr {$intf_cfg != "TX"}]
+  set has_tx            [expr {$intf_cfg != "RX"}]
+  set has_single_clock  [expr {$transceiver != "GTM" || $link_mode == 1}]
 
   if {$intf_cfg == "RXTX"} {
     set rx_intf 0
@@ -423,11 +452,13 @@ proc create_versal_jesd_xcvr_subsystem {
   create_bd_pin -dir I ${ip_name}/s_axi_clk
   create_bd_pin -dir I ${ip_name}/s_axi_resetn
   if {$has_rx} {
-    create_bd_pin -dir O ${ip_name}/rxusrclk_out -type clk
-    create_bd_pin -dir I ${ip_name}/en_char_align
+    create_bd_pin -dir O ${ip_name}/rxusrclk_out
+    if {$link_mode == 1} {
+      create_bd_pin -dir I ${ip_name}/en_char_align
+    }
   }
   if {$has_tx} {
-    create_bd_pin -dir O ${ip_name}/txusrclk_out -type clk
+    create_bd_pin -dir O ${ip_name}/txusrclk_out
   }
 
   # Create transceiver subsystem(s)
@@ -456,33 +487,99 @@ proc create_versal_jesd_xcvr_subsystem {
 
   # RX datapath
   if {$has_rx} {
+    # This shouldn't be necessary, we could use the INTF_out_clk but there is a bug
+    # where the divider is not properly set in the generated code.
     ad_ip_instance bufg_gt ${ip_name}/bufg_gt_rx
     ad_connect ${ip_name}/xcvr/INTF${rx_intf}_rx_clr_out ${ip_name}/bufg_gt_rx/gt_bufgtclr
     ad_connect ${ip_name}/xcvr/QUAD0_RX0_outclk          ${ip_name}/bufg_gt_rx/outclk
-    ad_connect ${ip_name}/bufg_gt_rx/usrclk              ${ip_name}/rxusrclk_out
+    if {$has_single_clock} {
+      ad_connect ${ip_name}/bufg_gt_rx/usrclk            ${ip_name}/rxusrclk_out
+    } elseif {$external_link_clk} {
+        create_bd_pin -dir I ${ip_name}/rx_usrclk_in
+        ad_connect ${ip_name}/rx_usrclk_in ${ip_name}/rxusrclk_out
+    } else {
+      ad_ip_instance clk_wizard ${ip_name}/rx_clkwiz
+      ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.CLKOUT_REQUESTED_OUT_FREQUENCY [format %.5f [expr $rx_lane_rate * 1000.0 / 66]]
+      ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.USE_PHASE_ALIGNMENT {true}
+      ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.USE_LOCKED {true}
+      ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.JITTER_SEL {Min_O_Jitter}
+      ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.PRIMITIVE_TYPE {Auto}
+      ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.PRIM_SOURCE {Global_buffer}
+
+      ad_connect ${ip_name}/bufg_gt_rx/usrclk   ${ip_name}/rx_clkwiz/clk_in1
+      ad_connect ${ip_name}/rx_clkwiz/clk_out1  ${ip_name}/rxusrclk_out
+    }
+
+    set rx_usrclk   ${ip_name}/bufg_gt_rx/usrclk
+    set rx_phy_clk  {}
+    set rx_phy_rstn ${ip_name}/xcvr/INTF${rx_intf}_rst_rx_done_out
+
+    if {!$has_single_clock} {
+      if {$external_link_clk} {
+        set rx_phy_clk  ${ip_name}/bufg_gt_rx/usrclk
+        set rx_usrclk   ${ip_name}/rx_usrclk_in
+      } else {
+        set rx_phy_clk  ${ip_name}/bufg_gt_rx/usrclk
+        set rx_usrclk   ${ip_name}/rx_clkwiz/clk_out1
+        set rx_phy_rstn ${ip_name}/rx_clkwiz/locked
+      }
+    }
 
     if {$consecutive_quad_mode} {
-      xcvr_connect_datapath ${ip_name} xcvr $rx_intf $rx_no_lanes $link_mode ${ip_name}/bufg_gt_rx/usrclk RX
+      xcvr_connect_datapath ${ip_name} $transceiver xcvr $rx_intf $rx_no_lanes $link_mode $rx_usrclk RX 0 $rx_phy_clk $rx_phy_rstn
     } else {
       set half_lanes [expr {int(ceil($rx_no_lanes / 2.0))}]
-      xcvr_connect_datapath ${ip_name} xcvr   $rx_intf $half_lanes $link_mode ${ip_name}/bufg_gt_rx/usrclk RX 0
-      xcvr_connect_datapath ${ip_name} xcvr_b $rx_intf $half_lanes $link_mode ${ip_name}/bufg_gt_rx/usrclk RX $half_lanes
+      xcvr_connect_datapath ${ip_name} $transceiver xcvr   $rx_intf $half_lanes $link_mode $rx_usrclk RX 0           $rx_phy_clk $rx_phy_rstn
+      xcvr_connect_datapath ${ip_name} $transceiver xcvr_b $rx_intf $half_lanes $link_mode $rx_usrclk RX $half_lanes $rx_phy_clk $rx_phy_rstn
     }
   }
 
   # TX datapath
   if {$has_tx} {
+    # This shouldn't be necessary, we could use the INTF_out_clk but there is a bug
+    # where the divider is not properly set in the generated code.
     ad_ip_instance bufg_gt ${ip_name}/bufg_gt_tx
     ad_connect ${ip_name}/xcvr/INTF${tx_intf}_tx_clr_out ${ip_name}/bufg_gt_tx/gt_bufgtclr
     ad_connect ${ip_name}/xcvr/QUAD0_TX0_outclk          ${ip_name}/bufg_gt_tx/outclk
-    ad_connect ${ip_name}/bufg_gt_tx/usrclk              ${ip_name}/txusrclk_out
+    if {$has_single_clock} {
+      ad_connect ${ip_name}/bufg_gt_tx/usrclk            ${ip_name}/txusrclk_out
+    } elseif {$external_link_clk} {
+      create_bd_pin -dir I ${ip_name}/tx_usrclk_in
+      ad_connect ${ip_name}/tx_usrclk_in ${ip_name}/txusrclk_out
+    } else {
+      ad_ip_instance clk_wizard ${ip_name}/tx_clkwiz
+      ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.CLKOUT_REQUESTED_OUT_FREQUENCY [format %.5f [expr $tx_lane_rate * 1000.0 / 66]]
+      ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.USE_PHASE_ALIGNMENT {true}
+      ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.USE_LOCKED {true}
+      ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.JITTER_SEL {Min_O_Jitter}
+      ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.PRIMITIVE_TYPE {Auto}
+      ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.PRIM_SOURCE {Global_buffer}
+
+      ad_connect ${ip_name}/bufg_gt_tx/usrclk ${ip_name}/tx_clkwiz/clk_in1
+      ad_connect ${ip_name}/tx_clkwiz/clk_out1 ${ip_name}/txusrclk_out
+    }
+
+    set tx_usrclk   ${ip_name}/bufg_gt_tx/usrclk
+    set tx_phy_clk  {}
+    set tx_phy_rstn ${ip_name}/xcvr/INTF${tx_intf}_rst_tx_done_out
+
+    if {!$has_single_clock} {
+      if {$external_link_clk} {
+        set tx_phy_clk  ${ip_name}/bufg_gt_tx/usrclk
+        set rx_usrclk   ${ip_name}/tx_usrclk_in
+      } else {
+        set tx_phy_clk  ${ip_name}/bufg_gt_tx/usrclk
+        set tx_usrclk   ${ip_name}/tx_clkwiz/clk_out1
+        set tx_phy_rstn ${ip_name}/tx_clkwiz/locked
+      }
+    }
 
     if {$consecutive_quad_mode} {
-      xcvr_connect_datapath ${ip_name} xcvr $tx_intf $tx_no_lanes $link_mode ${ip_name}/bufg_gt_tx/usrclk TX
+      xcvr_connect_datapath ${ip_name} $transceiver xcvr $tx_intf $tx_no_lanes $link_mode $tx_usrclk TX 0 $tx_phy_clk $tx_phy_rstn
     } else {
       set half_lanes [expr {int(ceil($tx_no_lanes / 2.0))}]
-      xcvr_connect_datapath ${ip_name} xcvr   $tx_intf $half_lanes $link_mode ${ip_name}/bufg_gt_tx/usrclk TX 0
-      xcvr_connect_datapath ${ip_name} xcvr_b $tx_intf $half_lanes $link_mode ${ip_name}/bufg_gt_tx/usrclk TX $half_lanes
+      xcvr_connect_datapath ${ip_name} $transceiver xcvr   $tx_intf $half_lanes $link_mode $tx_usrclk TX 0           $tx_phy_clk $tx_phy_rstn
+      xcvr_connect_datapath ${ip_name} $transceiver xcvr_b $tx_intf $half_lanes $link_mode $tx_usrclk TX $half_lanes $tx_phy_clk $tx_phy_rstn
     }
   }
 
