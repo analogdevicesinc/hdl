@@ -254,8 +254,8 @@ proc create_versal_jesd_xcvr_subsystem {
         ad_connect ${ip_name}/rx_usrclk_in ${ip_name}/rxusrclk_out
       } else {
         ad_ip_instance clk_wizard ${ip_name}/rx_clkwiz
-        ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.PRIM_IN_FREQ.VALUE_SRC {USER}
-        ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.PRIM_IN_FREQ [format %.5f [expr $rx_lane_rate * 1000.0 / 64]]
+        # ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.PRIM_IN_FREQ.VALUE_SRC {USER}
+        # ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.PRIM_IN_FREQ [format %.5f [expr $rx_lane_rate * 1000.0 / 64]]
         ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.CLKOUT_REQUESTED_OUT_FREQUENCY [format %.5f [expr $rx_lane_rate * 1000.0 / 66]]
         ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.USE_PHASE_ALIGNMENT {true}
         ad_ip_parameter ${ip_name}/rx_clkwiz CONFIG.USE_LOCKED {true}
@@ -311,8 +311,8 @@ proc create_versal_jesd_xcvr_subsystem {
         ad_connect ${ip_name}/tx_usrclk_in ${ip_name}/txusrclk_out
       } else {
         ad_ip_instance clk_wizard ${ip_name}/tx_clkwiz
-        ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.PRIM_IN_FREQ.VALUE_SRC {USER}
-        ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.PRIM_IN_FREQ [format %.5f [expr $tx_lane_rate * 1000.0 / 64]]
+        # ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.PRIM_IN_FREQ.VALUE_SRC {USER}
+        # ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.PRIM_IN_FREQ [format %.5f [expr $tx_lane_rate * 1000.0 / 64]]
         ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.CLKOUT_REQUESTED_OUT_FREQUENCY [format %.5f [expr $tx_lane_rate * 1000.0 / 66]]
         ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.USE_PHASE_ALIGNMENT {true}
         ad_ip_parameter ${ip_name}/tx_clkwiz CONFIG.USE_LOCKED {true}
