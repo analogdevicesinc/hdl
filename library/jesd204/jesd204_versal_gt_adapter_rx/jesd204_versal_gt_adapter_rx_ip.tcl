@@ -11,9 +11,19 @@ adi_ip_files jesd204_versal_gt_adapter_rx [list \
   jesd204_versal_gt_adapter_rx.v \
   lane_align.v \
   ../jesd204_common/sync_header_align.v \
-  ]
+  ../jesd204_common/gearbox_64b66b.v \
+  ../jesd204_common/bitslip.v \
+  ../jesd204_soft_pcs_rx/jesd204_soft_pcs_rx.v \
+  ../jesd204_soft_pcs_rx/jesd204_8b10b_decoder.v \
+  ../jesd204_soft_pcs_rx/jesd204_pattern_align.v \
+  $ad_hdl_dir/library/util_cdc/sync_bits.v \
+  jesd204_versal_gt_adapter_rx_constr.ttcl \
+  jesd204_versal_gt_adapter_rx_ooc.ttcl \
+]
 
 adi_ip_properties_lite jesd204_versal_gt_adapter_rx
+adi_ip_ttcl jesd204_versal_gt_adapter_rx "jesd204_versal_gt_adapter_rx_constr.ttcl"
+adi_ip_ttcl jesd204_versal_gt_adapter_rx "jesd204_versal_gt_adapter_rx_ooc.ttcl"
 
 set_property display_name "ADI JESD204 Versal Transceiver Rx Lane Adapter" [ipx::current_core]
 set_property description "ADI JESD204 Versal Transceiver Rx Lane Adapter" [ipx::current_core]
@@ -44,5 +54,15 @@ adi_add_bus "RX_GT_IP_Interface" "master" \
    { "rxheadervalid" "ch_rxheadervalid" } \
    { "rxgearboxslip" "ch_rxgearboxslip" } \
   }
+
+set_property -dict [list \
+  value_validation_type list \
+  value_validation_list {GT GTY GTM} \
+] [ipx::get_user_parameters TRANSCEIVER -of_objects [ipx::current_core]]
+
+set_property -dict [list \
+  value_validation_type pairs \
+  value_validation_pairs {64B66B 2 8B10B 1} \
+] [ipx::get_user_parameters LINK_MODE -of_objects [ipx::current_core]]
 
 ipx::save_core [ipx::current_core]
