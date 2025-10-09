@@ -355,6 +355,7 @@ ad_connect  util_adrv9026_tx_upack/s_axis $dac_offload_name/m_axis
 ad_connect  $sys_dma_clk $dac_offload_name/s_axis_aclk
 ad_connect  $sys_dma_resetn $dac_offload_name/s_axis_aresetn
 ad_connect  $sys_dma_clk axi_adrv9026_tx_dma/m_axis_aclk
+ad_connect  $sys_dma_resetn axi_adrv9026_tx_dma/m_src_axi_aresetn
 ad_connect  $dac_offload_name/s_axis axi_adrv9026_tx_dma/m_axis
 ad_connect  $dac_offload_name/init_req axi_adrv9026_tx_dma/m_axis_xfer_req
 ad_connect  tx_adrv9026_tpl_core/dac_dunf util_adrv9026_tx_upack/fifo_rd_underflow
