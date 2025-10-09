@@ -330,6 +330,14 @@ The Tx links (DAC Path) operate with the following parameters:
 - JESD204C Lane Rate: 16.22 Gbps
 - QPLL0
 
+.. caution::
+
+   ONLY for the ZCU102 design:
+     - Cache coherency is available and enabled.
+     - The DMA is connected to the Memory via HPC interface which is limited
+       to 128 bits.
+     - SYS_DMA_CLK = 333 MHz
+
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
