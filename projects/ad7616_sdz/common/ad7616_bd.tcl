@@ -49,7 +49,7 @@ ad_connect busy_sync/out_bits busy_capture/signal_in
 if {$INTF == 1} {
   create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad7616_spi
 
-  source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+  source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 
   set data_width    16
   set async_spi_clk 1

@@ -114,7 +114,7 @@ switch $INTF {
     ad_connect $sys_cpu_clk spi_clkgen/clk
 
     # spi engine
-    source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+    source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 
     set data_width    32
     set async_spi_clk 1

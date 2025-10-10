@@ -4,15 +4,15 @@
 ###############################################################################
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 adaq7980_spi
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 
 set data_width    16
-set async_spi_clk 1 
+set async_spi_clk 1
 set num_cs        1
-set num_sdi       1 
-set num_sdo       1 
-set sdi_delay     1 
-set echo_sclk     0 
+set num_sdi       1
+set num_sdo       1
+set sdi_delay     1
+set echo_sclk     0
 
 set hier_spi_engine spi_adaq7980_adc
 

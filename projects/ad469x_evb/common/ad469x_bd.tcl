@@ -14,7 +14,7 @@ create_bd_port -dir O ad469x_spi_cnv
 create_bd_port -dir I ad469x_spi_busy
 create_bd_port -dir I gpio_cnv
 
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 
 set data_width    32
 set async_spi_clk 1
