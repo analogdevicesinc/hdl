@@ -14,7 +14,7 @@ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.
 
 create_bd_port -dir I adc_data_ready
 
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 
 set data_width    32
 set async_spi_clk 1

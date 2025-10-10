@@ -158,11 +158,11 @@ In order to use it into your own project, you will have to add all of its compon
 For this example, the code shown here is from the ad4630_fmc project:
 :git-hdl:`projects/ad4630_fmc/common/ad463x_bd.tcl`
 
-Let's start with sourcing the spi_engine.tcl script inside your ``<project>_db.tcl``.
+Let's start with sourcing the spi_engine_xilinx.tcl script inside your ``<project>_db.tcl``.
 
 .. code:: tcl
 
-   source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+   source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 
 The SPI engine has 4 modules: execution, interconnect, regmap and offload.
 

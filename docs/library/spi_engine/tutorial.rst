@@ -68,7 +68,7 @@ SPI Engine hierarchy instantiation
 
 The SPI Engine can be implemented in two ways, either by placing and connecting
 each IP individually or by using the function provided by the
-:git-hdl:`library/spi_engine/scripts/spi_engine.tcl` script.
+:git-hdl:`library/spi_engine/scripts/spi_engine_xilinx.tcl` script.
 
 Using the script ensures that the correct connections are being made and that
 the IP cores will receive the correct parameter configuration since certain
@@ -103,7 +103,7 @@ Configuration tcl code and result below:
 
 .. code:: tcl
 
-   source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+   source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 
    set data_width    32
    set async_spi_clk 1

@@ -8,7 +8,7 @@ create_bd_port -dir O cn0561_odr
 
 # create a SPI Engine architecture for ADC
 
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 
 set data_width    32
 set async_spi_clk 1

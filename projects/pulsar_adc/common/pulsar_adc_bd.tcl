@@ -4,7 +4,7 @@
 ###############################################################################
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 pulsar_adc_spi
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 
 # If the ADC resolution <= 16, data_width is set 16 else 32
 set data_width    32
