@@ -104,6 +104,8 @@ module axi_ltc2387_if #(
   reg  [WIDTH:0]  adc_data_db_n = 'b0;
   reg      [2:0]  clk_gate_d = 'b0;
 
+  reg reset_data_buffers = 'b0;
+
   // assignments
   assign da_p_int_s_dbg = da_p_int_s;
   assign da_n_int_s_dbg = da_n_int_s;
@@ -111,7 +113,7 @@ module axi_ltc2387_if #(
   assign adc_data_da_p_dbg = adc_data_da_p;
   assign adc_data_da_n_dbg = adc_data_da_n;
 
-always @(posedge clk) begin
+  always @(posedge clk) begin
     adc_valid <= 1'b0;
     clk_gate_d <= {clk_gate_d[1:0], clk_gate};
     if (clk_gate_d[1] == 1'b1 && clk_gate_d[0] == 1'b0) begin
@@ -123,17 +125,29 @@ always @(posedge clk) begin
         adc_valid <= 1'b1;
       end
     end
+    if (clk_gate_d[2] == 1'b1 && clk_gate_d[1] == 1'b0) begin
+      reset_data_buffers <= 1'b1;
+    end else begin
+      reset_data_buffers <= 1'b0;
+    end
   end
 
-  always @(posedge dco) begin
-    adc_data_da_p <= {adc_data_da_p[WIDTH-1:0], da_p_int_s};
-    adc_data_da_n <= {adc_data_da_n[WIDTH-1:0], da_n_int_s};
-    if (TWOLANES) begin
-      adc_data_db_p <= {adc_data_db_p[WIDTH-1:0], db_p_int_s};
-      adc_data_db_n <= {adc_data_db_n[WIDTH-1:0], db_n_int_s};
-    end else begin
+  always @(posedge dco, posedge reset_data_buffers) begin
+    if (reset_data_buffers == 1'b1) begin
+      adc_data_da_p <= 'd0;
+      adc_data_da_n <= 'd0;
       adc_data_db_p <= 'd0;
       adc_data_db_n <= 'd0;
+    end else begin
+      adc_data_da_p <= {adc_data_da_p[WIDTH-1:0], da_p_int_s};
+      adc_data_da_n <= {adc_data_da_n[WIDTH-1:0], da_n_int_s};
+      if (TWOLANES) begin
+        adc_data_db_p <= {adc_data_db_p[WIDTH-1:0], db_p_int_s};
+        adc_data_db_n <= {adc_data_db_n[WIDTH-1:0], db_n_int_s};
+      end else begin
+        adc_data_db_p <= 'd0;
+        adc_data_db_n <= 'd0;
+      end
     end
   end
 
@@ -251,24 +265,24 @@ always @(posedge clk) begin
 
   // clock
 
-  IBUFDS i_rx_clk_ibuf (
+  IBUFGDS i_rx_clk_ibuf (
     .I (dco_p),
     .IB (dco_n),
-    .O (dco_s_int));
+    .O (dco_s));
 
   //BUFMR i_rx_clk_bufmr (
   //  .I (dco_s_int),
   //  .O (dco_s));
 
-  BUFR i_clk_bufr (
-    .CLR (1'b0),
-    .CE (1'b1),
-    .I (dco_s_int),
-    .O (dco_ss_int));
+  //BUFR i_clk_bufr (
+  //  .CLR (1'b0),
+  //  .CE (1'b1),
+  //  .I (dco_s_int),
+  //  .O (dco_ss_int));
 
-  BUFG i_clk_bufg (
-    .I (dco_ss_int),
-    .O (dco_s));
+  //BUFG i_clk_bufg (
+  //  .I (dco_ss_int),
+  //  .O (dco_s));
 
   BUFR i_clk_gbuf (
     .CLR (1'b0),
@@ -289,6 +303,7 @@ always @(posedge clk) begin
     .probe6(da_n_int_s_dbg),
     .probe7(adc_data_int_dbg),
     .probe8(adc_data_da_p_dbg),
-    .probe9(adc_data_da_n_dbg));
+    .probe9(adc_data_da_n_dbg),
+    .probe10(reset_data_buffers));
 
 endmodule
