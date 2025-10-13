@@ -39,6 +39,7 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
   ad_ip_parameter $execution CONFIG.ECHO_SCLK $echo_sclk
 
   ad_ip_instance axi_spi_engine $axi_regmap
+  ad_ip_parameter $axi_regmap CONFIG.MM_IF_TYPE 0
   ad_ip_parameter $axi_regmap CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter $axi_regmap CONFIG.NUM_OFFLOAD 1
   ad_ip_parameter $axi_regmap CONFIG.NUM_OF_SDI $num_sdi
