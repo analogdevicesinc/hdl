@@ -96,8 +96,6 @@ module axi_ltc2387_if #(
   reg  [WIDTH:0]  adc_data_db_n = 'b0;
   reg      [2:0]  clk_gate_d = 'b0;
 
-  reg reset_data_buffers = 'b0;
-
   // assignments
   assign da_p_int_s_dbg = da_p_int_s;
   assign da_n_int_s_dbg = da_n_int_s;
@@ -124,22 +122,15 @@ module axi_ltc2387_if #(
     end
   end
 
-  always @(posedge dco, posedge reset_data_buffers) begin
-    if (reset_data_buffers == 1'b1) begin
-      adc_data_da_p <= 'd0;
-      adc_data_da_n <= 'd0;
+  always @(posedge dco) begin
+    adc_data_da_p <= {adc_data_da_p[WIDTH-1:0], da_p_int_s};
+    adc_data_da_n <= {adc_data_da_n[WIDTH-1:0], da_n_int_s};
+    if (TWOLANES) begin
+      adc_data_db_p <= {adc_data_db_p[WIDTH-1:0], db_p_int_s};
+      adc_data_db_n <= {adc_data_db_n[WIDTH-1:0], db_n_int_s};
+    end else begin
       adc_data_db_p <= 'd0;
       adc_data_db_n <= 'd0;
-    end else begin
-      adc_data_da_p <= {adc_data_da_p[WIDTH-1:0], da_p_int_s};
-      adc_data_da_n <= {adc_data_da_n[WIDTH-1:0], da_n_int_s};
-      if (TWOLANES) begin
-        adc_data_db_p <= {adc_data_db_p[WIDTH-1:0], db_p_int_s};
-        adc_data_db_n <= {adc_data_db_n[WIDTH-1:0], db_n_int_s};
-      end else begin
-        adc_data_db_p <= 'd0;
-        adc_data_db_n <= 'd0;
-      end
     end
   end
 
