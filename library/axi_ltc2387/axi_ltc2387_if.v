@@ -80,20 +80,12 @@ module axi_ltc2387_if #(
 
   // internal wires
 
-  (* keep = "true" *) wire            da_p_int_s_dbg;
-  (* keep = "true" *) wire            da_n_int_s_dbg;
-  (* keep = "true" *) wire [17:0]     adc_data_int_dbg;
-  (* keep = "true" *) wire [WIDTH:0]  adc_data_da_p_dbg;
-  (* keep = "true" *) wire [WIDTH:0]  adc_data_da_n_dbg;
-
   wire            da_p_int_s;
   wire            da_n_int_s;
   wire            db_p_int_s;
   wire            db_n_int_s;
   wire            dco;
   wire            dco_s;
-  wire            dco_s_int;
-  wire            dco_ss_int;
   wire   [17:0]   adc_data_int;
 
   // internal registers
@@ -270,40 +262,10 @@ module axi_ltc2387_if #(
     .IB (dco_n),
     .O (dco_s));
 
-  //BUFMR i_rx_clk_bufmr (
-  //  .I (dco_s_int),
-  //  .O (dco_s));
-
-  //BUFR i_clk_bufr (
-  //  .CLR (1'b0),
-  //  .CE (1'b1),
-  //  .I (dco_s_int),
-  //  .O (dco_ss_int));
-
-  //BUFG i_clk_bufg (
-  //  .I (dco_ss_int),
-  //  .O (dco_s));
-
   BUFR i_clk_gbuf (
     .CLR (1'b0),
     .CE (1'b1),
     .I (dco_s),
     .O (dco));
-
-    // instantiate the ILA core inside of a module in the IP
-
-    my_ila i_ila (
-    .clk(ila_clk_in),
-    .probe0(clk_gate),
-    .probe1(delay_locked),
-    .probe2(clk_gate_d),
-    .probe3(adc_valid),
-    .probe4(adc_data),
-    .probe5(da_p_int_s_dbg),
-    .probe6(da_n_int_s_dbg),
-    .probe7(adc_data_int_dbg),
-    .probe8(adc_data_da_p_dbg),
-    .probe9(adc_data_da_n_dbg),
-    .probe10(reset_data_buffers));
 
 endmodule
