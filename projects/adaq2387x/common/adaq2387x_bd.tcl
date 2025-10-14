@@ -6,8 +6,8 @@
 # env params
 
 set TWOLANES $ad_project_params(TWOLANES);  # two-lane mode (1) or one-lane mode (0); default two-lane
-set ADC_RES $ad_project_params(ADC_RES);    # ADC resolution; default 18 bits
-set USE_MMCM $ad_project_params(USE_MMCM);  # ref_clk frequency: 120MHz (1) or 100MHz (0); default 0
+set ADC_RES $ad_project_params(ADC_RES);    # ADC resolution: (18) or (16); default 18 bits
+set USE_MMCM $ad_project_params(USE_MMCM);  # ref_clk frequency: 240MHz (1) or 100MHz (0); default 0
 set OUT_RES [expr {$ADC_RES == 16 ? 16 : 32}]
 set CLK_GATE_WIDTH [expr {($TWOLANES == 0 && $ADC_RES == 18) ? 9 : \
                           ($TWOLANES == 0 && $ADC_RES == 16) ? 8 : \
@@ -82,21 +82,6 @@ if {$USE_MMCM == "1"} {
   ad_connect ref_clk  axi_ltc2387_dma/fifo_wr_clk
   ad_connect ref_clk  axi_pwm_gen/ext_clk
 }
-
-
-# debug
-
-create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_1
-set_property -dict [list \
-  CONFIG.PRIM_IN_FREQ {100.000} \
-  CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {240.000} \
-  CONFIG.CLKOUT1_REQUESTED_PHASE {45} \
-  CONFIG.MMCM_CLKOUT0_PHASE {45.000} \
-] [get_bd_cells clk_wiz_1]
-
-ad_connect ref_clk   clk_wiz_1/clk_in1
-ad_connect sys_rstgen/peripheral_reset  clk_wiz_1/reset
-ad_connect clk_wiz_1/clk_out1  axi_ltc2387/ila_clk_in
 
 # connections
 
