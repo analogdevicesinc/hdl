@@ -37,7 +37,7 @@ set data_delay  0.200
 
 # data delay for 240MHz clk
 # data_delay_max is computed as: 4.16 ns period + 4.16ns / 2 + 200ps skew) = 6.44ns (the tool recommended 3.56ns)
-set data_delay_max 3.56
+set data_delay_max 6.44
 # data_delay_min is computes as: 4.16ns / 2 + 200ps skew = 2.28ns
 set data_delay_min 2.28
 
