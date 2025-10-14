@@ -108,6 +108,9 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 200
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL2_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__FREQMHZ 12.288
+ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL3_ENABLE 1
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL3_REF_CTRL__SRCSEL {IOPLL}
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL3_REF_CTRL__FREQMHZ 10
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__IRQ0 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__IRQ1 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__GPIO_EMIO__PERIPHERAL__ENABLE 1

@@ -50,7 +50,7 @@ create_bd_port -dir I spi_pmod_sdo_i
 create_bd_port -dir O spi_pmod_sdo_o
 create_bd_port -dir I spi_pmod_sdi_i
 
-# SPI at 100/8 = 12.5 MHz
+# SPI at 10/16 = 625 KHz
 ad_ip_instance axi_quad_spi axi_spi_pmod
 ad_ip_parameter axi_spi_pmod CONFIG.C_USE_STARTUP 0
 ad_ip_parameter axi_spi_pmod CONFIG.C_NUM_SS_BITS 8
@@ -85,7 +85,7 @@ create_bd_port -dir I spi_pmod_2_sdo_i
 create_bd_port -dir O spi_pmod_2_sdo_o
 create_bd_port -dir I spi_pmod_2_sdi_i
 
-# SPI at 100/8 = 12.5 MHz
+# SPI at 10/16 = 625 KHz
 ad_ip_instance axi_quad_spi axi_spi_pmod_2
 ad_ip_parameter axi_spi_pmod_2 CONFIG.C_USE_STARTUP 0
 ad_ip_parameter axi_spi_pmod_2 CONFIG.C_NUM_SS_BITS 8
