@@ -21,8 +21,8 @@ The overwritable parameters from the environment are:
 - ADC_RES: the resolution of the ADC input data;
   - 18 - the resolution is 18 bits (default)
   - 16 - the resolution is 16 bits
-- USE_MMCM: choose between default 100MHz ref_clk or 120MHz
-  - 1 - 120Mhz
+- USE_MMCM: choose between default 100MHz ref_clk or 240MHz
+  - 1 - 240Mhz
   - 0 - 100MHz (default)
 
 ### Example configurations
