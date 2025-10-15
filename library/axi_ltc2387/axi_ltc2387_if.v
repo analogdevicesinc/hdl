@@ -115,11 +115,6 @@ module axi_ltc2387_if #(
         adc_valid <= 1'b1;
       end
     end
-    if (clk_gate_d[2] == 1'b1 && clk_gate_d[1] == 1'b0) begin
-      reset_data_buffers <= 1'b1;
-    end else begin
-      reset_data_buffers <= 1'b0;
-    end
   end
 
   always @(posedge dco) begin
