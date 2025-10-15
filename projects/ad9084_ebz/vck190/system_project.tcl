@@ -25,6 +25,8 @@ source ../../../projects/scripts/adi_board.tcl
 #   REF_CLK_RATE : Reference clock frequency in MHz, should be Lane Rate / 66 for JESD204C or Lane Rate / 40 for JESD204B
 #   HSCI_ENABLE : If set, adds and enables the HSCI core in the design
 #   AION_ENABLE : If set, adds and enables the AION core in the design
+#   FSRC_ENABLE : If set, adds and enables the AXI FSRC cores in the design
+#   FSRC_ACCUM_WIDTH : Sets the granuality of the accumulator for the AXI FSRC TX core
 #   RX_LANE_RATE :  Lane rate of the Rx link ( Apollo to FPGA )
 #   TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to Apollo )
 #   [RX/TX]_JESD_M : Number of converters per link
@@ -46,6 +48,8 @@ adi_project ad9084_ebz_vck190 0 [list \
   REF_CLK_RATE        [get_env_param REF_CLK_RATE     312.5 ] \
   HSCI_ENABLE         [get_env_param HSCI_ENABLE          1 ] \
   AION_ENABLE         [get_env_param AION_ENABLE          1 ] \
+  FSRC_ENABLE         [get_env_param FSRC_ENABLE          1 ] \
+  FSRC_ACCUM_WIDTH    [get_env_param FSRC_ACCUM_WIDTH    56 ] \
   RX_LANE_RATE        [get_env_param RX_LANE_RATE    20.625 ] \
   TX_LANE_RATE        [get_env_param TX_LANE_RATE    20.625 ] \
   RX_JESD_M           [get_env_param RX_JESD_M            4 ] \
