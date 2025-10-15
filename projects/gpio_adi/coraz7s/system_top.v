@@ -31,7 +31,7 @@
 //      as long as it attaches to an ADI device.
 //
 // ***************************************************************************
-// 
+//
 `timescale 1ns/100ps
 
 module system_top (
@@ -69,17 +69,12 @@ module system_top (
   inout           iic_ard_scl,
   inout           iic_ard_sda
 
-  // // SPI for ADC (ex: ad7190)
-  // output          adc_spi_sclk,
-  // input           adc_spi_miso_rdyn,
-  // output          adc_spi_mosi,
-  // output          adc_spi_csn
 );
 
   // Internal GPIO signals connected to system_wrapper
-  wire [31:0] gpio_i;
-  wire [31:0] gpio_o;
-  wire [31:0] gpio_t;
+  (* MARK_DEBUG = "TRUE" *) wire [31:0] gpio_i;
+  (* MARK_DEBUG = "TRUE" *) wire [31:0] gpio_o;
+  (* MARK_DEBUG = "TRUE" *) wire [31:0] gpio_t;
 
   // IO Buffers for buttons (inputs)
   ad_iobuf #(
@@ -101,14 +96,9 @@ module system_top (
     .dio_p (led)
   );
 
-  // Neconectate fizic - loopback logica interna
-  //assign gpio_i[31:8] = gpio_o[31:8];
-  //assign gpio_i[31:8] = 24'b0; // sau 24'b1 daca e nevoie
-  // Prevenim optimizarea semnalului gpio_i[0]
   wire [23:0] gpio_unused = 24'b0;
   assign gpio_i = {gpio_unused, gpio_i[7:0]};
-  
-  // Instantiere system_wrapper
+
   system_wrapper i_system_wrapper (
     .ddr_addr         (ddr_addr),
     .ddr_ba           (ddr_ba),
@@ -137,28 +127,8 @@ module system_top (
     .gpio_o           (gpio_o),
     .gpio_t           (gpio_t),
 
-    // .spi0_clk_i       (1'b0),
-    // .spi0_clk_o       (adc_spi_sclk),
-    // .spi0_csn_0_o     (adc_spi_csn),
-    // .spi0_csn_1_o     (1'b0),
-    // .spi0_csn_2_o     (1'b0),
-    // .spi0_csn_i       (1'b0),
-    // .spi0_sdi_i       (adc_spi_miso_rdyn),
-    // .spi0_sdo_i       (1'b0),
-    // .spi0_sdo_o       (adc_spi_mosi),
-
     .iic_ard_scl_io   (iic_ard_scl),
     .iic_ard_sda_io   (iic_ard_sda)
-
-    // .spi1_clk_i       (1'b0),
-    // .spi1_clk_o       (1'b0),
-    // .spi1_csn_0_o     (1'b0),
-    // .spi1_csn_1_o     (1'b0),
-    // .spi1_csn_2_o     (1'b0),
-    // .spi1_csn_i       (1'b1),
-    // .spi1_sdi_i       (1'b0),
-    // .spi1_sdo_i       (1'b0),
-    // .spi1_sdo_o       (1'b0)
   );
 
 endmodule
