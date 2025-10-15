@@ -35,17 +35,17 @@
 `timescale 1ns / 1ps
 
 module axi_gpio_adi (
-  output reg irq,
+  (* MARK_DEBUG = "TRUE" *) output reg irq,
 
   // AXI interface
   input               s_axi_aclk,
-  input               s_axi_aresetn,
+  (* MARK_DEBUG = "TRUE" *) input               s_axi_aresetn,
   input               s_axi_awvalid,
   input      [15:0]   s_axi_awaddr,
   input      [2:0]    s_axi_awprot,
   output              s_axi_awready,
   input               s_axi_wvalid,
-  input      [31:0]   s_axi_wdata,
+ (* MARK_DEBUG = "TRUE" *) input      [31:0]   s_axi_wdata,
   input      [3:0]    s_axi_wstrb,
   output              s_axi_wready,
   output              s_axi_bvalid,
@@ -57,7 +57,7 @@ module axi_gpio_adi (
   output              s_axi_arready,
   output              s_axi_rvalid,
   output     [1:0]    s_axi_rresp,
-  output     [31:0]   s_axi_rdata,
+  (* MARK_DEBUG = "TRUE" *) output     [31:0]   s_axi_rdata,
   input               s_axi_rready,
 
   // GPIO Xilinx-style
@@ -75,9 +75,10 @@ module axi_gpio_adi (
 
   reg        [31:0] gpio_out_reg;
   reg        [31:0] gpio_dir_reg;  // 1 = output, 0 = input
-  reg        [31:0] up_rdata;
-  reg               up_rack;
-  reg               up_wack;
+  //(* dont_touch = "true" *)
+  (* MARK_DEBUG = "TRUE" *) reg        [31:0] up_rdata;
+  reg        up_rack;
+  reg        up_wack;
   reg               up_resetn;
 
   wire       [31:0] up_irq_pending;
@@ -86,13 +87,13 @@ module axi_gpio_adi (
   reg        [31:0] up_irq_mask;
   reg        [31:0] up_irq_source;
 
- 
+
   // Wire AXI-to-up bus interface
- 
+
   wire              up_clk = s_axi_aclk;
   wire              up_wreq_s;
   wire [7:0]        up_waddr_s;
-  wire [31:0]       up_wdata_s;
+   (* MARK_DEBUG = "TRUE" *) wire [31:0]       up_wdata_s;
   wire              up_rreq_s;
   wire [7:0]        up_raddr_s;
 
@@ -131,7 +132,6 @@ module axi_gpio_adi (
     .up_rack        (up_rack)
   );
 
-
   // Reset
 
   always @(posedge up_clk) begin
@@ -147,7 +147,7 @@ module axi_gpio_adi (
 
 
   // Write Registers
- 
+
   always @(posedge up_clk) begin
     if (!up_resetn) begin
       gpio_out_reg <= 32'd0;
@@ -178,11 +178,16 @@ module axi_gpio_adi (
       up_rack <= up_rreq_s;
       if (up_rreq_s) begin
         case (up_raddr_s)
-          8'h21: up_rdata <= gpio_out_reg;
-          8'h22: up_rdata <= gpio_io_i;
-          8'h24: up_rdata <= gpio_dir_reg;
+          8'h21: up_rdata[31:0] <= gpio_out_reg[31:0];
+          8'h22: up_rdata[31:0] <= gpio_io_i[31:0];
+          8'h24: up_rdata[31:0] <= gpio_dir_reg[31:0];
           default: up_rdata <= 32'd0;
         endcase
+        //modificare cod
+      //up_rdata[31:0] <= gpio_io_i[31:0];
+      if (|up_rdata) begin
+        up_rack <= up_rack; // dummy logic
+      end
       end
     end
   end
@@ -217,7 +222,7 @@ module axi_gpio_adi (
     else
       up_irq_source <= up_irq_trigger | (up_irq_source & ~up_irq_source_clear);
 
- 
+
   // Optional: LED toggle based on IRQ[2]
 
   reg [31:0] irq_source_d1;

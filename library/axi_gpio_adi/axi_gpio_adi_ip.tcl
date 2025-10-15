@@ -14,6 +14,13 @@ adi_ip_files axi_gpio_adi [list \
 
 adi_ip_properties axi_gpio_adi
 
+# Adaugare Device ID
+set cc [ipx::current_core]
+ipx::add_user_parameter DEVICE_ID $cc
+set_property value 0 [ipx::get_user_parameter DEVICE_ID $cc]
+set_property display_name {Device ID} [ipx::get_user_parameter DEVICE_ID $cc]
+set_property description {Unique ID for driver instantiation (Vivado export)} [ipx::get_user_parameter DEVICE_ID $cc]
+
 #set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_fan_control} [ipx::current_core]
 
 adi_add_bus "gpio" "master" \
