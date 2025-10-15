@@ -190,7 +190,7 @@ module system_top #(
   wire tx_b_resetdone;
   wire gt_powergood;
 
-  wire [ 2:0]  trig_channel;
+  wire [ 3:0]  trig_channel;
   wire         adf4030_sysref;
 
   // instantiations
@@ -304,9 +304,9 @@ module system_top #(
   assign gpio_i[53] = trig_in;
 
   assign trig_a[0]  = trig_channel[0];
-  assign trig_a[1]  = trig_channel[0];
-  assign trig_b[0]  = trig_channel[0];
-  assign trig_b[1]  = trig_channel[0];
+  assign trig_a[1]  = trig_channel[1];
+  assign trig_b[0]  = trig_channel[2];
+  assign trig_b[1]  = trig_channel[3];
   assign resetb     = gpio_o[62];
 
   assign gpio_i[64] = rx_resetdone;
@@ -453,6 +453,11 @@ module system_top #(
     .rx_sysref_0 (sysref),
     .tx_sysref_0 (sysref),
     .rx_sysref_12 (sysref),
-    .tx_sysref_12 (sysref));
+    .tx_sysref_12 (sysref),
+
+    .fsrc_sysref (sysref),
+    .fsrc_trig_in (),
+    .fsrc_trig_out (),
+    .fsrc_ctrl ());
 
 endmodule
