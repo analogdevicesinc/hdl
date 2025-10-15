@@ -52,3 +52,7 @@ set_input_delay -clock [get_clocks tx_device_clk] -add_delay\
   [get_ports {sysref_in*}]
 
 set_clock_groups -group rx_device_clk -group tx_device_clk -asynchronous
+
+set_property ASYNC_REG TRUE \
+  [get_cells -hier {*cdc_sync_stage1_reg*}] \
+  [get_cells -hier {*cdc_sync_stage2_reg*}]
