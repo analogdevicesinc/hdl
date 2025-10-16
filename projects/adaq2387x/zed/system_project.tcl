@@ -7,6 +7,8 @@
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
+set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timing_fix_xilinx.tcl]
+set BOARD_NAME zed
 
 # TWOLANES: parameter describing the number of lanes
 # - 1: in two-lane mode (default)
@@ -31,16 +33,19 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # ADAQ23876  | 16      | 0 or 1   | 0 or 1   |
 # ADAQ23878  | 18      | 0 or 1   | 0 or 1   |
 
-adi_project adaq2387x_zed 0 [list \
+adi_project adaq2387x_${BOARD_NAME} 0 [list \
   TWOLANES  [get_env_param TWOLANES  1 ] \
   ADC_RES   [get_env_param ADC_RES  18 ] \
   USE_MMCM  [get_env_param USE_MMCM  0 ]]
 
-adi_project_files adaq2387x_zed [list \
+adi_project_files adaq2387x_${BOARD_NAME} [list \
   "system_top.v" \
   "system_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
+  "$ad_hdl_dir/projects/common/${BOARD_NAME}/${BOARD_NAME}_system_constr.xdc"]
 
-adi_project_run adaq2387x_zed
+## set the strategy to spread logic and help with hold time fixes
+set_property strategy Congestion_SpreadLogic_high [get_runs impl_1]
+
+adi_project_run adaq2387x_${BOARD_NAME}
