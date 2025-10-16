@@ -219,7 +219,7 @@ module pack_shell #(
 
         /* Copy the samples_enable to the first row to make addressing it easier */
         genvar j;
-        for (j = 0; j < NUM_OF_SAMPLES; j = j + 1) begin
+        for (j = 0; j < NUM_OF_SAMPLES; j = j + 1) begin: samples_enable_copy
           assign prefix_count_tmp[0][j] = ~samples_enable[j];
         end
 
@@ -231,8 +231,8 @@ module pack_shell #(
         * prefix_count_tmp[3] = '1 2 3 4 5 6 7 8'
         */
         genvar k;
-        for (j = 1; j < LOG2_NUM_OF_SAMPLES + 1; j = j + 1) begin
-          for (k = 0; k < NUM_OF_SAMPLES; k = k + 1) begin
+        for (j = 1; j < LOG2_NUM_OF_SAMPLES + 1; j = j + 1) begin: prefix_count_tmp_lines
+          for (k = 0; k < NUM_OF_SAMPLES; k = k + 1) begin: prefix_count_tmp_cols
             if (k < 2 ** (j-1)) begin
               assign prefix_count_tmp[j][k] = prefix_count_tmp[j-1][k];
             end else begin
