@@ -352,6 +352,8 @@ module system_top #(
   wire tdd_channel_0;
   wire tdd_channel_1;
   wire tdd_sync_out;
+  wire tdd_channel_6;
+  wire tdd_channel_7;
 
   always @(*) begin
     case (spi_csn)
@@ -540,10 +542,10 @@ module system_top #(
   assign adrv9009_tx1_enable_a = tdd_support ? tdd_tx_en : gpio_o[56];
   assign adrv9009_rx2_enable_a = tdd_support ? tdd_rx_en : gpio_o[55];
   assign adrv9009_rx1_enable_a = tdd_support ? tdd_rx_en : gpio_o[54];
-  assign tr                    = tdd_support ? tdd_tx_stingray_en : fmc_gpio_o[31];
+  assign tr                    = tdd_support ? tdd_channel_7 : fmc_gpio_o[31];
 
   // PMOD GPIOs
-  assign stingray0_pmod0_PA_ON       = pwr_up_mask ? 1'b0 : fmc_gpio_o[30];
+  assign stingray0_pmod0_PA_ON       = pwr_up_mask ? 1'b0 : tdd_support ? tdd_channel_6 : fmc_gpio_o[30];
   assign stingray0_pmod0_TR          = pwr_up_mask ? 1'b0 : tr;
   assign stingray0_pmod0_TX_LOAD     = pwr_up_mask ? 1'b0 : fmc_gpio_o[29];
   assign stingray0_pmod0_RX_LOAD     = pwr_up_mask ? 1'b0 : fmc_gpio_o[28];
@@ -821,10 +823,11 @@ module system_top #(
     .tdd_tx_stingray_en (tdd_tx_stingray_en),
     .tdd_channel_0 (tdd_channel_0),
     .tdd_channel_1 (tdd_channel_1),
+    .tdd_channel_6 (tdd_channel_6),
+    .tdd_channel_7 (tdd_channel_7),
     .tdd_sync_out (tdd_sync_out));
 
-  assign tr2                         = tdd_support ? tdd_tx_stingray_en : fmc_gpio_o[12];
-  assign stingray1_pmod0_PA_ON       = pwr_up_mask ? 1'b0 : fmc_gpio_o[13];
+  assign stingray1_pmod0_PA_ON       = pwr_up_mask ? 1'b0 : tdd_enabled ? tdd_channel_6 : fmc_gpio_o[13];
   assign stingray1_pmod0_TR          = pwr_up_mask ? 1'b0 : tr;
   assign stingray1_pmod0_TX_LOAD     = pwr_up_mask ? 1'b0 : fmc_gpio_o[11];
   assign stingray1_pmod0_RX_LOAD     = pwr_up_mask ? 1'b0 : fmc_gpio_o[10];
