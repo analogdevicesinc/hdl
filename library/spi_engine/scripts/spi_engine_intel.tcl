@@ -3,8 +3,61 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-proc spi_engine_create {{name "spi_engine"} {axi_clk} {axi_reset} {spi_clk} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0} {sdo_streaming 0} {cmd_mem_addr_width 4} {data_mem_addr_width 4} {sdi_fifo_addr_width 5} {sdo_fifo_addr_width 5} {sync_fifo_addr_width 4} {cmd_fifo_addr_width 4}} {
+proc spi_engine_create {{name "spi_engine"}
+                        {data_width 32}
+                        {async_spi_clk 1}
+                        {num_cs 1}
+                        {num_sdi 1}
+                        {num_sdo 1}
+                        {sdi_delay 0}
+                        {echo_sclk 0}
+                        {sdo_streaming 0}
+                        {cmd_mem_addr_width 4}
+                        {data_mem_addr_width 4}
+                        {sdi_fifo_addr_width 5}
+                        {sdo_fifo_addr_width 5}
+                        {sync_fifo_addr_width 4}
+                        {cmd_fifo_addr_width 4}} {
 
+  # save current top system for restoring later
+  save_system {system_bd.qsys}
+
+  # create subsystem for spi engine
+  create_system spi_engine_subsystem
+
+  # create external interfaces
+  if {$async_spi_clk == 1} {
+    add_instance spi_clk clock_source
+    set_instance_parameter_value spi_clk {clockFrequencyKnown} {0}
+    add_interface spi_clk clock sink
+    set_interface_property spi_clk EXPORT_OF spi_clk.clk_in
+  }
+  if {$echo_sclk == 1} {
+    add_instance echo_clk clock_source
+    set_instance_parameter_value echo_clk {clockFrequencyKnown} {0}
+    add_interface echo_clk clock sink
+    set_interface_property echo_clk EXPORT_OF echo_clk.clk_in
+  }
+  add_instance axi_clk clock_source
+  set_instance_parameter_value axi_clk {clockFrequencyKnown} {0}
+  add_interface axi_clk clock sink
+  set_interface_property axi_clk EXPORT_OF axi_clk.clk_in
+  add_interface rst           reset   sink
+  set_interface_property rst EXPORT_OF axi_clk.clk_in_reset
+
+  add_interface s_axi axi4lite end
+  add_interface trigger       conduit end
+  add_interface interrupt_ender           interrupt end
+  add_interface m_spi_sclk    clock      source
+  add_interface m_spi_cs      conduit    start
+  add_interface m_spi_miso    conduit    end
+  add_interface m_spi_mosi    conduit    start
+  add_interface m_axis_sample axi4stream start
+  if {$sdo_streaming == 1} {
+    add_interface s_axis_sample axi4stream end
+  }
+
+  # spi engine IP instances
   set execution "${name}_execution"
   set axi_regmap "${name}_axi_regmap"
   set offload "${name}_offload"
@@ -45,20 +98,37 @@ proc spi_engine_create {{name "spi_engine"} {axi_clk} {axi_reset} {spi_clk} {dat
   set_instance_parameter_value $interconnect {NUM_OF_SDI} $num_sdi
 
   # clocks
-  add_connection $axi_clk $axi_regmap.s_axi_clock
-  add_connection $spi_clk $axi_regmap.if_spi_clk
-  add_connection $spi_clk $execution.if_clk
-  add_connection $spi_clk $interconnect.if_clk
-  add_connection $spi_clk $offload.if_ctrl_clk
-  add_connection $spi_clk $offload.if_spi_clk
+  add_connection axi_clk.clk $axi_regmap.s_axi_clock
+
+   if {$async_spi_clk == 1} {
+    add_connection spi_clk.clk $axi_regmap.if_spi_clk
+    add_connection spi_clk.clk $execution.if_clk
+    add_connection spi_clk.clk $interconnect.if_clk
+    add_connection spi_clk.clk $offload.if_ctrl_clk
+    add_connection spi_clk.clk $offload.if_spi_clk
+  } else {
+    add_connection axi_clk.clk $axi_regmap.if_spi_clk
+    add_connection axi_clk.clk $execution.if_clk
+    add_connection axi_clk.clk $interconnect.if_clk
+    add_connection axi_clk.clk $offload.if_ctrl_clk
+    add_connection axi_clk.clk $offload.if_spi_clk
+  }
+  if {$echo_sclk == 1} {
+    add_connection echo_sclk.clk $execution.echo_sclk
+  }
 
   # resets
-  add_connection $axi_reset $axi_regmap.s_axi_reset
+  add_connection axi_clk.clk_reset $axi_regmap.s_axi_reset
   add_connection $axi_regmap.if_spi_resetn $execution.if_resetn
   add_connection $axi_regmap.if_spi_resetn $interconnect.if_resetn
   add_connection $axi_regmap.if_spi_resetn $offload.if_spi_resetn
+  if {$async_spi_clk == 1} {
+    # not really needed, but quartus complains otherwise
+    # we are not using spi_clk.clk_reset
+    add_connection $axi_regmap.if_spi_resetn spi_clk.clk_in_reset
+  }
 
-  # interfaces
+  # spi engine internal connections
   add_connection $interconnect.m_cmd $execution.cmd
   add_connection $execution.sdi_data $interconnect.m_sdi
   add_connection $interconnect.m_sdo $execution.sdo_data
@@ -79,4 +149,27 @@ proc spi_engine_create {{name "spi_engine"} {axi_clk} {axi_reset} {spi_clk} {dat
   add_connection $offload.if_ctrl_mem_reset $axi_regmap.if_offload0_mem_reset
   add_connection $offload.status_sync       $axi_regmap.offload_sync
 
+  # external interface connections
+  set_interface_property m_spi_sclk       EXPORT_OF $execution.if_cs
+  set_interface_property m_spi_cs         EXPORT_OF $execution.if_sclk
+  set_interface_property m_spi_miso       EXPORT_OF $execution.if_sdi
+  set_interface_property m_spi_mosi       EXPORT_OF $execution.if_sdo
+  set_interface_property m_spi_mosi_t     EXPORT_OF $execution.if_sdo_t
+  set_interface_property m_spi_three_wire EXPORT_OF $execution.if_three_wire
+  set_interface_property m_axis_sample    EXPORT_OF $offload.offload_sdi
+  if {$sdo_streaming == 1} {
+    set_interface_property s_axis_sample  EXPORT_OF $offload.s_axis_sdo
+  }
+  set_interface_property trigger          EXPORT_OF $offload.if_trigger
+  set_interface_property interrupt_sender EXPORT_OF $axi_regmap.interrupt_sender
+  set_interface_property s_axi            EXPORT_OF $axi_regmap.s_axi
+
+  # save it for debugging
+  save_system "spi_engine_subsystem.qsys"
+  # export hardware tcl for synthesis tools
+  export_hw_tcl
+  # reload previous system
+  load_system {system_bd.qsys}
+
+  add_instance $name spi_engine_subsystem
 }

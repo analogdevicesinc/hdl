@@ -77,7 +77,7 @@ set axi_clk sys_clk.clk
 set axi_reset sys_clk.clk_reset
 set spi_clk spi_clk_pll.outclk0
 
-spi_engine_create $spi_engine_hier $axi_clk $axi_reset $spi_clk $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk $sdo_streaming
+spi_engine_create $spi_engine_hier $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk $sdo_streaming
 
 # exported interface
 
@@ -87,11 +87,11 @@ add_interface ad57xx_spi_miso    conduit    end
 add_interface ad57xx_spi_mosi    conduit    end
 add_interface m_axis_offload_sdi axi4stream end
 
-set_interface_property ad57xx_spi_cs      EXPORT_OF ${spi_engine_hier}_execution.if_cs
-set_interface_property ad57xx_spi_sclk    EXPORT_OF ${spi_engine_hier}_execution.if_sclk
-set_interface_property ad57xx_spi_miso    EXPORT_OF ${spi_engine_hier}_execution.if_sdi
-set_interface_property ad57xx_spi_mosi    EXPORT_OF ${spi_engine_hier}_execution.if_sdo
-set_interface_property m_axis_offload_sdi EXPORT_OF ${spi_engine_hier}_offload.offload_sdi
+set_interface_property ad57xx_spi_cs      EXPORT_OF ${spi_engine_hier}.m_spi_cs
+set_interface_property ad57xx_spi_sclk    EXPORT_OF ${spi_engine_hier}.m_spi_sclk
+set_interface_property ad57xx_spi_miso    EXPORT_OF ${spi_engine_hier}.m_spi_miso
+set_interface_property ad57xx_spi_mosi    EXPORT_OF ${spi_engine_hier}.m_spi_mosi
+set_interface_property m_axis_offload_sdi EXPORT_OF ${spi_engine_hier}.m_axis_sample
 
 # clocks
 
@@ -100,9 +100,11 @@ add_connection sys_clk.clk spi_clk_pll_reconfig.mgmt_clk
 
 add_connection sys_clk.clk ad57xx_dma.s_axi_clock
 add_connection sys_clk.clk trig_gen.s_axi_clock
+add_connection sys_clk.clk ${spi_engine_hier}.axi_clk
 
 add_connection spi_clk_pll.outclk0 trig_gen.if_ext_clk
 add_connection spi_clk_pll.outclk0 ad57xx_dma.if_m_axis_aclk
+add_connection spi_clk_pll.outclk0 ${spi_engine_hier}.spi_clk
 add_connection sys_dma_clk.clk ad57xx_dma.m_src_axi_clock
 
 # resets
@@ -111,17 +113,17 @@ add_connection sys_clk.clk_reset spi_clk_pll.reset
 add_connection sys_clk.clk_reset spi_clk_pll_reconfig.mgmt_reset
 add_connection sys_clk.clk_reset ad57xx_dma.s_axi_reset
 add_connection sys_clk.clk_reset trig_gen.s_axi_reset
+add_connection sys_clk.clk_reset ${spi_engine_hier}.rst
 
 add_connection sys_dma_clk.clk_reset ad57xx_dma.m_src_axi_reset
 
 # interfaces
-add_connection ${spi_engine_hier}_offload.if_trigger        trig_gen.if_pwm_0
-add_connection ad57xx_dma.m_axis ${spi_engine_hier}_offload.s_axis_sdo
-
+add_connection trig_gen.if_pwm_0 ${spi_engine_hier}.trigger
+add_connection ad57xx_dma.m_axis ${spi_engine_hier}.s_axis_sample
 # cpu interconnects
 
 ad_cpu_interconnect 0x00030000 ad57xx_dma.s_axi
-ad_cpu_interconnect 0x00040000 ${spi_engine_hier}_axi_regmap.s_axi
+ad_cpu_interconnect 0x00040000  ${spi_engine_hier}.s_axi
 ad_cpu_interconnect 0x00050000 trig_gen.s_axi
 ad_cpu_interconnect 0x00060000 spi_clk_pll_reconfig.mgmt_avalon_slave
 
@@ -132,4 +134,4 @@ ad_dma_interconnect ad57xx_dma.m_src_axi
 #interrupts
 
 ad_cpu_interrupt 4 ad57xx_dma.interrupt_sender
-ad_cpu_interrupt 5 ${spi_engine_hier}_axi_regmap.interrupt_sender
+ad_cpu_interrupt 5 ${spi_engine_hier}.interrupt_sender
