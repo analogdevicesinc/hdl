@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -60,13 +60,9 @@ module axi_gpio_adi (
   (* MARK_DEBUG = "TRUE" *) output     [31:0]   s_axi_rdata,
   input               s_axi_rready,
 
-  // GPIO Xilinx-style
-  //(* X_INTERFACE_INFO = "xilinx.com:interface:gpio_rtl:1.0 gpio TRI_O" *)
-  //(* X_INTERFACE_NAME = "gpio" *)
+
   output     [31:0]   gpio_io_o,
-  //(* X_INTERFACE_INFO = "xilinx.com:interface:gpio_rtl:1.0 gpio TRI_I" *)
   input      [31:0]   gpio_io_i,
-  //(* X_INTERFACE_INFO = "xilinx.com:interface:gpio_rtl:1.0 gpio TRI_T" *)
   output     [31:0]   gpio_io_t
 );
 
@@ -75,17 +71,16 @@ module axi_gpio_adi (
 
   reg        [31:0] gpio_out_reg;
   reg        [31:0] gpio_dir_reg;  // 1 = output, 0 = input
-  //(* dont_touch = "true" *)
-  (* MARK_DEBUG = "TRUE" *) reg        [31:0] up_rdata;
+  reg        [31:0] up_rdata;
   reg        up_rack;
   reg        up_wack;
   reg               up_resetn;
 
-  wire       [31:0] up_irq_pending;
-  wire       [31:0] up_irq_trigger;
-  wire       [31:0] up_irq_source_clear;
-  reg        [31:0] up_irq_mask;
-  reg        [31:0] up_irq_source;
+   (* MARK_DEBUG = "TRUE" *) wire       [31:0] up_irq_pending;
+   (* MARK_DEBUG = "TRUE" *) wire       [31:0] up_irq_trigger;
+   (* MARK_DEBUG = "TRUE" *) wire       [31:0] up_irq_source_clear;
+   (* MARK_DEBUG = "TRUE" *) reg        [31:0] up_irq_mask;
+   (* MARK_DEBUG = "TRUE" *) reg        [31:0] up_irq_source;
 
 
   // Wire AXI-to-up bus interface
@@ -93,7 +88,7 @@ module axi_gpio_adi (
   wire              up_clk = s_axi_aclk;
   wire              up_wreq_s;
   wire [7:0]        up_waddr_s;
-   (* MARK_DEBUG = "TRUE" *) wire [31:0]       up_wdata_s;
+  wire [31:0]       up_wdata_s;
   wire              up_rreq_s;
   wire [7:0]        up_raddr_s;
 
@@ -101,7 +96,7 @@ module axi_gpio_adi (
   assign gpio_io_t = ~gpio_dir_reg;
 
   up_axi #(
-    .AXI_ADDRESS_WIDTH(10)
+    .AXI_ADDRESS_WIDTH(15)
   ) i_up_axi (
     .up_rstn        (s_axi_aresetn),
     .up_clk         (up_clk),
@@ -135,12 +130,12 @@ module axi_gpio_adi (
   // Reset
 
   always @(posedge up_clk) begin
-    if (!s_axi_aresetn) begin
+    if (s_axi_aresetn == 1'b0) begin
       up_resetn <= 1'b0;
       up_wack   <= 1'b0;
     end else begin
       up_wack <= up_wreq_s;
-      if (up_wreq_s && (up_waddr_s == 8'h20))
+      if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h20))
         up_resetn <= up_wdata_s[0];
     end
   end
@@ -149,10 +144,10 @@ module axi_gpio_adi (
   // Write Registers
 
   always @(posedge up_clk) begin
-    if (!up_resetn) begin
-      gpio_out_reg <= 32'd0;
-      gpio_dir_reg <= 32'd0;
-    end else if (up_wreq_s) begin
+    if (up_resetn == 1'b0) begin
+      gpio_out_reg <= 32'b0;
+      gpio_dir_reg <= 32'b0;
+    end else if (up_wreq_s == 1'b1) begin
       case (up_waddr_s)
         8'h21: gpio_out_reg <= up_wdata_s;
         8'h24: gpio_dir_reg <= up_wdata_s;
@@ -162,31 +157,29 @@ module axi_gpio_adi (
 
   // IRQ mask write
   always @(posedge up_clk) begin
-    if (!up_resetn)
-      up_irq_mask <= 32'hFFFFFFFF;
-    else if (up_wreq_s && up_waddr_s == 8'h23)
+    if (up_resetn == 1'b0)
+      up_irq_mask <= 32'h00000000;
+    else if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h23))
       up_irq_mask <= up_wdata_s;
   end
 
   // Read Registers
 
   always @(posedge up_clk) begin
-    if (!s_axi_aresetn) begin
+    if (s_axi_aresetn == 1'b0) begin
       up_rack  <= 1'b0;
-      up_rdata <= 32'd0;
+      up_rdata <= 32'b0;
     end else begin
       up_rack <= up_rreq_s;
-      if (up_rreq_s) begin
+      if (up_rreq_s == 1'b1) begin
         case (up_raddr_s)
           8'h21: up_rdata[31:0] <= gpio_out_reg[31:0];
           8'h22: up_rdata[31:0] <= gpio_io_i[31:0];
           8'h24: up_rdata[31:0] <= gpio_dir_reg[31:0];
-          default: up_rdata <= 32'd0;
+          default: up_rdata <= 32'b0;
         endcase
-        //modificare cod
-      //up_rdata[31:0] <= gpio_io_i[31:0];
       if (|up_rdata) begin
-        up_rack <= up_rack; // dummy logic
+        up_rack <= up_rack;
       end
       end
     end
@@ -195,48 +188,52 @@ module axi_gpio_adi (
 
   // IRQ generation
 
-  wire button_input = gpio_io_i[0];
+  wire [31:0] button_input = gpio_io_i;
   reg button_d1;
 
-  always @(posedge up_clk)
-    if (!up_resetn)
+  always @(posedge up_clk) begin
+    if (up_resetn == 1'b0) begin
       button_d1 <= 1'b0;
-    else
+    end else begin
       button_d1 <= button_input;
+    end
+  end
+  wire led_blink = (button_input & (~button_d1));
 
-  wire led_blink = button_input & ~button_d1;
+  assign up_irq_trigger = {31'b0, led_blink};
+  assign up_irq_source_clear = ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h11)) ? up_wdata_s : 32'd0;
+  assign up_irq_pending = (~up_irq_mask) & up_irq_source;
 
-  assign up_irq_trigger = {28'd0, 1'b0, led_blink, 1'b0, 1'b0};
-  assign up_irq_source_clear = (up_wreq_s && (up_waddr_s == 8'h11)) ? up_wdata_s : 32'd0;
-  assign up_irq_pending = ~up_irq_mask & up_irq_source;
-
-  always @(posedge up_clk)
-    if (!up_resetn)
+  always @(posedge up_clk) begin
+    if (up_resetn == 1'b0) begin
       irq <= 1'b0;
-    else
+    end else begin
       irq <= |up_irq_pending;
+    end
+  end
 
-  always @(posedge up_clk)
-    if (!up_resetn)
-      up_irq_source <= 32'd0;
-    else
+  always @(posedge up_clk) begin
+    if (up_resetn == 1'b0) begin
+      up_irq_source <= 32'b0;
+    end else begin
       up_irq_source <= up_irq_trigger | (up_irq_source & ~up_irq_source_clear);
+    end
+  end
 
-
-  // Optional: LED toggle based on IRQ[2]
+  // LED toggle based on IRQ[2]
 
   reg [31:0] irq_source_d1;
   reg        led_state;
 
   always @(posedge up_clk) begin
-    if (!up_resetn) begin
-      irq_source_d1 <= 32'd0;
+    if (up_resetn == 1'b0) begin
+      irq_source_d1 <= 32'b0;
       led_state     <= 1'b0;
     end else begin
       irq_source_d1 <= up_irq_source;
       if ((up_irq_source[2] == 1'b1) && (irq_source_d1[2] == 1'b0))
         led_state <= ~led_state;
-    end
   end
+end
 
 endmodule
