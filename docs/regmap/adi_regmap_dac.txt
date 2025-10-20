@@ -519,7 +519,7 @@ ENDTITLE
 ############################################################################################
 
 REG
-0x0100 + 0x16*n
+0x0100 + 0x10*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_1
 DAC Channel Control & Status (channel - 0)
@@ -549,7 +549,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0101 + 0x16*n
+0x0101 + 0x10*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_2
 DAC Channel Control & Status (channel - 0)
@@ -580,7 +580,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0102 + 0x16*n
+0x0102 + 0x10*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_3
 DAC Channel Control & Status (channel - 0)
@@ -602,7 +602,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0103 + 0x16*n
+0x0103 + 0x10*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_4
 DAC Channel Control & Status (channel - 0)
@@ -635,7 +635,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0104 + 0x16*n
+0x0104 + 0x10*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_5
 DAC Channel Control & Status (channel - 0)
@@ -659,7 +659,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0105 + 0x16*n
+0x0105 + 0x10*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_6
 DAC Channel Control & Status (channel - 0)
@@ -693,7 +693,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0106 + 0x16*n
+0x0106 + 0x10*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_7
 DAC Channel Control & Status (channel - 0)
@@ -724,7 +724,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0107 + 0x16*n
+0x0107 + 0x10*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_8
 DAC Channel Control & Status (channel - 0)
@@ -754,7 +754,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0108 + 0x16*n
+0x0108 + 0x10*n
 WHERE n IS FROM 0 TO 15
 USR_CNTRLn_3
 DAC Channel Control & Status (channel - 0)
@@ -806,7 +806,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0109 + 0x16*n
+0x0109 + 0x10*n
 WHERE n IS FROM 0 TO 15
 USR_CNTRLn_4
 DAC Channel Control & Status (channel - 0)
@@ -834,7 +834,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x010A + 0x16*n
+0x010A + 0x10*n
 WHERE n IS FROM 0 TO 15
 USR_CNTRLn_5
 DAC Channel Control & Status (channel - 0)
@@ -860,7 +860,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x010B + 0x16*n
+0x010B + 0x10*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_9
 DAC Channel Control & Status (channel - 0)
@@ -892,7 +892,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x010C + 0x16*n
+0x010C + 0x10*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_10
 DAC Channel Control & Status (channel - 0)
