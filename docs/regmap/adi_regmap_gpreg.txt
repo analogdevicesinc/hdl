@@ -7,7 +7,7 @@ ENDTITLE
 ############################################################################################
 
 REG
-0x0100 + 0x16*n
+0x0100 + 0x10*n
 WHERE n IS FROM 0 TO 15
 IO_ENBn
 IO control register
@@ -24,7 +24,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0101 + 0x16*n
+0x0101 + 0x10*n
 WHERE n IS FROM 0 TO 15
 IO_OUTn
 IO output register
@@ -42,7 +42,7 @@ ENDFIELD
 
 
 REG
-0x0102 + 0x16*n
+0x0102 + 0x10*n
 WHERE n IS FROM 0 TO 15
 IO_INn
 IO input register
@@ -59,7 +59,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0200 + 0x16*n
+0x0200 + 0x10*n
 WHERE n IS FROM 0 TO 15
 CM_RESETn
 Reset register
@@ -76,7 +76,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0202 + 0x16*n
+0x0202 + 0x10*n
 WHERE n IS FROM 0 TO 15
 CM_COUNTn
 Clock count register
