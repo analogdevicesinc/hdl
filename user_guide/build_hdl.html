@@ -110,7 +110,7 @@
 </li>
 <li><a class="reference internal" href="#building-the-projects">4. Building the projects</a><ul>
 <li><a class="reference internal" href="#a-building-an-amd-project">4a. Building an AMD project</a><ul>
-<li><a class="reference internal" href="#enabling-out-of-context-synthesis">Enabling Out-of-Context synthesis</a></li>
+<li><a class="reference internal" href="#available-build-flags-and-parameters">Available build flags and parameters</a></li>
 <li><a class="reference internal" href="#checking-the-build-and-analyzing-results-of-library-components">Checking the build and analyzing results of library components</a></li>
 <li><a class="reference internal" href="#checking-the-build-and-analyzing-results-of-projects">Checking the build and analyzing results of projects</a></li>
 </ul>
@@ -1123,8 +1123,36 @@ characters.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">LVDS_CMOS_N</span><span class="o">=</span><span class="m">1</span>
 </pre></div>
 </div>
-<section id="enabling-out-of-context-synthesis">
-<h4>Enabling Out-of-Context synthesis<a class="headerlink" href="#enabling-out-of-context-synthesis" title="Permalink to this heading"></a></h4>
+<section id="available-build-flags-and-parameters">
+<h4>Available build flags and parameters<a class="headerlink" href="#available-build-flags-and-parameters" title="Permalink to this heading"></a></h4>
+<p>Below are some of the available parameters and system variables that can be used
+when building a project:</p>
+<ul class="simple">
+<li><p><strong>ADI_EXTRACT_PORTS</strong>: if set, extracts port properties from a predefined list
+of IPs into ‘ports_properties.txt’.</p></li>
+<li><p><strong>ADI_GENERATE_BIN</strong>: if set, generates a binary bitstream file (.bin)
+in addition to the .xsa hardware platform.</p></li>
+<li><p><strong>ADI_GENERATE_UTILIZATION</strong>: if set, generates CSV and log files detailing
+resource utilization for the design and specific IPs.</p></li>
+<li><p><strong>ADI_GENERATE_XPA</strong>: if set, runs a Xilinx Power Analysis (XPA) and generates
+a summary report.</p></li>
+<li><p><strong>ADI_MAX_OOC_JOBS</strong>: specifies the number of parallel jobs to use for
+Out-of-Context (OOC) synthesis.</p></li>
+<li><p><strong>ADI_MAX_THREADS</strong>: specifies the maximum number of threads for Vivado
+operations. Default value is 8.</p></li>
+<li><p><strong>ADI_NO_BITSTREAM_COMPRESSION</strong>: if set, disables compression of the final
+bitstream file.</p></li>
+<li><p><strong>ADI_POST_ROUTE_SCRIPT</strong>: specifies the path to a Tcl script to be executed
+after the routing design step.</p></li>
+<li><p><strong>ADI_POWER_OPTIMIZATION</strong>: if set to 1, enables power optimization during the
+implementation run.</p></li>
+<li><p><strong>ADI_PROJECT_DIR</strong>: specifies a base directory for output files such as logs
+and reports.</p></li>
+<li><p><strong>ADI_SKIP_SYNTHESIS</strong>: if set, the entire procedure will exit before starting
+synthesis.</p></li>
+<li><p><strong>ADI_USE_OOC_SYNTHESIS</strong>: if set to 1, launches synthesis for OOC IP modules
+in parallel.</p></li>
+</ul>
 <p>You can opt in for out-of-context synthesis during the build by defining
 the <code class="docutils literal notranslate"><span class="pre">ADI_USE_OOC_SYNTHESIS</span></code> system variable. By setting the
 <code class="docutils literal notranslate"><span class="pre">ADI_MAX_OOC_JOBS</span></code> system variable you can adjust the number of
