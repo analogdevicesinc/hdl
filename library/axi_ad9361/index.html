@@ -2668,8 +2668,8 @@ NOT-APPLICABLE if GPIO_DISABLE is set (0x1).</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x100</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x400</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x100</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x400</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn</span></code></td>
 <td class="description bold"><section>
 <p>ADC Interface Control &amp; Status
@@ -2799,8 +2799,8 @@ Though a single control is used, both must be individually selected.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x101</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x404</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x101</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x404</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_STATUSn</span></code></td>
 <td class="description bold"><section>
 <p>ADC Interface Control &amp; Status
@@ -2863,8 +2863,8 @@ this bit before initiating a transfer and monitor afterwards.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x102</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x408</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x102</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x408</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_RAW_DATAn</span></code></td>
 <td class="description bold"><section>
 <p>ADC Raw Data Reading
@@ -2882,8 +2882,8 @@ Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x104</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x410</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x104</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x410</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_1</span></code></td>
 <td class="description bold"><section>
 <p>ADC Interface Control &amp; Status
@@ -2915,8 +2915,8 @@ NOT-APPLICABLE if DCFILTER_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x105</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x414</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x105</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x414</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_2</span></code></td>
 <td class="description bold"><section>
 <p>ADC Interface Control &amp; Status
@@ -2952,8 +2952,8 @@ NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x106</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x418</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x106</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x418</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_3</span></code></td>
 <td class="description bold"><section>
 <p>ADC Interface Control &amp; Status
@@ -2994,8 +2994,8 @@ Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x108</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x420</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x108</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x420</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_USR_CNTRLn_1</span></code></td>
 <td class="description bold"><section>
 <p>ADC Interface Control &amp; Status
@@ -3060,8 +3060,8 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x109</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x424</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x109</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x424</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_USR_CNTRLn_2</span></code></td>
 <td class="description bold"><section>
 <p>ADC Interface Control &amp; Status
@@ -3093,8 +3093,8 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10a</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x428</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10a</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x428</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_4</span></code></td>
 <td class="description bold"><section>
 <p>ADC Interface Control &amp; Status
@@ -3787,8 +3787,8 @@ NOT-APPLICABLE if GPIO_DISABLE is set (0x1).</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x100</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x400</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x100</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x400</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_1</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -3822,8 +3822,8 @@ over-range. The final output is (tone_1_fullscale * scale_1) +
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x101</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x404</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x101</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x404</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_2</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -3858,8 +3858,8 @@ if DDS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x102</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x408</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x102</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x408</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_3</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -3882,8 +3882,8 @@ NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x103</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40c</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x103</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40c</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_4</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -3920,8 +3920,8 @@ set (0x1).</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x104</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x410</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x104</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x410</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_5</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -3949,8 +3949,8 @@ Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x105</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x414</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x105</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x414</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_6</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -3991,8 +3991,8 @@ If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x106</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x418</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x106</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x418</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_7</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -4024,8 +4024,8 @@ Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x107</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x41c</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x107</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x41c</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_8</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -4059,8 +4059,8 @@ NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x108</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x420</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x108</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x420</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">USR_CNTRLn_3</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -4125,8 +4125,8 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x109</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x424</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x109</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x424</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">USR_CNTRLn_4</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -4158,8 +4158,8 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10a</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x428</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10a</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x428</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">USR_CNTRLn_5</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -4189,8 +4189,8 @@ is enabled.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10b</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x42c</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10b</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x42c</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_9</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
@@ -4226,8 +4226,8 @@ NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10c</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x430</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10c</span> <span class="pre">+</span> <span class="pre">0x10*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x430</span> <span class="pre">+</span> <span class="pre">0x40*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_10</span></code></td>
 <td class="description bold"><section>
 <p>DAC Channel Control &amp; Status (channel - 0)
