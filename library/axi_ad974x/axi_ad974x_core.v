@@ -88,7 +88,7 @@ module axi_ad974x_core #(
   // defaults
 
   assign dac_rst       = dac_rst_s;
-  assign dac_data      = dac_data_channel_0;
+(* MARK_DEBUG = "TRUE" *)  assign dac_data      = dac_data_channel_0;
 
   // processor read interface
 

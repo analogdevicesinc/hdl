@@ -60,7 +60,8 @@ module system_top (
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
 
-  inout   [31:0]  gpio_bd,
+  inout    [4:0]  gpio_bd_b,
+  inout   [25:0]  gpio_bd_a,
 
   output          hdmi_out_clk,
   output          hdmi_vsync,
@@ -85,6 +86,7 @@ module system_top (
   
   // adf4351 interface
   
+  output  reg     led,
   output          adf4351_csn,
   output          adf4351_clk,
   output          adf4351_mosi,
@@ -116,6 +118,24 @@ module system_top (
   assign gpio_i[63:32] = 32'b0;
   assign adf4351_ce = 1'b1;
 
+
+
+
+  reg [25:0] counter;
+  
+  always @(posedge ad9740_clk) begin
+    if (counter == 26'd49999999) begin
+      counter <= 26'd0;
+      led <= ~led;
+    end else begin
+      counter <= counter + 1'b1;
+    end
+  end 
+
+
+
+
+
   IBUFDS i_ad9740_clk_ibuf_ds (
     .I (ad9740_clk_p),
     .IB (ad9740_clk_n),
@@ -126,12 +146,20 @@ module system_top (
     .O (ad9740_clk));
 
   ad_iobuf #(
-    .DATA_WIDTH(32)
-  ) i_iobuf (
-    .dio_t(gpio_t[31:0]),
-    .dio_i(gpio_o[31:0]),
-    .dio_o(gpio_i[31:0]),
-    .dio_p(gpio_bd));
+    .DATA_WIDTH(5)
+  ) i_iobufb (
+    .dio_t(gpio_t[31:27]),
+    .dio_i(gpio_o[31:27]),
+    .dio_o(gpio_i[31:27]),
+    .dio_p(gpio_bd_b));
+    
+  ad_iobuf #(
+    .DATA_WIDTH(26)
+  ) i_iobufa (
+    .dio_t(gpio_t[25:0]),
+    .dio_i(gpio_o[25:0]),
+    .dio_o(gpio_i[25:0]),
+    .dio_p(gpio_bd_a));    
 
   ad_iobuf #(
     .DATA_WIDTH(2)
