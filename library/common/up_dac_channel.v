@@ -90,14 +90,14 @@ module up_dac_channel #(
 
   input           up_rstn,
   input           up_clk,
-  input           up_wreq,
-  input   [13:0]  up_waddr,
-  input   [31:0]  up_wdata,
-  output          up_wack,
-  input           up_rreq,
-  input   [13:0]  up_raddr,
-  output  [31:0]  up_rdata,
-  output          up_rack
+(* MARK_DEBUG = "TRUE" *)  input           up_wreq,
+(* MARK_DEBUG = "TRUE" *)  input   [13:0]  up_waddr,
+(* MARK_DEBUG = "TRUE" *)  input   [31:0]  up_wdata,
+(* MARK_DEBUG = "TRUE" *)  output          up_wack,
+(* MARK_DEBUG = "TRUE" *)  input           up_rreq,
+(* MARK_DEBUG = "TRUE" *)  input   [13:0]  up_raddr,
+(* MARK_DEBUG = "TRUE" *)  output  [31:0]  up_rdata,
+(* MARK_DEBUG = "TRUE" *)  output          up_rack
 );
 
   // internal registers

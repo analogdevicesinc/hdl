@@ -31,31 +31,34 @@ set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS33} [get_ports adf4351_ce]
 
 # clocks
 create_clock -period 4.761 -name ad9740_clk [get_ports ad9740_clk_p]
-set_input_delay -clock [get_clocks ad9740_clk] 5 [get_ports ad9740_clk_p]
+set_input_delay -clock [get_clocks ad9740_clk] 5.000 [get_ports ad9740_clk_p]
+
+
+# REMOVE THIS LINE - Don't set input_delay on clock ports:
+# set_input_delay -clock [get_clocks ad9740_clk] 5.000 [get_ports ad9740_clk_p]
+
+# ADD: Output delay constraints for data pins
+# AD9740 datasheet specs: tDS (setup) = 1.5ns, tDH (hold) = 0.5ns
+
+##  set_output_delay -clock ad9740_clk -max 1.5 [get_ports ad9740_data[*]]
+##  set_output_delay -clock ad9740_clk -min -0.5 [get_ports ad9740_data[*]]
+
+# Optional: If you want to model clock output delay
+##  set_output_delay -clock ad9740_clk -max 1.5 [get_ports ad9740_clk_p]
+##  set_output_delay -clock ad9740_clk -min -0.5 [get_ports ad9740_clk_p]
+
+
+
+
+
 
 # Reconfigure the pins from Bank 34 and Bank 35 to use LVCMOS33 since VADJ must be set to 3.3V
 
 # otg
-set_property IOSTANDARD LVCMOS33 [get_ports otg_vbusoc]
 
 # gpio (switches, leds and such)
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[0]]       ; ## BTNC
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[1]]       ; ## BTND
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[2]]       ; ## BTNL
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[3]]       ; ## BTNR
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[4]]       ; ## BTNU
 
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[11]]      ; ## SW0
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[12]]      ; ## SW1
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[13]]      ; ## SW2
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[14]]      ; ## SW3
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[15]]      ; ## SW4
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[16]]      ; ## SW5
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[17]]      ; ## SW6
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[18]]      ; ## SW7
 
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[27]]      ; ## XADC-GIO0
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[28]]      ; ## XADC-GIO1
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[29]]      ; ## XADC-GIO2
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[30]]      ; ## XADC-GIO3
-set_property IOSTANDARD LVCMOS33 [get_ports gpio_bd[31]]      ; ## OTG-RESETN
+
+
+

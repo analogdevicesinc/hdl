@@ -57,16 +57,16 @@ module ad_dds #(
   // interface
 
   input                               clk,
-  input                               dac_dds_format,
-  input                               dac_data_sync,
-  input                               dac_valid,
-  input       [                15:0]  tone_1_scale,
-  input       [                15:0]  tone_2_scale,
-  input       [        PHASE_DW-1:0]  tone_1_init_offset,
-  input       [        PHASE_DW-1:0]  tone_2_init_offset,
-  input       [        PHASE_DW-1:0]  tone_1_freq_word,
-  input       [        PHASE_DW-1:0]  tone_2_freq_word,
-  output  reg [DDS_DW*CLK_RATIO-1:0]  dac_dds_data
+  (* MARK_DEBUG = "TRUE" *) input                               dac_dds_format,
+  (* MARK_DEBUG = "TRUE" *) input                               dac_data_sync,
+  (* MARK_DEBUG = "TRUE" *) input                               dac_valid,
+  (* MARK_DEBUG = "TRUE" *) input       [                15:0]  tone_1_scale,
+  (* MARK_DEBUG = "TRUE" *) input       [                15:0]  tone_2_scale,
+  (* MARK_DEBUG = "TRUE" *) input       [        PHASE_DW-1:0]  tone_1_init_offset,
+  (* MARK_DEBUG = "TRUE" *) input       [        PHASE_DW-1:0]  tone_2_init_offset,
+  (* MARK_DEBUG = "TRUE" *) input       [        PHASE_DW-1:0]  tone_1_freq_word,
+  (* MARK_DEBUG = "TRUE" *) input       [        PHASE_DW-1:0]  tone_2_freq_word,
+  (* MARK_DEBUG = "TRUE" *) output  reg [DDS_DW*CLK_RATIO-1:0]  dac_dds_data
 );
 
   wire [DDS_DW*CLK_RATIO-1:0] dac_dds_data_s;
