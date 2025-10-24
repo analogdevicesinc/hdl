@@ -8,7 +8,7 @@
   - [EVAL-AD7607](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7607.html)
   - [EVAL-AD7608](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7608.html)
   - [EVAL-AD7609](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7609.html)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad7606x-fmcz
+- System documentation: TO BE ADDED
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad7606x_fmc/index.html
 - Evaluation board VADJ range: 1.2V - 3.3V
 
