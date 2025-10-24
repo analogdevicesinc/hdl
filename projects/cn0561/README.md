@@ -1,7 +1,7 @@
 # CN0561 HDL Project
 
-- Evaluation board product page: TO BE ADDED
-- System documentation: TO BE ADDED
+- Evaluation board product page: [EVAL-CN0561](https://www.analog.com/en/resources/reference-designs/circuits-from-the-lab/cn0561)
+- System documentation: https://wiki.analog.com/resources/eval/user-guides/cn0561
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/cn0561/index.html
 - Evaluation board VADJ for FMC connector: 1.8V
 - Evaluation board VIO for ARDUINO connector: 3.3V

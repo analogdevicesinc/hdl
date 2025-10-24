@@ -1,7 +1,7 @@
 # ARRADIO HDL Project
 
 - Evaluation board product page: [ARRADIO](https://www.terasic.com.tw/cgi-bin/page/archive.pl?No=946)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/arradio/quickstart/alterasockit
+- System documentation: https://wiki.analog.com/resources/eval/user-guides/arradio
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/arradio/index.html
 - Evaluation board for VADJ: 2.5V
 
