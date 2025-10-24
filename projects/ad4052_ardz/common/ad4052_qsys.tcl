@@ -58,7 +58,7 @@ set_connection_parameter_value spi_clk_pll.reconfig_to_pll/spi_clk_pll_reconfig.
 set_connection_parameter_value spi_clk_pll.reconfig_to_pll/spi_clk_pll_reconfig.reconfig_to_pll width {0}
 
 # spi engine
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_intel.tcl
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_gen.tcl
 
 set spi_engine_hier spi_ad4052
 
