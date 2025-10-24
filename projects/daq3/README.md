@@ -1,7 +1,7 @@
 # DAQ3 HDL Project
 
 - Evaluation board product page: [EVAL-FMCDAQ3-EBZ](https://www.analog.com/eval-fmcdaq3-ebz)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq3-ebz/quickstart
+- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq3-ebz
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/daq3/index.html
 - Evaluation board VADJ range: 1.2V - 3.3V
 

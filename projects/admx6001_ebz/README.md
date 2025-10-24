@@ -1,7 +1,7 @@
 # ADMX6001-EBZ HDL Project
 
 - Evaluation board product page: [EVAL-ADMX6001-EBZ](https://www.analog.com/eval-admx6001-ebz)
-- System documentation: TO BE ADDED
+- System documentation: https://wiki.analog.com/resources/eval/user-guides/admx/admx6001resources/eval/user-guides/admx/admx6001_analog_devices_wiki
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/admx6001_ebz/index.html
 - Evaluation board VADJ: 1.8V
 

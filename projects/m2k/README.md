@@ -1,7 +1,7 @@
 # M2K HDL Project
 
 - Board product page: [ADALM2000](https://www.analog.com/adalm2000)
-- System documentation: https://wiki.analog.com/university/tools/m2k/users/quick_start
+- System documentation: https://analogdevicesinc.github.io/documentation/tools/m2k/index.html
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/m2k/index.html
 - VIO range can be found here: [M2K](https://wiki.analog.com/university/tools/m2k/devs/intro)
 
