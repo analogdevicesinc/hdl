@@ -12,7 +12,6 @@ ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
-set sys_cstring "TWOLANES=$ad_project_params(TWOLANES) \
-ADC_RES=$ad_project_params(ADC_RES)"
+set sys_cstring "TWOLANES=$ad_project_params(TWOLANES)"
 
 sysid_gen_sys_init_file $sys_cstring
