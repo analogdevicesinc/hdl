@@ -140,7 +140,8 @@ module system_top (
     .I (ad9740_clk_p),
     .IB (ad9740_clk_n),
     .O (ad9740_clk_ds));
- 
+
+  // Use BUFG for global clock distribution
   BUFG i_ad9740_clk_ibuf (
     .I (ad9740_clk_ds),
     .O (ad9740_clk));
