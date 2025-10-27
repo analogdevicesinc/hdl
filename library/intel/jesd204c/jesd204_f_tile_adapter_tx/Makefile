@@ -7,7 +7,7 @@
 LIBRARY_NAME := jesd204_f_tile_adapter_tx
 
 INTEL_DEPS += ../../../util_cdc/sync_bits.v
-INTEL_DEPS += gearbox_66b64b.v
+INTEL_DEPS += ../../../jesd204/jesd204_common/gearbox_66b64b.v
 INTEL_DEPS += jesd204_f_tile_adapter_tx.v
 INTEL_DEPS += jesd204_f_tile_adapter_tx_constr.sdc
 
