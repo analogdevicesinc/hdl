@@ -10,7 +10,6 @@ GENERIC_DEPS += ../common/up_axi.v
 GENERIC_DEPS += axi_clock_monitor.v
 
 XILINX_DEPS += ../common/up_clock_mon.v
-XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
 XILINX_DEPS += axi_clock_monitor_ip.tcl
 
 INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc

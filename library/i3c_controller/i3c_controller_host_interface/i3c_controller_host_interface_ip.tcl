@@ -14,7 +14,6 @@ adi_ip_files i3c_controller_host_interface [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/ad_mem_dual.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "i3c_controller_host_interface_constr.ttcl" \
   "i3c_controller_host_interface.v" \
   "i3c_controller_regmap.v" \
   "i3c_controller_regmap.vh" \
@@ -25,7 +24,6 @@ adi_ip_files i3c_controller_host_interface [list \
 ]
 
 adi_ip_properties i3c_controller_host_interface
-adi_ip_ttcl i3c_controller_host_interface "i3c_controller_host_interface_constr.ttcl"
 
 adi_ip_add_core_dependencies [list \
   analog.com:$VIVADO_IP_LIBRARY:util_axis_fifo:1.0 \

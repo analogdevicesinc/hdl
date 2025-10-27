@@ -24,9 +24,6 @@ GENERIC_DEPS += axi_ad9467_pnmon.v
 XILINX_DEPS += ../xilinx/common/ad_data_clk.v
 XILINX_DEPS += ../xilinx/common/ad_data_in.v
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += axi_ad9467_ip.tcl
 
 include ../scripts/library.mk

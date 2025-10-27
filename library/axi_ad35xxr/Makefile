@@ -27,9 +27,6 @@ GENERIC_DEPS += axi_ad35xxr_if.v
 
 XILINX_DEPS += ../xilinx/common/ad_mul.v
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += axi_ad35xxr_ip.tcl
 
 include ../scripts/library.mk

@@ -42,6 +42,7 @@ adi_ip_files axi_dmac [list \
   "splitter.v" \
   "response_generator.v" \
   "axi_dmac.v" \
+  "axi_dmac_constr.xdc" \
   "axi_dmac_pkg_sv.ttcl" \
   "bd/bd.tcl" ]
 

@@ -23,10 +23,7 @@ adi_ip_files axi_ad408x [list \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "ad408x_phy.v" \
   "axi_ad408x.v" ]
 

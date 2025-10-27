@@ -11,7 +11,6 @@ GENERIC_DEPS += jesd204_up_sysref.v
 GENERIC_DEPS += ../../common/ad_rst.v
 
 XILINX_DEPS += ../../common/up_clock_mon.v
-XILINX_DEPS += ../../xilinx/common/up_clock_mon_constr.xdc
 XILINX_DEPS += axi_jesd204_common_ip.tcl
 XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc
 

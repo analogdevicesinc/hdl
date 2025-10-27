@@ -14,13 +14,11 @@ adi_ip_files axi_pwm_gen [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "axi_pwm_gen_constr.ttcl" \
   "axi_pwm_gen_regmap.sv" \
   "axi_pwm_gen_1.v" \
   "axi_pwm_gen.sv"]
 
 adi_ip_properties axi_pwm_gen
-adi_ip_ttcl axi_pwm_gen "axi_pwm_gen_constr.ttcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen} [ipx::current_core]
 

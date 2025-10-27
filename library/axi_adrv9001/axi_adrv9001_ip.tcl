@@ -39,10 +39,7 @@ adi_ip_files axi_adrv9001 [list \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_pngen.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "$ad_hdl_dir/library/util_cdc/sync_event.v" \
   "adrv9001_rx.v" \
@@ -60,8 +57,6 @@ adi_ip_files axi_adrv9001 [list \
   "axi_adrv9001_core.v" \
   "axi_adrv9001_sync.v" \
   "axi_adrv9001_sync_ctrl.v" \
-  "axi_adrv9001_constr.xdc" \
-  "axi_adrv9001_constr.ttcl" \
   "axi_adrv9001_tdd.v" \
   "axi_adrv9001.v" ]
 

@@ -23,9 +23,6 @@ GENERIC_DEPS += axi_ad9625_if.v
 GENERIC_DEPS += axi_ad9625_pnmon.v
 
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += axi_ad9625_ip.tcl
 
 include ../scripts/library.mk

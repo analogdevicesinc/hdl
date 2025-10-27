@@ -23,11 +23,8 @@ adi_ip_files axi_ad7616 [list \
     "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
     "$ad_hdl_dir/library/common/up_adc_channel.v" \
     "$ad_hdl_dir/library/common/up_adc_common.v" \
-    "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
     "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-    "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-    "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
-    "axi_ad7616_pif.v" \
+      "axi_ad7616_pif.v" \
     "axi_ad7616.v" ]
 
 adi_ip_properties axi_ad7616

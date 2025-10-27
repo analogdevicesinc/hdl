@@ -20,7 +20,6 @@ adi_ip_files axi_i2s_adi [list \
   "i2s_clkgen.vhd" \
   "fifo_synchronizer.vhd" \
   "axi_i2s_adi.vhd" \
-  "axi_i2s_adi_constr.xdc" \
 ]
 
 adi_ip_properties axi_i2s_adi
@@ -152,7 +151,7 @@ set_property -dict [list \
 	"value_validation_range_maximum" "1" \
  ] \
  [ipx::get_user_parameters HAS_RX -of_objects $cc]
- 
+
 set_property -dict [list \
 	"value_validation_type" "range_long" \
 	"value_validation_range_minimum" "0" \

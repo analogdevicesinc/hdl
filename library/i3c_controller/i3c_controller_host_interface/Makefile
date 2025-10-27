@@ -18,7 +18,6 @@ GENERIC_DEPS += i3c_controller_unpack.v
 GENERIC_DEPS += i3c_controller_write_ibi.v
 
 XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc
-XILINX_DEPS += i3c_controller_host_interface_constr.ttcl
 XILINX_DEPS += i3c_controller_host_interface_ip.tcl
 
 XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_cmdp.xml

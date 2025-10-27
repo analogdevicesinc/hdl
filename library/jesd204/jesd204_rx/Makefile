@@ -22,7 +22,6 @@ GENERIC_DEPS += error_monitor.v
 
 XILINX_DEPS += bd/bd.tcl
 XILINX_DEPS += error_monitor.v
-XILINX_DEPS += jesd204_rx_constr.ttcl
 XILINX_DEPS += jesd204_rx_ctrl_64b.v
 XILINX_DEPS += jesd204_rx_header.v
 XILINX_DEPS += jesd204_rx_ip.tcl

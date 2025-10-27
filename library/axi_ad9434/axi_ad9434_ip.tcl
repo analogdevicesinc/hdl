@@ -22,10 +22,7 @@ adi_ip_files axi_ad9434 [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "axi_ad9434_if.v" \
   "axi_ad9434_pnmon.v" \
   "axi_ad9434_core.v" \
