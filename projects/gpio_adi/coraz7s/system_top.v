@@ -71,7 +71,7 @@ module system_top (
 
 );
 
-  // Internal GPIO signals connected to system_wrapper
+  // Internal GPIO
   (* MARK_DEBUG = "TRUE" *) wire [31:0] gpio_i;
   (* MARK_DEBUG = "TRUE" *) wire [31:0] gpio_o;
   (* MARK_DEBUG = "TRUE" *) wire [31:0] gpio_t;
