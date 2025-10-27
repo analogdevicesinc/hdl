@@ -47,20 +47,20 @@ module axi_ad974x_channel #(
   // dac interface
 
   input                   dac_clk,
-(* MARK_DEBUG = "TRUE" *)  input                   dac_rst,
-  output       [13:0]     dac_data,
+  input                   dac_rst,
+  (* IOB = "TRUE" *) output reg   [13:0]     dac_data,
 
   // input sources
 
   input        [15:0]     dma_data,
   input                   dma_valid,
   output reg              dma_ready,
-  
+
   // processor interface
-  
+
   input                   dac_data_sync,
   input                   dac_dfmt_type,
-    
+
   // bus interface
 
   input                   up_rstn,
@@ -77,7 +77,7 @@ module axi_ad974x_channel #(
 
   // internal signals
 
-(* MARK_DEBUG = "TRUE" *)  wire    [ 3:0]   dac_data_sel_s;
+  wire    [ 3:0]   dac_data_sel_s;
   wire    [13:0]   dac_dds_data_s;
   wire    [15:0]   dac_dds_scale_1_s;
   wire    [15:0]   dac_dds_init_1_s;
@@ -87,14 +87,16 @@ module axi_ad974x_channel #(
   wire    [15:0]   dac_dds_incr_2_s;
   wire    [15:0]   dac_pat_data_1_s;
   wire    [15:0]   dac_pat_data_2_s;
- 
-  reg     [13:0]   dma_pattern;   
- (* MARK_DEBUG = "TRUE" *) reg     [13:0]   ramp_pattern;
+
+  reg     [13:0]   dma_pattern;
+  reg     [13:0]   ramp_pattern;
 
   reg     [13:0]   dac_data_int;
   reg              dds_ready;
-  
-  assign dac_data       = dac_data_int;
+
+  always @(posedge dac_clk) begin
+    dac_data <= dac_data_int;
+  end
 
   always @ (*) begin
     dma_ready <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
@@ -129,12 +131,12 @@ module axi_ad974x_channel #(
   end
 
   // dma data
-  
+
   always @(posedge dac_clk) begin
     if (dma_valid == 1'b0 || dac_rst == 1'b1) begin
       dma_pattern <= 14'h0;
     end else begin
-      dma_pattern[13:0] <= dma_data[13:0]; 
+      dma_pattern[13:0] <= dma_data[13:0];
     end
   end
 
