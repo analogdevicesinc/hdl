@@ -16,7 +16,7 @@ ad_ip_parameter ad974x_dma CONFIG.DMA_TYPE_DEST 2
 ad_ip_parameter ad974x_dma CONFIG.CYCLIC 1
 ad_ip_parameter ad974x_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter ad974x_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter ad974x_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+ad_ip_parameter ad974x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter ad974x_dma CONFIG.DMA_DATA_WIDTH_DEST 16
 
 # ad974x
