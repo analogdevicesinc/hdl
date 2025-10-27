@@ -35,11 +35,11 @@
 `timescale 1ns / 1ps
 
 module axi_gpio_adi (
-  (* MARK_DEBUG = "TRUE" *) output reg irq,
+  (* MARK_DEBUG = "TRUE" *) output reg irq = 1'b0,
 
   // AXI interface
   input               s_axi_aclk,
-  (* MARK_DEBUG = "TRUE" *) input               s_axi_aresetn,
+  input               s_axi_aresetn,
   input               s_axi_awvalid,
   input      [15:0]   s_axi_awaddr,
   input      [2:0]    s_axi_awprot,
@@ -69,18 +69,17 @@ module axi_gpio_adi (
 
   // Internal Registers
 
-  reg        [31:0] gpio_out_reg;
-  reg        [31:0] gpio_dir_reg;  // 1 = output, 0 = input
+  reg        [31:0] gpio_out_reg = 'h0;
+  reg        [31:0] gpio_dir_reg = 'h0;  // 1 = output, 0 = input
   reg        [31:0] up_rdata;
-  reg        up_rack;
-  reg        up_wack;
-  reg               up_resetn;
-
-   (* MARK_DEBUG = "TRUE" *) wire       [31:0] up_irq_pending;
-   (* MARK_DEBUG = "TRUE" *) wire       [31:0] up_irq_trigger;
-   (* MARK_DEBUG = "TRUE" *) wire       [31:0] up_irq_source_clear;
-   (* MARK_DEBUG = "TRUE" *) reg        [31:0] up_irq_mask;
-   (* MARK_DEBUG = "TRUE" *) reg        [31:0] up_irq_source;
+  reg        up_rack = 'h0;
+  reg        up_wack = 'h0;
+  (* MARK_DEBUG = "TRUE" *) reg               up_resetn = 'h0;
+  (* MARK_DEBUG = "TRUE" *) reg        [31:0] up_irq_mask = 'h0;
+  (* MARK_DEBUG = "TRUE" *) reg        [31:0] up_irq_source = 'h0;
+  reg [31:0] gpio_in_d1 = 'h0;
+  reg [31:0] irq_source_d1 = 'h0;
+  reg        gpio_out_state = 'h0;
 
 
   // Wire AXI-to-up bus interface
@@ -91,6 +90,11 @@ module axi_gpio_adi (
   wire [31:0]       up_wdata_s;
   wire              up_rreq_s;
   wire [7:0]        up_raddr_s;
+  wire [31:0] gpio_in = gpio_io_i;
+  (* MARK_DEBUG = "TRUE" *) wire       [31:0] up_irq_pending;
+  (* MARK_DEBUG = "TRUE" *) wire       [31:0] up_irq_trigger;
+  (* MARK_DEBUG = "TRUE" *) wire       [31:0] up_irq_source_clear;
+  wire [31:0] gpio_edge_detect;
 
   assign gpio_io_o = gpio_out_reg;
   assign gpio_io_t = ~gpio_dir_reg;
@@ -187,20 +191,23 @@ module axi_gpio_adi (
 
 
   // IRQ generation
-
-  wire [31:0] button_input = gpio_io_i;
-  reg button_d1;
-
-  always @(posedge up_clk) begin
-    if (up_resetn == 1'b0) begin
-      button_d1 <= 1'b0;
-    end else begin
-      button_d1 <= button_input;
+  // Detect rising edges on GPIO inputs using generate
+  genvar i;
+  generate
+    for (i = 0; i < 32; i = i + 1) begin : gpio_edge_reg
+      always @(posedge up_clk) begin
+        if (up_resetn == 1'b0)
+          gpio_in_d1[i] <= 1'b0;
+        else
+          gpio_in_d1[i] <= gpio_in[i];
+      end
     end
-  end
-  wire led_blink = (button_input & (~button_d1));
+  endgenerate
 
-  assign up_irq_trigger = {31'b0, led_blink};
+  assign gpio_edge_detect = (gpio_in  & (~gpio_in_d1));
+
+  // IRQ trigger logic
+  assign up_irq_trigger = gpio_edge_detect;
   assign up_irq_source_clear = ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h11)) ? up_wdata_s : 32'd0;
   assign up_irq_pending = (~up_irq_mask) & up_irq_source;
 
@@ -212,6 +219,18 @@ module axi_gpio_adi (
     end
   end
 
+  // reg irq_pending_d = 1'b0;
+
+  // always @(posedge up_clk) begin
+  //   if (up_resetn == 1'b0) begin
+  //     irq_pending_d <= 1'b0;
+  //     irq           <= 1'b0;
+  //   end else begin
+  //     irq_pending_d <= |up_irq_pending;
+  //     irq           <= (|up_irq_pending) & (~irq_pending_d); // pulse 1 clk
+  //   end
+  // end
+
   always @(posedge up_clk) begin
     if (up_resetn == 1'b0) begin
       up_irq_source <= 32'b0;
@@ -222,17 +241,14 @@ module axi_gpio_adi (
 
   // LED toggle based on IRQ[2]
 
-  reg [31:0] irq_source_d1;
-  reg        led_state;
-
   always @(posedge up_clk) begin
     if (up_resetn == 1'b0) begin
       irq_source_d1 <= 32'b0;
-      led_state     <= 1'b0;
+      gpio_out_state    <= 1'b0;
     end else begin
       irq_source_d1 <= up_irq_source;
       if ((up_irq_source[2] == 1'b1) && (irq_source_d1[2] == 1'b0))
-        led_state <= ~led_state;
+        gpio_out_state <= ~gpio_out_state;
   end
 end
 
