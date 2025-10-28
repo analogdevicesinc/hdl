@@ -80,7 +80,7 @@ module axi_ad974x_core #(
   wire        up_rack_s;
   wire        up_wack_s;
 
-  wire [15:0] dac_data_channel_0;
+  wire [13:0] dac_data_channel_0;
   wire        dac_rst_s;
   wire        dac_data_sync;
   wire        dac_dfmt_type;
@@ -88,7 +88,7 @@ module axi_ad974x_core #(
   // defaults
 
   assign dac_rst       = dac_rst_s;
-(* MARK_DEBUG = "TRUE" *)  assign dac_data      = dac_data_channel_0;
+  assign dac_data      = dac_data_channel_0;
 
   // processor read interface
 

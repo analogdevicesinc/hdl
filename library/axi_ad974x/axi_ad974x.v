@@ -89,7 +89,7 @@ module axi_ad974x #(
 
   // internal data signals
 
-  wire [13:0] dac_data_s;
+  wire [15:0] dac_data_s;
 
   // internal signals
 
