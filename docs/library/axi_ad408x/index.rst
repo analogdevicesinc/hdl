@@ -54,6 +54,10 @@ Configuration Parameters
      - Core ID should be unique for each IP in the system
    * - FPGA_TECHNOLOGY
      - Used to select between FPGA devices, auto set in project.
+   * - ADC_N_BITS
+     - ADC resolution (default: 20). Supported values: 20 (AD4080), 16 (AD4083), 14 (AD4086)
+   * - DDR_OR_SDR_N
+     - Interface type (default: 1). 1 = DDR mode, 0 = SDR mode
 
 Interface
 --------------------------------------------------------------------------------
@@ -210,10 +214,18 @@ Software Guidelines
    * - FILTER_ENABLE
      - 0x4C (ADC Common)
      - 0
-     - Setting this bit configures the sample capture to occur at each falling
-       edge of the Filter Result Ready pin of the AD4080, as opposed to
-       continuous mode when the digital filter feature is disabled.
-   * - SYNC_STATUS *
+     - Controls the filter status.
+   * - SELF_SYNC
+     - 0x4C (ADC Common)
+     - 1
+     - Controls if the data capture synchronization is done through CNV signal or bit-slip.
+   * - DEVICE_CODE
+     - 0x4C (ADC Common)
+     - [3:2]
+     - Resolution selection code for the LVDS DATA deserialization
+       (00: AD4080/20-bit, 01: AD4083/16-bit, 10: AD4086/14-bit).
+       When you use an IP parameter ADC_N_BITS<=16 the 20-bit mode is not available.
+   * - SYNC_STATUS
      - 0x68 (ADC Common)
      - 0
      - This bit indicates whether the sample's MSB alignment has been correctly

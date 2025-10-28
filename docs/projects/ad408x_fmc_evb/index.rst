@@ -186,10 +186,37 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
+Example of running the ``make`` command without parameters (using the default
+configuration (ADC_N_BITS=20, DDR_OR_SDR_N=1)):
+
 .. shell::
 
    $cd hdl/projects/ad408x_fmc_evb/zed
    $make
+
+Example of running the ``make`` command with parameters:
+
+.. shell::
+
+   $cd hdl/projects/ad408x_fmc_evb/zed
+   $make ADC_N_BITS=16 DDR_OR_SDR_N=1
+
+The following table contains the parameters that can be used to configure this
+project:
+
+.. collapsible:: Default values of the make parameters for AD408X-FMC-EVB
+
+   +----------------+-------------------------------------------------------------+
+   | Parameter      | Description                                                 |
+   +================+=============================================================+
+   | ADC_N_BITS     | ADC resolution (default: 20)                                |
+   |                |                                                             |
+   |                | - 20: for AD4080                                            |
+   |                | - 16: for AD4083                                            |
+   |                | - 14: for AD4086                                            |
+   +----------------+-------------------------------------------------------------+
+   | DDR_OR_SDR_N   | Interface type (1=DDR, 0=SDR, default: 1)                   |
+   +----------------+-------------------------------------------------------------+
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 

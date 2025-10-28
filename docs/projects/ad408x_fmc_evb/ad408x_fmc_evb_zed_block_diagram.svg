@@ -7,7 +7,7 @@
    viewBox="0 0 160.82281 132.78648"
    version="1.1"
    id="svg29591"
-   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
    sodipodi:docname="ad408x_fmc_evb_zed_block_diagram.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -23,17 +23,25 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.0469406"
-     inkscape:cx="418.83943"
-     inkscape:cy="197.24137"
+     inkscape:zoom="2.9611952"
+     inkscape:cx="224.40263"
+     inkscape:cy="350.19644"
      inkscape:window-width="1920"
-     inkscape:window-height="990"
-     inkscape:window-x="0"
-     inkscape:window-y="28"
+     inkscape:window-height="1112"
+     inkscape:window-x="1456"
+     inkscape:window-y="1342"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs29588">
+    <rect
+       x="152.64107"
+       y="344.79321"
+       width="66.527192"
+       height="21.275193"
+       id="rect1" />
     <marker
        inkscape:stockid="TriangleInM"
        orient="auto"
@@ -1444,8 +1452,8 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.43958px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.269;stroke-miterlimit:4;stroke-dasharray:none;shape-rendering:crispEdges;enable-background:new"
-       x="92.421837"
-       y="111.93877"
+       x="90.575462"
+       y="111.75716"
        id="text2401-61-1-54-8-3"
        transform="scale(1.0162353,0.98402408)"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
@@ -1453,9 +1461,9 @@
        inkscape:export-ydpi="224.36"><tspan
          sodipodi:role="line"
          id="tspan2399-9-2-70-3-9"
-         x="92.421837"
-         y="111.93877"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.43958px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.269;stroke-miterlimit:4;stroke-dasharray:none">32</tspan></text>
+         x="90.575462"
+         y="111.75716"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.43958px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.269;stroke-miterlimit:4;stroke-dasharray:none">32/16</tspan></text>
     <rect
        style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
        id="rect19131"
@@ -1488,10 +1496,10 @@
        xml:space="preserve"
        transform="matrix(0.1434475,0,0,0.13069708,67.337038,44.068862)"
        id="text4758"
-       style="font-size:14px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect4760);stroke-width:1.93234"><tspan
+       style="font-size:14px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect4760);display:inline;stroke-width:1.93234"><tspan
          x="505.75977"
          y="453.41916"
-         id="tspan1523">ad_serdes_in</tspan></text>
+         id="tspan4">ad_serdes_in</tspan></text>
     <rect
        style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
        id="rect958-2"
@@ -1503,10 +1511,10 @@
        xml:space="preserve"
        transform="matrix(0.1434475,0,0,0.13069708,49.127482,44.136482)"
        id="text4758-5"
-       style="font-size:14px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect4760-6);stroke-width:1.93234"><tspan
+       style="font-size:14px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect4760-6);display:inline;stroke-width:1.93234"><tspan
          x="505.75977"
          y="453.41916"
-         id="tspan1525">ad_pack</tspan></text>
+         id="tspan5">ad_pack</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.20337px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
@@ -1523,10 +1531,10 @@
        xml:space="preserve"
        transform="matrix(0.13201657,0,0,0.13069708,78.342228,59.439291)"
        id="text24668"
-       style="font-size:16px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect24670);stroke-width:2.01426"><tspan
+       style="font-size:16px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect24670);display:inline;stroke-width:2.01426"><tspan
          x="298.9668"
          y="484.35348"
-         id="tspan1527">ADC COMMON</tspan></text>
+         id="tspan6">ADC COMMON</tspan></text>
     <rect
        style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
        id="rect958-1-1"
@@ -1538,10 +1546,10 @@
        xml:space="preserve"
        transform="matrix(0.13201657,0,0,0.13069708,99.100946,59.314451)"
        id="text24668-1"
-       style="font-size:16px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect24670-6);stroke-width:2.01426"><tspan
+       style="font-size:16px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect24670-6);display:inline;stroke-width:2.01426"><tspan
          x="298.9668"
          y="484.35348"
-         id="tspan1529">ADC CHANNEL</tspan></text>
+         id="tspan7">ADC CHANNEL</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.20337px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
@@ -1588,14 +1596,25 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-       x="81.975174"
-       y="154.93251"
+       x="79.92012"
+       y="156.00471"
        id="text41772-4"><tspan
          sodipodi:role="line"
          id="tspan41770-2"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
-         x="81.975174"
-         y="154.93251">REF_CLK= DCO_CLK(400MHz) / 4 </tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.11667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="79.92012"
+         y="156.00471">REF_CLK: DCO_CLK(400MHz) / 4 when DDR_OR_SDR_N=0 </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+       x="79.936821"
+       y="152.31467"
+       id="text41772-4-8"><tspan
+         sodipodi:role="line"
+         id="tspan41770-2-2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.11667px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="79.936821"
+         y="152.31467">REF_CLK: DCO_CLK(400MHz) / 2 when DDR_OR_SDR_N=1 (default) </tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
@@ -1668,5 +1687,27 @@
          sodipodi:role="line"
          id="tspan3592"
          style="stroke-width:0.264583" /></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,45.687375,26.530943)"
+       id="text1"
+       style="text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect1);display:inline;fill:#ffffff;fill-opacity:1" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.01358px;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;fill-opacity:1;stroke-width:0.251131"
+       x="89.098938"
+       y="110.49844"
+       id="text2"
+       transform="scale(0.94915879,1.0535645)"><tspan
+         id="tspan2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.00906px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.251131"
+         x="89.098938"
+         y="110.49844"
+         sodipodi:role="line">32 if ADC_N_BITS=20</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.00906px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.251131"
+         x="89.098938"
+         y="114.26542"
+         sodipodi:role="line"
+         id="tspan3">16 if ADC_N_BITS&lt;=16</tspan></text>
   </g>
 </svg>
