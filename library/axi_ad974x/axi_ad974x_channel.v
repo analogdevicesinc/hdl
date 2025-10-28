@@ -165,7 +165,7 @@ module axi_ad974x_channel #(
     .dac_dds_format (dac_dfmt_type),
     .dac_data_sync (dac_data_sync),
 //    .dac_valid (dds_ready),
-    .dac_valid (|dac_data_sel_s),
+    .dac_valid (~|dac_data_sel_s),
     .tone_1_scale (dac_dds_scale_1_s),
     .tone_2_scale (dac_dds_scale_2_s),
     .tone_1_init_offset (dac_dds_init_1_s),
