@@ -48,7 +48,7 @@ module axi_ad974x_channel #(
 
   input                   dac_clk,
   input                   dac_rst,
-  (* IOB = "TRUE" *) output reg   [13:0]     dac_data,
+  output reg   [13:0]     dac_data,
 
   // input sources
 
@@ -88,11 +88,11 @@ module axi_ad974x_channel #(
   wire    [15:0]   dac_pat_data_1_s;
   wire    [15:0]   dac_pat_data_2_s;
 
-  reg     [13:0]   dma_pattern;
+  reg     [15:0]   dma_pattern;
   reg     [13:0]   ramp_pattern;
 
-  reg     [13:0]   dac_data_int;
-  reg              dds_ready;
+  reg     [13:0]   dac_data_int = 'h0;
+//  reg              dds_ready;
 
   always @(posedge dac_clk) begin
     dac_data <= dac_data_int;
@@ -105,27 +105,27 @@ module axi_ad974x_channel #(
       4'h0 :
       begin
         dac_data_int       = dac_dds_data_s;
-        dds_ready          = 1'b1;
+//        dds_ready          = 1'b1;
       end
       4'h2 :
       begin
         dac_data_int       = dma_pattern;
-        dds_ready          =1'b0;
+//        dds_ready          = 1'b0;
       end
       4'h3 :
       begin
-        dac_data_int       = 14'b0;
-        dds_ready          =1'b0;
+        dac_data_int       = 'b0;
+//        dds_ready          = 1'b0;
       end
       4'hb :
       begin
         dac_data_int       = ramp_pattern;
-        dds_ready          =1'b0;
+//        dds_ready          = 1'b0;
       end
       default :
       begin
-        dac_data_int       = 14'b0;
-        dds_ready          =1'b0;
+        dac_data_int       = 'b0;
+//        dds_ready          = 1'b0;
       end
     endcase
   end
@@ -134,9 +134,9 @@ module axi_ad974x_channel #(
 
   always @(posedge dac_clk) begin
     if (dma_valid == 1'b0 || dac_rst == 1'b1) begin
-      dma_pattern <= 14'h0;
+      dma_pattern <= 'h0;
     end else begin
-      dma_pattern[13:0] <= dma_data[13:0];
+      dma_pattern <= dma_data;
     end
   end
 
@@ -164,7 +164,8 @@ module axi_ad974x_channel #(
     .clk (dac_clk),
     .dac_dds_format (dac_dfmt_type),
     .dac_data_sync (dac_data_sync),
-    .dac_valid (dds_ready),
+//    .dac_valid (dds_ready),
+    .dac_valid (|dac_data_sel_s),
     .tone_1_scale (dac_dds_scale_1_s),
     .tone_2_scale (dac_dds_scale_2_s),
     .tone_1_init_offset (dac_dds_init_1_s),
