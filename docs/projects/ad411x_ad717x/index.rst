@@ -1,6 +1,6 @@
 .. _ad411x_ad717x:
 
-AD411x-AD717x HDL project
+AD411X-AD717X HDL project
 ==================================================================================
 
 Overview
@@ -36,7 +36,7 @@ can select different filter settings depending on the requirements of
 each channel in the application.
 
 This project has a :ref:`spi_engine` instance to control and acquire data from
-the AD411x/AD717x precision ADC. This instance provides support for
+the AD411X/AD717X precision ADC. This instance provides support for
 capturing continuous samples at the maximum sample rate.
 
 Supported boards
@@ -82,7 +82,7 @@ The data path and clock domains are depicted in the below diagram:
 .. image:: ad411x_ad717x_hdl.svg
    :width: 800
    :align: center
-   :alt: AD411x_ad717x block diagram
+   :alt: AD411X_AD717X block diagram
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -221,7 +221,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD411x_AD717x HDL project source code <projects/ad411x_ad717x>`
+- :git-hdl:`AD411X_AD717X HDL project source code <projects/ad411x_ad717x>`
 
 .. list-table::
    :widths: 30 35 35
