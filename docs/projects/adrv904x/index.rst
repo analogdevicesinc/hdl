@@ -1,9 +1,9 @@
 .. _adrv904x:
 
-ADRV904x HDL reference design
+ADRV904X HDL reference design
 ===============================================================================
 
-The ADRV904x is a highly integrated, system on chip (SoC) radio frequency (RF)
+The ADRV904X is a highly integrated, system on chip (SoC) radio frequency (RF)
 agile transceiver with integrated digital front end (DFE). The SoC contains
 eight transmitters, two observation receivers for monitoring transmitter
 channels, eight receivers, integrated LO and clock synthesizers, and digital
@@ -20,7 +20,7 @@ Supported devices
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-ADRV904x`
+- :adi:`EVAL-ADRV904X`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -32,7 +32,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - EVAL-ADRV904x
+   * - EVAL-ADRV904X
      - :xilinx:`ZCU102`
      - FMC HPC0
 
@@ -50,7 +50,7 @@ Example block design for Single link and RX OBS disabled
 .. image:: adrv904x_block_diagram.svg
    :width: 800
    :align: center
-   :alt: ADRV904x JESD204C M=16 L=8 block diagram
+   :alt: ADRV904X JESD204C M=16 L=8 block diagram
 
 .. collapsible:: Click here for details on the block diagram modules
 
@@ -129,7 +129,7 @@ Example block design for Single link and RX OBS in Non-LinkSharing mode
 .. image:: adrv904x_nls_block_diagram.svg
    :width: 800
    :align: center
-   :alt: ADRV904x JESD204C NLS block diagram
+   :alt: ADRV904X JESD204C NLS block diagram
 
 .. collapsible:: Click here for details on the block diagram modules
 
@@ -264,7 +264,7 @@ Clock scheme
 .. image:: adrv904x_zcu102_clocking.svg
    :width: 500
    :align: center
-   :alt: ADRV904x ZCU102 clock scheme
+   :alt: ADRV904X ZCU102 clock scheme
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -307,7 +307,7 @@ SPI connections
      - CS
    * - PS
      - spi0
-     - ADRV904x
+     - ADRV904X
      - 0
    * -
      -
@@ -432,7 +432,7 @@ configure this project, depending on the carrier used.
 Where a cell contains a --- (dash) it means that the parameter doesn't exist
 for that project (adrv904x/carrier or adrv904x/carrier).
 
-.. collapsible:: Default values of the ``make`` parameters for ADRV904x
+.. collapsible:: Default values of the ``make`` parameters for ADRV904X
 
    +-------------------+------------------------------------------------------+
    | Parameter         | Default value of the parameters depending on carrier |
@@ -522,7 +522,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV904x Prototyping Platform User Guide <resources/eval/user-guides/adrv904x>`
+- :dokuwiki:`[Wiki] ADRV904X Prototyping Platform User Guide <resources/eval/user-guides/adrv904x>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -532,7 +532,7 @@ Here you can find the quick start guides available for these evaluation boards:
 
    * - Evaluation board
      - Zynq UltraScale+ MP
-   * - ADRV904x
+   * - ADRV904X
      - :dokuwiki:`ZCU102 <resources/eval/user-guides/adrv904x/quickstart/zynqmp>`
 
 Hardware related
@@ -543,7 +543,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`ADRV904x HDL project source code <projects/adrv904x>`
+- :git-hdl:`ADRV904X HDL project source code <projects/adrv904x>`
 
 .. list-table::
    :widths: 30 40 35
@@ -600,7 +600,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV904x Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/adrv904x>`
+- :dokuwiki:`[Wiki] ADRV904X Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/adrv904x>`
 
 .. include:: ../common/more_information.rst
 

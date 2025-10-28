@@ -346,7 +346,7 @@ Software related
 - :dokuwiki:`[Wiki] AD9361 no-OS software documentation <resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal>`
 - :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
 - :dokuwiki:`[Wiki] FMCOMMS2/3/4/5 Linux support <resources/eval/user-guides/ad-fmcomms2-ebz/software/linux>`
-- :dokuwiki:`[Wiki] AD936x IIO Oscilloscope plugin description <resources/tools-software/linux-software/fmcomms2_plugin>`
+- :dokuwiki:`[Wiki] AD936X IIO Oscilloscope plugin description <resources/tools-software/linux-software/fmcomms2_plugin>`
 
 .. include:: ../common/more_information.rst
 

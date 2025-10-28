@@ -214,8 +214,8 @@ digital interface:
 
 The NUM_OF_CHANNEL configuration parameter defines the number of ADC channels:
 
-- 1 - AD403x devices;
-- 2 - AD463x/adaq42xx devices (default).
+- 1 - AD403X devices;
+- 2 - AD463X/adaq42xx devices (default).
 
 The LANES_PER_CHANNEL configuration parameter defines the number of MISO lanes
 per channel of the SPI interface:
@@ -486,7 +486,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`AD4630_FMC Linux driver source code <drivers/iio/adc/ad4630.c>`
-- :git-no-os:`AD463x_FMC No-OS project source code <projects/ad463x_fmcz>`
+- :git-no-os:`AD463X_FMC No-OS project source code <projects/ad463x_fmcz>`
 - :dokuwiki:`AD4630 ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad4630>`
 - :dokuwiki:`AD463X ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad463x>`
 - :dokuwiki:`AD4630/AD4030 - No-OS Driver <resources/tools-software/uc-drivers/ad463x>`

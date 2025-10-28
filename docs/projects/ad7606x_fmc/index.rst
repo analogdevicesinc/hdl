@@ -79,7 +79,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagrams:
 
-AD7606x_FMCZ serial interface
+AD7606X_FMCZ serial interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ad7606x_serial_hdl.svg
@@ -87,7 +87,7 @@ AD7606x_FMCZ serial interface
    :align: center
    :alt: AD7606X_FMC using the serial interface block diagram
 
-AD7606x_FMCZ parallel interface
+AD7606X_FMCZ parallel interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ad7606x_parallel_hdl.svg
@@ -374,7 +374,7 @@ HDL related
    * - AD_EDGE_DETECT
      - :git-hdl:`library/common/ad_edge_detect.v`
      - ---
-   * - AXI_AD7606x
+   * - AXI_AD7606X
      - :git-hdl:`library/axi_ad7606x` *
      - :ref:`axi_ad7606x`
    * - AXI_CLKGEN

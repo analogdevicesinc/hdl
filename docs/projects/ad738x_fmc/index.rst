@@ -1,6 +1,6 @@
 .. _ad738x_fmc:
 
-AD738x_FMC HDL project
+AD738X_FMC HDL project
 ================================================================================
 
 The :adi:`AD7380`/ :adi:`AD7381` are a 16-bit and 14-bit pin-compatible family
@@ -46,7 +46,7 @@ Supported boards
 - :adi:`EVAL-AD7380-4FMCZ`
 - :adi:`EVAL-AD7383FMCZ`
 - :adi:`EVAL-AD7386FMCZ`
-- :adi:`EVAL-AD738xFMCZ`
+- :adi:`EVAL-AD738XFMCZ`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -415,7 +415,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD738x_FMC HDL project source code <projects/ad738x_fmc>`
+- :git-hdl:`AD738X_FMC HDL project source code <projects/ad738x_fmc>`
 
 .. list-table::
    :widths: 25 20 20 15
