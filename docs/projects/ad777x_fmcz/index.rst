@@ -7,8 +7,8 @@ The EVAL-AD7770 / EVAL-AD7771 / EVAL-AD7779 evaluation kit
 features the :adi:`AD7770`, :adi:`AD7771`, and :adi:`AD7779` 24-bit,
 analog-to-digital converters (ADCs).
 
-The AD777x is an 8-channel, simultaneous sampling analog-to-digital converter
-(ADC). Eight full Σ-Δ ADCs are on-chip. The AD777x provides an ultralow input
+The AD777X is an 8-channel, simultaneous sampling analog-to-digital converter
+(ADC). Eight full Σ-Δ ADCs are on-chip. The AD777X provides an ultralow input
 current to allow direct sensor connection. Each input channel has a
 programmable gain stage allowing gains of 1, 2, 4, and 8 to map lower amplitude
 sensor outputs into the full-scale ADC input range, maximizing the dynamic
@@ -65,7 +65,7 @@ Clock scheme
 .. image:: ad777x_clock_scheme.svg
    :width: 700
    :align: center
-   :alt: AD777x clocking scheme
+   :alt: AD777X clocking scheme
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,7 +90,7 @@ SPI connections
      - CS
    * - PS
      - SPI 0
-     - AD777x
+     - AD777X
      - 0
 
 GPIOs
@@ -188,7 +188,7 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
-   * - AXI_AD777x
+   * - AXI_AD777X
      - :git-hdl:`library/axi_ad777x`
      - :ref:`axi_ad777x`
    * - AXI_CLKGEN

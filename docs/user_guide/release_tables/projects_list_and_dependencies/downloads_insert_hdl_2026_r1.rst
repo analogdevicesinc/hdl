@@ -588,7 +588,7 @@ AD719XASDZ
        :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
        :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
 
-AD738xFMC
+AD738XFMC
 ---------
 
 .. list-table::
@@ -600,7 +600,7 @@ AD738xFMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD738xFMC <eval-ad738xfmcz>`
+   * - :adi:`AD738XFMC <eval-ad738xfmcz>`
      - :git-hdl:`ad738x_fmc <hdl_2026_r1:projects/ad738x_fmc>`
      - :git-hdl:`zed <hdl_2026_r1:projects/ad738x_fmc/zed>`
      - :ref:`ad738x_fmc_zed <util_hdl_2026_r1_ad738x_fmc_zed>`
@@ -1716,7 +1716,7 @@ ADRV903X
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`EVAL-ADRV903x`
+   * - :adi:`EVAL-ADRV903X`
      - :git-hdl:`adrv903x <hdl_2026_r1:projects/adrv903x>`
      - :git-hdl:`zcu102 <hdl_2026_r1:projects/adrv903x/zcu102>`
      - adrv903x_zcu102
@@ -1749,7 +1749,7 @@ ADRV904X
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`EVAL-ADRV904x`
+   * - :adi:`EVAL-ADRV904X`
      - :git-hdl:`adrv904x <hdl_2026_r1:projects/adrv904x>`
      - :git-hdl:`zcu102 <hdl_2026_r1:projects/adrv904x/zcu102>`
      - adrv904x_zcu102
@@ -2126,7 +2126,7 @@ DACFMCEBZ
      - 
      - 
      - :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-   * - :adi:`EVAL-AD916x`
+   * - :adi:`EVAL-AD916X`
      - 
      - 
      - 

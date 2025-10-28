@@ -23,7 +23,7 @@ The PulSAR converters are available with PMOD, FMC connectors.
 With PMOD
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The ADAQ40xx family is also part of the PulSAR converters with PMOD connector.
+The ADAQ40XX family is also part of the PulSAR converters with PMOD connector.
 
 This type of boards come with the :adi:`EVAL-PMD-IB1Z` PMOD to
 field programmable gate array (FPGA) mezzanine card (FMC) interposer board that
@@ -34,14 +34,14 @@ design on a laminate that includes the :adi:`AD4003` ADC with a fully
 differential driver the :adi:`ADA4945-1`, a reference buffer
 (the :adi:`ADA4807-1`), a precision resistor iPassive network on a separate die
 along with discrete capacitors and resistors. The device solves many design
-challenges for a wide range of applications similar to AD400x, yet it still
+challenges for a wide range of applications similar to AD400X, yet it still
 provides the flexibility. It offers over 75% area savings compared to discrete
 design and reduces TTM.
 
 With FMC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-PulSAR converters which have FMC boards associated with them are AD40xx family.
+PulSAR converters which have FMC boards associated with them are AD40XX family.
 
 The :adi:`AD4000` / :adi:`AD4001` / :adi:`AD4002` / :adi:`AD4003` / :adi:`AD4004` /
 :adi:`AD4005` / :adi:`AD4006` / :adi:`AD4007` / :adi:`AD4008` / :adi:`AD4010` /
@@ -88,11 +88,11 @@ PulSAR with PMOD connector:
 - :adi:`EVAL-AD7984-PMDZ`
 - :adi:`EVAL-AD7988-1-PMDZ`
 - :adi:`EVAL-AD7988-5-PMDZ`
-- :adi:`EVAL-ADAQ40xx`
+- :adi:`EVAL-ADAQ40XX`
 
 PulSAR with FMC connector:
 
-- :adi:`EVAL-AD400x-FMCZ`
+- :adi:`EVAL-AD400X-FMCZ`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ Other required hardware
 
 .. note::
 
-  Only for ADAQ40xx
+  Only for ADAQ40XX
 
 Block design
 -------------------------------------------------------------------------------
@@ -299,7 +299,7 @@ I2C connections
 
 .. note::
 
-   Only for AD40xx/ADAQ40xx
+   Only for AD40XX/ADAQ40XX
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -485,7 +485,7 @@ HDL related
 - :git-hdl:`pulsar_adc HDL project source code <projects/pulsar_adc>`
 - :dokuwiki:`[Wiki] PulSAR ADC PMOD HDL start guide <resources/eval/user-guides/pulsar_adc_pmods_hdl>`
 - :dokuwiki:`[Wiki] PulSAR ADC PMOD quick start guide <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`
-- :dokuwiki:`[Wiki] AD40xx/ADAQ40xx quick start guide <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`
+- :dokuwiki:`[Wiki] AD40XX/ADAQ40XX quick start guide <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`
 
 .. list-table::
    :widths: 30 40 30
@@ -537,7 +537,7 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   ``*`` instantiated only for AD40xx/ADAQ40xx
+   ``*`` instantiated only for AD40XX/ADAQ40XX
 
 - :ref:`SPI Engine Framework documentation <spi_engine>`
 
@@ -545,7 +545,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`PulSAR ADC PMDZ Linux driver source code <drivers/iio/adc/ad_pulsar.c>`
-- :git-linux:`AD40xx/ADAQ40xx Linux driver source code <drivers/iio/adc/ad4000.c>`
+- :git-linux:`AD40XX/ADAQ40XX Linux driver source code <drivers/iio/adc/ad4000.c>`
 - :git-linux:`AD4000 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4000.dts>`
 - :git-linux:`AD4001 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4001.dts>`
 - :git-linux:`AD4002 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4002.dts>`

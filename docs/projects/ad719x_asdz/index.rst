@@ -3,7 +3,7 @@
 AD719X-ASDZ HDL project
 ================================================================================
 
-The AD719x-ASDZ HDL project supports the EVAL-AD719xASDZ family, comprised of
+The AD719X-ASDZ HDL project supports the EVAL-AD719XASDZ family, comprised of
 :adi:`EVAL-AD7190ASDZ`, :adi:`EVAL-AD7193ASDZ`, :adi:`EVAL-AD7195ASDZ`,
 as well as the :adi:`EVAL-AD4131-8`, :adi:`EVAL-AD4130-8` and
 :adi:`EVAL-AD4129-8`.
@@ -104,7 +104,7 @@ The data path and clock domains are depicted in the below diagram:
 .. image:: ad719x_block_diagram.png
    :width: 1000
    :align: center
-   :alt: AD719x/CoraZ7S block diagram
+   :alt: AD719X/CoraZ7S block diagram
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,7 +119,7 @@ SPI connections
      - CS
    * - PS
      - SPI 0
-     - AD719x
+     - AD719X
      - 0
 
 GPIOs
@@ -263,14 +263,14 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`AD719x Linux driver <drivers/iio/adc/ad7192.c>`
+- :git-linux:`AD719X Linux driver <drivers/iio/adc/ad7192.c>`
 - :git-linux:`AD7190/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7190.dts>`
 - :git-linux:`AD7192/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7192.dts>`
 - :git-linux:`AD7193/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7193.dts>`
 - :git-linux:`AD7194/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7194.dts>`
 - :git-linux:`AD7195/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7195.dts>`
-- :git-no-os:`AD719x no-OS project <projects/ad719x>`
-- :git-no-os:`AD719x no-OS driver <drivers/adc/ad719x>`
+- :git-no-os:`AD719X no-OS project <projects/ad719x>`
+- :git-no-os:`AD719X no-OS driver <drivers/adc/ad719x>`
 - :dokuwiki:`AD7190 - Microcontroller No-OS Driver <resources/tools-software/uc-drivers/renesas/ad7190>`
 - :dokuwiki:`Supported devices <resources/tools-software/uc-drivers/ad7193>`
 
