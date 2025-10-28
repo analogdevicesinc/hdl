@@ -1,6 +1,6 @@
 .. _adrv9371x:
 
-ADRV9371x HDL reference design
+ADRV9371X HDL reference design
 ===============================================================================
 
 The ADRV371x HDL reference design is an embedded system built around a
@@ -398,7 +398,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`ADRV9371x HDL project source code <projects/adrv9371x>`
+- :git-hdl:`ADRV9371X HDL project source code <projects/adrv9371x>`
 
 .. list-table::
    :widths: 30 40 35
@@ -459,13 +459,13 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV9371x Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/ad9371>`
+- :dokuwiki:`[Wiki] ADRV9371X Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/ad9371>`
 
-- :git-linux:`ADRV9371x + ZCU102 device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371-jesd204-fsm.dts>`
-- :git-linux:`ADRV9371x + ZC706 device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9371-jesd204-fsm.dts>`
-- :git-linux:`ADRV9371x + KCU105 device tree <arch/microblaze/boot/dts/kcu105_adrv9371x.dts>`
-- :git-linux:`ADRV9371x + A10SoC device tree <arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_adrv9371.dts>`
-- :git-no-os:`ADRV9371x NO-OS PROJECT <projects/ad9371>`
+- :git-linux:`ADRV9371X + ZCU102 device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371-jesd204-fsm.dts>`
+- :git-linux:`ADRV9371X + ZC706 device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9371-jesd204-fsm.dts>`
+- :git-linux:`ADRV9371X + KCU105 device tree <arch/microblaze/boot/dts/kcu105_adrv9371x.dts>`
+- :git-linux:`ADRV9371X + A10SoC device tree <arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_adrv9371.dts>`
+- :git-no-os:`ADRV9371X NO-OS PROJECT <projects/ad9371>`
 
 .. include:: ../common/more_information.rst
 

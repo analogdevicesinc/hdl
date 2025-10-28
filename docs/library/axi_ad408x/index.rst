@@ -1,12 +1,12 @@
 .. _axi_ad408x:
 
-AXI AD408x
+AXI AD408X
 ================================================================================
 
 .. hdl-component-diagram::
 
-The :git-hdl:`AXI AD408x <library/axi_ad408x>` IP core can be used to interface
-the :adi:`AD4080, AD4083, AD4086` devices.
+The :git-hdl:`AXI AD408X <library/axi_ad408x>` IP core can be used to interface
+the :adi:`AD4080` device.
 This documentation only covers the IP core and requires one to be
 familiar with the device, for a complete and better understanding.
 
@@ -33,9 +33,9 @@ Files
    * - Name
      - Description
    * - :git-hdl:`library/axi_ad408x/axi_ad408x.v`
-     - Verilog source for the AXI AD408x.
+     - Verilog source for the AXI AD408X.
    * - :git-hdl:`library/axi_ad408x/ad408x_phy.v`
-     - Verilog source for the AXI AD408x physical interface.
+     - Verilog source for the AXI AD408X physical interface.
    * - :git-hdl:`library/axi_ad408x/axi_ad408x_ip.tcl`
      - IP definition file (AMD tools)
 
@@ -43,7 +43,7 @@ Block Diagram
 --------------------------------------------------------------------------------
 
 .. image:: block_diagram.svg
-   :alt: AXI AD408x block diagram
+   :alt: AXI AD408X block diagram
 
 Configuration Parameters
 --------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ see :ref:`ADC register access <generic-adc-register-access>`.
 Design Guidelines
 --------------------------------------------------------------------------------
 
-The control of the AD408x chip is done through a SPI interface, which is needed
+The control of the AD408X chip is done through a SPI interface, which is needed
 at system level.
 
 The *ADC interface signals* must be connected directly to the top file of the
@@ -191,7 +191,7 @@ the interface module.
 Software Guidelines
 --------------------------------------------------------------------------------
 
-.. list-table:: Main registers used to control the AXI AD408x IP
+.. list-table:: Main registers used to control the AXI AD408X IP
    :header-rows: 1
 
    * - Name

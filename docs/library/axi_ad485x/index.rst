@@ -1,11 +1,11 @@
 .. _axi_ad485x:
 
-AXI AD485x
+AXI AD485X
 ================================================================================
 
 .. hdl-component-diagram::
 
-The :git-hdl:`AXI AD485x <library/axi_ad485x>` IP core can be used to interface
+The :git-hdl:`AXI AD485X <library/axi_ad485x>` IP core can be used to interface
 the :adi:`AD4851` to :adi:`AD4858` devices.
 This documentation only covers the IP core and requires one to be
 familiar with the device, for a complete and better understanding.
@@ -34,17 +34,17 @@ Files
    * - Name
      - Description
    * - :git-hdl:`library/axi_ad485x/axi_ad485x.v`
-     - Verilog source for the AXI AD485x.
+     - Verilog source for the AXI AD485X.
    * - :git-hdl:`library/axi_ad485x/axi_ad485x_crc.v`
-     - Verilog source for the AXI AD485x CRC check.
+     - Verilog source for the AXI AD485X CRC check.
    * - :git-hdl:`library/axi_ad485x/axi_ad485x_lvds.v`
-     - Verilog source for the AXI AD485x LVDS interface.
+     - Verilog source for the AXI AD485X LVDS interface.
    * - :git-hdl:`library/axi_ad485x/axi_ad485x_cmos.v`
-     - Verilog source for the AXI AD485x CMOS interface.
+     - Verilog source for the AXI AD485X CMOS interface.
    * - :git-hdl:`library/axi_ad485x/axi_ad485x_20b_channel.v`
-     - Verilog source for the AXI AD485x 20-bit resolution devices.
+     - Verilog source for the AXI AD485X 20-bit resolution devices.
    * - :git-hdl:`library/axi_ad485x/axi_ad485x_16b_channel.v`
-     - Verilog source for the AXI AD485x 16-bit resolution devices.
+     - Verilog source for the AXI AD485X 16-bit resolution devices.
    * - :git-hdl:`library/axi_ad485x/axi_ad485x_constr.ttcl`
      - Dynamic constraint file (AMD tools)
    * - :git-hdl:`library/axi_ad485x/axi_ad485x_ip.tcl`
@@ -57,13 +57,13 @@ LVDS interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: block_diagram_LVDS.svg
-   :alt: AXI AD485x LVDS block diagram
+   :alt: AXI AD485X LVDS block diagram
 
 CMOS interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: block_diagram_CMOS.svg
-   :alt: AXI AD485x CMOS block diagram
+   :alt: AXI AD485X CMOS block diagram
 
 Configuration Parameters
 --------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ Configuration Parameters
    * - DELAY_REFCLK_FREQ
      - Delay reference clock frequency. Specific range based on FPGA technology
    * - DEVICE
-     - The device to interface with AD485x, where x can be from 1 to 8
+     - The device to interface with AD485X, where x can be from 1 to 8
    * - DW
      - Data Width parameter is auto selected based on DEVICE.
    * - LANE_0_ENABLE
@@ -168,7 +168,7 @@ corresponding register bit. The core simply reflects the programmed bit as an
 output port. In ADI reference projects, this bit is used to activate the channel
 of interest. It is then used by the PACK cores to route the data, based on the
 total number of channels and the selected number of channels. As an example,
-AXI_AD485x supports a total of 8 (or 4) channels, of 32 (or 16) bits.
+axi_ad485x supports a total of 8 (or 4) channels, of 32 (or 16) bits.
 This corresponds to a packed channel data width of 256 (or 128) bits.
 If software enables only two channels, the packed 256 bits of data is exclusively
 shared by the 2 enabled channels.
@@ -185,7 +185,7 @@ DATA
 
 The DATA is the raw analog samples. It follows two simple rules.
 
-Device (AD485x) Interface Description
+Device (AD485X) Interface Description
 --------------------------------------------------------------------------------
 
 For the :git-hdl:`axi_ad4858 CMOS interface <library/axi_ad485x/axi_ad485x_cmos.v>`
@@ -209,7 +209,7 @@ ADC's channel.
    The valid signal will only be asserted after all enabled channels are captured.
    The capture period depends on the combination of active lanes and active
    channels.
-   AD485x has an internal ring buffer which stores the channel data and CRC data.
+   AD485X has an internal ring buffer which stores the channel data and CRC data.
    It must be taken into consideration the maximum index difference between the
    channel index and lane index when setting the sampling rate (axi_pwm_gen).
    A one index difference means 2x the captured period, a two index difference
@@ -220,7 +220,7 @@ ADC's channel.
 .. warning::
 
    The serial configuration CS must be pulled down before capturing data. This is
-   to enable internal clock buffers in AD485x.
+   to enable internal clock buffers in AD485X.
 
 Timing Diagrams
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -351,9 +351,9 @@ Design Guidelines
 --------------------------------------------------------------------------------
 
 The IP was developed part of the
-:dokuwiki:`AD485x Native FMC Card Reference Design <resources/fpga/xilinx/fmc/ad485x>`.
+:dokuwiki:`AD485X Native FMC Card Reference Design <resources/fpga/xilinx/fmc/ad485x>`.
 
-The control of the AD485x chip is done through a SPI interface, which is needed
+The control of the AD485X chip is done through a SPI interface, which is needed
 at system level.
 
 The *ADC interface signals* must be connected directly to the top file of the
@@ -373,7 +373,7 @@ the interface module.
 Software Guidelines
 --------------------------------------------------------------------------------
 
-The software for this IP can be found as part of the AD485x Native FMC Card
+The software for this IP can be found as part of the AD485X Native FMC Card
 Linux drivers can be found in :git-linux:`/`.
 
   - Over-range (Under-range) flag - at reg. 0x5C (common) 0x404 (channel) - available for packet formats 23 and 32 only
