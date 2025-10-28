@@ -204,7 +204,7 @@ AD7134FMC
        :git-hdl:`spi_engine_offload <hdl_2021_r1:library/spi_engine/spi_engine_offload>`
        :git-hdl:`sysid_rom <hdl_2021_r1:library/sysid_rom>`
 
-AD738xFMC
+AD738XFMC
 ---------
 
 .. list-table::
@@ -216,7 +216,7 @@ AD738xFMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD738xFMC <eval-ad738xfmcz>`
+   * - :adi:`AD738XFMC <eval-ad738xfmcz>`
      - :git-hdl:`ad738x_fmc <hdl_2021_r1:projects/ad738x_fmc>`
      - :git-hdl:`zed <hdl_2021_r1:projects/ad738x_fmc/zed>`
      - :ref:`ad738x_fmc_zed <util_hdl_2021_r1_ad738x_fmc_zed>`
@@ -1248,7 +1248,7 @@ DACFMCEBZ
      - 
      - 
      - :git-hdl:`axi_hdmi_tx <hdl_2021_r1:library/axi_hdmi_tx>`
-   * - :adi:`EVAL-AD916x`
+   * - :adi:`EVAL-AD916X`
      - 
      - 
      - 

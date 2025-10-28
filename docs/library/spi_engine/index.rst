@@ -85,7 +85,7 @@ Examples
   The AD7768-1 is a low power, high performance, Σ-Δ analog-to-digital converter (ADC).
 * :git-hdl:`projects/ad40xx_fmc`
   Evaluation Board for the AD4000 Series 16-/18-/20-Bit Precision SAR ADCs.
-* :dokuwiki:`AD469x <resources/eval/user-guides/ad469x>`:
+* :dokuwiki:`AD469X <resources/eval/user-guides/ad469x>`:
   16-Bit, 16-Channel, 500 kSPS/1 MSPS, Easy Drive Multiplexed SAR ADC.
 * :dokuwiki:`AD4630-24 / AD4030-24 / AD4630-16 <resources/eval/user-guides/ad463x/hdl>`:
   16/24-Bit, 2 MSPS Single or Dual Channel SAR ADC.
