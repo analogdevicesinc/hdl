@@ -39,8 +39,7 @@ module axi_ad408x #(
   parameter   ID = 0,
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
-  parameter   ADC_N_BITS = 20,
-  parameter   DDR_OR_SDR_N = 1
+  parameter   ADC_N_BITS = 20
 ) (
 
   // ADC interface
@@ -100,6 +99,7 @@ module axi_ad408x #(
   localparam DELAY_CTRL_NUM_LANES = 2;
   localparam DELAY_CTRL_DRP_WIDTH = 5;
   localparam ADC_DATA_WIDTH  = ((ADC_N_BITS > 16)? 32 : 16);
+  localparam DDR_OR_SDR_N = 1;  // Always use DDR mode
 
   // internal signals
 
@@ -280,8 +280,7 @@ module axi_ad408x #(
     .IODELAY_CTRL(1),
     .IO_DELAY_GROUP(IO_DELAY_GROUP),
     .ADC_N_BITS(ADC_N_BITS),
-    .ADC_DATA_WIDTH(ADC_DATA_WIDTH),
-    .DDR_OR_SDR_N(DDR_OR_SDR_N)
+    .ADC_DATA_WIDTH(ADC_DATA_WIDTH)
   ) ad408x_interface (
     .dclk_in_n(dclk_in_n),
     .dclk_in_p(dclk_in_p),

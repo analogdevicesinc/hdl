@@ -3,7 +3,16 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# ad4880 interface
+set ADC_N_BITS $ad_project_params(ADC_N_BITS)
+if {$ADC_N_BITS <= 16} {
+    set DMA_DATA_WIDTH_SRC 32
+    set PACK_DATA_WIDTH 16
+} else {
+    set DMA_DATA_WIDTH_SRC 64
+    set PACK_DATA_WIDTH 32
+}
+
+# ad4884 interface
 
 create_bd_port -dir I adca_dco_p
 create_bd_port -dir I adca_dco_n
@@ -38,14 +47,14 @@ create_bd_port -dir I ad4080_b_spi_sdo_i
 create_bd_port -dir O ad4080_b_spi_sdo_o
 create_bd_port -dir I ad4080_b_spi_sdi_i
 
-# ad488x_clock_monitor
+# ad4884_clock_monitor
 
-ad_ip_instance axi_clock_monitor ad488x_clock_monitor
-ad_ip_parameter ad488x_clock_monitor CONFIG.NUM_OF_CLOCKS 2
-ad_ip_parameter ad488x_clock_monitor CONFIG.DIV_RATE 4
+ad_ip_instance axi_clock_monitor ad4884_clock_monitor
+ad_ip_parameter ad4884_clock_monitor CONFIG.NUM_OF_CLOCKS 2
+ad_ip_parameter ad4884_clock_monitor CONFIG.DIV_RATE 4
 
-ad_connect fpga_a_ref_clk  ad488x_clock_monitor/clock_0
-ad_connect fpga_b_ref_clk  ad488x_clock_monitor/clock_1
+ad_connect fpga_a_ref_clk  ad4884_clock_monitor/clock_0
+ad_connect fpga_b_ref_clk  ad4884_clock_monitor/clock_1
 
 #ad4080 AXI_SPI
 
@@ -66,22 +75,24 @@ ad_connect $sys_cpu_clk ad4080_b_spi/ext_spi_clk
 # axi_ad408x
 
 ad_ip_instance axi_ad408x axi_ad4080_adc_a
+ad_ip_parameter axi_ad4080_adc_a CONFIG.ADC_N_BITS $ADC_N_BITS
 
 ad_ip_instance axi_ad408x axi_ad4080_adc_b
+ad_ip_parameter axi_ad4080_adc_b CONFIG.ADC_N_BITS $ADC_N_BITS
 ad_ip_parameter axi_ad4080_adc_b CONFIG.IO_DELAY_GROUP adc_if_delay_group2
 
 # dma for rx data
 
-ad_ip_instance axi_dmac axi_ad4880_dma
-ad_ip_parameter axi_ad4880_dma CONFIG.DMA_TYPE_SRC 2
-ad_ip_parameter axi_ad4880_dma CONFIG.DMA_TYPE_DEST 0
-ad_ip_parameter axi_ad4880_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_ad4880_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter axi_ad4880_dma CONFIG.AXI_SLICE_SRC 1
-ad_ip_parameter axi_ad4880_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_ad4880_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad4880_dma CONFIG.DMA_DATA_WIDTH_SRC 64
-ad_ip_parameter axi_ad4880_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_instance axi_dmac axi_ad4884_dma
+ad_ip_parameter axi_ad4884_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad4884_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad4884_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad4884_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad4884_dma CONFIG.AXI_SLICE_SRC 1
+ad_ip_parameter axi_ad4884_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad4884_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad4884_dma CONFIG.DMA_DATA_WIDTH_SRC $DMA_DATA_WIDTH_SRC
+ad_ip_parameter axi_ad4884_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # connect interface to axi_ad4080_adc_a
 
@@ -111,40 +122,40 @@ ad_connect adcb_cnv_in_n             axi_ad4080_adc_b/cnv_in_n
 ad_connect adcb_filter_data_ready_n  axi_ad4080_adc_b/filter_data_ready_n
 ad_connect $sys_iodelay_clk          axi_ad4080_adc_b/delay_clk
 
-ad_ip_instance util_cpack2 util_ad4880_adc_pack { \
+ad_ip_instance util_cpack2 util_ad4884_adc_pack [list \
   NUM_OF_CHANNELS 2 \
-  SAMPLE_DATA_WIDTH 32 \
-}
-
+  SAMPLES_PER_CHANNEL 1 \
+  SAMPLE_DATA_WIDTH $PACK_DATA_WIDTH \
+]
 # connect datapath
 
-ad_connect axi_ad4080_adc_a/adc_clk    util_ad4880_adc_pack/clk
-ad_connect axi_ad4080_adc_a/adc_rst    util_ad4880_adc_pack/reset
-ad_connect axi_ad4080_adc_a/adc_valid  util_ad4880_adc_pack/fifo_wr_en
-ad_connect axi_ad4080_adc_a/adc_data   util_ad4880_adc_pack/fifo_wr_data_0
-ad_connect axi_ad4080_adc_b/adc_data   util_ad4880_adc_pack/fifo_wr_data_1
-ad_connect axi_ad4080_adc_a/adc_enable util_ad4880_adc_pack/enable_0
-ad_connect axi_ad4080_adc_b/adc_enable util_ad4880_adc_pack/enable_1
-ad_connect axi_ad4080_adc_a/adc_dovf   util_ad4880_adc_pack/fifo_wr_overflow
-ad_connect axi_ad4080_adc_b/adc_dovf   util_ad4880_adc_pack/fifo_wr_overflow
+ad_connect axi_ad4080_adc_a/adc_clk    util_ad4884_adc_pack/clk
+ad_connect axi_ad4080_adc_a/adc_rst    util_ad4884_adc_pack/reset
+ad_connect axi_ad4080_adc_a/adc_valid  util_ad4884_adc_pack/fifo_wr_en
+ad_connect axi_ad4080_adc_a/adc_data   util_ad4884_adc_pack/fifo_wr_data_0
+ad_connect axi_ad4080_adc_b/adc_data   util_ad4884_adc_pack/fifo_wr_data_1
+ad_connect axi_ad4080_adc_a/adc_enable util_ad4884_adc_pack/enable_0
+ad_connect axi_ad4080_adc_b/adc_enable util_ad4884_adc_pack/enable_1
+ad_connect axi_ad4080_adc_a/adc_dovf   util_ad4884_adc_pack/fifo_wr_overflow
+ad_connect axi_ad4080_adc_b/adc_dovf   util_ad4884_adc_pack/fifo_wr_overflow
 
-ad_connect util_ad4880_adc_pack/packed_fifo_wr   axi_ad4880_dma/fifo_wr
-ad_connect util_ad4880_adc_pack/packed_sync      axi_ad4880_dma/sync
+ad_connect util_ad4884_adc_pack/packed_fifo_wr   axi_ad4884_dma/fifo_wr
+ad_connect util_ad4884_adc_pack/packed_sync      axi_ad4884_dma/sync
 
 # system runs on phy's received clock
 
-ad_connect axi_ad4080_adc_a/adc_clk axi_ad4880_dma/fifo_wr_clk
+ad_connect axi_ad4080_adc_a/adc_clk axi_ad4884_dma/fifo_wr_clk
 
-ad_connect $sys_cpu_resetn axi_ad4880_dma/m_dest_axi_aresetn
+ad_connect $sys_cpu_resetn axi_ad4884_dma/m_dest_axi_aresetn
 
 ad_cpu_interconnect 0x44A00000 axi_ad4080_adc_a
 ad_cpu_interconnect 0x44A10000 axi_ad4080_adc_b
-ad_cpu_interconnect 0x44A30000 axi_ad4880_dma
+ad_cpu_interconnect 0x44A30000 axi_ad4884_dma
 ad_cpu_interconnect 0x44a70000 ad4080_b_spi
-ad_cpu_interconnect 0x44A80000 ad488x_clock_monitor
+ad_cpu_interconnect 0x44A80000 ad4884_clock_monitor
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect $sys_cpu_clk axi_ad4880_dma/m_dest_axi
+ad_mem_hp1_interconnect $sys_cpu_clk axi_ad4884_dma/m_dest_axi
 
-ad_cpu_interrupt ps-13 mb-12 axi_ad4880_dma/irq
+ad_cpu_interrupt ps-13 mb-12 axi_ad4884_dma/irq
 ad_cpu_interrupt ps-10 mb-9  ad4080_b_spi/ip2intc_irpt

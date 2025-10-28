@@ -1,16 +1,16 @@
-.. _ad488x_fmc_evb:
+.. _ad4884_fmc_evb:
 
-AD488X-FMC-EVB HDL project
+AD4884-FMC-EVB HDL project
 ================================================================================
 
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`EVAL-AD4880-FMC` is designed to demonstrate the :adi:`AD4880`
+The :adi:`EVAL-AD4884-FMC` is designed to demonstrate the :adi:`AD4884`
 performance.
 
-The :git-hdl:`AD488X-FMC-EVB HDL project <projects/ad488x_fmc_evb>` supports
-the following :adi:`AD4880` features:
+The :git-hdl:`AD4884-FMC-EVB HDL project <projects/ad4884_fmc_evb>` supports
+the following :adi:`AD4884` features:
 
 - Single/Dual lane DDR data capture
 - Self synchronization using the fixed pattern and bit-slip feature
@@ -23,12 +23,12 @@ the following :adi:`AD4880` features:
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD4880-FMC`
+- :adi:`EVAL-AD4884-FMC`
 
 Supported devices
 -------------------------------------------------------------------------------
 
-- :adi:`AD4880`
+- :adi:`AD4884`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`EVAL-AD4880-FMC`
+   * - :adi:`EVAL-AD4884-FMC`
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC-LPC
 
@@ -56,18 +56,18 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ad488x_fmc_evb_zed_block_diagram.svg
+.. image:: ad4884_fmc_evb_zed_block_diagram.svg
    :width: 800
    :align: center
-   :alt: AD4880-FMC-EVB/ZedBoard block diagram
+   :alt: AD4884-FMC-EVB/ZedBoard block diagram
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: ad488x_fmc_clock_scheme.svg
+.. image:: ad4884_fmc_clock_scheme.svg
    :width: 800
    :align: center
-   :alt: AD4880-FMC-EVB/ZedBoard clock scheme
+   :alt: AD4884-FMC-EVB/ZedBoard clock scheme
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,7 +80,7 @@ Instance             Zynq/Microblaze
 ==================== ===============
 axi_ad4080_adc_a     0x44A0_0000
 axi_ad4080_adc_b     0x44A1_0000
-axi_ad4880_dma       0x44A3_0000
+axi_ad4884_dma       0x44A3_0000
 ad4080_b_spi         0x44A7_0000
 ad408x_clock_monitor 0x44A8_0000
 ==================== ===============
@@ -98,11 +98,11 @@ SPI connections
      - CS
    * - PS
      - SPI 0
-     - AD4880_A
+     - AD4884_A
      - 0
    * - PL
      - ad4080_b_spi
-     - AD4880_B
+     - AD4884_B
      - 0
    * - PS
      - SPI 1
@@ -174,7 +174,7 @@ Below are the Programmable Logic interrupts used in this project.
 ================ === ========== ===========
 Instance name    HDL Linux Zynq Actual Zynq
 ================ === ========== ===========
-axi_ad4880_dma   13  57         89
+axi_ad4884_dma   13  57         89
 ad4080_b_spi     10  54         86
 ================ === ========== ===========
 
@@ -193,7 +193,7 @@ the HDL repository, and then build the project as follows:
 
 .. shell:: bash
 
-   $cd hdl/projects/ad488x_fmc_evb/zed
+   $cd hdl/projects/ad4884_fmc_evb/zed
    $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -204,17 +204,17 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- UG-2214, User Guide | EVAL-AD4880
+- UG-2214, User Guide | EVAL-AD4884
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`AD4880`
+-  Product datasheet: :adi:`AD4884`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD488x-FMC-EVB HDL project source code <projects/ad488x_fmc_evb>`
+-  :git-hdl:`AD4884-FMC-EVB HDL project source code <projects/ad4884_fmc_evb>`
 
 .. list-table::
    :widths: 30 35 35
@@ -265,9 +265,9 @@ Software related
    -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
    -  `PyADI-IIO example <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4880/examples/ad4880_example.py>`__
    -  `PyADI-IIO class <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4880/adi/ad4880.py>`__
-   -  AD4880-FMC-EVB Linux device tree :git-linux:`zynq-zed-adv7511-ad4880.dts
-      <arch/arm/boot/dts/zynq-zed-adv7511-ad4880.dts>`
-   -  AD4880 Linux driver :git-linux:`ad4080.c <drivers/iio/adc/ad4080.c>`
+   -  AD4884-FMC-EVB Linux device tree :git-linux:`zynq-zed-adv7511-ad4884.dts
+      <arch/arm/boot/dts/zynq-zed-adv7511-ad4884.dts>`
+   -  AD4884 Linux driver :git-linux:`ad4080.c <drivers/iio/adc/ad4080.c>`
 
 .. include:: ../common/more_information.rst
 

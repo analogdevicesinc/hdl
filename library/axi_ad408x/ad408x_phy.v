@@ -42,8 +42,7 @@ module ad408x_phy #(
   parameter IODELAY_CTRL = 1,
   parameter IO_DELAY_GROUP = "dev_if_delay_group",
   parameter ADC_DATA_WIDTH  = 32,
-  parameter ADC_N_BITS  = 20,
-  parameter DDR_OR_SDR_N  = 1
+  parameter ADC_N_BITS  = 20
 ) (
   // device interface
   input                             dclk_in_n,
@@ -85,7 +84,7 @@ module ad408x_phy #(
 );
 
   // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
-  // localparam DDR_OR_SDR_N    = 1;
+  localparam DDR_OR_SDR_N    = 1;
   localparam CMOS_LVDS_N     = 0; // Use always LVDS mode
   localparam SEVEN_SERIES    = 1;
   localparam ULTRASCALE      = 2;

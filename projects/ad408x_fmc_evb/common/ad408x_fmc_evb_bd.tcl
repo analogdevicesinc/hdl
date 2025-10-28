@@ -4,7 +4,6 @@
 ###############################################################################
 
 set ADC_N_BITS $ad_project_params(ADC_N_BITS)
-set DDR_OR_SDR_N $ad_project_params(DDR_OR_SDR_N)
 if {$ADC_N_BITS <= 16} {
     set DMA_DATA_WIDTH_SRC 16
 } else {
@@ -39,7 +38,6 @@ ad_connect fpga_100_clk  ad408x_clock_monitor/clock_1
 
 ad_ip_instance axi_ad408x axi_ad4080_adc
 ad_ip_parameter axi_ad4080_adc CONFIG.ADC_N_BITS $ADC_N_BITS
-ad_ip_parameter axi_ad4080_adc CONFIG.DDR_OR_SDR_N $DDR_OR_SDR_N
 
 # dma for rx data
 
