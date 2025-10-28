@@ -1,6 +1,6 @@
-.. _ad408x_fmc_evb:
+.. _ad4080_fmc_evb:
 
-AD408X-FMC-EVB HDL project
+AD4080-FMC-EVB HDL project
 ================================================================================
 
 .. caution::
@@ -69,7 +69,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../ad408x_fmc_evb/ad408x_fmc_evb_zed_block_diagram.svg
+.. image:: ../ad4080_fmc_evb/ad4080_fmc_evb_zed_block_diagram.svg
    :width: 800
    :align: center
    :alt: AD4080-FMC-EVB/ZedBoard block diagram
@@ -77,7 +77,7 @@ The data path and clock domains are depicted in the below diagram:
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: ../ad408x_fmc_evb/ad408x_fmc_clock_scheme.svg
+.. image:: ../ad4080_fmc_evb/ad4080_fmc_clock_scheme.svg
    :width: 800
    :align: center
    :alt: AD4080-FMC-EVB/ZedBoard block diagram
@@ -191,20 +191,20 @@ configuration (ADC_N_BITS=20, DDR_OR_SDR_N=1)):
 
 .. shell::
 
-   $cd hdl/projects/ad408x_fmc_evb/zed
+   $cd hdl/projects/ad4080_fmc_evb/zed
    $make
 
 Example of running the ``make`` command with parameters:
 
 .. shell::
 
-   $cd hdl/projects/ad408x_fmc_evb/zed
+   $cd hdl/projects/ad4080_fmc_evb/zed
    $make ADC_N_BITS=16 DDR_OR_SDR_N=1
 
 The following table contains the parameters that can be used to configure this
 project:
 
-.. collapsible:: Default values of the make parameters for AD408X-FMC-EVB
+.. collapsible:: Default values of the make parameters for AD4080-FMC-EVB
 
    +----------------+-------------------------------------------------------------+
    | Parameter      | Description                                                 |
@@ -243,7 +243,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD408x-FMC-EVB HDL project source code <projects/ad408x_fmc_evb>`
+- :git-hdl:`AD4080-FMC-EVB HDL project source code <projects/ad4080_fmc_evb>`
 
 .. list-table::
    :widths: 30 35 35

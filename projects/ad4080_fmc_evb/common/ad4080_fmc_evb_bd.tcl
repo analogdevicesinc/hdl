@@ -25,14 +25,14 @@ create_bd_port -dir I filter_data_ready_n
 create_bd_port -dir I fpga_ref_clk
 create_bd_port -dir I fpga_100_clk
 
-# ad408x_clock_monitor
+# ad4080_clock_monitor
 
-ad_ip_instance axi_clock_monitor ad408x_clock_monitor
-ad_ip_parameter ad408x_clock_monitor CONFIG.NUM_OF_CLOCKS 2
-ad_ip_parameter ad408x_clock_monitor CONFIG.DIV_RATE 4
+ad_ip_instance axi_clock_monitor ad4080_clock_monitor
+ad_ip_parameter ad4080_clock_monitor CONFIG.NUM_OF_CLOCKS 2
+ad_ip_parameter ad4080_clock_monitor CONFIG.DIV_RATE 4
 
-ad_connect fpga_ref_clk  ad408x_clock_monitor/clock_0
-ad_connect fpga_100_clk  ad408x_clock_monitor/clock_1
+ad_connect fpga_ref_clk  ad4080_clock_monitor/clock_0
+ad_connect fpga_100_clk  ad4080_clock_monitor/clock_1
 
 # axi_ad408x
 
@@ -80,7 +80,7 @@ ad_connect $sys_cpu_resetn axi_ad4080_dma/m_dest_axi_aresetn
 
 ad_cpu_interconnect 0x44A00000 axi_ad4080_adc
 ad_cpu_interconnect 0x44A30000 axi_ad4080_dma
-ad_cpu_interconnect 0x44A40000 ad408x_clock_monitor
+ad_cpu_interconnect 0x44A40000 ad4080_clock_monitor
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ad4080_dma/m_dest_axi
