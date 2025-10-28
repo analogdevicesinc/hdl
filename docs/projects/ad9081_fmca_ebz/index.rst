@@ -85,7 +85,7 @@ Supported carriers
      - FMCA
    * -
      - :xilinx:`VCK190`
-     - FMC0
+     - FMCP1 (J51)
    * -
      - :xilinx:`VPK180`
      - FMCP1
@@ -117,7 +117,7 @@ Supported carriers
      - FMC slot
    * - :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
      - :xilinx:`VCK190`
-     - FMC0
+     - FMCP1 (J51)
    * -
      - :xilinx:`VPK180`
      - FMCP1
