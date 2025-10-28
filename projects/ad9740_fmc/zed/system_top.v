@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
+  parameter DEVICE = "AD9744"
+) (
 
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
@@ -83,15 +85,15 @@ module system_top (
   inout   [ 1:0]  iic_mux_sda,
 
   input           otg_vbusoc,
-  
+
   // adf4351 interface
-  
+
   output  reg     led,
   output          adf4351_csn,
   output          adf4351_clk,
   output          adf4351_mosi,
   output          adf4351_ce,
-  
+
   // ad974x interface
 
   input           ad9740_clk_p,
@@ -112,6 +114,7 @@ module system_top (
   wire            iic_mux_sda_t_s;
   wire            ad9740_clk_ds;
   wire            ad9740_clk;
+  wire    [13:0]  ad9740_data_int;
 
   // instantiations
 
@@ -122,7 +125,7 @@ module system_top (
 
 
   reg [25:0] counter;
-  
+
   always @(posedge ad9740_clk) begin
     if (counter == 26'd49999999) begin
       counter <= 26'd0;
@@ -130,9 +133,30 @@ module system_top (
     end else begin
       counter <= counter + 1'b1;
     end
-  end 
+  end
 
 
+  generate
+    if (DEVICE == "AD9744") begin
+      // AD9744: 14-bit DAC - use all bits
+      assign ad9740_data = ad9740_data_int [13:0];
+    end else if (DEVICE == "AD9742") begin
+      // AD9742: 12-bit DAC - MSB aligned, use upper 12 bits, tie lower 2 bits to 0
+      assign ad9740_data[13:2] = ad9740_data_int[11:0];
+      assign ad9740_data[1:0] = 2'b00;
+    end else if (DEVICE == "AD9740") begin
+      // AD9740: 10-bit DAC - MSB aligned, use upper 10 bits, tie lower 4 bits to 0
+      assign ad9740_data[13:4] = ad9740_data_int[9:0];
+      assign ad9740_data[3:0] = 4'b0000;
+    end else if (DEVICE == "AD9748") begin
+      // AD9748: 8-bit DAC - MSB aligned, use upper 8 bits, tie lower 6 bits to 0
+      assign ad9740_data[13:6] = ad9740_data_int[7:0];
+      assign ad9740_data[5:0] = 6'b000000;
+    end else begin
+      // Default case: assume full 14-bit width
+      assign ad9740_data = ad9740_data_int;
+    end
+  endgenerate
 
 
 
@@ -153,14 +177,14 @@ module system_top (
     .dio_i(gpio_o[31:27]),
     .dio_o(gpio_i[31:27]),
     .dio_p(gpio_bd_b));
-    
+
   ad_iobuf #(
     .DATA_WIDTH(26)
   ) i_iobufa (
     .dio_t(gpio_t[25:0]),
     .dio_i(gpio_o[25:0]),
     .dio_o(gpio_i[25:0]),
-    .dio_p(gpio_bd_a));    
+    .dio_p(gpio_bd_a));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -180,7 +204,7 @@ module system_top (
 
   system_wrapper i_system_wrapper (
     .ad974x_clk (ad9740_clk),
-    .ad974x_data (ad9740_data),
+    .ad974x_data (ad9740_data_int),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
