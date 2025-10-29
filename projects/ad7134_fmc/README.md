@@ -3,7 +3,7 @@
 - Evaluation board product page: [EVAL-AD7134-FMCZ](https://www.analog.com/eval-ad7134fmcz)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad713x/hdl
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad7134_fmc/index.html
-- Evaluation board for VADJ: 1.8V
+- Evaluation board VADJ: 1.8V
 
 ## Supported parts
 
