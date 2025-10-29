@@ -95,6 +95,7 @@ Contents
    FMCOMMS8 <fmcomms8/index>
    FMCOMMS11 <fmcomms11/index>
    JUPITER-SDR <jupiter_sdr/index>
+   LTC2378-FMC <ltc2378_fmc/index>
    M2K <m2k/index>
    MAX96724 <max96724/index>
    PLUTO <pluto/index>
