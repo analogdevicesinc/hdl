@@ -127,12 +127,12 @@ base address to the registers relative address.
      - 0x0000
      - BASE
      - See the `Base <#hdl-regmap-COMMON>`__ table for more details.
-   * - 0x0010
-     - 0x0040
+   * - 0x0000
+     - 0x0000
      - ADC COMMON
      - See the `ADC Common <#hdl-regmap-ADC_COMMON>`__ table for more details.
-   * - 0x0100
-     - 0x0400
+   * - 0x0000
+     - 0x0000
      - ADC CHANNELS
      - See the `ADC Channel <#hdl-regmap-ADC_CHANNEL>`__ table for more details.
    * - 0x0200
