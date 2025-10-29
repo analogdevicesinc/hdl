@@ -177,14 +177,14 @@ module axi_gpio_adi (
       up_rack <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
         case (up_raddr_s)
+          8'h10: up_rdata[31:0] <= up_irq_pending[31:0];    // IRQ pending register
+          8'h11: up_rdata[31:0] <= up_irq_source[31:0];     // IRQ source register
           8'h21: up_rdata[31:0] <= gpio_out_reg[31:0];
           8'h22: up_rdata[31:0] <= gpio_io_i[31:0];
+          8'h23: up_rdata[31:0] <= up_irq_mask[31:0];       // IRQ mask register
           8'h24: up_rdata[31:0] <= gpio_dir_reg[31:0];
           default: up_rdata <= 32'b0;
         endcase
-      if (|up_rdata) begin
-        up_rack <= up_rack;
-      end
       end
     end
   end
