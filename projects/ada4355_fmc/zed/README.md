@@ -4,10 +4,6 @@
 
 - VADJ with which it was tested in hardware: 2.5V
 
-# ADA4355-FMC/ZED HDL Project
-
-- VADJ with which it was tested in hardware: 2.5V
-
 The parameters configurable through the `make` command, can be found below, as well as in the **system_project.tcl** file; it contains the default
 configuration.
 
