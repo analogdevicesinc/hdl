@@ -13,7 +13,7 @@ puts "build parameter: NUM_OF_SDI: $NUM_OF_SDI"
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad738x_spi
 
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 
 set data_width    32
 set async_spi_clk 1

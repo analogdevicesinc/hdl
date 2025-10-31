@@ -9,7 +9,7 @@ PROJECT_NAME := ad4134_fmc_zed
 M_DEPS += ../common/ad4134_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_bd.tcl
-M_DEPS += ../../../library/spi_engine/scripts/spi_engine.tcl
+M_DEPS += ../../../library/spi_engine/scripts/spi_engine_xilinx.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_clkgen
