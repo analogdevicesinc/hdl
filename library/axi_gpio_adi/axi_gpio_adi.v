@@ -204,10 +204,14 @@ module axi_gpio_adi (
     end
   endgenerate
 
-  assign gpio_edge_detect = (gpio_in  & (~gpio_in_d1));
+
+  //limitation irq for output, when irq is output not consider
+  assign gpio_edge_detect = (gpio_in  & (~gpio_in_d1)) & gpio_io_t;
+
 
   // IRQ trigger logic
-  assign up_irq_trigger = gpio_edge_detect;
+  //modify [0] = |gpio_edge_detect;
+  assign up_irq_trigger = {31'b0, |gpio_edge_detect}; // bit[0] = OR, restul 0
   assign up_irq_source_clear = ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h11)) ? up_wdata_s : 32'd0;
   assign up_irq_pending = (~up_irq_mask) & up_irq_source;
 
@@ -218,18 +222,6 @@ module axi_gpio_adi (
       irq <= |up_irq_pending;
     end
   end
-
-  // reg irq_pending_d = 1'b0;
-
-  // always @(posedge up_clk) begin
-  //   if (up_resetn == 1'b0) begin
-  //     irq_pending_d <= 1'b0;
-  //     irq           <= 1'b0;
-  //   end else begin
-  //     irq_pending_d <= |up_irq_pending;
-  //     irq           <= (|up_irq_pending) & (~irq_pending_d); // pulse 1 clk
-  //   end
-  // end
 
   always @(posedge up_clk) begin
     if (up_resetn == 1'b0) begin
