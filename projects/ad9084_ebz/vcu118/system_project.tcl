@@ -6,6 +6,7 @@
 source ../../../scripts/adi_env.tcl
 source ../../../projects/scripts/adi_project_xilinx.tcl
 source ../../../projects/scripts/adi_board.tcl
+set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timing_fix_xilinx.tcl]
 
 # get_env_param retrieves parameter value from the environment if exists,
 # other case use the default value
@@ -69,6 +70,7 @@ adi_project ad9084_ebz_vcu118 0 [list \
   TX_B_JESD_NP        [get_env_param TX_B_JESD_NP        16 ] \
   RX_B_KS_PER_CHANNEL [get_env_param RX_B_KS_PER_CHANNEL 32 ] \
   TX_B_KS_PER_CHANNEL [get_env_param TX_B_KS_PER_CHANNEL 32 ] \
+  DO_HAS_BYPASS       [get_env_param DO_HAS_BYPASS        0 ] \
 ]
 
 adi_project_files ad9084_ebz_vcu118 [list \
@@ -94,6 +96,6 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
 
-set_property strategy Performance_RefinePlacement [get_runs impl_1]
+set_property strategy Congestion_SpreadLogic_high [get_runs impl_1]
 
 adi_project_run ad9084_ebz_vcu118
