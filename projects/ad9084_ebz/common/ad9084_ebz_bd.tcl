@@ -25,7 +25,9 @@ set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
 set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
                           ? $ad_project_params(TDD_SUPPORT) : 0 } ]
 set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
-                            ? $ad_project_params(SHARED_DEVCLK) : 0 } ]
+                          ? $ad_project_params(SHARED_DEVCLK) : 0 } ]
+set DO_HAS_BYPASS [ expr { [info exists ad_project_params(DO_HAS_BYPASS)] \
+                          ? $ad_project_params(DO_HAS_BYPASS) : 1 } ]
 
 if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
   error "ERROR: Cannot enable TDD support without shared deviceclocks!"
@@ -478,6 +480,8 @@ ad_data_offload_create $adc_data_offload_name \
                        $do_axi_data_width \
                        $SHARED_DEVCLK
 
+ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
+
 ad_ip_instance axi_dmac axi_apollo_rx_dma
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_TYPE_SRC 1
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_TYPE_DEST 0
@@ -526,6 +530,8 @@ if {$ASYMMETRIC_A_B_MODE} {
                          $adc_b_data_width \
                          $do_axi_data_width \
                          $SHARED_DEVCLK
+
+  ad_ip_parameter $adc_b_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
 
   ad_ip_instance axi_dmac axi_apollo_rx_b_dma
   ad_ip_parameter axi_apollo_rx_b_dma CONFIG.DMA_TYPE_SRC 1
@@ -580,6 +586,8 @@ ad_data_offload_create $dac_data_offload_name \
                        $do_axi_data_width \
                        $SHARED_DEVCLK
 
+ad_ip_parameter $dac_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
+
 ad_ip_instance axi_dmac axi_apollo_tx_dma
 ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_TYPE_DEST 1
@@ -630,6 +638,8 @@ if {$ASYMMETRIC_A_B_MODE} {
                          $dac_b_data_width \
                          $do_axi_data_width \
                          $SHARED_DEVCLK
+
+  ad_ip_parameter $dac_b_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
 
   ad_ip_instance axi_dmac axi_apollo_tx_b_dma
   ad_ip_parameter axi_apollo_tx_b_dma CONFIG.DMA_TYPE_SRC 0
