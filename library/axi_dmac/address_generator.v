@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -58,7 +58,7 @@ module address_generator #(
 
   input                             bl_valid,
   output reg                        bl_ready,
-  input [BEATS_PER_BURST_WIDTH-1:0] measured_last_burst_length,
+  input [BEATS_PER_BURST_WIDTH:0] measured_last_burst_length,
 
   input                        eot,
 
@@ -91,11 +91,11 @@ module address_generator #(
                 DMA_DATA_WIDTH ==   32 ? 3'b010 :
                 DMA_DATA_WIDTH ==   16 ? 3'b001 : 3'b000;
 
-  reg [LENGTH_WIDTH-1:0] length = 'h0;
+  reg [BEATS_PER_BURST_WIDTH-1:0] length = 'h0;
   reg [DMA_ADDR_WIDTH-BYTES_PER_BEAT_WIDTH-1:0] address = 'h00;
-  reg [BEATS_PER_BURST_WIDTH-1:0] last_burst_len = 'h00;
+  reg [BEATS_PER_BURST_WIDTH:0] last_burst_len = 'h00;
   assign addr = {address, {BYTES_PER_BEAT_WIDTH{1'b0}}};
-  assign len = length;
+  assign len = {{(LENGTH_WIDTH-BEATS_PER_BURST_WIDTH){1'b0}}, length};
 
   reg addr_valid_d1;
   reg last = 1'b0;
@@ -122,7 +122,7 @@ module address_generator #(
     if (addr_valid == 1'b0) begin
       last <= eot;
       if (eot == 1'b1) begin
-        length <= last_burst_len;
+        length <= last_burst_len[BEATS_PER_BURST_WIDTH-1:0];
       end else begin
         length <= MAX_LENGTH;
       end
