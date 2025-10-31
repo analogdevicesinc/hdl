@@ -289,7 +289,6 @@ spi_ad7606 **   12  56         88
 .. admonition:: Legend
    :class: note
 
-   - ``*`` instantiated only for INTF=0 (parallel interface)
    - ``**`` instantiated only for INTF=1 (serial interface)
 
 Building the HDL project
