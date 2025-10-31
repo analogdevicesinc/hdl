@@ -150,8 +150,9 @@ create_clock -period 2.500 -name dco_clk      [get_ports dco_p]
 # Constraint SYSREFs
 # Assumption is that REFCLK and SYSREF have similar propagation delay,
 # and the SYSREF is a source synchronous Center-Aligned signal to REFCLK
-
-set_input_delay -clock [get_clocks global_clk_0] 1.600 [get_ports rx_sysref_*]
+set_input_delay -clock [get_clocks global_clk_0] \
+  [expr [get_property PERIOD [get_clocks global_clk_0]] / 2] \
+  [get_ports {rx_sysref_*}]
 
 ##by default IOB is TRUE and this register is not being driven by any IO element
 set_property IOB FALSE [get_cells -hierarchical -regexp {.*hmc7044_spi.*IO0_I_REG$}];
@@ -163,6 +164,8 @@ set_property IOB FALSE [get_cells -hierarchical -regexp {.*ltc2664_spi.*IO0_I_RE
 create_generated_clock -name adl5580_spi_clk -source [get_pins i_system_wrapper/system_i/adl5580_spi/ext_spi_clk] -divide_by 2 [get_pins i_system_wrapper/system_i/adl5580_spi/sck_o]
 create_generated_clock -name hmc7044_spi_clk -source [get_pins i_system_wrapper/system_i/hmc7044_spi/ext_spi_clk] -divide_by 2 [get_pins i_system_wrapper/system_i/hmc7044_spi/sck_o]
 
-# Set false path for the AD4080 sync GPIO
 
-set_false_path -through [get_nets i_system_wrapper/gpio_o[56]]
+
+# Set false path from AXI GPIO to AD9213 Data Offload as the GPIO is used only as a switch
+
+set_false_path -from [get_cells -hierarchical -filter {NAME =~ "*axi_gpio/U0/gpio_core_1/Dual.gpio2_Data_Out_reg*"}] -to [get_cells -hierarchical -filter {NAME =~ "*axi_ad9213_do*"}]
