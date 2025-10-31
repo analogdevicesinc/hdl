@@ -43,9 +43,17 @@ adi_add_bus "s_interconnect_ctrl" "slave" \
 	"analog.com:interface:spi_engine_interconnect_ctrl_rtl:1.0" \
 	"analog.com:interface:spi_engine_interconnect_ctrl:1.0" \
 	{ \
-		{"interconnect_dir" "interconnect_dir"} \
+		{"s_interconnect_dir" "interconnect_dir"} \
 	}
 adi_add_bus_clock "clk" "s_interconnect_ctrl" "resetn"
+
+adi_add_bus "m_offload_active_ctrl" "master" \
+	"analog.com:interface:spi_engine_interconnect_ctrl_rtl:1.0" \
+	"analog.com:interface:spi_engine_interconnect_ctrl:1.0" \
+	{ \
+		{"m_offload_active" "interconnect_dir"} \
+	}
+adi_add_bus_clock "clk" "m_offload_active_ctrl" "resetn"
 
 foreach prefix [list "s0" "s1"] {
 	adi_add_bus [format "%s_ctrl" $prefix] "slave" \
@@ -80,13 +88,13 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters DATA_WIDTH -of_objects $cc]
 
-## NUM_OF_SDI
+## NUM_OF_SDIO
 set_property -dict [list \
   "value_validation_type" "range_long" \
   "value_validation_range_minimum" "1" \
   "value_validation_range_maximum" "8" \
  ] \
- [ipx::get_user_parameters NUM_OF_SDI -of_objects $cc]
+ [ipx::get_user_parameters NUM_OF_SDIO -of_objects $cc]
 
 ## Customize IP Layout
 
@@ -107,11 +115,11 @@ set_property -dict [list \
   "tooltip" "\[DATA_WIDTH\] Define the data interface width"
 ] [ipgui::get_guiparamspec -name "DATA_WIDTH" -component $cc]
 
-ipgui::add_param -name "NUM_OF_SDI" -component $cc -parent $general_group
+ipgui::add_param -name "NUM_OF_SDIO" -component $cc -parent $general_group
 set_property -dict [list \
-  "display_name" "Number of MISO lines" \
-  "tooltip" "\[NUM_OF_SDI\] Define the number of MISO lines" \
-] [ipgui::get_guiparamspec -name "NUM_OF_SDI" -component $cc]
+  "display_name" "Number of MISO/MOSI lines" \
+  "tooltip" "\[NUM_OF_SDIO\] Define the number of MISO/MOSI lines" \
+] [ipgui::get_guiparamspec -name "NUM_OF_SDIO" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
