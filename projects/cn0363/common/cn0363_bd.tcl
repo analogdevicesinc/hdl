@@ -3,7 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 spi
 
