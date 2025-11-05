@@ -101,6 +101,13 @@ module system_top (
   wire    [17:0]  gpio_t;
   wire    [6:0]   ps_gpio;
 
+  // Rev. B hardware ADF4355 sclk, sdio swapped (mistake in hw)
+  wire w_spi_clk, w_spi_sdata, w_pll_csn;
+
+  assign spi_clk = ~w_pll_csn ? w_spi_sdata : w_spi_clk;
+  assign spi_sdata = ~w_pll_csn ? w_spi_clk : w_spi_sdata;
+  assign pll_csn = w_pll_csn;
+
   // instantiations
 
   ad_iobuf #(
@@ -141,14 +148,14 @@ module system_top (
     .gpio_t (gpio_t),
 
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (spi_clk),
+    .spi0_clk_o (w_spi_clk),
     .spi0_csn_0_o (spi_a1_csn), // 1st ADC
     .spi0_csn_1_o (spi_a2_csn), // 2nd ADC
-    .spi0_csn_2_o (pll_csn), // ADF4355
+    .spi0_csn_2_o (w_pll_csn), // ADF4355
     .spi0_csn_i (1'b1),
     .spi0_sdi_i (1'b0),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (spi_sdata),
+    .spi0_sdo_o (w_spi_sdata),
 
     .clk_in_a1_p (clk_in_a1_p),
     .clk_in_a1_n (clk_in_a1_n),
