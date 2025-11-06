@@ -1,7 +1,14 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
+
+# Constraints for 4 SDI per channel, 2 Channels configuration (8 SDI lines total)
+# input delays for MISO lines (SDO for the device)
+# data is latched on negative edge
+
+set tsetup 5.6
+set thold 1.6
 
 set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS25} [get_ports ad463x_spi_sdi[0]]       ; ## H07  FMC_LPC_LA02_P
 set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS25} [get_ports ad463x_spi_sdi[1]]       ; ## H08  FMC_LPC_LA02_N
@@ -12,10 +19,6 @@ set_property -dict {PACKAGE_PIN M22 IOSTANDARD LVCMOS25} [get_ports ad463x_spi_s
 set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS25} [get_ports ad463x_spi_sdi[6]]       ; ## D11  FMC_LPC_LA05_P
 set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS25} [get_ports ad463x_spi_sdi[7]]       ; ## D12  FMC_LPC_LA05_N
 
-set tsetup 5.6
-set thold 1.6
-
-# input delays for MISO lines (SDO for the device)
 set_input_delay -clock [get_clocks ECHOSCLK_clk] -clock_fall -max  $tsetup [get_ports ad463x_spi_sdi[0]]
 set_input_delay -clock [get_clocks ECHOSCLK_clk] -clock_fall -min  $thold [get_ports ad463x_spi_sdi[0]]
 set_input_delay -clock [get_clocks ECHOSCLK_clk] -clock_fall -max  $tsetup [get_ports ad463x_spi_sdi[1]]
