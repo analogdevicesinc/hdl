@@ -97,7 +97,7 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL0_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL0_REF_CTRL__FREQMHZ 100
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL1_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__SRCSEL {IOPLL}
-ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 200
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 250
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL2_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__FREQMHZ 12.288
@@ -722,15 +722,7 @@ ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
 ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
 ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
 ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
-
-# Read the value exported by Make, in case of Corundum build
-# Default: 332.9
-# revert back
-set freq 332.9
-if {[info exists ::env(DMA_CLKOUT1_REQUESTED_OUT_FREQ)]} {
-    set freq $::env(DMA_CLKOUT1_REQUESTED_OUT_FREQ)
-}
-ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ $freq
+ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 332.9
 
 ad_connect sys_cpu_clk dma_clk_wiz/clk_in1
 ad_connect sys_cpu_resetn dma_clk_wiz/resetn

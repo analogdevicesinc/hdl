@@ -9,6 +9,7 @@ source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 source $ad_hdl_dir/library/corundum/scripts/corundum_adrv9009zu11eg_cfg.tcl
 source $ad_hdl_dir/library/corundum/scripts/corundum.tcl
+# put if here
 source system_bd_corundum.tcl
 
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9

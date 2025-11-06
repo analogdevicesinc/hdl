@@ -516,6 +516,7 @@ if [string equal $board K26] {
 
   ad_connect ethernet_core/ptp_clock corundum_core/ptp_clock
   ad_connect corundum_core/ptp_clk ethernet_core/ptp_clk
+  ad_connect corundum_core/ptp_rst ethernet_core/ptp_rst
   ad_connect corundum_core/ptp_sample_clk ethernet_core/ptp_sample_clk
   ad_connect corundum_core/s_axis_stat ethernet_core/m_axis_stat
 } else {
@@ -781,12 +782,20 @@ ad_ip_instance proc_sys_reset corundum_rstgen [list \
 
 ad_connect corundum_hierarchy/rst_corundum corundum_rstgen/peripheral_reset
 
-if {![string equal $CPU Zynq]} {
-  ad_ip_instance axi_gpio corundum_gpio_reset [list \
-    C_ALL_OUTPUTS 1 \
-    C_DOUT_DEFAULT 0x00000000 \
-    C_GPIO_WIDTH 1 \
-  ]
-
-  ad_connect corundum_gpio_reset/gpio_io_o corundum_rstgen/aux_reset_in
+switch -exact -- $CPU {
+    Zynq     {
+                # do nothing
+             }
+    ZynqMP   {
+                # do nothing
+             }
+    default {
+        ad_ip_instance axi_gpio corundum_gpio_reset [list \
+            C_ALL_OUTPUTS 1 \
+            C_DOUT_DEFAULT 0x00000000 \
+            C_GPIO_WIDTH 1 \
+        ]
+        ad_connect corundum_gpio_reset/gpio_io_o corundum_rstgen/aux_reset_in
+    }
 }
+
