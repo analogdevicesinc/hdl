@@ -25,7 +25,7 @@ source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source $ad_hdl_dir/projects/ad9084_ebz/common/ad9084_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
-ad_ip_parameter axi_apollo_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 2
+ad_ip_parameter axi_apollo_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 3
 ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
 
 # Set SPI clock to 100/16 =  6.25 MHz
