@@ -5,11 +5,13 @@
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 # system level parameters
-set NUM_OF_SDI  $ad_project_params(NUM_OF_SDI)
-set CAPTURE_ZONE $ad_project_params(CAPTURE_ZONE)
-set CLK_MODE $ad_project_params(CLK_MODE)
-set DDR_EN $ad_project_params(DDR_EN)
-set NO_REORDER $ad_project_params(NO_REORDER)
+set NUM_OF_CHANNEL  $ad_project_params(NUM_OF_CHANNEL)
+set NUM_OF_SDI      [expr {$ad_project_params(NUM_OF_SDI) * $ad_project_params(NUM_OF_CHANNEL)}]
+set CAPTURE_ZONE    $ad_project_params(CAPTURE_ZONE)
+set CLK_MODE        $ad_project_params(CLK_MODE)
+set DDR_EN          $ad_project_params(DDR_EN)
+set NO_REORDER      $ad_project_params(NO_REORDER)
+#[expr {$NO_REORDER ? $ad_project_params(NUM_OF_SDI) : $ad_project_params(NUM_OF_SDI) * $ad_project_params(NUM_OF_CHANNEL)}]
 
 puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI ; CAPTURE_ZONE: $CAPTURE_ZONE ; CLK_MODE: $CLK_MODE ; DDR_EN: $DDR_EN ; NO_REORDER: $NO_REORDER"
 
@@ -77,7 +79,7 @@ ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_3
 set sampling_cycle [expr int(ceil(double($cnv_ref_clk * 1000000) / $adc_sampling_rate))]
 
 ## setup the pulse period for the MAX17687 and LT8608 SYNC signal
-set max17687_cycle [expr int(ceil(double($cnv_ref_clk * 1000000) / $max17687_sync_freq))] 
+set max17687_cycle [expr int(ceil(double($cnv_ref_clk * 1000000) / $max17687_sync_freq))]
 
 ad_ip_instance axi_pwm_gen cnv_generator
 ad_ip_parameter cnv_generator CONFIG.N_PWMS 2
@@ -99,8 +101,8 @@ if {$NO_REORDER == 0} {
 
 } elseif {$NO_REORDER == 1} {
 
-    if {$CAPTURE_ZONE == 2} {
-      puts "ERROR: Invalid configuration - Disabling Reorder IP is invalid for Capture Zone 2."
+    if {$CAPTURE_ZONE == 2 && $NUM_OF_SDI > 2} {
+      puts "ERROR: Invalid configuration - Disabling Reorder IP is invalid when there are more than 2 SDI lanes for Capture Zone 2."
       exit 2
     }
 
@@ -116,14 +118,17 @@ ad_ip_parameter axi_ad463x_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad463x_dma CONFIG.AXI_SLICE_SRC 1
 if {$NO_REORDER == 0} {
   ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
-} elseif {$NO_REORDER == 1} {
-    if {$NUM_OF_SDI == 1} {
-      ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 32
-    } elseif {$NUM_OF_SDI == 2} {
-      ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
-    }
+} else {
+  #REORDER BYPASSED
+  ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(32 * $NUM_OF_SDI, 64)]
 }
-  
+
+# } elseif {$NO_REORDER == 1 && $NUM_OF_SDI == 1 && $NUM_OF_CHANNEL == 1} {
+  # ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+# } else {
+#   ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+# }
+
 ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # Trigger for SPI offload
@@ -137,7 +142,7 @@ if {$CAPTURE_ZONE == 1} {
     }
     1 -
     2 {
-      puts "ERROR: Invalid configuration option. CAPTURE_ZONE 1 can be used only in SPI mode (CLK_MODE == 1)."
+      puts "ERROR: Invalid configuration option. CAPTURE_ZONE 1 can be used only in SPI mode (CLK_MODE == 0)."
       exit 2
     }
     default {
@@ -179,7 +184,11 @@ if {$CAPTURE_ZONE == 1} {
   switch $CLK_MODE {
     0 {
       ## SDI is latched by the SPIE execution module
-      ad_connect  $hier_spi_engine/m_axis_sample data_reorder/s_axis
+      if {$NO_REORDER == 0} {
+        ad_connect  $hier_spi_engine/m_axis_sample data_reorder/s_axis
+      } elseif {$NO_REORDER == 1} {
+        ad_connect $hier_spi_engine/m_axis_sample axi_ad463x_dma/s_axis
+      }
     }
     1 -
     2 {
@@ -193,7 +202,13 @@ if {$CAPTURE_ZONE == 1} {
       ad_connect ad463x_busy data_capture/echo_sclk
       ad_connect ad463x_spi_sdi data_capture/data_in
 
-      ad_connect data_capture/m_axis data_reorder/s_axis
+      # ad_connect data_capture/m_axis data_reorder/s_axis
+      ## SDI is latched by the SPIE execution module
+      if {$NO_REORDER == 0} {
+        ad_connect data_capture/m_axis data_reorder/s_axis
+      } elseif {$NO_REORDER == 1} {
+        ad_connect data_capture/m_axis axi_ad463x_dma/s_axis
+      }
 
     }
     default {

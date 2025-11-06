@@ -23,12 +23,16 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   0 - SPI Mode
 #   1 - Echo-clock or Master clock mode
 #
+# NUM_OF_CHANNEL : the number of ADC channels
+#
+#    1 - AD403x cases
+#    2 - AD463x cases
+#
 # NUM_OF_SDI : the number of MOSI lines of the SPI interface
 #
-#    1 - Interleaved mode
-#    2 - 1 lane per channel
-#    4 - 2 lanes per channel
-#    8 - 4 lanes per channel
+#    1 - 1 lane per channel: Interleaved mode or single lane per channel
+#    2 - 2 lanes per channel
+#    4 - 4 lanes per channel
 #
 # CAPTURE_ZONE : the capture zone of the next sample
 # There are two capture zones for AD4624-30:
@@ -56,11 +60,12 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 
 adi_project ad4630_fmc_zed 0 [list \
-  CLK_MODE     [get_env_param CLK_MODE      0] \
-  NUM_OF_SDI   [get_env_param NUM_OF_SDI    4] \
-  CAPTURE_ZONE [get_env_param CAPTURE_ZONE  2] \
-  DDR_EN       [get_env_param DDR_EN        0] \
-  NO_REORDER   [get_env_param NO_REORDER    0] ]
+  CLK_MODE        [get_env_param CLK_MODE         0] \
+  NUM_OF_SDI      [get_env_param NUM_OF_SDI       4] \
+  NUM_OF_CHANNEL  [get_env_param NUM_OF_CHANNEL   2] \
+  CAPTURE_ZONE    [get_env_param CAPTURE_ZONE     2] \
+  DDR_EN          [get_env_param DDR_EN           0] \
+  NO_REORDER      [get_env_param NO_REORDER       1] ]
 
 adi_project_files ad4630_fmc_zed [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
@@ -71,24 +76,51 @@ adi_project_files ad4630_fmc_zed [list \
 
 switch [get_env_param NUM_OF_SDI 4] {
   1 {
-    adi_project_files ad4630_fmc_zed [list \
-      "system_constr_1sdi.xdc" ]
+    # For 1 SDI, we need to check NUM_OF_CHANNEL and NO_REORDER
+    if {[get_env_param NUM_OF_CHANNEL 2] == 1} {
+      # 1 channel, 1 SDI
+      adi_project_files ad4630_fmc_zed [list \
+        "system_constr_1sdi_1ch.xdc" ]
+    } else {
+      # 2 channels, check NO_REORDER
+      if {[get_env_param NO_REORDER 1] == 1} {
+        # NO_REORDER=1: only 1 SDI line
+        adi_project_files ad4630_fmc_zed [list \
+          "system_constr_1sdi_2ch_noreorder.xdc" ]
+      } else {
+        # NO_REORDER=0: 2 SDI lines (1 per channel)
+        adi_project_files ad4630_fmc_zed [list \
+          "system_constr_1sdi_2ch_reorder.xdc" ]
+      }
+    }
   }
   2 {
-    adi_project_files ad4630_fmc_zed [list \
-      "system_constr_2sdi.xdc" ]
+    # For 2 SDI, check NUM_OF_CHANNEL
+    if {[get_env_param NUM_OF_CHANNEL 2] == 1} {
+      # 1 channel, 2 SDI
+      adi_project_files ad4630_fmc_zed [list \
+        "system_constr_2sdi_1ch.xdc" ]
+    } else {
+      # 2 channels, 4 SDI total (2 per channel)
+      adi_project_files ad4630_fmc_zed [list \
+        "system_constr_2sdi_2ch.xdc" ]
+    }
   }
   4 {
-    adi_project_files ad4630_fmc_zed [list \
-      "system_constr_4sdi.xdc" ]
-  }
-  8 {
-    adi_project_files ad4630_fmc_zed [list \
-      "system_constr_8sdi.xdc" ]
+    # For 4 SDI, check NUM_OF_CHANNEL
+    if {[get_env_param NUM_OF_CHANNEL 2] == 1} {
+      # 1 channel, 4 SDI
+      adi_project_files ad4630_fmc_zed [list \
+        "system_constr_4sdi_1ch.xdc" ]
+    } else {
+      # 2 channels, 8 SDI total (4 per channel)
+      adi_project_files ad4630_fmc_zed [list \
+        "system_constr_4sdi_2ch.xdc" ]
+    }
   }
   default {
     adi_project_files ad4630_fmc_zed [list \
-      "system_constr_2sdi.xdc" ]
+      "system_constr_1sdi_1ch.xdc" ]
   }
 }
 
