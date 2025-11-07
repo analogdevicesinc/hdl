@@ -38,6 +38,13 @@ if {$JESD_MODE == "8B10B"} {
   set ENCODER_SEL 2
 }
 
+set TX_TPL_WIDTH [ expr { [info exists ad_project_params(TX_TPL_WIDTH)] \
+                          ? $ad_project_params(TX_TPL_WIDTH) : {} } ]
+set RX_TPL_WIDTH [ expr { [info exists ad_project_params(RX_TPL_WIDTH)] \
+                          ? $ad_project_params(RX_TPL_WIDTH) : {} } ]
+set RX_OS_TPL_WIDTH [ expr { [info exists ad_project_params(RX_OS_TPL_WIDTH)] \
+                          ? $ad_project_params(RX_OS_TPL_WIDTH) : {} } ]
+
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 
@@ -52,7 +59,7 @@ if {$TX_DMA_SAMPLE_WIDTH == 12} {
   set TX_DMA_SAMPLE_WIDTH 16
 }
 
-set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX_JESD_M $TX_JESD_S $TX_JESD_NP]
+set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX_JESD_M $TX_JESD_S $TX_JESD_NP $TX_TPL_WIDTH]
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
@@ -67,7 +74,7 @@ if {$RX_DMA_SAMPLE_WIDTH == 12} {
   set RX_DMA_SAMPLE_WIDTH 16
 }
 
-set RX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_JESD_L $RX_JESD_M $RX_JESD_S $RX_JESD_NP]
+set RX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_JESD_L $RX_JESD_M $RX_JESD_S $RX_JESD_NP $RX_TPL_WIDTH]
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8* $RX_DATAPATH_WIDTH / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
 
 # RX OBS parameters
@@ -82,7 +89,7 @@ if {$RX_OS_DMA_SAMPLE_WIDTH == 12} {
 }
 
 if {$ORX_ENABLE} {
-  set RX_OS_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_OS_JESD_L $RX_OS_JESD_M $RX_OS_JESD_S $RX_OS_JESD_NP]
+  set RX_OS_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_OS_JESD_L $RX_OS_JESD_M $RX_OS_JESD_S $RX_OS_JESD_NP $RX_OS_TPL_WIDTH]
   set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8* $RX_OS_DATAPATH_WIDTH / ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)]
 }
 
@@ -339,7 +346,21 @@ ad_connect  $sys_cpu_clk util_adrv903x_xcvr/up_clk
 ad_connect adrv903x_tx_device_clk axi_adrv903x_tx_clkgen/clk_0
 ad_connect core_clk axi_adrv903x_tx_clkgen/clk
 
-ad_xcvrcon util_adrv903x_xcvr axi_adrv903x_tx_xcvr axi_adrv903x_tx_jesd {7 4 6 5 3 2 0 1} {} adrv903x_tx_device_clk  $TX_NUM_OF_LANES {}
+# if {$TX_NUM_OF_LANES == 8} {
+#   ad_xcvrcon util_adrv903x_xcvr axi_adrv903x_tx_xcvr axi_adrv903x_tx_jesd {7 4 6 5 3 2 0 1} {} adrv903x_tx_device_clk $MAX_TX_NUM_OF_LANES {}
+# } else {
+#     if {$TX_NUM_OF_LANES == 4} {
+#       ad_xcvrcon util_adrv903x_xcvr axi_adrv903x_tx_xcvr axi_adrv903x_tx_jesd {7 4 6 5 3 2 0 1} {} adrv903x_tx_device_clk $MAX_TX_NUM_OF_LANES {0 2 4 6}
+#     } else {
+#         if {$TX_NUM_OF_LANES == 2} {
+#           ad_xcvrcon util_adrv903x_xcvr axi_adrv903x_tx_xcvr axi_adrv903x_tx_jesd {7 4 6 5 3 2 0 1} {} adrv903x_tx_device_clk $MAX_TX_NUM_OF_LANES {0 2}
+#         } else {
+#             ad_xcvrcon util_adrv903x_xcvr axi_adrv903x_tx_xcvr axi_adrv903x_tx_jesd {7 4 6 5 3 2 0 1} {} adrv903x_tx_device_clk $MAX_TX_NUM_OF_LANES {0}
+#         }
+#     }
+# }
+
+ad_xcvrcon util_adrv903x_xcvr axi_adrv903x_tx_xcvr axi_adrv903x_tx_jesd {} {} adrv903x_tx_device_clk $MAX_TX_NUM_OF_LANES {6 7 5 4 2 0 1 3}
 
 ad_xcvrpll $tx_ref_clk util_adrv903x_xcvr/qpll_ref_clk_0
 ad_xcvrpll axi_adrv903x_tx_xcvr/up_pll_rst util_adrv903x_xcvr/up_qpll_rst_0
@@ -350,24 +371,24 @@ ad_xcvrpll axi_adrv903x_tx_xcvr/up_pll_rst util_adrv903x_xcvr/up_qpll_rst_4
 ad_connect adrv903x_rx_device_clk axi_adrv903x_rx_clkgen/clk_0
 ad_connect core_clk axi_adrv903x_rx_clkgen/clk
 
-if {$RX_NUM_OF_LANES == 8} {
-  ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_xcvr axi_adrv903x_rx_jesd {} {} adrv903x_rx_device_clk $RX_NUM_OF_LANES {0 1 2 3 4 5 6 7}
-} else {
-    if {$RX_NUM_OF_LANES == 4} {
-      ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_xcvr axi_adrv903x_rx_jesd {} {} adrv903x_rx_device_clk $RX_NUM_OF_LANES {0 1 2 3}
-    } else {
-        if {$RX_NUM_OF_LANES == 2} {
-          ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_xcvr axi_adrv903x_rx_jesd {} {} adrv903x_rx_device_clk $RX_NUM_OF_LANES {0 1}
-        } else {
-            ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_xcvr axi_adrv903x_rx_jesd {} {} adrv903x_rx_device_clk $RX_NUM_OF_LANES {0}
-        }
-    }
-}
+# if {$RX_NUM_OF_LANES >= 4} {
+  ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_xcvr axi_adrv903x_rx_jesd {} {} adrv903x_rx_device_clk $MAX_RX_NUM_OF_LANES {1 3 0 2 7 4 5 6}
+# } else {
+#     if {$RX_NUM_OF_LANES >= 4} {
+#       ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_xcvr axi_adrv903x_rx_jesd {} {} adrv903x_rx_device_clk $MAX_RX_NUM_OF_LANES {}
+#     } else {
+#         if {$RX_NUM_OF_LANES == 2} {
+#           ad_xcvrcon util_adrv903x_xcvr axi_adrv903x_rx_xcvr axi_adrv903x_rx_jesd {} {} adrv903x_rx_device_clk $MAX_RX_NUM_OF_LANES {0 1}
+#         } else {
+#             ad_xcvrcon util_adrv903x_xcvr axi_adrv903x_rx_xcvr axi_adrv903x_rx_jesd {} {} adrv903x_rx_device_clk $MAX_RX_NUM_OF_LANES {0}
+#         }
+#     }
+# }
 
 for {set i 0} {$i < 4} {incr i} {
   ad_xcvrpll  $rx_ref_clk util_adrv903x_xcvr/cpll_ref_clk_$i
   ad_xcvrpll  axi_adrv903x_rx_xcvr/up_pll_rst util_adrv903x_xcvr/up_cpll_rst_$i
-  if {$RX_NUM_OF_LANES > 4} {
+  if {$MAX_RX_NUM_OF_LANES > 4} {
     ad_xcvrpll  $rx_ref_clk util_adrv903x_xcvr/cpll_ref_clk_p[expr $i+4]
     ad_xcvrpll  axi_adrv903x_rx_xcvr/up_pll_rst util_adrv903x_xcvr/up_cpll_rst_$[expr $i+4]
   }
@@ -377,15 +398,15 @@ if {$ORX_ENABLE} {
 # Rx - OBS
   ad_connect adrv903x_rx_os_device_clk axi_adrv903x_rx_os_clkgen/clk_0
   ad_connect core_clk axi_adrv903x_rx_os_clkgen/clk
-  if {$RX_OS_NUM_OF_LANES == 4} {
-    ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_os_xcvr axi_adrv903x_rx_os_jesd {} {} adrv903x_rx_os_device_clk $RX_OS_NUM_OF_LANES {4 5 6 7}
-  } else {
-      if {$RX_OS_NUM_OF_LANES == 2} {
-        ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_os_xcvr axi_adrv903x_rx_os_jesd {} {} adrv903x_rx_os_device_clk $RX_OS_NUM_OF_LANES {4 5}
-      } else {
-        ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_os_xcvr axi_adrv903x_rx_os_jesd {} {} adrv903x_rx_os_device_clk $RX_OS_NUM_OF_LANES {4}
-      }
-  }
+  # if {$RX_OS_NUM_OF_LANES == 4} {
+    ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_os_xcvr axi_adrv903x_rx_os_jesd {4 5 6 7} {} adrv903x_rx_os_device_clk $MAX_RX_OS_NUM_OF_LANES {7 4 5 6}
+  # } else {
+      # if {$RX_OS_NUM_OF_LANES == 2} {
+      #   ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_os_xcvr axi_adrv903x_rx_os_jesd {} {} adrv903x_rx_os_device_clk $MAX_RX_OS_NUM_OF_LANES {4 5}
+      # } else {
+      #   ad_xcvrcon  util_adrv903x_xcvr axi_adrv903x_rx_os_xcvr axi_adrv903x_rx_os_jesd {} {} adrv903x_rx_os_device_clk $MAX_RX_OS_NUM_OF_LANES {4}
+      # }
+  # }
 
   for {set i 0} {$i < 4} {incr i} {
     set ch [expr $i + 4]

@@ -42,3 +42,14 @@ LINKS=$ad_project_params(RX_OS_NUM_LINKS)"
 sysid_gen_sys_init_file $sys_cstring 10
 
 source ../common/adrv903x_bd.tcl
+
+# if {$JESD_MODE == "64B66B"} {
+#   for {set i 0} {$i < [expr $MAX_TX_NUM_OF_LANES - $TX_NUM_OF_LANES]} {incr i} {
+#     ad_connect util_adrv903x_xcvr/tx_out_clk_0 util_adrv903x_xcvr/tx_clk_2x_$i
+#   }
+#   # for {set i 0} {$i < [expr $MAX_RX_NUM_OF_LANES + $MAX_RX_OS_NUM_OF_LANES - $RX_NUM_OF_LANES - $RX_OS_NUM_OF_LANES]} {incr [incr i]} {
+#     ad_connect util_adrv903x_xcvr/rx_out_clk_0 util_adrv903x_xcvr/rx_clk_2x_0
+#     ad_connect util_adrv903x_xcvr/rx_out_clk_0 util_adrv903x_xcvr/rx_clk_2x_2
+
+#   # }
+# }
