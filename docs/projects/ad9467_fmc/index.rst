@@ -30,6 +30,7 @@ Supported carriers
 
 - :xilinx:`KC705` LPC slot *
 - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
+- :xilinx:`ZCU102` FMC HPC0
 
 .. admonition:: Legend
    :class: note
@@ -40,10 +41,6 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
-.. warning::
-
-    The VADJ for the FPGA carrier must be set to 2.5V.
-
 The PN9/PN23 sequences are not compatible with O.150. Please use the
 equations given in the reference design. They follow the polynomial
 equations as in O.150, but ONLY the MSB is inverted.
@@ -52,6 +49,18 @@ The :adi:`AD9467` drives the interleaved first byte (D15:D1) on the rising edge
 and second byte (D14:D0) on the falling edge of DCO clock. However, in
 certain frequencies the captured data (from IDDR) seems to be reverse.
 If that occurs, try setting the "capture select" bit (register 0x0A, bit to 0).
+
+VADJ setting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. warning::
+
+   For ZedBoard, the VADJ must be set to 2.5V.
+
+   For ZCU102, the :adi:`EVAL-AD9467` it has on board EEPROM that will be read
+   as per VITA 57.1 FMC standards. It provides information to set the VADJ to 
+   1.8V. There are onboard level shifters on the :adi:`EVAL-AD9467` to accomodate 
+   the change in VADJ.
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,7 +73,7 @@ The data path and clock domains are depicted in the below diagram:
 .. image:: ad9467_fmc_block_diagram.svg
    :width: 800
    :align: center
-   :alt: AD9467-FMC HDL block diagram
+   :alt: AD9467-FMC/ZedBoard HDL block diagram
 
 AD9467 FMC card block diagram
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -144,12 +153,12 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-==================== ===============
-Instance             Zynq/Microblaze
-==================== ===============
-axi_ad9467           0x44A0_0000
-axi_ad9467_dma       0x44A3_0000
-==================== ===============
+==================== =============== ===========
+Instance             Zynq/Microblaze ZynqMP
+==================== =============== ===========
+axi_ad9467           0x44A0_0000     0x84A0_0000
+axi_ad9467_dma       0x44A3_0000     0x84A3_0000
+==================== =============== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -278,6 +287,8 @@ Software related
 
 - :git-linux:`AD9467-FMC KC705 Linux device tree (2023_R2 release) <2023_R2:arch/microblaze/boot/dts/kc705_ad9467_fmc.dts>`
 - :git-linux:`AD9467-FMC ZedBoard Linux device tree zynq-zed-adv7511-ad9467-fmc-250ebz.dts <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9467-fmc-250ebz.dts>`
+- :git-linux:`AD9467-FMC ZCU102 Linux device tree zynqmp-zcu102-rev10-ad9467-fmc-250ebz.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9467-fmc-250ebz.dts>`
+- :git-linux:`AD9467-FMC KC705 Linux device tree (2023_R2 release) <2023_R2:arch/microblaze/boot/dts/kc705_ad9467_fmc.dts>`
 - :git-linux:`Linux driver ad9467.c <drivers/iio/adc/ad9467.c>`
 - :dokuwiki:`[Wiki] AD9467-FMC on ZedBoard using ACE </resources/eval/ad9467-fmc-250ebz-zedboard>`
 - :git-no-os:`AD9467 no-OS project <projects/ad9467>` and
