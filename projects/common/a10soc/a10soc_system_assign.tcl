@@ -127,6 +127,15 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_eth_mdio
 
 set_instance_assignment -name OUTPUT_DELAY_CHAIN 8 -to hps_eth_txclk
 
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_eth_txd[0]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_eth_txd[1]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_eth_txd[2]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_eth_txd[3]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_eth_mdc
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_eth_mdio
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_eth_txclk
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_eth_txctl
+
 # hps-sdio
 
 set_location_assignment PIN_K16   -to hps_sdio_clk
@@ -157,16 +166,23 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdi
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_d[1]
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_d[2]
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to hps_sdio_d[3]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_sdio_d[4]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_sdio_d[5]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_sdio_d[6]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_sdio_d[7]
+
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d[4]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d[5]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d[6]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to hps_sdio_d[7]
+
 set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_clk
 set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_cmd
 set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d[0]
 set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d[1]
 set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d[2]
 set_instance_assignment -name SLEW_RATE 1 -to hps_sdio_d[3]
+
 
 # hps-usb
 
@@ -196,6 +212,16 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d[5]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d[6]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_usb_d[7]
 
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_usb_stp
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_usb_d[0]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_usb_d[1]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_usb_d[2]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_usb_d[3]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_usb_d[4]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_usb_d[5]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_usb_d[6]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_usb_d[7]
+
 # hps-uart
 
 set_location_assignment PIN_M17   -to hps_uart_tx
@@ -204,6 +230,8 @@ set_location_assignment PIN_K17   -to hps_uart_rx
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_uart_tx
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_uart_rx
 
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_uart_tx
+
 # hps-i2c (shared w fmc-a, fmc-b)
 
 set_location_assignment PIN_M20   -to hps_i2c_scl
@@ -211,6 +239,9 @@ set_location_assignment PIN_L20   -to hps_i2c_sda
 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_i2c_scl
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_i2c_sda
+
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_i2c_scl
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_i2c_sda
 
 # gpio (max-v-u21)
 
@@ -240,6 +271,11 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[5]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[6]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to gpio_bd_i[7]
 
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to gpio_bd_o[0]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to gpio_bd_o[1]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to gpio_bd_o[2]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to gpio_bd_o[3]
+
 # hps-gpio (max-v-u16)
 
 set_location_assignment PIN_J20   -to hps_gpio[0]
@@ -251,4 +287,9 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[0]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[1]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[2]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hps_gpio[3]
+
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_gpio[0]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_gpio[1]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_gpio[2]
+set_instance_assignment -name CURRENT_STRENGTH "2ma" -to hps_gpio[3]
 
