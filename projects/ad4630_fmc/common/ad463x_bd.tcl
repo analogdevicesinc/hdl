@@ -6,12 +6,16 @@
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 # system level parameters
 set NUM_OF_CHANNEL  $ad_project_params(NUM_OF_CHANNEL)
-set NUM_OF_SDI      [expr {$ad_project_params(NUM_OF_SDI) * $ad_project_params(NUM_OF_CHANNEL)}]
 set CAPTURE_ZONE    $ad_project_params(CAPTURE_ZONE)
 set CLK_MODE        $ad_project_params(CLK_MODE)
 set DDR_EN          $ad_project_params(DDR_EN)
 set NO_REORDER      $ad_project_params(NO_REORDER)
-#[expr {$NO_REORDER ? $ad_project_params(NUM_OF_SDI) : $ad_project_params(NUM_OF_SDI) * $ad_project_params(NUM_OF_CHANNEL)}]
+
+if {$NUM_OF_CHANNEL == 2 && $ad_project_params(NUM_OF_SDI) == 1 && $NO_REORDER == 0} {
+  set NUM_OF_SDI 1
+} else {
+  set NUM_OF_SDI      [expr {$ad_project_params(NUM_OF_SDI) * $ad_project_params(NUM_OF_CHANNEL)}]
+}
 
 puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI ; CAPTURE_ZONE: $CAPTURE_ZONE ; CLK_MODE: $CLK_MODE ; DDR_EN: $DDR_EN ; NO_REORDER: $NO_REORDER"
 

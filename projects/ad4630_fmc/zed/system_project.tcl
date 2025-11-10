@@ -84,11 +84,11 @@ switch [get_env_param NUM_OF_SDI 4] {
     } else {
       # 2 channels, check NO_REORDER
       if {[get_env_param NO_REORDER 1] == 1} {
-        # NO_REORDER=1: only 1 SDI line
+        # NO_REORDER=1: 2 SDI lines (1 per channel)
         adi_project_files ad4630_fmc_zed [list \
           "system_constr_1sdi_2ch_noreorder.xdc" ]
       } else {
-        # NO_REORDER=0: 2 SDI lines (1 per channel)
+        # NO_REORDER=0: 1 SDI line (double the size in bits)
         adi_project_files ad4630_fmc_zed [list \
           "system_constr_1sdi_2ch_reorder.xdc" ]
       }
