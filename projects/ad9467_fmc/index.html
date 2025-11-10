@@ -100,6 +100,7 @@
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
+<li><a class="reference internal" href="#vadj-setting">VADJ setting</a></li>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a><ul>
 <li><a class="reference internal" href="#project-block-diagram">Project block diagram</a></li>
 <li><a class="reference internal" href="#ad9467-fmc-card-block-diagram">AD9467 FMC card block diagram</a></li>
@@ -422,6 +423,7 @@ and/or setting up the <a class="icon adi reference external" href="https://www.a
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/KC705" target="_blank">KC705</a> LPC slot *</p></li>
 <li><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a> FMC HPC0</p></li>
 </ul>
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
@@ -433,10 +435,6 @@ and/or setting up the <a class="icon adi reference external" href="https://www.a
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The VADJ for the FPGA carrier must be set to 2.5V.</p>
-</div>
 <p>The PN9/PN23 sequences are not compatible with O.150. Please use the
 equations given in the reference design. They follow the polynomial
 equations as in O.150, but ONLY the MSB is inverted.</p>
@@ -444,12 +442,23 @@ equations as in O.150, but ONLY the MSB is inverted.</p>
 and second byte (D14:D0) on the falling edge of DCO clock. However, in
 certain frequencies the captured data (from IDDR) seems to be reverse.
 If that occurs, try setting the “capture select” bit (register 0x0A, bit to 0).</p>
+<section id="vadj-setting">
+<h3>VADJ setting<a class="headerlink" href="#vadj-setting" title="Permalink to this heading"></a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For ZedBoard, the VADJ must be set to 2.5V.</p>
+<p>For ZCU102, the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9467" target="_blank">EVAL-AD9467</a> it has on board EEPROM that will be read
+as per VITA 57.1 FMC standards. It provides information to set the VADJ to
+1.8V. There are onboard level shifters on the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9467" target="_blank">EVAL-AD9467</a> to accomodate
+the change in VADJ.</p>
+</div>
+</section>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <section id="project-block-diagram">
 <h4>Project block diagram<a class="headerlink" href="#project-block-diagram" title="Permalink to this heading"></a></h4>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad9467_fmc_block_diagram.svg"><img alt="AD9467-FMC HDL block diagram" class="align-center" src="../../_images/ad9467_fmc_block_diagram.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad9467_fmc_block_diagram.svg"><img alt="AD9467-FMC/ZedBoard HDL block diagram" class="align-center" src="../../_images/ad9467_fmc_block_diagram.svg" width="800" /></a>
 </section>
 <section id="ad9467-fmc-card-block-diagram">
 <h4>AD9467 FMC card block diagram<a class="headerlink" href="#ad9467-fmc-card-block-diagram" title="Permalink to this heading"></a></h4>
@@ -520,14 +529,17 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
 <th class="head"><p>Zynq/Microblaze</p></th>
+<th class="head"><p>ZynqMP</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>axi_ad9467</p></td>
 <td><p>0x44A0_0000</p></td>
+<td><p>0x84A0_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_ad9467_dma</p></td>
 <td><p>0x44A3_0000</p></td>
+<td><p>0x84A3_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -712,6 +724,8 @@ location and run the make command by typing in your command prompt:</p>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2023_R2/arch/microblaze/boot/dts/kc705_ad9467_fmc.dts" target="_blank">AD9467-FMC KC705 Linux device tree (2023_R2 release)</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9467-fmc-250ebz.dts" target="_blank">AD9467-FMC ZedBoard Linux device tree zynq-zed-adv7511-ad9467-fmc-250ebz.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9467-fmc-250ebz.dts" target="_blank">AD9467-FMC ZCU102 Linux device tree zynqmp-zcu102-rev10-ad9467-fmc-250ebz.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2023_R2/arch/microblaze/boot/dts/kc705_ad9467_fmc.dts" target="_blank">AD9467-FMC KC705 Linux device tree (2023_R2 release)</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad9467.c" target="_blank">Linux driver ad9467.c</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/ad9467-fmc-250ebz-zedboard" target="_blank">[Wiki] AD9467-FMC on ZedBoard using ACE</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9467" target="_blank">AD9467 no-OS project</a> and
