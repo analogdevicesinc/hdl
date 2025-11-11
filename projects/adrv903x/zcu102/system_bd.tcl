@@ -42,3 +42,5 @@ LINKS=$ad_project_params(RX_OS_NUM_LINKS)"
 sysid_gen_sys_init_file $sys_cstring 10
 
 source ../common/adrv903x_bd.tcl
+
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ {300}
