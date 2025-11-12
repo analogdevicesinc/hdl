@@ -25,7 +25,6 @@ ad_ip_instance axi_ad974x ad974x_dac
 
 # clocks
 
-#ad_connect ad974x_clk ad974x_dma/m_axis_aclk
 ad_connect ad974x_clk ad974x_dac/dac_clk
 
 # resets
@@ -41,8 +40,6 @@ connect_bd_net [get_bd_ports ad974x_clk] [get_bd_pins ad974x_dma/fifo_rd_clk]
 
 connect_bd_net [get_bd_pins ad974x_dma/fifo_rd_en] [get_bd_pins ad974x_dac/dma_ready]
 
-
-#ad_connect ad974x_dma/m_axis ad974x_dac/s_axis
 ad_connect ad974x_dac/dac_data ad974x_data
 
 # AXI address definitions

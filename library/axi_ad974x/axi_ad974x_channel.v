@@ -98,7 +98,7 @@ module axi_ad974x_channel #(
     dac_data <= dac_data_int;
   end
 
-  always @ (*) begin
+  always @ (dac_data_sel_s) begin
     dma_ready <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
 
     case(dac_data_sel_s)
@@ -132,9 +132,9 @@ module axi_ad974x_channel #(
 
   // dma data
 
-  always @(posedge dac_clk) begin
+  always @(posedge dac_clk) beg
     if (dma_valid == 1'b0 || dac_rst == 1'b1) begin
-      dma_pattern <= 'h0;
+      dma_pattern <= 14'h0
     end else begin
       dma_pattern <= dma_data;
     end
@@ -164,7 +164,6 @@ module axi_ad974x_channel #(
     .clk (dac_clk),
     .dac_dds_format (dac_dfmt_type),
     .dac_data_sync (dac_data_sync),
-//    .dac_valid (dds_ready),
     .dac_valid (~|dac_data_sel_s),
     .tone_1_scale (dac_dds_scale_1_s),
     .tone_2_scale (dac_dds_scale_2_s),

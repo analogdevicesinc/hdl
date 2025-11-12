@@ -22,7 +22,6 @@ adi_ip_files axi_ad974x [list \
   "$ad_hdl_dir/library/common/ad_dds_2.v" \
   "$ad_hdl_dir/library/common/ad_dds_1.v" \
   "$ad_hdl_dir/library/common/ad_dds.v" \
-  "$ad_hdl_dir/library/common/ad_addsub.v" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
@@ -38,12 +37,17 @@ adi_ip_bd axi_ad974x "bd/bd.tcl"
 
 set cc [ipx::current_core]
 
+set_property description "AD974x DAC Interface Core - Supports AD9740/AD9742/AD9744/AD9748 DACs" $cc
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ad974x} $cc
 
 set_property driver_value 0 [ipx::get_ports *dac* -of_objects  $cc]
 set_property driver_value 0 [ipx::get_ports *data* -of_objects  $cc]
 set_property driver_value 0 [ipx::get_ports *valid* -of_objects  $cc]
 ipx::infer_bus_interface dac_clk xilinx.com:signal:clock_rtl:1.0 $cc
+
+# Add FREQ_HZ parameters to clock interfaces
+ipx::add_bus_parameter FREQ_HZ [ipx::get_bus_interfaces dac_clk -of_objects $cc]
+ipx::add_bus_parameter FREQ_HZ [ipx::get_bus_interfaces s_axi_aclk -of_objects $cc]
 
 adi_add_bus "s_axis" "slave" \
   "xilinx.com:interface:axis_rtl:1.0" \
@@ -52,6 +56,19 @@ adi_add_bus "s_axis" "slave" \
     {"dma_valid" "TVALID"} \
     {"dma_data" "TDATA"}]
 adi_add_bus_clock "dac_clk" "s_axis"
+
+# Associate dma interfaces with dac_clk
+for {set i 0} {$i < 16} {incr i} {
+  adi_add_bus_clock "dac_clk" "dma_$i"
+}
+
+# Associate dac interfaces with dac_clk
+for {set i 0} {$i < 14} {incr i} {
+  adi_add_bus_clock "dac_clk" "dac_$i"
+}
+
+# Associate the non-indexed dma interface
+adi_add_bus_clock "dac_clk" "dma"
 
 adi_add_auto_fpga_spec_params
 

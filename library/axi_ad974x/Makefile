@@ -6,7 +6,6 @@
 
 LIBRARY_NAME := axi_ad974x
 
-GENERIC_DEPS += ../common/ad_addsub.v
 GENERIC_DEPS += ../common/ad_dds.v
 GENERIC_DEPS += ../common/ad_dds_1.v
 GENERIC_DEPS += ../common/ad_dds_2.v
