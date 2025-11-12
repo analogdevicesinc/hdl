@@ -799,6 +799,18 @@ out_clk_div2 outputs of the util_adxcvr).</p>
 <li><p>JESD204C Lane Rate: 16.22 Gbps</p></li>
 <li><p>QPLL0</p></li>
 </ul>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<dl class="simple">
+<dt>ONLY for the ZCU102 design:</dt><dd><ul class="simple">
+<li><p>Cache coherency is available and enabled.</p></li>
+<li><p>The DMA is connected to the Memory via HPC interface which is limited
+to 128 bits.</p></li>
+<li><p>SYS_DMA_CLK = 333 MHz</p></li>
+</ul>
+</dd>
+</dl>
+</div>
 </section>
 </section>
 <section id="configuration-modes">
