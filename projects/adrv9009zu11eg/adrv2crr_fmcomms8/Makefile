@@ -7,7 +7,6 @@
 PROJECT_NAME := fmcomms8_adrv9009zu11eg
 
 M_DEPS += fmcomms8_constr.xdc
-M_DEPS += ../common/adrv9009zu11eg_spi.v
 M_DEPS += ../common/adrv9009zu11eg_constr.xdc
 M_DEPS += ../common/adrv9009zu11eg_bd.tcl
 M_DEPS += ../common/adrv2crr_fmc_constr.xdc
@@ -15,6 +14,7 @@ M_DEPS += ../common/adrv2crr_fmc_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_fan_control
