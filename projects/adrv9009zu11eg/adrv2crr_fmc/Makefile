@@ -37,7 +37,6 @@ CORUNDUM ?= 0
 ifeq ($(CORUNDUM), 1)
 	export BOARD := ADRV9009ZU11EG
 	export CPU := ZynqMP
-	export DMA_CLKOUT1_REQUESTED_OUT_FREQ := 250
 
 	M_DEPS += system_constr_corundum.xdc
 	M_DEPS += system_bd_corundum.tcl

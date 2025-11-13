@@ -96,6 +96,7 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL0_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL0_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL0_REF_CTRL__FREQMHZ 100
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL1_ENABLE 1
+ad_ip_parameter sys_ps8 CONFIG.PSU__NUM_FABRIC_RESETS {2}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 250
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL2_ENABLE 1
@@ -318,6 +319,7 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_LENGTH_WIDTH 28
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_som_rx_dma MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width

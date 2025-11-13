@@ -47,12 +47,13 @@ connect_bd_net [get_bd_ports qsfp_led] [get_bd_pins corundum_hierarchy/ethernet_
 ad_connect corundum_hierarchy/clk_corundum sys_ps8/pl_clk1
 
 # Use Utility Logic Vector IP which takes sys_ps8/pl_resetn1 and negates it and connects
-# it to corundum_hierarchy/rstn_corundum
+# it to corundum_hierarchy/rst_corundum
 ad_ip_instance util_vector_logic util_vector_logic_0
 ad_ip_parameter util_vector_logic_0 CONFIG.C_OPERATION {not}
 ad_ip_parameter util_vector_logic_0 CONFIG.C_SIZE 1
 
-ad_connect corundum_hierarchy/rstn_corundum util_vector_logic_0/Res
+ad_connect sys_ps8/pl_resetn1 util_vector_logic_0/Op1
+ad_connect corundum_hierarchy/rst_corundum util_vector_logic_0/Res
 
 ad_connect corundum_hierarchy/qsfp qsfp
 ad_connect corundum_hierarchy/qsfp_rst qsfp_rst
