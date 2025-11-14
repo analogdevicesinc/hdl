@@ -26,7 +26,6 @@ adi_ip_files axi_ad9434 [list \
   "axi_ad9434_if.v" \
   "axi_ad9434_pnmon.v" \
   "axi_ad9434_core.v" \
-  "axi_ad9434_constr.xdc" \
   "axi_ad9434.v" ]
 
 adi_ip_properties axi_ad9434

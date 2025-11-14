@@ -52,7 +52,6 @@ XILINX_DEPS += ../xilinx/common/ad_serdes_in.v
 XILINX_DEPS += ../xilinx/common/ad_serdes_out.v
 XILINX_DEPS += adrv9001_rx.v
 XILINX_DEPS += adrv9001_tx.v
-XILINX_DEPS += axi_adrv9001_constr.xdc
 XILINX_DEPS += axi_adrv9001_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc

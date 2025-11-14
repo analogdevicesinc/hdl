@@ -24,10 +24,6 @@ adi_ip_files axi_i2s_adi [list \
 
 adi_ip_properties axi_i2s_adi
 
-set_property PROCESSING_ORDER LATE [ipx::get_files axi_i2s_adi_constr.xdc \
-  -of_objects [ipx::get_file_groups -of_objects [ipx::current_core] \
-  -filter {NAME =~ *synthesis*}]]
-
 adi_ip_infer_streaming_interfaces axi_i2s_adi
 
 set_property display_name "ADI AXI I2S Controller" [ipx::current_core]

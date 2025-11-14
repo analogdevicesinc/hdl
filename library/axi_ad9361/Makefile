@@ -45,7 +45,6 @@ XILINX_DEPS += ../xilinx/common/ad_data_out.v
 XILINX_DEPS += ../xilinx/common/ad_dcfilter.v
 XILINX_DEPS += ../xilinx/common/ad_mul.v
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
-XILINX_DEPS += axi_ad9361_constr.xdc
 XILINX_DEPS += axi_ad9361_ip.tcl
 XILINX_DEPS += xilinx/axi_ad9361_cmos_if.v
 XILINX_DEPS += xilinx/axi_ad9361_lvds_if.v

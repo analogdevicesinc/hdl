@@ -21,7 +21,6 @@ adi_ip_files axi_ltc2387 [list \
   "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "axi_ltc2387_if.v" \
   "axi_ltc2387_channel.v" \
   "axi_ltc2387.v" ]

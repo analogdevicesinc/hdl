@@ -15,7 +15,6 @@ GENERIC_DEPS += ../axi_jesd204_common/jesd204_up_common.v
 GENERIC_DEPS += ../../common/ad_mem.v
 GENERIC_DEPS += ../../common/ad_rst.v
 
-XILINX_DEPS += axi_jesd204_rx_constr.xdc
 XILINX_DEPS += axi_jesd204_rx_ip.tcl
 XILINX_DEPS += axi_jesd204_rx_ooc.ttcl
 XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc

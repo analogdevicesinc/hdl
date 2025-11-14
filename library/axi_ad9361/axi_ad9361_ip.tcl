@@ -39,7 +39,6 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
   "$ad_hdl_dir/library/common/ad_pps_receiver_constr.ttcl" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "axi_ad9361_constr.xdc" \
   "xilinx/axi_ad9361_lvds_if.v" \
   "xilinx/axi_ad9361_cmos_if.v" \
   "axi_ad9361_rx_pnmon.v" \

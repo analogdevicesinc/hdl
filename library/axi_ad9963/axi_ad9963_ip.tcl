@@ -32,7 +32,6 @@ adi_ip_files axi_ad9963 [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
-  "axi_ad9963_constr.xdc" \
   "axi_ad9963_if.v" \
   "axi_ad9963_rx_pnmon.v" \
   "axi_ad9963_rx_channel.v" \

@@ -23,7 +23,6 @@ GENERIC_DEPS += axi_hdmi_tx_vdma.v
 
 XILINX_DEPS += ../xilinx/common/ad_mul.v
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
-XILINX_DEPS += axi_hdmi_tx_constr.xdc
 XILINX_DEPS += axi_hdmi_tx_ip.tcl
 
 INTEL_DEPS += ../../library/scripts/adi_intel_device_info_enc.tcl

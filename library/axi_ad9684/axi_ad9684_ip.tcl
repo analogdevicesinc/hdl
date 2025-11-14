@@ -27,7 +27,6 @@ adi_ip_files axi_ad9684 [list \
   "axi_ad9684_pnmon.v" \
   "axi_ad9684_if.v" \
   "axi_ad9684_channel.v" \
-  "axi_ad9684_constr.xdc" \
   "axi_ad9684.v" ]
 
 adi_ip_properties axi_ad9684
