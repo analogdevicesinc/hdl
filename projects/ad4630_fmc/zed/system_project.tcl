@@ -13,7 +13,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   How to use over-writable parameters from the environment:
 #
 #    e.g.
-#      make NUM_OF_SDI=4  CAPTURE_ZONE=2
+#      make LANES_PER_CHANNEL=4  CAPTURE_ZONE=2
 #
 #
 # Parameter description:
@@ -25,10 +25,10 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 # NUM_OF_CHANNEL : the number of ADC channels
 #
-#    1 - AD403x cases
-#    2 - AD463x cases
+#    1 - AD403x devices
+#    2 - AD463x/adaq42xx devices
 #
-# NUM_OF_SDI : the number of MOSI lines of the SPI interface
+# LANES_PER_CHANNEL : the number of MOSI lines of the SPI interface
 #
 #    1 - 1 lane per channel: Interleaved mode or single lane per channel
 #    2 - 2 lanes per channel
@@ -47,25 +47,24 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   0 - MISO runs on SDR
 #   1 - MISO runs on DDR
 #
-# NO_REORDER : Parameter used for CAPTURE_ZONE = 1 and NUM_OF_SDI = 1 (ad4030)
-# or NUM_OF_SDI = 2 (ad4630) to connect the SPI Engine directly to DMA bypassing
-# the spi_axis_reorder IP
+# INTERLEAVE_MODE: parameter used for NUM_OF_CHANNEL = 2 and LANES_PER_CHANNEL = 1 (ad463x).
+# Enabling INTERLEAVE_MODE for any other configuration is invalid.
 #
-#   0 - spi_axis_reorder present in the system
-#   1 - spi_axis_reorder removed from the system
+#     0 - interleave mode disabled, each channel has its own SDI line
+#     1 - interleave mode enabled, the ad463x ADC share the same SDI line
 #
 # Example:
 #
-#   make NUM_OF_SDI=2 CAPTURE_ZONE=2
+#     make CLK_MODE=0 NUM_OF_CHANNEL=2 LANES_PER_CHANNEL=4 CAPTURE_ZONE=2 DDR_EN=0 INTERLEAVE_MODE=0
 #
 
 adi_project ad4630_fmc_zed 0 [list \
-  CLK_MODE        [get_env_param CLK_MODE         0] \
-  NUM_OF_SDI      [get_env_param NUM_OF_SDI       4] \
-  NUM_OF_CHANNEL  [get_env_param NUM_OF_CHANNEL   2] \
-  CAPTURE_ZONE    [get_env_param CAPTURE_ZONE     2] \
-  DDR_EN          [get_env_param DDR_EN           0] \
-  NO_REORDER      [get_env_param NO_REORDER       1] ]
+  CLK_MODE           [get_env_param CLK_MODE           0] \
+  LANES_PER_CHANNEL  [get_env_param LANES_PER_CHANNEL  4] \
+  NUM_OF_CHANNEL     [get_env_param NUM_OF_CHANNEL     2] \
+  CAPTURE_ZONE       [get_env_param CAPTURE_ZONE       2] \
+  DDR_EN             [get_env_param DDR_EN             0] \
+  INTERLEAVE_MODE    [get_env_param INTERLEAVE_MODE    0] ]
 
 adi_project_files ad4630_fmc_zed [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
@@ -74,23 +73,23 @@ adi_project_files ad4630_fmc_zed [list \
   "system_constr.xdc" \
   "system_top.v" ]
 
-switch [get_env_param NUM_OF_SDI 4] {
+switch [get_env_param LANES_PER_CHANNEL 4] {
   1 {
-    # For 1 SDI, we need to check NUM_OF_CHANNEL and NO_REORDER
+    # For 1 SDI, check NUM_OF_CHANNEL
     if {[get_env_param NUM_OF_CHANNEL 2] == 1} {
       # 1 channel, 1 SDI
       adi_project_files ad4630_fmc_zed [list \
         "system_constr_1sdi_1ch.xdc" ]
     } else {
-      # 2 channels, check NO_REORDER
-      if {[get_env_param NO_REORDER 1] == 1} {
-        # NO_REORDER=1: 2 SDI lines (1 per channel)
+      # 2 channels, check INTERLEAVE_MODE
+      if {[get_env_param INTERLEAVE_MODE 0] == 0} {
+        # INTERLEAVE_MODE=0: 2 SDI lines (1 per channel)
         adi_project_files ad4630_fmc_zed [list \
-          "system_constr_1sdi_2ch_noreorder.xdc" ]
+          "system_constr_1sdi_2ch.xdc" ]
       } else {
-        # NO_REORDER=0: 1 SDI line (double the size in bits)
+        # INTERLEAVE_MODE=1: valid for AD463x only, both channels share the same SDI line
         adi_project_files ad4630_fmc_zed [list \
-          "system_constr_1sdi_2ch_reorder.xdc" ]
+          "system_constr_1sdi_2ch_interleave.xdc" ]
       }
     }
   }
@@ -120,7 +119,7 @@ switch [get_env_param NUM_OF_SDI 4] {
   }
   default {
     adi_project_files ad4630_fmc_zed [list \
-      "system_constr_1sdi_1ch.xdc" ]
+      "system_constr_4sdi_2ch.xdc" ]
   }
 }
 

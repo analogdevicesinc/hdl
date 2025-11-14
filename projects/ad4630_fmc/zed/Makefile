@@ -6,16 +6,12 @@
 
 PROJECT_NAME := ad4630_fmc_zed
 
-# M_DEPS += system_constr_8sdi.xdc
-# M_DEPS += system_constr_4sdi.xdc
-# M_DEPS += system_constr_2sdi.xdc
-# M_DEPS += system_constr_1sdi.xdc
 M_DEPS += system_constr_4sdi_2ch.xdc
 M_DEPS += system_constr_4sdi_1ch.xdc
 M_DEPS += system_constr_2sdi_2ch.xdc
 M_DEPS += system_constr_2sdi_1ch.xdc
-M_DEPS += system_constr_1sdi_2ch_reorder.xdc
-M_DEPS += system_constr_1sdi_2ch_noreorder.xdc
+M_DEPS += system_constr_1sdi_2ch_interleave.xdc
+M_DEPS += system_constr_1sdi_2ch.xdc
 M_DEPS += system_constr_1sdi_1ch.xdc
 M_DEPS += ../common/ad463x_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl

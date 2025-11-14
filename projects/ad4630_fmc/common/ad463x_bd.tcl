@@ -5,19 +5,32 @@
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 # system level parameters
-set NUM_OF_CHANNEL  $ad_project_params(NUM_OF_CHANNEL)
-set CAPTURE_ZONE    $ad_project_params(CAPTURE_ZONE)
-set CLK_MODE        $ad_project_params(CLK_MODE)
-set DDR_EN          $ad_project_params(DDR_EN)
-set NO_REORDER      $ad_project_params(NO_REORDER)
+set LANES_PER_CHANNEL   $ad_project_params(LANES_PER_CHANNEL)
+set NUM_OF_CHANNEL      $ad_project_params(NUM_OF_CHANNEL)
+set CAPTURE_ZONE        $ad_project_params(CAPTURE_ZONE)
+set CLK_MODE            $ad_project_params(CLK_MODE)
+set DDR_EN              $ad_project_params(DDR_EN)
+set INTERLEAVE_MODE     $ad_project_params(INTERLEAVE_MODE)
 
-if {$NUM_OF_CHANNEL == 2 && $ad_project_params(NUM_OF_SDI) == 1 && $NO_REORDER == 0} {
-  set NUM_OF_SDI 1
+if {$INTERLEAVE_MODE == 1} {
+  if {$LANES_PER_CHANNEL > 1 || $NUM_OF_CHANNEL != 2} {
+    puts "ERROR: Interleave mode is only supported with 2 channels (NUM_OF_CHANNEL == 2) and 1 lane per channel (LANES_PER_CHANNEL == 1)."
+    exit 2
+  }
+  set NUM_OF_SDI      1
+  # REORDER is mandatory in interleaved mode
+  set NO_REORDER      0
 } else {
-  set NUM_OF_SDI      [expr {$ad_project_params(NUM_OF_SDI) * $ad_project_params(NUM_OF_CHANNEL)}]
+  set NUM_OF_SDI      [expr {$ad_project_params(NUM_OF_CHANNEL) * $ad_project_params(LANES_PER_CHANNEL)}]
+  if {$NUM_OF_SDI > 2} {
+    # REORDER is mandatory when more than 2 lanes are used
+    set NO_REORDER      0
+  } else {
+    set NO_REORDER      1
+  }
 }
 
-puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI ; CAPTURE_ZONE: $CAPTURE_ZONE ; CLK_MODE: $CLK_MODE ; DDR_EN: $DDR_EN ; NO_REORDER: $NO_REORDER"
+puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI ; CAPTURE_ZONE: $CAPTURE_ZONE ; CLK_MODE: $CLK_MODE ; DDR_EN: $DDR_EN ; INTERLEAVE_MODE: $INTERLEAVE_MODE"
 
 # block design ports and interfaces
 # specify the CNV generator's reference clock frequency in MHz
@@ -42,6 +55,7 @@ create_bd_port -dir I ad463x_echo_sclk
 
 create_bd_port -dir I ad463x_busy
 create_bd_port -dir O ad463x_cnv
+create_bd_port -dir I ad463x_trigger
 create_bd_port -dir I ad463x_ext_clk
 
 create_bd_port -dir O max17687_sync_clk
@@ -99,17 +113,8 @@ ad_ip_parameter sync_generator CONFIG.PULSE_0_PERIOD $max17687_cycle
 ad_ip_parameter sync_generator CONFIG.PULSE_0_WIDTH [expr int(ceil(double($max17687_cycle) / 2))]
 
 if {$NO_REORDER == 0} {
-
   ad_ip_instance spi_axis_reorder data_reorder
   ad_ip_parameter data_reorder CONFIG.NUM_OF_LANES $NUM_OF_SDI
-
-} elseif {$NO_REORDER == 1} {
-
-    if {$CAPTURE_ZONE == 2 && $NUM_OF_SDI > 2} {
-      puts "ERROR: Invalid configuration - Disabling Reorder IP is invalid when there are more than 2 SDI lanes for Capture Zone 2."
-      exit 2
-    }
-
 }
 
 # dma to receive data stream
@@ -127,17 +132,18 @@ if {$NO_REORDER == 0} {
   ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(32 * $NUM_OF_SDI, 64)]
 }
 
-# } elseif {$NO_REORDER == 1 && $NUM_OF_SDI == 1 && $NUM_OF_CHANNEL == 1} {
-  # ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 32
-# } else {
-#   ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
-# }
-
 ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+
+# or logic for CNV generation
+ad_ip_instance ilvector_logic or_logic_cnv
+ad_ip_parameter or_logic_cnv CONFIG.C_SIZE 1
+ad_ip_parameter or_logic_cnv CONFIG.C_OPERATION or
+
+ad_connect cnv_generator/pwm_1 or_logic_cnv/Op1
+ad_connect ad463x_trigger or_logic_cnv/Op2
 
 # Trigger for SPI offload
 if {$CAPTURE_ZONE == 1} {
-
   ## SPI mode is using the echo SCLK, on echo SPI and Master mode the BUSY
   #  is used for SDI latching
   switch $CLK_MODE {
@@ -168,6 +174,7 @@ if {$CAPTURE_ZONE == 1} {
   ad_connect ad463x_busy busy_sync/in_bits
   ad_connect busy_sync/out_bits busy_capture/signal_in
   ad_connect $hier_spi_engine/trigger busy_capture/signal_out
+
   ## SDI is latched by the SPIE execution module
   if {$NO_REORDER == 0} {
     ad_connect  $hier_spi_engine/m_axis_sample data_reorder/s_axis
@@ -176,7 +183,6 @@ if {$CAPTURE_ZONE == 1} {
   }
 
 } elseif {$CAPTURE_ZONE == 2} {
-
   # Zone 2 - trigger to next consecutive CNV
   ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_offload CONFIG.ASYNC_TRIG 1
   ad_connect cnv_generator/pwm_0 $hier_spi_engine/trigger
@@ -190,7 +196,7 @@ if {$CAPTURE_ZONE == 1} {
       ## SDI is latched by the SPIE execution module
       if {$NO_REORDER == 0} {
         ad_connect  $hier_spi_engine/m_axis_sample data_reorder/s_axis
-      } elseif {$NO_REORDER == 1} {
+      } else {
         ad_connect $hier_spi_engine/m_axis_sample axi_ad463x_dma/s_axis
       }
     }
@@ -206,14 +212,12 @@ if {$CAPTURE_ZONE == 1} {
       ad_connect ad463x_busy data_capture/echo_sclk
       ad_connect ad463x_spi_sdi data_capture/data_in
 
-      # ad_connect data_capture/m_axis data_reorder/s_axis
       ## SDI is latched by the SPIE execution module
       if {$NO_REORDER == 0} {
         ad_connect data_capture/m_axis data_reorder/s_axis
-      } elseif {$NO_REORDER == 1} {
+      } else {
         ad_connect data_capture/m_axis axi_ad463x_dma/s_axis
       }
-
     }
     default {
       puts "ERROR: Invalid value for CLK_MODE (valid values are 0 or 1 or 2)."
@@ -222,12 +226,11 @@ if {$CAPTURE_ZONE == 1} {
   }
 
 } else {
-
   puts "ERROR: Invalid capture zone, please choose 1 or 2."
   exit 2
-
 }
-ad_connect ad463x_cnv cnv_generator/pwm_1
+
+ad_connect ad463x_cnv or_logic_cnv/Res
 ad_connect max17687_sync_clk sync_generator/pwm_0
 
 # clocks
