@@ -138,4 +138,6 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[16]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[17]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to ad9371_gpio[18]
 
+set_global_assignment -name MESSAGE_DISABLE 15714
+
 execute_flow -compile
