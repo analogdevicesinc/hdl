@@ -8,7 +8,6 @@ PROJECT_NAME := ad9740_fmc_zed
 
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../common/ad9740_fmc_bd.tcl
-M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_data_clk.v
 M_DEPS += ../../../library/util_cdc/sync_bits.v
