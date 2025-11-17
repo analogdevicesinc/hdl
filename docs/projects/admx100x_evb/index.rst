@@ -109,66 +109,31 @@ The Software GPIO number is calculated as follows:
 
 - Zynq-7000: if PS7 is used, then offset is 54
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+======================  =========  =======  =========
+GPIO signal             Direction  HDL no.  Zynq-7000
+======================  =========  =======  =========
+ACQ_DRDY                IN         43       97
+ACQ_RESET               OUT        42       96
+ACQ_SYNQ_IN_FMC         OUT        41       95
+ADMX100X_TRIG           IN         40       94
+ADMX100X_DAC_LDAC       OUT        39       93
+ADMX100X_CAL            IN         38       92
+ADMX100X_VALID          OUT        37       91
+ADMX100X_READY          OUT        36       90
+ADMX100X_EN             OUT        35       89
+ADMX100X_SYNC_MODE      IN         34       88
+ADMX100X_RESET          OUT        33       87
+ADMX100X_OT             OUT        32       86
+======================  =========  =======  =========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - ACQ_DRDY
-     - IN
-     - 43
-     - 97
-   * - ACQ_RESET
-     - OUT
-     - 42
-     - 96
-   * - ACQ_SYNQ_IN_FMC
-     - OUT
-     - 41
-     - 95
-   * - ADMX100X_TRIG
-     - IN
-     - 40
-     - 94
-   * - ADMX100X_DAC_LDAC
-     - OUT
-     - 39
-     - 93
-   * - ADMX100X_CAL
-     - IN
-     - 38
-     - 92
-   * - ADMX100X_VALID
-     - OUT
-     - 37
-     - 91
-   * - ADMX100X_READY
-     - OUT
-     - 36
-     - 90
-   * - ADMX100X_EN
-     - OUT
-     - 35
-     - 89
-   * - ADMX100X_SYNC_MODE
-     - IN
-     - 34
-     - 88
-   * - ADMX100X_RESET
-     - OUT
-     - 33
-     - 87
-   * - ADMX100X_OT
-     - OUT
-     - 32
-     - 86
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq-7000 = Software GPIO (Linux GPIO numbers) to be used in
+     device trees
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
