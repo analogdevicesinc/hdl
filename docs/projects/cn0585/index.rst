@@ -127,45 +127,23 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+====================  ============  =======  ==========
+GPIO signal           Direction     HDL no.  Zynq-7000
+====================  ============  =======  ==========
+reset                 INOUT         36       90
+dac_0_ldac            INOUT         35       89
+dac_1_ldac            INOUT         34       88 
+dac_1_alert           IN            33       87
+dac_0_alert           IN            32       86
+====================  ============  =======  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - reset
-     - INOUT
-     - 36
-     - 90
-     - 114
-   * - dac_0_ldac
-     - INOUT
-     - 35
-     - 89
-     - 113
-   * - dac_1_ldac
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - dac_1_alert
-     - IN
-     - 33
-     - 87
-     - 111
-   * - dac_0_alert
-     - IN
-     - 32
-     - 86
-     - 110
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000 = Software GPIO to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

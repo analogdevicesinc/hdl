@@ -198,54 +198,24 @@ GPIOs
 The Software GPIO number is calculated as follows:
 
 - Zynq-7000: if PS7 is used, then offset is 54
+- DE10-Nano: the offset is -32
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+===================  =========  =======  =========  =========
+GPIO signal          Direction  HDL no.  Zynq-7000  DE10-Nano
+===================  =========  =======  =========  =========
+ad469x_resetn        INOUT      32       86         0
+gpio[33]             IN         33       87         --
+gpio[34]             OUT        34       88         --
+ad469x_busy_alt_gp0  INPUT      33       --          1
+===================  =========  =======  =========  =========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - ad469x_resetn
-     - INOUT
-     - 32
-     - 86
-   * - gpio[33]
-     - IN
-     - 33
-     - 87
-   * - gpio[34]
-     - OUT
-     - 34
-     - 88
+.. admonition:: Legend
+   :class: note
 
-- DE10-Nano: the offset is 32
-
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - DE10-Nano
-   * - ad469x_busy_alt_gp0;
-     - INPUT
-     - 33
-     - 1
-   * - ad469x_resetn
-     - INPUT
-     - 32
-     - 0
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, DE10-Nano are Software GPIOs, to be used in device trees
 
 ``BSY_ALT_GP0`` pin can be configured to function as a GPIO pin,
 the threshold detection alert indicator, the busy indicator, or the

@@ -154,54 +154,62 @@ GPIOs
 
 The device control and monitor signals are interfaced to a GPIO module.
 
-========================== ================ ============== ============== =====
-GPIO signal                Direction        HDL EMIOGPIO   Software GPIO  FMC
-                           (from FPGA view)                Zynq MP
-========================== ================ ============== ============== =====
-adrv1_gpio_tx2_enable_in   OUT              76             154            HPC0
-adrv1_gpio_tx1_enable_in   OUT              75             153            HPC0
-adrv1_gpio_rx2_enable_in   OUT              74             152            HPC0
-adrv1_gpio_rx1_enable_in   OUT              73             151            HPC0
-adrv1_sm_fan_tach,         INOUT            72             150            HPC0
-adrv1_reset_trx,           INOUT            71             149            HPC0
-adrv1_mode,                INOUT            70             148            HPC0
-adrv1_gp_int,              INOUT            69             147            HPC0
-adrv1_dgpio_11,            INOUT            68             146            HPC0
-adrv1_dgpio_10,            INOUT            67             145            HPC0
-adrv1_dgpio_9,             INOUT            66             144            HPC0
-adrv1_dgpio_8,             INOUT            65             143            HPC0
-adrv1_dgpio_7,             INOUT            64             142            HPC0
-adrv1_dgpio_6,             INOUT            63             141            HPC0
-adrv1_dgpio_5,             INOUT            62             140            HPC0
-adrv1_dgpio_4,             INOUT            61             139            HPC0
-adrv1_dgpio_3,             INOUT            60             138            HPC0
-adrv1_dgpio_2,             INOUT            59             137            HPC0
-adrv1_dgpio_1,             INOUT            58             136            HPC0
-adrv1_dgpio_0              INOUT            57             135            HPC0
-adrv1_tdd_sync_loc         INTERNAL         56             134            HPC1
-adrv1_vadj_err             IN               55             133            HPC1
-adrv1_mssi_sync            INTERNAL         54             132            HPC1
-adrv1_gpio_tx2_enable_in   OUT              51             129            HPC1
-adrv1_gpio_tx1_enable_in   OUT              50             128            HPC1
-adrv1_gpio_rx2_enable_in   OUT              49             127            HPC1
-adrv1_gpio_rx1_enable_in   OUT              48             126            HPC1
-adrv1_sm_fan_tach          INOUT            47             125            HPC1
-adrv1_reset_trx            INOUT            46             124            HPC1
-adrv1_mode                 INOUT            45             123            HPC1
-adrv1_gp_int               INOUT            44             122            HPC1
-adrv1_dgpio_11             INOUT            43             121            HPC1
-adrv1_dgpio_10             INOUT            42             120            HPC1
-adrv1_dgpio_9              INOUT            41             119            HPC1
-adrv1_dgpio_8              INOUT            40             118            HPC1
-adrv1_dgpio_7              INOUT            39             117            HPC1
-adrv1_dgpio_6              INOUT            38             116            HPC1
-adrv1_dgpio_5              INOUT            37             115            HPC1
-adrv1_dgpio_4              INOUT            36             114            HPC1
-adrv1_dgpio_3              INOUT            35             113            HPC1
-adrv1_dgpio_2              INOUT            34             112            HPC1
-adrv1_dgpio_1              INOUT            33             111            HPC1
-adrv1_dgpio_0              INOUT            32             110            HPC1
-========================== ================ ============== ============== =====
+=========================  ===========  =======  ===================  =====
+GPIO signal                Direction    HDL no.  Zynq UltraScale+ MP  FMC
+=========================  ===========  =======  ===================  =====
+adrv1_gpio_tx2_enable_in   OUT          76             154            HPC0
+adrv1_gpio_tx1_enable_in   OUT          75             153            HPC0
+adrv1_gpio_rx2_enable_in   OUT          74             152            HPC0
+adrv1_gpio_rx1_enable_in   OUT          73             151            HPC0
+adrv1_sm_fan_tach,         INOUT        72             150            HPC0
+adrv1_reset_trx,           INOUT        71             149            HPC0
+adrv1_mode,                INOUT        70             148            HPC0
+adrv1_gp_int,              INOUT        69             147            HPC0
+adrv1_dgpio_11,            INOUT        68             146            HPC0
+adrv1_dgpio_10,            INOUT        67             145            HPC0
+adrv1_dgpio_9,             INOUT        66             144            HPC0
+adrv1_dgpio_8,             INOUT        65             143            HPC0
+adrv1_dgpio_7,             INOUT        64             142            HPC0
+adrv1_dgpio_6,             INOUT        63             141            HPC0
+adrv1_dgpio_5,             INOUT        62             140            HPC0
+adrv1_dgpio_4,             INOUT        61             139            HPC0
+adrv1_dgpio_3,             INOUT        60             138            HPC0
+adrv1_dgpio_2,             INOUT        59             137            HPC0
+adrv1_dgpio_1,             INOUT        58             136            HPC0
+adrv1_dgpio_0              INOUT        57             135            HPC0
+adrv1_tdd_sync_loc         INTERNAL     56             134            HPC1
+adrv1_vadj_err             IN           55             133            HPC1
+adrv1_mssi_sync            INTERNAL     54             132            HPC1
+adrv1_gpio_tx2_enable_in   OUT          51             129            HPC1
+adrv1_gpio_tx1_enable_in   OUT          50             128            HPC1
+adrv1_gpio_rx2_enable_in   OUT          49             127            HPC1
+adrv1_gpio_rx1_enable_in   OUT          48             126            HPC1
+adrv1_sm_fan_tach          INOUT        47             125            HPC1
+adrv1_reset_trx            INOUT        46             124            HPC1
+adrv1_mode                 INOUT        45             123            HPC1
+adrv1_gp_int               INOUT        44             122            HPC1
+adrv1_dgpio_11             INOUT        43             121            HPC1
+adrv1_dgpio_10             INOUT        42             120            HPC1
+adrv1_dgpio_9              INOUT        41             119            HPC1
+adrv1_dgpio_8              INOUT        40             118            HPC1
+adrv1_dgpio_7              INOUT        39             117            HPC1
+adrv1_dgpio_6              INOUT        38             116            HPC1
+adrv1_dgpio_5              INOUT        37             115            HPC1
+adrv1_dgpio_4              INOUT        36             114            HPC1
+adrv1_dgpio_3              INOUT        35             113            HPC1
+adrv1_dgpio_2              INOUT        34             112            HPC1
+adrv1_dgpio_1              INOUT        33             111            HPC1
+adrv1_dgpio_0              INOUT        32             110            HPC1
+=========================  ===========  =======  ===================  =====
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq UltraScale+ MP = Software GPIO to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

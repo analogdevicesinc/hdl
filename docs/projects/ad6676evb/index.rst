@@ -163,70 +163,29 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+==============  =========  =======  =========  ==========
+GPIO signal     Direction  HDL no.  Zynq-7000  Microblaze
+==============  =========  =======  =========  ==========
+adc_oen         INOUT      41       95         41
+adc_sela        INOUT      40       94         40
+adc_selb        INOUT      39       93         39
+adc_s0          INOUT      38       92         38
+adc_s1          INOUT      37       91         37
+adc_resetb      INOUT      36       90         36
+adc_agc1        INOUT      35       89         35
+adc_agc2        INOUT      34       88         34
+adc_agc3        INOUT      33       87         33
+adc_agc4        INOUT      32       86         32
+==============  =========  =======  =========  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - adc_oen
-     - INOUT
-     - 41
-     - 95
-     - 119
-   * - adc_sela
-     - INOUT
-     - 40
-     - 94
-     - 118
-   * - adc_selb
-     - INOUT
-     - 39
-     - 93
-     - 117
-   * - adc_s0
-     - INOUT
-     - 38
-     - 92
-     - 116
-   * - adc_s1
-     - INOUT
-     - 37
-     - 91
-     - 115
-   * - adc_resetb
-     - INOUT
-     - 36
-     - 90
-     - 114
-   * - adc_agc1
-     - INOUT
-     - 35
-     - 89
-     - 113
-   * - adc_agc2
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - adc_agc3
-     - INOUT
-     - 33
-     - 87
-     - 111
-   * - adc_agc4
-     - INOUT
-     - 32
-     - 86
-     - 110
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, Microblaze are Software GPIOs, to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

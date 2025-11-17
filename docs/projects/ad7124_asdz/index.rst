@@ -90,26 +90,21 @@ The Software GPIO number is calculated as follows:
 
 - DE10-Nano: the offset is 32
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 3
+===========  =========  =======  =========
+GPIO signal  Direction  HDL no.  DE10-Nano
+===========  =========  =======  =========
+spi_miso     IN         33       1
+sync_error   IN         32       0
+===========  =========  =======  =========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - DE10-Nano
-   * - sync_err
-     - INPUT
-     - 32
-     - 0
-   * - spi_miso
-     - INPUT
-     - 33
-     - 1
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - DE10-Nano is Software GPIO, to be used in device trees
+
 
 Building the HDL project
 -------------------------------------------------------------------------------

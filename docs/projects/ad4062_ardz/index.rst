@@ -133,50 +133,22 @@ GPIOs
 The Software GPIO number is calculated as follows:
 
 -  Cora Z7S: the offset is 54
+-  DE10-Nano: the offset is -32
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+===========  =========  =======  =========  =========
+GPIO signal  Direction  HDL no.  Zynq-7000  DE10-Nano
+===========  =========  =======  =========  =========
+adc_gp1      INOUT      33       87         1
+adc_gp0      INOUT      32       86         0
+===========  =========  =======  =========  =========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - adc_gp1
-     - INOUT
-     - 33
-     - 87
-   * - adc_gp0
-     - INOUT
-     - 32
-     - 86
+.. admonition:: Legend
+   :class: note
 
--  DE10-Nano: the offset is 32
-
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     -
-   * - adc_gp1
-     - INPUT
-     - 33
-     - 1
-   * - adc_gp0
-     - INPUT
-     - 32
-     - 0
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, DE10-Nano are Software GPIOs, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

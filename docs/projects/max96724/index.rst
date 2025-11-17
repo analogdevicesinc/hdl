@@ -99,48 +99,27 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
-- ZynqMP: if PS8 EMIOs are used, then offset is 78
+- Zynq UltraScale+ MP: if PS8 EMIOs are used, then offset is 78
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+==================  =========  =======  =====================
+GPIO signal         Direction  HDL no.  Zynq UltraScale+ MP
+==================  =========  =======  =====================
+fan_en_b            OUT        0        78
+csirxss_rstn        OUT        1        79
+ap_rstn_frmbuf_0    OUT        2        80
+ap_rstn_frmbuf_1    OUT        3        81
+ap_rstn_frmbuf_2    OUT        4        82
+ap_rstn_frmbuf_3    OUT        5        83
+rpi_en              OUT        6        84
+==================  =========  =======  =====================
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - ZynqMP
-   * - fan_en_b
-     - OUT
-     - 0
-     - 78
-   * - csirxss_rstn
-     - OUT
-     - 1
-     - 79
-   * - ap_rstn_frmbuf_0
-     - OUT
-     - 2
-     - 80
-   * - ap_rstn_frmbuf_1
-     - OUT
-     - 3
-     - 81
-   * - ap_rstn_frmbuf_2
-     - OUT
-     - 4
-     - 82
-   * - ap_rstn_frmbuf_3
-     - OUT
-     - 5
-     - 83
-   * - rpi_en
-     - OUT
-     - 6
-     - 84
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq UltraScale+ MP = Software GPIO to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

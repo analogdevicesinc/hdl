@@ -183,75 +183,35 @@ GPIOs
 
 The device control and monitor signals are interfaced to a GPIO module.
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+===================  ============  =======  =========  ===================  ==========
+GPIO signal          Direction     HDL no.  Zynq-7000  Zynq UltraScale+ MP  Microblaze
+===================  ============  =======  =========  ===================  ==========
+gpio_muxout_tx*      INOUT         50       104        128                  --
+gpio_muxout_rx*      INOUT         49       103        127                  --
+up_txnrx             IN            48       102        126                  48
+up_enable            IN            47       101        125                  47                  
+gpio_resetb          OUT           46       100        124                  46
+gpio_sync            OUT           45        99        123                  45
+gpio_en_agc          OUT           44        98        122                  44
+gpio_ctl[3:0]        OUT           43:40    97:94      121:118              43:40
+gpio_status[7:0]     IN            39:32    93:86      117:110              39:32
+===================  ============  =======  =========  ===================  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - gpio_muxout_tx*
-     - INOUT
-     - 50
-     - 104
-     - 128
-   * - gpio_muxout_rx*
-     - INOUT
-     - 49
-     - 103
-     - 127
-   * - up_txnrx
-     - IN
-     - 48
-     - 102
-     - 126
-   * - up_enable
-     - IN
-     - 47
-     - 101
-     - 125
-   * - gpio_resetb
-     - OUT
-     - 46
-     - 100
-     - 124
-   * - gpio_sync
-     - OUT
-     - 45
-     - 99
-     - 123
-   * - gpio_en_agc
-     - OUT
-     - 44
-     - 98
-     - 122
-   * - gpio_ctl[3:0]
-     - OUT
-     - 43:40
-     - 97:94
-     - 121:118
-   * - gpio_status[7:0]
-     - IN
-     - 39:32
-     - 93:86
-     - 117:110
+.. admonition:: Legend
+   :class: note
 
-.. note::
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, Zynq UltraScale+ MP, Microblaze are Software GPIOs, to be used in
+     device trees
+   - **\*** - used only in :git-hdl:`Zed <projects/fmcomms2/zed/system_top.v>`,
+     :git-hdl:`ZC706 <projects/fmcomms2/zc706/system_top.v>` and
+     :git-hdl:`ZC702 <projects/fmcomms2/zc702/system_top.v>` projects.
 
-  **\*** - used only in
-  :git-hdl:`Zed <projects/fmcomms2/zed/system_top.v>` and
-  :git-hdl:`ZC702 <projects/fmcomms2/zc702/system_top.v>` projects.
-
-  ``gpio_muxout_tx`` is connected to PMOD JA1.3, used for LO PLL0 TX at ADF4351
-  and ``gpio_muxout_rx`` is connected to PMOD JA1.9, used for LO PLL0 RX at
-  ADF4351.
+     ``gpio_muxout_tx`` is connected to PMOD JA1.3, used for LO PLL0 TX at ADF4351
+     and ``gpio_muxout_rx`` is connected to PMOD JA1.9, used for LO PLL0 RX at
+     ADF4351.
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

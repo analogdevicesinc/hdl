@@ -84,55 +84,25 @@ axi_clkgen            0x44B0_0000
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+==============  =========  =======  =========
+GPIO signal     Direction  HDL no.  Zynq-7000
+==============  =========  =======  =========
+ad35xxr_resetn  OUT        38       92
+ad35xxr_gpio_9  INOUT      37       91
+ad35xxr_gpio_8  INOUT      36       90
+ad35xxr_gpio_7  INOUT      35       89
+ad35xxr_gpio_6  INOUT      34       88
+ad35xxr_alertn  INOUT      33       87
+ad35xxr_ldacn   INOUT      32       86
+==============  =========  =======  =========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - ad35xxr_resetn
-     - OUT
-     - 38
-     - 92
-     - 116
-   * - ad35xxr_gpio_9
-     - INOUT
-     - 37
-     - 91
-     - 115
-   * - ad35xxr_gpio_8
-     - INOUT
-     - 36
-     - 90
-     - 114
-   * - ad35xxr_gpio_7
-     - INOUT
-     - 35
-     - 89
-     - 113
-   * - ad35xxr_gpio_6
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - ad35xxr_alertn
-     - INOUT
-     - 33
-     - 87
-     - 111
-   * - ad35xxr_ldacn
-     - INOUT
-     - 32
-     - 86
-     - 110
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000 = Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

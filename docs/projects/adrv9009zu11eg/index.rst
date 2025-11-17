@@ -3,7 +3,7 @@
 ADRV9009ZU11EG HDL reference design
 ===============================================================================
 
-The HDL reference design is built around the Zynq® Ultrascale+ four
+The HDL reference design is built around the Zynq® UltraScale+ four
 Cortex™-A536 MPCore processors. A functional block diagram of the system is
 shown below.
 
@@ -202,118 +202,43 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 15
-   :header-rows: 2
+==========================  ============  =======  ======================
+GPIO signal                 Direction     HDL no.  Zynq UltraScale+ MP
+==========================  ============  =======  ======================
+gpio_4_exp_n                INOUT         92       170
+gpio_3_exp_n                INOUT         91       169
+gpio_3_exp_p                INOUT         90       168
+hmc7044_gpio_4              INOUT         89       167
+hmc7044_gpio_3              INOUT         88       166
+hmc7044_gpio_1              INOUT         87       165
+hmc7044_gpio_2              INOUT         86       164
+hmc7044_sync                INOUT         85       163
+hmc7044_reset               INOUT         84       162
+adrv9009_tx2_enable_b       INOUT         83       161
+adrv9009_tx1_enable_b       INOUT         82       160
+adrv9009_rx2_enable_b       INOUT         81       159
+adrv9009_rx1_enable_b       INOUT         80       158
+adrv9009_test_b             INOUT         79       157
+adrv9009_reset_b_b          INOUT         78       156
+adrv9009_gpint_b            INOUT         77       155
+adrv9009_gpio_{18:00}_b     INOUT         76:58    154:136
+adrv9009_tx2_enable_a       INOUT         57       135
+adrv9009_tx1_enable_a       INOUT         56       134
+adrv9009_rx2_enable_a       INOUT         55       133
+adrv9009_rx1_enable_a       INOUT         54       132
+adrv9009_test_a             INOUT         53       131
+adrv9009_reset_b_a          INOUT         52       130
+adrv9009_gpint_a            INOUT         51       129
+adrv9009_gpio_{18:00}_a     INOUT         50:32    128:110
+==========================  ============  =======  ======================
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-   * - gpio_4_exp_n
-     - INOUT
-     - 92
-     - 170
-   * - gpio_3_exp_n
-     - INOUT
-     - 91
-     - 169
-   * - gpio_3_exp_p
-     - INOUT
-     - 90
-     - 168
-   * - hmc7044_gpio_4
-     - INOUT
-     - 89
-     - 167
-   * - hmc7044_gpio_3
-     - INOUT
-     - 88
-     - 166
-   * - hmc7044_gpio_1
-     - INOUT
-     - 87
-     - 165
-   * - hmc7044_gpio_2
-     - INOUT
-     - 86
-     - 164
-   * - hmc7044_sync
-     - INOUT
-     - 85
-     - 163
-   * - hmc7044_reset
-     - INOUT
-     - 84
-     - 162
-   * - adrv9009_tx2_enable_b
-     - INOUT
-     - 83
-     - 161
-   * - adrv9009_tx1_enable_b
-     - INOUT
-     - 82
-     - 160
-   * - adrv9009_rx2_enable_b
-     - INOUT
-     - 81
-     - 159
-   * - adrv9009_rx1_enable_b
-     - INOUT
-     - 80
-     - 158
-   * - adrv9009_test_b
-     - INOUT
-     - 79
-     - 157
-   * - adrv9009_reset_b_b
-     - INOUT
-     - 78
-     - 156
-   * - adrv9009_gpint_b
-     - INOUT
-     - 77
-     - 155
-   * - adrv9009_gpio_{18:00}_b
-     - INOUT
-     - 76:58
-     - 154:136
-   * - adrv9009_tx2_enable_a
-     - INOUT
-     - 57
-     - 135
-   * - adrv9009_tx1_enable_a
-     - INOUT
-     - 56
-     - 134
-   * - adrv9009_rx2_enable_a
-     - INOUT
-     - 55
-     - 133
-   * - adrv9009_rx1_enable_a
-     - INOUT
-     - 54
-     - 132
-   * - adrv9009_test_a
-     - INOUT
-     - 53
-     - 131
-   * - adrv9009_reset_b_a
-     - INOUT
-     - 52
-     - 130
-   * - adrv9009_gpint_a
-     - INOUT
-     - 51
-     - 129
-   * - adrv9009_gpio_{18:00}_a
-     - INOUT
-     - 50:32
-     - 128:110
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq UltraScale+ MP = Software GPIO (Linux GPIO number) to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -276,117 +276,31 @@ The Software GPIO number is calculated as follows:
 
 - ZynqMP: the offset is 78
 - A10SoC: the offset is 0
-
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-     - A10SoC
-   * - trig
-     - IN
-     - 43
-     - 121
-     - 43
-   * - adc_pd
-     - OUT
-     - 42
-     - 120
-     - 42
-   * - adac_txen
-     - OUT
-     - 41
-     - 119
-     - 41
-   * - dac_reset
-     - OUT
-     - 40
-     - 118
-     - 40
-   * - clk_sync
-     - OUT
-     - 38
-     - 116
-     - 38
-   * - adc_fdb
-     - IN
-     - 36
-     - 114
-     - 36
-   * - adc_fda
-     - IN
-     - 35
-     - 113
-     - 35
-   * - dac_irq
-     - IN
-     - 34
-     - 112
-     - 34
-   * - clkd_status
-     - IN
-     - 33:32
-     - 111:110
-     - 33:32
-
 - Zynq-7000: the offset is 54
+- MicroBlaze: the offset is 0
 
-.. list-table::
-   :widths: 25 20 20 20
-   :header-rows: 2
+=================  ============  =======  ==========  =====  ==========  ==========
+GPIO signal        Direction     HDL no.  Zynq MP     A10SoC  Zynq-7000  MicroBlaze
+=================  ============  =======  ==========  =====  ==========  ==========
+trig               IN            43       121         43     97          43
+adc_pd             OUT           42       120         42     96          42
+adac_txen          OUT           41       119         41     95          41
+dac_reset          OUT           40       118         40     94          40
+clk_sync           OUT           38       116         38     92          38
+adc_fdb            IN            36       114         36     90          36
+adc_fda            IN            35       113         35     89          35
+dac_irq            IN            34       112         34     88          34
+clkd_status[1:0]   IN            33:32    111:110     33:32  87:86       33:32
+=================  ============  =======  ==========  =====  ==========  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-   * - trig
-     - IN
-     - 43
-     - 97
-   * - adc_pd
-     - OUT
-     - 42
-     - 96
-   * - adac_txen
-     - OUT
-     - 41
-     - 95
-   * - dac_reset
-     - OUT
-     - 40
-     - 94
-   * -  clk_sync
-     - OUT
-     - 38
-     - 92
-   * - adc_fdb
-     - IN
-     - 36
-     - 90
-   * - adc_fda
-     - IN
-     - 35
-     - 89
-   * - dac_irq
-     - IN
-     - 34
-     - 88
-   * - clkd_status
-     - IN
-     - 33:32
-     - 87:86
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project (bit-width indicated)
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq-7000, Zynq MP, A10SoC, MicroBlaze = Software GPIOs (Linux GPIO numbers) to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

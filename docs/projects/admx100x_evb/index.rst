@@ -89,54 +89,28 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+======================  =========  =======  =========
+GPIO signal             Direction  HDL no.  Zynq-7000
+======================  =========  =======  =========
+ADMX100X_OT             IN         32       86
+ADMX100X_RESET          OUT        33       87
+ADMX100X_SYNC_MODE      OUT        34       88
+ADMX100X_EN             OUT        35       89
+ADMX100X_READY          IN         36       90
+ADMX100X_VALID          IN         37       91
+ADMX100X_CAL            OUT        38       92
+ADMX100X_DAC_LDAC       OUT        39       93
+ADMX100X_TRIG           OUT        40       94
+======================  =========  =======  =========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - ADMX100X_SYNC_MODE
-     - OUT
-     - 34
-     - 88
-   * - ADMX100X_EN
-     - OUT
-     - 35
-     - 89
-   * - ADMX100X_CAL
-     - OUT
-     - 38
-     - 92
-   * - ADMX100X_TRIG
-     - OUT
-     - 40
-     - 94
-   * - ADMX100X_DAC_LDAC
-     - OUT
-     - 39
-     - 93
-   * - ADMX100X_RESET
-     - OUT
-     - 33
-     - 87
-   * - ADMX100X_READY
-     - IN
-     - 36
-     - 90
-   * - ADMX100X_VALID
-     - IN
-     - 37
-     - 91
-   * - ADMX100X_OT
-     - IN
-     - 32
-     - 86
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq-7000 = Software GPIO (Linux GPIO numbers) to be used in
+     device trees
 
 Building the HDL project
 -------------------------------------------------------------------------------

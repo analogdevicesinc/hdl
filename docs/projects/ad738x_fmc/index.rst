@@ -218,65 +218,34 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
-- Zynq-7000: if PS7 is used, then the offset is 54
-
 **Zynq Platform:**
 
-.. list-table::
-   :widths: 25 25 25 25 25 25
-   :header-rows: 2
+- Zynq-7000: if PS7 is used, then the offset is 54
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Assigned value
-     - Assigned value
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - ALERT_SPI_N=1
-     - ALERT_SPI_N=0
-   * - gpio[33]
-     - IN
-     - 33
-     - 87
-     - sdid
-     - 0
-   * - gpio[32]
-     - IN
-     - 32
-     - 86
-     - sdib
-     - 0
+==============  =========  =======  =========  =============  =============
+GPIO signal     Direction  HDL no.  Zynq-7000  ALERT_SPI_N=1  ALERT_SPI_N=0
+==============  =========  =======  =========  =============  =============
+gpio[33]        OUT        33       87         sdid           0
+gpio[32]        OUT        32       86         sdib           0
+==============  =========  =======  =========  =============  =============
 
 **Lattice LFCPNX-EVB Platform:**
 
-.. list-table::
-   :widths: 25 25 25 25 25
-   :header-rows: 2
+=================  =========  ============  ==============  ==============
+GPIO signal        Direction   RISC-V RX    ALERT_SPI_N=1   ALERT_SPI_N=0
+=================  =========  ============  ==============  ==============
+gpio1[29]          IN         gpio1[29]     sdi[3]          0
+gpio1[28]          IN         gpio1[28]     sdi[1]          0
+=================  =========  ============  ==============  ==============
 
-   * - GPIO signal
-     - Direction
-     - Software GPIO
-     - Assigned value
-     - Assigned value
-   * - HDL GPIO IP
-     - (from FPGA view)
-     - RISC-V RX
-     - ALERT_SPI_N=1
-     - ALERT_SPI_N=0
-   * - gpio1[29]
-     - IN
-     - gpio1[29]
-     - sdi[3]
-     - 0
-   * - gpio1[28]
-     - IN
-     - gpio1[28]
-     - sdi[1]
-     - 0
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, RISC-V RX are Software GPIOs, to be used in device trees
+   - ALERT_SPI_N = assigned value
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

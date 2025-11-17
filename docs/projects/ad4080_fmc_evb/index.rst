@@ -125,45 +125,23 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+==============  =========  =======  =========
+GPIO signal     Direction  HDL no.  Zynq-7000
+==============  =========  =======  =========
+ad9508_sync     OUT        37       91
+pwrgd           IN         36       90
+adf435x_lock    INOUT      35       89
+gpio3_fmc       INOUT      34       88
+gpio2_fmc       INOUT      33       87
+==============  =========  =======  =========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - sync_req
-     - OUT
-     - 37
-     - 91
-     - 115
-   * - pwrgd
-     - IN
-     - 36
-     - 90
-     - 114
-   * - adf435x_lock
-     - IN
-     - 35
-     - 89
-     - 113
-   * - gpio3_fmc
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - gpio3_fmc
-     - INOUT
-     - 33
-     - 87
-     - 111
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000 = Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

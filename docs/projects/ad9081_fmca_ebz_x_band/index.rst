@@ -220,27 +220,27 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-====================== ================ ============== ==============
-GPIO signal            Direction        HDL GPIO EMIO  Software GPIO
-                       (from FPGA view)                Zynq MP
-====================== ================ ============== ==============
-gpio_o_86_ms           OUT              86             163
-gpio_o_85_ms           OUT              85             162
-pmod0_6_6_RX_LOAD      OUT              84             161
-pmod0_5_4_TX_LOAD      OUT              83             160
+====================== ================ ============== ===================
+GPIO signal            Direction        HDL no.        Zynq UltraScale+ MP
+====================== ================ ============== ===================
+gpio_o_86_ms           OUT              86             164
+gpio_o_85_ms           OUT              85             163
+pmod0_6_6_RX_LOAD      OUT              84             162
+pmod0_5_4_TX_LOAD      OUT              83             161
+pmod0_4_2_TR           OUT              82             160
 pmod0_0_1_PA_ON        OUT              81             159
-gpio_o_78_ms           OUT              78             155
-fmc_bob_xud1_imu_rst   OUT              77             154
-tdd_sync               IN               76             153
-fmc_bob_xud1_imu_gpio2 INOUT            75             152
-fmc_bob_xud1_imu_gpio1 INOUT            74             151
-fmc_bob_xud1_imu_gpio0 INOUT            73             150
-fmc_bob_xud1_gpio5     INOUT            72             149
-fmc_bob_xud1_gpio4     INOUT            71             148
-fmc_bob_xud1_gpio3     INOUT            70             147
-fmc_bob_xud1_gpio2     INOUT            69             146
-fmc_bob_xud1_gpio1     INOUT            68             145
-fmc_bob_xud1_gpio0     INOUT            67             144
+gpio_o_78_ms           OUT              78             156
+fmc_bob_xud1_imu_rst   OUT              77             155
+tdd_sync               IN               76             154
+fmc_bob_xud1_imu_gpio2 INOUT            75             153
+fmc_bob_xud1_imu_gpio1 INOUT            74             152
+fmc_bob_xud1_imu_gpio0 INOUT            73             151
+fmc_bob_xud1_gpio5     INOUT            72             150
+fmc_bob_xud1_gpio4     INOUT            71             149
+fmc_bob_xud1_gpio3     INOUT            70             148
+fmc_bob_xud1_gpio2     INOUT            69             147
+fmc_bob_xud1_gpio1     INOUT            68             146
+fmc_bob_xud1_gpio0     INOUT            67             145
 fpga_syncout_1_n       INOUT            63             141
 fpga_syncout_1_p       INOUT            62             140
 fpga_syncin_1_n        INOUT            61             139
@@ -256,7 +256,15 @@ agc1[1:0]              IN               47:46          125:124
 agc0[1:0]              IN               45:44          123:122
 hmc_gpio1              INOUT            43             121
 gpio[10:0]             INOUT            42:32          120:110
-====================== ================ ============== ==============
+====================== ================ ============== ===================
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq UltraScale+ MP is Software GPIOs, to be used device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
