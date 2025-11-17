@@ -164,90 +164,40 @@ GPIO
 The Software GPIO number is calculated as follows:
 
 - Zynq-7000: if PS7 EMIOs are used, then offset is 54
-- ZynqMP: if PS8 EMIOs are used, then offset is 78
+- Zynq UltraScale+ MP: if PS8 EMIOs are used, then offset is 78
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000/ZynqMP
-   * - link_st_a
-     - IN
-     - 35
-     - 89
-   * - link_st_b
-     - IN
-     - 34
-     - 88
-   * - int_n_a
-     - IN
-     - 33
-     - 87
-   * - int_n_b
-     - IN
-     - 32
-     - 86
-   * - gpio_bd[31:0] *
-     - INOUT
-     - 31:0
-     - 85:54
-   * - gpio_bd[14:0] **
-     - INOUT
-     - 14:0
-     - 68:54
-   * - gpio_bd_i[20:8] \***
-     - IN
-     - 20:8
-     - 98:86
-   * - gpio_bd_o[7:0] \***
-     - OUT
-     - 7:0
-     - 85:78
+====================  ============  =======  =========  ======================
+GPIO signal           Direction     HDL no.  Zynq-7000  Zynq UltraScale+ MP
+====================  ============  =======  =========  ======================
+gpio_reset_a  *       OUT           37       91         115
+gpio_reset_b  *       OUT           36       90         114
+link_st_a             IN            35       89         113
+link_st_b             IN            34       88         112
+int_n_a  **           IN            33       87         111
+int_n_b  **           IN            32       86         110
+====================  ============  =======  =========  ======================
 
 - Intel FPGAs - Altera Arria 10 SoC
 
-.. list-table::
-   :widths: 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-   * -
-     - (from FPGA view)
-     - Arria10SoC
-   * - link_st_a
-     - IN
-     - 35
-   * - link_st_b
-     - IN
-     - 34
-   * - mii_crs_a
-     - IN
-     - 33
-   * - mii_crs_b
-     - IN
-     - 32
-   * - gpio_bd_i[11:4]
-     - IN
-     - 11:4
-   * - gpio_bd_o
-     - OUT
-     - 3:0
+====================  ============  =======  ======
+GPIO signal           Direction     HDL no.  A10SoC
+====================  ============  =======  ======
+link_st_a             IN            35       3
+link_st_b             IN            34       2
+mii_crs_a             IN            33       1
+mii_crs_b             IN            32       0
+====================  ============  =======  ======
 
 .. admonition:: Legend
    :class: note
 
-   - ``*``  instantiated only for Zed carrier
-   - ``**`` instantiated only for ZC706 carrier
-   - ``***`` instantiated only for ZCU102 carrier
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000, Zynq UltraScale+ MP, A10SoC = Software GPIO to be
+     used in device trees
+   - ``*`` instantiated only for RMII mode
+   - ``**`` instantiated only for RGMII mode
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

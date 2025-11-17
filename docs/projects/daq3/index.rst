@@ -315,50 +315,25 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+================  =========  =======  =========  ===================  ==========
+GPIO signal       Direction  HDL no.  Zynq-7000  Zynq UltraScale+ MP  MicroBlaze
+================  =========  =======  =========  ===================  ==========
+adc_pd            INOUT      38       92         116                  38
+dac_txen          INOUT      37       91         115                  37
+adc_fdb           INOUT      36       90         114                  36
+adc_fda           INOUT      35       89         113                  35
+dac_irq           INOUT      34       88         112                  34
+clkd_status[1:0]  INOUT      33:32    87:86      111:110              33:32
+================  =========  =======  =========  ===================  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - adc_pd
-     - INOUT
-     - 38
-     - 92
-     - 116
-   * - dac_txen
-     - INOUT
-     - 37
-     - 91
-     - 115
-   * - adc_fdb
-     - INOUT
-     - 36
-     - 90
-     - 114
-   * - adc_fda
-     - INOUT
-     - 35
-     - 89
-     - 113
-   * - dac_irq
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - clkd_status
-     - INOUT
-     - 32
-     - 86
-     - 110
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq-7000, Zynq UltraScale+ MP, MicroBlaze = Software GPIOs to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

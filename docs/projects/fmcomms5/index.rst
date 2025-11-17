@@ -165,40 +165,40 @@ GPIOs
 
 The device control and monitor signals are interfaced to a GPIO module.
 
-ZC706
+ZC706/ZC702
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-================ ========= ============= =============
-GPIO signal      Direction HDL GPIO EMIO Zynq-700 GPIO
-================ ========= ============= =============
-gpio_resetb_1    INOUT     59            113
-gpio_ad5355_lock INOUT     58            112
-gpio_ad5355_rfen INOUT     57            111
-gpio_calsw_4_1   INOUT     56            110
-gpio_calsw_3_1   INOUT     55            109
-gpio_calsw_2_1   INOUT     54            108
-gpio_calsw_1_1   INOUT     53            107
-gpio_txnrx_1     OUT       52            106
-gpio_enable_1    OUT       51            105
-gpio_en_agc_1    INOUT     50            104
-gpio_txnrx_0     INOUT     49            103
-gpio_enable_0    INOUT     48            102
-gpio_en_agc_0    INOUT     47            101
-gpio_resetb_0    OUT       46            100
-gpio_debug_4_1   INOUT     43            97
-gpio_debug_3_1   INOUT     42            96
-gpio_debug_2_1   INOUT     41            95
-gpio_debug_1_1   INOUT     40            94
-gpio_ctl_0[3:0]  INOUT     39:36         93:90
-gpio_ctl_1[3:0]  INOUT     35:32         89:86
-================ ========= ============= =============
+================ ========= ======== ==========
+GPIO signal      Direction HDL no.  Zynq-7000
+================ ========= ======== ==========
+gpio_resetb_1    INOUT     59        113
+gpio_ad5355_lock INOUT     58        112
+gpio_ad5355_rfen INOUT     57        111
+gpio_calsw_4_1   INOUT     56        110
+gpio_calsw_3_1   INOUT     55        109
+gpio_calsw_2_1   INOUT     54        108
+gpio_calsw_1_1   INOUT     53        107
+gpio_txnrx_1     OUT       52        106
+gpio_enable_1    OUT       51        105
+gpio_en_agc_1    INOUT     50        104
+gpio_txnrx_0     INOUT     49        103
+gpio_enable_0    INOUT     48        102
+gpio_en_agc_0    INOUT     47        101
+gpio_resetb_0    OUT       46        100
+gpio_debug_4_1   INOUT     43        97
+gpio_debug_3_1   INOUT     42        96
+gpio_debug_2_1   INOUT     41        95
+gpio_debug_1_1   INOUT     40        94
+gpio_ctl_0[3:0]  INOUT     39:36     93:90
+gpio_ctl_1[3:0]  INOUT     35:32     89:86
+================ ========= ======== ==========
 
 ZCU102
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-================ ========= ============= ============
-GPIO signal      Direction HDL GPIO EMIO Zynq MP GPIO
-================ ========= ============= ============
+================ ========= =======  ===================
+GPIO signal      Direction HDL no.  Zynq UltraScale+ MP
+================ ========= =======  ===================
 gpio_resetb_1    OUT       65            143
 gpio_ad5355_lock IN        64            142
 gpio_ad5355_rfen OUT       63            141
@@ -221,7 +221,16 @@ gpio_debug_1_0   OUT       46            124
 gpio_ctl_1       OUT       45:42         123:120
 gpio_ctl_0       OUT       41:38         119:116
 gpio_status_1    IN        37:30         115:108
-================ ========= ============= ============
+================ ========= =======  ===================
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000, Zynq UltraScale+ MP = Software GPIOs to
+     be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

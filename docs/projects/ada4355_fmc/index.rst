@@ -135,82 +135,33 @@ The Software GPIO number is calculated as follows:
 
 - Zynq-7000: if PS7 is used, then offset is 54
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - apd_supp_en **
-     - INOUT
-     - 42
-     - 96
-   * - trig_fmc_out **
-     - OUT
-     - 41
-     - 95
-   * - trig_fmc_in **
-     - IN
-     - 40
-     - 94
-   * - freq_sel1 **
-     - INOUT
-     - 39
-     - 93
-   * - gain_sel3 **
-     - INOUT
-     - 38
-     - 92
-   * - gpio_test **
-     - INOUT
-     - 37
-     - 91
-   * - gpio_1p8va_en *
-     - IN
-     - 37
-     - 91
-   * - gain_sel2 **
-     - INOUT
-     - 36
-     - 90
-   * - gain_sel2 *
-     - IN
-     - 36
-     - 90
-   * - gpio_vld_en **
-     - INOUT
-     - 35
-     - 89
-   * - gpio_1p8vd_en *
-     - INOUT
-     - 35
-     - 89
-   * - freq_sel0 **
-     - INOUT
-     - 34
-     - 88
-   * - fsel *
-     - INOUT
-     - 34
-     - 88
-   * - gain_sel1
-     - INOUT
-     - 33
-     - 87
-   * - gain_sel0
-     - INOUT
-     - 32
-     - 86
+=================  =========  =========  ==========
+GPIO Signal        Direction  HDL no.    Zynq-7000
+=================  =========  =========  ==========
+apd_supp_en **     INOUT      42         96
+trig_fmc_out **    OUT        41         95
+trig_fmc_in **     IN         40         94
+freq_sel1 **       INOUT      39         93
+gain_sel3 **       INOUT      38         92
+gpio_test **       INOUT      37         91
+gpio_1p8va_en *    IN         37         91
+gain_sel2 **       INOUT      36         90
+gain_sel2 *        IN         36         90
+gpio_vld_en **     INOUT      35         89
+gpio_1p8vd_en *    INOUT      35         89
+freq_sel0 **       INOUT      34         88
+fsel *             INOUT      34         88
+gain_sel1          INOUT      33         87
+gain_sel0          INOUT      32         86
+=================  =========  =========  ==========
 
 .. admonition:: Legend
    :class: note
 
+   - GPIO Signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq-7000 = Software GPIO (Linux GPIO numbers) to be used in device trees
    - ``*`` instantiated only for BUFMRCE_EN=1 (ADA4355)
    - ``**`` instantiated only for BUFMRCE_EN=0 (ADA4356)
 

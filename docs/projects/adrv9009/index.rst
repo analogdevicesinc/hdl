@@ -195,58 +195,30 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 15
-   :header-rows: 2
+=====================  =========  =======  ===================  ======  ==========  =========  ==========
+GPIO signal            Direction  HDL no.  Zynq UltraScale+ MP  A10SoC  Stratix 10  Zynq-7000  Microblaze
+=====================  =========  =======  ===================  ======  ==========  =========  ==========
+ad9528_reset_b         INOUT      59       137                  27      27          113        59
+ad9528_sysref_req      INOUT      58       136                  26      26          112        58
+adrv9009_tx1_enable    INOUT      57       135                  25      25          111        57
+adrv9009_tx2_enable    INOUT      56       134                  24      24          110        56
+adrv9009_rx1_enable    INOUT      55       133                  23      23          109        55
+adrv9009_rx2_enable    INOUT      54       132                  22      22          108        54
+adrv9009_test          INOUT      53       131                  21      21          107        53
+adrv9009_reset_b       INOUT      52       130                  20      20          106        52
+adrv9009_gpint         INOUT      51       129                  19      19          105        51
+adrv9009_gpio_{00:18}  INOUT      50:32    128:110              18:0    18:0        104:86     50:32
+=====================  =========  =======  ===================  ======  ==========  =========  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-   * - ad9528_reset_b
-     - INOUT
-     - 59
-     - 137
-   * - ad9528_sysref_req
-     - INOUT
-     - 58
-     - 136
-   * - adrv9009_tx1_enable
-     - INOUT
-     - 57
-     - 135
-   * - adrv9009_tx2_enable
-     - INOUT
-     - 56
-     - 134
-   * - adrv9009_rx1_enable
-     - INOUT
-     - 55
-     - 133
-   * - adrv9009_rx2_enable
-     - INOUT
-     - 54
-     - 132
-   * - adrv9009_test
-     - INOUT
-     - 53
-     - 131
-   * - adrv9009_reset_b
-     - INOUT
-     - 52
-     - 130
-   * - adrv9009_gpint
-     - INOUT
-     - 51
-     - 129
-   * - adrv9009_gpio_{00:18}
-     - INOUT
-     - 50:32
-     - 128:110
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq UltraScale+ MP, A10SoC, Stratix 10, Zynq-7000, MicroBlaze are Software
+     GPIOs, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

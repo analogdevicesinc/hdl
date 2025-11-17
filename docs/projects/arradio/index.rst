@@ -119,38 +119,23 @@ GPIOs
 
 The device control and monitor signals are interfaced to a GPIO module.
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+====================  ============  =======  ==========
+GPIO signal           Direction     HDL no.  Cyclone V
+====================  ============  =======  ==========
+gpio_status[7:0]      IN            23:16    23:16
+gpio_ctl[3:0]         OUT           11:8     11:8
+ad9361_resetb         OUT           4        4
+ad9361_en_agc         OUT           3        3
+ad9361_sync           OUT           2        2
+====================  ============  =======  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Linux Cyclone V
-   * - gpio_status[7:0]
-     - IN
-     - 23:16
-     - 23:16
-   * - gpio_ctl[3:0]
-     - OUT
-     - 11:8
-     - 11:8
-   * - ad9361_resetb
-     - OUT
-     - 4
-     - 4
-   * - ad9361_en_agc
-     - OUT
-     - 3
-     - 3
-   * - ad9361_sync
-     - OUT
-     - 2
-     - 2
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Cyclone V = Software GPIO to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -129,7 +129,7 @@ to DMA. For **other** number of SDIs this special mode **is not expected to work
    :width: 800
    :align: center
    :alt: AD4630_FMC SPI mode - transfer zone 1 block diagram without using the spi_axis_reorder IP
-   
+
 SPI mode - transfer zone 2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -207,7 +207,7 @@ and master clock mode the SDI lines can have Single or Double Data Rates:
 - 1 - MISO runs on DDR.
 
 The ``NO_REORDER`` configuration parameter removes the spi_axis_reorder IP from
-the system for CAPTURE_ZONE = 1 and NUM_OF_SDI = 1 (AD4030) or NUM_OF_SDI = 2 
+the system for CAPTURE_ZONE = 1 and NUM_OF_SDI = 1 (AD4030) or NUM_OF_SDI = 2
 (AD4630) and directly connects the SPI Engine to DMA:
 
 - 0 - spi_axis_reorder present (default)
@@ -290,38 +290,21 @@ The Software GPIO number is calculated as follows:
 
 - Zynq-7000: if PS7 is used, then offset is 54
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - ad463x_resetn
-     - INOUT
-     - 32
-     - 86
-   * - adaq42xx_pgia_mux[0]*
-     - INOUT
-     - 33
-     - 87
-   * - adaq42xx_pgia_mux[1]*
-     - INOUT
-     - 34
-     - 88
-   * - max17687_rst**
-     - INOUT
-     - 35
-     - 89
+=======================  =========  =======  =========
+GPIO signal              Direction  HDL no.  Zynq-7000
+=======================  =========  =======  =========
+ad463x_resetn            INOUT      32       86
+adaq42xx_pgia_mux[1:0]*  INOUT      34:33    88:87
+max17687_rst**           INOUT      35       89
+=======================  =========  =======  =========
 
 .. admonition:: Legend
    :class: note
 
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000 is Software GPIO, to be used in device trees
    - ``*`` instantiated, but used for ADAQ4224 only
    - ``**`` instantiated, but used for ADAQ4224 with isolated power supply
 

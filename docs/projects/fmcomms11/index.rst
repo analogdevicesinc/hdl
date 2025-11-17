@@ -508,40 +508,25 @@ The AD9508 chip select will be used only in the rev. A of the FMCOMMS11.
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+- Zynq-7000: if PS7 is used, then offset is 54
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - adf4355_muxout
-     - INOUT
-     - 35
-     - 89
-     - 113
-   * - ad9162_txen
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - ad9625_irq
-     - INOUT
-     - 33
-     - 87
-     - 111
-   * - ad9162_irq
-     - INOUT
-     - 32
-     - 86
-     - 110
+======================  ============  =======  =========
+GPIO signal             Direction     HDL no.  Zynq-7000
+======================  ============  =======  =========
+adf4355_muxout          INOUT         35       89
+ad9162_txen             INOUT         34       88
+ad9625_irq              INOUT         33       87
+ad9162_irq              INOUT         32       86
+======================  ============  =======  =========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO number
+   - Zynq-7000 = Software GPIO to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

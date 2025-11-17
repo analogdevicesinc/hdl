@@ -377,35 +377,22 @@ GPIOs
 ..
    Add explanation depending on your case
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+====================  ============  =======  ==========  ===================
+GPIO signal           Direction     HDL no.  Zynq-7000   Zynq UltraScale+ MP
+====================  ============  =======  ==========  ===================
+signal_name[31:0]     IN/OUT/INOUT  127:96   181:150     205:174
+signal_name[31:0]     IN/OUT/INOUT  95:64    149:118     173:142
+signal_name[31:0]     IN/OUT/INOUT  63:32    117:86      141:110
+====================  ============  =======  ==========  ===================
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - signal_name[31:0]
-     - IN/OUT/INOUT
-     - 127:96
-     - 181:150
-     - 205:174
-   * - signal_name[31:0]
-     - IN/OUT/INOUT
-     - 95:64
-     - 149:118
-     - 173:142
-   * - signal_name[31:0]
-     - IN/OUT/INOUT
-     - 63:32
-     - 117:86
-     - 141:110
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project (bit-width indicated)
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq-7000, Zynq UltraScale+ MP = Software GPIOs (Linux GPIO numbers) to be used in
+     device trees
 
 ..
    MUST: GPIOs should be listed in descending order and should have the number

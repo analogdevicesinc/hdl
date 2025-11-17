@@ -437,186 +437,85 @@ GPIOs
 ZCU102
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. list-table::
-   :widths: 25 20 20 15
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-   * - ad9528_reset_b
-     - INOUT
-     - 68
-     - 146
-   * - ad9528_sysref_req
-     - INOUT
-     - 67
-     - 145
-   * - adrv9026_tx1_enable
-     - INOUT
-     - 66
-     - 144
-   * - adrv9026_tx2_enable
-     - INOUT
-     - 65
-     - 143
-   * - adrv9026_tx3_enable
-     - INOUT
-     - 64
-     - 142
-   * - adrv9026_tx4_enable
-     - INOUT
-     - 63
-     - 141
-   * - adrv9026_rx1_enable
-     - INOUT
-     - 62
-     - 140
-   * - adrv9026_rx2_enable
-     - INOUT
-     - 61
-     - 139
-   * - adrv9026_rx3_enable
-     - INOUT
-     - 60
-     - 138
-   * - adrv9026_rx4_enable
-     - INOUT
-     - 59
-     - 137
-   * - adrv9026_test
-     - INOUT
-     - 58
-     - 136
-   * - adrv9026_reset_b
-     - INOUT
-     - 57
-     - 135
-   * - adrv9026_gpint1
-     - INOUT
-     - 56
-     - 134
-   * - adrv9026_gpint2
-     - INOUT
-     - 55
-     - 133
-   * - adrv9026_orx_ctrl_a
-     - INOUT
-     - 54
-     - 132
-   * - adrv9026_orx_ctrl_b
-     - INOUT
-     - 53
-     - 131
-   * - adrv9026_orx_ctrl_c
-     - INOUT
-     - 52
-     - 130
-   * - adrv9026_orx_ctrl_d
-     - INOUT
-     - 51
-     - 129
-   * - adrv9026_gpio[0:18]
-     - INOUT
-     - 50:32
-     - 128:110
+=====================  =========  ========  ===================
+GPIO signal            Direction  HDL no.   Zynq UltraScale+ MP
+=====================  =========  ========  ===================
+ad9528_reset_b         INOUT      68        146
+ad9528_sysref_req      INOUT      67        145
+adrv9026_tx1_enable    INOUT      66        144
+adrv9026_tx2_enable    INOUT      65        143
+adrv9026_tx3_enable    INOUT      64        142
+adrv9026_tx4_enable    INOUT      63        141
+adrv9026_rx1_enable    INOUT      62        140
+adrv9026_rx2_enable    INOUT      61        139
+adrv9026_rx3_enable    INOUT      60        138
+adrv9026_rx4_enable    INOUT      59        137
+adrv9026_test          INOUT      58        136
+adrv9026_reset_b       INOUT      57        135
+adrv9026_gpint1        INOUT      56        134
+adrv9026_gpint2        INOUT      55        133
+adrv9026_orx_ctrl_a    INOUT      54        132
+adrv9026_orx_ctrl_b    INOUT      53        131
+adrv9026_orx_ctrl_c    INOUT      52        130
+adrv9026_orx_ctrl_d    INOUT      51        129
+adrv9026_gpio_{00:18}  INOUT      50:32     128:110
+=====================  =========  ========  ===================
 
 VCU118
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. list-table::
-   :widths: 25 20 20 15
-   :header-rows: 2
+=====================  =========  ========  ============
+GPIO signal            Direction  HDL no.   Microblaze
+=====================  =========  ========  ============
+ad9528_reset_b         INOUT      62        62
+ad9528_sysref_req      INOUT      61        61
+adrv9026_tx1_enable    INOUT      60        60
+adrv9026_tx2_enable    INOUT      59        59
+adrv9026_tx3_enable    INOUT      58        58
+adrv9026_tx4_enable    INOUT      57        57
+adrv9026_rx1_enable    INOUT      56        56
+adrv9026_rx2_enable    INOUT      55        55
+adrv9026_rx3_enable    INOUT      54        54
+adrv9026_rx4_enable    INOUT      53        53
+adrv9026_test          INOUT      52        52
+adrv9026_reset_b       INOUT      51        51
+adrv9026_gpint1        INOUT      50        50
+adrv9026_gpint2        INOUT      49        49
+adrv9026_orx_ctrl_a    INOUT      48        48
+adrv9026_orx_ctrl_b    INOUT      47        47
+adrv9026_orx_ctrl_c    INOUT      46        46
+adrv9026_orx_ctrl_d    INOUT      45        45
+adrv9026_gpio_{00:18}  INOUT      44:26     44:26
+=====================  =========  ========  ============
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Microblaze
-   * - ad9528_reset_b
-     - INOUT
-     - 62
-     - 62
-   * - ad9528_reset_b
-     - INOUT
-     - 61
-     - 61
-   * - adrv9026_tx1_enable
-     - INOUT
-     - 60
-     - 60
-   * - adrv9026_tx2_enable
-     - INOUT
-     - 59
-     - 59
-   * - adrv9026_tx3_enable
-     - INOUT
-     - 58
-     - 58
-   * - adrv9026_tx4_enable
-     - INOUT
-     - 57
-     - 57
-   * - adrv9026_rx1_enable
-     - INOUT
-     - 56
-     - 56
-   * - adrv9026_rx2_enable
-     - INOUT
-     - 55
-     - 55
-   * - adrv9026_rx3_enable
-     - INOUT
-     - 54
-     - 54
-   * - adrv9026_rx4_enable
-     - INOUT
-     - 53
-     - 53
-   * - adrv9026_test
-     - INOUT
-     - 52
-     - 52
-   * - adrv9026_reset_b
-     - INOUT
-     - 51
-     - 51
-   * - adrv9026_gpint1
-     - INOUT
-     - 50
-     - 50
-   * - adrv9026_gpint2
-     - INOUT
-     - 49
-     - 49
-   * - adrv9026_orx_ctrl_a
-     - INOUT
-     - 48
-     - 48
-   * - adrv9026_orx_ctrl_b
-     - INOUT
-     - 47
-     - 47
-   * - adrv9026_orx_ctrl_c
-     - INOUT
-     - 46
-     - 46
-   * - adrv9026_orx_ctrl_d
-     - INOUT
-     - 45
-     - 45
-   * - adrv9026_gpio[0:18]
-     - INOUT
-     - 44:26
-     - 44:26
+A10SoC
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+=====================  =========  ========  =======
+GPIO signal            Direction  HDL no.   A10SoC
+=====================  =========  ========  =======
+ad9528_reset_b         INOUT      59        27
+ad9528_sysref_req      INOUT      58        26
+adrv9026_tx1_enable    INOUT      57        25
+adrv9026_tx2_enable    INOUT      56        24
+adrv9026_rx1_enable    INOUT      55        23
+adrv9026_rx2_enable    INOUT      54        22
+adrv9026_test          INOUT      53        21
+adrv9026_reset_b       INOUT      52        20
+adrv9026_gpint1        INOUT      51        19
+adrv9026_gpint2        INOUT      50        18
+adrv9026_gpio[18:0]    INOUT      49:32     17:0?
+=====================  =========  ========  =======
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq UltraScale+ MP, Microblaze, A10SoC = Software GPIOs to be used in
+     device trees
+
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

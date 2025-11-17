@@ -317,78 +317,33 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 15
-   :header-rows: 2
+=====================  ============  =======  ===================
+GPIO signal            Direction     HDL no.  Zynq UltraScale+ MP
+=====================  ============  =======  ===================
+ad9528_reset_b         INOUT         69       147
+ad9528_sysref_req      INOUT         68       146
+adrv904x_trx0_enable   INOUT         67       145
+adrv904x_trx1_enable   INOUT         66       144
+adrv904x_trx2_enable   INOUT         65       143
+adrv904x_trx3_enable   INOUT         64       142
+adrv904x_trx4_enable   INOUT         63       141
+adrv904x_trx5_enable   INOUT         62       140
+adrv904x_trx6_enable   INOUT         61       139
+adrv904x_trx7_enable   INOUT         60       138
+adrv904x_orx0_enable   INOUT         59       137
+adrv904x_orx1_enable   INOUT         58       136
+adrv904x_test          INOUT         57       135
+adrv904x_reset_b       INOUT         56       134
+adrv904x_gpio[23:0]    INOUT         55:32    133:110
+=====================  ============  =======  ===================
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-   * - ad9528_reset_b
-     - INOUT
-     - 69
-     - 147
-   * - ad9528_sysref_req
-     - INOUT
-     - 68
-     - 146
-   * - adrv904x_trx0_enable
-     - INOUT
-     - 67
-     - 145
-   * - adrv904x_trx1_enable
-     - INOUT
-     - 66
-     - 144
-   * - adrv904x_trx2_enable
-     - INOUT
-     - 65
-     - 143
-   * - adrv904x_trx3_enable
-     - INOUT
-     - 64
-     - 142
-   * - adrv904x_trx4_enable
-     - INOUT
-     - 63
-     - 141
-   * - adrv904x_trx5_enable
-     - INOUT
-     - 62
-     - 140
-   * - adrv904x_trx6_enable
-     - INOUT
-     - 61
-     - 139
-   * - adrv904x_trx7_enable
-     - INOUT
-     - 60
-     - 138
-   * - adrv904x_orx0_enable
-     - INOUT
-     - 59
-     - 137
-   * - adrv904x_orx1_enable
-     - INOUT
-     - 58
-     - 136
-   * - adrv904x_test
-     - INOUT
-     - 57
-     - 135
-   * - adrv904x_reset_b
-     - INOUT
-     - 56
-     - 134
-   * - adrv904x_gpio[0:23]
-     - INOUT
-     - 55:32
-     - 133:110
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq UltraScale+ MP = Software GPIOs to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -130,42 +130,26 @@ GPIOs
 
 The device control and monitor signals are interfaced to a GPIO module.
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+- Zynq-7000: if PS7 is used, then offset is 54
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - pl_muxout
-     - OUT
-     - 17
-     - 71
-   * - phaser_enable
-     - IN
-     - 14
-     - 68
-   * - gpio_resetb
-     - INOUT
-     - 13
-     - 67
-   * - gpio_en_agc
-     - INOUT
-     - 12
-     - 66
-   * - gpio_ctl[3:0]
-     - INOUT
-     - 11:8
-     - 65:62
-   * - gpio_status[7:0]
-     - INOUT
-     - 7:0
-     - 61:54
+=================  ============  =======  =========
+GPIO signal        Direction     HDL no.  Zynq-7000
+=================  ============  =======  =========
+pl_muxout          OUT           17       71
+phaser_enable      IN            14       68
+gpio_resetb        INOUT         13       67
+gpio_en_agc        INOUT         12       66
+gpio_ctl[3:0]      INOUT         11:8     65:62
+gpio_status[7:0]   INOUT         7:0      61:54
+=================  ============  =======  =========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO number
+   - Zynq-7000 = Software GPIO to be used in device trees
 
 .. note::	 
 

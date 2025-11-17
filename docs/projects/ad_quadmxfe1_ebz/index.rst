@@ -263,7 +263,7 @@ The following are the parameters of this project that can be configured:
 - RX_LANE_RATE: lane rate of the RX link (MxFE to FPGA)
 - TX_LANE_RATE: lane rate of the TX link (FPGA to MxFE)
 - [RX/TX]_PLL_SEL: used only in 64B66B mode:
-  
+
   - 0 - CPLL for lane rates 4-12.5 Gbps and integer sub-multiples
   - 1 - QPLL0 for lane rates 19.6-32.75 Gbps and integer sub-multiples (e.g. 9.8-16.375)
   - 2 - QPLL1 for lane rates 16.0-26.0 Gbps and integer sub-multiple (e.g. 8.0-13.0)
@@ -327,18 +327,18 @@ Check-out the table below to find out the conditions.
 ==================== ==================== ===============
 Instance             Depends on parameter Zynq/Microblaze
 ==================== ==================== ===============
-axi_mxfe_rx_xcvr     $ADI_PHY_SEL==1      0x44A6_0000    
-jesd204_phy_121_122  $ADI_PHY_SEL==0      0x44A6_0000    
-rx_mxfe_tpl_core                          0x44A1_0000    
-axi_mxfe_rx_jesd                          0x44A9_0000    
-axi_mxfe_rx_dma                           0x7C42_0000    
-mxfe_rx_data_offload                      0x7C45_0000    
-axi_mxfe_tx_xcvr     $ADI_PHY_SEL==1      0x44B6_0000    
-jesd204_phy_125_126  $ADI_PHY_SEL==0      0x44B6_0000    
-tx_mxfe_tpl_core                          0x44B1_0000    
-axi_mxfe_tx_jesd                          0x44B9_0000    
-axi_mxfe_tx_dma                           0x7C43_0000    
-mxfe_tx_data_offload                      0x7C46_0000    
+axi_mxfe_rx_xcvr     $ADI_PHY_SEL==1      0x44A6_0000
+jesd204_phy_121_122  $ADI_PHY_SEL==0      0x44A6_0000
+rx_mxfe_tpl_core                          0x44A1_0000
+axi_mxfe_rx_jesd                          0x44A9_0000
+axi_mxfe_rx_dma                           0x7C42_0000
+mxfe_rx_data_offload                      0x7C45_0000
+axi_mxfe_tx_xcvr     $ADI_PHY_SEL==1      0x44B6_0000
+jesd204_phy_125_126  $ADI_PHY_SEL==0      0x44B6_0000
+tx_mxfe_tpl_core                          0x44B1_0000
+axi_mxfe_tx_jesd                          0x44B9_0000
+axi_mxfe_tx_dma                           0x7C43_0000
+mxfe_tx_data_offload                      0x7C46_0000
 ==================== ==================== ===============
 
 SPI connections
@@ -382,21 +382,44 @@ NCO sync function or to be regular software-controllable GPIOs.
 
 e.g. function selection for gpio[0] line of MxFE(0,1,2,3) done through GPIO[108].
 
-==================  =========  =============  =============
-GPIO signal         Direction  HDL GPIO EMIO  Software GPIO
-==================  =========  =============  =============
-mxfe0/1/2/3_gpio0   INOUT      64             118
-mxfe0/1/2/3_gpio1   INOUT      65             119
-mxfe0/1/2/3_gpio2   INOUT      66             120
-mxfe0/1/2/3_gpio3   INOUT      67             121
-mxfe0/1/2/3_gpio4   INOUT      68             122
-mxfe0/1/2/3_gpio5   INOUT      69             123
-mxfe0/1/2/3_gpio6   INOUT      70             124
-mxfe0/1/2/3_gpio7   INOUT      71             125
-mxfe0/1/2/3_gpio8   INOUT      72             126
-mxfe0/1/2/3_gpio9   INOUT      73             127
-mxfe0/1/2/3_gpio10  INOUT      74             128
-==================  =========  =============  =============
+=======================  =======================  =========  =======  ==========
+HDL GPIO signal           HW GPIO signal          Direction  HDL no.  MicroBlaze
+=======================  =======================  =========  =======  ==========
+hmc7043_gpio             hmc7043_gpio             INOUT       32        32
+hmc7043_reset            hmc7043_reset            OUT         33        33
+adrf5020_ctrl            adrf5020_ctrl            OUT         34        34
+hmc425a_v                hmc425a_v                OUT         38:35     38:35
+mxfe_reset{3:0}          mxfe_reset{3:0}          OUT         44:41     44:41
+mxfe_rx_en0              mxfe_rx_en0              OUT         48:45     48:45
+mxfe_rx_en1              mxfe_rx_en1              OUT         52:49     52:49
+mxfe_tx_en0              mxfe_tx_en0              OUT         56:53     56:53
+mxfe_tx_en1              mxfe_tx_en1              OUT         60:57     60:57
+mxfe0/1/2/3_gpio0        mxfe0/1/2/3_gpio[0]      INOUT       64        64
+mxfe0/1/2/3_gpio1        mxfe0/1/2/3_gpio[1]      INOUT       65        65
+mxfe0/1/2/3_gpio2        mxfe0/1/2/3_gpio2        INOUT       66        66
+mxfe0/1/2/3_gpio5        mxfe0/1/2/3_gpio5        INOUT       69        69
+mxfe0/1/2/3_gpio6        mxfe0/1/2/3_gpio6        INOUT       70        70
+mxfe0/1/2/3_gpio7        mxfe0/1/2/3_gpio7        INOUT       71        71
+mxfe0/1/2/3_gpio8        mxfe0/1/2/3_gpio8        INOUT       72        72
+mxfe0/1/2/3_gpio9        mxfe0/1/2/3_gpio9        INOUT       73        73
+mxfe0/1/2/3_gpio10       mxfe0/1/2/3_gpio10       INOUT       74        74
+mxfe0/1/2/3_syncin_1_n   mxfe0/1/2/3_syncin_1_n   INOUT       75        75
+mxfe0/1/2/3_syncin_1_p   mxfe0/1/2/3_syncin_1_p   INOUT       76        76
+mxfe0/1/2/3_syncout_1_n  mxfe0/1/2/3_syncout_1_n  INOUT       77        77
+mxfe0/1/2/3_syncout_1_p  mxfe0/1/2/3_syncout_1_p  INOUT       78        78
+=======================  =======================  =========  =======  ==========
+
+Note: mxfe0/1/2/3_gpio3, mxfe0/1/2/3_gpio4 are not exposed to the FMC connector,
+so they do not exist in the HDL project.
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project (bit-width indicated)
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - MicroBlaze = Software GPIO (Linux GPIO numbers) to be used in
+     device trees
 
 Function selection for the first six GPIO lines is done with the following
 control GPIOs:
@@ -484,7 +507,7 @@ Example of running the ``make`` command with parameters:
    [B/C]: B for 8B/10B (a.k.a. JESD204B) and C for 64B66B (a.k.a. JESD204C).
 
    If a value is not specified, then the default value applies.
-   
+
    +---------------------+---------+-----------+-----------+---------+--------+---------+---------+---------+--------+
    |                     | default | B_9_10    | B_5_6     | C_10_11 | C_11_4 | C_23_25 | C_29_24 | C_12_13 | C_3_2  |
    +=====================+=========+===========+===========+=========+========+=========+=========+=========+========+
@@ -675,7 +698,7 @@ Software related
      - for direct 6 GHz: :git-linux:`vcu118_quad_ad9081_204c_txmode_11_rxmode_4_direct_6g.dts <arch/microblaze/boot/dts/vcu118_quad_ad9081_204c_txmode_11_rxmode_4_direct_6g.dts>`
 
    - AD9081 TX mode 5, RX mode 6:
-   
+
      - :git-linux:`vcu118_quad_ad9081_204b_txmode_5_rxmode_6.dts <arch/microblaze/boot/dts/vcu118_quad_ad9081_204b_txmode_5_rxmode_6.dts>`
      - for Quad MxFE rev. C: :git-linux:`vcu118_quad_ad9081_204b_txmode_5_rxmode_6_revc.dts <arch/microblaze/boot/dts/vcu118_quad_ad9081_204b_txmode_5_rxmode_6_revc.dts>`
 

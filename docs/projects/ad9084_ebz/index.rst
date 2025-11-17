@@ -441,153 +441,73 @@ The following table lists the GPIO signals used in this project that
 are connected to the Apollo evaluation board and are common between
 all the carriers.
 
-.. list-table::
-   :widths: 20 20 20 20 20
-   :header-rows: 2
+==================  =========  =======  ==========
+HDL GPIO signal     Direction  HDL no.  Microblaze
+==================  =========  =======  ==========
+resetb              OUT        62       62
+trig_b[1:0]         OUT        61:60    61:60
+trig_a[1:0]         OUT        59:58    59:58
+trig_in             IN         53       53
+aux_gpio            INOUT      48       48
+gpio[30:15]         INOUT      47:32    47:32
+==================  =========  =======  ==========
 
-   * - Apollo GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Microblaze
-     - ZynqMP
-   * - resetb
-     - OUT
-     - 62
-     - 62
-     - 30
-   * - trig_b[1:0]
-     - OUT
-     - 61:60
-     - 61:60
-     - 29:28
-   * - trig_a[1:0]
-     - OUT
-     - 59:58
-     - 59:58
-     - 27:26
-   * - trig_in
-     - IN
-     - 53
-     - 53
-     - 21
-   * - aux_gpio
-     - INOUT
-     - 48
-     - 48
-     - 16
-   * - gpio[30:15]
-     - INOUT
-     - 47:32
-     - 47:32
-     - 15:0
-
-The following table lists the GPIO signals that are only present
+The following table lists the GPIO signals that are present
 in the Versal projects.
 
 They are used from the linux kernel to
 control the reset sequence of the GTY/GTYP transceivers.
 
-.. list-table::
-   :widths: 40 20 20 20
-   :header-rows: 2
+===========================  =========  =======  =======
+HDL GPIO signal              Direction  HDL no.  Versal
+===========================  =========  =======  =======
+tx_b_reset_datapath            IN         79      47
+rx_b_reset_datapath            IN         78      46
+tx_b_reset_pll_and_datapath    IN         77      45
+rx_b_reset_pll_and_datapath    IN         76      44
+gt_b_reset                     IN         75      43
+mst_b_resetdone                OUT        74      42
+tx_b_resetdone                 OUT        73      41
+rx_b_resetdone                 OUT        72      40
+tx_reset_datapath              IN         71      39
+rx_reset_datapath              IN         70      38
+tx_reset_pll_and_datapath      IN         69      37
+rx_reset_pll_and_datapath      IN         68      36
+gt_reset                       IN         67      35
+mst_resetdone                  OUT        66      34
+tx_resetdone                   OUT        65      33
+rx_resetdone                   OUT        64      32
+resetb                         OUT        62      30
+trig_b[1:0]                    OUT        61:60   29:28
+trig_a[1:0]                    OUT        59:58   27:26
+trig_in                        IN         53      21
+aux_gpio                       INOUT      48      16
+gpio[30:15]                    INOUT      47:32   15:0
+===========================  =========  =======  =======
 
-   * - Versal transceivers GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - ZynqMP
-   * - tx_reset_datapath
-     - IN
-     - 71
-     - 39
-   * - rx_reset_datapath
-     - IN
-     - 70
-     - 38
-   * - tx_reset_pll_and_datapath
-     - IN
-     - 69
-     - 37
-   * - rx_reset_pll_and_datapath
-     - IN
-     - 68
-     - 36
-   * - gt_reset
-     - IN
-     - 67
-     - 35
-   * - mst_resetdone
-     - OUT
-     - 66
-     - 34
-   * - tx_resetdone
-     - OUT
-     - 65
-     - 33
-   * - rx_resetdone
-     - OUT
-     - 64
-     - 32
-   * - tx_b_reset_datapath
-     - IN
-     - 79
-     - 47
-   * - rx_b_reset_datapath
-     - IN
-     - 78
-     - 46
-   * - tx_b_reset_pll_and_datapath
-     - IN
-     - 77
-     - 45
-   * - rx_b_reset_pll_and_datapath
-     - IN
-     - 76
-     - 44
-   * - gt_b_reset
-     - IN
-     - 75
-     - 43
-   * - mst_b_resetdone
-     - OUT
-     - 74
-     - 42
-   * - tx_b_resetdone
-     - OUT
-     - 73
-     - 41
-   * - rx_b_resetdone
-     - OUT
-     - 72
-     - 40
-
-The following table lists the GPIOs that are only preset on the Intel
+The following table lists the GPIOs that are preset on the Intel
 carriers.
 
-.. list-table::
-   :widths: 40 20 20 20
-   :header-rows: 2
+======================  =========  =======  ======
+HDL GPIO signal         Direction  HDL no.  FM87
+======================  =========  =======  ======
+tx_fifo_bypass_bypass    IN         63      31
+resetb                   OUT        62      30
+trig_b[1:0]              OUT        61:60   29:28
+trig_a[1:0]              OUT        59:58   27:26
+trig_in                  IN         53      21
+aux_gpio                 INOUT      48      16
+gpio[30:15]              INOUT      47:32   15:0
+======================  =========  =======  ======
 
-   * - Intel GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - ZynqMP
-   * - tx_fifo_bypass_bypass
-     - IN
-     - 63
-     - 31
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Microblaze, Versal, FM87 are Software GPIOs, to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

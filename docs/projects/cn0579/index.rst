@@ -147,25 +147,20 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+====================  ============  =======  ==========  ===========
+GPIO signal           Direction     HDL no.  Zynq-7000   DE10-Nano
+====================  ============  =======  ==========  ===========
+RESET_N               OUT           32       86          0
+====================  ============  =======  ==========  ===========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Cyclone V
-   * - RESET_N
-     - OUT
-     - 32
-     - 86
-     - 0
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000, DE10-Nano = Software GPIOs to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

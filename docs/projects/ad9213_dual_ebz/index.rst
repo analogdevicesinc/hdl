@@ -217,30 +217,21 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 15
-   :header-rows: 2
+=================  =========  =======  ==========
+GPIO signal        Direction  HDL no.  Stratix 10
+=================  =========  =======  ==========
+ad9213_a_rst       INOUT      32       0
+ad9213_b_rst       INOUT      33       1
+adc_swap           INOUT      34       2
+=================  =========  =======  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Stratix 10
-   * - ad9213_a_rst
-     - INOUT
-     - 32
-     - 0
-   * - ad9213_b_rst
-     - INOUT
-     - 33
-     - 1
-   * - adc_swap
-     - INOUT
-     - 34
-     - 2
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Stratix 10 is Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

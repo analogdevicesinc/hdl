@@ -169,34 +169,68 @@ GPIOs
 
 The device control and monitor signals are interfaced to a GPIO module.
 
-====================== ================ ============== ==============
-GPIO signal            Direction        HDL EMIOGPIO   Software GPIO
-                       (from FPGA view)                Zynq MP
-====================== ================ ============== ==============
-tdd_sync_loc           OUT              56             134
-vadj_err               IN               55             133
-mssi_sync              INTERNAL         54             132
-gpio_tx2_enable_in     OUT              51             129
-gpio_tx1_enable_in     OUT              50             128
-gpio_rx2_enable_in     OUT              49             127
-gpio_rx1_enable_in     OUT              48             126
-sm_fan_tach            INOUT            47             125
-reset_trx              INOUT            46             124
-mode                   INOUT            45             123
-gp_int                 INOUT            44             122
-dgpio_11               INOUT            43             121
-dgpio_10               INOUT            42             120
-dgpio_9                INOUT            41             119
-dgpio_8                INOUT            40             118
-dgpio_7                INOUT            39             117
-dgpio_6                INOUT            38             116
-dgpio_5                INOUT            37             115
-dgpio_4                INOUT            36             114
-dgpio_3                INOUT            35             113
-dgpio_2                INOUT            34             112
-dgpio_1                INOUT            33             111
-dgpio_0                INOUT            32             110
-====================== ================ ============== ==============
+====================  =========  =======  ====================  =========
+GPIO signal           Direction  HDL no.  Zynq UltraScale+ MP   Zynq-7000
+====================  =========  =======  ====================  =========
+tdd_sync_loc          OUT          56     134                   110
+vadj_err              IN           55     133                   109
+mssi_sync             INTERNAL     54     132                   108
+gpio_tx2_enable_in    OUT          51     129                   105
+gpio_tx1_enable_in    OUT          50     128                   104
+gpio_rx2_enable_in    OUT          49     127                   103
+gpio_rx1_enable_in    OUT          48     126                   102
+sm_fan_tach           INOUT        47     125                   101
+reset_trx             INOUT        46     124                   100
+mode                  INOUT        45     123                   99
+gp_int                INOUT        44     122                   98
+dgpio_11              INOUT        43     121                   97
+dgpio_10              INOUT        42     120                   96
+dgpio_9               INOUT        41     119                   95
+dgpio_8               INOUT        40     118                   94
+dgpio_7               INOUT        39     117                   93
+dgpio_6               INOUT        38     116                   92
+dgpio_5               INOUT        37     115                   91
+dgpio_4               INOUT        36     114                   90
+dgpio_3               INOUT        35     113                   89
+dgpio_2               INOUT        34     112                   88
+dgpio_1               INOUT        33     111                   87
+dgpio_0               INOUT        32     110                   86
+====================  =========  =======  ====================  =========
+
+====================  =========  =======  ======
+GPIO signal           Direction  HDL no.  A10SoC
+====================  =========  =======  ======
+vadj_err              IN           55     23
+mssi_sync             INTERNAL     54     22
+gpio_tx2_enable_in    OUT          50     18
+gpio_tx1_enable_in    OUT          49     17
+gpio_rx2_enable_in    OUT          48     16
+gpio_rx1_enable_in    OUT          47     15
+reset_trx             INOUT        46     14
+mode                  INOUT        45     13
+gp_int                INOUT        44     12
+dgpio_11              INOUT        43     11
+dgpio_10              INOUT        42     10
+dgpio_9               INOUT        41     9
+dgpio_8               INOUT        40     8
+dgpio_7               INOUT        39     7
+dgpio_6               INOUT        38     6
+dgpio_5               INOUT        37     5
+dgpio_4               INOUT        36     4
+dgpio_3               INOUT        35     3
+dgpio_2               INOUT        34     2
+dgpio_1               INOUT        33     1
+dgpio_0               INOUT        32     0
+====================  =========  =======  ======
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq UltraScale+ MP, Zynq-7000, A10SoC are Softwares GPIOs, to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

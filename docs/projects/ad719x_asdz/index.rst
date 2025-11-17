@@ -128,37 +128,29 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction (from FPGA view)
-     - HDL GPIO EMIO
-     - Software GPIO (for Zynq-7000)
-   * - adc_syncn *
-     - OUT
-     - 33
-     - 87
-   * - adc_spi_miso_rdyn
-     - OUT
-     - 32
-     - 86
-   * - adc_int **
-     - OUT
-     - 31
-     - 85
+=================  =========  =======  =========  =========
+GPIO signal        Direction  HDL no.  Zynq-7000  DE10-Nano
+=================  =========  =======  =========  =========
+ad719x_sync_n *    OUT        33       87         1
+adc_spi_miso_rdyn  OUT        32       86         0
+adc_int **         OUT        31       85         --
+=================  =========  =======  =========  =========
 
 .. admonition:: Legend
    :class: note
 
-   - ``*`` - ``adc_syncn`` exists all the time on the DE10-Nano project, **but**
-     on the Cora Z7S project it exists only when the project was built with
-     ``ARDZ_PMOD_N=1`` parameter (used when connecting the eval. board through
-     the Arduino header)
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, DE-10Nano are Software GPIOs, to be used in device trees
+   - ``*`` - ``ad719x_sync_n`` is always present in the DE10-Nano project,
+     **but** on the Cora Z7S project, ``adc_syncn``, it exists only when the
+     project was built with ``ARDZ_PMOD_N=1`` parameter (used when connecting
+     the eval. board through the Arduino header)
    - ``**`` - ``adc_int`` exists on the Cora Z7S project only when the project
      as built with ``ARDZ_PMOD_N=1`` parameter (used when connecting the eval.
      board through the Arduino header)
+
 
 Building the HDL project
 -------------------------------------------------------------------------------

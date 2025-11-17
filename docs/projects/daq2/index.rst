@@ -162,7 +162,7 @@ signals used on the AD-FMCDAQ2-EBZ platform.
 
 The :adi:`AD-FMCDAQ2-EBZ <EVAL-AD-FMCDAQ2-EBZ>` platform only uses the second
 PLL of the :adi:`AD9523-1` with the reference for the PLL being sourced from an
-external 125 MHz crystal. 
+external 125 MHz crystal.
 
 This is the default AD-FMCDAQ2-EBZ configuration with both converters running at
 the maximum supported samplerate of 1 GSPS.
@@ -207,7 +207,7 @@ The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
 ==================== =============== ===========
-Instance             Zynq/Microblaze ZynqMP     
+Instance             Zynq/Microblaze ZynqMP
 ==================== =============== ===========
 axi_ad9144_xcvr      0x44A6_0000     0x84A6_0000
 axi_ad9144_tpl       0x44A0_4000     0x84A0_4000
@@ -276,117 +276,31 @@ The Software GPIO number is calculated as follows:
 
 - ZynqMP: the offset is 78
 - A10SoC: the offset is 0
-
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-     - A10SoC
-   * - trig
-     - IN
-     - 43
-     - 121
-     - 43
-   * - adc_pd
-     - OUT
-     - 42
-     - 120
-     - 42
-   * - adac_txen
-     - OUT
-     - 41
-     - 119
-     - 41
-   * - dac_reset
-     - OUT
-     - 40
-     - 118
-     - 40
-   * - clk_sync
-     - OUT
-     - 38
-     - 116
-     - 38
-   * - adc_fdb
-     - IN
-     - 36
-     - 114
-     - 36
-   * - adc_fda
-     - IN
-     - 35
-     - 113
-     - 35
-   * - dac_irq
-     - IN
-     - 34
-     - 112
-     - 34
-   * - clkd_status
-     - IN
-     - 33:32
-     - 111:110
-     - 33:32
-
 - Zynq-7000: the offset is 54
+- MicroBlaze: the offset is 0
 
-.. list-table::
-   :widths: 25 20 20 20
-   :header-rows: 2
+=================  ============  =======  ==========  ======  ==========  ==========
+GPIO signal        Direction     HDL no.  Zynq MP     A10SoC  Zynq-7000   MicroBlaze
+=================  ============  =======  ==========  ======  ==========  ==========
+trig               IN            43       121         11      97          43
+adc_pd             OUT           42       120         10      96          42
+adac_txen          OUT           41       119         9       95          41
+dac_reset          OUT           40       118         8       94          40
+clk_sync           OUT           38       116         6       92          38
+adc_fdb            IN            36       114         4       90          36
+adc_fda            IN            35       113         3       89          35
+dac_irq            IN            34       112         2       88          34
+clkd_status[1:0]   IN            33:32    111:110     1:0     87:86       33:32
+=================  ============  =======  ==========  ======  ==========  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-   * - trig
-     - IN
-     - 43
-     - 97
-   * - adc_pd
-     - OUT
-     - 42
-     - 96
-   * - adac_txen
-     - OUT
-     - 41
-     - 95
-   * - dac_reset
-     - OUT
-     - 40
-     - 94
-   * -  clk_sync
-     - OUT
-     - 38
-     - 92
-   * - adc_fdb
-     - IN
-     - 36
-     - 90
-   * - adc_fda
-     - IN
-     - 35
-     - 89
-   * - dac_irq
-     - IN
-     - 34
-     - 88
-   * - clkd_status
-     - IN
-     - 33:32
-     - 87:86
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project (bit-width indicated)
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq-7000, Zynq MP, A10SoC, MicroBlaze = Software GPIOs (Linux GPIO numbers) to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -456,7 +370,7 @@ Example of running the ``make`` command with parameters:
 .. shell::
 
    $cd hdl/projects/daq2/zcu102
-   $make RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=4 TX_JESD_L=4 RX_JESD_S=1 
+   $make RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=4 TX_JESD_L=4 RX_JESD_S=1
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:

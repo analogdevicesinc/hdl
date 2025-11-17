@@ -124,25 +124,21 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20
-   :header-rows: 2
+============  =========  =======  ==========
+GPIO signal   Direction  HDL no.  MicroBlaze
+============  =========  =======  ==========
+rstb          OUT        38       38
+hmc_sync_req  OUT        37       37
+gpio[4:0]     INOUT      36:32    36:32
+============  =========  =======  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-   * -
-     - (from FPGA view)
-     -
-   * - rstb
-     - OUT
-     - 38
-   * - hmc_sync_req
-     - OUT
-     - 37
-   * - gpio[4:0]
-     - INOUT
-     - 36:32
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - MicroBlaze is Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

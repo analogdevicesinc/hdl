@@ -155,66 +155,28 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+======================================  ============  =======  =========  ======================
+GPIO signal                             Direction     HDL no.  Zynq-7000  Zynq UltraScale+ MP
+======================================  ============  =======  =========  ======================
+pwr_good                                INOUT         44       98         122
+fd_1                                    INOUT         43       97         121
+irq_1                                   INOUT         42       96         120
+fd_0                                    INOUT         41       95         119
+irq_0                                   INOUT         40       94         118
+pwdn_1                                  INOUT         39       93         117
+rst_1                                   INOUT         38       92         116
+pwdn_0                                  INOUT         35       89         113
+rst_0                                   INOUT         34       88         112
+======================================  ============  =======  =========  ======================
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - pwr_good
-     - INOUT
-     - 44
-     - 98
-     - 122
-   * - fd_1
-     - INOUT
-     - 43
-     - 97
-     - 121
-   * - irq_1
-     - INOUT
-     - 42
-     - 96
-     - 120
-   * - fd_0
-     - INOUT
-     - 41
-     - 95
-     - 119
-   * - irq_0
-     - INOUT
-     - 40
-     - 94
-     - 118
-   * - pwdn_1
-     - INOUT
-     - 39
-     - 93
-     - 117
-   * - rst_1
-     - INOUT
-     - 38
-     - 92
-     - 116
-   * - pwdn_0
-     - INOUT
-     - 35
-     - 89
-     - 113
-   * - rst_0
-     - INOUT
-     - 34
-     - 88
-     - 112
+.. admonition:: Legend
+   :class: note
 
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000, Zynq UltraScale+ MP = Software GPIOs to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

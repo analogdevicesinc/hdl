@@ -140,105 +140,44 @@ The Software GPIO number is calculated as follows:
 
 - Cora Z7S: the offset is 54
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+====================  ============  =======  ==========
+GPIO signal           Direction     HDL no.  Zynq-7000
+====================  ============  =======  ==========
+cn0540_shutdown       INOUT         40       94
+cn0540_reset_adc      INOUT         39       93
+cn0540_csb_aux        INOUT         38       92
+cn0540_sw_ff          INOUT         37       91
+cn0540_drdy_aux       INOUT         36       90
+cn0540_blue_led       INOUT         35       89
+cn0540_yellow_led     INOUT         34       88
+cn0540_sync_in        INOUT         33       87
+cn0540_drdy           INOUT         32       86
+====================  ============  =======  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - cn0540_shutdown
-     - INOUT
-     - 40
-     - 94
-   * - cn0540_reset_adc
-     - INOUT
-     - 39
-     - 93
-   * - cn0540_csb_aux
-     - INOUT
-     - 38
-     - 92
-   * - cn0540_sw_ff
-     - INOUT
-     - 37
-     - 91
-   * - cn0540_drdy_aux
-     - INOUT
-     - 36
-     - 90
-   * - cn0540_blue_led
-     - INOUT
-     - 35
-     - 89
-   * - cn0540_yellow_led
-     - INOUT
-     - 34
-     - 88
-   * - cn0540_sync_in
-     - INOUT
-     - 33
-     - 87
-   * - cn0540_drdy
-     - INOUT
-     - 32
-     - 86
+- DE10-Nano: the offset is -32
 
-- DE10-Nano: the offset is 32
+====================  ============  =======  ===========
+GPIO signal           Direction     HDL no.  DE10-Nano
+====================  ============  =======  ===========
+ltc2308_cs            OUT           41       9
+cn0540_blue_led       OUT           40       8
+cn0540_yellow_led     OUT           39       7
+cn0540_sw_ff          IN            38       6
+cn0540_shutdown       OUT           36       4
+cn0540_drdy_aux       OUT           35       3
+cn0540_csb_aux        OUT           34       2
+cn0540_sync_in        OUT           33       1
+cn0540_reset_adc      OUT           32       0
+====================  ============  =======  ===========
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+.. admonition:: Legend
+   :class: note
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - DE10-Nano
-   * - ltc2308_cs
-     - OUT
-     - 41
-     - 9
-   * - cn0540_blue_led
-     - OUT
-     - 40
-     - 8
-   * - cn0540_yellow_led
-     - OUT
-     - 39
-     - 7
-   * - cn0540_sw_ff
-     - IN
-     - 38
-     - 6
-   * - cn0540_shutdown
-     - OUT
-     - 36
-     - 4
-   * - cn0540_drdy_aux
-     - OUT
-     - 35
-     - 3
-   * - cn0540_csb_aux
-     - OUT
-     - 34
-     - 2
-   * - cn0540_sync_in
-     - OUT
-     - 33
-     - 1
-   * - cn0540_reset_adc
-     - OUT
-     - 32
-     - 0
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000, DE10-Nano = Software GPIO to be used
+     in the corresponding device tree
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -153,46 +153,25 @@ The Software GPIO number is calculated as follows:
 
 - Zynq-7000: if PS7 is used, then offset is 54
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+==================  =========  =======  =========
+GPIO signal         Direction  HDL no.  Zynq-7000
+==================  =========  =======  =========
+ad713x_dclkmode     INOUT      49       103
+ad713x_pinbspi      INOUT      48       102
+ad713x_dclkio[1:0]  INOUT      47:46    101:100
+ad713x_gpio[7:0]    INOUT      45:38    99:92
+ad713x_mode[1:0]    INOUT      37:36    91:90
+ad713x_pdn[1:0]     INOUT      35:34    89:88
+ad713x_resetn[1:0]  INOUT      33:32    87:86
+==================  =========  =======  =========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - ad713x_dclkmode
-     - INOUT
-     - 49
-     - 103
-   * - ad713x_pinbspi
-     - INOUT
-     - 48
-     - 102
-   * - ad713x_dclkio[1:0]
-     - INOUT
-     - 47:46
-     - 101:100
-   * - ad713x_gpio[7:0]
-     - INOUT
-     - 45:38
-     - 99:92
-   * - ad713x_mode[1:0]
-     - INOUT
-     - 37:36
-     - 91:90
-   * - ad713x_pdn[1:0]
-     - INOUT
-     - 35:34
-     - 89:88
-   * - ad713x_resetn[1:0]
-     - INOUT
-     - 33:32
-     - 87:86
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000 is Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

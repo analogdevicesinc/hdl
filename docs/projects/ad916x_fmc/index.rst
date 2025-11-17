@@ -187,28 +187,22 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
-- ZCU102: the offset is 78 (PS8)
+- ZCU102 (Zynq UltraScale+ MP): the offset is 78 (PS8)
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+===============  =========  =======  ===================
+GPIO signal      Direction  HDL no.  Zynq UltraScale+ MP
+===============  =========  =======  ===================
+fmc_hmc849vctrl  INOUT      23       101
+fmc_txen_0       INOUT      22       100
+===============  =========  =======  ===================
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - ZCU102
-   * - fmc_hmc849vctrl
-     - INOUT
-     - 23
-     - 100
-   * - fmc_txen_0
-     - INOUT
-     - 22
-     - 99
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq UltraScale+ MP is Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

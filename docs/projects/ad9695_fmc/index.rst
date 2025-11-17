@@ -154,35 +154,22 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+============  =========  =======  ===================
+GPIO signal   Direction  HDL no.  Zynq UltraScale+ MP
+============  =========  =======  ===================
+fdb           INOUT      34       112
+fda           INOUT      33       111
+pwdn          INOUT      32       110
+============  =========  =======  ===================
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - fdb
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - fda
-     - INOUT
-     - 33
-     - 87
-     - 111
-   * - pwdn
-     - INOUT
-     - 32
-     - 86
-     - 110
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq UltraScale+ MP is Software GPIO, to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

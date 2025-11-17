@@ -179,42 +179,33 @@ The Software GPIO number is calculated as follows:
 
 - Zynq-7000: if PS7 is used, then offset is 54
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+====================  ============  =======  ==========
+GPIO signal           Direction     HDL no.  Zynq-7000
+====================  ============  =======  ==========
+cn0561_gpio[7:4]      INOUT         42:39    96:93
+cn0561_gpio[2:0]      INOUT         38:36    92:90
+cn0561_pinbspi        INOUT         35       89
+cn0561_mode           INOUT         34       88
+cn0561_pdn            INOUT         33       87
+cn0561_resetn         INOUT         32       86
+====================  ============  =======  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - cn0561_gpio[7:4]
-     - INOUT
-     - 42:39
-     - 96:93
-   * - cn0561_gpio[2:0]
-     - INOUT
-     - 38:36
-     - 92:90
-   * - cn0561_pinbspi
-     - INOUT
-     - 35
-     - 89
-   * - cn0561_mode
-     - INOUT
-     - 34
-     - 88
-   * - cn0561_pdn
-     - INOUT
-     - 33
-     - 87
-   * - cn0561_resetn
-     - INOUT
-     - 32
-     - 86
+- DE10-Nano: the offset is -32
+
+===================  ============  ========  ===========
+GPIO signal           Direction     HDL no.  DE10-Nano
+===================  ============  ========  ===========
+ltc2308_cs            OUT           41       9
+cn0561_pdn            OUT           32       0
+===================  ============  ========  ===========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000, DE-10Nano = Software GPIOs to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
