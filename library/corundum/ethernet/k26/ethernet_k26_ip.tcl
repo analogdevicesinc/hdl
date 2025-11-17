@@ -79,8 +79,6 @@ adi_add_bus "axis_eth_tx" "slave" \
     {"axis_eth_tx_tuser" "TUSER"} \
   ]
 
-adi_add_bus_clock "eth_tx_clk" "axis_eth_tx" "eth_tx_rst" "master" "master"
-
 adi_add_bus "axis_eth_rx" "master" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \
@@ -92,8 +90,6 @@ adi_add_bus "axis_eth_rx" "master" \
     {"axis_eth_rx_tlast" "TLAST"} \
     {"axis_eth_rx_tuser" "TUSER"} \
   ]
-
-adi_add_bus_clock "eth_rx_clk" "axis_eth_rx" "eth_rx_rst" "master" "master"
 
 adi_if_infer_bus analog.com:interface:if_ctrl_reg slave ctrl_reg [list \
   "ctrl_reg_wr_addr ctrl_reg_wr_addr" \
@@ -136,46 +132,19 @@ adi_if_infer_bus analog.com:interface:if_axis_tx_ptp slave axis_tx_ptp [list \
   "ready axis_eth_tx_ptp_ts_ready" \
 ]
 
-adi_add_bus_clock "eth_tx_clk" "axis_tx_ptp" "eth_tx_rst" "master" "master"
-
-ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-set reset_intf_main [ipx::infer_bus_interface rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
-set reset_polarity_main [ipx::add_bus_parameter "POLARITY" $reset_intf_main]
-set_property value "ACTIVE_HIGH" $reset_polarity_main
-
-ipx::infer_bus_interface ptp_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-ipx::infer_bus_interface ptp_sample_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-
-ipx::infer_bus_interface eth_tx_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-ipx::infer_bus_interface eth_rx_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
-
-set reset_intf_ptp [ipx::infer_bus_interface ptp_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
-set reset_polarity_ptp [ipx::add_bus_parameter "POLARITY" $reset_intf_ptp]
-set_property value "ACTIVE_HIGH" $reset_polarity_ptp
-
-set eth_tx_rst_intf [ipx::infer_bus_interface eth_tx_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
-set eth_tx_rst_polarity [ipx::add_bus_parameter "POLARITY" $eth_tx_rst_intf]
-set_property value "ACTIVE_HIGH" $eth_tx_rst_polarity
-set eth_rx_rst_intf [ipx::infer_bus_interface eth_rx_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
-set eth_rx_rst_polarity [ipx::add_bus_parameter "POLARITY" $eth_rx_rst_intf]
-set_property value "ACTIVE_HIGH" $eth_rx_rst_polarity
-
 adi_if_infer_bus analog.com:interface:if_ethernet_ptp slave ethernet_ptp_tx [list \
-  "ptp_clk     eth_tx_clk" \
-  "ptp_rst     eth_tx_rst" \
+  "ptp_clk     eth_tx_ptp_clk" \
+  "ptp_rst     eth_tx_ptp_rst" \
   "ptp_ts      eth_tx_ptp_ts" \
   "ptp_ts_step eth_tx_ptp_ts_step" \
 ]
 
 adi_if_infer_bus analog.com:interface:if_ethernet_ptp slave ethernet_ptp_rx [list \
-  "ptp_clk     eth_rx_clk" \
-  "ptp_rst     eth_rx_rst" \
+  "ptp_clk     eth_rx_ptp_clk" \
+  "ptp_rst     eth_rx_ptp_rst" \
   "ptp_ts      eth_rx_ptp_ts" \
   "ptp_ts_step eth_rx_ptp_ts_step" \
 ]
-
-adi_add_bus_clock "eth_tx_clk" "ethernet_ptp_tx" "eth_tx_rst" "master" "master"
-adi_add_bus_clock "eth_rx_clk" "ethernet_ptp_rx" "eth_rx_rst" "master" "master"
 
 adi_if_infer_bus analog.com:interface:if_flow_control_tx slave flow_control_tx [list \
   "tx_enable           eth_tx_enable" \
@@ -198,16 +167,6 @@ adi_if_infer_bus analog.com:interface:if_flow_control_rx slave flow_control_rx [
   "rx_pfc_ack          eth_rx_pfc_ack" \
   "rx_fc_quanta_clk_en eth_rx_fc_quanta_clk_en" \
 ]
-
-adi_add_bus "m_axis_stat" "master" \
-  "xilinx.com:interface:axis_rtl:1.0" \
-  "xilinx.com:interface:axis:1.0" \
-  [ list \
-    {"s_axis_stat_tdata" "TDATA"} \
-    {"s_axis_stat_tid" "TID"} \
-    {"s_axis_stat_tvalid" "TVALID"} \
-    {"s_axis_stat_tready" "TREADY"} \
-  ]
 
 adi_if_infer_bus analog.com:interface:if_sfp master m_sfp [list \
   "rx_p  sfp_rx_p" \
@@ -270,6 +229,11 @@ adi_if_infer_bus analog.com:interface:if_ptp slave ptp_clock [list \
   "ptp_perout_error     ptp_perout_error" \
   "ptp_perout_pulse     ptp_perout_pulse" \
 ]
+
+adi_add_bus_clock "eth_tx_clk" "axis_eth_tx:axis_tx_ptp" "eth_tx_rst" "master" "master"
+adi_add_bus_clock "eth_rx_clk" "axis_eth_rx" "eth_rx_rst" "master" "master"
+adi_add_bus_clock "eth_tx_ptp_clk" "ethernet_ptp_tx" "eth_tx_ptp_rst" "master" "master"
+adi_add_bus_clock "eth_rx_ptp_clk" "ethernet_ptp_rx" "eth_rx_ptp_rst" "master" "master"
 
 ## Customize GUI page
 
