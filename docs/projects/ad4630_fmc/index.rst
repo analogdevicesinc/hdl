@@ -322,42 +322,22 @@ The Software GPIO number is calculated as follows:
 
 - Zynq-7000: if PS7 is used, then offset is 54
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - ad463x_resetn
-     - INOUT
-     - 32
-     - 86
-   * - adaq42xx_pgia_mux[0]*
-     - INOUT
-     - 33
-     - 87
-   * - adaq42xx_pgia_mux[1]*
-     - INOUT
-     - 34
-     - 88
-   * - max17687_rst**
-     - INOUT
-     - 35
-     - 89
-   * - ad463x_trigger
-     - OUT
-     - 36
-     - 90
+=======================  =========  =======  =========
+GPIO signal              Direction  HDL no.  Zynq-7000
+=======================  =========  =======  =========
+ad463x_resetn            INOUT      32       86
+adaq42xx_pgia_mux[1:0]*  INOUT      34:33    88:87
+max17687_rst**           INOUT      35       89
+ad463x_trigger           OUT        36       90
+=======================  =========  =======  =========
 
 .. admonition:: Legend
    :class: note
 
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000 is Software GPIO, to be used in device trees
    - ``*`` instantiated, but used for ADAQ4224 only
    - ``**`` instantiated, but used for ADAQ4224 with isolated power supply
 

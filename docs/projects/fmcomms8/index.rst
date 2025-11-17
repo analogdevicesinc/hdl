@@ -193,98 +193,40 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 15
-   :header-rows: 2
+- Zynq UltraScale+ MP: if PS8 EMIOs are used, then offset is 78
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-   * - hmc7044_gpio_4
-     - INOUT
-     - 67
-     - 145
-   * - hmc7044_gpio_3
-     - INOUT
-     - 66
-     - 144
-   * - hmc7044_gpio_2
-     - INOUT
-     - 65
-     - 143
-   * - hmc7044_gpio_1
-     - INOUT
-     - 64
-     - 142
-   * - hmc7044_sync
-     - INOUT
-     - 63
-     - 141
-   * - hmc7044_reset
-     - INOUT
-     - 62
-     - 140
-   * - adrv9009_tx2_enable_d
-     - INOUT
-     - 61
-     - 139
-   * - adrv9009_tx1_enable_d
-     - INOUT
-     - 60
-     - 138
-   * - adrv9009_rx2_enable_d
-     - INOUT
-     - 59
-     - 137
-   * - adrv9009_rx1_enable_d
-     - INOUT
-     - 58
-     - 136
-   * - adrv9009_reset_b_d
-     - INOUT
-     - 57
-     - 135
-   * - adrv9009_gpint_d
-     - INOUT
-     - 56
-     - 134
-   * - adrv9009_gpio_{08:00}_d
-     - INOUT
-     - 55:47
-     - 133:125
-   * - adrv9009_tx2_enable_c
-     - INOUT
-     - 46
-     - 124
-   * - adrv9009_tx1_enable_c
-     - INOUT
-     - 45
-     - 123
-   * - adrv9009_rx2_enable_c
-     - INOUT
-     - 44
-     - 122
-   * - adrv9009_rx1_enable_c
-     - INOUT
-     - 43
-     - 121
-   * - adrv9009_reset_b_c
-     - INOUT
-     - 42
-     - 120
-   * - adrv9009_gpint_c
-     - INOUT
-     - 41
-     - 119
-   * - adrv9009_gpio_{08:00}_c
-     - INOUT
-     - 40:32
-     - 118:110
+======================================  ============  ========  ======================
+GPIO signal                              Direction     HDL no.  Zynq UltraScale+ MP
+======================================  ============  ========  ======================
+hmc7044_gpio_4                            INOUT         67       145
+hmc7044_gpio_3                            INOUT         66       144
+hmc7044_gpio_2                            INOUT         65       143
+hmc7044_gpio_1                            INOUT         64       142
+hmc7044_sync                              INOUT         63       141
+hmc7044_reset                             INOUT         62       140
+adrv9009_tx2_enable_d                     INOUT         61       139
+adrv9009_tx1_enable_d                     INOUT         60       138
+adrv9009_rx2_enable_d                     INOUT         59       137
+adrv9009_rx1_enable_d                     INOUT         58       136
+adrv9009_reset_b_d                        INOUT         57       135
+adrv9009_gpint_d                          INOUT         56       134
+adrv9009_gpio_{08:00}_d                   INOUT         55:47    133:125
+adrv9009_tx2_enable_c                     INOUT         46       124
+adrv9009_tx1_enable_c                     INOUT         45       123
+adrv9009_rx2_enable_c                     INOUT         44       122
+adrv9009_rx1_enable_c                     INOUT         43       121
+adrv9009_reset_b_c                        INOUT         42       120
+adrv9009_gpint_c                          INOUT         41       119
+adrv9009_gpio_{08:00}_c                   INOUT         40:32    118:110
+======================================  ============  ========  ======================
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL (as used in the HDL project)
+   - Zynq UltraScale+ MP = Software GPIO to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

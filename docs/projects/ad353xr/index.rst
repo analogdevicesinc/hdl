@@ -17,7 +17,7 @@ for a reference voltage of 2.5V. :adi:`AD3530`/ :adi:`AD3530R` has 8 channels
 :adi:`AD3536R` have an on-chip, buffered, 2.5V reference available at the VREF
 pin, capable of sourcing external loads up to +5mA.
 
-Each DAC channel has its own Input register and DAC register. The DAC Register 
+Each DAC channel has its own Input register and DAC register. The DAC Register
 stores digital code equivalent to the DAC output voltage while the Input
 Register acts as a temporary staging register before being passed on the DAC
 Register. With the LDAC function, one or more DAC registers could be updated in
@@ -110,28 +110,24 @@ GPIOs
 The Software GPIO number is calculated as follows:
 
 - Zynq-7000: if PS7 is used, then the offset is 54
+- DE10-Nano: the offset is -32
 - All supported boards uses the same HDL GPIO EMIO Number
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+===========  =========  =======  =========  =========
+GPIO signal  Direction  HDL no.  Zynq-7000  DE10-Nano
+===========  =========  =======  =========  =========
+dac_resetb   OUT        33       87         1
+dac_ldacb    OUT        34       88         2
+===========  =========  =======  =========  =========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - RESETB
-     - OUT
-     - 33
-     - 87
-   * - LDACB
-     - OUT
-     - 34
-     - 88
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, DE10-Nano are Software GPIOs, to be used in device trees
+
 
 Building the HDL project
 -------------------------------------------------------------------------------
