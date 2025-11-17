@@ -441,6 +441,26 @@ The following table lists the GPIO signals used in this project that
 are connected to the Apollo evaluation board and are common between
 all the carriers.
 
+============  =========  =======  =========  ==========
+GPIO signal   Direction  HDL no.  Zynq MP    Microblaze
+============  =========  =======  =========  ==========
+resetb        OUT        62       62         30
+trig_b[1:0]   OUT        61:60    61:60      29:28
+trig_a[1:0]   OUT        59:58    59:58      27:26
+trig_in       IN         53       53         21
+aux_gpio      INOUT      48       48         16
+gpio[30:15]   INOUT      47:32    47:32      15:0
+============  =========  =======  =========  ==========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq MP, Microblaze are Software GPIOs, to be used in
+     device trees
+
 .. list-table::
    :widths: 20 20 20 20 20
    :header-rows: 2

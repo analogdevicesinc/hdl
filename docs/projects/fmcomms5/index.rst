@@ -165,11 +165,11 @@ GPIOs
 
 The device control and monitor signals are interfaced to a GPIO module.
 
-ZC706
+ZC706/ZC702
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ================ ========= ============= =============
-GPIO signal      Direction HDL GPIO EMIO Zynq-700 GPIO
+GPIO signal      Direction HDL GPIO EMIO Zynq-7000 GPIO
 ================ ========= ============= =============
 gpio_resetb_1    INOUT     59            113
 gpio_ad5355_lock INOUT     58            112
