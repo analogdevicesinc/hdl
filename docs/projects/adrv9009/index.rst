@@ -195,58 +195,28 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 15
-   :header-rows: 2
+=====================  =========  =======  =========
+GPIO signal            Direction  HDL no.  Zynq MP
+=====================  =========  =======  =========
+ad9528_reset_b         INOUT      59       137
+ad9528_sysref_req      INOUT      58       136
+adrv9009_tx1_enable    INOUT      57       135
+adrv9009_tx2_enable    INOUT      56       134
+adrv9009_rx1_enable    INOUT      55       133
+adrv9009_rx2_enable    INOUT      54       132
+adrv9009_test          INOUT      53       131
+adrv9009_reset_b       INOUT      52       130
+adrv9009_gpint         INOUT      51       129
+adrv9009_gpio_{00:18}  INOUT      50:32    128:110
+=====================  =========  =======  =========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-   * - ad9528_reset_b
-     - INOUT
-     - 59
-     - 137
-   * - ad9528_sysref_req
-     - INOUT
-     - 58
-     - 136
-   * - adrv9009_tx1_enable
-     - INOUT
-     - 57
-     - 135
-   * - adrv9009_tx2_enable
-     - INOUT
-     - 56
-     - 134
-   * - adrv9009_rx1_enable
-     - INOUT
-     - 55
-     - 133
-   * - adrv9009_rx2_enable
-     - INOUT
-     - 54
-     - 132
-   * - adrv9009_test
-     - INOUT
-     - 53
-     - 131
-   * - adrv9009_reset_b
-     - INOUT
-     - 52
-     - 130
-   * - adrv9009_gpint
-     - INOUT
-     - 51
-     - 129
-   * - adrv9009_gpio_{00:18}
-     - INOUT
-     - 50:32
-     - 128:110
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq MP is Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

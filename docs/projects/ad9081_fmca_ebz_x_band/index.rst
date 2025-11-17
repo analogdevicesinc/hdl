@@ -221,8 +221,7 @@ GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ====================== ================ ============== ==============
-GPIO signal            Direction        HDL GPIO EMIO  Software GPIO
-                       (from FPGA view)                Zynq MP
+GPIO signal            Direction        HDL no.        Zynq MP
 ====================== ================ ============== ==============
 gpio_o_86_ms           OUT              86             163
 gpio_o_85_ms           OUT              85             162
@@ -257,6 +256,14 @@ agc0[1:0]              IN               45:44          123:122
 hmc_gpio1              INOUT            43             121
 gpio[10:0]             INOUT            42:32          120:110
 ====================== ================ ============== ==============
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq MP is Software GPIOs, to be used device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
