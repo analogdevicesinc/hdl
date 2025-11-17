@@ -860,6 +860,8 @@ adi_add_bus_clock "ddr_clk" "m_axi_ddr:m_axi_ddr_app" "ddr_rst"
 adi_add_bus_clock "hbm_clk" "m_axi_hbm:m_axi_hbm_app" "hbm_rst"
 adi_add_bus_clock "tx_clk" "m_axis_tx:s_axis_direct_tx_app:m_axis_direct_tx_app" "tx_rst"
 adi_add_bus_clock "rx_clk" "s_axis_rx:s_axis_stat:s_axis_direct_rx_app:m_axis_direct_rx_app" "rx_rst"
+adi_add_bus_clock "tx_ptp_clk" "ethernet_ptp_tx" "tx_ptp_rst"
+adi_add_bus_clock "rx_ptp_clk" "ethernet_ptp_rx" "rx_ptp_rst"
 
 ## Parameter validation
 
@@ -2526,6 +2528,9 @@ adi_set_ports_dependency "hbm_status" \
 
 adi_set_bus_dependency "m_axil_csr" "m_axil_csr" \
   "(spirit:decode(id('PARAM_VALUE.AXIL_CSR_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_stat" "s_axis_stat" \
+  "(spirit:decode(id('MODELPARAM_VALUE.STAT_ENABLE')) = 1)"
 
 # Application dependencies
 
