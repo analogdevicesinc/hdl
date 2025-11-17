@@ -53,8 +53,8 @@ module ethernet_k26 #(
 
   // Statistics counter subsystem
   parameter STAT_ENABLE = 0,
-  parameter STAT_DMA_ENABLE = 1,
-  parameter STAT_AXI_ENABLE = 1,
+  parameter STAT_DMA_ENABLE = 0,
+  parameter STAT_AXI_ENABLE = 0,
   parameter STAT_INC_WIDTH = 24,
   parameter STAT_ID_WIDTH = 12
 ) (
@@ -139,11 +139,17 @@ module ethernet_k26 #(
 
   output wire [PORT_COUNT-1:0]                     eth_tx_clk,
   output wire [PORT_COUNT-1:0]                     eth_tx_rst,
+
+  output wire [PORT_COUNT-1:0]                     eth_tx_ptp_clk,
+  output wire [PORT_COUNT-1:0]                     eth_tx_ptp_rst,
   input  wire [PORT_COUNT*PTP_TS_WIDTH-1:0]        eth_tx_ptp_ts,
   input  wire [PORT_COUNT-1:0]                     eth_tx_ptp_ts_step,
 
   output wire [PORT_COUNT-1:0]                     eth_rx_clk,
   output wire [PORT_COUNT-1:0]                     eth_rx_rst,
+
+  output wire [PORT_COUNT-1:0]                     eth_rx_ptp_clk,
+  output wire [PORT_COUNT-1:0]                     eth_rx_ptp_rst,
   input  wire [PORT_COUNT*PTP_TS_WIDTH-1:0]        eth_rx_ptp_ts,
   input  wire [PORT_COUNT-1:0]                     eth_rx_ptp_ts_step,
 
@@ -183,14 +189,6 @@ module ethernet_k26 #(
   output wire [PORT_COUNT*8-1:0]                   eth_rx_pfc_req,
   input  wire [PORT_COUNT*8-1:0]                   eth_rx_pfc_ack,
   output wire [PORT_COUNT-1:0]                     eth_rx_fc_quanta_clk_en,
-
-  /*
-  * Statistics increment input
-  */
-  output wire [STAT_INC_WIDTH-1:0]                 s_axis_stat_tdata,
-  output wire [STAT_ID_WIDTH-1:0]                  s_axis_stat_tid,
-  output wire                                      s_axis_stat_tvalid,
-  input  wire                                      s_axis_stat_tready,
 
   input  wire                                      scl_i,
   output reg                                       scl_o,
@@ -509,8 +507,12 @@ module ethernet_k26 #(
 
       assign eth_tx_clk[n] = port_xgmii_tx_clk[n];
       assign eth_tx_rst[n] = port_xgmii_tx_rst[n];
+      assign eth_tx_ptp_clk[n] = port_xgmii_tx_clk[n];
+      assign eth_tx_ptp_rst[n] = port_xgmii_tx_rst[n];
       assign eth_rx_clk[n] = port_xgmii_rx_clk[n];
       assign eth_rx_rst[n] = port_xgmii_rx_rst[n];
+      assign eth_rx_ptp_clk[n] = port_xgmii_rx_clk[n];
+      assign eth_rx_ptp_rst[n] = port_xgmii_rx_rst[n];
 
       eth_mac_10g #(
         .DATA_WIDTH(AXIS_DATA_WIDTH),

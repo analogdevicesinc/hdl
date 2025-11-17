@@ -402,7 +402,6 @@ if [string equal $board K26] {
   ad_connect corundum_core/ptp_clk ethernet_core/ptp_clk
   ad_connect corundum_core/ptp_rst ethernet_core/ptp_rst
   ad_connect corundum_core/ptp_sample_clk ethernet_core/ptp_sample_clk
-  ad_connect corundum_core/s_axis_stat ethernet_core/m_axis_stat
 } else {
   ad_connect ethernet_core/clk_125mhz clk_125mhz
   ad_connect ethernet_core/rst_125mhz rst_125mhz

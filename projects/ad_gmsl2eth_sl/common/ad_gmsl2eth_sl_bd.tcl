@@ -500,12 +500,6 @@ ad_connect corundum_hierarchy/sfp_iic sfp_iic
 
 ad_connect clk10_gen/clk_out1 ref_clk0
 
-set axi_clk_freq [get_property CONFIG.FREQ_HZ [get_bd_pins sys_ps8/pl_clk1]]
-set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins corundum_hierarchy/m_axi]
-set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins /corundum_hierarchy/corundum_core/m_axi]
-set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins corundum_hierarchy/s_axil_corundum]
-set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins /corundum_hierarchy/corundum_core/s_axil_ctrl]
-
 ad_ip_instance axi_interconnect smartconnect_corundum
 ad_ip_parameter smartconnect_corundum CONFIG.NUM_MI 2
 ad_ip_parameter smartconnect_corundum CONFIG.NUM_SI 1
