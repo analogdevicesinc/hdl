@@ -855,6 +855,17 @@ adi_if_infer_bus analog.com:interface:if_axis_stat slave m_axis_stat_app [list \
 
 # Bus-clock association
 
+ipx::infer_bus_interface tx_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface rx_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
+set reset_intf_tx [ipx::infer_bus_interface tx_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
+set reset_polarity_tx [ipx::add_bus_parameter "POLARITY" $reset_intf_tx]
+set_property value "ACTIVE_HIGH" $reset_polarity_tx
+
+set reset_intf_rx [ipx::infer_bus_interface rx_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
+set reset_polarity_rx [ipx::add_bus_parameter "POLARITY" $reset_intf_rx]
+set_property value "ACTIVE_HIGH" $reset_polarity_rx
+
 adi_add_bus_clock "clk" "m_axi:s_axil_ctrl:m_axil_csr:s_axis_sync_tx_app:m_axis_sync_tx_app:s_axis_sync_rx_app:m_axis_sync_rx_app:s_axis_if_tx_app:m_axis_if_tx_app:s_axis_if_rx_app:m_axis_if_rx_app:m_axil_ctrl_app" "rst"
 adi_add_bus_clock "ddr_clk" "m_axi_ddr:m_axi_ddr_app" "ddr_rst"
 adi_add_bus_clock "hbm_clk" "m_axi_hbm:m_axi_hbm_app" "hbm_rst"
@@ -2526,6 +2537,9 @@ adi_set_ports_dependency "hbm_status" \
 
 adi_set_bus_dependency "m_axil_csr" "m_axil_csr" \
   "(spirit:decode(id('PARAM_VALUE.AXIL_CSR_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_stat" "s_axis_stat" \
+  "(spirit:decode(id('MODELPARAM_VALUE.STAT_ENABLE')) = 1)"
 
 # Application dependencies
 

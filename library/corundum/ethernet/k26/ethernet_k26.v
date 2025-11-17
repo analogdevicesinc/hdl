@@ -53,8 +53,8 @@ module ethernet_k26 #(
 
   // Statistics counter subsystem
   parameter STAT_ENABLE = 0,
-  parameter STAT_DMA_ENABLE = 1,
-  parameter STAT_AXI_ENABLE = 1,
+  parameter STAT_DMA_ENABLE = 0,
+  parameter STAT_AXI_ENABLE = 0,
   parameter STAT_INC_WIDTH = 24,
   parameter STAT_ID_WIDTH = 12
 ) (
@@ -183,14 +183,6 @@ module ethernet_k26 #(
   output wire [PORT_COUNT*8-1:0]                   eth_rx_pfc_req,
   input  wire [PORT_COUNT*8-1:0]                   eth_rx_pfc_ack,
   output wire [PORT_COUNT-1:0]                     eth_rx_fc_quanta_clk_en,
-
-  /*
-  * Statistics increment input
-  */
-  output wire [STAT_INC_WIDTH-1:0]                 s_axis_stat_tdata,
-  output wire [STAT_ID_WIDTH-1:0]                  s_axis_stat_tid,
-  output wire                                      s_axis_stat_tvalid,
-  input  wire                                      s_axis_stat_tready,
 
   input  wire                                      scl_i,
   output reg                                       scl_o,
