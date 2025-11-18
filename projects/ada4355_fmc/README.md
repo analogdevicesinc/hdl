@@ -10,6 +10,7 @@
 | Part name                                      | Description                                                  |
 |------------------------------------------------|--------------------------------------------------------------|
 | [ADA4355](https://www.analog.com/ada4355) | 14-Bit, 125MSPS, High performance, current input, data acquisition μModule |
+| [ADA4356](https://www.analog.com/ada4356) | 14-Bit, 125MSPS, High performance, current input, data acquisition μModule |
 
 ## Building the project
 
