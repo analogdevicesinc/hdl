@@ -6,19 +6,19 @@ ADA4355-FMC HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`ADA4355` is a complete, high performance, current input µModule.
-For space savings, the :adi:`ADA4355` includes all the  required active and
-passive components to realize a complete current to bits data acquisition
-solution, supporting a small form factor, optical modules as well as
-multichannel systems.
+The :adi:`ADA4355`/ :adi:`ADA4356` is a complete, high performance, current
+input µModule. For space savings, the :adi:`ADA4355`/ :adi:`ADA4356` includes
+all the required active and passive components to realize a complete current to
+bits data acquisition solution, supporting a small form factor, optical modules
+as well as multichannel systems.
 
-The high speed transimpedance amplifier (TIA) of the device supports 10 ns pulse
-widths, allowing high spatial resolution for Time of Flight (ToF) measurements.
-Additionally, the :adi:`ADA4355` includes three TIA gain (TZ) settings to
-maximize dynamic range. An internal, selectable, analog low-pass filter (LPF)
-can limit the device bandwidth with a corner frequency of 100 MHz to minimize
-broadband noise while also serving as an antialiasing filter for the 125 MSPS
-ADC.
+The high speed transimpedance amplifier (TIA) supports short optical pulses:
+10 ns for the ADA4355 and 20 ns for the ADA4356, enabling high spatial
+resolution in Time of Flight (ToF) measurements. Both devices provide three TIA
+gain (TZ) settings to maximize dynamic range. An internal, selectable,
+analog low-pass filter (LPF) can limit the devices bandwidth with a corner
+frequency of 100 MHz to minimize broadband noise while also serving as an
+antialiasing filter for the 125 MSPS ADC.
 
 The 14-bit ADC converts the amplified voltage signal at a rate of up to 125 MSPS
 and outputs the digitized signals through two serial, low voltage differential
@@ -35,6 +35,7 @@ Supported devices
 -------------------------------------------------------------------------------
 
 - :adi:`ADA4355`
+- :adi:`ADA4356`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -69,23 +70,23 @@ The data path and clock domains are depicted in the below diagram:
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The BUFMRCE_EN configuration parameter defines the pinout used which is
-differentiated by how the frame clock signals are distributed.
-For one pinout version, the XDC constraints are not optimized for ISERDES,
-as the frame clock signals are located in a different I/O bank from the other
-related signals. To address this, a BUFMRCE buffer is used to distribute the
+The BUFMRCE_EN configuration parameter defines the supported board used which
+is differentiated by how the frame clock signals are distributed.
+For ADA4355 the XDC constraints are not optimized for ISERDES, as the frame
+clock signals are located in a different I/O bank from the other related
+signals. To address this, a BUFMRCE buffer is used to distribute the
 frame clock to all ISERDES instances.
 
-By default it is set to 0. Depending on the pinout, some hardware modifications
+By default it is set to 0. Depending on the part, some hardware modifications
 need to be done on the board and/or ``make`` command:
 
-In case of the pinout with optimized constraints:
+In case of the ADA4356:
 
 .. shell:: bash
 
    $make BUFMRCE_EN=0
 
-In case of the pinout with non-optimized constraints:
+In case of the ADA4355:
 
 .. shell:: bash
 
@@ -210,8 +211,8 @@ The Software GPIO number is calculated as follows:
 .. admonition:: Legend
    :class: note
 
-   - ``*`` instantiated only for BUFMRCE_EN=1
-   - ``**`` instantiated only for BUFMRCE_EN=0
+   - ``*`` instantiated only for BUFMRCE_EN=1 (ADA4355)
+   - ``**`` instantiated only for BUFMRCE_EN=0 (ADA4356)
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -291,6 +292,7 @@ Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  Product datasheet: :adi:`ADA4355`
+-  Product datasheet: :adi:`ADA4356`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
