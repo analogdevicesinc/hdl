@@ -6,27 +6,33 @@ LTC2378-FMC HDL project
 Overview
 --------------------------------------------------------------------------------
 
-The :adi:`LTC2378-20` is a low noise, low power, high speed 20-bit successive
-approximation register (SAR) ADC. Operating from a 2.5V supply, the
-:adi:`LTC2378-20` has a ±VREF fully differential input range with VREF ranging
-from  2.5V to 5.1V. The :adi:`LTC2378-20` consumes only 21mW and achieves ±2ppm
-INL maximum, no missing codes at 20 bits with 104dB SNR.
+The LTC23xx family consists of low noise, low power, high speed successive
+approximation register (SAR) ADCs with resolutions of 16-bit, 18-bit and 20-bit
+and maximum sampling rates from 250 kSPS to 2 MSPS. Operating from a 2.5V or 5V
+supply, these ADCs feature either fully differential or pseudo-differential
+input configurations with VREF ranging from 2.5V to 5.1V.
+The :adi:`LTC2338-18` is a special variant operating from a single 5V supply
+with a ±10.24V true bipolar input range, making it ideal for high voltage
+applications which require a wide dynamic range.
 
-The :adi:`LTC2378-20` has a high speed SPI-compatible serial interface that
-supports 1.8V, 2.5V, 3.3V and 5V logic while also featuring a daisy-chain mode.
-The fast 1Msps throughput with no cycle latency makes the :adi:`LTC2378-20`
-ideally suited for a wide variety of high speed applications. An internal
-oscillator sets the conversion time, easing external timing considerations.
-The :adi:`LTC2378-20` automatically  powers down between conversions, leading to
-reduced power dissipation that scales with the sampling rate.
+All devices in the family feature a high speed SPI-compatible serial interface
+that supports 1.8V, 2.5V, 3.3V and 5V logic while also featuring a daisy-chain
+mode. The fast throughput with no cycle latency makes the LTC23xx family ideally
+suited for a wide variety of high speed applications. An internal oscillator
+sets the conversion time, easing external timing considerations. The devices
+automatically power down between conversions, leading to reduced power
+dissipation that scales with the sampling rate.
 
-The :adi:`LTC2378-20` features a unique digital gain compression (DGC) function,
-which eliminates the driver amplifier's negative supply while preserving the
-full resolution of the ADC. When enabled, the ADC performs a digital scaling
-function that maps zero-scale code from 0V to 0.1 x VREF and full-scale code
-from VREF to 0.9 x VREF. For a typical reference voltage of 5V, the full-scale
-input range is now 0.5V to 4.5V, which provides adequate headroom for powering
-the driving amplifier from a single 5.5V supply.
+The :adi:`LTC2376-16`, :adi:`LTC2376-18`, :adi:`LTC2376-20`, :adi:`LTC2377-16`,
+:adi:`LTC2377-18`, :adi:`LTC2377-20`, :adi:`LTC2378-16`, :adi:`LTC2378-18`,
+:adi:`LTC2378-20`, :adi:`LTC2379-18`, :adi:`LTC2380-16` variants feature a
+unique digital gain compression (DGC) function, which eliminates the driver
+amplifier's negative supply while preserving the full resolution of the ADC.
+When enabled, the ADC performs a digital scaling function that maps zero-scale
+code from 0V to 0.1 x VREF and full-scale code from VREF to 0.9 x VREF. For a
+typical reference voltage of 5V, the full-scale input range is now 0.5V to 4.5V,
+which provides adequate headroom for powering the driving amplifier from a
+single 5.5V supply.
 
 Applications:
 
