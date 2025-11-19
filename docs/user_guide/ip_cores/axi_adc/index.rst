@@ -33,7 +33,6 @@ Files
    * - :git-hdl:`library/common/up_adc_channel.v`
      - Verilog source for the ADC Channel regmap.
 
-
 Architecture
 --------------------------------------------------------------------------------
 
@@ -218,6 +217,51 @@ see :ref:`axi_adc adc-channel` section.
    :git-hdl:`library/common/up_adc_channel.v` verilog file.
    To find the instantiation of this module search for ``up_adc_channel`` inside
    the IP's directory.
+
+Register access
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ADC IP supports **16 channels**, numbered from **0 to 15**. The **base
+registers** start at offset ``0x0`` and the **common (global) registers** start
+at offset ``0x10``. Each **channel** has its own register block, starting from
+offset ``0x100`` (for channel 0). Each subsequent channel is spaced by ``0x10``
+(HDL addressing) or ``0x40`` (WORD aligned).
+
+Let's say the ADC IP base address is 0x44A0_0000. Here is how the channel offset
+is computed: 
+
+.. math::
+
+   \text{Address}_{HDL} = 0x44A0\_0000 + 0x100 + (n \times 0x10) \\
+   \text{Address}_{WORD} = 0x44A0\_0000 + 0x400 + (n \times 0x40)
+
+This means the first register's address ( **``CHAN_CNTRL``**) is:
+
+- For **channel 0**:
+  - ``0x44A0_0100`` (HDL addressing)
+  - ``0x44A0_0400`` (WORD aligned addressing)
+- For **channel 3**:
+  - ``0x44A0_0140`` (HDL addressing)
+  - ``0x44A0_0500`` (WORD aligned addressing)
+- For **channel 15**:
+  - ``0x44A0_01F0`` (HDL addressing)
+  - ``0x44A0_07C0`` (WORD aligned addressing)
+
+If you want to access the **``CHAN_CNTRL_3``** register, its address is:
+
+- For **channel 0**:
+  - ``0x44A6_0106`` (HDL addressing)
+  - ``0x44A6_0418`` (WORD aligned addressing)
+- For **channel 5**:
+  - ``0x44A6_0156`` (HDL addressing)
+  - ``0x44A6_0558`` (WORD aligned addressing)
+
+In general, the address for the ``CHAN_CNTRL_3`` register of **channel *n*** can be calculated as:
+
+.. math::
+
+   \text{Address}_{HDL} = 0x44A6\_0000 + 0x100 + (n \times 0x10) + 0x06 \\
+   \text{Address}_{WORD}  = 0x44A6\_0000 + 0x400 + (n \times 0x40) + 0x18
 
 Typical Register Map base addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
