@@ -471,9 +471,9 @@ project.</p>
 <h4>DMA source<a class="headerlink" href="#dma-source" title="Permalink to this heading"></a></h4>
 <p>In cases of high sample rates where the required data rate exceeds the PS-PL
 interface’s available throughput, the data is transmitted in a loop from a
-local buffer (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz/common/dac_fmc_ebz_bd.tcl#L57" target="_blank">dac_fifo</a>)
-which is loaded once with the DMA from the PS DDR.</p>
-<p>For lower sample rates, the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_dacfifo" target="_blank">DAC FIFO</a>
+local buffer (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">data_offload</a>) which is loaded
+once with the DMA data from the PS DDR.</p>
+<p>For lower sample rates, the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">data_offload</a>
 can be placed in bypass mode, in which case the DMA must stream the data
 from the PS memory.</p>
 </section>
@@ -1168,6 +1168,10 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <td><p>0x7C42_0000</p></td>
 <td><p>0x9C42_0000</p></td>
 </tr>
+<tr class="row-even"><td><p>dac_data_offload</p></td>
+<td><p>0x7C43_0000</p></td>
+<td><p>0x9C43_0000</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1324,10 +1328,10 @@ Arria 10</p></th>
 </tr>
 <tr class="row-even"><td><p>dac_fifo_bypass</p></td>
 <td><p>OUTPUT</p></td>
+<td><p>—</p></td>
 <td><p>40</p></td>
-<td><p>40</p></td>
-<td><p>117</p></td>
-<td><p>40</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
 <td><p>8</p></td>
 </tr>
 <tr class="row-odd"><td><p>dac_ctrl[4]</p></td>
@@ -1626,9 +1630,9 @@ following table:</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_DACFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_dacfifo" target="_blank">library/util_dacfifo</a></p></td>
-<td><p>—</p></td>
+<tr class="row-odd"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">library/data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_UPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">library/util_pack/util_upack2</a></p></td>
