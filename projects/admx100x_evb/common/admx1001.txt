@@ -1,0 +1,27 @@
+FMC_pin           FMC_port            Schematic_name    System_top_name         IOSTANDARD    Termination
+
+# admx1001
+
+C10               FMC_LA06_P          ACQ_SYNC_IN_FMC                           LVCMOS33        #N/A
+D8                FMC_LA01_CC_P       ACQ_SCLK                                  LVCMOS33        #N/A
+D12               FMC_LA05_N          ACQ_DRDY                                  LVCMOS33        #N/A
+G6                FMC_LA00_CC_P       ACQ_MCLK                                  LVCMOS33        #N/A
+G9                FMC_LA03_P          ACQ_SDI                                   LVCMOS33        #N/A
+G15               FMC_LA12_P          ACQ_RESET                                 LVCMOS33        #N/A
+H7                FMC_LA02_P          ACQ_DOUT                                  LVCMOS33        #N/A
+H11               FMC_LA04_N          ACQ_CS                                    LVCMOS33        #N/A
+D17               FMC_LA13_P          SPI_SCLK          admx100x_spi_sclk       LVCMOS33        #N/A
+C19	              FMC_LA14_N          SPI_MISO          admx100x_spi_miso       LVCMOS33        #N/A
+H19               FMC_LA15_P          SPI_MOSI          admx100x_spi_mosi       LVCMOS33        #N/A
+G27               FMC_LA25_P          SPI_CS_DAC        admx100x_spi_cs_1       LVCMOS33	    #N/A
+G18               FMC_LA16_P          SPI_SS            admx100x_spi_cs_0       LVCMOS33        #N/A
+G24               FMC_LA22_P          DAC_RESET         admx100x_reset          LVCMOS33        #N/A
+C14               FMC_LA10_P          EN                admx100x_en             LVCMOS33        #N/A
+C26		          FMC_LA27_P          CAL               admx100x_cal            LVCMOS33        #N/A
+C30		          FMC_SCL             SCL               admx100x_scl            LVCMOS33        #N/A
+D14               FMC_LA09_P          READY             admx100x_ready          LVCMOS33        #N/A
+G12               FMC_LA08_P          VALID             admx100x_valid          LVCMOS33        #N/A
+G21               FMC_LA20_P          DAC_LDAC          admx100x_dac_ldac       LVCMOS33        #N/A
+H13               FMC_LA07_P          TRIG              admx100x_trig           LVCMOS33        #N/A
+H16               FMC_LA11_P          OT                admx100x_ot             LVCMOS33        #N/A
+H22               FMC_LA19_P          SYNC_MODE         admx100x_sync_mode      LVCMOS33        #N/A
