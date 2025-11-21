@@ -162,6 +162,11 @@ if [string equal $board K26] {
     MIN_FRAME_LENGTH $MIN_FRAME_LENGTH \
     PFC_ENABLE $PFC_ENABLE \
   ]
+
+  set_property CONFIG.FREQ_HZ 250000000 [get_bd_pins corundum_core/tx_clk]
+  set_property CONFIG.FREQ_HZ 250000000 [get_bd_pins corundum_core/rx_clk]
+  set_property CONFIG.FREQ_HZ 250000000 [get_bd_pins ethernet_core/eth_tx_clk]
+  set_property CONFIG.FREQ_HZ 250000000 [get_bd_pins ethernet_core/eth_rx_clk]
 } else {
   ad_ip_instance corundum_core corundum_core [list \
     FPGA_ID $FPGA_ID \
@@ -356,6 +361,11 @@ if [string equal $board K26] {
   ]
 }
 
+ad_connect corundum_core/rx_clk ethernet_core/eth_rx_clk
+ad_connect corundum_core/rx_rst ethernet_core/eth_rx_rst
+ad_connect corundum_core/tx_clk ethernet_core/eth_tx_clk
+ad_connect corundum_core/tx_rst ethernet_core/eth_tx_rst
+
 ad_connect corundum_core/s_axil_ctrl s_axil_corundum
 ad_connect corundum_core/m_axis_tx ethernet_core/axis_eth_tx
 ad_connect corundum_core/s_axis_rx ethernet_core/axis_eth_rx
@@ -365,11 +375,6 @@ ad_connect corundum_core/flow_control_rx ethernet_core/flow_control_rx
 ad_connect corundum_core/ethernet_ptp_tx ethernet_core/ethernet_ptp_tx
 ad_connect corundum_core/ethernet_ptp_rx ethernet_core/ethernet_ptp_rx
 ad_connect corundum_core/axis_tx_ptp ethernet_core/axis_tx_ptp
-
-ad_connect corundum_core/rx_clk ethernet_core/eth_rx_clk
-ad_connect corundum_core/rx_rst ethernet_core/eth_rx_rst
-ad_connect corundum_core/tx_clk ethernet_core/eth_tx_clk
-ad_connect corundum_core/tx_rst ethernet_core/eth_tx_rst
 
 ad_connect corundum_core/m_axi m_axi
 
@@ -402,7 +407,6 @@ if [string equal $board K26] {
   ad_connect corundum_core/ptp_clk ethernet_core/ptp_clk
   ad_connect corundum_core/ptp_rst ethernet_core/ptp_rst
   ad_connect corundum_core/ptp_sample_clk ethernet_core/ptp_sample_clk
-  ad_connect corundum_core/s_axis_stat ethernet_core/m_axis_stat
 } else {
   ad_connect ethernet_core/clk_125mhz clk_125mhz
   ad_connect ethernet_core/rst_125mhz rst_125mhz

@@ -79,8 +79,6 @@ adi_add_bus "axis_eth_tx" "slave" \
     {"axis_eth_tx_tuser" "TUSER"} \
   ]
 
-adi_add_bus_clock "eth_tx_clk" "axis_eth_tx" "eth_tx_rst" "master" "master"
-
 adi_add_bus "axis_eth_rx" "master" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \
@@ -92,8 +90,6 @@ adi_add_bus "axis_eth_rx" "master" \
     {"axis_eth_rx_tlast" "TLAST"} \
     {"axis_eth_rx_tuser" "TUSER"} \
   ]
-
-adi_add_bus_clock "eth_rx_clk" "axis_eth_rx" "eth_rx_rst" "master" "master"
 
 adi_if_infer_bus analog.com:interface:if_ctrl_reg slave ctrl_reg [list \
   "ctrl_reg_wr_addr ctrl_reg_wr_addr" \
@@ -136,8 +132,6 @@ adi_if_infer_bus analog.com:interface:if_axis_tx_ptp slave axis_tx_ptp [list \
   "ready axis_eth_tx_ptp_ts_ready" \
 ]
 
-adi_add_bus_clock "eth_tx_clk" "axis_tx_ptp" "eth_tx_rst" "master" "master"
-
 ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 set reset_intf_main [ipx::infer_bus_interface rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
 set reset_polarity_main [ipx::add_bus_parameter "POLARITY" $reset_intf_main]
@@ -174,8 +168,11 @@ adi_if_infer_bus analog.com:interface:if_ethernet_ptp slave ethernet_ptp_rx [lis
   "ptp_ts_step eth_rx_ptp_ts_step" \
 ]
 
-adi_add_bus_clock "eth_tx_clk" "ethernet_ptp_tx" "eth_tx_rst" "master" "master"
-adi_add_bus_clock "eth_rx_clk" "ethernet_ptp_rx" "eth_rx_rst" "master" "master"
+adi_add_bus_clock "eth_rx_clk" "ethernet_ptp_rx" "eth_rx_rst"
+adi_add_bus_clock "eth_tx_clk" "ethernet_ptp_tx:axis_tx_ptp" "eth_tx_rst"
+
+set_property value ptp_rst [ipx::get_bus_parameters ASSOCIATED_RESET -of_objects [ipx::get_bus_interfaces ptp_clk -of_objects [ipx::current_core]]]
+set_property value ptp_rst [ipx::get_bus_parameters ASSOCIATED_RESET -of_objects [ipx::get_bus_interfaces ptp_sample_clk -of_objects [ipx::current_core]]]
 
 adi_if_infer_bus analog.com:interface:if_flow_control_tx slave flow_control_tx [list \
   "tx_enable           eth_tx_enable" \
@@ -198,16 +195,6 @@ adi_if_infer_bus analog.com:interface:if_flow_control_rx slave flow_control_rx [
   "rx_pfc_ack          eth_rx_pfc_ack" \
   "rx_fc_quanta_clk_en eth_rx_fc_quanta_clk_en" \
 ]
-
-adi_add_bus "m_axis_stat" "master" \
-  "xilinx.com:interface:axis_rtl:1.0" \
-  "xilinx.com:interface:axis:1.0" \
-  [ list \
-    {"s_axis_stat_tdata" "TDATA"} \
-    {"s_axis_stat_tid" "TID"} \
-    {"s_axis_stat_tvalid" "TVALID"} \
-    {"s_axis_stat_tready" "TREADY"} \
-  ]
 
 adi_if_infer_bus analog.com:interface:if_sfp master m_sfp [list \
   "rx_p  sfp_rx_p" \
