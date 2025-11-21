@@ -9,7 +9,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_ad9963
 adi_ip_files axi_ad9963 [list \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_dcfilter.v" \

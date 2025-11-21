@@ -21,7 +21,6 @@ adi_ip_files ad_ip_jesd204_tpl_adc [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/util_ext_sync.v" \
   "$ad_hdl_dir/library/common/ad_xcvr_rx_if.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "../ad_ip_jesd204_tpl_common/up_tpl_common.v" \
   "ad_ip_jesd204_tpl_adc_core.v" \
   "ad_ip_jesd204_tpl_adc_channel.v" \

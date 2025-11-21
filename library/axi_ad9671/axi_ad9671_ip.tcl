@@ -20,7 +20,6 @@ adi_ip_files axi_ad9671 [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/ad_mem.v" \
   "$ad_hdl_dir/library/common/ad_xcvr_rx_if.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
 	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad9671_pnmon.v" \
   "axi_ad9671_channel.v" \

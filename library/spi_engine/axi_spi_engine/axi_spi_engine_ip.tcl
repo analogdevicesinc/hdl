@@ -13,7 +13,6 @@ adi_ip_create axi_spi_engine
 adi_ip_files axi_spi_engine [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "axi_spi_engine.v" \
 ]
 

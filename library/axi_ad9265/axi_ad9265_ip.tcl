@@ -22,7 +22,6 @@ adi_ip_files axi_ad9265 [list \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
 	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad9265_pnmon.v" \
   "axi_ad9265_if.v" \

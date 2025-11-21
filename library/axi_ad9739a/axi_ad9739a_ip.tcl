@@ -24,7 +24,6 @@ adi_ip_files axi_ad9739a [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
 	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad9739a_channel.v" \
   "axi_ad9739a_core.v" \

@@ -24,7 +24,6 @@ adi_ip_files axi_ada4355 [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "axi_ada4355_regmap.v" \
   "axi_ada4355_if.v" \
   "axi_ada4355.v" ]

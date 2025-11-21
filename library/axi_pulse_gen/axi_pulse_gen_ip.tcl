@@ -13,7 +13,6 @@ adi_ip_create axi_pulse_gen
 adi_ip_files axi_pulse_gen [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/common/util_pulse_gen.v" \
   "axi_pulse_gen_regmap.v" \
   "axi_pulse_gen.v"]

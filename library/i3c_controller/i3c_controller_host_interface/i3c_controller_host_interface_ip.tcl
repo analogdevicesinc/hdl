@@ -13,7 +13,6 @@ adi_ip_files i3c_controller_host_interface [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/ad_mem_dual.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "i3c_controller_host_interface.v" \
   "i3c_controller_regmap.v" \
   "i3c_controller_regmap.vh" \

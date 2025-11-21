@@ -9,7 +9,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_hdmi_rx
 adi_ip_files axi_hdmi_rx [list \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/ad_csc.v" \
   "$ad_hdl_dir/library/common/ad_ss_422to444.v" \

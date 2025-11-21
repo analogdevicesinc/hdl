@@ -13,7 +13,6 @@ adi_ip_create axi_pwm_gen
 adi_ip_files axi_pwm_gen [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "axi_pwm_gen_regmap.sv" \
   "axi_pwm_gen_1.v" \
   "axi_pwm_gen.sv"]

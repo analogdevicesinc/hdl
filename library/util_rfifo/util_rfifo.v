@@ -298,7 +298,7 @@ module util_rfifo #(
     .NUM_OF_BITS(1),
     .ASYNC_CLK(1),
     .SYNC_STAGES(2)
-  ) i__sync (
+  ) i_dout_req_t_sync (
     .out_clk(din_clk),
     .out_resetn(din_rstn),
     .in_bits(dout_req_t),
@@ -308,7 +308,7 @@ module util_rfifo #(
     .NUM_OF_BITS(1),
     .ASYNC_CLK(1),
     .SYNC_STAGES(2)
-  ) i__sync (
+  ) i_dout_init_sync (
     .out_clk(din_clk),
     .out_resetn(din_rstn),
     .in_bits(dout_init),
@@ -401,7 +401,7 @@ module util_rfifo #(
     .NUM_OF_BITS(1),
     .ASYNC_CLK(1),
     .SYNC_STAGES(2)
-  ) i__sync (
+  ) i_dout_unf_sync (
     .out_clk(dout_clk),
     .out_resetn(~dout_rst),
     .in_bits(din_unf_d),

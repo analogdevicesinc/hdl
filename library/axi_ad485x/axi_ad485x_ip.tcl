@@ -24,8 +24,7 @@ adi_ip_files axi_ad485x [list \
     "$ad_hdl_dir/library/common/up_xfer_status.v" \
     "$ad_hdl_dir/library/common/up_clock_mon.v" \
     "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
-    "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-      "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
+    "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
     "$ad_hdl_dir/library/xilinx/common/ad_serdes_out.v" \
     "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
     "axi_ad485x_constr.ttcl" \
