@@ -97,7 +97,10 @@
 <li><a class="reference internal" href="#">Porting ADI’s HDL reference designs</a><ul>
 <li><a class="reference internal" href="#quick-compatibility-check">Quick Compatibility Check</a></li>
 <li><a class="reference internal" href="#base-design-files">Base design files</a><ul>
-<li><a class="reference internal" href="#example-with-an-amd-xilinx-board">Example with an AMD Xilinx board</a></li>
+<li><a class="reference internal" href="#example-with-an-amd-xilinx-board">Example with an AMD Xilinx board</a><ul>
+<li><a class="reference internal" href="#project-flow">Project flow</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#example-with-an-intel-board">Example with an Intel board</a></li>
 <li><a class="reference internal" href="#example-with-a-lattice-board">Example with a Lattice board</a></li>
 </ul>
@@ -397,7 +400,7 @@ features and maximum performance.</p>
 maintainability and simplify portability. The result of these design goals is
 that porting a given project to another carrier is fairly simple if the user
 respects a couple of guidelines.</p>
-<p>The main scope of this wiki page is to discuss these guidelines and provide
+<p>The main purpose of this page is to discuss these guidelines and provide
 simple indications for users who wants to port a project to a non-supported
 carrier.</p>
 <section id="quick-compatibility-check">
@@ -406,7 +409,7 @@ carrier.</p>
 <p class="admonition-title">Note</p>
 <p>All ADI’s FPGA Mezzanine Cards (FMC) are designed to respect all the
 specifications and requirements defined in the ANSI/VITA 57.1/57.4 FPGA
-Mezzanine Card Standard (if not otherwise stated on board’s wiki page).</p>
+Mezzanine Card Standard (if not otherwise stated on board’s page).</p>
 <p>If the new FPGA carrier is fully compliant with this standard, there
 will be no obstacles preventing the user to port the project to the required
 carrier card.</p>
@@ -520,6 +523,22 @@ to the ones we have for ZCU102 (projects/common/zcu102/zcu102_*)
 with the note that you need to manually enable all the functions needed in
 the system.</p>
 </div>
+<p>You need to populate the following lists with information regarding your FPGA
+in the file <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl" target="_blank">library/scripts/adi_xilinx_device_info_enc.tcl</a>;
+but keep in mind, if some of the information already exists in a list,
+do not duplicate it!</p>
+<ul class="simple">
+<li><p>fpga_technology_list: we added <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">ultrascale+</span> <span class="pre">3</span> <span class="pre">}</span></code> for ZCU102</p></li>
+<li><p>fpga_family_list: we added <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">zynq</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4</span> <span class="pre">}</span></code> for ZCU102</p></li>
+<li><p>speed_grade_list: we added <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">-2</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">20</span> <span class="pre">}</span></code> for ZCU102</p></li>
+<li><p>dev_package_list: we added <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">ff</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">3</span>&#160; <span class="pre">}</span></code> for ZCU102</p></li>
+</ul>
+<p>Then, in the same file, under the <code class="docutils literal notranslate"><span class="pre">adi_device_spec</span></code> procedure, you’d need to
+add a regular expression containing the part name (<code class="docutils literal notranslate"><span class="pre">^xc.u</span></code> in our example,
+to match other UltraScale+ boards that fit, as well) under the FPGA_TECHNOLOGY
+case.</p>
+<section id="project-flow">
+<h4>Project flow<a class="headerlink" href="#project-flow" title="Permalink to this heading"></a></h4>
 <p>The entry point for project creation is <code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code>. Some support
 scripts are first loaded (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl" target="_blank">scripts/adi_env.tcl</a>) then the project is
 created (
@@ -614,6 +633,7 @@ justified by <a class="icon git reference external" href="https://github.com/ana
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/scripts/jesd204.tcl" target="_blank">JESD204 support script</a>.
 <code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">$ad_hdl_dir/library/jesd204/scripts/jesd204.tcl</span></code>.
 In this script, several procedures which simplify the design are defined.</p>
+</section>
 </section>
 <section id="example-with-an-intel-board">
 <h3>Example with an Intel board<a class="headerlink" href="#example-with-an-intel-board" title="Permalink to this heading"></a></h3>

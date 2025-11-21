@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The ADA4355 is a complete, high performance, current input µModule. For space savings, the ADA4355 includes all the  required active and passive components to realize a complete current to bits data acquisition solution, supporting a small form factor, optical modules as well as multichannel systems." name="description" />
+<meta content="The ADA4355/ ADA4356 is a complete, high performance, current input µModule. For space savings, the ADA4355/ ADA4356 includes all the required active and passive components to realize a complete current to bits data acquisition solution, supporting a small form factor, optical modules as well as multichannel systems." name="description" />
 
     <title>ADA4355-FMC HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
@@ -387,18 +387,18 @@ Content on this topic
 <span id="ada4355-fmc"></span><h1>ADA4355-FMC HDL project<a class="headerlink" href="#ada4355-fmc-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a> is a complete, high performance, current input µModule.
-For space savings, the <a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a> includes all the  required active and
-passive components to realize a complete current to bits data acquisition
-solution, supporting a small form factor, optical modules as well as
-multichannel systems.</p>
-<p>The high speed transimpedance amplifier (TIA) of the device supports 10 ns pulse
-widths, allowing high spatial resolution for Time of Flight (ToF) measurements.
-Additionally, the <a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a> includes three TIA gain (TZ) settings to
-maximize dynamic range. An internal, selectable, analog low-pass filter (LPF)
-can limit the device bandwidth with a corner frequency of 100 MHz to minimize
-broadband noise while also serving as an antialiasing filter for the 125 MSPS
-ADC.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a>/ <a class="icon adi reference external" href="https://www.analog.com/ADA4356" target="_blank">ADA4356</a> is a complete, high performance, current
+input µModule. For space savings, the <a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a>/ <a class="icon adi reference external" href="https://www.analog.com/ADA4356" target="_blank">ADA4356</a> includes
+all the required active and passive components to realize a complete current to
+bits data acquisition solution, supporting a small form factor, optical modules
+as well as multichannel systems.</p>
+<p>The high speed transimpedance amplifier (TIA) supports short optical pulses:
+10 ns for the ADA4355 and 20 ns for the ADA4356, enabling high spatial
+resolution in Time of Flight (ToF) measurements. Both devices provide three TIA
+gain (TZ) settings to maximize dynamic range. An internal, selectable,
+analog low-pass filter (LPF) can limit the devices bandwidth with a corner
+frequency of 100 MHz to minimize broadband noise while also serving as an
+antialiasing filter for the 125 MSPS ADC.</p>
 <p>The 14-bit ADC converts the amplified voltage signal at a rate of up to 125 MSPS
 and outputs the digitized signals through two serial, low voltage differential
 signaling (LVDS) data lanes, operating at rates of up to 1 Gbps per lane. The
@@ -415,6 +415,7 @@ double data rate (DDR) operation.</p>
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4356" target="_blank">ADA4356</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -454,22 +455,22 @@ double data rate (DDR) operation.</p>
 </section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
-<p>The BUFMRCE_EN configuration parameter defines the pinout used which is
-differentiated by how the frame clock signals are distributed.
-For one pinout version, the XDC constraints are not optimized for ISERDES,
-as the frame clock signals are located in a different I/O bank from the other
-related signals. To address this, a BUFMRCE buffer is used to distribute the
+<p>The BUFMRCE_EN configuration parameter defines the supported board used which
+is differentiated by how the frame clock signals are distributed.
+For ADA4355 the XDC constraints are not optimized for ISERDES, as the frame
+clock signals are located in a different I/O bank from the other related
+signals. To address this, a BUFMRCE buffer is used to distribute the
 frame clock to all ISERDES instances.</p>
-<p>By default it is set to 0. Depending on the pinout, some hardware modifications
+<p>By default it is set to 0. Depending on the part, some hardware modifications
 need to be done on the board and/or <code class="docutils literal notranslate"><span class="pre">make</span></code> command:</p>
-<p>In case of the pinout with optimized constraints:</p>
+<p>In case of the ADA4356:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">0</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>In case of the pinout with non-optimized constraints:</p>
+<div class="clear-left"></div></div></div><p>In case of the ADA4355:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
@@ -643,8 +644,8 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for BUFMRCE_EN=1</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for BUFMRCE_EN=0</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for BUFMRCE_EN=1 (ADA4355)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for BUFMRCE_EN=0 (ADA4356)</p></li>
 </ul>
 </div>
 </section>
@@ -747,6 +748,7 @@ by the configuration used.</p>
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADA4356" target="_blank">ADA4356</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
