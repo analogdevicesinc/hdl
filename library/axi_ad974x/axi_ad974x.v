@@ -42,6 +42,7 @@ module axi_ad974x #(
   parameter   FPGA_FAMILY = 0,
   parameter   SPEED_GRADE = 0,
   parameter   DEV_PACKAGE = 0,
+  parameter   DAC_RESOLUTION = 14,
   parameter   DDS_DISABLE = 0,
   parameter   DDS_TYPE = 1,
   parameter   DDS_CORDIC_DW = 14,
@@ -109,7 +110,9 @@ module axi_ad974x #(
 
   // device interface
 
-  axi_ad974x_if axi_ad974x_interface (
+  axi_ad974x_if #(
+    .DAC_RESOLUTION(DAC_RESOLUTION)
+  ) axi_ad974x_interface (
     .dac_data_in(dac_data_s),
     .dac_data_out(dac_data));
 
@@ -121,6 +124,7 @@ module axi_ad974x #(
     .FPGA_FAMILY(FPGA_FAMILY),
     .SPEED_GRADE(SPEED_GRADE),
     .DEV_PACKAGE(DEV_PACKAGE),
+    .DAC_RESOLUTION(DAC_RESOLUTION),
     .DDS_DISABLE(DDS_DISABLE),
     .DDS_TYPE(DDS_TYPE),
     .DDS_CORDIC_DW(DDS_CORDIC_DW),

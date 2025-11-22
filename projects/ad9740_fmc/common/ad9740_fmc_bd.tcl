@@ -23,6 +23,30 @@ ad_ip_parameter ad974x_dma CONFIG.DMA_DATA_WIDTH_DEST 16
 
 ad_ip_instance axi_ad974x ad974x_dac
 
+# Set DAC resolution based on DEVICE parameter
+if {[info exists DEVICE]} {
+  switch $DEVICE {
+    "AD9748" {
+      ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 8
+    }
+    "AD9740" {
+      ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 10
+    }
+    "AD9742" {
+      ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 12
+    }
+    "AD9744" {
+      ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 14
+    }
+    default {
+      ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 14
+    }
+  }
+} else {
+  # Default to 14-bit if DEVICE not specified
+  ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 14
+}
+
 # clocks
 
 #ad_connect ad974x_clk ad974x_dma/m_axis_aclk

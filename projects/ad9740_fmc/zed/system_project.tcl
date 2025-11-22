@@ -9,10 +9,10 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 
 
-set DEVICE [get_env_param DEVICE "AD9740"]
+set DEVICE [get_env_param DEVICE "AD9744"]
 
 adi_project ad9740_fmc_zed 0 [list \
-  DEVICE [get_env_param DEVICE "AD9740"] \
+  DEVICE $DEVICE \
   ]
 
 adi_project_files ad9740_fmc_zed [list \
@@ -21,7 +21,7 @@ adi_project_files ad9740_fmc_zed [list \
     "system_top.v" \
     "system_constr.xdc"]
 
-  switch [get_env_param DEVICE "AD9740"] {
+  switch $DEVICE {
     "AD9740" {
       adi_project_files ad9740_fmc_zed [list \
         "ad9744_constr.xdc" ]

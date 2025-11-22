@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module axi_ad974x_if (
+module axi_ad974x_if #(
+  parameter DAC_RESOLUTION = 14
+) (
 
   // dac interface
 
@@ -46,6 +48,35 @@ module axi_ad974x_if (
   input  [13:0]   dac_data_in
 );
 
-  assign dac_data_out = dac_data_in;
-  
+  // The AD974x DACs expect offset binary format
+  // DDS outputs 2's complement, so we need to convert
+  // by inverting the MSB for the actual DAC resolution
+
+  generate
+    if (DAC_RESOLUTION == 14) begin
+      // For 14-bit DAC (AD9744), invert MSB to convert from 2's complement to offset binary
+      assign dac_data_out[13] = ~dac_data_in[13];
+      assign dac_data_out[12:0] = dac_data_in[12:0];
+    end else if (DAC_RESOLUTION == 12) begin
+      // For 12-bit DAC (AD9742), data is in upper 12 bits
+      // Invert MSB of the 12-bit data
+      assign dac_data_out[13] = ~dac_data_in[13];
+      assign dac_data_out[12:0] = dac_data_in[12:0];
+    end else if (DAC_RESOLUTION == 10) begin
+      // For 10-bit DAC (AD9740), data is in upper 10 bits
+      // Invert MSB of the 10-bit data
+      assign dac_data_out[13] = ~dac_data_in[13];
+      assign dac_data_out[12:0] = dac_data_in[12:0];
+    end else if (DAC_RESOLUTION == 8) begin
+      // For 8-bit DAC (AD9748), data is in upper 8 bits
+      // Invert MSB of the 8-bit data
+      assign dac_data_out[13] = ~dac_data_in[13];
+      assign dac_data_out[12:0] = dac_data_in[12:0];
+    end else begin
+      // Default: pass through with MSB inverted
+      assign dac_data_out[13] = ~dac_data_in[13];
+      assign dac_data_out[12:0] = dac_data_in[12:0];
+    end
+  endgenerate
+
 endmodule

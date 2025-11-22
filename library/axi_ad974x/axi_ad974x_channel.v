@@ -38,6 +38,7 @@
 module axi_ad974x_channel #(
 
   parameter   CHANNEL_ID = 32'h0,
+  parameter   DAC_RESOLUTION = 14,
   parameter   DDS_DISABLE = 0,
   parameter   DDS_TYPE = 1,
   parameter   DDS_CORDIC_DW = 14,
@@ -78,7 +79,7 @@ module axi_ad974x_channel #(
   // internal signals
 
   wire    [ 3:0]   dac_data_sel_s;
-  wire    [13:0]   dac_dds_data_s;
+  wire    [DAC_RESOLUTION-1:0]   dac_dds_data_s;
   wire    [15:0]   dac_dds_scale_1_s;
   wire    [15:0]   dac_dds_init_1_s;
   wire    [15:0]   dac_dds_incr_1_s;
@@ -89,7 +90,7 @@ module axi_ad974x_channel #(
   wire    [15:0]   dac_pat_data_2_s;
 
   reg     [15:0]   dma_pattern;
-  reg     [13:0]   ramp_pattern;
+  reg     [DAC_RESOLUTION-1:0]   ramp_pattern;
 
   reg     [13:0]   dac_data_int = 'h0;
 //  reg              dds_ready;
@@ -104,12 +105,24 @@ module axi_ad974x_channel #(
     case(dac_data_sel_s)
       4'h0 :
       begin
-        dac_data_int       = dac_dds_data_s;
+        // DDS data - already at correct resolution
+        if (DAC_RESOLUTION == 14) begin
+          dac_data_int = dac_dds_data_s;
+        end else begin
+          // Scale up to 14 bits for output interface
+          dac_data_int = {dac_dds_data_s, {(14-DAC_RESOLUTION){1'b0}}};
+        end
 //        dds_ready          = 1'b1;
       end
       4'h2 :
       begin
-        dac_data_int       = dma_pattern;
+        // DMA data - truncate or pad as needed
+        if (DAC_RESOLUTION >= 14) begin
+          dac_data_int = dma_pattern[13:0];
+        end else begin
+          // Take MSBs from DMA and scale up to 14 bits
+          dac_data_int = {dma_pattern[15:16-DAC_RESOLUTION], {(14-DAC_RESOLUTION){1'b0}}};
+        end
 //        dds_ready          = 1'b0;
       end
       4'h3 :
@@ -119,7 +132,12 @@ module axi_ad974x_channel #(
       end
       4'hb :
       begin
-        dac_data_int       = ramp_pattern;
+        // Ramp data - scale up to 14 bits
+        if (DAC_RESOLUTION == 14) begin
+          dac_data_int = ramp_pattern;
+        end else begin
+          dac_data_int = {ramp_pattern, {(14-DAC_RESOLUTION){1'b0}}};
+        end
 //        dds_ready          = 1'b0;
       end
       default :
@@ -143,8 +161,8 @@ module axi_ad974x_channel #(
   // ramp data generator
 
   always @(posedge dac_clk) begin
-    if(ramp_pattern == 14'h3fff || dac_rst == 1'b1) begin
-        ramp_pattern <= 14'h0;
+    if(ramp_pattern == {DAC_RESOLUTION{1'b1}} || dac_rst == 1'b1) begin
+        ramp_pattern <= {DAC_RESOLUTION{1'b0}};
     end else begin
       ramp_pattern <= ramp_pattern + 1'b1;
     end
@@ -154,7 +172,7 @@ module axi_ad974x_channel #(
 
   ad_dds #(
     .DISABLE (DDS_DISABLE),
-    .DDS_DW (14),
+    .DDS_DW (DAC_RESOLUTION),
     .PHASE_DW (16),
     .DDS_TYPE (DDS_TYPE),
     .CORDIC_DW (DDS_CORDIC_DW),
