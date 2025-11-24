@@ -228,7 +228,6 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to agc2[1]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to agc3[0]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to agc3[1]
 
-set_global_assignment -name MESSAGE_DISABLE 15714
 set_global_assignment -name MESSAGE_DISABLE 24605
 
 # transceiver calibration clock
