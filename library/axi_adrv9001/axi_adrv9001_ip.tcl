@@ -60,7 +60,6 @@ adi_ip_files axi_adrv9001 [list \
   "axi_adrv9001_core.v" \
   "axi_adrv9001_sync.v" \
   "axi_adrv9001_sync_ctrl.v" \
-  "axi_adrv9001_constr.xdc" \
   "axi_adrv9001_constr.ttcl" \
   "axi_adrv9001_tdd.v" \
   "axi_adrv9001.v" ]
@@ -73,6 +72,8 @@ adi_ip_bd axi_adrv9001 "bd/bd.tcl"
 adi_ip_add_core_dependencies [list \
   analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
 ]
+# Register the ttcl constraint template to be generated as XDC
+adi_ip_ttcl axi_adrv9001 "axi_adrv9001_constr.ttcl"
 
 set cc [ipx::current_core]
 
