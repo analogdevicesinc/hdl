@@ -32,7 +32,13 @@ This script ensures that all HDL project directories contain properly formatted 
 - **Board names** are uppercased and underscores are replaced with hyphens (e.g., `ad9081_fmca_ebz` → `AD9081-FMCA-EBZ`);
 - **Carrier names** are uppercased as-is (e.g., `de10nano` → `DE10NANO`), except for special carriers.
 
-#### 3. Special carrier exceptions
+#### 3. Special projects exceptions
+
+The following projects are allowed to use exceptions from the template in their project/README file:
+
+- `xcvr_wizard`
+
+#### 4. Special carrier exceptions
 
 The following carriers are allowed to use underscore in their README titles and are not flagged for title mismatches:
 
@@ -59,7 +65,7 @@ is_special_carrier() {
 }
 ```
 
-#### 4. Required sections
+#### 5. Required sections
 
 - **Main board README** MUST contain:
   - `Building the project`
@@ -80,7 +86,7 @@ Include these flags on the first line of the README.md file, as a MarkDown comme
 <!-- no_build_example, no_dts, no_no_os -->
 ```
 
-#### 5. Forbidden content
+#### 6. Forbidden content
 
 - Links to the following are not allowed:
   - `https://wiki.analog.com/resources/tools-software/linux-drivers-all`
