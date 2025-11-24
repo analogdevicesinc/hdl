@@ -38,11 +38,11 @@ set_false_path \
 # the serial interface clock is derived from ref_clk
 set_max_delay -datapath_only \
   -from [get_pins -hierarchical * -filter {NAME=~*i_sync/mssi_sync_reg*/C}] \
-  -to [get_pins -hierarchical * -filter {NAME=~*i_if/i_*_phy/mssi_sync_d1*}] 6.0
+  -to [get_pins -hierarchical * -filter {NAME=~*i_if/i_*_phy/mssi_sync_d1_reg/D}] 6.0
 
 set_min_delay \
   -from [get_pins -hierarchical * -filter {NAME=~*i_sync/mssi_sync_reg*/C}] \
-  -to [get_pins -hierarchical * -filter {NAME=~*i_if/i_*_phy/mssi_sync_d1*}] 4.0
+  -to [get_pins -hierarchical * -filter {NAME=~*i_if/i_*_phy/mssi_sync_d1_reg/D}] 4.0
 
 ## transfer sync event i_rx1/2_external_sync
 set_false_path \
