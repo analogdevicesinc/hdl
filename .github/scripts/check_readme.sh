@@ -34,6 +34,18 @@ is_special_carrier() {
     esac
 }
 
+# Function to detect special projects (e.g., projects that need title check skipped)
+is_special_project() {
+    case "$1" in
+        xcvr_wizard)
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
 # Function to extract flags from first line of README
 extract_flags() {
     local file=$1
@@ -72,9 +84,16 @@ check_readme() {
         echo "$flags" | grep -q "$1"
     }
 
-    # Check title (skip for special carriers)
-    if [ "$is_main_readme" -eq 0 ] && is_special_carrier "$carrier"; then
-        :
+    # Check title (skip for special carriers or special projects)
+    if [ "$is_main_readme" -eq 0 ]; then
+        if is_special_carrier "$carrier" || is_special_project "$board"; then
+            :
+        else
+            if ! grep -q "$expected_title" "$file"; then
+                echo "    ✖ Incorrect or missing title. Expected: $expected_title"
+                local_fail=1
+            fi
+        fi
     else
         if ! grep -q "$expected_title" "$file"; then
             echo "    ✖ Incorrect or missing title. Expected: $expected_title"
@@ -89,7 +108,7 @@ check_readme() {
                 local_fail=1
             fi
         fi
-        if ! grep -q "Supported parts" "$file"; then
+        if ! grep -q "Supported parts" "$file" && ! is_special_project "$board"; then
             echo "    ✖ Missing section \"Supported parts\""
             local_fail=1
         fi
