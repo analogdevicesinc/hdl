@@ -19,15 +19,16 @@ set_false_path \
   -from [get_pins -hierarchical * -filter {NAME=~*i_*x_*_phy/bufdiv_clr_reg/C}] \
   -to [get_pins -hierarchical * -filter {NAME=~*i_if/i_*x_*_phy/reset_*reg/PRE}]
 
-# sync bits i_rx1_ctrl_sync
-set_false_path \
-  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-    -filter {NAME =~ *i_rx1_ctrl_sync* && IS_SEQUENTIAL}]
-
-# sync bits i_tx1_ctrl_sync
-set_false_path \
-  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-    -filter {NAME =~ *i_tx1_ctrl_sync* && IS_SEQUENTIAL}]
+# part of workaround - to be fixed
+## sync bits i_rx1_ctrl_sync
+#set_false_path \
+#  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+#    -filter {NAME =~ *i_rx1_ctrl_sync* && IS_SEQUENTIAL}]
+#
+## sync bits i_tx1_ctrl_sync
+#set_false_path \
+#  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+#    -filter {NAME =~ *i_tx1_ctrl_sync* && IS_SEQUENTIAL}]
 
 # sync bits i_txn/i_rate_sync_in
 set_false_path \
