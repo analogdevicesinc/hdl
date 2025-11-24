@@ -55,7 +55,6 @@ XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += adrv9001_rx.v
 XILINX_DEPS += adrv9001_tx.v
-XILINX_DEPS += axi_adrv9001_constr.xdc
 XILINX_DEPS += axi_adrv9001_constr.ttcl
 XILINX_DEPS += axi_adrv9001_ip.tcl
 
