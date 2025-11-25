@@ -543,8 +543,8 @@ Register Map base addresses for axi_adrv9001
 
 .. list-table::
 
-   * - DWORD
-     - BYTE
+   * - HDL reg
+     - Software reg
      - Name
      - Description
    * - 0x0000

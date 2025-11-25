@@ -127,8 +127,8 @@ base address to the registers relative address.
 .. list-table:: Register Map base addresses for axi_ad408x
    :header-rows: 1
 
-   * - DWORD
-     - BYTE
+   * - HDL reg
+     - Software reg
      - Name
      - Description
    * - 0x0000
