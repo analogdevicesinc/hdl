@@ -178,7 +178,7 @@ module up_dac_channel #(
 
   assign up_wack = up_wack_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack_int <= 'd0;
     end else begin
@@ -201,7 +201,7 @@ module up_dac_channel #(
     up_dac_dds_incr_2_extend <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dac_dds_scale_1 <= 'd0;
       up_dac_dds_init_1 <= 'd0;
@@ -241,7 +241,7 @@ module up_dac_channel #(
   end
   endgenerate
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dac_pat_data_2 <= 'd0;
       up_dac_pat_data_1 <= 'd0;
@@ -259,7 +259,7 @@ module up_dac_channel #(
     up_dac_iqcor_enb <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dac_iqcor_enb <= 'd0;
     end else begin
@@ -271,7 +271,7 @@ module up_dac_channel #(
   end
   endgenerate
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dac_lb_enb <= 'd0;
       up_dac_pn_enb <= 'd0;
@@ -298,7 +298,7 @@ module up_dac_channel #(
     up_dac_iqcor_coeff_2 <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dac_iqcor_coeff_1 <= 'd0;
       up_dac_iqcor_coeff_2 <= 'd0;
@@ -332,7 +332,7 @@ module up_dac_channel #(
     up_usr_interpolation_n_int <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_usr_datatype_be_int <= 'd0;
       up_usr_datatype_signed_int <= 'd0;
@@ -358,7 +358,7 @@ module up_dac_channel #(
   end
   endgenerate
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dac_iq_mode <= 'd0;
     end else begin
@@ -373,7 +373,7 @@ module up_dac_channel #(
   assign up_rack = up_rack_int;
   assign up_rdata = up_rdata_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack_int <= 'd0;
       up_rdata_int <= 'd0;
@@ -406,7 +406,7 @@ module up_dac_channel #(
 
   // change coefficients to 2's complements
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dac_dds_scale_tc_1 <= 16'd0;
       up_dac_dds_scale_tc_2 <= 16'd0;
@@ -422,7 +422,7 @@ module up_dac_channel #(
 
   // backward compatibility
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dac_data_sel_m <= 4'd0;
     end else begin

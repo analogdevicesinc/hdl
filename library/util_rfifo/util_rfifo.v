@@ -215,7 +215,7 @@ module util_rfifo #(
   end else begin
     reg [ 2:0] din_wcnt = 'd0;
 
-    always @(posedge din_clk or negedge din_rstn)
+    always @(posedge din_clk)
     if (din_rstn == 1'b0) begin
       din_wcnt <= 'd0;
     end else begin
@@ -228,7 +228,7 @@ module util_rfifo #(
   end
   endgenerate
 
-  always @(posedge din_clk or negedge din_rstn) begin
+  always @(posedge din_clk) begin
     if (din_rstn == 1'b0) begin
       din_waddr <= 'hc;
       din_wr <= 1'd0;
@@ -247,7 +247,7 @@ module util_rfifo #(
     end
   end
 
-  always @(posedge din_clk or negedge din_rstn) begin
+  always @(posedge din_clk) begin
     if (din_rstn == 1'b0) begin
       din_valid <= 'd0;
       din_req_cnt <= 'd0;

@@ -13,6 +13,10 @@ adi_ip_files util_clkdiv [list \
 
 adi_ip_properties_lite util_clkdiv
 
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
+
 adi_ip_ttcl util_clkdiv "util_clkdiv_ooc.ttcl"
 
 set_property driver_value 0 [ipx::get_ports clk_sel -of_objects [ipx::current_core]]

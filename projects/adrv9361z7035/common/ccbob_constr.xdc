@@ -244,9 +244,7 @@ set_property  -dict {PACKAGE_PIN  R1}     [get_ports  gt_tx_n[3]]     ; ## U1,R1
 ## clocks
 
 create_clock -name ref_clk      -period  4.00 [get_ports gt_ref_clk_p]
-create_clock -name xcvr_clk_0   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[0].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
-create_clock -name xcvr_clk_1   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[1].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
-create_clock -name xcvr_clk_2   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[2].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
-create_clock -name xcvr_clk_3   -period  8.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[3].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
-
-
+create_clock -name xcvr_clk_0   -period  16.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[0].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
+create_clock -name xcvr_clk_1   -period  16.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[1].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
+create_clock -name xcvr_clk_2   -period  16.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[2].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]
+create_clock -name xcvr_clk_3   -period  16.00 [get_pins i_system_wrapper/system_i/axi_pz_xcvrlb/inst/g_lanes[3].i_xcvrlb_1/i_xch/i_gtxe2_channel/RXOUTCLK]

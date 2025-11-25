@@ -248,6 +248,8 @@ module request_arb #(
   wire [ID_WIDTH-1:0] dest_data_response_id;
   wire [ID_WIDTH-1:0] dest_response_id;
 
+  reg  [ID_WIDTH-1:0] dest_response_id_d;
+
   wire dest_valid;
   wire dest_ready;
   wire [DMA_DATA_WIDTH_DEST-1:0] dest_data;
@@ -343,14 +345,7 @@ module request_arb #(
     .in_bits(dest_request_id),
     .out_bits(dbg_dest_request_id));
 
-  sync_bits #(
-    .NUM_OF_BITS(ID_WIDTH),
-    .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
-  ) i_dbg_dest_response_id_sync (
-    .out_clk(req_clk),
-    .out_resetn(req_resetn),
-    .in_bits(dest_response_id),
-    .out_bits(dbg_dest_response_id));
+  assign dbg_dest_response_id = response_id;
 
   sync_bits #(
     .NUM_OF_BITS(ID_WIDTH),
@@ -1058,7 +1053,7 @@ module request_arb #(
     .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
   ) i_sync_src_request_id (
     .out_clk(src_clk),
-    .out_resetn(1'b1),
+    .out_resetn(src_resetn),
     .in_bits(request_id),
     .out_bits(src_request_id));
 
@@ -1100,13 +1095,17 @@ module request_arb #(
     end
   end
 
+  always @(posedge dest_clk) begin
+    dest_response_id_d <= dest_response_id;
+  end
+
   sync_bits #(
     .NUM_OF_BITS(ID_WIDTH),
     .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
-  ) i_sync_req_response_id (
+  ) i_req_response_id_sync (
     .out_clk(req_clk),
-    .out_resetn(1'b1),
-    .in_bits(dest_response_id),
+    .out_resetn(req_resetn),
+    .in_bits(dest_response_id_d),
     .out_bits(response_id));
 
   axi_register_slice #(

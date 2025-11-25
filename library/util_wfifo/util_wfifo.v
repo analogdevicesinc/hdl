@@ -71,7 +71,7 @@ module util_wfifo #(
   input                   din_enable_7,
   input                   din_valid_7,
   input       [DIN_DATA_WIDTH-1:0]  din_data_7,
-  output  reg             din_ovf,
+  output                  din_ovf,
 
   // d-out interface
 
@@ -118,10 +118,7 @@ module util_wfifo #(
   reg     [(ADDRESS_WIDTH-1):0]       din_waddr = 'd0;
   reg                                 din_req_t = 'd0;
   reg     [(ADDRESS_WIDTH-4):0]       din_rinit = 'd0;
-  reg                                 din_ovf_m1 = 'd0;
-  reg                                 dout_req_t_m1 = 'd0;
-  reg                                 dout_req_t_m2 = 'd0;
-  reg                                 dout_req_t_m3 = 'd0;
+  reg                                 dout_req_t_d = 'd0;
   reg                                 dout_req_t = 'd0;
   reg     [(ADDRESS_WIDTH-4):0]       dout_rinit = 'd0;
   reg                                 dout_ovf_d = 'd0;
@@ -129,8 +126,6 @@ module util_wfifo #(
   reg     [(ADDRESS_WIDTH-1):0]       dout_raddr = 'd8;
   reg                                 dout_rd_d = 'd0;
   reg                                 dout_valid = 'd0;
-  reg     [ 7:0]                      dout_enable_m1 = 'd0;
-  reg     [ 7:0]                      dout_enable = 'd0;
   reg     [(DATA_WIDTH-1):0]          dout_rdata = 'd0;
 
   // internal signals
@@ -138,7 +133,10 @@ module util_wfifo #(
   wire    [ 7:0]                      din_enable_s;
   wire    [ 7:0]                      din_valid_s;
   wire    [(T_DIN_DATA_WIDTH-1):0]    din_data_s;
+  wire    [ 7:0]                      dout_enable;
   wire                                dout_req_t_s;
+  wire                                dout_req_t_sync;
+  wire    [(ADDRESS_WIDTH-4):0]       dout_rinit_s;
   wire    [(DATA_WIDTH-1):0]          dout_rdata_s;
   wire    [(T_DOUT_DATA_WIDTH+1):0]   dout_data_s;
   wire    [ 2:0]                      din_dcnt_s;
@@ -205,8 +203,6 @@ module util_wfifo #(
       din_waddr <= 'd0;
       din_req_t <= 1'd0;
       din_rinit <= 'd0;
-      din_ovf_m1 <= 'd0;
-      din_ovf <= 'd0;
     end else begin
       din_enable <= din_enable_s;
       case (M_MEM_RATIO)
@@ -222,36 +218,60 @@ module util_wfifo #(
         din_req_t <= ~din_req_t;
         din_rinit <= din_waddr[(ADDRESS_WIDTH-1):3];
       end
-      din_ovf_m1 <= dout_ovf_d;
-      din_ovf <= din_ovf_m1;
     end
   end
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_din_ovf_sync (
+    .out_clk(din_clk),
+    .out_resetn(~din_rst),
+    .in_bits(dout_ovf_d),
+    .out_bits(din_ovf));
+
   // read interface (bus expansion and/or clock conversion)
 
-  assign dout_req_t_s = dout_req_t_m3 ^ dout_req_t_m2;
+  assign dout_req_t_s = dout_req_t_d ^ dout_req_t_sync;
 
-  always @(posedge dout_clk or negedge dout_rstn) begin
+  always @(posedge dout_clk) begin
     if (dout_rstn == 1'b0) begin
-      dout_req_t_m1 <= 'd0;
-      dout_req_t_m2 <= 'd0;
-      dout_req_t_m3 <= 'd0;
+      dout_req_t_d <= 'd0;
       dout_req_t <= 'd0;
       dout_rinit <= 'd0;
       dout_ovf_d <= 'd0;
     end else begin
-      dout_req_t_m1 <= din_req_t;
-      dout_req_t_m2 <= dout_req_t_m1;
-      dout_req_t_m3 <= dout_req_t_m2;
+      dout_req_t_d <= dout_req_t_sync;
       dout_req_t <= dout_req_t_s;
       if (dout_req_t_s == 1'b1) begin
-        dout_rinit <= din_rinit;
+        dout_rinit <= dout_rinit_s;
       end
       dout_ovf_d <= dout_ovf;
     end
   end
 
-  always @(posedge dout_clk or negedge dout_rstn) begin
+  sync_bits #(
+    .NUM_OF_BITS(ADDRESS_WIDTH-3),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dout_rinit_sync (
+    .out_clk(dout_clk),
+    .out_resetn(dout_rstn),
+    .in_bits(din_rinit),
+    .out_bits(dout_rinit_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_din_req_t_sync (
+    .out_clk(dout_clk),
+    .out_resetn(dout_rstn),
+    .in_bits(din_req_t),
+    .out_bits(dout_req_t_sync));
+
+  always @(posedge dout_clk) begin
     if (dout_rstn == 1'b0) begin
       dout_req_cnt <= 'd0;
       dout_raddr <= 'd8;
@@ -270,15 +290,15 @@ module util_wfifo #(
     end
   end
 
-  always @(posedge dout_clk or negedge dout_rstn) begin
-    if (dout_rstn == 1'b0) begin
-      dout_enable_m1 <= 'd0;
-      dout_enable <= 'd0;
-    end else begin
-      dout_enable_m1 <= din_enable;
-      dout_enable <= dout_enable_m1;
-    end
-  end
+  sync_bits #(
+    .NUM_OF_BITS(8),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dout_enable_sync (
+    .out_clk(dout_clk),
+    .out_resetn(dout_rstn),
+    .in_bits(din_enable),
+    .out_bits(dout_enable));
 
   always @(posedge dout_clk) begin
     dout_rdata <= dout_rdata_s;

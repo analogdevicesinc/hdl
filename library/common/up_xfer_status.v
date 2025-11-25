@@ -55,18 +55,19 @@ module up_xfer_status #(
 
   // internal registers
 
-  wire                        d_xfer_state;
+  reg                         d_rstn;
   reg     [ 5:0]              d_xfer_count = 'd0;
   reg                         d_xfer_toggle = 'd0;
   reg     [(DATA_WIDTH-1):0]  d_xfer_data = 'd0;
   reg     [(DATA_WIDTH-1):0]  d_acc_data = 'd0;
-  wire                        up_xfer_toggle;
   reg                         up_xfer_toggle_d;
   reg     [(DATA_WIDTH-1):0]  up_data_status_int = 'd0;
-  wire    [(DATA_WIDTH-1):0]  up_data_status_int_cdc;
 
   // internal signals
 
+  wire                        d_xfer_state;
+  wire    [(DATA_WIDTH-1):0]  up_data_status_int_cdc;
+  wire                        up_xfer_toggle;
   wire                        d_xfer_enable_s;
   wire                        up_xfer_toggle_s;
 
@@ -74,7 +75,7 @@ module up_xfer_status #(
 
   assign d_xfer_enable_s = d_xfer_state ^ d_xfer_toggle;
 
-  always @(posedge d_clk or posedge d_rst) begin
+  always @(posedge d_clk) begin
     if (d_rst == 1'b1) begin
       d_xfer_count <= 'd0;
       d_xfer_toggle <= 'd0;
@@ -109,6 +110,10 @@ module up_xfer_status #(
     end
   end
 
+  always @(posedge d_clk) begin
+    d_rstn <= ~d_rst;
+  end
+
   sync_bits #(
     .SYNC_STAGES (3)
   ) i_sync_up_xfer_state (
@@ -122,7 +127,7 @@ module up_xfer_status #(
   ) i_sync_up_xfer_toggle (
     .in_bits(up_xfer_toggle),
     .out_clk(d_clk),
-    .out_resetn(~d_rst),
+    .out_resetn(d_rstn),
     .out_bits(d_xfer_state));
 
   sync_bits #(

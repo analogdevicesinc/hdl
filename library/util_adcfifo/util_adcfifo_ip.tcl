@@ -15,7 +15,7 @@ adi_ip_files util_adcfifo [list \
   "$ad_hdl_dir/library/common/ad_axis_inf_rx.v" \
   "$ad_hdl_dir/library/common/ad_mem_asym.v" \
   "util_adcfifo.v" \
-  "util_adcfifo_constr.xdc" ]
+]
 
 adi_ip_properties_lite util_adcfifo
 

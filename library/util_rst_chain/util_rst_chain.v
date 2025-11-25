@@ -89,7 +89,7 @@ module util_rst_chain #(
       assign rst_s = (i == 0) ? 1'b0 : rst[i-1];
 
       util_rst #(
-        .ASYNC_STAGES(1),
+        .ASYNC_STAGES(2),
         .SYNC_STAGES(2)
       ) i_cdc_async_stage_sync (
         .rst_async(cdc_async_stage_d[NUM_OF_RESET-1] || rst_s),

@@ -4,8 +4,8 @@
 ###############################################################################
 
 proc string_occurrences {needleString haystackString} {
-    regsub -all $needleString $haystackString {} stripped
-    expr {([string length $haystackString] - [string length $stripped]) / [string length $needleString]}
+  regsub -all $needleString $haystackString {} stripped
+  expr {([string length $haystackString] - [string length $stripped]) / [string length $needleString]}
 }
 
 proc constrain_ip_inst {{ip_inst {}}} {
@@ -46,7 +46,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
     if {$item_count_total != 0 && $item_count_gnd != $item_count_total} {
       if {$item_count_fd == 0 || [expr $item_count_fd + $item_count_gnd] != $item_count_total} {
         set_false_path \
-          -to $input_data_reg_pin
+          -to [get_pins -include_replicated_objects -filter {REF_PIN_NAME == D} -of_objects [get_cells -include_replicated_objects $sync_bits_inst/cdc_sync_stage_reg[0]*]]
       } else {
         set input_clk [get_clocks -of_objects $input_start_regs]
         set output_clk [get_clocks -of_objects [get_cells -include_replicated_objects $sync_bits_inst/cdc_sync_stage_reg[0]*]]
@@ -174,15 +174,10 @@ proc constrain_ip_inst {{ip_inst {}}} {
     if {$item_count_total != 0 && $item_count_gnd != $item_count_total} {
       if {$item_count_fd == 0 || [expr $item_count_fd + $item_count_gnd] != $item_count_total} {
         set_false_path \
-          -to $input_data_reg_pin
+          -to [get_pins -include_replicated_objects -filter {REF_PIN_NAME == PRE} -of_objects [get_cells -include_replicated_objects $sync_rst_inst/cdc_sync_stage_reg[*]]]
       } else {
         set input_clk [get_clocks -of_objects $input_start_regs]
-        set output_clk [get_clocks -of_objects [get_cells -include_replicated_objects $sync_rst_inst/cdc_sync_stage_reg[*]]]
-
         set input_clk_period [get_property -min PERIOD $input_clk]
-        set output_clk_period [get_property -min PERIOD $output_clk]
-
-        set min_clk_period [expr min($input_clk_period, $output_clk_period)]
 
         set_max_delay -datapath_only \
           -from $input_start_regs \
@@ -229,15 +224,10 @@ proc constrain_ip_inst {{ip_inst {}}} {
     if {$item_count_total != 0 && $item_count_gnd != $item_count_total} {
       if {$item_count_fd == 0 || [expr $item_count_fd + $item_count_gnd] != $item_count_total} {
         set_false_path \
-          -to $input_data_reg_pin
+          -to [get_pins -include_replicated_objects -filter {REF_PIN_NAME == PRE} -of_objects [get_cells -include_replicated_objects $sync_rst_inst/cdc_async_stage_reg[*]]]
       } else {
         set input_clk [get_clocks -of_objects $input_start_regs]
-        set output_clk [get_clocks -of_objects [get_cells -include_replicated_objects $sync_rst_inst/cdc_async_stage_reg[*]]]
-
         set input_clk_period [get_property -min PERIOD $input_clk]
-        set output_clk_period [get_property -min PERIOD $output_clk]
-
-        set min_clk_period [expr min($input_clk_period, $output_clk_period)]
 
         set_max_delay -datapath_only \
           -from $input_start_regs \
@@ -287,15 +277,10 @@ proc constrain_ip_inst {{ip_inst {}}} {
     if {$item_count_total != 0 && $item_count_gnd != $item_count_total} {
       if {$item_count_fd == 0 || [expr $item_count_fd + $item_count_gnd] != $item_count_total} {
         set_false_path \
-          -to $input_data_reg_pin
+          -to [get_pins -include_replicated_objects -filter {REF_PIN_NAME == PRE} -of_objects [get_cells -include_replicated_objects $sync_rst_inst/genblk1[*].cdc_async_stage_reg[*]]]
       } else {
         set input_clk [get_clocks -of_objects $input_start_regs]
-        set output_clk [get_clocks -of_objects [get_cells -include_replicated_objects $sync_rst_inst/genblk1[*].cdc_async_stage_reg[*]]]
-
         set input_clk_period [get_property -min PERIOD $input_clk]
-        set output_clk_period [get_property -min PERIOD $output_clk]
-
-        set min_clk_period [expr min($input_clk_period, $output_clk_period)]
 
         set_max_delay -datapath_only \
           -from $input_start_regs \
@@ -336,15 +321,10 @@ proc constrain_ip_inst {{ip_inst {}}} {
       if {$item_count_total != 0 && $item_count_gnd != $item_count_total} {
         if {$item_count_fd == 0 || [expr $item_count_fd + $item_count_gnd] != $item_count_total} {
           set_false_path \
-            -to $input_data_reg_pin
+            -to [get_pins -include_replicated_objects -filter {REF_PIN_NAME == D} -of_objects [get_cells -include_replicated_objects $sync_rst_inst/genblk1[*].cdc_async_stage_reg[*]]]
         } else {
           set input_clk [get_clocks -of_objects $input_start_regs]
-          set output_clk [get_clocks -of_objects [get_cells -include_replicated_objects $sync_rst_inst/genblk1[*].cdc_async_stage_reg[*]]]
-
           set input_clk_period [get_property -min PERIOD $input_clk]
-          set output_clk_period [get_property -min PERIOD $output_clk]
-
-          set min_clk_period [expr min($input_clk_period, $output_clk_period)]
 
           set_max_delay -datapath_only \
             -from $input_start_regs \
@@ -353,6 +333,21 @@ proc constrain_ip_inst {{ip_inst {}}} {
         }
       }
     }
+  }
+
+  # util rst constraints
+  if {$ip_inst != ""} {
+    current_instance -quiet
+    current_instance $ip_inst
+  }
+  foreach sync_clkdiv [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == util_clkdiv || REF_NAME == util_clkdiv)}] {
+    current_instance -quiet
+
+    set_clock_groups -logically_exclusive \
+      -group [get_clocks -of_objects [get_pins -filter {REF_PIN_NAME == O} -of_objects [get_cells -include_replicated_objects $sync_clkdiv/clk_divide_sel_0]]] \
+      -group [get_clocks -of_objects [get_pins -filter {REF_PIN_NAME == O} -of_objects [get_cells -include_replicated_objects $sync_clkdiv/clk_divide_sel_1]]]
+
+    set_false_path -to [get_pins -include_replicated_objects $sync_clkdiv/i_div_clk_gbuf/S*]
   }
 
   current_instance -quiet

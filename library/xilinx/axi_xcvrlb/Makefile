@@ -12,7 +12,6 @@ XILINX_DEPS += ../../common/up_xfer_status.v
 XILINX_DEPS += ../../xilinx/util_adxcvr/util_adxcvr_xch.v
 XILINX_DEPS += axi_xcvrlb.v
 XILINX_DEPS += axi_xcvrlb_1.v
-XILINX_DEPS += axi_xcvrlb_constr.xdc
 XILINX_DEPS += axi_xcvrlb_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc

@@ -16,7 +16,7 @@ adi_ip_files util_dacfifo [list \
   "util_dacfifo.v" \
   "util_dacfifo_bypass.v" \
   "util_dacfifo_ooc.ttcl" \
-  "util_dacfifo_constr.xdc"]
+]
 
 
 adi_ip_properties_lite util_dacfifo
