@@ -254,11 +254,13 @@ Register Map
 --------------------------------------------------------------------------------
 
 The register map of the core contains instances of several generic register maps
-like ADC common, ADC channel, DAC common, DAC channel etc. The following table
-presents the base addresses of each instance, after that can be found the
-detailed description of each generic register map. The absolute address of a
-register should be calculated by adding the instance base address to the
-registers relative address.
+like DAC common, DAC channel.
+The following table presents the base addresses of each instance, after it you
+can find the detailed description of each generic register map.
+
+The absolute address of a register should be calculated by adding the instance
+base address to the registers relative address. For a more detailed explanation,
+see :ref:`DAC register access <generic-dac-register-access>`.
 
 .. list-table:: Register Map base addresses for axi_ad9783
    :header-rows: 1
