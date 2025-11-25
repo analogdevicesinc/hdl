@@ -302,8 +302,10 @@ The register map of the core contains instances of several generic register maps
 like ADC common, ADC channel, :git-hdl:`up_delay_ctrl <library/common/up_delay_ctrl.v>`.
 The following table presents the base addresses of each instance, after it you
 can find the detailed description of each generic register map.
+
 The absolute address of a register should be calculated by adding the instance
-base address to the registers relative address.
+base address to the registers relative address. For a more detailed explanation,
+see :ref:`ADC register access <generic-adc-register-access>`.
 
 .. list-table:: Register Map base addresses for axi_ad485x
    :header-rows: 1
