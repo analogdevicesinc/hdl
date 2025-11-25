@@ -211,6 +211,81 @@ see :ref:`axi_dac dac-channel` section.
    To find the instantiation of this module search for ``up_dac_channel`` inside
    the IP's directory.
 
+.. _generic-dac-register-access:
+
+Register access
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The DAC IP supports **16 channels**, numbered from **0 to 15**. Usually, the
+**base registers** start at offset ``0x0`` and the **common (global) registers**
+start at address ``0x10``. Each **channel** has its own register block, starting
+from address ``0x100`` (for channel 0). Each subsequent channel is spaced by
+``0x10`` (HDL register address) or ``0x40`` (Software addressing).
+
+..note::
+
+   There are cases in which the offset is different from ``0x0``. Please refer to
+   the register map table of the specific IP for more details.
+
+Let's say the DAC IP base address is 0x44A0_0000. Here is how the channel offset
+is computed: 
+
+.. math::
+
+   \text{HDL}_{reg} = 0x100 + (n \times 0x10) \\
+
+.. math::   
+
+   \text{Software}_{addr} = IP_BaseAddr + (\text{HDL}_{reg} << 2) = 0x44A0\_0000 + 0x400 + (n \times 0x40)
+
+This means the first register's address ( **``CHAN_CNTRL_0``**) is:
+
+- For **channel 0**:
+
+  - ``0x0100`` (HDL register)=> ``0x44A0_0400`` (Software addressing)
+
+- For **channel 3**:
+
+  - ``0x0130`` (HDL register) => ``0x44A0_04C0`` (Software addressing)
+- For **channel 15**:
+
+  - ``0x01F0`` (HDL register) => ``0x44A0_07C0`` (Software addressing)
+
+If you want to access the **``CHAN_CNTRL_3``** register, its address is:
+
+- For **channel 0**:
+
+  - ``0x0106`` (HDL register) => ``0x44A0_0418`` (Software addressing)
+
+- For **channel 5**:
+
+  - ``0x0156`` (HDL register) => ``0x44A0_0558`` (Software addressing)
+
+In general, the address for the ``CHAN_CNTRL_3`` register of **channel *n*** can be calculated as:
+
+.. math::
+  
+   \text{HDL}_{reg} = 0x100 + (n \times 0x10) + 0x06 \\
+
+.. math::
+  
+   \text{Software}_{addr}  = IP_base_addr + 0x400 + (n \times 0x40) + 0x18
+
+The software addresses for all channels can be found in the table below:
+
+==========  ==============
+Name        Address range
+==========  ==============
+Base        0x000 to 0x0BC
+Common      0x040 to 0x0C4
+Channel 0   0x400 to 0x430
+Channel 1   0x440 to 0x470
+Channel 2   0x480 to 0x4B0
+Channel 3   0x4C0 to 0x4F0
+*...*       *...*
+Channel 15  0x7C0 to 0x7F0
+==========  ==============
+
 Typical Register Map base addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
