@@ -150,18 +150,44 @@ the 16 LSBs -- The 4 LSBs of this word are 0's for the 12-bit accuracy.
 Register Map
 --------------------------------------------------------------------------------
 
+The register map of the core contains instances of several generic register maps
+like DAC common, DAC channel.
+The following table presents the base addresses of each instance, after it you
+can find the detailed description of each generic register map.
+
 For the AXI_AD3XXR control used registers from DAC Common are:
 
 .. hdl-regmap::
    :name: AXI_AD35XXR_DAC_COMMON
-
 
 For the AXI_AD35XXR control used registers from DAC Channel are:
 
 .. hdl-regmap::
    :name: AXI_AD35XXR_DAC_CHANNEL
 
-For reference, all the register map templates are:
+The absolute address of a register should be calculated by adding the instance
+base address to the registers relative address. For a more detailed explanation,
+see :ref:`DAC register access <generic-dac-register-access>`.
+
+.. list-table:: Register Map base addresses for axi_ad35xxr
+   :header-rows: 1
+
+   * - HDL reg
+     - Software reg
+     - Name
+     - Description
+   * - 0x0000
+     - 0x0000
+     - BASE
+     - See the `Base <#hdl-regmap-COMMON>`__ table for more details.
+   * - 0x0000
+     - 0x0000
+     - TX COMMON
+     - See the `DAC Common <#hdl-regmap-DAC_COMMON>`__ table for more details.
+   * - 0x0000
+     - 0x0000
+     - TX CHANNELS
+     - See the `DAC Channel <#hdl-regmap-DAC_CHANNEL>`__ table for more details.
 
 .. hdl-regmap::
    :name: COMMON
