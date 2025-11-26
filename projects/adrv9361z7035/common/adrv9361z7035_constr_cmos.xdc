@@ -42,5 +42,3 @@ set_property -dict {PACKAGE_PIN J15 IOSTANDARD LVCMOS18} [get_ports {tx_gnd[1]}]
 # clocks
 
 create_clock -period 8.000 -name rx_clk [get_ports rx_clk_in]
-
-

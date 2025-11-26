@@ -343,9 +343,9 @@ proc constrain_ip_inst {{ip_inst {}}} {
   foreach sync_clkdiv [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == util_clkdiv || REF_NAME == util_clkdiv)}] {
     current_instance -quiet
 
-    set_clock_groups -logically_exclusive \
-      -group [get_clocks -of_objects [get_pins -filter {REF_PIN_NAME == O} -of_objects [get_cells -include_replicated_objects $sync_clkdiv/clk_divide_sel_0]]] \
-      -group [get_clocks -of_objects [get_pins -filter {REF_PIN_NAME == O} -of_objects [get_cells -include_replicated_objects $sync_clkdiv/clk_divide_sel_1]]]
+    set_clock_groups -physically_exclusive \
+      -group [get_clocks clk_div_sel_0_s] \
+      -group [get_clocks clk_div_sel_1_s]
 
     set_false_path -to [get_pins -include_replicated_objects $sync_clkdiv/i_div_clk_gbuf/S*]
   }
