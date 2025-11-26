@@ -38,7 +38,7 @@ adi_project fmcomms8_zcu102 0 [list \
 adi_project_files  fmcomms8_zcu102 [list \
   "system_top.v" \
   "system_constr.xdc"\
-  "../common/fmcomms8_spi.v" \
+  "$ad_hdl_dir/library/common/ad_3w_spi.v" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
