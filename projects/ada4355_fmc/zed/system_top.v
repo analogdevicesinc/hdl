@@ -120,7 +120,12 @@ module system_top (
   input         miso_pot,
   output        sclk_pot,
   output        mosi_pot,
-  output        csb_apd_pot
+  output        csb_apd_pot,
+
+  // TDD control for LiDAR
+
+  input         tdd_ext_sync,
+  output        laser_trigger
 );
 
   // internal signals
@@ -250,6 +255,8 @@ module system_top (
     .d1a_n (d1a_n),
     .frame_p(frame_p),
     .frame_n(frame_n),
-    .sync_n (1'b1));
+    .sync_n (1'b1),
+    .tdd_ext_sync(tdd_ext_sync),
+    .laser_trigger(laser_trigger));
 
 endmodule

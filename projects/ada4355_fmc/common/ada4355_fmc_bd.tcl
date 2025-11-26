@@ -3,10 +3,23 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+# Source the TDD library
+source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
+
 # system level parameter
 
 set BUFMRCE_EN $ad_project_params(BUFMRCE_EN)
 puts "build parameters: BUFMRCE_EN: $BUFMRCE_EN"
+
+# TDD parameters for LiDAR control
+set TDD_CHANNEL_CNT 3
+set TDD_DEFAULT_POL 0b000
+set TDD_REG_WIDTH 32
+set TDD_BURST_WIDTH 32
+set TDD_SYNC_WIDTH 64
+set TDD_SYNC_INT 1
+set TDD_SYNC_EXT 1
+set TDD_SYNC_EXT_CDC 1
 
 # ada4355 interface
 
@@ -20,6 +33,10 @@ create_bd_port -dir I sync_n
 create_bd_port -dir I frame_p
 create_bd_port -dir I frame_n
 
+# TDD external ports for LiDAR control
+create_bd_port -dir I tdd_ext_sync
+create_bd_port -dir O laser_trigger
+
 # axi_ada4355
 
 ad_ip_instance axi_ada4355 axi_ada4355_adc
@@ -31,12 +48,39 @@ ad_ip_instance axi_dmac axi_ada4355_dma
 ad_ip_parameter axi_ada4355_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ada4355_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ada4355_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ada4355_dma CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ada4355_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+
+# TDD controller instantiation
+# Channel allocation for LiDAR:
+# Channel 0: Laser trigger output
+# Channel 1: ADC gate/enable (controls when ADC captures data)
+# Channel 2: DMA sync (triggers DMA transfer)
+
+ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
+  $TDD_DEFAULT_POL \
+  $TDD_REG_WIDTH \
+  $TDD_BURST_WIDTH \
+  $TDD_SYNC_WIDTH \
+  $TDD_SYNC_INT \
+  $TDD_SYNC_EXT \
+  $TDD_SYNC_EXT_CDC
+
+# Create reset inverter for TDD (needs active high reset)
+ad_ip_instance util_vector_logic logic_inv [list \
+  C_SIZE 1 \
+  C_OPERATION not \
+]
+
+# Create AND gate to gate ADC valid signal with TDD control
+ad_ip_instance util_vector_logic adc_gate_logic [list \
+  C_SIZE 1 \
+  C_OPERATION and \
+]
 
 # connect interface to axi_ad4355_adc
 
@@ -51,20 +95,38 @@ ad_connect frame_p              axi_ada4355_adc/fco_p
 ad_connect frame_n              axi_ada4355_adc/fco_n
 ad_connect $sys_iodelay_clk     axi_ada4355_adc/delay_clk
 
-# connect datapath
+# connect datapath with TDD gating
 
 ad_connect axi_ada4355_adc/adc_data  axi_ada4355_dma/fifo_wr_din
-ad_connect axi_ada4355_adc/adc_valid axi_ada4355_dma/fifo_wr_en
 ad_connect axi_ada4355_adc/adc_dovf  axi_ada4355_dma/fifo_wr_overflow
+
+# Gate ADC valid signal with TDD control
+ad_connect axi_ada4355_adc/adc_valid adc_gate_logic/Op1
+ad_connect axi_tdd_0/tdd_channel_1 adc_gate_logic/Op2
+ad_connect adc_gate_logic/Res axi_ada4355_dma/fifo_wr_en
 
 # system runs on if.v's received clock
 
 ad_connect axi_ada4355_adc/adc_clk axi_ada4355_dma/fifo_wr_clk
 
+# TDD connections
+# Connect TDD to ADC clock domain for precise timing control
+ad_connect axi_ada4355_adc/adc_clk axi_tdd_0/clk
+ad_connect $sys_cpu_reset logic_inv/Op1
+ad_connect logic_inv/Res axi_tdd_0/resetn
+
+# TDD synchronization
+ad_connect axi_tdd_0/sync_in tdd_ext_sync
+
+# TDD channel connections
+ad_connect axi_tdd_0/tdd_channel_0 laser_trigger
+ad_connect axi_tdd_0/tdd_channel_2 axi_ada4355_dma/sync
+
 ad_connect $sys_cpu_resetn axi_ada4355_dma/m_dest_axi_aresetn
 
 ad_cpu_interconnect 0x44A00000 axi_ada4355_adc
 ad_cpu_interconnect 0x44A30000 axi_ada4355_dma
+ad_cpu_interconnect 0x44A40000 axi_tdd_0
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ada4355_dma/m_dest_axi
