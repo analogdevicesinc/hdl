@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -93,7 +93,8 @@ module axi_dmac_burst_memory #(
     BURST_LEN > 16 ? 5 :
     BURST_LEN > 8 ? 4 :
     BURST_LEN > 4 ? 3 :
-    BURST_LEN > 2 ? 2 : 1;
+    BURST_LEN > 2 ? 2 :
+    BURST_LEN > 1 ? 1 : 0;
 
   localparam AUX_FIFO_SIZE = 2**(ID_WIDTH-1);
 
@@ -144,14 +145,11 @@ module axi_dmac_burst_memory #(
   reg [ID_WIDTH-1:0] src_id_next;
   reg [ID_WIDTH-1:0] src_id = 'h0;
   reg src_id_reduced_msb = 1'b0;
-  reg [BURST_LEN_WIDTH_SRC-1:0] src_beat_counter = 'h00;
 
   reg [ID_WIDTH-1:0] dest_id_next = 'h0;
   reg dest_id_reduced_msb_next = 1'b0;
   reg dest_id_reduced_msb = 1'b0;
   reg [ID_WIDTH-1:0] dest_id = 'h0;
-  reg [BURST_LEN_WIDTH_DEST-1:0] dest_beat_counter = 'h00;
-  wire [BURST_LEN_WIDTH_DEST-1:0] dest_burst_len;
   reg dest_valid = 1'b0;
   reg dest_mem_data_valid = 1'b0;
   reg dest_mem_data_last = 1'b0;
@@ -201,7 +199,6 @@ module axi_dmac_burst_memory #(
 
   assign src_beat = src_mem_data_valid;
   assign src_last_beat = src_beat & src_mem_data_last;
-  assign src_waddr = {src_id_reduced,src_beat_counter};
 
   assign src_data_request_id = src_dest_id;
 
@@ -223,13 +220,31 @@ module axi_dmac_burst_memory #(
     end
   end
 
-  always @(posedge src_clk) begin
-    if (src_reset == 1'b1 || src_last_beat == 1'b1) begin
-      src_beat_counter <= 'h00;
-    end else if (src_beat == 1'b1) begin
-      src_beat_counter <= src_beat_counter + 1'b1;
+  /*
+   * When the burst is only one beat wide, the src_beat_counter logic can be removed,
+   * since the current beat is actually the last in the burst. This scenario happens
+   * when the MAX_BYTES_PER_BURST value matches the DATA_WIDTH_SRC value in bytes.
+   */
+  generate if (BURST_LEN_WIDTH_SRC > 0) begin
+    reg [BURST_LEN_WIDTH_SRC-1:0] src_beat_counter = 'h00;
+
+    always @(posedge src_clk) begin
+      if (src_reset == 1'b1 || src_last_beat == 1'b1) begin
+        src_beat_counter <= 'h00;
+      end else if (src_beat == 1'b1) begin
+        src_beat_counter <= src_beat_counter + 1'b1;
+      end
     end
-  end
+
+    assign src_burst_len_data = {src_mem_data_partial_burst,
+                                 src_beat_counter,
+                                 src_mem_data_valid_bytes};
+    assign src_waddr = {src_id_reduced,src_beat_counter};
+  end else begin
+    assign src_burst_len_data = {src_mem_data_partial_burst,
+                                 src_mem_data_valid_bytes};
+    assign src_waddr = src_id_reduced;
+  end endgenerate
 
   always @(posedge src_clk) begin
     if (src_last_beat == 1'b1) begin
@@ -238,11 +253,9 @@ module axi_dmac_burst_memory #(
   end
 
   assign dest_ready = ~dest_mem_data_valid | dest_mem_data_ready;
-  assign dest_last = dest_beat_counter == dest_burst_len;
 
   assign dest_beat = dest_valid & dest_ready;
   assign dest_last_beat = dest_last & dest_beat;
-  assign dest_raddr = {dest_id_reduced,dest_beat_counter};
 
   assign dest_burst_valid = dest_data_request_id != dest_id_next;
   assign dest_burst_ready = ~dest_valid | dest_last_beat;
@@ -332,13 +345,30 @@ module axi_dmac_burst_memory #(
     end
   end
 
-  always @(posedge dest_clk) begin
-    if (dest_reset == 1'b1 || dest_last_beat == 1'b1) begin
-      dest_beat_counter <= 'h00;
-    end else if (dest_beat == 1'b1) begin
-      dest_beat_counter <= dest_beat_counter + 1'b1;
+  /*
+   * When the burst is only one beat wide, the dest_beat_counter logic can be removed,
+   * since the current beat is actually the last in the burst. This scenario happens
+   * when the MAX_BYTES_PER_BURST value matches the DATA_WIDTH_DEST value in bytes.
+   */
+  generate if (BURST_LEN_WIDTH_DEST > 0) begin
+    reg [BURST_LEN_WIDTH_DEST-1:0] dest_beat_counter = 'h00;
+    wire [BURST_LEN_WIDTH_DEST-1:0] dest_burst_len;
+
+    always @(posedge dest_clk) begin
+      if (dest_reset == 1'b1 || dest_last_beat == 1'b1) begin
+        dest_beat_counter <= 'h00;
+      end else if (dest_beat == 1'b1) begin
+        dest_beat_counter <= dest_beat_counter + 1'b1;
+      end
     end
-  end
+
+    assign dest_burst_len = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH_DEST];
+    assign dest_last = dest_beat_counter == dest_burst_len;
+    assign dest_raddr = {dest_id_reduced,dest_beat_counter};
+  end else begin
+    assign dest_last = 1'b1;
+    assign dest_raddr = dest_id_reduced;
+  end endgenerate
 
   assign dest_burst_info_length = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1:0];
   assign dest_burst_info_partial = dest_burst_len_data[BYTES_PER_BURST_WIDTH];
@@ -347,8 +377,6 @@ module axi_dmac_burst_memory #(
   always @(posedge dest_clk) begin
     dest_burst_info_write <= (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1);
   end
-
-  assign dest_burst_len = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH_DEST];
 
   axi_dmac_resize_src #(
     .DATA_WIDTH_SRC (DATA_WIDTH_SRC),
@@ -370,10 +398,6 @@ module axi_dmac_burst_memory #(
     .mem_data_last (src_mem_data_last),
     .mem_data_valid_bytes (src_mem_data_valid_bytes),
     .mem_data_partial_burst (src_mem_data_partial_burst));
-
-  assign src_burst_len_data = {src_mem_data_partial_burst,
-                               src_beat_counter,
-                               src_mem_data_valid_bytes};
 
   ad_mem_asym #(
     .A_ADDRESS_WIDTH (ADDRESS_WIDTH_SRC),
