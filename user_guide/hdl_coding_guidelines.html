@@ -106,9 +106,9 @@
 <li><a class="reference internal" href="#annexes">3. Annexes</a><ul>
 <li><a class="reference internal" href="#annex-1-verilog-file-format">Annex 1 Verilog file format</a></li>
 <li><a class="reference internal" href="#annex-2-vhdl-file-format">Annex 2 VHDL file format</a></li>
+<li><a class="reference internal" href="#annex-3-systemverilog-package-file-format">Annex 3 SystemVerilog package file format</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#references">4. References</a></li>
 </ul>
 </li>
 </ul>
@@ -407,14 +407,17 @@ document.</p>
 <section id="a-layout">
 <h3>A. Layout<a class="headerlink" href="#a-layout" title="Permalink to this heading"></a></h3>
 <p><strong>A1</strong></p>
+<p>HDL source files <strong>must not</strong> begin or end with empty lines, but <strong>must</strong>
+terminate with exactly one newline character.</p>
+<p><strong>A2</strong></p>
 <p>Spaces <strong>must</strong> be used instead of tabs.</p>
 <p>This allows the code to be properly visualized by any editor. <strong>Do not</strong>
 leave spaces at the end of a line. The following editor settings <strong>must</strong>
 be used: <em>Tab Size</em>: 2, <em>Indent Size</em>: 2.</p>
-<p><strong>A2</strong></p>
+<p><strong>A3</strong></p>
 <p>One white space <strong>must</strong> be inserted around operators, such as
 =, ==, &amp;&amp;, ||, &amp;, |, ^, etc.</p>
-<p id="example-a2">Incorrect:</p>
+<p id="example-a3">Incorrect:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">((</span><span class="n">my_signal1</span><span class="o">==</span><span class="mi">1</span><span class="s1">&#39;b0)&amp;&amp;(my_bus[3:0]==4&#39;</span><span class="n">d5</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -422,9 +425,9 @@ be used: <em>Tab Size</em>: 2, <em>Indent Size</em>: 2.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">((</span><span class="n">my_signal</span> <span class="o">==</span> <span class="mi">1</span><span class="s1">&#39;b0) &amp;&amp; (my_bus[3:0] == 4&#39;</span><span class="n">d5</span><span class="p">))</span>
 </pre></div>
 </div>
-<p><strong>A3</strong></p>
+<p><strong>A4</strong></p>
 <p>The <em>always</em> block <em>should</em> have a space before <a class="reference external" href="mailto:**&#37;&#52;&#48;**">**<span>&#64;</span>**</a> symbol.</p>
-<p id="example-a3">Incorrect:</p>
+<p id="example-a4">Incorrect:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">always</span><span class="o">@</span><span class="p">(</span><span class="n">posedge</span> <span class="n">clk</span><span class="p">)</span> <span class="n">begin</span>
   <span class="o">...</span>
 <span class="n">end</span>
@@ -436,15 +439,15 @@ be used: <em>Tab Size</em>: 2, <em>Indent Size</em>: 2.</p>
 <span class="n">end</span>
 </pre></div>
 </div>
-<p><strong>A4</strong></p>
+<p><strong>A5</strong></p>
 <p>The Verilog <code class="docutils literal notranslate"><span class="pre">begin</span></code>/<code class="docutils literal notranslate"><span class="pre">end</span></code> block <strong>must</strong> always be used,
 even if there is only one statement. This makes adding lines of code
 much easier and with fewer errors.</p>
-<p><strong>A5</strong></p>
+<p><strong>A6</strong></p>
 <p>Indentation levels <strong>must</strong> be used to show code nesting. Blank
 lines may be used as desired to improve code readability, but <em>not</em> in
 all cases.</p>
-<p id="example-a5">Incorrect:</p>
+<p id="example-a6">Incorrect:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">if</span> <span class="p">(</span><span class="n">my_signal</span> <span class="o">==</span> <span class="mi">1</span><span class="s1">&#39;b0) begin</span>
 <span class="linenos"> 2</span>  <span class="k">if</span> <span class="p">(</span><span class="n">my_bus</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">4</span><span class="s1">&#39;d5) begin</span>
 <span class="linenos"> 3</span>  <span class="n">statement1</span><span class="p">;</span>
@@ -470,12 +473,12 @@ all cases.</p>
 <span class="linenos">10</span><span class="n">end</span>
 </pre></div>
 </div>
-<p><strong>A6</strong></p>
+<p><strong>A7</strong></p>
 <p>In a <code class="docutils literal notranslate"><span class="pre">case</span></code> definition, indentation levels <strong>must</strong> be used to
 offset the statements that are encapsulated, but the use of blank lines
 can be used or omitted to best show the statement groupings (if really
 necessary). <code class="docutils literal notranslate"><span class="pre">end</span></code> should be indented as in the correct example.</p>
-<p id="example-a6">Incorrect:</p>
+<p id="example-a7">Incorrect:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">case</span> <span class="p">(</span> <span class="n">my_bus</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
 <span class="linenos"> 2</span>  <span class="mi">4</span><span class="s1">&#39;b0000 : my_signal1 = TRUE;</span>
 <span class="linenos"> 3</span>  <span class="mi">4</span><span class="s1">&#39;b0001 : my_signal1 = FALSE;</span>
@@ -510,11 +513,11 @@ necessary). <code class="docutils literal notranslate"><span class="pre">end</sp
 <span class="linenos">18</span><span class="n">endcase</span>
 </pre></div>
 </div>
-<p><strong>A7</strong></p>
+<p><strong>A8</strong></p>
 <p>Alignment <strong>should</strong> be used in declarations, assignments,
 multi-line statements, and end of line comments. The code <strong>must</strong> be
 written in a tabular format.</p>
-<p id="example-a7">Incorrect:</p>
+<p id="example-a8">Incorrect:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">reg</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">my_signal1</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
 <span class="linenos">2</span><span class="n">reg</span><span class="p">[</span><span class="mi">31</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">my_decoded_signal1</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
 <span class="linenos">3</span><span class="n">reg</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">my_signal2</span><span class="p">,</span> <span class="n">my_signal3</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
@@ -530,12 +533,12 @@ written in a tabular format.</p>
 <span class="linenos">6</span><span class="n">wire</span> <span class="p">[</span> <span class="mi">2</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_select</span><span class="p">;</span>          <span class="o">//</span> <span class="n">description</span>
 </pre></div>
 </div>
-<p><strong>A8</strong></p>
+<p><strong>A9</strong></p>
 <p>Parentheses <strong>must</strong> be used around all boolean statements and
 in complex equations, in order to force the order of operations and
 avoid confusion. Complex boolean expressions <em>should</em> be expressed as
 multi-line aligned statements.</p>
-<p id="example-a8">Incorrect:</p>
+<p id="example-a9">Incorrect:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>if ((my_signal1 &amp;&amp; your_signal1) || (my_signal2 &amp;&amp; your_signal2) || (my_signal3 &amp;&amp; your_signal3)) begin
 <span class="linenos">2</span>  my_signal1 = TRUE;
 <span class="linenos">3</span>  my_delayed_signal1 = !your_signal;
@@ -551,10 +554,10 @@ multi-line aligned statements.</p>
 <span class="linenos">6</span>end
 </pre></div>
 </div>
-<p><strong>A9</strong></p>
+<p><strong>A10</strong></p>
 <p>A line <strong>must</strong> not contain more than one statement. <strong>Do not</strong>
 concatenate multiple statements on the same line.</p>
-<p id="example-a9">Incorrect:</p>
+<p id="example-a10">Incorrect:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>upper_en = (p5type &amp;&amp; xadr1[0]); lower_en = (p5type &amp;&amp; !xadr1[0]);
 </pre></div>
 </div>
@@ -563,12 +566,12 @@ concatenate multiple statements on the same line.</p>
 lower_en = (p5type &amp;&amp; !xadr1[0]);
 </pre></div>
 </div>
-<p><strong>A10</strong></p>
+<p><strong>A11</strong></p>
 <p>In module instances:</p>
-<p><strong>A10.1</strong></p>
+<p><strong>A11.1</strong></p>
 <p><strong>All</strong> parameters and ports, <strong>must</strong> be written on a
 separate line, even if there are few of them or their names are short.</p>
-<p id="example-a10-1">Incorrect:</p>
+<p id="example-a11-1">Incorrect:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_module</span> <span class="c1">#(.PARAMETER1 (PARAMETER1)) i_my_module (.clk (clk));</span>
 </pre></div>
 </div>
@@ -579,13 +582,13 @@ separate line, even if there are few of them or their names are short.</p>
 <span class="linenos">4</span>  <span class="o">.</span><span class="n">clk</span> <span class="p">(</span><span class="n">clk</span><span class="p">));</span>
 </pre></div>
 </div>
-<p><strong>A10.2</strong></p>
+<p><strong>A11.2</strong></p>
 <p>When instantiating a module, the label of the module instance
 <strong>must</strong> be on a separate line, with the closing parenthesis of the
 parameters list (if that’s the case) and the opening parenthesis of the
 ports list. The closing parenthesis of the ports list must be right next
 to the last parenthesis of the last port.</p>
-<div class="highlight-default notranslate" id="example-a10-2"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">my_module</span> <span class="c1">#(</span>
+<div class="highlight-default notranslate" id="example-a11-2"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">my_module</span> <span class="c1">#(</span>
 <span class="linenos">2</span>  <span class="o">.</span><span class="n">PARAMETER1</span> <span class="p">(</span><span class="n">PARAMETER1</span><span class="p">),</span>
 <span class="linenos">3</span>  <span class="o">.</span><span class="n">PARAMETER2</span> <span class="p">(</span><span class="n">PARAMETER2</span><span class="p">)</span>
 <span class="hll"><span class="linenos">4</span><span class="p">)</span> <span class="n">i_my_module</span> <span class="p">(</span>
@@ -596,15 +599,15 @@ to the last parenthesis of the last port.</p>
 <span class="linenos">9</span>  <span class="o">.</span><span class="n">response_out</span> <span class="p">(</span><span class="n">response_out</span><span class="p">));</span>
 </pre></div>
 </div>
-<p><strong>A10.3</strong></p>
+<p><strong>A11.3</strong></p>
 <p>Commented parts of code <strong>must</strong> not be added to the main
 branch (i.e if, case, module instances, etc).</p>
-<p><strong>A11</strong></p>
+<p><strong>A12</strong></p>
 <p>In module declarations:</p>
-<p><strong>A11.1</strong></p>
+<p><strong>A12.1</strong></p>
 <p>Verilog modules <strong>must</strong> use Verilog-2001 style parameter
 declarations. This increases legibility and consistency.</p>
-<div class="highlight-default notranslate" id="example-a11-1"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="n">module</span> <span class="n">my_module</span> <span class="c1">#(</span>
+<div class="highlight-default notranslate" id="example-a12-1"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="n">module</span> <span class="n">my_module</span> <span class="c1">#(</span>
 </span><span class="hll"><span class="linenos"> 2</span>  <span class="n">parameter</span> <span class="n">PARAMETER1</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span class="hll"><span class="linenos"> 3</span><span class="p">)</span> <span class="p">(</span>
 </span><span class="hll"><span class="linenos"> 4</span>  <span class="nb">input</span>         <span class="n">clk</span><span class="p">,</span>
@@ -626,41 +629,57 @@ declarations. This increases legibility and consistency.</p>
 </span><span class="hll"><span class="linenos">20</span><span class="p">);</span>
 </span></pre></div>
 </div>
-<p><strong>A11.2</strong></p>
+<p><strong>A12.2</strong></p>
 <p>Comments are allowed inside a module declaration <strong>only</strong> for
 separating the interfaces by specifying the name and giving
 supplementary explanations.</p>
-<p><strong>A11.3</strong></p>
+<p><strong>A12.3</strong></p>
 <p>When declaring a module, the closing parenthesis of the
 parameters list <strong>must</strong> be on the same line with the last parameter and
 with the opening parenthesis of the ports list (as shown in the correct
 examples).</p>
-<p><strong>A11.4</strong></p>
+<p><strong>A12.4</strong></p>
 <p>After <code class="docutils literal notranslate"><span class="pre">endmodule</span></code> there <strong>must</strong> be only one newline, and
 nothing else after.</p>
-<p><strong>A12</strong></p>
+<p><strong>A13</strong></p>
+<p>SystemVerilog packages must follow these rules:</p>
+<p><strong>A13.1</strong></p>
+<p>The package name <strong>must</strong> be the same as the file name.</p>
+<p><strong>A13.2</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">package</span> <span class="pre">&lt;name&gt;;</span></code> declaration <strong>must</strong> start at the beginning of the line,
+with no leading spaces and no extra spaces before or after <code class="docutils literal notranslate"><span class="pre">;</span></code>.</p>
+<p><strong>A13.3</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">endpackage</span></code> statement <strong>must</strong> be on a separate line, with no leading
+spaces and no extra spaces before or after <code class="docutils literal notranslate"><span class="pre">;</span></code>.</p>
+<p><strong>A13.4</strong></p>
+<p>There <strong>must</strong> be only one newline after <code class="docutils literal notranslate"><span class="pre">endpackage</span></code>, and nothing else after.</p>
+<p><strong>A13.5</strong></p>
+<p>In a package body, indentation levels must be used to offset the enclosed
+statements. Blank lines may be used or omitted to improve readability, but only
+where they help clarity.</p>
+<p><strong>A14</strong></p>
 <p>Ports <strong>must</strong> be indicated individually; that is, one port per
 line must be declared, using the direction indication and data type with
 each port.</p>
-<p><strong>A13</strong></p>
+<p><strong>A15</strong></p>
 <p>Signals and variables <strong>must</strong> be declared individually; that
 is, one signal/variable per line <strong>must</strong> be declared.</p>
-<p><strong>A14</strong></p>
+<p><strong>A16</strong></p>
 <p>All ports and signals <strong>must</strong> be grouped by interface. Group
 ports declaration by direction starting with input, inout and output
 ports.</p>
-<p><strong>A15</strong></p>
+<p><strong>A17</strong></p>
 <p>The clock and reset ports <strong>must</strong> be declared first.</p>
-<p><strong>A16</strong></p>
+<p><strong>A18</strong></p>
 <p>Verilog wires and registers declarations <strong>must</strong> be grouped in
 separate sections. <strong>Firstly</strong> register types and then wire types.</p>
-<p><strong>A17</strong></p>
+<p><strong>A19</strong></p>
 <p>The source files <em>should</em> have the format shown in Annex 1 for
-Verilog code and Annex 2 for VHDL code.</p>
-<p><strong>A18</strong></p>
+Verilog code, Annex 2 for VHDL code and Annex 3 for SystemVerilog code.</p>
+<p><strong>A20</strong></p>
 <p>Local parameters <strong>must</strong> be declared first, before declaring wires
 or registers.</p>
-<div class="highlight-default notranslate" id="example-a18"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="n">localparam</span>   <span class="n">LOCAL_PARAM1</span><span class="p">;</span>
+<div class="highlight-default notranslate" id="example-a20"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="n">localparam</span>   <span class="n">LOCAL_PARAM1</span><span class="p">;</span>
 </span><span class="hll"><span class="linenos"> 2</span><span class="n">localparam</span>   <span class="n">NEXT_LOCAL_PARAM</span><span class="p">;</span>
 </span><span class="hll"><span class="linenos"> 3</span><span class="n">localparam</span>   <span class="n">LOCAL_PARAM2</span><span class="p">;</span>
 </span><span class="linenos"> 4</span>
@@ -670,6 +689,71 @@ or registers.</p>
 <span class="linenos"> 8</span>
 <span class="linenos"> 9</span><span class="n">wire</span> <span class="p">[</span> <span class="mi">2</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_wire1</span><span class="p">;</span>
 <span class="linenos">10</span><span class="n">wire</span>         <span class="n">my_wire2</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><strong>A21</strong></p>
+<p>Local parameter formatting:</p>
+<p><strong>A21.1</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">localparam</span></code> statements <strong>must</strong> be indented by a number of spaces that is a
+multiple of 2, with a minimum of 2 spaces.
+Items in a list (when present) must be indented by +2 spaces relative to the
+<code class="docutils literal notranslate"><span class="pre">localparam</span></code> line.</p>
+<p><strong>A21.2</strong></p>
+<p><strong>Multi-line list form</strong></p>
+<dl class="simple">
+<dt>When declaring multiple local parameters as a list:</dt><dd><ul class="simple">
+<li><p>the list must start on a new line after the <code class="docutils literal notranslate"><span class="pre">localparam</span></code> keyword;</p></li>
+<li><p>each intermediate item must end with a comma <code class="docutils literal notranslate"><span class="pre">,</span></code>; the last item must not end with a comma;</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">=</span></code> operator must be column-aligned across all items in the list.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span> <span class="n">localparam</span>
+<span class="linenos">2</span>   <span class="n">PCORE_VERSION</span> <span class="o">=</span> <span class="mi">32</span><span class="s1">&#39;h00020062,</span>
+<span class="linenos">3</span>   <span class="n">PCORE_MAGIC</span>   <span class="o">=</span> <span class="mi">32</span><span class="s1">&#39;h5444444E;</span>
+</pre></div>
+</div>
+<p><strong>A21.3</strong></p>
+<p><strong>Concatenation form ({ … })</strong></p>
+<dl class="simple">
+<dt>When declaring a local parameter using concatenation:</dt><dd><ul class="simple">
+<li><p>the first element may appear on the same line as <code class="docutils literal notranslate"><span class="pre">{</span></code>; all subsequent elements must start on new lines, indented by +2 spaces;</p></li>
+<li><p>items must be aligned to a common anchor (apostrophes in literals or, otherwise, the first token) for visual alignment;</p></li>
+<li><p>inline comments for items should align to a common column, at least 4 spaces after the longest code element;</p></li>
+<li><p>the closing <code class="docutils literal notranslate"><span class="pre">};</span></code> must be attached to the last element on the same line;</p></li>
+<li><p>comments written after a comma belong to the preceding element and must be attached to that element’s line;</p></li>
+<li><p>any trailing comment after the final semicolon of the whole statement must be attached to the last element’s line.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span> <span class="n">localparam</span> <span class="p">[</span><span class="mi">31</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">CORE_VERSION</span> <span class="o">=</span> <span class="p">{</span><span class="mi">16</span><span class="s1">&#39;h0002,    /* MAJOR */</span>
+<span class="linenos">2</span>                                    <span class="mi">8</span><span class="s1">&#39;h01,      /* MINOR */</span>
+<span class="linenos">3</span>                                    <span class="mi">8</span><span class="s1">&#39;h01};     /* PATCH */</span>
+</pre></div>
+</div>
+<p><strong>A22</strong></p>
+<p>In <code class="docutils literal notranslate"><span class="pre">typedef</span></code> declarations:</p>
+<p><strong>A22.1</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">typedef</span></code> line must be indented by a number of spaces that is a multiple
+of 2, with a minimum of 2 spaces.</p>
+<p><strong>A22.2</strong></p>
+<p>All items must be on separate lines (no one-liners), indented by +2 spaces
+relative to the typedef line.</p>
+<p><strong>A22.3</strong></p>
+<p>The closing <code class="docutils literal notranslate"><span class="pre">}</span></code> must be aligned with the <code class="docutils literal notranslate"><span class="pre">typedef</span></code> line indentation.
+The type name and semicolon must be on the same line as <code class="docutils literal notranslate"><span class="pre">}</span></code>.</p>
+<p><strong>A22.4</strong></p>
+<p>Inline comments after <code class="docutils literal notranslate"><span class="pre">}</span> <span class="pre">type_name;</span></code> must be moved to a separate line.</p>
+<p>Correct</p>
+<div class="highlight-default notranslate" id="example-a22"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">typedef</span> <span class="n">enum</span> <span class="n">logic</span> <span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="p">{</span>
+<span class="linenos">2</span>  <span class="n">IDLE</span>    <span class="o">=</span> <span class="mi">2</span><span class="s1">&#39;b00,</span>
+<span class="linenos">3</span>  <span class="n">ARMED</span>   <span class="o">=</span> <span class="mi">2</span><span class="s1">&#39;b01,</span>
+<span class="linenos">4</span>  <span class="n">WAITING</span> <span class="o">=</span> <span class="mi">2</span><span class="s1">&#39;b10,</span>
+<span class="linenos">5</span>  <span class="n">RUNNING</span> <span class="o">=</span> <span class="mi">2</span><span class="s1">&#39;b11</span>
+<span class="linenos">6</span><span class="p">}</span> <span class="n">type_name</span><span class="p">;</span>
+<span class="linenos">7</span><span class="o">//</span> <span class="n">comment</span> <span class="n">describing</span> <span class="n">the</span> <span class="nb">type</span>
 </pre></div>
 </div>
 </section>
@@ -787,7 +871,7 @@ format shown in Annex 1 for Verilog code and Annex 2 for VHDL code.</p>
 <section id="d-general">
 <h3>D. General<a class="headerlink" href="#d-general" title="Permalink to this heading"></a></h3>
 <p><strong>D1</strong></p>
-<p>A file <strong>must</strong> contain a single module.</p>
+<p>A file <strong>must</strong> contain a single module or package.</p>
 <p><strong>D2</strong></p>
 <p>A file <strong>must</strong> contain either: digital-only Verilog code (files
 with .v extension); analog-only Verilog code (files with .va or .vams
@@ -1033,15 +1117,125 @@ the current year.</p>
 </pre></div>
 </div>
 </section>
-</section>
-<section id="references">
-<h2>4. References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<section id="annex-3-systemverilog-package-file-format">
+<h3>Annex 3 SystemVerilog package file format<a class="headerlink" href="#annex-3-systemverilog-package-file-format" title="Permalink to this heading"></a></h3>
+<div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos">  2</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos">  3</span><span class="c1">// Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>
+<span class="linenos">  4</span><span class="c1">//</span>
+<span class="linenos">  5</span><span class="c1">// In this HDL repository, there are many different and unique modules, consisting</span>
+<span class="linenos">  6</span><span class="c1">// of various HDL (Verilog or VHDL) components. The individual modules are</span>
+<span class="linenos">  7</span><span class="c1">// developed independently, and may be accompanied by separate and unique license</span>
+<span class="linenos">  8</span><span class="c1">// terms.</span>
+<span class="linenos">  9</span><span class="c1">//</span>
+<span class="linenos"> 10</span><span class="c1">// The user should read each of these license terms, and understand the</span>
+<span class="linenos"> 11</span><span class="c1">// freedoms and responsibilities that he or she has by using this source/core.</span>
+<span class="linenos"> 12</span><span class="c1">//</span>
+<span class="linenos"> 13</span><span class="c1">// This core is distributed in the hope that it will be useful, but WITHOUT ANY</span>
+<span class="linenos"> 14</span><span class="c1">// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</span>
+<span class="linenos"> 15</span><span class="c1">// A PARTICULAR PURPOSE.</span>
+<span class="linenos"> 16</span><span class="c1">//</span>
+<span class="linenos"> 17</span><span class="c1">// Redistribution and use of source or resulting binaries, with or without modification</span>
+<span class="linenos"> 18</span><span class="c1">// of this file, are permitted under one of the following two license terms:</span>
+<span class="linenos"> 19</span><span class="c1">//</span>
+<span class="linenos"> 20</span><span class="c1">//   1. The GNU General Public License version 2 as published by the</span>
+<span class="linenos"> 21</span><span class="c1">//      Free Software Foundation, which can be found in the top level directory</span>
+<span class="linenos"> 22</span><span class="c1">//      of this repository (LICENSE_GPL2), and also online at:</span>
+<span class="linenos"> 23</span><span class="c1">//      &lt;https://www.gnu.org/licenses/old-licenses/gpl-2.0.html&gt;</span>
+<span class="linenos"> 24</span><span class="c1">//</span>
+<span class="linenos"> 25</span><span class="c1">// OR</span>
+<span class="linenos"> 26</span><span class="c1">//</span>
+<span class="linenos"> 27</span><span class="c1">//   2. An ADI specific BSD license, which can be found in the top level directory</span>
+<span class="linenos"> 28</span><span class="c1">//      of this repository (LICENSE_ADIBSD), and also on-line at:</span>
+<span class="linenos"> 29</span><span class="c1">//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD</span>
+<span class="linenos"> 30</span><span class="c1">//      This will allow to generate bit files and not release the source code,</span>
+<span class="linenos"> 31</span><span class="c1">//      as long as it attaches to an ADI device.</span>
+<span class="linenos"> 32</span><span class="c1">//</span>
+<span class="linenos"> 33</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos"> 34</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos"> 35</span>
+<span class="linenos"> 36</span><span class="kn">package</span> <span class="n">axi_tdd_pkg</span><span class="p">;</span>
+<span class="linenos"> 37</span>
+<span class="linenos"> 38</span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 39</span><span class="w">  </span><span class="n">IDLE</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span><span class="mb">&#39;b00</span><span class="p">,</span>
+<span class="linenos"> 40</span><span class="w">  </span><span class="n">ARMED</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span><span class="mb">&#39;b01</span><span class="p">,</span>
+<span class="linenos"> 41</span><span class="w">  </span><span class="n">WAITING</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span><span class="mb">&#39;b10</span><span class="p">,</span>
+<span class="linenos"> 42</span><span class="w">  </span><span class="n">RUNNING</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span><span class="mb">&#39;b11</span>
+<span class="linenos"> 43</span><span class="p">}</span><span class="w"> </span><span class="n">state_t</span><span class="p">;</span>
+<span class="linenos"> 44</span><span class="c1">// comment describing the type</span>
+<span class="linenos"> 45</span>
+<span class="linenos"> 46</span><span class="k">localparam</span>
+<span class="linenos"> 47</span><span class="w">  </span><span class="n">PCORE_VERSION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">32&#39;h00020062</span><span class="p">,</span>
+<span class="linenos"> 48</span><span class="w">  </span><span class="n">PCORE_MAGIC</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mh">32&#39;h5444444E</span><span class="p">;</span><span class="w"> </span><span class="c1">// &quot;TDDN&quot;, big endian</span>
+<span class="linenos"> 49</span>
+<span class="linenos"> 50</span><span class="c1">// register address offset</span>
+<span class="linenos"> 51</span><span class="k">localparam</span>
+<span class="linenos"> 52</span><span class="w">  </span><span class="n">ADDR_TDD_VERSION</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h00</span><span class="p">,</span>
+<span class="linenos"> 53</span><span class="w">  </span><span class="n">ADDR_TDD_ID</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h01</span><span class="p">,</span>
+<span class="linenos"> 54</span><span class="w">  </span><span class="n">ADDR_TDD_SCRATCH</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h02</span><span class="p">,</span>
+<span class="linenos"> 55</span><span class="w">  </span><span class="n">ADDR_TDD_IDENTIFICATION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h03</span><span class="p">,</span>
+<span class="linenos"> 56</span><span class="w">  </span><span class="n">ADDR_TDD_INTERFACE</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h04</span><span class="p">,</span>
+<span class="linenos"> 57</span><span class="w">  </span><span class="n">ADDR_TDD_DEF_POLARITY</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h05</span><span class="p">,</span>
+<span class="linenos"> 58</span><span class="w">  </span><span class="n">ADDR_TDD_CONTROL</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h10</span><span class="p">,</span>
+<span class="linenos"> 59</span><span class="w">  </span><span class="n">ADDR_TDD_CH_ENABLE</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h11</span><span class="p">,</span>
+<span class="linenos"> 60</span><span class="w">  </span><span class="n">ADDR_TDD_CH_POLARITY</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h12</span><span class="p">,</span>
+<span class="linenos"> 61</span><span class="w">  </span><span class="n">ADDR_TDD_BURST_COUNT</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h13</span><span class="p">,</span>
+<span class="linenos"> 62</span><span class="w">  </span><span class="n">ADDR_TDD_STARTUP_DELAY</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h14</span><span class="p">,</span>
+<span class="linenos"> 63</span><span class="w">  </span><span class="n">ADDR_TDD_FRAME_LENGTH</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h15</span><span class="p">,</span>
+<span class="linenos"> 64</span><span class="w">  </span><span class="n">ADDR_TDD_SYNC_CNT_LOW</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h16</span><span class="p">,</span>
+<span class="linenos"> 65</span><span class="w">  </span><span class="n">ADDR_TDD_SYNC_CNT_HIGH</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h17</span><span class="p">,</span>
+<span class="linenos"> 66</span><span class="w">  </span><span class="n">ADDR_TDD_STATUS</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h18</span><span class="p">,</span>
+<span class="linenos"> 67</span><span class="w">  </span><span class="n">ADDR_TDD_CH_ON</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h20</span><span class="p">,</span>
+<span class="linenos"> 68</span><span class="w">  </span><span class="n">ADDR_TDD_CH_OFF</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mh">8&#39;h21</span><span class="p">;</span>
+<span class="linenos"> 69</span>
+<span class="linenos"> 70</span><span class="c1">// channel offset values</span>
+<span class="linenos"> 71</span><span class="k">localparam</span>
+<span class="linenos"> 72</span><span class="w">  </span><span class="n">CH0</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">,</span>
+<span class="linenos"> 73</span><span class="w">  </span><span class="n">CH1</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="p">,</span>
+<span class="linenos"> 74</span><span class="w">  </span><span class="n">CH2</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span><span class="p">,</span>
+<span class="linenos"> 75</span><span class="w">  </span><span class="n">CH3</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">3</span><span class="p">,</span>
+<span class="linenos"> 76</span><span class="w">  </span><span class="n">CH4</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">4</span><span class="p">,</span>
+<span class="linenos"> 77</span><span class="w">  </span><span class="n">CH5</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">5</span><span class="p">,</span>
+<span class="linenos"> 78</span><span class="w">  </span><span class="n">CH6</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">6</span><span class="p">,</span>
+<span class="linenos"> 79</span><span class="w">  </span><span class="n">CH7</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">7</span><span class="p">,</span>
+<span class="linenos"> 80</span><span class="w">  </span><span class="n">CH8</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">8</span><span class="p">,</span>
+<span class="linenos"> 81</span><span class="w">  </span><span class="n">CH9</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">9</span><span class="p">,</span>
+<span class="linenos"> 82</span><span class="w">  </span><span class="n">CH10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">10</span><span class="p">,</span>
+<span class="linenos"> 83</span><span class="w">  </span><span class="n">CH11</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">11</span><span class="p">,</span>
+<span class="linenos"> 84</span><span class="w">  </span><span class="n">CH12</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">12</span><span class="p">,</span>
+<span class="linenos"> 85</span><span class="w">  </span><span class="n">CH13</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">13</span><span class="p">,</span>
+<span class="linenos"> 86</span><span class="w">  </span><span class="n">CH14</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">14</span><span class="p">,</span>
+<span class="linenos"> 87</span><span class="w">  </span><span class="n">CH15</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">15</span><span class="p">,</span>
+<span class="linenos"> 88</span><span class="w">  </span><span class="n">CH16</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">16</span><span class="p">,</span>
+<span class="linenos"> 89</span><span class="w">  </span><span class="n">CH17</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">17</span><span class="p">,</span>
+<span class="linenos"> 90</span><span class="w">  </span><span class="n">CH18</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">18</span><span class="p">,</span>
+<span class="linenos"> 91</span><span class="w">  </span><span class="n">CH19</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">19</span><span class="p">,</span>
+<span class="linenos"> 92</span><span class="w">  </span><span class="n">CH20</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">20</span><span class="p">,</span>
+<span class="linenos"> 93</span><span class="w">  </span><span class="n">CH21</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">21</span><span class="p">,</span>
+<span class="linenos"> 94</span><span class="w">  </span><span class="n">CH22</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">22</span><span class="p">,</span>
+<span class="linenos"> 95</span><span class="w">  </span><span class="n">CH23</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">23</span><span class="p">,</span>
+<span class="linenos"> 96</span><span class="w">  </span><span class="n">CH24</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">24</span><span class="p">,</span>
+<span class="linenos"> 97</span><span class="w">  </span><span class="n">CH25</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">25</span><span class="p">,</span>
+<span class="linenos"> 98</span><span class="w">  </span><span class="n">CH26</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">26</span><span class="p">,</span>
+<span class="linenos"> 99</span><span class="w">  </span><span class="n">CH27</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">27</span><span class="p">,</span>
+<span class="linenos">100</span><span class="w">  </span><span class="n">CH28</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">28</span><span class="p">,</span>
+<span class="linenos">101</span><span class="w">  </span><span class="n">CH29</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">29</span><span class="p">,</span>
+<span class="linenos">102</span><span class="w">  </span><span class="n">CH30</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">30</span><span class="p">,</span>
+<span class="linenos">103</span><span class="w">  </span><span class="n">CH31</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">31</span><span class="p">;</span>
+<span class="linenos">104</span>
+<span class="linenos">105</span><span class="k">endpackage</span>
+<span class="linenos">106</span>
+<span class="linenos">107</span><span class="w"> </span><span class="mf">4.</span><span class="w"> </span><span class="n">References</span>
+<span class="linenos">108</span><span class="w"> </span><span class="o">-------------------------------------------------------------------------------</span>
+</pre></div>
+</div>
 <p><a class="icon link reference external" href="http://www.xilinx.com/support/documentation/white_papers/wp231.pdf" target="_blank">[1] Philippe Garrault, Brian Philofsky, “HDL Coding Practices to Accelerate
 Design Performance”, Xilinx, 2006</a></p>
 <p><a class="icon link reference external" href="http://www.asic-world.com/code/verilog_tutorial/peter_chambers_10_commandments.pdf" target="_blank">[2] Peter Chambers, “The Ten Commandments of Excellent Design”, VLSI
 Technology, 1997</a></p>
 <p><a class="icon link reference external" href="http://courses.cit.cornell.edu/ece576/Verilog/FreescaleVerilog.pdf" target="_blank">[3] “Verilog Coding Techniques, v3.2”, Freescale Semiconductor, 2005</a></p>
 <p><a class="icon link reference external" href="http://www.engr.sjsu.edu/cpham/VERILOG/VerilogCodingStyle.pdf" target="_blank">[4] Jane Smith, “Verilog Coding Guidelines, Rev. B”, Cisco Systems 2000</a></p>
+</section>
 </section>
 </section>
 
