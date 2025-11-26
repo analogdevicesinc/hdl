@@ -3,7 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
 # system level parameters
 set NUM_OF_SDI  $ad_project_params(NUM_OF_SDI)
 set CAPTURE_ZONE $ad_project_params(CAPTURE_ZONE)
