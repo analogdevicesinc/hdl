@@ -1,25 +1,25 @@
 ###############################################################################
-## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 # ad463x_fmc SPI interface
-set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad463x_spi_sdo]    ; ## C11  FMC_LA06_N
-set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad463x_spi_sclk]   ; ## G6  FMC_LA00_CC_P
-set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25}          [get_ports ad463x_spi_cs]     ; ## G7  FMC_LA00_CC_N
+set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad463x_spi_sdo]    ; ## C11  FMC_LPC_LA06_N
+set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad463x_spi_sclk]   ; ## G6  FMC_LPC_LA00_CC_P
+set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25}          [get_ports ad463x_spi_cs]     ; ## G7  FMC_LPC_LA00_CC_N
 
-set_property -dict {PACKAGE_PIN B19 IOSTANDARD LVCMOS25} [get_ports ad463x_echo_sclk]           ; ## D20  FMC_LA17_CC_P
-set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS25} [get_ports ad463x_resetn]              ; ## D9  FMC_LA01_CC_N
-set_property -dict {PACKAGE_PIN D20 IOSTANDARD LVCMOS25} [get_ports ad463x_busy]                ; ## C22  FMC_LA18_CC_P
-set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ad463x_cnv]                 ; ## D8  FMC_LA01_CC_P
-set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports ad463x_ext_clk]             ; ## H4  FMC_CLK0_P
+set_property -dict {PACKAGE_PIN B19 IOSTANDARD LVCMOS25} [get_ports ad463x_echo_sclk]           ; ## D20  FMC_LPC_LA17_CC_P
+set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS25} [get_ports ad463x_resetn]              ; ## D9  FMC_LPC_LA01_CC_N
+set_property -dict {PACKAGE_PIN D20 IOSTANDARD LVCMOS25} [get_ports ad463x_busy]                ; ## C22  FMC_LPC_LA18_CC_P
+set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ad463x_cnv]                 ; ## D8  FMC_LPC_LA01_CC_P
+set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports ad463x_ext_clk]             ; ## H4  FMC_LPC_CLK0_P
 
-set_property -dict {PACKAGE_PIN J21 IOSTANDARD LVCMOS25} [get_ports {adaq42xx_pgia_mux[0]}]    ; ## G12  FMC-LA08_P
-set_property -dict {PACKAGE_PIN J22 IOSTANDARD LVCMOS25} [get_ports {adaq42xx_pgia_mux[1]}]    ; ## G13  FMC-LA08_N
+set_property -dict {PACKAGE_PIN J21 IOSTANDARD LVCMOS25} [get_ports {adaq42xx_pgia_mux[0]}]    ; ## G12  FMC_LPC_LA08_P
+set_property -dict {PACKAGE_PIN J22 IOSTANDARD LVCMOS25} [get_ports {adaq42xx_pgia_mux[1]}]    ; ## G13  FMC_LPC_LA08_N
 
-set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS25} [get_ports max17687_rst]              ; ## H13  FMC-LA07_P
-set_property -dict {PACKAGE_PIN T17 IOSTANDARD LVCMOS25} [get_ports max17687_en]               ; ## H14  FMC-LA07_N
-set_property -dict {PACKAGE_PIN B20 IOSTANDARD LVCMOS25} [get_ports max17687_sync_clk]         ; ## D21  FMC-LA17_N_CC
+set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS25} [get_ports max17687_rst]              ; ## H13  FMC_LPC_LA07_P
+set_property -dict {PACKAGE_PIN T17 IOSTANDARD LVCMOS25} [get_ports max17687_en]               ; ## H14  FMC_LPC_LA07_N
+set_property -dict {PACKAGE_PIN B20 IOSTANDARD LVCMOS25} [get_ports max17687_sync_clk]         ; ## D21  FMC_LPC_LA17_N_CC
 
 # external clock, that drives the CNV generator, must have a maximum 100 MHz frequency
 create_clock -period 10.000 -name cnv_ext_clk [get_ports ad463x_ext_clk]
