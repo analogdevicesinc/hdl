@@ -75,17 +75,17 @@ adi_project_files ad4630_fmc_zed [list \
 
 switch [get_env_param LANES_PER_CHANNEL 2] {
   1 {
-    # For 1 SDI, check NUM_OF_CHANNEL
+    # For 1 lane per channel, check NUM_OF_CHANNEL
     if {[get_env_param NUM_OF_CHANNEL 2] == 1} {
-      # 1 channel, 1 SDI
+      # 1 channel, 1 SDI lane
       adi_project_files ad4630_fmc_zed [list \
         "system_constr_1sdi_1ch.xdc" ]
     } else {
       # 2 channels, check INTERLEAVE_MODE
       if {[get_env_param INTERLEAVE_MODE 0] == 0} {
-        # INTERLEAVE_MODE=0: 2 SDI lines (1 per channel)
+        # INTERLEAVE_MODE=0: 2 SDI lanes (1 per channel)
         adi_project_files ad4630_fmc_zed [list \
-          "system_constr_1sdi_2ch.xdc" ]
+          "system_constr_2sdi_2ch.xdc" ]
       } else {
         # INTERLEAVE_MODE=1: valid for AD463x only, both channels share the same SDI line
         adi_project_files ad4630_fmc_zed [list \
@@ -94,27 +94,27 @@ switch [get_env_param LANES_PER_CHANNEL 2] {
     }
   }
   2 {
-    # For 2 SDI, check NUM_OF_CHANNEL
+    # For 2 lanes per channel, check NUM_OF_CHANNEL
     if {[get_env_param NUM_OF_CHANNEL 2] == 1} {
-      # 1 channel, 2 SDI
+      # 1 channel, 2 SDI lanes
       adi_project_files ad4630_fmc_zed [list \
         "system_constr_2sdi_1ch.xdc" ]
     } else {
-      # 2 channels, 4 SDI total (2 per channel)
+      # 2 channels, 4 SDI lanes (2 per channel)
       adi_project_files ad4630_fmc_zed [list \
-        "system_constr_2sdi_2ch.xdc" ]
+        "system_constr_4sdi_2ch.xdc" ]
     }
   }
   4 {
-    # For 4 SDI, check NUM_OF_CHANNEL
+    # For 4 lanes per channel, check NUM_OF_CHANNEL
     if {[get_env_param NUM_OF_CHANNEL 2] == 1} {
-      # 1 channel, 4 SDI
+      # 1 channel, 4 SDI lanes
       adi_project_files ad4630_fmc_zed [list \
         "system_constr_4sdi_1ch.xdc" ]
     } else {
-      # 2 channels, 8 SDI total (4 per channel)
+      # 2 channels, 8 SDI lanes (4 per channel)
       adi_project_files ad4630_fmc_zed [list \
-        "system_constr_4sdi_2ch.xdc" ]
+        "system_constr_8sdi_2ch.xdc" ]
     }
   }
   default {
