@@ -13,7 +13,7 @@ set DDR_EN              $ad_project_params(DDR_EN)
 set INTERLEAVE_MODE     $ad_project_params(INTERLEAVE_MODE)
 
 if {$INTERLEAVE_MODE == 1} {
-  if {$LANES_PER_CHANNEL > 1 || $NUM_OF_CHANNEL != 2} {
+  if {$LANES_PER_CHANNEL != 1 || $NUM_OF_CHANNEL != 2} {
     puts "ERROR: Interleave mode is only supported with 2 channels (NUM_OF_CHANNEL == 2) and 1 lane per channel (LANES_PER_CHANNEL == 1)."
     exit 2
   }
