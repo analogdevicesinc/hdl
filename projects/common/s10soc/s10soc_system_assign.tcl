@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -371,3 +371,6 @@ set_global_assignment -name PWRMGT_VOLTAGE_OUTPUT_FORMAT "AUTO DISCOVERY"
 set_global_assignment -name PWRMGT_TRANSLATED_VOLTAGE_VALUE_UNIT VOLTS
 
 set_global_assignment -name DEVICE_INITIALIZATION_CLOCK OSC_CLK_1_125MHz
+
+# Workaround for Quartus 25.1 incomplete IO assignment becoming a critical warning
+set_global_assignment -name MESSAGE_DISABLE 15714
