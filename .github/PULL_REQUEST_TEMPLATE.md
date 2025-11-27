@@ -1,22 +1,15 @@
 ## PR Description
 
-Please replace this comment with summary, motivation and context of the changes.
-List any dependencies required for this change.
-
-You can check the checkboxes below by inserting a 'x' between square brackets
-(without any other characters or spaces) or just check them after publishing the PR.
-
-If there is a breaking change, specify dependent PRs in description and
-try to push all related PRs at the same time.
+Possible missing concatenation in AXI AD9361 LVDS Interface module for Xilinx platforms.
 
 
 ## PR Type
-- [ ] Bug fix (change that fixes an issue)
+- [x] Bug fix (change that fixes an issue)
 - [ ] New feature (change that adds new functionality)
 - [ ] Breaking change (has dependencies in other repos or will cause CI to fail)
 
 ## PR Checklist
-- [ ] I have followed the code style guidelines
+- [x] I have followed the code style guidelines
 - [ ] I have performed a self-review of changes
 - [ ] I have compiled all hdl projects and libraries affected by this PR
 - [ ] I have tested in hardware affected projects, at least on relevant boards
