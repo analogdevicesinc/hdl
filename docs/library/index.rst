@@ -106,7 +106,6 @@ Obsolete IPs
 .. toctree::
    :maxdepth: 1
 
-   axi_ad9144/index
    axi_ad9371/index
    axi_ad9643/index
    axi_ad9671/index
