@@ -259,8 +259,6 @@ set_instance_assignment -name IO_STANDARD "1.2 V" -to spi1_sdio
 set_instance_assignment -name IO_STANDARD "1.2 V" -to txen[0]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to txen[1]
 
-set_global_assignment -name MESSAGE_DISABLE 15714
-
 # set optimization to get a better timing closure
 set_global_assignment -name OPTIMIZATION_MODE "Superior Performance"
 
