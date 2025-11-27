@@ -45,3 +45,6 @@ set_property -dict {PACKAGE_PIN AA11 IOSTANDARD LVCMOS33} [get_ports laser_trigg
 # clocks
 
 create_clock -period 2.000 -name dco_clk [get_ports dco_p]
+
+# Clock groups to define asynchronous clock domains
+set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks dco_clk]
