@@ -35,9 +35,6 @@ ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG2 0x0203
 
 create_bd_port -dir I dac_fifo_bypass
 
-ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV 20
-ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_REFCLK_DIV 1
-
 ad_ip_parameter axi_ad9152_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_ad9152_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ad9152_dma CONFIG.AXI_SLICE_DEST 1
