@@ -114,25 +114,26 @@ The following table presents the base addresses of each instance, after it you
 can find the detailed description of each generic register map.
 
 The absolute address of a register should be calculated by adding the instance
-base address to the registers relative address.
+base address to the registers relative address. For a more detailed explanation,
+see :ref:`ADC register access <generic-adc-register-access>`.
 
 .. list-table:: Register Map base addresses for axi_ada4355
    :header-rows: 1
 
-   * - DWORD
-     - BYTE
+   * - HDL reg
+     - Software reg
      - Name
      - Description
    * - 0x0000
      - 0x0000
      - BASE
      - See the `Base <#hdl-regmap-COMMON>`__ table for more details.
-   * - 0x0010
-     - 0x0040
+   * - 0x0000
+     - 0x0000
      - ADC COMMON
      - See the `ADC Common <#hdl-regmap-ADC_COMMON>`__ table for more details.
-   * - 0x0100
-     - 0x0400
+   * - 0x0000
+     - 0x0000
      - ADC CHANNELS
      - See the `ADC Channel <#hdl-regmap-ADC_CHANNEL>`__ table for more details.
    * - 0x0200

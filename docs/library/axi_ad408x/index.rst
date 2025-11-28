@@ -122,13 +122,14 @@ The following table presents the base addresses of each instance, after it you
 can find the detailed description of each generic register map.
 
 The absolute address of a register should be calculated by adding the instance
-base address to the registers relative address.
+base address to the registers relative address. For a more detailed explanation,
+see :ref:`ADC register access <generic-adc-register-access>`.
 
 .. list-table:: Register Map base addresses for axi_ad408x
    :header-rows: 1
 
-   * - DWORD
-     - BYTE
+   * - HDL reg
+     - Software reg
      - Name
      - Description
    * - 0x0000
