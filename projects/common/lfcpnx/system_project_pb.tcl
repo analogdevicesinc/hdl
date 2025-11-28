@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -18,4 +18,5 @@ source $ad_hdl_dir/projects/scripts/adi_project_lattice_pb.tcl
 #     -language "verilog" \
 #     -cmd_list {{source ./system_pb.tcl}}
 #     -psc "${env(TOOLRTF)}/../../templates/MachXO3D_Template01/MachXO3D_Template01.psc"
-adi_project_pb template_lfcpnx
+adi_project_pb template_lfcpnx -parameter_list [list \
+  SYSMEM_INIT_FILE [get_env_param SYSMEM_INIT_FILE ""]]
