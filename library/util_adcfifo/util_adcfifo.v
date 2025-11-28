@@ -89,6 +89,8 @@ module util_adcfifo #(
   // internal signals
 
   wire                                  adc_rst_s;
+  wire                                  adc_rstn_s;
+  wire                                  adc_xfer_req;
   wire                                  dma_wready_s;
   wire        [DMA_DATA_WIDTH-1:0]      dma_rdata_s;
   wire                                  dma_read_rst_s;
@@ -105,16 +107,26 @@ module util_adcfifo #(
   ad_rst i_adc_rst_sync (
     .rst_async (adc_rst),
     .clk (adc_clk),
-    .rstn (),
+    .rstn (adc_rstn_s),
     .rst (adc_rst_s));
 
   // optional capture synchronization
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_xfer_req_sync (
+    .out_clk(adc_clk),
+    .out_resetn(adc_rstn_s),
+    .in_bits(dma_xfer_req),
+    .out_bits(adc_xfer_req));
 
   always @(posedge adc_clk) begin
     if (adc_rst_s == 1'b1) begin
       adc_xfer_req_m <= 'd0;
     end else begin
-      adc_xfer_req_m <= {adc_xfer_req_m[1:0], dma_xfer_req};
+      adc_xfer_req_m <= {adc_xfer_req_m[1:0], adc_xfer_req};
     end
   end
 

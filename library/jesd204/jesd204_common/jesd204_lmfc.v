@@ -42,7 +42,8 @@ module jesd204_lmfc #(
   //wire [BEATS_PER_MF_WIDTH-1:0]     cfg_beats_per_multiframe = cfg_octets_per_multiframe[9:DPW_LOG2];
   reg  [BEATS_PER_MF_WIDTH:0]       cfg_whole_beats_per_multiframe;
 
-  reg sysref_r = 1'b0;
+  wire sysref_s;
+
   reg sysref_d1 = 1'b0;
   reg sysref_d2 = 1'b0;
   reg sysref_d3 = 1'b0;
@@ -56,9 +57,15 @@ module jesd204_lmfc #(
 
   reg lmfc_active = 1'b0;
 
-  always @(posedge clk) begin
-    sysref_r <= sysref;
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(SYNC_STAGES)
+  ) i_cdc_async_stage_sync (
+    .out_clk(clk),
+    .out_resetn(1'b1),
+    .in_bits(sysref),
+    .out_bits(sysref_s));
 
   /*
    * Unfortunately setup and hold are often ignored on the sysref signal relative
@@ -67,7 +74,7 @@ module jesd204_lmfc #(
    * reset of the system and causes non-reproducible issues.
    */
   always @(posedge clk) begin
-    sysref_d1 <= sysref_r;
+    sysref_d1 <= sysref_s;
     sysref_d2 <= sysref_d1;
     sysref_d3 <= sysref_d2;
   end

@@ -335,7 +335,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
     }
   }
 
-  # util rst constraints
+  # clock div constraints
   if {$ip_inst != ""} {
     current_instance -quiet
     current_instance $ip_inst

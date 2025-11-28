@@ -90,7 +90,7 @@ module util_rst_chain #(
 
       util_rst #(
         .ASYNC_STAGES(2),
-        .SYNC_STAGES(2)
+        .SYNC_STAGES(1)
       ) i_cdc_async_stage_sync (
         .rst_async(cdc_async_stage_d[NUM_OF_RESET-1] || rst_s),
         .clk(clk[i]),

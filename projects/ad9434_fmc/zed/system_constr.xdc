@@ -46,7 +46,3 @@ set_property -dict {PACKAGE_PIN A22 IOSTANDARD LVCMOS25} [get_ports spi_sclk]   
 
 # 463.82MHz
 create_clock -name adc_clk          -period 2.156    [get_ports adc_clk_p]
-create_clock -name adc_core_clk     -period 8.624    [get_pins i_system_wrapper/system_i/axi_ad9434/adc_clk]
-
-set_clock_groups -asynchronous -group [get_clocks adc_clk]
-set_clock_groups -asynchronous -group [get_clocks adc_core_clk]

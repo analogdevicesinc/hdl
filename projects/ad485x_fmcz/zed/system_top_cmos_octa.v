@@ -93,6 +93,7 @@ module system_top (
 
   input                   csd0, //spiad_sdo
   output                  csck, //spiad_sck
+  // output  reg             csck, //spiad_sck
   output  reg             csdio,//spiad_sdi
   output  reg             cs_n  //spiad_csn
 );

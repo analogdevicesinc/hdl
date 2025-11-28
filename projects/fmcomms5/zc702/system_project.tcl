@@ -14,6 +14,8 @@ adi_project_files fmcomms5_${BOARD_NAME} [list \
   "system_top.v" \
   "system_constr.xdc"\
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "$ad_hdl_dir/library/util_rst/util_rst.v" \
   "$ad_hdl_dir/projects/common/${BOARD_NAME}/${BOARD_NAME}_system_constr.xdc" ]
 
 ## fmcomms5 design is presenting hold time violations on some paths

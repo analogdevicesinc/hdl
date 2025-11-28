@@ -321,22 +321,40 @@ module data_offload_regmap #(
   endgenerate
 
   sync_bits #(
-    .NUM_OF_BITS (2),
+    .NUM_OF_BITS (1),
     .ASYNC_CLK (1)
-  ) i_src_xfer_control (
-    .in_bits ({ up_sw_resetn, up_bypass }),
+  ) i_src_xfer_control_rst (
+    .in_bits (up_sw_resetn),
     .out_clk (src_clk),
     .out_resetn (1'b1),
-    .out_bits ({ src_sw_resetn_s, src_bypass }));
+    .out_bits (src_sw_resetn_s));
 
   sync_bits #(
-    .NUM_OF_BITS (2),
+    .NUM_OF_BITS (1),
     .ASYNC_CLK (1)
-  ) i_dst_xfer_control (
-    .in_bits ({ up_sw_resetn, up_bypass }),
+  ) i_src_xfer_control_bps (
+    .in_bits (up_bypass),
+    .out_clk (src_clk),
+    .out_resetn (1'b1),
+    .out_bits (src_bypass));
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_dst_xfer_control_rst (
+    .in_bits (up_sw_resetn),
     .out_clk (dst_clk),
     .out_resetn (1'b1),
-    .out_bits ({ dst_sw_resetn_s, dst_bypass }));
+    .out_bits (dst_sw_resetn_s));
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_dst_xfer_control_bps (
+    .in_bits (up_bypass),
+    .out_clk (dst_clk),
+    .out_resetn (1'b1),
+    .out_bits (dst_bypass));
 
   sync_bits #(
     .NUM_OF_BITS (1),

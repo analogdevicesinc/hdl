@@ -140,6 +140,8 @@ module system_top (
   // internal signals
 
   wire            sys_100m_resetn;
+  wire            mcs_rstn;
+  wire            mcs_sync_s;
   wire            ref_clk_s;
   wire            ref_clk;
   wire    [ 63:0] gpio_i;
@@ -156,12 +158,31 @@ module system_top (
 
   // multi-chip synchronization
 
-  always @(posedge ref_clk or negedge sys_100m_resetn) begin
-    if (sys_100m_resetn == 1'b0) begin
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_mcs_rst_sync (
+    .rst_async(~sys_100m_resetn),
+    .clk(ref_clk),
+    .rstn(mcs_rstn),
+    .rst());
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(SYNC_STAGES)
+  ) i_mcs_gpio_sync (
+    .out_clk(ref_clk),
+    .out_resetn(mcs_rstn),
+    .in_bits(gpio_o[45]),
+    .out_bits(mcs_sync_s));
+
+  always @(posedge ref_clk) begin
+    if (mcs_rstn == 1'b0) begin
       mcs_sync_m <= 3'd0;
       mcs_sync <= 1'd0;
     end else begin
-      mcs_sync_m <= {mcs_sync_m[1:0], gpio_o[45]};
+      mcs_sync_m <= {mcs_sync_m[1:0], mcs_sync_s};
       mcs_sync <= mcs_sync_m[2] & ~mcs_sync_m[1];
     end
   end
