@@ -86,6 +86,8 @@ module ad_dds #(
 
       // enable dds
 
+      // Phase registers - initialize to 0 to avoid X in simulation
+      // Note: These are arrays indexed [1:CLK_RATIO], initialized via initial block
       reg  [PHASE_DW-1:0]  dac_dds_phase_0[1:CLK_RATIO];
       reg  [PHASE_DW-1:0]  dac_dds_phase_1[1:CLK_RATIO];
       reg  [PHASE_DW-1:0]  dac_dds_phase_0_m[1:CLK_RATIO];
@@ -93,6 +95,17 @@ module ad_dds #(
       reg  [PHASE_DW-1:0]  dac_dds_incr_0 = 'd0;
       reg  [PHASE_DW-1:0]  dac_dds_incr_1 = 'd0;
       reg  [CLK_RATIO :1]  sync_min_pulse_m = 'd0;
+
+      // Initialize phase array registers to avoid X in simulation
+      integer init_idx;
+      initial begin
+        for (init_idx = 1; init_idx <= CLK_RATIO; init_idx = init_idx + 1) begin
+          dac_dds_phase_0[init_idx] = 'd0;
+          dac_dds_phase_1[init_idx] = 'd0;
+          dac_dds_phase_0_m[init_idx] = 'd0;
+          dac_dds_phase_1_m[init_idx] = 'd0;
+        end
+      end
 
       // For scenarios where the synchronization signal comes from an external
       // source and it is high for a longer period of time, the phase
