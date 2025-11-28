@@ -952,7 +952,7 @@ The **sof** file is used to program the device.
 .. warning::
 
    Instantiating IPs in Propel Builder CLI or GUI does not work in WSL for an
-   unknown compatibility reason. You can use WSL/Cygwin on Windows or a normal
+   unknown compatibility reason. You can use Cygwin on Windows or a normal
    Linux installation.
 
 .. warning::
@@ -983,19 +983,25 @@ The **sof** file is used to program the device.
 
 The Lattice build is in a very early version. We are just adding the first
 version of library infrastructure support.
-Currently, we only have a single early-version base design that builds almost
-like the other ones. For Lattice, there are separate tools for creating
-a block design **(Propel Builder)** and building an HDL design **(Radiant)**.
 
-To build a project, go to the carrier folder and run ``make``. For now, you can
-try to build the only base design we have available for
-**CertusPro-NX Evaluation Board** by entering the base design directory and
-running ``make``.
+.. note::
+
+   Currently, we are supporting the
+   `ad738x_fmc <https://analogdevicesinc.github.io/hdl/projects/ad738x_fmc/index.html>`__
+   project for the **LFCPNX-EVN** carrier board, in the
+   `hdl/projects/ad738x_fmc/lfcpnx <https://github.com/analogdevicesinc/hdl/tree/main/projects/ad738x_fmc/lfcpnx>`__ folder.
+   For Lattice, there are separate tools for creating
+   a block design **(Propel Builder)** and building an HDL design **(Radiant)**.
+
+To build a project, go to the carrier folder and run ``make``.
+The **ad738x_fmc** project is available for the
+**CertusPro-NX Evaluation Board** and can be built by entering the
+``hdl/projects/ad738x_fmc/lfcpnx`` directory and running ``make``.
 
 .. shell:: bash
 
    ~/hdl
-   $cd projects/common/lfcpnx
+   $cd projects/ad738x_fmc/lfcpnx
    $make
 
 This assumes that you have the tools and licenses set up correctly.
