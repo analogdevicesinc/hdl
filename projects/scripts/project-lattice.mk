@@ -79,6 +79,7 @@ R_TARGETS += _bld/$(PROJECT_NAME)/impl_1/$(PROJECT_NAME)_impl_1.bit
 
 CLEAN_TARGET += $(wildcard ./*/)
 CLEAN_TARGET += $(wildcard *.log)
+CLEAN_TARGET += mem_init_sys.txt
 CLEAN_TARGET += $(wildcard ./radiantc.*)
 CLEAN_TARGET += $(filter-out . .. ./. ./.., $(wildcard .*))
 
@@ -109,10 +110,11 @@ ifeq ($(LATTICE_DEFAULT_PATHS),1)
 LIB_TARGETS := $(LIB_TARGETS) $(foreach dep,$(LIB_DEPS),${LATTICE_DEFAULT_IP_PATH}/$(lastword $(subst /, ,$(dep)))/metadata.xml)
 endif
 
-$(LIB_TARGETS):
-	$(foreach dep,$(LIB_DEPS), \
-		flock $(HDL_LIBRARY_PATH)$(dep)/.lock -c "cd $(HDL_LIBRARY_PATH)$(dep) \
-		&& $(MAKE) lattice";) exit $$?
+$(HDL_LIBRARY_PATH)%/metadata.xml: TARGET:=lattice
+FORCE:
+$(HDL_LIBRARY_PATH)%/metadata.xml: FORCE
+	flock $(patsubst %/ltt/,%/,$(dir $@)).lock sh -c " \
+	$(MAKE) -C $(patsubst %/ltt/,%/,$(dir $@)) $(TARGET)"; exit $$?
 
 $(PB_TARGETS): $(filter-out $(PB_DEPS_FILTER_OUT),$(filter $(PB_DEPS_FILTER), $(M_DEPS))) $(LIB_TARGETS)
 	$(call skip_if_missing, \
