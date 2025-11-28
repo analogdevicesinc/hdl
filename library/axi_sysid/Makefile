@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2023, 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -12,5 +12,7 @@ GENERIC_DEPS += axi_sysid.v
 XILINX_DEPS += axi_sysid_ip.tcl
 
 INTEL_DEPS += axi_sysid_hw.tcl
+
+LATTICE_DEPS += axi_sysid_ltt.tcl
 
 include ../scripts/library.mk
