@@ -9,37 +9,35 @@ Overview
 This wiki page describes how to add a custom processing module into the
 :git-hdl:`FMCOMMS2 <projects/fmcomms2>`'s TX and/or RX data path.
 
-In this example, the custom modules are going to be some digital FIR filters,
-to decimate and interpolate the incoming and outcoming data stream.
+In this example, the custom modules are going to be some digital FIR filters, to
+decimate and interpolate the incoming and outcoming data stream.
 
 .. important::
 
-   This example was built using the hdl_2023_r2 release branch, using Vivado
-   and Vitis 2023.2.
-   Sources from older examples can be found under the tag
-   `eg_fmcomms2_fir_filter`_ using Vivado 16.2 and 16.4 versions, and
+   This example was built using the hdl_2023_r2 release branch, using Vivado and
+   Vitis 2023.2. Sources from older examples can be found under the tag
+   `eg_fmcomms2_fir_filter`_ using Vivado 16.2 and 16.4 versions, andstatus
    **are not supported by us anymore**.
 
-Assuming we want to transmit a sinewave with the :adi:`AD9361` ADI Integrated
-RF transceiver: the sinewave frequency is below 6 MHz, so we can use a lower
-system data rate than the reference design. But, by simply lowering the data
-rate of the system we will increase the equalization error.
-To avoid this issue, we can add some interpolation filters for transmitting.
+Assuming we want to transmit a sinewave with the :adi:`AD9361` ADI Integrated RF
+transceiver: the sinewave frequency is below 6 MHz, so we can use a lower system
+data rate than the reference design. But, by simply lowering the data rate of
+the system we will increase the equalization error. To avoid this issue, we can
+add some interpolation filters for transmitting.
 
 A similar problem is encountered on the ADC side when receiving a low-frequency
 signal. This can be solved with the use of decimation filters. In our example,
-these filters were already implemented in
-:git-hdl:`util_fir_int <library/util_fir_int>` and
-:git-hdl:`util_fir_dec <library/util_fir_dec>` HDL IP core, which are wrappers
-for the FIR Compiler Xilinx IP. The wrappers are used to manage the data rates
-entering the filter and to facilitate the configuration of the filter
-parameters for a specific application (TX/RX).
+these filters were already implemented in :git-hdl:`util_fir_int
+<library/util_fir_int>` and :git-hdl:`util_fir_dec <library/util_fir_dec>` HDL
+IP core, which are wrappers for the FIR Compiler Xilinx IP. The wrappers are
+used to manage the data rates entering the filter and to facilitate the
+configuration of the filter parameters for a specific application (TX/RX).
 
 Choosing filter parameters and coefficients
 -------------------------------------------------------------------------------
 
-The interpolation/decimation filters parameters and coefficients were
-calculated in `MATLAB`_.
+The interpolation/decimation filters parameters and coefficients were calculated
+in `MATLAB`_.
 
 Interpolation FIR filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,23 +103,22 @@ Adding the filters in the data path
 -------------------------------------------------------------------------------
 
 In the original :git-hdl:`fmcomms2 <projects/fmcomms2>` design, the data comes
-from the :git-hdl:`DMA <library/axi_dmac>`, goes to the
-:git-hdl:`util_upack2 <library/util_pack/util_upack2>` core which transmits
-the individual channel data to a :git-hdl:`dac_fifo <library/util_rfifo>` core,
-from which the
-:git-hdl:`axi_ad9361 <library/axi_ad9361>` core reads the data and transmits
-it to the :adi:`AD9361` chip. The util_upack2 core is used to split the 64-bit
-data containing 2 RF channels, each one having I/Q data. dac_fifo is used for
+from the :git-hdl:`DMA <library/axi_dmac>`, goes to the :git-hdl:`util_upack2
+<library/util_pack/util_upack2>` core which transmits the individual channel
+data to a :git-hdl:`dac_fifo <library/util_rfifo>` core, from which the
+:git-hdl:`axi_ad9361 <library/axi_ad9361>` core reads the data and transmits it
+to the :adi:`AD9361` chip. The util_upack2 core is used to split the 64-bit data
+containing 2 RF channels, each one having I/Q data. dac_fifo is used for
 clock-domain crossing between the system clock and the AD9361 clock.
 
 The data processing is done at lower clock frequencies. This is the reason for
 placing the interpolation filters in front of the dac_fifo module.
 
-The required input data for the filter is I/Q data and the output is
-independent I and Q data. Because of these conditions, we still require the
-util_upack2 module, but we only need to split the DAC data into independent
-channel data, so we need one UPACK module and two **util_fir_int** modules
-before the FIFO. The same approach is implemented on the receive path.
+The required input data for the filter is I/Q data and the output is independent
+I and Q data. Because of these conditions, we still require the util_upack2
+module, but we only need to split the DAC data into independent channel data, so
+we need one UPACK module and two **util_fir_int** modules before the FIFO. The
+same approach is implemented on the receive path.
 
 For more information about the reference design, visit :ref:`fmcomms2`
 documentation.
@@ -129,8 +126,8 @@ documentation.
 Block diagram
 -------------------------------------------------------------------------------
 
-The modified reference design block diagram containing now **Interpolation**
-and **Decimation** filters is presented below:
+The modified reference design block diagram containing now **Interpolation** and
+**Decimation** filters is presented below:
 
 .. image:: fmcomms234_fir_filt_block_diagram.svg
    :width: 1000
@@ -165,10 +162,13 @@ components:
    :align: center
    :alt: FMCOMMS2 Vivado TX data path
 
-We need to remove the connections between util_upack2 and dac_fifo cores
-so we can add the FIR filter modules in the reference design. With the
-following commands, all the unwanted connections will be removed and new ones
-will be created.
+We need to remove the connections between util_upack2 and dac_fifo cores so we
+can add the FIR filter modules in the reference design. With the following
+commands, all the unwanted connections will be removed and new ones will be
+created.
+
+All the TCL commands from this page are available in the `fir_filter.tcl` script
+located in `hdl/docs/projects/fmcomms2`.
 
 .. code-block:: tcl
 
@@ -189,33 +189,36 @@ We will disconnect/connect the Rx path in a similar manner.
 
 Adding interpolation filters.
 
+Add the two required IP cores to the Makefile: **LIB_DEPS += util_fir_int** and
+**LIB_DEPS += util_fir_dec**.
+
 .. code-block:: tcl
 
-   set fir_interpolator_0 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_int:1.0 fir_interpolator_0 ]
-   set fir_interpolator_1 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_int:1.0 fir_interpolator_1 ]
+   set util_fir_int_0 [create_bd_cell -type ip -vlnv analog.com:user:util_fir_int:1.0 util_fir_int_0]
+   set util_fir_int_1 [create_bd_cell -type ip -vlnv analog.com:user:util_fir_int:1.0 util_fir_int_1]
 
 Adding interpolation control.
 
 .. code-block:: tcl
 
-   set interp_slice [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 interp_slice ]
+   set interp_slice [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 interp_slice]
 
 Adding decimation filters.
 
 .. code-block:: tcl
 
-   set fir_decimator_0 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_dec:1.0 fir_decimator_0 ]
-   set fir_decimator_1 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_dec:1.0 fir_decimator_1 ]
+   set fir_decimator_0 [create_bd_cell -type ip -vlnv analog.com:user:util_fir_dec:1.0 fir_decimator_0]
+   set fir_decimator_1 [create_bd_cell -type ip -vlnv analog.com:user:util_fir_dec:1.0 fir_decimator_1]
 
 Adding decimation control.
 
 .. code-block:: tcl
 
-   set decim_slice [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 decim_slice ]
+   set decim_slice [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 decim_slice]
 
 The interpolation filter has a 32-bit (I+Q) input data bus. In the base design,
-the util_upack2 module is configured to output 4 channels of 16-bit data.
-By changing the UPACK number of channels to 2 and the width of the channels to
+the util_upack2 module is configured to output 4 channels of 16-bit data. By
+changing the UPACK number of channels to 2 and the width of the channels to
 32-bit, will not work because of how the independent I/Q channel data is
 arranged in the 64-bit data bus coming from the DMA; see the figure below:
 
@@ -226,8 +229,8 @@ arranged in the 64-bit data bus coming from the DMA; see the figure below:
 
 More information about the util_upack2 core at :ref:`util_upack2`.
 
-As a fact, the data transmitted/received through LVDS interface at DDR
-(Double Data Rate) is presented in the diagram below:
+As a fact, the data transmitted/received through LVDS interface at DDR (Double
+Data Rate) is presented in the diagram below:
 
 .. image:: ad9361_lvds_ddr_transmision.svg
    :width: 1000
@@ -241,19 +244,18 @@ At this point, we have two options:
    one channel is not enabled.
 
 For this example, the upack_core was kept. The core's proprieties remain
-unchanged, and a concatenate module was added, in order to merge the data
-coming out from the unpack module, then feed it into the interpolation filter.
+unchanged, and a concatenate module was added, in order to merge the data coming
+out from the unpack module, then feed it into the interpolation filter.
 
 Adding concatenation modules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: tcl
 
-   set concat_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 concat_0 ]
+   set concat_0 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilconcat:1.0 concat_0]
    set_property -dict [list CONFIG.IN1_WIDTH.VALUE_SRC USER CONFIG.IN0_WIDTH.VALUE_SRC USER] $concat_0
    set_property -dict [list CONFIG.IN0_WIDTH {16} CONFIG.IN1_WIDTH {16}] $concat_0
-
-   set concat_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 concat_1 ]
+   set concat_1 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilconcat:1.0 concat_1]
    set_property -dict [list CONFIG.IN1_WIDTH.VALUE_SRC USER CONFIG.IN0_WIDTH.VALUE_SRC USER] $concat_1
    set_property -dict [list CONFIG.IN0_WIDTH {16} CONFIG.IN1_WIDTH {16}] $concat_1
 
@@ -263,22 +265,19 @@ the independent I/Q channel data.
 
 .. code-block:: tcl
 
-   set pack0_slice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack0_slice_0 ]
+   set pack0_slice_0 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 pack0_slice_0]
    set_property -dict [list CONFIG.DIN_FROM {15}] $pack0_slice_0
    set_property -dict [list CONFIG.DIN_TO {0}] $pack0_slice_0
    set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack0_slice_0
-
-   set pack0_slice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack0_slice_1 ]
+   set pack0_slice_1 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 pack0_slice_1]
    set_property -dict [list CONFIG.DIN_FROM {31}] $pack0_slice_1
    set_property -dict [list CONFIG.DIN_TO {16}] $pack0_slice_1
    set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack0_slice_1
-
-   set pack1_slice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack1_slice_0 ]
+   set pack1_slice_0 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 pack1_slice_0]
    set_property -dict [list CONFIG.DIN_FROM {15}] $pack1_slice_0
    set_property -dict [list CONFIG.DIN_TO {0}] $pack1_slice_0
    set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack1_slice_0
-
-   set pack1_slice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack1_slice_1 ]
+   set pack1_slice_1 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 pack1_slice_1]
    set_property -dict [list CONFIG.DIN_FROM {31}] $pack1_slice_1
    set_property -dict [list CONFIG.DIN_TO {16}] $pack1_slice_1
    set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack1_slice_1
@@ -289,43 +288,38 @@ Connecting the FIR interpolation filters on the Tx side
 .. code-block:: tcl
 
    # fir interpolator 0
-   connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins fir_interpolator_0/aclk]
+   connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins util_fir_int_0/aclk]
    connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_0] [get_bd_pins axi_ad9361_dac_fifo/din_enable_0]
    connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_1] [get_bd_pins axi_ad9361_dac_fifo/din_enable_1]
-   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins fir_interpolator_0/s_axis_data_tready]
-   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins fir_interpolator_0/s_axis_data_tvalid]
-   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_0] [get_bd_pins fir_interpolator_0/channel_0]
-   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_1] [get_bd_pins fir_interpolator_0/channel_1]
-   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_0] [get_bd_pins fir_interpolator_0/dac_read]
-
-
-   connect_bd_net [get_bd_pins concat_0/In0 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_0]
-   connect_bd_net [get_bd_pins concat_0/In1 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_1]
-   connect_bd_net [get_bd_pins concat_0/dout ] [get_bd_pins fir_interpolator_0/s_axis_data_tdata]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins util_fir_int_0/s_axis_data_tready]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins util_fir_int_0/s_axis_data_tvalid]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_0] [get_bd_pins util_fir_int_0/channel_0]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_1] [get_bd_pins util_fir_int_0/channel_1]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_0] [get_bd_pins util_fir_int_0/dac_read]
+   connect_bd_net [get_bd_pins concat_0/In0] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_0]
+   connect_bd_net [get_bd_pins concat_0/In1] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_1]
+   connect_bd_net [get_bd_pins concat_0/dout] [get_bd_pins util_fir_int_0/s_axis_data_tdata]
 
    # fir interpolator 1
-   connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins fir_interpolator_1/aclk]
+   connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins util_fir_int_1/aclk]
    connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_2] [get_bd_pins axi_ad9361_dac_fifo/din_enable_2]
    connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_3] [get_bd_pins axi_ad9361_dac_fifo/din_enable_3]
-   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins fir_interpolator_1/s_axis_data_tvalid]
-   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_2] [get_bd_pins fir_interpolator_1/channel_0]
-   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_3] [get_bd_pins fir_interpolator_0/channel_1]
-   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_2] [get_bd_pins fir_interpolator_1/dac_read]
-
-
-   connect_bd_net [get_bd_pins concat_1/In0 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_2]
-   connect_bd_net [get_bd_pins concat_1/In1 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_3]
-   connect_bd_net [get_bd_pins concat_1/dout ] [get_bd_pins fir_interpolator_1/s_axis_data_tdata]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins util_fir_int_1/s_axis_data_tvalid]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_2] [get_bd_pins util_fir_int_1/channel_0]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_3] [get_bd_pins util_fir_int_0/channel_1]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_2] [get_bd_pins util_fir_int_1/dac_read]
+   connect_bd_net [get_bd_pins concat_1/In0] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_2]
+   connect_bd_net [get_bd_pins concat_1/In1] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_3]
+   connect_bd_net [get_bd_pins concat_1/dout] [get_bd_pins util_fir_int_1/s_axis_data_tdata]
 
    # gpio controlled
    connect_bd_net [get_bd_pins axi_ad9361/up_dac_gpio_out] [get_bd_pins interp_slice/Din]
-   connect_bd_net [get_bd_pins fir_interpolator_0/interpolate] [get_bd_pins interp_slice/Dout]
-   connect_bd_net [get_bd_pins fir_interpolator_1/interpolate] [get_bd_pins interp_slice/Dout]
+   connect_bd_net [get_bd_pins util_fir_int_0/interpolate] [get_bd_pins interp_slice/Dout]
+   connect_bd_net [get_bd_pins util_fir_int_1/interpolate] [get_bd_pins interp_slice/Dout]
 
-In this example, the TX data flow is controlled by the interpolation filter
-when interpolation is activated and by the axi_ad9361_core when interpolation
-is not active. In the reference design, the data flow is controlled by the
-ad9631_core.
+In this example, the TX data flow is controlled by the interpolation filter when
+interpolation is activated and by the axi_ad9361_core when interpolation is not
+active. In the reference design, the data flow is controlled by the ad9631_core.
 
 ..
    We must connect the upack_core's dma_xfer_in port to VCC so that the UPACK may
@@ -409,20 +403,20 @@ TX to RX for each channel with a SMA to SMA cable.
    :align: center
    :alt: FMCOMMS2_TXRX_LOOPBACK
 
-When first booting up the design, none of the filters will be active.
-For the beginning make sure you have the same **LO frequency for RX and TX**,
-as in the picture below.
+When first booting up the design, none of the filters will be active. For the
+beginning make sure you have the same **LO frequency for RX and TX**, as in the
+picture below.
 
 Configure the Transmit/DDS mode to *DAC Buffer Output*, and chose one of the
-*.mat* files from there and press *Load*. This will send data in the *.mat*
-file via DMA. This option was chosen because the DDS data does not pass through
-the FIR interpolation filters. On the decimation side, data will always pass
-through decimation filters.
+*.mat* files from there and press *Load*. This will send data in the *.mat* file
+via DMA. This option was chosen because the DDS data does not pass through the
+FIR interpolation filters. On the decimation side, data will always pass through
+decimation filters.
 
-Below are the settings for FMCOMMS2 and the data plot in FFT and Time Domain
-for the "sinewave_0.6.mat". The file "sinewave_0.6.mat" can be found under
-the installation folder, in **lib\osc\waveforms**. As a functionality example,
-only one of the two channels will be enabled.
+Below are the settings for FMCOMMS2 and the data plot in FFT and Time Domain for
+the "sinewave_0.6.mat". The file "sinewave_0.6.mat" can be found under the
+installation folder, in **lib\osc\waveforms**. As a functionality example, only
+one of the two channels will be enabled.
 
 **FFT Domain**
 
@@ -441,10 +435,10 @@ only one of the two channels will be enabled.
 To better understand what is happening with the data inside the FPGA, 3 ILAs
 (Integrated Logic Analyzer) modules were added in the HDL design.
 
-The 1st ILA was connected to the control signals between the ad9361_core and
-the dac_fifo. The 2nd ILA is monitoring the interpolation filters and the 3rd
-ILA the decimation filters. As previously discussed above, **none of the
-filters are active and only one of the channels is enabled at this point**.
+The 1st ILA was connected to the control signals between the ad9361_core and the
+dac_fifo. The 2nd ILA is monitoring the interpolation filters and the 3rd ILA
+the decimation filters. As previously discussed above, **none of the filters are
+active and only one of the channels is enabled at this point**.
 
 **AD9361 core control signals**
 
@@ -473,15 +467,16 @@ Activating Filters
 Interpolation filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In the `Connecting the FIR interpolation filters on the Tx side`_ section
-above, we added a GPIO control. The ad9361_core GPIO control register can be
-found in the register map at the address **0xBC** `AXI AD9361`_.
+In the `Connecting the FIR interpolation filters on the Tx side`_ section above,
+we added a GPIO control. The ad9361_core GPIO control register can be found in
+the register map at the address **0xBC** `AXI AD9361`_.
 
 To activate the interpolation filter, one must go to the Debug mode:
 
 - At section Device selection chose **"cf-ad9361-dds-core-lpc"**
 - In the Register Map settings, select the source to be AXI_CORE
-- Read the 0xBC address then write 0x1 value at it, this will activate the filter.
+- Read the 0xBC address then write 0x1 value at it, this will activate the
+  filter.
 
 **Activating TX interpolation filters**
 
@@ -490,14 +485,16 @@ To activate the interpolation filter, one must go to the Debug mode:
    :align: center
    :alt: ACTIVATE_TX_INTERPOLATION_FILTERS_WRITE
 
-After activating the interpolation you can see in FFT domain a 1/8 smaller fundamental frequency than before (filter interpolation factor is 8).
+After activating the interpolation you can see in FFT domain a 1/8 smaller
+fundamental frequency than before (filter interpolation factor is 8).
 
 .. image:: fmcomms2_fir_tx_active_fft.png
    :width: 1000
    :align: center
    :alt: FMCOMMS2_FIR_TX_ACTIVE_FFT
 
-The data captured by the ILA connected to the interpolation filters shows the smaller frequency sine wave and the 1/8 valid/clock signals.
+The data captured by the ILA connected to the interpolation filters shows the
+smaller frequency sine wave and the 1/8 valid/clock signals.
 
 .. image:: fir_active_interpolators_all_ch_active.png
    :width: 1000
@@ -513,16 +510,16 @@ Similar to interpolation, to activate the decimation we must go to the Debug,
 but this time select the "cf-ad9361-lpc".
 
 Select the "Register Map Settings" source to be "AXI_CORE" and at the same
-address **0xBC** `AXI AD9361`_.
-this time being the ADC side GPIO, write 0x1, as in the example below:
+address **0xBC** `AXI AD9361`_. this time being the ADC side GPIO, write 0x1, as
+in the example below:
 
 .. image:: activate_rx_interpolation_filters_write.png
    :width: 1000
    :align: center
    :alt: ACTIVATE_RX_INTERPOLATION_FILTERS_WRITE
 
-You will see in the FFT domain, a frequency 8 times bigger than the one when
-the filters were inactive (decimation factor is 8):
+You will see in the FFT domain, a frequency 8 times bigger than the one when the
+filters were inactive (decimation factor is 8):
 
 .. image:: fmcomms2_fir_rx_active_fft.png
    :width: 1000
@@ -588,77 +585,68 @@ References
     delete_bd_objs [get_bd_nets util_ad9361_adc_fifo_dout_enable_*]
     delete_bd_objs [get_bd_nets util_ad9361_adc_fifo_dout_data_*]
 
-    set fir_interpolator_0 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_int:1.0 fir_interpolator_0 ]
-    set fir_interpolator_1 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_int:1.0 fir_interpolator_1 ]
+    set util_fir_int_0 [create_bd_cell -type ip -vlnv analog.com:user:util_fir_int:1.0 util_fir_int_0]
+    set util_fir_int_1 [create_bd_cell -type ip -vlnv analog.com:user:util_fir_int:1.0 util_fir_int_1]
 
-    set interp_slice [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 interp_slice ]
+    set interp_slice [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 interp_slice]
 
-    set fir_decimator_0 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_dec:1.0 fir_decimator_0 ]
-    set fir_decimator_1 [ create_bd_cell -type ip -vlnv analog.com:user:util_fir_dec:1.0 fir_decimator_1 ]
+    set fir_decimator_0 [create_bd_cell -type ip -vlnv analog.com:user:util_fir_dec:1.0 fir_decimator_0]
+    set fir_decimator_1 [create_bd_cell -type ip -vlnv analog.com:user:util_fir_dec:1.0 fir_decimator_1]
 
-    set decim_slice [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 decim_slice ]
+    set decim_slice [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 decim_slice]
 
-    set concat_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 concat_0 ]
+    set concat_0 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilconcat:1.0 concat_0]
     set_property -dict [list CONFIG.IN1_WIDTH.VALUE_SRC USER CONFIG.IN0_WIDTH.VALUE_SRC USER] $concat_0
     set_property -dict [list CONFIG.IN0_WIDTH {16} CONFIG.IN1_WIDTH {16}] $concat_0
-
-    set concat_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 concat_1 ]
+    set concat_1 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilconcat:1.0 concat_1]
     set_property -dict [list CONFIG.IN1_WIDTH.VALUE_SRC USER CONFIG.IN0_WIDTH.VALUE_SRC USER] $concat_1
     set_property -dict [list CONFIG.IN0_WIDTH {16} CONFIG.IN1_WIDTH {16}] $concat_1
-
-    set pack0_slice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack0_slice_0 ]
+    set pack0_slice_0 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 pack0_slice_0]
     set_property -dict [list CONFIG.DIN_FROM {15}] $pack0_slice_0
     set_property -dict [list CONFIG.DIN_TO {0}] $pack0_slice_0
     set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack0_slice_0
-
-    set pack0_slice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack0_slice_1 ]
+    set pack0_slice_1 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 pack0_slice_1]
     set_property -dict [list CONFIG.DIN_FROM {31}] $pack0_slice_1
     set_property -dict [list CONFIG.DIN_TO {16}] $pack0_slice_1
     set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack0_slice_1
-
-    set pack1_slice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack1_slice_0 ]
+    set pack1_slice_0 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 pack1_slice_0]
     set_property -dict [list CONFIG.DIN_FROM {15}] $pack1_slice_0
     set_property -dict [list CONFIG.DIN_TO {0}] $pack1_slice_0
     set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack1_slice_0
-
-    set pack1_slice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack1_slice_1 ]
+    set pack1_slice_1 [create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilslice:1.0 pack1_slice_1]
     set_property -dict [list CONFIG.DIN_FROM {31}] $pack1_slice_1
     set_property -dict [list CONFIG.DIN_TO {16}] $pack1_slice_1
     set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack1_slice_1
 
     # fir interpolator 0
-    connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins fir_interpolator_0/aclk]
+    connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins util_fir_int_0/aclk]
     connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_0] [get_bd_pins axi_ad9361_dac_fifo/din_enable_0]
     connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_1] [get_bd_pins axi_ad9361_dac_fifo/din_enable_1]
-    connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins fir_interpolator_0/s_axis_data_tready]
-    connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins fir_interpolator_0/s_axis_data_tvalid]
-    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_0] [get_bd_pins fir_interpolator_0/channel_0]
-    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_1] [get_bd_pins fir_interpolator_0/channel_1]
-    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_0] [get_bd_pins fir_interpolator_0/dac_read]
-
-
-    connect_bd_net [get_bd_pins concat_0/In0 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_0]
-    connect_bd_net [get_bd_pins concat_0/In1 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_1]
-    connect_bd_net [get_bd_pins concat_0/dout ] [get_bd_pins fir_interpolator_0/s_axis_data_tdata]
+    connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins util_fir_int_0/s_axis_data_tready]
+    connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins util_fir_int_0/s_axis_data_tvalid]
+    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_0] [get_bd_pins util_fir_int_0/channel_0]
+    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_1] [get_bd_pins util_fir_int_0/channel_1]
+    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_0] [get_bd_pins util_fir_int_0/dac_read]
+    connect_bd_net [get_bd_pins concat_0/In0] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_0]
+    connect_bd_net [get_bd_pins concat_0/In1] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_1]
+    connect_bd_net [get_bd_pins concat_0/dout] [get_bd_pins util_fir_int_0/s_axis_data_tdata]
 
     # fir interpolator 1
-    connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins fir_interpolator_1/aclk]
+    connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins util_fir_int_1/aclk]
     connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_2] [get_bd_pins axi_ad9361_dac_fifo/din_enable_2]
     connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_3] [get_bd_pins axi_ad9361_dac_fifo/din_enable_3]
-    connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins fir_interpolator_1/s_axis_data_tvalid]
-    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_2] [get_bd_pins fir_interpolator_1/channel_0]
-    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_3] [get_bd_pins fir_interpolator_0/channel_1]
-    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_2] [get_bd_pins fir_interpolator_1/dac_read]
-
-
-    connect_bd_net [get_bd_pins concat_1/In0 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_2]
-    connect_bd_net [get_bd_pins concat_1/In1 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_3]
-    connect_bd_net [get_bd_pins concat_1/dout ] [get_bd_pins fir_interpolator_1/s_axis_data_tdata]
+    connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins util_fir_int_1/s_axis_data_tvalid]
+    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_2] [get_bd_pins util_fir_int_1/channel_0]
+    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_3] [get_bd_pins util_fir_int_0/channel_1]
+    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_2] [get_bd_pins util_fir_int_1/dac_read]
+    connect_bd_net [get_bd_pins concat_1/In0] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_2]
+    connect_bd_net [get_bd_pins concat_1/In1] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_3]
+    connect_bd_net [get_bd_pins concat_1/dout] [get_bd_pins util_fir_int_1/s_axis_data_tdata]
 
     # gpio controlled
     connect_bd_net [get_bd_pins axi_ad9361/up_dac_gpio_out] [get_bd_pins interp_slice/Din]
-    connect_bd_net [get_bd_pins fir_interpolator_0/interpolate] [get_bd_pins interp_slice/Dout]
-    connect_bd_net [get_bd_pins fir_interpolator_1/interpolate] [get_bd_pins interp_slice/Dout]
+    connect_bd_net [get_bd_pins util_fir_int_0/interpolate] [get_bd_pins interp_slice/Dout]
+    connect_bd_net [get_bd_pins util_fir_int_1/interpolate] [get_bd_pins interp_slice/Dout]
 
 
     # fir decimator 0
