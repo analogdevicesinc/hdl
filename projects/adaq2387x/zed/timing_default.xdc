@@ -6,9 +6,10 @@
 # data delay (dco to da/db skew 200ps)
 set data_delay  0.200
 
-# data delay for 240MHz clk
-set data_delay_min 1.880
-set data_delay_max 3.120
+# data delay for 100MHz clk
+set data_delay_min   4.512
+set data_delay_max   7.488
+
 
 # input delays
 
