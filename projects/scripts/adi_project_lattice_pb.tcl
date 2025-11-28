@@ -35,12 +35,15 @@
 # \opt[language] -language "verilog"
 # \opt[cmd_list] -cmd_list {{source ./system_pb.tcl}}
 # \opt[psc] -psc "${env(TOOLRTF)}/../../templates/MachXO3D_Template01/MachXO3D_Template01.psc"
+# \opt[parameter_list] -parameter_list {PARAM1 value1 PARAM2 value2}
 ###############################################################################
 proc adi_project_pb {project_name args} {
   puts "\nadi_project_pb:\n"
 
   global env
   global ad_hdl_dir
+  global ad_project_params
+  set ::project_name $project_name
   set preinst_ip_mod_dir ${env(TOOLRTF)}
 
   array set opt [list -dev_select "auto" \
@@ -52,6 +55,9 @@ proc adi_project_pb {project_name args} {
     -psc "${env(TOOLRTF)}/../../templates/MachXO3D_Template01/MachXO3D_Template01.psc" \
     -cmd_list {{source ./system_pb.tcl}} \
     -interface_paths "$ad_hdl_dir/library/interfaces_ltt" \
+    -parameter_list {} \
+    -parameter_file_radiant "system_top_parameters.txt" \
+    -sim_prj_tcl "./sim.tcl" \
     {*}$args]
 
   set dev_select $opt(-dev_select)
@@ -60,6 +66,33 @@ proc adi_project_pb {project_name args} {
   set cmd_list $opt(-cmd_list)
   set psc $opt(-psc)
   set interface_paths $opt(-interface_paths)
+  set parameter_list $opt(-parameter_list)
+  set parameter_file_radiant $opt(-parameter_file_radiant)
+  set sim_prj_tcl $opt(-sim_prj_tcl)
+
+  # Make parameters available globally for system_pb.tcl
+  foreach {param value} $parameter_list {
+    set ad_project_params($param) $value
+    puts "Setting parameter: $param = $value"
+  }
+
+  if {[file exists $ppath] != 1} {
+    file mkdir $ppath
+  }
+
+  # Generate system_top_parameters.txt file from parameter_list
+  if {[llength $parameter_list] > 0} {
+    set param_file_path "$ppath/system_top_parameters.txt"
+    set fout [open $param_file_path w]
+    puts $fout "# System top parameters"
+    puts $fout "# Generated on [clock format [clock seconds]]"
+    puts $fout ""
+    foreach {pname pval} $parameter_list {
+      puts $fout "$pname=$pval"
+    }
+    close $fout
+    puts "Generated parameter file: $param_file_path"
+  }
 
   if { [string match "auto" $dev_select] } {
     source $ad_hdl_dir/projects/scripts/adi_lattice_dev_select.tcl
@@ -76,7 +109,9 @@ proc adi_project_pb {project_name args} {
     -speed $speed \
     -language $language \
     -psc $psc \
-    -cmd_list $cmd_list
+    -cmd_list $cmd_list \
+    -parameter_list $parameter_list \
+    -sim_prj_tcl $sim_prj_tcl
 }
 
 ###############################################################################
@@ -95,6 +130,7 @@ proc adi_project_create_pb {project_name args} {
   puts "\nadi_project_create_pb:\n"
 
   global ad_hdl_dir
+  global ad_project_params
   global required_lattice_version
   global IGNORE_VERSION_CHECK
   global env
@@ -107,6 +143,7 @@ proc adi_project_create_pb {project_name args} {
     -psc "" \
     -cmd_list "" \
     -interface_paths "$ad_hdl_dir/library/interfaces_ltt" \
+    -sim_prj_tcl "./sim.tcl" \
     {*}$args]
 
   set ppath [file normalize $opt(-ppath)]
@@ -117,6 +154,7 @@ proc adi_project_create_pb {project_name args} {
   set psc $opt(-psc)
   set cmd_list $opt(-cmd_list)
   set interface_paths $opt(-interface_paths)
+  set sim_prj_tcl $opt(-sim_prj_tcl)
 
   # Extracting the Propel Builder version from $env(TOOLRTF)/../../components.xml
   set regex "<Name>com\.latticesemi\.systembuilder.*<Version>$required_lattice_version"
@@ -200,6 +238,16 @@ proc adi_project_create_pb {project_name args} {
   close $file
 
   sbp_design close
+
+  if {[file exists $sim_prj_tcl]} {
+    sbp_design open -name ${project_name}_v -path $ppath/$project_name/verification/${project_name}_v.sbx
+    sbp_replace -vlnv {lattice:systembuilder:dut:1.0} -name {dut_inst} -component ${project_name}_v/dut_inst
+    source $sim_prj_tcl
+    sbp_design save
+    sbp_design close
+  } else {
+    puts "FILE: $sim_prj_tcl does not exist."
+  }
 }
 
 ###############################################################################
