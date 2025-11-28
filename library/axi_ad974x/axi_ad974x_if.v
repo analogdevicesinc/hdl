@@ -45,38 +45,26 @@ module axi_ad974x_if #(
 
   // data interface
 
-  input  [13:0]   dac_data_in
+  input  [13:0]   dac_data_in,
+  input  [ 3:0]   dac_data_sel,
+ (* MARK_DEBUG = "TRUE" *)  input           dac_dfmt_type
 );
 
   // The AD974x DACs expect offset binary format
-  // DDS outputs 2's complement, so we need to convert
-  // by inverting the MSB for the actual DAC resolution
+  // Data format conversion based on dac_dfmt_type register:
+  // - dac_dfmt_type = 0: Data is offset binary (unsigned) - pass through
+  // - dac_dfmt_type = 1: Data is two's complement (signed) - invert MSB
+  //
+  // This applies to ALL data sources (DDS, DMA, Ramp):
+  // - DDS can be configured for signed or unsigned output
+  // - DMA data format depends on what software sends
+  // - Ramp is always unsigned (offset binary)
+  //
+  // For all DAC resolutions, data is MSB-aligned in the 14-bit bus
 
-  generate
-    if (DAC_RESOLUTION == 14) begin
-      // For 14-bit DAC (AD9744), invert MSB to convert from 2's complement to offset binary
-      assign dac_data_out[13] = ~dac_data_in[13];
-      assign dac_data_out[12:0] = dac_data_in[12:0];
-    end else if (DAC_RESOLUTION == 12) begin
-      // For 12-bit DAC (AD9742), data is in upper 12 bits
-      // Invert MSB of the 12-bit data
-      assign dac_data_out[13] = ~dac_data_in[13];
-      assign dac_data_out[12:0] = dac_data_in[12:0];
-    end else if (DAC_RESOLUTION == 10) begin
-      // For 10-bit DAC (AD9740), data is in upper 10 bits
-      // Invert MSB of the 10-bit data
-      assign dac_data_out[13] = ~dac_data_in[13];
-      assign dac_data_out[12:0] = dac_data_in[12:0];
-    end else if (DAC_RESOLUTION == 8) begin
-      // For 8-bit DAC (AD9748), data is in upper 8 bits
-      // Invert MSB of the 8-bit data
-      assign dac_data_out[13] = ~dac_data_in[13];
-      assign dac_data_out[12:0] = dac_data_in[12:0];
-    end else begin
-      // Default: pass through with MSB inverted
-      assign dac_data_out[13] = ~dac_data_in[13];
-      assign dac_data_out[12:0] = dac_data_in[12:0];
-    end
-  endgenerate
+  // MSB inversion for two's complement to offset binary conversion
+  // Note: dac_dfmt_type=1 means signed (two's complement) data
+  assign dac_data_out[13] = dac_dfmt_type ? ~dac_data_in[13] : dac_data_in[13];
+  assign dac_data_out[12:0] = dac_data_in[12:0];
 
 endmodule

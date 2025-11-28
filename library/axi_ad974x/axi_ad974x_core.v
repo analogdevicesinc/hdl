@@ -56,6 +56,8 @@ module axi_ad974x_core #(
   input         dma_valid,
   output        dma_ready,
   output [13:0] dac_data,
+  output [ 3:0] dac_data_sel,
+  output        dac_dfmt_type,
 
   // processor interface
 
@@ -82,14 +84,17 @@ module axi_ad974x_core #(
   wire        up_wack_s;
 
   wire [13:0] dac_data_channel_0;
+  wire [ 3:0] dac_data_sel_channel_0;
   wire        dac_rst_s;
   wire        dac_data_sync;
-  wire        dac_dfmt_type;
+  wire        dac_dfmt_type_s;
 
   // defaults
 
   assign dac_rst       = dac_rst_s;
   assign dac_data      = dac_data_channel_0;
+  assign dac_data_sel  = dac_data_sel_channel_0;
+  assign dac_dfmt_type = dac_dfmt_type_s;
 
   // processor read interface
 
@@ -118,11 +123,12 @@ module axi_ad974x_core #(
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
     .dac_data(dac_data_channel_0),
+    .dac_data_sel(dac_data_sel_channel_0),
     .dma_data(dma_data[15:0]),
     .dma_ready(dma_ready),
     .dma_valid(dma_valid),
     .dac_data_sync(dac_data_sync),
-    .dac_dfmt_type(dac_dfmt_type),
+    .dac_dfmt_type(dac_dfmt_type_s),
     .up_rstn(up_rstn),
     .up_clk(up_clk),
     .up_wreq(up_wreq),
@@ -164,7 +170,7 @@ module axi_ad974x_core #(
     .dac_par_type(),
     .dac_par_enb(),
     .dac_r1_mode(),
-    .dac_datafmt(dac_dfmt_type),
+    .dac_datafmt(dac_dfmt_type_s),
     .dac_datarate(),
     .dac_status(),
     .dac_sync_in_status(),

@@ -50,6 +50,7 @@ module axi_ad974x_channel #(
   input                   dac_clk,
   input                   dac_rst,
   output reg   [13:0]     dac_data,
+  output       [ 3:0]     dac_data_sel,
 
   // input sources
 
@@ -78,8 +79,8 @@ module axi_ad974x_channel #(
 
   // internal signals
 
-  wire    [ 3:0]   dac_data_sel_s;
-  wire    [DAC_RESOLUTION-1:0]   dac_dds_data_s;
+ (* MARK_DEBUG = "TRUE" *) wire    [ 3:0]   dac_data_sel_s;
+ (* MARK_DEBUG = "TRUE" *) wire    [DAC_RESOLUTION-1:0]   dac_dds_data_s;
   wire    [15:0]   dac_dds_scale_1_s;
   wire    [15:0]   dac_dds_init_1_s;
   wire    [15:0]   dac_dds_incr_1_s;
@@ -92,14 +93,17 @@ module axi_ad974x_channel #(
   reg     [15:0]   dma_pattern;
   reg     [DAC_RESOLUTION-1:0]   ramp_pattern;
 
-  reg     [13:0]   dac_data_int = 'h0;
+ (* MARK_DEBUG = "TRUE" *) reg     [13:0]   dac_data_int = 'h0;
 //  reg              dds_ready;
+
+  // Output the data source selection
+  assign dac_data_sel = dac_data_sel_s;
 
   always @(posedge dac_clk) begin
     dac_data <= dac_data_int;
   end
 
-  always @ (*) begin
+  always @(posedge dac_clk) begin
     dma_ready <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
 
     case(dac_data_sel_s)
@@ -109,7 +113,7 @@ module axi_ad974x_channel #(
         if (DAC_RESOLUTION == 14) begin
           dac_data_int = dac_dds_data_s;
         end else begin
-          // Scale up to 14 bits for output interface
+          // Scale up to 14 bits for output interface - MSB aligned
           dac_data_int = {dac_dds_data_s, {(14-DAC_RESOLUTION){1'b0}}};
         end
 //        dds_ready          = 1'b1;
@@ -120,7 +124,10 @@ module axi_ad974x_channel #(
         if (DAC_RESOLUTION >= 14) begin
           dac_data_int = dma_pattern[13:0];
         end else begin
-          // Take MSBs from DMA and scale up to 14 bits
+          // Take MSBs from DMA and scale up to 14 bits - MSB aligned
+          // For 10-bit: takes DMA[15:6] and puts in Internal[13:4]
+          // For 12-bit: takes DMA[15:4] and puts in Internal[13:2]
+          // For 8-bit:  takes DMA[15:8] and puts in Internal[13:6]
           dac_data_int = {dma_pattern[15:16-DAC_RESOLUTION], {(14-DAC_RESOLUTION){1'b0}}};
         end
 //        dds_ready          = 1'b0;
@@ -132,10 +139,11 @@ module axi_ad974x_channel #(
       end
       4'hb :
       begin
-        // Ramp data - scale up to 14 bits
+        // Ramp data - scale up to 14 bits - MSB aligned
         if (DAC_RESOLUTION == 14) begin
           dac_data_int = ramp_pattern;
         end else begin
+          // Ramp pattern is DAC_RESOLUTION bits, put in upper bits of 14-bit bus
           dac_data_int = {ramp_pattern, {(14-DAC_RESOLUTION){1'b0}}};
         end
 //        dds_ready          = 1'b0;
@@ -180,7 +188,7 @@ module axi_ad974x_channel #(
     .CLK_RATIO (1)
   ) i_dds (
     .clk (dac_clk),
-    .dac_dds_format (dac_dfmt_type),
+    .dac_dds_format (1'b0),  // DDS outputs signed (CORDIC native), conversion handled by axi_ad974x_if
     .dac_data_sync (dac_data_sync),
 //    .dac_valid (dds_ready),
     .dac_valid (~|dac_data_sel_s),

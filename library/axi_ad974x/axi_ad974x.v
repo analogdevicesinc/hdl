@@ -52,11 +52,11 @@ module axi_ad974x #(
   // dac interface
 
   input         dac_clk,
-  input  [15:0] dma_data,
-  input         dma_valid,
-  output        dma_ready,
-  output [13:0] dac_data,
- 
+ (* MARK_DEBUG = "TRUE" *) input  [15:0] dma_data,
+ (* MARK_DEBUG = "TRUE" *) input         dma_valid,
+ (* MARK_DEBUG = "TRUE" *) output        dma_ready,
+ (* MARK_DEBUG = "TRUE" *) output [13:0] dac_data,
+
   // axi interface
 
   input         s_axi_aclk,
@@ -91,6 +91,8 @@ module axi_ad974x #(
   // internal data signals
 
   wire [15:0] dac_data_s;
+  wire [ 3:0] dac_data_sel_s;
+  wire        dac_dfmt_type_s;
 
   // internal signals
 
@@ -114,6 +116,8 @@ module axi_ad974x #(
     .DAC_RESOLUTION(DAC_RESOLUTION)
   ) axi_ad974x_interface (
     .dac_data_in(dac_data_s),
+    .dac_data_sel(dac_data_sel_s),
+    .dac_dfmt_type(dac_dfmt_type_s),
     .dac_data_out(dac_data));
 
   // core
@@ -133,6 +137,8 @@ module axi_ad974x #(
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
     .dac_data(dac_data_s),
+    .dac_data_sel(dac_data_sel_s),
+    .dac_dfmt_type(dac_dfmt_type_s),
     .dma_data(dma_data),
     .dma_ready(dma_ready),
     .dma_valid(dma_valid),
