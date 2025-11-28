@@ -70,6 +70,21 @@ create_clock -period 6.66 -name tx_clk [get_ports tx_clk]
 
 create_clock -period 12.500 -name data_clk [get_ports {data_bd[0]}]
 
+set inout_ports [get_ports [list data_bd[0] data_bd[1] data_bd[2] data_bd[3] data_bd[4] data_bd[5] data_bd[6] data_bd[7] data_bd[8] data_bd[9] data_bd[10] data_bd[11] data_bd[12] data_bd[13] data_bd[14] data_bd[15]]]; # list of inout ports
+
+set_output_delay -clock [get_clocks rx_clk] -max 0 [get_ports $inout_ports];
+set_output_delay -clock [get_clocks rx_clk] -min 0 [get_ports $inout_ports];
+set_output_delay -clock [get_clocks data_clk] -max 0 [get_ports $inout_ports];
+set_output_delay -clock [get_clocks data_clk] -min 0 [get_ports $inout_ports];
+
+set_input_delay -clock [get_clocks rx_clk] -max 0 [get_ports $inout_ports];
+set_input_delay -clock [get_clocks rx_clk] -min 0 [get_ports $inout_ports];
+set_input_delay -clock [get_clocks data_clk] -max 0 [get_ports $inout_ports];
+set_input_delay -clock [get_clocks data_clk] -min 0 [get_ports $inout_ports];
+
+set_multicycle_path -setup 1 -from [get_ports $inout_ports]
+set_multicycle_path -hold  1 -from [get_ports $inout_ports]
+
 create_clock -name clk_fpga_0 -period 36 [get_pins "i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[0]"]
 create_clock -name clk_fpga_1 -period  5 [get_pins "i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[1]"]
 create_clock -name clk_fpga_3 -period 18 [get_pins "i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[3]"]
@@ -212,10 +227,3 @@ set_switching_activity -static_probability 0 -toggle_rate 0 [get_nets i_system_w
 
 # Define SPI clock
 create_clock -name spi0_clk      -period 40   [get_pins -hier */EMIOSPI0SCLKO]
-
-# CDC between ADC and DAC trigger signal
-set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ */cdc_*_trig_sync/inst/i_sync_*/cdc_sync_stage1_reg*}]
-set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ */cdc_*_trig_sync/inst/i_sync_*/cdc_sync_stage2_reg*}]
-
-set_false_path  -to [get_cells -hierarchical -filter {name =~ */cdc_*_trig_sync/inst/i_sync_*/cdc_sync_stage1_reg** && IS_SEQUENTIAL}]
-set_false_path  -to [get_cells -hierarchical -filter {name =~ */cdc_*_trig_sync/inst/i_sync_*/cdc_sync_stage2_reg** && IS_SEQUENTIAL}]

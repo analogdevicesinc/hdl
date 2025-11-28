@@ -78,6 +78,7 @@ module axi_adrv9001_sync #(
   reg   [31:0]  transfer_cnt = 32'd0;
   reg           transfer_busy = 1'b0;
   reg           rf_enable_d = 1'b1;
+  reg   [31:0]  sync_config_d;
 
   // internal signals
 
@@ -92,14 +93,18 @@ module axi_adrv9001_sync #(
   wire          manual_sync_req_s;
   wire          mcs_or_transfer_trig_n_s;
 
+  always @(negedge ref_clk) begin
+    sync_config_d <= sync_config;
+  end
+
   // MCS pulses src internal = 1 or external = 0
-  assign mcs_6_pulse_train_seq_s = sync_config[0];
+  assign mcs_6_pulse_train_seq_s = sync_config_d[0];
   // MCS request src internal = 1 or external = 0
-  assign mcs_req_src_s = sync_config[1];
+  assign mcs_req_src_s = sync_config_d[1];
   // use to synchronize the channels of one system
-  assign manual_sync_req_s = sync_config[2];
+  assign manual_sync_req_s = sync_config_d[2];
   // use to synchronize the transfer start of all channels
-  assign mcs_or_transfer_trig_n_s = sync_config[3];
+  assign mcs_or_transfer_trig_n_s = sync_config_d[3];
 
   assign mcs_src = mcs_6_pulse_train_seq_s;
   // consider ref_clk = 30.72MHz (32.552ns)
@@ -161,15 +166,13 @@ module axi_adrv9001_sync #(
     end
   end
 
-  always @(posedge ref_clk) begin
+  always @(negedge ref_clk) begin
     if (mcs_start) begin
       rf_enable_d <=  1'b0;
     end else if (mcs_sync_pulse_num == 5 && mcs_out_fall_edge == 1'b1) begin
       rf_enable_d <=  1'b1;
     end
   end
-
-  assign rf_enable = rf_enable_d;
 
   assign mcs_out_fall_edge = mcs_out_d & !mcs_out_i;
   assign mcs_out_rise_edge = !mcs_out_d & mcs_out_i;

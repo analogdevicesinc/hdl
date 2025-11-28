@@ -105,38 +105,60 @@ module axi_adrv9001_rx_channel #(
   wire    [ 3:0]                  adc_data_sel_s;
   wire    [15:0]                  adc_data_in_s;
   wire                            adc_valid_in_s;
+  wire                            adc_valid_in_d;
+  wire    [(DATA_WIDTH-1):0]      adc_data_in_d;
+  wire                            dac_valid_in_d;
+  wire    [(DATA_WIDTH-1):0]      dac_data_in_d;
 
   reg     [15:0]                  full_ramp_counter = 'd0;
-
-  reg                             adc_valid_in_d = 'h0;
-  reg                             adc_valid_in_2d = 'h0;
-  reg     [(DATA_WIDTH-1):0]      adc_data_in_d = 'h0;
-  reg     [(DATA_WIDTH-1):0]      adc_data_in_2d = 'h0;
-
-  reg                             dac_valid_in_d = 'h0;
-  reg                             dac_valid_in_2d = 'h0;
-  reg     [(DATA_WIDTH-1):0]      dac_data_in_d = 'h0;
-  reg     [(DATA_WIDTH-1):0]      dac_data_in_2d = 'h0;
 
   // variables
   genvar                          n;
 
   // input pipeline stage to protect logic if data comes from an async clock domain
-  always @(posedge adc_clk) begin
-    adc_valid_in_d <= adc_valid_in;
-    adc_valid_in_2d <= adc_valid_in_d;
-    adc_data_in_d <= adc_data_in;
-    adc_data_in_2d <= adc_data_in_d;
-  end
-  always @(posedge adc_clk) begin
-    dac_valid_in_d <= dac_valid_in;
-    dac_valid_in_2d <= dac_valid_in_d;
-    dac_data_in_d <= dac_data_in;
-    dac_data_in_2d <= dac_data_in_d;
-  end
 
-  assign adc_data_in_s = (adc_data_sel_s == 4'h0) ? adc_data_in_2d : dac_data_in_2d;
-  assign adc_valid_in_s = (adc_data_sel_s == 4'h0) ? adc_valid_in_2d : dac_valid_in_2d;
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_valid_in_sync (
+    .out_clk(clk),
+    .out_resetn(~adc_rst),
+    .in_bits(adc_valid_in),
+    .out_bits(adc_valid_in_d));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dac_valid_in_sync (
+    .out_clk(clk),
+    .out_resetn(~adc_rst),
+    .in_bits(dac_valid_in),
+    .out_bits(dac_valid_in_d));
+
+  sync_bits #(
+    .NUM_OF_BITS(DATA_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_data_in_sync (
+    .out_clk(clk),
+    .out_resetn(~adc_rst),
+    .in_bits(adc_data_in),
+    .out_bits(adc_data_in_d));
+
+  sync_bits #(
+    .NUM_OF_BITS(DATA_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dac_data_in_sync (
+    .out_clk(clk),
+    .out_resetn(~adc_rst),
+    .in_bits(dac_data_in),
+    .out_bits(dac_data_in_d));
+
+  assign adc_data_in_s = (adc_data_sel_s == 4'h0) ? adc_data_in_d : dac_data_in_d;
+  assign adc_valid_in_s = (adc_data_sel_s == 4'h0) ? adc_valid_in_d : dac_valid_in_d;
 
   // iq correction inputs
 

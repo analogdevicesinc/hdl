@@ -45,6 +45,8 @@ set_property  -dict {PACKAGE_PIN AF30  IOSTANDARD LVCMOS18}  [get_ports tx2_stro
 
 # clocks
 
+create_clock -name ref_clk        -period  5.00 [get_ports fpga_ref_clk_p]
+
 create_clock -name rx1_dclk_out   -period  12.5 [get_ports rx1_dclk_in_p]
 create_clock -name rx2_dclk_out   -period  12.5 [get_ports rx2_dclk_in_p]
 create_clock -name tx1_dclk_out   -period  12.5 [get_ports tx1_dclk_in_p]

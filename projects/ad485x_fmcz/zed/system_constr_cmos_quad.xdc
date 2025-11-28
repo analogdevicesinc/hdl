@@ -2,6 +2,7 @@
 ## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
+
 # AD4851, AD4852, AD4853, AD4854
 set_property -dict {PACKAGE_PIN L21 IOSTANDARD LVCMOS25}                          [get_ports lvds_cmos_n]  ; ##  C10  FMC_LPC_LA06_P
 set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS25}                          [get_ports pd]           ; ##  H08  FMC_LPC_LA02_N
@@ -27,3 +28,7 @@ set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {scko_IBUF}]
 create_clock -name scko_cmos       -period  10 [get_ports scko]
 set_max_delay -from [get_clocks scko_cmos] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcm/CLKOUT0]] 10.0
 set_min_delay -from [get_clocks scko_cmos] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcm/CLKOUT0]] 1.0
+
+set_max_delay -datapath_only \
+  -to [get_pins -filter {REF_PIN_NAME == D} -of_objects [get_cells csck_reg]] \
+  [get_property -min PERIOD [get_clocks -of_objects [get_pins -filter {REF_PIN_NAME == D} -of_objects [get_cells csck_reg]]]]

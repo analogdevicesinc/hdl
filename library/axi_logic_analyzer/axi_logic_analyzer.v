@@ -44,7 +44,7 @@ module axi_logic_analyzer (
 
   input       [15:0]    data_i,
   output reg  [15:0]    data_o,
-  output      [15:0]    data_t,
+  output reg  [15:0]    data_t,
   input       [ 1:0]    trigger_i,
 
   output                adc_valid,
@@ -243,7 +243,10 @@ module axi_logic_analyzer (
 
   generate
   for (i = 0 ; i < 16; i = i + 1) begin
-    assign data_t[i] = od_pp_n[i] ? io_selection[i] | data_o[i] : io_selection[i];
+    always @(posedge clk_out) begin
+      data_t[i] <= od_pp_n[i] ? io_selection[i] | data_o[i] : io_selection[i];
+    end
+
     always @(posedge clk_out) begin
       data_o[i] <= data_src_select[i] ? overwrite_data[i] : data_r[i];
     end

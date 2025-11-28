@@ -66,6 +66,7 @@ adi_ip_bd axi_adrv9001 "bd/bd.tcl"
 
 adi_ip_add_core_dependencies [list \
   analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+  analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
 ]
 
 set cc [ipx::current_core]

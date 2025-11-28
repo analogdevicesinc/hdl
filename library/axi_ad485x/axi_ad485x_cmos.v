@@ -104,7 +104,6 @@ module axi_ad485x_cmos #(
   reg         [ 5:0]  data_counter = 6'h0;
   reg         [ 5:0]  scki_counter = 6'h0;
   reg                 adc_captured;
-  reg                 adc_captured_d;
   reg         [ 6:0]  capture_cnt;
 
   reg                 scki_i;
@@ -191,6 +190,8 @@ module axi_ad485x_cmos #(
   wire                conversion_quiet_time_s;
 
   wire        [ 5:0]  packet_lenght;
+  wire        [ 5:0]  packet_format_s;
+  wire                adc_captured_s;
 
   wire                crc_reset;
   wire                crc_enable;
@@ -198,14 +199,41 @@ module axi_ad485x_cmos #(
   wire        [15:0]  crc_res;
   wire                adc_valid_s;
 
+  wire                start_transfer_s;
+
+  wire        [ 3:0]  ch_0_index_s;
+  wire        [ 3:0]  ch_1_index_s;
+  wire        [ 3:0]  ch_2_index_s;
+  wire        [ 3:0]  ch_3_index_s;
+  wire        [ 3:0]  ch_4_index_s;
+  wire        [ 3:0]  ch_5_index_s;
+  wire        [ 3:0]  ch_6_index_s;
+  wire        [ 3:0]  ch_7_index_s;
+  wire        [ 8:0]  ch_data_capt_s;
+
+  wire        [31:0]  adc_data_init_s[7:0];
+
   // packet format selection
 
   always @(posedge clk) begin
     packet_format <= packet_format_in;
   end
 
+  sync_bits #(
+    .NUM_OF_BITS(6),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_packet_format_sync (
+    .out_clk(scko),
+    .out_resetn(1'b1),
+    .in_bits(packet_format),
+    .out_bits(packet_format_s));
+
   assign packet_lenght = packet_format == 2'd0 ? PACKET_1 :
                          packet_format == 2'd1 ? PACKET_2 : PACKET_3;
+
+  assign packet_lenght_scko = packet_format_s == 2'd0 ? PACKET_1 :
+                              packet_format_s == 2'd1 ? PACKET_2 : PACKET_3;
 
   always @(posedge clk) begin
     if (rst == 1'b1) begin
@@ -443,9 +471,19 @@ module axi_ad485x_cmos #(
     adc_lane_7 <= {adc_lane_7[30:0], db_s[7]};
   end
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_start_transfer_sync (
+    .out_clk(scko),
+    .out_resetn(1'b1),
+    .in_bits(start_transfer),
+    .out_bits(start_transfer_s));
+
   // scko is not active when start_transfer toggles
-  always @(negedge scko, posedge start_transfer) begin
-    if (start_transfer == 1'b1) begin
+  always @(negedge scko) begin
+    if (start_transfer_s == 1'b1) begin
       capture_cnt <= 7'b1;
       adc_captured <= 1'b0;
       new_transfer <= 1'b1;
@@ -453,7 +491,7 @@ module axi_ad485x_cmos #(
     end else begin
       new_transfer_d <= new_transfer;
       new_transfer <= ~new_transfer_d & new_transfer;
-      if (capture_cnt == packet_lenght) begin
+      if (capture_cnt == packet_lenght_scko) begin
         adc_captured <= 1'b1;
         capture_cnt <= 7'b1;
       end else begin
@@ -466,7 +504,6 @@ module axi_ad485x_cmos #(
   // hold data and index information for a packet capture interval
 
   always @(posedge scko) begin
-    adc_captured_d <= adc_captured;
     if (new_transfer == 1'b1) begin
       ch_0_index <= 4'd0;
       ch_1_index <= 4'd1;
@@ -520,11 +557,21 @@ module axi_ad485x_cmos #(
 
   // base core clock domain 2x scko
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_captured_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(adc_captured),
+    .out_bits(adc_captured_s));
+
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       adc_valid_init <= 1'b0;
     end else begin
-      if (adc_captured_d == 1'd1) begin
+      if (adc_captured_s == 1'd1) begin
         adc_valid_init <= 1'b1;
       end else begin
         adc_valid_init <= 1'b0;
@@ -537,16 +584,106 @@ module axi_ad485x_cmos #(
 
   assign adc_valid_s = ~adc_valid_init_d2 & adc_valid_init_d1;
 
+  sync_bits #(
+    .NUM_OF_BITS(4),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ch_0_index_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(ch_0_index_d),
+    .out_bits(ch_0_index_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(4),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ch_1_index_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(ch_1_index_d),
+    .out_bits(ch_1_index_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(4),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ch_2_index_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(ch_2_index_d),
+    .out_bits(ch_2_index_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(4),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ch_3_index_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(ch_3_index_d),
+    .out_bits(ch_3_index_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(4),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ch_4_index_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(ch_4_index_d),
+    .out_bits(ch_4_index_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(4),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ch_5_index_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(ch_5_index_d),
+    .out_bits(ch_5_index_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(4),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ch_6_index_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(ch_6_index_d),
+    .out_bits(ch_6_index_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(4),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ch_7_index_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(ch_7_index_d),
+    .out_bits(ch_7_index_s));
+
   always @(posedge clk) begin
-    adc_ch0_shift <= {ACTIVE_LANE[0],ch_0_index_d};
-    adc_ch1_shift <= {ACTIVE_LANE[1],ch_1_index_d};
-    adc_ch2_shift <= {ACTIVE_LANE[2],ch_2_index_d};
-    adc_ch3_shift <= {ACTIVE_LANE[3],ch_3_index_d};
-    adc_ch4_shift <= {ACTIVE_LANE[4],ch_4_index_d};
-    adc_ch5_shift <= {ACTIVE_LANE[5],ch_5_index_d};
-    adc_ch6_shift <= {ACTIVE_LANE[6],ch_6_index_d};
-    adc_ch7_shift <= {ACTIVE_LANE[7],ch_7_index_d};
+    adc_ch0_shift <= {ACTIVE_LANE[0],ch_0_index_s};
+    adc_ch1_shift <= {ACTIVE_LANE[1],ch_1_index_s};
+    adc_ch2_shift <= {ACTIVE_LANE[2],ch_2_index_s};
+    adc_ch3_shift <= {ACTIVE_LANE[3],ch_3_index_s};
+    adc_ch4_shift <= {ACTIVE_LANE[4],ch_4_index_s};
+    adc_ch5_shift <= {ACTIVE_LANE[5],ch_5_index_s};
+    adc_ch6_shift <= {ACTIVE_LANE[6],ch_6_index_s};
+    adc_ch7_shift <= {ACTIVE_LANE[7],ch_7_index_s};
   end
+
+  sync_bits #(
+    .NUM_OF_BITS(9),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ch_data_capt_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(ch_data_capt),
+    .out_bits(ch_data_capt_s));
 
   always @(posedge clk) begin
     if (rst == 1'b1) begin
@@ -554,7 +691,7 @@ module axi_ad485x_cmos #(
       ch_captured <= 9'd0;
 
     end else begin
-      ch_captured <= ch_data_capt;
+      ch_captured <= ch_data_capt_s;
 
       if (N_CHANNELS == 8) begin
         adc_valid <= adc_valid_d &
@@ -578,6 +715,86 @@ module axi_ad485x_cmos #(
     end
   end
 
+  sync_bits #(
+    .NUM_OF_BITS(32),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_data_init_0_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(adc_data_init[0]),
+    .out_bits(adc_data_init_s[0]));
+
+  sync_bits #(
+    .NUM_OF_BITS(32),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_data_init_1_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(adc_data_init[1]),
+    .out_bits(adc_data_init_s[1]));
+
+  sync_bits #(
+    .NUM_OF_BITS(32),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_data_init_2_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(adc_data_init[2]),
+    .out_bits(adc_data_init_s[2]));
+
+  sync_bits #(
+    .NUM_OF_BITS(32),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_data_init_3_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(adc_data_init[3]),
+    .out_bits(adc_data_init_s[3]));
+
+  sync_bits #(
+    .NUM_OF_BITS(32),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_data_init_4_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(adc_data_init[4]),
+    .out_bits(adc_data_init_s[4]));
+
+  sync_bits #(
+    .NUM_OF_BITS(32),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_data_init_5_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(adc_data_init[5]),
+    .out_bits(adc_data_init_s[5]));
+
+  sync_bits #(
+    .NUM_OF_BITS(32),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_data_init_6_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(adc_data_init[6]),
+    .out_bits(adc_data_init_s[6]));
+
+  sync_bits #(
+    .NUM_OF_BITS(32),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_data_init_7_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(adc_data_init[7]),
+    .out_bits(adc_data_init_s[7]));
+
   always @(posedge clk) begin
     if (rst == 1'b1) begin
       adc_data_store[0] <= 'd0;
@@ -592,28 +809,28 @@ module axi_ad485x_cmos #(
     end else begin
       if (adc_valid_s) begin
         if (adc_ch0_shift[4] == 1'b1) begin
-          adc_data_store[adc_ch0_shift[3:0]] <= adc_data_init[0];
+          adc_data_store[adc_ch0_shift[3:0]] <= adc_data_init_s[0];
         end
         if (adc_ch1_shift[4] == 1'b1) begin
-          adc_data_store[adc_ch1_shift[3:0]] <= adc_data_init[1];
+          adc_data_store[adc_ch1_shift[3:0]] <= adc_data_init_s[1];
         end
         if (adc_ch2_shift[4] == 1'b1) begin
-          adc_data_store[adc_ch2_shift[3:0]] <= adc_data_init[2];
+          adc_data_store[adc_ch2_shift[3:0]] <= adc_data_init_s[2];
         end
         if (adc_ch3_shift[4] == 1'b1) begin
-          adc_data_store[adc_ch3_shift[3:0]] <= adc_data_init[3];
+          adc_data_store[adc_ch3_shift[3:0]] <= adc_data_init_s[3];
         end
         if (adc_ch4_shift[4] == 1'b1) begin
-          adc_data_store[adc_ch4_shift[3:0]] <= adc_data_init[4];
+          adc_data_store[adc_ch4_shift[3:0]] <= adc_data_init_s[4];
         end
         if (adc_ch5_shift[4] == 1'b1) begin
-          adc_data_store[adc_ch5_shift[3:0]] <= adc_data_init[5];
+          adc_data_store[adc_ch5_shift[3:0]] <= adc_data_init_s[5];
         end
         if (adc_ch6_shift[4] == 1'b1) begin
-          adc_data_store[adc_ch6_shift[3:0]] <= adc_data_init[6];
+          adc_data_store[adc_ch6_shift[3:0]] <= adc_data_init_s[6];
         end
         if (adc_ch7_shift[4] == 1'b1) begin
-          adc_data_store[adc_ch7_shift[3:0]] <= adc_data_init[7];
+          adc_data_store[adc_ch7_shift[3:0]] <= adc_data_init_s[7];
         end
       end
     end

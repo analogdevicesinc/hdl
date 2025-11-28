@@ -204,7 +204,7 @@ module axi_ad9434_if #(
   sync_bits #(
     .NUM_OF_BITS(1),
     .ASYNC_CLK(1),
-    .SYNC_STAGES(SYNC_STAGES)
+    .SYNC_STAGES(2)
   ) i_up_drp_locked_sync (
     .out_clk(adc_div_clk),
     .out_resetn(~adc_rst),
@@ -214,7 +214,7 @@ module axi_ad9434_if #(
   sync_bits #(
     .NUM_OF_BITS(1),
     .ASYNC_CLK(1),
-    .SYNC_STAGES(SYNC_STAGES)
+    .SYNC_STAGES(2)
   ) i_delay_locked_sync (
     .out_clk(adc_div_clk),
     .out_resetn(~adc_rst),

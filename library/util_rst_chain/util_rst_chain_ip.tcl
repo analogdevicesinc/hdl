@@ -24,6 +24,6 @@ adi_ip_add_core_dependencies [list \
 set_property name "util_rst_chain" [ipx::current_core]
 set_property display_name "ADI Reset Chain Utils" [ipx::current_core]
 set_property description "ADI Reset Chain Utils" [ipx::current_core]
-set_property hide_in_gui {1} [ipx::current_core]
+# set_property hide_in_gui {1} [ipx::current_core]
 
 ipx::save_core [ipx::current_core]

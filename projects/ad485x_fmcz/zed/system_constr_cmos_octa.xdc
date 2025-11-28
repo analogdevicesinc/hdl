@@ -31,3 +31,11 @@ set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {scko_IBUF}]
 create_clock -name scko_cmos       -period  10 [get_ports scko]
 set_max_delay -from [get_clocks scko_cmos] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcm/CLKOUT0]] 10.0
 set_min_delay -from [get_clocks scko_cmos] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcm/CLKOUT0]] 1.0
+
+# set_max_delay -datapath_only \
+#   -from [get_clocks -of_objects [get_pins -filter {REF_PIN_NAME == D} -of_objects [get_cells csck_reg]]] \
+#   -to [get_pins -filter {REF_PIN_NAME == D} -of_objects [get_cells csck_reg]] \
+#   [get_property -min PERIOD [get_clocks -of_objects [get_pins -filter {REF_PIN_NAME == D} -of_objects [get_cells csck_reg]]]]
+
+# set_multicycle_path -setup 1 -to [get_pins -filter {REF_PIN_NAME == D} -of_objects [get_cells csck_reg]]
+# set_multicycle_path -hold  1 -to [get_pins -filter {REF_PIN_NAME == D} -of_objects [get_cells csck_reg]]

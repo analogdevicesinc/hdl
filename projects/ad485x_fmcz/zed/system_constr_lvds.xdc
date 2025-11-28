@@ -25,3 +25,7 @@ set_property -dict {PACKAGE_PIN B20 IOSTANDARD LVDS_25 DIFF_TERM TRUE}          
 
 create_clock -period 2.5 -name scko [get_ports scko_p]
 set_false_path -from [get_clocks scko] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcm/CLKOUT0]]
+
+set_max_delay -datapath_only \
+  -to [get_pins -filter {REF_PIN_NAME == D} -of_objects [get_cells csck_reg]] \
+  [get_property -min PERIOD [get_clocks -of_objects [get_pins -filter {REF_PIN_NAME == D} -of_objects [get_cells csck_reg]]]]

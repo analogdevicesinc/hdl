@@ -55,6 +55,7 @@ XILINX_DEPS += adrv9001_tx.v
 XILINX_DEPS += axi_adrv9001_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 INTEL_DEPS += ../intel/common/ad_mul.v
 INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc

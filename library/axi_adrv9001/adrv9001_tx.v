@@ -97,14 +97,11 @@ module adrv9001_tx #(
   wire [NUM_LANES-1:0] data_s6;
   wire [NUM_LANES-1:0] data_s7;
   wire                 dac_clk_div_s;
+  wire                 mssi_sync_s;
+  wire                 reset;
 
   // internal registers
 
-  reg        mssi_sync_d1;
-  reg        mssi_sync_d2;
-  reg        reset_m2;
-  reg        reset_m1;
-  reg        reset;
   reg        bufdiv_clr = 1'b0;
   reg [2:0]  state_cnt = 7;
   reg [2:0]  bufdiv_clr_state = 3;
@@ -190,13 +187,18 @@ module adrv9001_tx #(
 
   // reset logic
 
-  always @(posedge dac_fast_clk) begin
-    mssi_sync_d1 <= mssi_sync;
-    mssi_sync_d2 <= mssi_sync_d1;
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_mssi_sync_sync (
+    .out_clk(dac_fast_clk),
+    .out_resetn(1'b1),
+    .in_bits(mssi_sync),
+    .out_bits(mssi_sync_s));
 
-  always @(posedge dac_fast_clk, posedge mssi_sync_d2) begin
-    if (mssi_sync_d2 == 1'b1) begin
+  always @(posedge dac_fast_clk) begin
+    if (mssi_sync_s == 1'b1) begin
       bufdiv_ce <= 1'b0;
       bufdiv_clr <= 1'b0;
       bufdiv_clr_state <= 3'd0;
@@ -231,17 +233,14 @@ module adrv9001_tx #(
     end
   end
 
-  always @(posedge dac_clk_div, posedge bufdiv_clr) begin
-    if (bufdiv_clr == 1'b1) begin
-      reset_m2 <= 1'b1;
-      reset_m1 <= 1'b1;
-      reset <= 1'b1;
-    end else begin
-      reset_m2 <= 1'b0;
-      reset_m1 <= reset_m2;
-      reset <= reset_m1;
-    end
-  end
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_async_reset (
+    .rst_async(bufdiv_clr),
+    .clk(dac_clk_div),
+    .rstn(),
+    .rst(reset));
 
   assign dac_if_rst = dac_rst | reset;
 

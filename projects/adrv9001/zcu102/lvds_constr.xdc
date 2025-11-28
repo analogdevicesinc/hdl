@@ -45,7 +45,7 @@ set_property  -dict {PACKAGE_PIN L12    IOSTANDARD LVDS}                        
 
 # clocks
 
-create_clock -name ref_clk        -period  8.00 [get_ports fpga_ref_clk_p]
+create_clock -name ref_clk        -period  5.00 [get_ports fpga_ref_clk_p]
 
 create_clock -name rx1_dclk_out   -period  2.0  -waveform {0.0 1.0} [get_ports rx1_dclk_in_p]
 create_clock -name rx2_dclk_out   -period  2.0  -waveform {0.0 1.0} [get_ports rx2_dclk_in_p]

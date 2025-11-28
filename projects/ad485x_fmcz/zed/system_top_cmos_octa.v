@@ -92,7 +92,7 @@ module system_top (
   output                  lvds_cmos_n,
 
   input                   csd0, //spiad_sdo
-  output  reg             csck, //spiad_sck
+  output                  csck, //spiad_sck
   output  reg             csdio,//spiad_sdi
   output  reg             cs_n  //spiad_csn
 );
@@ -117,8 +117,18 @@ module system_top (
   assign gpio_i[63:32] = gpio_o[63:32];
   assign pd = gpio_o[32];
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_cdc_async_stage_sync (
+    .out_clk(cpu_clk),
+    .out_resetn(1'b1),
+    .in_bits(spiad_sck_s),
+    .out_bits(csck));
+
   always @(posedge cpu_clk) begin
-    csck <= spiad_sck_s;
+    // csck <= spiad_sck_s;
     csdio <= spiad_sdi_s;
     if (spiad_csn_s == 1'b0) begin
       cs_n <= 1'b0;

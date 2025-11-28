@@ -94,28 +94,28 @@ module adrv9001_rx #(
   localparam  ULTRASCALE_PLUS  = 3;
 
   // internal wire
-  wire                 clk_in_s;
-  wire [NUM_LANES-1:0] serdes_in_p;
-  wire [NUM_LANES-1:0] serdes_in_n;
-  wire [NUM_LANES-1:0] data_s0;
-  wire [NUM_LANES-1:0] data_s1;
-  wire [NUM_LANES-1:0] data_s2;
-  wire [NUM_LANES-1:0] data_s3;
-  wire [NUM_LANES-1:0] data_s4;
-  wire [NUM_LANES-1:0] data_s5;
-  wire [NUM_LANES-1:0] data_s6;
-  wire [NUM_LANES-1:0] data_s7;
-  wire                 adc_clk_in_fast;
-  wire                 mcs_6th_pulse_s;
-  wire                 adc_clk_div_s;
+  wire                           clk_in_s;
+  wire [NUM_LANES-1:0]           serdes_in_p;
+  wire [NUM_LANES-1:0]           serdes_in_n;
+  wire [NUM_LANES-1:0]           data_s0;
+  wire [NUM_LANES-1:0]           data_s1;
+  wire [NUM_LANES-1:0]           data_s2;
+  wire [NUM_LANES-1:0]           data_s3;
+  wire [NUM_LANES-1:0]           data_s4;
+  wire [NUM_LANES-1:0]           data_s5;
+  wire [NUM_LANES-1:0]           data_s6;
+  wire [NUM_LANES-1:0]           data_s7;
+  wire                           adc_clk_in_fast;
+  wire                           mcs_6th_pulse_s;
+  wire                           adc_clk_div_s;
+  wire                           mssi_sync_s;
+  wire                           reset;
+  wire                           resetn;
+  wire [DRP_WIDTH*NUM_LANES-1:0] up_adc_dwdata_s;
+  wire [DRP_WIDTH*NUM_LANES-1:0] up_adc_drdata_s;
 
   // internal registers
 
-  reg       mssi_sync_d1;
-  reg       mssi_sync_d2;
-  reg       reset_m2;
-  reg       reset_m1;
-  reg       reset;
   reg       bufdiv_clr = 1'b0;
   reg [2:0] state_cnt = 7;
   reg [2:0] bufdiv_clr_state = 3;
@@ -123,6 +123,38 @@ module adrv9001_rx #(
   reg       serdes_reset = 1'b0;
   reg       serdes_next_reset = 1'b0;
   reg [7:0] serdes_min_reset_cycle = 8'hff;
+
+  generate
+
+    if (FPGA_TECHNOLOGY == ULTRASCALE || FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
+
+      sync_bits #(
+        .NUM_OF_BITS(DRP_WIDTH*NUM_LANES),
+        .ASYNC_CLK(1),
+        .SYNC_STAGES(2)
+      ) i_up_adc_dwdata_sync (
+        .out_clk(adc_clk_in_fast),
+        .out_resetn(1'b1),
+        .in_bits(up_adc_dwdata),
+        .out_bits(up_adc_dwdata_s));
+
+    end else begin
+
+      assign up_adc_dwdata_s = up_adc_dwdata;
+
+    end
+
+  endgenerate
+
+  sync_bits #(
+    .NUM_OF_BITS(DRP_WIDTH*NUM_LANES),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_adc_drdata_sync (
+    .out_clk(up_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_adc_drdata_s),
+    .out_bits(up_adc_drdata));
 
   // data interface
   ad_serdes_in #(
@@ -151,8 +183,8 @@ module adrv9001_rx #(
     .data_in_n (serdes_in_n),
     .up_clk (up_clk),
     .up_dld (up_adc_dld),
-    .up_dwdata (up_adc_dwdata),
-    .up_drdata (up_adc_drdata),
+    .up_dwdata (up_adc_dwdata_s),
+    .up_drdata (up_adc_drdata_s),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked));
@@ -208,13 +240,18 @@ module adrv9001_rx #(
 
   // reset logic
 
-  always @(posedge clk_in_s) begin
-    mssi_sync_d1 <= mssi_sync;
-    mssi_sync_d2 <= mssi_sync_d1;
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_mssi_sync_sync (
+    .out_clk(clk_in_s),
+    .out_resetn(1'b1),
+    .in_bits(mssi_sync),
+    .out_bits(mssi_sync_s));
 
-  always @(posedge clk_in_s, posedge mssi_sync_d2) begin
-    if (mssi_sync_d2 == 1'b1) begin
+  always @(posedge clk_in_s) begin
+    if (mssi_sync_s == 1'b1) begin
       bufdiv_ce <= 1'b0;
       bufdiv_clr <= 1'b0;
       bufdiv_clr_state <= 3'd0;
@@ -249,17 +286,14 @@ module adrv9001_rx #(
     end
   end
 
-  always @(posedge adc_clk_div, posedge bufdiv_clr) begin
-    if (bufdiv_clr == 1'b1) begin
-      reset_m2 <= 1'b1;
-      reset_m1 <= 1'b1;
-      reset <= 1'b1;
-    end else begin
-      reset_m2 <= 1'b0;
-      reset_m1 <= reset_m2;
-      reset <= reset_m1;
-    end
-  end
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_async_reset (
+    .rst_async(bufdiv_clr),
+    .clk(adc_clk_div),
+    .rstn(resetn),
+    .rst(reset));
 
   assign adc_if_rst = adc_rst | reset;
 
@@ -397,7 +431,7 @@ module adrv9001_rx #(
   assign adc_clk = adc_clk_in_fast;
   assign adc_clk_ratio = 4;
 
-  always @(posedge adc_clk_div, posedge adc_if_rst) begin
+  always @(posedge adc_clk_div) begin
     if (adc_if_rst == 1'b1) begin
       adc_valid <= 1'b0;
     end else begin

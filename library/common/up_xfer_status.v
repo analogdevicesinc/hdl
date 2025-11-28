@@ -115,7 +115,9 @@ module up_xfer_status #(
   end
 
   sync_bits #(
-    .SYNC_STAGES (3)
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1),
+    .SYNC_STAGES (2)
   ) i_sync_up_xfer_state (
     .in_bits(d_xfer_toggle),
     .out_clk(up_clk),
@@ -123,7 +125,9 @@ module up_xfer_status #(
     .out_bits(up_xfer_toggle));
 
   sync_bits #(
-    .SYNC_STAGES (3)
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1),
+    .SYNC_STAGES (2)
   ) i_sync_up_xfer_toggle (
     .in_bits(up_xfer_toggle),
     .out_clk(d_clk),
@@ -131,7 +135,9 @@ module up_xfer_status #(
     .out_bits(d_xfer_state));
 
   sync_bits #(
-    .NUM_OF_BITS (DATA_WIDTH)
+    .NUM_OF_BITS (DATA_WIDTH),
+    .ASYNC_CLK (1),
+    .SYNC_STAGES (2)
   ) i_sync_up_xfer_data (
     .in_bits(d_xfer_data),
     .out_clk(up_clk),
