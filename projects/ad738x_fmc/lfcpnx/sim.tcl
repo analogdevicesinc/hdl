@@ -1,0 +1,26 @@
+###############################################################################
+## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+adi_ip_instance -vlnv {latticesemi.com:sim_model:clk_rst_gen:1.0.0} \
+    -meta_vlnv {latticesemi.com:sim_model:Clock_Reset_Generator:1.0.0} \
+    -cfg_value {TB_CLK_PERIOD:8} \
+    -ip_iname "clk_rst_gen_inst"
+adi_ip_instance -vlnv {latticesemi.com:sim_model:uart:1.0.0} \
+    -meta_vlnv {latticesemi.com:sim_model:UART_Model:1.0.0} \
+    -cfg_value {CLK_MHZ:125} \
+    -ip_iname "uart_inst"
+
+sbp_connect_net ${project_name}_v/uart_inst/clk \
+    ${project_name}_v/clk_rst_gen_inst/tb_clk_o
+sbp_connect_net -name ${project_name}_v/clk_rst_gen_inst_tb_clk_o_net \
+    ${project_name}_v/dut_inst/clk_125
+sbp_connect_net ${project_name}_v/uart_inst/rstn \
+    ${project_name}_v/clk_rst_gen_inst/tb_rst_o
+sbp_connect_net -name ${project_name}_v/clk_rst_gen_inst_tb_rst_o_net \
+    ${project_name}_v/dut_inst/rstn_i
+sbp_connect_net ${project_name}_v/dut_inst/rxd_i \
+    ${project_name}_v/uart_inst/uart_txd
+sbp_connect_net ${project_name}_v/dut_inst/txd_o \
+    ${project_name}_v/uart_inst/uart_rxd
