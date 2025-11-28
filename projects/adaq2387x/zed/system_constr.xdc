@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023, 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -15,7 +15,6 @@ set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVDS_25} [get_ports clk_n]       
 
 set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVDS_25} [get_ports cnv_p]                         ; ## D8   FMC_LA01_CC_P   IO_L14P_T2_SRCC_34
 set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVDS_25} [get_ports cnv_n]                         ; ## D9   FMC_LA01_CC_N   IO_L14N_T2_SRCC_34
-# aici nu e folosit
 set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVCMOS25} [get_ports cnv_en]                       ; ## G10  FMC_LA03_N      IO_L16N_T2_34
 
 # dco, da, db
@@ -32,15 +31,6 @@ set clk_period  10
 # differential propagation delay for ref_clk
 set tref_early  0.3
 set tref_late   1.5
-# data delay (dco to da/db skew 200ps)
-set data_delay  0.200
-
-# data delay for 240MHz clk
-# data_delay_max is computed as: 4.16 ns period + 4.16ns / 2 + 200ps skew) = 6.44ns (the tool recommended 3.56ns)
-set data_delay_max 6.44
-# data_delay_min is computes as: 4.16ns / 2 + 200ps skew = 2.28ns
-set data_delay_min 2.28
-
 
 # clocks
 
@@ -53,6 +43,14 @@ create_clock -period $clk_period -name ref_clk  [get_ports ref_clk_p]
 set_clock_latency -source -early $tref_early  [get_clocks ref_clk]
 # maximum source latency values
 set_clock_latency -source -late  $tref_late   [get_clocks ref_clk]
+
+
+# data delay (dco to da/db skew 200ps)
+set data_delay  0.200
+
+# data delay for 240MHz clk
+set data_delay_min 1.880
+set data_delay_max 3.120
 
 # input delays
 
@@ -68,3 +66,5 @@ set_input_delay -clock dco -clock_fall -min -add_delay -$data_delay [get_ports d
 
 set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387/inst/i_if/i_rx_db/i_rx_data_idelay]
 set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387/inst/i_if/i_rx_da/i_rx_data_idelay]
+
+

@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023, 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -36,11 +36,20 @@ adi_project adaq2387x_zed 0 [list \
   ADC_RES   [get_env_param ADC_RES  18 ] \
   USE_MMCM  [get_env_param USE_MMCM  0 ]]
 
-adi_project_files adaq2387x_zed [list \
+# Base files
+set base_files [list \
   "system_top.v" \
   "system_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
+
+# Add timing_constr.xdc if USE_MMCM is enabled
+if { [get_env_param USE_MMCM 0] == 1 } {
+  lappend base_files "timing_constr.xdc"
+}
+
+# Register final list
+adi_project_files adaq2387x_zed $base_files
 
 adi_project_run adaq2387x_zed
