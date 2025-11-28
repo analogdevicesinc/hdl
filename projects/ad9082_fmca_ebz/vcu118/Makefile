@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -45,5 +45,31 @@ LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/util_adxcvr
+
+CORUNDUM ?= 0
+
+ifeq ($(CORUNDUM), 1)
+	export BOARD := VCU118
+	export CPU := MB
+
+	M_DEPS += ../../ad9081_fmca_ebz/vcu118/system_constr_corundum.xdc
+
+	M_DEPS += $(ADI_HDL_DIR)/library/corundum/scripts/corundum_vcu118_cfg.tcl
+	M_DEPS += $(ADI_HDL_DIR)/library/corundum/scripts/corundum.tcl
+	M_DEPS += $(ADI_HDL_DIR)/library/corundum/scripts/sync_reset.tcl
+
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/rb_drp.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/cmac_gty_wrapper.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/cmac_gty_ch_wrapper.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/common/syn/vivado/mqnic_port.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl
+	EXTERNAL_DEPS += $(ADI_HDL_DIR)/../corundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl
+
+	LIB_DEPS += corundum/corundum_core
+	LIB_DEPS += corundum/ethernet/vcu118
+endif
 
 include ../../scripts/project-xilinx.mk
