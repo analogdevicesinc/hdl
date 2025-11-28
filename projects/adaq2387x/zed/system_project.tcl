@@ -44,9 +44,11 @@ set base_files [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
 
-# Add timing_constr.xdc if USE_MMCM is enabled
+# Append timing constraint file based on USE_MMCM
 if { [get_env_param USE_MMCM 0] == 1 } {
-  lappend base_files "timing_constr.xdc"
+  lappend base_files "timing_mmcm.xdc"
+} else {
+  lappend base_files "timing_default.xdc"
 }
 
 # Register final list
