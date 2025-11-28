@@ -23,28 +23,31 @@ ad_ip_parameter ad974x_dma CONFIG.DMA_DATA_WIDTH_DEST 16
 
 ad_ip_instance axi_ad974x ad974x_dac
 
+set DEVICE $ad_project_params(DEVICE)
+
 # Set DAC resolution based on DEVICE parameter
-if {[info exists DEVICE]} {
-  switch $DEVICE {
-    "AD9748" {
-      ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 8
-    }
-    "AD9740" {
-      ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 10
-    }
-    "AD9742" {
-      ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 12
-    }
-    "AD9744" {
-      ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 14
-    }
-    default {
-      ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 14
-    }
+# DEVICE must be set by the calling script (system_bd.tcl or system_project.tcl)
+switch $DEVICE {
+  "AD9748" {
+    ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 8
+    puts "common bd tcl: detected AD9748"
   }
-} else {
-  # Default to 14-bit if DEVICE not specified
-  ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 14
+  "AD9740" {
+    ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 10
+    puts "common bd tcl: detected AD9740"
+  }
+  "AD9742" {
+    ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 12
+    puts "common bd tcl: detected AD9742"
+  }
+  "AD9744" {
+    ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 14
+    puts "common bd tcl: detected AD9744"
+  }
+  default {
+    ad_ip_parameter ad974x_dac CONFIG.DAC_RESOLUTION 14
+    puts "common bd tcl: detected default AD9744"
+  }
 }
 
 # clocks

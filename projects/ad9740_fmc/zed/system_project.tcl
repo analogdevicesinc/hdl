@@ -8,11 +8,10 @@ source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 
-
-set DEVICE [get_env_param DEVICE "AD9744"]
+puts "system_project.tcl: param: [get_env_param DEVICE "AD9744"]"
 
 adi_project ad9740_fmc_zed 0 [list \
-  DEVICE $DEVICE \
+  DEVICE [get_env_param DEVICE "AD9744"]  \
   ]
 
 adi_project_files ad9740_fmc_zed [list \
@@ -21,29 +20,33 @@ adi_project_files ad9740_fmc_zed [list \
     "system_top.v" \
     "system_constr.xdc"]
 
-  switch $DEVICE {
+switch [get_env_param DEVICE "AD9744"] {
     "AD9740" {
       adi_project_files ad9740_fmc_zed [list \
         "ad9744_constr.xdc" ]
+    puts "system_project.tcl: switch in ad9740"
+
   }
     "AD9742" {
       adi_project_files ad9740_fmc_zed [list \
         "ad9744_constr.xdc" ]
+    puts "system_project.tcl: switch in ad9742"
   }
     "AD9744" {
       adi_project_files ad9740_fmc_zed [list \
         "ad9744_constr.xdc" ]
+    puts "system_project.tcl: switch in ad9744"
   }
     "AD9748" {
       adi_project_files ad9740_fmc_zed [list \
         "ad9744_constr.xdc" ]
+    puts "system_project.tcl: switch in ad9748"
   }
   default {
     adi_project_files ad9740_fmc_zed [list \
-      "ad9740_constr.xdc" ]
+      "ad9744_constr.xdc" ]
+    puts "system_project.tcl: switch in default"
   }
 }
-
-
 
 adi_project_run ad9740_fmc_zed
