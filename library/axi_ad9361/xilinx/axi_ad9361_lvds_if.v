@@ -220,9 +220,9 @@ module axi_ad9361_lvds_if #(
   reg             rx_error_r2 = 'd0;
 
   always @(posedge l_clk) begin
-    rx_error_r1 <= ~((rx_frame_s == 4'b1100) || (rx_frame_s == 4'b0011));
-    rx_error_r2 <= ~((rx_frame_s == 4'b1111) || (rx_frame_s == 4'b1100) ||
-                     (rx_frame_s == 4'b0000) || (rx_frame_s == 4'b0011));
+    rx_error_r1 <= ~(({rx_frame_s, rx_frame} == 4'b1100) || ({rx_frame_s, rx_frame} == 4'b0011));
+    rx_error_r2 <= ~(({rx_frame_s, rx_frame} == 4'b1111) || ({rx_frame_s, rx_frame} == 4'b1100) ||
+                     ({rx_frame_s, rx_frame} == 4'b0000) || ({rx_frame_s, rx_frame} == 4'b0011));
   end
 
   always @(posedge l_clk) begin
