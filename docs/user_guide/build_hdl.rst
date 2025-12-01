@@ -596,6 +596,8 @@ when building a project:
   operations. Default value is 8.
 - **ADI_NO_BITSTREAM_COMPRESSION**: if set, disables compression of the final
   bitstream file.
+- **ADI_POST_ROUTE_POD_PRE_SCRIPT**: specifies the path to a Tcl script to be
+  executed before the phys_opt_design (POD) stage.
 - **ADI_POST_ROUTE_SCRIPT**: specifies the path to a Tcl script to be executed
   after the routing design step.
 - **ADI_POWER_OPTIMIZATION**: if set to 1, enables power optimization during the
