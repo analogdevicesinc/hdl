@@ -102,7 +102,7 @@ module up_ad5766_sequencer #(
 
   // processor write interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       for (i=0; i<16; i=i+1) begin
         up_sequencer[i] <= 8'b0;
@@ -180,7 +180,7 @@ module up_ad5766_sequencer #(
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack <= 'd0;
       up_rdata <= 'd0;

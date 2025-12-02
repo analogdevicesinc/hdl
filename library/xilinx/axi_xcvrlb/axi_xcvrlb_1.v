@@ -201,7 +201,7 @@ module axi_xcvrlb_1 #(
   assign up_pll_locked = up_pll_locked_s;
   assign up_rst_done_s = up_rx_rst_done_s & up_tx_rst_done_s;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_pll_rst_cnt <= 4'h8;
       up_rst_cnt <= 4'h8;

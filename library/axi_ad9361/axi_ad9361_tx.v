@@ -206,7 +206,7 @@ module axi_ad9361_tx #(
   assign up_rack = up_rack_int;
   assign up_rdata = up_rdata_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack_int <= 'd0;
       up_rack_int <= 'd0;

@@ -180,6 +180,8 @@ module axi_dmac_burst_memory #(
   wire [ID_WIDTH-1:0] dest_src_id;
   wire [ADDRESS_WIDTH_DEST-1:0] dest_raddr;
   wire [ID_WIDTH-2:0] dest_id_reduced_next;
+  reg  [ID_WIDTH-2:0] dest_id_reduced_next_d;
+  wire [ID_WIDTH-2:0] dest_id_reduced_next_s;
   wire [ID_WIDTH-1:0] dest_id_next_inc;
   wire [ID_WIDTH-2:0] dest_id_reduced;
   wire dest_burst_valid;
@@ -320,13 +322,30 @@ module axi_dmac_burst_memory #(
     end
   end
 
+  always @(posedge dest_clk) begin
+    if (dest_reset == 1'b1) begin
+      dest_id_reduced_next_d <= {ID_WIDTH-1{1'b0}};
+    end else begin
+      dest_id_reduced_next_d <= dest_id_reduced_next;
+    end
+  end
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH-1),
+    .ASYNC_CLK(1)
+  ) i_dest_id_reduced_next_sync (
+    .out_clk(src_clk),
+    .out_resetn(~src_reset),
+    .in_bits(dest_id_reduced_next_d),
+    .out_bits(dest_id_reduced_next_s));
+
   sync_bits #(
     .NUM_OF_BITS(BYTES_PER_BURST_WIDTH-DMA_LENGTH_ALIGN+1),
     .ASYNC_CLK(1)
   ) i_waddr_sync (
     .out_clk(dest_clk),
     .out_resetn(~dest_reset),
-    .in_bits(burst_len_mem[dest_id_reduced_next]),
+    .in_bits(burst_len_mem[dest_id_reduced_next_s]),
     .out_bits(dest_burst_len_data_s[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN]));
 
   always @(posedge dest_clk) begin

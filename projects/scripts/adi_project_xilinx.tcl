@@ -593,9 +593,24 @@ proc adi_project_run {project_name} {
 
   file mkdir ${actual_project_name}.sdk
 
-  set timing_string $[report_timing_summary -return_string]
-  if { [string match "*VIOLATED*" $timing_string] == 1 ||
-       [string match "*Timing constraints are not met*" $timing_string] == 1} {
+  set timing_string $[report_timing_summary -no_header -return_string]
+  set cdc_string $[report_clock_interaction -delay_type min_max -significant_digits 3 -no_header -return_string]
+  set bus_skew_string $[report_bus_skew -delay_type min_max -max_paths 10 -no_header -return_string]
+  if { [string match "*(unsafe)*" $cdc_string] == 1 } {
+    write_hw_platform -fixed -force  -include_bit -file ${actual_project_name}.sdk/system_top_unconstrained_cdc_paths.xsa
+    # Generate .bin file only for non Versal designs
+    if {$ADI_GENERATE_BIN == 1} {
+      if {$sys_zynq == 3} {
+        puts "Bin generation skipped, Versal families do not support it."
+      } else {
+        write_bitstream -bin_file ${actual_project_name}.sdk/system_top_unconstrained_cdc_paths.bit
+      }
+    }
+    report_clock_interaction -delay_type min_max -significant_digits 3 -no_header -file clock_interaction.log
+    report_cdc -details -no_header -file cdc_report.log
+    return -code error [format "ERROR: Design contains unconstrained CDC paths!"]
+  } elseif { [string match "*VIOLATED*" $timing_string] == 1 ||
+      [string match "*Timing constraints are not met*" $timing_string] == 1} {
     write_hw_platform -fixed -force  -include_bit -file ${actual_project_name}.sdk/system_top_bad_timing.xsa
     # Generate .bin file only for non Versal designs
     if {$ADI_GENERATE_BIN == 1} {
@@ -606,6 +621,18 @@ proc adi_project_run {project_name} {
       }
     }
     return -code error [format "ERROR: Timing Constraints NOT met!"]
+  } elseif { [string match "*VIOLATED*" $bus_skew_string] == 1 } {
+    write_hw_platform -fixed -force  -include_bit -file ${actual_project_name}.sdk/system_top_bad_timing.xsa
+    # Generate .bin file only for non Versal designs
+    if {$ADI_GENERATE_BIN == 1} {
+      if {$sys_zynq == 3} {
+        puts "Bin generation skipped, Versal families do not support it."
+      } else {
+        write_bitstream -bin_file ${actual_project_name}.sdk/system_top_bus_skew_violation.bit
+      }
+    }
+    report_bus_skew -delay_type min_max -max_paths 10 -no_header -file bus_skew_report.log
+    return -code error [format "ERROR: Bus Skew constraints are not met!"]
   } else {
     write_hw_platform -fixed -force  -include_bit -file ${actual_project_name}.sdk/system_top.xsa
     # Generate .bin file only for non Versal designs

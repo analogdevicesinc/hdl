@@ -192,7 +192,7 @@ module axi_adxcvr_up #(
 
   assign up_wack = up_wreq_d;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wreq_d <= 'd0;
       up_scratch <= 'd0;
@@ -206,7 +206,7 @@ module axi_adxcvr_up #(
 
   // reset-controller
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_resetn <= 'd0;
       up_bufstatus_rst <= 1'b1;
@@ -223,7 +223,7 @@ module axi_adxcvr_up #(
   assign up_ch_user_ready = up_user_ready_cnt[6];
   assign up_status = up_status_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_pll_rst_cnt <= 4'h8;
       up_rst_cnt <= 4'h8;
@@ -268,7 +268,7 @@ module axi_adxcvr_up #(
   assign up_ch_prbsforceerr = up_prbsforceerr;
   assign up_ch_bufstatus_rst = up_bufstatus_rst;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_lpm_dfe_n <= LPM_OR_DFE_N;
       up_rate <= RATE;
@@ -323,7 +323,7 @@ module axi_adxcvr_up #(
     up_icm_busy <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_icm_sel <= 'd0;
       up_icm_enb <= 'd0;
@@ -365,7 +365,7 @@ module axi_adxcvr_up #(
   assign up_ch_addr = up_ich_data[27:16];
   assign up_ch_wdata = up_ich_data[15:0];
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_ich_sel <= 'd0;
       up_ich_enb <= 'd0;
@@ -413,7 +413,7 @@ module axi_adxcvr_up #(
 
   generate
   if (TX_OR_RX_N == 1) begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_ies_sel <= 'd0;
       up_ies_req <= 'd0;
@@ -445,7 +445,7 @@ module axi_adxcvr_up #(
     end
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_ies_sel <= 'd0;
       up_ies_req <= 'd0;
@@ -522,7 +522,7 @@ module axi_adxcvr_up #(
   assign up_rparam_s[ 8: 8] = (TX_OR_RX_N == 0) ? 1'b0 : 1'b1;
   assign up_rparam_s[ 7: 0] = NUM_OF_LANES;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rreq_d <= 'd0;
       up_rdata_d <= 'd0;

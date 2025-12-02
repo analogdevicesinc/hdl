@@ -60,7 +60,7 @@ module jesd204_lmfc #(
   sync_bits #(
     .NUM_OF_BITS(1),
     .ASYNC_CLK(1),
-    .SYNC_STAGES(SYNC_STAGES)
+    .SYNC_STAGES(2)
   ) i_cdc_async_stage_sync (
     .out_clk(clk),
     .out_resetn(1'b1),

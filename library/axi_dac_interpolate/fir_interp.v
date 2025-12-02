@@ -151,7 +151,7 @@ module fir_interp (
   reg  signed [35:0] output_register = 0; // sfix36_En30
 
   // Block Statements
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: ce_output
       if (reset == 1'b1) begin
         cur_count <= 2'b00;
@@ -172,7 +172,7 @@ module fir_interp (
 
   //   ---------------- Delay Registers ----------------
 
-  always @( posedge clk or posedge reset)
+  always @( )
     begin: Delay_Pipeline_process
       if (reset == 1'b1) begin
         delay_pipeline[0] <= 0;
@@ -284,7 +284,7 @@ module fir_interp (
   assign add_temp_5 = add_signext_10 + add_signext_11;
   assign sumvector1[5] = $signed({{3{add_temp_5[32]}}, add_temp_5});
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: sumdelay_pipeline_process1
       if (reset == 1'b1) begin
         sumdelay_pipeline1[0] <= 0;
@@ -321,7 +321,7 @@ module fir_interp (
   assign add_temp_8 = add_signext_16 + add_signext_17;
   assign sumvector2[2] = add_temp_8[35:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: sumdelay_pipeline_process2
       if (reset == 1'b1) begin
         sumdelay_pipeline2[0] <= 0;
@@ -344,7 +344,7 @@ module fir_interp (
 
   assign sumvector3[1] = sumdelay_pipeline2[2];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: sumdelay_pipeline_process3
       if (reset == 1'b1) begin
         sumdelay_pipeline3[0] <= 0;
@@ -363,7 +363,7 @@ module fir_interp (
   assign add_temp_10 = add_signext_20 + add_signext_21;
   assign sum4 = add_temp_10[35:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: Output_Register_process
       if (reset == 1'b1) begin
         output_register <= 0;

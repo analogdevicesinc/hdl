@@ -116,7 +116,7 @@ module axi_adc_trigger_reg (
   assign rise_edge  = config_trigger_i[7:6];
   assign fall_edge  = config_trigger_i[9:8];
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
       up_scratch <= 'd0;
@@ -204,7 +204,7 @@ module axi_adc_trigger_reg (
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack <= 'd0;
       up_rdata <= 'd0;

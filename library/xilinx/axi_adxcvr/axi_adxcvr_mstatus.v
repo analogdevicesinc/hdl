@@ -92,7 +92,7 @@ module axi_adxcvr_mstatus (
   assign up_prbslocked_s = (XCVR_ID < NUM_OF_LANES) ? up_prbslocked : 1'b1;
   assign up_bufstatus_s = (XCVR_ID < NUM_OF_LANES) ? up_bufstatus : 2'b00;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_pll_locked_int <= 1'd0;
       up_rst_done_int <= 1'd0;

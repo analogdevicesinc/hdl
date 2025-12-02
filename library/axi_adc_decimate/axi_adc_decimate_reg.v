@@ -73,7 +73,7 @@ module axi_adc_decimate_reg(
   reg     [15:0]  up_correction_coefficient_a = 16'h0;
   reg     [15:0]  up_correction_coefficient_b = 16'h0;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
       up_scratch <= 'd0;
@@ -107,7 +107,7 @@ module axi_adc_decimate_reg(
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack <= 'd0;
       up_rdata <= 'd0;

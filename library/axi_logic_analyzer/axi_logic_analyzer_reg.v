@@ -107,7 +107,7 @@ module axi_logic_analyzer_reg (
 
   wire    [15:0]  up_input_data;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
       up_scratch <= 'd0;
@@ -203,7 +203,7 @@ module axi_logic_analyzer_reg (
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack <= 'd0;
       up_rdata <= 'd0;

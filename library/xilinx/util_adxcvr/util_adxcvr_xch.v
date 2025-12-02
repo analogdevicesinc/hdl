@@ -245,7 +245,7 @@ module util_adxcvr_xch #(
   assign up_tx_rdata = up_tx_rdata_int;
   assign up_tx_ready = up_tx_ready_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_es_rdata_int <= 15'd0;
       up_es_ready_int <= 1'd0;

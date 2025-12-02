@@ -113,7 +113,7 @@ module axi_xcvrlb #(
 
   // register access
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
       up_scratch <= 'd0;
@@ -141,7 +141,7 @@ module axi_xcvrlb #(
     end
   end
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack <= 'd0;
       up_rdata <= 'd0;

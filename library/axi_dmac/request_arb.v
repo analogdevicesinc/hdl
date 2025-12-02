@@ -247,6 +247,7 @@ module request_arb #(
   wire [ID_WIDTH-1:0] dest_data_request_id;
   wire [ID_WIDTH-1:0] dest_data_response_id;
   wire [ID_WIDTH-1:0] dest_response_id;
+  wire [ID_WIDTH-1:0] dest_response_id_s;
 
   reg  [ID_WIDTH-1:0] dest_response_id_d;
 
@@ -286,6 +287,7 @@ module request_arb #(
   reg [ID_WIDTH-1:0] src_throttled_request_id;
   wire [ID_WIDTH-1:0] src_data_request_id;
   wire [ID_WIDTH-1:0] src_response_id;
+  wire [ID_WIDTH-1:0] src_response_id_s;
 
   wire src_valid;
   wire [DMA_DATA_WIDTH_SRC-1:0] src_data;
@@ -386,25 +388,44 @@ module request_arb #(
   assign dest_ext_resetn = m_dest_axi_aresetn;
 
   wire [ID_WIDTH-1:0] dest_address_id;
+  wire [ID_WIDTH-1:0] dest_address_id_s;
   wire dest_address_eot;
   wire dest_response_eot;
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_dest_address_id_sync (
+    .out_clk(src_clk),
+    .out_resetn(src_resetn),
+    .in_bits(dest_address_id),
+    .out_bits(dest_address_id_s));
 
   sync_bits #(
     .NUM_OF_BITS(1),
     .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
   ) i_dest_address_eot_sync (
-    .out_clk(m_dest_axi_aclk),
+    .out_clk(dest_clk),
     .out_resetn(dest_resetn),
-    .in_bits(eot_mem_dest[dest_address_id]),
+    .in_bits(eot_mem_dest[dest_address_id_s]),
     .out_bits(dest_address_eot));
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_dest_response_id_sync (
+    .out_clk(src_clk),
+    .out_resetn(src_resetn),
+    .in_bits(dest_response_id),
+    .out_bits(dest_response_id_s));
 
   sync_bits #(
     .NUM_OF_BITS(1),
     .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
   ) i_dest_response_eot_sync (
-    .out_clk(m_dest_axi_aclk),
+    .out_clk(dest_clk),
     .out_resetn(dest_resetn),
-    .in_bits(eot_mem_dest[dest_response_id]),
+    .in_bits(eot_mem_dest[dest_response_id_s]),
     .out_bits(dest_response_eot));
 
   sync_bits #(
@@ -439,7 +460,7 @@ module request_arb #(
     .AXI_AXCACHE(AXI_AXCACHE),
     .AXI_AXPROT(AXI_AXPROT)
   ) i_dest_dma_mm (
-    .m_axi_aclk(m_dest_axi_aclk),
+    .m_axi_aclk(dest_clk),
     .m_axi_aresetn(dest_resetn),
 
     .enable(dest_enable),
@@ -559,31 +580,45 @@ module request_arb #(
 
   if (DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
 
+    wire [ID_WIDTH-1:0] data_id;
+    wire [ID_WIDTH-1:0] data_id_s;
+
+    wire data_eot;
+    wire response_eot;
+
+    sync_bits #(
+      .NUM_OF_BITS(ID_WIDTH),
+      .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+    ) i_data_id_sync (
+      .out_clk(src_clk),
+      .out_resetn(src_resetn),
+      .in_bits(data_id),
+      .out_bits(data_id_s));
+
+    sync_bits #(
+      .NUM_OF_BITS(1),
+      .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+    ) i_data_eot_sync (
+      .out_clk(dest_clk),
+      .out_resetn(dest_resetn),
+      .in_bits(eot_mem_dest[data_id_s]),
+      .out_bits(data_eot));
+
+    sync_bits #(
+      .NUM_OF_BITS(1),
+      .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+    ) i_response_eot_sync (
+      .out_clk(dest_clk),
+      .out_resetn(dest_resetn),
+      .in_bits(eot_mem_dest[dest_response_id_s]),
+      .out_bits(response_eot));
+
+  end
+
+  if (DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
+
   assign dest_clk = m_axis_aclk;
   assign dest_ext_resetn = 1'b1;
-
-  wire [ID_WIDTH-1:0] data_id;
-
-  wire data_eot;
-  wire response_eot;
-
-  sync_bits #(
-    .NUM_OF_BITS(1),
-    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
-  ) i_data_eot_sync (
-    .out_clk(m_axis_aclk),
-    .out_resetn(dest_resetn),
-    .in_bits(eot_mem_dest[data_id]),
-    .out_bits(data_eot));
-
-  sync_bits #(
-    .NUM_OF_BITS(1),
-    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
-  ) i_response_eot_sync (
-    .out_clk(m_axis_aclk),
-    .out_resetn(dest_resetn),
-    .in_bits(eot_mem_dest[dest_response_id]),
-    .out_bits(response_eot));
 
   assign dest_data_request_id = dest_request_id;
 
@@ -603,7 +638,7 @@ module request_arb #(
     .S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_DEST),
     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
   ) i_dest_dma_stream (
-    .s_axis_aclk(m_axis_aclk),
+    .s_axis_aclk(dest_clk),
     .s_axis_aresetn(dest_resetn),
 
     .enable(dest_enable),
@@ -654,29 +689,6 @@ module request_arb #(
   assign dest_clk = fifo_rd_clk;
   assign dest_ext_resetn = 1'b1;
 
-  wire [ID_WIDTH-1:0] data_id;
-
-  wire data_eot;
-  wire response_eot;
-
-  sync_bits #(
-    .NUM_OF_BITS(1),
-    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
-  ) i_data_eot_sync (
-    .out_clk(fifo_rd_clk),
-    .out_resetn(dest_resetn),
-    .in_bits(eot_mem_dest[data_id]),
-    .out_bits(data_eot));
-
-  sync_bits #(
-    .NUM_OF_BITS(1),
-    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
-  ) i_response_eot_sync (
-    .out_clk(fifo_rd_clk),
-    .out_resetn(dest_resetn),
-    .in_bits(eot_mem_dest[dest_response_id]),
-    .out_bits(response_eot));
-
   assign dest_data_request_id = dest_request_id;
 
   assign dbg_dest_address_id = 'h00;
@@ -695,7 +707,7 @@ module request_arb #(
     .DATA_WIDTH(DMA_DATA_WIDTH_DEST),
     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_DEST)
   ) i_dest_dma_fifo (
-    .clk(fifo_rd_clk),
+    .clk(dest_clk),
     .resetn(dest_resetn),
 
     .enable(dest_enable),
@@ -741,22 +753,32 @@ module request_arb #(
 
   wire [ID_WIDTH-1:0] src_data_id;
   wire [ID_WIDTH-1:0] src_address_id;
+  wire [ID_WIDTH-1:0] src_address_id_s;
   wire src_address_eot;
-
-  sync_bits #(
-    .NUM_OF_BITS(1),
-    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
-  ) i_src_address_eot_sync (
-    .out_clk(m_src_axi_aclk),
-    .out_resetn(src_resetn),
-    .in_bits(eot_mem_src[src_address_id]),
-    .out_bits(src_address_eot));
 
   assign source_id = src_address_id;
   assign source_eot = src_address_eot;
 
   assign src_clk = m_src_axi_aclk;
   assign src_ext_resetn = m_src_axi_aresetn;
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_src_address_id_sync (
+    .out_clk(src_clk),
+    .out_resetn(src_resetn),
+    .in_bits(src_address_id),
+    .out_bits(src_address_id_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_src_address_eot_sync (
+    .out_clk(src_clk),
+    .out_resetn(src_resetn),
+    .in_bits(eot_mem_src[src_address_id_s]),
+    .out_bits(src_address_eot));
 
   sync_bits #(
     .NUM_OF_BITS(ID_WIDTH),
@@ -786,7 +808,7 @@ module request_arb #(
     .AXI_AXCACHE(AXI_AXCACHE),
     .AXI_AXPROT(AXI_AXPROT)
   ) i_src_dma_mm (
-    .m_axi_aclk(m_src_axi_aclk),
+    .m_axi_aclk(src_clk),
     .m_axi_aresetn(src_resetn),
 
     .enable(src_enable),
@@ -856,12 +878,21 @@ module request_arb #(
   wire src_eot;
 
   sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_src_response_id_sync (
+    .out_clk(src_clk),
+    .out_resetn(src_resetn),
+    .in_bits(src_response_id),
+    .out_bits(src_response_id_s));
+
+  sync_bits #(
     .NUM_OF_BITS(1),
     .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
   ) i_src_eot_sync (
-    .out_clk(s_axis_aclk),
+    .out_clk(src_clk),
     .out_resetn(src_resetn),
-    .in_bits(eot_mem_src[src_response_id]),
+    .in_bits(eot_mem_src[src_response_id_s]),
     .out_bits(src_eot));
 
   assign dbg_src_address_id = 'h00;
@@ -878,7 +909,7 @@ module request_arb #(
     .S_AXIS_USER_SYNC(AXIS_TUSER_SYNC),
     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
   ) i_src_dma_stream (
-    .s_axis_aclk(s_axis_aclk),
+    .s_axis_aclk(src_clk),
     .s_axis_aresetn(src_resetn),
 
     .enable(src_enable),
@@ -981,15 +1012,6 @@ module request_arb #(
 
   wire src_eot;
 
-  sync_bits #(
-    .NUM_OF_BITS(1),
-    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
-  ) i_src_eot_sync (
-    .out_clk(fifo_wr_clk),
-    .out_resetn(src_resetn),
-    .in_bits(eot_mem_src[src_response_id]),
-    .out_bits(src_eot));
-
   assign source_id = src_response_id;
   assign source_eot = src_eot;
 
@@ -998,6 +1020,24 @@ module request_arb #(
 
   assign dbg_src_address_id = 'h00;
   assign dbg_src_data_id = 'h00;
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_src_response_id_sync (
+    .out_clk(src_clk),
+    .out_resetn(src_resetn),
+    .in_bits(src_response_id),
+    .out_bits(src_response_id_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_src_eot_sync (
+    .out_clk(src_clk),
+    .out_resetn(src_resetn),
+    .in_bits(eot_mem_src[src_response_id_s]),
+    .out_bits(src_eot));
 
   /* TODO
   assign src_response_valid = 1'b0;
@@ -1009,7 +1049,7 @@ module request_arb #(
     .DATA_WIDTH(DMA_DATA_WIDTH_SRC),
     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
   ) i_src_dma_fifo (
-    .clk(fifo_wr_clk),
+    .clk(src_clk),
     .resetn(src_resetn),
 
     .enable(src_enable),

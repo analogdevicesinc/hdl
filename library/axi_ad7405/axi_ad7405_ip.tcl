@@ -31,6 +31,11 @@ adi_ip_files axi_ad7405 [list \
 adi_ip_properties axi_ad7405
 adi_ip_ttcl axi_ad7405 "axi_ad7405_constr.ttcl"
 
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
+
 set cc [ipx::current_core]
 
 ipx::create_xgui_files $cc

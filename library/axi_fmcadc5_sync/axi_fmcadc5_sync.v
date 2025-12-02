@@ -257,7 +257,7 @@ module axi_fmcadc5_sync #(
 
   assign psync = up_psync;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_psync_count <= 7'd0;
       up_psync <= 1'b0;
@@ -275,7 +275,7 @@ module axi_fmcadc5_sync #(
 
   // calibration (offset & gain only)
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_cal_done_t_m1 <= 1'd0;
       up_cal_done_t_m2 <= 1'd0;
@@ -289,7 +289,7 @@ module axi_fmcadc5_sync #(
 
   assign up_cal_done_t_s = up_cal_done_t_m3 ^ up_cal_done_t_m2;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_cal_max_0 <= 16'd0;
       up_cal_min_0 <= 16'd0;
@@ -305,7 +305,7 @@ module axi_fmcadc5_sync #(
     end
   end
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_cal_enable <= 1'd0;
       up_cor_enable <= 1'd0;
@@ -341,7 +341,7 @@ module axi_fmcadc5_sync #(
 
   assign vcal = up_vcal;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_vcal_8 <= 8'd0;
       up_vcal <= 1'd0;
@@ -368,7 +368,7 @@ module axi_fmcadc5_sync #(
 
   assign up_sysref_ack_t_s = up_sysref_ack_t_m3 ^ up_sysref_ack_t_m2;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_sysref_ack_t_m1 <= 1'd0;
       up_sysref_ack_t_m2 <= 1'd0;
@@ -380,7 +380,7 @@ module axi_fmcadc5_sync #(
     end
   end
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_sysref_control_t <= 1'd0;
       up_sysref_mode_e <= 2'd0;
@@ -409,7 +409,7 @@ module axi_fmcadc5_sync #(
 
   // sync register(s)
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_sync_control_t <= 1'd0;
       up_sync_mode <= 1'd0;
@@ -429,7 +429,7 @@ module axi_fmcadc5_sync #(
 
   assign up_sync_status_t_s = up_sync_status_t_m3 ^ up_sync_status_t_m2;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_sync_status_t_m1 <= 1'd0;
       up_sync_status_t_m2 <= 1'd0;
@@ -449,7 +449,7 @@ module axi_fmcadc5_sync #(
 
   // delay register(s)
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_delay_ld <= 1'd0;
       up_delay_wdata <= 5'd0;
@@ -517,7 +517,7 @@ module axi_fmcadc5_sync #(
 
   // spi register(s)
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_spi_req <= 1'd0;
       up_spi_csn <= {8{1'b1}};
@@ -551,7 +551,7 @@ module axi_fmcadc5_sync #(
 
   // scratch register(s)
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_scratch <= 'd0;
       up_timer <= 'd0;
@@ -569,7 +569,7 @@ module axi_fmcadc5_sync #(
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
       up_rack <= 'd0;

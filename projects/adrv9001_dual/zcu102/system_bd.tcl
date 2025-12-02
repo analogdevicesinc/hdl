@@ -28,8 +28,3 @@ if {$ad_project_params(CMOS_LVDS_N) == 0} {
 sysid_gen_sys_init_file $sys_cstring
 
 set_property strategy Flow_RunPostRoutePhysOpt [get_runs impl_1]
-
-
-# IOdelays disabled for this setup
-set_msg_config -suppress -id {Vivado 12-4739} -string {{CRITICAL WARNING: [Vivado 12-4739] set_false_path:No valid object(s) found for '-through [get_pins -hier *i_idelay/CNTVALUEIN]}}
-set_msg_config -suppress -id {Vivado 12-4739} -string {{CRITICAL WARNING: [Vivado 12-4739] set_false_path:No valid object(s) found for '-through [get_pins -hier *i_idelay/CNTVALUEOUT]}}

@@ -153,7 +153,7 @@ module up_tdd_cntrl #(
 
   // processor write interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 1'h0;
       up_scratch <= 32'h0;
@@ -293,7 +293,7 @@ module up_tdd_cntrl #(
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack <= 1'b0;
       up_rdata <= 1'b0;

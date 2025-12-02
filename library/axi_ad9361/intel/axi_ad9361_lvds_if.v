@@ -189,7 +189,7 @@ module axi_ad9361_lvds_if #(
 
   assign up_drp_locked = up_drp_locked_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_drp_locked_m1 <= 1'd0;
       up_drp_locked_int <= 1'd0;

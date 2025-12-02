@@ -218,7 +218,7 @@ module axi_adxcvr_es (
 
   // axi write
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_awvalid <= 'b0;
       up_awaddr <= 'd0;
@@ -256,7 +256,7 @@ module axi_adxcvr_es (
   assign up_vindex_n_s = {1'b1, up_vindex_m_s[6:0]};
   assign up_vindex_s = (up_vindex[7] == 1'b1) ? up_vindex_n_s : up_vindex;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_ut <= 'd0;
       up_daddr <= 'd0;
@@ -285,7 +285,7 @@ module axi_adxcvr_es (
 
   // read-modify-write
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_hdata <= 'd0;
       up_vdata <= 'd0;
@@ -315,7 +315,7 @@ module axi_adxcvr_es (
 
   assign up_start_s = up_es_req & ~up_req_d;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_req_d <= 1'b0;
       up_ack <= 1'b0;
@@ -331,7 +331,7 @@ module axi_adxcvr_es (
 
   // es-fsm
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_fsm <= ES_FSM_IDLE;
     end else begin
@@ -473,7 +473,7 @@ module axi_adxcvr_es (
 
   // channel access
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_enb <= 'd0;
       up_addr <= 'd0;

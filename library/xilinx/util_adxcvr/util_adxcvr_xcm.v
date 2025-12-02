@@ -109,7 +109,7 @@ module util_adxcvr_xcm #(
   assign up_cm_rdata = up_rdata_int;
   assign up_cm_ready = up_ready_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_enb_int <= 1'd0;
       up_addr_int <= 12'd0;

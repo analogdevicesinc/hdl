@@ -114,7 +114,7 @@ module axi_ad9361_lvds_if_10  #(
 
   // pll reset
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       pll_rst <= 1'b1;
     end else begin

@@ -137,7 +137,7 @@ module axi_pulsar_lvds #(
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (!up_rstn) begin
       up_rdata <= 32'd0;
       up_rack <= 1'd0;

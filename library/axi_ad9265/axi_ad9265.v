@@ -136,7 +136,7 @@ module axi_ad9265 #(
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_status_pn_err <= 'd0;
       up_status_pn_oos <= 'd0;

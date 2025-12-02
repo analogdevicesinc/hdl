@@ -124,7 +124,7 @@ module axi_ad35xxr_core #(
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if(up_rstn == 0) begin
       up_rdata <= 'd0;
       up_rack  <= 'd0;

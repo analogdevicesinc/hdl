@@ -99,7 +99,7 @@ module axi_adxcvr_up #(
 
   assign up_wack = up_wreq_d;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wreq_d <= 'd0;
       up_scratch <= 'd0;
@@ -113,7 +113,7 @@ module axi_adxcvr_up #(
 
   // reset-controller
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_resetn <= 'd0;
     end else begin
@@ -158,7 +158,7 @@ module axi_adxcvr_up #(
       .out_clk (up_clk),
       .out_bits(up_reset_ack_s));
 
-    always @(negedge up_rstn or posedge up_clk) begin
+    always @(posedge up_clk) begin
       if (up_rstn == 0) begin
         up_rst_d <= 1'b1;
       end else if (up_resetn == 1'b0) begin
@@ -171,7 +171,7 @@ module axi_adxcvr_up #(
   end else begin
     reg [3:0] up_rst_cnt = 'd8;
 
-    always @(negedge up_rstn or posedge up_clk) begin
+    always @(posedge up_clk) begin
       if (up_rstn == 0) begin
         up_rst_cnt <= 4'h8;
       end else begin
@@ -186,7 +186,7 @@ module axi_adxcvr_up #(
   end
   endgenerate
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_status_int <= 1'b0;
     end else begin
@@ -218,7 +218,7 @@ module axi_adxcvr_up #(
   assign up_rack = up_rreq_d;
   assign up_rdata = up_rdata_d;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rreq_d <= 'd0;
       up_rdata_d <= 'd0;

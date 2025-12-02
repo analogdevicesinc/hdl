@@ -132,7 +132,7 @@ module up_hdmi_tx #(
 
   // processor write interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_core_preset <= 1'd1;
       up_wack <= 'd0;
@@ -230,7 +230,7 @@ module up_hdmi_tx #(
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack <= 'd0;
       up_rdata <= 'd0;

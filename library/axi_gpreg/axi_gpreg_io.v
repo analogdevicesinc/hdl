@@ -74,7 +74,7 @@ module axi_gpreg_io #(
 
   // processor write interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
       up_gp_ioenb <= {32{1'b1}};
@@ -92,7 +92,7 @@ module axi_gpreg_io #(
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack <= 'd0;
       up_rdata <= 'd0;

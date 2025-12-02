@@ -198,7 +198,7 @@ module up_dac_common #(
 
   assign up_wack = up_wack_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_core_preset <= 1'd1;
       up_mmcm_preset <= 1'd1;
@@ -319,7 +319,7 @@ module up_dac_common #(
     reg  [31:0]  up_drp_wdata_int = 'd0;
     reg  [31:0]  up_drp_rdata_hold_int = 'd0;
 
-    always @(negedge up_rstn or posedge up_clk) begin
+    always @(posedge up_clk) begin
       if (up_rstn == 0) begin
         up_drp_sel_int <= 'd0;
         up_drp_wr_int <= 'd0;
@@ -375,7 +375,7 @@ module up_dac_common #(
     end
   end
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_status_unf <= 'd0;
     end else begin
@@ -395,7 +395,7 @@ module up_dac_common #(
     up_usr_chanmax_int <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_usr_chanmax_int <= 'd0;
     end else begin
@@ -415,7 +415,7 @@ module up_dac_common #(
     up_dac_gpio_out_int <= 'd0;
   end
   end else begin
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_dac_gpio_out_int <= 'd0;
     end else begin
@@ -429,7 +429,7 @@ module up_dac_common #(
 
   // timer with premature termination
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_timer <= 32'd0;
     end else begin
@@ -446,7 +446,7 @@ module up_dac_common #(
   assign up_rack = up_rack_int;
   assign up_rdata = up_rdata_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack_int <= 'd0;
       up_rdata_int <= 'd0;

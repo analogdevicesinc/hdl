@@ -175,7 +175,7 @@ module cic_interp (
   // Block Statements
   assign rate_unsigned = rate;
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: ce_output
       if (reset == 1'b1) begin
         cur_count <= 16'b0000000000000000;
@@ -199,7 +199,7 @@ module cic_interp (
 
   //   ------------------ Input Register ------------------
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: input_reg_process
       if (reset == 1'b1) begin
         input_register <= 0;
@@ -222,7 +222,7 @@ module cic_interp (
   assign sub_temp = sub_cast - sub_cast_1;
   assign section_out1 = sub_temp[31:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: comb_delay_section1
       if (reset == 1'b1) begin
         diff1 <= 0;
@@ -234,7 +234,7 @@ module cic_interp (
       end
     end // comb_delay_section1
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: cic_pipeline_process_section1
       if (reset == 1'b1) begin
         cic_pipeline1 <= 0;
@@ -257,7 +257,7 @@ module cic_interp (
   assign sub_temp_1 = sub_cast_2 - sub_cast_3;
   assign section_out2 = sub_temp_1[32:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: comb_delay_section2
       if (reset == 1'b1) begin
         diff2 <= 0;
@@ -269,7 +269,7 @@ module cic_interp (
       end
     end // comb_delay_section2
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: cic_pipeline_process_section2
       if (reset == 1'b1) begin
         cic_pipeline2 <= 0;
@@ -292,7 +292,7 @@ module cic_interp (
   assign sub_temp_2 = sub_cast_4 - sub_cast_5;
   assign section_out3 = sub_temp_2[33:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: comb_delay_section3
       if (reset == 1'b1) begin
         diff3 <= 0;
@@ -304,7 +304,7 @@ module cic_interp (
       end
     end // comb_delay_section3
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: cic_pipeline_process_section3
       if (reset == 1'b1) begin
         cic_pipeline3 <= 0;
@@ -327,7 +327,7 @@ module cic_interp (
   assign sub_temp_3 = sub_cast_6 - sub_cast_7;
   assign section_out4 = sub_temp_3[34:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: comb_delay_section4
       if (reset == 1'b1) begin
         diff4 <= 0;
@@ -339,7 +339,7 @@ module cic_interp (
       end
     end // comb_delay_section4
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: cic_pipeline_process_section4
       if (reset == 1'b1) begin
         cic_pipeline4 <= 0;
@@ -362,7 +362,7 @@ module cic_interp (
   assign sub_temp_4 = sub_cast_8 - sub_cast_9;
   assign section_out5 = sub_temp_4[35:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: comb_delay_section5
       if (reset == 1'b1) begin
         diff5 <= 0;
@@ -374,7 +374,7 @@ module cic_interp (
       end
     end // comb_delay_section5
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: cic_pipeline_process_section5
       if (reset == 1'b1) begin
         cic_pipeline5 <= 0;
@@ -395,7 +395,7 @@ module cic_interp (
   assign sub_temp_5 = sub_cast_10 - sub_cast_11;
   assign section_out6 = sub_temp_5[35:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: comb_delay_section6
       if (reset == 1'b1) begin
         diff6 <= 0;
@@ -407,7 +407,7 @@ module cic_interp (
       end
     end // comb_delay_section6
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: cic_pipeline_process_section6
       if (reset == 1'b1) begin
         cic_pipeline6 <= 0;
@@ -430,7 +430,7 @@ module cic_interp (
   assign add_temp = add_cast + add_cast_1;
   assign sum1 = add_temp[35:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: integrator_delay_section7
       if (reset == 1'b1) begin
         section_out7 <= 0;
@@ -453,7 +453,7 @@ module cic_interp (
   assign add_temp_1 = add_cast_2 + add_cast_3;
   assign sum2 = add_temp_1[50:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: integrator_delay_section8
       if (reset == 1'b1) begin
         section_out8 <= 0;
@@ -476,7 +476,7 @@ module cic_interp (
   assign add_temp_2 = add_cast_4 + add_cast_5;
   assign sum3 = add_temp_2[65:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: integrator_delay_section9
       if (reset == 1'b1) begin
         section_out9 <= 0;
@@ -499,7 +499,7 @@ module cic_interp (
   assign add_temp_3 = add_cast_6 + add_cast_7;
   assign sum4 = add_temp_3[79:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: integrator_delay_section10
       if (reset == 1'b1) begin
         section_out10 <= 0;
@@ -522,7 +522,7 @@ module cic_interp (
   assign add_temp_4 = add_cast_8 + add_cast_9;
   assign sum5 = add_temp_4[94:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: integrator_delay_section11
       if (reset == 1'b1) begin
         section_out11 <= 0;
@@ -545,7 +545,7 @@ module cic_interp (
   assign add_temp_5 = add_cast_10 + add_cast_11;
   assign sum6 = add_temp_5[109:0];
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: integrator_delay_section12
       if (reset == 1'b1) begin
         section_out12 <= 0;
@@ -586,7 +586,7 @@ module cic_interp (
                              muxinput_94;
   //   ------------------ Output Register ------------------
 
-  always @ (posedge clk or posedge reset)
+  always @ ()
     begin: output_reg_process
       if (reset == 1'b1) begin
         output_register <= 0;

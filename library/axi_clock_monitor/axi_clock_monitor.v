@@ -163,7 +163,7 @@ module axi_clock_monitor #(
 
   assign up_wack_o_s = up_wack_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack_int <= 'd0;
       up_reset_core <= 'd0;
@@ -183,7 +183,7 @@ module axi_clock_monitor #(
   assign up_rack_o_s = up_rack_int;
   assign up_rdata_o_s = up_rdata_int;
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rack_int <= 'd0;
       up_rdata_int <= 'd0;
