@@ -1,11 +1,12 @@
 ###############################################################################
-## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
+set ADI_POST_ROUTE_POD_PRE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/route_design.tcl]
 
 adi_project_create adrv9364z7020_ccbob_cmos 0 {} "xc7z020clg400-1"
 adi_project_files adrv9364z7020_ccbob_cmos [list \
