@@ -14,4 +14,3 @@ set_multicycle_path -hold -to [get_pins -hier -filter {name=~*i_if/i_rx_d*/i_rx_
 
 set_multicycle_path -setup -to [get_pins -hier -filter {name=~*i_if/adc_data_reg[*]/D}] 2
 set_multicycle_path -hold -to [get_pins -hier -filter {name=~*i_if/adc_data_reg[*]/D}] 1
-
