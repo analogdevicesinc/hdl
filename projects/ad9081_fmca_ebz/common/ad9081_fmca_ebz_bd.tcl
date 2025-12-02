@@ -564,7 +564,7 @@ if {$INTF_CFG != "RX"} {
 # Connect PHY Quads to CPU
 if {!$ADI_PHY_SEL} {
   for {set i 0} {$i < $num_quads} {incr i} {
-    set addr [expr 0x44a60000 + $i * 0x100000]
+    set addr [expr 0x44040000 + $i * 0x40000]
     if {$INTF_CFG == "RXTX"} {
       ad_cpu_interconnect $addr $rx_phy s_axi_${i}
     } elseif {$INTF_CFG == "RX"} {
