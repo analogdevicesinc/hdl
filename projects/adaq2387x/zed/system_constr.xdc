@@ -34,7 +34,6 @@ set tref_late   1.5
 
 # clocks
 
-create_clock -period $clk_period -name dco      [get_ports dco_p]
 create_clock -period $clk_period -name ref_clk  [get_ports ref_clk_p]
 
 # clock latencies

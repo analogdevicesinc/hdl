@@ -3,12 +3,15 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+set dco_clk_period 4.16
+create_clock -period $dco_clk_period -name dco  [get_ports dco_p]
+
 # data delay (dco to da/db skew 200ps)
 set data_delay  0.200
 
 # data delay for 240MHz clk
-set data_delay_min 1.880
-set data_delay_max 3.120
+set data_delay_min  1.880
+set data_delay_max  3.120
 
 # input delays
 
