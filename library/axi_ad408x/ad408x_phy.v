@@ -40,7 +40,9 @@ module ad408x_phy #(
   parameter DRP_WIDTH = 5,
   parameter NUM_LANES = 2,  // Max number of lanes is 2
   parameter IODELAY_CTRL = 1,
-  parameter IO_DELAY_GROUP = "dev_if_delay_group"
+  parameter IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter ADC_DATA_WIDTH  = 32,
+  parameter ADC_N_BITS  = 20
 ) (
   // device interface
   input                             dclk_in_n,
@@ -54,6 +56,7 @@ module ad408x_phy #(
 
   input                             sync_n,
   input        [4:0]                num_lanes,
+  input        [1:0]                device_code,
   input                             self_sync,
   input                             bitslip_enable,
   input                             filter_enable,
@@ -73,15 +76,13 @@ module ad408x_phy #(
   output                            adc_clk,
 
   // Output data
-  output      [31:0]                adc_data,
+  output  [ADC_DATA_WIDTH-1:0]      adc_data,
   output                            adc_valid,
 
   // Synchronization signals used when CNV signal is not present
   output                            sync_status
 );
 
-  // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
-  localparam DDR_OR_SDR_N    = 1;
   localparam CMOS_LVDS_N     = 0; // Use always LVDS mode
   localparam SEVEN_SERIES    = 1;
   localparam ULTRASCALE      = 2;
@@ -127,15 +128,23 @@ module ad408x_phy #(
   wire                 adc_clk_in_fast;
   wire [ 4:0]          shift_cnt_value;
   wire                 shift_cnt_en_s;
-  wire [15:0]          serdes_data_16;
-  wire [ 7:0]          serdes_data_0;
-  wire [ 7:0]          serdes_data_1;
-  wire [ 7:0]          serdes_data_8;
+  wire [7:0]           serdes_data_8;
+  wire                 ad_pack_ovalid_8_20;
+  wire                 ad_pack_ovalid_4_20;
+  wire                 ad_pack_ovalid_8_16;
+  wire                 ad_pack_ovalid_4_16;
+  wire                 ad_pack_ovalid_8_14;
+  wire                 ad_pack_ovalid_4_14;
+  wire [ 3:0]          serdes_data_0;
+  wire [ 3:0]          serdes_data_1;
+  wire [ 3:0]          serdes_data_4;
   wire [19:0]          pattern_value;
-  wire [19:0]          packed_16_20;
-  wire [19:0]          packed_8_20;
-  wire                 pack16_valid;
-  wire                 pack8_valid;
+  wire [19:0]          ad_pack_odata_8_20;
+  wire [15:0]          ad_pack_odata_8_16;
+  wire [13:0]          ad_pack_odata_8_14;
+  wire [19:0]          ad_pack_odata_4_20;
+  wire [15:0]          ad_pack_odata_4_16;
+  wire [13:0]          ad_pack_odata_4_14;
   wire                 adc_clk_div;
   wire [NUM_LANES-1:0] serdes_in_p;
   wire [NUM_LANES-1:0] serdes_in_n;
@@ -148,6 +157,12 @@ module ad408x_phy #(
   wire [NUM_LANES-1:0] data_s5;
   wire [NUM_LANES-1:0] data_s6;
   wire [NUM_LANES-1:0] data_s7;
+  wire [19:0]          ad_pack_odata_20;
+  wire [15:0]          ad_pack_odata_16;
+  wire [13:0]          ad_pack_odata_14;
+  wire [19:0]          adc_data_shifted_20;
+  wire [15:0]          adc_data_shifted_16;
+  wire [13:0]          adc_data_shifted_14;
 
   reg  [5:0]  serdes_reset = 6'b000110;
   reg         sync_status_int = 1'b0;
@@ -158,9 +173,11 @@ module ad408x_phy #(
   reg         packed_data_valid_d;
   reg         packed_data_valid;
   reg  [19:0] adc_data_shifted;
+  reg  [19:0] adc_data_shifted_s;
   reg  [ 4:0] shift_cnt = 5'd0;
-  reg  [19:0] packed_data_d;
-  reg  [19:0] packed_data;
+  reg  [19:0] ad_pack_odata_20_d;
+  reg  [15:0] ad_pack_odata_16_d;
+  reg  [13:0] ad_pack_odata_14_d;
   reg         slip_dd;
   reg         slip_d;
 
@@ -168,8 +185,13 @@ module ad408x_phy #(
   assign sync_status       = sync_status_int;
   assign single_lane       = num_lanes[0];
   assign adc_clk           = adc_clk_div;
-  assign pattern_value     = 20'hac5d6;
-  assign shift_cnt_value   = 'd19;
+  assign pattern_value     = device_code == 2'h0 ? 20'hAC5D6:
+                             device_code == 2'h1 ? 20'h0AC5D:
+                                                   20'h02B17;
+
+  assign shift_cnt_value   = device_code == 2'h0 ? 'd19:
+                             device_code == 2'h1 ? 'd15:
+                                                   'd13;
 
   IBUFGDS i_clk_in_ibuf(
     .I(dclk_in_p),
@@ -182,9 +204,8 @@ module ad408x_phy #(
     BUFIO i_clk_buf(
       .I(clk_in_s),
       .O(adc_clk_in_fast));
-
     BUFR #(
-      .BUFR_DIVIDE("4")
+      .BUFR_DIVIDE("2")
     ) i_div_clk_buf (
       .CLR(~sync_n),
       .CE(1'b1),
@@ -203,7 +224,7 @@ module ad408x_phy #(
       .I(clk_in_s));
 
     BUFGCE_DIV #(
-      .BUFGCE_DIVIDE(4),
+      .BUFGCE_DIVIDE(2),
       .IS_CE_INVERTED(1'b0),
       .IS_CLR_INVERTED(1'b0),
       .IS_I_INVERTED(1'b0)
@@ -236,10 +257,10 @@ module ad408x_phy #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .IODELAY_CTRL(IODELAY_CTRL),
     .IODELAY_GROUP(IO_DELAY_GROUP),
-    .DDR_OR_SDR_N(DDR_OR_SDR_N),
+    .DDR_OR_SDR_N(1),
     .DATA_WIDTH(NUM_LANES),
     .DRP_WIDTH(DRP_WIDTH),
-    .SERDES_FACTOR(8),
+    .SERDES_FACTOR(4),
     .EXT_SERDES_RESET(1)
   ) i_serdes(
     .rst(serdes_reset_s),
@@ -267,11 +288,7 @@ module ad408x_phy #(
   assign {serdes_data_1[0],serdes_data_0[0]} = data_s0;  // f-e latest bit received
   assign {serdes_data_1[1],serdes_data_0[1]} = data_s1;  // r-e
   assign {serdes_data_1[2],serdes_data_0[2]} = data_s2;  // f-e
-  assign {serdes_data_1[3],serdes_data_0[3]} = data_s3;  // r-e
-  assign {serdes_data_1[4],serdes_data_0[4]} = data_s4;  // f-e
-  assign {serdes_data_1[5],serdes_data_0[5]} = data_s5;  // r-e
-  assign {serdes_data_1[6],serdes_data_0[6]} = data_s6;  // f-e
-  assign {serdes_data_1[7],serdes_data_0[7]} = data_s7;  // r-e oldest bit received
+  assign {serdes_data_1[3],serdes_data_0[3]} = data_s3;  // r-e oldest bit received
 
   // Assert serdes valid after 2 clock cycles is pulled out of reset
 
@@ -283,68 +300,222 @@ module ad408x_phy #(
     end
   end
 
-  // for DDR(single lane) take data from a single lane
+  // single lane wiring
 
-  assign serdes_data_8 = serdes_data_0;
+  assign serdes_data_4 = serdes_data_0;
 
-  // For DDR dual lane interleave the two sedres outputs;
+  // dual lane wiring
 
-  assign serdes_data_16 = {serdes_data_0[7],
-                           serdes_data_1[7],
-                           serdes_data_0[6],
-                           serdes_data_1[6],
-                           serdes_data_0[5],
-                           serdes_data_1[5],
-                           serdes_data_0[4],
-                           serdes_data_1[4],
-                           serdes_data_0[3],
-                           serdes_data_1[3],
-                           serdes_data_0[2],
-                           serdes_data_1[2],
-                           serdes_data_0[1],
-                           serdes_data_1[1],
-                           serdes_data_0[0],
-                           serdes_data_1[0]};
+  assign serdes_data_8 = {serdes_data_0[3],
+                          serdes_data_1[3],
+                          serdes_data_0[2],
+                          serdes_data_1[2],
+                          serdes_data_0[1],
+                          serdes_data_1[1],
+                          serdes_data_0[0],
+                          serdes_data_1[0]};
 
-  ad_pack #(
-    .I_W(8),
-    .O_W(20),
-    .UNIT_W(1),
-    .ALIGN_TO_MSB(1)
-  ) i_ad_pack_8 (
-    .clk(adc_clk_div),
-    .reset(~serdes_valid[0]),
-    .idata(serdes_data_8),
-    .ivalid(serdes_valid[1]),
-    .odata(packed_8_20),
-    .ovalid(pack8_valid));
+  generate
+    if (ADC_DATA_WIDTH == 32) begin
 
-  ad_pack #(
-    .I_W(16),
-    .O_W(20),
-    .UNIT_W(1),
-    .ALIGN_TO_MSB(1)
-  ) i_ad_pack_16 (
-    .clk(adc_clk_div),
-    .reset(~serdes_valid[0]),
-    .idata(serdes_data_16),
-    .ivalid(serdes_valid[1]),
-    .odata(packed_16_20),
-    .ovalid(pack16_valid));
+      ad_pack #(
+        .I_W(4),
+        .O_W(20),
+        .UNIT_W(1),
+        .ALIGN_TO_MSB(1)
+      ) i_ad_pack_4_20 (
+        .clk(adc_clk_div),
+        .reset(~serdes_valid[0]),
+        .idata(serdes_data_4),
+        .ivalid(serdes_valid[1]),
+        .odata(ad_pack_odata_4_20),
+        .ovalid(ad_pack_ovalid_4_20));
 
-  always @(*) begin
-    case(single_lane)
-      1'b0 : packed_data = packed_16_20;
-      1'b1 : packed_data = packed_8_20;
-    endcase
-  end
+      ad_pack #(
+        .I_W(8),
+        .O_W(20),
+        .UNIT_W(1),
+        .ALIGN_TO_MSB(1)
+      ) i_ad_pack_8_20 (
+        .clk(adc_clk_div),
+        .reset(~serdes_valid[0]),
+        .idata(serdes_data_8),
+        .ivalid(serdes_valid[1]),
+        .odata(ad_pack_odata_8_20),
+        .ovalid(ad_pack_ovalid_8_20));
 
-  always @(*) begin
-    case(single_lane)
-      1'b0 : packed_data_valid = pack16_valid;
-      1'b1 : packed_data_valid = pack8_valid;
-    endcase
-  end
+      ad_pack #(
+        .I_W(4),
+        .O_W(16),
+        .UNIT_W(1),
+        .ALIGN_TO_MSB(1)
+      ) i_ad_pack_4_16 (
+        .clk(adc_clk_div),
+        .reset(~serdes_valid[0]),
+        .idata(serdes_data_4),
+        .ivalid(serdes_valid[1]),
+        .odata(ad_pack_odata_4_16),
+        .ovalid(ad_pack_ovalid_4_16));
+
+      ad_pack #(
+        .I_W(8),
+        .O_W(16),
+        .UNIT_W(1),
+        .ALIGN_TO_MSB(1)
+      ) i_ad_pack_8_16 (
+        .clk(adc_clk_div),
+        .reset(~serdes_valid[0]),
+        .idata(serdes_data_8),
+        .ivalid(serdes_valid[1]),
+        .odata(ad_pack_odata_8_16),
+        .ovalid(ad_pack_ovalid_8_16));
+
+      ad_pack #(
+        .I_W(4),
+        .O_W(14),
+        .UNIT_W(1),
+        .ALIGN_TO_MSB(1)
+      ) i_ad_pack_4_14 (
+        .clk(adc_clk_div),
+        .reset(~serdes_valid[0]),
+        .idata(serdes_data_4),
+        .ivalid(serdes_valid[1]),
+        .odata(ad_pack_odata_4_14),
+        .ovalid(ad_pack_ovalid_4_14));
+
+      ad_pack #(
+        .I_W(8),
+        .O_W(14),
+        .UNIT_W(1),
+        .ALIGN_TO_MSB(1)
+      ) i_ad_pack_8_14 (
+        .clk(adc_clk_div),
+        .reset(~serdes_valid[0]),
+        .idata(serdes_data_8),
+        .ivalid(serdes_valid[1]),
+        .odata(ad_pack_odata_8_14),
+        .ovalid(ad_pack_ovalid_8_14));
+
+      assign ad_pack_odata_20 = (single_lane) ? ad_pack_odata_4_20 : ad_pack_odata_8_20;
+      assign ad_pack_odata_16 = (single_lane) ? ad_pack_odata_4_16 : ad_pack_odata_8_16;
+      assign ad_pack_odata_14 = (single_lane) ? ad_pack_odata_4_14 : ad_pack_odata_8_14;
+
+      assign adc_data_shifted_20 = {ad_pack_odata_20_d,ad_pack_odata_20} >> shift_cnt;
+      assign adc_data_shifted_16 = {ad_pack_odata_16_d,ad_pack_odata_16} >> shift_cnt;
+      assign adc_data_shifted_14 = {ad_pack_odata_14_d,ad_pack_odata_14} >> shift_cnt;
+
+      always @(*) begin
+        case(device_code)
+          2'h0 : adc_data_shifted_s <= adc_data_shifted_20;
+          2'h1 : adc_data_shifted_s <= {{4{1'b0}},adc_data_shifted_16};
+          2'h2 : adc_data_shifted_s <= {{6{1'b0}},adc_data_shifted_14};
+          default : adc_data_shifted_s <= 20'hdeadd;
+        endcase
+      end
+
+      always @(*) begin
+        case({device_code,single_lane})
+          3'h0 : packed_data_valid = ad_pack_ovalid_8_20;
+          3'h1 : packed_data_valid = ad_pack_ovalid_4_20;
+          3'h2 : packed_data_valid = ad_pack_ovalid_8_16;
+          3'h3 : packed_data_valid = ad_pack_ovalid_4_16;
+          3'h4 : packed_data_valid = ad_pack_ovalid_8_14;
+          3'h5 : packed_data_valid = ad_pack_ovalid_4_14;
+          default : packed_data_valid = 1'b0;
+        endcase
+      end
+
+      // Sign extend to 32 bits
+
+      assign adc_data  = device_code == 2'h0 ? {{12{adc_data_shifted[19]}},adc_data_shifted}:
+                         device_code == 2'h1 ? {{16{adc_data_shifted[15]}},adc_data_shifted[15:0]}:
+                         device_code == 2'h2 ? {{18{adc_data_shifted[13]}},adc_data_shifted[13:0]}: 32'hdeaddead;
+
+    end else if (ADC_DATA_WIDTH == 16) begin
+
+      ad_pack #(
+        .I_W(4),
+        .O_W(16),
+        .UNIT_W(1),
+        .ALIGN_TO_MSB(1)
+      ) i_ad_pack_4_16 (
+        .clk(adc_clk_div),
+        .reset(~serdes_valid[0]),
+        .idata(serdes_data_4),
+        .ivalid(serdes_valid[1]),
+        .odata(ad_pack_odata_4_16),
+        .ovalid(ad_pack_ovalid_4_16));
+
+      ad_pack #(
+        .I_W(8),
+        .O_W(16),
+        .UNIT_W(1),
+        .ALIGN_TO_MSB(1)
+      ) i_ad_pack_8_16 (
+        .clk(adc_clk_div),
+        .reset(~serdes_valid[0]),
+        .idata(serdes_data_8),
+        .ivalid(serdes_valid[1]),
+        .odata(ad_pack_odata_8_16),
+        .ovalid(ad_pack_ovalid_8_16));
+
+      ad_pack #(
+        .I_W(4),
+        .O_W(14),
+        .UNIT_W(1),
+        .ALIGN_TO_MSB(1)
+      ) i_ad_pack_4_14 (
+        .clk(adc_clk_div),
+        .reset(~serdes_valid[0]),
+        .idata(serdes_data_4),
+        .ivalid(serdes_valid[1]),
+        .odata(ad_pack_odata_4_14),
+        .ovalid(ad_pack_ovalid_4_14));
+
+      ad_pack #(
+        .I_W(8),
+        .O_W(14),
+        .UNIT_W(1),
+        .ALIGN_TO_MSB(1)
+      ) i_ad_pack_8_14 (
+        .clk(adc_clk_div),
+        .reset(~serdes_valid[0]),
+        .idata(serdes_data_8),
+        .ivalid(serdes_valid[1]),
+        .odata(ad_pack_odata_8_14),
+        .ovalid(ad_pack_ovalid_8_14));
+
+      assign ad_pack_odata_16 = (single_lane) ? ad_pack_odata_4_16 : ad_pack_odata_8_16;
+      assign ad_pack_odata_14 = (single_lane) ? ad_pack_odata_4_14 : ad_pack_odata_8_14;
+
+      assign adc_data_shifted_16 = {ad_pack_odata_16_d,ad_pack_odata_16} >> shift_cnt;
+      assign adc_data_shifted_14 = {ad_pack_odata_14_d,ad_pack_odata_14} >> shift_cnt;
+
+      always @(*) begin
+        case(device_code)
+          2'h1 : adc_data_shifted_s <= {{4{1'b0}},adc_data_shifted_16};
+          2'h2 : adc_data_shifted_s <= {{6{1'b0}},adc_data_shifted_14};
+          default : adc_data_shifted_s <= 20'hdeadd;
+        endcase
+      end
+
+      always @(*) begin
+        case({device_code,single_lane})
+          3'h2 : packed_data_valid = ad_pack_ovalid_8_16;
+          3'h3 : packed_data_valid = ad_pack_ovalid_4_16;
+          3'h4 : packed_data_valid = ad_pack_ovalid_8_14;
+          3'h5 : packed_data_valid = ad_pack_ovalid_4_14;
+          default : packed_data_valid = 1'b0;
+        endcase
+      end
+
+      // Sign extend to 16 bits
+
+      assign adc_data  = device_code == 2'h1 ? adc_data_shifted[15:0]:
+                         device_code == 2'h2 ? {{2{adc_data_shifted[13]}}, adc_data_shifted[13:0]} : 16'hdead;
+
+    end
+  endgenerate
 
   // Align data
   // Use different rotations based on selected mode
@@ -353,7 +524,9 @@ module ad408x_phy #(
 
   always @(posedge adc_clk_div) begin
     if(packed_data_valid) begin
-      packed_data_d <= packed_data;
+      ad_pack_odata_20_d <= ad_pack_odata_20;
+      ad_pack_odata_16_d <= ad_pack_odata_16;
+      ad_pack_odata_14_d <= ad_pack_odata_14;
     end
   end
 
@@ -368,20 +541,26 @@ module ad408x_phy #(
 
   always @(posedge adc_clk_div) begin
     if(shift_cnt_en) begin
-      if(shift_cnt == shift_cnt_value || serdes_reset_s) begin
+      if(~serdes_reset_s) begin
+        if( adc_data_shifted == pattern_value ) begin
+          sync_status_int <= 1'b1;
+        end else if( adc_data_shifted != pattern_value && packed_data_valid_d ) begin
+          if(shift_cnt == shift_cnt_value) begin
+            shift_cnt <= 0;
+            sync_status_int <= 1'b0;
+          end else begin
+            shift_cnt <= shift_cnt + 1;
+          end
+        end
+      end else begin
         shift_cnt <= 0;
         sync_status_int <= 1'b0;
-      end else if( adc_data_shifted != pattern_value &&(packed_data_valid_d & ~packed_data_valid) ) begin
-        shift_cnt <= shift_cnt + 1;
-      end
-      if(adc_data_shifted == pattern_value) begin
-        sync_status_int <= 1'b1;
       end
     end
   end
 
   always @(posedge adc_clk_div) begin
-    adc_data_shifted <= {packed_data_d,packed_data} >> shift_cnt;
+    adc_data_shifted <= adc_data_shifted_s;
     packed_data_valid_d <= packed_data_valid;
   end
 
@@ -394,9 +573,6 @@ module ad408x_phy #(
    end
   end
 
-  // Sign extend to 32 bits
-
-  assign adc_data  = {{12{adc_data_shifted[19]}},adc_data_shifted};
   assign adc_valid = filter_enable ?  (packed_data_valid_d & filter_ready) : packed_data_valid_d;
 
 endmodule

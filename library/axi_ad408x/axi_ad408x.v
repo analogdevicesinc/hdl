@@ -38,7 +38,8 @@
 module axi_ad408x #(
   parameter   ID = 0,
   parameter   FPGA_TECHNOLOGY = 0,
-  parameter   IO_DELAY_GROUP = "dev_if_delay_group"
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter   ADC_N_BITS = 20
 ) (
 
   // ADC interface
@@ -59,12 +60,13 @@ module axi_ad408x #(
 
   // output data interface
 
-  output                  adc_clk,
-  output      [ 31:0]     adc_data,
-  output                  adc_valid,
-  input                   adc_dovf,
-  output                  adc_enable,
-  output                  adc_rst,
+  output                                      adc_enable,
+  output                                      adc_rst,
+  output                                      adc_clk,
+  output  [((ADC_N_BITS > 16)? 31 : 15):0]    adc_data,
+  output                                      adc_valid,
+  input                                       adc_dovf,
+
   // delay interface
 
   input                   delay_clk,
@@ -96,6 +98,7 @@ module axi_ad408x #(
 
   localparam DELAY_CTRL_NUM_LANES = 2;
   localparam DELAY_CTRL_DRP_WIDTH = 5;
+  localparam ADC_DATA_WIDTH  = ((ADC_N_BITS > 16)? 32 : 16);
 
   // internal signals
 
@@ -103,9 +106,10 @@ module axi_ad408x #(
   wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_drdata;
   wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
 
-  wire    [7:0]    adc_custom_control_s;
-  wire   [ 4:0]    adc_num_lanes;
+  wire   [ 7:0]    adc_custom_control_s;
+  wire   [ 1:0]    adc_device_code;
   wire             bitslip_enable;
+  wire   [ 4:0]    adc_num_lanes;
   wire             filter_enable;
   wire             delay_locked;
   wire             sync_status;
@@ -139,8 +143,9 @@ module axi_ad408x #(
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
   assign adc_rst = adc_rst_s;
-  assign self_sync     = adc_custom_control_s[1];
-  assign filter_enable = adc_custom_control_s[0];
+  assign adc_device_code = adc_custom_control_s[3:2];
+  assign self_sync       = adc_custom_control_s[1];
+  assign filter_enable   = adc_custom_control_s[0];
 
   always @(*) begin
     up_rdata_r = 'h00;
@@ -267,12 +272,14 @@ module axi_ad408x #(
     .up_rdata(up_rdata_s[1]),
     .up_rack(up_rack_s[1]));
 
- // ad4080 interface module
+ // ad408x interface module
 
   ad408x_phy #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .IO_DELAY_GROUP(IO_DELAY_GROUP),
-    .IODELAY_CTRL(1)
+    .IODELAY_CTRL(1),
+    .ADC_N_BITS(ADC_N_BITS),
+    .ADC_DATA_WIDTH(ADC_DATA_WIDTH)
   ) ad408x_interface (
     .dclk_in_n(dclk_in_n),
     .dclk_in_p(dclk_in_p),
@@ -283,6 +290,7 @@ module axi_ad408x #(
     .cnv_in_p(cnv_in_p),
     .cnv_in_n(cnv_in_n),
     .num_lanes(adc_num_lanes),
+    .device_code(adc_device_code),
     .self_sync(self_sync),
     .up_clk(up_clk),
     .up_adc_dld(up_dld),
