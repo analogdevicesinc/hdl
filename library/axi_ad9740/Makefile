@@ -4,7 +4,7 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-LIBRARY_NAME := axi_ad974x
+LIBRARY_NAME := axi_ad9740
 
 GENERIC_DEPS += ../common/ad_addsub.v
 GENERIC_DEPS += ../common/ad_dds.v
@@ -20,16 +20,16 @@ GENERIC_DEPS += ../common/up_dac_channel.v
 GENERIC_DEPS += ../common/up_dac_common.v
 GENERIC_DEPS += ../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_status.v
-GENERIC_DEPS += axi_ad974x.v
-GENERIC_DEPS += axi_ad974x_channel.v
-GENERIC_DEPS += axi_ad974x_core.v
-GENERIC_DEPS += axi_ad974x_if.v
+GENERIC_DEPS += axi_ad9740.v
+GENERIC_DEPS += axi_ad9740_channel.v
+GENERIC_DEPS += axi_ad9740_core.v
+GENERIC_DEPS += axi_ad9740_if.v
 
 XILINX_DEPS += ../xilinx/common/ad_mul.v
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
-XILINX_DEPS += axi_ad974x_ip.tcl
+XILINX_DEPS += axi_ad9740_ip.tcl
 
 include ../scripts/library.mk

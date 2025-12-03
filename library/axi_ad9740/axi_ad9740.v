@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad974x #(
+module axi_ad9740 #(
 
   parameter   ID = 0,
   parameter   FPGA_TECHNOLOGY = 0,
@@ -55,7 +55,7 @@ module axi_ad974x #(
  (* MARK_DEBUG = "TRUE" *) input  [15:0] dma_data,
  (* MARK_DEBUG = "TRUE" *) input         dma_valid,
  (* MARK_DEBUG = "TRUE" *) output        dma_ready,
- (* MARK_DEBUG = "TRUE" *) output [13:0] dac_data,
+ (* MARK_DEBUG = "TRUE" *) output reg [13:0] dac_data,
 
   // axi interface
 
@@ -104,25 +104,30 @@ module axi_ad974x #(
   wire [13:0] up_raddr_s;
   wire [31:0] up_rdata_s;
   wire        up_rack_s;
+  wire [13:0] dac_data_int;
 
   // signal name changes
 
   assign up_clk   = s_axi_aclk;
   assign up_rstn  = s_axi_aresetn;
 
+  always @(posedge dac_clk) begin
+    dac_data <= dac_data_int;
+  end
+
   // device interface
 
-  axi_ad974x_if #(
+  axi_ad9740_if #(
     .DAC_RESOLUTION(DAC_RESOLUTION)
-  ) axi_ad974x_interface (
+  ) axi_ad9740_interface (
     .dac_data_in(dac_data_s),
     .dac_data_sel(dac_data_sel_s),
     .dac_dfmt_type(dac_dfmt_type_s),
-    .dac_data_out(dac_data));
+    .dac_data_out(dac_data_int));
 
   // core
 
-  axi_ad974x_core #(
+  axi_ad9740_core #(
     .ID(ID),
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .FPGA_FAMILY(FPGA_FAMILY),
@@ -133,7 +138,7 @@ module axi_ad974x #(
     .DDS_TYPE(DDS_TYPE),
     .DDS_CORDIC_DW(DDS_CORDIC_DW),
     .DDS_CORDIC_PHASE_DW(DDS_CORDIC_PHASE_DW)
-  ) axi_ad974x_up_core (
+  ) axi_ad9740_up_core (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
     .dac_data(dac_data_s),

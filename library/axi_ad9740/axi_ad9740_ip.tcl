@@ -6,8 +6,8 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
-adi_ip_create axi_ad974x
-adi_ip_files axi_ad974x [list \
+adi_ip_create axi_ad9740
+adi_ip_files axi_ad9740 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
@@ -27,18 +27,18 @@ adi_ip_files axi_ad974x [list \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
-  "axi_ad974x_channel.v" \
-  "axi_ad974x_core.v" \
-  "axi_ad974x_if.v" \
-  "axi_ad974x.v" ]
+  "axi_ad9740_channel.v" \
+  "axi_ad9740_core.v" \
+  "axi_ad9740_if.v" \
+  "axi_ad9740.v" ]
 
-adi_ip_properties axi_ad974x
+adi_ip_properties axi_ad9740
 adi_init_bd_tcl
-adi_ip_bd axi_ad974x "bd/bd.tcl"
+adi_ip_bd axi_ad9740 "bd/bd.tcl"
 
 set cc [ipx::current_core]
 
-set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ad974x} $cc
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ad9740} $cc
 
 set_property driver_value 0 [ipx::get_ports *dac* -of_objects  $cc]
 set_property driver_value 0 [ipx::get_ports *data* -of_objects  $cc]

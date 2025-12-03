@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad974x_if #(
+module axi_ad9740_if #(
   parameter DAC_RESOLUTION = 14
 ) (
 

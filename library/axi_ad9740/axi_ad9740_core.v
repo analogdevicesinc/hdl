@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad974x_core #(
+module axi_ad9740_core #(
   parameter   ID = 0,
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   FPGA_FAMILY = 0,
@@ -112,14 +112,14 @@ module axi_ad974x_core #(
 
   // dac channel 0
 
-  axi_ad974x_channel #(
+  axi_ad9740_channel #(
     .CHANNEL_ID(0),
     .DAC_RESOLUTION(DAC_RESOLUTION),
     .DDS_DISABLE(DDS_DISABLE),
     .DDS_TYPE(DDS_TYPE),
     .DDS_CORDIC_DW(DDS_CORDIC_DW),
     .DDS_CORDIC_PHASE_DW(DDS_CORDIC_PHASE_DW)
-  ) axi_ad974x_channel_0 (
+  ) axi_ad9740_channel_0 (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
     .dac_data(dac_data_channel_0),
@@ -149,7 +149,7 @@ module axi_ad974x_core #(
     .SPEED_GRADE(SPEED_GRADE),
     .DEV_PACKAGE(DEV_PACKAGE),
     .COMMON_ID(6'h00)
-  ) axi_ad974x_common_core (
+  ) axi_ad9740_common_core (
     .mmcm_rst(),
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
