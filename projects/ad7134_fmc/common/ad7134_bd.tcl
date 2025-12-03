@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -10,7 +10,7 @@ create_bd_port -dir O ad713x_sdpclk
 # create a SPI Engine architecture for the parallel data interface of AD713x
 # this design supports AD7132/AD7134/AD7136
 
-source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+source $ad_hdl_dir/library/spi_engine/scripts/spi_engine_xilinx.tcl
  
 set data_width    32
 set async_spi_clk 1
