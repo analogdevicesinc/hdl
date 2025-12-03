@@ -42,12 +42,22 @@ set RX_DESC_TABLE_SIZE "32"
 set TX_RAM_SIZE "32768"
 set RX_RAM_SIZE "32768"
 
+# Extra configurations for Corundum functionality
+ad_ip_parameter sys_ps8 CONFIG.PSU__NUM_FABRIC_RESETS {2}
+# ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_LENGTH_WIDTH 28
+
+# Corundum connections
 connect_bd_net [get_bd_ports qsfp_led] [get_bd_pins corundum_hierarchy/ethernet_core/qsfp_led]
 
 ad_connect corundum_hierarchy/clk_corundum sys_ps8/pl_clk1
 
 # Use Utility Logic Vector IP which takes sys_ps8/pl_resetn1 and negates it and connects
-# it to corundum_hierarchy/rst_corundum
+# it to corundum_hierarchy/rst_corundum, but first it's must be disconnected
+# from the Corundum Reset Generator
+
+#ad_disconnect [get_bd_pins corundum_hierarchy/rst_corundum] [get_bd_pins corundum_rstgen/peripheral_reset]
+delete_bd_objs [get_bd_nets rst_corundum_1]
+
 ad_ip_instance util_vector_logic util_vector_logic_0
 ad_ip_parameter util_vector_logic_0 CONFIG.C_OPERATION {not}
 ad_ip_parameter util_vector_logic_0 CONFIG.C_SIZE 1
@@ -101,7 +111,6 @@ ad_connect util_reduced_logic_0/Op1 corundum_hierarchy/irq
 
 ad_cpu_interrupt ps-4 mb-4 util_reduced_logic_0/Res
 
-# ad_mem_hpc0_interconnect sys_dma_clk sys_ps8/S_AXI_HPC0_FPD
 ad_mem_hpc0_interconnect sys_200m_clk corundum_hierarchy/m_axi
 
 assign_bd_address [get_bd_addr_segs { \

@@ -780,7 +780,7 @@ ad_ip_instance proc_sys_reset corundum_rstgen [list \
   C_AUX_RESET_HIGH 1 \
 ]
 
-#ad_connect corundum_hierarchy/rst_corundum corundum_rstgen/peripheral_reset
+ad_connect corundum_hierarchy/rst_corundum corundum_rstgen/peripheral_reset
 
 switch -exact -- $CPU {
     Zynq     {

@@ -234,7 +234,11 @@ module system_top (
   input  wire         qsfp_intl,
   output wire         qsfp_lpmode,
 
-  output [3:0]        qsfp_led
+  // previously named qsfp_led
+  output              led_gpio_0,
+  output              led_gpio_1,
+  output              led_gpio_2,
+  output              led_gpio_3
 );
 
   // internal signals
@@ -262,11 +266,6 @@ module system_top (
   wire            spi_mosi;
   wire            spi0_miso;
   wire            spi_miso_s;
-
-  wire           led_gpio_0;
-  wire           led_gpio_1;
-  wire           led_gpio_2;
-  wire           led_gpio_3;
 
   reg  [7:0]     spi_3_to_8_csn;
 
@@ -405,10 +404,10 @@ module system_top (
               pmod0_d2,     // 14
               pmod0_d1,     // 13
               pmod0_d0,     // 12
-              led_gpio_3,   // 11
-              led_gpio_2,   // 10
-              led_gpio_1,   // 9
-              led_gpio_0,   // 8
+              0'b0,         // 11
+              0'b0,         // 10
+              0'b0,         // 9
+              0'b0,         // 8
               dip_gpio_3,   // 7
               dip_gpio_2,   // 6
               dip_gpio_1,   // 5
@@ -423,8 +422,10 @@ module system_top (
   wire qsfp_gtpowergood;
   wire qsfp_rst;
   wire ptp_rst;
+  wire [3:0] qsfp_led;
 
   assign ptp_rst = qsfp_rst;
+  assign {led_gpio_0, led_gpio_1, led_gpio_2, led_gpio_3} = qsfp_led[3:0];
 
   IBUFDS_GTE4 i_ibufds_ref_clk_1 (
     .CEB (1'd0),
