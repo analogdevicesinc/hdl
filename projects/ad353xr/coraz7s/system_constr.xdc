@@ -3,6 +3,8 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]] -master_clock clk_fpga_0 [get_pins -filter name=~*CLKOUT0 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]]
+
 # DAC SPI interface
 set_property -dict {PACKAGE_PIN H15  IOSTANDARD LVCMOS33} [get_ports spi_sck]           ; ## ck_sck H15
 set_property -dict {PACKAGE_PIN T12  IOSTANDARD LVCMOS33} [get_ports spi_sdo]           ; ## ck_mosi T12
