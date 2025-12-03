@@ -15,7 +15,7 @@ M_DEPS += ../../../library/util_cdc/sync_bits.v
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_edge_detect.v
 
-LIB_DEPS += axi_ad974x
+LIB_DEPS += axi_ad9740
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx

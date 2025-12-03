@@ -94,7 +94,7 @@ module system_top #(
   output          adf4351_mosi,
   output          adf4351_ce,
 
-  // ad974x interface
+  // ad9740 interface
 
   input           ad9740_clk_p,
   input           ad9740_clk_n,
@@ -206,8 +206,8 @@ module system_top #(
     .dio_p(iic_mux_sda));
 
   system_wrapper i_system_wrapper (
-    .ad974x_clk (ad9740_clk),
-    .ad974x_data (ad9740_data_int),
+    .ad9740_clk (ad9740_clk),
+    .ad9740_data (ad9740_data_int),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
