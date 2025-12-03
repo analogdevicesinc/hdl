@@ -6,7 +6,7 @@ AXI AD408x
 .. hdl-component-diagram::
 
 The :git-hdl:`AXI AD408x <library/axi_ad408x>` IP core can be used to interface
-the :adi:`AD4080` device.
+the :adi:`AD4080, AD4083, AD4086` devices.
 This documentation only covers the IP core and requires one to be
 familiar with the device, for a complete and better understanding.
 
@@ -54,6 +54,8 @@ Configuration Parameters
      - Core ID should be unique for each IP in the system
    * - FPGA_TECHNOLOGY
      - Used to select between FPGA devices, auto set in project.
+   * - ADC_N_BITS
+     - ADC resolution (default: 20). Supported values: 20, 16, 14
 
 Interface
 --------------------------------------------------------------------------------
@@ -101,10 +103,11 @@ The axi_ad408x operates as follows:
 
 * The LVDS data is deserialized by the
   :git-hdl:`ad_serdes_in<library/xilinx/common/ad_serdes_in.v>` module with
-  a 1:8 ratio.
+  a 1:4 ratio.
 * After deserialization, the data is sent to the
-  :git-hdl:`ad_pack<library/common/ad_pack.v>` module, which packs the 8-bit
-  data into a 20-bit format.
+  :git-hdl:`ad_pack<library/common/ad_pack.v>` module, which packs the 4/8-bit
+  (single lane/dual lane)data into a 20/16/14-bit format based on the DEVICE_CODE
+  field of the 0x4C (ADC Common) register.
 * When the bit-slip (synchronization process) is enabled, the software
   configures the ADC to output a fixed pattern, and the interface module will
   adjust the data alignment until the pattern is captured.
@@ -199,7 +202,7 @@ Software Guidelines
      - 3
      - This bit enables capture synchronization. When activated, it initiates
        an HDL process that aligns the sample's most significant bit (MSB) based
-       solely on the captured data, without considering the AD4080's CNV signal.
+       solely on the captured data, without considering the AD408x device's CNV signal.
        This bit is self-clearing and should be toggled whenever synchronization
        is needed (e.g., at boot or after updating the sampling rate).
    * - NUM_LANES *
@@ -211,8 +214,14 @@ Software Guidelines
      - 0x4C (ADC Common)
      - 0
      - Setting this bit configures the sample capture to occur at each falling
-       edge of the Filter Result Ready pin of the AD4080, as opposed to
+       edge of the Filter Result Ready pin of the AD408x devices, as opposed to
        continuous mode when the digital filter feature is disabled.
+   * - DEVICE_CODE
+     - 0x4C (ADC Common)
+     - [3:2]
+     - Resolution selection code for the LVDS DATA deserialization
+       (00: 20-bit, 01: 16-bit, 10: 14-bit).
+       When you use an IP parameter ADC_N_BITS<=16 the 20-bit mode is not available.
    * - SYNC_STATUS *
      - 0x68 (ADC Common)
      - 0
@@ -232,8 +241,8 @@ References
 -------------------------------------------------------------------------------
 
 * HDL IP core at :git-hdl:`library/axi_ad408x`
-* HDL project at :git-hdl:`projects/ad408x_fmc_evb`
-* HDL project documentation at :ref:`ad408x_fmc_evb`
+* HDL project at :git-hdl:`projects/ad4080_fmc_evb`
+* HDL project documentation at :ref:`ad4080_fmc_evb`
 * :adi:`AD4080`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`
