@@ -1,8 +1,8 @@
-# AD408X-FMC-EVB HDL Project
+# AD4080-FMC-EVB HDL Project
 
 - Evaluation board product page: [EVAL-AD4080-FMC](https://www.analog.com/eval-ad4080-fmc)
 - System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad408x_fmc_evb/index.html
+- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad4080_fmc_evb/index.html
 - Evaluation board VADJ: 2.5V
 
 ## Supported parts
