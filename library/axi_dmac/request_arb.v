@@ -766,8 +766,8 @@ module request_arb #(
     .NUM_OF_BITS(ID_WIDTH),
     .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
   ) i_src_address_id_sync (
-    .out_clk(src_clk),
-    .out_resetn(src_resetn),
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
     .in_bits(src_address_id),
     .out_bits(src_address_id_s));
 
@@ -881,8 +881,8 @@ module request_arb #(
     .NUM_OF_BITS(ID_WIDTH),
     .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
   ) i_src_response_id_sync (
-    .out_clk(src_clk),
-    .out_resetn(src_resetn),
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
     .in_bits(src_response_id),
     .out_bits(src_response_id_s));
 
@@ -1025,8 +1025,8 @@ module request_arb #(
     .NUM_OF_BITS(ID_WIDTH),
     .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
   ) i_src_response_id_sync (
-    .out_clk(src_clk),
-    .out_resetn(src_resetn),
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
     .in_bits(src_response_id),
     .out_bits(src_response_id_s));
 

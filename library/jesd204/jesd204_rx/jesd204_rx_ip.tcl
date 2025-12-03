@@ -41,6 +41,7 @@ adi_ip_bd jesd204_rx "bd/bd.tcl"
 adi_ip_add_core_dependencies [list \
   analog.com:$VIVADO_IP_LIBRARY:jesd204_common:1.0 \
   analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+  analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
 ]
 
 set_property display_name "ADI JESD204 Receive" [ipx::current_core]

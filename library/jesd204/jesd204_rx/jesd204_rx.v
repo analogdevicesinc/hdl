@@ -464,14 +464,22 @@ module jesd204_rx #(
   wire [NUM_LANES-1:0] emb_lock;
   wire link_buffer_release_n;
 
-  sync_bits #(
-    .NUM_OF_BITS (1),
-    .ASYNC_CLK(ASYNC_CLK)
-  ) i_buffer_release_cdc (
-    .in_bits(buffer_release_n),
-    .out_clk(clk),
-    .out_resetn(1'b1),
-    .out_bits(link_buffer_release_n));
+  if (ASYNC_CLK) begin
+
+    util_rst #(
+      .ASYNC_STAGES(2),
+      .SYNC_STAGES(2)
+    ) i_buffer_release_rst (
+      .rst_async(buffer_release_d1),
+      .clk(clk),
+      .rstn(link_buffer_release_n),
+      .rst());
+
+  end else begin
+
+    assign link_buffer_release_n = buffer_release_d1;
+
+  end
 
   jesd204_rx_ctrl_64b  #(
     .NUM_LANES(NUM_LANES)

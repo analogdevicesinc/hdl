@@ -20,12 +20,15 @@ adi_ip_files axi_ltc2387 [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ltc2387_if.v" \
   "axi_ltc2387_channel.v" \
   "axi_ltc2387.v" ]
 
 adi_ip_properties axi_ltc2387
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 ipx::infer_bus_interface ref_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface dco_p xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]

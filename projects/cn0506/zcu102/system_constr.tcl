@@ -70,9 +70,6 @@ switch $INTF_CFG {
     create_clock -name tx_clk_1   -period  40.0 [get_ports mii_tx_clk_a]
     create_clock -name tx_clk_2   -period  40.0 [get_ports mii_tx_clk_b]
 
-    create_clock -name mdio_clk_a -period 400.0 [get_pins i_system_wrapper/system_i/sys_ps8/inst/emio_enet0_mdio_mdc]
-    create_clock -name mdio_clk_b -period 400.0 [get_pins i_system_wrapper/system_i/sys_ps8/inst/emio_enet1_mdio_mdc]
-
     set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports mii_rx_clk_b]
     set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports mii_txd_b]
 
@@ -113,7 +110,7 @@ switch $INTF_CFG {
     set_property -dict {PACKAGE_PIN AC12 IOSTANDARD LVCMOS18 SLEW FAST} [get_ports {rgmii_txd_b[0]}]  ; ## H25 FMC_HPC1_LA21_P
     set_property -dict {PACKAGE_PIN AC11 IOSTANDARD LVCMOS18 SLEW FAST} [get_ports {rgmii_txd_b[1]}]  ; ## H26 FMC_HPC1_LA21_N
     set_property -dict {PACKAGE_PIN AF11 IOSTANDARD LVCMOS18 SLEW FAST} [get_ports {rgmii_txd_b[2]}]  ; ## G24 FMC_HPC1_LA22_P
-    set_property -dict {PACKAGE_PIN AG11 IOSTANDARD LVCMOS18 SLEW FAST} [get_ports {rgmii_txd_b[3]}]  ; ## G25 FMC_HPC1_LA22_N 
+    set_property -dict {PACKAGE_PIN AG11 IOSTANDARD LVCMOS18 SLEW FAST} [get_ports {rgmii_txd_b[3]}]  ; ## G25 FMC_HPC1_LA22_N
 
     set_property -dict {PACKAGE_PIN AF12 IOSTANDARD LVCMOS18} [get_ports int_n_b]                     ; ## D24 FMC_HPC1_LA23_N
 
@@ -125,9 +122,6 @@ switch $INTF_CFG {
     set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports rgmii_txd_b]
 
     set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports link_st_b]
-
-    create_clock -period 400.000 -name mdio_clk_a [get_pins i_system_wrapper/system_i/sys_ps8/inst/emio_enet0_mdio_mdc]
-    create_clock -period 400.000 -name mdio_clk_b [get_pins i_system_wrapper/system_i/sys_ps8/inst/emio_enet1_mdio_mdc]
 
     set_false_path -setup -to [get_pins i_system_wrapper/system_i/sys_ps8/inst/PS8_i/EMIOENET0MDIOI]
     set_false_path -setup -to [get_pins i_system_wrapper/system_i/sys_ps8/inst/PS8_i/EMIOENET1MDIOI]
@@ -160,9 +154,6 @@ switch $INTF_CFG {
 
     create_clock -name rx_clk_a -period 20.0 [get_ports rmii_rx_ref_clk_a]
     create_clock -name rx_clk_b -period 20.0 [get_ports rmii_rx_ref_clk_b]
-
-    create_clock -name mdio_clk_a -period 400.0 [get_pins i_system_wrapper/system_i/sys_ps8/inst/emio_enet0_mdio_mdc]
-    create_clock -name mdio_clk_b -period 400.0 [get_pins i_system_wrapper/system_i/sys_ps8/inst/emio_enet1_mdio_mdc]
 
     create_clock -name mdio_0_rx_clk_a -period 40.0 [get_pins i_system_wrapper/system_i/sys_ps8/emio_enet0_gmii_rx_clk]
     create_clock -name mdio_0_tx_clk_a -period 40.0 [get_pins i_system_wrapper/system_i/sys_ps8/emio_enet0_gmii_tx_clk]

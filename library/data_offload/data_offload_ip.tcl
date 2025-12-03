@@ -26,6 +26,7 @@ adi_ip_sim_ttcl data_offload "data_offload_sv.ttcl"
 
 adi_ip_add_core_dependencies [list \
   analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+  analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
   analog.com:$VIVADO_IP_LIBRARY:util_axis_fifo_asym:1.0 \
 ]
 

@@ -64,8 +64,31 @@ switch $INTF_CFG {
 
     ad_connect gmii_to_rgmii_0/GMII sys_ps8/GMII_ENET0
     ad_connect gmii_to_rgmii_1/GMII sys_ps8/GMII_ENET1
-    ad_connect gmii_to_rgmii_0/MDIO_GEM sys_ps8/MDIO_ENET0
-    ad_connect gmii_to_rgmii_1/MDIO_GEM sys_ps8/MDIO_ENET1
+
+    ad_ip_instance ilconstant VCC [list \
+      CONST_VAL 1 \
+    ]
+
+    ad_ip_instance sync_bits sync_mdio_enet0_in
+    ad_ip_instance sync_bits sync_mdio_enet1_in
+
+    ad_connect sync_mdio_enet0_in/out_clk sys_ps8/emio_enet0_mdio_mdc
+    ad_connect sync_mdio_enet0_in/out_resetn VCC/dout
+    ad_connect sync_mdio_enet0_in/in_bits gmii_to_rgmii_0/mdio_gem_i
+
+    ad_connect gmii_to_rgmii_0/mdio_gem_mdc sys_ps8/emio_enet0_mdio_mdc
+    ad_connect gmii_to_rgmii_0/mdio_gem_o sys_ps8/emio_enet0_mdio_i
+    ad_connect gmii_to_rgmii_0/mdio_gem_t sys_ps8/emio_enet0_mdio_t
+    ad_connect sync_mdio_enet0_in/out_bits sys_ps8/emio_enet0_mdio_i
+
+    ad_connect sync_mdio_enet1_in/out_clk sys_ps8/emio_enet1_mdio_mdc
+    ad_connect sync_mdio_enet1_in/out_resetn VCC/dout
+    ad_connect sync_mdio_enet1_in/in_bits gmii_to_rgmii_1/mdio_gem_i
+
+    ad_connect gmii_to_rgmii_1/mdio_gem_mdc sys_ps8/emio_enet1_mdio_mdc
+    ad_connect gmii_to_rgmii_1/mdio_gem_o sys_ps8/emio_enet1_mdio_i
+    ad_connect gmii_to_rgmii_1/mdio_gem_t sys_ps8/emio_enet1_mdio_t
+    ad_connect sync_mdio_enet1_in/out_bits sys_ps8/emio_enet1_mdio_i
 
     # Remove the unused 250MHz and 500MHz reset generators added in the base design.
 

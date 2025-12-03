@@ -28,11 +28,10 @@ proc constrain_ip_inst {{ip_inst {}}} {
       set input_start_cells [filter -quiet $input_start_cells "NAME != $input_data_reg"]
     }
 
-    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER && PRIMITIVE_SUBGROUP == SDR) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM)}]
+    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
 
     if {$input_start_cells eq ""} {
-      set item_count_total 0
-      set item_count_gnd 0
+      continue
     } else {
       set item_count_total [expr [string_occurrences " " $input_start_cells] + 1]
       set item_count_gnd [string_occurrences "GND" $input_start_cells]
@@ -43,14 +42,19 @@ proc constrain_ip_inst {{ip_inst {}}} {
       set item_count_fd [expr [string_occurrences " " $input_start_regs] + 1]
     }
 
+    set input_clk [get_clocks -quiet -of_objects $input_start_regs]
+    set output_clk [get_clocks -quiet -of_objects [get_cells -include_replicated_objects $sync_bits_inst/cdc_sync_stage_reg[0]*]]
+    # skip adding constraints if the clocks are in the same clock domain
+    if {[string equal $input_clk $output_clk]} {
+      continue
+    }
+    puts "$sync_bits_inst : $input_clk : $output_clk"
+
     if {$item_count_total != 0 && $item_count_gnd != $item_count_total} {
       if {$item_count_fd == 0 || [expr $item_count_fd + $item_count_gnd] != $item_count_total} {
         set_false_path \
           -to [get_pins -include_replicated_objects -filter {REF_PIN_NAME == D} -of_objects [get_cells -include_replicated_objects $sync_bits_inst/cdc_sync_stage_reg[0]*]]
       } else {
-        set input_clk [get_clocks -of_objects $input_start_regs]
-        set output_clk [get_clocks -of_objects [get_cells -include_replicated_objects $sync_bits_inst/cdc_sync_stage_reg[0]*]]
-
         set input_clk_period [get_property -min PERIOD $input_clk]
         set output_clk_period [get_property -min PERIOD $output_clk]
 
@@ -83,8 +87,14 @@ proc constrain_ip_inst {{ip_inst {}}} {
     if {$input_data_reg_cdc eq ""} {
       continue
     }
+
     set input_clk [get_clocks -of_objects [get_cells -include_replicated_objects $sync_data_inst/in_toggle_d1_reg]]
     set output_clk [get_clocks -of_objects [get_cells -include_replicated_objects $sync_data_inst/out_toggle_d1_reg]]
+    # skip adding constraints if the clocks are in the same clock domain
+    if {[string equal $input_clk $output_clk]} {
+      continue
+    }
+    puts "$sync_data_inst : $input_clk : $output_clk"
 
     set input_clk_period [get_property -min PERIOD $input_clk]
     set output_clk_period [get_property -min PERIOD $output_clk]
@@ -116,8 +126,14 @@ proc constrain_ip_inst {{ip_inst {}}} {
     if {$input_data_reg_cdc eq ""} {
       continue
     }
+
     set input_clk [get_clocks -of_objects [get_cells -include_replicated_objects $sync_event_inst/in_toggle_d1_reg]]
     set output_clk [get_clocks -of_objects [get_cells -include_replicated_objects $sync_event_inst/out_toggle_d1_reg]]
+    # skip adding constraints if the clocks are in the same clock domain
+    if {[string equal $input_clk $output_clk]} {
+      continue
+    }
+    puts "$sync_event_inst : $input_clk : $output_clk"
 
     set input_clk_period [get_property -min PERIOD $input_clk]
     set output_clk_period [get_property -min PERIOD $output_clk]
@@ -156,11 +172,10 @@ proc constrain_ip_inst {{ip_inst {}}} {
       set input_start_cells [filter -quiet $input_start_cells "NAME != $input_data_reg"]
     }
 
-    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER && PRIMITIVE_SUBGROUP == SDR) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM)}]
+    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
 
     if {$input_start_cells eq ""} {
-      set item_count_total 0
-      set item_count_gnd 0
+      continue
     } else {
       set item_count_total [expr [string_occurrences " " $input_start_cells] + 1]
       set item_count_gnd [string_occurrences "GND" $input_start_cells]
@@ -206,11 +221,10 @@ proc constrain_ip_inst {{ip_inst {}}} {
       set input_start_cells [filter -quiet $input_start_cells "NAME != $input_data_reg"]
     }
 
-    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER && PRIMITIVE_SUBGROUP == SDR) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM)}]
+    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
 
     if {$input_start_cells eq ""} {
-      set item_count_total 0
-      set item_count_gnd 0
+      continue
     } else {
       set item_count_total [expr [string_occurrences " " $input_start_cells] + 1]
       set item_count_gnd [string_occurrences "GND" $input_start_cells]
@@ -259,11 +273,10 @@ proc constrain_ip_inst {{ip_inst {}}} {
       set input_start_cells [filter -quiet $input_start_cells "NAME != $input_data_reg"]
     }
 
-    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER && PRIMITIVE_SUBGROUP == SDR) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM)}]
+    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
 
     if {$input_start_cells eq ""} {
-      set item_count_total 0
-      set item_count_gnd 0
+      continue
     } else {
       set item_count_total [expr [string_occurrences " " $input_start_cells] + 1]
       set item_count_gnd [string_occurrences "GND" $input_start_cells]
@@ -303,11 +316,10 @@ proc constrain_ip_inst {{ip_inst {}}} {
         set input_start_cells [filter -quiet $input_start_cells "NAME != $input_data_reg"]
       }
 
-      set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER && PRIMITIVE_SUBGROUP == SDR) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM)}]
+      set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
 
       if {$input_start_cells eq ""} {
-        set item_count_total 0
-        set item_count_gnd 0
+        continue
       } else {
         set item_count_total [expr [string_occurrences " " $input_start_cells] + 1]
         set item_count_gnd [string_occurrences "GND" $input_start_cells]

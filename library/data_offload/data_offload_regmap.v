@@ -64,8 +64,8 @@ module data_offload_regmap #(
   input                   dst_clk,
 
   // resets for all clock domains
-  output reg              src_sw_resetn,
-  output reg              dst_sw_resetn,
+  output                  src_sw_resetn,
+  output                  dst_sw_resetn,
 
   // status bit from the memory controller
   input                   ddr_calib_done,
@@ -101,6 +101,7 @@ module data_offload_regmap #(
 
   reg   [31:0]  up_scratch = 'd0;
   reg           up_sw_resetn = 'd0;
+  reg           up_sw_reset = 'd0;
   reg           up_bypass = 'd0;
   reg           up_sync = 'd0;
   reg   [ 1:0]  up_sync_config = 'd0;
@@ -114,8 +115,6 @@ module data_offload_regmap #(
   wire          up_ddr_calib_done_s;
   wire  [ 4:0]  up_wr_fsm_status_s;
   wire  [ 3:0]  up_rd_fsm_status_s;
-  wire          src_sw_resetn_s;
-  wire          dst_sw_resetn_s;
   wire  [33:0]  src_transfer_length_s;
   wire          up_src_overflow_set_s;
   wire          up_dst_underflow_set_s;
@@ -320,14 +319,27 @@ module data_offload_regmap #(
   end
   endgenerate
 
-  sync_bits #(
-    .NUM_OF_BITS (1),
-    .ASYNC_CLK (1)
+  always @(posedge up_clk) begin
+    up_sw_reset <= ~up_sw_resetn;
+  end
+
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
   ) i_src_xfer_control_rst (
-    .in_bits (up_sw_resetn),
-    .out_clk (src_clk),
-    .out_resetn (1'b1),
-    .out_bits (src_sw_resetn_s));
+    .rst_async(up_sw_reset),
+    .clk(src_clk),
+    .rstn(src_sw_resetn),
+    .rst());
+
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_dst_xfer_control_rst (
+    .rst_async(up_sw_reset),
+    .clk(dst_clk),
+    .rstn(dst_sw_resetn),
+    .rst());
 
   sync_bits #(
     .NUM_OF_BITS (1),
@@ -337,15 +349,6 @@ module data_offload_regmap #(
     .out_clk (src_clk),
     .out_resetn (1'b1),
     .out_bits (src_bypass));
-
-  sync_bits #(
-    .NUM_OF_BITS (1),
-    .ASYNC_CLK (1)
-  ) i_dst_xfer_control_rst (
-    .in_bits (up_sw_resetn),
-    .out_clk (dst_clk),
-    .out_resetn (1'b1),
-    .out_bits (dst_sw_resetn_s));
 
   sync_bits #(
     .NUM_OF_BITS (1),
@@ -391,14 +394,6 @@ module data_offload_regmap #(
     .in_data (up_transfer_length),
     .out_clk (dst_clk),
     .out_data (dst_transfer_length));
-
-  always @(posedge src_clk) begin
-    src_sw_resetn <= src_sw_resetn_s;
-  end
-
-  always @(posedge dst_clk) begin
-    dst_sw_resetn <= dst_sw_resetn_s;
-  end
 
   generate if (TX_OR_RXN_PATH == 0) begin
     sync_event #(

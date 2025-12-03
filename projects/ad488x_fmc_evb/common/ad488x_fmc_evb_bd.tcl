@@ -83,6 +83,67 @@ ad_ip_parameter axi_ad4880_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad4880_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad4880_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
+# reset synchronizer
+
+ad_ip_instance ilvector_logic adc_a_resetn [list \
+  C_OPERATION {not} \
+  C_SIZE {1} \
+]
+
+ad_ip_instance ilvector_logic adc_b_resetn [list \
+  C_OPERATION {not} \
+  C_SIZE {1} \
+]
+
+# channel 1 synchonizer (delay only)
+
+ad_ip_instance ilconcat channel1_concat [list \
+  NUM_PORTS 3 \
+]
+
+ad_ip_instance sync_bits sync_channel1 [list \
+  NUM_OF_BITS 34 \
+]
+
+ad_ip_instance ilslice channel1_data [list \
+  DIN_WIDTH 34 \
+  DIN_FROM 33 \
+  DIN_TO 2 \
+]
+ad_ip_instance ilslice channel1_valid [list \
+  DIN_WIDTH 34 \
+  DIN_FROM 1 \
+  DIN_TO 1 \
+]
+ad_ip_instance ilslice channel1_enable [list \
+  DIN_WIDTH 34 \
+  DIN_FROM 0 \
+  DIN_TO 0 \
+]
+
+# channel 2 synchronizer
+
+ad_ip_instance ilconcat channel2_concat [list \
+  NUM_PORTS 2 \
+]
+
+ad_ip_instance sync_bits sync_channel2 [list \
+  NUM_OF_BITS 33 \
+]
+
+ad_ip_instance ilslice channel2_data [list \
+  DIN_WIDTH 33 \
+  DIN_FROM 32 \
+  DIN_TO 1 \
+]
+ad_ip_instance ilslice channel2_valid [list \
+  DIN_WIDTH 33 \
+  DIN_FROM 0 \
+  DIN_TO 0 \
+]
+
+ad_ip_instance sync_bits sync_fifo_wr_overflow
+
 # connect interface to axi_ad4080_adc_a
 
 ad_connect adca_dco_p                axi_ad4080_adc_a/dclk_in_p
@@ -120,16 +181,54 @@ ad_ip_instance util_cpack2 util_ad4880_adc_pack { \
 
 ad_connect axi_ad4080_adc_a/adc_clk    util_ad4880_adc_pack/clk
 ad_connect axi_ad4080_adc_a/adc_rst    util_ad4880_adc_pack/reset
-ad_connect axi_ad4080_adc_a/adc_valid  util_ad4880_adc_pack/fifo_wr_en
-ad_connect axi_ad4080_adc_a/adc_data   util_ad4880_adc_pack/fifo_wr_data_0
-ad_connect axi_ad4080_adc_b/adc_data   util_ad4880_adc_pack/fifo_wr_data_1
-ad_connect axi_ad4080_adc_a/adc_enable util_ad4880_adc_pack/enable_0
-ad_connect axi_ad4080_adc_b/adc_enable util_ad4880_adc_pack/enable_1
+
 ad_connect axi_ad4080_adc_a/adc_dovf   util_ad4880_adc_pack/fifo_wr_overflow
-ad_connect axi_ad4080_adc_b/adc_dovf   util_ad4880_adc_pack/fifo_wr_overflow
 
 ad_connect util_ad4880_adc_pack/packed_fifo_wr   axi_ad4880_dma/fifo_wr
 ad_connect util_ad4880_adc_pack/packed_sync      axi_ad4880_dma/sync
+
+# connect reset
+
+ad_connect adc_a_resetn/Op1 axi_ad4080_adc_a/adc_rst
+ad_connect adc_b_resetn/Op1 axi_ad4080_adc_b/adc_rst
+
+ad_connect sync_fifo_wr_overflow/out_clk axi_ad4080_adc_b/adc_clk
+ad_connect sync_fifo_wr_overflow/out_resetn adc_b_resetn/Res
+ad_connect sync_fifo_wr_overflow/in_bits util_ad4880_adc_pack/fifo_wr_overflow
+ad_connect sync_fifo_wr_overflow/out_bits axi_ad4080_adc_b/adc_dovf
+
+# connect channel1 datapath
+
+ad_connect channel1_concat/In0 axi_ad4080_adc_a/adc_data
+ad_connect channel1_concat/In1 axi_ad4080_adc_a/adc_enable
+ad_connect channel1_concat/In2 axi_ad4080_adc_a/adc_valid
+
+ad_connect sync_channel1/out_clk axi_ad4080_adc_a/adc_clk
+ad_connect sync_channel1/out_resetn adc_a_resetn/Res
+ad_connect sync_channel1/in_bits channel1_concat/dout
+
+ad_connect sync_channel1/out_bits channel1_data/Din
+ad_connect sync_channel1/out_bits channel1_valid/Din
+ad_connect sync_channel1/out_bits channel1_enable/Din
+
+ad_connect channel1_data/Dout util_ad4880_adc_pack/fifo_wr_data_0
+ad_connect channel1_valid/Dout util_ad4880_adc_pack/enable_0
+ad_connect channel1_enable/Dout util_ad4880_adc_pack/fifo_wr_en
+
+# connect channel2 datapath
+
+ad_connect channel2_concat/In0 axi_ad4080_adc_b/adc_data
+ad_connect channel2_concat/In1 axi_ad4080_adc_b/adc_enable
+
+ad_connect sync_channel2/out_clk axi_ad4080_adc_a/adc_clk
+ad_connect sync_channel2/out_resetn adc_a_resetn/Res
+ad_connect sync_channel2/in_bits channel2_concat/dout
+
+ad_connect sync_channel2/out_bits channel2_data/Din
+ad_connect sync_channel2/out_bits channel2_valid/Din
+
+ad_connect channel2_data/Dout util_ad4880_adc_pack/fifo_wr_data_1
+ad_connect channel2_valid/Dout util_ad4880_adc_pack/enable_1
 
 # system runs on phy's received clock
 

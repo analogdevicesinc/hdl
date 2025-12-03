@@ -89,6 +89,18 @@ module spi_engine_execution_shiftreg #(
   wire trigger_rx_s;
   wire [2:0] current_instr = current_cmd[14:12];
 
+  wire cs_activate_s;
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_cs_activate_sync (
+    .out_clk(echo_sclk),
+    .out_resetn(1'b1),
+    .in_bits(cs_activate),
+    .out_bits(cs_activate_s));
+
   // sdo data handshake
   assign sdo_data_ready = (!data_sdo_v) || sdo_toshiftreg;
   assign sdo_io_ready = data_sdo_v;
@@ -164,8 +176,8 @@ module spi_engine_execution_shiftreg #(
       for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
         reg [DATA_WIDTH-1:0] data_sdi_shift;
 
-        always @(negedge echo_sclk or posedge cs_activate) begin
-          if (cs_activate) begin
+        always @(negedge echo_sclk) begin
+          if (cs_activate_s) begin
             data_sdi_shift <= 0;
           end else begin
             data_sdi_shift <= {data_sdi_shift, sdi[i]};
@@ -179,8 +191,8 @@ module spi_engine_execution_shiftreg #(
         end
       end
 
-      always @(negedge echo_sclk or posedge cs_activate) begin
-        if (cs_activate) begin
+      always @(negedge echo_sclk) begin
+        if (cs_activate_s) begin
           sdi_counter     <= 8'b0;
           last_sdi_bit_r  <= 1'b0;
           latch_sdi       <= 1'b0;
@@ -197,8 +209,8 @@ module spi_engine_execution_shiftreg #(
       // MISO shift register runs on positive echo_sclk
       for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
         reg [DATA_WIDTH-1:0] data_sdi_shift;
-        always @(posedge echo_sclk or posedge cs_activate) begin
-          if (cs_activate) begin
+        always @(posedge echo_sclk) begin
+          if (cs_activate_s) begin
             data_sdi_shift <= 0;
           end else begin
             data_sdi_shift <= {data_sdi_shift, sdi[i]};
@@ -211,8 +223,8 @@ module spi_engine_execution_shiftreg #(
         end
       end
 
-      always @(posedge echo_sclk or posedge cs_activate) begin
-        if (cs_activate) begin
+      always @(posedge echo_sclk) begin
+        if (cs_activate_s) begin
           sdi_counter     <= 8'b0;
           last_sdi_bit_r  <= 1'b0;
           latch_sdi       <= 1'b0;
@@ -226,21 +238,39 @@ module spi_engine_execution_shiftreg #(
 
     end
 
-    assign sdi_data = sdi_data_latch;
-    assign last_sdi_bit = last_sdi_bit_r;
-    assign echo_last_bit =  !last_sdi_bit_m[3] && last_sdi_bit_m[2];
+    sync_bits #(
+      .NUM_OF_BITS(NUM_OF_SDI * DATA_WIDTH),
+      .ASYNC_CLK(1),
+      .SYNC_STAGES(2)
+    ) i_word_length_sync (
+      .out_clk(clk),
+      .out_resetn(resetn),
+      .in_bits(sdi_data_latch),
+      .out_bits(sdi_data));
+
+    sync_bits #(
+      .NUM_OF_BITS(1),
+      .ASYNC_CLK(1),
+      .SYNC_STAGES(2)
+    ) i_last_sdi_bit_sync (
+      .out_clk(clk),
+      .out_resetn(resetn),
+      .in_bits(last_sdi_bit_r),
+      .out_bits(last_sdi_bit));
 
     // sdi_data_valid is synchronous to SPI clock, so synchronize the
     // last_sdi_bit to SPI clock
 
-    reg [3:0] last_sdi_bit_m = 4'b0;
+    reg [1:0] last_sdi_bit_m = 2'b0;
     always @(posedge clk) begin
       if (cs_activate) begin
-        last_sdi_bit_m <= 4'b0;
+        last_sdi_bit_m <= 2'b0;
       end else begin
         last_sdi_bit_m <= {last_sdi_bit_m, last_sdi_bit};
       end
     end
+
+    assign echo_last_bit =  !last_sdi_bit_m[1] && last_sdi_bit_m[0];
 
     always @(posedge clk) begin
       if (cs_activate) begin

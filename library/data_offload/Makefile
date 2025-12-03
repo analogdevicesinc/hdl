@@ -19,8 +19,9 @@ XILINX_DEPS += data_offload_sv.ttcl
 XILINX_DEPS += ../interfaces/if_do_ctrl.xml
 XILINX_DEPS += ../interfaces/if_do_ctrl_rtl.xml
 
-XILINX_LIB_DEPS += util_axis_fifo_asym
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
+XILINX_LIB_DEPS += util_axis_fifo_asym
 
 XILINX_INTERFACE_DEPS += interfaces
 

@@ -9,7 +9,6 @@ LIBRARY_NAME := spi_engine_execution
 GENERIC_DEPS += spi_engine_execution.v
 GENERIC_DEPS += spi_engine_execution_shiftreg.v
 
-XILINX_DEPS += spi_engine_execution_constr.ttcl
 XILINX_DEPS += spi_engine_execution_ip.tcl
 
 XILINX_DEPS += ../../spi_engine/interfaces/spi_engine.xml
@@ -18,6 +17,8 @@ XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl_rtl.xml
 XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_rtl.xml
 
 XILINX_INTERFACE_DEPS += spi_engine/interfaces
+
+XILINX_LIB_DEPS += util_cdc
 
 INTEL_DEPS += spi_engine_execution_hw.tcl
 

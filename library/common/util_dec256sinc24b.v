@@ -118,7 +118,7 @@ module util_dec256sinc24b (
 
   util_rst #(
     .ASYNC_STAGES(2),
-    .SYNC_STAGES(1)
+    .SYNC_STAGES(2)
   ) i_cdc_async_stage_sync (
     .rst_async(reset),
     .clk(word_clk),

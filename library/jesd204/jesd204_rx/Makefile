@@ -39,6 +39,7 @@ XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_status_rtl.xml
 
 XILINX_LIB_DEPS += jesd204/jesd204_common
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 XILINX_INTERFACE_DEPS += jesd204/interfaces
 

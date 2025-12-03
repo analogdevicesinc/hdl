@@ -8,13 +8,15 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create spi_engine_execution
 adi_ip_files spi_engine_execution [list \
-  "spi_engine_execution_constr.ttcl" \
   "spi_engine_execution.v" \
   "spi_engine_execution_shiftreg.v" \
 ]
 
 adi_ip_properties_lite spi_engine_execution
-adi_ip_ttcl spi_engine_execution "spi_engine_execution_constr.ttcl"
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/spi_engine/engine} [ipx::current_core]
 

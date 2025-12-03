@@ -59,24 +59,24 @@ set_clock_latency -source -early -0.1 [get_clocks rx2_dclk_out]
 set_clock_latency -source -late 0.1 [get_clocks rx1_dclk_out]
 set_clock_latency -source -late 0.1 [get_clocks rx2_dclk_out]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_1 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_1_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_1_phy/i_clk_buf_fast/O]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_1 \
+  [list [get_nets -quiet -of [get_pins -quiet i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_1_phy/i_div_clk_buf/O]] \
+        [get_nets -quiet -of [get_pins -quiet i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_1_phy/i_clk_buf_fast/O]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_2 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_2_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_2 \
+  [list [get_nets -quiet -of [get_pins -quiet i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_2_phy/i_div_clk_buf/O]] \
+        [get_nets -quiet -of [get_pins -quiet i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_3 \
-  [list [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_div_clk_buf/O}]] \
-        [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O}]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_3 \
+  [list [get_nets -quiet -of [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_div_clk_buf/O}]] \
+        [get_nets -quiet -of [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O}]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_4 \
-  [list [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_div_clk_buf/O}]] \
-        [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O}]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_4 \
+  [list [get_nets -quiet -of [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_div_clk_buf/O}]] \
+        [get_nets -quiet -of [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O}]] \
   ]
 
 set_input_delay -clock [get_clocks {ref_clk}] -min -add_delay 2.0 [get_ports {fpga_mcs_in_p}]

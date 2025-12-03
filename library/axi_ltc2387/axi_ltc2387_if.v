@@ -85,6 +85,7 @@ module axi_ltc2387_if #(
   wire            dco;
   wire            dco_s;
   wire   [17:0]   adc_data_int;
+  wire   [17:0]   adc_data_int_s;
 
   // internal registers
 
@@ -96,15 +97,24 @@ module axi_ltc2387_if #(
 
   // assignments
 
+  sync_bits #(
+    .NUM_OF_BITS(18),
+    .ASYNC_CLK(1)
+  ) i_adc_data_int_sync (
+    .out_clk(clk),
+    .out_resetn(1'b1),
+    .in_bits(adc_data_int),
+    .out_bits(adc_data_int_s));
+
   always @(posedge clk) begin
     adc_valid <= 1'b0;
     clk_gate_d <= {clk_gate_d[1:0], clk_gate};
     if (clk_gate_d[1] == 1'b1 && clk_gate_d[0] == 1'b0) begin
       if (ADC_RES == 18) begin
-        adc_data <= adc_data_int;
+        adc_data <= adc_data_int_s;
         adc_valid <= 1'b1;
       end else begin
-        adc_data <= adc_data_int[15:0];
+        adc_data <= adc_data_int_s[15:0];
         adc_valid <= 1'b1;
       end
     end
