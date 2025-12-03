@@ -15,7 +15,7 @@ Overview
 The :adi:`EVAL-AD4080-FMC` is designed to demonstrate the
 :adi:`AD4080` performance.
 
-The :adi:`EVAL-AD4080-FMC`  HDL design supports the following
+The :adi:`EVAL-AD408x-FMC`  HDL design supports the following
 :adi:`AD4080` features:
 
 * Single/Dual lane DDR data capture
@@ -72,7 +72,7 @@ The data path and clock domains are depicted in the below diagram:
 .. image:: ../ad408x_fmc_evb/ad408x_fmc_evb_zed_block_diagram.svg
    :width: 800
    :align: center
-   :alt: AD4080-FMC-EVB/ZedBoard block diagram
+   :alt: AD408x-FMC-EVB/ZedBoard block diagram
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,7 +80,7 @@ Clock scheme
 .. image:: ../ad408x_fmc_evb/ad408x_fmc_clock_scheme.svg
    :width: 800
    :align: center
-   :alt: AD4080-FMC-EVB/ZedBoard block diagram
+   :alt: AD408x-FMC-EVB/ZedBoard block diagram
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -91,8 +91,8 @@ added to the base address from HDL (see more at :ref:`architecture cpu-intercon-
 ==================== ===============
 Instance             Zynq/Microblaze
 ==================== ===============
-axi_ad4080_adc       0x44A0_0000
-axi_ad4080_dma       0x44A3_0000
+axi_ad408x_adc       0x44A0_0000
+axi_ad408x_dma       0x44A3_0000
 ==================== ===============
 
 SPI connections
@@ -170,7 +170,7 @@ Below are the Programmable Logic interrupts used in this project.
 ================ === ========== ===========
 Instance name    HDL Linux Zynq Actual Zynq
 ================ === ========== ===========
-axi_ad4080_dma   13  57         89
+axi_ad408x_dma   13  57         89
 ================ === ========== ===========
 
 Building the HDL project
@@ -186,10 +186,35 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
+Example of running the ``make`` command without parameters (using the default
+configuration (ADC_N_BITS=20):
+
 .. shell::
 
    $cd hdl/projects/ad408x_fmc_evb/zed
    $make
+
+Example of running the ``make`` command with parameters:
+
+.. shell::
+
+   $cd hdl/projects/ad408x_fmc_evb/zed
+   $make ADC_N_BITS=16
+
+The following table contains the parameters that can be used to configure this
+project:
+
+.. collapsible:: Default values of the make parameters for AD408X-FMC-EVB
+
+   +----------------+-------------------------------------------------------------+
+   | Parameter      | Description                                                 |
+   +================+=============================================================+
+   | ADC_N_BITS     | ADC resolution (default: 20)                                |
+   |                |                                                             |
+   |                | - 20                                                        |
+   |                | - 16                                                        |
+   |                | - 14                                                        |
+   +----------------+-------------------------------------------------------------+
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
