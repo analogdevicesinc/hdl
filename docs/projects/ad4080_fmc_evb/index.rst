@@ -1,13 +1,14 @@
-.. _ad408x_fmc_evb:
+.. _ad4080_fmc_evb:
 
-AD408X-FMC-EVB HDL project
+AD4080-FMC-EVB HDL project
 ================================================================================
 
 .. caution::
 
    Although the :adi:`AD4080` supports CMOS interface, this HDL project does not
-   support it. The only available interface for this project is LVDS, in
-   single lane mode, DDR.
+   support it. The only available interface for this project is LVDS, in DDR mode.
+   Single lane mode is fully tested and supported. Dual lane mode is supported
+   in the HDL but has not been tested yet.
 
 Overview
 -------------------------------------------------------------------------------
@@ -15,8 +16,8 @@ Overview
 The :adi:`EVAL-AD4080-FMC` is designed to demonstrate the
 :adi:`AD4080` performance.
 
-The :adi:`EVAL-AD4080-FMC`  HDL design supports the following
-:adi:`AD4080` features:
+The :adi:`EVAL-AD4080-FMC` HDL design supports the following
+:adi:`AD4080, AD4083, AD4086` features:
 
 * Single/Dual lane DDR data capture
 * Self synchronization using the fixed pattern and bit-slip feature
@@ -38,6 +39,8 @@ Supported devices
 -------------------------------------------------------------------------------
 
 - :adi:`AD4080`
+- :adi:`AD4083`
+- :adi:`AD4086`
 - :adi:`AD9508`
 - :adi:`ADA4945-1`
 - :adi:`ADF4350`
@@ -69,7 +72,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../ad408x_fmc_evb/ad408x_fmc_evb_zed_block_diagram.svg
+.. image:: ../ad4080_fmc_evb/ad4080_fmc_evb_zed_block_diagram.svg
    :width: 800
    :align: center
    :alt: AD4080-FMC-EVB/ZedBoard block diagram
@@ -77,7 +80,7 @@ The data path and clock domains are depicted in the below diagram:
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: ../ad408x_fmc_evb/ad408x_fmc_clock_scheme.svg
+.. image:: ../ad4080_fmc_evb/ad4080_fmc_clock_scheme.svg
    :width: 800
    :align: center
    :alt: AD4080-FMC-EVB/ZedBoard block diagram
@@ -186,10 +189,35 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
+Example of running the ``make`` command without parameters (using the default
+configuration (ADC_N_BITS=20):
+
 .. shell::
 
-   $cd hdl/projects/ad408x_fmc_evb/zed
+   $cd hdl/projects/ad4080_fmc_evb/zed
    $make
+
+Example of running the ``make`` command with parameters:
+
+.. shell::
+
+   $cd hdl/projects/ad4080_fmc_evb/zed
+   $make ADC_N_BITS=16
+
+The following table contains the parameters that can be used to configure this
+project:
+
+.. collapsible:: Default values of the make parameters for AD4080-FMC-EVB HDL project
+
+   +----------------+-------------------------------------------------------------+
+   | Parameter      | Description                                                 |
+   +================+=============================================================+
+   | ADC_N_BITS     | ADC resolution (default: 20)                                |
+   |                |                                                             |
+   |                | - 20                                                        |
+   |                | - 16                                                        |
+   |                | - 14                                                        |
+   +----------------+-------------------------------------------------------------+
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -216,7 +244,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD408x-FMC-EVB HDL project source code <projects/ad408x_fmc_evb>`
+- :git-hdl:`AD4080-FMC-EVB HDL project source code <projects/ad4080_fmc_evb>`
 
 .. list-table::
    :widths: 30 35 35
