@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2023, 2025 - 2026 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -31,5 +31,34 @@ LIB_DEPS += util_pack/util_upack2
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/axi_dacfifo
 LIB_DEPS += xilinx/util_adxcvr
+
+CORUNDUM ?= 0
+
+ifeq ($(CORUNDUM), 1)
+	export BOARD := ADRV9009ZU11EG
+	export CPU := ZynqMP
+
+	M_DEPS += system_constr_corundum.xdc
+	M_DEPS += system_bd_corundum.tcl
+
+	M_DEPS += ../../../library/corundum/scripts/corundum_adrv9009zu11eg_cfg.tcl
+	M_DEPS += ../../../library/corundum/scripts/corundum.tcl
+	M_DEPS += ../../../library/corundum/scripts/sync_reset.tcl
+
+	EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/rb_drp.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/mqnic_port.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/syn/vivado/ptp_clock_cdc.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl
+
+	LIB_DEPS += corundum/corundum_core
+	LIB_DEPS += corundum/ethernet/adrv9009zu11eg
+endif
 
 include ../../scripts/project-xilinx.mk
