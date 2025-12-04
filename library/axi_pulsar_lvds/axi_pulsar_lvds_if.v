@@ -72,9 +72,10 @@ module axi_pulsar_lvds_if #(
 
   // internal wires
 
-  wire          d_p_int_s;
-  wire          dco;
-  wire          dco_s;
+  wire                        d_p_int_s;
+  wire                        dco;
+  wire                        dco_s;
+  wire [(ADC_DATA_WIDTH-1):0] adc_data_s;
 
   // internal register
 
@@ -83,11 +84,21 @@ module axi_pulsar_lvds_if #(
 
   // adc_valid is 1 for the current sample that is sent
 
+  sync_bits #(
+    .NUM_OF_BITS(ADC_DATA_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_data_sync (
+    .out_clk(clk),
+    .out_resetn(1'b1),
+    .in_bits(adc_data_int),
+    .out_bits(adc_data_s));
+
   always @(posedge clk) begin
     adc_valid <= 1'b0;
     clk_gate_d <= {clk_gate_d[0], clk_gate};
     if (clk_gate_d[1] == 1'b1 && clk_gate_d[0] == 1'b0) begin
-      adc_data  <= adc_data_int;
+      adc_data  <= adc_data_s;
       adc_valid <= 1'b1;
     end
   end

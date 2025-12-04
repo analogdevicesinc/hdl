@@ -185,7 +185,10 @@ module up_clkgen #(
 
   // resets
 
-  ad_rst i_mmcm_rst_reg (
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_mmcm_rst_reg (
     .rst_async(up_mmcm_preset),
     .clk(up_clk),
     .rstn(),

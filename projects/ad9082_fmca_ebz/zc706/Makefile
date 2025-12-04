@@ -41,6 +41,7 @@ LIB_DEPS += jesd204/jesd204_versal_gt_adapter_rx
 LIB_DEPS += jesd204/jesd204_versal_gt_adapter_tx
 LIB_DEPS += sysid_rom
 LIB_DEPS += util_adcfifo
+LIB_DEPS += util_cdc
 LIB_DEPS += util_dacfifo
 LIB_DEPS += util_do_ram
 LIB_DEPS += util_hbm

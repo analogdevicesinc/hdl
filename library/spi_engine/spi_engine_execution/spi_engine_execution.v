@@ -173,15 +173,27 @@ module spi_engine_execution #(
 
   (* direct_enable = "yes" *) wire cs_gen;
 
-  sync_bits #(
-    .NUM_OF_BITS(8),
-    .ASYNC_CLK(1),
-    .SYNC_STAGES(2)
-  ) i_word_length_sync (
-    .out_clk(echo_sclk),
-    .out_resetn(1'b1),
-    .in_bits(word_length),
-    .out_bits(word_length_s));
+  generate
+
+    if (ECHO_SCLK) begin
+
+      sync_bits #(
+        .NUM_OF_BITS(8),
+        .ASYNC_CLK(1),
+        .SYNC_STAGES(2)
+      ) i_word_length_sync (
+        .out_clk(echo_sclk),
+        .out_resetn(1'b1),
+        .in_bits(word_length),
+        .out_bits(word_length_s));
+
+    end else begin
+
+      assign word_length_s = word_length;
+
+    end
+
+  endgenerate
 
   spi_engine_execution_shiftreg #(
     .DEFAULT_SPI_CFG(DEFAULT_SPI_CFG),

@@ -269,13 +269,19 @@ module up_hdmi_tx #(
 
   // resets
 
-  ad_rst i_core_rst_reg (
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_hdmi_rst_sync (
     .rst_async(up_core_preset),
     .clk(hdmi_clk),
     .rstn(),
     .rst(hdmi_rst));
 
-  ad_rst i_vdma_rst_reg (
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_vdma_rst_sync (
     .rst_async(up_core_preset),
     .clk(vdma_clk),
     .rstn(),

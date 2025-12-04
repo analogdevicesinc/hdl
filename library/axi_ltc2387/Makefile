@@ -21,9 +21,9 @@ GENERIC_DEPS += axi_ltc2387_if.v
 
 XILINX_DEPS += ../xilinx/common/ad_data_clk.v
 XILINX_DEPS += ../xilinx/common/ad_data_in.v
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_ltc2387_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 include ../scripts/library.mk

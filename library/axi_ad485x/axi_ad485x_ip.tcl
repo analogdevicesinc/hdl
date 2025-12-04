@@ -17,7 +17,6 @@ adi_ip_files axi_ad485x [list \
     "$ad_hdl_dir/library/common/ad_edge_detect.v" \
     "$ad_hdl_dir/library/common/ad_datafmt.v" \
     "$ad_hdl_dir/library/common/up_axi.v" \
-    "$ad_hdl_dir/library/common/ad_rst.v" \
     "$ad_hdl_dir/library/common/up_adc_common.v" \
     "$ad_hdl_dir/library/common/up_adc_channel.v" \
     "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
@@ -37,6 +36,7 @@ adi_ip_properties axi_ad485x
 
 adi_ip_add_core_dependencies [list \
 	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
 ]
 
 set cc [ipx::current_core]

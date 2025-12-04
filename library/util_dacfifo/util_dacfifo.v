@@ -71,53 +71,57 @@ module util_dacfifo #(
   reg     [(ADDRESS_WIDTH-1):0]       dma_waddr = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dma_waddr_g = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dma_lastaddr_g = 'b0;
-  reg                                 dma_bypass = 1'b0;
-  reg                                 dma_bypass_m1 = 1'b0;
-  reg                                 dma_xfer_req_d1 = 1'b0;
   reg                                 dma_xfer_req_d2 = 1'b0;
   reg                                 dma_xfer_out_fifo = 1'b0;
 
   reg     [(ADDRESS_WIDTH-1):0]       dac_raddr = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dac_waddr = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dac_waddr_m1 = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dac_waddr_m2 = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dac_addr_diff = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr_m1 = 'b0;
-  reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr_m2 = 'b0;
   reg     [(ADDRESS_WIDTH-1):0]       dac_lastaddr = 'b0;
   reg                                 dac_mem_ready = 1'b0;
-  reg                                 dac_xfer_req_m1 = 1'b0;
-  reg                                 dac_xfer_req = 1'b0;
   reg                                 dac_xfer_req_d = 1'b0;
-  reg                                 dac_xfer_out_fifo = 1'b0;
-  reg                                 dac_xfer_out_fifo_m1 = 1'b0;
   reg                                 dac_xfer_out_fifo_d = 1'b0;
-  reg                                 dac_bypass = 1'b0;
-  reg                                 dac_bypass_m1 = 1'b0;
 
   // internal wires
 
   wire                                dma_rst_int_s;
+  wire                                dma_xfer_req_d1;
   wire                                dma_wren_s;
   wire                                dma_xfer_posedge_s;
   wire                                dma_ready_bypass_s;
   wire    [(DATA_WIDTH-1):0]          dac_data_fifo_s;
   wire    [(DATA_WIDTH-1):0]          dac_data_bypass_s;
   wire    [ADDRESS_WIDTH:0]           dac_addr_diff_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_waddr_m2;
+  wire                                dac_xfer_req;
+  wire                                dac_xfer_out_fifo;
   wire    [(ADDRESS_WIDTH-1):0]       dma_waddr_b2g_s;
   wire    [(ADDRESS_WIDTH-1):0]       dac_waddr_g2b_s;
+  wire    [(ADDRESS_WIDTH-1):0]       dac_lastaddr_d;
   wire    [(ADDRESS_WIDTH-1):0]       dac_lastaddr_g2b_s;
   wire                                dac_mem_ren_s;
   wire                                dac_xfer_posedge_s;
   wire                                dac_rst_int_s;
+  wire                                dac_bypass;
+  wire                                dma_bypass;
 
   // internal reset generation
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dma_xfer_req_dma_sync (
+    .out_clk(dma_clk),
+    .out_resetn(~dma_rst_int_s),
+    .in_bits(dma_xfer_req),
+    .out_bits(dma_xfer_req_d1));
+
   always @(posedge dma_clk) begin
-    dma_xfer_req_d1 <= dma_xfer_req;
     dma_xfer_req_d2 <= dma_xfer_req_d1;
   end
-  assign dma_xfer_posedge_s = ~dma_xfer_req_d2 & dma_xfer_req_d1;
+  assign dma_xfer_posedge_s = ~dma_xfer_req_d2 && dma_xfer_req_d1;
 
   // status register indicating that the module is in initialization phase
 
@@ -134,7 +138,7 @@ module util_dacfifo #(
   // if the module is not in initialization phase, it should go
   // into reset at a positive edge of dma_xfer_req
 
-  assign dma_rst_int_s = dma_rst | (dma_xfer_posedge_s & ~dma_init);
+  assign dma_rst_int_s = dma_rst || (dma_xfer_posedge_s && ~dma_init);
 
   // DMA / Write interface
 
@@ -172,19 +176,27 @@ module util_dacfifo #(
       dma_lastaddr_g <= 'b0;
     end else begin
       if (dma_bypass == 1'b0) begin
-        dma_lastaddr_g <= (dma_xfer_last == 1'b1)? dma_waddr_b2g_s : dma_lastaddr_g;
+        dma_lastaddr_g <= (dma_xfer_last == 1'b1) ? dma_waddr_b2g_s : dma_lastaddr_g;
       end
     end
   end
 
   // DAC / Read interface
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dma_xfer_req_dac_sync (
+    .out_clk(dac_clk),
+    .out_resetn(~dac_rst_int_s),
+    .in_bits(dma_xfer_req),
+    .out_bits(dac_xfer_req));
+
   always @(posedge dac_clk) begin
-    dac_xfer_req_m1 <= dma_xfer_req;
-    dac_xfer_req <= dac_xfer_req_m1;
     dac_xfer_req_d <= dac_xfer_req;
   end
-  assign dac_xfer_posedge_s = ~dac_xfer_req_d & dac_xfer_req;
+  assign dac_xfer_posedge_s = ~dac_xfer_req_d && dac_xfer_req;
 
   // we can reset the DAC side at each positive edge of xfer_req, even if
   // sometimes the reset is redundant
@@ -192,17 +204,23 @@ module util_dacfifo #(
 
   assign dac_addr_diff_s = {1'b1, dac_waddr} - dac_raddr;
 
+  sync_bits #(
+    .NUM_OF_BITS(ADDRESS_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dma_waddr_g_sync (
+    .out_clk(dac_clk),
+    .out_resetn(~dac_rst_int_s),
+    .in_bits(dma_waddr_g),
+    .out_bits(dac_waddr_m2));
+
   // The memory module is ready if it's not empty
   always @(posedge dac_clk) begin
     if (dac_rst_int_s == 1'b1) begin
       dac_addr_diff <= 'b0;
-      dac_waddr_m1 <= 'b0;
-      dac_waddr_m2 <= 'b0;
       dac_waddr <= 'b0;
       dac_mem_ready <= 1'b0;
     end else begin
-      dac_waddr_m1 <= dma_waddr_g;
-      dac_waddr_m2 <= dac_waddr_m1;
       dac_waddr <= dac_waddr_g2b_s;
       dac_addr_diff <= dac_addr_diff_s[ADDRESS_WIDTH-1:0];
       if (dac_addr_diff > 0) begin
@@ -221,19 +239,31 @@ module util_dacfifo #(
 
   // sync lastaddr to dac clock domain
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dma_xfer_out_fifo_sync (
+    .out_clk(dac_clk),
+    .out_resetn(~dac_rst_int_s),
+    .in_bits(dma_xfer_out_fifo),
+    .out_bits(dac_xfer_out_fifo));
+
+  sync_bits #(
+    .NUM_OF_BITS(ADDRESS_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dma_lastaddr_g_sync (
+    .out_clk(dac_clk),
+    .out_resetn(~dac_rst_int_s),
+    .in_bits(dma_lastaddr_g),
+    .out_bits(dac_lastaddr_d));
+
   always @(posedge dac_clk) begin
     if (dac_rst_int_s == 1'b1) begin
-      dac_lastaddr_m1 <= 1'b0;
-      dac_lastaddr_m2 <= 1'b0;
-      dac_xfer_out_fifo_m1 <= 1'b0;
-      dac_xfer_out_fifo <= 1'b0;
       dac_xfer_out_fifo_d <= 1'b0;
     end else begin
-      dac_lastaddr_m1 <= dma_lastaddr_g;
-      dac_lastaddr_m2 <= dac_lastaddr_m1;
       dac_lastaddr <= dac_lastaddr_g2b_s;
-      dac_xfer_out_fifo_m1 <= dma_xfer_out_fifo;
-      dac_xfer_out_fifo <= dac_xfer_out_fifo_m1;
       if (dac_valid)
         dac_xfer_out_fifo_d <= dac_xfer_out_fifo;
     end
@@ -242,13 +272,13 @@ module util_dacfifo #(
   ad_g2b #(
     .DATA_WIDTH (ADDRESS_WIDTH)
   ) i_dac_lastaddr_g2b (
-    .din (dac_lastaddr_m2),
+    .din (dac_lastaddr_d),
     .dout (dac_lastaddr_g2b_s));
 
   // generate dac read address
 
-  assign dac_mem_ren_s = (dac_bypass == 1'b1) ? (dac_valid & dac_mem_ready) :
-                                                (dac_valid & dac_xfer_out_fifo);
+  assign dac_mem_ren_s = (dac_bypass == 1'b1) ? (dac_valid && dac_mem_ready) :
+                                                (dac_valid && dac_xfer_out_fifo);
 
   always @(posedge dac_clk) begin
     if (dac_rst_int_s == 1'b1) begin
@@ -286,7 +316,7 @@ module util_dacfifo #(
     if (dac_rst_int_s == 1'b1) begin
       dac_dunf <= 1'b0;
     end else begin
-      dac_dunf <= (dac_bypass == 1'b1) ? (dac_valid & dac_xfer_req & ~dac_mem_ren_s) : 1'b0;
+      dac_dunf <= (dac_bypass == 1'b1) ? (dac_valid && dac_xfer_req && ~dac_mem_ren_s) : 1'b0;
     end
   end
 
@@ -308,15 +338,25 @@ module util_dacfifo #(
     .dac_data(dac_data_bypass_s),
     .dac_dunf(dac_dunf_bypass_s));
 
-  always @(posedge dma_clk) begin
-    dma_bypass_m1 <= bypass;
-    dma_bypass <= dma_bypass_m1;
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dma_bypass_sync (
+    .out_clk(dma_clk),
+    .out_resetn(~dma_rst_int_s),
+    .in_bits(bypass),
+    .out_bits(dma_bypass));
 
-  always @(posedge dac_clk) begin
-    dac_bypass_m1 <= bypass;
-    dac_bypass <= dac_bypass_m1;
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dac_bypass_sync (
+    .out_clk(dac_clk),
+    .out_resetn(~dac_rst_int_s),
+    .in_bits(bypass),
+    .out_bits(dac_bypass));
 
   // the util_dacfifo is always ready for the DMA
   always @(posedge dma_clk) begin

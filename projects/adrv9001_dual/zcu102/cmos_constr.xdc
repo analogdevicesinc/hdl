@@ -89,7 +89,7 @@ set_property  -dict {PACKAGE_PIN AH12   IOSTANDARD LVCMOS18}  [get_ports adrv2_t
 
 # clocks
 
-create_clock -name adrv1_ref_clk  -period  25.00 [get_ports fpga_ref_clk_p]
+create_clock -name adrv1_ref_clk  -period  25.00 [get_ports adrv1_fpga_ref_clk_p]
 
 create_clock -name adrv1_rx1_dclk_out   -period  12.5 [get_ports adrv1_rx1_dclk_out_p]
 create_clock -name adrv1_rx2_dclk_out   -period  12.5 [get_ports adrv1_rx2_dclk_out_p]
@@ -119,6 +119,8 @@ set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets i_system_wrapper/system_i/axi
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_dac_clk_in_ibuf/O]
 
 # fmc2
+
+create_clock -name adrv2_ref_clk  -period  25.00 [get_ports adrv2_fpga_ref_clk_p]
 
 create_clock -name adrv2_rx1_dclk_out   -period  12.5 [get_ports adrv2_rx1_dclk_out_p]
 create_clock -name adrv2_rx2_dclk_out   -period  12.5 [get_ports adrv2_rx2_dclk_out_p]

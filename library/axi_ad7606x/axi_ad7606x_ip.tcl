@@ -13,7 +13,6 @@ adi_ip_create axi_ad7606x
 
 adi_ip_files axi_ad7606x [list \
   "$ad_hdl_dir/library/common/ad_edge_detect.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_dcfilter.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
@@ -23,12 +22,16 @@ adi_ip_files axi_ad7606x [list \
   "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
-  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad7606x_16b_pif.v" \
   "axi_ad7606x_18b_pif.v" \
   "axi_ad7606x.v" ]
 
 adi_ip_properties axi_ad7606x
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ad7606x} [ipx::current_core]
 

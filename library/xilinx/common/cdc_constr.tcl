@@ -48,7 +48,6 @@ proc constrain_ip_inst {{ip_inst {}}} {
     if {[string equal $input_clk $output_clk]} {
       continue
     }
-    puts "$sync_bits_inst : $input_clk : $output_clk"
 
     if {$item_count_total != 0 && $item_count_gnd != $item_count_total} {
       if {$item_count_fd == 0 || [expr $item_count_fd + $item_count_gnd] != $item_count_total} {
@@ -94,7 +93,6 @@ proc constrain_ip_inst {{ip_inst {}}} {
     if {[string equal $input_clk $output_clk]} {
       continue
     }
-    puts "$sync_data_inst : $input_clk : $output_clk"
 
     set input_clk_period [get_property -min PERIOD $input_clk]
     set output_clk_period [get_property -min PERIOD $output_clk]
@@ -133,7 +131,6 @@ proc constrain_ip_inst {{ip_inst {}}} {
     if {[string equal $input_clk $output_clk]} {
       continue
     }
-    puts "$sync_event_inst : $input_clk : $output_clk"
 
     set input_clk_period [get_property -min PERIOD $input_clk]
     set output_clk_period [get_property -min PERIOD $output_clk]
@@ -150,55 +147,6 @@ proc constrain_ip_inst {{ip_inst {}}} {
         -from [get_pins -include_replicated_objects -filter {REF_PIN_NAME == C} -of_objects [get_cells -include_replicated_objects $sync_event_inst/cdc_hold_reg[*]]] \
         -to [get_pins -include_replicated_objects -filter {REF_PIN_NAME == D} -of_objects [get_cells -include_replicated_objects $sync_event_inst/out_event_reg[*]]] \
         $min_clk_period
-    }
-  }
-
-  # ad rst constraints
-  if {$ip_inst != ""} {
-    current_instance -quiet
-    current_instance $ip_inst
-  }
-  foreach sync_rst_inst [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == ad_rst || REF_NAME == ad_rst)}] {
-    current_instance -quiet
-    set input_data_reg_cdc [get_cells -quiet -include_replicated_objects $sync_rst_inst/cdc_sync_stage_reg[0]]
-    # skip if no register is found
-    if {$input_data_reg_cdc eq ""} {
-      continue
-    }
-    set input_data_reg_pin [get_pins -quiet -include_replicated_objects -filter {REF_PIN_NAME == PRE} -of_objects $input_data_reg_cdc]
-
-    set input_start_cells [all_fanin -quiet -flat -only_cells [get_pins -quiet -include_replicated_objects -filter {REF_PIN_NAME == PRE} -of_objects $input_data_reg_cdc]]
-    foreach input_data_reg $input_data_reg_cdc {
-      set input_start_cells [filter -quiet $input_start_cells "NAME != $input_data_reg"]
-    }
-
-    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
-
-    if {$input_start_cells eq ""} {
-      continue
-    } else {
-      set item_count_total [expr [string_occurrences " " $input_start_cells] + 1]
-      set item_count_gnd [string_occurrences "GND" $input_start_cells]
-    }
-    if {$input_start_regs eq ""} {
-      set item_count_fd 0
-    } else {
-      set item_count_fd [expr [string_occurrences " " $input_start_regs] + 1]
-    }
-
-    if {$item_count_total != 0 && $item_count_gnd != $item_count_total} {
-      if {$item_count_fd == 0 || [expr $item_count_fd + $item_count_gnd] != $item_count_total} {
-        set_false_path \
-          -to [get_pins -include_replicated_objects -filter {REF_PIN_NAME == PRE} -of_objects [get_cells -include_replicated_objects $sync_rst_inst/cdc_sync_stage_reg[*]]]
-      } else {
-        set input_clk [get_clocks -of_objects $input_start_regs]
-        set input_clk_period [get_property -min PERIOD $input_clk]
-
-        set_max_delay -datapath_only \
-          -from $input_start_regs \
-          -to [get_pins -include_replicated_objects -filter {REF_PIN_NAME == PRE} -of_objects [get_cells -include_replicated_objects $sync_rst_inst/cdc_sync_stage_reg[*]]] \
-          $input_clk_period
-      }
     }
   }
 
@@ -260,7 +208,6 @@ proc constrain_ip_inst {{ip_inst {}}} {
     current_instance -quiet
 
     # constrain the reset signal
-
     set input_data_reg_cdc [get_cells -quiet -include_replicated_objects $sync_rst_inst/genblk1[0].cdc_async_stage_reg[0]]
     # skip if no register is found
     if {$input_data_reg_cdc eq ""} {
@@ -347,20 +294,20 @@ proc constrain_ip_inst {{ip_inst {}}} {
     }
   }
 
-  # clock div constraints
-  if {$ip_inst != ""} {
-    current_instance -quiet
-    current_instance $ip_inst
-  }
-  foreach sync_clkdiv [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == util_clkdiv || REF_NAME == util_clkdiv)}] {
-    current_instance -quiet
+  # # clock div constraints
+  # if {$ip_inst != ""} {
+  #   current_instance -quiet
+  #   current_instance $ip_inst
+  # }
+  # foreach sync_clkdiv [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == util_clkdiv || REF_NAME == util_clkdiv)}] {
+  #   current_instance -quiet
 
-    set_clock_groups -physically_exclusive \
-      -group [get_clocks clk_div_sel_0_s] \
-      -group [get_clocks clk_div_sel_1_s]
+  #   set_clock_groups -physically_exclusive \
+  #     -group [get_clocks clk_div_sel_0_s] \
+  #     -group [get_clocks clk_div_sel_1_s]
 
-    set_false_path -to [get_pins -include_replicated_objects $sync_clkdiv/i_div_clk_gbuf/S*]
-  }
+  #   set_false_path -to [get_pins -include_replicated_objects $sync_clkdiv/i_div_clk_gbuf/S*]
+  # }
 
   current_instance -quiet
 }

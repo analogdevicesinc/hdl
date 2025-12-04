@@ -24,11 +24,11 @@ GENERIC_DEPS += axi_ad485x_crc.v
 GENERIC_DEPS += axi_ad485x_lvds.v
 
 XILINX_DEPS += ../xilinx/common/ad_data_in.v
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += ../xilinx/common/ad_serdes_out.v
 XILINX_DEPS += axi_ad485x_constr.ttcl
 XILINX_DEPS += axi_ad485x_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 include ../scripts/library.mk

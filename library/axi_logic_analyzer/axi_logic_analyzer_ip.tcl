@@ -11,14 +11,17 @@ adi_ip_create axi_logic_analyzer
 adi_ip_files axi_logic_analyzer [list \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_logic_analyzer_reg.v" \
   "axi_logic_analyzer_trigger.v" \
   "axi_logic_analyzer.v" ]
 
 adi_ip_properties axi_logic_analyzer
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_logic_analyzer} [ipx::current_core]
 

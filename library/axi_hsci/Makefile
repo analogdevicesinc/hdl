@@ -22,7 +22,9 @@ GENERIC_DEPS += hsci_mlink_ctrl.sv
 GENERIC_DEPS += lfsr15_8.v
 GENERIC_DEPS += pulse_sync.v
 
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_hsci_ip.tcl
+
+XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 include ../scripts/library.mk

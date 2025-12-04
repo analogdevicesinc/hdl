@@ -79,17 +79,13 @@ module util_dacfifo_bypass #(
   reg     [(DAC_ADDRESS_WIDTH-1):0]     dac_mem_raddr = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]     dac_mem_raddr_g = 'd0;
   reg                                   dac_mem_rea = 1'b0;
-  reg                                   dma_rst_m1 = 1'b0;
-  reg                                   dma_rst = 1'b0;
   reg     [DMA_ADDRESS_WIDTH-1:0]       dma_mem_addr_diff = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m1 = 'd0;
-  reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m2 = 'd0;
   reg     [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr = 'd0;
-  reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m1 = 'd0;
-  reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m2 = 'd0;
   reg     [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr = 'd0;
 
   // internal signals
+
+  wire                                  dma_rst;
 
   wire    [(DMA_ADDRESS_WIDTH-1):0]     dma_mem_raddr_s;
   wire    [(DAC_ADDRESS_WIDTH-1):0]     dac_mem_waddr_s;
@@ -101,6 +97,8 @@ module util_dacfifo_bypass #(
 
   wire    [(DMA_ADDRESS_WIDTH-1):0]     dma_mem_waddr_b2g_s;
   wire    [(DAC_ADDRESS_WIDTH-1):0]     dac_mem_raddr_b2g_s;
+  wire    [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m2;
+  wire    [(DAC_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m2;
   wire    [(DAC_ADDRESS_WIDTH-1):0]     dma_mem_raddr_m2_g2b_s;
   wire    [(DMA_ADDRESS_WIDTH-1):0]     dac_mem_waddr_m2_g2b_s;
 
@@ -123,10 +121,14 @@ module util_dacfifo_bypass #(
 
   // DMA reset is brought from dac domain
 
-  always @(posedge dma_clk) begin
-    dma_rst_m1 <= dac_rst;
-    dma_rst <= dma_rst_m1;
-  end
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_cdc_async_stage_sync (
+    .rst_async(dac_rst),
+    .clk(dma_clk),
+    .rstn(),
+    .rst(dma_rst));
 
   // write address generation for the asymmetric FIFO
 
@@ -152,16 +154,22 @@ module util_dacfifo_bypass #(
 
   // FIFO request data until reaches the high threshold.
 
+  sync_bits #(
+    .NUM_OF_BITS(DAC_ADDRESS_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dac_mem_raddr_g_sync (
+    .out_clk(dma_clk),
+    .out_resetn(~dma_rst),
+    .in_bits(dac_mem_raddr_g),
+    .out_bits(dma_mem_raddr_m2));
+
   always @(posedge dma_clk) begin
     if (dma_rst == 1'b1) begin
       dma_mem_addr_diff <= 'b0;
-      dma_mem_raddr_m1 <= 'b0;
-      dma_mem_raddr_m2 <= 'b0;
       dma_mem_raddr <= 'b0;
       dma_ready_out <= 1'b0;
     end else begin
-      dma_mem_raddr_m1 <= dac_mem_raddr_g;
-      dma_mem_raddr_m2 <= dma_mem_raddr_m1;
       dma_mem_raddr <= dma_mem_raddr_m2_g2b_s;
       dma_mem_addr_diff <= dma_address_diff_s[DMA_ADDRESS_WIDTH-1:0];
       if (dma_mem_addr_diff >= DMA_BUF_THRESHOLD_HI) begin
@@ -225,14 +233,20 @@ module util_dacfifo_bypass #(
 
   // transfer the write address into the DAC's clock domain
 
+  sync_bits #(
+    .NUM_OF_BITS(DMA_ADDRESS_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dma_mem_waddr_g_sync (
+    .out_clk(dac_clk),
+    .out_resetn(~dac_rst),
+    .in_bits(dma_mem_waddr_g),
+    .out_bits(dac_mem_waddr_m2));
+
   always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
-      dac_mem_waddr_m1 <= 'b0;
-      dac_mem_waddr_m2 <= 'b0;
       dac_mem_waddr <= 'b0;
     end else begin
-      dac_mem_waddr_m1 <= dma_mem_waddr_g;
-      dac_mem_waddr_m2 <= dac_mem_waddr_m1;
       dac_mem_waddr <= dac_mem_waddr_m2_g2b_s;
     end
   end

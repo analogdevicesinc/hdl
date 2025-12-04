@@ -399,14 +399,14 @@ module axi_spi_engine #(
   end
 
   generate if (ASYNC_SPI_CLK) begin
-
-    wire spi_reset;
-    ad_rst i_spi_resetn (
+    util_rst #(
+      .ASYNC_STAGES(2),
+      .SYNC_STAGES(2)
+    ) i_spi_resetn (
       .rst_async(up_sw_reset),
       .clk(spi_clk),
-      .rst(spi_reset),
-      .rstn());
-    assign spi_resetn = ~spi_reset;
+      .rstn(spi_resetn),
+      .rst());
   end else begin
     assign spi_resetn = ~up_sw_reset;
   end

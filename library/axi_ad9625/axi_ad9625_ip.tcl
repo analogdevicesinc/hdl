@@ -9,7 +9,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_ad9625
 adi_ip_files axi_ad9625 [list \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/ad_mem.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
@@ -20,7 +19,6 @@ adi_ip_files axi_ad9625 [list \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/ad_xcvr_rx_if.v" \
-	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad9625_pnmon.v" \
   "axi_ad9625_channel.v" \
   "axi_ad9625_if.v" \
@@ -30,6 +28,11 @@ adi_ip_properties axi_ad9625
 
 adi_init_bd_tcl
 adi_ip_bd axi_ad9625 "bd/bd.tcl"
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *raddr_in* -of_objects [ipx::current_core]]

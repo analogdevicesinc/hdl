@@ -15,4 +15,7 @@ XILINX_DEPS += ../xilinx/common/ad_mmcm_drp.v
 XILINX_DEPS += axi_clkgen_ip.tcl
 XILINX_DEPS += bd/bd.tcl
 
+XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
+
 include ../scripts/library.mk

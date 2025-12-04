@@ -570,13 +570,14 @@ module i3c_controller_regmap #(
   end
 
   generate if (ASYNC_CLK) begin
-    wire a_reset;
-    ad_rst i_resetn (
+    util_rst #(
+      .ASYNC_STAGES(2),
+      .SYNC_STAGES(2)
+    ) i_resetn (
       .rst_async(up_sw_reset),
       .clk(clk),
-      .rst(a_reset),
-      .rstn());
-    assign a_reset_n = ~a_reset;
+      .rstn(a_reset_n),
+      .rst());
     assign clk_1 = clk;
   end else begin /* ASYNC_CLK == 0 */
     assign a_reset_n = ~up_sw_reset;

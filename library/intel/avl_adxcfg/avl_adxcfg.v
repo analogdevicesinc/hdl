@@ -108,7 +108,7 @@ module avl_adxcfg #(
   assign rcfg_readdata_s = rcfg_out_readdata_1 & rcfg_out_readdata_0;
   assign rcfg_waitrequest_s = rcfg_out_waitrequest_1 & rcfg_out_waitrequest_0;
 
-  always @(negedge rcfg_reset_n or posedge rcfg_clk) begin
+  always @(posedge rcfg_clk) begin
     if (rcfg_reset_n == 0) begin
       rcfg_select <= 2'd0;
       rcfg_read_int <= 1'd0;

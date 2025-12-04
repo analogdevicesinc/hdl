@@ -16,7 +16,6 @@ adi_ip_files axi_ad9783 [list \
   "$ad_hdl_dir/library/common/ad_dds_2.v" \
   "$ad_hdl_dir/library/common/ad_dds_1.v" \
   "$ad_hdl_dir/library/common/ad_dds.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_serdes_out.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
@@ -24,7 +23,6 @@ adi_ip_files axi_ad9783 [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
-	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad9783_channel.v" \
   "axi_ad9783_core.v" \
   "axi_ad9783_if.v" \
@@ -36,6 +34,11 @@ set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ad9783
 
 adi_init_bd_tcl
 adi_ip_bd axi_ad9783 "bd/bd.tcl"
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]
 

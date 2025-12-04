@@ -17,7 +17,6 @@ GENERIC_DEPS += i3c_controller_regmap.vh
 GENERIC_DEPS += i3c_controller_unpack.v
 GENERIC_DEPS += i3c_controller_write_ibi.v
 
-XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += i3c_controller_host_interface_ip.tcl
 
 XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_cmdp.xml
@@ -29,6 +28,7 @@ XILINX_DEPS += ../../i3c_controller/interfaces/i3c_controller_sdio_rtl.xml
 
 XILINX_LIB_DEPS += util_axis_fifo
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 XILINX_INTERFACE_DEPS += i3c_controller/interfaces
 

@@ -12,10 +12,10 @@ GENERIC_DEPS += ../common/util_pulse_gen.v
 GENERIC_DEPS += axi_pulse_gen.v
 GENERIC_DEPS += axi_pulse_gen_regmap.v
 
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_pulse_gen_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 LATTICE_DEPS += ../util_cdc/sync_bits.v
 LATTICE_DEPS += ../util_cdc/sync_data.v

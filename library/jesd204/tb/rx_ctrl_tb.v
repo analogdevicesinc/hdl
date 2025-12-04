@@ -51,7 +51,7 @@ module rx_ctrl_tb;
     end
   end
 
-  always @(posedge clk or posedge cgs_reset) begin
+  always @(posedge clk) begin
     if (cgs_reset == 1'b1) begin
       cgs_counter <= 'h00;
       cgs_ready <= 1'b0;

@@ -13,7 +13,6 @@ adi_ip_files axi_ad9434 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_mmcm_drp.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_serdes_in.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
@@ -22,7 +21,6 @@ adi_ip_files axi_ad9434 [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad9434_if.v" \
   "axi_ad9434_pnmon.v" \
   "axi_ad9434_core.v" \
@@ -32,6 +30,11 @@ adi_ip_properties axi_ad9434
 
 adi_init_bd_tcl
 adi_ip_bd axi_ad9434 "bd/bd.tcl"
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 

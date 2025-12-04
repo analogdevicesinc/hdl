@@ -25,11 +25,11 @@ GENERIC_DEPS += ad_ip_jesd204_tpl_adc_deframer.v
 GENERIC_DEPS += ad_ip_jesd204_tpl_adc_pnmon.v
 GENERIC_DEPS += ad_ip_jesd204_tpl_adc_regmap.v
 
-XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += ../ad_ip_jesd204_tpl_common/up_tpl_common.v
 XILINX_DEPS += ad_ip_jesd204_tpl_adc_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 INTEL_DEPS += ../../intel/common/up_clock_mon_constr.sdc
 INTEL_DEPS += ../../intel/common/up_rst_constr.sdc

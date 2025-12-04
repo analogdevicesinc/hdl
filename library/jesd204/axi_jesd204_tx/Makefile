@@ -14,7 +14,6 @@ GENERIC_DEPS += ../../common/ad_rst.v
 
 XILINX_DEPS += axi_jesd204_tx_ip.tcl
 XILINX_DEPS += axi_jesd204_tx_ooc.ttcl
-XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc
 
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_cfg.xml
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_cfg_rtl.xml
@@ -28,6 +27,8 @@ XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_status.xml
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_status_rtl.xml
 
 XILINX_LIB_DEPS += jesd204/axi_jesd204_common
+XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 XILINX_INTERFACE_DEPS += jesd204/interfaces
 

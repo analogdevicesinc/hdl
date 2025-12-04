@@ -124,7 +124,7 @@ module up_clock_mon #(
     .out_resetn(~d_rst),
     .out_bits(d_count_run));
 
-  always @(posedge d_clk or posedge d_rst) begin
+  always @(posedge d_clk) begin
     if (d_rst == 1'b1) begin
       d_count_run_d <= 1'b0;
     end else begin

@@ -52,6 +52,13 @@ module util_rst_chain #(
   output [NUM_OF_RESET-1:0] rst
 );
 
+  initial begin
+    if (ASYNC_STAGES < 2) begin
+      $error("The number of asynchronous stages registering the reset shouldn't be at least 2!");
+      $finish;
+    end
+  end
+
   integer j;
 
   generate

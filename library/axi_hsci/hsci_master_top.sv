@@ -117,7 +117,10 @@ module hsci_master_top #(
   assign hsci_clear_errors = O.hsci_master_clear_errors.data;
   assign bram_strt_addr = (O.hsci_bram_start_address.data)-1;//*'h4 - 16'h4;
 
-  ad_rst i_hsci_rstn_reg (
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_hsci_rstn_reg (
     .rst_async(~hsci_rstn_async),
     .clk(hsci_pclk),
     .rstn(),

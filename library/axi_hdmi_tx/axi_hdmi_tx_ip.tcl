@@ -10,7 +10,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create axi_hdmi_tx
 adi_ip_files axi_hdmi_tx [list \
   "$ad_hdl_dir/library/common/ad_mem.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/ad_csc.v" \
   "$ad_hdl_dir/library/common/ad_csc_RGB2CrYCb.v" \
   "$ad_hdl_dir/library/common/ad_ss_444to422.v" \
@@ -20,7 +19,6 @@ adi_ip_files axi_hdmi_tx [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_hdmi_tx.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
-	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_hdmi_tx_vdma.v" \
   "axi_hdmi_tx_es.v" \
   "axi_hdmi_tx_core.v" \
@@ -30,6 +28,11 @@ adi_ip_properties axi_hdmi_tx
 
 adi_init_bd_tcl
 adi_ip_bd axi_hdmi_tx "bd/bd.tcl"
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_hdmi_tx} [ipx::current_core]
 

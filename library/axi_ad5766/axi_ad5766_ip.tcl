@@ -13,7 +13,6 @@ adi_ip_create axi_ad5766
 adi_ip_files axi_ad5766 [list \
     "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
     "$ad_hdl_dir/library/common/up_xfer_status.v" \
-    "$ad_hdl_dir/library/common/ad_rst.v" \
     "$ad_hdl_dir/library/common/up_dac_common.v" \
     "$ad_hdl_dir/library/common/up_clock_mon.v" \
     "$ad_hdl_dir/library/common/up_axi.v" \
@@ -28,6 +27,7 @@ adi_ip_bd axi_ad5766 "bd/bd.tcl"
 
 adi_ip_add_core_dependencies [list \
 	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
 ]
 
 adi_add_bus "spi_engine_ctrl" "master" \

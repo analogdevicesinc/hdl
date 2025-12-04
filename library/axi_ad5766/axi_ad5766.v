@@ -323,7 +323,7 @@ module axi_ad5766 #(
 
   // offset of the sequencer registers are 8'h40
 
-  always @(negedge up_rstn or posedge spi_clk) begin
+  always @(posedge spi_clk) begin
     if (up_rstn == 1'b0) begin
       up_rdata <= 'd0;
       up_rack <= 'd0;

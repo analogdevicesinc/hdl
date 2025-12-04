@@ -125,7 +125,7 @@ module util_mfifo #(
   assign din_waddr_max_s = & din_waddr;
   assign din_dout_toggle_s = din_dout_toggle_m3 ^ din_dout_toggle_m2;
 
-  always @(posedge din_clk or posedge din_rst) begin
+  always @(posedge din_clk) begin
     if (din_rst == 1'b1) begin
       din_dout_toggle_m1 <= 1'd0;
       din_dout_toggle_m2 <= 1'd0;
@@ -160,7 +160,7 @@ module util_mfifo #(
   assign dout_rd_s = (dout_cnt == 5'd0) ? dout_enable : 1'b0;
   assign dout_din_toggle_s = dout_din_toggle_m3 ^ dout_din_toggle_m2;
 
-  always @(posedge dout_clk or posedge dout_rst) begin
+  always @(posedge dout_clk) begin
     if (dout_rst == 1'b1) begin
       dout_din_toggle_m1 <= 1'd0;
       dout_din_toggle_m2 <= 1'd0;
@@ -197,7 +197,7 @@ module util_mfifo #(
     end
   end
 
-  always @(posedge dout_clk or posedge dout_rst) begin
+  always @(posedge dout_clk) begin
     if (dout_rst == 1'b1) begin
       dout_valid <= 'd0;
       dout_rdata_0 <= 'd0;

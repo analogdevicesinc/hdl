@@ -20,9 +20,9 @@ GENERIC_DEPS += axi_hdmi_rx_core.v
 GENERIC_DEPS += axi_hdmi_rx_es.v
 GENERIC_DEPS += axi_hdmi_rx_tpm.v
 
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_hdmi_rx_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 include ../scripts/library.mk

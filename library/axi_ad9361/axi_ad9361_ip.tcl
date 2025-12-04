@@ -9,7 +9,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_ad9361
 adi_ip_files axi_ad9361 [list \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_out.v" \
@@ -37,8 +36,6 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
   "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
-  "$ad_hdl_dir/library/common/ad_pps_receiver_constr.ttcl" \
-	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "xilinx/axi_ad9361_lvds_if.v" \
   "xilinx/axi_ad9361_cmos_if.v" \
   "axi_ad9361_rx_pnmon.v" \
@@ -51,10 +48,14 @@ adi_ip_files axi_ad9361 [list \
   "axi_ad9361.v" ]
 
 adi_ip_properties axi_ad9361
-adi_ip_ttcl axi_ad9361 "../common/ad_pps_receiver_constr.ttcl"
 
 adi_init_bd_tcl
 adi_ip_bd axi_ad9361 "bd/bd.tcl"
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ad9361} [ipx::current_core]
 

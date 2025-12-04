@@ -101,6 +101,10 @@ module axi_dmac_reset_manager #(
   wire enabled_all;
   wire disabled_all;
 
+  wire src_resetn_dbg;
+  wire dest_resetn_dbg;
+  wire sg_resetn_dbg;
+
   generate if (DMA_SG_TRANSFER == 1) begin
   assign enabled_all = req_enabled & enabled_src & enabled_dest & (enabled_sg | ~ctrl_hwdesc);
   assign disabled_all = ~(req_enabled | enabled_src | enabled_dest | (enabled_sg & ctrl_hwdesc));
@@ -221,10 +225,6 @@ module axi_dmac_reset_manager #(
   wire [NUM_RESET_LINKS-1:0] reset_chain_clks;
   wire [NUM_RESET_LINKS-1:0] resetn_chain;
 
-  wire src_resetn_dbg;
-  wire dest_resetn_dbg;
-  wire sg_resetn_dbg;
-
   generate
 
     if (DMA_SG_TRANSFER) begin
@@ -251,7 +251,7 @@ module axi_dmac_reset_manager #(
   endgenerate
 
   util_rst_chain #(
-    .ASYNC_STAGES(4),
+    .ASYNC_STAGES(3),
     .NUM_OF_RESET(NUM_RESET_LINKS)
   ) i_reset_chain_sync (
     .rst_async(do_reset),

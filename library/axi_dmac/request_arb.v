@@ -580,42 +580,38 @@ module request_arb #(
 
   if (DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
 
-    wire [ID_WIDTH-1:0] data_id;
-    wire [ID_WIDTH-1:0] data_id_s;
+  wire [ID_WIDTH-1:0] data_id;
+  wire [ID_WIDTH-1:0] data_id_s;
 
-    wire data_eot;
-    wire response_eot;
+  wire data_eot;
+  wire response_eot;
 
-    sync_bits #(
-      .NUM_OF_BITS(ID_WIDTH),
-      .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
-    ) i_data_id_sync (
-      .out_clk(src_clk),
-      .out_resetn(src_resetn),
-      .in_bits(data_id),
-      .out_bits(data_id_s));
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_data_id_sync (
+    .out_clk(src_clk),
+    .out_resetn(src_resetn),
+    .in_bits(data_id),
+    .out_bits(data_id_s));
 
-    sync_bits #(
-      .NUM_OF_BITS(1),
-      .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
-    ) i_data_eot_sync (
-      .out_clk(dest_clk),
-      .out_resetn(dest_resetn),
-      .in_bits(eot_mem_dest[data_id_s]),
-      .out_bits(data_eot));
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_data_eot_sync (
+    .out_clk(dest_clk),
+    .out_resetn(dest_resetn),
+    .in_bits(eot_mem_dest[data_id_s]),
+    .out_bits(data_eot));
 
-    sync_bits #(
-      .NUM_OF_BITS(1),
-      .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
-    ) i_response_eot_sync (
-      .out_clk(dest_clk),
-      .out_resetn(dest_resetn),
-      .in_bits(eot_mem_dest[dest_response_id_s]),
-      .out_bits(response_eot));
-
-  end
-
-  if (DMA_TYPE_DEST == DMA_TYPE_STREAM_AXI) begin
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_response_eot_sync (
+    .out_clk(dest_clk),
+    .out_resetn(dest_resetn),
+    .in_bits(eot_mem_dest[dest_response_id_s]),
+    .out_bits(response_eot));
 
   assign dest_clk = m_axis_aclk;
   assign dest_ext_resetn = 1'b1;

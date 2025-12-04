@@ -14,9 +14,9 @@ GENERIC_DEPS += axi_logic_analyzer.v
 GENERIC_DEPS += axi_logic_analyzer_reg.v
 GENERIC_DEPS += axi_logic_analyzer_trigger.v
 
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_logic_analyzer_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 include ../scripts/library.mk

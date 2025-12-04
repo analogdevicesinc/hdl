@@ -12,7 +12,6 @@ global VIVADO_IP_LIBRARY
 adi_ip_create axi_spi_engine
 adi_ip_files axi_spi_engine [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "axi_spi_engine.v" \
 ]
 
@@ -21,6 +20,7 @@ adi_ip_properties axi_spi_engine
 adi_ip_add_core_dependencies [list \
 	analog.com:$VIVADO_IP_LIBRARY:util_axis_fifo:1.0 \
 	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
 ]
 
 set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/spi_engine/axi} [ipx::current_core]

@@ -53,6 +53,18 @@ module util_rst #(
   output reg              rst
 );
 
+  initial begin
+    if (SYNC_STAGES < 2) begin
+      $error("The number of synchronization stages cannot be less than 2!");
+      $finish;
+    end
+
+    if (ASYNC_STAGES < 2) begin
+      $error("The number of asynchronous stages registering the reset shouldn't be at least 2!");
+      $finish;
+    end
+  end
+
   // internal registers
   reg [ASYNC_STAGES-1:0] cdc_async_stage = {ASYNC_STAGES{1'b1}};
 

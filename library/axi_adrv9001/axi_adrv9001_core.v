@@ -266,6 +266,11 @@ module axi_adrv9001_core #(
   wire           tdd_tx2_valid;
   wire           tdd_tx2_valid_s;
 
+  wire           adc_1_transfer_sync_s;
+  wire           adc_2_transfer_sync_s;
+  wire           dac_1_transfer_sync_s;
+  wire           dac_2_transfer_sync_s;
+
   wire           adc_sync_1;
   wire           adc_sync_2;
   wire           adc_1_armed_s;
@@ -285,15 +290,6 @@ module axi_adrv9001_core #(
   reg    [15:0]  tx2_data_i_A_d;
   reg    [15:0]  tx2_data_q_A_d;
 
-  reg            adc_1_transfer_sync_d1 = 1'b0;
-  reg            adc_1_transfer_sync_d2 = 1'b0;
-  reg            adc_2_transfer_sync_d1 = 1'b0;
-  reg            adc_2_transfer_sync_d2 = 1'b0;
-  reg            dac_1_transfer_sync_d1 = 1'b0;
-  reg            dac_1_transfer_sync_d2 = 1'b0;
-  reg            dac_2_transfer_sync_d1 = 1'b0;
-  reg            dac_2_transfer_sync_d2 = 1'b0;
-
   // workaround registers
   wire rx1_r1_mode_d;
   wire rx1_symb_op_d;
@@ -309,7 +305,6 @@ module axi_adrv9001_core #(
   wire tx1_single_lane_d;
   wire tx1_rst_cdc_s_d;
 
-  reg adc_sync_2_d;
   reg adc_1_ext_sync_disarm_cdc_d;
   reg adc_1_ext_sync_arm_cdc_d;
   // end of workaround registers
@@ -338,8 +333,17 @@ module axi_adrv9001_core #(
   // rx1_r1_mode should be 0 only when rx1_clk and rx2_clk have the same frequency
   // tx1_r1_mode should be 0 only when tx1_clk and tx2_clk have the same frequency
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_sync_2_sync (
+    .out_clk(rx2_clk),
+    .out_resetn(~rx2_rst),
+    .in_bits(adc_sync_1),
+    .out_bits(adc_sync_2));
+
   always @(posedge rx2_clk) begin
-    adc_sync_2_d <= adc_sync_1;
     adc_1_ext_sync_disarm_cdc_d <= adc_1_ext_sync_disarm;
     adc_1_ext_sync_arm_cdc_d <= adc_1_ext_sync_arm;
   end
@@ -410,7 +414,6 @@ module axi_adrv9001_core #(
   assign rx1_sdr_ddr_n_s = rx1_sdr_ddr_n_d;
   assign rx1_single_lane_s = rx1_single_lane_d;
   assign rx1_rst_s = rx1_rst_d;
-  assign adc_sync_2 = adc_sync_2_d;
   assign adc_1_ext_sync_disarm_cdc_s = adc_1_ext_sync_disarm_cdc_d;
   assign adc_1_ext_sync_arm_cdc_s = adc_1_ext_sync_arm_cdc_d;
 
@@ -574,10 +577,15 @@ module axi_adrv9001_core #(
 
   // rx1 transfer sync
 
-  always @(posedge rx1_clk) begin
-    adc_1_transfer_sync_d1 <= transfer_sync_in;
-    adc_1_transfer_sync_d2 <= adc_1_transfer_sync_d1;
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_1_transfer_sync (
+    .out_clk(rx1_clk),
+    .out_resetn(rx1_rst),
+    .in_bits(transfer_sync_in),
+    .out_bits(adc_1_transfer_sync_s));
 
   util_ext_sync #(
     .ENABLED (EXT_SYNC)
@@ -585,16 +593,21 @@ module axi_adrv9001_core #(
     .clk (rx1_clk),
     .ext_sync_arm (adc_1_ext_sync_arm),
     .ext_sync_disarm (adc_1_ext_sync_disarm),
-    .sync_in (adc_1_transfer_sync_d2 | adc_sync_1),
+    .sync_in (adc_1_transfer_sync_s | adc_sync_1),
     .sync_armed (adc_1_armed_s)
   );
 
   // rx2 transfer sync
 
-  always @(posedge rx2_clk) begin
-    adc_2_transfer_sync_d1 <= transfer_sync_in;
-    adc_2_transfer_sync_d2 <= adc_2_transfer_sync_d1;
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_2_transfer_sync (
+    .out_clk(rx2_clk),
+    .out_resetn(rx2_rst),
+    .in_bits(transfer_sync_in),
+    .out_bits(adc_2_transfer_sync_s));
 
   util_ext_sync #(
     .ENABLED (EXT_SYNC)
@@ -602,7 +615,7 @@ module axi_adrv9001_core #(
     .clk (rx2_clk),
     .ext_sync_arm (adc_2_ext_sync_arm | adc_1_ext_sync_arm_cdc_s),
     .ext_sync_disarm (adc_2_ext_sync_disarm | adc_1_ext_sync_disarm_cdc_s),
-    .sync_in (adc_2_transfer_sync_d2 | adc_sync_2),
+    .sync_in (adc_2_transfer_sync_s | adc_sync_2),
     .sync_armed (adc_2_armed_s)
   );
 
@@ -612,10 +625,15 @@ module axi_adrv9001_core #(
 
   // tx1 transfer sync
 
-  always @(posedge tx1_clk) begin
-    dac_1_transfer_sync_d1 <= transfer_sync_in;
-    dac_1_transfer_sync_d2 <= dac_1_transfer_sync_d1;
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dac_1_transfer_sync (
+    .out_clk(tx1_clk),
+    .out_resetn(tx1_rst),
+    .in_bits(transfer_sync_in),
+    .out_bits(dac_1_transfer_sync_s));
 
   util_ext_sync #(
     .ENABLED (EXT_SYNC)
@@ -623,16 +641,21 @@ module axi_adrv9001_core #(
     .clk (tx1_clk),
     .ext_sync_arm (dac_1_ext_sync_arm),
     .ext_sync_disarm (dac_1_ext_sync_disarm),
-    .sync_in (dac_1_transfer_sync_d2),
+    .sync_in (dac_1_transfer_sync_s),
     .sync_armed (dac_sync_armed_cd_1_s)
   );
 
   // tx2 transfer sync
 
-  always @(posedge tx2_clk) begin
-    dac_2_transfer_sync_d1 <= transfer_sync_in;
-    dac_2_transfer_sync_d2 <= dac_2_transfer_sync_d1;
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dac_2_transfer_sync (
+    .out_clk(tx2_clk),
+    .out_resetn(tx2_rst),
+    .in_bits(transfer_sync_in),
+    .out_bits(dac_2_transfer_sync_s));
 
   util_ext_sync #(
     .ENABLED (EXT_SYNC)
@@ -640,7 +663,7 @@ module axi_adrv9001_core #(
     .clk (tx2_clk),
     .ext_sync_arm (dac_2_ext_sync_arm),
     .ext_sync_disarm (dac_2_ext_sync_disarm),
-    .sync_in (dac_2_transfer_sync_d2),
+    .sync_in (dac_2_transfer_sync_s),
     .sync_armed (dac_sync_armed_cd_2_s)
   );
 

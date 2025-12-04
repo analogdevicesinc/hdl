@@ -208,7 +208,10 @@ module axi_adrv9001_sync_ctrl #(
     end
   end
 
-  ad_rst i_core_rst_reg (
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_core_rst_reg (
     .rst_async(up_preset),
     .clk(ref_clk),
     .rstn(),

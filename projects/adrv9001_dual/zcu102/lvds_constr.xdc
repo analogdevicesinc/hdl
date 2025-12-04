@@ -89,7 +89,8 @@ set_property  -dict {PACKAGE_PIN AH12   IOSTANDARD LVDS}                        
 
 # clocks
 
-create_clock -name adrv1_ref_clk       -period  8.00 [get_ports fpga_ref_clk_p]
+create_clock -name adrv1_ref_clk       -period  8.00 [get_ports adrv1_fpga_ref_clk_p]
+create_clock -name adrv2_ref_clk       -period  8.00 [get_ports adrv2_fpga_ref_clk_p]
 
 create_clock -name adrv1_rx1_dclk_in   -period  2.034 [get_ports adrv1_rx1_dclk_out_p]
 create_clock -name adrv1_rx2_dclk_in   -period  2.034 [get_ports adrv1_rx2_dclk_out_p]

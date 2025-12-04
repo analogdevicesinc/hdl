@@ -170,7 +170,7 @@ module system_top (
   sync_bits #(
     .NUM_OF_BITS(1),
     .ASYNC_CLK(1),
-    .SYNC_STAGES(SYNC_STAGES)
+    .SYNC_STAGES(2)
   ) i_mcs_gpio_sync (
     .out_clk(ref_clk),
     .out_resetn(mcs_rstn),

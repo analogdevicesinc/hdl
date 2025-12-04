@@ -11,7 +11,6 @@ adi_ip_create axi_ada4355
 adi_ip_files axi_ada4355 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_serdes_in.v" \
   "$ad_hdl_dir/library/common/ad_pack.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_dcfilter.v" \
@@ -23,7 +22,6 @@ adi_ip_files axi_ada4355 [list \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ada4355_regmap.v" \
   "axi_ada4355_if.v" \
   "axi_ada4355.v" ]
@@ -31,7 +29,8 @@ adi_ip_files axi_ada4355 [list \
 adi_ip_properties axi_ada4355
 
 adi_ip_add_core_dependencies [list \
-  analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
 ]
 
 adi_init_bd_tcl

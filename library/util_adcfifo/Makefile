@@ -14,6 +14,7 @@ XILINX_DEPS += ../common/ad_mem_asym.v
 XILINX_DEPS += util_adcfifo_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 INTEL_DEPS += ../util_cdc/sync_gray.v
 INTEL_DEPS += util_adcfifo_constr.sdc

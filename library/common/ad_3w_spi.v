@@ -75,7 +75,7 @@ module ad_3w_spi #(
   assign spi_dir = ~spi_enable_s;
   assign spi_enable_s = spi_enable & ~spi_csn_s;
 
-  always @(posedge spi_clk or posedge spi_csn_s) begin
+  always @(posedge spi_clk) begin
     if (spi_csn_s == 1'b1) begin
       spi_count <= 6'd0;
       spi_rd_wr_n <= 1'd0;
@@ -87,7 +87,7 @@ module ad_3w_spi #(
     end
   end
 
-  always @(negedge spi_clk or posedge spi_csn_s) begin
+  always @(negedge spi_clk) begin
     if (spi_csn_s == 1'b1) begin
       spi_enable <= 1'b0;
     end else begin

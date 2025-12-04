@@ -22,10 +22,10 @@ GENERIC_DEPS += axi_ad9671_channel.v
 GENERIC_DEPS += axi_ad9671_if.v
 GENERIC_DEPS += axi_ad9671_pnmon.v
 
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_ad9671_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc
 INTEL_DEPS += ../intel/common/up_rst_constr.sdc

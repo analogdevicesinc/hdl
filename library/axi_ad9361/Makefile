@@ -38,18 +38,17 @@ GENERIC_DEPS += axi_ad9361_tdd_if.v
 GENERIC_DEPS += axi_ad9361_tx.v
 GENERIC_DEPS += axi_ad9361_tx_channel.v
 
-XILINX_DEPS += ../common/ad_pps_receiver_constr.ttcl
 XILINX_DEPS += ../xilinx/common/ad_data_clk.v
 XILINX_DEPS += ../xilinx/common/ad_data_in.v
 XILINX_DEPS += ../xilinx/common/ad_data_out.v
 XILINX_DEPS += ../xilinx/common/ad_dcfilter.v
 XILINX_DEPS += ../xilinx/common/ad_mul.v
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_ad9361_ip.tcl
 XILINX_DEPS += xilinx/axi_ad9361_cmos_if.v
 XILINX_DEPS += xilinx/axi_ad9361_lvds_if.v
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 INTEL_DEPS += ../intel/common/ad_dcfilter.v
 INTEL_DEPS += ../intel/common/ad_mul.v

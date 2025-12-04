@@ -9,7 +9,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create axi_ad35xxr
 adi_ip_files axi_ad35xxr [list \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
@@ -32,6 +31,11 @@ adi_ip_files axi_ad35xxr [list \
 adi_ip_properties axi_ad35xxr
 adi_init_bd_tcl
 adi_ip_bd axi_ad35xxr "bd/bd.tcl"
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 set cc [ipx::current_core]
 

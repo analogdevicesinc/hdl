@@ -11,7 +11,6 @@ adi_ip_create axi_ad408x
 adi_ip_files axi_ad408x [list \
   "$ad_hdl_dir/library/xilinx/common/ad_serdes_in.v" \
   "$ad_hdl_dir/library/common/ad_pack.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_dcfilter.v" \
@@ -30,6 +29,7 @@ adi_ip_properties axi_ad408x
 
 adi_ip_add_core_dependencies [list \
   analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
 ]
 
 adi_init_bd_tcl

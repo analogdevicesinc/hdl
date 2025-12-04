@@ -17,8 +17,6 @@ adi_ip_files axi_jesd204_rx [list \
   "axi_jesd204_rx_ooc.ttcl" \
   "axi_jesd204_rx.v" \
   "../../common/ad_mem.v" \
-  "../../common/ad_rst.v" \
-  "../../xilinx/common/ad_rst_constr.xdc" \
 ]
 
 set_property source_mgmt_mode DisplayOnly [current_project]
@@ -31,6 +29,8 @@ set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/jes
 
 adi_ip_add_core_dependencies [list \
   analog.com:$VIVADO_IP_LIBRARY:axi_jesd204_common:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
 ]
 
 set_property display_name "ADI JESD204C Receive AXI Interface" [ipx::current_core]

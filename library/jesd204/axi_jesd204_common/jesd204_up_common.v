@@ -130,45 +130,60 @@ module jesd204_up_common #(
 
   assign up_cfg_is_writeable = up_reset_core;
 
-  ad_rst i_up_reset_vector (
-    .rst_async (~ext_resetn),
-    .clk (up_clk),
-    .rstn (),
-    .rst (up_reset_vector_s));
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_up_reset_vector (
+    .rst_async(~ext_resetn),
+    .clk(up_clk),
+    .rstn(),
+    .rst(up_reset_vector_s));
 
   wire core_reset_all = up_reset_core | core_reset_ext;
 
-  ad_rst i_core_reset_vector (
-    .rst_async (core_reset_all),
-    .clk (core_clk),
-    .rstn (),
-    .rst (core_reset_vector_s));
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_core_reset_vector (
+    .rst_async(core_reset_all),
+    .clk(core_clk),
+    .rstn(),
+    .rst(core_reset_vector_s));
 
   always @(posedge core_clk) begin
     core_reset_vector <= {core_reset_vector_s, core_reset_vector[1]};
   end
 
-  ad_rst i_device_reset_vector (
-    .rst_async (core_reset_all),
-    .clk (device_clk),
-    .rstn (),
-    .rst (device_reset_vector_s));
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_device_reset_vector (
+    .rst_async(core_reset_all),
+    .clk(device_clk),
+    .rstn(),
+    .rst(device_reset_vector_s));
 
   always @(posedge device_clk) begin
     device_reset_vector <= {device_reset_vector_s, device_reset_vector[1]};
   end
 
-  ad_rst i_up_reset_synchronizer_vector (
-    .rst_async (core_reset),
-    .clk (up_clk),
-    .rstn (),
-    .rst (up_reset_synchronizer_vector_s));
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_up_reset_synchronizer_vector (
+    .rst_async(core_reset),
+    .clk(up_clk),
+    .rstn(),
+    .rst(up_reset_synchronizer_vector_s));
 
-  ad_rst i_up_core_reset_ext_synchronizer_vector (
-    .rst_async (core_reset_ext),
-    .clk (up_clk),
-    .rstn (),
-    .rst (up_core_reset_ext_synchronizer_vector_s));
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_up_core_reset_ext_synchronizer_vector (
+    .rst_async(core_reset_ext),
+    .clk(up_clk),
+    .rstn(),
+    .rst(up_core_reset_ext_synchronizer_vector_s));
 
   sync_bits #(
     .NUM_OF_BITS(10)

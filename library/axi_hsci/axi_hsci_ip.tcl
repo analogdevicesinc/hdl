@@ -10,8 +10,6 @@ source ../scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_hsci
 adi_ip_files axi_hsci [list \
-  "../common/ad_rst.v" \
-  "../xilinx/common/ad_rst_constr.xdc" \
   "axi_hsci.sv" \
   "hsci_master_axi_slave.sv" \
   "hsci_master_logic.sv" \
@@ -32,6 +30,11 @@ adi_ip_ttcl axi_hsci "axi_hsci_constr.ttcl"
 set_property display_name "ADI AXI HSCI" [ipx::current_core]
 set_property description "ADI AXI HSCI" [ipx::current_core]
 # set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_hsci} [ipx::current_core]
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 adi_init_bd_tcl
 

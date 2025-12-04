@@ -13,9 +13,9 @@ GENERIC_DEPS += axi_gpreg.v
 GENERIC_DEPS += axi_gpreg_clock_mon.v
 GENERIC_DEPS += axi_gpreg_io.v
 
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_gpreg_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 include ../scripts/library.mk

@@ -90,7 +90,7 @@ module ad463x_data_capture #(
       end
 
       // shift register for positive edge
-      always @(posedge echo_sclk or posedge reset) begin
+      always @(posedge echo_sclk) begin
         if (reset) begin
           data_shift_p <= 0;
         end else begin

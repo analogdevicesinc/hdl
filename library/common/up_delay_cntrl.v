@@ -199,17 +199,23 @@ module up_delay_cntrl #(
   assign delay_rst = delay_rst_s;
 
   if (CUSTOM_RST == 1) begin
-    ad_rst i_delay_rst_reg (
-      .rst_async (core_rst),
-      .clk (delay_clk),
-      .rstn (),
-      .rst (delay_rst_s));
+    util_rst #(
+      .ASYNC_STAGES(2),
+      .SYNC_STAGES(2)
+    ) i_delay_rst_reg (
+      .rst_async(core_rst),
+      .clk(delay_clk),
+      .rstn(),
+      .rst(delay_rst_s));
   end else begin
-    ad_rst i_delay_rst_reg (
-      .rst_async (up_preset),
-      .clk (delay_clk),
-      .rstn (),
-      .rst (delay_rst_s));
+    util_rst #(
+      .ASYNC_STAGES(2),
+      .SYNC_STAGES(2)
+    ) i_delay_rst_reg (
+      .rst_async(up_preset),
+      .clk(delay_clk),
+      .rstn(),
+      .rst(delay_rst_s));
   end
 
   end

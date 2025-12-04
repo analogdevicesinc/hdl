@@ -9,7 +9,6 @@ LIBRARY_NAME := axi_hdmi_tx
 GENERIC_DEPS += ../common/ad_csc.v
 GENERIC_DEPS += ../common/ad_csc_RGB2CrYCb.v
 GENERIC_DEPS += ../common/ad_mem.v
-GENERIC_DEPS += ../common/ad_rst.v
 GENERIC_DEPS += ../common/ad_ss_444to422.v
 GENERIC_DEPS += ../common/up_axi.v
 GENERIC_DEPS += ../common/up_clock_mon.v
@@ -22,10 +21,10 @@ GENERIC_DEPS += axi_hdmi_tx_es.v
 GENERIC_DEPS += axi_hdmi_tx_vdma.v
 
 XILINX_DEPS += ../xilinx/common/ad_mul.v
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_hdmi_tx_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 INTEL_DEPS += ../../library/scripts/adi_intel_device_info_enc.tcl
 INTEL_DEPS += ../intel/common/ad_mul.v

@@ -21,9 +21,9 @@ GENERIC_DEPS += axi_ad7606x_16b_pif.v
 GENERIC_DEPS += axi_ad7606x_18b_pif.v
 
 XILINX_DEPS += ../xilinx/common/ad_dcfilter.v
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_ad7606x_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 include ../scripts/library.mk

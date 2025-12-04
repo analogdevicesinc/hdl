@@ -122,11 +122,14 @@ module axi_gpreg_clock_mon #(
     .d_rst (d_rst),
     .d_clk (d_clk_g));
 
-  ad_rst i_d_rst_reg (
-    .rst_async (up_d_preset),
-    .clk (d_clk_g),
-    .rstn (),
-    .rst (d_rst));
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_d_rst_reg (
+    .rst_async(up_d_preset),
+    .clk(d_clk_g),
+    .rstn(),
+    .rst(d_rst));
 
   generate
   if (BUF_ENABLE == 1) begin

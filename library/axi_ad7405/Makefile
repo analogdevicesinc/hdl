@@ -20,7 +20,6 @@ GENERIC_DEPS += ../common/util_dec256sinc24b.v
 GENERIC_DEPS += axi_ad7405.v
 
 XILINX_DEPS += ../xilinx/common/ad_dcfilter.v
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += axi_ad7405_constr.ttcl
 XILINX_DEPS += axi_ad7405_ip.tcl
 

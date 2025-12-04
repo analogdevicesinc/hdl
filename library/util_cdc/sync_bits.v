@@ -60,6 +60,13 @@ module sync_bits #(
   output [NUM_OF_BITS-1:0] out_bits
 );
 
+  initial begin
+    if (SYNC_STAGES < 2) begin
+      $error("The number of synchronization stages cannot be less than 2!");
+      $finish;
+    end
+  end
+
   integer i;
 
   generate if (ASYNC_CLK == 1) begin

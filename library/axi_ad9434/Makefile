@@ -22,11 +22,11 @@ GENERIC_DEPS += axi_ad9434_if.v
 GENERIC_DEPS += axi_ad9434_pnmon.v
 
 XILINX_DEPS += ../xilinx/common/ad_mmcm_drp.v
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += ../xilinx/common/ad_serdes_clk.v
 XILINX_DEPS += ../xilinx/common/ad_serdes_in.v
 XILINX_DEPS += axi_ad9434_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 include ../scripts/library.mk

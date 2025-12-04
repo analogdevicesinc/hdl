@@ -8,7 +8,6 @@ LIBRARY_NAME := axi_ad408x
 
 GENERIC_DEPS += ../common/ad_datafmt.v
 GENERIC_DEPS += ../common/ad_pack.v
-GENERIC_DEPS += ../common/ad_rst.v
 GENERIC_DEPS += ../common/up_adc_channel.v
 GENERIC_DEPS += ../common/up_adc_common.v
 GENERIC_DEPS += ../common/up_axi.v
@@ -22,10 +21,10 @@ GENERIC_DEPS += axi_ad408x.v
 XILINX_DEPS += ../xilinx/common/ad_data_clk.v
 XILINX_DEPS += ../xilinx/common/ad_data_in.v
 XILINX_DEPS += ../xilinx/common/ad_dcfilter.v
-XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += ../xilinx/common/ad_serdes_in.v
 XILINX_DEPS += axi_ad408x_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 include ../scripts/library.mk

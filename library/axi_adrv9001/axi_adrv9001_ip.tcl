@@ -26,7 +26,6 @@ adi_ip_files axi_adrv9001 [list \
   "$ad_hdl_dir/library/common/up_tdd_cntrl.v" \
   "$ad_hdl_dir/library/common/ad_tdd_control.v" \
   "$ad_hdl_dir/library/common/ad_addsub.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
@@ -39,8 +38,6 @@ adi_ip_files axi_adrv9001 [list \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_pngen.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
-  "$ad_hdl_dir/library/util_cdc/sync_event.v" \
   "adrv9001_rx.v" \
   "adrv9001_tx.v" \
   "adrv9001_pack.v" \

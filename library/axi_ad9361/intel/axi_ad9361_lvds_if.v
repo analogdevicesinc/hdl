@@ -445,7 +445,7 @@ module axi_ad9361_lvds_if #(
     up_txnrx_int <= up_txnrx;
   end
 
-  always @(posedge clk or posedge rst) begin
+  always @(posedge clk) begin
     if (rst == 1'b1) begin
       enable_up_m1 <= 1'b0;
       txnrx_up_m1 <= 1'b0;

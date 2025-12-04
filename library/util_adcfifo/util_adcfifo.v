@@ -104,11 +104,14 @@ module util_adcfifo #(
   assign adc_wovf = 1'd0;
 
   // synchronize the adc_rst to the adc_clk clock domain
-  ad_rst i_adc_rst_sync (
-    .rst_async (adc_rst),
-    .clk (adc_clk),
-    .rstn (adc_rstn_s),
-    .rst (adc_rst_s));
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_adc_rst_sync (
+    .rst_async(adc_rst),
+    .clk(adc_clk),
+    .rstn(adc_rstn_s),
+    .rst(adc_rst_s));
 
   // optional capture synchronization
 

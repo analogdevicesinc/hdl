@@ -11,7 +11,6 @@ global VIVADO_IP_LIBRARY
 
 adi_ip_create axi_pulse_gen
 adi_ip_files axi_pulse_gen [list \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/util_pulse_gen.v" \
   "axi_pulse_gen_regmap.v" \
@@ -21,8 +20,8 @@ adi_ip_properties axi_pulse_gen
 
 adi_ip_add_core_dependencies [list \
 	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
 ]
-
 
 set cc [ipx::current_core]
 

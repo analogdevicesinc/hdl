@@ -242,7 +242,10 @@ module axi_logic_analyzer_reg (
     end
   end
 
-  ad_rst i_core_rst_reg (
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_core_rst_reg (
     .rst_async(~up_rstn),
     .clk(clk),
     .rstn(),

@@ -9,7 +9,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_ad9467
 adi_ip_files axi_ad9467 [list \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
@@ -21,7 +20,6 @@ adi_ip_files axi_ad9467 [list \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad9467_pnmon.v" \
   "axi_ad9467_if.v" \
   "axi_ad9467_channel.v" \
@@ -31,6 +29,11 @@ adi_ip_properties axi_ad9467
 
 adi_init_bd_tcl
 adi_ip_bd axi_ad9467 "bd/bd.tcl"
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_ad9467} [ipx::current_core]
 

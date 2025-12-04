@@ -90,7 +90,7 @@ module axi_intr_monitor (
 
   assign irq = interrupt;
 
-  always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
+  always @(posedge s_axi_aclk) begin
     if (s_axi_aresetn == 1'b0 || control[0] == 1'b0) begin
       counter_to_interrupt_cnt <= 0;
       counter_interrupt_handling <= 'd0;
@@ -129,7 +129,7 @@ module axi_intr_monitor (
     end
   end
 
-  always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
+  always @(posedge s_axi_aclk) begin
     if (s_axi_aresetn == 0) begin
       up_wack                    <= 1'b0;
       scratch                    <= 'd0;
@@ -162,7 +162,7 @@ module axi_intr_monitor (
     end
   end
 
-  always @(negedge s_axi_aresetn or posedge s_axi_aclk) begin
+  always @(posedge s_axi_aclk) begin
     if (s_axi_aresetn == 0) begin
       up_rack <= 'd0;
       up_rdata <= 'd0;

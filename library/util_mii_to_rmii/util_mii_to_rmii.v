@@ -130,7 +130,7 @@ module util_mii_to_rmii #(
   sync_bits #(
     .NUM_OF_BITS(2),
     .ASYNC_CLK(1)
-  ) i_mac_in_sync (
+  ) i_mii_tx_sync (
     .out_clk(mii_tx_clk_r),
     .out_resetn(1'b1),
     .in_bits( {mii_col_r, mii_crs_r} ),
@@ -139,7 +139,7 @@ module util_mii_to_rmii #(
   sync_bits #(
     .NUM_OF_BITS(9),
     .ASYNC_CLK(1)
-  ) i_mac_in_sync (
+  ) i_mii_rx_sync (
     .out_clk(mii_rx_clk_r),
     .out_resetn(1'b1),
     .in_bits( {mii_rx_dv_r, mii_rx_er_r, mii_rxd_r} ),

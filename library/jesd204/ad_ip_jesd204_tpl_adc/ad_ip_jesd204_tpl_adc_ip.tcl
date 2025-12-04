@@ -9,7 +9,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create ad_ip_jesd204_tpl_adc
 
 adi_ip_files ad_ip_jesd204_tpl_adc [list \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/ad_perfect_shuffle.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
@@ -38,7 +37,8 @@ adi_ip_bd ad_ip_jesd204_tpl_adc "bd/bd.tcl"
 set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_tpl_adc} [ipx::current_core]
 
 adi_ip_add_core_dependencies [list \
-  analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
 ]
 
 set cc [ipx::current_core]

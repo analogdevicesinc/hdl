@@ -10,7 +10,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_ad9684
 adi_ip_files axi_ad9684 [list \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_serdes_in.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_serdes_clk.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_mmcm_drp.v" \
@@ -23,7 +22,6 @@ adi_ip_files axi_ad9684 [list \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad9684_pnmon.v" \
   "axi_ad9684_if.v" \
   "axi_ad9684_channel.v" \
@@ -33,6 +31,11 @@ adi_ip_properties axi_ad9684
 
 adi_init_bd_tcl
 adi_ip_bd axi_ad9684 "bd/bd.tcl"
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 
