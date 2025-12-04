@@ -38,6 +38,4 @@ make SYSMEM_INIT_FILE=<path_to>/<sysmem_file>.mem
 
 NOTE:
 
-This project has no ready to make software support yet.
-no-OS support will be added soon here: https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad738x_fmcz
-Most recent no-OS branch: https://github.com/analogdevicesinc/no-OS/tree/ad738x_fmcz_lattice/projects/ad738x_fmcz
+The Software support is still work in progress and can be found here: https://github.com/analogdevicesinc/no-OS/tree/ad738x_fmcz_lattice/projects/ad738x_fmcz
