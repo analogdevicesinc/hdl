@@ -97,7 +97,7 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL0_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL0_REF_CTRL__FREQMHZ 100
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL1_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__SRCSEL {IOPLL}
-ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 200
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 250
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL2_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__FREQMHZ 12.288
@@ -319,7 +319,7 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
-ad_ip_parameter axi_adrv9009_som_rx_dma MAX_BYTES_PER_BURST 256
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.CACHE_COHERENT 1
@@ -355,7 +355,7 @@ ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.FIFO_SIZE 32
-ad_ip_parameter axi_adrv9009_som_obs_dma MAX_BYTES_PER_BURST 256
+ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_OS_NUM_OF_LANES]
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.CACHE_COHERENT 1
@@ -721,8 +721,8 @@ ad_ip_instance clk_wiz dma_clk_wiz
 ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
 ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
 ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
-ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 332.9
 ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
+ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 332.9
 
 ad_connect sys_cpu_clk dma_clk_wiz/clk_in1
 ad_connect sys_cpu_resetn dma_clk_wiz/resetn
