@@ -984,22 +984,22 @@ version of library infrastructure support.
 
 .. note::
 
-   Currently, we have only one supported project the
+   Currently, we are supporting the
    `ad738x_fmc <https://analogdevicesinc.github.io/hdl/projects/ad738x_fmc/index.html>`__
-   for the **LFCPNX-EVN** carrier board, in
+   project for the **LFCPNX-EVN** carrier board, in the
    `hdl/projects/ad738x_fmc/lfcpnx <https://github.com/analogdevicesinc/hdl/tree/main/projects/ad738x_fmc/lfcpnx>`__ folder.
    For Lattice, there are separate tools for creating
    a block design **(Propel Builder)** and building an HDL design **(Radiant)**.
 
-To build a project, go to the carrier folder and run ``make``. For now, you can
-try to build the **ad738x_fmc** project that we have available for
-**CertusPro-NX Evaluation Board** by entering the
+To build a project, go to the carrier folder and run ``make``.
+The **ad738x_fmc** project is available for the
+**CertusPro-NX Evaluation Board** and can be built by entering the
 ``hdl/projects/ad738x_fmc/lfcpnx`` directory and running ``make``.
 
 .. shell:: bash
 
    ~/hdl
-   $cd projects/common/lfcpnx
+   $cd projects/ad738x_fmc/lfcpnx
    $make
 
 This assumes that you have the tools and licenses set up correctly.
