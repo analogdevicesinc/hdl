@@ -1,4 +1,4 @@
-# AD738X-FMC/ZED HDL Project
+# AD738X-FMC/LFCPNX HDL Project
 
 ## Building the project
 
