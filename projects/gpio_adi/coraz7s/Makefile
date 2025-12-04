@@ -13,4 +13,6 @@ M_DEPS += ../../common/coraz7s/coraz7s_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 
 M_DEPS += system_post_synth.tcl
+
+LIB_DEPS += axi_gpio_adi
 include ../../scripts/project-xilinx.mk

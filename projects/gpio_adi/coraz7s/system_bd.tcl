@@ -20,9 +20,9 @@ create_bd_port -dir O  -from 31 -to 0 gpio_o
 create_bd_port -dir O  -from 31 -to 0 gpio_t
 create_bd_port -dir O irq_0
 
-ad_connect gpio_i axi_gpio_adi_0/gpio_io_i
-ad_connect gpio_o axi_gpio_adi_0/gpio_io_o
-ad_connect gpio_t axi_gpio_adi_0/gpio_io_t
+ad_connect gpio_i axi_gpio_adi_0/gpio_i
+ad_connect gpio_o axi_gpio_adi_0/gpio_o
+ad_connect gpio_t axi_gpio_adi_0/gpio_t
 ad_connect irq_0  axi_gpio_adi_0/irq
 ad_cpu_interrupt "ps-10" "mb-10" axi_gpio_adi_0/irq
 
