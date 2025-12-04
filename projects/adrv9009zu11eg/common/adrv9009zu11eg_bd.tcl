@@ -319,7 +319,7 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
-ad_ip_parameter axi_adrv9009_som_rx_dma MAX_BYTES_PER_BURST 256
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.CACHE_COHERENT 1
@@ -355,7 +355,7 @@ ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.FIFO_SIZE 32
-ad_ip_parameter axi_adrv9009_som_obs_dma MAX_BYTES_PER_BURST 256
+ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_OS_NUM_OF_LANES]
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.CACHE_COHERENT 1
