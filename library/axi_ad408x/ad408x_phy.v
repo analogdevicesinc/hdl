@@ -83,8 +83,6 @@ module ad408x_phy #(
   output                            sync_status
 );
 
-  // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
-  localparam DDR_OR_SDR_N    = 1;
   localparam CMOS_LVDS_N     = 0; // Use always LVDS mode
   localparam SEVEN_SERIES    = 1;
   localparam ULTRASCALE      = 2;
@@ -199,30 +197,20 @@ module ad408x_phy #(
     .I(dclk_in_p),
     .IB(dclk_in_n),
     .O(clk_in_s));
-    // 0x15 0x50 pttmode
+
   generate
   if(FPGA_TECHNOLOGY == SEVEN_SERIES) begin
 
     BUFIO i_clk_buf(
       .I(clk_in_s),
       .O(adc_clk_in_fast));
-    if(DDR_OR_SDR_N == 1) begin
-      BUFR #(
-        .BUFR_DIVIDE("2")
-      ) i_div_clk_buf (
-        .CLR(~sync_n),
-        .CE(1'b1),
-        .I(clk_in_s),
-        .O(adc_clk_div));
-    end else if(DDR_OR_SDR_N == 0) begin
-      BUFR #(
-        .BUFR_DIVIDE("4")
-      ) i_div_clk_buf (
-        .CLR(~sync_n),
-        .CE(1'b1),
-        .I(clk_in_s),
-        .O(adc_clk_div));
-    end
+    BUFR #(
+      .BUFR_DIVIDE("2")
+    ) i_div_clk_buf (
+      .CLR(~sync_n),
+      .CE(1'b1),
+      .I(clk_in_s),
+      .O(adc_clk_div));
 
   end else begin
 
@@ -235,29 +223,16 @@ module ad408x_phy #(
       .CE(1'b1),
       .I(clk_in_s));
 
-    if(DDR_OR_SDR_N == 1) begin
-      BUFGCE_DIV #(
-        .BUFGCE_DIVIDE(2),
-        .IS_CE_INVERTED(1'b0),
-        .IS_CLR_INVERTED(1'b0),
-        .IS_I_INVERTED(1'b0)
-      ) i_div_clk_buf(
-        .O(adc_clk_div),
-        .CE(1'b1),
-        .CLR(~sync_n),
-        .I(clk_in_s));
-    end else if(DDR_OR_SDR_N == 0) begin
-      BUFGCE_DIV #(
-        .BUFGCE_DIVIDE(4),
-        .IS_CE_INVERTED(1'b0),
-        .IS_CLR_INVERTED(1'b0),
-        .IS_I_INVERTED(1'b0)
-      ) i_div_clk_buf(
-        .O(adc_clk_div),
-        .CE(1'b1),
-        .CLR(~sync_n),
-        .I(clk_in_s));
-    end
+    BUFGCE_DIV #(
+      .BUFGCE_DIVIDE(2),
+      .IS_CE_INVERTED(1'b0),
+      .IS_CLR_INVERTED(1'b0),
+      .IS_I_INVERTED(1'b0)
+    ) i_div_clk_buf(
+      .O(adc_clk_div),
+      .CE(1'b1),
+      .CLR(~sync_n),
+      .I(clk_in_s));
 
   end
   endgenerate
@@ -282,7 +257,7 @@ module ad408x_phy #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .IODELAY_CTRL(IODELAY_CTRL),
     .IODELAY_GROUP(IO_DELAY_GROUP),
-    .DDR_OR_SDR_N(DDR_OR_SDR_N),
+    .DDR_OR_SDR_N(1),
     .DATA_WIDTH(NUM_LANES),
     .DRP_WIDTH(DRP_WIDTH),
     .SERDES_FACTOR(4),
