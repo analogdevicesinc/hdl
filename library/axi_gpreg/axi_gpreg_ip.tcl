@@ -15,14 +15,14 @@ adi_ip_files axi_gpreg [list \
   "axi_gpreg_clock_mon.v" \
   "axi_gpreg.v" ]
 
+set_property FILE_TYPE SystemVerilog [get_files "axi_gpreg.v"]
+
+adi_ip_properties axi_gpreg
+
 adi_ip_add_core_dependencies [list \
 	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
 	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
 ]
-
-set_property FILE_TYPE SystemVerilog [get_files "axi_gpreg.v"]
-
-adi_ip_properties axi_gpreg
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_IO')) > 0} \
   [ipx::get_ports up_gp_*_0 -of_objects [ipx::current_core]]
