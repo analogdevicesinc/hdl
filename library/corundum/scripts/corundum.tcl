@@ -782,20 +782,16 @@ ad_ip_instance proc_sys_reset corundum_rstgen [list \
 
 ad_connect corundum_hierarchy/rst_corundum corundum_rstgen/peripheral_reset
 
-switch -exact -- $CPU {
-    Zynq     {
-                # do nothing
-             }
-    ZynqMP   {
-                # do nothing
-             }
-    default {
-        ad_ip_instance axi_gpio corundum_gpio_reset [list \
-            C_ALL_OUTPUTS 1 \
-            C_DOUT_DEFAULT 0x00000000 \
-            C_GPIO_WIDTH 1 \
-        ]
-        ad_connect corundum_gpio_reset/gpio_io_o corundum_rstgen/aux_reset_in
-    }
-}
+# only for MicroBlaze variant of the project, add AXI GPIO to control
+# the Corundum Reset Generator
 
+if {[string equal $CPU MB]} {
+  ad_ip_instance axi_gpio corundum_gpio_reset [list \
+    C_ALL_OUTPUTS 1 \
+    C_DOUT_DEFAULT 0x00000000 \
+    C_GPIO_WIDTH 1 \
+  ]
+
+  ad_connect corundum_gpio_reset/gpio_io_o corundum_rstgen/aux_reset_in
+
+}
