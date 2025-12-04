@@ -6,7 +6,7 @@ AXI AD408x
 .. hdl-component-diagram::
 
 The :git-hdl:`AXI AD408x <library/axi_ad408x>` IP core can be used to interface
-the :adi:`AD408x` device family (e.g., AD4080).
+the :adi:`AD4080, AD4083, AD4086` devices.
 This documentation only covers the IP core and requires one to be
 familiar with the device, for a complete and better understanding.
 
@@ -216,10 +216,6 @@ Software Guidelines
      - Setting this bit configures the sample capture to occur at each falling
        edge of the Filter Result Ready pin of the AD408x devices, as opposed to
        continuous mode when the digital filter feature is disabled.
-   * - SELF_SYNC
-     - 0x4C (ADC Common)
-     - 1
-     - Controls if the data capture synchronization is done through CNV signal or bit-slip.
    * - DEVICE_CODE
      - 0x4C (ADC Common)
      - [3:2]
@@ -245,8 +241,8 @@ References
 -------------------------------------------------------------------------------
 
 * HDL IP core at :git-hdl:`library/axi_ad408x`
-* HDL project at :git-hdl:`projects/ad408x_fmc_evb`
-* HDL project documentation at :ref:`ad408x_fmc_evb`
+* HDL project at :git-hdl:`projects/ad4080_fmc_evb`
+* HDL project documentation at :ref:`ad4080_fmc_evb`
 * :adi:`AD4080`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`
