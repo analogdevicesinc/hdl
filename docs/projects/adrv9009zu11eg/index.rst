@@ -168,8 +168,17 @@ axi_adrv9009_obs_jesd 0x84A7_0000
 axi_adrv9009_rx_dma   0x9C42_0000
 axi_adrv9009_tx_dma   0x9C40_0000
 axi_adrv9009_obs_dma  0x9C44_0000
-axi_sysid_0           0x8500_0000 
+axi_sysid_0           0x8500_0000
 ===================== ===========
+
+In case of :adi:`ADRV2CRR-FMC`, additional interconnects may be present in
+the system.
+
+============================================ ===========
+Instance                                     Address
+============================================ ===========
+corundum_hierarchy/corundum_core/s_axil_ctrl 0xA000_0000
+============================================ ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -331,6 +340,14 @@ axi_adrv9009_fmc_tx_jesd   12  108          140
 axi_adrv9009_fmc_rx_jesd   13  109          141
 ========================== === ============ =============
 
+In case of :adi:`ADRV2CRR-FMC`, additional interrupts may be present in the system.
+
+======================= === ============ =============
+Instance name           HDL Linux ZynqMP Actual ZynqMP
+======================= === ============ =============
+corundum_hierarcy/irq   4   93           125
+======================= === ============ =============
+
 Building the HDL project
 -------------------------------------------------------------------------------
 
@@ -385,7 +402,42 @@ configure this project, depending on the carrier used.
    | RX_OS_JESD_S      |                1                 |          1        |
    +-------------------+----------------------------------+-------------------+
 
+**Corundum Network Stack support for ADRV9009-ZU11EG/ADRV2CRR-FMC**
+
+For this configuration of the project only, the Corundum Network Stack can be
+added. This configuration supports **10 Gbps** on the **QSFP+** connector.
+
+`Corundum NIC <https://github.com/ucsdsysnet/corundum>`_ repository needs to
+be cloned alongside HDL repository. Do a git checkout to the latest tested
+version (commit - 37f2607). When the 10G-based implementation (e.g., in
+this project) is used, apply the indicated patch. Then navigate back to the
+location of the project, and build the project using the enviromental variable
+**CORUNDUM**, by setting it to 1 (default it's 0).
+
+**Linux/Cygwin/WSL**
+
+.. shell::
+
+   $git clone https://github.com/ucsdsysnet/corundum.git
+   $cd corundum
+   $git checkout 37f2607
+   $git apply ../hdl/library/corundum/patch_axis_xgmii_rx_64.patch
+   $cd ../hdl/projects/adrv9009_zu11eg/adrv2crr_fmc
+   $make CORUNDUM=1
+
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+
+.. admonition:: Publications
+
+   The following papers pertain to the Corundum source code:
+
+   - J- A. Forencich, A. C. Snoeren, G. Porter, G. Papen, Corundum: An Open-Source 100-Gbps NIC, in FCCM'20.
+     (`FCCM Paper`_, `FCCM Presentation`_)
+   - J- A. Forencich, System-Level Considerations for Optical Switching in Data Center Networks. (`Thesis`_)
+
+.. _FCCM Paper: https://www.cse.ucsd.edu/~snoeren/papers/corundum-fccm20.pdf
+.. _FCCM Presentation: https://www.fccm.org/past/2020/forums/topic/corundum-an-open-source-100-gbps-nic/
+.. _Thesis: https://escholarship.org/uc/item/3mc9070t
 
 Other considerations
 -------------------------------------------------------------------------------
@@ -514,6 +566,12 @@ HDL related
    * - JESD204_TPL_DAC
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      - :ref:`ad_ip_jesd204_tpl_dac`
+   * - CORUNDUM_CORE
+     - :git-hdl:`library/corundum/corundum_core`
+     - :ref:`corundum_core`
+   * - ETHERNET_CORE
+     - :git-hdl:`library/corundum/ethernet`
+     - :ref:`corundum_ethernet_core`
 
 - :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
 - :ref:`jesd204`
@@ -526,6 +584,7 @@ Software related
 - :git-linux:`ADRV9009ZU11EG device tree <arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm.dts>`
 - :git-linux:`ADRV9009ZU11EG + FMCOMMS8 device tree <arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-sync-fmcomms8-jesd204-fsm.dts>`
 - :git-linux:`ADRV9009ZU11EG + FMCXMWBR1 device tree <arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-xmicrowave.dts>`
+- :git-linux:`ADRV9009ZU11EG + ADRV2CRR-FMC CORUNDUM device tree <arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-100-qsfp.dts>`
 - :git-no-os:`ADRV9009ZU11EG NO-OS PROJECT <projects/adrv9009>`
 
 .. include:: ../common/more_information.rst
