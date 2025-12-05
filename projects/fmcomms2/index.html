@@ -13,7 +13,7 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="FMCOMMS5 HDL Project" href="../fmcomms5/index.html" />
+    <link rel="next" title="Integrate FIR filters into the FMCOMMS2 HDL design" href="fir_filter.html" />
     <link rel="prev" title="DC2677A HDL project" href="../dc2677a/index.html" />
    
   
@@ -350,7 +350,10 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../daq2/index.html">DAQ2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../daq3/index.html">DAQ3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../dc2677a/index.html">DC2677A</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">FMCOMMS2/3/4</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1" checked=""/><div class="collapse"><a class="current reference internal" href="#">FMCOMMS2/3/4</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="fir_filter.html">FMCOMMS2 FIR FILTER</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms11/index.html">FMCOMMS11</a></li>
@@ -387,6 +390,38 @@ Content on this topic
             
   <section id="fmcomms2-3-4-hdl-project">
 <span id="fmcomms2"></span><h1>FMCOMMS2/3/4 HDL Project<a class="headerlink" href="#fmcomms2-3-4-hdl-project" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fir_filter.html">FMCOMMS2 FIR FILTER</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fir_filter.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fir_filter.html#choosing-filter-parameters-and-coefficients">Choosing filter parameters and coefficients</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fir_filter.html#interpolation-fir-filter">Interpolation FIR filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fir_filter.html#decimation-fir-filter">Decimation FIR filter</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fir_filter.html#adding-the-filters-in-the-data-path">Adding the filters in the data path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fir_filter.html#block-diagram">Block diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fir_filter.html#understanding-fmcomms2-clock-routing">Understanding FMCOMMS2 clock routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fir_filter.html#adding-fir-filters-in-fmcomms2-design-and-building-the-hdl">Adding FIR filters in FMCOMMS2 design and building the HDL</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fir_filter.html#adding-concatenation-modules">Adding concatenation modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fir_filter.html#connecting-the-fir-interpolation-filters-on-the-tx-side">Connecting the FIR interpolation filters on the Tx side</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fir_filter.html#connecting-the-fir-decimation-filters-on-the-rx-side">Connecting the FIR decimation filters on the Rx side</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fir_filter.html#generating-the-programing-files">Generating the programing files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fir_filter.html#base-system-functionality">Base system functionality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fir_filter.html#activating-filters">Activating Filters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fir_filter.html#interpolation-filter">Interpolation filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fir_filter.html#decimation-filters">Decimation filters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fir_filter.html#all-filters-active-characteristic">All filters active characteristic</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fir_filter.html#older-sources">Older sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fir_filter.html#references">References</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The AD-FMCOMMS2/3/4/5-EBZ are a high-speed analog modules designed to showcase
@@ -901,7 +936,7 @@ are, the lower the chances to receive support from <a class="icon link reference
               <div class="related">
                 &nbsp;
     <a href="../dc2677a/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">DC2677A HDL project</a>
-    <a href="../fmcomms5/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">FMCOMMS5 HDL Project</a>
+    <a href="fir_filter.html" title="Next document (Alt+Shift+RightArrow)" class="next">Integrate FIR filters into the FMCOMMS2 HDL design</a>
               </div>
           
         </div>
