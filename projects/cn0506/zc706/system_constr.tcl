@@ -44,7 +44,7 @@ switch $INTF_CFG {
     set_property -dict {PACKAGE_PIN AH14  IOSTANDARD LVCMOS25 SLEW FAST} [get_ports {mii_txd_a[0]}]    ; ## D14 FMC_LPC_LA09_P
     set_property -dict {PACKAGE_PIN AH13  IOSTANDARD LVCMOS25 SLEW FAST} [get_ports {mii_txd_a[1]}]    ; ## D15 FMC_LPC_LA09_N
     set_property -dict {PACKAGE_PIN AB12  IOSTANDARD LVCMOS25 SLEW FAST} [get_ports {mii_txd_a[2]}]    ; ## C10 FMC_LPC_LA06_P
-    set_property -dict {PACKAGE_PIN AC12  IOSTANDARD LVCMOS25 SLEW FAST} [get_ports {mii_txd_a[3]}]    ; ## C11 FMC_LPC_LA06_N 
+    set_property -dict {PACKAGE_PIN AC12  IOSTANDARD LVCMOS25 SLEW FAST} [get_ports {mii_txd_a[3]}]    ; ## C11 FMC_LPC_LA06_N
 
     set_property -dict {PACKAGE_PIN AD13  IOSTANDARD LVCMOS25} [get_ports mii_crs_a]                   ; ## G13 FMC_LPC_LA08_N
 
@@ -89,7 +89,7 @@ switch $INTF_CFG {
     set_property -dict {PACKAGE_PIN AH14  IOSTANDARD LVCMOS25 SLEW FAST} [get_ports {rgmii_txd_a[0]}]  ; ## D14 FMC_LPC_LA09_P
     set_property -dict {PACKAGE_PIN AH13  IOSTANDARD LVCMOS25 SLEW FAST} [get_ports {rgmii_txd_a[1]}]  ; ## D15 FMC_LPC_LA09_N
     set_property -dict {PACKAGE_PIN AB12  IOSTANDARD LVCMOS25 SLEW FAST} [get_ports {rgmii_txd_a[2]}]  ; ## C10 FMC_LPC_LA06_P
-    set_property -dict {PACKAGE_PIN AC12  IOSTANDARD LVCMOS25 SLEW FAST} [get_ports {rgmii_txd_a[3]}]  ; ## C11 FMC_LPC_LA06_N 
+    set_property -dict {PACKAGE_PIN AC12  IOSTANDARD LVCMOS25 SLEW FAST} [get_ports {rgmii_txd_a[3]}]  ; ## C11 FMC_LPC_LA06_N
 
     set_property -dict {PACKAGE_PIN AD13  IOSTANDARD LVCMOS25} [get_ports int_n_a]                     ; ## G13 FMC_LPC_LA08_N
 
@@ -138,10 +138,10 @@ switch $INTF_CFG {
     create_clock -name rmii_ref_clk_a  -period 20.0 [get_ports rmii_rx_ref_clk_a]
     create_clock -name rmii_ref_clk_b  -period 20.0 [get_ports rmii_rx_ref_clk_b]
 
-    create_clock -name rmii_rx_clk_0   -period  20 [get_pins i_system_wrapper/system_i/mii_to_rmii_0/inst/mii_rx_clk_r1_reg/Q]
-    create_clock -name rmii_rx_clk_1   -period  20 [get_pins i_system_wrapper/system_i/mii_to_rmii_1/inst/mii_rx_clk_r1_reg/Q]
-    create_clock -name rmii_tx_clk_0   -period  20 [get_pins i_system_wrapper/system_i/mii_to_rmii_0/inst/mii_tx_clk_r1_reg/Q]
-    create_clock -name rmii_tx_clk_1   -period  20 [get_pins i_system_wrapper/system_i/mii_to_rmii_1/inst/mii_tx_clk_r1_reg/Q]
+    create_clock -name rmii_rx_clk_0   -period  20 [get_pins i_system_wrapper/system_i/mii_to_rmii_0/inst/mii_rx_clk_reg/Q]
+    create_clock -name rmii_rx_clk_1   -period  20 [get_pins i_system_wrapper/system_i/mii_to_rmii_1/inst/mii_rx_clk_reg/Q]
+    create_clock -name rmii_tx_clk_0   -period  20 [get_pins i_system_wrapper/system_i/mii_to_rmii_0/inst/mii_tx_clk_reg/Q]
+    create_clock -name rmii_tx_clk_1   -period  20 [get_pins i_system_wrapper/system_i/mii_to_rmii_1/inst/mii_tx_clk_reg/Q]
 
   }
 }

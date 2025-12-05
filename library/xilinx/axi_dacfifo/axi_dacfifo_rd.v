@@ -124,24 +124,18 @@ module axi_dacfifo_rd #(
   reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_waddr_g = 'd0;
   (* dont_touch = "true" *) reg                                  axi_mem_laddr_toggle = 1'b0;
   reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr = 'd0;
-  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr_m1 = 'd0;
-  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr_m2 = 'd0;
   reg     [(AXI_MEM_ADDRESS_WIDTH-1):0] axi_mem_addr_diff = 'd0;
   reg     [31:0]                        axi_araddr_prev = 'd0;
 
   reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_raddr = 'd0;
   reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_raddr_g = 'd0;
   reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_waddr = 'd0;
-  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_waddr_m1 = 'd0;
-  reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_waddr_m2 = 'd0;
   reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_laddr = 'd0;
   reg     [ 3:0]                        dac_mem_laddr_toggle_m = 4'd0;
   reg     [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_laddr_b = 'd0;
   reg                                   dac_mem_valid = 1'b0;
   reg                                   dac_mem_enable = 1'b0;
   reg     [ 2:0]                        dac_xfer_req_m = 3'b0;
-  reg     [ 3:0]                        dac_last_beats = 4'b0;
-  reg     [ 3:0]                        dac_last_beats_m = 4'b0;
 
   // internal signals
 
@@ -152,9 +146,15 @@ module axi_dacfifo_rd #(
   wire    [(AXI_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr_s;
   wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_waddr_s;
   wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_laddr_s;
+  wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr_m2;
   wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_waddr_b2g_s;
   wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] axi_mem_raddr_m2_g2b_s;
 
+  wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_laddr_cdc;
+  wire                                  dac_xfer_req;
+  wire                                  dac_mem_laddr_toggle_cdc;
+  wire    [ 3:0]                        dac_last_beats;
+  wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_waddr_m2;
   wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_raddr_b2g_s;
   wire    [(DAC_MEM_ADDRESS_WIDTH-1):0] dac_mem_waddr_m2_g2b_s;
   wire    [    DAC_MEM_ADDRESS_WIDTH:0] dac_mem_addr_diff_s;
@@ -328,16 +328,22 @@ module axi_dacfifo_rd #(
 
   assign axi_mem_addr_diff_s = {1'b1, axi_mem_waddr} - axi_mem_raddr_s;
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dac_mem_raddr_g_sync (
+    .out_clk(axi_clk),
+    .out_resetn(~axi_fifo_reset_s),
+    .in_bits(dac_mem_raddr_g),
+    .out_bits(axi_mem_raddr_m2));
+
   always @(posedge axi_clk) begin
     if (axi_fifo_reset_s == 1'b1) begin
       axi_mem_addr_diff <= 'd0;
       axi_mem_raddr <= 'd0;
-      axi_mem_raddr_m1 <= 'd0;
-      axi_mem_raddr_m2 <= 'd0;
       axi_data_req <= 'd0;
     end else begin
-      axi_mem_raddr_m1 <= dac_mem_raddr_g;
-      axi_mem_raddr_m2 <= axi_mem_raddr_m1;
       axi_mem_raddr <= axi_mem_raddr_m2_g2b_s;
       axi_mem_addr_diff <= axi_mem_addr_diff_s[AXI_MEM_ADDRESS_WIDTH-1:0];
       // requesting AXI read access from the memory, if there is enough space
@@ -358,31 +364,67 @@ module axi_dacfifo_rd #(
 
   // CDC for xfer_req signal
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_axi_xfer_req_sync (
+    .out_clk(dac_clk),
+    .out_resetn(~dac_fifo_reset_s),
+    .in_bits(axi_xfer_req),
+    .out_bits(dac_xfer_req));
+
   always @(posedge dac_clk) begin
     if (dac_rst == 1'b1) begin
       dac_xfer_req_m <= 3'b0;
     end else begin
-      dac_xfer_req_m <= {dac_xfer_req_m[1:0], axi_xfer_req};
+      dac_xfer_req_m <= {dac_xfer_req_m[1:0], dac_xfer_req};
     end
   end
 
   assign dac_xfer_out = dac_xfer_req_m[2] & dac_mem_valid;
 
+  sync_bits #(
+    .NUM_OF_BITS(DAC_MEM_ADDRESS_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_axi_mem_waddr_g_sync (
+    .out_clk(dac_clk),
+    .out_resetn(~dac_fifo_reset_s),
+    .in_bits(axi_mem_waddr_g),
+    .out_bits(dac_mem_waddr_m2));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_axi_mem_laddr_toggle_sync (
+    .out_clk(dac_clk),
+    .out_resetn(~dac_fifo_reset_s),
+    .in_bits(axi_mem_laddr_toggle),
+    .out_bits(dac_mem_laddr_toggle_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(DAC_MEM_ADDRESS_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_axi_mem_laddr_s_sync (
+    .out_clk(dac_clk),
+    .out_resetn(~dac_fifo_reset_s),
+    .in_bits(axi_mem_laddr_s),
+    .out_bits(dac_mem_laddr_cdc));
+
   // CDC for write addresses from the DDRx clock domain
   always @(posedge dac_clk) begin
     if (dac_fifo_reset_s == 1'b1) begin
       dac_mem_waddr <= 'b0;
-      dac_mem_waddr_m1 <= 'b0;
-      dac_mem_waddr_m2 <= 'b0;
       dac_mem_laddr_toggle_m <= 4'b0;
       dac_mem_laddr <= 'b0;
     end else begin
-      dac_mem_waddr_m1 <= axi_mem_waddr_g;
-      dac_mem_waddr_m2 <= dac_mem_waddr_m1;
       dac_mem_waddr <= dac_mem_waddr_m2_g2b_s;
-      dac_mem_laddr_toggle_m <= {dac_mem_laddr_toggle_m[2:0], axi_mem_laddr_toggle};
+      dac_mem_laddr_toggle_m <= {dac_mem_laddr_toggle_m[2:0], dac_mem_laddr_toggle_cdc};
       dac_mem_laddr <= (dac_mem_laddr_toggle_m[2] ^ dac_mem_laddr_toggle_m[1]) ?
-                                                      axi_mem_laddr_s :
+                                                      dac_mem_laddr_cdc :
                                                       dac_mem_laddr;
     end
   end
@@ -428,15 +470,15 @@ module axi_dacfifo_rd #(
 
   // CDC for the dma_last_beats
 
-  always @(posedge dac_clk) begin
-    if (dac_fifo_reset_s == 1'b1) begin
-      dac_last_beats <= 4'b0;
-      dac_last_beats_m <= 4'b0;
-    end else begin
-      dac_last_beats_m <= dma_last_beats;
-      dac_last_beats <= dac_last_beats_m;
-    end
-  end
+  sync_bits #(
+    .NUM_OF_BITS(4),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dac_last_beats_sync (
+    .out_clk(dac_clk),
+    .out_resetn(~dac_fifo_reset_s),
+    .in_bits(dma_last_beats),
+    .out_bits(dac_last_beats));
 
   // If the MEM_RATIO is grater than one, it can happen that not all the DAC beats from
   // an AXI beat are valid. In this case the invalid data is dropped.

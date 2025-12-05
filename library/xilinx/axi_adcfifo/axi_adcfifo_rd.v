@@ -105,13 +105,24 @@ module axi_adcfifo_rd #(
 
   // internal signals
 
+  wire                            axi_xfer_req_s;
   wire                            axi_ready_s;
 
   // read is way too slow- buffer mode
 
   assign axi_ready_s = (~axi_arvalid | axi_arready) & axi_dready;
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dma_xfer_req_sync (
+    .out_clk(axi_clk),
+    .out_resetn(axi_resetn),
+    .in_bits(dma_xfer_req),
+    .out_bits(axi_xfer_req_s));
+
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_rd_addr_h <= 'd0;
       axi_rd <= 'd0;
@@ -134,7 +145,7 @@ module axi_adcfifo_rd #(
         axi_rd <= axi_xfer_enable;
         axi_rd_active <= axi_xfer_enable;
       end
-      axi_xfer_req_m <= {axi_xfer_req_m[1:0], dma_xfer_req};
+      axi_xfer_req_m <= {axi_xfer_req_m[1:0], axi_xfer_req_s};
       axi_xfer_init <= axi_xfer_req_m[1] & ~axi_xfer_req_m[2];
       axi_xfer_enable <= axi_xfer_req_m[2];
     end
@@ -152,7 +163,7 @@ module axi_adcfifo_rd #(
   assign axi_arlen  = AXI_LENGTH - 1;
   assign axi_arsize  = AXI_SIZE;
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_arvalid <= 'd0;
       axi_araddr <= 'd0;
@@ -176,7 +187,7 @@ module axi_adcfifo_rd #(
 
   // read data channel
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_drst <= 'd1;
       axi_dvalid <= 'd0;
@@ -190,7 +201,7 @@ module axi_adcfifo_rd #(
     end
   end
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_rerror <= 'd0;
     end else begin

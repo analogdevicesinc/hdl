@@ -137,22 +137,22 @@ set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_4 \
         [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_5 \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_5 \
   [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_1_phy/i_div_clk_buf/O]] \
         [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_6 \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_6 \
   [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_2_phy/i_div_clk_buf/O]] \
         [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_7 \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_7 \
   [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_1_phy/i_div_clk_buf/O]] \
         [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_8 \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_8 \
   [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_2_phy/i_div_clk_buf/O]] \
         [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O]] \
   ]

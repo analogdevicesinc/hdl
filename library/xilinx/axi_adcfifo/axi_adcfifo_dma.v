@@ -41,19 +41,19 @@ module axi_adcfifo_dma #(
   parameter   DMA_DATA_WIDTH =  64,
   parameter   DMA_READY_ENABLE = 1
 ) (
-  input                   axi_clk,
-  input                   axi_drst,
-  input                   axi_dvalid,
-  input       [AXI_DATA_WIDTH-1:0]  axi_ddata,
-  output  reg             axi_dready,
-  input       [ 3:0]      axi_xfer_status,
+  input                            axi_clk,
+  input                            axi_drst,
+  input                            axi_dvalid,
+  input       [AXI_DATA_WIDTH-1:0] axi_ddata,
+  output  reg                      axi_dready,
+  input       [ 3:0]               axi_xfer_status,
 
-  input                   dma_clk,
-  output                  dma_wr,
-  output      [DMA_DATA_WIDTH-1:0]  dma_wdata,
-  input                   dma_wready,
-  input                   dma_xfer_req,
-  output      [ 3:0]      dma_xfer_status
+  input                            dma_clk,
+  output                           dma_wr,
+  output      [DMA_DATA_WIDTH-1:0] dma_wdata,
+  input                            dma_wready,
+  input                            dma_xfer_req,
+  output      [ 3:0]               dma_xfer_status
 );
 
   localparam  DMA_MEM_RATIO = AXI_DATA_WIDTH/DMA_DATA_WIDTH;
@@ -63,31 +63,35 @@ module axi_adcfifo_dma #(
 
   // internal registers
 
-  reg     [AXI_ADDRESS_WIDTH-1:0]    axi_waddr = 'd0;
+  reg     [AXI_ADDRESS_WIDTH-1:0] axi_waddr = 'd0;
   reg     [  2:0]                 axi_waddr_rel_count = 'd0;
   reg                             axi_waddr_rel_t = 'd0;
-  reg     [AXI_ADDRESS_WIDTH-1:0]    axi_waddr_rel = 'd0;
+  reg     [AXI_ADDRESS_WIDTH-1:0] axi_waddr_rel = 'd0;
   reg     [  2:0]                 axi_raddr_rel_t_m = 'd0;
-  reg     [DMA_ADDRESS_WIDTH-1:0]    axi_raddr_rel = 'd0;
-  reg     [DMA_ADDRESS_WIDTH-1:0]    axi_addr_diff = 'd0;
+  reg     [DMA_ADDRESS_WIDTH-1:0] axi_raddr_rel = 'd0;
+  reg     [DMA_ADDRESS_WIDTH-1:0] axi_addr_diff = 'd0;
   reg                             dma_rst = 'd0;
   reg     [  2:0]                 dma_waddr_rel_t_m = 'd0;
-  reg     [AXI_ADDRESS_WIDTH-1:0]    dma_waddr_rel = 'd0;
+  reg     [AXI_ADDRESS_WIDTH-1:0] dma_waddr_rel = 'd0;
   reg                             dma_rd = 'd0;
   reg                             dma_rd_d = 'd0;
   reg     [DMA_DATA_WIDTH-1:0]    dma_rdata_d = 'd0;
-  reg     [DMA_ADDRESS_WIDTH-1:0]    dma_raddr = 'd0;
+  reg     [DMA_ADDRESS_WIDTH-1:0] dma_raddr = 'd0;
   reg     [  2:0]                 dma_raddr_rel_count = 'd0;
   reg                             dma_raddr_rel_t = 'd0;
-  reg     [DMA_ADDRESS_WIDTH-1:0]    dma_raddr_rel = 'd0;
+  reg     [DMA_ADDRESS_WIDTH-1:0] dma_raddr_rel = 'd0;
 
   // internal signals
 
-  wire    [DMA_ADDRESS_WIDTH:0]      axi_addr_diff_s;
+  wire    [DMA_ADDRESS_WIDTH:0]   axi_addr_diff_s;
+  wire    [DMA_ADDRESS_WIDTH-1:0] axi_raddr_rel_cdc;
   wire                            axi_raddr_rel_t_s;
-  wire    [DMA_ADDRESS_WIDTH-1:0]    axi_waddr_s;
+  wire    [DMA_ADDRESS_WIDTH-1:0] axi_waddr_s;
+  wire                            axi_raddr_rel_t_cdc;
+  wire    [AXI_ADDRESS_WIDTH-1:0] dma_waddr_rel_cdc;
   wire                            dma_waddr_rel_t_s;
-  wire    [DMA_ADDRESS_WIDTH-1:0]    dma_waddr_rel_s;
+  wire                            dma_waddr_rel_t_cdc;
+  wire    [DMA_ADDRESS_WIDTH-1:0] dma_waddr_rel_s;
   wire                            dma_wready_s;
   wire                            dma_rd_s;
   wire    [DMA_DATA_WIDTH-1:0]    dma_rdata_s;
@@ -117,6 +121,26 @@ module axi_adcfifo_dma #(
   assign axi_waddr_s = (DMA_MEM_RATIO == 2) ? {axi_waddr, 1'd0} :
     ((DMA_MEM_RATIO == 4) ? {axi_waddr, 2'd0} : {axi_waddr, 3'd0});
 
+  sync_bits #(
+    .NUM_OF_BITS(DMA_ADDRESS_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dma_raddr_rel_sync (
+    .out_clk(axi_clk),
+    .out_resetn(~axi_drst),
+    .in_bits(dma_raddr_rel),
+    .out_bits(axi_raddr_rel_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dma_raddr_rel_t_sync (
+    .out_clk(axi_clk),
+    .out_resetn(~axi_drst),
+    .in_bits(dma_raddr_rel_t),
+    .out_bits(axi_raddr_rel_t_cdc));
+
   always @(posedge axi_clk) begin
     if (axi_drst == 1'b1) begin
       axi_raddr_rel_t_m <= 'd0;
@@ -124,9 +148,9 @@ module axi_adcfifo_dma #(
       axi_addr_diff <= 'd0;
       axi_dready <= 'd0;
     end else begin
-      axi_raddr_rel_t_m <= {axi_raddr_rel_t_m[1:0], dma_raddr_rel_t};
+      axi_raddr_rel_t_m <= {axi_raddr_rel_t_m[1:0], axi_raddr_rel_t_cdc};
       if (axi_raddr_rel_t_s == 1'b1) begin
-        axi_raddr_rel <= dma_raddr_rel;
+        axi_raddr_rel <= axi_raddr_rel_cdc;
       end
       axi_addr_diff <= axi_addr_diff_s[DMA_ADDRESS_WIDTH-1:0];
       if (axi_addr_diff >= 180) begin
@@ -141,7 +165,27 @@ module axi_adcfifo_dma #(
 
   assign dma_waddr_rel_t_s = dma_waddr_rel_t_m[2] ^ dma_waddr_rel_t_m[1];
   assign dma_waddr_rel_s = (DMA_MEM_RATIO == 2) ? {dma_waddr_rel, 1'd0} :
-    ((DMA_MEM_RATIO == 4) ? {dma_waddr_rel, 2'd0} : {dma_waddr_rel, 3'd0});
+  ((DMA_MEM_RATIO == 4) ? {dma_waddr_rel, 2'd0} : {dma_waddr_rel, 3'd0});
+
+  sync_bits #(
+    .NUM_OF_BITS(AXI_ADDRESS_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_axi_waddr_rel_sync (
+    .out_clk(dma_clk),
+    .out_resetn(1'b1),
+    .in_bits(axi_waddr_rel),
+    .out_bits(dma_waddr_rel_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_axi_waddr_rel_t_sync (
+    .out_clk(dma_clk),
+    .out_resetn(1'b1),
+    .in_bits(axi_waddr_rel_t),
+    .out_bits(dma_waddr_rel_t_cdc));
 
   always @(posedge dma_clk) begin
     if (dma_xfer_req == 1'b0) begin
@@ -150,9 +194,9 @@ module axi_adcfifo_dma #(
       dma_waddr_rel <= 'd0;
     end else begin
       dma_rst <= 1'b0;
-      dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], axi_waddr_rel_t};
+      dma_waddr_rel_t_m <= {dma_waddr_rel_t_m[1:0], dma_waddr_rel_t_cdc};
       if (dma_waddr_rel_t_s == 1'b1) begin
-        dma_waddr_rel <= axi_waddr_rel;
+        dma_waddr_rel <= dma_waddr_rel_cdc;
       end
     end
   end

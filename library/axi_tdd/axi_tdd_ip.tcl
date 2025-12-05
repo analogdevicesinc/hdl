@@ -10,9 +10,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create axi_tdd
 adi_ip_files axi_tdd [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
-  "$ad_hdl_dir/library/util_cdc/sync_data.v" \
-  "$ad_hdl_dir/library/util_cdc/sync_event.v" \
   "axi_tdd_pkg.sv" \
   "axi_tdd_channel.sv" \
   "axi_tdd_counter.sv" \
@@ -24,6 +21,11 @@ adi_ip_properties axi_tdd
 set_property display_name "ADI AXI TDD Controller" [ipx::current_core]
 set_property description "ADI AXI TDD Controller" [ipx::current_core]
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_tdd} [ipx::current_core]
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 adi_init_bd_tcl
 

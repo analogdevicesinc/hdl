@@ -14,9 +14,11 @@ XILINX_DEPS += ../../common/ad_mem_asym.v
 XILINX_DEPS += ../../util_dacfifo/util_dacfifo_bypass.v
 XILINX_DEPS += axi_dacfifo.v
 XILINX_DEPS += axi_dacfifo_address_buffer.v
-XILINX_DEPS += axi_dacfifo_constr.xdc
 XILINX_DEPS += axi_dacfifo_ip.tcl
 XILINX_DEPS += axi_dacfifo_rd.v
 XILINX_DEPS += axi_dacfifo_wr.v
+
+XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 include ../../scripts/library.mk

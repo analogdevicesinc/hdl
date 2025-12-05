@@ -290,7 +290,7 @@ proc create_versal_jesd_xcvr_subsystem {
     create_bd_pin -dir O ${ip_name}/tx_resetdone
   }
 
-  create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_sync
+  ad_ip_instance sync_bits ${ip_name}/gtreset_sync
   ad_connect ${ip_name}/s_axi_clk ${ip_name}/gtreset_sync/out_clk
   ad_connect ${ip_name}/s_axi_resetn ${ip_name}/gtreset_sync/out_resetn
   ad_connect ${ip_name}/gtreset_in ${ip_name}/gtreset_sync/in_bits
@@ -307,7 +307,7 @@ proc create_versal_jesd_xcvr_subsystem {
         continue
       }
       set intf [expr {$rx_tx == "rx" ? $rx_intf : $tx_intf}]
-      create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_${rx_tx}_${port}_sync
+      ad_ip_instance sync_bits ${ip_name}/gtreset_${rx_tx}_${port}_sync
       ad_connect ${ip_name}/s_axi_clk ${ip_name}/gtreset_${rx_tx}_${port}_sync/out_clk
       ad_connect ${ip_name}/s_axi_resetn ${ip_name}/gtreset_${rx_tx}_${port}_sync/out_resetn
       ad_connect ${ip_name}/gtreset_${rx_tx}_${port} ${ip_name}/gtreset_${rx_tx}_${port}_sync/in_bits

@@ -112,16 +112,12 @@ module axi_dacfifo #(
 
   localparam  FIFO_BYPASS = (DAC_DATA_WIDTH == DMA_DATA_WIDTH) ? 1 : 0;
 
-  reg                                 dma_bypass_m1 = 1'b0;
-  reg                                 dma_bypass = 1'b0;
-  reg                                 dac_bypass_m1 = 1'b0;
-  reg                                 dac_bypass = 1'b0;
-  reg                                 dac_xfer_out_m1 = 1'b0;
-  reg                                 dac_xfer_out_bypass = 1'b0;
-
   wire                                axi_xfer_req_s;
   (* dont_touch = "true" *) wire    [31:0]                      axi_last_addr_s;
   (* dont_touch = "true" *) wire    [ 7:0]                      axi_last_beats_s;
+  wire                                dma_bypass;
+  wire                                dac_bypass;
+  wire                                dac_xfer_out_bypass;
   wire    [ 3:0]                      dma_last_beats_s;
   wire    [(DAC_DATA_WIDTH-1):0]      dac_data_fifo_s;
   wire    [(DAC_DATA_WIDTH-1):0]      dac_data_bypass_s;
@@ -235,17 +231,35 @@ module axi_dacfifo #(
       .dac_data(dac_data_bypass_s),
       .dac_dunf(dac_dunf_bypass_s));
 
-    always @(posedge dma_clk) begin
-      dma_bypass_m1 <= bypass;
-      dma_bypass <= dma_bypass_m1;
-    end
+    sync_bits #(
+      .NUM_OF_BITS(1),
+      .ASYNC_CLK(1),
+      .SYNC_STAGES(2)
+    ) i_dma_bypass_sync (
+      .out_clk(dma_clk),
+      .out_resetn(~dma_rst),
+      .in_bits(bypass),
+      .out_bits(dma_bypass));
 
-    always @(posedge dac_clk) begin
-      dac_bypass_m1 <= bypass;
-      dac_bypass <= dac_bypass_m1;
-      dac_xfer_out_m1 <= dma_xfer_req;
-      dac_xfer_out_bypass <= dac_xfer_out_m1;
-    end
+    sync_bits #(
+      .NUM_OF_BITS(1),
+      .ASYNC_CLK(1),
+      .SYNC_STAGES(2)
+    ) i_dac_bypass_sync (
+      .out_clk(dac_clk),
+      .out_resetn(~dac_rst),
+      .in_bits(bypass),
+      .out_bits(dac_bypass));
+
+    sync_bits #(
+      .NUM_OF_BITS(1),
+      .ASYNC_CLK(1),
+      .SYNC_STAGES(2)
+    ) i_dac_xfer_out_bypass_sync (
+      .out_clk(dma_clk),
+      .out_resetn(~dma_rst),
+      .in_bits(dma_xfer_req),
+      .out_bits(dac_xfer_out_bypass));
 
     // mux for the dma_ready
 

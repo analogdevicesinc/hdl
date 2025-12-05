@@ -12,10 +12,12 @@ XILINX_DEPS += ../../common/ad_mem_asym.v
 XILINX_DEPS += ../../common/up_xfer_status.v
 XILINX_DEPS += axi_adcfifo.v
 XILINX_DEPS += axi_adcfifo_adc.v
-XILINX_DEPS += axi_adcfifo_constr.xdc
 XILINX_DEPS += axi_adcfifo_dma.v
 XILINX_DEPS += axi_adcfifo_ip.tcl
 XILINX_DEPS += axi_adcfifo_rd.v
 XILINX_DEPS += axi_adcfifo_wr.v
+
+XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst
 
 include ../../scripts/library.mk

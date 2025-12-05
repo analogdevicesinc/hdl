@@ -390,19 +390,26 @@ module axi_tdd_regmap #(
 
   // control signals CDC
 
+  util_rst #(
+    .ASYNC_STAGES(2),
+    .SYNC_STAGES(2)
+  ) i_tdd_sync_rst_sync (
+    .rst_async(up_tdd_sync_rst),
+    .clk(tdd_clk),
+    .rstn(),
+    .rst(tdd_sync_rst));
+
   sync_bits #(
-    .NUM_OF_BITS (4),
+    .NUM_OF_BITS (3),
     .ASYNC_CLK (1)
   ) i_tdd_control_sync (
     .in_bits ({up_tdd_sync_ext,
                up_tdd_sync_int,
-               up_tdd_sync_rst,
                up_tdd_enable}),
     .out_resetn (tdd_resetn),
     .out_clk (tdd_clk),
     .out_bits ({tdd_sync_ext,
                 tdd_sync_int,
-                tdd_sync_rst,
                 tdd_enable}));
 
   sync_event #(
@@ -438,7 +445,7 @@ module axi_tdd_regmap #(
   assign asy_tdd_burst_count = up_tdd_burst_count;
   assign asy_tdd_startup_delay = up_tdd_startup_delay;
   assign asy_tdd_frame_length = up_tdd_frame_length;
-  assign asy_tdd_channel_pol  = up_tdd_channel_pol;
+  assign asy_tdd_channel_pol = up_tdd_channel_pol;
   assign asy_tdd_channel_on  = up_tdd_channel_on;
   assign asy_tdd_channel_off = up_tdd_channel_off;
 

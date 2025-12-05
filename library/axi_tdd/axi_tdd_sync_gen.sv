@@ -101,13 +101,25 @@ module axi_tdd_sync_gen #(
       logic [SYNC_COUNT_WIDTH-1:0] tdd_sync_counter = '0;
       logic [SYNC_COUNT_WIDTH-1:0] tdd_sync_period = '0;
 
+      wire  [SYNC_COUNT_WIDTH-1:0] tdd_sync_period_s;
+
+      sync_bits #(
+        .NUM_OF_BITS(SYNC_COUNT_WIDTH),
+        .ASYNC_CLK(1),
+        .SYNC_STAGES(2)
+      ) i_tdd_sync_period_sync (
+        .out_clk(clk),
+        .out_resetn(resetn),
+        .in_bits(asy_tdd_sync_period),
+        .out_bits(tdd_sync_period_s));
+
       // Save the async register values only when the module is enabled
       always @(posedge clk) begin
         if (resetn == 1'b0) begin
           tdd_sync_period <= '0;
         end else begin
           if (enable) begin
-            tdd_sync_period <= asy_tdd_sync_period;
+            tdd_sync_period <= tdd_sync_period_s;
           end
         end
       end

@@ -66,6 +66,11 @@ module axi_tdd_channel #(
   logic                      tdd_ch_set;
   logic                      tdd_ch_rst;
 
+  // wire
+  wire                       ch_pol_s;
+  wire  [REGISTER_WIDTH-1:0] t_high_s;
+  wire  [REGISTER_WIDTH-1:0] t_low_s;
+
   // initial values
   initial begin
     tdd_ch_en  = 1'b0;
@@ -78,6 +83,16 @@ module axi_tdd_channel #(
   (* direct_enable = "yes" *) logic enable;
   assign enable = tdd_enable;
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ch_pol_sync (
+    .out_clk(clk),
+    .out_resetn(resetn),
+    .in_bits(asy_ch_pol),
+    .out_bits(ch_pol_s));
+
   // Save the async register values only when the module is enabled
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
@@ -89,22 +104,42 @@ module axi_tdd_channel #(
     end
   end
 
+  sync_bits #(
+    .NUM_OF_BITS(REGISTER_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_t_high_sync (
+    .out_clk(clk),
+    .out_resetn(resetn),
+    .in_bits(asy_t_high),
+    .out_bits(t_high_s));
+
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       t_high <= '0;
     end else begin
       if (enable) begin
-        t_high <= asy_t_high;
+        t_high <= t_high_s;
       end
     end
   end
+
+  sync_bits #(
+    .NUM_OF_BITS(REGISTER_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_t_low_sync (
+    .out_clk(clk),
+    .out_resetn(resetn),
+    .in_bits(asy_t_low),
+    .out_bits(t_low_s));
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       t_low <= '0;
     end else begin
       if (enable) begin
-        t_low <= asy_t_low;
+        t_low <= t_low_s;
       end
     end
   end

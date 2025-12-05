@@ -17,10 +17,14 @@ adi_ip_files axi_adcfifo [list \
   "axi_adcfifo_dma.v" \
   "axi_adcfifo_wr.v" \
   "axi_adcfifo_rd.v" \
-  "axi_adcfifo.v" \
-  "axi_adcfifo_constr.xdc" ]
+  "axi_adcfifo.v" ]
 
 adi_ip_properties_lite axi_adcfifo
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_rst:1.0 \
+]
 
 ipx::infer_bus_interface {\
   axi_awvalid \

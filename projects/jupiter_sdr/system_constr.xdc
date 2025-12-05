@@ -203,12 +203,12 @@ set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_2 \
         [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O}]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_3 \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_3 \
   [list [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_div_clk_buf/O}]] \
         [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O}]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_4 \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_4 \
   [list [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_div_clk_buf/O}]] \
         [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O}]] \
   ]

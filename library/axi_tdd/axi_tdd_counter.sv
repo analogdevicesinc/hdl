@@ -68,6 +68,10 @@ module axi_tdd_counter #(
   logic                         tdd_last_burst;
   state_t                       tdd_cstate_ns;
 
+  wire  [BURST_COUNT_WIDTH-1:0] tdd_burst_count_s;
+  wire  [REGISTER_WIDTH-1:0]    tdd_startup_delay_s;
+  wire  [REGISTER_WIDTH-1:0]    tdd_frame_length_s;
+
   // initial values
   initial begin
     tdd_burst_counter = '0;
@@ -83,33 +87,63 @@ module axi_tdd_counter #(
   (* direct_enable = "yes" *) logic enable;
   assign enable = tdd_enable;
 
+  sync_bits #(
+    .NUM_OF_BITS(BURST_COUNT_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_tdd_burst_count_sync (
+    .out_clk(clk),
+    .out_resetn(resetn),
+    .in_bits(asy_tdd_burst_count),
+    .out_bits(tdd_burst_count_s));
+
   // Save the async register values only when the module is enabled
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       tdd_burst_count <= '0;
     end else begin
       if (enable) begin
-        tdd_burst_count <= asy_tdd_burst_count;
+        tdd_burst_count <= tdd_burst_count_s;
       end
     end
   end
+
+  sync_bits #(
+    .NUM_OF_BITS(REGISTER_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_tdd_startup_delay_sync (
+    .out_clk(clk),
+    .out_resetn(resetn),
+    .in_bits(asy_tdd_startup_delay),
+    .out_bits(tdd_startup_delay_s));
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       tdd_startup_delay <= '0;
     end else begin
       if (enable) begin
-        tdd_startup_delay <= asy_tdd_startup_delay;
+        tdd_startup_delay <= tdd_startup_delay_s;
       end
     end
   end
+
+  sync_bits #(
+    .NUM_OF_BITS(REGISTER_WIDTH),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_tdd_frame_length_sync (
+    .out_clk(clk),
+    .out_resetn(resetn),
+    .in_bits(asy_tdd_frame_length),
+    .out_bits(tdd_frame_length_s));
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       tdd_frame_length <= '0;
     end else begin
       if (enable) begin
-        tdd_frame_length <= asy_tdd_frame_length;
+        tdd_frame_length <= tdd_frame_length_s;
       end
     end
   end

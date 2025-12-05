@@ -114,8 +114,6 @@ module axi_adcfifo_wr #(
   reg     [  7:0]                 adc_rel_waddr = 'd0;
   reg     [  2:0]                 axi_rel_toggle_m = 'd0;
   reg     [  7:0]                 axi_rel_waddr = 'd0;
-  reg     [  7:0]                 axi_waddr_m1 = 'd0;
-  reg     [  7:0]                 axi_waddr_m2 = 'd0;
   reg     [  7:0]                 axi_waddr = 'd0;
   reg     [  7:0]                 axi_addr_diff = 'd0;
   reg                             axi_almost_full = 'd0;
@@ -132,6 +130,11 @@ module axi_adcfifo_wr #(
 
   // internal signals
 
+  wire                            adc_xfer_req_s;
+  wire    [  7:0]                 axi_waddr_s;
+  wire    [  7:0]                 axi_rel_waddr_cdc;
+  wire                            axi_rel_toggle_cdc;
+  wire                            axi_xfer_req_s;
   wire                            axi_rel_toggle_s;
   wire    [  8:0]                 axi_addr_diff_s;
   wire                            axi_wready_s;
@@ -178,6 +181,16 @@ module axi_adcfifo_wr #(
 
   // fifo interface
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_xfer_req_s_sync (
+    .out_clk(adc_clk),
+    .out_resetn(adc_rst),
+    .in_bits(dma_xfer_req),
+    .out_bits(adc_xfer_req_s));
+
   always @(posedge adc_clk) begin
     if (adc_rst == 1'b1) begin
       adc_waddr <= 'd0;
@@ -195,7 +208,7 @@ module axi_adcfifo_wr #(
         adc_waddr <= adc_waddr + 1'b1;
       end
       adc_waddr_g <= b2g(adc_waddr);
-      adc_xfer_req_m <= {adc_xfer_req_m[1:0], dma_xfer_req};
+      adc_xfer_req_m <= {adc_xfer_req_m[1:0], adc_xfer_req_s};
       adc_xfer_init <= adc_xfer_req_m[1] & ~adc_xfer_req_m[2];
       if (adc_xfer_init == 1'b1) begin
         adc_xfer_limit <= 1'd1;
@@ -225,21 +238,47 @@ module axi_adcfifo_wr #(
 
   assign axi_rel_toggle_s = axi_rel_toggle_m[2] ^ axi_rel_toggle_m[1];
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_rel_toggle_sync (
+    .out_clk(axi_clk),
+    .out_resetn(axi_resetn),
+    .in_bits(adc_rel_toggle),
+    .out_bits(axi_rel_toggle_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(8),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_rel_waddr_sync (
+    .out_clk(axi_clk),
+    .out_resetn(axi_resetn),
+    .in_bits(adc_rel_waddr),
+    .out_bits(axi_rel_waddr_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(8),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_adc_waddr_g_sync (
+    .out_clk(axi_clk),
+    .out_resetn(axi_resetn),
+    .in_bits(adc_waddr_g),
+    .out_bits(axi_waddr_s));
+
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_rel_toggle_m <= 'd0;
       axi_rel_waddr <= 'd0;
-      axi_waddr_m1 <= 'd0;
-      axi_waddr_m2 <= 'd0;
       axi_waddr <= 'd0;
     end else begin
-      axi_rel_toggle_m <= {axi_rel_toggle_m[1:0], adc_rel_toggle};
+      axi_rel_toggle_m <= {axi_rel_toggle_m[1:0], axi_rel_toggle_cdc};
       if (axi_rel_toggle_s == 1'b1) begin
-        axi_rel_waddr <= adc_rel_waddr;
+        axi_rel_waddr <= axi_rel_waddr_cdc;
       end
-      axi_waddr_m1 <= adc_waddr_g;
-      axi_waddr_m2 <= axi_waddr_m1;
-      axi_waddr <= g2b(axi_waddr_m2);
+      axi_waddr <= g2b(axi_waddr_s);
     end
   end
 
@@ -247,7 +286,7 @@ module axi_adcfifo_wr #(
 
   assign axi_addr_diff_s = {1'b1, axi_waddr} - axi_raddr;
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_addr_diff <= 'd0;
       axi_almost_full <= 'd0;
@@ -275,12 +314,22 @@ module axi_adcfifo_wr #(
 
   // transfer request is required to keep things in sync
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_axi_xfer_req_s_sync (
+    .out_clk(axi_clk),
+    .out_resetn(axi_resetn),
+    .in_bits(dma_xfer_req),
+    .out_bits(axi_xfer_req_s));
+
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_xfer_req_m <= 'd0;
       axi_xfer_init <= 'd0;
     end else begin
-      axi_xfer_req_m <= {axi_xfer_req_m[1:0], dma_xfer_req};
+      axi_xfer_req_m <= {axi_xfer_req_m[1:0], axi_xfer_req_s};
       axi_xfer_init <= axi_xfer_req_m[1] & ~axi_xfer_req_m[2];
     end
   end
@@ -292,7 +341,7 @@ module axi_adcfifo_wr #(
   assign axi_req_s = (axi_raddr[1:0] == 2'h0) ? axi_rd_s : 1'b0;
   assign axi_rlast_s = (axi_raddr[1:0] == 2'h3) ? axi_rd_s : 1'b0;
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_raddr <= 'd0;
       axi_rd <= 'd0;
@@ -314,7 +363,7 @@ module axi_adcfifo_wr #(
 
   // send read request for every burst about to be completed
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_rd_req <= 'd0;
       axi_rd_addr <= 'd0;
@@ -340,7 +389,7 @@ module axi_adcfifo_wr #(
   assign axi_awlen = AXI_LENGTH - 1;
   assign axi_awsize = AXI_SIZE;
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_awvalid <= 'd0;
       axi_awaddr <= 'd0;
@@ -371,7 +420,7 @@ module axi_adcfifo_wr #(
 
   assign axi_bready = 1'b1;
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_werror <= 'd0;
     end else begin
@@ -381,7 +430,7 @@ module axi_adcfifo_wr #(
 
   // fifo needs a reset
 
-  always @(posedge axi_clk or negedge axi_resetn) begin
+  always @(posedge axi_clk) begin
     if (axi_resetn == 1'b0) begin
       axi_reset <= 1'b1;
     end else begin

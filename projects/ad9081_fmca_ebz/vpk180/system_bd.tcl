@@ -16,10 +16,6 @@ source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 set ADI_PHY_SEL 0
 set TRANSCEIVER_TYPE GTYP
 
-adi_project_files ad9081_fmca_ebz_vpk180 [list \
-  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
-]
-
 source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
