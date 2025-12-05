@@ -42,3 +42,14 @@ RX_OS_JESD_S=1
 ```
 
 Corresponding device tree: [zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm.dts)
+
+#### Corundum Network Stack support for QSFP+ 10 Gbps
+
+This configuration ONLY, ADRV9009ZU11EG/ADRV2CRR-FMC, supports Corundum Network Stack for a QSFP+ ethernet connection, at a rate of 10 Gbps. All of the other parameters and configuration remain the same. To use this variant of the project and use the Corundum features, build the project using the following command:
+
+```
+make CORUNDUM=1
+```
+All of the binaries resulted from the build will be present in a folder called **CORUNDUM1**.
+
+Corresponding device tree: [zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-100-qsfp.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-100-qsfp.dts)
