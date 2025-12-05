@@ -3,8 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-create_clock -period 5.000 -name sys_clk_p [get_ports sys_clk_p]
-
 set_property	PACKAGE_PIN	BK5 	  [get_ports sys_clk_n]
 set_property	PACKAGE_PIN	BK6	    [get_ports sys_clk_p]
 

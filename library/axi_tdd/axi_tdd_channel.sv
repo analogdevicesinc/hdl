@@ -99,7 +99,7 @@ module axi_tdd_channel #(
       ch_pol <= DEFAULT_POLARITY;
     end else begin
       if (enable) begin
-        ch_pol <= asy_ch_pol;
+        ch_pol <= ch_pol_s;
       end
     end
   end
