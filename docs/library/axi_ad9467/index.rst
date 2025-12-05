@@ -134,6 +134,35 @@ monitoring and control of the ADC.
 Register Map
 --------------------------------------------------------------------------------
 
+The register map of the core contains instances of several generic register maps
+like ADC common, ADC channel.
+The following table presents the base addresses of each instance, after it you
+can find the detailed description of each generic register map.
+
+The absolute address of a register should be calculated by adding the instance
+base address to the registers relative address. For a more detailed explanation,
+see :ref:`ADC register access <generic-adc-register-access>`.
+
+.. list-table:: Register Map base addresses for axi_ad9467
+   :header-rows: 1
+
+   * - HDL reg
+     - Software reg
+     - Name
+     - Description
+   * - 0x0000
+     - 0x0000
+     - BASE
+     - See the `Base <#hdl-regmap-COMMON>`__ table for more details.
+   * - 0x0000
+     - 0x0000
+     - RX COMMON
+     - See the `ADC Common <#hdl-regmap-ADC_COMMON>`__ table for more details.
+   * - 0x0000
+     - 0x0000
+     - RX CHANNELS
+     - See the `ADC Channel <#hdl-regmap-ADC_CHANNEL>`__ table for more details.
+
 .. hdl-regmap::
    :name: COMMON
    :no-type-info:
