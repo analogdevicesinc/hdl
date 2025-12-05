@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -83,5 +83,8 @@ adi_project_run template_lfcpnx \
   -cmd_list { \
     {prj_clean_impl -impl $impl} \
     {prj_set_strategy_value -strategy Strategy1 bit_ip_eval=True} \
-    {prj_set_strategy_value -strategy Strategy1 syn_frequency=100}
+    {prj_set_strategy_value -strategy Strategy1 par_place_iterator_start_pt=1} \
+    {prj_set_strategy_value -strategy Strategy1 par_place_iterator=0} \
+    {prj_set_strategy_value -strategy Strategy1 par_save_best_result=1} \
+    {prj_set_strategy_value -strategy Strategy1 syn_frequency=} \
   }

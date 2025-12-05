@@ -79,6 +79,7 @@ R_TARGETS += _bld/$(PROJECT_NAME)/impl_1/$(PROJECT_NAME)_impl_1.bit
 
 CLEAN_TARGET += $(wildcard ./*/)
 CLEAN_TARGET += $(wildcard *.log)
+CLEAN_TARGET += mem_init_sys.txt
 CLEAN_TARGET += $(wildcard ./radiantc.*)
 CLEAN_TARGET += $(filter-out . .. ./. ./.., $(wildcard .*))
 

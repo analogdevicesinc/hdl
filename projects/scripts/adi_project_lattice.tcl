@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -276,6 +276,142 @@ proc adi_project_files_auto {project_name args} {
 }
 
 ###############################################################################
+## Procedure to update parameter values in an existing Verilog file
+##
+## Usage:
+##   update_verilog_parameters \
+##     -input_file "system_top.v" \
+##     -output_file "system_top_modified.v" \
+##     -parameters {ALERT_SPI_N 1 NUM_OF_SDI 4}
+##
+## Parameters:
+##   -input_file: Path to the input Verilog file
+##   -output_file: Path to the output file (can be same as input)
+##   -parameters: List of parameter name-value pairs {NAME1 VALUE1 NAME2 VALUE2}
+###############################################################################
+proc update_verilog_parameters {args} {
+  array set opt [list -input_file "" \
+    -output_file "" \
+    -parameters {} \
+    {*}$args]
+
+  set input_file $opt(-input_file)
+  set output_file $opt(-output_file)
+  set parameters $opt(-parameters)
+
+  if {$input_file == ""} {
+    puts "ERROR: -input_file is required"
+    return -code error
+  }
+
+  if {$output_file == ""} {
+    set output_file $input_file
+  }
+
+  if {![file exists $input_file]} {
+    puts "ERROR: Input file '$input_file' does not exist"
+    return -code error
+  }
+
+  # Build parameter override map
+  array set param_map {}
+  if {[llength $parameters] % 2 != 0} {
+    puts "WARNING: Parameter list has odd length; last entry ignored"
+  }
+  foreach {pname pval} $parameters {
+    set param_map([string trim $pname]) [string trim $pval]
+  }
+
+  # Read the input file
+  set fid [open $input_file r]
+  set data [read $fid]
+  close $fid
+
+  # Process line by line and update parameter values
+  set lines [split $data "\n"]
+  set new_lines {}
+  set updated_params {}
+
+  foreach line $lines {
+    set updated_line $line
+    # Match parameter lines: parameter NAME = VALUE
+    if {[regexp {^(\s*parameter\s+)(\w+)(\s*=\s*)([^,;]+)(.*)} $line -> prefix pname eq pval suffix]} {
+      set pname [string trim $pname]
+      if {[info exists param_map($pname)]} {
+        set new_val $param_map($pname)
+        set updated_line "${prefix}${pname}${eq}${new_val}${suffix}"
+        lappend updated_params $pname
+        puts "Updated parameter: $pname = $pval -> $new_val"
+      }
+    }
+    lappend new_lines $updated_line
+  }
+
+  # Write output file
+  set fout [open $output_file w]
+  puts $fout [join $new_lines "\n"]
+  close $fout
+
+  puts "\nUpdated file: $output_file"
+  if {[llength $updated_params] > 0} {
+    puts "Updated parameters: [join $updated_params {, }]"
+  } else {
+    puts "No parameters were updated"
+  }
+
+  # Check for parameters that weren't found
+  foreach {pname pval} $parameters {
+    set pname [string trim $pname]
+    if {[lsearch $updated_params $pname] == -1} {
+      puts "WARNING: Parameter '$pname' not found in file"
+    }
+  }
+}
+
+###############################################################################
+## Parses a parameter file and returns a parameter list.
+## File format: NAME=VALUE (one per line, # for comments)
+##
+## Usage:
+##   set param_list [parse_parameter_file "system_top_parameters.txt"]
+##
+## Returns:
+##   A list in format {NAME1 VALUE1 NAME2 VALUE2 ...}
+###############################################################################
+proc parse_parameter_file {file_path} {
+  if {![file exists $file_path]} {
+    puts "WARNING: Parameter file '$file_path' does not exist"
+    return {}
+  }
+
+  set param_list {}
+  set fid [open $file_path r]
+  
+  while {[gets $fid line] >= 0} {
+    # Skip empty lines and comments
+    set line [string trim $line]
+    if {$line == "" || [string index $line 0] == "#"} {
+      continue
+    }
+    
+    # Parse NAME=VALUE format
+    if {[regexp {^([^=]+)=(.*)$} $line -> pname pval]} {
+      set pname [string trim $pname]
+      set pval [string trim $pval]
+      lappend param_list $pname $pval
+    }
+  }
+  
+  close $fid
+  
+  if {$param_list != ""} {
+    puts "Parsed [expr {[llength $param_list] / 2}] parameters from $file_path"
+  }
+  
+  return $param_list
+}
+
+###############################################################################
 ## Adds files to the specified project.
 ## The ppath (project path) must be a folder that contains the .rdf project
 ## file max 3 directory deep.
@@ -290,11 +426,54 @@ proc adi_project_files {project_name args} {
   array set opt [list -ppath "./_bld/$project_name" \
     -flist "" \
     -opt_args "" \
+    -top_module_file_in "system_top.v" \
+    -top_module_file_out "_bld/system_top.v" \
+    -top_module_par_list {} \
+    -param_file "./_bld/system_top_parameters.txt" \
     {*}$args]
 
   set ppath $opt(-ppath)
   set flist $opt(-flist)
   set opt_args $opt(-opt_args)
+  set top_module_file_in $opt(-top_module_file_in)
+  set top_module_file_out $opt(-top_module_file_out)
+  set top_module_par_list $opt(-top_module_par_list)
+  set param_file $opt(-param_file)
+
+  # Check if parameter file exists and load parameters
+  set file_param_list [parse_parameter_file $param_file]
+    
+  # Merge file parameters with command-line parameters (command-line takes precedence)
+  set top_module_par_list [dict merge $file_param_list $top_module_par_list]
+
+    # Top module parameter injection and file list replacement logic
+  if {$top_module_par_list != ""} {
+    puts "Top module processing: in='$top_module_file_in' out='$top_module_file_out'"
+
+    # Replace occurrences of input top module file with output file path in flist
+    set new_flist {}
+    set top_file_found {}
+    foreach f $flist {
+      if {[file tail $f] eq [file tail $top_module_file_in]} {
+        lappend new_flist $top_module_file_out
+        set top_file_found $f
+        puts "Replacing $f with $top_module_file_out in file list"
+      } else {
+        lappend new_flist $f
+      }
+    }
+    set flist $new_flist
+
+    if {$top_file_found == ""} {
+      puts "WARNING: Top module file '$top_module_file_in' not found in file list"
+    } else {
+      puts "Updating parameters in top module file '$top_file_found'"
+        update_verilog_parameters \
+          -input_file $top_file_found \
+          -output_file $top_module_file_out \
+          -parameters $top_module_par_list
+    }
+  }
 
   # Searching for the Radiant project file.
   set sbx_lsit [get_file_list $ppath *${project_name}.rdf 3]
