@@ -8,7 +8,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
-   sodipodi:docname="admx100x_hdl_block_diagram.svg"
+   sodipodi:docname="admx100x-evb.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -25,8 +25,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.2020546"
-     inkscape:cx="1683.3678"
-     inkscape:cy="848.1312"
+     inkscape:cx="1684.1997"
+     inkscape:cy="249.15674"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
@@ -1645,10 +1645,7 @@
        transform="scale(1.0564806,0.94653891)"
        inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD7768\AD7768_BLOCK_DIAGRAM_new.png"><tspan
          sodipodi:role="line"
-         id="tspan3"
-         x="170.5995"
-         y="-40.044807"
-         style="stroke:url(#linearGradient13)">ADMX100x-FMCZ</tspan></text>
+         id="tspan3">ADMX100X-EVB</tspan></text>
     <path
        style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.77122;stroke-dasharray:none;stroke-opacity:1"
        d="m 145.00713,45.944236 c 0,161.991604 0,161.991604 0,161.991604"

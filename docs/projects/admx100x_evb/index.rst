@@ -6,24 +6,26 @@ ADMX100X-EVB HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`EVAL-ADMX1001 <EVAL-ADMX1001>` and :adi:`EVAL-ADMX1002 <EVAL-ADMX1002>`
-modules are ultra-low-distortion, low-noise signal generators. They support output
-frequencies up to 40 kHz when the digital  pre-distortion (DPD) algorithm is disabled,
-and up to 20 kHz with DPD enabled while maintaining a typical total harmonic distortion
-(THD) of −130 dB at 1 kHz. The ADMX1001 includes a built-in acquisition channel that
-enables simultaneous generation and capture of differential signals, making it ideal
-for characterization and closed-loop evaluation of high-performance ADCs, audio converters,
-and precision sensing systems. The integrated DPD algorithm minimizes distortion typically
-introduced by DAC and amplifier stages, enabling the generation of extremely clean test
-signals for precision measurement applications. The ADMX1002 focuses solely on high-fidelity
-signal generation, providing a streamlined solution for setups where local signal acquisition
-is not required.
+The :adi:`EVAL-ADMX1001` and :adi:`EVAL-ADMX1002` modules are
+ultra-low-distortion, low-noise signal generators. They support output
+frequencies up to 40 kHz when the digital  pre-distortion (DPD) algorithm is
+disabled, and up to 20 kHz with DPD enabled while maintaining a typical total
+harmonic distortion (THD) of −130 dB at 1 kHz. The ADMX1001 includes a built-in
+acquisition channel that enables simultaneous generation and capture of
+differential signals, making it ideal for characterization and closed-loop
+evaluation of high-performance ADCs, audio converters, and precision sensing
+systems. The integrated DPD algorithm minimizes distortion typically introduced
+by DAC and amplifier stages, enabling the generation of extremely clean test
+signals for precision measurement applications. The ADMX1002 focuses solely on
+high-fidelity signal generation, providing a streamlined solution for setups
+where local signal acquisition is not required. Note that in the current HDL
+release, only the TX path is implemented and supported.
 
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-ADMX1001 <EVAL-ADMX1001>`
-- :adi:`EVAL-ADMX1002 <EVAL-ADMX1002>`
+- :adi:`EVAL-ADMX1001`
+- :adi:`EVAL-ADMX1002`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -59,7 +61,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: admx100x_hdl_block_diagram.svg
+.. image:: admx100x-evb.svg
    :width: 800
    :align: center
    :alt: ADMX100X/ZedBoard block diagram
@@ -139,19 +141,19 @@ GPIOs
 Building the HDL project
 -------------------------------------------------------------------------------
 
-The design is built upon ADI's generic HDL reference design framework.
-ADI distributes the bit/elf files of these projects as part of the
-:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
-If you want to build the sources, ADI makes them available on the
-:git-hdl:`HDL repository </>`. To get the source you must
-`clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
-the HDL repository.
+The design is built upon ADI's generic HDL reference design framework. ADI
+distributes the bit/elf files of these projects as part of the :dokuwiki:`ADI
+Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`. If you
+want to build the sources, ADI makes them available on the :git-hdl:`HDL
+repository </>`. To get the source you must `clone
+<https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__ the HDL
+repository.
 
 **Linux/Cygwin/WSL**
 
 Building the ZedBoard project:
 
-.. shell::
+.. shell:: bash
 
    $cd hdl/projects/admx100xevb/zed
    $make
@@ -171,7 +173,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`ADMX100X-EVB HDL project source code <projects/admx100xevb>`
+- :git-hdl:`ADMX100X-EVB HDL project source code <projects/admx100x_evb>`
 
 .. list-table::
    :widths: 30 35 35
@@ -191,10 +193,10 @@ HDL related
      - :ref:`axi_hdmi_tx`
    * - AXI_I2S_ADI
      - :git-hdl:`library/axi_i2s_adi`
-     - —
+     - ---
    * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx`
-     - 	—
+     - ---
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
      - :ref:`axi_sysid`
@@ -203,7 +205,7 @@ HDL related
      - :ref:`axi_sysid`
    * - UTIL_I2C_MIXER
      - :git-hdl:`library/util_i2c_mixer`
-     - 	—
+     - ---
 
 .. include:: ../common/more_information.rst
 
