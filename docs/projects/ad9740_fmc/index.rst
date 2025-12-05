@@ -17,8 +17,8 @@ downward component selection path based on performance, resolution and
 financial cost, offering exceptional AC and DC performance while supporting
 update rates up to 210 MSPS.
 
-The adi:`EVAL-AD9740`, :adi:`EVAL-AD9742`, :adi:`EVAL-AD9744` and
-and :adi:`EVAL-AD9748`  evaluation board is an FMC form-factor board with FMC
+The :adi:`EVAL-AD9740`, :adi:`EVAL-AD9742`, :adi:`EVAL-AD9744` and
+:adi:`EVAL-AD9748` evaluation boards are FMC form-factor boards with FMC
 connector that is compatible to the Vita 57.1 standard. This board provides the
 user with the flexibility to operate the :adi:`AD9740`, :adi:`AD9742`,
 :adi:`AD9744` and :adi:`AD9748` in various configurations.
@@ -81,10 +81,10 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ad974x_zed_block_diagram.svg
+.. image:: ad9740_zed_block_diagram.svg
    :width: 800
    :align: center
-   :alt: EVAL-AD974X/ZedBoard block diagram
+   :alt: EVAL-AD9740/ZedBoard block diagram
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,8 +95,8 @@ added to the base address from HDL (see more at :ref:`architecture cpu-intercon-
 ====================  ===============
 Instance              Zynq
 ====================  ===============
-ad974x_dac            0x44A7_0000
-ad974x_dma            0x44A4_0000
+ad9740_dac            0x44A7_0000
+ad9740_dma            0x44A4_0000
 ====================  ===============
 
 Interrupts
@@ -107,7 +107,7 @@ Below are the Programmable Logic interrupts used in this project.
 ================ === ========== ===========
 Instance name    HDL Linux Zynq Actual Zynq
 ================ === ========== ===========
-ad974x_dma       13  57         89
+ad9740_dma       13  57         89
 ================ === ========== ===========
 
 Building the HDL project
@@ -163,9 +163,9 @@ HDL related
      - Source code link
      - Documentation link
 
-   * - AXI_AD974X
-     - :git-hdl:`library/axi_ad974x`
-     - :ref:`axi_ad974x`
+   * - AXI_AD9740
+     - :git-hdl:`library/axi_ad9740`
+     - :ref:`axi_ad9740`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
