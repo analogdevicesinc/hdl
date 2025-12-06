@@ -43,7 +43,7 @@ module axi_spi_engine #(
   parameter SDI_FIFO_ADDRESS_WIDTH = 5,
   parameter MM_IF_TYPE = 0,
   parameter ASYNC_SPI_CLK = 0,
-  parameter NUM_OFFLOAD = 0,
+  parameter OFFLOAD_EN = 1,
   parameter OFFLOAD0_CMD_MEM_ADDRESS_WIDTH = 4,
   parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH = 4,
   parameter ID = 0,
