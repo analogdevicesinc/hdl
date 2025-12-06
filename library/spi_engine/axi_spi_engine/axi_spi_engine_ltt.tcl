@@ -194,14 +194,14 @@ set ip [ipl::set_parameter -ip $ip \
     -group2 Config]
 
 set ip [ipl::set_parameter -ip $ip \
-    -id NUM_OFFLOAD \
+    -id OFFLOAD_EN \
     -type param \
     -value_type int \
     -conn_mod axi_spi_engine \
-    -title {Number of offloads} \
-    -default 0 \
+    -title {Offload interface enable} \
+    -default 1 \
     -output_formatter nostr \
-    -value_range {(0, 8)} \
+    -options {[('True', 1), ('False', 0)]} \
     -group1 {Offload module configuration} \
     -group2 Config]
 set ip [ipl::set_parameter -ip $ip \
@@ -212,7 +212,7 @@ set ip [ipl::set_parameter -ip $ip \
     -title {Offload command FIFO address width} \
     -default 4 \
     -output_formatter nostr \
-    -editable {(NUM_OFFLOAD > 0)} \
+    -editable {(OFFLOAD_EN == 1)} \
     -value_range {(1, 16)} \
     -group1 {Offload module configuration} \
     -group2 Config]
@@ -224,7 +224,7 @@ set ip [ipl::set_parameter -ip $ip \
     -title {Offload MOSI FIFO address width} \
     -default 4 \
     -output_formatter nostr \
-    -editable {(NUM_OFFLOAD > 0)} \
+    -editable {(OFFLOAD_EN == 1)} \
     -value_range {(1, 16)} \
     -group1 {Offload module configuration} \
     -group2 Config]
@@ -247,5 +247,20 @@ set ip [ipl::ignore_ports -ip $ip \
         up_rack
     } \
     -expression {(MM_IF_TYPE != 1)}]
+
+set ip [ipl::ignore_ports -ip $ip \
+    -portlist {
+        offload0_cmd_wr_en
+        offload0_cmd_wr_data
+        offload0_sdo_wr_en
+        offload0_sdo_wr_data
+        offload0_enable
+        offload0_enabled
+        offload0_mem_reset
+        offload_sync_ready
+        offload_sync_valid
+        offload_sync_data
+    } \
+    -expression {(OFFLOAD_EN == 0)}]
 
 ipl::generate_ip $ip

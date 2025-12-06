@@ -70,7 +70,7 @@ foreach port {"up_clk" "up_rstn" "up_wreq" "up_waddr" "up_wdata" "up_rreq" "up_r
   set_property DRIVER_VALUE "0" [ipx::get_ports $port]
 }
 adi_set_bus_dependency "spi_engine_offload_ctrl0" "spi_engine_offload_ctrl0" \
-	"(spirit:decode(id('MODELPARAM_VALUE.NUM_OFFLOAD')) > 0)"
+	"(spirit:decode(id('MODELPARAM_VALUE.OFFLOAD_EN')) == 1)"
 
 adi_set_bus_dependency "s_axi" "s_axi" \
       "(spirit:decode(id('MODELPARAM_VALUE.MM_IF_TYPE')) = 0)"
@@ -162,13 +162,13 @@ set_property -dict [list \
  ] \
  [ipx::get_hdl_parameters ASYNC_SPI_CLK -of_objects $cc]
 
-## NUM_OFFLOAD
+ ## OFFLOAD_EN
 set_property -dict [list \
   "value_validation_type" "range_long" \
   "value_validation_range_minimum" "0" \
-  "value_validation_range_maximum" "8" \
+  "value_validation_range_maximum" "1" \
  ] \
- [ipx::get_user_parameters NUM_OFFLOAD -of_objects $cc]
+ [ipx::get_user_parameters OFFLOAD_EN -of_objects $cc]
 
 ## OFFLOAD0_CMD_MEM_ADDRESS_WIDTH
 set_property -dict [list \
@@ -277,25 +277,25 @@ set_property -dict [list \
 set offload_group [ipgui::add_group -name "Offload module configuration" -component $cc \
     -parent $page0 -display_name "Offload module configuration" ]
 
-ipgui::add_param -name "NUM_OFFLOAD" -component $cc -parent $offload_group
+ipgui::add_param -name "OFFLOAD_EN" -component $cc -parent $offload_group
 set_property -dict [list \
-  "display_name" "Number of offloads" \
-  "tooltip" "\[NUM_OFFLOAD\] Number of offloads" \
-] [ipgui::get_guiparamspec -name "NUM_OFFLOAD" -component $cc]
+  "display_name" "Offload interface enable" \
+  "tooltip" "\[OFFLOAD_EN\] Enable the offload module interface" \
+] [ipgui::get_guiparamspec -name "OFFLOAD_EN" -component $cc]
 
 ipgui::add_param -name "OFFLOAD0_CMD_MEM_ADDRESS_WIDTH" -component $cc -parent $offload_group
 set_property -dict [list \
   "display_name" "Offload command FIFO address width" \
   "tooltip" "\[OFFLOAD0_CMD_MEM_ADDRESS_WIDTH\] Define the depth of the FIFO" \
 ] [ipgui::get_guiparamspec -name "OFFLOAD0_CMD_MEM_ADDRESS_WIDTH" -component $cc]
-set_property enablement_tcl_expr {$NUM_OFFLOAD > 0} [ipx::get_user_parameters OFFLOAD0_CMD_MEM_ADDRESS_WIDTH -of_objects $cc]
+set_property enablement_tcl_expr {$OFFLOAD_EN == 1} [ipx::get_user_parameters OFFLOAD0_CMD_MEM_ADDRESS_WIDTH -of_objects $cc]
 
 ipgui::add_param -name "OFFLOAD0_SDO_MEM_ADDRESS_WIDTH" -component $cc -parent $offload_group
 set_property -dict [list \
   "display_name" "Offload MOSI FIFO address width" \
   "tooltip" "\[OFFLOAD0_SDO_MEM_ADDRESS_WIDTH\] Define the depth of the FIFO" \
 ] [ipgui::get_guiparamspec -name "OFFLOAD0_SDO_MEM_ADDRESS_WIDTH" -component $cc]
-set_property enablement_tcl_expr {$NUM_OFFLOAD > 0} [ipx::get_user_parameters OFFLOAD0_SDO_MEM_ADDRESS_WIDTH -of_objects $cc]
+set_property enablement_tcl_expr {$OFFLOAD_EN == 1} [ipx::get_user_parameters OFFLOAD0_SDO_MEM_ADDRESS_WIDTH -of_objects $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

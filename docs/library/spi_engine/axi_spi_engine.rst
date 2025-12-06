@@ -42,8 +42,8 @@ Configuration Parameters
      - Configures the size of the serial-data out FIFO.
    * - SDI_FIFO_ADDRESS_WIDTH
      - Configures the size of the serial-data in FIFO.
-   * - NUM_OFFLOAD
-     - The number of offload control interfaces.
+   * - OFFLOAD_EN
+     - Enable the offload module interface.
 
 Signal and Interface Pins
 --------------------------------------------------------------------------------

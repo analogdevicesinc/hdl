@@ -28,7 +28,7 @@ ad_ip_parameter SDO_FIFO_ADDRESS_WIDTH INTEGER 5
 ad_ip_parameter SDI_FIFO_ADDRESS_WIDTH INTEGER 5
 ad_ip_parameter MM_IF_TYPE INTEGER 1
 ad_ip_parameter ASYNC_SPI_CLK INTEGER 0
-ad_ip_parameter NUM_OFFLOAD INTEGER 1
+ad_ip_parameter OFFLOAD_EN INTEGER 1
 ad_ip_parameter OFFLOAD0_CMD_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter ID INTEGER 0
@@ -43,6 +43,7 @@ proc p_elaboration {} {
 
   set num_of_sdi [get_parameter_value NUM_OF_SDI]
   set data_width [get_parameter_value DATA_WIDTH]
+  set offload_en [get_parameter_value OFFLOAD_EN]
 
   # interrupt
 
@@ -152,31 +153,32 @@ proc p_elaboration {} {
 
   # Offload interfaces
 
-  add_interface offload0_cmd conduit end
-  add_interface_port offload0_cmd offload0_cmd_wr_en    wre   output  1
-  add_interface_port offload0_cmd offload0_cmd_wr_data  data  output  16
+  if {$offload_en == 1} {
+    add_interface offload0_cmd conduit end
+    add_interface_port offload0_cmd offload0_cmd_wr_en    wre   output  1
+    add_interface_port offload0_cmd offload0_cmd_wr_data  data  output  16
 
-  set_interface_property offload0_cmd associatedClock if_spi_clk
-  set_interface_property offload0_cmd associatedReset none
+    set_interface_property offload0_cmd associatedClock if_spi_clk
+    set_interface_property offload0_cmd associatedReset none
 
-  add_interface offload0_sdo conduit end
-  add_interface_port offload0_sdo offload0_sdo_wr_en    wre   output  1
-  add_interface_port offload0_sdo offload0_sdo_wr_data  data  output  $data_width
+    add_interface offload0_sdo conduit end
+    add_interface_port offload0_sdo offload0_sdo_wr_en    wre   output  1
+    add_interface_port offload0_sdo offload0_sdo_wr_data  data  output  $data_width
 
-  set_interface_property offload0_sdo associatedClock if_spi_clk
-  set_interface_property offload0_sdo associatedReset none
+    set_interface_property offload0_sdo associatedClock if_spi_clk
+    set_interface_property offload0_sdo associatedReset none
 
-  ad_interface signal  offload0_mem_reset  output  1   reset
-  ad_interface signal  offload0_enable     output  1   enable
-  ad_interface signal  offload0_enabled    input   1   enabled
+    ad_interface signal  offload0_mem_reset  output  1   reset
+    ad_interface signal  offload0_enable     output  1   enable
+    ad_interface signal  offload0_enabled    input   1   enabled
 
-  add_interface offload_sync axi4stream end
-  add_interface_port offload_sync offload_sync_valid  tvalid input   1
-  add_interface_port offload_sync offload_sync_ready  tready output  1
-  add_interface_port offload_sync offload_sync_data   tdata  input   8
+    add_interface offload_sync axi4stream end
+    add_interface_port offload_sync offload_sync_valid  tvalid input   1
+    add_interface_port offload_sync offload_sync_ready  tready output  1
+    add_interface_port offload_sync offload_sync_data   tdata  input   8
 
-  set_interface_property offload_sync associatedClock if_spi_clk
-  set_interface_property offload_sync associatedReset if_spi_resetn
-
+    set_interface_property offload_sync associatedClock if_spi_clk
+    set_interface_property offload_sync associatedReset if_spi_resetn
+  }
 }
 
