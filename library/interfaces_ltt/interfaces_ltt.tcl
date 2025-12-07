@@ -90,12 +90,12 @@ set if [ipl::create_interface \
     -isAddressable false \
     -description "SPI Master Interface" \
     -ports {
-        {-n SCLK -p required -w 1 -d out}
+        {-n SCLK -p optional -w 1 -d out}
         {-n SDI -p optional -d in}
         {-n SDO -p optional -w 1 -d out}
         {-n SDO_T -p optional -w 1 -d out}
         {-n THREE_WIRE -p optional -w 1 -d out}
-        {-n CS -p required -d out}
+        {-n CS -p optional -d out}
     }]
 ipl::generate_interface $if
 
