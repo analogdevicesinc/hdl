@@ -29,10 +29,6 @@ set HSCI_BANKS 1
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]
 
-adi_project_files ad9084_ebz_vpk180 [list \
-  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
-]
-
 source $ad_hdl_dir/projects/ad9084_ebz/common/ad9084_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
