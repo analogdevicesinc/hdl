@@ -4,17 +4,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="Although the AD4080 supports CMOS interface, this HDL project does not support it. The only available interface for this project is LVDS, in single lane mode, DDR." name="description" />
+<meta content="Although the AD4080 supports CMOS interface, this HDL project does not support it. The only available interface for this project is LVDS, in DDR mode. Single lane mode is fully tested and supported. Dual lane mode is supported in the HDL but has not been tested yet." name="description" />
 
-    <title>AD408X-FMC-EVB HDL project &#8212; HDL  documentation</title>
+    <title>AD4080-FMC-EVB HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=31a9e0ba" />
     <script async="async" src="../../_static/app.umd.js?v=3a4867e9"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="AD4110 HDL project" href="../ad4110/index.html" />
-    <link rel="prev" title="AD4062-ARDZ HDL project" href="../ad4062_ardz/index.html" />
    
   
   
@@ -94,7 +92,7 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AD408X-FMC-EVB HDL project</a><ul>
+<li><a class="reference internal" href="#">AD4080-FMC-EVB HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
@@ -275,15 +273,14 @@ Content on this topic
 </ul>
 </li>
 </ul>
-<ul class="current">
-<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
 <li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad_quadmxfe1_ebz/index.html">AD-QUADMXFE1-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4052_ardz/index.html">AD4052-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4062_ardz/index.html">AD4062-ARDZ</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">AD408X-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
@@ -383,24 +380,25 @@ Content on this topic
       <div class="documentwrapper">
         <div class="bodywrapper" id="top-anchor">
           <div class="body-header">
-  <nav class="breadcrumb"><ol><li><a href="../index.html">Projects</a></li></ol></nav>
+  <nav class="breadcrumb empty"><ol></ol></nav>
 </div>
           <div class="body" role="main">
             
-  <section id="ad408x-fmc-evb-hdl-project">
-<span id="ad408x-fmc-evb"></span><h1>AD408X-FMC-EVB HDL project<a class="headerlink" href="#ad408x-fmc-evb-hdl-project" title="Permalink to this heading"></a></h1>
+  <section id="ad4080-fmc-evb-hdl-project">
+<span id="ad4080-fmc-evb"></span><h1>AD4080-FMC-EVB HDL project<a class="headerlink" href="#ad4080-fmc-evb-hdl-project" title="Permalink to this heading"></a></h1>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>Although the <a class="icon adi reference external" href="https://www.analog.com/AD4080" target="_blank">AD4080</a> supports CMOS interface, this HDL project does not
-support it. The only available interface for this project is LVDS, in
-single lane mode, DDR.</p>
+support it. The only available interface for this project is LVDS, in DDR mode.
+Single lane mode is fully tested and supported. Dual lane mode is supported
+in the HDL but has not been tested yet.</p>
 </div>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4080-FMC" target="_blank">EVAL-AD4080-FMC</a> is designed to demonstrate the
 <a class="icon adi reference external" href="https://www.analog.com/AD4080" target="_blank">AD4080</a> performance.</p>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4080-FMC" target="_blank">EVAL-AD4080-FMC</a>  HDL design supports the following
-<a class="icon adi reference external" href="https://www.analog.com/AD4080" target="_blank">AD4080</a> features:</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4080-FMC" target="_blank">EVAL-AD4080-FMC</a> HDL design supports the following
+<a class="icon adi reference external" href="https://www.analog.com/AD4080, AD4083, AD4086" target="_blank">AD4080, AD4083, AD4086</a> features:</p>
 <ul class="simple">
 <li><p>Single/Dual lane DDR data capture</p></li>
 <li><p>Self synchronization using the fixed pattern and bit-slip feature</p></li>
@@ -423,6 +421,8 @@ mezzanine card (FMC) connector.</p>
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4080" target="_blank">AD4080</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4083" target="_blank">AD4083</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4086" target="_blank">AD4086</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9508" target="_blank">AD9508</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4945-1" target="_blank">ADA4945-1</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4350" target="_blank">ADF4350</a></p></li>
@@ -463,11 +463,11 @@ mezzanine card (FMC) connector.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad408x_fmc_evb_zed_block_diagram.svg"><img alt="AD4080-FMC-EVB/ZedBoard block diagram" class="align-center" src="../../_images/ad408x_fmc_evb_zed_block_diagram.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad4080_fmc_evb_zed_block_diagram.svg"><img alt="AD4080-FMC-EVB/ZedBoard block diagram" class="align-center" src="../../_images/ad4080_fmc_evb_zed_block_diagram.svg" width="800" /></a>
 </section>
 <section id="clock-scheme">
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="../../_images/ad408x_fmc_clock_scheme.svg"><img alt="AD4080-FMC-EVB/ZedBoard block diagram" class="align-center" src="../../_images/ad408x_fmc_clock_scheme.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad4080_fmc_clock_scheme.svg"><img alt="AD4080-FMC-EVB/ZedBoard block diagram" class="align-center" src="../../_images/ad4080_fmc_clock_scheme.svg" width="800" /></a>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
@@ -621,19 +621,61 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository, and then build the project as follows:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
+<p>Example of running the <code class="docutils literal notranslate"><span class="pre">make</span></code> command without parameters (using the default
+configuration (ADC_N_BITS=20):</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad408x_fmc_evb/zed
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad4080_fmc_evb/zed
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad408x_fmc_evb/zed$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad4080_fmc_evb/zed$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<div class="clear-left"></div></div></div><p>Example of running the <code class="docutils literal notranslate"><span class="pre">make</span></code> command with parameters:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad4080_fmc_evb/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad4080_fmc_evb/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ADC_N_BITS</span><span class="o">=</span><span class="m">16</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The following table contains the parameters that can be used to configure this
+project:</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="5b11fe06df1e91227f880754723f56bd4f8f9bdf" name="5b11fe06df1e91227f880754723f56bd4f8f9bdf" type="checkbox"></input><label for="5b11fe06df1e91227f880754723f56bd4f8f9bdf"><p>Default values of the make parameters for AD4080-FMC-EVB HDL project</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ADC_N_BITS</p></td>
+<td><p>ADC resolution (default: 20)</p>
+<ul class="simple">
+<li><p>20</p></li>
+<li><p>16</p></li>
+<li><p>14</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
@@ -661,7 +703,7 @@ the HDL repository, and then build the project as follows:</p>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad408x_fmc_evb" target="_blank">AD408x-FMC-EVB HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4080_fmc_evb" target="_blank">AD4080-FMC-EVB HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -758,8 +800,8 @@ are, the lower the chances to receive support from <a class="icon link reference
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../ad4062_ardz/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD4062-ARDZ HDL project</a>
-    <a href="../ad4110/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD4110 HDL project</a>
+    <div></div>
+    <div></div>
               </div>
           
         </div>
