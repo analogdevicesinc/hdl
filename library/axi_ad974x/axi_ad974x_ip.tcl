@@ -72,5 +72,19 @@ adi_add_bus_clock "dac_clk" "dma"
 
 adi_add_auto_fpga_spec_params
 
+# Add DEVICE parameter
+set param [ipx::add_user_parameter DEVICE $cc]
+set_property -dict [list \
+  "value" "AD9740" \
+  "value_resolve_type" "user" \
+  "display_name" "Device Type" \
+  "description" "Selects the device type: AD9740, AD9742, AD9744, or AD9748" \
+] $param
+
+set_property -dict [list \
+  "value_validation_type" "list" \
+  "value_validation_list" "AD9740 AD9742 AD9744 AD9748" \
+] [ipx::get_user_parameters DEVICE -of_objects $cc]
+
 ipx::create_xgui_files $cc
 ipx::save_core $cc

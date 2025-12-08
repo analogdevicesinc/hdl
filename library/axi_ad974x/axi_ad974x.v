@@ -38,6 +38,7 @@
 module axi_ad974x #(
 
   parameter   ID = 0,
+  parameter   DEVICE = "AD9740",
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   FPGA_FAMILY = 0,
   parameter   SPEED_GRADE = 0,
@@ -117,6 +118,7 @@ module axi_ad974x #(
 
   axi_ad974x_core #(
     .ID(ID),
+    .DEVICE(DEVICE),
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .FPGA_FAMILY(FPGA_FAMILY),
     .SPEED_GRADE(SPEED_GRADE),

@@ -37,6 +37,7 @@
 
 module axi_ad974x_core #(
   parameter   ID = 0,
+  parameter   DEVICE = "AD9740",
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   FPGA_FAMILY = 0,
   parameter   SPEED_GRADE = 0,
@@ -108,6 +109,7 @@ module axi_ad974x_core #(
 
   axi_ad974x_channel #(
     .CHANNEL_ID(0),
+    .DEVICE(DEVICE),
     .DDS_DISABLE(DDS_DISABLE),
     .DDS_TYPE(DDS_TYPE),
     .DDS_CORDIC_DW(DDS_CORDIC_DW),

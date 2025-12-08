@@ -38,6 +38,7 @@
 module axi_ad974x_channel #(
 
   parameter   CHANNEL_ID = 32'h0,
+  parameter   DEVICE = "AD9740",
   parameter   DDS_DISABLE = 0,
   parameter   DDS_TYPE = 1,
   parameter   DDS_CORDIC_DW = 14,
@@ -92,49 +93,43 @@ module axi_ad974x_channel #(
   reg     [13:0]   ramp_pattern;
 
   reg     [13:0]   dac_data_int = 'h0;
-//  reg              dds_ready;
 
-  always @(posedge dac_clk) begin
+  always @ (dac_clk) begin
     dac_data <= dac_data_int;
   end
-
-  always @ (dac_data_sel_s) begin
+ 
+  always @ (dac_clk) begin
     dma_ready <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
 
     case(dac_data_sel_s)
       4'h0 :
       begin
         dac_data_int       = dac_dds_data_s;
-//        dds_ready          = 1'b1;
       end
       4'h2 :
       begin
         dac_data_int       = dma_pattern;
-//        dds_ready          = 1'b0;
       end
       4'h3 :
       begin
         dac_data_int       = 'b0;
-//        dds_ready          = 1'b0;
       end
       4'hb :
       begin
         dac_data_int       = ramp_pattern;
-//        dds_ready          = 1'b0;
       end
       default :
       begin
-        dac_data_int       = 'b0;
-//        dds_ready          = 1'b0;
+        dac_data_int       = 'h0;
       end
     endcase
   end
 
   // dma data
 
-  always @(posedge dac_clk) beg
+  always @(posedge dac_clk) begin
     if (dma_valid == 1'b0 || dac_rst == 1'b1) begin
-      dma_pattern <= 14'h0
+      dma_pattern <= 14'h0;
     end else begin
       dma_pattern <= dma_data;
     end
@@ -142,13 +137,49 @@ module axi_ad974x_channel #(
 
   // ramp data generator
 
-  always @(posedge dac_clk) begin
-    if(ramp_pattern == 14'h3fff || dac_rst == 1'b1) begin
-        ramp_pattern <= 14'h0;
+  generate
+    if (DEVICE == "AD9744") begin
+      always @(posedge dac_clk) begin
+	    if(ramp_pattern == 14'h3fff || dac_rst == 1'b1) begin
+	        ramp_pattern <= 14'h0;
+	    end else begin
+	      ramp_pattern <= ramp_pattern + 1'b1;
+	    end
+	  end
+    end else if (DEVICE == "AD9742") begin
+	  always @(posedge dac_clk) begin
+	    if(ramp_pattern == 14'h0fff || dac_rst == 1'b1) begin
+	        ramp_pattern <= 14'h0;
+	    end else begin
+	      ramp_pattern <= ramp_pattern + 1'b1;
+	    end
+	  end
+    end else if (DEVICE == "AD9740") begin
+      always @(posedge dac_clk) begin
+	    if(ramp_pattern == 14'h03ff || dac_rst == 1'b1) begin
+	        ramp_pattern <= 14'h0;
+	    end else begin
+	      ramp_pattern <= ramp_pattern + 1'b1;
+	    end
+	  end
+    end else if (DEVICE == "AD9748") begin
+      always @(posedge dac_clk) begin
+	    if(ramp_pattern == 12'h00ff || dac_rst == 1'b1) begin
+	        ramp_pattern <= 14'h0;
+	    end else begin
+	      ramp_pattern <= ramp_pattern + 1'b1;
+	    end
+	  end
     end else begin
-      ramp_pattern <= ramp_pattern + 1'b1;
+      always @(posedge dac_clk) begin
+	    if(ramp_pattern == 14'h03ff || dac_rst == 1'b1) begin
+	        ramp_pattern <= 14'h0;
+	    end else begin
+	      ramp_pattern <= ramp_pattern + 1'b1;
+	    end
+	  end
     end
-  end
+  endgenerate
 
   // DDS generator
 
