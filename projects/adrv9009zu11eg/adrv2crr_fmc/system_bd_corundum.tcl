@@ -44,7 +44,6 @@ set RX_RAM_SIZE "32768"
 
 # Extra configurations for Corundum functionality
 ad_ip_parameter sys_ps8 CONFIG.PSU__NUM_FABRIC_RESETS {2}
-# ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_LENGTH_WIDTH 28
 
 # Corundum connections
 connect_bd_net [get_bd_ports qsfp_led] [get_bd_pins corundum_hierarchy/ethernet_core/qsfp_led]
@@ -55,7 +54,6 @@ ad_connect corundum_hierarchy/clk_corundum sys_ps8/pl_clk1
 # it to corundum_hierarchy/rst_corundum, but first it's must be disconnected
 # from the Corundum Reset Generator
 
-#ad_disconnect [get_bd_pins corundum_hierarchy/rst_corundum] [get_bd_pins corundum_rstgen/peripheral_reset]
 delete_bd_objs [get_bd_nets rst_corundum_1]
 
 ad_ip_instance util_vector_logic util_vector_logic_0
@@ -95,7 +93,6 @@ ad_connect corundum_rstgen/slowest_sync_clk sys_200m_clk
 ad_connect corundum_rstgen/ext_reset_in sys_ps8/pl_resetn0
 ad_connect corundum_rstgen/peripheral_aresetn corundum_rstn
 
-# not sure to add them or not
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP5 1
 ad_connect sys_200m_clk sys_ps8/saxihp3_fpd_aclk
 
