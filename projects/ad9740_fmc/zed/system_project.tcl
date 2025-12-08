@@ -43,28 +43,5 @@ adi_project_files ad9740_fmc_zed [list \
     "system_top.v" \
     "system_constr.xdc"]
 
-  switch [get_env_param DEVICE "AD9740"] {
-    "AD9740" {
-      adi_project_files ad9740_fmc_zed [list \
-        "ad9744_constr.xdc" ]
-    }
-    "AD9742" {
-      adi_project_files ad9740_fmc_zed [list \
-        "ad9744_constr.xdc" ]
-    }
-    "AD9744" {
-      adi_project_files ad9740_fmc_zed [list \
-        "ad9744_constr.xdc" ]
-    }
-    "AD9748" {
-      adi_project_files ad9740_fmc_zed [list \
-        "ad9744_constr.xdc" ]
-    }
-    default {
-      adi_project_files ad9740_fmc_zed [list \
-        "ad9740_constr.xdc" ]
-    }
-  }
-
 adi_project_run ad9740_fmc_zed
 

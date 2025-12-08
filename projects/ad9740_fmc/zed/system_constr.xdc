@@ -3,15 +3,26 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# Set the bank voltage for IO Bank 34 to 1.8V by default.
-set_property IOSTANDARD LVCMOS33 [get_ports -of_objects [get_iobanks 34]];
-
-# Set the bank voltage for IO Bank 35 to 1.8V by default.
-set_property IOSTANDARD LVCMOS33 [get_ports -of_objects [get_iobanks 35]];
-
-# ad9740 clk interface
+# ad974x clk interface
 set_property -dict {PACKAGE_PIN L18 IOSTANDARD TMDS_33} [get_ports ad9740_clk_p]
 set_property -dict {PACKAGE_PIN L19 IOSTANDARD TMDS_33} [get_ports ad9740_clk_n]
+
+# ad974x data interface
+# Force IOB placement with FAST slew rate for output registers
+set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[13]}]
+set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[12]}]
+set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[11]}]
+set_property -dict {PACKAGE_PIN L21 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[10]}]
+set_property -dict {PACKAGE_PIN M22 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[9]}]
+set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[8]}]
+set_property -dict {PACKAGE_PIN J21 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[7]}]
+set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[6]}]
+set_property -dict {PACKAGE_PIN J22 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[5]}]
+set_property -dict {PACKAGE_PIN T17 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[4]}]
+set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[3]}]
+set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[2]}]
+set_property -dict {PACKAGE_PIN R20 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[1]}]
+set_property -dict {PACKAGE_PIN R21 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE 12} [get_ports {ad9740_data[0]}]
 
 # adf4351 interface
 set_property -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS33} [get_ports adf4351_csn]

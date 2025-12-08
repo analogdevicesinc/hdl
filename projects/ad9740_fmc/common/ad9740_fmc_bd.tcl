@@ -8,6 +8,9 @@
 create_bd_port -dir I ad974x_clk
 create_bd_port -dir O -from 13 -to 0 ad974x_data
 
+# system level parameters
+set DEVICE  $ad_project_params(DEVICE)
+
 # dma
 
 ad_ip_instance axi_dmac ad974x_dma
@@ -22,6 +25,7 @@ ad_ip_parameter ad974x_dma CONFIG.DMA_DATA_WIDTH_DEST 16
 # ad974x
 
 ad_ip_instance axi_ad974x ad974x_dac
+ad_ip_parameter ad974x_dac CONFIG.DEVICE $DEVICE
 
 # clocks
 
