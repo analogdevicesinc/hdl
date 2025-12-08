@@ -26,7 +26,6 @@ if [info exists ::env(CPU)] {
 
 if [info exists ::env(BOARD)] {
   set board $::env(BOARD)
-  # check if
   if [string equal $board VCU118] {
     create_bd_pin -dir O -from 0 -to 0 -type rst qsfp_rst
     create_bd_pin -dir O fpga_boot
