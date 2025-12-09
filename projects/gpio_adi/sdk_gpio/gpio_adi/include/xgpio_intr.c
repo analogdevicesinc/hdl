@@ -129,13 +129,15 @@ void XGpio_InterruptEnable(XGpio *InstancePtr, u32 Mask)
 	Xil_AssertVoid(InstancePtr->InterruptPresent == TRUE);
 
 	/*
-	 * Read the interrupt enable register and only enable the specified
-	 * interrupts without disabling or enabling any others.
+	 * Read the interrupt mask register and clear the specified bits
+	 * to enable those interrupts.
+	 * IP logic: up_irq_pending = (~up_irq_mask) & up_irq_source
+	 * So mask=0 means interrupt is ENABLED, mask=1 means DISABLED.
 	 */
 
 	Register = XGpio_ReadReg(InstancePtr->BaseAddress, XGPIO_MASK_OFFSET);
 	XGpio_WriteReg(InstancePtr->BaseAddress, XGPIO_MASK_OFFSET,
-			Register | Mask);
+			Register & (~Mask));
 
 }
 
@@ -165,12 +167,14 @@ void XGpio_InterruptDisable(XGpio *InstancePtr, u32 Mask)
 	Xil_AssertVoid(InstancePtr->InterruptPresent == TRUE);
 
 	/*
-	 * Read the interrupt enable register and only disable the specified
-	 * interrupts without enabling or disabling any others.
+	 * Read the interrupt mask register and set the specified bits
+	 * to disable those interrupts.
+	 * IP logic: up_irq_pending = (~up_irq_mask) & up_irq_source
+	 * So mask=0 means interrupt is ENABLED, mask=1 means DISABLED.
 	 */
 	Register = XGpio_ReadReg(InstancePtr->BaseAddress, XGPIO_MASK_OFFSET);
 	XGpio_WriteReg(InstancePtr->BaseAddress, XGPIO_MASK_OFFSET,
-			Register & (~Mask));
+			Register | Mask);
 
 }
 
@@ -200,16 +204,12 @@ void XGpio_InterruptClear(XGpio * InstancePtr, u32 Mask)
 	Xil_AssertVoid(InstancePtr->InterruptPresent == TRUE);
 
 	/*
-	 * Read the interrupt status register and only clear the interrupts
-	 * that are specified without affecting any others.  Since the register
-	 * is a toggle on write, make sure any bits to be written are already
-	 * set.
+	 * Read the interrupt pending status register (0x40) for debugging.
+	 * Write Mask to the source register (0x44) to clear the interrupt.
+	 * IP logic: up_irq_source <= up_irq_source & ~up_irq_source_clear
 	 */
 	Register = XGpio_ReadReg(InstancePtr->BaseAddress, XGPIO_PENDING_OFFSET);
-	XGpio_WriteReg(InstancePtr->BaseAddress, XGPIO_PENDING_OFFSET,
-			Register);
-
-
+	XGpio_WriteReg(InstancePtr->BaseAddress, XGPIO_SOURCE_OFFSET, Mask);
 }
 
 

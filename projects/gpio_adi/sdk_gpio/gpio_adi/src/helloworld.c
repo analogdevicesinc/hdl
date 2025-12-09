@@ -144,7 +144,6 @@ INTC Intc; /* The Instance of the Interrupt Controller Driver */
 static u16 GlobalIntrMask; /* GPIO channel mask that is needed by
 			    * the Interrupt Handler */
 
-static volatile u32 IntrFlag = 0; /* Interrupt Handler Flag */
 
 /****************************************************************************/
 /**
@@ -166,20 +165,23 @@ int main(void)
 	int Status;
 	u32 DataRead;
 
-	  print(" Press button to Generate Interrupt\r\n");
+	print(" Press button to Generate Interrupt\r\n");
 
-//	  Status = GpioIntrExample(&Intc, &Gpio,
-//				   GPIO_DEVICE_ID,
-//				   INTC_GPIO_INTERRUPT_ID,
-//				   GPIO_CHANNEL1, &DataRead);
-//	  XGpio_Initialize(&Gpio, GPIO_DEVICE_ID);
-//	  XGpio_SetDataDirection(&Gpio, 1, 0xF); // 4 butoane = input
-//	  XGpio_SetDataDirection(&Gpio, 1, 0x0); // LED-uri = output
-	    // Setează direcția pinilor pe canalul 1:
-	    // biții 0..2 = input (butoane), biții 3..4 = output (LED-uri)
+	// Initialize GPIO first
+	Status = XGpio_Initialize(&Gpio, GPIO_DEVICE_ID);
+	if (Status != XST_SUCCESS) {
+		print("GPIO Init failed\r\n");
+		return XST_FAILURE;
+	}
 
-	  XGpio_SetDataDirection(&Gpio, 1, 0x0007);
-	  Status = GpioIntrExample(&Intc, &Gpio,
+	// Enable IP reset (write 1 to reset register at offset 0x80)
+	XGpio_WriteReg(Gpio.BaseAddress, GPIO_RESET_OFFSET, 0x1);
+
+	// Direction is fixed in IP: bits 0-1 input (buttons), bits 2-7 output (LEDs)
+	// No need to set direction, but we can verify it
+	print("GPIO initialized, IP reset enabled\r\n");
+
+	Status = GpioIntrExample(&Intc, &Gpio,
 				   GPIO_DEVICE_ID,
 				   INTC_GPIO_INTERRUPT_ID,
 				   BUTTON_INTERRUPT, &DataRead);
@@ -228,11 +230,12 @@ int GpioIntrExample(INTC *IntcInstancePtr, XGpio* InstancePtr, u16 DeviceId,
 	int Status;
 	u32 delay;
 
-	/* Initialize the GPIO driver. If an error occurs then exit */
-	Status = XGpio_Initialize(InstancePtr, DeviceId);
-	if (Status != XST_SUCCESS) {
-		return XST_FAILURE;
-	}
+	/* GPIO already initialized in main(), just setup interrupts */
+
+	/* Enable IRQ mask in IP - write 0x00000000 to allow all interrupts
+	 * IP logic: up_irq_pending = (~up_irq_mask) & up_irq_source
+	 * So mask=0 means interrupt is enabled for that bit */
+	XGpio_WriteReg(InstancePtr->BaseAddress, XGPIO_MASK_OFFSET, 0x00000000);
 
 	Status = GpioSetupIntrSystem(IntcInstancePtr, InstancePtr, DeviceId,
 					IntrId, IntrMask);
@@ -240,18 +243,19 @@ int GpioIntrExample(INTC *IntcInstancePtr, XGpio* InstancePtr, u16 DeviceId,
 		return XST_FAILURE;
 	}
 
-	IntrFlag = 0;
-	delay = 0;
 
-	while(!IntrFlag) {
-		delay++;
+
+
+	xil_printf("Waiting for button press...\r\n");
+
+	while(1) {
+
 	}
 
 	GpioDisableIntr(IntcInstancePtr, InstancePtr, IntrId, IntrMask);
 
-	*DataRead = IntrFlag;
 
-	return Status;
+	return XST_SUCCESS;
 }
 
 
@@ -352,50 +356,40 @@ int GpioSetupIntrSystem(INTC *IntcInstancePtr, XGpio *InstancePtr,
 * @note		None.
 *
 ******************************************************************************/
+/* Static variable to track LED state (toggle on each button press) */
+static u32 led_state = 0;
+
 void GpioHandler(void *CallbackRef)
-{	xil_printf("Interrupt triggered!\n");
+{
 	XGpio *GpioPtr = (XGpio *)CallbackRef;
-
-//    u32 btn_value;
-//
-//    // Citește butoanele (canal 1)
-//    btn_value = XGpio_DiscreteRead(GpioPtr, 1);
-//
-//    // Aprinde LED-uri (canal 2) conform butoanelor
-//    XGpio_DiscreteWrite(GpioPtr, 1, btn_value);
-	// READ DATA REG
-	// IDENTIFY BUTTON
-	// TURN ON/OFF LED(s)
-//	IntrFlag = 1;
-
-	/* Clear the Interrupt */
-//	XGpio_InterruptClear(GpioPtr, GlobalIntrMask);
 	u32 btn_value;
 
-	    // Citeste butoanele (bitii 0..2)
-	    btn_value = XGpio_DiscreteRead(GpioPtr, 1);
+	xil_printf("Interrupt triggered!\r\n");
 
-	    // Dacă butonul 0 e apasat -> blink LED0 (bit 3)
-	    if (btn_value & 0x1) {
+	/* Read button state from GPIO input
+	 * IP maps: bits 0-1 are inputs (buttons), bits 2-7 are outputs (LEDs)
+	 * gpio_tri = 0xffffff03 means bits 0,1 = input (1), bits 2-7 = output (0)
+	 */
+	btn_value = XGpio_DiscreteRead(GpioPtr, 1);
+	xil_printf("Button value: 0x%X\r\n", btn_value);
+
+	/* Button 0 (bit 0) pressed -> toggle LED on bit 2 */
+	if (btn_value & 0x1) {
+		led_state ^= 0x4;  /* Toggle bit 2 (first LED output) */
+		XGpio_DiscreteWrite(GpioPtr, 1, led_state);
+		xil_printf("LED state: 0x%X\r\n", led_state);
+	}
+
+	/* Button 1 (bit 1) pressed -> toggle LED on bit 3 */
+	if (btn_value & 0x2) {
+		led_state ^= 0x8;  /* Toggle bit 3 (second LED output) */
+		XGpio_DiscreteWrite(GpioPtr, 1, led_state);
+		xil_printf("LED state: 0x%X\r\n", led_state);
+	}
 
 
-	    	XGpio_DiscreteWrite(GpioPtr, 1, 0x8);   // aprinde LED0
-
-	        XGpio_DiscreteWrite(GpioPtr, 1, 0x0);   // stinge LED0
-
-	     }
-
-
-
-
-
-
-
-	    // Daca butonul 1 e apasat -> blink LED1 (bit 4)
-//	    if (btn_value & 0x2) {}
-
+	/* Clear the interrupt source */
 	XGpio_InterruptClear(GpioPtr, XGPIO_IR_CH1_MASK);
-
 }
 
 /******************************************************************************/

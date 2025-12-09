@@ -82,7 +82,7 @@ void XGpio_DiscreteSet(XGpio * InstancePtr, unsigned Channel, u32 Mask)
 		     ((Channel == 2) && (InstancePtr->IsDual == TRUE)));
 
 	/* Calculate the offset to the data register of the GPIO  */
-	DataOffset = ((Channel - 1) * XGPIO_CHAN_OFFSET) + XGPIO_DATA_OFFSET;
+	DataOffset = ((Channel - 1) * XGPIO_CHAN_OFFSET) + XGPIO_DATA_OFFSET_OUTPUT;
 
 	/*
 	 * Read the contents of the data register, merge in Mask and write
@@ -126,7 +126,7 @@ void XGpio_DiscreteClear(XGpio * InstancePtr, unsigned Channel, u32 Mask)
 		     ((Channel == 2) && (InstancePtr->IsDual == TRUE)));
 
 	/* Calculate the offset to the data register of the GPIO  */
-	DataOffset = ((Channel - 1) * XGPIO_CHAN_OFFSET) + XGPIO_DATA_OFFSET;
+	DataOffset = ((Channel - 1) * XGPIO_CHAN_OFFSET) + XGPIO_DATA_OFFSET_OUTPUT;
 
 	/*
 	 * Read the contents of the data register, merge in Mask and write
