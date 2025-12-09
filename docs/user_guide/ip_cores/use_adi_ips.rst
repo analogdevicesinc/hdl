@@ -150,13 +150,23 @@ Now just add the interconnects and the interrupts for the added layers (PL, TPL,
 SPI Engine
 -------------------------------------------------------------------------------
 
+The SPI Engine is a special module too, since it consists of more than one IP.
+In order to use it into your own project, you will have to add all of the
+necessary components. The SPI engine has 4 modules: execution, interconnect,
+regmap and offload, they are instantiated inside the ``spi_engine_create``
+function.
+
+The offload_en parameter defines whether or not offload and interconnect are
+necessary for the project. Vivado an Quartus projects have different parameters
+for the instantiation of the SPI engine. Below you will find examples for both
+tools.
+
 Vivado
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The SPI Engine is a special module too, since it consists of more than one IP.
-In order to use it into your own project, you will have to add all of its components.
-For this example, the code shown here is from the ad4630_fmc project:
-:git-hdl:`projects/ad4630_fmc/common/ad463x_bd.tcl`
+For Xilinx projects using Vivado, ``spi_engine_create`` function requires 15
+parameters. Take this example, the code shown here is from the ad4630_fmc
+project: :git-hdl:`projects/ad4630_fmc/common/ad463x_bd.tcl`
 
 Let's start with sourcing the spi_engine.tcl script inside your ``<project>_db.tcl``.
 
@@ -164,25 +174,62 @@ Let's start with sourcing the spi_engine.tcl script inside your ``<project>_db.t
 
    source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
-The SPI engine has 4 modules: execution, interconnect, regmap and offload.
-
-All of the modules are instantiated inside the ``spi_engine_create`` function.
-This function requires 13 parameters. The default values for them are as follow,
-but feel free to configure it as you want:
+Parameters and default values for Vivado projects:
 
 .. code:: tcl
 
-   {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0} {cmd_mem_addr_width 4} {data_mem_addr_width 4} {sdi_fifo_addr_width 5} {sdo_fifo_addr_width 5} {sync_fifo_addr_width 4} {cmd_fifo_addr_width 4}}
+   {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {offload_en 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0} {sdo_streaming 0} {cmd_mem_addr_width 4} {data_mem_addr_width 4} {sdi_fifo_addr_width 5} {sdo_fifo_addr_width 5} {sync_fifo_addr_width 4} {cmd_fifo_addr_width 4}}
 
-An example of instantiation, using the default values for ``cmd_mem_addr_width``, ``data_mem_addr_width``, ``sdi_fifo_addr_width``, ``sdo_fifo_addr_width``, ``sync_fifo_addr_width`` and ``cmd_fifo_addr_width``:
+Name is a mandatory input. An example of instantiation (Xilinx project), using
+the default values for ``sdo_streaming``, ``cmd_mem_addr_width``,
+``data_mem_addr_width``, ``sdi_fifo_addr_width``, ``sdo_fifo_addr_width``,
+``sync_fifo_addr_width`` and ``cmd_fifo_addr_width``:
 
 .. code:: tcl
 
-   #                 name         data_width async_spi_clk num_csn num_sdi     sdi_delay  echo_sclk
-   spi_engine_create "spi_ad463x" 32         1             1       $NUM_OF_SDI 0          1
+   #                 name         data_width async_spi_clk offload_en num_csn num_sdi     sdi_delay  echo_sclk
+   spi_engine_create "spi_ad463x" 32         1             1          1       $NUM_OF_SDI 0          1
    ad_ip_parameter spi_ad463x/execution CONFIG.DEFAULT_SPI_CFG 1   ;
 
    ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_0 $NUM_OF_SDI
    ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_1 $CAPTURE_ZONE
    ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_2 $CLK_MODE
    ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_3 $DDR_EN
+
+Quartus
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For Altera projects using Quartus, ``spi_engine_create`` function requires 18
+parameters. Parameters and default values for Quartus projects:
+
+.. code:: tcl
+
+   {{name "spi_engine"} {axi_clk sys_clk.clk} {axi_reset sys_clk.clk_reset} {spi_clk spi_clk_pll.outclk0} {data_width 32} {async_spi_clk 1} {offload_en 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0} {sdo_streaming 0} {cmd_mem_addr_width 4} {data_mem_addr_width 4} {sdi_fifo_addr_width 5} {sdo_fifo_addr_width 5} {sync_fifo_addr_width 4} {cmd_fifo_addr_width 4}}
+
+Name, axi_clk, axi_reset, and spi_clk are mandatory inputs. An example of
+instantiation (Quartus project), using the default values for
+``sdo_streaming``, ``cmd_mem_addr_width``, ``data_mem_addr_width``,
+``sdi_fifo_addr_width``, ``sdo_fifo_addr_width``, ``sync_fifo_addr_width``,
+and ``cmd_fifo_addr_width``:
+
+.. code:: tcl
+
+   source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
+
+   set spi_engine_hier spi_ad57xx
+
+   set data_width     32
+   set async_spi_clk  1
+   set offload_en     1
+   set num_cs         1
+   set num_sdi        1
+   set num_sdo        1
+   set sdi_delay      0
+   set echo_sclk      0
+   set sdo_streaming  1
+
+   set axi_clk sys_clk.clk
+   set axi_reset sys_clk.clk_reset
+   set spi_clk spi_clk_pll.outclk0
+
+   spi_engine_create $spi_engine_hier $axi_clk $axi_reset $spi_clk $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk $sdo_streaming
