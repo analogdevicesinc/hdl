@@ -7,39 +7,39 @@
 ## Apollo
 #
 
-set_property   -dict {PACKAGE_PIN CB62                                                } [get_ports stx_n[0]           ]    ;  ## FMCP1_DP0_M2C_N  GTYP_200
-set_property   -dict {PACKAGE_PIN CB61                                                } [get_ports stx_p[0]           ]    ;  ## FMCP1_DP0_M2C_P  GTYP_200
-set_property   -dict {PACKAGE_PIN BY62                                                } [get_ports stx_n[1]           ]    ;  ## FMCP1_DP1_M2C_N  GTYP_200
-set_property   -dict {PACKAGE_PIN BY61                                                } [get_ports stx_p[1]           ]    ;  ## FMCP1_DP1_M2C_P  GTYP_200
-set_property   -dict {PACKAGE_PIN BW64                                                } [get_ports stx_n[2]           ]    ;  ## FMCP1_DP2_M2C_N  GTYP_200
-set_property   -dict {PACKAGE_PIN BW63                                                } [get_ports stx_p[2]           ]    ;  ## FMCP1_DP2_M2C_P  GTYP_200
-set_property   -dict {PACKAGE_PIN BV62                                                } [get_ports stx_n[3]           ]    ;  ## FMCP1_DP3_M2C_N  GTYP_200
-set_property   -dict {PACKAGE_PIN BV61                                                } [get_ports stx_p[3]           ]    ;  ## FMCP1_DP3_M2C_P  GTYP_200
-set_property   -dict {PACKAGE_PIN BU64                                                } [get_ports stx_n[4]           ]    ;  ## FMCP1_DP4_M2C_N  GTYP_201
-set_property   -dict {PACKAGE_PIN BU63                                                } [get_ports stx_p[4]           ]    ;  ## FMCP1_DP4_M2C_P  GTYP_201
-set_property   -dict {PACKAGE_PIN BT62                                                } [get_ports stx_n[5]           ]    ;  ## FMCP1_DP5_M2C_N  GTYP_201
-set_property   -dict {PACKAGE_PIN BT61                                                } [get_ports stx_p[5]           ]    ;  ## FMCP1_DP5_M2C_P  GTYP_201
-set_property   -dict {PACKAGE_PIN BR64                                                } [get_ports stx_n[6]           ]    ;  ## FMCP1_DP6_M2C_N  GTYP_201
-set_property   -dict {PACKAGE_PIN BR63                                                } [get_ports stx_p[6]           ]    ;  ## FMCP1_DP6_M2C_P  GTYP_201
-set_property   -dict {PACKAGE_PIN BR60                                                } [get_ports stx_n[7]           ]    ;  ## FMCP1_DP7_M2C_N  GTYP_201
-set_property   -dict {PACKAGE_PIN BR59                                                } [get_ports stx_p[7]           ]    ;  ## FMCP1_DP7_M2C_P  GTYP_201
+set_property   -dict {PACKAGE_PIN CB62                                                } [get_ports stxb_n[0]          ]    ;  ## FMCP1_DP0_M2C_N  GTYP_200
+set_property   -dict {PACKAGE_PIN CB61                                                } [get_ports stxb_p[0]          ]    ;  ## FMCP1_DP0_M2C_P  GTYP_200
+set_property   -dict {PACKAGE_PIN BY62                                                } [get_ports stxb_n[1]          ]    ;  ## FMCP1_DP1_M2C_N  GTYP_200
+set_property   -dict {PACKAGE_PIN BY61                                                } [get_ports stxb_p[1]          ]    ;  ## FMCP1_DP1_M2C_P  GTYP_200
+set_property   -dict {PACKAGE_PIN BW64                                                } [get_ports stxb_n[2]          ]    ;  ## FMCP1_DP2_M2C_N  GTYP_200
+set_property   -dict {PACKAGE_PIN BW63                                                } [get_ports stxb_p[2]          ]    ;  ## FMCP1_DP2_M2C_P  GTYP_200
+set_property   -dict {PACKAGE_PIN BV62                                                } [get_ports stxb_n[3]          ]    ;  ## FMCP1_DP3_M2C_N  GTYP_200
+set_property   -dict {PACKAGE_PIN BV61                                                } [get_ports stxb_p[3]          ]    ;  ## FMCP1_DP3_M2C_P  GTYP_200
+set_property   -dict {PACKAGE_PIN BU64                                                } [get_ports stxa_n[0]          ]    ;  ## FMCP1_DP4_M2C_N  GTYP_201
+set_property   -dict {PACKAGE_PIN BU63                                                } [get_ports stxa_p[0]          ]    ;  ## FMCP1_DP4_M2C_P  GTYP_201
+set_property   -dict {PACKAGE_PIN BT62                                                } [get_ports stxa_n[1]          ]    ;  ## FMCP1_DP5_M2C_N  GTYP_201
+set_property   -dict {PACKAGE_PIN BT61                                                } [get_ports stxa_p[1]          ]    ;  ## FMCP1_DP5_M2C_P  GTYP_201
+set_property   -dict {PACKAGE_PIN BR64                                                } [get_ports stxa_n[2]          ]    ;  ## FMCP1_DP6_M2C_N  GTYP_201
+set_property   -dict {PACKAGE_PIN BR63                                                } [get_ports stxa_p[2]          ]    ;  ## FMCP1_DP6_M2C_P  GTYP_201
+set_property   -dict {PACKAGE_PIN BR60                                                } [get_ports stxa_n[3]          ]    ;  ## FMCP1_DP7_M2C_N  GTYP_201
+set_property   -dict {PACKAGE_PIN BR59                                                } [get_ports stxa_p[3]          ]    ;  ## FMCP1_DP7_M2C_P  GTYP_201
 
-set_property   -dict {PACKAGE_PIN CD55                                                } [get_ports srx_n[0]           ]    ;  ## FMCP1_DP0_C2M_N  GTYP_200
-set_property   -dict {PACKAGE_PIN CD54                                                } [get_ports srx_p[0]           ]    ;  ## FMCP1_DP0_C2M_P  GTYP_200
-set_property   -dict {PACKAGE_PIN CD59                                                } [get_ports srx_n[1]           ]    ;  ## FMCP1_DP1_C2M_N  GTYP_200
-set_property   -dict {PACKAGE_PIN CD58                                                } [get_ports srx_p[1]           ]    ;  ## FMCP1_DP1_C2M_P  GTYP_200
-set_property   -dict {PACKAGE_PIN CC57                                                } [get_ports srx_n[2]           ]    ;  ## FMCP1_DP2_C2M_N  GTYP_200
-set_property   -dict {PACKAGE_PIN CC56                                                } [get_ports srx_p[2]           ]    ;  ## FMCP1_DP2_C2M_P  GTYP_200
-set_property   -dict {PACKAGE_PIN CB59                                                } [get_ports srx_n[3]           ]    ;  ## FMCP1_DP3_C2M_N  GTYP_200
-set_property   -dict {PACKAGE_PIN CB58                                                } [get_ports srx_p[3]           ]    ;  ## FMCP1_DP3_C2M_P  GTYP_200
-set_property   -dict {PACKAGE_PIN CB55                                                } [get_ports srx_n[4]           ]    ;  ## FMCP1_DP4_C2M_N  GTYP_201
-set_property   -dict {PACKAGE_PIN CB54                                                } [get_ports srx_p[4]           ]    ;  ## FMCP1_DP4_C2M_P  GTYP_201
-set_property   -dict {PACKAGE_PIN CA57                                                } [get_ports srx_n[5]           ]    ;  ## FMCP1_DP5_C2M_N  GTYP_201
-set_property   -dict {PACKAGE_PIN CA56                                                } [get_ports srx_p[5]           ]    ;  ## FMCP1_DP5_C2M_P  GTYP_201
-set_property   -dict {PACKAGE_PIN BY59                                                } [get_ports srx_n[6]           ]    ;  ## FMCP1_DP6_C2M_N  GTYP_201
-set_property   -dict {PACKAGE_PIN BY58                                                } [get_ports srx_p[6]           ]    ;  ## FMCP1_DP6_C2M_P  GTYP_201
-set_property   -dict {PACKAGE_PIN BY55                                                } [get_ports srx_n[7]           ]    ;  ## FMCP1_DP7_C2M_N  GTYP_201
-set_property   -dict {PACKAGE_PIN BY54                                                } [get_ports srx_p[7]           ]    ;  ## FMCP1_DP7_C2M_P  GTYP_201
+set_property   -dict {PACKAGE_PIN CD55                                                } [get_ports srxb_n[0]          ]    ;  ## FMCP1_DP0_C2M_N  GTYP_200
+set_property   -dict {PACKAGE_PIN CD54                                                } [get_ports srxb_p[0]          ]    ;  ## FMCP1_DP0_C2M_P  GTYP_200
+set_property   -dict {PACKAGE_PIN CD59                                                } [get_ports srxb_n[1]          ]    ;  ## FMCP1_DP1_C2M_N  GTYP_200
+set_property   -dict {PACKAGE_PIN CD58                                                } [get_ports srxb_p[1]          ]    ;  ## FMCP1_DP1_C2M_P  GTYP_200
+set_property   -dict {PACKAGE_PIN CC57                                                } [get_ports srxb_n[2]          ]    ;  ## FMCP1_DP2_C2M_N  GTYP_200
+set_property   -dict {PACKAGE_PIN CC56                                                } [get_ports srxb_p[2]          ]    ;  ## FMCP1_DP2_C2M_P  GTYP_200
+set_property   -dict {PACKAGE_PIN CB59                                                } [get_ports srxb_n[3]          ]    ;  ## FMCP1_DP3_C2M_N  GTYP_200
+set_property   -dict {PACKAGE_PIN CB58                                                } [get_ports srxb_p[3]          ]    ;  ## FMCP1_DP3_C2M_P  GTYP_200
+set_property   -dict {PACKAGE_PIN CB55                                                } [get_ports srxa_n[0]          ]    ;  ## FMCP1_DP4_C2M_N  GTYP_201
+set_property   -dict {PACKAGE_PIN CB54                                                } [get_ports srxa_p[0]          ]    ;  ## FMCP1_DP4_C2M_P  GTYP_201
+set_property   -dict {PACKAGE_PIN CA57                                                } [get_ports srxa_n[1]          ]    ;  ## FMCP1_DP5_C2M_N  GTYP_201
+set_property   -dict {PACKAGE_PIN CA56                                                } [get_ports srxa_p[1]          ]    ;  ## FMCP1_DP5_C2M_P  GTYP_201
+set_property   -dict {PACKAGE_PIN BY59                                                } [get_ports srxa_n[2]          ]    ;  ## FMCP1_DP6_C2M_N  GTYP_201
+set_property   -dict {PACKAGE_PIN BY58                                                } [get_ports srxa_p[2]          ]    ;  ## FMCP1_DP6_C2M_P  GTYP_201
+set_property   -dict {PACKAGE_PIN BY55                                                } [get_ports srxa_n[3]          ]    ;  ## FMCP1_DP7_C2M_N  GTYP_201
+set_property   -dict {PACKAGE_PIN BY54                                                } [get_ports srxa_p[3]          ]    ;  ## FMCP1_DP7_C2M_P  GTYP_201
 
 set_property   -dict {PACKAGE_PIN CA44  IOSTANDARD LVCMOS15                           } [get_ports gpio[15]		        ]    ;  ## FMCP1_LA06_P
 set_property   -dict {PACKAGE_PIN CB45  IOSTANDARD LVCMOS15                           } [get_ports gpio[16]		        ]    ;  ## FMCP1_LA06_N

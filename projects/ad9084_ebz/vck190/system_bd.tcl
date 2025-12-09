@@ -18,9 +18,22 @@ if {$ASYMMETRIC_A_B_MODE == 1} {
   set dac_b_fifo_samples_per_converter [expr $ad_project_params(TX_B_KS_PER_CHANNEL)*1024]
 }
 
+set SIDE_B_ONLY [ expr { [info exists ad_project_params(SIDE_B_ONLY)] \
+                          ? $ad_project_params(SIDE_B_ONLY) : 0 } ]
+
 source $ad_hdl_dir/projects/common/vck190/vck190_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
+
+if {!$SIDE_B_ONLY} {
+  adi_project_files ad9084_ebz_vck190 [list \
+    "system_top.v" \
+  ]
+} else {
+  adi_project_files ad9084_ebz_vck190 [list \
+    "system_top_side_b_only.v" \
+  ]
+}
 
 set ADI_PHY_SEL 0
 set MAX_NUMBER_OF_QUADS 3

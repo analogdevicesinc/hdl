@@ -61,14 +61,14 @@ module system_top #(
   input   [ 3:0] gpio_dip_sw,
   input   [ 1:0] gpio_pb,
 
-  // // FMC HPC+ IOs
-  output  [ 7:0] srxb_p,
-  output  [ 7:0] srxb_n,
+  // FMC HPC+ IOs
+  output  [ 3:0] srxb_p,
+  output  [ 3:0] srxb_n,
   output  [ 3:0] srxa_p,
   output  [ 3:0] srxa_n,
 
-  input   [ 7:0] stxb_p,
-  input   [ 7:0] stxb_n,
+  input   [ 3:0] stxb_p,
+  input   [ 3:0] stxb_n,
   input   [ 3:0] stxa_p,
   input   [ 3:0] stxa_n,
 
@@ -188,11 +188,6 @@ module system_top #(
   wire rx_b_resetdone;
   wire tx_b_resetdone;
   wire gt_powergood;
-
-  wire [11:0] rx_data_p_loc;
-  wire [11:0] rx_data_n_loc;
-  wire [11:0] tx_data_p_loc;
-  wire [11:0] tx_data_n_loc;
 
   // instantiations
 
@@ -380,18 +375,20 @@ module system_top #(
     .gpio2_t (gpio_t[95:64]),
 
     // FMC HPC
-    .tx_0_p (tx_data_p_loc[ 3:0]),
-    .tx_0_n (tx_data_n_loc[ 3:0]),
-    .rx_0_p (rx_data_p_loc[ 3:0]),
-    .rx_0_n (rx_data_n_loc[ 3:0]),
-    .tx_1_p (tx_data_p_loc[ 7:4]),
-    .tx_1_n (tx_data_n_loc[ 7:4]),
-    .rx_1_p (rx_data_p_loc[ 7:4]),
-    .rx_1_n (rx_data_n_loc[ 7:4]),
-    .tx_2_p (tx_data_p_loc[11:8]),
-    .tx_2_n (tx_data_n_loc[11:8]),
-    .rx_2_p (rx_data_p_loc[11:8]),
-    .rx_2_n (rx_data_n_loc[11:8]),
+    // Apollo A-side
+    .tx_0_p (srxa_p[3:0]),
+    .tx_0_n (srxa_n[3:0]),
+    .rx_0_p (stxa_p[3:0]),
+    .rx_0_n (stxa_n[3:0]),
+    // Apollo B-Side
+    .tx_1_p (srxb_p[3:0]),
+    .tx_1_n (srxb_n[3:0]),
+    .rx_1_p (stxb_p[3:0]),
+    .rx_1_n (stxb_n[3:0]),
+    .tx_2_p (),
+    .tx_2_n (),
+    .rx_2_p (),
+    .rx_2_n (),
 
     .gt_powergood (gt_powergood),
     .gt_reset (gt_reset & gt_powergood),
@@ -441,19 +438,5 @@ module system_top #(
     .tx_sysref_0 (sysref),
     .rx_sysref_12 (sysref),
     .tx_sysref_12 (sysref));
-
-  assign rx_data_p_loc[11:8] = stxb_p[7:4];
-  assign rx_data_p_loc[ 7:4] = stxa_p[3:0];
-  assign rx_data_p_loc[ 3:0] = stxb_p[3:0];
-  assign rx_data_n_loc[11:8] = stxb_n[7:4];
-  assign rx_data_n_loc[ 7:4] = stxa_n[3:0];
-  assign rx_data_n_loc[ 3:0] = stxb_n[3:0];
-
-  assign srxb_p[7:4] = tx_data_p_loc[11:8];
-  assign srxa_p[3:0] = tx_data_p_loc[ 7:4];
-  assign srxb_p[3:0] = tx_data_p_loc[ 3:0];
-  assign srxb_n[7:4] = tx_data_n_loc[11:8];
-  assign srxa_n[3:0] = tx_data_n_loc[ 7:4];
-  assign srxb_n[3:0] = tx_data_n_loc[ 3:0];
 
 endmodule
