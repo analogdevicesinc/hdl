@@ -191,7 +191,7 @@ module axi_gpreg #(
 
   // up signals
 
-  always @(posedge up_clk or negedge up_rstn) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_wack_d <= 1'd0;
       up_rack_d <= 1'd0;

@@ -270,7 +270,7 @@ module axi_ada4355_if #(
     .delay_rst(delay_rst),
     .delay_locked(delay_locked_frame));
 
-  always @(posedge adc_clk_div or negedge sync_n) begin
+  always @(posedge adc_clk_div) begin
     if(~sync_n) begin
       serdes_reset <= 10'b0000000110;
     end else begin
@@ -291,7 +291,7 @@ module axi_ada4355_if #(
     end
   end
 
-  always @(posedge clk_in_s or negedge aresetn) begin
+  always @(posedge clk_in_s) begin
     if (aresetn == 0) begin
       // reset condition
       bufr_alignment <= 1'b0;

@@ -79,6 +79,13 @@ module axi_adrv9001_sync #(
   reg           transfer_busy = 1'b0;
   reg           rf_enable_d = 1'b1;
   reg   [31:0]  sync_config_d;
+  reg   [31:0]  mcs_sync_pulse_width_d;
+  reg   [31:0]  mcs_sync_pulse_1_delay_d;
+  reg   [31:0]  mcs_sync_pulse_2_delay_d;
+  reg   [31:0]  mcs_sync_pulse_3_delay_d;
+  reg   [31:0]  mcs_sync_pulse_4_delay_d;
+  reg   [31:0]  mcs_sync_pulse_5_delay_d;
+  reg   [31:0]  mcs_sync_pulse_6_delay_d;
 
   // internal signals
 
@@ -95,6 +102,13 @@ module axi_adrv9001_sync #(
 
   always @(negedge ref_clk) begin
     sync_config_d <= sync_config;
+    mcs_sync_pulse_width_d <= mcs_sync_pulse_width;
+    mcs_sync_pulse_1_delay_d <= mcs_sync_pulse_1_delay;
+    mcs_sync_pulse_2_delay_d <= mcs_sync_pulse_2_delay;
+    mcs_sync_pulse_3_delay_d <= mcs_sync_pulse_3_delay;
+    mcs_sync_pulse_4_delay_d <= mcs_sync_pulse_4_delay;
+    mcs_sync_pulse_5_delay_d <= mcs_sync_pulse_5_delay;
+    mcs_sync_pulse_6_delay_d <= mcs_sync_pulse_6_delay;
   end
 
   // MCS pulses src internal = 1 or external = 0
@@ -131,8 +145,8 @@ module axi_adrv9001_sync #(
   always @(negedge ref_clk) begin
     if (mcs_start) begin
       mcs_sync_busy <= 1'b1;
-      mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
-      mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_1_delay;
+      mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width_d;
+      mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_1_delay_d;
       mcs_out_i <= 1'b0;
     end else if (mcs_sync_busy == 1'b1) begin
       mcs_out_d <= mcs_out_i;
@@ -144,20 +158,20 @@ module axi_adrv9001_sync #(
         mcs_out_i <= 1'b0;
       end else begin
         if (mcs_sync_pulse_num == 0) begin
-          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
-          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_2_delay;
+          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width_d;
+          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_2_delay_d;
         end else if (mcs_sync_pulse_num == 1) begin
-          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
-          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_3_delay;
+          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width_d;
+          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_3_delay_d;
         end else if (mcs_sync_pulse_num == 2) begin
-          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
-          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_4_delay;
+          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width_d;
+          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_4_delay_d;
         end else if (mcs_sync_pulse_num == 3) begin
-          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
-          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_5_delay;
+          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width_d;
+          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_5_delay_d;
         end else if (mcs_sync_pulse_num == 4) begin
-          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width;
-          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_6_delay;
+          mcs_sync_pulse_width_cnt <= mcs_sync_pulse_width_d;
+          mcs_sync_pulse_delay_cnt <= mcs_sync_pulse_6_delay_d;
         end else begin
           mcs_sync_busy <= 1'b0;
         end

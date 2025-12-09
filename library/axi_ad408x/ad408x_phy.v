@@ -222,7 +222,7 @@ module ad408x_phy #(
   // Min 2 div_clk cycles once div_clk is running after deassertion of sync
   // Control externally the reset of serdes for precise timing
 
-  always @(posedge adc_clk_div or negedge sync_n) begin
+  always @(posedge adc_clk_div) begin
     if(~sync_n) begin
       serdes_reset <= 6'b000110;
     end else begin

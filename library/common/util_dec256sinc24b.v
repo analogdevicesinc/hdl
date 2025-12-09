@@ -58,6 +58,7 @@ module util_dec256sinc24b (
   reg [15:0] word_count;
   reg        word_clk;
   reg        enable;
+  reg        word_clk_d;
 
   wire        word_rst;
   wire [36:0] acc3_s;
@@ -106,14 +107,18 @@ module util_dec256sinc24b (
 
   always @ (posedge clk) begin
     if (reset) begin
-      word_clk <= 1'b0;
+      word_clk_d <= 1'b0;
     end else begin
-      if (word_count == dec_rate/2 - 1) begin
-        word_clk <= 1'b1;
-      end else if (word_count == dec_rate - 1) begin
-        word_clk <= 1'b0;
+      if (word_count == dec_rate/2 - 2) begin
+        word_clk_d <= 1'b1;
+      end else if (word_count == dec_rate - 2) begin
+        word_clk_d <= 1'b0;
       end
     end
+  end
+
+  always @ (posedge clk) begin
+    word_clk <= word_clk_d;
   end
 
   util_rst #(

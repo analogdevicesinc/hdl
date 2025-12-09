@@ -13,7 +13,6 @@ adi_ip_create util_adxcvr
 adi_ip_files util_adxcvr [list \
   "$ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl" \
   "$ad_hdl_dir/library/jesd204/jesd204_common/sync_header_align.v" \
-  "util_adxcvr_constr.xdc" \
   "util_adxcvr_xcm.v" \
   "util_adxcvr_xch.v" \
   "util_adxcvr.v" \

@@ -485,7 +485,7 @@ module axi_fmcadc5_sync #(
 
   assign up_spi_gnt_s = (&spi_csn_o) & ~spi_clk_o;
 
-  always @(posedge up_clk or negedge up_rstn) begin
+  always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_spi_gnt <= 1'd0;
     end else begin
