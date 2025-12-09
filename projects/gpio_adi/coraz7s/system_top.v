@@ -96,8 +96,8 @@ module system_top (
     .dio_p (led)
   );
 
-  wire [23:0] gpio_unused = 24'b0;
-  assign gpio_i = {gpio_unused, gpio_i[7:0]};
+  // Upper bits of gpio_i directly tied to 0 (no external connection)
+  assign gpio_i[31:8] = 24'b0;
 
   system_wrapper i_system_wrapper (
     .ddr_addr         (ddr_addr),
