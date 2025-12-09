@@ -69,7 +69,19 @@ module axi_dac_interpolate_filter #(
   input                 en_start_trigger,
   input                 en_stop_trigger,
   input                 dma_valid,
-  input                 dma_valid_adjacent
+  input                 dma_valid_adjacent,
+  
+  
+  output                transfer_start_filter,
+  output      [ 1:0]    transfer_state_filter,
+  output      [ 1:0]    transfer_state_next_filter,
+  output                stop_transfer_filter,
+  output                dma_valid_m2_out,
+  output                dma_valid_m13_out,
+  output                dac_valid_corrected_out,
+  output                dac_fir_valid_out,
+  output                transfer_first_sample_o,
+  output                transfer_start_posedge_out
 );
 
   // local parameters
@@ -82,6 +94,8 @@ module axi_dac_interpolate_filter #(
   // internal registers
 
   reg               dac_int_ready;
+  reg               transfer_first_sample;
+  reg               transfer_start_posedge;
   reg               dac_filt_int_valid;
   reg     [15:0]    interp_rate_cic;
   reg     [ 2:0]    filter_mask_d1;
@@ -132,7 +146,22 @@ module axi_dac_interpolate_filter #(
 
   assign iqcor_data_in  = raw_dma_n ? dac_raw_ch_data : dac_data;
   assign iqcor_valid_in = raw_dma_n ? 1'b1 : dac_valid;
-
+  
+  assign transfer_start_filter = transfer_start;
+  assign transfer_state_filter = transfer_sm;
+  assign transfer_state_next_filter = transfer_sm_next;
+  assign stop_transfer_filter = stop_transfer;
+  
+  assign dma_valid_m2_out = dma_valid_m[2];
+  assign dma_valid_m13_out = dma_valid_m[13];
+  
+  assign dac_valid_corrected_out = dac_valid_corrected;
+  assign dac_fir_valid_out = dac_fir_valid;
+  
+  assign transfer_first_sample_o = transfer_first_sample;
+  
+  assign transfer_start_posedge_out = transfer_start_posedge;
+  
   ad_iqcor #(
     .Q_OR_I_N (0),
     .DISABLE(CORRECTION_DISABLE),
@@ -176,8 +205,21 @@ module axi_dac_interpolate_filter #(
   end
 
   always @(posedge dac_clk) begin
+    //using this to detect the rising edge of transfer_start
+    transfer_start_posedge <= transfer_start;
+    
+    if (transfer_start && !transfer_start_posedge) begin
+      transfer_first_sample <= 1'b1;
+    end else if (transfer_first_sample && dac_filt_int_valid & transfer_ready) begin
+      transfer_first_sample <= 1'b0;
+    end
+    
     if (dac_filt_int_valid & transfer_ready) begin
-      if (interpolation_counter == interpolation_ratio) begin
+      if (transfer_first_sample) begin
+        //first sample of new transfer: assert dac_int_ready immediately
+        interpolation_counter <= 0;
+        dac_int_ready <= 1'b1;
+      end else if (interpolation_counter == interpolation_ratio) begin
         interpolation_counter <= 0;
         dac_int_ready <= 1'b1;
       end else begin
@@ -220,6 +262,7 @@ module axi_dac_interpolate_filter #(
       IDLE: begin
         transfer <= 1'b0;
         if (dac_int_ready & !dma_transfer_suspend) begin
+//        if (!dma_transfer_suspend) begin
           transfer_sm_next <= WAIT;
         end
       end
