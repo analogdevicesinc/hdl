@@ -22,12 +22,18 @@ if {$ASYMMETRIC_A_B_MODE} {
 
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]
+set SIDE_B_ONLY [ expr { [info exists ad_project_params(SIDE_B_ONLY)] \
+                          ? $ad_project_params(SIDE_B_ONLY) : 0 } ]
 set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
                           ? $ad_project_params(TDD_SUPPORT) : 0 } ]
 set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
                           ? $ad_project_params(SHARED_DEVCLK) : 0 } ]
 set DO_HAS_BYPASS [ expr { [info exists ad_project_params(DO_HAS_BYPASS)] \
                           ? $ad_project_params(DO_HAS_BYPASS) : 1 } ]
+
+if {$SIDE_B_ONLY && $ASYMMETRIC_A_B_MODE} {
+  error "ERROR: SIDE_B_ONLY and ASYMMETRIC_A_B_MODE cannot be both enabled!"
+}
 
 if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
   error "ERROR: Cannot enable TDD support without shared deviceclocks!"
@@ -374,7 +380,7 @@ if {$ADI_PHY_SEL} {
 
   set REF_CLK_RATE $ad_project_params(REF_CLK_RATE)
   # instantiate versal phy
-  create_versal_jesd_xcvr_subsystem jesd204_phy $JESD_MODE $RX_NUM_OF_LANES $TX_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX
+  create_versal_jesd_xcvr_subsystem jesd204_phy $JESD_MODE $RX_NUM_OF_LANES $TX_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX false
   # reset generator
   ad_ip_instance proc_sys_reset rx_device_clk_rstgen
   ad_connect rx_device_clk rx_device_clk_rstgen/slowest_sync_clk
@@ -744,50 +750,57 @@ if {$ADI_PHY_SEL} {
   }
 
   # Export serial interfaces
-  for {set j 0} {$j < $num_quads} {incr j} {
-    if {$j < $num_quads_a} {
-      create_bd_port -dir I -from 3 -to 0 rx_${j}_p
-      create_bd_port -dir I -from 3 -to 0 rx_${j}_n
-      create_bd_port -dir O -from 3 -to 0 tx_${j}_p
-      create_bd_port -dir O -from 3 -to 0 tx_${j}_n
-      ad_connect rx_${j}_p jesd204_phy/rx_${j}_p
-      ad_connect rx_${j}_n jesd204_phy/rx_${j}_n
-      ad_connect tx_${j}_p jesd204_phy/tx_${j}_p
-      ad_connect tx_${j}_n jesd204_phy/tx_${j}_n
-    } else {
-      set jj [expr $j - $num_quads_a]
-      create_bd_port -dir I -from 3 -to 0 rx_${j}_p
-      create_bd_port -dir I -from 3 -to 0 rx_${j}_n
-      create_bd_port -dir O -from 3 -to 0 tx_${j}_p
-      create_bd_port -dir O -from 3 -to 0 tx_${j}_n
-      ad_connect rx_${j}_p jesd204_phy_b/rx_${jj}_p
-      ad_connect rx_${j}_n jesd204_phy_b/rx_${jj}_n
-      ad_connect tx_${j}_p jesd204_phy_b/tx_${jj}_p
-      ad_connect tx_${j}_n jesd204_phy_b/tx_${jj}_n
+  if {!$SIDE_B_ONLY} {
+    for {set j 0} {$j < $num_quads} {incr j} {
+      if {$j < $num_quads_a} {
+        create_bd_port -dir I -from 3 -to 0 rx_${j}_p
+        create_bd_port -dir I -from 3 -to 0 rx_${j}_n
+        create_bd_port -dir O -from 3 -to 0 tx_${j}_p
+        create_bd_port -dir O -from 3 -to 0 tx_${j}_n
+        ad_connect rx_${j}_p jesd204_phy/rx_${j}_p
+        ad_connect rx_${j}_n jesd204_phy/rx_${j}_n
+        ad_connect tx_${j}_p jesd204_phy/tx_${j}_p
+        ad_connect tx_${j}_n jesd204_phy/tx_${j}_n
+      } else {
+        set jj [expr $j - $num_quads_a]
+        create_bd_port -dir I -from 3 -to 0 rx_${j}_p
+        create_bd_port -dir I -from 3 -to 0 rx_${j}_n
+        create_bd_port -dir O -from 3 -to 0 tx_${j}_p
+        create_bd_port -dir O -from 3 -to 0 tx_${j}_n
+        ad_connect rx_${j}_p jesd204_phy_b/rx_${jj}_p
+        ad_connect rx_${j}_n jesd204_phy_b/rx_${jj}_n
+        ad_connect tx_${j}_p jesd204_phy_b/tx_${jj}_p
+        ad_connect tx_${j}_n jesd204_phy_b/tx_${jj}_n
+      }
     }
-  }
 
-  if {$num_quads < $MAX_NUMBER_OF_QUADS} {
-    # Create dummy ports for non-existing lanes
-    for {set j $num_quads} {$j < $MAX_NUMBER_OF_QUADS} {incr j} {
-      create_bd_port -dir I -from 3 -to 0 rx_${j}_p
-      create_bd_port -dir I -from 3 -to 0 rx_${j}_n
-      create_bd_port -dir O -from 3 -to 0 tx_${j}_p
-      create_bd_port -dir O -from 3 -to 0 tx_${j}_n
+    if {$num_quads < $MAX_NUMBER_OF_QUADS} {
+      # Create dummy ports for non-existing lanes
+      for {set j $num_quads} {$j < $MAX_NUMBER_OF_QUADS} {incr j} {
+        create_bd_port -dir I -from 3 -to 0 rx_${j}_p
+        create_bd_port -dir I -from 3 -to 0 rx_${j}_n
+        create_bd_port -dir O -from 3 -to 0 tx_${j}_p
+        create_bd_port -dir O -from 3 -to 0 tx_${j}_n
+      }
     }
-    # for {set j $num_quads_b} {$j < 1} {incr j} {
-    #   create_bd_port -dir I -from 3 -to 0 GT_Serial _${j}_0_grx_p
-    #   create_bd_port -dir I -from 3 -to 0 GT_Serial_${j}_0_grx_n
-    #   create_bd_port -dir O -from 3 -to 0 GT_Serial_${j}_0_gtx_p
-    #   create_bd_port -dir O -from 3 -to 0 GT_Serial_${j}_0_gtx_n
-    # }
-
-    # for {set j $num_quads_a} {$j < 2} {incr j} {
-    #   create_bd_port -dir I -from 3 -to 0 GT_Serial_A_${j}_0_grx_p
-    #   create_bd_port -dir I -from 3 -to 0 GT_Serial_A_${j}_0_grx_n
-    #   create_bd_port -dir O -from 3 -to 0 GT_Serial_A_${j}_0_gtx_p
-    #   create_bd_port -dir O -from 3 -to 0 GT_Serial_A_${j}_0_gtx_n
-    # }
+  } else {
+    # Map the serial lanes to side B only
+    for {set j 0} {$j < $num_quads} {incr j} {
+      set idx [expr $j + 1]
+      create_bd_port -dir I -from 3 -to 0 rx_${idx}_p
+      create_bd_port -dir I -from 3 -to 0 rx_${idx}_n
+      create_bd_port -dir O -from 3 -to 0 tx_${idx}_p
+      create_bd_port -dir O -from 3 -to 0 tx_${idx}_n
+      ad_connect rx_${idx}_p jesd204_phy/rx_${j}_p
+      ad_connect rx_${idx}_n jesd204_phy/rx_${j}_n
+      ad_connect tx_${idx}_p jesd204_phy/tx_${j}_p
+      ad_connect tx_${idx}_n jesd204_phy/tx_${j}_n
+    }
+    # Crete dummy ports for non-existing lanes
+    create_bd_port -dir I -from 3 -to 0 rx_0_p
+    create_bd_port -dir I -from 3 -to 0 rx_0_n
+    create_bd_port -dir O -from 3 -to 0 tx_0_p
+    create_bd_port -dir O -from 3 -to 0 tx_0_n
   }
 }
 
