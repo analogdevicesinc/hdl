@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -62,22 +62,21 @@ set_connection_parameter_value spi_clk_pll.reconfig_to_pll/spi_clk_pll_reconfig.
 # spi engine
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
-set spi_engine_hier spi_ad57xx
+set spi_engine_hier  spi_ad57xx
+set axi_clk          sys_clk.clk
+set axi_reset        sys_clk.clk_reset
+set spi_clk          spi_clk_pll.outclk0
+set data_width       32
+set async_spi_clk    1
+set offload_en       1
+set num_cs           1
+set num_sdi          1
+set num_sdo          1
+set sdi_delay        0
+set echo_sclk        0
+set sdo_streaming    1
 
-set data_width 32
-set async_spi_clk 1
-set num_cs 1
-set num_sdi 1
-set num_sdo 1
-set sdi_delay 0
-set echo_sclk 0
-set sdo_streaming 1
-
-set axi_clk sys_clk.clk
-set axi_reset sys_clk.clk_reset
-set spi_clk spi_clk_pll.outclk0
-
-spi_engine_create $spi_engine_hier $axi_clk $axi_reset $spi_clk $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk $sdo_streaming
+spi_engine_create $spi_engine_hier $axi_clk $axi_reset $spi_clk $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk $sdo_streaming
 
 # exported interface
 
