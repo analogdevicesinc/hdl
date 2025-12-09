@@ -118,6 +118,7 @@ switch $INTF {
 
     set data_width    32
     set async_spi_clk 1
+    set offload_en    1
     set num_cs        1
     set num_sdi       $NUM_OF_SDI
     set num_sdo       1
@@ -125,7 +126,7 @@ switch $INTF {
 
     set hier_spi_engine spi_ad7606
 
-    spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay
+    spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay
 
     # axi_pwm_gen
     ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_PERIOD 120

@@ -9,6 +9,7 @@ source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 # If the ADC resolution <= 16, data_width is set 16 else 32
 set data_width    32
 set async_spi_clk 1
+set offload_en    1
 set num_cs        1
 set num_sdi       1
 set num_sdo       1
@@ -17,7 +18,7 @@ set echo_sclk     0
 
 set hier_spi_engine spi_pulsar_adc
 
-spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
+spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
 
 ad_ip_instance axi_clkgen spi_clkgen
 ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 5

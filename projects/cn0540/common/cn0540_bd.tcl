@@ -18,6 +18,7 @@ source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
 set data_width    32
 set async_spi_clk 1
+set offload_en    1
 set num_cs        1
 set num_sdi       1
 set num_sdo       1
@@ -26,7 +27,7 @@ set echo_sclk     0
 
 set hier_spi_engine spi_cn0540
 
-spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
+spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
 
 # Generate a 80MHz spi_clk for the SPI Engine (targeted SCLK is 20MHz)
 
