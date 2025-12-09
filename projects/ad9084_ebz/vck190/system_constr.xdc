@@ -7,55 +7,55 @@
 ## Apollo
 #
 
-set_property   -dict {PACKAGE_PIN K1                                                  } [get_ports stxb_n[0]          ]    ;  ## FMC2_DP0_M2C_N   GTY_204
-set_property   -dict {PACKAGE_PIN K2                                                  } [get_ports stxb_p[0]          ]    ;  ## FMC2_DP0_M2C_P   GTY_204
-set_property   -dict {PACKAGE_PIN J3                                                  } [get_ports stxb_n[1]          ]    ;  ## FMC2_DP1_M2C_N   GTY_204
-set_property   -dict {PACKAGE_PIN J4                                                  } [get_ports stxb_p[1]          ]    ;  ## FMC2_DP1_M2C_P   GTY_204
-set_property   -dict {PACKAGE_PIN H1                                                  } [get_ports stxb_n[2]          ]    ;  ## FMC2_DP2_M2C_N   GTY_204
-set_property   -dict {PACKAGE_PIN H2                                                  } [get_ports stxb_p[2]          ]    ;  ## FMC2_DP2_M2C_P   GTY_204
-set_property   -dict {PACKAGE_PIN H5                                                  } [get_ports stxb_n[3]          ]    ;  ## FMC2_DP3_M2C_N   GTY_204
-set_property   -dict {PACKAGE_PIN H6                                                  } [get_ports stxb_p[3]          ]    ;  ## FMC2_DP3_M2C_P   GTY_204
-set_property   -dict {PACKAGE_PIN G3                                                  } [get_ports stxa_n[0]          ]    ;  ## FMC2_DP4_M2C_N   GTY_205
-set_property   -dict {PACKAGE_PIN G4                                                  } [get_ports stxa_p[0]          ]    ;  ## FMC2_DP4_M2C_P   GTY_205
-set_property   -dict {PACKAGE_PIN F1                                                  } [get_ports stxa_n[1]          ]    ;  ## FMC2_DP5_M2C_N   GTY_205
-set_property   -dict {PACKAGE_PIN F2                                                  } [get_ports stxa_p[1]          ]    ;  ## FMC2_DP5_M2C_P   GTY_205
-set_property   -dict {PACKAGE_PIN F5                                                  } [get_ports stxa_n[2]          ]    ;  ## FMC2_DP6_M2C_N   GTY_205
-set_property   -dict {PACKAGE_PIN F6                                                  } [get_ports stxa_p[2]          ]    ;  ## FMC2_DP6_M2C_P   GTY_205
-set_property   -dict {PACKAGE_PIN E3                                                  } [get_ports stxa_n[3]          ]    ;  ## FMC2_DP7_M2C_N   GTY_205
-set_property   -dict {PACKAGE_PIN E4                                                  } [get_ports stxa_p[3]          ]    ;  ## FMC2_DP7_M2C_P   GTY_205
-set_property   -dict {PACKAGE_PIN D1                                                  } [get_ports stxb_n[4]          ]    ;  ## FMC2_DP8_M2C_N   GTY_206
-set_property   -dict {PACKAGE_PIN D2                                                  } [get_ports stxb_p[4]          ]    ;  ## FMC2_DP8_M2C_P   GTY_206
-set_property   -dict {PACKAGE_PIN D5                                                  } [get_ports stxb_n[5]          ]    ;  ## FMC2_DP9_M2C_N   GTY_206
-set_property   -dict {PACKAGE_PIN D6                                                  } [get_ports stxb_p[5]          ]    ;  ## FMC2_DP9_M2C_P   GTY_206
-set_property   -dict {PACKAGE_PIN C3                                                  } [get_ports stxb_n[6]          ]    ;  ## FMC2_DP10_M2C_N  GTY_206
-set_property   -dict {PACKAGE_PIN C4                                                  } [get_ports stxb_p[6]          ]    ;  ## FMC2_DP10_M2C_P  GTY_206
-set_property   -dict {PACKAGE_PIN B5                                                  } [get_ports stxb_n[7]          ]    ;  ## FMC2_DP11_M2C_N  GTY_206
-set_property   -dict {PACKAGE_PIN B6                                                  } [get_ports stxb_p[7]          ]    ;  ## FMC2_DP11_M2C_P  GTY_206
+set_property -quiet  -dict {PACKAGE_PIN K1                                            } [get_ports stxb_n[0]          ]    ;  ## FMC2_DP0_M2C_N   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN K2                                            } [get_ports stxb_p[0]          ]    ;  ## FMC2_DP0_M2C_P   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN J3                                            } [get_ports stxb_n[1]          ]    ;  ## FMC2_DP1_M2C_N   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN J4                                            } [get_ports stxb_p[1]          ]    ;  ## FMC2_DP1_M2C_P   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN H1                                            } [get_ports stxb_n[2]          ]    ;  ## FMC2_DP2_M2C_N   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN H2                                            } [get_ports stxb_p[2]          ]    ;  ## FMC2_DP2_M2C_P   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN H5                                            } [get_ports stxb_n[3]          ]    ;  ## FMC2_DP3_M2C_N   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN H6                                            } [get_ports stxb_p[3]          ]    ;  ## FMC2_DP3_M2C_P   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN G3                                            } [get_ports stxa_n[0]          ]    ;  ## FMC2_DP4_M2C_N   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN G4                                            } [get_ports stxa_p[0]          ]    ;  ## FMC2_DP4_M2C_P   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN F1                                            } [get_ports stxa_n[1]          ]    ;  ## FMC2_DP5_M2C_N   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN F2                                            } [get_ports stxa_p[1]          ]    ;  ## FMC2_DP5_M2C_P   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN F5                                            } [get_ports stxa_n[2]          ]    ;  ## FMC2_DP6_M2C_N   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN F6                                            } [get_ports stxa_p[2]          ]    ;  ## FMC2_DP6_M2C_P   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN E3                                            } [get_ports stxa_n[3]          ]    ;  ## FMC2_DP7_M2C_N   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN E4                                            } [get_ports stxa_p[3]          ]    ;  ## FMC2_DP7_M2C_P   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN D1                                            } [get_ports stxb_n[4]          ]    ;  ## FMC2_DP8_M2C_N   GTY_206
+set_property -quiet  -dict {PACKAGE_PIN D2                                            } [get_ports stxb_p[4]          ]    ;  ## FMC2_DP8_M2C_P   GTY_206
+set_property -quiet  -dict {PACKAGE_PIN D5                                            } [get_ports stxb_n[5]          ]    ;  ## FMC2_DP9_M2C_N   GTY_206
+set_property -quiet  -dict {PACKAGE_PIN D6                                            } [get_ports stxb_p[5]          ]    ;  ## FMC2_DP9_M2C_P   GTY_206
+set_property -quiet  -dict {PACKAGE_PIN C3                                            } [get_ports stxb_n[6]          ]    ;  ## FMC2_DP10_M2C_N  GTY_206
+set_property -quiet  -dict {PACKAGE_PIN C4                                            } [get_ports stxb_p[6]          ]    ;  ## FMC2_DP10_M2C_P  GTY_206
+set_property -quiet  -dict {PACKAGE_PIN B5                                            } [get_ports stxb_n[7]          ]    ;  ## FMC2_DP11_M2C_N  GTY_206
+set_property -quiet  -dict {PACKAGE_PIN B6                                            } [get_ports stxb_p[7]          ]    ;  ## FMC2_DP11_M2C_P  GTY_206
 
-set_property   -dict {PACKAGE_PIN  K6                                                 } [get_ports srxb_n[0]          ]    ;  ## FMC2_DP0_C2M_N   GTY_204
-set_property   -dict {PACKAGE_PIN  K7                                                 } [get_ports srxb_p[0]          ]    ;  ## FMC2_DP0_C2M_P   GTY_204
-set_property   -dict {PACKAGE_PIN  K10                                                } [get_ports srxb_n[1]          ]    ;  ## FMC2_DP1_C2M_N   GTY_204
-set_property   -dict {PACKAGE_PIN  K11                                                } [get_ports srxb_p[1]          ]    ;  ## FMC2_DP1_C2M_P   GTY_204
-set_property   -dict {PACKAGE_PIN  J8                                                 } [get_ports srxb_n[2]          ]    ;  ## FMC2_DP2_C2M_N   GTY_204
-set_property   -dict {PACKAGE_PIN  J9                                                 } [get_ports srxb_p[2]          ]    ;  ## FMC2_DP2_C2M_P   GTY_204
-set_property   -dict {PACKAGE_PIN  H10                                                } [get_ports srxb_n[3]          ]    ;  ## FMC2_DP3_C2M_N   GTY_204
-set_property   -dict {PACKAGE_PIN  H11                                                } [get_ports srxb_p[3]          ]    ;  ## FMC2_DP3_C2M_P   GTY_204
-set_property   -dict {PACKAGE_PIN  G8                                                 } [get_ports srxa_n[0]          ]    ;  ## FMC2_DP4_C2M_N   GTY_205
-set_property   -dict {PACKAGE_PIN  G9                                                 } [get_ports srxa_p[0]          ]    ;  ## FMC2_DP4_C2M_P   GTY_205
-set_property   -dict {PACKAGE_PIN  F10                                                } [get_ports srxa_n[1]          ]    ;  ## FMC2_DP5_C2M_N   GTY_205
-set_property   -dict {PACKAGE_PIN  F11                                                } [get_ports srxa_p[1]          ]    ;  ## FMC2_DP5_C2M_P   GTY_205
-set_property   -dict {PACKAGE_PIN  E8                                                 } [get_ports srxa_n[2]          ]    ;  ## FMC2_DP6_C2M_N   GTY_205
-set_property   -dict {PACKAGE_PIN  E9                                                 } [get_ports srxa_p[2]          ]    ;  ## FMC2_DP6_C2M_P   GTY_205
-set_property   -dict {PACKAGE_PIN  D10                                                } [get_ports srxa_n[3]          ]    ;  ## FMC2_DP7_C2M_N   GTY_205
-set_property   -dict {PACKAGE_PIN  D11                                                } [get_ports srxa_p[3]          ]    ;  ## FMC2_DP7_C2M_P   GTY_205
-set_property   -dict {PACKAGE_PIN  C8                                                 } [get_ports srxb_n[4]          ]    ;  ## FMC2_DP8_C2M_N   GTY_206
-set_property   -dict {PACKAGE_PIN  C9                                                 } [get_ports srxb_p[4]          ]    ;  ## FMC2_DP8_C2M_P   GTY_206
-set_property   -dict {PACKAGE_PIN  B10                                                } [get_ports srxb_n[5]          ]    ;  ## FMC2_DP9_C2M_N   GTY_206
-set_property   -dict {PACKAGE_PIN  B11                                                } [get_ports srxb_p[5]          ]    ;  ## FMC2_DP9_C2M_P   GTY_206
-set_property   -dict {PACKAGE_PIN  A8                                                 } [get_ports srxb_n[6]          ]    ;  ## FMC2_DP10_C2M_N  GTY_206
-set_property   -dict {PACKAGE_PIN  A9                                                 } [get_ports srxb_p[6]          ]    ;  ## FMC2_DP10_C2M_P  GTY_206
-set_property   -dict {PACKAGE_PIN  A12                                                } [get_ports srxb_n[7]          ]    ;  ## FMC2_DP11_C2M_N  GTY_206
-set_property   -dict {PACKAGE_PIN  A13                                                } [get_ports srxb_p[7]          ]    ;  ## FMC2_DP11_C2M_P  GTY_206
+set_property -quiet  -dict {PACKAGE_PIN K6                                            } [get_ports srxb_n[0]          ]    ;  ## FMC2_DP0_C2M_N   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN K7                                            } [get_ports srxb_p[0]          ]    ;  ## FMC2_DP0_C2M_P   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN K10                                           } [get_ports srxb_n[1]          ]    ;  ## FMC2_DP1_C2M_N   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN K11                                           } [get_ports srxb_p[1]          ]    ;  ## FMC2_DP1_C2M_P   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN J8                                            } [get_ports srxb_n[2]          ]    ;  ## FMC2_DP2_C2M_N   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN J9                                            } [get_ports srxb_p[2]          ]    ;  ## FMC2_DP2_C2M_P   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN H10                                           } [get_ports srxb_n[3]          ]    ;  ## FMC2_DP3_C2M_N   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN H11                                           } [get_ports srxb_p[3]          ]    ;  ## FMC2_DP3_C2M_P   GTY_204
+set_property -quiet  -dict {PACKAGE_PIN G8                                            } [get_ports srxa_n[0]          ]    ;  ## FMC2_DP4_C2M_N   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN G9                                            } [get_ports srxa_p[0]          ]    ;  ## FMC2_DP4_C2M_P   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN F10                                           } [get_ports srxa_n[1]          ]    ;  ## FMC2_DP5_C2M_N   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN F11                                           } [get_ports srxa_p[1]          ]    ;  ## FMC2_DP5_C2M_P   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN E8                                            } [get_ports srxa_n[2]          ]    ;  ## FMC2_DP6_C2M_N   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN E9                                            } [get_ports srxa_p[2]          ]    ;  ## FMC2_DP6_C2M_P   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN D10                                           } [get_ports srxa_n[3]          ]    ;  ## FMC2_DP7_C2M_N   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN D11                                           } [get_ports srxa_p[3]          ]    ;  ## FMC2_DP7_C2M_P   GTY_205
+set_property -quiet  -dict {PACKAGE_PIN C8                                            } [get_ports srxb_n[4]          ]    ;  ## FMC2_DP8_C2M_N   GTY_206
+set_property -quiet  -dict {PACKAGE_PIN C9                                            } [get_ports srxb_p[4]          ]    ;  ## FMC2_DP8_C2M_P   GTY_206
+set_property -quiet  -dict {PACKAGE_PIN B10                                           } [get_ports srxb_n[5]          ]    ;  ## FMC2_DP9_C2M_N   GTY_206
+set_property -quiet  -dict {PACKAGE_PIN B11                                           } [get_ports srxb_p[5]          ]    ;  ## FMC2_DP9_C2M_P   GTY_206
+set_property -quiet  -dict {PACKAGE_PIN A8                                            } [get_ports srxb_n[6]          ]    ;  ## FMC2_DP10_C2M_N  GTY_206
+set_property -quiet  -dict {PACKAGE_PIN A9                                            } [get_ports srxb_p[6]          ]    ;  ## FMC2_DP10_C2M_P  GTY_206
+set_property -quiet  -dict {PACKAGE_PIN A12                                           } [get_ports srxb_n[7]          ]    ;  ## FMC2_DP11_C2M_N  GTY_206
+set_property -quiet  -dict {PACKAGE_PIN A13                                           } [get_ports srxb_p[7]          ]    ;  ## FMC2_DP11_C2M_P  GTY_206
 
 set_property   -dict {PACKAGE_PIN AU12  IOSTANDARD LVCMOS15                           } [get_ports gpio[15]		        ]    ;  ## FMC2_LA06_P
 set_property   -dict {PACKAGE_PIN AU11  IOSTANDARD LVCMOS15                           } [get_ports gpio[16]		        ]    ;  ## FMC2_LA06_N

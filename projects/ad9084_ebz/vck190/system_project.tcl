@@ -23,7 +23,8 @@ source ../../../projects/scripts/adi_board.tcl
 #      8B10B  - 8b10b link layer defined in JESD 204B
 #
 #   REF_CLK_RATE : Reference clock frequency in MHz, should be Lane Rate / 66 for JESD204C or Lane Rate / 40 for JESD204B
-#   HSCI_ENABLE : If set, adds and enables the HSCI core in the design
+#   ENABLE_HSCI : If set, adds and enables the HSCI core in the design
+#   SIDE_B_ONLY : When set, use only the B side of the Apollo device (maximum 8 lanes instead of 4)
 #   RX_LANE_RATE :  Lane rate of the Rx link ( Apollo to FPGA )
 #   TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to Apollo )
 #   [RX/TX]_JESD_M : Number of converters per link
@@ -44,6 +45,7 @@ adi_project ad9084_ebz_vck190 0 [list \
   JESD_MODE           [get_env_param JESD_MODE       64B66B ] \
   REF_CLK_RATE        [get_env_param REF_CLK_RATE     312.5 ] \
   ENABLE_HSCI         [get_env_param HSCI_ENABLE          1 ] \
+  SIDE_B_ONLY         [get_env_param SIDE_B_ONLY          0 ] \
   RX_LANE_RATE        [get_env_param RX_LANE_RATE    20.625 ] \
   TX_LANE_RATE        [get_env_param TX_LANE_RATE    20.625 ] \
   RX_JESD_M           [get_env_param RX_JESD_M            4 ] \
@@ -74,7 +76,6 @@ adi_project ad9084_ebz_vck190 0 [list \
 ]
 
 adi_project_files ad9084_ebz_vck190 [list \
-  "system_top.v" \
   "system_constr.xdc" \
   "timing_constr.tcl" \
   "../common/versal_hsci_phy.tcl" \
