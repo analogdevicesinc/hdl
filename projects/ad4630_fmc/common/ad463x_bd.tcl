@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -51,19 +51,19 @@ ad_connect spi_clk spi_clkgen/clk_0
 
 # create a SPI Engine architecture
 
-#spi_engine_create "spi_ad463x" 32         1             1       $NUM_OF_SDI 0          1
+#spi_engine_create "spi_ad463x" 32         1            1             1       $NUM_OF_SDI 0          1
 
-set data_width    32
-set async_spi_clk 1
-set num_cs        1
-set num_sdi       $NUM_OF_SDI
-set num_sdo       1
-set sdi_delay     1
-set echo_sclk     1
+set hier_spi_engine  spi_ad463x
+set data_width       32
+set async_spi_clk    1
+set offload_en       1
+set num_cs           1
+set num_sdi          $NUM_OF_SDI
+set num_sdo          1
+set sdi_delay        1
+set echo_sclk        1
 
-set hier_spi_engine spi_ad463x
-
-spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
+spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
 
 ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_execution CONFIG.DEFAULT_SPI_CFG 1   ; # latching MISO on negative edge - hardware only
 

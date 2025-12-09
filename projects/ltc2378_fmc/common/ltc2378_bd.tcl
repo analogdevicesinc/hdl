@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -10,17 +10,17 @@ create_bd_port -dir I ltc2378_ext_clk
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
-set data_width    32
-set async_spi_clk 1
-set num_cs        1
-set num_sdi       1
-set num_sdo       1
-set sdi_delay     0
-set echo_sclk     0
+set hier_spi_engine  spi_ltc2378
+set data_width       32
+set async_spi_clk    1
+set offload_en       1
+set num_cs           1
+set num_sdi          1
+set num_sdo          1
+set sdi_delay        0
+set echo_sclk        0
 
-set hier_spi_engine spi_ltc2378
-
-spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
+spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
 
 # activate internal SPI Engine Offload synchronizer
 ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_offload CONFIG.ASYNC_TRIG 1

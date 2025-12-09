@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -15,17 +15,17 @@ create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 a
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
-set data_width    32
-set async_spi_clk 1
-set num_cs        1
-set num_sdi       [expr {$ALERT_SPI_N ? 1 : $NUM_OF_SDI}]
-set num_sdo       1
-set sdi_delay     1
-set echo_sclk     0
+set hier_spi_engine  spi_ad738x_adc
+set data_width       32
+set async_spi_clk    1
+set offload_en       1
+set num_cs           1
+set num_sdi          [expr {$ALERT_SPI_N ? 1 : $NUM_OF_SDI}]
+set num_sdo          1
+set sdi_delay        1
+set echo_sclk        0
 
-set hier_spi_engine spi_ad738x_adc
-
-spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
+spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
 
 ad_ip_instance axi_pwm_gen spi_trigger_gen
 # 300ns pwm period
