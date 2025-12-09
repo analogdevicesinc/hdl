@@ -41,6 +41,7 @@ LTT_INTERFACES := $(LTT_INTERFACES) $(foreach dep,$(LTT_INTERFACES),$(LATTICE_DE
 CLEAN_TARGETS := $(CLEAN_TARGETS) $(foreach dep,$(CLEAN_TARGETS),$(LATTICE_DEFAULT_INTERFACE_PATH)/$(dep))
 endif
 
+CLEAN_TARGETS += .lock
 CLEAN_TARGETS += $(wildcard ./*/)
 CLEAN_TARGETS += interfaces_ltt.log
 
@@ -52,11 +53,12 @@ clean: clean-all
 
 clean-all:
 	$(call clean, \
-		$(CLEAN_TARGETS) .lock, \
-		$(HL)ADI$(NC) interfaces for lattice)
+		$(CLEAN_TARGETS), \
+		interfaces definitions)
 
 $(LTT_INTERFACES): $(L_DEPS)
+	-rm -fr $(CLEAN_TARGETS)
 	$(call build, \
 		$(LATTICE_IP_TOOL) interfaces_ltt.tcl, \
 		interfaces_ltt.log, \
-		$(HL)ADI$(NC) interfaces for lattice)
+		interfaces definitions)
