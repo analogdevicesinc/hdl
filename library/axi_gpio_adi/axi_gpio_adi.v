@@ -256,7 +256,7 @@ module axi_gpio_adi (
 
   // AXI interface
   input               s_axi_aclk,
-  input               s_axi_aresetn,
+  (* MARK_DEBUG = "TRUE" *) input               s_axi_aresetn,
   input               s_axi_awvalid,
   input      [15:0]   s_axi_awaddr,
   input      [2:0]    s_axi_awprot,
@@ -288,9 +288,9 @@ module axi_gpio_adi (
 
   reg        [31:0] gpio_out = 'h0;
   reg        [31:0] gpio_tri = 32'hffffff03;  // 0 = output, 1 = input 2 btn - '1' input si 2 led-uri RGB - output '0'
-  reg        [31:0] up_rdata;
-  reg        up_rack = 'h0;
-  reg        up_wack = 'h0;
+  (* MARK_DEBUG = "TRUE" *) reg        [31:0] up_rdata;
+  (* MARK_DEBUG = "TRUE" *) reg        up_rack = 'h0;
+  (* MARK_DEBUG = "TRUE" *) reg        up_wack = 'h0;
   (* MARK_DEBUG = "TRUE" *) reg               up_resetn = 'h0;
   (* MARK_DEBUG = "TRUE" *) reg        [31:0] up_irq_mask = 'h0;
   (* MARK_DEBUG = "TRUE" *) reg        [31:0] up_irq_source = 'h0;
@@ -302,11 +302,11 @@ module axi_gpio_adi (
   // Wire AXI-to-up bus interface
 
   wire              up_clk = s_axi_aclk;
-  wire              up_wreq_s;
-  wire [7:0]        up_waddr_s;
-  wire [31:0]       up_wdata_s;
-  wire              up_rreq_s;
-  wire [7:0]        up_raddr_s;
+  (* MARK_DEBUG = "TRUE" *) wire              up_wreq_s;
+  (* MARK_DEBUG = "TRUE" *) wire [7:0]        up_waddr_s;
+  (* MARK_DEBUG = "TRUE" *) wire [31:0]       up_wdata_s;
+  (* MARK_DEBUG = "TRUE" *) wire              up_rreq_s;
+  (* MARK_DEBUG = "TRUE" *) wire [7:0]        up_raddr_s;
   wire [31:0] gpio_in = gpio_i;
   (* MARK_DEBUG = "TRUE" *) wire       [31:0] up_irq_pending;
   (* MARK_DEBUG = "TRUE" *) wire       [31:0] up_irq_trigger;
@@ -363,23 +363,32 @@ module axi_gpio_adi (
 
 
  // Write Registers and reset
+ // AXI reset has priority, then software reset (up_resetn)
 
  always @(posedge up_clk) begin
-   if (s_axi_aresetn == 1'b0 && up_resetn == 1'b0) begin
+   if (s_axi_aresetn == 1'b0) begin
+     // AXI reset active - reset everything including up_resetn
      gpio_out <= 32'b0;
-     gpio_tri <= 32'hffffff03;  // Fixed direction: bits 0-2 input(1), bits 3-7 output(0)
+     gpio_tri <= 32'hffffff03;  // Fixed direction: bits 0-1 input(1), bits 2-7 output(0)
      up_resetn <= 1'b0;
      up_wack   <= 1'b0;
-    end else begin
+   end else begin
      up_wack <= up_wreq_s;
-      if (up_wreq_s == 1'b1) begin
-      case (up_waddr_s)
-        8'h21: gpio_out <= up_wdata_s;
-        8'h20: up_resetn<= up_wdata_s[0];
-        //'20 for reset
-      endcase
+
+     // Software reset active - keep outputs in reset state
+     if (up_resetn == 1'b0) begin
+       gpio_out <= 32'b0;
+       gpio_tri <= 32'hffffff03;
+     end
+
+     // Process register writes (always allow writes to enable up_resetn)
+     if (up_wreq_s == 1'b1) begin
+       case (up_waddr_s)
+         8'h20: up_resetn <= up_wdata_s[0];  // Software reset control
+         8'h21: if (up_resetn) gpio_out <= up_wdata_s;  // Only write GPIO if not in reset
+       endcase
+     end
    end
-  end
  end
 
 // // Write Registers & Reset bidirectional
