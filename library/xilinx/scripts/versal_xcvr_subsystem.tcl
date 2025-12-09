@@ -176,6 +176,107 @@ proc create_xcvr_subsystem {
   set_property -dict $phy_params [get_bd_cells ${ip_name}]
 }
 
+# Utility function to connect the datapath of the transceiver subsystem
+# Parameter description:
+#   ip_name : The name of the created ip
+#   xcvr : The name of the transceiver instance inside the ip
+#   num_lanes : Number of lanes
+#   link_mode : 1 for 8b10b, 2 for 64b66b
+#   usrclk : The usrclk signal to use as the link clock
+#   rx_or_tx : "RX" or "TX"
+#   lane_offset : Offset to apply to lane numbering (default 0)
+proc xcvr_connect_datapath {ip_name xcvr intf num_lanes link_mode usrclk rx_or_tx {lane_offset 0}} {
+  if {$rx_or_tx == "RX"} {
+    for {set j 0} {$j < $num_lanes} {set j [expr $j + 4]} {
+      set idx [expr ($j + $lane_offset) / 4]
+      set quad_idx [expr $j / 4]
+      create_bd_pin -dir I -from 3 -to 0 ${ip_name}/rx_${idx}_p
+      create_bd_pin -dir I -from 3 -to 0 ${ip_name}/rx_${idx}_n
+      ad_connect ${ip_name}/${xcvr}/QUAD${quad_idx}_rxp ${ip_name}/rx_${idx}_p
+      ad_connect ${ip_name}/${xcvr}/QUAD${quad_idx}_rxn ${ip_name}/rx_${idx}_n
+    }
+
+    for {set j 0} {$j < $num_lanes} {incr j} {
+      set idx [expr $j + $lane_offset]
+      ad_ip_instance jesd204_versal_gt_adapter_rx ${ip_name}/rx_adapt_${idx} [list \
+        LINK_MODE $link_mode \
+      ]
+      ad_connect ${ip_name}/rx_adapt_${idx}/RX_GT_IP_Interface ${ip_name}/${xcvr}/INTF${intf}_RX${j}_GT_IP_Interface
+
+      create_bd_intf_pin -mode Master -vlnv xilinx.com:display_jesd204:jesd204_rx_bus_rtl:1.0 ${ip_name}/rx${idx}
+      ad_connect ${ip_name}/rx${idx} ${ip_name}/rx_adapt_${idx}/RX
+      ad_connect ${ip_name}/rx_adapt_${idx}/usr_clk ${usrclk}
+      ad_connect ${ip_name}/rx_adapt_${idx}/en_char_align ${ip_name}/en_char_align
+
+      set quad_idx [expr $j / 4]
+      set lane_idx [expr $j % 4]
+      ad_connect ${ip_name}/${xcvr}/QUAD${quad_idx}_RX${lane_idx}_usrclk ${usrclk}
+    }
+  } else {
+    for {set j 0} {$j < $num_lanes} {set j [expr $j + 4]} {
+      set idx [expr ($j + $lane_offset) / 4]
+      set quad_idx [expr $j / 4]
+      create_bd_pin -dir O -from 3 -to 0 ${ip_name}/tx_${idx}_p
+      create_bd_pin -dir O -from 3 -to 0 ${ip_name}/tx_${idx}_n
+      ad_connect ${ip_name}/${xcvr}/QUAD${quad_idx}_txp ${ip_name}/tx_${idx}_p
+      ad_connect ${ip_name}/${xcvr}/QUAD${quad_idx}_txn ${ip_name}/tx_${idx}_n
+    }
+
+    for {set j 0} {$j < $num_lanes} {incr j} {
+      set idx [expr $j + $lane_offset]
+      ad_ip_instance jesd204_versal_gt_adapter_tx ${ip_name}/tx_adapt_${idx} [list \
+        LINK_MODE $link_mode \
+      ]
+      ad_connect ${ip_name}/tx_adapt_${idx}/TX_GT_IP_Interface ${ip_name}/${xcvr}/INTF${intf}_TX${j}_GT_IP_Interface
+
+      create_bd_intf_pin -mode Slave -vlnv xilinx.com:display_jesd204:jesd204_tx_bus_rtl:1.0 ${ip_name}/tx${idx}
+      ad_connect ${ip_name}/tx${idx} ${ip_name}/tx_adapt_${idx}/TX
+      ad_connect ${ip_name}/tx_adapt_${idx}/usr_clk ${usrclk}
+
+      set quad_idx [expr $j / 4]
+      set lane_idx [expr $j % 4]
+      ad_connect ${ip_name}/${xcvr}/QUAD${quad_idx}_TX${lane_idx}_usrclk ${usrclk}
+    }
+  }
+}
+
+# Utility function to connect the lcpll resets of the transceiver subsystem
+# Parameter description:
+#   ip_name : The name of the created ip
+#   xcvr : The name of the transceiver instance inside the ip
+#   num_quads : Number of quads (number of lanes / 4)
+#   reset_pin : The reset_pin signal to use for the lcpll reset
+proc xcvr_connect_lcpll_resets {ip_name xcvr num_quads reset_pin} {
+  ad_ip_instance ilconcat ${ip_name}/${xcvr}_lcplllock_concat
+  ad_ip_parameter ${ip_name}/${xcvr}_lcplllock_concat CONFIG.NUM_PORTS [expr 2 * $num_quads]
+
+  for {set i 0} {$i < $num_quads} {incr i} {
+    ad_connect $reset_pin ${ip_name}/${xcvr}/QUAD${i}_hsclk0_lcpllreset
+    ad_connect $reset_pin ${ip_name}/${xcvr}/QUAD${i}_hsclk1_lcpllreset
+
+    ad_connect ${ip_name}/${xcvr}/QUAD${i}_hsclk0_lcplllock ${ip_name}/${xcvr}_lcplllock_concat/In[expr 2 * $i]
+    ad_connect ${ip_name}/${xcvr}/QUAD${i}_hsclk1_lcplllock ${ip_name}/${xcvr}_lcplllock_concat/In[expr 2 * $i + 1]
+  }
+
+  ad_ip_instance ilreduced_logic ${ip_name}/${xcvr}_lcplllock_and
+  ad_ip_parameter ${ip_name}/${xcvr}_lcplllock_and CONFIG.C_SIZE [expr 2 * $num_quads]
+  ad_ip_parameter ${ip_name}/${xcvr}_lcplllock_and CONFIG.C_OPERATION {and}
+
+  ad_connect ${ip_name}/${xcvr}_lcplllock_concat/dout ${ip_name}/${xcvr}_lcplllock_and/Op1
+
+  ad_ip_instance ilvector_logic ${ip_name}/${xcvr}_lcplllock_not
+  ad_ip_parameter ${ip_name}/${xcvr}_lcplllock_not CONFIG.C_SIZE {1}
+  ad_ip_parameter ${ip_name}/${xcvr}_lcplllock_not CONFIG.C_OPERATION {not}
+
+  ad_connect ${ip_name}/${xcvr}_lcplllock_not/Op1 ${ip_name}/${xcvr}_lcplllock_and/Res
+
+  for {set i 0} {$i < [expr 4 * $num_quads]} {incr i} {
+    set quad_idx [expr $i / 4]
+    set lane_idx [expr $i % 4]
+    ad_connect ${ip_name}/${xcvr}_lcplllock_not/Res ${ip_name}/${xcvr}/QUAD${quad_idx}_ch${lane_idx}_iloreset
+  }
+}
+
 # Parameter description:
 #   ip_name : The name of the created ip
 #   jesd_mode : Used physical layer encoder mode
@@ -189,6 +290,7 @@ proc create_xcvr_subsystem {
 #       RXTX : Duplex mode
 #       RX   : Rx link only
 #       TX   : Tx link only
+#  consecutive_quad_mode : true to use consecutive quads for RX and TX, false to split RX and TX across different quads
 proc create_versal_jesd_xcvr_subsystem {
   {ip_name versal_phy}
   {jesd_mode 64B66B}
@@ -199,6 +301,7 @@ proc create_versal_jesd_xcvr_subsystem {
   {ref_clock 375}
   {transceiver GTY}
   {intf_cfg RXTX}
+  {consecutive_quad_mode true}
 } {
   set rx_quads                 [expr int(ceil(1.0 * $rx_no_lanes / 4))]
   set tx_quads                 [expr int(ceil(1.0 * $tx_no_lanes / 4))]
@@ -227,11 +330,23 @@ proc create_versal_jesd_xcvr_subsystem {
     create_bd_pin -dir O ${ip_name}/txusrclk_out -type clk
   }
 
-  create_xcvr_subsystem ${ip_name}/xcvr $jesd_mode $rx_no_lanes $tx_no_lanes $rx_lane_rate $tx_lane_rate $ref_clock $transceiver $intf_cfg
+  if {$consecutive_quad_mode} {
+    create_xcvr_subsystem ${ip_name}/xcvr $jesd_mode $rx_no_lanes $tx_no_lanes $rx_lane_rate $tx_lane_rate $ref_clock $transceiver $intf_cfg
+  } else {
+    create_xcvr_subsystem ${ip_name}/xcvr   $jesd_mode [expr $rx_no_lanes / 2] [expr $tx_no_lanes / 2] $rx_lane_rate $tx_lane_rate $ref_clock $transceiver $intf_cfg
+    create_xcvr_subsystem ${ip_name}/xcvr_b $jesd_mode [expr $rx_no_lanes / 2] [expr $tx_no_lanes / 2] $rx_lane_rate $tx_lane_rate $ref_clock $transceiver $intf_cfg
+  }
 
   # Common xcvr connection
-  for {set j 0} {$j < $num_quads} {incr j} {
-    ad_connect ${ip_name}/GT_REFCLK ${ip_name}/xcvr/QUAD${j}_GTREFCLK0
+  if {$consecutive_quad_mode} {
+    for {set j 0} {$j < $num_quads} {incr j} {
+      ad_connect ${ip_name}/GT_REFCLK ${ip_name}/xcvr/QUAD${j}_GTREFCLK0
+    }
+  } else {
+    for {set j 0} {$j < $num_quads / 2} {incr j} {
+      ad_connect ${ip_name}/GT_REFCLK ${ip_name}/xcvr/QUAD${j}_GTREFCLK0
+      ad_connect ${ip_name}/GT_REFCLK ${ip_name}/xcvr_b/QUAD${j}_GTREFCLK0
+    }
   }
 
   if {$intf_cfg != "TX"} {
@@ -240,27 +355,11 @@ proc create_versal_jesd_xcvr_subsystem {
     ad_connect ${ip_name}/xcvr/QUAD0_RX0_outclk          ${ip_name}/bufg_gt_rx/outclk
     ad_connect ${ip_name}/bufg_gt_rx/usrclk              ${ip_name}/rxusrclk_out
 
-    for {set j 0} {$j < $rx_quads} {incr j} {
-      create_bd_pin -dir I -from 3 -to 0 ${ip_name}/rx_${j}_p
-      create_bd_pin -dir I -from 3 -to 0 ${ip_name}/rx_${j}_n
-      ad_connect ${ip_name}/xcvr/QUAD${j}_rxp ${ip_name}/rx_${j}_p
-      ad_connect ${ip_name}/xcvr/QUAD${j}_rxn ${ip_name}/rx_${j}_n
-    }
-
-    for {set j 0} {$j < $rx_no_lanes} {incr j} {
-      ad_ip_instance jesd204_versal_gt_adapter_rx ${ip_name}/rx_adapt_${j} [list \
-        LINK_MODE $link_mode \
-      ]
-      ad_connect ${ip_name}/rx_adapt_${j}/RX_GT_IP_Interface ${ip_name}/xcvr/INTF${rx_intf}_RX${j}_GT_IP_Interface
-
-      create_bd_intf_pin -mode Master -vlnv xilinx.com:display_jesd204:jesd204_rx_bus_rtl:1.0 ${ip_name}/rx${j}
-      ad_connect ${ip_name}/rx${j} ${ip_name}/rx_adapt_${j}/RX
-      ad_connect ${ip_name}/rx_adapt_${j}/usr_clk ${ip_name}/bufg_gt_rx/usrclk
-      ad_connect ${ip_name}/rx_adapt_${j}/en_char_align ${ip_name}/en_char_align
-
-      set quad_idx [expr $j / 4]
-      set lane_idx [expr $j % 4]
-      ad_connect ${ip_name}/xcvr/QUAD${quad_idx}_RX${lane_idx}_usrclk ${ip_name}/bufg_gt_rx/usrclk
+    if {$consecutive_quad_mode} {
+      xcvr_connect_datapath ${ip_name} xcvr $rx_intf $rx_no_lanes $link_mode ${ip_name}/bufg_gt_rx/usrclk RX
+    } else {
+      xcvr_connect_datapath ${ip_name} xcvr   $rx_intf [expr $rx_no_lanes / 2] $link_mode ${ip_name}/bufg_gt_rx/usrclk RX 0
+      xcvr_connect_datapath ${ip_name} xcvr_b $rx_intf [expr $rx_no_lanes / 2] $link_mode ${ip_name}/bufg_gt_rx/usrclk RX 4
     }
   }
 
@@ -270,26 +369,11 @@ proc create_versal_jesd_xcvr_subsystem {
     ad_connect ${ip_name}/xcvr/QUAD0_TX0_outclk          ${ip_name}/bufg_gt_tx/outclk
     ad_connect ${ip_name}/bufg_gt_tx/usrclk              ${ip_name}/txusrclk_out
 
-    for {set j 0} {$j < $tx_quads} {incr j} {
-      create_bd_pin -dir O -from 3 -to 0 ${ip_name}/tx_${j}_p
-      create_bd_pin -dir O -from 3 -to 0 ${ip_name}/tx_${j}_n
-      ad_connect ${ip_name}/xcvr/QUAD${j}_txp ${ip_name}/tx_${j}_p
-      ad_connect ${ip_name}/xcvr/QUAD${j}_txn ${ip_name}/tx_${j}_n
-    }
-
-    for {set j 0} {$j < $tx_no_lanes} {incr j} {
-      ad_ip_instance jesd204_versal_gt_adapter_tx ${ip_name}/tx_adapt_${j} [list \
-        LINK_MODE $link_mode \
-      ]
-      ad_connect ${ip_name}/tx_adapt_${j}/TX_GT_IP_Interface ${ip_name}/xcvr/INTF${tx_intf}_TX${j}_GT_IP_Interface
-
-      create_bd_intf_pin -mode Slave -vlnv xilinx.com:display_jesd204:jesd204_tx_bus_rtl:1.0 ${ip_name}/tx${j}
-      ad_connect ${ip_name}/tx${j} ${ip_name}/tx_adapt_${j}/TX
-      ad_connect ${ip_name}/tx_adapt_${j}/usr_clk ${ip_name}/bufg_gt_tx/usrclk
-
-      set quad_idx [expr $j / 4]
-      set lane_idx [expr $j % 4]
-      ad_connect ${ip_name}/xcvr/QUAD${quad_idx}_TX${lane_idx}_usrclk ${ip_name}/bufg_gt_tx/usrclk
+    if {$consecutive_quad_mode} {
+      xcvr_connect_datapath ${ip_name} xcvr $tx_intf $tx_no_lanes $link_mode ${ip_name}/bufg_gt_tx/usrclk TX
+    } else {
+      xcvr_connect_datapath ${ip_name} xcvr   $tx_intf [expr $tx_no_lanes / 2] $link_mode ${ip_name}/bufg_gt_tx/usrclk TX 0
+      xcvr_connect_datapath ${ip_name} xcvr_b $tx_intf [expr $tx_no_lanes / 2] $link_mode ${ip_name}/bufg_gt_tx/usrclk TX 4
     }
   }
 
@@ -312,6 +396,13 @@ proc create_versal_jesd_xcvr_subsystem {
     ad_connect ${ip_name}/gtreset_in ${ip_name}/xcvr/INTF${tx_intf}_rst_all_in
   }
 
+  if {!$consecutive_quad_mode} {
+    ad_connect ${ip_name}/gtreset_in ${ip_name}/xcvr_b/INTF${rx_intf}_rst_all_in
+    if {$rx_intf != $tx_intf} {
+      ad_connect ${ip_name}/gtreset_in ${ip_name}/xcvr_b/INTF${tx_intf}_rst_all_in
+    }
+  }
+
   foreach port {pll_and_datapath datapath} {
     foreach rx_tx {rx tx} {
       if {($rx_tx == "rx" && $intf_cfg == "TX") || ($rx_tx == "tx" && $intf_cfg == "RX")} {
@@ -319,56 +410,90 @@ proc create_versal_jesd_xcvr_subsystem {
       }
       set intf [expr {$rx_tx == "rx" ? $rx_intf : $tx_intf}]
       ad_connect ${ip_name}/gtreset_${rx_tx}_${port} ${ip_name}/xcvr/INTF${intf}_rst_${rx_tx}_${port}_in
+      if {!$consecutive_quad_mode} {
+        ad_connect ${ip_name}/gtreset_${rx_tx}_${port} ${ip_name}/xcvr_b/INTF${intf}_rst_${rx_tx}_${port}_in
+      }
     }
   }
 
-  ad_ip_instance ilconcat ${ip_name}/lcplllock_concat
-  ad_ip_parameter ${ip_name}/lcplllock_concat CONFIG.NUM_PORTS [expr 2 * $num_quads]
+  set reset_pin [expr {$intf_cfg != "RX" ? "${ip_name}/gtreset_tx_pll_and_datapath"
+                                         : "${ip_name}/gtreset_rx_pll_and_datapath"}]
 
-  for {set i 0} {$i < $num_quads} {incr i} {
-    if {$intf_cfg != "RX"} {
-      ad_connect ${ip_name}/gtreset_tx_pll_and_datapath ${ip_name}/xcvr/QUAD${i}_hsclk0_lcpllreset
-      ad_connect ${ip_name}/gtreset_tx_pll_and_datapath ${ip_name}/xcvr/QUAD${i}_hsclk1_lcpllreset
-    } else {
-      ad_connect ${ip_name}/gtreset_rx_pll_and_datapath ${ip_name}/xcvr/QUAD${i}_hsclk0_lcpllreset
-      ad_connect ${ip_name}/gtreset_rx_pll_and_datapath ${ip_name}/xcvr/QUAD${i}_hsclk1_lcpllreset
-    }
-    ad_connect ${ip_name}/xcvr/QUAD${i}_hsclk0_lcplllock ${ip_name}/lcplllock_concat/In[expr 2 * $i]
-    ad_connect ${ip_name}/xcvr/QUAD${i}_hsclk1_lcplllock ${ip_name}/lcplllock_concat/In[expr 2 * $i + 1]
+  if {$consecutive_quad_mode} {
+    xcvr_connect_lcpll_resets ${ip_name} xcvr $num_quads $reset_pin
+  } else {
+    xcvr_connect_lcpll_resets ${ip_name} xcvr   [expr $num_quads / 2] $reset_pin
+    xcvr_connect_lcpll_resets ${ip_name} xcvr_b [expr $num_quads / 2] $reset_pin
   }
 
-  ad_ip_instance ilreduced_logic ${ip_name}/lcplllock_and
-  ad_ip_parameter ${ip_name}/lcplllock_and CONFIG.C_SIZE [expr 2 * $num_quads]
-  ad_ip_parameter ${ip_name}/lcplllock_and CONFIG.C_OPERATION {and}
-
-  ad_connect ${ip_name}/lcplllock_concat/dout ${ip_name}/lcplllock_and/Op1
-
-  ad_ip_instance ilvector_logic ${ip_name}/lcplllock_not
-  ad_ip_parameter ${ip_name}/lcplllock_not CONFIG.C_SIZE {1}
-  ad_ip_parameter ${ip_name}/lcplllock_not CONFIG.C_OPERATION {not}
-
-  ad_connect ${ip_name}/lcplllock_not/Op1 ${ip_name}/lcplllock_and/Res
-
-  for {set i 0} {$i < [expr 4 * $num_quads]} {incr i} {
-    set quad_idx [expr $i / 4]
-    set lane_idx [expr $i % 4]
-    ad_connect ${ip_name}/lcplllock_not/Res ${ip_name}/xcvr/QUAD${quad_idx}_ch${lane_idx}_iloreset
+  ad_ip_instance ilconcat ${ip_name}/gtpowergood_concat
+  ad_ip_parameter ${ip_name}/gtpowergood_concat CONFIG.NUM_PORTS {2}
+  ad_connect ${ip_name}/xcvr/gtpowergood ${ip_name}/gtpowergood_concat/In0
+  if {!$consecutive_quad_mode} {
+    ad_connect ${ip_name}/xcvr_b/gtpowergood ${ip_name}/gtpowergood_concat/In1
+  } else {
+    ad_connect ${ip_name}/xcvr/gtpowergood ${ip_name}/gtpowergood_concat/In1
   }
 
-  ad_connect ${ip_name}/xcvr/gtpowergood ${ip_name}/gtpowergood
+  ad_ip_instance ilreduced_logic ${ip_name}/gtpowergood_and
+  ad_ip_parameter ${ip_name}/gtpowergood_and CONFIG.C_SIZE {2}
+  ad_ip_parameter ${ip_name}/gtpowergood_and CONFIG.C_OPERATION {and}
+  ad_connect ${ip_name}/gtpowergood_concat/dout ${ip_name}/gtpowergood_and/Op1
+  ad_connect ${ip_name}/gtpowergood_and/Res ${ip_name}/gtpowergood
+
   if {$intf_cfg != "TX"} {
-    ad_connect ${ip_name}/xcvr/INTF${rx_intf}_rst_rx_done_out ${ip_name}/rx_resetdone
+    ad_ip_instance ilconcat ${ip_name}/rx_resetdone_concat
+    ad_ip_parameter ${ip_name}/rx_resetdone_concat CONFIG.NUM_PORTS {2}
+    ad_connect ${ip_name}/xcvr/INTF${rx_intf}_rst_rx_done_out ${ip_name}/rx_resetdone_concat/In0
+    if {!$consecutive_quad_mode} {
+      ad_connect ${ip_name}/xcvr_b/INTF${rx_intf}_rst_rx_done_out ${ip_name}/rx_resetdone_concat/In1
+    } else {
+      ad_connect ${ip_name}/xcvr/INTF${rx_intf}_rst_rx_done_out ${ip_name}/rx_resetdone_concat/In1
+    }
+
+    ad_ip_instance ilreduced_logic ${ip_name}/rx_resetdone_and
+    ad_ip_parameter ${ip_name}/rx_resetdone_and CONFIG.C_SIZE {2}
+    ad_ip_parameter ${ip_name}/rx_resetdone_and CONFIG.C_OPERATION {and}
+    ad_connect ${ip_name}/rx_resetdone_concat/dout ${ip_name}/rx_resetdone_and/Op1
+    ad_connect ${ip_name}/rx_resetdone_and/Res ${ip_name}/rx_resetdone
   }
   if {$intf_cfg != "RX"} {
-    ad_connect ${ip_name}/xcvr/INTF${tx_intf}_rst_tx_done_out ${ip_name}/tx_resetdone
+    ad_ip_instance ilconcat ${ip_name}/tx_resetdone_concat
+    ad_ip_parameter ${ip_name}/tx_resetdone_concat CONFIG.NUM_PORTS {2}
+    ad_connect ${ip_name}/xcvr/INTF${tx_intf}_rst_tx_done_out ${ip_name}/tx_resetdone_concat/In0
+    if {!$consecutive_quad_mode} {
+      ad_connect ${ip_name}/xcvr_b/INTF${tx_intf}_rst_tx_done_out ${ip_name}/tx_resetdone_concat/In1
+    } else {
+      ad_connect ${ip_name}/xcvr/INTF${tx_intf}_rst_tx_done_out ${ip_name}/tx_resetdone_concat/In1
+    }
+
+    ad_ip_instance ilreduced_logic ${ip_name}/tx_resetdone_and
+    ad_ip_parameter ${ip_name}/tx_resetdone_and CONFIG.C_SIZE {2}
+    ad_ip_parameter ${ip_name}/tx_resetdone_and CONFIG.C_OPERATION {and}
+    ad_connect ${ip_name}/tx_resetdone_concat/dout ${ip_name}/tx_resetdone_and/Op1
+    ad_connect ${ip_name}/tx_resetdone_and/Res ${ip_name}/tx_resetdone
   }
 
   # AXI interface
   ad_connect ${ip_name}/s_axi_clk ${ip_name}/xcvr/gtwiz_freerun_clk
+  if {!$consecutive_quad_mode} {
+    ad_connect ${ip_name}/s_axi_clk ${ip_name}/xcvr_b/gtwiz_freerun_clk
+  }
   for {set j 0} {$j < $num_quads} {incr j} {
-    ad_connect ${ip_name}/s_axi_resetn ${ip_name}/xcvr/QUAD${j}_s_axi_lite_resetn
+    if {!$consecutive_quad_mode} {
+      set quad_idx [expr $j / 2]
+      if {$j < $num_quads / 2} {
+        set xcvr_name xcvr
+      } else {
+        set xcvr_name xcvr_b
+      }
+    } else {
+      set quad_idx $j
+      set xcvr_name xcvr
+    }
+    ad_connect ${ip_name}/s_axi_resetn ${ip_name}/${xcvr_name}/QUAD${quad_idx}_s_axi_lite_resetn
 
     create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 ${ip_name}/s_axi_${j}
-    ad_connect ${ip_name}/s_axi_${j} ${ip_name}/xcvr/Quad${j}_AXI_LITE
+    ad_connect ${ip_name}/s_axi_${j} ${ip_name}/${xcvr_name}/Quad${quad_idx}_AXI_LITE
   }
 }
