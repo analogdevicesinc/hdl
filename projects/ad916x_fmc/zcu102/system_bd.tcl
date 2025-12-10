@@ -3,11 +3,12 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set dac_fifo_address_width 13
+## Offload attributes
+set dac_offload_type 0   ; ## BRAM
+set dac_offload_size [expr $ad_project_params(NUM_LINKS)*$ad_project_params(JESD_L)*64*1024]
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
 source $ad_hdl_dir/projects/dac_fmc_ebz/common/dac_fmc_ebz_bd.tcl
 
@@ -86,6 +87,7 @@ LINKS=$ad_project_params(NUM_LINKS)\
 DAC_DEVICE=$ADI_DAC_DEVICE\
 DAC_MODE=$ADI_DAC_MODE\
 ADI_LANE_RATE=$ADI_LANE_RATE\
-DAC_FIFO_ADDR_WIDTH=$dac_fifo_address_width"
+DAC_OFFLOAD:TYPE=$dac_offload_type\
+SIZE=$dac_offload_size"
 
 sysid_gen_sys_init_file $sys_cstring
