@@ -128,12 +128,6 @@ make CLK_MODE=1 NUM_OF_CHANNEL=1 LANES_PER_CHANNEL=4 CAPTURE_ZONE=2 DDR_EN=1
 ```
 
 #### 2-Channel options
-#### Clock mode SPI, 2 channels, MISO lane 1, interleaved mode (1 MISO shared by both channels), Capture zone 2, SDR
-
-```
-make CLK_MODE=0 NUM_OF_CHANNEL=2 LANES_PER_CHANNEL=1 INTERLEAVE_MODE=1 CAPTURE_ZONE=2 DDR_EN=0
-```
-
 #### Clock mode SPI, 2 channels, MISO lanes 2 (1 per channel), Capture zone 2, SDR
 
 ```
@@ -152,12 +146,6 @@ make CLK_MODE=0 NUM_OF_CHANNEL=2 LANES_PER_CHANNEL=2 CAPTURE_ZONE=2 DDR_EN=0
 make CLK_MODE=0 NUM_OF_CHANNEL=2 LANES_PER_CHANNEL=4 CAPTURE_ZONE=2 DDR_EN=0
 ```
 
-#### Clock mode Echo, 2 channels, MISO lane 1, interleaved mode (1 MISO shared by both channels), Capture zone 2, SDR
-
-```
-make CLK_MODE=1 NUM_OF_CHANNEL=2 LANES_PER_CHANNEL=1 INTERLEAVE_MODE=1 CAPTURE_ZONE=2 DDR_EN=0
-```
-
 #### Clock mode Echo, 2 channels, MISO lanes 2 (1 per channel), Capture zone 2, SDR
 
 ```
@@ -174,12 +162,6 @@ make CLK_MODE=1 NUM_OF_CHANNEL=2 LANES_PER_CHANNEL=2 CAPTURE_ZONE=2 DDR_EN=0
 
 ```
 make CLK_MODE=1 NUM_OF_CHANNEL=2 LANES_PER_CHANNEL=4 CAPTURE_ZONE=2 DDR_EN=0
-```
-
-#### Clock mode Echo, 2 channels, MISO lane 1, interleaved mode (1 MISO shared by both channels), Capture zone 2, DDR
-
-```
-make CLK_MODE=1 NUM_OF_CHANNEL=2 LANES_PER_CHANNEL=1 INTERLEAVE_MODE=1 CAPTURE_ZONE=2 DDR_EN=1
 ```
 
 #### Clock mode Echo, 2 channels, MISO lanes 2 (1 per channel), Capture zone 2, DDR
