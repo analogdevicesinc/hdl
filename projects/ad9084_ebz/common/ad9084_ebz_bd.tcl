@@ -639,7 +639,7 @@ if {$FSRC_ENABLE} {
   ad_ip_instance axi_fsrc_sequencer fsrc_ctrl
   ad_ip_parameter fsrc_ctrl CONFIG.CTRL_WIDTH 40
   ad_ip_parameter fsrc_ctrl CONFIG.COUNTER_WIDTH 16
-  ad_ip_parameter fsrc_ctrl CONFIG.NUM_TRIG 1
+  ad_ip_parameter fsrc_ctrl CONFIG.NUM_TRIG 4
 
   ad_connect tx_device_clk fsrc_ctrl/clk
   ad_connect fsrc_sysref   fsrc_ctrl/sysref
