@@ -544,9 +544,9 @@ namespace eval ipl {
         if {$dpath == ""} {
             if {[info exists ::env(LATTICE_DEFAULT_PATHS)] && \
                 $::env(LATTICE_DEFAULT_PATHS) == 1} {
-                set dpaths [list ./ $ipl::PropelIPLocal_path/interfaces]
+                set dpaths [list ./ltt $ipl::PropelIPLocal_path/interfaces]
             } else {
-                set dpaths ./
+                set dpaths ./ltt
             }
             foreach dp $dpaths {
                 generate_interface_on_path $if $dp
