@@ -53,8 +53,8 @@ Block design
 -------------------------------------------------------------------------------
 
 The difference between the KCU105/VCU118/ZC706 designs and the ZCU102 one, is
-the use of :git-hdl:`AXI_ADCFIFO <library/xilinx/axi_adcfifo>`:
-in the Zynq UltraScale-based designs, it is not instantiated.
+the use of RX :git-hdl:`DATA_OFFLOAD <library/data_offload>`: in the Zynq
+UltraScale-based designs, it is not instantiated.
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,10 +92,6 @@ parameters:
         - IP name
         - Documentation
         - Additional info
-      * - AXI_ADCFIFO
-        - :git-hdl:`axi_adcfifo <library/xilinx/axi_adcfifo>`
-        - ---
-        - ---
       * - AXI_ADXCVR
         - :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
         - :ref:`axi_adxcvr`
@@ -103,6 +99,10 @@ parameters:
       * - AXI_DMAC
         - :git-hdl:`axi_dmac <library/axi_dmac>`
         - :ref:`axi_dmac`
+        - 2 instances, one for RX and one for TX
+      * - DATA_OFFLOAD
+        - :git-hdl:`data_offload <library/data_offload>`
+        - :ref:`data_offload`
         - 2 instances, one for RX and one for TX
       * - RX JESD LINK
         - axi_mxfe_rx_jesd
@@ -127,10 +127,6 @@ parameters:
       * - UTIL_CPACK
         - :git-hdl:`axi_ad9680_cpack <library/util_pack/util_cpack2>`
         - :ref:`util_cpack2`
-        - ---
-      * - UTIL_DACFIFO
-        - :git-hdl:`util_dacfifo <library/util_dacfifo>`
-        - ---
         - ---
       * - UTIL_UPACK
         - :git-hdl:`axi_ad9152_upack <library/util_pack/util_upack2>`
@@ -178,6 +174,10 @@ parameters:
         - :git-hdl:`axi_dmac <library/axi_dmac>`
         - :ref:`axi_dmac`
         - 2 instances, one for RX and one for TX
+      * - DATA_OFFLOAD
+        - :git-hdl:`data_offload <library/data_offload>`
+        - :ref:`data_offload`
+        - 1 instance for TX
       * - RX JESD LINK
         - axi_mxfe_rx_jesd
         - :ref:`axi_jesd204_rx`
@@ -201,10 +201,6 @@ parameters:
       * - UTIL_CPACK
         - :git-hdl:`axi_ad9680_cpack <library/util_pack/util_cpack2>`
         - :ref:`util_cpack2`
-        - ---
-      * - UTIL_DACFIFO
-        - :git-hdl:`util_dacfifo <library/util_dacfifo>`
-        - ---
         - ---
       * - UTIL_UPACK
         - :git-hdl:`axi_ad9152_upack <library/util_pack/util_upack2>`
@@ -282,10 +278,12 @@ axi_ad9152_tpl_core  0x44A0_4000     0x84A0_4000
 axi_ad9152_xcvr      0x44A6_0000     0x84A6_0000
 axi_ad9152_jesd      0x44A9_0000     0x84A9_0000
 axi_ad9152_dma       0x7C42_0000     0x9C42_0000
+ad9152_data_offload  0x7C43_0000     0x9C43_0000
 axi_ad9680_tpl_core  0x44A1_0000     0x84A1_0000
 axi_ad9680_xcvr      0x44A5_0000     0x84A5_0000
 axi_ad9680_jesd      0x44AA_0000     0x84AA_0000
 axi_ad9680_dma       0x7C40_0000     0x9C40_0000
+ad9680_data_offload  0x7C41_0000     ---
 ==================== =============== ===========
 
 SPI connections
@@ -510,15 +508,15 @@ HDL related
    * - UTIL_UPACK2
      - :git-hdl:`library/util_pack/util_upack2`
      - :ref:`util_upack2`
-   * - AXI_ADCFIFO *
-     - :git-hdl:`library/xilinx/axi_adcfifo`
-     - ---
-   * - UTIL_ADCFIFO **
-     - :git-hdl:`library/util_adcfifo`
-     - ---
-   * - UTIL_DACFIFO
-     - :git-hdl:`library/util_dacfifo`
-     - ---
+   * - DATA_OFFLOAD
+     - :git-hdl:`library/data_offload`
+     - :ref:`data_offload`
+   * - UTIL_DO_RAM
+     - :git-hdl:`library/util_do_ram`
+     - :ref:`data_offload`
+   * - UTIL_HBM
+     - :git-hdl:`library/util_hbm`
+     - :ref:`data_offload`
    * - AXI_ADXCVR for AMD
      - :git-hdl:`library/xilinx/axi_adxcvr`
      - :ref:`axi_adxcvr amd`
