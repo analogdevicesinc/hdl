@@ -36,6 +36,8 @@ CLEAN_TARGETS += analog.com/ADI/spi_engine_offload_ctrl
 CLEAN_TARGETS += analog.com/ADI/if_framelock
 CLEAN_TARGETS += analog.com/ADI/spi_engine_interconnect_ctrl
 
+LTT_INTERFACES := $(foreach dep,$(LTT_INTERFACES),ltt/$(dep))
+
 ifeq ($(LATTICE_DEFAULT_PATHS),1)
 LTT_INTERFACES := $(LTT_INTERFACES) $(foreach dep,$(LTT_INTERFACES),$(LATTICE_DEFAULT_INTERFACE_PATH)/$(dep))
 CLEAN_TARGETS := $(CLEAN_TARGETS) $(foreach dep,$(CLEAN_TARGETS),$(LATTICE_DEFAULT_INTERFACE_PATH)/$(dep))
