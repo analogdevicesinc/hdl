@@ -116,15 +116,14 @@ switch $INTF {
     # spi engine
     source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
-    set data_width    32
-    set async_spi_clk 1
-    set offload_en    1
-    set num_cs        1
-    set num_sdi       $NUM_OF_SDI
-    set num_sdo       1
-    set sdi_delay     1
-
-    set hier_spi_engine spi_ad7606
+    set hier_spi_engine  spi_ad7606
+    set data_width       32
+    set async_spi_clk    1
+    set offload_en       1
+    set num_cs           1
+    set num_sdi          $NUM_OF_SDI
+    set num_sdo          1
+    set sdi_delay        1
 
     spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay
 
