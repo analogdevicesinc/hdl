@@ -322,18 +322,18 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
   ]
   set_property used_in_synthesis false [get_files $ad_hdl_dir/library/xilinx/common/cdc_constr.tcl]
 
-  if { [file exists {timing_constr.tcl}] == 1} {
+  if { [file exists {cdc_timing_constr.tcl}] == 1} {
     add_files -fileset constrs_1 -norecurse [list \
-      "timing_constr.tcl" \
+      "cdc_timing_constr.tcl" \
     ]
-    set_property used_in_synthesis false [get_files timing_constr.tcl]
-    set_property processing_order late [get_files timing_constr.tcl]
+    set_property used_in_synthesis false [get_files cdc_timing_constr.tcl]
+    set_property processing_order late [get_files cdc_timing_constr.tcl]
   } else {
     add_files -fileset constrs_1 -norecurse [list \
-      "$ad_hdl_dir/library/xilinx/common/timing_constr.tcl" \
+      "$ad_hdl_dir/library/xilinx/common/cdc_timing_constr.tcl" \
     ]
-    set_property used_in_synthesis false [get_files $ad_hdl_dir/library/xilinx/common/timing_constr.tcl]
-    set_property processing_order late [get_files $ad_hdl_dir/library/xilinx/common/timing_constr.tcl]
+    set_property used_in_synthesis false [get_files $ad_hdl_dir/library/xilinx/common/cdc_timing_constr.tcl]
+    set_property processing_order late [get_files $ad_hdl_dir/library/xilinx/common/cdc_timing_constr.tcl]
   }
 
 }
@@ -343,7 +343,7 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
 # \param[project_name] - name of the project
 # \param[project_files] - list of project files
 #
-proc adi_project_files {project_name project_files} {
+proc adi_project_files {project_name project_files {project_top "system_top"}} {
   global ADI_POST_ROUTE_SCRIPT
 
   foreach pfile $project_files {
@@ -358,8 +358,8 @@ proc adi_project_files {project_name project_files} {
     add_files -fileset utils_1 -norecurse ${ADI_POST_ROUTE_SCRIPT}
   }
 
-  # NOTE: top file name is always system_top
-  set_property top system_top [current_fileset]
+  # NOTE: top file name is in most cases system_top
+  set_property top $project_top [current_fileset]
 }
 
 ## Run an existing project (generate bit stream).

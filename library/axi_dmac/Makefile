@@ -38,7 +38,6 @@ GENERIC_DEPS += src_axi_mm.v
 GENERIC_DEPS += src_axi_stream.v
 GENERIC_DEPS += src_fifo_inf.v
 
-XILINX_DEPS += axi_dmac_constr.xdc
 XILINX_DEPS += axi_dmac_ip.tcl
 XILINX_DEPS += axi_dmac_pkg_sv.ttcl
 XILINX_DEPS += bd/bd.tcl

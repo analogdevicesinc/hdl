@@ -11,7 +11,6 @@ GENERIC_DEPS += phy_mac_link.v
 GENERIC_DEPS += util_mii_to_rmii.v
 
 XILINX_DEPS += util_mii_to_rmii_ip.tcl
-XILINX_DEPS += util_mii_to_rmii_constr.ttcl
 
 XILINX_LIB_DEPS += util_cdc
 

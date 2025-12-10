@@ -10,17 +10,12 @@ adi_ip_create util_do_ram
 adi_ip_files util_do_ram [list \
   "../common/ad_mem_asym.v" \
   "../common/util_pipeline_stage.v" \
-  "util_do_ram_constr.xdc" \
   "util_do_ram_ooc.ttcl" \
   "util_do_ram.v" \
 ]
 
 adi_ip_properties_lite util_do_ram
 adi_ip_ttcl util_do_ram "util_do_ram_ooc.ttcl"
-
-set_property PROCESSING_ORDER LATE [ipx::get_files util_do_ram_constr.xdc \
-  -of_objects [ipx::get_file_groups -of_objects [ipx::current_core] \
-  -filter {NAME =~ *synthesis*}]]
 
 adi_ip_add_core_dependencies { \
   analog.com:user:util_cdc:1.0 \

@@ -60,24 +60,53 @@ module jesd204_up_rx #(
   reg [6:0] up_ctrl_err_statistics_mask = 7'h0;
 
   sync_data #(
-    .NUM_OF_BITS(2+NUM_LANES*(3+2+32+8))
-  ) i_cdc_status (
+    .NUM_OF_BITS(2)
+  ) i_cdc_status_ctrl_state (
     .in_clk(core_clk),
-    .in_data({
-      core_status_err_statistics_cnt,
-      core_status_ctrl_state,
-      core_status_lane_cgs_state,
-      core_status_lane_emb_state,
-      core_status_lane_frame_align_err_cnt
-    }),
+    .in_data(core_status_ctrl_state),
     .out_clk(up_clk),
-    .out_data({
-      up_status_err_statistics_cnt,
-      up_status_ctrl_state,
-      up_status_lane_cgs_state,
-      up_status_lane_emb_state,
-      up_status_lane_frame_align_err_cnt
-    }));
+    .out_data(up_status_ctrl_state));
+
+  genvar i;
+  generate
+
+    for (i = 0; i < NUM_LANES; i = i + 1) begin: cdc_status
+
+      sync_data #(
+        .NUM_OF_BITS(32)
+      ) i_cdc_status_err_statistics_cnt (
+        .in_clk(core_clk),
+        .in_data(core_status_err_statistics_cnt[i*32 +: 32]),
+        .out_clk(up_clk),
+        .out_data(up_status_err_statistics_cnt[i*32 +: 32]));
+
+      sync_data #(
+        .NUM_OF_BITS(2)
+      ) i_cdc_status_lane_cgs_state (
+        .in_clk(core_clk),
+        .in_data(core_status_lane_cgs_state[i*2 +: 2]),
+        .out_clk(up_clk),
+        .out_data(up_status_lane_cgs_state[i*2 +: 2]));
+
+      sync_data #(
+        .NUM_OF_BITS(3)
+      ) i_cdc_status_lane_emb_state (
+        .in_clk(core_clk),
+        .in_data(core_status_lane_emb_state[i*3 +: 3]),
+        .out_clk(up_clk),
+        .out_data(up_status_lane_emb_state[i*3 +: 3]));
+
+      sync_data #(
+        .NUM_OF_BITS(8)
+      ) i_cdc_status_lane_frame_align_err_cnt (
+        .in_clk(core_clk),
+        .in_data(core_status_lane_frame_align_err_cnt[i*8 +: 8]),
+        .out_clk(up_clk),
+        .out_data(up_status_lane_frame_align_err_cnt[i*8 +: 8]));
+
+    end
+
+  endgenerate
 
   sync_data #(
     .NUM_OF_BITS(8)
@@ -166,7 +195,6 @@ module jesd204_up_rx #(
     end
   end
 
-  genvar i;
   generate for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
       jesd204_up_rx_lane #(
         .DATA_PATH_WIDTH(DATA_PATH_WIDTH)

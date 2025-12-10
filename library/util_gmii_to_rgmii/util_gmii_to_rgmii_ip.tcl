@@ -10,7 +10,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create util_gmii_to_rgmii
 adi_ip_files util_gmii_to_rgmii [list \
   "mdc_mdio.v" \
-  "util_gmii_to_rgmii_constr.xdc" \
   "util_gmii_to_rgmii.v" ]
 
 adi_ip_properties_lite util_gmii_to_rgmii

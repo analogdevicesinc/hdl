@@ -70,7 +70,7 @@ if {[get_env_param CORUNDUM 0] == 1} {
     "system_top_corundum.v" \
     "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/boot.xdc" \
     "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
-  ]
+  ] system_top_corundum
 
   add_files -fileset constrs_1 -norecurse [list \
     "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/rb_drp.tcl" \

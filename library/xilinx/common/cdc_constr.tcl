@@ -15,6 +15,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
     current_instance $ip_inst
   }
   foreach sync_bits_inst [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == sync_bits || REF_NAME == sync_bits)}] {
+    # puts "$sync_bits_inst"
     current_instance -quiet
     set input_data_reg_cdc [get_cells -quiet -include_replicated_objects $sync_bits_inst/cdc_sync_stage_reg[0]*]
     # skip if no register is found
@@ -73,6 +74,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
       }
     }
   }
+  # puts "Sync bits done"
 
   # sync data constraints
   if {$ip_inst != ""} {
@@ -80,6 +82,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
     current_instance $ip_inst
   }
   foreach sync_data_inst [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == sync_data || REF_NAME == sync_data)}] {
+    # puts "$sync_data_inst"
     current_instance -quiet
     set input_data_reg_cdc [get_cells -quiet -include_replicated_objects $sync_data_inst/in_toggle_d1_reg]
     # skip if no register is found
@@ -111,6 +114,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
         $min_clk_period
     }
   }
+  # puts "Sync data done"
 
   # sync event constraints
   if {$ip_inst != ""} {
@@ -118,6 +122,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
     current_instance $ip_inst
   }
   foreach sync_event_inst [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == sync_event || REF_NAME == sync_event)}] {
+    # puts "$sync_event_inst"
     current_instance -quiet
     set input_data_reg_cdc [get_cells -quiet -include_replicated_objects $sync_event_inst/in_toggle_d1_reg]
     # skip if no register is found
@@ -149,6 +154,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
         $min_clk_period
     }
   }
+  # puts "Sync event done"
 
   # util rst constraints
   if {$ip_inst != ""} {
@@ -156,6 +162,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
     current_instance $ip_inst
   }
   foreach sync_rst_inst [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == util_rst || REF_NAME == util_rst)}] {
+    # puts "$sync_rst_inst"
     current_instance -quiet
     set input_data_reg_cdc [get_cells -quiet -include_replicated_objects $sync_rst_inst/cdc_async_stage_reg[0]]
     # skip if no register is found
@@ -198,6 +205,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
       }
     }
   }
+  # puts "Util reset done"
 
   # util rst chain constraints
   if {$ip_inst != ""} {
@@ -205,6 +213,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
     current_instance $ip_inst
   }
   foreach sync_rst_inst [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == util_rst_chain || REF_NAME == util_rst_chain)}] {
+    # puts "$sync_rst_inst"
     current_instance -quiet
 
     # constrain the reset signal
@@ -293,31 +302,17 @@ proc constrain_ip_inst {{ip_inst {}}} {
       }
     }
   }
-
-  # # clock div constraints
-  # if {$ip_inst != ""} {
-  #   current_instance -quiet
-  #   current_instance $ip_inst
-  # }
-  # foreach sync_clkdiv [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == util_clkdiv || REF_NAME == util_clkdiv)}] {
-  #   current_instance -quiet
-
-  #   set_clock_groups -physically_exclusive \
-  #     -group [get_clocks clk_div_sel_0_s] \
-  #     -group [get_clocks clk_div_sel_1_s]
-
-  #   set_false_path -to [get_pins -include_replicated_objects $sync_clkdiv/i_div_clk_gbuf/S*]
-  # }
+  # puts "Util reset chain done"
 
   current_instance -quiet
 }
 
 proc constrain_ip {{ip_name {}}} {
   if {$ip_name == ""} {
-    puts "Constraining all IP instances"
+    # puts "Constraining all IP instances"
     constrain_ip_inst
   } else {
-    puts "Look for IP: $ip_name"
+    # puts "Look for IP: $ip_name"
     foreach ip_inst [get_cells -quiet -include_replicated_objects -hier -filter "(ORIG_REF_NAME == $ip_name || REF_NAME == $ip_name)"] {
       puts "Constraining IP instance: $ip_inst"
       constrain_ip_inst $ip_inst
@@ -327,11 +322,11 @@ proc constrain_ip {{ip_name {}}} {
 
 proc constrain_ips {{ip_name_list {}}} {
   if {$ip_name_list == {}} {
-    puts "Constraining all IPs"
+    # puts "Constraining all IPs"
     constrain_ip
   } else {
     foreach ip_name $ip_name_list {
-      puts "Constraining IP type: $ip_name"
+      # puts "Constraining IP type: $ip_name"
       constrain_ip $ip_name
     }
   }

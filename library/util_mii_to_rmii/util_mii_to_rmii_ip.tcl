@@ -13,11 +13,9 @@ adi_ip_files util_mii_to_rmii [list \
   "mac_phy_link.v" \
   "phy_mac_link.v" \
   "util_mii_to_rmii.v" \
-  "util_mii_to_rmii_constr.ttcl" \
 ]
 
 adi_ip_properties_lite util_mii_to_rmii
-adi_ip_ttcl axi_ad7405 "util_mii_to_rmii_constr.ttcl"
 
 adi_ip_add_core_dependencies [list \
 	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \

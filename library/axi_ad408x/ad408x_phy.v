@@ -216,6 +216,26 @@ module ad408x_phy #(
   end
   endgenerate
 
+  sync_bits #(
+    .NUM_OF_BITS(DRP_WIDTH*NUM_LANES),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_adc_dwdata_sync (
+    .out_clk(adc_clk_div),
+    .out_resetn(1'b1),
+    .in_bits(up_adc_dwdata),
+    .out_bits(up_adc_dwdata_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(DRP_WIDTH*NUM_LANES),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_adc_drdata_sync (
+    .out_clk(up_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_adc_drdata_s),
+    .out_bits(up_adc_drdata));
+
   assign serdes_in_p = {data_b_in_p, data_a_in_p};
   assign serdes_in_n = {data_b_in_n, data_a_in_n};
 
@@ -258,8 +278,8 @@ module ad408x_phy #(
     .data_in_n(serdes_in_n),
     .up_clk(up_clk),
     .up_dld(up_adc_dld),
-    .up_dwdata(up_adc_dwdata),
-    .up_drdata(up_adc_drdata),
+    .up_dwdata(up_adc_dwdata_s),
+    .up_drdata(up_adc_drdata_s),
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked));

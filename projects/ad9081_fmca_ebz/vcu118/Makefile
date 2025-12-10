@@ -7,7 +7,6 @@
 PROJECT_NAME := ad9081_fmca_ebz_vcu118
 
 M_DEPS += timing_constr.xdc
-M_DEPS += timing_constr.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/xilinx/data_offload_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl

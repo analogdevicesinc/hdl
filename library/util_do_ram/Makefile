@@ -10,7 +10,6 @@ GENERIC_DEPS += ../common/ad_mem_asym.v
 GENERIC_DEPS += ../common/util_pipeline_stage.v
 GENERIC_DEPS += util_do_ram.v
 
-XILINX_DEPS += util_do_ram_constr.xdc
 XILINX_DEPS += util_do_ram_ip.tcl
 XILINX_DEPS += util_do_ram_ooc.ttcl
 
