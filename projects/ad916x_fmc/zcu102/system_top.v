@@ -69,7 +69,6 @@ module system_top #(
   wire    [ 2:0]  spi1_csn;
   wire            tx_ref_clk;
   wire    [ 1:0]  tx_sync;
-  wire            dac_fifo_bypass;
 
   // spi
 
@@ -113,8 +112,6 @@ module system_top #(
       fmc_txen_0
     }));
 
-  assign dac_fifo_bypass = gpio_o[21];
-
   /* Board GPIOS. Buttons, LEDs, etc... */
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_bd_o = gpio_o[7:0];
@@ -125,7 +122,6 @@ module system_top #(
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
-    .dac_fifo_bypass(dac_fifo_bypass),
     .spi0_csn (spi0_csn),
     .spi0_miso (spi_miso),
     .spi0_mosi (spi_mosi),
