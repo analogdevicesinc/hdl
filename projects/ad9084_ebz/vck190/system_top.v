@@ -444,7 +444,7 @@ module system_top #(
     .adf4030_clk          (rx_device_clk),
     .adf4030_trigger      (aux_gpio),
     .adf4030_sysref       (adf4030_sysref),
-    .adf4030_trig_channel (trig_channel),
+    .adf4030_trig_channel (),
 
     .rx_sync_0 (rx_syncout[0]),
     .tx_sync_0 (tx_syncin[0]),
@@ -456,8 +456,8 @@ module system_top #(
     .tx_sysref_12 (sysref),
 
     .fsrc_sysref (sysref),
-    .fsrc_trig_in (),
-    .fsrc_trig_out (),
+    .fsrc_trig_in (gpio_o[58]),
+    .fsrc_trig_out (trig_channel[3:0]),
     .fsrc_ctrl ());
 
 endmodule
