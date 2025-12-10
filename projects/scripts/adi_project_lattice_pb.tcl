@@ -54,7 +54,8 @@ proc adi_project_pb {project_name args} {
     -language "verilog" \
     -psc "${env(TOOLRTF)}/../../templates/MachXO3D_Template01/MachXO3D_Template01.psc" \
     -cmd_list {{source ./system_pb.tcl}} \
-    -interface_paths "$ad_hdl_dir/library/interfaces_ltt" \
+    -interface_paths "$ad_hdl_dir/library/interfaces_ltt/ltt" \
+    -interface_folder_names {interfaces_ltt} \
     -parameter_list {} \
     -parameter_file_radiant "system_top_parameters.txt" \
     -sim_prj_tcl "./sim.tcl" \
@@ -66,6 +67,7 @@ proc adi_project_pb {project_name args} {
   set cmd_list $opt(-cmd_list)
   set psc $opt(-psc)
   set interface_paths $opt(-interface_paths)
+  set interface_folder_names $opt(-interface_folder_names)
   set parameter_list $opt(-parameter_list)
   set parameter_file_radiant $opt(-parameter_file_radiant)
   set sim_prj_tcl $opt(-sim_prj_tcl)
@@ -101,6 +103,15 @@ proc adi_project_pb {project_name args} {
     set board $opt(-board)
     set speed $opt(-speed)
   }
+
+  set interface_paths [lmap path $interface_paths {file normalize $path}]
+  set interface_paths_found [get_norm_dirs_by_name $ad_hdl_dir/library $interface_folder_names 8]
+  set interface_paths_found [lmap path $interface_paths_found {list "$path/ltt"}]
+
+  set interface_paths [lsort -unique [list {*}$interface_paths {*}$interface_paths_found]]
+
+  puts "Interface paths found: $interface_paths_found"
+  puts "Interface paths used: $interface_paths"
 
   adi_project_create_pb $project_name \
     -ppath $ppath \
@@ -142,7 +153,7 @@ proc adi_project_create_pb {project_name args} {
     -language "verilog" \
     -psc "" \
     -cmd_list "" \
-    -interface_paths "$ad_hdl_dir/library/interfaces_ltt" \
+    -interface_paths "$ad_hdl_dir/library/interfaces_ltt/ltt" \
     -sim_prj_tcl "./sim.tcl" \
     {*}$args]
 
@@ -218,6 +229,8 @@ proc adi_project_create_pb {project_name args} {
         "$env(LATTICE_INTERFACE_SEARCH_PATH);$interface_path"
     }
   }
+
+  puts "LATTICE_INTERFACE_SEARCH_PATH: $env(LATTICE_INTERFACE_SEARCH_PATH)"
 
   foreach cmd $cmd_list {
     puts "Executing cmd: $cmd"
@@ -645,4 +658,30 @@ proc get_lattice_vlnv {xml} {
   } else {
     return {}
   }
+}
+
+###############################################################################
+## Searches for folders from an input folder list within a given path.
+## Uses get_dir_list to search for each folder name up to 8 folder depths in
+## default.
+## Returns a list of unique normalized folder paths.
+##
+# \param search_path - The base path to search in
+# \param folder_list - List of folder names to search for
+# \param depth - Depth of folder search
+##
+# \return List of unique folder paths
+###############################################################################
+proc get_norm_dirs_by_name {search_path {folder_list {interfaces_ltt}} {depth 8}} {
+  set found_folders {}
+
+  foreach folder_name $folder_list {
+    set matching_dirs [get_dir_list $search_path $folder_name $depth]
+    foreach dir $matching_dirs {
+      lappend found_folders [file normalize $dir]
+    }
+  }
+  set found_folders [lsort -unique $found_folders]
+
+  return $found_folders
 }
