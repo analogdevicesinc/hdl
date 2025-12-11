@@ -11,7 +11,7 @@ create_bd_port -dir O ad713x_sdpclk
 # this design supports AD7132/AD7134/AD7136
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
- 
+
 set data_width    32
 set async_spi_clk 1
 set num_cs        1

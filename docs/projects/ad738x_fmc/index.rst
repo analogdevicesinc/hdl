@@ -112,14 +112,14 @@ In case of the **Alert Indication Output Pin** functionality:
 
    $make ALERT_SPI_N=1
 
-The **NUM_OF_SDI** configuration parameter defines the number of SDI lines used:
+The **NUM_OF_SDIO** configuration parameter defines the number of SDI lines used:
 **{1, 2, 4}**. By default is set to 1.
 
 For the **ALERT** functionality, the following parameters will be used in make
 command: ALERT_SPI_N.
 
 For the **serial data output** functionality, the following parameters will be
-used in make command: ALERT_SPI_N, NUM_OF_SDI.
+used in make command: ALERT_SPI_N, NUM_OF_SDIO.
 
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -264,14 +264,14 @@ the HDL repository, and then build the project as follows:
 .. shell::
 
    $cd hdl/projects/ad738x_fmc/zed
-   $make ALERT_SPI_N=0 NUM_OF_SDI=4
+   $make ALERT_SPI_N=0 NUM_OF_SDIO=4
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:
 
 if the following command was run
 
-``make ALERT_SPI_N=0 NUM_OF_SDI=4``
+``make ALERT_SPI_N=0 NUM_OF_SDIO=4``
 
 then the folder name will be:
 

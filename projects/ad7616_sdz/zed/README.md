@@ -19,7 +19,7 @@ The overwritable parameter from the environment:
   - 0 - parallel interface (default)
   - 1 - serial interface
 
-- NUM_OF_SDI - specifies the number of SDI lines used when **serial interface** is set;
+- NUM_OF_SDIO - specifies the number of SDI lines used when **serial interface** is set;
   - 1 - one SDI line
   - 2 - two SDI lines (default)
 
@@ -41,10 +41,10 @@ make INTF=0
 #### Serial interface
 
 ```
-make INTF=1 NUM_OF_SDI=1
+make INTF=1 NUM_OF_SDIO=1
 ```
 ```
-make INTF=1 NUM_OF_SDI=2
+make INTF=1 NUM_OF_SDIO=2
 ```
 
 Corresponding No-OS project for both configurations: [ad7616-sdz](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7616-sdz)
