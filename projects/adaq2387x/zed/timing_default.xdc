@@ -25,5 +25,8 @@ set_input_delay -clock [get_clocks dco] -clock_fall -min -add_delay -$data_delay
 set_input_delay -clock [get_clocks dco] -max  $data_delay [get_ports db_p]
 set_input_delay -clock [get_clocks dco] -min -$data_delay [get_ports db_p]
 
+set_false_path -from [get_ports da_p] -to [get_pins -hier -filter {name=~*i_rx_data_iddr/D}]
+set_false_path -from [get_ports db_p] -to [get_pins -hier -filter {name=~*i_rx_data_iddr/D}]
+
 set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387/inst/i_if/i_rx_db/i_rx_data_idelay]
 set_property IDELAY_VALUE 27 [get_cells i_system_wrapper/system_i/axi_ltc2387/inst/i_if/i_rx_da/i_rx_data_idelay]
