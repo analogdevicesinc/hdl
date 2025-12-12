@@ -9,7 +9,6 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create util_clkdiv
 adi_ip_files util_clkdiv [list \
   "util_clkdiv_ooc.ttcl" \
-  "util_clkdiv_constr.ttcl" \
   "util_clkdiv.v" ]
 
 adi_ip_properties_lite util_clkdiv
@@ -19,7 +18,6 @@ adi_ip_add_core_dependencies [list \
 ]
 
 adi_ip_ttcl util_clkdiv "util_clkdiv_ooc.ttcl"
-adi_ip_ttcl util_clkdiv "util_clkdiv_constr.ttcl"
 
 set_property driver_value 0 [ipx::get_ports clk_sel -of_objects [ipx::current_core]]
 

@@ -153,13 +153,12 @@ module axi_adc_trigger #(
   wire                  trigger_out_s;
   wire                  embedded_trigger;
   wire                  external_trigger;
+  wire                  trigger_a_cdc; // synchronization signal
+  wire                  trigger_b_cdc; // synchronization signal
+  wire                  trigger_in_cdc;
 
-  reg                   trigger_a_d1; // synchronization flip flop
-  reg                   trigger_a_d2; // synchronization flip flop
-  reg                   trigger_a_d3;
-  reg                   trigger_b_d1; // synchronization flip flop
-  reg                   trigger_b_d2; // synchronization flip flop
-  reg                   trigger_b_d3;
+  reg                   trigger_a_d;
+  reg                   trigger_b_d;
   reg                   comp_high_a;  // signal is over the limit
   reg                   old_comp_high_a;   // t + 1 version of comp_high_a
   reg                   hyst_high_limit_pass_a; // valid hysteresis range on passthrough high trigger limit
@@ -215,11 +214,11 @@ module axi_adc_trigger #(
 
   assign trigger_t = io_selection[1:0];
 
-  assign trigger_a_fall_edge = (trigger_a_d2 == 1'b0 && trigger_a_d3 == 1'b1) ? 1'b1: 1'b0;
-  assign trigger_a_rise_edge = (trigger_a_d2 == 1'b1 && trigger_a_d3 == 1'b0) ? 1'b1: 1'b0;
+  assign trigger_a_fall_edge = (trigger_a_cdc == 1'b0 && trigger_a_d == 1'b1) ? 1'b1: 1'b0;
+  assign trigger_a_rise_edge = (trigger_a_cdc == 1'b1 && trigger_a_d == 1'b0) ? 1'b1: 1'b0;
   assign trigger_a_any_edge = trigger_a_rise_edge | trigger_a_fall_edge;
-  assign trigger_b_fall_edge = (trigger_b_d2 == 1'b0 && trigger_b_d3 == 1'b1) ? 1'b1: 1'b0;
-  assign trigger_b_rise_edge = (trigger_b_d2 == 1'b1 && trigger_b_d3 == 1'b0) ? 1'b1: 1'b0;
+  assign trigger_b_fall_edge = (trigger_b_cdc == 1'b0 && trigger_b_d == 1'b1) ? 1'b1: 1'b0;
+  assign trigger_b_rise_edge = (trigger_b_cdc == 1'b1 && trigger_b_d == 1'b0) ? 1'b1: 1'b0;
   assign trigger_b_any_edge = trigger_b_rise_edge | trigger_b_fall_edge;
 
   assign data_a_cmp   = data_a[DW:0];
@@ -227,13 +226,23 @@ module axi_adc_trigger #(
   assign limit_a_cmp  = limit_a[DW:0];
   assign limit_b_cmp  = limit_b[DW:0];
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_trigger_in_sync (
+    .out_clk(clk),
+    .out_resetn(~reset),
+    .in_bits(trigger_in),
+    .out_bits(trigger_in_cdc));
+
   always @(*) begin
     case(io_selection[4:2])
       3'h0: trigger_o_m[0] = trigger_up_o_s[0];
       3'h1: trigger_o_m[0] = trigger_i[0];
       3'h2: trigger_o_m[0] = trigger_i[1];
       3'h3: trigger_o_m[0] = trigger_out_mixed;
-      3'h4: trigger_o_m[0] = trigger_in;
+      3'h4: trigger_o_m[0] = trigger_in_cdc;
       default: trigger_o_m[0] = trigger_up_o_s[0];
     endcase
     case(io_selection[7:5])
@@ -241,7 +250,7 @@ module axi_adc_trigger #(
       3'h1: trigger_o_m[1] = trigger_i[1];
       3'h2: trigger_o_m[1] = trigger_i[0];
       3'h3: trigger_o_m[1] = trigger_out_mixed;
-      3'h4: trigger_o_m[1] = trigger_in;
+      3'h4: trigger_o_m[1] = trigger_in_cdc;
       default: trigger_o_m[1] = trigger_up_o_s[1];
     endcase
   end
@@ -450,26 +459,42 @@ module axi_adc_trigger #(
     endcase
   end
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_trigger_a_sync (
+    .out_clk(clk),
+    .out_resetn(~reset),
+    .in_bits(trigger_i[0]),
+    .out_bits(trigger_a_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_trigger_b_sync (
+    .out_clk(clk),
+    .out_resetn(~reset),
+    .in_bits(trigger_i[0]),
+    .out_bits(trigger_b_cdc));
+
   always @(posedge clk) begin
-    trigger_a_d1 <= trigger_i[0];
-    trigger_a_d2 <= trigger_a_d1;
-    trigger_a_d3 <= trigger_a_d2;
-    trigger_b_d1 <= trigger_i[1];
-    trigger_b_d2 <= trigger_b_d1;
-    trigger_b_d3 <= trigger_b_d2;
+    trigger_a_d <= trigger_a_cdc;
+    trigger_b_d <= trigger_b_cdc;
   end
 
   always @(*) begin
-    trigger_pin_a = ((!trigger_a_d3 & low_level[0]) |
-      (trigger_a_d3 & high_level[0]) |
+    trigger_pin_a = ((!trigger_a_d & low_level[0]) |
+      (trigger_a_d & high_level[0]) |
       (trigger_a_fall_edge & fall_edge[0]) |
       (trigger_a_rise_edge & rise_edge[0]) |
       (trigger_a_any_edge & any_edge[0]));
   end
 
   always @(*) begin
-    trigger_pin_b = ((!trigger_b_d3 & low_level[1]) |
-      (trigger_b_d3 & high_level[1]) |
+    trigger_pin_b = ((!trigger_b_d & low_level[1]) |
+      (trigger_b_d & high_level[1]) |
       (trigger_b_fall_edge & fall_edge[1]) |
       (trigger_b_rise_edge & rise_edge[1]) |
       (trigger_b_any_edge & any_edge[1]));
@@ -482,10 +507,10 @@ module axi_adc_trigger #(
       4'h2: trigger_out_mixed = trigger_a | trigger_b;
       4'h3: trigger_out_mixed = trigger_a & trigger_b;
       4'h4: trigger_out_mixed = trigger_a ^ trigger_b;
-      4'h5: trigger_out_mixed = trigger_in;
-      4'h6: trigger_out_mixed = trigger_a | trigger_in;
-      4'h7: trigger_out_mixed = trigger_b | trigger_in;
-      4'h8: trigger_out_mixed = trigger_a | trigger_b | trigger_in;
+      4'h5: trigger_out_mixed = trigger_in_cdc;
+      4'h6: trigger_out_mixed = trigger_a | trigger_in_cdc;
+      4'h7: trigger_out_mixed = trigger_b | trigger_in_cdc;
+      4'h8: trigger_out_mixed = trigger_a | trigger_b | trigger_in_cdc;
       4'hf: trigger_out_mixed = 1'b0; // trigger disable
       default: trigger_out_mixed = 1'b0;
     endcase

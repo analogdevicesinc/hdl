@@ -12,6 +12,7 @@ XILINX_DEPS += util_adxcvr.v
 XILINX_DEPS += util_adxcvr_ip.tcl
 XILINX_DEPS += util_adxcvr_xch.v
 XILINX_DEPS += util_adxcvr_xcm.v
+XILINX_DEPS += util_adxcvr_constr.xdc
 
 XILINX_DEPS += ../../interfaces/if_xcvr_ch.xml
 XILINX_DEPS += ../../interfaces/if_xcvr_ch_rtl.xml

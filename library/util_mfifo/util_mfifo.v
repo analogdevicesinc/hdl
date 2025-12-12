@@ -73,16 +73,12 @@ module util_mfifo #(
 
   // internal registers
 
-  reg                                 din_dout_toggle_m1 = 'd0;
-  reg                                 din_dout_toggle_m2 = 'd0;
-  reg                                 din_dout_toggle_m3 = 'd0;
+  reg                                 din_dout_toggle_d = 'd0;
   reg                                 din_wr = 'd0;
   reg     [(ADDRESS_WIDTH-1):0]       din_waddr = 'd0;
   reg                                 din_enable = 'd0;
   reg                                 din_toggle = 'd0;
-  reg                                 dout_din_toggle_m1 = 'd0;
-  reg                                 dout_din_toggle_m2 = 'd0;
-  reg                                 dout_din_toggle_m3 = 'd0;
+  reg                                 dout_din_toggle_d = 'd0;
   reg     [ 4:0]                      dout_cnt = 'd0;
   reg                                 dout_ld = 'd0;
   reg                                 dout_ld_d = 'd0;
@@ -103,9 +99,11 @@ module util_mfifo #(
   wire    [(DIN_DATA_WIDTH-1):0]      din_wdata_s[0:7];
   wire                                din_waddr_max_s;
   wire                                din_dout_toggle_s;
+  wire                                din_dout_toggle_cdc;
   wire                                dout_raddr_max_s;
   wire                                dout_rd_s;
   wire                                dout_din_toggle_s;
+  wire                                dout_din_toggle_cdc;
   wire    [(DIN_DATA_WIDTH-1):0]      dout_rdata_s[0:7];
 
   // variables
@@ -123,21 +121,27 @@ module util_mfifo #(
   assign din_wdata_s[1] = din_data_1;
   assign din_wdata_s[0] = din_data_0;
   assign din_waddr_max_s = & din_waddr;
-  assign din_dout_toggle_s = din_dout_toggle_m3 ^ din_dout_toggle_m2;
+  assign din_dout_toggle_s = din_dout_toggle_d ^ din_dout_toggle_cdc;
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_din_dout_toggle_sync (
+    .out_clk(clk),
+    .out_resetn(1'b1),
+    .in_bits(dout_toggle),
+    .out_bits(din_dout_toggle_cdc));
 
   always @(posedge din_clk) begin
     if (din_rst == 1'b1) begin
-      din_dout_toggle_m1 <= 1'd0;
-      din_dout_toggle_m2 <= 1'd0;
-      din_dout_toggle_m3 <= 1'd0;
+      din_dout_toggle_d <= 1'd0;
       din_wr <= 1'd0;
       din_waddr <= 'd0;
       din_enable <= 1'd0;
       din_toggle <= 1'd0;
     end else begin
-      din_dout_toggle_m1 <= dout_toggle;
-      din_dout_toggle_m2 <= din_dout_toggle_m1;
-      din_dout_toggle_m3 <= din_dout_toggle_m2;
+      din_dout_toggle_d <= din_dout_toggle_cdc;
       din_wr <= din_valid & din_enable;
       if (din_dout_toggle_s == 1'b1) begin
         din_waddr <= 'd0;
@@ -158,13 +162,21 @@ module util_mfifo #(
 
   assign dout_raddr_max_s = & dout_raddr;
   assign dout_rd_s = (dout_cnt == 5'd0) ? dout_enable : 1'b0;
-  assign dout_din_toggle_s = dout_din_toggle_m3 ^ dout_din_toggle_m2;
+  assign dout_din_toggle_s = dout_din_toggle_d ^ dout_din_toggle_cdc;
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_dout_din_toggle_sync (
+    .out_clk(clk),
+    .out_resetn(1'b1),
+    .in_bits(din_toggle),
+    .out_bits(dout_din_toggle_cdc));
 
   always @(posedge dout_clk) begin
     if (dout_rst == 1'b1) begin
-      dout_din_toggle_m1 <= 1'd0;
-      dout_din_toggle_m2 <= 1'd0;
-      dout_din_toggle_m3 <= 1'd0;
+      dout_din_toggle_d <= 1'd0;
       dout_cnt <= 'd0;
       dout_ld <= 'd0;
       dout_ld_d <= 'd0;
@@ -172,9 +184,7 @@ module util_mfifo #(
       dout_enable <= 1'd0;
       dout_toggle <= 1'd1;
     end else begin
-      dout_din_toggle_m1 <= din_toggle;
-      dout_din_toggle_m2 <= dout_din_toggle_m1;
-      dout_din_toggle_m3 <= dout_din_toggle_m2;
+      dout_din_toggle_d <= dout_din_toggle_cdc;
       if ((dout_din_toggle_s == 1'b1) || (dout_cnt >= ((DIN_DATA_WIDTH/16) - 1))) begin
         dout_cnt <= 'd0;
       end else begin

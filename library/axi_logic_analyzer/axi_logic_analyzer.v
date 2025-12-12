@@ -108,11 +108,7 @@ module axi_logic_analyzer (
 
   reg               streaming_on;
 
-  reg    [ 1:0]     trigger_i_m1 = 2'd0;
-  reg    [ 1:0]     trigger_i_m2 = 2'd0;
-  reg    [ 1:0]     trigger_i_m3 = 2'd0;
-  reg               trigger_adc_m1 = 1'd0;
-  reg               trigger_adc_m2 = 1'd0;
+  reg    [ 1:0]     trigger_i_d = 2'd0;
   reg               trigger_la_m2 = 1'd0;
   reg               pg_trigered = 1'd0;
 
@@ -142,6 +138,13 @@ module axi_logic_analyzer (
   wire    [ 4:0]    up_raddr;
 
   wire              reset;
+  wire              resetn;
+
+  wire    [15:0]    data_i_cdc;
+  wire              external_valid_cdc;
+
+  wire    [ 2:0]    external_rate_cdc;
+  wire              external_decimation_en_cdc;
 
   wire    [31:0]    divider_counter_la;
   wire    [31:0]    divider_counter_pg;
@@ -162,6 +165,8 @@ module axi_logic_analyzer (
   wire              trigger_out_s;
   wire    [31:0]    trigger_delay;
   wire              trigger_out_delayed;
+  wire   [ 1:0]     trigger_i_cdc;
+  wire              trigger_adc_s;
 
   wire    [19:0]    pg_trigger_config;
 
@@ -227,7 +232,7 @@ module axi_logic_analyzer (
     .SYNC_STAGES(2)
   ) i_up_triggered_reset_sync (
     .out_clk(clk_out),
-    .out_resetn(1'b1),
+    .out_resetn(resetn),
     .in_bits(up_triggered),
     .out_bits(up_triggered_reset));
 
@@ -285,14 +290,24 @@ module axi_logic_analyzer (
   // - synchronization
   // - compensate for m2k adc path delay
 
-  // 17 clock cycles delay
+  sync_bits #(
+    .NUM_OF_BITS(16),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_data_i_sync (
+    .out_clk(clk_out),
+    .out_resetn(resetn),
+    .in_bits(data_i),
+    .out_bits(data_i_cdc));
+
+  // 17 clock cycles delay + 2 from sync
   generate
   for (i = 0 ; i < 16; i = i + 1) begin
     always @(posedge clk_out) begin
       if (reset == 1'b1) begin
         data_fixed_delay[i] <= 'd0;
       end else begin
-        data_fixed_delay[i] <= {data_fixed_delay[i][15:0], data_i[i]};
+        data_fixed_delay[i] <= {data_fixed_delay[i][15:0], data_i_cdc[i]};
       end
     end
   end
@@ -308,9 +323,19 @@ module axi_logic_analyzer (
   end
   endgenerate
 
+  sync_bits #(
+    .NUM_OF_BITS(3),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_external_rate_sync (
+    .out_clk(clk_out),
+    .out_resetn(resetn),
+    .in_bits(external_rate),
+    .out_bits(external_rate_cdc));
+
   // adc path 'rate delay' given by axi_adc_decimate
   always @(posedge clk_out) begin
-    case (external_rate)
+    case (external_rate_cdc)
       3'd0:    adc_data_delay <= 4'd1; // 100MSPS
       3'd1:    adc_data_delay <= 4'd3; // 10MSPS
       default: adc_data_delay <= 4'd1; // <= 1MSPS
@@ -320,10 +345,20 @@ module axi_logic_analyzer (
   assign up_data_delay = data_delay_control[3:0];
   assign rate_gen_select = data_delay_control[8];
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_external_decimation_en_sync (
+    .out_clk(clk_out),
+    .out_resetn(resetn),
+    .in_bits(external_decimation_en),
+    .out_bits(external_decimation_en_cdc));
+
   // select if the delay taps number is chosen by the user or automatically
   assign master_delay_ctrl = data_delay_control[9];
   assign in_data_delay = master_delay_ctrl ? up_data_delay :
-                         external_decimation_en ? 4'd0 : adc_data_delay;
+                         external_decimation_en_cdc ? 4'd0 : adc_data_delay;
 
   always @(posedge clk_out) begin
     if (sample_valid_la == 1'b1) begin
@@ -339,6 +374,16 @@ module axi_logic_analyzer (
 
   // downsampler logic analyzer
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_external_valid_sync (
+    .out_clk(clk_out),
+    .out_resetn(resetn),
+    .in_bits(external_valid),
+    .out_bits(external_valid_cdc));
+
   always @(posedge clk_out) begin
     if (reset == 1'b1) begin
       sample_valid_la <= 1'b0;
@@ -346,7 +391,7 @@ module axi_logic_analyzer (
     end else begin
       if (rate_gen_select) begin
         downsampler_counter_la <= 32'h0;
-        sample_valid_la <= external_valid;
+        sample_valid_la <= external_valid_cdc;
       end else if (downsampler_counter_la < divider_counter_la ) begin
         downsampler_counter_la <= downsampler_counter_la + 1;
         sample_valid_la <= 1'b0;
@@ -371,7 +416,7 @@ module axi_logic_analyzer (
 
   assign trigger_active = |pg_trigger_config[19:16];
   assign trigger = (ext_trigger & pg_en_trigger_pins) |
-                   (trigger_adc_m2 & pg_en_trigger_adc) |
+                   (trigger_adc_s & pg_en_trigger_adc) |
                    (trigger_out_s & pg_en_trigger_la);
 
   assign ext_trigger = |(any_edge_trigger |
@@ -380,22 +425,37 @@ module axi_logic_analyzer (
                         high_level_trigger |
                         low_level_trigger);
 
-  // sync
-  always @(posedge clk) begin
-    trigger_i_m1 <= trigger_i;
-    trigger_i_m2 <= trigger_i_m1;
-    trigger_i_m3 <= trigger_i_m2;
+  sync_bits #(
+    .NUM_OF_BITS(2),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_trigger_i_sync (
+    .out_clk(clk_out),
+    .out_resetn(resetn),
+    .in_bits(trigger_i),
+    .out_bits(trigger_i_cdc));
 
-    trigger_adc_m1 <= trigger_in;
-    trigger_adc_m2 <= trigger_adc_m1;
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_trigger_in_sync (
+    .out_clk(clk_out),
+    .out_resetn(resetn),
+    .in_bits(trigger_in),
+    .out_bits(trigger_adc_s));
+
+  // sync
+  always @(posedge clk_out) begin
+    trigger_i_d <= trigger_i_cdc;
   end
 
-  always @(posedge clk) begin
-    any_edge_trigger <= (trigger_i_m3 ^ trigger_i_m2) & pg_any_edge;
-    rise_edge_trigger <= (~trigger_i_m3 & trigger_i_m2) & pg_rise_edge;
-    fall_edge_trigger <= (trigger_i_m3 & ~trigger_i_m2) & pg_fall_edge;
-    high_level_trigger <= trigger_i_m3 & pg_high_level;
-    low_level_trigger <= ~trigger_i_m3 & pg_low_level;
+  always @(posedge clk_out) begin
+    any_edge_trigger <= (trigger_i_d ^ trigger_i_cdc) & pg_any_edge;
+    rise_edge_trigger <= (~trigger_i_d & trigger_i_cdc) & pg_rise_edge;
+    fall_edge_trigger <= (trigger_i_d & ~trigger_i_cdc) & pg_fall_edge;
+    high_level_trigger <= trigger_i_d & pg_high_level;
+    low_level_trigger <= ~trigger_i_d & pg_low_level;
   end
 
   // upsampler pattern generator
@@ -441,7 +501,7 @@ module axi_logic_analyzer (
   assign trigger_out_holdoff = (trigger_holdoff_counter != 0) ? 0 : trigger_out_s;
   assign holdoff_cnt_en = |trigger_holdoff;
 
-  always @(posedge clk) begin
+  always @(posedge clk_out) begin
     if (reset == 1'b1) begin
       trigger_holdoff_counter <= 0;
     end else begin
@@ -476,6 +536,7 @@ module axi_logic_analyzer (
   axi_logic_analyzer_reg i_registers (
     .clk (clk_out),
     .reset (reset),
+    .resetn (resetn),
 
     .divider_counter_la (divider_counter_la),
     .divider_counter_pg (divider_counter_pg),

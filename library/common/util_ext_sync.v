@@ -48,26 +48,53 @@ module util_ext_sync #(
   output reg sync_armed = 1'b0
 );
 
-  reg sync_in_d1 = 1'b0;
-  reg sync_in_d2 = 1'b0;
-  reg ext_sync_arm_d1 = 1'b0;
-  reg ext_sync_disarm_d1 = 1'b0;
+  reg  sync_in_d = 1'b0;
+
+  wire sync_in_cdc;
+  wire ext_sync_arm_cdc;
+  wire ext_sync_disarm_cdc;
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ext_sync_arm_sync (
+    .out_clk(clk_out),
+    .out_resetn(resetn),
+    .in_bits(ext_sync_arm),
+    .out_bits(ext_sync_arm_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_ext_sync_disarm_sync (
+    .out_clk(clk_out),
+    .out_resetn(resetn),
+    .in_bits(ext_sync_disarm),
+    .out_bits(ext_sync_disarm_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_sync_in_sync (
+    .out_clk(clk_out),
+    .out_resetn(resetn),
+    .in_bits(sync_in),
+    .out_bits(sync_in_cdc));
 
   // External sync
   always @(posedge clk) begin
-    ext_sync_arm_d1 <= ext_sync_arm;
-    ext_sync_disarm_d1 <= ext_sync_disarm;
-
-    sync_in_d1 <= sync_in ;
-    sync_in_d2 <= sync_in_d1;
+    sync_in_d <= sync_in_cdc;
 
     if (ENABLED == 1'b0) begin
       sync_armed <= 1'b0;
-    end else if (~ext_sync_disarm_d1 & ext_sync_disarm) begin
+    end else if (~ext_sync_disarm_cdc & ext_sync_disarm) begin
       sync_armed <= 1'b0;
-    end else if (~ext_sync_arm_d1 & ext_sync_arm) begin
+    end else if (~ext_sync_arm_cdc & ext_sync_arm) begin
       sync_armed <= 1'b1;
-    end else if (~sync_in_d2 & sync_in_d1) begin
+    end else if (~sync_in_d & sync_in_cdc) begin
       sync_armed <= 1'b0;
     end
   end

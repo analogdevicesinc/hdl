@@ -39,6 +39,7 @@ module axi_logic_analyzer_reg (
 
   input               clk,
   output              reset,
+  output              resetn,
 
   output      [31:0]  divider_counter_la,
   output      [31:0]  divider_counter_pg,
@@ -248,7 +249,7 @@ module axi_logic_analyzer_reg (
   ) i_core_rst_reg (
     .rst_async(~up_rstn),
     .clk(clk),
-    .rstn(),
+    .rstn(resetn),
     .rst(reset));
 
   up_xfer_cntrl #(

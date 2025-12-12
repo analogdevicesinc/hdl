@@ -5,9 +5,6 @@
 
 set_msg_config -id {PSU-1} -new_severity {WARNING}
 
-add_files -norecurse  $ad_hdl_dir/library/util_cdc/sync_bits.v
-add_files -norecurse  $ad_hdl_dir/library/util_cdc/sync_event.v
-
 set DEBUG_BUILD 0
 set DISABLE_DMAC_DEBUG [expr !$DEBUG_BUILD]
 
@@ -270,8 +267,8 @@ ad_ip_instance proc_sys_reset logic_analyzer_reset
 ad_ip_instance axi_rd_wr_combiner axi_rd_wr_combiner_logic
 ad_ip_instance axi_rd_wr_combiner axi_rd_wr_combiner_converter
 
-create_bd_cell -type module -reference sync_event cdc_adc_trig_sync
-create_bd_cell -type module -reference sync_event cdc_la_trig_sync
+ad_ip_instance sync_event cdc_adc_trig_sync
+ad_ip_instance sync_event cdc_la_trig_sync
 
 # logic analyzer & la_trigger_fifo connections
 
@@ -386,8 +383,8 @@ ad_connect axi_ad9963/adc_clk  cdc_adc_trig_sync/in_clk
 ad_connect adc_trigger/trigger_out_la  cdc_adc_trig_sync/in_event
 ad_connect axi_dac_interpolate/trigger_adc  cdc_adc_trig_sync/out_event
 
-ad_connect axi_ad9963/dac_clk  cdc_la_trig_sync/out_clk
-ad_connect axi_ad9963/adc_clk  cdc_la_trig_sync/in_clk
+ad_connect axi_ad9963/dac_clk      cdc_la_trig_sync/out_clk
+ad_connect logic_analyzer/clk_out  cdc_la_trig_sync/in_clk
 ad_connect logic_analyzer/trigger_out_adc  cdc_la_trig_sync/in_event
 ad_connect axi_dac_interpolate/trigger_la  cdc_la_trig_sync/out_event
 

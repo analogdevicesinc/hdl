@@ -27,5 +27,4 @@ set_input_delay -clock [get_clocks rx_device_clk] \
 set_input_delay -clock [get_clocks tx_device_clk] -add_delay\
   [get_property PERIOD [get_clocks tx_device_clk]] \
   [get_ports {fpga_sysref_m2c_*}]
-set_clock_groups -group rx_device_clk -group tx_device_clk -asynchronous
 

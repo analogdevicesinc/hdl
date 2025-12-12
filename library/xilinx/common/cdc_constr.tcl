@@ -29,7 +29,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
       set input_start_cells [filter -quiet $input_start_cells "NAME != $input_data_reg"]
     }
 
-    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
+    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == CLB && PRIMITIVE_SUBGROUP == LUTRAM) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
 
     if {$input_start_cells eq ""} {
       continue
@@ -176,7 +176,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
       set input_start_cells [filter -quiet $input_start_cells "NAME != $input_data_reg"]
     }
 
-    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
+    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == CLB && PRIMITIVE_SUBGROUP == LUTRAM) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
 
     if {$input_start_cells eq ""} {
       continue
@@ -229,7 +229,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
       set input_start_cells [filter -quiet $input_start_cells "NAME != $input_data_reg"]
     }
 
-    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
+    set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == CLB && PRIMITIVE_SUBGROUP == LUTRAM) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
 
     if {$input_start_cells eq ""} {
       continue
@@ -272,7 +272,7 @@ proc constrain_ip_inst {{ip_inst {}}} {
         set input_start_cells [filter -quiet $input_start_cells "NAME != $input_data_reg"]
       }
 
-      set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
+      set input_start_regs [filter -quiet $input_start_cells {(PRIMITIVE_GROUP == REGISTER) || (PRIMITIVE_GROUP == CLB && PRIMITIVE_SUBGROUP == LUTRAM) || (PRIMITIVE_GROUP == FLOP_LATCH) || (PRIMITIVE_GROUP == DMEM) || (PRIMITIVE_GROUP == IO && REF_NAME == IDDR)}]
 
       if {$input_start_cells eq ""} {
         continue
@@ -303,6 +303,39 @@ proc constrain_ip_inst {{ip_inst {}}} {
     }
   }
   # puts "Util reset chain done"
+
+  # clock multiplexer constraints
+  if {$ip_inst != ""} {
+    current_instance -quiet
+    current_instance $ip_inst
+  }
+  foreach clkmux_inst [get_cells -quiet -include_replicated_objects -hier -filter {(ORIG_REF_NAME == BUFGCTRL || REF_NAME == BUFGCTRL)}] {
+    # puts "$clkmux_inst"
+    current_instance -quiet
+
+    set_false_path -quiet -to [get_pins -filter {REF_PIN_NAME == S0} -of_objects [get_cells $clkmux_inst]]
+    set_false_path -quiet -to [get_pins -filter {REF_PIN_NAME == S1} -of_objects [get_cells $clkmux_inst]]
+
+    set clkdiv_name [string map {/ _} $clkmux_inst]
+
+    set clk0 "${clkdiv_name}_clk_0"
+    set clk1 "${clkdiv_name}_clk_1"
+
+    create_generated_clock -quiet -name $clk0 -divide_by 1 -add \
+      -master_clock [get_clocks -of_objects [get_pins -quiet -filter {REF_PIN_NAME == I0} -of_objects [get_cells -quiet $clkmux_inst]]] \
+      -source [get_pins -quiet -filter {REF_PIN_NAME == I0} -of_objects [get_cells -quiet $clkmux_inst]] \
+      [get_pins -quiet -filter {REF_PIN_NAME == O} -of_objects [get_cells -quiet $clkmux_inst]]
+
+    create_generated_clock -quiet -name $clk1 -divide_by 1 -add \
+      -master_clock [get_clocks -of_objects [get_pins -quiet -filter {REF_PIN_NAME == I1} -of_objects [get_cells -quiet $clkmux_inst]]] \
+      -source [get_pins -quiet -filter {REF_PIN_NAME == I1} -of_objects [get_cells -quiet $clkmux_inst]] \
+      [get_pins -quiet -filter {REF_PIN_NAME == O} -of_objects [get_cells -quiet $clkmux_inst]]
+
+    if {[get_clocks -quiet $clk0] != "" && [get_clocks -quiet $clk1] != ""} {
+      set_clock_groups -physically_exclusive -group $clk0 -group $clk1
+    }
+  }
+  # puts "Clock multiplexer done"
 
   current_instance -quiet
 }

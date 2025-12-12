@@ -18,6 +18,10 @@ adi_ip_files axi_fmcadc5_sync [list \
 
 adi_ip_properties axi_fmcadc5_sync
 
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
+
 adi_init_bd_tcl
 adi_ip_bd axi_fmcadc5_sync "bd/bd.tcl"
 

@@ -11,4 +11,6 @@ GENERIC_DEPS += util_mfifo.v
 
 XILINX_DEPS += util_mfifo_ip.tcl
 
+XILINX_LIB_DEPS += util_cdc
+
 include ../scripts/library.mk

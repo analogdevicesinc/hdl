@@ -15,4 +15,6 @@ XILINX_DEPS += ../xilinx/common/ad_mul.v
 XILINX_DEPS += axi_fmcadc5_sync_constr.xdc
 XILINX_DEPS += axi_fmcadc5_sync_ip.tcl
 
+XILINX_LIB_DEPS += util_cdc
+
 include ../scripts/library.mk

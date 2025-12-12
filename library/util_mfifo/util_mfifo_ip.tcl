@@ -14,6 +14,10 @@ adi_ip_files util_mfifo [list \
 
 adi_ip_properties_lite util_mfifo
 
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
+
 ipx::remove_all_bus_interface [ipx::current_core]
 set_property driver_value 0 [ipx::get_ports *din_valid* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *din_data* -of_objects [ipx::current_core]]

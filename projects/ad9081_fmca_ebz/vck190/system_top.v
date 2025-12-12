@@ -116,7 +116,6 @@ module system_top  #(
   wire    [ 2:0]  spi1_csn;
   wire            spi1_mosi;
   wire            spi1_miso;
-  // wire            spi1_sclk_buf;
 
   wire            sysref;
   wire    [TX_NUM_LINKS-1:0]   tx_syncin;
@@ -191,10 +190,6 @@ module system_top  #(
 
   assign spi0_csb   = spi0_csn[0];
   assign spi1_csb   = spi1_csn[0];
-
-  // BUFG i_spi_clk (
-  //   .I (spi1_sclk_buf),
-  //   .O (spi1_sclk));
 
   ad_3w_spi #(
     .NUM_OF_SLAVES(1)
@@ -325,7 +320,6 @@ module system_top  #(
     .spi1_csn  (spi1_csn),
     .spi1_miso (spi1_miso),
     .spi1_mosi (spi1_mosi),
-    // .spi1_sclk (spi1_sclk_buf),
     .spi1_sclk (spi1_sclk),
     // FMC HPC
     .rx_0_p (rx_data_p_loc[3:0]),

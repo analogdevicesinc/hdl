@@ -84,6 +84,8 @@ module axi_logic_analyzer_trigger (
   reg               trigger_active_mux;
   reg               trigger_active_d1;
 
+  wire              trigger_in_cdc;
+
   always @(posedge clk) begin
     if (data_valid == 1'b1) begin
       trigger_active_d1 <= trigger_active_mux;
@@ -114,13 +116,23 @@ module axi_logic_analyzer_trigger (
     end
   end
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_trigger_in_sync (
+    .out_clk(clk),
+    .out_resetn(~reset),
+    .in_bits(trigger_in),
+    .out_bits(trigger_in_cdc));
+
   always @(*) begin
     case (trigger_logic[6:4])
       3'd0: trigger_active_mux = trigger_active;
-      3'd1: trigger_active_mux = trigger_in;
-      3'd2: trigger_active_mux = trigger_active & trigger_in;
-      3'd3: trigger_active_mux = trigger_active | trigger_in;
-      3'd4: trigger_active_mux = trigger_active ^ trigger_in;
+      3'd1: trigger_active_mux = trigger_in_cdc;
+      3'd2: trigger_active_mux = trigger_active & trigger_in_cdc;
+      3'd3: trigger_active_mux = trigger_active | trigger_in_cdc;
+      3'd4: trigger_active_mux = trigger_active ^ trigger_in_cdc;
       3'd7: trigger_active_mux = 1'b0; // trigger disable
       default: trigger_active_mux = 1'b0;
     endcase

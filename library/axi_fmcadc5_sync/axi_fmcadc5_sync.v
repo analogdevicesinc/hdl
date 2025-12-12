@@ -123,13 +123,11 @@ module axi_fmcadc5_sync #(
 
   reg     [  7:0]   up_psync_count = 'd0;
   reg               up_psync = 'd0;
-  reg               up_cal_done_t_m1 = 'd0;
-  reg               up_cal_done_t_m2 = 'd0;
-  reg               up_cal_done_t_m3 = 'd0;
   reg     [ 15:0]   up_cal_max_0 = 'd0;
   reg     [ 15:0]   up_cal_min_0 = 'd0;
   reg     [ 15:0]   up_cal_max_1 = 'd0;
   reg     [ 15:0]   up_cal_min_1 = 'd0;
+  reg               up_cal_done_t_d = 'd0;
   reg               up_cal_enable = 'd0;
   reg               up_cor_enable    = 'd0;
   reg               up_cor_enable_t = 'd0;
@@ -141,9 +139,7 @@ module axi_fmcadc5_sync #(
   reg               up_vcal = 'd0;
   reg     [  7:0]   up_vcal_cnt = 'd0;
   reg               up_vcal_enable = 'd0;
-  reg               up_sysref_ack_t_m1 = 'd0;
-  reg               up_sysref_ack_t_m2 = 'd0;
-  reg               up_sysref_ack_t_m3 = 'd0;
+  reg               up_sysref_ack_t_d = 'd0;
   reg               up_sysref_control_t = 'd0;
   reg     [  1:0]   up_sysref_mode_e = 'd0;
   reg               up_sysref_mode_i = 'd0;
@@ -153,9 +149,7 @@ module axi_fmcadc5_sync #(
   reg               up_sync_mode = 'd0;
   reg               up_sync_disable_1 = 'd0;
   reg               up_sync_disable_0 = 'd0;
-  reg               up_sync_status_t_m1 = 'd0;
-  reg               up_sync_status_t_m2 = 'd0;
-  reg               up_sync_status_t_m3 = 'd0;
+  reg               up_sync_status_t_d = 'd0;
   reg               up_sync_status_1 = 'd0;
   reg               up_sync_status_0 = 'd0;
   reg               up_delay_ld = 'd0;
@@ -176,11 +170,7 @@ module axi_fmcadc5_sync #(
   reg               up_wack = 'd0;
   reg               up_rack = 'd0;
   reg     [ 31:0]   up_rdata = 'd0;
-  reg               rx_cal_enable_m1 = 'd0;
-  reg               rx_cal_enable = 'd0;
-  reg               rx_cor_enable_t_m1 = 'd0;
-  reg               rx_cor_enable_t_m2 = 'd0;
-  reg               rx_cor_enable_t_m3 = 'd0;
+  reg               rx_cor_enable_t_d = 'd0;
   reg               rx_cor_enable = 'd0;
   reg     [ 15:0]   rx_cor_scale_0 = 'd0;
   reg     [ 15:0]   rx_cor_offset_0 = 'd0;
@@ -191,23 +181,17 @@ module axi_fmcadc5_sync #(
   reg     [ 15:0]   rx_cor_scale_d_1 = 'd0;
   reg     [ 15:0]   rx_cor_offset_d_1 = 'd0;
   reg     [  7:0]   rx_sysref_cnt = 'd0;
-  reg               rx_sysref_control_t_m1 = 'd0;
-  reg               rx_sysref_control_t_m2 = 'd0;
-  reg               rx_sysref_control_t_m3 = 'd0;
+  reg               rx_sysref_control_t_d = 'd0;
   reg     [  1:0]   rx_sysref_mode_e = 'd0;
   reg               rx_sysref_mode_i = 'd0;
-  reg               rx_sysref_req_t_m1 = 'd0;
-  reg               rx_sysref_req_t_m2 = 'd0;
-  reg               rx_sysref_req_t_m3 = 'd0;
+  reg               rx_sysref_req_t_d = 'd0;
   reg               rx_sysref_req = 'd0;
   reg               rx_sysref_e = 'd0;
   reg               rx_sysref_i = 'd0;
   reg               rx_sysref_ack_t = 'd0;
   reg               rx_sysref_enb_e = 'd0;
   reg               rx_sysref_enb_i = 'd0;
-  reg               rx_sync_control_t_m1 = 'd0;
-  reg               rx_sync_control_t_m2 = 'd0;
-  reg               rx_sync_control_t_m3 = 'd0;
+  reg               rx_sync_control_t_d = 'd0;
   reg               rx_sync_mode = 'd0;
   reg               rx_sync_disable_1 = 'd0;
   reg               rx_sync_disable_0 = 'd0;
@@ -222,22 +206,46 @@ module axi_fmcadc5_sync #(
 
   // internal signals
 
+  wire    [  1:0]   rx_sysref_mode_e_cdc;
+  wire              rx_sysref_mode_i_cdc;
+  wire              rx_cor_enable_t_cdc;
+  wire              up_sync_status_0_cdc;
+  wire              up_sync_status_1_cdc;
   wire              up_cal_done_t_s;
+  wire              up_cal_done_t_cdc;
   wire              up_sysref_ack_t_s;
+  wire              up_sysref_ack_t_cdc;
   wire              up_sync_status_t_s;
+  wire              up_sync_status_t_cdc;
   wire              up_spi_gnt_s;
   wire    [ 31:0]   up_spi_out_32_s;
   wire    [  7:0]   up_spi_in_s;
+  wire              rx_cor_enable_cdc;
+  wire    [ 15:0]   rx_cor_scale_0_cdc;
+  wire    [ 15:0]   rx_cor_offset_0_cdc;
+  wire    [ 15:0]   rx_cor_scale_1_cdc;
+  wire    [ 15:0]   rx_cor_offset_1_cdc;
   wire              rx_cor_enable_t_s;
   wire              rx_cal_done_t_s;
+  wire              rx_sync_mode_cdc;
+  wire              rx_sync_disable_1_cdc;
+  wire              rx_sync_disable_0_cdc;
+  wire              rx_cal_enable;
   wire    [ 15:0]   rx_cal_max_0_s;
   wire    [ 15:0]   rx_cal_min_0_s;
   wire    [ 15:0]   rx_cal_max_1_s;
   wire    [ 15:0]   rx_cal_min_1_s;
+  wire    [ 15:0]   up_cal_max_0_cdc;
+  wire    [ 15:0]   up_cal_min_0_cdc;
+  wire    [ 15:0]   up_cal_max_1_cdc;
+  wire    [ 15:0]   up_cal_min_1_cdc;
   wire              rx_sysref_control_t_s;
+  wire              rx_sysref_control_t_cdc;
   wire              rx_sysref_req_t_s;
+  wire              rx_sysref_req_t_cdc;
   wire              rx_sysref_enb_e_s;
   wire              rx_sync_control_t_s;
+  wire              rx_sync_control_t_cdc;
   wire    [  4:0]   up_delay_rdata_s;
   wire              up_delay_locked_s;
   wire              up_wreq_s;
@@ -275,19 +283,65 @@ module axi_fmcadc5_sync #(
 
   // calibration (offset & gain only)
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_cal_done_t_sync (
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .in_bits(rx_cal_done_t_s),
+    .out_bits(up_cal_done_t_cdc));
+
   always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
-      up_cal_done_t_m1 <= 1'd0;
-      up_cal_done_t_m2 <= 1'd0;
-      up_cal_done_t_m3 <= 1'd0;
+      up_cal_done_t_d <= 1'd0;
     end else begin
-      up_cal_done_t_m1 <= rx_cal_done_t_s;
-      up_cal_done_t_m2 <= up_cal_done_t_m1;
-      up_cal_done_t_m3 <= up_cal_done_t_m2;
+      up_cal_done_t_d <= up_cal_done_t_cdc;
     end
   end
 
-  assign up_cal_done_t_s = up_cal_done_t_m3 ^ up_cal_done_t_m2;
+  assign up_cal_done_t_s = up_cal_done_t_d ^ up_cal_done_t_cdc;
+
+  sync_bits #(
+    .NUM_OF_BITS(16),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_cal_max_0_sync (
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .in_bits(rx_cal_max_0_s),
+    .out_bits(up_cal_max_0_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(16),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_cal_min_0_sync (
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .in_bits(rx_cal_min_0_s),
+    .out_bits(up_cal_min_0_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(16),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_cal_max_1_sync (
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .in_bits(rx_cal_max_1_s),
+    .out_bits(up_cal_max_1_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(16),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_cal_min_1_sync (
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .in_bits(rx_cal_min_1_s),
+    .out_bits(up_cal_min_1_cdc));
 
   always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
@@ -297,10 +351,10 @@ module axi_fmcadc5_sync #(
       up_cal_min_1 <= 16'd0;
     end else begin
       if (up_cal_done_t_s == 1'b1) begin
-        up_cal_max_0 <= rx_cal_max_0_s;
-        up_cal_min_0 <= rx_cal_min_0_s;
-        up_cal_max_1 <= rx_cal_max_1_s;
-        up_cal_min_1 <= rx_cal_min_1_s;
+        up_cal_max_0 <= up_cal_max_0_cdc;
+        up_cal_min_0 <= up_cal_min_0_cdc;
+        up_cal_max_1 <= up_cal_max_1_cdc;
+        up_cal_min_1 <= up_cal_min_1_cdc;
       end
     end
   end
@@ -366,19 +420,25 @@ module axi_fmcadc5_sync #(
 
   // sysref register(s)
 
-  assign up_sysref_ack_t_s = up_sysref_ack_t_m3 ^ up_sysref_ack_t_m2;
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_sysref_ack_t_sync (
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .in_bits(rx_sysref_ack_t),
+    .out_bits(up_sysref_ack_t_cdc));
 
   always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
-      up_sysref_ack_t_m1 <= 1'd0;
-      up_sysref_ack_t_m2 <= 1'd0;
-      up_sysref_ack_t_m3 <= 1'd0;
+      up_sysref_ack_t_d <= 1'd0;
     end else begin
-      up_sysref_ack_t_m1 <= rx_sysref_ack_t;
-      up_sysref_ack_t_m2 <= up_sysref_ack_t_m1;
-      up_sysref_ack_t_m3 <= up_sysref_ack_t_m2;
+      up_sysref_ack_t_d <= up_sysref_ack_t_cdc;
     end
   end
+
+  assign up_sysref_ack_t_s = up_sysref_ack_t_d ^ up_sysref_ack_t_cdc;
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -427,25 +487,51 @@ module axi_fmcadc5_sync #(
 
   // simple current status (no persistence)
 
-  assign up_sync_status_t_s = up_sync_status_t_m3 ^ up_sync_status_t_m2;
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_sync_status_t_sync (
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .in_bits(rx_sync_status_t),
+    .out_bits(up_sync_status_t_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_sync_status_0_sync (
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .in_bits(rx_sync_status_0),
+    .out_bits(up_sync_status_0_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_sync_status_1_sync (
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .in_bits(rx_sync_status_1),
+    .out_bits(up_sync_status_1_cdc));
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_sync_status_t_m1 <= 1'd0;
-      up_sync_status_t_m2 <= 1'd0;
-      up_sync_status_t_m3 <= 1'd0;
+      up_sync_status_t_d <= 1'd0;
       up_sync_status_1 <= 1'd0;
       up_sync_status_0 <= 1'd0;
     end else begin
-      up_sync_status_t_m1 <= rx_sync_status_t;
-      up_sync_status_t_m2 <= up_sync_status_t_m1;
-      up_sync_status_t_m3 <= up_sync_status_t_m2;
+      up_sync_status_t_d <= up_sync_status_t_cdc;
       if (up_sync_status_t_s == 1'b1) begin
-        up_sync_status_1 <= rx_sync_status_1;
-        up_sync_status_0 <= rx_sync_status_0;
+        up_sync_status_0 <= up_sync_status_0_cdc;
+        up_sync_status_1 <= up_sync_status_1_cdc;
       end
     end
   end
+
+  assign up_sync_status_t_s = up_sync_status_t_d ^ up_sync_status_t_cdc;
 
   // delay register(s)
 
@@ -619,23 +705,89 @@ module axi_fmcadc5_sync #(
 
   // calibration at receive clock
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_cal_enable_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_cal_enable),
+    .out_bits(rx_cal_enable));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_cor_enable_t_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_cor_enable_t),
+    .out_bits(rx_cor_enable_t_cdc));
+
   always @(posedge rx_clk) begin
-    rx_cal_enable_m1 <= up_cal_enable;
-    rx_cal_enable <= rx_cal_enable_m1;
-    rx_cor_enable_t_m1 <= up_cor_enable_t;
-    rx_cor_enable_t_m2 <= rx_cor_enable_t_m1;
-    rx_cor_enable_t_m3 <= rx_cor_enable_t_m2;
+    rx_cor_enable_t_d <= rx_cor_enable_t_cdc;
   end
 
-  assign rx_cor_enable_t_s = rx_cor_enable_t_m3 ^ rx_cor_enable_t_m2;
+  assign rx_cor_enable_t_s = rx_cor_enable_t_d ^ rx_cor_enable_t_cdc;
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_cor_enable_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_cor_enable),
+    .out_bits(rx_cor_enable_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(16),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_cor_scale_0_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_cor_scale_0),
+    .out_bits(rx_cor_scale_0_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(16),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_cor_offset_0_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_cor_offset_0),
+    .out_bits(rx_cor_offset_0_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(16),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_cor_scale_1_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_cor_scale_1),
+    .out_bits(rx_cor_scale_1_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(16),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_cor_offset_1_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_cor_offset_1),
+    .out_bits(rx_cor_offset_1_cdc));
 
   always @(posedge rx_clk) begin
     if (rx_cor_enable_t_s == 1'b1) begin
-      rx_cor_enable <= up_cor_enable;
-      rx_cor_scale_0 <= up_cor_scale_0;
-      rx_cor_offset_0 <= up_cor_offset_0;
-      rx_cor_scale_1 <= up_cor_scale_1;
-      rx_cor_offset_1 <= up_cor_offset_1;
+      rx_cor_enable <= rx_cor_enable_cdc;
+      rx_cor_scale_0 <= rx_cor_scale_0_cdc;
+      rx_cor_offset_0 <= rx_cor_offset_0_cdc;
+      rx_cor_scale_1 <= rx_cor_scale_1_cdc;
+      rx_cor_offset_1 <= rx_cor_offset_1_cdc;
     end
   end
 
@@ -678,24 +830,64 @@ module axi_fmcadc5_sync #(
     rx_sysref_cnt <= rx_sysref_cnt + 1'b1;
   end
 
-  assign rx_sysref_control_t_s = rx_sysref_control_t_m3 ^ rx_sysref_control_t_m2;
-  assign rx_sysref_req_t_s = rx_sysref_req_t_m3 ^ rx_sysref_req_t_m2;
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_sysref_control_t_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_sysref_control_t),
+    .out_bits(rx_sysref_control_t_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(2),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_sysref_mode_e_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_sysref_mode_e),
+    .out_bits(rx_sysref_mode_e_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_sysref_mode_i_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_sysref_mode_i),
+    .out_bits(rx_sysref_mode_i_cdc));
 
   always @(posedge rx_clk) begin
-    rx_sysref_control_t_m1 <= up_sysref_control_t;
-    rx_sysref_control_t_m2 <= rx_sysref_control_t_m1;
-    rx_sysref_control_t_m3 <= rx_sysref_control_t_m2;
+    rx_sysref_control_t_d <= rx_sysref_control_t_cdc;
     if (rx_sysref_control_t_s == 1'b1) begin
-      rx_sysref_mode_e <= up_sysref_mode_e;
-      rx_sysref_mode_i <= up_sysref_mode_i;
+      rx_sysref_mode_e <= rx_sysref_mode_e_cdc;
+      rx_sysref_mode_i <= rx_sysref_mode_i_cdc;
     end
-    rx_sysref_req_t_m1 <= up_sysref_req_t;
-    rx_sysref_req_t_m2 <= rx_sysref_req_t_m1;
-    rx_sysref_req_t_m3 <= rx_sysref_req_t_m2;
+  end
+
+  assign rx_sysref_control_t_s = rx_sysref_control_t_d ^ rx_sysref_control_t_cdc;
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_sysref_req_t_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_sysref_req_t),
+    .out_bits(rx_sysref_req_t_cdc));
+
+  always @(posedge rx_clk) begin
+    rx_sysref_req_t_d <= rx_sysref_req_t_cdc;
     if ((rx_sysref_cnt == 8'd0) || (rx_sysref_req_t_s == 1'b1)) begin
       rx_sysref_req <= rx_sysref_req_t_s;
     end
   end
+
+  assign rx_sysref_req_t_s = rx_sysref_req_t_d ^ rx_sysref_req_t_cdc;
 
   assign rx_sysref_enb_e_s = (rx_sysref_mode_e == 2'b10) ? rx_sysref_req :
     ((rx_sysref_mode_e == 2'b00) ? 1'b1 : 1'b0);
@@ -714,16 +906,52 @@ module axi_fmcadc5_sync #(
 
   // sync-control at receive clock
 
-  assign rx_sync_control_t_s = rx_sync_control_t_m3 ^ rx_sync_control_t_m2;
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_sync_control_t_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_sync_control_t),
+    .out_bits(rx_sync_control_t_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_sync_mode_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_sync_mode),
+    .out_bits(rx_sync_mode_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_sync_disable_1_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_sync_disable_1),
+    .out_bits(rx_sync_disable_1_cdc));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_rx_sync_disable_0_sync (
+    .out_clk(rx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_sync_disable_0),
+    .out_bits(rx_sync_disable_0_cdc));
 
   always @(posedge rx_clk) begin
-    rx_sync_control_t_m1 <= up_sync_control_t;
-    rx_sync_control_t_m2 <= rx_sync_control_t_m1;
-    rx_sync_control_t_m3 <= rx_sync_control_t_m2;
+    rx_sync_control_t_d <= rx_sync_control_t_cdc;
     if (rx_sync_control_t_s == 1'b1) begin
-      rx_sync_mode <= up_sync_mode;
-      rx_sync_disable_1 <= up_sync_disable_1;
-      rx_sync_disable_0 <= up_sync_disable_0;
+      rx_sync_mode <= rx_sync_mode_cdc;
+      rx_sync_disable_1 <= rx_sync_disable_1_cdc;
+      rx_sync_disable_0 <= rx_sync_disable_0_cdc;
     end
     if (rx_sync_mode == 1'b1) begin
       rx_sync_out_1 <= ~rx_sync_disable_1 & rx_sync_1 & rx_sync_0;
@@ -733,6 +961,8 @@ module axi_fmcadc5_sync #(
       rx_sync_out_0 <= ~rx_sync_disable_0 & rx_sync_0;
     end
   end
+
+  assign rx_sync_control_t_s = rx_sync_control_t_d ^ rx_sync_control_t_cdc;
 
   always @(posedge rx_clk) begin
     rx_sync_cnt <= rx_sync_cnt + 1'b1;

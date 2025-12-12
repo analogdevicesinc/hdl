@@ -3,4 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set_false_path  -from [get_cells -hier -filter {name =~ *up_drp_locked_reg && IS_SEQUENTIAL}] -to   [get_cells -hier -filter {name =~ *adc_status_m1_reg && IS_SEQUENTIAL}]
+# DON'T TOUCH!
+# Required by Vivado in order to include the IP parameters in the synthesized
+# design. Used in parameter extraction after synthesis for clock parameters.

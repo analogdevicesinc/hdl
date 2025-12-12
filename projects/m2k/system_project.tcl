@@ -13,9 +13,14 @@ adi_project_files m2k [list \
   "m2k_spi.v" \
   "system_top.v" \
   "system_constr.xdc" \
+  "timing_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_iobuf.v"]
 
 set_property is_enabled false [get_files  *system_sys_ps7_0.xdc]
+
+# post cdc constraint
+
+set_property PROCESSING_ORDER LATE [get_files timing_constr.xdc]
 
 adi_project_run m2k
 

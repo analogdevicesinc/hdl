@@ -16,6 +16,7 @@ adi_ip_files util_adxcvr [list \
   "util_adxcvr_xcm.v" \
   "util_adxcvr_xch.v" \
   "util_adxcvr.v" \
+  "util_adxcvr_constr.xdc" \
   "bd/bd.tcl" ]
 
 set_property used_in_simulation false [get_files ./bd/bd.tcl]
