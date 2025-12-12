@@ -2909,7 +2909,7 @@
            y="348.42267"
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.12457px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.0688924">TX_REF_CLK = 616.5MHz</tspan></text>
       <g
-         transform="matrix(0.26317814,0,0,0.2602511,-15.931919,212.9105)"
+         transform="matrix(0.26317814,0,0,0.2602511,-15.671605,214.47275)"
          id="g5828"
          style="display:inline;stroke:#a01414;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new">
         <text
@@ -2923,7 +2923,7 @@
              y="157.05742"
              x="-1005.8705"
              id="tspan5773-2"
-             sodipodi:role="line">AXI_ADCFIFO</tspan></text>
+             sodipodi:role="line">DATA_OFFLOAD</tspan></text>
       </g>
       <g
          id="g2"
@@ -3296,14 +3296,14 @@
          transform="rotate(-90)"
          id="text5798-7-0"
          y="25.587696"
-         x="-398.79758"
+         x="-400.09937"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.86046px;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.260381px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.86046px;line-height:108%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.260381px;stroke-opacity:1"
            y="25.587696"
-           x="-398.79758"
+           x="-400.09937"
            id="tspan5800-1-7"
-           sodipodi:role="line">UTIL_DACFIFO</tspan></text>
+           sodipodi:role="line">DATA_OFFLOAD</tspan></text>
       <rect
          style="display:inline;fill:#d2e6eb;fill-opacity:1;fill-rule:nonzero;stroke:#0f3296;stroke-width:0.520762;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
          id="rect5796-8-7"
