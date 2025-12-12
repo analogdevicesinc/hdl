@@ -51,7 +51,7 @@ CLEAN_TARGET += tb/xsim_gui_cmd.tcl
 CLEAN_TARGET += tb/libraries
 
 ifneq ($(LATTICE_DEPS),)
-	LATTICE_CLEAN_TARGET += ./*.log
+	LATTICE_CLEAN_TARGET += ./*_ltt.log
 	LATTICE_CLEAN_TARGET += ltt
 	ifeq ($(LATTICE_DEFAULT_PATHS),1)
 		LATTICE_CLEAN_TARGET += ${LATTICE_DEFAULT_IP_PATH}/${LIBRARY_NAME}
@@ -64,9 +64,9 @@ GENERIC_DEPS += $(HDL_LIBRARY_PATH)../scripts/adi_env.tcl
 
 all: intel xilinx lattice
 
-clean: clean-all clean-ltt-interfaces
+clean: clean-all
 
-clean-all:
+clean-all: clean-ltt-interfaces
 	$(call clean, \
 		$(CLEAN_TARGET) $(LATTICE_CLEAN_TARGET) .lock, \
 		$(HL)$(LIBRARY_NAME)$(NC) library)
@@ -139,6 +139,8 @@ ifneq ($(LATTICE_DEPS),)
 LATTICE_DEPS += $(GENERIC_DEPS)
 LATTICE_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_ip_lattice.tcl
 _LATTICE_INTF_DEPS := $(foreach dep,$(LATTICE_INTERFACE_DEPS),$(HDL_LIBRARY_PATH)$(dep))
+_LATTICE_INTF_GEN_DEPS := $(foreach dep,$(LATTICE_INTERFACE_DEPS),$(wildcard $(HDL_LIBRARY_PATH)$(dep)/*_ltt.tcl))
+LATTICE_DEPS += $(_LATTICE_INTF_GEN_DEPS)
 
 LATTICE_TARGETS := ./ltt/metadata.xml
 ifeq ($(LATTICE_DEFAULT_PATHS),1)
