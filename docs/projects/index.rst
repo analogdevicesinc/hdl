@@ -24,7 +24,7 @@ Contents
    AD35XXR-EVB <ad35xxr_evb/index>
    AD4052-ARDZ <ad4052_ardz/index>
    AD4062-ARDZ <ad4062_ardz/index>
-   AD408X-FMC-EVB <ad408x_fmc_evb/index>
+   AD4080-FMC-EVB <ad4080_fmc_evb/index>
    AD4110-SDZ <ad4110/index>
    AD411x-AD717x <ad411x_ad717x/index>
    AD4134-FMC <ad4134_fmc/index>
