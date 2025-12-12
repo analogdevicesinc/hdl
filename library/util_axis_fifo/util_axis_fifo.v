@@ -92,7 +92,7 @@ module util_axis_fifo #(
         sync_bits #(
           .NUM_OF_BITS(1),
           .ASYNC_CLK(ASYNC_CLK),
-          .SYNC_STAGES(3)
+          .SYNC_STAGES(2)
         ) i_waddr_sync (
           .out_clk(m_axis_aclk),
           .out_resetn(m_axis_aresetn),
@@ -102,7 +102,7 @@ module util_axis_fifo #(
         sync_bits #(
           .NUM_OF_BITS(1),
           .ASYNC_CLK(ASYNC_CLK),
-          .SYNC_STAGES(3)
+          .SYNC_STAGES(2)
         ) i_raddr_sync (
           .out_clk(s_axis_aclk),
           .out_resetn(s_axis_aresetn),
@@ -110,7 +110,7 @@ module util_axis_fifo #(
           .out_bits(s_axis_raddr));
 
         sync_bits #(
-          .NUM_OF_BITS(1),
+          .NUM_OF_BITS(DATA_WIDTH),
           .ASYNC_CLK(ASYNC_CLK)
         ) i_cdc_sync_fifo_data (
           .out_clk(m_axis_aclk),

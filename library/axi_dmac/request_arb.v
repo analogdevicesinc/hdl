@@ -377,6 +377,15 @@ module request_arb #(
     eot_mem_dest[source_id] <= source_eot;
   end
 
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_dest_response_id_sync (
+    .out_clk(src_clk),
+    .out_resetn(src_resetn),
+    .in_bits(dest_response_id),
+    .out_bits(dest_response_id_s));
+
   generate if (DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
 
   wire                                  dest_bl_valid;
@@ -409,15 +418,6 @@ module request_arb #(
     .out_resetn(dest_resetn),
     .in_bits(eot_mem_dest[dest_address_id_s]),
     .out_bits(dest_address_eot));
-
-  sync_bits #(
-    .NUM_OF_BITS(ID_WIDTH),
-    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
-  ) i_dest_response_id_sync (
-    .out_clk(src_clk),
-    .out_resetn(src_resetn),
-    .in_bits(dest_response_id),
-    .out_bits(dest_response_id_s));
 
   sync_bits #(
     .NUM_OF_BITS(1),
