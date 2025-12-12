@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -52,7 +52,7 @@ module src_axi_mm #(
   input                           req_valid,
   output                          req_ready,
   input [DMA_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH] req_address,
-  input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
+  input [BEATS_PER_BURST_WIDTH:0] req_last_burst_length,
   input [BYTES_PER_BEAT_WIDTH-1:0]  req_last_beat_bytes,
 
   input                            enable,
@@ -60,7 +60,7 @@ module src_axi_mm #(
 
   output                           bl_valid,
   input                            bl_ready,
-  output [BEATS_PER_BURST_WIDTH-1:0] measured_last_burst_length,
+  output [BEATS_PER_BURST_WIDTH:0] measured_last_burst_length,
 /*
   output                          response_valid,
   input                           response_ready,
