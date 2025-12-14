@@ -270,8 +270,6 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad9144/index.html">AXI AD9144 (OBSOLETE)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad9371/index.html">AXI AD9371 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9643/index.html">AXI AD9643 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671 (OBSOLETE)</a></li>
 </ul>
@@ -1045,15 +1043,16 @@ all of the 8 channels and lanes enabled.</p>
 <p>The register map of the core contains instances of several generic register maps
 like ADC common, ADC channel, <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_delay_ctrl.v" target="_blank">up_delay_ctrl</a>.
 The following table presents the base addresses of each instance, after it you
-can find the detailed description of each generic register map.
-The absolute address of a register should be calculated by adding the instance
-base address to the registers relative address.</p>
+can find the detailed description of each generic register map.</p>
+<p>The absolute address of a register should be calculated by adding the instance
+base address to the registers relative address. For a more detailed explanation,
+see <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#generic-adc-register-access"><span class="std std-ref">ADC register access</span></a>.</p>
 <div class="table-wrapper docutils container" id="id4">
 <table class="docutils align-default" id="id4">
 <caption><span class="caption-text">Register Map base addresses for axi_ad485x</span><a class="headerlink" href="#id4" title="Permalink to this table"></a></caption>
 <thead>
-<tr class="row-odd"><th class="head"><p>DWORD</p></th>
-<th class="head"><p>BYTE</p></th>
+<tr class="row-odd"><th class="head"><p>HDL reg</p></th>
+<th class="head"><p>Software reg</p></th>
 <th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
 </tr>

@@ -266,8 +266,6 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad9144/index.html">AXI AD9144 (OBSOLETE)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad9371/index.html">AXI AD9371 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9643/index.html">AXI AD9643 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671 (OBSOLETE)</a></li>
 </ul>
@@ -2054,17 +2052,19 @@ signals. For simplicity, we will look only at the data part:</p>
 <p>The register map of the core contains instances of several generic register maps
 like ADC common, ADC channel, DAC common, DAC channel etc. The following table
 presents the base addresses of each instance, after that can be found the
-detailed description of each generic register map. The absolute address of a
-register should be calculated by adding the instance base address to the
-registers relative address.</p>
+detailed description of each generic register map.</p>
+<p>The absolute address of a register should be calculated by adding the instance
+base address to the registers relative address. For a more detailed explanation,
+see <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#generic-adc-register-access"><span class="std std-ref">ADC register access</span></a> and
+<a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html#generic-dac-register-access"><span class="std std-ref">DAC register access</span></a>.</p>
 </section>
 <section id="register-map-base-addresses-for-axi-adrv9001">
 <h2>Register Map base addresses for axi_adrv9001<a class="headerlink" href="#register-map-base-addresses-for-axi-adrv9001" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p>DWORD</p></td>
-<td><p>BYTE</p></td>
+<tr class="row-odd"><td><p>HDL reg</p></td>
+<td><p>Software reg</p></td>
 <td><p>Name</p></td>
 <td><p>Description</p></td>
 </tr>

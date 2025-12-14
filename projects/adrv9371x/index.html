@@ -281,8 +281,6 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9144/index.html">AXI AD9144 (OBSOLETE)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9371/index.html">AXI AD9371 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9643/index.html">AXI AD9643 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9671/index.html">AXI AD9671 (OBSOLETE)</a></li>
 </ul>
@@ -605,19 +603,23 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <td><p>0x7C42_0000</p></td>
 <td><p>0x9C42_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_adrv9009_rx_os_dma</p></td>
+<tr class="row-odd"><td><p>ad9371_data_offload</p></td>
+<td><p>0x7C43_0000</p></td>
+<td><p>0x9C43_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_adrv9009_rx_os_dma</p></td>
 <td><p>0x7C44_0000</p></td>
 <td><p>0x9C44_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_adrv9009_rx_clkgen</p></td>
+<tr class="row-odd"><td><p>axi_adrv9009_rx_clkgen</p></td>
 <td><p>0x43C1_0000</p></td>
 <td><p>0x83C1_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_adrv9009_tx_clkgen</p></td>
+<tr class="row-even"><td><p>axi_adrv9009_tx_clkgen</p></td>
 <td><p>0x43C0_0000</p></td>
 <td><p>0x83C0_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_adrv9009_rx_os_clkgen</p></td>
+<tr class="row-odd"><td><p>axi_adrv9009_rx_os_clkgen</p></td>
 <td><p>0x43C2_0000</p></td>
 <td><p>0x83C2_0000</p></td>
 </tr>
@@ -1052,13 +1054,13 @@ following table.</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2" target="_blank">library/util_pack/util_cpack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_DACFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_dacfifo" target="_blank">library/xilinx/axi_dacfifo</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_axis_fifo/index.html#util-axis-fifo"><span class="std std-ref">AXI Stream FIFO</span></a></p></td>
+<tr class="row-odd"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">library/data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_DACFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_dacfifo" target="_blank">library/util_dacfifo</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_rfifo/index.html#util-rfifo"><span class="std std-ref">Util RFIFO</span></a></p></td>
+<tr class="row-even"><td><p>UTIL_DO_RAM</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_do_ram" target="_blank">library/util_do_ram</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_CLKGEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen" target="_blank">library/axi_clkgen</a></p></td>
