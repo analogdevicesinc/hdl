@@ -3,8 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-package require math
-
 ## Global variables for interconnect interface indexing
 #
 set sys_hpc0_interconnect_index -1
@@ -153,8 +151,8 @@ proc ad_connect_int_width {obj} {
   set left [get_property LEFT $obj]
   set right [get_property RIGHT $obj]
 
-  set high [::math::max $left $right]
-  set low [::math::min $left $right]
+  set high [expr max($left,$right)]
+  set low [expr min($left,$right)]
 
   return [expr {1 + $high - $low}]
 }

@@ -1,7 +1,10 @@
 ###############################################################################
-## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
+
+# Intel specific helper proc/ compatibility with xilinx procs on adi_board.tcl
+source $ad_hdl_dir/projects/scripts/adi_board_intel.tcl
 
 # a10soc carrier qsys
 set system_type a10soc
