@@ -257,13 +257,12 @@ ila_0 i_ila (
 	.probe22(raw_transfer_en),
 	.probe23(dac_valid_corrected_a),
 	.probe24(dac_fir_valid_a),
-    .probe25(dac_valid_corrected_b),
-    .probe26(dac_fir_valid_b),
-    .probe27(flush_dma_s),
-    .probe28(transfer_first_sample_a),
-    .probe29(transfer_first_sample_b),
-    .probe30(transfer_start_posedge_a),
-    .probe31(transfer_start_posedge_b)
+	.probe25(dac_valid_corrected_b),
+	.probe26(dac_fir_valid_b),
+	.probe27(flush_dma_s),
+	.probe28(transfer_first_sample_a),
+	.probe29(transfer_first_sample_b),
+	.probe30(dma_transfer_suspend)
 );
 
   axi_dac_interpolate_filter #(
