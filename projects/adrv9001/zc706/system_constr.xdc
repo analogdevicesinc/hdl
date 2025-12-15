@@ -109,3 +109,5 @@ set_property  -dict {IOSTANDARD LVCMOS18} [get_ports gpio_bd[6]]
 
 set_property  -dict {IOSTANDARD LVCMOS18} [get_ports gpio_bd[7]]
 set_property  -dict {IOSTANDARD LVCMOS18} [get_ports gpio_bd[9]]
+
+create_clock -name ref_clk        -period  8.00 [get_ports fpga_ref_clk_p]
