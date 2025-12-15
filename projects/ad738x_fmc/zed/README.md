@@ -18,10 +18,11 @@ The overwritable parameters from the environment:
 - ALERT_SPI_N pin can operate as a serial data output pin or alert indication output depending on its value:
    - 0 - SDOB-SDOD
    - 1 - ALERT
-- NUM_OF_SDI - Defines the number of SDI lines used: 1, 2, 4
+
+- NUM_OF_SDIO - Defines the number of SDI lines used: 1, 2, 4
 
 For the ALERT functionality, the following parameter will be used in `make` command: ALERT_SPI_N.
-For the serial data output functionality, the following parameters will be used in `make` command: ALERT_SPI_N, NUM_OF_SDI.
+For the serial data output functionality, the following parameters will be used in `make` command: ALERT_SPI_N, NUM_OF_SDIO.
 
 ### Example configurations
 
@@ -30,7 +31,8 @@ For the serial data output functionality, the following parameters will be used 
 This specific command is equivalent to running `make` only:
 
 ```
-make ALERT_SPI_N=0 NUM_OF_SDI=1
+cd projects/ad738x_fmc/zed
+make ALERT_SPI_N=0 NUM_OF_SDIO=1
 ```
 
 Corresponding device tree: [zynq-zed-adv7511-ad7380.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad7380.dts)

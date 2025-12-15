@@ -13,7 +13,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   How to use over-writable parameters from the environment:
 #
 #    e.g.
-#      make NUM_OF_SDI=4  CAPTURE_ZONE=2
+#      make NUM_OF_SDIO=4  CAPTURE_ZONE=2
 #
 #
 # Parameter description:
@@ -23,7 +23,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   0 - SPI Mode
 #   1 - Echo-clock or Master clock mode
 #
-# NUM_OF_SDI : the number of MOSI lines of the SPI interface
+# NUM_OF_SDIO : the number of MOSI lines of the SPI interface
 #
 #    1 - Interleaved mode
 #    2 - 1 lane per channel
@@ -52,12 +52,12 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 # Example:
 #
-#   make NUM_OF_SDI=2 CAPTURE_ZONE=2
+#   make NUM_OF_SDIO=2 CAPTURE_ZONE=2
 #
 
 adi_project ad4630_fmc_zed 0 [list \
   CLK_MODE     [get_env_param CLK_MODE      0] \
-  NUM_OF_SDI   [get_env_param NUM_OF_SDI    4] \
+  NUM_OF_SDIO   [get_env_param NUM_OF_SDIO    4] \
   CAPTURE_ZONE [get_env_param CAPTURE_ZONE  2] \
   DDR_EN       [get_env_param DDR_EN        0] \
   NO_REORDER   [get_env_param NO_REORDER    0] ]
@@ -69,7 +69,7 @@ adi_project_files ad4630_fmc_zed [list \
   "system_constr.xdc" \
   "system_top.v" ]
 
-switch [get_env_param NUM_OF_SDI 4] {
+switch [get_env_param NUM_OF_SDIO 4] {
   1 {
     adi_project_files ad4630_fmc_zed [list \
       "system_constr_1sdi.xdc" ]

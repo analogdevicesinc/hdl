@@ -38,12 +38,13 @@
 module spi_engine_interconnect #(
 
   parameter DATA_WIDTH = 8, // Valid data widths values are 8/16/24/32
-  parameter NUM_OF_SDI = 1
+  parameter NUM_OF_SDIO = 1
 ) (
   input clk,
   input resetn,
 
-  input interconnect_dir,
+  input s_interconnect_dir,
+  output m_offload_active,
 
   output m_cmd_valid,
   input m_cmd_ready,
@@ -55,7 +56,7 @@ module spi_engine_interconnect #(
 
   input m_sdi_valid,
   output m_sdi_ready,
-  input [(NUM_OF_SDI * DATA_WIDTH-1):0] m_sdi_data,
+  input [(NUM_OF_SDIO * DATA_WIDTH-1):0] m_sdi_data,
 
   input m_sync_valid,
   output m_sync_ready,
@@ -71,7 +72,7 @@ module spi_engine_interconnect #(
 
   output s0_sdi_valid,
   input s0_sdi_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] s0_sdi_data,
+  output [(NUM_OF_SDIO * DATA_WIDTH-1):0] s0_sdi_data,
 
   output s0_sync_valid,
   input s0_sync_ready,
@@ -87,15 +88,16 @@ module spi_engine_interconnect #(
 
   output s1_sdi_valid,
   input s1_sdi_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] s1_sdi_data,
+  output [(NUM_OF_SDIO * DATA_WIDTH-1):0] s1_sdi_data,
 
   output s1_sync_valid,
   input s1_sync_ready,
   output [7:0] s1_sync
 );
 
-  `define spi_engine_interconnect_mux(s0, s1) (interconnect_dir == 1'b1 ? s0 : s1)
+  `define spi_engine_interconnect_mux(s0, s1) (s_interconnect_dir == 1'b1 ? s0 : s1)
 
+  assign m_offload_active = s_interconnect_dir;
   assign m_cmd_data   = `spi_engine_interconnect_mux(s0_cmd_data, s1_cmd_data);
   assign m_cmd_valid  = `spi_engine_interconnect_mux(s0_cmd_valid, s1_cmd_valid);
   assign s0_cmd_ready = `spi_engine_interconnect_mux(m_cmd_ready, 1'b0);

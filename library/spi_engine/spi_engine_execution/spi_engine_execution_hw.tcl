@@ -11,7 +11,8 @@ ad_ip_create spi_engine_execution {SPI Engine Execution}
 set_module_property ELABORATION_CALLBACK p_elaboration
 ad_ip_files spi_engine_execution [list\
   spi_engine_execution.v \
-  spi_engine_execution_shiftreg.v]
+  spi_engine_execution_shiftreg.v \
+  spi_engine_execution_shiftreg_data_assemble.v]
 
 # parameters
 
@@ -19,20 +20,27 @@ ad_ip_parameter NUM_OF_CS INTEGER 1
 ad_ip_parameter DEFAULT_SPI_CFG INTEGER 0
 ad_ip_parameter DEFAULT_CLK_DIV INTEGER 0
 ad_ip_parameter DATA_WIDTH INTEGER 8
-ad_ip_parameter NUM_OF_SDI INTEGER 1
+ad_ip_parameter NUM_OF_SDIO INTEGER 1
 ad_ip_parameter SDI_DELAY INTEGER 0
 ad_ip_parameter SDO_DEFAULT INTEGER 0
 
 proc p_elaboration {} {
 
   set data_width [get_parameter_value DATA_WIDTH]
-  set num_of_sdi [get_parameter_value NUM_OF_SDI]
+  set num_of_sdi [get_parameter_value NUM_OF_SDIO]
   set num_of_cs [get_parameter_value NUM_OF_CS]
 
   # clock and reset interface
 
   ad_interface clock   clk     input 1
   ad_interface reset-n resetn  input 1 if_clk
+
+  # interconnect direction interface
+
+  add_interface s_interconnect_ctrl conduit end
+  add_interface_port s_interconnect_ctrl s_interconnect_dir interconnect_dir input 1
+  set_interface_property s_interconnect_ctrl associatedClock if_clk
+  set_interface_property s_interconnect_ctrl associatedReset if_resetn
 
   # command interface
 
@@ -43,6 +51,13 @@ proc p_elaboration {} {
 
   set_interface_property cmd associatedClock if_clk
   set_interface_property cmd associatedReset if_resetn
+
+  # offload active interface
+
+  add_interface s_offload_active_ctrl conduit end
+  add_interface_port s_offload_active_ctrl s_offload_active interconnect_dir input 1
+  set_interface_property s_offload_active_ctrl associatedClock if_clk
+  set_interface_property s_offload_active_ctrl associatedReset if_resetn
 
   # SDO data interface
 
