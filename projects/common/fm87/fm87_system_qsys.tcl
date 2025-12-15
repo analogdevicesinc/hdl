@@ -3,6 +3,9 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+# Intel specific helper proc/ compatibility with xilinx procs on adi_board.tcl
+source $ad_hdl_dir/projects/scripts/adi_board_intel.tcl
+
 # fm87 carrier qsys
 
 set system_type "Agilex 7"
