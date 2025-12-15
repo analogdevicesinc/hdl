@@ -72,4 +72,4 @@ set_property  -dict {PACKAGE_PIN  G17   IOSTANDARD LVCMOS18} [get_ports gpio_bd[
 
 set_property  -dict {PACKAGE_PIN  Y11   IOSTANDARD LVCMOS33} [get_ports  tdd_sync]        ; ## JA1.JA1
 
-
+create_clock -name ref_clk        -period  8.00 [get_ports fpga_ref_clk_p]
