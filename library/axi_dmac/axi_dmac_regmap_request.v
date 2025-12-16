@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -194,11 +194,11 @@ module axi_dmac_regmap_request #(
         9'h106: up_dma_x_length[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN] <= up_wdata[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN];
         9'h124:
           if (HAS_ADDR_HIGH) begin
-            up_dma_dest_address[DMA_AXI_ADDR_WIDTH-1:32] <= up_wdata[ADDR_HIGH_MSB:0];
+            up_dma_dest_address[DMA_AXI_ADDR_WIDTH-1:HAS_ADDR_HIGH*32] <= up_wdata[ADDR_HIGH_MSB:0];
           end
         9'h125:
           if (HAS_ADDR_HIGH) begin
-            up_dma_src_address[DMA_AXI_ADDR_WIDTH-1:32] <= up_wdata[ADDR_HIGH_MSB:0];
+            up_dma_src_address[DMA_AXI_ADDR_WIDTH-1:HAS_ADDR_HIGH*32] <= up_wdata[ADDR_HIGH_MSB:0];
           end
         endcase
       end
@@ -232,9 +232,9 @@ module axi_dmac_regmap_request #(
             end
     9'h117: up_rdata <= request_flock_stride;
     9'h11f: up_rdata <= {request_sg_address[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG],{BYTES_PER_BEAT_WIDTH_SG{1'b0}}};
-    9'h124: up_rdata <= (HAS_ADDR_HIGH && HAS_DEST_ADDR) ? up_dma_dest_address[DMA_AXI_ADDR_WIDTH-1:32] : 32'h00;
-    9'h125: up_rdata <= (HAS_ADDR_HIGH && HAS_SRC_ADDR) ? up_dma_src_address[DMA_AXI_ADDR_WIDTH-1:32] : 32'h00;
-    9'h12f: up_rdata <= HAS_ADDR_HIGH ? request_sg_address[DMA_AXI_ADDR_WIDTH-1:32] : 32'h00;
+    9'h124: up_rdata <= (HAS_ADDR_HIGH && HAS_DEST_ADDR) ? up_dma_dest_address[DMA_AXI_ADDR_WIDTH-1:HAS_ADDR_HIGH*32] : 32'h00;
+    9'h125: up_rdata <= (HAS_ADDR_HIGH && HAS_SRC_ADDR) ? up_dma_src_address[DMA_AXI_ADDR_WIDTH-1:HAS_ADDR_HIGH*32] : 32'h00;
+    9'h12f: up_rdata <= HAS_ADDR_HIGH ? request_sg_address[DMA_AXI_ADDR_WIDTH-1:HAS_ADDR_HIGH*32] : 32'h00;
     default: up_rdata <= 32'h00;
     endcase
   end
@@ -342,7 +342,7 @@ module axi_dmac_regmap_request #(
         9'h11f: up_dma_sg_address[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG] <= up_wdata[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG];
         9'h12f:
           if (HAS_ADDR_HIGH) begin
-            up_dma_sg_address[DMA_AXI_ADDR_WIDTH-1:32] <= up_wdata[ADDR_HIGH_MSB:0];
+            up_dma_sg_address[DMA_AXI_ADDR_WIDTH-1:HAS_ADDR_HIGH*32] <= up_wdata[ADDR_HIGH_MSB:0];
           end
         endcase
       end
