@@ -403,7 +403,7 @@ if {$ADI_PHY_SEL} {
    NUM_PORTS 2 \
   ]
   ad_ip_instance ilreduced_logic gt_powergood_and [list \
-     C_SIZE $num_quads \
+     C_SIZE 2 \
   ]
   ad_connect jesd204_phy/gtpowergood gt_powergood_concat/In0
   if {!$ASYMMETRIC_A_B_MODE} {
@@ -750,57 +750,53 @@ if {$ADI_PHY_SEL} {
   }
 
   # Export serial interfaces
+  for {set j 0} {$j < $MAX_NUMBER_OF_QUADS} {incr j} {
+    create_bd_port -dir I -from 3 -to 0 rx_${j}_p
+    create_bd_port -dir I -from 3 -to 0 rx_${j}_n
+    create_bd_port -dir O -from 3 -to 0 tx_${j}_p
+    create_bd_port -dir O -from 3 -to 0 tx_${j}_n
+  }
+
   if {!$SIDE_B_ONLY} {
-    for {set j 0} {$j < $num_quads} {incr j} {
-      if {$j < $num_quads_a} {
-        create_bd_port -dir I -from 3 -to 0 rx_${j}_p
-        create_bd_port -dir I -from 3 -to 0 rx_${j}_n
-        create_bd_port -dir O -from 3 -to 0 tx_${j}_p
-        create_bd_port -dir O -from 3 -to 0 tx_${j}_n
+    if {!$ASYMMETRIC_A_B_MODE} {
+      set half_lanes [expr max($RX_NUM_OF_LANES, $TX_NUM_OF_LANES) / 2]
+      set half_quads [expr int(ceil($half_lanes / 4.0))]
+      for {set j 0} {$j < $half_quads} {incr j} {
+        set jj [expr $j + 1]
         ad_connect rx_${j}_p jesd204_phy/rx_${j}_p
         ad_connect rx_${j}_n jesd204_phy/rx_${j}_n
         ad_connect tx_${j}_p jesd204_phy/tx_${j}_p
         ad_connect tx_${j}_n jesd204_phy/tx_${j}_n
-      } else {
+
+        ad_connect rx_${jj}_p jesd204_phy/rx_${jj}_p
+        ad_connect rx_${jj}_n jesd204_phy/rx_${jj}_n
+        ad_connect tx_${jj}_p jesd204_phy/tx_${jj}_p
+        ad_connect tx_${jj}_n jesd204_phy/tx_${jj}_n
+      }
+    } else {
+      for {set j 0} {$j < $num_quads_a} {incr j} {
+        ad_connect rx_${j}_p jesd204_phy/rx_${j}_p
+        ad_connect rx_${j}_n jesd204_phy/rx_${j}_n
+        ad_connect tx_${j}_p jesd204_phy/tx_${j}_p
+        ad_connect tx_${j}_n jesd204_phy/tx_${j}_n
+      }
+      for {set j $num_quads_a} {$j < $num_quads} {incr j} {
         set jj [expr $j - $num_quads_a]
-        create_bd_port -dir I -from 3 -to 0 rx_${j}_p
-        create_bd_port -dir I -from 3 -to 0 rx_${j}_n
-        create_bd_port -dir O -from 3 -to 0 tx_${j}_p
-        create_bd_port -dir O -from 3 -to 0 tx_${j}_n
         ad_connect rx_${j}_p jesd204_phy_b/rx_${jj}_p
         ad_connect rx_${j}_n jesd204_phy_b/rx_${jj}_n
         ad_connect tx_${j}_p jesd204_phy_b/tx_${jj}_p
         ad_connect tx_${j}_n jesd204_phy_b/tx_${jj}_n
       }
     }
-
-    if {$num_quads < $MAX_NUMBER_OF_QUADS} {
-      # Create dummy ports for non-existing lanes
-      for {set j $num_quads} {$j < $MAX_NUMBER_OF_QUADS} {incr j} {
-        create_bd_port -dir I -from 3 -to 0 rx_${j}_p
-        create_bd_port -dir I -from 3 -to 0 rx_${j}_n
-        create_bd_port -dir O -from 3 -to 0 tx_${j}_p
-        create_bd_port -dir O -from 3 -to 0 tx_${j}_n
-      }
-    }
   } else {
     # Map the serial lanes to side B only
     for {set j 0} {$j < $num_quads} {incr j} {
       set idx [expr $j + 1]
-      create_bd_port -dir I -from 3 -to 0 rx_${idx}_p
-      create_bd_port -dir I -from 3 -to 0 rx_${idx}_n
-      create_bd_port -dir O -from 3 -to 0 tx_${idx}_p
-      create_bd_port -dir O -from 3 -to 0 tx_${idx}_n
       ad_connect rx_${idx}_p jesd204_phy/rx_${j}_p
       ad_connect rx_${idx}_n jesd204_phy/rx_${j}_n
       ad_connect tx_${idx}_p jesd204_phy/tx_${j}_p
       ad_connect tx_${idx}_n jesd204_phy/tx_${j}_n
     }
-    # Crete dummy ports for non-existing lanes
-    create_bd_port -dir I -from 3 -to 0 rx_0_p
-    create_bd_port -dir I -from 3 -to 0 rx_0_n
-    create_bd_port -dir O -from 3 -to 0 tx_0_p
-    create_bd_port -dir O -from 3 -to 0 tx_0_n
   }
 }
 
@@ -1044,7 +1040,10 @@ if {$ADI_PHY_SEL} {
   ad_cpu_interconnect 0x44a60000 axi_apollo_rx_xcvr
   ad_cpu_interconnect 0x44b60000 axi_apollo_tx_xcvr
 } else {
-  # ad_cpu_interconnect 0x44a40000 jesd204_phy
+  for {set i 0} {$i < $num_quads} {incr i} {
+    set addr [expr 0x44040000 + $i * 0x40000]
+    ad_cpu_interconnect $addr jesd204_phy s_axi_${i}
+  }
 }
 ad_cpu_interconnect 0x44a10000 rx_apollo_tpl_core
 ad_cpu_interconnect 0x44b10000 tx_apollo_tpl_core
@@ -1065,7 +1064,10 @@ if {$ASYMMETRIC_A_B_MODE} {
     ad_cpu_interconnect 0x44aa0000 axi_apollo_rx_b_xcvr
     ad_cpu_interconnect 0x44ba0000 axi_apollo_tx_b_xcvr
   } else {
-    # ad_cpu_interconnect 0x45a40000 jesd204_phy_b
+    for {set i 0} {$i < $num_quads} {incr i} {
+      set addr [expr 0x44140000 + $i * 0x40000]
+      ad_cpu_interconnect $addr jesd204_phy_b s_axi_${i}
+    }
   }
   ad_cpu_interconnect 0x44ab0000 rx_b_apollo_tpl_core
   ad_cpu_interconnect 0x44bb0000 tx_b_apollo_tpl_core
