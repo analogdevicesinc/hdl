@@ -6,9 +6,6 @@
 set dco_clk_period 8.33
 create_clock -period $dco_clk_period -name dco  [get_ports dco_p]
 
-# data delay (dco to da/db skew 200ps)
-set data_delay  0.200
-
 # input delays for 120MHz clk
 
 set_input_delay -clock [get_clocks dco] -clock_fall -min -add_delay 1.880 [get_ports da_p]
