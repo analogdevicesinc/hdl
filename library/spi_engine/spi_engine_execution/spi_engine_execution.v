@@ -118,11 +118,8 @@ module spi_engine_execution #(
   reg last_transfer;
   reg echo_last_transfer;
   reg [7:0] word_length = DATA_WIDTH;
-  wire [7:0] word_length_s;
   reg [7:0] last_bit_count = DATA_WIDTH-1;
   reg [7:0] left_aligned = 8'b0;
-
-  assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
 
   reg [15:0] cmd_d1;
 
@@ -171,29 +168,9 @@ module spi_engine_execution #(
 
   wire sdo_io_ready;
 
+  assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
+
   (* direct_enable = "yes" *) wire cs_gen;
-
-  generate
-
-    if (ECHO_SCLK) begin
-
-      sync_bits #(
-        .NUM_OF_BITS(8),
-        .ASYNC_CLK(1),
-        .SYNC_STAGES(2)
-      ) i_word_length_sync (
-        .out_clk(echo_sclk),
-        .out_resetn(1'b1),
-        .in_bits(word_length),
-        .out_bits(word_length_s));
-
-    end else begin
-
-      assign word_length_s = word_length;
-
-    end
-
-  endgenerate
 
   spi_engine_execution_shiftreg #(
     .DEFAULT_SPI_CFG(DEFAULT_SPI_CFG),
@@ -219,7 +196,7 @@ module spi_engine_execution #(
     .current_cmd(cmd_d1),
     .sdo_idle_state(sdo_idle_state),
     .left_aligned(left_aligned),
-    .word_length(word_length_s),
+    .word_length(word_length),
     .sdo_io_ready(sdo_io_ready),
     .echo_last_bit(echo_last_bit),
     .transfer_active(transfer_active),

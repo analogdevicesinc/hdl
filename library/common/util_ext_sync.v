@@ -59,8 +59,8 @@ module util_ext_sync #(
     .ASYNC_CLK(1),
     .SYNC_STAGES(2)
   ) i_ext_sync_arm_sync (
-    .out_clk(clk_out),
-    .out_resetn(resetn),
+    .out_clk(clk),
+    .out_resetn(1'b1),
     .in_bits(ext_sync_arm),
     .out_bits(ext_sync_arm_cdc));
 
@@ -69,8 +69,8 @@ module util_ext_sync #(
     .ASYNC_CLK(1),
     .SYNC_STAGES(2)
   ) i_ext_sync_disarm_sync (
-    .out_clk(clk_out),
-    .out_resetn(resetn),
+    .out_clk(clk),
+    .out_resetn(1'b1),
     .in_bits(ext_sync_disarm),
     .out_bits(ext_sync_disarm_cdc));
 
@@ -79,8 +79,8 @@ module util_ext_sync #(
     .ASYNC_CLK(1),
     .SYNC_STAGES(2)
   ) i_sync_in_sync (
-    .out_clk(clk_out),
-    .out_resetn(resetn),
+    .out_clk(clk),
+    .out_resetn(1'b1),
     .in_bits(sync_in),
     .out_bits(sync_in_cdc));
 
@@ -90,11 +90,11 @@ module util_ext_sync #(
 
     if (ENABLED == 1'b0) begin
       sync_armed <= 1'b0;
-    end else if (~ext_sync_disarm_cdc & ext_sync_disarm) begin
+    end else if (~ext_sync_disarm_cdc && ext_sync_disarm) begin
       sync_armed <= 1'b0;
-    end else if (~ext_sync_arm_cdc & ext_sync_arm) begin
+    end else if (~ext_sync_arm_cdc && ext_sync_arm) begin
       sync_armed <= 1'b1;
-    end else if (~sync_in_d & sync_in_cdc) begin
+    end else if (~sync_in_d && sync_in_cdc) begin
       sync_armed <= 1'b0;
     end
   end

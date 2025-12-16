@@ -157,11 +157,11 @@ module axi_dmac_burst_memory #(
   reg dest_mem_data_last = 1'b0;
   reg [DATA_WIDTH_MEM_DEST/8-1:0] dest_mem_data_strb = {DATA_WIDTH_MEM_DEST/8{1'b1}};
 
-  reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
+  reg  [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
+  wire [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem_cdc;
 
   wire [BYTES_PER_BURST_WIDTH+1-1:0] src_burst_len_data;
-  reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}};
-  wire [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data_s;
+  reg  [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}};
 
   wire src_beat;
   wire src_last_beat;
@@ -185,6 +185,7 @@ module axi_dmac_burst_memory #(
   wire [ID_WIDTH-1:0] dest_id_next_inc;
   wire [ID_WIDTH-2:0] dest_id_reduced;
   wire dest_burst_valid;
+  reg  [2:0] dest_burst_valid_d;
   wire dest_burst_ready;
   wire dest_ready;
   wire [DATA_WIDTH_MEM_DEST-1:0] dest_mem_data;
@@ -250,6 +251,10 @@ module axi_dmac_burst_memory #(
   assign dest_burst_valid = dest_data_request_id != dest_id_next;
   assign dest_burst_ready = ~dest_valid | dest_last_beat;
 
+  always @(posedge dest_clk) begin
+    dest_burst_valid_d <= {dest_burst_valid_d[1:0], dest_burst_valid};
+  end
+
   /*
    * The data valid signal for the destination side is asserted if there are one
    * or more pending bursts. It is de-asserted if there are no more pending burst
@@ -258,7 +263,7 @@ module axi_dmac_burst_memory #(
   always @(posedge dest_clk) begin
     if (dest_reset == 1'b1) begin
       dest_valid <= 1'b0;
-    end else if (dest_burst_valid == 1'b1) begin
+    end else if (dest_burst_valid_d[2] == 1'b1) begin
       dest_valid <= 1'b1;
     end else if (dest_last_beat == 1'b1) begin
       dest_valid <= 1'b0;
@@ -316,7 +321,7 @@ module axi_dmac_burst_memory #(
     if (dest_reset == 1'b1) begin
       dest_id_next <= 'h00;
       dest_id_reduced_msb_next <= 1'b0;
-    end else if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
+    end else if (dest_burst_valid_d[2] == 1'b1 && dest_burst_ready == 1'b1) begin
       dest_id_next <= dest_id_next_inc;
       dest_id_reduced_msb_next <= ^dest_id_next_inc[ID_WIDTH-1-:2];
     end
@@ -342,15 +347,15 @@ module axi_dmac_burst_memory #(
   sync_bits #(
     .NUM_OF_BITS(BYTES_PER_BURST_WIDTH-DMA_LENGTH_ALIGN+1),
     .ASYNC_CLK(1)
-  ) i_waddr_sync (
+  ) i_burst_len_mem_sync (
     .out_clk(dest_clk),
     .out_resetn(~dest_reset),
     .in_bits(burst_len_mem[dest_id_reduced_next_s]),
-    .out_bits(dest_burst_len_data_s[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN]));
+    .out_bits(burst_len_mem_cdc));
 
   always @(posedge dest_clk) begin
-    if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
-      dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= dest_burst_len_data_s[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN];
+    if (dest_burst_valid_d[2] == 1'b1 && dest_burst_ready == 1'b1) begin
+      dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem_cdc;
     end
   end
 
@@ -374,7 +379,7 @@ module axi_dmac_burst_memory #(
   assign dest_burst_info_id = dest_id;
 
   always @(posedge dest_clk) begin
-    dest_burst_info_write <= (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1);
+    dest_burst_info_write <= (dest_burst_valid_d[2] == 1'b1 && dest_burst_ready == 1'b1);
   end
 
   assign dest_burst_len = dest_burst_len_data[BYTES_PER_BURST_WIDTH-1 -: BURST_LEN_WIDTH_DEST];

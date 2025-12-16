@@ -10,6 +10,7 @@ GENERIC_DEPS += spi_engine_execution.v
 GENERIC_DEPS += spi_engine_execution_shiftreg.v
 
 XILINX_DEPS += spi_engine_execution_ip.tcl
+XILINX_DEPS += spi_engine_execution_constr.ttcl
 
 XILINX_DEPS += ../../spi_engine/interfaces/spi_engine.xml
 XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl.xml
