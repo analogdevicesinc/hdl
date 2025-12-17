@@ -20,7 +20,7 @@ source ../common/adsy2301_bd.tcl
 # Reconfigure PS
 # - Additional general SPI clock @ 1 MHz
 set_property -dict [list \
-  CONFIG.PSU__CRL_APB__PL3_REF_CTRL__FREQMHZ {2} \
+  CONFIG.PSU__CRL_APB__PL3_REF_CTRL__FREQMHZ {25} \
   CONFIG.PSU__FPGA_PL3_ENABLE {1} \
 ] [get_bd_cells sys_ps8]
 

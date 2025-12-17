@@ -52,41 +52,41 @@ set_property -dict {PACKAGE_PIN M14  IOSTANDARD LVCMOS18 SLEW FAST} [get_ports "
 set_property -dict {PACKAGE_PIN M11  IOSTANDARD LVCMOS18          } [get_ports "XUD_SPI_MISO"]
 
 # set false path to output ports which connect to devices without any clocks
-set_false_path -to [get_ports BF_TR]
-set_false_path -to [get_ports BF_TX_LOAD]
-set_false_path -to [get_ports BF_RX_LOAD]
-set_false_path -to [get_ports PG_PA_VGG_01]
-set_false_path -to [get_ports BF_PWR_EN_01]
-set_false_path -to [get_ports BF_PA_ON_01]
-set_false_path -to [get_ports PG_PA_VGG_02]
-set_false_path -to [get_ports BF_PWR_EN_02]
-set_false_path -to [get_ports BF_PA_ON_02]
-set_false_path -to [get_ports PG_PA_VGG_03]
-set_false_path -to [get_ports BF_PWR_EN_03]
-set_false_path -to [get_ports BF_PA_ON_03]
-set_false_path -to [get_ports PG_PA_VGG_04]
-set_false_path -to [get_ports BF_PWR_EN_04]
-set_false_path -to [get_ports BF_PA_ON_04]
-set_false_path -to [get_ports XUD_RX_GAIN_MODE]
-set_false_path -to [get_ports XUD_PLL_OUTPUT_SEL]
-set_false_path -to [get_ports XUD_TXRX0]
-set_false_path -to [get_ports XUD_TXRX1]
-set_false_path -to [get_ports XUD_TXRX2]
-set_false_path -to [get_ports XUD_TXRX3]
+set_false_path -to   [get_ports BF_TR]
+set_false_path -to   [get_ports BF_TX_LOAD]
+set_false_path -to   [get_ports BF_RX_LOAD]
+set_false_path -to   [get_ports BF_PWR_EN_01]
+set_false_path -to   [get_ports BF_PA_ON_01]
+set_false_path -to   [get_ports BF_PWR_EN_02]
+set_false_path -to   [get_ports BF_PA_ON_02]
+set_false_path -to   [get_ports BF_PWR_EN_03]
+set_false_path -to   [get_ports BF_PA_ON_03]
+set_false_path -to   [get_ports BF_PWR_EN_04]
+set_false_path -to   [get_ports BF_PA_ON_04]
+set_false_path -to   [get_ports XUD_RX_GAIN_MODE]
+set_false_path -to   [get_ports XUD_PLL_OUTPUT_SEL]
+set_false_path -to   [get_ports XUD_TXRX0]
+set_false_path -to   [get_ports XUD_TXRX1]
+set_false_path -to   [get_ports XUD_TXRX2]
+set_false_path -to   [get_ports XUD_TXRX3]
+set_false_path -from [get_ports PG_PA_VGG_01]
+set_false_path -from [get_ports PG_PA_VGG_02]
+set_false_path -from [get_ports PG_PA_VGG_03]
+set_false_path -from [get_ports PG_PA_VGG_04]
 
-set trce_dly_max   0.900; # maximum board trace delay
-set trce_dly_min   0.850; # minimum board trace delay
+set trce_dly_max   0.000; # maximum board trace delay
+set trce_dly_min   0.000; # minimum board trace delay
 
 # BF SPI 01
 
 create_generated_clock -name BF_SPI_SCLK_01 -source [get_pins -of_objects [get_clocks clk_pl_3]] -divide_by 2 [get_ports BF_SPI_SCLK_01]
-set tsu          100.000;      # destination device setup time requirement
-set thd          20.000;      # destination device hold time requirement
+set tsu          0.000;      # destination device setup time requirement
+set thd          0.000;      # destination device hold time requirement
 set output_ports [get_ports [list BF_SPI_CSB_01 BF_SPI_MOSI_01]]; # list of output ports
 set_output_delay -clock [get_clocks clk_pl_3] -max [expr $trce_dly_max + $tsu] [get_ports $output_ports];
 set_output_delay -clock [get_clocks clk_pl_3] -min [expr $trce_dly_min - $thd] [get_ports $output_ports];
 set tco_max     5.000;     # Maximum clock to out delay
-set tco_min     40.000;     # Minimum clock to out delay
+set tco_min     5.000;     # Minimum clock to out delay
 set input_ports [get_ports BF_SPI_MISO_01]; # list of input ports
 set_input_delay -clock [get_clocks clk_pl_3] -max [expr $tco_max + $trce_dly_max * 2] [get_ports $input_ports];
 set_input_delay -clock [get_clocks clk_pl_3] -min [expr $tco_min + $trce_dly_min * 2] [get_ports $input_ports];
@@ -94,13 +94,13 @@ set_input_delay -clock [get_clocks clk_pl_3] -min [expr $tco_min + $trce_dly_min
 # BF SPI 02
 
 create_generated_clock -name BF_SPI_SCLK_02 -source [get_pins -of_objects [get_clocks clk_pl_3]] -divide_by 2 [get_ports BF_SPI_SCLK_02]
-set tsu          100.000;      # destination device setup time requirement
-set thd          20.000;      # destination device hold time requirement
+set tsu          0.000;      # destination device setup time requirement
+set thd          0.000;      # destination device hold time requirement
 set output_ports [get_ports [list BF_SPI_CSB_02 BF_SPI_MOSI_02]]; # list of output ports
 set_output_delay -clock [get_clocks clk_pl_3] -max [expr $trce_dly_max + $tsu] [get_ports $output_ports];
 set_output_delay -clock [get_clocks clk_pl_3] -min [expr $trce_dly_min - $thd] [get_ports $output_ports];
 set tco_max     5.000;     # Maximum clock to out delay
-set tco_min     40.000;     # Minimum clock to out delay
+set tco_min     5.000;     # Minimum clock to out delay
 set input_ports [get_ports BF_SPI_MISO_02]; # list of input ports
 set_input_delay -clock [get_clocks clk_pl_3] -max [expr $tco_max + $trce_dly_max * 2] [get_ports $input_ports];
 set_input_delay -clock [get_clocks clk_pl_3] -min [expr $tco_min + $trce_dly_min * 2] [get_ports $input_ports];
@@ -108,13 +108,13 @@ set_input_delay -clock [get_clocks clk_pl_3] -min [expr $tco_min + $trce_dly_min
 # BF SPI 03
 
 create_generated_clock -name BF_SPI_SCLK_03 -source [get_pins -of_objects [get_clocks clk_pl_3]] -divide_by 2 [get_ports BF_SPI_SCLK_03]
-set tsu          100.000;      # destination device setup time requirement
-set thd          20.000;      # destination device hold time requirement
+set tsu          0.000;      # destination device setup time requirement
+set thd          0.000;      # destination device hold time requirement
 set output_ports [get_ports [list BF_SPI_CSB_03 BF_SPI_MOSI_03]]; # list of output ports
 set_output_delay -clock [get_clocks clk_pl_3] -max [expr $trce_dly_max + $tsu] [get_ports $output_ports];
 set_output_delay -clock [get_clocks clk_pl_3] -min [expr $trce_dly_min - $thd] [get_ports $output_ports];
 set tco_max     5.000;     # Maximum clock to out delay
-set tco_min     40.000;     # Minimum clock to out delay
+set tco_min     5.000;     # Minimum clock to out delay
 set input_ports [get_ports BF_SPI_MISO_03]; # list of input ports
 set_input_delay -clock [get_clocks clk_pl_3] -max [expr $tco_max + $trce_dly_max * 2] [get_ports $input_ports];
 set_input_delay -clock [get_clocks clk_pl_3] -min [expr $tco_min + $trce_dly_min * 2] [get_ports $input_ports];
@@ -122,13 +122,13 @@ set_input_delay -clock [get_clocks clk_pl_3] -min [expr $tco_min + $trce_dly_min
 # BF SPI 04
 
 create_generated_clock -name BF_SPI_SCLK_04 -source [get_pins -of_objects [get_clocks clk_pl_3]] -divide_by 2 [get_ports BF_SPI_SCLK_04]
-set tsu          100.000;      # destination device setup time requirement
-set thd          20.000;      # destination device hold time requirement
+set tsu          0.000;      # destination device setup time requirement
+set thd          0.000;      # destination device hold time requirement
 set output_ports [get_ports [list BF_SPI_CSB_04 BF_SPI_MOSI_04]]; # list of output ports
 set_output_delay -clock [get_clocks clk_pl_3] -max [expr $trce_dly_max + $tsu] [get_ports $output_ports];
 set_output_delay -clock [get_clocks clk_pl_3] -min [expr $trce_dly_min - $thd] [get_ports $output_ports];
 set tco_max     5.000;     # Maximum clock to out delay
-set tco_min     40.000;     # Minimum clock to out delay
+set tco_min     5.000;     # Minimum clock to out delay
 set input_ports [get_ports BF_SPI_MISO_04]; # list of input ports
 set_input_delay -clock [get_clocks clk_pl_3] -max [expr $tco_max + $trce_dly_max * 2] [get_ports $input_ports];
 set_input_delay -clock [get_clocks clk_pl_3] -min [expr $tco_min + $trce_dly_min * 2] [get_ports $input_ports];
@@ -136,13 +136,13 @@ set_input_delay -clock [get_clocks clk_pl_3] -min [expr $tco_min + $trce_dly_min
 # XUD SPI
 
 create_generated_clock -name XUD_SPI_SCLK -source [get_pins -of_objects [get_clocks clk_pl_3]] -divide_by 2 [get_ports XUD_SPI_SCLK]
-set tsu          100.000;      # destination device setup time requirement
-set thd          20.000;      # destination device hold time requirement
+set tsu          0.000;      # destination device setup time requirement
+set thd          0.000;      # destination device hold time requirement
 set output_ports [get_ports [list XUD_SPI_CSB XUD_SPI_MOSI]]; # list of output ports
 set_output_delay -clock [get_clocks clk_pl_3] -max [expr $trce_dly_max + $tsu] [get_ports $output_ports];
 set_output_delay -clock [get_clocks clk_pl_3] -min [expr $trce_dly_min - $thd] [get_ports $output_ports];
 set tco_max     5.000;     # Maximum clock to out delay
-set tco_min     40.000;     # Minimum clock to out delay
+set tco_min     5.000;     # Minimum clock to out delay
 set input_ports [get_ports XUD_SPI_MISO]; # list of input ports
 set_input_delay -clock [get_clocks clk_pl_3] -max [expr $tco_max + $trce_dly_max * 2] [get_ports $input_ports];
 set_input_delay -clock [get_clocks clk_pl_3] -min [expr $tco_min + $trce_dly_min * 2] [get_ports $input_ports];

@@ -143,7 +143,7 @@ module system_top (
 
   system_wrapper i_system_wrapper (
     .gpio_out_tri_o(adsy2301_gpio[16:0]),
-    .gpio_in_tri_i(adsy2301_gpio[20:0]),
+    .gpio_in_tri_i(adsy2301_gpio[20:17]),
     .bf_spi_sclk_01(BF_SPI_SCLK_01),
     .bf_spi_csb_01(BF_SPI_CSB_01),
     .bf_spi_mosi_01(BF_SPI_MOSI_01),
