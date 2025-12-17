@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -263,8 +263,9 @@ module request_arb #(
   wire src_req_ready;
   wire [DMA_ADDRESS_WIDTH_DEST-1:0] src_req_dest_address;
   wire [DMA_ADDRESS_WIDTH_SRC-1:0] src_req_src_address;
-  wire [BEATS_PER_BURST_WIDTH_SRC-1:0] src_req_last_burst_length;
+  wire [BYTES_PER_BURST_WIDTH-1:0] src_req_length;
   wire [BYTES_PER_BEAT_WIDTH_SRC-1:0] src_req_last_beat_bytes;
+  wire [BEATS_PER_BURST_WIDTH_SRC:0] src_req_last_burst_length;
   wire src_req_sync_transfer_start;
   wire src_req_xlast;
   wire src_req_islast;
@@ -299,7 +300,7 @@ module request_arb #(
 
   wire                                 src_bl_valid;
   wire                                 src_bl_ready;
-  wire [BEATS_PER_BURST_WIDTH_SRC-1:0] src_burst_length;
+  wire [BEATS_PER_BURST_WIDTH_SRC:0] src_burst_length;
 
   wire [BYTES_PER_BURST_WIDTH-1:0] dest_burst_info_length;
   wire                             dest_burst_info_partial;
@@ -349,12 +350,20 @@ module request_arb #(
     eot_mem_dest[source_id] <= source_eot;
   end
 
+  generate if (BEATS_PER_BURST_WIDTH_SRC>0) begin
+    assign src_req_last_burst_length = {1'b0, src_req_length[BYTES_PER_BURST_WIDTH-1 : BYTES_PER_BEAT_WIDTH_SRC]};
+    assign src_req_last_beat_bytes = src_req_length[BYTES_PER_BEAT_WIDTH_SRC-1:0];
+  end else begin
+    assign src_req_last_burst_length = 1'b0;
+    assign src_req_last_beat_bytes = src_req_length;
+  end endgenerate
+
   generate if (DMA_TYPE_DEST == DMA_TYPE_MM_AXI) begin
 
   wire                                  dest_bl_valid;
   wire                                  dest_bl_ready;
-  wire [BEATS_PER_BURST_WIDTH_DEST-1:0] dest_burst_length;
-  wire [BEATS_PER_BURST_WIDTH_SRC-1:0] dest_src_burst_length;
+  wire [BEATS_PER_BURST_WIDTH_DEST:0] dest_burst_length;
+  wire [BEATS_PER_BURST_WIDTH_SRC:0] dest_src_burst_length;
 
   assign dest_clk = m_dest_axi_aclk;
   assign dest_ext_resetn = m_dest_axi_aresetn;
@@ -439,7 +448,7 @@ module request_arb #(
     .m_axi_bready(m_axi_bready));
 
   util_axis_fifo #(
-    .DATA_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
+    .DATA_WIDTH(BEATS_PER_BURST_WIDTH_SRC+1),
     .ADDRESS_WIDTH(0),
     .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
   ) i_src_dest_bl_fifo (
@@ -471,7 +480,7 @@ module request_arb #(
   end
 
   if (BEATS_PER_BURST_WIDTH_SRC > BEATS_PER_BURST_WIDTH_DEST) begin
-  assign dest_burst_length = dest_src_burst_length[BEATS_PER_BURST_WIDTH_SRC-1 -: BEATS_PER_BURST_WIDTH_DEST];
+  assign dest_burst_length = dest_src_burst_length[BEATS_PER_BURST_WIDTH_SRC -: BEATS_PER_BURST_WIDTH_DEST+1];
   end
 
   end else begin
@@ -1086,8 +1095,7 @@ module request_arb #(
     .m_axis_data({
       src_req_dest_address,
       src_req_src_address,
-      src_req_last_burst_length,
-      src_req_last_beat_bytes,
+      src_req_length,
       src_req_sync_transfer_start,
       src_req_xlast,
       src_req_islast}),
