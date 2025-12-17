@@ -36,7 +36,6 @@
 `timescale 1ps/1ps
 
 module hsci_phy_top (
-
   input wire          pll_inclk,
   input wire          hsci_pll_reset,
 
@@ -65,8 +64,8 @@ module hsci_phy_top (
   output logic        vtc_rdy_bsc_rx,
   output logic        dly_rdy_bsc_rx,
   output logic        rst_seq_done
-
 );
+
    //TX
    logic [7:0]       hsci_mosi_data_br;
    logic             rst_seq_done_tx;
