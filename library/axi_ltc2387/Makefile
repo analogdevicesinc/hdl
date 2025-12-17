@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2023, 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -18,6 +18,7 @@ GENERIC_DEPS += ../common/up_xfer_status.v
 GENERIC_DEPS += axi_ltc2387.v
 GENERIC_DEPS += axi_ltc2387_channel.v
 GENERIC_DEPS += axi_ltc2387_if.v
+GENERIC_DEPS += axi_ltc2387_constr.xdc
 
 XILINX_DEPS += ../xilinx/common/ad_data_clk.v
 XILINX_DEPS += ../xilinx/common/ad_data_in.v
