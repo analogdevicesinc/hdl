@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -36,7 +36,7 @@
 `timescale 1ns/100ps
 
 module dmac_sg #(
-  parameter DMA_AXI_ADDR_WIDTH = 32,
+  parameter DMA_AXI_ADDR_WIDTH = 64,
   parameter DMA_DATA_WIDTH = 64,
   parameter DMA_LENGTH_WIDTH = 24,
   parameter AXI_LENGTH_WIDTH = 8,
