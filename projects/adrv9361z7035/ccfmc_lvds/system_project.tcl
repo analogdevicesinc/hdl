@@ -6,7 +6,7 @@
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
-set ADI_POST_ROUTE_POD_PRE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/route_design.tcl]
+set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timing_fix_xilinx.tcl]
 
 adi_project_create adrv9361z7035_ccfmc_lvds 0 {} "xc7z035ifbg676-2L"
 adi_project_files adrv9361z7035_ccfmc_lvds [list \
