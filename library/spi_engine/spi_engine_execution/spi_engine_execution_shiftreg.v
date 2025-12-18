@@ -226,6 +226,8 @@ module spi_engine_execution_shiftreg #(
 
     end
 
+    reg [3:0] last_sdi_bit_m = 4'b0;
+
     assign sdi_data = sdi_data_latch;
     assign last_sdi_bit = last_sdi_bit_r;
     assign echo_last_bit =  !last_sdi_bit_m[3] && last_sdi_bit_m[2];
@@ -233,7 +235,6 @@ module spi_engine_execution_shiftreg #(
     // sdi_data_valid is synchronous to SPI clock, so synchronize the
     // last_sdi_bit to SPI clock
 
-    reg [3:0] last_sdi_bit_m = 4'b0;
     always @(posedge clk) begin
       if (cs_activate) begin
         last_sdi_bit_m <= 4'b0;
