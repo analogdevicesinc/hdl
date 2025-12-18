@@ -3,9 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# Intel specific helper proc/ compatibility with xilinx procs on adi_board.tcl
-source $ad_hdl_dir/projects/scripts/adi_board_intel.tcl
-
 # a10gx carrier qsys
 set system_type nios
 
@@ -223,19 +220,7 @@ set_connection_parameter_value sys_cpu.instruction_master/sys_flash.uas defaultC
 
 
 
-# cpu/hps handling
-
-proc ad_cpu_interrupt {m_irq m_port} {
-
-  add_connection sys_cpu.irq ${m_port}
-  set_connection_parameter_value sys_cpu.irq/${m_port} irqNumber ${m_irq}
-}
-
-proc ad_cpu_interconnect {m_base m_port} {
-
-  add_connection sys_cpu.data_master ${m_port}
-  set_connection_parameter_value sys_cpu.data_master/${m_port} baseAddress [expr ($m_base + 0x10000000)]
-}
+# carrier-specific cpu/hps handling
 
 proc ad_dma_interconnect {m_port} {
 

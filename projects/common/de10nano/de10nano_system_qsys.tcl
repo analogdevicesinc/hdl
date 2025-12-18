@@ -3,9 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# Intel specific helper proc/ compatibility with xilinx procs on adi_board.tcl
-source $ad_hdl_dir/projects/scripts/adi_board_intel.tcl
-
 # de10nano carrier qsys
 # system clock
 
@@ -125,19 +122,7 @@ set_interface_property sys_hps_i2c1_clk EXPORT_OF sys_hps.i2c1_clk
 add_interface sys_hps_i2c1_scl_in clock sink
 set_interface_property sys_hps_i2c1_scl_in EXPORT_OF sys_hps.i2c1_scl_in
 
-# cpu/hps handling
-
-proc ad_cpu_interrupt {m_irq m_port} {
-
-  add_connection sys_hps.f2h_irq0 ${m_port}
-  set_connection_parameter_value sys_hps.f2h_irq0/${m_port} irqNumber ${m_irq}
-}
-
-proc ad_cpu_interconnect {m_base m_port} {
-
-  add_connection sys_hps.h2f_lw_axi_master ${m_port}
-  set_connection_parameter_value sys_hps.h2f_lw_axi_master/${m_port} baseAddress ${m_base}
-}
+# carrier-specific cpu/hps handling
 
 proc ad_dma_interconnect {m_port} {
 

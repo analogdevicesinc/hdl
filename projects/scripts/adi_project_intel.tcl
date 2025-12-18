@@ -21,6 +21,7 @@ proc adi_project {project_name {parameter_list {}}} {
   global ad_ghdl_dir
   global family
   global device
+  global sys_intel_soc
   global REQUIRED_QUARTUS_VERSION
   global quartus
   global IGNORE_VERSION_CHECK
@@ -52,33 +53,40 @@ proc adi_project {project_name {parameter_list {}}} {
   if [regexp "_a10gx" $project_name] {
     set family "Arria 10"
     set device 10AX115S2F45I1SG
+    # a10gx alone uses nios
+    set sys_intel_soc 0
   }
 
   if [regexp "_a10soc" $project_name] {
     set family "Arria 10"
     set device 10AS066N3F40E2SG
+    set sys_intel_soc 1
   }
 
   if [regexp "_s10soc" $project_name] {
     set family "Stratix 10"
     set device 1SX280HU2F50E1VGAS
+    set sys_intel_soc 1
   }
 
   if [regexp "_c5soc" $project_name] {
     set family "Cyclone V"
     set device 5CSXFC6D6F31C8ES
+    set sys_intel_soc 1
     set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
   if [regexp "_de10nano" $project_name] {
     set family "Cyclone V"
     set device 5CSEBA6U23I7DK
+    set sys_intel_soc 1
     set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
   if [regexp "fm87" $project_name] {
     set family "Agilex 7"
     set device AGIB027R31B1E1V
+    set sys_intel_soc 1
     set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 

@@ -21,6 +21,18 @@ set xcvr_instance NONE
 
 set use_smartconnect 1
 
+proc ad_detect_vendor {} {
+  if {[info commands get_bd_cells] != ""} {
+    return "xilinx"
+  }
+  if {[info commands add_instance] != ""} {
+    return "intel"
+  }
+  # Default to xilinx for backward compatibility
+  return "xilinx"
+}
+
+
 ## Add an instance of an IP or inline_hdl to the block design.
 #
 # \param[i_ip] - name of the IP
@@ -29,6 +41,18 @@ set use_smartconnect 1
 # pairs
 #
 proc ad_ip_instance {i_ip i_name {i_params {}}} {
+
+  set vendor [ad_detect_vendor]
+  if {$vendor == "xilinx"} {
+    ad_ip_instance_xilinx $i_ip $i_name $i_params
+  } elseif {$vendor == "intel"} {
+    ad_ip_instance_intel $i_ip $i_name $i_params
+  }
+}
+
+## Add an instance of an IP or inline_hdl to the block design (Xilinx implementation).
+proc ad_ip_instance_xilinx {i_ip i_name {i_params {}}} {
+
   set ip_type ip
   set ip_def [get_ipdefs -all -filter "VLNV =~ *:${i_ip}:* && \
     design_tool_contexts =~ *IPI* && UPGRADE_VERSIONS == \"\""]
@@ -46,6 +70,17 @@ proc ad_ip_instance {i_ip i_name {i_params {}}} {
   }
 }
 
+## Add an instance of an IP to the block design (Intel implementation).
+proc ad_ip_instance_intel {i_ip i_name {i_params {}}} {
+  add_instance ${i_name} ${i_ip}
+  # Set parameters if provided
+  if {$i_params != {}} {
+    foreach {k v} $i_params {
+      set_instance_parameter_value ${i_name} $k $v
+    }
+  }
+}
+
 ## Define a parameter value of an IP instance.
 #
 # \param[i_name] - name of the instance
@@ -53,8 +88,14 @@ proc ad_ip_instance {i_ip i_name {i_params {}}} {
 # \param[i_value] - value of the parameter
 #
 proc ad_ip_parameter {i_name i_param i_value} {
-
-  set_property ${i_param} ${i_value} [get_bd_cells ${i_name}]
+  set vendor [ad_detect_vendor]
+  if {$vendor == "xilinx"} {
+    set_property ${i_param} ${i_value} [get_bd_cells ${i_name}]
+  } elseif {$vendor == "intel"} {
+    # Remove CONFIG. prefix if present for Intel
+    regsub {^CONFIG\.} $i_param {} param_name
+    set_instance_parameter_value ${i_name} ${param_name} ${i_value}
+  }
 }
 
 ## Define the type of an IPI interface object, in general these objects an be:
@@ -158,7 +199,7 @@ proc ad_connect_int_width {obj} {
 }
 
 
-## Connect two IPI interface object together.
+## Connect two IPI/Platform Designer interface objects together.
 #
 # \param[p_name_1] - first object name
 # \param[p_name_2] - second object name
@@ -168,6 +209,16 @@ proc ad_connect_int_width {obj} {
 # \return - N/A
 #
 proc ad_connect {name_a name_b} {
+  set vendor [ad_detect_vendor]
+  if {$vendor == "xilinx"} {
+    ad_connect_xilinx $name_a $name_b
+  } elseif {$vendor == "intel"} {
+    ad_connect_intel $name_a $name_b
+  }
+}
+
+## Connect two IPI interface objects together. (Xilinx implementation)
+proc ad_connect_xilinx {name_a name_b} {
   set type_a [ad_connect_int_class $name_a]
   set type_b [ad_connect_int_class $name_b]
 
@@ -255,7 +306,13 @@ proc ad_connect {name_a name_b} {
   puts "connect_bd_net [get_bd_pin $cell/dout] $obj_b"
 }
 
-## Disconnect two IPI interface object together.
+## Connect two Platform Designer interface objects together. (Intel implementation)
+proc ad_connect_intel {name_a name_b} {
+
+    add_connection $name_a $name_b
+}
+
+## Disconnect two IPI interface objects.
 #
 # \param[p_name_1] - first object name
 # \param[p_name_2] - second object name
@@ -1204,6 +1261,39 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
   }
 }
 
+proc ad_cpu_interconnect_intel {m_base m_port {avl_bridge ""} {avl_bridge_base 0x00000000} {avl_address_width 18}} {
+
+  global sys_intel_soc
+
+  if {$sys_intel_soc == 0} { # a10gx only
+    set soc_master sys_cpu
+    set soc_port   data_master
+    set soc_base   0x10000000
+  } elseif {$sys_intel_soc == 1} {
+    set soc_master sys_hps
+    set soc_port   h2f_lw_axi_master
+    set soc_base   0x00000000
+  }
+
+  if {[string equal ${avl_bridge} ""]} {
+    add_connection $soc_master.$soc_port ${m_port}
+    set_connection_parameter_value $soc_master.$soc_port/${m_port} baseAddress [expr ($m_base + $soc_base)]
+  } else {
+    if {[lsearch -exact [get_instances] ${avl_bridge}] == -1} {
+      ## Instantiate the bridge and connect the interfaces
+      add_instance ${avl_bridge} altera_avalon_mm_bridge
+      set_instance_parameter_value ${avl_bridge} {ADDRESS_WIDTH} $avl_address_width
+      set_instance_parameter_value ${avl_bridge} {SYNC_RESET} {1}
+      add_connection $soc_master.$soc_port ${avl_bridge}.s0
+      set_connection_parameter_value $soc_master.$soc_port/${avl_bridge}.s0 baseAddress ${avl_bridge_base}
+      add_connection sys_clk.clk ${avl_bridge}.clk
+      add_connection sys_clk.clk_reset ${avl_bridge}.reset
+    }
+    add_connection ${avl_bridge}.m0 ${m_port}
+    set_connection_parameter_value ${avl_bridge}.m0/${m_port} baseAddress ${m_base}
+  }
+}
+
 ## Connects an IP interrupt port to the system's interrupt controller interface.
 #
 #  \param[p_ps_index] - interrupt index used in PSx based architecture
@@ -1254,4 +1344,20 @@ proc ad_cpu_interrupt {p_ps_index p_mb_index p_name} {
     disconnect_bd_net $p_net $p_pin
     ad_connect sys_concat_intc/In$p_index $p_name
   }
+}
+
+proc ad_cpu_interrupt_intel {m_irq m_port} {
+
+  global sys_intel_soc
+
+  if {$sys_intel_soc == 0} { # a10gx only
+    set soc_master  sys_cpu
+    set soc_irq     irq
+  } elseif {$sys_intel_soc == 1} {
+    set soc_master  sys_hps
+    set soc_irq     f2h_irq0
+  }
+
+    add_connection $soc_master.$soc_irq ${m_port}
+    set_connection_parameter_value $soc_master.$soc_irq/${m_port} irqNumber ${m_irq}
 }

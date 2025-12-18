@@ -3,9 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# Intel specific helper proc/ compatibility with xilinx procs on adi_board.tcl
-source $ad_hdl_dir/projects/scripts/adi_board_intel.tcl
-
 # stratix10soc carrier qsys
 
 set system_type s10soc
@@ -239,34 +236,7 @@ set_interface_property sys_hps_ddr_oct EXPORT_OF sys_hps_ddr4_cntrl.oct
 add_interface sys_hps_ddr_ref_clk clock sink
 set_interface_property sys_hps_ddr_ref_clk EXPORT_OF sys_hps_ddr4_cntrl.pll_ref_clk
 
-# cpu/hps handling
-
-proc ad_cpu_interrupt {m_irq m_port} {
-
-  add_connection sys_hps.f2h_irq0 ${m_port}
-  set_connection_parameter_value sys_hps.f2h_irq0/${m_port} irqNumber ${m_irq}
-}
-
-proc ad_cpu_interconnect {m_base m_port {avl_bridge ""} {avl_bridge_base 0x00000000} {avl_address_width 18}} {
-
-  if {[string equal ${avl_bridge} ""]} {
-    add_connection sys_hps.h2f_lw_axi_master ${m_port}
-    set_connection_parameter_value sys_hps.h2f_lw_axi_master/${m_port} baseAddress ${m_base}
-  } else {
-    if {[lsearch -exact [get_instances] ${avl_bridge}] == -1} {
-      ## Instantiate the bridge and connect the interfaces
-      add_instance ${avl_bridge} altera_avalon_mm_bridge
-      set_instance_parameter_value ${avl_bridge} {ADDRESS_WIDTH} $avl_address_width
-      set_instance_parameter_value ${avl_bridge} {SYNC_RESET} {1}
-      add_connection sys_hps.h2f_lw_axi_master ${avl_bridge}.s0
-      set_connection_parameter_value sys_hps.h2f_lw_axi_master/${avl_bridge}.s0 baseAddress ${avl_bridge_base}
-      add_connection sys_clk.clk ${avl_bridge}.clk
-      add_connection sys_clk.clk_reset ${avl_bridge}.reset
-    }
-    add_connection ${avl_bridge}.m0 ${m_port}
-    set_connection_parameter_value ${avl_bridge}.m0/${m_port} baseAddress ${m_base}
-  }
- }
+# carrier-specific  cpu/hps handling
 
 ## Connect the memory mapped interface of an ADI DMAC to the hps.f2sdram0 interface
 #  Use an altera_axi_bridge to isolate the bridging logic, which will be generated

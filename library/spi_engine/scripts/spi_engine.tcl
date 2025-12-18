@@ -5,18 +5,8 @@
 
 ## Unified SPI Engine generation script
 ## This script provides a single implementation that works for both Xilinx and Intel
-## by using the vendor-agnostic ad_* procedures from adi_board.tcl or <intel_carrier>_system_qsys.tcl
-
-proc ad_detect_vendor {} {
-  if {[info commands get_bd_cells] != ""} {
-    return "xilinx"
-  }
-  if {[info commands add_instance] != ""} {
-    return "intel"
-  }
-  # Default to xilinx for backward compatibility
-  return "xilinx"
-}
+## by using the vendor-agnostic ad_* procedures from adi_board.tcl
+source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 proc optional_param {param_list index default_value} {
   if {[llength $param_list] > $index} {
