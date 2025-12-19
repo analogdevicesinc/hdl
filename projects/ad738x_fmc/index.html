@@ -104,7 +104,7 @@
 <li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#jumper-setup">Jumper setup</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
-<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
+<li><a class="reference internal" href="#i2c-connections-zynq">I2C connections (Zynq)</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
@@ -282,6 +282,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4052_ardz/index.html">AD4052-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4062_ardz/index.html">AD4062-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4080_fmc_evb/index.html">AD4080-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
@@ -323,6 +324,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admx100x_evb/index.html">ADMX100X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../admx6001_ebz/index.html">ADMX6001-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9001/index.html">ADRV9001</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9001_dual/index.html">ADRV9001-DUAL</a></li>
@@ -460,6 +462,7 @@ from -40°C to +125°C temperature range.</p>
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a> on FMC slot</p></li>
+<li><p><a class="icon link reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard" target="_blank">LFCPNX-EVN</a> on FMC slot</p></li>
 </ul>
 </section>
 <section id="block-design">
@@ -565,6 +568,7 @@ A1 buffer amplifier</p></td>
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
+<p>Xilinx</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -588,9 +592,30 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tbody>
 </table>
 </div>
+<p>Lattice</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>RISC-V RX</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>dmac0</p></td>
+<td><p>0x4002_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_spi0</p></td>
+<td><p>0x4003_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>pwm0</p></td>
+<td><p>0x4004_0000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
-<section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading"></a></h3>
+<section id="i2c-connections-zynq">
+<h3>I2C connections (Zynq)<a class="headerlink" href="#i2c-connections-zynq" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -658,6 +683,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <ul class="simple">
 <li><p>Zynq-7000: if PS7 is used, then the offset is 54</p></li>
 </ul>
+<p><strong>Zynq Platform:</strong></p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -686,17 +712,57 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </thead>
 <tbody>
 <tr class="row-odd"><td><p>gpio[33]</p></td>
-<td><p>OUT</p></td>
+<td><p>IN</p></td>
 <td><p>33</p></td>
 <td><p>87</p></td>
 <td><p>sdid</p></td>
 <td><p>0</p></td>
 </tr>
 <tr class="row-even"><td><p>gpio[32]</p></td>
-<td><p>OUT</p></td>
+<td><p>IN</p></td>
 <td><p>32</p></td>
 <td><p>86</p></td>
 <td><p>sdib</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Lattice LFCPNX-EVB Platform:</strong></p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Software GPIO</p></th>
+<th class="head"><p>Assigned value</p></th>
+<th class="head"><p>Assigned value</p></th>
+</tr>
+<tr class="row-even"><th class="head"><p>HDL GPIO IP</p></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"><p>RISC-V RX</p></th>
+<th class="head"><p>ALERT_SPI_N=1</p></th>
+<th class="head"><p>ALERT_SPI_N=0</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>gpio1[29]</p></td>
+<td><p>IN</p></td>
+<td><p>gpio1[29]</p></td>
+<td><p>sdi[3]</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>gpio1[28]</p></td>
+<td><p>IN</p></td>
+<td><p>gpio1[28]</p></td>
+<td><p>sdi[1]</p></td>
 <td><p>0</p></td>
 </tr>
 </tbody>
@@ -706,6 +772,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
+<p>Xilinx</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -729,6 +796,27 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tbody>
 </table>
 </div>
+<p>Lattice</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance name</p></th>
+<th class="head"><p>HDL</p></th>
+<th class="head"><p>Lattice RISC-V RX</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>dmac0</p></td>
+<td><p>IRQ_S7</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_spi0</p></td>
+<td><p>IRQ_S8</p></td>
+<td><p>8</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 </section>
 <section id="building-the-hdl-project">
@@ -740,7 +828,7 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
 <a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository, and then build the project as follows:</p>
-<p><strong>Linux/Cygwin/WSL</strong></p>
+<p><strong>Linux/Cygwin/WSL (for ZedBoard - Xilinx)</strong></p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
@@ -753,12 +841,40 @@ the HDL repository, and then build the project as follows:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ALERT_SPI_N</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">NUM_OF_SDI</span><span class="o">=</span><span class="m">4</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>The result of the build, if parameters were used, will be in a folder named
-by the configuration used:</p>
+<div class="clear-left"></div></div></div><p>The result of the Xilinx build, if parameters were used, will be in a folder
+named by the configuration used:</p>
 <p>if the following command was run</p>
 <p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">ALERT_SPI_N=0</span> <span class="pre">NUM_OF_SDI=4</span></code></p>
 <p>then the folder name will be:</p>
 <p><code class="docutils literal notranslate"><span class="pre">ALERTSPIN0_NUMOFSDI4</span></code></p>
+<p><strong>Linux/Cygwin/WSL (for LFCPNX-EVN - Lattice)</strong></p>
+<p>Before building the Lattice project, download the necessary Lattice Propel Builder
+IPs by running the following commands in the Lattice Propel Builder TCL Console:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ip_catalog_install</span><span class="w"> </span><span class="o">-</span>vlnv<span class="w"> </span>latticesemi.com:ip:gpio:1.7.0
+<span class="nv">ip_catalog_install</span><span class="w"> </span><span class="o">-</span>vlnv<span class="w"> </span>latticesemi.com:ip:spi_controller:2.1.0
+<span class="nv">ip_catalog_install</span><span class="w"> </span><span class="o">-</span>vlnv<span class="w"> </span>latticesemi.com:ip:i2c_controller:2.2.0
+<span class="nv">ip_catalog_install</span><span class="w"> </span><span class="o">-</span>vlnv<span class="w"> </span>latticesemi.com:ip:axi_interconnect:2.0.1
+<span class="nv">ip_catalog_install</span><span class="w"> </span><span class="o">-</span>vlnv<span class="w"> </span>latticesemi.com:ip:uart:1.4.0
+<span class="nv">ip_catalog_install</span><span class="w"> </span><span class="o">-</span>vlnv<span class="w"> </span>latticesemi.com:ip:axi2apb_bridge:1.3.0
+<span class="nv">ip_catalog_install</span><span class="w"> </span><span class="o">-</span>vlnv<span class="w"> </span>latticesemi.com:ip:gp_timer:1.4.0
+</pre></div>
+</div>
+<p>Then, to build the project:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad738x_fmc/lfcpnx
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad738x_fmc/lfcpnx$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ALERT_SPI_N</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">NUM_OF_SDI</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">SYSMEM_INIT_FILE</span><span class="o">=</span>&lt;path_to&gt;/&lt;sysmem_init&gt;.mem
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The SYSMEM_INIT_FILE parameter for LFCPNX-EVN is optional, use it to build the
+project with an already initialized system memory for the RISC-V RX CPU,
+otherwise the memory can be initialized from the Lattice Propel OCM debugger.</p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
@@ -800,68 +916,83 @@ by the configuration used:</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 30.0%" />
-<col style="width: 35.0%" />
-<col style="width: 35.0%" />
+<col style="width: 31.2%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 18.8%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>IP name</p></th>
 <th class="head"><p>Source code link</p></th>
 <th class="head"><p>Documentation link</p></th>
+<th class="head"><p>Platform</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>AXI_CLKGEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen" target="_blank">library/axi_clkgen</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
+<td><p>Zynq</p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
+<td><p>Zynq, LFCPNX</p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx" target="_blank">library/axi_hdmi_tx</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">AXI HDMI TX</span></a></p></td>
+<td><p>Zynq</p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi" target="_blank">library/axi_i2s_adi</a></p></td>
 <td><p>—</p></td>
+<td><p>Zynq</p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_PWM_GEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen" target="_blank">library/axi_pwm_gen</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">AXI PWM Generator</span></a></p></td>
+<td><p>Zynq, LFCPNX</p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx" target="_blank">library/axi_spdif_tx</a></p></td>
 <td><p>—</p></td>
+<td><p>Zynq</p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
+<td><p>Zynq, LFCPNX</p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SPI_ENGINE</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/axi_spi_engine" target="_blank">library/spi_engine/axi_spi_engine</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">AXI SPI Engine Module</span></a></p></td>
+<td><p>Zynq, LFCPNX</p></td>
 </tr>
 <tr class="row-even"><td><p>SPI_ENGINE_EXECUTION</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_execution" target="_blank">library/spi_engine/spi_engine_execution</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">SPI Engine Execution Module</span></a></p></td>
+<td><p>Zynq, LFCPNX</p></td>
 </tr>
 <tr class="row-odd"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_interconnect" target="_blank">library/spi_engine/spi_engine_interconnect</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">SPI Engine Interconnect Module</span></a></p></td>
+<td><p>Zynq, LFCPNX</p></td>
 </tr>
 <tr class="row-even"><td><p>SPI_ENGINE_OFFLOAD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_offload" target="_blank">library/spi_engine/spi_engine_offload</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload Module</span></a></p></td>
+<td><p>Zynq, LFCPNX</p></td>
 </tr>
 <tr class="row-odd"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
+<td><p>Zynq, LFCPNX</p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_I2C-MIXER</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer" target="_blank">library/util_i2c_mixer</a></p></td>
 <td><p>—</p></td>
+<td><p>Zynq</p></td>
 </tr>
 </tbody>
 </table>

@@ -304,6 +304,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4052_ardz/index.html">AD4052-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4062_ardz/index.html">AD4062-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4080_fmc_evb/index.html">AD4080-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
@@ -345,6 +346,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/admx100x_evb/index.html">ADMX100X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/admx6001_ebz/index.html">ADMX6001-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001/index.html">ADRV9001</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001_dual/index.html">ADRV9001-DUAL</a></li>
@@ -1143,6 +1145,8 @@ Out-of-Context (OOC) synthesis.</p></li>
 operations. Default value is 8.</p></li>
 <li><p><strong>ADI_NO_BITSTREAM_COMPRESSION</strong>: if set, disables compression of the final
 bitstream file.</p></li>
+<li><p><strong>ADI_POST_ROUTE_POD_PRE_SCRIPT</strong>: specifies the path to a Tcl script to be
+executed before the phys_opt_design (POD) stage.</p></li>
 <li><p><strong>ADI_POST_ROUTE_SCRIPT</strong>: specifies the path to a Tcl script to be executed
 after the routing design step.</p></li>
 <li><p><strong>ADI_POWER_OPTIMIZATION</strong>: if set to 1, enables power optimization during the
@@ -1559,7 +1563,7 @@ implementation.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Instantiating IPs in Propel Builder CLI or GUI does not work in WSL for an
-unknown compatibility reason. You can use WSL/Cygwin on Windows or a normal
+unknown compatibility reason. You can use Cygwin on Windows or a normal
 Linux installation.</p>
 </div>
 <div class="admonition warning">
@@ -1587,21 +1591,27 @@ Propel Builder. This way they will be accessible from Propel Builder GUI.</p>
 </div>
 <div class="clear-left"></div></div></div></div>
 <p>The Lattice build is in a very early version. We are just adding the first
-version of library infrastructure support.
-Currently, we only have a single early-version base design that builds almost
-like the other ones. For Lattice, there are separate tools for creating
+version of library infrastructure support.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, we are supporting the
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/projects/ad738x_fmc/index.html" target="_blank">ad738x_fmc</a>
+project for the <strong>LFCPNX-EVN</strong> carrier board, in the
+<a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad738x_fmc/lfcpnx" target="_blank">hdl/projects/ad738x_fmc/lfcpnx</a> folder.
+For Lattice, there are separate tools for creating
 a block design <strong>(Propel Builder)</strong> and building an HDL design <strong>(Radiant)</strong>.</p>
-<p>To build a project, go to the carrier folder and run <code class="docutils literal notranslate"><span class="pre">make</span></code>. For now, you can
-try to build the only base design we have available for
-<strong>CertusPro-NX Evaluation Board</strong> by entering the base design directory and
-running <code class="docutils literal notranslate"><span class="pre">make</span></code>.</p>
+</div>
+<p>To build a project, go to the carrier folder and run <code class="docutils literal notranslate"><span class="pre">make</span></code>.
+The <strong>ad738x_fmc</strong> project is available for the
+<strong>CertusPro-NX Evaluation Board</strong> and can be built by entering the
+<code class="docutils literal notranslate"><span class="pre">hdl/projects/ad738x_fmc/lfcpnx</span></code> directory and running <code class="docutils literal notranslate"><span class="pre">make</span></code>.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/common/lfcpnx
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/ad738x_fmc/lfcpnx
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/common/lfcpnx$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad738x_fmc/lfcpnx$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
