@@ -19,14 +19,14 @@ set_property -dict {PACKAGE_PIN C32}  [get_ports rx_data_n[2]]                  
 set_property -dict {PACKAGE_PIN B33}  [get_ports rx_data_p[3]]                               ; ## A10  FMC1_DP3_M2C_P        MGTHRXP3_130
 set_property -dict {PACKAGE_PIN B34}  [get_ports rx_data_n[3]]                               ; ## A11  FMC1_DP3_M2C_N        MGTHRXN3_130
 
-set_property -dict {PACKAGE_PIN D29}  [get_ports tx_data_p[0]]                               ; ## A22  FMC1_DP1_C2M_P        MGTHTXP1_130  (tx_data_p[2])
-set_property -dict {PACKAGE_PIN D30}  [get_ports tx_data_n[0]]                               ; ## A23  FMC1_DP1_C2M_N        MGTHTXN1_130  (tx_data_n[2])
-set_property -dict {PACKAGE_PIN F29}  [get_ports tx_data_p[1]]                               ; ## C2   FMC1_DP0_C2M_P        MGTHTXP0_130  (tx_data_p[3])
-set_property -dict {PACKAGE_PIN F30}  [get_ports tx_data_n[1]]                               ; ## C3   FMC1_DP0_C2M_N        MGTHTXN0_130  (tx_data_n[3])
-set_property -dict {PACKAGE_PIN B29}  [get_ports tx_data_p[2]]                               ; ## A26  FMC1_DP2_C2M_P        MGTHTXP2_130  (tx_data_p[1])
-set_property -dict {PACKAGE_PIN B30}  [get_ports tx_data_n[2]]                               ; ## A27  FMC1_DP2_C2M_N        MGTHTXN2_130  (tx_data_n[1])
-set_property -dict {PACKAGE_PIN A31}  [get_ports tx_data_p[3]]                               ; ## A30  FMC1_DP3_C2M_P        MGTHTXP3_130  (tx_data_p[0])
-set_property -dict {PACKAGE_PIN A32}  [get_ports tx_data_n[3]]                               ; ## A31  FMC1_DP3_C2M_N        MGTHTXN3_130  (tx_data_n[0])
+set_property -dict {PACKAGE_PIN A31}  [get_ports tx_data_p[0]]                               ; ## A30  FMC1_DP3_C2M_P        MGTHTXP3_130  (tx_data_p[0])
+set_property -dict {PACKAGE_PIN A32}  [get_ports tx_data_n[0]]                               ; ## A31  FMC1_DP3_C2M_N        MGTHTXN3_130  (tx_data_n[0])
+set_property -dict {PACKAGE_PIN B29}  [get_ports tx_data_p[1]]                               ; ## A26  FMC1_DP2_C2M_P        MGTHTXP2_130  (tx_data_p[1])
+set_property -dict {PACKAGE_PIN B30}  [get_ports tx_data_n[1]]                               ; ## A27  FMC1_DP2_C2M_N        MGTHTXN2_130  (tx_data_n[1])
+set_property -dict {PACKAGE_PIN D29}  [get_ports tx_data_p[2]]                               ; ## A22  FMC1_DP1_C2M_P        MGTHTXP1_130  (tx_data_p[2])
+set_property -dict {PACKAGE_PIN D30}  [get_ports tx_data_n[2]]                               ; ## A23  FMC1_DP1_C2M_N        MGTHTXN1_130  (tx_data_n[2])
+set_property -dict {PACKAGE_PIN F29}  [get_ports tx_data_p[3]]                               ; ## C2   FMC1_DP0_C2M_P        MGTHTXP0_130  (tx_data_p[3])
+set_property -dict {PACKAGE_PIN F30}  [get_ports tx_data_n[3]]                               ; ## C3   FMC1_DP0_C2M_N        MGTHTXN0_130  (tx_data_n[3])
 
 set_property -dict {PACKAGE_PIN AH1  IOSTANDARD LVDS} [get_ports rx_sync_p]                  ; ## G9   FMC1_LA03_P           IO_L22P_T3U_N6_DBC_AD0P_65
 set_property -dict {PACKAGE_PIN AJ1  IOSTANDARD LVDS} [get_ports rx_sync_n]                  ; ## G10  FMC1_LA03_N           IO_L22N_T3U_N7_DBC_AD0N_65
