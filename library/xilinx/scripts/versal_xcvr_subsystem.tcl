@@ -84,7 +84,7 @@ proc create_xcvr_subsystem {
   dict set phy_params CONFIG.REG_CONF_INTF {AXI_LITE}
   dict set phy_params CONFIG.NO_OF_QUADS ${num_quads}
   dict set phy_params CONFIG.NO_OF_INTERFACE {1}
-  dict set phy_params CONFIG.LOCATE_BUFG {CORE}
+  dict set phy_params CONFIG.LOCATE_BUFG {EXAMPLE_DESIGN}
   dict set phy_params CONFIG.INTF0_PRESET ${transceiver}-JESD204_${jesd_mode}
   dict set phy_params CONFIG.INTF0_GT_SETTINGS(LR0_SETTINGS) ${xcvr_param}
   if {$direction != "RXTX"} {
@@ -161,6 +161,17 @@ proc create_xcvr_subsystem {
       set prot_idx [expr {[dict get $phy_params "CONFIG.QUAD${quad_idx}_NO_PROT"] - 1}]
       dict set phy_params "CONFIG.QUAD${quad_idx}_PROT${prot_idx}_TX${lane_idx}_EN" [expr $i < $tx_no_lanes]
     }
+  }
+
+  for {set i 0} {$i < $no_lanes} {incr i} {
+    set quad_idx [expr $i / 4]
+    set lane_idx [expr $i % 4]
+
+    dict set phy_params "CONFIG.QUAD${quad_idx}_CH${lane_idx}_ILORESET_EN" {true}
+    dict set phy_params "CONFIG.QUAD${quad_idx}_HSCLK0_LCPLLRESET_EN" {true}
+    dict set phy_params "CONFIG.QUAD${quad_idx}_HSCLK1_LCPLLRESET_EN" {true}
+    dict set phy_params "CONFIG.QUAD${quad_idx}_HSCLK0_LCPLL_LOCK_EN" {true}
+    dict set phy_params "CONFIG.QUAD${quad_idx}_HSCLK1_LCPLL_LOCK_EN" {true}
   }
 
   # dict for {k v} $phy_params {puts "$k : $v"}
@@ -246,8 +257,12 @@ proc create_versal_jesd_xcvr_subsystem {
 
       create_bd_intf_pin -mode Master -vlnv xilinx.com:display_jesd204:jesd204_rx_bus_rtl:1.0 ${ip_name}/rx${j}
       ad_connect ${ip_name}/rx${j} ${ip_name}/rx_adapt_${j}/RX
-      ad_connect ${ip_name}/rx_adapt_${j}/usr_clk ${ip_name}/xcvr/INTF${rx_intf}_rx_usrclk
+      ad_connect ${ip_name}/rx_adapt_${j}/usr_clk ${ip_name}/bufg_gt_rx/usrclk
       ad_connect ${ip_name}/rx_adapt_${j}/en_char_align ${ip_name}/en_char_align
+
+      set quad_idx [expr $j / 4]
+      set lane_idx [expr $j % 4]
+      ad_connect ${ip_name}/xcvr/QUAD${quad_idx}_RX${lane_idx}_usrclk ${ip_name}/bufg_gt_rx/usrclk
     }
   }
 
@@ -272,7 +287,11 @@ proc create_versal_jesd_xcvr_subsystem {
 
       create_bd_intf_pin -mode Slave -vlnv xilinx.com:display_jesd204:jesd204_tx_bus_rtl:1.0 ${ip_name}/tx${j}
       ad_connect ${ip_name}/tx${j} ${ip_name}/tx_adapt_${j}/TX
-      ad_connect ${ip_name}/tx_adapt_${j}/usr_clk ${ip_name}/xcvr/INTF${tx_intf}_tx_usrclk
+      ad_connect ${ip_name}/tx_adapt_${j}/usr_clk ${ip_name}/bufg_gt_tx/usrclk
+
+      set quad_idx [expr $j / 4]
+      set lane_idx [expr $j % 4]
+      ad_connect ${ip_name}/xcvr/QUAD${quad_idx}_TX${lane_idx}_usrclk ${ip_name}/bufg_gt_tx/usrclk
     }
   }
 
@@ -290,15 +309,9 @@ proc create_versal_jesd_xcvr_subsystem {
     create_bd_pin -dir O ${ip_name}/tx_resetdone
   }
 
-  create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_sync
-  ad_connect ${ip_name}/s_axi_clk ${ip_name}/gtreset_sync/out_clk
-  ad_connect ${ip_name}/s_axi_resetn ${ip_name}/gtreset_sync/out_resetn
-  ad_connect ${ip_name}/gtreset_in ${ip_name}/gtreset_sync/in_bits
-
-
-  ad_connect ${ip_name}/gtreset_sync/out_bits ${ip_name}/xcvr/INTF${rx_intf}_rst_all_in
+  ad_connect ${ip_name}/gtreset_in ${ip_name}/xcvr/INTF${rx_intf}_rst_all_in
   if {$rx_intf != $tx_intf} {
-    ad_connect ${ip_name}/gtreset_sync/out_bits ${ip_name}/xcvr/INTF${tx_intf}_rst_all_in
+    ad_connect ${ip_name}/gtreset_in ${ip_name}/xcvr/INTF${tx_intf}_rst_all_in
   }
 
   foreach port {pll_and_datapath datapath} {
@@ -307,12 +320,41 @@ proc create_versal_jesd_xcvr_subsystem {
         continue
       }
       set intf [expr {$rx_tx == "rx" ? $rx_intf : $tx_intf}]
-      create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_${rx_tx}_${port}_sync
-      ad_connect ${ip_name}/s_axi_clk ${ip_name}/gtreset_${rx_tx}_${port}_sync/out_clk
-      ad_connect ${ip_name}/s_axi_resetn ${ip_name}/gtreset_${rx_tx}_${port}_sync/out_resetn
-      ad_connect ${ip_name}/gtreset_${rx_tx}_${port} ${ip_name}/gtreset_${rx_tx}_${port}_sync/in_bits
-      ad_connect ${ip_name}/gtreset_${rx_tx}_${port}_sync/out_bits ${ip_name}/xcvr/INTF${intf}_rst_${rx_tx}_${port}_in
+      ad_connect ${ip_name}/gtreset_${rx_tx}_${port} ${ip_name}/xcvr/INTF${intf}_rst_${rx_tx}_${port}_in
     }
+  }
+
+  ad_ip_instance ilconcat ${ip_name}/lcplllock_concat
+  ad_ip_parameter ${ip_name}/lcplllock_concat CONFIG.NUM_PORTS [expr 2 * $num_quads]
+
+  for {set i 0} {$i < $num_quads} {incr i} {
+    if {$intf_cfg != "RX"} {
+      ad_connect ${ip_name}/gtreset_tx_pll_and_datapath ${ip_name}/xcvr/QUAD${i}_hsclk0_lcpllreset
+      ad_connect ${ip_name}/gtreset_tx_pll_and_datapath ${ip_name}/xcvr/QUAD${i}_hsclk1_lcpllreset
+    } else {
+      ad_connect ${ip_name}/gtreset_rx_pll_and_datapath ${ip_name}/xcvr/QUAD${i}_hsclk0_lcpllreset
+      ad_connect ${ip_name}/gtreset_rx_pll_and_datapath ${ip_name}/xcvr/QUAD${i}_hsclk1_lcpllreset
+    }
+    ad_connect ${ip_name}/xcvr/QUAD${i}_hsclk0_lcplllock ${ip_name}/lcplllock_concat/In[expr 2 * $i]
+    ad_connect ${ip_name}/xcvr/QUAD${i}_hsclk1_lcplllock ${ip_name}/lcplllock_concat/In[expr 2 * $i + 1]
+  }
+
+  ad_ip_instance ilreduced_logic ${ip_name}/lcplllock_and
+  ad_ip_parameter ${ip_name}/lcplllock_and CONFIG.C_SIZE [expr 2 * $num_quads]
+  ad_ip_parameter ${ip_name}/lcplllock_and CONFIG.C_OPERATION {and}
+
+  ad_connect ${ip_name}/lcplllock_concat/dout ${ip_name}/lcplllock_and/Op1
+
+  ad_ip_instance ilvector_logic ${ip_name}/lcplllock_not
+  ad_ip_parameter ${ip_name}/lcplllock_not CONFIG.C_SIZE {1}
+  ad_ip_parameter ${ip_name}/lcplllock_not CONFIG.C_OPERATION {not}
+
+  ad_connect ${ip_name}/lcplllock_not/Op1 ${ip_name}/lcplllock_and/Res
+
+  for {set i 0} {$i < [expr 4 * $num_quads]} {incr i} {
+    set quad_idx [expr $i / 4]
+    set lane_idx [expr $i % 4]
+    ad_connect ${ip_name}/lcplllock_not/Res ${ip_name}/xcvr/QUAD${quad_idx}_ch${lane_idx}_iloreset
   }
 
   ad_connect ${ip_name}/xcvr/gtpowergood ${ip_name}/gtpowergood
