@@ -51,12 +51,23 @@ Block design
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The data path and clock domains are depicted in the below diagram:
+The data path and clock domains are depicted in the below diagrams:
 
-.. image:: adaq2387x_zed_block_diagram.svg
+Default timing configuration (USE_MMCM=0)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: adaq2387x_zed_block_diagram_default.svg
    :width: 800
    :align: center
-   :alt: ADAQ2387X/ZedBoard block diagram
+   :alt: ADAQ2387X/ZedBoard block diagram for ref_clk = sampling_clk = 100MHz
+
+Enhanced timing configuration (USE_MMCM=1)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: adaq2387x_zed_block_diagram_mmcm.svg
+   :width: 800
+   :align: center
+   :alt: ADAQ2387X/ZedBoard block diagram for ref_clk = 100MHz & sampling_clk = 120Mhz
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
