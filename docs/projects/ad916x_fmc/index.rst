@@ -69,6 +69,10 @@ The data path and clock domains are depicted in the below diagram:
         - :git-hdl:`axi_dmac <library/axi_dmac>`
         - :ref:`axi_dmac`
         - ---
+      * - DATA_OFFLOAD
+        - :git-hdl:`data_offload <library/data_offload>`
+        - :ref:`data_offload`
+        - ---
       * - TX JESD LINK
         - axi_ad916x_jesd
         - :ref:`axi_jesd204_tx`
@@ -80,10 +84,6 @@ The data path and clock domains are depicted in the below diagram:
       * - UTIL_ADXCVR for AMD
         - :git-hdl:`library/xilinx/util_adxcvr`
         - :ref:`util_adxcvr`
-        - ---
-      * - UTIL_DACFIFO
-        - :git-hdl:`util_dacfifo <library/util_dacfifo>`
-        - ---
         - ---
       * - UTIL_UPACK
         - :git-hdl:`util_upack2 <library/util_pack/util_upack2>`
@@ -156,6 +156,7 @@ dac_jesd204_transport     0x84A0_4000
 dac_jesd204_xcvr          0x84A6_0000
 dac_jesd204_link          0x84A9_0000
 dac_dma                   0x9C42_0000
+dac_data_offload          0x9C43_0000
 ========================  ===========
 
 SPI connections
@@ -311,6 +312,12 @@ HDL related
    * - AXI_ADXCVR for AMD
      - :git-hdl:`library/xilinx/axi_adxcvr`
      - :ref:`axi_adxcvr amd`
+   * - DATA_OFFLOAD
+     - :git-hdl:`library/data_offload`
+     - :ref:`data_offload`
+   * - UTIL_DO_RAM
+     - :git-hdl:`library/util_do_ram`
+     - :ref:`data_offload`
    * - JESD204_TPL_DAC
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      - :ref:`ad_ip_jesd204_tpl_dac`
@@ -320,9 +327,6 @@ HDL related
    * - UTIL_ADXCVR for AMD
      - :git-hdl:`library/xilinx/util_adxcvr`
      - :ref:`util_adxcvr`
-   * - UTIL_DACFIFO
-     - :git-hdl:`library/util_dacfifo`
-     - :ref:`util_rfifo`
    * - UTIL_UPACK2
      - :git-hdl:`library/util_pack/util_upack2`
      - :ref:`util_upack2`
