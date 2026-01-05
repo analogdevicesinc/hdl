@@ -175,3 +175,23 @@ create_generated_clock -name BF_SCL_01 -source [get_pins -of_objects [get_clocks
 create_generated_clock -name BF_SCL_02 -source [get_pins -of_objects [get_clocks clk_pl_0]] -divide_by 1000 [get_ports BF_SCL_02]
 create_generated_clock -name BF_SCL_03 -source [get_pins -of_objects [get_clocks clk_pl_0]] -divide_by 1000 [get_ports BF_SCL_03]
 create_generated_clock -name BF_SCL_04 -source [get_pins -of_objects [get_clocks clk_pl_0]] -divide_by 1000 [get_ports BF_SCL_04]
+
+set_input_delay  -clock [get_clocks clk_pl_0] -max 1 [get_ports BF_SDA_01];
+set_input_delay  -clock [get_clocks clk_pl_0] -min 0 [get_ports BF_SDA_01];
+set_output_delay -clock [get_clocks clk_pl_0] -max 1 [get_ports BF_SDA_01];
+set_output_delay -clock [get_clocks clk_pl_0] -min 0 [get_ports BF_SDA_01];
+
+set_input_delay  -clock [get_clocks clk_pl_0] -max 1 [get_ports BF_SDA_02];
+set_input_delay  -clock [get_clocks clk_pl_0] -min 0 [get_ports BF_SDA_02];
+set_output_delay -clock [get_clocks clk_pl_0] -max 1 [get_ports BF_SDA_02];
+set_output_delay -clock [get_clocks clk_pl_0] -min 0 [get_ports BF_SDA_02];
+
+set_input_delay  -clock [get_clocks clk_pl_0] -max 1 [get_ports BF_SDA_03];
+set_input_delay  -clock [get_clocks clk_pl_0] -min 0 [get_ports BF_SDA_03];
+set_output_delay -clock [get_clocks clk_pl_0] -max 1 [get_ports BF_SDA_03];
+set_output_delay -clock [get_clocks clk_pl_0] -min 0 [get_ports BF_SDA_03];
+
+set_input_delay  -clock [get_clocks clk_pl_0] -max 1 [get_ports BF_SDA_04];
+set_input_delay  -clock [get_clocks clk_pl_0] -min 0 [get_ports BF_SDA_04];
+set_output_delay -clock [get_clocks clk_pl_0] -max 1 [get_ports BF_SDA_04];
+set_output_delay -clock [get_clocks clk_pl_0] -min 0 [get_ports BF_SDA_04];

@@ -26,8 +26,10 @@ set_property -dict [list \
 
 ad_connect sys_ps8/pl_clk3 bf_spi_01/ext_spi_clk
 ad_connect sys_ps8/pl_clk3 bf_spi_02/ext_spi_clk
-ad_connect sys_ps8/pl_clk3 fmc_spi_03/ext_spi_clk
-ad_connect sys_ps8/pl_clk3 fmc_spi_04/ext_spi_clk
+if {$ad_project_params(MULTI_SPI) == 1} {
+  ad_connect sys_ps8/pl_clk3 fmc_spi_03/ext_spi_clk
+  ad_connect sys_ps8/pl_clk3 fmc_spi_04/ext_spi_clk
+}
 
 ad_connect sys_ps8/pl_clk3 xud_spi/ext_spi_clk
 
@@ -35,8 +37,10 @@ ad_connect sys_ps8/pl_clk3 xud_spi/ext_spi_clk
 
 ad_cpu_interconnect 0x80000000 bf_spi_01
 ad_cpu_interconnect 0x80010000 bf_spi_02
-ad_cpu_interconnect 0x80020000 fmc_spi_03
-ad_cpu_interconnect 0x80030000 fmc_spi_04
+if {$ad_project_params(MULTI_SPI) == 1} {
+  ad_cpu_interconnect 0x80020000 fmc_spi_03
+  ad_cpu_interconnect 0x80030000 fmc_spi_04
+}
 
 ad_cpu_interconnect 0x80040000 axi_bf_iic_01
 ad_cpu_interconnect 0x80050000 axi_bf_iic_02
@@ -51,8 +55,10 @@ ad_cpu_interconnect 0x80090000 gpio_0
 
 ad_cpu_interrupt ps-0 mb-0 bf_spi_01/ip2intc_irpt
 ad_cpu_interrupt ps-1 mb-1 bf_spi_02/ip2intc_irpt
-ad_cpu_interrupt ps-2 mb-2 fmc_spi_03/ip2intc_irpt
-ad_cpu_interrupt ps-3 mb-3 fmc_spi_04/ip2intc_irpt
+if {$ad_project_params(MULTI_SPI) == 1} {
+  ad_cpu_interrupt ps-2 mb-2 fmc_spi_03/ip2intc_irpt
+  ad_cpu_interrupt ps-3 mb-3 fmc_spi_04/ip2intc_irpt
+}
 
 ad_cpu_interrupt ps-4 mb-4 axi_bf_iic_01/iic2intc_irpt
 ad_cpu_interrupt ps-5 mb-5 axi_bf_iic_02/iic2intc_irpt
