@@ -7,7 +7,9 @@ source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project adsy2301_2_zcu102
+adi_project adsy2301_2_zcu102 0 [list \
+  MULTI_SPI [get_env_param MULTI_SPI 0 ] \
+]
 
 adi_project_files adsy2301_2_zcu102 [list \
   "system_top.v" \

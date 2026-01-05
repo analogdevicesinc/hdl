@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top # (
+  parameter MULTI_SPI = 0
+) (
 
   input   [12:0]  gpio_bd_i,
   output  [ 7:0]  gpio_bd_o,
@@ -165,68 +167,78 @@ module system_top (
 
   // instantiations
 
-  // system wrapper for 2 SPI controllers
-  system_wrapper i_system_wrapper (
-    .gpio_out_tri_o(adsy2301_2_gpio[21:0]),
-    .gpio_in_tri_i(adsy2301_2_gpio[25:22]),
-    .bf_spi_sclk_01(BF_SPI_SCLK_01),
-    .bf_spi_csb_01({FMC_SPI_CSB_03, BF_SPI_CSB_01}),
-    .bf_spi_mosi_01(BF_SPI_MOSI_01),
-    .bf_spi_miso_01(BF_SPI_MISO_01),
-    .bf_spi_sclk_02(BF_SPI_SCLK_02),
-    .bf_spi_csb_02({FMC_SPI_CSB_04, BF_SPI_CSB_02}),
-    .bf_spi_mosi_02(BF_SPI_MOSI_02),
-    .bf_spi_miso_02(BF_SPI_MISO_02),
-    .xud_spi_sclk(XUD_SPI_SCLK),
-    .xud_spi_csb(XUD_SPI_CSB),
-    .xud_spi_mosi(XUD_SPI_MOSI),
-    .xud_spi_miso(XUD_SPI_MISO),
-    .bf_iic_01_scl_io(BF_SCL_01),
-    .bf_iic_01_sda_io(BF_SDA_01),
-    .bf_iic_02_scl_io(BF_SCL_02),
-    .bf_iic_02_sda_io(BF_SDA_02),
-    .bf_iic_03_scl_io(BF_SCL_03),
-    .bf_iic_03_sda_io(BF_SDA_03),
-    .bf_iic_04_scl_io(BF_SCL_04),
-    .bf_iic_04_sda_io(BF_SDA_04),
-    .gpio_i (gpio_i),
-    .gpio_o (gpio_o),
-    .gpio_t ());
+  generate
 
-  // system wrapper for 4 SPI controllers
-  // system_wrapper i_system_wrapper (
-  //   .gpio_out_tri_o(adsy2301_2_gpio[21:0]),
-  //   .gpio_in_tri_i(adsy2301_2_gpio[25:22]),
-  //   .bf_spi_sclk_01(BF_SPI_SCLK_01),
-  //   .bf_spi_csb_01(BF_SPI_CSB_01),
-  //   .bf_spi_mosi_01(BF_SPI_MOSI_01),
-  //   .bf_spi_miso_01(BF_SPI_MISO_01),
-  //   .bf_spi_sclk_02(BF_SPI_SCLK_02),
-  //   .bf_spi_csb_02(BF_SPI_CSB_02),
-  //   .bf_spi_mosi_02(BF_SPI_MOSI_02),
-  //   .bf_spi_miso_02(BF_SPI_MISO_02),
-  //   .FMC_SPI_SCLK_03(FMC_SPI_SCLK_03),
-  //   .FMC_SPI_CSB_03(FMC_SPI_CSB_03),
-  //   .FMC_SPI_MOSI_03(FMC_SPI_MOSI_03),
-  //   .FMC_SPI_MISO_03(FMC_SPI_MISO_03),
-  //   .FMC_SPI_SCLK_04(FMC_SPI_SCLK_04),
-  //   .FMC_SPI_CSB_04(FMC_SPI_CSB_04),
-  //   .FMC_SPI_MOSI_04(FMC_SPI_MOSI_04),
-  //   .FMC_SPI_MISO_04(FMC_SPI_MISO_04),
-  //   .xud_spi_sclk(XUD_SPI_SCLK),
-  //   .xud_spi_csb(XUD_SPI_CSB),
-  //   .xud_spi_mosi(XUD_SPI_MOSI),
-  //   .xud_spi_miso(XUD_SPI_MISO),
-  //   .bf_iic_01_scl_io(BF_SCL_01),
-  //   .bf_iic_01_sda_io(BF_SDA_01),
-  //   .bf_iic_02_scl_io(BF_SCL_02),
-  //   .bf_iic_02_sda_io(BF_SDA_02),
-  //   .bf_iic_03_scl_io(BF_SCL_03),
-  //   .bf_iic_03_sda_io(BF_SDA_03),
-  //   .bf_iic_04_scl_io(BF_SCL_04),
-  //   .bf_iic_04_sda_io(BF_SDA_04),
-  //   .gpio_i (gpio_i),
-  //   .gpio_o (gpio_o),
-  //   .gpio_t ());
+  if (MULTI_SPI == 0) begin
+
+    // system wrapper for 2 SPI controllers
+    system_wrapper i_system_wrapper (
+      .gpio_out_tri_o(adsy2301_2_gpio[21:0]),
+      .gpio_in_tri_i(adsy2301_2_gpio[25:22]),
+      .bf_spi_sclk_01(BF_SPI_SCLK_01),
+      .bf_spi_csb_01({FMC_SPI_CSB_03, BF_SPI_CSB_01}),
+      .bf_spi_mosi_01(BF_SPI_MOSI_01),
+      .bf_spi_miso_01(BF_SPI_MISO_01),
+      .bf_spi_sclk_02(BF_SPI_SCLK_02),
+      .bf_spi_csb_02({FMC_SPI_CSB_04, BF_SPI_CSB_02}),
+      .bf_spi_mosi_02(BF_SPI_MOSI_02),
+      .bf_spi_miso_02(BF_SPI_MISO_02),
+      .xud_spi_sclk(XUD_SPI_SCLK),
+      .xud_spi_csb(XUD_SPI_CSB),
+      .xud_spi_mosi(XUD_SPI_MOSI),
+      .xud_spi_miso(XUD_SPI_MISO),
+      .bf_iic_01_scl_io(BF_SCL_01),
+      .bf_iic_01_sda_io(BF_SDA_01),
+      .bf_iic_02_scl_io(BF_SCL_02),
+      .bf_iic_02_sda_io(BF_SDA_02),
+      .bf_iic_03_scl_io(BF_SCL_03),
+      .bf_iic_03_sda_io(BF_SDA_03),
+      .bf_iic_04_scl_io(BF_SCL_04),
+      .bf_iic_04_sda_io(BF_SDA_04),
+      .gpio_i (gpio_i),
+      .gpio_o (gpio_o),
+      .gpio_t ());
+
+  end else begin
+
+    // system wrapper for 4 SPI controllers
+    system_wrapper i_system_wrapper (
+      .gpio_out_tri_o(adsy2301_2_gpio[21:0]),
+      .gpio_in_tri_i(adsy2301_2_gpio[25:22]),
+      .bf_spi_sclk_01(BF_SPI_SCLK_01),
+      .bf_spi_csb_01(BF_SPI_CSB_01),
+      .bf_spi_mosi_01(BF_SPI_MOSI_01),
+      .bf_spi_miso_01(BF_SPI_MISO_01),
+      .bf_spi_sclk_02(BF_SPI_SCLK_02),
+      .bf_spi_csb_02(BF_SPI_CSB_02),
+      .bf_spi_mosi_02(BF_SPI_MOSI_02),
+      .bf_spi_miso_02(BF_SPI_MISO_02),
+      .fmc_spi_sclk_03(FMC_SPI_SCLK_03),
+      .fmc_spi_csb_03(FMC_SPI_CSB_03),
+      .fmc_spi_mosi_03(FMC_SPI_MOSI_03),
+      .fmc_spi_miso_03(FMC_SPI_MISO_03),
+      .fmc_spi_sclk_04(FMC_SPI_SCLK_04),
+      .fmc_spi_csb_04(FMC_SPI_CSB_04),
+      .fmc_spi_mosi_04(FMC_SPI_MOSI_04),
+      .fmc_spi_miso_04(FMC_SPI_MISO_04),
+      .xud_spi_sclk(XUD_SPI_SCLK),
+      .xud_spi_csb(XUD_SPI_CSB),
+      .xud_spi_mosi(XUD_SPI_MOSI),
+      .xud_spi_miso(XUD_SPI_MISO),
+      .bf_iic_01_scl_io(BF_SCL_01),
+      .bf_iic_01_sda_io(BF_SDA_01),
+      .bf_iic_02_scl_io(BF_SCL_02),
+      .bf_iic_02_sda_io(BF_SDA_02),
+      .bf_iic_03_scl_io(BF_SCL_03),
+      .bf_iic_03_sda_io(BF_SDA_03),
+      .bf_iic_04_scl_io(BF_SCL_04),
+      .bf_iic_04_sda_io(BF_SDA_04),
+      .gpio_i (gpio_i),
+      .gpio_o (gpio_o),
+      .gpio_t ());
+
+  end
+
+  endgenerate
 
 endmodule

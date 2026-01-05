@@ -19,77 +19,97 @@ ad_ip_instance axi_gpio gpio_0 [list \
 ad_connect gpio_0/GPIO gpio_out
 ad_connect gpio_0/GPIO2 gpio_in
 
-# BF SPI 01
+# BF SPI ports
 
 create_bd_port -dir O bf_spi_sclk_01
 create_bd_port -dir O -from 1 -to 0 bf_spi_csb_01
 create_bd_port -dir O bf_spi_mosi_01
 create_bd_port -dir I bf_spi_miso_01
 
-ad_ip_instance axi_quad_spi bf_spi_01 [list \
-  C_USE_STARTUP 0 \
-  C_NUM_SS_BITS 2 \
-  C_SCK_RATIO 2 \
-]
-
-ad_connect bf_spi_01/sck_o bf_spi_sclk_01
-ad_connect bf_spi_01/ss_o bf_spi_csb_01
-ad_connect bf_spi_01/io0_o bf_spi_mosi_01
-ad_connect bf_spi_01/io1_i bf_spi_miso_01
-
-# BF SPI 02
-
 create_bd_port -dir O bf_spi_sclk_02
 create_bd_port -dir O -from 1 -to 0 bf_spi_csb_02
 create_bd_port -dir O bf_spi_mosi_02
 create_bd_port -dir I bf_spi_miso_02
-
-ad_ip_instance axi_quad_spi bf_spi_02 [list \
-  C_USE_STARTUP 0 \
-  C_NUM_SS_BITS 2 \
-  C_SCK_RATIO 2 \
-]
-
-ad_connect bf_spi_02/sck_o bf_spi_sclk_02
-ad_connect bf_spi_02/ss_o bf_spi_csb_02
-ad_connect bf_spi_02/io0_o bf_spi_mosi_02
-ad_connect bf_spi_02/io1_i bf_spi_miso_02
-
-# FMC SPI 03
 
 create_bd_port -dir O fmc_spi_sclk_03
 create_bd_port -dir O fmc_spi_csb_03
 create_bd_port -dir O fmc_spi_mosi_03
 create_bd_port -dir I fmc_spi_miso_03
 
-ad_ip_instance axi_quad_spi fmc_spi_03 [list \
-  C_USE_STARTUP 0 \
-  C_NUM_SS_BITS 1 \
-  C_SCK_RATIO 2 \
-]
-
-ad_connect fmc_spi_03/sck_o fmc_spi_sclk_03
-ad_connect fmc_spi_03/ss_o fmc_spi_csb_03
-ad_connect fmc_spi_03/io0_o fmc_spi_mosi_03
-ad_connect fmc_spi_03/io1_i fmc_spi_miso_03
-
-# FMC SPI 04
-
 create_bd_port -dir O fmc_spi_sclk_04
 create_bd_port -dir O fmc_spi_csb_04
 create_bd_port -dir O fmc_spi_mosi_04
 create_bd_port -dir I fmc_spi_miso_04
 
-ad_ip_instance axi_quad_spi fmc_spi_04 [list \
-  C_USE_STARTUP 0 \
-  C_NUM_SS_BITS 1 \
-  C_SCK_RATIO 2 \
-]
+if {$ad_project_params(MULTI_SPI) == 0} {
+  # BF SPI 01
 
-ad_connect fmc_spi_04/sck_o fmc_spi_sclk_04
-ad_connect fmc_spi_04/ss_o fmc_spi_csb_04
-ad_connect fmc_spi_04/io0_o fmc_spi_mosi_04
-ad_connect fmc_spi_04/io1_i fmc_spi_miso_04
+  ad_ip_instance axi_quad_spi bf_spi_01 [list \
+    C_USE_STARTUP 0 \
+    C_NUM_SS_BITS 2 \
+    C_SCK_RATIO 2 \
+  ]
+
+  # BF SPI 02
+
+  ad_ip_instance axi_quad_spi bf_spi_02 [list \
+    C_USE_STARTUP 0 \
+    C_NUM_SS_BITS 2 \
+    C_SCK_RATIO 2 \
+  ]
+} else {
+  # BF SPI 01
+
+  ad_ip_instance axi_quad_spi bf_spi_01 [list \
+    C_USE_STARTUP 0 \
+    C_NUM_SS_BITS 1 \
+    C_SCK_RATIO 2 \
+  ]
+
+  # BF SPI 02
+
+  ad_ip_instance axi_quad_spi bf_spi_02 [list \
+    C_USE_STARTUP 0 \
+    C_NUM_SS_BITS 1 \
+    C_SCK_RATIO 2 \
+  ]
+
+  # FMC SPI 03
+
+  ad_ip_instance axi_quad_spi fmc_spi_03 [list \
+    C_USE_STARTUP 0 \
+    C_NUM_SS_BITS 1 \
+    C_SCK_RATIO 2 \
+  ]
+
+  ad_connect fmc_spi_03/sck_o fmc_spi_sclk_03
+  ad_connect fmc_spi_03/ss_o fmc_spi_csb_03
+  ad_connect fmc_spi_03/io0_o fmc_spi_mosi_03
+  ad_connect fmc_spi_03/io1_i fmc_spi_miso_03
+
+  # FMC SPI 04
+
+  ad_ip_instance axi_quad_spi fmc_spi_04 [list \
+    C_USE_STARTUP 0 \
+    C_NUM_SS_BITS 1 \
+    C_SCK_RATIO 2 \
+  ]
+
+  ad_connect fmc_spi_04/sck_o fmc_spi_sclk_04
+  ad_connect fmc_spi_04/ss_o fmc_spi_csb_04
+  ad_connect fmc_spi_04/io0_o fmc_spi_mosi_04
+  ad_connect fmc_spi_04/io1_i fmc_spi_miso_04
+}
+
+ad_connect bf_spi_01/sck_o bf_spi_sclk_01
+ad_connect bf_spi_01/ss_o bf_spi_csb_01
+ad_connect bf_spi_01/io0_o bf_spi_mosi_01
+ad_connect bf_spi_01/io1_i bf_spi_miso_01
+
+ad_connect bf_spi_02/sck_o bf_spi_sclk_02
+ad_connect bf_spi_02/ss_o bf_spi_csb_02
+ad_connect bf_spi_02/io0_o bf_spi_mosi_02
+ad_connect bf_spi_02/io1_i bf_spi_miso_02
 
 # BF I2C 01
 
