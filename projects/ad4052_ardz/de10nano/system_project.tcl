@@ -7,6 +7,7 @@ set REQUIRED_QUARTUS_VERSION 24.1std.0
 set QUARTUS_PRO_ISUSED 0
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
+source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 adi_project ad4052_ardz_de10nano
 
