@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -13,7 +13,7 @@ set device "none"
 # \param[parameter_list] - a list of global parameters (parameters of the
 # system_top module)
 #
-# Supported carrier names are: a10gx, a10soc, c5soc, de10nano, a5soc, a5gt.
+# Supported carrier names are: a10gx, a10soc, c5soc, de10nano, s10soc, fm87
 #
 proc adi_project {project_name {parameter_list {}}} {
 
@@ -73,18 +73,6 @@ proc adi_project {project_name {parameter_list {}}} {
   if [regexp "_de10nano" $project_name] {
     set family "Cyclone V"
     set device 5CSEBA6U23I7DK
-    set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
-  }
-
-  if [regexp "_a5soc" $project_name] {
-    set family "Arria V"
-    set device 5ASTFD5K3F40I3ES
-    set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
-  }
-
-  if [regexp "_a5gt" $project_name] {
-    set family "Arria V"
-    set device 5AGTFD7K3F40I3
     set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
