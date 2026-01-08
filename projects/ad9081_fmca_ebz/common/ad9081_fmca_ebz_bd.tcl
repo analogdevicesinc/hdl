@@ -36,6 +36,10 @@ if {![info exists TRANSCEIVER_TYPE]} {
   set TRANSCEIVER_TYPE GTY
 }
 
+if {![info exists EXTERNAL_LINK_CLK]} {
+  set EXTERNAL_LINK_CLK 0
+}
+
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
 set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
@@ -157,6 +161,8 @@ if {!$ADI_PHY_SEL} {
   create_bd_port -dir I tx_sysref_0
   create_bd_port -dir O rx_sync_0
   create_bd_port -dir I tx_sync_0
+  create_bd_port -dir I rx_usrclk_in
+  create_bd_port -dir I tx_usrclk_in
 }
 
 # common xcvr
@@ -209,7 +215,7 @@ if {$ADI_PHY_SEL == 1} {
 
   switch $INTF_CFG {
     "RXTX" {
-      create_versal_jesd_xcvr_subsystem jesd204_phy_rxtx $JESD_MODE $RX_NUM_OF_LANES $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG
+      create_versal_jesd_xcvr_subsystem jesd204_phy_rxtx $JESD_MODE $RX_NUM_OF_LANES $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG $EXTERNAL_LINK_CLK
       set rx_phy jesd204_phy_rxtx
       set tx_phy jesd204_phy_rxtx
       ad_connect ref_clk_q0      ${rx_phy}/GT_REFCLK
@@ -223,9 +229,13 @@ if {$ADI_PHY_SEL == 1} {
       ad_connect ${rx_phy}/gtreset_tx_pll_and_datapath gt_reset_tx_pll_and_datapath
       ad_connect ${rx_phy}/rx_resetdone rx_resetdone
       ad_connect ${rx_phy}/tx_resetdone tx_resetdone
+      if {$EXTERNAL_LINK_CLK && $JESD_MODE == "64B66B"} {
+        ad_connect rx_usrclk_in     ${rx_phy}/rx_usrclk_in
+        ad_connect tx_usrclk_in     ${tx_phy}/tx_usrclk_in
+      }
     }
     "RX" {
-      create_versal_jesd_xcvr_subsystem jesd204_phy_rx $JESD_MODE $RX_NUM_OF_LANES 0 $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG
+      create_versal_jesd_xcvr_subsystem jesd204_phy_rx $JESD_MODE $RX_NUM_OF_LANES 0 $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG $EXTERNAL_LINK_CLK
       set rx_phy jesd204_phy_rx
       ad_connect ref_clk_q0      ${rx_phy}/GT_REFCLK
       ad_connect gt_reset        ${rx_phy}/gtreset_in
@@ -235,9 +245,12 @@ if {$ADI_PHY_SEL == 1} {
       ad_connect ${rx_phy}/gtreset_rx_datapath gt_reset_rx_datapath
       ad_connect ${rx_phy}/gtreset_rx_pll_and_datapath gt_reset_rx_pll_and_datapath
       ad_connect ${rx_phy}/rx_resetdone rx_resetdone
+      if {$EXTERNAL_LINK_CLK && $JESD_MODE == "64B66B"} {
+        ad_connect rx_usrclk_in     ${rx_phy}/rx_usrclk_in
+      }
     }
     "TX" {
-      create_versal_jesd_xcvr_subsystem jesd204_phy_tx $JESD_MODE 0 $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG
+      create_versal_jesd_xcvr_subsystem jesd204_phy_tx $JESD_MODE 0 $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG $EXTERNAL_LINK_CLK
       set tx_phy jesd204_phy_tx
       ad_connect ref_clk_q0      ${tx_phy}/GT_REFCLK
       ad_connect gt_reset        ${tx_phy}/gtreset_in
@@ -247,6 +260,9 @@ if {$ADI_PHY_SEL == 1} {
       ad_connect ${tx_phy}/gtreset_tx_datapath gt_reset_tx_datapath
       ad_connect ${tx_phy}/gtreset_tx_pll_and_datapath gt_reset_tx_pll_and_datapath
       ad_connect ${tx_phy}/tx_resetdone tx_resetdone
+      if {$EXTERNAL_LINK_CLK && $JESD_MODE == "64B66B"} {
+        ad_connect tx_usrclk_in     ${tx_phy}/tx_usrclk_in
+      }
     }
   }
 }

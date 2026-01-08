@@ -1,0 +1,21 @@
+###############################################################################
+## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIJESD204
+###############################################################################
+
+<: setFileUsedIn { out_of_context synthesis implementation } :>
+<: ;#Component and file information :>
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName $ComponentName :>
+<: setFileExtension "_ooc.xdc" :>
+
+# This XDC is used only for OOC mode of synthesis, implementation.
+# These are default values for timing driven synthesis during OOC flow.
+# These values will be overwritten during implementation with information
+# from top level.
+
+create_clock -name usr_clk -period 2.5000 [get_ports usr_clk]
+create_clock -name phy_clk -period 2.4242 [get_ports phy_clk]
+
+################################################################################
