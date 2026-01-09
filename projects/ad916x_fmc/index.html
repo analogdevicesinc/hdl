@@ -8,8 +8,8 @@
 
     <title>AD916x-FMC HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=31a9e0ba" />
-    <script async="async" src="../../_static/app.umd.js?v=3a4867e9"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=5d595293" />
+    <script async="async" src="../../_static/app.umd.js?v=46a18818"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -430,7 +430,7 @@ configures the DACs and monitors the status of all registers.</p>
 <p>The data path and clock domains are depicted in the below diagram:</p>
 <a class="reference internal image-reference" href="../../_images/ad916x_fmc_zcu102_block_diagram.svg"><img alt="AD916x block diagram" class="align-center" src="../../_images/ad916x_fmc_zcu102_block_diagram.svg" width="1000" /></a>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="ea53f4c7187380c0f0fead0bddf331de5cee80d8" name="ea53f4c7187380c0f0fead0bddf331de5cee80d8" type="checkbox"></input><label for="ea53f4c7187380c0f0fead0bddf331de5cee80d8"><p>Click here for details on the block diagram modules</p>
+<input class="collapsible_input" id="324a5890f44ffe82334fd7dec00b16a9b3080320" name="324a5890f44ffe82334fd7dec00b16a9b3080320" type="checkbox"></input><label for="324a5890f44ffe82334fd7dec00b16a9b3080320"><p>Click here for details on the block diagram modules</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -458,24 +458,24 @@ configures the DACs and monitors the status of all registers.</p>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-even"><td><p>TX JESD LINK</p></td>
+<tr class="row-even"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX JESD LINK</p></td>
 <td><p>axi_ad916x_jesd</p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a></p></td>
 <td><p>Instantiaded by <code class="docutils literal notranslate"><span class="pre">adi_axi_jesd204_tx_create</span></code> procedure</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX JESD TPL</p></td>
+<tr class="row-even"><td><p>TX JESD TPL</p></td>
 <td><p>axi_ad916x_core</p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
 <td><p>Instantiated by <code class="docutils literal notranslate"><span class="pre">adi_tpl_jesd204_tx_create</span></code> procedure</p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_ADXCVR for AMD</p></td>
+<tr class="row-odd"><td><p>UTIL_ADXCVR for AMD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr" target="_blank">library/xilinx/util_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR core for AMD Xilinx devices</span></a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-odd"><td><p>UTIL_DACFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_dacfifo" target="_blank">util_dacfifo</a></p></td>
-<td><p>—</p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_UPACK</p></td>
@@ -580,6 +580,9 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tr>
 <tr class="row-odd"><td><p>dac_dma</p></td>
 <td><p>0x9C42_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>dac_data_offload</p></td>
+<td><p>0x9C43_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -813,6 +816,14 @@ more context):</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr" target="_blank">library/xilinx/axi_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">AMD Xilinx Devices</span></a></p></td>
 </tr>
+<tr class="row-even"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">library/data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_DO_RAM</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_do_ram" target="_blank">library/util_do_ram</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
+</tr>
 <tr class="row-even"><td><p>JESD204_TPL_DAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_dac" target="_blank">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
@@ -825,11 +836,7 @@ more context):</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr" target="_blank">library/xilinx/util_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR core for AMD Xilinx devices</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_DACFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_dacfifo" target="_blank">library/util_dacfifo</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_rfifo/index.html#util-rfifo"><span class="std std-ref">Util RFIFO</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>UTIL_UPACK2</p></td>
+<tr class="row-odd"><td><p>UTIL_UPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">library/util_pack/util_upack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
