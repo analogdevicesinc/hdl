@@ -172,7 +172,7 @@ module axi_ad9740_core #(
     .dac_r1_mode(),
     .dac_datafmt(dac_dfmt_type_s),
     .dac_datarate(),
-    .dac_status(),
+    .dac_status(1'b1),  // DAC running
     .dac_sync_in_status(),
     .dac_status_unf(),
     .dac_clk_ratio(32'd1),
