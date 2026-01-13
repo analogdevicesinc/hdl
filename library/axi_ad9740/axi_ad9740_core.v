@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -76,9 +76,6 @@ module axi_ad9740_core #(
   wire [31:0] up_rdata_0_s;
   wire        up_rack_0_s;
   wire        up_wack_0_s;
-  wire [31:0] up_rdata_1_s;
-  wire        up_rack_1_s;
-  wire        up_wack_1_s;
   wire [31:0] up_rdata_s;
   wire        up_rack_s;
   wire        up_wack_s;
@@ -104,9 +101,9 @@ module axi_ad9740_core #(
       up_rack  <= 'd0;
       up_wack  <= 'd0;
     end else begin
-      up_rdata <= up_rdata_s | up_rdata_0_s | up_rdata_1_s;
-      up_rack  <= up_rack_s  | up_rack_0_s  | up_rack_1_s;
-      up_wack  <= up_wack_s  | up_wack_0_s  | up_wack_1_s;
+      up_rdata <= up_rdata_s | up_rdata_0_s;
+      up_rack  <= up_rack_s  | up_rack_0_s;
+      up_wack  <= up_wack_s  | up_wack_0_s;
     end
   end
 
