@@ -12,6 +12,7 @@
 <: set tx_enable [getBooleanValue "TX_OR_RXN_PATH"] :>
 <: set internal_cdc [getBooleanValue "SYNC_EXT_ADD_INTERNAL_CDC"] :>
 <: set has_bypass [getBooleanValue "HAS_BYPASS"] :>
+<: set async_clk  [getBooleanValue "ASYNC_CLK"] :>
 
 ## for all synchronization registers from util_cdc modules
 set_property ASYNC_REG TRUE \
@@ -148,7 +149,7 @@ set_max_delay -quiet -datapath_only \
   [get_property -min PERIOD $dest_clk]
 
 ## Constraints for the bypass module
-<: if { $has_bypass } { :>
+<: if { $has_bypass && $async_clk  } { :>
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_waddr_sync_gray/cdc_sync_stage1_reg[*]/D}]
 
