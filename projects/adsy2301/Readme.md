@@ -1,1 +1,1 @@
-# ADSY2301 HDL Project
+# ADSY2301 Rev 1 HDL Project
