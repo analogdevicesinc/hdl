@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -21,10 +21,10 @@ proc adi_project {project_name {parameter_list {}}} {
   global ad_ghdl_dir
   global family
   global device
-  global REQUIRED_QUARTUS_VERSION
+  global required_quartus_version
   global quartus
   global IGNORE_VERSION_CHECK
-  global QUARTUS_PRO_ISUSED
+  global quartus_pro_isused
 
   if {![info exists ::env(ADI_PROJECT_DIR)]} {
     set actual_project_name $project_name
@@ -39,14 +39,6 @@ proc adi_project {project_name {parameter_list {}}} {
   set mmu_enabled 1
   if [info exists ::env(ALT_NIOS_MMU_ENABLED)] {
     set mmu_enabled $::env(ALT_NIOS_MMU_ENABLED)
-  }
-
-  # check $QUARTUS_PRO_ISUSED environment variables
-  set quartus_pro_isused 1
-  if {[info exists ::env(QUARTUS_PRO_ISUSED)]} {
-    set quartus_pro_isused $::env(QUARTUS_PRO_ISUSED)
-  } elseif {[info exists QUARTUS_PRO_ISUSED]} {
-    set quartus_pro_isused $QUARTUS_PRO_ISUSED
   }
 
   if [regexp "_a10gx" $project_name] {
@@ -86,15 +78,15 @@ proc adi_project {project_name {parameter_list {}}} {
 
   set m_version [lindex $quartus(version) 1]
   if {$IGNORE_VERSION_CHECK} {
-    if {[string compare $m_version $REQUIRED_QUARTUS_VERSION] != 0} {
+    if {[string compare $m_version $required_quartus_version] != 0} {
       puts -nonewline "CRITICAL WARNING: Quartus version mismatch; "
-      puts -nonewline "expected $REQUIRED_QUARTUS_VERSION, "
+      puts -nonewline "expected $required_quartus_version, "
       puts -nonewline "got $m_version.\n"
     }
   } else {
-    if {[string compare $m_version $REQUIRED_QUARTUS_VERSION] != 0} {
+    if {[string compare $m_version $required_quartus_version] != 0} {
       puts -nonewline "ERROR: Quartus version mismatch; "
-      puts -nonewline "expected $REQUIRED_QUARTUS_VERSION, "
+      puts -nonewline "expected $required_quartus_version, "
       puts -nonewline "got $m_version.\n"
       puts -nonewline "This ERROR message can be down-graded to CRITICAL WARNING by setting ADI_IGNORE_VERSION_CHECK environment variable to 1. Be aware that ADI will not support you, if you are using a different tool version.\n"
       exit 2
