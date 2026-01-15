@@ -36,7 +36,7 @@
 `timescale 1ns/100ps
 
 module system_top #(
-  parameter DEVICE = "AD9744"
+  parameter DAC_RESOLUTION = 14
 ) (
 
   inout   [14:0]  ddr_addr,
@@ -99,7 +99,7 @@ module system_top #(
   output  [13:0]  ad9740_data
 );
 
-  // internal signals
+  localparam ZERO_BITS = 14 - DAC_RESOLUTION;
 
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
@@ -114,33 +114,13 @@ module system_top #(
   wire            ad9740_clk;
   wire    [13:0]  ad9740_data_int;
 
-  // instantiations
-
   assign gpio_i[63:32] = gpio_o[63:32];
   assign adf4351_ce = 1'b1;
+  assign ad9740_data[13:ZERO_BITS] = ad9740_data_int[13:ZERO_BITS];
 
   generate
-    if (DEVICE == "AD9744") begin
-      // AD9744: 14-bit DAC - use all bits
-      assign ad9740_data = ad9740_data_int [13:0];
-    end else if (DEVICE == "AD9742") begin
-      // AD9742: 12-bit DAC - MSB aligned, use upper 12 bits, tie lower 2 bits to 0
-      // FIX: Take upper 12 bits from internal 14-bit bus (was taking lower 12 bits)
-      assign ad9740_data[13:2] = ad9740_data_int[13:2];
-      assign ad9740_data[1:0] = 2'b00;
-    end else if (DEVICE == "AD9740") begin
-      // AD9740: 10-bit DAC - MSB aligned, use upper 10 bits, tie lower 4 bits to 0
-      // FIX: Take upper 10 bits from internal 14-bit bus (was taking lower 10 bits)
-      assign ad9740_data[13:4] = ad9740_data_int[13:4];
-      assign ad9740_data[3:0] = 4'b0000;
-    end else if (DEVICE == "AD9748") begin
-      // AD9748: 8-bit DAC - MSB aligned, use upper 8 bits, tie lower 6 bits to 0
-      // FIX: Take upper 8 bits from internal 14-bit bus (was taking lower 8 bits)
-      assign ad9740_data[13:6] = ad9740_data_int[13:6];
-      assign ad9740_data[5:0] = 6'b000000;
-    end else begin
-      // Default case: assume full 14-bit width
-      assign ad9740_data = ad9740_data_int;
+    if (ZERO_BITS > 0) begin : gen_zero_lsbs
+      assign ad9740_data[ZERO_BITS-1:0] = {ZERO_BITS{1'b0}};
     end
   endgenerate
 

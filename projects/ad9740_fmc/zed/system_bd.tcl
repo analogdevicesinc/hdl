@@ -5,13 +5,6 @@
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
-
-# Pass DEVICE parameter to block design
-if {![info exists DEVICE]} {
-  set DEVICE "AD9744"
-}
-
-# block design
 source ../common/ad9740_fmc_bd.tcl
 
 # system ID

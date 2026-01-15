@@ -3,6 +3,8 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+set DAC_RESOLUTION $ad_project_params(DAC_RESOLUTION)
+
 # bd ports
 
 create_bd_port -dir I ad9740_clk
@@ -22,37 +24,10 @@ ad_ip_parameter ad9740_dma CONFIG.DMA_DATA_WIDTH_DEST 16
 # ad9740
 
 ad_ip_instance axi_ad9740 ad9740_dac
-
-set DEVICE $ad_project_params(DEVICE)
-
-# Set DAC resolution based on DEVICE parameter
-# DEVICE must be set by the calling script (system_bd.tcl or system_project.tcl)
-switch $DEVICE {
-  "AD9748" {
-    ad_ip_parameter ad9740_dac CONFIG.DAC_RESOLUTION 8
-    puts "common bd tcl: detected AD9748"
-  }
-  "AD9740" {
-    ad_ip_parameter ad9740_dac CONFIG.DAC_RESOLUTION 10
-    puts "common bd tcl: detected AD9740"
-  }
-  "AD9742" {
-    ad_ip_parameter ad9740_dac CONFIG.DAC_RESOLUTION 12
-    puts "common bd tcl: detected AD9742"
-  }
-  "AD9744" {
-    ad_ip_parameter ad9740_dac CONFIG.DAC_RESOLUTION 14
-    puts "common bd tcl: detected AD9744"
-  }
-  default {
-    ad_ip_parameter ad9740_dac CONFIG.DAC_RESOLUTION 14
-    puts "common bd tcl: detected default AD9744"
-  }
-}
+ad_ip_parameter ad9740_dac CONFIG.DAC_RESOLUTION $DAC_RESOLUTION
 
 # clocks
 
-#ad_connect ad9740_clk ad9740_dma/m_axis_aclk
 ad_connect ad9740_clk ad9740_dac/dac_clk
 
 # resets
@@ -61,15 +36,11 @@ ad_connect sys_rstgen/peripheral_aresetn ad9740_dma/m_src_axi_aresetn
 
 # data path
 
-connect_bd_net [get_bd_pins ad9740_dma/fifo_rd_dout] [get_bd_pins ad9740_dac/dma_data]
-connect_bd_net [get_bd_pins ad9740_dma/fifo_rd_valid] [get_bd_pins ad9740_dac/dma_valid]
+ad_connect ad9740_dma/fifo_rd_dout ad9740_dac/dma_data
+ad_connect ad9740_dma/fifo_rd_valid ad9740_dac/dma_valid
+ad_connect ad9740_clk ad9740_dma/fifo_rd_clk
+ad_connect ad9740_dac/dma_ready ad9740_dma/fifo_rd_en
 
-connect_bd_net [get_bd_ports ad9740_clk] [get_bd_pins ad9740_dma/fifo_rd_clk]
-
-connect_bd_net [get_bd_pins ad9740_dma/fifo_rd_en] [get_bd_pins ad9740_dac/dma_ready]
-
-
-#ad_connect ad9740_dma/m_axis ad9740_dac/s_axis
 ad_connect ad9740_dac/dac_data ad9740_data
 
 # AXI address definitions
