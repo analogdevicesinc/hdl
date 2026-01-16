@@ -87,8 +87,6 @@ module system_top (
   output                  adrv1_platform_status,
 
 
-  input                   adrv1_fpga_mcs_in_n,
-  input                   adrv1_fpga_mcs_in_p,
   output                  adrv1_dev_mcs_fpga_out_n,
   output                  adrv1_dev_mcs_fpga_out_p,
   output                  adrv2_dev_mcs_fpga_out_n,
@@ -212,7 +210,6 @@ module system_top (
 
   wire                    adrv1_fpga_ref_clk;
   wire                    adrv2_fpga_ref_clk;
-  wire                    adrv1_fpga_mcs_in;
   wire                    tdd_sync_loc;
   wire                    tdd_sync_i;
   wire                    tdd_sync_cntr;
@@ -228,11 +225,6 @@ module system_top (
     .I (adrv2_fpga_ref_clk_p),
     .IB (adrv2_fpga_ref_clk_n),
     .O (adrv2_fpga_ref_clk));
-
-  IBUFDS i_ibufgs_fpga_mcs_in (
-    .I (adrv1_fpga_mcs_in_p),
-    .IB (adrv1_fpga_mcs_in_n),
-    .O (adrv1_fpga_mcs_in));
 
   OBUFDS i_obufds_adrv1_dev_mcs_fpga_in (
     .I (adrv1_dev_mcs_fpga_in),
@@ -330,7 +322,6 @@ module system_top (
 
   system_wrapper i_system_wrapper (
     .adrv1_ref_clk (adrv1_fpga_ref_clk),
-    .adrv1_fpga_mcs_in (adrv1_fpga_mcs_in),
     .mssi_sync (mssi_sync),
 
     .tx_output_enable (1'b1),
