@@ -8,7 +8,7 @@
    viewBox="0 0 980.00007 1060"
    height="1060"
    width="980"
-   inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -1652,7 +1652,7 @@
      id="path1206-9-7-0-71-02-2-4"
      d="m 114.24435,474.84488 h 32.47873"
      style="display:inline;fill:none;stroke:#000000;stroke-width:2.01137;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-55-6-7);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -1661,7 +1661,7 @@
      id="path1206-9-7-0-71-02-2"
      d="M 114.11627,420 H 146.595"
      style="display:inline;fill:none;stroke:#000000;stroke-width:2.01137;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-55-6);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <g
@@ -1685,7 +1685,7 @@
        id="path1206-7-8-6-5-7-4-2-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -1694,7 +1694,7 @@
        id="path1206-7-8-6-5-7-4-2-0-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -1703,7 +1703,7 @@
        id="path1206-7-8-6-5-7-4-2-0-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc"
-       inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -1712,7 +1712,7 @@
        id="path1206-7-8-6-5-7-4-2-0-6-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <rect
@@ -1728,7 +1728,7 @@
      style="fill:#a01414;fill-opacity:0.858824;stroke:#800000;stroke-width:0.999999px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
      d="m 744.99998,941.966 v 30 l 35.00001,-14.99999 z"
      id="path40445"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <rect
@@ -1738,7 +1738,7 @@
      height="15.000009"
      x="54.999981"
      y="54.999992"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <rect
@@ -1748,7 +1748,7 @@
      height="15.000009"
      x="54.999981"
      y="29.999998"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -1757,7 +1757,7 @@
      id="path4518"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -1766,7 +1766,7 @@
      id="path4518-5"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -1775,7 +1775,7 @@
      id="path4518-5-9"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <rect
@@ -1786,14 +1786,14 @@
      id="rect4136"
      style="display:inline;fill:#ebebeb;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.28681;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges"
      transform="scale(-1,1)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <g
      transform="matrix(1.1787565,0,0,1.1091093,58.00812,183.87957)"
      id="g1870"
      style="shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <path
@@ -1839,7 +1839,7 @@
      y="529.47565"
      id="text4229"
      transform="matrix(0,-0.97701285,1.023528,0,0,0)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -1854,7 +1854,7 @@
      y="557.8291"
      id="text4233"
      transform="matrix(0,-0.97701285,1.023528,0,0,0)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -1869,7 +1869,7 @@
      y="500.90668"
      id="text4237"
      transform="matrix(0,-0.97701285,1.023528,0,0,0)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -1884,7 +1884,7 @@
      y="616.86279"
      id="text4241"
      transform="matrix(0,-0.97701285,1.023528,0,0,0)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -1899,7 +1899,7 @@
      y="588.88489"
      id="text4245"
      transform="matrix(0,-0.97701285,1.023528,0,0,0)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -1916,7 +1916,7 @@
      y="470.5239"
      id="text4251"
      transform="matrix(0,-0.97701285,1.023528,0,0,0)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -1931,7 +1931,7 @@
      y="191.46887"
      id="text4311"
      transform="scale(1.023528,0.97701285)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <text
@@ -1941,7 +1941,7 @@
      y="439.8667"
      id="text4301"
      transform="matrix(0,-0.97701285,1.023528,0,0,0)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -1953,7 +1953,7 @@
      transform="matrix(1.1787565,0,0,1.1091093,58.00812,157.26095)"
      id="g1405"
      style="shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <rect
@@ -1965,7 +1965,7 @@
      width="28.530003"
      id="rect4487"
      style="display:inline;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:3.60319;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png" />
+ />
   <text
      inkscape:export-ydpi="224.36"
      inkscape:export-xdpi="224.36"
@@ -1975,7 +1975,7 @@
      x="-744.27112"
      style="font-style:normal;font-weight:normal;font-size:13.7208px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.1434px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"><tspan
+><tspan
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:20.0095px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1.1434px"
        y="103.43478"
        x="-744.27112"
@@ -1990,7 +1990,7 @@
      style="font-style:normal;font-weight:normal;font-size:13.7208px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:0.858696;stroke:none;stroke-width:1.1434px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"><tspan
+><tspan
        id="tspan3725"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:22.8681px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.858696;stroke-width:1.1434px"
        y="153.87302"
@@ -2005,7 +2005,7 @@
      width="655.21973"
      id="rect6078"
      style="display:inline;vector-effect:none;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:2.9902;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2.9902, 8.97062;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png" />
+ />
   <rect
      inkscape:export-ydpi="224.36"
      inkscape:export-xdpi="224.36"
@@ -2015,7 +2015,7 @@
      width="33.440662"
      id="rect4488"
      style="display:inline;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:3.11114;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png" />
+ />
   <text
      inkscape:export-ydpi="224.36"
      inkscape:export-xdpi="224.36"
@@ -2025,7 +2025,7 @@
      x="-672.82245"
      style="font-style:normal;font-weight:normal;font-size:13.7208px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.1434px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"><tspan
+><tspan
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:20.0095px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1.1434px"
        y="862.9726"
        x="-672.82245"
@@ -2040,7 +2040,7 @@
      width="102.36497"
      id="rect6057"
      style="display:inline;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:3.27756;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:3.27756, 9.83267;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png" />
+ />
   <rect
      inkscape:export-ydpi="224.36"
      inkscape:export-xdpi="224.36"
@@ -2050,7 +2050,7 @@
      height="266.1095"
      x="160.93863"
      y="273.8222"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png" />
+ />
   <rect
      inkscape:export-ydpi="224.36"
      inkscape:export-xdpi="224.36"
@@ -2060,7 +2060,7 @@
      height="266.1095"
      x="229.73091"
      y="714.03925"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png" />
+ />
   <rect
      inkscape:export-ydpi="224.36"
      inkscape:export-xdpi="224.36"
@@ -2070,7 +2070,7 @@
      height="266.1095"
      x="154.51768"
      y="712.3161"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png" />
+ />
   <text
      inkscape:export-ydpi="224.36"
      inkscape:export-xdpi="224.36"
@@ -2080,7 +2080,7 @@
      y="185.19524"
      id="text5788"
      transform="matrix(0,-0.97000757,1.0309198,0,0,0)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"><tspan
+><tspan
        sodipodi:role="line"
        id="tspan5790"
        x="-456.48276"
@@ -2095,7 +2095,7 @@
      y="251.79082"
      id="text5788-2"
      transform="matrix(0,-0.97000757,1.0309198,0,0,0)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"><tspan
+><tspan
        sodipodi:role="line"
        id="tspan5790-0"
        x="-915.66266"
@@ -2110,7 +2110,7 @@
      y="176.48819"
      id="text5788-87"
      transform="matrix(0,-0.97000757,1.0309198,0,0,0)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"><tspan
+><tspan
        sodipodi:role="line"
        id="tspan5790-6"
        x="-917.48169"
@@ -2125,7 +2125,7 @@
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.5491px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#040404;fill-opacity:1;stroke:none;stroke-width:1.1434;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"><tspan
+><tspan
        id="tspan5125"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.5491px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#040404;fill-opacity:1;stroke:none;stroke-width:1.1434;stroke-opacity:1"
        y="432.98633"
@@ -2138,7 +2138,7 @@
      width="339.17905"
      id="rect35512"
      style="fill:#d2e6eb;fill-opacity:1;fill-rule:nonzero;stroke:#0f3296;stroke-width:1.99999;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <rect
@@ -2148,14 +2148,14 @@
      width="317.71915"
      id="rect35512-8"
      style="display:inline;fill:#d2e6eb;fill-opacity:1;fill-rule:nonzero;stroke:#0f3296;stroke-width:1.99999;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <g
      id="adc_core"
      style="display:inline;shape-rendering:crispEdges;enable-background:new"
      transform="matrix(1.6808353,0,0,1.5352423,1079.89,-808.19341)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2163,7 +2163,7 @@
      d="M 372.56771,141.83821 H 167.7273"
      id="path4305"
      inkscape:connector-curvature="0"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <text
@@ -2173,7 +2173,7 @@
      y="138.24049"
      id="text4307-4"
      transform="scale(1.023528,0.97701285)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -2188,7 +2188,7 @@
      y="161.2655"
      id="text4311-0"
      transform="scale(1.023528,0.97701285)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -2200,7 +2200,7 @@
      transform="matrix(2.0602936,0,0,1.1091093,-35.802505,-356.75465)"
      style="display:inline;fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
      id="g5654-2"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <text
@@ -2210,7 +2210,7 @@
      y="402.81137"
      id="text11366-4-8"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2219,7 +2219,7 @@
      id="path1206-1-0"
      d="M 691.6116,363.51902 H 856.86084"
      style="display:inline;fill:#0f3296;fill-opacity:1;stroke:#0f3296;stroke-width:2.27896;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2228,7 +2228,7 @@
      id="path1206-1-0-6"
      d="M 692.75074,402 H 857.99998"
      style="display:inline;fill:#0f3296;fill-opacity:1;stroke:#0f3296;stroke-width:2.27896;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-80);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <text
@@ -2238,7 +2238,7 @@
      y="309.27594"
      id="text4964-9-5"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -2253,7 +2253,7 @@
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.5491px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.1434;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        y="371.13113"
@@ -2268,7 +2268,7 @@
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.5491px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.1434;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        y="391.74954"
@@ -2283,7 +2283,7 @@
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.5491px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#0f0202;fill-opacity:1;stroke:none;stroke-width:1.1434;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        y="411.33701"
@@ -2297,7 +2297,7 @@
      id="path1206-9-4-1"
      d="M 791.43962,346.08089 H 767.86449"
      style="display:inline;fill:#0f3296;fill-opacity:1;stroke:#000000;stroke-width:1.7151;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <text
@@ -2307,7 +2307,7 @@
      style="font-style:normal;font-weight:normal;font-size:18.2944px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.1434;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <rect
@@ -2317,7 +2317,7 @@
      width="120.23316"
      id="rect35512-6"
      style="display:inline;fill:#d2e6eb;fill-opacity:1;fill-rule:nonzero;stroke:#0f3296;stroke-width:1.99999;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <text
@@ -2327,7 +2327,7 @@
      y="377.93201"
      id="text4964-9-5-1"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <text
@@ -2337,7 +2337,7 @@
      style="font-style:normal;font-weight:normal;font-size:18.2944px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.1434;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        y="472.04846"
@@ -2354,7 +2354,7 @@
      style="fill:#d2e6eb;fill-opacity:1;stroke:#0f3296;stroke-width:2.06977;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
      transform="matrix(0.3735284,0,0,2.49971,483.31396,-27.750749)"
      id="g1816"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <rect
@@ -2374,7 +2374,7 @@
      xml:space="preserve"
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"><tspan
+><tspan
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:18px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.802425px;stroke-opacity:1"
        y="665.9469"
        x="-445.50375"
@@ -2387,7 +2387,7 @@
      style="font-style:normal;font-weight:normal;font-size:18.2944px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.1434;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        id="tspan5269-7"
@@ -2406,7 +2406,7 @@
      id="path1206-9-7-0-71"
      d="M 202.03847,450.54543 H 364.99998"
      style="display:inline;fill:none;stroke:#000000;stroke-width:2.01137;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2415,7 +2415,7 @@
      id="path1206-9-7-0-71-4"
      d="M 154.29492,838.003 H 124.99998"
      style="display:inline;fill:none;stroke:#000000;stroke-width:2.01136;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-4);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2424,7 +2424,7 @@
      id="path1206-9-7-0-71-4-9"
      d="m 229.29344,837.811 -26.99008,3.9e-4"
      style="display:inline;fill:none;stroke:#000000;stroke-width:2.01137;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-4-3);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2433,7 +2433,7 @@
      id="path1206-9-7-0-71-02"
      d="M 201.40519,431.08508 H 334.99997"
      style="display:inline;fill:none;stroke:#000000;stroke-width:2.01137;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-55);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2442,7 +2442,7 @@
      id="path1206-1-0-95-1-9"
      d="M 692.11668,384.02738 H 856.67822"
      style="display:inline;fill:#0f3296;fill-opacity:1;stroke:#0f3296;stroke-width:2.27896;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2-0);image-rendering:auto;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <rect
@@ -2452,7 +2452,7 @@
      width="119.99998"
      id="rect35512-6-1-2"
      style="display:inline;fill:#e5e5e5;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.99999;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <text
@@ -2462,7 +2462,7 @@
      style="font-style:normal;font-weight:normal;font-size:18.2944px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.1434;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        style="text-align:center;text-anchor:middle;stroke-width:1.1434"
@@ -2482,7 +2482,7 @@
      style="font-style:normal;font-weight:normal;font-size:18.2944px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.1434;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        id="tspan4332-2"
@@ -2499,7 +2499,7 @@
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1963px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.1434;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"><tspan
+><tspan
        id="tspan331"
        style="stroke-width:1.1434"
        y="1034.1219"
@@ -2514,7 +2514,7 @@
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.1963px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.1434;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(1.0309198,0.97000757)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"><tspan
+><tspan
        id="tspan331-1"
        style="stroke-width:1.1434"
        y="1035.0079"
@@ -2525,7 +2525,7 @@
      id="flowRoot482"
      xml:space="preserve"
      transform="matrix(1.1787565,0,0,1.1091093,58.00812,265.95366)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><flowRegion
        id="flowRegion484"><rect
@@ -2539,7 +2539,7 @@
      id="g1985"
      transform="matrix(0.80242547,0,0,0.80242536,372.20776,255.46083)"
      style="shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <rect
@@ -2573,7 +2573,7 @@
      width="247.00725"
      id="daccore0-6-4"
      style="display:inline;fill:#4cbeef;fill-opacity:0;fill-rule:nonzero;stroke:#a01414;stroke-width:1.71644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <title
@@ -2586,7 +2586,7 @@
      width="247.00725"
      id="daccore0-6-4-9"
      style="display:inline;fill:#4cbeef;fill-opacity:0;fill-rule:nonzero;stroke:#a01414;stroke-width:1.71644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <title
@@ -2599,7 +2599,7 @@
      width="247.00725"
      id="daccore0-6-4-9-6"
      style="display:inline;fill:#4cbeef;fill-opacity:0;fill-rule:nonzero;stroke:#a01414;stroke-width:1.71644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <title
@@ -2612,7 +2612,7 @@
      width="247.00725"
      id="daccore0-6-4-9-9"
      style="display:inline;fill:#4cbeef;fill-opacity:0;fill-rule:nonzero;stroke:#a01414;stroke-width:1.71644;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <title
@@ -2625,7 +2625,7 @@
      style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.033px;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:0.294118;stroke:none;stroke-width:0.830361;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
      xml:space="preserve"
      transform="scale(0.88803716,1.126079)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.033px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.830361;stroke-miterlimit:4;stroke-dasharray:none"
@@ -2637,7 +2637,7 @@
      id="g21139"
      transform="matrix(0.9585553,0,0,1,295.48228,709.00988)"
      style="fill:none;fill-opacity:0.639216;stroke:#a01414;stroke-width:1.02139;stroke-opacity:0.858824;shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <path
@@ -2668,7 +2668,7 @@
      id="g15320"
      transform="matrix(0.95825745,0,0,1,294.95196,667.00988)"
      style="fill:none;fill-opacity:0.639216;stroke:#a01414;stroke-width:1.02155;stroke-opacity:0.858824;shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <path
@@ -2677,7 +2677,7 @@
        id="path1206-1-0-9"
        d="M 596,197.09448 H 498"
        style="display:inline;opacity:1;fill:none;fill-opacity:0.639216;stroke:#a01414;stroke-width:2.0431;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.858824;marker-end:url(#marker1216-0-3-74);shape-rendering:crispEdges;enable-background:new"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\lldk_fmc_card_UPDATED.svg.2022_12_21_15_46_15.0.jpg"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -2686,7 +2686,7 @@
        id="path1206-1-0-8-8"
        d="M 596,209.09448 H 498"
        style="display:inline;opacity:1;fill:none;fill-opacity:0.639216;stroke:#a01414;stroke-width:2.0431;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.858824;marker-end:url(#marker1216-0-3-9-3);shape-rendering:crispEdges;enable-background:new"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\lldk_fmc_card_UPDATED.svg.2022_12_21_15_46_15.0.jpg"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <text
@@ -2695,7 +2695,7 @@
        x="522.70721"
        style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.02155;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\lldk_fmc_card_UPDATED.svg.2022_12_21_15_46_15.0.jpg"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-size:13.3333px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.02155;stroke-opacity:1"
@@ -2708,7 +2708,7 @@
      id="g15302"
      transform="matrix(0.96188724,0,0,1,294.40771,689.00988)"
      style="fill:none;fill-opacity:0.639216;stroke:#a01414;stroke-width:1.01962;stroke-opacity:0.858824;shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <path
@@ -2743,7 +2743,7 @@
      id="text6100-2-7"
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"><tspan
+><tspan
        sodipodi:role="line"
        x="494.99997"
        y="955"
@@ -2755,7 +2755,7 @@
      x="783.25647"
      y="988.00409"
      id="text2401-1-7-3-9-9-8-9"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -2769,7 +2769,7 @@
      x="698.99994"
      y="953"
      id="text2401-1-7-3-9-9-8-9-9"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -2783,7 +2783,7 @@
      x="782.00006"
      y="946.99994"
      id="text2401-1-7-3-9-9-8-9-9-1"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -2797,7 +2797,7 @@
      x="781.29297"
      y="963"
      id="text2401-1-7-3-9-9-8-9-9-1-0"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -2811,7 +2811,7 @@
      x="421.46045"
      y="984.99908"
      id="text2401-1-7-3-9-9-8-2"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -2825,7 +2825,7 @@
      x="423.07935"
      y="957.71704"
      id="text2401-1-7-3-9-9-8-2-6"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -2839,14 +2839,14 @@
      id="path1206-7-8"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <g
      id="g6577"
      style="display:inline;fill:#ffcccc;fill-opacity:1;shape-rendering:crispEdges;enable-background:new"
      transform="matrix(1.3748693,0,0,1.4504246,40.645781,-64.887655)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <g
@@ -2888,7 +2888,7 @@
      id="path5471-9-9-1"
      cx="580.27496"
      cy="961.64099"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"
      rx="3.5355341"
@@ -2898,7 +2898,7 @@
      id="path5471-9-9-1-8"
      cx="765.77393"
      cy="967.42059"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"
      rx="3.5355341"
@@ -2909,7 +2909,7 @@
      id="path1206-7-8-6-5-7"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2918,7 +2918,7 @@
      id="path1206-7-8-6-5-7-9"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2927,7 +2927,7 @@
      id="path1206-7-8-6-5-7-9-6"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2936,7 +2936,7 @@
      id="path1206-7-8-6-5-7-9-7"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2945,7 +2945,7 @@
      id="path1206-7-8-6-5-7-9-2"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -2954,7 +2954,7 @@
      id="path1206-7-8-6-5-7-2"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <text
@@ -2963,7 +2963,7 @@
      x="117.42435"
      y="655.22797"
      id="text1814"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -2977,7 +2977,7 @@
      x="220.99583"
      y="653.94226"
      id="text1818"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -2990,7 +2990,7 @@
      id="path5471-9-9-17"
      cx="405.3887"
      cy="828.04938"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"
      rx="3.4019763"
@@ -3000,7 +3000,7 @@
      id="path5471-9-9-17-9"
      cx="390.03156"
      cy="812.51367"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"
      rx="3.4019763"
@@ -3010,7 +3010,7 @@
      id="path5471-9-9-17-9-6"
      cx="364.67441"
      cy="798.40649"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"
      rx="3.4019763"
@@ -3020,7 +3020,7 @@
      id="path5471-9-9-17-9-6-5"
      cx="351.10297"
      cy="782.15656"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"
      rx="3.4019763"
@@ -3031,7 +3031,7 @@
      x="724.83789"
      y="405.65735"
      id="text5363"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -3043,7 +3043,7 @@
      style="display:inline;shape-rendering:crispEdges;enable-background:new"
      id="g6008"
      transform="translate(243.94543,-323.02098)"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36">
     <g
@@ -3140,7 +3140,7 @@
      x="94.999977"
      y="43.000008"
      id="text69411"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -3154,7 +3154,7 @@
      x="94.999977"
      y="67"
      id="text69411-5"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -3168,7 +3168,7 @@
      x="535"
      y="885"
      id="text9373"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -3183,7 +3183,7 @@
      height="59.999996"
      x="114.99998"
      y="600"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <text
@@ -3192,7 +3192,7 @@
      x="154.99998"
      y="630"
      id="text8548"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -3206,7 +3206,7 @@
      x="119.99998"
      y="655"
      id="text11612"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -3220,7 +3220,7 @@
      x="219.99997"
      y="655"
      id="text14344"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"><tspan
        sodipodi:role="line"
@@ -3236,7 +3236,7 @@
      id="text6100-2-2-8"
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      transform="scale(0.98002378,1.0203834)"><tspan
        sodipodi:role="line"
        x="612.23004"
@@ -3249,7 +3249,7 @@
      id="path1206-7-8-6-5"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3258,7 +3258,7 @@
      id="path1206-7-8-6-5-8"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3267,7 +3267,7 @@
      id="path1206-7-8-6-5-8-6"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3276,7 +3276,7 @@
      id="path1206-7-8-6-5-1"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3284,7 +3284,7 @@
      d="M 676.99997,947.15123 V 967 c 8.06497,-0.42862 16.92511,-2.88806 17.01382,-9.60426 0.0902,-6.82051 -7.64548,-10.23776 -17.01382,-10.24451 z"
      id="path5279"
      sodipodi:nodetypes="ccac"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3293,7 +3293,7 @@
      id="path1206-1-0-95-1"
      d="m 569.99997,357.53033 h 21.41424"
      style="display:inline;fill:#0f3296;fill-opacity:1;stroke:#0f3296;stroke-width:2.2712;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3302,7 +3302,7 @@
      id="path1206-1-0-95-1-5"
      d="m 569.82318,410.70712 h 21.41424"
      style="display:inline;fill:#0f3296;fill-opacity:1;stroke:#0f3296;stroke-width:2.2712;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2-94);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3311,7 +3311,7 @@
      id="path1206-1-0-95-1-93"
      d="m 571.90927,392.8285 h 19.73192"
      style="display:inline;fill:#0f3296;fill-opacity:1;stroke:#0f3296;stroke-width:2.2712;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2-03);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3320,7 +3320,7 @@
      id="path1206-1-0-95-1-4"
      d="m 571.32872,375 h 19.73192"
      style="display:inline;fill:#0f3296;fill-opacity:1;stroke:#0f3296;stroke-width:2.2712;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2-4);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3328,7 +3328,7 @@
      id="path20012-1-0"
      d="m 139.99998,833 -5,10"
      style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3336,7 +3336,7 @@
      id="path20012-1-06"
      d="m 216.4799,832.49523 -5,10"
      style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3344,7 +3344,7 @@
      id="path20012-1-06-2"
      d="m 442.70132,774.89907 -5,10"
      style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3352,7 +3352,7 @@
      id="path20012-1-06-2-3"
      d="m 442.70132,790.55644 -5,10"
      style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3360,7 +3360,7 @@
      id="path20012-1-06-2-3-1"
      d="m 442.70132,805.20365 -5,10"
      style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <path
@@ -3368,7 +3368,7 @@
      id="path20012-1-06-2-3-1-3"
      d="m 442.70132,820.60848 -5,10"
      style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
   <g
