@@ -22,8 +22,6 @@ set_property  -dict {PACKAGE_PIN T6    IOSTANDARD LVCMOS18}  [get_ports adrv1_dg
 set_property  -dict {PACKAGE_PIN AB6   IOSTANDARD LVCMOS18}  [get_ports adrv1_dgpio_10]                          ; #FMC_HPC0_LA11_P      IO_L10P_T1U_N6_QBC_AD4P_66
 set_property  -dict {PACKAGE_PIN L10   IOSTANDARD LVCMOS18}  [get_ports adrv1_dgpio_11]                          ; #FMC_HPC0_LA27_N      IO_L15N_T2L_N5_AD11N_67
 
-set_property  -dict {PACKAGE_PIN T11   IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}  [get_ports adrv1_fpga_mcs_in_n]  ; #FMC_HPC0_LA32_N      IO_L6N_T0U_N11_AD6N_67
-set_property  -dict {PACKAGE_PIN U11   IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}  [get_ports adrv1_fpga_mcs_in_p]  ; #FMC_HPC0_LA32_P      IO_L6P_T0U_N10_AD6P_67
 set_property  -dict {PACKAGE_PIN R8    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}  [get_ports adrv1_fpga_ref_clk_n] ; #FMC_HPC0_CLK1_M2C_N  IO_L12N_T1U_N11_GC_67
 set_property  -dict {PACKAGE_PIN T8    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}  [get_ports adrv1_fpga_ref_clk_p] ; #FMC_HPC0_CLK1_M2C_P  IO_L12P_T1U_N10_GC_67
 

@@ -89,7 +89,7 @@ set_property  -dict {PACKAGE_PIN AH12   IOSTANDARD LVDS}                        
 
 # clocks
 
-create_clock -name adrv1_ref_clk       -period  8.00 [get_ports fpga_ref_clk_p]
+create_clock -name adrv1_ref_clk       -period  8.00 [get_ports adrv1_fpga_ref_clk_p]
 
 create_clock -name adrv1_rx1_dclk_in   -period  2.034 [get_ports adrv1_rx1_dclk_out_p]
 create_clock -name adrv1_rx2_dclk_in   -period  2.034 [get_ports adrv1_rx2_dclk_out_p]
@@ -134,26 +134,6 @@ set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_3 \
 set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_4 \
   [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_2_phy/i_div_clk_buf/O]] \
         [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O]] \
-  ]
-
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_5 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_1_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O]] \
-  ]
-
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_6 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_2_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O]] \
-  ]
-
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_7 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_1_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O]] \
-  ]
-
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_8 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_2_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O]] \
   ]
 
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports adrv1_tx1_strobe_in_p]
