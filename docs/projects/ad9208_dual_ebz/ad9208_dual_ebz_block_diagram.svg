@@ -9,7 +9,7 @@
    id="svg1993"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    sodipodi:docname="ad9208_dual_ebz_block_diagram.svg"
-   inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"
+
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -1731,7 +1731,7 @@
     <g
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+
        id="use13535"
        transform="matrix(0.26458333,0,0,0.26458333,-176.3204,566.91768)">
       <ellipse
@@ -1762,7 +1762,7 @@
     <g
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+
        id="use13535-0"
        transform="matrix(0.26458333,0,0,0.26458333,-176.3204,566.91768)">
       <ellipse

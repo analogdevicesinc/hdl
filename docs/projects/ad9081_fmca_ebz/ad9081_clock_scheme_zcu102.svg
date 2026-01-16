@@ -9,7 +9,7 @@
    id="svg1993"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    sodipodi:docname="ad9081_clock_scheme_zcu102.svg"
-   inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"
+
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -1795,7 +1795,7 @@
     <g
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+
        id="use13535"
        transform="matrix(0.26458333,0,0,0.26458333,-176.3204,566.91768)">
       <ellipse
@@ -1826,7 +1826,7 @@
     <g
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+
        id="use13535-0"
        transform="matrix(0.26458333,0,0,0.26458333,-176.3204,566.91768)">
       <ellipse
@@ -1863,7 +1863,7 @@
        height="65.040627"
        x="-138.78259"
        y="-96.181931"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <text
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
@@ -1873,7 +1873,7 @@
        y="-124.926"
        id="text17738"
        transform="rotate(-90)"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          sodipodi:role="line"
          id="tspan17736"
          x="45.203575"
@@ -1884,7 +1884,7 @@
        transform="matrix(2.1625098,0,0,1.2566551,-169.16618,-58.04152)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png">
+>
       <rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
@@ -1914,7 +1914,7 @@
        transform="matrix(1.2496492,0,0,1.2567868,-161.02953,-58.037492)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png">
+>
       <rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
@@ -1947,7 +1947,7 @@
        x="2.4201453"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465361"
          y="-45.021366"
          x="2.4201453"
@@ -1961,7 +1961,7 @@
        x="2.4201453"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465361"
          y="-57.649849"
          x="2.4201453"
@@ -1975,7 +1975,7 @@
        x="2.5372784"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465361"
          y="-69.551338"
          x="2.5372784"
@@ -1989,7 +1989,7 @@
        x="2.4206314"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465361"
          y="-80.613525"
          x="2.4206314"
@@ -2003,7 +2003,7 @@
        x="-28.868187"
        y="-48.323616"
        id="text27307"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan27305"
          sodipodi:role="line"
          x="-28.868187"
@@ -2016,7 +2016,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.410516px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28903)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <text
        id="text28157"
        y="-83.35923"
@@ -2025,7 +2025,7 @@
        xml:space="preserve"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="stroke-width:0.465361"
          y="-83.35923"
          x="-115.96132"
@@ -2038,7 +2038,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.411158px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <text
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
@@ -2047,7 +2047,7 @@
        x="-115.96132"
        y="-47.385971"
        id="text28465"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan28463"
          sodipodi:role="line"
          x="-115.96132"
@@ -2061,7 +2061,7 @@
        x="-115.96132"
        y="-71.437614"
        id="text28859"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan28857"
          sodipodi:role="line"
          x="-115.96132"
@@ -2075,7 +2075,7 @@
        xml:space="preserve"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="stroke-width:0.465361"
          y="-108.01256"
          x="77.609154"
@@ -2089,7 +2089,7 @@
        x="-76.750298"
        y="-108.01334"
        id="text35792"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan35790"
          sodipodi:role="line"
          x="-76.750298"
@@ -2103,7 +2103,7 @@
        xml:space="preserve"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="stroke-width:0.465357"
          y="-83.038155"
          x="73.716347"
@@ -2116,7 +2116,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.441;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker36002-0)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <text
        id="text35998-56"
        y="-50.688122"
@@ -2125,7 +2125,7 @@
        xml:space="preserve"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="stroke-width:0.465362"
          y="-50.688122"
          x="74.118645"
@@ -2138,7 +2138,7 @@
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <text
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
@@ -2147,7 +2147,7 @@
        x="74.118645"
        y="-43.26812"
        id="text37206-7"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan37204-5"
          sodipodi:role="line"
          x="74.118645"
@@ -2161,14 +2161,14 @@
        x="-29.176264"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="stroke-width:0.465361"
          y="-71.954567"
          x="-29.176264"
          sodipodi:role="line"
          id="tspan6705-1">CLKIN6</tspan></text>
     <path
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"
+
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
        style="fill:none;stroke:#000000;stroke-width:0.409876px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker5160)"
@@ -2176,7 +2176,7 @@
        id="path5148"
        inkscape:connector-curvature="0" />
     <text
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"
+
        id="text5152"
        y="-59.633789"
        x="-115.96251"
@@ -2190,7 +2190,7 @@
          sodipodi:role="line"
          id="tspan5150">CLKOUT10 </tspan></text>
     <text
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"
+
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.96383px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        x="-28.866138"
@@ -2211,7 +2211,7 @@
        x="-85.868874"
        y="-48.323616"
        id="text28465-9"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan28463-0"
          sodipodi:role="line"
          x="-85.868874"
@@ -2225,7 +2225,7 @@
        x="-85.868027"
        y="-60.579346"
        id="text28465-9-2"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan28463-0-5"
          sodipodi:role="line"
          x="-85.868027"
@@ -2239,7 +2239,7 @@
        x="-85.868034"
        y="-72.567619"
        id="text28465-9-2-0"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan28463-0-5-8"
          sodipodi:role="line"
          x="-85.868034"
@@ -2253,7 +2253,7 @@
        x="-86.074951"
        y="-83.26828"
        id="text28465-9-2-0-3"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan28463-0-5-8-0"
          sodipodi:role="line"
          x="-86.074951"
@@ -2267,7 +2267,7 @@
        x="-41.68045"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.13475px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.13475px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465361"
          y="-83.268715"
          x="-41.68045"
@@ -2281,7 +2281,7 @@
        x="1.6142108"
        y="-105.77497"
        id="text17738-3"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          sodipodi:role="line"
          id="tspan17736-1"
          x="1.6142108"
@@ -2294,7 +2294,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.411158px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-1)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <path
        inkscape:connector-curvature="0"
        id="path28181-9"
@@ -2302,7 +2302,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.422447px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-5)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <path
        inkscape:connector-curvature="0"
        id="path28181-9-10"
@@ -2310,7 +2310,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.442;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <path
        inkscape:connector-curvature="0"
        id="path28181-9-10-1"
@@ -2318,7 +2318,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.308077;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5160)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <path
        inkscape:connector-curvature="0"
        id="path28181-9-10-18"
@@ -2326,7 +2326,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <path
        inkscape:connector-curvature="0"
        id="path28181-9-10-1-7"
@@ -2334,7 +2334,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.19;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5160-1)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <text
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
@@ -2343,7 +2343,7 @@
        x="20.606249"
        y="-72.237328"
        id="text28465-9-2-0-5"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan28463-0-5-8-02"
          sodipodi:role="line"
          x="20.606249"
@@ -2357,7 +2357,7 @@
        x="20.39917"
        y="-83.037811"
        id="text28465-9-2-0-3-9"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan28463-0-5-8-0-7"
          sodipodi:role="line"
          x="20.39917"
@@ -2370,7 +2370,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.421608px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-1-3)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <text
        id="text35998-5"
        y="-71.446449"
@@ -2379,7 +2379,7 @@
        xml:space="preserve"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="stroke-width:0.465362"
          y="-71.446449"
          x="72.498001"
@@ -2392,7 +2392,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.283984px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-5-7)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <path
        inkscape:connector-curvature="0"
        id="path28181-9-1-2"
@@ -2400,7 +2400,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.291881px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-5-7-1)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <text
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
@@ -2409,7 +2409,7 @@
        x="20.985645"
        y="-60.477325"
        id="text28465-9-2-0-5-7"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan28463-0-5-8-02-8"
          sodipodi:role="line"
          x="20.985645"
@@ -2423,7 +2423,7 @@
        xml:space="preserve"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="stroke-width:0.465362"
          y="-61.686356"
          x="72.87738"
@@ -2436,7 +2436,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.292805px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker28185-5-2)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png" />
+ />
     <text
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
@@ -2445,7 +2445,7 @@
        x="20.97448"
        y="-48.198555"
        id="text28465-9-2-0-5-3"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          id="tspan28463-0-5-8-02-2"
          sodipodi:role="line"
          x="20.97448"
@@ -2459,7 +2459,7 @@
        x="-11.828721"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
          y="-77.607384"
          x="-11.828721"
@@ -2473,7 +2473,7 @@
        x="13.342795"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
          y="-77.607094"
          x="13.342795"
@@ -2487,7 +2487,7 @@
        x="-11.539998"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
          y="-66.394783"
          x="-11.539998"
@@ -2501,7 +2501,7 @@
        x="-11.484143"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
          y="-54.546936"
          x="-11.484143"
@@ -2515,7 +2515,7 @@
        x="-11.16582"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
          y="-42.225094"
          x="-11.16582"
@@ -2529,7 +2529,7 @@
        x="13.342338"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
          y="-66.394783"
          x="13.342338"
@@ -2543,7 +2543,7 @@
        x="13.342338"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
          y="-54.547092"
          x="13.342338"
@@ -2557,7 +2557,7 @@
        x="13.342338"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.465361;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:0.465361"
          y="-42.225094"
          x="13.342338"
@@ -2579,7 +2579,7 @@
        xml:space="preserve"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465;stroke-miterlimit:4;stroke-dasharray:none"
          y="-51.425182"
          x="40.959858"
@@ -2593,7 +2593,7 @@
        xml:space="preserve"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465362"
          y="-57.128944"
          x="63.742271"
@@ -2607,7 +2607,7 @@
        xml:space="preserve"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.465362"
          y="-61.902473"
          x="63.687141"
