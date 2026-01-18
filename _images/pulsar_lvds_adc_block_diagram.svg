@@ -886,7 +886,7 @@
        y="290.30939"
        ry="4.2426405"
        rx="4.2426405"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -895,7 +895,7 @@
        id="use1501-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -904,14 +904,14 @@
        id="use1501"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <g
        id="use1475"
        transform="matrix(1.2398233,0,0,1.0502642,-550.86908,-27.87137)"
        style="stroke-width:0.703194"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
       <rect
@@ -942,7 +942,7 @@
        transform="matrix(1.0673306,0,0,1.8499427,219.25772,-722.33135)"
        style="display:inline;stroke-width:0.710514;shape-rendering:crispEdges;enable-background:new"
        id="use1479"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
       <rect
@@ -974,7 +974,7 @@
        id="path4518"
        d="M -116.99853,382.44135 V 357.36307"
        style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.49999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM);marker-end:url(#TriangleOutM);shape-rendering:crispEdges;enable-background:new"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -983,7 +983,7 @@
        id="path4518-5"
        d="M -76.645434,382.43275 V 357.48479"
        style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.49999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM-7);marker-end:url(#TriangleOutM-2);shape-rendering:crispEdges;enable-background:new"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -992,7 +992,7 @@
        id="path4518-5-9"
        d="m -36.292394,382.40442 v -25.078"
        style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.49999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM-7-1);marker-end:url(#TriangleOutM-2-8);shape-rendering:crispEdges;enable-background:new"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <rect
@@ -1003,7 +1003,7 @@
        height="98.169884"
        x="-65.555916"
        y="388.32852"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -1011,7 +1011,7 @@
        d="m 23.010776,389.20037 v 97.52402"
        id="path4179"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -1019,7 +1019,7 @@
        d="m -16.590604,389.20037 v 97.52402"
        id="path4179-9"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -1027,7 +1027,7 @@
        d="m -174.99613,389.20037 v 97.52402"
        id="path4179-0"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -1035,7 +1035,7 @@
        d="m -135.39473,389.20037 v 97.52402"
        id="path4179-4"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -1043,7 +1043,7 @@
        d="m -95.793334,389.20037 v 97.52402"
        id="path4179-7"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -1051,7 +1051,7 @@
        d="m -56.191934,389.20037 v 97.52402"
        id="path4179-41"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -1059,7 +1059,7 @@
        d="m -214.59743,389.20037 v 97.52402"
        id="path4179-0-3"
        inkscape:connector-curvature="0"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <text
@@ -1069,7 +1069,7 @@
        x="-504.8009"
        style="font-style:normal;font-weight:normal;font-size:17.0649px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.9984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1px"
@@ -1084,7 +1084,7 @@
        x="-494.49719"
        style="font-style:normal;font-weight:normal;font-size:17.0649px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.9984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1px"
@@ -1099,7 +1099,7 @@
        x="-494.13788"
        style="font-style:normal;font-weight:normal;font-size:17.0649px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.9984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1px"
@@ -1114,7 +1114,7 @@
        x="-484.52167"
        style="font-style:normal;font-weight:normal;font-size:17.0649px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.9984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1px"
@@ -1129,7 +1129,7 @@
        x="-484.42786"
        style="font-style:normal;font-weight:normal;font-size:17.0649px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.9984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1px"
@@ -1146,7 +1146,7 @@
        x="-509.3551"
        style="font-style:normal;font-weight:normal;font-size:17.0649px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.9984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1px"
@@ -1161,7 +1161,7 @@
        x="131.22955"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          y="474.38336"
@@ -1176,7 +1176,7 @@
        x="-493.74341"
        style="font-style:normal;font-weight:normal;font-size:17.0649px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
        xml:space="preserve"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.9984px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1px"
@@ -1193,7 +1193,7 @@
        y="338.00516"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png" />
+ />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:17.0649px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -1202,7 +1202,7 @@
        id="text4595"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        transform="scale(1.0865021,0.92038479)"><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.776px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:1px"
          sodipodi:role="line"
@@ -1217,7 +1217,7 @@
        id="text4482"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        transform="scale(1.0865021,0.92038479)"><tspan
          sodipodi:role="line"
          x="139.86217"
@@ -1231,7 +1231,7 @@
        x="-457.88947"
        style="font-style:normal;font-weight:normal;font-size:17.0649px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:21.3312px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1px"
@@ -1243,7 +1243,7 @@
        id="g5654"
        style="display:inline;fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-width:0.449013;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        transform="matrix(3.3206195,0,0,1.5398491,-947.00529,-151.5917)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
       <path
@@ -1257,7 +1257,7 @@
        id="g5654-2"
        style="display:inline;fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        transform="matrix(1.7478534,0,0,1,-85.40762,-12.51405)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <text
@@ -1266,7 +1266,7 @@
        x="243.93425"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          id="tspan11370-7-5"
@@ -1278,7 +1278,7 @@
        id="g21139"
        transform="matrix(1.5450945,0,0,1.3088622,-704.15763,583.40432)"
        style="stroke-width:0.703194;shape-rendering:crispEdges"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
       <path
@@ -1317,14 +1317,14 @@
        inkscape:transform-center-x="-9.2284841"
        inkscape:transform-center-y="0.25764112"
        d="m 1321.5825,846.40682 -31.3012,-18.69776 -31.3013,-18.69777 31.8434,-17.7588 31.8433,-17.7588 -0.5421,36.45657 z"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <g
        style="display:inline;stroke-width:0.703194;shape-rendering:crispEdges;enable-background:new"
        id="g8892"
        transform="matrix(1.5450945,0,0,1.3088622,-662.96483,-259.32641)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
       <rect
@@ -1434,7 +1434,7 @@
        id="uart"
        transform="matrix(0,-0.54286345,0.64084324,0,-295.62563,605.42102)"
        style="display:inline;stroke-width:1.69543;stroke-miterlimit:4;stroke-dasharray:none;shape-rendering:crispEdges;enable-background:new"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
       <rect
@@ -1535,7 +1535,7 @@
        height="783.39758"
        x="-608.15723"
        y="293.99307"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1547,7 +1547,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1559,7 +1559,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1571,7 +1571,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1583,7 +1583,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1595,7 +1595,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1607,7 +1607,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1619,7 +1619,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1631,7 +1631,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1643,7 +1643,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1655,7 +1655,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1667,7 +1667,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1679,7 +1679,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1691,7 +1691,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1703,7 +1703,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1715,7 +1715,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1727,7 +1727,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1739,7 +1739,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1751,7 +1751,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1763,7 +1763,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1775,7 +1775,7 @@
        width="100%"
        height="100%"
        transform="translate(6.133e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <rect
@@ -1787,7 +1787,7 @@
        y="545.1864"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png" />
+ />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:20.8572px;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -1797,7 +1797,7 @@
        transform="matrix(0,-0.92038479,1.0865021,0,0,0)"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"><tspan
+><tspan
          sodipodi:role="line"
          id="tspan32453"
          x="-867.47467"
@@ -1812,7 +1812,7 @@
        width="100%"
        height="100%"
        transform="translate(6.133e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <rect
@@ -1824,7 +1824,7 @@
        y="517.15466"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png" />
+ />
     <rect
        style="display:inline;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:2.03381;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2.03381, 6.10143;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        id="use1467-5"
@@ -1834,7 +1834,7 @@
        y="517.15454"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png" />
+ />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
@@ -1843,7 +1843,7 @@
        id="use1473"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        transform="scale(1.1546692,0.8660489)"><tspan
          sodipodi:role="line"
          x="-506.41898"
@@ -1858,7 +1858,7 @@
        id="use1473-1"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        transform="scale(1.1546692,0.8660489)"><tspan
          sodipodi:role="line"
          x="-188.69106"
@@ -1874,7 +1874,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -1886,14 +1886,14 @@
        width="100%"
        height="100%"
        transform="matrix(0.66964978,0,0,1.0295248,5.7143093,-13.791464)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <g
        id="use1487"
        transform="matrix(1.5450945,0,0,1.3088622,-706.25013,504.72576)"
        style="stroke-width:0.703194;shape-rendering:crispEdges"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
       <path
@@ -1928,7 +1928,7 @@
        id="use1503"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        transform="scale(0.95451552,1.0476519)"><tspan
          sodipodi:role="line"
          x="-103.83724"
@@ -1941,7 +1941,7 @@
        x="77.567307"
        y="972.91711"
        id="use1505"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        transform="scale(1.0865021,0.92038479)"><tspan
@@ -1956,14 +1956,14 @@
        id="use1517"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <g
        style="display:inline;stroke-width:0.858876;shape-rendering:crispEdges;enable-background:new"
        id="use1519"
        transform="matrix(1.723039,0,0,1.5883337,-803.56673,-374.73699)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
       <rect
@@ -2077,7 +2077,7 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <use
@@ -2089,14 +2089,14 @@
        width="100%"
        height="100%"
        transform="translate(6.033e-5)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <g
        id="use1525"
        style="display:inline;stroke-width:0.841182;shape-rendering:crispEdges;enable-background:new"
        transform="matrix(2.490919,0,0,2.1197426,-1140.4833,-725.63285)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36">
       <g
@@ -2173,7 +2173,7 @@
        y="760.92261"
        id="use1527"
        transform="scale(1.0902764,0.91719861)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          sodipodi:role="line"
@@ -2188,7 +2188,7 @@
        y="759.1181"
        id="use1527-3"
        transform="scale(1.0807618,0.92527326)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          sodipodi:role="line"
@@ -2201,7 +2201,7 @@
        d="m -32.487834,950.41121 v 40.76732 c 16.3104,-0.8803 34.2289303,-5.9317 34.4083803,-19.7261 0.18234,-14.00862 -15.4621103,-21.02742 -34.4083803,-21.04122 z"
        id="use1537"
        sodipodi:nodetypes="ccac"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -2210,7 +2210,7 @@
        id="use1539-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -2219,7 +2219,7 @@
        id="use1539-1-72"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -2228,7 +2228,7 @@
        id="use1539-1-72-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -2237,7 +2237,7 @@
        id="use1539-1-72-2-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -2246,7 +2246,7 @@
        id="use1539-1-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -2255,7 +2255,7 @@
        id="use1539-1-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -2264,7 +2264,7 @@
        id="path1206-9-8"
        d="M 215.4315,676.93349 H 64.012235"
        style="display:inline;fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-8);shape-rendering:crispEdges;enable-background:new"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <rect
@@ -2276,7 +2276,7 @@
        style="display:inline;vector-effect:none;fill:#ffcccc;fill-opacity:1;fill-rule:nonzero;stroke:#a01414;stroke-width:0.852662;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;shape-rendering:crispEdges;enable-background:new"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png" />
+ />
     <text
        transform="matrix(0,-0.92038479,1.0865021,0,0,0)"
        id="use1471"
@@ -2286,7 +2286,7 @@
        xml:space="preserve"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"><tspan
+><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.8865px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#28170b;stroke:none;stroke-width:1px;stroke-opacity:1"
          y="-331.76257"
          x="-777.62524"
@@ -2299,7 +2299,7 @@
        cy="914.27716"
        rx="3.3295474"
        ry="3.251775"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -2308,7 +2308,7 @@
        id="use1501-5-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -2317,7 +2317,7 @@
        id="use1501-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
@@ -2338,7 +2338,7 @@
        inkscape:transform-center-x="-9.2284841"
        inkscape:transform-center-y="0.25764112"
        d="m 1321.5825,846.40682 -31.3012,-18.69776 -31.3013,-18.69777 31.8434,-17.7588 31.8433,-17.7588 -0.5421,36.45657 z"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <text
@@ -2347,7 +2347,7 @@
        x="78.355026"
        y="1042.4747"
        id="use1505-8"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        transform="scale(1.0865021,0.92038479)"><tspan
@@ -2363,7 +2363,7 @@
        cy="978.29694"
        rx="3.3295474"
        ry="3.251775"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <rect
@@ -2376,14 +2376,14 @@
        height="193.85277"
        x="-969.28571"
        y="-298.34576"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png" />
+ />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.3767px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
        x="-140.71672"
        y="988.16522"
        id="text2401-1-7-3-9-9-8-2"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        transform="scale(1.0865021,0.92038479)"><tspan
@@ -2403,7 +2403,7 @@
        x="-139.63338"
        y="1041.292"
        id="text2401-1-7-3-9-9-8-2-60"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        transform="scale(1.0865021,0.92038479)"><tspan
@@ -2419,7 +2419,7 @@
        y="901.9021"
        id="text4964-9-0-2-5"
        transform="scale(0.96611964,1.0350685)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          sodipodi:role="line"
@@ -2437,7 +2437,7 @@
        height="193.85277"
        x="-969.28571"
        y="-584.2135"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png" />
+ />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:16.093px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.00699px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -2445,7 +2445,7 @@
        y="898.59241"
        id="text4964-9-0-2-5-4"
        transform="scale(0.96611964,1.0350685)"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          sodipodi:role="line"
@@ -2459,7 +2459,7 @@
        x="-394.65787"
        y="1006.6296"
        id="text2401-1-7-3-9-9-8-2-5"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        transform="scale(1.0865021,0.92038479)"><tspan
@@ -2479,7 +2479,7 @@
        x="-360.28079"
        y="1000.3776"
        id="text2401-1-7-3-9-9-8-2-5-8"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"
+
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
        transform="scale(1.0865021,0.92038479)"><tspan
@@ -2497,7 +2497,7 @@
        y="543.96466"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png" />
+ />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:17.0649px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -2507,7 +2507,7 @@
        transform="matrix(0,-0.92038479,1.0865021,0,0,0)"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"
-       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD762x\ad7960_block_diagram.png"><tspan
+><tspan
          sodipodi:role="line"
          id="tspan4493"
          x="-964.02057"

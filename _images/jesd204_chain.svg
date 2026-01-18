@@ -8,7 +8,7 @@
    version="1.1"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    sodipodi:docname="jesd204b_chain.svg"
-   inkscape:export-filename="/home/lars/graphics/jesd/jesd204b_chain.png"
+
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -400,7 +400,7 @@
          width="160.714"
          id="rect4728-6"
          style="fill:url(#linearGradient429436);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:6;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
       <text
@@ -409,7 +409,7 @@
          x="108.40558"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
          xml:space="preserve"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90"><tspan
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:20px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans Bold';text-align:center;text-anchor:middle"
@@ -430,7 +430,7 @@
        width="520.26929"
        id="rect3761"
        style="fill:url(#linearGradient429418);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:7.81077;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <text
@@ -439,7 +439,7 @@
        x="230.18436"
        y="253.28296"
        id="text3769"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
@@ -452,7 +452,7 @@
       <g
          id="g3809"
          transform="translate(-86.630188,247.84483)"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <rect
@@ -497,7 +497,7 @@
        id="path3815"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
@@ -506,7 +506,7 @@
        id="path4447"
        d="m 323.53236,406.63558 h 22.22335"
        style="fill:none;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutS)"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
@@ -515,7 +515,7 @@
        id="path4449"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
@@ -524,7 +524,7 @@
        id="path4475"
        d="m 578.37223,406.63558 h 22.92624"
        style="fill:none;stroke:#000000;stroke-width:5.10756;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutS)"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
@@ -533,7 +533,7 @@
        id="path4477"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <text
@@ -542,7 +542,7 @@
        x="160.89287"
        y="477.36523"
        id="text4663"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
@@ -607,7 +607,7 @@
     <g
        id="g4712"
        transform="translate(-60.64466,314)"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <rect
@@ -637,7 +637,7 @@
     <g
        transform="translate(-251.82746,314)"
        id="g4718"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <rect
@@ -671,7 +671,7 @@
        height="255.08521"
        x="224.56088"
        y="-121.83542"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <text
@@ -680,7 +680,7 @@
        x="395.70901"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        xml:space="preserve"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          style="font-size:15px;line-height:1.25"
@@ -699,7 +699,7 @@
        x="395.01273"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        xml:space="preserve"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          style="font-size:15px;line-height:1.25"
@@ -713,7 +713,7 @@
        x="230.18436"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        xml:space="preserve"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:30px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans Bold'"
@@ -727,7 +727,7 @@
       <g
          transform="translate(-86.630188,-202.97248)"
          id="g4742"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <rect
@@ -772,7 +772,7 @@
        id="path4772"
        d="M 238.75584,65.818274 H 199.21827"
        style="fill:none;stroke:#000000;stroke-width:4.75649;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutS)"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
@@ -781,7 +781,7 @@
        id="path4774"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
@@ -790,13 +790,13 @@
        id="path4776"
        d="M 465.69199,65.818274 H 444.29372"
        style="fill:none;stroke:#000000;stroke-width:4.93442;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutS)"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <g
        transform="translate(20.369715,-209.30566)"
        id="g4778"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <rect
@@ -829,7 +829,7 @@
        id="path4788"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
@@ -838,7 +838,7 @@
        id="path4790"
        d="m 364.64286,105.64676 v 13.38941 H 159.28571 v -14.13651"
        style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS);marker-end:none"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <text
@@ -847,7 +847,7 @@
        x="158.75002"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        xml:space="preserve"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          style="font-size:15px;line-height:1.25"
@@ -861,7 +861,7 @@
        x="6.4285736"
        y="-139.78067"
        id="text5168"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
@@ -875,7 +875,7 @@
        x="6.4285736"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        xml:space="preserve"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          y="210.50504"
@@ -893,7 +893,7 @@
          width="160.714"
          id="rect4728"
          style="fill:url(#linearGradient429436);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:6;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
       <text
@@ -902,7 +902,7 @@
          x="108.40597"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
          xml:space="preserve"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90"><tspan
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:20px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans Bold';text-align:center;text-anchor:middle"
@@ -918,7 +918,7 @@
       <g
          id="g961"
          transform="matrix(0.66767832,0,0,0.66767832,268.62497,179.08152)"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -940,7 +940,7 @@
       <g
          transform="translate(-99.959503,-202.97248)"
          id="g4752"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <rect
@@ -970,7 +970,7 @@
       <g
          id="g973"
          transform="matrix(0.66767832,0,0,0.66767832,516.48212,179.08152)"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -992,7 +992,7 @@
       <g
          transform="translate(-98.977814,-202.97247)"
          id="g4762"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <rect
@@ -1022,7 +1022,7 @@
       <g
          transform="matrix(0.66767832,0,0,0.66767832,654.53011,179.08152)"
          id="g979"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -1047,7 +1047,7 @@
          height="74.285721"
          x="28.571428"
          y="369.49274"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
       <text
@@ -1056,7 +1056,7 @@
          x="108.82589"
          y="401.02036"
          id="text2987"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90"><tspan
            sodipodi:role="line"
@@ -1072,7 +1072,7 @@
       <g
          transform="matrix(0.66767832,0,0,0.66767832,268.62497,630.32627)"
          id="g985"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -1093,7 +1093,7 @@
       <g
          id="g3803"
          transform="translate(-99.959503,247.84483)"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <rect
@@ -1123,7 +1123,7 @@
       <g
          transform="matrix(0.66767832,0,0,0.66767832,516.48212,630.32627)"
          id="g997"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -1144,7 +1144,7 @@
       <g
          id="g3797"
          transform="translate(-98.977814,247.84483)"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <rect
@@ -1174,7 +1174,7 @@
       <g
          id="g1003"
          transform="matrix(0.66767832,0,0,0.66767832,654.53011,630.32627)"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <path
@@ -1206,7 +1206,7 @@
     <g
        transform="translate(20.369341,-95.169953)"
        id="g4778-2"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <rect
@@ -1266,7 +1266,7 @@
          width="160.714"
          id="rect4728-6-1"
          style="fill:url(#linearGradient429436);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:6;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
       <text
@@ -1275,7 +1275,7 @@
          x="108.40558"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
          xml:space="preserve"
-         inkscape:export-filename="/home/lars/jesd204_chain.png"
+
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90"><tspan
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:20px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans Bold';text-align:center;text-anchor:middle"
@@ -1295,7 +1295,7 @@
        x="395.70911"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        xml:space="preserve"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          style="font-size:15px;line-height:1.25"
@@ -1314,7 +1314,7 @@
        x="395.01282"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        xml:space="preserve"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          style="font-size:15px;line-height:1.25"
@@ -1325,7 +1325,7 @@
     <g
        transform="translate(20.369714,131.23785)"
        id="g4778-7"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <rect
@@ -1355,7 +1355,7 @@
     <g
        transform="translate(20.36934,245.37356)"
        id="g4778-2-9"
-       inkscape:export-filename="/home/lars/jesd204_chain.png"
+
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
       <rect

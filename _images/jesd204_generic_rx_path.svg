@@ -1123,7 +1123,7 @@
     <g
        id="g13582"
        transform="translate(131.56285,-380.53334)"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <rect
@@ -1133,7 +1133,7 @@
        height="133.88882"
        x="1517.0769"
        y="-325.29602"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <rect
@@ -1143,13 +1143,13 @@
        height="133.41664"
        x="1045.9352"
        y="-324.81519"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <g
        id="g13642"
        transform="translate(1023.8412,-524.78312)"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180">
       <rect
@@ -1184,7 +1184,7 @@
     <g
        id="g13654"
        transform="translate(1126.7127,-510.49742)"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180">
       <rect
@@ -1214,7 +1214,7 @@
     <g
        transform="translate(1262.5204,-510.85102)"
        id="g13668"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180">
       <rect
@@ -1245,13 +1245,13 @@
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
        d="m 1312.8993,-335.45038 c 0,30.94571 0,30.94571 0,30.94571"
        id="path13686"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <text
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        xml:space="preserve"
        style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        x="1445.8877"
@@ -1266,20 +1266,20 @@
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 1443.6974,-244.77397 6.5,-10.5"
        id="path13708"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <path
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/sample_Tx_JESD_path.png"
+
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 1310.5616,-244.02399 6.5,-10.5"
        id="use13710" />
     <text
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        xml:space="preserve"
        style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        x="1312.6587"
@@ -1293,7 +1293,7 @@
     <g
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+
        transform="translate(920.39177,58.63425)"
        id="use13732">
       <ellipse
@@ -1324,7 +1324,7 @@
     <g
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+
        transform="translate(1050.8918,58.63425)"
        id="use13734">
       <ellipse
@@ -1355,7 +1355,7 @@
     <path
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        id="path13736"
        d="m 1577.3572,-335.45038 c 0,30.94571 0,30.94571 0,30.94571"
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
@@ -1365,7 +1365,7 @@
        x="1577.1166"
        style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        xml:space="preserve"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180"><tspan
          style="font-size:13px;line-height:1.25;font-family:sans-serif"
@@ -1376,14 +1376,14 @@
     <path
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        id="path13742"
        d="m 1166.0637,-335.45038 c 0,30.94571 0,30.94571 0,30.94571"
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)" />
     <text
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        xml:space="preserve"
        style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        x="1168.5891"
@@ -1397,7 +1397,7 @@
     <text
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        xml:space="preserve"
        style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        x="1312.8302"
@@ -1411,7 +1411,7 @@
     <g
        transform="translate(786.89179,59.634253)"
        id="g13760"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180">
       <ellipse
@@ -1443,13 +1443,13 @@
        id="path13768"
        d="m 1138.878,-297.58273 h 45.2991"
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstart);marker-end:none"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <g
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+
        id="use13774"
        transform="translate(638.99556,55.573947)">
       <ellipse
@@ -1480,14 +1480,14 @@
     <path
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/sample_Tx_JESD_path.png"
+
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 1161.4509,-244.77399 6.5,-10.5"
        id="use13776" />
     <text
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        xml:space="preserve"
        style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        x="1152.2772"
@@ -1504,7 +1504,7 @@
        x="1213.6975"
        style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        xml:space="preserve"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180"><tspan
          style="font-size:13px;line-height:1.25;font-family:sans-serif"
@@ -1518,7 +1518,7 @@
        x="1578.1166"
        style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate"
        xml:space="preserve"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180"><tspan
          style="font-size:13px;line-height:1.25;font-family:sans-serif"
@@ -1530,13 +1530,13 @@
        id="path13790"
        d="m 1575.9264,-244.77397 6.5,-10.5"
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <use
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        height="1488.189"
        width="2104.7244"
        transform="translate(0.5,32)"
@@ -1547,7 +1547,7 @@
     <use
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        height="1488.189"
        width="2104.7244"
        transform="translate(0,48)"
@@ -1558,7 +1558,7 @@
     <use
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        x="0"
        y="0"
        xlink:href="#path15771"
@@ -1569,7 +1569,7 @@
     <use
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        x="0"
        y="0"
        xlink:href="#path15771"
@@ -1580,7 +1580,7 @@
     <use
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        height="1488.189"
        width="2104.7244"
        transform="matrix(0.85420883,0,0,1,313.71546,0)"
@@ -1591,7 +1591,7 @@
     <use
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        height="1488.189"
        width="2104.7244"
        transform="matrix(0.84169995,0,0,1,464.7198,30.232233)"
@@ -1602,7 +1602,7 @@
     <use
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        height="1488.189"
        width="2104.7244"
        transform="matrix(0.84169995,0,0,1,464.29895,46.232233)"
@@ -1613,7 +1613,7 @@
     <use
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        x="0"
        y="0"
        xlink:href="#path15771"
@@ -1624,7 +1624,7 @@
     <use
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        x="0"
        y="0"
        xlink:href="#path13768"
@@ -1635,7 +1635,7 @@
     <use
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        x="0"
        y="0"
        xlink:href="#path13768"
@@ -1646,7 +1646,7 @@
     <use
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        height="1488.189"
        width="2104.7244"
        transform="matrix(0.85420883,0,0,1,584.53735,-1.7677669)"
@@ -1657,7 +1657,7 @@
     <path
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstart);marker-end:none"
        d="m 1138.878,-297.58273 h 45.2991"
        id="path15769" />
@@ -1665,13 +1665,13 @@
        id="path15771"
        d="m 1138.878,-297.58273 h 45.2991"
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstart);marker-end:none"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Rx_JESD_path.png"
+
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <g
        inkscape:export-ydpi="180"
        inkscape:export-xdpi="180"
-       inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/F8_Tx_JESD_path.png"
+
        id="g3351-2"
        transform="matrix(0.65068191,0,0,0.7092071,1440.7377,492.69043)"
        style="stroke-width:1.47207">
@@ -1693,7 +1693,7 @@
          x="154.46059"
          style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.7022px;line-height:0%;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.47207;marker:none;enable-background:accumulate"
          xml:space="preserve"
-         inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180"
          transform="scale(1.044004,0.95785074)"><tspan
@@ -1708,7 +1708,7 @@
          x="-35.031052"
          style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.7022px;line-height:0%;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-indent:0;text-align:center;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.47207;marker:none;enable-background:accumulate"
          xml:space="preserve"
-         inkscape:export-filename="/media/data/workspace/ws1/ghdl/docs/block_diagrams/jesd/generic_Tx_JESD_path.png"
+
          inkscape:export-xdpi="180"
          inkscape:export-ydpi="180"
          transform="scale(1.044004,0.95785074)"><tspan
