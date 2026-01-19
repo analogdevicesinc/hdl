@@ -337,6 +337,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad9695_fmc/index.html">AD9695-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ada4355_fmc/index.html">ADA4355-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adaq23875/index.html">ADAQ23875</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../admx100x_evb/index.html">ADMX100X-EVB</a></li>
@@ -650,10 +651,11 @@ in/multiple out (MIMO) base stations.</p>
 </div>
 </div><p>The Rx links (ADC Path) operate with the following parameters:</p>
 <ul class="simple">
-<li><p>Rx Framer parameters: L=2, M=4, F=4, S=1, NP=16, N=16</p></li>
-<li><p>Sample Rate: 245.76 MSPS</p></li>
+<li><p>Rx Framer parameters: L=2, M=8, F=8, S=1, NP=16, N=16</p></li>
+<li><p>Sample Rate: 122.88 MSPS</p></li>
 <li><p>Dual link: No</p></li>
-<li><p>RX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)</p></li>
+<li><p>RX_DEVICE_CLK: 122.88 MHz</p></li>
+<li><p>RX_LINK_CLK: 245.76 MHz (Lane Rate/40)</p></li>
 <li><p>REF_CLK: 245.76 MHz (Lane Rate/40)</p></li>
 <li><p>JESD204B Lane Rate: 9.83 Gbps</p></li>
 <li><p>CPLL</p></li>
@@ -851,6 +853,7 @@ hdl/projects/adrv9026/$CARRIER/system_project.tcl</p>
 <li><p>[RX/TX/RX_OS]_JESD_L: number of lanes per link</p></li>
 <li><p>[RX/TX/RX_OS]_JESD_S: number of samples per frame</p></li>
 <li><p>[RX/TX/RX_OS]_JESD_NP: number of bits per sample</p></li>
+<li><p>[RX/TX/RX_OS]_TPL_WIDTH : TPL data path width in bits</p></li>
 <li><p>[RX/TX/RX_OS]_NUM_LINKS: number of links</p></li>
 </ul>
 </section>
@@ -1332,7 +1335,7 @@ by typing in your command prompt:</p>
 <div class="clear-left"></div></div></div><p>The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="d2ad0123a5559e88e480a92b05844637c4087f45" name="d2ad0123a5559e88e480a92b05844637c4087f45" type="checkbox"></input><label for="d2ad0123a5559e88e480a92b05844637c4087f45"><p>Default values of the make parameters for ADRV9026</p>
+<input class="collapsible_input" id="522a19be5375da923bb5b35a3d7ddceaed586a5e" name="522a19be5375da923bb5b35a3d7ddceaed586a5e" type="checkbox"></input><label for="522a19be5375da923bb5b35a3d7ddceaed586a5e"><p>Default values of the make parameters for ADRV9026</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1390,20 +1393,28 @@ configure this project, depending on the carrier used.</p>
 <td><p>16</p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-even"><td><p>TX_JESD_M</p></td>
+<tr class="row-even"><td><p>RX_JESD_TPL_WIDTH</p></td>
+<td><p>{}</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_JESD_M</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX_JESD_L</p></td>
+<tr class="row-even"><td><p>TX_JESD_L</p></td>
 <td><p>4</p></td>
 <td><p>4</p></td>
 </tr>
-<tr class="row-even"><td><p>TX_JESD_S</p></td>
+<tr class="row-odd"><td><p>TX_JESD_S</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX_JESD_NP</p></td>
+<tr class="row-even"><td><p>TX_JESD_NP</p></td>
 <td><p>16</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_JESD_TPL_WIDTH</p></td>
+<td><p>{}</p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_OS_JESD_M</p></td>
@@ -1418,8 +1429,12 @@ configure this project, depending on the carrier used.</p>
 <td><p>0</p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-odd"><td><p>RX_JESD_NP</p></td>
+<tr class="row-odd"><td><p>RX_OS_JESD_NP</p></td>
 <td><p>0</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_OS_JESD_TPL_WIDTH</p></td>
+<td><p>{}</p></td>
 <td><p>—</p></td>
 </tr>
 </tbody>
@@ -1472,16 +1487,16 @@ following table.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>0</p></td>
-<td><p>3</p></td>
-</tr>
-<tr class="row-odd"><td><p>1</p></td>
-<td><p>2</p></td>
-</tr>
-<tr class="row-even"><td><p>2</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>3</p></td>
+<tr class="row-odd"><td><p>1</p></td>
 <td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>3</p></td>
 </tr>
 </tbody>
 </table>
