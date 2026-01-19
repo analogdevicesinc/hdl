@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -50,12 +50,12 @@ module system_top (
   output                  rx_sync_n,
   output                  rx_os_sync_p,
   output                  rx_os_sync_n,
+  output                  rx_sync_2_p,
+  output                  rx_sync_2_n,
   input                   tx_sync_p,
   input                   tx_sync_n,
   input                   tx_sync_1_p,
   input                   tx_sync_1_n,
-  input                   tx_sync_2_p,
-  input                   tx_sync_2_n,
 
   input                   sysref_in_p,
   input                   sysref_in_n,
@@ -97,7 +97,9 @@ module system_top (
   wire        [ 2:0]      spi_csn;
   wire                    rx_sync;
   wire                    rx_os_sync;
+  wire                    rx_sync_2;
   wire                    tx_sync;
+  wire                    tx_sync_1;
   wire                    sysref;
   wire                    ref_clk0;
   wire                    ref_clk1;
@@ -133,14 +135,19 @@ module system_top (
     .ODIV2 (ref_clk1_odiv2));
 
   OBUFDS i_obufds_rx_sync (
-    .I (rx_sync),
+    .I (~rx_sync),
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
   OBUFDS i_obufds_rx_os_sync (
-    .I (rx_os_sync),
+    .I (~rx_os_sync),
     .O (rx_os_sync_p),
     .OB (rx_os_sync_n));
+
+  OBUFDS i_obufds_rx_sync_2 (
+    .I (~rx_sync_2),
+    .O (rx_sync_2_p),
+    .OB (rx_sync_2_n));
 
   OBUFDS i_obufds_sysref_out (
     .I (sysref_out),
@@ -156,11 +163,6 @@ module system_top (
     .I (tx_sync_1_p),
     .IB (tx_sync_1_n),
     .O (tx_sync_1));
-
-  IBUFDS i_ibufds_tx_sync_2 (
-    .I (tx_sync_2_p),
-    .IB (tx_sync_2_n),
-    .O (tx_sync_2));
 
   IBUFDS i_ibufds_sysref (
     .I (sysref_in_p),
@@ -219,7 +221,7 @@ module system_top (
     .rx_data_7_p (rx_data_p[7]),
     .rx_ref_clk_0 (ref_clk0),
     .rx_ref_clk_1 (ref_clk0),
-    .rx_os_ref_clk_0 (ref_clk),
+    .rx_os_ref_clk_0 (ref_clk0),
     .rx_sync_0 (rx_sync),
     .rx_os_sync (rx_os_sync),
     .rx_sysref_0 (sysref),
