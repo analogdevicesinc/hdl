@@ -58,8 +58,7 @@ ad_ip_parameter axi_ada4355_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 # TDD controller instantiation
 # Channel allocation for LiDAR:
 # Channel 0: Laser trigger output
-# Channel 1: ADC gate/enable (controls when ADC captures data)
-# Channel 2: DMA sync (triggers DMA transfer)
+# Channel 1: DMA sync (controls when DMA starts capturing)
 
 ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
   $TDD_DEFAULT_POL \
@@ -76,11 +75,8 @@ ad_ip_instance util_vector_logic logic_inv [list \
   C_OPERATION not \
 ]
 
-# Create AND gate to gate ADC valid signal with TDD control
-ad_ip_instance util_vector_logic adc_gate_logic [list \
-  C_SIZE 1 \
-  C_OPERATION and \
-]
+# Note: ADC valid signal connected directly to DMA (no TDD gating)
+# Data flow controlled by DMA SYNC_TRANSFER_START with CH2
 
 # connect interface to axi_ad4355_adc
 
@@ -100,10 +96,9 @@ ad_connect $sys_iodelay_clk     axi_ada4355_adc/delay_clk
 ad_connect axi_ada4355_adc/adc_data  axi_ada4355_dma/fifo_wr_din
 ad_connect axi_ada4355_adc/adc_dovf  axi_ada4355_dma/fifo_wr_overflow
 
-# Gate ADC valid signal with TDD control
-ad_connect axi_ada4355_adc/adc_valid adc_gate_logic/Op1
-ad_connect axi_tdd_0/tdd_channel_1 adc_gate_logic/Op2
-ad_connect adc_gate_logic/Res axi_ada4355_dma/fifo_wr_en
+# Connect ADC valid directly to DMA (no gating)
+# DMA will use SYNC (CH2) to control when to start capturing
+ad_connect axi_ada4355_adc/adc_valid axi_ada4355_dma/fifo_wr_en
 
 # system runs on if.v's received clock
 
@@ -120,7 +115,7 @@ ad_connect axi_tdd_0/sync_in tdd_ext_sync
 
 # TDD channel connections
 ad_connect axi_tdd_0/tdd_channel_0 laser_trigger
-ad_connect axi_tdd_0/tdd_channel_2 axi_ada4355_dma/sync
+ad_connect axi_tdd_0/tdd_channel_1 axi_ada4355_dma/sync
 
 ad_connect $sys_cpu_resetn axi_ada4355_dma/m_dest_axi_aresetn
 
