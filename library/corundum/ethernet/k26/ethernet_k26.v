@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: BSD-2-Clause-Views
 /*
  * Copyright (c) 2023 The Regents of the University of California
- * Copyright (c) 2025 Analog Devices, Inc. All rights reserved
+ * Copyright (c) 2025-2026 Analog Devices, Inc. All rights reserved
  */
 /*
  * This file repackages Corundum MQNIC Core AXI with the sole purpose of
@@ -29,7 +29,8 @@ module ethernet_k26 #(
   parameter PTP_TS_ENABLE = 1,
   parameter PTP_TS_FMT_TOD = 1,
   parameter PTP_TS_WIDTH = PTP_TS_FMT_TOD ? 96 : 64,
-  parameter TX_TAG_WIDTH = 16,
+  // log2(TX_DESC_TABLE_SIZE - 32) + 1 = 6
+  parameter TX_TAG_WIDTH = 6,
   parameter PFC_ENABLE = 1,
   parameter LFC_ENABLE = PFC_ENABLE,
   parameter ENABLE_PADDING = 1,
@@ -171,7 +172,7 @@ module ethernet_k26 #(
   input  wire [PORT_COUNT-1:0]                     eth_tx_lfc_req,
   input  wire [PORT_COUNT*8-1:0]                   eth_tx_pfc_en,
   input  wire [PORT_COUNT*8-1:0]                   eth_tx_pfc_req,
-  output wire [PORT_COUNT*8-1:0]                   eth_tx_fc_quanta_clk_en,
+  output wire [PORT_COUNT-1:0]                     eth_tx_fc_quanta_clk_en,
 
   output wire [PORT_COUNT*AXIS_DATA_WIDTH-1:0]     axis_eth_rx_tdata,
   output wire [PORT_COUNT*AXIS_KEEP_WIDTH-1:0]     axis_eth_rx_tkeep,
