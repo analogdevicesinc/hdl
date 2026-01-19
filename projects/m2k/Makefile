@@ -8,12 +8,13 @@ PROJECT_NAME := m2k
 
 M_DEPS += m2k_spi.v
 M_DEPS += system_bd.tcl
+M_DEPS += create_pynq_mb_subsystem.tcl
 M_DEPS += ../../library/common/ad_iobuf.v
 
-LIB_DEPS += axi_ad9963
-LIB_DEPS += axi_adc_decimate
-LIB_DEPS += axi_adc_trigger
-LIB_DEPS += axi_dac_interpolate
+# LIB_DEPS += axi_ad9963
+# LIB_DEPS += axi_adc_decimate
+# LIB_DEPS += axi_adc_trigger
+# LIB_DEPS += axi_dac_interpolate
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_logic_analyzer
 LIB_DEPS += axi_rd_wr_combiner

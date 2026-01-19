@@ -92,6 +92,32 @@ module system_top (
   wire    [15:0]  data_o;
   wire    [15:0]  data_t;
 
+  wire    [ 1:0]  iop_data_i;
+  wire    [ 1:0]  iop_data_o;
+  wire    [ 1:0]  iop_data_t;
+
+  // IOP SPI signals
+  wire            iop_spi_io0_i;
+  wire            iop_spi_io0_o;
+  wire            iop_spi_io0_t;
+  wire            iop_spi_io1_i;
+  wire            iop_spi_io1_o;
+  wire            iop_spi_io1_t;
+  wire            iop_spi_sck_i;
+  wire            iop_spi_sck_o;
+  wire            iop_spi_sck_t;
+  wire    [ 0:0]  iop_spi_ss_i;
+  wire    [ 0:0]  iop_spi_ss_o;
+  wire            iop_spi_ss_t;
+
+  // IOP I2C signals
+  wire            iop_iic_scl_i;
+  wire            iop_iic_scl_o;
+  wire            iop_iic_scl_t;
+  wire            iop_iic_sda_i;
+  wire            iop_iic_sda_o;
+  wire            iop_iic_sda_t;
+
   wire    [ 1:0]  trigger_i;
   wire    [ 1:0]  trigger_o;
   wire    [ 1:0]  trigger_t;
@@ -120,13 +146,72 @@ module system_top (
 
   assign gpio_i[16:2] = gpio_o[16:2];
 
+  // Split data_bd: [7:0] for IOP PMOD, [15:8] for Logic Analyzer
+  // IOP PMOD pin mapping:
+  // data_bd[0]: I2C SDA
+  // data_bd[1]: I2C SCL
+  // data_bd[2]: SPI CS
+  // data_bd[3]: SPI MOSI (io0)
+  // data_bd[4]: SPI MISO (io1)
+  // data_bd[5]: SPI SCK
+  // data_bd[6-7]: GPIO
+
+  // I2C IOBUFs
+  ad_iobuf #(.DATA_WIDTH(1)) i_iop_iic_sda (
+    .dio_t(iop_iic_sda_t),
+    .dio_i(iop_iic_sda_o),
+    .dio_o(iop_iic_sda_i),
+    .dio_p(data_bd[0]));
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_iop_iic_scl (
+    .dio_t(iop_iic_scl_t),
+    .dio_i(iop_iic_scl_o),
+    .dio_o(iop_iic_scl_i),
+    .dio_p(data_bd[1]));
+
+  // SPI IOBUFs
+  ad_iobuf #(.DATA_WIDTH(1)) i_iop_spi_ss (
+    .dio_t(iop_spi_ss_t),
+    .dio_i(iop_spi_ss_o[0]),
+    .dio_o(iop_spi_ss_i[0]),
+    .dio_p(data_bd[2]));
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_iop_spi_io0 (
+    .dio_t(iop_spi_io0_t),
+    .dio_i(iop_spi_io0_o),
+    .dio_o(iop_spi_io0_i),
+    .dio_p(data_bd[3]));
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_iop_spi_io1 (
+    .dio_t(iop_spi_io1_t),
+    .dio_i(iop_spi_io1_o),
+    .dio_o(iop_spi_io1_i),
+    .dio_p(data_bd[4]));
+
+  ad_iobuf #(.DATA_WIDTH(1)) i_iop_spi_sck (
+    .dio_t(iop_spi_sck_t),
+    .dio_i(iop_spi_sck_o),
+    .dio_o(iop_spi_sck_i),
+    .dio_p(data_bd[5]));
+
+  // GPIO IOBUFs (2 pins)
+  ad_iobuf #(.DATA_WIDTH(2)) i_data_bd_iop_gpio (
+    .dio_t(iop_data_t[1:0]),
+    .dio_i(iop_data_o[1:0]),
+    .dio_o(iop_data_i[1:0]),
+    .dio_p(data_bd[7:6]));
+
   ad_iobuf #(
-    .DATA_WIDTH(16)
-  ) i_data_bd (
-    .dio_t(data_t[15:0]),
-    .dio_i(data_o[15:0]),
-    .dio_o(data_i[15:0]),
-    .dio_p(data_bd));
+    .DATA_WIDTH(8)
+  ) i_data_bd_la (
+    .dio_t(data_t[15:8]),
+    .dio_i(data_o[15:8]),
+    .dio_o(data_i[15:8]),
+    .dio_p(data_bd[15:8]));
+
+  // Tie off unused lower 8 bits of logic analyzer data ports
+  assign data_i[7:0] = 8'h00;
+  assign data_t[7:0] = 8'hFF;  // High-Z
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -174,6 +259,27 @@ module system_top (
     .data_i(data_i),
     .data_o(data_o),
     .data_t(data_t),
+    .iop_data_i(iop_data_i),
+    .iop_data_o(iop_data_o),
+    .iop_data_t(iop_data_t),
+    .iop_iic_scl_i(iop_iic_scl_i),
+    .iop_iic_scl_o(iop_iic_scl_o),
+    .iop_iic_scl_t(iop_iic_scl_t),
+    .iop_iic_sda_i(iop_iic_sda_i),
+    .iop_iic_sda_o(iop_iic_sda_o),
+    .iop_iic_sda_t(iop_iic_sda_t),
+    .iop_spi_io0_i(iop_spi_io0_i),
+    .iop_spi_io0_o(iop_spi_io0_o),
+    .iop_spi_io0_t(iop_spi_io0_t),
+    .iop_spi_io1_i(iop_spi_io1_i),
+    .iop_spi_io1_o(iop_spi_io1_o),
+    .iop_spi_io1_t(iop_spi_io1_t),
+    .iop_spi_sck_i(iop_spi_sck_i),
+    .iop_spi_sck_o(iop_spi_sck_o),
+    .iop_spi_sck_t(iop_spi_sck_t),
+    .iop_spi_ss_i(iop_spi_ss_i),
+    .iop_spi_ss_o(iop_spi_ss_o),
+    .iop_spi_ss_t(iop_spi_ss_t),
     .trigger_i(trigger_i),
     .trigger_o(trigger_o),
     .trigger_t(trigger_t),
