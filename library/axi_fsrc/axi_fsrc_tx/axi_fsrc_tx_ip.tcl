@@ -41,34 +41,18 @@ proc add_reset {name polarity} {
   set_property value $polarity $reset_polarity
 }
 
-ipx::infer_bus_interface s_axis_aclk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface s_axi_aclk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
+for {set i 1} {$i < 64} {incr i} {
+  set_property enablement_dependency "spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CHANNELS')) > $i" \
+    [ipx::get_ports *_$i -of_objects [ipx::current_core]]
+}
 
 add_reset reset ACTIVE_HIGH
 add_reset s_axi_aresetn ACTIVE_LOW
 
 ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces s_axi_aclk -of_objects [ipx::current_core]]
 set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF -of_objects [ipx::get_bus_interfaces s_axi_aclk -of_objects [ipx::current_core]]]
-
-adi_add_bus "s_axis" "slave" \
-  "xilinx.com:interface:axis_rtl:1.0" \
-  "xilinx.com:interface:axis:1.0" \
-  [list \
-    {"s_axis_ready" "TREADY"} \
-    {"s_axis_valid" "TVALID"} \
-    {"s_axis_data" "TDATA"} \
-  ]
-
-adi_add_bus "m_axis" "master" \
-  "xilinx.com:interface:axis_rtl:1.0" \
-  "xilinx.com:interface:axis:1.0" \
-  [ list \
-    {"m_axis_ready" "TREADY"} \
-    {"m_axis_valid" "TVALID"} \
-    {"m_axis_data" "TDATA"} \
-  ]
-
-adi_add_bus_clock "clk" "s_axis:m_axis"
 
 adi_add_auto_fpga_spec_params
 ipx::create_xgui_files [ipx::current_core]

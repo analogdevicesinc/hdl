@@ -43,13 +43,137 @@ module axi_fsrc_tx #(
   input reset,
   input start,
 
-  input      s_axis_valid,
-  output     s_axis_ready,
-  input      [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] s_axis_data,
+  input data_in_valid,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_0,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_1,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_2,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_3,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_4,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_5,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_6,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_7,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_8,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_9,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_10,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_11,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_12,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_13,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_14,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_15,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_16,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_17,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_18,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_19,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_20,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_21,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_22,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_23,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_24,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_25,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_26,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_27,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_28,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_29,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_30,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_31,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_32,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_33,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_34,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_35,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_36,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_37,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_38,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_39,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_40,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_41,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_42,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_43,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_44,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_45,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_46,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_47,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_48,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_49,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_50,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_51,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_52,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_53,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_54,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_55,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_56,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_57,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_58,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_59,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_60,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_61,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_62,
+  input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_63,
 
-  output reg m_axis_valid,
-  input      m_axis_ready,
-  output reg [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] m_axis_data,
+  output reg data_out_valid,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_0,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_1,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_2,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_3,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_4,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_5,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_6,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_7,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_8,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_9,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_10,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_11,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_12,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_13,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_14,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_15,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_16,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_17,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_18,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_19,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_20,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_21,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_22,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_23,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_24,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_25,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_26,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_27,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_28,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_29,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_30,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_31,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_32,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_33,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_34,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_35,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_36,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_37,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_38,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_39,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_40,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_41,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_42,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_43,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_44,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_45,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_46,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_47,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_48,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_49,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_50,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_51,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_52,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_53,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_54,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_55,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_56,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_57,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_58,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_59,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_60,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_61,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_62,
+  output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_63,
 
   // axi interface
   input                   s_axi_aclk,
@@ -80,8 +204,17 @@ module axi_fsrc_tx #(
                                      8'h00};      /* PATCH */
   localparam [31:0] CORE_MAGIC = 32'h504c5347;    // FSRC
 
-  localparam DATA_WIDTH = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL * SAMPLE_DATA_WIDTH;
+  localparam CHANNEL_WIDTH = SAMPLES_PER_CHANNEL * SAMPLE_DATA_WIDTH;
   localparam NUM_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
+
+  wire data_out_valid_s;
+  wire [CHANNEL_WIDTH*NUM_OF_CHANNELS-1:0] in_data;
+  wire [CHANNEL_WIDTH*NUM_OF_CHANNELS-1:0] out_data;
+  wire [CHANNEL_WIDTH*64-1:0] data_in_s;
+  wire [CHANNEL_WIDTH*64-1:0] data_out_s;
+
+  reg [CHANNEL_WIDTH*NUM_OF_CHANNELS-1:0] out_data_reg;
+
 
   // internal signals
 
@@ -170,13 +303,10 @@ module axi_fsrc_tx #(
     .up_rdata (up_rdata_s),
     .up_rack (up_rack_s));
 
-  wire                   data_out_valid_s;
-  wire [DATA_WIDTH-1:0]  data_out_s;
-
   tx_fsrc #(
     .NUM_OF_CHANNELS (NUM_OF_CHANNELS),
     .SAMPLE_DATA_WIDTH (SAMPLE_DATA_WIDTH),
-    .DATA_WIDTH (DATA_WIDTH),
+    .DATA_WIDTH (NUM_OF_CHANNELS * CHANNEL_WIDTH),
     .ACCUM_WIDTH (ACCUM_WIDTH),
     .NUM_SAMPLES (NUM_SAMPLES)
   ) i_tx_fsrc (
@@ -193,19 +323,152 @@ module axi_fsrc_tx #(
     .accum_set (accum_set),
     .accum_add_val (accum_add_val),
 
-    .in_ready (s_axis_ready),
-    .in_data (s_axis_data),
-    .in_valid (s_axis_valid),
+    .in_ready (),
+    .in_data (in_data),
+    .in_valid (data_in_valid),
 
-    .out_data (data_out_s),
+    .out_data (out_data),
     .out_valid (data_out_valid_s),
-    .out_ready (m_axis_ready));
+    .out_ready (1'b1));
 
   always @(posedge clk) begin
-    m_axis_data <= data_out_s;
-    m_axis_valid <= data_out_valid_s;
+    out_data_reg <= out_data;
+    data_out_valid <= data_out_valid_s;
   end
 
   assign start_s = (start & ext_trig_en) | reg_start_s;
+
+  assign in_data = data_in_s[CHANNEL_WIDTH*NUM_OF_CHANNELS-1:0];
+  assign data_out_s = {{(64-NUM_OF_CHANNELS)*CHANNEL_WIDTH{1'b0}}, out_data_reg};
+
+  assign data_in_s[CHANNEL_WIDTH*0+:CHANNEL_WIDTH] = data_in_0;
+  assign data_in_s[CHANNEL_WIDTH*1+:CHANNEL_WIDTH] = data_in_1;
+  assign data_in_s[CHANNEL_WIDTH*2+:CHANNEL_WIDTH] = data_in_2;
+  assign data_in_s[CHANNEL_WIDTH*3+:CHANNEL_WIDTH] = data_in_3;
+  assign data_in_s[CHANNEL_WIDTH*4+:CHANNEL_WIDTH] = data_in_4;
+  assign data_in_s[CHANNEL_WIDTH*5+:CHANNEL_WIDTH] = data_in_5;
+  assign data_in_s[CHANNEL_WIDTH*6+:CHANNEL_WIDTH] = data_in_6;
+  assign data_in_s[CHANNEL_WIDTH*7+:CHANNEL_WIDTH] = data_in_7;
+  assign data_in_s[CHANNEL_WIDTH*8+:CHANNEL_WIDTH] = data_in_8;
+  assign data_in_s[CHANNEL_WIDTH*9+:CHANNEL_WIDTH] = data_in_9;
+  assign data_in_s[CHANNEL_WIDTH*10+:CHANNEL_WIDTH] = data_in_10;
+  assign data_in_s[CHANNEL_WIDTH*11+:CHANNEL_WIDTH] = data_in_11;
+  assign data_in_s[CHANNEL_WIDTH*12+:CHANNEL_WIDTH] = data_in_12;
+  assign data_in_s[CHANNEL_WIDTH*13+:CHANNEL_WIDTH] = data_in_13;
+  assign data_in_s[CHANNEL_WIDTH*14+:CHANNEL_WIDTH] = data_in_14;
+  assign data_in_s[CHANNEL_WIDTH*15+:CHANNEL_WIDTH] = data_in_15;
+  assign data_in_s[CHANNEL_WIDTH*16+:CHANNEL_WIDTH] = data_in_16;
+  assign data_in_s[CHANNEL_WIDTH*17+:CHANNEL_WIDTH] = data_in_17;
+  assign data_in_s[CHANNEL_WIDTH*18+:CHANNEL_WIDTH] = data_in_18;
+  assign data_in_s[CHANNEL_WIDTH*19+:CHANNEL_WIDTH] = data_in_19;
+  assign data_in_s[CHANNEL_WIDTH*20+:CHANNEL_WIDTH] = data_in_20;
+  assign data_in_s[CHANNEL_WIDTH*21+:CHANNEL_WIDTH] = data_in_21;
+  assign data_in_s[CHANNEL_WIDTH*22+:CHANNEL_WIDTH] = data_in_22;
+  assign data_in_s[CHANNEL_WIDTH*23+:CHANNEL_WIDTH] = data_in_23;
+  assign data_in_s[CHANNEL_WIDTH*24+:CHANNEL_WIDTH] = data_in_24;
+  assign data_in_s[CHANNEL_WIDTH*25+:CHANNEL_WIDTH] = data_in_25;
+  assign data_in_s[CHANNEL_WIDTH*26+:CHANNEL_WIDTH] = data_in_26;
+  assign data_in_s[CHANNEL_WIDTH*27+:CHANNEL_WIDTH] = data_in_27;
+  assign data_in_s[CHANNEL_WIDTH*28+:CHANNEL_WIDTH] = data_in_28;
+  assign data_in_s[CHANNEL_WIDTH*29+:CHANNEL_WIDTH] = data_in_29;
+  assign data_in_s[CHANNEL_WIDTH*30+:CHANNEL_WIDTH] = data_in_30;
+  assign data_in_s[CHANNEL_WIDTH*31+:CHANNEL_WIDTH] = data_in_31;
+  assign data_in_s[CHANNEL_WIDTH*32+:CHANNEL_WIDTH] = data_in_32;
+  assign data_in_s[CHANNEL_WIDTH*33+:CHANNEL_WIDTH] = data_in_33;
+  assign data_in_s[CHANNEL_WIDTH*34+:CHANNEL_WIDTH] = data_in_34;
+  assign data_in_s[CHANNEL_WIDTH*35+:CHANNEL_WIDTH] = data_in_35;
+  assign data_in_s[CHANNEL_WIDTH*36+:CHANNEL_WIDTH] = data_in_36;
+  assign data_in_s[CHANNEL_WIDTH*37+:CHANNEL_WIDTH] = data_in_37;
+  assign data_in_s[CHANNEL_WIDTH*38+:CHANNEL_WIDTH] = data_in_38;
+  assign data_in_s[CHANNEL_WIDTH*39+:CHANNEL_WIDTH] = data_in_39;
+  assign data_in_s[CHANNEL_WIDTH*40+:CHANNEL_WIDTH] = data_in_40;
+  assign data_in_s[CHANNEL_WIDTH*41+:CHANNEL_WIDTH] = data_in_41;
+  assign data_in_s[CHANNEL_WIDTH*42+:CHANNEL_WIDTH] = data_in_42;
+  assign data_in_s[CHANNEL_WIDTH*43+:CHANNEL_WIDTH] = data_in_43;
+  assign data_in_s[CHANNEL_WIDTH*44+:CHANNEL_WIDTH] = data_in_44;
+  assign data_in_s[CHANNEL_WIDTH*45+:CHANNEL_WIDTH] = data_in_45;
+  assign data_in_s[CHANNEL_WIDTH*46+:CHANNEL_WIDTH] = data_in_46;
+  assign data_in_s[CHANNEL_WIDTH*47+:CHANNEL_WIDTH] = data_in_47;
+  assign data_in_s[CHANNEL_WIDTH*48+:CHANNEL_WIDTH] = data_in_48;
+  assign data_in_s[CHANNEL_WIDTH*49+:CHANNEL_WIDTH] = data_in_49;
+  assign data_in_s[CHANNEL_WIDTH*50+:CHANNEL_WIDTH] = data_in_50;
+  assign data_in_s[CHANNEL_WIDTH*51+:CHANNEL_WIDTH] = data_in_51;
+  assign data_in_s[CHANNEL_WIDTH*52+:CHANNEL_WIDTH] = data_in_52;
+  assign data_in_s[CHANNEL_WIDTH*53+:CHANNEL_WIDTH] = data_in_53;
+  assign data_in_s[CHANNEL_WIDTH*54+:CHANNEL_WIDTH] = data_in_54;
+  assign data_in_s[CHANNEL_WIDTH*55+:CHANNEL_WIDTH] = data_in_55;
+  assign data_in_s[CHANNEL_WIDTH*56+:CHANNEL_WIDTH] = data_in_56;
+  assign data_in_s[CHANNEL_WIDTH*57+:CHANNEL_WIDTH] = data_in_57;
+  assign data_in_s[CHANNEL_WIDTH*58+:CHANNEL_WIDTH] = data_in_58;
+  assign data_in_s[CHANNEL_WIDTH*59+:CHANNEL_WIDTH] = data_in_59;
+  assign data_in_s[CHANNEL_WIDTH*60+:CHANNEL_WIDTH] = data_in_60;
+  assign data_in_s[CHANNEL_WIDTH*61+:CHANNEL_WIDTH] = data_in_61;
+  assign data_in_s[CHANNEL_WIDTH*62+:CHANNEL_WIDTH] = data_in_62;
+  assign data_in_s[CHANNEL_WIDTH*63+:CHANNEL_WIDTH] = data_in_63;
+
+  assign data_out_0 = data_out_s[CHANNEL_WIDTH*0+:CHANNEL_WIDTH];
+  assign data_out_1 = data_out_s[CHANNEL_WIDTH*1+:CHANNEL_WIDTH];
+  assign data_out_2 = data_out_s[CHANNEL_WIDTH*2+:CHANNEL_WIDTH];
+  assign data_out_3 = data_out_s[CHANNEL_WIDTH*3+:CHANNEL_WIDTH];
+  assign data_out_4 = data_out_s[CHANNEL_WIDTH*4+:CHANNEL_WIDTH];
+  assign data_out_5 = data_out_s[CHANNEL_WIDTH*5+:CHANNEL_WIDTH];
+  assign data_out_6 = data_out_s[CHANNEL_WIDTH*6+:CHANNEL_WIDTH];
+  assign data_out_7 = data_out_s[CHANNEL_WIDTH*7+:CHANNEL_WIDTH];
+  assign data_out_8 = data_out_s[CHANNEL_WIDTH*8+:CHANNEL_WIDTH];
+  assign data_out_9 = data_out_s[CHANNEL_WIDTH*9+:CHANNEL_WIDTH];
+  assign data_out_10 = data_out_s[CHANNEL_WIDTH*10+:CHANNEL_WIDTH];
+  assign data_out_11 = data_out_s[CHANNEL_WIDTH*11+:CHANNEL_WIDTH];
+  assign data_out_12 = data_out_s[CHANNEL_WIDTH*12+:CHANNEL_WIDTH];
+  assign data_out_13 = data_out_s[CHANNEL_WIDTH*13+:CHANNEL_WIDTH];
+  assign data_out_14 = data_out_s[CHANNEL_WIDTH*14+:CHANNEL_WIDTH];
+  assign data_out_15 = data_out_s[CHANNEL_WIDTH*15+:CHANNEL_WIDTH];
+  assign data_out_16 = data_out_s[CHANNEL_WIDTH*16+:CHANNEL_WIDTH];
+  assign data_out_17 = data_out_s[CHANNEL_WIDTH*17+:CHANNEL_WIDTH];
+  assign data_out_18 = data_out_s[CHANNEL_WIDTH*18+:CHANNEL_WIDTH];
+  assign data_out_19 = data_out_s[CHANNEL_WIDTH*19+:CHANNEL_WIDTH];
+  assign data_out_20 = data_out_s[CHANNEL_WIDTH*20+:CHANNEL_WIDTH];
+  assign data_out_21 = data_out_s[CHANNEL_WIDTH*21+:CHANNEL_WIDTH];
+  assign data_out_22 = data_out_s[CHANNEL_WIDTH*22+:CHANNEL_WIDTH];
+  assign data_out_23 = data_out_s[CHANNEL_WIDTH*23+:CHANNEL_WIDTH];
+  assign data_out_24 = data_out_s[CHANNEL_WIDTH*24+:CHANNEL_WIDTH];
+  assign data_out_25 = data_out_s[CHANNEL_WIDTH*25+:CHANNEL_WIDTH];
+  assign data_out_26 = data_out_s[CHANNEL_WIDTH*26+:CHANNEL_WIDTH];
+  assign data_out_27 = data_out_s[CHANNEL_WIDTH*27+:CHANNEL_WIDTH];
+  assign data_out_28 = data_out_s[CHANNEL_WIDTH*28+:CHANNEL_WIDTH];
+  assign data_out_29 = data_out_s[CHANNEL_WIDTH*29+:CHANNEL_WIDTH];
+  assign data_out_30 = data_out_s[CHANNEL_WIDTH*30+:CHANNEL_WIDTH];
+  assign data_out_31 = data_out_s[CHANNEL_WIDTH*31+:CHANNEL_WIDTH];
+  assign data_out_32 = data_out_s[CHANNEL_WIDTH*32+:CHANNEL_WIDTH];
+  assign data_out_33 = data_out_s[CHANNEL_WIDTH*33+:CHANNEL_WIDTH];
+  assign data_out_34 = data_out_s[CHANNEL_WIDTH*34+:CHANNEL_WIDTH];
+  assign data_out_35 = data_out_s[CHANNEL_WIDTH*35+:CHANNEL_WIDTH];
+  assign data_out_36 = data_out_s[CHANNEL_WIDTH*36+:CHANNEL_WIDTH];
+  assign data_out_37 = data_out_s[CHANNEL_WIDTH*37+:CHANNEL_WIDTH];
+  assign data_out_38 = data_out_s[CHANNEL_WIDTH*38+:CHANNEL_WIDTH];
+  assign data_out_39 = data_out_s[CHANNEL_WIDTH*39+:CHANNEL_WIDTH];
+  assign data_out_40 = data_out_s[CHANNEL_WIDTH*40+:CHANNEL_WIDTH];
+  assign data_out_41 = data_out_s[CHANNEL_WIDTH*41+:CHANNEL_WIDTH];
+  assign data_out_42 = data_out_s[CHANNEL_WIDTH*42+:CHANNEL_WIDTH];
+  assign data_out_43 = data_out_s[CHANNEL_WIDTH*43+:CHANNEL_WIDTH];
+  assign data_out_44 = data_out_s[CHANNEL_WIDTH*44+:CHANNEL_WIDTH];
+  assign data_out_45 = data_out_s[CHANNEL_WIDTH*45+:CHANNEL_WIDTH];
+  assign data_out_46 = data_out_s[CHANNEL_WIDTH*46+:CHANNEL_WIDTH];
+  assign data_out_47 = data_out_s[CHANNEL_WIDTH*47+:CHANNEL_WIDTH];
+  assign data_out_48 = data_out_s[CHANNEL_WIDTH*48+:CHANNEL_WIDTH];
+  assign data_out_49 = data_out_s[CHANNEL_WIDTH*49+:CHANNEL_WIDTH];
+  assign data_out_50 = data_out_s[CHANNEL_WIDTH*50+:CHANNEL_WIDTH];
+  assign data_out_51 = data_out_s[CHANNEL_WIDTH*51+:CHANNEL_WIDTH];
+  assign data_out_52 = data_out_s[CHANNEL_WIDTH*52+:CHANNEL_WIDTH];
+  assign data_out_53 = data_out_s[CHANNEL_WIDTH*53+:CHANNEL_WIDTH];
+  assign data_out_54 = data_out_s[CHANNEL_WIDTH*54+:CHANNEL_WIDTH];
+  assign data_out_55 = data_out_s[CHANNEL_WIDTH*55+:CHANNEL_WIDTH];
+  assign data_out_56 = data_out_s[CHANNEL_WIDTH*56+:CHANNEL_WIDTH];
+  assign data_out_57 = data_out_s[CHANNEL_WIDTH*57+:CHANNEL_WIDTH];
+  assign data_out_58 = data_out_s[CHANNEL_WIDTH*58+:CHANNEL_WIDTH];
+  assign data_out_59 = data_out_s[CHANNEL_WIDTH*59+:CHANNEL_WIDTH];
+  assign data_out_60 = data_out_s[CHANNEL_WIDTH*60+:CHANNEL_WIDTH];
+  assign data_out_61 = data_out_s[CHANNEL_WIDTH*61+:CHANNEL_WIDTH];
+  assign data_out_62 = data_out_s[CHANNEL_WIDTH*62+:CHANNEL_WIDTH];
+  assign data_out_63 = data_out_s[CHANNEL_WIDTH*63+:CHANNEL_WIDTH];
 
 endmodule
