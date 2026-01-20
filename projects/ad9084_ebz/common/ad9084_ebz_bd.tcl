@@ -1104,7 +1104,6 @@ ad_connect  tx_apollo_tpl_core/link axi_apollo_tx_jesd/tx_data
 
 ad_connect  tx_apollo_tpl_core/dac_valid_0 util_apollo_upack/fifo_rd_en
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
-  ad_connect  util_apollo_upack/fifo_rd_data_$i tx_apollo_tpl_core/dac_data_$i
   ad_connect  tx_apollo_tpl_core/dac_enable_$i  util_apollo_upack/enable_$i
 }
 
@@ -1113,10 +1112,17 @@ if {$FSRC_ENABLE} {
   ad_connect tx_device_clk                         fsrc_tx/clk
   ad_connect tx_device_clk_rstgen/peripheral_reset fsrc_tx/reset
 
-  ad_connect $dac_data_offload_name/m_axis fsrc_tx/s_axis
-  ad_connect util_apollo_upack/s_axis      fsrc_tx/m_axis
+  ad_connect $dac_data_offload_name/m_axis util_apollo_upack/s_axis
+  ad_connect  util_apollo_upack/fifo_rd_valid fsrc_tx/data_in_valid
+  for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+    ad_connect  util_apollo_upack/fifo_rd_data_$i fsrc_tx/data_in_$i
+    ad_connect  fsrc_tx/data_out_$i tx_apollo_tpl_core/dac_data_$i
+  }
 } else {
   ad_connect  util_apollo_upack/s_axis $dac_data_offload_name/m_axis
+  for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+    ad_connect  util_apollo_upack/fifo_rd_data_$i tx_apollo_tpl_core/dac_data_$i
+  }
 }
 
 ad_connect $dac_data_offload_name/init_req axi_apollo_tx_dma/m_axis_xfer_req
