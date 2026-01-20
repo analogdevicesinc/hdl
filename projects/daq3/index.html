@@ -463,8 +463,8 @@ signal synthesis prototyping platform.</p>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <p>The difference between the KCU105/VCU118/ZC706 designs and the ZCU102 one, is
-the use of <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adcfifo" target="_blank">AXI_ADCFIFO</a>:
-in the Zynq UltraScale-based designs, it is not instantiated.</p>
+the use of <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">DATA_OFFLOAD</a>: in the Zynq
+UltraScale-based designs, it is not used due to HP ports’ superior bandwidth.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <section id="kcu105-vcu118-zc706">
@@ -485,7 +485,7 @@ parameters:</p>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="b17dabbaeffb1f2c08c41acd5014b8779c3f1419" name="b17dabbaeffb1f2c08c41acd5014b8779c3f1419" type="checkbox"></input><label for="b17dabbaeffb1f2c08c41acd5014b8779c3f1419"><p>Click here for details on the block diagram modules</p>
+<input class="collapsible_input" id="29c6e1e50c24065cb82c3b4c2759be59bbde06ca" name="29c6e1e50c24065cb82c3b4c2759be59bbde06ca" type="checkbox"></input><label for="29c6e1e50c24065cb82c3b4c2759be59bbde06ca"><p>Click here for details on the block diagram modules</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -503,19 +503,19 @@ parameters:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>AXI_ADCFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adcfifo" target="_blank">axi_adcfifo</a></p></td>
-<td><p>—</p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_ADXCVR</p></td>
+<tr class="row-even"><td><p>AXI_ADXCVR</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr" target="_blank">axi_adxcvr</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr"><span class="std std-ref">AXI ADXCVR</span></a></p></td>
 <td><p>2 instances, one for RX and one for TX</p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_DMAC</p></td>
+<tr class="row-odd"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
+<td><p>2 instances, one for RX and one for TX</p></td>
+</tr>
+<tr class="row-even"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
 <td><p>2 instances, one for RX and one for TX</p></td>
 </tr>
 <tr class="row-odd"><td><p>RX JESD LINK</p></td>
@@ -548,12 +548,7 @@ parameters:</p>
 <td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_DACFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_dacfifo" target="_blank">util_dacfifo</a></p></td>
-<td><p>—</p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-even"><td><p>UTIL_UPACK</p></td>
+<tr class="row-odd"><td><p>UTIL_UPACK</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">axi_ad9152_upack</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 <td><p>—</p></td>
@@ -582,7 +577,7 @@ parameters:</p>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="02a1793e36a45d942c9588fdbe05e523cbfdd992" name="02a1793e36a45d942c9588fdbe05e523cbfdd992" type="checkbox"></input><label for="02a1793e36a45d942c9588fdbe05e523cbfdd992"><p>Click here for details on the block diagram modules</p>
+<input class="collapsible_input" id="33513295438ea74733cdaa9804885d7f8a739bdd" name="33513295438ea74733cdaa9804885d7f8a739bdd" type="checkbox"></input><label for="33513295438ea74733cdaa9804885d7f8a739bdd"><p>Click here for details on the block diagram modules</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -640,12 +635,7 @@ parameters:</p>
 <td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_DACFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_dacfifo" target="_blank">util_dacfifo</a></p></td>
-<td><p>—</p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-odd"><td><p>UTIL_UPACK</p></td>
+<tr class="row-even"><td><p>UTIL_UPACK</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">axi_ad9152_upack</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 <td><p>—</p></td>
@@ -738,21 +728,29 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <td><p>0x7C42_0000</p></td>
 <td><p>0x9C42_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_ad9680_tpl_core</p></td>
+<tr class="row-even"><td><p>ad9152_data_offload</p></td>
+<td><p>0x7C43_0000</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_ad9680_tpl_core</p></td>
 <td><p>0x44A1_0000</p></td>
 <td><p>0x84A1_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_ad9680_xcvr</p></td>
+<tr class="row-even"><td><p>axi_ad9680_xcvr</p></td>
 <td><p>0x44A5_0000</p></td>
 <td><p>0x84A5_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_ad9680_jesd</p></td>
+<tr class="row-odd"><td><p>axi_ad9680_jesd</p></td>
 <td><p>0x44AA_0000</p></td>
 <td><p>0x84AA_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_ad9680_dma</p></td>
+<tr class="row-even"><td><p>axi_ad9680_dma</p></td>
 <td><p>0x7C40_0000</p></td>
 <td><p>0x9C40_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>ad9680_data_offload</p></td>
+<td><p>0x7C41_0000</p></td>
+<td><p>—</p></td>
 </tr>
 </tbody>
 </table>
@@ -1089,17 +1087,17 @@ you can find prebuilt images for this setup;
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">library/util_pack/util_upack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_ADCFIFO *</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adcfifo" target="_blank">library/xilinx/axi_adcfifo</a></p></td>
-<td><p>—</p></td>
+<tr class="row-even"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">library/data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_ADCFIFO **</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_adcfifo" target="_blank">library/util_adcfifo</a></p></td>
-<td><p>—</p></td>
+<tr class="row-odd"><td><p>UTIL_DO_RAM</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_do_ram" target="_blank">library/util_do_ram</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_DACFIFO</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_dacfifo" target="_blank">library/util_dacfifo</a></p></td>
-<td><p>—</p></td>
+<tr class="row-even"><td><p>UTIL_HBM</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_hbm" target="_blank">library/util_hbm</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_ADXCVR for AMD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr" target="_blank">library/xilinx/axi_adxcvr</a></p></td>
@@ -1116,7 +1114,6 @@ you can find prebuilt images for this setup;
 <p class="admonition-title">Note</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> - instantiated only for ZC706</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> - instantiated only for KCU105 and VCU118</p></li>
 </ul>
 </div>
 <ul class="simple">

@@ -99,6 +99,7 @@
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
+<li><a class="reference internal" href="#block-design-corundum-network-interface-card-integrated">Block design - Corundum Network Interface Card integrated</a></li>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a><ul>
 <li><a class="reference internal" href="#example-block-design-for-single-link-m-8-l-8">Example block design for Single link; M=8; L=8</a></li>
 </ul>
@@ -114,7 +115,10 @@
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
+<li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a><ul>
+<li><a class="reference internal" href="#build-the-project-with-corundum-network-stack-support-for-adrv9009-zu11eg-adrv2crr-fmc">Build the project with Corundum Network Stack support for ADRV9009-ZU11EG/ADRV2CRR-FMC</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#other-considerations">Other considerations</a><ul>
 <li><a class="reference internal" href="#adc-lane-mapping">ADC - lane mapping</a></li>
 <li><a class="reference internal" href="#dac-lane-mapping">DAC - lane mapping</a></li>
@@ -446,6 +450,12 @@ connector, through which to extend the system with another two ADRV9009s.</p>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <a class="reference internal image-reference" href="../../_images/adrv9009_zu11eg_hdl.svg"><img alt="ADRV9009ZU11EG block diagram" class="align-center" src="../../_images/adrv9009_zu11eg_hdl.svg" width="800" /></a>
+<section id="block-design-corundum-network-interface-card-integrated">
+<h3>Block design - Corundum Network Interface Card integrated<a class="headerlink" href="#block-design-corundum-network-interface-card-integrated" title="Permalink to this heading"></a></h3>
+<p>This is available only if the project was build using the command
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">CORUNDUM=1</span></code>.</p>
+<a class="reference internal image-reference" href="../../_images/adrv9009_zu11eg_hdl_corundum.svg"><img alt="ADRV9009ZU11EG block diagram Corundum N.I.C" class="align-center" src="../../_images/adrv9009_zu11eg_hdl_corundum.svg" width="800" /></a>
+</section>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagrams:</p>
@@ -584,6 +594,25 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tr>
 <tr class="row-even"><td><p>axi_sysid_0</p></td>
 <td><p>0x8500_0000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In case of <a class="icon adi reference external" href="https://www.analog.com/ADRV2CRR-FMC" target="_blank">ADRV2CRR-FMC</a>, additional interconnects may be present in
+the system.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Address</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>corundum_hierarchy/corundum_core/s_axil_ctrl</p></td>
+<td><p>0xA000_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_iic</p></td>
+<td><p>0x4300_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -829,6 +858,30 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tbody>
 </table>
 </div>
+<p>In case of <a class="icon adi reference external" href="https://www.analog.com/ADRV2CRR-FMC" target="_blank">ADRV2CRR-FMC</a>, additional interrupts may be present in the system.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance name</p></th>
+<th class="head"><p>HDL</p></th>
+<th class="head"><p>Linux ZynqMP</p></th>
+<th class="head"><p>Actual ZynqMP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>corundum_hierarcy/irq</p></td>
+<td><p>4</p></td>
+<td><p>93</p></td>
+<td><p>125</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_iic</p></td>
+<td><p>14</p></td>
+<td><p>110</p></td>
+<td><p>142</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 </section>
 <section id="building-the-hdl-project">
@@ -916,7 +969,64 @@ configure this project, depending on the carrier used.</p>
 </div>
 </div>
 </div>
-</div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+</div><section id="build-the-project-with-corundum-network-stack-support-for-adrv9009-zu11eg-adrv2crr-fmc">
+<h3>Build the project with Corundum Network Stack support for ADRV9009-ZU11EG/ADRV2CRR-FMC<a class="headerlink" href="#build-the-project-with-corundum-network-stack-support-for-adrv9009-zu11eg-adrv2crr-fmc" title="Permalink to this heading"></a></h3>
+<p>For this configuration of the project only, the Corundum Network Stack can be
+added. This configuration supports <strong>10 Gbps</strong> on the <strong>QSFP+</strong> connector.</p>
+<p><a class="icon link reference external" href="https://github.com/ucsdsysnet/corundum" target="_blank">Corundum NIC</a> repository needs to
+be cloned alongside HDL repository. Do a git checkout to the latest tested
+version (commit - 37f2607). When the 10G-based implementation (e.g., in
+this project) is used, apply the indicated patch. Then navigate back to the
+location of the project, and build the project using the environment variable
+<strong>CORUNDUM</strong>, by setting it to 1 (default it’s 0).</p>
+<p><strong>Linux/Cygwin/WSL</strong></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ucsdsysnet/corundum.git
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>corundum
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/corundum$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>37f2607
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/corundum$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>apply<span class="w"> </span>../hdl/library/corundum/patch_axis_xgmii_rx_64.patch
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/corundum$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>../hdl/projects/adrv9009_zu11eg/adrv2crr_fmc
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv9009_zu11eg/adrv2crr_fmc$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">CORUNDUM</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<div class="admonition-publications admonition">
+<p class="admonition-title">Publications</p>
+<p>The following papers pertain to the Corundum source code:</p>
+<ul class="simple">
+<li><p>J- A. Forencich, A. C. Snoeren, G. Porter, G. Papen, Corundum: An Open-Source 100-Gbps NIC, in FCCM’20.
+(<a class="icon link reference external" href="https://www.cse.ucsd.edu/~snoeren/papers/corundum-fccm20.pdf" target="_blank">FCCM Paper</a>, <a class="icon link reference external" href="https://www.fccm.org/past/2020/forums/topic/corundum-an-open-source-100-gbps-nic/" target="_blank">FCCM Presentation</a>)</p></li>
+<li><p>J- A. Forencich, System-Level Considerations for Optical Switching in Data Center Networks. (<a class="icon link reference external" href="https://escholarship.org/uc/item/3mc9070t" target="_blank">Thesis</a>)</p></li>
+</ul>
+</div>
+</section>
 </section>
 <section id="other-considerations">
 <h2>Other considerations<a class="headerlink" href="#other-considerations" title="Permalink to this heading"></a></h2>
@@ -1124,6 +1234,14 @@ following table.</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_dac" target="_blank">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
 <td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
 </tr>
+<tr class="row-odd"><td><p>CORUNDUM_CORE</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/corundum/corundum_core" target="_blank">library/corundum/corundum_core</a></p></td>
+<td><p><a class="reference internal" href="../../library/corundum/corundum_core/index.html#corundum-core"><span class="std std-ref">Corundum Core</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>ETHERNET_CORE</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/corundum/ethernet" target="_blank">library/corundum/ethernet</a></p></td>
+<td><p><a class="reference internal" href="../../library/corundum/ethernet/index.html#corundum-ethernet-core"><span class="std std-ref">Corundum Ethernet Core</span></a></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1139,6 +1257,7 @@ following table.</p>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm.dts" target="_blank">ADRV9009ZU11EG device tree</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-sync-fmcomms8-jesd204-fsm.dts" target="_blank">ADRV9009ZU11EG + FMCOMMS8 device tree</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-xmicrowave.dts" target="_blank">ADRV9009ZU11EG + FMCXMWBR1 device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-100-qsfp.dts" target="_blank">ADRV9009ZU11EG + ADRV2CRR-FMC CORUNDUM device tree</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv9009" target="_blank">ADRV9009ZU11EG NO-OS PROJECT</a></p></li>
 </ul>
 </section>
