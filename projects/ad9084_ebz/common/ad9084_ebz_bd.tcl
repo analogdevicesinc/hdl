@@ -1042,7 +1042,7 @@ ad_connect  axi_apollo_rx_jesd/rx_data_tvalid rx_apollo_tpl_core/link_valid
 if {$FSRC_ENABLE} {
   ad_connect rx_device_clk fsrc_rx/link_clk
   ad_connect rx_apollo_tpl_core/adc_valid_0 fsrc_rx/adc_data_in_valid
-  for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
+  for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
     ad_connect fsrc_rx/adc_data_in_${i}  rx_apollo_tpl_core/adc_data_$i
     ad_connect fsrc_rx/adc_data_out_${i} util_apollo_cpack/fifo_wr_data_$i
     ad_connect rx_apollo_tpl_core/adc_enable_$i util_apollo_cpack/enable_$i
@@ -1072,7 +1072,7 @@ if {$ASYMMETRIC_A_B_MODE} {
   if {$FSRC_ENABLE} {
     ad_connect rx_b_device_clk fsrc_rx_b/link_clk
     ad_connect rx_b_apollo_tpl_core/adc_valid_0 fsrc_rx_b/adc_data_in_valid
-    for {set i 0} {$i < $RX_B_NUM_OF_LANES} {incr i} {
+    for {set i 0} {$i < $RX_B_NUM_OF_CONVERTERS} {incr i} {
       ad_connect fsrc_rx_b/adc_data_in_${i}  rx_b_apollo_tpl_core/adc_data_$i
       ad_connect fsrc_rx_b/adc_data_out_${i} util_apollo_cpack_b/fifo_wr_data_$i
       ad_connect rx_b_apollo_tpl_core/adc_enable_$i util_apollo_cpack_b/enable_$i
