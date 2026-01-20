@@ -205,34 +205,30 @@ module axi_dac_interpolate_filter #(
   end
 
   always @(posedge dac_clk) begin
-    //using this to detect the rising edge of transfer_start
-//    transfer_start_posedge <= transfer_start;
-    
-//    if (transfer_start && !transfer_start_posedge) begin
-//      transfer_first_sample <= 1'b1;
-//    end else if (transfer_first_sample && dac_filt_int_valid & transfer_ready) begin
-//      transfer_first_sample <= 1'b0;
-//    end
-    
+    // Detect rising edge of transfer_start to synchronize first sample across channels
+    transfer_start_posedge <= transfer_start;
+
+    if (transfer_start && !transfer_start_posedge) begin
+      transfer_first_sample <= 1'b1;
+    end else if (transfer_first_sample && dac_filt_int_valid & transfer_ready) begin
+      transfer_first_sample <= 1'b0;
+    end
+
     if (dac_filt_int_valid & transfer_ready) begin
       if (transfer_first_sample) begin
         //first sample of new transfer: assert dac_int_ready immediately
         interpolation_counter <= 0;
         dac_int_ready <= 1'b1;
-        transfer_first_sample <= 1'b0;
       end else if (interpolation_counter == interpolation_ratio) begin
         interpolation_counter <= 0;
         dac_int_ready <= 1'b1;
-//        transfer_first_sample <= 1'b0;
       end else begin
         interpolation_counter <= interpolation_counter + 1;
         dac_int_ready <= 1'b0;
-        transfer_first_sample <= 1'b1;
       end
     end else begin
       dac_int_ready <= 1'b0;
       interpolation_counter <= 0;
-      transfer_first_sample <= 1'b1;
     end
   end
 
@@ -265,7 +261,6 @@ module axi_dac_interpolate_filter #(
     case (transfer_sm)
       IDLE: begin
         transfer <= 1'b0;
-//        if (dac_int_ready & !dma_transfer_suspend) begin
         if (!dma_transfer_suspend) begin
           transfer_sm_next <= WAIT;
         end
