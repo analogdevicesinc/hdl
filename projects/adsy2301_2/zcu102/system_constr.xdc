@@ -11,7 +11,7 @@ set_property -dict {PACKAGE_PIN Y4   IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_01
 set_property -dict {PACKAGE_PIN AC2  IOSTANDARD LVCMOS18} [get_ports BF_TR_02]
 set_property -dict {PACKAGE_PIN AC1  IOSTANDARD LVCMOS18} [get_ports BF_TX_LOAD_02]
 set_property -dict {PACKAGE_PIN U5   IOSTANDARD LVCMOS18} [get_ports BF_RX_LOAD_02]
-set_property -dict {PACKAGE_PIN AA2 IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_02]
+set_property -dict {PACKAGE_PIN AA2  IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_02]
 set_property -dict {PACKAGE_PIN L12  IOSTANDARD LVCMOS18} [get_ports BF_TR_03]
 set_property -dict {PACKAGE_PIN M13  IOSTANDARD LVCMOS18} [get_ports BF_TX_LOAD_03]
 set_property -dict {PACKAGE_PIN K16  IOSTANDARD LVCMOS18} [get_ports BF_RX_LOAD_03]

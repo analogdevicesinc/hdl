@@ -51,6 +51,10 @@ ad_cpu_interconnect 0x80080000 xud_spi
 
 ad_cpu_interconnect 0x80090000 gpio_0
 
+if {$ad_project_params(TDD_SUPPORT) == 1} {
+  ad_cpu_interconnect 0x800A0000 axi_tdd_0
+}
+
 # Interrupts
 
 ad_cpu_interrupt ps-0 mb-0 bf_spi_01/ip2intc_irpt
