@@ -1,4 +1,4 @@
-# ADAQ2387X HDL Project
+# ADAQ23875 HDL Project
 
 - Evaluation board product page:
   - [EVAL-ADAQ23878](https://analog.com/eval-adaq23878)
