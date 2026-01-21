@@ -3,6 +3,18 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
+
+set TDD_SUPPORT      $ad_project_params(TDD_SUPPORT)
+set TDD_CHANNEL_CNT  $ad_project_params(TDD_CHANNEL_CNT)
+set TDD_DEFAULT_POL  $ad_project_params(TDD_DEFAULT_POL)
+set TDD_REG_WIDTH    $ad_project_params(TDD_REG_WIDTH)
+set TDD_BURST_WIDTH  $ad_project_params(TDD_BURST_WIDTH)
+set TDD_SYNC_WIDTH   $ad_project_params(TDD_SYNC_WIDTH)
+set TDD_SYNC_INT     $ad_project_params(TDD_SYNC_INT)
+set TDD_SYNC_EXT     $ad_project_params(TDD_SYNC_EXT)
+set TDD_SYNC_EXT_CDC $ad_project_params(TDD_SYNC_EXT_CDC)
+
 # GPIO
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_out
@@ -40,6 +52,11 @@ create_bd_port -dir O fmc_spi_sclk_04
 create_bd_port -dir O fmc_spi_csb_04
 create_bd_port -dir O fmc_spi_mosi_04
 create_bd_port -dir I fmc_spi_miso_04
+
+# TDD ports
+create_bd_port -dir I tdd_sync
+create_bd_port -dir O tdd_sync_out
+create_bd_port -dir O -from [expr $TDD_CHANNEL_CNT - 1] -to 0 tdd_channels
 
 if {$ad_project_params(MULTI_SPI) == 0} {
   # BF SPI 01
@@ -160,3 +177,30 @@ ad_connect xud_spi/sck_o xud_spi_sclk
 ad_connect xud_spi/ss_o xud_spi_csb
 ad_connect xud_spi/io0_o xud_spi_mosi
 ad_connect xud_spi/io1_i xud_spi_miso
+
+# TDD
+if {$TDD_SUPPORT} {
+  ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
+                              $TDD_DEFAULT_POL \
+                              $TDD_REG_WIDTH \
+                              $TDD_BURST_WIDTH \
+                              $TDD_SYNC_WIDTH \
+                              $TDD_SYNC_INT \
+                              $TDD_SYNC_EXT \
+                              $TDD_SYNC_EXT_CDC
+
+  ad_ip_instance ilconcat tdd_channel_concat
+  ad_ip_parameter tdd_channel_concat CONFIG.NUM_PORTS ${TDD_CHANNEL_CNT}
+
+  ad_connect sys_250m_clk     axi_tdd_0/clk
+  ad_connect sys_250m_resetn  axi_tdd_0/resetn
+  ad_connect $sys_cpu_clk     axi_tdd_0/s_axi_aclk
+  ad_connect $sys_cpu_resetn  axi_tdd_0/s_axi_aresetn
+  for {set j 0} {$j < $TDD_CHANNEL_CNT} {incr j} {
+    ad_connect axi_tdd_0/tdd_channel_${j} tdd_channel_concat/In${j}
+  }
+
+  ad_connect tdd_sync         axi_tdd_0/sync_in
+  ad_connect tdd_sync_out     axi_tdd_0/sync_out
+  ad_connect tdd_channels     tdd_channel_concat/dout
+}
