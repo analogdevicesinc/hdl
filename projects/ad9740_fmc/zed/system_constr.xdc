@@ -34,11 +34,11 @@ set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE
 
 # clocks
 
+# Input clock at FPGA pad
 create_clock -period 4.761 -name ad9740_clk [get_ports ad9740_clk_p]
 
 # Output delay constraints for data pins
 # AD9744 datasheet specs (Table 3, Page 5): tS (setup) = 2.0ns, tH (hold) = 1.5ns
-
 set_output_delay -clock ad9740_clk -max 2.000 [get_ports ad9740_data[*]]
 set_output_delay -clock ad9740_clk -min -1.500 [get_ports ad9740_data[*]]
 
@@ -48,8 +48,8 @@ set_output_delay -clock ad9740_clk -min -1.500 [get_ports ad9740_data[*]]
 # than one clock period. Data arrives at ~8.6ns but needs to be sampled at edge 2 (~9.5ns).
 # Allow 3 cycles for setup to ensure positive slack
 
-set_multicycle_path -setup -to [get_ports ad9740_data[*]] 3
-set_multicycle_path -hold -to [get_ports ad9740_data[*]] 2
+set_multicycle_path -setup -end 3 -to [get_ports ad9740_data[*]]
+set_multicycle_path -hold -end 2 -to [get_ports ad9740_data[*]]
 
 # hdmi
 
