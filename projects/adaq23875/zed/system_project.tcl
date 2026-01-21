@@ -37,21 +37,18 @@ adi_project adaq23875_zed 0 [list \
   USE_MMCM  [get_env_param USE_MMCM  0 ]]
 
 # Base files
-set base_files [list \
+adi_project_files adaq23875_zed [list \
   "system_top.v" \
   "system_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
 
-# Append timing constraint file based on USE_MMCM
+# Add contraint for MMCM 0 - 100MHz or 1 - 120MHz
 if { [get_env_param USE_MMCM 0] == 1 } {
-  lappend base_files "timing_mmcm.xdc"
+  adi_project_files adaq23875_zed [list "timing_mmcm.xdc" ]
 } else {
-  lappend base_files "timing_default.xdc"
+  adi_project_files adaq23875_zed [list "timing_default.xdc" ]
 }
-
-# Register final list
-adi_project_files adaq23875_zed $base_files
 
 adi_project_run adaq23875_zed
