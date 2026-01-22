@@ -75,7 +75,7 @@ module axi_fsrc_tx_regmap #(
   wire [31:0] enable_s;
   wire [31:0] ctrl_transmit_s;
   wire [ACCUM_WIDTH-1:0] accum_set_val_s;
-  wire  [3:0] accum_set_val_addr_s;
+  wire  [5:0] accum_set_val_addr_s;
   wire        accum_set_val_apply_s;
 
   reg stop_reg;
@@ -134,7 +134,7 @@ module axi_fsrc_tx_regmap #(
         up_accum_add_val_1 <= up_wdata;
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h9)) begin
-        up_accum_set_val_addr <= up_wdata[3:0];
+        up_accum_set_val_addr <= up_wdata[5:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'ha)) begin
         up_accum_set_val_0 <= up_wdata;
@@ -223,10 +223,10 @@ module axi_fsrc_tx_regmap #(
     .out_bits(accum_set_val_s));
 
   sync_bits #(
-    .NUM_OF_BITS (4),
+    .NUM_OF_BITS (6),
     .ASYNC_CLK (1)
   ) accum_set_val_addr_sync (
-    .in_bits(up_accum_set_val_addr[3:0]),
+    .in_bits(up_accum_set_val_addr[5:0]),
     .out_resetn(~reset),
     .out_clk(clk),
     .out_bits(accum_set_val_addr_s));
