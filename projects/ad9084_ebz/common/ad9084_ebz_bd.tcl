@@ -1113,7 +1113,10 @@ if {$FSRC_ENABLE} {
   ad_connect tx_device_clk_rstgen/peripheral_reset fsrc_tx/reset
 
   ad_connect $dac_data_offload_name/m_axis util_apollo_upack/s_axis
-  ad_connect  util_apollo_upack/fifo_rd_valid fsrc_tx/data_in_valid
+  ad_ip_instance ilconstant fsrc_tx_valid
+  ad_ip_parameter fsrc_tx_valid CONFIG.CONST_VAL 1
+  ad_ip_parameter fsrc_tx_valid CONFIG.CONST_WIDTH 1
+  ad_connect fsrc_tx_valid/dout fsrc_tx/data_in_valid
   for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
     ad_connect  util_apollo_upack/fifo_rd_data_$i fsrc_tx/data_in_$i
     ad_connect  fsrc_tx/data_out_$i tx_apollo_tpl_core/dac_data_$i
