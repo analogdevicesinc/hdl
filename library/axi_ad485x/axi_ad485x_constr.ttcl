@@ -14,7 +14,7 @@ set up_clk [get_clocks -of_objects [get_ports s_axi_aclk]]
 
 set_false_path -quiet \
         -from $up_clk \
-        -to [get_cells -quiet -hier -filter {name =~ *i_adc_channel/pattern_reg*}}]
+        -to [get_cells -quiet -hier -filter {name =~ *i_adc_channel/pattern_reg*}]
 
 <: if { $lvds_cmos_n } { :>
 
