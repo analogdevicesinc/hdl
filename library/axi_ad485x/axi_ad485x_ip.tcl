@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -96,6 +96,13 @@ for {set i 0} {$i < 8} {incr i} {
   set_property value true [ipx::get_hdl_parameters LANE_${i}_ENABLE -of_objects $cc]
 
   if { $i >= 4 } {
+    set_property value_tcl_expr {expr {[info exists LVDS_CMOS_N] && [info exists DEVICE] ? \
+                                                  $LVDS_CMOS_N == 1 ? 0 : \
+                                                  $DEVICE == {AD4854} ? 0 : \
+                                                  $DEVICE == {AD4853} ? 0 : \
+                                                  $DEVICE == {AD4852} ? 0 : \
+                                                  $DEVICE == {AD4851} ? 0 : 1 : 0}
+    } [ipx::get_user_parameters LANE_${i}_ENABLE -of_objects $cc]
     set_property enablement_tcl_expr {expr {$LVDS_CMOS_N == 1 ? 0 : \
                                                   $DEVICE == {AD4854} ? 0 : \
                                                   $DEVICE == {AD4853} ? 0 : \
@@ -103,6 +110,8 @@ for {set i 0} {$i < 8} {incr i} {
                                                   $DEVICE == {AD4851} ? 0 : 1}
     } [ipx::get_user_parameters LANE_${i}_ENABLE -of_objects $cc]
   } else {
+    set_property value_tcl_expr {expr {[info exists LVDS_CMOS_N] ? $LVDS_CMOS_N == 0 : 0}
+    } [ipx::get_user_parameters LANE_${i}_ENABLE -of_objects $cc]
     set_property enablement_tcl_expr {expr $LVDS_CMOS_N == 0
     } [ipx::get_user_parameters LANE_${i}_ENABLE -of_objects $cc]
   }
