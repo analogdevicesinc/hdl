@@ -72,32 +72,49 @@ each IP individually or by using the function provided by the
 
 Using the script ensures that the correct connections are being made and that
 the IP cores will receive the correct parameter configuration since certain
-parameters need to be set to the same value. The function takes the following
-arguments:
+parameters need to be set to the same value. The same script can be used for
+Intel and Xilinx projects, and it is expected to be extended for other
+vendors in the future. The function takes the following arguments:
 
 .. code:: tcl
 
-   proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0} {cmd_mem_addr_width 4} {data_mem_addr_width 4} {sdi_fifo_addr_width 5} {sdo_fifo_addr_width 5} {sync_fifo_addr_width 4} {cmd_fifo_addr_width 4}}
+   proc spi_engine_create {args}
 
-**data_width** will set the width of the data bus / data line used by the SPI
-engine to connect to the DMA and which serves the purpose of sending ADC sample
-data to the DDR memory. The data_width value will also set the maximum word
-length for the SPI transfer. Valid values are are 8/16/24/32. The DMA valid
-values are 16/32/64/128[…]. Since the Pulsar_ADC devices are all single SDI/SDO
-and some of them require 18bit transfers, this value will be rounded to 32bit.
+**args[0] - name** is mandatory for all Xilinx projects.
 
-**async_spi_clk** will chose the reference clock for the SPI Engine. Setting
-this parameter to 0 will configure the hierarchy to use the axi clock (100MHz)
-as the reference clock. Setting it to 1 will allow for an external reference
-clock (spi_clk). Because some devices need 80MHz SCLK, a 160MHz reference clock
-is required which implies an external reference.
+**args[1] - data_width** will set the width of the data bus / data line used by
+the SPI engine to connect to the DMA and which serves the purpose of sending
+ADC sample data to the DDR memory. The data_width value will also set the
+maximum word length for the SPI transfer. Valid values are are 8/16/24/32. The
+DMA valid values are 16/32/64/128[…]. Since the Pulsar_ADC devices are all
+single SDI/SDO and some of them require 18bit transfers, this value will be
+rounded to 32bit.
 
-**num_cs** selects the number of CS lines.
+**args[2] - async_spi_clk** will chose the reference clock for the SPI Engine.
+Setting this parameter to 0 will configure the hierarchy to use the axi clock
+(100MHz) as the reference clock. Setting it to 1 will allow for an external
+reference clock (spi_clk). Because some devices need 80MHz SCLK, a 160MHz
+reference clock is required which implies an external reference.
 
-**num_sdi** selects the number of SDI lines.
+**args[3] - offload_en** enables the offload mode of the SPI Engine. This is
+useful for situation where only FIFO mode are needed. By default, offload mode
+is enabled.
 
-**sdi_delay** The latch of the SDI line can be delayed with 1, 2 or 3 SPI core
-clock cycle. Needed for designs with high SCLK rate (>50MHz).
+**args[4] - num_cs** selects the number of CS lines.
+
+**args[5] - num_sdi** selects the number of SDI lines.
+
+**args[6] - num_sdo** selects the number of SDO lines.
+
+**args[7] - sdi_delay** The latch of the SDI line can be delayed with 1, 2 or
+3 SPI core clock cycle. Needed for designs with high SCLK rate (>50MHz).
+
+**args[8] - echo_sclk** enables the usage of external echo_sclk.
+
+**args[9] - sdo_streaming** Enables the s_axis_sdo interface. This allows for
+sourcing the SDO data stream from a DMA or other similar sources, useful for
+DACs.
+
 
 Configuration tcl code and result below:
 
@@ -107,12 +124,13 @@ Configuration tcl code and result below:
 
    set data_width    32
    set async_spi_clk 1
+   set offload_en    1
    set num_cs        1
    set num_sdi       1
    set sdi_delay     1
    set hier_spi_engine spi_pulsar_adc
 
-   spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $sdi_delay
+   spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $sdi_delay
 
 .. image:: tutorial/pulsar_hdl_1.svg
    :align: center
