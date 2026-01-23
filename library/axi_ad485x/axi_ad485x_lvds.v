@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2024, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -96,69 +96,69 @@ module axi_ad485x_lvds #(
 
   // internal registers
 
-  reg        [  1:0]  packet_format;
-  reg        [  5:0]  packet_cnt_length;
-  reg        [ 15:0]  crc_data_length;
+  reg        [  1:0]  packet_format = 'h0;
+  reg        [  5:0]  packet_cnt_length = 'h0;
+  reg        [ 15:0]  crc_data_length = 'h0;
 
-  reg        [HBW:0]  rx_data_pos;
-  reg        [HBW:0]  rx_data_neg;
+  reg        [HBW:0]  rx_data_pos = 'h0;
+  reg        [HBW:0]  rx_data_neg = 'h0;
 
   reg        [  5:0]  data_counter = 'h0;
   reg        [  3:0]  ch_counter = 'h0;
 
-  reg                 busy_m1;
-  reg                 busy_m2;
-  reg                 cnvs_d;
-  reg        [ 31:0]  period_cnt;
+  reg                 busy_m1 = 'h0;
+  reg                 busy_m2 = 'h0;
+  reg                 cnvs_d = 'h0;
+  reg        [ 31:0]  period_cnt = 'h0;
 
-  reg                 conversion_quiet_time;
-  reg                 run_busy_period_cnt;
-  reg        [ 31:0]  busy_conversion_cnt;
-  reg        [ 31:0]  busy_measure_value;
-  reg        [ 31:0]  busy_measure_value_plus;
+  reg                 conversion_quiet_time = 'h0;
+  reg                 run_busy_period_cnt = 'h0;
+  reg        [ 31:0]  busy_conversion_cnt = 'h0;
+  reg        [ 31:0]  busy_measure_value = 'h0;
+  reg        [ 31:0]  busy_measure_value_plus = 'h0;
 
-  reg        [FBW:0]  adc_data_store;
-  reg        [FBW:0]  adc_data_init;
-  reg                 aquire_data;
-  reg                 capture_complete_init;
-  reg                 capture_complete_d;
-  reg                 start_transfer;
-  reg                 start_transfer_d;
+  reg        [FBW:0]  adc_data_store = 'h0;
+  reg        [FBW:0]  adc_data_init = 'h0;
+  reg                 aquire_data = 'h0;
+  reg                 capture_complete_init = 'h0;
+  reg                 capture_complete_d = 'h0;
+  reg                 start_transfer = 'h0;
+  reg                 start_transfer_d = 'h0;
 
-  reg        [ 15:0]  dynamic_delay;
-  reg                 adc_valid_init;
-  reg                 adc_valid_init_d;
-  reg                 adc_valid_init_d2;
+  reg        [ 15:0]  dynamic_delay = 'h0;
+  reg                 adc_valid_init = 'h0;
+  reg                 adc_valid_init_d = 'h0;
+  reg                 adc_valid_init_d2 = 'h0;
 
-  reg        [ BW:0]  adc_data_0;
-  reg        [ BW:0]  adc_data_1;
-  reg        [ BW:0]  adc_data_2;
-  reg                 crc_enable_window;
-  reg                 run_crc;
-  reg                 run_crc_d;
-  reg        [FBW:0]  crc_data_in;
-  reg        [FBW:0]  crc_data_in_sh;
-  reg        [ 15:0]  crc_cnt;
-  reg        [  7:0]  data_in_byte;
+  reg        [ BW:0]  adc_data_0 = 'h0;
+  reg        [ BW:0]  adc_data_1 = 'h0;
+  reg        [ BW:0]  adc_data_2 = 'h0;
+  reg                 crc_enable_window = 'h0;
+  reg                 run_crc = 'h0;
+  reg                 run_crc_d = 'h0;
+  reg        [FBW:0]  crc_data_in = 'h0;
+  reg        [FBW:0]  crc_data_in_sh = 'h0;
+  reg        [ 15:0]  crc_cnt= 'h0;
+  reg        [  7:0]  data_in_byte = 'h0;
 
-  reg        [  3:0]  ch_7_index;
-  reg        [  3:0]  ch_6_index;
-  reg        [  3:0]  ch_5_index;
-  reg        [  3:0]  ch_4_index;
-  reg        [  3:0]  ch_3_index;
-  reg        [  3:0]  ch_2_index;
-  reg        [  3:0]  ch_1_index;
-  reg        [  3:0]  ch_0_index;
-  reg        [  8:0]  ch_7_base;
-  reg        [  8:0]  ch_6_base;
-  reg        [  8:0]  ch_5_base;
-  reg        [  8:0]  ch_4_base;
-  reg        [  8:0]  ch_3_base;
-  reg        [  8:0]  ch_2_base;
-  reg        [  8:0]  ch_1_base;
-  reg        [  8:0]  ch_0_base;
-  reg        [  3:0]  max_channel_transfer;
-  reg        [ 31:0]  device_status_store;
+  reg        [  3:0]  ch_7_index = 'h0;
+  reg        [  3:0]  ch_6_index = 'h0;
+  reg        [  3:0]  ch_5_index = 'h0;
+  reg        [  3:0]  ch_4_index = 'h0;
+  reg        [  3:0]  ch_3_index = 'h0;
+  reg        [  3:0]  ch_2_index = 'h0;
+  reg        [  3:0]  ch_1_index = 'h0;
+  reg        [  3:0]  ch_0_index = 'h0;
+  reg        [  8:0]  ch_7_base = 'h0;
+  reg        [  8:0]  ch_6_base = 'h0;
+  reg        [  8:0]  ch_5_base = 'h0;
+  reg        [  8:0]  ch_4_base = 'h0;
+  reg        [  8:0]  ch_3_base = 'h0;
+  reg        [  8:0]  ch_2_base = 'h0;
+  reg        [  8:0]  ch_1_base = 'h0;
+  reg        [  8:0]  ch_0_base = 'h0;
+  reg        [  3:0]  max_channel_transfer = 'h0;
+  reg        [ 31:0]  device_status_store = 'h0;
 
   // internal wires
 
@@ -301,10 +301,9 @@ module axi_ad485x_lvds #(
    // It is added to constraint the tool to keep the logic in the same region
    // as the input pins, otherwise the tool will automatically add a bufg and
    // meeting the timing margins is harder.
-   BUFH BUFH_inst (
-      .O(scko),
-      .I(scko_s)
-   );
+  BUFH BUFH_inst (
+    .O(scko),
+    .I(scko_s));
 
   // receive
 
