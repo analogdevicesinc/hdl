@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -138,7 +138,7 @@ module axi_ad485x_16b_channel #(
         adc_status_header <= 7'd0;
         pattern <= {16'd0, adc_ch_data_in[15:0]};
       end
-      3'h1: begin // packet format 24 - oversampling off
+      default: begin // packet format 24 - oversampling off
         adc_raw_data <= {16'd0,adc_ch_data_in[23:8]};
         adc_or <= adc_ch_data_in[7];
         adc_status_header <= adc_ch_data_in[6:0];
