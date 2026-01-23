@@ -1,9 +1,9 @@
 .. _adrv904x:
 
-ADRV904x HDL reference design
+ADRV904X HDL reference design
 ===============================================================================
 
-The ADRV904x is a highly integrated, system on chip (SoC) radio frequency (RF)
+The ADRV904X is a highly integrated, system on chip (SoC) radio frequency (RF)
 agile transceiver with integrated digital front end (DFE). The SoC contains
 eight transmitters, two observation receivers for monitoring transmitter
 channels, eight receivers, integrated LO and clock synthesizers, and digital
@@ -20,7 +20,7 @@ Supported devices
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-ADRV904x`
+- :adi:`EVAL-ADRV904X`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -32,7 +32,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - EVAL-ADRV904x
+   * - EVAL-ADRV904X
      - :xilinx:`ZCU102`
      - FMC HPC0
 
@@ -50,7 +50,7 @@ Example block design for Single link and RX OBS disabled
 .. image:: adrv904x_block_diagram.svg
    :width: 800
    :align: center
-   :alt: ADRV904x JESD204C M=16 L=8 block diagram
+   :alt: ADRV904X JESD204C M=16 L=8 block diagram
 
 .. collapsible:: Click here for details on the block diagram modules
 
@@ -129,7 +129,7 @@ Example block design for Single link and RX OBS in Non-LinkSharing mode
 .. image:: adrv904x_nls_block_diagram.svg
    :width: 800
    :align: center
-   :alt: ADRV904x JESD204C NLS block diagram
+   :alt: ADRV904X JESD204C NLS block diagram
 
 .. collapsible:: Click here for details on the block diagram modules
 
@@ -192,8 +192,8 @@ Example block design for Single link and RX OBS in Non-LinkSharing mode
 
 The Rx links (ADC Path) operate with the following parameters:
 
-- Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
-- Sample Rate: 491.52 MSPS
+- Rx Deframer parameters: L=4, M=16, F=8, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
 - Dual link: No
 - RX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)
 - REF_CLK: 491.52 MHz
@@ -220,6 +220,164 @@ The ORx links (ADC Obs Path) operate with the following parameters:
 - JESD204C Lane Rate: 16.22 Gbps
 - QPLL0
 
+Example block design for JESD204B @245.76 MSPS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: adrv904x_jesd204b_245MHz_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: ADRV904X JESD204B SampleRate=245MSPS block diagram
+
+.. collapsible:: Click here for details on the block diagram modules
+
+   .. list-table::
+      :widths: 10 20 35 35
+      :header-rows: 1
+
+      * - Block name
+        - IP name
+        - Documentation
+        - Additional info
+      * - AXI_ADXCVR
+        - :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
+        - :ref:`axi_adxcvr`
+        - 2 instances, one for Rx and one for Tx
+      * - AXI_CLKGEN
+        - :git-hdl:`axi_clkgen <library/axi_clkgen>`
+        - :ref:`axi_clkgen`
+        - 2 instances, one for Rx and one for Tx
+      * - AXI_DMAC
+        - :git-hdl:`axi_dmac <library/axi_dmac>`
+        - :ref:`axi_dmac`
+        - 2 instances, one for Rx and one for Tx
+      * - DATA_OFFLOAD
+        - :git-hdl:`data_offload <library/data_offload>`
+        - :ref:`data_offload`
+        - 2 instances, one for Rx and one for Tx
+      * - RX JESD LINK
+        - axi_adrv904x_rx_jesd
+        - :ref:`axi_jesd204_rx`
+        - Instantiaded by ``adi_axi_jesd204_rx_create`` procedure
+      * - RX JESD TPL
+        - rx_adrv904x_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_adc`
+        - Instantiated by ``adi_tpl_jesd204_rx_create`` procedure
+      * - TX JESD LINK
+        - axi_adrv904x_tx_jesd
+        - :ref:`axi_jesd204_tx`
+        - Instantiaded by ``adi_axi_jesd204_tx_create`` procedure
+      * - TX JESD TPL
+        - tx_adrv904x_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_dac`
+        - Instantiated by ``adi_tpl_jesd204_tx_create`` procedure
+      * - UTIL_UPACK
+        - :git-hdl:`util_upack2 <library/util_pack/util_upack2>`
+        - :ref:`util_upack2`
+        - ---
+      * - UTIL_CPACK
+        - :git-hdl:`util_cpack2 <library/util_pack/util_cpack2>`
+        - :ref:`util_cpack2`
+        - ---
+
+The Rx links (ADC Path) operate with the following parameters:
+
+- Rx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- CPLL
+
+The Tx links (DAC Path) operate with the following parameters:
+
+- Tx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- QPLL0
+
+Example block design for JESD204B @122.88 MSPS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: adrv904x_jesd204b_122MHz_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: ADRV904X JESD204B SampleRate=122MSPS block diagram
+
+.. collapsible:: Click here for details on the block diagram modules
+
+   .. list-table::
+      :widths: 10 20 35 35
+      :header-rows: 1
+
+      * - Block name
+        - IP name
+        - Documentation
+        - Additional info
+      * - AXI_ADXCVR
+        - :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
+        - :ref:`axi_adxcvr`
+        - 2 instances, one for Rx and one for Tx
+      * - AXI_CLKGEN
+        - :git-hdl:`axi_clkgen <library/axi_clkgen>`
+        - :ref:`axi_clkgen`
+        - 2 instances, one for Rx and one for Tx
+      * - AXI_DMAC
+        - :git-hdl:`axi_dmac <library/axi_dmac>`
+        - :ref:`axi_dmac`
+        - 2 instances, one for Rx and one for Tx
+      * - DATA_OFFLOAD
+        - :git-hdl:`data_offload <library/data_offload>`
+        - :ref:`data_offload`
+        - 2 instances, one for Rx and one for Tx
+      * - RX JESD LINK
+        - axi_adrv904x_rx_jesd
+        - :ref:`axi_jesd204_rx`
+        - Instantiaded by ``adi_axi_jesd204_rx_create`` procedure
+      * - RX JESD TPL
+        - rx_adrv904x_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_adc`
+        - Instantiated by ``adi_tpl_jesd204_rx_create`` procedure
+      * - TX JESD LINK
+        - axi_adrv904x_tx_jesd
+        - :ref:`axi_jesd204_tx`
+        - Instantiaded by ``adi_axi_jesd204_tx_create`` procedure
+      * - TX JESD TPL
+        - tx_adrv904x_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_dac`
+        - Instantiated by ``adi_tpl_jesd204_tx_create`` procedure
+      * - UTIL_UPACK
+        - :git-hdl:`util_upack2 <library/util_pack/util_upack2>`
+        - :ref:`util_upack2`
+        - ---
+      * - UTIL_CPACK
+        - :git-hdl:`util_cpack2 <library/util_pack/util_cpack2>`
+        - :ref:`util_cpack2`
+        - ---
+
+The Rx links (ADC Path) operate with the following parameters:
+
+- Rx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16
+- Sample Rate: 122.88 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 122.88 MHz (Lane Rate/40)
+- REF_CLK: 122.88 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 4.915 Gbps
+- CPLL
+
+The Tx links (DAC Path) operate with the following parameters:
+
+- Tx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16
+- Sample Rate: 122.88 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 122.88 MHz (Lane Rate/40)
+- REF_CLK: 122.88 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 4.915 Gbps
+- QPLL0
+
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -235,8 +393,15 @@ for each project.
    **system_project.tcl** file, located in
    hdl/projects/adrv904x/$CARRIER/system_project.tcl
 
+JESD204C:
+
 .. math::
    Lane Rate = Sample Rate*\frac{M}{L}*N'* \frac{66}{64}
+
+JESD204B:
+
+.. math::
+   Lane Rate = Sample Rate*\frac{M}{L}*N'* \frac{10}{8}
 
 The following are the parameters of this project that can be configured:
 
@@ -256,6 +421,7 @@ The following are the parameters of this project that can be configured:
 - [RX/TX/RX_OS]_JESD_L: number of lanes per link
 - [RX/TX/RX_OS]_JESD_S: number of samples per frame
 - [RX/TX/RX_OS]_JESD_NP: number of bits per sample
+- [RX/TX/RX_OS]_TPL_WIDTH : TPL data path width in bits
 - [RX/TX/RX_OS]_NUM_LINKS: number of links
 
 Clock scheme
@@ -264,7 +430,7 @@ Clock scheme
 .. image:: adrv904x_zcu102_clocking.svg
    :width: 500
    :align: center
-   :alt: ADRV904x ZCU102 clock scheme
+   :alt: ADRV904X ZCU102 clock scheme
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -307,7 +473,7 @@ SPI connections
      - CS
    * - PS
      - spi0
-     - ADRV904x
+     - ADRV904X
      - 0
    * -
      -
@@ -432,7 +598,7 @@ configure this project, depending on the carrier used.
 Where a cell contains a --- (dash) it means that the parameter doesn't exist
 for that project (adrv904x/carrier or adrv904x/carrier).
 
-.. collapsible:: Default values of the ``make`` parameters for ADRV904x
+.. collapsible:: Default values of the ``make`` parameters for ADRV904X
 
    +-------------------+------------------------------------------------------+
    | Parameter         | Default value of the parameters depending on carrier |
@@ -459,17 +625,29 @@ for that project (adrv904x/carrier or adrv904x/carrier).
    +-------------------+------------------------------------------------------+
    | RX_JESD_S         |                           1                          |
    +-------------------+------------------------------------------------------+
+   | RX_JESD_NP        |                          16                          |
+   +-------------------+------------------------------------------------------+
+   | RX_TPL_WIDTH      |                          {}                          |
+   +-------------------+------------------------------------------------------+
    | TX_JESD_M         |                          16                          |
    +-------------------+------------------------------------------------------+
    | TX_JESD_L         |                           8                          |
    +-------------------+------------------------------------------------------+
    | TX_JESD_S         |                           1                          |
    +-------------------+------------------------------------------------------+
+   | TX_JESD_NP        |                          16                          |
+   +-------------------+------------------------------------------------------+
+   | TX_TPL_WIDTH      |                          {}                          |
+   +-------------------+------------------------------------------------------+
    | RX_OS_JESD_M      |                           0                          |
    +-------------------+------------------------------------------------------+
    | RX_OS_JESD_L      |                           0                          |
    +-------------------+------------------------------------------------------+
    | RX_OS_JESD_S      |                           0                          |
+   +-------------------+------------------------------------------------------+
+   | RX_OS_JESD_NP     |                           0                          |
+   +-------------------+------------------------------------------------------+
+   | RX_OS_TPL_WIDTH   |                          {}                          |
    +-------------------+------------------------------------------------------+
 
 
@@ -484,18 +662,18 @@ ADC - lane mapping
 Due to physical constraints, Rx lanes are reordered as described in the
 following table.
 
-============ ===========================
-ADC phy Lane FPGA Rx lane / Logical Lane
-============ ===========================
-0            0
-1            1
-2            2
-3            3
-4            4
-5            5
-6            6
-7            7
-============ ===========================
+======== =========== ====== ============== ============= ==========
+ADC Lane GTH Channel FMC DP FPGA Rx lane   XCVR Lane     Link layer
+======== =========== ====== ============== ============= ==========
+SERDOUT0 MGTHRX1_228 DP5    rx_data_p/n[1] rx_data_1_p/n rx_phy0
+SERDOUT1 MGTHRX0_228 DP6    rx_data_p/n[0] rx_data_0_p/n rx_phy1
+SERDOUT2 MGTHRX3_228 DP4    rx_data_p/n[3] rx_data_3_p/n rx_phy2
+SERDOUT3 MGTHRX2_228 DP7    rx_data_p/n[2] rx_data_2_p/n rx_phy3
+SERDOUT4 MGTHRX3_229 DP2    rx_data_p/n[7] rx_data_7_p/n rx_phy4
+SERDOUT5 MGTHRX0_229 DP3    rx_data_p/n[4] rx_data_4_p/n rx_phy5
+SERDOUT6 MGTHRX1_229 DP1    rx_data_p/n[5] rx_data_5_p/n rx_phy6
+SERDOUT7 MGTHRX2_229 DP0    rx_data_p/n[6] rx_data_6_p/n rx_phy7
+======== =========== ====== ============== ============= ==========
 
 DAC - lane mapping
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -503,18 +681,18 @@ DAC - lane mapping
 Due to physical constraints, Tx lanes are reordered as described in the
 following table.
 
-============ ===========================
-DAC phy lane FPGA Tx lane / Logical lane
-============ ===========================
-0            7
-1            6
-2            4
-3            5
-4            3
-5            1
-6            0
-7            2
-============ ===========================
+======== =========== ====== ============== ============= ==========
+DAC Lane GTH Channel FMC DP FPGA Tx lane   XCVR Lane     Link layer
+======== =========== ====== ============== ============= ==========
+SERDIN0  MGTHTX2_229 DP0    tx_data_p/n[6] tx_data_6_p/n tx_phy0
+SERDIN1  MGTHTX1_229 DP1    tx_data_p/n[5] tx_data_5_p/n tx_phy1
+SERDIN2  MGTHTX3_229 DP2    tx_data_p/n[7] tx_data_7_p/n tx_phy2
+SERDIN3  MGTHTX0_229 DP3    tx_data_p/n[4] tx_data_4_p/n tx_phy3
+SERDIN4  MGTHTX0_228 DP7    tx_data_p/n[2] tx_data_2_p/n tx_phy4
+SERDIN5  MGTHTX1_228 DP6    tx_data_p/n[0] tx_data_0_p/n tx_phy5
+SERDIN6  MGTHTX2_228 DP5    tx_data_p/n[1] tx_data_1_p/n tx_phy6
+SERDIN7  MGTHTX3_228 DP4    tx_data_p/n[3] tx_data_3_p/n tx_phy7
+======== =========== ====== ============== ============= ==========
 
 Resources
 -------------------------------------------------------------------------------
@@ -522,7 +700,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV904x Prototyping Platform User Guide <resources/eval/user-guides/adrv904x>`
+- :external+documentation:ref:`adrv904x`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -532,8 +710,8 @@ Here you can find the quick start guides available for these evaluation boards:
 
    * - Evaluation board
      - Zynq UltraScale+ MP
-   * - ADRV904x
-     - :dokuwiki:`ZCU102 <resources/eval/user-guides/adrv904x/quickstart/zynqmp>`
+   * - ADRV904X
+     - :external+documentation:ref:`adrv904x quickstart zcu102`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -543,7 +721,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`ADRV904x HDL project source code <projects/adrv904x>`
+- :git-hdl:`ADRV904X HDL project source code <projects/adrv904x>`
 
 .. list-table::
    :widths: 30 40 35
@@ -600,7 +778,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV904x Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/adrv904x>`
+- :external+linux:ref:`adrv904x`
 
 .. include:: ../common/more_information.rst
 
