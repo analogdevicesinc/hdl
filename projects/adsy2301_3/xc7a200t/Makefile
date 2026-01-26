@@ -4,15 +4,12 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := adsy2301_3_zcu102
+PROJECT_NAME := adsy2301_3_xc7a200t
 
 M_DEPS += system_top.v
 M_DEPS += system_constr.xdc
-M_DEPS += ../common/adsy2301_3_carrier_bd.tcl
-M_DEPS += ../../scripts/adi_pd.tcl
-M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
-M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
-M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += system_constr_synth.xdc
+M_DEPS += ../common/adsy2301_3_udc_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 
 LIB_DEPS += axi_sysid
