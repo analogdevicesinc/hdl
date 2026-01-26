@@ -27,7 +27,7 @@ set_property -dict {PACKAGE_PIN G7} [get_ports aurora_refclk_n]
 # set_property -dict {PACKAGE_PIN H6} [get_ports aurora_rxp[1]]
 # set_property -dict {PACKAGE_PIN H5} [get_ports aurora_rxn[1]]
 
-create_clock -period 3.333 -name aurora_refclk [get_ports aurora_refclk_p]
+create_clock -period 8.000 -name aurora_refclk [get_ports aurora_refclk_p]
 
 # set false path to output ports which connect to devices without any clocks
 set_false_path -to   [get_ports FPGA_TRIG]
