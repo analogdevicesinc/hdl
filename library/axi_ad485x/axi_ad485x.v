@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -138,35 +138,34 @@ module axi_ad485x #(
 
   // localparam
 
-  localparam             RESOLUTION = (DEVICE == "AD4858") ? 20 :
-                                      (DEVICE == "AD4857") ? 16 :
-                                      (DEVICE == "AD4856") ? 20 :
-                                      (DEVICE == "AD4855") ? 16 :
-                                      (DEVICE == "AD4854") ? 20 :
-                                      (DEVICE == "AD4853") ? 16 :
-                                      (DEVICE == "AD4852") ? 20 :
-                                      (DEVICE == "AD4851") ? 16 : 20;
+localparam             RESOLUTION = (DEVICE == "AD4858") ? 20 :
+                                    (DEVICE == "AD4857") ? 16 :
+                                    (DEVICE == "AD4856") ? 20 :
+                                    (DEVICE == "AD4855") ? 16 :
+                                    (DEVICE == "AD4854") ? 20 :
+                                    (DEVICE == "AD4853") ? 16 :
+                                    (DEVICE == "AD4852") ? 20 :
+                                    (DEVICE == "AD4851") ? 16 : 20;
 
-  localparam             N_CHANNELS = (DEVICE == "AD4858") ? 8 :
-                                      (DEVICE == "AD4857") ? 8 :
-                                      (DEVICE == "AD4856") ? 8 :
-                                      (DEVICE == "AD4855") ? 8 :
-                                      (DEVICE == "AD4854") ? 4 :
-                                      (DEVICE == "AD4853") ? 4 :
-                                      (DEVICE == "AD4852") ? 4 :
-                                      (DEVICE == "AD4851") ? 4 : 'hz;
+localparam             N_CHANNELS = (DEVICE == "AD4858") ? 8 :
+                                    (DEVICE == "AD4857") ? 8 :
+                                    (DEVICE == "AD4856") ? 8 :
+                                    (DEVICE == "AD4855") ? 8 :
+                                    (DEVICE == "AD4854") ? 4 :
+                                    (DEVICE == "AD4853") ? 4 :
+                                    (DEVICE == "AD4852") ? 4 :
+                                    (DEVICE == "AD4851") ? 4 : 'hz;
 
-  localparam  [ 0:0]     READ_RAW = 1'b1;
-  localparam             CONFIG = {18'd0, READ_RAW, 5'd0, ~LVDS_CMOS_N[0], 7'd0};
-  localparam  [ 7:0]     ACTIVE_LANES = {
-                         LANE_7_ENABLE == 1 ? 1'b1 : 1'b0,
-                         LANE_6_ENABLE == 1 ? 1'b1 : 1'b0,
-                         LANE_5_ENABLE == 1 ? 1'b1 : 1'b0,
-                         LANE_4_ENABLE == 1 ? 1'b1 : 1'b0,
-                         LANE_3_ENABLE == 1 ? 1'b1 : 1'b0,
-                         LANE_2_ENABLE == 1 ? 1'b1 : 1'b0,
-                         LANE_1_ENABLE == 1 ? 1'b1 : 1'b0,
-                         LANE_0_ENABLE == 1 ? 1'b1 : 1'b0};
+localparam  [ 0:0]     READ_RAW = 1'b1;
+localparam             CONFIG = {18'd0, READ_RAW, 5'd0, ~LVDS_CMOS_N[0], 7'd0};
+localparam  [ 7:0]     ACTIVE_LANES = {LANE_7_ENABLE == 1 ? 1'b1 : 1'b0,
+                                       LANE_6_ENABLE == 1 ? 1'b1 : 1'b0,
+                                       LANE_5_ENABLE == 1 ? 1'b1 : 1'b0,
+                                       LANE_4_ENABLE == 1 ? 1'b1 : 1'b0,
+                                       LANE_3_ENABLE == 1 ? 1'b1 : 1'b0,
+                                       LANE_2_ENABLE == 1 ? 1'b1 : 1'b0,
+                                       LANE_1_ENABLE == 1 ? 1'b1 : 1'b0,
+                                       LANE_0_ENABLE == 1 ? 1'b1 : 1'b0};
 
   // internal registers
 
@@ -499,6 +498,13 @@ module axi_ad485x #(
       end else begin
         assign adc_data_s[i] = 'd0;
         assign adc_enable_s[i] = 'd0;
+        assign up_rack_s[i] = 'd0;
+        assign up_rdata_s[i] = 'd0;
+        assign up_wack_s[i] = 'd0;
+        assign up_adc_or_s[i] = 'd0;
+        assign up_adc_pn_oos[i] = 'd0;
+        assign up_adc_pn_err[i] = 'd0;
+
       end
     end
   endgenerate
