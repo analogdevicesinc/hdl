@@ -66,7 +66,7 @@ if {[get_env_param CORUNDUM 0] == 1} {
     "../../ad9081_fmca_ebz/vcu118/system_top_corundum.v" \
     "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/boot.xdc" \
     "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
-  ]
+  ] system_top_corundum
 
   add_files -fileset constrs_1 -norecurse [list \
     "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/rb_drp.tcl" \
@@ -83,7 +83,7 @@ if {[get_env_param CORUNDUM 0] == 1} {
 } else {
   adi_project_files ad9082_fmca_ebz_vcu118 [list \
     "../../ad9081_fmca_ebz/vcu118/system_top.v" \
-  ]
+  ] system_top
 }
 
 # Avoid critical warning in OOC mode from the clock definitions
