@@ -1,5 +1,4 @@
 ###############################################################################
-#
 ## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
@@ -9,22 +8,6 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_dac_interpolate
-create_ip -name ila -vendor xilinx.com -library ip -version 6.2 -module_name ila_0
-set_property -dict [list \
-  CONFIG.C_DATA_DEPTH {16384} \
-  CONFIG.C_EN_STRG_QUAL {1} \
-  CONFIG.ALL_PROBE_SAME_MU_CNT {2} \
-  CONFIG.C_NUM_OF_PROBES {31} \
-  CONFIG.C_PROBE0_WIDTH {16} \
-  CONFIG.C_PROBE1_WIDTH {16} \
-  CONFIG.C_PROBE9_WIDTH {2} \
-  CONFIG.C_PROBE10_WIDTH {2} \
-  CONFIG.C_PROBE13_WIDTH {2} \
-  CONFIG.C_PROBE14_WIDTH {2} \
-  CONFIG.C_PROBE22_WIDTH {2} \
-  CONFIG.C_PROBE30_WIDTH {1} \
-] [get_ips ila_0]
-generate_target {all} [get_files ila_0.srcs/sources_1/ip/ila_0/ila_0.xci]
 adi_ip_files axi_dac_interpolate [list \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \

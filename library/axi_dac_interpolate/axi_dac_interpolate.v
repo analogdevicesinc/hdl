@@ -154,32 +154,6 @@ module axi_dac_interpolate #(
   wire    [15:0]    dac_raw_ch_b_data;
   wire              rearm_on_last_s;
   
-  wire              transfer_start_filter_a;
-  wire    [ 1:0]    transfer_state_filter_a;
-  wire    [ 1:0]    transfer_state_next_filter_a;
-  wire              stop_transfer_filter_a;
-  
-  wire              transfer_start_filter_b;
-  wire    [ 1:0]    transfer_state_filter_b;
-  wire    [ 1:0]    transfer_state_next_filter_b;
-  wire              stop_transfer_filter_b;
-  
-  wire              dma_valid_m2_out_a;
-  wire              dma_valid_m2_out_b;
-  wire              dma_valid_m13_out_a;
-  wire              dma_valid_m13_out_b;
-  
-  wire              dac_valid_corrected_a;
-  wire              dac_valid_corrected_b;
-  wire              dac_fir_valid_a;
-  wire              dac_fir_valid_b;
-  
-  wire              transfer_first_sample_a;
-  wire              transfer_first_sample_b;
-  
-  wire              transfer_start_posedge_a;
-  wire              transfer_start_posedge_b;
-
   // signal name changes
 
   assign up_clk = s_axi_aclk;
@@ -228,43 +202,6 @@ module axi_dac_interpolate #(
 
   assign underflow = underflow_a | underflow_b;
 
-ila_0 i_ila (
-	.clk(dac_clk), // input wire clk
-
-
-	.probe0(dac_int_data_a), // input wire [15:0]  probe0
-	.probe1(dac_int_data_b), // input wire [15:0]  probe1
-	.probe2(dma_valid_a), // input wire [0:0]  probe2
-	.probe3(dma_valid_b), // input wire [0:0]  probe3
-	.probe4(dma_ready_a), // input wire [0:0]  probe4
-	.probe5(dma_ready_b), // input wire [0:0]  probe5
-	.probe6(start_sync_channels), // input wire [0:0]  probe6
-	.probe7(stop_sync_channels),//input wire [0:0] probe7
-	.probe8(transfer_start_filter_a),//input wire [0:0] probe8
-	.probe9(transfer_state_filter_a),//wire [1:0]
-	.probe10(transfer_state_next_filter_a),//wire [1:0]
-	.probe11(stop_transfer_filter_a),
-	.probe12(transfer_start_filter_b),
-	.probe13(transfer_state_filter_b),//wire [1:0]
-	.probe14(transfer_state_next_filter_b),//wire [1:0]
-	.probe15(stop_transfer_filter_b),
-	.probe16(dac_valid_out_a),
-	.probe17(dac_valid_out_b),
-	.probe18(dma_valid_m2_out_a),
-	.probe19(dma_valid_m13_out_a),
-	.probe20(dma_valid_m2_out_b),
-	.probe21(dma_valid_m13_out_b),
-	.probe22(raw_transfer_en),
-	.probe23(dac_valid_corrected_a),
-	.probe24(dac_fir_valid_a),
-	.probe25(dac_valid_corrected_b),
-	.probe26(dac_fir_valid_b),
-	.probe27(flush_dma_s),
-	.probe28(transfer_first_sample_a),
-	.probe29(transfer_first_sample_b),
-	.probe30(dma_transfer_suspend)
-);
-
   axi_dac_interpolate_filter #(
     .CORRECTION_DISABLE (CORRECTION_DISABLE)
   ) i_filter_a (
@@ -297,19 +234,7 @@ ila_0 i_ila (
     .dma_valid (dma_valid_a),
     .dma_valid_adjacent (dma_valid_b),
     .dac_correction_enable(dac_correction_enable_a),
-    .dac_correction_coefficient(dac_correction_coefficient_a),
-    
-    .transfer_start_filter(transfer_start_filter_a),
-    .transfer_state_filter(transfer_state_filter_a),
-    .transfer_state_next_filter(transfer_state_next_filter_a),
-    .stop_transfer_filter(stop_transfer_filter_a),
-    .dma_valid_m2_out(dma_valid_m2_out_a),
-    .dma_valid_m13_out(dma_valid_m13_out_a),
-    .dac_valid_corrected_out(dac_valid_corrected_a),
-    .dac_fir_valid_out(dac_fir_valid_a),
-    .transfer_first_sample_o(transfer_first_sample_a),
-    .transfer_start_posedge_out(transfer_start_posedge_a)
-    );
+    .dac_correction_coefficient(dac_correction_coefficient_a));
 
   axi_dac_interpolate_filter #(
     .CORRECTION_DISABLE(CORRECTION_DISABLE)
@@ -343,19 +268,7 @@ ila_0 i_ila (
     .dma_valid (dma_valid_b),
     .dma_valid_adjacent (dma_valid_a),
     .dac_correction_enable(dac_correction_enable_b),
-    .dac_correction_coefficient(dac_correction_coefficient_b),
-    
-    .transfer_start_filter(transfer_start_filter_b),
-    .transfer_state_filter(transfer_state_filter_b),
-    .transfer_state_next_filter(transfer_state_next_filter_b),
-    .stop_transfer_filter(stop_transfer_filter_b),
-    .dma_valid_m2_out(dma_valid_m2_out_b),
-    .dma_valid_m13_out(dma_valid_m13_out_b),
-    .dac_valid_corrected_out(dac_valid_corrected_b),
-    .dac_fir_valid_out(dac_fir_valid_b),
-    .transfer_first_sample_o(transfer_first_sample_b),
-    .transfer_start_posedge_out(transfer_start_posedge_b)
-    );
+    .dac_correction_coefficient(dac_correction_coefficient_b));
 
   axi_dac_interpolate_reg axi_dac_interpolate_reg_inst (
 
