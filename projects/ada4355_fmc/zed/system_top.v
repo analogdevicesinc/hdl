@@ -120,12 +120,8 @@ module system_top (
   input         miso_pot,
   output        sclk_pot,
   output        mosi_pot,
-  output        csb_apd_pot,
+  output        csb_apd_pot
 
-  // TDD control for LiDAR
-
-  input         tdd_ext_sync,
-  output        laser_trigger
 );
 
   // internal signals
@@ -142,7 +138,6 @@ module system_top (
   wire        iic_mux_sda_t_s;
 
   assign gpio_i[63:43] = gpio_o[63:43];
-  assign trig_fmc_out = trig_fmc_in;
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -256,7 +251,7 @@ module system_top (
     .frame_p(frame_p),
     .frame_n(frame_n),
     .sync_n (1'b1),
-    .tdd_ext_sync(tdd_ext_sync),
-    .laser_trigger(laser_trigger));
+    .trig_fmc_in(trig_fmc_in),
+    .trig_fmc_out(trig_fmc_out));
 
 endmodule

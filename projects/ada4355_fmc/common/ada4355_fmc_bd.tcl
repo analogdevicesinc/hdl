@@ -33,9 +33,9 @@ create_bd_port -dir I sync_n
 create_bd_port -dir I frame_p
 create_bd_port -dir I frame_n
 
-# TDD external ports for LiDAR control
-create_bd_port -dir I tdd_ext_sync
-create_bd_port -dir O laser_trigger
+# TDD external ports for LiDAR control (directly connected to FMC J3/J4 SMA connectors)
+create_bd_port -dir I trig_fmc_in
+create_bd_port -dir O trig_fmc_out
 
 # axi_ada4355
 
@@ -110,11 +110,11 @@ ad_connect axi_ada4355_adc/adc_clk axi_tdd_0/clk
 ad_connect $sys_cpu_reset logic_inv/Op1
 ad_connect logic_inv/Res axi_tdd_0/resetn
 
-# TDD synchronization
-ad_connect axi_tdd_0/sync_in tdd_ext_sync
+# TDD synchronization (from FMC J3 SMA input)
+ad_connect axi_tdd_0/sync_in trig_fmc_in
 
-# TDD channel connections
-ad_connect axi_tdd_0/tdd_channel_0 laser_trigger
+# TDD channel connections (to FMC J4 SMA output)
+ad_connect axi_tdd_0/tdd_channel_0 trig_fmc_out
 ad_connect axi_tdd_0/tdd_channel_1 axi_ada4355_dma/sync
 
 ad_connect $sys_cpu_resetn axi_ada4355_dma/m_dest_axi_aresetn

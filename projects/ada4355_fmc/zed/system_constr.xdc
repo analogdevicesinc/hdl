@@ -37,11 +37,6 @@ set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ada4355_sclk
 set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS25} [get_ports ada4355_mosi];  ## H7 FMC_LA02_P IO_L20P_T3_34
 set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS25} [get_ports ada4355_miso];  ## H8 FMC_LA02_N IO_L20N_T3_34
 
-# TDD control signals for LiDAR - Using PMOD JA connector
-# PMOD JA pins on ZedBoard (3.3V logic level)
-set_property -dict {PACKAGE_PIN Y11  IOSTANDARD LVCMOS33} [get_ports tdd_ext_sync];   ## PMOD JA1
-set_property -dict {PACKAGE_PIN AA11 IOSTANDARD LVCMOS33} [get_ports laser_trigger];  ## PMOD JA2
-
 # clocks
 
 create_clock -period 2.000 -name dco_clk [get_ports dco_p]
