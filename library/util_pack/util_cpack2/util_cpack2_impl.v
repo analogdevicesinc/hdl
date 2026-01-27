@@ -39,7 +39,8 @@ module util_cpack2_impl #(
   parameter NUM_OF_CHANNELS = 4,
   parameter SAMPLES_PER_CHANNEL = 1,
   parameter SAMPLE_DATA_WIDTH = 16,
-  parameter PARALLEL_OR_SERIAL_N = 0
+  parameter PARALLEL_OR_SERIAL_N = 0,
+  parameter PACK_EN = 1
 ) (
   input clk,
   input reset,
@@ -101,8 +102,9 @@ module util_cpack2_impl #(
     .NUM_OF_CHANNELS (NUM_OF_CHANNELS),
     .SAMPLES_PER_CHANNEL (SAMPLES_PER_CHANNEL),
     .SAMPLE_DATA_WIDTH (SAMPLE_DATA_WIDTH),
-    .PACK (1),
-    .PARALLEL_OR_SERIAL_N (PARALLEL_OR_SERIAL_N)
+    .PARALLEL_OR_SERIAL_N (PARALLEL_OR_SERIAL_N),
+    .PACK_EN (PACK_EN),
+    .PACK (1)
   ) i_pack_shell (
     .clk (clk),
     .reset (reset),

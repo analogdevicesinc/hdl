@@ -39,8 +39,9 @@ module pack_shell #(
   parameter NUM_OF_CHANNELS = 4,
   parameter SAMPLES_PER_CHANNEL = 1,
   parameter SAMPLE_DATA_WIDTH = 16,
-  parameter PACK = 0,
-  parameter PARALLEL_OR_SERIAL_N = 0
+  parameter PARALLEL_OR_SERIAL_N = 0,
+  parameter PACK_EN = 1,
+  parameter PACK = 0
 ) (
   input clk,
   input reset,
@@ -68,62 +69,62 @@ module pack_shell #(
   localparam NUM_OF_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
   localparam LOG2_NUM_OF_SAMPLES = $clog2(NUM_OF_SAMPLES);
 
-  /*
-   * Reset and control signals for the state machine. Data and control have
-   * separate resets since control is pipelined and needs to be taken out of
-   * reset before data so it can compute the control signals for the first data
-   * cycle.
-   */
-  reg reset_ctrl = 1'b1;
-  reg startup_ctrl = 1'b0;
-  reg startup_ctrl2 = 1'b0;
-  reg [NUM_OF_CHANNELS-1:0] enable_int = 'h00;
+  generate if (PACK_EN == 1) begin
+    /*
+     * Reset and control signals for the state machine. Data and control have
+     * separate resets since control is pipelined and needs to be taken out of
+     * reset before data so it can compute the control signals for the first data
+     * cycle.
+     */
+    reg reset_ctrl = 1'b1;
+    reg startup_ctrl = 1'b0;
+    reg startup_ctrl2 = 1'b0;
+    reg [NUM_OF_CHANNELS-1:0] enable_int = 'h00;
 
-  /*
-   * Internal copy of the enable signals. This is used to detect changes in the
-   * channel selection and reset the internal state when that happens.
-   */
-  always @(posedge clk) begin
-    if (reset == 1'b1) begin
-      enable_int <= {NUM_OF_CHANNELS{1'b0}};
-    end else begin
-      enable_int <= enable;
+    /*
+     * Internal copy of the enable signals. This is used to detect changes in the
+     * channel selection and reset the internal state when that happens.
+     */
+    always @(posedge clk) begin
+      if (reset == 1'b1) begin
+        enable_int <= {NUM_OF_CHANNELS{1'b0}};
+      end else begin
+        enable_int <= enable;
+      end
     end
-  end
 
-  /*
-   * The internal state is reset whenever the selected channels change. The
-   * control path is pipelined and computed one clock cycle in advance. This
-   * means the control path needs to be taken out of reset one clock cycle
-   * before the data path and a special startup cycles are required to compute
-   * the first sets of control signals.
-   *
-   * In the case where there is only one channel no control signals are needed
-   * and hence no startup cycle. In the case where there are two channels the
-   * control signal pipeline is one cycle, so one startup cycle is required. For
-   * more than two channels the startup pipeline is two channels and two startup
-   * cycles are required.
-   */
-  always @(posedge clk) begin
-    if (reset == 1'b1 || enable == {NUM_OF_CHANNELS{1'b0}}) begin
-      reset_ctrl <= 1'b1;
-      reset_data <= 1'b1;
-      startup_ctrl <= 1'b0;
-      startup_ctrl2 <= 1'b0;
-    end else if (enable != enable_int) begin
-      reset_ctrl <= 1'b1;
-      reset_data <= 1'b1;
-      startup_ctrl <= 1'b1;
-      startup_ctrl2 <= 1'b1;
-    end else begin
-      reset_ctrl <= 1'b0;
-      reset_data <= NUM_OF_CHANNELS != 1 ? startup_ctrl2 : 1'b0;
-      startup_ctrl2 <= NON_POWER_OF_TWO && PACK == 0 ? reset_ctrl : 1'b0;
-      startup_ctrl <= reset_ctrl | startup_ctrl2;
+    /*
+     * The internal state is reset whenever the selected channels change. The
+     * control path is pipelined and computed one clock cycle in advance. This
+     * means the control path needs to be taken out of reset one clock cycle
+     * before the data path and a special startup cycles are required to compute
+     * the first sets of control signals.
+     *
+     * In the case where there is only one channel no control signals are needed
+     * and hence no startup cycle. In the case where there are two channels the
+     * control signal pipeline is one cycle, so one startup cycle is required. For
+     * more than two channels the startup pipeline is two channels and two startup
+     * cycles are required.
+     */
+    always @(posedge clk) begin
+      if (reset == 1'b1 || enable == {NUM_OF_CHANNELS{1'b0}}) begin
+        reset_ctrl <= 1'b1;
+        reset_data <= 1'b1;
+        startup_ctrl <= 1'b0;
+        startup_ctrl2 <= 1'b0;
+      end else if (enable != enable_int) begin
+        reset_ctrl <= 1'b1;
+        reset_data <= 1'b1;
+        startup_ctrl <= 1'b1;
+        startup_ctrl2 <= 1'b1;
+      end else begin
+        reset_ctrl <= 1'b0;
+        reset_data <= NUM_OF_CHANNELS != 1 ? startup_ctrl2 : 1'b0;
+        startup_ctrl2 <= NON_POWER_OF_TWO && PACK == 0 ? reset_ctrl : 1'b0;
+        startup_ctrl <= reset_ctrl | startup_ctrl2;
+      end
     end
-  end
 
-  generate
     if (NUM_OF_CHANNELS == 1) begin
       /*
        * In the one channel case there is not much to do. Nevertheless we should
@@ -567,6 +568,23 @@ module pack_shell #(
         assign out_data = data[2];
       end
     end
+  end else begin
+    always @(posedge clk) begin
+      if (reset == 1'b1 || enable != {NUM_OF_CHANNELS{1'b1}}) begin
+        reset_data <= 1'b1;
+      end else begin
+        reset_data <= 1'b0;
+      end
+    end
+
+    assign out_data = in_data;
+    assign out_sync = 1'b1;
+    assign out_valid = {NUM_OF_SAMPLES{1'b1}};
+
+    always @(*) begin
+      ready <= ce & ~reset_data;
+    end
+  end
   endgenerate
 
 endmodule
