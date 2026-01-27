@@ -1042,6 +1042,8 @@ ad_connect  axi_apollo_rx_jesd/rx_data_tvalid rx_apollo_tpl_core/link_valid
 if {$FSRC_ENABLE} {
   ad_connect rx_device_clk fsrc_rx/link_clk
   ad_connect rx_apollo_tpl_core/adc_valid_0 fsrc_rx/adc_data_in_valid
+
+  ad_ip_parameter util_apollo_cpack CONFIG.PACK_EN 0
   for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
     ad_connect fsrc_rx/adc_data_in_${i}  rx_apollo_tpl_core/adc_data_$i
     ad_connect fsrc_rx/adc_data_out_${i} util_apollo_cpack/fifo_wr_data_$i
@@ -1072,6 +1074,8 @@ if {$ASYMMETRIC_A_B_MODE} {
   if {$FSRC_ENABLE} {
     ad_connect rx_b_device_clk fsrc_rx_b/link_clk
     ad_connect rx_b_apollo_tpl_core/adc_valid_0 fsrc_rx_b/adc_data_in_valid
+
+    ad_ip_parameter util_apollo_cpack_b CONFIG.PACK_EN 0
     for {set i 0} {$i < $RX_B_NUM_OF_CONVERTERS} {incr i} {
       ad_connect fsrc_rx_b/adc_data_in_${i}  rx_b_apollo_tpl_core/adc_data_$i
       ad_connect fsrc_rx_b/adc_data_out_${i} util_apollo_cpack_b/fifo_wr_data_$i
@@ -1112,6 +1116,7 @@ if {$FSRC_ENABLE} {
   ad_connect tx_device_clk                         fsrc_tx/clk
   ad_connect tx_device_clk_rstgen/peripheral_reset fsrc_tx/reset
 
+  ad_ip_parameter util_apollo_upack CONFIG.PACK_EN 0
   ad_connect $dac_data_offload_name/m_axis util_apollo_upack/s_axis
   ad_ip_instance ilconstant fsrc_tx_valid
   ad_ip_parameter fsrc_tx_valid CONFIG.CONST_VAL 1
@@ -1146,6 +1151,7 @@ if {$ASYMMETRIC_A_B_MODE} {
     ad_connect tx_b_device_clk                         fsrc_tx_b/clk
     ad_connect tx_b_device_clk_rstgen/peripheral_reset fsrc_tx_b/reset
 
+    ad_ip_parameter util_apollo_upack_b CONFIG.PACK_EN 0
     ad_connect $dac_b_data_offload_name/m_axis fsrc_tx_b/s_axis
     ad_connect util_apollo_upack_b/s_axis      fsrc_tx_b/m_axis
   } else {
