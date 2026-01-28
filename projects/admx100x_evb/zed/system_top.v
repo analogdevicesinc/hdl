@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -93,6 +93,17 @@ module system_top (
   input           admx100x_valid,
   input           admx100x_ot,
 
+  //RX part
+
+  output          acq_synq_in_fmc,
+  output          acq_sclk,
+  input           acq_drdy,
+  output          acq_mclk,
+  output          acq_mosi,
+  output          acq_reset,
+  input           acq_miso,
+  output          acq_cs,
+
   input           admx100x_spi_miso,
   output          admx100x_spi_mosi,
   output          admx100x_spi_sclk,
@@ -123,7 +134,9 @@ module system_top (
   assign admx100x_cal = gpio_o[38];
   assign admx100x_dac_ldac = gpio_o[39];
   assign admx100x_trig = gpio_o[40];
-  assign gpio_i[63:41] = gpio_o[63:41];
+  assign acq_synq_in_fmc = gpio_o[41];
+  assign acq_reset = gpio_o[42];
+  assign gpio_i[63:43] = gpio_o[63:43];
 
   // instantiations
 
@@ -220,6 +233,13 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o ());
+    .spi1_sdo_o (),
+    .adc_spi_sdo (acq_mosi),
+    .adc_spi_sdo_t (),
+    .adc_spi_sdi (acq_miso),
+    .adc_spi_cs (acq_cs),
+    .adc_spi_sclk (acq_sclk),
+    .adc_data_ready (acq_drdy),
+    .mclk_clk(acq_mclk));
 
 endmodule
