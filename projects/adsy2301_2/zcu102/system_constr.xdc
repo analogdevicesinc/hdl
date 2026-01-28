@@ -4,22 +4,22 @@
 ###############################################################################
 
 # FMC HPC0
-set_property -dict {PACKAGE_PIN V2   IOSTANDARD LVCMOS18} [get_ports BF_TR_01]
-set_property -dict {PACKAGE_PIN V1   IOSTANDARD LVCMOS18} [get_ports BF_TX_LOAD_01]
-set_property -dict {PACKAGE_PIN Y2   IOSTANDARD LVCMOS18} [get_ports BF_RX_LOAD_01]
-set_property -dict {PACKAGE_PIN Y4   IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_01]
-set_property -dict {PACKAGE_PIN AC2  IOSTANDARD LVCMOS18} [get_ports BF_TR_02]
-set_property -dict {PACKAGE_PIN AC1  IOSTANDARD LVCMOS18} [get_ports BF_TX_LOAD_02]
-set_property -dict {PACKAGE_PIN U5   IOSTANDARD LVCMOS18} [get_ports BF_RX_LOAD_02]
-set_property -dict {PACKAGE_PIN AA2  IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_02]
-set_property -dict {PACKAGE_PIN L12  IOSTANDARD LVCMOS18} [get_ports BF_TR_03]
-set_property -dict {PACKAGE_PIN M13  IOSTANDARD LVCMOS18} [get_ports BF_TX_LOAD_03]
-set_property -dict {PACKAGE_PIN K16  IOSTANDARD LVCMOS18} [get_ports BF_RX_LOAD_03]
-set_property -dict {PACKAGE_PIN N9   IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_03]
-set_property -dict {PACKAGE_PIN V8   IOSTANDARD LVCMOS18} [get_ports BF_TR_04]
-set_property -dict {PACKAGE_PIN V6   IOSTANDARD LVCMOS18} [get_ports BF_TX_LOAD_04]
-set_property -dict {PACKAGE_PIN U6   IOSTANDARD LVCMOS18} [get_ports BF_RX_LOAD_04]
-set_property -dict {PACKAGE_PIN L10  IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_04]
+set_property -dict {PACKAGE_PIN V2   IOSTANDARD LVCMOS18} [get_ports BF_TR_01];       # FMC0_LA02_P
+set_property -dict {PACKAGE_PIN V1   IOSTANDARD LVCMOS18} [get_ports BF_TX_LOAD_01];  # FMC0_LA02_N
+set_property -dict {PACKAGE_PIN Y2   IOSTANDARD LVCMOS18} [get_ports BF_RX_LOAD_01];  # FMC0_LA03_P
+set_property -dict {PACKAGE_PIN Y4   IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_01];    # FMC0_LA00_CC_P
+set_property -dict {PACKAGE_PIN AC2  IOSTANDARD LVCMOS18} [get_ports BF_TR_02];       # FMC0_LA06_P
+set_property -dict {PACKAGE_PIN AC1  IOSTANDARD LVCMOS18} [get_ports BF_TX_LOAD_02];  # FMC0_LA06_N
+set_property -dict {PACKAGE_PIN U5   IOSTANDARD LVCMOS18} [get_ports BF_RX_LOAD_02];  # FMC0_LA07_P
+set_property -dict {PACKAGE_PIN AA2  IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_02];    # FMC0_LA04_P
+set_property -dict {PACKAGE_PIN L12  IOSTANDARD LVCMOS18} [get_ports BF_TR_03];       # FMC0_LA24_P
+set_property -dict {PACKAGE_PIN M13  IOSTANDARD LVCMOS18} [get_ports BF_TX_LOAD_03];  # FMC0_LA20_N
+set_property -dict {PACKAGE_PIN K16  IOSTANDARD LVCMOS18} [get_ports BF_RX_LOAD_03];  # FMC0_LA23_N
+set_property -dict {PACKAGE_PIN N9   IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_03];    # FMC0_LA18_CC_P
+set_property -dict {PACKAGE_PIN V8   IOSTANDARD LVCMOS18} [get_ports BF_TR_04];       # FMC0_LA31_P
+set_property -dict {PACKAGE_PIN V6   IOSTANDARD LVCMOS18} [get_ports BF_TX_LOAD_04];  # FMC0_LA30_P
+set_property -dict {PACKAGE_PIN U6   IOSTANDARD LVCMOS18} [get_ports BF_RX_LOAD_04];  # FMC0_LA30_N
+set_property -dict {PACKAGE_PIN L10  IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_04];    # FMC0_LA27_N
 set_property -dict {PACKAGE_PIN P12  IOSTANDARD LVCMOS18} [get_ports XUD_RX_GAIN_MODE]
 set_property -dict {PACKAGE_PIN M11  IOSTANDARD LVCMOS18} [get_ports XUD_PLL_OUTPUT_SEL]
 set_property -dict {PACKAGE_PIN M10  IOSTANDARD LVCMOS18} [get_ports XUD_TXRX0]
@@ -68,6 +68,11 @@ set_property -dict {PACKAGE_PIN V11  IOSTANDARD LVCMOS18} [get_ports BF_SDA_03]
 set_property -dict {PACKAGE_PIN U11  IOSTANDARD LVCMOS18} [get_ports BF_SCL_04]
 set_property -dict {PACKAGE_PIN T11  IOSTANDARD LVCMOS18} [get_ports BF_SDA_04]
 
+# TDD debug signals
+set_property -dict {PACKAGE_PIN AB6  IOSTANDARD LVCMOS18} [get_ports tdd_sync_in_debug];  # FMC0_LA11_P
+set_property -dict {PACKAGE_PIN AB8  IOSTANDARD LVCMOS18} [get_ports tdd_sync_out_debug]; # FMC0_LA13_P
+set_property -dict {PACKAGE_PIN AC8  IOSTANDARD LVCMOS18} [get_ports tdd_enable_debug];   # FMC0_LA13_N
+
 # set false path to output ports which connect to devices without any clocks
 set_false_path -to   [get_ports BF_TR_01]
 set_false_path -to   [get_ports BF_TX_LOAD_01]
@@ -95,6 +100,11 @@ set_false_path -from [get_ports BF_ALARM_TS_01]
 set_false_path -from [get_ports BF_ALARM_TS_02]
 set_false_path -from [get_ports BF_ALARM_TS_03]
 set_false_path -from [get_ports BF_ALARM_TS_04]
+
+# TDD debug signals
+set_false_path -to   [get_ports tdd_sync_in_debug]
+set_false_path -to   [get_ports tdd_sync_out_debug]
+set_false_path -to   [get_ports tdd_enable_debug]
 
 set trce_dly_max   0.900; # maximum board trace delay
 set trce_dly_min   0.800; # minimum board trace delay
