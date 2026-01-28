@@ -42,6 +42,7 @@ module axi_ad9740_core #(
   parameter   SPEED_GRADE = 0,
   parameter   DEV_PACKAGE = 0,
   parameter   DAC_RESOLUTION = 14,
+  parameter   CLK_RATIO = 2,
   parameter   DDS_DISABLE = 0,
   parameter   DDS_TYPE = 1,
   parameter   DDS_CORDIC_DW = 14,
@@ -50,14 +51,14 @@ module axi_ad9740_core #(
 
   // dac interface
 
-  input         dac_clk,
-  output        dac_rst,
-  input  [15:0] dma_data,
-  input         dma_valid,
-  output        dma_ready,
-  output [13:0] dac_data,
-  output [ 3:0] dac_data_sel,
-  output        dac_dfmt_type,
+  input                         dac_clk,
+  output                        dac_rst,
+  input  [16*CLK_RATIO-1:0]     dma_data,
+  input                         dma_valid,
+  output                        dma_ready,
+  output [14*CLK_RATIO-1:0]     dac_data,
+  output [ 3:0]                 dac_data_sel,
+  output                        dac_dfmt_type,
 
   // processor interface
 
@@ -80,7 +81,7 @@ module axi_ad9740_core #(
   wire        up_rack_s;
   wire        up_wack_s;
 
-  wire [13:0] dac_data_channel_0;
+  wire [14*CLK_RATIO-1:0] dac_data_channel_0;
   wire [ 3:0] dac_data_sel_channel_0;
   wire        dac_rst_s;
   wire        dac_data_sync;
@@ -112,6 +113,7 @@ module axi_ad9740_core #(
   axi_ad9740_channel #(
     .CHANNEL_ID(0),
     .DAC_RESOLUTION(DAC_RESOLUTION),
+    .CLK_RATIO(CLK_RATIO),
     .DDS_DISABLE(DDS_DISABLE),
     .DDS_TYPE(DDS_TYPE),
     .DDS_CORDIC_DW(DDS_CORDIC_DW),
@@ -121,7 +123,7 @@ module axi_ad9740_core #(
     .dac_rst(dac_rst_s),
     .dac_data(dac_data_channel_0),
     .dac_data_sel(dac_data_sel_channel_0),
-    .dma_data(dma_data[15:0]),
+    .dma_data(dma_data),
     .dma_ready(dma_ready),
     .dma_valid(dma_valid),
     .dac_data_sync(dac_data_sync),

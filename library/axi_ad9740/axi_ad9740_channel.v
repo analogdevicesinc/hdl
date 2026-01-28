@@ -39,6 +39,7 @@ module axi_ad9740_channel #(
 
   parameter   CHANNEL_ID = 32'h0,
   parameter   DAC_RESOLUTION = 14,
+  parameter   CLK_RATIO = 2,
   parameter   DDS_DISABLE = 0,
   parameter   DDS_TYPE = 1,
   parameter   DDS_CORDIC_DW = 14,
@@ -47,16 +48,16 @@ module axi_ad9740_channel #(
 
   // dac interface
 
-  input                   dac_clk,
-  input                   dac_rst,
-  output reg   [13:0]     dac_data,
-  output       [ 3:0]     dac_data_sel,
+  input                             dac_clk,
+  input                             dac_rst,
+  output reg   [14*CLK_RATIO-1:0]   dac_data,
+  output       [ 3:0]               dac_data_sel,
 
   // input sources
 
-  input        [15:0]     dma_data,
-  input                   dma_valid,
-  output reg              dma_ready,
+  input        [16*CLK_RATIO-1:0]   dma_data,
+  input                             dma_valid,
+  output reg                        dma_ready,
 
   // processor interface
 
@@ -80,7 +81,7 @@ module axi_ad9740_channel #(
   // internal signals
 
   wire    [ 3:0]   dac_data_sel_s;
-  wire    [DAC_RESOLUTION-1:0]   dac_dds_data_s;
+  wire    [DAC_RESOLUTION*CLK_RATIO-1:0]   dac_dds_data_s;
   wire    [15:0]   dac_dds_scale_1_s;
   wire    [15:0]   dac_dds_init_1_s;
   wire    [15:0]   dac_dds_incr_1_s;
@@ -90,54 +91,54 @@ module axi_ad9740_channel #(
   wire    [15:0]   dac_pat_data_1_s;
   wire    [15:0]   dac_pat_data_2_s;
 
-  reg     [15:0]   dma_pattern;
-  reg     [DAC_RESOLUTION-1:0]   ramp_pattern;
+  reg     [16*CLK_RATIO-1:0]   dma_pattern;
+  reg     [DAC_RESOLUTION-1:0]   ramp_counter;
+  wire    [DAC_RESOLUTION*CLK_RATIO-1:0]   ramp_pattern;
+
+  genvar n;
+  generate
+    for (n = 0; n < CLK_RATIO; n = n + 1) begin : gen_dac_data
+      always @(posedge dac_clk) begin
+        case(dac_data_sel_s)
+          4'h0 :
+          begin
+            if (DAC_RESOLUTION == 14) begin
+              dac_data[n*14 +: 14] = dac_dds_data_s[n*DAC_RESOLUTION +: DAC_RESOLUTION];
+            end else begin
+              dac_data[n*14 +: 14] = {dac_dds_data_s[n*DAC_RESOLUTION +: DAC_RESOLUTION], {(14-DAC_RESOLUTION){1'b0}}};
+            end
+          end
+          4'h2 :
+          begin
+            if (DAC_RESOLUTION >= 14) begin
+              dac_data[n*14 +: 14] = dma_pattern[n*16 +: 14];
+            end else begin
+              dac_data[n*14 +: 14] = {dma_pattern[n*16+16-DAC_RESOLUTION +: DAC_RESOLUTION], {(14-DAC_RESOLUTION){1'b0}}};
+            end
+          end
+          4'h3 :
+          begin
+            dac_data[n*14 +: 14] = 'b0;
+          end
+          4'hb :
+          begin
+            if (DAC_RESOLUTION == 14) begin
+              dac_data[n*14 +: 14] = ramp_pattern[n*DAC_RESOLUTION +: DAC_RESOLUTION];
+            end else begin
+              dac_data[n*14 +: 14] = {ramp_pattern[n*DAC_RESOLUTION +: DAC_RESOLUTION], {(14-DAC_RESOLUTION){1'b0}}};
+            end
+          end
+          default :
+          begin
+            dac_data[n*14 +: 14] = 'b0;
+          end
+        endcase
+      end
+    end
+  endgenerate
 
   always @(posedge dac_clk) begin
     dma_ready <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
-
-    case(dac_data_sel_s)
-      4'h0 :
-      begin
-        if (DAC_RESOLUTION == 14) begin
-          dac_data = dac_dds_data_s;
-        end else begin
-          // Scale up to 14 bits for output interface - MSB aligned
-          dac_data = {dac_dds_data_s, {(14-DAC_RESOLUTION){1'b0}}};
-        end
-      end
-      4'h2 :
-      begin
-        // DMA data - truncate or pad as needed
-        if (DAC_RESOLUTION >= 14) begin
-          dac_data = dma_pattern[13:0];
-        end else begin
-          // Take MSBs from DMA and scale up to 14 bits - MSB aligned
-          // For 10-bit: takes DMA[15:6] and puts in Internal[13:4]
-          // For 12-bit: takes DMA[15:4] and puts in Internal[13:2]
-          // For 8-bit:  takes DMA[15:8] and puts in Internal[13:6]
-          dac_data = {dma_pattern[15:16-DAC_RESOLUTION], {(14-DAC_RESOLUTION){1'b0}}};
-        end
-      end
-      4'h3 :
-      begin
-        dac_data       = 'b0;
-      end
-      4'hb :
-      begin
-        // Ramp data - scale up to 14 bits - MSB aligned
-        if (DAC_RESOLUTION == 14) begin
-          dac_data = ramp_pattern;
-        end else begin
-          // Ramp pattern is DAC_RESOLUTION bits, put in upper bits of 14-bit bus
-          dac_data = {ramp_pattern, {(14-DAC_RESOLUTION){1'b0}}};
-        end
-      end
-      default :
-      begin
-        dac_data       = 'b0;
-      end
-    endcase
   end
 
   // dma data
@@ -150,15 +151,23 @@ module axi_ad9740_channel #(
     end
   end
 
-  // ramp data generator
+  // ramp data generator - generates CLK_RATIO consecutive samples per clock
+  // Each sample increments by 1, counter increments by CLK_RATIO each clock cycle
 
   always @(posedge dac_clk) begin
-    if(ramp_pattern == {DAC_RESOLUTION{1'b1}} || dac_rst == 1'b1) begin
-        ramp_pattern <= {DAC_RESOLUTION{1'b0}};
+    if (dac_rst == 1'b1) begin
+      ramp_counter <= 'h0;
     end else begin
-      ramp_pattern <= ramp_pattern + 1'b1;
+      ramp_counter <= ramp_counter + CLK_RATIO;
     end
   end
+
+  // Generate CLK_RATIO consecutive ramp values
+  generate
+    for (n = 0; n < CLK_RATIO; n = n + 1) begin : gen_ramp
+      assign ramp_pattern[n*DAC_RESOLUTION +: DAC_RESOLUTION] = ramp_counter + n;
+    end
+  endgenerate
 
   // DDS generator
 
@@ -169,7 +178,7 @@ module axi_ad9740_channel #(
     .DDS_TYPE (DDS_TYPE),
     .CORDIC_DW (DDS_CORDIC_DW),
     .CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
-    .CLK_RATIO (1)
+    .CLK_RATIO (CLK_RATIO)
   ) i_dds (
     .clk (dac_clk),
     .dac_dds_format (1'b0),  // DDS outputs signed (CORDIC native), conversion handled by axi_ad9740_if

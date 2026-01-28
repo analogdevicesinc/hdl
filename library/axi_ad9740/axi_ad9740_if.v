@@ -36,18 +36,19 @@
 `timescale 1ns/100ps
 
 module axi_ad9740_if #(
-  parameter DAC_RESOLUTION = 14
+  parameter DAC_RESOLUTION = 14,
+  parameter CLK_RATIO = 2
 ) (
 
   // dac interface
 
-  output [13:0]   dac_data_out,
+  output [14*CLK_RATIO-1:0]   dac_data_out,
 
   // data interface
 
-  input  [13:0]   dac_data_in,
-  input  [ 3:0]   dac_data_sel,
-  input           dac_dfmt_type
+  input  [14*CLK_RATIO-1:0]   dac_data_in,
+  input  [ 3:0]               dac_data_sel,
+  input                       dac_dfmt_type
 );
 
   // The AD974x DACs expect offset binary format
@@ -64,7 +65,14 @@ module axi_ad9740_if #(
 
   // MSB inversion for two's complement to offset binary conversion
   // Note: dac_dfmt_type=1 means signed (two's complement) data
-  assign dac_data_out[13] = dac_dfmt_type ? ~dac_data_in[13] : dac_data_in[13];
-  assign dac_data_out[12:0] = dac_data_in[12:0];
+  // Apply to each sample in the CLK_RATIO group
+
+  genvar n;
+  generate
+    for (n = 0; n < CLK_RATIO; n = n + 1) begin : gen_fmt
+      assign dac_data_out[n*14+13] = dac_dfmt_type ? ~dac_data_in[n*14+13] : dac_data_in[n*14+13];
+      assign dac_data_out[n*14 +: 13] = dac_data_in[n*14 +: 13];
+    end
+  endgenerate
 
 endmodule

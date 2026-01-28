@@ -45,6 +45,16 @@ set_property driver_value 0 [ipx::get_ports *data* -of_objects  $cc]
 set_property driver_value 0 [ipx::get_ports *valid* -of_objects  $cc]
 ipx::infer_bus_interface dac_clk xilinx.com:signal:clock_rtl:1.0 $cc
 
+# CLK_RATIO parameter (number of samples per clock cycle for DDR output)
+set_property -dict [list \
+  "value_validation_type" "list" \
+  "value_validation_list" "1 2" \
+] [ipx::get_user_parameters CLK_RATIO -of_objects $cc]
+set_property -dict [list \
+  "value_validation_type" "list" \
+  "value_validation_list" "1 2" \
+] [ipx::get_hdl_parameters CLK_RATIO -of_objects $cc]
+
 adi_add_bus "s_axis" "slave" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \
