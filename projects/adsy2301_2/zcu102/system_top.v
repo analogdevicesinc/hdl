@@ -123,7 +123,12 @@ module system_top # (
   output XUD_TXRX0,
   output XUD_TXRX1,
   output XUD_TXRX2,
-  output XUD_TXRX3
+  output XUD_TXRX3,
+
+  // Debug FMC TDD
+  output tdd_sync_in_debug,
+  output tdd_sync_out_debug,
+  output tdd_enable_debug
 );
 
   // internal signals
@@ -258,5 +263,9 @@ module system_top # (
   end
 
   endgenerate
+
+  assign tdd_sync_in_debug  = tdd_sync;
+  assign tdd_sync_out_debug = tdd_sync_out;
+  assign tdd_enable_debug   = tdd_enabled;
 
 endmodule
