@@ -8,7 +8,7 @@ set DAC_RESOLUTION $ad_project_params(DAC_RESOLUTION)
 # bd ports
 
 create_bd_port -dir I ad9740_clk
-create_bd_port -dir O -from 13 -to 0 ad9740_data
+create_bd_port -dir O -from 27 -to 0 ad9740_data
 
 # dma
 
@@ -19,12 +19,13 @@ ad_ip_parameter ad9740_dma CONFIG.CYCLIC 1
 ad_ip_parameter ad9740_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter ad9740_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter ad9740_dma CONFIG.DMA_DATA_WIDTH_SRC 64
-ad_ip_parameter ad9740_dma CONFIG.DMA_DATA_WIDTH_DEST 16
+ad_ip_parameter ad9740_dma CONFIG.DMA_DATA_WIDTH_DEST 32
 
 # ad9740
 
 ad_ip_instance axi_ad9740 ad9740_dac
 ad_ip_parameter ad9740_dac CONFIG.DAC_RESOLUTION $DAC_RESOLUTION
+ad_ip_parameter ad9740_dac CONFIG.CLK_RATIO 2
 
 # clocks
 

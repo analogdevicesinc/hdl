@@ -34,22 +34,29 @@ set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE
 
 # clocks
 
-# Input clock at FPGA pad
-create_clock -period 4.761 -name ad9740_clk [get_ports ad9740_clk_p]
+# Input clock at FPGA pad (210 MHz from ADF4351)
+create_clock -period 4.761 -name ad9740_clk_in [get_ports ad9740_clk_p]
 
-# Output delay constraints for data pins
-# AD9744 datasheet specs (Table 3, Page 5): tS (setup) = 2.0ns, tH (hold) = 1.5ns
-set_output_delay -clock ad9740_clk -max 2.000 [get_ports ad9740_data[*]]
-set_output_delay -clock ad9740_clk -min -1.500 [get_ports ad9740_data[*]]
+# PLL generates 105 MHz clock for logic (div by 2)
+# The generated clock is automatically created by Vivado from the PLL
+# but we define it explicitly for clarity
+create_generated_clock -name ad9740_clk \
+  -source [get_pins i_ad9740_pll/CLKIN1] \
+  -divide_by 2 \
+  [get_pins i_ad9740_pll/CLKOUT0]
 
-# Multicycle path constraint
-# Due to the clock architecture where AD9744 receives clock directly from ADF4351 while
-# FPGA sees the same clock after IBUFDS+BUFG delays (~5.1ns), the data path takes longer
-# than one clock period. Data arrives at ~8.6ns but needs to be sampled at edge 2 (~9.5ns).
-# Allow 3 cycles for setup to ensure positive slack
+# ODDR output clock (virtual clock representing DDR output timing)
+# The DAC samples data on the external clock from ADF4351 (210 MHz)
+create_clock -period 4.761 -name ad9740_dac_clk
 
-set_multicycle_path -setup -end 3 -to [get_ports ad9740_data[*]]
-set_multicycle_path -hold -end 2 -to [get_ports ad9740_data[*]]
+# Output delay constraints for ODDR data pins
+# AD9744 datasheet specs: tS (setup) = 2.0ns, tH (hold) = 1.5ns
+# These are relative to the external DAC clock (ad9740_dac_clk)
+set_output_delay -clock ad9740_dac_clk -max 2.000 [get_ports ad9740_data[*]]
+set_output_delay -clock ad9740_dac_clk -min -1.500 [get_ports ad9740_data[*]]
+
+# False path between unrelated clock domains
+set_false_path -from [get_clocks ad9740_clk] -to [get_clocks ad9740_dac_clk]
 
 # hdmi
 

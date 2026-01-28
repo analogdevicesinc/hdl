@@ -111,27 +111,93 @@ module system_top #(
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
   wire            ad9740_clk_ds;
+  wire            ad9740_clk_bufg;
   wire            ad9740_clk;
-  wire    [13:0]  ad9740_data_int;
+  wire            ad9740_pll_locked;
+  wire            ad9740_pll_fb;
+  wire    [27:0]  ad9740_data_int;
+  wire    [13:0]  ad9740_data_d1;
+  wire    [13:0]  ad9740_data_d2;
 
   assign gpio_i[63:32] = gpio_o[63:32];
   assign adf4351_ce = 1'b1;
-  assign ad9740_data[13:ZERO_BITS] = ad9740_data_int[13:ZERO_BITS];
 
-  generate
-    if (ZERO_BITS > 0) begin : gen_zero_lsbs
-      assign ad9740_data[ZERO_BITS-1:0] = {ZERO_BITS{1'b0}};
-    end
-  endgenerate
+  // DDR data: d1 = rising edge (first sample), d2 = falling edge (second sample)
+  assign ad9740_data_d1 = ad9740_data_int[13:0];
+  assign ad9740_data_d2 = ad9740_data_int[27:14];
 
+  // Differential input buffer for DAC clock (210 MHz)
   IBUFDS i_ad9740_clk_ibuf_ds (
     .I (ad9740_clk_p),
     .IB (ad9740_clk_n),
     .O (ad9740_clk_ds));
 
-  BUFG i_ad9740_clk_ibuf (
-    .I (ad9740_clk_ds),
+  // PLL: divide input clock by 2 for logic, ODDR outputs DDR data
+  // Optimized for wide frequency range: 107 MHz to 210 MHz input
+  // VCO = CLKIN * 15 / 2 = CLKIN * 7.5 (valid range: 802-1575 MHz)
+  // CLKOUT = VCO / 15 = CLKIN / 2
+  PLLE2_BASE #(
+    .BANDWIDTH          ("OPTIMIZED"),
+    .CLKFBOUT_MULT      (15),         // VCO = CLKIN * 15 / 2
+    .CLKFBOUT_PHASE     (0.0),
+    .CLKIN1_PERIOD      (4.761),      // 210 MHz nominal (adjust for actual freq)
+    .CLKOUT0_DIVIDE     (15),         // CLKOUT = VCO / 15 = CLKIN / 2
+    .CLKOUT0_DUTY_CYCLE (0.5),
+    .CLKOUT0_PHASE      (0.0),
+    .DIVCLK_DIVIDE      (2),          // Divide input by 2 before multiplier
+    .REF_JITTER1        (0.010),
+    .STARTUP_WAIT       ("FALSE")
+  ) i_ad9740_pll (
+    .CLKFBOUT (ad9740_pll_fb),
+    .CLKOUT0  (ad9740_clk_bufg),
+    .CLKOUT1  (),
+    .CLKOUT2  (),
+    .CLKOUT3  (),
+    .CLKOUT4  (),
+    .CLKOUT5  (),
+    .LOCKED   (ad9740_pll_locked),
+    .CLKFBIN  (ad9740_pll_fb),
+    .CLKIN1   (ad9740_clk_ds),
+    .PWRDWN   (1'b0),
+    .RST      (1'b0));
+
+  BUFG i_ad9740_clk_bufg (
+    .I (ad9740_clk_bufg),
     .O (ad9740_clk));
+
+  // ODDR primitives for DAC data output (DDR on 105 MHz = 210 MSPS)
+  genvar i;
+  generate
+    for (i = 0; i < 14; i = i + 1) begin : gen_oddr
+      if (i >= ZERO_BITS) begin : gen_oddr_data
+        ODDR #(
+          .DDR_CLK_EDGE ("SAME_EDGE"),
+          .INIT         (1'b0),
+          .SRTYPE       ("ASYNC")
+        ) i_oddr (
+          .Q  (ad9740_data[i]),
+          .C  (ad9740_clk),
+          .CE (1'b1),
+          .D1 (ad9740_data_d1[i]),
+          .D2 (ad9740_data_d2[i]),
+          .R  (1'b0),
+          .S  (1'b0));
+      end else begin : gen_oddr_zero
+        ODDR #(
+          .DDR_CLK_EDGE ("SAME_EDGE"),
+          .INIT         (1'b0),
+          .SRTYPE       ("ASYNC")
+        ) i_oddr (
+          .Q  (ad9740_data[i]),
+          .C  (ad9740_clk),
+          .CE (1'b1),
+          .D1 (1'b0),
+          .D2 (1'b0),
+          .R  (1'b0),
+          .S  (1'b0));
+      end
+    end
+  endgenerate
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -159,7 +225,7 @@ module system_top #(
 
   system_wrapper i_system_wrapper (
     .ad9740_clk (ad9740_clk),
-    .ad9740_data (ad9740_data_int),
+    .ad9740_data (ad9740_data_int[27:0]),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
