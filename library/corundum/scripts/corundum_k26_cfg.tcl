@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -137,7 +137,6 @@ set AXI_ID_WIDTH 8
 
 # Interrupt configuration
 set IRQ_COUNT "8"
-set IRQ_STRETCH "10"
 
 # Ethernet interface configuration
 set AXIS_ETH_TX_PIPELINE "0"
