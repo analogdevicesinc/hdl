@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -23,7 +23,19 @@ set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS33}                 [get_po
 set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33}                 [get_ports admx100x_ot];       ##H16   FMC_LA11_P
 
 # syncronization
+
 set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33}                 [get_ports admx100x_sync_mode]; ##H22  FMC_LA19_P  SYNC_MODE
+
+# RX part
+
+set_property -dict {PACKAGE_PIN L21 IOSTANDARD LVCMOS33}                 [get_ports acq_synq_in_fmc];  ## C10   FMC-LA06_P
+set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS33}                 [get_ports acq_sclk];         ## D8    FMC-LA01 CC P
+set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS33}                 [get_ports acq_drdy];         ## D12   FMC-LA05 N
+set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS33}                 [get_ports acq_mclk];         ## G6    FMC-LA00 CC P
+set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS33}                 [get_ports acq_mosi];          ## G9    FMC-LA03_P
+set_property -dict {PACKAGE_PIN P20 IOSTANDARD LVCMOS33}                 [get_ports acq_reset];        ## G15   FMC-LA12_P
+set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS33}                 [get_ports acq_miso];         ## H7    FMC-LA02_P
+set_property -dict {PACKAGE_PIN M22 IOSTANDARD LVCMOS33}                 [get_ports acq_cs];           ## H11   FMC-LA04_N
 
 # set IOSTANDARD according to VADJ 3.3V
 
