@@ -130,7 +130,7 @@ These rules can be found in the [HDL coding guidelines](https://analogdevicesinc
 It checks that the copyright years after Copyright (C) are up-to-date and properly
 formatted.
 Supported forms: a single year, a range (YYYY-YYYY), or a comma-separated list
-combining singles and/or ranges. 
+combining singles and/or ranges.
 Exceptions are the JESD files and the ones specified in the `avoid_list` string list.
 
 The following checks are performed (only the last year and, if present, the
@@ -210,26 +210,11 @@ It checks if SystemVerilog packages are defined correctly:
 * `package <name>;` starts at column 0, with no extra spaces before or after ;.
 * `endpackage` is alone on its line at column 0.
 * Exactly one newline follows `endpackage`.
-* Inside the package, typedefs and localparams follow the same indentation and alignment rules.
 
 If `-e` option is added, the script rewrites these to the guideline-compliant
 format.
 
-#### 9. Localparams
-
-It checks if localparam declarations follow the rules:
-* Indented by a multiple of 2 spaces (minimum 2).
-* **List form:** each item is on a new line, `=` operator is aligned, and the last
-item has no comma.
-* **Concatenation form ({ … }):**
-  * The first element is on the same line as `{`.
-  * Following elements are indented +2 spaces.
-  * Inline comments are aligned at least 4 spaces after the longest element.
-  * The closing `};` is attached to the last element.
-
-If `-e` option is added, the script normalizes the block automatically.
-
-#### 10. Typedefs
+#### 9. Typedefs
 
 It checks if typedef blocks are formatted correctly:
 * They are not written as one-liners, each item is on its own line.
@@ -241,7 +226,7 @@ It checks if typedef blocks are formatted correctly:
 If `-e` option is added, the script rewrites the block to the guideline-compliant
 format.
 
-#### 11. Project name vs. path
+#### 10. Project name vs. path
 
 It checks that in each system_project.tcl, the project name used in `adi_project`
 matches the relative project path under `projects/`.
@@ -262,7 +247,7 @@ If edits are enabled (-e), the script may modify:
 * lines after `endmodule`/`endpackage` tag
 * parentheses around the module declaration (meaning `) (` for the parameters'
   list and `);` for when closing the declaration)
-* typedefs and localparams — rewritten into a guideline-compliant format
+* typedefs — rewritten into a guideline-compliant format
 * SystemVerilog packages — normalizes `package <name>;` / `endpackage` placement
 and ensures exactly one newline after `endpackage`
 * project name inside `system_project.tcl` (to match the relative project path)
