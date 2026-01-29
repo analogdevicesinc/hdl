@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 ##############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2023, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 #
 ## Check readme_check_guideline.md from the same folder, for more details.
@@ -143,16 +143,6 @@ def emit_line_warning(lw, path, base_line_nb, start_idx, abs_idx, msg: str):
     lw.append(f"{path} : {real_ln} {msg}")
 
 
-# compare two lists of lines and emit warnings for each differing line
-def diff_line_warnings(lw, path, base_line_nb, start_idx, old_lines, new_lines, msg: str):
-    m = min(len(old_lines), len(new_lines))
-    for k in range(m):
-        old = (old_lines[k].rstrip("\n")).rstrip()
-        neu = (new_lines[k].rstrip("\n")).rstrip()
-        if old != neu:
-            emit_line_warning(lw, path, base_line_nb, start_idx, start_idx + k, msg)
-
-
 # find the line index where a statement ends (with ';'), starting from start_i
 def stmt_end_line(lines, start_i: int) -> int:
     depth = 0
@@ -246,29 +236,6 @@ def split_top_level_commas(text: str):
     return parts
 
 
-# find the position of the top-level assignment '=' (not '==', '!=', '<=', '>=')
-def find_assign_eq_top(code: str) -> int:
-    depth = 0
-    i = 0
-    L = len(code)
-    while i < L:
-        ch = code[i]
-        nxt = code[i+1] if i+1 < L else ""
-        prv = code[i-1] if i-1 >= 0 else ""
-        if ch in "([{":
-             depth += 1
-             i += 1
-             continue
-        if ch in ")]}":
-             depth = max(0, depth - 1)
-             i += 1
-             continue
-        if ch == "=" and depth == 0 and nxt != "=" and prv not in "<>!":
-            return i
-        i += 1
-    return -1
-
-
 # strip trailing ';' or ',' and spaces
 def strip_trailing_semicol(line: str) -> str:
     return re.sub(r"[;,]\s*$", "", line.rstrip())
@@ -288,23 +255,6 @@ def normalize_str(s: str) -> str:
     return s
 
 
-# normalize soft spacing around '=' in a code segment, keep comment if any
-def soft_norm_eq_keep_cmt(seg: str) -> str:
-    code, sep, cmt = seg.partition("//")
-    s = code.rstrip()
-    eq = find_assign_eq_top(s)
-    if eq != -1:
-        if eq > 0 and s[eq-1] != " ":
-            s = s[:eq] + " " + s[eq:]
-            eq += 1
-        if eq + 1 < len(s) and s[eq+1] != " ":
-            s = s[:eq+1] + " " + s[eq+1:]
-    out = s.rstrip()
-    if sep:
-        out += " //" + cmt.strip()
-    return out
-
-
 # find the span of the top-level {...} block (not in comments)
 def find_top_level_brace_span(lines, start_i: int, end_i: int):
     depth = 0
@@ -316,43 +266,43 @@ def find_top_level_brace_span(lines, start_i: int, end_i: int):
         i = 0
         L = len(s)
         while i < L:
-            ch = s[i] 
+            ch = s[i]
             nxt = s[i+1] if i+1 < L else ""
-            if in_line: 
+            if in_line:
                 break
             if in_block:
-                if ch == "*" and nxt == "/": 
-                    in_block = False 
-                    i += 2 
+                if ch == "*" and nxt == "/":
+                    in_block = False
+                    i += 2
                     continue
-                i += 1 
+                i += 1
                 continue
-            if ch == "/" and nxt == "/": 
-                in_line = True 
+            if ch == "/" and nxt == "/":
+                in_line = True
                 i += 2
                 continue
-            if ch == "/" and nxt == "*": 
+            if ch == "/" and nxt == "*":
                 in_block = True
                 i += 2
                 continue
-            if ch == "{" and depth == 0: 
+            if ch == "{" and depth == 0:
                 open_pos = (j, i)
                 depth = 1
                 i += 1
                 continue
-            if ch == "{" and depth > 0: 
+            if ch == "{" and depth > 0:
                 depth += 1
                 i += 1
                 continue
             if ch == "}":
                 depth = max(0, depth - 1)
-                if depth == 0 and open_pos is not None: 
+                if depth == 0 and open_pos is not None:
                     return open_pos + (j, i)
                 i += 1
                 continue
-            if ch in "([<": 
+            if ch in "([<":
                 depth += 1
-            elif ch in ")]>": 
+            elif ch in ")]>":
                 depth = max(0, depth - 1)
             i += 1
     return None
@@ -381,42 +331,6 @@ def replace_block_atomic(lines, start_idx, end_idx, new_block_lines):
     return orig_span
 
 
-# find the index of the first non-space/tab character in code
-def first_token_start(code: str) -> int:
-    for k, ch in enumerate(code):
-        if not ch.isspace():
-            return k
-    return 0
-
-
-# align '=' across a list of 'segments' (strings without terminators).
-# keeps the original trailing '//' comment (if present).
-def _align_equals_segments(segments):
-    triples = []
-    max_lhs = 0
-    for seg in segments:
-        code, sep, cmt = seg.partition("//")
-        s = code.rstrip()
-        eq = find_assign_eq_top(s)
-        if eq == -1:
-            triples.append((None, s.rstrip(), (" //" + cmt.strip()) if sep else ""))
-            continue
-        lhs = s[:eq].rstrip()
-        rhs = s[eq+1:].lstrip()
-        max_lhs = max(max_lhs, len(lhs))
-        triples.append((lhs, rhs, (" //" + cmt.strip()) if sep else ""))
-
-    aligned = []
-    for lhs, rhs, cmt in triples:
-        if lhs is None:
-            aligned.append((rhs + cmt).rstrip())
-        else:
-            pad = " " * (max_lhs - len(lhs))
-            aligned.append(f"{lhs}{pad} = {rhs}{cmt}".rstrip())
-
-    return aligned
-
-
 ###############################################################################
 #
 # Check if file has correct properties, meaning that the file extension has to
@@ -429,7 +343,7 @@ def check_hdl_filename(filename):
         return False
     if (filename.find("tb") != -1):
         return False
-    
+
     return True
 
 
@@ -490,7 +404,7 @@ def detect_file_unit_(path: str):
                 return "package"
             if line.startswith("module "):
                 return "module"
-            
+
     return None
 
 
@@ -601,7 +515,7 @@ def check_extra_lines (module_path, list_of_lines, lw, edit_files, end_token="en
         if edit_files:
             list_of_lines[-1] += '\n'
             add_end_line = True
-    
+
     return add_end_line
 
 
@@ -646,7 +560,7 @@ def header_check_allowed (module_path):
 def check_copyright(file_path: str, list_of_lines, lw, edit_files):
 
     currentYear = datetime.now().year
-    
+
 #    license_header = """// ***************************************************************************
 #// ***************************************************************************
 #// Copyright (C) """ + str(currentYear) + """ Analog Devices, Inc. All rights reserved.
@@ -695,7 +609,7 @@ def check_copyright(file_path: str, list_of_lines, lw, edit_files):
         return 4
 
     line = list_of_lines[line_nb]
-    
+
     # capture the entire "years" sequence (single / range / comma-separated list)
     # examples matched by (?P<years>...):
     #   "2024"
@@ -744,8 +658,8 @@ def check_copyright(file_path: str, list_of_lines, lw, edit_files):
     prev_idx = len(parsed) - 2 if len(parsed) >= 2 else None
 
     proposed = [dict(p) for p in parsed]
-    
-    
+
+
     if last_num == currentYear:
         # current year is already present at the end
         if prev_num is not None:
@@ -763,7 +677,7 @@ def check_copyright(file_path: str, list_of_lines, lw, edit_files):
                             }
                         else:
                             proposed[prev_idx]["b"] = currentYear
-                        proposed.pop() 
+                        proposed.pop()
             # if dif > 1: list is correct; do nothing.
             # example: "2013-2020, 2025" stays as list (spacing may be normalized).
         # no penultimate and last == currentYear -> OK (no change). Example: "2025".
@@ -805,7 +719,7 @@ def check_copyright(file_path: str, list_of_lines, lw, edit_files):
     tail = tail.lstrip()
     tail = (' ' + tail) if tail else ''
     new_line = head + ' ' + proposed_text + tail
-   
+
     changed = (new_line != line)
 
     if edit_files and changed:
@@ -813,7 +727,7 @@ def check_copyright(file_path: str, list_of_lines, lw, edit_files):
         list_of_lines[line_nb] = new_line
         lw.append(file_path + " : license header updated by the script")
         header_status = 1
-        
+
     elif not edit_files and changed:
         # files not to be edited and header is not up-to-date
         lw.append(file_path + " : license header cannot be updated")
@@ -821,9 +735,9 @@ def check_copyright(file_path: str, list_of_lines, lw, edit_files):
     else:
         # files can be changed and header got updated
         header_status = 2
-    
+
     return header_status
-  
+
 
 ###############################################################################
 #
@@ -1000,343 +914,6 @@ def _check_typedef_block(idx, line_nb, list_of_lines, lw, edit_files, state):
 
 ###############################################################################
 #
-# Check/normalize a localparam block.
-# Handles both list-style and brace-initializer style:
-#  - Base indent must be even and >= base_min_indent (default 2)
-#  - For brace style:
-#      * header and '{' on same line, with first item glued right after '{'
-#      * inner items at +2 indent, aligned by a column anchor
-#      * comments aligned after longest code + 4 spaces
-#      * last item ends with '};' (final comment, if any, is attached here)
-#  - For list style:
-#      * 'localparam' on its own line
-#      * each item on its own line at +2 indent
-#      * alignment of '=' across items
-# If edit_files is True, the block is reformatted as needed.
-###############################################################################
-def _check_localparam_block(idx, line_nb, list_of_lines, lw, edit_files, state,
-                            base_min_indent=2, align_equals=True, brace_comment_gap=4):
-
-    path = state.get("path", "<file>")
-    if idx >= len(list_of_lines):
-        return idx, line_nb
-    if not re.match(r"^\s*localparam\b", list_of_lines[idx]):
-        return idx, line_nb
-
-    # compute statement span (from 'localparam' to terminating ';')
-    start_idx = idx
-    end_idx = stmt_end_line(list_of_lines, start_idx)
-    if end_idx == -1:
-        emit_line_warning(lw, path, line_nb, start_idx, start_idx, "unterminated localparam (missing ';')")
-        return idx, line_nb
-
-    base_indent   = indent_of(list_of_lines[start_idx])
-    desired_base  = even_indent(base_indent)
-    desired_inner = desired_base + 2
-
-    code0, _ = split_code_comment_sl(list_of_lines[start_idx])
-
-    # Case 1: one-liner without commas - only indent check
-    if ";" in code0 and "," not in code0 and ("\n" not in list_of_lines[start_idx]):
-        if base_indent != desired_base:
-            emit_line_warning(lw, path, line_nb, start_idx, start_idx,
-                                    f"indent for 'localparam' must be multiple of 2 and >= {base_min_indent}")
-            if edit_files:
-                list_of_lines[start_idx] = (" " * desired_base) + list_of_lines[start_idx].lstrip()
-                state["edited"] = True
-        return idx, line_nb
-
-   # Case 2: brace-initializer form (= '{ ... };)
-    brace_span = find_top_level_brace_span(list_of_lines, start_idx, end_idx)
-    if brace_span is not None:
-        open_l, open_c, close_l, close_c = brace_span
-
-        # collect header tokens before '{'
-        header_tokens = []
-        if open_l > start_idx:
-            for h in range(start_idx, open_l):
-                code_h, _ = split_code_comment_sl(list_of_lines[h])
-                t = code_h.strip()
-                if t:
-                    header_tokens.append(t)
-
-        # use the indent of the initial 'localparam' line as anchor
-        open_line   = list_of_lines[open_l]
-        open_indent = indent_of(open_line)
-        new_open_indent = even_indent(base_indent)
-        if open_indent != new_open_indent:
-            emit_line_warning(lw, path, line_nb, start_idx, open_l,
-                                    f"indent for 'localparam' header must be multiple of 2 and >= {base_min_indent}")
-
-        token_before_brace = open_line[open_indent:open_c].strip()
-        if token_before_brace:
-            header_tokens.append(token_before_brace)
-
-        header_head = " ".join(header_tokens).rstrip()
-
-        if header_head.endswith("= '"):
-            # case: = '{...};
-            header_prefix = (" " * new_open_indent) + header_head + "{"
-        else:
-            # case: = {...};
-            header_prefix = (" " * new_open_indent) + header_head + " {"
-
-        header_prefix_len = len(header_prefix)
-
-        desired_base  = new_open_indent
-        desired_inner = desired_base + 2
-        inner_indent      = " " * desired_inner
-        inner_indent_len  = len(inner_indent)
-
-        inner_text = extract_between_braces(list_of_lines, open_l, open_c, close_l, close_c)
-
-        # split inner text by top-level commas, keeping comments attached to items
-        items = []
-        buf = []
-        depth = 0
-        i = 0
-        L = len(inner_text)
-        trailing_cmt_for_prev = ""
-        at_item_start = True
-
-        # helper: push current buffer as item (if any)
-        def flush_item():
-            nonlocal trailing_cmt_for_prev
-            if trailing_cmt_for_prev and items:
-                c = items[-1]["cmt"]
-                items[-1]["cmt"] = (c + (" " if c and not c.endswith(" ") else "") + trailing_cmt_for_prev.strip()).strip()
-            trailing_cmt_for_prev = ""
-            code = "".join(buf).strip()
-            buf.clear()
-            if code: items.append({"code": code, "cmt": "", "apos": 0})
-
-        # scan inner text char by char
-        while i < L:
-            ch = inner_text[i]
-            nxt = inner_text[i+1] if i+1 < L else ""
-
-            if ch == "/" and nxt == "/":
-                j = i + 2
-                while j < L and inner_text[j] != "\n": j += 1
-                cmt_text = "//" + inner_text[i+2:j]
-                if at_item_start: trailing_cmt_for_prev += " " + cmt_text
-                else: buf.append(cmt_text)
-                i = j
-                continue
-
-            if ch == "/" and nxt == "*":
-                j = i + 2
-                while j+1 < L and not (inner_text[j] == "*" and inner_text[j+1] == "/"): j += 1
-                j2 = min(j+2, L)
-                cmt_text = inner_text[i:j2]
-                if at_item_start: trailing_cmt_for_prev += " " + cmt_text
-                else: buf.append(cmt_text)
-                i = j2
-                continue
-
-            if ch == "\n":
-                buf.append(ch)
-                i += 1
-                continue
-            if ch in "([{":
-                 depth += 1
-                 buf.append(ch)
-                 at_item_start = False
-                 i += 1
-                 continue
-            if ch in ")]}":
-                 depth = max(0, depth - 1)
-                 buf.append(ch)
-                 at_item_start = False
-                 i += 1
-                 continue
-
-            if ch == "," and depth == 0:
-                flush_item()
-                at_item_start = True
-                i += 1
-                continue
-
-            if not ch.isspace():
-                at_item_start = False
-            buf.append(ch)
-            i += 1
-
-        flush_item()
-        if not items:
-            return idx, line_nb
-
-        for it in items:
-            code0 = strip_trailing_semicol(it["code"])
-
-            code_sl, sep_sl, cmt_sl = code0.partition("//")
-            if sep_sl:
-                code1 = code_sl.rstrip()
-                cmt_extra = "//" + cmt_sl.strip()
-            else:
-                m = re.search(r"(.*?)(/\*.*?\*/)\s*$", code0)
-                if m:
-                    code1 = m.group(1).rstrip()
-                    cmt_extra = m.group(2).strip()
-                else:
-                    code1 = code0.rstrip()
-                    cmt_extra = ""
-
-            it["code"] = soft_norm_eq_keep_cmt(code1)
-            if cmt_extra:
-                it["cmt"] = (it["cmt"] + " " + cmt_extra).strip() if it["cmt"] else cmt_extra
-            it["apos"] = max(0, it["code"].find("'"))
-
-        # determine alignment anchor column (apostrophe or first token)
-        braces_same_line = (open_l == close_l)
-        if braces_same_line:
-            anchor_abs = header_prefix_len + (items[0]["apos"] if items[0]["apos"] > 0 else first_token_start(items[0]["code"]))
-        else:
-            tail = list_of_lines[open_l][open_c+1:]
-            p_apos = tail.find("'")
-            p_coma = tail.find(",")
-            if p_apos != -1 and (p_coma == -1 or p_apos < p_coma):
-                anchor_abs = header_prefix_len + p_apos
-            else:
-                anchor_abs = header_prefix_len + first_token_start(items[0]["code"])
-
-        # pre-render each line and measure longest code (for comment alignment)
-        prelim = []
-        max_abs_pre_len = 0
-
-        for k, it in enumerate(items):
-            base = (it["apos"] if it["apos"] > 0 else first_token_start(it["code"]))
-            if k == 0:
-                curr_base_abs = header_prefix_len + base
-                prefix = header_prefix         # glue first item to '{'
-            else:
-                curr_base_abs = inner_indent_len + base
-                prefix = inner_indent
-
-            # left padding to meet common anchor
-            need = max(0, anchor_abs - curr_base_abs)
-            pre_noprefix = (" " * need) + it["code"]
-
-            # add ',' for non-last items, '};' for last item
-            suff = "," if k < len(items) - 1 else "};"
-            pre_noprefix += suff
-
-            abs_pre_len = len(prefix) + len(pre_noprefix)
-            prelim.append((prefix, pre_noprefix, it["cmt"], abs_pre_len))
-            if abs_pre_len > max_abs_pre_len:
-                max_abs_pre_len = abs_pre_len
-
-        # final comment column = longest code + max(4, gap)
-        comment_abs_col = max_abs_pre_len + max(4, brace_comment_gap)
-
-        # attach final comment (after ';') to last item
-        last_stmt_raw = list_of_lines[end_idx].rstrip("\n")
-        _, _, final_cmt_sl = last_stmt_raw.partition("//")
-        if final_cmt_sl.strip():
-            final_cmt = "//" + final_cmt_sl.strip()
-        else:
-            mblk = re.search(r";\s*(/\*.*?\*/)\s*$", last_stmt_raw)
-            final_cmt = mblk.group(1) if mblk else ""
-        if final_cmt:
-            pfx, pre_np, cmt, abs_len = prelim[-1]
-            cmt = (cmt + " " + final_cmt).strip() if cmt else final_cmt
-            prelim[-1] = (pfx, pre_np, cmt, abs_len)
-
-        # construct the new normalized block
-        new_block_lines = []
-        for pfx, pre_np, cmt, abs_len in prelim:
-            line = pfx + pre_np
-            if cmt:
-                pad = " " * (comment_abs_col - abs_len)
-                line += pad + cmt
-            new_block_lines.append(line + "\n")
-
-        # replace block atomically if edit_files and changes are needed
-        old_block = list_of_lines[start_idx:end_idx+1]
-        old_norm  = [(ln.rstrip() + "\n") for ln in old_block]
-        new_norm  = new_block_lines
-        if old_norm != new_norm:
-            diff_line_warnings(
-                lw, path, line_nb, start_idx, old_norm, new_norm,
-                "normalize localparam {..}: header with '{' and first item; even indent >=2; align items; comments at longest+4; '};' on last"
-            )
-            if edit_files:
-                replace_block_atomic(list_of_lines, start_idx, end_idx, new_block_lines)
-                state["edited"] = True
-                delta = len(new_block_lines) - len(old_block)
-                return start_idx + len(new_block_lines) - 1, line_nb + delta
-        return idx, line_nb
-
-    # Case 3: list form without braces
-    mkw = re.search(r"\blocalparam\b", code0)
-    raw_after_kw = code0[mkw.end():] if mkw else ""
-    joined = raw_after_kw + "".join(list_of_lines[start_idx+1:end_idx+1])
-    cut = joined.rfind(";")
-    body = joined[:cut] if cut != -1 else joined
-
-    # split by commas at top level
-    parts_raw = [p.strip() for p in split_top_level_commas(body)]
-    is_list = len(parts_raw) > 1 or (start_idx != end_idx)
-    if not is_list: return idx, line_nb
-
-    had_issue = False
-    if base_indent != desired_base:
-        emit_line_warning(lw, path, line_nb, start_idx, start_idx,
-                                f"indent for 'localparam' must be multiple of 2 and >= {base_min_indent}")
-        had_issue = True
-    if raw_after_kw.strip():
-        emit_line_warning(lw, path, line_nb, start_idx, start_idx,
-                                "localparam list must start on a new line"); had_issue = True
-
-    for j in range(start_idx + 1, end_idx + 1):
-        s = list_of_lines[j]
-        code_j, cmt_j = split_code_comment_sl(s)
-        if code_j.strip() == "" and cmt_j: continue
-        if code_j.strip() == "": continue
-        if indent_of(s) != desired_inner:
-            emit_line_warning(lw, path, line_nb, start_idx, j,
-                                    "items in localparam list must be indented by +2 spaces (from 'localparam')")
-            had_issue = True
-
-    parts_clean = [strip_trailing_semicol(p) for p in parts_raw if p]
-    parts_soft  = [soft_norm_eq_keep_cmt(p) for p in parts_clean]
-
-    last_stmt_raw = list_of_lines[end_idx].rstrip("\n")
-    _, _, final_cmt_sl = last_stmt_raw.partition("//")
-    if final_cmt_sl.strip():
-        final_cmt = "//" + final_cmt_sl.strip()
-    else:
-        mblk = re.search(r";\s*(/\*.*?\*/)\s*$", last_stmt_raw)
-        final_cmt = mblk.group(1) if mblk else ""
-
-    chosen_segments = _align_equals_segments(parts_soft) if align_equals else parts_soft
-
-    # build normalized block inline (no inner helper)
-    new_block_aligned = []
-    new_block_aligned.append((" " * desired_base) + "localparam\n")
-    for k, seg in enumerate(chosen_segments):
-        term = "," if k < len(chosen_segments) - 1 else ";"
-        cmt  = (" " + final_cmt) if (k == len(chosen_segments) - 1 and final_cmt) else ""
-        new_block_aligned.append((" " * desired_inner) + seg + term + cmt + "\n")
-
-    # replace if different or layout issues found
-    old_block = list_of_lines[start_idx:end_idx+1]
-    old_len   = len(old_block)
-    old_norm  = [(ln.rstrip() + "\n") for ln in old_block]
-    new_norm  = new_block_aligned
-
-    if old_norm != new_norm or had_issue:
-        if edit_files:
-            list_of_lines[start_idx:end_idx+1] = new_block_aligned
-            state["edited"] = True
-            delta = len(new_block_aligned) - old_len
-            return start_idx + len(new_block_aligned) - 1, line_nb + delta
-
-    return idx, line_nb
-
-
-###############################################################################
-#
 # Check for guideline rules applied to module definitions and the entire file,
 # except for the module instances. They are processed in check_guideline_instances.
 # This can modify the files if edit_files is true.
@@ -1396,11 +973,10 @@ def get_and_check_module (module_path, lw, edit_files):
 
         if (pos_endmodule != -1):
             passed_endmodule = True
-        
-        # typedef, locaparam inside of the module
+
+        # typedef inside of the module
         if passed_module and (not passed_endmodule):
             idx, line_nb = _check_typedef_block(idx, line_nb, list_of_lines, lw, edit_files, typedef_state)
-            idx, line_nb = _check_localparam_block(idx, line_nb, list_of_lines, lw, edit_files, typedef_state)
 
         # GC: check for spaces at the end of line
         if (re.search(" +$", line) != None):
@@ -1614,7 +1190,7 @@ def get_and_check_module (module_path, lw, edit_files):
     # (and delete them, if desired)
     prev_length = len(list_of_lines)
     changed_extra = check_extra_lines (module_path, list_of_lines, lw, edit_files)
-    
+
 
     if (edit_files):
         # if at least one of the things was edited
@@ -1627,7 +1203,7 @@ def get_and_check_module (module_path, lw, edit_files):
 
             if extra_chars:
                 lw.append(module_path + " : removed extra spaces at the end of lines")
-            
+
             if changed_extra:
                 lw.append(module_path + " : add new line after end token")
 
@@ -1749,9 +1325,8 @@ def get_and_check_package(package_path, lw, edit_files):
 
         inside_pkg = passed_package and (not passed_endpackage)
         if inside_pkg:
-            # typedef, localparam normalization
+            # typedef normalization
             idx, line_nb = _check_typedef_block(idx, line_nb, list_of_lines, lw, edit_files, typedef_state)
-            idx, line_nb = _check_localparam_block(idx, line_nb, list_of_lines, lw, edit_files, typedef_state)
 
             # minimal indentation rule for other top-level lines (>= 2 spaces),
             # excluding lines with directives/backticks or comments.
@@ -1770,8 +1345,8 @@ def get_and_check_package(package_path, lw, edit_files):
     # Rewrite file if needed
     if edit_files:
         if (changed_pkg_line != -1 or changed_endpkg_line != -1
-            or extra_chars or (prev_length != len(list_of_lines)) 
-            or (header_status == 1) or typedef_state["edited"] 
+            or extra_chars or (prev_length != len(list_of_lines))
+            or (header_status == 1) or typedef_state["edited"]
             or changed_extra):
 
             rewrite_file(package_path, list_of_lines)
