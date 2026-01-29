@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ##############################################################################
-## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: BSD-1-Clause
 #
 # The purpose of this script:
@@ -174,6 +174,10 @@ for project in projects/*; do
         carrier_name=$(basename "$carrier")
 
         if [ "$carrier_name" = "common" ]; then
+            continue
+        fi
+
+        if [ "$carrier_name" = "scripts" ]; then
             continue
         fi
 
