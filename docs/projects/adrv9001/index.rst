@@ -230,6 +230,51 @@ the HDL repository.
    $cd hdl/projects/adrv9001/zcu102
    $make
 
+TX clock source selection (build-time)
+-------------------------------------------------------------------------------
+Two environment parameters control which clock drives each TX SSI interface.
+These are read in ``system_project.tcl`` and forwarded to the ``axi_adrv9001``
+IP as ``CONFIG.USE_RX_CLK_FOR_TX1/2``.
+
+``USE_RX_CLK_FOR_TX1``: Clock source for TX1
+
+- ``0`` = TX1 dedicated SSI reference clock
+- ``1`` = RX1 SSI clock
+- ``2`` = RX2 SSI clock
+
+``USE_RX_CLK_FOR_TX2``: Clock source for TX2
+
+- ``0`` = TX2 dedicated SSI reference clock
+- ``1`` = RX1 SSI clock
+- ``2`` = RX2 SSI clock
+
+Examples
+-------------------------------------------------------------------------------
+- Drive TX1 from RX1 and TX2 from RX2:
+
+.. code-block:: bash
+
+   make USE_RX_CLK_FOR_TX1=1 USE_RX_CLK_FOR_TX2=2
+
+- Drive TX channels from RX1:
+
+.. code-block:: bash
+
+   make USE_RX_CLK_FOR_TX1=1 USE_RX_CLK_FOR_TX2=1
+
+- LVDS interface with TX2 driven by RX1 clock:
+
+.. code-block:: bash
+
+   make CMOS_LVDS_N=0 USE_RX_CLK_FOR_TX1=2
+
+Notes
+-------------------------------------------------------------------------------
+- Defaults: ``system_project.tcl`` defaults both to ``0`` (dedicated TX clocks).
+  But, for LVDS builds on ZCU102, ``system_bd.tcl`` sets TX1=1 and TX2=2 to use
+  RX clocks by default.
+- Related IP parameters are also described in :ref:`axi_adrv9001` (library docs).
+
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
 Resources
