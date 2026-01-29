@@ -6,6 +6,7 @@
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
+source $ad_hdl_dir/projects/xcvr_wizard/scripts/adi_xcvr_xilinx.tcl
 
 # get_env_param retrieves parameter value from the environment if exists,
 # other case use the default value.
