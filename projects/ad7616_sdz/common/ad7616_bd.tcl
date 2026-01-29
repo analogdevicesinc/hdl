@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 ##--------------------------------------------------------------
@@ -53,12 +53,13 @@ if {$INTF == 1} {
 
   set data_width    16
   set async_spi_clk 1
+  set offload_en    1
   set num_cs        1
   set num_sdi       $NUM_OF_SDI
   set sdi_delay     1
   set hier_spi_engine spi_ad7616
 
-  spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $sdi_delay
+  spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $sdi_delay
 
   ad_ip_parameter axi_ad7616_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $data_width * $num_sdi]
   ad_ip_parameter axi_ad7616_dma CONFIG.DMA_TYPE_SRC 1
