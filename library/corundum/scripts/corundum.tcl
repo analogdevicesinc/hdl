@@ -33,8 +33,30 @@ if [info exists ::env(BOARD)] {
 }
 
 switch $board {
-  VCU118 -
-  XCVU11P {
+  ADRV9009ZU11EG {
+    create_bd_pin -dir O -type rst qsfp_rst
+    create_bd_pin -dir I qsfp_mgt_refclk_p
+    create_bd_pin -dir I qsfp_mgt_refclk_n
+
+    create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
+    create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 qsfp_iic
+  }
+  K26 {
+    create_bd_pin -dir I sfp_rx_p
+    create_bd_pin -dir I sfp_rx_n
+    create_bd_pin -dir O sfp_tx_p
+    create_bd_pin -dir O sfp_tx_n
+    create_bd_pin -dir I sfp_mgt_refclk_p
+    create_bd_pin -dir I sfp_mgt_refclk_n
+
+    create_bd_pin -dir O sfp_tx_disable
+    create_bd_pin -dir I sfp_tx_fault
+    create_bd_pin -dir I sfp_rx_los
+    create_bd_pin -dir I sfp_mod_abs
+    create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 sfp_iic
+  }
+  XCVU11P -
+  VCU118 {
     create_bd_pin -dir O -from 0 -to 0 -type rst qsfp_rst
     create_bd_pin -dir O fpga_boot
     create_bd_pin -dir O -type clk qspi_clk
@@ -60,28 +82,6 @@ switch $board {
 
     create_bd_pin -dir I -type clk clk_125mhz
     create_bd_pin -dir I -type rst rst_125mhz
-  }
-  ADRV9009ZU11EG {
-    create_bd_pin -dir O -type rst qsfp_rst
-    create_bd_pin -dir I qsfp_mgt_refclk_p
-    create_bd_pin -dir I qsfp_mgt_refclk_n
-
-    create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
-    create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 qsfp_iic
-  }
-  K26 {
-    create_bd_pin -dir I sfp_rx_p
-    create_bd_pin -dir I sfp_rx_n
-    create_bd_pin -dir O sfp_tx_p
-    create_bd_pin -dir O sfp_tx_n
-    create_bd_pin -dir I sfp_mgt_refclk_p
-    create_bd_pin -dir I sfp_mgt_refclk_n
-
-    create_bd_pin -dir O sfp_tx_disable
-    create_bd_pin -dir I sfp_tx_fault
-    create_bd_pin -dir I sfp_rx_los
-    create_bd_pin -dir I sfp_mod_abs
-    create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 sfp_iic
   }
 }
 
@@ -252,8 +252,8 @@ ad_ip_instance corundum_core corundum_core [list \
 ]
 
 switch $board {
-  K26 {
-    ad_ip_instance ethernet_k26 ethernet_core [list \
+  ADRV9009ZU11EG {
+    ad_ip_instance ethernet_adrv9009zu11eg ethernet_core [list \
       IF_COUNT $IF_COUNT \
       PORTS_PER_IF $PORTS_PER_IF \
       PORT_MASK $PORT_MASK \
@@ -265,8 +265,8 @@ switch $board {
       PFC_ENABLE $PFC_ENABLE \
     ]
   }
-  ADRV9009ZU11EG {
-    ad_ip_instance ethernet_adrv9009zu11eg ethernet_core [list \
+  K26 {
+    ad_ip_instance ethernet_k26 ethernet_core [list \
       IF_COUNT $IF_COUNT \
       PORTS_PER_IF $PORTS_PER_IF \
       PORT_MASK $PORT_MASK \
@@ -275,34 +275,7 @@ switch $board {
       ENABLE_PADDING $ENABLE_PADDING \
       ENABLE_DIC $ENABLE_DIC \
       MIN_FRAME_LENGTH $MIN_FRAME_LENGTH \
-      PFC_ENABLE $PFC_ENABLE
-    ]
-  }
-  VCU118 {
-    ad_ip_instance ethernet_vcu118 ethernet_core [list \
-      TDMA_BER_ENABLE $TDMA_BER_ENABLE \
-      QSFP_CNT $QSFP_CNT \
-      IF_COUNT $IF_COUNT \
-      PORTS_PER_IF $PORTS_PER_IF \
-      SCHED_PER_IF $SCHED_PER_IF \
-      PORT_COUNT $PORT_COUNT \
-      PORT_MASK $PORT_MASK \
-      PTP_TS_WIDTH $PTP_TS_WIDTH \
-      TX_TAG_WIDTH $TX_TAG_WIDTH \
-      TDMA_INDEX_WIDTH $TDMA_INDEX_WIDTH \
-      PTP_TS_ENABLE $PTP_TS_ENABLE \
-      PTP_TS_FMT_TOD $PTP_TS_FMT_TOD \
-      AXIL_CTRL_DATA_WIDTH $AXIL_CTRL_DATA_WIDTH \
-      AXIL_CTRL_ADDR_WIDTH $AXIL_CTRL_ADDR_WIDTH \
-      AXIL_CTRL_STRB_WIDTH $AXIL_CTRL_STRB_WIDTH \
-      AXIL_CSR_ADDR_WIDTH $AXIL_CSR_ADDR_WIDTH \
-      AXIL_IF_CTRL_ADDR_WIDTH $AXIL_IF_CTRL_ADDR_WIDTH \
-      ETH_RX_CLK_FROM_TX $ETH_RX_CLK_FROM_TX \
-      ETH_RS_FEC_ENABLE $ETH_RS_FEC_ENABLE \
-      AXIS_DATA_WIDTH $AXIS_DATA_WIDTH \
-      AXIS_KEEP_WIDTH $AXIS_KEEP_WIDTH \
-      AXIS_TX_USER_WIDTH $AXIS_TX_USER_WIDTH \
-      AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH
+      PFC_ENABLE $PFC_ENABLE \
     ]
   }
   XCVU11P {
@@ -329,7 +302,34 @@ switch $board {
       AXIS_DATA_WIDTH $AXIS_DATA_WIDTH \
       AXIS_KEEP_WIDTH $AXIS_KEEP_WIDTH \
       AXIS_TX_USER_WIDTH $AXIS_TX_USER_WIDTH \
-      AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH
+      AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
+    ]
+  }
+  VCU118 {
+    ad_ip_instance ethernet_vcu118 ethernet_core [list \
+      TDMA_BER_ENABLE $TDMA_BER_ENABLE \
+      QSFP_CNT $QSFP_CNT \
+      IF_COUNT $IF_COUNT \
+      PORTS_PER_IF $PORTS_PER_IF \
+      SCHED_PER_IF $SCHED_PER_IF \
+      PORT_COUNT $PORT_COUNT \
+      PORT_MASK $PORT_MASK \
+      PTP_TS_WIDTH $PTP_TS_WIDTH \
+      TX_TAG_WIDTH $TX_TAG_WIDTH \
+      TDMA_INDEX_WIDTH $TDMA_INDEX_WIDTH \
+      PTP_TS_ENABLE $PTP_TS_ENABLE \
+      PTP_TS_FMT_TOD $PTP_TS_FMT_TOD \
+      AXIL_CTRL_DATA_WIDTH $AXIL_CTRL_DATA_WIDTH \
+      AXIL_CTRL_ADDR_WIDTH $AXIL_CTRL_ADDR_WIDTH \
+      AXIL_CTRL_STRB_WIDTH $AXIL_CTRL_STRB_WIDTH \
+      AXIL_CSR_ADDR_WIDTH $AXIL_CSR_ADDR_WIDTH \
+      AXIL_IF_CTRL_ADDR_WIDTH $AXIL_IF_CTRL_ADDR_WIDTH \
+      ETH_RX_CLK_FROM_TX $ETH_RX_CLK_FROM_TX \
+      ETH_RS_FEC_ENABLE $ETH_RS_FEC_ENABLE \
+      AXIS_DATA_WIDTH $AXIS_DATA_WIDTH \
+      AXIS_KEEP_WIDTH $AXIS_KEEP_WIDTH \
+      AXIS_TX_USER_WIDTH $AXIS_TX_USER_WIDTH \
+      AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
     ]
   }
 }
@@ -393,8 +393,8 @@ switch $board {
 
     ad_connect ethernet_core/iic qsfp_iic
   }
-  VCU118 -
-  XCVU11P {
+  XCVU11P -
+  VCU118 {
     ad_connect ethernet_core/clk_125mhz clk_125mhz
     ad_connect ethernet_core/rst_125mhz rst_125mhz
     ad_connect ethernet_core/qsfp_drp_clk clk_125mhz
