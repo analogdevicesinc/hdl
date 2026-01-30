@@ -21,38 +21,40 @@ source ../common/create_pynq_mb_subsystem.tcl
 # -----------------------
 create_pynq_mb_subsystem IOP1
 
-# Connect IOP1 signals
-# Note: IOP1 data pins are left unconnected (not connected to physical pins)
-# Only IOP0 is connected to the physical data_bd pins
-# IOP1 can still be used for internal processing, DDR access, etc.
+
 ad_cpu_interrupt ps-13 mb-12 IOP1/intr_req
 
-# Create AXI interconnect for IOP M_AXI connections to HP0
-#ad_ip_instance axi_interconnect axi_iop_hp0_interconnect
-#ad_ip_parameter axi_iop_hp0_interconnect CONFIG.NUM_MI 1
-#ad_ip_parameter axi_iop_hp0_interconnect CONFIG.NUM_SI 2
+#ad_connect sys_cpu_resetn IOP1/aux_reset_in
 
-#ad_connect sys_cpu_clk axi_iop_hp0_interconnect/ACLK
-# ad_connect sys_cpu_clk axi_iop_hp0_interconnect/S00_ACLK
-# ad_connect sys_cpu_clk axi_iop_hp0_interconnect/S01_ACLK
-# ad_connect sys_cpu_clk axi_iop_hp0_interconnect/M00_ACLK
-# ad_connect sys_cpu_resetn axi_iop_hp0_interconnect/ARESETN
-# ad_connect sys_cpu_resetn axi_iop_hp0_interconnect/S00_ARESETN
-# ad_connect sys_cpu_resetn axi_iop_hp0_interconnect/S01_ARESETN
-
-
-#ad_ip_parameter axi_hp0_interconnect CONFIG.NUM_SI 2
-
-
-# Connect reset signals
-
-ad_connect sys_cpu_resetn IOP1/aux_reset_in
+#ad_mem_hp0_interconnect sys_cpu_clk IOP1/M_AXI
+#add SPI
+create_bd_port -dir I  SPI_0_io0_i
+create_bd_port -dir O  SPI_0_io0_o
+create_bd_port -dir O  SPI_0_io0_t
+create_bd_port -dir I  SPI_0_io1_i
+create_bd_port -dir O  SPI_0_io1_o
+create_bd_port -dir O  SPI_0_io1_t
+create_bd_port -dir I  SPI_0_sck_i
+create_bd_port -dir O  SPI_0_sck_o
+create_bd_port -dir O  SPI_0_sck_t
+create_bd_port -dir I  SPI_0_ss_i
+create_bd_port -dir O  SPI_0_ss_o
+create_bd_port -dir O  SPI_0_ss_t
 
 
-# Connect IOP1 M_AXI to interconnect for HP0 memory access
-ad_mem_hp0_interconnect sys_cpu_clk IOP1/M_AXI
-#ad_connect IOP1/M_AXI axi_hp0_interconnect/S01_AXI
+ad_connect    SPI_0_io0_i   IOP1/SPI_0_io0_i
+ad_connect    SPI_0_io0_o   IOP1/SPI_0_io0_o
+ad_connect    SPI_0_io0_t   IOP1/SPI_0_io0_t
+ad_connect    SPI_0_io1_i   IOP1/SPI_0_io1_i
+ad_connect    SPI_0_io1_o   IOP1/SPI_0_io1_o
+ad_connect    SPI_0_io1_t   IOP1/SPI_0_io1_t
+ad_connect    SPI_0_sck_i   IOP1/SPI_0_sck_i
+ad_connect    SPI_0_sck_o   IOP1/SPI_0_sck_o
+ad_connect    SPI_0_sck_t   IOP1/SPI_0_sck_t
+ad_connect    SPI_0_ss_i    IOP1/SPI_0_ss_i
+ad_connect    SPI_0_ss_o    IOP1/SPI_0_ss_o
+ad_connect    SPI_0_ss_t    IOP1/SPI_0_ss_t
 
-# Create address segment for IOP1 to access DDR memory
-create_bd_addr_seg -range 0x20000000 -offset 0x00000000 [get_bd_addr_spaces IOP1/IOP1_mb/Data] \
-                    [get_bd_addr_segs sys_ps7/S_AXI_HP0/HP0_DDR_LOWOCM] SEG_sys_ps7_HP0_DDR_LOWOCM
+#GPIO
+create_bd_port -dir O  data_o
+ad_connect    data_o   IOP1/data_o
