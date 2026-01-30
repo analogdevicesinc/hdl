@@ -5,10 +5,10 @@
 
 # SPI interface
 
-#set_property -dict {PACKAGE_PIN L17 IOSTANDARD LVCMOS33}                 [get_ports admx100x_spi_sclk]; ## D17   FMC_LA13_P
-#set_property -dict {PACKAGE_PIN K20 IOSTANDARD LVCMOS33}                 [get_ports admx100x_spi_miso]; ## C19   FMC_LA14_N
-#set_property -dict {PACKAGE_PIN J16 IOSTANDARD LVCMOS33}                 [get_ports admx100x_spi_mosi]; ## H19   FMC_LA15_P
-#set_property -dict {PACKAGE_PIN J20 IOSTANDARD LVCMOS33}                 [get_ports admx100x_spi_cs_0]; ## G18   FMC_LA16_P  CS_FPGA
+set_property -dict {PACKAGE_PIN Y11 IOSTANDARD LVCMOS33}                 [get_ports SPI_0_sck_o];  #JA1 Pmod 
+set_property -dict {PACKAGE_PIN AA11 IOSTANDARD LVCMOS33}                 [get_ports SPI_0_io1_i_miso]; #JA2
+set_property -dict {PACKAGE_PIN Y10 IOSTANDARD LVCMOS33}                 [get_ports SPI_0_io0_o_mosi  ];#JA3 
+set_property -dict {PACKAGE_PIN AA9 IOSTANDARD LVCMOS33}                 [get_ports SPI_0_ss_o_cs_n ]; #JA4
 #set_property -dict {PACKAGE_PIN D22 IOSTANDARD LVCMOS33}                 [get_ports admx100x_spi_cs_1]; ## G27   FMC_LA25_P  CS_DAC
 #
 # reset and GPIO signal
@@ -50,3 +50,7 @@ set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[29]]      ; ## XADC
 set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[30]]      ; ## XADC-GIO3
 
 set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[31]]      ; ## OTG-RESETN
+
+
+#GPIO LED
+set_property -dict {PACKAGE_PIN T21 IOSTANDARD LVCMOS33}    [get_ports LED];

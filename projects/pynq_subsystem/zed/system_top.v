@@ -81,7 +81,15 @@ module system_top (
   inout   [ 1:0]  iic_mux_scl,
   inout   [ 1:0]  iic_mux_sda,
 
-  input           otg_vbusoc
+  input           otg_vbusoc,
+
+  output  SPI_0_io0_o_mosi,
+  input   SPI_0_io1_i_miso,
+  output  SPI_0_sck_o,
+  output  SPI_0_ss_o_cs_n,
+
+  output LED
+
 
 );
 
@@ -96,9 +104,11 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
+  wire [1:0] data_o;
 
   // gpio assigz
 
+  assign LED =data_o[0];
   assign gpio_i[63:32] = gpio_o[63:32];
 
   // instantiations
@@ -196,6 +206,23 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o ());
+    .spi1_sdo_o (),
 
+    .SPI_0_io0_i (1'b0),
+    .SPI_0_io0_o (SPI_0_io0_o_mosi),
+    .SPI_0_io0_t (1'b0),
+    .SPI_0_io1_i (SPI_0_io1_i_miso),
+    .SPI_0_io1_o(),
+    .SPI_0_io1_t(1'b1),
+    .SPI_0_sck_i (1'b0),
+    .SPI_0_sck_o(SPI_0_sck_o),
+    .SPI_0_sck_t (1'b0),
+    .SPI_0_ss_i(1'b1),
+    .SPI_0_ss_o(SPI_0_ss_o_cs_n), //active low
+    .SPI_0_ss_t (),
+    
+    .data_o(data_o));
+
+     
+   
 endmodule
