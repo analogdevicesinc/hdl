@@ -48,19 +48,21 @@ ad_connect sys_cpu_resetn ad469x_trigger_gen/s_axi_aresetn
 
 # trigger to BUSY's negative edge
 
-create_bd_cell -type module -reference sync_bits busy_sync
-create_bd_cell -type module -reference ad_edge_detect busy_capture
-set_property -dict [list CONFIG.EDGE 1] [get_bd_cells busy_capture]
+#create_bd_cell -type module -reference sync_bits busy_sync
+#create_bd_cell -type module -reference ad_edge_detect busy_capture
+#set_property -dict [list CONFIG.EDGE 1] [get_bd_cells busy_capture]
 
-ad_connect spi_clk busy_capture/clk
-ad_connect busy_capture/rst GND
+#ad_connect spi_clk busy_capture/clk
+#ad_connect busy_capture/rst GND
 
-ad_connect busy_sync/out_resetn $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn
-ad_connect spi_clk busy_sync/out_clk
-ad_connect busy_sync/in_bits ad469x_spi_busy
-ad_connect busy_sync/out_bits busy_capture/signal_in
-ad_connect busy_capture/signal_out $hier_spi_engine/trigger
+#ad_connect busy_sync/out_resetn $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn
+#ad_connect spi_clk busy_sync/out_clk
+#ad_connect busy_sync/in_bits ad469x_spi_busy
+#ad_connect busy_sync/out_bits busy_capture/signal_in
+#ad_connect busy_capture/signal_out $hier_spi_engine/trigger
 
+ad_connect $hier_spi_engine/trigger ad469x_trigger_gen/pwm_0
+#
 # dma to receive data stream
 
 ad_ip_instance axi_dmac axi_ad469x_dma
@@ -84,27 +86,27 @@ ad_connect spi_clk $hier_spi_engine/spi_clk
 ad_connect $hier_spi_engine/m_spi ad469x_spi
 ad_connect axi_ad469x_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
 
-ad_ip_instance ilvector_logic cnv_gate
-ad_ip_parameter cnv_gate CONFIG.C_SIZE 1
-ad_ip_parameter cnv_gate CONFIG.C_OPERATION {and}
+#ad_ip_instance ilvector_logic cnv_gate
+#ad_ip_parameter cnv_gate CONFIG.C_SIZE 1
+#ad_ip_parameter cnv_gate CONFIG.C_OPERATION {and}
 
-ad_ip_instance ilvector_logic cnv_gate_busy
-ad_ip_parameter cnv_gate_busy CONFIG.C_SIZE 1
-ad_ip_parameter cnv_gate_busy CONFIG.C_OPERATION {and}
+#ad_ip_instance ilvector_logic cnv_gate_busy
+#ad_ip_parameter cnv_gate_busy CONFIG.C_SIZE 1
+#ad_ip_parameter cnv_gate_busy CONFIG.C_OPERATION {and}
 
-ad_ip_instance ilvector_logic cnv_gate_gpio
-ad_ip_parameter cnv_gate_gpio CONFIG.C_SIZE 1
-ad_ip_parameter cnv_gate_gpio CONFIG.C_OPERATION {or}
+#ad_ip_instance ilvector_logic cnv_gate_gpio
+#ad_ip_parameter cnv_gate_gpio CONFIG.C_SIZE 1
+#ad_ip_parameter cnv_gate_gpio CONFIG.C_OPERATION {or}
 
-ad_connect cnv_gate/Op1 axi_ad469x_dma/s_axis_xfer_req
-ad_connect cnv_gate/Op2 ad469x_trigger_gen/pwm_0
+#ad_connect cnv_gate/Op1 axi_ad469x_dma/s_axis_xfer_re
+#ad_connect cnv_gate/Op2 ad469x_trigger_gen/pwm_0
 
-ad_connect cnv_gate_busy/Op1 cnv_gate/Res
-ad_connect cnv_gate_busy/Op2 ad469x_spi_busy
+#ad_connect cnv_gate_busy/Op1 cnv_gate/Re
+#ad_connect cnv_gate_busy/Op2 ad469x_spi_busy
 
-ad_connect cnv_gate_gpio/Op1 cnv_gate_busy/Res
-ad_connect cnv_gate_gpio/Op2 gpio_cnv
-ad_connect cnv_gate_gpio/Res ad469x_spi_cnv
+#ad_connect cnv_gate_gpio/Op1 cnv_gate_busy/Res
+#ad_connect cnv_gate_gpio/Op2 gpio_cnv
+#ad_connect cnv_gate_gpio/Res ad469x_spi_cnv
 
 ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44a30000 axi_ad469x_dma
