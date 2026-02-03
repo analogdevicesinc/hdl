@@ -96,7 +96,7 @@ module system_top #(
 
   input           ad9740_clk_p,
   input           ad9740_clk_n,
-  output  [13:0]  ad9740_data
+(* MARK_DEBUG = "TRUE" *)  output  [13:0]  ad9740_data
 );
 
   localparam ZERO_BITS = 14 - DAC_RESOLUTION;
@@ -111,13 +111,10 @@ module system_top #(
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
   wire            ad9740_clk_ds;
-  wire            ad9740_clk_bufg;
   wire            ad9740_clk;
-  wire            ad9740_pll_locked;
-  wire            ad9740_pll_fb;
   wire    [27:0]  ad9740_data_int;
-  wire    [13:0]  ad9740_data_d1;
-  wire    [13:0]  ad9740_data_d2;
+(* MARK_DEBUG = "TRUE" *)  wire    [13:0]  ad9740_data_d1;
+(* MARK_DEBUG = "TRUE" *)  wire    [13:0]  ad9740_data_d2;
 
   assign gpio_i[63:32] = gpio_o[63:32];
   assign adf4351_ce = 1'b1;
@@ -126,43 +123,19 @@ module system_top #(
   assign ad9740_data_d1 = ad9740_data_int[13:0];
   assign ad9740_data_d2 = ad9740_data_int[27:14];
 
-  // Differential input buffer for DAC clock (210 MHz)
-  IBUFDS i_ad9740_clk_ibuf_ds (
+  // Differential input buffer for DAC clock
+  IBUFGDS i_ad9740_clk_ibuf_ds (
     .I (ad9740_clk_p),
     .IB (ad9740_clk_n),
     .O (ad9740_clk_ds));
 
-  // PLL: divide input clock by 2 for logic, ODDR outputs DDR data
-  // Optimized for wide frequency range: 107 MHz to 210 MHz input
-  // VCO = CLKIN * 15 / 2 = CLKIN * 7.5 (valid range: 802-1575 MHz)
-  // CLKOUT = VCO / 15 = CLKIN / 2
-  PLLE2_BASE #(
-    .BANDWIDTH          ("OPTIMIZED"),
-    .CLKFBOUT_MULT      (15),         // VCO = CLKIN * 15 / 2
-    .CLKFBOUT_PHASE     (0.0),
-    .CLKIN1_PERIOD      (4.761),      // 210 MHz nominal (adjust for actual freq)
-    .CLKOUT0_DIVIDE     (15),         // CLKOUT = VCO / 15 = CLKIN / 2
-    .CLKOUT0_DUTY_CYCLE (0.5),
-    .CLKOUT0_PHASE      (0.0),
-    .DIVCLK_DIVIDE      (2),          // Divide input by 2 before multiplier
-    .REF_JITTER1        (0.010),
-    .STARTUP_WAIT       ("FALSE")
-  ) i_ad9740_pll (
-    .CLKFBOUT (ad9740_pll_fb),
-    .CLKOUT0  (ad9740_clk_bufg),
-    .CLKOUT1  (),
-    .CLKOUT2  (),
-    .CLKOUT3  (),
-    .CLKOUT4  (),
-    .CLKOUT5  (),
-    .LOCKED   (ad9740_pll_locked),
-    .CLKFBIN  (ad9740_pll_fb),
-    .CLKIN1   (ad9740_clk_ds),
-    .PWRDWN   (1'b0),
-    .RST      (1'b0));
-
-  BUFG i_ad9740_clk_bufg (
-    .I (ad9740_clk_bufg),
+  // BUFR: divide input clock by 2 for logic, ODDR outputs DDR data
+  BUFR #(
+    .BUFR_DIVIDE ("2")
+  ) i_ad9740_clk_bufr (
+    .CLR (1'b0),
+    .CE (1'b1),
+    .I (ad9740_clk_ds),
     .O (ad9740_clk));
 
   // ODDR primitives for DAC data output (DDR on 105 MHz = 210 MSPS)

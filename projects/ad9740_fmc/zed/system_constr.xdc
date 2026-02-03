@@ -35,7 +35,10 @@ set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE
 # clocks
 
 # Input clock at FPGA pad (210 MHz from ADF4351)
-create_clock -period 4.761 -name ad9740_clk_in [get_ports ad9740_clk_p]
+#create_clock -period 4.761 -name ad9740_clk_in [get_ports ad9740_clk_p]
+
+# Input clock at FPGA pad (250 MHz from ADF4351)
+create_clock -period 4 -name ad9740_clk_in [get_ports ad9740_clk_p]
 
 # PLL generates 105 MHz clock for logic (div by 2)
 # The generated clock is automatically created by Vivado from the PLL
@@ -51,9 +54,10 @@ create_clock -period 4.761 -name ad9740_dac_clk
 
 # Output delay constraints for ODDR data pins
 # AD9744 datasheet specs: tS (setup) = 2.0ns, tH (hold) = 1.5ns
-# These are relative to the external DAC clock (ad9740_dac_clk)
-set_output_delay -clock ad9740_dac_clk -max 2.000 [get_ports ad9740_data[*]]
-set_output_delay -clock ad9740_dac_clk -min -1.500 [get_ports ad9740_data[*]]
+# PCB propagation delay: 0.7ns (estimated for ~10cm trace on ZedBoard FR-4)
+# Total: max = tS + tPCB = 2.7ns, min = -tH + tPCB = -0.8ns
+set_output_delay -clock ad9740_dac_clk -max 2.700 [get_ports ad9740_data[*]]
+set_output_delay -clock ad9740_dac_clk -min -0.800 [get_ports ad9740_data[*]]
 
 # False path between unrelated clock domains
 set_false_path -from [get_clocks ad9740_clk] -to [get_clocks ad9740_dac_clk]

@@ -26,6 +26,8 @@ ad_ip_parameter ad9740_dma CONFIG.DMA_DATA_WIDTH_DEST 32
 ad_ip_instance axi_ad9740 ad9740_dac
 ad_ip_parameter ad9740_dac CONFIG.DAC_RESOLUTION $DAC_RESOLUTION
 ad_ip_parameter ad9740_dac CONFIG.CLK_RATIO 2
+ad_ip_parameter ad9740_dac CONFIG.DDS_CORDIC_DW 18
+ad_ip_parameter ad9740_dac CONFIG.DDS_CORDIC_PHASE_DW 18
 
 # clocks
 
