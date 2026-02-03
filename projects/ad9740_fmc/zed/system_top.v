@@ -96,7 +96,7 @@ module system_top #(
 
   input           ad9740_clk_p,
   input           ad9740_clk_n,
-(* MARK_DEBUG = "TRUE" *)  output  [13:0]  ad9740_data
+  output  [13:0]  ad9740_data
 );
 
   localparam ZERO_BITS = 14 - DAC_RESOLUTION;
@@ -113,8 +113,8 @@ module system_top #(
   wire            ad9740_clk_ds;
   wire            ad9740_clk;
   wire    [27:0]  ad9740_data_int;
-(* MARK_DEBUG = "TRUE" *)  wire    [13:0]  ad9740_data_d1;
-(* MARK_DEBUG = "TRUE" *)  wire    [13:0]  ad9740_data_d2;
+  wire    [13:0]  ad9740_data_d1;
+  wire    [13:0]  ad9740_data_d2;
 
   assign gpio_i[63:32] = gpio_o[63:32];
   assign adf4351_ce = 1'b1;
