@@ -374,7 +374,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :external+documentation:doc:`ADRV9009 & ADRV9008 Prototyping Platform User Guide <eval/user-guide/transceiver/adrv9009/index>`
+- :external+documentation:ref:`ADRV9009 & ADRV9008 Prototyping Platform User Guide <adrv9009>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -385,7 +385,7 @@ Here you can find the quick start guides available for these evaluation boards:
    * - Evaluation board
      - Zynq UltraScale+ MP
    * - ADRV9009/ADRV9008
-     - :external+documentation:doc:`ZCU102 <eval/user-guide/transceiver/adrv9009/quickstart/zynqmp>`
+     - :external+documentation:ref:`adrv9009 quickstart zynqmp`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
