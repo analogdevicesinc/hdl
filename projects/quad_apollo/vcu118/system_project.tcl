@@ -24,7 +24,7 @@ source ../../../projects/scripts/adi_board.tcl
 #   [RX/TX]_JESD_NP : Number of bits per sample
 #   [RX/TX]_NUM_LINKS : Number of links
 #
-set mcs_mode SLAVE
+set mcs_mode MASTER
 
 if {[info exists ::env(MCS_MODE)]} {
   set mcs_mode $::env(MCS_MODE)
@@ -68,13 +68,11 @@ switch $mcs_mode {
   MASTER {
     adi_project_files ad_xband16_ebz_vcu118 [list \
       "system_top_master.v" \
-      "master_constr.xdc" \
     ]
   }
   SLAVE {
     adi_project_files ad_xband16_ebz_vcu118 [list \
       "system_top_slave.v" \
-      "slave_constr.xdc" \
     ]
   }
 }

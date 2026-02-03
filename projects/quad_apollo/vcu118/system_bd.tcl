@@ -169,7 +169,7 @@ ad_ip_instance axi_quad_spi axi_spi_3
 ad_ip_parameter axi_spi_3 CONFIG.C_USE_STARTUP 0
 ad_ip_parameter axi_spi_3 CONFIG.C_NUM_SS_BITS 8
 ad_ip_parameter axi_spi_3 CONFIG.C_SCK_RATIO 16
-ad_ip_parameter axi_spi_3 CONFIG.Multiples16 [expr {$MCS_MODE == "SLAVE" ? 64 : 16}]
+ad_ip_parameter axi_spi_3 CONFIG.Multiples16 16
 
 ad_connect spi_3_csn_i axi_spi_3/ss_i
 ad_connect spi_3_csn_o axi_spi_3/ss_o
@@ -189,35 +189,3 @@ set_property range 256K [get_bd_addr_segs {sys_mb/Data/SEG_data_axi_hsci_0}]
 set_property range 256K [get_bd_addr_segs {sys_mb/Data/SEG_data_axi_hsci_1}]
 set_property range 256K [get_bd_addr_segs {sys_mb/Data/SEG_data_axi_hsci_2}]
 set_property range 256K [get_bd_addr_segs {sys_mb/Data/SEG_data_axi_hsci_3}]
-
-# set MCS_MODE [ expr { [info exists ad_project_params(MCS_MODE)] \
-#                           ? $ad_project_params(MCS_MODE) : "MASTER" } ]
-
-# if {$MCS_MODE == "SLAVE"} {
-#   create_bd_port -dir O spi_4_csn_o
-#   create_bd_port -dir I spi_4_csn_i
-#   create_bd_port -dir I spi_4_clk_i
-#   create_bd_port -dir O spi_4_clk_o
-#   create_bd_port -dir I spi_4_sdo_i
-#   create_bd_port -dir O spi_4_sdo_o
-#   create_bd_port -dir I spi_4_sdi_i
-
-#   ad_ip_instance axi_quad_spi axi_spi_4
-#   ad_ip_parameter axi_spi_4 CONFIG.C_USE_STARTUP 0
-#   ad_ip_parameter axi_spi_4 CONFIG.C_NUM_SS_BITS 1
-#   ad_ip_parameter axi_spi_4 CONFIG.C_SCK_RATIO 8
-
-#   ad_connect spi_4_csn_i axi_spi_4/ss_i
-#   ad_connect spi_4_csn_o axi_spi_4/ss_o
-#   ad_connect spi_4_clk_i axi_spi_4/sck_i
-#   ad_connect spi_4_clk_o axi_spi_4/sck_o
-#   ad_connect spi_4_sdo_i axi_spi_4/io0_i
-#   ad_connect spi_4_sdo_o axi_spi_4/io0_o
-#   ad_connect spi_4_sdi_i axi_spi_4/io1_i
-
-#   ad_connect sys_cpu_clk axi_spi_4/ext_spi_clk
-
-#   ad_cpu_interrupt ps-14 mb-8 axi_spi_4/ip2intc_irpt
-
-#   ad_cpu_interconnect 0x44B90000 axi_spi_4
-# }

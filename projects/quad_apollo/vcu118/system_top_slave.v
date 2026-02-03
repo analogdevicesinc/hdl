@@ -150,19 +150,23 @@ module system_top (
   input        vneg_m1p0_pg,
 
   inout   [3:0] gp4,
-  inout   [3:1] gp5,
-  output        gp5_0,
+  inout   [3:0] gp5,
 
   // PMOD0 for MCS cotrol
-  input         nco_sync,
   input         dma_start,
-  output        sync_start_debug,      
+  output        sync_start_debug,
+  output        apollo_trig_debug,
 
-  // PMOD1 for SYNCHRONA14
-  output        ext_hmc7044_sclk,
-  output        ext_hmc7044_slen,
-  inout         ext_hmc7044_sdata,
-  input         ext_hmc7044_miso
+  // PMOD1 for calibration board
+  output pmod1_adc_sync_n,
+  output pmod1_adc_sdi,
+  input  pmod1_adc_sdo,
+  output pmod1_adc_sclk,
+
+  output pmod1_5045_v2,
+  output pmod1_5045_v1,
+  output pmod1_ctrl_ind,
+  output pmod1_ctrl_rx_combined
 );
 
   // internal signals
@@ -180,18 +184,6 @@ module system_top (
   wire    [ 7:0]  spi_3_csn;
   wire            spi_3_mosi;
   wire            spi_3_miso;
-
-  wire            ext_sync_at_sysref;
-  wire            sysref_edge;
-  wire            ext_sync_edge;
-
-  reg             ext_sync_d1 = 1'b0;
-  reg             ext_sync_d2 = 1'b0;
-  reg             ext_sync_d3 = 1'b0;
-  reg             sysref_d1 = 1'b0;
-  reg             sysref_d2 = 1'b0;
-  reg             sysref_d3 = 1'b0;
-  reg             sync_pendign = 1'b0;
 
   wire            ref_clk;
   wire            ref_clk_replica;
@@ -221,7 +213,6 @@ module system_top (
 
   // wire            trig_rstn;
   wire    [ 5:0]  trig_channel;
-  wire            aux_gpio;
 
   assign iic_rstn = 1'b1;
 
@@ -278,26 +269,11 @@ module system_top (
   assign ltc6953_csn = spi_2_csn[7];
   assign clk_sclk = spi_2_clk;
 
-  assign ext_hmc7044_slen = spi_3_csn[0];
-  assign ext_hmc7044_sclk = spi_3_clk;
+  assign pmod1_adc_sync_n = spi_3_csn[0];
+  assign pmod1_adc_sdi = spi_3_mosi;
+  assign pmod1_adc_sclk = spi_3_clk;
 
-  assign spi_3_miso = ~spi_3_csn[0] ? ext_hmc7044_miso : 1'b0;
-
-  ad_3w_spi #(
-    .NUM_OF_SLAVES(1)
-  ) i_spi_ext_hmc (
-    .spi_csn (spi_3_csn),
-    .spi_clk (spi_3_clk),
-    .spi_mosi (spi_3_mosi),
-    .spi_miso (),
-    .spi_sdio (ext_hmc7044_sdata),
-    .spi_dir ());
-
-  // assign pmod1_adc_sync_n = spi_3_csn[0];
-  // assign pmod1_adc_sdi = spi_3_mosi;
-  // assign pmod1_adc_sclk = spi_3_clk;
-
-  // assign spi_3_miso =  ~pmod1_adc_sync_n ? pmod1_adc_sdo : 1'b0;
+  assign spi_3_miso =  ~pmod1_adc_sync_n ? pmod1_adc_sdo : 1'b0;
 
   // clk_spi #(
   //   .NUM_OF_SLAVES(8)
@@ -311,13 +287,12 @@ module system_top (
 
   // gpios
   ad_iobuf #(
-    .DATA_WIDTH(8)
+    .DATA_WIDTH(1)
   ) i_iobuf (
     .dio_t (gpio_t[39:32]),
     .dio_i (gpio_o[39:32]),
     .dio_o (gpio_i[39:32]),
-    .dio_p ({gp5[3:1],       // 39-37
-             aux_gpio,       // 36
+    .dio_p ({gp5[3:0],       // 39-36
              gp4[3:0]}));    // 35-32
 
   assign gpio_i[43:40] = irqa;
@@ -327,7 +302,6 @@ module system_top (
   assign trig1_a       = {4{trig_channel[1]}};
   assign trig0_b       = {4{trig_channel[2]}};
   assign trig1_b       = {4{trig_channel[3]}};
-  assign gp5_0         = nco_sync;
   assign resetb        = gpio_o[67:64];
   assign txen          = gpio_o[69:68];
   assign rxen          = gpio_o[71:70];
@@ -344,6 +318,8 @@ module system_top (
   assign pmod1_5045_v1 = gpio_o[97];
   assign pmod1_ctrl_ind = gpio_o[98];
   assign pmod1_ctrl_rx_combined = gpio_o[99];
+  assign sync_start_debug = trig_channel[5];
+  assign apollo_trig_debug = trig_channel[0];
 
   assign gpio_i[100] = pdn_12v_pg;
   assign gpio_i[101] = vddd_0p8_pg;
@@ -365,31 +341,6 @@ module system_top (
 
   assign gpio_i[127:109] = gpio_o[127:109];
   assign gpio_i[ 31:17] = gpio_o[ 31:17];
-
-  assign sysref_edge = sysref_d2 & ~sysref_d3;
-
-  always @(posedge rx_device_clk) begin
-    sysref_d1 <= sysref;
-    sysref_d2 <= sysref_d1;
-    sysref_d3 <= sysref_d2;
-    ext_sync_d1 <= dma_start;
-    ext_sync_d2 <= ext_sync_d1;
-    ext_sync_d3 <= ext_sync_d2;
-  end
-
-  assign ext_sync_edge = ext_sync_d2 & ~ext_sync_d3;
-
-  // assumption is the ext_sync is not edge aligned with sysref
-  always @(posedge rx_device_clk) begin
-    if (ext_sync_edge) begin
-      sync_pendign <= 1'b1;
-    end else if (sysref_edge) begin
-      sync_pendign <= 1'b0;
-    end
-  end
-
-  assign ext_sync_at_sysref = sync_pendign & sysref_edge;
-  assign sync_start_debug = ext_sync_at_sysref;
 
   hsci_phy_top hsci_phy_top(
     .pll_inclk        (selectio_clk_in),
@@ -619,11 +570,11 @@ module system_top (
     .adf4030_bsync_p      (sysref_m2c_p),
     .adf4030_bsync_n      (sysref_m2c_n),
     .adf4030_clk          (rx_device_clk),
-    .adf4030_trigger      (gp4[0]),
+    .adf4030_trigger      (dma_start),
     .adf4030_sysref       (sysref),
     .adf4030_trig_channel (trig_channel),
 
-    .ext_sync_in (ext_sync_at_sysref),
+    .ext_sync_in (trig_channel[5]),
 
     .ref_clk_q0 (ref_clk_replica),
     .ref_clk_q1 (ref_clk_replica),

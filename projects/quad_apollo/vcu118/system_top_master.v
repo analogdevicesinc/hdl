@@ -153,9 +153,9 @@ module system_top (
   inout   [3:0] gp5,
 
   // PMOD0 for MCS cotrol
-  output       nco_sync,
   output       dma_start,
-  output       sync_start_debug,    
+  output       sync_start_debug,
+  output       apollo_trig_debug,
 
   // PMOD1 for calibration board
   output pmod1_adc_sync_n,
@@ -302,7 +302,6 @@ module system_top (
   assign trig1_a       = {4{trig_channel[1]}};
   assign trig0_b       = {4{trig_channel[2]}};
   assign trig1_b       = {4{trig_channel[3]}};
-  assign nco_sync      = trig_channel[0];
   assign dma_start     = trig_channel[4];
   assign resetb        = gpio_o[67:64];
   assign txen          = gpio_o[69:68];
@@ -321,6 +320,7 @@ module system_top (
   assign pmod1_ctrl_ind = gpio_o[98];
   assign pmod1_ctrl_rx_combined = gpio_o[99];
   assign sync_start_debug = trig_channel[5];
+  assign apollo_trig_debug = trig_channel[0];
 
   assign gpio_i[100] = pdn_12v_pg;
   assign gpio_i[101] = vddd_0p8_pg;
@@ -575,7 +575,7 @@ module system_top (
     .adf4030_sysref       (sysref),
     .adf4030_trig_channel (trig_channel),
 
-    .ext_sync_in(trig_channel[5]),
+    .ext_sync_in (trig_channel[5]),
 
     .ref_clk_q0 (ref_clk_replica),
     .ref_clk_q1 (ref_clk_replica),
