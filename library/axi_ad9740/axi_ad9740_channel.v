@@ -51,18 +51,18 @@ module axi_ad9740_channel #(
   input                             dac_clk,
   input                             dac_rst,
   output reg   [14*CLK_RATIO-1:0]   dac_data,
-(* MARK_DEBUG = "TRUE" *)  output       [ 3:0]               dac_data_sel,
+  output       [ 3:0]               dac_data_sel,
 
   // input sources
 
- (* MARK_DEBUG = "TRUE" *) input        [16*CLK_RATIO-1:0]   dma_data,
- (* MARK_DEBUG = "TRUE" *) input                             dma_valid,
- (* MARK_DEBUG = "TRUE" *) output reg                        dma_ready,
+  input        [16*CLK_RATIO-1:0]   dma_data,
+  input                             dma_valid,
+  output reg                        dma_ready,
 
   // processor interface
 
-(* MARK_DEBUG = "TRUE" *)  input                   dac_data_sync,
-(* MARK_DEBUG = "TRUE" *)  input                   dac_dfmt_type,
+  input                   dac_data_sync,
+  input                   dac_dfmt_type,
 
   // bus interface
 

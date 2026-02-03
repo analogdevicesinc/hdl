@@ -56,7 +56,7 @@ module axi_ad9740 #(
   input  [16*CLK_RATIO-1:0]       dma_data,
   input                           dma_valid,
   output                          dma_ready,
-(* MARK_DEBUG = "TRUE" *)  output reg [14*CLK_RATIO-1:0]   dac_data,
+  output reg [14*CLK_RATIO-1:0]   dac_data,
 
   // axi interface
 
