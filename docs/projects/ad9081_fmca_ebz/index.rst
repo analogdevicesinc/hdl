@@ -44,8 +44,8 @@ Supported boards
 
 - :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
 - :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
-- :adi:`EVAL-AD9988`
 - :adi:`EVAL-AD9986`
+- :adi:`EVAL-AD9988`
 
 Supported devices
 -------------------------------------------------------------------------------
