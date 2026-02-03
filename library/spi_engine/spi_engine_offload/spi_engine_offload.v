@@ -115,6 +115,11 @@ module spi_engine_offload #(
   wire trigger_posedge;
   wire sdo_source_select;
 
+  // Detect when processing the last command in the sequence
+  // This is true when the next read address equals the write address
+  wire last_spi_cmd;
+  assign last_spi_cmd = (spi_cmd_rd_addr_next == ctrl_cmd_wr_addr);
+
   assign sdo_source_select = SDO_STREAMING;
   assign cmd_valid = spi_active;
   assign sdo_data_valid = (sdo_source_select == SDO_SOURCE_STREAM) ?
@@ -124,8 +129,11 @@ module spi_engine_offload #(
   assign offload_sdi_valid = sdi_data_valid;
 
   // we don't want to block the SDI interface after disabling the module
-  // so just assert the SDI_READY if the sink module (DMA) is disabled
-  assign sdi_data_ready = (spi_enable) ? offload_sdi_ready : 1'b1;
+  // so just assert the SDI_READY if the sink module (DMA) is disabled.
+  // Also don't block during the last command or after offload completes -
+  // this prevents a hang when DMA transfer size is exactly 64-bit aligned,
+  // where DMA may de-assert ready before the last SPI beat completes.
+  assign sdi_data_ready = (spi_enable) ? (offload_sdi_ready || last_spi_cmd || !spi_active) : 1'b1;
 
   assign offload_sdi_data = sdi_data;
 

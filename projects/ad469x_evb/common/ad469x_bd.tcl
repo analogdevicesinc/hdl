@@ -61,8 +61,11 @@ ad_connect sys_cpu_resetn ad469x_trigger_gen/s_axi_aresetn
 #ad_connect busy_sync/out_bits busy_capture/signal_in
 #ad_connect busy_capture/signal_out $hier_spi_engine/trigger
 
-ad_connect $hier_spi_engine/trigger ad469x_trigger_gen/pwm_0
-#
+# AND gate: trigger only when PWM fires AND DMA is ready to receive
+ad_ip_instance util_vector_logic trigger_gate
+ad_ip_parameter trigger_gate CONFIG.C_SIZE 1
+ad_ip_parameter trigger_gate CONFIG.C_OPERATION {and}
+
 # dma to receive data stream
 
 ad_ip_instance axi_dmac axi_ad469x_dma
@@ -85,6 +88,11 @@ ad_connect sys_cpu_resetn axi_ad469x_dma/m_dest_axi_aresetn
 ad_connect spi_clk $hier_spi_engine/spi_clk
 ad_connect $hier_spi_engine/m_spi ad469x_spi
 ad_connect axi_ad469x_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
+
+# Connect trigger gate: PWM AND DMA_request -> SPI Engine trigger
+ad_connect trigger_gate/Op1 ad469x_trigger_gen/pwm_0
+ad_connect trigger_gate/Op2 axi_ad469x_dma/s_axis_xfer_req
+ad_connect $hier_spi_engine/trigger trigger_gate/Res
 
 #ad_ip_instance ilvector_logic cnv_gate
 #ad_ip_parameter cnv_gate CONFIG.C_SIZE 1
