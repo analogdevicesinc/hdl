@@ -335,7 +335,7 @@
 /library/cn0363/            paul.pop@analog.com  pop.ioan-daniel@analog.com
 
 # Code owners for corundum IP
-/library/corundum/          alin-tudor.sferle@analog.com
+/library/corundum/          istvan.szekely@analog.com  alin-tudor.sferle@analog.com  cristianmihai.popa@analog.com
 
 # Code owners for data_offload IP
 /library/data_offload/      ionut.podgoreanu@analog.com  jorge.marques@analog.com
