@@ -134,6 +134,7 @@ module spi_engine_execution #(
 
   reg sdo_enabled = 1'b0;
   reg sdi_enabled = 1'b0;
+  reg pending_sdi_data_valid = 1'b0;
   wire sdo_enabled_io;
   wire sdi_enabled_io;
 
@@ -325,6 +326,14 @@ module spi_engine_execution #(
   end
 
   always @(posedge clk) begin
+    if (sdi_enabled == 1'b1 && last_bit && trigger_rx == 1'b1) begin
+      pending_sdi_data_valid <= 1'b1;
+    end else if (sdi_data_ready == 1'b1) begin
+      pending_sdi_data_valid <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
     if (resetn == 1'b0) begin
       idle <= 1'b1;
     end else begin
@@ -389,10 +398,17 @@ module spi_engine_execution #(
 
   assign sync = cmd_d1[7:0];
 
-  assign io_ready1 = (sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
-          (sdo_enabled_io == 1'b0 || sdo_io_ready == 1'b1);
+  // sdi_data_valid has a delay for the ECHO_SCLK, that is why
+  // it was created an pending_sdi_data_valid signal that asserts on the last bit
+  // during the needed period of time
+  assign io_ready1 =  (pending_sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
+                      (sdo_enabled_io == 1'b0 || sdo_io_ready == 1'b1);
+  // assign io_ready1 = ((sdi_data_valid == 1'b0 && ECHO_SCLK == 1'b0) ||
+  //                     (pending_sdi_data_valid == 1'b0 && ECHO_SCLK == 1'b1) ||
+  //                      sdi_data_ready == 1'b1) && (sdo_enabled_io == 1'b0 || sdo_io_ready == 1'b1);
+
   assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
-          (sdo_enabled_io == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
+                     (sdo_enabled_io == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
 
   always @(posedge clk) begin
     if (idle == 1'b1) begin
@@ -441,10 +457,10 @@ module spi_engine_execution #(
         transfer_active <= io_ready1;
       end else if (wait_for_io == 1'b1 && io_ready1 == 1'b1) begin
         wait_for_io <= 1'b0;
-        transfer_active <= !last_transfer;
+        transfer_active <= !last_transfer; //it is not considering sdi_data_ready, so it is activating transfer with sdi_data_ready low
       end else if (transfer_active == 1'b1 && end_of_word == 1'b1) begin
         if (last_transfer == 1'b1 || io_ready2 == 1'b0)
-          transfer_active <= 1'b0;
+          transfer_active <= 1'b0; //when sdi_data_ready is low, it will wait in the next block
         if (io_ready2 == 1'b0)
           wait_for_io <= 1'b1;
       end
