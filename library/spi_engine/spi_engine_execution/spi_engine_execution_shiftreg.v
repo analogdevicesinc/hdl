@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -150,6 +150,7 @@ module spi_engine_execution_shiftreg #(
   // interface.
 
   genvar i;
+
   // NOTE: SPI configuration (CPOL/PHA) is only hardware configurable at this point, unless ECHO_SCLK=0
   generate
   if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
@@ -244,9 +245,7 @@ module spi_engine_execution_shiftreg #(
     end
 
     always @(posedge clk) begin
-      if (cs_activate) begin
-        sdi_data_valid <= 1'b0;
-      end else if (sdi_enabled == 1'b1 && echo_last_bit) begin
+      if (sdi_enabled == 1'b1 && echo_last_bit) begin
         sdi_data_valid <= 1'b1;
       end else if (sdi_data_ready == 1'b1) begin
         sdi_data_valid <= 1'b0;

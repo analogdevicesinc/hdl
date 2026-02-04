@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2015-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2015-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -97,6 +97,7 @@ module spi_engine_offload #(
   localparam SDO_SOURCE_MEM    = 1'b0;
 
   reg spi_active = 1'b0;
+  reg offload_cmd_valid = 1'b0;
 
   reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
   reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
@@ -116,15 +117,15 @@ module spi_engine_offload #(
   wire sdo_source_select;
 
   assign sdo_source_select = SDO_STREAMING;
-  assign cmd_valid = spi_active;
+  assign cmd_valid = offload_cmd_valid;
   assign sdo_data_valid = (sdo_source_select == SDO_SOURCE_STREAM) ?
-                           s_axis_sdo_valid : (spi_active && sdo_mem_valid);
+                          s_axis_sdo_valid : (spi_active && sdo_mem_valid);
   assign s_axis_sdo_ready = (sdo_source_select == SDO_SOURCE_STREAM) ?
-                             sdo_data_ready : 1'b0;
+                            sdo_data_ready : 1'b0;
   assign offload_sdi_valid = sdi_data_valid;
 
   // we don't want to block the SDI interface after disabling the module
-  // so just assert the SDI_READY if the sink module (DMA) is disabled
+  // so just assert the SDI_READY
   assign sdi_data_ready = (spi_enable) ? offload_sdi_ready : 1'b1;
 
   assign offload_sdi_data = sdi_data;
@@ -251,9 +252,9 @@ module spi_engine_offload #(
     .out_bits(ctrl_is_enabled));
 
   end else begin
-  assign spi_enable = ctrl_enable;
-  assign ctrl_enabled = spi_enable | spi_active;
-  assign interconnect_dir = ctrl_enabled;
+    assign spi_enable = ctrl_enable;
+    assign ctrl_enabled = spi_enable | spi_active;
+    assign interconnect_dir = ctrl_enabled;
   end endgenerate
 
   assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
@@ -278,17 +279,51 @@ module spi_engine_offload #(
 
   assign trigger_posedge = trigger_s && !trigger_last_reg;
 
+  reg  last_cmd;
+  wire last_cmd_accept;
+  wire offload_disable_pending;
+
+  // Detects when offload disable is requested but operations are still in progress.
+  // spi_enable goes low when the user disables offload, but interconnect_dir
+  // remains high while the offload completes its current operations.
+  assign offload_disable_pending = !spi_enable && interconnect_dir;
+
   always @(posedge spi_clk) begin
     if (!spi_resetn) begin
       spi_active <= 1'b0;
     end else begin
       if (!spi_active) begin
-        // start offload when we have a valid trigger, offload is enabled and
-        // the DMA is enabled
+        // start offload when we have a valid trigger and offload is enabled
         if (trigger_posedge && spi_enable)
           spi_active <= 1'b1;
-      end else if (cmd_ready && (spi_cmd_rd_addr_next == ctrl_cmd_wr_addr)) begin
+      // Deassert spi_active when offload execution is complete.
+      // Conditions for completion:
+      // - (last_cmd_accept || !offload_cmd_valid): Either processed the last command OR no offload commands remain
+      // - !(offload_disable_pending && sdi_data_valid): Prevent mode switch if SDI data is pending during disable
+      // The !offload_cmd_valid condition handles edge cases where sdi_data_valid remains continuously asserted
+      end else if ((last_cmd_accept || !offload_cmd_valid) && !(offload_disable_pending && sdi_data_valid)) begin
         spi_active <= 1'b0;
+      end
+    end
+  end
+
+  // Manages the offload_cmd_valid flag to track offload command availability.
+  // This signal must be coordinated with spi_active to ensure proper offload sequencing.
+  // offload_cmd_valid is high during the entire offload execution cycle.
+  always @(posedge spi_clk) begin
+    if (!spi_resetn) begin
+      offload_cmd_valid <= 1'b0;
+    end else begin
+      if (!offload_cmd_valid) begin
+        // Assert offload_cmd_valid when starting a new offload cycle.
+        // Requires: valid trigger, offload enabled, and spi_active is low (previous cycle complete)
+        if (trigger_posedge && spi_enable && !spi_active) begin
+          offload_cmd_valid <= 1'b1;
+        end
+
+      // Deassert offload_cmd_valid when the last command in the buffer is processed
+      end else if (last_cmd_accept) begin
+        offload_cmd_valid <= 1'b0;
       end
     end
   end
@@ -298,11 +333,17 @@ module spi_engine_offload #(
       spi_cmd_rd_addr <= 'h00;
     end else if (cmd_ready) begin
       spi_cmd_rd_addr <= spi_cmd_rd_addr_next;
+      last_cmd <= spi_cmd_rd_addr + 2'h2 == ctrl_cmd_wr_addr;
     end
   end
 
+  // Detects when the offload engine is processing the last command in the buffer.
+  // This occurs when reading a command (cmd_ready) and the next read address
+  // equals the write address (caught up to all written commands).
+  assign last_cmd_accept = cmd_ready && last_cmd;
+
   always @(posedge spi_clk) begin
-    if (!spi_active) begin
+    if (!sdo_mem_valid) begin
       spi_sdo_rd_addr <= 'h00;
     end else if (sdo_data_ready && (sdo_source_select == SDO_SOURCE_MEM)) begin
       spi_sdo_rd_addr <= spi_sdo_rd_addr + 1'b1;
@@ -315,7 +356,7 @@ module spi_engine_offload #(
     end else begin
       if (!spi_active && trigger_posedge && spi_enable) begin
         sdo_mem_valid <= (ctrl_sdo_wr_addr != 'h00); // if ctrl_sdo_wr_addr is 0, mem is empty
-      end else if (sdo_data_ready && spi_active && sdo_mem_valid && (spi_sdo_rd_addr + 1'b1 == ctrl_sdo_wr_addr))  begin
+      end else if (sdo_data_ready && sdo_mem_valid && (spi_sdo_rd_addr + 1'b1 == ctrl_sdo_wr_addr))  begin
         sdo_mem_valid <= 1'b0;
       end
     end

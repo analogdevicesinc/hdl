@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2015-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2015-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -87,8 +87,8 @@ module spi_engine_execution #(
   localparam REG_CONFIG = 2'b01;
   localparam REG_WORD_LENGTH = 2'b10;
 
-  localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
-                                 DATA_WIDTH > 8  ? 4 : 3;
+  localparam BIT_COUNTER_WIDTH =  DATA_WIDTH > 16 ? 5 :
+                                  DATA_WIDTH > 8  ? 4 : 3;
 
   localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
   localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
@@ -134,6 +134,7 @@ module spi_engine_execution #(
 
   reg sdo_enabled = 1'b0;
   reg sdi_enabled = 1'b0;
+  reg pending_sdi_data_valid = 1'b0;
   wire sdo_enabled_io;
   wire sdi_enabled_io;
 
@@ -325,6 +326,14 @@ module spi_engine_execution #(
   end
 
   always @(posedge clk) begin
+    if (sdi_enabled == 1'b1 && last_bit && trigger_rx == 1'b1) begin
+      pending_sdi_data_valid <= 1'b1;
+    end else if (sdi_data_ready == 1'b1) begin
+      pending_sdi_data_valid <= 1'b0;
+    end
+  end
+
+  always @(posedge clk) begin
     if (resetn == 1'b0) begin
       idle <= 1'b1;
     end else begin
@@ -389,10 +398,14 @@ module spi_engine_execution #(
 
   assign sync = cmd_d1[7:0];
 
-  assign io_ready1 = (sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
-          (sdo_enabled_io == 1'b0 || sdo_io_ready == 1'b1);
+  // The sdi_data_valid signal has inherent delays due to ECHO_SCLK and SCLK timing.
+  // To handle backpressure, pending_sdi_data_valid is asserted when the last bit
+  // is received and remains high until sdi_data_ready acknowledges the data.
+  assign io_ready1 =  (pending_sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
+                      (sdo_enabled_io == 1'b0 || sdo_io_ready == 1'b1);
+
   assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
-          (sdo_enabled_io == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
+                     (sdo_enabled_io == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
 
   always @(posedge clk) begin
     if (idle == 1'b1) begin
@@ -455,11 +468,11 @@ module spi_engine_execution #(
     if (resetn == 1'b0) begin
       transfer_done <= 1'b0;
     end else begin
-       if (ECHO_SCLK) begin
+      if (ECHO_SCLK) begin
         transfer_done <= echo_last_bit && echo_last_transfer;
-       end else begin
+      end else begin
         transfer_done <= (wait_for_io && io_ready1 && last_transfer) || (!wait_for_io && transfer_active && end_of_word && last_transfer );
-       end
+      end
     end
   end
 
