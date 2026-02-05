@@ -102,7 +102,8 @@ adi_ip_instance -vlnv {latticesemi.com:ip:sysmem0:2.3.0} \
     ID_WIDTH:8,
     INTERFACE:AXI4,
     MEMORY_TYPE:LRAM,
-    REGMODE_S0:true$sysmem_init
+    REGMODE_S0:true,
+    ATOMIC_ACCESS_EN_S0:true$sysmem_init
   }] \
   -ip_iname "sysmem0_inst"
 
