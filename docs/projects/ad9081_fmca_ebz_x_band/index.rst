@@ -31,6 +31,20 @@ The system is designed to mate with a :xilinx:`ZCU102` Evaluation Board from
 Xilinx®, which features the Zynq® UltraScale+™ MPSoC FPGA, with provided
 reference software, HDL code, and MATLAB system-level interfacing software.
 
+.. important::
+
+  The current implementation is tailored for CW (Continuous Waveform) mode,
+  where the TDD frame rate matches the transmitted buffer length.
+
+  For this to work,the following criteria must be met:
+
+  - The RX/TX DMAs must handle the CDC (Clock Domain Crossing) between the
+    330 MHz clock on the memory side and the 250MHz clock on the JESD side.
+  - The clock frequency on the memory interconnect side of the DMAs
+    must be configured to 330MHz.
+  - The DMAs' coherent mode must be disabled.
+  - The data offload IPs must be configured in bypass mode.
+
 Supported boards
 -------------------------------------------------------------------------------
 
@@ -68,7 +82,7 @@ Block diagram
 Example block design for Single link; M=8; L=4
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ad9081_x_band_M8L4.svg
+.. image:: ad9081_x_band_204b_M8L4.svg
    :width: 800
    :align: center
    :alt: AD9081-FMCA-EBZ JESD204B M=8 L=4 block diagram

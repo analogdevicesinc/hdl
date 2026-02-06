@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -49,7 +49,8 @@ module data_offload #(
 
   parameter          AUTO_BRINGUP = 1,
   parameter          SYNC_EXT_ADD_INTERNAL_CDC = 1,
-  parameter          HAS_BYPASS = 1
+  parameter          HAS_BYPASS = 1,
+  parameter          ASYNC_CLK = 1
 ) (
 
   // AXI4 Slave for configuration
@@ -252,7 +253,7 @@ module data_offload #(
       .S_DATA_WIDTH (SRC_DATA_WIDTH),
       .ADDRESS_WIDTH (SRC_ADDR_WIDTH_BYPASS),
       .M_DATA_WIDTH (DST_DATA_WIDTH),
-      .ASYNC_CLK (1)
+      .ASYNC_CLK (ASYNC_CLK)
     ) i_bypass_fifo (
       .m_axis_aclk (m_axis_aclk),
       .m_axis_aresetn (dst_rstn),
@@ -357,7 +358,7 @@ module data_offload #(
   util_axis_fifo #(
     .DATA_WIDTH(MEM_SIZE_LOG2),
     .ADDRESS_WIDTH(0),
-    .ASYNC_CLK(1)
+    .ASYNC_CLK(ASYNC_CLK)
   ) i_measured_length_cdc (
     .s_axis_aclk(s_axis_aclk),
     .s_axis_aresetn(s_axis_aresetn),
