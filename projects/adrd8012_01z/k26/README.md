@@ -1,6 +1,6 @@
 <!-- no_build_example, no_dts, no_no_os -->
 
-# AD-GMSL2ETH-SL/K26 HDL Project
+# ADRD8012_01Z/K26 HDL Project
 
 The +VCC_SOM voltage is 5V and the SOM connectors voltages can be found in the table below:
 
@@ -21,6 +21,6 @@ This project uses [Corundum NIC](https://github.com/corundum/corundum) and it ne
 hdl/../> git clone https://github.com/ucsdsysnet/corundum.git
 corundum/> git checkout 37f2607
 corundum/> git apply ../hdl/library/corundum/patch_axis_xgmii_rx_64.patch
-cd hdl/projects/ad_gmsl2eth_sl/k26
+cd hdl/projects/adrd8012_01z/k26
 make
 ```
