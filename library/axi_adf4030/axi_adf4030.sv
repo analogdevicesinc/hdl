@@ -15,6 +15,7 @@ module axi_adf4030 #(
   input  logic trigger,
   output logic sysref,
   output logic [CHANNEL_COUNT-1:0] trig_channel,
+  output logic debug_trig_out,
 
   // AXI BUS
   input  logic                     s_axi_aresetn,
@@ -138,6 +139,8 @@ module axi_adf4030 #(
       assign trig_channel[i] = enable_debug_trig ? debug_trig : trig_channel_s[i];
     end
   endgenerate
+
+  assign debug_trig_out = manual_trig | debug_trig;
 
   axi_adf4030_regmap #(
     .ID            (ID),

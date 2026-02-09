@@ -154,6 +154,7 @@ module system_top (
 
   // PMOD0 for MCS cotrol
   output       dma_start,
+  output       trig_request,
   output       sync_start_debug,
   output       apollo_trig_debug,
 
@@ -212,7 +213,15 @@ module system_top (
   wire    [ 7:0]  hsci_data_out [0:3];
 
   // wire            trig_rstn;
-  wire    [ 5:0]  trig_channel;
+  wire    [ 4:0]  trig_channel;
+  wire            debug_trig_out;
+  wire            trigger_captured;
+  wire            sync_start;
+  wire            sync_start_edge;
+
+  reg             trigger_stretched = 1'b0;
+  reg             trigger_sync1 = 1'b0;
+  reg             trigger_sync2 = 1'b0;
 
   assign iic_rstn = 1'b1;
 
@@ -287,7 +296,7 @@ module system_top (
 
   // gpios
   ad_iobuf #(
-    .DATA_WIDTH(1)
+    .DATA_WIDTH(8)
   ) i_iobuf (
     .dio_t (gpio_t[39:32]),
     .dio_i (gpio_o[39:32]),
@@ -319,8 +328,9 @@ module system_top (
   assign pmod1_5045_v1 = gpio_o[97];
   assign pmod1_ctrl_ind = gpio_o[98];
   assign pmod1_ctrl_rx_combined = gpio_o[99];
-  assign sync_start_debug = trig_channel[5];
+  // assign sync_start_debug = trig_channel[5];
   assign apollo_trig_debug = trig_channel[0];
+  assign trig_request = gp4[0] | debug_trig_out;
 
   assign gpio_i[100] = pdn_12v_pg;
   assign gpio_i[101] = vddd_0p8_pg;
@@ -342,6 +352,24 @@ module system_top (
 
   assign gpio_i[127:109] = gpio_o[127:109];
   assign gpio_i[ 31:17] = gpio_o[ 31:17];
+
+  always @(posedge dma_start or posedge trigger_captured) begin
+    if (trigger_captured)
+        trigger_stretched <= 1'b0;
+    else
+        trigger_stretched <= 1'b1;
+  end
+
+  always @(posedge sysref) begin
+    trigger_sync1 <= trigger_stretched;
+    trigger_sync2 <= trigger_sync1;
+  end
+
+  assign trigger_captured = trigger_sync2;
+
+  assign sync_start_edge = trigger_sync1 & ~trigger_sync2;
+  assign sync_start = sync_start_edge & sysref;
+  assign sync_start_debug = sync_start;
 
   hsci_phy_top hsci_phy_top(
     .pll_inclk        (selectio_clk_in),
@@ -568,14 +596,15 @@ module system_top (
     .hsci_dly_rdy_bsc_rx_2 (hsci_dly_rdy_bsc_rx[2]),
     .hsci_dly_rdy_bsc_rx_3 (hsci_dly_rdy_bsc_rx[3]),
 
-    .adf4030_bsync_p      (sysref_m2c_p),
-    .adf4030_bsync_n      (sysref_m2c_n),
-    .adf4030_clk          (rx_device_clk),
-    .adf4030_trigger      (gp4[0]),
-    .adf4030_sysref       (sysref),
-    .adf4030_trig_channel (trig_channel),
+    .adf4030_bsync_p        (sysref_m2c_p),
+    .adf4030_bsync_n        (sysref_m2c_n),
+    .adf4030_clk            (rx_device_clk),
+    .adf4030_trigger        (gp4[0]),
+    .adf4030_sysref         (sysref),
+    .adf4030_trig_channel   (trig_channel),
+    .adf4030_debug_trig_out (debug_trig_out),
 
-    .ext_sync_in (trig_channel[5]),
+    .ext_sync_in (sync_start),
 
     .ref_clk_q0 (ref_clk_replica),
     .ref_clk_q1 (ref_clk_replica),

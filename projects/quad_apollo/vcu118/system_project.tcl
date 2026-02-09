@@ -33,22 +33,23 @@ if {[info exists ::env(MCS_MODE)]} {
 }
 
 adi_project ad_xband16_ebz_vcu118 0 [list \
-  MCS_MODE     [get_env_param MCS_MODE         $mcs_mode] \
-  JESD_MODE    [get_env_param JESD_MODE           64B66B] \
-  RX_LANE_RATE [get_env_param RX_RATE              13.2 ] \
-  TX_LANE_RATE [get_env_param TX_RATE              13.2 ] \
-  RX_JESD_M    [get_env_param RX_JESD_M               8 ] \
-  RX_JESD_L    [get_env_param RX_JESD_L               4 ] \
-  RX_JESD_S    [get_env_param RX_JESD_S               1 ] \
-  RX_JESD_NP   [get_env_param RX_JESD_NP             16 ] \
-  RX_NUM_LINKS [get_env_param RX_NUM_LINKS            4 ] \
-  TX_JESD_M    [get_env_param TX_JESD_M               8 ] \
-  TX_JESD_L    [get_env_param TX_JESD_L               4 ] \
-  TX_JESD_S    [get_env_param TX_JESD_S               1 ] \
-  TX_JESD_NP   [get_env_param TX_JESD_NP             16 ] \
-  TX_NUM_LINKS [get_env_param TX_NUM_LINKS            4 ] \
-  RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL 16 ] \
-  TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL 16 ] \
+  MCS_MODE          [get_env_param MCS_MODE         $mcs_mode] \
+  JESD_MODE         [get_env_param JESD_MODE           64B66B] \
+  RX_LANE_RATE      [get_env_param RX_RATE              13.2 ] \
+  TX_LANE_RATE      [get_env_param TX_RATE              13.2 ] \
+  RX_JESD_M         [get_env_param RX_JESD_M               8 ] \
+  RX_JESD_L         [get_env_param RX_JESD_L               4 ] \
+  RX_JESD_S         [get_env_param RX_JESD_S               1 ] \
+  RX_JESD_NP        [get_env_param RX_JESD_NP             16 ] \
+  RX_NUM_LINKS      [get_env_param RX_NUM_LINKS            4 ] \
+  TX_JESD_M         [get_env_param TX_JESD_M               8 ] \
+  TX_JESD_L         [get_env_param TX_JESD_L               4 ] \
+  TX_JESD_S         [get_env_param TX_JESD_S               1 ] \
+  TX_JESD_NP        [get_env_param TX_JESD_NP             16 ] \
+  TX_NUM_LINKS      [get_env_param TX_NUM_LINKS            4 ] \
+  RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL      16 ] \
+  TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL      16 ] \
+  DO_HAS_BYPASS     [get_env_param DO_HAS_BYPASS           0 ] \
 ]
 
 adi_project_files ad_xband16_ebz_vcu118 [list \
@@ -95,6 +96,9 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
 
-set_property strategy Performance_RefinePlacement [get_runs impl_1]
+set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
+set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE AggressiveExplore [get_runs impl_1]
+set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.ARGS.DIRECTIVE AggressiveExplore [get_runs impl_1]
 
 adi_project_run ad_xband16_ebz_vcu118

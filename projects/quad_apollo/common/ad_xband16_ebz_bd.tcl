@@ -12,6 +12,8 @@ set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
                           ? $ad_project_params(TDD_SUPPORT) : 0 } ]
 set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
                             ? $ad_project_params(SHARED_DEVCLK) : 0 } ]
+set DO_HAS_BYPASS [ expr { [info exists ad_project_params(DO_HAS_BYPASS)] \
+                          ? $ad_project_params(DO_HAS_BYPASS) : 1 } ]
 
 if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
   error "ERROR: Cannot enable TDD support without shared deviceclocks!"
@@ -107,9 +109,10 @@ create_bd_port -dir I adf4030_clk
 create_bd_port -dir I adf4030_trigger
 create_bd_port -dir O adf4030_sysref
 create_bd_port -dir O -from 5 -to 0 adf4030_trig_channel
+create_bd_port -dir O adf4030_debug_trig_out
 
 ad_ip_instance axi_adf4030 axi_adf4030_0
-ad_ip_parameter axi_adf4030_0 CONFIG.CHANNEL_COUNT 6
+ad_ip_parameter axi_adf4030_0 CONFIG.CHANNEL_COUNT 5
 
 ad_connect axi_adf4030_0/bsync_p adf4030_bsync_p
 ad_connect axi_adf4030_0/bsync_n adf4030_bsync_n
@@ -117,6 +120,7 @@ ad_connect axi_adf4030_0/device_clk adf4030_clk
 ad_connect axi_adf4030_0/trigger adf4030_trigger
 ad_connect axi_adf4030_0/sysref adf4030_sysref
 ad_connect axi_adf4030_0/trig_channel adf4030_trig_channel
+ad_connect axi_adf4030_0/debug_trig_out adf4030_debug_trig_out
 
 ##AXI_HSCI IP
 if {!$HSCI_BYPASS} {
@@ -240,6 +244,8 @@ ad_data_offload_create $adc_data_offload_name \
                        $do_axi_data_width \
                        $SHARED_DEVCLK
 
+ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
+
 ad_ip_instance axi_dmac axi_apollo_rx_dma
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_TYPE_SRC 1
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_TYPE_DEST 0
@@ -300,6 +306,8 @@ ad_data_offload_create $dac_data_offload_name \
                        $dac_data_width \
                        $do_axi_data_width \
                        $SHARED_DEVCLK
+
+ad_ip_parameter $dac_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
 
 ad_ip_instance axi_dmac axi_apollo_tx_dma
 ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_TYPE_SRC 0

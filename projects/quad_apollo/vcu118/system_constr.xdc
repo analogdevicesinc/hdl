@@ -247,8 +247,8 @@ set_property  -dict {PACKAGE_PIN AT12 IOSTANDARD LVCMOS18                       
 set_property  -dict {PACKAGE_PIN AU12 IOSTANDARD LVCMOS18                                     } [get_ports gp5[3]           ]; ## LA25_N          G28  IO_L1N_T0L_N1_DBC_67
 
 # PMOD0 connections (NCO Sync and DMA Sync Start signals)
-# set_property  -dict {PACKAGE_PIN AY14 IOSTANDARD LVCMOS18                                     } [get_ports nco_sync         ]; ## PMOD0_0 J52.1
-set_property  -dict {PACKAGE_PIN AY15 IOSTANDARD LVCMOS18                                     } [get_ports dma_start        ]; ## PMOD0_1 J52.3
+set_property  -dict {PACKAGE_PIN AY14 IOSTANDARD LVCMOS18                                     } [get_ports dma_start        ]; ## PMOD0_0 J52.1
+set_property  -dict {PACKAGE_PIN AY15 IOSTANDARD LVCMOS18                                     } [get_ports trig_request     ]; ## PMOD0_1 J52.3
 set_property  -dict {PACKAGE_PIN AW15 IOSTANDARD LVCMOS18                                     } [get_ports sync_start_debug ]; ## PMOD0_2 J52.5
 set_property  -dict {PACKAGE_PIN AV15 IOSTANDARD LVCMOS18                                     } [get_ports apollo_trig_debug]; ## PMOD0_3 J52.7
 # set_property         -dict {PACKAGE_PIN AV16  IOSTANDARD LVCMOS18                  } [get_ports pmod0_4             ]    ; ## PMOD0_4 J52.2
@@ -269,3 +269,11 @@ set_property  -dict {PACKAGE_PIN R29  IOSTANDARD LVCMOS12                       
 
 set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/I.*]
 set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/T.*]
+
+create_pblock SLR0
+add_cells_to_pblock [get_pblocks SLR0] [get_cells -quiet [list i_system_wrapper/system_i/axi_mem_interconnect]]
+resize_pblock [get_pblocks SLR0] -add SLR0:SLR0
+
+create_pblock SLR1
+add_cells_to_pblock [get_pblocks SLR1] [get_cells -quiet [list i_system_wrapper/system_i/util_apollo_upack]]
+resize_pblock SLR1 -add SLR1:SLR1
