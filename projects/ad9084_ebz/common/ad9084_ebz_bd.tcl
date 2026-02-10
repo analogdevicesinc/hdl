@@ -1042,6 +1042,7 @@ ad_connect  axi_apollo_rx_jesd/rx_data_tvalid rx_apollo_tpl_core/link_valid
 
 if {$FSRC_ENABLE} {
   ad_connect rx_device_clk fsrc_rx/link_clk
+  ad_connect rx_device_clk_rstgen/peripheral_reset fsrc_rx/reset
   ad_connect rx_apollo_tpl_core/adc_valid_0 fsrc_rx/adc_data_in_valid
 
   ad_ip_parameter util_apollo_cpack CONFIG.PACK_EN 0
@@ -1074,6 +1075,7 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   if {$FSRC_ENABLE} {
     ad_connect rx_b_device_clk fsrc_rx_b/link_clk
+    ad_connect rx_b_device_clk_rstgen/peripheral_reset fsrc_rx_b/reset
     ad_connect rx_b_apollo_tpl_core/adc_valid_0 fsrc_rx_b/adc_data_in_valid
 
     ad_ip_parameter util_apollo_cpack_b CONFIG.PACK_EN 0
@@ -1358,11 +1360,6 @@ ad_connect rx_do_rstout_logic/res cpack_reset_sources/in2
 ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
 ad_connect cpack_rst_logic/res util_apollo_cpack/reset
 
-if {$FSRC_ENABLE} {
-  ad_connect rx_device_clk_rstgen/peripheral_reset fsrc_rx/reset
-  ad_connect cpack_rst_logic/res fsrc_rx/cpack_reset
-}
-
 if {$ASYMMETRIC_A_B_MODE} {
   ad_ip_instance ilreduced_logic cpack_b_rst_logic
   ad_ip_parameter cpack_b_rst_logic config.c_operation {or}
@@ -1382,9 +1379,6 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   ad_connect cpack_b_reset_sources/dout cpack_b_rst_logic/op1
   ad_connect cpack_b_rst_logic/res util_apollo_cpack_b/reset
-  if {$FSRC_ENABLE} {
-    ad_connect rx_b_device_clk_rstgen/peripheral_reset fsrc_rx_b/reset
-  }
 }
 
 # Reset unpack cores
