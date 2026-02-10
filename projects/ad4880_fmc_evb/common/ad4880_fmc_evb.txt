@@ -1,6 +1,6 @@
 FMC_pin   FMC_port         Schematic_name     System_top_name     IOSTANDARD  Termination
 
-# ad488x_fmc_evb
+# ad4880_fmc_evb
 
 H4        FMC_CLK0_M2C_P   CHA_DCO_P          adca_dco_p          LVDS_25     DIFF_TERM
 H5        FMC_CLK0_M2C_N   CHA_DCO_N          adca_dco_n          LVDS_25     DIFF_TERM

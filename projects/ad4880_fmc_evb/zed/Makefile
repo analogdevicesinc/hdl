@@ -4,9 +4,9 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad488x_fmc_evb_zed
+PROJECT_NAME := ad4880_fmc_evb_zed
 
-M_DEPS += ../common/ad488x_fmc_evb_bd.tcl
+M_DEPS += ../common/ad4880_fmc_evb_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
