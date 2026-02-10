@@ -642,6 +642,7 @@ if {$FSRC_ENABLE} {
   ad_ip_parameter fsrc_ctrl CONFIG.NUM_TRIG 4
 
   ad_connect tx_device_clk fsrc_ctrl/clk
+  ad_connect tx_device_clk_rstgen/peripheral_reset fsrc_ctrl/reset
   ad_connect fsrc_sysref   fsrc_ctrl/sysref
   ad_connect fsrc_trig_in  fsrc_ctrl/trig_in
   ad_connect fsrc_trig_out fsrc_ctrl/trig_out
@@ -1106,7 +1107,18 @@ if {$ASYMMETRIC_A_B_MODE} {
 #
 ad_connect  tx_apollo_tpl_core/link axi_apollo_tx_jesd/tx_data
 
-ad_connect  tx_apollo_tpl_core/dac_valid_0 util_apollo_upack/fifo_rd_en
+if {$FSRC_ENABLE} {
+  ad_ip_instance ilvector_logic upack_en_logic
+  ad_ip_parameter upack_en_logic config.c_operation {and}
+  ad_ip_parameter upack_en_logic config.c_size {1}
+
+  ad_connect tx_apollo_tpl_core/dac_valid_0 upack_en_logic/Op1
+  ad_connect fsrc_tx/data_in_ready upack_en_logic/Op2
+  ad_connect upack_en_logic/Res util_apollo_upack/fifo_rd_en
+} else {
+  ad_connect tx_apollo_tpl_core/dac_valid_0 util_apollo_upack/fifo_rd_en
+}
+
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  tx_apollo_tpl_core/dac_enable_$i  util_apollo_upack/enable_$i
 }
@@ -1118,10 +1130,7 @@ if {$FSRC_ENABLE} {
 
   ad_ip_parameter util_apollo_upack CONFIG.PACK_EN 0
   ad_connect $dac_data_offload_name/m_axis util_apollo_upack/s_axis
-  ad_ip_instance ilconstant fsrc_tx_valid
-  ad_ip_parameter fsrc_tx_valid CONFIG.CONST_VAL 1
-  ad_ip_parameter fsrc_tx_valid CONFIG.CONST_WIDTH 1
-  ad_connect fsrc_tx_valid/dout fsrc_tx/data_in_valid
+  ad_connect tx_apollo_tpl_core/dac_valid_0 fsrc_tx/data_in_valid
   for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
     ad_connect  util_apollo_upack/fifo_rd_data_$i fsrc_tx/data_in_$i
     ad_connect  fsrc_tx/data_out_$i tx_apollo_tpl_core/dac_data_$i
@@ -1135,14 +1144,24 @@ if {$FSRC_ENABLE} {
 
 ad_connect $dac_data_offload_name/init_req axi_apollo_tx_dma/m_axis_xfer_req
 ad_connect $adc_data_offload_name/init_req axi_apollo_rx_dma/s_axis_xfer_req
-ad_connect tx_apollo_tpl_core/dac_dunf GND
+ad_connect tx_apollo_tpl_core/dac_dunf util_apollo_upack/fifo_rd_underflow
 
 if {$ASYMMETRIC_A_B_MODE} {
   ad_connect  tx_b_apollo_tpl_core/link axi_apollo_tx_b_jesd/tx_data
 
-  ad_connect  tx_b_apollo_tpl_core/dac_valid_0 util_apollo_upack_b/fifo_rd_en
+  if {$FSRC_ENABLE} {
+    ad_ip_instance ilvector_logic upack_b_en_logic
+    ad_ip_parameter upack_b_en_logic config.c_operation {and}
+    ad_ip_parameter upack_b_en_logic config.c_size {1}
+
+    ad_connect tx_b_apollo_tpl_core/dac_valid_0 upack_b_en_logic/Op1
+    ad_connect fsrc_tx_b/data_in_ready upack_b_en_logic/Op2
+    ad_connect upack_b_en_logic/Res util_apollo_upack_b/fifo_rd_en
+  } else {
+    ad_connect tx_b_apollo_tpl_core/dac_valid_0 util_apollo_upack_b/fifo_rd_en
+  }
+
   for {set i 0} {$i < $TX_B_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  util_apollo_upack_b/fifo_rd_data_$i tx_b_apollo_tpl_core/dac_data_$i
     ad_connect  tx_b_apollo_tpl_core/dac_enable_$i  util_apollo_upack_b/enable_$i
   }
 
@@ -1152,15 +1171,22 @@ if {$ASYMMETRIC_A_B_MODE} {
     ad_connect tx_b_device_clk_rstgen/peripheral_reset fsrc_tx_b/reset
 
     ad_ip_parameter util_apollo_upack_b CONFIG.PACK_EN 0
-    ad_connect $dac_b_data_offload_name/m_axis fsrc_tx_b/s_axis
-    ad_connect util_apollo_upack_b/s_axis      fsrc_tx_b/m_axis
+    ad_connect $dac_b_data_offload_name/m_axis util_apollo_upack_b/s_axis
+    ad_connect tx_b_apollo_tpl_core/dac_valid_0 fsrc_tx_b/data_in_valid
+    for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  util_apollo_upack_b/fifo_rd_data_$i fsrc_tx_b/data_in_$i
+      ad_connect  fsrc_tx_b/data_out_$i tx_b_apollo_tpl_core/dac_data_$i
+    }
   } else {
     ad_connect  util_apollo_upack_b/s_axis $dac_b_data_offload_name/m_axis
+    for {set i 0} {$i < $TX_B_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  util_apollo_upack_b/fifo_rd_data_$i tx_b_apollo_tpl_core/dac_data_$i
+    }
   }
 
   ad_connect $dac_b_data_offload_name/init_req axi_apollo_tx_b_dma/m_axis_xfer_req
   ad_connect $adc_b_data_offload_name/init_req axi_apollo_rx_b_dma/s_axis_xfer_req
-  ad_connect tx_b_apollo_tpl_core/dac_dunf GND
+  ad_connect tx_b_apollo_tpl_core/dac_dunf util_apollo_upack_b/fifo_rd_underflow
 }
 
 # interconnect (cpu)
@@ -1374,9 +1400,6 @@ ad_connect tx_apollo_tpl_core/dac_tpl_core/dac_rst upack_reset_sources/in1
 ad_connect upack_reset_sources/dout upack_rst_logic/op1
 ad_connect upack_rst_logic/res util_apollo_upack/reset
 
-if {$FSRC_ENABLE} {
-  ad_connect tx_device_clk_rstgen/peripheral_reset fsrc_ctrl/reset
-}
 if {$ASYMMETRIC_A_B_MODE} {
   ad_ip_instance ilreduced_logic upack_b_rst_logic
   ad_ip_parameter upack_b_rst_logic config.c_operation {or}
