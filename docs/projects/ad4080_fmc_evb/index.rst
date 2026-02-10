@@ -19,7 +19,7 @@ The :adi:`EVAL-AD4080-FMC` is designed to demonstrate the
 The :adi:`EVAL-AD4080-FMC` HDL design supports the following
 :adi:`AD4080, AD4083, AD4086` features:
 
-* Single/Dual lane DDR data capture
+* Single lane DDR data capture
 * Self synchronization using the fixed pattern and bit-slip feature
 * Capturing digital averaging filter with up to 2^10 decimation
 * Analog-to-digital converter (ADC) configuration via serial peripheral
