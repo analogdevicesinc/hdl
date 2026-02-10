@@ -40,7 +40,6 @@ module axi_fsrc_rx #(
 ) (
   input  clk,
   input  reset,
-  input  cpack_reset,
   input  data_in_valid,
   input  [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] data_in,
   output data_out_valid,
@@ -92,11 +91,9 @@ module axi_fsrc_rx #(
   wire [31:0] up_wdata_s;
 
   wire enable;
-  wire reset_s;
 
   reg [DATA_WIDTH-1:0] data_in_d;
   reg                  data_in_valid_d;
-  assign reset_s = reset || cpack_reset;
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -156,7 +153,7 @@ module axi_fsrc_rx #(
     .NP (NP)
   ) remove_invalid (
     .clk (clk),
-    .reset (reset_s),
+    .reset (reset),
     .fsrc_en (enable),
     .in_data (data_in_d),
     .in_valid (data_in_valid_d),
@@ -164,7 +161,7 @@ module axi_fsrc_rx #(
     .out_valid (data_out_valid));
 
   always @(posedge clk) begin
-    if (reset_s) begin
+    if (reset) begin
       data_in_valid_d <= 1'b0;
     end else begin
       data_in_valid_d <= data_in_valid;
