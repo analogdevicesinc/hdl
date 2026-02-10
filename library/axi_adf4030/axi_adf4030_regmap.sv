@@ -260,14 +260,14 @@ module axi_adf4030_regmap #(
     .out_resetn (1'b1),
     .out_bits ({enable_misalign_check, debug_trig, enable_debug_trig, select_trig, rstn, disable_internal_bsync}));
 
-  sync_bits #(
-    .NUM_OF_BITS (1),
+  sync_event #(
+    .NUM_OF_EVENTS (1),
     .ASYNC_CLK (1)
   ) i_manual_trig (
-    .in_bits (up_manual_trig),
+    .in_clk (up_clk),
+    .in_event (up_manual_trig),
     .out_clk (clk),
-    .out_resetn (1'b1),
-    .out_bits (manual_trig));
+    .out_event (manual_trig));
 
   sync_data #(
     .NUM_OF_BITS (3),

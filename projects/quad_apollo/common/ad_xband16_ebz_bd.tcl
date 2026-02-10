@@ -14,6 +14,8 @@ set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
                             ? $ad_project_params(SHARED_DEVCLK) : 0 } ]
 set DO_HAS_BYPASS [ expr { [info exists ad_project_params(DO_HAS_BYPASS)] \
                           ? $ad_project_params(DO_HAS_BYPASS) : 1 } ]
+set MCS_MODE [ expr { [info exists ad_project_params(MCS_MODE)] \
+                          ? $ad_project_params(MCS_MODE) : "MASTER" } ]
 
 if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
   error "ERROR: Cannot enable TDD support without shared deviceclocks!"
@@ -109,10 +111,11 @@ create_bd_port -dir I adf4030_clk
 create_bd_port -dir I adf4030_trigger
 create_bd_port -dir O adf4030_sysref
 create_bd_port -dir O -from 5 -to 0 adf4030_trig_channel
-create_bd_port -dir O adf4030_debug_trig_out
+create_bd_port -dir O adf4030_trig_request_out
 
 ad_ip_instance axi_adf4030 axi_adf4030_0
 ad_ip_parameter axi_adf4030_0 CONFIG.CHANNEL_COUNT 5
+ad_ip_parameter axi_adf4030_0 CONFIG.TRIGGER_STRETCH [expr {$MCS_MODE == "MASTER" ? 1 : 0}]
 
 ad_connect axi_adf4030_0/bsync_p adf4030_bsync_p
 ad_connect axi_adf4030_0/bsync_n adf4030_bsync_n
@@ -120,7 +123,7 @@ ad_connect axi_adf4030_0/device_clk adf4030_clk
 ad_connect axi_adf4030_0/trigger adf4030_trigger
 ad_connect axi_adf4030_0/sysref adf4030_sysref
 ad_connect axi_adf4030_0/trig_channel adf4030_trig_channel
-ad_connect axi_adf4030_0/debug_trig_out adf4030_debug_trig_out
+ad_connect axi_adf4030_0/trig_request_out adf4030_trig_request_out
 
 ##AXI_HSCI IP
 if {!$HSCI_BYPASS} {

@@ -20,9 +20,11 @@ adi_ip_files axi_adf4030 [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "$ad_hdl_dir/library/util_cdc/sync_data.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_event.v" \
   "bsync_generator.sv" \
   "trigger_channel.sv" \
   "axi_adf4030_regmap.sv" \
+  "trigger_bsync_stretcher.sv" \
   "axi_adf4030.sv" ]
 
 adi_ip_properties axi_adf4030
@@ -53,6 +55,13 @@ set_property -dict [list \
         "value_validation_range_maximum" "8" \
         ] \
         [ipx::get_user_parameters CHANNEL_COUNT -of_objects [ipx::current_core]]
+
+set_property -dict [list \
+        "value_validation_type" "range_long" \
+        "value_validation_range_minimum" "0" \
+        "value_validation_range_maximum" "1" \
+        ] \
+        [ipx::get_user_parameters TRIGGER_STRETCH -of_objects [ipx::current_core]]
 
 adi_add_auto_fpga_spec_params
 ipx::create_xgui_files [ipx::current_core]

@@ -6,7 +6,8 @@ module axi_adf4030 #(
   // FPGA FAMILY
   parameter FPGA_FAMILY = 0,
   // Number of active trigger channels
-  parameter CHANNEL_COUNT = 1
+  parameter CHANNEL_COUNT = 1,
+  parameter TRIGGER_STRETCH = 0
 ) (
 
   inout  logic bsync_p,
@@ -15,7 +16,7 @@ module axi_adf4030 #(
   input  logic trigger,
   output logic sysref,
   output logic [CHANNEL_COUNT-1:0] trig_channel,
-  output logic debug_trig_out,
+  output logic trig_request_out,
 
   // AXI BUS
   input  logic                     s_axi_aresetn,
@@ -59,6 +60,7 @@ module axi_adf4030 #(
   logic        debug_trig;
   logic        enable_misalign_check;
   logic        trig;
+  logic        trig_in;
 
   // Internal up bus, translated by up_axi
   logic        up_rstn;
@@ -120,13 +122,26 @@ module axi_adf4030 #(
 
   assign trig = enable_debug_trig ? 1'b0 : (select_trig ? trigger_sync : manual_trig);
 
+  generate
+    if (TRIGGER_STRETCH) begin
+      trigger_bsync_stretcher i_trigger_stretcher (
+        .external_bsync(external_bsync),
+        .trigger(trig),
+        .sync_start(trig_in));
+    end else begin
+      assign trig_in = trig;
+    end
+  endgenerate
+
+  assign trig_request_out = trig_in;
+
   genvar i;
   generate
     for (i = 0; i < CHANNEL_COUNT; i = i + 1) begin
       trigger_channel i_channel (
         .clk         (device_clk),
         .rstn        (rstn),
-        .trigger     (trig),
+        .trigger     (trig_in),
         .ch_en       (trig_channel_en[i]),
         .ch_phase    (trig_channel_phase[i]),
         .bsync_event (bsync_event),
@@ -139,8 +154,6 @@ module axi_adf4030 #(
       assign trig_channel[i] = enable_debug_trig ? debug_trig : trig_channel_s[i];
     end
   endgenerate
-
-  assign debug_trig_out = manual_trig | debug_trig;
 
   axi_adf4030_regmap #(
     .ID            (ID),

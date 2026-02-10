@@ -214,7 +214,6 @@ module system_top (
 
   // wire            trig_rstn;
   wire    [ 4:0]  trig_channel;
-  wire            debug_trig_out;
   wire            trigger_captured;
   wire            sync_start;
   wire            sync_start_edge;
@@ -330,7 +329,6 @@ module system_top (
   assign pmod1_ctrl_rx_combined = gpio_o[99];
   // assign sync_start_debug = trig_channel[5];
   assign apollo_trig_debug = trig_channel[0];
-  assign trig_request = gp4[0] | debug_trig_out;
 
   assign gpio_i[100] = pdn_12v_pg;
   assign gpio_i[101] = vddd_0p8_pg;
@@ -596,13 +594,13 @@ module system_top (
     .hsci_dly_rdy_bsc_rx_2 (hsci_dly_rdy_bsc_rx[2]),
     .hsci_dly_rdy_bsc_rx_3 (hsci_dly_rdy_bsc_rx[3]),
 
-    .adf4030_bsync_p        (sysref_m2c_p),
-    .adf4030_bsync_n        (sysref_m2c_n),
-    .adf4030_clk            (rx_device_clk),
-    .adf4030_trigger        (gp4[0]),
-    .adf4030_sysref         (sysref),
-    .adf4030_trig_channel   (trig_channel),
-    .adf4030_debug_trig_out (debug_trig_out),
+    .adf4030_bsync_p          (sysref_m2c_p),
+    .adf4030_bsync_n          (sysref_m2c_n),
+    .adf4030_clk              (rx_device_clk),
+    .adf4030_trigger          (gp4[0]),
+    .adf4030_sysref           (sysref),
+    .adf4030_trig_channel     (trig_channel),
+    .adf4030_trig_request_out (trig_request),
 
     .ext_sync_in (sync_start),
 
