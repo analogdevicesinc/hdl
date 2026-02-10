@@ -108,6 +108,7 @@ module axi_fsrc_tx #(
   input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_61,
   input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_62,
   input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_in_63,
+  output data_in_ready,
 
   output reg data_out_valid,
   output [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] data_out_0,
@@ -323,7 +324,7 @@ module axi_fsrc_tx #(
     .accum_set (accum_set),
     .accum_add_val (accum_add_val),
 
-    .in_ready (),
+    .in_ready (data_in_ready),
     .in_data (in_data),
     .in_valid (data_in_valid),
 
