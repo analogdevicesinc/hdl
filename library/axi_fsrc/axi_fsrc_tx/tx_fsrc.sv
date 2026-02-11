@@ -55,8 +55,8 @@ module tx_fsrc #(
   logic [NUM_OF_CHANNELS-1:0]                    out_fifo_in_valid;
   logic                                          accum_en;
   logic                   holes_ready;
-  logic [NUM_SAMPLES-1:0] holes_n;
-  logic [NUM_SAMPLES-1:0] holes_data;
+  logic [SAMPLES_PER_CHANNEL-1:0] holes_n;
+  logic [SAMPLES_PER_CHANNEL-1:0] holes_data;
   logic                   fsrc_data_en;
   logic [NUM_OF_CHANNELS-1:0] in_ready_s;
   logic [NUM_OF_CHANNELS-1:0] out_valid_s;
@@ -147,13 +147,13 @@ module tx_fsrc #(
   end
 
   assign out_fifo_in_data = enable ? fsrc_out_data : in_fifo_out_data;
-  assign holes_data = fsrc_data_en ? {NUM_OF_CHANNELS{~holes_n}} : '1;
+  assign holes_data = fsrc_data_en ? ~holes_n : '1;
   assign accum_en = !reset && enable && fsrc_data_en && holes_ready;
 
   // Generate sequence of valid and invalid samples
   tx_fsrc_sample_en_gen #(
     .ACCUM_WIDTH (ACCUM_WIDTH),
-    .NUM_SAMPLES (NUM_SAMPLES)
+    .NUM_SAMPLES (SAMPLES_PER_CHANNEL)
   ) tx_fsrc_sample_en_gen (
     .clk        (clk),
     .reset      (reset),

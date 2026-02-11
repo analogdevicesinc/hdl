@@ -49,7 +49,7 @@ module fill_holes #(
     if (reset) begin
       in_holes_d <= '0;
       in_valid_d <= '0;
-      in_data_d <= 'X;
+      in_data_d <= '0;
     end else begin
       in_holes_d <= in_holes;
       in_data_d <= {in_data_d[2:1], in_data};
@@ -99,7 +99,7 @@ module fill_holes #(
   always_ff @(posedge clk) begin
     if(reset) begin
       non_holes_cnt_filled_valid <= '0;
-      non_holes_cnt_filled_d <= 'X;
+      non_holes_cnt_filled_d <= '0;
     end else begin
       non_holes_cnt_filled_valid <= in_valid_d[4] ? non_holes_cnt_filled_d[2] : '0;
       non_holes_cnt_filled_d <= {non_holes_cnt_filled_d[1], non_holes_cnt_filled};
@@ -111,7 +111,7 @@ module fill_holes #(
     if(reset) begin
       non_holes_cnt <= '0;
       out_valid <= 1'b0;
-      data_stored <= 'X;
+      data_stored <= '0;
     end else begin
       non_holes_cnt <= non_holes_cnt_comb;
       out_valid <= non_holes_cnt_comb >= NUM_WORDS;
