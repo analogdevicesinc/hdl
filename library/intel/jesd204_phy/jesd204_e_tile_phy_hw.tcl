@@ -86,6 +86,7 @@ proc jesd204_e_tile_phy_composition_callback {} {
   set_instance_parameter_value native_phy pma_data_rate $lane_rate
   set_instance_parameter_value native_phy pma_width $pma_width
   set_instance_parameter_value native_phy l_av1_enable 1
+  set_instance_parameter_value native_phy refclk_recovery_en 1
 
   # TX side parameters
   set_instance_parameter_value native_phy tx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
@@ -126,23 +127,40 @@ proc jesd204_e_tile_phy_composition_callback {} {
     add_connection gts_reset_phy.o_pma_cu_clk native_phy.i_pma_cu_clk
     add_connection gts_reset_phy.o_src_rs_grant native_phy.i_src_rs_grant
     add_connection native_phy.o_src_rs_req gts_reset_phy.i_src_rs_req
-    add_connection native_phy.o_refclk_bus_out gts_reset_phy.i_refclk_bus_out
 
     add_interface gts_reset_src_rs_priority conduit end
     set_interface_property gts_reset_src_rs_priority EXPORT_OF gts_reset_phy.i_src_rs_priority
+
+    add_interface gts_reset_o_refclk_fail_status conduit end
+    set_interface_property gts_reset_o_refclk_fail_status EXPORT_OF gts_reset_phy.o_refclk_fail_status
+
+    add_interface gts_reset_i_refclk_on conduit end
+    set_interface_property gts_reset_i_refclk_on EXPORT_OF gts_reset_phy.i_refclk_on
+
+    add_interface gts_reset_o_refclk_on_ack conduit end
+    set_interface_property gts_reset_o_refclk_on_ack EXPORT_OF gts_reset_phy.o_refclk_on_ack
+
+    add_interface gts_reset_i_src_rs_refclk_status_bus conduit end
+    set_interface_property gts_reset_i_src_rs_refclk_status_bus EXPORT_OF gts_reset.i_src_rs_refclk_status_bus
+
+    add_interface gts_reset_o_src_rs_refclk_cmd_bus conduit end
+    set_interface_property gts_reset_o_src_rs_refclk_cmd_bus EXPORT_OF gts_reset.o_src_rs_refclk_cmd_bus
   } else {
     # Use external reset controller
     add_interface o_src_rs_req conduit end
     set_interface_property o_src_rs_req EXPORT_OF native_phy.o_src_rs_req
-
-    add_interface o_refclk_bus_out conduit end
-    set_interface_property o_refclk_bus_out EXPORT_OF native_phy.o_refclk_bus_out
 
     add_interface i_pma_cu_clk conduit end
     set_interface_property i_pma_cu_clk EXPORT_OF native_phy.i_pma_cu_clk
 
     add_interface i_src_rs_grant conduit end
     set_interface_property i_src_rs_grant EXPORT_OF native_phy.i_src_rs_grant
+
+    add_interface i_refclk_cmd_bus_in conduit end
+    set_interface_property i_refclk_cmd_bus_in EXPORT_OF native_phy.i_refclk_cmd_bus_in
+
+    add_interface o_refclk_status_bus_out conduit end
+    set_interface_property o_refclk_status_bus_out EXPORT_OF native_phy.o_refclk_status_bus_out
   }
 
   # Instantiate PHY glues (RX and TX)

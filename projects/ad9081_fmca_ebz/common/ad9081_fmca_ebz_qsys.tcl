@@ -215,25 +215,36 @@ if {$EXTERNAL_PHY} {
   add_interface gts_reset_o_pma_cu_clk conduit end
   add_interface gts_reset_o_src_rs_grant conduit end
   add_interface gts_reset_i_src_rs_req conduit end
-  add_interface gts_reset_i_refclk_bus_out conduit end
   add_interface gts_reset_src_rs_priority conduit end
+
+  add_interface gts_reset_o_refclk_fail_status conduit end
+  add_interface gts_reset_i_refclk_on conduit end
+  add_interface gts_reset_o_refclk_on_ack conduit end
+  add_interface gts_reset_i_src_rs_refclk_status_bus conduit end
+  add_interface gts_reset_o_src_rs_refclk_cmd_bus conduit end
 
   set_interface_property gts_reset_o_pma_cu_clk EXPORT_OF gts_reset_phy.o_pma_cu_clk
   set_interface_property gts_reset_o_src_rs_grant EXPORT_OF gts_reset_phy.o_src_rs_grant
   set_interface_property gts_reset_i_src_rs_req EXPORT_OF gts_reset_phy.i_src_rs_req
-  set_interface_property gts_reset_i_refclk_bus_out EXPORT_OF gts_reset_phy.i_refclk_bus_out
   set_interface_property gts_reset_src_rs_priority EXPORT_OF gts_reset_phy.i_src_rs_priority
+
+  set_interface_property gts_reset_i_refclk_on EXPORT_OF gts_reset_phy.i_refclk_on
+  set_interface_property gts_reset_i_src_rs_refclk_status_bus EXPORT_OF gts_reset_phy.i_src_rs_refclk_status_bus
+  set_interface_property gts_reset_o_refclk_fail_status EXPORT_OF gts_reset_phy.o_refclk_fail_status
+  set_interface_property gts_reset_o_refclk_on_ack EXPORT_OF gts_reset_phy.o_refclk_on_ack
+  set_interface_property gts_reset_o_src_rs_refclk_cmd_bus EXPORT_OF gts_reset_phy.o_src_rs_refclk_cmd_bus
 
   foreach phy {jesd204_phy jesd204_phy_os} {
     add_interface ${phy}_i_pma_cu_clk conduit end
     add_interface ${phy}_i_src_rs_grant conduit end
     add_interface ${phy}_o_src_rs_req conduit end
-    add_interface ${phy}_o_refclk_bus_out conduit end
+    add_interface ${phy}_o_refclk_status_bus_out conduit end
 
     set_interface_property ${phy}_i_pma_cu_clk EXPORT_OF ${phy}.i_pma_cu_clk
     set_interface_property ${phy}_i_src_rs_grant EXPORT_OF ${phy}.i_src_rs_grant
     set_interface_property ${phy}_o_src_rs_req EXPORT_OF ${phy}.o_src_rs_req
-    set_interface_property ${phy}_o_refclk_bus_out EXPORT_OF ${phy}.o_refclk_bus_out
+    set_interface_property ${phy}_i_refclk_cmd_bus_in EXPORT_OF ${phy}.i_refclk_cmd_bus_in
+    set_interface_property ${phy}_o_refclk_status_bus_out EXPORT_OF ${phy}.o_refclk_status_bus_out
   }
 }
 

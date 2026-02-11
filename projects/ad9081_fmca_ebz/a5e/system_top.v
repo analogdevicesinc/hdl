@@ -203,7 +203,6 @@ module system_top #(
   wire          h2f_reset;
   wire [ 1:0]   usb31_io_usb_ctrl_s;
   wire          pma_cu_clk;
-  wire          refclk_fail_stat;
   wire          syspll_clk;
   wire          syspll_lock;
   wire          dacfifo_bypass;
@@ -211,9 +210,15 @@ module system_top #(
   wire [RX_JESD_L+RX_OS_JESD_L-1:0] gts_reset_o_src_rs_grant_src_rs_grant;
   wire [RX_JESD_L+RX_OS_JESD_L-1:0] gts_reset_i_src_rs_req_src_rs_req;
   wire [NUM_BANKS-1:0]              gts_reset_o_pma_cu_clk_clk;
-  wire                              gts_reset_i_refclk_bus_out_refclk_bus_out;
-  wire                              jesd204_phy_o_refclk_bus_out_refclk_bus_out;
-  wire                              jesd204_phy_os_o_refclk_bus_out_refclk_bus_out;
+  wire [9:0]                        gts_reset_i_refclk_on_refclk_on;
+  wire [9:0]                        gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out;
+  wire [7:0]                        gts_reset_o_refclk_fail_status_refclk_fail_status;
+  wire                              gts_reset_o_refclk_on_ack_refclk_on_ack;
+  wire [9:0]                        gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in;
+  wire [9:0]                        jesd204_phy_i_refclk_cmd_bus_in_refclk_cmd_bus_in;
+  wire [9:0]                        jesd204_phy_o_refclk_status_bus_out_refclk_status_bus_out;
+  wire [9:0]                        jesd204_phy_os_i_refclk_cmd_bus_in_refclk_cmd_bus_in;
+  wire [9:0]                        jesd204_phy_os_o_refclk_status_bus_out_refclk_status_bus_out;
 
   wire  [ 7:0]  spi_csn_s;
   wire          spi_clk;
@@ -224,6 +229,9 @@ module system_top #(
   assign gpio_i[ 3: 0] = gpio_o[3:0];
   assign gpio_i[ 7: 4] = fpga_dipsw;
   assign gpio_i[11: 8] = fpga_btn;
+
+  assign gpio_i[31:24] = gts_reset_o_refclk_fail_status_refclk_fail_status;
+  assign gpio_i[23]    = gts_reset_o_refclk_on_ack_refclk_on_ack;
 
   // HMC GPIOs
   assign gpio_i[44] = agc0[0];
@@ -250,7 +258,7 @@ module system_top #(
   // Unused GPIOs
   assign gpio_i[63:54] = gpio_o[63:54];
   assign gpio_i[43:32] = gpio_o[43:32];
-  assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[22:12] = gpio_o[22:12];
 
   // assignmnets
   assign sys_reset_n = sys_resetn & ~h2f_reset & ~ninit_done;
@@ -279,169 +287,177 @@ module system_top #(
                     ~spi_csn_s[1] ? spi_hmc_miso :
                     1'b0;
 
-  assign gts_reset_i_refclk_bus_out_refclk_bus_out = jesd204_phy_o_refclk_bus_out_refclk_bus_out & jesd204_phy_os_o_refclk_bus_out_refclk_bus_out;
+  assign gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out = jesd204_phy_o_refclk_status_bus_out_refclk_status_bus_out &
+                                                                      jesd204_phy_os_o_refclk_status_bus_out_refclk_status_bus_out;
+  assign jesd204_phy_i_refclk_cmd_bus_in_refclk_cmd_bus_in    = gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in;
+  assign jesd204_phy_os_i_refclk_cmd_bus_in_refclk_cmd_bus_in = gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in;
+  assign gts_reset_i_refclk_on_refclk_on = 9'b111111111;
 
   system_bd i_system_bd (
-    .sys_clk_clk                                             (sys_clk),
-    .sys_hps_io_hps_osc_clk                                  (hps_osc_clk),
+    .sys_clk_clk                                                  (sys_clk),
+    .sys_hps_io_hps_osc_clk                                       (hps_osc_clk),
 
-    .sys_rst_reset_n                                         (sys_reset_n),
-    .rst_ninit_done                                          (ninit_done),
-    .h2f_reset_reset                                         (h2f_reset),
+    .sys_rst_reset_n                                              (sys_reset_n),
+    .rst_ninit_done                                               (ninit_done),
+    .h2f_reset_reset                                              (h2f_reset),
 
-    .f2h_irq1_in_irq                                         ('h0),
-    .pr_rom_data_nc_rom_data                                 ('h0),
-    .o_pma_cu_clk_clk                                        (pma_cu_clk),
-    .i_refclk_bus_out_refclk_bus_out                         (1'h0),
-    .o_shoreline_refclk_fail_stat_shoreline_refclk_fail_stat (refclk_fail_stat),
+    .f2h_irq1_in_irq                                              ('h0),
+    .pr_rom_data_nc_rom_data                                      ('h0),
+    .o_pma_cu_clk_clk                                             (pma_cu_clk),
 
-    .hps_emif_mem_0_mem_cke                                  (emif_hps_mem_cke),
-    .hps_emif_mem_0_mem_odt                                  (emif_hps_mem_odt),
-    .hps_emif_mem_0_mem_cs_n                                 (emif_hps_mem_cs_n),
-    .hps_emif_mem_0_mem_a                                    (emif_hps_mem_a),
-    .hps_emif_mem_0_mem_ba                                   (emif_hps_mem_ba),
-    .hps_emif_mem_0_mem_bg                                   (emif_hps_mem_bg),
-    .hps_emif_mem_0_mem_act_n                                (emif_hps_mem_act_n),
-    .hps_emif_mem_0_mem_par                                  (emif_hps_mem_par),
-    .hps_emif_mem_0_mem_dq                                   (emif_hps_mem_dq),
-    .hps_emif_mem_0_mem_dqs_t                                (emif_hps_mem_dqs_t),
-    .hps_emif_mem_0_mem_dqs_c                                (emif_hps_mem_dqs_c),
-    .hps_emif_mem_0_mem_alert_n                              (emif_hps_mem_alert_n),
-    .hps_emif_mem_ck_0_mem_ck_t                              (emif_hps_mem_ck_t),
-    .hps_emif_mem_ck_0_mem_ck_c                              (emif_hps_mem_ck_c),
-    .hps_emif_mem_reset_n_mem_reset_n                        (emif_hps_mem_reset_n),
-    .hps_emif_oct_0_oct_rzqin                                (emif_hps_oct_rzqin),
-    .hps_emif_ref_clk_0_clk                                  (emif_hps_ref_clk),
+    .hps_emif_mem_0_mem_cke                                       (emif_hps_mem_cke),
+    .hps_emif_mem_0_mem_odt                                       (emif_hps_mem_odt),
+    .hps_emif_mem_0_mem_cs_n                                      (emif_hps_mem_cs_n),
+    .hps_emif_mem_0_mem_a                                         (emif_hps_mem_a),
+    .hps_emif_mem_0_mem_ba                                        (emif_hps_mem_ba),
+    .hps_emif_mem_0_mem_bg                                        (emif_hps_mem_bg),
+    .hps_emif_mem_0_mem_act_n                                     (emif_hps_mem_act_n),
+    .hps_emif_mem_0_mem_par                                       (emif_hps_mem_par),
+    .hps_emif_mem_0_mem_dq                                        (emif_hps_mem_dq),
+    .hps_emif_mem_0_mem_dqs_t                                     (emif_hps_mem_dqs_t),
+    .hps_emif_mem_0_mem_dqs_c                                     (emif_hps_mem_dqs_c),
+    .hps_emif_mem_0_mem_alert_n                                   (emif_hps_mem_alert_n),
+    .hps_emif_mem_ck_0_mem_ck_t                                   (emif_hps_mem_ck_t),
+    .hps_emif_mem_ck_0_mem_ck_c                                   (emif_hps_mem_ck_c),
+    .hps_emif_mem_reset_n_mem_reset_n                             (emif_hps_mem_reset_n),
+    .hps_emif_oct_0_oct_rzqin                                     (emif_hps_oct_rzqin),
+    .hps_emif_ref_clk_0_clk                                       (emif_hps_ref_clk),
 
-    .sys_hps_io_sdmmc_data0                                  (hps_sdmmc_d[0]),
-    .sys_hps_io_sdmmc_data1                                  (hps_sdmmc_d[1]),
-    .sys_hps_io_sdmmc_data2                                  (hps_sdmmc_d[2]),
-    .sys_hps_io_sdmmc_data3                                  (hps_sdmmc_d[3]),
-    .sys_hps_io_sdmmc_cclk                                   (hps_sdmmc_clk),
-    .sys_hps_io_sdmmc_cmd                                    (hps_sdmmc_cmd),
+    .sys_hps_io_sdmmc_data0                                       (hps_sdmmc_d[0]),
+    .sys_hps_io_sdmmc_data1                                       (hps_sdmmc_d[1]),
+    .sys_hps_io_sdmmc_data2                                       (hps_sdmmc_d[2]),
+    .sys_hps_io_sdmmc_data3                                       (hps_sdmmc_d[3]),
+    .sys_hps_io_sdmmc_cclk                                        (hps_sdmmc_clk),
+    .sys_hps_io_sdmmc_cmd                                         (hps_sdmmc_cmd),
 
-    .sys_hps_io_usb1_clk                                     (hps_usb_clk),
-    .sys_hps_io_usb1_stp                                     (hps_usb_stp),
-    .sys_hps_io_usb1_dir                                     (hps_usb_dir),
-    .sys_hps_io_usb1_nxt                                     (hps_usb_nxt),
-    .sys_hps_io_usb1_data0                                   (hps_usb_d[0]),
-    .sys_hps_io_usb1_data1                                   (hps_usb_d[1]),
-    .sys_hps_io_usb1_data2                                   (hps_usb_d[2]),
-    .sys_hps_io_usb1_data3                                   (hps_usb_d[3]),
-    .sys_hps_io_usb1_data4                                   (hps_usb_d[4]),
-    .sys_hps_io_usb1_data5                                   (hps_usb_d[5]),
-    .sys_hps_io_usb1_data6                                   (hps_usb_d[6]),
-    .sys_hps_io_usb1_data7                                   (hps_usb_d[7]),
+    .sys_hps_io_usb1_clk                                          (hps_usb_clk),
+    .sys_hps_io_usb1_stp                                          (hps_usb_stp),
+    .sys_hps_io_usb1_dir                                          (hps_usb_dir),
+    .sys_hps_io_usb1_nxt                                          (hps_usb_nxt),
+    .sys_hps_io_usb1_data0                                        (hps_usb_d[0]),
+    .sys_hps_io_usb1_data1                                        (hps_usb_d[1]),
+    .sys_hps_io_usb1_data2                                        (hps_usb_d[2]),
+    .sys_hps_io_usb1_data3                                        (hps_usb_d[3]),
+    .sys_hps_io_usb1_data4                                        (hps_usb_d[4]),
+    .sys_hps_io_usb1_data5                                        (hps_usb_d[5]),
+    .sys_hps_io_usb1_data6                                        (hps_usb_d[6]),
+    .sys_hps_io_usb1_data7                                        (hps_usb_d[7]),
 
-    .sys_hps_io_emac2_tx_clk                                 (hps_emac_txclk),
-    .sys_hps_io_emac2_tx_ctl                                 (hps_emac_txctl),
-    .sys_hps_io_emac2_rx_clk                                 (hps_emac_rxclk),
-    .sys_hps_io_emac2_rx_ctl                                 (hps_emac_rxctl),
-    .sys_hps_io_emac2_txd0                                   (hps_emac_txd[0]),
-    .sys_hps_io_emac2_txd1                                   (hps_emac_txd[1]),
-    .sys_hps_io_emac2_txd2                                   (hps_emac_txd[2]),
-    .sys_hps_io_emac2_txd3                                   (hps_emac_txd[3]),
-    .sys_hps_io_emac2_rxd0                                   (hps_emac_rxd[0]),
-    .sys_hps_io_emac2_rxd1                                   (hps_emac_rxd[1]),
-    .sys_hps_io_emac2_rxd2                                   (hps_emac_rxd[2]),
-    .sys_hps_io_emac2_rxd3                                   (hps_emac_rxd[3]),
-    .sys_hps_io_emac2_pps                                    (hps_emac_pps),
-    .sys_hps_io_emac2_pps_trig                               (hps_emac_pps_trig),
+    .sys_hps_io_emac2_tx_clk                                      (hps_emac_txclk),
+    .sys_hps_io_emac2_tx_ctl                                      (hps_emac_txctl),
+    .sys_hps_io_emac2_rx_clk                                      (hps_emac_rxclk),
+    .sys_hps_io_emac2_rx_ctl                                      (hps_emac_rxctl),
+    .sys_hps_io_emac2_txd0                                        (hps_emac_txd[0]),
+    .sys_hps_io_emac2_txd1                                        (hps_emac_txd[1]),
+    .sys_hps_io_emac2_txd2                                        (hps_emac_txd[2]),
+    .sys_hps_io_emac2_txd3                                        (hps_emac_txd[3]),
+    .sys_hps_io_emac2_rxd0                                        (hps_emac_rxd[0]),
+    .sys_hps_io_emac2_rxd1                                        (hps_emac_rxd[1]),
+    .sys_hps_io_emac2_rxd2                                        (hps_emac_rxd[2]),
+    .sys_hps_io_emac2_rxd3                                        (hps_emac_rxd[3]),
+    .sys_hps_io_emac2_pps                                         (hps_emac_pps),
+    .sys_hps_io_emac2_pps_trig                                    (hps_emac_pps_trig),
 
-    .sys_hps_io_mdio2_mdio                                   (hps_emac_mdio),
-    .sys_hps_io_mdio2_mdc                                    (hps_emac_mdc),
+    .sys_hps_io_mdio2_mdio                                        (hps_emac_mdio),
+    .sys_hps_io_mdio2_mdc                                         (hps_emac_mdc),
 
-    .sys_hps_io_uart0_tx                                     (hps_uart_tx),
-    .sys_hps_io_uart0_rx                                     (hps_uart_rx),
+    .sys_hps_io_uart0_tx                                          (hps_uart_tx),
+    .sys_hps_io_uart0_rx                                          (hps_uart_rx),
 
-    .sys_hps_io_i3c1_sda                                     (hps_i2c_sda),
-    .sys_hps_io_i3c1_scl                                     (hps_i2c_scl),
+    .sys_hps_io_i3c1_sda                                          (hps_i2c_sda),
+    .sys_hps_io_i3c1_scl                                          (hps_i2c_scl),
 
-    .sys_hps_io_jtag_tck                                     (hps_jtag_tck),
-    .sys_hps_io_jtag_tms                                     (hps_jtag_tms),
-    .sys_hps_io_jtag_tdo                                     (hps_jtag_tdo),
-    .sys_hps_io_jtag_tdi                                     (hps_jtag_tdi),
+    .sys_hps_io_jtag_tck                                          (hps_jtag_tck),
+    .sys_hps_io_jtag_tms                                          (hps_jtag_tms),
+    .sys_hps_io_jtag_tdo                                          (hps_jtag_tdo),
+    .sys_hps_io_jtag_tdi                                          (hps_jtag_tdi),
 
-    .usb31_io_vbus_det                                       (usb31_io_vbus_det),
-    .usb31_io_flt_bar                                        (usb31_io_flt_bar),
-    .usb31_io_usb_ctrl                                       (usb31_io_usb_ctrl_s),
-    .usb31_io_usb31_id                                       (usb31_io_usb31_id),
+    .usb31_io_vbus_det                                            (usb31_io_vbus_det),
+    .usb31_io_flt_bar                                             (usb31_io_flt_bar),
+    .usb31_io_usb_ctrl                                            (usb31_io_usb_ctrl_s),
+    .usb31_io_usb31_id                                            (usb31_io_usb31_id),
 
-    .usb31_phy_pma_cpu_clk_clk                               (pma_cu_clk),
-    .usb31_phy_refclk_p_clk                                  (usb31_phy_refclk_p),
-    .usb31_phy_rx_serial_n_i_rx_serial_n                     (usb31_phy_rx_serial_n),
-    .usb31_phy_rx_serial_p_i_rx_serial_p                     (usb31_phy_rx_serial_p),
-    .usb31_phy_tx_serial_n_o_tx_serial_n                     (usb31_phy_tx_serial_n),
-    .usb31_phy_tx_serial_p_o_tx_serial_p                     (usb31_phy_tx_serial_p),
+    .usb31_phy_pma_cpu_clk_clk                                    (pma_cu_clk),
+    .usb31_phy_refclk_p_clk                                       (usb31_phy_refclk_p),
+    .usb31_phy_rx_serial_n_i_rx_serial_n                          (usb31_phy_rx_serial_n),
+    .usb31_phy_rx_serial_p_i_rx_serial_p                          (usb31_phy_rx_serial_p),
+    .usb31_phy_tx_serial_n_o_tx_serial_n                          (usb31_phy_tx_serial_n),
+    .usb31_phy_tx_serial_p_o_tx_serial_p                          (usb31_phy_tx_serial_p),
 
-    .sys_hps_io_gpio0                                        (hps_gpio0_io0),
-    .sys_hps_io_gpio1                                        (hps_gpio0_io1),
-    .sys_hps_io_gpio11                                       (hps_gpio0_io11),
-    .sys_hps_io_gpio27                                       (hps_gpio1_io3),
-    .sys_hps_io_gpio28                                       (hps_gpio1_io4),
+    .sys_hps_io_gpio0                                             (hps_gpio0_io0),
+    .sys_hps_io_gpio1                                             (hps_gpio0_io1),
+    .sys_hps_io_gpio11                                            (hps_gpio0_io11),
+    .sys_hps_io_gpio27                                            (hps_gpio1_io3),
+    .sys_hps_io_gpio28                                            (hps_gpio1_io4),
 
-    .sys_gpio_bd_in_port                                     (gpio_i[31:0]),
-    .sys_gpio_bd_out_port                                    (gpio_o[31:0]),
-    .sys_gpio_in_export                                      (gpio_i[63:32]),
-    .sys_gpio_out_export                                     (gpio_o[63:32]),
+    .sys_gpio_bd_in_port                                          (gpio_i[31:0]),
+    .sys_gpio_bd_out_port                                         (gpio_o[31:0]),
+    .sys_gpio_in_export                                           (gpio_i[63:32]),
+    .sys_gpio_out_export                                          (gpio_o[63:32]),
 
-    .gts_reset_o_src_rs_grant_src_rs_grant                   (gts_reset_o_src_rs_grant_src_rs_grant),
-    .gts_reset_src_rs_priority_src_rs_priority               ('h0),
-    .gts_reset_i_src_rs_req_src_rs_req                       (gts_reset_i_src_rs_req_src_rs_req),
-    .gts_reset_o_pma_cu_clk_clk                              (gts_reset_o_pma_cu_clk_clk),
-    .gts_reset_i_refclk_bus_out_refclk_bus_out               (gts_reset_i_refclk_bus_out_refclk_bus_out),
+    .gts_reset_i_refclk_on_refclk_on                              (gts_reset_i_refclk_on_refclk_on),
+    .gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out   (gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out),
+    .gts_reset_o_refclk_fail_status_refclk_fail_status            (gts_reset_o_refclk_fail_status_refclk_fail_status),
+    .gts_reset_o_refclk_on_ack_refclk_on_ack                      (gts_reset_o_refclk_on_ack_refclk_on_ack),
+    .gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in          (gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in),
 
-    .jesd204_phy_i_pma_cu_clk_clk                            (gts_reset_o_pma_cu_clk_clk[0]),
-    .jesd204_phy_i_src_rs_grant_src_rs_grant                 (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L-1:0]),
-    .jesd204_phy_o_src_rs_req_src_rs_req                     (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L-1:0]),
-    .jesd204_phy_o_refclk_bus_out_refclk_bus_out             (jesd204_phy_o_refclk_bus_out_refclk_bus_out),
+    .gts_reset_o_src_rs_grant_src_rs_grant                        (gts_reset_o_src_rs_grant_src_rs_grant),
+    .gts_reset_src_rs_priority_src_rs_priority                    ('h0),
+    .gts_reset_i_src_rs_req_src_rs_req                            (gts_reset_i_src_rs_req_src_rs_req),
+    .gts_reset_o_pma_cu_clk_clk                                   (gts_reset_o_pma_cu_clk_clk),
 
-    .jesd204_phy_os_i_pma_cu_clk_clk                         (gts_reset_o_pma_cu_clk_clk[PHY_OS_PMA_CLK_IDX]),
-    .jesd204_phy_os_i_src_rs_grant_src_rs_grant              (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
-    .jesd204_phy_os_o_src_rs_req_src_rs_req                  (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
-    .jesd204_phy_os_o_refclk_bus_out_refclk_bus_out          (jesd204_phy_os_o_refclk_bus_out_refclk_bus_out),
+    .jesd204_phy_i_pma_cu_clk_clk                                 (gts_reset_o_pma_cu_clk_clk[0]),
+    .jesd204_phy_i_src_rs_grant_src_rs_grant                      (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L-1:0]),
+    .jesd204_phy_o_src_rs_req_src_rs_req                          (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L-1:0]),
+    .jesd204_phy_i_refclk_cmd_bus_in_refclk_cmd_bus_in            (jesd204_phy_i_refclk_cmd_bus_in_refclk_cmd_bus_in),
+    .jesd204_phy_o_refclk_status_bus_out_refclk_status_bus_out    (jesd204_phy_o_refclk_status_bus_out_refclk_status_bus_out),
 
-    .o_pll_lock_o_pll_lock                                   (syspll_lock),
-    .o_syspll_c0_clk                                         (syspll_clk),
+    .jesd204_phy_os_i_pma_cu_clk_clk                              (gts_reset_o_pma_cu_clk_clk[PHY_OS_PMA_CLK_IDX]),
+    .jesd204_phy_os_i_src_rs_grant_src_rs_grant                   (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
+    .jesd204_phy_os_o_src_rs_req_src_rs_req                       (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
+    .jesd204_phy_os_i_refclk_cmd_bus_in_refclk_cmd_bus_in         (jesd204_phy_os_i_refclk_cmd_bus_in_refclk_cmd_bus_in),
+    .jesd204_phy_os_o_refclk_status_bus_out_refclk_status_bus_out (jesd204_phy_os_o_refclk_status_bus_out_refclk_status_bus_out),
+    .o_pll_lock_o_pll_lock                                        (syspll_lock),
+    .o_syspll_c0_clk                                              (syspll_clk),
 
-    .system_pll_lock_system_pll_lock                         (syspll_lock),
-    .system_pll_clk_clk                                      (syspll_clk),
-    .system_pll_lock_os_system_pll_lock                      (syspll_lock),
-    .system_pll_clk_os_clk                                   (syspll_clk),
-    .refclk_xcvr_clk                                         (fpga_refclk_in),
-    .i_refclk_rdy_data                                       (1'b1),
-    .dacfifo_bypass_bypass                                   (dacfifo_bypass),
-    .phy_tx_pll_locked_o_tx_pll_locked                       (phy_tx_pll_locked_o_tx_pll_locked),
-    .tx_pll_locked_o_tx_pll_locked                           (phy_tx_pll_locked_o_tx_pll_locked[TX_JESD_L-1:0]),
+    .system_pll_lock_system_pll_lock                              (syspll_lock),
+    .system_pll_clk_clk                                           (syspll_clk),
+    .system_pll_lock_os_system_pll_lock                           (syspll_lock),
+    .system_pll_clk_os_clk                                        (syspll_clk),
+    .refclk_xcvr_clk                                              (fpga_refclk_in),
+    .i_refclk_rdy_data                                            (1'b1),
+    .dacfifo_bypass_bypass                                        (dacfifo_bypass),
+    .phy_tx_pll_locked_o_tx_pll_locked                            (phy_tx_pll_locked_o_tx_pll_locked),
+    .tx_pll_locked_o_tx_pll_locked                                (phy_tx_pll_locked_o_tx_pll_locked[TX_JESD_L-1:0]),
 
     // FMC HPC
-    .sys_spi_MISO                                            (spi_miso),
-    .sys_spi_MOSI                                            (spi_mosi),
-    .sys_spi_SCLK                                            (spi_clk),
-    .sys_spi_SS_n                                            (spi_csn_s),
-    .tx_serial_data_o_tx_serial_data                         (tx_data[TX_JESD_L-1:0]),
-    .tx_serial_data_n_o_tx_serial_data_n                     (tx_data_n[TX_JESD_L-1:0]),
-    .tx_ref_clk_clk                                          (fpga_refclk_in),
-    .tx_sync_export                                          (fpga_syncin_0),
-    .tx_sysref_export                                        (sysref2),
-    .tx_device_clk_clk                                       (clkin6),
-    .rx_serial_data_i_rx_serial_data                         (rx_data[RX_JESD_L-1:0]),
-    .rx_serial_data_n_i_rx_serial_data_n                     (rx_data_n[RX_JESD_L-1:0]),
-    .rx_ref_clk_clk                                          (fpga_refclk_in),
-    .rx_sync_export                                          (fpga_syncout_0),
-    .rx_sysref_export                                        (sysref2),
-    .rx_os_ref_clk_clk                                       (fpga_refclk_in),
-    .tx_os_ref_clk_clk                                       (fpga_refclk_in),
-    .rx_os_serial_data_i_rx_serial_data                      (rx_os_data[RX_OS_JESD_L-1:0]),
-    .rx_os_serial_data_n_i_rx_serial_data_n                  (rx_os_data_n[RX_OS_JESD_L-1:0]),
-    .rx_os_device_clk_clk                                    (clkin10),
-    .rx_os_sync_export                                       (fpga_syncout_1),
-    .rx_os_sysref_export                                     (sysref2),
-    .rx_device_clk_clk                                       (clkin6),
-    .mxfe_gpio_export                                        ({1'b0,              // 14
-                                                               1'b0,              // 13
-                                                               fpga_syncin_1_n,   // 12
-                                                               fpga_syncin_1_p,   // 11
-                                                               gpio}));           // 10:0
+    .sys_spi_MISO                                                 (spi_miso),
+    .sys_spi_MOSI                                                 (spi_mosi),
+    .sys_spi_SCLK                                                 (spi_clk),
+    .sys_spi_SS_n                                                 (spi_csn_s),
+    .tx_serial_data_o_tx_serial_data                              (tx_data[TX_JESD_L-1:0]),
+    .tx_serial_data_n_o_tx_serial_data_n                          (tx_data_n[TX_JESD_L-1:0]),
+    .tx_ref_clk_clk                                               (fpga_refclk_in),
+    .tx_sync_export                                               (fpga_syncin_0),
+    .tx_sysref_export                                             (sysref2),
+    .tx_device_clk_clk                                            (clkin6),
+    .rx_serial_data_i_rx_serial_data                              (rx_data[RX_JESD_L-1:0]),
+    .rx_serial_data_n_i_rx_serial_data_n                          (rx_data_n[RX_JESD_L-1:0]),
+    .rx_ref_clk_clk                                               (fpga_refclk_in),
+    .rx_sync_export                                               (fpga_syncout_0),
+    .rx_sysref_export                                             (sysref2),
+    .rx_os_ref_clk_clk                                            (fpga_refclk_in),
+    .tx_os_ref_clk_clk                                            (fpga_refclk_in),
+    .rx_os_serial_data_i_rx_serial_data                           (rx_os_data[RX_OS_JESD_L-1:0]),
+    .rx_os_serial_data_n_i_rx_serial_data_n                       (rx_os_data_n[RX_OS_JESD_L-1:0]),
+    .rx_os_device_clk_clk                                         (clkin10),
+    .rx_os_sync_export                                            (fpga_syncout_1),
+    .rx_os_sysref_export                                          (sysref2),
+    .rx_device_clk_clk                                            (clkin6),
+    .mxfe_gpio_export                                             ({1'b0,              // 14
+                                                                    1'b0,              // 13
+                                                                    fpga_syncin_1_n,   // 12
+                                                                    fpga_syncin_1_p,   // 11
+                                                                    gpio}));           // 10:0
 
 endmodule

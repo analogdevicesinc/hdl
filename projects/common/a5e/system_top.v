@@ -131,7 +131,6 @@ module system_top (
   wire          h2f_reset;
   wire [ 1:0]   usb31_io_usb_ctrl_s;
   wire          pma_cu_clk;
-  wire          refclk_fail_stat;
 
   // Board GPIOs
   assign fpga_led      = gpio_o[3:0];
@@ -158,8 +157,6 @@ module system_top (
     .f2h_irq1_in_irq                                         ('h0),
     .pr_rom_data_nc_rom_data                                 ('h0),
     .o_pma_cu_clk_clk                                        (pma_cu_clk),
-    .i_refclk_bus_out_refclk_bus_out                         (1'h0),
-    .o_shoreline_refclk_fail_stat_shoreline_refclk_fail_stat (refclk_fail_stat),
 
     .hps_emif_mem_0_mem_cke                                  (emif_hps_mem_cke),
     .hps_emif_mem_0_mem_odt                                  (emif_hps_mem_odt),
