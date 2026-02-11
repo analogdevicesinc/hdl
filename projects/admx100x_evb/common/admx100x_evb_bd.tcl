@@ -35,7 +35,7 @@ ad_ip_instance clk_wiz mclk_clk_wiz
 ad_ip_parameter mclk_clk_wiz CONFIG.PRIMITIVE MMCM
 ad_ip_parameter mclk_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
 ad_ip_parameter mclk_clk_wiz CONFIG.USE_LOCKED false
-ad_ip_parameter mclk_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 16
+ad_ip_parameter mclk_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 16.384
 ad_ip_parameter mclk_clk_wiz CONFIG.PRIM_SOURCE No_buffer
 
 # dma for the ADC

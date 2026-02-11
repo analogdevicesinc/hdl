@@ -136,7 +136,8 @@ module system_top (
   assign admx100x_trig = gpio_o[40];
   assign acq_synq_in_fmc = gpio_o[41];
   assign acq_reset = gpio_o[42];
-  assign gpio_i[63:43] = gpio_o[63:43];
+  assign gpio_i[43] = acq_drdy;
+  assign gpio_i[63:44] = gpio_o[63:44];
 
   // instantiations
 
