@@ -143,7 +143,7 @@ Using the GUI of the Wizard
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 7 Series FPGAs Transceiver Wizard
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+*******************************************************************************
 
 To start the wizard in the Vivado, a project should be loaded with a 7 Series
 FPGA which has gigabit transceivers. In the **Project Manager** select IP
@@ -188,7 +188,7 @@ The setting from the tabs **PCIe, SATA, PRBS** and **CB and CC Sequence** can
 be left to their default values.
 
 Generated files
-********************************************************************************
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Location of the **COMMON** instance:
  - <project_name>/<project_name>.gen/sources_1/ip/<component_name>/<component_name>_common.v
@@ -206,7 +206,7 @@ These instances should be compared with the COMMON and CHANNEL instances used in
 :git-hdl:`util_adxcvr_xch.v <library/xilinx/util_adxcvr/util_adxcvr_xch.v>`.
 
 Ultrascale FPGAs Transceiver Wizard
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+********************************************************************************
 
 The overall workflow with the Ultrascale FPGAs Transceiver Wizard is similar to
 the 7 Series one, it just has a different GUI. To open up the wizard in the
@@ -226,7 +226,7 @@ To have both COMMON and CHANNEL instances inside the generated core, in the
 option must be selected.
 
 Generated files
-********************************************************************************
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 To find the actual instance attributes, two different files should be examined.
 A generic one, which contains the actual software macro instance, and a wrapper,
@@ -277,12 +277,12 @@ Open the TCL console inside your Vivado project. Source gtwizard_generator.tcl
    source ../../scripts/gtwizard_generator.tcl
 
 Generating configuration
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+********************************************************************************
 
 Here you have 2 options.
 
 ad_gth_generator
-********************************************************************************
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 **Recommended method for generating multiple configurations**
 
@@ -319,7 +319,7 @@ run the Parsing_script to get the list of parameters that need to be changed
 into the project.
 
 get_diff_params
-********************************************************************************
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 **Recommended method for generating a single configuration**
 
@@ -362,7 +362,7 @@ This call makes 4 instances of transceivers, and also deletes them after
 generating the list because of the 4th parameter is set to false.
 
 Parsing script
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+********************************************************************************
 
 If you used the get_diff_params method from the script to generate the IP,
 there is no need to call it again.
@@ -392,7 +392,7 @@ Make sure to overwrite the list from system_bd with the one in <GT_Type>_cfng.tx
    paring script will not work
 
 Output products
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+********************************************************************************
 
 Output products can be found at this location: <project_name>.gen/sources_1/ip
 
@@ -404,7 +404,7 @@ If you had multiple configurations, all the output files should give you some
 valuable information.
 
 GT_Type_cfng.txt
-********************************************************************************
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This file contains 2 lists. The first one is a list of parameters that are
 unique for the desired configuration/configurations, different from the default
@@ -415,7 +415,7 @@ ones different from the default ones. This list should be empty if you have
 only one configuration generated.
 
 GT_Type_var_dist.txt
-********************************************************************************
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Here you will find a list with the distribution of each DRP attribute in
 relation to the lane rates of your instances.
@@ -451,7 +451,7 @@ relation to the lane rates of your instances.
          };
 
 GT_Type_vco_dist.txt
-********************************************************************************
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Here you will find a list with the distribution of each DRP attribute in
 relation to the VCO frequency of your instances. If this list is empty, that
@@ -459,7 +459,7 @@ means that the attributes are the same for the used VCOs (Probably all the
 instances have the same VCO) This should look similar to “GT_Type_var_dist.txt”
 
 table_common.csv
-********************************************************************************
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This is a table containing 3 columns: The first one is the name of the parameter.
 The second one is the default value for that parameter, and it is that value
@@ -469,7 +469,7 @@ from the default. If there is an empty cell in this column, it means that there
 is used the default value.
 
 table_unique.csv
-********************************************************************************
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This table contains the unique parameters for each individual configurations.
 The values found here are the ones that differ among your generated
