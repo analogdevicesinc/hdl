@@ -24,13 +24,13 @@ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 gt
 create_bd_intf_port -mode Slave -vlnv xilinx.com:display_aurora:GT_Serial_Transceiver_Pins_RX_rtl:1.0 gt_serial_rx
 create_bd_intf_port -mode Master -vlnv xilinx.com:display_aurora:GT_Serial_Transceiver_Pins_TX_rtl:1.0 gt_serial_tx
 
-set_property -dict [list CONFIG.FREQ_HZ {125000000}] [get_bd_intf_ports gt_diff_refclk]
+set_property -dict [list CONFIG.FREQ_HZ {156250000}] [get_bd_intf_ports gt_diff_refclk]
 
 ad_ip_instance aurora_8b10b aurora_8b10b [list \
   SupportLevel 1 \
   C_AURORA_LANES 2 \
   C_LINE_RATE 3.125 \
-  C_REFCLK_FREQUENCY 125.000 \
+  C_REFCLK_FREQUENCY 156.250 \
   interface_mode {Streaming} \
   SINGLEEND_INITCLK {true} \
   C_INIT_CLK 100 \
@@ -71,10 +71,6 @@ set_property range 4K [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_bf_spi_01_Reg}]
 set_property range 4K [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_bf_spi_02_Reg}]
 set_property range 4K [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_bf_spi_03_Reg}]
 set_property range 4K [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_bf_spi_04_Reg}]
-set_property range 4K [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_axi_bf_iic_01_Reg}]
-set_property range 4K [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_axi_bf_iic_02_Reg}]
-set_property range 4K [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_axi_bf_iic_03_Reg}]
-set_property range 4K [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_axi_bf_iic_04_Reg}]
 set_property range 4K [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_rf_fl_spi_Reg}]
 set_property range 4K [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_lo_spi_Reg}]
 set_property range 4K [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_tx_spi_Reg}]
@@ -88,10 +84,6 @@ set_property offset 0x90003000 [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_bf_spi_
 set_property offset 0x90004000 [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_bf_spi_02_Reg}]
 set_property offset 0x90005000 [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_bf_spi_03_Reg}]
 set_property offset 0x90006000 [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_bf_spi_04_Reg}]
-set_property offset 0x90007000 [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_axi_bf_iic_01_Reg}]
-set_property offset 0x90008000 [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_axi_bf_iic_02_Reg}]
-set_property offset 0x90009000 [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_axi_bf_iic_03_Reg}]
-set_property offset 0x9000A000 [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_axi_bf_iic_04_Reg}]
 set_property offset 0x9000B000 [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_rf_fl_spi_Reg}]
 set_property offset 0x9000C000 [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_lo_spi_Reg}]
 set_property offset 0x9000D000 [get_bd_addr_segs {axi_chip2chip/MAXI/SEG_tx_spi_Reg}]

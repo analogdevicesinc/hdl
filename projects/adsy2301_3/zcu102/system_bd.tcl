@@ -32,13 +32,13 @@ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 gt
 create_bd_intf_port -mode Slave -vlnv xilinx.com:display_aurora:GT_Serial_Transceiver_Pins_RX_rtl:1.0 gt_serial_rx
 create_bd_intf_port -mode Master -vlnv xilinx.com:display_aurora:GT_Serial_Transceiver_Pins_TX_rtl:1.0 gt_serial_tx
 
-set_property -dict [list CONFIG.FREQ_HZ {125000000}] [get_bd_intf_ports gt_diff_refclk]
+set_property -dict [list CONFIG.FREQ_HZ {156250000}] [get_bd_intf_ports gt_diff_refclk]
 
 ad_ip_instance aurora_8b10b aurora_8b10b [list \
   SupportLevel 1 \
   C_AURORA_LANES 2 \
   C_LINE_RATE 3.125 \
-  C_REFCLK_FREQUENCY 125 \
+  C_REFCLK_FREQUENCY 156.25 \
   interface_mode {Streaming} \
   C_START_QUAD {Quad_X1Y2} \
   C_START_LANE {X1Y9} \

@@ -83,7 +83,7 @@ ad_ip_instance axi_gpio axi_gpio1 [list \
   C_ALL_OUTPUTS 1 \
   C_GPIO_WIDTH 4 \
   C_ALL_INPUTS_2 1 \
-  C_GPIO2_WIDTH 15 \
+  C_GPIO2_WIDTH 17\
 ]
 
 ad_connect axi_gpio0/GPIO gpio_out1
@@ -202,66 +202,6 @@ ad_connect bf_spi_04/s_axi_aresetn sys_cpu_resetn
 ad_connect axi_smartconnect/M06_AXI bf_spi_04/AXI_LITE
 
 ad_connect sys_concat_intc/In3 bf_spi_04/ip2intc_irpt
-
-# BF I2C 01
-
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 bf_iic_01
-
-ad_ip_instance axi_iic axi_bf_iic_01
-
-ad_connect axi_bf_iic_01/IIC bf_iic_01
-
-ad_connect axi_bf_iic_01/s_axi_aclk sys_cpu_clk
-ad_connect axi_bf_iic_01/s_axi_aresetn sys_cpu_resetn
-
-ad_connect axi_smartconnect/M07_AXI axi_bf_iic_01/S_AXI
-
-ad_connect sys_concat_intc/In4 axi_bf_iic_01/iic2intc_irpt
-
-# BF I2C 02
-
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 bf_iic_02
-
-ad_ip_instance axi_iic axi_bf_iic_02
-
-ad_connect axi_bf_iic_02/IIC bf_iic_02
-
-ad_connect axi_bf_iic_02/s_axi_aclk sys_cpu_clk
-ad_connect axi_bf_iic_02/s_axi_aresetn sys_cpu_resetn
-
-ad_connect axi_smartconnect/M08_AXI axi_bf_iic_02/S_AXI
-
-ad_connect sys_concat_intc/In5 axi_bf_iic_02/iic2intc_irpt
-
-# BF I2C 03
-
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 bf_iic_03
-
-ad_ip_instance axi_iic axi_bf_iic_03
-
-ad_connect axi_bf_iic_03/IIC bf_iic_03
-
-ad_connect axi_bf_iic_03/s_axi_aclk sys_cpu_clk
-ad_connect axi_bf_iic_03/s_axi_aresetn sys_cpu_resetn
-
-ad_connect axi_smartconnect/M09_AXI axi_bf_iic_03/S_AXI
-
-ad_connect sys_concat_intc/In6 axi_bf_iic_03/iic2intc_irpt
-
-# BF I2C 04
-
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 bf_iic_04
-
-ad_ip_instance axi_iic axi_bf_iic_04
-
-ad_connect axi_bf_iic_04/IIC bf_iic_04
-
-ad_connect axi_bf_iic_04/s_axi_aclk sys_cpu_clk
-ad_connect axi_bf_iic_04/s_axi_aresetn sys_cpu_resetn
-
-ad_connect axi_smartconnect/M10_AXI axi_bf_iic_04/S_AXI
-
-ad_connect sys_concat_intc/In7 axi_bf_iic_04/iic2intc_irpt
 
 # RF FL SPI
 
