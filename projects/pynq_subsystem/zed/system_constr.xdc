@@ -27,30 +27,32 @@ set_property -dict {PACKAGE_PIN AA9 IOSTANDARD LVCMOS33}                 [get_po
 
 # set IOSTANDARD according to VADJ 3.3V
 
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports otg_vbusoc]
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports otg_vbusoc]
 
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[0]]       ; ## BTNC
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[1]]       ; ## BTND
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[2]]       ; ## BTNL
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[3]]       ; ## BTNR
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[4]]       ; ## BTNU
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[0]]       ; ## BTNC
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[1]]       ; ## BTND
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[2]]       ; ## BTNL
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[3]]       ; ## BTNR
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[4]]       ; ## BTNU
 
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[11]]      ; ## SW0
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[12]]      ; ## SW1
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[13]]      ; ## SW2
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[14]]      ; ## SW3
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[15]]      ; ## SW4
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[16]]      ; ## SW5
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[17]]      ; ## SW6
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[18]]      ; ## SW7
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[11]]      ; ## SW0
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[12]]      ; ## SW1
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[13]]      ; ## SW2
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[14]]      ; ## SW3
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[15]]      ; ## SW4
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[16]]      ; ## SW5
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[17]]      ; ## SW6
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[18]]      ; ## SW7
 
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[27]]      ; ## XADC-GIO0
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[28]]      ; ## XADC-GIO1
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[29]]      ; ## XADC-GIO2
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[30]]      ; ## XADC-GIO3
 
-set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[31]]      ; ## OTG-RESETN
+
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[27]]      ; ## XADC-GIO0
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[28]]      ; ## XADC-GIO1
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[29]]      ; ## XADC-GIO2
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[30]]      ; ## XADC-GIO3
+
+# set_property  -dict {IOSTANDARD LVCMOS33} [get_ports gpio_bd[31]]      ; ## OTG-RESETN
 
 
 #GPIO LED
-set_property -dict {PACKAGE_PIN T21 IOSTANDARD LVCMOS33}    [get_ports LED];
+#mset_property -dict {PACKAGE_PIN T21 IOSTANDARD LVCMOS33}    [get_ports LED];
