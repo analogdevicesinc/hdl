@@ -31,15 +31,16 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   # Create pins
   # -----------------------
   create_bd_pin -dir I -from 0 -to 0 -type rst aux_reset_in
+  create_bd_pin -dir I -type rst  ext_reset_in
   create_bd_pin -dir I -type clk clk_100M
-  create_bd_pin -dir I -from 1 -to 0 data_i
-  create_bd_pin -dir O -from 1 -to 0 data_o
+  #create_bd_pin -dir I -from 1 -to 0 data_i
+  create_bd_pin -dir O  data_o
   create_bd_pin -dir I -from 0 -to 0 intr_ack
   create_bd_pin -dir O  intr_req
   create_bd_pin -dir I -type rst mb_debug_sys_rst
   create_bd_pin -dir O -from 0 -to 0 -type rst peripheral_aresetn
   create_bd_pin -dir I -from 0 -to 0 -type rst s_axi_aresetn
-  create_bd_pin -dir O -from 1 -to 0 tri_o
+  #create_bd_pin -dir O -from 1 -to 0 tri_o
 
   # -----------------------
   # Logic constants (needed early for reset)
@@ -51,14 +52,14 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   # Processor System Reset
   # -----------------------
   ad_ip_instance proc_sys_reset ${iop_name}_rst
-  ad_ip_parameter ${iop_name}_rst CONFIG.C_EXT_RESET_HIGH 0
+  #ad_ip_parameter ${iop_name}_rst CONFIG.C_EXT_RESET_HIGH 0
   ad_ip_parameter ${iop_name}_rst CONFIG.C_AUX_RESET_HIGH 1
 
   ad_connect clk_100M ${iop_name}_rst/slowest_sync_clk
   ad_connect aux_reset_in ${iop_name}_rst/aux_reset_in
   ad_connect mb_debug_sys_rst ${iop_name}_rst/mb_debug_sys_rst
   ad_connect ${iop_name}_logic_1/dout ${iop_name}_rst/dcm_locked
-  ad_connect ${iop_name}_logic_1/dout ${iop_name}_rst/ext_reset_in
+  ad_connect ext_reset_in  ${iop_name}_rst/ext_reset_in
   ad_connect ${iop_name}_rst/peripheral_aresetn peripheral_aresetn
 
   # -----------------------
@@ -109,24 +110,43 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   # LMB BRAM (shared instruction and data memory)
   # Use standalone BRAM configuration for dual-port access
   # -----------------------
-  ad_ip_instance blk_mem_gen ${iop_name}_lmb_bram
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Memory_Type True_Dual_Port_RAM
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.use_bram_block Stand_Alone
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Write_Depth_A 1024
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Write_Width_A 32
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Read_Width_A 32
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Write_Width_B 32
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Read_Width_B 32
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Enable_B Use_ENB_Pin
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Port_B_Clock 100
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Port_B_Enable_Rate 100
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Port_B_Write_Rate 50
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Use_RSTB_Pin true
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Register_PortA_Output_of_Memory_Primitives false
-  ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Register_PortB_Output_of_Memory_Primitives false
+  # ad_ip_instance blk_mem_gen ${iop_name}_lmb_bram
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Memory_Type True_Dual_Port_RAM
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.use_bram_block Stand_Alone
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Write_Depth_A [expr 1024 *16]
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Write_Width_A 32
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Read_Width_A 32
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Write_Width_B 32
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Read_Width_B 32
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Enable_B Use_ENB_Pin
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Port_B_Clock 100
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Port_B_Enable_Rate 100
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Port_B_Write_Rate 50
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Use_RSTB_Pin true
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Register_PortA_Output_of_Memory_Primitives false
+  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Register_PortB_Output_of_Memory_Primitives false
+
+  ad_ip_instance blk_mem_gen ${iop_name}_lmb_bram [list \
+    Memory_Type True_Dual_Port_RAM  \
+    use_bram_block BRAM_Controller \
+    Write_Depth_A [expr 1024 *16] \
+    Write_Width_A 32 \
+    Read_Width_A 32 \
+    Write_Width_B 32 \
+    Read_Width_B 32 \
+    Enable_B Use_ENB_Pin \
+    Port_B_Clock 100 \
+    Port_B_Enable_Rate 100 \
+    Port_B_Write_Rate 50 \
+    Use_RSTB_Pin true \
+    Register_PortA_Output_of_Memory_Primitives false \
+    Register_PortB_Output_of_Memory_Primitives false \
+  ]
+
 
   ad_connect ${iop_name}_lmb_bram_cntlr/BRAM_PORT ${iop_name}_lmb_bram/BRAM_PORTA
 
+ 
   # -----------------------
   # AXI BRAM Controller for PS access to LMB BRAM Port B
   # PYNQ requires this to be named "mb_bram_ctrl"
@@ -139,6 +159,12 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   ad_connect s_axi_aresetn mb_bram_ctrl/s_axi_aresetn
   ad_connect S_AXI mb_bram_ctrl/S_AXI
   ad_connect mb_bram_ctrl/BRAM_PORTA ${iop_name}_lmb_bram/BRAM_PORTB
+
+    # ad_ip_parameter  ${iop_name}_lmb_bram/BRAM_PORTA  CONFIG.MASTER_TYPE	BRAM_CTRL
+    # ad_ip_parameter  ${iop_name}_lmb_bram/BRAM_PORTA  CONFIG.MEM_SIZE	65536
+
+    # ad_ip_parameter  ${iop_name}_lmb_bram/BRAM_PORTB CONFIG.MASTER_TYPE	BRAM_CTRL
+    # ad_ip_parameter  ${iop_name}_lmb_bram/BRAM_PORTB  CONFIG.MEM_SIZE	65536
 
   # -----------------------
   # AXI Interconnect for MicroBlaze peripherals
@@ -201,9 +227,9 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   # AXI GPIO - Direct connection to data pins (2 bits)
   # -----------------------
   ad_ip_instance axi_gpio ${iop_name}_gpio
-  ad_ip_parameter ${iop_name}_gpio CONFIG.C_GPIO_WIDTH 2
+  ad_ip_parameter ${iop_name}_gpio CONFIG.C_GPIO_WIDTH 1
   ad_ip_parameter ${iop_name}_gpio CONFIG.C_IS_DUAL 0
-  ad_ip_parameter ${iop_name}_gpio CONFIG.C_ALL_OUTPUTS 0
+  ad_ip_parameter ${iop_name}_gpio CONFIG.C_ALL_OUTPUTS 1
   ad_ip_parameter ${iop_name}_gpio CONFIG.C_ALL_INPUTS 0
 
   ad_connect clk_100M ${iop_name}_gpio/s_axi_aclk
@@ -211,9 +237,9 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   ad_connect ${iop_name}_axi_periph/M[format "%02d" $mi_index]_AXI ${iop_name}_gpio/S_AXI
 
   # Connect GPIO directly to data pins
-  ad_connect ${iop_name}_gpio/gpio_io_i data_i
+  #ad_connect ${iop_name}_gpio/gpio_io_i data_i
   ad_connect ${iop_name}_gpio/gpio_io_o data_o
-  ad_connect ${iop_name}_gpio/gpio_io_t tri_o
+  #ad_connect ${iop_name}_gpio/gpio_io_t tri_o
   incr mi_index
 
   # -----------------------
@@ -254,13 +280,30 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   # Use xlconstant to create a proper scalar signal for sys_concat_intc
   # -----------------------
   # Create a constant 0 for when interrupt is not active
-  ad_ip_instance xlconstant ${iop_name}_intr_const
-  ad_ip_parameter ${iop_name}_intr_const CONFIG.CONST_VAL 0
-  ad_ip_parameter ${iop_name}_intr_const CONFIG.CONST_WIDTH 1
+  #ad_ip_instance xlconstant ${iop_name}_intr_const
+  #ad_ip_parameter ${iop_name}_intr_const CONFIG.CONST_VAL 0
+  #ad_ip_parameter ${iop_name}_intr_const CONFIG.CONST_WIDTH 1
 
   # For now, connect interrupt output to GND (can be modified later)
   # The interrupt logic needs to match sys_concat_intc input type (scalar)
-  ad_connect ${iop_name}_intr_const/dout intr_req
+  #ad_connect ${iop_name}_intr_const/dout intr_req
+
+ad_ip_instance util_reg  ${iop_name}_util_reg [list \
+   IS_FF Flip-Flop \
+   NUM_OF_BITS 1 \
+   CLK_EDGE Riseing \
+   ACTIVE_RESET High \
+   RESET_ASYNC Synchronous \
+   INIT 0 \
+   RESET_VALUE 0 \
+  ]
+
+  ad_connect  ${iop_name}_util_reg/d  ${iop_name}_logic_1/dout
+  ad_connect  ${iop_name}_util_reg/clk   clk_100M
+  ad_connect  ${iop_name}_util_reg/en   ${iop_name}_intr/gpio_io_o 
+  ad_connect  ${iop_name}_util_reg/reset intr_ack
+  ad_connect  ${iop_name}_util_reg/q  intr_req
+
 
   # -----------------------
   # Return to parent instance
@@ -275,7 +318,7 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   # PYNQ Reset GPIO (outside hierarchy)
   # Named mb_${iop_name}_reset for PYNQ compatibility
   # -----------------------
-  ad_ip_instance axi_gpio mb_${iop_name}_reset
+   ad_ip_instance axi_gpio mb_${iop_name}_reset
   ad_ip_parameter mb_${iop_name}_reset CONFIG.C_GPIO_WIDTH 1
   ad_ip_parameter mb_${iop_name}_reset CONFIG.C_ALL_OUTPUTS 1
   ad_ip_parameter mb_${iop_name}_reset CONFIG.C_DOUT_DEFAULT 0x00000001
@@ -286,7 +329,7 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   # Connect reset GPIO output to IOP aux_reset_in (directly, no inversion needed)
   # When GPIO output is 0 -> MB in reset, when 1 -> MB running
   ad_connect mb_${iop_name}_reset/gpio_io_o ${iop_name}/aux_reset_in
-
+  ad_connect sys_ps7_FCLK_RESET0_N ${iop_name}/ext_reset_in
   # -----------------------
   # PYNQ Interrupt ACK GPIO (outside hierarchy)
   # Named mb_${iop_name}_intr_ack for PYNQ compatibility
@@ -309,11 +352,13 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
 
   ad_connect ${iop_name}_gnd/dout ${iop_name}/mb_debug_sys_rst
 
+  
+
   # -----------------------
   # CPU Interconnect for PS access to BRAM
   # -----------------------
   ad_cpu_interconnect $base_addr ${iop_name}/mb_bram_ctrl
-set_property range 64K [get_bd_addr_segs {sys_ps7/Data/mb_bram_ctrl}]
+  set_property range 64K [get_bd_addr_segs {sys_ps7/Data/mb_bram_ctrl}]
   # CPU Interconnect for reset GPIO
   ad_cpu_interconnect [expr $base_addr + 0x10000] mb_${iop_name}_reset
 
@@ -324,12 +369,14 @@ set_property range 64K [get_bd_addr_segs {sys_ps7/Data/mb_bram_ctrl}]
   # Address assignment for MicroBlaze LMB (critical for MB to find instructions at 0x0)
   # -----------------------
   # Assign LMB BRAM at address 0x0 for MicroBlaze Data bus
-  assign_bd_address -offset 0x00000000 -range 0x00001000 \
+
+  assign_bd_address -offset 0x00000000 -range 0x00010000 \
     -target_address_space [get_bd_addr_spaces ${iop_name}/${iop_name}_mb/Data] \
     [get_bd_addr_segs ${iop_name}/${iop_name}_lmb_bram_cntlr/SLMB1/Mem] -force
 
-  # Assign LMB BRAM at address 0x0 for MicroBlaze Instruction bus
-  assign_bd_address -offset 0x00000000 -range 0x00001000 \
+  # Assign LMB BRAM at address 0x0 for MicroBlaze Instruction bus 
+  
+  assign_bd_address -offset 0x00000000 -range 0x00010000 \
     -target_address_space [get_bd_addr_spaces ${iop_name}/${iop_name}_mb/Instruction] \
     [get_bd_addr_segs ${iop_name}/${iop_name}_lmb_bram_cntlr/SLMB/Mem] -force
 
