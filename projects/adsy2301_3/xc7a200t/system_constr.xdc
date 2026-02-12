@@ -82,18 +82,6 @@ set_property -dict {PACKAGE_PIN L1   IOSTANDARD LVCMOS18          } [get_ports R
 
 # I2C
 
-set_property -dict {PACKAGE_PIN W21  IOSTANDARD LVCMOS18 SLEW SLOW PULLUP TRUE} [get_ports BF_SCL_01]
-set_property -dict {PACKAGE_PIN T20  IOSTANDARD LVCMOS18 SLEW SLOW PULLUP TRUE} [get_ports BF_SDA_01]
-
-set_property -dict {PACKAGE_PIN W20  IOSTANDARD LVCMOS18 SLEW SLOW PULLUP TRUE} [get_ports BF_SCL_02]
-set_property -dict {PACKAGE_PIN W19  IOSTANDARD LVCMOS18 SLEW SLOW PULLUP TRUE} [get_ports BF_SDA_02]
-
-set_property -dict {PACKAGE_PIN J14  IOSTANDARD LVCMOS18 SLEW SLOW PULLUP TRUE} [get_ports BF_SCL_03]
-set_property -dict {PACKAGE_PIN G16  IOSTANDARD LVCMOS18 SLEW SLOW PULLUP TRUE} [get_ports BF_SDA_03]
-
-set_property -dict {PACKAGE_PIN G20  IOSTANDARD LVCMOS18 SLEW SLOW PULLUP TRUE} [get_ports BF_SCL_04]
-set_property -dict {PACKAGE_PIN H20  IOSTANDARD LVCMOS18 SLEW SLOW PULLUP TRUE} [get_ports BF_SDA_04]
-
 set_property -dict {PACKAGE_PIN J19  IOSTANDARD LVCMOS18 SLEW SLOW PULLUP TRUE} [get_ports UDC_SCL]
 set_property -dict {PACKAGE_PIN J21  IOSTANDARD LVCMOS18 SLEW SLOW PULLUP TRUE} [get_ports UDC_SDA]
 
@@ -118,19 +106,19 @@ set_property -dict {PACKAGE_PIN G17  IOSTANDARD LVCMOS18} [get_ports BF_TR_03]
 set_property -dict {PACKAGE_PIN K22  IOSTANDARD LVCMOS18} [get_ports BF_TR_04]
 
 set_property -dict {PACKAGE_PIN AA21 IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_01]
-set_property -dict {PACKAGE_PIN W22  IOSTANDARD LVCMOS18} [get_ports BF_ALARM_01]
+set_property -dict {PACKAGE_PIN W22  IOSTANDARD LVCMOS18} [get_ports BF_PWR_EN_01]
 set_property -dict {PACKAGE_PIN AA18 IOSTANDARD LVCMOS18} [get_ports VGG_PA_PG_N1]
 
 set_property -dict {PACKAGE_PIN AA19 IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_02]
-set_property -dict {PACKAGE_PIN V18  IOSTANDARD LVCMOS18} [get_ports BF_ALARM_02]
+set_property -dict {PACKAGE_PIN W19  IOSTANDARD LVCMOS18} [get_ports BF_PWR_EN_02]
 set_property -dict {PACKAGE_PIN AB18 IOSTANDARD LVCMOS18} [get_ports VGG_PA_PG_N2]
 
 set_property -dict {PACKAGE_PIN G18  IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_03]
-set_property -dict {PACKAGE_PIN H14  IOSTANDARD LVCMOS18} [get_ports BF_ALARM_03]
+set_property -dict {PACKAGE_PIN P17  IOSTANDARD LVCMOS18} [get_ports BF_PWR_EN_03]
 set_property -dict {PACKAGE_PIN U17  IOSTANDARD LVCMOS18} [get_ports VGG_PA_PG_N3]
 
 set_property -dict {PACKAGE_PIN M21  IOSTANDARD LVCMOS18} [get_ports BF_PA_ON_04]
-set_property -dict {PACKAGE_PIN K21  IOSTANDARD LVCMOS18} [get_ports BF_ALARM_04]
+set_property -dict {PACKAGE_PIN P15  IOSTANDARD LVCMOS18} [get_ports BF_PWR_EN_04]
 set_property -dict {PACKAGE_PIN U18  IOSTANDARD LVCMOS18} [get_ports VGG_PA_PG_N4]
 
 set_property -dict {PACKAGE_PIN F15  IOSTANDARD LVCMOS18} [get_ports ADRF5030_CTRL1]
@@ -203,6 +191,8 @@ set_property -dict {PACKAGE_PIN H19  IOSTANDARD LVCMOS18} [get_ports PG_CARRIER]
 set_property -dict {PACKAGE_PIN K18  IOSTANDARD LVCMOS18} [get_ports GT_PGOOD_1V]
 set_property -dict {PACKAGE_PIN K19  IOSTANDARD LVCMOS18} [get_ports UDC_PG]
 set_property -dict {PACKAGE_PIN M22  IOSTANDARD LVCMOS18} [get_ports N6P0V_PG]
+set_property -dict {PACKAGE_PIN K1   IOSTANDARD LVCMOS18} [get_ports UDC_5P0V_LDO_PG]
+set_property -dict {PACKAGE_PIN E1   IOSTANDARD LVCMOS18} [get_ports UDC_3P3V_LDO_PG]
 
 set_property -dict {PACKAGE_PIN D1   IOSTANDARD LVCMOS18} [get_ports UDC_ALERT_N_LTC2945]
 set_property -dict {PACKAGE_PIN E2   IOSTANDARD LVCMOS18} [get_ports FPGA_TRIG]
@@ -210,7 +200,7 @@ set_property -dict {PACKAGE_PIN K6   IOSTANDARD LVCMOS18} [get_ports DELSTR]
 set_property -dict {PACKAGE_PIN J6   IOSTANDARD LVCMOS18} [get_ports DELADJ]
 set_property -dict {PACKAGE_PIN L5   IOSTANDARD LVCMOS18} [get_ports MUXOUT]
 
-create_clock -period 8.000 -name aurora_refclk [get_ports aurora_refclk_p]
+create_clock -period 6.400 -name aurora_refclk [get_ports aurora_refclk_p]
 
 create_generated_clock -name sys_clk [get_pins i_system_wrapper/system_i/clk_wizard/inst/mmcm_adv_inst/CLKOUT0]
 create_generated_clock -name spi_clk [get_pins i_system_wrapper/system_i/clk_wizard/inst/mmcm_adv_inst/CLKOUT1]
@@ -346,21 +336,7 @@ set_input_delay -clock [get_clocks spi_clk] -min [expr $tco_min + $trce_dly_min 
 
 # IIC
 
-create_generated_clock -name BF_SCL_01 -source [get_pins -of_objects [get_clocks sys_clk]] -divide_by 1000 [get_ports BF_SCL_01]
-create_generated_clock -name BF_SCL_02 -source [get_pins -of_objects [get_clocks sys_clk]] -divide_by 1000 [get_ports BF_SCL_02]
-create_generated_clock -name BF_SCL_03 -source [get_pins -of_objects [get_clocks sys_clk]] -divide_by 1000 [get_ports BF_SCL_03]
-create_generated_clock -name BF_SCL_04 -source [get_pins -of_objects [get_clocks sys_clk]] -divide_by 1000 [get_ports BF_SCL_04]
-
 create_generated_clock -name UDC_SCL -source [get_pins -of_objects [get_clocks sys_clk]] -divide_by 1000 [get_ports UDC_SCL]
-
-set_false_path -from [get_ports BF_SDA_01]
-set_false_path -to   [get_ports BF_SDA_01]
-set_false_path -from [get_ports BF_SDA_02]
-set_false_path -to   [get_ports BF_SDA_02]
-set_false_path -from [get_ports BF_SDA_03]
-set_false_path -to   [get_ports BF_SDA_03]
-set_false_path -from [get_ports BF_SDA_04]
-set_false_path -to   [get_ports BF_SDA_04]
 
 set_false_path -from [get_ports UDC_SDA]
 set_false_path -to   [get_ports UDC_SDA]
@@ -386,19 +362,19 @@ set_false_path -to   [get_ports BF_TR_03]
 set_false_path -to   [get_ports BF_TR_04]
 
 set_false_path -to   [get_ports BF_PA_ON_01]
-set_false_path -from [get_ports BF_ALARM_01]
+set_false_path -from [get_ports BF_PWR_EN_01]
 set_false_path -from [get_ports VGG_PA_PG_N1]
 
 set_false_path -to   [get_ports BF_PA_ON_02]
-set_false_path -from [get_ports BF_ALARM_02]
+set_false_path -from [get_ports BF_PWR_EN_02]
 set_false_path -from [get_ports VGG_PA_PG_N2]
 
 set_false_path -to   [get_ports BF_PA_ON_03]
-set_false_path -from [get_ports BF_ALARM_03]
+set_false_path -from [get_ports BF_PWR_EN_03]
 set_false_path -from [get_ports VGG_PA_PG_N3]
 
 set_false_path -to   [get_ports BF_PA_ON_04]
-set_false_path -from [get_ports BF_ALARM_04]
+set_false_path -from [get_ports BF_PWR_EN_04]
 set_false_path -from [get_ports VGG_PA_PG_N4]
 
 set_false_path -to   [get_ports ADRF5030_CTRL1]
@@ -476,6 +452,8 @@ set_false_path -from [get_ports UDC_PG]
 set_false_path -from [get_ports N6P0V_PG]
 set_false_path -from [get_ports UDC_ALERT_N_LTC2945]
 set_false_path -from [get_ports FPGA_TRIG]
+set_false_path -from [get_ports UDC_5P0V_LDO_PG]
+set_false_path -from [get_ports UDC_3P3V_LDO_PG]
 
 set_property IOB TRUE [get_cells gpio_tx_load_reg[*]]
 set_property IOB TRUE [get_cells gpio_rx_load_reg[*]]

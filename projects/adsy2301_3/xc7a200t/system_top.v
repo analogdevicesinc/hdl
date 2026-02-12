@@ -98,22 +98,6 @@ module system_top (
   output RX_SPI_MOSI,
   input  RX_SPI_MISO,
 
-  // BF I2C 01
-  inout  BF_SCL_01,
-  inout  BF_SDA_01,
-
-  // BF I2C 02
-  inout  BF_SCL_02,
-  inout  BF_SDA_02,
-
-  // BF I2C 03
-  inout  BF_SCL_03,
-  inout  BF_SDA_03,
-
-  // BF I2C 04
-  inout  BF_SCL_04,
-  inout  BF_SDA_04,
-
   // UDC I2C
   inout  UDC_SCL,
   inout  UDC_SDA,
@@ -141,22 +125,22 @@ module system_top (
 
   // BF GPIO 01
   output BF_PA_ON_01,
-  input  BF_ALARM_01,
+  input  BF_PWR_EN_01,
   input  VGG_PA_PG_N1,
 
   // BF GPIO 02
   output BF_PA_ON_02,
-  input  BF_ALARM_02,
+  input  BF_PWR_EN_02,
   input  VGG_PA_PG_N2,
 
   // BF GPIO 03
   output BF_PA_ON_03,
-  input  BF_ALARM_03,
+  input  BF_PWR_EN_03,
   input  VGG_PA_PG_N3,
 
   // BF GPIO 04
   output BF_PA_ON_04,
-  input  BF_ALARM_04,
+  input  BF_PWR_EN_04,
   input  VGG_PA_PG_N4,
 
   // ADRF5030 GPIO
@@ -226,6 +210,8 @@ module system_top (
   input  N6P0V_PG,
   input  UDC_ALERT_N_LTC2945,
   input  FPGA_TRIG,
+  input  UDC_5P0V_LDO_PG,
+  input  UDC_3P3V_LDO_PG,
 
   // FLASH SPI
   // output FLASH_SPI_SCLK,
@@ -263,7 +249,7 @@ module system_top (
   wire [29:0] gpio_o1;
   wire [31:0] gpio_o2;
   wire [3:0]  gpio_o3;
-  wire [14:0] gpio_i;
+  wire [16:0] gpio_i;
 
   assign BF_PA_ON_01      = gpio_o1[0];
   assign BF_PA_ON_02      = gpio_o1[1];
@@ -334,13 +320,13 @@ module system_top (
   assign UDC_3P3V_PWR_EN = gpio_o3[2];
   assign UDC_5P0V_PWR_EN = gpio_o3[3];
 
-  assign gpio_i[0]  = BF_ALARM_01;
+  assign gpio_i[0]  = BF_PWR_EN_01;
   assign gpio_i[1]  = VGG_PA_PG_N1;
-  assign gpio_i[2]  = BF_ALARM_02;
+  assign gpio_i[2]  = BF_PWR_EN_02;
   assign gpio_i[3]  = VGG_PA_PG_N2;
-  assign gpio_i[4]  = BF_ALARM_03;
+  assign gpio_i[4]  = BF_PWR_EN_03;
   assign gpio_i[5]  = VGG_PA_PG_N3;
-  assign gpio_i[6]  = BF_ALARM_04;
+  assign gpio_i[6]  = BF_PWR_EN_04;
   assign gpio_i[7]  = VGG_PA_PG_N4;
   assign gpio_i[8]  = MUXOUT;
   assign gpio_i[9]  = PG_CARRIER;
@@ -349,6 +335,8 @@ module system_top (
   assign gpio_i[12] = N6P0V_PG;
   assign gpio_i[13] = UDC_ALERT_N_LTC2945;
   assign gpio_i[14] = FPGA_TRIG;
+  assign gpio_i[15] = UDC_5P0V_LDO_PG;
+  assign gpio_i[16] = UDC_3P3V_LDO_PG;
 
   system_wrapper i_system_wrapper (
     .clk_in_clk_p (clk_125_p),
@@ -393,14 +381,6 @@ module system_top (
     // .flash_spi_miso(FLASH_SPI_DQ1),
     // .flash_spi_miso(FLASH_SPI_DQ2),
     // .flash_spi_miso(FLASH_SPI_DQ3),
-    .bf_iic_01_scl_io(BF_SCL_01),
-    .bf_iic_01_sda_io(BF_SDA_01),
-    .bf_iic_02_scl_io(BF_SCL_02),
-    .bf_iic_02_sda_io(BF_SDA_02),
-    .bf_iic_03_scl_io(BF_SCL_03),
-    .bf_iic_03_sda_io(BF_SDA_03),
-    .bf_iic_04_scl_io(BF_SCL_04),
-    .bf_iic_04_sda_io(BF_SDA_04),
     .udc_iic_scl_io(UDC_SCL),
     .udc_iic_sda_io(UDC_SDA),
     .gpio_out1_tri_o(gpio_o1),
