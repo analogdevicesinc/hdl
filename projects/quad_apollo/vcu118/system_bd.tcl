@@ -13,7 +13,7 @@ set MCS_MODE [ expr { [info exists ad_project_params(MCS_MODE)] \
                           ? $ad_project_params(MCS_MODE) : "MASTER" } ]
 
 ad_ip_parameter axi_apollo_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 3
-ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
+ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 2
 
 # Set SPI clock to 100/32 = 3.125 MHz
 ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 16

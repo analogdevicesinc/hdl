@@ -77,15 +77,15 @@ module ad_dds_2 #(
   reg     [DDS_D_DW-1:0]  dds_data_rownd = 0;
   reg     [DDS_D_DW-1:0]  dds_data_int = 0;
   reg     [        15:0]  dds_scale_0_d = 0;
-  reg     [        15:0]  dds_scale_1_d = 0;
+  // reg     [        15:0]  dds_scale_1_d = 0;
   reg     [  DDS_DW-1:0]  dds_data_out = 0;
 
   // internal signals
 
   wire    [DDS_D_DW-1:0]  dds_data_0_s;
-  wire    [DDS_D_DW-1:0]  dds_data_1_s;
+  // wire    [DDS_D_DW-1:0]  dds_data_1_s;
   wire    [DDS_P_DW-1:0]  dds_phase_0_s;
-  wire    [DDS_P_DW-1:0]  dds_phase_1_s;
+  // wire    [DDS_P_DW-1:0]  dds_phase_1_s;
 
   generate
     // dds channel output
@@ -110,21 +110,21 @@ module ad_dds_2 #(
 
     // dual tone
     always @(posedge clk) begin
-      dds_data_int <= dds_data_0_s + dds_data_1_s;
+      dds_data_int <= dds_data_0_s;
     end
 
     always @(posedge clk) begin
       dds_scale_0_d <= dds_scale_0;
-      dds_scale_1_d <= dds_scale_1;
+      // dds_scale_1_d <= dds_scale_1;
     end
 
     // phase
     if (DDS_P_DW > PHASE_DW) begin
       assign dds_phase_0_s = {dds_phase_0,{DDS_P_DW-PHASE_DW{1'b0}}};
-      assign dds_phase_1_s = {dds_phase_1,{DDS_P_DW-PHASE_DW{1'b0}}};
+      // assign dds_phase_1_s = {dds_phase_1,{DDS_P_DW-PHASE_DW{1'b0}}};
     end else begin
       assign dds_phase_0_s = dds_phase_0[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
-      assign dds_phase_1_s = dds_phase_1[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
+      // assign dds_phase_1_s = dds_phase_1[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
     end
 
     // dds-1
@@ -141,15 +141,15 @@ module ad_dds_2 #(
 
     // dds-2
 
-    ad_dds_1 #(
-      .DDS_TYPE(DDS_TYPE),
-      .DDS_D_DW(DDS_D_DW),
-      .DDS_P_DW(DDS_P_DW)
-    ) i_dds_1_1 (
-      .clk (clk),
-      .angle (dds_phase_1_s),
-      .scale (dds_scale_1_d),
-      .dds_data (dds_data_1_s));
+    // ad_dds_1 #(
+    //   .DDS_TYPE(DDS_TYPE),
+    //   .DDS_D_DW(DDS_D_DW),
+    //   .DDS_P_DW(DDS_P_DW)
+    // ) i_dds_1_1 (
+    //   .clk (clk),
+    //   .angle (dds_phase_1_s),
+    //   .scale (dds_scale_1_d),
+    //   .dds_data (dds_data_1_s));
   endgenerate
 
 endmodule

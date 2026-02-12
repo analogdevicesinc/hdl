@@ -237,6 +237,8 @@ ad_ip_instance util_cpack2 util_apollo_cpack [list \
   SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
 ]
 
+ad_ip_parameter util_apollo_cpack CONFIG.PARALLEL_OR_SERIAL_N 1
+
 set adc_data_offload_size [expr $adc_data_width / 8 * 2**$adc_fifo_address_width]
 ad_data_offload_create $adc_data_offload_name \
                        0 \
@@ -299,6 +301,8 @@ ad_ip_instance util_upack2 util_apollo_upack [list \
   SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
   SAMPLE_DATA_WIDTH $TX_DMA_SAMPLE_WIDTH \
 ]
+
+ad_ip_parameter util_apollo_upack CONFIG.PARALLEL_OR_SERIAL_N 1
 
 set dac_data_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
 ad_data_offload_create $dac_data_offload_name \
