@@ -56,7 +56,7 @@ module axi_ad9740 #(
   input  [16*CLK_RATIO-1:0]       dma_data,
   input                           dma_valid,
   output                          dma_ready,
-  output reg [14*CLK_RATIO-1:0]   dac_data,
+  output [13:0]                   dac_data,
 
   // axi interface
 
@@ -105,16 +105,11 @@ module axi_ad9740 #(
   wire [13:0] up_raddr_s;
   wire [31:0] up_rdata_s;
   wire        up_rack_s;
-  wire [14*CLK_RATIO-1:0] dac_data_int;
 
   // signal name changes
 
   assign up_clk   = s_axi_aclk;
   assign up_rstn  = s_axi_aresetn;
-
-  always @(posedge dac_clk) begin
-    dac_data <= dac_data_int;
-  end
 
   // device interface
 
@@ -122,10 +117,11 @@ module axi_ad9740 #(
     .DAC_RESOLUTION(DAC_RESOLUTION),
     .CLK_RATIO(CLK_RATIO)
   ) axi_ad9740_interface (
+    .dac_clk(dac_clk),
     .dac_data_in(dac_data_s),
     .dac_data_sel(dac_data_sel_s),
     .dac_dfmt_type(dac_dfmt_type_s),
-    .dac_data_out(dac_data_int));
+    .dac_data_out(dac_data));
 
   // core
 

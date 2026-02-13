@@ -55,6 +55,16 @@ set_property -dict [list \
   "value_validation_list" "1 2" \
 ] [ipx::get_hdl_parameters CLK_RATIO -of_objects $cc]
 
+# DAC_RESOLUTION parameter (8 for AD9748, 10 for AD9740, 12 for AD9742, 14 for AD9744)
+set_property -dict [list \
+  "value_validation_type" "list" \
+  "value_validation_list" "8 10 12 14" \
+] [ipx::get_user_parameters DAC_RESOLUTION -of_objects $cc]
+set_property -dict [list \
+  "value_validation_type" "list" \
+  "value_validation_list" "8 10 12 14" \
+] [ipx::get_hdl_parameters DAC_RESOLUTION -of_objects $cc]
+
 adi_add_bus "s_axis" "slave" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \

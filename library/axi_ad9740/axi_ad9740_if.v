@@ -42,7 +42,8 @@ module axi_ad9740_if #(
 
   // dac interface
 
-  output [14*CLK_RATIO-1:0]   dac_data_out,
+  input                       dac_clk,
+  output [13:0]               dac_data_out,
 
   // data interface
 
@@ -50,6 +51,8 @@ module axi_ad9740_if #(
   input  [ 3:0]               dac_data_sel,
   input                       dac_dfmt_type
 );
+
+  localparam ZERO_BITS = 14 - DAC_RESOLUTION;
 
   // The AD974x DACs expect offset binary format
   // Data format conversion based on dac_dfmt_type register:
@@ -67,11 +70,54 @@ module axi_ad9740_if #(
   // Note: dac_dfmt_type=1 means signed (two's complement) data
   // Apply to each sample in the CLK_RATIO group
 
+  wire [14*CLK_RATIO-1:0] dac_data_fmt;
+
   genvar n;
   generate
     for (n = 0; n < CLK_RATIO; n = n + 1) begin : gen_fmt
-      assign dac_data_out[n*14+13] = dac_dfmt_type ? ~dac_data_in[n*14+13] : dac_data_in[n*14+13];
-      assign dac_data_out[n*14 +: 13] = dac_data_in[n*14 +: 13];
+      assign dac_data_fmt[n*14+13] = dac_dfmt_type ? ~dac_data_in[n*14+13] : dac_data_in[n*14+13];
+      assign dac_data_fmt[n*14 +: 13] = dac_data_in[n*14 +: 13];
+    end
+  endgenerate
+
+  // DDR data: d1 = rising edge (first sample), d2 = falling edge (second sample)
+  wire [13:0] dac_data_d1;
+  wire [13:0] dac_data_d2;
+
+  assign dac_data_d1 = dac_data_fmt[13:0];
+  assign dac_data_d2 = (CLK_RATIO == 2) ? dac_data_fmt[27:14] : dac_data_fmt[13:0];
+
+  // ODDR primitives for DAC data output (DDR on 105 MHz = 210 MSPS)
+  genvar i;
+  generate
+    for (i = 0; i < 14; i = i + 1) begin : gen_oddr
+      if (i >= ZERO_BITS) begin : gen_oddr_data
+        ODDR #(
+          .DDR_CLK_EDGE ("SAME_EDGE"),
+          .INIT         (1'b0),
+          .SRTYPE       ("ASYNC")
+        ) i_oddr (
+          .Q  (dac_data_out[i]),
+          .C  (dac_clk),
+          .CE (1'b1),
+          .D1 (dac_data_d1[i]),
+          .D2 (dac_data_d2[i]),
+          .R  (1'b0),
+          .S  (1'b0));
+      end else begin : gen_oddr_zero
+        ODDR #(
+          .DDR_CLK_EDGE ("SAME_EDGE"),
+          .INIT         (1'b0),
+          .SRTYPE       ("ASYNC")
+        ) i_oddr (
+          .Q  (dac_data_out[i]),
+          .C  (dac_clk),
+          .CE (1'b1),
+          .D1 (1'b0),
+          .D2 (1'b0),
+          .R  (1'b0),
+          .S  (1'b0));
+      end
     end
   endgenerate
 
