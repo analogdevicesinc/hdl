@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2024, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -122,7 +122,6 @@ module system_top (
   wire            iic_mux_sda_t_s;
   wire            spi_mosi;
   wire            spi_miso;
-
 
   ad_iobuf #(
     .DATA_WIDTH(32)
