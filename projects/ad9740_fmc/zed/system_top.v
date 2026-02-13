@@ -35,9 +35,7 @@
 
 `timescale 1ns/100ps
 
-module system_top #(
-  parameter DAC_RESOLUTION = 14
-) (
+module system_top (
 
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
@@ -99,8 +97,6 @@ module system_top #(
   output  [13:0]  ad9740_data
 );
 
-  localparam ZERO_BITS = 14 - DAC_RESOLUTION;
-
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
@@ -112,16 +108,9 @@ module system_top #(
   wire            iic_mux_sda_t_s;
   wire            ad9740_clk_ds;
   wire            ad9740_clk;
-  wire    [27:0]  ad9740_data_int;
-  wire    [13:0]  ad9740_data_d1;
-  wire    [13:0]  ad9740_data_d2;
 
   assign gpio_i[63:32] = gpio_o[63:32];
   assign adf4351_ce = 1'b1;
-
-  // DDR data: d1 = rising edge (first sample), d2 = falling edge (second sample)
-  assign ad9740_data_d1 = ad9740_data_int[13:0];
-  assign ad9740_data_d2 = ad9740_data_int[27:14];
 
   // Differential input buffer for DAC clock
   IBUFGDS i_ad9740_clk_ibuf_ds (
@@ -129,7 +118,7 @@ module system_top #(
     .IB (ad9740_clk_n),
     .O (ad9740_clk_ds));
 
-  // BUFR: divide input clock by 2 for logic, ODDR outputs DDR data
+  // BUFR: divide input clock by 2 for logic, ODDR outputs DDR data in axi_ad9740
   BUFR #(
     .BUFR_DIVIDE ("2")
   ) i_ad9740_clk_bufr (
@@ -137,40 +126,6 @@ module system_top #(
     .CE (1'b1),
     .I (ad9740_clk_ds),
     .O (ad9740_clk));
-
-  // ODDR primitives for DAC data output (DDR on 105 MHz = 210 MSPS)
-  genvar i;
-  generate
-    for (i = 0; i < 14; i = i + 1) begin : gen_oddr
-      if (i >= ZERO_BITS) begin : gen_oddr_data
-        ODDR #(
-          .DDR_CLK_EDGE ("SAME_EDGE"),
-          .INIT         (1'b0),
-          .SRTYPE       ("ASYNC")
-        ) i_oddr (
-          .Q  (ad9740_data[i]),
-          .C  (ad9740_clk),
-          .CE (1'b1),
-          .D1 (ad9740_data_d1[i]),
-          .D2 (ad9740_data_d2[i]),
-          .R  (1'b0),
-          .S  (1'b0));
-      end else begin : gen_oddr_zero
-        ODDR #(
-          .DDR_CLK_EDGE ("SAME_EDGE"),
-          .INIT         (1'b0),
-          .SRTYPE       ("ASYNC")
-        ) i_oddr (
-          .Q  (ad9740_data[i]),
-          .C  (ad9740_clk),
-          .CE (1'b1),
-          .D1 (1'b0),
-          .D2 (1'b0),
-          .R  (1'b0),
-          .S  (1'b0));
-      end
-    end
-  endgenerate
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -198,7 +153,7 @@ module system_top #(
 
   system_wrapper i_system_wrapper (
     .ad9740_clk (ad9740_clk),
-    .ad9740_data (ad9740_data_int[27:0]),
+    .ad9740_data (ad9740_data),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),

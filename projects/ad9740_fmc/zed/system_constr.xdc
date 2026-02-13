@@ -40,17 +40,15 @@ set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS33 IOB TRUE SLEW FAST DRIVE
 # Input clock at FPGA pad (250 MHz from ADF4351)
 create_clock -period 4 -name ad9740_clk_in [get_ports ad9740_clk_p]
 
-# PLL generates 105 MHz clock for logic (div by 2)
-# The generated clock is automatically created by Vivado from the PLL
-# but we define it explicitly for clarity
+# BUFR generates 125 MHz clock for logic (div by 2 from 250 MHz input)
 create_generated_clock -name ad9740_clk \
-  -source [get_pins i_ad9740_pll/CLKIN1] \
+  -source [get_pins i_ad9740_clk_bufr/I] \
   -divide_by 2 \
-  [get_pins i_ad9740_pll/CLKOUT0]
+  [get_pins i_ad9740_clk_bufr/O]
 
 # ODDR output clock (virtual clock representing DDR output timing)
-# The DAC samples data on the external clock from ADF4351 (210 MHz)
-create_clock -period 4.761 -name ad9740_dac_clk
+# The DAC samples data on the external clock from ADF4351 (250 MHz)
+create_clock -period 4.0 -name ad9740_dac_clk
 
 # Output delay constraints for ODDR data pins
 # AD9744 datasheet specs: tS (setup) = 2.0ns, tH (hold) = 1.5ns
