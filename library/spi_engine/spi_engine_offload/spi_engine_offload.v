@@ -119,9 +119,9 @@ module spi_engine_offload #(
   assign sdo_source_select = SDO_STREAMING;
   assign cmd_valid = last_cmd_valid;
   assign sdo_data_valid = (sdo_source_select == SDO_SOURCE_STREAM) ?
-                           s_axis_sdo_valid : (spi_active && sdo_mem_valid);
+                          s_axis_sdo_valid : (spi_active && sdo_mem_valid);
   assign s_axis_sdo_ready = (sdo_source_select == SDO_SOURCE_STREAM) ?
-                             sdo_data_ready : 1'b0;
+                            sdo_data_ready : 1'b0;
   assign offload_sdi_valid = sdi_data_valid;
 
   // we don't want to block the SDI interface after disabling the module
@@ -279,14 +279,14 @@ module spi_engine_offload #(
 
   assign trigger_posedge = trigger_s && !trigger_last_reg;
 
-  reg last_cmd_consumed = 1'b0;
   wire last_cmd_accept;
   wire offload_disable_pending;
 
-  // last command in the command offload
+  // last accepted command in the command offload
   assign last_cmd_accept = cmd_ready && (spi_cmd_rd_addr_next == ctrl_cmd_wr_addr);
-  //spi_enable is low when the user disabled the offload
-  //interconnect_dir is high when in offload mode
+  // spi_enable is low when the user disabled the offload
+  // interconnect_dir is high when in offload mode, that is,
+  // there is still an offload disable pending
   assign offload_disable_pending = !spi_enable && interconnect_dir;
 
   always @(posedge spi_clk) begin
@@ -299,29 +299,30 @@ module spi_engine_offload #(
           spi_active <= 1'b1;
       // finished executing offload commands
       // checks if there is valid SDI data, if so it does not allow to change to FIFO mode
-      end else if ((last_cmd_accept || last_cmd_consumed) && !(offload_disable_pending && sdi_data_valid)) begin //putting an extra reg to save when it fetched the last cmd, otherwise spi_active will never be deasserted if sdi_data_valid is always high
+      // !last_cmd_valid is a necessary condition to guarantee the spi_active is deasserted
+      // when sdi_data_valid is always high
+      end else if ((last_cmd_accept || !last_cmd_valid) && !(offload_disable_pending && sdi_data_valid)) begin
         spi_active <= 1'b0;
       end
     end
   end
 
-  // basically the same process for the spi_active signal
+  // Similar to the spi_active process
+  // it needs to guarantee spi_active is deactivated to assert the last_cmd_valid
+  // The last CMD consumed is !last_cmd_valid
   always @(posedge spi_clk) begin
     if (!spi_resetn) begin
       last_cmd_valid <= 1'b0;
-      last_cmd_consumed <= 1'b0;
     end else begin
       if (!last_cmd_valid) begin
         // start offload when we have a valid trigger and offload is enabled and the last SDI data was consumed
         if (trigger_posedge && spi_enable && !spi_active) begin
           last_cmd_valid <= 1'b1;
-          last_cmd_consumed <= 1'b0;
         end
 
       // finished executing offload commands
-      end else if (cmd_ready && (spi_cmd_rd_addr_next == ctrl_cmd_wr_addr)) begin
+      end else if (last_cmd_accept) begin
         last_cmd_valid <= 1'b0;
-        last_cmd_consumed <= 1'b1;
       end
     end
   end
@@ -349,7 +350,6 @@ module spi_engine_offload #(
     end else begin
       if (!spi_active && trigger_posedge && spi_enable) begin
         sdo_mem_valid <= (ctrl_sdo_wr_addr != 'h00); // if ctrl_sdo_wr_addr is 0, mem is empty
-      // end else if (sdo_data_ready && spi_active && sdo_mem_valid && (spi_sdo_rd_addr + 1'b1 == ctrl_sdo_wr_addr))  begin
       end else if (sdo_data_ready && sdo_mem_valid && (spi_sdo_rd_addr + 1'b1 == ctrl_sdo_wr_addr))  begin
         sdo_mem_valid <= 1'b0;
       end
