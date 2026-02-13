@@ -83,15 +83,15 @@ module system_top (
 
   input           otg_vbusoc,
 
-  output          admx100x_sync_mode,
-  output          admx100x_en,
-  output          admx100x_cal,
-  output          admx100x_trig,
-  output          admx100x_dac_ldac,
-  output          admx100x_reset,
-  input           admx100x_ready,
-  input           admx100x_valid,
-  input           admx100x_ot,
+  input          admx100x_sync_mode,
+  input          admx100x_en,
+  input          admx100x_cal,
+  input          admx100x_trig,
+  output         admx100x_dac_ldac,
+  output         admx100x_reset,
+  output         admx100x_ready,
+  output         admx100x_valid,
+  output         admx100x_ot,
 
   //RX part
 
@@ -125,15 +125,15 @@ module system_top (
 
   // gpio assign
 
-  assign gpio_i[32] = admx100x_ot;
+  assign admx100x_ot = gpio_o[32];
   assign admx100x_reset = gpio_o[33];
-  assign admx100x_sync_mode = gpio_o[34];
-  assign admx100x_en = gpio_o[35];
-  assign gpio_i[36] = admx100x_ready;
-  assign gpio_i[37] = admx100x_valid;
-  assign admx100x_cal = gpio_o[38];
+  assign gpio_i[34] = admx100x_sync_mode;
+  assign gpio_i[35] = admx100x_en;
+  assign admx100x_ready = gpio_o[36];
+  assign admx100x_valid = gpio_o[37];
+  assign gpio_i[38] = admx100x_cal;
   assign admx100x_dac_ldac = gpio_o[39];
-  assign admx100x_trig = gpio_o[40];
+  assign gpio_i[40] = admx100x_trig;
   assign acq_synq_in_fmc = gpio_o[41];
   assign acq_reset = gpio_o[42];
   assign gpio_i[43] = acq_drdy;
