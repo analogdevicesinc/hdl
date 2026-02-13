@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -101,7 +101,6 @@ reg  [127:0] wr_data_int;
 reg  [127:0] wr_data_reg;
 reg          wr_en_reg;
 
-
 assign adc_valid   = (resolution == 2'b00) ? wr_en8_reg  : (resolution != 2'b11) ? wr_en_reg : (wr_en14_reg && data_en[0]);
 assign adc_data    = (resolution != 2'b11) ? wr_data_reg :  wr_data14_reg;
 assign adc_clk     = adc_clk_div;
@@ -191,7 +190,21 @@ assign data_out[6] = {16{polarity_mask_s[6]}}^sample_assembly_out[6];
 assign data_out[7] = {16{polarity_mask_s[7]}}^sample_assembly_out[7];
 
 always @(posedge adc_clk_div) begin
-if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
+  if((resolution == 2'b11) && (mode == 3'b100)) begin           // 14-bit  single lane quad channel
+     wr_data_int <= {data_out[0], data_out[2], data_out[4], data_out[6], 64'b0};
+  end else if((resolution == 2'b10) && (mode == 3'b100)) begin  // 12-bit quad channel
+     wr_data_int <= {data_out[0], data_out[2], data_out[4], data_out[6],
+                     data_out[1], data_out[3], data_out[5], data_out[7]};
+  end else if((resolution == 2'b10) && (mode == 3'b010)) begin  // 12-bit dual channel
+     wr_data_int <= {data_out[0], data_out[4], data_out[1], data_out[5],
+                     data_out[2], data_out[6], data_out[3], data_out[7]};
+  end else if((resolution == 2'b10) && (mode == 3'b001)) begin  // 12-bit single channel
+     wr_data_int <= {data_out[0], data_out[1], data_out[2], data_out[3],
+                     data_out[4], data_out[5], data_out[6], data_out[7]};
+  end else if((resolution == 2'b01) && (mode == 3'b100)) begin  //  dual 8-bit quad channel
+   wr_data_int <= { data_out[6][ 7:0], data_out[7][ 7:0] , data_out[4][ 7:0], data_out[5][ 7:0], data_out[2][ 7:0], data_out[3][ 7:0],  data_out[0][ 7:0], data_out[1][ 7:0] ,
+                    data_out[6][15:8], data_out[7][15:8] , data_out[4][15:8], data_out[5][15:8], data_out[2][15:8], data_out[3][15:8],  data_out[0][15:8], data_out[1][15:8] };
+  end else if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
      wr_data_int <= {data_out[6][ 7:0], data_out[4][ 7:0], data_out[2][ 7:0], data_out[0][ 7:0],data_out[7][ 7:0], data_out[5][ 7:0], data_out[3][ 7:0], data_out[1][ 7:0],
                      data_out[6][15:8], data_out[4][15:8], data_out[2][15:8], data_out[0][15:8],data_out[7][15:8], data_out[5][15:8], data_out[3][15:8], data_out[1][15:8]};
   end else if((resolution == 2'b00) && (mode == 3'b010)) begin  //  8-bit dual channel
@@ -221,7 +234,5 @@ end
     wr_en_reg   <= data_en[0];
     wr_data_reg <= wr_data_int;
  end
-
-
 
 endmodule

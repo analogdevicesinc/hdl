@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -65,9 +65,6 @@ module axi_hmcad15xx #(
 
   output  [127:0] adc_data,
 
-
-
-
   output          adc_clk,
   output          adc_reset,
 
@@ -107,7 +104,6 @@ wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_dwdata;
 wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_drdata;
 wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
 
-
   // internal registers
 
   reg  [31:0] up_rdata = 'd0;
@@ -137,7 +133,6 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
 
   wire        delay_rst;
 
-
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
   assign adc_clk = adc_clk_s;
@@ -147,7 +142,6 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   assign adc_enable_1 = adc_enable[1];
   assign adc_enable_2 = adc_enable[2];
   assign adc_enable_3 = adc_enable[3];
-
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin

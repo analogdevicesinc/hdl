@@ -13,7 +13,7 @@ module sample_assembly (
    input  [1:0]  resolution,
    output        data_en,
    output [15:0] data_out
-   );
+);
 
    //==========================================================================
    // Signal declarations
@@ -425,7 +425,7 @@ module sample_assembly (
          data_int_reg[2] <= 0;
          data_int_reg[1] <= 0;
          data_int_reg[0] <= 0;
-      end else if(resolution == 2'b00) begin  // 8-bits
+      end else if(resolution == 2'b00  || resolution == 2'b01 ) begin  // 8-bits or dual 8-bit
          case(frame_in_reg)
             8'b00001111: // 0
                begin
@@ -610,7 +610,6 @@ module sample_assembly (
                           data_int_reg[15]};
       end
    end
-
 
    always @(posedge clk) begin
       if(resolution == 2'b11) begin          // 14-bits
