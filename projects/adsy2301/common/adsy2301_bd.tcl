@@ -11,7 +11,7 @@ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpio_in
 ad_ip_instance axi_gpio gpio_0 [list \
   C_IS_DUAL 1 \
   C_ALL_OUTPUTS 1 \
-  C_GPIO_WIDTH 17 \
+  C_GPIO_WIDTH 26 \
   C_ALL_INPUTS_2 1 \
   C_GPIO2_WIDTH 4 \
 ]

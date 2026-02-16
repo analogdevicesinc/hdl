@@ -70,27 +70,34 @@ module system_top (
   output       XUD_SPI_MOSI,
   input        XUD_SPI_MISO,
 
-  // BF GPIO
-  output BF_TR,
-  output BF_TX_LOAD,
-  output BF_RX_LOAD,
-
   // BF GPIO 01
+  output TR_01,
+  output TX_LOAD_01,
+  output RX_LOAD_01,
   input  PG_PA_VGG_01,
   output BF_PWR_EN_01,
   output BF_PA_ON_01,
 
   // BF GPIO 02
+  output TR_02,
+  output TX_LOAD_02,
+  output RX_LOAD_02,
   input  PG_PA_VGG_02,
   output BF_PWR_EN_02,
   output BF_PA_ON_02,
 
   // BF GPIO 03
+  output TR_03,
+  output TX_LOAD_03,
+  output RX_LOAD_03,
   input  PG_PA_VGG_03,
   output BF_PWR_EN_03,
   output BF_PA_ON_03,
 
   // BF GPIO 04
+  output TR_04,
+  output TX_LOAD_04,
+  output RX_LOAD_04,
   input  PG_PA_VGG_04,
   output BF_PWR_EN_04,
   output BF_PA_ON_04,
@@ -114,36 +121,45 @@ module system_top (
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
 
-  wire  [20:0]  adsy2301_gpio;
+  wire  [29:0]  adsy2301_gpio;
 
-  assign BF_TR              = adsy2301_gpio[0];
-  assign BF_TX_LOAD         = adsy2301_gpio[1];
-  assign BF_RX_LOAD         = adsy2301_gpio[2];
+  assign TR_01              = adsy2301_gpio[0];
+  assign TX_LOAD_01         = adsy2301_gpio[1];
+  assign RX_LOAD_01         = adsy2301_gpio[2];
   assign BF_PWR_EN_01       = adsy2301_gpio[3];
   assign BF_PA_ON_01        = adsy2301_gpio[4];
-  assign BF_PWR_EN_02       = adsy2301_gpio[5];
-  assign BF_PA_ON_02        = adsy2301_gpio[6];
-  assign BF_PWR_EN_03       = adsy2301_gpio[7];
-  assign BF_PA_ON_03        = adsy2301_gpio[8];
-  assign BF_PWR_EN_04       = adsy2301_gpio[9];
-  assign BF_PA_ON_04        = adsy2301_gpio[10];
-  assign XUD_RX_GAIN_MODE   = adsy2301_gpio[11];
-  assign XUD_PLL_OUTPUT_SEL = adsy2301_gpio[12];
-  assign XUD_TXRX0          = adsy2301_gpio[13];
-  assign XUD_TXRX1          = adsy2301_gpio[14];
-  assign XUD_TXRX2          = adsy2301_gpio[15];
-  assign XUD_TXRX3          = adsy2301_gpio[16];
+  assign TR_02              = adsy2301_gpio[5];
+  assign TX_LOAD_02         = adsy2301_gpio[6];
+  assign RX_LOAD_02         = adsy2301_gpio[7];
+  assign BF_PWR_EN_02       = adsy2301_gpio[8];
+  assign BF_PA_ON_02        = adsy2301_gpio[9];
+  assign TR_03              = adsy2301_gpio[10];
+  assign TX_LOAD_03         = adsy2301_gpio[11];
+  assign RX_LOAD_03         = adsy2301_gpio[12];
+  assign BF_PWR_EN_03       = adsy2301_gpio[13];
+  assign BF_PA_ON_03        = adsy2301_gpio[14];
+  assign TR_04              = adsy2301_gpio[15];
+  assign TX_LOAD_04         = adsy2301_gpio[16];
+  assign RX_LOAD_04         = adsy2301_gpio[17];
+  assign BF_PWR_EN_04       = adsy2301_gpio[18];
+  assign BF_PA_ON_04        = adsy2301_gpio[19];
+  assign XUD_RX_GAIN_MODE   = adsy2301_gpio[20];
+  assign XUD_PLL_OUTPUT_SEL = adsy2301_gpio[21];
+  assign XUD_TXRX0          = adsy2301_gpio[22];
+  assign XUD_TXRX1          = adsy2301_gpio[23];
+  assign XUD_TXRX2          = adsy2301_gpio[24];
+  assign XUD_TXRX3          = adsy2301_gpio[25];
 
-  assign adsy2301_gpio[17]  = PG_PA_VGG_01;
-  assign adsy2301_gpio[18]  = PG_PA_VGG_02;
-  assign adsy2301_gpio[19]  = PG_PA_VGG_03;
-  assign adsy2301_gpio[20]  = PG_PA_VGG_04;
+  assign adsy2301_gpio[26]  = PG_PA_VGG_01;
+  assign adsy2301_gpio[27]  = PG_PA_VGG_02;
+  assign adsy2301_gpio[28]  = PG_PA_VGG_03;
+  assign adsy2301_gpio[29]  = PG_PA_VGG_04;
 
   // instantiations
 
   system_wrapper i_system_wrapper (
-    .gpio_out_tri_o(adsy2301_gpio[16:0]),
-    .gpio_in_tri_i(adsy2301_gpio[20:17]),
+    .gpio_out_tri_o(adsy2301_gpio[25:0]),
+    .gpio_in_tri_i(adsy2301_gpio[29:26]),
     .bf_spi_sclk_01(BF_SPI_SCLK_01),
     .bf_spi_csb_01(BF_SPI_CSB_01),
     .bf_spi_mosi_01(BF_SPI_MOSI_01),
