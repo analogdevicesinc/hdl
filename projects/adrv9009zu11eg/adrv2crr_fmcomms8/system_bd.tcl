@@ -132,7 +132,12 @@ ad_connect $adc_data_offload_name/i_data_offload/ddr_calib_done ddr4_0/c0_init_c
 ad_connect util_som_rx_cpack/packed_fifo_wr_en $adc_data_offload_name/i_data_offload/s_axis_valid
 ad_connect util_som_rx_cpack/packed_fifo_wr_data $adc_data_offload_name/i_data_offload/s_axis_data
 
-ad_connect $adc_data_offload_name/m_axis axi_adrv9009_som_rx_dma/s_axis
+#ad_connect $adc_data_offload_name/m_axis axi_adrv9009_som_rx_dma/s_axis
+ad_connect $adc_data_offload_name/i_data_offload/m_axis_ready axi_adrv9009_som_rx_dma/s_axis_ready
+ad_connect $adc_data_offload_name/i_data_offload/m_axis_valid axi_adrv9009_som_rx_dma/s_axis_valid
+ad_connect $adc_data_offload_name/i_data_offload/m_axis_data axi_adrv9009_som_rx_dma/s_axis_data
+ad_connect $adc_data_offload_name/i_data_offload/m_axis_last axi_adrv9009_som_rx_dma/s_axis_last
+ad_connect $adc_data_offload_name/i_data_offload/m_axis_tkeep axi_adrv9009_som_rx_dma/s_axis_keep
 ad_connect $adc_data_offload_name/init_req axi_adrv9009_som_rx_dma/s_axis_xfer_req
 
 ad_connect sys_cpu_clk $adc_data_offload_name/s_axi_aclk
@@ -193,3 +198,58 @@ create_bd_addr_seg -range 0x40000000 -offset 0x80000000 \
 # interconnect (mem/dac)
 
 ad_cpu_interrupt ps-4 mb-4 axi_fmcomms8_gpio/ip2intc_irpt
+
+
+# debug
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_0
+set_property -dict [list \
+  CONFIG.C_DATA_DEPTH {1024} \
+  CONFIG.C_EN_STRG_QUAL {1} \
+  CONFIG.C_MONITOR_TYPE {Native} \
+  CONFIG.C_NUM_OF_PROBES {4} \
+  CONFIG.C_PROBE2_TYPE {1} \
+  CONFIG.C_PROBE2_WIDTH {256} \
+] [get_bd_cells ila_0]
+
+ad_connect ila_0/clk     core_clk_b
+ad_connect ila_0/probe0  $adc_data_offload_name/s_axis_tready
+ad_connect ila_0/probe1  util_som_rx_cpack/packed_fifo_wr_en
+ad_connect ila_0/probe2  util_som_rx_cpack/packed_fifo_wr_data
+ad_connect ila_0/probe3  util_som_rx_cpack/packed_sync
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_1
+set_property -dict [list \
+  CONFIG.C_DATA_DEPTH {1024} \
+  CONFIG.C_EN_STRG_QUAL {1} \
+  CONFIG.C_MONITOR_TYPE {Native} \
+  CONFIG.C_NUM_OF_PROBES {4} \
+  CONFIG.C_PROBE2_TYPE {1} \
+  CONFIG.C_PROBE3_TYPE {1} \
+  CONFIG.C_PROBE2_WIDTH {256} \
+] [get_bd_cells ila_1]
+
+ad_connect ila_1/clk     $sys_dma_clk
+ad_connect ila_1/probe0  $adc_data_offload_name/i_data_offload/m_axis_ready
+ad_connect ila_1/probe1  $adc_data_offload_name/i_data_offload/m_axis_valid
+ad_connect ila_1/probe2  $adc_data_offload_name/i_data_offload/m_axis_data
+ad_connect ila_1/probe3  $adc_data_offload_name/i_data_offload/m_axis_last
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:system_ila:1.1 system_ila_0
+set_property -dict [list \
+  CONFIG.C_EN_STRG_QUAL {1} \
+] [get_bd_cells system_ila_0]
+
+ad_connect system_ila_0/clk         $sys_dma_clk
+ad_connect system_ila_0/resetn      sys_dma_rstgen/peripheral_aresetn
+ad_connect system_ila_0/SLOT_0_AXI  axi_adrv9009_som_rx_dma/m_dest_axi
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:system_ila:1.1 system_ila_1
+set_property -dict [list \
+  CONFIG.C_EN_STRG_QUAL {1} \
+] [get_bd_cells system_ila_1]
+
+ad_connect system_ila_1/clk         sys_cpu_clk
+ad_connect system_ila_1/resetn      sys_cpu_resetn
+ad_connect system_ila_1/SLOT_0_AXI  axi_adrv9009_som_rx_dma/s_axi
+
