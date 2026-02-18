@@ -3,6 +3,12 @@
 Imageon HDL project (OBSOLETE)
 ===============================================================================
 
+.. warning::
+
+   The support for :git-hdl:`IMAGEON <hdl_2021_r2:projects/imageon>` HDL project
+   has been discontinued, the latest release branch where it can be found is
+   ``hdl_2021_r2``. This page is left for legacy purposes only.
+
 Overview
 -------------------------------------------------------------------------------
 
@@ -146,10 +152,10 @@ Building the HDL project
 The design is built upon ADI's generic HDL reference design framework.
 ADI distributed the bit/elf files of this project as part of the
 :dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`
-in the 2019_R1 release
+in the 2021_r2 release
 If you want to build the sources, ADI makes them available on the
 :git-hdl:`HDL repository </>`. But, since this is an obsolete project, you need
-to check out the last release branch where it was tested (hdl_2019_r1).
+to check out the last release branch where it was tested (hdl_2021_r2).
 To get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository, and then build the project as follows:
@@ -159,9 +165,9 @@ the HDL repository, and then build the project as follows:
 .. shell:: bash
 
    /hdl
-   $git checkout hdl_2019_r1
+   $git checkout hdl_2021_r2
    $cd projects/imageon/zed
-   $ make
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -177,7 +183,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`IMAGEON HDL project source code <hdl_2019_r1:projects/imageon>`
+- :git-hdl:`IMAGEON HDL project source code <hdl_2021_r2:projects/imageon>`
 
 .. list-table::
    :widths: 30 35 35
@@ -187,25 +193,25 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_CLKGEN
-     - :git-hdl:`hdl_2019_r1:library/axi_clkgen`
+     - :git-hdl:`hdl_2021_r2:library/axi_clkgen`
      - :ref:`axi_clkgen`
    * - AXI_DMAC
-     - :git-hdl:`hdl_2019_r1:library/axi_dmac`
+     - :git-hdl:`hdl_2021_r2:library/axi_dmac`
      - :ref:`axi_dmac`
    * - AXI_HDMI_RX
-     - :git-hdl:`hdl_2019_r1:library/axi_hdmi_rx`
+     - :git-hdl:`hdl_2021_r2:library/axi_hdmi_rx`
      - :ref:`axi_hdmi_rx`
    * - AXI_HDMI_TX
-     - :git-hdl:`hdl_2019_r1:library/axi_hdmi_tx`
+     - :git-hdl:`hdl_2021_r2:library/axi_hdmi_tx`
      - :ref:`axi_hdmi_tx`
    * - AXI_SYSID
-     - :git-hdl:`hdl_2019_r1:library/axi_sysid`
+     - :git-hdl:`hdl_2021_r2:library/axi_sysid`
      - :ref:`axi_sysid`
    * - SYSID_ROM
-     - :git-hdl:`hdl_2019_r1:library/sysid_rom`
+     - :git-hdl:`hdl_2021_r2:library/sysid_rom`
      - :ref:`axi_sysid`
    * - AXI_SDDIF_RX
-     - :git-hdl:`hdl_2019_r1:library/axi_spdif_rx`
+     - :git-hdl:`hdl_2021_r2:library/axi_spdif_rx`
      - ---
 
 Software related
