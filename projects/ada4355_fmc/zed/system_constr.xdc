@@ -23,6 +23,7 @@ set_property -dict {PACKAGE_PIN G19 IOSTANDARD LVCMOS25} [get_ports gain_sel2]; 
 set_property -dict {PACKAGE_PIN F19 IOSTANDARD LVCMOS25} [get_ports gain_sel3];     ## G25 FMC_LA22_N IO_L20N_T3_AD6N_35
 set_property -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS25} [get_ports gpio_vld_en];   ## G16 FMC_LA12_N IO_L18N_T2_34
 set_property -dict {PACKAGE_PIN E15 IOSTANDARD LVCMOS25} [get_ports gpio_test];     ## D23 FMC_LA23_P IO_L3P_T0_DQS_AD1P_35
+set_property -dict {PACKAGE_PIN D15 IOSTANDARD LVCMOS25} [get_ports vlogic_fmc];    ## D24 FMC_LA23_N IO_L3N_T0_DQS_AD1N_35
 set_property -dict {PACKAGE_PIN R19 IOSTANDARD LVCMOS25} [get_ports trig_fmc_in];   ## C14 FMC_LA10_P IO_L22P_T3_34
 set_property -dict {PACKAGE_PIN T19 IOSTANDARD LVCMOS25} [get_ports trig_fmc_out];  ## C15 FMC_LA10_N IO_L22N_T3_34
 set_property -dict {PACKAGE_PIN K19 IOSTANDARD LVCMOS25} [get_ports apd_supp_en];   ## C18 FMC_LA14_P IO_L11P_T1_SRCC_34
