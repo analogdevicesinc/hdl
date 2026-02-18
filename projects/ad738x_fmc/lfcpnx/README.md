@@ -50,6 +50,16 @@ make ALERT_SPI_N=0 NUM_OF_SDI=1
 make SYSMEM_INIT_FILE=<path_to>/<sysmem_file>.mem
 ```
 
+#### Building block design only for simulation with SYSMEM_INIT_FILE
+
+```
+make pb SYSMEM_INIT_FILE=<path_to>/<sysmem_file>.mem
+```
+
+When the Propel Builder finishes generating the block design you can open the
+project, switch to simulation project, generate the Questasim simulation project
+and start the simulation.
+
 NOTE:
 
-The Software support is still work in progress and can be found here: https://github.com/analogdevicesinc/no-OS/tree/ad738x_fmcz_lattice/projects/ad738x_fmcz
+The Software support is still work in progress and can be found here: https://github.com/analogdevicesinc/no-OS/tree/add_lattice_riscvrx_ad738x_fmcz/projects/ad738x_fmcz
