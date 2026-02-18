@@ -46,7 +46,7 @@ module system_top (
   output TR_PULSE,
   output TX_LOAD,
   output RX_LOAD,
-  inout  FPGA_BOOT_GOOD,
+  input  FPGA_BOOT_GOOD,
 
   // CMD SPI
   output CMD_SPI_SCLK,
@@ -73,31 +73,22 @@ module system_top (
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
 
-  wire [5:0] adsy2301_3_gpio_i;
-  wire [5:0] adsy2301_3_gpio_o;
-  wire [5:0] adsy2301_3_gpio_t;
+  wire [3:0] adsy2301_3_gpio_o;
+  wire [1:0] adsy2301_3_gpio_i;
 
-  assign RX_LOAD    = adsy2301_3_gpio_o[1];
-  assign TX_LOAD    = adsy2301_3_gpio_o[2];
-  assign TR_PULSE   = adsy2301_3_gpio_o[3];
-  assign FPGA_TRIG  = adsy2301_3_gpio_o[5];
+  assign RX_LOAD   = adsy2301_3_gpio_o[0];
+  assign TX_LOAD   = adsy2301_3_gpio_o[1];
+  assign TR_PULSE  = adsy2301_3_gpio_o[2];
+  assign FPGA_TRIG = adsy2301_3_gpio_o[3];
 
-  assign adsy2301_3_gpio_i[4]  = UDC_PG;
+  assign adsy2301_3_gpio_i[0] = FPGA_BOOT_GOOD;
+  assign adsy2301_3_gpio_i[1] = UDC_PG;
 
   // instantiations
 
-  ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_iobuf (
-    .dio_t (adsy2301_3_gpio_t[0]),
-    .dio_i (adsy2301_3_gpio_o[0]),
-    .dio_o (adsy2301_3_gpio_i[0]),
-    .dio_p (FPGA_BOOT_GOOD));
-
   system_wrapper i_system_wrapper (
-    .gpio_pins_i (adsy2301_3_gpio_i),
-    .gpio_pins_o (adsy2301_3_gpio_o),
-    .gpio_pins_t (adsy2301_3_gpio_t),
+    .gpio_in_tri_i (adsy2301_3_gpio_i),
+    .gpio_out_tri_o (adsy2301_3_gpio_o),
     .cmd_spi_sclk(CMD_SPI_SCLK),
     .cmd_spi_csb(CMD_SPI_CSB),
     .cmd_spi_mosi(CMD_SPI_MOSI),
