@@ -13,7 +13,6 @@ adi_project_files adsy2301_3_zcu102 [list \
   "system_top.v" \
   "system_constr.xdc" \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" \
-  "$ad_hdl_dir/library/common/ad_iobuf.v" \
 ]
 
 set_property used_in_synthesis false [get_files "$ad_hdl_dir/projects/adsy2301_3/zcu102/system_constr.xdc"]

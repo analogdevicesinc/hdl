@@ -34,7 +34,6 @@ set_false_path -to   [get_ports FPGA_TRIG]
 set_false_path -to   [get_ports TR_PULSE]
 set_false_path -to   [get_ports TX_LOAD]
 set_false_path -to   [get_ports RX_LOAD]
-set_false_path -to   [get_ports FPGA_BOOT_GOOD]
 set_false_path -from [get_ports FPGA_BOOT_GOOD]
 set_false_path -from [get_ports UDC_PG]
 

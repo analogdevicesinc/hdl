@@ -53,7 +53,7 @@ ad_ip_instance axi_intc axi_intc [list \
 ]
 
 ad_ip_instance ilconcat sys_concat_intc [list \
-  NUM_PORTS 13 \
+  NUM_PORTS 9 \
 ]
 
 ad_connect axi_intc/s_axi_aclk sys_cpu_clk
@@ -227,7 +227,7 @@ ad_connect rf_fl_spi/s_axi_aresetn sys_cpu_resetn
 
 ad_connect axi_smartconnect/M11_AXI rf_fl_spi/AXI_LITE
 
-ad_connect sys_concat_intc/In8 rf_fl_spi/ip2intc_irpt
+ad_connect sys_concat_intc/In4 rf_fl_spi/ip2intc_irpt
 
 # LO SPI
 
@@ -253,7 +253,7 @@ ad_connect lo_spi/s_axi_aresetn sys_cpu_resetn
 
 ad_connect axi_smartconnect/M12_AXI lo_spi/AXI_LITE
 
-ad_connect sys_concat_intc/In9 lo_spi/ip2intc_irpt
+ad_connect sys_concat_intc/In5 lo_spi/ip2intc_irpt
 
 # TX SPI
 
@@ -279,7 +279,7 @@ ad_connect tx_spi/s_axi_aresetn sys_cpu_resetn
 
 ad_connect axi_smartconnect/M13_AXI tx_spi/AXI_LITE
 
-ad_connect sys_concat_intc/In10 tx_spi/ip2intc_irpt
+ad_connect sys_concat_intc/In6 tx_spi/ip2intc_irpt
 
 # RX SPI
 
@@ -305,7 +305,7 @@ ad_connect rx_spi/s_axi_aresetn sys_cpu_resetn
 
 ad_connect axi_smartconnect/M14_AXI rx_spi/AXI_LITE
 
-ad_connect sys_concat_intc/In11 rx_spi/ip2intc_irpt
+ad_connect sys_concat_intc/In7 rx_spi/ip2intc_irpt
 
 # UDC I2C
 
@@ -320,7 +320,7 @@ ad_connect axi_udc_iic/s_axi_aresetn sys_cpu_resetn
 
 ad_connect axi_smartconnect/M15_AXI axi_udc_iic/S_AXI
 
-ad_connect sys_concat_intc/In12 axi_udc_iic/iic2intc_irpt
+ad_connect sys_concat_intc/In8 axi_udc_iic/iic2intc_irpt
 
 # Flash SPI
 
@@ -346,4 +346,4 @@ ad_connect sys_concat_intc/In12 axi_udc_iic/iic2intc_irpt
 
 # ad_connect axi_smartconnect/M16_AXI flash_spi/AXI_LITE
 
-# ad_connect sys_concat_intc/In13 flash_spi/ip2intc_irpt
+# ad_connect sys_concat_intc/In9 flash_spi/ip2intc_irpt
