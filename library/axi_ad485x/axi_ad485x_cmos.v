@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -719,7 +719,6 @@ module axi_ad485x_cmos #(
     end
   endgenerate
 
-
   // relax timing
   reg  adc_valid_crc_d;
   always @(posedge clk) begin
@@ -795,7 +794,7 @@ module axi_ad485x_cmos #(
       if (crc_res == 16'd0) begin
         crc_error <= 1'd0;
       end else begin
-        crc_error <= 1'd1;
+        crc_error <= crc_enable_window;
       end
     end
   end
