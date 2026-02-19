@@ -51,7 +51,7 @@ if {[info exists ::env(QUARTUS_PRO_ISUSED)]} {
 
 # Define the supported tool version
 # If the variable is not defined, set it to standard if the carrier requires it
-set required_quartus_version "25.1.0"
+set required_quartus_version "25.3.0"
 set required_quartus_std_version "24.1std.0"
 if {[info exists ::env(REQUIRED_QUARTUS_VERSION)]} {
   set required_quartus_version $::env(REQUIRED_QUARTUS_VERSION)
