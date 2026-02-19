@@ -60,28 +60,7 @@ module system_top (
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
 
-  inout   [31:0]  gpio_bd,
-
-  output          hdmi_out_clk,
-  output          hdmi_vsync,
-  output          hdmi_hsync,
-  output          hdmi_data_e,
-  output  [15:0]  hdmi_data,
-
-  output          spdif,
-
-  output          i2s_mclk,
-  output          i2s_bclk,
-  output          i2s_lrclk,
-  output          i2s_sdata_out,
-  input           i2s_sdata_in,
-
-  inout           iic_scl,
-  inout           iic_sda,
-  inout   [ 1:0]  iic_mux_scl,
-  inout   [ 1:0]  iic_mux_sda,
-
-  input           otg_vbusoc,
+  output   data_o,
 
   output  SPI_0_io0_o_mosi,
   input   SPI_0_io1_i_miso,
@@ -93,49 +72,6 @@ module system_top (
 
 );
 
-  // internal signals
-
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  iic_mux_scl_o_s;
-  wire            iic_mux_scl_t_s;
-  wire    [ 1:0]  iic_mux_sda_i_s;
-  wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            iic_mux_sda_t_s;
-  wire  data_o;
-
-  // gpio assigz
-
-  //assign  gpio_i[20]=data_o[0];
-  assign gpio_i[63:32] = gpio_o[63:32];
-
-  // instantiations
-
-  ad_iobuf #(
-    .DATA_WIDTH (32)
-  ) i_iobuf (
-    .dio_t ({gpio_t[31:21],1'b0,gpio_t[19:0]}),
-    .dio_i ({gpio_o[31:21],data_o,gpio_o[19:0]}),
-    .dio_o (gpio_i[31:0]),
-    .dio_p (gpio_bd));
-
-  ad_iobuf #(
-    .DATA_WIDTH (2)
-  ) i_iic_mux_scl (
-    .dio_t ({iic_mux_scl_t_s, iic_mux_scl_t_s}),
-    .dio_i (iic_mux_scl_o_s),
-    .dio_o (iic_mux_scl_i_s),
-    .dio_p (iic_mux_scl));
-
-  ad_iobuf #(
-    .DATA_WIDTH (2)
-  ) i_iic_mux_sda (
-    .dio_t ({iic_mux_sda_t_s, iic_mux_sda_t_s}),
-    .dio_i (iic_mux_sda_o_s),
-    .dio_o (iic_mux_sda_i_s),
-    .dio_p (iic_mux_sda));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -161,52 +97,6 @@ module system_top (
     .fixed_io_ps_porb (fixed_io_ps_porb),
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
 
-    .gpio_i (gpio_i),
-    .gpio_o (gpio_o),
-    .gpio_t (gpio_t),
-
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
-    .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
-
-    .spdif (spdif),
-
-    .i2s_bclk (i2s_bclk),
-    .i2s_lrclk (i2s_lrclk),
-    .i2s_mclk (i2s_mclk),
-    .i2s_sdata_in (i2s_sdata_in),
-    .i2s_sdata_out (i2s_sdata_out),
-    .iic_fmc_scl_io (iic_scl),
-    .iic_fmc_sda_io (iic_sda),
-    .iic_mux_scl_i (iic_mux_scl_i_s),
-    .iic_mux_scl_o (iic_mux_scl_o_s),
-    .iic_mux_scl_t (iic_mux_scl_t_s),
-    .iic_mux_sda_i (iic_mux_sda_i_s),
-    .iic_mux_sda_o (iic_mux_sda_o_s),
-    .iic_mux_sda_t (iic_mux_sda_t_s),
-
-    .otg_vbusoc (otg_vbusoc),
-
-    .spi0_clk_i (1'b0),
-    .spi0_clk_o (),
-    .spi0_csn_0_o (),
-    .spi0_csn_1_o (),
-    .spi0_csn_2_o (),
-    .spi0_csn_i (1'b1),
-    .spi0_sdi_i (1'b0),
-    .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (),
-    .spi1_clk_i (1'b0),
-    .spi1_clk_o (),
-    .spi1_csn_0_o (),
-    .spi1_csn_1_o (),
-    .spi1_csn_2_o (),
-    .spi1_csn_i (1'b1),
-    .spi1_sdi_i (1'b0),
-    .spi1_sdo_i (1'b0),
-    .spi1_sdo_o (),
 
     .SPI_0_io0_i (1'b0),
     .SPI_0_io0_o (SPI_0_io0_o_mosi),

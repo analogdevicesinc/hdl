@@ -8,8 +8,8 @@ PROJECT_NAME := pynq_subsystem_zed
 
 M_DEPS += ../common/create_pynq_mb_subsystem.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
-M_DEPS += ../../common/zed/zed_system_constr.xdc
-M_DEPS += ../../common/zed/zed_system_bd.tcl
+M_DEPS += ../common/pynq_zed_system_constr.xdc
+M_DEPS += ../common/pynq_zed_system_bd.tcl
 M_DEPS += ../../../library/xilinx/common/ad_data_clk.v
 M_DEPS += ../../../library/common/ad_iobuf.v
 
