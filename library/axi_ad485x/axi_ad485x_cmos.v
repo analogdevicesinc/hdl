@@ -795,7 +795,7 @@ module axi_ad485x_cmos #(
       if (crc_res == 16'd0) begin
         crc_error <= 1'd0;
       end else begin
-        crc_error <= 1'd1;
+        crc_error <= crc_enable_window;
       end
     end
   end

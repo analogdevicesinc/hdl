@@ -214,7 +214,7 @@ module axi_ad485x_lvds #(
 
   // busy period counter
   always @(posedge clk) begin
-    if (cnvs == 1'b1 && busy_m2 == 1'b1) begin
+    if (cnvs == 1'b1 && busy_m2 == 1'b1 && oversampling_en == 1) begin
       run_busy_period_cnt <= 1'b1;
     end else if (start_transfer == 1'b1) begin
       run_busy_period_cnt <= 1'b0;
@@ -250,7 +250,7 @@ module axi_ad485x_lvds #(
   end
 
   assign conversion_quiet_time_s = (oversampling_en == 1) ? conversion_quiet_time & !conversion_completed | cnvs : 1'b0;
-  assign conversion_completed = (period_cnt == busy_measure_value) ? 1'b1 : 1'b0;
+  assign conversion_completed = (period_cnt == busy_measure_value) ? |busy_measure_value : 1'b0;
   assign adc_cnvs_redge = ~cnvs_d & cnvs;
 
   always @(posedge clk) begin
@@ -274,7 +274,7 @@ module axi_ad485x_lvds #(
       end
     end
 
-    if (data_counter == packet_cnt_length && ch_counter == max_channel_transfer) begin
+    if (data_counter == packet_cnt_length && ch_counter == max_channel_transfer && packet_cnt_length != 0) begin
       aquire_data <= 1'b0;
       capture_complete_init <= 1'b1;
     end else if (aquire_data | start_transfer) begin
@@ -572,7 +572,7 @@ module axi_ad485x_lvds #(
       if (crc_res == 16'd0) begin
         crc_error <= 1'd0;
       end else begin
-        crc_error <= 1'd1;
+        crc_error <= crc_enable_window;
       end
     end
   end
