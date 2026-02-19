@@ -139,7 +139,6 @@ module system_top (
   wire        iic_mux_sda_t_s;
 
   assign gpio_i[63:42] = gpio_o[63:42];
-  assign trig_fmc_out = trig_fmc_in;
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -253,6 +252,8 @@ module system_top (
     .d1a_n (d1a_n),
     .frame_p(frame_p),
     .frame_n(frame_n),
-    .sync_n (1'b1));
+    .sync_n (1'b1),
+    .trig_fmc_in(trig_fmc_in),
+    .trig_fmc_out(trig_fmc_out));
 
 endmodule
