@@ -318,31 +318,26 @@ ad_ip_instance util_reg  ${iop_name}_util_reg [list \
   # PYNQ Reset GPIO (outside hierarchy)
   # Named mb_${iop_name}_reset for PYNQ compatibility
   # -----------------------
-   ad_ip_instance axi_gpio mb_${iop_name}_reset
-  ad_ip_parameter mb_${iop_name}_reset CONFIG.C_GPIO_WIDTH 1
-  ad_ip_parameter mb_${iop_name}_reset CONFIG.C_ALL_OUTPUTS 1
-  ad_ip_parameter mb_${iop_name}_reset CONFIG.C_DOUT_DEFAULT 0x00000001
+   
 
-  ad_connect sys_cpu_clk mb_${iop_name}_reset/s_axi_aclk
-  ad_connect sys_cpu_resetn mb_${iop_name}_reset/s_axi_aresetn
 
   # Connect reset GPIO output to IOP aux_reset_in (directly, no inversion needed)
   # When GPIO output is 0 -> MB in reset, when 1 -> MB running
-  ad_connect mb_${iop_name}_reset/gpio_io_o ${iop_name}/aux_reset_in
-  ad_connect sys_ps7_FCLK_RESET0_N ${iop_name}/ext_reset_in
+
+  ad_connect sys_ps7/FCLK_RESET0_N ${iop_name}/ext_reset_in
   # -----------------------
   # PYNQ Interrupt ACK GPIO (outside hierarchy)
   # Named mb_${iop_name}_intr_ack for PYNQ compatibility
   # -----------------------
-  ad_ip_instance axi_gpio mb_${iop_name}_intr_ack
-  ad_ip_parameter mb_${iop_name}_intr_ack CONFIG.C_GPIO_WIDTH 1
-  ad_ip_parameter mb_${iop_name}_intr_ack CONFIG.C_ALL_OUTPUTS 1
+  #ad_ip_instance axi_gpio mb_${iop_name}_intr_ack
+  #ad_ip_parameter mb_${iop_name}_intr_ack CONFIG.C_GPIO_WIDTH 1
+  #ad_ip_parameter mb_${iop_name}_intr_ack CONFIG.C_ALL_OUTPUTS 1
 
-  ad_connect sys_cpu_clk mb_${iop_name}_intr_ack/s_axi_aclk
-  ad_connect sys_cpu_resetn mb_${iop_name}_intr_ack/s_axi_aresetn
+  #ad_connect sys_cpu_clk mb_${iop_name}_intr_ack/s_axi_aclk
+  #ad_connect sys_cpu_resetn mb_${iop_name}_intr_ack/s_axi_aresetn
 
   # Connect interrupt ACK to the DFF clear
-  ad_connect mb_${iop_name}_intr_ack/gpio_io_o ${iop_name}/intr_ack
+ # ad_connect mb_${iop_name}_intr_ack/gpio_io_o ${iop_name}/intr_ack
 
   # -----------------------
   # Connect mb_debug_sys_rst to GND (no debug reset)
@@ -357,13 +352,12 @@ ad_ip_instance util_reg  ${iop_name}_util_reg [list \
   # -----------------------
   # CPU Interconnect for PS access to BRAM
   # -----------------------
-  ad_cpu_interconnect $base_addr ${iop_name}/mb_bram_ctrl
-  set_property range 64K [get_bd_addr_segs {sys_ps7/Data/mb_bram_ctrl}]
+ ad_cpu_interconnect 0x42000000  ${iop_name}/mb_bram_ctrl
+ set_property range 64K [get_bd_addr_segs {sys_ps7/Data/mb_bram_ctrl}]
   # CPU Interconnect for reset GPIO
-  ad_cpu_interconnect [expr $base_addr + 0x10000] mb_${iop_name}_reset
 
   # CPU Interconnect for interrupt ACK GPIO
-  ad_cpu_interconnect [expr $base_addr + 0x20000] mb_${iop_name}_intr_ack
+
 
   # -----------------------
   # Address assignment for MicroBlaze LMB (critical for MB to find instructions at 0x0)
