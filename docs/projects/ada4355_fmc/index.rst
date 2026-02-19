@@ -30,6 +30,7 @@ Supported boards
 -------------------------------------------------------------------------------
 
 - :adi:`EVAL-ADA4355`
+- :adi:`EVAL-ADA4356EBZ`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -50,6 +51,9 @@ Supported carriers
    * - :adi:`EVAL-ADA4355`
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC
+   * - :adi:`EVAL-ADA4356EBZ`
+     - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
+     - FMC
 
 Block design
 -------------------------------------------------------------------------------
@@ -67,30 +71,75 @@ The data path and clock domains are depicted in the below diagram:
    :align: center
    :alt: ADA4355_FMC/ZedBoard block diagram
 
+When TDD is enabled (TDD_EN=1), the AXI_TDD controller is added to provide
+precise LiDAR timing control:
+
+.. image:: ../ada4355_fmc/lidar_ada4356_tdd_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: ADA4355_FMC/ZedBoard block diagram with TDD
+
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The BUFMRCE_EN configuration parameter defines the supported board used which
-is differentiated by how the frame clock signals are distributed.
-For ADA4355 the XDC constraints are not optimized for ISERDES, as the frame
-clock signals are located in a different I/O bank from the other related
-signals. To address this, a BUFMRCE buffer is used to distribute the
-frame clock to all ISERDES instances.
+The following are the parameters of this project that can be configured:
 
-By default it is set to 0. Depending on the part, some hardware modifications
-need to be done on the board and/or ``make`` command:
+- BUFMRCE_EN: specifies the evaluation board type, which is differentiated by
+  how the frame clock signals are distributed. For ADA4355 the XDC constraints
+  are not optimized for ISERDES, as the frame clock signals are located in a
+  different I/O bank from the other related signals. To address this, a BUFMRCE
+  buffer is used to distribute the frame clock to all ISERDES instances.
 
-In case of the ADA4356:
+  - 0 - ADA4356 - pinout with optimized constraints (default)
+  - 1 - ADA4355 - pinout with non-optimized constraints
+
+- TDD_EN: enables the TDD controller for LiDAR timing control. Only supported
+  with BUFMRCE_EN=0 (ADA4356). When enabled, the AXI_TDD IP is added with
+  laser trigger output and DMA synchronization. Check out this guide for more
+  details regarding TDD parameters: :ref:`axi_tdd`
+
+  - 0 - TDD disabled, plain ADC capture (default)
+  - 1 - TDD enabled, adds axi_tdd IP with 2 channels
+
+ADA4356 without TDD (default):
 
 .. shell:: bash
 
-   $make BUFMRCE_EN=0
+   $make BUFMRCE_EN=0 TDD_EN=0
 
-In case of the ADA4355:
+ADA4356 with TDD for LiDAR:
 
 .. shell:: bash
 
-   $make BUFMRCE_EN=1
+   $make BUFMRCE_EN=0 TDD_EN=1
+
+ADA4355 without TDD:
+
+.. shell:: bash
+
+   $make BUFMRCE_EN=1 TDD_EN=0
+
+TDD channel allocation (TDD_EN=1)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When TDD is enabled, the controller runs in the ADC clock domain (125 MHz) and
+provides the following channel allocation:
+
+.. list-table::
+   :widths: 15 30 55
+   :header-rows: 1
+
+   * - Channel
+     - Connection
+     - Purpose
+   * - 0
+     - trig_fmc_out (FMC SMA)
+     - Laser trigger output
+   * - 1
+     - axi_ada4355_dma/sync
+     - DMA synchronization — controls when DMA starts capturing
+
+The TDD sync input is connected to trig_fmc_in (FMC SMA connector).
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -103,7 +152,13 @@ Instance             Zynq/Microblaze
 ==================== ===============
 axi_ada4355_adc      0x44A0_0000
 axi_ada4355_dma      0x44A3_0000
+axi_tdd_0 *          0x44A4_0000
 ==================== ===============
+
+.. admonition:: Legend
+   :class: note
+
+   - ``*`` instantiated only when TDD_EN=1
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -147,16 +202,12 @@ The Software GPIO number is calculated as follows:
      - (from FPGA view)
      -
      - Zynq-7000
-   * - apd_supp_en **
+   * - vlogic_fmc **
      - INOUT
-     - 42
-     - 96
-   * - trig_fmc_out **
-     - OUT
      - 41
      - 95
-   * - trig_fmc_in **
-     - IN
+   * - apd_supp_en **
+     - INOUT
      - 40
      - 94
    * - freq_sel1 **
@@ -214,6 +265,14 @@ The Software GPIO number is calculated as follows:
    - ``*`` instantiated only for BUFMRCE_EN=1 (ADA4355)
    - ``**`` instantiated only for BUFMRCE_EN=0 (ADA4356)
 
+.. note::
+
+   When TDD_EN=1, the trig_fmc_in and trig_fmc_out signals are routed to the
+   AXI_TDD controller. The trig_fmc_in SMA connector can be used as an
+   external sync source for the TDD controller, but synchronization can also
+   be done internally through the AXI_TDD registers. When TDD_EN=0,
+   trig_fmc_out is a passthrough of trig_fmc_in.
+
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -258,28 +317,35 @@ the HDL repository.
 
 **Linux/Cygwin/WSL**
 
-Example for building with the default configuration (BUFMRCE_EN=0):
+Example for building with the default configuration (BUFMRCE_EN=0, TDD_EN=0):
 
 .. shell::
 
    $cd hdl/projects/ada4355_fmc/zed
    $make
 
-Example for building with parameters:
+Example for building ADA4356 with TDD for LiDAR:
 
 .. shell::
 
    ~/hdl/projects/ada4355_fmc/zed
-   $make BUFMRCE_EN=1
+   $make BUFMRCE_EN=0 TDD_EN=1
+
+Example for building ADA4355:
+
+.. shell::
+
+   ~/hdl/projects/ada4355_fmc/zed
+   $make BUFMRCE_EN=1 TDD_EN=0
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used.
 
 If the following command was run
 
-``make BUFMRCE_EN=1``
+``make BUFMRCE_EN=0 TDD_EN=1``
 
-then the folder name will be: ``BUFMRCEEN1``.
+then the folder name will be: ``BUFMRCEEN0_TDDEN1``.
 
 Check `Configuration modes`_ for more details.
 
@@ -330,6 +396,9 @@ HDL related
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
      - :ref:`axi_sysid`
+   * - AXI_TDD
+     - :git-hdl:`library/axi_tdd`
+     - :ref:`axi_tdd`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
      - :ref:`axi_sysid`
