@@ -6,6 +6,7 @@
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
+source $ad_hdl_dir/projects/xcvr_wizard/scripts/adi_xcvr_xilinx.tcl
 set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timing_fix_xilinx.tcl]
 set BOARD_NAME zcu102
 
