@@ -62,7 +62,7 @@ adi_ip_instance -vlnv {analog.com:ip:axi_spi0:1.0} \
     ASYNC_SPI_CLK:1,
     DATA_WIDTH:$DATA_WIDTH,
     MM_IF_TYPE:0,
-    NUM_OFFLOAD:1,
+    OFFLOAD_EN:1,
     NUM_OF_SDI:$NUM_OF_SDI
   }] \
   -ip_iname "axi_spi0_inst"
