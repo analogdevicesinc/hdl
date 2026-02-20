@@ -19,7 +19,7 @@ ifdef CFG
     DIR_NAME := $(basename $(notdir $(CFG)))
 endif
 
-VIVADO := vivado -mode batch -source
+VIVADO := vivado -tempDir .Xil -mode batch -source
 
 # Parse the variables passed to make and convert them to the filename format
 ifeq ($(shell expr $(MAKELEVEL) % 2),0)
@@ -39,7 +39,7 @@ ifneq ($(strip $(DIR_NAME)), )
     $(shell test -d $(DIR_NAME) || mkdir $(DIR_NAME))
     ADI_PROJECT_DIR := $(DIR_NAME)/
     export ADI_PROJECT_DIR
-	VIVADO := vivado -log $(DIR_NAME)/vivado.log -journal $(DIR_NAME)/vivado.jou -mode batch -source
+	VIVADO := vivado -tempDir $(DIR_NAME) -log $(DIR_NAME)/vivado.log -journal $(DIR_NAME)/vivado.jou -mode batch -source
 endif
 
 CLEAN_TARGET := *.cache
