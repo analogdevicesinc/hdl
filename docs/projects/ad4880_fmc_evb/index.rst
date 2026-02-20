@@ -1,6 +1,6 @@
-.. _ad488x_fmc_evb:
+.. _ad4880_fmc_evb:
 
-AD488X-FMC-EVB HDL project
+AD4880-FMC-EVB HDL project
 ================================================================================
 
 Overview
@@ -9,10 +9,10 @@ Overview
 The :adi:`EVAL-AD4880-FMC` is designed to demonstrate the :adi:`AD4880`
 performance.
 
-The :git-hdl:`AD488X-FMC-EVB HDL project <projects/ad488x_fmc_evb>` supports
-the following :adi:`AD4880` features:
+The :git-hdl:`AD4880-FMC-EVB HDL project <projects/ad4880_fmc_evb>` supports
+the following :adi:`AD4880` , :adi:`AD4884` features:
 
-- Single/Dual lane DDR data capture
+- Single lane DDR data capture
 - Self synchronization using the fixed pattern and bit-slip feature
 - Capturing digital averaging filter with up to 2^10 decimation
 - Analog-to-digital converter (ADC) configuration via serial peripheral
@@ -24,11 +24,18 @@ Supported boards
 -------------------------------------------------------------------------------
 
 - :adi:`EVAL-AD4880-FMC`
+- :adi:`EVAL-AD4884-FMC`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 - :adi:`AD4880`
+- :adi:`AD4884`
+- :adi:`AD9508`
+- :adi:`ADA4945-1`
+- :adi:`ADF4350`
+- :adi:`ADP7182`
+- :adi:`LT6236`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -41,6 +48,9 @@ Supported carriers
      - Carrier
      - FMC slot
    * - :adi:`EVAL-AD4880-FMC`
+     - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
+     - FMC-LPC
+   * - :adi:`EVAL-AD4884-FMC`
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC-LPC
 
@@ -56,7 +66,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ad488x_fmc_evb_zed_block_diagram.svg
+.. image:: ad4880_fmc_evb_zed_block_diagram.svg
    :width: 800
    :align: center
    :alt: AD4880-FMC-EVB/ZedBoard block diagram
@@ -64,7 +74,7 @@ The data path and clock domains are depicted in the below diagram:
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: ad488x_fmc_clock_scheme.svg
+.. image:: ad4880_fmc_clock_scheme.svg
    :width: 800
    :align: center
    :alt: AD4880-FMC-EVB/ZedBoard clock scheme
@@ -191,10 +201,20 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. shell:: bash
+Example of running the ``make`` command without parameters (using the default
+configuration (ADC_N_BITS=20):
 
-   $cd hdl/projects/ad488x_fmc_evb/zed
+.. shell::
+
+   $cd hdl/projects/ad4880_fmc_evb/zed
    $make
+
+Example of running the ``make`` command with parameters:
+
+.. shell::
+
+   $cd hdl/projects/ad4880_fmc_evb/zed
+   $make ADC_N_BITS=16
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -204,7 +224,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- UG-2214, User Guide | EVAL-AD4880
+- `EVAL-AD4884 User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad4884.pdf>`__
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -214,7 +234,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD488x-FMC-EVB HDL project source code <projects/ad488x_fmc_evb>`
+-  :git-hdl:`AD4880-FMC-EVB HDL project source code <projects/ad4880_fmc_evb>`
 
 .. list-table::
    :widths: 30 35 35

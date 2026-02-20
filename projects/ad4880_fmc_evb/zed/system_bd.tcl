@@ -1,10 +1,10 @@
 ###############################################################################
-## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
-source ../common/ad488x_fmc_evb_bd.tcl
+source ../common/ad4880_fmc_evb_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID
