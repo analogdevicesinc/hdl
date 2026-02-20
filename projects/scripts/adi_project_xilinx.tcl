@@ -322,8 +322,9 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
 #
 # \param[project_name] - name of the project
 # \param[project_files] - list of project files
+# \param[system_top] - system_top file name; default is system_top
 #
-proc adi_project_files {project_name project_files} {
+proc adi_project_files {project_name project_files {system_top "system_top"}} {
   global ADI_POST_ROUTE_POD_PRE_SCRIPT
   global ADI_POST_ROUTE_SCRIPT
 
@@ -342,8 +343,7 @@ proc adi_project_files {project_name project_files} {
     add_files -fileset utils_1 -norecurse ${ADI_POST_ROUTE_SCRIPT}
   }
 
-  # NOTE: top file name is always system_top
-  set_property top system_top [current_fileset]
+  set_property top $system_top [current_fileset]
 }
 
 
