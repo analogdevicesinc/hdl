@@ -224,7 +224,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- UG-2214, User Guide | EVAL-AD4880
+- `EVAL-AD4884 User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad4884.pdf>`__
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
