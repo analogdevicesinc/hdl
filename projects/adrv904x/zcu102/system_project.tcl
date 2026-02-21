@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -14,7 +14,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 # e.g.
 #   RX-OS disabled:        make
-#   RX-OS Non-LinkSharing: make ORX_ENABLE=1 LINK_SHARING=0 RX_OS_JESD_M=8 RX_OS_JESD_L=4 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_M=8 RX_JESD_L=4
+#   RX-OS Non-LinkSharing: make ORX_ENABLE=1 RX_OS_JESD_M=8 RX_OS_JESD_L=4 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=4
 #
 # Parameter description:
 #   JESD_MODE : Used link layer encoder mode
@@ -30,6 +30,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   [TX/RX/RX_OS]_JESD_L : Number of lanes per link
 #   [TX/RX/RX_OS]_JESD_S : Number of samples per frame
 #   [TX/RX/RX_OS]_JESD_NP : Number of bits per sample
+#   [TX/RX/RX_OS]_TPL_WIDTH : TPL data path width in bits
 
 adi_project adrv904x_zcu102 0 [list \
   JESD_MODE       [get_env_param JESD_MODE     64B66B] \
@@ -43,14 +44,17 @@ adi_project adrv904x_zcu102 0 [list \
   TX_JESD_L       [get_env_param TX_JESD_L          8] \
   TX_JESD_S       [get_env_param TX_JESD_S          1] \
   TX_JESD_NP      [get_env_param TX_JESD_NP        16] \
+  TX_TPL_WIDTH    [get_env_param TX_TPL_WIDTH      {}] \
   RX_JESD_M       [get_env_param RX_JESD_M         16] \
   RX_JESD_L       [get_env_param RX_JESD_L          8] \
   RX_JESD_S       [get_env_param RX_JESD_S          1] \
   RX_JESD_NP      [get_env_param RX_JESD_NP        16] \
+  RX_TPL_WIDTH    [get_env_param RX_TPL_WIDTH      {}] \
   RX_OS_JESD_M    [get_env_param RX_OS_JESD_M       0] \
   RX_OS_JESD_L    [get_env_param RX_OS_JESD_L       0] \
   RX_OS_JESD_S    [get_env_param RX_OS_JESD_S       0] \
   RX_OS_JESD_NP   [get_env_param RX_OS_JESD_NP      0] \
+  RX_OS_TPL_WIDTH [get_env_param RX_OS_TPL_WIDTH   {}] \
 ]
 
 adi_project_files adrv904x_zcu102 [list \
