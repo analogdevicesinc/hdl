@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2022 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2022, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -21,6 +21,7 @@ adi_ip_files ad_ip_jesd204_tpl_adc [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/util_ext_sync.v" \
   "$ad_hdl_dir/library/common/ad_xcvr_rx_if.v" \
+  "$ad_hdl_dir/library/common/util_pipeline_stage.v" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
@@ -68,6 +69,7 @@ foreach {p v} {
   "CONVERTER_RESOLUTION" "8 11 12 14 16" \
   "SAMPLES_PER_FRAME" "1 2 3 4 6 8 12 16" \
   "OCTETS_PER_BEAT" "4 6 8 12 16 32 64" \
+  "NUM_PIPELINE_STAGES" "0 1 2" \
 } { \
   set_property -dict [list \
     "value_validation_type" "list" \

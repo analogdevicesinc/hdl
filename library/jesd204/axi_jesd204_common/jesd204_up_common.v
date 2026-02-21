@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2016-2022 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2016-2022, 2025 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -54,6 +54,7 @@ module jesd204_up_common #(
   output reg [7:0] core_cfg_octets_per_frame = 'h00,
   output reg core_cfg_disable_scrambler = 'h00,
   output reg core_cfg_disable_char_replacement = 'h00,
+  output reg [1:0] core_cfg_header_mode = 'h00,
   output reg [EXTRA_CFG_WIDTH-1:0] core_extra_cfg = 'h00,
 
   output reg [DEV_EXTRA_CFG_WIDTH-1:0] device_extra_cfg = 'h00,
@@ -75,6 +76,7 @@ module jesd204_up_common #(
   reg [NUM_LANES-1:0] up_cfg_lanes_disable = {NUM_LANES{1'b0}};
   reg [NUM_LINKS-1:0] up_cfg_links_disable = {NUM_LINKS{1'b0}};
   reg up_cfg_disable_char_replacement = 1'b0;
+  reg [1:0] up_cfg_header_mode = 1'b0;
   reg up_cfg_disable_scrambler = 1'b0;
 
   /* Reset for the register map */
@@ -164,6 +166,7 @@ module jesd204_up_common #(
       core_cfg_links_disable <= up_cfg_links_disable;
       core_cfg_disable_scrambler <= up_cfg_disable_scrambler;
       core_cfg_disable_char_replacement <= up_cfg_disable_char_replacement;
+      core_cfg_header_mode <= up_cfg_header_mode;
       core_extra_cfg <= up_extra_cfg;
     end
   end
@@ -291,7 +294,8 @@ module jesd204_up_common #(
         /* 00-09 */ up_cfg_octets_per_multiframe
       };
       12'h85: up_rdata = {
-        /* 02-31 */ 30'h00, /* Reserved for future additions */
+        /* 04-31 */ 30'h00, /* Reserved for future additions */
+        /* 03-02 */ up_cfg_header_mode, /* 0 - CRC12 ; 1 - CRC3; 2 - FEC; 3 - CMD */
         /*    01 */ up_cfg_disable_char_replacement, /* Disable character replacement */
         /*    00 */ up_cfg_disable_scrambler /* Disable scrambler */
       };
@@ -335,6 +339,7 @@ module jesd204_up_common #(
       up_cfg_beats_per_multiframe <= 'h00;
 
       up_cfg_disable_char_replacement <= 1'b0;
+      up_cfg_header_mode <= 2'b0;
       up_cfg_disable_scrambler <= 1'b0;
     end else if (up_wreq == 1'b1) begin
       case (up_waddr)
@@ -364,6 +369,7 @@ module jesd204_up_common #(
                                             {DATA_PATH_WIDTH_LOG2{1'b1}}};
           end
           12'h085: begin
+            up_cfg_header_mode <= up_wdata[3:2];
             up_cfg_disable_char_replacement <= up_wdata[1];
             up_cfg_disable_scrambler <= up_wdata[0];
           end

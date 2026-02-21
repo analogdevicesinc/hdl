@@ -8,6 +8,7 @@ LIBRARY_NAME := jesd204_rx
 
 GENERIC_DEPS += ../../common/ad_pack.v
 GENERIC_DEPS += ../../common/ad_upack.v
+GENERIC_DEPS += ../../common/ad_mem_dist.v
 GENERIC_DEPS += align_mux.v
 GENERIC_DEPS += elastic_buffer.v
 GENERIC_DEPS += jesd204_ilas_monitor.v
@@ -18,6 +19,9 @@ GENERIC_DEPS += jesd204_rx_ctrl.v
 GENERIC_DEPS += jesd204_rx_frame_align.v
 GENERIC_DEPS += jesd204_rx_lane.v
 GENERIC_DEPS += ../jesd204_common/jesd204_crc12.v
+GENERIC_DEPS += ../jesd204_common/lfsr_input.sv
+GENERIC_DEPS += jesd204_rx_fec_lfsr.sv
+GENERIC_DEPS += jesd204_fec_decode.sv
 GENERIC_DEPS += error_monitor.v
 
 XILINX_DEPS += bd/bd.tcl
@@ -28,6 +32,7 @@ XILINX_DEPS += jesd204_rx_header.v
 XILINX_DEPS += jesd204_rx_ip.tcl
 XILINX_DEPS += jesd204_rx_lane_64b.v
 XILINX_DEPS += jesd204_rx_ooc.ttcl
+XILINX_DEPS += jesd204_rx.xdc
 
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_cfg.xml
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_rx_cfg_rtl.xml

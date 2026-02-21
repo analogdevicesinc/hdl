@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -50,7 +50,8 @@ module ad_ip_jesd204_tpl_adc_core #(
   parameter TWOS_COMPLEMENT = 1,
   parameter EXT_SYNC = 0,
   parameter PN7_ENABLE = 1,
-  parameter PN15_ENABLE = 1
+  parameter PN15_ENABLE = 1,
+  parameter NUM_PIPELINE_STAGES = 0
 ) (
   input clk,
 
@@ -119,7 +120,8 @@ module ad_ip_jesd204_tpl_adc_core #(
     .OCTETS_PER_BEAT (OCTETS_PER_BEAT),
     .EN_FRAME_ALIGN (EN_FRAME_ALIGN),
     .LINK_DATA_WIDTH (LINK_DATA_WIDTH),
-    .ADC_DATA_WIDTH (ADC_DATA_WIDTH)
+    .ADC_DATA_WIDTH (ADC_DATA_WIDTH),
+    .NUM_PIPELINE_STAGES (NUM_PIPELINE_STAGES)
   ) i_deframer (
     .clk (clk),
     .link_sof (link_sof),
