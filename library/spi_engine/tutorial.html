@@ -8,8 +8,8 @@
 
     <title>SPI Engine Tutorial - PulSAR-ADC &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=5d595293" />
-    <script async="async" src="../../_static/app.umd.js?v=46a18818"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
+    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -282,7 +282,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/ad488x_fmc_evb/index.html">AD488X-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -324,6 +324,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009/index.html">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009zu11eg/index.html">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv903x/index.html">ADRV903x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9361z7035/index.html">ADRV9361Z7035</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9364z7020/index.html">ADRV9364Z7020</a></li>
@@ -552,37 +553,86 @@ each IP individually or by using the function provided by the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/scripts/spi_engine.tcl" target="_blank">library/spi_engine/scripts/spi_engine.tcl</a> script.</p>
 <p>Using the script ensures that the correct connections are being made and that
 the IP cores will receive the correct parameter configuration since certain
-parameters need to be set to the same value. The function takes the following
-arguments:</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span>spi_engine_create<span class="w"> </span><span class="k">{{</span><span class="nv">name</span><span class="w"> </span><span class="s2">&quot;spi_engine&quot;</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_width</span><span class="w"> </span><span class="mi">32</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">async_spi_clk</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_cs</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdi</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdo</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_delay</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">echo_sclk</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdo_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sync_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}}</span>
+parameters need to be set to the same value. The same script can be used for
+Intel and Xilinx projects, and it is expected to be extended for other
+vendors in the future. The function takes the following arguments for Xilinx
+projects:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">proc</span><span class="w"> </span>spi_engine_create<span class="w"> </span><span class="k">{</span><span class="nv">args</span><span class="k">}</span>
 </pre></div>
 </div>
-<p><strong>data_width</strong> will set the width of the data bus / data line used by the SPI
-engine to connect to the DMA and which serves the purpose of sending ADC sample
-data to the DDR memory. The data_width value will also set the maximum word
-length for the SPI transfer. Valid values are are 8/16/24/32. The DMA valid
-values are 16/32/64/128[…]. Since the Pulsar_ADC devices are all single SDI/SDO
-and some of them require 18bit transfers, this value will be rounded to 32bit.</p>
-<p><strong>async_spi_clk</strong> will chose the reference clock for the SPI Engine. Setting
-this parameter to 0 will configure the hierarchy to use the axi clock (100MHz)
-as the reference clock. Setting it to 1 will allow for an external reference
-clock (spi_clk). Because some devices need 80MHz SCLK, a 160MHz reference clock
-is required which implies an external reference.</p>
-<p><strong>num_cs</strong> selects the number of CS lines.</p>
-<p><strong>num_sdi</strong> selects the number of SDI lines.</p>
-<p><strong>sdi_delay</strong> The latch of the SDI line can be delayed with 1, 2 or 3 SPI core
-clock cycle. Needed for designs with high SCLK rate (&gt;50MHz).</p>
-<p>Configuration tcl code and result below:</p>
+<p><strong>args[0] - name</strong> is mandatory for all Xilinx projects.</p>
+<p><strong>args[1] - data_width</strong> will set the width of the data bus / data line used by
+the SPI engine to connect to the DMA and which serves the purpose of sending
+ADC sample data to the DDR memory. The data_width value will also set the
+maximum word length for the SPI transfer. Valid values are are 8/16/24/32. The
+DMA valid values are 16/32/64/128[…]. Since the Pulsar_ADC devices are all
+single SDI/SDO and some of them require 18bit transfers, this value will be
+rounded to 32bit.</p>
+<p><strong>args[2] - async_spi_clk</strong> will chose the reference clock for the SPI Engine.
+Setting this parameter to 0 will configure the hierarchy to use the axi clock
+(100MHz) as the reference clock. Setting it to 1 will allow for an external
+reference clock (spi_clk). Because some devices need 80MHz SCLK, a 160MHz
+reference clock is required which implies an external reference.</p>
+<p><strong>args[3] - offload_en</strong> enables the offload mode of the SPI Engine. This is
+useful for situation where only FIFO mode are needed. By default, offload mode
+is enabled.</p>
+<p><strong>args[4] - num_cs</strong> selects the number of CS lines.</p>
+<p><strong>args[5] - num_sdi</strong> selects the number of SDI lines.</p>
+<p><strong>args[6] - num_sdo</strong> selects the number of SDO lines.</p>
+<p><strong>args[7] - sdi_delay</strong> The latch of the SDI line can be delayed with 1, 2 or
+3 SPI core clock cycle. Needed for designs with high SCLK rate (&gt;50MHz).</p>
+<p><strong>args[8] - echo_sclk</strong> enables the usage of external echo_sclk.</p>
+<p><strong>args[9] - sdo_streaming</strong> Enables the s_axis_sdo interface. This allows for
+sourcing the SDO data stream from a DMA or other similar sources, useful for
+DACs.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Although Pulsar ADC does not support Intel devices yet, the
+spi_engine_create function can also be used for Intel projects by providing
+additional parameters.</p>
+</div>
+<p>These are the arguments for Intel projects:</p>
+<p><strong>args[0] - name</strong> is mandatory for all Intel projects.</p>
+<p><strong>args[1] - axi_clk</strong> is mandatory for all Intel projects.</p>
+<p><strong>args[2] - axi_reset</strong> is mandatory for all Intel projects.</p>
+<p><strong>args[3] - spi_clk</strong> is mandatory for all Intel projects.</p>
+<p><strong>args[4] - data_width</strong> will set the width of the data bus / data line used by
+the SPI engine to connect to the DMA and which serves the purpose of sending
+ADC sample data to the DDR memory. The data_width value will also set the
+maximum word length for the SPI transfer. Valid values are are 8/16/24/32. The
+DMA valid values are 16/32/64/128[…]. Since the Pulsar_ADC devices are all
+single SDI/SDO and some of them require 18bit transfers, this value will be
+rounded to 32bit.</p>
+<p><strong>args[5] - async_spi_clk</strong> will chose the reference clock for the SPI Engine.
+Setting this parameter to 0 will configure the hierarchy to use the axi clock
+(100MHz) as the reference clock. Setting it to 1 will allow for an external
+reference clock (spi_clk). Because some devices need 80MHz SCLK, a 160MHz
+reference clock is required which implies an external reference.</p>
+<p><strong>args[6] - offload_en</strong> enables the offload mode of the SPI Engine. This is
+useful for situation where only FIFO mode are needed. By default, offload mode
+is enabled.</p>
+<p><strong>args[7] - num_cs</strong> selects the number of CS lines.</p>
+<p><strong>args[8] - num_sdi</strong> selects the number of SDI lines.</p>
+<p><strong>args[9] - num_sdo</strong> selects the number of SDO lines.</p>
+<p><strong>args[10] - sdi_delay</strong> The latch of the SDI line can be delayed with 1, 2 or
+3 SPI core clock cycle. Needed for designs with high SCLK rate (&gt;50MHz).</p>
+<p><strong>args[11] - echo_sclk</strong> enables the usage of external echo_sclk.</p>
+<p><strong>args[12] - sdo_streaming</strong> Enables the s_axis_sdo interface. This allows for
+sourcing the SDO data stream from a DMA or other similar sources, useful for
+DACs.</p>
+<p>Configuration tcl code for Xilinx projects and result below. Intel requires
+three additional parameters as described above:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>spi_engine<span class="o">/</span>scripts<span class="o">/</span>spi_engine.tcl
 
 <span class="k">set</span><span class="w"> </span>data_width<span class="w">    </span><span class="mi">32</span>
 <span class="k">set</span><span class="w"> </span>async_spi_clk<span class="w"> </span><span class="mi">1</span>
+<span class="k">set</span><span class="w"> </span>offload_en<span class="w">    </span><span class="mi">1</span>
 <span class="k">set</span><span class="w"> </span>num_cs<span class="w">        </span><span class="mi">1</span>
 <span class="k">set</span><span class="w"> </span>num_sdi<span class="w">       </span><span class="mi">1</span>
 <span class="k">set</span><span class="w"> </span>sdi_delay<span class="w">     </span><span class="mi">1</span>
 <span class="k">set</span><span class="w"> </span>hier_spi_engine<span class="w"> </span>spi_pulsar_adc
 
-<span class="nv">spi_engine_create</span><span class="w"> </span><span class="nv">$hier_spi_engine</span><span class="w"> </span><span class="nv">$data_width</span><span class="w"> </span><span class="nv">$async_spi_clk</span><span class="w"> </span><span class="nv">$num_cs</span><span class="w"> </span><span class="nv">$num_sdi</span><span class="w"> </span><span class="nv">$sdi_delay</span>
+<span class="nv">spi_engine_create</span><span class="w"> </span><span class="nv">$hier_spi_engine</span><span class="w"> </span><span class="nv">$data_width</span><span class="w"> </span><span class="nv">$async_spi_clk</span><span class="w"> </span><span class="nv">$offload_en</span><span class="w"> </span><span class="nv">$num_cs</span><span class="w"> </span><span class="nv">$num_sdi</span><span class="w"> </span><span class="nv">$sdi_delay</span>
 </pre></div>
 </div>
 <img alt="../../_images/pulsar_hdl_1.svg" class="align-center" src="../../_images/pulsar_hdl_1.svg" /></section>
@@ -722,11 +772,11 @@ development.</p>
 over the minimum value, to ensure that the design meets the T_CONV minimum. This
 will slightly lower the maximum sample rate of the design from 1.333 MSPS to
 1.322 MSPS.</p>
-<a class="reference internal image-reference" href="../../_images/pulsar_hdl_timing_2.png"><img alt="../../_images/pulsar_hdl_timing_2.png" src="../../_images/pulsar_hdl_timing_2.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_2.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_2.png" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_2.png" style="width: 100%;" /></a>
 <p>Holding CS high for 500ns ensures that we always meet T_CONV minimum.</p>
-<a class="reference internal image-reference" href="../../_images/pulsar_hdl_timing_3.png"><img alt="../../_images/pulsar_hdl_timing_3.png" src="../../_images/pulsar_hdl_timing_3.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_3.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_3.png" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_3.png" style="width: 100%;" /></a>
 <p>The 250ns minimum T_ACQ is also met with a slightly higher value of 256.25ns.</p>
-<a class="reference internal image-reference" href="../../_images/pulsar_hdl_timing_4.png"><img alt="../../_images/pulsar_hdl_timing_4.png" src="../../_images/pulsar_hdl_timing_4.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_4.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_4.png" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_4.png" style="width: 100%;" /></a>
 <p>Overall the project appears to be functional and ready for the next step in
 development, using software.</p>
 </section>

@@ -8,8 +8,8 @@
 
     <title>X-Band Platform HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=5d595293" />
-    <script async="async" src="../../_static/app.umd.js?v=46a18818"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
+    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -294,7 +294,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad488x_fmc_evb/index.html">AD488X-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -336,6 +336,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009/index.html">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009zu11eg/index.html">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv903x/index.html">ADRV903x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9361z7035/index.html">ADRV9361Z7035</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9364z7020/index.html">ADRV9364Z7020</a></li>
@@ -418,6 +419,20 @@ calibrations, beamforming algorithms, and other signal processing algorithms.
 The system is designed to mate with a <a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a> Evaluation Board from
 Xilinx®, which features the Zynq® UltraScale+™ MPSoC FPGA, with provided
 reference software, HDL code, and MATLAB system-level interfacing software.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The current implementation is tailored for CW (Continuous Waveform) mode,
+where the TDD frame rate matches the transmitted buffer length.</p>
+<p>For this to work,the following criteria must be met:</p>
+<ul class="simple">
+<li><p>The RX/TX DMAs must handle the CDC (Clock Domain Crossing) between the
+330 MHz clock on the memory side and the 250MHz clock on the JESD side.</p></li>
+<li><p>The clock frequency on the memory interconnect side of the DMAs
+must be configured to 330MHz.</p></li>
+<li><p>The DMAs’ coherent mode must be disabled.</p></li>
+<li><p>The data offload IPs must be configured in bypass mode.</p></li>
+</ul>
+</div>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
@@ -465,7 +480,7 @@ reference software, HDL code, and MATLAB system-level interfacing software.</p>
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <section id="example-block-design-for-single-link-m-8-l-4">
 <h4>Example block design for Single link; M=8; L=4<a class="headerlink" href="#example-block-design-for-single-link-m-8-l-4" title="Permalink to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/ad9081_x_band_M8L4.svg"><img alt="AD9081-FMCA-EBZ JESD204B M=8 L=4 block diagram" class="align-center" src="../../_images/ad9081_x_band_M8L4.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad9081_x_band_204b_M8L4.svg"><img alt="AD9081-FMCA-EBZ JESD204B M=8 L=4 block diagram" class="align-center" src="../../_images/ad9081_x_band_204b_M8L4.svg" width="800" /></a>
 <p>The Rx links (ADC Path) operate with the following parameters:</p>
 <ul class="simple">
 <li><dl class="simple">

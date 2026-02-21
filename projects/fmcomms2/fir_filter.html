@@ -8,8 +8,8 @@
 
     <title>Integrate FIR filters into the FMCOMMS2 HDL design &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=5d595293" />
-    <script async="async" src="../../_static/app.umd.js?v=46a18818"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
+    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -291,7 +291,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad488x_fmc_evb/index.html">AD488X-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -333,6 +333,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009/index.html">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009zu11eg/index.html">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv903x/index.html">ADRV903x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9361z7035/index.html">ADRV9361Z7035</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9364z7020/index.html">ADRV9364Z7020</a></li>
@@ -443,7 +444,7 @@ in <a class="icon link reference external" href="https://www.mathworks.com/produ
 <span class="n">fvtool</span><span class="p">(</span><span class="n">hq</span><span class="p">);</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../../_images/fir_interpolation.png"><img alt="FIR_INTERPOLATION block diagram" class="align-center" src="../../_images/fir_interpolation.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_interpolation.png"><img alt="FIR_INTERPOLATION block diagram" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_interpolation.png" style="width: 1000px;" /></a>
 </section>
 <section id="decimation-fir-filter">
 <h3>Decimation FIR filter<a class="headerlink" href="#decimation-fir-filter" title="Permalink to this heading"></a></h3>
@@ -467,7 +468,7 @@ in <a class="icon link reference external" href="https://www.mathworks.com/produ
 <span class="n">fvtool</span><span class="p">(</span><span class="n">hf</span><span class="p">);</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../../_images/fir_decimation.png"><img alt="FIR_DECIMATION block diagram" class="align-center" src="../../_images/fir_decimation.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_decimation.png"><img alt="FIR_DECIMATION block diagram" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_decimation.png" style="width: 1000px;" /></a>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>After running the above commands in MATLAB, you will obtain some <em>.coe</em>
@@ -517,7 +518,7 @@ documentation.</p>
 </div>
 <p>At this point, FMCOMMS2 reference design’s TX data path has the following
 components:</p>
-<a class="reference internal image-reference" href="../../_images/fmcomms2_vivado_ref_tx.jpg"><img alt="FMCOMMS2 Vivado TX data path" class="align-center" src="../../_images/fmcomms2_vivado_ref_tx.jpg" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_vivado_ref_tx.jpg"><img alt="FMCOMMS2 Vivado TX data path" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_vivado_ref_tx.jpg" style="width: 1000px;" /></a>
 <p>We need to remove the connections between util_upack2 and dac_fifo cores so we
 can add the FIR filter modules in the reference design. With the following
 commands, all the unwanted connections will be removed and new ones will be
@@ -651,7 +652,7 @@ interpolation is activated and by the axi_ad9361_core when interpolation is not
 active. In the reference design, the data flow is controlled by the ad9631_core.
 At this moment, the Interpolation filters are completely integrated into the
 design and the data path should look like the one in the figure below.</p>
-<a class="reference internal image-reference" href="../../_images/fmcomms2_vivado_interp_fir_tx.jpg"><img alt="FMCOMMS2_VIVADO_INTERP_FIR_TX" class="align-center" src="../../_images/fmcomms2_vivado_interp_fir_tx.jpg" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_vivado_interp_fir_tx.jpg"><img alt="FMCOMMS2_VIVADO_INTERP_FIR_TX" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_vivado_interp_fir_tx.jpg" style="width: 1000px;" /></a>
 </section>
 <section id="connecting-the-fir-decimation-filters-on-the-rx-side">
 <h3>Connecting the FIR decimation filters on the Rx side<a class="headerlink" href="#connecting-the-fir-decimation-filters-on-the-rx-side" title="Permalink to this heading"></a></h3>
@@ -715,7 +716,7 @@ in your system, booting the Linux will is simpler.</p></li>
 <h2>Base system functionality<a class="headerlink" href="#base-system-functionality" title="Permalink to this heading"></a></h2>
 <p>For simply testing the FMCOMMS2 with filter design, we loop-back the data from
 TX to RX for each channel with a SMA to SMA cable.</p>
-<a class="reference internal image-reference" href="../../_images/fmcomms2_txrx_loopback.jpg"><img alt="FMCOMMS2_TXRX_LOOPBACK" class="align-center" src="../../_images/fmcomms2_txrx_loopback.jpg" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_txrx_loopback.jpg"><img alt="FMCOMMS2_TXRX_LOOPBACK" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_txrx_loopback.jpg" style="width: 1000px;" /></a>
 <p>When first booting up the design, none of the filters will be active. For the
 beginning, make sure you have the same <strong>LO frequency for RX and TX</strong>, as in the
 picture below.</p>
@@ -729,9 +730,9 @@ the “sinewave_0.6.mat”. The file “sinewave_0.6.mat” can be found under t
 installation folder, in <strong>liboscwaveforms</strong>. As a functionality example, only
 one of the two channels will be enabled.</p>
 <p><strong>FFT Domain</strong></p>
-<a class="reference internal image-reference" href="../../_images/fmcomms2_fir_setup_activate_dma_data_fft.png"><img alt="FMCOMMS2_FIR_SETUP_ACTIVATE_DMA_DATA_FFT" class="align-center" src="../../_images/fmcomms2_fir_setup_activate_dma_data_fft.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_setup_activate_dma_data_fft.png"><img alt="FMCOMMS2_FIR_SETUP_ACTIVATE_DMA_DATA_FFT" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_setup_activate_dma_data_fft.png" style="width: 1000px;" /></a>
 <p><strong>Time Domain</strong></p>
-<a class="reference internal image-reference" href="../../_images/fmcomms2_fir_setup_activate_dma_data_waveform.png"><img alt="FMCOMMS2_FIR_SETUP_ACTIVATE_DMA_DATA_WAVEFORM" class="align-center" src="../../_images/fmcomms2_fir_setup_activate_dma_data_waveform.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_setup_activate_dma_data_waveform.png"><img alt="FMCOMMS2_FIR_SETUP_ACTIVATE_DMA_DATA_WAVEFORM" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_setup_activate_dma_data_waveform.png" style="width: 1000px;" /></a>
 <p>To better understand what is happening with the data inside the FPGA, 3 ILA
 (Integrated Logic Analyzer) modules were added in the HDL design.</p>
 <p>The 1st ILA was connected to the control signals between the ad9361_core and the
@@ -739,11 +740,11 @@ dac_fifo. The 2nd ILA is monitoring the interpolation filters and the 3rd ILA
 the decimation filters. As previously discussed above, <strong>none of the filters are
 active and only one of the channels is enabled at this point</strong>.</p>
 <p><strong>AD9361 core control signals</strong></p>
-<a class="reference internal image-reference" href="../../_images/fir_inactive_fifo_ch1_active.png"><img alt="FIR_INACTIVE_FIFO_CH1_ACTIVE" class="align-center" src="../../_images/fir_inactive_fifo_ch1_active.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_inactive_fifo_ch1_active.png"><img alt="FIR_INACTIVE_FIFO_CH1_ACTIVE" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_inactive_fifo_ch1_active.png" style="width: 1000px;" /></a>
 <p><strong>Interpolation filters</strong></p>
-<a class="reference internal image-reference" href="../../_images/fir_inactive_interpolators_ch1_active.png"><img alt="FIR_INACTIVE_INTERPOLATORS_CH1_ACTIVE" class="align-center" src="../../_images/fir_inactive_interpolators_ch1_active.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_inactive_interpolators_ch1_active.png"><img alt="FIR_INACTIVE_INTERPOLATORS_CH1_ACTIVE" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_inactive_interpolators_ch1_active.png" style="width: 1000px;" /></a>
 <p><strong>Decimation filters</strong></p>
-<a class="reference internal image-reference" href="../../_images/fir_inactive_decimators_ch1_active.png"><img alt="FIR_INACTIVE_DECIMATORS_CH1_ACTIVE" class="align-center" src="../../_images/fir_inactive_decimators_ch1_active.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_inactive_decimators_ch1_active.png"><img alt="FIR_INACTIVE_DECIMATORS_CH1_ACTIVE" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_inactive_decimators_ch1_active.png" style="width: 1000px;" /></a>
 </section>
 <section id="activating-filters">
 <h2>Activating Filters<a class="headerlink" href="#activating-filters" title="Permalink to this heading"></a></h2>
@@ -760,13 +761,13 @@ the register map at the address <strong>0xBC</strong> <a class="icon link refere
 filter.</p></li>
 </ul>
 <p><strong>Activating TX interpolation filters</strong></p>
-<a class="reference internal image-reference" href="../../_images/activate_tx_interpolation_filters_write.png"><img alt="ACTIVATE_TX_INTERPOLATION_FILTERS_WRITE" class="align-center" src="../../_images/activate_tx_interpolation_filters_write.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/activate_tx_interpolation_filters_write.png"><img alt="ACTIVATE_TX_INTERPOLATION_FILTERS_WRITE" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/activate_tx_interpolation_filters_write.png" style="width: 1000px;" /></a>
 <p>After activating the interpolation you can see in FFT domain a 1/8 smaller
 fundamental frequency than before (filter interpolation factor is 8).</p>
-<a class="reference internal image-reference" href="../../_images/fmcomms2_fir_tx_active_fft.png"><img alt="FMCOMMS2_FIR_TX_ACTIVE_FFT" class="align-center" src="../../_images/fmcomms2_fir_tx_active_fft.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_tx_active_fft.png"><img alt="FMCOMMS2_FIR_TX_ACTIVE_FFT" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_tx_active_fft.png" style="width: 1000px;" /></a>
 <p>The data captured by the ILA connected to the interpolation filters shows the
 smaller frequency sine wave and the 1/8 valid/clock signals.</p>
-<a class="reference internal image-reference" href="../../_images/fir_active_interpolators_all_ch_active.png"><img alt="FIR_ACTIVE_INTERPOLATORS_ALL_CH_ACTIVE" class="align-center" src="../../_images/fir_active_interpolators_all_ch_active.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_active_interpolators_all_ch_active.png"><img alt="FIR_ACTIVE_INTERPOLATORS_ALL_CH_ACTIVE" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_active_interpolators_all_ch_active.png" style="width: 1000px;" /></a>
 </section>
 <section id="decimation-filters">
 <h3>Decimation filters<a class="headerlink" href="#decimation-filters" title="Permalink to this heading"></a></h3>
@@ -776,19 +777,19 @@ but this time select the “cf-ad9361-lpc”.</p>
 <p>Select the “Register Map Settings” source to be “AXI_CORE” and at the same
 address <strong>0xBC</strong> <a class="icon link reference external" href="https://analogdevicesinc.github.io/hdl/library/axi_ad9361/index.html#register-map" target="_blank">AXI AD9361</a>. this time being the ADC side GPIO, write 0x1, as
 in the example below:</p>
-<a class="reference internal image-reference" href="../../_images/activate_rx_interpolation_filters_write.png"><img alt="ACTIVATE_RX_INTERPOLATION_FILTERS_WRITE" class="align-center" src="../../_images/activate_rx_interpolation_filters_write.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/activate_rx_interpolation_filters_write.png"><img alt="ACTIVATE_RX_INTERPOLATION_FILTERS_WRITE" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/activate_rx_interpolation_filters_write.png" style="width: 1000px;" /></a>
 <p>You will see in the FFT domain, a frequency 8 times bigger than the one when the
 filters were inactive (decimation factor is 8):</p>
-<a class="reference internal image-reference" href="../../_images/fmcomms2_fir_rx_active_fft.png"><img alt="ACTIVATE_RX_INTERPOLATION_FILTERS_WRITE" class="align-center" src="../../_images/fmcomms2_fir_rx_active_fft.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_rx_active_fft.png"><img alt="ACTIVATE_RX_INTERPOLATION_FILTERS_WRITE" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_rx_active_fft.png" style="width: 1000px;" /></a>
 <p>The signals captured by the ILA:</p>
-<a class="reference internal image-reference" href="../../_images/fir_inactive_decimators_ch1_active_int_activ.png"><img alt="FIR_INACTIVE_DECIMATORS_CH1_ACTIVE_INT_ACTIV" class="align-center" src="../../_images/fir_inactive_decimators_ch1_active_int_activ.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_inactive_decimators_ch1_active_int_activ.png"><img alt="FIR_INACTIVE_DECIMATORS_CH1_ACTIVE_INT_ACTIV" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fir_inactive_decimators_ch1_active_int_activ.png" style="width: 1000px;" /></a>
 </section>
 <section id="all-filters-active-characteristic">
 <h3>All filters active characteristic<a class="headerlink" href="#all-filters-active-characteristic" title="Permalink to this heading"></a></h3>
 <p><strong>FFT characteristic</strong></p>
-<a class="reference internal image-reference" href="../../_images/fmcomms2_fir_tx_rx_active_fft.png"><img alt="FMCOMMS_FIR_TX_RX_ACTIVE_FFT" class="align-center" src="../../_images/fmcomms2_fir_tx_rx_active_fft.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_tx_rx_active_fft.png"><img alt="FMCOMMS_FIR_TX_RX_ACTIVE_FFT" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_tx_rx_active_fft.png" style="width: 1000px;" /></a>
 <p><strong>Time Domain characteristic</strong></p>
-<a class="reference internal image-reference" href="../../_images/fmcomms2_fir_tx_rx_active_waveform.png"><img alt="FMCOMMS_FIR_TX_RX_ACTIVE_WAVEFORM" class="align-center" src="../../_images/fmcomms2_fir_tx_rx_active_waveform.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_tx_rx_active_waveform.png"><img alt="FMCOMMS_FIR_TX_RX_ACTIVE_WAVEFORM" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/fmcomms2/projects/fmcomms2/fmcomms2_fir_tx_rx_active_waveform.png" style="width: 1000px;" /></a>
 </section>
 </section>
 <section id="older-sources">

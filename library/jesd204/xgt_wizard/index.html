@@ -8,8 +8,8 @@
 
     <title>Xilinx FPGAs Transceivers Wizard &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=5d595293" />
-    <script async="async" src="../../../_static/app.umd.js?v=46a18818"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=a525f648" />
+    <script async="async" src="../../../_static/app.umd.js?v=fcf3088a"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -104,28 +104,34 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#using-the-gui-of-the-wizard">Using the GUI of the Wizard</a><ul>
+<li><a class="reference internal" href="#series-fpgas-transceiver-wizard">7 Series FPGAs Transceiver Wizard</a></li>
 <li><a class="reference internal" href="#line-rate-and-refclk-selection">Line Rate and RefClk Selection</a></li>
 <li><a class="reference internal" href="#encoding-and-clocking">Encoding and Clocking</a></li>
-<li><a class="reference internal" href="#other-tabs">Other tabs</a></li>
-<li><a class="reference internal" href="#generated-files">Generated files</a><ul>
-<li><a class="reference internal" href="#ultrascale-fpgas-transceiver-wizard">Ultrascale FPGAs Transceiver Wizard</a></li>
+<li><a class="reference internal" href="#other-tabs">Other tabs</a><ul>
+<li><a class="reference internal" href="#generated-files">Generated files</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#ultrascale-fpgas-transceiver-wizard">Ultrascale FPGAs Transceiver Wizard</a><ul>
 <li><a class="reference internal" href="#id1">Generated files</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#using-the-generator-script">Using the generator script</a><ul>
-<li><a class="reference internal" href="#ad-gth-generator">ad_gth_generator</a></li>
-<li><a class="reference internal" href="#get-diff-params">get_diff_params</a><ul>
-<li><a class="reference internal" href="#parsing-script">Parsing script</a></li>
-<li><a class="reference internal" href="#output-products">Output products</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#using-the-generator-script">Using the generator script</a><ul>
+<li><a class="reference internal" href="#generating-configuration">Generating configuration</a><ul>
+<li><a class="reference internal" href="#ad-gth-generator">ad_gth_generator</a></li>
+<li><a class="reference internal" href="#get-diff-params">get_diff_params</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#parsing-script">Parsing script</a></li>
+<li><a class="reference internal" href="#output-products">Output products</a><ul>
 <li><a class="reference internal" href="#gt-type-cfng-txt">GT_Type_cfng.txt</a></li>
 <li><a class="reference internal" href="#gt-type-var-dist-txt">GT_Type_var_dist.txt</a></li>
 <li><a class="reference internal" href="#gt-type-vco-dist-txt">GT_Type_vco_dist.txt</a></li>
 <li><a class="reference internal" href="#table-common-csv">table_common.csv</a></li>
 <li><a class="reference internal" href="#table-unique-csv">table_unique.csv</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -301,7 +307,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4630_fmc/index.html">AD4630-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad488x_fmc_evb/index.html">AD488X-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -343,6 +349,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9009/index.html">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9009zu11eg/index.html">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv903x/index.html">ADRV903x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9361z7035/index.html">ADRV9361Z7035</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9364z7020/index.html">ADRV9364Z7020</a></li>
@@ -521,6 +528,8 @@ the <cite>common/</cite> folder (e.g., <cite>projects/&lt;project_name&gt;/commo
 </section>
 <section id="using-the-gui-of-the-wizard">
 <span id="xgt-wizard-gui-of-the-wizard"></span><h3>Using the GUI of the Wizard<a class="headerlink" href="#using-the-gui-of-the-wizard" title="Permalink to this heading"></a></h3>
+<section id="series-fpgas-transceiver-wizard">
+<h4>7 Series FPGAs Transceiver Wizard<a class="headerlink" href="#series-fpgas-transceiver-wizard" title="Permalink to this heading"></a></h4>
 <p>To start the wizard in the Vivado, a project should be loaded with a 7 Series
 FPGA which has gigabit transceivers. In the <strong>Project Manager</strong> select IP
 catalog and search after the keyword <strong>wizard</strong>, then select the <strong>7 Series
@@ -531,6 +540,7 @@ not, you may have to double check if you have the right FPGA device selected
 for your project. You also need to select <strong>Include Shared Logic in core</strong> at
 the Shared Logic section in order to have both COMMON and CHANNEL instances in
 the generated code.</p>
+</section>
 <section id="line-rate-and-refclk-selection">
 <h4>Line Rate and RefClk Selection<a class="headerlink" href="#line-rate-and-refclk-selection" title="Permalink to this heading"></a></h4>
 <p>First, you need to select <strong>JESD204</strong> as targeted <strong>protocol</strong> and specify your
@@ -557,9 +567,8 @@ as both clocks are already using PLLREFCLK as their source.</p>
 <h4>Other tabs<a class="headerlink" href="#other-tabs" title="Permalink to this heading"></a></h4>
 <p>The setting from the tabs <strong>PCIe, SATA, PRBS</strong> and <strong>CB and CC Sequence</strong> can
 be left to their default values.</p>
-</section>
 <section id="generated-files">
-<h4>Generated files<a class="headerlink" href="#generated-files" title="Permalink to this heading"></a></h4>
+<h5>Generated files<a class="headerlink" href="#generated-files" title="Permalink to this heading"></a></h5>
 <dl class="simple">
 <dt>Location of the <strong>COMMON</strong> instance:</dt><dd><ul class="simple">
 <li><p>&lt;project_name&gt;/&lt;project_name&gt;.gen/sources_1/ip/&lt;component_name&gt;/&lt;component_name&gt;_common.v</p></li>
@@ -585,8 +594,10 @@ be left to their default values.</p>
 <div class="clear-left"></div></div></div><p>These instances should be compared with the COMMON and CHANNEL instances used in
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr/util_adxcvr_xcm.v" target="_blank">util_adxcvr_xcm.v</a> and
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr/util_adxcvr_xch.v" target="_blank">util_adxcvr_xch.v</a>.</p>
+</section>
+</section>
 <section id="ultrascale-fpgas-transceiver-wizard">
-<h5>Ultrascale FPGAs Transceiver Wizard<a class="headerlink" href="#ultrascale-fpgas-transceiver-wizard" title="Permalink to this heading"></a></h5>
+<h4>Ultrascale FPGAs Transceiver Wizard<a class="headerlink" href="#ultrascale-fpgas-transceiver-wizard" title="Permalink to this heading"></a></h4>
 <p>The overall workflow with the Ultrascale FPGAs Transceiver Wizard is similar to
 the 7 Series one, it just has a different GUI. To open up the wizard in the
 <strong>Project Manager</strong> select <strong>IP Catalog</strong> and search after the keyword <strong>wizard</strong>,
@@ -602,10 +613,8 @@ version of the util_adxcvr core does not support <strong>QPLL Fractional-N optio
 <p>To have both COMMON and CHANNEL instances inside the generated core, in the
 <strong>Structural Options</strong> tab the <strong>Include transceiver COMMON in the Core</strong>
 option must be selected.</p>
-</section>
-</section>
 <section id="id1">
-<h4>Generated files<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<h5>Generated files<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h5>
 <p>To find the actual instance attributes, two different files should be examined.
 A generic one, which contains the actual software macro instance, and a wrapper,
 which instanciates the previous file and sets the required attributes.</p>
@@ -662,6 +671,7 @@ the COMMON and CHANNEL instances in
 and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr/util_adxcvr_xch.v" target="_blank">util_adxcvr_xch.v</a> .</p>
 </section>
 </section>
+</section>
 <section id="using-the-generator-script">
 <span id="xgt-wizard-generator-script"></span><h3>Using the generator script<a class="headerlink" href="#using-the-generator-script" title="Permalink to this heading"></a></h3>
 <div class="admonition warning">
@@ -674,9 +684,11 @@ systems</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>..<span class="o">/</span>scripts<span class="o">/</span>gtwizard_generator.tcl
 </pre></div>
 </div>
+<section id="generating-configuration">
+<h4>Generating configuration<a class="headerlink" href="#generating-configuration" title="Permalink to this heading"></a></h4>
 <p>Here you have 2 options.</p>
 <section id="ad-gth-generator">
-<h4>ad_gth_generator<a class="headerlink" href="#ad-gth-generator" title="Permalink to this heading"></a></h4>
+<h5>ad_gth_generator<a class="headerlink" href="#ad-gth-generator" title="Permalink to this heading"></a></h5>
 <p><strong>Recommended method for generating multiple configurations</strong></p>
 <p>This function only generates the IPs, but you can edit them using GT wizard
 afterwards. After sourcing the script, you can just run the following command
@@ -705,7 +717,7 @@ run the Parsing_script to get the list of parameters that need to be changed
 into the project.</p>
 </section>
 <section id="get-diff-params">
-<h4>get_diff_params<a class="headerlink" href="#get-diff-params" title="Permalink to this heading"></a></h4>
+<h5>get_diff_params<a class="headerlink" href="#get-diff-params" title="Permalink to this heading"></a></h5>
 <p><strong>Recommended method for generating a single configuration</strong></p>
 <p>This function generates the IP and calls the parsing script.</p>
 <div class="admonition note">
@@ -736,8 +748,10 @@ clock.</p>
 </div>
 <p>This call makes 4 instances of transceivers, and also deletes them after
 generating the list because of the 4th parameter is set to false.</p>
+</section>
+</section>
 <section id="parsing-script">
-<h5>Parsing script<a class="headerlink" href="#parsing-script" title="Permalink to this heading"></a></h5>
+<h4>Parsing script<a class="headerlink" href="#parsing-script" title="Permalink to this heading"></a></h4>
 <p>If you used the get_diff_params method from the script to generate the IP,
 there is no need to call it again.</p>
 <p>If you used the ad_gth_generator method from the script, you will have to call
@@ -761,17 +775,15 @@ paring script will not work</p>
 </div>
 </section>
 <section id="output-products">
-<h5>Output products<a class="headerlink" href="#output-products" title="Permalink to this heading"></a></h5>
+<h4>Output products<a class="headerlink" href="#output-products" title="Permalink to this heading"></a></h4>
 <p>Output products can be found at this location: &lt;project_name&gt;.gen/sources_1/ip</p>
 <p>Most of the output files make sense in the context of parsing multiple
 configurations at once. If this is not the case, and you just used it to
 generate a single configuration, then the only file you need is &lt;GT_Type&gt;_cfng.txt.</p>
 <p>If you had multiple configurations, all the output files should give you some
 valuable information.</p>
-</section>
-</section>
 <section id="gt-type-cfng-txt">
-<h4>GT_Type_cfng.txt<a class="headerlink" href="#gt-type-cfng-txt" title="Permalink to this heading"></a></h4>
+<h5>GT_Type_cfng.txt<a class="headerlink" href="#gt-type-cfng-txt" title="Permalink to this heading"></a></h5>
 <p>This file contains 2 lists. The first one is a list of parameters that are
 unique for the desired configuration/configurations, different from the default
 values, and these parameters should be written into the system_bd file for your
@@ -781,7 +793,7 @@ ones different from the default ones. This list should be empty if you have
 only one configuration generated.</p>
 </section>
 <section id="gt-type-var-dist-txt">
-<h4>GT_Type_var_dist.txt<a class="headerlink" href="#gt-type-var-dist-txt" title="Permalink to this heading"></a></h4>
+<h5>GT_Type_var_dist.txt<a class="headerlink" href="#gt-type-var-dist-txt" title="Permalink to this heading"></a></h5>
 <p>Here you will find a list with the distribution of each DRP attribute in
 relation to the lane rates of your instances.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$VAR1 = &#39;RX_CLK25_DIV&#39;;
@@ -815,14 +827,14 @@ $VAR6 = {
 </div>
 </section>
 <section id="gt-type-vco-dist-txt">
-<h4>GT_Type_vco_dist.txt<a class="headerlink" href="#gt-type-vco-dist-txt" title="Permalink to this heading"></a></h4>
+<h5>GT_Type_vco_dist.txt<a class="headerlink" href="#gt-type-vco-dist-txt" title="Permalink to this heading"></a></h5>
 <p>Here you will find a list with the distribution of each DRP attribute in
 relation to the VCO frequency of your instances. If this list is empty, that
 means that the attributes are the same for the used VCOs (Probably all the
 instances have the same VCO) This should look similar to “GT_Type_var_dist.txt”</p>
 </section>
 <section id="table-common-csv">
-<h4>table_common.csv<a class="headerlink" href="#table-common-csv" title="Permalink to this heading"></a></h4>
+<h5>table_common.csv<a class="headerlink" href="#table-common-csv" title="Permalink to this heading"></a></h5>
 <p>This is a table containing 3 columns: The first one is the name of the parameter.
 The second one is the default value for that parameter, and it is that value
 found in the util_adxcvr file. The third column is called gt_global, and it
@@ -831,7 +843,7 @@ from the default. If there is an empty cell in this column, it means that there
 is used the default value.</p>
 </section>
 <section id="table-unique-csv">
-<h4>table_unique.csv<a class="headerlink" href="#table-unique-csv" title="Permalink to this heading"></a></h4>
+<h5>table_unique.csv<a class="headerlink" href="#table-unique-csv" title="Permalink to this heading"></a></h5>
 <p>This table contains the unique parameters for each individual configurations.
 The values found here are the ones that differ among your generated
 configurations.</p>
@@ -844,6 +856,7 @@ to update the default util_adxcvr files, and it will probably not work if
 you are in detached HEAD state, or any state that could generate git
 conflicts with it.</p>
 </div>
+</section>
 </section>
 </section>
 </section>

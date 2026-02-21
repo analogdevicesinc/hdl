@@ -8,8 +8,8 @@
 
     <title>Use ADI IPs into your own project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=5d595293" />
-    <script async="async" src="../../_static/app.umd.js?v=46a18818"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
+    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -103,6 +103,7 @@
 </li>
 <li><a class="reference internal" href="#spi-engine">SPI Engine</a><ul>
 <li><a class="reference internal" href="#id2">Vivado</a></li>
+<li><a class="reference internal" href="#id3">Quartus</a></li>
 </ul>
 </li>
 </ul>
@@ -276,7 +277,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/ad488x_fmc_evb/index.html">AD488X-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -318,6 +319,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009/index.html">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009zu11eg/index.html">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv903x/index.html">ADRV903x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9361z7035/index.html">ADRV9361Z7035</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9364z7020/index.html">ADRV9364Z7020</a></li>
@@ -497,32 +499,74 @@ together.</p>
 </section>
 <section id="spi-engine">
 <h2>SPI Engine<a class="headerlink" href="#spi-engine" title="Permalink to this heading"></a></h2>
+<p>The SPI Engine is a special module too, since it consists of more than one IP.
+In order to use it into your own project, you will have to add all of the
+necessary components. The SPI engine has 4 modules: execution, interconnect,
+regmap and offload, they are instantiated inside the <code class="docutils literal notranslate"><span class="pre">spi_engine_create</span></code>
+function.</p>
+<p>The offload_en parameter defines whether or not offload and interconnect are
+necessary for the project. Vivado an Quartus projects have different parameters
+for the instantiation of the SPI engine. Below you will find examples for both
+tools.</p>
 <section id="id2">
 <h3>Vivado<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
-<p>The SPI Engine is a special module too, since it consists of more than one IP.
-In order to use it into your own project, you will have to add all of its components.
-For this example, the code shown here is from the ad4630_fmc project:
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4630_fmc/common/ad463x_bd.tcl" target="_blank">projects/ad4630_fmc/common/ad463x_bd.tcl</a></p>
+<p>For Xilinx projects using Vivado, <code class="docutils literal notranslate"><span class="pre">spi_engine_create</span></code> function requires 15
+parameters. Take this example, the code shown here is from the ad4630_fmc
+project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4630_fmc/common/ad463x_bd.tcl" target="_blank">projects/ad4630_fmc/common/ad463x_bd.tcl</a></p>
 <p>Let’s start with sourcing the spi_engine.tcl script inside your <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;_db.tcl</span></code>.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>spi_engine<span class="o">/</span>scripts<span class="o">/</span>spi_engine.tcl
 </pre></div>
 </div>
-<p>The SPI engine has 4 modules: execution, interconnect, regmap and offload.</p>
-<p>All of the modules are instantiated inside the <code class="docutils literal notranslate"><span class="pre">spi_engine_create</span></code> function.
-This function requires 13 parameters. The default values for them are as follow,
-but feel free to configure it as you want:</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">{{</span><span class="nv">name</span><span class="w"> </span><span class="s2">&quot;spi_engine&quot;</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_width</span><span class="w"> </span><span class="mi">32</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">async_spi_clk</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_cs</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdi</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdo</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_delay</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">echo_sclk</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdo_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sync_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}}</span>
+<p>Parameters and default values for Vivado projects:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">{{</span><span class="nv">name</span><span class="w"> </span><span class="s2">&quot;spi_engine&quot;</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_width</span><span class="w"> </span><span class="mi">32</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">async_spi_clk</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">offload_en</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_cs</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdi</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdo</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_delay</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">echo_sclk</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdo_streaming</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdo_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sync_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}}</span>
 </pre></div>
 </div>
-<p>An example of instantiation, using the default values for <code class="docutils literal notranslate"><span class="pre">cmd_mem_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">data_mem_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sdi_fifo_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sdo_fifo_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sync_fifo_addr_width</span></code> and <code class="docutils literal notranslate"><span class="pre">cmd_fifo_addr_width</span></code>:</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c">#                 name         data_width async_spi_clk num_csn num_sdi     sdi_delay  echo_sclk</span>
-<span class="nv">spi_engine_create</span><span class="w"> </span><span class="s2">&quot;spi_ad463x&quot;</span><span class="w"> </span><span class="mi">32</span><span class="w">         </span><span class="mi">1</span><span class="w">             </span><span class="mi">1</span><span class="w">       </span><span class="nv">$NUM_OF_SDI</span><span class="w"> </span><span class="mi">0</span><span class="w">          </span><span class="mi">1</span>
+<p>Name is a mandatory input. An example of instantiation (Xilinx project), using
+the default values for <code class="docutils literal notranslate"><span class="pre">sdo_streaming</span></code>, <code class="docutils literal notranslate"><span class="pre">cmd_mem_addr_width</span></code>,
+<code class="docutils literal notranslate"><span class="pre">data_mem_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sdi_fifo_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sdo_fifo_addr_width</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sync_fifo_addr_width</span></code> and <code class="docutils literal notranslate"><span class="pre">cmd_fifo_addr_width</span></code>:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c">#                 name         data_width async_spi_clk offload_en num_csn num_sdi     sdi_delay  echo_sclk</span>
+<span class="nv">spi_engine_create</span><span class="w"> </span><span class="s2">&quot;spi_ad463x&quot;</span><span class="w"> </span><span class="mi">32</span><span class="w">         </span><span class="mi">1</span><span class="w">             </span><span class="mi">1</span><span class="w">          </span><span class="mi">1</span><span class="w">       </span><span class="nv">$NUM_OF_SDI</span><span class="w"> </span><span class="mi">0</span><span class="w">          </span><span class="mi">1</span>
 <span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>execution<span class="w"> </span>CONFIG.DEFAULT_SPI_CFG<span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="k">;</span>
 
 <span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_0<span class="w"> </span><span class="nv">$NUM_OF_SDI</span>
 <span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_1<span class="w"> </span><span class="nv">$CAPTURE_ZONE</span>
 <span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_2<span class="w"> </span><span class="nv">$CLK_MODE</span>
 <span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_3<span class="w"> </span><span class="nv">$DDR_EN</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>Quartus<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<p>For Altera projects using Quartus, <code class="docutils literal notranslate"><span class="pre">spi_engine_create</span></code> function requires 18
+parameters. Parameters and default values for Quartus projects:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">{{</span><span class="nv">name</span><span class="w"> </span><span class="s2">&quot;spi_engine&quot;</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">axi_clk</span><span class="w"> </span>sys_clk.clk<span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">axi_reset</span><span class="w"> </span>sys_clk.clk_reset<span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">spi_clk</span><span class="w"> </span>spi_clk_pll.outclk0<span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_width</span><span class="w"> </span><span class="mi">32</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">async_spi_clk</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">offload_en</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_cs</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdi</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdo</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_delay</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">echo_sclk</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdo_streaming</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdo_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sync_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}}</span>
+</pre></div>
+</div>
+<p>Name, axi_clk, axi_reset, and spi_clk are mandatory inputs. An example of
+instantiation (Quartus project), using the default values for
+<code class="docutils literal notranslate"><span class="pre">sdo_streaming</span></code>, <code class="docutils literal notranslate"><span class="pre">cmd_mem_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">data_mem_addr_width</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sdi_fifo_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sdo_fifo_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sync_fifo_addr_width</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">cmd_fifo_addr_width</span></code>:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>spi_engine<span class="o">/</span>scripts<span class="o">/</span>spi_engine.tcl
+
+<span class="k">set</span><span class="w"> </span>spi_engine_hier<span class="w"> </span>spi_ad57xx
+
+<span class="k">set</span><span class="w"> </span>data_width<span class="w">     </span><span class="mi">32</span>
+<span class="k">set</span><span class="w"> </span>async_spi_clk<span class="w">  </span><span class="mi">1</span>
+<span class="k">set</span><span class="w"> </span>offload_en<span class="w">     </span><span class="mi">1</span>
+<span class="k">set</span><span class="w"> </span>num_cs<span class="w">         </span><span class="mi">1</span>
+<span class="k">set</span><span class="w"> </span>num_sdi<span class="w">        </span><span class="mi">1</span>
+<span class="k">set</span><span class="w"> </span>num_sdo<span class="w">        </span><span class="mi">1</span>
+<span class="k">set</span><span class="w"> </span>sdi_delay<span class="w">      </span><span class="mi">0</span>
+<span class="k">set</span><span class="w"> </span>echo_sclk<span class="w">      </span><span class="mi">0</span>
+<span class="k">set</span><span class="w"> </span>sdo_streaming<span class="w">  </span><span class="mi">1</span>
+
+<span class="k">set</span><span class="w"> </span>axi_clk<span class="w"> </span>sys_clk.clk
+<span class="k">set</span><span class="w"> </span>axi_reset<span class="w"> </span>sys_clk.clk_reset
+<span class="k">set</span><span class="w"> </span>spi_clk<span class="w"> </span>spi_clk_pll.outclk0
+
+<span class="nv">spi_engine_create</span><span class="w"> </span><span class="nv">$spi_engine_hier</span><span class="w"> </span><span class="nv">$axi_clk</span><span class="w"> </span><span class="nv">$axi_reset</span><span class="w"> </span><span class="nv">$spi_clk</span><span class="w"> </span><span class="nv">$data_width</span><span class="w"> </span><span class="nv">$async_spi_clk</span><span class="w"> </span><span class="nv">$offload_en</span><span class="w"> </span><span class="nv">$num_cs</span><span class="w"> </span><span class="nv">$num_sdi</span><span class="w"> </span><span class="nv">$num_sdo</span><span class="w"> </span><span class="nv">$sdi_delay</span><span class="w"> </span><span class="nv">$echo_sclk</span><span class="w"> </span><span class="nv">$sdo_streaming</span>
 </pre></div>
 </div>
 </section>

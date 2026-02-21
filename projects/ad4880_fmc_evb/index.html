@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta content="The EVAL-AD4880-FMC is designed to demonstrate the AD4880 performance." name="description" />
 
-    <title>AD488X-FMC-EVB HDL project &#8212; HDL  documentation</title>
+    <title>AD4880-FMC-EVB HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=5d595293" />
-    <script async="async" src="../../_static/app.umd.js?v=46a18818"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
+    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -94,7 +94,7 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AD488X-FMC-EVB HDL project</a><ul>
+<li><a class="reference internal" href="#">AD4880-FMC-EVB HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
@@ -289,7 +289,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">AD488X-FMC-EVB</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD4880-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -331,6 +331,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009/index.html">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009zu11eg/index.html">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv903x/index.html">ADRV903x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9361z7035/index.html">ADRV9361Z7035</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9364z7020/index.html">ADRV9364Z7020</a></li>
@@ -387,16 +388,16 @@ Content on this topic
 </div>
           <div class="body" role="main">
             
-  <section id="ad488x-fmc-evb-hdl-project">
-<span id="ad488x-fmc-evb"></span><h1>AD488X-FMC-EVB HDL project<a class="headerlink" href="#ad488x-fmc-evb-hdl-project" title="Permalink to this heading"></a></h1>
+  <section id="ad4880-fmc-evb-hdl-project">
+<span id="ad4880-fmc-evb"></span><h1>AD4880-FMC-EVB HDL project<a class="headerlink" href="#ad4880-fmc-evb-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4880-FMC" target="_blank">EVAL-AD4880-FMC</a> is designed to demonstrate the <a class="icon adi reference external" href="https://www.analog.com/AD4880" target="_blank">AD4880</a>
 performance.</p>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad488x_fmc_evb" target="_blank">AD488X-FMC-EVB HDL project</a> supports
-the following <a class="icon adi reference external" href="https://www.analog.com/AD4880" target="_blank">AD4880</a> features:</p>
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4880_fmc_evb" target="_blank">AD4880-FMC-EVB HDL project</a> supports
+the following <a class="icon adi reference external" href="https://www.analog.com/AD4880" target="_blank">AD4880</a> , <a class="icon adi reference external" href="https://www.analog.com/AD4884" target="_blank">AD4884</a> features:</p>
 <ul class="simple">
-<li><p>Single/Dual lane DDR data capture</p></li>
+<li><p>Single lane DDR data capture</p></li>
 <li><p>Self synchronization using the fixed pattern and bit-slip feature</p></li>
 <li><p>Capturing digital averaging filter with up to 2^10 decimation</p></li>
 <li><p>Analog-to-digital converter (ADC) configuration via serial peripheral
@@ -409,12 +410,19 @@ interface (SPI)</p></li>
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4880-FMC" target="_blank">EVAL-AD4880-FMC</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4884-FMC" target="_blank">EVAL-AD4884-FMC</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4880" target="_blank">AD4880</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4884" target="_blank">AD4884</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9508" target="_blank">AD9508</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4945-1" target="_blank">ADA4945-1</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4350" target="_blank">ADF4350</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADP7182" target="_blank">ADP7182</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LT6236" target="_blank">LT6236</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -437,6 +445,10 @@ interface (SPI)</p></li>
 <td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
 <td><p>FMC-LPC</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4884-FMC" target="_blank">EVAL-AD4884-FMC</a></p></td>
+<td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
+<td><p>FMC-LPC</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -450,11 +462,11 @@ interface (SPI)</p></li>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad488x_fmc_evb_zed_block_diagram.svg"><img alt="AD4880-FMC-EVB/ZedBoard block diagram" class="align-center" src="../../_images/ad488x_fmc_evb_zed_block_diagram.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad4880_fmc_evb_zed_block_diagram.svg"><img alt="AD4880-FMC-EVB/ZedBoard block diagram" class="align-center" src="../../_images/ad4880_fmc_evb_zed_block_diagram.svg" width="800" /></a>
 </section>
 <section id="clock-scheme">
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="../../_images/ad488x_fmc_clock_scheme.svg"><img alt="AD4880-FMC-EVB/ZedBoard clock scheme" class="align-center" src="../../_images/ad488x_fmc_clock_scheme.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad4880_fmc_clock_scheme.svg"><img alt="AD4880-FMC-EVB/ZedBoard clock scheme" class="align-center" src="../../_images/ad4880_fmc_clock_scheme.svg" width="800" /></a>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
@@ -639,16 +651,31 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository, and then build the project as follows:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
+<p>Example of running the <code class="docutils literal notranslate"><span class="pre">make</span></code> command without parameters (using the default
+configuration (ADC_N_BITS=20):</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad488x_fmc_evb/zed
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad4880_fmc_evb/zed
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad488x_fmc_evb/zed$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad4880_fmc_evb/zed$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Example of running the <code class="docutils literal notranslate"><span class="pre">make</span></code> command with parameters:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad4880_fmc_evb/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad4880_fmc_evb/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ADC_N_BITS</span><span class="o">=</span><span class="m">16</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
@@ -658,7 +685,7 @@ the HDL repository, and then build the project as follows:</p>
 <section id="systems-related">
 <h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>UG-2214, User Guide | EVAL-AD4880</p></li>
+<li><p><a class="icon link reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad4884.pdf" target="_blank">EVAL-AD4884 User Guide</a></p></li>
 </ul>
 </section>
 <section id="hardware-related">
@@ -670,7 +697,7 @@ the HDL repository, and then build the project as follows:</p>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad488x_fmc_evb" target="_blank">AD488x-FMC-EVB HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4880_fmc_evb" target="_blank">AD4880-FMC-EVB HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">

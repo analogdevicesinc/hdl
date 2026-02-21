@@ -8,8 +8,8 @@
 
     <title>AXI DMAC &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=5d595293" />
-    <script async="async" src="../../_static/app.umd.js?v=46a18818"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
+    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -326,7 +326,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/ad488x_fmc_evb/index.html">AD488X-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -368,6 +368,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009/index.html">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009zu11eg/index.html">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv903x/index.html">ADRV903x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9361z7035/index.html">ADRV9361Z7035</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9364z7020/index.html">ADRV9364Z7020</a></li>
@@ -710,7 +711,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <p>Maximum address width for AXI interfaces.</p>
 </section>
 </td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">32</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">64</span></code></td>
 <td class="range"><p>From 16 to 64.</p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code></td>
@@ -1070,7 +1071,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awaddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
-<td><p>out [31:0]</p></td>
+<td><p>out [63:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awlen</span></code></td>
@@ -1170,7 +1171,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_araddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
-<td><p>out [31:0]</p></td>
+<td><p>out [63:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arlen</span></code></td>
@@ -1273,7 +1274,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awaddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
-<td><p>out [31:0]</p></td>
+<td><p>out [63:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awlen</span></code></td>
@@ -1373,7 +1374,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_araddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
-<td><p>out [31:0]</p></td>
+<td><p>out [63:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_arlen</span></code></td>
@@ -1476,7 +1477,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awaddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
-<td><p>out [31:0]</p></td>
+<td><p>out [63:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awlen</span></code></td>
@@ -1576,7 +1577,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_araddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
-<td><p>out [31:0]</p></td>
+<td><p>out [63:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arlen</span></code></td>
@@ -2354,7 +2355,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
 <td class="description bold"><section>
-<p>Version of the peripheral. Follows semantic versioning. Current version 4.05.64.</p>
+<p>Version of the peripheral. Follows semantic versioning. Current version 4.05.65.</p>
 </section>
 </td>
 </tr>
@@ -2376,7 +2377,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x64</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x65</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
