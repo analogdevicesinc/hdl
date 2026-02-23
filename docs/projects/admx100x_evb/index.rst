@@ -18,8 +18,12 @@ systems. The integrated DPD algorithm minimizes distortion typically introduced
 by DAC and amplifier stages, enabling the generation of extremely clean test
 signals for precision measurement applications. The ADMX1002 focuses solely on
 high-fidelity signal generation, providing a streamlined solution for setups
-where local signal acquisition is not required. Note that in the current HDL
-release, only the TX path is implemented and supported.
+where local signal acquisition is not required.
+
+The HDL reference design implements both the TX signal generation path and the
+RX acquisition path. The RX path uses an :adi:`ADAQ7768-1` precision ADC
+interfaced through the :ref:`SPI Engine Framework <spi_engine>`, enabling
+simultaneous signal generation and capture on the ADMX1001.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -31,6 +35,7 @@ Supported devices
 -------------------------------------------------------------------------------
 
 - :adi:`AD5683R`
+- :adi:`ADAQ7768-1`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -61,7 +66,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: admx100x-evb.svg
+.. image:: admx100x_evb.svg
    :width: 800
    :align: center
    :alt: ADMX100X/ZedBoard block diagram
@@ -79,15 +84,23 @@ SPI connections
      - CS
    * - PS
      - SPI 0
-     - CS_DAC
+     - CS_FPGA
      - 0
    * - PS
      - SPI 0
-     - CS_FPGA
+     - CS_DAC
+     - 1
+   * - PL
+     - axi_spi_engine
+     - ADAQ7768-1
      - 0
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Software GPIO number is calculated as follows:
+
+- Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -101,42 +114,80 @@ GPIOs
      - (from FPGA view)
      -
      - Zynq-7000
-   * - ADMX100X_SYNC_MODE
+   * - ACQ_DRDY
+     - IN
+     - 43
+     - 97
+   * - ACQ_RESET
      - OUT
-     - 34
-     - 88
-   * - ADMX100X_EN
+     - 42
+     - 96
+   * - ACQ_SYNQ_IN_FMC
      - OUT
-     - 35
-     - 89
-   * - ADMX100X_CAL
-     - OUT
-     - 38
-     - 92
+     - 41
+     - 95
    * - ADMX100X_TRIG
-     - OUT
+     - IN
      - 40
      - 94
    * - ADMX100X_DAC_LDAC
      - OUT
      - 39
      - 93
+   * - ADMX100X_CAL
+     - IN
+     - 38
+     - 92
+   * - ADMX100X_VALID
+     - OUT
+     - 37
+     - 91
+   * - ADMX100X_READY
+     - OUT
+     - 36
+     - 90
+   * - ADMX100X_EN
+     - OUT
+     - 35
+     - 89
+   * - ADMX100X_SYNC_MODE
+     - IN
+     - 34
+     - 88
    * - ADMX100X_RESET
      - OUT
      - 33
      - 87
-   * - ADMX100X_READY
-     - IN
-     - 36
-     - 90
-   * - ADMX100X_VALID
-     - IN
-     - 37
-     - 91
    * - ADMX100X_OT
-     - IN
+     - OUT
      - 32
      - 86
+
+CPU/Memory interconnects addresses
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL(see more at :ref:`architecture cpu-intercon-addr`).
+
+========================  ===========
+Instance                  Zynq
+========================  ===========
+spi_adaq77681_axi_regmap  0x44A0_0000
+axi_adaq77681_dma         0x44A3_0000
+spi_clkgen                0x44A7_0000
+========================  ===========
+
+Interrupts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Below are the Programmable Logic interrupts used in this project.
+
+=================== === ========== ===========
+Instance name       HDL Linux Zynq Actual Zynq
+=================== === ========== ===========
+axi_adaq77681_dma   13  57         89
+spi_adaq77681       12  56         88
+=================== === ========== ===========
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -169,6 +220,7 @@ Hardware related
 - Product datasheets:
 
   - :adi:`AD5683R`
+  - :adi:`ADAQ7768-1`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -188,6 +240,18 @@ HDL related
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
+   * - AXI_SPI_ENGINE
+     - :git-hdl:`library/spi_engine/axi_spi_engine`
+     - :ref:`spi_engine axi`
+   * - SPI_ENGINE_EXECUTION
+     - :git-hdl:`library/spi_engine/spi_engine_execution`
+     - :ref:`spi_engine execution`
+   * - SPI_ENGINE_INTERCONNECT
+     - :git-hdl:`library/spi_engine/spi_engine_interconnect`
+     - :ref:`spi_engine interconnect`
+   * - SPI_ENGINE_OFFLOAD
+     - :git-hdl:`library/spi_engine/spi_engine_offload`
+     - :ref:`spi_engine offload`
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx`
      - :ref:`axi_hdmi_tx`
