@@ -1,85 +1,84 @@
-# GPIO 0
-# CH1
-set_property -dict {PACKAGE_PIN AP24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[0]}] ;# FMC_HPC_LA00_P_CC
-set_property -dict {PACKAGE_PIN G35  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[1]}] ;# FMC_HPC_LA17_P_CC
-set_property -dict {PACKAGE_PIN AR24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[2]}] ;# FMC_HPC_LA00_N_CC
-set_property -dict {PACKAGE_PIN G36  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[3]}] ;# FMC_HPC_LA17_N_CC
-set_property -dict {PACKAGE_PIN AP25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[4]}] ;# FMC_HPC_LA01_P_CC
-set_property -dict {PACKAGE_PIN E34  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[5]}] ;# FMC_HPC_LA18_P_CC
-set_property -dict {PACKAGE_PIN AP26 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[6]}] ;# FMC_HPC_LA01_N_CC
-set_property -dict {PACKAGE_PIN D34  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[7]}] ;# FMC_HPC_LA18_N_CC
-set_property -dict {PACKAGE_PIN AW26 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[8]}] ;# FMC_HPC_LA02_P
-set_property -dict {PACKAGE_PIN C38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[9]}] ;# FMC_HPC_LA19_P
-set_property -dict {PACKAGE_PIN AW27 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[10]}] ;# FMC_HPC_LA02_N
-set_property -dict {PACKAGE_PIN C39  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[11]}] ;# FMC_HPC_LA19_N
-set_property -dict {PACKAGE_PIN AK24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[12]}] ;# FMC_HPC_LA03_P
-set_property -dict {PACKAGE_PIN J32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[13]}] ;# FMC_HPC_LA20_P
-set_property -dict {PACKAGE_PIN AK25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[14]}] ;# FMC_HPC_LA03_N
-set_property -dict {PACKAGE_PIN H33  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[15]}] ;# FMC_HPC_LA20_N
-set_property -dict {PACKAGE_PIN AR25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[16]}] ;# FMC_HPC_LA04_P
-set_property -dict {PACKAGE_PIN B33  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[17]}] ;# FMC_HPC_LA21_P
-set_property -dict {PACKAGE_PIN AT25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[18]}] ;# FMC_HPC_LA04_N
-set_property -dict {PACKAGE_PIN B34  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[19]}] ;# FMC_HPC_LA21_N
-set_property -dict {PACKAGE_PIN AJ25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[20]}] ;# FMC_HPC_LA05_P
-set_property -dict {PACKAGE_PIN H38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[21]}] ;# FMC_HPC_LA22_P
-set_property -dict {PACKAGE_PIN AJ26 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[22]}] ;# FMC_HPC_LA05_N
-set_property -dict {PACKAGE_PIN H39  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[23]}] ;# FMC_HPC_LA22_N
-set_property -dict {PACKAGE_PIN AH22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[24]}] ;# FMC_HPC_LA06_P
-set_property -dict {PACKAGE_PIN F38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[25]}] ;# FMC_HPC_LA23_P
-set_property -dict {PACKAGE_PIN AJ22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[26]}] ;# FMC_HPC_LA06_N
-set_property -dict {PACKAGE_PIN E38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[27]}] ;# FMC_HPC_LA23_N
-set_property -dict {PACKAGE_PIN AW24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[28]}] ;# FMC_HPC_LA07_P
-set_property -dict {PACKAGE_PIN AR22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[29]}] ;# FMC_HPC_LA24_P
-set_property -dict {PACKAGE_PIN AW25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[30]}] ;# FMC_HPC_LA07_N
-set_property -dict {PACKAGE_PIN AT22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[31]}] ;# FMC_HPC_LA24_N
+# GPIO 0 - iWave FMC+ Loopback (even<->odd LA pairs)
+# CH1: LA00<->LA01, LA02<->LA03, LA04<->LA05, LA06<->LA07 (8 loopback pairs = 32 signals)
+set_property -dict {PACKAGE_PIN AP24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[0]}]  ;# FMC_HPC_LA00_P_CC
+set_property -dict {PACKAGE_PIN AP25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[1]}]  ;# FMC_HPC_LA01_P_CC
+set_property -dict {PACKAGE_PIN AR24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[2]}]  ;# FMC_HPC_LA00_N_CC
+set_property -dict {PACKAGE_PIN AP26 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[3]}]  ;# FMC_HPC_LA01_N_CC
+set_property -dict {PACKAGE_PIN AW26 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[4]}]  ;# FMC_HPC_LA02_P
+set_property -dict {PACKAGE_PIN AK24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[5]}]  ;# FMC_HPC_LA03_P
+set_property -dict {PACKAGE_PIN AW27 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[6]}]  ;# FMC_HPC_LA02_N
+set_property -dict {PACKAGE_PIN AK25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[7]}]  ;# FMC_HPC_LA03_N
+set_property -dict {PACKAGE_PIN AR25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[8]}]  ;# FMC_HPC_LA04_P
+set_property -dict {PACKAGE_PIN AJ25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[9]}]  ;# FMC_HPC_LA05_P
+set_property -dict {PACKAGE_PIN AT25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[10]}] ;# FMC_HPC_LA04_N
+set_property -dict {PACKAGE_PIN AJ26 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[11]}] ;# FMC_HPC_LA05_N
+set_property -dict {PACKAGE_PIN AH22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[12]}] ;# FMC_HPC_LA06_P
+set_property -dict {PACKAGE_PIN AW24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[13]}] ;# FMC_HPC_LA07_P
+set_property -dict {PACKAGE_PIN AJ22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[14]}] ;# FMC_HPC_LA06_N
+set_property -dict {PACKAGE_PIN AW25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[15]}] ;# FMC_HPC_LA07_N
+set_property -dict {PACKAGE_PIN AL25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[16]}] ;# FMC_HPC_LA08_P
+set_property -dict {PACKAGE_PIN AL22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[17]}] ;# FMC_HPC_LA09_P
+set_property -dict {PACKAGE_PIN AM25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[18]}] ;# FMC_HPC_LA08_N
+set_property -dict {PACKAGE_PIN AL23 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[19]}] ;# FMC_HPC_LA09_N
+set_property -dict {PACKAGE_PIN AG22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[20]}] ;# FMC_HPC_LA10_P
+set_property -dict {PACKAGE_PIN H36  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[21]}] ;# FMC_HPC_LA11_P
+set_property -dict {PACKAGE_PIN AG23 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[22]}] ;# FMC_HPC_LA10_N
+set_property -dict {PACKAGE_PIN H37  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[23]}] ;# FMC_HPC_LA11_N
+set_property -dict {PACKAGE_PIN AH24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[24]}] ;# FMC_HPC_LA12_P
+set_property -dict {PACKAGE_PIN H31  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[25]}] ;# FMC_HPC_LA13_P
+set_property -dict {PACKAGE_PIN AJ24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[26]}] ;# FMC_HPC_LA12_N
+set_property -dict {PACKAGE_PIN H32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[27]}] ;# FMC_HPC_LA13_N
+set_property -dict {PACKAGE_PIN G38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[28]}] ;# FMC_HPC_LA14_P
+set_property -dict {PACKAGE_PIN F37  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[29]}] ;# FMC_HPC_LA15_P
+set_property -dict {PACKAGE_PIN G39  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[30]}] ;# FMC_HPC_LA14_N
+set_property -dict {PACKAGE_PIN E37  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_00_io_tri_io[31]}] ;# FMC_HPC_LA15_N
 
-# CH2
-set_property -dict {PACKAGE_PIN AL25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[0]}] ;# FMC_HPC_LA08_P
-set_property -dict {PACKAGE_PIN C37  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[1]}] ;# FMC_HPC_LA25_P
-set_property -dict {PACKAGE_PIN AM25 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[2]}] ;# FMC_HPC_LA08_N
-set_property -dict {PACKAGE_PIN B38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[3]}] ;# FMC_HPC_LA25_N
-set_property -dict {PACKAGE_PIN AL22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[4]}] ;# FMC_HPC_LA09_P
-set_property -dict {PACKAGE_PIN A37  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[5]}] ;# FMC_HPC_LA26_P
-set_property -dict {PACKAGE_PIN AL23 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[6]}] ;# FMC_HPC_LA09_N
-set_property -dict {PACKAGE_PIN A38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[7]}] ;# FMC_HPC_LA26_N
-set_property -dict {PACKAGE_PIN AG22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[8]}] ;# FMC_HPC_LA10_P
-set_property -dict {PACKAGE_PIN E39  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[9]}] ;# FMC_HPC_LA27_P
-set_property -dict {PACKAGE_PIN AG23 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[10]}] ;# FMC_HPC_LA10_N
-set_property -dict {PACKAGE_PIN D39  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[11]}] ;# FMC_HPC_LA27_N
-set_property -dict {PACKAGE_PIN H36  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[12]}] ;# FMC_HPC_LA11_P
-set_property -dict {PACKAGE_PIN E35  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[13]}] ;# FMC_HPC_LA28_P
-set_property -dict {PACKAGE_PIN H37  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[14]}] ;# FMC_HPC_LA11_N
-set_property -dict {PACKAGE_PIN D35  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[15]}] ;# FMC_HPC_LA28_N
-set_property -dict {PACKAGE_PIN AH24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[16]}] ;# FMC_HPC_LA12_P
-set_property -dict {PACKAGE_PIN E32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[17]}] ;# FMC_HPC_LA29_P
-set_property -dict {PACKAGE_PIN AJ24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[18]}] ;# FMC_HPC_LA12_N
-set_property -dict {PACKAGE_PIN E33  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[19]}] ;# FMC_HPC_LA29_N
-set_property -dict {PACKAGE_PIN H31  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[20]}] ;# FMC_HPC_LA13_P
-set_property -dict {PACKAGE_PIN AK22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[21]}] ;# FMC_HPC_LA30_P
-set_property -dict {PACKAGE_PIN H32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[22]}] ;# FMC_HPC_LA13_N
-set_property -dict {PACKAGE_PIN AK23 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[23]}] ;# FMC_HPC_LA30_N
-set_property -dict {PACKAGE_PIN G38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[24]}] ;# FMC_HPC_LA14_P
-set_property -dict {PACKAGE_PIN A32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[25]}] ;# FMC_HPC_LA31_P
-set_property -dict {PACKAGE_PIN G39  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[26]}] ;# FMC_HPC_LA14_N
-set_property -dict {PACKAGE_PIN A33  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[27]}] ;# FMC_HPC_LA31_N
-set_property -dict {PACKAGE_PIN F37  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[28]}] ;# FMC_HPC_LA15_P
-set_property -dict {PACKAGE_PIN G33  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[29]}] ;# FMC_HPC_LA32_P
-set_property -dict {PACKAGE_PIN E37  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[30]}] ;# FMC_HPC_LA15_N
-set_property -dict {PACKAGE_PIN G34  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[31]}] ;# FMC_HPC_LA32_N
+# CH2: LA16<->LA17, LA18<->LA19, LA20<->LA21, LA22<->LA23, LA24<->LA25, LA26<->LA27, LA28<->LA29, LA30<->LA31 (8 loopback pairs = 32 signals)
+set_property -dict {PACKAGE_PIN AM23 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[0]}]  ;# FMC_HPC_LA16_P
+set_property -dict {PACKAGE_PIN G35  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[1]}]  ;# FMC_HPC_LA17_P_CC
+set_property -dict {PACKAGE_PIN AM24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[2]}]  ;# FMC_HPC_LA16_N
+set_property -dict {PACKAGE_PIN G36  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[3]}]  ;# FMC_HPC_LA17_N_CC
+set_property -dict {PACKAGE_PIN E34  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[4]}]  ;# FMC_HPC_LA18_P_CC
+set_property -dict {PACKAGE_PIN C38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[5]}]  ;# FMC_HPC_LA19_P
+set_property -dict {PACKAGE_PIN D34  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[6]}]  ;# FMC_HPC_LA18_N_CC
+set_property -dict {PACKAGE_PIN C39  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[7]}]  ;# FMC_HPC_LA19_N
+set_property -dict {PACKAGE_PIN J32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[8]}]  ;# FMC_HPC_LA20_P
+set_property -dict {PACKAGE_PIN B33  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[9]}]  ;# FMC_HPC_LA21_P
+set_property -dict {PACKAGE_PIN H33  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[10]}] ;# FMC_HPC_LA20_N
+set_property -dict {PACKAGE_PIN B34  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[11]}] ;# FMC_HPC_LA21_N
+set_property -dict {PACKAGE_PIN H38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[12]}] ;# FMC_HPC_LA22_P
+set_property -dict {PACKAGE_PIN F38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[13]}] ;# FMC_HPC_LA23_P
+set_property -dict {PACKAGE_PIN H39  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[14]}] ;# FMC_HPC_LA22_N
+set_property -dict {PACKAGE_PIN E38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[15]}] ;# FMC_HPC_LA23_N
+set_property -dict {PACKAGE_PIN AR22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[16]}] ;# FMC_HPC_LA24_P
+set_property -dict {PACKAGE_PIN C37  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[17]}] ;# FMC_HPC_LA25_P
+set_property -dict {PACKAGE_PIN AT22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[18]}] ;# FMC_HPC_LA24_N
+set_property -dict {PACKAGE_PIN B38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[19]}] ;# FMC_HPC_LA25_N
+set_property -dict {PACKAGE_PIN A37  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[20]}] ;# FMC_HPC_LA26_P
+set_property -dict {PACKAGE_PIN E39  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[21]}] ;# FMC_HPC_LA27_P
+set_property -dict {PACKAGE_PIN A38  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[22]}] ;# FMC_HPC_LA26_N
+set_property -dict {PACKAGE_PIN D39  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[23]}] ;# FMC_HPC_LA27_N
+set_property -dict {PACKAGE_PIN E35  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[24]}] ;# FMC_HPC_LA28_P
+set_property -dict {PACKAGE_PIN E32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[25]}] ;# FMC_HPC_LA29_P
+set_property -dict {PACKAGE_PIN D35  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[26]}] ;# FMC_HPC_LA28_N
+set_property -dict {PACKAGE_PIN E33  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[27]}] ;# FMC_HPC_LA29_N
+set_property -dict {PACKAGE_PIN AK22 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[28]}] ;# FMC_HPC_LA30_P
+set_property -dict {PACKAGE_PIN A32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[29]}] ;# FMC_HPC_LA31_P
+set_property -dict {PACKAGE_PIN AK23 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[30]}] ;# FMC_HPC_LA30_N
+set_property -dict {PACKAGE_PIN A33  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_01_io_tri_io[31]}] ;# FMC_HPC_LA31_N
 
-# GPIO 1
-# CH 1
-set_property -dict {PACKAGE_PIN AM23 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_10_io_tri_io[0]}] ;# FMC_HPC_LA16_P
-set_property -dict {PACKAGE_PIN D32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_10_io_tri_io[1]}] ;# FMC_HPC_LA33_P
-set_property -dict {PACKAGE_PIN AM24 IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_10_io_tri_io[2]}] ;# FMC_HPC_LA16_N
-set_property -dict {PACKAGE_PIN C32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_10_io_tri_io[3]}] ;# FMC_HPC_LA33_N
+# GPIO 1: LA32<->LA33 (1 loopback pair = 4 signals)
+set_property -dict {PACKAGE_PIN G33  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_10_io_tri_io[0]}]  ;# FMC_HPC_LA32_P
+set_property -dict {PACKAGE_PIN D32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_10_io_tri_io[1]}]  ;# FMC_HPC_LA33_P
+set_property -dict {PACKAGE_PIN G34  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_10_io_tri_io[2]}]  ;# FMC_HPC_LA32_N
+set_property -dict {PACKAGE_PIN C32  IOSTANDARD LVCMOS18 PULLUP true DRIVE 2} [get_ports {fmc_gpio_10_io_tri_io[3]}]  ;# FMC_HPC_LA33_N
 
 # XCVR
 set_property PACKAGE_PIN W12 [get_ports ref_clk_fmc_0_p]
-create_clock -name ref_clk_0 -period 3.20 [get_ports ref_clk_fmc_0_p]
+create_clock -name ref_clk_fmc_0 -period 6.40 [get_ports ref_clk_fmc_0_p]
 
 set_property PACKAGE_PIN V10 [get_ports ref_clk_fmc_1_p]
-create_clock -name ref_clk_0 -period 3.20 [get_ports ref_clk_fmc_1_p]
+create_clock -name ref_clk_fmc_1 -period 6.40 [get_ports ref_clk_fmc_1_p]
 
 set_property PACKAGE_PIN AH10 [get_ports ref_clk_1_p]
 create_clock -name ref_clk_1 -period 10.00 [get_ports ref_clk_1_p]
