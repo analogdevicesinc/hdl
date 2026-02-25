@@ -96,6 +96,7 @@ Contents
    FMCOMMS5 <fmcomms5/index>
    FMCOMMS8 <fmcomms8/index>
    FMCOMMS11 <fmcomms11/index>
+   HMCAD1520 <hmcad1520_ebz/index>
    JUPITER-SDR <jupiter_sdr/index>
    LTC2378-FMC <ltc2378_fmc/index>
    M2K <m2k/index>
