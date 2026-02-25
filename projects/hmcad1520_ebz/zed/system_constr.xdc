@@ -37,9 +37,4 @@ set_property  -dict {PACKAGE_PIN P18  IOSTANDARD LVCMOS25}  [get_ports spi_sdata
 set_property  -dict {PACKAGE_PIN P20  IOSTANDARD LVCMOS25}  [get_ports fmc_pd]       ; ##G15   FMC_LA12_P       IO_L18P_T2_34
 set_property  -dict {PACKAGE_PIN P21  IOSTANDARD LVCMOS25}  [get_ports fmc_rstn]     ; ##G16   FMC_LA12_N       IO_L18N_T2_34
 
-
-set_property  -dict {PACKAGE_PIN Y11   IOSTANDARD LVCMOS33}  [get_ports debug_spi_csn]     ; # "JA1"
-set_property  -dict {PACKAGE_PIN AA11  IOSTANDARD LVCMOS33}  [get_ports debug_spi_clk]     ; # "JA2"
-set_property  -dict {PACKAGE_PIN Y10   IOSTANDARD LVCMOS33}  [get_ports debug_spi_sdata]   ; # "JA3"
-
 create_clock -name adc_clk   -period 2 [get_ports clk_in_p]

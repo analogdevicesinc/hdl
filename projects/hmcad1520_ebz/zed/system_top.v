@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2024, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -95,15 +95,12 @@ module system_top (
   input       [ 7:0]      data_in_p,
   input       [ 7:0]      data_in_n,
 
-  (* MARK_DEBUG = "TRUE" *) output                  spi_csn,
-  (* MARK_DEBUG = "TRUE" *) output                  spi_clk,
-  (* MARK_DEBUG = "TRUE" *) output                  spi_sdata,
-  output                  debug_spi_csn,
-  output                  debug_spi_clk,
-  output                  debug_spi_sdata,
+  output                  spi_csn,
+  output                  spi_clk,
+  output                  spi_sdata,
 
-  (* MARK_DEBUG = "TRUE" *) output                  fmc_pd,
-  (* MARK_DEBUG = "TRUE" *) output                  fmc_rstn
+  output                  fmc_pd,
+  output                  fmc_rstn
 );
 
   // internal signals
@@ -123,7 +120,6 @@ module system_top (
   wire            spi_mosi;
   wire            spi_miso;
 
-
   ad_iobuf #(
     .DATA_WIDTH(32)
   ) i_iobuf_bd (
@@ -134,9 +130,6 @@ module system_top (
 
   assign fmc_pd   = gpio_o[32];
   assign fmc_rstn = gpio_o[33];
-  assign debug_spi_csn   = spi_csn;
-  assign debug_spi_clk   = spi_clk;
-  assign debug_spi_sdata = spi_sdata;
   assign gpio_i[63:34] = gpio_o[63:34];
 
   ad_iobuf #(

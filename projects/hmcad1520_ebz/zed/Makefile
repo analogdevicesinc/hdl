@@ -1,12 +1,12 @@
 ####################################################################################
-## Copyright (c) 2018 - 2024 Analog Devices, Inc.
+## Copyright (c) 2018 - 2024, 2026 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := hmcad15xx_ebz_zed
+PROJECT_NAME := hmcad1520_ebz_zed
 
-M_DEPS += ../common/hmcad15xx_ebz_bd.tcl
+M_DEPS += ../common/hmcad1520_ebz_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl

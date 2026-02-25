@@ -1,0 +1,65 @@
+###############################################################################
+## Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+# hmcad15xx interface
+
+create_bd_port -dir I clk_in_p
+create_bd_port -dir I clk_in_n
+create_bd_port -dir I fclk_p
+create_bd_port -dir I fclk_n
+create_bd_port -dir I -from 7 -to 0 data_in_p
+create_bd_port -dir I -from 7 -to 0 data_in_n
+
+# instances
+
+ad_ip_instance axi_dmac hmcad1520_dma
+ad_ip_parameter hmcad1520_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter hmcad1520_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter hmcad1520_dma CONFIG.CYCLIC 0
+ad_ip_parameter hmcad1520_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter hmcad1520_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter hmcad1520_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter hmcad1520_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter hmcad1520_dma CONFIG.DMA_DATA_WIDTH_SRC 128
+ad_ip_parameter hmcad1520_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter hmcad1520_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter hmcad1520_dma CONFIG.MAX_BYTES_PER_BURST 4096
+
+# axi_hmcad15xx
+
+ad_ip_instance axi_hmcad15xx axi_hmcad1520_adc
+ad_ip_parameter axi_hmcad1520_adc CONFIG.NUM_CHANNELS 4
+ad_ip_parameter axi_hmcad1520_adc CONFIG.IODELAY_CTRL 1
+
+ad_connect axi_hmcad1520_adc/s_axi_aclk    sys_cpu_clk
+ad_connect axi_hmcad1520_adc/clk_in_p      clk_in_p
+ad_connect axi_hmcad1520_adc/clk_in_n      clk_in_n
+ad_connect axi_hmcad1520_adc/fclk_p        fclk_p
+ad_connect axi_hmcad1520_adc/fclk_n        fclk_n
+ad_connect axi_hmcad1520_adc/data_in_p     data_in_p
+ad_connect axi_hmcad1520_adc/data_in_n     data_in_n
+ad_connect axi_hmcad1520_adc/delay_clk     $sys_iodelay_clk
+
+ad_connect axi_hmcad1520_adc/adc_clk   hmcad1520_dma/fifo_wr_clk
+ad_connect axi_hmcad1520_adc/adc_data  hmcad1520_dma/fifo_wr_din
+ad_connect axi_hmcad1520_adc/adc_valid hmcad1520_dma/fifo_wr_en
+ad_connect axi_hmcad1520_adc/adc_dovf  hmcad1520_dma/fifo_wr_overflow
+
+#DMA
+
+ad_connect  hmcad1520_dma/m_dest_axi_aresetn    $sys_cpu_resetn
+
+# interrupts
+
+ad_cpu_interrupt ps-13 mb-12  hmcad1520_dma/irq
+
+
+# cpu / memory interconnects
+ad_cpu_interconnect 0x44A00000 axi_hmcad1520_adc
+ad_cpu_interconnect 0x44A30000 hmcad1520_dma
+
+
+ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_cpu_clk hmcad1520_dma/m_dest_axi
