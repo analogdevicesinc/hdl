@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -43,8 +43,8 @@ module axi_hmcad15xx #(
   parameter   SPEED_GRADE = 0,
   parameter   DEV_PACKAGE = 0,
   parameter   ADC_DATAPATH_DISABLE = 0,
-  parameter   POLARITY_MASK = 8'h00,
-  parameter   IO_DELAY_GROUP = "adc_if_delay_group"
+  parameter   IO_DELAY_GROUP = "adc_if_delay_group",
+  parameter   IODELAY_CTRL = 0
 ) (
 
   input           adc_dovf,
@@ -108,9 +108,6 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   reg  [31:0] up_rdata = 'd0;
   reg         up_rack = 'd0;
   reg         up_wack = 'd0;
-  reg [31:0]  up_rdata_r;
-  reg         up_rack_r;
-  reg         up_wack_r;
 
   // internal signals
 
@@ -122,21 +119,18 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   wire        adc_clk_s;
   wire        up_wreq_s;
   wire        up_rreq_s;
-  wire [13:0] up_addr_s;
   wire [31:0] up_wdata_s;
 
-  wire [31:0] up_rdata_s[0:4];
+  wire [31:0] up_rdata_s[0:5];
 
-  wire  [4:0] up_rack_s;
-  wire  [4:0] up_wack_s;
+  wire  [5:0] up_rack_s;
+  wire  [5:0] up_wack_s;
 
   wire  [7:0] adc_enable;
   wire  [4:0] adc_num_lanes;
+  wire        adc_crc_enable;
 
   wire        delay_rst;
-
-  wire        adc_pattern_check_enable;
-  wire  [3:0] adc_pattern_ch_mismatch;
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -148,28 +142,15 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   assign adc_enable_2 = adc_enable[2];
   assign adc_enable_3 = adc_enable[3];
 
-  integer j;
-
-  always @(*) begin
-    up_rdata_r = 'h00;
-    up_rack_r = 'h00;
-    up_wack_r = 'h00;
-    for (j = 0; j <= 5; j=j+1) begin
-      up_rack_r = up_rack_r | up_rack_s[j];
-      up_wack_r = up_wack_r | up_wack_s[j];
-      up_rdata_r = up_rdata_r | up_rdata_s[j];
-    end
-  end
-
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
       up_rdata <= 'd0;
       up_rack <= 'd0;
       up_wack <= 'd0;
     end else begin
-      up_rdata <= up_rdata_r;
-      up_rack <= up_rack_r;
-      up_wack <= up_wack_r;
+      up_rdata <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] | up_rdata_s[3] | up_rdata_s[4] | up_rdata_s[5];
+      up_rack  <= up_rack_s[0]  | up_rack_s[1]  | up_rack_s[2]  | up_rack_s[3]  | up_rack_s[4]  | up_rack_s[5];
+      up_wack  <= up_wack_s[0]  | up_wack_s[1]  | up_wack_s[2]  | up_wack_s[3]  | up_wack_s[4]  | up_wack_s[5];
     end
   end
 
@@ -200,7 +181,7 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
         .adc_or (1'b0),
         .adc_read_data ('d0),
         .adc_status_header(),
-        .adc_crc_err(adc_pattern_ch_mismatch[i]),
+        .adc_crc_err(),
         .up_adc_pn_err (),
         .up_adc_pn_oos (),
         .up_adc_or (),
@@ -232,21 +213,21 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   endgenerate
 
   // adc interface
-
   wire             delay_locked;
   wire [7:0]       adc_custom_control;
   wire [1:0]       resolution;
   wire [2:0]       mode;
-  wire [31:0]      adc_config_write_s;
-  wire  [7:0]      pattern_value;
+  wire [7:0]       polarity_mask_s;
+  wire [31:0]      adc_config_wr;
 
-assign resolution = adc_custom_control[1:0];
-assign mode       = adc_custom_control[4:2];
-assign pattern_value = adc_config_write_s[7:0];
+assign resolution      = adc_custom_control[1:0];
+assign mode            = adc_custom_control[4:2];
+assign polarity_mask_s = adc_config_wr[7:0];
 
   axi_hmcad15xx_if  #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
-    .IO_DELAY_GROUP(IO_DELAY_GROUP)
+    .IO_DELAY_GROUP(IO_DELAY_GROUP),
+    .IODELAY_CTRL(IODELAY_CTRL)
   ) i_axi_hmcad15xx_if (
     .up_clk(up_clk),
     .adc_rst(adc_rst_s),
@@ -260,11 +241,9 @@ assign pattern_value = adc_config_write_s[7:0];
     .data_in_n (data_in_n),
     .adc_clk (adc_clk_s),
     .adc_valid (adc_valid),
-    .adc_pattern_ch_mismatch(adc_pattern_ch_mismatch),
-    .adc_pattern_check_enable(adc_pattern_check_enable),
-    .pattern_value (pattern_value),
     .adc_data (adc_data),
     .resolution(resolution),
+    .polarity_mask_s(polarity_mask_s),
     .mode(mode),
     .up_dld(up_dld),
     .up_dwdata(up_dwdata),
@@ -297,7 +276,7 @@ assign pattern_value = adc_config_write_s[7:0];
     .adc_symb_op(),
     .adc_symb_8_16b(),
     .adc_num_lanes(),
-    .adc_crc_enable(adc_pattern_check_enable),
+    .adc_crc_enable(),
     .up_pps_rcounter (32'b0),
     .up_pps_status (1'b0),
     .up_pps_irq_mask (),
@@ -313,7 +292,7 @@ assign pattern_value = adc_config_write_s[7:0];
     .up_drp_rdata (32'd0),
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
-    .adc_config_wr (adc_config_write_s),
+    .adc_config_wr (adc_config_wr),
     .adc_config_ctrl (),
     .adc_config_rd ('d0),
     .adc_ctrl_status ('d0),
@@ -332,7 +311,6 @@ assign pattern_value = adc_config_write_s[7:0];
     .up_rdata (up_rdata_s[4]),
     .up_rack (up_rack_s[4]));
 
-
  // adc delay control
 
   up_delay_cntrl #(
@@ -340,6 +318,7 @@ assign pattern_value = adc_config_write_s[7:0];
     .DRP_WIDTH(DELAY_CTRL_DRP_WIDTH),
     .BASE_ADDRESS(6'h02)
   ) i_delay_cntrl (
+    .core_rst(1'b0),
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked),
