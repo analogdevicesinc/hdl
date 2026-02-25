@@ -39,6 +39,7 @@ ADC/DAC
    axi_ada4355/index
    axi_adaq8092/index
    axi_adrv9001/index
+   axi_hmcad15xx/index
    axi_ltc235x/index
    axi_ltc2387/index
 
