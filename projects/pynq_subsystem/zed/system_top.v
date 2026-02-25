@@ -62,6 +62,12 @@ module system_top (
 
   output   data_o,
 
+  inout iic_scl_io,
+  inout iic_sda_io,
+
+  input uart_rx,
+  output uart_tx,
+
   output  SPI_0_io0_o_mosi,
   input   SPI_0_io1_i_miso,
   output  SPI_0_sck_o,
@@ -110,6 +116,13 @@ module system_top (
     .SPI_0_ss_i(1'b1),
     .SPI_0_ss_o(SPI_0_ss_o_cs_n), //active low
     .SPI_0_ss_t (),
+
+    .IIC_sda_io(iic_sda_io),
+    .IIC_scl_io(iic_scl_io),
+
+    .UART_rxd(uart_rx),
+    .UART_txd(uart_tx),
+
     
     .data_o(data_o));
 

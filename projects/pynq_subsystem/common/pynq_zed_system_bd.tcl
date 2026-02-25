@@ -81,8 +81,12 @@ ad_connect    SPI_0_ss_t    IOP1/SPI_0_ss_t
 create_bd_port -dir O  data_o
 ad_connect    data_o   IOP1/data_o
 
+#IIC
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 IIC
+ad_connect IIC  IOP1/IIC
 
-
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 UART
+ad_connect UART  IOP1/UART
 
 ad_ip_instance xlslice iop_intr_ack [list \
     DIN_FROM 5 \

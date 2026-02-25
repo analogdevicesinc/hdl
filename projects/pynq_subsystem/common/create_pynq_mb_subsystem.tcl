@@ -26,6 +26,8 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 S_AXI
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 IIC
   create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:spi_rtl:1.0 SPI_0
+  create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 UART
+
 
   # -----------------------
   # Create pins
@@ -170,7 +172,7 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   # AXI Interconnect for MicroBlaze peripherals
   # -----------------------
   # 5 master interfaces: SPI, IIC, GPIO, INTC, INTR
-  set num_mi 5
+  set num_mi 6
 
   ad_ip_instance axi_interconnect ${iop_name}_axi_periph
   ad_ip_parameter ${iop_name}_axi_periph CONFIG.NUM_MI $num_mi
@@ -179,6 +181,7 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   ad_ip_parameter ${iop_name}_axi_periph CONFIG.M02_HAS_REGSLICE 1
   ad_ip_parameter ${iop_name}_axi_periph CONFIG.M03_HAS_REGSLICE 1
   ad_ip_parameter ${iop_name}_axi_periph CONFIG.M04_HAS_REGSLICE 1
+  ad_ip_parameter ${iop_name}_axi_periph CONFIG.M05_HAS_REGSLICE 1
   ad_ip_parameter ${iop_name}_axi_periph CONFIG.S00_HAS_REGSLICE 1
 
   ad_connect clk_100M ${iop_name}_axi_periph/ACLK
@@ -188,14 +191,19 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   ad_connect clk_100M ${iop_name}_axi_periph/M02_ACLK
   ad_connect clk_100M ${iop_name}_axi_periph/M03_ACLK
   ad_connect clk_100M ${iop_name}_axi_periph/M04_ACLK
+  ad_connect clk_100M ${iop_name}_axi_periph/M05_ACLK
+
   ad_connect ${iop_name}_rst/interconnect_aresetn ${iop_name}_axi_periph/ARESETN
   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/S00_ARESETN
   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M00_ARESETN
   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M01_ARESETN
   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M02_ARESETN
-  ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M03_ARESETN
+  ad_connect s_axi_aresetn ${iop_name}_axi_periph/M03_ARESETN
   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M04_ARESETN
+  ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M05_ARESETN
   ad_connect ${iop_name}_mb/M_AXI_DP ${iop_name}_axi_periph/S00_AXI
+
+
 
   set mi_index 0
 
@@ -243,6 +251,16 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   incr mi_index
 
   # -----------------------
+  #UART
+  # -----------------------
+  ad_ip_instance axi_uartlite ${iop_name}_uart [list C_BAUDRATE 9600]
+
+   ad_connect clk_100M ${iop_name}_uart/s_axi_aclk
+   ad_connect s_axi_aresetn ${iop_name}_uart/s_axi_aresetn
+    ad_connect ${iop_name}_axi_periph/M[format "%02d" $mi_index]_AXI ${iop_name}_uart/s_axi
+    ad_connect UART  ${iop_name}_uart/UART
+   incr mi_index
+  # -----------------------
   # AXI Interrupt Controller
   # -----------------------
   ad_ip_instance axi_intc ${iop_name}_intc
@@ -269,10 +287,11 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   # Interrupt Concatenation
   # -----------------------
   ad_ip_instance xlconcat ${iop_name}_intr_concat
-  ad_ip_parameter ${iop_name}_intr_concat CONFIG.NUM_PORTS 2
+  ad_ip_parameter ${iop_name}_intr_concat CONFIG.NUM_PORTS 3
 
   ad_connect ${iop_name}_iic/iic2intc_irpt ${iop_name}_intr_concat/In0
   ad_connect ${iop_name}_spi/ip2intc_irpt ${iop_name}_intr_concat/In1
+  ad_connect ${iop_name}_uart/interrupt  ${iop_name}_intr_concat/In2
   ad_connect ${iop_name}_intr_concat/dout ${iop_name}_intc/intr
 
   # -----------------------

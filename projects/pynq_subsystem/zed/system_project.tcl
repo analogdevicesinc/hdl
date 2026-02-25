@@ -31,3 +31,8 @@ set_property used_in_synthesis false [get_files $ad_hdl_dir/projects/pynq_subsys
 
 
 adi_project_run pynq_subsystem_zed
+
+
+
+
+
