@@ -41,7 +41,8 @@ module pack_network #(
   parameter MIN_STAGE = 1,
   parameter NUM_STAGES = 1,
   parameter PACK = 0,
-  parameter PORT_DATA_WIDTH = 16
+  parameter PORT_DATA_WIDTH = 16,
+  parameter PIPELINE_STAGES = 0
 ) (
   input clk,
   input ce_ctrl,
@@ -97,8 +98,10 @@ module pack_network #(
     .PORT_ADDRESS_WIDTH (PORT_ADDRESS_WIDTH),
     .MUX_ORDER (MUX_ORDER),
     .NUM_STAGES (NUM_STAGES),
-    .PACK (PACK)
+    .PACK (PACK),
+    .PIPELINE_STAGES (PIPELINE_STAGES)
   ) i_interconnect (
+    .clk(clk),
     .ctrl(ctrl_),
 
     .data_in(data_in),
