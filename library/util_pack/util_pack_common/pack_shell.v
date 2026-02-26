@@ -40,7 +40,8 @@ module pack_shell #(
   parameter SAMPLES_PER_CHANNEL = 1,
   parameter SAMPLE_DATA_WIDTH = 16,
   parameter PACK = 0,
-  parameter PARALLEL_OR_SERIAL_N = 0
+  parameter PARALLEL_OR_SERIAL_N = 0,
+  parameter PIPELINE_STAGES = 0
 ) (
   input clk,
   input reset,
@@ -51,7 +52,7 @@ module pack_shell #(
 
   input ce,
 
-  output reg ready = 1'b0,
+  output ready,
   input [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] in_data,
 
   output [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] out_data,
@@ -67,6 +68,19 @@ module pack_shell #(
   localparam TOTAL_DATA_WIDTH = CHANNEL_DATA_WIDTH * NUM_OF_CHANNELS;
   localparam NUM_OF_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
   localparam LOG2_NUM_OF_SAMPLES = $clog2(NUM_OF_SAMPLES);
+
+  // Function to calculate pipeline latency for a given number of MUX stages.
+  function integer calc_pipeline_latency;
+    input integer num_stages;
+    begin
+      if (PIPELINE_STAGES == 2)
+        calc_pipeline_latency = num_stages;
+      else if (PIPELINE_STAGES == 1)
+        calc_pipeline_latency = num_stages / 2;
+      else
+        calc_pipeline_latency = 0;
+    end
+  endfunction
 
   /*
    * Reset and control signals for the state machine. Data and control have
@@ -133,10 +147,7 @@ module pack_shell #(
       assign out_data = in_data;
       assign out_sync = 1'b1;
       assign out_valid = {NUM_OF_SAMPLES{1'b1}};
-
-      always @(*) begin
-        ready <= ce & ~reset_data;
-      end
+      assign ready = ce & ~reset_data;
     end else begin
       localparam SAMPLE_ADDRESS_WIDTH =
         NUM_OF_SAMPLES > 512 ? 10 :
@@ -148,6 +159,65 @@ module pack_shell #(
         NUM_OF_SAMPLES > 8 ? 4 :
         NUM_OF_SAMPLES > 4 ? 3 :
         NUM_OF_SAMPLES > 2 ? 2 : 1;
+
+      /*
+       * Calculate total pipeline latency from all pack_network stages.
+       * For PACK mode:
+       *   gen_network[0]: SAMPLE_ADDRESS_WIDTH / 2 stages (4:1 MUX)
+       *   gen_network[1]: SAMPLE_ADDRESS_WIDTH % 2 stages (2:1 MUX)
+       * For UNPACK mode:
+       *   i_ext_ctrl_interconnect: 1 stage (only if NON_POWER_OF_TWO)
+       *   gen_network[0]: (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2 stages
+       *   gen_network[1]: (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2 stages
+       */
+      localparam NETWORK0_STAGES = PACK ? (SAMPLE_ADDRESS_WIDTH / 2) :
+                                          ((SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2);
+      localparam NETWORK1_STAGES = PACK ? (SAMPLE_ADDRESS_WIDTH % 2) :
+                                          ((SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2);
+      localparam EXT_NETWORK_STAGES = (NON_POWER_OF_TWO == 1 && PACK == 0) ? 1 : 0;
+
+      localparam TOTAL_PIPELINE_LATENCY = calc_pipeline_latency(NETWORK0_STAGES) +
+                                          calc_pipeline_latency(NETWORK1_STAGES) +
+                                          calc_pipeline_latency(EXT_NETWORK_STAGES);
+
+      /*
+       * Internal versions of control signals before pipeline delay.
+       * These are delayed by TOTAL_PIPELINE_LATENCY cycles to match the
+       * data path latency through the pack/unpack network.
+       */
+      reg ready_int = 1'b0;
+      wire out_sync_int;
+      wire [NUM_OF_SAMPLES-1:0] out_valid_int;
+
+      // Pipeline delay for ready signal
+      util_pipeline_stage #(
+        .REGISTERED(TOTAL_PIPELINE_LATENCY),
+        .WIDTH(1)
+      ) i_ready_pipe (
+        .clk(clk),
+        .in(ready_int),
+        .out(ready)
+      );
+
+      // Pipeline delay for out_sync signal
+      util_pipeline_stage #(
+        .REGISTERED(TOTAL_PIPELINE_LATENCY),
+        .WIDTH(1)
+      ) i_out_sync_pipe (
+        .clk(clk),
+        .in(out_sync_int),
+        .out(out_sync)
+      );
+
+      // Pipeline delay for out_valid signal
+      util_pipeline_stage #(
+        .REGISTERED(TOTAL_PIPELINE_LATENCY),
+        .WIDTH(NUM_OF_SAMPLES)
+      ) i_out_valid_pipe (
+        .clk(clk),
+        .in(out_valid_int),
+        .out(out_valid)
+      );
 
       /*
        * `rotate` is used as an offset into the input data vector. When not all
@@ -330,7 +400,7 @@ module pack_shell #(
          * no configurations in which they'd be required.
          */
         always @(posedge clk) begin
-          if (ce == 1'b1 && ready == 1'b1) begin /* Just ready ??? */
+          if (ce == 1'b1 && ready_int == 1'b1) begin
             data_d1 <= in_data[TOTAL_DATA_WIDTH-1:2*CHANNEL_DATA_WIDTH];
           end
         end
@@ -340,13 +410,13 @@ module pack_shell #(
 
         always @(posedge clk) begin
           if (reset_ctrl == 1'b1) begin
-            ready <= 1'b0;
+            ready_int <= 1'b0;
             rotate_msb <= 1'b0;
 
             rotate <= 'h0;
             rotate_next <= 'h0;
           end else if (ce_ctrl == 1'b1) begin
-            ready <= 1'b0;
+            ready_int <= 1'b0;
             rotate_msb <= 1'b0;
 
             /*
@@ -356,7 +426,7 @@ module pack_shell #(
              */
             if (rotate_next_next[SAMPLE_ADDRESS_WIDTH] &
                 |rotate_next_next[SAMPLE_ADDRESS_WIDTH-1:0]) begin
-              ready <= 1'b1;
+              ready_int <= 1'b1;
               rotate_msb <= 1'b1;
             end
             /*
@@ -365,7 +435,7 @@ module pack_shell #(
              * previous cycle due to overconsumption.
              */
             if (rotate_next[SAMPLE_ADDRESS_WIDTH] == 1'b1 && rotate_msb == 1'b0) begin
-              ready <= 1'b1;
+              ready_int <= 1'b1;
             end
 
             rotate <= rotate_next;
@@ -383,7 +453,8 @@ module pack_shell #(
           .MUX_ORDER (2),
           .MIN_STAGE (0),
           .NUM_STAGES (1),
-          .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH)
+          .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH),
+          .PIPELINE_STAGES (PIPELINE_STAGES)
         ) i_ext_ctrl_interconnect (
           .clk (clk),
           .ce_ctrl (ce_ctrl),
@@ -416,7 +487,7 @@ module pack_shell #(
       end else begin
         always @(posedge clk) begin
           if (reset_ctrl == 1'b1) begin
-            ready <= 1'b0;
+            ready_int <= 1'b0;
             rotate <= 'h0;
           end else if (ce_ctrl == 1'b1) begin
             /*
@@ -426,7 +497,7 @@ module pack_shell #(
              * evenly divisible into the output data and there is no fractional
              * residual data. I.e. when ready is asserted rotate is 0.
              */
-            {ready,rotate} <= rotate + enable_count + 1'b1;
+            {ready_int,rotate} <= rotate + enable_count + 1'b1;
           end
         end
 
@@ -460,7 +531,8 @@ module pack_shell #(
             .MUX_ORDER (MUX_ORDER),
             .MIN_STAGE (MIN_STAGE),
             .NUM_STAGES (NUM_STAGES),
-            .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH)
+            .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH),
+            .PIPELINE_STAGES (PIPELINE_STAGES)
           ) i_ctrl_interconnect (
             .clk (clk),
             .ce_ctrl (ce_ctrl),
@@ -523,7 +595,7 @@ module pack_shell #(
           always @(posedge clk) begin
             if (reset_ctrl == 1'b1) begin
               sync <= 1'b1;
-            end else if (ready == 1'b1 && ce == 1'b1) begin
+            end else if (ready_int == 1'b1 && ce == 1'b1) begin
               if (rotate == 'h0) begin
                 sync <= 1'b1;
               end else begin
@@ -554,16 +626,16 @@ module pack_shell #(
             end
           end
 
-          assign out_sync = sync;
+          assign out_sync_int = sync;
         end else begin
           assign out_data = data[2];
-          assign out_sync = 1'b1;
+          assign out_sync_int = 1'b1;
         end
 
-        assign out_valid = valid;
+        assign out_valid_int = valid;
       end else begin
-        assign out_sync = 1'b1;
-        assign out_valid = {NUM_OF_SAMPLES{1'b1}};
+        assign out_sync_int = 1'b1;
+        assign out_valid_int = {NUM_OF_SAMPLES{1'b1}};
         assign out_data = data[2];
       end
     end
