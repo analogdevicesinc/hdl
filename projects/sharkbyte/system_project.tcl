@@ -6,14 +6,14 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
+source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
 
 adi_project_create sharkbyte 0 {} "xc7z010clg225-2"
 
 adi_project_files sharkbyte [list \
   "system_top.v" \
   "system_constr.xdc" \
-  "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/library/common/ad_3w_spi.v"]
+  "$ad_hdl_dir/library/common/ad_iobuf.v"]
 
 set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
 

@@ -6,6 +6,7 @@
 # create board design
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
 create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 fixed_io
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main
 
 create_bd_port -dir O spi0_csn_2_o
 create_bd_port -dir O spi0_csn_1_o
@@ -98,6 +99,9 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY0 0.0822516875
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 0.0545553125
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_0 0.072623
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 0.0553525
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 150.0
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_RST2_PORT 1
 
 ad_ip_instance xlconcat sys_concat_intc
 ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
@@ -105,13 +109,19 @@ ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 ad_ip_instance proc_sys_reset sys_rstgen
 ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
+ad_ip_instance proc_sys_reset sys_150m_rstgen
+ad_ip_parameter sys_150m_rstgen CONFIG.C_EXT_RST_WIDTH 1
+ad_connect  sys_ps7/FCLK_CLK2 sys_150m_rstgen/slowest_sync_clk
+ad_connect  sys_150m_rstgen/ext_reset_in sys_ps7/FCLK_RESET2_N
+
 # instance: hcmad15xx_a1 dma
 
 ad_ip_instance axi_dmac hmcad15xx_a1_dma
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.CYCLIC 0
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_mxfe_tx_dma CONFIG.AXIS_TUSER_SYNC 0
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_2D_TRANSFER 0
@@ -120,13 +130,16 @@ ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.MAX_BYTES_PER_BURST 4096
 
+ad_connect  hmcad15xx_a1_dma/m_dest_axi_aresetn sys_150m_rstgen/peripheral_aresetn
+
 # instance: hcmad15xx_a2 dma
 
 ad_ip_instance axi_dmac hmcad15xx_a2_dma
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.CYCLIC 0
-ad_ip_parameter hmcad15xx_a2_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_mxfe_tx_dma CONFIG.AXIS_TUSER_SYNC 0
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_2D_TRANSFER 0
@@ -134,6 +147,8 @@ ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.MAX_BYTES_PER_BURST 4096
+
+ad_connect  hmcad15xx_a2_dma/m_dest_axi_aresetn sys_150m_rstgen/peripheral_aresetn
 
 # instance: axi_hmcad15xx_a1
 
@@ -163,7 +178,6 @@ ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.IODELAY_CTRL 1
 ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.NUM_CHANNELS 4
 ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.POLARITY_MASK 0
 
-
 ad_connect axi_hmcad15xx_a2_adc/s_axi_aclk    sys_cpu_clk
 ad_connect axi_hmcad15xx_a2_adc/clk_in_p      clk_in_a2_p
 ad_connect axi_hmcad15xx_a2_adc/clk_in_n      clk_in_a2_n
@@ -178,19 +192,34 @@ ad_connect axi_hmcad15xx_a2_adc/adc_data  hmcad15xx_a2_dma/fifo_wr_din
 ad_connect axi_hmcad15xx_a2_adc/adc_valid hmcad15xx_a2_dma/fifo_wr_en
 ad_connect axi_hmcad15xx_a2_adc/adc_dovf  hmcad15xx_a2_dma/fifo_wr_overflow
 
-ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 150.0
-ad_ip_parameter sys_ps7 CONFIG.PCW_EN_RST2_PORT 1
+# AXI TDD for DMA to synchronize the two DMAs of each ADC
 
-ad_ip_instance proc_sys_reset sys_150m_rstgen
-ad_ip_parameter sys_150m_rstgen CONFIG.C_EXT_RST_WIDTH 1
-ad_connect  sys_ps7/FCLK_CLK2 sys_150m_rstgen/slowest_sync_clk
-ad_connect  sys_150m_rstgen/ext_reset_in sys_ps7/FCLK_RESET2_N
+set TDD_CHANNEL_COUNT 2
+# not sure about the initial value of the polarity, which is used at the startup
+set TDD_DEFAULT_POLARITY 0x0000
+set TDD_REGISTER_WIDTH 32
+set TDD_BURST_COUNT_WIDTH 32
+set TDD_SYNC_INTERNAL 1
+set TDD_SYNC_EXTERNAL 0
+set TDD_SYNC_EXTERNAL_CDC 0
+set TDD_SYNC_COUNT_WIDTH 0
+ad_tdd_gen_create axi_tdd_sync  $TDD_CHANNEL_COUNT \
+                                $TDD_DEFAULT_POLARITY \
+                                $TDD_REGISTER_WIDTH \
+                                $TDD_BURST_COUNT_WIDTH \
+                                $TDD_SYNC_INTERNAL \
+                                $TDD_SYNC_EXTERNAL \
+                                $TDD_SYNC_EXTERNAL_CDC \
+                                $TDD_SYNC_COUNT_WIDTH
 
-#DMA
+ad_connect axi_tdd_sync/clk axi_hmcad15xx_a1_adc/adc_clk
+ad_connect axi_tdd_sync/resetn sys_ps7/FCLK_RESET2_N
+ad_connect axi_tdd_sync/s_axi_aclk sys_cpu_clk
+ad_connect axi_tdd_sync/s_axi_aresetn sys_150m_rstgen/peripheral_aresetn
+ad_connect axi_tdd_sync/sync_in GND
 
-ad_connect  hmcad15xx_a1_dma/m_dest_axi_aresetn     sys_150m_rstgen/peripheral_aresetn
-ad_connect  hmcad15xx_a2_dma/m_dest_axi_aresetn     sys_150m_rstgen/peripheral_aresetn
+ad_connect axi_tdd_sync/tdd_channel_0 hmcad15xx_a1_dma/sync
+ad_connect axi_tdd_sync/tdd_channel_1 hmcad15xx_a2_dma/sync
 
 # system reset/clock definitions
 
@@ -244,25 +273,17 @@ ad_connect  sys_concat_intc/In0 GND
 
 # iic
 
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_main
-
 ad_ip_instance axi_iic axi_iic_main
-
 ad_connect  iic_main axi_iic_main/iic
-ad_cpu_interconnect 0x41600000 axi_iic_main
-ad_cpu_interrupt ps-15 mb-15 axi_iic_main/iic2intc_irpt
-
-# connections - working here new
-
 
 # cpu / memory interconnects
 
+ad_cpu_interconnect 0x41600000 axi_iic_main
 ad_cpu_interconnect 0x44A00000 axi_hmcad15xx_a1_adc
 ad_cpu_interconnect 0x44A30000 hmcad15xx_a1_dma
 ad_cpu_interconnect 0x44A60000 axi_hmcad15xx_a2_adc
 ad_cpu_interconnect 0x44A90000 hmcad15xx_a2_dma
-
-# + doua adrese pentru celaltat hmc
+ad_cpu_interconnect 0x44AC0000 axi_tdd_sync
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 {1}
@@ -286,8 +307,8 @@ create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
 ad_connect sys_ps7/FCLK_CLK2 hmcad15xx_a1_dma/m_dest_axi_aclk
 ad_connect sys_ps7/FCLK_CLK2 hmcad15xx_a2_dma/m_dest_axi_aclk
 
-
 # interrupts
 
 ad_cpu_interrupt ps-12 mb-12 hmcad15xx_a1_dma/irq
-ad_cpu_interrupt ps-13 mb-12 hmcad15xx_a2_dma/irq
+ad_cpu_interrupt ps-13 mb-13 hmcad15xx_a2_dma/irq
+ad_cpu_interrupt ps-15 mb-15 axi_iic_main/iic2intc_irpt
