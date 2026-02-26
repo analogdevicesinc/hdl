@@ -7,6 +7,7 @@
 LIBRARY_NAME := util_upack2
 
 GENERIC_DEPS += ../../common/ad_perfect_shuffle.v
+GENERIC_DEPS += ../../common/util_pipeline_stage.v
 GENERIC_DEPS += ../util_pack_common/pack_ctrl.v
 GENERIC_DEPS += ../util_pack_common/pack_interconnect.v
 GENERIC_DEPS += ../util_pack_common/pack_network.v
