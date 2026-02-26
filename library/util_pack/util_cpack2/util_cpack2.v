@@ -40,7 +40,8 @@ module util_cpack2 #(
   parameter SAMPLES_PER_CHANNEL = 1,
   parameter SAMPLE_DATA_WIDTH = 16,
   parameter INTERFACE_TYPE = 1,
-  parameter PARALLEL_OR_SERIAL_N = 0
+  parameter PARALLEL_OR_SERIAL_N = 0,
+  parameter PIPELINE_STAGES = 0
 ) (
   input clk,
   input reset,
@@ -292,7 +293,8 @@ module util_cpack2 #(
     .SAMPLE_DATA_WIDTH (SAMPLE_DATA_WIDTH),
     .SAMPLES_PER_CHANNEL (SAMPLES_PER_CHANNEL),
     .INTERFACE_TYPE (INTERFACE_TYPE),
-    .PARALLEL_OR_SERIAL_N (PARALLEL_OR_SERIAL_N)
+    .PARALLEL_OR_SERIAL_N (PARALLEL_OR_SERIAL_N),
+    .PIPELINE_STAGES (PIPELINE_STAGES)
   ) i_cpack (
     .clk (clk),
     .reset (reset),
