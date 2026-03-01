@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -8,8 +8,8 @@ source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project ad_gmsl2eth_sl_k26
-adi_project_files ad_gmsl2eth_sl_k26 [list \
+adi_project adrd8012_01z_k26
+adi_project_files adrd8012_01z_k26 [list \
   "system_top.v" \
   "system_constr.xdc" \
   "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl" \
@@ -25,4 +25,4 @@ adi_project_files ad_gmsl2eth_sl_k26 [list \
   "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" ]
 
-adi_project_run ad_gmsl2eth_sl_k26
+adi_project_run adrd8012_01z_k26

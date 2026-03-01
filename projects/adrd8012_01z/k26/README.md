@@ -1,6 +1,6 @@
 <!-- no_build_example, no_dts, no_no_os -->
 
-# AD-GMSL2ETH-SL/K26 HDL Project
+# ADRD8012-01Z/K26 HDL Project
 
 The +VCC_SOM voltage is 5V and the SOM connectors voltages can be found in the table below:
 
