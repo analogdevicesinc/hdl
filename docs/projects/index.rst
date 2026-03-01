@@ -18,7 +18,7 @@ Contents
 .. toctree::
    :maxdepth: 1
 
-   AD-GMSL2ETH-SL <ad_gmsl2eth_sl/index>
+   ADRD8012-01Z <adrd8012_01z/index>
    AD-QUADMXFE1-EBZ <ad_quadmxfe1_ebz/index>
    AD353XR <ad353xr/index>
    AD35XXR-EVB <ad35xxr_evb/index>
