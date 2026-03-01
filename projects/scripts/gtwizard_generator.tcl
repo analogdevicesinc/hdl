@@ -164,7 +164,7 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
       set ref_clk "clk1"
       set ref_clk_source [list X0Y16 $ref_clk X0Y17 $ref_clk X0Y18 $ref_clk X0Y19 $ref_clk]
     }
-    "xcau10p"{
+    "xcau10p" {
       set gt_type GTHE4
       set channel_enable [list X0Y15 X0Y14 X0Y13 X0Y12]
       set ref_clk "clk1"
