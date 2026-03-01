@@ -130,7 +130,6 @@ Software Support
 
 Analog Devices recommends to use the provided software drivers.
 
-* Linux driver at :git-linux:`drivers/net/mii.c`
 * :dokuwiki:`Analog Devices ADIN1300/ADIN1200 PHY Linux Driver <resources/tools-software/linux-drivers/net-phy/adin>`
 
 References
