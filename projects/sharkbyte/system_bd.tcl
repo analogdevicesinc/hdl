@@ -121,7 +121,7 @@ ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.CYCLIC 0
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter axi_mxfe_tx_dma CONFIG.AXIS_TUSER_SYNC 0
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXIS_TUSER_SYNC 0
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_2D_TRANSFER 0
@@ -139,7 +139,7 @@ ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.CYCLIC 0
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter axi_mxfe_tx_dma CONFIG.AXIS_TUSER_SYNC 0
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXIS_TUSER_SYNC 0
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_2D_TRANSFER 0
