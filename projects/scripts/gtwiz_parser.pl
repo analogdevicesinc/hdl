@@ -242,12 +242,12 @@ sub xcvr_diff {
   $file_name =~ s/^.*\///;
   $file_name =~ s/\.v$//;
 
-  my $check_git = `git status`;
-  if ($check_git =~ m/On branch/i) {
+  my $git_exit_code = system("git rev-parse --is-inside-work-tree >/dev/null 2>&1");
+  if ($git_exit_code == 0) {
     system "git diff $pfile > $file_name.diff";
     system "git checkout -- $pfile";
   } else {
-    print "WARNING: ADI's util_xcvr's can not be updated, because the current direcotry is NOT an HDL repository!\n";
+    print "WARNING: ADI's util_xcvr's can not be updated, because the current directory is NOT an HDL repository!\n";
   }
 
 }
