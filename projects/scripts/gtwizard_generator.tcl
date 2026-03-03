@@ -164,6 +164,12 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
       set ref_clk "clk1"
       set ref_clk_source [list X0Y16 $ref_clk X0Y17 $ref_clk X0Y18 $ref_clk X0Y19 $ref_clk]
     }
+    "xcau10p" {
+      set gt_type GTHE4
+      set channel_enable [list X0Y3 X0Y2 X0Y1 X0Y0]
+      set ref_clk "clk1"
+      set ref_clk_source [list X0Y3 $ref_clk X0Y2 $ref_clk X0Y1 $ref_clk X0Y0 $ref_clk]
+    }
     "xcvu095" {
       set gt_type GTYE3
       set channel_enable [list X0Y16 X0Y17 X0Y18 X0Y19]
@@ -464,6 +470,9 @@ proc get_diff_params { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} {keep_ip "
     }
     "xcku040" {
       set gt_type GTHE3
+    }
+    "xcau10p" {
+      set gt_type GTHE4
     }
     "xcvu095" {
       set gt_type GTYE3
