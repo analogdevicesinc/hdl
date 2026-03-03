@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -83,15 +83,26 @@ module system_top (
 
   input           otg_vbusoc,
 
-  output          admx100x_sync_mode,
-  output          admx100x_en,
-  output          admx100x_cal,
-  output          admx100x_trig,
-  output          admx100x_dac_ldac,
-  output          admx100x_reset,
-  input           admx100x_ready,
-  input           admx100x_valid,
-  input           admx100x_ot,
+  input          admx100x_sync_mode,
+  output         admx100x_en,
+  input          admx100x_cal,
+  input          admx100x_trig,
+  output         admx100x_dac_ldac,
+  output         admx100x_reset,
+  output         admx100x_ready,
+  output         admx100x_valid,
+  output         admx100x_ot,
+
+  //ADAQ7768-1
+
+  output          acq_synq_in_fmc,
+  output          acq_sclk,
+  input           acq_drdy,
+  output          acq_mclk,
+  output          acq_mosi,
+  output          acq_reset,
+  input           acq_miso,
+  output          acq_cs,
 
   input           admx100x_spi_miso,
   output          admx100x_spi_mosi,
@@ -114,16 +125,19 @@ module system_top (
 
   // gpio assign
 
-  assign gpio_i[32] = admx100x_ot;
+  assign admx100x_ot = gpio_o[32];
   assign admx100x_reset = gpio_o[33];
-  assign admx100x_sync_mode = gpio_o[34];
+  assign gpio_i[34] = admx100x_sync_mode;
   assign admx100x_en = gpio_o[35];
-  assign gpio_i[36] = admx100x_ready;
-  assign gpio_i[37] = admx100x_valid;
-  assign admx100x_cal = gpio_o[38];
+  assign admx100x_ready = gpio_o[36];
+  assign admx100x_valid = gpio_o[37];
+  assign gpio_i[38] = admx100x_cal;
   assign admx100x_dac_ldac = gpio_o[39];
-  assign admx100x_trig = gpio_o[40];
-  assign gpio_i[63:41] = gpio_o[63:41];
+  assign gpio_i[40] = admx100x_trig;
+  assign acq_synq_in_fmc = gpio_o[41];
+  assign acq_reset = gpio_o[42];
+  assign gpio_i[43] = acq_drdy;
+  assign gpio_i[63:44] = gpio_o[63:44];
 
   // instantiations
 
@@ -220,6 +234,13 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o ());
+    .spi1_sdo_o (),
+    .adc_spi_sdo (acq_mosi),
+    .adc_spi_sdo_t (),
+    .adc_spi_sdi (acq_miso),
+    .adc_spi_cs (acq_cs),
+    .adc_spi_sclk (acq_sclk),
+    .adc_data_ready (acq_drdy),
+    .mclk_clk(acq_mclk));
 
 endmodule
