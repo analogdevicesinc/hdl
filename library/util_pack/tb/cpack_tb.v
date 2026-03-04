@@ -40,8 +40,9 @@ module cpack_tb;
   parameter NUM_OF_CHANNELS = 4;
   parameter SAMPLES_PER_CHANNEL = 1;
   parameter ENABLE_RANDOM = 0;
+  parameter PIPELINE_STAGES = 0;
 
-  `define TIMEOUT 1500000
+  `define TIMEOUT 3000000
   `include "tb_base.v"
 
   localparam NUM_OF_PORTS = SAMPLES_PER_CHANNEL * NUM_OF_CHANNELS;
@@ -160,7 +161,8 @@ module cpack_tb;
   util_cpack2_impl #(
     .NUM_OF_CHANNELS(NUM_OF_CHANNELS),
     .SAMPLES_PER_CHANNEL(SAMPLES_PER_CHANNEL),
-    .SAMPLE_DATA_WIDTH(8)
+    .SAMPLE_DATA_WIDTH(8),
+    .PIPELINE_STAGES(PIPELINE_STAGES)
   ) i_cpack (
     .clk(clk),
     .reset(reset),
