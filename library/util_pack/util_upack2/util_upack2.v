@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023, 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -189,12 +189,13 @@ module util_upack2 #(
    * Round up to the next power of two and zero out the additional channels
    * internally.
    */
-  localparam REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 32 ? 64 :
-     NUM_OF_CHANNELS > 16 ? 32 :
-     NUM_OF_CHANNELS > 8 ? 16 :
-     NUM_OF_CHANNELS > 4 ? 8 :
-     NUM_OF_CHANNELS > 2 ? 4 :
-     NUM_OF_CHANNELS > 1 ? 2 : 1;
+  localparam
+    REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 32 ? 64 :
+    NUM_OF_CHANNELS > 16 ? 32 :
+    NUM_OF_CHANNELS > 8 ? 16 :
+    NUM_OF_CHANNELS > 4 ? 8 :
+    NUM_OF_CHANNELS > 2 ? 4 :
+    NUM_OF_CHANNELS > 1 ? 2 : 1;
 
   /* FIXME: Find out how to do this in the IP-XACT */
 

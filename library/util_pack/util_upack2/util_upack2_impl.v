@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023, 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -59,8 +59,8 @@ module util_upack2_impl #(
 
   localparam NUM_OF_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
 
-  localparam SAMPLE_ADDRESS_WIDTH =
-    NUM_OF_SAMPLES > 512 ? 10 :
+  localparam
+    SAMPLE_ADDRESS_WIDTH = NUM_OF_SAMPLES > 512 ? 10 :
     NUM_OF_SAMPLES > 256 ? 9 :
     NUM_OF_SAMPLES > 128 ? 8 :
     NUM_OF_SAMPLES > 64 ? 7 :
@@ -89,10 +89,11 @@ module util_upack2_impl #(
     end
   endfunction
 
-  localparam TOTAL_PIPELINE_LATENCY = (NUM_OF_CHANNELS == 1) ? 0 :
-                                       calc_pipeline_latency(NETWORK0_STAGES) +
-                                       calc_pipeline_latency(NETWORK1_STAGES) +
-                                       calc_pipeline_latency(EXT_NETWORK_STAGES);
+  localparam
+    TOTAL_PIPELINE_LATENCY = (NUM_OF_CHANNELS == 1) ? 0 :
+    calc_pipeline_latency(NETWORK0_STAGES) +
+    calc_pipeline_latency(NETWORK1_STAGES) +
+    calc_pipeline_latency(EXT_NETWORK_STAGES);
 
   /*
    * Final output data of the routing network that will be written to
@@ -142,8 +143,7 @@ module util_upack2_impl #(
   ) i_data_rd_en_pipe (
     .clk(clk),
     .in(data_rd_en),
-    .out(data_rd_en_delayed)
-  );
+    .out(data_rd_en_delayed));
 
   util_pipeline_stage #(
     .REGISTERED(TOTAL_PIPELINE_LATENCY),
@@ -151,8 +151,7 @@ module util_upack2_impl #(
   ) i_s_axis_valid_pipe (
     .clk(clk),
     .in(s_axis_valid),
-    .out(s_axis_valid_delayed)
-  );
+    .out(s_axis_valid_delayed));
 
   util_pipeline_stage #(
     .REGISTERED(TOTAL_PIPELINE_LATENCY),
@@ -160,8 +159,7 @@ module util_upack2_impl #(
   ) i_reset_data_pipe (
     .clk(clk),
     .in(reset_data),
-    .out(reset_data_delayed)
-  );
+    .out(reset_data_delayed));
 
   pack_shell #(
     .NUM_OF_CHANNELS (NUM_OF_CHANNELS),
