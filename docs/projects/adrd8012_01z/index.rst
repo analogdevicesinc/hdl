@@ -1,12 +1,12 @@
-.. _ad_gmsl2eth_sl:
+.. _adrd8012_01z:
 
-AD-GMSL2ETH-SL HDL project
+ADRD8012-01Z HDL project
 ===============================================================================
 
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`AD-GMSL2ETH-SL` is an edge compute platform enabling low-latency
+The :adi:`ADRD8012-01Z` is an edge compute platform enabling low-latency
 data transfer from eight Gigabit Multimedia Serial Link™ (GMSL) interfaces
 on to a 10 Gb Ethernet link. The target applications include autonomous robots
 and vehicles where machine vision and real-time sensor fusion is critical.
@@ -27,7 +27,7 @@ and the PTP logic.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`AD-GMSL2ETH-SL`
+- :adi:`ADRD8012-01Z`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -60,10 +60,10 @@ The data path designed in this reference design is as follows:
 
 The data path and elements of the video network, 10G NIC, are depicted in the below diagram:
 
-.. image:: ad_gmsl2eth_hdl.svg
+.. image:: adrd8012_01z_hdl.svg
    :width: 1200
    :align: center
-   :alt: AD-GMSL2ETH-SL Evaluation Kit HDL-related block design
+   :alt: ADRD8012-01Z Evaluation Kit HDL-related block design
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -238,7 +238,7 @@ apply the indicated patch.
    $cd corundum
    $git checkout 37f2607
    $git apply ../hdl/library/corundum/patch_axis_xgmii_rx_64.patch
-   $cd ../hdl/projects/ad_gmsl2eth_sl/k26
+   $cd ../hdl/projects/adrd8012_01z/k26
    $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -263,7 +263,7 @@ Hardware related
 
 - Product datasheets:
 
-  - :adi:`AD-GMSL2ETH-SL`
+  - :adi:`ADRD8012-01Z`
   - :adi:`MAX96724 <media/en/technical-documentation/data-sheets/max96724.pdf>`
   - :adi:`MAX17573 <media/en/technical-documentation/data-sheets/max17573.pdf>`
   - :adi:`ADM7154 <media/en/technical-documentation/data-sheets/adm7154.pdf>`
@@ -275,7 +275,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD-GMSL2ETH-SL HDL project source code <projects/ad_gmsl2eth_sl>`
+- :git-hdl:`ADRD8012-01Z HDL project source code <projects/adrd8012_01z>`
 
 .. list-table::
    :widths: 30 35 35
