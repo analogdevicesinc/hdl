@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -41,9 +41,11 @@ module pack_interconnect #(
   parameter MUX_ORDER = 2,
   parameter NUM_STAGES = 2,
   parameter PACK = 0, // 0 = Unpack, 1 = Pack
-  parameter PIPELINE_STAGES = 0 // 0 = no pipeline, 1 = pipeline every 2 stages, 2 = pipeline every stage
+  parameter PIPELINE_STAGES = 0, // 0 = no pipeline, 1 = pipeline every 2 stages, 2 = pipeline every stage
+  parameter PIPELINE_OFFSET = 0  // Cumulative pipeline delay from previous networks
 ) (
   input clk,
+  (* max_fanout = 100 *) input ce,  // Clock enable for data pipeline registers
   input [2**PORT_ADDRESS_WIDTH*MUX_ORDER*NUM_STAGES-1:0] ctrl,
 
   input [PORT_DATA_WIDTH * 2**PORT_ADDRESS_WIDTH-1:0] data_in,
@@ -100,14 +102,20 @@ module pack_interconnect #(
       localparam SHOULD_REGISTER = (PIPELINE_STAGES == 2 && p > 0) ||
                                    (PIPELINE_STAGES == 1 && p > 0 && p % 2 == 0);
 
-      util_pipeline_stage #(
-        .REGISTERED(SHOULD_REGISTER ? 1 : 0),
-        .WIDTH(TOTAL_DATA_WIDTH)
-      ) i_stage_pipe (
-        .clk(clk),
-        .in(interconnect_comb[p]),
-        .out(interconnect[p])
-      );
+      if (SHOULD_REGISTER == 0) begin
+        // No pipeline register, pass through
+        assign interconnect[p] = interconnect_comb[p];
+      end else begin
+        // Pipeline register advances only when ce is asserted
+        // This ensures data pipeline timing matches ce-gated control signals
+        (* shreg_extract = "no" *) reg [TOTAL_DATA_WIDTH-1:0] data_pipe = {TOTAL_DATA_WIDTH{1'b0}};
+        always @(posedge clk) begin
+          if (ce == 1'b1) begin
+            data_pipe <= interconnect_comb[p];
+          end
+        end
+        assign interconnect[p] = data_pipe;
+      end
     end
   endgenerate
 
@@ -124,7 +132,8 @@ module pack_interconnect #(
       localparam ctrl_stage = PACK ? NUM_STAGES - i - 1 : i;
 
       // Calculate cumulative delay for this stage control signals
-      localparam CTRL_DELAY = calc_ctrl_delay(i);
+      // Include PIPELINE_OFFSET from previous networks
+      localparam CTRL_DELAY = calc_ctrl_delay(i) + PIPELINE_OFFSET;
 
       wire [TOTAL_DATA_WIDTH-1:0] shuffle_in;
       wire [TOTAL_DATA_WIDTH-1:0] shuffle_out;
@@ -137,15 +146,26 @@ module pack_interconnect #(
       // Extract control bits for this stage
       assign ctrl_stage_in = ctrl[ctrl_stage*CTRL_WIDTH_PER_STAGE +: CTRL_WIDTH_PER_STAGE];
 
-      // Delay control signals to match data pipeline latency
-      util_pipeline_stage #(
-        .REGISTERED(CTRL_DELAY),
-        .WIDTH(CTRL_WIDTH_PER_STAGE)
-      ) i_ctrl_pipe (
-        .clk(clk),
-        .in(ctrl_stage_in),
-        .out(ctrl_stage_delayed)
-      );
+      // Delay control signals to match ce-gated data pipeline latency
+      // Control signals must also be ce-gated to maintain timing alignment
+      if (CTRL_DELAY == 0) begin: gen_ctrl_comb
+        assign ctrl_stage_delayed = ctrl_stage_in;
+      end else begin: gen_ctrl_pipe
+        (* shreg_extract = "no" *) reg [CTRL_WIDTH_PER_STAGE-1:0] ctrl_sr [0:CTRL_DELAY-1];
+        integer ci, cj;
+        initial begin
+          for (ci = 0; ci < CTRL_DELAY; ci = ci + 1)
+            ctrl_sr[ci] = {CTRL_WIDTH_PER_STAGE{1'b0}};
+        end
+        always @(posedge clk) begin
+          if (ce == 1'b1) begin
+            ctrl_sr[0] <= ctrl_stage_in;
+            for (cj = 1; cj < CTRL_DELAY; cj = cj + 1)
+              ctrl_sr[cj] <= ctrl_sr[cj-1];
+          end
+        end
+        assign ctrl_stage_delayed = ctrl_sr[CTRL_DELAY-1];
+      end
 
       // Unpack uses forward shuffle and pack a reverse shuffle
       ad_perfect_shuffle #(
