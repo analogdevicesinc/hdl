@@ -67,8 +67,8 @@ module util_cpack2_impl #(
   localparam TOTAL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL * NUM_OF_CHANNELS;
   localparam NUM_OF_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
 
-  localparam SAMPLE_ADDRESS_WIDTH =
-    NUM_OF_SAMPLES > 512 ? 10 :
+  localparam
+    SAMPLE_ADDRESS_WIDTH = NUM_OF_SAMPLES > 512 ? 10 :
     NUM_OF_SAMPLES > 256 ? 9 :
     NUM_OF_SAMPLES > 128 ? 8 :
     NUM_OF_SAMPLES > 64 ? 7 :
@@ -94,9 +94,10 @@ module util_cpack2_impl #(
     end
   endfunction
 
-  localparam TOTAL_PIPELINE_LATENCY = (NUM_OF_CHANNELS == 1) ? 0 :
-                                       calc_pipeline_latency(NETWORK0_STAGES) +
-                                       calc_pipeline_latency(NETWORK1_STAGES);
+  localparam
+    TOTAL_PIPELINE_LATENCY = (NUM_OF_CHANNELS == 1) ? 0 :
+    calc_pipeline_latency(NETWORK0_STAGES) +
+    calc_pipeline_latency(NETWORK1_STAGES);
 
   //Internal write signal.
   wire data_wr_en;
@@ -146,14 +147,27 @@ module util_cpack2_impl #(
 
   wire data_wr_en_delayed;
 
-  util_pipeline_stage #(
-    .REGISTERED(TOTAL_PIPELINE_LATENCY),
-    .WIDTH(1)
-  ) i_data_wr_en_pipe (
-    .clk(clk),
-    .in(data_wr_en),
-    .out(data_wr_en_delayed)
-  );
+  /*
+   * Ce-gated delay for data_wr_en to match the ce-gated data pipeline.
+   * When PIPELINE_STAGES > 0, the data pipeline is ce-gated, so this
+   * delay must also be ce-gated.
+   */
+  generate
+    if (TOTAL_PIPELINE_LATENCY == 0) begin: gen_wr_en_comb
+      assign data_wr_en_delayed = data_wr_en;
+    end else begin: gen_wr_en_pipe
+      (* shreg_extract = "no" *) reg [TOTAL_PIPELINE_LATENCY:0] wr_en_sr = 'h0;
+      integer wei;
+      always @(posedge clk) begin
+        if (data_wr_en == 1'b1) begin
+          wr_en_sr[0] <= data_wr_en;
+          for (wei = 1; wei <= TOTAL_PIPELINE_LATENCY; wei = wei + 1)
+            wr_en_sr[wei] <= wr_en_sr[wei-1];
+        end
+      end
+      assign data_wr_en_delayed = wr_en_sr[TOTAL_PIPELINE_LATENCY];
+    end
+  endgenerate
 
   /*
    * The cpack core itself has no backpressure. Overflows can only happen
@@ -212,7 +226,7 @@ module util_cpack2_impl #(
   always @(posedge clk) begin: gen_packed_fifo_wr_data
     integer i;
 
-    if (data_wr_en_delayed == 1'b1) begin
+    if (data_wr_en == 1'b1) begin
       for (i = 0; i < NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL; i = i + 1) begin
         if (out_valid[i] == 1'b1) begin
           out_data_int[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= out_data[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH];

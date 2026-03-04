@@ -196,12 +196,13 @@ module util_cpack2 #(
    * Round up to the next power of two and zero out the additional channels
    * internally.
    */
-  localparam REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 32 ? 64 :
-     NUM_OF_CHANNELS > 16 ? 32 :
-     NUM_OF_CHANNELS > 8 ? 16 :
-     NUM_OF_CHANNELS > 4 ? 8 :
-     NUM_OF_CHANNELS > 2 ? 4 :
-     NUM_OF_CHANNELS > 1 ? 2 : 1;
+  localparam
+    REAL_NUM_OF_CHANNELS = NUM_OF_CHANNELS > 32 ? 64 :
+    NUM_OF_CHANNELS > 16 ? 32 :
+    NUM_OF_CHANNELS > 8 ? 16 :
+    NUM_OF_CHANNELS > 4 ? 8 :
+    NUM_OF_CHANNELS > 2 ? 4 :
+    NUM_OF_CHANNELS > 1 ? 2 : 1;
 
   /* FIXME: Find out how to do this in the IP-XACT */
 
