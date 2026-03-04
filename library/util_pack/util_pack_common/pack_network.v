@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -42,10 +42,12 @@ module pack_network #(
   parameter NUM_STAGES = 1,
   parameter PACK = 0,
   parameter PORT_DATA_WIDTH = 16,
-  parameter PIPELINE_STAGES = 0
+  parameter PIPELINE_STAGES = 0,
+  parameter PIPELINE_OFFSET = 0
 ) (
   input clk,
   input ce_ctrl,
+  input ce,
 
   input [PORT_ADDRESS_WIDTH-1:0] rotate,
   input [2**PORT_ADDRESS_WIDTH*PORT_ADDRESS_WIDTH-1:0] prefix_count,
@@ -99,9 +101,11 @@ module pack_network #(
     .MUX_ORDER (MUX_ORDER),
     .NUM_STAGES (NUM_STAGES),
     .PACK (PACK),
-    .PIPELINE_STAGES (PIPELINE_STAGES)
+    .PIPELINE_STAGES (PIPELINE_STAGES),
+    .PIPELINE_OFFSET (PIPELINE_OFFSET)
   ) i_interconnect (
     .clk(clk),
+    .ce(ce),
     .ctrl(ctrl_),
 
     .data_in(data_in),

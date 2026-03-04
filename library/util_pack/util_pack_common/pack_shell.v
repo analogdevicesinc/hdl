@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023, 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -149,8 +149,8 @@ module pack_shell #(
       assign out_valid = {NUM_OF_SAMPLES{1'b1}};
       assign ready = ce & ~reset_data;
     end else begin
-      localparam SAMPLE_ADDRESS_WIDTH =
-        NUM_OF_SAMPLES > 512 ? 10 :
+      localparam
+        SAMPLE_ADDRESS_WIDTH = NUM_OF_SAMPLES > 512 ? 10 :
         NUM_OF_SAMPLES > 256 ? 9 :
         NUM_OF_SAMPLES > 128 ? 8 :
         NUM_OF_SAMPLES > 64 ? 7 :
@@ -170,54 +170,90 @@ module pack_shell #(
        *   gen_network[0]: (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2 stages
        *   gen_network[1]: (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2 stages
        */
-      localparam NETWORK0_STAGES = PACK ? (SAMPLE_ADDRESS_WIDTH / 2) :
-                                          ((SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2);
-      localparam NETWORK1_STAGES = PACK ? (SAMPLE_ADDRESS_WIDTH % 2) :
-                                          ((SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2);
+      localparam
+        NETWORK0_STAGES = PACK ? (SAMPLE_ADDRESS_WIDTH / 2) :
+        ((SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2);
+      localparam
+        NETWORK1_STAGES = PACK ? (SAMPLE_ADDRESS_WIDTH % 2) :
+        ((SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2);
       localparam EXT_NETWORK_STAGES = (NON_POWER_OF_TWO == 1 && PACK == 0) ? 1 : 0;
 
-      localparam TOTAL_PIPELINE_LATENCY = calc_pipeline_latency(NETWORK0_STAGES) +
-                                          calc_pipeline_latency(NETWORK1_STAGES) +
-                                          calc_pipeline_latency(EXT_NETWORK_STAGES);
+      localparam
+        TOTAL_PIPELINE_LATENCY = calc_pipeline_latency(NETWORK0_STAGES) +
+        calc_pipeline_latency(NETWORK1_STAGES) +
+        calc_pipeline_latency(EXT_NETWORK_STAGES);
 
       /*
        * Internal versions of control signals before pipeline delay.
-       * These are delayed by TOTAL_PIPELINE_LATENCY cycles to match the
-       * data path latency through the pack/unpack network.
+       * These are delayed by TOTAL_PIPELINE_LATENCY clock enable cycles to match the
+       * ce-gated data path latency through the pack/unpack network.
+       *
+       * When PIPELINE_STAGES > 0, the data pipeline is ce-gated and control
+       * signal delays must also be ce-gated to maintain alignment.
        */
       reg ready_int = 1'b0;
       wire out_sync_int;
       wire [NUM_OF_SAMPLES-1:0] out_valid_int;
 
-      // Pipeline delay for ready signal
-      util_pipeline_stage #(
-        .REGISTERED(TOTAL_PIPELINE_LATENCY),
-        .WIDTH(1)
-      ) i_ready_pipe (
-        .clk(clk),
-        .in(ready_int),
-        .out(ready)
-      );
+      // Ce-gated pipeline delay for ready signal
+      // TOTAL_PIPELINE_LATENCY stages of ce-gated delay to match data pipeline
+      if (TOTAL_PIPELINE_LATENCY == 0) begin: gen_ready_comb
+        assign ready = ready_int;
+      end else begin: gen_ready_pipe
+        (* shreg_extract = "no" *) reg [TOTAL_PIPELINE_LATENCY-1:0] ready_sr = 'h0;
+        integer ri;
+        always @(posedge clk) begin
+          if (reset_ctrl == 1'b1) begin
+            ready_sr <= 'h0;
+          end else if (ce == 1'b1) begin
+            ready_sr[0] <= ready_int;
+            for (ri = 1; ri < TOTAL_PIPELINE_LATENCY; ri = ri + 1)
+              ready_sr[ri] <= ready_sr[ri-1];
+          end
+        end
+        assign ready = ready_sr[TOTAL_PIPELINE_LATENCY-1];
+      end
 
-      // Pipeline delay for out_sync signal
-      util_pipeline_stage #(
-        .REGISTERED(TOTAL_PIPELINE_LATENCY),
-        .WIDTH(1)
-      ) i_out_sync_pipe (
-        .clk(clk),
-        .in(out_sync_int),
-        .out(out_sync)
-      );
+      // Ce-gated pipeline delay for out_sync signal
+      if (TOTAL_PIPELINE_LATENCY == 0) begin: gen_sync_comb
+        assign out_sync = out_sync_int;
+      end else begin: gen_sync_pipe
+        (* shreg_extract = "no" *) reg [TOTAL_PIPELINE_LATENCY-1:0] sync_sr = 'h0;
+        integer si;
+        always @(posedge clk) begin
+          if (reset_ctrl == 1'b1) begin
+            sync_sr <= 'h0;
+          end else if (ce == 1'b1) begin
+            sync_sr[0] <= out_sync_int;
+            for (si = 1; si < TOTAL_PIPELINE_LATENCY; si = si + 1)
+              sync_sr[si] <= sync_sr[si-1];
+          end
+        end
+        assign out_sync = sync_sr[TOTAL_PIPELINE_LATENCY-1];
+      end
 
-      // Pipeline delay for out_valid signal
-      util_pipeline_stage #(
-        .REGISTERED(TOTAL_PIPELINE_LATENCY),
-        .WIDTH(NUM_OF_SAMPLES)
-      ) i_out_valid_pipe (
-        .clk(clk),
-        .in(out_valid_int),
-        .out(out_valid)
-      );
+      // Ce-gated pipeline delay for out_valid signal
+      if (TOTAL_PIPELINE_LATENCY == 0) begin: gen_valid_comb
+        assign out_valid = out_valid_int;
+      end else begin: gen_valid_pipe
+        (* shreg_extract = "no" *) reg [NUM_OF_SAMPLES-1:0] valid_sr [0:TOTAL_PIPELINE_LATENCY-1];
+        integer vi, vj;
+        initial begin
+          for (vi = 0; vi < TOTAL_PIPELINE_LATENCY; vi = vi + 1)
+            valid_sr[vi] = {NUM_OF_SAMPLES{1'b0}};
+        end
+        always @(posedge clk) begin
+          if (reset_ctrl == 1'b1) begin
+            for (vj = 0; vj < TOTAL_PIPELINE_LATENCY; vj = vj + 1)
+              valid_sr[vj] <= {NUM_OF_SAMPLES{1'b0}};
+          end else if (ce == 1'b1) begin
+            valid_sr[0] <= out_valid_int;
+            for (vj = 1; vj < TOTAL_PIPELINE_LATENCY; vj = vj + 1)
+              valid_sr[vj] <= valid_sr[vj-1];
+          end
+        end
+        assign out_valid = valid_sr[TOTAL_PIPELINE_LATENCY-1];
+      end
 
       /*
        * `rotate` is used as an offset into the input data vector. When not all
@@ -454,10 +490,12 @@ module pack_shell #(
           .MIN_STAGE (0),
           .NUM_STAGES (1),
           .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH),
-          .PIPELINE_STAGES (PIPELINE_STAGES)
+          .PIPELINE_STAGES (PIPELINE_STAGES),
+          .PIPELINE_OFFSET (0)
         ) i_ext_ctrl_interconnect (
           .clk (clk),
           .ce_ctrl (ce_ctrl),
+          .ce (ce),
 
           .rotate ({rotate_msb,rotate}),
           .prefix_count (ext_prefix_count),
@@ -518,11 +556,22 @@ module pack_shell #(
        */
       for (i = 0; i < 2; i = i + 1) begin: gen_network
         localparam MUX_ORDER = i == 0 ? 2 : 1;
-        localparam MIN_STAGE = PACK ? (i == 0 ? SAMPLE_ADDRESS_WIDTH % 2 : 0) :
-                                      (i == 0 ? NON_POWER_OF_TWO : SAMPLE_ADDRESS_WIDTH - 1);
-        localparam NUM_STAGES = PACK ? (i == 0 ? SAMPLE_ADDRESS_WIDTH / 2 : SAMPLE_ADDRESS_WIDTH % 2) :
-                                       (i == 0 ? (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2 :
-                                                 (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2);
+        localparam
+          MIN_STAGE = PACK ? (i == 0 ? SAMPLE_ADDRESS_WIDTH % 2 : 0) :
+          (i == 0 ? NON_POWER_OF_TWO : SAMPLE_ADDRESS_WIDTH - 1);
+        localparam
+          NUM_STAGES = PACK ?
+          (i == 0 ? SAMPLE_ADDRESS_WIDTH / 2 : SAMPLE_ADDRESS_WIDTH % 2) :
+          (i == 0 ? (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2 :
+          (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2);
+        // Cumulative pipeline delay from previous networks
+        // gen_network[0]: includes ext network latency (if present)
+        // gen_network[1]: includes ext network + gen_network[0] latency
+        localparam
+          PIPELINE_OFFSET = (i == 0) ?
+          calc_pipeline_latency(EXT_NETWORK_STAGES) :
+          calc_pipeline_latency(EXT_NETWORK_STAGES) +
+          calc_pipeline_latency(NETWORK0_STAGES);
 
         if (NUM_STAGES > 0) begin
           pack_network #(
@@ -532,10 +581,12 @@ module pack_shell #(
             .MIN_STAGE (MIN_STAGE),
             .NUM_STAGES (NUM_STAGES),
             .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH),
-            .PIPELINE_STAGES (PIPELINE_STAGES)
+            .PIPELINE_STAGES (PIPELINE_STAGES),
+            .PIPELINE_OFFSET (PIPELINE_OFFSET)
           ) i_ctrl_interconnect (
             .clk (clk),
             .ce_ctrl (ce_ctrl),
+            .ce (ce),
 
             .rotate (rotate),
             .prefix_count (prefix_count),
@@ -561,9 +612,17 @@ module pack_shell #(
          */
         reg [NUM_OF_SAMPLES-2*SAMPLES_PER_CHANNEL-1:0] prev_valid = 'h00;
 
+        /*
+         * Compute which positions are being filled. The mask is extended to
+         * the full width (NUM_OF_SAMPLES + prev_valid width) before shifting
+         * so that overflow bits properly go into prev_valid.
+         */
+        localparam PREV_VALID_WIDTH = NUM_OF_SAMPLES - 2 * SAMPLES_PER_CHANNEL;
+        localparam MASK_WIDTH = NUM_OF_SAMPLES + PREV_VALID_WIDTH;
+
         always @(posedge clk) begin
           if (ce_ctrl == 1'b1) begin
-            {prev_valid,valid} <= (({NUM_OF_SAMPLES{1'b1}} >> ~enable_count) << rotate) | prev_valid;
+            {prev_valid,valid} <= ({{PREV_VALID_WIDTH{1'b0}}, {NUM_OF_SAMPLES{1'b1}} >> ~enable_count} << rotate) | {{PREV_VALID_WIDTH{1'b0}}, prev_valid};
           end
         end
 
@@ -580,10 +639,38 @@ module pack_shell #(
           reg [DELAYED_DATA_WIDTH-1:0] data_d1 = 'h00;
 
           /*
-           * `prev_valid` delayed by one clock cyle. This is to compensate for
-           * the control pipeline delay.
+           * prev_valid_d1 needs ce-gated delay to match data_d1 timing.
+           * With ce-gated data pipeline of TOTAL_PIPELINE_LATENCY stages:
+           *   prev_valid: is set when overflow occurs
+           *   data_d1: captures overflow data (TOTAL_PIPELINE_LATENCY + 1) ce-cycles later
+           *   prev_valid_d1: must match this timing
+           *
+           * Use shift register for PV_DELAY ce-cycles delay.
            */
-          reg [NUM_OF_SAMPLES-2*SAMPLES_PER_CHANNEL-1:0] prev_valid_d1 = 'h00;
+          localparam PV_WIDTH = NUM_OF_SAMPLES - 2*SAMPLES_PER_CHANNEL;
+          localparam PV_DELAY = TOTAL_PIPELINE_LATENCY + 1;
+
+          (* shreg_extract = "no" *) reg [PV_WIDTH-1:0] pv_sr [0:PV_DELAY-1];
+          wire [PV_WIDTH-1:0] prev_valid_d1;
+
+          integer pv_i;
+          initial begin
+            for (pv_i = 0; pv_i < PV_DELAY; pv_i = pv_i + 1)
+              pv_sr[pv_i] = {PV_WIDTH{1'b0}};
+          end
+
+          always @(posedge clk) begin
+            if (reset_ctrl == 1'b1) begin
+              for (pv_i = 0; pv_i < PV_DELAY; pv_i = pv_i + 1)
+                pv_sr[pv_i] <= {PV_WIDTH{1'b0}};
+            end else if (ce_ctrl == 1'b1) begin
+              pv_sr[0] <= prev_valid;
+              for (pv_i = 1; pv_i < PV_DELAY; pv_i = pv_i + 1)
+                pv_sr[pv_i] <= pv_sr[pv_i-1];
+            end
+          end
+
+          assign prev_valid_d1 = pv_sr[PV_DELAY-1];
 
           /*
            * synchronization signal that indicates whether the first enabled
@@ -601,12 +688,6 @@ module pack_shell #(
               end else begin
                 sync <= 1'b0;
               end
-            end
-          end
-
-          always @(posedge clk) begin
-            if (ce_ctrl == 1'b1) begin
-              prev_valid_d1 <= prev_valid;
             end
           end
 
