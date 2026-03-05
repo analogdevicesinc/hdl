@@ -84,9 +84,9 @@ ad_connect spi_clk $hier_spi_engine/spi_clk
 ad_connect $hier_spi_engine/m_spi ad469x_spi
 ad_connect axi_ad469x_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
 
-ad_ip_instance ilvector_logic cnv_gate
-ad_ip_parameter cnv_gate CONFIG.C_SIZE 1
-ad_ip_parameter cnv_gate CONFIG.C_OPERATION {and}
+#ad_ip_instance ilvector_logic cnv_gate
+#ad_ip_parameter cnv_gate CONFIG.C_SIZE 1
+#ad_ip_parameter cnv_gate CONFIG.C_OPERATION {and}
 
 ad_ip_instance ilvector_logic cnv_gate_busy
 ad_ip_parameter cnv_gate_busy CONFIG.C_SIZE 1
@@ -96,10 +96,11 @@ ad_ip_instance ilvector_logic cnv_gate_gpio
 ad_ip_parameter cnv_gate_gpio CONFIG.C_SIZE 1
 ad_ip_parameter cnv_gate_gpio CONFIG.C_OPERATION {or}
 
-ad_connect cnv_gate/Op1 axi_ad469x_dma/s_axis_xfer_req
-ad_connect cnv_gate/Op2 ad469x_trigger_gen/pwm_0
+#ad_connect cnv_gate/Op1 axi_ad469x_dma/s_axis_xfer_req
+#ad_connect cnv_gate/Op2 ad469x_trigger_gen/pwm_0
 
-ad_connect cnv_gate_busy/Op1 cnv_gate/Res
+#ad_connect cnv_gate_busy/Op1 cnv_gate/Res
+ad_connect cnv_gate_busy/Op1 ad469x_trigger_gen/pwm_0
 ad_connect cnv_gate_busy/Op2 ad469x_spi_busy
 
 ad_connect cnv_gate_gpio/Op1 cnv_gate_busy/Res
