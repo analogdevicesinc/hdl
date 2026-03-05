@@ -21,7 +21,7 @@ source ../../scripts/adi_project_intel.tcl
 #       0 - disabled (default)
 
 adi_project ad4062_ardz_de10nano [list \
-  OFFLOAD [get_env_param OFFLOAD 0]]
+  OFFLOAD [get_env_param 0]]
 
 source $ad_hdl_dir/projects/common/de10nano/de10nano_system_assign.tcl
 

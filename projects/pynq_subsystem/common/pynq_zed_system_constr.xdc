@@ -1,1 +1,0 @@
-set_property  -dict {PACKAGE_PIN  T22   IOSTANDARD LVCMOS33} [get_ports data_o] 

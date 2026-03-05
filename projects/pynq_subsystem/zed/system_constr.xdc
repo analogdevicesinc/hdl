@@ -10,9 +10,14 @@ set_property -dict {PACKAGE_PIN AA11 IOSTANDARD LVCMOS33}                 [get_p
 set_property -dict {PACKAGE_PIN Y10 IOSTANDARD LVCMOS33}                 [get_ports SPI_0_io0_o_mosi  ];#JA3 
 set_property -dict {PACKAGE_PIN AA9 IOSTANDARD LVCMOS33}                 [get_ports SPI_0_ss_o_cs_n ]; #JA4
 
+
 #iic
 set_property -dict {PACKAGE_PIN AB11 IOSTANDARD LVCMOS33 PULLTYPE PULLUP }                 [get_ports iic_scl_io  ];#JA7
 set_property -dict {PACKAGE_PIN AB10 IOSTANDARD LVCMOS33 PULLTYPE PULLUP}                 [get_ports iic_sda_io ]; #JA8
+
+#i3c
+set_property -dict {PACKAGE_PIN W12 IOSTANDARD LVCMOS33 PULLTYPE PULLUP }  [get_ports i3c_sda  ];#JB1
+set_property -dict {PACKAGE_PIN W11 IOSTANDARD LVCMOS33 PULLTYPE PULLUP }  [get_ports i3c_scl  ];#JB2
 
 #uart
 set_property -dict {PACKAGE_PIN AB9 IOSTANDARD LVCMOS33}                 [get_ports uart_rx  ];#JA9

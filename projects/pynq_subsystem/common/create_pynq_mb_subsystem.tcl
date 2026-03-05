@@ -371,7 +371,7 @@ ad_ip_instance util_reg  ${iop_name}_util_reg [list \
   # -----------------------
   # CPU Interconnect for PS access to BRAM
   # -----------------------
- ad_cpu_interconnect 0x42000000  ${iop_name}/mb_bram_ctrl
+ ad_cpu_interconnect 0x79020000  ${iop_name}/mb_bram_ctrl
  set_property range 64K [get_bd_addr_segs {sys_ps7/Data/mb_bram_ctrl}]
   # CPU Interconnect for reset GPIO
 
