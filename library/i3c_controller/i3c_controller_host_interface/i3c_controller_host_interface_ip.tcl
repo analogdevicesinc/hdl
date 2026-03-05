@@ -51,7 +51,7 @@ adi_add_bus "sdio" "master" \
     {"ibi_valid" "ibi_valid"} \
     {"ibi"       "ibi"} \
   }
-adi_add_bus_clock "clk" "sdio" "reset_n"
+
 
 adi_add_bus "offload_sdi" "master" \
   "xilinx.com:interface:axis_rtl:1.0" \
@@ -61,7 +61,7 @@ adi_add_bus "offload_sdi" "master" \
     {"offload_sdi_valid"  "TVALID"} \
     {"offload_sdi"        "TDATA"} \
   }
-adi_add_bus_clock "clk" "offload_sdi" "reset_n" "master"
+
 
 adi_add_bus "cmdp" "master" \
   "analog.com:interface:i3c_controller_cmdp_rtl:1.0" \
@@ -74,7 +74,9 @@ adi_add_bus "cmdp" "master" \
     {"cmdp_nop"         "cmdp_nop"} \
     {"cmdp_daa_trigger" "cmdp_daa_trigger"} \
   }
-adi_add_bus_clock "clk" "cmdp" "reset_n"
+
+
+
 
 adi_add_bus "rmap" "master" \
   "analog.com:interface:i3c_controller_rmap_rtl:1.0" \
@@ -85,10 +87,10 @@ adi_add_bus "rmap" "master" \
     {"rmap_dev_char_addr" "rmap_dev_char_addr"} \
     {"rmap_dev_char_data" "rmap_dev_char_data"} \
   }
-adi_add_bus_clock "clk" "rmap" "reset_n" "master"
 
-adi_set_ports_dependency "clk" \
-      "(spirit:decode(id('MODELPARAM_VALUE.ASYNC_CLK')) = 1)"
+adi_add_bus_clock "clk"  "cmdp:rmap:offload_sdi:sdio" "reset_n" "master" "slave"
+
+
 
 adi_set_bus_dependency "offload_sdi" "offload_sdi" \
       "(spirit:decode(id('MODELPARAM_VALUE.OFFLOAD')) = 1)"
@@ -97,7 +99,7 @@ adi_set_ports_dependency "offload_trigger" \
 
 set cc [ipx::current_core]
 
-ipx::associate_bus_interfaces -clock s_axi_aclk -reset reset_n $cc
+
 
 ## ID
 set_property -dict [list \
