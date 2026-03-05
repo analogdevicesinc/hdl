@@ -8,10 +8,8 @@ proc i3c_controller_create {{name "i3c_controller"} {async_clk 0} {i2c_mod 0} {o
   create_bd_cell -type hier $name
   current_bd_instance /$name
 
-  if {$async_clk == 1} {
-    create_bd_pin -dir I -type clk aclk
-  }
   create_bd_pin -dir I -type clk clk
+  create_bd_pin -dir I -type clk s_axi_aclk
   create_bd_pin -dir I -type rst reset_n
   create_bd_pin -dir O irq
   create_bd_intf_pin -mode Master -vlnv analog.com:interface:i3c_controller_rtl:1.0 m_i3c
@@ -28,13 +26,11 @@ proc i3c_controller_create {{name "i3c_controller"} {async_clk 0} {i2c_mod 0} {o
   ad_ip_parameter core CONFIG.MAX_DEVS $max_devs
   ad_ip_parameter core CONFIG.i2c_MOD $i2c_mod
 
-  ad_connect clk host_interface/s_axi_aclk
-  if {$async_clk == 1} {
-    ad_connect aclk host_interface/clk
-    ad_connect aclk core/clk
-  } else {
-    ad_connect clk core/clk
-  }
+  ad_connect s_axi_aclk  host_interface/s_axi_aclk
+  
+ ad_connect clk host_interface/clk
+ ad_connect clk core/clk
+  
   if {$offload == 1} {
     ad_connect trigger host_interface/offload_trigger
     ad_connect host_interface/offload_sdi offload_sdi

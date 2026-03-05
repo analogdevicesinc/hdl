@@ -141,14 +141,9 @@ module i3c_controller_host_interface #(
   wire ibi_valid_w;
   wire [31:0] ibi_w;
 
-  wire clk_w;
 
-  generate if (ASYNC_CLK) begin
-    assign clk_w = clk;
-  end else begin
-    assign clk_w = s_axi_aclk;
-  end
-  endgenerate
+
+ 
 
   i3c_controller_regmap #(
     .CMD_FIFO_ADDRESS_WIDTH(CMD_FIFO_ADDRESS_WIDTH),
@@ -218,7 +213,7 @@ module i3c_controller_host_interface #(
 
   i3c_controller_unpack
   i_i3c_controller_unpack (
-    .clk(clk_w),
+    .clk(clk),
     .reset_n(reset_n),
     .stop(rd_bytes_stop),
     .u32_ready(sdo_ready_w),
@@ -231,7 +226,7 @@ module i3c_controller_host_interface #(
 
   i3c_controller_pack
   i_i3c_controller_pack (
-    .clk(clk_w),
+    .clk(clk),
     .reset_n(reset_n),
     .u32_ready(sdi_ready_w),
     .u32_valid(sdi_valid_w),
@@ -244,7 +239,7 @@ module i3c_controller_host_interface #(
 
   i3c_controller_write_ibi
   i_i3c_controller_write_ibi (
-    .clk(clk_w),
+    .clk(clk),
     .reset_n(reset_n),
     .out_ready(ibi_ready_w),
     .out_valid(ibi_valid_w),
@@ -255,7 +250,7 @@ module i3c_controller_host_interface #(
 
   i3c_controller_cmd_parser
   i_i3c_controller_cmd_parser (
-    .clk(clk_w),
+    .clk(clk),
     .reset_n(reset_n),
     .cmd_ready(cmd_ready),
     .cmd_valid(cmd_valid),
