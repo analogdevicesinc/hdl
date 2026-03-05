@@ -42,6 +42,8 @@ if {$offload == 1} {
 ad_connect i3c/m_i3c i3c
 
 ad_connect sys_cpu_clk i3c/clk
+ad_connect sys_cpu_clk i3c/s_axi_aclk
+
 ad_connect sys_cpu_resetn i3c/reset_n
 if {$offload == 1} {
   ad_connect sys_cpu_clk i3c_offload_dma/s_axis_aclk
