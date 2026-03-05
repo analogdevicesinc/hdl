@@ -6,6 +6,7 @@
 source ../../../scripts/adi_env.tcl
 source ../../../projects/scripts/adi_project_xilinx.tcl
 source ../../../projects/scripts/adi_board.tcl
+set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timing_fix_xilinx.tcl]
 
 # get_env_param retrieves parameter value from the environment if exists,
 # other case use the default value
@@ -35,8 +36,8 @@ if {[info exists ::env(MCS_MODE)]} {
 adi_project ad_xband16_ebz_vcu118 0 [list \
   MCS_MODE          [get_env_param MCS_MODE         $mcs_mode] \
   JESD_MODE         [get_env_param JESD_MODE           64B66B] \
-  RX_LANE_RATE      [get_env_param RX_RATE              13.2 ] \
-  TX_LANE_RATE      [get_env_param TX_RATE              13.2 ] \
+  RX_LANE_RATE      [get_env_param RX_RATE              26.4 ] \
+  TX_LANE_RATE      [get_env_param TX_RATE              26.4 ] \
   RX_JESD_M         [get_env_param RX_JESD_M               8 ] \
   RX_JESD_L         [get_env_param RX_JESD_L               4 ] \
   RX_JESD_S         [get_env_param RX_JESD_S               1 ] \
@@ -96,9 +97,6 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
 
-set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
-set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE AggressiveExplore [get_runs impl_1]
-set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
-set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.ARGS.DIRECTIVE AggressiveExplore [get_runs impl_1]
+set_property strategy Congestion_SpreadLogic_high [get_runs impl_1]
 
 adi_project_run ad_xband16_ebz_vcu118

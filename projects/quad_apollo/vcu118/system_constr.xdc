@@ -269,11 +269,3 @@ set_property  -dict {PACKAGE_PIN R29  IOSTANDARD LVCMOS12                       
 
 set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/I.*]
 set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/T.*]
-
-create_pblock SLR0
-add_cells_to_pblock [get_pblocks SLR0] [get_cells -quiet [list i_system_wrapper/system_i/axi_mem_interconnect]]
-resize_pblock [get_pblocks SLR0] -add SLR0:SLR0
-
-create_pblock SLR1
-add_cells_to_pblock [get_pblocks SLR1] [get_cells -quiet [list i_system_wrapper/system_i/util_apollo_upack]]
-resize_pblock SLR1 -add SLR1:SLR1
