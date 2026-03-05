@@ -26,12 +26,6 @@ proc load_fir_filter_vector {filter_file} {
 	return $filter
 }
 
-ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 35
-
-set_property LEFT 34 [get_bd_ports GPIO_I]
-set_property LEFT 34 [get_bd_ports GPIO_O]
-set_property LEFT 34 [get_bd_ports GPIO_T]
-
 ad_ip_instance axi_dmac axi_dma
 ad_ip_parameter axi_dma CONFIG.FIFO_SIZE 2
 ad_ip_parameter axi_dma CONFIG.DMA_TYPE_SRC 2
@@ -118,7 +112,7 @@ current_bd_instance /processing
   ad_ip_instance fir_compiler hpf
   ad_ip_instance fir_compiler lpf
 
-	ad_ip_parameter hpf	CONFIG.CoefficientVector [load_fir_filter_vector "../common/filters/hpf.mat"]
+	ad_ip_parameter hpf	CONFIG.CoefficientVector [load_fir_filter_vector "$ad_hdl_dir/projects/cn0363/common/filters/hpf.mat"]
 	ad_ip_parameter hpf	CONFIG.Data_Fractional_Bits.VALUE_SRC USER
 	ad_ip_parameter hpf	CONFIG.Data_Sign.VALUE_SRC USER
 	ad_ip_parameter hpf	CONFIG.Data_Width.VALUE_SRC USER
@@ -133,7 +127,7 @@ current_bd_instance /processing
 	ad_ip_parameter hpf	CONFIG.Has_ARESETn true
 	ad_ip_parameter hpf	CONFIG.Reset_Data_Vector false
 
-	ad_ip_parameter lpf	CONFIG.CoefficientVector [load_fir_filter_vector "../common/filters/lpf.mat"]
+	ad_ip_parameter lpf	CONFIG.CoefficientVector [load_fir_filter_vector "$ad_hdl_dir/projects/cn0363/common/filters/lpf.mat"]
 	ad_ip_parameter lpf	CONFIG.Data_Fractional_Bits.VALUE_SRC USER
 	ad_ip_parameter lpf	CONFIG.Data_Sign.VALUE_SRC USER
 	ad_ip_parameter lpf	CONFIG.Data_Width.VALUE_SRC USER
