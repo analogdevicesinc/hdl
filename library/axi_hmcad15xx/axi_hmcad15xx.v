@@ -45,7 +45,8 @@ module axi_hmcad15xx #(
   parameter   ADC_DATAPATH_DISABLE = 0,
   parameter   IO_DELAY_GROUP = "adc_if_delay_group",
   parameter   IODELAY_CTRL = 0,
-  parameter   POLARITY_MASK = 8'h00
+  parameter   POLARITY_MASK = 8'h00,
+  parameter   EXT_SYNC = 1
 ) (
 
   input           adc_dovf,
@@ -67,6 +68,8 @@ module axi_hmcad15xx #(
 
   output          adc_clk,
   output          adc_reset,
+
+  output          adc_sync_armed,
 
   // delay interface
 
@@ -97,6 +100,7 @@ module axi_hmcad15xx #(
 
 localparam DELAY_CTRL_NUM_LANES = 9;
 localparam DELAY_CTRL_DRP_WIDTH = 5;
+localparam CONFIG = (EXT_SYNC << 12);
 
 // internal signals
 
@@ -221,6 +225,10 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   wire [7:0]       polarity_mask_s;
   wire [31:0]      adc_config_wr;
 
+  wire             adc_ext_sync_arm;
+  wire             adc_ext_sync_disarm;
+  wire             adc_ext_sync_manual_req;
+
 assign resolution      = adc_custom_control[1:0];
 assign mode            = adc_custom_control[4:2];
 assign polarity_mask_s = adc_config_wr[7:0];
@@ -252,10 +260,21 @@ assign polarity_mask_s = adc_config_wr[7:0];
     .up_drdata(up_drdata),
     .delay_locked(delay_locked));
 
+  // synchronization logic
+  util_ext_sync #(
+    .ENABLED (1'b1)
+  ) i_util_ext_sync (
+    .clk (adc_clk_s),
+    .ext_sync_arm (adc_ext_sync_arm),
+    .ext_sync_disarm (adc_ext_sync_disarm),
+    .sync_in (adc_ext_sync_manual_req),
+    .sync_armed (adc_sync_armed));
+
   // adc up common
 
   up_adc_common #(
-    .ID(ID)
+    .ID(ID),
+    .CONFIG(CONFIG)
   ) i_up_adc_common (
     .mmcm_rst (),
     .adc_clk (adc_clk_s),
@@ -270,9 +289,9 @@ assign polarity_mask_s = adc_config_wr[7:0];
     .adc_start_code (),
     .adc_sref_sync (),
     .adc_sync (),
-    .adc_ext_sync_arm(),
-    .adc_ext_sync_disarm(),
-    .adc_ext_sync_manual_req(),
+    .adc_ext_sync_arm(adc_ext_sync_arm),
+    .adc_ext_sync_disarm(adc_ext_sync_disarm),
+    .adc_ext_sync_manual_req(adc_ext_sync_manual_req),
     .adc_custom_control(adc_custom_control),
     .adc_sdr_ddr_n(),
     .adc_symb_op(),

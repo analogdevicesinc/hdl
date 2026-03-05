@@ -13,6 +13,7 @@ GENERIC_DEPS += ../common/up_axi.v
 GENERIC_DEPS += ../common/up_clock_mon.v
 GENERIC_DEPS += ../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_status.v
+GENERIC_DEPS += ../common/util_ext_sync.v
 GENERIC_DEPS += sample_assembly.v
 GENERIC_DEPS += axi_hmcad15xx.v
 GENERIC_DEPS += axi_hmcad15xx_if.v

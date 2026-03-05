@@ -192,34 +192,9 @@ ad_connect axi_hmcad15xx_a2_adc/adc_data  hmcad15xx_a2_dma/fifo_wr_din
 ad_connect axi_hmcad15xx_a2_adc/adc_valid hmcad15xx_a2_dma/fifo_wr_en
 ad_connect axi_hmcad15xx_a2_adc/adc_dovf  hmcad15xx_a2_dma/fifo_wr_overflow
 
-# AXI TDD for DMA to synchronize the two DMAs of each ADC
-
-set TDD_CHANNEL_COUNT 2
-# not sure about the initial value of the polarity, which is used at the startup
-set TDD_DEFAULT_POLARITY 0x0000
-set TDD_REGISTER_WIDTH 32
-set TDD_BURST_COUNT_WIDTH 32
-set TDD_SYNC_INTERNAL 1
-set TDD_SYNC_EXTERNAL 0
-set TDD_SYNC_EXTERNAL_CDC 0
-set TDD_SYNC_COUNT_WIDTH 0
-ad_tdd_gen_create axi_tdd_sync  $TDD_CHANNEL_COUNT \
-                                $TDD_DEFAULT_POLARITY \
-                                $TDD_REGISTER_WIDTH \
-                                $TDD_BURST_COUNT_WIDTH \
-                                $TDD_SYNC_INTERNAL \
-                                $TDD_SYNC_EXTERNAL \
-                                $TDD_SYNC_EXTERNAL_CDC \
-                                $TDD_SYNC_COUNT_WIDTH
-
-ad_connect axi_tdd_sync/clk axi_hmcad15xx_a1_adc/adc_clk
-ad_connect axi_tdd_sync/resetn sys_ps7/FCLK_RESET2_N
-ad_connect axi_tdd_sync/s_axi_aclk sys_cpu_clk
-ad_connect axi_tdd_sync/s_axi_aresetn sys_150m_rstgen/peripheral_aresetn
-ad_connect axi_tdd_sync/sync_in GND
-
-ad_connect axi_tdd_sync/tdd_channel_0 hmcad15xx_a1_dma/sync
-ad_connect axi_tdd_sync/tdd_channel_1 hmcad15xx_a2_dma/sync
+# singal synchronization
+ad_connect axi_hmcad15xx_a1_adc/adc_sync_armed hmcad15xx_a1_dma/sync
+ad_connect axi_hmcad15xx_a1_adc/adc_sync_armed hmcad15xx_a2_dma/sync
 
 # system reset/clock definitions
 
@@ -283,7 +258,6 @@ ad_cpu_interconnect 0x44A00000 axi_hmcad15xx_a1_adc
 ad_cpu_interconnect 0x44A30000 hmcad15xx_a1_dma
 ad_cpu_interconnect 0x44A60000 axi_hmcad15xx_a2_adc
 ad_cpu_interconnect 0x44A90000 hmcad15xx_a2_dma
-ad_cpu_interconnect 0x44AC0000 axi_tdd_sync
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 {1}

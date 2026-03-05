@@ -6,7 +6,6 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
-source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
 
 adi_project_create sharkbyte 0 {} "xc7z010clg225-2"
 
