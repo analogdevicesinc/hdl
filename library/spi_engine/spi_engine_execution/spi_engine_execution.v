@@ -123,6 +123,7 @@ module spi_engine_execution #(
   reg echo_last_transfer;
   reg [7:0] word_length = DATA_WIDTH;
   reg [7:0] last_bit_count = DATA_WIDTH-1;
+  reg [7:0] latch_last_bit_count = DATA_WIDTH-2;
   reg [7:0] left_aligned = 8'b0;
   reg [7:0] sdi_lane_mask =  ALL_ACTIVE_LANE_MASK;
   reg [7:0] sdo_lane_mask =  ALL_ACTIVE_LANE_MASK;
@@ -136,15 +137,15 @@ module spi_engine_execution #(
 
   reg sdo_enabled = 1'b0;
   reg sdi_enabled = 1'b0;
-  reg [7:0] num_of_transfers = 0;
   reg pending_sdi_data_valid = 1'b0;
   wire sdo_enabled_io;
   wire sdi_enabled_io;
 
   wire [NUM_OF_SDIO-1:0] sdo_int_s;
 
-  reg last_bit;
+  wire last_bit;
   wire echo_last_bit;
+  // wire first_bit;
   reg first_bit;
   wire end_of_word;
 
@@ -185,15 +186,14 @@ module spi_engine_execution #(
 
   (* direct_enable = "yes" *) wire cs_gen;
 
+  // assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
+
   spi_engine_execution_shiftreg #(
     .DEFAULT_SPI_CFG(DEFAULT_SPI_CFG),
-    .ALL_ACTIVE_LANE_MASK(ALL_ACTIVE_LANE_MASK),
     .DATA_WIDTH(DATA_WIDTH),
     .NUM_OF_SDIO(NUM_OF_SDIO),
     .SDI_DELAY(SDI_DELAY),
-    .ECHO_SCLK(ECHO_SCLK),
-    .CMD_TRANSFER(CMD_TRANSFER),
-    .CMD_WRITE(CMD_WRITE)
+    .ECHO_SCLK(ECHO_SCLK)
   ) shiftreg (
     .clk(clk),
     .resetn(resetn),
@@ -215,6 +215,8 @@ module spi_engine_execution #(
     .sdo_idle_state(sdo_idle_state),
     .left_aligned(left_aligned),
     .word_length(word_length),
+    .last_bit_count (last_bit_count),
+    .latch_last_bit_count (latch_last_bit_count),
     .sdo_lane_mask(sdo_lane_mask),
     .sdo_io_ready(sdo_io_ready),
     .echo_last_bit(echo_last_bit),
@@ -233,7 +235,6 @@ module spi_engine_execution #(
     if (exec_transfer_cmd) begin
       sdo_enabled <= cmd[8];
       sdi_enabled <= cmd[9];
-      num_of_transfers <= cmd[7:0];
     end
   end
   assign sdo_enabled_io = (exec_transfer_cmd) ? cmd[8] : sdo_enabled;
@@ -304,7 +305,8 @@ module spi_engine_execution #(
   always @(posedge clk) begin
     // we can calculate this from word_length (instead of cmd), with an extra cycle delay
     // because even in the worst case (transfer after config), we still have another cycle before using it
-    last_bit_count <= word_length - 1; // needed when transfer_active goes high
+    last_bit_count       <= word_length - 1; // needed when transfer_active goes high
+    latch_last_bit_count <= word_length - 2;
   end
 
   always @(posedge clk) begin
@@ -337,7 +339,6 @@ module spi_engine_execution #(
     if (idle) begin
       bit_counter <= 0;
       first_bit <= 1'b1;
-      last_bit <= 1'b0;
       transfer_counter <= 0;
       ntx_rx  <= 1'b0;
       sleep_counter_increment <= 1'b0;
@@ -347,8 +348,6 @@ module spi_engine_execution #(
       end
     end else begin
       first_bit <= ((bit_counter + ntx_rx == 0) || (bit_counter == word_length-1));
-      last_bit <= (bit_counter == last_bit_count);
-
       if (clk_div_last && ~wait_for_io) begin
         if (last_bit && transfer_active && ntx_rx) begin
           bit_counter <= 0;
@@ -540,6 +539,7 @@ module spi_engine_execution #(
   // end_of_word will signal the end of a transaction, pushing the command
   // stream execution to the next command. end_of_word in normal mode can be
   // generated using the global bit_counter
+  assign last_bit = (bit_counter == last_bit_count);
   assign end_of_word = last_bit && ntx_rx && clk_div_last;
 
   always @(posedge clk) begin

@@ -38,13 +38,10 @@
 module spi_engine_execution_shiftreg #(
 
   parameter DEFAULT_SPI_CFG = 0,
-  parameter ALL_ACTIVE_LANE_MASK = 8'hFF,
   parameter DATA_WIDTH = 8,
   parameter NUM_OF_SDIO = 1,
   parameter [1:0] SDI_DELAY = 2'b00,
-  parameter ECHO_SCLK = 0,
-  parameter [2:0] CMD_TRANSFER = 3'b000,
-  parameter [2:0] CMD_WRITE = 3'b010
+  parameter ECHO_SCLK = 0
 ) (
   input   clk,
   input   resetn,
@@ -75,6 +72,8 @@ module spi_engine_execution_shiftreg #(
   input           sdo_idle_state,
   input   [ 7:0]  left_aligned,
   input   [ 7:0]  word_length,
+  input   [ 7:0]  last_bit_count,
+  input   [ 7:0]  latch_last_bit_count,
   input   [ 7:0]  sdo_lane_mask,
 
   // timing from main fsm
@@ -95,31 +94,29 @@ module spi_engine_execution_shiftreg #(
   wire trigger_rx_s;
   wire index_ready;
   wire sdo_data_ready_int;
+  wire data_ready_out;
 
   // sdo_data_ready_int is active when two conditions are true:
-  //   ((!data_sdo_v) || (sdo_toshiftreg))
+  //   ((!data_ready_out) || (sdo_toshiftreg))
   //      there's room for storing sdo data
   //    AND
   //    (s_offload_active || (exec_cmd & index_ready))
   //      when s_offload_active, it is possible to prefetch
   //      when !s_offload_active, wait for a write instruction and for end of processing lane mask
-  assign sdo_data_ready_int = ((!data_sdo_v) || (sdo_toshiftreg)) && (s_offload_active || (exec_cmd & index_ready));
+  assign sdo_data_ready_int = ((!data_ready_out) || (sdo_toshiftreg)) && (s_offload_active || (exec_cmd & index_ready));
   assign sdo_data_ready = sdo_data_ready_int;
   assign sdo_io_ready = data_sdo_v;
 
   wire [(NUM_OF_SDIO * DATA_WIDTH)-1:0] aligned_sdo_data;
   spi_engine_execution_shiftreg_data_assemble #(
-    .ALL_ACTIVE_LANE_MASK(ALL_ACTIVE_LANE_MASK),
     .DATA_WIDTH(DATA_WIDTH),
-    .NUM_OF_SDIO(NUM_OF_SDIO),
-    .CMD_WRITE(CMD_WRITE)
+    .NUM_OF_SDIO(NUM_OF_SDIO)
   ) sdo_data_assemble (
     .clk (clk),
     .resetn (resetn),
     .data (sdo_data),
     .data_ready (sdo_data_ready_int),
     .data_valid (sdo_data_valid),
-    .current_cmd (current_cmd),
     .exec_sdo_lane_cmd(exec_sdo_lane_cmd),
     .lane_mask (sdo_lane_mask),
     .idle_state (sdo_idle_state),
@@ -130,13 +127,14 @@ module spi_engine_execution_shiftreg #(
     .sdo_enabled (sdo_enabled),
     .index_ready (index_ready),
     .data_assembled (aligned_sdo_data),
+    .data_ready_out (data_ready_out),
     .last_handshake (data_sdo_v));
 
   genvar i;
   generate
     for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin: g_sdo_shift_reg
       // Load the SDO parallel data into the SDO shift register.
-      reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
+      reg [(DATA_WIDTH-1):0] data_sdo_shift = 0;
       always @(posedge clk) begin
         if (!sdo_enabled || !exec_cmd) begin
           data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
@@ -210,9 +208,9 @@ module spi_engine_execution_shiftreg #(
           latch_sdi       <= 1'b0;
         end else begin
           // these paths would be unsafe it there wasn't a guarantee of some settling time between word_length changing and a transfer starting
-          latch_sdi       <= (sdi_counter == word_length - 2);
-          last_sdi_bit_r  <= (sdi_counter == word_length - 1);
-          sdi_counter     <= (sdi_counter == word_length - 1) ? 8'b0 : sdi_counter + 1'b1;
+          latch_sdi       <= (sdi_counter == latch_last_bit_count);
+          last_sdi_bit_r  <= (sdi_counter == last_bit_count);
+          sdi_counter     <= (sdi_counter == last_bit_count) ? 8'b0 : sdi_counter + 1'b1;
         end
       end
 
@@ -242,9 +240,9 @@ module spi_engine_execution_shiftreg #(
           latch_sdi       <= 1'b0;
         end else begin
           // these paths would be unsafe it there wasn't a guarantee of some settling time between word_length changing and a transfer starting
-          latch_sdi       <= (sdi_counter == word_length - 2);
-          last_sdi_bit_r  <= (sdi_counter == word_length - 1);
-          sdi_counter     <= (sdi_counter == word_length - 1) ? 8'b0 : sdi_counter + 1'b1;
+          latch_sdi       <= (sdi_counter == latch_last_bit_count);
+          last_sdi_bit_r  <= (sdi_counter == last_bit_count);
+          sdi_counter     <= (sdi_counter == last_bit_count) ? 8'b0 : sdi_counter + 1'b1;
         end
       end
 
@@ -296,7 +294,7 @@ module spi_engine_execution_shiftreg #(
 
     end
 
-    assign last_sdi_bit = (sdi_counter == word_length-1);
+    assign last_sdi_bit = (sdi_counter == last_bit_count);
     always @(posedge clk) begin
       if (resetn == 1'b0) begin
         sdi_counter <= 8'b0;
