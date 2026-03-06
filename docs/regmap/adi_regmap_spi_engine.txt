@@ -9,23 +9,23 @@ ENDTITLE
 REG
 0x00
 VERSION
-Version of the peripheral. Follows semantic versioning. Current version 1.04.02.
+Version of the peripheral. Follows semantic versioning. Current version 2.00.00.
 ENDREG
 
 FIELD
-[31:16] 0x0001
+[31:16] 0x0002
 VERSION_MAJOR
 RO
 ENDFIELD
 
 FIELD
-[15:8] 0x05
+[15:8] 0x00000000
 VERSION_MINOR
 RO
 ENDFIELD
 
 FIELD
-[7:0] 0x03
+[7:0] 0x00000000
 VERSION_PATCH
 RO
 ENDFIELD
@@ -70,7 +70,7 @@ DATA_WIDTH
 ENDREG
 
 FIELD
-[7:4] NUM_OF_SDI
+[23:16] NUM_OF_SDI
 NUM_OF_SDI
 RO
 Number of SDI.
@@ -78,7 +78,7 @@ It is equal with the maximum supported SDI lines in bits.
 ENDFIELD
 
 FIELD
-[3:0] DATA_WIDTH
+[15:0] DATA_WIDTH
 DATA_WIDTH
 RO
 Data width of the SDI/SDO parallel interface.
@@ -364,21 +364,6 @@ RO
 SDI FIFO register. Reading from this register removes the first entry from the SDI FIFO.
 Reading this register when the SDI FIFO is empty will return undefined data.
 Writing to it has no effect.
-ENDFIELD
-
-############################################################################################
-############################################################################################
-
-REG
-0x3b
-SDI_FIFO_MSB
-ENDREG
-
-FIELD
-[31:0] 
-SDI_FIFO_MSB
-RO
-Store SDI's 32 bits MSB, if exists.
 ENDFIELD
 
 ############################################################################################
