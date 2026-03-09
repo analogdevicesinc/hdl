@@ -103,7 +103,6 @@ module spi_engine_execution #(
   reg idle;
 
   reg [7:0] clk_div_counter = 'h00;
-  reg [7:0] clk_div_counter_next = 'h00;
   reg clk_div_last;
 
   reg [7:0] sleep_counter;
@@ -114,7 +113,6 @@ module spi_engine_execution #(
   reg sleep_counter_increment;
 
   reg trigger = 1'b0;
-  reg trigger_next = 1'b0;
   reg wait_for_io = 1'b0;
   reg transfer_active = 1'b0;
   reg transfer_done = 1'b0;
@@ -125,6 +123,10 @@ module spi_engine_execution #(
   reg [7:0] last_bit_count = DATA_WIDTH-1;
   reg [7:0] latch_last_bit_count = DATA_WIDTH-2;
   reg [7:0] left_aligned = 8'b0;
+  // sdi_lane_mask: Stores the SDI lane configuration from REG_SDI_LANE_CONFIG
+  // write commands (cmd[15:8] == 8'h23). While not directly used in this module,
+  // the same command is intercepted by axi_spi_engine to configure sdi_fifo_tkeep_int,
+  // which controls valid lanes in the SDI asymmetric FIFO (util_axis_fifo_asym).
   reg [7:0] sdi_lane_mask =  ALL_ACTIVE_LANE_MASK;
   reg [7:0] sdo_lane_mask =  ALL_ACTIVE_LANE_MASK;
 
@@ -139,13 +141,11 @@ module spi_engine_execution #(
   reg sdi_enabled = 1'b0;
   reg pending_sdi_data_valid = 1'b0;
   wire sdo_enabled_io;
-  wire sdi_enabled_io;
 
   wire [NUM_OF_SDIO-1:0] sdo_int_s;
 
   wire last_bit;
   wire echo_last_bit;
-  // wire first_bit;
   reg first_bit;
   wire end_of_word;
 
@@ -165,7 +165,6 @@ module spi_engine_execution #(
   reg [ 2:0] cmd_d1_instr;
   reg        cmd_d1_sleep_instr;
   reg        exec_transfer_cmd_reg = 1'b0; //avoid comparison in the shiftreg
-  reg        exec_write_cmd_reg = 1'b0; //avoid comparison in the shiftreg data assemble
   reg        exec_sdo_lane_config_reg = 1'b0; //avoid comparison in the shiftreg data assemble
   reg        exec_chipselect_cmd_reg = 1'b0; //avoid comparison cs_gen
   reg        cmd_d1_time_is_zero;
@@ -185,8 +184,6 @@ module spi_engine_execution #(
   wire sdo_io_ready;
 
   (* direct_enable = "yes" *) wire cs_gen;
-
-  // assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
 
   spi_engine_execution_shiftreg #(
     .DEFAULT_SPI_CFG(DEFAULT_SPI_CFG),
@@ -238,7 +235,6 @@ module spi_engine_execution #(
     end
   end
   assign sdo_enabled_io = (exec_transfer_cmd) ? cmd[8] : sdo_enabled;
-  assign sdi_enabled_io = (exec_transfer_cmd) ? cmd[9] : sdi_enabled;
 
   always @(posedge clk) begin
     if (exec_cmd) begin
@@ -250,7 +246,6 @@ module spi_engine_execution #(
       cs_sleep_early_exit      <= ~|cmd[9:8];
       cmd_d1_time_is_zero      <= ~|cmd[7:0];
       exec_transfer_cmd_reg    <= (inst == CMD_TRANSFER);
-      exec_write_cmd_reg       <= (inst == CMD_WRITE);
       exec_chipselect_cmd_reg  <= (inst == CMD_CHIPSELECT);
       exec_sdo_lane_config_reg <= (inst == CMD_WRITE) && (cmd[10:8] == REG_SDO_LANE_CONFIG);
     end else begin
