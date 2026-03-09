@@ -64,8 +64,6 @@ module spi_engine_execution_shiftreg_data_assemble #(
   // if not, non activated serial lines have their data fulfilled with idle_state and buffer the remaining activated lines
   // also, in this mode it is not possible to prefetch data
 
-  reg [                  N_STAGES-1:0] handshake_pipe_reg;
-  reg                                  handshake_reg;
   reg                                  sdo_ready_out;
   reg                                  last_handshake_int;
   reg [                  N_STAGES-1:0] last_handshake_pipe;
@@ -88,16 +86,12 @@ module spi_engine_execution_shiftreg_data_assemble #(
   assign index_ready    = index_ready_reg;
 
   // register data
-  // register handshake for one cycle to be used in the pipeline and to generate sdo_ready_out
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       data_reg <= {DATA_WIDTH{idle_state}};
     end else begin
       if (data_ready && data_valid) begin
-          data_reg      <= data;
-          handshake_reg <= 1'b1;
-      end else begin
-        handshake_reg   <= 1'b0;
+        data_reg <= data;
       end
     end
   end
@@ -107,12 +101,10 @@ module spi_engine_execution_shiftreg_data_assemble #(
   // data is left shifted left_aligned times, where left_aligned equals to DATA_WIDTH - word_length
   // word_length comes from the dynamic transfer length register
   always @(posedge clk) begin
-    handshake_pipe_reg[0]         <= handshake_reg;
     last_handshake_pipe[0]        <= sdo_ready_out;
     valid_index_pipe[0+:8]        <= valid_index * DATA_WIDTH;
     data_pipe_reg[0+: DATA_WIDTH] <= data_reg << left_aligned;
     for (i = N_STAGES-1; i > 0; i = i - 1) begin
-      handshake_pipe_reg[i]                    <= handshake_pipe_reg[i-1];
       last_handshake_pipe[i]                   <= last_handshake_pipe[i-1];
       valid_index_pipe[i*8+:8]                 <= valid_index_pipe[(i-1)*8+:8];
       data_pipe_reg[i*DATA_WIDTH+: DATA_WIDTH] <= data_pipe_reg[(i-1)*DATA_WIDTH+: DATA_WIDTH];
