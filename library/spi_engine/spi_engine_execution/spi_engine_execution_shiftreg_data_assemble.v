@@ -36,59 +36,96 @@
 `timescale 1ns/100ps
 
 module spi_engine_execution_shiftreg_data_assemble #(
-  parameter N_STAGES = 2,
-  parameter DATA_WIDTH = 8,
+  parameter N_STAGES    = 2,
+  parameter DATA_WIDTH  = 8,
   parameter NUM_OF_SDIO = 1
 ) (
   input                                   clk,
   input                                   resetn,
-  input               [(DATA_WIDTH)-1:0]  data,
-  input                                   data_ready,
-  input                                   data_valid,
-  input                                   exec_sdo_lane_cmd,
-  input                            [7:0]  lane_mask,
-  input                                   idle_state,
-  input                            [7:0]  left_aligned,
-  input                                   transfer_active,
-  input                                   trigger_tx,
-  input                                   first_bit,
-  input                                   sdo_enabled,
-  output                                  index_ready,
-  output [(NUM_OF_SDIO * DATA_WIDTH)-1:0] data_assembled,
-  output                                  data_ready_out,
-  output                                  last_handshake
+
+  // Data interface
+  input  [             (DATA_WIDTH)-1:0] data,
+  input                                  data_ready,
+  input                                  data_valid,
+
+  // Lane configuration
+  input                                  lane_cfg_valid,
+  input  [                          7:0] sdo_lane_mask,
+  input                                  sdo_idle_state,
+  input  [                          7:0] left_shift_count,
+  output                                 lane_cfg_ready,
+
+  // Transfer control (from execution FSM)
+  input                                  transfer_active,
+  input                                  trigger_tx,
+  input                                  first_bit,
+  input                                  sdo_enabled,
+
+  // Assembled data output
+  output [(NUM_OF_SDIO*DATA_WIDTH)-1:0] data_assembled,
+  output                                 word_ready,
+  output                                 word_ready_aligned
 );
 
-  // This module is responsible to align data for different lane masks
-  // if lane_mask has all of its SDOs activated, then it allows prefetch data
-  // if not, non activated serial lines have their data fulfilled with idle_state and buffer the remaining activated lines
-  // also, in this mode it is not possible to prefetch data
+  // =============================================================================
+  // SDO Data Assembly Module
+  // =============================================================================
+  // Assembles sequential data words into a multi-lane output buffer (aligned_data).
+  // Maps each incoming word to the correct physical SDO lane based on sdo_lane_mask.
+  //
+  // Operation:
+  //   1. Lane mask is parsed when lane_cfg_valid asserts, building lane_lookup[]
+  //      table that maps sequential index to physical lane number.
+  //   2. On each data handshake, active_lane_idx cycles through active lanes.
+  //   3. Data is left-shifted for MSB alignment, then pipelined for timing.
+  //   4. At pipeline output, data is written to aligned_data at the correct lane position.
+  //
+  // Example (NUM_OF_SDIO=4, DATA_WIDTH=8, sdo_lane_mask=4'b1010):
+  //   - lane_lookup[0]=1, lane_lookup[1]=3, last_active_idx=1
+  //   - Handshake 1: data -> aligned_data[15:8]  (lane 1)
+  //   - Handshake 2: data -> aligned_data[31:24] (lane 3), word_ready=1
+  //
+  // Pipeline adds N_STAGES cycles latency from data input to aligned_data output.
+  // =============================================================================
 
-  reg                                  sdo_ready_out;
-  reg                                  last_handshake_int;
-  reg [                  N_STAGES-1:0] last_handshake_pipe;
+  // Parameter validation
+  initial begin
+    if (N_STAGES < 2) begin
+      $error("N_STAGES must be >= 2 for pipeline to function correctly");
+    end
+  end
+
+  // Output registers
+  reg                                  word_ready_int;
+  reg                                  word_ready_aligned_int;
+
+  // Pipeline registers for timing closure
+  reg [                  N_STAGES-1:0] word_ready_pipe;
   reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] aligned_data;
   reg [              (DATA_WIDTH)-1:0] data_reg;
   reg [     (N_STAGES*DATA_WIDTH)-1:0] data_pipe_reg;
-  reg [                           3:0] lane_index         = 0;
-  reg [                           3:0] last_lane_index    = 0;
-  reg [                           3:0] valid_indices [0:7];
-  reg [                           3:0] valid_index = 0;
-  reg [              (N_STAGES*8)-1:0] valid_index_pipe;
-  reg                                  index_ready_reg;
 
+  // Lane indexing and mapping
+  reg [             3:0] active_lane_idx  = 0;  // Current active lane being processed (0 to last_active_idx)
+  reg [             3:0] last_active_idx  = 0;  // Index of last active lane (num_active_lanes - 1)
+  reg [             3:0] lane_lookup [0:7];     // Lookup table: sequential index -> physical lane number
+  reg [             3:0] physical_lane    = 0;  // Current physical lane number from lookup
+  reg [(N_STAGES*8)-1:0] bit_position_pipe;  // Pipelined bit position (physical_lane * DATA_WIDTH)
+  reg                    lane_cfg_ready_reg; // Asserted when lane mask processing complete
+
+  // Indicates data is being loaded into shift register (consumption point)
   wire sdo_toshiftreg = (transfer_active && trigger_tx && first_bit && sdo_enabled);
   integer i;
 
-  assign data_assembled = aligned_data;
-  assign data_ready_out = sdo_ready_out;
-  assign last_handshake = last_handshake_int;
-  assign index_ready    = index_ready_reg;
+  assign data_assembled      = aligned_data;
+  assign word_ready          = word_ready_int;
+  assign word_ready_aligned  = word_ready_aligned_int;
+  assign lane_cfg_ready      = lane_cfg_ready_reg;
 
-  // register data
+  // Register incoming data on handshake
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
-      data_reg <= {DATA_WIDTH{idle_state}};
+      data_reg <= {DATA_WIDTH{sdo_idle_state}};
     end else begin
       if (data_ready && data_valid) begin
         data_reg <= data;
@@ -96,99 +133,107 @@ module spi_engine_execution_shiftreg_data_assemble #(
     end
   end
 
-  // pipeline registers
-  // Align data to have its bits on the MSB bits
-  // data is left shifted left_aligned times, where left_aligned equals to DATA_WIDTH - word_length
-  // word_length comes from the dynamic transfer length register
+  // Pipeline Registers
+  // Stage 0: Left-shift data for MSB alignment (left_shift_count = DATA_WIDTH - word_length)
+  //          Compute bit position in aligned_data (physical_lane * DATA_WIDTH)
+  // Stages 1+: Propagate data and position through pipeline for timing closure
   always @(posedge clk) begin
-    last_handshake_pipe[0]        <= sdo_ready_out;
-    valid_index_pipe[0+:8]        <= valid_index * DATA_WIDTH;
-    data_pipe_reg[0+: DATA_WIDTH] <= data_reg << left_aligned;
+    word_ready_pipe[0]            <= word_ready_int;
+    bit_position_pipe[0+:8]       <= physical_lane * DATA_WIDTH;
+    data_pipe_reg[0+: DATA_WIDTH] <= data_reg << left_shift_count;
     for (i = N_STAGES-1; i > 0; i = i - 1) begin
-      last_handshake_pipe[i]                   <= last_handshake_pipe[i-1];
-      valid_index_pipe[i*8+:8]                 <= valid_index_pipe[(i-1)*8+:8];
+      word_ready_pipe[i]                       <= word_ready_pipe[i-1];
+      bit_position_pipe[i*8+:8]                <= bit_position_pipe[(i-1)*8+:8];
       data_pipe_reg[i*DATA_WIDTH+: DATA_WIDTH] <= data_pipe_reg[(i-1)*DATA_WIDTH+: DATA_WIDTH];
     end
   end
 
-  // Aligned data
+  // Data Assembly
+  // At pipeline output, write shifted data to aligned_data at the lane's bit position.
+  // Inactive lanes retain sdo_idle_state from reset.
   always @(posedge clk) begin
     if (!resetn) begin
-      aligned_data <= {(NUM_OF_SDIO * DATA_WIDTH){idle_state}};
+      aligned_data <= {(NUM_OF_SDIO * DATA_WIDTH){sdo_idle_state}};
     end else begin
-      aligned_data[valid_index_pipe[(N_STAGES-1)*8+:8]+:DATA_WIDTH] <= data_pipe_reg[(N_STAGES-1)*DATA_WIDTH+: DATA_WIDTH];
+      aligned_data[bit_position_pipe[(N_STAGES-1)*8+:8]+:DATA_WIDTH] <= data_pipe_reg[(N_STAGES-1)*DATA_WIDTH+: DATA_WIDTH];
     end
   end
 
-  // data line counter and stores activated lines
-  // it returns valid_indices array necessary for correct buffering of data
-  reg [3:0] j;
-  reg [3:0] mask_index;
+  // Lane Mask Processing
+  // Parses sdo_lane_mask to build lane_lookup[] table.
+  // Example: sdo_lane_mask = 8'b00001010 (lanes 1 and 3 active)
+  //   lane_lookup[0] = 1, lane_lookup[1] = 3, last_active_idx = 1
+  // Processing starts on lane_cfg_valid and completes after NUM_OF_SDIO cycles.
+  reg [3:0] lane_scan_idx;
+  reg [3:0] active_lane_cnt;
   always @(posedge clk) begin
     if (!resetn) begin
-      index_ready_reg <= 1'b0;
-      mask_index <= 0;
-      last_lane_index <= 0;
-      j <= 0;
+      lane_cfg_ready_reg <= 1'b0;
+      active_lane_cnt    <= 0;
+      last_active_idx    <= 0;
+      lane_scan_idx      <= 0;
     end else begin
-      if (exec_sdo_lane_cmd) begin
-        j <= 0;
-        index_ready_reg <= 1'b0;
-        mask_index <= 0;
-        last_lane_index <= 0;
+      if (lane_cfg_valid) begin
+        lane_scan_idx      <= 0;
+        lane_cfg_ready_reg <= 1'b0;
+        active_lane_cnt    <= 0;
+        last_active_idx    <= 0;
       end else begin
-        if (j < NUM_OF_SDIO) begin
-          if (lane_mask[j]) begin
-            valid_indices[mask_index] <= j;
-            last_lane_index <= mask_index; //avoid subtraction in the handshake counter
-            mask_index <= mask_index + 1;
+        if (lane_scan_idx < NUM_OF_SDIO) begin
+          if (sdo_lane_mask[lane_scan_idx]) begin
+            lane_lookup[active_lane_cnt] <= lane_scan_idx;
+            last_active_idx <= active_lane_cnt; // avoid subtraction in the handshake counter
+            active_lane_cnt <= active_lane_cnt + 1;
           end
-          j <= j + 1;
-          index_ready_reg <= (j == NUM_OF_SDIO-1);
+          lane_scan_idx      <= lane_scan_idx + 1;
+          lane_cfg_ready_reg <= (lane_scan_idx == NUM_OF_SDIO-1);
         end
       end
     end
   end
 
-  // valid_index is used to select the correct bits of aligned_data
-  // to be sent to the shift register, and it is updated on each handshake
+  // physical_lane selects the correct bit position in aligned_data
+  // for the shift register, updated on each handshake
   always @(posedge clk) begin
     if (!resetn) begin
-      valid_index <= 0;
+      physical_lane <= 0;
     end else begin
       if (data_ready && data_valid) begin
-        valid_index <= valid_indices[lane_index];
+        physical_lane <= lane_lookup[active_lane_idx];
       end
     end
   end
 
-  // lane_index is a counter that increments on each handshake,
-  // and it is used to retrieve the correct valid_index for data alignment
+  // active_lane_idx cycles through active lanes on each handshake,
+  // used to retrieve the correct physical_lane for data alignment
   always @(posedge clk) begin
     if (!resetn) begin
-      lane_index <= 0;
+      active_lane_idx <= 0;
     end else begin
       if (data_ready && data_valid) begin
-        if (lane_index < last_lane_index) begin
-          lane_index <= lane_index + 1;
+        if (active_lane_idx < last_active_idx) begin
+          active_lane_idx <= active_lane_idx + 1;
         end else begin
-          lane_index <= 0;
+          active_lane_idx <= 0;
         end
       end
     end
   end
 
-  // The last handshake is used by external logic to enable sdo_io_ready
+  // Handshake and Ready Signaling
+  // word_ready_int: Asserted when last active lane's data received (active_lane_idx == last_active_idx).
+  //                 Cleared when shift register consumes the data (sdo_toshiftreg).
+  // word_ready_aligned_int: Pipelined version aligned with data_assembled output timing.
   always @(posedge clk) begin
     if (!resetn) begin
-      sdo_ready_out <= 1'b0;
-      last_handshake_int <= 1'b0;
+      word_ready_int         <= 1'b0;
+      word_ready_aligned_int <= 1'b0;
     end else begin
-      last_handshake_int <= last_handshake_pipe[N_STAGES-2];
+      word_ready_aligned_int <= word_ready_pipe[N_STAGES-2];
       if (data_ready && data_valid) begin
-        sdo_ready_out <= (lane_index == last_lane_index);
+        word_ready_int <= (active_lane_idx == last_active_idx);
       end else if (sdo_toshiftreg) begin
-        sdo_ready_out <= 1'b0;
+        word_ready_int <= 1'b0;
       end
     end
   end
