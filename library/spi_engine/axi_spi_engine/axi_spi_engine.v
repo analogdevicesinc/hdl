@@ -203,16 +203,13 @@ module axi_spi_engine #(
   wire        sdi_output_read;
   wire        sdi_output_read_sync;
 
-
   generate if (MM_IF_TYPE == S_AXI) begin
 
     // assign clock and reset
-
     assign clk = s_axi_aclk;
     assign rstn = s_axi_aresetn;
 
     // interface wrapper
-
     up_axi #(
       .AXI_ADDRESS_WIDTH (16)
     ) i_up_axi (
@@ -254,7 +251,6 @@ module axi_spi_engine #(
   generate if (MM_IF_TYPE == UP_FIFO) begin
 
     // assign clock and reset
-
     assign clk = up_clk;
     assign rstn = up_rstn;
 
@@ -784,7 +780,6 @@ module axi_spi_engine #(
     .in_clk   (spi_clk),
     .in_data  (sdi_input_level),
     .out_clk  (clk),
-    .out_data (sdi_level_s)
-  );
+    .out_data (sdi_level_s));
 
 endmodule
