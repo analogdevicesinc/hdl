@@ -517,7 +517,8 @@ module axi_spi_engine #(
     .ALMOST_FULL_THRESHOLD(31),
     .TLAST_EN(0),
     .TKEEP_EN(1),
-    .REDUCED_FIFO(0)
+    .REDUCED_FIFO(0),
+    .SRC_REG_SLICE_EN (1)
   ) i_sdi_fifo(
     .s_axis_aclk(spi_clk),
     .s_axis_aresetn(spi_resetn),
