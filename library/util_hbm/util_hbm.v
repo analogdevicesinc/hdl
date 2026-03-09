@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -130,6 +130,8 @@ module util_hbm #(
   output [NUM_M*(8-(4*AXI_PROTOCOL))-1:0]  m_axi_awlen,
   output [NUM_M*3-1:0]                     m_axi_awsize,
   output [NUM_M*2-1:0]                     m_axi_awburst,
+  output [NUM_M*4-1:0]                     m_axi_awcache,
+  output [NUM_M*3-1:0]                     m_axi_awprot,
   output [NUM_M-1:0]                       m_axi_awvalid,
   input  [NUM_M-1:0]                       m_axi_awready,
 
@@ -152,6 +154,8 @@ module util_hbm #(
   output [NUM_M*(8-(4*AXI_PROTOCOL))-1:0]  m_axi_arlen,
   output [NUM_M*3-1:0]                     m_axi_arsize,
   output [NUM_M*2-1:0]                     m_axi_arburst,
+  output [NUM_M*4-1:0]                     m_axi_arcache,
+  output [NUM_M*3-1:0]                     m_axi_arprot,
 
   // Read data and response
   input  [NUM_M*AXI_DATA_WIDTH-1:0]        m_axi_rdata,
@@ -191,8 +195,10 @@ module util_hbm #(
   wire [NUM_M-1:0] rd_request_ready_loc;
   wire [NUM_M-1:0] wr_request_eot_loc;
   wire [NUM_M-1:0] rd_request_eot_loc;
-  wire [NUM_M-1:0] rd_response_valid_loc;
+  wire [NUM_M-1:0] wr_response_ready_loc;
+  wire [NUM_M-1:0] rd_response_ready_loc;
   wire [NUM_M-1:0] wr_response_valid_loc;
+  wire [NUM_M-1:0] rd_response_valid_loc;
   wire             wr_eot_pending_all;
   wire             rd_eot_pending_all;
 
@@ -215,11 +221,11 @@ module util_hbm #(
   wire [NUM_M-1:0] m_axis_valid_loc;
   assign m_axis_valid = &m_axis_valid_loc;
 
-  wire [NUM_M-1:0] wr_response_ready_loc;
-  wire [NUM_M-1:0] rd_response_ready_loc;
-
   wire [NUM_M-1:0] wr_overflow_loc;
+  assign wr_overflow = |wr_overflow_loc;
+
   wire [NUM_M-1:0] rd_underflow_loc;
+  assign rd_underflow = |rd_underflow_loc;
 
   // Measure stored data in case transfer is shorter than programmed,
   //  do the measurement only with the first master, all others should be
@@ -638,8 +644,13 @@ module util_hbm #(
   end
   endgenerate
 
-  assign wr_overflow = |wr_overflow_loc;
+  assign m_axis_keep = {DST_DATA_WIDTH/8{1'b1}};
+  assign m_axis_strb = {DST_DATA_WIDTH/8{1'b1}};
+  assign m_axis_user = 1'b0;
 
-  assign rd_underflow = |rd_underflow_loc;
+  assign m_axi_awcache = {(NUM_M*4){1'b0}};
+  assign m_axi_awprot = {(NUM_M*3){1'b0}};
+  assign m_axi_arcache = {(NUM_M*4){1'b0}};
+  assign m_axi_arprot = {(NUM_M*3){1'b0}};
 
 endmodule
