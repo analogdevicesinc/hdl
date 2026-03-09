@@ -94,9 +94,6 @@ module spi_engine_execution #(
   localparam BIT_COUNTER_WIDTH =  DATA_WIDTH > 16 ? 5 :
                                   DATA_WIDTH > 8  ? 4 : 3;
 
-  localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
-  localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
-
   reg sclk_int = 1'b0;
   reg sdo_t_int = 1'b0;
 
