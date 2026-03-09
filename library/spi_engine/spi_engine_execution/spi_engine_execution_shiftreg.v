@@ -112,23 +112,23 @@ module spi_engine_execution_shiftreg #(
     .DATA_WIDTH(DATA_WIDTH),
     .NUM_OF_SDIO(NUM_OF_SDIO)
   ) sdo_data_assemble (
-    .clk (clk),
-    .resetn (resetn),
-    .data (sdo_data),
-    .data_ready (sdo_data_ready_int),
-    .data_valid (sdo_data_valid),
-    .exec_sdo_lane_cmd(exec_sdo_lane_cmd),
-    .lane_mask (sdo_lane_mask),
-    .idle_state (sdo_idle_state),
-    .left_aligned (left_aligned),
-    .transfer_active (transfer_active),
-    .trigger_tx (trigger_tx),
-    .first_bit (first_bit),
-    .sdo_enabled (sdo_enabled),
-    .index_ready (index_ready),
-    .data_assembled (aligned_sdo_data),
-    .data_ready_out (data_ready_out),
-    .last_handshake (data_sdo_v));
+    .clk              (clk),
+    .resetn           (resetn),
+    .data             (sdo_data),
+    .data_ready       (sdo_data_ready_int),
+    .data_valid       (sdo_data_valid),
+    .lane_cfg_valid   (exec_sdo_lane_cmd),
+    .sdo_lane_mask    (sdo_lane_mask),
+    .sdo_idle_state   (sdo_idle_state),
+    .left_shift_count (left_aligned),
+    .lane_cfg_ready   (index_ready),
+    .transfer_active  (transfer_active),
+    .trigger_tx       (trigger_tx),
+    .first_bit        (first_bit),
+    .sdo_enabled      (sdo_enabled),
+    .data_assembled   (aligned_sdo_data),
+    .word_ready       (data_ready_out),
+    .word_ready_aligned (data_sdo_v));
 
   genvar i;
   generate
