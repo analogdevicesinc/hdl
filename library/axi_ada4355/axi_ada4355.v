@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL(Verilog or VHDL) components. The individual modules are
@@ -229,7 +229,7 @@ module axi_ada4355 #(
     .adc_start_code(),
     .adc_sref_sync(),
     .adc_sync(),
-    .adc_num_lanes(adc_num_lanes),
+    .adc_num_lanes(),
     .up_pps_rcounter(32'b0),
     .up_pps_status(1'b0),
     .up_pps_irq_mask(),
@@ -249,7 +249,7 @@ module axi_ada4355 #(
     .adc_config_rd('d0),
     .adc_ctrl_status('d0),
     .up_usr_chanmax_out(),
-    .up_usr_chanmax_in(1),
+    .up_usr_chanmax_in(8'd0),
     .up_adc_gpio_in(32'b0),
     .up_adc_gpio_out(),
     .up_rstn(up_rstn),
@@ -304,6 +304,7 @@ module axi_ada4355 #(
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked),
+    .core_rst(1'b0),
     .up_dld(up_dld),
     .up_dwdata(up_dwdata),
     .up_drdata(up_drdata),
