@@ -47,9 +47,18 @@ ad_connect axi_hmcad1520_adc/adc_data  hmcad1520_dma/fifo_wr_din
 ad_connect axi_hmcad1520_adc/adc_valid hmcad1520_dma/fifo_wr_en
 ad_connect axi_hmcad1520_adc/adc_dovf  hmcad1520_dma/fifo_wr_overflow
 
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 150.0
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_RST2_PORT 1
+
+ad_ip_instance proc_sys_reset sys_150m_rstgen
+ad_ip_parameter sys_150m_rstgen CONFIG.C_EXT_RST_WIDTH 1
+ad_connect  sys_ps7/FCLK_CLK2 sys_150m_rstgen/slowest_sync_clk
+ad_connect  sys_150m_rstgen/ext_reset_in sys_ps7/FCLK_RESET2_N
+
 #DMA
 
-ad_connect  hmcad1520_dma/m_dest_axi_aresetn    $sys_cpu_resetn
+ad_connect  hmcad1520_dma/m_dest_axi_aresetn    sys_150m_rstgen/peripheral_aresetn
 
 # interrupts
 
@@ -61,5 +70,5 @@ ad_cpu_interconnect 0x44A00000 axi_hmcad1520_adc
 ad_cpu_interconnect 0x44A30000 hmcad1520_dma
 
 
-ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect $sys_cpu_clk hmcad1520_dma/m_dest_axi
+ad_mem_hp1_interconnect sys_ps7/FCLK_CLK2 sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect sys_ps7/FCLK_CLK2 hmcad1520_dma/m_dest_axi
