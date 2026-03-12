@@ -298,10 +298,10 @@ module spi_engine_offload #(
           spi_active <= 1'b1;
       // Deassert spi_active when offload execution is complete.
       // Conditions for completion:
-      // - (last_cmd_accept || !offload_cmd_valid): Either processed the last command OR no offload commands remain
+      // - (!offload_cmd_valid): no offload commands remain
       // - !(offload_disable_pending && sdi_data_valid): Prevent mode switch if SDI data is pending during disable
       // The !offload_cmd_valid condition handles edge cases where sdi_data_valid remains continuously asserted
-      end else if ((last_cmd_accept || !offload_cmd_valid) && !(offload_disable_pending && sdi_data_valid)) begin
+      end else if ((!offload_cmd_valid) && !(offload_disable_pending && sdi_data_valid)) begin
         spi_active <= 1'b0;
       end
     end
