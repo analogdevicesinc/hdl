@@ -200,6 +200,7 @@ sub xcvr_diff {
   while (my $fline = <READFILE>) {
     push(@File, $fline);
   }
+  close(READFILE) or die print "@[$myname] Can not close file called $pfile.\n";
 
   # Find the GT's attributes location in the file
   my $gt_paramblock_start = 0;
@@ -212,9 +213,24 @@ sub xcvr_diff {
       $gt_paramblock_end = $i;
     }
   }
-  close(READFILE) or die print "@[$myname] Can not close file called $pfile.\n";
 
-  ## Update the attributes with the generated values
+  ## Extract base file name for the diff output
+  my $file_name = $pfile;
+  $file_name =~ s/^.*\///;
+  $file_name =~ s/\.v$//;
+
+  my $git_exit_code = system("git rev-parse --is-inside-work-tree >/dev/null 2>&1");
+  if ($git_exit_code != 0) {
+    print "WARNING: ADI's util_xcvr's can not be updated, because the current directory is NOT an HDL repository!\n";
+    return 0;
+  }
+
+  ## Create a copy of the original file and stage it
+  my $pfile_copy = $pfile . ".new";
+  system "cp $pfile $pfile_copy";
+  system "git add $pfile_copy";
+
+  ## Update the attributes with the generated values on the copy
   for my $i ($gt_paramblock_start..$gt_paramblock_end) {
     if ($File[$i] =~ m/\.\w*/) { ## it match a word which starts with a dot
       my $param = $File[$i];
@@ -229,26 +245,19 @@ sub xcvr_diff {
     }
   }
 
-  # Try to open file for write
-  open(WRITEFILE, ">$pfile") or die print "@[$myname] Can not open file called $pfile for writing.\n";
-
+  # Write the modified content to the copy
+  open(WRITEFILE, ">$pfile_copy") or die print "@[$myname] Can not open file called $pfile_copy for writing.\n";
   foreach my $line (@File){
     print WRITEFILE $line;
   }
-  close(WRITEFILE) or die print "@[$myname] Can not close file called $pfile.\n";
+  close(WRITEFILE) or die print "@[$myname] Can not close file called $pfile_copy.\n";
 
-  ## save the diff between the current and updated XCVR files
-  my $file_name = $pfile;
-  $file_name =~ s/^.*\///;
-  $file_name =~ s/\.v$//;
+  ## Generate diff between the staged (original) copy and the modified copy
+  system "git diff $pfile_copy > $file_name.diff";
 
-  my $git_exit_code = system("git rev-parse --is-inside-work-tree >/dev/null 2>&1");
-  if ($git_exit_code == 0) {
-    system "git diff $pfile > $file_name.diff";
-    system "git checkout -- $pfile";
-  } else {
-    print "WARNING: ADI's util_xcvr's can not be updated, because the current directory is NOT an HDL repository!\n";
-  }
+  ## Unstage and remove the copy to keep the repo clean
+  system "git rm --cached -f $pfile_copy >/dev/null 2>&1";
+  unlink $pfile_copy;
 
 }
 
