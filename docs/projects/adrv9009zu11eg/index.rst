@@ -3,8 +3,8 @@
 ADRV9009ZU11EG HDL reference design
 ===============================================================================
 
-The HDL reference design is built around the Zynq® Ultrascale+ four
-Cortex™-A536 MPCore processors. A functional block diagram of the system is
+The HDL reference design is built around the Zynq® Ultrascale+ Quad-core ARM
+Cortex™-A53 MPCore processor. A functional block diagram of the system is
 shown below.
 
 The PS8 provides a SDIO, UART, Ethernet, SPI, USB 3.0, QSPI and a Display Port
@@ -95,7 +95,45 @@ The ORx links (ADC Path) operate with the following parameters:
 
 The Tx links (DAC Path) operate with the following parameters:
 
-- Tx Framer parameters: L=8, M=8, F=4, S=1, NP=16, N=16
+- Tx Framer parameters: L=8, M=8, F=2, S=1, NP=16, N=16
+- Sample Rate: 491.52 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- QPLL0 or CPLL
+
+Example block design for Single link; M=16; L=16
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: adrv9009_zu11eg_fmcomms8_jesd204b.svg
+   :width: 800
+   :align: center
+   :alt: ADRV9009ZU11EG-FMCOMMS8 JESD204B M=16 L=16 block diagram
+
+The Rx links (ADC Path) operate with the following parameters:
+
+- Rx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- QPLL0 or CPLL
+
+The ORx links (ADC Path) operate with the following parameters:
+
+- ORx Deframer parameters: L=8, M=8, F=2, S=1, NP=16, N=16
+- Sample Rate: 491.52 MSPS
+- Dual link: No
+- ORX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- QPLL0 or CPLL
+
+The Tx links (DAC Path) operate with the following parameters:
+
+- Tx Framer parameters: L=16, M=16, F=2, S=1, NP=16, N=16
 - Sample Rate: 491.52 MSPS
 - Dual link: No
 - TX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
@@ -106,7 +144,7 @@ The Tx links (DAC Path) operate with the following parameters:
 Digital Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The digital interface consists of 8 transmit, 4 receive and 4
+The default digital interface consists of 8 transmit, 4 receive and 4
 observation/sniffer lanes running up to 9.8Gbps. The transceivers then
 interface to the cores at 256bits @245.76MHz in the transmit and
 128bits @245.76MHz for the receive and sniffer/observation rates. The data is
@@ -164,23 +202,24 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-===================== ===========
-Instance              ZynqMP
-===================== ===========
-rx_adrv9009_tpl_core  0x84A0_0000
-tx_adrv9009_tpl_core  0x84A0_4000
-obs_adrv9009_tpl_core 0x84A0_8000
-axi_adrv9009_rx_xcvr  0x84A4_0000
-axi_adrv9009_tx_xcvr  0x84A2_0000
-axi_adrv9009_obs_xcvr 0x84A6_0000
-axi_adrv9009_tx_jesd  0x84A3_0000
-axi_adrv9009_rx_jesd  0x84A5_0000
-axi_adrv9009_obs_jesd 0x84A7_0000
-axi_adrv9009_rx_dma   0x9C42_0000
-axi_adrv9009_tx_dma   0x9C40_0000
-axi_adrv9009_obs_dma  0x9C44_0000
-axi_sysid_0           0x8500_0000
-===================== ===========
+======================== ===========
+Instance                 ZynqMP
+======================== ===========
+rx_adrv9009_tpl_core     0x84A0_0000
+tx_adrv9009_tpl_core     0x84A0_4000
+obs_adrv9009_tpl_core    0x84A0_8000
+axi_adrv9009_rx_xcvr     0x84A4_0000
+axi_adrv9009_tx_xcvr     0x84A2_0000
+axi_adrv9009_obs_xcvr    0x84A6_0000
+axi_adrv9009_tx_jesd     0x84A3_0000
+axi_adrv9009_rx_jesd     0x84A5_0000
+axi_adrv9009_obs_jesd    0x84A7_0000
+axi_adrv9009_rx_dma      0x9C42_0000
+axi_adrv9009_tx_dma      0x9C40_0000
+adrv9009_tx_data_offload 0x9C41_0000
+axi_adrv9009_obs_dma     0x9C44_0000
+axi_sysid_0              0x8500_0000
+======================== ===========
 
 In case of :adi:`ADRV2CRR-FMC`, additional interconnects may be present in
 the system.
@@ -191,6 +230,15 @@ Instance                                     Address
 corundum_hierarchy/corundum_core/s_axil_ctrl 0xA000_0000
 axi_iic                                      0x4300_0000
 ============================================ ===========
+
+In case of attaching :adi:`AD-FMCOMMS8-EBZ <EVAL-AD-FMCOMMS8-EBZ>`, additional
+interconnects may be present in the system.
+
+======================== ===========
+Instance                 Address
+======================== ===========
+adrv9009_rx_data_offload 0x9C43_0000
+======================== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -553,8 +601,8 @@ HDL related
    * - DATA_OFFLOAD
      - :git-hdl:`library/data_offload`
      - :ref:`data_offload`
-   * - UTIL_DO_RAM
-     - :git-hdl:`library/util_do_ram`
+   * - UTIL_HBM
+     - :git-hdl:`library/util_hbm`
      - :ref:`data_offload`
    * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen`
