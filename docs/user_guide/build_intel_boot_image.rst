@@ -85,11 +85,50 @@ Cyclone5 is slightly different.
 
 Supposing your host is a Linux system, your carrier is an Arria10, the
 eval board/project is AD9081 and you are using the built files from the Kuiper
-image mounted at ``/mnt/BOOT``, then you would:
+image mounted at ``/BOOT``, then you would:
+
+.. collapsible:: How to attach an SD card for the WSL users
+
+   Use WSL2 with `usbipd-win` for full USB passthrough. When running the
+   following commands in Windows PowerShell, make sure you open PowerShell **as Administrator**.
+
+   #. **Install usbipd-win on Windows**
+
+      .. code-block:: powershell
+
+         winget install usbipd-win
+
+      .. warning::
+
+         ``usbipd-win`` only works with devices that are physically connected
+         to your PC via USB. If your SD card is normally inserted directly into
+         a built-in SD card slot, it will **not** be detected. You must use an
+         external SD-card reader that connects through USB.
+
+   #. **Find the disk number**
+
+      .. code-block:: powershell
+
+         usbipd list
+
+   #. **Share the device**
+
+      .. code-block:: powershell
+
+         usbipd bind --busid <nr>
+
+   #. **Attach the device to WSL**
+
+      .. code-block:: powershell
+
+         usbipd attach --wsl --busid <nr>
 
 .. shell:: bash
 
-   $cd /mnt/BOOT
+   $lsblk
+   $sudo mkdir -p /BOOT
+   $sudo mount /dev/sde1 /BOOT
+   $cd /BOOT
    $cp socfpga_arria10_socdk_ad9081/u-boot.img .
    $cp socfpga_arria10_socdk_ad9081/fit_spl_fpga.itb .
    $mkdir -p extlinux
@@ -114,7 +153,7 @@ Then, clear the partition with zeros and write the preloader image
    $DEV=mmcblk0p3
    $cd /mnt/BOOT/socfpga_arria10_socdk_ad9081
    $sudo dd if=/dev/zero of=/dev/$DEV oflag=sync status=progress \
-   $    bs=$(sudo blockdev --getsize64 /dev/$DEV) count=1
+   $bs=$(sudo blockdev --getsize64 /dev/$DEV) count=1
     1+0 records in
     1+0 records out
     8388608 bytes (8.4 MB, 8.0 MiB) copied, 0.359183 s, 23.4 MB/s
@@ -136,6 +175,39 @@ Then, clear the partition with zeros and write the preloader image
       $else \
       $   echo The preloader image partition path likely is /dev/"$DEV"3 ; \
       $fi
+
+Unmount the partitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Make sure you are not in the /BOOT folder
+
+.. shell:: bash
+
+   $sudo umount /BOOT
+
+.. collapsible:: Steps to Eject SD Card for the WSL users
+
+   .. warning::
+
+      Always unmount the SD card inside WSL before detaching it.
+      Detaching without unmounting can lead to data corruption.
+
+   #. **Detach the USB device from WSL in PowerShell (Admin):**
+
+      .. code-block:: powershell
+
+         usbipd detach --busid <nr>
+
+   #. **Unbind the device**
+
+      .. code-block:: powershell
+
+         usbipd unbind --busid <nr>
+
+**Physically remove the SD card**
+
+After completing the steps above, you can safely remove the SD card from the
+USB reader.
 
 Examples of building the boot image
 -------------------------------------------------------------------------------
@@ -197,7 +269,7 @@ ADRV9371/Arria 10
 - ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts`
 
 Building the Linux Kernel image and the Devicetree
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Linux/Cygwin/WSL**
 
@@ -216,7 +288,7 @@ Building the Linux Kernel image and the Devicetree
    $make socfpga_arria10_socdk_adrv9371.dtb
 
 Building the Hardware Design
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Clone the HDL repository, then build the project:
 
@@ -246,7 +318,7 @@ compiler environment variables.
    $    ./adrv9371x_a10soc.sof soc_system.rbf
 
 Building the Preloader and Bootloader Image
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This flow applies starting with release :git-hdl:`2021_R1 <hdl_2021_r1:>` /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
@@ -310,7 +382,7 @@ named ``extlinux``:
    $    > extlinux/extlinux.conf
 
 Configuring the SD Card
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Below are the commands to create the preloader and bootloader partition using
 the Kuiper Linux image as a starting point.
@@ -407,7 +479,7 @@ ARRADIO/Terasic C5 SoC
 - ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts`
 
 Building the Linux Kernel image and the Devicetree
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Linux/Cygwin/WSL**
 
@@ -426,7 +498,7 @@ Building the Linux Kernel image and the Devicetree
    $make socfpga_cyclone5_sockit_arradio.dtb
 
 Building the Hardware Design
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Clone the HDL repository, then build the project:
 
@@ -456,7 +528,7 @@ compiler environment variables.
    $    ./arradio_c5soc.sof soc_system.rbf
 
 Building the Preloader and Bootloader Image
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This flow applies starting with release :git-hdl:`2021_R1 <hdl_2021_r1:>` /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
@@ -523,7 +595,7 @@ named ``extlinux``:
    $    > extlinux/extlinux.conf
 
 Jumper setup
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Here is the jumper configuration for ARRADIO/C5SoC to boot the image from the
 SD Card:
@@ -560,7 +632,7 @@ SD Card:
 And **set JP2 to 2.5V or 1.8V**.
 
 Configuring the SD Card
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Below are the commands to create the preloader and bootloader partition using
 the Kuiper Linux image as a starting point.
@@ -657,7 +729,7 @@ CN0540/DE10Nano
 - ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts`
 
 Building the Linux Kernel image and the Devicetree
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Linux/Cygwin/WSL**
 
@@ -676,7 +748,7 @@ Building the Linux Kernel image and the Devicetree
    $make socfpga_cyclone5_de10_nano_cn0540.dtb
 
 Building the Hardware Design
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Clone the HDL repository, then build the project:
 
@@ -706,7 +778,7 @@ compiler environment variables.
    $    ./cn0540_de10nano.sof soc_system.rbf
 
 Building the Preloader and Bootloader Image
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This flow applies starting with release :git-hdl:`2021_R1 <hdl_2021_r1:>` /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
@@ -773,7 +845,7 @@ named ``extlinux``:
    $    > extlinux/extlinux.conf
 
 Configuring the SD Card
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Below is the commands to create the preloader and bootloader partition using
 the Kuiper Linux image as a starting point.
@@ -871,7 +943,7 @@ AD9081/Agilex 7
 - ADI's Linux kernel: :git-linux:`../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts`
 
 Get aarch64-none-linux-gnu and set CROSS_COMPILE and ARCH variables
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. shell:: bash
    :no-path:
@@ -885,7 +957,7 @@ Get aarch64-none-linux-gnu and set CROSS_COMPILE and ARCH variables
    $cd ..
 
 Building the Linux Kernel image and the Devicetree
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. shell:: bash
    :no-path:
@@ -898,7 +970,7 @@ Building the Linux Kernel image and the Devicetree
    $cd ..
 
 Build the ARM Trusted Firmware
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. shell:: bash
    :no-path:
@@ -909,7 +981,7 @@ Build the ARM Trusted Firmware
    $cd ..
 
 Build U-Boot
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. shell:: bash
    :no-path:
@@ -928,7 +1000,7 @@ Build U-Boot
    $cd ..
 
 Building the Hardware Design
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Clone the HDL repository, then build the project:
 
@@ -956,7 +1028,7 @@ If you skipped the last section, ensure to set the architecture and cross compil
    $  -o hps=1
 
 Configuring the SD Card
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Below are the commands to create the preloader and bootloader partition using
 the Kuiper Linux image as a starting point.
@@ -1023,7 +1095,7 @@ Unmount the /BOOT partition:
     └─sdz3        8:51  1      8M  0 part
 
 Programming steps
-```````````````````````````````````````````````````````````````````````````````
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Set **S9** to JTAG
 - Power on the FPGA
