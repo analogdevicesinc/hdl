@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -89,27 +89,29 @@ ad_ip_parameter sys_500m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 # instance: ddr4
 
-ad_ip_instance ip:ddr4 axi_ddr_cntrl
-ad_ip_parameter axi_ddr_cntrl CONFIG.C0_CLOCK_BOARD_INTERFACE default_250mhz_clk2
-ad_ip_parameter axi_ddr_cntrl CONFIG.C0_DDR4_BOARD_INTERFACE ddr4_sdram_c2_083
-ad_ip_parameter axi_ddr_cntrl CONFIG.RESET_BOARD_INTERFACE reset
-ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT2_FREQ_HZ 250
-ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT3_FREQ_HZ 500
-ad_ip_parameter axi_ddr_cntrl CONFIG.ADDN_UI_CLKOUT4_FREQ_HZ 188
+ad_ip_instance ip:ddr4 axi_ddr_cntrl [list \
+  C0_CLOCK_BOARD_INTERFACE default_250mhz_clk2 \
+  C0_DDR4_BOARD_INTERFACE ddr4_sdram_c2_083 \
+  RESET_BOARD_INTERFACE reset \
+  ADDN_UI_CLKOUT2_FREQ_HZ 250 \
+  ADDN_UI_CLKOUT3_FREQ_HZ 500 \
+  ADDN_UI_CLKOUT4_FREQ_HZ 188 \
+]
 
 ad_ip_instance proc_sys_reset axi_ddr_cntrl_rstgen
 
 # instance: default peripherals
 
-ad_ip_instance axi_ethernet axi_ethernet_0
-ad_ip_parameter axi_ethernet_0 CONFIG.DIFFCLK_BOARD_INTERFACE sgmii_phyclk
-ad_ip_parameter axi_ethernet_0 CONFIG.ETHERNET_BOARD_INTERFACE sgmii_lvds
-ad_ip_parameter axi_ethernet_0 CONFIG.MDIO_BOARD_INTERFACE mdio_mdc
-ad_ip_parameter axi_ethernet_0 CONFIG.PHYRST_BOARD_INTERFACE phy_reset_out
-ad_ip_parameter axi_ethernet_0 CONFIG.TXCSUM Full
-ad_ip_parameter axi_ethernet_0 CONFIG.RXCSUM Full
-ad_ip_parameter axi_ethernet_0 CONFIG.TXMEM 8k
-ad_ip_parameter axi_ethernet_0 CONFIG.RXMEM 8k
+ad_ip_instance axi_ethernet axi_ethernet_0 [list \
+  DIFFCLK_BOARD_INTERFACE sgmii_phyclk \
+  ETHERNET_BOARD_INTERFACE sgmii_lvds \
+  MDIO_BOARD_INTERFACE mdio_mdc \
+  PHYRST_BOARD_INTERFACE phy_reset_out \
+  TXCSUM Full \
+  RXCSUM Full \
+  TXMEM 8k \
+  RXMEM 8k \
+]
 
 ad_ip_instance axi_dma axi_ethernet_dma
 ad_ip_parameter axi_ethernet_dma CONFIG.c_include_mm2s_dre 1

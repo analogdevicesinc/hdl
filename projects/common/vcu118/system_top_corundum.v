@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023, 2026 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top_corundumm (
 
   input           sys_rst,
   input           sys_clk_p,
@@ -73,7 +73,24 @@ module system_top (
 
   output          iic_rstn,
   inout           iic_scl,
-  inout           iic_sda
+  inout           iic_sda,
+
+  /*
+  * Ethernet: QSFP28
+  */
+  input           qsfp_mgt_refclk_p,
+  input           qsfp_mgt_refclk_n,
+
+  output  [3:0]   qsfp_tx_p,
+  output  [3:0]   qsfp_tx_n,
+  input   [3:0]   qsfp_rx_p,
+  input   [3:0]   qsfp_rx_n,
+
+  output          qsfp_modsell,
+  output          qsfp_resetl,
+  input           qsfp_modprsl,
+  input           qsfp_intl,
+  output          qsfp_lpmode
 );
 
   // internal signals
@@ -93,6 +110,32 @@ module system_top (
     .dio_i (gpio_o[16:0]),
     .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
+
+  // QSFP
+  wire qsfp_gtpowergood;
+  wire qsfp_mgt_refclk;
+  wire qsfp_mgt_refclk_bufg;
+  wire qsfp_rst;
+
+  wire ptp_rst;
+
+  assign ptp_rst = qsfp_rst;
+
+  IBUFDS_GTE4 ibufds_gte4_qsfp_mgt_refclk_0_inst (
+    .I     (qsfp_mgt_refclk_p),
+    .IB    (qsfp_mgt_refclk_n),
+    .CEB   (1'b0),
+    .O     (qsfp_mgt_refclk),
+    .ODIV2 (qsfp_mgt_refclk_int));
+
+  BUFG_GT bufg_gt_qsfp_mgt_refclk_0_inst (
+    .CE      (qsfp_gtpowergood),
+    .CEMASK  (1'b1),
+    .CLR     (1'b0),
+    .CLRMASK (1'b1),
+    .DIV     (3'd0),
+    .I       (qsfp_mgt_refclk_int),
+    .O       (qsfp_mgt_refclk_bufg));
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
@@ -144,6 +187,22 @@ module system_top (
     .gpio0_t (gpio_t[31:0]),
     .gpio1_i (gpio_i[63:32]),
     .gpio1_o (gpio_o[63:32]),
-    .gpio1_t (gpio_t[63:32]));
+    .gpio1_t (gpio_t[63:32]),
+
+    .ptp_rst (ptp_rst),
+
+    .qsfp_gtpowergood (qsfp_gtpowergood),
+    .qsfp_intl (qsfp_intl),
+    .qsfp_lpmode (qsfp_lpmode),
+    .qsfp_mgt_refclk (qsfp_mgt_refclk),
+    .qsfp_mgt_refclk_bufg (qsfp_mgt_refclk_bufg),
+    .qsfp_modprsl (qsfp_modprsl),
+    .qsfp_modsell (qsfp_modsell),
+    .qsfp_resetl (qsfp_resetl),
+    .qsfp_rst (qsfp_rst),
+    .qsfp_rx_n (qsfp_rx_n),
+    .qsfp_rx_p (qsfp_rx_p),
+    .qsfp_tx_n (qsfp_tx_n),
+    .qsfp_tx_p (qsfp_tx_p));
 
 endmodule

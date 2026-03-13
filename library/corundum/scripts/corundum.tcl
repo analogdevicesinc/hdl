@@ -58,15 +58,13 @@ switch $board {
   XCVU11P -
   VCU118 {
     create_bd_pin -dir O -from 0 -to 0 -type rst qsfp_rst
-    create_bd_pin -dir O fpga_boot
-    create_bd_pin -dir O -type clk qspi_clk
-    create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi0
-    create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi1
     create_bd_pin -dir I -type rst ptp_rst
     create_bd_pin -dir I -type clk qsfp_mgt_refclk
     create_bd_pin -dir I -type clk qsfp_mgt_refclk_bufg
     create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
-    create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
+
+    create_bd_pin -dir I -type clk clk_125mhz
+    create_bd_pin -dir I -type rst rst_125mhz
 
     if {$DDR_ENABLE == 1} {
       create_bd_pin -dir I -type clk ddr_clk
@@ -79,9 +77,6 @@ switch $board {
       create_bd_pin -dir I -type rst hbm_rst
       create_bd_pin -dir I hbm_status
     }
-
-    create_bd_pin -dir I -type clk clk_125mhz
-    create_bd_pin -dir I -type rst rst_125mhz
   }
 }
 
@@ -395,20 +390,13 @@ switch $board {
   }
   XCVU11P -
   VCU118 {
-    ad_connect ethernet_core/clk_125mhz clk_125mhz
-    ad_connect ethernet_core/rst_125mhz rst_125mhz
     ad_connect ethernet_core/qsfp_drp_clk clk_125mhz
     ad_connect ethernet_core/qsfp_drp_rst rst_125mhz
     ad_connect ethernet_core/qsfp_mgt_refclk qsfp_mgt_refclk
     ad_connect ethernet_core/qsfp_mgt_refclk_bufg qsfp_mgt_refclk_bufg
     ad_connect ethernet_core/qsfp_rst qsfp_rst
-    ad_connect ethernet_core/fpga_boot fpga_boot
-    ad_connect ethernet_core/qspi_clk qspi_clk
 
-    ad_connect ethernet_core/qspi0 qspi0
-    ad_connect ethernet_core/qspi1 qspi1
     ad_connect ethernet_core/qsfp qsfp
-    ad_connect ethernet_core/i2c i2c
 
     ad_connect corundum_core/ptp_clk qsfp_mgt_refclk_bufg
     ad_connect corundum_core/ptp_rst ptp_rst
