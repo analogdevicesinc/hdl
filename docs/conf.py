@@ -27,7 +27,7 @@ source_suffix = '.rst'
 # -- External docs configuration ----------------------------------------------
 
 interref_repos = [
-        'adi-kuiper-gen',
+        'kuiper',
         'doctools',
         'documentation',
         'no-OS',

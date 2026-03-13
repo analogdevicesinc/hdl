@@ -58,7 +58,7 @@ The script can take 3 parameters:
 
    Keep in mind that **the u-boot is FPGA-specific**!
 
-   See this :external+adi-kuiper-gen:ref:`tutorial <quick-start>` for
+   See this :external+kuiper:ref:`tutorial <quick-start>` for
    instructions on how to obtain the ADI Kuiper image and use it.
 
 If you didn't use ``make`` parameters when building the project, then
@@ -116,7 +116,7 @@ The script can take 4 parameters (the last one is optional):
 
    Keep in mind that **the u-boot is FPGA-specific**!
 
-   See this :external+adi-kuiper-gen:ref:`tutorial <quick-start>` for
+   See this :external+kuiper:ref:`tutorial <quick-start>` for
    instructions on how to obtain the ADI Kuiper image and use it.
 
 If you didn't use ``make`` parameters when building the project, then
@@ -173,7 +173,7 @@ The script can take 4 parameters:
 
    Keep in mind that **the u-boot is FPGA-specific**!
 
-   See this :external+adi-kuiper-gen:ref:`tutorial <quick-start>` for
+   See this :external+kuiper:ref:`tutorial <quick-start>` for
    instructions on how to obtain the ADI Kuiper image and use it.
 
 If you didn't use ``make`` parameters when building the project, then
