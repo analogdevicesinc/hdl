@@ -7,6 +7,7 @@ SOURCE+=" ../util_pack_common/pack_interconnect.v"
 SOURCE+=" ../util_pack_common/pack_network.v"
 SOURCE+=" ../util_pack_common/pack_shell.v"
 SOURCE+=" ../../common/ad_perfect_shuffle.v"
+SOURCE+=" ../../common/util_pipeline_stage.v"
 
 cd `dirname $0`
 source ../../common/tb/run_tb.sh
