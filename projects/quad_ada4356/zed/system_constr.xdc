@@ -28,8 +28,8 @@ set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d
 set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports dco_0_n];   ## D9  FMC_LA01_CC_N   IO_L14N_T2_SRCC_34        DCON_A
 set_property -dict {PACKAGE_PIN R20 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d0a_0_p];   ## D14 FMC_LA09_P      IO_L17P_T2_34             D0AP
 set_property -dict {PACKAGE_PIN R21 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d0a_0_n];   ## D15 FMC_LA09_N      IO_L17N_T2_34             D0AN
-set_property -dict {PACKAGE_PIN R19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d1a_0_p];   ## C14 FMC_LA10_P      IO_L22P_T3_34             D1BP  ????
-set_property -dict {PACKAGE_PIN T19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d1a_0_n];   ## C15 FMC_LA10_N      IO_L22N_T3_34             D1BN  ????
+set_property -dict {PACKAGE_PIN R19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d1a_0_p];   ## C14 FMC_LA10_P      IO_L22P_T3_34             D1AP
+set_property -dict {PACKAGE_PIN T19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d1a_0_n];   ## C15 FMC_LA10_N      IO_L22N_T3_34             D1AN
 set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_0_p]; ## D11 FMC_LA05_P      IO_L7P_T1_34              FCOP_A
 set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_0_n]; ## D12 FMC_LA05_N      IO_L7N_T1_34              FCON_A
 
@@ -39,8 +39,8 @@ set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d
 set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports dco_1_n];   ## G7  FMC_LA00_CC_N   IO_L13N_T2_MRCC_34        DCON_B
 set_property -dict {PACKAGE_PIN J21 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d0a_1_p];   ## G12 FMC_LA08_P      IO_L8P_T1_34              D0BP
 set_property -dict {PACKAGE_PIN J22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d0a_1_n];   ## G13 FMC_LA08_N      IO_L8N_T1_34              D0BN
-set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d1a_1_p];   ## H13 FMC_LA07_P      IO_L21P_T3_DQS_34         D1BP  ????
-set_property -dict {PACKAGE_PIN T17 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d1a_1_n];   ## H14 FMC_LA07_N      IO_L21N_T3_DQS_34         D1BN  ????
+set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d1a_1_p];   ## H13 FMC_LA07_P      IO_L21P_T3_DQS_34         D1BP
+set_property -dict {PACKAGE_PIN T17 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d1a_1_n];   ## H14 FMC_LA07_N      IO_L21N_T3_DQS_34         D1BN
 set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_1_p]; ## G9  FMC_LA03_P      IO_L16P_T2_34             FCOP_B
 set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_1_n]; ## G10 FMC_LA03_N      IO_L16N_T2_34             FCON_B
 
