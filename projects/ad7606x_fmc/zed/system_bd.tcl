@@ -21,6 +21,6 @@ ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 set sys_cstring "INTF=$ad_project_params(INTF)\
 ADC_N_BITS=$ad_project_params(ADC_N_BITS)\
-NUM_OF_SDI=$ad_project_params(NUM_OF_SDI)"
+NUM_OF_SDIO=$ad_project_params(NUM_OF_SDIO)"
 
 sysid_gen_sys_init_file $sys_cstring
