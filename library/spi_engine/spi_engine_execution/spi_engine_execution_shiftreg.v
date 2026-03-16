@@ -38,7 +38,6 @@
 module spi_engine_execution_shiftreg #(
 
   parameter DEFAULT_SPI_CFG = 0,
-  parameter ALL_ACTIVE_LANE_MASK = 8'hFF,
   parameter DATA_WIDTH = 8,
   parameter NUM_OF_SDIO = 1,
   parameter [1:0] SDI_DELAY = 2'b00,
