@@ -132,13 +132,13 @@ set_property -dict [list \
  ] \
  [ipx::get_hdl_parameters SDO_STREAMING -of_objects $cc]
 
-## NUM_OF_SDI
+## NUM_OF_SDIO
 set_property -dict [list \
   "value_validation_type" "range_long" \
   "value_validation_range_minimum" "1" \
   "value_validation_range_maximum" "8" \
  ] \
- [ipx::get_user_parameters NUM_OF_SDI -of_objects $cc]
+ [ipx::get_user_parameters NUM_OF_SDIO -of_objects $cc]
 
 ## DATA_WIDTH
 set_property -dict [list \
@@ -183,11 +183,11 @@ set_property -dict [list \
   "tooltip" "\[DATA_WIDTH\] Define the data interface width"
 ] [ipgui::get_guiparamspec -name "DATA_WIDTH" -component $cc]
 
-ipgui::add_param -name "NUM_OF_SDI" -component $cc -parent $general_group
+ipgui::add_param -name "NUM_OF_SDIO" -component $cc -parent $general_group
 set_property -dict [list \
-  "display_name" "Number of MISO lines" \
-  "tooltip" "\[NUM_OF_SDI\] Define the number of MISO lines" \
-] [ipgui::get_guiparamspec -name "NUM_OF_SDI" -component $cc]
+  "display_name" "Number of MISO/MOSI lines" \
+  "tooltip" "\[NUM_OF_SDIO\] Define the number of MISO/MOSI lines" \
+] [ipgui::get_guiparamspec -name "NUM_OF_SDIO" -component $cc]
 
 ipgui::add_param -name "ASYNC_SPI_CLK" -component $cc -parent $general_group
 set_property -dict [list \

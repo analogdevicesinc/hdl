@@ -112,7 +112,7 @@ proc spi_engine_create {args} {
   ad_ip_instance spi_engine_execution $execution
   ad_ip_parameter $execution CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter $execution CONFIG.NUM_OF_CS $num_cs
-  ad_ip_parameter $execution CONFIG.NUM_OF_SDI $num_sdi
+  ad_ip_parameter $execution CONFIG.NUM_OF_SDIO $num_sdi
   ad_ip_parameter $execution CONFIG.SDO_DEFAULT 1
   ad_ip_parameter $execution CONFIG.SDI_DELAY $sdi_delay
   ad_ip_parameter $execution CONFIG.ECHO_SCLK $echo_sclk
@@ -121,7 +121,7 @@ proc spi_engine_create {args} {
   ad_ip_parameter $axi_regmap CONFIG.MM_IF_TYPE 0
   ad_ip_parameter $axi_regmap CONFIG.DATA_WIDTH $data_width
   ad_ip_parameter $axi_regmap CONFIG.OFFLOAD_EN $offload_en
-  ad_ip_parameter $axi_regmap CONFIG.NUM_OF_SDI $num_sdi
+  ad_ip_parameter $axi_regmap CONFIG.NUM_OF_SDIO $num_sdi
   ad_ip_parameter $axi_regmap CONFIG.ASYNC_SPI_CLK $async_spi_clk
   ad_ip_parameter $axi_regmap CONFIG.OFFLOAD0_CMD_MEM_ADDRESS_WIDTH $cmd_mem_addr_width
   ad_ip_parameter $axi_regmap CONFIG.OFFLOAD0_SDO_MEM_ADDRESS_WIDTH $data_mem_addr_width
@@ -135,7 +135,7 @@ proc spi_engine_create {args} {
     ad_ip_instance spi_engine_offload $offload
     ad_ip_parameter $offload CONFIG.DATA_WIDTH $data_width
     ad_ip_parameter $offload CONFIG.ASYNC_SPI_CLK 0
-    ad_ip_parameter $offload CONFIG.NUM_OF_SDI $num_sdi
+    ad_ip_parameter $offload CONFIG.NUM_OF_SDIO $num_sdi
     ad_ip_parameter $offload CONFIG.CMD_MEM_ADDRESS_WIDTH $cmd_mem_addr_width
     ad_ip_parameter $offload CONFIG.SDO_MEM_ADDRESS_WIDTH $data_mem_addr_width
     ad_ip_parameter $offload CONFIG.SDO_STREAMING $sdo_streaming
@@ -143,7 +143,7 @@ proc spi_engine_create {args} {
 
     ad_ip_instance spi_engine_interconnect $interconnect
     ad_ip_parameter $interconnect CONFIG.DATA_WIDTH $data_width
-    ad_ip_parameter $interconnect CONFIG.NUM_OF_SDI $num_sdi
+    ad_ip_parameter $interconnect CONFIG.NUM_OF_SDIO $num_sdi
   }
 
   # Connections based on vendor
@@ -191,6 +191,7 @@ proc spi_engine_create {args} {
       ad_connect $offload/spi_engine_ctrl $interconnect/s0_ctrl
       ad_connect $axi_regmap/spi_engine_ctrl $interconnect/s1_ctrl
       ad_connect $interconnect/m_ctrl $execution/ctrl
+      ad_connect $interconnect/m_offload_active_ctrl $execution/s_offload_active_ctrl
       ad_connect $offload/offload_sdi m_axis_sample
       ad_connect $offload/trigger trigger
 
@@ -240,6 +241,7 @@ proc spi_engine_create {args} {
       ad_connect $offload.sdo_data $interconnect.s0_sdo
       ad_connect $interconnect.s0_sdi $offload.sdi_data
       ad_connect $interconnect.s0_sync $offload.sync
+      ad_connect $interconnect.m_offload_active_ctrl $execution.s_offload_active_ctrl
       ad_connect $axi_regmap.cmd $interconnect.s1_cmd
       ad_connect $axi_regmap.sdo_data $interconnect.s1_sdo
       ad_connect $interconnect.s1_sdi $axi_regmap.sdi_data

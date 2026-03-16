@@ -191,7 +191,7 @@ the default values for ``sdo_streaming``, ``cmd_mem_addr_width``,
    spi_engine_create "spi_ad463x" 32         1             1          1       $NUM_OF_SDI 0          1
    ad_ip_parameter spi_ad463x/execution CONFIG.DEFAULT_SPI_CFG 1   ;
 
-   ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_0 $NUM_OF_SDI
+   ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_0 $NUM_OF_SDIO
    ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_1 $CAPTURE_ZONE
    ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_2 $CLK_MODE
    ad_ip_parameter spi_ad463x/axi_regmap CONFIG.CFG_INFO_3 $DDR_EN
