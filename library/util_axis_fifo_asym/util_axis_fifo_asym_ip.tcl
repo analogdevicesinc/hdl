@@ -10,6 +10,7 @@ global VIVADO_IP_LIBRARY
 
 adi_ip_create util_axis_fifo_asym
 adi_ip_files util_axis_fifo_asym [list \
+  "$ad_hdl_dir/library/axi_dmac/axi_register_slice.v" \
   "util_axis_fifo_asym.v" \
 ]
 
