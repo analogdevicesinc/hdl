@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -44,7 +44,8 @@ module util_axis_fifo_asym #(
   parameter ALMOST_FULL_THRESHOLD = 4,
   parameter TLAST_EN = 0,
   parameter TKEEP_EN = 0,
-  parameter REDUCED_FIFO = 1
+  parameter REDUCED_FIFO = 1,
+  parameter SRC_REG_SLICE_EN = 0
 ) (
   input m_axis_aclk,
   input m_axis_aresetn,
@@ -81,6 +82,14 @@ module util_axis_fifo_asym #(
   localparam A_ALMOST_FULL_THRESHOLD = (REDUCED_FIFO) ? ((ALMOST_FULL_THRESHOLD+RATIO-1)/RATIO) : ALMOST_FULL_THRESHOLD;
   localparam A_ALMOST_EMPTY_THRESHOLD = (REDUCED_FIFO) ? ((ALMOST_EMPTY_THRESHOLD+RATIO-1)/RATIO) : ALMOST_EMPTY_THRESHOLD;
 
+  localparam MEM_WORD = (TKEEP_EN & TLAST_EN) ? (A_WIDTH+A_WIDTH/8+1) :
+                        (TKEEP_EN)            ? (A_WIDTH+A_WIDTH/8)   :
+                        (TLAST_EN)            ? (A_WIDTH+1)           :
+                                                (A_WIDTH);
+
+  wire [MEM_WORD-1:0] slice_s_data [RATIO-1:0];
+  wire [MEM_WORD-1:0] slice_m_data [RATIO-1:0];
+
   // slave and master sequencers
   reg [$clog2(RATIO)-1:0] s_axis_counter;
   reg [$clog2(RATIO)-1:0] m_axis_counter;
@@ -96,6 +105,7 @@ module util_axis_fifo_asym #(
 
   wire [RATIO-1:0] s_axis_ready_int_s;
   wire [RATIO-1:0] s_axis_valid_int_s;
+  wire [RATIO-1:0] slice_m_valid;
   wire [RATIO*A_WIDTH-1:0] s_axis_data_int_s;
   wire [RATIO*A_WIDTH/8-1:0] s_axis_tkeep_int_s;
   wire [RATIO-1:0] s_axis_tlast_int_s;
@@ -104,6 +114,12 @@ module util_axis_fifo_asym #(
   wire [RATIO*A_ADDRESS-1:0] s_axis_room_int_s;
 
   wire m_axis_valid_int;
+
+  wire [RATIO-1:0] fifo_s_ready;
+  wire [RATIO-1:0] fifo_s_valid;
+  wire [RATIO*A_WIDTH-1:0] fifo_s_data;
+  wire [RATIO*A_WIDTH/8-1:0] fifo_s_tkeep;
+  wire [RATIO-1:0] fifo_s_tlast;
 
   // instantiate the FIFOs
   genvar i;
@@ -132,14 +148,66 @@ module util_axis_fifo_asym #(
         .m_axis_almost_empty (m_axis_almost_empty_int_s[i]),
         .s_axis_aclk    (s_axis_aclk),
         .s_axis_aresetn (s_axis_aresetn),
-        .s_axis_ready   (s_axis_ready_int_s[i]),
-        .s_axis_valid   (s_axis_valid_int_s[i]),
-        .s_axis_data    (s_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
-        .s_axis_tkeep   (s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
-        .s_axis_tlast   (s_axis_tlast_int_s[i]),
+        .s_axis_ready   (fifo_s_ready[i]),
+        .s_axis_valid   (fifo_s_valid[i]),
+        .s_axis_data    (fifo_s_data[A_WIDTH*i+:A_WIDTH]),
+        .s_axis_tkeep   (fifo_s_tkeep[A_WIDTH/8*i+:A_WIDTH/8]),
+        .s_axis_tlast   (fifo_s_tlast[i]),
         .s_axis_room    (s_axis_room_int_s[A_ADDRESS*i+:A_ADDRESS]),
         .s_axis_full    (s_axis_full_int_s[i]),
         .s_axis_almost_full (s_axis_almost_full_int_s[i]));
+
+      // SRC_REG_SLICE_EN: Adds an AXI register slice on the slave (source) side
+      // of the FIFO to break timing critical paths. This is required for high-
+      // frequency clock domains such as the SPI Engine's spi_clk (150-160 MHz),
+      // where the combinatorial path from s_axis_* signals through the FIFO
+      // creates timing violations. Disabled by default (0) since modules like
+      // data_offload do not require this additional latency.
+      if (SRC_REG_SLICE_EN) begin : gen_with_slice
+        axi_register_slice #(
+          .DATA_WIDTH(MEM_WORD),
+          .FORWARD_REGISTERED(1),
+          .BACKWARD_REGISTERED(1)
+        ) i_src_dst_slice (
+          .clk(s_axis_aclk),
+          .resetn(s_axis_aresetn),
+          .s_axi_data(slice_s_data[i]),
+          .s_axi_valid(s_axis_valid_int_s[i]),
+          .s_axi_ready(s_axis_ready_int_s[i]),
+          .m_axi_data(slice_m_data[i]),
+          .m_axi_valid(slice_m_valid[i]),
+          .m_axi_ready(fifo_s_ready[i]));
+
+        // Connect slice master to FIFO slave
+        assign fifo_s_valid[i] = slice_m_valid[i];
+
+        // TLAST and TKEEP packing/unpacking
+        if (TLAST_EN & TKEEP_EN) begin
+          assign slice_s_data[i]                      = {s_axis_data_int_s[A_WIDTH*i+:A_WIDTH], s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8], s_axis_tlast_int_s[i]};
+          assign fifo_s_data[A_WIDTH*i+:A_WIDTH]      = slice_m_data[i][(MEM_WORD-1)-:A_WIDTH];
+          assign fifo_s_tkeep[A_WIDTH/8*i+:A_WIDTH/8] = slice_m_data[i][(MEM_WORD-A_WIDTH-1)-:A_WIDTH/8];
+          assign fifo_s_tlast[i]                      = slice_m_data[i][(MEM_WORD-A_WIDTH-(A_WIDTH/8)-1)];
+        end else if (TKEEP_EN) begin
+          assign slice_s_data[i]                      = {s_axis_data_int_s[A_WIDTH*i+:A_WIDTH], s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]};
+          assign fifo_s_data[A_WIDTH*i+:A_WIDTH]      = slice_m_data[i][(MEM_WORD-1)-:A_WIDTH];
+          assign fifo_s_tkeep[A_WIDTH/8*i+:A_WIDTH/8] = slice_m_data[i][(MEM_WORD-A_WIDTH-1)-:A_WIDTH/8];
+        end else if (TLAST_EN) begin
+          assign slice_s_data[i]                      = {s_axis_data_int_s[A_WIDTH*i+:A_WIDTH], s_axis_tlast_int_s[i]};
+          assign fifo_s_data[A_WIDTH*i+:A_WIDTH]      = slice_m_data[i][(MEM_WORD-1)-:A_WIDTH];
+          assign fifo_s_tlast[i]                      = slice_m_data[i][(MEM_WORD-A_WIDTH-1)];
+        end else begin
+          assign slice_s_data[i]                      = {s_axis_data_int_s[A_WIDTH*i+:A_WIDTH]};
+          assign fifo_s_data[A_WIDTH*i+:A_WIDTH]      = slice_m_data[i][(MEM_WORD-1)-:A_WIDTH];
+        end
+
+      end else begin : gen_without_slice
+        // Direct connection - bypass register slice
+        assign s_axis_ready_int_s[i]                = fifo_s_ready[i];
+        assign fifo_s_valid[i]                      = s_axis_valid_int_s[i];
+        assign fifo_s_data[A_WIDTH*i+:A_WIDTH]      = s_axis_data_int_s[A_WIDTH*i+:A_WIDTH];
+        assign fifo_s_tkeep[A_WIDTH/8*i+:A_WIDTH/8] = s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8];
+        assign fifo_s_tlast[i]                      = s_axis_tlast_int_s[i];
+      end
     end
   endgenerate
 
