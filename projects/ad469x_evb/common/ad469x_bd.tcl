@@ -6,13 +6,13 @@
 # system level parameters
 
 set SPI_4WIRE $ad_project_params(SPI_4WIRE)
-if {[info exists ad_project_params(OFFLOAD_MODE)]} {
-  set OFFLOAD_MODE $ad_project_params(OFFLOAD_MODE)
+if {[info exists ad_project_params(PWM_OFFLOAD)]} {
+  set PWM_OFFLOAD $ad_project_params(PWM_OFFLOAD)
 } else {
-  set OFFLOAD_MODE 0
+  set PWM_OFFLOAD 0
 }
 puts "build parameter: SPI_4WIRE: $SPI_4WIRE"
-puts "build parameter: OFFLOAD_MODE: $OFFLOAD_MODE"
+puts "build parameter: PWM_OFFLOAD: $PWM_OFFLOAD"
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad469x_spi
 
@@ -54,7 +54,7 @@ ad_connect sys_cpu_resetn ad469x_trigger_gen/s_axi_aresetn
 
 # SPI Engine offload trigger configuration
 
-if {$OFFLOAD_MODE == 0 || $OFFLOAD_MODE == 1} {
+if {$PWM_OFFLOAD == 0 || $PWM_OFFLOAD == 1} {
 
   create_bd_cell -type module -reference sync_bits busy_sync
   create_bd_cell -type module -reference ad_edge_detect busy_capture
@@ -69,7 +69,7 @@ if {$OFFLOAD_MODE == 0 || $OFFLOAD_MODE == 1} {
   ad_connect busy_sync/out_bits busy_capture/signal_in
   ad_connect busy_capture/signal_out $hier_spi_engine/trigger
 
-} elseif {$OFFLOAD_MODE == 2} {
+} elseif {$PWM_OFFLOAD == 2} {
 
   ad_ip_instance ilvector_logic trigger_gate
   ad_ip_parameter trigger_gate CONFIG.C_SIZE 1
@@ -102,7 +102,7 @@ ad_connect axi_ad469x_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
 
 # Trigger gate connections for manual mode (needs DMA instance)
 
-if {$OFFLOAD_MODE == 2} {
+if {$PWM_OFFLOAD == 2} {
   ad_connect trigger_gate/Op1 ad469x_trigger_gen/pwm_0
   ad_connect trigger_gate/Op2 axi_ad469x_dma/s_axis_xfer_req
   ad_connect $hier_spi_engine/trigger trigger_gate/Res
@@ -110,7 +110,7 @@ if {$OFFLOAD_MODE == 2} {
 
 # CNV gating configuration
 
-if {$OFFLOAD_MODE == 0} {
+if {$PWM_OFFLOAD == 0} {
 
   ad_ip_instance ilvector_logic cnv_gate
   ad_ip_parameter cnv_gate CONFIG.C_SIZE 1
@@ -127,7 +127,7 @@ if {$OFFLOAD_MODE == 0} {
   ad_connect cnv_gate_gpio/Op2 gpio_cnv
   ad_connect cnv_gate_gpio/Res ad469x_spi_cnv
 
-} elseif {$OFFLOAD_MODE == 1} {
+} elseif {$PWM_OFFLOAD == 1} {
 
   ad_ip_instance ilvector_logic cnv_gate_busy
   ad_ip_parameter cnv_gate_busy CONFIG.C_SIZE 1

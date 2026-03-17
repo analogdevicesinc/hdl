@@ -20,6 +20,6 @@ ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 set sys_cstring "SPI_4WIRE=$ad_project_params(SPI_4WIRE)\
-  OFFLOAD_MODE=$ad_project_params(OFFLOAD_MODE)"
+  PWM_OFFLOAD=$ad_project_params(PWM_OFFLOAD)"
 
 sysid_gen_sys_init_file $sys_cstring
