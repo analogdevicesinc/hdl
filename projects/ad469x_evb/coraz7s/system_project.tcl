@@ -10,9 +10,13 @@ source ../../scripts/adi_board.tcl
 # Parameter description
 
 # SPI_4WIRE - For 0 CNV is linked to PWM. For 1 CNV is linked to SPI_CS
+# PWM_OFFLOAD - 0: BUSY edge trigger, DMA+PWM gated CNV (ad469x)
+#                1: BUSY edge trigger, PWM+BUSY gated CNV (ad4692 register)
+#                2: PWM+DMA gated trigger, no CNV gating (ad4692 manual)
 
 adi_project ad469x_evb_coraz7s 0 [list \
-  SPI_4WIRE [get_env_param SPI_4WIRE 0]]
+  SPI_4WIRE    [get_env_param SPI_4WIRE    0] \
+  PWM_OFFLOAD [get_env_param PWM_OFFLOAD 0]]
 
 adi_project_files ad469x_evb_coraz7s [list \
     "../../../library/common/ad_iobuf.v" \
