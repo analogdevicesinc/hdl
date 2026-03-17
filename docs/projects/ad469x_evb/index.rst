@@ -7,25 +7,28 @@ Overview
 -------------------------------------------------------------------------------
 
 The AD469X HDL reference design provides all the interfaces that are
-necessary to interact with the devices on the :adi:`EVAL-AD4696` board.
+necessary to interact with the devices on the :adi:`EVAL-AD4696` and
+:adi:`EVAL-AD4692-ARDZ` boards.
 
 The design has a SPI Engine instance to control and acquire data from the
-:adi:`AD4696` 16-bit precisions ADC, providing support to capture continuous
-samples at maximum sampling rate. Currently the design supports the Zedboard.
+:adi:`AD4696`/:adi:`AD4692` 16-bit precision ADCs, providing support to capture
+continuous samples at maximum sampling rate. The ``PWM_OFFLOAD`` parameter
+allows selecting the appropriate offload trigger and CNV gating scheme for
+each device.
 
 Supported boards
 -------------------------------------------------------------------------------
-
-- EVAL-AD4692
+- :adi:`EVAL-AD4692-ARDZ`
 - :adi:`EVAL-AD4696`
+
 
 Supported devices
 -------------------------------------------------------------------------------
 
-- AD4691
-- AD4692
-- AD4693
-- AD4694
+- :adi:`AD4691`
+- :adi:`AD4692`
+- :adi:`AD4693`
+- :adi:`AD4694`
 - :adi:`AD4695`
 - :adi:`AD4696`
 - :adi:`AD4697`
@@ -44,8 +47,8 @@ Block design
 The reference design uses the standard :ref:`SPI Engine Framework <spi_engine>`
 to interface the :adi:`AD4696` ADC in single SDO Mode.
 The :ref:`SPI Engine Offload module <spi_engine offload>`, which can be used to
-capture continuous data stream at maximum data rate, is triggered by the BUSY
-signal of the device.
+capture continuous data stream at maximum data rate, is triggered depending on
+the ``PWM_OFFLOAD`` parameter (see `Configuration modes`_).
 
 CNV signal gating
 -------------------------------------------------------------------------------
@@ -54,24 +57,38 @@ The :git-hdl:`AXI PWM GEN <library/axi_pwm_gen>` IP core is used to drive CNV
 when the SPI Engine is operating in Offload mode along with logic gates and a
 few extra signals to ensure proper control of the signal.
 
-The AND gate has the DMA ``s_axis_xfer_req`` signal and the PWM signal as inputs.
-Since the PWM is free running, this gate is necessary to prevent the sequencer
-on the ADC from getting out of sync. When the DMA is unable to receive more
-data, the ``s_axis_xfer_req`` signal is driven low, blocking the PWM signal.
+In the default mode (``PWM_OFFLOAD=0``), the AND gate has the DMA
+``s_axis_xfer_req`` signal and the PWM signal as inputs. Since the PWM is free
+running, this gate is necessary to prevent the sequencer on the ADC from getting
+out of sync. When the DMA is unable to receive more data, the
+``s_axis_xfer_req`` signal is driven low, blocking the PWM signal.
 
-Also, to exit conversion mode on the device, one extra pulse on the CNV pin is
-needed before sending the exit command, otherwise this command is ignored by the
-ADC. This feature also allows the system to read single samples using the SPI
-Engine FIFO mode. To achieve this, an OR gate is used to allow the software to
-generate CNV pulses using a GPIO signal.
+In register mode (``PWM_OFFLOAD=1``), the AND gate has the PWM signal and the
+BUSY signal as inputs, gating the CNV based on the ADC busy state.
+
+In both modes 0 and 1, an OR gate allows the software to generate CNV pulses
+using a GPIO signal. This is needed to exit conversion mode on the device, as
+one extra pulse on the CNV pin is required before sending the exit command.
+This also allows the system to read single samples using the SPI Engine FIFO
+mode.
+
+In manual mode (``PWM_OFFLOAD=2``), no CNV gating is used. Instead, the SPI
+Engine offload trigger itself is gated by an AND of the PWM and DMA
+``s_axis_xfer_req`` signals.
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The data path and clock domains are depicted in the below diagram:
+Default mode (PWM_OFFLOAD=0)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The data path and clock domains are depicted in the below diagrams.
+These diagrams correspond to the default configuration (``PWM_OFFLOAD=0``),
+where the BUSY falling edge triggers the SPI Engine offload and the CNV signal
+is gated by DMA ``s_axis_xfer_req`` AND PWM, with a GPIO OR override.
 
 Zedboard
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. image:: ad469x_hdl_zed.svg
    :width: 800
@@ -79,7 +96,7 @@ Zedboard
    :alt: AD469X_EVB/Zedboard block diagram
 
 Cora Z7S
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. image:: ad469x_hdl_coraz7s.svg
    :width: 800
@@ -87,12 +104,39 @@ Cora Z7S
    :alt: AD469X_EVB/Cora block diagram
 
 DE10-Nano
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. image:: ad469x_hdl_de10nano.svg
    :width: 800
    :align: center
    :alt: AD469X_EVB/DE10-Nano block diagram
+
+AD4692 register mode (PWM_OFFLOAD=1)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In register mode, the SPI Engine offload is triggered by the BUSY falling edge,
+same as the default mode. The difference is in the CNV gating: instead of
+gating with DMA ``s_axis_xfer_req``, the CNV signal is gated by an AND of the
+PWM signal and the BUSY signal. An OR gate with a GPIO signal is still present
+to allow software-generated CNV pulses.
+
+.. image:: ad4692_hdl_cnv_coraz7s.svg
+   :width: 800
+   :align: center
+   :alt: AD4692/Cora Z7S register mode block diagram
+
+AD4692 manual mode (PWM_OFFLOAD=2)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In manual mode, the SPI Engine offload trigger is gated by an AND of the PWM
+signal and the DMA ``s_axis_xfer_req`` signal. This ensures that SPI
+transactions only occur when both the PWM fires and the DMA is ready to receive
+data. No CNV gating logic is instantiated.
+
+.. image:: ad4692_hdl_pwm_coraz7s.svg
+   :width: 800
+   :align: center
+   :alt: AD4692/Cora Z7S manual mode block diagram
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -109,13 +153,27 @@ In case we link CNV signal to PWM:
 
 .. shell:: bash
 
-   $make SPI_4WIRE=0
+   $make SPI_4WIRE=0 PWM_OFFLOAD=0
 
 In case we link CNV signal to SPI_CS:
 
 .. shell:: bash
 
-   $make SPI_4WIRE=1
+   $make SPI_4WIRE=1 PWM_OFFLOAD=0
+
+The ``PWM_OFFLOAD`` configuration parameter defines the SPI
+Engine offload trigger source and CNV gating scheme. By default, it is set to 0.
+
+- ``PWM_OFFLOAD=0``: BUSY falling edge triggers offload, CNV gated by
+  DMA xfer_req AND PWM (original ad469x).
+- ``PWM_OFFLOAD=1``: BUSY falling edge triggers offload, CNV gated by
+  PWM AND BUSY (ad4692 register mode).
+- ``PWM_OFFLOAD=2``: PWM AND DMA xfer_req gates offload trigger, no CNV
+  gating (ad4692 manual mode).
+
+.. shell:: bash
+
+   $make SPI_4WIRE=0 PWM_OFFLOAD=1
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -286,18 +344,25 @@ the HDL repository, and then build the project as follows:
 .. shell::
 
    $cd hdl/projects/ad469x_evb/zed
-   $make SPI_4WIRE=0
+   $make SPI_4WIRE=0 PWM_OFFLOAD=0
+
+or, for the AD4692 in register mode on Cora Z7S:
+
+.. shell::
+
+   $cd hdl/projects/ad469x_evb/coraz7s
+   $make SPI_4WIRE=0 PWM_OFFLOAD=1
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:
 
 if the following command was run
 
-``SPI_4WIRE=0``
+``SPI_4WIRE=0 PWM_OFFLOAD=1``
 
 then the folder name will be:
 
-``SPI4WIRE0``
+``SPI4WIRE0_PWMOFFLOAD1``
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -309,10 +374,13 @@ Hardware related
 
 - Product datasheets:
 
+  - :adi:`AD4691`/:adi:`AD4692`
+  - :adi:`AD4693`/:adi:`AD4694`
   - :adi:`AD4695`/:adi:`AD4696`
   - :adi:`AD4697`/:adi:`AD4698`
 
 - `UG-1882, EVAL-AD4694FMCZ User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad4696fmcz-ug-1882.pdf>`__
+- `UG - EVAL-AD4692ARDZ User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad4692-ardz.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
