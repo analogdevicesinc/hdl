@@ -1,0 +1,85 @@
+###############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+ldc_set_sysconfig {JTAG_PORT=ENABLE PROGRAMN_PORT=ENABLE CONFIG_IOSLEW=FAST MASTER_SPI_PORT=DISABLE DONE_PORT=DISABLE INITN_PORT=DISABLE MCCLK_FREQ=28.1 BOOTMODE=DUAL CONFIGIO_VOLTAGE_BANK1=NOT_SPECIFIED CONFIGIO_VOLTAGE_BANK0=NOT_SPECIFIED}
+##########MCB_BOARD Pin configuration##################
+#LED Mapping
+ldc_set_location -site {R4} [get_ports init_done_o]
+ldc_set_location -site {R5} [get_ports config_active]
+#UART
+ldc_set_location -site {M9} [get_ports txd_o]
+ldc_set_location -site {L8} [get_ports rxd_i]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports rxd_i]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports txd_o]
+#RESET
+ldc_set_location -site {N9} [get_ports rstn_i]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33 PULLMODE=UP} [get_ports rstn_i]
+#clock pins
+ldc_set_port -iobuf {IO_TYPE=LVSTLD_I} [get_ports clk_100]
+ldc_set_location -site {AB19} [get_ports clk_100]
+create_clock -name {clk_100Mhz} -period 10 -waveform {0.000 5.000} [get_ports clk_100]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS33} [get_ports clk_125]
+ldc_set_location -site {P24} [get_ports clk_125]
+create_clock -name {clk_125Mhz} -period 8 -waveform {0 4} [get_ports clk_125]
+#IO location assignment after back-annotation
+#DQ GROUP
+ldc_set_location -site {AA6} [get_ports {ddr_dq_io[0]}]
+ldc_set_location -site {AA5} [get_ports {ddr_dq_io[1]}]
+ldc_set_location -site {Y6} [get_ports {ddr_dq_io[2]}]
+ldc_set_location -site {Y5} [get_ports {ddr_dq_io[3]}]
+ldc_set_location -site {AE4} [get_ports {ddr_dq_io[4]}]
+ldc_set_location -site {AD4} [get_ports {ddr_dq_io[5]}]
+ldc_set_location -site {AD3} [get_ports {ddr_dq_io[6]}]
+ldc_set_location -site {AC4} [get_ports {ddr_dq_io[7]}]
+ldc_set_location -site {AD6} [get_ports {ddr_dq_io[8]}]
+ldc_set_location -site {AE6} [get_ports {ddr_dq_io[9]}]
+ldc_set_location -site {AC7} [get_ports {ddr_dq_io[10]}]
+ldc_set_location -site {AB7} [get_ports {ddr_dq_io[11]}]
+ldc_set_location -site {AA7} [get_ports {ddr_dq_io[12]}]
+ldc_set_location -site {Y7} [get_ports {ddr_dq_io[13]}]
+ldc_set_location -site {AB6} [get_ports {ddr_dq_io[14]}]
+ldc_set_location -site {AC6} [get_ports {ddr_dq_io[15]}]
+ldc_set_location -site {W10} [get_ports {ddr_dq_io[16]}]
+ldc_set_location -site {W11} [get_ports {ddr_dq_io[17]}]
+ldc_set_location -site {AD9} [get_ports {ddr_dq_io[18]}]
+ldc_set_location -site {AE9} [get_ports {ddr_dq_io[19]}]
+ldc_set_location -site {AD10} [get_ports {ddr_dq_io[20]}]
+ldc_set_location -site {AE10} [get_ports {ddr_dq_io[21]}]
+ldc_set_location -site {AA10} [get_ports {ddr_dq_io[22]}]
+ldc_set_location -site {Y10} [get_ports {ddr_dq_io[23]}]
+ldc_set_location -site {AC11} [get_ports {ddr_dq_io[24]}]
+ldc_set_location -site {AD12} [get_ports {ddr_dq_io[25]}]
+ldc_set_location -site {AD11} [get_ports {ddr_dq_io[26]}]
+ldc_set_location -site {AE11} [get_ports {ddr_dq_io[27]}]
+ldc_set_location -site {AB12} [get_ports {ddr_dq_io[28]}]
+ldc_set_location -site {AA11} [get_ports {ddr_dq_io[29]}]
+ldc_set_location -site {Y11} [get_ports {ddr_dq_io[30]}]
+ldc_set_location -site {AA12} [get_ports {ddr_dq_io[31]}]
+# DQS GROUP
+ldc_set_location -site {AF4} [get_ports {ddr_dqs_io[0]}]
+ldc_set_location -site {AF6} [get_ports {ddr_dqs_io[1]}]
+ldc_set_location -site {AF10} [get_ports {ddr_dqs_io[2]}]
+ldc_set_location -site {AF12} [get_ports {ddr_dqs_io[3]}]
+# DMI GROUP
+ldc_set_location -site {AE3} [get_ports {ddr_dmi_io[0]}]
+ldc_set_location -site {AD5} [get_ports {ddr_dmi_io[1]}]
+ldc_set_location -site {AB9} [get_ports {ddr_dmi_io[2]}]
+ldc_set_location -site {AC12} [get_ports {ddr_dmi_io[3]}]
+# CK, CKE, CS, CA
+ldc_set_location -site {AA13} [get_ports {ddr_ck_o[0]}]
+ldc_set_location -site {AD20} [get_ports {ddr_cke_o[0]}]
+ldc_set_location -site {AC19} [get_ports {ddr_cs_o[0]}]
+ldc_set_location -site {W13} [get_ports ddr_reset_n_o]
+ldc_set_location -site {AE22} [get_ports {ddr_ca_o[0]}]
+ldc_set_location -site {AE23} [get_ports {ddr_ca_o[1]}]
+ldc_set_location -site {AD21} [get_ports {ddr_ca_o[2]}]
+ldc_set_location -site {AE21} [get_ports {ddr_ca_o[3]}]
+ldc_set_location -site {AF22} [get_ports {ddr_ca_o[4]}]
+ldc_set_location -site {AF23} [get_ports {ddr_ca_o[5]}]
+
+create_generated_clock -name {template_lscc_arw_mcb_inst/pll0_inst_clkos_o_net} -source [get_pins template_lscc_arw_mcb_inst/pll0_inst/lscc_pll_inst/gen_no_refclk_mon.u_PLL.PLL_inst/REFCK] -divide_by 25 -multiply_by 2 [get_pins template_lscc_arw_mcb_inst/pll0_inst/lscc_pll_inst/gen_no_refclk_mon.u_PLL.PLL_inst/CLKOS]
+create_generated_clock -name {template_lscc_arw_mcb_inst/pll0_inst_clkop_o_net} -source [get_pins template_lscc_arw_mcb_inst/pll0_inst/lscc_pll_inst/gen_no_refclk_mon.u_PLL.PLL_inst/REFCK] -divide_by 5 -multiply_by 4 [get_pins template_lscc_arw_mcb_inst/pll0_inst/lscc_pll_inst/gen_no_refclk_mon.u_PLL.PLL_inst/CLKOP]
+
+set_clock_groups -group [get_clocks template_lscc_arw_mcb_inst/pll0_inst_clkos_o_net] -group [get_clocks template_lscc_arw_mcb_inst/pll0_inst_clkop_o_net] -group [get_clocks clk_125Mhz] -group [get_clocks clk_100Mhz] -asynchronous
