@@ -144,7 +144,7 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dir (spi_dir));
 
- IBUFDS i_ibufds_trig (
+  IBUFDS i_ibufds_trig (
     .I (trig_p),
     .IB (trig_n),
     .O (trig));
