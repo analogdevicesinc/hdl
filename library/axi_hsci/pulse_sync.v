@@ -49,6 +49,9 @@ module pulse_sync (
   reg [2:0] t_d;
   reg       dout_r;
 
+  // mask output for 3 cycles after reset to let t_d track t
+  reg [2:0] rst_mask;
+
   always @(posedge inclk) begin
     if(rst_inclk) begin
       din_d1 <= 1'b0;
@@ -63,11 +66,13 @@ module pulse_sync (
 
   always @(posedge outclk) begin
     if(rst_outclk) begin
-      t_d <= 'b0;
-      dout_r <= 1'b0;
+      t_d      <= 3'b0;
+      dout_r   <= 1'b0;
+      rst_mask <= 3'b111;
     end else begin
-      t_d <= {t_d[1:0], t};
-      dout_r <= t_d[2] ^ t_d[1];
+      t_d      <= {t_d[1:0], t};
+      rst_mask <= {1'b0, rst_mask[2:1]};
+      dout_r   <= rst_mask[0] ? 1'b0 : (t_d[2] ^ t_d[1]);
     end
   end
 
