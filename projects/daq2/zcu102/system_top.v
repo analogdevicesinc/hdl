@@ -145,9 +145,9 @@ module system_top (
     .spi_dir (spi_dir));
 
  IBUFDS i_ibufds_trig (
-   .I (trig_p),
-   .IB (trig_n),
-   .O (trig));
+    .I (trig_p),
+    .IB (trig_n),
+    .O (trig));
   
   assign ext_sync_in = trig;
   
