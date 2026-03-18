@@ -93,7 +93,7 @@ module system_top (
   wire            tx_ref_clk;
   wire            tx_sysref;
   wire            tx_sync;
-
+  wire            ext_sync_in;
   // spi
 
   assign spi_csn_adc = spi_csn[2];
@@ -144,11 +144,13 @@ module system_top (
     .spi_sdio (spi_sdio),
     .spi_dir (spi_dir));
 
-  IBUFDS i_ibufds_trig (
-    .I (trig_p),
-    .IB (trig_n),
-    .O (trig));
-
+ IBUFDS i_ibufds_trig (
+   .I (trig_p),
+   .IB (trig_n),
+   .O (trig));
+  
+  assign ext_sync_in = trig;
+  
   assign adc_pd = gpio_o[42];
   assign dac_txen = gpio_o[41];
   assign dac_reset = gpio_o[40];
@@ -156,7 +158,7 @@ module system_top (
   assign gpio_bd_o = gpio_o[7:0];
 
   assign gpio_i[94:44] = gpio_o[94:44];
-  assign gpio_i[43:43] = trig;
+  assign gpio_i[43:43] = 0;
   assign gpio_i[42:37] = gpio_o[42:37];
   assign gpio_i[36:36] = adc_fdb;
   assign gpio_i[35:35] = adc_fda;
@@ -167,6 +169,7 @@ module system_top (
   assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
 
   system_wrapper i_system_wrapper (
+    .ext_sync_in(ext_sync_in),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (),
