@@ -27,6 +27,7 @@ set sdi_delay        0
 set echo_sclk        0
 
 spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
+ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_offload CONFIG.ASYNC_TRIG 1
 
 # Generate a 80MHz spi_clk for the SPI Engine (targeted SCLK is 20MHz)
 
