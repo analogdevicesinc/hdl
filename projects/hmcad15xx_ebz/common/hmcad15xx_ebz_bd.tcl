@@ -19,13 +19,15 @@ ad_ip_parameter hmcad15xx_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter hmcad15xx_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter hmcad15xx_dma CONFIG.CYCLIC 0
 ad_ip_parameter hmcad15xx_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter hmcad15xx_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter hmcad15xx_dma CONFIG.AXIS_TUSER_SYNC 0
+ad_ip_parameter hmcad15xx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter hmcad15xx_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter hmcad15xx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter hmcad15xx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter hmcad15xx_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter hmcad15xx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter hmcad15xx_dma CONFIG.MAX_BYTES_PER_BURST 4096
+
 
 # axi_hmcad15xx
 
@@ -41,10 +43,11 @@ ad_connect axi_hmcad15xx_adc/data_in_p     data_in_p
 ad_connect axi_hmcad15xx_adc/data_in_n     data_in_n
 ad_connect axi_hmcad15xx_adc/delay_clk     $sys_iodelay_clk
 
-ad_connect axi_hmcad15xx_adc/adc_clk   hmcad15xx_dma/fifo_wr_clk
-ad_connect axi_hmcad15xx_adc/adc_data  hmcad15xx_dma/fifo_wr_din
-ad_connect axi_hmcad15xx_adc/adc_valid hmcad15xx_dma/fifo_wr_en
-ad_connect axi_hmcad15xx_adc/adc_dovf  hmcad15xx_dma/fifo_wr_overflow
+ad_connect axi_hmcad15xx_adc/adc_clk        hmcad15xx_dma/fifo_wr_clk
+ad_connect axi_hmcad15xx_adc/adc_data       hmcad15xx_dma/fifo_wr_din
+ad_connect axi_hmcad15xx_adc/adc_valid      hmcad15xx_dma/fifo_wr_en
+ad_connect axi_hmcad15xx_adc/adc_dovf       hmcad15xx_dma/fifo_wr_overflow
+ad_connect axi_hmcad15xx_adc/adc_sync_armed hmcad15xx_dma/sync
 
 #DMA
 
