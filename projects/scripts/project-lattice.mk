@@ -6,7 +6,7 @@
 ################################################################################
 ## Make script for building Lattice projects. ##################################
 #
-# * Make commands: all pb rd rd-force pb-force clean clean-all.
+# * Make commands: all pb rd rd-force pb-force sim sim-cli clean clean-all.
 #
 # * pb: checks if dependencies exist and builds the Propel Builder project.
 #   (block design)
@@ -16,6 +16,8 @@
 #   checking for dependencies.
 # * pb-force and rd-force: you can build the respective projects without
 #   checking for dependencies.
+# * sim: runs Questasim simulation using qsim.do in GUI mode.
+# * sim-cli: runs Questasim simulation using qsim.do in command-line mode.
 # * clean: deletes the whole project and log files.
 # * clean-all: deletes all the generated files during build.
 #
@@ -83,13 +85,26 @@ CLEAN_TARGET += mem_init_sys.txt
 CLEAN_TARGET += $(wildcard ./radiantc.*)
 CLEAN_TARGET += $(filter-out . .. ./. ./.., $(wildcard .*))
 
-.PHONY: all pb rd force rd-force pb-force clean clean-all
+SIM_DIR := _bld/$(PROJECT_NAME)/verification/sim
+SIM_DO := $(SIM_DIR)/qsim.do
+
+ifneq ($(wildcard sim.tcl),)
+PB_TARGETS += $(SIM_DO)
+endif
+
+.PHONY: all pb rd force rd-force pb-force sim sim-cli clean clean-all
 
 all: pb rd
 
 pb: $(PB_TARGETS)
 
 rd: $(R_TARGETS)
+
+sim: $(SIM_DO)
+	cd $(SIM_DIR) && vsim -do qsim.do
+
+sim-cli: $(SIM_DO)
+	cd $(SIM_DIR) && vsim -c -do qsim.do
 
 clean:
 	$(call clean, \

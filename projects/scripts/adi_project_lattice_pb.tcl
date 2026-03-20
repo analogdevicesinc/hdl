@@ -36,6 +36,7 @@
 # \opt[cmd_list] -cmd_list {{source ./system_pb.tcl}}
 # \opt[psc] -psc "${env(TOOLRTF)}/../../templates/MachXO3D_Template01/MachXO3D_Template01.psc"
 # \opt[parameter_list] -parameter_list {PARAM1 value1 PARAM2 value2}
+# \opt[custom_questa_prep_tcl] -custom_questa_prep_tcl ""
 ###############################################################################
 proc adi_project_pb {project_name args} {
   puts "\nadi_project_pb:\n"
@@ -59,6 +60,7 @@ proc adi_project_pb {project_name args} {
     -parameter_list {} \
     -parameter_file_radiant "system_top_parameters.txt" \
     -sim_prj_tcl "./sim.tcl" \
+    -custom_questa_prep_tcl "" \
     {*}$args]
 
   set dev_select $opt(-dev_select)
@@ -71,6 +73,7 @@ proc adi_project_pb {project_name args} {
   set parameter_list $opt(-parameter_list)
   set parameter_file_radiant $opt(-parameter_file_radiant)
   set sim_prj_tcl $opt(-sim_prj_tcl)
+  set custom_questa_prep_tcl $opt(-custom_questa_prep_tcl)
 
   # Make parameters available globally for system_pb.tcl
   foreach {param value} $parameter_list {
@@ -122,7 +125,8 @@ proc adi_project_pb {project_name args} {
     -psc $psc \
     -cmd_list $cmd_list \
     -parameter_list $parameter_list \
-    -sim_prj_tcl $sim_prj_tcl
+    -sim_prj_tcl $sim_prj_tcl \
+    -custom_questa_prep_tcl $custom_questa_prep_tcl
 }
 
 ###############################################################################
@@ -136,6 +140,7 @@ proc adi_project_pb {project_name args} {
 # \opt[board] -board "Certus Pro NX Evaluation Board"
 # \opt[language] -language "verilog"
 # \opt[cmd_list] -cmd_list {{source ./system_pb.tcl}}
+# \opt[custom_questa_prep_tcl] -custom_questa_prep_tcl ""
 ###############################################################################
 proc adi_project_create_pb {project_name args} {
   puts "\nadi_project_create_pb:\n"
@@ -155,6 +160,7 @@ proc adi_project_create_pb {project_name args} {
     -cmd_list "" \
     -interface_paths "$ad_hdl_dir/library/interfaces_ltt/ltt" \
     -sim_prj_tcl "./sim.tcl" \
+    -custom_questa_prep_tcl "" \
     {*}$args]
 
   set ppath [file normalize $opt(-ppath)]
@@ -166,6 +172,7 @@ proc adi_project_create_pb {project_name args} {
   set cmd_list $opt(-cmd_list)
   set interface_paths $opt(-interface_paths)
   set sim_prj_tcl $opt(-sim_prj_tcl)
+  set custom_questa_prep_tcl $opt(-custom_questa_prep_tcl)
 
   # Extracting the Propel Builder version from $env(TOOLRTF)/../../components.xml
   set regex "<Name>com\.latticesemi\.systembuilder.*<Version>$required_lattice_version"
@@ -256,6 +263,41 @@ proc adi_project_create_pb {project_name args} {
     sbp_design open -name ${project_name}_v -path $ppath/$project_name/verification/${project_name}_v.sbx
     sbp_replace -vlnv {lattice:systembuilder:dut:1.0} -name {dut_inst} -component ${project_name}_v/dut_inst
     source $sim_prj_tcl
+    sbp_design save
+
+    set radiant_search_root [file normalize "$env(TOOLRTF)/../../../"]
+    set radiant_bins [get_file_list $radiant_search_root {radiantc} 5]
+    if {[llength $radiant_bins] > 0} {
+      set radiant_path [file normalize \
+        [file dirname [file dirname [lindex $radiant_bins 0]]]]
+    } else {
+      set install_root  $radiant_search_root
+      set radiant_path  [file normalize "$install_root/radiant/$PROPEL_BUILDER_VERSION"]
+      puts -nonewline "WARNING: radiantc binary not found under '$radiant_search_root'; "
+      puts "using fallback Radiant path '$radiant_path'."
+    }
+    puts "Radiant path: $radiant_path"
+    set sim_workfolder [file normalize "$ppath/$project_name/verification/sim"]
+    set sim_sbx_file   [file normalize "$ppath/$project_name/verification/${project_name}_v.sbx"]
+    puts "Generating sim project in: $sim_workfolder"
+    if {$custom_questa_prep_tcl != ""} {
+      if {[file exists $custom_questa_prep_tcl]} {
+        set custom_questa_prep_tcl [file normalize $custom_questa_prep_tcl]
+        puts "Running custom Questa prep script: $custom_questa_prep_tcl"
+
+        source $custom_questa_prep_tcl
+      } else {
+        puts "ERROR: custom_questa_prep_tcl script does not exist: $custom_questa_prep_tcl"
+        exit 2
+      }
+    } else {
+      sbp_design verify \
+        --workfolder $sim_workfolder \
+        --sbx_file $sim_sbx_file \
+        --radiant_path $radiant_path \
+        sim_gen --soc_ver
+    }
+
     sbp_design save
     sbp_design close
   } else {

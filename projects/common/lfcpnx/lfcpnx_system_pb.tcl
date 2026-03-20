@@ -7,8 +7,8 @@
 ########### components and the assembly of the design. ########################
 
 ## configure ip components and add to design. #################################
-adi_ip_instance -vlnv {latticesemi.com:ip:cpu0:2.5.0} \
-  -meta_vlnv {latticesemi.com:ip:riscv_rtos:2.5.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:cpu0:2.8.0} \
+  -meta_vlnv {latticesemi.com:ip:riscv_rtos:2.8.0} \
   -cfg_value {
     TCM_ENABLE: false,
     IRQ_NUM: 16,
@@ -17,24 +17,24 @@ adi_ip_instance -vlnv {latticesemi.com:ip:cpu0:2.5.0} \
     AXI_ID_WIDTH:4
   } \
   -ip_iname "cpu0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:gpio0:1.7.0} \
-  -meta_vlnv {latticesemi.com:ip:gpio:1.7.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:gpio0:1.8.0} \
+  -meta_vlnv {latticesemi.com:ip:gpio:1.8.0} \
   -cfg_value {
     IO_LINES_COUNT: 32,
     EXTERNAL_BUF: true,
     DIRECTION_DEF_VAL_INPUT: 00FFFFFF
   } \
   -ip_iname "gpio0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:gpio1:1.7.0} \
-  -meta_vlnv {latticesemi.com:ip:gpio:1.7.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:gpio1:1.8.0} \
+  -meta_vlnv {latticesemi.com:ip:gpio:1.8.0} \
   -cfg_value {
     IO_LINES_COUNT: 32,
     EXTERNAL_BUF: true,
     DIRECTION_DEF_VAL_INPUT: 00000000
   } \
   -ip_iname "gpio1_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:spi0:2.1.0} \
-  -meta_vlnv {latticesemi.com:ip:spi_controller:2.1.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:spi0:2.4.0} \
+  -meta_vlnv {latticesemi.com:ip:spi_controller:2.4.0} \
   -cfg_value {
     DATA_WIDTH: 8,
     FIFO_DEPTH: 256,
@@ -42,14 +42,14 @@ adi_ip_instance -vlnv {latticesemi.com:ip:spi0:2.1.0} \
     SYS_CLOCK_FREQ: 100
   } \
   -ip_iname "spi0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:i2c0:2.2.0} \
-  -meta_vlnv {latticesemi.com:ip:i2c_controller:2.2.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:i2c0:2.4.0} \
+  -meta_vlnv {latticesemi.com:ip:i2c_controller:2.4.0} \
   -cfg_value {
     SYS_CLOCK_FREQ: 100
   } \
   -ip_iname "i2c0_inst"
-adi_ip_instance -vlnv {latticesemi.com:module:pll0:1.9.0} \
-  -meta_vlnv {latticesemi.com:module:pll:1.9.0} \
+adi_ip_instance -vlnv {latticesemi.com:module:pll0:1.9.1} \
+  -meta_vlnv {latticesemi.com:module:pll:1.9.1} \
   -cfg_value {
     gui_refclk_freq: 125.0,
     gui_clk_os_en: true,
@@ -57,8 +57,8 @@ adi_ip_instance -vlnv {latticesemi.com:module:pll0:1.9.0} \
     gui_clk_os_freq: 10.0
   } \
   -ip_iname "pll0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:axi_interc0:2.0.1} \
-  -meta_vlnv {latticesemi.com:ip:axi_interconnect:2.0.1} \
+adi_ip_instance -vlnv {latticesemi.com:ip:axi_interc0:2.2.1} \
+  -meta_vlnv {latticesemi.com:ip:axi_interconnect:2.2.1} \
   -cfg_value {
     TOTAL_EXTMAS_CNT: 2,
     TOTAL_EXTSLV_CNT: 3,
@@ -67,16 +67,16 @@ adi_ip_instance -vlnv {latticesemi.com:ip:axi_interc0:2.0.1} \
     ext_slv_axi_protocol_2:1
   } \
   -ip_iname "axi_interc0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:uart0:1.4.0} \
-  -meta_vlnv {latticesemi.com:ip:uart:1.4.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:uart0:1.5.0} \
+  -meta_vlnv {latticesemi.com:ip:uart:1.5.0} \
   -cfg_value {SYS_CLOCK_FREQ:100} \
   -ip_iname "uart0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb0:1.3.0} \
-  -meta_vlnv {latticesemi.com:ip:axi2apb_bridge:1.3.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb0:1.4.0} \
+  -meta_vlnv {latticesemi.com:ip:axi2apb_bridge:1.4.0} \
   -cfg_value {} \
   -ip_iname "axi_apb0_inst"
-adi_ip_instance -vlnv {latticesemi.com:module:apb_interconnect0:1.2.1} \
-  -meta_vlnv {latticesemi.com:module:apb_interconnect:1.2.1} \
+adi_ip_instance -vlnv {latticesemi.com:module:apb_interconnect0:1.4.0} \
+  -meta_vlnv {latticesemi.com:module:apb_interconnect:1.4.0} \
   -cfg_value {TOTAL_MASTER_CNT:1,TOTAL_SLAVE_CNT:5} \
   -ip_iname "apb_interconnect0_inst"
 
@@ -95,8 +95,8 @@ if {[info exists ad_project_params(SYSMEM_INIT_FILE)]} {
 } else {
   set sysmem_init ""
 }
-adi_ip_instance -vlnv {latticesemi.com:ip:sysmem0:2.3.0} \
-  -meta_vlnv latticesemi.com:ip:system_memory:2.3.0 \
+adi_ip_instance -vlnv {latticesemi.com:ip:sysmem0:2.5.1} \
+  -meta_vlnv latticesemi.com:ip:system_memory:2.5.1 \
   -cfg_value [subst {
     ADDR_DEPTH:32768,
     ID_WIDTH:8,
@@ -277,44 +277,3 @@ sbp_assign_addr_seg -offset 'h40010000 "$project_name/axi_interc0_inst/AXIL_M02"
 sbp_assign_addr_seg -offset 'h00000000 "$project_name/axi_interc0_inst/AXI_M00" \
   "$project_name/sysmem0_inst/AXI_S0"
 
-if {$timer_en == 1} {
-  adi_ip_update $project_name -vlnv {latticesemi.com:module:apb_interconnect0:1.2.1} \
-    -meta_vlnv {latticesemi.com:module:apb_interconnect:1.2.1} \
-    -cfg_value {TOTAL_MASTER_CNT:1,TOTAL_SLAVE_CNT:6} \
-    -ip_iname "apb_interconnect0_inst"
-
-  adi_ip_instance -vlnv {latticesemi.com:ip:timer0:1.4.0} \
-    -meta_vlnv {latticesemi.com:ip:gp_timer:1.4.0} \
-    -cfg_value {
-      t1_cnt_up: count-up,
-      T1_PERIOD_WIDTH: 32,
-      t1_period_val: 0,
-      t1_dis_pscaler: false,
-      t2_cnt_up: count-up,
-      T2_PERIOD_WIDTH: 32,
-      t2_period_val: 0,
-      t2_dis_pscaler: false,
-      t3_cnt_up: count-up,
-      T3_PERIOD_WIDTH: 32,
-      t3_period_val: 0,
-      t4_cnt_up: count-up,
-      T4_PERIOD_WIDTH: 32,
-      t4_period_val: 0
-    } \
-    -ip_iname "timer0_inst"
-
-  sbp_connect_net -name [sbp_get_nets -from $project_name/pll0_inst *clkop*] \
-    "$project_name/timer0_inst/clk_i"
-
-  sbp_connect_net -name [sbp_get_nets -from $project_name/cpu0_inst *resetn*] \
-    "$project_name/timer0_inst/rst_n_i"
-
-  sbp_connect_interface_net "$project_name/apb_interconnect0_inst/APB_M04" \
-    "$project_name/timer0_inst/APB_S0"
-
-  sbp_connect_interface_net "$project_name/timer0_inst/INTR" \
-    "$project_name/cpu0_inst/IRQ_S6"
-
-  sbp_assign_addr_seg -offset 'h40005000 "$project_name/apb_interconnect0_inst/APB_M04" \
-    "$project_name/timer0_inst/APB_S0"
-}
