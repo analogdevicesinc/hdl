@@ -48,6 +48,9 @@ set p_prcfg_init ""
 set p_prcfg_list ""
 set p_prcfg_status ""
 
+# Importing XCVR related functions
+source $ad_hdl_dir/projects/xcvr_wizard/scripts/adi_xcvr_xilinx.tcl
+
 ## Creates a Xilinx project for a given board
 #
 # \param[project_name] - name of the project
