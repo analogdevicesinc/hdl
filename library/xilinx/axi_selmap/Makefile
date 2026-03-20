@@ -13,4 +13,6 @@ GENERIC_DEPS += async_cdc_fifo.v
 
 XILINX_DEPS += axi_selmap_ip.tcl
 
+XILINX_LIB_DEPS += util_cdc
+
 include ../../scripts/library.mk
