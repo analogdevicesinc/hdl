@@ -98,11 +98,16 @@ The device clock and the link clock have different sources, and in this case,
 the link clock is double the device clock.
 
 .. math::
-   Lane Rate &= \frac{IQ Sample Rate * M * NP * \frac{10}{8}}{L} = 10Gbps
 
-   Link Clock &= \frac{LaneRate}{40} = 250Mbps
+   Lane Rate = \frac{IQ Sample Rate * M * NP * \frac{10}{8}}{L} = 10Gbps
 
-   Device Clock &= \frac{LinkClock}{2} = 125Mbps
+.. math::
+
+   Link Clock = \frac{LaneRate}{40} = 250Mbps
+
+.. math::
+
+   Device Clock = \frac{LinkClock}{2} = 125Mbps
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -239,7 +239,7 @@ is computed:
 
 .. math::
 
-   \text{HDL}_{reg} = 0x100 + (n \times 0x10) \\
+   \text{HDL}_{reg} = 0x100 + (n \times 0x10)
 
 .. math::   
 
@@ -272,7 +272,7 @@ In general, the address for the ``CHAN_CNTRL_3`` register of **channel *n*** can
 
 .. math::
   
-   \text{HDL}_{reg} = 0x100 + (n \times 0x10) + 0x06 \\
+   \text{HDL}_{reg} = 0x100 + (n \times 0x10) + 0x06
 
 .. math::
   
