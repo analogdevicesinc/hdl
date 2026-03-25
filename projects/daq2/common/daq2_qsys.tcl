@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2023, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -21,7 +21,7 @@ set TX_SAMPLE_WIDTH 16          ; # N/NP
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 32 / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
-set dac_fifo_name avl_ad9144_fifo
+set dac_data_offload_name adi_ad9144_data_offload
 set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
 
 # ad9144-xcvr
@@ -66,25 +66,29 @@ add_instance util_ad9144_upack util_upack2
 set_instance_parameter_value util_ad9144_upack {NUM_OF_CHANNELS} $TX_NUM_OF_CONVERTERS
 set_instance_parameter_value util_ad9144_upack {SAMPLES_PER_CHANNEL} $TX_SAMPLES_PER_CHANNEL
 set_instance_parameter_value util_ad9144_upack {SAMPLE_DATA_WIDTH} $TX_SAMPLE_WIDTH
-set_instance_parameter_value util_ad9144_upack {INTERFACE_TYPE} {1}
+set_instance_parameter_value util_ad9144_upack {INTERFACE_TYPE} {0}
 
 add_connection ad9144_jesd204.link_clk util_ad9144_upack.clk
 add_connection ad9144_jesd204.link_reset util_ad9144_upack.reset
 add_connection axi_ad9144.dac_ch_0 util_ad9144_upack.dac_ch_0
 add_connection axi_ad9144.dac_ch_1 util_ad9144_upack.dac_ch_1
 
-# dac fifo
+# dac data offload
 
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_data_width $dac_fifo_address_width
+add_instance $dac_data_offload_name adi_data_offload
+set_instance_parameter_value $dac_data_offload_name {DATAPATH_TYPE} {1}
+set_instance_parameter_value $dac_data_offload_name {MEM_TYPE} $dac_data_offload_type
+set_instance_parameter_value $dac_data_offload_name {MEM_SIZE} $dac_data_offload_size
+set_instance_parameter_value $dac_data_offload_name {SOURCE_DWIDTH} $dac_data_width
+set_instance_parameter_value $dac_data_offload_name {DESTINATION_DWIDTH} $dac_data_width
+set_instance_parameter_value $dac_data_offload_name {AXI_DATA_WIDTH} $dac_axi_data_width
 
-add_interface tx_fifo_bypass conduit end
-set_interface_property tx_fifo_bypass EXPORT_OF avl_ad9144_fifo.if_bypass
-
-add_connection ad9144_jesd204.link_clk avl_ad9144_fifo.if_dac_clk
-add_connection ad9144_jesd204.link_reset avl_ad9144_fifo.if_dac_rst
-add_connection util_ad9144_upack.if_packed_fifo_rd_en avl_ad9144_fifo.if_dac_valid
-add_connection avl_ad9144_fifo.if_dac_data util_ad9144_upack.if_packed_fifo_rd_data
-add_connection avl_ad9144_fifo.if_dac_dunf axi_ad9144.if_dac_dunf
+add_connection sys_clk.clk $dac_data_offload_name.sys_clk
+add_connection sys_clk.clk_reset $dac_data_offload_name.sys_resetn
+add_connection adrv9009_tx_jesd204.link_clk $dac_data_offload_name.m_axis_aclk
+add_connection adrv9009_tx_jesd204.link_reset $dac_data_offload_name.m_axis_aresetn
+add_connection $dac_data_offload_name.m_axis axi_adrv9009_tx_upack.s_axis
+#add_connection $dac_data_offload_name.sync_ext GND
 
 # ad9144-dma
 
@@ -101,12 +105,13 @@ set_instance_parameter_value axi_ad9144_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_ad9144_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_ad9144_dma {FIFO_SIZE} {16}
 set_instance_parameter_value axi_ad9144_dma {HAS_AXIS_TLAST} {1}
+set_instance_parameter_value axi_ad9144_dma {HAS_AXIS_TKEEP} {1}
 
-add_connection sys_dma_clk.clk avl_ad9144_fifo.if_dma_clk
-add_connection sys_dma_clk.clk_reset avl_ad9144_fifo.if_dma_rst
+add_connection sys_dma_clk.clk $dac_data_offload_name.s_axis_aclk
+add_connection sys_dma_clk.clk_reset $dac_data_offload_name.s_axis_aresetn
 add_connection sys_dma_clk.clk axi_ad9144_dma.if_m_axis_aclk
-add_connection axi_ad9144_dma.m_axis avl_ad9144_fifo.s_axis
-add_connection axi_ad9144_dma.if_m_axis_xfer_req avl_ad9144_fifo.if_dma_xfer_req
+add_connection axi_ad9144_dma.m_axis $dac_data_offload_name.s_axis
+add_connection axi_ad9144_dma.if_m_axis_xfer_req $dac_data_offload_name.init_req
 add_connection sys_clk.clk_reset axi_ad9144_dma.s_axi_reset
 add_connection sys_clk.clk axi_ad9144_dma.s_axi_clock
 add_connection sys_dma_clk.clk_reset axi_ad9144_dma.m_src_axi_reset
@@ -229,6 +234,7 @@ ad_cpu_interconnect 0x0004a000 avl_adxcfg_2.rcfg_s1
 ad_cpu_interconnect 0x0004b000 avl_adxcfg_3.rcfg_s1
 ad_cpu_interconnect 0x0004c000 axi_ad9680_dma.s_axi
 ad_cpu_interconnect 0x00050000 axi_ad9680.s_axi
+ad_cpu_interconnect 0x00060000 $dac_data_offload_name.s_axi
 
 # dma interconnects
 

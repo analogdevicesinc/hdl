@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -172,7 +172,6 @@ module system_top (
   wire              spi_miso_s;
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
-  wire              dac_fifo_bypass;
 
   // assignments
 
@@ -191,7 +190,6 @@ module system_top (
   // gpio in & out are separate cores
 
   assign gpio_i[63:45] = gpio_o[63:45];
-  assign dac_fifo_bypass = gpio_o[44];
   assign gpio_i[44:44] = gpio_o[44:44];
   assign gpio_i[43:43] = trig;
 
@@ -323,7 +321,6 @@ module system_top (
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
     .tx_serial_data_tx_serial_data (tx_serial_data),
-    .tx_fifo_bypass_bypass (dac_fifo_bypass),
     .tx_ref_clk_clk (tx_ref_clk),
     .tx_sync_export (tx_sync),
     .tx_sysref_export (tx_sysref),
