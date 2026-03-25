@@ -111,15 +111,15 @@ ad_interface signal rd_response_eot             Output 1
 add_interface m_axi_clock clock end
 add_interface_port m_axi_clock m_axi_aclk clk Input 1
 
-add_interface m_axi_reset reset end
-set_interface_property m_axi_reset associatedClock m_axi_clock
-add_interface_port m_axi_reset m_axi_aresetn reset_n Input 1
+add_interface m_axi_resetn reset end
+set_interface_property m_axi_resetn associatedClock m_axi_clock
+add_interface_port m_axi_resetn m_axi_aresetn reset_n Input 1
 
 add_interface m_axi axi4 start
 set_interface_property m_axi associatedClock m_axi_clock
-set_interface_property m_axi associatedReset m_axi_reset
-set_interface_property m_axi readIssuingCapability 16
-set_interface_property m_axi writeIssuingCapability 16
+set_interface_property m_axi associatedReset m_axi_resetn
+set_interface_property m_axi readIssuingCapability 8
+set_interface_property m_axi writeIssuingCapability 8
 add_interface_port m_axi m_axi_awvalid awvalid Output 1
 add_interface_port m_axi m_axi_awaddr awaddr Output AXI_ADDR_WIDTH
 add_interface_port m_axi m_axi_awready awready Input 1

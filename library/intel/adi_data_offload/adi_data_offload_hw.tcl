@@ -17,13 +17,13 @@ ad_ip_parameter INSTANCE_NAME STRING "" false {
   VISIBLE true
 }
 
-ad_ip_parameter DATAPATH_TYPE BOOLEAN 0 false { \
+ad_ip_parameter DATAPATH_TYPE INTEGER 0 false { \
   DISPLAY_HINT "radio" \
   DISPLAY_NAME "Data Path" \
   ALLOWED_RANGES { "0:Receive" "1:Transmit" }
 }
 
-ad_ip_parameter MEM_TYPE BOOLEAN 0 false { \
+ad_ip_parameter MEM_TYPE INTEGER 0 false { \
   DISPLAY_HINT "radio" \
   DISPLAY_NAME "Memory Type" \
   ALLOWED_RANGES { "0:Internal memory" "1:External memory" }
@@ -74,7 +74,7 @@ ad_ip_parameter AXI_ADDR_WIDTH INTEGER 32 false { \
   DISPLAY_NAME "AXI address width" \
 }
 
-ad_ip_parameter SHARED_DEVCLK BOOLEAN 0 false { \
+ad_ip_parameter SHARED_DEVCLK INTEGER 0 false { \
   DISPLAY_HINT "radio" \
   DISPLAY_NAME "CDC Circuit for sync_ext" \
   ALLOWED_RANGES { "0:Disable" "1:Enable" }
@@ -144,18 +144,20 @@ proc data_offload_compose {} {
   add_instance m_axis_clock altera_clock_bridge
   add_interface m_axis_aclk clock sink
   set_interface_property m_axis_aclk EXPORT_OF m_axis_clock.in_clk
-  add_instance m_axis_reset altera_reset_bridge
+  add_instance m_axis_resetn altera_reset_bridge
+  set_instance_parameter_value m_axis_resetn {ACTIVE_LOW_RESET} {1}
   add_interface m_axis_aresetn reset sink
-  set_interface_property m_axis_aresetn EXPORT_OF m_axis_reset.in_reset
-  add_connection m_axis_clock.out_clk m_axis_reset.clk
+  set_interface_property m_axis_aresetn EXPORT_OF m_axis_resetn.in_reset
+  add_connection m_axis_clock.out_clk m_axis_resetn.clk
 
   add_instance s_axis_clock altera_clock_bridge
   add_interface s_axis_aclk clock sink
   set_interface_property s_axis_aclk EXPORT_OF s_axis_clock.in_clk
-  add_instance s_axis_reset altera_reset_bridge
+  add_instance s_axis_resetn altera_reset_bridge
+  set_instance_parameter_value s_axis_resetn {ACTIVE_LOW_RESET} {1}
   add_interface s_axis_aresetn reset sink
-  set_interface_property s_axis_aresetn EXPORT_OF s_axis_reset.in_reset
-  add_connection s_axis_clock.out_clk s_axis_reset.clk
+  set_interface_property s_axis_aresetn EXPORT_OF s_axis_resetn.in_reset
+  add_connection s_axis_clock.out_clk s_axis_resetn.clk
 
   ###########################################################################
   # Data offload controller instance
@@ -214,13 +216,14 @@ proc data_offload_compose {} {
     add_instance m_axi_clock altera_clock_bridge
     add_interface m_axi_aclk clock sink
     set_interface_property m_axi_aclk EXPORT_OF m_axi_clock.in_clk
-    add_instance m_axi_reset altera_reset_bridge
+    add_instance m_axi_resetn altera_reset_bridge
+    set_instance_parameter_value m_axi_resetn {ACTIVE_LOW_RESET} {1}
     add_interface m_axi_aresetn reset sink
-    set_interface_property m_axi_aresetn EXPORT_OF m_axi_reset.in_reset
-    add_connection m_axi_clock.out_clk m_axi_reset.clk
+    set_interface_property m_axi_aresetn EXPORT_OF m_axi_resetn.in_reset
+    add_connection m_axi_clock.out_clk m_axi_resetn.clk
 
     add_connection m_axi_clock.out_clk storage_unit.m_axi_clock
-    add_connection m_axi_reset.out_reset storage_unit.m_axi_reset
+    add_connection m_axi_resetn.out_reset storage_unit.m_axi_resetn
 
     add_interface m_axi axi4 start
     set_interface_property m_axi EXPORT_OF storage_unit.m_axi
@@ -254,14 +257,14 @@ proc data_offload_compose {} {
   add_connection sys_clock.clk i_data_offload.s_axi_clock
   add_connection sys_clock.clk_reset i_data_offload.s_axi_reset
   add_connection s_axis_clock.out_clk i_data_offload.if_s_axis_aclk
-  add_connection s_axis_reset.out_reset i_data_offload.if_s_axis_aresetn
+  add_connection s_axis_resetn.out_reset i_data_offload.if_s_axis_aresetn
   add_connection m_axis_clock.out_clk i_data_offload.if_m_axis_aclk
-  add_connection m_axis_reset.out_reset i_data_offload.if_m_axis_aresetn
+  add_connection m_axis_resetn.out_reset i_data_offload.if_m_axis_aresetn
 
   add_connection s_axis_clock.out_clk storage_unit.if_s_axis_aclk
-  add_connection s_axis_reset.out_reset storage_unit.if_s_axis_aresetn
+  add_connection s_axis_resetn.out_reset storage_unit.if_s_axis_aresetn
   add_connection m_axis_clock.out_clk storage_unit.if_m_axis_aclk
-  add_connection m_axis_reset.out_reset storage_unit.if_m_axis_aresetn
+  add_connection m_axis_resetn.out_reset storage_unit.if_m_axis_aresetn
 
 }
 

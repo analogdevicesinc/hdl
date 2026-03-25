@@ -85,9 +85,9 @@ set_instance_parameter_value $dac_data_offload_name {AXI_DATA_WIDTH} $dac_axi_da
 
 add_connection sys_clk.clk $dac_data_offload_name.sys_clk
 add_connection sys_clk.clk_reset $dac_data_offload_name.sys_resetn
-add_connection adrv9009_tx_jesd204.link_clk $dac_data_offload_name.m_axis_aclk
-add_connection adrv9009_tx_jesd204.link_reset $dac_data_offload_name.m_axis_aresetn
-add_connection $dac_data_offload_name.m_axis axi_adrv9009_tx_upack.s_axis
+add_connection ad9144_jesd204.link_clk $dac_data_offload_name.m_axis_aclk
+add_connection ad9144_jesd204.link_reset $dac_data_offload_name.m_axis_aresetn
+add_connection $dac_data_offload_name.m_axis util_ad9144_upack.s_axis
 #add_connection $dac_data_offload_name.sync_ext GND
 
 # ad9144-dma
