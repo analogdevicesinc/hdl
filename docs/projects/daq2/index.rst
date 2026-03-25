@@ -240,6 +240,8 @@ avl_adxcfg_2.rcfg_s1              0x0004_A000
 avl_adxcfg_3.rcfg_s1              0x0004_B000
 axi_ad9680_dma.s_axi              0x0004_C000
 axi_ad9680.s_axi                  0x0005_0000
+ad9144_data_offload.s_axi         0x0006_0000
+ad9680_data_offload.s_axi         0x0007_0000
 ================================= ===========
 
 SPI connections
