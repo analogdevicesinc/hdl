@@ -137,10 +137,9 @@ module system_top (
   inout         csb_dutd,
   inout         csb_ad9510,
 
-  // Control signals
-  inout         trig_fmc_in,
-  inout         trig_fmc_out,
-  input         int_max7329
+  // TDD LiDAR control
+  input         trig_fmc_in,
+  output        trig_fmc_out
 );
 
   // internal signals
@@ -158,18 +157,15 @@ module system_top (
 
   // GPIO mapping:
   // [31: 0] - gpio_bd (directly active on Zedboard LEDs/switches/buttons)
-  // [32]    - trig_fmc_in
-  // [33]    - trig_fmc_out
-  // [34]    - csb_duta
-  // [35]    - csb_dutb
-  // [36]    - csb_dutc
-  // [37]    - csb_dutd
-  // [38]    - csb_ad9510
-  // [39]    - int_max7329 (input only)
-  // [63:40] - unused
+  // [32]    - csb_duta
+  // [33]    - csb_dutb
+  // [34]    - csb_dutc
+  // [35]    - csb_dutd
+  // [36]    - csb_ad9510
+  // [63:37] - unused
+  // trig_fmc_in/out connected to TDD controller (not GPIO)
 
-  assign gpio_i[63:40] = gpio_o[63:40];
-  assign gpio_i[39] = int_max7329;
+  assign gpio_i[63:37] = gpio_o[63:37];
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -180,18 +176,16 @@ module system_top (
     .dio_p(gpio_bd));
 
   ad_iobuf #(
-    .DATA_WIDTH(7)
+    .DATA_WIDTH(5)
   ) i_iobuf_fmc_gpio (
-    .dio_t(gpio_t[38:32]),
-    .dio_i(gpio_o[38:32]),
-    .dio_o(gpio_i[38:32]),
+    .dio_t(gpio_t[36:32]),
+    .dio_i(gpio_o[36:32]),
+    .dio_o(gpio_i[36:32]),
     .dio_p({csb_ad9510,
             csb_dutd,
             csb_dutc,
             csb_dutb,
-            csb_duta,
-            trig_fmc_out,
-            trig_fmc_in}));
+            csb_duta}));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -312,6 +306,10 @@ module system_top (
     .d1a_3_n (d1a_3_n),
     .frame_3_p (frame_3_p),
     .frame_3_n (frame_3_n),
-    .sync_3_n (1'b1));
+    .sync_3_n (1'b1),
+
+    // TDD LiDAR control
+    .trig_fmc_in (trig_fmc_in),
+    .trig_fmc_out (trig_fmc_out));
 
 endmodule

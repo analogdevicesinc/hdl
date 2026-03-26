@@ -3,10 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# system level parameter
-
-set BUFMRCE_EN $ad_project_params(BUFMRCE_EN)
-puts "build parameters: BUFMRCE_EN: $BUFMRCE_EN"
+source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
 
 # ada4355 interfaces for 4 instances
 
@@ -54,6 +51,10 @@ create_bd_port -dir I sync_3_n
 create_bd_port -dir I frame_3_p
 create_bd_port -dir I frame_3_n
 
+# TDD external ports
+create_bd_port -dir I trig_fmc_in
+create_bd_port -dir O trig_fmc_out
+
 # axi_ada4355 instances and DMAs
 #
 # On Zedboard FMC LPC, LVDS pins span two IO banks:
@@ -63,7 +64,6 @@ create_bd_port -dir I frame_3_n
 
 # Instance 0 - Creates IDELAYCTRL for bank 34
 ad_ip_instance axi_ada4355 axi_ada4355_adc_0
-ad_ip_parameter axi_ada4355_adc_0 CONFIG.BUFMRCE_EN $BUFMRCE_EN
 ad_ip_parameter axi_ada4355_adc_0 CONFIG.IODELAY_CTRL 1
 ad_ip_parameter axi_ada4355_adc_0 CONFIG.IO_DELAY_GROUP {adc_if_delay_group_0}
 
@@ -71,7 +71,7 @@ ad_ip_instance axi_dmac axi_ada4355_dma_0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_0 CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ada4355_dma_0 CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_2D_TRANSFER 0
@@ -80,7 +80,6 @@ ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # Instance 1 - Shares IDELAYCTRL with instance 0 (bank 34)
 ad_ip_instance axi_ada4355 axi_ada4355_adc_1
-ad_ip_parameter axi_ada4355_adc_1 CONFIG.BUFMRCE_EN $BUFMRCE_EN
 ad_ip_parameter axi_ada4355_adc_1 CONFIG.IODELAY_CTRL 0
 ad_ip_parameter axi_ada4355_adc_1 CONFIG.IO_DELAY_GROUP {adc_if_delay_group_0}
 
@@ -88,7 +87,7 @@ ad_ip_instance axi_dmac axi_ada4355_dma_1
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_1 CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ada4355_dma_1 CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_2D_TRANSFER 0
@@ -97,7 +96,6 @@ ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # Instance 2 - Creates IDELAYCTRL for bank 35
 ad_ip_instance axi_ada4355 axi_ada4355_adc_2
-ad_ip_parameter axi_ada4355_adc_2 CONFIG.BUFMRCE_EN $BUFMRCE_EN
 ad_ip_parameter axi_ada4355_adc_2 CONFIG.IODELAY_CTRL 1
 ad_ip_parameter axi_ada4355_adc_2 CONFIG.IO_DELAY_GROUP {adc_if_delay_group_1}
 
@@ -105,7 +103,7 @@ ad_ip_instance axi_dmac axi_ada4355_dma_2
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_2 CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ada4355_dma_2 CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_2D_TRANSFER 0
@@ -114,7 +112,6 @@ ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # Instance 3 - Shares IDELAYCTRL with instance 2 (bank 35)
 ad_ip_instance axi_ada4355 axi_ada4355_adc_3
-ad_ip_parameter axi_ada4355_adc_3 CONFIG.BUFMRCE_EN $BUFMRCE_EN
 ad_ip_parameter axi_ada4355_adc_3 CONFIG.IODELAY_CTRL 0
 ad_ip_parameter axi_ada4355_adc_3 CONFIG.IO_DELAY_GROUP {adc_if_delay_group_1}
 
@@ -122,12 +119,38 @@ ad_ip_instance axi_dmac axi_ada4355_dma_3
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_3 CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ada4355_dma_3 CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_DATA_WIDTH_DEST 64
+
+# TDD controller for LiDAR timing control
+# Channel 0: Laser trigger output
+# Channels 1-4: Per-DMA sync (controls when each DMA starts capturing)
+
+set TDD_CHANNEL_CNT 5
+set TDD_DEFAULT_POL 0b00000
+set TDD_REG_WIDTH 32
+set TDD_BURST_WIDTH 32
+set TDD_SYNC_WIDTH 64
+set TDD_SYNC_INT 1
+set TDD_SYNC_EXT 1
+set TDD_SYNC_EXT_CDC 1
+
+ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
+  $TDD_DEFAULT_POL \
+  $TDD_REG_WIDTH \
+  $TDD_BURST_WIDTH \
+  $TDD_SYNC_WIDTH \
+  $TDD_SYNC_INT \
+  $TDD_SYNC_EXT \
+  $TDD_SYNC_EXT_CDC
+
+ad_ip_instance ilvector_logic logic_inv [list \
+  C_OPERATION {not} \
+  C_SIZE 1]
 
 # connect interfaces to axi_ada4355 instances
 
@@ -209,7 +232,20 @@ ad_connect axi_ada4355_adc_3/adc_dovf  axi_ada4355_dma_3/fifo_wr_overflow
 ad_connect axi_ada4355_adc_3/adc_clk   axi_ada4355_dma_3/fifo_wr_clk
 ad_connect $sys_cpu_resetn axi_ada4355_dma_3/m_dest_axi_aresetn
 
-# CPU interconnect for all instances
+# TDD connections
+
+ad_connect axi_ada4355_adc_0/adc_clk axi_tdd_0/clk
+ad_connect $sys_cpu_reset logic_inv/Op1
+ad_connect logic_inv/Res axi_tdd_0/resetn
+ad_connect axi_tdd_0/sync_in trig_fmc_in
+ad_connect axi_tdd_0/tdd_channel_0 trig_fmc_out
+ad_connect axi_tdd_0/tdd_channel_1 axi_ada4355_dma_0/sync
+ad_connect axi_tdd_0/tdd_channel_2 axi_ada4355_dma_1/sync
+ad_connect axi_tdd_0/tdd_channel_3 axi_ada4355_dma_2/sync
+ad_connect axi_tdd_0/tdd_channel_4 axi_ada4355_dma_3/sync
+
+# interconnects
+
 ad_cpu_interconnect 0x44A00000 axi_ada4355_adc_0
 ad_cpu_interconnect 0x44A10000 axi_ada4355_adc_1
 ad_cpu_interconnect 0x44A20000 axi_ada4355_adc_2
@@ -220,6 +256,8 @@ ad_cpu_interconnect 0x44A50000 axi_ada4355_dma_1
 ad_cpu_interconnect 0x44A60000 axi_ada4355_dma_2
 ad_cpu_interconnect 0x44A70000 axi_ada4355_dma_3
 
+ad_cpu_interconnect 0x44A80000 axi_tdd_0
+
 # Memory interconnect for all DMAs
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ada4355_dma_0/m_dest_axi
@@ -227,7 +265,7 @@ ad_mem_hp1_interconnect $sys_cpu_clk axi_ada4355_dma_1/m_dest_axi
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ada4355_dma_2/m_dest_axi
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ada4355_dma_3/m_dest_axi
 
-# CPU interrupts for all DMAs
+# interrupts
 ad_cpu_interrupt ps-13 mb-13 axi_ada4355_dma_0/irq
 ad_cpu_interrupt ps-14 mb-14 axi_ada4355_dma_1/irq
 ad_cpu_interrupt ps-15 mb-15 axi_ada4355_dma_2/irq
