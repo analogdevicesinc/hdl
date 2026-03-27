@@ -4,6 +4,9 @@
 ###############################################################################
 
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
+
+set CACHE_COHERENCY false
+
 source ../common/daq3_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
@@ -69,7 +72,7 @@ ad_connect axi_ad9680_cpack/packed_fifo_wr axi_ad9680_dma/fifo_wr
 
 ad_mem_hp0_interconnect sys_cpu_clk sys_ps8/S_AXI_HP0
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9680_xcvr/m_axi
-ad_mem_hpc0_interconnect sys_dma_clk sys_ps8/S_AXI_HPC0
-ad_mem_hpc0_interconnect sys_dma_clk axi_ad9680_dma/m_dest_axi
-ad_mem_hpc1_interconnect sys_dma_clk sys_ps8/S_AXI_HPC1
-ad_mem_hpc1_interconnect sys_dma_clk axi_ad9152_dma/m_src_axi
+ad_mem_hp1_interconnect sys_dma_clk sys_ps8/S_AXI_HP1
+ad_mem_hp1_interconnect sys_dma_clk axi_ad9680_dma/m_dest_axi
+ad_mem_hp2_interconnect sys_dma_clk sys_ps8/S_AXI_HP2
+ad_mem_hp2_interconnect sys_dma_clk axi_ad9152_dma/m_src_axi
