@@ -65,7 +65,8 @@ module axi_hmcad15xx #(
 
   output  [127:0] adc_data,
 
-  output          adc_clk,
+  output          adc_clk,      // Regional clock (BUFR) - for IO-local logic
+  output          adc_clk_g,    // Global clock (BUFG) - for BRAM/fabric logic
   output          adc_resetn,
 
   // delay interface
@@ -118,6 +119,7 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   wire [13:0] up_waddr_s;
   wire [13:0] up_raddr_s;
   wire        adc_clk_s;
+  wire        adc_clk_g_s;  // Global clock from BUFG
   wire        up_wreq_s;
   wire        up_rreq_s;
   wire [31:0] up_wdata_s;
@@ -136,6 +138,7 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
   assign adc_clk = adc_clk_s;
+  assign adc_clk_g = adc_clk_g_s;  // Global clock for BRAM/fabric
   assign adc_resetn = ~adc_rst_s;
 
   assign adc_enable_0 = adc_enable[0];
@@ -242,6 +245,7 @@ assign polarity_mask_s = adc_config_wr[7:0];
     .data_in_p (data_in_p),
     .data_in_n (data_in_n),
     .adc_clk (adc_clk_s),
+    .adc_clk_g (adc_clk_g_s),
     .adc_valid (adc_valid),
     .adc_data (adc_data),
     .resolution(resolution),

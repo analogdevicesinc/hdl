@@ -74,9 +74,7 @@ create_clock -period 4.000 -name ref_clk_a2 [get_ports clk_in_a2_p]
 
 # Both ADC clocks come from same ADF4355 but are treated as asynchronous domains
 # No timing paths need to be analyzed between them (data synchronization handled in software)
-set_clock_groups -asynchronous \
-    -group [get_clocks -include_generated_clocks ref_clk_a1] \
-    -group [get_clocks -include_generated_clocks ref_clk_a2]
+set_clock_groups -asynchronous -group [get_clocks -include_generated_clocks ref_clk_a1] -group [get_clocks -include_generated_clocks ref_clk_a2]
 
 # input                  ____________________
 # clock    _____________|                    |_____________
@@ -141,7 +139,7 @@ set_property -dict {PACKAGE_PIN E12 IOSTANDARD LVCMOS25} [get_ports spi_sdata]
 
 create_clock -period 10.000 -name clk_fpga_0 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[0]}]
 create_clock -period 5.000 -name clk_fpga_1 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[1]}]
-create_clock -period 4.000 -name clk_fpga_2 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[2]}]
+create_clock -period 6.666 -name clk_fpga_2 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[2]}]
 
 create_clock -period 40.000 -name spi0_clk [get_pins -hier */EMIOSPI0SCLKO]
 
@@ -302,4 +300,6 @@ set_property PACKAGE_PIN B2 [get_ports {ddr_dqs_n[0]}]
 set_property PACKAGE_PIN F2 [get_ports {ddr_dqs_n[1]}]
 set_property PACKAGE_PIN C2 [get_ports {ddr_dqs_p[0]}]
 set_property PACKAGE_PIN G2 [get_ports {ddr_dqs_p[1]}]
+
+
 

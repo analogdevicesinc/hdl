@@ -62,7 +62,8 @@ module axi_hmcad15xx_if #(
 
   // data path interface
 
-  output                 adc_clk,
+  output                 adc_clk,      // Regional clock (BUFR) - for local IO logic only
+  output                 adc_clk_g,    // Global clock (BUFG) - for BRAM/fabric logic
   output                 adc_valid,
   output    [127:0]      adc_data,
 
@@ -81,7 +82,8 @@ wire [15:0]  sample_assembly_out [0:7];
 wire [ 7:0]  serdes_data [0:7];
 wire         adc_clk_in_fast;
 wire [15:0]  data_out [0:7];
-wire         adc_clk_div;
+wire         adc_clk_div;      // Regional clock from BUFR
+wire         adc_clk_global;   // Global clock from BUFG
 wire [ 7:0]  frame_data;
 wire         clk_in_s;
 wire [ 7:0]  data_en;
@@ -103,7 +105,8 @@ reg          wr_en_reg;
 
 assign adc_valid   = (resolution == 2'b00 || resolution == 2'b01) ? wr_en8_reg  : (resolution != 2'b11) ? wr_en_reg : (wr_en14_reg && data_en[0]);
 assign adc_data    = (resolution != 2'b11) ? wr_data_reg :  wr_data14_reg;
-assign adc_clk     = adc_clk_div;
+assign adc_clk     = adc_clk_div;     // Regional clock for IO-local logic
+assign adc_clk_g   = adc_clk_global;  // Global clock for BRAM/fabric
 
 IBUFDS i_clk_in_ibuf(
   .I (clk_in_p),
@@ -114,13 +117,21 @@ BUFIO i_clk_buf(
  .I(clk_in_s),
  .O(adc_clk_in_fast));
 
- BUFR #(
-   .BUFR_DIVIDE("4")
- ) i_div_clk_buf (
-   .CLR(1'b0),
-   .CE(1'b1),
-   .I(clk_in_s),
-   .O(adc_clk_div));
+// Regional clock buffer - drives ISERDES and local IO logic
+// Limited to resources within the same clock region
+BUFR #(
+  .BUFR_DIVIDE("4")
+) i_div_clk_buf (
+  .CLR(1'b0),
+  .CE(1'b1),
+  .I(clk_in_s),
+  .O(adc_clk_div));
+
+// Global clock buffer - drives BRAM and fabric logic anywhere on chip
+// Converts regional BUFR clock to global routing network
+BUFG i_global_clk_buf (
+  .I(adc_clk_div),
+  .O(adc_clk_global));
 
 ad_serdes_in # (
   .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),

@@ -47,7 +47,6 @@ ad_connect axi_hmcad15xx_adc/adc_clk        hmcad15xx_dma/fifo_wr_clk
 ad_connect axi_hmcad15xx_adc/adc_data       hmcad15xx_dma/fifo_wr_din
 ad_connect axi_hmcad15xx_adc/adc_valid      hmcad15xx_dma/fifo_wr_en
 ad_connect axi_hmcad15xx_adc/adc_dovf       hmcad15xx_dma/fifo_wr_overflow
-ad_connect axi_hmcad15xx_adc/adc_sync_armed hmcad15xx_dma/sync
 
 #DMA
 

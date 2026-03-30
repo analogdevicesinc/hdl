@@ -3,6 +3,9 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+# Source data_offload helper for synchronized dual-ADC capture with BRAM storage
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
+
 # create board design
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
 create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 fixed_io
@@ -101,7 +104,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 0.0545553125
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_0 0.072623
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 0.0553525
 ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 250.0
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 150.0
 ad_ip_parameter sys_ps7 CONFIG.PCW_EN_RST2_PORT 1
 
 ad_ip_instance xlconcat sys_concat_intc
@@ -115,46 +118,52 @@ ad_ip_parameter sys_150m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_connect  sys_ps7/FCLK_CLK2 sys_150m_rstgen/slowest_sync_clk
 ad_connect  sys_150m_rstgen/ext_reset_in sys_ps7/FCLK_RESET2_N
 
-# instance: hcmad15xx_a1 dma
+ad_connect  sys_cpu_clk sys_ps7/FCLK_CLK0
+ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
+ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
+ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
+ad_connect  sys_rstgen/ext_reset_in sys_ps7/FCLK_RESET0_N
+
 
 ad_ip_instance axi_dmac hmcad15xx_a1_dma
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_TYPE_SRC 2
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_TYPE_DEST 0
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.CYCLIC 0
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.SYNC_TRANSFER_START 0
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_SRC 1
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_DEST 1
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_DATA_WIDTH_SRC 128
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.FIFO_SIZE 32
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.MAX_BYTES_PER_BURST 4096
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_TYPE_SRC 1         
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_TYPE_DEST 0        
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.CYCLIC 0               
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.SYNC_TRANSFER_START 0  
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_SRC 1        
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_DEST 1       
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_2D_TRANSFER 0      
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_DATA_WIDTH_SRC 64  
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_DATA_WIDTH_DEST 64 
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.FIFO_SIZE 8            
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.MAX_BYTES_PER_BURST 4096 
 
 ad_connect  hmcad15xx_a1_dma/m_dest_axi_aresetn sys_150m_rstgen/peripheral_aresetn
 
-# instance: hcmad15xx_a2 dma
-
+# ADC2 DMA - receives AXI Stream from data_offload, writes to DDR via HP2
 ad_ip_instance axi_dmac hmcad15xx_a2_dma
-ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_TYPE_SRC 2
-ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_TYPE_SRC 1         
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_TYPE_DEST 0        
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.CYCLIC 0
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_DATA_WIDTH_SRC 128
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_DATA_WIDTH_DEST 64
-ad_ip_parameter hmcad15xx_a2_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.FIFO_SIZE 8
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.MAX_BYTES_PER_BURST 4096
 
 ad_connect  hmcad15xx_a2_dma/m_dest_axi_aresetn sys_150m_rstgen/peripheral_aresetn
 
-# instance: axi_hmcad15xx_a1
+# =============================================================================
+# ADC1: HMCAD15xx LVDS Interface
+# =============================================================================
 
 ad_ip_instance axi_hmcad15xx axi_hmcad15xx_a1_adc
-ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.IODELAY_CTRL 0
-ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.NUM_CHANNELS 4
-ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.POLARITY_MASK 247
+ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.IODELAY_CTRL 0     
+ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.NUM_CHANNELS 4     
+ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.POLARITY_MASK 247  
 
 ad_connect axi_hmcad15xx_a1_adc/s_axi_aclk    sys_cpu_clk
 ad_connect axi_hmcad15xx_a1_adc/clk_in_p      clk_in_a1_p
@@ -165,17 +174,36 @@ ad_connect axi_hmcad15xx_a1_adc/data_in_p     data_in_a1_p
 ad_connect axi_hmcad15xx_a1_adc/data_in_n     data_in_a1_n
 ad_connect axi_hmcad15xx_a1_adc/delay_clk     sys_ps7/FCLK_CLK1
 
-ad_connect axi_hmcad15xx_a1_adc/adc_clk   hmcad15xx_a1_dma/fifo_wr_clk
-ad_connect axi_hmcad15xx_a1_adc/adc_data  hmcad15xx_a1_dma/fifo_wr_din
-ad_connect axi_hmcad15xx_a1_adc/adc_valid hmcad15xx_a1_dma/fifo_wr_en
-ad_connect axi_hmcad15xx_a1_adc/adc_dovf  hmcad15xx_a1_dma/fifo_wr_overflow
+# 80KB BRAM buffer for ADC1
+ad_data_offload_create adc1_data_offload 0 0 [expr 64*1024] 128 64
+                       
+ad_ip_parameter adc1_data_offload/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
 
-# instance: axi_hmcad15xx_a2
+ad_connect sys_cpu_clk                           adc1_data_offload/s_axi_aclk
+ad_connect sys_cpu_resetn                        adc1_data_offload/s_axi_aresetn
+ad_connect axi_hmcad15xx_a1_adc/adc_clk_g        adc1_data_offload/s_axis_aclk
+ad_connect axi_hmcad15xx_a1_adc/adc_resetn       adc1_data_offload/s_axis_aresetn
+ad_connect sys_ps7/FCLK_CLK2                     adc1_data_offload/m_axis_aclk
+ad_connect sys_150m_rstgen/peripheral_aresetn    adc1_data_offload/m_axis_aresetn
+
+ad_connect axi_hmcad15xx_a1_adc/adc_valid   adc1_data_offload/i_data_offload/s_axis_valid
+ad_connect axi_hmcad15xx_a1_adc/adc_data    adc1_data_offload/i_data_offload/s_axis_data
+
+# Connect data_offload AXI Stream output to DMA input
+ad_connect adc1_data_offload/m_axis        hmcad15xx_a1_dma/s_axis
+ad_connect sys_ps7/FCLK_CLK2               hmcad15xx_a1_dma/s_axis_aclk
+
+# Handshake: data_offload requests transfer, DMA acknowledges ready
+ad_connect adc1_data_offload/init_req      hmcad15xx_a1_dma/s_axis_xfer_req
+
+# =============================================================================
+# ADC2: HMCAD15xx LVDS Interface
+# =============================================================================
 
 ad_ip_instance axi_hmcad15xx axi_hmcad15xx_a2_adc
-ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.IODELAY_CTRL 1
-ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.NUM_CHANNELS 4
-ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.POLARITY_MASK 0
+ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.IODELAY_CTRL 1    
+ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.NUM_CHANNELS 4    
+ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.POLARITY_MASK 0    
 
 ad_connect axi_hmcad15xx_a2_adc/s_axi_aclk    sys_cpu_clk
 ad_connect axi_hmcad15xx_a2_adc/clk_in_p      clk_in_a2_p
@@ -186,18 +214,47 @@ ad_connect axi_hmcad15xx_a2_adc/data_in_p     data_in_a2_p
 ad_connect axi_hmcad15xx_a2_adc/data_in_n     data_in_a2_n
 ad_connect axi_hmcad15xx_a2_adc/delay_clk     sys_ps7/FCLK_CLK1
 
-ad_connect axi_hmcad15xx_a2_adc/adc_clk   hmcad15xx_a2_dma/fifo_wr_clk
-ad_connect axi_hmcad15xx_a2_adc/adc_data  hmcad15xx_a2_dma/fifo_wr_din
-ad_connect axi_hmcad15xx_a2_adc/adc_valid hmcad15xx_a2_dma/fifo_wr_en
-ad_connect axi_hmcad15xx_a2_adc/adc_dovf  hmcad15xx_a2_dma/fifo_wr_overflow
+# =============================================================================
+# ADC2 Data Path: ADC -> data_offload (BRAM) -> DMA -> DDR
+# =============================================================================
 
-# add external spi
+# 80KB BRAM buffer for ADC2
+ad_data_offload_create adc2_data_offload 0 0 [expr 64*1024] 128 64  
 
-ad_connect  sys_cpu_clk sys_ps7/FCLK_CLK0
-ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
-ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
-ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
-ad_connect  sys_rstgen/ext_reset_in sys_ps7/FCLK_RESET0_N
+ad_ip_parameter adc2_data_offload/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+
+ad_connect sys_cpu_clk                           adc2_data_offload/s_axi_aclk
+ad_connect sys_cpu_resetn                        adc2_data_offload/s_axi_aresetn
+ad_connect axi_hmcad15xx_a2_adc/adc_clk_g        adc2_data_offload/s_axis_aclk
+ad_connect  axi_hmcad15xx_a1_adc/adc_resetn      adc2_data_offload/s_axis_aresetn
+ad_connect sys_ps7/FCLK_CLK2                     adc2_data_offload/m_axis_aclk
+ad_connect sys_150m_rstgen/peripheral_aresetn    adc2_data_offload/m_axis_aresetn
+
+
+ad_connect axi_hmcad15xx_a2_adc/adc_valid   adc2_data_offload/i_data_offload/s_axis_valid
+ad_connect axi_hmcad15xx_a2_adc/adc_data    adc2_data_offload/i_data_offload/s_axis_data
+
+# data_offload AXI Stream output -> DMA
+ad_connect adc2_data_offload/m_axis        hmcad15xx_a2_dma/s_axis
+ad_connect sys_ps7/FCLK_CLK2               hmcad15xx_a2_dma/s_axis_aclk
+
+# Handshake for transfer synchronization
+ad_connect adc2_data_offload/init_req      hmcad15xx_a2_dma/s_axis_xfer_req
+
+# TDD configuration - 2 channels, sync internal, polarity 0, rest defaults
+ad_tdd_gen_create axi_tdd_sync 2
+
+
+ad_connect axi_tdd_sync/clk           axi_hmcad15xx_a1_adc/adc_clk_g
+ad_connect axi_tdd_sync/resetn        axi_hmcad15xx_a1_adc/adc_resetn
+ad_connect axi_tdd_sync/s_axi_aclk    sys_cpu_clk
+ad_connect axi_tdd_sync/s_axi_aresetn sys_cpu_resetn
+ad_connect axi_tdd_sync/sync_in GND
+
+# Route TDD sync to data_offload for synchronized capture start
+
+ad_connect axi_tdd_sync/tdd_channel_0 adc1_data_offload/sync_ext
+ad_connect axi_tdd_sync/tdd_channel_1 adc2_data_offload/sync_ext
 
 # interface connections
 
@@ -251,6 +308,9 @@ ad_cpu_interconnect 0x44A00000 axi_hmcad15xx_a1_adc
 ad_cpu_interconnect 0x44A30000 hmcad15xx_a1_dma
 ad_cpu_interconnect 0x44A60000 axi_hmcad15xx_a2_adc
 ad_cpu_interconnect 0x44A90000 hmcad15xx_a2_dma
+ad_cpu_interconnect 0x44AC0000 axi_tdd_sync
+ad_cpu_interconnect 0x44B00000 adc1_data_offload
+ad_cpu_interconnect 0x44B10000 adc2_data_offload
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP0 {1}
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 {1}
