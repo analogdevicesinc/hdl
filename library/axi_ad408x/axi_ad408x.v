@@ -38,6 +38,7 @@
 module axi_ad408x #(
   parameter   ID = 0,
   parameter   FPGA_TECHNOLOGY = 0,
+  parameter   NUM_LANES = 2,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
   parameter   ADC_N_BITS = 20
 ) (
@@ -96,7 +97,7 @@ module axi_ad408x #(
   input         [ 2:0]    s_axi_arprot
 );
 
-  localparam DELAY_CTRL_NUM_LANES = 2;
+  localparam DELAY_CTRL_NUM_LANES = NUM_LANES;
   localparam DELAY_CTRL_DRP_WIDTH = 5;
   localparam ADC_DATA_WIDTH  = ((ADC_N_BITS > 16)? 32 : 16);
 
@@ -276,6 +277,7 @@ module axi_ad408x #(
 
   ad408x_phy #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
+    .NUM_LANES(NUM_LANES),
     .IO_DELAY_GROUP(IO_DELAY_GROUP),
     .IODELAY_CTRL(1),
     .ADC_N_BITS(ADC_N_BITS),
