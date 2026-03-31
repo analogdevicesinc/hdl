@@ -6,8 +6,8 @@
 set_property CFGBVS GND [current_design]
 set_property CONFIG_VOLTAGE 1.8 [current_design]
 
-set_property -dict {PACKAGE_PIN Y18  IOSTANDARD DIFF_SSTL18_I} [get_ports clk_125_p]
-set_property -dict {PACKAGE_PIN Y19  IOSTANDARD DIFF_SSTL18_I} [get_ports clk_125_n]
+set_property -dict {PACKAGE_PIN Y18  IOSTANDARD DIFF_SSTL18_I} [get_ports clk_156_p]
+set_property -dict {PACKAGE_PIN Y19  IOSTANDARD DIFF_SSTL18_I} [get_ports clk_156_n]
 
 # Aurora
 
