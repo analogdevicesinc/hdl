@@ -35,7 +35,11 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
+  parameter NUM_OF_SDIO = 4,
+  parameter NUM_OF_CS = 4,
+  parameter EN_SINGLE_CS = 0
+) (
 
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
@@ -85,40 +89,43 @@ module system_top (
 
   // SPI configuration interface
 
-  output          se_spi_sdo,
-  output          se_spi_sclk,
-  input   [ 3:0]  se_spi_sdi,
-  output  [ 3:0]  se_spi_cs,
+  output                     se_spi_sdo,
+  output                     se_spi_sclk,
+  input   [NUM_OF_SDIO-1:0]  se_spi_sdi,
+  output  [  NUM_OF_CS-1:0]  se_spi_cs,
 
-  input   [ 3:0]  qadc_drdy,
+  input   [            3:0]  qadc_drdy,
 
-  input           qadc_mclk_refclk,
-  output          qadc_xtal2_mclk,
-  inout           qadc_sync,
+  input                      qadc_mclk_refclk,
+  output                     qadc_xtal2_mclk,
+  inout                      qadc_sync,
 
-  inout   [ 3:0]  qadc_pgood,
+  inout   [            3:0]  qadc_pgood,
 
-  inout   [ 1:0]  qadc_muxa,
-  inout   [ 1:0]  qadc_muxb,
-  inout   [ 1:0]  qadc_muxc,
-  inout   [ 1:0]  qadc_muxd
+  inout   [            1:0]  qadc_muxa,
+  inout   [            1:0]  qadc_muxb,
+  inout   [            1:0]  qadc_muxc,
+  inout   [            1:0]  qadc_muxd
 );
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  iic_mux_scl_o_s;
-  wire            iic_mux_scl_t_s;
-  wire    [ 1:0]  iic_mux_sda_i_s;
-  wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            iic_mux_sda_t_s;
+  wire  [          63:0]  gpio_i;
+  wire  [          63:0]  gpio_o;
+  wire  [          63:0]  gpio_t;
+  wire  [           1:0]  iic_mux_scl_i_s;
+  wire  [           1:0]  iic_mux_scl_o_s;
+  wire                    iic_mux_scl_t_s;
+  wire  [           1:0]  iic_mux_sda_i_s;
+  wire  [           1:0]  iic_mux_sda_o_s;
+  wire                    iic_mux_sda_t_s;
+  wire                    out_drdy;
+  wire  [ NUM_OF_CS-1:0]  se_spi_cs_int;
 
   // instantiations
-
-  assign gpio_i[63:45] = gpio_o[63:45];
+  assign gpio_i[63:46] = gpio_o[63:46];
+  assign gpio_i[45] = out_drdy; // gpio_and_reduce_trigger
+  assign se_spi_cs = EN_SINGLE_CS ? {NUM_OF_CS{se_spi_cs_int[0]}} : se_spi_cs_int;
 
   ad_iobuf #(
     .DATA_WIDTH(13)
@@ -225,12 +232,13 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .quad_adaq77681_spi_cs(se_spi_cs),
+    .quad_adaq77681_spi_cs(se_spi_cs_int),
     .quad_adaq77681_spi_sclk(se_spi_sclk),
     .quad_adaq77681_spi_sdi(se_spi_sdi),
     .quad_adaq77681_spi_sdo(se_spi_sdo),
     .quad_adaq77681_spi_sdo_t(),
     .quad_adaq77681_drdy(qadc_drdy),
+    .quad_adaq77681_out_drdy(out_drdy),
     .quad_adaq77681_mclk_refclk(qadc_mclk_refclk),
     .quad_adaq77681_xtal2_mclk(qadc_xtal2_mclk),
     .otg_vbusoc (otg_vbusoc),

@@ -38,7 +38,7 @@ set_property -dict {PACKAGE_PIN A21 IOSTANDARD LVCMOS25} [get_ports qadc_pgood[2
 set_property -dict {PACKAGE_PIN B21 IOSTANDARD LVCMOS25} [get_ports qadc_pgood[3]]          ; ## FMC_LA30_P
 
 #create_clock -period 30.5175781 -name qadc_mclk_refclk [get_ports qadc_mclk_refclk]
-create_clock -period 32.768 -name qadc_mclk_refclk [get_ports qadc_mclk_refclk]
+create_clock -period 61.0351562 -name qadc_mclk_refclk [get_ports qadc_mclk_refclk]
 
 ## There is a multi-cycle path between the axi_spi_engine's SDO_FIFO and the
 # execution's shift register, because we load new data into the shift register
