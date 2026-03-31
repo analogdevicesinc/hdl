@@ -139,7 +139,7 @@ set_property -dict {PACKAGE_PIN E12 IOSTANDARD LVCMOS25} [get_ports spi_sdata]
 
 create_clock -period 10.000 -name clk_fpga_0 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[0]}]
 create_clock -period 5.000 -name clk_fpga_1 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[1]}]
-create_clock -period 6.666 -name clk_fpga_2 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[2]}]
+create_clock -period 4.000 -name clk_fpga_2 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[2]}]
 
 create_clock -period 40.000 -name spi0_clk [get_pins -hier */EMIOSPI0SCLKO]
 
