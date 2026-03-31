@@ -6,7 +6,7 @@
 # Clocking
 
 create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 clk_in
-set_property CONFIG.FREQ_HZ 125000000 [get_bd_intf_ports clk_in]
+set_property CONFIG.FREQ_HZ 156250000 [get_bd_intf_ports clk_in]
 create_bd_port -dir O -type clk clk_out
 
 ad_ip_instance clk_wiz clk_wizard [list \

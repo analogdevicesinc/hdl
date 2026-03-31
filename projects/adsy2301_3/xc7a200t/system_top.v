@@ -38,8 +38,8 @@
 module system_top (
 
   // Input reference clock
-  input  clk_125_p,
-  input  clk_125_n,
+  input  clk_156_p,
+  input  clk_156_n,
 
   // BF SPI 01
   output BF_SPI_SCLK_01,
@@ -339,8 +339,8 @@ module system_top (
   assign gpio_i[16] = UDC_3P3V_LDO_PG;
 
   system_wrapper i_system_wrapper (
-    .clk_in_clk_p (clk_125_p),
-    .clk_in_clk_n (clk_125_n),
+    .clk_in_clk_p (clk_156_p),
+    .clk_in_clk_n (clk_156_n),
     .clk_out (clk),
     .ext_rst (FPGA_TRIG),
     .bf_spi_sclk_01(BF_SPI_SCLK_01),
