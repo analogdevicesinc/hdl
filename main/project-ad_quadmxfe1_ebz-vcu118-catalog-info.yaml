@@ -1,0 +1,44 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad_quadmxfe1_ebz-vcu118
+  title: AD-QUADMXFE1-EBZ HDL project
+  description: >
+    The AD-QUADMXFE1-EBZ reference design is a processor based (e.g. Microblaze) embedded
+    system, which showcases the QUAD-MXFE evaluation board.
+
+    The Quad-MxFE System Development Platform contains four MxFE (Mixed-signal Front
+    End) software defined, direct RF sampling transceivers, as well as associated
+    RF front-ends, clocking, and power circuitry. The target application is phased
+    array radars, electronic warfare, and ground-based SATCOM, specifically a 16 transmit/16
+    receive channel direct sampling phased array at L/S/C band (0.1 GHz to ~5GHz).
+
+    - 16x RF receive (RX) channels (32x digital RX channels), with 16 ADCs going from
+    1.5 GSPS to 4 GSPS, and 48x Digital Down Converters (DDCs), each including complex
+    Numerically-Controlled Oscillators (NCOs)
+
+    - 16x RF transmit (TX) channels (32x digital TX channels), with 16 DACs going
+    from 3 GSPS to 12 GSPS, and 48x Digital Up Converters (DUCs), each including complex
+    Numerically-Controlled Oscillators (NCOs)
+
+    It targets the AMD Xilinx VCU118.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_quadmxfe1_ebz/vcu118
+  tags:
+  - hdl
+  - project
+  - quad-mxfe
+  - reference-design
+  - vcu118
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad_quadmxfe1_ebz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

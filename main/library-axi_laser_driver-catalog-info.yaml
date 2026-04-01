@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_laser_driver
+  title: AXI_LASER_DRIVER HDL IP core
+  description: >
+    The AXI Laser Driver IP core generates all the necessary control signals for the
+    ad_fmclidar1_ebz prototyping platform, to drive the laser, switch between the
+    TIA channels and synchronize all the data flow inside the FPGA. This documentation
+    covers the main functionality of the IP core and its software programmable registers.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/axi_laser_driver
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/axi_laser_driver/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

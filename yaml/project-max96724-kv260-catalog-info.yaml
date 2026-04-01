@@ -1,0 +1,42 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-max96724-kv260
+  title: MAX96724 HDL project
+  description: >
+    The MAX96724 deserializer converts four GMSL™2/1 inputs to 1, 2, or 4 MIPI D-PHY
+    or C-PHY outputs. The device allows simultaneous transmit bidirectional transmissions
+    over 50Ω coax or 100Ω STP cables that meet the GMSL channel specification.
+
+    Up to four remotely located sensors can be supported using industry-standard coax
+    or STP interconnects. Each GMSL2 serial link operates at a fixed rate of 3 Gbps
+    or 6 Gbps in the forward direction and 187.5Mbps in the reverse direction. The
+    MAX96724/F/R supports both aggregation and replication of video data, enabling
+    streams from multiple remotely located sensors to be combined and routed to one
+    or more of the available CSI-2 outputs.
+
+    The MAX96724 DPHY Evaluation Kit (EV Kit) provides a proven design and reliable
+    platform to evaluate the MAX96724 device using standard FAKRA coaxial cables.
+
+    It targets the AMD Xilinx KV260.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/max96724/kv260
+  tags:
+  - hdl
+  - kv260
+  - max96724
+  - max96724f-bak-evk
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/max96724/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

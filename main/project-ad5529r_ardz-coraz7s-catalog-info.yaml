@@ -1,0 +1,51 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad5529r_ardz-coraz7s
+  title: AD5529R HDL project
+  description: >
+    The AD5529R is a 16-channel, 16-bit voltage-output digital-to-analog converter
+    (DAC) with an integrated 4.096V precision reference. The device supports programmable
+    output ranges up to ±20V or 0-40V, making it suitable for industrial control,
+    test and measurement, and process automation applications.
+
+    Key features include:
+
+    - 16-bit resolution across 16 channels
+
+    - Built-in digital functions (toggle, dither, ramp)
+
+    - Monitor multiplexer for diagnostics
+
+    - SPI interface: 16-bit instruction + 8/16-bit data
+
+    - Maximum SPI clock: 50 MHz
+
+    - Settling time: 8-20 µs (range-dependent)
+
+    This HDL project implements the SPI Engine framework with DMA streaming, enabling
+    SPI throughput of 123.4 kSPS per channel with hardware-triggered updates and zero
+    CPU involvement. Actual update rate is settling-time limited (125 kSPS at 0-5V
+    range, down to 50 kSPS at ±20V range).
+
+    It targets the AMD Xilinx CORAZ7S.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad5529r_ardz/coraz7s
+  tags:
+  - ad5529r
+  - coraz7s
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad5529r_ardz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

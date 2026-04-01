@@ -1,0 +1,49 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-admx6020m
+  title: ADMX6020M HDL project
+  description: >
+    The ADMX6020M is a dual-channel HMCAD15xx ADC data acquisition system targeting
+    Xilinx Zynq-7000. It supports synchronous capture from both ADCs in all supported
+    resolutions (8/12/14-bit) for up to 64KB of data per channel.
+
+    The design uses the TDD IP to generate a sync signal that triggers simultaneous
+    capture start on both ADC channels, ensuring sample-aligned data acquisition.
+
+    Key features:
+
+    - 1 GSPS sampling rate (1 ns time resolution) / 8-bit vertical resolution
+
+    - 2 differential input channels
+
+    - 50-ohm input impedance
+
+    - 0°C to 85°C(ambient)
+
+    - Configurable input range (0.5V to 1.5V default, configurable to -4V min to +4V
+    max)
+
+    - Built-in non-volatile storage
+
+    - Programmable trigger functionality
+
+    - SPI, I2C, USB interfaces for control and data offloading
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/admx6020m
+  tags:
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/admx6020m/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

@@ -1,0 +1,55 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-quad_adaq77681-zed
+  title: QUAD_ADAQ77681 HDL project
+  description: >
+    The ADAQ7768-1 is a 24-bit precision data acquisition (DAQ) μModule system that
+    encapsulates signal conditioning, conversion, and processing blocks into one system-in-package
+    (SiP) design for the rapid development of highly compact, high-performance precision
+    DAQ systems.
+
+    The ADAQ7768-1 consists of a low-noise, low-bias current, high-bandwidth programmable
+    gain instrumentation amplifier (PGIA) also capable of signal amplification and
+    signal attenuation while maintaining high input impedance, a fourth-order, low-noise,
+    linear phase anti-aliasing filter, a low-noise, low-distortion, high-bandwidth
+    ADC driver plus an optional linearity boost buffer. Also, contains a high-performance
+    medium bandwidth 24-bit Σ-Δ ADC with programmable digital filter,a low-noise,
+    low-dropout linear regulator, reference buffers and critical passive components
+    required for the signal chain.
+
+    The ADAQ7768-1 supports fully differential input signal with a maximum range of
+    ±12.6 V. It has an input common-mode voltage range of ±12 V with excellent common-mode
+    rejection ratio (CMRR). The input signal is fully buffered with very low input
+    bias current of 2 pA typical. This allows easy input impedance matching and enables
+    the ADAQ7768-1 to directly interface to sensors with high output impedance.
+
+    The analog-to-digital converter (ADC) inside the ADAQ7768-1 is a high-performance,
+    24-bit precision, single-channel sigma-delta converter with excellent AC performance
+    and DC precision, and the throughput rate of 256 kSPS from a 16.384 MHz MCLK.
+
+    The ADAQ7768-1 device has an operating temperature range of −40°C to +85°C and
+    is available in a 12.00 mm × 6.00 mm 84-ball CSP_BGA package with an 0.80 mm ball
+    pitch, which makes it ideal for multiple channel applications.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/quad_adaq77681/zed
+  tags:
+  - adaq7768-1
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/quad_adaq77681/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

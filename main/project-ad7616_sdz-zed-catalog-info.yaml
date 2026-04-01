@@ -1,0 +1,44 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad7616_sdz-zed
+  title: AD7616-SDZ HDL project
+  description: >
+    The AD7616 is a 16-bit, data acquisition system (DAS) that supports dual simultaneous
+    sampling of 16 channels. It operates from a single 5 V supply and can accommodate
+    ±10 V, ±5 V, and ±2.5 V true bipolar input signals while sampling at throughput
+    rates up to 1 MSPS per channel pair with 90 dB SNR. Higher SNR performance can
+    be achieved with the on-chip oversampling mode; 92 dB for an oversampling ratio
+    of 2.
+
+    The input clamp protection circuitry can tolerate voltages up to ±20 V. The AD7616
+    has 1 MΩ analog input impedance regardless of sampling frequency. The single supply
+    operation, on-chip filtering, and high input impedance eliminate the need for
+    driver op-amps and external bipolar supplies.
+
+    Each device contains analog input clamp protection, a dual, 16-bit charge redistribution
+    successive approximation analog-to-digital converter (ADC), a flexible digital
+    filter, a 2.5 V reference and reference buffer, and high-speed serial and parallel
+    interfaces.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad7616_sdz/zed
+  tags:
+  - ad7616
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad7616_sdz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

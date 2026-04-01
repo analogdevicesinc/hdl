@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-spi_engine-spi_engine_offload
+  title: SPI_ENGINE_OFFLOAD HDL IP core
+  description: >
+    The SPI Engine Offload peripheral allows to store a SPI Engine command and SDO
+    data stream in a RAM or ROM module. The command stream is executed when the trigger
+    signal is asserted. This allows the execution of SPI transactions with a very
+    short delay in reaction to a event.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_offload
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/spi_engine/spi_engine_offload.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

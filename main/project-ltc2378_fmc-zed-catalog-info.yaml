@@ -1,0 +1,77 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ltc2378_fmc-zed
+  title: LTC2378-FMC HDL project
+  description: >
+    The LTC23xx family consists of low noise, low power, high speed successive approximation
+    register (SAR) ADCs with resolutions of 16-bit, 18-bit and 20-bit and maximum
+    sampling rates from 250 kSPS to 2 MSPS. Operating from a 2.5V or 5V supply, these
+    ADCs feature either fully differential or pseudo-differential input configurations
+    with VREF ranging from 2.5V to 5.1V. The LTC2338-18 is a special variant operating
+    from a single 5V supply with a ±10.24V true bipolar input range, making it ideal
+    for high voltage applications which require a wide dynamic range.
+
+    All devices in the family feature a high speed SPI-compatible serial interface
+    that supports 1.8V, 2.5V, 3.3V and 5V logic while also featuring a daisy-chain
+    mode. The fast throughput with no cycle latency makes the LTC23xx family ideally
+    suited for a wide variety of high speed applications. An internal oscillator sets
+    the conversion time, easing external timing considerations. The devices automatically
+    power down between conversions, leading to reduced power dissipation that scales
+    with the sampling rate.
+
+    The LTC2376-16, LTC2376-18, LTC2376-20, LTC2377-16, LTC2377-18, LTC2377-20, LTC2378-16,
+    LTC2378-18, LTC2378-20, LTC2379-18, LTC2380-16 variants feature a unique digital
+    gain compression (DGC) function, which eliminates the driver amplifier's negative
+    supply while preserving the full resolution of the ADC. When enabled, the ADC
+    performs a digital scaling function that maps zero-scale code from 0V to 0.1 x
+    VREF and full-scale code from VREF to 0.9 x VREF. For a typical reference voltage
+    of 5V, the full-scale input range is now 0.5V to 4.5V, which provides adequate
+    headroom for powering the driving amplifier from a single 5.5V supply.
+
+    Applications:
+
+    - Medical Imaging
+
+    - High Speed Data Acquisition
+
+    - Portable or Compact Instrumentation
+
+    - Industrial Process Control
+
+    - Low Power Battery-Operated Instrumentation
+
+    - ATE
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ltc2378_fmc/zed
+  tags:
+  - hdl
+  - ltc2338-18
+  - ltc2376-16
+  - ltc2376-18
+  - ltc2376-20
+  - ltc2377-16
+  - ltc2377-18
+  - ltc2377-20
+  - ltc2378-16
+  - ltc2378-18
+  - ltc2378-20
+  - ltc2379-18
+  - ltc2380-16
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ltc2378_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

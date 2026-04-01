@@ -1,0 +1,51 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad5706r-coraz7s
+  title: AD5706R HDL project
+  description: >
+    The AD5706R devices are 4-channel, 16-/12-/10-bit resolution, low noise, programmable
+    current output, digital-to-analog converter (DAC) capable of multiple operating
+    modes and output current ranges with high power efficiency. These are intended
+    for photonics control and current mode biasing applications. The devices incorporate
+    a 2.5V, on-chip voltage reference, die temperature, load DAC, and A/B toggle functions,
+    output monitoring functions, and reset functions.
+
+    The family provides multiple programmable output current ranges up to 300mA. With
+    device addressable pins, an SPI transaction can communicate with up to four AD5706R
+    on the same SPI bus. Each DAC operates with an independent positive power supply
+    rails PVDDx from 1.65V to 3.6V, for optimizing power efficiency and thermal power
+    dissipation. The AD5706R operate from a 2.9V to 3.6V AVDD supply and are specified
+    over the −40°C to +125°C temperature range.
+
+    Applications:
+
+    - Photonics Control
+
+    - Optical Communications
+
+    - LED Driver Programmable Current Source
+
+    - Current Mode Biasing
+
+    It targets the AMD Xilinx CORAZ7S.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad5706r/coraz7s
+  tags:
+  - ad5706r
+  - coraz7s
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad5706r/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
