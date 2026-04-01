@@ -702,7 +702,7 @@ trying to simulate most of the available options when creating a new IP.
 
       # Example adding parameters to the IP.
       # You must use the Verilog parameter name at '-id' option.
-      # You can check the Lattice Propel IP Packager documentation for parameter
+      # You can check the Lattice Propel Builder IP Packager documentation for parameter
       # use cases as Setting Nodes at:
       #                https://www.latticesemi.com/view_document?document_id=54003
       # The same options in the tables are used here as options for the procedure.
@@ -758,7 +758,7 @@ trying to simulate most of the available options when creating a new IP.
       # For constraint files the 'ldc' folder must be used at '-dpath' option.
       # The following are the standard directories by purpose:
       # eval, plugin, doc, rtl, testbench, driver, ldc.
-      # You can check the Lattice Propel IP Packager documentation for more
+      # You can check the Lattice Propel Builder IP Packager documentation for more
       # information at: https://www.latticesemi.com/view_document?document_id=54003
       set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
          "<path>/<dependency0>.v" \
@@ -818,6 +818,39 @@ trying to simulate most of the available options when creating a new IP.
       # env variable is exported like:
       # 'export LATTICE_DEFAULT_PATHS=1' before running the script or running make.
       ipl::generate_ip $ip
+
+.. _ip_sim_models:
+
+Simulation IPs (Lattice Propel Builder / QuestaSim)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some Lattice verification flows require packaging simulation-only helpers (bus
+models, behavioral VIP, top-level harnesses) as standard Propel Builder
+IPs so they can be instantiated from ``system_v_pb.tcl`` and exported toward
+QuestaSim. When creating these IPs:
+
+* Set the VLNV (<vendor>:<library>:<name>:<version>) library to
+   ``-vlnv <vendor>:sim_model:<name>:<version>``. This is mandatory: it
+   differentiates simulation helpers from synthesizable IPs and gives the
+   block-design scripts a dedicated namespace for referencing them.
+* Keep the ``name`` field identical to the top module name, this is the field
+   used to select the top module for the IP.
+* Reference the IP from the project's ``system_v_pb.tcl`` so Propel Builder
+   instantiates it alongside the DUT and VIP blocks.
+
+Example resources for these flows:
+
+* Verification IP example:
+   `library/spi_engine/sim/spi_sdo_sin_tb
+   <https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/sim/spi_sdo_sin_tb>`__
+   includes the Propel Builder wrapper around the SPI Engine stimulus.
+* VIP instantiation and verification block design script example:
+   `projects/ad738x_fmc/lfcpnx/system_v_pb.tcl
+   <https://github.com/analogdevicesinc/hdl/blob/main/projects/ad738x_fmc/lfcpnx/system_v_pb.tcl>`__
+   shows how the simulation VLNV is wired next to the DUT.
+
+See also :ref:`lattice_simulation_flow` for how these IPs plug into the
+Questasim make targets.
 
 Makefile
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

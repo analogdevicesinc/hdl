@@ -224,8 +224,9 @@ For Lattice:
 .. shell:: bash
 
    ~/hdl
-   $export PATH=$PATH:/opt/lscc/propel/2023.2/builder/rtf/bin/lin64
-   $export PATH=$PATH:/opt/lscc/radiant/2023.2/bin/lin64
+   $export PATH=$PATH:/opt/lscc/propel/2025.2/builder/rtf/bin/lin64
+   $export PATH=$PATH:/opt/lscc/radiant/2025.2/bin/lin64
+   $export PATH=$PATH:/opt/lscc/propel/2025.2/questasim/linux_x86_64
 
 3b. Windows environment setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -416,8 +417,9 @@ the Vivado Tcl console building mode to build the BOOT.BIN (see
    .. shell:: bash
 
       ~/hdl
-      $export PATH=$PATH:/cygdrive/c/lscc/propel/2023.2/builder/rtf/bin/nt64
-      $export PATH=$PATH:/cygdrive/c/lscc/radiant/2023.2/bin/nt64
+      $export PATH=$PATH:/cygdrive/c/lscc/propel/2025.2/builder/rtf/bin/nt64
+      $export PATH=$PATH:/cygdrive/c/lscc/radiant/2025.2/bin/nt64
+      $export PATH=$PATH:/cygdrive/c/lscc/propel/2025.2/questasim/win64
 
 .. collapsible::  Building the libraries and the project in Vivado GUI
 
@@ -1005,6 +1007,13 @@ The **ad738x_fmc** project is available for the
    $make
 
 This assumes that you have the tools and licenses set up correctly.
+For Lattice builds, ensure that the ``LM_LICENSE_FILE``
+environment variable is exported before running ``make``.
+
+.. shell:: bash
+
+   $export LM_LICENSE_FILE=<path_to_license_file_or_server>
+
 There is nothing you can gather from the ``make`` output (other than if the
 build failed or not); the actual failure message is in a log file.
 
@@ -1083,6 +1092,77 @@ the **constraint files** and build the project.
 The output is a **.bit** file that by default will appear in the
 ``<ADI_carrier_proj_dir>/_bld/<project_name>/impl_1`` folder if the project was
 successfully built.
+
+.. _lattice_simulation_flow:
+
+Running the simulation design (where available)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For simulation, the following make rules are also available:
+
+- ``make sim:`` runs Questasim GUI using the generated simulation do-file.
+- ``make sim-cli:`` runs Questasim CLI (``-c``) using the generated simulation
+  do-file. When you create a sim-cli-compatible VIP in advance for CI runs,
+  make sure you add a $finish criterion for PASS or $error + $stop for
+  FAIL in one of the simulation source files (.sv) in one of the VIPs
+  (Verification IPs) to end the simulation for the design.
+
+These make rules require a `system_v_pb.tcl
+<https://github.com/analogdevicesinc/hdl/blob/main/projects/ad738x_fmc/lfcpnx/system_v_pb.tcl>`__
+simulation block-design file in the project directory. The file
+must instantiate the DUT together with any VIPs or simulation-only helper IPs
+so Propel Builder can emit the corresponding Questasim setup. Package those
+helpers as described in :ref:`ip_sim_models` to ensure their VLNV uses the
+``sim_model`` library; the SPI Engine VIP under
+`library/spi_engine/sim/spi_sdo_sin_tb <https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/sim/spi_sdo_sin_tb>`_
+shows the expected structure and naming.
+
+In addition, most systems need a generated
+``SYSMEM_INIT_FILE`` (custom make parameter) for memory initialization
+(<no_os_project>.mem) from the corresponding no-OS simulation build
+(``make SIMULATION=y``) if the project is a RISC-V based system. The
+SIMULATION=y flag sets a NO_OS_LATTICE_SIMULATION define which currently is
+used to reduce/limit the software delays for faster simulation.
+
+The `hdl/projects/ad738x_fmc/lfcpnx <https://github.com/analogdevicesinc/hdl/tree/main/projects/ad738x_fmc/lfcpnx>`__
+project contains a complete reference setup (including ``system_v_pb.tcl`` and
+the exported simulation IPs) that you can reuse for new Lattice/Questasim flows.
+
+For Lattice simulation (Questasim), ensure that the ``SALT_LICENSE_SERVER``
+environment variable is exported before running ``make sim``.
+This is the same file or server path used for Lattice Propel Builder and Radiant
+builds via ``LM_LICENSE_FILE``.
+
+.. shell:: bash
+
+   $export SALT_LICENSE_SERVER=<path_to_license_file_or_server>
+
+Simulation flow for the hdl/projects/ad738x_fmc/lfcpnx project:
+
+1. Generate the Propel Builder block design:
+
+   .. shell:: bash
+
+      $cd hdl/projects/ad738x_fmc/lfcpnx
+      $make pb
+
+2. Copy the generated SGE folder from
+   ``hdl/projects/ad738x_fmc/lfcpnx/_bld/ad738x_fmc_lfcpnx/``
+   to the corresponding no-OS project root (for example,
+   `no-OS/projects/ad738x_fmcz <https://github.com/analogdevicesinc/no-OS/tree/add_lattice_riscvrx_ad738x_fmcz/projects/ad738x_fmcz>`__).
+
+3. Build the no-OS project with simulation enabled:
+
+   .. shell:: bash
+
+      $make SIMULATION=y
+
+4. Run HDL simulation using the generated memory init file from the no-OS build:
+
+   .. shell:: bash
+
+      $cd hdl/projects/ad738x_fmc/lfcpnx
+      $make sim SYSMEM_INIT_FILE=<path_to>/<no_os_project>.mem
 
 Supported targets of ``make`` command
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

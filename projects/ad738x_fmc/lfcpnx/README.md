@@ -5,13 +5,13 @@
 Download the necessary Lattice Propel Builder IPs by running the following commands in the Lattice Propel Builder TCL Console:
 
 ```
-ip_catalog_install -vlnv latticesemi.com:ip:gpio:1.7.0
-ip_catalog_install -vlnv latticesemi.com:ip:spi_controller:2.1.0
-ip_catalog_install -vlnv latticesemi.com:ip:i2c_controller:2.2.0
-ip_catalog_install -vlnv latticesemi.com:ip:axi_interconnect:2.0.1
-ip_catalog_install -vlnv latticesemi.com:ip:uart:1.4.0
-ip_catalog_install -vlnv latticesemi.com:ip:axi2apb_bridge:1.3.0
-ip_catalog_install -vlnv latticesemi.com:ip:gp_timer:1.4.0
+ip_catalog_install -vlnv latticesemi.com:ip:gpio:1.8.0
+ip_catalog_install -vlnv latticesemi.com:ip:spi_controller:2.4.0
+ip_catalog_install -vlnv latticesemi.com:ip:i2c_controller:2.4.0
+ip_catalog_install -vlnv latticesemi.com:ip:axi_interconnect:2.2.1
+ip_catalog_install -vlnv latticesemi.com:ip:uart:1.5.0
+ip_catalog_install -vlnv latticesemi.com:module:apb_interconnect:1.4.0
+ip_catalog_install -vlnv latticesemi.com:ip:axi2apb_bridge:1.4.0
 ```
 
 ## Building the project

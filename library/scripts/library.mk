@@ -147,6 +147,8 @@ ifeq ($(LATTICE_DEFAULT_PATHS),1)
 LATTICE_TARGETS += $(LATTICE_DEFAULT_IP_PATH)/$(LIBRARY_NAME)/metadata.xml
 endif
 
+.NOTPARALLEL: lattice
+
 lattice: ltt-interfaces $(LATTICE_TARGETS)
 
 .DELETE_ON_ERROR:

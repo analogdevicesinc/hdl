@@ -32,8 +32,8 @@ puts "ad738x_pb.tcl: Using ALERT_SPI_N=$ALERT_SPI_N, NUM_OF_SDI=$NUM_OF_SDI, DAT
 
 set DMA_WIDTH_SRC [expr ${NUM_OF_SDI} * $DATA_WIDTH]
 
-adi_ip_update $project_name -vlnv {latticesemi.com:module:pll0:1.9.0} \
-  -meta_vlnv {latticesemi.com:module:pll:1.9.0} \
+adi_ip_update $project_name -vlnv {latticesemi.com:module:pll0:1.9.1} \
+  -meta_vlnv {latticesemi.com:module:pll:1.9.1} \
   -cfg_value {
     gui_clk_os_byp:false,
     gui_clk_os_en:true,
@@ -43,8 +43,8 @@ adi_ip_update $project_name -vlnv {latticesemi.com:module:pll0:1.9.0} \
     gui_refclk_freq:125
   } \
   -ip_iname "pll0_inst"
-adi_ip_update $project_name -vlnv {latticesemi.com:ip:axi_interc0:2.0.1} \
-  -meta_vlnv {latticesemi.com:ip:axi_interconnect:2.0.1} \
+adi_ip_update $project_name -vlnv {latticesemi.com:ip:axi_interc0:2.2.1} \
+  -meta_vlnv {latticesemi.com:ip:axi_interconnect:2.2.1} \
   -cfg_value {
     EXT_MAS_AXI_ID_WIDTH:4,
     EXT_SLV_AXI_ID_WIDTH:8,
