@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-corundum-corundum_core
+  title: CORUNDUM_CORE HDL IP core
+  description: >
+    The Corundum Core is common in all projects and is used by the Corundum Network
+    Stack. It repackages part of the Corundum NIC <https://github.com/ucsdsysnet/corundum>__
+    as an IP Core to be used with the ADI workflow.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  - BSD-2-Clause-Views
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/corundum/corundum_core
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/corundum/corundum_core/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

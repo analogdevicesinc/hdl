@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-pulsar_adc-zed
+  title: PULSAR_ADC_ZED HDL project
+  description: >
+    The PulSAR converters are available with PMOD, FMC connectors.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/pulsar_adc/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/pulsar_adc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

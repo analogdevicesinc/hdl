@@ -1,0 +1,44 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad916x_fmc-zcu102
+  title: AD916x-FMC HDL project
+  description: >
+    The AD9161 /AD9162 /AD9163 /AD9164 is a high performance, 16-bit (AD9164, AD9163,
+    AD9162)/11-bit (AD9161) resolution digital-to-analog converter (DAC) that supports
+    data rates to 6 GSPS.
+
+    The DAC core is based on a quad-switch architecture coupled with a 2x interpolator
+    filter that enables an effective DAC update rate of up to 12 GSPS in some modes.
+    The high dynamic range and bandwidth makes this DAC ideally suited for the most
+    demanding high speed radio frequency (RF) DAC applications.
+
+    The data interface is programmable in terms of lane speed and number of lanes
+    (up to 8 jesd204 serializer/deserializer SERDES lanes) to enable application flexibility.
+    A serial peripheral interface (SPI) configures the DACs and monitors the status
+    of all registers.
+
+    It targets the AMD Xilinx ZCU102.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad916x_fmc/zcu102
+  tags:
+  - ad9161
+  - ad9162
+  - ad9163
+  - ad9164
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad916x_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

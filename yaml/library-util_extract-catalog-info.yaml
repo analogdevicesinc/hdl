@@ -1,0 +1,26 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-util_extract
+  title: UTIL_EXTRACT HDL IP core
+  description: >
+    The Util Extract core allows the extraction of the trigger signal and restoration
+    of the data signal that was embedded in the data stream by the axi_adc_trigger.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/util_extract
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/util_extract/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

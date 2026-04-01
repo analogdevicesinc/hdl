@@ -1,0 +1,37 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9265_fmc-zed
+  title: AD9265-FMC HDL project
+  description: >
+    The AD9265 is a 16-bit, 125 MSPS analog-to-digital converter (ADC). The AD9265
+    is designed to support communications applications where high performance combined
+    with low cost, small size, and versatility is desired. The ADC core features a
+    multistage, differential pipelined architecture with integrated output error correction
+    logic to provide 16-bit accuracy at 125 MSPS data rates and guarantees no missing
+    codes over the full operating temperature range. The ADC output data format is
+    either parallel 1.8 V CMOS or LVDS (DDR). A data output clock is provided to ensure
+    proper latch timing with receiving logic. The board also provides other options
+    to drive the clock and analog inputs of the ADC.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9265_fmc/zed
+  tags:
+  - ad9265
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9265_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
