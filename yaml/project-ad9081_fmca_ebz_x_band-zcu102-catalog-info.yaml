@@ -1,0 +1,48 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9081_fmca_ebz_x_band-zcu102
+  title: X-Band Platform HDL project
+  description: >
+    The X-Band Development Platform contains one MxFE® software defined, direct RF
+    sampling transceivers, X-Band to C-Band Up/Down Converter, and a X/Ku Band analog
+    phased array proto-typing platform. The target application is phased array radars,
+    electronic warfare, and ground-based SATCOM, specifically a X Band 32 transmit/32
+    receive channel hybrid beamforming phased array radar.
+
+    The X-Band Development Platform highlights a complete system solution. It is intended
+    as a testbed for demonstrating hybrid beamforming phased array radar as well as
+    the implementation of system level calibrations, beamforming algorithms, and other
+    signal processing algorithms. The system is designed to mate with a ZCU102 Evaluation
+    Board from Xilinx®, which features the Zynq® UltraScale+™ MPSoC FPGA, with provided
+    reference software, HDL code, and MATLAB system-level interfacing software.
+     The current implementation is tailored for CW (Continuous Waveform) mode, where
+    the TDD frame rate matches the transmitted buffer length.
+     For this to work,the following criteria must be met:
+     - The RX/TX DMAs must handle the CDC (Clock Domain Crossing) between the 330
+    MHz clock on the memory side and the 250MHz clock on the JESD side.
+     - The clock frequency on the memory interconnect side of the DMAs must be configured
+    to 330MHz.
+     - The DMAs' coherent mode must be disabled.
+     - The data offload IPs must be configured in bypass mode.
+    It targets the AMD Xilinx ZCU102.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz_x_band/zcu102
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - x-band-development-platform
+  - zcu102
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9081_fmca_ebz_x_band/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
