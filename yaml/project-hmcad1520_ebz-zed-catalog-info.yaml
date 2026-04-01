@@ -1,0 +1,39 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-hmcad1520_ebz-zed
+  title: HMCAD1520-FMC-EVB HDL project
+  description: >
+    The HMCAD1520-EBZ HDL design supports the following HMCAD1520 features:
+
+    - Single/Dual/Quad Channel modes
+
+    - 8/12/14 bit resolution configurations
+
+    - Sampling rates between 105 - 1000 MSPS
+
+    The HMCAD1520-EBZ evaluation board was designed for use with the Digilent ZedBoard
+    via the field programmable gate array(FPGA) mezzanine card (FMC) connector.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/hmcad1520_ebz/zed
+  tags:
+  - hdl
+  - hmcad1520
+  - hmcad1520-ebz
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/hmcad1520_ebz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

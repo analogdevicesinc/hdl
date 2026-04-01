@@ -1,0 +1,46 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-fmcomms11-zc706
+  title: FMCOMMS11 HDL project
+  description: >
+    The HDL reference design is an embedded system built around a processor core either
+    ARM, NIOS-II or Microblaze. The high speed digital interface of the converters
+    is handled by the JESD204B framework. Due to the system's memory interface bandwidth
+    limitation, there are intermediary buffers in the both TX and RX data paths, in
+    order to save and push data using high data rates. In case of the ZC706 carrier
+    board, the RX buffer depth is 1Gbyte, and TX buffer depth is 1Mbyte. This depths
+    can be swapped if required.
+
+    By default, the AD9162 is configured in complex mode with 8 lanes (see Table 16
+    <https://www.analog.com/media/en/technical-documentation/data-sheets/AD9161-9162.pdf>__
+    in data sheet), and the AD9625 is configured in generic operation mode with 8
+    lanes (see Table 16 <https://www.analog.com/media/en/technical-documentation/data-sheets/AD9625.pdf>__
+    in data sheet). Both JESD204 interfaces run in Subclass 0.
+
+    Other configurations can be used too, but the user needs to make sure that all
+    the parties (clock chip, converters and FPGA JESD204 IPs) of the interface are
+    reconfigured accordingly.
+
+    It targets the AMD Xilinx ZC706.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms11/zc706
+  tags:
+  - ad9162
+  - ad9625
+  - hdl
+  - project
+  - reference-design
+  - zc706
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/fmcomms11/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

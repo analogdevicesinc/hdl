@@ -1,0 +1,39 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9783_ebz-zcu102
+  title: AD9783-EBZ HDL project
+  description: >
+    The AD9783 includes pin-compatible, high dynamic range, dual digital-to-analog
+    converters (DACs) with 16-bit resolution, and sample rates of up to 500 MSPS.
+
+    The device includes specific features for direct conversion transmit applications,
+    including gain and offset compensation, interfacing seamlessly with analog quadrature
+    modulators.
+
+    The EVAL-AD9783 board is connected to the FPGA carrier through AD-DAC-FMC-ADP
+    interposer board.
+
+    It targets the AMD Xilinx ZCU102.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9783_ebz/zcu102
+  tags:
+  - ad-dac-fmc
+  - ad9783
+  - eval-ad9783
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9783_ebz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

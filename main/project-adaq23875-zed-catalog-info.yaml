@@ -1,0 +1,46 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adaq23875-zed
+  title: ADAQ23875 HDL project
+  description: >
+    The EVAL-ADAQ23875/ EVAL-ADAQ23876/ EVAL-ADAQ23878 provide an analog front-end
+    and an FMC digital interface for ADAQ23875/ ADAQ23876/ ADAQ23878, its core. It
+    is a low noise, high speed successive approximation register (SAR) ADC with a
+    resolution of 18/16 bits and sampling rate up to 15MSPS.
+
+    The ADAQ2387x family includes an on-board reference oscillator and a retiming
+    circuit to minimize signal-to-noise ratio (SNR) degradation due to the FPGA additive
+    jitter.
+
+    In order to support high speed operations while minimizing the number of data
+    lines, a serial LVDS digital interface is used. It has a one-lane and two-lane
+    output modes, allowing the user to optimize the interface data rate for each application,
+    through setting a parameter.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/adaq23875/zed
+  tags:
+  - adaq23875
+  - adaq23876
+  - adaq23878
+  - eval-adaq23875
+  - eval-adaq23876
+  - eval-adaq23878
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/adaq23875/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
