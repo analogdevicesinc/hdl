@@ -337,13 +337,13 @@ IPs by running the following commands in the Lattice Propel Builder TCL Console:
 
 .. code-block:: tcl
 
-   ip_catalog_install -vlnv latticesemi.com:ip:gpio:1.7.0
-   ip_catalog_install -vlnv latticesemi.com:ip:spi_controller:2.1.0
-   ip_catalog_install -vlnv latticesemi.com:ip:i2c_controller:2.2.0
-   ip_catalog_install -vlnv latticesemi.com:ip:axi_interconnect:2.0.1
-   ip_catalog_install -vlnv latticesemi.com:ip:uart:1.4.0
-   ip_catalog_install -vlnv latticesemi.com:ip:axi2apb_bridge:1.3.0
-   ip_catalog_install -vlnv latticesemi.com:ip:gp_timer:1.4.0
+   ip_catalog_install -vlnv latticesemi.com:ip:gpio:1.8.0
+   ip_catalog_install -vlnv latticesemi.com:ip:spi_controller:2.4.0
+   ip_catalog_install -vlnv latticesemi.com:ip:i2c_controller:2.4.0
+   ip_catalog_install -vlnv latticesemi.com:ip:axi_interconnect:2.2.1
+   ip_catalog_install -vlnv latticesemi.com:ip:uart:1.5.0
+   ip_catalog_install -vlnv latticesemi.com:module:apb_interconnect:1.4.0
+   ip_catalog_install -vlnv latticesemi.com:ip:axi2apb_bridge:1.4.0
 
 Then, to build the project:
 
@@ -354,7 +354,35 @@ Then, to build the project:
 
 The SYSMEM_INIT_FILE parameter for LFCPNX-EVN is optional, use it to build the 
 project with an already initialized system memory for the RISC-V RX CPU, 
-otherwise the memory can be initialized from the Lattice Propel OCM debugger.
+otherwise the memory can be initialized by ``make run`` in the no-OS project
+folder or by Lattice Propel OCM debugger after loading the bitstream using
+Radiant Programmer.
+
+Simulation flow for LFCPNX-EVN (Lattice):
+
+1. Generate the Propel Builder block design:
+
+   .. shell:: bash
+
+      $cd hdl/projects/ad738x_fmc/lfcpnx
+      $make pb
+
+2. Copy the generated SGE folder from
+   ``hdl/projects/ad738x_fmc/lfcpnx/_bld/ad738x_fmc_lfcpnx/``
+   to the corresponding no-OS project root.
+
+3. Build the no-OS project with simulation enabled:
+
+   .. shell:: bash
+
+      $make SIMULATION=y
+
+4. Run HDL simulation using the generated memory image:
+
+   .. shell:: bash
+
+      $cd hdl/projects/ad738x_fmc/lfcpnx
+      $make sim SYSMEM_INIT_FILE=<path_to>/<no_os_project>.mem
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 

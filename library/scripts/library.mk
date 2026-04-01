@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2025 Analog Devices, Inc.
+## Copyright (c) 2018 - 2026 Analog Devices, Inc.
 ## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
@@ -146,6 +146,8 @@ LATTICE_TARGETS := ./ltt/metadata.xml
 ifeq ($(LATTICE_DEFAULT_PATHS),1)
 LATTICE_TARGETS += $(LATTICE_DEFAULT_IP_PATH)/$(LIBRARY_NAME)/metadata.xml
 endif
+
+.NOTPARALLEL: lattice
 
 lattice: ltt-interfaces $(LATTICE_TARGETS)
 

@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -36,6 +36,7 @@
 # \opt[cmd_list] -cmd_list {{source ./system_pb.tcl}}
 # \opt[psc] -psc "${env(TOOLRTF)}/../../templates/MachXO3D_Template01/MachXO3D_Template01.psc"
 # \opt[parameter_list] -parameter_list {PARAM1 value1 PARAM2 value2}
+# \opt[custom_questa_prep_tcl] -custom_questa_prep_tcl ""
 ###############################################################################
 proc adi_project_pb {project_name args} {
   puts "\nadi_project_pb:\n"
@@ -46,8 +47,10 @@ proc adi_project_pb {project_name args} {
   set ::project_name $project_name
   set preinst_ip_mod_dir ${env(TOOLRTF)}
 
+  set ppath "./_bld"
+
   array set opt [list -dev_select "auto" \
-    -ppath "./_bld" \
+    -ppath $ppath \
     -device "" \
     -board "" \
     -speed "" \
@@ -57,8 +60,9 @@ proc adi_project_pb {project_name args} {
     -interface_paths "$ad_hdl_dir/library/interfaces_ltt/ltt" \
     -interface_folder_names {interfaces_ltt} \
     -parameter_list {} \
-    -parameter_file_radiant "system_top_parameters.txt" \
-    -sim_prj_tcl "./sim.tcl" \
+    -parameter_file_radiant "$ppath/system_top_parameters.txt" \
+    -sim_prj_tcl "./system_v_pb.tcl" \
+    -custom_questa_prep_tcl "" \
     {*}$args]
 
   set dev_select $opt(-dev_select)
@@ -71,6 +75,7 @@ proc adi_project_pb {project_name args} {
   set parameter_list $opt(-parameter_list)
   set parameter_file_radiant $opt(-parameter_file_radiant)
   set sim_prj_tcl $opt(-sim_prj_tcl)
+  set custom_questa_prep_tcl $opt(-custom_questa_prep_tcl)
 
   # Make parameters available globally for system_pb.tcl
   foreach {param value} $parameter_list {
@@ -84,7 +89,7 @@ proc adi_project_pb {project_name args} {
 
   # Generate system_top_parameters.txt file from parameter_list
   if {[llength $parameter_list] > 0} {
-    set param_file_path "$ppath/system_top_parameters.txt"
+    set param_file_path "$parameter_file_radiant"
     set fout [open $param_file_path w]
     puts $fout "# System top parameters"
     puts $fout "# Generated on [clock format [clock seconds]]"
@@ -122,7 +127,8 @@ proc adi_project_pb {project_name args} {
     -psc $psc \
     -cmd_list $cmd_list \
     -parameter_list $parameter_list \
-    -sim_prj_tcl $sim_prj_tcl
+    -sim_prj_tcl $sim_prj_tcl \
+    -custom_questa_prep_tcl $custom_questa_prep_tcl
 }
 
 ###############################################################################
@@ -136,6 +142,7 @@ proc adi_project_pb {project_name args} {
 # \opt[board] -board "Certus Pro NX Evaluation Board"
 # \opt[language] -language "verilog"
 # \opt[cmd_list] -cmd_list {{source ./system_pb.tcl}}
+# \opt[custom_questa_prep_tcl] -custom_questa_prep_tcl ""
 ###############################################################################
 proc adi_project_create_pb {project_name args} {
   puts "\nadi_project_create_pb:\n"
@@ -154,7 +161,8 @@ proc adi_project_create_pb {project_name args} {
     -psc "" \
     -cmd_list "" \
     -interface_paths "$ad_hdl_dir/library/interfaces_ltt/ltt" \
-    -sim_prj_tcl "./sim.tcl" \
+    -sim_prj_tcl "./system_v_pb.tcl" \
+    -custom_questa_prep_tcl "" \
     {*}$args]
 
   set ppath [file normalize $opt(-ppath)]
@@ -166,6 +174,7 @@ proc adi_project_create_pb {project_name args} {
   set cmd_list $opt(-cmd_list)
   set interface_paths $opt(-interface_paths)
   set sim_prj_tcl $opt(-sim_prj_tcl)
+  set custom_questa_prep_tcl $opt(-custom_questa_prep_tcl)
 
   # Extracting the Propel Builder version from $env(TOOLRTF)/../../components.xml
   set regex "<Name>com\.latticesemi\.systembuilder.*<Version>$required_lattice_version"
@@ -246,7 +255,7 @@ proc adi_project_create_pb {project_name args} {
     -i "$propel_builder_project_dir/$project_name.sbx" \
     -o "$ppath/$project_name"
 
-  set file [open _bld/pb_design_finished.log "w"]
+  set file [open _bld/pb_design_finished.stamp "w"]
   puts $file "Design generated."
   close $file
 
@@ -256,6 +265,41 @@ proc adi_project_create_pb {project_name args} {
     sbp_design open -name ${project_name}_v -path $ppath/$project_name/verification/${project_name}_v.sbx
     sbp_replace -vlnv {lattice:systembuilder:dut:1.0} -name {dut_inst} -component ${project_name}_v/dut_inst
     source $sim_prj_tcl
+    sbp_design save
+
+    set radiant_search_root [file normalize "$env(TOOLRTF)/../../../"]
+    set radiant_bins [get_file_list $radiant_search_root {radiantc} 5]
+    if {[llength $radiant_bins] > 0} {
+      set radiant_path [file normalize \
+        [file dirname [file dirname [lindex $radiant_bins 0]]]]
+    } else {
+      set install_root  $radiant_search_root
+      set radiant_path  [file normalize "$install_root/radiant/$PROPEL_BUILDER_VERSION"]
+      puts -nonewline "WARNING: radiantc binary not found under '$radiant_search_root'; "
+      puts "using fallback Radiant path '$radiant_path'."
+    }
+    puts "Radiant path: $radiant_path"
+    set sim_workfolder [file normalize "$ppath/$project_name/verification/sim"]
+    set sim_sbx_file   [file normalize "$ppath/$project_name/verification/${project_name}_v.sbx"]
+    puts "Generating sim project in: $sim_workfolder"
+    if {$custom_questa_prep_tcl != ""} {
+      if {[file exists $custom_questa_prep_tcl]} {
+        set custom_questa_prep_tcl [file normalize $custom_questa_prep_tcl]
+        puts "Running custom Questa prep script: $custom_questa_prep_tcl"
+
+        source $custom_questa_prep_tcl
+      } else {
+        puts "ERROR: custom_questa_prep_tcl script does not exist: $custom_questa_prep_tcl"
+        exit 2
+      }
+    } else {
+      sbp_design verify \
+        --workfolder $sim_workfolder \
+        --sbx_file $sim_sbx_file \
+        --radiant_path $radiant_path \
+        sim_gen --soc_ver
+    }
+
     sbp_design save
     sbp_design close
   } else {
@@ -267,7 +311,7 @@ proc adi_project_create_pb {project_name args} {
 ## Creates a Propel Builder ip config file and configures the specified ip.
 ## Project must be open.
 #
-# \opt[cfg_path] -cfg_path "./ipcfg"
+# \opt[cfg_path] -cfg_path "./_bld/ipcfg"
 # \opt[vlnv] -vlnv {latticesemi.com:ip:cpu0:2.4.0}
 # \opt[ip_path] -ip_path "$ip_download_path/latticesemi.com_ip_riscv_mc_2.4.0"
 # \opt[meta_vlnv] -meta_vlnv {latticesemi.com:ip:riscv_mc:2.4.0}
@@ -278,7 +322,7 @@ proc adi_project_create_pb {project_name args} {
 set adi_move_ip_to_project "false"
 proc adi_ip_config {args} {
   global adi_move_ip_to_project
-  array set opt [list -cfg_path "./ipcfg" \
+  array set opt [list -cfg_path "./_bld/ipcfg" \
     -vlnv "" \
     -ip_path "" \
     -meta_vlnv "" \
@@ -533,7 +577,7 @@ proc adi_ip_config {args} {
 ## opened project with that configuration.
 ## Project must be open.
 #
-# \opt[cfg_path] -cfg_path "./ipcfg"
+# \opt[cfg_path] -cfg_path "./_bld/ipcfg"
 # \opt[vlnv] -vlnv {latticesemi.com:ip:cpu0:2.4.0}
 # \opt[ip_path] -ip_path "$ip_download_path/latticesemi.com_ip_riscv_mc_2.4.0"
 # \opt[meta_vlnv] -meta_vlnv {latticesemi.com:ip:riscv_mc:2.4.0}
@@ -542,7 +586,7 @@ proc adi_ip_config {args} {
 # \opt[ip_iname] -ip_iname cpu0_inst
 ###############################################################################
 proc adi_ip_instance {args} {
-  array set opt [list -cfg_path "./ipcfg" \
+  array set opt [list -cfg_path "./_bld/ipcfg" \
     -vlnv "" \
     -ip_path "" \
     -meta_vlnv "" \
@@ -567,7 +611,7 @@ proc adi_ip_instance {args} {
 ## Updates a Propel Builder ip.
 ## Project must be open.
 #
-# \opt[cfg_path] -cfg_path "./ipcfg"
+# \opt[cfg_path] -cfg_path "./_bld/ipcfg"
 # \opt[vlnv] -vlnv {latticesemi.com:ip:cpu0:2.4.0}
 # \opt[ip_path] -ip_path "$ip_download_path/latticesemi.com_ip_riscv_mc_2.4.0"
 # \opt[meta_vlnv] -meta_vlnv {latticesemi.com:ip:riscv_mc:2.4.0}
@@ -577,7 +621,7 @@ proc adi_ip_instance {args} {
 # \opt[ip_niname] -ip_niname new_name_inst
 ###############################################################################
 proc adi_ip_update {project_name args} {
-  array set opt [list -cfg_path "./ipcfg" \
+  array set opt [list -cfg_path "./_bld/ipcfg" \
     -vlnv "" \
     -ip_path "" \
     -meta_vlnv "" \

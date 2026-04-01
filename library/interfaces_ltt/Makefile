@@ -49,7 +49,7 @@ CLEAN_TARGETS += .lock
 CLEAN_TARGETS += $(wildcard ./*/)
 CLEAN_TARGETS += interfaces_ltt.log
 
-.PHONY: all lattice clean clean-all
+.PHONY: all clean clean-all
 
 all: $(LTT_INTERFACES)
 
@@ -60,9 +60,11 @@ clean-all:
 		$(CLEAN_TARGETS), \
 		interfaces definitions)
 
-$(LTT_INTERFACES): $(L_DEPS)
+interfaces_ltt.log: $(L_DEPS)
 	-rm -fr $(CLEAN_TARGETS)
 	$(call build, \
 		$(LATTICE_IP_TOOL) interfaces_ltt.tcl, \
 		interfaces_ltt.log, \
 		interfaces definitions)
+
+$(LTT_INTERFACES): interfaces_ltt.log

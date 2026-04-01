@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -445,6 +445,19 @@ proc adi_project_files {project_name args} {
     
   # Merge file parameters with command-line parameters (command-line takes precedence)
   set top_module_par_list [dict merge $file_param_list $top_module_par_list]
+
+  # Generate or update parameter file from merged parameter list
+  if {[llength $top_module_par_list] > 0} {
+    set fout [open $param_file w]
+    puts $fout "# System top parameters"
+    puts $fout "# Generated on [clock format [clock seconds]]"
+    puts $fout ""
+    foreach {pname pval} $top_module_par_list {
+      puts $fout "$pname=$pval"
+    }
+    close $fout
+    puts "Generated parameter file: $param_file"
+  }
 
     # Top module parameter injection and file list replacement logic
   if {$top_module_par_list != ""} {
