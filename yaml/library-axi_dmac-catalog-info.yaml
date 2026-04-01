@@ -1,0 +1,27 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_dmac
+  title: AXI_DMAC HDL IP core
+  description: >
+    The AXI DMA Controller IP core is a high-speed, high-throughput, general purpose
+    DMA controller intended to be used to transfer data between system memory and
+    other peripherals like high-speed converters.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/axi_dmac/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

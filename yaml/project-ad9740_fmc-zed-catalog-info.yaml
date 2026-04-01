@@ -1,0 +1,55 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9740_fmc-zed
+  title: AD9740-FMC HDL project
+  description: >
+    The AD9740, AD9742, AD9744 and AD9748 are wideband, 3G members of the TxDAC® series
+    of high performance, low power CMOS, digital-to-analog converters (DACs). The
+    TxDAC family, consisting of pin-compatible 14-, 12-, 10-, and 8-bit DACs, is specifically
+    optimized for the transmit signal path of communication systems. All the devices
+    share the same interface options, small outline package, and pinout. The AD9740,
+    AD9742, AD9744 and AD9748 also provide an upward or downward component selection
+    path based on performance, resolution and financial cost, offering exceptional
+    AC and DC performance while supporting update rates up to 210 MSPS.
+
+    The EVAL-AD9740, EVAL-AD9742, EVAL-AD9744 and EVAL-AD9748 evaluation boards are
+    FMC form-factor boards with FMC connector that is compatible to the Vita 57.1
+    standard. This board provides the user with the flexibility to operate the AD9740,
+    AD9742, AD9744 and AD9748 in various configurations.
+
+    Output configurations include transformer-coupled, resistor terminated, and single
+    and differential outputs. The digital inputs are designed to be driven from various
+    word generators with the onboard option to add a resistor network for proper load
+    termination. Provisions are also made to operate the AD9740, AD9742, AD9744 and
+    AD9748 with either the onboard clock source (ADF4351) or with external clock configuration.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9740_fmc/zed
+  tags:
+  - ad9740
+  - ad9742
+  - ad9744
+  - ad9748
+  - adf4351
+  - eval-ad9740
+  - eval-ad9742
+  - eval-ad9744
+  - eval-ad9748
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9740_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

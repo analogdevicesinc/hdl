@@ -1,0 +1,63 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9213_dual_ebz-s10soc
+  title: AD9213-DUAL-EBZ HDL Project
+  description: >
+    The EVAL-AD9213-DUAL-EBZ platform includes two AD9213 single, 12-bit, 10 GSPS,
+    radio frequency (RF) analog-to-digital converters (ADC) with the JESD204B interface.
+    The two 10 GSPS data converters are interleaved to sample at 20 GSPS enabled by
+    their built-in multi-chip synchronization capability.
+
+    The ADF4377, high performance, ultra-low jitter, dual output integer-N phased
+    locked loop (PLL) with an integrated voltage-controlled oscillator (VCO), supports
+    the interleaving. The LTC6955, low jitter, fanout clock buffer, and the LTC6952
+    JESD204B clock generation and distribution IC enable a clocking architecture built
+    for multi-channel scalability.
+
+    The reference design is a processor based (e.g. ARM) embedded system. The device
+    interfaces to the FPGA transceivers followed by the individual JESD204B and ADC
+    cores. The cores are programmable through an AXI-Lite interface. The samples are
+    initially captured by UTIL_ADCFIFO and then passed to the system memory (DDR).
+    The user can capture up to 1048576 samples per channel, if both channels are selected
+    or 2097152 per channel if only one channel is selected or in the case the data
+    is considered single channel interposed. The platform allows users to direct sample
+    L, S, and C bands, all while supporting up to 8GHz of IBW per channel.
+
+    Features:
+
+    - 20GSPS sample rate through interleaving supporting up to 8 GHz of instantaneous
+    BW
+
+    - Multi-chip synchronization (MCS) at 10GSPS using a scalable reference distribution
+    architecture
+
+    - Input network supporting a wde analog frequency range DC - 9GHz
+
+    - Compact layout scheme that can be quickly adopted into a customer application
+
+    It targets the Intel Altera S10SOC.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9213_dual_ebz/s10soc
+  tags:
+  - ad9213
+  - adf4377
+  - eval-ad9213-dual-ebz
+  - hdl
+  - ltc6952
+  - ltc6955
+  - project
+  - reference-design
+  - s10soc
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9213_dual_ebz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

@@ -1,0 +1,57 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-m2k
+  title: M2K HDL Project
+  description: >
+    The ADALM2000 (M2K), is built around the XC7Z010 Xilinx Zynq FPGA.
+
+    Booting is done from a 32MB QSPI FLASH, connected directly to the PS7 block.
+
+    The system memory is 512MB RAM, which is also used for the file system. The DDR
+    interface is a 16 bits interface running at 500 MHz. The frequency was chosen
+    so that a single PLL runs inside of the PS7 block generating all the required
+    PS7 clocks, consuming minimum power.
+
+    The FPGA drives 16 GPIOs for the logic analyzer, 2 GPIOs for triggers, a 14 pin
+    interface to the AD9963's ADC and a 14 pin interface to the AD9963's DAC. It also
+    has several generic GPIOs, an SPI and an I2C interface for configuring the board.
+
+    The control GPIOs and the SPI are driven by the PS7 block in order to minimize
+    the PL resource usage.
+
+    The I2C is implemented by an AXI I2C IP because the PS7 I2C has several limitations,
+    which makes it not suitable for this project.
+
+    The oscilloscope related logic transfers data from the AD9963 chip with the AD9963
+    TRX interface goes through the decimation block, the analog triggering block,
+    the history FIFO and streams data to memory using the DMA.
+
+    The analog waveform generator transfers data from the memory using two DMAs, then
+    goes through the interpolation block and ends with the AD9963 TX interface, which
+    transfers data to the AD9963 chip. Two DMAs are used in order to have different
+    orders of magnitude for the frequency of the two AWG channels, without needing
+    to transfer a very large number of samples.
+
+    The logic analyzer and pattern generator logic are mostly implemented in the same
+    IP to which a history FIFO and DMAs are added.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/m2k
+  tags:
+  - ad9963
+  - adalm2000
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/m2k/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

@@ -1,0 +1,27 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-i3c_controller-i3c_controller_core
+  title: I3C_CONTROLLER_CORE HDL IP core
+  description: >
+    The I3C Controller Core peripheral forms the heart of the I3C Controller. It is
+    responsible for handling a I3C Controller commands and translates it into low-level
+    I3C bus transactions.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/i3c_controller/i3c_controller_core
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/i3c_controller/i3c_controller_core.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

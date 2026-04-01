@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-corundum-ethernet-adrv9009zu11eg
+  title: ETHERNET_ADRV9009ZU11EG HDL IP core
+  description: ETHERNET_ADRV9009ZU11EG HDL IP core
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  - BSD-2-Clause-Views
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/corundum/ethernet/adrv9009zu11eg
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

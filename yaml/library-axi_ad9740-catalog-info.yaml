@@ -1,0 +1,37 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_ad9740
+  title: AXI AD9740 HDL IP core
+  description: >
+    The AXI AD9740 IP core can be used to interface the AD9740, AD9742, AD9744 or
+    AD9748 devices. It is a DAC with 8, 10, 12 or 14 bits resolution and with sample
+    rates up to 210 MSPS (per datasheet). The reference design uses a 250 MHz external
+    clock from the ADF4351, achieving up to 250 MSPS DAC update rate using DDR output.
+    This documentation only covers the IP core and requires that one must be familiar
+    with the device for a complete and better understanding.
+
+    More about the generic framework interfacing DACs can be read in axi_dac.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9740
+  tags:
+  - ad9740
+  - ad9742
+  - ad9744
+  - ad9748
+  - adf4351
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/axi_ad9740/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
