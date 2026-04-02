@@ -120,13 +120,19 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
   wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  ii_mux_scl_o_s;
+  wire    [ 1:0]  iic_mux_scl_o_s;
   wire            iic_mux_scl_t_s;
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            ii5c_mux_sda_t_s;
+  wire            iic_mux_sda_t_s;
+
+  wire            ad4134_sclk_s;
 
   // instantiations
+
+  // SPI Engine SCLK drives both config SCLK and data DCLK (tied on board)
+  assign ad4134_spi_sclk = ad4134_sclk_s;
+  assign ad4134_dclk     = ad4134_sclk_s;
 
   assign gpio_i[63:46] = gpio_o[63:46];
   ad_iobuf #(
@@ -217,15 +223,15 @@ module system_top (
     .iic_mux_sda_i (iic_mux_sda_i_s),
     .iic_mux_sda_o (iic_mux_sda_o_s),
     .iic_mux_sda_t (iic_mux_sda_t_s),
-    .spi0_clk_i (ad4134_spi_sclk),
-    .spi0_clk_o (ad4134_spi_sclk),
-    .spi0_csn_0_o (ad4134_spi_cs),
+    .spi0_clk_i (1'b0),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (ad4134_spi_sdi),
-    .spi0_sdo_i (ad4134_spi_sdo),
-    .spi0_sdo_o (ad4134_spi_sdo),
+    .spi0_sdi_i (1'b0),
+    .spi0_sdo_i (1'b0),
+    .spi0_sdo_o (),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -235,13 +241,11 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .ad4134_di_sdo (),
-    .ad4134_di_sdo_t (),
-    .ad4134_di_sdi (ad4134_din),
-    .ad4134_di_cs (),
-    .ad4134_di_sclk (ad4134_dclk),
+    .ad4134_spi_sclk (ad4134_sclk_s),
+    .ad4134_spi_cs (ad4134_spi_cs),
+    .ad4134_spi_sdo (ad4134_spi_sdo),
+    .ad4134_spi_sdi (ad4134_din),
     .ad4134_odr (ad4134_odr),
-    .ad4134_di_three_wire (),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 

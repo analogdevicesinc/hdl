@@ -3,7 +3,11 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad4134_di
+create_bd_port -dir O ad4134_spi_sclk
+create_bd_port -dir O ad4134_spi_cs
+create_bd_port -dir O ad4134_spi_sdo
+create_bd_port -dir I -from 3 -to 0 ad4134_spi_sdi
+
 create_bd_port -dir O ad4134_odr
 
 # create a SPI Engine architecture for ADC
@@ -16,7 +20,7 @@ set async_spi_clk    1
 set offload_en       1
 set num_cs           1
 set num_sdi          4
-set num_sdo          0
+set num_sdo          1
 set sdi_delay        0
 set echo_sclk        0
 
@@ -61,7 +65,10 @@ ad_connect  axi_ad4134_clkgen/clk_0 axi_ad4134_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn $hier_spi_engine/resetn
 ad_connect  sys_cpu_resetn axi_ad4134_dma/m_dest_axi_aresetn
 
-ad_connect  $hier_spi_engine/m_spi ad4134_di
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sclk ad4134_spi_sclk
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/cs   ad4134_spi_cs
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdo  ad4134_spi_sdo
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdi  ad4134_spi_sdi
 ad_connect  axi_ad4134_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
 
 # AXI address definitions
