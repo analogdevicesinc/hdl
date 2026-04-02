@@ -77,11 +77,13 @@ proc post_config_ip {cellpath otherinfo} {
 		set_property CONFIG.MAX_BURST_LENGTH $max_beats_per_burst $intf
 
 		# The core issues as many requests as the amount of data the FIFO can hold
+		# Cap at 256 which is the maximum allowed by the AXI interface property
+		set outstanding [expr {$fifo_size > 256 ? 256 : $fifo_size}]
 		if {$dir == "SRC"} {
 			set_property CONFIG.NUM_WRITE_OUTSTANDING 0 $intf
-			set_property CONFIG.NUM_READ_OUTSTANDING $fifo_size $intf
+			set_property CONFIG.NUM_READ_OUTSTANDING $outstanding $intf
 		} else {
-			set_property CONFIG.NUM_WRITE_OUTSTANDING $fifo_size $intf
+			set_property CONFIG.NUM_WRITE_OUTSTANDING $outstanding $intf
 			set_property CONFIG.NUM_READ_OUTSTANDING 0 $intf
 		}
 	}

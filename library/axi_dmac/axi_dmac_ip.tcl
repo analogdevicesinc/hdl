@@ -283,7 +283,7 @@ foreach intf [ipx::get_bus_interfaces m_*_axi -of_objects $cc] {
 
 set_property -dict [list \
   "value_validation_type" "list" \
-  "value_validation_list" "2 4 8 16 32" \
+  "value_validation_list" "2 4 8 16 32 64 128 256 512 1024" \
 ] [ipx::get_user_parameters FIFO_SIZE -of_objects $cc]
 
 set_property -dict [list \

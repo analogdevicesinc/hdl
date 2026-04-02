@@ -98,7 +98,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 0.0545553125
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_0 0.072623
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 0.0553525
 ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 250.0
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 150.0
 ad_ip_parameter sys_ps7 CONFIG.PCW_EN_RST2_PORT 1
 
 ad_ip_instance xlconcat sys_concat_intc
@@ -134,11 +134,10 @@ ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXIS_TUSER_SYNC 0
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_SRC 1        
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_DEST 1       
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_2D_TRANSFER 0 
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_AXI_PROTOCOL_DEST 0
 ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_DATA_WIDTH_SRC 128  
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_DATA_WIDTH_DEST 128
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.FIFO_SIZE 32          
-ad_ip_parameter hmcad15xx_a1_dma CONFIG.MAX_BYTES_PER_BURST 2048 
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.FIFO_SIZE 512          
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.MAX_BYTES_PER_BURST 4096 
 
 ad_connect  hmcad15xx_a1_dma/m_dest_axi_aresetn sys_dma_resetn
 
@@ -151,11 +150,10 @@ ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXIS_TUSER_SYNC 0
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXI_SLICE_SRC 1        
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXI_SLICE_DEST 1       
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_2D_TRANSFER 0 
-ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_AXI_PROTOCOL_DEST 0
 ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_DATA_WIDTH_SRC 128  
-ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_DATA_WIDTH_DEST 128
-ad_ip_parameter hmcad15xx_a2_dma CONFIG.FIFO_SIZE 32           
-ad_ip_parameter hmcad15xx_a2_dma CONFIG.MAX_BYTES_PER_BURST 2048 
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.FIFO_SIZE 512           
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.MAX_BYTES_PER_BURST 4096 
 
 ad_connect  hmcad15xx_a2_dma/m_dest_axi_aresetn sys_dma_resetn
 
@@ -273,14 +271,27 @@ ad_cpu_interconnect 0x44A60000 axi_hmcad15xx_a2_adc
 ad_cpu_interconnect 0x44A90000 hmcad15xx_a2_dma
 ad_cpu_interconnect 0x44AC0000 axi_tdd_sync
 
-set use_smartconnect 1
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP0 {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 {1}
+ad_connect sys_ps7/FCLK_CLK2 sys_ps7/S_AXI_HP0_ACLK
+ad_connect sys_ps7/FCLK_CLK2 sys_ps7/S_AXI_HP2_ACLK
 
-ad_mem_hp0_interconnect sys_dma_clk sys_ps7/S_AXI_HP0
-ad_mem_hp2_interconnect sys_dma_clk sys_ps7/S_AXI_HP2
+ad_connect hmcad15xx_a1_dma/m_dest_axi sys_ps7/S_AXI_HP0
+create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
+                    [get_bd_addr_spaces hmcad15xx_a1_dma/m_dest_axi] \
+                    [get_bd_addr_segs sys_ps7/S_AXI_HP0/HP0_DDR_LOWOCM] \
+                    SEG_sys_ps7_HP0_DDR_LOWOCM
 
-ad_mem_hp0_interconnect sys_dma_clk hmcad15xx_a1_dma/m_dest_axi
-ad_mem_hp2_interconnect sys_dma_clk hmcad15xx_a2_dma/m_dest_axi
 
+ad_connect hmcad15xx_a2_dma/m_dest_axi sys_ps7/S_AXI_HP2
+create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
+                    [get_bd_addr_spaces hmcad15xx_a2_dma/m_dest_axi] \
+                    [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM] \
+                    SEG_sys_ps7_HP2_DDR_LOWOCM
+
+
+ad_connect sys_ps7/FCLK_CLK2 hmcad15xx_a1_dma/m_dest_axi_aclk
+ad_connect sys_ps7/FCLK_CLK2 hmcad15xx_a2_dma/m_dest_axi_aclk
 
 # interrupts
 

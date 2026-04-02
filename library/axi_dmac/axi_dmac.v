@@ -354,7 +354,11 @@ module axi_dmac #(
     DMA_DATA_WIDTH_SG > 32 ? 3 :
     DMA_DATA_WIDTH_SG > 16 ? 2 :
     DMA_DATA_WIDTH_SG > 8 ? 1 : 0;
-  localparam ID_WIDTH = (FIFO_SIZE) > 64 ? 8 :
+  localparam ID_WIDTH = (FIFO_SIZE) > 1024 ? 12 :
+    (FIFO_SIZE) > 512 ? 11 :
+    (FIFO_SIZE) > 256 ? 10 :
+    (FIFO_SIZE) > 128 ? 9 :
+    (FIFO_SIZE) > 64 ? 8 :
     (FIFO_SIZE) > 32 ? 7 :
     (FIFO_SIZE) > 16 ? 6 :
     (FIFO_SIZE) > 8 ? 5 :

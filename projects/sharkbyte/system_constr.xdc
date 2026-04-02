@@ -139,13 +139,38 @@ set_property -dict {PACKAGE_PIN E12 IOSTANDARD LVCMOS25} [get_ports spi_sdata]
 
 create_clock -period 10.000 -name clk_fpga_0 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[0]}]
 create_clock -period 5.000 -name clk_fpga_1 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[1]}]
-create_clock -period 4.000 -name clk_fpga_2 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[2]}]
+create_clock -period 6.666 -name clk_fpga_2 [get_pins {i_system_wrapper/system_i/sys_ps7/inst/PS7_i/FCLKCLK[2]}]
 
 create_clock -period 40.000 -name spi0_clk [get_pins -hier */EMIOSPI0SCLKO]
 
 set_input_jitter clk_fpga_0 0.300
 set_input_jitter clk_fpga_1 0.150
 set_input_jitter clk_fpga_2 0.200
+
+# CDC constraints - MUST come after all clock definitions
+# ADC clocks (generated from ref_clk_a1/a2) are asynchronous to PS clocks
+set_clock_groups -asynchronous \
+  -group [get_clocks -include_generated_clocks ref_clk_a1] \
+  -group [get_clocks {clk_fpga_0 clk_fpga_1 clk_fpga_2}]
+
+set_clock_groups -asynchronous \
+  -group [get_clocks -include_generated_clocks ref_clk_a2] \
+  -group [get_clocks {clk_fpga_0 clk_fpga_1 clk_fpga_2}]
+
+# DMA clock (clk_fpga_2, 150MHz) to CPU clock (clk_fpga_0, 100MHz) CDC
+# The axi_dmac uses sync_bits modules with 2-stage synchronizers for these crossings
+# These paths go to cdc_sync_stage1_reg which is the first flop of the synchronizer
+set_false_path -from [get_clocks clk_fpga_2] -to [get_cells -hier -filter {NAME =~ */i_sync_*/cdc_sync_stage1_reg[*]}]
+set_false_path -from [get_clocks clk_fpga_0] -to [get_cells -hier -filter {NAME =~ */i_sync_*/cdc_sync_stage1_reg[*]}]
+
+# Zero-depth CDC FIFOs in DMA response path
+# These are async FIFOs crossing between DMA and CPU clock domains
+set_false_path -from [get_cells -hier -filter {NAME =~ */zerodeep.cdc_sync_fifo_ram_reg[*]}] -to [get_clocks clk_fpga_0]
+set_false_path -from [get_cells -hier -filter {NAME =~ */zerodeep.cdc_sync_fifo_ram_reg[*]}] -to [get_clocks clk_fpga_2]
+
+# Zero-depth FIFO address synchronizers (waddr/raddr crossing clock domains)
+set_false_path -from [get_cells -hier -filter {NAME =~ */zerodeep.s_axis_waddr_reg*}] -to [get_cells -hier -filter {NAME =~ */cdc_sync_stage1_reg[*]}]
+set_false_path -from [get_cells -hier -filter {NAME =~ */zerodeep.m_axis_raddr_reg*}] -to [get_cells -hier -filter {NAME =~ */cdc_sync_stage1_reg[*]}]
 
 set_property IOSTANDARD LVCMOS18 [get_ports *fixed_io_mio*]
 set_property SLEW SLOW [get_ports *fixed_io_mio*]

@@ -15,6 +15,8 @@ adi_project_files sharkbyte [list \
   "system_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_iobuf.v"]
 
+set_property PROCESSING_ORDER LATE [get_files system_constr.xdc]
+
 set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
 
 set_property is_enabled false [get_files  *system_sys_ps7_0.xdc]
