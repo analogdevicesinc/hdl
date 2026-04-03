@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
+  parameter NUM_OF_SDI = 4
+) (
 
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
@@ -93,7 +95,7 @@ module system_top (
   // ad4134 data interface
 
   output          ad4134_dclk,
-  input   [ 3:0]  ad4134_din,
+  input   [NUM_OF_SDI-1:0]  ad4134_din,
   output          ad4134_odr,
 
   // ad4134 GPIO lines
