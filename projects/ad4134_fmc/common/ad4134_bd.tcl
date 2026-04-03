@@ -32,10 +32,12 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
+set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
+
 create_bd_port -dir O ad4134_spi_sclk
 create_bd_port -dir O ad4134_spi_cs
 create_bd_port -dir O ad4134_spi_sdo
-create_bd_port -dir I -from 3 -to 0 ad4134_spi_sdi
+create_bd_port -dir I -from [expr $NUM_OF_SDI-1] -to 0 ad4134_spi_sdi
 
 create_bd_port -dir O ad4134_odr
 
@@ -48,7 +50,7 @@ set data_width       32
 set async_spi_clk    1
 set offload_en       1
 set num_cs           1
-set num_sdi          4
+set num_sdi          $NUM_OF_SDI
 set num_sdo          1
 set sdi_delay        0
 set echo_sclk        0
@@ -70,7 +72,7 @@ ad_ip_parameter axi_ad4134_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ad4134_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad4134_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad4134_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad4134_dma CONFIG.DMA_DATA_WIDTH_SRC 128
+ad_ip_parameter axi_ad4134_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32 * $NUM_OF_SDI]
 ad_ip_parameter axi_ad4134_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # odr generator
