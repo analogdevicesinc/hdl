@@ -9,13 +9,21 @@ source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)           ; # L
 set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M)      ; # M
 set RX_SAMPLES_PER_FRAME $ad_project_params(RX_JESD_S)      ; # S
-set RX_SAMPLE_WIDTH 16                                      ; # N/NP
+set RX_JESD_NP    $ad_project_params(RX_JESD_NP)
+
+set RX_SAMPLE_WIDTH      $RX_JESD_NP
+set RX_SAMPLES_PER_CHANNEL 1
+
+set RX_DMA_SAMPLE_WIDTH $RX_JESD_NP
+if {$RX_DMA_SAMPLE_WIDTH == 12} {
+  set RX_DMA_SAMPLE_WIDTH 16
+}
 
 set RX_OCTETS_PER_FRAME [expr $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_FRAME * $RX_SAMPLE_WIDTH / (8*$RX_NUM_OF_LANES)] ; # F
 set DPW [expr max(4,$RX_OCTETS_PER_FRAME)] ;# max(4,F)
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8 * $DPW / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 8* DPW /
 
-set adc_dma_data_width [expr $RX_NUM_OF_LANES * 8 * $DPW]
+set adc_dma_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
 
 # adc peripherals
 # rx_out_clk = ref_clk
@@ -36,13 +44,14 @@ ad_ip_parameter axi_ad9083_rx_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH $DPW
 ad_ip_instance util_cpack2 util_ad9083_rx_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL \
-  SAMPLE_DATA_WIDTH $RX_SAMPLE_WIDTH \
+  SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
   ]
 
 adi_tpl_jesd204_rx_create rx_ad9083_tpl_core $RX_NUM_OF_LANES \
                                                $RX_NUM_OF_CONVERTERS \
                                                $RX_SAMPLES_PER_FRAME \
-                                               $RX_SAMPLE_WIDTH
+                                               $RX_SAMPLE_WIDTH \
+                                               $RX_DMA_SAMPLE_WIDTH
 
 ad_ip_instance axi_dmac axi_ad9083_rx_dma [list \
   DMA_TYPE_SRC 2 \
