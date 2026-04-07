@@ -129,12 +129,19 @@ module system_top #(
   wire            iic_mux_sda_t_s;
 
   wire            ad4134_sclk_s;
+  wire [NUM_OF_SDI-1:0] ad4134_sdi_s;
 
   // instantiations
 
   // SPI Engine SCLK drives both config SCLK and data DCLK (tied on board)
   assign ad4134_spi_sclk = ad4134_sclk_s;
   assign ad4134_dclk     = ad4134_sclk_s;
+
+  // NUM_OF_SDI=1: SDI from SDO (ADC muxes via SDO_PIN_SRC_SEL)
+  // NUM_OF_SDI=4: SDI[0] muxed between SDO and DOUT0 via gpio_o[46]
+  assign ad4134_sdi_s = (NUM_OF_SDI == 1) ?
+      {ad4134_spi_sdi} :
+      {ad4134_din[3:1], (gpio_o[46] ? ad4134_spi_sdi : ad4134_din[0])};
 
   assign gpio_i[63:46] = gpio_o[63:46];
   ad_iobuf #(
@@ -246,7 +253,7 @@ module system_top #(
     .ad4134_spi_sclk (ad4134_sclk_s),
     .ad4134_spi_cs (ad4134_spi_cs),
     .ad4134_spi_sdo (ad4134_spi_sdo),
-    .ad4134_spi_sdi (ad4134_din),
+    .ad4134_spi_sdi (ad4134_sdi_s),
     .ad4134_odr (ad4134_odr),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
