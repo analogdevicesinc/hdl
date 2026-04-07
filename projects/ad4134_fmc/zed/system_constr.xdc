@@ -11,7 +11,7 @@ set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS18} [get_ports ad4134_spi_c
 
 # ad4134 data interface
 
-set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports ad4134_dclk];   ## FMC_LPC_CLK0_M2C_P
+set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS18} [get_ports ad4134_dclk];             ## FMC_LPC_CLK0_M2C_P
 set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS18} [get_ports ad4134_odr];             ## FMC_LPC_LA00_P_CC
 
 # ad4134 GPIO lines
@@ -124,3 +124,19 @@ set_property  -dict {PACKAGE_PIN  G17   IOSTANDARD LVCMOS18} [get_ports gpio_bd[
 # Define SPI clock
 create_clock -name spi0_clk      -period 40   [get_pins -hier */EMIOSPI0SCLKO]
 create_clock -name spi1_clk      -period 40   [get_pins -hier */EMIOSPI1SCLKO]
+
+# Virtual clock at 50 MHz representing DCLK/SCLK as seen by the AD4134
+# Datasheet tco values are referenced to this frequency
+create_clock -period 20.0 -name ad4134_dclk_virt
+
+# DOUTx input delay relative to DCLK (tco_max = 8.2 ns)
+set_input_delay -clock ad4134_dclk_virt -max 8.2 [get_ports ad4134_din[*]]
+set_input_delay -clock ad4134_dclk_virt -min 0.0 [get_ports ad4134_din[*]]
+
+# SDO input delay relative to SCLK falling (tco_max = 8.0 ns)
+set_input_delay -clock ad4134_dclk_virt -clock_fall -max 8.0 [get_ports ad4134_spi_sdi]
+set_input_delay -clock ad4134_dclk_virt -clock_fall -min 0.0 [get_ports ad4134_spi_sdi]
+
+# Virtual clock is unrelated to MMCM domain — SPI Engine handles timing internally
+set_false_path -from [get_clocks ad4134_dclk_virt] -to [get_clocks mmcm_clk_0_s]
+
