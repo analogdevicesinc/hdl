@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023, 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2023, 2025-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -427,6 +427,9 @@ module pack_shell #(
              * residual data. I.e. when ready is asserted rotate is 0.
              */
             {ready,rotate} <= rotate + enable_count + 1'b1;
+          end else begin
+            ready <= 1'b0;
+            rotate <= 'h0;
           end
         end
 
