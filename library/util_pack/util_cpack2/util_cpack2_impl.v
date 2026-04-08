@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -39,6 +39,7 @@ module util_cpack2_impl #(
   parameter NUM_OF_CHANNELS = 4,
   parameter SAMPLES_PER_CHANNEL = 1,
   parameter SAMPLE_DATA_WIDTH = 16,
+  parameter INTERFACE_TYPE = 1,
   parameter PARALLEL_OR_SERIAL_N = 0
 ) (
   input clk,
@@ -50,17 +51,31 @@ module util_cpack2_impl #(
   output fifo_wr_overflow,
   input [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data,
 
-  output reg packed_fifo_wr_en = 1'b0,
+  input m_axis_ready,
+  output m_axis_valid,
+  output [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] m_axis_data,
+  output [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL/8-1:0] m_axis_keep,
+  output m_axis_last,
+
+  output packed_fifo_wr_en,
   input packed_fifo_wr_overflow,
-  output reg [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] packed_fifo_wr_data = 'h00,
+  output [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] packed_fifo_wr_data,
   output reg packed_sync = 1'b1
 );
 
   localparam TOTAL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL * NUM_OF_CHANNELS;
 
+  //Internal write signal.
+  wire data_wr_en; 
+
   // Control signals from the pack shell.
-  wire reset_data;
+  wire ce;
   wire ready;
+  wire reset_data;
+
+  wire out_ready_int;
+  reg out_valid_int = 1'b0;
+  reg [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] out_data_int = 'h00;
 
   // Interleaved version of `fifo_wr_data`.
   wire [TOTAL_DATA_WIDTH-1:0] interleaved_data;
@@ -70,12 +85,32 @@ module util_cpack2_impl #(
   wire out_sync;
   wire [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL-1:0] out_valid;
 
+  generate if (INTERFACE_TYPE == 1) begin
+    assign out_ready_int = 1'b1;
+    assign packed_fifo_wr_en = out_valid_int;
+    assign packed_fifo_wr_data = out_data_int;
+    assign m_axis_valid = 1'b0;
+    assign m_axis_data = 'h00;
+    assign m_axis_keep = 'h00;
+    assign m_axis_last = 1'b0;
+  end else begin
+    assign out_ready_int = m_axis_ready;
+    assign packed_fifo_wr_en = 1'b0;
+    assign packed_fifo_wr_data = 'h00;
+    assign m_axis_valid = out_valid_int;
+    assign m_axis_data = out_data_int;
+    assign m_axis_keep = {(NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL/8){1'b1}};
+    assign m_axis_last = 1'b0;
+  end endgenerate
+
   /*
    * Only the first signal of fifo_rd_en is used. All others are ignored. The
    * only reason why fifo_rd_en has multiple entries is to keep the interface
    * somewhat backwards compatible to the previous upack.
    */
-  wire data_wr_en = fifo_wr_en[0];
+  assign data_wr_en = fifo_wr_en[0];
+
+  assign ce = data_wr_en & out_ready_int;
 
   /*
    * The cpack core itself has no backpressure. Overflows can only happen
@@ -110,7 +145,7 @@ module util_cpack2_impl #(
     .reset_data (reset_data),
 
     .enable (enable),
-    .ce (data_wr_en),
+    .ce (ce),
     .ready (ready),
     .in_data (interleaved_data),
     .out_data (out_data),
@@ -119,13 +154,13 @@ module util_cpack2_impl #(
 
   always @(posedge clk) begin
     if (reset_data == 1'b1) begin
-      packed_fifo_wr_en <= 1'b0;
+      out_valid_int <= 1'b0;
       packed_sync <= 1'b0;
     end else if (ready == 1'b1 && data_wr_en == 1'b1) begin
-      packed_fifo_wr_en <= 1'b1;
+      out_valid_int <= 1'b1;
       packed_sync <= out_sync;
     end else begin
-      packed_fifo_wr_en <= 1'b0;
+      out_valid_int <= 1'b0;
       packed_sync <= 1'b0;
     end
   end
@@ -136,7 +171,7 @@ module util_cpack2_impl #(
     if (data_wr_en == 1'b1) begin
       for (i = 0; i < NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL; i = i + 1) begin
         if (out_valid[i] == 1'b1) begin
-          packed_fifo_wr_data[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= out_data[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH];
+          out_data_int[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= out_data[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH];
         end
       end
     end

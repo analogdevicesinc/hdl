@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -31,6 +31,11 @@ ad_ip_parameter SAMPLE_DATA_WIDTH INTEGER 16 true [list \
   DISPLAY_NAME "Sample Data Width"
 ]
 
+ad_ip_parameter INTERFACE_TYPE INTEGER 1 true [list \
+  DISPLAY_NAME "Interface Type" \
+  ALLOWED_RANGES {"0:AXIS" "1:FIFO"} \
+]
+
 ad_ip_parameter PARALLEL_OR_SERIAL_N INTEGER 0 true [list \
   DISPLAY_NAME "Parallel prefix sum calculation" \
   ALLOWED_RANGES {"0:Serial" "1:Parallel"} \
@@ -42,6 +47,7 @@ proc util_cpack_elab {} {
   set num_channels [get_parameter_value NUM_OF_CHANNELS]
   set samples_per_channel [get_parameter_value SAMPLES_PER_CHANNEL]
   set sample_data_width [get_parameter_value SAMPLE_DATA_WIDTH]
+  set interface_type [get_parameter_value INTERFACE_TYPE]
 
   set channel_data_width [expr $sample_data_width * $samples_per_channel]
   set total_data_width [expr $num_channels * $channel_data_width]
@@ -52,10 +58,27 @@ proc util_cpack_elab {} {
   add_interface_port reset reset reset Input 1
   set_interface_property reset associatedClock clk
 
+  add_interface m_axis axi4stream start
+  set_interface_property m_axis associatedClock clk
+  set_interface_property m_axis associatedReset reset
+  add_interface_port  m_axis  m_axis_valid tvalid  Output  1
+  add_interface_port  m_axis  m_axis_ready tready  Input   1
+  add_interface_port  m_axis  m_axis_last  tlast   Output  1
+  add_interface_port  m_axis  m_axis_data  tdata   Output  $total_data_width
+  add_interface_port  m_axis  m_axis_keep  tkeep   Output  $total_data_width/8
+
   ad_interface signal packed_fifo_wr_en output 1 valid
   ad_interface signal packed_fifo_wr_data output $total_data_width data
   ad_interface signal packed_fifo_wr_overflow input 1 ovf
   ad_interface signal packed_sync output 1 sync
+
+  if {$interface_type == 0} {
+    lappend disabled_intfs \
+      if_packed_fifo_wr_en if_packed_fifo_wr_data if_packed_fifo_wr_overflow \
+      if_packed_sync
+  } else {
+    lappend disabled_intfs m_axis
+  }
 
   ad_interface signal fifo_wr_overflow output 1 ovf
 

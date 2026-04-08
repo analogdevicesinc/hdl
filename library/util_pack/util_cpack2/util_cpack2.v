@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -39,6 +39,7 @@ module util_cpack2 #(
   parameter NUM_OF_CHANNELS = 4,
   parameter SAMPLES_PER_CHANNEL = 1,
   parameter SAMPLE_DATA_WIDTH = 16,
+  parameter INTERFACE_TYPE = 1,
   parameter PARALLEL_OR_SERIAL_N = 0
 ) (
   input clk,
@@ -177,6 +178,12 @@ module util_cpack2 #(
   input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_62,
   input [SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] fifo_wr_data_63,
 
+  input m_axis_ready,
+  output m_axis_valid,
+  output [2**$clog2(NUM_OF_CHANNELS)*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] m_axis_data,
+  output [2**$clog2(NUM_OF_CHANNELS)*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL/8-1:0] m_axis_keep,
+  output m_axis_last,
+
   output packed_fifo_wr_en,
   input packed_fifo_wr_overflow,
   output [2**$clog2(NUM_OF_CHANNELS)*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] packed_fifo_wr_data,
@@ -284,6 +291,7 @@ module util_cpack2 #(
     .NUM_OF_CHANNELS (REAL_NUM_OF_CHANNELS),
     .SAMPLE_DATA_WIDTH (SAMPLE_DATA_WIDTH),
     .SAMPLES_PER_CHANNEL (SAMPLES_PER_CHANNEL),
+    .INTERFACE_TYPE (INTERFACE_TYPE),
     .PARALLEL_OR_SERIAL_N (PARALLEL_OR_SERIAL_N)
   ) i_cpack (
     .clk (clk),
@@ -294,6 +302,12 @@ module util_cpack2 #(
     .fifo_wr_en ({REAL_NUM_OF_CHANNELS{fifo_wr_en}}),
     .fifo_wr_overflow (fifo_wr_overflow),
     .fifo_wr_data (fifo_wr_data),
+
+    .m_axis_ready (m_axis_ready),
+    .m_axis_valid (m_axis_valid),
+    .m_axis_data (m_axis_data),
+    .m_axis_keep (m_axis_keep),
+    .m_axis_last (m_axis_last),
 
     .packed_fifo_wr_en (packed_fifo_wr_en),
     .packed_fifo_wr_overflow (packed_fifo_wr_overflow),

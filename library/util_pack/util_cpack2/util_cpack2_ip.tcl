@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -18,6 +18,18 @@ adi_ip_files util_cpack2 [list \
 
 adi_ip_properties_lite util_cpack2
 
+adi_add_bus "m_axis" "master" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  [list {"m_axis_ready" "TREADY"} \
+    {"m_axis_valid" "TVALID"} \
+    {"m_axis_data" "TDATA"} \
+    {"m_axis_keep" "TKEEP"} \
+    {"m_axis_last" "TLAST"}]
+
+adi_set_bus_dependency "m_axis" "m_axis" \
+  "(spirit:decode(id('MODELPARAM_VALUE.INTERFACE_TYPE')) = 0)"
+
 adi_add_bus "packed_fifo_wr" "master" \
   "analog.com:interface:fifo_wr_rtl:1.0" \
   "analog.com:interface:fifo_wr:1.0" \
@@ -26,7 +38,13 @@ adi_add_bus "packed_fifo_wr" "master" \
     {"packed_fifo_wr_data" "DATA"} \
     {"packed_fifo_wr_overflow" "OVERFLOW"} \
   }
-adi_add_bus_clock "clk" "packed_fifo_wr" "reset"
+
+adi_set_bus_dependency "packed_fifo_wr" "packed_fifo_wr" \
+  "(spirit:decode(id('MODELPARAM_VALUE.INTERFACE_TYPE')) = 1)"
+adi_set_ports_dependency "packed_sync" \
+  "(spirit:decode(id('MODELPARAM_VALUE.INTERFACE_TYPE')) = 1)"
+
+adi_add_bus_clock "clk" "m_axis:packed_fifo_wr" "reset"
 
 set cc [ipx::current_core]
 
