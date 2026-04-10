@@ -34,7 +34,8 @@ ad_ip_instance axi_adxcvr axi_ad9083_rx_xcvr [list \
   QPLL_ENABLE 1 \
   TX_OR_RX_N 0 \
   SYS_CLK_SEL 3 \
-  OUT_CLK_SEL 4 \
+  OUT_CLK_SEL 3 \
+  LPM_OR_DFE_N 1 \
   ]
 
 adi_axi_jesd204_rx_create axi_ad9083_rx_jesd $RX_NUM_OF_LANES
@@ -51,6 +52,7 @@ adi_tpl_jesd204_rx_create rx_ad9083_tpl_core $RX_NUM_OF_LANES \
                                                $RX_NUM_OF_CONVERTERS \
                                                $RX_SAMPLES_PER_FRAME \
                                                $RX_SAMPLE_WIDTH \
+                                               $DPW \
                                                $RX_DMA_SAMPLE_WIDTH
 
 ad_ip_instance axi_dmac axi_ad9083_rx_dma [list \
@@ -74,36 +76,40 @@ ad_ip_instance axi_dmac axi_ad9083_rx_dma [list \
 # fPLLClkout = 5000 MHz
 # VCO = 10000 MHz - qpll0
 
-ad_ip_instance util_adxcvr util_ad9083_xcvr [list \
-  RX_NUM_OF_LANES $RX_NUM_OF_LANES \
-  TX_NUM_OF_LANES 0 \
-  QPLL_FBDIV 40 \
-  QPLL_REFCLK_DIV 2 \
-  RX_OUT_DIV 1 \
-  RX_CLK25_DIV 20 \
-  POR_CFG 0x0 \
-  QPLL_CFG0 0x391c \
-  QPLL_CFG1 0x0000 \
-  QPLL_CFG1_G3 0x0020 \
-  QPLL_CFG2 0x0f80 \
-  QPLL_CFG2_G3 0x0f80 \
-  QPLL_CFG3 0x0120 \
-  QPLL_CFG4 0x0002 \
-  QPLL_CP 0x1f \
-  QPLL_CP_G3 0x1f \
-  QPLL_LPF 0x2ff \
-  CH_HSPMUX 0x2424 \
-  PREIQ_FREQ_BST 0 \
-  RXPI_CFG0 0x0102 \
-  RXPI_CFG1 0x15 \
-  RXCDR_CFG0 0x3 \
-  RXCDR_CFG2_GEN2 0x265 \
-  RXCDR_CFG2_GEN4 0x164 \
-  RXCDR_CFG3 0x12 \
-  RXCDR_CFG3_GEN2 0x12 \
-  RXCDR_CFG3_GEN3 0x12 \
-  RXCDR_CFG3_GEN4 0x12 \
-  RX_WIDEMODE_CDR 0x0 \
+ad_ip_instance util_adxcvr util_ad9083_xcvr
+ad_ip_parameter util_ad9083_xcvr CONFIG.CPLL_FBDIV_4_5 5
+ad_ip_parameter util_ad9083_xcvr CONFIG.TX_NUM_OF_LANES 0
+ad_ip_parameter util_ad9083_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
+ad_ip_parameter util_ad9083_xcvr CONFIG.RX_OUT_DIV 1
+ad_ip_parameter util_ad9083_xcvr CONFIG.RX_LANE_RATE 15
+ad_ip_parameter util_ad9083_xcvr CONFIG.TX_LANE_RATE 0
+  # QPLL_FBDIV 40 \
+  # QPLL_REFCLK_DIV 2 \
+  # RX_OUT_DIV 1 \
+  # RX_CLK25_DIV 20 \
+  # POR_CFG 0x0 \
+  # QPLL_CFG0 0x391c \
+  # QPLL_CFG1 0x0000 \
+  # QPLL_CFG1_G3 0x0020 \
+  # QPLL_CFG2 0x0f80 \
+  # QPLL_CFG2_G3 0x0f80 \
+  # QPLL_CFG3 0x0120 \
+  # QPLL_CFG4 0x0002 \
+  # QPLL_CP 0x1f \
+  # QPLL_CP_G3 0x1f \
+  # QPLL_LPF 0x2ff \
+  # CH_HSPMUX 0x2424 \
+  # PREIQ_FREQ_BST 0 \
+  # RXPI_CFG0 0x0102 \
+  # RXPI_CFG1 0x15 \
+  # RXCDR_CFG0 0x3 \
+  # RXCDR_CFG2_GEN2 0x265 \
+  # RXCDR_CFG2_GEN4 0x164 \
+  # RXCDR_CFG3 0x12 \
+  # RXCDR_CFG3_GEN2 0x12 \
+  # RXCDR_CFG3_GEN3 0x12 \
+  # RXCDR_CFG3_GEN4 0x12 \
+  # RX_WIDEMODE_CDR 0x0 \
   ]
 
 # xcvr interfaces
@@ -120,7 +126,7 @@ ad_connect  $sys_cpu_clk util_ad9083_xcvr/up_clk
 ad_connect ad9083_rx_device_clk rx_core_clk_0
 ad_connect ad9083_rx_link_clk util_ad9083_xcvr/rx_out_clk_0
 
-ad_xcvrcon  util_ad9083_xcvr axi_ad9083_rx_xcvr axi_ad9083_rx_jesd {} ad9083_rx_link_clk ad9083_rx_device_clk
+ad_xcvrcon  util_ad9083_xcvr axi_ad9083_rx_xcvr axi_ad9083_rx_jesd {} {} ad9083_rx_device_clk
 ad_xcvrpll $rx_ref_clk util_ad9083_xcvr/qpll_ref_clk_0
 for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
   set ch [expr $i]

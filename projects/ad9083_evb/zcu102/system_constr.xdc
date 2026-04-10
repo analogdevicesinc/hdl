@@ -37,9 +37,10 @@ set_property  -dict {PACKAGE_PIN  V4  IOSTANDARD LVDS}       [get_ports sysref_p
 set_property  -dict {PACKAGE_PIN  V3  IOSTANDARD LVDS}       [get_ports sysref_n]        ; ## FMC_HPC0_LA08_N
 
 # clocks
-create_clock -period 2 -name rx_ref_clk [get_ports ref_clk0_p]
-create_clock -period 8 -name rx_ref_clk2 [get_ports glblclk_p]
+create_clock -period 2.66666 -name rx_ref_clk [get_ports ref_clk0_p]
+create_clock -period 4       -name rx_ref_clk2 [get_ports glblclk_p]
+create_generated_clock       -name rx_link_clk [get_pins i_system_wrapper/system_i/util_ad9083_xcvr/inst/i_xch_0/i_gthe4_channel/RXOUTCLK]
 
-set_input_delay -clock [get_clocks rx_ref_clk2] [get_property PERIOD [get_clocks rx_ref_clk2]] \
-                [get_ports -regexp -filter { NAME =~  ".*sysref.*" && DIRECTION == "IN" }]
+ set_input_delay -clock [get_clocks rx_ref_clk2] [get_property PERIOD [get_clocks rx_ref_clk2]] \
+                 [get_ports -regexp -filter { NAME =~  ".*sysref.*" && DIRECTION == "IN" }]
 

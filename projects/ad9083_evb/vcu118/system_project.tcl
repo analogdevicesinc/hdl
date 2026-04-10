@@ -20,4 +20,6 @@ adi_project_files ad9083_fmc_vcu118 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
 
+set_property strategy Congestion_SpreadLogic_high [get_runs impl_1]
+
 adi_project_run ad9083_evb_vcu118

@@ -108,8 +108,6 @@ module system_top (
   wire    [ 7:0]  spi0_csn;
   wire            spi0_mosi;
   wire            spi0_miso;
-  wire            spi_miso;
-  wire            spi_mosi;
 
   wire            core_clk_in;
   wire            core_clk;
@@ -123,8 +121,6 @@ module system_top (
 
   assign spi_csn_adc = spi0_csn[0];
   assign spi_csn_clk = spi0_csn[1];
-  assign spi_mosi = spi0_mosi;
-  assign spi0_miso = spi_miso;
 
   // instantiations
   ad_iobuf #(
@@ -156,10 +152,10 @@ module system_top (
   ) i_spi (
     .spi_csn(spi0_csn[1:0]),
     .spi_clk(spi_clk),
-    .spi_mosi(spi_mosi),
-    .spi_miso(spi_miso),
+    .spi_mosi(spi0_mosi),
+    .spi_miso(spi0_miso),
     .spi_sdio(spi_sdio),
-    .spi_dir(spidbg_dir));
+    .spi_dir());
 
   ad_iobuf #(
     .DATA_WIDTH(3)
@@ -226,7 +222,7 @@ module system_top (
     .rx_data_2_p (rx_data_p[2]),
     .rx_data_3_n (rx_data_n[3]),
     .rx_data_3_p (rx_data_p[3]),
-    .rx_ref_clk_0 (ref_clk),
+    .rx_ref_clk_0 (ref_clk0),
     .rx_core_clk_0 (core_clk),
     .rx_sync_0 (sync),
     .rx_sysref_0 (sysref),

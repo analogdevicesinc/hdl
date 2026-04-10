@@ -21,6 +21,7 @@ adi_project ad9083_evb_zcu102 0 [list \
   RX_JESD_L    [get_env_param RX_JESD_L    4 ] \
   RX_JESD_M    [get_env_param RX_JESD_M   16 ] \
   RX_JESD_S    [get_env_param RX_JESD_S    1 ] \
+  RX_JESD_NP   [get_env_param RX_JESD_NP  12 ] \
 ]
 adi_project_files ad9083_fmc_zcu102 [list \
   "system_top.v" \
