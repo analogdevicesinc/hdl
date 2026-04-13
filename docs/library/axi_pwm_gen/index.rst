@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen
+
 .. _axi_pwm_gen:
 
 AXI PWM Generator

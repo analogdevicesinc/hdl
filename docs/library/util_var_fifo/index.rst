@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/util_var_fifo
+
 .. _util_var_fifo:
 
 Util VAR FIFO

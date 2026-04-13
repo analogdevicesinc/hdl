@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_tdd
+
 .. _axi_tdd:
 
 AXI TDD

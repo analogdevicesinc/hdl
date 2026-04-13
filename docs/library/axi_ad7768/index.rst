@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/ad7768
+
 .. _axi_ad7768:
 
 AXI AD7768

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_ad9671
+
 .. _axi_ad9671:
 
 AXI AD9671 (OBSOLETE)

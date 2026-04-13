@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_tpl_adc
+
 .. _ad_ip_jesd204_tpl_adc:
 
 ADC JESD204B/C Transport Peripheral

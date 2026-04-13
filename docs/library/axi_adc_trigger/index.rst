@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_adc_trigger
+
 .. _axi_adc_trigger:
 
 AXI ADC Trigger

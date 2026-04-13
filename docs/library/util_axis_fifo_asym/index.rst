@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/util_axis_fifo_asym
+
 .. _util_axis_fifo_asym:
 
 Asymmetric AXI Stream FIFO

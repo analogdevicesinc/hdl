@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/xilinx/fmc/ad9467
+
 .. _ad9467_fmc:
 
 AD9467-FMC HDL project

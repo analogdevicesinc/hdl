@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_dac_interpolate
+
 .. _axi_dac_interpolate:
 
 AXI DAC Interpolate

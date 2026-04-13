@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_fan_control
+
 .. _axi_fan_control:
 
 AXI Fan Control

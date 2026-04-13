@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_ltc235x
+
 .. _axi_ltc235x:
 
 AXI LTC235X

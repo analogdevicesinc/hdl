@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/adaq8092
+
 .. _axi_adaq8092:
 
 AXI ADAQ8092

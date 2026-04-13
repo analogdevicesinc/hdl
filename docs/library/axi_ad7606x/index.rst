@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_ad7606x
+
 .. _axi_ad7606x:
 
 AXI AD7606x

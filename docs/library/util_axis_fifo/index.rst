@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/util_axis_fifo
+
 .. _util_axis_fifo:
 
 AXI Stream FIFO

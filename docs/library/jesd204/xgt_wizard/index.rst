@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/xgt_wizard
+
 .. _xgt_wizard:
 
 Xilinx FPGAs Transceivers Wizard

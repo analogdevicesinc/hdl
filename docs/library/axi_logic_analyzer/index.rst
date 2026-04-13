@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_logic_analyzer
+
 .. _axi_logic_analyzer:
 
 AXI Logic Analyzer

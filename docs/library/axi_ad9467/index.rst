@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_ad9467
+
 .. _axi_ad9467:
 
 AXI AD9467

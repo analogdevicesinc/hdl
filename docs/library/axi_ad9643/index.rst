@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_ad9643
+
 .. _axi_ad9643:
 
 AXI AD9643 (OBSOLETE)

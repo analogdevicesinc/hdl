@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/dds
+
 .. _ad_dds:
 
 AD Direct Digital Synthesis

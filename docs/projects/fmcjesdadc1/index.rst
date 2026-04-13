@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz
+
 .. _fmcjesdadc1:
 
 FMCJESDADC1 HDL Project (OBSOLETE)

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/ad777x
+
 .. _axi_ad777x:
 
 AXI AD777x

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/util_xcvr
+
 .. _util_adxcvr:
 
 UTIL_ADXCVR core for AMD Xilinx devices

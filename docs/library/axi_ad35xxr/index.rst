@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_ad3552r
+
 .. _axi_ad35xxr:
 
 AXI AD35XXR

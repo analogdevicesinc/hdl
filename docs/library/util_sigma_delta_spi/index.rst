@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/peripherals/util_sigma_delta_spi
+
 .. _util_sigma_delta_spi:
 
 Util Sigma Delta SPI

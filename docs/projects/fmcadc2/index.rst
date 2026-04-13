@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/xilinx/fmc/ad-fmcadc2-ebz
+
 .. _fmcadc2:
 
 FMCADC2 HDL Project (OBSOLETE)

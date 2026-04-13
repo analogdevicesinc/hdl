@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/util_cpack
+
 .. _util_cpack2:
 
 Channel CPACK Utility

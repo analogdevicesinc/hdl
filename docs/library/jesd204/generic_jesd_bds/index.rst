@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/hdl/generic_jesd_bds
+
 .. _generic_jesd_bds:
 
 Generic JESD204 block designs

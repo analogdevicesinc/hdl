@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/peripherals/spi_engine
+
 .. _spi_engine:
 
 SPI Engine

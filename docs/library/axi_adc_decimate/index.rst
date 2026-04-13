@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_adc_decimate
+
 .. _axi_adc_decimate:
 
 AXI ADC Decimate

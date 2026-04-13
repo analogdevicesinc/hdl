@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/hdl/m2k
+
 .. _m2k:
 
 M2K HDL Project

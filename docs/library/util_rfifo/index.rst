@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/util_rfifo
+
 .. _util_rfifo:
 
 Util RFIFO

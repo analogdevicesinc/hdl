@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/data_offload
+
 .. _data_offload:
 
 Data Offload

@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_tx
+
 .. _axi_jesd204_tx:
 
 JESD204B/C Link Transmit Peripheral

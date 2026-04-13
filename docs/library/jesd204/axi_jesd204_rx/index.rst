@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx
+
 .. _axi_jesd204_rx:
 
 JESD204B/C Link Receive Peripheral

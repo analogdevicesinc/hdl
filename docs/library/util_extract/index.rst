@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/util_extract
+
 .. _util_extract:
 
 Util Extract

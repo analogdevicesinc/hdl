@@ -1,3 +1,5 @@
+.. imported from: https://wiki.analog.com/resources/fpga/docs/axi_ltc2387
+
 .. _axi_ltc2387:
 
 AXI LTC2387
