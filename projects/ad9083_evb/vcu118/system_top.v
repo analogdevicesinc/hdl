@@ -144,7 +144,7 @@ module system_top (
     .CEB (1'd0),
     .I (ref_clk0_p),
     .IB (ref_clk0_n),
-    .O (ref_clk0),
+    .O (ref_clk),
     .ODIV2 ());
 
   ad_3w_spi #(
@@ -222,7 +222,7 @@ module system_top (
     .rx_data_2_p (rx_data_p[2]),
     .rx_data_3_n (rx_data_n[3]),
     .rx_data_3_p (rx_data_p[3]),
-    .rx_ref_clk_0 (ref_clk0),
+    .rx_ref_clk_0 (ref_clk),
     .rx_core_clk_0 (core_clk),
     .rx_sync_0 (sync),
     .rx_sysref_0 (sysref),

@@ -33,8 +33,8 @@ ad_ip_instance axi_adxcvr axi_ad9083_rx_xcvr [list \
   NUM_OF_LANES $RX_NUM_OF_LANES \
   QPLL_ENABLE 1 \
   TX_OR_RX_N 0 \
-  SYS_CLK_SEL 3 \
-  OUT_CLK_SEL 3 \
+  SYS_CLK_SEL 0x3 \
+  OUT_CLK_SEL 0x4 \
   LPM_OR_DFE_N 1 \
   ]
 
