@@ -35,6 +35,10 @@ set_property -dict {PACKAGE_PIN Y12  IOSTANDARD LVCMOS18} [get_ports "XUD_TXRX1"
 set_property -dict {PACKAGE_PIN W6   IOSTANDARD LVCMOS18} [get_ports "XUD_TXRX2"]
 set_property -dict {PACKAGE_PIN W7   IOSTANDARD LVCMOS18} [get_ports "XUD_TXRX3"]
 
+set_property -dict {PACKAGE_PIN W2   IOSTANDARD LVCMOS18} [get_ports "tdd_sync_in_debug"]
+set_property -dict {PACKAGE_PIN N8   IOSTANDARD LVCMOS18} [get_ports "tdd_sync_out_debug"]
+set_property -dict {PACKAGE_PIN P11  IOSTANDARD LVCMOS18} [get_ports "tdd_enable_debug"]
+
 set_property -dict {PACKAGE_PIN U11  IOSTANDARD LVCMOS18 SLEW FAST} [get_ports "BF_SPI_SCLK_01"]
 set_property -dict {PACKAGE_PIN U6   IOSTANDARD LVCMOS18 SLEW FAST} [get_ports "BF_SPI_CSB_01"]
 set_property -dict {PACKAGE_PIN T11  IOSTANDARD LVCMOS18 SLEW FAST} [get_ports "BF_SPI_MOSI_01"]
@@ -91,6 +95,10 @@ set_false_path -from [get_ports PG_PA_VGG_01]
 set_false_path -from [get_ports PG_PA_VGG_02]
 set_false_path -from [get_ports PG_PA_VGG_03]
 set_false_path -from [get_ports PG_PA_VGG_04]
+
+set_false_path -to   [get_ports tdd_sync_in_debug]
+set_false_path -to   [get_ports tdd_sync_out_debug]
+set_false_path -to   [get_ports tdd_enable_debug]
 
 set trce_dly_max   0.800; # maximum board trace delay
 set trce_dly_min   0.900; # minimum board trace delay
