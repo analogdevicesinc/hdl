@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top # (
+  parameter TDD_SUPPORT = 0
+) (
 
   input   [12:0]  gpio_bd_i,
   output  [ 7:0]  gpio_bd_o,
@@ -108,41 +110,58 @@ module system_top (
   output XUD_TXRX0,
   output XUD_TXRX1,
   output XUD_TXRX2,
-  output XUD_TXRX3
+  output XUD_TXRX3,
+
+  // Debug FMC TDD
+  output tdd_sync_in_debug,
+  output tdd_sync_out_debug,
+  output tdd_enable_debug
 );
 
   // internal signals
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
 
+  wire            tdd_sync;
+  wire            tdd_sync_out;
+  wire    [20:0]  tdd_channels;
+  wire            tdd_enabled;
+  wire            tdd_support;
+
   assign gpio_bd_o = gpio_o[7:0];
 
-  assign gpio_i[94:21] = gpio_o[94:21];
+  assign gpio_i[94:22] = gpio_o[94:22];
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
 
+  assign tdd_sync = gpio_i[21];
+
   wire  [29:0]  adsy2301_gpio;
 
-  assign TR_01              = adsy2301_gpio[0];
-  assign TX_LOAD_01         = adsy2301_gpio[1];
-  assign RX_LOAD_01         = adsy2301_gpio[2];
-  assign BF_PWR_EN_01       = adsy2301_gpio[3];
-  assign BF_PA_ON_01        = adsy2301_gpio[4];
-  assign TR_02              = adsy2301_gpio[5];
-  assign TX_LOAD_02         = adsy2301_gpio[6];
-  assign RX_LOAD_02         = adsy2301_gpio[7];
-  assign BF_PWR_EN_02       = adsy2301_gpio[8];
-  assign BF_PA_ON_02        = adsy2301_gpio[9];
-  assign TR_03              = adsy2301_gpio[10];
-  assign TX_LOAD_03         = adsy2301_gpio[11];
-  assign RX_LOAD_03         = adsy2301_gpio[12];
-  assign BF_PWR_EN_03       = adsy2301_gpio[13];
-  assign BF_PA_ON_03        = adsy2301_gpio[14];
-  assign TR_04              = adsy2301_gpio[15];
-  assign TX_LOAD_04         = adsy2301_gpio[16];
-  assign RX_LOAD_04         = adsy2301_gpio[17];
-  assign BF_PWR_EN_04       = adsy2301_gpio[18];
-  assign BF_PA_ON_04        = adsy2301_gpio[19];
+  assign tdd_enabled = tdd_channels[0];
+  assign tdd_support = TDD_SUPPORT ? tdd_enabled : 1'b0;
+
+  assign TR_01              = tdd_support ? tdd_channels[1]  : adsy2301_gpio[0];
+  assign TX_LOAD_01         = tdd_support ? tdd_channels[2]  : adsy2301_gpio[1];
+  assign RX_LOAD_01         = tdd_support ? tdd_channels[3]  : adsy2301_gpio[2];
+  assign BF_PWR_EN_01       = tdd_support ? tdd_channels[4]  : adsy2301_gpio[3];
+  assign BF_PA_ON_01        = tdd_support ? tdd_channels[5]  : adsy2301_gpio[4];
+  assign TR_02              = tdd_support ? tdd_channels[6]  : adsy2301_gpio[5];
+  assign TX_LOAD_02         = tdd_support ? tdd_channels[7]  : adsy2301_gpio[6];
+  assign RX_LOAD_02         = tdd_support ? tdd_channels[8]  : adsy2301_gpio[7];
+  assign BF_PWR_EN_02       = tdd_support ? tdd_channels[9]  : adsy2301_gpio[8];
+  assign BF_PA_ON_02        = tdd_support ? tdd_channels[10] : adsy2301_gpio[9];
+  assign TR_03              = tdd_support ? tdd_channels[11] : adsy2301_gpio[10];
+  assign TX_LOAD_03         = tdd_support ? tdd_channels[12] : adsy2301_gpio[11];
+  assign RX_LOAD_03         = tdd_support ? tdd_channels[13] : adsy2301_gpio[12];
+  assign BF_PWR_EN_03       = tdd_support ? tdd_channels[14] : adsy2301_gpio[13];
+  assign BF_PA_ON_03        = tdd_support ? tdd_channels[15] : adsy2301_gpio[14];
+  assign TR_04              = tdd_support ? tdd_channels[16] : adsy2301_gpio[15];
+  assign TX_LOAD_04         = tdd_support ? tdd_channels[17] : adsy2301_gpio[16];
+  assign RX_LOAD_04         = tdd_support ? tdd_channels[18] : adsy2301_gpio[17];
+  assign BF_PWR_EN_04       = tdd_support ? tdd_channels[19] : adsy2301_gpio[18];
+  assign BF_PA_ON_04        = tdd_support ? tdd_channels[20] : adsy2301_gpio[19];
+
   assign XUD_RX_GAIN_MODE   = adsy2301_gpio[20];
   assign XUD_PLL_OUTPUT_SEL = adsy2301_gpio[21];
   assign XUD_TXRX0          = adsy2301_gpio[22];
@@ -155,31 +174,38 @@ module system_top (
   assign adsy2301_gpio[28]  = PG_PA_VGG_03;
   assign adsy2301_gpio[29]  = PG_PA_VGG_04;
 
+  assign tdd_sync_in_debug  = tdd_sync;
+  assign tdd_sync_out_debug = tdd_sync_out;
+  assign tdd_enable_debug   = tdd_enabled;
+
   // instantiations
 
   system_wrapper i_system_wrapper (
-    .gpio_out_tri_o(adsy2301_gpio[25:0]),
-    .gpio_in_tri_i(adsy2301_gpio[29:26]),
-    .bf_spi_sclk_01(BF_SPI_SCLK_01),
-    .bf_spi_csb_01(BF_SPI_CSB_01),
-    .bf_spi_mosi_01(BF_SPI_MOSI_01),
-    .bf_spi_miso_01(BF_SPI_MISO_01),
-    .bf_spi_sclk_02(BF_SPI_SCLK_02),
-    .bf_spi_csb_02(BF_SPI_CSB_02),
-    .bf_spi_mosi_02(BF_SPI_MOSI_02),
-    .bf_spi_miso_02(BF_SPI_MISO_02),
-    .bf_spi_sclk_03(BF_SPI_SCLK_03),
-    .bf_spi_csb_03(BF_SPI_CSB_03),
-    .bf_spi_mosi_03(BF_SPI_MOSI_03),
-    .bf_spi_miso_03(BF_SPI_MISO_03),
-    .bf_spi_sclk_04(BF_SPI_SCLK_04),
-    .bf_spi_csb_04(BF_SPI_CSB_04),
-    .bf_spi_mosi_04(BF_SPI_MOSI_04),
-    .bf_spi_miso_04(BF_SPI_MISO_04),
-    .xud_spi_sclk(XUD_SPI_SCLK),
-    .xud_spi_csb(XUD_SPI_CSB),
-    .xud_spi_mosi(XUD_SPI_MOSI),
-    .xud_spi_miso(XUD_SPI_MISO),
+    .gpio_out_tri_o (adsy2301_gpio[25:0]),
+    .gpio_in_tri_i (adsy2301_gpio[29:26]),
+    .bf_spi_sclk_01 (BF_SPI_SCLK_01),
+    .bf_spi_csb_01 (BF_SPI_CSB_01),
+    .bf_spi_mosi_01 (BF_SPI_MOSI_01),
+    .bf_spi_miso_01 (BF_SPI_MISO_01),
+    .bf_spi_sclk_02 (BF_SPI_SCLK_02),
+    .bf_spi_csb_02 (BF_SPI_CSB_02),
+    .bf_spi_mosi_02 (BF_SPI_MOSI_02),
+    .bf_spi_miso_02 (BF_SPI_MISO_02),
+    .bf_spi_sclk_03 (BF_SPI_SCLK_03),
+    .bf_spi_csb_03 (BF_SPI_CSB_03),
+    .bf_spi_mosi_03 (BF_SPI_MOSI_03),
+    .bf_spi_miso_03 (BF_SPI_MISO_03),
+    .bf_spi_sclk_04 (BF_SPI_SCLK_04),
+    .bf_spi_csb_04 (BF_SPI_CSB_04),
+    .bf_spi_mosi_04 (BF_SPI_MOSI_04),
+    .bf_spi_miso_04 (BF_SPI_MISO_04),
+    .xud_spi_sclk (XUD_SPI_SCLK),
+    .xud_spi_csb (XUD_SPI_CSB),
+    .xud_spi_mosi (XUD_SPI_MOSI),
+    .xud_spi_miso (XUD_SPI_MISO),
+    .tdd_sync (tdd_sync),
+    .tdd_sync_out (tdd_sync_out),
+    .tdd_channels (tdd_channels),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t ());
