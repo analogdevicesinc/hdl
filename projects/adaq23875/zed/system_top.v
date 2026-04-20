@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023, 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2023, 2025-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -95,7 +95,10 @@ module system_top (
   input                   db_p,
   output                  cnv_p,
   output                  cnv_n,
-  output                  cnv_en
+  output                  cnv_en,
+  output                  pd_cntrl,
+  output                  testpat_cntrl,
+  output                  twolanes_cntrl
 );
 
   // internal signals
@@ -119,6 +122,11 @@ module system_top (
   wire          ltc_clk;
 
   assign gpio_i[63:32] = gpio_o[63:32];
+
+  assign twolanes_cntrl = gpio_o[34];
+  assign pd_cntrl = gpio_o[33];
+  assign testpat_cntrl = gpio_o[32];
+
   assign cnv_en = cnv;
 
   // instantiations
