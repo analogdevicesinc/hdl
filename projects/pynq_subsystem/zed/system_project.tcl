@@ -30,7 +30,7 @@ set_property used_in_synthesis false [get_files  $ad_hdl_dir/projects/common/zed
 set_property used_in_synthesis false [get_files $ad_hdl_dir/projects/pynq_subsystem/zed/system_constr.xdc]
 
 
-adi_project_run pynq_subsystem_zed
+#adi_project_run pynq_subsystem_zed
 
 
 

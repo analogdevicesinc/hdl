@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -60,30 +60,11 @@ module system_top (
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
 
-  
-  inout   [31:0]  gpio_bd,
+  inout   [ 1:0]  btn,
+  inout   [ 5:0]  led,
 
-  output          hdmi_out_clk,
-  output          hdmi_vsync,
-  output          hdmi_hsync,
-  output          hdmi_data_e,
-  output  [15:0]  hdmi_data,
-
-  output          spdif,
-
-  output          i2s_mclk,
-  output          i2s_bclk,
-  output          i2s_lrclk,
-  output          i2s_sdata_out,
-  input           i2s_sdata_in,
-
-  inout           iic_scl,
-  inout           iic_sda,
-  inout   [ 1:0]  iic_mux_scl,
-  inout   [ 1:0]  iic_mux_sda,
-
-  input           otg_vbusoc,
-
+  inout           iic_ard_scl,
+  inout           iic_ard_sda,
 
   inout iic_scl_io,
   inout iic_sda_io,
@@ -95,71 +76,57 @@ module system_top (
   output i3c_scl,
 
   inout  SPI_0_io0_o_mosi,
-  inout   SPI_0_io1_i_miso,
+  inout  SPI_0_io1_i_miso,
   inout  SPI_0_sck_o,
   inout  [0:0]SPI_0_ss_o_cs_n
 
 );
 
- wire    [63:0]  gpio_i;
- wire    [63:0]  gpio_o;
- wire    [63:0]  gpio_t;
+  // internal signals
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
 
  wire  data_o;
  wire  reset_IOP;
  wire  intrack_IOP;
-
 
 wire   i3c_sdi;
 wire  i3c_sdo;
 wire  i3c_t;
 
 
- wire    [ 1:0]  iic_mux_scl_i_s;
- wire    [ 1:0]  iic_mux_scl_o_s;
- wire            iic_mux_scl_t_s;
- wire    [ 1:0]  iic_mux_sda_i_s;
- wire    [ 1:0]  iic_mux_sda_o_s;
- wire            iic_mux_sda_t_s;
 
-
+ // assignments
  assign reset_IOP = gpio_o[32];
  assign intrack_IOP = gpio_o[33];
  assign gpio_i[63:34] = gpio_o[63:34];
+ assign gpio_i[31:8] = gpio_o[31:8];
 
- ad_iobuf #(
-    .DATA_WIDTH (32)
-  ) i_iobuf (
-    .dio_t ({gpio_t[31:21],1'b0,gpio_t[19:0]}),
-    .dio_i ({gpio_o[31:21],data_o,gpio_o[19:0]}),
-    .dio_o (gpio_i[31:0]),
-    .dio_p (gpio_bd));
-
-ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_iobuf_sda (
-    .dio_t(i3c_t),
-    .dio_i(i3c_sdo),
-    .dio_o(i3c_sdi),
-    .dio_p(i3c_sda));
-
-
- ad_iobuf #(
-    .DATA_WIDTH (2)
-  ) i_iic_mux_scl (
-    .dio_t ({iic_mux_scl_t_s, iic_mux_scl_t_s}),
-    .dio_i (iic_mux_scl_o_s),
-    .dio_o (iic_mux_scl_i_s),
-    .dio_p (iic_mux_scl));
-
+  // instantiations
   ad_iobuf #(
     .DATA_WIDTH (2)
-  ) i_iic_mux_sda (
-    .dio_t ({iic_mux_sda_t_s, iic_mux_sda_t_s}),
-    .dio_i (iic_mux_sda_o_s),
-    .dio_o (iic_mux_sda_i_s),
-    .dio_p (iic_mux_sda));
+  ) i_iobuf_buttons (
+    .dio_t (gpio_t[1:0]),
+    .dio_i (gpio_o[1:0]),
+    .dio_o (gpio_i[1:0]),
+    .dio_p (btn));
 
+  ad_iobuf #(
+    .DATA_WIDTH (6)
+  ) i_iobuf_leds (
+    .dio_t ({gpio_t[7:5],1'b0,gpio_t[3:2]}),
+    .dio_i ({gpio_o[7:5],data_o,gpio_o[3:2]}),
+    .dio_o (gpio_i[7:2]),
+    .dio_p (led));
+
+  ad_iobuf #(
+    .DATA_WIDTH (1)
+  ) i_iobuf_i3c_sda (
+    .dio_t (i3c_t),
+    .dio_i (i3c_sdo),
+    .dio_o (i3c_sdi),
+    .dio_p (i3c_sda));
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -189,30 +156,6 @@ ad_iobuf #(
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
 
-    .hdmi_data (hdmi_data),
-    .hdmi_data_e (hdmi_data_e),
-    .hdmi_hsync (hdmi_hsync),
-    .hdmi_out_clk (hdmi_out_clk),
-    .hdmi_vsync (hdmi_vsync),
-
-    .spdif (spdif),
-
-    .i2s_bclk (i2s_bclk),
-    .i2s_lrclk (i2s_lrclk),
-    .i2s_mclk (i2s_mclk),
-    .i2s_sdata_in (i2s_sdata_in),
-    .i2s_sdata_out (i2s_sdata_out),
-    .iic_fmc_scl_io (iic_scl),
-    .iic_fmc_sda_io (iic_sda),
-    .iic_mux_scl_i (iic_mux_scl_i_s),
-    .iic_mux_scl_o (iic_mux_scl_o_s),
-    .iic_mux_scl_t (iic_mux_scl_t_s),
-    .iic_mux_sda_i (iic_mux_sda_i_s),
-    .iic_mux_sda_o (iic_mux_sda_o_s),
-    .iic_mux_sda_t (iic_mux_sda_t_s),
-
-    .otg_vbusoc (otg_vbusoc),
-
     .spi0_clk_i (1'b0),
     .spi0_clk_o (),
     .spi0_csn_0_o (),
@@ -232,15 +175,13 @@ ad_iobuf #(
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
 
+    .iic_ard_scl_io (iic_ard_scl),
+    .iic_ard_sda_io (iic_ard_sda),
 
-  
-    
     .SPI_0_io0_io(SPI_0_io0_o_mosi),
     .SPI_0_io1_io(SPI_0_io1_i_miso),
     .SPI_0_sck_io(SPI_0_sck_o),
     .SPI_0_ss_io(SPI_0_ss_o_cs_n),
-
-  
 
     .IIC_sda_io(iic_sda_io),
     .IIC_scl_io(iic_scl_io),
@@ -257,8 +198,8 @@ ad_iobuf #(
     .i3c_t (i3c_t),
 
     .data_o(data_o)
-);
 
-     
-   
+
+    );
+
 endmodule

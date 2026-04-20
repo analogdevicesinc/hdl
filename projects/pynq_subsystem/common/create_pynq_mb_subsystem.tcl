@@ -131,7 +131,7 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   ad_ip_instance blk_mem_gen ${iop_name}_lmb_bram [list \
     Memory_Type True_Dual_Port_RAM  \
     use_bram_block BRAM_Controller \
-    Write_Depth_A [expr 1024 *16] \
+    Write_Depth_A [expr 1024 * 32] \
     Write_Width_A 32 \
     Read_Width_A 32 \
     Write_Width_B 32 \
@@ -368,11 +368,7 @@ ad_ip_instance util_reg  ${iop_name}_util_reg [list \
 
   
 
-  # -----------------------
-  # CPU Interconnect for PS access to BRAM
-  # -----------------------
- ad_cpu_interconnect 0x79020000  ${iop_name}/mb_bram_ctrl
- set_property range 64K [get_bd_addr_segs {sys_ps7/Data/mb_bram_ctrl}]
+ 
   # CPU Interconnect for reset GPIO
 
   # CPU Interconnect for interrupt ACK GPIO
@@ -383,13 +379,13 @@ ad_ip_instance util_reg  ${iop_name}_util_reg [list \
   # -----------------------
   # Assign LMB BRAM at address 0x0 for MicroBlaze Data bus
 
-  assign_bd_address -offset 0x00000000 -range 0x00010000 \
+  assign_bd_address -offset 0x00000000 -range 0x00020000 \
     -target_address_space [get_bd_addr_spaces ${iop_name}/${iop_name}_mb/Data] \
     [get_bd_addr_segs ${iop_name}/${iop_name}_lmb_bram_cntlr/SLMB1/Mem] -force
 
-  # Assign LMB BRAM at address 0x0 for MicroBlaze Instruction bus 
-  
-  assign_bd_address -offset 0x00000000 -range 0x00010000 \
+  # Assign LMB BRAM at address 0x0 for MicroBlaze Instruction bus
+
+  assign_bd_address -offset 0x00000000 -range 0x00020000 \
     -target_address_space [get_bd_addr_spaces ${iop_name}/${iop_name}_mb/Instruction] \
     [get_bd_addr_segs ${iop_name}/${iop_name}_lmb_bram_cntlr/SLMB/Mem] -force
 

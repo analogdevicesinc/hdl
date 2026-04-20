@@ -100,7 +100,7 @@ adi_set_ports_dependency "offload_trigger" \
 set cc [ipx::current_core]
 
 
-ipx::associate_bus_interfaces -clock s_axi_aclk -reset reset_n $cc
+
 
 ## ID
 set_property -dict [list \

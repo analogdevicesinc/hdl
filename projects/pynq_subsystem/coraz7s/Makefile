@@ -4,12 +4,12 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := pynq_subsystem_zed
+PROJECT_NAME := pynq_subsystem_cora7s
 
 M_DEPS += ../common/create_pynq_mb_subsystem.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
-M_DEPS += ../../common/zed/zed_system_constr.xdc
-M_DEPS += ../../common/zed/zed_system_bd.tcl
+M_DEPS += ../../common/coraz7s/coraz7s_system_constr.xdc
+M_DEPS += ../../common/coraz7s/coraz7s_system_bd.tcl
 M_DEPS += ../common/pynq_subsystem_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/i3c_controller/scripts/i3c_controller_bd.tcl
