@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023, 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2023, 2025-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -7,7 +7,6 @@
 
 set TWOLANES $ad_project_params(TWOLANES);  # two-lane mode (1) or one-lane mode (0); default two-lane
 set ADC_RES $ad_project_params(ADC_RES);    # ADC resolution: (18) or (16); default 18 bits
-set USE_MMCM $ad_project_params(USE_MMCM);  # ref_clk frequency: 120MHz (1) or 100MHz (0); default 0
 set OUT_RES [expr {$ADC_RES == 16 ? 16 : 32}]
 set CLK_GATE_WIDTH [expr {($TWOLANES == 0 && $ADC_RES == 18) ? 9 : \
                           ($TWOLANES == 0 && $ADC_RES == 16) ? 8 : \
@@ -60,28 +59,10 @@ ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_DATA_WIDTH_SRC $OUT_RES
 ad_ip_parameter axi_ltc2387_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
-# clk wizard
-
-if {$USE_MMCM == "1"} {
-  create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0
-
-  set_property -dict [list \
-    CONFIG.PRIM_IN_FREQ {100.000} \
-    CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {120.000} \
-  ] [get_bd_cells clk_wiz_0]
-
-  ad_connect ref_clk                      clk_wiz_0/clk_in1
-  ad_connect sys_rstgen/peripheral_reset  clk_wiz_0/reset
-  ad_connect clk_wiz_0/clk_out1           sampling_clk
-  ad_connect clk_wiz_0/clk_out1           axi_ltc2387/ref_clk
-  ad_connect clk_wiz_0/clk_out1           axi_ltc2387_dma/fifo_wr_clk
-  ad_connect clk_wiz_0/clk_out1           axi_pwm_gen/ext_clk
-} else {
-  ad_connect ref_clk  sampling_clk
-  ad_connect ref_clk  axi_ltc2387/ref_clk
-  ad_connect ref_clk  axi_ltc2387_dma/fifo_wr_clk
-  ad_connect ref_clk  axi_pwm_gen/ext_clk
-}
+ad_connect ref_clk  sampling_clk
+ad_connect ref_clk  axi_ltc2387/ref_clk
+ad_connect ref_clk  axi_ltc2387_dma/fifo_wr_clk
+ad_connect ref_clk  axi_pwm_gen/ext_clk
 
 # connections
 
