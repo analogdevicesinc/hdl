@@ -322,6 +322,9 @@
 # Code owners for axi_dmac IP
 /library/axi_dmac/          ionut.podgoreanu@analog.com
 
+# Code owners for axi_hmcad15xx IP
+/library/axi_hmcad15xx/     paul.pop@analog.com  cristianmihai.popa@analog.com
+
 # Code owners for axi_ltc235x IP
 /library/axi_ltc235x/       sergiu.arpadi@analog.com
 
