@@ -9,7 +9,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 adi_project adsy2301_zcu102 0 [list \
   TDD_SUPPORT      [get_env_param TDD_SUPPORT       1 ] \
-  TDD_CHANNEL_CNT  [get_env_param TDD_CHANNEL_CNT  17 ] \
+  TDD_CHANNEL_CNT  [get_env_param TDD_CHANNEL_CNT  21 ] \
   TDD_DEFAULT_POL  [get_env_param TDD_DEFAULT_POL   0 ] \
   TDD_REG_WIDTH    [get_env_param TDD_REG_WIDTH    32 ] \
   TDD_BURST_WIDTH  [get_env_param TDD_BURST_WIDTH  32 ] \
