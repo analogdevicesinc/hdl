@@ -260,6 +260,9 @@
 # Code owners for pulsar_adc_pmdz folder
 /projects/pulsar_adc_pmdz/  sergiu.arpadi@analog.com  pop.ioan-daniel@analog.com
 
+# Code owners for sharkbyte folder
+/projects/sharkbyte/        paul.pop@analog.com  cristianmihai.popa@analog.com
+
 # Code owners for ltc2378_fmc folder
 /projects/ltc2378_fmc/      pop.ioan-daniel@analog.com sergiu.arpadi@analog.com
 
