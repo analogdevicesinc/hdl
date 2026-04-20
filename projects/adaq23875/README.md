@@ -4,8 +4,8 @@
   - [EVAL-ADAQ23878](https://analog.com/eval-adaq23878)
   - [EVAL-ADAQ23876](https://analog.com/eval-adaq23876)
   - [EVAL-ADAQ23875](https://analog.com/eval-adaq23875)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0577 
-- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/cn0577/index.html
+- System documentation: TO BE ADDED 
+- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adaq23875/index.html
 - Evaluation board VADJ: 2.5V
 
 ## Supported parts
