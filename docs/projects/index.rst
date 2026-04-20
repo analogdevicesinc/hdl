@@ -106,6 +106,7 @@ Contents
    PLUTO <pluto/index>
    PULSAR-ADC <pulsar_adc/index>
    PULSAR-LVDS-ADC <pulsar_lvds_adc/index>
+   SHARKBYTE <sharkbyte/index>
    
 Obsolete projects
 -------------------------------------------------------------------------------
