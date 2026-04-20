@@ -239,6 +239,9 @@
 # Code owners for fmcomms8 folder
 /projects/fmcomms8/         andrei.dragomir@analog.com  iulia.moldovan@analog.com
 
+# Code owners for hmcad1520_ebz folder
+/projects/hmcad1520_ebz/    paul.pop@analog.com  cristianmihai.popa@analog.com
+
 # Code owners for jupiter_sdr folder
 /projects/jupiter_sdr/      andrei.grozav@analog.com  stanca.pop@analog.com
 
