@@ -60,11 +60,11 @@ clean-all:
 		$(CLEAN_TARGETS), \
 		interfaces definitions)
 
-interfaces_ltt.log: $(L_DEPS)
+ltt: $(L_DEPS)
 	-rm -fr $(CLEAN_TARGETS)
 	$(call build, \
 		$(LATTICE_IP_TOOL) interfaces_ltt.tcl, \
 		interfaces_ltt.log, \
 		interfaces definitions)
 
-$(LTT_INTERFACES): interfaces_ltt.log
+$(LTT_INTERFACES): ltt
