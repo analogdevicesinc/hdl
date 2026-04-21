@@ -121,7 +121,12 @@ module system_top (
   wire          sampling_clk_s;
   wire          ltc_clk;
 
-  assign gpio_i[63:35] = gpio_o[63:35];
+  assign gpio_i[63:32] = gpio_o[63:32];
+
+  assign twolanes_cntrl = gpio_o[34];
+  assign pd_cntrl = gpio_o[33];
+  assign testpat_cntrl = gpio_o[32];
+
   assign cnv_en = cnv;
 
   // instantiations
@@ -166,16 +171,6 @@ module system_top (
     .O (cnv_p),
     .OB (cnv_n),
     .I (cnv_s));
-
-  ad_iobuf #(
-    .DATA_WIDTH (2)
-  ) iobuf_gpio_adaq2387x (
-    .dio_i (gpio_o[34:32]),
-    .dio_o (gpio_i[34:32]),
-    .dio_t (gpio_t[34:32]),
-    .dio_p ({twolanes_cntrl, pd_cntrl, testpat_cntrl}));
-
-  ad_iobuf #(
     .DATA_WIDTH (32)
   ) iobuf_gpio_bd (
     .dio_i (gpio_o[31:0]),
