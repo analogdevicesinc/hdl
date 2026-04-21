@@ -57,3 +57,25 @@ set_property -dict {PACKAGE_PIN C20 IOSTANDARD LVCMOS25} [get_ports adf435x_lock
 create_clock -period 2.500 -name dco_clk  [get_ports dco_p]
 create_clock -period 2.500 -name ref_clk  [get_ports clk_p]
 create_clock -period 10.00 -name fpga_clk [get_ports fpgaclk_p]
+
+# PMOD JB interface for SPI slave and data ready
+set_property -dict {PACKAGE_PIN W12  IOSTANDARD LVCMOS33} [get_ports pmod_spi_cs];     ## JB1 - SPI Chip Select (input)
+set_property -dict {PACKAGE_PIN W11  IOSTANDARD LVCMOS33} [get_ports pmod_spi_sclk];   ## JB2 - SPI Clock (input)
+set_property -dict {PACKAGE_PIN V10  IOSTANDARD LVCMOS33} [get_ports pmod_spi_mosi];   ## JB3 - SPI Master Out Slave In (input)
+set_property -dict {PACKAGE_PIN W8   IOSTANDARD LVCMOS33} [get_ports pmod_spi_miso];   ## JB4 - SPI Master In Slave Out (output)
+set_property -dict {PACKAGE_PIN V8   IOSTANDARD LVCMOS33} [get_ports pmod_data_ready]; ## JB7 - Data Ready (output, active low when FIFO not empty)
+
+# SPI slave timing constraints
+# Create a virtual clock for external SPI master (assuming up to 10 MHz)
+create_clock -period 100.0 -name spi_ext_clk [get_ports pmod_spi_sclk]
+
+# Set input delay constraints for SPI slave inputs relative to SPI clock
+set_input_delay -clock [get_clocks spi_ext_clk] -max 10.0 [get_ports {pmod_spi_mosi pmod_spi_cs}]
+set_input_delay -clock [get_clocks spi_ext_clk] -min 2.0  [get_ports {pmod_spi_mosi pmod_spi_cs}]
+
+# Set output delay constraints for SPI slave outputs relative to SPI clock
+set_output_delay -clock [get_clocks spi_ext_clk] -max 15.0 [get_ports pmod_spi_miso]
+set_output_delay -clock [get_clocks spi_ext_clk] -min 5.0  [get_ports pmod_spi_miso]
+
+# Set false path for data ready signal (asynchronous)
+set_false_path -from [get_clocks clk_fpga_0] -to [get_ports pmod_data_ready]

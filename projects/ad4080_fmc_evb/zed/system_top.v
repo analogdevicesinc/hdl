@@ -136,7 +136,15 @@ module system_top (
   output          ad9508_adf4350_sclk,
   output          ad9508_adf4350_mosi,
   output          ad9508_csn,
-  output          adf4350_csn
+  output          adf4350_csn,
+
+  // PMOD JB interface for AD4080 helper
+
+  input           pmod_spi_cs,
+  input           pmod_spi_sclk,
+  input           pmod_spi_mosi,
+  output          pmod_spi_miso,
+  output          pmod_data_ready
 );
 
   // internal signals
@@ -281,6 +289,11 @@ module system_top (
     .filter_data_ready_n(filter_data_ready_n),
     .sync_n (ad9508_sync),
     .fpga_ref_clk(fpga_ref_clk),
-    .fpga_100_clk(fpga_100_clk));
+    .fpga_100_clk(fpga_100_clk),
+    .pmod_spi_cs (pmod_spi_cs),
+    .pmod_spi_sclk (pmod_spi_sclk),
+    .pmod_spi_mosi (pmod_spi_mosi),
+    .pmod_spi_miso (pmod_spi_miso),
+    .pmod_data_ready (pmod_data_ready));
 
 endmodule
