@@ -54,27 +54,10 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagrams:
 
-Default timing configuration (USE_MMCM=0)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The following block diagram shows the default case, where the **reference
-clock** has the same frequency as the **sampling clock**, meaning 100MHz.
-
-.. image:: adaq2387x_zed_block_diagram_default.svg
+.. image:: adaq2387x_zed_block_diagram.svg
    :width: 800
    :align: center
-   :alt: ADAQ2387X/ZedBoard block diagram for ref_clk = sampling_clk = 100MHz
-
-Enhanced timing configuration (USE_MMCM=1)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The following block diagram shows the case where a Clocking Wizard is added to
-generate the 120MHz **sampling clock** from the 100MHz **reference clock**.
-
-.. image:: adaq2387x_zed_block_diagram_mmcm.svg
-   :width: 800
-   :align: center
-   :alt: ADAQ2387X/ZedBoard block diagram for ref_clk = 100MHz & sampling_clk = 120Mhz
+   :alt: ADAQ2387X/ZedBoard block diagram
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,38 +73,34 @@ Configuration modes
   - 18 - 18 bits ADC resolution, :adi:`EVAL-ADAQ23878` (default)
   - 16 - 16 bits ADC resoluton, :adi:`EVAL-ADAQ23875`/:adi:`EVAL-ADAQ23876`
 
-- USE_MMCM: specifies if a Clocking Wizard is used to generate the sampling
-  clock of 120MHz, or use the default 100MHz clock directly from the on-board
-  VCXO.
-
-  - 1 - MMCM is used; When operating with a 120MHz sampling clock, the system
-    achieves the maximum supported sampling rate of 15MSPS.
-  - 0 - MMCM is not used (default); When operating with a 100MHz sampling
-    clock, the system achieves half of the maximum supported sampling rate,
-    which is 7.5MSPS.
-
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Depending on what configuration of pins is chosen on the jumpers P1, P2 and P3,
+Depending on what configuration of pins is chosen on the jumpers J6, J8 and J9,
 the device can act in different modes, as described below. Of course, the PD
 jumper overrides the PD signal from the FPGA. It is controlled by a
 one-bit-adc-dac, in software.
 
-- P1 - configures PD_N
+- J6 - configures PD_N
 
   - Shorting pins 1 and 2 → PD_N = 1, device is not powered down
   - Shorting pins 2 and 3 → PD_N = 0, device is powered down
 
-- P2 - configures TESTPAT
+- J8 - configures TESTPAT
 
   - Shorting pins 1 and 2 → TESTPAT = 1, pattern testing is active
   - Shorting pins 2 and 3 → TESTPAT = 0, pattern testing is inactive
 
-- P3 - configures TWOLANES parameter
+- J9 - configures TWOLANES parameter
 
   - Shorting pins 1 and 2 → TWOLANES = 1 (TWO LANES mode)
   - Shorting pins 2 and 3 → TWOLANES = 0 (ONE LANE mode)
+
+.. warning::
+
+   TWOLANES is fixed at HDL build time and cannot be changed at runtime. Do not
+   change the hardware switch unless the HDL was built with the corresponding
+   TWOLANES setting.
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -208,24 +187,24 @@ two-lane mode):
    $make
 
 Example configuration for :adi:`EVAL-ADAQ23878` in one-lane mode (TWOLANES=0,
-ADC_RES=18, USE_MMCM=0):
+ADC_RES=18):
 
 .. shell:: bash
 
    ~/hdl/projects/adaq23875/zed
-   $make TWOLANES=0 ADC_RES=18 USE_MMCM=0
+   $make TWOLANES=0 ADC_RES=18
 
-The built project will be found in a folder called TWOS0_ADCRES18_USEMMCM0.
+The built project will be found in a folder called TWOS0_ADCRES18.
 
 Example configuration for :adi:`EVAL-ADAQ23875`/:adi:`EVAL-ADQ23876` in
-two-lane mode (TWOLANES=1, ADC_RES=16, USE_MMCM=1):
+two-lane mode (TWOLANES=1, ADC_RES=16):
 
 .. shell:: bash
 
    ~/hdl/projects/adaq23875/zed
-   $make TWOLANES=1 ADC_RES=16 USE_MMCM=1
+   $make TWOLANES=1 ADC_RES=16
 
-The built project will be found in a folder called TWOS1_ADCRES16_USEMMCM1.
+The built project will be found in a folder called TWOS1_ADCRES16.
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user
 guide.
