@@ -83,6 +83,12 @@ one-bit-adc-dac, in software.
   - Shorting pins 1 and 2 → TWOLANES = 1 (TWO LANES mode)
   - Shorting pins 2 and 3 → TWOLANES = 0 (ONE LANE mode)
 
+.. warning::
+
+   TWOLANES is fixed at HDL build time and cannot be changed at runtime. Do not
+   change the hardware switch unless the HDL was built with the corresponding
+   TWOLANES setting.
+
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
