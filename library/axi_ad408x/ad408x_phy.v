@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL(Verilog or VHDL) components. The individual modules are
@@ -237,8 +237,15 @@ module ad408x_phy #(
   end
   endgenerate
 
-  assign serdes_in_p = {data_b_in_p, data_a_in_p};
-  assign serdes_in_n = {data_b_in_n, data_a_in_n};
+  generate
+  if (NUM_LANES == 2) begin
+    assign serdes_in_p = {data_b_in_p, data_a_in_p};
+    assign serdes_in_n = {data_b_in_n, data_a_in_n};
+  end else begin
+    assign serdes_in_p = data_a_in_p;
+    assign serdes_in_n = data_a_in_n;
+  end
+  endgenerate
 
   // Min 2 div_clk cycles once div_clk is running after deassertion of sync
   // Control externally the reset of serdes for precise timing
@@ -285,10 +292,20 @@ module ad408x_phy #(
     .delay_rst(delay_rst),
     .delay_locked(delay_locked));
 
-  assign {serdes_data_1[0],serdes_data_0[0]} = data_s0;  // f-e latest bit received
-  assign {serdes_data_1[1],serdes_data_0[1]} = data_s1;  // r-e
-  assign {serdes_data_1[2],serdes_data_0[2]} = data_s2;  // f-e
-  assign {serdes_data_1[3],serdes_data_0[3]} = data_s3;  // r-e oldest bit received
+  generate
+  if (NUM_LANES == 2) begin
+    assign {serdes_data_1[0],serdes_data_0[0]} = data_s0;  // f-e latest bit received
+    assign {serdes_data_1[1],serdes_data_0[1]} = data_s1;  // r-e
+    assign {serdes_data_1[2],serdes_data_0[2]} = data_s2;  // f-e
+    assign {serdes_data_1[3],serdes_data_0[3]} = data_s3;  // r-e oldest bit received
+  end else begin
+    assign serdes_data_0[0] = data_s0;
+    assign serdes_data_0[1] = data_s1;
+    assign serdes_data_0[2] = data_s2;
+    assign serdes_data_0[3] = data_s3;
+    assign serdes_data_1 = 4'b0;
+  end
+  endgenerate
 
   // Assert serdes valid after 2 clock cycles is pulled out of reset
 
