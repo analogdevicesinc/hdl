@@ -46,7 +46,7 @@ global xcvr_config_paths
 #   REF_CLK: Value of the reference clock [MHz] (usually LANE_RATE/20 or LANE_RATE/40)
 #   PLL_TYPE: The PLL used for driving the link [CPLL/QPLL]
 
-set xcvr_config_paths [adi_xcvr_projec [list \
+set xcvr_config_paths [adi_xcvr_project [list \
   LANE_RATE [get_env_param LANE_RATE   10] \
   REF_CLK   [get_env_param REF_CLK    500] \
   PLL_TYPE  [get_env_param PLL_TYPE  QPLL] \
