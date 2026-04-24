@@ -32,6 +32,7 @@ The overwritable parameters from the environment:
 - [RX/TX/RX_OS]_JESD_L - [RX/TX/RX_OS] number of lanes per link
 - [RX/TX/RX_OS]_JESD_S - [RX/TX/RX_OS] number of samples per converter per frame
 - [RX/TX/RX_OS]_JESD_NP - [RX/TX/RX_OS] number of bits per sample, only 16 is supported
+- [RX/TX/RX_OS]_TPL_WIDTH - [RX/TX/RX_OS] TPL data path width in bits
 - [RX/TX/RX_OS]_NUM_LINKS - [RX/TX/RX_OS] number of links
 
 ### Example configurations
@@ -52,14 +53,17 @@ RX_JESD_M=16 \
 RX_JESD_L=8 \
 RX_JESD_S=1 \
 RX_JESD_NP=16 \
+RX_TPL_WIDTH={} \
 TX_JESD_M=16 \
 TX_JESD_L=8 \
 TX_JESD_S=1 \
 TX_JESD_NP=16 \
+TX_TPL_WIDTH={} \
 RX_OS_JESD_M=0 \
 RX_OS_JESD_L=0 \
 RX_OS_JESD_S=0 \
-RX_OS_JESD_NP=0
+RX_OS_JESD_NP=0 \
+RX_OS_TPL_WIDTH={}
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv904x.dts)
@@ -74,18 +78,21 @@ TX_LANE_RATE=16.22 \
 RX_NUM_LINKS=1 \
 TX_NUM_LINK=1 \
 RX_OS_NUM_LINKS=1 \
-RX_JESD_M=8 \
+RX_JESD_M=16 \
 RX_JESD_L=4 \
 RX_JESD_S=1 \
 RX_JESD_NP=16 \
+RX_TPL_WIDTH={} \
 TX_JESD_M=16 \
 TX_JESD_L=8 \
 TX_JESD_S=1 \
 TX_JESD_NP=16 \
+TX_TPL_WIDTH={} \
 RX_OS_JESD_M=8 \
 RX_OS_JESD_L=4 \
 RX_OS_JESD_S=1 \
-RX_OS_JESD_NP=16
+RX_OS_JESD_NP=16 \
+RX_OS_TPL_WIDTH={}
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x-nls.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv904x-nls.dts)
