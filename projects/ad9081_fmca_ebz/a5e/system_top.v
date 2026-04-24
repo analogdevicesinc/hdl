@@ -207,6 +207,7 @@ module system_top #(
   wire          syspll_clk;
   wire          syspll_lock;
   wire          dacfifo_bypass;
+  wire          refclk_ready;
   wire [ 3:0]   phy_tx_pll_locked_o_tx_pll_locked;
   wire [RX_JESD_L+RX_OS_JESD_L-1:0] gts_reset_o_src_rs_grant_src_rs_grant;
   wire [RX_JESD_L+RX_OS_JESD_L-1:0] gts_reset_i_src_rs_req_src_rs_req;
@@ -246,6 +247,7 @@ module system_top #(
   assign txen[1]    = gpio_o[59];
 
   assign dacfifo_bypass = gpio_o[60];
+  assign refclk_ready   = gpio_o[61];
 
   // Unused GPIOs
   assign gpio_i[63:54] = gpio_o[63:54];
@@ -409,7 +411,7 @@ module system_top #(
     .system_pll_lock_os_system_pll_lock                      (syspll_lock),
     .system_pll_clk_os_clk                                   (syspll_clk),
     .refclk_xcvr_clk                                         (fpga_refclk_in),
-    .i_refclk_rdy_data                                       (1'b1),
+    .i_refclk_rdy_data                                       (refclk_ready),
     .dacfifo_bypass_bypass                                   (dacfifo_bypass),
     .phy_tx_pll_locked_o_tx_pll_locked                       (phy_tx_pll_locked_o_tx_pll_locked),
     .tx_pll_locked_o_tx_pll_locked                           (phy_tx_pll_locked_o_tx_pll_locked[TX_JESD_L-1:0]),
