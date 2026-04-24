@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -295,7 +295,7 @@ set_instance_parameter_value sys_hps NOC_clk_cs_div {1}
 set_instance_parameter_value sys_hps NOC_clk_cs_trace_div {4}
 set_instance_parameter_value sys_hps NOC_clk_free_l4_div {4}
 set_instance_parameter_value sys_hps NOC_clk_periph_l4_div {2}
-set_instance_parameter_value sys_hps NOC_clk_phy_div {4}
+set_instance_parameter_value sys_hps NOC_clk_phy_div {1}
 set_instance_parameter_value sys_hps NOC_clk_slow_l4_div {4}
 set_instance_parameter_value sys_hps NOC_clk_src_select {3}
 set_instance_parameter_value sys_hps PLL_CLK0 {Unused}
@@ -310,9 +310,9 @@ set_instance_parameter_value sys_hps PPLL_C3_Override_mhz {500.0}
 set_instance_parameter_value sys_hps PPLL_Clock_Source {0}
 set_instance_parameter_value sys_hps PPLL_Override {1}
 set_instance_parameter_value sys_hps PPLL_VCO_Override_mhz {3000.0}
-set_instance_parameter_value sys_hps Periph_clk_emac0_sel {50}
-set_instance_parameter_value sys_hps Periph_clk_emac1_sel {50}
-set_instance_parameter_value sys_hps Periph_clk_emac2_sel {50}
+set_instance_parameter_value sys_hps Periph_clk_emac0_sel {250}
+set_instance_parameter_value sys_hps Periph_clk_emac1_sel {250}
+set_instance_parameter_value sys_hps Periph_clk_emac2_sel {250}
 set_instance_parameter_value sys_hps Periph_clk_override {0}
 set_instance_parameter_value sys_hps Periph_emac_ptp_freq_override {400.0}
 set_instance_parameter_value sys_hps Periph_emac_ptp_src_override {7}
@@ -334,8 +334,8 @@ set_instance_parameter_value sys_hps Rst_h2f_cold_en {0}
 set_instance_parameter_value sys_hps Rst_hps_warm_en {0}
 set_instance_parameter_value sys_hps Rst_sdm_wd_config {0}
 set_instance_parameter_value sys_hps Rst_watchdog_en {0}
-set_instance_parameter_value sys_hps SDMMC_Mode {N/A}
-set_instance_parameter_value sys_hps SDMMC_PinMuxing {Unused}
+set_instance_parameter_value sys_hps SDMMC_Mode {4-bit}
+set_instance_parameter_value sys_hps SDMMC_PinMuxing {IO}
 set_instance_parameter_value sys_hps SPIM0_Mode {N/A}
 set_instance_parameter_value sys_hps SPIM0_PinMuxing {Unused}
 set_instance_parameter_value sys_hps SPIM1_Mode {N/A}
@@ -485,7 +485,7 @@ set_component_sub_module_parameter_value emif_0_ddr4comp MEM_BANK_GROUP_ADDR_WID
 set_component_sub_module_parameter_value emif_0_ddr4comp MEM_CHANNEL_ADDR_NUM_BITS {36}
 set_component_sub_module_parameter_value emif_0_ddr4comp MEM_CHANNEL_CAPACITY_GBITS {64}
 set_component_sub_module_parameter_value emif_0_ddr4comp MEM_CHANNEL_CS_WIDTH {1}
-set_component_sub_module_parameter_value emif_0_ddr4comp MEM_CHANNEL_ECC_DQ_WIDTH {0}
+set_component_sub_module_parameter_value emif_0_ddr4comp MEM_CHANNEL_ECC_DQ_WIDTH {8}
 set_component_sub_module_parameter_value emif_0_ddr4comp MEM_CKE_WIDTH {1}
 set_component_sub_module_parameter_value emif_0_ddr4comp MEM_CK_WIDTH {1}
 set_component_sub_module_parameter_value emif_0_ddr4comp MEM_CLAMSHELL_EN {0}
@@ -579,7 +579,7 @@ set_component_sub_module_parameter_value emif_0_ddr4comp PHY_FORCE_MIN_4_AC_LANE
 set_component_sub_module_parameter_value emif_0_ddr4comp PHY_REFCLK_ADVANCED_SELECT_EN {0}
 set_component_sub_module_parameter_value emif_0_ddr4comp PHY_REFCLK_FREQ_MHZ {100.0}
 set_component_sub_module_parameter_value emif_0_ddr4comp PHY_REFCLK_FREQ_MHZ_AUTOSET_EN {0}
-set_component_sub_module_parameter_value emif_0_ddr4comp PHY_SWIZZLE_MAP {BYTE_SWIZZLE_CH0=3 X X X 0 2 1 X;PIN_SWIZZLE_CH0_DQS0=7 1 2 3 4 5 6 0;PIN_SWIZZLE_CH0_DQS1=15 14 13 12 11 10 9 8;PIN_SWIZZLE_CH0_DQS2=20 21 22 23 16 17 18 19;PIN_SWIZZLE_CH0_DQS3=31 24 25 26 27 28 29 30;}
+set_component_sub_module_parameter_value emif_0_ddr4comp PHY_SWIZZLE_MAP {BYTE_SWIZZLE_CH0=0 X X X 1 2 3 ECC;PIN_SWIZZLE_CH0_DQS0=0 2 6 4 1 3 5 7;PIN_SWIZZLE_CH0_DQS1=12 15 8 11 14 10 13 9;PIN_SWIZZLE_CH0_DQS2=20 16 18 22 23 17 19 21;PIN_SWIZZLE_CH0_DQS3=26 30 28 24 25 27 31 29;PIN_SWIZZLE_CH0_ECC=2 6 0 4 5 3 7 1;}
 set_component_sub_module_parameter_value emif_0_ddr4comp PHY_TERM_X_AC_OUTPUT_IO_STD_TYPE {SSTL}
 set_component_sub_module_parameter_value emif_0_ddr4comp PHY_TERM_X_CK_OUTPUT_IO_STD_TYPE {DF_SSTL}
 set_component_sub_module_parameter_value emif_0_ddr4comp PHY_TERM_X_CS_OUTPUT_IO_STD_TYPE {SSTL}

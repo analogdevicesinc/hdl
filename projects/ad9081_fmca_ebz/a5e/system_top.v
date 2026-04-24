@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -88,9 +88,9 @@ module system_top #(
   output           emif_hps_mem_par,
   input            emif_hps_mem_alert_n,
   input            emif_hps_oct_rzqin,
-  inout  [  3:0]   emif_hps_mem_dqs_t,
-  inout  [  3:0]   emif_hps_mem_dqs_c,
-  inout  [ 31:0]   emif_hps_mem_dq,
+  inout  [  4:0]   emif_hps_mem_dqs_t,
+  inout  [  4:0]   emif_hps_mem_dqs_c,
+  inout  [ 39:0]   emif_hps_mem_dq,
 
   // hps-sdmmc
   output           hps_sdmmc_clk,
