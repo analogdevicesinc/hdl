@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -148,23 +148,40 @@ module axi_adxcvr_up #(
   end
 
   generate if (FPGA_TECHNOLOGY == 105 || FPGA_TECHNOLOGY == 106) begin
-    reg up_reset_ack_d = 'd0;
+    reg up_reset_ack_sync1 = 'd0;
+    reg up_reset_ack_sync2 = 'd0;
+    reg up_reset_ack_latched = 'd0;
+    reg [5:0] up_rst_ack_cnt = 'd0;
 
     always @(negedge up_rstn or posedge up_clk) begin
-      if (up_rstn == 0) begin
-        up_reset_ack_d <= 1'b0;
+      if (up_rstn == 1'b0) begin
+        up_reset_ack_sync1 <= 1'b0;
+        up_reset_ack_sync2 <= 1'b0;
+        up_reset_ack_latched <= 1'b0;
       end else begin
+        up_reset_ack_sync1 <= up_reset_ack;
+        up_reset_ack_sync2 <= up_reset_ack_sync1;
         if (up_resetn == 1'b0) begin
-          up_reset_ack_d <= 1'b0;
-        end else begin
-          if (up_reset_ack_d == 1'b0) begin
-            up_reset_ack_d <= up_reset_ack;
-          end
+          up_reset_ack_latched <= 1'b0;
+        end else if (up_reset_ack_sync2 == 1'b1) begin
+          up_reset_ack_latched <= 1'b1;
         end
       end
     end
 
-    assign up_rst = ~up_reset_ack_d;
+    always @(negedge up_rstn or posedge up_clk) begin
+      if (up_rstn == 1'b0) begin
+        up_rst_ack_cnt <= 'd0;
+      end else begin
+        if (up_resetn == 1'b0) begin
+          up_rst_ack_cnt <= 'd0;
+        end else if (!up_rst_ack_cnt[5] && up_reset_ack_latched) begin
+          up_rst_ack_cnt <= up_rst_ack_cnt + 1'b1;
+        end
+      end
+    end
+
+    assign up_rst = ~up_rst_ack_cnt[5];
   end else begin
     assign up_rst = up_rst_cnt[3];
   end
