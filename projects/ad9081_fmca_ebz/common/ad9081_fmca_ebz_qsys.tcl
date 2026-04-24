@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -447,6 +447,12 @@ add_connection rx_os_device_clk.out_clk mxfe_rx_os_tpl.link_clk
 if {$EXTERNAL_PHY} {
   add_connection jesd204_phy.rx_clkout jesd204_phy.rx_link_clock
   add_connection jesd204_phy_os.rx_clkout jesd204_phy_os.rx_link_clock
+  if {$RX_TPL_DATA_PATH_WIDTH > $RX_DATA_PATH_WIDTH} {
+    add_connection jesd204_phy.rx_clkout mxfe_rx_jesd204.phy_link_clk
+  }
+  if {$RX_OS_TPL_DATA_PATH_WIDTH > $RX_OS_DATA_PATH_WIDTH} {
+    add_connection jesd204_phy_os.rx_clkout mxfe_rx_os_jesd204.phy_link_clk
+  }
 }
 add_connection rx_device_clk.out_clk mxfe_rx_cpack.clk
 add_connection rx_device_clk.out_clk $adc_fifo_name.if_adc_clk
@@ -457,6 +463,9 @@ add_connection tx_device_clk.out_clk mxfe_tx_jesd204.device_clk
 add_connection tx_device_clk.out_clk mxfe_tx_tpl.link_clk
 if {$EXTERNAL_PHY} {
   add_connection jesd204_phy.tx_clkout jesd204_phy.tx_link_clock
+  if {$TX_TPL_DATA_PATH_WIDTH > $TX_DATA_PATH_WIDTH} {
+    add_connection jesd204_phy.tx_clkout mxfe_tx_jesd204.phy_link_clk
+  }
 }
 add_connection tx_device_clk.out_clk mxfe_tx_upack.clk
 add_connection tx_device_clk.out_clk $dac_fifo_name.if_dac_clk

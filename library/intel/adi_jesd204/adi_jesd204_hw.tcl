@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -627,7 +627,14 @@ proc jesd204_compose {} {
 
     set_interface_property link_clk EXPORT_OF $device_clock_export
 
-    add_connection $device_clock link_clock.in_clk
+    # When running in gearbox mode, the device clock will be slower
+    # than the link clock so we can't use it
+    if {$data_path_width < $tpl_data_path_width} {
+      add_interface phy_link_clk clock sink
+      set_interface_property phy_link_clk EXPORT_OF link_clock.in_clk
+    } else {
+      add_connection $device_clock link_clock.in_clk
+    }
 
     add_interface ready conduit end
     add_interface reset conduit end
