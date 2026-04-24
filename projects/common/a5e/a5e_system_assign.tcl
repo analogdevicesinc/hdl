@@ -375,3 +375,6 @@ set_global_assignment -name STRATIX_JTAG_USER_CODE 4
 set_global_assignment -name USE_CHECKSUM_AS_USERCODE OFF
 
 set_global_assignment -name DEVICE_INITIALIZATION_CLOCK OSC_CLK_1_125MHz
+
+# Workaround for Quartus 25.1 incomplete IO assignment becoming a critical warning
+set_global_assignment -name MESSAGE_DISABLE 15714
