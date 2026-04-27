@@ -34,11 +34,11 @@ ad_ip_parameter axi_adaq7980_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adaq7980_dma CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_adaq7980_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
- # axi_clkgen
+# axi_clkgen
 ad_ip_instance axi_clkgen spi_clkgen
-ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 5 
-ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1 
-ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 8 
+ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 5
+ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
+ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 8
 
 ad_connect $sys_cpu_clk spi_clkgen/clk
 ad_connect spi_clk spi_clkgen/clk_0
