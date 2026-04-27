@@ -14,10 +14,12 @@ decimate and interpolate the incoming and outcoming data stream.
 
 .. important::
 
-   This example was built using the hdl_2023_r2 release branch, using Vivado and
-   Vitis 2023.2. Sources from older examples can be found under the tag
-   `eg_fmcomms2_fir_filter`_ using Vivado 16.2 and 16.4 versions, and status
-   **are not supported by us anymore**.
+   This example was built using the HDL main branch, using Vivado and
+   Vitis 2025.1. For the hdl_2023_r2 branch with Vivado 2023.2, use the
+   :git-hdl:`fir_filter_2023.tcl <hdl_2023_r2:projects/fmcomms2/zc706/fir_filter_2023.tcl>`
+   script which replaces ``inline_hdl`` IP types
+   (``ilslice``, ``ilconcat``) with their standard equivalents
+   (``xlslice``, ``xlconcat``).
 
 Assuming we want to transmit a sinewave with the :adi:`AD9361` ADI Integrated RF
 transceiver: the sinewave frequency is below 6 MHz, so we can use a lower system
@@ -73,7 +75,7 @@ Decimation FIR filter
 - ``ast``: normalize stopband attenuation = 80
 - ``tw``: normalized transition width = 0.01
 - ``n``: number of coefficients = 128
-- ``interp``: interpolation factor = 8
+- ``decim``: decimation factor = 8
 
 .. code-block::
 
@@ -314,7 +316,7 @@ Connecting the FIR interpolation filters on the Tx side
    connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_3] [get_bd_pins axi_ad9361_dac_fifo/din_enable_3]
    connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins util_fir_int_1/s_axis_data_tvalid]
    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_2] [get_bd_pins util_fir_int_1/channel_0]
-   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_3] [get_bd_pins util_fir_int_0/channel_1]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_3] [get_bd_pins util_fir_int_1/channel_1]
    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_2] [get_bd_pins util_fir_int_1/dac_read]
    connect_bd_net [get_bd_pins concat_1/In0] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_2]
    connect_bd_net [get_bd_pins concat_1/In1] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_3]
@@ -327,7 +329,7 @@ Connecting the FIR interpolation filters on the Tx side
 
 In this example, the TX data flow is controlled by the interpolation filter when
 interpolation is activated and by the axi_ad9361_core when interpolation is not
-active. In the reference design, the data flow is controlled by the ad9631_core.
+active. In the reference design, the data flow is controlled by the ad9361_core.
 At this moment, the Interpolation filters are completely integrated into the
 design and the data path should look like the one in the figure below.
 
@@ -367,9 +369,9 @@ Connecting the FIR decimation filters on the Rx side
    connect_bd_net [get_bd_pins util_ad9361_adc_pack/fifo_wr_data_3] [get_bd_pins pack1_slice_1/Dout]
 
    #gpio controlled
-   connect_bd_net [get_bd_pins axi_ad9361/up_dac_gpio_out] [get_bd_pins decim_slice/Din]
+   connect_bd_net [get_bd_pins axi_ad9361/up_adc_gpio_out] [get_bd_pins decim_slice/Din]
    connect_bd_net [get_bd_pins fir_decimator_0/decimate] [get_bd_pins decim_slice/Dout]
-   connect_bd_net [get_bd_pins fir_decimator_1/decimate] [get_bd_pins decim_slice/Din]
+   connect_bd_net [get_bd_pins fir_decimator_1/decimate] [get_bd_pins decim_slice/Dout]
 
 Generating the programing files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -384,7 +386,7 @@ Generating the programing files
      ``make`` to generate the bitstream and .xsa file.
    - Now, if your system is based on a **Zynq architecture**, you will have to
      generate the ``BOOT.BIN``. If you have a **MicroBlaze** soft processor
-     in your system, booting the Linux will is simpler.
+     in your system, booting Linux is simpler.
 
 More information at:
 
@@ -553,6 +555,9 @@ All filters active characteristic
 Older sources
 -------------------------------------------------------------------------------
 
+- For the hdl_2023_r2 branch with Vivado 2023.2, use the
+  :git-hdl:`fir_filter_2023.tcl <hdl_2023_r2:projects/fmcomms2/zc706/fir_filter_2023.tcl>`
+  script, which replaces ``inline_hdl`` IP types with standard equivalents.
 - Sources from older examples can be found under the tag
   `eg_fmcomms2_fir_filter`_ using Vivado 16.2 and 16.4 versions, and
   **are not supported by us anymore**.
