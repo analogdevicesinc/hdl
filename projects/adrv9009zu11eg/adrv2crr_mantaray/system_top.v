@@ -354,6 +354,10 @@ module system_top #(
   wire tdd_sync_out;
   wire tdd_channel_6;
   wire tdd_channel_7;
+  wire tdd_xud_trx0;
+  wire tdd_xud_trx1;
+  wire tdd_xud_trx2;
+  wire tdd_xud_trx3;
 
   always @(*) begin
     case (spi_csn)
@@ -598,10 +602,10 @@ module system_top #(
              tdd_support ? tdd_rx_en : fmc_gpio_o[23],            // 23   TDD_RX_SYNC
              tdd_support ? tdd_tx_en : fmc_gpio_o[22],            // 22   TDD_TX_SYNC
              fmc_gpio_o[21],   // 21
-             tdd_support ? tdd_tx_stingray_en : fmc_gpio_o[20],   // 20   TRX3
-             tdd_support ? tdd_tx_stingray_en : fmc_gpio_o[19],   // 19   TRX2
-             tdd_support ? tdd_tx_stingray_en : fmc_gpio_o[18],   // 18   TRX1
-             tdd_support ? tdd_tx_stingray_en : fmc_gpio_o[17],   // 17   TRX0
+             tdd_support ? tdd_xud_trx3 : fmc_gpio_o[20],   // 20   TRX3
+             tdd_support ? tdd_xud_trx2 : fmc_gpio_o[19],   // 19   TRX2
+             tdd_support ? tdd_xud_trx1 : fmc_gpio_o[18],   // 18   TRX1
+             tdd_support ? tdd_xud_trx0 : fmc_gpio_o[17],   // 17   TRX0
              fmc_gpio_o[16]    // 16
             }),
     .dio_o ({fmc_gpio_i[25],
@@ -825,6 +829,10 @@ module system_top #(
     .tdd_channel_1 (tdd_channel_1),
     .tdd_channel_6 (tdd_channel_6),
     .tdd_channel_7 (tdd_channel_7),
+    .tdd_xud_trx0 (tdd_xud_trx0),
+    .tdd_xud_trx1 (tdd_xud_trx1),
+    .tdd_xud_trx2 (tdd_xud_trx2),
+    .tdd_xud_trx3 (tdd_xud_trx3),
     .tdd_sync_out (tdd_sync_out));
 
   assign stingray1_pmod0_PA_ON       = pwr_up_mask ? 1'b0 : tdd_enabled ? tdd_channel_6 : fmc_gpio_o[13];

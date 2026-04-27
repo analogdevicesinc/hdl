@@ -166,6 +166,10 @@ create_bd_port -dir O tdd_channel_1
 create_bd_port -dir O tdd_sync_out
 create_bd_port -dir O tdd_channel_6
 create_bd_port -dir O tdd_channel_7
+create_bd_port -dir O tdd_xud_trx0
+create_bd_port -dir O tdd_xud_trx1
+create_bd_port -dir O tdd_xud_trx2
+create_bd_port -dir O tdd_xud_trx3
 
 if {$TDD_SUPPORT} {
   set tdd_sync_in_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins axi_tdd_0/sync_in]]]
@@ -177,16 +181,21 @@ if {$TDD_SUPPORT} {
   # ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_LENGTH_WIDTH 30
 
   ad_connect axi_tdd_0/sync_in tdd_sync
-  ad_connect axi_tdd_0/tdd_channel_1 axi_adrv9009_som_rx_dma/s_axis_user
-  ad_connect axi_tdd_0/tdd_channel_2 tdd_enabled
-  ad_connect axi_tdd_0/tdd_channel_3 tdd_rx_en
-  ad_connect axi_tdd_0/tdd_channel_4 tdd_tx_en
-  ad_connect axi_tdd_0/tdd_channel_5 tdd_tx_stingray_en
+  ad_connect axi_tdd_0/tdd_channel_1  axi_adrv9009_som_rx_dma/s_axis_user
+  ad_connect axi_tdd_0/tdd_channel_2  tdd_enabled
+  ad_connect axi_tdd_0/tdd_channel_3  tdd_rx_en
+  ad_connect axi_tdd_0/tdd_channel_4  tdd_tx_en
+  ad_connect axi_tdd_0/tdd_channel_5  tdd_tx_stingray_en
 
-  ad_connect axi_tdd_0/tdd_channel_0 tdd_channel_0
-  ad_connect axi_tdd_0/tdd_channel_1 tdd_channel_1
-  ad_connect axi_tdd_0/sync_out      tdd_sync_out
+  ad_connect axi_tdd_0/tdd_channel_0  tdd_channel_0
+  ad_connect axi_tdd_0/tdd_channel_1  tdd_channel_1
+  ad_connect axi_tdd_0/sync_out       tdd_sync_out
 
-  ad_connect axi_tdd_0/tdd_channel_6 tdd_channel_6
-  ad_connect axi_tdd_0/tdd_channel_7 tdd_channel_7
+  ad_connect axi_tdd_0/tdd_channel_6  tdd_channel_6
+  ad_connect axi_tdd_0/tdd_channel_7  tdd_channel_7
+
+  ad_connect axi_tdd_0/tdd_channel_8  tdd_xud_trx0
+  ad_connect axi_tdd_0/tdd_channel_9  tdd_xud_trx1
+  ad_connect axi_tdd_0/tdd_channel_10 tdd_xud_trx2
+  ad_connect axi_tdd_0/tdd_channel_11 tdd_xud_trx3
 }

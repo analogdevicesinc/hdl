@@ -25,22 +25,22 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 
 adi_project_create adrv9009zu11eg_mantaray 0 [list \
-  RX_JESD_M        [get_env_param RX_JESD_M        8 ] \
-  RX_JESD_L        [get_env_param RX_JESD_L        4 ] \
-  RX_JESD_S        [get_env_param RX_JESD_S        1 ] \
-  TX_JESD_M        [get_env_param TX_JESD_M        8 ] \
-  TX_JESD_L        [get_env_param TX_JESD_L        8 ] \
-  TX_JESD_S        [get_env_param TX_JESD_S        1 ] \
-  RX_OS_JESD_M     [get_env_param RX_OS_JESD_M     4 ] \
-  RX_OS_JESD_L     [get_env_param RX_OS_JESD_L     4 ] \
-  RX_OS_JESD_S     [get_env_param RX_OS_JESD_S     1 ] \
-  SHARED_DEVCLK    [get_env_param SHARED_DEVCLK    1 ] \
-  TDD_SUPPORT      [get_env_param TDD_SUPPORT      1 ] \
-  TDD_CHANNEL_CNT  [get_env_param TDD_CHANNEL_CNT  8 ] \
-  TDD_SYNC_WIDTH   [get_env_param TDD_SYNC_WIDTH   0 ] \
-  TDD_SYNC_INT     [get_env_param TDD_SYNC_INT     0 ] \
-  TDD_SYNC_EXT     [get_env_param TDD_SYNC_EXT     1 ] \
-  TDD_SYNC_EXT_CDC [get_env_param TDD_SYNC_EXT_CDC 1 ] \
+  RX_JESD_M        [get_env_param RX_JESD_M         8 ] \
+  RX_JESD_L        [get_env_param RX_JESD_L         4 ] \
+  RX_JESD_S        [get_env_param RX_JESD_S         1 ] \
+  TX_JESD_M        [get_env_param TX_JESD_M         8 ] \
+  TX_JESD_L        [get_env_param TX_JESD_L         8 ] \
+  TX_JESD_S        [get_env_param TX_JESD_S         1 ] \
+  RX_OS_JESD_M     [get_env_param RX_OS_JESD_M      4 ] \
+  RX_OS_JESD_L     [get_env_param RX_OS_JESD_L      4 ] \
+  RX_OS_JESD_S     [get_env_param RX_OS_JESD_S      1 ] \
+  SHARED_DEVCLK    [get_env_param SHARED_DEVCLK     1 ] \
+  TDD_SUPPORT      [get_env_param TDD_SUPPORT       1 ] \
+  TDD_CHANNEL_CNT  [get_env_param TDD_CHANNEL_CNT  12 ] \
+  TDD_SYNC_WIDTH   [get_env_param TDD_SYNC_WIDTH    0 ] \
+  TDD_SYNC_INT     [get_env_param TDD_SYNC_INT      0 ] \
+  TDD_SYNC_EXT     [get_env_param TDD_SYNC_EXT      1 ] \
+  TDD_SYNC_EXT_CDC [get_env_param TDD_SYNC_EXT_CDC  1 ] \
 ] "xczu11eg-ffvf1517-2-i"
 
 
