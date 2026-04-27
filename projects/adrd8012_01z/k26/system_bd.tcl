@@ -1,11 +1,11 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 # Use the same base project as KV260
 source ../../common/kv260/kv260_system_bd.tcl
-source ../common/ad_gmsl2eth_sl_bd.tcl
+source ../common/adrd8012_01z_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID

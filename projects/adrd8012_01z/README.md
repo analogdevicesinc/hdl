@@ -1,7 +1,7 @@
-# AD-GMSL2ETH-SL HDL Project
+# ADRD8012-01Z HDL Project
 
-- Evaluation board product page: [AD-GMSL2ETH-SL](https://www.analog.com/ad-gmsl2eth-sl)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad-gmsl2eth-sl-guide
+- Evaluation board product page: [ADRD8012-01Z](https://www.analog.com/adrd8012-01z)
+- System documentation: https://analogdevicesinc.github.io/documentation/solutions/reference-designs/adrd8012-01Z/index.html
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad_gmsl2eth_sl/index.html
 
 ## Supported parts
