@@ -456,10 +456,15 @@ module spi_engine_execution #(
         wait_for_io <= 1'b0;
         transfer_active <= !last_transfer;
       end else if (transfer_active == 1'b1 && end_of_word == 1'b1) begin
-        if (last_transfer == 1'b1 || io_ready2 == 1'b0)
+        if (last_transfer == 1'b1 || io_ready2 == 1'b0) begin
           transfer_active <= 1'b0;
-        if (io_ready2 == 1'b0)
+        end
+        if (io_ready2 == 1'b0) begin
           wait_for_io <= 1'b1;
+        end
+      end else if (idle == 1'b1) begin
+        wait_for_io <= 1'b0;
+        transfer_active <= 1'b0;
       end
     end
   end
