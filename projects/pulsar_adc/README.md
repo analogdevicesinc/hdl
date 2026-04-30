@@ -1,6 +1,8 @@
 # PULSAR-ADC HDL Project
 
-- Evaluation boards product page: [EVAL-AD400x-FMCZ](https://www.analog.com/eval-ad400x-fmcz) (with-MC) and [EVAL-ADAQ40xx](https://www.analog.com/eval-adaq40xx) (with PMOD)
+- Evaluation boards product pages:
+  - [EVAL-AD400x-FMCZ](https://www.analog.com/eval-ad400x-fmcz) (with-FMC)
+  - [EVAL-ADAQ40xx](https://www.analog.com/eval-adaq40xx) (with PMOD)
 - System documentation: https://wiki.analog.com/resources/eval/10-lead-pulsar-adc-evaluation-board
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/pulsar_adc/index.html
 - Evaluation board VIO: 3.3V
@@ -21,6 +23,7 @@
 | [AD4010](https://www.analog.com/ad4010)     | 18-bit     |         | X   | 2 MSPS/1 MSPS/500 kSPS, Precision, Pseudo Differential, SAR ADCs |
 | [AD4011](https://www.analog.com/ad4011)     | 18-bit     |         | X   | 2 MSPS/1 MSPS/500 kSPS, Easy Drive, Differential SAR ADCs |
 | [AD4020](https://www.analog.com/ad4020)     | 20-bit     |         | X   | 1.8 MSPS/1 MSPS/500 kSPS, Easy Drive, Differential SAR ADCs |
+| [AD4021](https://www.analog.com/ad4021)     | 20-bit     |         | X   | 1.8 MSPS/1 MSPS/500 kSPS, Easy Drive, Differential SAR ADCs |
 | [ADAQ4003](https://www.analog.com/adaq4003) | 18-bit     |         | X   | 2 MSPS, Precision DAQ, Differential SAR ADCs |
 | [AD7685](https://www.analog.com/ad7685)     | 16-bit     | X       |     | 250 kSPS PulSAR ADC in MSOP/QFN |
 | [AD7686](https://www.analog.com/ad7686)     | 16-bit     | X       |     | 500 kSPS PulSAR A/D Converter in MSOP/QFN |
