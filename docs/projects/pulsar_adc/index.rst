@@ -40,11 +40,11 @@ With FMC
 
 PulSAR converters which have FMC boards associated with them are AD40xx family.
 
-The :adi:`AD4003` / :adi:`AD4007` / :adi:`AD4011` / :adi:`AD4020` are low noise,
-low power, high speed, 18-bit, precision successive approximation register (SAR)
-analog-to-digital converters (ADCs). The :adi:`AD4003`, :adi:`AD4007`, and
-:adi:`AD4011` offer 2 MSPS, 1 MSPS, and 500 kSPS throughputs, respectively.
-They incorporate ease of use features that reduce signal chain power consumption,
+The :adi:`AD4000` / :adi:`AD4001` / :adi:`AD4002` / :adi:`AD4003` / :adi:`AD4004` /
+:adi:`AD4005` / :adi:`AD4006` / :adi:`AD4007` / :adi:`AD4008` / :adi:`AD4010` /
+:adi:`AD4011` / :adi:`AD4020` / :adi:`AD4021` are low noise, low power, high speed,
+high-resolution precision successive approximation register (SAR) analog-to-digital
+converters (ADCs). They incorporate ease of use features that reduce signal chain power consumption,
 reduce signal chain complexity, and enable higher channel density. The high-Z
 mode, coupled with a long acquisition phase, eliminates the need for a dedicated
 high power, high speed ADC driver, thus broadening the range of low power
@@ -115,10 +115,19 @@ PulSAR with PMOD connector:
 
 PulSAR with FMC connector:
 
+- :adi:`AD4000`
+- :adi:`AD4001`
+- :adi:`AD4002`
 - :adi:`AD4003`
+- :adi:`AD4004`
+- :adi:`AD4005`
+- :adi:`AD4006`
 - :adi:`AD4007`
+- :adi:`AD4008`
+- :adi:`AD4010`
 - :adi:`AD4011`
 - :adi:`AD4020`
+- :adi:`AD4021`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -222,10 +231,11 @@ ADCs, like the AD7944.
 
 These modes are selected using the ``SPI_OP_MODE`` parameter:
 
-- 0 - for normal SPI Engine connections (default)
-- 1 - for 3-wire "single" mode where CS drives the SDO line while the CS line
-  is driven by GPIO
-- 2 - SDO is driven by GPIO and the CS line is driven by CS.
+- 0 - standard FMC version, normal SPI Engine connections (default)
+- 1 - FMC version with ADC SDO pin driven by SPI Engine CS and ADC CS pin driven
+  by GPIO (3-wire "single" mode)
+- 2 - FMC version with ADC SDO pin driven by GPIO and ADC CS pin driven by SPI
+  Engine CS
 
 .. caution::
 
@@ -387,7 +397,7 @@ Zedboard standard configuration FMC support (default)
 .. shell:: bash
 
    $cd hdl/projects/pulsar_adc/zed
-   $make FMC_N_PMOD=1 SPI_OP_MODE=0 - builds standard FMC version
+   $make FMC_N_PMOD=1 SPI_OP_MODE=0
 
 Zedboard FMC support for AD7944 4-wire mode ("multi")
 
@@ -449,10 +459,19 @@ Datasheets for PulSAR with PMOD connector:
 
 Datasheets PulSAR with FMC connector:
 
+- :adi:`AD4000`
+- :adi:`AD4001`
+- :adi:`AD4002`
 - :adi:`AD4003`
+- :adi:`AD4004`
+- :adi:`AD4005`
+- :adi:`AD4006`
 - :adi:`AD4007`
+- :adi:`AD4008`
+- :adi:`AD4010`
 - :adi:`AD4011`
 - :adi:`AD4020`
+- :adi:`AD4021`
 - :adi:`ADAQ4003`
 - :adi:`UG-1042, Evaluation Board User Guide <media/en/technical-documentation/user-guides/UG-1042.pdf>`
 - :adi:`UG-1042, Evaluation Board User Guide <media/en/technical-documentation/user-guides/eval-adaq4001fmcz_eval-adaq4003fmcz-ug-1533.pdf>`
@@ -524,8 +543,19 @@ Software related
 
 - :git-linux:`PulSAR ADC PMDZ Linux driver source code <drivers/iio/adc/ad_pulsar.c>`
 - :git-linux:`AD40xx/ADAQ40xx Linux driver source code <drivers/iio/adc/ad4000.c>`
+- :git-linux:`AD4000 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4000.dts>`
+- :git-linux:`AD4001 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4001.dts>`
+- :git-linux:`AD4002 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4002.dts>`
 - :git-linux:`AD4003 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4003.dts>`
+- :git-linux:`AD4004 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4004.dts>`
+- :git-linux:`AD4005 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4005.dts>`
+- :git-linux:`AD4006 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4006.dts>`
+- :git-linux:`AD4007 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4007.dts>`
+- :git-linux:`AD4008 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4008.dts>`
+- :git-linux:`AD4010 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4010.dts>`
+- :git-linux:`AD4011 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4011.dts>`
 - :git-linux:`AD4020 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4020.dts>`
+- :git-linux:`AD4021 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4021.dts>`
 - :git-linux:`AD7687 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7687-pmdz.dts>`
 - :git-linux:`AD7689 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7689-ardz.dts>`
 - :git-linux:`AD7946 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7946.dts>`
