@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>DAQ3 HDL Project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -138,7 +138,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -227,6 +227,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -331,6 +332,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adaq23875/index.html">ADAQ23875</a></li>
@@ -400,9 +402,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="daq3-hdl-project">
-<span id="daq3"></span><h1>DAQ3 HDL Project<a class="headerlink" href="#daq3-hdl-project" title="Permalink to this heading"></a></h1>
+<span id="daq3"></span><h1>DAQ3 HDL Project<a class="headerlink" href="#daq3-hdl-project" title="Link to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq3" target="_blank">DAQ3</a> reference design showcases the
 <a class="icon adi reference external" href="https://www.analog.com/EVAL-FMCDAQ3-EBZ" target="_blank">EVAL-FMCDAQ3-EBZ</a> evaluation board, which is comprised of the
 <a class="icon adi reference external" href="https://www.analog.com/AD9680" target="_blank">AD9680</a> dual, 14-bit, 1.25 GSPS, JESD204B (subclass 1) ADC, the
@@ -413,20 +415,20 @@ FMC connector, comprising a completely self contained data acquisition and
 signal synthesis prototyping platform.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-FMCDAQ3-EBZ" target="_blank">EVAL-FMCDAQ3-EBZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9152" target="_blank">AD9152</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9680" target="_blank">AD9680</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -462,16 +464,17 @@ signal synthesis prototyping platform.</p>
 </div>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
 <p>The difference between the KCU105/VCU118/ZC706 designs and the ZCU102 one, is
 the use of <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload" target="_blank">DATA_OFFLOAD</a>: in the Zynq
 UltraScale-based designs, it is not used due to HP ports’ superior bandwidth.</p>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
 <section id="kcu105-vcu118-zc706">
-<h4>KCU105/VCU118/ZC706<a class="headerlink" href="#kcu105-vcu118-zc706" title="Permalink to this heading"></a></h4>
+<h4>KCU105/VCU118/ZC706<a class="headerlink" href="#kcu105-vcu118-zc706" title="Link to this heading"></a></h4>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/daq3_block_diagram.svg"><img alt="EVAL-FMCDAQ3-EBZ block diagram" class="align-center" src="../../_images/daq3_block_diagram.svg" width="1000" /></a>
+<a class="reference internal image-reference" href="../../_images/daq3_block_diagram.svg"><img alt="EVAL-FMCDAQ3-EBZ block diagram" class="align-center" src="../../_images/daq3_block_diagram.svg" width="1000" />
+</a>
 <p>This configuration was built using the <code class="docutils literal notranslate"><span class="pre">make</span></code> command with the following
 parameters:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/hdl/projects/daq3/zc706$
@@ -561,9 +564,10 @@ parameters:</p>
 </div>
 </div></section>
 <section id="zcu102">
-<h4>ZCU102<a class="headerlink" href="#zcu102" title="Permalink to this heading"></a></h4>
+<h4>ZCU102<a class="headerlink" href="#zcu102" title="Link to this heading"></a></h4>
 <p>The data path and clock domains are depicted in the below diagram.</p>
-<a class="reference internal image-reference" href="../../_images/daq3_zcu102_block_diagram.svg"><img alt="EVAL-FMCDAQ3-EBZ/ZCU102 block diagram" class="align-center" src="../../_images/daq3_zcu102_block_diagram.svg" width="1000" /></a>
+<a class="reference internal image-reference" href="../../_images/daq3_zcu102_block_diagram.svg"><img alt="EVAL-FMCDAQ3-EBZ/ZCU102 block diagram" class="align-center" src="../../_images/daq3_zcu102_block_diagram.svg" width="1000" />
+</a>
 <p>This configuration was built using the <code class="docutils literal notranslate"><span class="pre">make</span></code> command with the following
 parameters:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/hdl/projects/daq3/zcu102$
@@ -649,7 +653,7 @@ parameters:</p>
 </div></section>
 </section>
 <section id="clock-scheme">
-<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Internal clock sources for both the ADC and the DAC, coming from <a class="icon adi reference external" href="https://www.analog.com/AD9528" target="_blank">AD9528</a>
 clock-generator chip (device clocks and reference clocks)</p></li>
@@ -657,7 +661,7 @@ clock-generator chip (device clocks and reference clocks)</p></li>
 </ul>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
 <p>The design has one JESD204B receive chain and one transmit chain, each with
 4 lanes.</p>
 <p>Each chain consists of a transport layer represented by a JESD TPL module,
@@ -677,7 +681,7 @@ among chains, represented by an XCVR module.</p>
 </ul>
 </section>
 <section id="detailed-description">
-<h3>Detailed description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h3>
+<h3>Detailed description<a class="headerlink" href="#detailed-description" title="Link to this heading"></a></h3>
 <p>The digital interface consists of 4 transmit and 4 receive lanes running at
 12.33 Gbps (default).</p>
 <p>The devices’ interfaces are shared by the same set of transceivers, followed
@@ -701,7 +705,7 @@ The SPI signals are controlled by a separate AXI based SPI core.</p>
 </ul>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -758,7 +762,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -795,7 +799,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -861,7 +865,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -914,7 +918,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -957,13 +961,13 @@ by the configuration used: <code class="docutils literal notranslate"><span clas
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="software-considerations">
-<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Permalink to this heading"></a></h2>
+<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Link to this heading"></a></h2>
 <section id="adc-crossbar-config">
-<h3>ADC - crossbar config<a class="headerlink" href="#adc-crossbar-config" title="Permalink to this heading"></a></h3>
+<h3>ADC - crossbar config<a class="headerlink" href="#adc-crossbar-config" title="Link to this heading"></a></h3>
 <p>RX lanes are not reordered, they are the same as the physical lanes.</p>
 </section>
 <section id="dac-crossbar-config">
-<h3>DAC - crossbar config<a class="headerlink" href="#dac-crossbar-config" title="Permalink to this heading"></a></h3>
+<h3>DAC - crossbar config<a class="headerlink" href="#dac-crossbar-config" title="Link to this heading"></a></h3>
 <p>Due to physical constraints, TX lanes are reordered as described in the
 following table:</p>
 <p>For example, physical lane 2 from DAC connects to logical lane 1
@@ -992,9 +996,9 @@ accordingly.</p>
 </section>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq3-ebz/quickstart/kcu105" target="_blank">AD-FMCDAQ3-EBZ on Kintex KCU105 quick start guide</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq3-ebz/quickstart/vcu118" target="_blank">AD-FMCDAQ3-EBZ on Virtex UltraScale+ VCU118 quick start guide</a></p></li>
@@ -1008,7 +1012,7 @@ you can find prebuilt images for this setup;
 </ul>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
@@ -1022,7 +1026,7 @@ you can find prebuilt images for this setup;
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq3" target="_blank">DAQ3 HDL project source code</a></p></li>
 </ul>
@@ -1123,12 +1127,12 @@ you can find prebuilt images for this setup;
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p>DAQ3/KCU105 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/kcu105_fmcdaq3.dts" target="_blank">kcu105_fmcdaq3.dts</a></p></li>
-<li><p>DAQ3/VCU118 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/microblaze/boot/dts/vcu118_fmcdaq3.dts" target="_blank">vcu118_fmcdaq3.dts</a></p></li>
-<li><p>DAQ3/ZC706 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcdaq3.dts" target="_blank">zynq-zc706-adv7511-fmcdaq3.dts</a></p></li>
-<li><p>DAQ3/ZCU102 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-fmcdaq3.dts" target="_blank">zynqmp-zcu102-rev10-fmcdaq3.dts</a></p></li>
+<li><p>DAQ3/KCU105 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/microblaze/boot/dts/kcu105_fmcdaq3.dts" target="_blank">kcu105_fmcdaq3.dts</a></p></li>
+<li><p>DAQ3/VCU118 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/microblaze/boot/dts/vcu118_fmcdaq3.dts" target="_blank">vcu118_fmcdaq3.dts</a></p></li>
+<li><p>DAQ3/ZC706 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcdaq3.dts" target="_blank">zynq-zc706-adv7511-fmcdaq3.dts</a></p></li>
+<li><p>DAQ3/ZCU102 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-fmcdaq3.dts" target="_blank">zynqmp-zcu102-rev10-fmcdaq3.dts</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/zynq" target="_blank">AD-FMCDAQ3-EBZ on Zynq ZC706 Linux quick start guide</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq3-ebz/software/baremetal" target="_blank">AD-FMCDAQ3-EBZ on Zynq ZC706 no-OS quick start guide</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/microblaze" target="_blank">AD-FMCDAQ3-EBZ on MicroBlaze no-OS quick start guide</a></p></li>
@@ -1138,13 +1142,13 @@ you can find prebuilt images for this setup;
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

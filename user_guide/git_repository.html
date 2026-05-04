@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>HDL Git repository &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../index.html">
           <div>HDL</div>
@@ -110,7 +110,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -199,6 +199,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -303,6 +304,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -372,7 +374,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="hdl-git-repository">
-<span id="git-repository"></span><h1>HDL Git repository<a class="headerlink" href="#hdl-git-repository" title="Permalink to this heading"></a></h1>
+<span id="git-repository"></span><h1>HDL Git repository<a class="headerlink" href="#hdl-git-repository" title="Link to this heading"></a></h1>
 <p>All the HDL sources can be found in the following git repository:</p>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">ADI HDL repository</a></p>
 <p>We assume that the user is familiar with <a class="icon link reference external" href="https://git-scm.com/" target="_blank">git</a>.
@@ -405,7 +407,7 @@ instructions</p></li>
 <a class="reference internal" href="contributing.html#contributing"><span class="std std-ref">Contributing to HDL repository</span></a>.</p>
 </div>
 <section id="folder-structure">
-<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Permalink to this heading"></a></h2>
+<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Link to this heading"></a></h2>
 <p>The root of the HDL repository has the following structure:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span>
 <span class="o">+--</span> <span class="o">.</span><span class="n">github</span>
@@ -434,7 +436,7 @@ files that Git should ignore. The root <strong>Makefile</strong> can be used to 
 all the project of the repository. To learn more about hdl <strong>Makefiles</strong>
 visit the <a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Building &amp; Generating programming files</span></a> section.</p>
 <section id="the-projects-are-structured-as-follows">
-<h3>The projects are structured as follows<a class="headerlink" href="#the-projects-are-structured-as-follows" title="Permalink to this heading"></a></h3>
+<h3>The projects are structured as follows<a class="headerlink" href="#the-projects-are-structured-as-follows" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
 +-- docs
 +-- library
@@ -480,7 +482,7 @@ folder, that means your FPGA board with that particular FMC board is not
 supported.</p>
 </section>
 <section id="the-library-are-structured-as-follows">
-<h3>The library are structured as follows<a class="headerlink" href="#the-library-are-structured-as-follows" title="Permalink to this heading"></a></h3>
+<h3>The library are structured as follows<a class="headerlink" href="#the-library-are-structured-as-follows" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
 +-- library
 ¦   +-- ad463x_data_capture
@@ -519,7 +521,7 @@ the <a class="reference internal" href="build_hdl.html#build-hdl"><span class="s
 </section>
 </section>
 <section id="repository-releases-and-branches">
-<h2>Repository releases and branches<a class="headerlink" href="#repository-releases-and-branches" title="Permalink to this heading"></a></h2>
+<h2>Repository releases and branches<a class="headerlink" href="#repository-releases-and-branches" title="Link to this heading"></a></h2>
 <p>The repository may contain multiple branches and tags. The
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">main</a> branch
 is the development branch (latest sources, but not stable). If you check

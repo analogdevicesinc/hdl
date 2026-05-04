@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,9 +8,9 @@
 
     <title>AXI ADRV9001 &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -69,7 +69,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -125,7 +125,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -214,6 +214,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -318,6 +319,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -387,7 +389,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-adrv9001">
-<span id="id1"></span><h1>AXI ADRV9001<a class="headerlink" href="#axi-adrv9001" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>AXI ADRV9001<a class="headerlink" href="#axi-adrv9001" title="Link to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 589.2 1362" width="589.2" class="no-background"><style>
                 a {
@@ -411,7 +413,7 @@ familiar with the device for a complete and better understanding.</p>
 <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a>. Regarding the DAC, more information related to its generic
 framework can be found at <a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html#axi-dac"><span class="std std-ref">Generic AXI DAC</span></a>.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>AXI-based configuration</p></li>
 <li><p>Supports both Altera and AMD Xilinx devices</p></li>
@@ -426,7 +428,7 @@ framework can be found at <a class="reference internal" href="../../user_guide/i
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -488,11 +490,12 @@ framework can be found at <a class="reference internal" href="../../user_guide/i
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
-<a class="reference internal image-reference" href="../../_images/axi_adrv9001.svg"><img alt="AXI ADRV9001 block diagram" src="../../_images/axi_adrv9001.svg" width="400" /></a>
+<h2>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
+<a class="reference internal image-reference" href="../../_images/axi_adrv9001.svg"><img alt="AXI ADRV9001 block diagram" src="../../_images/axi_adrv9001.svg" width="400" />
+</a>
 </section>
 <section id="functional-description">
-<h2>Functional Description<a class="headerlink" href="#functional-description" title="Permalink to this heading"></a></h2>
+<h2>Functional Description<a class="headerlink" href="#functional-description" title="Link to this heading"></a></h2>
 <p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001" target="_blank">axi_adrv9001</a> core’s architecture contains:</p>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001/axi_adrv9001.v" target="_blank">Wrapper</a> top module</p>
@@ -546,7 +549,7 @@ modules, one for each channel</p>
 </li>
 </ul>
 <section id="physical-interface">
-<h3>Physical Interface<a class="headerlink" href="#physical-interface" title="Permalink to this heading"></a></h3>
+<h3>Physical Interface<a class="headerlink" href="#physical-interface" title="Link to this heading"></a></h3>
 <p>The following operation modes are supported by the physical layer (PHY).
 CMOS (CSSI) and LVDS (LSSI) selection is done through a synthesis parameter.
 Other parameters (column B, G, H) can be modified at run time, preferably while
@@ -718,32 +721,34 @@ qualifier which is not active on every clock cycle.</p>
 </section>
 </section>
 <section id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Rx1 clock and Rx2 clock should be length matched</p></li>
 <li><p>Clock and data in SSI interface must be length matched</p></li>
 </ul>
 </section>
 <section id="xilinx-physical-interface">
-<h2>Xilinx Physical interface<a class="headerlink" href="#xilinx-physical-interface" title="Permalink to this heading"></a></h2>
+<h2>Xilinx Physical interface<a class="headerlink" href="#xilinx-physical-interface" title="Link to this heading"></a></h2>
 <section id="rx-component-mode">
-<h3>RX Component mode<a class="headerlink" href="#rx-component-mode" title="Permalink to this heading"></a></h3>
+<h3>RX Component mode<a class="headerlink" href="#rx-component-mode" title="Link to this heading"></a></h3>
 <p>For Rx interfaces, the source-synchronous associated clock is used to sample the
 input data. Software configuration is required, which is described in
 <a class="reference internal" href="#axi-adrv9001-adc-config"><span class="std std-ref">Configure ADC common interface</span></a> section. Input delays of the FPGA or output
 delays of the ADRV9001 can be tuned by software for optimized sampling.</p>
-<a class="reference internal image-reference" href="../../_images/rxcomponentmodephy.svg"><img alt="../../_images/rxcomponentmodephy.svg" src="../../_images/rxcomponentmodephy.svg" width="500" /></a>
+<a class="reference internal image-reference" href="../../_images/rxcomponentmodephy.svg"><img alt="../../_images/rxcomponentmodephy.svg" src="../../_images/rxcomponentmodephy.svg" width="500" />
+</a>
 </section>
 <section id="tx-using-dedicated-clock">
-<h3>TX Using dedicated clock<a class="headerlink" href="#tx-using-dedicated-clock" title="Permalink to this heading"></a></h3>
+<h3>TX Using dedicated clock<a class="headerlink" href="#tx-using-dedicated-clock" title="Link to this heading"></a></h3>
 <p>For Tx interfaces, the clock received from the transceiver is used to drive the
 output data. Software configuration is required for clock rate selection, which
 is described in <a class="reference internal" href="#axi-adrv9001-dac-config"><span class="std std-ref">Configure DAC common interface</span></a> section. Input delays of the
 ADRV9001 can be tuned by software for optimized sampling.</p>
-<a class="reference internal image-reference" href="../../_images/txcomponentmodephy.svg"><img alt="../../_images/txcomponentmodephy.svg" src="../../_images/txcomponentmodephy.svg" width="500" /></a>
+<a class="reference internal image-reference" href="../../_images/txcomponentmodephy.svg"><img alt="../../_images/txcomponentmodephy.svg" src="../../_images/txcomponentmodephy.svg" width="500" />
+</a>
 </section>
 <section id="configure-dac-common-interface">
-<span id="axi-adrv9001-dac-config"></span><h3>Configure DAC common interface<a class="headerlink" href="#configure-dac-common-interface" title="Permalink to this heading"></a></h3>
+<span id="axi-adrv9001-dac-config"></span><h3>Configure DAC common interface<a class="headerlink" href="#configure-dac-common-interface" title="Link to this heading"></a></h3>
 <p>Register <strong>0x0048 REG_CNTRL_2</strong></p>
 <ul class="simple">
 <li><p>[12:8] - NUM_LANES (<strong>new</strong>) - number of active lanes (1 : CSSI 1-lane, LSSI
@@ -760,7 +765,7 @@ DDR)</p></li>
 </ul>
 </section>
 <section id="configure-adc-common-interface">
-<span id="axi-adrv9001-adc-config"></span><h3>Configure ADC common interface<a class="headerlink" href="#configure-adc-common-interface" title="Permalink to this heading"></a></h3>
+<span id="axi-adrv9001-adc-config"></span><h3>Configure ADC common interface<a class="headerlink" href="#configure-adc-common-interface" title="Link to this heading"></a></h3>
 <p>Register <strong>0x0044 REG_CNTRL</strong></p>
 <ul class="simple">
 <li><p>[12:8] - NUM_LANES (<strong>new</strong>) - number of active lanes (1 : CSSI 1-lane, LSSI
@@ -774,7 +779,7 @@ DDR)</p></li>
 </section>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -980,7 +985,7 @@ DDR)</p></li>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>There are two ADC interfaces, composed of enable, valid, data and underflow
@@ -2052,7 +2057,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </div></section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
 <p>The register map of the core contains instances of several generic register maps
 like ADC common, ADC channel, DAC common, DAC channel etc. The following table
 presents the base addresses of each instance, after that can be found the
@@ -2063,7 +2068,7 @@ see <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.
 <a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html#generic-dac-register-access"><span class="std std-ref">DAC register access</span></a>.</p>
 </section>
 <section id="register-map-base-addresses-for-axi-adrv9001">
-<h2>Register Map base addresses for axi_adrv9001<a class="headerlink" href="#register-map-base-addresses-for-axi-adrv9001" title="Permalink to this heading"></a></h2>
+<h2>Register Map base addresses for axi_adrv9001<a class="headerlink" href="#register-map-base-addresses-for-axi-adrv9001" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <tbody>
@@ -4919,14 +4924,14 @@ memory for transmit.</p>
 </section>
 </div></section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001" target="_blank">library/axi_adrv9001</a></p></li>
 <li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9001" target="_blank">projects/adrv9001</a></p></li>
 <li><p>HDL project documentation at <a class="reference internal" href="../../projects/adrv9001/index.html#adrv9001"><span class="std std-ref">ADRV9001 HDL Project</span></a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9002" target="_blank">ADRV9001/ADRV9002</a></p></li>
 <li><p>No-OS driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/rf-transceiver/navassa/devices/adrv9001" target="_blank">drivers/rf-transceiver/navassa/devices/adrv9001</a></p></li>
-<li><p>Linux driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/navassa" target="_blank">drivers/iio/adc/navassa</a></p></li>
+<li><p>Linux driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/iio/adc/navassa" target="_blank">drivers/iio/adc/navassa</a></p></li>
 </ul>
 </section>
 </section>

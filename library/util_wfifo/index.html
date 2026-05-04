@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>Util WFIFO &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -109,7 +109,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -198,6 +198,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -302,6 +303,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -371,7 +373,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="util-wfifo">
-<span id="id1"></span><h1>Util WFIFO<a class="headerlink" href="#util-wfifo" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>Util WFIFO<a class="headerlink" href="#util-wfifo" title="Link to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330.0 282" width="330.0" class="no-background"><style>
                 a {
@@ -400,7 +402,7 @@ downscale the clock rate is to increase the data width of the output ports of
 the FIFO. Currently the util_wfifo supports four data width ratios:
 1:1/1:2/1:4/1:8.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Supports Altera and AMD Xilinx devices.</p></li>
 <li><p>Downscale the ADC data path’s clock rate.</p></li>
@@ -408,7 +410,7 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -425,7 +427,7 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -475,7 +477,7 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
 <div><section id="bus-interface-din_clk">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="151f94c14c0c6d290df3fcf85a2a18cee68240c5" name="151f94c14c0c6d290df3fcf85a2a18cee68240c5" type="checkbox"></input><label for="151f94c14c0c6d290df3fcf85a2a18cee68240c5"><div><p>din_clk</p>
@@ -662,7 +664,7 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </section>
 </div></section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_wfifo" target="_blank">library/util_wfifo</a></p></li>
 </ul>

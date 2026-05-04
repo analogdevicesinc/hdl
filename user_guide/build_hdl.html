@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>Build an HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../index.html">
           <div>HDL</div>
@@ -121,6 +121,7 @@
 </li>
 <li><a class="reference internal" href="#c-building-a-lattice-project">4c. Building a Lattice project</a><ul>
 <li><a class="reference internal" href="#id1">Checking the build and analyzing results</a></li>
+<li><a class="reference internal" href="#running-the-simulation-design-where-available">Running the simulation design (where available)</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#supported-targets-of-make-command">Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command</a></li>
@@ -150,7 +151,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -239,6 +240,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -343,6 +345,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -412,9 +415,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="build-an-hdl-project">
-<span id="build-hdl"></span><h1>Build an HDL project<a class="headerlink" href="#build-an-hdl-project" title="Permalink to this heading"></a></h1>
+<span id="build-hdl"></span><h1>Build an HDL project<a class="headerlink" href="#build-an-hdl-project" title="Link to this heading"></a></h1>
 <section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Please note that ADI only provides the source files necessary to create
@@ -443,7 +446,7 @@ in many ways. We use <strong>command line</strong> and mostly <strong>Linux syst
 </div>
 </section>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>This is a detailed guide with lots of information regarding everything.
 Careful reading is needed. To put it in few words, the following steps will
 be described:</p>
@@ -456,7 +459,7 @@ be described:</p>
 </ol>
 </section>
 <section id="needed-tools">
-<span id="build-hdl-needed-tools"></span><h2>1. Needed tools<a class="headerlink" href="#needed-tools" title="Permalink to this heading"></a></h2>
+<span id="build-hdl-needed-tools"></span><h2>1. Needed tools<a class="headerlink" href="#needed-tools" title="Link to this heading"></a></h2>
 <p>We offer reference designs for our evaluation boards, on three FPGA platforms:
 from AMD Xilinx, from Intel and from Lattice.</p>
 <p>Each one of these platforms has their own FPGA design suites:</p>
@@ -500,7 +503,7 @@ Subsystem for Linux).</p>
 </div>
 </section>
 <section id="setup-the-hdl-repository">
-<span id="build-hdl-setup-repo"></span><h2>2. Setup the HDL repository<a class="headerlink" href="#setup-the-hdl-repository" title="Permalink to this heading"></a></h2>
+<span id="build-hdl-setup-repo"></span><h2>2. Setup the HDL repository<a class="headerlink" href="#setup-the-hdl-repository" title="Link to this heading"></a></h2>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>We offer support only for
@@ -561,7 +564,7 @@ If not, you can simply pull the latest sources using <code class="docutils liter
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="environment">
-<span id="build-hdl-environment"></span><h2>3. Environment<a class="headerlink" href="#environment" title="Permalink to this heading"></a></h2>
+<span id="build-hdl-environment"></span><h2>3. Environment<a class="headerlink" href="#environment" title="Link to this heading"></a></h2>
 <p>Our recommended build flow involves using <code class="docutils literal notranslate"><span class="pre">make</span></code> and the command line versions
 of the FPGA design tools.
 This approach streamlines our overall build and release process, as it
@@ -597,7 +600,7 @@ for the current session (or open a new one) and call the defined method:</p>
 </div>
 <div class="clear-left"></div></div></div><p>Check out the following sections for the paths you need to export.</p>
 <section id="a-linux-environment-setup">
-<h3>3a. Linux environment setup<a class="headerlink" href="#a-linux-environment-setup" title="Permalink to this heading"></a></h3>
+<h3>3a. Linux environment setup<a class="headerlink" href="#a-linux-environment-setup" title="Link to this heading"></a></h3>
 <p>All major distributions should have <code class="docutils literal notranslate"><span class="pre">make</span></code> installed by default. If not,
 when trying the command, it should tell you how to install it with the
 package name.</p>
@@ -638,20 +641,26 @@ package name.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/propel/2023.2/builder/rtf/bin/lin64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/propel/2025.2/builder/rtf/bin/lin64
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/radiant/2023.2/bin/lin64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/radiant/2025.2/bin/lin64
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/propel/2025.2/questasim/linux_x86_64
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="b-windows-environment-setup">
-<h3>3b. Windows environment setup<a class="headerlink" href="#b-windows-environment-setup" title="Permalink to this heading"></a></h3>
+<h3>3b. Windows environment setup<a class="headerlink" href="#b-windows-environment-setup" title="Link to this heading"></a></h3>
 <section id="wsl">
-<h4>WSL<a class="headerlink" href="#wsl" title="Permalink to this heading"></a></h4>
+<h4>WSL<a class="headerlink" href="#wsl" title="Link to this heading"></a></h4>
 <p><a class="icon link reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install/" target="_blank">WSL</a> (or Windows
 Subsystem for Linux) is both a UNIX-like environment and a command-line
 interface for Microsoft Windows. You need to install the Ubuntu distribution.</p>
@@ -901,7 +910,7 @@ current environment, for example:</p>
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="cygwin-not-recommended">
-<span id="build-hdl-cygwin"></span><h4>Cygwin (NOT RECOMMENDED)<a class="headerlink" href="#cygwin-not-recommended" title="Permalink to this heading"></a></h4>
+<span id="build-hdl-cygwin"></span><h4>Cygwin (NOT RECOMMENDED)<a class="headerlink" href="#cygwin-not-recommended" title="Link to this heading"></a></h4>
 <p>Using <a class="icon link reference external" href="https://www.cygwin.com/" target="_blank">Cygwin</a> is not recommended anymore, and if
 one encounters issues with this flow, we will not offer support for this.</p>
 <p><span class="red">We do not offer support on Cygwin-related issues or on Vivado/Vitis issues!</span></p>
@@ -910,7 +919,7 @@ One cannot build the boot file needed for the setup, but instead should use
 the Vivado Tcl console building mode to build the BOOT.BIN (see
 “Building the BOOT.BIN in Vivado GUI”).</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="a992d65c293186b9f47ee3025d780bc7d060d332" name="a992d65c293186b9f47ee3025d780bc7d060d332" type="checkbox"></input><label for="a992d65c293186b9f47ee3025d780bc7d060d332"><p>Installation paths for tools in Cygwin</p>
+<input class="collapsible_input" id="df07288c916ce7002d1452eb97dba1b2401c7632" name="df07288c916ce7002d1452eb97dba1b2401c7632" type="checkbox"></input><label for="df07288c916ce7002d1452eb97dba1b2401c7632"><p>Installation paths for tools in Cygwin</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
@@ -976,13 +985,19 @@ the Vivado Tcl console building mode to build the BOOT.BIN (see
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/propel/2023.2/builder/rtf/bin/nt64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/propel/2025.2/builder/rtf/bin/nt64
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/radiant/2023.2/bin/nt64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/radiant/2025.2/bin/nt64
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/propel/2025.2/questasim/win64
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></div>
@@ -1054,7 +1069,7 @@ hdl/projects/ad9081_fmca_ebz/zcu102/ad9081_fmca_ebz_zcu102.sdk/system_top.xsa).<
 </section>
 </section>
 <section id="building-the-projects">
-<span id="build-hdl-build"></span><h2>4. Building the projects<a class="headerlink" href="#building-the-projects" title="Permalink to this heading"></a></h2>
+<span id="build-hdl-build"></span><h2>4. Building the projects<a class="headerlink" href="#building-the-projects" title="Link to this heading"></a></h2>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>Before building any project, you <strong>must</strong>:</p>
@@ -1080,7 +1095,7 @@ run <code class="docutils literal notranslate"><span class="pre">make</span> <sp
 To clean both the already built IP cores which the project depends on and the
 project, run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean-all</span></code>.</p>
 <section id="a-building-an-amd-project">
-<span id="build-hdl-build-amd-project"></span><h3>4a. Building an AMD project<a class="headerlink" href="#a-building-an-amd-project" title="Permalink to this heading"></a></h3>
+<span id="build-hdl-build-amd-project"></span><h3>4a. Building an AMD project<a class="headerlink" href="#a-building-an-amd-project" title="Link to this heading"></a></h3>
 <p>An AMD project is built the same way as an Intel project. The only
 exception is that there are a few ‘sub-make(s)’ for the library
 components.</p>
@@ -1129,7 +1144,7 @@ characters.</p>
 </pre></div>
 </div>
 <section id="available-build-flags-and-parameters">
-<h4>Available build flags and parameters<a class="headerlink" href="#available-build-flags-and-parameters" title="Permalink to this heading"></a></h4>
+<h4>Available build flags and parameters<a class="headerlink" href="#available-build-flags-and-parameters" title="Link to this heading"></a></h4>
 <p>Below are some of the available parameters and system variables that can be used
 when building a project:</p>
 <ul class="simple">
@@ -1212,7 +1227,7 @@ default mode. There is no need to set ADI_USE_OOC_SYNTHESIS variable.</p>
 </div>
 </section>
 <section id="checking-the-build-and-analyzing-results-of-library-components">
-<h4>Checking the build and analyzing results of library components<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-library-components" title="Permalink to this heading"></a></h4>
+<h4>Checking the build and analyzing results of library components<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-library-components" title="Link to this heading"></a></h4>
 <p>If you look closely, you see what it is actually doing. It enters a
 library component folder then calls <strong>Vivado</strong> in batch mode. The IP
 commands are in the source Tcl file and output is redirected to a log
@@ -1246,7 +1261,7 @@ You may also check the generated files for more information.</p>
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="checking-the-build-and-analyzing-results-of-projects">
-<h4>Checking the build and analyzing results of projects<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-projects" title="Permalink to this heading"></a></h4>
+<h4>Checking the build and analyzing results of projects<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-projects" title="Link to this heading"></a></h4>
 <p>The last thing that <code class="docutils literal notranslate"><span class="pre">make</span></code> does in this above example is building the project.
 It is exactly the same <strong>rule</strong> as the library component. The log file, in
 this example, is called <strong>daq2_zc706_vivado.log</strong> and is inside the
@@ -1391,7 +1406,7 @@ without header <strong>.bin</strong> and the binary bit file <strong>.bit</stron
 </section>
 </section>
 <section id="b-building-an-intel-project">
-<h3>4b. Building an Intel project<a class="headerlink" href="#b-building-an-intel-project" title="Permalink to this heading"></a></h3>
+<h3>4b. Building an Intel project<a class="headerlink" href="#b-building-an-intel-project" title="Link to this heading"></a></h3>
 <p>An Intel project build is relatively easy. There is no need to build any
 library components.</p>
 <p>You just need to go to the hdl/projects folder, choose the ADI part that you
@@ -1426,7 +1441,7 @@ In that case, the make will get an additional attribute:
 <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">NIOS2_MMU=0</span></code></p>
 </div>
 <section id="checking-the-build-and-analyzing-results">
-<h4>Checking the build and analyzing results<a class="headerlink" href="#checking-the-build-and-analyzing-results" title="Permalink to this heading"></a></h4>
+<h4>Checking the build and analyzing results<a class="headerlink" href="#checking-the-build-and-analyzing-results" title="Link to this heading"></a></h4>
 <p>If you look closely at the <strong>rule</strong> for this target, you see it is just
 calling <code class="docutils literal notranslate"><span class="pre">quartus_sh</span></code> with the project TCL file and redirecting the
 output to a log file.</p>
@@ -1561,7 +1576,7 @@ implementation.</p>
 </div></section>
 </section>
 <section id="c-building-a-lattice-project">
-<h3>4c. Building a Lattice project<a class="headerlink" href="#c-building-a-lattice-project" title="Permalink to this heading"></a></h3>
+<h3>4c. Building a Lattice project<a class="headerlink" href="#c-building-a-lattice-project" title="Link to this heading"></a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Instantiating IPs in Propel Builder CLI or GUI does not work in WSL for an
@@ -1620,10 +1635,18 @@ The <strong>ad738x_fmc</strong> project is available for the
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>This assumes that you have the tools and licenses set up correctly.
-There is nothing you can gather from the <code class="docutils literal notranslate"><span class="pre">make</span></code> output (other than if the
+For Lattice builds, ensure that the <code class="docutils literal notranslate"><span class="pre">LM_LICENSE_FILE</span></code>
+environment variable is exported before running <code class="docutils literal notranslate"><span class="pre">make</span></code>.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LM_LICENSE_FILE</span><span class="o">=</span>&lt;path_to_license_file_or_server&gt;
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>There is nothing you can gather from the <code class="docutils literal notranslate"><span class="pre">make</span></code> output (other than if the
 build failed or not); the actual failure message is in a log file.</p>
 <section id="id1">
-<h4>Checking the build and analyzing results<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<h4>Checking the build and analyzing results<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
 <p>The make script for Lattice projects is <code class="docutils literal notranslate"><span class="pre">projects/scripts/project-lattice.mk</span></code>
 which is included in <strong>Makefile</strong> after setting the project dependencies.
 If you check this make script, you can note that we have two rules we run by the
@@ -1707,9 +1730,91 @@ the <strong>constraint files</strong> and build the project.</p>
 <code class="docutils literal notranslate"><span class="pre">&lt;ADI_carrier_proj_dir&gt;/_bld/&lt;project_name&gt;/impl_1</span></code> folder if the project was
 successfully built.</p>
 </section>
+<section id="running-the-simulation-design-where-available">
+<span id="lattice-simulation-flow"></span><h4>Running the simulation design (where available)<a class="headerlink" href="#running-the-simulation-design-where-available" title="Link to this heading"></a></h4>
+<p>For simulation, the following make rules are also available:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">sim:</span></code> runs Questasim GUI using the generated simulation do-file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">sim-cli:</span></code> runs Questasim CLI (<code class="docutils literal notranslate"><span class="pre">-c</span></code>) using the generated simulation
+do-file. When you create a sim-cli-compatible VIP in advance for CI runs,
+make sure you add a $finish criterion for PASS or $error + $stop for
+FAIL in one of the simulation source files (.sv) in one of the VIPs
+(Verification IPs) to end the simulation for the design.</p></li>
+</ul>
+<p>These make rules require a <a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad738x_fmc/lfcpnx/system_v_pb.tcl" target="_blank">system_v_pb.tcl</a>
+simulation block-design file in the project directory. The file
+must instantiate the DUT together with any VIPs or simulation-only helper IPs
+so Propel Builder can emit the corresponding Questasim setup. Package those
+helpers as described in <a class="reference internal" href="ip_cores/creating_new_ip.html#ip-sim-models"><span class="std std-ref">Simulation IPs (Lattice Propel Builder / QuestaSim)</span></a> to ensure their VLNV uses the
+<code class="docutils literal notranslate"><span class="pre">sim_model</span></code> library; the SPI Engine VIP under
+<a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/sim/spi_sdo_sin_tb" target="_blank">library/spi_engine/sim/spi_sdo_sin_tb</a>
+shows the expected structure and naming.</p>
+<p>In addition, most systems need a generated
+<code class="docutils literal notranslate"><span class="pre">SYSMEM_INIT_FILE</span></code> (custom make parameter) for memory initialization
+(&lt;no_os_project&gt;.mem) from the corresponding no-OS simulation build
+(<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">SIMULATION=y</span></code>) if the project is a RISC-V based system. The
+SIMULATION=y flag sets a NO_OS_LATTICE_SIMULATION define which currently is
+used to reduce/limit the software delays for faster simulation.</p>
+<p>The <a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad738x_fmc/lfcpnx" target="_blank">hdl/projects/ad738x_fmc/lfcpnx</a>
+project contains a complete reference setup (including <code class="docutils literal notranslate"><span class="pre">system_v_pb.tcl</span></code> and
+the exported simulation IPs) that you can reuse for new Lattice/Questasim flows.</p>
+<p>For Lattice simulation (Questasim), ensure that the <code class="docutils literal notranslate"><span class="pre">SALT_LICENSE_SERVER</span></code>
+environment variable is exported before running <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">sim</span></code>.
+This is the same file or server path used for Lattice Propel Builder and Radiant
+builds via <code class="docutils literal notranslate"><span class="pre">LM_LICENSE_FILE</span></code>.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">SALT_LICENSE_SERVER</span><span class="o">=</span>&lt;path_to_license_file_or_server&gt;
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Simulation flow for the hdl/projects/ad738x_fmc/lfcpnx project:</p>
+<ol class="arabic">
+<li><p>Generate the Propel Builder block design:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad738x_fmc/lfcpnx
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad738x_fmc/lfcpnx$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>pb
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Copy the generated SGE folder from
+<code class="docutils literal notranslate"><span class="pre">hdl/projects/ad738x_fmc/lfcpnx/_bld/ad738x_fmc_lfcpnx/</span></code>
+to the corresponding no-OS project root (for example,
+<a class="icon link reference external" href="https://github.com/analogdevicesinc/no-OS/tree/add_lattice_riscvrx_ad738x_fmcz/projects/ad738x_fmcz" target="_blank">no-OS/projects/ad738x_fmcz</a>).</p></li>
+<li><p>Build the no-OS project with simulation enabled:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">SIMULATION</span><span class="o">=</span>y
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+<li><p>Run HDL simulation using the generated memory init file from the no-OS build:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad738x_fmc/lfcpnx
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad738x_fmc/lfcpnx$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>sim<span class="w"> </span><span class="nv">SYSMEM_INIT_FILE</span><span class="o">=</span>&lt;path_to&gt;/&lt;no_os_project&gt;.mem
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></li>
+</ol>
+</section>
 </section>
 <section id="supported-targets-of-make-command">
-<h3>Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command<a class="headerlink" href="#supported-targets-of-make-command" title="Permalink to this heading"></a></h3>
+<h3>Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command<a class="headerlink" href="#supported-targets-of-make-command" title="Link to this heading"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="icon link reference external" href="https://www.gnu.org/software/make/manual/make.html" target="_blank">Make</a> is a build
@@ -1761,14 +1866,14 @@ e.g. <code class="docutils literal notranslate"><span class="pre">component.xml<
 </section>
 </section>
 <section id="preparing-the-sd-card">
-<span id="build-hdl-boot-file"></span><h2>5. Preparing the SD card<a class="headerlink" href="#preparing-the-sd-card" title="Permalink to this heading"></a></h2>
+<span id="build-hdl-boot-file"></span><h2>5. Preparing the SD card<a class="headerlink" href="#preparing-the-sd-card" title="Link to this heading"></a></h2>
 <p>First, you have to write the SD card with the
-<a class="icon link reference external" href="https://analogdevicesinc.github.io/adi-kuiper-gen/index.html" target="_blank" title="(in Kuiper vlatest)"><span class="xref std std-doc">ADI Kuiper image</span></a>.
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/kuiper/index.html" target="_blank" title="(in Kuiper latest)"><span class="xref std std-doc">ADI Kuiper image</span></a>.
 Check this
-<a class="icon link reference external" href="https://analogdevicesinc.github.io/adi-kuiper-gen/quick-start.html#quick-start" target="_blank" title="(in Kuiper vlatest)"><span class="xref std std-ref">tutorial</span></a>.</p>
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/kuiper/quick-start.html#quick-start" target="_blank" title="(in Kuiper latest)"><span class="xref std std-ref">tutorial</span></a>.</p>
 <p>Once you are done with that, you can go on with the following steps.</p>
 <section id="for-amd-fpgas">
-<h3>For AMD FPGAs<a class="headerlink" href="#for-amd-fpgas" title="Permalink to this heading"></a></h3>
+<h3>For AMD FPGAs<a class="headerlink" href="#for-amd-fpgas" title="Link to this heading"></a></h3>
 <p>On the BOOT partition recently created, you will find folders for each
 carrier that we support, and each of these folders contain an archive
 called <strong>bootgen_sysfiles.tgz</strong>. These have all the files needed to
@@ -1799,14 +1904,14 @@ found in <em>zynqmp-common</em></p></li>
 </div>
 </section>
 <section id="b-for-intel-fpgas">
-<h3>5b. For Intel FPGAs<a class="headerlink" href="#b-for-intel-fpgas" title="Permalink to this heading"></a></h3>
+<h3>5b. For Intel FPGAs<a class="headerlink" href="#b-for-intel-fpgas" title="Link to this heading"></a></h3>
 <p>Check out <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images" target="_blank">this guide</a>.</p>
 </section>
 </section>
 <section id="tools-and-their-versions">
-<h2>Tools and their versions<a class="headerlink" href="#tools-and-their-versions" title="Permalink to this heading"></a></h2>
+<h2>Tools and their versions<a class="headerlink" href="#tools-and-their-versions" title="Link to this heading"></a></h2>
 <section id="tools">
-<h3>Tools<a class="headerlink" href="#tools" title="Permalink to this heading"></a></h3>
+<h3>Tools<a class="headerlink" href="#tools" title="Link to this heading"></a></h3>
 <p>ADI provides reference designs for Intel, AMD and soon Lattice.</p>
 <p>Please note that this is NOT a comparison (generic or otherwise).
 This is what you should expect and understand when using ADI HDL repository
@@ -1817,7 +1922,7 @@ on these tools.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper colwidths-auto docutils container" id="id2">
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Tools from Intel and AMD</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Tools from Intel and AMD</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Notes</p></th>
 <th class="head"><p>Intel</p></th>
@@ -1882,7 +1987,7 @@ slow and frustrating process)</span></p></td>
 </div>
 <div class="table-wrapper colwidths-auto docutils container" id="id3">
 <table class="docutils align-default" id="id3">
-<caption><span class="caption-text">Tools from Lattice</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Tools from Lattice</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Notes</p></th>
 <th class="head"><p>Lattice</p></th>
@@ -1940,7 +2045,7 @@ to replace the -vlnv and -cfg_value section in the tcl scripts.</span></p></td>
 </div>
 </div></section>
 <section id="tool-versions">
-<span id="build-hdl-tool-versions"></span><h3>Tool versions<a class="headerlink" href="#tool-versions" title="Permalink to this heading"></a></h3>
+<span id="build-hdl-tool-versions"></span><h3>Tool versions<a class="headerlink" href="#tool-versions" title="Link to this heading"></a></h3>
 <p>Though the ADI libraries work across different versions of the tools,
 the projects we provide <strong>may not</strong>. The AMD, Intel and Lattice IPs may or may
 not work across versions. We can only assure you that they are tested and
@@ -1965,7 +2070,7 @@ which builds the projects.</p>
 </section>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images" target="_blank">Altera SoC quick start guide</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms8-ebz/quickstart/a10soc" target="_blank">Arria 10 SoC quick start guide</a></p></li>
@@ -1974,7 +2079,7 @@ kernel</a></p></li>
 </ul>
 </section>
 <section id="errors-warnings-and-notes">
-<h2>Errors, warnings and notes<a class="headerlink" href="#errors-warnings-and-notes" title="Permalink to this heading"></a></h2>
+<h2>Errors, warnings and notes<a class="headerlink" href="#errors-warnings-and-notes" title="Link to this heading"></a></h2>
 <p>Assuming the right to make an honest comment, the tools (both Quartus
 and Vivado) are not that useful or friendly when it comes to messages.
 In most cases, you may see <strong>hacked-in</strong> debugging <code class="docutils literal notranslate"><span class="pre">printf</span></code> sort of
@@ -1983,11 +2088,11 @@ going to see a lot of <strong>warnings</strong> and some <strong>critical-warnin
 to what could be hard to answer). Here are some of the commonly asked
 EngineerZone questions and their explanations.</p>
 <section id="amd-xilinx-vivado">
-<h3>AMD Xilinx Vivado<a class="headerlink" href="#amd-xilinx-vivado" title="Permalink to this heading"></a></h3>
+<h3>AMD Xilinx Vivado<a class="headerlink" href="#amd-xilinx-vivado" title="Link to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span><span class="p">:</span> <span class="p">[</span><span class="n">BD</span> <span class="mi">5</span><span class="o">-</span><span class="mi">216</span><span class="p">]</span> <span class="n">VLNV</span> <span class="o">&lt;</span><span class="n">analog</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">user</span><span class="p">:</span><span class="n">axi_clkgen</span><span class="p">:</span><span class="mf">1.0</span><span class="o">&gt;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">supported</span> <span class="k">for</span> <span class="n">the</span> <span class="n">current</span> <span class="n">part</span><span class="o">.</span>
 
 <span class="n">ERROR</span><span class="p">:</span> <span class="p">[</span><span class="n">Common</span> <span class="mi">17</span><span class="o">-</span><span class="mi">39</span><span class="p">]</span> <span class="s1">&#39;create_bd_cell&#39;</span> <span class="n">failed</span> <span class="n">due</span> <span class="n">to</span> <span class="n">earlier</span> <span class="n">errors</span> <span class="k">while</span> <span class="n">executing</span>
-<span class="s2">&quot;create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen&quot;</span> <span class="n">invoked</span> <span class="kn">from</span> <span class="nn">within</span>
+<span class="s2">&quot;create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen&quot;</span> <span class="n">invoked</span> <span class="kn">from</span><span class="w"> </span><span class="nn">within</span>
 <span class="s2">&quot;set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]&quot;</span> <span class="p">(</span><span class="n">file</span> <span class="s2">&quot;../../../projects/common/zc706/zc706_system_bd.tcl&quot;</span> <span class="n">line</span> <span class="mi">57</span><span class="p">)</span>
 </pre></div>
 </div>

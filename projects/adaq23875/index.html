@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>ADAQ23875 HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -132,7 +132,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -221,6 +221,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -325,6 +326,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">ADAQ23875</a></li>
@@ -394,9 +396,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="adaq23875-hdl-project">
-<span id="adaq23875"></span><h1>ADAQ23875 HDL project<a class="headerlink" href="#adaq23875-hdl-project" title="Permalink to this heading"></a></h1>
+<span id="adaq23875"></span><h1>ADAQ23875 HDL project<a class="headerlink" href="#adaq23875-hdl-project" title="Link to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ23875" target="_blank">EVAL-ADAQ23875</a>/ <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ23876" target="_blank">EVAL-ADAQ23876</a>/ <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ23878" target="_blank">EVAL-ADAQ23878</a> provide
 an analog front-end and an FMC digital interface for <a class="icon adi reference external" href="https://www.analog.com/ADAQ23875" target="_blank">ADAQ23875</a>/
 <a class="icon adi reference external" href="https://www.analog.com/ADAQ23876" target="_blank">ADAQ23876</a>/ <a class="icon adi reference external" href="https://www.analog.com/ADAQ23878" target="_blank">ADAQ23878</a>, its core. It is a low noise, high speed
@@ -411,7 +413,7 @@ output modes, allowing the user to optimize the interface data rate for each
 application, through setting a parameter.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ23875" target="_blank">EVAL-ADAQ23875</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ23876" target="_blank">EVAL-ADAQ23876</a></p></li>
@@ -419,7 +421,7 @@ application, through setting a parameter.</p>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ23875" target="_blank">ADAQ23875</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ23876" target="_blank">ADAQ23876</a></p></li>
@@ -429,35 +431,37 @@ application, through setting a parameter.</p>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a> on FMC slot</p></li>
 </ul>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The VADJ for the Zedboard must be set to 2.5V.</p>
 </div>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagrams:</p>
 <section id="default-timing-configuration-use-mmcm-0">
-<h4>Default timing configuration (USE_MMCM=0)<a class="headerlink" href="#default-timing-configuration-use-mmcm-0" title="Permalink to this heading"></a></h4>
+<h4>Default timing configuration (USE_MMCM=0)<a class="headerlink" href="#default-timing-configuration-use-mmcm-0" title="Link to this heading"></a></h4>
 <p>The following block diagram shows the default case, where the <strong>reference
 clock</strong> has the same frequency as the <strong>sampling clock</strong>, meaning 100MHz.</p>
-<a class="reference internal image-reference" href="../../_images/adaq2387x_zed_block_diagram_default.svg"><img alt="ADAQ2387X/ZedBoard block diagram for ref_clk = sampling_clk = 100MHz" class="align-center" src="../../_images/adaq2387x_zed_block_diagram_default.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/adaq2387x_zed_block_diagram_default.svg"><img alt="ADAQ2387X/ZedBoard block diagram for ref_clk = sampling_clk = 100MHz" class="align-center" src="../../_images/adaq2387x_zed_block_diagram_default.svg" width="800" />
+</a>
 </section>
 <section id="enhanced-timing-configuration-use-mmcm-1">
-<h4>Enhanced timing configuration (USE_MMCM=1)<a class="headerlink" href="#enhanced-timing-configuration-use-mmcm-1" title="Permalink to this heading"></a></h4>
+<h4>Enhanced timing configuration (USE_MMCM=1)<a class="headerlink" href="#enhanced-timing-configuration-use-mmcm-1" title="Link to this heading"></a></h4>
 <p>The following block diagram shows the case where a Clocking Wizard is added to
 generate the 120MHz <strong>sampling clock</strong> from the 100MHz <strong>reference clock</strong>.</p>
-<a class="reference internal image-reference" href="../../_images/adaq2387x_zed_block_diagram_mmcm.svg"><img alt="ADAQ2387X/ZedBoard block diagram for ref_clk = 100MHz &amp; sampling_clk = 120Mhz" class="align-center" src="../../_images/adaq2387x_zed_block_diagram_mmcm.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/adaq2387x_zed_block_diagram_mmcm.svg"><img alt="ADAQ2387X/ZedBoard block diagram for ref_clk = 100MHz &amp; sampling_clk = 120Mhz" class="align-center" src="../../_images/adaq2387x_zed_block_diagram_mmcm.svg" width="800" />
+</a>
 </section>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>TWOLANES: specifies the number of lanes used</p>
 <ul>
@@ -486,7 +490,7 @@ which is 7.5MSPS.</p></li>
 </ul>
 </section>
 <section id="jumper-setup">
-<h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Permalink to this heading"></a></h3>
+<h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Link to this heading"></a></h3>
 <p>Depending on what configuration of pins is chosen on the jumpers P1, P2 and P3,
 the device can act in different modes, as described below. Of course, the PD
 jumper overrides the PD signal from the FPGA. It is controlled by a
@@ -513,7 +517,7 @@ one-bit-adc-dac, in software.</p>
 </ul>
 </section>
 <section id="clock-scheme">
-<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>The clock architecture of the EVAL-ADAQ2387X is designed
 with careful consideration to ensure low jitter and low phase noise.</p></li>
@@ -525,7 +529,7 @@ the device as the sampling clock, on which the data was sampled.</p></li>
 </ul>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL
 (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
@@ -551,7 +555,7 @@ added to the base address from HDL
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -593,7 +597,7 @@ added to the base address from HDL
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -616,7 +620,7 @@ added to the base address from HDL
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -660,12 +664,12 @@ two-lane mode (TWOLANES=1, ADC_RES=16, USE_MMCM=1):</p>
 guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading"></a></h3>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
@@ -679,7 +683,7 @@ guide.</p>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adaq23875" target="_blank">ADAQ23875 HDL project source code</a></p></li>
 </ul>
@@ -742,23 +746,23 @@ guide.</p>
 </div>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ltc2387" target="_blank">[Wiki] LTC2387 SAR ADC IIO Linux driver page</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23875.dts" target="_blank">ADAQ23875/ADAQ23876 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23878.dts" target="_blank">ADAQ23878 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ltc2387.c" target="_blank">LTC2387 Linux driver</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23875.dts" target="_blank">ADAQ23875/ADAQ23876 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23878.dts" target="_blank">ADAQ23878 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/iio/adc/ltc2387.c" target="_blank">LTC2387 Linux driver</a></p></li>
 </ul>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

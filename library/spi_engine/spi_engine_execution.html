@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>SPI Engine Execution Module &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -108,7 +108,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -197,6 +197,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -301,6 +302,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -370,7 +372,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="spi-engine-execution-module">
-<span id="spi-engine-execution"></span><h1>SPI Engine Execution Module<a class="headerlink" href="#spi-engine-execution-module" title="Permalink to this heading"></a></h1>
+<span id="spi-engine-execution"></span><h1>SPI Engine Execution Module<a class="headerlink" href="#spi-engine-execution-module" title="Link to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 205.2 186" width="205.2" class="no-background"><style>
                 a {
@@ -382,7 +384,7 @@ IP core is the heart of the SPI Engine framework.
 It is responsible for handling a SPI Engine control stream and translates it
 into low-level SPI bus transactions.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -406,7 +408,7 @@ into low-level SPI bus transactions.</p>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -479,7 +481,7 @@ into low-level SPI bus transactions.</p>
 </section>
 </div></section>
 <section id="signal-and-interface-pins">
-<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Permalink to this heading"></a></h2>
+<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Link to this heading"></a></h2>
 <div><section id="bus-interface-ctrl">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="55096f5c41d27e7d18a5ace03156e3daf3c9b896" name="55096f5c41d27e7d18a5ace03156e3daf3c9b896" type="checkbox"></input><label for="55096f5c41d27e7d18a5ace03156e3daf3c9b896"><div><p>ctrl</p>
@@ -659,7 +661,7 @@ into low-level SPI bus transactions.</p>
 </section>
 </div></section>
 <section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading"></a></h2>
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading"></a></h2>
 <p>The SPI Engine Execution module implements the physical access to the SPI bus.
 It implements a small but powerful programmable state machine that translates a
 SPI Engine command stream into low-level SPI bus access.</p>
@@ -671,7 +673,8 @@ multi-function counter and compares unit that is responsible for handling the
 timing and a shift register which holds the received and transmitted SPI data.</p>
 <p>The module has an optional programmable pre-scaler register that can be used to
 divide the external clock to the counter and compare unit.</p>
-<img alt="../../_images/spi_engine.svg" src="../../_images/spi_engine.svg" /></section>
+<img alt="../../_images/spi_engine.svg" src="../../_images/spi_engine.svg" />
+</section>
 </section>
 
 

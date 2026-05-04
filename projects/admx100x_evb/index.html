@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The EVAL-ADMX1001 and EVAL-ADMX1002 modules are ultra-low-distortion, low-noise signal generators. They support output frequencies up to 40 kHz when the digital  pre-distortion (DPD) algorithm is disabled, and up to 20 kHz with DPD enabled while maintaining a typical total harmonic distortion (THD) of −130 dB at 1 kHz. The ADMX1001 includes a built-in acquisition channel that enables simultaneous generation and capture of differential signals, making it ideal for characterization and closed-loop evaluation of high-performance ADCs, audio converters, and precision sensing systems. The integrated DPD algorithm minimizes distortion typically introduced by DAC and amplifier stages, enabling the generation of extremely clean test signals for precision measurement applications. The ADMX1002 focuses solely on high-fidelity signal generation, providing a streamlined solution for setups where local signal acquisition is not required. Note that in the current HDL release, only the TX path is implemented and supported." name="description" />
+<meta content="The EVAL-ADMX1001 and EVAL-ADMX1002 modules are ultra-low-distortion, low-noise signal generators. They support output frequencies up to 40 kHz when the digital  pre-distortion (DPD) algorithm is disabled, and up to 20 kHz with DPD enabled while maintaining a typical total harmonic distortion (THD) of −130 dB at 1 kHz. The ADMX1001 includes a built-in acquisition channel that enables simultaneous generation and capture of differential signals, making it ideal for characterization and closed-loop evaluation of high-performance ADCs, audio converters, and precision sensing systems. The integrated DPD algorithm minimizes distortion typically introduced by DAC and amplifier stages, enabling the generation of extremely clean test signals for precision measurement applications. The ADMX1002 focuses solely on high-fidelity signal generation, providing a streamlined solution for setups where local signal acquisition is not required." name="description" />
 
     <title>ADMX100X-EVB HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -103,6 +103,8 @@
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
+<li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
+<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
@@ -122,7 +124,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -211,6 +213,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -315,6 +318,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adaq23875/index.html">ADAQ23875</a></li>
@@ -384,9 +388,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="admx100x-evb-hdl-project">
-<span id="admx100x-evb"></span><h1>ADMX100X-EVB HDL project<a class="headerlink" href="#admx100x-evb-hdl-project" title="Permalink to this heading"></a></h1>
+<span id="admx100x-evb"></span><h1>ADMX100X-EVB HDL project<a class="headerlink" href="#admx100x-evb-hdl-project" title="Link to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADMX1001" target="_blank">EVAL-ADMX1001</a> and <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADMX1002" target="_blank">EVAL-ADMX1002</a> modules are
 ultra-low-distortion, low-noise signal generators. They support output
 frequencies up to 40 kHz when the digital  pre-distortion (DPD) algorithm is
@@ -399,24 +403,31 @@ systems. The integrated DPD algorithm minimizes distortion typically introduced
 by DAC and amplifier stages, enabling the generation of extremely clean test
 signals for precision measurement applications. The ADMX1002 focuses solely on
 high-fidelity signal generation, providing a streamlined solution for setups
-where local signal acquisition is not required. Note that in the current HDL
-release, only the TX path is implemented and supported.</p>
+where local signal acquisition is not required.</p>
+<p>The HDL reference design implements both the TX signal generation path and the
+RX acquisition path. The RX path uses an <a class="icon adi reference external" href="https://www.analog.com/ADAQ7768-1" target="_blank">ADAQ7768-1</a> precision ADC,
+enabling simultaneous signal generation and capture on the ADMX1001.</p>
+<p>This project has a <a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine</span></a> instance to control and
+acquire data from the <a class="icon adi reference external" href="https://www.analog.com/ADAQ7768-1" target="_blank">ADAQ7768-1</a> 24-bit precision ADC. This instance
+provides support for capturing continuous samples at the maximum sample rate
+of 256 kSPS.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADMX1001" target="_blank">EVAL-ADMX1001</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADMX1002" target="_blank">EVAL-ADMX1002</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD5683R" target="_blank">AD5683R</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ7768-1" target="_blank">ADAQ7768-1</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -444,18 +455,24 @@ release, only the TX path is implemented and supported.</p>
 </div>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<p>The reference design uses the <a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine Framework</span></a> to
+interface with the <a class="icon adi reference external" href="https://www.analog.com/ADAQ7768-1" target="_blank">ADAQ7768-1</a> precision ADC on the RX acquisition path.
+The <a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload module</span></a> is used to capture
+continuous samples at the maximum sample rate of 256 kSPS, triggered by the
+DRDY (data ready) signal of the <a class="icon adi reference external" href="https://www.analog.com/ADAQ7768-1" target="_blank">ADAQ7768-1</a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The VADJ for the Zedboard must be set to 3.3V.</p>
 </div>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/admx100x-evb.svg"><img alt="ADMX100X/ZedBoard block diagram" class="align-center" src="../../_images/admx100x-evb.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/admx100x_evb.svg"><img alt="ADMX100X/ZedBoard block diagram" class="align-center" src="../../_images/admx100x_evb.svg" width="800" />
+</a>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -474,12 +491,17 @@ release, only the TX path is implemented and supported.</p>
 <tbody>
 <tr class="row-even"><td><p>PS</p></td>
 <td><p>SPI 0</p></td>
-<td><p>CS_DAC</p></td>
+<td><p>CS_FPGA</p></td>
 <td><p>0</p></td>
 </tr>
 <tr class="row-odd"><td><p>PS</p></td>
 <td><p>SPI 0</p></td>
-<td><p>CS_FPGA</p></td>
+<td><p>CS_DAC</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>axi_spi_engine</p></td>
+<td><p>ADAQ7768-1</p></td>
 <td><p>0</p></td>
 </tr>
 </tbody>
@@ -487,7 +509,11 @@ release, only the TX path is implemented and supported.</p>
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
+<p>The Software GPIO number is calculated as follows:</p>
+<ul class="simple">
+<li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
+</ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -509,23 +535,23 @@ release, only the TX path is implemented and supported.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>ADMX100X_SYNC_MODE</p></td>
-<td><p>OUT</p></td>
-<td><p>34</p></td>
-<td><p>88</p></td>
+<tr class="row-odd"><td><p>ACQ_DRDY</p></td>
+<td><p>IN</p></td>
+<td><p>43</p></td>
+<td><p>97</p></td>
 </tr>
-<tr class="row-even"><td><p>ADMX100X_EN</p></td>
+<tr class="row-even"><td><p>ACQ_RESET</p></td>
 <td><p>OUT</p></td>
-<td><p>35</p></td>
-<td><p>89</p></td>
+<td><p>42</p></td>
+<td><p>96</p></td>
 </tr>
-<tr class="row-odd"><td><p>ADMX100X_CAL</p></td>
+<tr class="row-odd"><td><p>ACQ_SYNQ_IN_FMC</p></td>
 <td><p>OUT</p></td>
-<td><p>38</p></td>
-<td><p>92</p></td>
+<td><p>41</p></td>
+<td><p>95</p></td>
 </tr>
 <tr class="row-even"><td><p>ADMX100X_TRIG</p></td>
-<td><p>OUT</p></td>
+<td><p>IN</p></td>
 <td><p>40</p></td>
 <td><p>94</p></td>
 </tr>
@@ -534,23 +560,38 @@ release, only the TX path is implemented and supported.</p>
 <td><p>39</p></td>
 <td><p>93</p></td>
 </tr>
-<tr class="row-even"><td><p>ADMX100X_RESET</p></td>
+<tr class="row-even"><td><p>ADMX100X_CAL</p></td>
+<td><p>IN</p></td>
+<td><p>38</p></td>
+<td><p>92</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADMX100X_VALID</p></td>
+<td><p>OUT</p></td>
+<td><p>37</p></td>
+<td><p>91</p></td>
+</tr>
+<tr class="row-even"><td><p>ADMX100X_READY</p></td>
+<td><p>OUT</p></td>
+<td><p>36</p></td>
+<td><p>90</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADMX100X_EN</p></td>
+<td><p>OUT</p></td>
+<td><p>35</p></td>
+<td><p>89</p></td>
+</tr>
+<tr class="row-even"><td><p>ADMX100X_SYNC_MODE</p></td>
+<td><p>IN</p></td>
+<td><p>34</p></td>
+<td><p>88</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADMX100X_RESET</p></td>
 <td><p>OUT</p></td>
 <td><p>33</p></td>
 <td><p>87</p></td>
 </tr>
-<tr class="row-odd"><td><p>ADMX100X_READY</p></td>
-<td><p>IN</p></td>
-<td><p>36</p></td>
-<td><p>90</p></td>
-</tr>
-<tr class="row-even"><td><p>ADMX100X_VALID</p></td>
-<td><p>IN</p></td>
-<td><p>37</p></td>
-<td><p>91</p></td>
-</tr>
-<tr class="row-odd"><td><p>ADMX100X_OT</p></td>
-<td><p>IN</p></td>
+<tr class="row-even"><td><p>ADMX100X_OT</p></td>
+<td><p>OUT</p></td>
 <td><p>32</p></td>
 <td><p>86</p></td>
 </tr>
@@ -558,9 +599,61 @@ release, only the TX path is implemented and supported.</p>
 </table>
 </div>
 </section>
+<section id="cpu-memory-interconnects-addresses">
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<p>The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Zynq</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>spi_adaq77681_axi_regmap</p></td>
+<td><p>0x44A0_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adaq77681_dma</p></td>
+<td><p>0x44A3_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>spi_clkgen</p></td>
+<td><p>0x44A7_0000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="interrupts">
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<p>Below are the Programmable Logic interrupts used in this project.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance name</p></th>
+<th class="head"><p>HDL</p></th>
+<th class="head"><p>Linux Zynq</p></th>
+<th class="head"><p>Actual Zynq</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>axi_adaq77681_dma</p></td>
+<td><p>13</p></td>
+<td><p>57</p></td>
+<td><p>89</p></td>
+</tr>
+<tr class="row-odd"><td><p>spi_adaq77681</p></td>
+<td><p>12</p></td>
+<td><p>56</p></td>
+<td><p>88</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework. ADI
 distributes the bit/elf files of these projects as part of the <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI
 Kuiper Linux</a>. If you
@@ -584,19 +677,20 @@ repository.</p>
 <div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD5683R" target="_blank">AD5683R</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ7768-1" target="_blank">ADAQ7768-1</a></p></li>
 </ul>
 </li>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/admx100x_evb" target="_blank">ADMX100X-EVB HDL project source code</a></p></li>
 </ul>
@@ -621,6 +715,22 @@ repository.</p>
 <tr class="row-odd"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_SPI_ENGINE</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/axi_spi_engine" target="_blank">library/spi_engine/axi_spi_engine</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">AXI SPI Engine Module</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI_ENGINE_EXECUTION</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_execution" target="_blank">library/spi_engine/spi_engine_execution</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">SPI Engine Execution Module</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_interconnect" target="_blank">library/spi_engine/spi_engine_interconnect</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">SPI Engine Interconnect Module</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI_ENGINE_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_offload" target="_blank">library/spi_engine/spi_engine_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload Module</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx" target="_blank">library/axi_hdmi_tx</a></p></td>
@@ -649,16 +759,19 @@ repository.</p>
 </tbody>
 </table>
 </div>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine Framework documentation</span></a></p></li>
+</ul>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

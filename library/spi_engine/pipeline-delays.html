@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,9 +8,9 @@
 
     <title>SPI Engine Pipeline Delays &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -69,7 +69,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -113,7 +113,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -202,6 +202,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -306,6 +307,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -375,14 +377,14 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="spi-engine-pipeline-delays">
-<span id="id1"></span><h1>SPI Engine Pipeline Delays<a class="headerlink" href="#spi-engine-pipeline-delays" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>SPI Engine Pipeline Delays<a class="headerlink" href="#spi-engine-pipeline-delays" title="Link to this heading"></a></h1>
 <p>The SPI Engine implementation imposes certain constraints on the timing of
 different commands. Each instruction requires some number of cycles to execute,
 which may depend on the instruction parameters. Additionally, there are delays
 associated with the internal architecture of the SPI Engine, which become
 relevant unless we are using the Offload functionality.</p>
 <section id="instruction-execution">
-<span id="instruction-execution-times"></span><h2>Instruction Execution<a class="headerlink" href="#instruction-execution" title="Permalink to this heading"></a></h2>
+<span id="instruction-execution-times"></span><h2>Instruction Execution<a class="headerlink" href="#instruction-execution" title="Link to this heading"></a></h2>
 <p>Every instruction requires 1 cycle minimum for communication between the offload
 module and the execution module. Additionally, the Chip Select, Sleep, Transfer
 and Sync instructions require another cycle for checking the idle condition
@@ -429,14 +431,14 @@ execution time). For other cases, the detailed delays of the architecture are
 needed.</p>
 </section>
 <section id="detailed-delays">
-<span id="id2"></span><h2>Detailed Delays<a class="headerlink" href="#detailed-delays" title="Permalink to this heading"></a></h2>
+<span id="id2"></span><h2>Detailed Delays<a class="headerlink" href="#detailed-delays" title="Link to this heading"></a></h2>
 <p>This section lists the delays inside the SPI Engine architecture. To make use of
 this information, one needs some degree of familiarity with the hdl
 implementation (knowledge of the sub-modules and the way they communicate).</p>
 <p>See also: <a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a>,
 <a class="reference internal" href="offload-control-interface.html#spi-engine-offload-control-interface"><span class="std std-ref">SPI Engine Offload Control Interface</span></a>.</p>
 <section id="offload-module">
-<h3>Offload Module<a class="headerlink" href="#offload-module" title="Permalink to this heading"></a></h3>
+<h3>Offload Module<a class="headerlink" href="#offload-module" title="Link to this heading"></a></h3>
 <p>All the delays measured for this module are in terms of SPI Engine clock cycles.</p>
 <ul class="simple">
 <li><p>Trigger input to command valid output: 1 + 1-2(from a 2FF CDC, 0 if not
@@ -448,7 +450,7 @@ cycles.</p></li>
 </ul>
 </section>
 <section id="interconnect-module">
-<h3>Interconnect Module<a class="headerlink" href="#interconnect-module" title="Permalink to this heading"></a></h3>
+<h3>Interconnect Module<a class="headerlink" href="#interconnect-module" title="Link to this heading"></a></h3>
 <p>All the delays measured for this module are in terms of SPI Engine clock cycles.</p>
 <p>The interconnect will only accept one manager at a time, and will wait until a
 sync handshake back to the manager is completed to free the channel.</p>
@@ -470,7 +472,7 @@ Otherwise has to wait until s0/s1 owns the channel.</p></li>
 </ul>
 </section>
 <section id="execution-module">
-<h3>Execution Module<a class="headerlink" href="#execution-module" title="Permalink to this heading"></a></h3>
+<h3>Execution Module<a class="headerlink" href="#execution-module" title="Link to this heading"></a></h3>
 <p>All the delays measured for this module are in terms of SPI Engine clock cycles.
 See above: <a class="reference internal" href="#instruction-execution-times"><span class="std std-ref">Instruction Execution</span></a></p>
 <ul class="simple">
@@ -489,7 +491,7 @@ Transfer instruction finishes and the next command is accepted).</p></li>
 </ul>
 </section>
 <section id="axi-module">
-<h3>AXI Module<a class="headerlink" href="#axi-module" title="Permalink to this heading"></a></h3>
+<h3>AXI Module<a class="headerlink" href="#axi-module" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>AXI transaction to take effect internally: 1 (AXI clock).</p>
 <ul>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>Contributing to HDL repository &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../index.html">
           <div>HDL</div>
@@ -110,7 +110,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -199,6 +199,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -303,6 +304,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -372,7 +374,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="contributing-to-hdl-repository">
-<span id="contributing"></span><h1>Contributing to HDL repository<a class="headerlink" href="#contributing-to-hdl-repository" title="Permalink to this heading"></a></h1>
+<span id="contributing"></span><h1>Contributing to HDL repository<a class="headerlink" href="#contributing-to-hdl-repository" title="Link to this heading"></a></h1>
 <p>When contributing to this repository, please first discuss the change you wish
 to make, via the <a class="icon link reference external" href="https://github.com/analogdevicesinc/hdl/issues" target="_blank">issue tracker</a>
 before making a pull request. We will let you know if we want to have it
@@ -396,7 +398,7 @@ and responsibilities that he or she has by using them.</p>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_LGPL" target="_blank">LICENSE_LGPL</a></p></li>
 </ul>
 <section id="pull-request-rules">
-<h2>Pull request rules<a class="headerlink" href="#pull-request-rules" title="Permalink to this heading"></a></h2>
+<h2>Pull request rules<a class="headerlink" href="#pull-request-rules" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>Commit message includes a “Signed-off-by: [name] &lt; email &gt;” to the commit
 message. This ensures you have the rights to submit your code, by agreeing
@@ -422,7 +424,7 @@ approved by the <a class="icon git reference external" href="https://github.com/
 </ol>
 </section>
 <section id="before-opening-the-pull-request">
-<h2>Before opening the pull request<a class="headerlink" href="#before-opening-the-pull-request" title="Permalink to this heading"></a></h2>
+<h2>Before opening the pull request<a class="headerlink" href="#before-opening-the-pull-request" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>Create a fork of this repository. If you are not sure on how to do this,
 check out
@@ -457,7 +459,7 @@ should be created, following our <a class="reference internal" href="docs_guidel
 </div>
 </section>
 <section id="when-opening-the-pull-request">
-<h2>When opening the pull request<a class="headerlink" href="#when-opening-the-pull-request" title="Permalink to this heading"></a></h2>
+<h2>When opening the pull request<a class="headerlink" href="#when-opening-the-pull-request" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>Create a pull request on this repository. If you are not sure on how to
 do this, check out
@@ -508,7 +510,7 @@ it there (see <a class="icon link reference external" href="https://stackoverflo
 </ol>
 </section>
 <section id="code-related-check-list">
-<span id="contributing-code-related-check-list"></span><h2>Code-related check list<a class="headerlink" href="#code-related-check-list" title="Permalink to this heading"></a></h2>
+<span id="contributing-code-related-check-list"></span><h2>Code-related check list<a class="headerlink" href="#code-related-check-list" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>On top of the existing guidelines for Tcl scripting, Verilog/SystemVerilog,
 Makefiles, etc., we have our own guidelines and you must check them out:
@@ -529,7 +531,7 @@ and IP cores.</p></li>
 </ol>
 </section>
 <section id="devicetree-bindings-drivers">
-<span id="contributing-devicetree-bindings-drivers"></span><h2>Devicetree bindings &amp; drivers<a class="headerlink" href="#devicetree-bindings-drivers" title="Permalink to this heading"></a></h2>
+<span id="contributing-devicetree-bindings-drivers"></span><h2>Devicetree bindings &amp; drivers<a class="headerlink" href="#devicetree-bindings-drivers" title="Link to this heading"></a></h2>
 <p>The IPs typically follow <a class="icon link reference external" href="https://semver.org/" target="_blank">Semantic Versioning 2.0.0</a>
 and his information must be used in devicetree bindings and drivers to assert
 compatibility. The first stable release version should be higher or equal to
@@ -544,7 +546,7 @@ drivers, if it seems necessary to, consider incrementing the minor number
 instead.</p>
 </section>
 <section id="related-resources">
-<h2>Related resources<a class="headerlink" href="#related-resources" title="Permalink to this heading"></a></h2>
+<h2>Related resources<a class="headerlink" href="#related-resources" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://cbea.ms/git-commit/" target="_blank">How to write a good commit message</a>
 and <a class="icon link reference external" href="https://gist.github.com/rsp/057481db4dbd999bb7077f211f53f212" target="_blank">another resource</a></p></li>

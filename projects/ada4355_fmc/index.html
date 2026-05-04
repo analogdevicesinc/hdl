@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>ADA4355-FMC HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -101,7 +101,10 @@
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
-<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
+<li><a class="reference internal" href="#configuration-modes">Configuration modes</a><ul>
+<li><a class="reference internal" href="#tdd-channel-allocation-tdd-en-1">TDD channel allocation (TDD_EN=1)</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
@@ -126,7 +129,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -215,6 +218,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -319,6 +323,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adaq23875/index.html">ADAQ23875</a></li>
@@ -388,9 +393,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="ada4355-fmc-hdl-project">
-<span id="ada4355-fmc"></span><h1>ADA4355-FMC HDL project<a class="headerlink" href="#ada4355-fmc-hdl-project" title="Permalink to this heading"></a></h1>
+<span id="ada4355-fmc"></span><h1>ADA4355-FMC HDL project<a class="headerlink" href="#ada4355-fmc-hdl-project" title="Link to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a>/ <a class="icon adi reference external" href="https://www.analog.com/ADA4356" target="_blank">ADA4356</a> is a complete, high performance, current
 input µModule. For space savings, the <a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a>/ <a class="icon adi reference external" href="https://www.analog.com/ADA4356" target="_blank">ADA4356</a> includes
 all the required active and passive components to realize a complete current to
@@ -410,20 +415,21 @@ data clock output (DCO) operates at frequencies of up to 500 MHz and supports
 double data rate (DDR) operation.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADA4355" target="_blank">EVAL-ADA4355</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADA4356EBZ" target="_blank">EVAL-ADA4356EBZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4356" target="_blank">ADA4356</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -442,48 +448,109 @@ double data rate (DDR) operation.</p>
 <td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
 <td><p>FMC</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADA4356EBZ" target="_blank">EVAL-ADA4356EBZ</a></p></td>
+<td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
+<td><p>FMC</p></td>
+</tr>
 </tbody>
 </table>
 </div>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The VADJ for the Zedboard must be set to 2.5V.</p>
 </div>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ada4355_fmc_zed_block_diagram.svg"><img alt="ADA4355_FMC/ZedBoard block diagram" class="align-center" src="../../_images/ada4355_fmc_zed_block_diagram.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ada4355_fmc_zed_block_diagram.svg"><img alt="ADA4355_FMC/ZedBoard block diagram" class="align-center" src="../../_images/ada4355_fmc_zed_block_diagram.svg" width="800" />
+</a>
+<p>When TDD is enabled (TDD_EN=1), the AXI_TDD controller is added to provide
+precise LiDAR timing control:</p>
+<a class="reference internal image-reference" href="../../_images/lidar_ada4356_tdd_block_diagram.svg"><img alt="ADA4355_FMC/ZedBoard block diagram with TDD" class="align-center" src="../../_images/lidar_ada4356_tdd_block_diagram.svg" width="800" />
+</a>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
-<p>The BUFMRCE_EN configuration parameter defines the supported board used which
-is differentiated by how the frame clock signals are distributed.
-For ADA4355 the XDC constraints are not optimized for ISERDES, as the frame
-clock signals are located in a different I/O bank from the other related
-signals. To address this, a BUFMRCE buffer is used to distribute the
-frame clock to all ISERDES instances.</p>
-<p>By default it is set to 0. Depending on the part, some hardware modifications
-need to be done on the board and/or <code class="docutils literal notranslate"><span class="pre">make</span></code> command:</p>
-<p>In case of the ADA4356:</p>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
+<p>The following are the parameters of this project that can be configured:</p>
+<ul class="simple">
+<li><p>BUFMRCE_EN: specifies the evaluation board type, which is differentiated by
+how the frame clock signals are distributed. For ADA4355 the XDC constraints
+are not optimized for ISERDES, as the frame clock signals are located in a
+different I/O bank from the other related signals. To address this, a BUFMRCE
+buffer is used to distribute the frame clock to all ISERDES instances.</p>
+<ul>
+<li><p>0 - ADA4356 - pinout with optimized constraints (default)</p></li>
+<li><p>1 - ADA4355 - pinout with non-optimized constraints</p></li>
+</ul>
+</li>
+<li><p>TDD_EN: enables the TDD controller for LiDAR timing control. Only supported
+with BUFMRCE_EN=0 (ADA4356). When enabled, the AXI_TDD IP is added with
+laser trigger output and DMA synchronization. Check out this guide for more
+details regarding TDD parameters: <a class="reference internal" href="../../library/axi_tdd/index.html#axi-tdd"><span class="std std-ref">AXI TDD</span></a></p>
+<ul>
+<li><p>0 - TDD disabled, plain ADC capture (default)</p></li>
+<li><p>1 - TDD enabled, adds axi_tdd IP with 2 channels</p></li>
+</ul>
+</li>
+</ul>
+<p>ADA4356 without TDD (default):</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">0</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">TDD_EN</span><span class="o">=</span><span class="m">0</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>In case of the ADA4355:</p>
+<div class="clear-left"></div></div></div><p>ADA4356 with TDD for LiDAR:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">1</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">TDD_EN</span><span class="o">=</span><span class="m">1</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div></section>
+<div class="clear-left"></div></div></div><p>ADA4355 without TDD:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">TDD_EN</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><section id="tdd-channel-allocation-tdd-en-1">
+<h4>TDD channel allocation (TDD_EN=1)<a class="headerlink" href="#tdd-channel-allocation-tdd-en-1" title="Link to this heading"></a></h4>
+<p>When TDD is enabled, the controller runs in the ADC clock domain (125 MHz) and
+provides the following channel allocation:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 30.0%" />
+<col style="width: 55.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Channel</p></th>
+<th class="head"><p>Connection</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>trig_fmc_out (FMC SMA)</p></td>
+<td><p>Laser trigger output</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>axi_ada4355_dma/sync</p></td>
+<td><p>DMA synchronization — controls when DMA starts capturing</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The TDD sync input is connected to trig_fmc_in (FMC SMA connector).</p>
+</section>
+</section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -500,12 +567,21 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <tr class="row-odd"><td><p>axi_ada4355_dma</p></td>
 <td><p>0x44A3_0000</p></td>
 </tr>
+<tr class="row-even"><td><p>axi_tdd_0 *</p></td>
+<td><p>0x44A4_0000</p></td>
+</tr>
 </tbody>
 </table>
 </div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only when TDD_EN=1</p></li>
+</ul>
+</div>
 </section>
 <section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading"></a></h3>
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Link to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -541,7 +617,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
 <p>The Software GPIO number is calculated as follows:</p>
 <ul class="simple">
 <li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
@@ -567,77 +643,72 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>apd_supp_en **</p></td>
+<tr class="row-odd"><td><p>vlogic_fmc **</p></td>
 <td><p>INOUT</p></td>
-<td><p>42</p></td>
-<td><p>96</p></td>
-</tr>
-<tr class="row-even"><td><p>trig_fmc_out **</p></td>
-<td><p>OUT</p></td>
 <td><p>41</p></td>
 <td><p>95</p></td>
 </tr>
-<tr class="row-odd"><td><p>trig_fmc_in **</p></td>
-<td><p>IN</p></td>
+<tr class="row-even"><td><p>apd_supp_en **</p></td>
+<td><p>INOUT</p></td>
 <td><p>40</p></td>
 <td><p>94</p></td>
 </tr>
-<tr class="row-even"><td><p>freq_sel1 **</p></td>
+<tr class="row-odd"><td><p>freq_sel1 **</p></td>
 <td><p>INOUT</p></td>
 <td><p>39</p></td>
 <td><p>93</p></td>
 </tr>
-<tr class="row-odd"><td><p>gain_sel3 **</p></td>
+<tr class="row-even"><td><p>gain_sel3 **</p></td>
 <td><p>INOUT</p></td>
 <td><p>38</p></td>
 <td><p>92</p></td>
 </tr>
-<tr class="row-even"><td><p>gpio_test **</p></td>
+<tr class="row-odd"><td><p>gpio_test **</p></td>
 <td><p>INOUT</p></td>
 <td><p>37</p></td>
 <td><p>91</p></td>
 </tr>
-<tr class="row-odd"><td><p>gpio_1p8va_en *</p></td>
+<tr class="row-even"><td><p>gpio_1p8va_en *</p></td>
 <td><p>IN</p></td>
 <td><p>37</p></td>
 <td><p>91</p></td>
 </tr>
-<tr class="row-even"><td><p>gain_sel2 **</p></td>
+<tr class="row-odd"><td><p>gain_sel2 **</p></td>
 <td><p>INOUT</p></td>
 <td><p>36</p></td>
 <td><p>90</p></td>
 </tr>
-<tr class="row-odd"><td><p>gain_sel2 *</p></td>
+<tr class="row-even"><td><p>gain_sel2 *</p></td>
 <td><p>IN</p></td>
 <td><p>36</p></td>
 <td><p>90</p></td>
 </tr>
-<tr class="row-even"><td><p>gpio_vld_en **</p></td>
+<tr class="row-odd"><td><p>gpio_vld_en **</p></td>
 <td><p>INOUT</p></td>
 <td><p>35</p></td>
 <td><p>89</p></td>
 </tr>
-<tr class="row-odd"><td><p>gpio_1p8vd_en *</p></td>
+<tr class="row-even"><td><p>gpio_1p8vd_en *</p></td>
 <td><p>INOUT</p></td>
 <td><p>35</p></td>
 <td><p>89</p></td>
 </tr>
-<tr class="row-even"><td><p>freq_sel0 **</p></td>
+<tr class="row-odd"><td><p>freq_sel0 **</p></td>
 <td><p>INOUT</p></td>
 <td><p>34</p></td>
 <td><p>88</p></td>
 </tr>
-<tr class="row-odd"><td><p>fsel *</p></td>
+<tr class="row-even"><td><p>fsel *</p></td>
 <td><p>INOUT</p></td>
 <td><p>34</p></td>
 <td><p>88</p></td>
 </tr>
-<tr class="row-even"><td><p>gain_sel1</p></td>
+<tr class="row-odd"><td><p>gain_sel1</p></td>
 <td><p>INOUT</p></td>
 <td><p>33</p></td>
 <td><p>87</p></td>
 </tr>
-<tr class="row-odd"><td><p>gain_sel0</p></td>
+<tr class="row-even"><td><p>gain_sel0</p></td>
 <td><p>INOUT</p></td>
 <td><p>32</p></td>
 <td><p>86</p></td>
@@ -652,9 +723,17 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for BUFMRCE_EN=0 (ADA4356)</p></li>
 </ul>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When TDD_EN=1, the trig_fmc_in and trig_fmc_out signals are routed to the
+AXI_TDD controller. The trig_fmc_in SMA connector can be used as an
+external sync source for the TDD controller, but synchronization can also
+be done internally through the AXI_TDD registers. When TDD_EN=0,
+trig_fmc_out is a passthrough of trig_fmc_in.</p>
+</div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -676,7 +755,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -709,7 +788,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -718,7 +797,7 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<p>Example for building with the default configuration (BUFMRCE_EN=0):</p>
+<p>Example for building with the default configuration (BUFMRCE_EN=0, TDD_EN=0):</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
@@ -731,32 +810,39 @@ the HDL repository.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>Example for building with parameters:</p>
+<div class="clear-left"></div></div></div><p>Example for building ADA4356 with TDD for LiDAR:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ada4355_fmc/zed$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">1</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">TDD_EN</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Example for building ADA4355:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ada4355_fmc/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">BUFMRCE_EN</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">TDD_EN</span><span class="o">=</span><span class="m">0</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>The result of the build, if parameters were used, will be in a folder named
 by the configuration used.</p>
 <p>If the following command was run</p>
-<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">BUFMRCE_EN=1</span></code></p>
-<p>then the folder name will be: <code class="docutils literal notranslate"><span class="pre">BUFMRCEEN1</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">BUFMRCE_EN=0</span> <span class="pre">TDD_EN=1</span></code></p>
+<p>then the folder name will be: <code class="docutils literal notranslate"><span class="pre">BUFMRCEEN0_TDDEN1</span></code>.</p>
 <p>Check <a class="reference internal" href="#configuration-modes">Configuration modes</a> for more details.</p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a></p></li>
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADA4356" target="_blank">ADA4356</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ada4355_fmc" target="_blank">ADA4355-FMC HDL project source code</a></p></li>
 </ul>
@@ -806,11 +892,15 @@ by the configuration used.</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>SYSID_ROM</p></td>
+<tr class="row-even"><td><p>AXI_TDD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_tdd" target="_blank">library/axi_tdd</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_tdd/index.html#axi-tdd"><span class="std std-ref">AXI TDD</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_I2C_MIXER</p></td>
+<tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer" target="_blank">library/util_i2c_mixer</a></p></td>
 <td><p>—</p></td>
 </tr>
@@ -820,13 +910,13 @@ by the configuration used.</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

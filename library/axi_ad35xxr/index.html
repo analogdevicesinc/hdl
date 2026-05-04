@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,9 +8,9 @@
 
     <title>AXI AD35XXR &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -69,7 +69,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -116,7 +116,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -205,6 +205,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -309,6 +310,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -378,7 +380,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-ad35xxr">
-<span id="id1"></span><h1>AXI AD35XXR<a class="headerlink" href="#axi-ad35xxr" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>AXI AD35XXR<a class="headerlink" href="#axi-ad35xxr" title="Link to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 387.59999999999997 378" width="387.59999999999997" class="no-background"><style>
                 a {
@@ -395,7 +397,7 @@ channel part. <a class="icon adi reference external" href="https://www.analog.co
 can be configured in multiple voltage span ranges, the <a class="icon adi reference external" href="https://www.analog.com/AD3541R" target="_blank">AD3541R</a> is the
 single channel part.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>AXI-based configuration;</p></li>
 <li><p>Vivado compatible;</p></li>
@@ -411,7 +413,7 @@ as an input data source.</p></li>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -446,10 +448,11 @@ as an input data source.</p></li>
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
-<img alt="AXI AD35XXR block diagram" src="../../_images/block_diagram6.svg" /></section>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
+<img alt="AXI AD35XXR block diagram" src="../../_images/block_diagram15.svg" />
+</section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -527,7 +530,7 @@ as an input data source.</p></li>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="731bbd4f5583a8cf673c0bd11f4f018bdf23f596" name="731bbd4f5583a8cf673c0bd11f4f018bdf23f596" type="checkbox"></input><label for="731bbd4f5583a8cf673c0bd11f4f018bdf23f596"><div><p>s_axi</p>
@@ -885,10 +888,11 @@ as an input data source.</p></li>
 </section>
 </div></section>
 <section id="detailed-architecture">
-<h2>Detailed Architecture<a class="headerlink" href="#detailed-architecture" title="Permalink to this heading"></a></h2>
-<img alt="AXI AD3XXR detailed architecture" src="../../_images/detailed_architecture.svg" /></section>
+<h2>Detailed Architecture<a class="headerlink" href="#detailed-architecture" title="Link to this heading"></a></h2>
+<img alt="AXI AD3XXR detailed architecture" src="../../_images/detailed_architecture.svg" />
+</section>
 <section id="detailed-description">
-<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Link to this heading"></a></h2>
 <p>The top module instantiates:</p>
 <ul class="simple">
 <li><p>The axi_ad35xxr interface module</p></li>
@@ -902,7 +906,7 @@ the ad35x1r cases. For the single channel and 12 bit accuracy cases, consider
 the 16 LSBs – The 4 LSBs of this word are 0’s for the 12-bit accuracy.</p>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
 <p>The register map of the core contains instances of several generic register maps
 like DAC common, DAC channel.
 The following table presents the base addresses of each instance, after it you
@@ -1209,7 +1213,7 @@ base address to the registers relative address. For a more detailed explanation,
 see <a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html#generic-dac-register-access"><span class="std std-ref">DAC register access</span></a>.</p>
 <div class="table-wrapper docutils container" id="id2">
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Register Map base addresses for axi_ad35xxr</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Register Map base addresses for axi_ad35xxr</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>HDL reg</p></th>
 <th class="head"><p>Software reg</p></th>
@@ -2661,7 +2665,7 @@ NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
 </section>
 </div></section>
 <section id="design-guidelines">
-<h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Permalink to this heading"></a></h2>
+<h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Link to this heading"></a></h2>
 <p>The control of the chip is done through the AXI_AD35XXR IP.</p>
 <p>The <em>DAC interface</em> must be connected to an IO buffer.</p>
 <p>The example design uses a DMA to move the data from the memory to the CHIP quad
@@ -2674,9 +2678,9 @@ processor is available in your system, you can create your IP starting from the
 interface module.</p>
 </section>
 <section id="software-support">
-<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
+<h2>Software Support<a class="headerlink" href="#software-support" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/dac/ad3552r.c" target="_blank">drivers/iio/dac/ad3552r.c</a></p></li>
+<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/iio/dac/ad3552r.c" target="_blank">drivers/iio/dac/ad3552r.c</a></p></li>
 <li><p>Linux device driver documentation
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dac/axi-ad3552r" target="_blank">on wiki</a></p></li>
 <li><p>No-OS device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/dac/ad3552r" target="_blank">drivers/dac/ad3552r</a></p></li>
@@ -2684,7 +2688,7 @@ interface module.</p>
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad35xxr" target="_blank">library/axi_ad35xxr</a></p></li>
 <li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad35xxr_evb" target="_blank">projects/ad35xxr_evb</a></p></li>

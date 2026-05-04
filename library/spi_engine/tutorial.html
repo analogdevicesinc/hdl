@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,9 +8,9 @@
 
     <title>SPI Engine Tutorial - PulSAR-ADC &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -69,7 +69,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -120,7 +120,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -209,6 +209,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -313,6 +314,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -382,13 +384,13 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="spi-engine-tutorial-pulsar-adc">
-<span id="spi-engine-tutorial"></span><h1>SPI Engine Tutorial - PulSAR-ADC<a class="headerlink" href="#spi-engine-tutorial-pulsar-adc" title="Permalink to this heading"></a></h1>
+<span id="spi-engine-tutorial"></span><h1>SPI Engine Tutorial - PulSAR-ADC<a class="headerlink" href="#spi-engine-tutorial-pulsar-adc" title="Link to this heading"></a></h1>
 <p>The goal of this tutorial is to present the process of adding
 <a class="reference internal" href="index.html#spi-engine"><span class="std std-ref">SPI Engine</span></a> support for an ADI precision converter or family of converters
 using a few simple steps.
 The target carrier is the Digilent Cora Z7S board using a PMOD connector.</p>
 <section id="evaluating-the-target-device">
-<h2>Evaluating the target device<a class="headerlink" href="#evaluating-the-target-device" title="Permalink to this heading"></a></h2>
+<h2>Evaluating the target device<a class="headerlink" href="#evaluating-the-target-device" title="Link to this heading"></a></h2>
 <p>The aim of this project is to provide support for a family of ADCs which come in
 the form of
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods" target="_blank">pulsar-adc-pmods</a>.
@@ -547,7 +549,7 @@ time (T_ACQ 250ns). The other devices will work with the same HDL by just using
 different “downgraded” configurations.</p>
 </section>
 <section id="spi-engine-hierarchy-instantiation">
-<h2>SPI Engine hierarchy instantiation<a class="headerlink" href="#spi-engine-hierarchy-instantiation" title="Permalink to this heading"></a></h2>
+<h2>SPI Engine hierarchy instantiation<a class="headerlink" href="#spi-engine-hierarchy-instantiation" title="Link to this heading"></a></h2>
 <p>The SPI Engine can be implemented in two ways, either by placing and connecting
 each IP individually or by using the function provided by the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/scripts/spi_engine.tcl" target="_blank">library/spi_engine/scripts/spi_engine.tcl</a> script.</p>
@@ -635,9 +637,10 @@ three additional parameters as described above:</p>
 <span class="nv">spi_engine_create</span><span class="w"> </span><span class="nv">$hier_spi_engine</span><span class="w"> </span><span class="nv">$data_width</span><span class="w"> </span><span class="nv">$async_spi_clk</span><span class="w"> </span><span class="nv">$offload_en</span><span class="w"> </span><span class="nv">$num_cs</span><span class="w"> </span><span class="nv">$num_sdi</span><span class="w"> </span><span class="nv">$sdi_delay</span>
 </pre></div>
 </div>
-<img alt="../../_images/pulsar_hdl_1.svg" class="align-center" src="../../_images/pulsar_hdl_1.svg" /></section>
+<img alt="../../_images/pulsar_hdl_1.svg" class="align-center" src="../../_images/pulsar_hdl_1.svg" />
+</section>
 <section id="spi-engine-reference-clock">
-<h2>SPI Engine reference clock<a class="headerlink" href="#spi-engine-reference-clock" title="Permalink to this heading"></a></h2>
+<h2>SPI Engine reference clock<a class="headerlink" href="#spi-engine-reference-clock" title="Link to this heading"></a></h2>
 <p>There are 3 categories of devices depending on the SPI interface clock (SCLK):
 80 MHz, 50MHz (one device) and 40MHz. SCLK will be derived from the spi_clk
 reference signal using an internal prescaler with this formula:</p>
@@ -664,7 +667,7 @@ timing. This IP can also be configured from software to output 100MHz.</p>
 </div>
 </section>
 <section id="ad7984-timing-diagram">
-<h2>AD7984 Timing diagram<a class="headerlink" href="#ad7984-timing-diagram" title="Permalink to this heading"></a></h2>
+<h2>AD7984 Timing diagram<a class="headerlink" href="#ad7984-timing-diagram" title="Link to this heading"></a></h2>
 <p>The operation mode that will be implemented using the SPI Engine in offload mode
 is the <span class="math notranslate nohighlight">\(\overline{CS}\)</span> Mode, 3-Wire with Busy Indicator Serial Interface Timing (SDI High),
 as shown in <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/AD7984.pdf" target="_blank">AD7984</a>,
@@ -678,7 +681,7 @@ page 18, figure 30.</p>
 </pre></div>
 </div>
 <section id="sample-rate-control">
-<h3>Sample rate control<a class="headerlink" href="#sample-rate-control" title="Permalink to this heading"></a></h3>
+<h3>Sample rate control<a class="headerlink" href="#sample-rate-control" title="Link to this heading"></a></h3>
 <p>The T_CYC parameter is the what sets the maximum sample rate (1/750 =&gt; 1333
 KSPS). To achieve precise control over the sample rate we will use a PWM
 generator (AXI PWM GEN) using the spi_clk as reference. The spi_clock is used to
@@ -694,7 +697,8 @@ the overall performance of the system.</p>
 <span class="nv">ad_connect</span><span class="w"> </span>pulsar_adc_trigger_gen<span class="o">/</span>pwm_0<span class="w">  </span><span class="nv">$hier_spi_engine</span><span class="o">/</span>offload<span class="o">/</span>trigger
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../../_images/pwm_trigger_1.svg"><img alt="../../_images/pwm_trigger_1.svg" class="align-right" src="../../_images/pwm_trigger_1.svg" width="50%" /></a>
+<a class="reference internal image-reference" href="../../_images/pwm_trigger_1.svg"><img alt="../../_images/pwm_trigger_1.svg" class="align-right" src="../../_images/pwm_trigger_1.svg" style="width: 50%;" />
+</a>
 <p>Since the AXI PWM IP core is connected to the system with AXI4 Lite, the
 software will be able to change the frequency of its output at any time. The
 resolution of the PWM period is the reference clock period (spi_clk) providing a
@@ -705,7 +709,7 @@ PWM-trigger signal.</p>
 </section>
 </section>
 <section id="dma-setup">
-<h2>DMA setup<a class="headerlink" href="#dma-setup" title="Permalink to this heading"></a></h2>
+<h2>DMA setup<a class="headerlink" href="#dma-setup" title="Link to this heading"></a></h2>
 <p>DMA destination bus (connection to Zynq – DDR memory) shall always be 64 bit
 wide AXI4 MM and source bus shall be data_width * num_sdi = 32 bit, AXI4 Stream.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_ip_instance</span><span class="w"> </span>axi_dmac<span class="w"> </span>axi_pulsar_adc_dma
@@ -728,7 +732,7 @@ clock</p>
 </div>
 </section>
 <section id="system-top">
-<h2>System Top<a class="headerlink" href="#system-top" title="Permalink to this heading"></a></h2>
+<h2>System Top<a class="headerlink" href="#system-top" title="Link to this heading"></a></h2>
 <p>This is a layer on top of the system_wrapper generated by Vivado used to
 instantiate IO buffers, I/ODDRs or to create some custom connections which would
 be harder to do in the block design. It also allows for more consistency across
@@ -736,7 +740,7 @@ projects. In this particular case we use it to place an IO buffer for the ADC
 power down signal (pulsar_adc_spi_pd).</p>
 </section>
 <section id="system-constraints">
-<h2>System Constraints<a class="headerlink" href="#system-constraints" title="Permalink to this heading"></a></h2>
+<h2>System Constraints<a class="headerlink" href="#system-constraints" title="Link to this heading"></a></h2>
 <p>The system_constr.xdc file inside the carrier folder
 (/coraz7s/system_constr.xdc) is used for defining the physical FPGA pins used by
 this particular project (in this case the AD7984 ADC), excluding the “common”
@@ -747,15 +751,15 @@ the SPI Engine.</p>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># relax the SDO path to help closing timing at high frequencies</span>
-<span class="n">set_multicycle_path</span> <span class="o">-</span><span class="n">setup</span> <span class="mi">8</span> <span class="o">-</span><span class="n">to</span> <span class="p">[</span><span class="n">get_cells</span> <span class="o">-</span><span class="n">hierarchical</span> <span class="o">-</span><span class="nb">filter</span> <span class="p">{</span><span class="n">NAME</span><span class="o">=~*/</span><span class="n">data_sdo_shift_reg</span><span class="p">[</span><span class="o">*</span><span class="p">]}]</span> <span class="o">-</span><span class="kn">from</span> <span class="p">[</span><span class="n">get_clocks</span> <span class="n">spi_clk</span><span class="p">]</span>
-<span class="n">set_multicycle_path</span> <span class="o">-</span><span class="n">hold</span>  <span class="mi">7</span> <span class="o">-</span><span class="n">to</span> <span class="p">[</span><span class="n">get_cells</span> <span class="o">-</span><span class="n">hierarchical</span> <span class="o">-</span><span class="nb">filter</span> <span class="p">{</span><span class="n">NAME</span><span class="o">=~*/</span><span class="n">data_sdo_shift_reg</span><span class="p">[</span><span class="o">*</span><span class="p">]}]</span> <span class="o">-</span><span class="kn">from</span> <span class="p">[</span><span class="n">get_clocks</span> <span class="n">spi_clk</span><span class="p">]</span>
-<span class="n">set_multicycle_path</span> <span class="o">-</span><span class="n">setup</span> <span class="mi">8</span> <span class="o">-</span><span class="n">to</span> <span class="p">[</span><span class="n">get_cells</span> <span class="o">-</span><span class="n">hierarchical</span> <span class="o">-</span><span class="nb">filter</span> <span class="p">{</span><span class="n">NAME</span><span class="o">=~*/</span><span class="n">execution</span><span class="o">/</span><span class="n">inst</span><span class="o">/</span><span class="n">left_aligned_reg</span><span class="o">*</span><span class="p">}]</span> <span class="o">-</span><span class="kn">from</span> <span class="p">[</span><span class="n">get_clocks</span> <span class="n">spi_clk</span><span class="p">]</span>
-<span class="n">set_multicycle_path</span> <span class="o">-</span><span class="n">hold</span>  <span class="mi">7</span> <span class="o">-</span><span class="n">to</span> <span class="p">[</span><span class="n">get_cells</span> <span class="o">-</span><span class="n">hierarchical</span> <span class="o">-</span><span class="nb">filter</span> <span class="p">{</span><span class="n">NAME</span><span class="o">=~*/</span><span class="n">execution</span><span class="o">/</span><span class="n">inst</span><span class="o">/</span><span class="n">left_aligned_reg</span><span class="o">*</span><span class="p">}]</span> <span class="o">-</span><span class="kn">from</span> <span class="p">[</span><span class="n">get_clocks</span> <span class="n">spi_clk</span><span class="p">]</span>
+<span class="n">set_multicycle_path</span> <span class="o">-</span><span class="n">setup</span> <span class="mi">8</span> <span class="o">-</span><span class="n">to</span> <span class="p">[</span><span class="n">get_cells</span> <span class="o">-</span><span class="n">hierarchical</span> <span class="o">-</span><span class="nb">filter</span> <span class="p">{</span><span class="n">NAME</span><span class="o">=~*/</span><span class="n">data_sdo_shift_reg</span><span class="p">[</span><span class="o">*</span><span class="p">]}]</span> <span class="o">-</span><span class="kn">from</span><span class="w"> </span><span class="p">[</span><span class="n">get_clocks</span> <span class="n">spi_clk</span><span class="p">]</span>
+<span class="n">set_multicycle_path</span> <span class="o">-</span><span class="n">hold</span>  <span class="mi">7</span> <span class="o">-</span><span class="n">to</span> <span class="p">[</span><span class="n">get_cells</span> <span class="o">-</span><span class="n">hierarchical</span> <span class="o">-</span><span class="nb">filter</span> <span class="p">{</span><span class="n">NAME</span><span class="o">=~*/</span><span class="n">data_sdo_shift_reg</span><span class="p">[</span><span class="o">*</span><span class="p">]}]</span> <span class="o">-</span><span class="kn">from</span><span class="w"> </span><span class="p">[</span><span class="n">get_clocks</span> <span class="n">spi_clk</span><span class="p">]</span>
+<span class="n">set_multicycle_path</span> <span class="o">-</span><span class="n">setup</span> <span class="mi">8</span> <span class="o">-</span><span class="n">to</span> <span class="p">[</span><span class="n">get_cells</span> <span class="o">-</span><span class="n">hierarchical</span> <span class="o">-</span><span class="nb">filter</span> <span class="p">{</span><span class="n">NAME</span><span class="o">=~*/</span><span class="n">execution</span><span class="o">/</span><span class="n">inst</span><span class="o">/</span><span class="n">left_aligned_reg</span><span class="o">*</span><span class="p">}]</span> <span class="o">-</span><span class="kn">from</span><span class="w"> </span><span class="p">[</span><span class="n">get_clocks</span> <span class="n">spi_clk</span><span class="p">]</span>
+<span class="n">set_multicycle_path</span> <span class="o">-</span><span class="n">hold</span>  <span class="mi">7</span> <span class="o">-</span><span class="n">to</span> <span class="p">[</span><span class="n">get_cells</span> <span class="o">-</span><span class="n">hierarchical</span> <span class="o">-</span><span class="nb">filter</span> <span class="p">{</span><span class="n">NAME</span><span class="o">=~*/</span><span class="n">execution</span><span class="o">/</span><span class="n">inst</span><span class="o">/</span><span class="n">left_aligned_reg</span><span class="o">*</span><span class="p">}]</span> <span class="o">-</span><span class="kn">from</span><span class="w"> </span><span class="p">[</span><span class="n">get_clocks</span> <span class="n">spi_clk</span><span class="p">]</span>
 </pre></div>
 </div>
 </section>
 <section id="testbench">
-<h2>Testbench<a class="headerlink" href="#testbench" title="Permalink to this heading"></a></h2>
+<h2>Testbench<a class="headerlink" href="#testbench" title="Link to this heading"></a></h2>
 <p>To check the overall performance of the design and also to expose any major
 bugs, the system can be tested using a testbench from <a class="icon git reference external" href="https://github.com/analogdevicesinc/testbenches/tree/main/" target="_blank">ADI Testbenches repository</a>.</p>
 <p>The testbench framework is designed to use the same bd.tcl as the actual project
@@ -767,22 +771,25 @@ using the testbench will provide the user with an early way of evaluating the
 timing of the design. The testbench can also be a very useful tool for IP
 development.</p>
 <section id="evaluating-the-result">
-<h3>Evaluating the result<a class="headerlink" href="#evaluating-the-result" title="Permalink to this heading"></a></h3>
+<h3>Evaluating the result<a class="headerlink" href="#evaluating-the-result" title="Link to this heading"></a></h3>
 <p>Due to the limits of the SPI Engine cores, T_CYC needs to be increased slightly
 over the minimum value, to ensure that the design meets the T_CONV minimum. This
 will slightly lower the maximum sample rate of the design from 1.333 MSPS to
 1.322 MSPS.</p>
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_2.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_2.png" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_2.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/tutorial/pulsar_hdl_timing_2.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/tutorial/pulsar_hdl_timing_2.png" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/tutorial/pulsar_hdl_timing_2.png" style="width: 100%;" />
+</a>
 <p>Holding CS high for 500ns ensures that we always meet T_CONV minimum.</p>
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_3.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_3.png" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_3.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/tutorial/pulsar_hdl_timing_3.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/tutorial/pulsar_hdl_timing_3.png" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/tutorial/pulsar_hdl_timing_3.png" style="width: 100%;" />
+</a>
 <p>The 250ns minimum T_ACQ is also met with a slightly higher value of 256.25ns.</p>
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_4.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_4.png" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/library/spi_engine/tutorial/pulsar_hdl_timing_4.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/tutorial/pulsar_hdl_timing_4.png"><img alt="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/tutorial/pulsar_hdl_timing_4.png" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/spi_engine/tutorial/pulsar_hdl_timing_4.png" style="width: 100%;" />
+</a>
 <p>Overall the project appears to be functional and ready for the next step in
 development, using software.</p>
 </section>
 </section>
 <section id="software-section">
-<h2>Software section<a class="headerlink" href="#software-section" title="Permalink to this heading"></a></h2>
+<h2>Software section<a class="headerlink" href="#software-section" title="Link to this heading"></a></h2>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>This section is still under development.</p>

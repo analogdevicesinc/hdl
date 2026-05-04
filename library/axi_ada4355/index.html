@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>AXI ADA4355 &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -114,7 +114,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -203,6 +203,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AXI ADA4355</a></li>
@@ -307,6 +308,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -376,7 +378,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-ada4355">
-<span id="id1"></span><h1>AXI ADA4355<a class="headerlink" href="#axi-ada4355" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>AXI ADA4355<a class="headerlink" href="#axi-ada4355" title="Link to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 339.6 426" width="339.6" class="no-background"><style>
                 a {
@@ -391,7 +393,7 @@ DMAC. This documentation only covers the IP core and requires one to be familiar
 with the device, for a complete and better understanding.</p>
 <p>More about the generic framework interfacing ADCs can be read in <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a>.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -420,10 +422,11 @@ with the device, for a complete and better understanding.</p>
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
-<img alt="AXI ADA4355 block diagram" src="../../_images/axi_ada4355.svg" /></section>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
+<img alt="AXI ADA4355 block diagram" src="../../_images/axi_ada4355.svg" />
+</section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -465,7 +468,7 @@ with the device, for a complete and better understanding.</p>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="fc2f3d318f0008a60fc87e752dc6022b1a06802b" name="fc2f3d318f0008a60fc87e752dc6022b1a06802b" type="checkbox"></input><label for="fc2f3d318f0008a60fc87e752dc6022b1a06802b"><div><p>s_axi</p>
@@ -815,7 +818,7 @@ with the device, for a complete and better understanding.</p>
 </div>
 </section>
 </div><section id="internal-interface-description">
-<h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Permalink to this heading"></a></h3>
+<h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Link to this heading"></a></h3>
 <p>The axi_ada4355 operates as follows:</p>
 <ul class="simple">
 <li><p>The LVDS data is deserialized by the
@@ -829,7 +832,7 @@ a 1:8 ratio.</p></li>
 </section>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
 <p>The register map of the core contains instances of several generic register maps
 like ADC common, ADC channel,
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_delay_cntrl.v" target="_blank">up_delay_cntrl</a>.
@@ -840,7 +843,7 @@ base address to the registers relative address. For a more detailed explanation,
 see <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#generic-adc-register-access"><span class="std std-ref">ADC register access</span></a>.</p>
 <div class="table-wrapper docutils container" id="id2">
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Register Map base addresses for axi_ada4355</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Register Map base addresses for axi_ada4355</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>HDL reg</p></th>
 <th class="head"><p>Software reg</p></th>
@@ -2540,7 +2543,7 @@ Otherwise will be the last set up value.</p>
 </section>
 </div></section>
 <section id="design-guidelines">
-<h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Permalink to this heading"></a></h2>
+<h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Link to this heading"></a></h2>
 <p>The control of the ADA4355 chip is done through a SPI interface, which is needed
 at system level.</p>
 <p>The <em>ADC interface signals</em> must be connected directly to the top file of the
@@ -2555,7 +2558,7 @@ processor is available in your system, you can create your own IP starting from
 the interface module.</p>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ada4355" target="_blank">library/axi_ada4355</a></p></li>
 <li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ada4355_fmc" target="_blank">projects/ada4355_fmc</a></p></li>

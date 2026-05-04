@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,14 +8,14 @@
 
     <title>AXI AD9783 &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="AXI AD9963" href="../axi_ad9963/index.html" />
-    <link rel="prev" title="AXI AD9467" href="../axi_ad9467/index.html" />
+    <link rel="prev" title="AXI AD9740" href="../axi_ad9740/index.html" />
    
   
   
@@ -69,7 +69,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -126,7 +126,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -215,6 +215,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -319,6 +320,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -388,7 +390,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-ad9783">
-<span id="id1"></span><h1>AXI AD9783<a class="headerlink" href="#axi-ad9783" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>AXI AD9783<a class="headerlink" href="#axi-ad9783" title="Link to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 349.2 282" width="349.2" class="no-background"><style>
                 a {
@@ -402,7 +404,7 @@ rates up to 500 MSPS. This documentation only covers the IP core and requires
 that one must be familiar with the device for a complete and better understanding.</p>
 <p>More about the generic framework interfacing DACs can be read in <a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html#axi-dac"><span class="std std-ref">Generic AXI DAC</span></a>.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>AXI Memory-Mapped to Streaming control/status interface</p></li>
 <li><p>PRBS monitoring</p></li>
@@ -412,7 +414,7 @@ that one must be familiar with the device for a complete and better understandin
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -435,7 +437,7 @@ that one must be familiar with the device for a complete and better understandin
 </div>
 </section>
 <section id="functional-description">
-<h2>Functional Description<a class="headerlink" href="#functional-description" title="Permalink to this heading"></a></h2>
+<h2>Functional Description<a class="headerlink" href="#functional-description" title="Link to this heading"></a></h2>
 <p>The axi_ad9783 cores architecture contains:</p>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783/axi_ad9783.v#L135" target="_blank">Interface</a>
@@ -455,7 +457,7 @@ module, which contains:</p>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_axi.v" target="_blank">AXI control and status</a> modules.</p></li>
 </ul>
 <section id="device-interface-description">
-<h3>Device Interface Description<a class="headerlink" href="#device-interface-description" title="Permalink to this heading"></a></h3>
+<h3>Device Interface Description<a class="headerlink" href="#device-interface-description" title="Link to this heading"></a></h3>
 <p>The interface also provides a single clock tree for the entire core. This clock
 uses a global buffer that has the minimum skew all across the die. On Xilinx
 devices, this is done via the IBUFGDS, BUFGCE_DIV and BUFG primitives. The clock
@@ -464,18 +466,18 @@ divided clock: through IBUFGDS, then BUFGCE_DIV to BUFG. The core and the
 interface run at the same clock frequency.</p>
 </section>
 <section id="internal-interface-description">
-<h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Permalink to this heading"></a></h3>
+<h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Link to this heading"></a></h3>
 <p>The main purpose of all (including this) ADI IP cores is to provide a common,
 well-defined internal interface within the FPGA. This interface consists of the
 following signals per channel, except for VALID which is common to all channels.</p>
 <section id="valid">
-<h4>VALID<a class="headerlink" href="#valid" title="Permalink to this heading"></a></h4>
+<h4>VALID<a class="headerlink" href="#valid" title="Link to this heading"></a></h4>
 <p>It is always set to logic 1 and indicates a valid sample on each DATA port.
 Because it is in the transmit (DAC) direction, this indicates the current sample
 is being read by the core.</p>
 </section>
 <section id="enable">
-<h4>ENABLE<a class="headerlink" href="#enable" title="Permalink to this heading"></a></h4>
+<h4>ENABLE<a class="headerlink" href="#enable" title="Link to this heading"></a></h4>
 <p>The enable signal is only for software use and it is controlled by the
 corresponding register bit. The core simply reflects the programmed bit as an
 output port. In ADI reference projects, this bit is used to activate the channel
@@ -486,7 +488,7 @@ SERDES factor was chosen to be 8, we have 4 samples of 16 bits each, on I
 channel and Q channel also, resulting in DMA with 128 bits as data width.</p>
 </section>
 <section id="data">
-<h4>DATA<a class="headerlink" href="#data" title="Permalink to this heading"></a></h4>
+<h4>DATA<a class="headerlink" href="#data" title="Link to this heading"></a></h4>
 <p>The DATA is the raw analog samples, and 4096 samples generated by PRBS are sent.
 It follows two simple rules.</p>
 <ol class="arabic simple">
@@ -510,7 +512,7 @@ S3 across time with S0 being the oldest and S3 being the newest sample.</p></li>
 </section>
 </section>
 <section id="parallel-data-port-interface">
-<h2>Parallel data port interface<a class="headerlink" href="#parallel-data-port-interface" title="Permalink to this heading"></a></h2>
+<h2>Parallel data port interface<a class="headerlink" href="#parallel-data-port-interface" title="Link to this heading"></a></h2>
 <p>The parallel port data interface consists of up to 18 differential signals,
 <code class="docutils literal notranslate"><span class="pre">dac_clk_out_*</span></code>, <code class="docutils literal notranslate"><span class="pre">dac_clk_in_*</span></code>, and up to 16 data lines
 (<code class="docutils literal notranslate"><span class="pre">dac_data_out_*</span></code>[15:0]).
@@ -527,9 +529,10 @@ clock signal.</p>
 well as indicating the destination (that is, I DAC or Q DAC) of the data. The
 data that is processed on rising edge will be outputted on the I DAC, and the
 data that is on falling edge will be outputted on Q DAC (see figure below).</p>
-<img alt="AXI AD9783 parallel interface" src="../../_images/parallel_interface.svg" /></section>
+<img alt="AXI AD9783 parallel interface" src="../../_images/parallel_interface.svg" />
+</section>
 <section id="calibration-of-the-device">
-<h2>Calibration of the device<a class="headerlink" href="#calibration-of-the-device" title="Permalink to this heading"></a></h2>
+<h2>Calibration of the device<a class="headerlink" href="#calibration-of-the-device" title="Link to this heading"></a></h2>
 <p>Calibrating the device means finding the proper value for the SMP_DLY register
 (see datasheet) in order for the PRBS function (PN23 in this case) to work
 properly when generating the 4096 samples of data.</p>
@@ -566,11 +569,12 @@ the DAC_DDS_SEL register is calculated by adding 0x418 (for the first channel)
 to the offset found in the devicetree, for the device.</p>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
-<a class="reference internal image-reference" href="../../_images/block_diagram20.svg"><img alt="AXI AD9783 block diagram" src="../../_images/block_diagram20.svg" width="600" /></a>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
+<a class="reference internal image-reference" href="../../_images/block_diagram24.svg"><img alt="AXI AD9783 block diagram" src="../../_images/block_diagram24.svg" width="600" />
+</a>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -664,7 +668,7 @@ to the offset found in the devicetree, for the device.</p>
 </div>
 </section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="3623d596eaa21cdbf8ce55aa9f16eb59631f79ed" name="3623d596eaa21cdbf8ce55aa9f16eb59631f79ed" type="checkbox"></input><label for="3623d596eaa21cdbf8ce55aa9f16eb59631f79ed"><div><p>s_axi</p>
@@ -951,7 +955,7 @@ to the offset found in the devicetree, for the device.</p>
 </section>
 </div></section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
 <p>The register map of the core contains instances of several generic register maps
 like DAC common, DAC channel.
 The following table presents the base addresses of each instance, after it you
@@ -961,7 +965,7 @@ base address to the registers relative address. For a more detailed explanation,
 see <a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html#generic-dac-register-access"><span class="std std-ref">DAC register access</span></a>.</p>
 <div class="table-wrapper docutils container" id="id2">
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Register Map base addresses for axi_ad9783</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Register Map base addresses for axi_ad9783</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>HDL reg</p></th>
 <th class="head"><p>Software reg</p></th>
@@ -2413,21 +2417,21 @@ NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
 </section>
 </div></section>
 <section id="software-guidelines">
-<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading"></a></h2>
+<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Link to this heading"></a></h2>
 <p>The software for this IP can be found as part of the ZCU102 Reference Design.
 The IP expects the software run a calibration at least once. It has to find
 out what value for the SMP_DLY (see in datasheet) is good for the PRBS to
 work.</p>
 </section>
 <section id="software-support">
-<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
+<h2>Software Support<a class="headerlink" href="#software-support" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad9783.c" target="_blank">drivers/iio/adc/ad9783.c</a></p></li>
-<li><p>Linux device tree at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts" target="_blank">arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts</a></p></li>
+<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/iio/adc/ad9783.c" target="_blank">drivers/iio/adc/ad9783.c</a></p></li>
+<li><p>Linux device tree at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts" target="_blank">arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts</a></p></li>
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783" target="_blank">library/axi_ad9783</a></p></li>
 <li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9783_ebz" target="_blank">projects/ad9783_ebz</a></p></li>
@@ -2446,7 +2450,7 @@ work.</p>
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../axi_ad9467/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AXI AD9467</a>
+    <a href="../axi_ad9740/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AXI AD9740</a>
     <a href="../axi_ad9963/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AXI AD9963</a>
               </div>
           

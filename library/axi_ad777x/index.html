@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>AXI AD777x &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -115,7 +115,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -204,6 +204,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -308,6 +309,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -377,7 +379,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-ad777x">
-<span id="id1"></span><h1>AXI AD777x<a class="headerlink" href="#axi-ad777x" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>AXI AD777x<a class="headerlink" href="#axi-ad777x" title="Link to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 397.2 282" width="397.2" class="no-background"><style>
                 a {
@@ -390,7 +392,7 @@ converters using an FPGA in 1, 2, or 4 data lines active.
 More about the generic framework interfacing ADCs, that contains the
 <code class="docutils literal notranslate"><span class="pre">up_adc_channel</span></code> and <code class="docutils literal notranslate"><span class="pre">up_adc_common</span> <span class="pre">modules</span></code>, can be read in <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a>.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>AXI based configuration</p></li>
 <li><p>CRC validation flag</p></li>
@@ -400,7 +402,7 @@ More about the generic framework interfacing ADCs, that contains the
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -426,10 +428,11 @@ More about the generic framework interfacing ADCs, that contains the
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
-<img alt="AXI AD777x block diagram" src="../../_images/block_diagram10.svg" /></section>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
+<img alt="AXI AD777x block diagram" src="../../_images/block_diagram19.svg" />
+</section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -455,7 +458,7 @@ More about the generic framework interfacing ADCs, that contains the
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="a285ef604da9afcc42952fbb383deb4460602b44" name="a285ef604da9afcc42952fbb383deb4460602b44" type="checkbox"></input><label for="a285ef604da9afcc42952fbb383deb4460602b44"><div><p>s_axi</p>
@@ -810,10 +813,11 @@ More about the generic framework interfacing ADCs, that contains the
 </section>
 </div></section>
 <section id="detailed-architecture">
-<h2>Detailed Architecture<a class="headerlink" href="#detailed-architecture" title="Permalink to this heading"></a></h2>
-<img alt="AXI AD777x detailed architecture" src="../../_images/detailed_architecture2.svg" /></section>
+<h2>Detailed Architecture<a class="headerlink" href="#detailed-architecture" title="Link to this heading"></a></h2>
+<img alt="AXI AD777x detailed architecture" src="../../_images/detailed_architecture2.svg" />
+</section>
 <section id="detailed-description">
-<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Link to this heading"></a></h2>
 <p>The top module, axi_ad777x, instantiates:</p>
 <ul class="simple">
 <li><p>The AD777x interface module</p></li>
@@ -832,7 +836,7 @@ basic monitoring and control of the ADC.
 basic monitoring and control of the ADC’s channel.</p>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
 <p>The register map of the core contains instances of several generic register maps
 like ADC common, ADC channel.
 The following table presents the base addresses of each instance, after it you
@@ -842,7 +846,7 @@ base address to the registers relative address. For a more detailed explanation,
 see <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#generic-adc-register-access"><span class="std std-ref">ADC register access</span></a>.</p>
 <div class="table-wrapper docutils container" id="id2">
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Register Map base addresses for axi_ad777x</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Register Map base addresses for axi_ad777x</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>HDL reg</p></th>
 <th class="head"><p>Software reg</p></th>
@@ -2416,7 +2420,7 @@ Where n is from 0 to 15.</p>
 </section>
 </div></section>
 <section id="design-guidelines">
-<h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Permalink to this heading"></a></h2>
+<h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Link to this heading"></a></h2>
 <p>The control of the ad777x chip is done through a SPI interface, which is needed
 at system level.</p>
 <p>The <em>ADC interface signals</em> must be connected directly to the top file of the
@@ -2431,7 +2435,7 @@ processor is available in your system, you can create your own IP starting from
 the interface module.</p>
 </section>
 <section id="software-support">
-<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
+<h2>Software Support<a class="headerlink" href="#software-support" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>No-OS device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad7779" target="_blank">drivers/adc/ad7779</a></p></li>
 <li><p>No-OS driver documentation <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/ad7779" target="_blank">here</a></p></li>
@@ -2439,7 +2443,7 @@ the interface module.</p>
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad777x" target="_blank">library/axi_ad777x</a></p></li>
 <li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad777x_fmcz" target="_blank">projects/ad777x_fmcz</a></p></li>

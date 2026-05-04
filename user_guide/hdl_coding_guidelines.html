@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>ADI HDL coding guidelines &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../index.html">
           <div>HDL</div>
@@ -118,7 +118,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -207,6 +207,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -311,6 +312,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -380,9 +382,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="adi-hdl-coding-guidelines">
-<span id="hdl-coding-guidelines"></span><h1>ADI HDL coding guidelines<a class="headerlink" href="#adi-hdl-coding-guidelines" title="Permalink to this heading"></a></h1>
+<span id="hdl-coding-guidelines"></span><h1>ADI HDL coding guidelines<a class="headerlink" href="#adi-hdl-coding-guidelines" title="Link to this heading"></a></h1>
 <section id="introduction">
-<h2>1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<h2>1. Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
 <p>This document contains coding and documentation guidelines which must be
 followed by all HDL projects. The purpose of this document is to
 establish a set of rules that specify the layout, naming conventions and
@@ -407,9 +409,9 @@ VHDL or Verilog.</p>
 document.</p>
 </section>
 <section id="coding-style">
-<h2>2. Coding style<a class="headerlink" href="#coding-style" title="Permalink to this heading"></a></h2>
+<h2>2. Coding style<a class="headerlink" href="#coding-style" title="Link to this heading"></a></h2>
 <section id="a-layout">
-<h3>A. Layout<a class="headerlink" href="#a-layout" title="Permalink to this heading"></a></h3>
+<h3>A. Layout<a class="headerlink" href="#a-layout" title="Link to this heading"></a></h3>
 <p><strong>A1</strong></p>
 <p>HDL source files <strong>must not</strong> begin or end with empty lines, but <strong>must</strong>
 terminate with exactly one newline character.</p>
@@ -762,7 +764,7 @@ The type name and semicolon must be on the same line as <code class="docutils li
 </div>
 </section>
 <section id="b-naming-conventions">
-<h3>B. Naming Conventions<a class="headerlink" href="#b-naming-conventions" title="Permalink to this heading"></a></h3>
+<h3>B. Naming Conventions<a class="headerlink" href="#b-naming-conventions" title="Link to this heading"></a></h3>
 <p><strong>B1</strong></p>
 <p>All the names in the source code <strong>must</strong> be written in English.</p>
 <p><strong>B2</strong></p>
@@ -843,7 +845,7 @@ uncommon abbreviations <em>should</em> be avoided.</p>
 hierarchy.</p>
 </section>
 <section id="c-comments">
-<h3>C. Comments<a class="headerlink" href="#c-comments" title="Permalink to this heading"></a></h3>
+<h3>C. Comments<a class="headerlink" href="#c-comments" title="Link to this heading"></a></h3>
 <p><strong>C1</strong></p>
 <p>Comments <strong>must</strong> be used to describe the functionality of the
 HDL code. Liberal use of comments is strongly encouraged. Adding obvious
@@ -873,7 +875,7 @@ used.</p>
 format shown in Annex 1 for Verilog code and Annex 2 for VHDL code.</p>
 </section>
 <section id="d-general">
-<h3>D. General<a class="headerlink" href="#d-general" title="Permalink to this heading"></a></h3>
+<h3>D. General<a class="headerlink" href="#d-general" title="Link to this heading"></a></h3>
 <p><strong>D1</strong></p>
 <p>A file <strong>must</strong> contain a single module or package.</p>
 <p><strong>D2</strong></p>
@@ -926,9 +928,9 @@ the current year.</p>
 </section>
 </section>
 <section id="annexes">
-<h2>3. Annexes<a class="headerlink" href="#annexes" title="Permalink to this heading"></a></h2>
+<h2>3. Annexes<a class="headerlink" href="#annexes" title="Link to this heading"></a></h2>
 <section id="annex-1-verilog-file-format">
-<h3>Annex 1 Verilog file format<a class="headerlink" href="#annex-1-verilog-file-format" title="Permalink to this heading"></a></h3>
+<h3>Annex 1 Verilog file format<a class="headerlink" href="#annex-1-verilog-file-format" title="Link to this heading"></a></h3>
 <div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// ***************************************************************************</span>
 <span class="linenos"> 2</span><span class="c1">// ***************************************************************************</span>
 <span class="linenos"> 3</span><span class="c1">// Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>
@@ -1023,7 +1025,7 @@ the current year.</p>
 </div>
 </section>
 <section id="annex-2-vhdl-file-format">
-<h3>Annex 2 VHDL file format<a class="headerlink" href="#annex-2-vhdl-file-format" title="Permalink to this heading"></a></h3>
+<h3>Annex 2 VHDL file format<a class="headerlink" href="#annex-2-vhdl-file-format" title="Link to this heading"></a></h3>
 <div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- ***************************************************************************</span>
 <span class="linenos"> 2</span><span class="c1">-- ***************************************************************************</span>
 <span class="linenos"> 3</span><span class="c1">-- Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>
@@ -1122,7 +1124,7 @@ the current year.</p>
 </div>
 </section>
 <section id="annex-3-systemverilog-package-file-format">
-<h3>Annex 3 SystemVerilog package file format<a class="headerlink" href="#annex-3-systemverilog-package-file-format" title="Permalink to this heading"></a></h3>
+<h3>Annex 3 SystemVerilog package file format<a class="headerlink" href="#annex-3-systemverilog-package-file-format" title="Link to this heading"></a></h3>
 <div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1">// ***************************************************************************</span>
 <span class="linenos">  2</span><span class="c1">// ***************************************************************************</span>
 <span class="linenos">  3</span><span class="c1">// Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>

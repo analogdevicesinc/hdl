@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,12 +8,12 @@
 
     <title>AD9695-FMC HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="AD9783-EBZ HDL project" href="../ad9783_ebz/index.html" />
+    <link rel="next" title="AD9740-FMC HDL project" href="../ad9740_fmc/index.html" />
     <link rel="prev" title="AD9694-FMC HDL project" href="../ad9694_fmc/index.html" />
    
   
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -131,7 +131,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -220,6 +220,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -324,6 +325,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adaq23875/index.html">ADAQ23875</a></li>
@@ -393,9 +395,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="ad9695-fmc-hdl-project">
-<span id="ad9695-fmc"></span><h1>AD9695-FMC HDL project<a class="headerlink" href="#ad9695-fmc-hdl-project" title="Permalink to this heading"></a></h1>
+<span id="ad9695-fmc"></span><h1>AD9695-FMC HDL project<a class="headerlink" href="#ad9695-fmc-hdl-project" title="Link to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9695" target="_blank">EVAL-AD9695</a> is a fully-featured evaluation board for the
 <a class="icon adi reference external" href="https://www.analog.com/AD9695" target="_blank">AD9695</a>, a dual 14-bit, 1300/625MSPS analog-to-digital converter (ADC)
 featuring an on-chip buffer and a sample-and-hold circuit designed for
@@ -410,7 +412,7 @@ transports the captured samples from the ADC to the system memory (DDR).</p>
 <p>All cores from the receive chain are programmable through an AXI-Lite interface.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9695" target="_blank">EVAL-AD9695</a> with 1300MSPS</p></li>
 </ul>
@@ -418,33 +420,35 @@ transports the captured samples from the ADC to the system memory (DDR).</p>
 <strong>are not supported by our reference design</strong>.</p>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9695" target="_blank">AD9695</a> with 1300MSPS</p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a> on FMC HPC1</p></li>
 </ul>
 </section>
 <section id="other-required-hardware">
-<h2>Other required hardware<a class="headerlink" href="#other-required-hardware" title="Permalink to this heading"></a></h2>
+<h2>Other required hardware<a class="headerlink" href="#other-required-hardware" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD-SYNCHRONA14-EBZ" target="_blank">AD-SYNCHRONA14-EBZ</a> as an external clock source</p></li>
 </ul>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad9695_fmc_block_diagram.svg"><img alt="AD9695-EBZ/ZCU102 block diagram" class="align-center" src="../../_images/ad9695_fmc_block_diagram.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad9695_fmc_block_diagram.svg"><img alt="AD9695-EBZ/ZCU102 block diagram" class="align-center" src="../../_images/ad9695_fmc_block_diagram.svg" width="800" />
+</a>
 </section>
 <section id="clock-scheme">
-<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="../../_images/ad9695_clock_scheme.svg"><img alt="AD9695-EBZ/ZCU102 clock scheme" class="align-center" src="../../_images/ad9695_clock_scheme.svg" width="600" /></a>
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Link to this heading"></a></h3>
+<a class="reference internal image-reference" href="../../_images/ad9695_clock_scheme.svg"><img alt="AD9695-EBZ/ZCU102 clock scheme" class="align-center" src="../../_images/ad9695_clock_scheme.svg" width="600" />
+</a>
 <ul class="simple">
 <li><p>Uses an external clock source: <a class="icon adi reference external" href="https://www.analog.com/AD-SYNCHRONA14-EBZ" target="_blank">AD-SYNCHRONA14-EBZ</a></p></li>
 <li><p>SYSREF clocks are LVDS</p></li>
@@ -452,7 +456,7 @@ transports the captured samples from the ADC to the system memory (DDR).</p>
 </ul>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="icon adi reference external" href="https://www.analog.com/AD9695" target="_blank">AD9695</a> supports only JESD204B.</p>
@@ -471,7 +475,7 @@ since in our design
 See <a class="reference internal" href="#software-related">Software related</a> section for details.</p>
 </section>
 <section id="hardware-considerations">
-<h3>Hardware considerations<a class="headerlink" href="#hardware-considerations" title="Permalink to this heading"></a></h3>
+<h3>Hardware considerations<a class="headerlink" href="#hardware-considerations" title="Link to this heading"></a></h3>
 <p>The following connections should be made:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -518,7 +522,7 @@ See <a class="reference internal" href="#software-related">Software related</a> 
 </ul>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -546,7 +550,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -578,7 +582,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -626,7 +630,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -660,7 +664,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -711,32 +715,33 @@ by the configuration used.</p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="software-considerations">
-<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Permalink to this heading"></a></h2>
+<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Link to this heading"></a></h2>
 <p><a class="icon adi reference external" href="https://www.analog.com/AD-SYNCHRONA14-EBZ" target="_blank">AD-SYNCHRONA14-EBZ</a> output configuration:</p>
 <p>Only the channels presented in the clocking selection are relevant.
 For the rest, you can either disable them or just put a divided frequency
 of the source clock.</p>
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/ad9695_fmc/projects/ad9695_fmc/synchrona_settings.png"><img alt="AD-SYNCHRONA14-EBZ output configuration" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/ad9695_fmc/projects/ad9695_fmc/synchrona_settings.png" style="width: 1000px;" /></a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/ad9695_fmc/synchrona_settings.png"><img alt="AD-SYNCHRONA14-EBZ output configuration" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/projects/ad9695_fmc/synchrona_settings.png" width="1000" />
+</a>
 <p>More details on how to set up the <a class="icon adi reference external" href="https://www.analog.com/AD-SYNCHRONA14-EBZ" target="_blank">AD-SYNCHRONA14-EBZ</a> can be found on
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-synchrona14-ebz#gui" target="_blank">its wiki page</a>.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9695_fmc" target="_blank">AD9695-FMC quick start guide</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-synchrona14-ebz" target="_blank">AD-SYNCHRONA14-EBZ User guide</a></p></li>
 </ul>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9695" target="_blank">AD9695</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9695_fmc" target="_blank">AD9695_FMC HDL project source code</a></p></li>
 </ul>
@@ -799,20 +804,20 @@ of the source clock.</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p>AD9695-FMC ZCU102 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9695.dts" target="_blank">arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9695.dts</a></p></li>
+<li><p>AD9695-FMC ZCU102 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9695.dts" target="_blank">arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9695.dts</a></p></li>
 </ul>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>
@@ -832,7 +837,7 @@ are, the lower the chances to receive support from <a class="icon link reference
               <div class="related">
                 &nbsp;
     <a href="../ad9694_fmc/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD9694-FMC HDL project</a>
-    <a href="../ad9783_ebz/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD9783-EBZ HDL project</a>
+    <a href="../ad9740_fmc/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD9740-FMC HDL project</a>
               </div>
           
         </div>

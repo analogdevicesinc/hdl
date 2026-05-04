@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,8 +8,8 @@
 
     <title>SPI Bus Interface &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a525f648" />
-    <script async="async" src="../../_static/app.umd.js?v=fcf3088a"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="../../_static/app.umd.js?v=d9819247"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -68,7 +68,7 @@
         <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
         <div class="vertical-divider"></div>
         
-        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
         
         <a id="logo" href="../../index.html">
           <div>HDL</div>
@@ -110,7 +110,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -199,6 +199,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
@@ -303,6 +304,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/index.html">ADAQ23875</a></li>
@@ -372,10 +374,10 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="spi-bus-interface">
-<span id="spi-engine-spi-bus-interface"></span><h1>SPI Bus Interface<a class="headerlink" href="#spi-bus-interface" title="Permalink to this heading"></a></h1>
+<span id="spi-engine-spi-bus-interface"></span><h1>SPI Bus Interface<a class="headerlink" href="#spi-bus-interface" title="Link to this heading"></a></h1>
 <p>The SPI bus interface carries logical low-level SPI bus signals.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -392,7 +394,7 @@ Content on this topic
 </div>
 </section>
 <section id="signal-pins">
-<h2>Signal Pins<a class="headerlink" href="#signal-pins" title="Permalink to this heading"></a></h2>
+<h2>Signal Pins<a class="headerlink" href="#signal-pins" title="Link to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -439,8 +441,9 @@ mode <code class="docutils literal notranslate"><span class="pre">sdi</span></co
 </div>
 </section>
 <section id="io-configuration">
-<h2>IO configuration<a class="headerlink" href="#io-configuration" title="Permalink to this heading"></a></h2>
-<a class="reference internal image-reference" href="../../_images/spi_bus.svg"><img alt="../../_images/spi_bus.svg" class="align-right" src="../../_images/spi_bus.svg" width="30%" /></a>
+<h2>IO configuration<a class="headerlink" href="#io-configuration" title="Link to this heading"></a></h2>
+<a class="reference internal image-reference" href="../../_images/spi_bus.svg"><img alt="../../_images/spi_bus.svg" class="align-right" src="../../_images/spi_bus.svg" style="width: 30%;" />
+</a>
 <p>The SPI bus interface only carries a logical representation of the low-level SPI
 bus signals. The top-level module in the FPGA design project is responsible for
 translating the signal to physical SPI bus signals by instantiating and
@@ -456,7 +459,7 @@ directly be connected to the input buffer for the <code class="docutils literal 
 when <code class="docutils literal notranslate"><span class="pre">mosi</span></code> tri-stating is not required the <code class="docutils literal notranslate"><span class="pre">sdo</span></code> signal can be directly
 connected to the <code class="docutils literal notranslate"><span class="pre">mosi</span></code> signal leaving the <code class="docutils literal notranslate"><span class="pre">sdo_t</span></code> signal unconnected.</p>
 <section id="example-verilog-io-configuration">
-<h3>Example Verilog IO configuration<a class="headerlink" href="#example-verilog-io-configuration" title="Permalink to this heading"></a></h3>
+<h3>Example Verilog IO configuration<a class="headerlink" href="#example-verilog-io-configuration" title="Link to this heading"></a></h3>
 <blockquote>
 <div><p>The following example Verilog code shows the most generic IO configuration,
 which represents the diagram above. Depending on system requirements some
