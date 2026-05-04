@@ -158,15 +158,16 @@ A more comprehensive build guide can be found in the :ref:`build_hdl` user guide
 Resources
 -------------------------------------------------------------------------------
 
-Systems related
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+..
+  Systems related
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- TBD
+  .. TBD
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Product datasheets:
+- Product datasheet:
 
   - :adi:`AD5529R`
 
@@ -209,11 +210,12 @@ HDL related
 
 - :ref:`SPI Engine Framework documentation <spi_engine>`
 
-Software related
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+..
+  Software related
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Linux driver: TBD
-- No-OS driver: TBD
+  - Linux driver: TBD
+  - No-OS driver: TBD
 
 .. include:: ../common/more_information.rst
 

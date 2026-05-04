@@ -52,7 +52,6 @@ create_generated_clock -name SCLK_clk \
 # =============================================================================
 set_max_delay -datapath_only -from [get_ports ad5529r_ardz_spi_miso] -to [get_clocks spi_clk] 10.0
 
-
 # =============================================================================
 # SPI Output Constraints (CS, MOSI)
 # =============================================================================
