@@ -89,12 +89,8 @@ Interface
 
    * - dac_clk
      - Reference clock
-   * - dma_data
+   * - s_axis
      - Data from the DMAC when input source is set to DMA_DATA.
-   * - valid_in_dma
-     - Valid from the DMAC.
-   * - dac_data_ready
-     - Data ready signal for the DMAC.
    * - data_in_a
      - Data for channel 1 when input source is set to ADC_DATA.
    * - data_in_b
