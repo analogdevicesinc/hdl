@@ -58,11 +58,15 @@ ad_connect odr_generator/ext_clk axi_ad7134_clkgen/clk_0
 ad_connect odr_generator/pwm_0 $hier_spi_engine/trigger
 ad_connect odr_generator/pwm_1 ad713x_odr
 
-# sdpclk clock - 50 MHz
+# sdpclk clock - 48 MHz
 
-ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 50.0
-ad_connect ad713x_sdpclk sys_ps7/FCLK_CLK2
+ad_ip_instance axi_clkgen axi_sdpclk_clkgen
+ad_ip_parameter axi_sdpclk_clkgen CONFIG.VCO_DIV 5
+ad_ip_parameter axi_sdpclk_clkgen CONFIG.VCO_MUL 48
+ad_ip_parameter axi_sdpclk_clkgen CONFIG.CLK0_DIV 20
+
+ad_connect $sys_cpu_clk axi_sdpclk_clkgen/clk
+ad_connect axi_sdpclk_clkgen/clk_0 ad713x_sdpclk
 
 ad_connect  axi_ad7134_clkgen/clk_0 $hier_spi_engine/spi_clk
 ad_connect  $sys_cpu_clk axi_ad7134_clkgen/clk 
@@ -80,6 +84,7 @@ ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44a30000 axi_ad7134_dma
 ad_cpu_interconnect 0x44b00000 odr_generator
 ad_cpu_interconnect 0x44b10000 axi_ad7134_clkgen
+ad_cpu_interconnect 0x44b20000 axi_sdpclk_clkgen
 
 # interrupts
 
