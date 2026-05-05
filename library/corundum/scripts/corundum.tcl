@@ -8,18 +8,6 @@ source $ad_hdl_dir/library/corundum/scripts/corundum_common_cfg.tcl
 create_bd_cell -type hier corundum_hierarchy
 current_bd_instance /corundum_hierarchy
 
-create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axil_corundum
-if {$APP_ENABLE == 1} {
-  create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axil_application
-}
-
-create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:aximm_rtl:1.0 m_axi
-
-create_bd_pin -dir I -type clk clk_corundum
-create_bd_pin -dir I -type rst rst_corundum
-
-create_bd_pin -dir O -type intr irq
-
 if [info exists ::env(CPU)] {
   set CPU $::env(CPU)
 } else {
@@ -31,6 +19,20 @@ if [info exists ::env(BOARD)] {
 } else {
   error "Missing BOARD environment variable definition from makefile!"
 }
+
+create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axil_corundum
+if {$APP_ENABLE == 1} {
+  if {[string equal $board "XCVU11P"] || [string equal $board "VCU118"] || [string equal $board "ADRV9009ZU11EG"]} {
+    create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axil_application
+  }
+}
+
+create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:aximm_rtl:1.0 m_axi
+
+create_bd_pin -dir I -type clk clk_corundum
+create_bd_pin -dir I -type rst rst_corundum
+
+create_bd_pin -dir O -type intr irq
 
 switch $board {
   ADRV9009ZU11EG {
@@ -431,110 +433,194 @@ switch $board {
 }
 
 if {$APP_ENABLE == 1} {
-  ad_ip_instance application_core application_core [list \
-    IF_COUNT $IF_COUNT \
-    PORTS_PER_IF $PORTS_PER_IF \
-    PTP_PEROUT_COUNT $PTP_PEROUT_COUNT \
-    PTP_TS_ENABLE $PTP_TS_ENABLE \
-    PTP_TS_FMT_TOD $PTP_TS_FMT_TOD \
-    PTP_TS_WIDTH $PTP_TS_WIDTH \
-    TX_TAG_WIDTH $TX_TAG_WIDTH \
-    DDR_CH $DDR_CH \
-    AXI_DDR_DATA_WIDTH $AXI_DDR_DATA_WIDTH \
-    AXI_DDR_ADDR_WIDTH $AXI_DDR_ADDR_WIDTH \
-    AXI_DDR_STRB_WIDTH $AXI_DDR_STRB_WIDTH \
-    AXI_DDR_ID_WIDTH $AXI_DDR_ID_WIDTH \
-    AXI_DDR_AWUSER_ENABLE $AXI_DDR_AWUSER_ENABLE \
-    AXI_DDR_WUSER_ENABLE $AXI_DDR_WUSER_ENABLE \
-    AXI_DDR_BUSER_ENABLE $AXI_DDR_BUSER_ENABLE \
-    AXI_DDR_ARUSER_ENABLE $AXI_DDR_ARUSER_ENABLE \
-    AXI_DDR_RUSER_ENABLE $AXI_DDR_RUSER_ENABLE \
-    HBM_CH $HBM_CH \
-    AXI_HBM_DATA_WIDTH $AXI_HBM_DATA_WIDTH \
-    AXI_HBM_ADDR_WIDTH $AXI_HBM_ADDR_WIDTH \
-    AXI_HBM_STRB_WIDTH $AXI_HBM_STRB_WIDTH \
-    AXI_HBM_ID_WIDTH $AXI_HBM_ID_WIDTH \
-    AXI_HBM_AWUSER_ENABLE $AXI_HBM_AWUSER_ENABLE \
-    AXI_HBM_AWUSER_WIDTH $AXI_HBM_AWUSER_WIDTH \
-    AXI_HBM_WUSER_ENABLE $AXI_HBM_WUSER_ENABLE \
-    AXI_HBM_WUSER_WIDTH $AXI_HBM_WUSER_WIDTH \
-    AXI_HBM_BUSER_ENABLE $AXI_HBM_BUSER_ENABLE \
-    AXI_HBM_BUSER_WIDTH $AXI_HBM_BUSER_WIDTH \
-    AXI_HBM_ARUSER_ENABLE $AXI_HBM_ARUSER_ENABLE \
-    AXI_HBM_ARUSER_WIDTH $AXI_HBM_ARUSER_WIDTH \
-    AXI_HBM_RUSER_ENABLE $AXI_HBM_RUSER_ENABLE \
-    AXI_HBM_RUSER_WIDTH $AXI_HBM_RUSER_WIDTH \
-    APP_ID $APP_ID \
-    APP_GPIO_IN_WIDTH $APP_GPIO_IN_WIDTH \
-    APP_GPIO_OUT_WIDTH $APP_GPIO_OUT_WIDTH \
-    DMA_ADDR_WIDTH $DMA_ADDR_WIDTH \
-    DMA_IMM_WIDTH $DMA_IMM_WIDTH \
-    DMA_LEN_WIDTH $DMA_LEN_WIDTH \
-    DMA_TAG_WIDTH $DMA_TAG_WIDTH \
-    RAM_SEL_WIDTH $RAM_SEL_WIDTH \
-    RAM_ADDR_WIDTH $RAM_ADDR_WIDTH \
-    RAM_SEG_COUNT $RAM_SEG_COUNT \
-    RAM_SEG_DATA_WIDTH $RAM_SEG_DATA_WIDTH \
-    RAM_SEG_BE_WIDTH $RAM_SEG_BE_WIDTH \
-    RAM_SEG_ADDR_WIDTH $RAM_SEG_ADDR_WIDTH \
-    AXIL_CTRL_DATA_WIDTH $AXIL_CTRL_DATA_WIDTH \
-    AXIL_CTRL_ADDR_WIDTH $AXIL_CTRL_ADDR_WIDTH \
-    AXIL_CTRL_STRB_WIDTH $AXIL_CTRL_STRB_WIDTH \
-    AXIS_DATA_WIDTH $AXIS_DATA_WIDTH \
-    AXIS_KEEP_WIDTH $AXIS_KEEP_WIDTH \
-    AXIS_TX_USER_WIDTH $AXIS_TX_USER_WIDTH \
-    AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
-    AXIS_SYNC_DATA_WIDTH $AXIS_SYNC_DATA_WIDTH \
-    AXIS_SYNC_KEEP_WIDTH $AXIS_SYNC_KEEP_WIDTH \
-    AXIS_SYNC_TX_USER_WIDTH $AXIS_SYNC_TX_USER_WIDTH \
-    AXIS_SYNC_RX_USER_WIDTH $AXIS_SYNC_RX_USER_WIDTH \
-    AXIS_IF_DATA_WIDTH $AXIS_IF_DATA_WIDTH \
-    AXIS_IF_KEEP_WIDTH $AXIS_IF_KEEP_WIDTH \
-    AXIS_IF_TX_ID_WIDTH $AXIS_IF_TX_ID_WIDTH \
-    AXIS_IF_RX_ID_WIDTH $AXIS_IF_RX_ID_WIDTH \
-    AXIS_IF_TX_DEST_WIDTH $AXIS_IF_TX_DEST_WIDTH \
-    AXIS_IF_RX_DEST_WIDTH $AXIS_IF_RX_DEST_WIDTH \
-    AXIS_IF_TX_USER_WIDTH $AXIS_IF_TX_USER_WIDTH \
-    AXIS_IF_RX_USER_WIDTH $AXIS_IF_RX_USER_WIDTH \
-    STAT_INC_WIDTH $STAT_INC_WIDTH \
-    STAT_ID_WIDTH $STAT_ID_WIDTH \
-    INPUT_CHANNELS $INPUT_CHANNELS \
-    INPUT_SAMPLES_PER_CHANNEL $INPUT_SAMPLES_PER_CHANNEL \
-    INPUT_SAMPLE_DATA_WIDTH $INPUT_SAMPLE_DATA_WIDTH \
-    OUTPUT_CHANNELS $OUTPUT_CHANNELS \
-    OUTPUT_SAMPLES_PER_CHANNEL $OUTPUT_SAMPLES_PER_CHANNEL \
-    OUTPUT_SAMPLE_DATA_WIDTH $OUTPUT_SAMPLE_DATA_WIDTH \
-  ]
+  if {[string equal $board "K26"]} {
+    ad_ip_instance application_core application_core [list \
+      IF_COUNT $IF_COUNT \
+      PORTS_PER_IF $PORTS_PER_IF \
+      PTP_PEROUT_COUNT $PTP_PEROUT_COUNT \
+      PTP_TS_ENABLE $PTP_TS_ENABLE \
+      PTP_TS_FMT_TOD $PTP_TS_FMT_TOD \
+      PTP_TS_WIDTH $PTP_TS_WIDTH \
+      TX_TAG_WIDTH $TX_TAG_WIDTH \
+      DDR_CH $DDR_CH \
+      AXI_DDR_DATA_WIDTH $AXI_DDR_DATA_WIDTH \
+      AXI_DDR_ADDR_WIDTH $AXI_DDR_ADDR_WIDTH \
+      AXI_DDR_STRB_WIDTH $AXI_DDR_STRB_WIDTH \
+      AXI_DDR_ID_WIDTH $AXI_DDR_ID_WIDTH \
+      AXI_DDR_AWUSER_ENABLE $AXI_DDR_AWUSER_ENABLE \
+      AXI_DDR_WUSER_ENABLE $AXI_DDR_WUSER_ENABLE \
+      AXI_DDR_BUSER_ENABLE $AXI_DDR_BUSER_ENABLE \
+      AXI_DDR_ARUSER_ENABLE $AXI_DDR_ARUSER_ENABLE \
+      AXI_DDR_RUSER_ENABLE $AXI_DDR_RUSER_ENABLE \
+      HBM_CH $HBM_CH \
+      AXI_HBM_DATA_WIDTH $AXI_HBM_DATA_WIDTH \
+      AXI_HBM_ADDR_WIDTH $AXI_HBM_ADDR_WIDTH \
+      AXI_HBM_STRB_WIDTH $AXI_HBM_STRB_WIDTH \
+      AXI_HBM_ID_WIDTH $AXI_HBM_ID_WIDTH \
+      AXI_HBM_AWUSER_ENABLE $AXI_HBM_AWUSER_ENABLE \
+      AXI_HBM_AWUSER_WIDTH $AXI_HBM_AWUSER_WIDTH \
+      AXI_HBM_WUSER_ENABLE $AXI_HBM_WUSER_ENABLE \
+      AXI_HBM_WUSER_WIDTH $AXI_HBM_WUSER_WIDTH \
+      AXI_HBM_BUSER_ENABLE $AXI_HBM_BUSER_ENABLE \
+      AXI_HBM_BUSER_WIDTH $AXI_HBM_BUSER_WIDTH \
+      AXI_HBM_ARUSER_ENABLE $AXI_HBM_ARUSER_ENABLE \
+      AXI_HBM_ARUSER_WIDTH $AXI_HBM_ARUSER_WIDTH \
+      AXI_HBM_RUSER_ENABLE $AXI_HBM_RUSER_ENABLE \
+      AXI_HBM_RUSER_WIDTH $AXI_HBM_RUSER_WIDTH \
+      APP_ID $APP_ID \
+      DMA_ADDR_WIDTH $DMA_ADDR_WIDTH \
+      DMA_IMM_WIDTH $DMA_IMM_WIDTH \
+      DMA_LEN_WIDTH $DMA_LEN_WIDTH \
+      DMA_TAG_WIDTH $DMA_TAG_WIDTH \
+      RAM_SEL_WIDTH $RAM_SEL_WIDTH \
+      RAM_ADDR_WIDTH $RAM_ADDR_WIDTH \
+      RAM_SEG_COUNT $RAM_SEG_COUNT \
+      RAM_SEG_DATA_WIDTH $RAM_SEG_DATA_WIDTH \
+      RAM_SEG_BE_WIDTH $RAM_SEG_BE_WIDTH \
+      RAM_SEG_ADDR_WIDTH $RAM_SEG_ADDR_WIDTH \
+      AXIL_CTRL_DATA_WIDTH $AXIL_CTRL_DATA_WIDTH \
+      AXIL_CTRL_ADDR_WIDTH $AXIL_CTRL_ADDR_WIDTH \
+      AXIL_CTRL_STRB_WIDTH $AXIL_CTRL_STRB_WIDTH \
+      AXIS_DATA_WIDTH $AXIS_DATA_WIDTH \
+      AXIS_KEEP_WIDTH $AXIS_KEEP_WIDTH \
+      AXIS_TX_USER_WIDTH $AXIS_TX_USER_WIDTH \
+      AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
+      AXIS_SYNC_DATA_WIDTH $AXIS_SYNC_DATA_WIDTH \
+      AXIS_SYNC_KEEP_WIDTH $AXIS_SYNC_KEEP_WIDTH \
+      AXIS_SYNC_TX_USER_WIDTH $AXIS_SYNC_TX_USER_WIDTH \
+      AXIS_SYNC_RX_USER_WIDTH $AXIS_SYNC_RX_USER_WIDTH \
+      AXIS_IF_DATA_WIDTH $AXIS_IF_DATA_WIDTH \
+      AXIS_IF_KEEP_WIDTH $AXIS_IF_KEEP_WIDTH \
+      AXIS_IF_TX_ID_WIDTH $AXIS_IF_TX_ID_WIDTH \
+      AXIS_IF_RX_ID_WIDTH $AXIS_IF_RX_ID_WIDTH \
+      AXIS_IF_TX_DEST_WIDTH $AXIS_IF_TX_DEST_WIDTH \
+      AXIS_IF_RX_DEST_WIDTH $AXIS_IF_RX_DEST_WIDTH \
+      AXIS_IF_TX_USER_WIDTH $AXIS_IF_TX_USER_WIDTH \
+      AXIS_IF_RX_USER_WIDTH $AXIS_IF_RX_USER_WIDTH \
+      STAT_INC_WIDTH $STAT_INC_WIDTH \
+      STAT_ID_WIDTH $STAT_ID_WIDTH \
+    ]
+  } else {
+    ad_ip_instance application_core application_core [list \
+      IF_COUNT $IF_COUNT \
+      PORTS_PER_IF $PORTS_PER_IF \
+      PTP_PEROUT_COUNT $PTP_PEROUT_COUNT \
+      PTP_TS_ENABLE $PTP_TS_ENABLE \
+      PTP_TS_FMT_TOD $PTP_TS_FMT_TOD \
+      PTP_TS_WIDTH $PTP_TS_WIDTH \
+      TX_TAG_WIDTH $TX_TAG_WIDTH \
+      DDR_CH $DDR_CH \
+      AXI_DDR_DATA_WIDTH $AXI_DDR_DATA_WIDTH \
+      AXI_DDR_ADDR_WIDTH $AXI_DDR_ADDR_WIDTH \
+      AXI_DDR_STRB_WIDTH $AXI_DDR_STRB_WIDTH \
+      AXI_DDR_ID_WIDTH $AXI_DDR_ID_WIDTH \
+      AXI_DDR_AWUSER_ENABLE $AXI_DDR_AWUSER_ENABLE \
+      AXI_DDR_WUSER_ENABLE $AXI_DDR_WUSER_ENABLE \
+      AXI_DDR_BUSER_ENABLE $AXI_DDR_BUSER_ENABLE \
+      AXI_DDR_ARUSER_ENABLE $AXI_DDR_ARUSER_ENABLE \
+      AXI_DDR_RUSER_ENABLE $AXI_DDR_RUSER_ENABLE \
+      HBM_CH $HBM_CH \
+      AXI_HBM_DATA_WIDTH $AXI_HBM_DATA_WIDTH \
+      AXI_HBM_ADDR_WIDTH $AXI_HBM_ADDR_WIDTH \
+      AXI_HBM_STRB_WIDTH $AXI_HBM_STRB_WIDTH \
+      AXI_HBM_ID_WIDTH $AXI_HBM_ID_WIDTH \
+      AXI_HBM_AWUSER_ENABLE $AXI_HBM_AWUSER_ENABLE \
+      AXI_HBM_AWUSER_WIDTH $AXI_HBM_AWUSER_WIDTH \
+      AXI_HBM_WUSER_ENABLE $AXI_HBM_WUSER_ENABLE \
+      AXI_HBM_WUSER_WIDTH $AXI_HBM_WUSER_WIDTH \
+      AXI_HBM_BUSER_ENABLE $AXI_HBM_BUSER_ENABLE \
+      AXI_HBM_BUSER_WIDTH $AXI_HBM_BUSER_WIDTH \
+      AXI_HBM_ARUSER_ENABLE $AXI_HBM_ARUSER_ENABLE \
+      AXI_HBM_ARUSER_WIDTH $AXI_HBM_ARUSER_WIDTH \
+      AXI_HBM_RUSER_ENABLE $AXI_HBM_RUSER_ENABLE \
+      AXI_HBM_RUSER_WIDTH $AXI_HBM_RUSER_WIDTH \
+      APP_ID $APP_ID \
+      APP_GPIO_IN_WIDTH $APP_GPIO_IN_WIDTH \
+      APP_GPIO_OUT_WIDTH $APP_GPIO_OUT_WIDTH \
+      DMA_ADDR_WIDTH $DMA_ADDR_WIDTH \
+      DMA_IMM_WIDTH $DMA_IMM_WIDTH \
+      DMA_LEN_WIDTH $DMA_LEN_WIDTH \
+      DMA_TAG_WIDTH $DMA_TAG_WIDTH \
+      RAM_SEL_WIDTH $RAM_SEL_WIDTH \
+      RAM_ADDR_WIDTH $RAM_ADDR_WIDTH \
+      RAM_SEG_COUNT $RAM_SEG_COUNT \
+      RAM_SEG_DATA_WIDTH $RAM_SEG_DATA_WIDTH \
+      RAM_SEG_BE_WIDTH $RAM_SEG_BE_WIDTH \
+      RAM_SEG_ADDR_WIDTH $RAM_SEG_ADDR_WIDTH \
+      AXIL_CTRL_DATA_WIDTH $AXIL_CTRL_DATA_WIDTH \
+      AXIL_CTRL_ADDR_WIDTH $AXIL_CTRL_ADDR_WIDTH \
+      AXIL_CTRL_STRB_WIDTH $AXIL_CTRL_STRB_WIDTH \
+      AXIS_DATA_WIDTH $AXIS_DATA_WIDTH \
+      AXIS_KEEP_WIDTH $AXIS_KEEP_WIDTH \
+      AXIS_TX_USER_WIDTH $AXIS_TX_USER_WIDTH \
+      AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
+      AXIS_SYNC_DATA_WIDTH $AXIS_SYNC_DATA_WIDTH \
+      AXIS_SYNC_KEEP_WIDTH $AXIS_SYNC_KEEP_WIDTH \
+      AXIS_SYNC_TX_USER_WIDTH $AXIS_SYNC_TX_USER_WIDTH \
+      AXIS_SYNC_RX_USER_WIDTH $AXIS_SYNC_RX_USER_WIDTH \
+      AXIS_IF_DATA_WIDTH $AXIS_IF_DATA_WIDTH \
+      AXIS_IF_KEEP_WIDTH $AXIS_IF_KEEP_WIDTH \
+      AXIS_IF_TX_ID_WIDTH $AXIS_IF_TX_ID_WIDTH \
+      AXIS_IF_RX_ID_WIDTH $AXIS_IF_RX_ID_WIDTH \
+      AXIS_IF_TX_DEST_WIDTH $AXIS_IF_TX_DEST_WIDTH \
+      AXIS_IF_RX_DEST_WIDTH $AXIS_IF_RX_DEST_WIDTH \
+      AXIS_IF_TX_USER_WIDTH $AXIS_IF_TX_USER_WIDTH \
+      AXIS_IF_RX_USER_WIDTH $AXIS_IF_RX_USER_WIDTH \
+      STAT_INC_WIDTH $STAT_INC_WIDTH \
+      STAT_ID_WIDTH $STAT_ID_WIDTH \
+      INPUT_CHANNELS $INPUT_CHANNELS \
+      INPUT_SAMPLES_PER_CHANNEL $INPUT_SAMPLES_PER_CHANNEL \
+      INPUT_SAMPLE_DATA_WIDTH $INPUT_SAMPLE_DATA_WIDTH \
+      OUTPUT_CHANNELS $OUTPUT_CHANNELS \
+      OUTPUT_SAMPLES_PER_CHANNEL $OUTPUT_SAMPLES_PER_CHANNEL \
+      OUTPUT_SAMPLE_DATA_WIDTH $OUTPUT_SAMPLE_DATA_WIDTH \
+    ]
+  
+    set INPUT_WIDTH [expr $INPUT_CHANNELS*$INPUT_SAMPLES_PER_CHANNEL*$INPUT_SAMPLE_DATA_WIDTH]
+    set OUTPUT_WIDTH [expr $OUTPUT_CHANNELS*$OUTPUT_SAMPLES_PER_CHANNEL*$OUTPUT_SAMPLE_DATA_WIDTH]
 
-  set INPUT_WIDTH [expr $INPUT_CHANNELS*$INPUT_SAMPLES_PER_CHANNEL*$INPUT_SAMPLE_DATA_WIDTH]
-  set OUTPUT_WIDTH [expr $OUTPUT_CHANNELS*$OUTPUT_SAMPLES_PER_CHANNEL*$OUTPUT_SAMPLE_DATA_WIDTH]
+    create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axil_application
 
-  create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axil_application
+    create_bd_pin -dir I -type clk input_clk
+    create_bd_pin -dir I -type rst input_rstn
 
-  create_bd_pin -dir I -type clk input_clk
-  create_bd_pin -dir I -type rst input_rstn
+    create_bd_pin -dir I -type clk output_clk
+    create_bd_pin -dir I -type rst output_rstn
 
-  create_bd_pin -dir I -type clk output_clk
-  create_bd_pin -dir I -type rst output_rstn
+    create_bd_pin -dir I input_axis_tvalid
+    create_bd_pin -dir O input_axis_tready
+    create_bd_pin -dir I -from [expr {$INPUT_WIDTH-1}] -to 0 input_axis_tdata
 
-  create_bd_pin -dir I input_axis_tvalid
-  create_bd_pin -dir O input_axis_tready
-  create_bd_pin -dir I -from [expr {$INPUT_WIDTH-1}] -to 0 input_axis_tdata
+    create_bd_pin -dir O -type intr input_packer_reset
 
-  create_bd_pin -dir O -type intr input_packer_reset
+    create_bd_pin -dir O output_axis_tvalid
+    create_bd_pin -dir I output_axis_tready
+    create_bd_pin -dir O -from [expr {$OUTPUT_WIDTH-1}] -to 0 output_axis_tdata
 
-  create_bd_pin -dir O output_axis_tvalid
-  create_bd_pin -dir I output_axis_tready
-  create_bd_pin -dir O -from [expr {$OUTPUT_WIDTH-1}] -to 0 output_axis_tdata
+    create_bd_pin -dir I -from [expr {$INPUT_CHANNELS-1}] -to 0 input_enable
+    create_bd_pin -dir I -from [expr {$OUTPUT_CHANNELS-1}] -to 0 output_enable
 
-  create_bd_pin -dir I -from [expr {$INPUT_CHANNELS-1}] -to 0 input_enable
-  create_bd_pin -dir I -from [expr {$OUTPUT_CHANNELS-1}] -to 0 output_enable
+    ad_connect application_core/s_axil_ctrl s_axil_application
 
-  ad_connect application_core/input_clk input_clk
-  ad_connect application_core/input_rstn input_rstn
+    ad_connect application_core/input_clk input_clk
+    ad_connect application_core/input_rstn input_rstn
 
-  ad_connect application_core/output_clk output_clk
-  ad_connect application_core/output_rstn output_rstn
+    ad_connect application_core/output_clk output_clk
+    ad_connect application_core/output_rstn output_rstn
+
+    ad_connect application_core/input_axis_tvalid input_axis_tvalid
+    ad_connect application_core/input_axis_tdata input_axis_tdata
+    ad_connect application_core/input_axis_tready input_axis_tready
+
+    ad_connect application_core/input_packer_reset input_packer_reset
+
+    ad_connect application_core/output_axis_tvalid output_axis_tvalid
+    ad_connect application_core/output_axis_tdata output_axis_tdata
+    ad_connect application_core/output_axis_tready output_axis_tready
+
+    ad_connect application_core/input_enable input_enable
+    ad_connect application_core/output_enable output_enable
+  }
 
   ad_connect application_core/clk corundum_core/clk
   ad_connect application_core/rst corundum_core/rst
@@ -547,21 +633,7 @@ if {$APP_ENABLE == 1} {
   ad_connect application_core/direct_rx_rst corundum_core/rx_rst
 
   ad_connect application_core/ptp_clock corundum_core/ptp_clock_app
-  ad_connect application_core/s_axil_ctrl s_axil_application
-
-  ad_connect application_core/input_axis_tvalid input_axis_tvalid
-  ad_connect application_core/input_axis_tdata input_axis_tdata
-  ad_connect application_core/input_axis_tready input_axis_tready
-
-  ad_connect application_core/input_packer_reset input_packer_reset
-
-  ad_connect application_core/output_axis_tvalid output_axis_tvalid
-  ad_connect application_core/output_axis_tdata output_axis_tdata
-  ad_connect application_core/output_axis_tready output_axis_tready
-
-  ad_connect application_core/input_enable input_enable
-  ad_connect application_core/output_enable output_enable
-
+   
   ad_connect application_core/jtag_tdi GND
   ad_connect application_core/jtag_tms GND
   ad_connect application_core/jtag_tck GND
