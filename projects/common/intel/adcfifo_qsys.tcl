@@ -3,7 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-proc ad_adcfifo_create {adc_fifo_name adc_data_width dma_data_width adc_fifo_address_width} {
+proc ad_adcfifo_create {adc_fifo_name adc_data_width dma_data_width adc_fifo_address_width {rx_os 0}} {
 
   if {$adc_data_width != $dma_data_width} {
     return -code error [format "ERROR: util_adcfifo adc/dma widths must be the same!"]
@@ -13,6 +13,7 @@ proc ad_adcfifo_create {adc_fifo_name adc_data_width dma_data_width adc_fifo_add
   set_instance_parameter_value $adc_fifo_name {DMA_ADDRESS_WIDTH} $adc_fifo_address_width
   set_instance_parameter_value $adc_fifo_name {ADC_DATA_WIDTH} $adc_data_width
   set_instance_parameter_value $adc_fifo_name {DMA_DATA_WIDTH} $dma_data_width
+  set_instance_parameter_value $adc_fifo_name {RX_OS} $rx_os
 
 }
 

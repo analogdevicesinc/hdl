@@ -41,7 +41,8 @@ module util_adcfifo #(
   parameter   ADC_DATA_WIDTH = 256,
   parameter   DMA_DATA_WIDTH =  64,
   parameter   DMA_READY_ENABLE = 1,
-  parameter   DMA_ADDRESS_WIDTH =  10
+  parameter   DMA_ADDRESS_WIDTH =  10,
+  parameter   RX_OS = 0
 ) (
 
   // fifo interface
@@ -211,14 +212,25 @@ module util_adcfifo #(
 
   generate
   if (FPGA_TECHNOLOGY == 1) begin
-  mem_asym i_mem_asym (
-    .mem_i_wrclock_clk (adc_clk),
-    .mem_i_wren_wren (adc_wr_int),
-    .mem_i_wraddress_wraddress (adc_waddr_int),
-    .mem_i_datain_datain (adc_wdata_int),
-    .mem_i_rdclock_clk (dma_clk),
-    .mem_i_rdaddress_rdaddress (dma_raddr[DMA_ADDRESS_WIDTH-1:0]),
-    .mem_o_dataout_dataout (dma_rdata_s));
+    if (RX_OS == 0) begin
+      mem_asym i_mem_asym (
+        .mem_i_wrclock_clk (adc_clk),
+        .mem_i_wren_wren (adc_wr_int),
+        .mem_i_wraddress_wraddress (adc_waddr_int),
+        .mem_i_datain_datain (adc_wdata_int),
+        .mem_i_rdclock_clk (dma_clk),
+        .mem_i_rdaddress_rdaddress (dma_raddr[DMA_ADDRESS_WIDTH-1:0]),
+        .mem_o_dataout_dataout (dma_rdata_s));
+    end else begin
+      mem_asym_os i_mem_asym (
+        .mem_i_wrclock_clk (adc_clk),
+        .mem_i_wren_wren (adc_wr_int),
+        .mem_i_wraddress_wraddress (adc_waddr_int),
+        .mem_i_datain_datain (adc_wdata_int),
+        .mem_i_rdclock_clk (dma_clk),
+        .mem_i_rdaddress_rdaddress (dma_raddr[DMA_ADDRESS_WIDTH-1:0]),
+        .mem_o_dataout_dataout (dma_rdata_s));
+    end
   end else begin
   ad_mem_asym #(
     .A_ADDRESS_WIDTH (ADC_ADDRESS_WIDTH),
