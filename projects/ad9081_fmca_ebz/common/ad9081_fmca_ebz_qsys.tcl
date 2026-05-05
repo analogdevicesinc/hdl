@@ -344,7 +344,7 @@ set_instance_parameter_value mxfe_rx_os_cpack {SAMPLE_DATA_WIDTH} $RX_OS_DMA_SAM
 # RX and TX data offload buffers
 
 ad_adcfifo_create $adc_fifo_name    $adc_data_width    $adc_dma_data_width    $adc_fifo_address_width
-ad_adcfifo_create $adc_os_fifo_name $adc_os_data_width $adc_os_dma_data_width $adc_os_fifo_address_width
+ad_adcfifo_create $adc_os_fifo_name $adc_os_data_width $adc_os_dma_data_width $adc_os_fifo_address_width 1
 ad_dacfifo_create $dac_fifo_name    $dac_data_width    $dac_dma_data_width    $dac_fifo_address_width
 
 add_interface dacfifo_bypass conduit end
@@ -383,7 +383,7 @@ set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_SRC} {1}
 # set_instance_parameter_value mxfe_rx_dma {FIFO_SIZE} {8}
 set_instance_parameter_value mxfe_rx_dma {DMA_AXI_PROTOCOL_DEST} {0}
-set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {2048}
+set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {4096}
 
 add_instance mxfe_rx_os_dma axi_dmac
 set_instance_parameter_value mxfe_rx_os_dma {ID} {0}

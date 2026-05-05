@@ -27,6 +27,7 @@ ad_ip_parameter ADC_DATA_WIDTH INTEGER 256
 ad_ip_parameter DMA_DATA_WIDTH INTEGER 64
 ad_ip_parameter DMA_READY_ENABLE INTEGER 1
 ad_ip_parameter DMA_ADDRESS_WIDTH INTEGER 10
+ad_ip_parameter RX_OS INTEGER 1
 
 # elaborate
 
@@ -38,15 +39,22 @@ proc p_util_adcfifo {} {
   set m_adc_data_width [get_parameter_value "ADC_DATA_WIDTH"]
   set m_dma_addr_width [get_parameter_value "DMA_ADDRESS_WIDTH"]
   set m_dma_data_width [get_parameter_value "DMA_DATA_WIDTH"]
+  set is_rx_os         [get_parameter_value "RX_OS"]
+
+  if {$is_rx_os == 0} {
+    set instance_name "mem_asym"
+  } else {
+    set instance_name "mem_asym_os"
+  }
 
   # intel memory
 
-  add_hdl_instance mem_asym intel_mem_asym 1.0
-  set_instance_parameter_value mem_asym DEVICE_FAMILY $m_device_family
-  set_instance_parameter_value mem_asym A_ADDRESS_WIDTH 0
-  set_instance_parameter_value mem_asym A_DATA_WIDTH $m_adc_data_width
-  set_instance_parameter_value mem_asym B_ADDRESS_WIDTH $m_dma_addr_width
-  set_instance_parameter_value mem_asym B_DATA_WIDTH $m_dma_data_width
+  add_hdl_instance $instance_name intel_mem_asym 1.0
+  set_instance_parameter_value $instance_name DEVICE_FAMILY $m_device_family
+  set_instance_parameter_value $instance_name A_ADDRESS_WIDTH 0
+  set_instance_parameter_value $instance_name A_DATA_WIDTH $m_adc_data_width
+  set_instance_parameter_value $instance_name B_ADDRESS_WIDTH $m_dma_addr_width
+  set_instance_parameter_value $instance_name B_DATA_WIDTH $m_dma_data_width
 
   # interfaces
 
