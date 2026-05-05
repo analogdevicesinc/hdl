@@ -98,23 +98,11 @@ module system_top (
   wire  [94:0]  gpio_t;
   wire          ap_rstn_frmbuf_0;
   wire          ap_rstn_frmbuf_1;
-  wire          ap_rstn_frmbuf_2;
-  wire          ap_rstn_frmbuf_3;
-  wire          ap_rstn_frmbuf_4;
-  wire          ap_rstn_frmbuf_5;
-  wire          ap_rstn_frmbuf_6;
-  wire          ap_rstn_frmbuf_7;
   wire          csirxss_rstn;
 
   assign csirxss_rstn = gpio_o[0];
   assign ap_rstn_frmbuf_0 = gpio_o[2];
   assign ap_rstn_frmbuf_1 = gpio_o[3];
-  assign ap_rstn_frmbuf_2 = gpio_o[4];
-  assign ap_rstn_frmbuf_3 = gpio_o[5];
-  assign ap_rstn_frmbuf_4 = gpio_o[6];
-  assign ap_rstn_frmbuf_5 = gpio_o[7];
-  assign ap_rstn_frmbuf_6 = gpio_o[8];
-  assign ap_rstn_frmbuf_7 = gpio_o[9];
 
   assign sfp_i2c_rstn = gpio_o[10];
   assign sfp_i2c_en = 1'b0;
@@ -147,12 +135,6 @@ module system_top (
   system_wrapper i_system_wrapper (
     .ap_rstn_frmbuf_0 (ap_rstn_frmbuf_0),
     .ap_rstn_frmbuf_1 (ap_rstn_frmbuf_1),
-    .ap_rstn_frmbuf_2 (ap_rstn_frmbuf_2),
-    .ap_rstn_frmbuf_3 (ap_rstn_frmbuf_3),
-    .ap_rstn_frmbuf_4 (ap_rstn_frmbuf_4),
-    .ap_rstn_frmbuf_5 (ap_rstn_frmbuf_5),
-    .ap_rstn_frmbuf_6 (ap_rstn_frmbuf_6),
-    .ap_rstn_frmbuf_7 (ap_rstn_frmbuf_7),
     .csirxss_rstn (csirxss_rstn),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
