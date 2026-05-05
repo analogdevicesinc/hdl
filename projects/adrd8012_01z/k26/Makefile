@@ -27,11 +27,14 @@ EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/lib/axis/syn/vivado/sync_rese
 EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl
 EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl
 
-LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_sysid
 LIB_DEPS += axi_pwm_gen
+LIB_DEPS += corundum/application_core
 LIB_DEPS += corundum/corundum_core
 LIB_DEPS += corundum/ethernet/k26
+LIB_DEPS += rtp_engine
+LIB_DEPS += rtp_session_mux
+LIB_DEPS += rtp_video_transm_handler
 LIB_DEPS += sysid_rom
 
 export BOARD := K26
