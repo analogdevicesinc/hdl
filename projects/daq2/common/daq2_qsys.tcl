@@ -12,6 +12,7 @@ set RX_SAMPLE_WIDTH 16          ; # N/NP
 
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
 
+set adc_data_offload_name adi_ad9680_data_offload
 set adc_data_width [expr $RX_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_CHANNEL]
 
 set TX_NUM_OF_LANES 4           ; # L
@@ -73,7 +74,7 @@ add_connection ad9144_jesd204.link_reset util_ad9144_upack.reset
 add_connection axi_ad9144.dac_ch_0 util_ad9144_upack.dac_ch_0
 add_connection axi_ad9144.dac_ch_1 util_ad9144_upack.dac_ch_1
 
-# dac data offload
+# ad9144-data offload
 
 add_instance $dac_data_offload_name adi_data_offload
 set_instance_parameter_value $dac_data_offload_name {DATAPATH_TYPE} {1}
@@ -160,25 +161,30 @@ add_instance util_ad9680_cpack util_cpack2
 set_instance_parameter_value util_ad9680_cpack {NUM_OF_CHANNELS} $RX_NUM_OF_CONVERTERS
 set_instance_parameter_value util_ad9680_cpack {SAMPLES_PER_CHANNEL} $RX_NUM_OF_LANES
 set_instance_parameter_value util_ad9680_cpack {SAMPLE_DATA_WIDTH} $RX_SAMPLE_WIDTH
+set_instance_parameter_value util_ad9680_cpack {INTERFACE_TYPE} {0}
 
 add_connection ad9680_jesd204.link_reset util_ad9680_cpack.reset
 add_connection ad9680_jesd204.link_clk util_ad9680_cpack.clk
 add_connection axi_ad9680.adc_ch_0 util_ad9680_cpack.adc_ch_0
 add_connection axi_ad9680.adc_ch_1 util_ad9680_cpack.adc_ch_1
 
-# ad9680-fifo
+# ad9680-data offload
 
-add_instance ad9680_adcfifo util_adcfifo
-set_instance_parameter_value ad9680_adcfifo {ADC_DATA_WIDTH} $adc_data_width
-set_instance_parameter_value ad9680_adcfifo {DMA_DATA_WIDTH} $adc_data_width
-set_instance_parameter_value ad9680_adcfifo {DMA_ADDRESS_WIDTH} {16}
+add_instance $adc_data_offload_name adi_data_offload
+set_instance_parameter_value $adc_data_offload_name {DATAPATH_TYPE} {0}
+set_instance_parameter_value $adc_data_offload_name {MEM_TYPE} $adc_data_offload_type
+set_instance_parameter_value $adc_data_offload_name {MEM_SIZE} $adc_data_offload_size
+set_instance_parameter_value $adc_data_offload_name {SOURCE_DWIDTH} $adc_data_width
+set_instance_parameter_value $adc_data_offload_name {DESTINATION_DWIDTH} $adc_data_width
+set_instance_parameter_value $adc_data_offload_name {AXI_DATA_WIDTH} $adc_axi_data_width
 
-add_connection sys_clk.clk_reset ad9680_adcfifo.if_adc_rst
-add_connection ad9680_jesd204.link_clk ad9680_adcfifo.if_adc_clk
-add_connection util_ad9680_cpack.if_packed_fifo_wr_en ad9680_adcfifo.if_adc_wr
-add_connection util_ad9680_cpack.if_packed_fifo_wr_data ad9680_adcfifo.if_adc_wdata
-add_connection sys_dma_clk.clk ad9680_adcfifo.if_dma_clk
-add_connection sys_dma_clk.clk_reset ad9680_adcfifo.if_adc_rst
+add_connection sys_clk.clk $adc_data_offload_name.sys_clk
+add_connection sys_clk.clk_reset $adc_data_offload_name.sys_resetn
+add_connection ad9680_jesd204.link_clk $adc_data_offload_name.s_axis_aclk
+add_connection ad9680_jesd204.link_reset $adc_data_offload_name.s_axis_aresetn
+add_connection util_ad9680_cpack.m_axis $adc_data_offload_name.s_axis
+add_connection sys_dma_clk.clk $adc_data_offload_name.m_axis_aclk
+add_connection sys_dma_clk.clk_reset $adc_data_offload_name.m_axis_aresetn
 
 # ad9680-dma
 
@@ -193,9 +199,8 @@ set_instance_parameter_value axi_ad9680_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_ad9680_dma {DMA_TYPE_SRC} {1}
 
 add_connection sys_dma_clk.clk axi_ad9680_dma.if_s_axis_aclk
-add_connection ad9680_adcfifo.m_axis axi_ad9680_dma.s_axis
-add_connection ad9680_adcfifo.if_dma_xfer_req axi_ad9680_dma.if_s_axis_xfer_req
-add_connection ad9680_adcfifo.if_adc_wovf axi_ad9680.if_adc_dovf
+add_connection $adc_data_offload_name.m_axis axi_ad9680_dma.s_axis
+add_connection $adc_data_offload_name.init_req axi_ad9680_dma.if_s_axis_xfer_req
 add_connection sys_clk.clk_reset axi_ad9680_dma.s_axi_reset
 add_connection sys_clk.clk axi_ad9680_dma.s_axi_clock
 add_connection sys_dma_clk.clk_reset axi_ad9680_dma.m_dest_axi_reset

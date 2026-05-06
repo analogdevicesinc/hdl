@@ -5,7 +5,11 @@
 
 set dac_data_offload_type 1                      ; ## PL_DDR
 set dac_data_offload_size [expr 1024*1024*1024]  ; ## 1 GB
-set dac_axi_data_width 128
+set dac_axi_data_width 512
+
+set adc_data_offload_type 0                      ; ## BRAM
+set adc_data_offload_size [expr 1024*1024]       ; ## 1 MB
+set adc_axi_data_width 512
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_qsys.tcl
@@ -18,6 +22,8 @@ if [info exists ad_project_dir] {
 }
 
 ad_data_offload_create $dac_data_offload_name
+
+ad_cpu_interconnect 0x00070000 $adc_data_offload_name.s_axi
 
 #system ID
 set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}
