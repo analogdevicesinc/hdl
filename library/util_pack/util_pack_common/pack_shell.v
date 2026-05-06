@@ -427,6 +427,9 @@ module pack_shell #(
              * residual data. I.e. when ready is asserted rotate is 0.
              */
             {ready,rotate} <= rotate + enable_count + 1'b1;
+          end else begin
+            ready <= 1'b0;
+            rotate <= 'h0;
           end
         end
 
