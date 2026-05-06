@@ -21,7 +21,6 @@ LIB_DEPS += intel/adi_jesd204
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_dac
 LIB_DEPS += sysid_rom
-LIB_DEPS += util_adcfifo
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
 
