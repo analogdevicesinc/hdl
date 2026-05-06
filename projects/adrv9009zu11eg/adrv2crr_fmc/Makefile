@@ -33,6 +33,7 @@ LIB_DEPS += xilinx/axi_dacfifo
 LIB_DEPS += xilinx/util_adxcvr
 
 CORUNDUM ?= 0
+PCIE ?= 0
 
 ifeq ($(CORUNDUM), 1)
 	export BOARD := ADRV9009ZU11EG
@@ -59,6 +60,11 @@ ifeq ($(CORUNDUM), 1)
 
 	LIB_DEPS += corundum/corundum_core
 	LIB_DEPS += corundum/ethernet/adrv9009zu11eg
+endif
+
+ifeq ($(PCIE), 1)
+	M_DEPS += system_constr_pcie.xdc
+	M_DEPS += system_bd_pcie.tcl
 endif
 
 include ../../scripts/project-xilinx.mk
