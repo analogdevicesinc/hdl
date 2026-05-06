@@ -123,8 +123,9 @@ Interrupts
 
 Below are the Programmable Logic interrupts used in this project.
 
-.. IRQ assignments defined in: projects/ad5529r_ardz/common/ad5529r_ardz_bd.tcl
-.. IRQ_F2P mode (REVERSE) set in: projects/common/coraz7s/coraz7s_system_bd.tcl
+..
+  IRQ assignments defined in: projects/ad5529r_ardz/common/ad5529r_ardz_bd.tcl
+  IRQ_F2P mode (REVERSE) set in: projects/common/coraz7s/coraz7s_system_bd.tcl
 
 ====================== === ========== ===========
 Instance name          HDL Linux Zynq Actual Zynq
@@ -133,7 +134,8 @@ ad5529r_dma            13  57         89
 spi_ad5529r/axi_regmap 12  56         88
 ====================== === ========== ===========
 
-Note: IRQ_F2P mode is REVERSE (bit 15 = highest priority).
+.. warning::
+  IRQ_F2P mode is REVERSE (bit 15 = highest priority).
 
 Building the HDL project
 -------------------------------------------------------------------------------
