@@ -63,6 +63,9 @@ module system_top (
   inout   [1:0]   btn,
   inout   [5:0]   led,
 
+  inout           iic_ard_scl,
+  inout           iic_ard_sda,
+
   // ad5529r ardz
   input           ad5529r_ardz_spi_miso,
   output          ad5529r_ardz_spi_mosi,
@@ -156,6 +159,8 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
+    .iic_ard_scl_io (iic_ard_scl),
+    .iic_ard_sda_io (iic_ard_sda),
     .ad5529r_spi_sdo (ad5529r_ardz_spi_mosi),
     .ad5529r_spi_sdo_t (),
     .ad5529r_spi_sdi (ad5529r_ardz_spi_miso),
