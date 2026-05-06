@@ -35,6 +35,7 @@ adi_project_create adrv9009zu11eg 0 [list \
   RX_OS_JESD_L    [get_env_param RX_OS_JESD_L  4] \
   RX_OS_JESD_S    [get_env_param RX_OS_JESD_S  1] \
   CORUNDUM        [get_env_param CORUNDUM      0] \
+  PCIE            [get_env_param PCIE          0] \
 ] "xczu11eg-ffvf1517-2-i"
 
 adi_project_files adrv9009zu11eg [list \
@@ -58,6 +59,11 @@ if {[get_env_param CORUNDUM 0] == 1} {
     "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl" \
     "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl" \
     "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl"
+  ]
+} elseif {[get_env_param PCIE 0] == 1} {
+  adi_project_files adrv9009zu11eg [list \
+    "system_constr_pcie.xdc" \
+    "system_top_pcie.v"
   ]
 } else {
   adi_project_files adrv9009zu11eg [list \
