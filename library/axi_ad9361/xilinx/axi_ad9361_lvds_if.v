@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -215,7 +215,11 @@ module axi_ad9361_lvds_if #(
   end
 
   // frame check
-  assign rx_error = ^rx_frame;
+
+  assign rx_error = ~(({rx_frame_s, rx_frame} == 4'b1111) ||
+                      ({rx_frame_s, rx_frame} == 4'b1100) ||
+                      ({rx_frame_s, rx_frame} == 4'b0000) ||
+                      ({rx_frame_s, rx_frame} == 4'b0011));
 
   // delineation
 
