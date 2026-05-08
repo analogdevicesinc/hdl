@@ -116,6 +116,7 @@ Obsolete projects
    AD-FMCLIDAR1-EBZ (OBSOLETE) <ad_fmclidar1_ebz/index>
    FMCADC2 (OBSOLETE) <fmcadc2/index>
    FMCADC5 (OBSOLETE) <fmcadc5/index>
+   FMCOMMS1 (OBSOLETE) <fmcomms1/index>
    FMCJESDADC1 (OBSOLETE) <fmcjesdadc1/index>
    IMAGEON (OBSOLETE) <imageon/index>
 
@@ -137,6 +138,8 @@ Linux images (the already built files):
      - :git-hdl:`hdl_2021_r2 <hdl_2021_r2:projects/ad9739a_fmc>`
    * - ad_fmclidar1_ebz
      - :git-hdl:`hdl_2019_r1 <hdl_2019_r1:projects/ad_fmclidar1_ebz>`
+   * - fmcomms1
+     - :git-hdl:`hdl_2015_r2 <hdl_2015_r2:projects/fmcomms1>`
    * - fmcadc2
      - :git-hdl:`hdl_2021_r2 <hdl_2021_r2:projects/fmcadc2>`
    * - fmcadc5

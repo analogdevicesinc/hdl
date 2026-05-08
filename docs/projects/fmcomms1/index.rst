@@ -2,10 +2,10 @@
 
 .. _fmcomms1:
 
-AD-FMCOMMS1-EBZ HDL Reference Design
+AD-FMCOMMS1-EBZ HDL Project (OBSOLETE)
 ===============================================================================
 
-.. deprecated::
+.. warning::
 
    This design has been retired or deprecated, which means it is no longer
    maintained or actively updated, even though the devices themselves may be
