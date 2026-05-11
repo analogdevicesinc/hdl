@@ -43,13 +43,14 @@ ad_ip_files util_hbm [list \
   $ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl \
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v \
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo_address_generator.v \
-  $ad_hdl_dir/library/common/ad_mem_asym.v \
+  $ad_hdl_dir/library/intel/common/ad_mem_asym.v \
   util_hbm.v \
   util_hbm_constr.sdc \
 ]
 
 # parameters
 
+ad_ip_parameter DEVICE_FAMILY           STRING  {Arria 10}
 ad_ip_parameter TX_RX_N                 INTEGER 1
 ad_ip_parameter SRC_DATA_WIDTH          INTEGER 512
 ad_ip_parameter DST_DATA_WIDTH          INTEGER 512
