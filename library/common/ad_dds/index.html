@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=ac863bf0" />
     <script async="async" src="../../../_static/app.umd.js?v=09b0c6bc"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -125,7 +125,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../../index.html">
       <img class="only-light" src="../../../_static/HDL_logo_cropped.svg"/>
@@ -290,6 +290,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -369,6 +370,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -389,13 +391,12 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="ad-direct-digital-synthesis">
-<span id="ad-dds"></span><h1>AD Direct Digital Synthesis<a class="headerlink" href="#ad-direct-digital-synthesis" title="Link to this heading"></a></h1>
+<span id="ad-dds"></span><h1>AD Direct Digital Synthesis<a class="headerlink" href="#ad-direct-digital-synthesis" title="Permalink to this heading"></a></h1>
 <p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v" target="_blank">AD Direct Digital Synthesis (DDS)</a> module
 is used to generate sine waves on a clock (referenced to sampling clock).</p>
 <p>Typically, in the reference designs each HDL DAC interface IP has a DDS for every
 channel.</p>
-<img alt="../../../_images/dds_in_dac_core.svg" src="../../../_images/dds_in_dac_core.svg" />
-<p>The resulting sine wave can be changed at runtime by 4 parameters:</p>
+<img alt="../../../_images/dds_in_dac_core.svg" src="../../../_images/dds_in_dac_core.svg" /><p>The resulting sine wave can be changed at runtime by 4 parameters:</p>
 <ul class="simple">
 <li><p>frequency word (FW)</p></li>
 <li><p>phase shift</p></li>
@@ -403,13 +404,12 @@ channel.</p>
 <li><p>clock frequency (sampling rate - where possible)</p></li>
 </ul>
 <section id="dds-basics">
-<h2>DDS basics<a class="headerlink" href="#dds-basics" title="Link to this heading"></a></h2>
+<h2>DDS basics<a class="headerlink" href="#dds-basics" title="Permalink to this heading"></a></h2>
 <p>A generic DDS consists of a phase accumulator and a phase to amplitude
 converter.</p>
 <p>The phase accumulator is basically a counter that increments by a frequency word
 which determines a timely overflow (the actual period of the resulting signal).</p>
-<img alt="../../../_images/dds_basic.svg" src="../../../_images/dds_basic.svg" />
-<p>The phase to amplitude converter is a bit more complex and is the main consumer
+<img alt="../../../_images/dds_basic.svg" src="../../../_images/dds_basic.svg" /><p>The phase to amplitude converter is a bit more complex and is the main consumer
 of FPGA resources out of the DDS modules.</p>
 <p>Currently in the reference designs, there is support for 2 types of phase to
 amplitude converters, polynomial and
@@ -426,9 +426,9 @@ multiple DDS instances are added for each tone and independent I/Q channels.</p>
 </div>
 </section>
 <section id="adi-dds-module">
-<h2>ADI DDS module<a class="headerlink" href="#adi-dds-module" title="Link to this heading"></a></h2>
+<h2>ADI DDS module<a class="headerlink" href="#adi-dds-module" title="Permalink to this heading"></a></h2>
 <section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -475,7 +475,7 @@ multiple DDS instances are added for each tone and independent I/Q channels.</p>
 </div>
 </section>
 <section id="interface">
-<h3>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h3>
+<h3>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -534,7 +534,7 @@ multiple DDS instances are added for each tone and independent I/Q channels.</p>
 </div>
 </section>
 <section id="control">
-<h3>Control<a class="headerlink" href="#control" title="Link to this heading"></a></h3>
+<h3>Control<a class="headerlink" href="#control" title="Permalink to this heading"></a></h3>
 <p>In the reference designs, the DDS is controlled through the register map
 (DAC channel section).</p>
 <div><section id="hdl-regmap">
@@ -1067,9 +1067,9 @@ NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
 </div></section>
 </section>
 <section id="config">
-<h2>Config<a class="headerlink" href="#config" title="Link to this heading"></a></h2>
+<h2>Config<a class="headerlink" href="#config" title="Permalink to this heading"></a></h2>
 <section id="dds-scale">
-<h3>DDS_SCALE<a class="headerlink" href="#dds-scale" title="Link to this heading"></a></h3>
+<h3>DDS_SCALE<a class="headerlink" href="#dds-scale" title="Permalink to this heading"></a></h3>
 <p>The DDS scale for a tone contributes to the amplitude of the channel (I or Q -
 where it applies).</p>
 <p>The format is 1.1.14 fixed point. See below:</p>
@@ -1105,7 +1105,7 @@ output will over-range.</p>
 </ol>
 </section>
 <section id="phase-dds-init">
-<h3>PHASE - DDS_INIT<a class="headerlink" href="#phase-dds-init" title="Link to this heading"></a></h3>
+<h3>PHASE - DDS_INIT<a class="headerlink" href="#phase-dds-init" title="Permalink to this heading"></a></h3>
 <p>All tones/channels start on a sync event (internal or external).
 The DDS_INIT value will be used by the phase accumulator as a starting point in
 other words as a phase offset.</p>
@@ -1114,7 +1114,7 @@ other words as a phase offset.</p>
 <p>e.g., for 90°. <span class="math notranslate nohighlight">\(init = (90 * 2^{phaseDW})/360\)</span>.</p>
 </section>
 <section id="frequency-dds-incr">
-<h3>FREQUENCY - DDS_INCR<a class="headerlink" href="#frequency-dds-incr" title="Link to this heading"></a></h3>
+<h3>FREQUENCY - DDS_INCR<a class="headerlink" href="#frequency-dds-incr" title="Permalink to this heading"></a></h3>
 <p>The value can be calculated by:</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
@@ -1130,7 +1130,7 @@ other words as a phase offset.</p>
 </ol>
 </section>
 <section id="structure">
-<h3>STRUCTURE<a class="headerlink" href="#structure" title="Link to this heading"></a></h3>
+<h3>STRUCTURE<a class="headerlink" href="#structure" title="Permalink to this heading"></a></h3>
 <p>Below is the hierarchical structure of the modules.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">ad_dds</span> <span class="o">-&gt;</span>
   <span class="o">*</span> <span class="n">ad_dds_2</span> <span class="o">-&gt;</span>
@@ -1140,14 +1140,13 @@ other words as a phase offset.</p>
 </div>
 </section>
 <section id="id1">
-<h3>ad_dds<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<h3>ad_dds<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v" target="_blank">ad_dds</a>
 is the main module, it contains the phase accumulators and the phase to
 amplitude converters.</p>
-<img alt="../../../_images/dds_dual_tone.svg" src="../../../_images/dds_dual_tone.svg" />
-</section>
+<img alt="../../../_images/dds_dual_tone.svg" src="../../../_images/dds_dual_tone.svg" /></section>
 <section id="ad-dds-2">
-<h3>ad_dds_2<a class="headerlink" href="#ad-dds-2" title="Link to this heading"></a></h3>
+<h3>ad_dds_2<a class="headerlink" href="#ad-dds-2" title="Permalink to this heading"></a></h3>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_2.v" target="_blank">ad_dds_2</a>
 contains two phase to amplitude converters. The resulting waveforms will be
 summed. The resulting waveform must have a maximum amplitude level of 0x8000
@@ -1156,16 +1155,15 @@ and shift, there is no constraint for the amplitude, but if is equal for both
 channels, it should not be more than 0x400 -1 for each channel.</p>
 </section>
 <section id="ad-dds-1">
-<h3>ad_dds_1<a class="headerlink" href="#ad-dds-1" title="Link to this heading"></a></h3>
+<h3>ad_dds_1<a class="headerlink" href="#ad-dds-1" title="Permalink to this heading"></a></h3>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_1.v" target="_blank">ad_dds_1</a>
 contains the phase to amplitude converter and an “amplifier”. The phase to
 amplitude converter is always generating a full scale sine wave. Because the
 data format is two’s complement, for a 16-bit data angle, min value will be
 -(2^16)/2 and max (2^16)/2-1.</p>
-<img alt="../../../_images/ad_dds_1.svg" src="../../../_images/ad_dds_1.svg" />
-</section>
+<img alt="../../../_images/ad_dds_1.svg" src="../../../_images/ad_dds_1.svg" /></section>
 <section id="ad-dds-sine">
-<h3>ad_dds_sine_*<a class="headerlink" href="#ad-dds-sine" title="Link to this heading"></a></h3>
+<h3>ad_dds_sine_*<a class="headerlink" href="#ad-dds-sine" title="Permalink to this heading"></a></h3>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_sine.v" target="_blank">ad_dds_sine</a>
 and
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_sine_cordic.v" target="_blank">ad_dds_sine_cordic</a>
@@ -1173,7 +1171,7 @@ are the available phase to amplitude converters.</p>
 </section>
 </section>
 <section id="clock-ratio">
-<h2>CLOCK RATIO<a class="headerlink" href="#clock-ratio" title="Link to this heading"></a></h2>
+<h2>CLOCK RATIO<a class="headerlink" href="#clock-ratio" title="Permalink to this heading"></a></h2>
 <p>The clock ratio (number of data paths processed in parallel) instantiates more
 DDS logic, but it is controlled by the same register map for all
 CLOCK_RATIO/DATA_PATH parameters.</p>
@@ -1191,19 +1189,16 @@ frequency is changed by software, the 4 phase accumulators are aligned for the n
 frequency word and/or frequency phase shift. The counter increment value will be
 multiplied with the clock ratio (4), to get a continuity of the 4 consecutive
 samples generated at t, t+1, t+2, and so on.</p>
-<img alt="../../../_images/dds_clk_ratio_4.svg" src="../../../_images/dds_clk_ratio_4.svg" />
-<p>For scenarios where the synchronization signal comes from an external source and
+<img alt="../../../_images/dds_clk_ratio_4.svg" src="../../../_images/dds_clk_ratio_4.svg" /><p>For scenarios where the synchronization signal comes from an external source and
 it is high for a longer period of time, the phase accumulator stages will be
 hold in reset, to avoid a noise-like signal, caused by sending all the
 summed outputs of each DDS stage.</p>
 <p>There is a minimum synchronization pulse width (delay) of <strong>n</strong> clock cycles,
 that is required to synchronize all phase accumulator stages, where <strong>n</strong> is
 equal to the CLOCK_RATIO.</p>
-<img alt="../../../_images/fw_sync_basics.svg" src="../../../_images/fw_sync_basics.svg" />
-<figure class="align-default" id="id2">
-<img alt="../../../_images/wavedrom.svg" src="../../../_images/wavedrom.svg" />
-<figcaption>
-<p><span class="caption-text">text: [‘tspan’, ‘Frequency word sync at CLK_RATIO=4’],</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+<img alt="../../../_images/fw_sync_basics.svg" src="../../../_images/fw_sync_basics.svg" /><figure class="align-default" id="id2">
+<img alt="../../../_images/wavedrom.svg" src="../../../_images/wavedrom.svg" /><figcaption>
+<p><span class="caption-text">text: [‘tspan’, ‘Frequency word sync at CLK_RATIO=4’],</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <p>In the above diagram example:</p>
@@ -1222,7 +1217,7 @@ in the case of the CORDIC type, the number of rotation stages will also have a
 direct impact on this clock period delay.</p>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v" target="_blank">library/common/ad_dds.v</a> and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_1.v" target="_blank">library/common/ad_dds_1.v</a>
 and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_2.v" target="_blank">library/common/ad_dds_2.v</a></p></li>

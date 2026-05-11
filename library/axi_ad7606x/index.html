@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -123,7 +123,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -288,6 +288,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -367,6 +368,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -387,7 +389,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-ad7606x">
-<span id="id1"></span><h1>AXI AD7606x<a class="headerlink" href="#axi-ad7606x" title="Link to this heading"></a></h1>
+<span id="id1"></span><h1>AXI AD7606x<a class="headerlink" href="#axi-ad7606x" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330.0 330" width="330.0" class="no-background"><style>
                 a {
@@ -403,7 +405,7 @@ and has a simple FIFO interface for the DMAC.
 More about the generic framework interfacing ADCs, that contains the
 <code class="docutils literal notranslate"><span class="pre">up_adc_channel</span></code> and <code class="docutils literal notranslate"><span class="pre">up_adc_common</span> <span class="pre">modules</span></code>, can be read in <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a>.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -426,11 +428,10 @@ More about the generic framework interfacing ADCs, that contains the
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
-<img alt="AXI AD7606x block diagram" src="../../_images/block_diagram17.svg" />
-</section>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
+<img alt="AXI AD7606x block diagram" src="../../_images/block_diagram14.svg" /></section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -472,7 +473,7 @@ More about the generic framework interfacing ADCs, that contains the
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="dcd81463365202905abc5b9d936cd24fa5b72eac" name="dcd81463365202905abc5b9d936cd24fa5b72eac" type="checkbox"></input><label for="dcd81463365202905abc5b9d936cd24fa5b72eac"><div><p>s_axi</p>
@@ -812,7 +813,7 @@ More about the generic framework interfacing ADCs, that contains the
 </section>
 </div></section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <p>The register map of the core contains instances of several generic register maps
 like ADC common, ADC channel.
 The following table presents the base addresses of each instance, after it you
@@ -822,7 +823,7 @@ base address to the registers relative address. For a more detailed explanation,
 see <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#generic-adc-register-access"><span class="std std-ref">ADC register access</span></a>.</p>
 <div class="table-wrapper docutils container" id="id2">
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Register Map base addresses for axi_ad7606x</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
+<caption><span class="caption-text">Register Map base addresses for axi_ad7606x</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>HDL reg</p></th>
 <th class="head"><p>Software reg</p></th>
@@ -2396,7 +2397,7 @@ Where n is from 0 to 15.</p>
 </section>
 </div></section>
 <section id="theory-of-operation">
-<h2>Theory of operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading"></a></h2>
+<h2>Theory of operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading"></a></h2>
 <p>The axi_ad7606x IP can be configured in various operation modes, this feature
 being integrated in the device register map. Thus, to be able to configure the
 operation mode and any other features available through the mentioned register
@@ -2404,7 +2405,7 @@ map, <strong>adc_config_ctrl</strong> signal, that is available in the <em>up_ad
 module, is used in this way: bit 1 - RD (‘b1) | WR (‘b0) and bit 0 - enable
 WR/RD operation.</p>
 <section id="adc-register-mode-ad7606x-familiy">
-<h3>ADC Register Mode (AD7606x familiy)<a class="headerlink" href="#adc-register-mode-ad7606x-familiy" title="Link to this heading"></a></h3>
+<h3>ADC Register Mode (AD7606x familiy)<a class="headerlink" href="#adc-register-mode-ad7606x-familiy" title="Permalink to this heading"></a></h3>
 <p>As regards the register mode, AD7606x family devices have the following
 workflow: DB[15] - RD (‘b0) | WR (‘b1), DB[14:8] - register address and DB[7:0]
 - register data or don’t care data. Besides the data output signal, WR_N and
@@ -2421,45 +2422,36 @@ be DB2 in <a class="icon adi reference external" href="https://www.analog.com/AD
 <a class="icon adi reference external" href="https://www.analog.com/AD7606C-18" target="_blank">AD7606C-18</a> chip can be obtained from the page 12 of the
 <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/ad7606c-18.pdf" target="_blank">AD7606C-18 Datasheet</a>.</p>
 </div>
-<img alt="../../_images/wavedrom-13.svg" src="../../_images/wavedrom-13.svg" />
-<p>The following timing diagrams illustrate available ADC read modes using the
+<img alt="../../_images/wavedrom-13.svg" src="../../_images/wavedrom-13.svg" /><p>The following timing diagrams illustrate available ADC read modes using the
 AD7606x family devices.</p>
 </section>
 <section id="adc-read-mode-ad7606b-c-16">
-<h3>ADC Read Mode (AD7606B/C-16)<a class="headerlink" href="#adc-read-mode-ad7606b-c-16" title="Link to this heading"></a></h3>
-<img alt="../../_images/wavedrom-23.svg" src="../../_images/wavedrom-23.svg" />
-</section>
+<h3>ADC Read Mode (AD7606B/C-16)<a class="headerlink" href="#adc-read-mode-ad7606b-c-16" title="Permalink to this heading"></a></h3>
+<img alt="../../_images/wavedrom-23.svg" src="../../_images/wavedrom-23.svg" /></section>
 <section id="adc-read-mode-ad7606c-18">
-<h3>ADC Read Mode (AD7606C-18)<a class="headerlink" href="#adc-read-mode-ad7606c-18" title="Link to this heading"></a></h3>
-<img alt="../../_images/wavedrom-3.svg" src="../../_images/wavedrom-3.svg" />
-</section>
+<h3>ADC Read Mode (AD7606C-18)<a class="headerlink" href="#adc-read-mode-ad7606c-18" title="Permalink to this heading"></a></h3>
+<img alt="../../_images/wavedrom-3.svg" src="../../_images/wavedrom-3.svg" /></section>
 <section id="adc-read-mode-with-crc-enabled-ad7606b-c-16">
-<h3>ADC Read Mode with CRC enabled (AD7606B/C-16)<a class="headerlink" href="#adc-read-mode-with-crc-enabled-ad7606b-c-16" title="Link to this heading"></a></h3>
-<img alt="../../_images/wavedrom-4.svg" src="../../_images/wavedrom-4.svg" />
-</section>
+<h3>ADC Read Mode with CRC enabled (AD7606B/C-16)<a class="headerlink" href="#adc-read-mode-with-crc-enabled-ad7606b-c-16" title="Permalink to this heading"></a></h3>
+<img alt="../../_images/wavedrom-4.svg" src="../../_images/wavedrom-4.svg" /></section>
 <section id="adc-read-mode-with-crc-enabled-ad7606c-18">
-<h3>ADC Read Mode with CRC enabled (AD7606C-18)<a class="headerlink" href="#adc-read-mode-with-crc-enabled-ad7606c-18" title="Link to this heading"></a></h3>
-<img alt="../../_images/wavedrom-5.svg" src="../../_images/wavedrom-5.svg" />
-</section>
+<h3>ADC Read Mode with CRC enabled (AD7606C-18)<a class="headerlink" href="#adc-read-mode-with-crc-enabled-ad7606c-18" title="Permalink to this heading"></a></h3>
+<img alt="../../_images/wavedrom-5.svg" src="../../_images/wavedrom-5.svg" /></section>
 <section id="adc-read-mode-with-status-enabled-ad7606b-c-16">
-<h3>ADC Read Mode with Status enabled (AD7606B/C-16)<a class="headerlink" href="#adc-read-mode-with-status-enabled-ad7606b-c-16" title="Link to this heading"></a></h3>
-<img alt="../../_images/wavedrom-6.svg" src="../../_images/wavedrom-6.svg" />
-</section>
+<h3>ADC Read Mode with Status enabled (AD7606B/C-16)<a class="headerlink" href="#adc-read-mode-with-status-enabled-ad7606b-c-16" title="Permalink to this heading"></a></h3>
+<img alt="../../_images/wavedrom-6.svg" src="../../_images/wavedrom-6.svg" /></section>
 <section id="adc-read-mode-with-status-enabled-ad7606c-18">
-<h3>ADC Read Mode with Status enabled (AD7606C-18)<a class="headerlink" href="#adc-read-mode-with-status-enabled-ad7606c-18" title="Link to this heading"></a></h3>
-<img alt="../../_images/wavedrom-7.svg" src="../../_images/wavedrom-7.svg" />
-</section>
+<h3>ADC Read Mode with Status enabled (AD7606C-18)<a class="headerlink" href="#adc-read-mode-with-status-enabled-ad7606c-18" title="Permalink to this heading"></a></h3>
+<img alt="../../_images/wavedrom-7.svg" src="../../_images/wavedrom-7.svg" /></section>
 <section id="adc-read-mode-with-status-and-crc-enabled-ad7606b-c-16">
-<h3>ADC Read Mode with Status and CRC enabled (AD7606B/C-16)<a class="headerlink" href="#adc-read-mode-with-status-and-crc-enabled-ad7606b-c-16" title="Link to this heading"></a></h3>
-<img alt="../../_images/wavedrom-8.svg" src="../../_images/wavedrom-8.svg" />
-</section>
+<h3>ADC Read Mode with Status and CRC enabled (AD7606B/C-16)<a class="headerlink" href="#adc-read-mode-with-status-and-crc-enabled-ad7606b-c-16" title="Permalink to this heading"></a></h3>
+<img alt="../../_images/wavedrom-8.svg" src="../../_images/wavedrom-8.svg" /></section>
 <section id="adc-read-mode-with-status-and-crc-enabled-ad7606c-18">
-<h3>ADC Read Mode with Status and CRC enabled (AD7606C-18)<a class="headerlink" href="#adc-read-mode-with-status-and-crc-enabled-ad7606c-18" title="Link to this heading"></a></h3>
-<img alt="../../_images/wavedrom-9.svg" src="../../_images/wavedrom-9.svg" />
-</section>
+<h3>ADC Read Mode with Status and CRC enabled (AD7606C-18)<a class="headerlink" href="#adc-read-mode-with-status-and-crc-enabled-ad7606c-18" title="Permalink to this heading"></a></h3>
+<img alt="../../_images/wavedrom-9.svg" src="../../_images/wavedrom-9.svg" /></section>
 </section>
 <section id="software-support">
-<h2>Software Support<a class="headerlink" href="#software-support" title="Link to this heading"></a></h2>
+<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Linux device drivers at:</p>
 <ul>
@@ -2471,7 +2463,7 @@ AD7606x family devices.</p>
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7606x" target="_blank">library/axi_ad7606x</a></p></li>
 <li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad7606x_fmc" target="_blank">projects/ad7606x_fmc</a></p></li>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -123,7 +123,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../../index.html">
       <img class="only-light" src="../../../_static/HDL_logo_cropped.svg"/>
@@ -288,6 +288,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -367,6 +368,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -387,13 +389,13 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="generic-jesd204-block-designs">
-<span id="generic-jesd-bds"></span><h1>Generic JESD204 block designs<a class="headerlink" href="#generic-jesd204-block-designs" title="Link to this heading"></a></h1>
+<span id="generic-jesd-bds"></span><h1>Generic JESD204 block designs<a class="headerlink" href="#generic-jesd204-block-designs" title="Permalink to this heading"></a></h1>
 <p>Using the generic building blocks from the
 <a class="reference internal" href="../../index.html#library"><span class="std std-ref">ADI IP library</span></a>, together with the
 <a class="reference internal" href="../index.html#jesd204"><span class="std std-ref">JESD framework</span></a>, parametrizable block designs can be built to
 interface ADI ADCs and DACs in various JESD modes.</p>
 <section id="link-parameters">
-<h2>Link parameters<a class="headerlink" href="#link-parameters" title="Link to this heading"></a></h2>
+<h2>Link parameters<a class="headerlink" href="#link-parameters" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -444,7 +446,7 @@ interface ADI ADCs and DACs in various JESD modes.</p>
 </div></blockquote>
 </div>
 <section id="changing-the-link-parameters">
-<h3>Changing the link parameters<a class="headerlink" href="#changing-the-link-parameters" title="Link to this heading"></a></h3>
+<h3>Changing the link parameters<a class="headerlink" href="#changing-the-link-parameters" title="Permalink to this heading"></a></h3>
 <p>Usually, projects are built and configured to exercise the ADC/DAC devices at
 maximum capability using all available lanes — this corresponds to a single
 JESD operation mode.</p>
@@ -470,15 +472,14 @@ both files must be updated to remove references to the unused lanes.</p>
 </section>
 </section>
 <section id="generic-tx-path">
-<h2>Generic TX path<a class="headerlink" href="#generic-tx-path" title="Link to this heading"></a></h2>
+<h2>Generic TX path<a class="headerlink" href="#generic-tx-path" title="Permalink to this heading"></a></h2>
 <p>The following diagram presents a generic JESD TX path from the Application Layer
 to the FPGA boundary. The application layer is connected to the TX path through
 the DAC Transport Layer, which for each converter it accepts a data beat on
 every cycle. The width of data beat is defined by the SPC and NP parameter.</p>
 <p>SPC represents the number of samples per converter per data clock cycle.
 SPC must be a natural number (greater than one and a whole number).</p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_path.svg"><img alt="Generic JESD204 TX path" class="align-center" src="../../../_images/jesd204_generic_tx_path.svg" width="700" />
-</a>
+<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_path.svg"><img alt="Generic JESD204 TX path" class="align-center" src="../../../_images/jesd204_generic_tx_path.svg" width="700" /></a>
 <p>On each clock cycle, the Link layer accepts 32 bits per every lane as a
 constraint from the physical layer that is configured to 32-bit mode.
 This means that for each clock cycle, the application layer must provide
@@ -519,36 +520,33 @@ e.g: <code class="docutils literal notranslate"><span class="pre">DAC_interpolat
 More information on the TX Link layer can be found in
 <a class="reference internal" href="../axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a> page.</p>
 <section id="example-1-tx-link-with-l-4-m-1-s-1-f-2-np-16">
-<h3>Example 1: TX link with L=4, M=1, S=1, F=2, NP=16<a class="headerlink" href="#example-1-tx-link-with-l-4-m-1-s-1-f-2-np-16" title="Link to this heading"></a></h3>
+<h3>Example 1: TX link with L=4, M=1, S=1, F=2, NP=16<a class="headerlink" href="#example-1-tx-link-with-l-4-m-1-s-1-f-2-np-16" title="Permalink to this heading"></a></h3>
 <p>In this mode, the Transport Layer will output 2 frames in every clock cycle
 (32 bits / (F*8) = 2).
 The Application Layer must provide 8 samples each cycle to be able to fill
 the 2 frames.</p>
 <p><strong>SPC = (L*32) / (M*NP) = (4*32) / (1*16) = 128/16 = 8</strong></p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_path_ex1.svg"><img alt="Generic JESD204 TX path example 1" class="align-center" src="../../../_images/jesd204_generic_tx_path_ex1.svg" width="600" />
-</a>
+<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_path_ex1.svg"><img alt="Generic JESD204 TX path example 1" class="align-center" src="../../../_images/jesd204_generic_tx_path_ex1.svg" width="600" /></a>
 </section>
 <section id="example-2-tx-link-with-l-4-m-4-s-1-f-2-np-16">
-<h3>Example 2: TX link with L=4, M=4, S=1, F=2, NP=16<a class="headerlink" href="#example-2-tx-link-with-l-4-m-4-s-1-f-2-np-16" title="Link to this heading"></a></h3>
+<h3>Example 2: TX link with L=4, M=4, S=1, F=2, NP=16<a class="headerlink" href="#example-2-tx-link-with-l-4-m-4-s-1-f-2-np-16" title="Permalink to this heading"></a></h3>
 <p>In this mode the Transport Layer will output two frames in every clock cycle.
 32 bits / (F*8) = 2.
 The Application Layer must provide 8 samples each cycle to be able to fill the
 2 frames.</p>
 <p><strong>SPC = (L*32) / (M*NP) = (4*32) / (4*16) = 128/64 = 2</strong></p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_path_ex2.svg"><img alt="Generic JESD204 TX path example 2" class="align-center" src="../../../_images/jesd204_generic_tx_path_ex2.svg" width="600" />
-</a>
+<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_path_ex2.svg"><img alt="Generic JESD204 TX path example 2" class="align-center" src="../../../_images/jesd204_generic_tx_path_ex2.svg" width="600" /></a>
 </section>
 </section>
 <section id="generic-rx-path">
-<h2>Generic RX path<a class="headerlink" href="#generic-rx-path" title="Link to this heading"></a></h2>
+<h2>Generic RX path<a class="headerlink" href="#generic-rx-path" title="Permalink to this heading"></a></h2>
 <p>The following diagram presents a generic JESD RX path from the Application Layer
 to the FPGA boundary. The Application Layer is connected to the RX path through
 the ADC Transport Layer, which for each converter generates a data beat on
 every cycle. The width of data beat is defined by the SPC and NP parameter.
 SPC represents the number of samples per converter per data clock cycle.
 SPC must be a natural number (greater than one and a whole number).</p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_rx_path.svg"><img alt="Generic JESD204 RX path" class="align-center" src="../../../_images/jesd204_generic_rx_path.svg" width="700" />
-</a>
+<a class="reference internal image-reference" href="../../../_images/jesd204_generic_rx_path.svg"><img alt="Generic JESD204 RX path" class="align-center" src="../../../_images/jesd204_generic_rx_path.svg" width="700" /></a>
 <p>On each clock cycle, the Link layer generates 32 bits per every lane as it is
 constrained from the Physical Layer that is configured to 32-bit mode. This
 means that for each clock cycle, the Application Layer must accept enough
@@ -565,14 +563,13 @@ each lane.</p>
 More information on the RX Link layer can be found in
 <a class="reference internal" href="../axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a> page.</p>
 <section id="example-rx-link-with-l-4-m-1-s-1-f-2-np-16">
-<h3>Example: RX link with L=4, M=1, S=1, F=2, NP=16<a class="headerlink" href="#example-rx-link-with-l-4-m-1-s-1-f-2-np-16" title="Link to this heading"></a></h3>
+<h3>Example: RX link with L=4, M=1, S=1, F=2, NP=16<a class="headerlink" href="#example-rx-link-with-l-4-m-1-s-1-f-2-np-16" title="Permalink to this heading"></a></h3>
 <p>In this mode the Transport Layer will accept two frames in every clock cycle.
 32 bits / (F*8) = 2;
 The Application Layer must accept 8 samples each cycle so the transport layer
 can deframe the 2 frames.</p>
 <p><strong>SPC = (L*32) / (M*NP) = (4*32) / (1*16) = 128/16 = 8</strong></p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_rx_path_ex1.svg"><img alt="Generic JESD204 RX path example 1" class="align-center" src="../../../_images/jesd204_generic_rx_path_ex1.svg" width="600" />
-</a>
+<a class="reference internal image-reference" href="../../../_images/jesd204_generic_rx_path_ex1.svg"><img alt="Generic JESD204 RX path example 1" class="align-center" src="../../../_images/jesd204_generic_rx_path_ex1.svg" width="600" /></a>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Such a parametrizable block design was built for the ADRV9009 prototyping
@@ -581,36 +578,34 @@ platform and can be found <a class="icon git reference external" href="https://g
 </section>
 </section>
 <section id="jesd204-modes-with-f-8">
-<h2>JESD204 modes with F=8<a class="headerlink" href="#jesd204-modes-with-f-8" title="Link to this heading"></a></h2>
+<h2>JESD204 modes with F=8<a class="headerlink" href="#jesd204-modes-with-f-8" title="Permalink to this heading"></a></h2>
 <p>In a period of LinkClk, the Link layer always handles 32 bits per lane.
 The Transport Layer running at a same clock rate can fill the 32 bits with
 frames of 1,2 or 4 bytes.</p>
 <p>However, for a link with L=1, M=4, NP=16 the minimum number of bytes per
 frame that must be supported is 8 (F=8).</p>
 <section id="example-tx-link-with-l-1-m-4-s-1-f-8-np-16">
-<h3>Example: TX link with L=1, M=4, S=1, F=8, NP=16<a class="headerlink" href="#example-tx-link-with-l-1-m-4-s-1-f-8-np-16" title="Link to this heading"></a></h3>
+<h3>Example: TX link with L=1, M=4, S=1, F=8, NP=16<a class="headerlink" href="#example-tx-link-with-l-1-m-4-s-1-f-8-np-16" title="Permalink to this heading"></a></h3>
 <p>To fulfill the requirement that in every DataClk period for each converter
 from the Application Layer a sample must be accepted (64 bits in this case),
 DataClk must be run with half the speed of the LinkClk.</p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_f8.svg"><img alt="Generic JESD204 TX path example with F=8" class="align-center" src="../../../_images/jesd204_generic_tx_f8.svg" width="600" />
-</a>
+<a class="reference internal image-reference" href="../../../_images/jesd204_generic_tx_f8.svg"><img alt="Generic JESD204 TX path example with F=8" class="align-center" src="../../../_images/jesd204_generic_tx_f8.svg" width="600" /></a>
 <p>The rate adaptation and synchronization is done with a gearbox which receives
 its clocks from a PLL that ensures its output clocks are in phase.</p>
 </section>
 <section id="example-rx-link-with-l-1-m-4-s-1-f-8-np-16">
-<h3>Example: RX link with L=1, M=4, S=1, F=8, NP=16<a class="headerlink" href="#example-rx-link-with-l-1-m-4-s-1-f-8-np-16" title="Link to this heading"></a></h3>
+<h3>Example: RX link with L=1, M=4, S=1, F=8, NP=16<a class="headerlink" href="#example-rx-link-with-l-1-m-4-s-1-f-8-np-16" title="Permalink to this heading"></a></h3>
 <p>The RX path is similar to the TX. In order the transport layer to produce a
 sample per converter in every clock cycle the Data clock must be ran at half
 of the LinkClock speed.</p>
-<a class="reference internal image-reference" href="../../../_images/jesd204_generic_rx_f8.svg"><img alt="Generic JESD204 RX path example with F=8" class="align-center" src="../../../_images/jesd204_generic_rx_f8.svg" width="600" />
-</a>
+<a class="reference internal image-reference" href="../../../_images/jesd204_generic_rx_f8.svg"><img alt="Generic JESD204 RX path example with F=8" class="align-center" src="../../../_images/jesd204_generic_rx_f8.svg" width="600" /></a>
 <p>Such a parametrizable block design that supports also F=8 was built for the
 ADRV9009 prototyping platform, and can be found
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/dev_adrv9009_less_lanes/projects/adrv9009/common/adrv9009_bd.tcl" target="_blank">here</a>.</p>
 </section>
 </section>
 <section id="software-related">
-<h2>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h2>
+<h2>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl" target="_blank">ADC Linux driver documentation</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl" target="_blank">DAC Linux driver documentation</a></p></li>

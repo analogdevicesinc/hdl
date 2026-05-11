@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -118,7 +118,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -283,6 +283,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -362,6 +363,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -382,9 +384,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="adi-hdl-coding-guidelines">
-<span id="hdl-coding-guidelines"></span><h1>ADI HDL coding guidelines<a class="headerlink" href="#adi-hdl-coding-guidelines" title="Link to this heading"></a></h1>
+<span id="hdl-coding-guidelines"></span><h1>ADI HDL coding guidelines<a class="headerlink" href="#adi-hdl-coding-guidelines" title="Permalink to this heading"></a></h1>
 <section id="introduction">
-<h2>1. Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<h2>1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>This document contains coding and documentation guidelines which must be
 followed by all HDL projects. The purpose of this document is to
 establish a set of rules that specify the layout, naming conventions and
@@ -409,9 +411,9 @@ VHDL or Verilog.</p>
 document.</p>
 </section>
 <section id="coding-style">
-<h2>2. Coding style<a class="headerlink" href="#coding-style" title="Link to this heading"></a></h2>
+<h2>2. Coding style<a class="headerlink" href="#coding-style" title="Permalink to this heading"></a></h2>
 <section id="a-layout">
-<h3>A. Layout<a class="headerlink" href="#a-layout" title="Link to this heading"></a></h3>
+<h3>A. Layout<a class="headerlink" href="#a-layout" title="Permalink to this heading"></a></h3>
 <p><strong>A1</strong></p>
 <p>HDL source files <strong>must not</strong> begin or end with empty lines, but <strong>must</strong>
 terminate with exactly one newline character.</p>
@@ -764,7 +766,7 @@ The type name and semicolon must be on the same line as <code class="docutils li
 </div>
 </section>
 <section id="b-naming-conventions">
-<h3>B. Naming Conventions<a class="headerlink" href="#b-naming-conventions" title="Link to this heading"></a></h3>
+<h3>B. Naming Conventions<a class="headerlink" href="#b-naming-conventions" title="Permalink to this heading"></a></h3>
 <p><strong>B1</strong></p>
 <p>All the names in the source code <strong>must</strong> be written in English.</p>
 <p><strong>B2</strong></p>
@@ -845,7 +847,7 @@ uncommon abbreviations <em>should</em> be avoided.</p>
 hierarchy.</p>
 </section>
 <section id="c-comments">
-<h3>C. Comments<a class="headerlink" href="#c-comments" title="Link to this heading"></a></h3>
+<h3>C. Comments<a class="headerlink" href="#c-comments" title="Permalink to this heading"></a></h3>
 <p><strong>C1</strong></p>
 <p>Comments <strong>must</strong> be used to describe the functionality of the
 HDL code. Liberal use of comments is strongly encouraged. Adding obvious
@@ -875,7 +877,7 @@ used.</p>
 format shown in Annex 1 for Verilog code and Annex 2 for VHDL code.</p>
 </section>
 <section id="d-general">
-<h3>D. General<a class="headerlink" href="#d-general" title="Link to this heading"></a></h3>
+<h3>D. General<a class="headerlink" href="#d-general" title="Permalink to this heading"></a></h3>
 <p><strong>D1</strong></p>
 <p>A file <strong>must</strong> contain a single module or package.</p>
 <p><strong>D2</strong></p>
@@ -928,9 +930,9 @@ the current year.</p>
 </section>
 </section>
 <section id="annexes">
-<h2>3. Annexes<a class="headerlink" href="#annexes" title="Link to this heading"></a></h2>
+<h2>3. Annexes<a class="headerlink" href="#annexes" title="Permalink to this heading"></a></h2>
 <section id="annex-1-verilog-file-format">
-<h3>Annex 1 Verilog file format<a class="headerlink" href="#annex-1-verilog-file-format" title="Link to this heading"></a></h3>
+<h3>Annex 1 Verilog file format<a class="headerlink" href="#annex-1-verilog-file-format" title="Permalink to this heading"></a></h3>
 <div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// ***************************************************************************</span>
 <span class="linenos"> 2</span><span class="c1">// ***************************************************************************</span>
 <span class="linenos"> 3</span><span class="c1">// Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>
@@ -1025,7 +1027,7 @@ the current year.</p>
 </div>
 </section>
 <section id="annex-2-vhdl-file-format">
-<h3>Annex 2 VHDL file format<a class="headerlink" href="#annex-2-vhdl-file-format" title="Link to this heading"></a></h3>
+<h3>Annex 2 VHDL file format<a class="headerlink" href="#annex-2-vhdl-file-format" title="Permalink to this heading"></a></h3>
 <div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- ***************************************************************************</span>
 <span class="linenos"> 2</span><span class="c1">-- ***************************************************************************</span>
 <span class="linenos"> 3</span><span class="c1">-- Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>
@@ -1124,7 +1126,7 @@ the current year.</p>
 </div>
 </section>
 <section id="annex-3-systemverilog-package-file-format">
-<h3>Annex 3 SystemVerilog package file format<a class="headerlink" href="#annex-3-systemverilog-package-file-format" title="Link to this heading"></a></h3>
+<h3>Annex 3 SystemVerilog package file format<a class="headerlink" href="#annex-3-systemverilog-package-file-format" title="Permalink to this heading"></a></h3>
 <div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1">// ***************************************************************************</span>
 <span class="linenos">  2</span><span class="c1">// ***************************************************************************</span>
 <span class="linenos">  3</span><span class="c1">// Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>

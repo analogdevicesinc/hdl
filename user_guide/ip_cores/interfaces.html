@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -112,7 +112,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -277,6 +277,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -356,6 +357,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -376,9 +378,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="interfaces">
-<span id="id1"></span><h1>Interfaces<a class="headerlink" href="#interfaces" title="Link to this heading"></a></h1>
+<span id="id1"></span><h1>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading"></a></h1>
 <section id="microprocessor-interface">
-<span id="up-if"></span><h2>Microprocessor Interface<a class="headerlink" href="#microprocessor-interface" title="Link to this heading"></a></h2>
+<span id="up-if"></span><h2>Microprocessor Interface<a class="headerlink" href="#microprocessor-interface" title="Permalink to this heading"></a></h2>
 <p>All the ADI IP cores contains multiple AXI register map modules, which control
 a well specified part of the IP.
 To avoid complicated interconnections inside the IP, using the
@@ -391,10 +393,10 @@ All the uP interface signals names have a <code class="docutils literal notransl
 themselves clearly from other internal signals.</p>
 </section>
 <section id="up-interface-and-signals">
-<h2>uP Interface and Signals<a class="headerlink" href="#up-interface-and-signals" title="Link to this heading"></a></h2>
+<h2>uP Interface and Signals<a class="headerlink" href="#up-interface-and-signals" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container" id="id2">
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Clock and reset</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
+<caption><span class="caption-text">Clock and reset</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p>Pin</p></td>
 <td><p>Type</p></td>
@@ -413,7 +415,7 @@ themselves clearly from other internal signals.</p>
 </div>
 <div class="table-wrapper docutils container" id="id3">
 <table class="docutils align-default" id="id3">
-<caption><span class="caption-text">Read interface</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
+<caption><span class="caption-text">Read interface</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p>Pin</p></td>
 <td><p>Type</p></td>
@@ -440,7 +442,7 @@ themselves clearly from other internal signals.</p>
 </div>
 <div class="table-wrapper docutils container" id="id4">
 <table class="docutils align-default" id="id4">
-<caption><span class="caption-text">Write interface</span><a class="headerlink" href="#id4" title="Link to this table"></a></caption>
+<caption><span class="caption-text">Write interface</span><a class="headerlink" href="#id4" title="Permalink to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p>Pin</p></td>
 <td><p>Type</p></td>
@@ -472,27 +474,26 @@ perspective.</p>
 </div>
 </section>
 <section id="timing-diagram">
-<h2>Timing diagram<a class="headerlink" href="#timing-diagram" title="Link to this heading"></a></h2>
+<h2>Timing diagram<a class="headerlink" href="#timing-diagram" title="Permalink to this heading"></a></h2>
 <p>The following timing diagram illustrates the signals and functionality of the
 interface. It show a register write access and two consecutive register read access.</p>
 <figure class="align-default" id="id5">
-<img alt="../../_images/wavedrom1.svg" src="../../_images/wavedrom1.svg" />
-<figcaption>
-<p><span class="caption-text">UP interface timing diagram</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+<img alt="../../_images/wavedrom1.svg" src="../../_images/wavedrom1.svg" /><figcaption>
+<p><span class="caption-text">UP interface timing diagram</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <section id="amba-axi">
-<h3>AMBA AXI<a class="headerlink" href="#amba-axi" title="Link to this heading"></a></h3>
+<h3>AMBA AXI<a class="headerlink" href="#amba-axi" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>AMBA <a class="icon link reference external" href="https://www.arm.com/architecture/system-architectures/amba/amba-specifications" target="_blank">Specification</a></p></li>
 <li><p>Vivado Design Suite: <a class="icon link reference external" href="https://docs.amd.com/v/u/en-US/ug1037-vivado-axi-reference-guide" target="_blank">AXI Reference Guide</a></p></li>
 </ul>
 </section>
 <section id="avalon">
-<h3>Avalon<a class="headerlink" href="#avalon" title="Link to this heading"></a></h3>
+<h3>Avalon<a class="headerlink" href="#avalon" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Avalon Interface <a class="icon link reference external" href="https://www.intel.com/content/www/us/en/docs/programmable/683091/22-3/introduction-to-the-interface-specifications.html" target="_blank">Specification</a></p></li>
 </ul>

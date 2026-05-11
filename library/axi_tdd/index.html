@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -112,7 +112,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -277,6 +277,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -356,6 +357,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -376,7 +378,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-tdd">
-<span id="id1"></span><h1>AXI TDD<a class="headerlink" href="#axi-tdd" title="Link to this heading"></a></h1>
+<span id="id1"></span><h1>AXI TDD<a class="headerlink" href="#axi-tdd" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320.4 258" width="320.4" class="no-background"><style>
                 a {
@@ -398,7 +400,7 @@ which require more than six controlling signals.</p>
 the receive and transmit bursts.</p>
 </div>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Up to 32 independent output channels</p></li>
 <li><p>Start/stop time values per channel</p></li>
@@ -410,7 +412,7 @@ the receive and transmit bursts.</p>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -448,7 +450,7 @@ the receive and transmit bursts.</p>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -538,7 +540,7 @@ the receive and transmit bursts.</p>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="03f873a68b5b8f1bd14a9f1e4f34d3ed1394f93f" name="03f873a68b5b8f1bd14a9f1e4f34d3ed1394f93f" type="checkbox"></input><label for="03f873a68b5b8f1bd14a9f1e4f34d3ed1394f93f"><div><p>s_axi</p>
@@ -820,7 +822,7 @@ the receive and transmit bursts.</p>
 </section>
 </div></section>
 <section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading"></a></h2>
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading"></a></h2>
 <p>The central idea of the TDD controller is “frame”-based operation, i.e. all the
 timing defined for the individual channels is relative to the beginning of a
 frame. The <code class="docutils literal notranslate"><span class="pre">FRAME_LENGTH</span></code> value controls the length of a single frame, while
@@ -828,8 +830,7 @@ the <code class="docutils literal notranslate"><span class="pre">BURST_COUNT</sp
 enabling the device (a value of 0 means the frames will be repeated indefinitely).
 Before the start of a burst, an optional startup delay is inserted, defined by
 the <code class="docutils literal notranslate"><span class="pre">STARTUP_DELAY</span></code> value in clock cycles.</p>
-<img alt="../../_images/diagram.svg" src="../../_images/diagram.svg" />
-<p>This diagram illustrates how different channels can be enabled at different
+<img alt="../../_images/diagram.svg" src="../../_images/diagram.svg" /><p>This diagram illustrates how different channels can be enabled at different
 times relative to the beginning of a frame.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -838,7 +839,7 @@ manner, they are completely independent of each other.</p>
 </div>
 </section>
 <section id="detailed-description">
-<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Link to this heading"></a></h2>
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
 <p>In order to begin its operation, the peripheral must be enabled. This is done by
 setting the <code class="docutils literal notranslate"><span class="pre">ENABLE</span></code> bit. Next, the peripheral waits to receive a synchronization
 signal. There are 3 possible sync sources, which can be independently activated
@@ -852,8 +853,7 @@ The software generated sync pulse is triggered at an arbitrary point in time
 when writing a ‘1’ value in <code class="docutils literal notranslate"><span class="pre">SYNC_SOFT</span></code>.</p>
 <p>The next diagram shows the peripheral’s FSM, which transitions between 4 states:
 IDLE, ARMED, WAITING and RUNNING.</p>
-<img alt="../../_images/fsm.svg" src="../../_images/fsm.svg" />
-<p>In case a synchronization signal is received while the TDD core is running, the
+<img alt="../../_images/fsm.svg" src="../../_images/fsm.svg" /><p>In case a synchronization signal is received while the TDD core is running, the
 signal can reset the internal counter to zero by setting <code class="docutils literal notranslate"><span class="pre">SYNC_RST</span></code> to ‘1’.
 This can alter the counter value in both WAITING or RUNNING states.</p>
 <p>The generic TDD controller can have up to 32 output channels, each of them
@@ -886,7 +886,7 @@ state.</p>
 is highly flexible and can substantially reduce resource utilization.</p>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-TDDN_CNTRL">
 <div class="collapsible docutils container">
@@ -1349,7 +1349,7 @@ Where n is from 0 to 31.</p>
 </section>
 </div></section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_tdd" target="_blank">library/axi_tdd</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_tdd" target="_blank">Generic Time-Division Duplexing Controller on wiki</a></p></li>

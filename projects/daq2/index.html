@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -132,7 +132,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -297,6 +297,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -376,6 +377,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -396,9 +398,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="daq2-hdl-project">
-<span id="daq2"></span><h1>DAQ2 HDL Project<a class="headerlink" href="#daq2-hdl-project" title="Link to this heading"></a></h1>
+<span id="daq2"></span><h1>DAQ2 HDL Project<a class="headerlink" href="#daq2-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCDAQ2-EBZ" target="_blank">AD-FMCDAQ2-EBZ</a> module is comprised of the
 <a class="icon adi reference external" href="https://www.analog.com/AD9680" target="_blank">AD9680</a> dual, 14-bit, 1.0 GSPS, JESD204B ADC, the <a class="icon adi reference external" href="https://www.analog.com/AD9144" target="_blank">AD9144</a> quad,
 16-bit, 2.8 GSPS, JESD204B DAC, the <a class="icon adi reference external" href="https://www.analog.com/AD9523-1" target="_blank">AD9523-1</a> clock, and power management
@@ -413,20 +415,20 @@ either ARM, NIOS-II or Microblaze. The high speed digital interface of the
 converters is handled by the <a class="reference internal" href="../../library/jesd204/index.html#jesd204"><span class="std std-ref">JESD204B framework</span></a>.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCDAQ2-EBZ" target="_blank">AD-FMCDAQ2-EBZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9680" target="_blank">AD9680</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9144" target="_blank">AD9144</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -469,12 +471,11 @@ converters is handled by the <a class="reference internal" href="../../library/j
 </div>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/daq2_xilinx_block_diagram.svg"><img alt="DAQ2 block diagram" class="align-center" src="../../_images/daq2_xilinx_block_diagram.svg" width="1000" />
-</a>
+<a class="reference internal image-reference" href="../../_images/daq2_xilinx_block_diagram.svg"><img alt="DAQ2 block diagram" class="align-center" src="../../_images/daq2_xilinx_block_diagram.svg" width="1000" /></a>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="87766633c501b40ab30f1f5dcfce2af7aa957530" name="87766633c501b40ab30f1f5dcfce2af7aa957530" type="checkbox"></input><label for="87766633c501b40ab30f1f5dcfce2af7aa957530"><p>Click here for details on the block diagram modules</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -559,14 +560,13 @@ programmable through an AXI-lite interface.</p>
 separate transmit and receive chains.</p>
 </section>
 <section id="evaluation-board-block-diagram">
-<h3>Evaluation Board Block diagram<a class="headerlink" href="#evaluation-board-block-diagram" title="Link to this heading"></a></h3>
+<h3>Evaluation Board Block diagram<a class="headerlink" href="#evaluation-board-block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and associated clock domains of the evaluation board are shown in
 the diagram below.</p>
-<a class="reference internal image-reference" href="../../_images/daq2_evb_block_diagram.svg"><img alt="AD-FMCDAQ2-EBZ block diagram" class="align-center" src="../../_images/daq2_evb_block_diagram.svg" width="1000" />
-</a>
+<a class="reference internal image-reference" href="../../_images/daq2_evb_block_diagram.svg"><img alt="AD-FMCDAQ2-EBZ block diagram" class="align-center" src="../../_images/daq2_evb_block_diagram.svg" width="1000" /></a>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
 <p>The following are the parameters of this project that can be configured:</p>
 <ul class="simple">
 <li><p>[RX/TX]_JESD_M: number of converters per link</p></li>
@@ -575,7 +575,7 @@ the diagram below.</p>
 </ul>
 </section>
 <section id="clock-scheme">
-<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Link to this heading"></a></h3>
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/AD9523-1" target="_blank">AD9523-1</a> is responsible for generating and distributing all clock
 signals used on the AD-FMCDAQ2-EBZ platform.</p>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCDAQ2-EBZ" target="_blank">AD-FMCDAQ2-EBZ</a> platform only uses the second
@@ -640,7 +640,7 @@ the maximum supported samplerate of 1 GSPS.</p>
 </table>
 </div>
 <section id="limitations">
-<h4>Limitations<a class="headerlink" href="#limitations" title="Link to this heading"></a></h4>
+<h4>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading"></a></h4>
 <p>The design has one JESD receive chain and one JESD transmit chain each with 4
 lanes at the rate of 10Gbps. The JESD receive chain consists of a physical layer
 represented by an XCVR module, a link layer represented by an RX JESD LINK
@@ -656,7 +656,7 @@ parameters:</p>
 </section>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -781,7 +781,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -818,7 +818,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
 <p>The Software GPIO number is calculated as follows:</p>
 <ul class="simple">
 <li><p>ZynqMP: the offset is 78</p></li>
@@ -979,7 +979,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -1035,7 +1035,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -1085,7 +1085,7 @@ characters.</p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="software-considerations">
-<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Link to this heading"></a></h2>
+<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Permalink to this heading"></a></h2>
 <p>Given that the IP uses the same QUAD as the DAC, performing channel
 reconfiguration may affect the DAC and vice versa. When using the JESD204B
 framework, this is taken into consideration by software.</p>
@@ -1122,9 +1122,9 @@ between the physical and link layer to reorder the data streams.</p>
 </div>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
@@ -1135,7 +1135,7 @@ between the physical and link layer to reorder the data streams.</p>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2" target="_blank">DAQ2 HDL project source code</a></p></li>
 </ul>
@@ -1214,7 +1214,7 @@ between the physical and link layer to reorder the data streams.</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/microblaze/boot/dts/kc705_fmcdaq2.dts" target="_blank">DAQ2 KC705 Linux Device Tree</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/microblaze/boot/dts/vc707_fmcdaq2.dts" target="_blank">DAQ2 VC707 Device Tree</a></p></li>
@@ -1227,13 +1227,13 @@ between the physical and link layer to reorder the data streams.</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

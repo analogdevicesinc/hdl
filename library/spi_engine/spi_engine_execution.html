@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -108,7 +108,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -273,6 +273,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -352,6 +353,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -372,7 +374,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="spi-engine-execution-module">
-<span id="spi-engine-execution"></span><h1>SPI Engine Execution Module<a class="headerlink" href="#spi-engine-execution-module" title="Link to this heading"></a></h1>
+<span id="spi-engine-execution"></span><h1>SPI Engine Execution Module<a class="headerlink" href="#spi-engine-execution-module" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 205.2 186" width="205.2" class="no-background"><style>
                 a {
@@ -384,7 +386,7 @@ IP core is the heart of the SPI Engine framework.
 It is responsible for handling a SPI Engine control stream and translates it
 into low-level SPI bus transactions.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -408,7 +410,7 @@ into low-level SPI bus transactions.</p>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -481,7 +483,7 @@ into low-level SPI bus transactions.</p>
 </section>
 </div></section>
 <section id="signal-and-interface-pins">
-<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Link to this heading"></a></h2>
+<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-ctrl">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="55096f5c41d27e7d18a5ace03156e3daf3c9b896" name="55096f5c41d27e7d18a5ace03156e3daf3c9b896" type="checkbox"></input><label for="55096f5c41d27e7d18a5ace03156e3daf3c9b896"><div><p>ctrl</p>
@@ -661,7 +663,7 @@ into low-level SPI bus transactions.</p>
 </section>
 </div></section>
 <section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading"></a></h2>
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading"></a></h2>
 <p>The SPI Engine Execution module implements the physical access to the SPI bus.
 It implements a small but powerful programmable state machine that translates a
 SPI Engine command stream into low-level SPI bus access.</p>
@@ -673,8 +675,7 @@ multi-function counter and compares unit that is responsible for handling the
 timing and a shift register which holds the received and transmitted SPI data.</p>
 <p>The module has an optional programmable pre-scaler register that can be used to
 divide the external clock to the counter and compare unit.</p>
-<img alt="../../_images/spi_engine.svg" src="../../_images/spi_engine.svg" />
-</section>
+<img alt="../../_images/spi_engine.svg" src="../../_images/spi_engine.svg" /></section>
 </section>
 
 

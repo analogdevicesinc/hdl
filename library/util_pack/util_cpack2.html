@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -110,7 +110,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -275,6 +275,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -354,6 +355,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -374,7 +376,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="channel-cpack-utility">
-<span id="util-cpack2"></span><h1>Channel CPACK Utility<a class="headerlink" href="#channel-cpack-utility" title="Link to this heading"></a></h1>
+<span id="util-cpack2"></span><h1>Channel CPACK Utility<a class="headerlink" href="#channel-cpack-utility" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 378.0 210" width="378.0" class="no-background"><style>
                 a {
@@ -393,7 +395,7 @@ The enable signals are usually controlled by software.
 The core simply packs the ADC data of the individual channels into a single data
 bus, as defined by the ADC enables.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Supports Altera and AMD Xilinx devices</p></li>
 <li><p>Supports up to 64 channels</p></li>
@@ -401,7 +403,7 @@ bus, as defined by the ADC enables.</p>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -418,7 +420,7 @@ bus, as defined by the ADC enables.</p>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -456,7 +458,7 @@ bus, as defined by the ADC enables.</p>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-packed_fifo_wr">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="383ac2fe1ece55526bbdedf7482f09c90ce5ac45" name="383ac2fe1ece55526bbdedf7482f09c90ce5ac45" type="checkbox"></input><label for="383ac2fe1ece55526bbdedf7482f09c90ce5ac45"><div><p>packed_fifo_wr</p>
@@ -567,7 +569,7 @@ bus, as defined by the ADC enables.</p>
 </section>
 </div></section>
 <section id="detailed-description">
-<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Link to this heading"></a></h2>
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
 <p>The core “collects” samples from the ADC interface and passes it to the DMA
 (or any other sink module), the data flow is controlled by the ADC. This is best
 explained through some examples. Let’s consider a 4 channel ADC with a channel
@@ -578,26 +580,23 @@ the ADC channel data width, the software always sees data as “samples interlea
 The same data set may received by the DMA core with a channel width of 128 bits
 or 16 bits.</p>
 <figure class="align-default" id="id1">
-<img alt="../../_images/cpack_4channel.svg" src="../../_images/cpack_4channel.svg" />
-<figcaption>
-<p><span class="caption-text">Four channel enabled (4’b1111)</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+<img alt="../../_images/cpack_4channel.svg" src="../../_images/cpack_4channel.svg" /><figcaption>
+<p><span class="caption-text">Four channel enabled (4’b1111)</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <figure class="align-default" id="id2">
-<img alt="../../_images/cpack_3channel.svg" src="../../_images/cpack_3channel.svg" />
-<figcaption>
-<p><span class="caption-text">Three channel enabled (4’b1110)</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+<img alt="../../_images/cpack_3channel.svg" src="../../_images/cpack_3channel.svg" /><figcaption>
+<p><span class="caption-text">Three channel enabled (4’b1110)</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <figure class="align-default" id="id3">
-<img alt="../../_images/cpack_2channel.svg" src="../../_images/cpack_2channel.svg" />
-<figcaption>
-<p><span class="caption-text">Two channel enabled (4’b1100)</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+<img alt="../../_images/cpack_2channel.svg" src="../../_images/cpack_2channel.svg" /><figcaption>
+<p><span class="caption-text">Two channel enabled (4’b1100)</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2" target="_blank">library/util_pack/util_cpack2</a></p></li>
 </ul>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -127,7 +127,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -292,6 +292,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -371,6 +372,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -391,7 +393,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="imageon-hdl-project-obsolete">
-<span id="imageon"></span><h1>Imageon HDL project (OBSOLETE)<a class="headerlink" href="#imageon-hdl-project-obsolete" title="Link to this heading"></a></h1>
+<span id="imageon"></span><h1>Imageon HDL project (OBSOLETE)<a class="headerlink" href="#imageon-hdl-project-obsolete" title="Permalink to this heading"></a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The support for <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/projects/imageon" target="_blank">IMAGEON</a> HDL project
@@ -399,7 +401,7 @@ has been discontinued, the latest release branch where it can be found is
 <code class="docutils literal notranslate"><span class="pre">hdl_2021_r2</span></code>. This page is left for legacy purposes only.</p>
 </div>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/fmc-imageon" target="_blank">FMC-Imageon</a> is a
 HDMI input/output FMC card that provides high definition video interface for
 Xilinx FPGAs. The HDMI input interface is implemented with the <a class="icon adi reference external" href="https://www.analog.com/ADV7611" target="_blank">ADV7611</a>,
@@ -411,26 +413,26 @@ and ADV7511/ADV7611 on board. The video uses a 16bit 422 YCbCr interface and
 the audio uses a single bit SPDIF interface in both directions.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>FMC-IMAGEON</p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADV7611" target="_blank">ADV7611</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a> on FMC slot</p></li>
 </ul>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <p>The reference design is divided in three parts as related to the functionalities
 of the board. The first one, related to video transmission, uses the
 axi_hdmi_tx module and the axi_dmac modules to read 24 bits of RGB data from
@@ -443,23 +445,21 @@ YCbCr and a downsampling from 444 to 422 are done in the transmit and receive
 (in reverse) datapaths as a default operation. To ensure the setup of the
 <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a> and <a class="icon adi reference external" href="https://www.analog.com/ADV75611" target="_blank">ADV75611</a> ICs, Xilinx’s AXI IIC module is used.</p>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data and control paths, along with the corresponding clocks are depicted
 in the first diagram. As related to the functional description of the HDL
 modules, this is presented in the second diagram.</p>
 <section id="fmc-imageon-block-diagram">
-<h4>FMC-IMAGEON Block Diagram<a class="headerlink" href="#fmc-imageon-block-diagram" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/imageon_bd.svg"><img alt="FMC-IMAGEON block diagram" class="align-center" src="../../_images/imageon_bd.svg" width="800" />
-</a>
+<h4>FMC-IMAGEON Block Diagram<a class="headerlink" href="#fmc-imageon-block-diagram" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/imageon_bd.svg"><img alt="FMC-IMAGEON block diagram" class="align-center" src="../../_images/imageon_bd.svg" width="800" /></a>
 </section>
 <section id="fmc-imageon-functional-description">
-<h4>FMC-IMAGEON Functional Description<a class="headerlink" href="#fmc-imageon-functional-description" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/imageon_func_diagram.svg"><img alt="IMAGEON functional description" class="align-center" src="../../_images/imageon_func_diagram.svg" width="800" />
-</a>
+<h4>FMC-IMAGEON Functional Description<a class="headerlink" href="#fmc-imageon-functional-description" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/imageon_func_diagram.svg"><img alt="IMAGEON functional description" class="align-center" src="../../_images/imageon_func_diagram.svg" width="800" /></a>
 </section>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -511,7 +511,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="gpio">
-<h3>GPIO<a class="headerlink" href="#gpio" title="Link to this heading"></a></h3>
+<h3>GPIO<a class="headerlink" href="#gpio" title="Permalink to this heading"></a></h3>
 <p>The Software GPIO number is calculated as follows:</p>
 <ul class="simple">
 <li><p>Zynq-7000: if PS7 EMIOs are used, then offset is 54</p></li>
@@ -557,7 +557,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -590,7 +590,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributed the bit/elf files of this project as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>
@@ -623,16 +623,16 @@ the HDL repository, and then build the project as follows:</p>
 <div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>ADV7511 datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a></p></li>
 <li><p>ADV7611 datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADV7611" target="_blank">ADV7611</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/projects/imageon" target="_blank">IMAGEON HDL project source code</a></p></li>
 </ul>
@@ -683,7 +683,7 @@ the HDL repository, and then build the project as follows:</p>
 </div>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/zynq-zed-imageon.dts" target="_blank">IMAGEON dts source code (arm32)</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/media/i2c/adv7604.c" target="_blank">ADV7604 Linux driver</a></p></li>
@@ -693,13 +693,13 @@ the HDL repository, and then build the project as follows:</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

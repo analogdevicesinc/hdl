@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
     <script async="async" src="../../_static/app.umd.js?v=09b0c6bc"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -142,7 +142,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -307,6 +307,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -386,6 +387,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -406,9 +408,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="ad9084-ebz-hdl-project">
-<span id="ad9084-ebz"></span><h1>AD9084-EBZ HDL project<a class="headerlink" href="#ad9084-ebz-hdl-project" title="Link to this heading"></a></h1>
+<span id="ad9084-ebz"></span><h1>AD9084-EBZ HDL project<a class="headerlink" href="#ad9084-ebz-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9084" target="_blank">AD9084-EBZ</a> reference design
 (also known as Apollo) is a processor based
 (e.g. Microblaze) embedded system.
@@ -438,19 +440,19 @@ having separate <code class="docutils literal notranslate"><span class="pre">rx_
 but must share the same reference clock.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9084" target="_blank">AD9084-EBZ</a> evaluation board</p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9084" target="_blank">AD9084</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -492,7 +494,7 @@ but must share the same reference clock.</p>
 </div>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>The Apollo chip is split into two sides, each side having up to 12 JESD
@@ -550,12 +552,11 @@ parameters, each having it’s own JESD link inside the design:</p>
 </ul>
 </div>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagrams:</p>
 <section id="example-block-design-for-asymmetric-a-b-mode-0-m-4-l-8-num-links-2-jesd204c">
-<h4>Example block design for ASYMMETRIC_A_B_MODE=0; M=4; L=8; NUM_LINKS=2; JESD204C<a class="headerlink" href="#example-block-design-for-asymmetric-a-b-mode-0-m-4-l-8-num-links-2-jesd204c" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/ad9084_204c_M4L8.svg"><img alt="AD9084-FMC JESD204C ASYMMETRIC_A_B_MODE=0 M=4 L=8 NUM_LINKS=2 block diagram" class="align-center" src="../../_images/ad9084_204c_M4L8.svg" width="800" />
-</a>
+<h4>Example block design for ASYMMETRIC_A_B_MODE=0; M=4; L=8; NUM_LINKS=2; JESD204C<a class="headerlink" href="#example-block-design-for-asymmetric-a-b-mode-0-m-4-l-8-num-links-2-jesd204c" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9084_204c_M4L8.svg"><img alt="AD9084-FMC JESD204C ASYMMETRIC_A_B_MODE=0 M=4 L=8 NUM_LINKS=2 block diagram" class="align-center" src="../../_images/ad9084_204c_M4L8.svg" width="800" /></a>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><strong>Build instructions:</strong></p>
@@ -606,9 +607,8 @@ parameters, each having it’s own JESD link inside the design:</p>
 </div>
 </section>
 <section id="example-block-design-for-asymmetric-a-b-mode-1-m-4-l-8-jesd204c">
-<h4>Example block design for ASYMMETRIC_A_B_MODE=1; M=4; L=8; JESD204C<a class="headerlink" href="#example-block-design-for-asymmetric-a-b-mode-1-m-4-l-8-jesd204c" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/ad9084_204c_M4L8_asymmetric.svg"><img alt="AD9084-FMC JESD204C ASYMMETRIC_A_B_MODE=1 M=4 L=8 NUM_LINKS=2 block diagram" class="align-center" src="../../_images/ad9084_204c_M4L8_asymmetric.svg" width="800" />
-</a>
+<h4>Example block design for ASYMMETRIC_A_B_MODE=1; M=4; L=8; JESD204C<a class="headerlink" href="#example-block-design-for-asymmetric-a-b-mode-1-m-4-l-8-jesd204c" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9084_204c_M4L8_asymmetric.svg"><img alt="AD9084-FMC JESD204C ASYMMETRIC_A_B_MODE=1 M=4 L=8 NUM_LINKS=2 block diagram" class="align-center" src="../../_images/ad9084_204c_M4L8_asymmetric.svg" width="800" /></a>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><strong>Build instructions:</strong></p>
@@ -663,7 +663,7 @@ parameters, each having it’s own JESD link inside the design:</p>
 </section>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
 <p>The block design supports configuration of parameters and scales.</p>
 <p>We have listed a couple of examples at section <a class="reference internal" href="#ad9084-ebz-build"><span class="std std-ref">Building the HDL project</span></a> and
 the default modes for each project.</p>
@@ -729,15 +729,14 @@ kilosamples per converter (M) (B link)</p></li>
 </ul>
 </section>
 <section id="clock-scheme">
-<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Link to this heading"></a></h3>
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
 <p>The clock sources depend on the carrier that is used:</p>
 <section id="vcu118">
-<h4><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a><a class="headerlink" href="#vcu118" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/ad9084_clock_scheme_vcu118.svg"><img alt="AD9084-EBZ VCU118 clock scheme" class="align-center" src="../../_images/ad9084_clock_scheme_vcu118.svg" width="800" />
-</a>
+<h4><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a><a class="headerlink" href="#vcu118" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9084_clock_scheme_vcu118.svg"><img alt="AD9084-EBZ VCU118 clock scheme" class="align-center" src="../../_images/ad9084_clock_scheme_vcu118.svg" width="800" /></a>
 </section>
 <section id="limitations">
-<h4>Limitations<a class="headerlink" href="#limitations" title="Link to this heading"></a></h4>
+<h4>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading"></a></h4>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>For the parameter selection, the following restrictions apply:</p>
@@ -751,7 +750,7 @@ kilosamples per converter (M) (B link)</p></li>
 </section>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL
 (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
@@ -934,7 +933,7 @@ for more details).</p>
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -971,7 +970,7 @@ for more details).</p>
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
 <p>The following table lists the GPIO signals used in this project that
 are connected to the Apollo evaluation board and are common between
 all the carriers.</p>
@@ -1179,7 +1178,7 @@ carriers.</p>
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1242,7 +1241,7 @@ carriers.</p>
 </section>
 </section>
 <section id="building-the-hdl-project">
-<span id="ad9084-ebz-build"></span><h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
+<span id="ad9084-ebz-build"></span><h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -1521,9 +1520,9 @@ characters.</p>
 user guide.</p>
 </section>
 <section id="software-considerations">
-<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Link to this heading"></a></h2>
+<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Permalink to this heading"></a></h2>
 <section id="adc-crossbar-config">
-<h3>ADC - crossbar config<a class="headerlink" href="#adc-crossbar-config" title="Link to this heading"></a></h3>
+<h3>ADC - crossbar config<a class="headerlink" href="#adc-crossbar-config" title="Permalink to this heading"></a></h3>
 <p>Due to physical constraints, Rx lanes are reordered as described in the
 following table.</p>
 <p>e.g physical lane 2 from ADC from A side connects to logical lane 1
@@ -1677,7 +1676,7 @@ accordingly.</p>
 </div>
 </section>
 <section id="dac-crossbar-config">
-<h3>DAC - crossbar config<a class="headerlink" href="#dac-crossbar-config" title="Link to this heading"></a></h3>
+<h3>DAC - crossbar config<a class="headerlink" href="#dac-crossbar-config" title="Permalink to this heading"></a></h3>
 <p>Due to physical constraints, Tx lanes are reordered as described in the
 following table.</p>
 <p>e.g physical lane 2 from DAC from A side connects to logical lane 9
@@ -1832,9 +1831,9 @@ accordingly.</p>
 </section>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading"></a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9084_ebz" target="_blank">[Wiki] AD9084 Prototyping Platform User Guide</a></p></li>
 <li><p>Here you can find all the quick start guides on wiki documentation
@@ -1867,7 +1866,7 @@ accordingly.</p>
 </div>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9084" target="_blank">AD9084</a></p>
 <ul>
@@ -1878,7 +1877,7 @@ accordingly.</p>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9084_ebz" target="_blank">ad9084_ebz HDL project source code</a></p></li>
 </ul>
@@ -1953,7 +1952,7 @@ accordingly.</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/ad9084" target="_blank">[Wiki] AD9084-EBZ Linux driver wiki page</a></p></li>
 <li><p>Python support:</p>
@@ -1966,13 +1965,13 @@ accordingly.</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

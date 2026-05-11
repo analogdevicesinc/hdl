@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -133,7 +133,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -298,6 +298,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -377,6 +378,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -397,9 +399,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="ad4630-fmc-hdl-project">
-<span id="ad4630-fmc"></span><h1>AD4630-FMC HDL project<a class="headerlink" href="#ad4630-fmc-hdl-project" title="Link to this heading"></a></h1>
+<span id="ad4630-fmc"></span><h1>AD4630-FMC HDL project<a class="headerlink" href="#ad4630-fmc-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/AD4630-24" target="_blank">AD4630-24</a> is a two-channel, simultaneous sampling, Easy Drive, 2 MSPS
 successive approximation register (SAR) analog-to-digital converter (ADC). The
 <a class="icon adi reference external" href="https://www.analog.com/AD4030-24" target="_blank">AD4030-24</a> is the single channel version. With a guaranteed maximum ±0.9
@@ -453,7 +455,7 @@ Zynq-7000 re-programmable SoC from Xilinx.</p>
 </ul>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4030-24FMCZ" target="_blank">EVAL-AD4030-24FMCZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4630-16FMCZ" target="_blank">EVAL-AD4630-16FMCZ</a></p></li>
@@ -464,7 +466,7 @@ Zynq-7000 re-programmable SoC from Xilinx.</p>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4030-24" target="_blank">AD4030-24</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4630-16" target="_blank">AD4630-16</a></p></li>
@@ -474,13 +476,13 @@ Zynq-7000 re-programmable SoC from Xilinx.</p>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a> on FMC slot</p></li>
 </ul>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <p>The reference design uses the <a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine Framework</span></a> to
 interface with the AD4630 ADC. The design supports almost all possible digital
 interface configurations of the device. In echo clock mode, because the clock
@@ -491,10 +493,10 @@ forward for the DMA.</p>
 <a class="icon adi reference external" href="https://www.analog.com/AD4630-16" target="_blank">AD4630-16</a> or <a class="icon adi reference external" href="https://www.analog.com/AD4030-24" target="_blank">AD4030-24</a> data sheet section titled SAMPLE CONVERSION
 TIMING AND DATA TRANSFER for more explanation of data transfer zones.</p>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagrams:</p>
 <section id="spi-mode-transfer-zone-1">
-<h4>SPI mode - transfer zone 1<a class="headerlink" href="#spi-mode-transfer-zone-1" title="Link to this heading"></a></h4>
+<h4>SPI mode - transfer zone 1<a class="headerlink" href="#spi-mode-transfer-zone-1" title="Permalink to this heading"></a></h4>
 <p>The main aspect of this mode is the fact that it is using the BUSY signal from
 the ADC to trigger the Offload module. Data is then clocked out by the
 Execution module and transferred to the DMA by the Offload module. CNV is an “or”
@@ -503,8 +505,7 @@ mode. It is the software responsibility to configure the correct behavior for
 the trigger source. Zone 1 transfer is not currently supported by the
 pre-compiled HDL files that are included in the SD card image that is provided
 with the evaluation board.</p>
-<a class="reference internal image-reference" href="../../_images/ad463x_hdl_cm0_cz1_1.svg"><img alt="AD4630_FMC SPI mode - transfer zone 1 block diagram" class="align-center" src="../../_images/ad463x_hdl_cm0_cz1_1.svg" width="800" />
-</a>
+<a class="reference internal image-reference" href="../../_images/ad463x_hdl_cm0_cz1_1.svg"><img alt="AD4630_FMC SPI mode - transfer zone 1 block diagram" class="align-center" src="../../_images/ad463x_hdl_cm0_cz1_1.svg" width="800" /></a>
 <p>The DATA REORDER IP (spi_axis_reorder) is instantiated according to the
 combination of the NUM_OF_CHANNEL and LANES_PER_CHANNEL parameters. The
 following modes does not use the spi_axis_reorder IP and directly connects the
@@ -515,23 +516,20 @@ SPI Engine Offload to the DMA:</p>
 <li><p>2 MISOs/SDIs (<a class="icon adi reference external" href="https://www.analog.com/AD4630" target="_blank">AD4630</a>) - NUM_OF_CHANNEL = 2 LANES_PER_CHANNEL = 1.</p></li>
 </ul>
 <p>The last case may instantiate spi_axis_reorder IP if INTERLEAVE_MODE=1 is used.</p>
-<a class="reference internal image-reference" href="../../_images/ad463x_hdl_cm0_cz1_no_reorder.svg"><img alt="AD4630_FMC SPI mode - transfer zone 1 block diagram without using the spi_axis_reorder IP" class="align-center" src="../../_images/ad463x_hdl_cm0_cz1_no_reorder.svg" width="800" />
-</a>
+<a class="reference internal image-reference" href="../../_images/ad463x_hdl_cm0_cz1_no_reorder.svg"><img alt="AD4630_FMC SPI mode - transfer zone 1 block diagram without using the spi_axis_reorder IP" class="align-center" src="../../_images/ad463x_hdl_cm0_cz1_no_reorder.svg" width="800" /></a>
 </section>
 <section id="spi-mode-transfer-zone-2">
-<h4>SPI mode - transfer zone 2<a class="headerlink" href="#spi-mode-transfer-zone-2" title="Link to this heading"></a></h4>
+<h4>SPI mode - transfer zone 2<a class="headerlink" href="#spi-mode-transfer-zone-2" title="Permalink to this heading"></a></h4>
 <p>In this mode, the BUSY signal is not used. Offload trigger is generated by the AXI
 PWM GEN core. CNV is still generated by the “or” function of the AXI PWM GEN and the
 ad463x_trigger (EMIO). The reason for using two PWM outputs instead of a common one
 is to accommodate for the averaging mode where the two signals will have different
 frequencies.</p>
-<a class="reference internal image-reference" href="../../_images/ad463x_hdl_cm0_cz2_1.svg"><img alt="AD4630_FMC SPI mode - transfer zone 2 block diagram" class="align-center" src="../../_images/ad463x_hdl_cm0_cz2_1.svg" width="800" />
-</a>
-<a class="reference internal image-reference" href="../../_images/adaq42xx_hdl_cm0_cz2_1.svg"><img alt="ADAQ4224_FMC SPI mode - transfer zone 2 block diagram" class="align-center" src="../../_images/adaq42xx_hdl_cm0_cz2_1.svg" width="800" />
-</a>
+<a class="reference internal image-reference" href="../../_images/ad463x_hdl_cm0_cz2_1.svg"><img alt="AD4630_FMC SPI mode - transfer zone 2 block diagram" class="align-center" src="../../_images/ad463x_hdl_cm0_cz2_1.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/adaq42xx_hdl_cm0_cz2_1.svg"><img alt="ADAQ4224_FMC SPI mode - transfer zone 2 block diagram" class="align-center" src="../../_images/adaq42xx_hdl_cm0_cz2_1.svg" width="800" /></a>
 </section>
 <section id="echo-clock-mode-transfer-zone-2">
-<h4>Echo clock mode - transfer zone 2<a class="headerlink" href="#echo-clock-mode-transfer-zone-2" title="Link to this heading"></a></h4>
+<h4>Echo clock mode - transfer zone 2<a class="headerlink" href="#echo-clock-mode-transfer-zone-2" title="Permalink to this heading"></a></h4>
 <p>In this configuration, the ADC’s BUSY-SCKOUT pin functions as a bit-clock
 output and is generated by looping-through the host’s SCK. The SPI engine is
 driving the SPI signals except it is no longer reading the data. In echo clock
@@ -539,10 +537,8 @@ mode, data reading reading is done by a dedicated Data Capture IP that is
 configured to capture data either in SDR or DDR mode.
 Again, CNV is generated by the “or” function of the AXI PWM GEN and the
 ad463x_trigger (EMIO).</p>
-<a class="reference internal image-reference" href="../../_images/ad463x_hdl_cm1_cz2_1.svg"><img alt="AD4630_FMC Echo clock mode - transfer zone 2 block diagram" class="align-center" src="../../_images/ad463x_hdl_cm1_cz2_1.svg" width="800" />
-</a>
-<a class="reference internal image-reference" href="../../_images/adaq42xx_hdl_cm1_cz2_1.svg"><img alt="ADAQ4224_FMC Echo clock mode - transfer zone 2 block diagram" class="align-center" src="../../_images/adaq42xx_hdl_cm1_cz2_1.svg" width="800" />
-</a>
+<a class="reference internal image-reference" href="../../_images/ad463x_hdl_cm1_cz2_1.svg"><img alt="AD4630_FMC Echo clock mode - transfer zone 2 block diagram" class="align-center" src="../../_images/ad463x_hdl_cm1_cz2_1.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/adaq42xx_hdl_cm1_cz2_1.svg"><img alt="ADAQ4224_FMC Echo clock mode - transfer zone 2 block diagram" class="align-center" src="../../_images/adaq42xx_hdl_cm1_cz2_1.svg" width="800" /></a>
 <p>The design supports the following modes:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -579,7 +575,7 @@ ad463x_trigger (EMIO).</p>
 </section>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
 <p>The CLK_MODE configuration parameter defines clocking mode of the device’s
 digital interface:</p>
 <ul class="simple">
@@ -621,7 +617,7 @@ for any other configuration is invalid.</p>
 </ul>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -656,7 +652,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Link to this heading"></a></h3>
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -704,7 +700,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -731,7 +727,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
 <p>The Software GPIO number is calculated as follows:</p>
 <ul class="simple">
 <li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
@@ -794,7 +790,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -822,7 +818,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -852,15 +848,15 @@ by the configuration used:</p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading"></a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/ad4630-24-eval-board/ad4630-24-developer-guide" target="_blank">[Wiki] AD463X and AD403X Developer’s Guide</a></p></li>
 </ul>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
@@ -875,7 +871,7 @@ by the configuration used:</p>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4630_fmc" target="_blank">AD4630_FMC HDL project source code</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad463x/hdl" target="_blank">[Wiki] AD4630_FMC HDL project documentation</a></p></li>
@@ -958,7 +954,7 @@ by the configuration used:</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/iio/adc/ad4630.c" target="_blank">AD4630_FMC Linux driver source code</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad463x_fmcz" target="_blank">AD463x_FMC No-OS project source code</a></p></li>
@@ -969,13 +965,13 @@ by the configuration used:</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

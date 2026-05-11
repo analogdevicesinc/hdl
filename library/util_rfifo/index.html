@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -111,7 +111,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -276,6 +276,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -355,6 +356,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -375,7 +377,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="util-rfifo">
-<span id="id1"></span><h1>Util RFIFO<a class="headerlink" href="#util-rfifo" title="Link to this heading"></a></h1>
+<span id="id1"></span><h1>Util RFIFO<a class="headerlink" href="#util-rfifo" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 378.0 306" width="378.0" class="no-background"><style>
                 a {
@@ -404,7 +406,7 @@ downscale the clock rate is to increase the data width of the output ports of
 the FIFO. Currently the util_rfifo supports four data width ratios:
 1:1/1:2/1:4/1:8.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Supports Altera and AMD Xilinx devices.</p></li>
 <li><p>Downscale the DAC data path’s clock rate.</p></li>
@@ -412,7 +414,7 @@ the FIFO. Currently the util_rfifo supports four data width ratios:
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -429,15 +431,14 @@ the FIFO. Currently the util_rfifo supports four data width ratios:
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
-<img alt="Util RFIFO block diagram" src="../../_images/block_diagram2.svg" />
-</section>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
+<img alt="Util RFIFO block diagram" src="../../_images/block_diagram2.svg" /></section>
 <section id="timing-diagram">
-<h2>Timing Diagram<a class="headerlink" href="#timing-diagram" title="Link to this heading"></a></h2>
+<h2>Timing Diagram<a class="headerlink" href="#timing-diagram" title="Permalink to this heading"></a></h2>
 <img alt="Util RFIFO timing diagram" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/util_rfifo/timing_diagram.png" />
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -487,7 +488,7 @@ the FIFO. Currently the util_rfifo supports four data width ratios:
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-din_clk">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="7307d147774c460b1e6f147e9c71ef19f3c759cf" name="7307d147774c460b1e6f147e9c71ef19f3c759cf" type="checkbox"></input><label for="7307d147774c460b1e6f147e9c71ef19f3c759cf"><div><p>din_clk</p>
@@ -690,7 +691,7 @@ the FIFO. Currently the util_rfifo supports four data width ratios:
 </section>
 </div></section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_rfifo" target="_blank">library/util_rfifo</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/util_rfifo" target="_blank">UTIL RFIFO on wiki</a></p></li>

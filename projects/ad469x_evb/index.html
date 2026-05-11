@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -138,7 +138,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -303,6 +303,7 @@ Content on this topic
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -382,6 +383,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -402,9 +404,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="ad469x-evb-hdl-project">
-<span id="ad469x-evb"></span><h1>AD469X-EVB HDL project<a class="headerlink" href="#ad469x-evb-hdl-project" title="Link to this heading"></a></h1>
+<span id="ad469x-evb"></span><h1>AD469X-EVB HDL project<a class="headerlink" href="#ad469x-evb-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The AD469X HDL reference design provides all the interfaces that are
 necessary to interact with the devices on the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4696" target="_blank">EVAL-AD4696</a> and
 <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4692-ARDZ" target="_blank">EVAL-AD4692-ARDZ</a> boards.</p>
@@ -415,14 +417,14 @@ allows selecting the appropriate offload trigger and CNV gating scheme for
 each device.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4692-ARDZ" target="_blank">EVAL-AD4692-ARDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4696" target="_blank">EVAL-AD4696</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4691" target="_blank">AD4691</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4692" target="_blank">AD4692</a></p></li>
@@ -435,7 +437,7 @@ each device.</p>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a> on FMC slot</p></li>
 <li><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a> on Arduino shield connector</p></li>
@@ -443,7 +445,7 @@ each device.</p>
 </ul>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <p>The reference design uses the standard <a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine Framework</span></a>
 to interface the <a class="icon adi reference external" href="https://www.analog.com/AD4696" target="_blank">AD4696</a> ADC in single SDO Mode.
 The <a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload module</span></a>, which can be used to
@@ -451,7 +453,7 @@ capture continuous data stream at maximum data rate, is triggered depending on
 the <code class="docutils literal notranslate"><span class="pre">PWM_OFFLOAD</span></code> parameter (see <a class="reference internal" href="#configuration-modes">Configuration modes</a>).</p>
 </section>
 <section id="cnv-signal-gating">
-<h2>CNV signal gating<a class="headerlink" href="#cnv-signal-gating" title="Link to this heading"></a></h2>
+<h2>CNV signal gating<a class="headerlink" href="#cnv-signal-gating" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen" target="_blank">AXI PWM GEN</a> IP core is used to drive CNV
 when the SPI Engine is operating in Offload mode along with logic gates and a
 few extra signals to ensure proper control of the signal.</p>
@@ -471,51 +473,46 @@ mode.</p>
 Engine offload trigger itself is gated by an AND of the PWM and DMA
 <code class="docutils literal notranslate"><span class="pre">s_axis_xfer_req</span></code> signals.</p>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <section id="default-mode-pwm-offload-0">
-<h4>Default mode (PWM_OFFLOAD=0)<a class="headerlink" href="#default-mode-pwm-offload-0" title="Link to this heading"></a></h4>
+<h4>Default mode (PWM_OFFLOAD=0)<a class="headerlink" href="#default-mode-pwm-offload-0" title="Permalink to this heading"></a></h4>
 <p>The data path and clock domains are depicted in the below diagrams.
 These diagrams correspond to the default configuration (<code class="docutils literal notranslate"><span class="pre">PWM_OFFLOAD=0</span></code>),
 where the BUSY falling edge triggers the SPI Engine offload and the CNV signal
 is gated by DMA <code class="docutils literal notranslate"><span class="pre">s_axis_xfer_req</span></code> AND PWM, with a GPIO OR override.</p>
 <section id="zedboard">
-<h5>Zedboard<a class="headerlink" href="#zedboard" title="Link to this heading"></a></h5>
-<a class="reference internal image-reference" href="../../_images/ad469x_hdl_zed.svg"><img alt="AD469X_EVB/Zedboard block diagram" class="align-center" src="../../_images/ad469x_hdl_zed.svg" width="800" />
-</a>
+<h5>Zedboard<a class="headerlink" href="#zedboard" title="Permalink to this heading"></a></h5>
+<a class="reference internal image-reference" href="../../_images/ad469x_hdl_zed.svg"><img alt="AD469X_EVB/Zedboard block diagram" class="align-center" src="../../_images/ad469x_hdl_zed.svg" width="800" /></a>
 </section>
 <section id="cora-z7s">
-<h5>Cora Z7S<a class="headerlink" href="#cora-z7s" title="Link to this heading"></a></h5>
-<a class="reference internal image-reference" href="../../_images/ad469x_hdl_coraz7s.svg"><img alt="AD469X_EVB/Cora block diagram" class="align-center" src="../../_images/ad469x_hdl_coraz7s.svg" width="800" />
-</a>
+<h5>Cora Z7S<a class="headerlink" href="#cora-z7s" title="Permalink to this heading"></a></h5>
+<a class="reference internal image-reference" href="../../_images/ad469x_hdl_coraz7s.svg"><img alt="AD469X_EVB/Cora block diagram" class="align-center" src="../../_images/ad469x_hdl_coraz7s.svg" width="800" /></a>
 </section>
 <section id="de10-nano">
-<h5>DE10-Nano<a class="headerlink" href="#de10-nano" title="Link to this heading"></a></h5>
-<a class="reference internal image-reference" href="../../_images/ad469x_hdl_de10nano.svg"><img alt="AD469X_EVB/DE10-Nano block diagram" class="align-center" src="../../_images/ad469x_hdl_de10nano.svg" width="800" />
-</a>
+<h5>DE10-Nano<a class="headerlink" href="#de10-nano" title="Permalink to this heading"></a></h5>
+<a class="reference internal image-reference" href="../../_images/ad469x_hdl_de10nano.svg"><img alt="AD469X_EVB/DE10-Nano block diagram" class="align-center" src="../../_images/ad469x_hdl_de10nano.svg" width="800" /></a>
 </section>
 </section>
 <section id="ad4692-register-mode-pwm-offload-1">
-<h4>AD4692 register mode (PWM_OFFLOAD=1)<a class="headerlink" href="#ad4692-register-mode-pwm-offload-1" title="Link to this heading"></a></h4>
+<h4>AD4692 register mode (PWM_OFFLOAD=1)<a class="headerlink" href="#ad4692-register-mode-pwm-offload-1" title="Permalink to this heading"></a></h4>
 <p>In register mode, the SPI Engine offload is triggered by the BUSY falling edge,
 same as the default mode. The difference is in the CNV gating: instead of
 gating with DMA <code class="docutils literal notranslate"><span class="pre">s_axis_xfer_req</span></code>, the CNV signal is gated by an AND of the
 PWM signal and the BUSY signal. An OR gate with a GPIO signal is still present
 to allow software-generated CNV pulses.</p>
-<a class="reference internal image-reference" href="../../_images/ad4692_hdl_cnv_coraz7s.svg"><img alt="AD4692/Cora Z7S register mode block diagram" class="align-center" src="../../_images/ad4692_hdl_cnv_coraz7s.svg" width="800" />
-</a>
+<a class="reference internal image-reference" href="../../_images/ad4692_hdl_cnv_coraz7s.svg"><img alt="AD4692/Cora Z7S register mode block diagram" class="align-center" src="../../_images/ad4692_hdl_cnv_coraz7s.svg" width="800" /></a>
 </section>
 <section id="ad4692-manual-mode-pwm-offload-2">
-<h4>AD4692 manual mode (PWM_OFFLOAD=2)<a class="headerlink" href="#ad4692-manual-mode-pwm-offload-2" title="Link to this heading"></a></h4>
+<h4>AD4692 manual mode (PWM_OFFLOAD=2)<a class="headerlink" href="#ad4692-manual-mode-pwm-offload-2" title="Permalink to this heading"></a></h4>
 <p>In manual mode, the SPI Engine offload trigger is gated by an AND of the PWM
 signal and the DMA <code class="docutils literal notranslate"><span class="pre">s_axis_xfer_req</span></code> signal. This ensures that SPI
 transactions only occur when both the PWM fires and the DMA is ready to receive
 data. No CNV gating logic is instantiated.</p>
-<a class="reference internal image-reference" href="../../_images/ad4692_hdl_pwm_coraz7s.svg"><img alt="AD4692/Cora Z7S manual mode block diagram" class="align-center" src="../../_images/ad4692_hdl_pwm_coraz7s.svg" width="800" />
-</a>
+<a class="reference internal image-reference" href="../../_images/ad4692_hdl_pwm_coraz7s.svg"><img alt="AD4692/Cora Z7S manual mode block diagram" class="align-center" src="../../_images/ad4692_hdl_pwm_coraz7s.svg" width="800" /></a>
 </section>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">SPI_4WIRE</span></code> configuration parameter defines if CNV signal is linked to
 PWM or to SPI_CS to enable interfacing with a single 4-wire SPI port.</p>
 <p>By default, it is set to 0.</p>
@@ -553,7 +550,7 @@ gating (ad4692 manual mode).</p></li>
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -597,7 +594,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Link to this heading"></a></h3>
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -647,7 +644,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -674,7 +671,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
 <p>The Software GPIO number is calculated as follows:</p>
 <ul class="simple">
 <li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
@@ -760,7 +757,7 @@ the threshold detection alert indicator, the busy indicator, or the
 second serial data output in dual-sdo MODE</p>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -816,7 +813,7 @@ second serial data output in dual-sdo MODE</p>
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -858,9 +855,9 @@ by the configuration used:</p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
@@ -875,7 +872,7 @@ by the configuration used:</p>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad469x_evb" target="_blank">AD469X_EVB HDL project source code</a></p></li>
 </ul>
@@ -953,7 +950,7 @@ by the configuration used:</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4696.dts" target="_blank">AD469X_EVB - ZED dts source code</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad469x" target="_blank">AD469X_EVB no-OS driver source code</a></p></li>
@@ -962,13 +959,13 @@ by the configuration used:</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

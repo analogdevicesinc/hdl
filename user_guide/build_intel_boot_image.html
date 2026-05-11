@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -144,7 +144,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -309,6 +309,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -388,6 +389,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -408,7 +410,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="generating-hdl-boot-image-for-intel-projects">
-<span id="build-intel-boot-image"></span><h1>Generating HDL boot image for Intel projects<a class="headerlink" href="#generating-hdl-boot-image-for-intel-projects" title="Link to this heading"></a></h1>
+<span id="build-intel-boot-image"></span><h1>Generating HDL boot image for Intel projects<a class="headerlink" href="#generating-hdl-boot-image-for-intel-projects" title="Permalink to this heading"></a></h1>
 <p>This page is dedicated to the building process of boot image for supported
 Intel/Altera projects. One key file specific to these projects is
 the <code class="docutils literal notranslate"><span class="pre">bootloader</span></code>. Its role is to initialize the system after the
@@ -423,7 +425,7 @@ necessary components:</p>
 <li><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/support/programmable/support-resources/design-guidance/soc-bootloader.html" target="_blank">Intel Bootloader</a></p></li>
 </ul>
 <section id="necessary-files-for-booting-up-an-hdl-project">
-<h2>Necessary files for booting up an HDL project<a class="headerlink" href="#necessary-files-for-booting-up-an-hdl-project" title="Link to this heading"></a></h2>
+<h2>Necessary files for booting up an HDL project<a class="headerlink" href="#necessary-files-for-booting-up-an-hdl-project" title="Permalink to this heading"></a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>We <strong>do not</strong> provide any scripts to automate this process, so please read
@@ -472,7 +474,7 @@ later in the Intel boot flow with the U-Boot image update.</p>
 </div>
 </section>
 <section id="using-kuiper-linux-pre-built-images">
-<h2>Using Kuiper Linux pre-built images<a class="headerlink" href="#using-kuiper-linux-pre-built-images" title="Link to this heading"></a></h2>
+<h2>Using Kuiper Linux pre-built images<a class="headerlink" href="#using-kuiper-linux-pre-built-images" title="Permalink to this heading"></a></h2>
 <p>The built and tested files can be found in our ADI Kuiper Linux release, which
 can be obtained from
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/adi-kuiper_images/release_notes" target="_blank">here</a>.</p>
@@ -656,7 +658,7 @@ mountpoint</p>
 </div>
 <div class="clear-left"></div></div></div></div>
 <section id="unmount-the-partitions">
-<h3>Unmount the partitions<a class="headerlink" href="#unmount-the-partitions" title="Link to this heading"></a></h3>
+<h3>Unmount the partitions<a class="headerlink" href="#unmount-the-partitions" title="Permalink to this heading"></a></h3>
 <p>Make sure you are not in the /BOOT folder</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
@@ -692,7 +694,7 @@ USB reader.</p>
 </section>
 </section>
 <section id="examples-of-building-the-boot-image">
-<h2>Examples of building the boot image<a class="headerlink" href="#examples-of-building-the-boot-image" title="Link to this heading"></a></h2>
+<h2>Examples of building the boot image<a class="headerlink" href="#examples-of-building-the-boot-image" title="Permalink to this heading"></a></h2>
 <p>This is a list of projects supported by us for each carrier. The purpose is to
 illustrate how to build the different files involved in the process. Each
 project has its own characteristics (some files may differ from one project to
@@ -741,13 +743,13 @@ latest Quartus version available so the corresponding u-boot branches
 were checked-out.</p>
 </div>
 <section id="adrv9371-arria-10">
-<span id="build-intel-boot-image-arria10"></span><h3>ADRV9371/Arria 10<a class="headerlink" href="#adrv9371-arria-10" title="Link to this heading"></a></h3>
+<span id="build-intel-boot-image-arria10"></span><h3>ADRV9371/Arria 10<a class="headerlink" href="#adrv9371-arria-10" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/a10soc" target="_blank">projects/adrv9371x/a10soc</a></p></li>
 <li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts" target="_blank">arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts</a></p></li>
 </ul>
 <section id="building-the-linux-kernel-image-and-the-devicetree">
-<h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#building-the-linux-kernel-image-and-the-devicetree" title="Link to this heading"></a></h4>
+<h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#building-the-linux-kernel-image-and-the-devicetree" title="Permalink to this heading"></a></h4>
 <p><strong>Linux/Cygwin/WSL</strong></p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
@@ -805,7 +807,7 @@ were checked-out.</p>
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="building-the-hardware-design">
-<h4>Building the Hardware Design<a class="headerlink" href="#building-the-hardware-design" title="Link to this heading"></a></h4>
+<h4>Building the Hardware Design<a class="headerlink" href="#building-the-hardware-design" title="Permalink to this heading"></a></h4>
 <p>Clone the HDL repository, then build the project:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
@@ -852,7 +854,7 @@ and always confirm with <code class="docutils literal notranslate"><span class="
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="building-the-preloader-and-bootloader-image">
-<h4>Building the Preloader and Bootloader Image<a class="headerlink" href="#building-the-preloader-and-bootloader-image" title="Link to this heading"></a></h4>
+<h4>Building the Preloader and Bootloader Image<a class="headerlink" href="#building-the-preloader-and-bootloader-image" title="Permalink to this heading"></a></h4>
 <p>This flow applies starting with release <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/" target="_blank">2021_R1</a> /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
 of this page on wiki
@@ -995,7 +997,7 @@ named <code class="docutils literal notranslate"><span class="pre">extlinux</spa
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="configuring-the-sd-card">
-<h4>Configuring the SD Card<a class="headerlink" href="#configuring-the-sd-card" title="Link to this heading"></a></h4>
+<h4>Configuring the SD Card<a class="headerlink" href="#configuring-the-sd-card" title="Permalink to this heading"></a></h4>
 <p>Below are the commands to create the preloader and bootloader partition using
 the Kuiper Linux image as a starting point.
 Please check every command before running, especially configuring target
@@ -1164,13 +1166,13 @@ sdz           8:48  1   29.1G  0 disk
 <div class="clear-left"></div></div></div></section>
 </section>
 <section id="arradio-terasic-c5-soc">
-<span id="build-intel-boot-image-c5soc"></span><h3>ARRADIO/Terasic C5 SoC<a class="headerlink" href="#arradio-terasic-c5-soc" title="Link to this heading"></a></h3>
+<span id="build-intel-boot-image-c5soc"></span><h3>ARRADIO/Terasic C5 SoC<a class="headerlink" href="#arradio-terasic-c5-soc" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/arradio/c5soc" target="_blank">projects/arradio/c5soc</a></p></li>
 <li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts" target="_blank">arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts</a></p></li>
 </ul>
 <section id="id1">
-<h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
 <p><strong>Linux/Cygwin/WSL</strong></p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
@@ -1228,7 +1230,7 @@ sdz           8:48  1   29.1G  0 disk
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="id2">
-<h4>Building the Hardware Design<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<h4>Building the Hardware Design<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
 <p>Clone the HDL repository, then build the project:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
@@ -1275,7 +1277,7 @@ and always confirm with <code class="docutils literal notranslate"><span class="
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="id3">
-<h4>Building the Preloader and Bootloader Image<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<h4>Building the Preloader and Bootloader Image<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
 <p>This flow applies starting with release <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/" target="_blank">2021_R1</a> /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
 of this page on wiki
@@ -1423,7 +1425,7 @@ named <code class="docutils literal notranslate"><span class="pre">extlinux</spa
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="jumper-setup">
-<h4>Jumper setup<a class="headerlink" href="#jumper-setup" title="Link to this heading"></a></h4>
+<h4>Jumper setup<a class="headerlink" href="#jumper-setup" title="Permalink to this heading"></a></h4>
 <p>Here is the jumper configuration for ARRADIO/C5SoC to boot the image from the
 SD Card:</p>
 <div class="table-wrapper colwidths-given docutils container">
@@ -1477,7 +1479,7 @@ SD Card:</p>
 <p>And <strong>set JP2 to 2.5V or 1.8V</strong>.</p>
 </section>
 <section id="id4">
-<h4>Configuring the SD Card<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<h4>Configuring the SD Card<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
 <p>Below are the commands to create the preloader and bootloader partition using
 the Kuiper Linux image as a starting point.
 Please check every command before running, especially configuring target
@@ -1646,13 +1648,13 @@ sdz           8:48  1   29.1G  0 disk
 <div class="clear-left"></div></div></div></section>
 </section>
 <section id="cn0540-de10nano">
-<span id="build-intel-boot-image-de10nano"></span><h3>CN0540/DE10Nano<a class="headerlink" href="#cn0540-de10nano" title="Link to this heading"></a></h3>
+<span id="build-intel-boot-image-de10nano"></span><h3>CN0540/DE10Nano<a class="headerlink" href="#cn0540-de10nano" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0540/de10nano" target="_blank">projects/cn0540/de10nano</a></p></li>
 <li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts" target="_blank">arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts</a></p></li>
 </ul>
 <section id="id5">
-<h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h4>
 <p><strong>Linux/Cygwin/WSL</strong></p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
@@ -1710,7 +1712,7 @@ sdz           8:48  1   29.1G  0 disk
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="id6">
-<h4>Building the Hardware Design<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<h4>Building the Hardware Design<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h4>
 <p>Clone the HDL repository, then build the project:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
@@ -1757,7 +1759,7 @@ and always confirm with <code class="docutils literal notranslate"><span class="
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="id7">
-<h4>Building the Preloader and Bootloader Image<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<h4>Building the Preloader and Bootloader Image<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h4>
 <p>This flow applies starting with release <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/" target="_blank">2021_R1</a> /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
 of this page on wiki
@@ -1905,7 +1907,7 @@ named <code class="docutils literal notranslate"><span class="pre">extlinux</spa
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="id8">
-<h4>Configuring the SD Card<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<h4>Configuring the SD Card<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h4>
 <p>Below is the commands to create the preloader and bootloader partition using
 the Kuiper Linux image as a starting point.
 Please check every command before running, especially configuring target
@@ -2080,13 +2082,13 @@ sdz           8:48  1   29.1G  0 disk
 <div class="clear-left"></div></div></div></section>
 </section>
 <section id="ad9081-agilex-7">
-<span id="build-intel-boot-image-fm87"></span><h3>AD9081/Agilex 7<a class="headerlink" href="#ad9081-agilex-7" title="Link to this heading"></a></h3>
+<span id="build-intel-boot-image-fm87"></span><h3>AD9081/Agilex 7<a class="headerlink" href="#ad9081-agilex-7" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/fm87" target="_blank">projects/ad9081_fmca_ebz/fm87</a></p></li>
 <li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts" target="_blank">../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts</a></p></li>
 </ul>
 <section id="get-aarch64-none-linux-gnu-and-set-cross-compile-and-arch-variables">
-<h4>Get aarch64-none-linux-gnu and set CROSS_COMPILE and ARCH variables<a class="headerlink" href="#get-aarch64-none-linux-gnu-and-set-cross-compile-and-arch-variables" title="Link to this heading"></a></h4>
+<h4>Get aarch64-none-linux-gnu and set CROSS_COMPILE and ARCH variables<a class="headerlink" href="#get-aarch64-none-linux-gnu-and-set-cross-compile-and-arch-variables" title="Permalink to this heading"></a></h4>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
@@ -2131,7 +2133,7 @@ sdz           8:48  1   29.1G  0 disk
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="id9">
-<h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h4>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
@@ -2170,7 +2172,7 @@ sdz           8:48  1   29.1G  0 disk
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="build-the-arm-trusted-firmware">
-<h4>Build the ARM Trusted Firmware<a class="headerlink" href="#build-the-arm-trusted-firmware" title="Link to this heading"></a></h4>
+<h4>Build the ARM Trusted Firmware<a class="headerlink" href="#build-the-arm-trusted-firmware" title="Permalink to this heading"></a></h4>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
@@ -2197,7 +2199,7 @@ sdz           8:48  1   29.1G  0 disk
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="build-u-boot">
-<h4>Build U-Boot<a class="headerlink" href="#build-u-boot" title="Link to this heading"></a></h4>
+<h4>Build U-Boot<a class="headerlink" href="#build-u-boot" title="Permalink to this heading"></a></h4>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
@@ -2272,7 +2274,7 @@ sdz           8:48  1   29.1G  0 disk
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="id10">
-<h4>Building the Hardware Design<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<h4>Building the Hardware Design<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h4>
 <p>Clone the HDL repository, then build the project:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
@@ -2311,7 +2313,7 @@ and a Jtag Indirect Configuration (.jic) file.</p>
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="id11">
-<h4>Configuring the SD Card<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<h4>Configuring the SD Card<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h4>
 <p>Below are the commands to create the preloader and bootloader partition using
 the Kuiper Linux image as a starting point.
 Please check every command before running, especially configuring target
@@ -2425,7 +2427,7 @@ sdz           8:48  1   29.1G  0 disk
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="programming-steps">
-<h4>Programming steps<a class="headerlink" href="#programming-steps" title="Link to this heading"></a></h4>
+<h4>Programming steps<a class="headerlink" href="#programming-steps" title="Permalink to this heading"></a></h4>
 <ul class="simple">
 <li><p>Set <strong>S9</strong> to JTAG</p></li>
 <li><p>Power on the FPGA</p></li>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -121,7 +121,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../../index.html">
       <img class="only-light" src="../../../_static/HDL_logo_cropped.svg"/>
@@ -286,6 +286,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -365,6 +366,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -385,9 +387,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="versal-adaptive-soc-transceiver-subsystem">
-<span id="versal-transceiver-subsystem"></span><h1>Versal Adaptive SoC Transceiver Subsystem<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem" title="Link to this heading"></a></h1>
+<span id="versal-transceiver-subsystem"></span><h1>Versal Adaptive SoC Transceiver Subsystem<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem" title="Permalink to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The Versal Transceiver Subsystem can be used to configure the GTY and GTYP for
 Versal ACAP devices. In general, across all reference designs, the gigabit
 transceivers are configured specifically to the Lane rate of the HDL build.
@@ -403,7 +405,7 @@ configuration for JESD204B/C interfaces on Versal devices.</p>
 </div>
 </section>
 <section id="versal-acap-transceiver-architecture">
-<h2>Versal ACAP Transceiver Architecture<a class="headerlink" href="#versal-acap-transceiver-architecture" title="Link to this heading"></a></h2>
+<h2>Versal ACAP Transceiver Architecture<a class="headerlink" href="#versal-acap-transceiver-architecture" title="Permalink to this heading"></a></h2>
 <p>Versal ACAP devices feature advanced GTY and GTYP transceivers that support:</p>
 <ul class="simple">
 <li><p>Lane rates from 1.2 Gb/s up to 28.21 Gb/s (GTY) and 32.0 Gb/s (GTYP)</p></li>
@@ -412,7 +414,7 @@ configuration for JESD204B/C interfaces on Versal devices.</p>
 <li><p>Native JESD204B and JESD204C protocol support</p></li>
 </ul>
 <section id="required-features-by-the-jesd204b">
-<h3>Required features by the JESD204B<a class="headerlink" href="#required-features-by-the-jesd204b" title="Link to this heading"></a></h3>
+<h3>Required features by the JESD204B<a class="headerlink" href="#required-features-by-the-jesd204b" title="Permalink to this heading"></a></h3>
 <p>The following features are required for a JESD204B interface:</p>
 <ul class="simple">
 <li><p>LCPLL for clock generation</p></li>
@@ -424,7 +426,7 @@ configuration for JESD204B/C interfaces on Versal devices.</p>
 </ul>
 </section>
 <section id="required-features-by-the-jesd204c">
-<h3>Required features by the JESD204C<a class="headerlink" href="#required-features-by-the-jesd204c" title="Link to this heading"></a></h3>
+<h3>Required features by the JESD204C<a class="headerlink" href="#required-features-by-the-jesd204c" title="Permalink to this heading"></a></h3>
 <p>The following features are required for a JESD204C interface:</p>
 <ul class="simple">
 <li><p>LCPLL for clock generation</p></li>
@@ -435,7 +437,7 @@ configuration for JESD204B/C interfaces on Versal devices.</p>
 </ul>
 </section>
 <section id="lane-rate-and-refclk-selection">
-<span id="id1"></span><h3>Lane Rate and RefClk Selection<a class="headerlink" href="#lane-rate-and-refclk-selection" title="Link to this heading"></a></h3>
+<span id="id1"></span><h3>Lane Rate and RefClk Selection<a class="headerlink" href="#lane-rate-and-refclk-selection" title="Permalink to this heading"></a></h3>
 <p>In our reference designs, we usually use the following relationship between
 the Lane rate and the reference clock:</p>
 <ul class="simple">
@@ -445,7 +447,7 @@ the Lane rate and the reference clock:</p>
 </section>
 </section>
 <section id="versal-adaptive-soc-transceiver-subsystem-wrapper">
-<h2>Versal Adaptive SoC Transceiver Subsystem wrapper<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-wrapper" title="Link to this heading"></a></h2>
+<h2>Versal Adaptive SoC Transceiver Subsystem wrapper<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-wrapper" title="Permalink to this heading"></a></h2>
 <p>In our reference designs, we use a
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/scripts/versal_xcvr_subsystem.tcl" target="_blank">versal_xcvr_subsystem.tcl</a>
 as a wrapper to instantiate and configure the Versal Transceiver Subsystem IP
@@ -475,7 +477,7 @@ core.</p>
 </li>
 </ul>
 <section id="versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-transmit-peripheral-adapter">
-<h3>Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Transmit Peripheral adapter<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-transmit-peripheral-adapter" title="Link to this heading"></a></h3>
+<h3>Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Transmit Peripheral adapter<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-transmit-peripheral-adapter" title="Permalink to this heading"></a></h3>
 <p>In order to connect the Versal Transceiver Subsystem to the
 <a class="reference internal" href="../axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a>, we provide a
 Link-to-Phy adapter.</p>
@@ -501,7 +503,7 @@ TX Link-to-Phy adapter for Versal.</p></td>
 </div>
 </section>
 <section id="versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-receive-peripheral-adapter">
-<h3>Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Receive Peripheral adapter<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-receive-peripheral-adapter" title="Link to this heading"></a></h3>
+<h3>Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Receive Peripheral adapter<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-receive-peripheral-adapter" title="Permalink to this heading"></a></h3>
 <p>In order to connect the Versal Transceiver Subsystem to the
 <a class="reference internal" href="../axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a>, we provide a
 Phy-to-Link adapter.</p>
@@ -531,7 +533,7 @@ RX Link-to-Phy adapter for Versal.</p></td>
 </section>
 </section>
 <section id="example-vivado-block-design-for-a-jesd204c-interface-on-vck190">
-<h2>Example Vivado block design for a JESD204C interface on VCK190<a class="headerlink" href="#example-vivado-block-design-for-a-jesd204c-interface-on-vck190" title="Link to this heading"></a></h2>
+<h2>Example Vivado block design for a JESD204C interface on VCK190<a class="headerlink" href="#example-vivado-block-design-for-a-jesd204c-interface-on-vck190" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -564,10 +566,9 @@ RX Link-to-Phy adapter for Versal.</p></td>
 </tbody>
 </table>
 </div>
-<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/jesd204/versal_transceiver_subsystem/block_diagram.png"><img alt="JESD204B/C Physical Layer" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/jesd204/versal_transceiver_subsystem/block_diagram.png" width="1000" />
-</a>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/jesd204/versal_transceiver_subsystem/block_diagram.png"><img alt="JESD204B/C Physical Layer" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/main/docs/library/jesd204/versal_transceiver_subsystem/block_diagram.png" style="width: 1000px;" /></a>
 <section id="signal-description">
-<h3>Signal Description<a class="headerlink" href="#signal-description" title="Link to this heading"></a></h3>
+<h3>Signal Description<a class="headerlink" href="#signal-description" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -622,7 +623,7 @@ in this example)</p></td>
 </section>
 </section>
 <section id="example-usage-of-the-versal-transceiver-subsystem-wrapper-in-a-jesd204b-c-design">
-<h2>Example usage of the Versal Transceiver Subsystem wrapper in a JESD204B/C design<a class="headerlink" href="#example-usage-of-the-versal-transceiver-subsystem-wrapper-in-a-jesd204b-c-design" title="Link to this heading"></a></h2>
+<h2>Example usage of the Versal Transceiver Subsystem wrapper in a JESD204B/C design<a class="headerlink" href="#example-usage-of-the-versal-transceiver-subsystem-wrapper-in-a-jesd204b-c-design" title="Permalink to this heading"></a></h2>
 <p>One example of usage of the Versal Transceiver Subsystem wrapper can be found
 in the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/" target="_blank">ad9081_fmca_ebz</a>

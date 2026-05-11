@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -108,7 +108,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -273,6 +273,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -352,6 +353,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -372,7 +374,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="releases">
-<span id="id1"></span><h1>Releases<a class="headerlink" href="#releases" title="Link to this heading"></a></h1>
+<span id="id1"></span><h1>Releases<a class="headerlink" href="#releases" title="Permalink to this heading"></a></h1>
 <p>The HDL is released as git branches bi-annually. The release branches
 are created first and then tested before being made official. That is,
 the existence of a branch does not mean it is a fully tested release.</p>
@@ -384,7 +386,7 @@ along with the ADI library cores that are used.</p>
 one must assume these are <strong>not</strong> tested, therefore <strong>not</strong> supported by
 this release.</p>
 <section id="porting-a-release-branch-to-another-tool-version">
-<h2>Porting a release branch to another Tool version<a class="headerlink" href="#porting-a-release-branch-to-another-tool-version" title="Link to this heading"></a></h2>
+<h2>Porting a release branch to another Tool version<a class="headerlink" href="#porting-a-release-branch-to-another-tool-version" title="Permalink to this heading"></a></h2>
 <p>It is possible to port a release branch to another tool version, though
 not recommended. The ADI libraries should work across different versions
 of the tools, but the projects may not. The issues are most likely with
@@ -413,7 +415,7 @@ cases, it should work without much effort. If it doesn’t, do an
 incremental update and debug accordingly.</p>
 </section>
 <section id="use-already-built-files">
-<h2>Use already built files<a class="headerlink" href="#use-already-built-files" title="Link to this heading"></a></h2>
+<h2>Use already built files<a class="headerlink" href="#use-already-built-files" title="Permalink to this heading"></a></h2>
 <p>You can download already built files and use them as they are.</p>
 <p>The BOOT partition files for the main branches can be found in the link inside
 <a class="icon link reference external" href="https://swdownloads.analog.com/cse/boot_partition_files/main/latest_boot.txt" target="_blank">this document</a>.
@@ -428,7 +430,7 @@ are not tested in hardware!</p>
 </div>
 </section>
 <section id="release-branches">
-<h2>Release branches<a class="headerlink" href="#release-branches" title="Link to this heading"></a></h2>
+<h2>Release branches<a class="headerlink" href="#release-branches" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -580,7 +582,7 @@ are not tested in hardware!</p>
 </div>
 </section>
 <section id="about-the-tools-we-use">
-<h2>About the tools we use<a class="headerlink" href="#about-the-tools-we-use" title="Link to this heading"></a></h2>
+<h2>About the tools we use<a class="headerlink" href="#about-the-tools-we-use" title="Permalink to this heading"></a></h2>
 <p>When Intel or AMD have a new release, we usually follow them and update our
 tools in a timely manner.</p>
 <p>Changing the version of tool used on a branch is done by updating the

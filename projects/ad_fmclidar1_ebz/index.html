@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -130,7 +130,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -295,6 +295,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -374,6 +375,7 @@ Content on this topic
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -394,7 +396,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="ad-fmclidar1-ebz-hdl-project-obsolete">
-<span id="ad-fmclidar1-ebz"></span><h1>AD-FMCLIDAR1-EBZ HDL project (OBSOLETE)<a class="headerlink" href="#ad-fmclidar1-ebz-hdl-project-obsolete" title="Link to this heading"></a></h1>
+<span id="ad-fmclidar1-ebz"></span><h1>AD-FMCLIDAR1-EBZ HDL project (OBSOLETE)<a class="headerlink" href="#ad-fmclidar1-ebz-hdl-project-obsolete" title="Permalink to this heading"></a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The support for <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r1/projects/ad_fmclidar1_ebz" target="_blank">AD-FMCLIDAR1-EBZ</a>
@@ -402,7 +404,7 @@ HDL project has been discontinued, the latest release branch where it can be fou
 is <code class="docutils literal notranslate"><span class="pre">hdl_2019_r1</span></code>. This page is left for legacy purposes only.</p>
 </div>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/AD-FMCLIDAR1-EBZ" target="_blank">AD-FMCLIDAR1-EBZ</a> is a prototyping platform for
 LiDAR applications that can be used on FPGA development boards enabled with FMC
 HPC connector and JESD204B support capability. It offers developers a
@@ -412,13 +414,13 @@ algorithms for a broad range of applications.</p>
 Board, and the AFE Receiver Board.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD-FMCLIDAR1-EBZ" target="_blank">AD-FMCLIDAR1-EBZ</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a> on FMC HPC</p></li>
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a> on on FMC HPC0</p></li>
@@ -437,24 +439,23 @@ can be accessed by the fabric.</p>
 </div>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The main scope of the HDL design is to provide all the required digital
 interfaces for the data acquisition board of the prototyping system.</p>
 <p>The following block diagram presents the simplified system architecture:</p>
-<a class="reference internal image-reference" href="../../_images/ad_fmlidar1_ebz.svg"><img alt="AD-FMCLIDAR1-EBZ block diagram" class="align-center" src="../../_images/ad_fmlidar1_ebz.svg" width="800" />
-</a>
+<a class="reference internal image-reference" href="../../_images/ad_fmlidar1_ebz.svg"><img alt="AD-FMCLIDAR1-EBZ block diagram" class="align-center" src="../../_images/ad_fmlidar1_ebz.svg" width="800" /></a>
 </section>
 <section id="axi-laser-driver-ip">
-<h3>AXI Laser Driver IP<a class="headerlink" href="#axi-laser-driver-ip" title="Link to this heading"></a></h3>
+<h3>AXI Laser Driver IP<a class="headerlink" href="#axi-laser-driver-ip" title="Permalink to this heading"></a></h3>
 <p>The axi_laser_driver IP is responsible to generate a narrow pulse for the laser
 driver circuit, to control the TIA channel selection on the analog front end (AFE)
 board, and to synchronize the data acquisition to the generated pulses.</p>
 <p>More information about the IP can be found at <a class="reference internal" href="../../library/axi_laser_driver/index.html#axi-laser-driver"><span class="std std-ref">AXI Laser Driver</span></a>.</p>
 </section>
 <section id="control-interfaces">
-<h3>Control interfaces<a class="headerlink" href="#control-interfaces" title="Link to this heading"></a></h3>
+<h3>Control interfaces<a class="headerlink" href="#control-interfaces" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -525,7 +526,7 @@ board, and to synchronize the data acquisition to the generated pulses.</p>
 </div>
 </section>
 <section id="jesd204b-interface">
-<h3>JESD204B interface<a class="headerlink" href="#jesd204b-interface" title="Link to this heading"></a></h3>
+<h3>JESD204B interface<a class="headerlink" href="#jesd204b-interface" title="Permalink to this heading"></a></h3>
 <p>The JESD204B interface runs in Subclass 1 mode to ensure the deterministic
 latency of the link. The following tables are summarizing the JESD204B important
 configuration parameter and attributes.</p>
@@ -598,7 +599,7 @@ configuration parameter and attributes.</p>
 </div>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -700,7 +701,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -751,7 +752,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -833,7 +834,7 @@ Arria 10</p></th>
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -927,7 +928,7 @@ Arria 10</p></th>
 </div>
 </section>
 <section id="known-issues">
-<h3>Known issues<a class="headerlink" href="#known-issues" title="Link to this heading"></a></h3>
+<h3>Known issues<a class="headerlink" href="#known-issues" title="Permalink to this heading"></a></h3>
 <p>If the Lidar board do not power up.</p>
 <p><strong>Problem:</strong> The Lidar boards do not power up because the PG_C2M pull-up
 resistor value on the carrier (Arria 10) is too high.</p>
@@ -939,7 +940,7 @@ This problem only affects Lidar Rev B.</p>
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributed the bit/elf files of this project as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>
@@ -974,9 +975,9 @@ command. You can also go to the other folder for different carriers.</p>
 guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <section id="parts">
-<h3>Parts<a class="headerlink" href="#parts" title="Link to this heading"></a></h3>
+<h3>Parts<a class="headerlink" href="#parts" title="Permalink to this heading"></a></h3>
 <p>Laser Board</p>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADN4691E" target="_blank">3.3 V, 200 Mbps, Half-Duplex, High Speed M-LVDS Transceiver with Type 1 Receiver</a></p></li>
@@ -1001,19 +1002,19 @@ guide.</p>
 </ul>
 </section>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading"></a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmclidar1-ebz" target="_blank">[Wiki] AD-FMCLIDAR1-EBZ</a></p></li>
 </ul>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets: <a class="icon adi reference external" href="https://www.analog.com/AD-FMCLIDAR1-EBZ" target="_blank">AD-FMCLIDAR1-EBZ</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r1/projects/ad_fmclidar1_ebz" target="_blank">AD-FMCLIDAR1-EBZ HDL project source code</a></p></li>
 </ul>
@@ -1080,7 +1081,7 @@ guide.</p>
 </div>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm/boot/dts/socfpga_arria10_socdk_fmclidar1.dts" target="_blank">AD-FMCLIDAR1-EBZ/A10SoC Linux device tree</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2019_R2/arch/arm/boot/dts/zynq-zc706-adv7511-fmclidar1.dts" target="_blank">AD-FMCLIDAR1-EBZ/ZC706 Linux device tree</a></p></li>
@@ -1089,13 +1090,13 @@ guide.</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

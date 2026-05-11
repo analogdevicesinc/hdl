@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -108,7 +108,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -273,6 +273,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -352,6 +353,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -372,7 +374,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="build-the-boot-image-boot-bin">
-<span id="build-boot-bin"></span><h1>Build the boot image BOOT.BIN<a class="headerlink" href="#build-the-boot-image-boot-bin" title="Link to this heading"></a></h1>
+<span id="build-boot-bin"></span><h1>Build the boot image BOOT.BIN<a class="headerlink" href="#build-the-boot-image-boot-bin" title="Permalink to this heading"></a></h1>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p><span class="red">This flow is not supported by us in Cygwin!</span> Use Linux terminal or
@@ -395,7 +397,7 @@ the <code class="docutils literal notranslate"><span class="pre">$PATH</span></c
 <p>As prerequisites, you need to have <code class="docutils literal notranslate"><span class="pre">xlsclients</span></code> from the <code class="docutils literal notranslate"><span class="pre">x11-utils</span></code> package
 installed in your Linux/WSL system.</p>
 <section id="for-zynq">
-<span id="build-boot-bin-zynq"></span><h2>For Zynq<a class="headerlink" href="#for-zynq" title="Link to this heading"></a></h2>
+<span id="build-boot-bin-zynq"></span><h2>For Zynq<a class="headerlink" href="#for-zynq" title="Permalink to this heading"></a></h2>
 <p>This section applies to the Zynq-based carriers from
 <a class="reference internal" href="architecture.html#architecture-amd-platforms"><span class="std std-ref">our list</span></a>.</p>
 <p>Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
@@ -416,7 +418,7 @@ which needs to be downloaded on your computer.</p>
 <p>The u-boot can be taken from the <em>bootgen_sysfiles.tgz</em> archive located in
 the project folder of the ADI Kuiper Linux image from the SD card.</p>
 <p>Keep in mind that <strong>the u-boot is FPGA-specific</strong>!</p>
-<p>See this <a class="icon link reference external" href="https://analogdevicesinc.github.io/kuiper/quick-start.html#quick-start" target="_blank" title="(in Kuiper latest)"><span class="xref std std-ref">tutorial</span></a> for
+<p>See this <a class="icon link reference external" href="https://analogdevicesinc.github.io/kuiper/quick-start.html#quick-start" target="_blank" title="(in Kuiper vlatest)"><span class="xref std std-ref">tutorial</span></a> for
 instructions on how to obtain the ADI Kuiper image and use it.</p>
 </div>
 <p>If you didn’t use <code class="docutils literal notranslate"><span class="pre">make</span></code> parameters when building the project, then
@@ -452,7 +454,7 @@ parameters were used
 <em>hdl/projects/$ADI_PART/$CARRIER/$PARAM1_PARAM2/output_boot_bin</em>.</p>
 </section>
 <section id="for-zynq-ultrascale-mp">
-<span id="build-boot-bin-zynqmp"></span><h2>For Zynq UltraScale+ MP<a class="headerlink" href="#for-zynq-ultrascale-mp" title="Link to this heading"></a></h2>
+<span id="build-boot-bin-zynqmp"></span><h2>For Zynq UltraScale+ MP<a class="headerlink" href="#for-zynq-ultrascale-mp" title="Permalink to this heading"></a></h2>
 <p>This section applies to the ZynqMP-based carriers (<a class="icon link reference external" href="https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-ultrascale-plus-mpsoc.html" target="_blank">Zynq UltraScale+ MPSoC</a>),
 usually <a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a> in our systems, but not limited to this one only.</p>
 <p>Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
@@ -475,7 +477,7 @@ which needs to be downloaded on your computer.</p>
 archive located in the project folder of the ADI Kuiper Linux image from
 the SD card.</p>
 <p>Keep in mind that <strong>the u-boot is FPGA-specific</strong>!</p>
-<p>See this <a class="icon link reference external" href="https://analogdevicesinc.github.io/kuiper/quick-start.html#quick-start" target="_blank" title="(in Kuiper latest)"><span class="xref std std-ref">tutorial</span></a> for
+<p>See this <a class="icon link reference external" href="https://analogdevicesinc.github.io/kuiper/quick-start.html#quick-start" target="_blank" title="(in Kuiper vlatest)"><span class="xref std std-ref">tutorial</span></a> for
 instructions on how to obtain the ADI Kuiper image and use it.</p>
 </div>
 <p>If you didn’t use <code class="docutils literal notranslate"><span class="pre">make</span></code> parameters when building the project, then
@@ -511,7 +513,7 @@ parameters were used
 <em>hdl/projects/$ADI_PART/$CARRIER/$PARAM1_PARAM2/output_boot_bin</em>.</p>
 </section>
 <section id="for-versal">
-<span id="build-boot-bin-versal"></span><h2>For Versal<a class="headerlink" href="#for-versal" title="Link to this heading"></a></h2>
+<span id="build-boot-bin-versal"></span><h2>For Versal<a class="headerlink" href="#for-versal" title="Permalink to this heading"></a></h2>
 <p>This section applies only to the Versal carriers: <a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a> and
 <a class="icon link reference external" href="https://www.xilinx.com/VPK180" target="_blank">VPK180</a>.</p>
 <p>Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
@@ -534,7 +536,7 @@ which needs to be downloaded on your computer.</p>
 archive located in the project folder of the ADI Kuiper Linux image from
 the SD card.</p>
 <p>Keep in mind that <strong>the u-boot is FPGA-specific</strong>!</p>
-<p>See this <a class="icon link reference external" href="https://analogdevicesinc.github.io/kuiper/quick-start.html#quick-start" target="_blank" title="(in Kuiper latest)"><span class="xref std std-ref">tutorial</span></a> for
+<p>See this <a class="icon link reference external" href="https://analogdevicesinc.github.io/kuiper/quick-start.html#quick-start" target="_blank" title="(in Kuiper vlatest)"><span class="xref std std-ref">tutorial</span></a> for
 instructions on how to obtain the ADI Kuiper image and use it.</p>
 </div>
 <p>If you didn’t use <code class="docutils literal notranslate"><span class="pre">make</span></code> parameters when building the project, then
@@ -570,7 +572,7 @@ parameters were used
 <em>hdl/projects/$ADI_PART/$CARRIER/$PARAM1_PARAM2/output_boot_bin</em>.</p>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <p>(NOT RECOMMENDED) If you’re in for the long story, check out the
 <a class="icon link reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/overview" target="_blank">AMD Xilinx wiki</a> pages.</p>
 <div><div class="collapsible docutils container">

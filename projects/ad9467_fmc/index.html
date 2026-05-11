@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -136,7 +136,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -301,6 +301,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -380,6 +381,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -400,9 +402,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="ad9467-fmc-hdl-project">
-<span id="ad9467-fmc"></span><h1>AD9467-FMC HDL project<a class="headerlink" href="#ad9467-fmc-hdl-project" title="Link to this heading"></a></h1>
+<span id="ad9467-fmc"></span><h1>AD9467-FMC HDL project<a class="headerlink" href="#ad9467-fmc-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/AD9467" target="_blank">AD9467</a> chip used on <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9467" target="_blank">EVAL-AD9467</a> is a 16-bit, monolithic, IF
 sampling analog-to-digital converter (ADC) with a conversion rate of up
 to 250 MSPS. This reference design includes a data capture interface and
@@ -413,19 +415,19 @@ of the ADC. This can be done by programming the <a class="icon adi reference ext
 and/or setting up the <a class="icon adi reference external" href="https://www.analog.com/ADL5565" target="_blank">ADL5565</a> differential amplifier, respectively.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9467" target="_blank">AD9467-FMC-250EBZ</a> also referred to as EVAL-AD9467</p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9467" target="_blank">AD9467</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/KC705" target="_blank">KC705</a> LPC slot *</p></li>
 <li><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></li>
@@ -440,7 +442,7 @@ and/or setting up the <a class="icon adi reference external" href="https://www.a
 </div>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <p>The PN9/PN23 sequences are not compatible with O.150. Please use the
 equations given in the reference design. They follow the polynomial
 equations as in O.150, but ONLY the MSB is inverted.</p>
@@ -449,7 +451,7 @@ and second byte (D14:D0) on the falling edge of DCO clock. However, in
 certain frequencies the captured data (from IDDR) seems to be reverse.
 If that occurs, try setting the “capture select” bit (register 0x0A, bit to 0).</p>
 <section id="vadj-setting">
-<h3>VADJ setting<a class="headerlink" href="#vadj-setting" title="Link to this heading"></a></h3>
+<h3>VADJ setting<a class="headerlink" href="#vadj-setting" title="Permalink to this heading"></a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>For ZedBoard, the VADJ must be set to 2.5V.</p>
@@ -460,18 +462,16 @@ the change in VADJ.</p>
 </div>
 </section>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <section id="project-block-diagram">
-<h4>Project block diagram<a class="headerlink" href="#project-block-diagram" title="Link to this heading"></a></h4>
+<h4>Project block diagram<a class="headerlink" href="#project-block-diagram" title="Permalink to this heading"></a></h4>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad9467_fmc_block_diagram.svg"><img alt="AD9467-FMC/ZedBoard HDL block diagram" class="align-center" src="../../_images/ad9467_fmc_block_diagram.svg" width="800" />
-</a>
+<a class="reference internal image-reference" href="../../_images/ad9467_fmc_block_diagram.svg"><img alt="AD9467-FMC/ZedBoard HDL block diagram" class="align-center" src="../../_images/ad9467_fmc_block_diagram.svg" width="800" /></a>
 </section>
 <section id="ad9467-fmc-card-block-diagram">
-<h4>AD9467 FMC card block diagram<a class="headerlink" href="#ad9467-fmc-card-block-diagram" title="Link to this heading"></a></h4>
+<h4>AD9467 FMC card block diagram<a class="headerlink" href="#ad9467-fmc-card-block-diagram" title="Permalink to this heading"></a></h4>
 <p>The block diagram of the AD9467-FMC evaluation board is depicted below:</p>
-<a class="reference internal image-reference" href="../../_images/ad9467_fmc_card.svg"><img alt="AD9467-FMC card diagram" class="align-center" src="../../_images/ad9467_fmc_card.svg" width="600" />
-</a>
+<a class="reference internal image-reference" href="../../_images/ad9467_fmc_card.svg"><img alt="AD9467-FMC card diagram" class="align-center" src="../../_images/ad9467_fmc_card.svg" width="600" /></a>
 <p>The reference design is built on an ARM/Microblaze based system tailored
 for Linux.</p>
 <p>Through an SPI interface, the software can access the <a class="icon adi reference external" href="https://www.analog.com/AD9467" target="_blank">AD9467</a> and the
@@ -484,11 +484,11 @@ of capture (overflow, over the range) are reported back to the software.</p>
 </section>
 </section>
 <section id="clock-selection">
-<h3>Clock selection<a class="headerlink" href="#clock-selection" title="Link to this heading"></a></h3>
+<h3>Clock selection<a class="headerlink" href="#clock-selection" title="Permalink to this heading"></a></h3>
 <p>The board provides 3 possible clock paths for clocking the <a class="icon adi reference external" href="https://www.analog.com/AD9467" target="_blank">AD9467</a>
 (some of them require hardware changes), as follows:</p>
 <section id="default-clock-input">
-<h4>Default clock input<a class="headerlink" href="#default-clock-input" title="Link to this heading"></a></h4>
+<h4>Default clock input<a class="headerlink" href="#default-clock-input" title="Permalink to this heading"></a></h4>
 <p>The <strong>default clock input</strong> circuitry is derived from a simple
 transformer-coupled circuit using a high bandwidth 1:1 impedance ratio
 transformer (T201) that adds a very low amount of jitter to the clock
@@ -498,7 +498,7 @@ converts the single-ended input to a differential signal that is
 clipped before entering the ADC clock inputs.</p>
 </section>
 <section id="crystal-oscillator">
-<h4>Crystal oscillator<a class="headerlink" href="#crystal-oscillator" title="Link to this heading"></a></h4>
+<h4>Crystal oscillator<a class="headerlink" href="#crystal-oscillator" title="Permalink to this heading"></a></h4>
 <p>The evaluation board can be set up to be clocked from the <strong>crystal
 oscillator</strong>, Y200. This oscillator is a low phase noise oscillator from
 Vectron (VCC6-QCD-250M000).</p>
@@ -509,7 +509,7 @@ Vectron (VCC6-QCD-250M000).</p>
 <p>Jumper P200 is used to disable the oscillator from running.</p>
 </section>
 <section id="clock-generator-ad9517">
-<h4>Clock generator AD9517<a class="headerlink" href="#clock-generator-ad9517" title="Link to this heading"></a></h4>
+<h4>Clock generator AD9517<a class="headerlink" href="#clock-generator-ad9517" title="Permalink to this heading"></a></h4>
 <p>A <strong>differential LVPECL or LVDS clock driver</strong> can also be used to clock
 the ADC input using the AD9517.</p>
 <ul class="simple">
@@ -529,7 +529,7 @@ on the board to select the desired clock path.</p>
 </section>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -554,7 +554,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
 <p>Depending on the carrier, the SPI connections are as follows:</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -592,7 +592,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -619,7 +619,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -645,15 +645,15 @@ location and run the make command by typing in your command prompt:</p>
 <div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading"></a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/ad9467" target="_blank">AD9467-FMC Quick Start Guide</a></p></li>
 </ul>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9467" target="_blank">AD9467</a></p></li>
 <li><p>The schematic of the new board can be found
@@ -663,7 +663,7 @@ location and run the make command by typing in your command prompt:</p>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9467_fmc" target="_blank">AD9467_FMC HDL project source code</a></p></li>
 </ul>
@@ -728,7 +728,7 @@ location and run the make command by typing in your command prompt:</p>
 </div>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/2023_R2/arch/microblaze/boot/dts/kc705_ad9467_fmc.dts" target="_blank">AD9467-FMC KC705 Linux device tree (2023_R2 release)</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9467-fmc-250ebz.dts" target="_blank">AD9467-FMC ZedBoard Linux device tree zynq-zed-adv7511-ad9467-fmc-250ebz.dts</a></p></li>
@@ -742,13 +742,13 @@ location and run the make command by typing in your command prompt:</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

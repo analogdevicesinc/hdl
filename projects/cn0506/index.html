@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -131,7 +131,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -296,6 +296,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -375,6 +376,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -395,9 +397,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="cn0506-hdl-project">
-<span id="cn0506"></span><h1>CN0506 HDL project<a class="headerlink" href="#cn0506-hdl-project" title="Link to this heading"></a></h1>
+<span id="cn0506"></span><h1>CN0506 HDL project<a class="headerlink" href="#cn0506-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/CN0506" target="_blank">CN0506</a> is a dual channel, low latency, low power Ethernet PHY card supporting
 speeds of 10/100/1000 Mbps for Industrial Ethernet applications. The circuit consists of two
 indivudual, independent 10/100/1000Mb <a class="icon adi reference external" href="https://www.analog.com/ADIN1300" target="_blank">ADIN1300</a> PHYs, each with an energy efficient
@@ -412,13 +414,13 @@ The solution supports cable lengths up to 150 meters at gigabit speeds and up to
 at 100 Mbps or 10 Mbps.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/design-center/reference-designs/circuits-from-the-lab/cn0506" target="_blank">EVAL-CN0506</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADIN1300" target="_blank">ADIN1300</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/4316fa.pdf" target="_blank">LTC4316</a></p></li>
@@ -426,7 +428,7 @@ at 100 Mbps or 10 Mbps.</p>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/arria/10/sx.html" target="_blank">A10SOC</a> on FMC_A HPC *</p></li>
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a> on FMC HPC1</p></li>
@@ -441,32 +443,29 @@ at 100 Mbps or 10 Mbps.</p>
 </div>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <p>The reference design uses <a class="reference internal" href="../../library/util_mii_to_rmii/index.html#util-mii-to-rmii"><span class="std std-ref">Util MII to RMII</span></a> converter to interface the MII
 option of the CN0506’s ethernet PHYs and Xilinx’s GMII to RGMII converter for the
 RGMII option of the kit with Xilinx’s Zynq7000 or ZynqMP SoC implementations.</p>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains for all the three MII interface types are depicted
 in the below diagrams:</p>
 <section id="cn0506-mii-interface">
-<h4>CN0506_MII interface<a class="headerlink" href="#cn0506-mii-interface" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/cn0506_mii.svg"><img alt="CN0506 MII-based block diagram" class="align-center" src="../../_images/cn0506_mii.svg" width="800" />
-</a>
+<h4>CN0506_MII interface<a class="headerlink" href="#cn0506-mii-interface" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/cn0506_mii.svg"><img alt="CN0506 MII-based block diagram" class="align-center" src="../../_images/cn0506_mii.svg" width="800" /></a>
 </section>
 <section id="cn0506-rgmii-interface">
-<h4>CN0506_RGMII interface<a class="headerlink" href="#cn0506-rgmii-interface" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/cn0506_rgmii.svg"><img alt="CN0506 RGMII-based block diagram" class="align-center" src="../../_images/cn0506_rgmii.svg" width="800" />
-</a>
+<h4>CN0506_RGMII interface<a class="headerlink" href="#cn0506-rgmii-interface" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/cn0506_rgmii.svg"><img alt="CN0506 RGMII-based block diagram" class="align-center" src="../../_images/cn0506_rgmii.svg" width="800" /></a>
 </section>
 <section id="cn0506-rmii-interface">
-<h4>CN0506_RMII interface<a class="headerlink" href="#cn0506-rmii-interface" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/cn0506_rmii.svg"><img alt="CN0506 RMII-based block diagram" class="align-center" src="../../_images/cn0506_rmii.svg" width="800" />
-</a>
+<h4>CN0506_RMII interface<a class="headerlink" href="#cn0506-rmii-interface" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/cn0506_rmii.svg"><img alt="CN0506 RMII-based block diagram" class="align-center" src="../../_images/cn0506_rmii.svg" width="800" /></a>
 </section>
 </section>
 <section id="resistor-based-setup">
-<h3>Resistor-based setup<a class="headerlink" href="#resistor-based-setup" title="Link to this heading"></a></h3>
+<h3>Resistor-based setup<a class="headerlink" href="#resistor-based-setup" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -502,7 +501,7 @@ in the below diagrams:</p>
 </div>
 </section>
 <section id="mdi-related-resistor-based-setup">
-<h3>MDI-related resistor-based setup<a class="headerlink" href="#mdi-related-resistor-based-setup" title="Link to this heading"></a></h3>
+<h3>MDI-related resistor-based setup<a class="headerlink" href="#mdi-related-resistor-based-setup" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -544,7 +543,7 @@ in the below diagrams:</p>
 </div>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -591,7 +590,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="gpio">
-<h3>GPIO<a class="headerlink" href="#gpio" title="Link to this heading"></a></h3>
+<h3>GPIO<a class="headerlink" href="#gpio" title="Permalink to this heading"></a></h3>
 <p>The Software GPIO number is calculated as follows:</p>
 <ul class="simple">
 <li><p>Zynq-7000: if PS7 EMIOs are used, then offset is 54</p></li>
@@ -719,7 +718,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -759,7 +758,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -790,16 +789,16 @@ by the configuration used:</p>
 user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/CN0506" target="_blank">CN0506</a></p></li>
 <li><p>ADIN1300 datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADIN1300" target="_blank">ADIN1300</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0506" target="_blank">CN0506 HDL project source code</a></p></li>
 </ul>
@@ -862,7 +861,7 @@ user guide.</p>
 </div>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_cn0506_mii.dts" target="_blank">CN0506 MII - A10SOC dts source code (arm32)</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_cn0506_rgmii.dts" target="_blank">CN0506 RGMII - A10SOC dts source code (arm32)</a></p></li>
@@ -880,13 +879,13 @@ user guide.</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>
