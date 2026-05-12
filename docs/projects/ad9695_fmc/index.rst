@@ -3,9 +3,6 @@
 AD9695-FMC HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`EVAL-AD9695` is a fully-featured evaluation board for the
 :adi:`AD9695`, a dual 14-bit, 1300/625MSPS analog-to-digital converter (ADC)
 featuring an on-chip buffer and a sample-and-hold circuit designed for

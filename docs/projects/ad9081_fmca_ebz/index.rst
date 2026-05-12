@@ -3,9 +3,6 @@
 AD9081/AD9082/AD9986/AD9988 HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` / :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
 reference design (also known as Single MxFE) is a processor based
 (e.g. Microblaze) embedded system.

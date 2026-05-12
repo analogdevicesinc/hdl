@@ -3,9 +3,6 @@
 AD4062-ARDZ HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 The HDL reference design for the :adi:`AD4060`, :adi:`AD4062`.
 They are versatile, 16-bit/12-bit, successive approximation register (SAR)
 analog-to-digital converters (ADCs) that enable low-power, high-density data

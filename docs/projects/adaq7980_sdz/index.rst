@@ -3,9 +3,6 @@
 ADAQ7980-SDZ HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`ADAQ7980`/:adi:`ADAQ7988` are 16-bit analog-to-digital converter
 (ADC) subsystems that integrate four common signal processing and conditioning
 blocks into a system in package (SiP) design that supports a variety of

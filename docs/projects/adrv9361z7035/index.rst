@@ -3,9 +3,6 @@
 ADRV9361Z7035 HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`ADRV9361-Z7035` is built on a portfolio of highly integrated
 System-On-Module (SOMs) based on the Xilinx Zynq-7000 All Programmable (AP) SoC.
 Starting with the :adi:`AD9361`, it is schematically & HDL similar to the

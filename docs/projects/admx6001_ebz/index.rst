@@ -3,9 +3,6 @@
 ADMX6001-EBZ HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-The :adi:`EVAL-ADMX6001-EBZ` is a reference design of a DC-coupled single
 channel 10GSPS digitizer featuring the low noise 12-bit high-speed ADC
 :adi:`AD9213` and the 20-bit precision ADC :adi:`AD4080`. The dual-path
 design achieves true low noise digitization in the broad band from DC to 5GHz.

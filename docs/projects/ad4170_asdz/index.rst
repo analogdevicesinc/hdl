@@ -3,9 +3,6 @@
 AD4170_ASDZ HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 The HDL reference design for the :adi:`AD4170-4` and :adi:`AD4190-4` provides
 a high resolution, 24-Bit, DC to 50 kHz Input Bandwidth, Multichannel,
 Low Noise Precision Sigma-Delta ADC with PGA.

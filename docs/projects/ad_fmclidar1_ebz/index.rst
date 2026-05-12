@@ -9,9 +9,6 @@ AD-FMCLIDAR1-EBZ HDL project (OBSOLETE)
    HDL project has been discontinued, the latest release branch where it can be found
    is ``hdl_2019_r1``. This page is left for legacy purposes only.
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD-FMCLIDAR1-EBZ` is a prototyping platform for
 LiDAR applications that can be used on FPGA development boards enabled with FMC
 HPC connector and JESD204B support capability. It offers developers a

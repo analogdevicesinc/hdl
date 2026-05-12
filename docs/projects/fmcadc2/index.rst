@@ -9,9 +9,6 @@ FMCADC2 HDL Project (OBSOLETE)
    has been discontinued, the latest release branch where it can be found is
    ``hdl_2021_r2``. This page is left for legacy purposes only.
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD-FMCADC2-EBZ <EVAL-AD-FMCADC2-EBZ>` is a high-speed data
 acquisition (1 ADC channel at 2500 MSPS), in an FMC form factor, which has one
 high-speed JESD204B Analog to Digital converter (:adi:`AD9625`) on it.

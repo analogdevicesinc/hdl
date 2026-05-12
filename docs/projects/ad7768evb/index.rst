@@ -3,9 +3,6 @@
 AD7768-EVB HDL project
 ====================================================================================
 
-Overview
-------------------------------------------------------------------------------------
-
 The :adi:`EVAL-AD7768FMCZ` / :adi:`EVAL-AD7768-4FMCZ` evaluation kit features the
 :adi:`AD7768` / :adi:`AD7768-4` 24-bit, 256 kSPS, analog-to-digital converter (ADC).
 A 7 V to 9 V external bench top supply is regulated to 5 V and 3.3 V to  supply the

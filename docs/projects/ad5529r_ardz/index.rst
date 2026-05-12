@@ -3,9 +3,6 @@
 AD5529R HDL project
 =================================================================================
 
-Overview
----------------------------------------------------------------------------------
-
 The :adi:`AD5529R` is a 16-channel, 16-bit voltage-output digital-to-analog
 converter (DAC) with an integrated 4.096V precision reference. The device
 supports programmable output ranges up to ±20V or 0-40V, making it suitable

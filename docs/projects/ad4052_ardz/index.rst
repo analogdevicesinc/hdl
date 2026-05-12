@@ -3,9 +3,6 @@
 AD4052-ARDZ HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 The HDL reference design for the :adi:`AD4050`, :adi:`AD4052`, :adi:`AD4056`, and
 :adi:`AD4058`.
 They are versatile, 16-bit/12-bit, successive approximation register (SAR)

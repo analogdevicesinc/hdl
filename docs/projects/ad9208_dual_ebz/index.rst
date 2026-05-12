@@ -3,9 +3,6 @@
 AD9208-DUAL-EBZ HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9208-DUAL-EBZ <EVAL-AD9208>` evaluation board features the
 :adi:`AD9208` dual, 14-bit, 3 GSPS ADC.
 

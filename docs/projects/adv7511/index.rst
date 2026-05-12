@@ -3,9 +3,6 @@
 ADV7511 HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`ADV7511` is a 225 MHz High-Definition Multimedia Interface (HDMI) transmitter,
 which is ideal for home entertainment products including DVD players/recorders, digital
 set top boxes, A/V receivers, gaming consoles, and PCs.

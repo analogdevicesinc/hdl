@@ -3,9 +3,6 @@
 ARRADIO HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The `ARRADIO <https://www.terasic.com.tw/cgi-bin/page/archive.pl?No=946>`__
 board is an `HSMC <http://www.altera.com/literature/ds/hsmc_spec.pdf>`__ 
 board by `Arrow <https://www.arrow.com/en/manufacturers/analog-devices>`__ & 

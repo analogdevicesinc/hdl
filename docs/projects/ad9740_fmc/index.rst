@@ -3,9 +3,6 @@
 AD9740-FMC HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9740`, :adi:`AD9742`, :adi:`AD9744` and :adi:`AD9748` are wideband,
 3G members of the TxDAC® series of high performance, low power CMOS,
 digital-to-analog converters (DACs). The TxDAC family, consisting of

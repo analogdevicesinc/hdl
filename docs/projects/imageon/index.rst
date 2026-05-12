@@ -9,9 +9,6 @@ Imageon HDL project (OBSOLETE)
    has been discontinued, the latest release branch where it can be found is
    ``hdl_2021_r2``. This page is left for legacy purposes only.
 
-Overview
--------------------------------------------------------------------------------
-
 The :dokuwiki:`FMC-Imageon <resources/fpga/xilinx/fmc/fmc-imageon>` is a
 HDMI input/output FMC card that provides high definition video interface for
 Xilinx FPGAs. The HDMI input interface is implemented with the :adi:`ADV7611`,

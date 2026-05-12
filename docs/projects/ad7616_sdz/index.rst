@@ -3,9 +3,6 @@
 AD7616-SDZ HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD7616` is a 16-bit, data acquisition system (DAS) that supports
 dual simultaneous sampling of 16 channels. It operates from a single 5 V supply
 and can accommodate ±10 V, ±5 V, and ±2.5 V true bipolar input signals while

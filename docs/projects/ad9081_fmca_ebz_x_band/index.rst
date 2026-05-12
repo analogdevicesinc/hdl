@@ -11,9 +11,6 @@ X-Band Platform HDL project
    For a more detailed description of the configuration parameters and system
    capabilities, check the :ref:`ad9081_fmca_ebz` documentation.
 
-Overview
--------------------------------------------------------------------------------
-
 The  :adi:`X-Band Development Platform <x-band-development-platform>` contains
 one MxFE® software defined, direct RF sampling transceivers,
 :dokuwiki:`X-Band to C-Band Up/Down Converter <resources/eval/user-guides/stingray>`,

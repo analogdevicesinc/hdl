@@ -3,9 +3,6 @@
 ADV7513 HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`ADV7513` is a 165 MHz, High-Definition Multimedia Interface (HDMI®)
 transmitter that is ideal for DVD players/ recorders, digital set-top boxes,
 A/V receivers, gaming consoles, and PCs.

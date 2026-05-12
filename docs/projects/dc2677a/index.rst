@@ -3,9 +3,6 @@
 DC2677A HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 Demonstration circuit 2677A (:adi:`DC2677A`) is a reference design for robust
 industrial data acquisition applications for the LTC2358-18. The LTC2358-18 is
 capable of high voltage measurements with a large input common range; however,

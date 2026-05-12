@@ -3,9 +3,6 @@
 AD35XXR-EVB HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`EVAL-AD3542R` is an evaluation board for the
 :adi:`AD3542R`, a dual-channel, 16-bit fast precision
 digital-to-analog converter (DAC). The same eval board can be used to

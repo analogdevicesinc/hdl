@@ -3,9 +3,6 @@
 LTC2378-FMC HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 The LTC23xx family consists of low noise, low power, high speed successive
 approximation register (SAR) ADCs with resolutions of 16-bit, 18-bit and 20-bit
 and maximum sampling rates from 250 kSPS to 2 MSPS. Operating from a 2.5V or 5V

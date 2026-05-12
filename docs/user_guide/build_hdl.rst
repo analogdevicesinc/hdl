@@ -37,9 +37,6 @@ in many ways. We use **command line** and mostly **Linux systems**.
    and simple git command line commands (or the equivalent in GUI):
    **clone, status, checkout, log, fetch, rebase**.
 
-Overview
--------------------------------------------------------------------------------
-
 This is a detailed guide with lots of information regarding everything.
 Careful reading is needed. To put it in few words, the following steps will
 be described:

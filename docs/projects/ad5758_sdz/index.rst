@@ -3,9 +3,6 @@
 AD5758-SDZ HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 The :adi:`AD5758` is a single-channel, voltage and current output
 digital-to-analog converter (DAC) that operates with a power supply range from
 −33 V (minimum) on AVSS to +33 V (maximum) on AVDD1 with a maximum operating

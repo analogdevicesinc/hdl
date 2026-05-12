@@ -3,9 +3,6 @@
 AD-QUADMXFE1-EBZ HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :git-hdl:`AD-QUADMXFE1-EBZ <projects/ad_quadmxfe1_ebz>` reference design
 is a processor based (e.g. Microblaze) embedded system, which showcases the
 :adi:`QUAD-MXFE` evaluation board.

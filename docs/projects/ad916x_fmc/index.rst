@@ -3,9 +3,6 @@
 AD916x-FMC HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 The :adi:`AD9161` /:adi:`AD9162` /:adi:`AD9163` /:adi:`AD9164` is a high
 performance, 16-bit (AD9164, AD9163, AD9162)/11-bit (AD9161) resolution
 digital-to-analog converter (DAC) that supports data rates to 6 GSPS.

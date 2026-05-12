@@ -3,9 +3,6 @@
 AD7405-FMC HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`EVAL-AD7405` is a full-featured evaluation board
 designed to allow the user to easily evaluate all features of the :adi:`AD7405`
 isolated analog-to-digital converter (ADC).

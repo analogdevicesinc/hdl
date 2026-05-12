@@ -3,9 +3,6 @@
 AD9265-FMC HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9265` is a 16-bit, 125 MSPS analog-to-digital converter (ADC). The
 :adi:`AD9265` is designed to support communications applications where high
 performance combined with low cost, small size, and versatility is desired. The

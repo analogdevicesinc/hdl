@@ -3,9 +3,6 @@
 ADAQ8092-FMC HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`EVAL-ADAQ8092` evaluates the :adi:`ADAQ8092`, a
 14-bit, 105MSPS , high-speed dual-channel data acquisition uModule solution.
 This device uses the System-in-Package (SiP) that integrates three common signal

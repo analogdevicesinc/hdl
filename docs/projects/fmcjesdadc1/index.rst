@@ -9,9 +9,6 @@ FMCJESDADC1 HDL Project (OBSOLETE)
    HDL project has been discontinued, the latest release branch where it can
    be found is ``hdl_2021_r2``. This page is left for legacy purposes only.
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD-FMCJESDADC1-EBZ <EVAL-AD-FMCJESDADC1-EBZ>` is a high speed data
 acquisition (4 ADC channels at 250MSPS), in an FMC form factor, which has
 two high speed JESD204B Analog to Digital converters (:adi:`AD9250`) on it.

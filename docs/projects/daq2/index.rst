@@ -3,9 +3,6 @@
 DAQ2 HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD-FMCDAQ2-EBZ <EVAL-AD-FMCDAQ2-EBZ>` module is comprised of the
 :adi:`AD9680` dual, 14-bit, 1.0 GSPS, JESD204B ADC, the :adi:`AD9144` quad,
 16-bit, 2.8 GSPS, JESD204B DAC, the :adi:`AD9523-1` clock, and power management

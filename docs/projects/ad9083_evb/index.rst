@@ -3,9 +3,6 @@
 AD9083-EVB HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :git-hdl:`AD9083_EVB <projects/ad9083_evb>` reference design is a
 processor-based embedded system. The design consists of a receive chain; the
 receive chain transports the captured samples from ADC to the system memory

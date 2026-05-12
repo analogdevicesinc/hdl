@@ -3,9 +3,6 @@
 CN0540 HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 The HDL reference design for the :adi:`CN0540` provides a high resolution,
 wide-bandwidth, high dynamic range, Integrated Electronics Piezoelectric (IEPE)
 compatible interface data acquisition system (DAQ) for interfacing with

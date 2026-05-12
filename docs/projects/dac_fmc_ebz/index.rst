@@ -3,9 +3,6 @@
 DAC-FMC-EBZ HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The DAC-FMC-EBZ HDL project is a wrapper for many DAC-based evaluation boards,
 all having similar interfaces, which are listed below.
 Each evaluation board has its particularities, which are supported in this

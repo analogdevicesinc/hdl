@@ -3,9 +3,6 @@
 ADMX100X-EVB HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`EVAL-ADMX1001` and :adi:`EVAL-ADMX1002` modules are
 ultra-low-distortion, low-noise signal generators. They support output
 frequencies up to 40 kHz when the digital  pre-distortion (DPD) algorithm is

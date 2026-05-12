@@ -3,9 +3,6 @@
 AD485x_FMCZ HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 This design is meant to support the AD485x family. For example,
 :adi:`EVAL-AD4858` board contains :adi:`AD4858` chip, which is a 20-bit, low
 noise 8-channel simultaneous sampling successive approximation register (SAR)

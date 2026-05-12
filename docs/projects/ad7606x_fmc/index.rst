@@ -3,9 +3,6 @@
 AD7606X-FMCZ HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD7606` is a 8-/6-/4-Channel DAS with 16-Bit, Bipolar Input,
 Simultaneous Sampling ADC. Each part contains analog input clamp protection, a
 second-order antialiasing filter, a track-and-hold amplifier, a 16-bit charge

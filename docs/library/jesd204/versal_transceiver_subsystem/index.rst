@@ -3,9 +3,6 @@
 Versal Adaptive SoC Transceiver Subsystem
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The Versal Transceiver Subsystem can be used to configure the GTY and GTYP for
 Versal ACAP devices. In general, across all reference designs, the gigabit
 transceivers are configured specifically to the Lane rate of the HDL build.

@@ -3,9 +3,6 @@
 AD5766-SDZ HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD5766`/ :adi:`AD5767` are 16-channel, 16-/12-bit, voltage output
 Digital-to-Analog Converters (DAC). The DAC generates output voltage ranges from
 an external 2.5 V reference. Depending on the span selected, the mid-point of

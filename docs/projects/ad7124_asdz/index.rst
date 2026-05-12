@@ -3,9 +3,6 @@
 AD7124-ASDZ HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 The HDL reference design for the :adi:`AD7124-4` and :adi:`AD7124-8` provides a
 4/8-Channel, Low Noise, Low Power, 24-Bit, Sigma-Delta ADC with PGA and
 Reference.

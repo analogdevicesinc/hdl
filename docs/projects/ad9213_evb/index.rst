@@ -3,9 +3,6 @@
 AD9213-EVB HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9213-EVB <EVAL-AD9213>` reference design is a processor based
 (e.g. Microblaze) embedded system.
 

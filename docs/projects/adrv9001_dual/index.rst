@@ -3,9 +3,6 @@
 ADRV9001-DUAL HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 This design allows controlling, receiving and transmitting sample stream
 from/to two ADRV9001/ADRV9002 devices(2x eval b) through four independent source
 synchronous interfaces for each direction and for each device.

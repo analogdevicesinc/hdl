@@ -5,9 +5,6 @@
 AD---- HDL Project (template)
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 ..
    Some specifications about the board, the chip, etc. Typically the
    information found on the https://www.analog.com/en/products/

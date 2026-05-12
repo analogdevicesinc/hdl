@@ -3,9 +3,6 @@
 AD9209-FMCA-EBZ HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :git-hdl:`AD9209-FMCA-EBZ <projects/ad9209_fmca_ebz>` reference design is
 a processor-based embedded system. This reference design works with
 :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` (RX only) /

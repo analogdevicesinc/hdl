@@ -3,9 +3,6 @@
 AD9213-DUAL-EBZ HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`EVAL-AD9213-DUAL-EBZ` platform includes two :adi:`AD9213`
 single, 12-bit, 10 GSPS, radio frequency (RF) analog-to-digital converters (ADC)
 with the JESD204B interface. The two 10 GSPS data converters are interleaved to

@@ -3,9 +3,6 @@
 AD353XR HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 The :adi:`AD3530R`/ :adi:`AD3530` and :adi:`AD3531R`/ :adi:`AD3531` are low
 power, 16-bit, buffered voltage output, digital-to-analog converters (DACs) that
 include a gain bit field, resulting in a full-scale output of 2.5V (gain = 1)

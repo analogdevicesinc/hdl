@@ -3,9 +3,6 @@
 CN0506 HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`CN0506` is a dual channel, low latency, low power Ethernet PHY card supporting
 speeds of 10/100/1000 Mbps for Industrial Ethernet applications. The circuit consists of two
 indivudual, independent 10/100/1000Mb :adi:`ADIN1300` PHYs, each with an energy efficient

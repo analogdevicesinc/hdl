@@ -3,9 +3,6 @@
 Integrate FIR filters into the FMCOMMS2 HDL design
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 This page describes how to add a custom processing module into the
 :git-hdl:`FMCOMMS2 <projects/fmcomms2>`'s TX and/or RX data path.
 
