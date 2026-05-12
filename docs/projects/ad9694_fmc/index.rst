@@ -3,9 +3,6 @@
 AD9694-FMC HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9694-500EBZ <EVAL-AD9694>` supports the :adi:`AD9694`, a quad,
 14-bit, 500 MSPS ADC. The device has an on-chip buffer and a sample-and-hold
 circuit designed for low power, small size, and ease of use. This device is

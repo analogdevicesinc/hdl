@@ -3,9 +3,6 @@
 CN0579 HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`CN0579` is a 4-channel, high resolution, wide bandwidth,
 high dynamic range, integrated electronics piezoelectric (IEPE)-compatible
 interface data acquisition (DAQ) system that interfaces with IC piezoelectric

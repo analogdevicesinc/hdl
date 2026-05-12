@@ -3,9 +3,6 @@
 PULSAR-LVDS-ADC HDL project
 ==================================================================================
 
-Overview
-----------------------------------------------------------------------------------
-
 The :adi:`AD7625`, :adi:`AD7626`, :adi:`AD7960`, :adi:`AD7961` devices are parts
 from ADC LVDS PulSAR family.
 The :adi:`AD7625` / :adi:`AD7626` is a 16-bit, 6 MSPS / 10 MSPS, charge

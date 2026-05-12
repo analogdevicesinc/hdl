@@ -3,9 +3,6 @@
 CN0561 HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD4134` is a quad channel, low noise, simultaneous sampling,
 precision analog-to-digital converter (ADC), based on the continuous time
 sigma-delta (CTSD) modulation scheme. This architecture inherently rejects

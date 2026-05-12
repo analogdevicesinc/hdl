@@ -135,9 +135,6 @@ Representation Character  Description
 
    All clocks inside a JESD204B system must have an integer relationship.
 
-Overview
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 JESD204B/C is a high-speed serial link for data converters between converter and
 logic device (FPGA/ASIC):
 

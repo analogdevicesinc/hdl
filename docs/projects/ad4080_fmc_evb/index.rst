@@ -10,9 +10,6 @@ AD4080-FMC-EVB HDL project
    Single lane mode is fully tested and supported. Dual lane mode is supported
    in the HDL but has not been tested yet.
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`EVAL-AD4080-FMC` is designed to demonstrate the
 :adi:`AD4080` performance.
 

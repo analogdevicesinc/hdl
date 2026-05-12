@@ -3,9 +3,6 @@
 AD9084-EBZ HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9084-EBZ <EVAL-AD9084>` reference design
 (also known as Apollo) is a processor based
 (e.g. Microblaze) embedded system.

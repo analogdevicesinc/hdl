@@ -3,9 +3,6 @@
 JUPITER-SDR HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 This design allows controlling, receiving and transmitting sample stream
 from/to an :adi:`ADRV9002` device through two independent
 source-synchronous interfaces.

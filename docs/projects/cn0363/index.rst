@@ -3,9 +3,6 @@
 CN0363 HDL project
 ==================================================================================
 
-Overview
-----------------------------------------------------------------------------------
-
 The :adi:`EVAL-CN0363-PMDZ <CN0363>` is a dual channel colorimeter featuring a
 modulated light source transmitter, programmable gain transimpedance amplifiers
 on each channel, and a very low noise, 24-bit sigma delta ADC. The output of the

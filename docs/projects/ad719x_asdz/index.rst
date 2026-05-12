@@ -3,9 +3,6 @@
 AD719X-ASDZ HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The AD719x-ASDZ HDL project supports the EVAL-AD719xASDZ family, comprised of
 :adi:`EVAL-AD7190ASDZ`, :adi:`EVAL-AD7193ASDZ`, :adi:`EVAL-AD7195ASDZ`,
 as well as the :adi:`EVAL-AD4131-8`, :adi:`EVAL-AD4130-8` and

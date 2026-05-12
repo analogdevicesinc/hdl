@@ -9,9 +9,6 @@ FMCADC5 HDL Project (OBSOLETE)
    has been discontinued, the latest release branch where it can be found is
    ``hdl_2021_r2``. This page is left for legacy purposes only.
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD-FMCADC5-EBZ` is a high-speed single channel data acquisition board
 featuring two :adi:`AD9625` ADCs. The board is provisioned to sample the
 single input at an effective sampling rate of 5GSPS, with both the ADCs running

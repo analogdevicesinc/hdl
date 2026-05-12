@@ -3,9 +3,6 @@
 FMCOMMS5 HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>` is a high-speed analog module designed
 to showcase the :adi:`AD9361` in multiple-input, multiple-output (MIMO)
 applications. The :adi:`AD9361`  is a high performance, highly integrated RF

@@ -3,9 +3,6 @@
 AD9656-FMC HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9656` is a quad 16-bit, 125 MSPS analog-to-digital converter (ADC)
 featuring an on-chip sample and hold circuit. It is designed to be low cost, low
 power and compact, making it easy to use.

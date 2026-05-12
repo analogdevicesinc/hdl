@@ -3,9 +3,6 @@
 AD4110 HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 The :adi:`AD4110-1` is a complete, single-channel, universal input
 analog-to-digital front end for industrial process control systems where sensor
 type flexibility is required.

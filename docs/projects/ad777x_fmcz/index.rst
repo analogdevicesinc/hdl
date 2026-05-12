@@ -3,9 +3,6 @@
 AD777X-FMCZ HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The EVAL-AD7770 / EVAL-AD7771 / EVAL-AD7779 evaluation kit
 features the :adi:`AD7770`, :adi:`AD7771`, and :adi:`AD7779` 24-bit,
 analog-to-digital converters (ADCs).

@@ -3,9 +3,6 @@
 ADAQ23875 HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`EVAL-ADAQ23875`/ :adi:`EVAL-ADAQ23876`/ :adi:`EVAL-ADAQ23878` provide
 an analog front-end and an FMC digital interface for :adi:`ADAQ23875`/
 :adi:`ADAQ23876`/ :adi:`ADAQ23878`, its core. It is a low noise, high speed

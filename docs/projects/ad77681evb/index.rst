@@ -3,9 +3,6 @@
 AD77681EVB HDL project
 =================================================================================
 
-Overview
----------------------------------------------------------------------------------
-
 The :adi:`AD7768-1`/:adi:`ADAQ7768-1` is a low power, high performance, Σ-Δ
 analog-to-digital converter (ADC), with a Σ-Δ modulator and digital filter for
 precision conversion of both AC and DC signals. The :adi:`AD7768-1` is a single

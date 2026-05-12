@@ -3,9 +3,6 @@
 ADRV9001 HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 This design allows controlling, receiving and transmitting sample stream
 from/to an ADRV9001/ADRV9002 device through two independent source-synchronous
 interface.

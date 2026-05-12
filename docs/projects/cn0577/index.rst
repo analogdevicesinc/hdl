@@ -3,9 +3,6 @@
 CN0577 HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`CN0577` provides an analog front-end and an FMC
 digital interface for :adi:`LTC2387-18`, its core. It is a low
 noise, high speed successive approximation register (SAR) ADC with a resolution

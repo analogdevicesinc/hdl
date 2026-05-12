@@ -3,9 +3,6 @@
 AD9434-FMC HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9434` is a 12-bit monolithic sampling analog-to-digital converter
 (ADC) optimized for high performance, low power, and ease of use. The part
 operates at up to a 500 MSPS conversion rate and is optimized for outstanding

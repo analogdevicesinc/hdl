@@ -7,9 +7,6 @@ FMCOMMS2/3/4 HDL Project
 
   FMCOMMS2 FIR FILTER <fir_filter>
 
-Overview
--------------------------------------------------------------------------------
-
 The AD-FMCOMMS2/3/4/5-EBZ are a high-speed analog modules designed to showcase
 the :adi:`AD9361` or :adi:`AD9364`, a high performance, highly integrated RF
 agile transceiver intended for use in RF applications.

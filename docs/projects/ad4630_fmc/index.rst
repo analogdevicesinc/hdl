@@ -3,9 +3,6 @@
 AD4630-FMC HDL project
 =================================================================================
 
-Overview
----------------------------------------------------------------------------------
-
 The :adi:`AD4630-24` is a two-channel, simultaneous sampling, Easy Drive, 2 MSPS
 successive approximation register (SAR) analog-to-digital converter (ADC). The
 :adi:`AD4030-24` is the single channel version. With a guaranteed maximum ±0.9

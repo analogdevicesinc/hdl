@@ -3,9 +3,6 @@
 AD9467-FMC HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9467` chip used on :adi:`EVAL-AD9467` is a 16-bit, monolithic, IF
 sampling analog-to-digital converter (ADC) with a conversion rate of up
 to 250 MSPS. This reference design includes a data capture interface and

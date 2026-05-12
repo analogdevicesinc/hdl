@@ -3,9 +3,6 @@
 MAX96724 HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`MAX96724` deserializer converts four GMSL™2/1 inputs to 1, 2, or 4 MIPI D-PHY
 or C-PHY outputs. The device allows simultaneous transmit bidirectional transmissions
 over 50Ω coax or 100Ω STP cables that meet the GMSL channel specification.

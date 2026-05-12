@@ -3,9 +3,6 @@
 CN0585 HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`EVAL-CN0585-FMCZ <CN0585>` Low Latency Development Kit (LLDK) board
 is a development board consisting of 4 x 16-bit ADC channels and 4 x 16-bit
 DAC channels that are interfaced with an FPGA through the FMC Low Pin Count

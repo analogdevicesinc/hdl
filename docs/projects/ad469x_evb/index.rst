@@ -3,9 +3,6 @@
 AD469X-EVB HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The AD469X HDL reference design provides all the interfaces that are
 necessary to interact with the devices on the :adi:`EVAL-AD4696` and
 :adi:`EVAL-AD4692-ARDZ` boards.

@@ -3,9 +3,6 @@
 AD738x_FMC HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 The :adi:`AD7380`/ :adi:`AD7381` are a 16-bit and 14-bit pin-compatible family
 of dual simultaneous sampling, high speed, low power, successive approximation
 register (SAR) analog-to-digital converters (ADCs) that operate from a 3.3 V

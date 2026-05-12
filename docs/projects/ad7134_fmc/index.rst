@@ -3,9 +3,6 @@
 AD7134-FMC HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD7134` is a quad channel, low noise, simultaneous sampling,
 precision analog-to-digital converter (ADC), based on the continuous time
 sigma-delta (CTSD) modulation scheme. The CTSD architecture inherently rejects

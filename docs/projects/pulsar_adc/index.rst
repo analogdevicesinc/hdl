@@ -3,8 +3,6 @@
 PULSAR-ADC HDL project
 =================================================================================
 
-Overview
----------------------------------------------------------------------------------
 Depending on the type of connector it uses, the PulSAR family is divided into
 the products which have **PMOD** connectors and **FMC** connectors.
 
@@ -16,6 +14,11 @@ system applications. The PulSAR family share the same interface and the same PCB
 the differences being found in their performance.  A full description of these
 products are available in their respective data sheets and should be consulted
 when utilizing the boards.
+
+Overview
+-------------------------------------------------------------------------------
+
+The PulSAR converters are available with PMOD, FMC connectors.
 
 With PMOD
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

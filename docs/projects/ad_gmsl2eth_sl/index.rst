@@ -3,9 +3,6 @@
 AD-GMSL2ETH-SL HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD-GMSL2ETH-SL` is an edge compute platform enabling low-latency
 data transfer from eight Gigabit Multimedia Serial Link™ (GMSL) interfaces
 on to a 10 Gb Ethernet link. The target applications include autonomous robots

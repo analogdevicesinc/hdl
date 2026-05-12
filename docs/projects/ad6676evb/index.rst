@@ -3,9 +3,6 @@
 AD6676EVB HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD6676-EBZ <EVAL-AD6676>` supports the :adi:`AD6676` highly integrated
 IF subsystem that can digitize radio frequency (RF) bands up to 160 MHz in
 width centered on an intermediate frequency (IF) of 70 MHz to 450 MHz.

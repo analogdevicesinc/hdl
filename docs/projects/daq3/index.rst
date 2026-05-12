@@ -3,9 +3,6 @@
 DAQ3 HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :git-hdl:`DAQ3 <projects/daq3>` reference design showcases the
 :adi:`EVAL-FMCDAQ3-EBZ` evaluation board, which is comprised of the
 :adi:`AD9680` dual, 14-bit, 1.25 GSPS, JESD204B (subclass 1) ADC, the

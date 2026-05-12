@@ -3,9 +3,6 @@
 AD57XX_ARDZ HDL project
 ================================================================================
 
-Overview
---------------------------------------------------------------------------------
-
 This page documents the HDL reference design for the
 :adi:`EVAL-AD5780ARDZ`, :adi:`EVAL-AD5781ARDZ` and :adi:`EVAL-AD5791ARDZ`
 evaluation boards.

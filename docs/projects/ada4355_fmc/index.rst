@@ -3,9 +3,6 @@
 ADA4355-FMC HDL project
 ================================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`ADA4355`/ :adi:`ADA4356` is a complete, high performance, current
 input µModule. For space savings, the :adi:`ADA4355`/ :adi:`ADA4356` includes
 all the required active and passive components to realize a complete current to

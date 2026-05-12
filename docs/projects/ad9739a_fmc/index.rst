@@ -9,9 +9,6 @@ AD9739A-FMC HDL project (OBSOLETE)
    project has been discontinued, the latest release branch where it can be found
    is ``hdl_2021_r2``. This page is left for legacy purposes only.
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9739A` is a 14-bit, 2.5 GSPS high performance RF DAC
 capable of synthesizing wideband signals with up to 1.25GHz of bandwidth, from
 DC up to 3 GHz.

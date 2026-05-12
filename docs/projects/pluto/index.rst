@@ -3,9 +3,6 @@
 PLUTO HDL Project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`ADALM-PLUTO` Active Learning Module (PlutoSDR) is an easy to use tool
 available from Analog Devices Inc. (ADI) that can be used to introduce
 fundamentals of `Software Defined Radio (SDR) <https://en.wikipedia.org/wiki/Software-defined_radio>`_ 

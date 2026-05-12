@@ -3,9 +3,6 @@
 AD9783-EBZ HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The :adi:`AD9783` includes pin-compatible, high dynamic range, dual
 digital-to-analog converters (DACs) with 16-bit resolution, and sample rates of
 up to 500 MSPS.

@@ -3,9 +3,6 @@
 FMCOMMS11 HDL project
 ===============================================================================
 
-Overview
--------------------------------------------------------------------------------
-
 The HDL reference design is an embedded system built around a processor core
 either ARM, NIOS-II or Microblaze. The high speed digital interface of the
 converters is handled by the :ref:`JESD204B framework <jesd204>`.
