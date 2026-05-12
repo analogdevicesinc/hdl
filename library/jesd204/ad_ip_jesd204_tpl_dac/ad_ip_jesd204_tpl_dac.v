@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -56,7 +56,8 @@ module ad_ip_jesd204_tpl_dac #(
   parameter DATAPATH_DISABLE = 0,
   parameter IQCORRECTION_DISABLE = 1,
   parameter EXT_SYNC = 0,
-  parameter XBAR_ENABLE = 0
+  parameter XBAR_ENABLE = 0,
+  parameter PNGEN_ENABLE = 1
 ) (
 
   // jesd interface
@@ -237,7 +238,8 @@ module ad_ip_jesd204_tpl_dac #(
     .DDS_CORDIC_DW (DDS_CORDIC_DW),
     .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
     .DDS_PHASE_DW (DDS_PHASE_DW),
-    .EXT_SYNC (EXT_SYNC)
+    .EXT_SYNC (EXT_SYNC),
+    .PNGEN_ENABLE (PNGEN_ENABLE)
   ) i_core (
     .clk (link_clk),
 

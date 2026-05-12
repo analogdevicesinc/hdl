@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,6 +40,7 @@ module ad_ip_jesd204_tpl_adc_channel #(
   parameter DATA_PATH_WIDTH = 2,
   parameter TWOS_COMPLEMENT = 1,
   parameter BITS_PER_SAMPLE = 16,
+  parameter PNMON_ENABLE = 1,
   parameter PN7_ENABLE = 1,
   parameter PN15_ENABLE = 1
 ) (
@@ -61,19 +62,26 @@ module ad_ip_jesd204_tpl_adc_channel #(
 
   // instantiations
 
-  ad_ip_jesd204_tpl_adc_pnmon #(
-    .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
-    .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
-    .TWOS_COMPLEMENT (TWOS_COMPLEMENT),
-    .PN7_ENABLE (PN7_ENABLE),
-    .PN15_ENABLE(PN15_ENABLE)
-  ) i_pnmon (
-    .clk (clk),
-    .data (raw_data),
+  generate
+  if (PNMON_ENABLE == 1) begin: g_pnmon
+    ad_ip_jesd204_tpl_adc_pnmon #(
+      .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
+      .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+      .TWOS_COMPLEMENT (TWOS_COMPLEMENT),
+      .PN7_ENABLE (PN7_ENABLE),
+      .PN15_ENABLE(PN15_ENABLE)
+    ) i_pnmon (
+      .clk (clk),
+      .data (raw_data),
 
-    .pn_seq_sel (pn_seq_sel),
-    .pn_oos (pn_oos),
-    .pn_err (pn_err));
+      .pn_seq_sel (pn_seq_sel),
+      .pn_oos (pn_oos),
+      .pn_err (pn_err));
+  end else begin: g_no_pnmon
+    assign pn_oos = 1'b0;
+    assign pn_err = 1'b0;
+  end
+  endgenerate
 
   generate
   genvar n;
