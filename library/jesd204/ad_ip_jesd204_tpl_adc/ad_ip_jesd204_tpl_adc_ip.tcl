@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2022 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -119,6 +119,7 @@ foreach {k v w} {
   "EXT_SYNC" "Enable external sync" "checkBox" \
   "PN7_ENABLE" "Enable PN7" "checkBox" \
   "PN15_ENABLE" "Enable PN15" "checkBox" \
+  "PNMON_ENABLE" "Enable PN monitor" "checkBox" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]
   ipgui::move_param -component $cc -order $i $p -parent $datapath_group

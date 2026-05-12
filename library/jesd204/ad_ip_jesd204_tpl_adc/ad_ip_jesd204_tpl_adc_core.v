@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -49,6 +49,7 @@ module ad_ip_jesd204_tpl_adc_core #(
   parameter DMA_DATA_WIDTH = DATA_PATH_WIDTH * DMA_BITS_PER_SAMPLE * NUM_CHANNELS,
   parameter TWOS_COMPLEMENT = 1,
   parameter EXT_SYNC = 0,
+  parameter PNMON_ENABLE = 1,
   parameter PN7_ENABLE = 1,
   parameter PN15_ENABLE = 1
 ) (
@@ -134,6 +135,7 @@ module ad_ip_jesd204_tpl_adc_core #(
       .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION),
       .TWOS_COMPLEMENT (TWOS_COMPLEMENT),
       .BITS_PER_SAMPLE (DMA_BITS_PER_SAMPLE),
+      .PNMON_ENABLE (PNMON_ENABLE),
       .PN7_ENABLE (PN7_ENABLE),
       .PN15_ENABLE(PN15_ENABLE)
     ) i_channel (

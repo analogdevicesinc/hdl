@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -51,7 +51,8 @@ module ad_ip_jesd204_tpl_dac_core #(
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16,
   parameter DDS_PHASE_DW = 16,
-  parameter EXT_SYNC = 0
+  parameter EXT_SYNC = 0,
+  parameter PNGEN_ENABLE = 1
 ) (
 
   // dac interface
@@ -143,15 +144,22 @@ module ad_ip_jesd204_tpl_dac_core #(
     .dac_data (dac_data_s));
 
   // PN generator
-  ad_ip_jesd204_tpl_dac_pn #(
-    .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
-    .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION)
-  ) i_pn_gen (
-    .clk (clk),
-    .reset (dac_sync_int),
+  generate
+  if (PNGEN_ENABLE == 1) begin: g_pngen
+    ad_ip_jesd204_tpl_dac_pn #(
+      .DATA_PATH_WIDTH (DATA_PATH_WIDTH),
+      .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION)
+    ) i_pn_gen (
+      .clk (clk),
+      .reset (dac_sync_int),
 
-    .pn7_data (pn7_data),
-    .pn15_data (pn15_data));
+      .pn7_data (pn7_data),
+      .pn15_data (pn15_data));
+  end else begin: g_no_pngen
+    assign pn7_data = 0;
+    assign pn15_data = 0;
+  end
+  endgenerate
 
   // dac valid
 
