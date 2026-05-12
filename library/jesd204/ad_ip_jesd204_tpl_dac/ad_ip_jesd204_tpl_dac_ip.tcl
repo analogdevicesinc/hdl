@@ -145,6 +145,7 @@ foreach {k v w} {
   "DDS_PHASE_DW" "DDS Phase Width" "text" \
   "DDS_CORDIC_DW" "CORDIC DDS Data Width" "text" \
   "DDS_CORDIC_PHASE_DW" "CORDIC DDS Phase Width" "text" \
+  "PNGEN_ENABLE" "Enable PN generator" "checkBox" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]
   ipgui::move_param -component $cc -order $i $p -parent $datapath_group
