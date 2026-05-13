@@ -64,7 +64,7 @@ module spi_engine_offload #(
   input spi_clk,
   input spi_resetn,
 
-  input trigger,
+(* mark_debug = "true" *)   input trigger,
 
   output cmd_valid,
   input cmd_ready,
@@ -90,7 +90,7 @@ module spi_engine_offload #(
   input offload_sdi_ready,
   output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data,
 
-  output interconnect_dir
+(* mark_debug = "true" *)  output interconnect_dir
 );
 
   localparam SDO_SOURCE_STREAM = 1'b1;
