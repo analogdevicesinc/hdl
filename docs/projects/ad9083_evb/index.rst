@@ -43,6 +43,9 @@ Supported carriers
    * -
      - :xilinx:`ZCU102`
      - FMC HPC0
+   * -
+     - :xilinx:`VCU118`
+     - FMC+ :red:`using FMC extender`
 
 Block design
 -------------------------------------------------------------------------------
@@ -72,15 +75,42 @@ A10SoC
    :align: center
    :alt: AD9083-EVB/A10SoC block diagram
 
+VCU118
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: ad9083_evb_vcu118_block_diagram.svg
+   :width: 1000
+   :align: center
+   :alt: AD9083-EVB/VCU118 block diagram
+
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The following are the parameters of this project that can be configured,
-followed by the default configuration:
+The following are the parameters of this project that can be configured:
 
-- RX_JESD_L: number of lanes per link; by default 4
-- RX_JESD_M: number of converters per link; by default 16
-- RX_JESD_S: number of samples per frame; by default 1
+.. list-table::
+   :header-rows: 1
+
+   * - Parameter
+     - Description
+     - ZCU102 / A10SoC
+     - VCU118
+   * - RX_JESD_L
+     - Number of lanes per link
+     - 4
+     - 4
+   * - RX_JESD_M
+     - Number of converters per link
+     - 16
+     - 16
+   * - RX_JESD_S
+     - Number of samples per frame
+     - 1
+     - 1
+   * - RX_JESD_NP
+     - Number of bits per sample
+     - 16
+     - 12
 
 Other JESD204B output configuration modes can be found in the :adi:`AD9083`
 data sheet, at Table 24.
@@ -91,8 +121,26 @@ Clock scheme
 The AD9083 PLL reference clock, the FPGA reference clock and the FPGA global
 clock are provided by the on-board :adi:`AD9528` JESD204B clock generator.
 
-The device clock and the link clock have different sources, and in this case,
-the link clock is double the device clock.
+The device clock and the link clock have different sources and follow the
+formulas below:
+
+.. math::
+
+   Lane Rate = \frac{IQ Sample Rate * M * NP * \frac{10}{8}}{L}
+
+.. math::
+
+   Link Clock = \frac{LaneRate}{40}
+
+.. math::
+
+   Device Clock = Link Clock * \frac{DPW}{TPL\_DPW}
+
+Where DPW is the JESD204B link layer datapath width (4 bytes) and TPL_DPW is
+the transport layer datapath width (OCTETS_PER_BEAT).
+
+ZCU102
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. math::
 
@@ -100,11 +148,26 @@ the link clock is double the device clock.
 
 .. math::
 
-   Link Clock = \frac{LaneRate}{40} = 250Mbps
+   Link Clock = \frac{LaneRate}{40} = 250MHz
 
 .. math::
 
-   Device Clock = \frac{LinkClock}{2} = 125Mbps
+   Device Clock = 250 * \frac{4}{8} = 125MHz
+
+VCU118
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. math::
+
+   Lane Rate = \frac{IQ Sample Rate * M * NP * \frac{10}{8}}{L} = 15Gbps
+
+.. math::
+
+   Link Clock = \frac{LaneRate}{40} = 375MHz
+
+.. math::
+
+   Device Clock = 375 * \frac{4}{6} = 250MHz
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,14 +175,14 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-=================== =========== ===========
-Instance            ZynqMP      A10Soc
-=================== =========== ===========
-rx_ad9083_tpl_core  0x84A0_0000 0x0005_0000
-axi_ad9083_rx_xcvr  0x84A6_0000 0x0004_8000
-axi_ad9083_rx_jesd  0x84AA_0000 0x0004_0000
-axi_ad9083_rx_dma   0x9C40_0000 0x0004_C000
-=================== =========== ===========
+=================== =========== =========== ===========
+Instance            ZynqMP      A10SoC      VCU118
+=================== =========== =========== ===========
+rx_ad9083_tpl_core  0x84A0_0000 0x0005_0000 0x44A0_0000
+axi_ad9083_rx_xcvr  0x84A6_0000 0x0004_8000 0x44A6_0000
+axi_ad9083_rx_jesd  0x84AA_0000 0x0004_0000 0x44AA_0000
+axi_ad9083_rx_dma   0x9C40_0000 0x0004_C000 0x7C40_0000
+=================== =========== =========== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -144,54 +207,36 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+============  =========  =======  ======  ====================  ======
+GPIO signal   Direction  HDL no.  A10SoC  Zynq UltraScale+ MP   VCU118
+============  =========  =======  ======  ====================  ======
+refsel        INOUT      34       2       112                   34
+rstb          INOUT      33       1       111                   33
+pwdn          INOUT      32       0       110                   32
+============  =========  =======  ======  ====================  ======
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - refsel
-     - INOUT
-     - 34
-     - 181:150
-     - 205:174
-   * - rstb
-     - INOUT
-     - 33
-     - 149:118
-     - 173:142
-   * - pwdn
-     - INOUT
-     - 32
-     - 86
-     - 110
+.. admonition:: Legend
+   :class: note
 
-.. note::
-
-   For A10SoC project, the GPIO numbers coincide with the HDL GPIO EMIO number
-   (column 3 from the table).
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - A10SoC, Zynq UltraScale+ MP, VCU118 are Software GPIOs, to be
+     used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Below are the Programmable Logic interrupts used in this project.
 
-================== === ============ ============= ======
-Instance name      HDL Linux ZynqMP Actual ZynqMP A10SoC
-================== === ============ ============= ======
-axi_ad9083_rx_dma  13  109          141           ---
-axi_ad9083_rx_jesd 12  108          140           ---
-axi_ad9083_dma     12  ---          ---           31
-ad9083_jesd204     11  ---          ---           32
-================== === ============ ============= ======
+================== === ============ ============= ====== ======
+Instance name      HDL Linux ZynqMP Actual ZynqMP A10SoC VCU118
+================== === ============ ============= ====== ======
+axi_ad9083_rx_dma  13  109          141           ---    12
+axi_ad9083_rx_jesd 12  108          140           ---    13
+axi_ad9083_dma     12  ---          ---           31     ---
+ad9083_jesd204     11  ---          ---           32     ---
+================== === ============ ============= ====== ======
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -299,7 +344,7 @@ HDL related
 .. note::
 
    - ``*`` - used only in A10SoC project
-   - ``**`` - used only in ZCU102 project
+   - ``**`` - used in ZCU102 and VCU118 projects
 
 - :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
 - :ref:`jesd204`
@@ -310,6 +355,7 @@ Software related
 - :dokuwiki:`Linux driver documentation <resources/tools-software/linux-drivers/iio-adc/ad9083>`
 - AD9083-EVB/ZCU102 Linux device tree :git-linux:`arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9083-fmc-ebz.dts`
 - AD9083-EVB/A10SoC Linux device tree :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_ad9083_fmc_ebz.dts`
+- AD9083-EVB/VCU118 Linux device tree :git-linux:`arch/microblaze/boot/dts/vcu118_ad9083.dts`
 
 .. include:: ../common/more_information.rst
 
