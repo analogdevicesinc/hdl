@@ -24,6 +24,8 @@ set echo_sclk        0
 
 spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
 
+ad_ip_parameter ${hier_spi_engine}/${hier_spi_engine}_offload CONFIG.ASYNC_TRIG 1
+
 # clkgen
 
 ad_ip_instance axi_clkgen axi_ad7134_clkgen
@@ -44,6 +46,16 @@ ad_ip_parameter axi_ad7134_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC 256
 ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
+# sdpclk clock - 48 MHz
+
+ad_ip_instance axi_clkgen axi_sdpclk_clkgen
+ad_ip_parameter axi_sdpclk_clkgen CONFIG.VCO_DIV 5
+ad_ip_parameter axi_sdpclk_clkgen CONFIG.VCO_MUL 48
+ad_ip_parameter axi_sdpclk_clkgen CONFIG.CLK0_DIV 20
+
+ad_connect $sys_cpu_clk axi_sdpclk_clkgen/clk
+ad_connect axi_sdpclk_clkgen/clk_0 ad713x_sdpclk
+
 # odr generator
 
 ad_ip_instance axi_pwm_gen odr_generator
@@ -54,19 +66,9 @@ ad_ip_parameter odr_generator CONFIG.PULSE_0_OFFSET 3
 ad_ip_parameter odr_generator CONFIG.PULSE_1_PERIOD 85
 ad_ip_parameter odr_generator CONFIG.PULSE_1_WIDTH 13
 
-ad_connect odr_generator/ext_clk axi_ad7134_clkgen/clk_0
+ad_connect odr_generator/ext_clk axi_sdpclk_clkgen/clk_0
 ad_connect odr_generator/pwm_0 $hier_spi_engine/trigger
 ad_connect odr_generator/pwm_1 ad713x_odr
-
-# sdpclk clock - 48 MHz
-
-ad_ip_instance axi_clkgen axi_sdpclk_clkgen
-ad_ip_parameter axi_sdpclk_clkgen CONFIG.VCO_DIV 5
-ad_ip_parameter axi_sdpclk_clkgen CONFIG.VCO_MUL 48
-ad_ip_parameter axi_sdpclk_clkgen CONFIG.CLK0_DIV 20
-
-ad_connect $sys_cpu_clk axi_sdpclk_clkgen/clk
-ad_connect axi_sdpclk_clkgen/clk_0 ad713x_sdpclk
 
 ad_connect  axi_ad7134_clkgen/clk_0 $hier_spi_engine/spi_clk
 ad_connect  $sys_cpu_clk axi_ad7134_clkgen/clk 

@@ -92,9 +92,9 @@ module system_top (
 
   // ad713x data interface
 
-  output        ad713x_dclk,
+(* mark_debug = "true" *)  output        ad713x_dclk,
   input  [ 7:0] ad713x_din,
-  output        ad713x_odr,
+(* mark_debug = "true" *)  output        ad713x_odr,
 
   // ad713x GPIO lines
 
