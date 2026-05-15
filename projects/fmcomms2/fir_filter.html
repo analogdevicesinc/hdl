@@ -95,7 +95,6 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">Integrate FIR filters into the FMCOMMS2 HDL design</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#choosing-filter-parameters-and-coefficients">Choosing filter parameters and coefficients</a><ul>
 <li><a class="reference internal" href="#interpolation-fir-filter">Interpolation FIR filter</a></li>
 <li><a class="reference internal" href="#decimation-fir-filter">Decimation FIR filter</a></li>
@@ -396,8 +395,6 @@ Content on this topic
             
   <section id="integrate-fir-filters-into-the-fmcomms2-hdl-design">
 <span id="fir-filter"></span><h1>Integrate FIR filters into the FMCOMMS2 HDL design<a class="headerlink" href="#integrate-fir-filters-into-the-fmcomms2-hdl-design" title="Permalink to this heading"></a></h1>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>This page describes how to add a custom processing module into the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms2" target="_blank">FMCOMMS2</a>’s TX and/or RX data path.</p>
 <p>In this example, the custom modules are going to be some digital FIR filters, to
@@ -422,7 +419,6 @@ these filters were already implemented in
 for the FIR Compiler Xilinx IP. The wrappers are used to manage the data rates
 entering the filter and to facilitate the configuration of the filter
 parameters for a specific application (TX/RX).</p>
-</section>
 <section id="choosing-filter-parameters-and-coefficients">
 <h2>Choosing filter parameters and coefficients<a class="headerlink" href="#choosing-filter-parameters-and-coefficients" title="Permalink to this heading"></a></h2>
 <p>The interpolation/decimation filters parameters and coefficients were calculated

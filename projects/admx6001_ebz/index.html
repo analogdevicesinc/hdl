@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The EVAL-ADMX6001-EBZ is a reference design of a DC-coupled single channel 10GSPS digitizer featuring the low noise 12-bit high-speed ADC AD9213 and the 20-bit precision ADC AD4080. The dual-path design achieves true low noise digitization in the broad band from DC to 5GHz. By biasing the ADC driver ADL5580 with the precision DAC LTC2664, it is capable of handling unipolar and bipolar signals at various DC levels, maximizing utility of the input dynamic range of AD9213. This design is ideal for high performance time-domain instruments such as time-of-flight mass spectrometry (TOFMS), distributed fiber optic sensing (DFOS), and digital oscilloscope." name="description" />
+<meta content="channel 10GSPS digitizer featuring the low noise 12-bit high-speed ADC AD9213 and the 20-bit precision ADC AD4080. The dual-path design achieves true low noise digitization in the broad band from DC to 5GHz. By biasing the ADC driver ADL5580 with the precision DAC LTC2664, it is capable of handling unipolar and bipolar signals at various DC levels, maximizing utility of the input dynamic range of AD9213. This design is ideal for high performance time-domain instruments such as time-of-flight mass spectrometry (TOFMS), distributed fiber optic sensing (DFOS), and digital oscilloscope." name="description" />
 
     <title>ADMX6001-EBZ HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
@@ -96,7 +96,6 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">ADMX6001-EBZ HDL project</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
@@ -393,10 +392,7 @@ Content on this topic
             
   <section id="admx6001-ebz-hdl-project">
 <span id="admx6001-ebz"></span><h1>ADMX6001-EBZ HDL project<a class="headerlink" href="#admx6001-ebz-hdl-project" title="Permalink to this heading"></a></h1>
-<section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADMX6001-EBZ" target="_blank">EVAL-ADMX6001-EBZ</a> is a reference design of a DC-coupled single
-channel 10GSPS digitizer featuring the low noise 12-bit high-speed ADC
+<p>channel 10GSPS digitizer featuring the low noise 12-bit high-speed ADC
 <a class="icon adi reference external" href="https://www.analog.com/AD9213" target="_blank">AD9213</a> and the 20-bit precision ADC <a class="icon adi reference external" href="https://www.analog.com/AD4080" target="_blank">AD4080</a>. The dual-path
 design achieves true low noise digitization in the broad band from DC to 5GHz.
 By biasing the ADC driver <a class="icon adi reference external" href="https://www.analog.com/ADL5580" target="_blank">ADL5580</a> with the precision DAC <a class="icon adi reference external" href="https://www.analog.com/LTC2664" target="_blank">LTC2664</a>,
@@ -415,7 +411,6 @@ in a buffer implemented on block rams from the FPGA fabric
 (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_adcfifo" target="_blank">util_adcfifo</a>).</p>
 <p>All cores from the receive chain are programmable through
 an AXI-Lite interface.</p>
-</section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
