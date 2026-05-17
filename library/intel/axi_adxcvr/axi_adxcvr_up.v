@@ -56,7 +56,7 @@ module axi_adxcvr_up #(
   input                         up_pll_locked,
   input                         up_rx_lockedtodata,
   input   [READY_W-1:0]         up_ready,
-  input   [READY_W-1:0]         up_reset_ack,
+  input                         up_reset_ack,
 
   // bus interface
 
@@ -91,6 +91,9 @@ module axi_adxcvr_up #(
   wire                          up_ready_s;
   wire    [31:0]                up_status_32_s;
   wire    [31:0]                up_rparam_s;
+  wire                          up_reset_ack_latched_s;
+
+  reg                           up_reset_ack_latched = 'd0;
 
   // defaults
 
@@ -120,14 +123,14 @@ module axi_adxcvr_up #(
     end
   end
 
-  assign up_ready_s = & up_status_32_s[(NUM_OF_LANES-1):0];
-  assign up_status_32_s[31:(NUM_OF_LANES+1)] = 'd0;
-
-  assign up_ready_s = & up_status_32_s[(NUM_OF_LANES-1):0];
+  assign up_rst = up_rst_cnt[3];
+  assign up_ready_s = & up_status_32_s[NUM_OF_LANES:1];
   assign up_status_32_s[31:(NUM_OF_LANES+1)] = 'd0;
   assign up_status_32_s[NUM_OF_LANES] = (FPGA_TECHNOLOGY == 105 || FPGA_TECHNOLOGY == 106) ? TX_OR_RX_N ? up_pll_locked : up_rx_lockedtodata :
                                                                  up_pll_locked;
   assign up_status_32_s[(NUM_OF_LANES-1):0] = (FPGA_TECHNOLOGY == 105 || FPGA_TECHNOLOGY == 106) ? {NUM_OF_LANES{up_ready}} : up_ready;
+
+  assign up_reset_ack_latched_s = (FPGA_TECHNOLOGY == 105 || FPGA_TECHNOLOGY == 106) ? up_reset_ack_latched : 1'b1;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
@@ -136,54 +139,29 @@ module axi_adxcvr_up #(
     end else begin
       if (up_resetn == 1'b0) begin
         up_rst_cnt <= 4'h8;
-      end else if (up_rst_cnt[3] == 1'b1) begin
+      end else if (up_rst_cnt[3] == 1'b1 && up_reset_ack_latched_s) begin
         up_rst_cnt <= up_rst_cnt + 1'b1;
       end
       if (up_resetn == 1'b0) begin
         up_status_int <= 1'b0;
-      end else if (up_ready_s == 1'b1) begin
-        up_status_int <= 1'b1;
+      end else begin
+        up_status_int <= up_ready_s;
       end
     end
   end
 
   generate if (FPGA_TECHNOLOGY == 105 || FPGA_TECHNOLOGY == 106) begin
-    reg up_reset_ack_sync1 = 'd0;
-    reg up_reset_ack_sync2 = 'd0;
-    reg up_reset_ack_latched = 'd0;
-    reg [5:0] up_rst_ack_cnt = 'd0;
-
     always @(negedge up_rstn or posedge up_clk) begin
       if (up_rstn == 1'b0) begin
-        up_reset_ack_sync1 <= 1'b0;
-        up_reset_ack_sync2 <= 1'b0;
         up_reset_ack_latched <= 1'b0;
       end else begin
-        up_reset_ack_sync1 <= up_reset_ack;
-        up_reset_ack_sync2 <= up_reset_ack_sync1;
         if (up_resetn == 1'b0) begin
           up_reset_ack_latched <= 1'b0;
-        end else if (up_reset_ack_sync2 == 1'b1) begin
+        end else if (up_reset_ack == 1'b1) begin
           up_reset_ack_latched <= 1'b1;
         end
       end
     end
-
-    always @(negedge up_rstn or posedge up_clk) begin
-      if (up_rstn == 1'b0) begin
-        up_rst_ack_cnt <= 'd0;
-      end else begin
-        if (up_resetn == 1'b0) begin
-          up_rst_ack_cnt <= 'd0;
-        end else if (!up_rst_ack_cnt[5] && up_reset_ack_latched) begin
-          up_rst_ack_cnt <= up_rst_ack_cnt + 1'b1;
-        end
-      end
-    end
-
-    assign up_rst = ~up_rst_ack_cnt[5];
-  end else begin
-    assign up_rst = up_rst_cnt[3];
   end
   endgenerate
 
