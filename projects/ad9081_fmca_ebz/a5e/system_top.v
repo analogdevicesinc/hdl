@@ -154,12 +154,13 @@ module system_top #(
   input                   clkin6,
   input                   clkin10,
   input                   fpga_refclk_in,
-  input   [RX_JESD_L-1:0] rx_data,
+
+  output  [TX_JESD_L-1:0]    tx_data,
+  output  [TX_JESD_L-1:0]    tx_data_n,
+  input   [RX_JESD_L-1:0]    rx_data,
+  input   [RX_JESD_L-1:0]    rx_data_n,
   input   [RX_OS_JESD_L-1:0] rx_os_data,
-  output  [TX_JESD_L-1:0] tx_data,
-  input   [RX_JESD_L-1:0] rx_data_n,
   input   [RX_OS_JESD_L-1:0] rx_os_data_n,
-  output  [TX_JESD_L-1:0] tx_data_n,
   input                   fpga_syncin_0,
   input                   fpga_syncin_1_n,
   input                   fpga_syncin_1_p,
@@ -193,7 +194,7 @@ module system_top #(
 );
 
   localparam NUM_BANKS = (RX_JESD_L + RX_OS_JESD_L) > 4 ? 2 : 1;
-  localparam PHY_OS_PMA_CLK_IDX = RX_JESD_L >= 4 ? 1 : 0;
+  localparam PHY_OS_PMA_CLK_IDX = RX_JESD_L > 4 ? 1 : 0;
 
   // internal signals
   wire  [63:0]  gpio_i;
@@ -201,6 +202,8 @@ module system_top #(
   wire          ninit_done;
   wire          sys_reset_n;
   wire          h2f_reset;
+  wire          h2f_warm_reset_reset_ack;
+  wire          h2f_warm_reset_reset_req;
   wire [ 1:0]   usb31_io_usb_ctrl_s;
   wire          pma_cu_clk;
   wire          refclk_fail_stat;
@@ -208,17 +211,23 @@ module system_top #(
   wire          syspll_lock;
   wire          dacfifo_bypass;
   wire          refclk_ready;
-  wire [ 3:0]   phy_tx_pll_locked_o_tx_pll_locked;
+  wire          refclk_ready_rx;
+  wire          refclk_ready_tx;
+  wire          refclk_ready_os;
+  wire [TX_JESD_L-1:0] phy_tx_pll_locked_o_tx_pll_locked;
   wire [RX_JESD_L+RX_OS_JESD_L-1:0] gts_reset_o_src_rs_grant_src_rs_grant;
   wire [RX_JESD_L+RX_OS_JESD_L-1:0] gts_reset_i_src_rs_req_src_rs_req;
-  wire [NUM_BANKS-1:0]              gts_reset_o_pma_cu_clk_clk;
-  wire                              gts_reset_i_refclk_bus_out_refclk_bus_out;
-  wire                              jesd204_phy_o_refclk_bus_out_refclk_bus_out;
-  wire                              jesd204_phy_os_o_refclk_bus_out_refclk_bus_out;
+  wire [PHY_OS_PMA_CLK_IDX:0] gts_reset_o_pma_cu_clk_clk;
+  wire          gts_reset_i_refclk_bus_out_refclk_bus_out;
+  wire [ 9:0]   jesd204_phy_o_refclk_bus_out_refclk_bus_out;
+  // wire [ 9:0]   jesd204_phy_os_o_refclk_bus_out_refclk_bus_out;
+  wire          mxfe_rx_os_jesd204_reset_rx_reset;
 
   wire  [ 7:0]  spi_csn_s;
   wire          spi_clk;
   wire          spi_mosi;
+
+  assign h2f_warm_reset_reset_ack = h2f_warm_reset_reset_req;
 
   // Board GPIOs
   assign fpga_led      = gpio_o[3:0];
@@ -246,8 +255,10 @@ module system_top #(
   assign txen[0]    = gpio_o[58];
   assign txen[1]    = gpio_o[59];
 
-  assign dacfifo_bypass = gpio_o[60];
-  assign refclk_ready   = gpio_o[61];
+  assign dacfifo_bypass  = gpio_o[60];
+  assign refclk_ready_rx = gpio_o[61];
+  assign refclk_ready_tx = gpio_o[62];
+  assign refclk_ready_os = gpio_o[63];
 
   // Unused GPIOs
   assign gpio_i[63:54] = gpio_o[63:54];
@@ -281,7 +292,16 @@ module system_top #(
                     ~spi_csn_s[1] ? spi_hmc_miso :
                     1'b0;
 
-  assign gts_reset_i_refclk_bus_out_refclk_bus_out = jesd204_phy_o_refclk_bus_out_refclk_bus_out & jesd204_phy_os_o_refclk_bus_out_refclk_bus_out;
+  assign refclk_ready = refclk_ready_tx || refclk_ready_rx || refclk_ready_os;
+
+  wire [9:0]                        gts_reset_i_refclk_on_refclk_on;
+  wire [9:0]                        gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out;
+  wire [7:0]                        gts_reset_o_refclk_fail_status_refclk_fail_status;
+  wire                              gts_reset_o_refclk_on_ack_refclk_on_ack;
+  wire [9:0]                        gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in;
+
+  assign gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out = jesd204_phy_o_refclk_bus_out_refclk_bus_out;
+  assign gts_reset_i_refclk_on_refclk_on = {10{refclk_ready}};
 
   system_bd i_system_bd (
     .sys_clk_clk                                             (sys_clk),
@@ -290,12 +310,14 @@ module system_top #(
     .sys_rst_reset_n                                         (sys_reset_n),
     .rst_ninit_done                                          (ninit_done),
     .h2f_reset_reset                                         (h2f_reset),
+    .h2f_warm_reset_reset_req                                (h2f_warm_reset_reset_req),
+    .h2f_warm_reset_reset_ack                                (h2f_warm_reset_reset_ack),
 
     .f2h_irq1_in_irq                                         ('h0),
     .pr_rom_data_nc_rom_data                                 ('h0),
     .o_pma_cu_clk_clk                                        (pma_cu_clk),
-    .i_refclk_bus_out_refclk_bus_out                         (1'h0),
-    .o_shoreline_refclk_fail_stat_shoreline_refclk_fail_stat (refclk_fail_stat),
+    // .i_refclk_bus_out_refclk_bus_out                         (1'h0),
+    // .o_shoreline_refclk_fail_stat_shoreline_refclk_fail_stat (refclk_fail_stat),
 
     .hps_emif_mem_0_mem_cke                                  (emif_hps_mem_cke),
     .hps_emif_mem_0_mem_odt                                  (emif_hps_mem_odt),
@@ -387,59 +409,68 @@ module system_top #(
     .sys_gpio_in_export                                      (gpio_i[63:32]),
     .sys_gpio_out_export                                     (gpio_o[63:32]),
 
-    .gts_reset_o_src_rs_grant_src_rs_grant                   (gts_reset_o_src_rs_grant_src_rs_grant),
-    .gts_reset_src_rs_priority_src_rs_priority               ('h0),
-    .gts_reset_i_src_rs_req_src_rs_req                       (gts_reset_i_src_rs_req_src_rs_req),
-    .gts_reset_o_pma_cu_clk_clk                              (gts_reset_o_pma_cu_clk_clk),
-    .gts_reset_i_refclk_bus_out_refclk_bus_out               (gts_reset_i_refclk_bus_out_refclk_bus_out),
+    .gts_reset_src_rs_priority_src_rs_priority                  ('h0),
+    .gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out (gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out),
+		.gts_reset_o_refclk_fail_status_refclk_fail_status          (gts_reset_o_refclk_fail_status_refclk_fail_status),
+		.gts_reset_o_refclk_on_ack_refclk_on_ack                    (gts_reset_o_refclk_on_ack_refclk_on_ack),
+		.gts_reset_i_refclk_on_refclk_on                            (gts_reset_i_refclk_on_refclk_on),
+		.gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in        (gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in),
+    .gts_reset_o_src_rs_grant_src_rs_grant                      (gts_reset_o_src_rs_grant_src_rs_grant),
+    .gts_reset_i_src_rs_req_src_rs_req                          (gts_reset_i_src_rs_req_src_rs_req),
+    .gts_reset_o_pma_cu_clk_clk                                 (gts_reset_o_pma_cu_clk_clk),
 
-    .jesd204_phy_i_pma_cu_clk_clk                            (gts_reset_o_pma_cu_clk_clk[0]),
-    .jesd204_phy_i_src_rs_grant_src_rs_grant                 (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L-1:0]),
-    .jesd204_phy_o_src_rs_req_src_rs_req                     (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L-1:0]),
-    .jesd204_phy_o_refclk_bus_out_refclk_bus_out             (jesd204_phy_o_refclk_bus_out_refclk_bus_out),
+    .jesd204_phy_i_pma_cu_clk_clk                              (gts_reset_o_pma_cu_clk_clk[PHY_OS_PMA_CLK_IDX]),
+    .jesd204_phy_i_src_rs_grant_src_rs_grant                   (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L-1:0]),
+    .jesd204_phy_o_src_rs_req_src_rs_req                       (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L-1:0]),
+    .jesd204_phy_o_refclk_status_bus_out_refclk_status_bus_out (jesd204_phy_o_refclk_bus_out_refclk_bus_out),
+    .jesd204_phy_i_refclk_cmd_bus_in_refclk_cmd_bus_in         (gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in),
 
-    .jesd204_phy_os_i_pma_cu_clk_clk                         (gts_reset_o_pma_cu_clk_clk[PHY_OS_PMA_CLK_IDX]),
-    .jesd204_phy_os_i_src_rs_grant_src_rs_grant              (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
-    .jesd204_phy_os_o_src_rs_req_src_rs_req                  (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
-    .jesd204_phy_os_o_refclk_bus_out_refclk_bus_out          (jesd204_phy_os_o_refclk_bus_out_refclk_bus_out),
+    .jesd204_phy_os_i_pma_cu_clk_clk                           (gts_reset_o_pma_cu_clk_clk[PHY_OS_PMA_CLK_IDX]),
+    .jesd204_phy_os_i_src_rs_grant_src_rs_grant                (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
+    .jesd204_phy_os_o_src_rs_req_src_rs_req                    (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
+    // .jesd204_phy_os_o_refclk_bus_out_refclk_bus_out            (jesd204_phy_os_o_refclk_bus_out_refclk_bus_out),
 
     .o_pll_lock_o_pll_lock                                   (syspll_lock),
     .o_syspll_c0_clk                                         (syspll_clk),
-
-    .system_pll_lock_system_pll_lock                         (syspll_lock),
-    .system_pll_clk_clk                                      (syspll_clk),
-    .system_pll_lock_os_system_pll_lock                      (syspll_lock),
-    .system_pll_clk_os_clk                                   (syspll_clk),
     .refclk_xcvr_clk                                         (fpga_refclk_in),
     .i_refclk_rdy_data                                       (refclk_ready),
-    .dacfifo_bypass_bypass                                   (dacfifo_bypass),
+
+    .system_pll_clk_clk                                      (syspll_clk),
+    .system_pll_lock_system_pll_lock                         (syspll_lock),
+
+    .system_pll_clk_os_clk                                   (syspll_clk),
+    .system_pll_lock_os_system_pll_lock                      (syspll_lock),
+
     .phy_tx_pll_locked_o_tx_pll_locked                       (phy_tx_pll_locked_o_tx_pll_locked),
     .tx_pll_locked_o_tx_pll_locked                           (phy_tx_pll_locked_o_tx_pll_locked[TX_JESD_L-1:0]),
-
+    .mxfe_rx_os_jesd204_reset_rx_reset                       (mxfe_rx_os_jesd204_reset_rx_reset),
+    .jesd204_phy_os_tx_reset_tx_reset                        (mxfe_rx_os_jesd204_reset_rx_reset),
+    .jesd204_phy_os_rx_reset_rx_reset                        (mxfe_rx_os_jesd204_reset_rx_reset),
+    .dacfifo_bypass_bypass                                   (dacfifo_bypass),
     // FMC HPC
     .sys_spi_MISO                                            (spi_miso),
     .sys_spi_MOSI                                            (spi_mosi),
     .sys_spi_SCLK                                            (spi_clk),
     .sys_spi_SS_n                                            (spi_csn_s),
-    .tx_serial_data_o_tx_serial_data                         (tx_data[TX_JESD_L-1:0]),
-    .tx_serial_data_n_o_tx_serial_data_n                     (tx_data_n[TX_JESD_L-1:0]),
+    .tx_serial_data_o_tx_serial_data                         (tx_data),
+    .tx_serial_data_n_o_tx_serial_data_n                     (tx_data_n),
     .tx_ref_clk_clk                                          (fpga_refclk_in),
     .tx_sync_export                                          (fpga_syncin_0),
     .tx_sysref_export                                        (sysref2),
     .tx_device_clk_clk                                       (clkin6),
-    .rx_serial_data_i_rx_serial_data                         (rx_data[RX_JESD_L-1:0]),
-    .rx_serial_data_n_i_rx_serial_data_n                     (rx_data_n[RX_JESD_L-1:0]),
+    .rx_serial_data_i_rx_serial_data                         (rx_data),
+    .rx_serial_data_n_i_rx_serial_data_n                     (rx_data_n),
     .rx_ref_clk_clk                                          (fpga_refclk_in),
     .rx_sync_export                                          (fpga_syncout_0),
     .rx_sysref_export                                        (sysref2),
     .rx_os_ref_clk_clk                                       (fpga_refclk_in),
     .tx_os_ref_clk_clk                                       (fpga_refclk_in),
-    .rx_os_serial_data_i_rx_serial_data                      (rx_os_data[RX_OS_JESD_L-1:0]),
-    .rx_os_serial_data_n_i_rx_serial_data_n                  (rx_os_data_n[RX_OS_JESD_L-1:0]),
-    .rx_os_device_clk_clk                                    (clkin10),
+    .rx_os_serial_data_i_rx_serial_data                      (rx_os_data),
+    .rx_os_serial_data_n_i_rx_serial_data_n                  (rx_os_data_n),
+    .rx_os_device_clk_clk                                    (clkin6),
     .rx_os_sync_export                                       (fpga_syncout_1),
     .rx_os_sysref_export                                     (sysref2),
-    .rx_device_clk_clk                                       (clkin6),
+    .rx_device_clk_clk                                       (clkin10),
     .mxfe_gpio_export                                        ({1'b0,              // 14
                                                                1'b0,              // 13
                                                                fpga_syncin_1_n,   // 12

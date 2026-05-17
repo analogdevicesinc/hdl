@@ -1,6 +1,6 @@
 #
-# SPDX-FileCopyrightText: Copyright (C) 2024 Intel Corporation
 # SPDX-License-Identifier: MIT-0
+# SPDX-FileCopyrightText: Copyright (C) 2025 Altera Corporation
 #
 
 package require -exact qsys 24.3
@@ -28,13 +28,19 @@ set_module_property ELABORATION_CALLBACK elaboration
 #
 # parameters
 #
-add_parameter DATA_WIDTH INTEGER "64"
+add_parameter ADDRESS_WIDTH INTEGER "40"
+set_parameter_property ADDRESS_WIDTH DEFAULT_VALUE 40
+set_parameter_property ADDRESS_WIDTH DISPLAY_NAME ADDRESS_WIDTH
+set_parameter_property ADDRESS_WIDTH HDL_PARAMETER true
+set_parameter_property ADDRESS_WIDTH VISIBLE true
+set_parameter_property ADDRESS_WIDTH ALLOWED_RANGES {32 40}
+
+add_parameter DATA_WIDTH INTEGER "256"
+set_parameter_property DATA_WIDTH DEFAULT_VALUE 256
 set_parameter_property DATA_WIDTH DISPLAY_NAME DATA_WIDTH
-set_parameter_property DATA_WIDTH SYSTEM_INFO "DATA_WIDTH"
 set_parameter_property DATA_WIDTH HDL_PARAMETER true
 set_parameter_property DATA_WIDTH VISIBLE true
 set_parameter_property DATA_WIDTH ALLOWED_RANGES {64 128 256}
-
 
 #
 # file sets
@@ -46,6 +52,7 @@ add_fileset SIM_VERILOG SIM_VERILOG generate_verilog
 add_fileset SIM_VHDL SIM_VHDL generate_verilog
 
 proc elaboration {} {
+set ADDRESS_WIDTH          [ get_parameter_value ADDRESS_WIDTH ]
 set DATA_WIDTH          [ get_parameter_value DATA_WIDTH ]
 }
 #
@@ -112,7 +119,7 @@ set_interface_property axi4_man IPXACT_REGISTER_MAP_VARIABLES ""
 set_interface_property axi4_man SV_INTERFACE_TYPE ""
 set_interface_property axi4_man SV_INTERFACE_MODPORT_TYPE ""
 
-add_interface_port axi4_man man_araddr araddr Output 32
+add_interface_port axi4_man man_araddr araddr Output ADDRESS_WIDTH
 add_interface_port axi4_man man_arburst arburst Output 2
 add_interface_port axi4_man man_arcache arcache Output 4
 add_interface_port axi4_man man_arid arid Output 5
@@ -123,7 +130,7 @@ add_interface_port axi4_man man_arqos arqos Output 4
 add_interface_port axi4_man man_arready arready Input 1
 add_interface_port axi4_man man_arsize arsize Output 3
 add_interface_port axi4_man man_arvalid arvalid Output 1
-add_interface_port axi4_man man_awaddr awaddr Output 32
+add_interface_port axi4_man man_awaddr awaddr Output ADDRESS_WIDTH
 add_interface_port axi4_man man_awburst awburst Output 2
 add_interface_port axi4_man man_awcache awcache Output 4
 add_interface_port axi4_man man_awid awid Output 5
@@ -192,7 +199,7 @@ set_interface_property axi4_sub IPXACT_REGISTER_MAP_VARIABLES ""
 set_interface_property axi4_sub SV_INTERFACE_TYPE ""
 set_interface_property axi4_sub SV_INTERFACE_MODPORT_TYPE ""
 
-add_interface_port axi4_sub sub_araddr araddr Input 32
+add_interface_port axi4_sub sub_araddr araddr Input ADDRESS_WIDTH
 add_interface_port axi4_sub sub_arburst arburst Input 2
 add_interface_port axi4_sub sub_arcache arcache Input 4
 add_interface_port axi4_sub sub_arid arid Input 5
@@ -203,7 +210,7 @@ add_interface_port axi4_sub sub_arqos arqos Input 4
 add_interface_port axi4_sub sub_arready arready Output 1
 add_interface_port axi4_sub sub_arsize arsize Input 3
 add_interface_port axi4_sub sub_arvalid arvalid Input 1
-add_interface_port axi4_sub sub_awaddr awaddr Input 32
+add_interface_port axi4_sub sub_awaddr awaddr Input ADDRESS_WIDTH
 add_interface_port axi4_sub sub_awburst awburst Input 2
 add_interface_port axi4_sub sub_awcache awcache Input 4
 add_interface_port axi4_sub sub_awid awid Input 5
@@ -239,14 +246,17 @@ add_interface_port axi4_sub sub_awregion awregion Input 4
 
 proc generate_verilog { output_name } {
 set verilog_code {
+// ****************************************************************************
 //
-// SPDX-FileCopyrightText: Copyright (C) 2024 Intel Corporation
 // SPDX-License-Identifier: MIT-0
+// SPDX-FileCopyrightText: Copyright (C) 2025 Altera Corporation
 //
+// ****************************************************************************
 
 `timescale 1 ps / 1 ps
 module ${output_name} #(
-    parameter DATA_WIDTH = 64
+    parameter ADDRESS_WIDTH = 40,
+    parameter DATA_WIDTH = 256
 ) (
 
 	//
@@ -258,7 +268,7 @@ module ${output_name} #(
 	//
 	// AXI4 subordinate
 	//
-	input  wire \[31:0\]  sub_araddr,
+	input  wire \[ADDRESS_WIDTH-1:0\]  sub_araddr,
 	input  wire \[1:0\]   sub_arburst,
 	input  wire \[3:0\]   sub_arcache,
 	input  wire \[4:0\]   sub_arid,
@@ -269,7 +279,7 @@ module ${output_name} #(
 	output wire         sub_arready,
 	input  wire \[2:0\]   sub_arsize,
 	input  wire         sub_arvalid,
-	input  wire \[31:0\]  sub_awaddr,
+	input  wire \[ADDRESS_WIDTH-1:0\]  sub_awaddr,
 	input  wire \[1:0\]   sub_awburst,
 	input  wire \[3:0\]   sub_awcache,
 	input  wire \[4:0\]   sub_awid,
@@ -306,7 +316,7 @@ module ${output_name} #(
 	//
 	// AXI4 manager
 	//
-	output wire \[31:0\]  man_araddr,
+	output wire \[ADDRESS_WIDTH-1:0\]  man_araddr,
 	output wire \[1:0\]   man_arburst,
 	output wire \[3:0\]   man_arcache,
 	output wire \[4:0\]   man_arid,
@@ -317,7 +327,7 @@ module ${output_name} #(
 	input  wire         man_arready,
 	output wire \[2:0\]   man_arsize,
 	output wire         man_arvalid,
-	output wire \[31:0\]  man_awaddr,
+	output wire \[ADDRESS_WIDTH-1:0\]  man_awaddr,
 	output wire \[1:0\]   man_awburst,
 	output wire \[3:0\]   man_awcache,
 	output wire \[4:0\]   man_awid,

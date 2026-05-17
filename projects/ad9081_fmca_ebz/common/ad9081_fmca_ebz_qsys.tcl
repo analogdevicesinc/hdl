@@ -212,28 +212,28 @@ if {$EXTERNAL_PHY} {
   set_instance_parameter_value gts_reset_phy NUM_BANKS_SHORELINE [expr int(ceil(($RX_NUM_OF_LANES + $RX_OS_NUM_OF_LANES) / 4.0))]
   set_instance_parameter_value gts_reset_phy NUM_LANES_SHORELINE [expr $RX_NUM_OF_LANES + $RX_OS_NUM_OF_LANES]
 
-  add_interface gts_reset_o_pma_cu_clk conduit end
-  add_interface gts_reset_o_src_rs_grant conduit end
-  add_interface gts_reset_i_src_rs_req conduit end
-  add_interface gts_reset_i_refclk_bus_out conduit end
-  add_interface gts_reset_src_rs_priority conduit end
-
-  set_interface_property gts_reset_o_pma_cu_clk EXPORT_OF gts_reset_phy.o_pma_cu_clk
+  set_interface_property gts_reset_src_rs_priority EXPORT_OF gts_reset_phy.i_src_rs_priority
+  set_interface_property gts_reset_i_refclk_on EXPORT_OF gts_reset_phy.i_refclk_on
+  set_interface_property gts_reset_o_refclk_on_ack EXPORT_OF gts_reset_phy.o_refclk_on_ack
+  set_interface_property gts_reset_i_src_rs_refclk_status_bus EXPORT_OF gts_reset_phy.i_src_rs_refclk_status_bus
+  set_interface_property gts_reset_o_src_rs_refclk_cmd_bus EXPORT_OF gts_reset_phy.o_src_rs_refclk_cmd_bus
   set_interface_property gts_reset_o_src_rs_grant EXPORT_OF gts_reset_phy.o_src_rs_grant
   set_interface_property gts_reset_i_src_rs_req EXPORT_OF gts_reset_phy.i_src_rs_req
-  set_interface_property gts_reset_i_refclk_bus_out EXPORT_OF gts_reset_phy.i_refclk_bus_out
-  set_interface_property gts_reset_src_rs_priority EXPORT_OF gts_reset_phy.i_src_rs_priority
+  set_interface_property gts_reset_o_pma_cu_clk EXPORT_OF gts_reset_phy.o_pma_cu_clk
+  set_interface_property gts_reset_o_refclk_fail_status EXPORT_OF gts_reset_phy.o_refclk_fail_status
 
   foreach phy {jesd204_phy jesd204_phy_os} {
     add_interface ${phy}_i_pma_cu_clk conduit end
     add_interface ${phy}_i_src_rs_grant conduit end
     add_interface ${phy}_o_src_rs_req conduit end
-    add_interface ${phy}_o_refclk_bus_out conduit end
+    add_interface ${phy}_i_refclk_cmd_bus_in conduit end
+    add_interface ${phy}_o_refclk_status_bus_out conduit end
 
     set_interface_property ${phy}_i_pma_cu_clk EXPORT_OF ${phy}.i_pma_cu_clk
     set_interface_property ${phy}_i_src_rs_grant EXPORT_OF ${phy}.i_src_rs_grant
     set_interface_property ${phy}_o_src_rs_req EXPORT_OF ${phy}.o_src_rs_req
-    set_interface_property ${phy}_o_refclk_bus_out EXPORT_OF ${phy}.o_refclk_bus_out
+    set_interface_property ${phy}_i_refclk_cmd_bus_in EXPORT_OF ${phy}.i_refclk_cmd_bus_in
+    set_interface_property ${phy}_o_refclk_status_bus_out EXPORT_OF ${phy}.o_refclk_status_bus_out
   }
 }
 
@@ -383,7 +383,7 @@ set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_SRC} {1}
 # set_instance_parameter_value mxfe_rx_dma {FIFO_SIZE} {8}
 set_instance_parameter_value mxfe_rx_dma {DMA_AXI_PROTOCOL_DEST} {0}
-set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {4096}
+set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {2048}
 
 add_instance mxfe_rx_os_dma axi_dmac
 set_instance_parameter_value mxfe_rx_os_dma {ID} {0}
@@ -414,7 +414,6 @@ set_interface_property mxfe_gpio EXPORT_OF mxfe_gpio.external_connection
 
 
 # clocks and resets
-
 
 # system clock and reset
 
@@ -474,8 +473,8 @@ add_connection tx_device_clk.out_clk $dac_fifo_name.if_dac_clk
 add_connection mxfe_rx_jesd204.link_reset mxfe_rx_cpack.reset
 add_connection mxfe_rx_jesd204.link_reset $adc_fifo_name.if_adc_rst
 
-add_connection mxfe_rx_jesd204.link_reset mxfe_rx_os_cpack.reset
-add_connection mxfe_rx_jesd204.link_reset $adc_os_fifo_name.if_adc_rst
+add_connection mxfe_rx_os_jesd204.link_reset mxfe_rx_os_cpack.reset
+add_connection mxfe_rx_os_jesd204.link_reset $adc_os_fifo_name.if_adc_rst
 
 add_connection mxfe_tx_jesd204.link_reset mxfe_tx_upack.reset
 add_connection mxfe_tx_jesd204.link_reset $dac_fifo_name.if_dac_rst
@@ -574,10 +573,14 @@ if {!$EXTERNAL_PHY} {
   add_connection jesd204_phy.rx_is_lockedtodata mxfe_rx_jesd204.rx_is_lockedtodata
 
   add_connection mxfe_rx_os_jesd204.if_up_rst jesd204_phy_os.rx_link_reset
-  add_connection mxfe_rx_os_jesd204.reset     jesd204_phy_os.rx_reset
+  # add_connection mxfe_rx_os_jesd204.reset     jesd204_phy_os.rx_reset
   add_connection jesd204_phy_os.rx_reset_ack  mxfe_rx_os_jesd204.reset_ack
   add_connection jesd204_phy_os.rx_ready      mxfe_rx_os_jesd204.ready
   add_connection jesd204_phy_os.rx_is_lockedtodata mxfe_rx_os_jesd204.rx_is_lockedtodata
+
+  set_interface_property mxfe_rx_os_jesd204_reset EXPORT_OF mxfe_rx_os_jesd204.reset
+  set_interface_property jesd204_phy_os_rx_reset  EXPORT_OF jesd204_phy_os.rx_reset
+  set_interface_property jesd204_phy_os_tx_reset  EXPORT_OF jesd204_phy_os.tx_reset
 
   for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
     add_connection jesd204_phy.phy_rx_${i} mxfe_rx_jesd204.rx_phy${i}
@@ -714,6 +717,16 @@ if {!$EXTERNAL_PHY} {
     if {$TX_NUM_OF_LANES > 6} {ad_cpu_interconnect 0x0000C000 avl_adxcfg_6.rcfg_s1    "avl_mm_bridge_1"}
     if {$TX_NUM_OF_LANES > 7} {ad_cpu_interconnect 0x0000E000 avl_adxcfg_7.rcfg_s1    "avl_mm_bridge_1"}
 
+    ad_cpu_interconnect 0x00020000 mxfe_rx_os_jesd204.link_pll_reconfig "avl_mm_bridge_0" 0x000C0000
+    if {$RX_OS_NUM_OF_LANES > 0} {ad_cpu_interconnect 0x00000000 avl_adxcfg_0.rcfg_s0    "avl_mm_bridge_2"}
+    if {$RX_OS_NUM_OF_LANES > 1} {ad_cpu_interconnect 0x00002000 avl_adxcfg_1.rcfg_s0    "avl_mm_bridge_2"}
+    if {$RX_OS_NUM_OF_LANES > 2} {ad_cpu_interconnect 0x00004000 avl_adxcfg_2.rcfg_s0    "avl_mm_bridge_2"}
+    if {$RX_OS_NUM_OF_LANES > 3} {ad_cpu_interconnect 0x00006000 avl_adxcfg_3.rcfg_s0    "avl_mm_bridge_2"}
+    if {$RX_OS_NUM_OF_LANES > 4} {ad_cpu_interconnect 0x00008000 avl_adxcfg_4.rcfg_s0    "avl_mm_bridge_2"}
+    if {$RX_OS_NUM_OF_LANES > 5} {ad_cpu_interconnect 0x0000A000 avl_adxcfg_5.rcfg_s0    "avl_mm_bridge_2"}
+    if {$RX_OS_NUM_OF_LANES > 6} {ad_cpu_interconnect 0x0000C000 avl_adxcfg_6.rcfg_s0    "avl_mm_bridge_2"}
+    if {$RX_OS_NUM_OF_LANES > 7} {ad_cpu_interconnect 0x0000E000 avl_adxcfg_7.rcfg_s0    "avl_mm_bridge_2"}
+
     ad_cpu_interconnect 0x000D0000 mxfe_tx_jesd204.lane_pll_reconfig
   }
 } else {
@@ -747,10 +760,15 @@ ad_cpu_interconnect 0x000E0000 mxfe_gpio.s1
 ## interrupts
 #
 
-ad_cpu_interrupt  9  mxfe_rx_os_dma.interrupt_sender
-ad_cpu_interrupt 10  mxfe_rx_os_jesd204.interrupt
-ad_cpu_interrupt 11  mxfe_rx_dma.interrupt_sender
-ad_cpu_interrupt 12  mxfe_tx_dma.interrupt_sender
+ad_cpu_interrupt 10  mxfe_rx_dma.interrupt_sender
+ad_cpu_interrupt 11  mxfe_tx_dma.interrupt_sender
+ad_cpu_interrupt 12  mxfe_rx_os_dma.interrupt_sender
 ad_cpu_interrupt 13  mxfe_rx_jesd204.interrupt
 ad_cpu_interrupt 14  mxfe_tx_jesd204.interrupt
-ad_cpu_interrupt 15  mxfe_gpio.irq
+ad_cpu_interrupt 15  mxfe_rx_os_jesd204.interrupt
+# ad_cpu_interrupt 15  mxfe_gpio.irq
+
+# add_interface sys_100_clk clock source
+# set_interface_property sys_100_clk EXPORT_OF sys_clk.clk
+# add_interface sys_100_clk_rst reset source
+# set_interface_property sys_100_clk_rst EXPORT_OF sys_clk.clk_reset

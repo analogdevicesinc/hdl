@@ -86,6 +86,8 @@ proc jesd204_e_tile_phy_composition_callback {} {
   set_instance_parameter_value native_phy pma_data_rate $lane_rate
   set_instance_parameter_value native_phy pma_width $pma_width
   set_instance_parameter_value native_phy l_av1_enable 1
+  set_instance_parameter_value native_phy refclk_recovery_en 1
+  set_instance_parameter_value native_phy rx_deskew_en 0
 
   # TX side parameters
   set_instance_parameter_value native_phy tx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
@@ -101,7 +103,7 @@ proc jesd204_e_tile_phy_composition_callback {} {
   set_instance_parameter_value native_phy pldif_tx_clkout_div 1
   set_instance_parameter_value native_phy pldif_tx_clkout2_sel "TX_WORD_CLK"
   set_instance_parameter_value native_phy pldif_tx_clkout2_div 2
-  set_instance_parameter_value native_phy rx_deskew_en 0
+  set_instance_parameter_value native_phy tx_pll_realtime_lock_enable 1
 
   # RX side parameters
   set_instance_parameter_value native_phy rx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
@@ -135,14 +137,20 @@ proc jesd204_e_tile_phy_composition_callback {} {
     add_interface o_src_rs_req conduit end
     set_interface_property o_src_rs_req EXPORT_OF native_phy.o_src_rs_req
 
-    add_interface o_refclk_bus_out conduit end
-    set_interface_property o_refclk_bus_out EXPORT_OF native_phy.o_refclk_bus_out
+    # add_interface o_refclk_bus_out conduit end
+    # set_interface_property o_refclk_bus_out EXPORT_OF native_phy.o_refclk_bus_out
 
     add_interface i_pma_cu_clk conduit end
     set_interface_property i_pma_cu_clk EXPORT_OF native_phy.i_pma_cu_clk
 
     add_interface i_src_rs_grant conduit end
     set_interface_property i_src_rs_grant EXPORT_OF native_phy.i_src_rs_grant
+
+    add_interface i_refclk_cmd_bus_in conduit end
+    set_interface_property i_refclk_cmd_bus_in EXPORT_OF native_phy.i_refclk_cmd_bus_in
+
+    add_interface o_refclk_status_bus_out conduit end
+    set_interface_property o_refclk_status_bus_out EXPORT_OF native_phy.o_refclk_status_bus_out
   }
 
   # Instantiate PHY glues (RX and TX)

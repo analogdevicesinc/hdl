@@ -36,7 +36,7 @@ source ../../scripts/adi_project_intel.tcl
 #   [RX/TX]_KS_PER_CHANNEL : Number of samples stored in internal buffers in kilosamples per converter (M)
 #
 
-set REQUIRED_QUARTUS_VERSION "25.1.1"
+set REQUIRED_QUARTUS_VERSION "25.3.1"
 
 adi_project ad9081_fmca_ebz_a5e [list \
   JESD_MODE            [get_env_param JESD_MODE        8B10B ] \
@@ -54,7 +54,7 @@ adi_project ad9081_fmca_ebz_a5e [list \
   RX_OS_JESD_S         [get_env_param RX_OS_JESD_S         1 ] \
   RX_OS_JESD_NP        [get_env_param RX_OS_JESD_NP       16 ] \
   RX_OS_NUM_LINKS      [get_env_param RX_OS_NUM_LINKS      1 ] \
-  TX_JESD_M            [get_env_param TX_JESD_M            8 ] \
+  TX_JESD_M            [get_env_param TX_JESD_M            4 ] \
   TX_JESD_L            [get_env_param TX_JESD_L            2 ] \
   TX_JESD_S            [get_env_param TX_JESD_S            1 ] \
   TX_JESD_NP           [get_env_param TX_JESD_NP          16 ] \
@@ -62,12 +62,15 @@ adi_project ad9081_fmca_ebz_a5e [list \
   RX_KS_PER_CHANNEL    [get_env_param RX_KS_PER_CHANNEL    1 ] \
   TX_KS_PER_CHANNEL    [get_env_param TX_KS_PER_CHANNEL    1 ] \
   RX_OS_KS_PER_CHANNEL [get_env_param RX_OS_KS_PER_CHANNEL 1 ] \
-  DDS_DISABLED         [get_env_param DDS_DISABLED         1 ] \
+  DDS_DISABLED         [get_env_param DDS_DISABLED         0 ] \
 ]
 
 source $ad_hdl_dir/projects/common/a5e/a5e_system_assign.tcl
 
 # files
+
+# set_global_assignment -name ENABLE_SIGNALTAP ON
+# set_global_assignment -name USE_SIGNALTAP_FILE debug.stp
 
 set_global_assignment -name VERILOG_FILE ../../../library/common/ad_3w_spi.v
 
@@ -102,14 +105,14 @@ set_location_assignment PIN_AV21  -to "fpga_refclk_in(n)"   ; ## D05  GBTCLK1_M2
 # set_location_assignment PIN_AP3   -to "rx_data_n[2]"        ; ## A07  DP2_M2C_N
 # set_location_assignment PIN_AM1   -to "rx_data[3]"          ; ## A10  DP3_M2C_P
 # set_location_assignment PIN_AM3   -to "rx_data_n[3]"        ; ## A11  DP3_M2C_N
-set_location_assignment PIN_BF1   -to "rx_data[0]"          ; ## A14  DP4_M2C_P
-set_location_assignment PIN_BF3   -to "rx_data_n[0]"        ; ## A15  DP4_M2C_N
-set_location_assignment PIN_BD1   -to "rx_data[1]"          ; ## A18  DP5_M2C_P
-set_location_assignment PIN_BD3   -to "rx_data_n[1]"        ; ## A19  DP5_M2C_N
-set_location_assignment PIN_BB1   -to "rx_os_data[0]"       ; ## B16  DP6_M2C_P
-set_location_assignment PIN_BB3   -to "rx_os_data_n[0]"     ; ## B17  DP6_M2C_N
-set_location_assignment PIN_AY1   -to "rx_os_data[1]"       ; ## B12  DP7_M2C_P
-set_location_assignment PIN_AY3   -to "rx_os_data_n[1]"     ; ## B13  DP7_M2C_N
+set_location_assignment PIN_BF1   -to "rx_data[0]"            ; ## A14  DP4_M2C_P
+set_location_assignment PIN_BF3   -to "rx_data_n[0]"          ; ## A15  DP4_M2C_N
+set_location_assignment PIN_BD1   -to "rx_data[1]"            ; ## A18  DP5_M2C_P
+set_location_assignment PIN_BD3   -to "rx_data_n[1]"          ; ## A19  DP5_M2C_N
+set_location_assignment PIN_BB1   -to "rx_os_data[0]"         ; ## B16  DP6_M2C_P
+set_location_assignment PIN_BB3   -to "rx_os_data_n[0]"       ; ## B17  DP6_M2C_N
+set_location_assignment PIN_AY1   -to "rx_os_data[1]"         ; ## B12  DP7_M2C_P
+set_location_assignment PIN_AY3   -to "rx_os_data_n[1]"       ; ## B13  DP7_M2C_N
 
 # set_location_assignment PIN_AU7   -to "tx_data[0]"          ; ## C02  DP0_C2M_P
 # set_location_assignment PIN_AU10  -to "tx_data_n[0]"        ; ## C03  DP0_C2M_N
@@ -123,10 +126,10 @@ set_location_assignment PIN_BE7   -to "tx_data[0]"          ; ## A34  DP4_C2M_P
 set_location_assignment PIN_BE10  -to "tx_data_n[0]"        ; ## A35  DP4_C2M_N
 set_location_assignment PIN_BC7   -to "tx_data[1]"          ; ## A38  DP5_C2M_P
 set_location_assignment PIN_BC10  -to "tx_data_n[1]"        ; ## A39  DP5_C2M_N
-set_location_assignment PIN_BA7   -to "tx_data[2]"          ; ## B36  DP6_C2M_P
-set_location_assignment PIN_BA10  -to "tx_data_n[2]"        ; ## B37  DP6_C2M_N
-set_location_assignment PIN_AW7   -to "tx_data[3]"          ; ## B32  DP7_C2M_P
-set_location_assignment PIN_AW10  -to "tx_data_n[3]"        ; ## B33  DP7_C2M_N
+# set_location_assignment PIN_BA7   -to "tx_data[2]"          ; ## B36  DP6_C2M_P
+# set_location_assignment PIN_BA10  -to "tx_data_n[2]"        ; ## B37  DP6_C2M_N
+# set_location_assignment PIN_AW7   -to "tx_data[3]"          ; ## B32  DP7_C2M_P
+# set_location_assignment PIN_AW10  -to "tx_data_n[3]"        ; ## B33  DP7_C2M_N
 
 set_location_assignment PIN_A51   -to "fpga_syncin_0(n)"    ; ## H08  LA02_N
 set_location_assignment PIN_B51   -to "fpga_syncin_0"       ; ## H07  LA02_P
@@ -170,18 +173,31 @@ set tx_num_lanes [get_env_param TX_JESD_L 8]
 for {set j 0} {$j < $tx_num_lanes} {incr j} {
   set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to tx_data[$j]
   set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to tx_data_n[$j]
+
+  set_instance_assignment -name HSSI_PARAMETER "tx_eq_main_tap=55" -to  tx_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "tx_eq_pre_tap_1=0" -to  tx_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "tx_eq_pre_tap_2=0" -to  tx_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "tx_eq_post_tap_1=0" -to tx_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "tx_eq_main_tap=55" -to  tx_data_n[$j]
+  set_instance_assignment -name HSSI_PARAMETER "tx_eq_pre_tap_1=0" -to  tx_data_n[$j]
+  set_instance_assignment -name HSSI_PARAMETER "tx_eq_pre_tap_2=0" -to  tx_data_n[$j]
+  set_instance_assignment -name HSSI_PARAMETER "tx_eq_post_tap_1=0" -to tx_data_n[$j]
 }
 
 set rx_num_lanes [get_env_param RX_JESD_L 8]
 for {set j 0} {$j < $rx_num_lanes} {incr j} {
   set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_data[$j]
   set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_data_n[$j]
+  set_instance_assignment -name HSSI_PARAMETER "rx_adaptation_mode=RX_ADAPTATION_MODE_FLUX_ADAPTATION" -to rx_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "rx_adaptation_mode=RX_ADAPTATION_MODE_FLUX_ADAPTATION" -to rx_data_n[$j]
 }
 
 set rx_os_num_lanes [get_env_param RX_OS_JESD_L 8]
 for {set j 0} {$j < $rx_os_num_lanes} {incr j} {
   set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_os_data[$j]
   set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_os_data_n[$j]
+  set_instance_assignment -name HSSI_PARAMETER "rx_adaptation_mode=RX_ADAPTATION_MODE_FLUX_ADAPTATION" -to rx_os_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "rx_adaptation_mode=RX_ADAPTATION_MODE_FLUX_ADAPTATION" -to rx_os_data_n[$j]
 }
 
 set_instance_assignment -name IO_STANDARD "1.2 V" -to agc0[0]
@@ -205,8 +221,6 @@ set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[9]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to gpio[10]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_syncin_1_p
 set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_syncin_1_n
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_syncout_1_p
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_syncout_1_n
 set_instance_assignment -name IO_STANDARD "1.2 V" -to hmc_gpio1
 set_instance_assignment -name IO_STANDARD "1.2 V" -to hmc_sync
 set_instance_assignment -name IO_STANDARD "1.2 V" -to irqb[0]

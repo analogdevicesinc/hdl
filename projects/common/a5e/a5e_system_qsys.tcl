@@ -676,10 +676,13 @@ proc ad_dma_interconnect {m_port {m_addr 0x00000000} {data_width 128}} {
       # This adapter is needed, otherwise the bridge doesn't work...
       add_instance f2sdram_adapter f2sdram_adapter
       set_instance_parameter_value f2sdram_adapter {DATA_WIDTH} $data_width
+      set_instance_parameter_value f2sdram_adapter {ADDRESS_WIDTH} {32}
 
       add_connection sys_dma_clk.clk f2sdram_adapter.clock
       add_connection sys_dma_clk.clk_reset f2sdram_adapter.reset
       add_connection f2sdram_adapter.axi4_man sys_hps.f2sdram
+
+      set_interface_property h2f_warm_reset EXPORT_OF sys_hps.h2f_warm_reset_handshake
     }
     add_connection ${m_port} f2sdram_adapter.axi4_sub
     set_connection_parameter_value ${m_port}/f2sdram_adapter.axi4_sub baseAddress ${m_addr}
@@ -767,8 +770,8 @@ set_interface_property sys_spi EXPORT_OF sys_spi.external
 # exports
 
 set_interface_property o_pma_cu_clk EXPORT_OF gts_reset.o_pma_cu_clk
-set_interface_property i_refclk_bus_out EXPORT_OF gts_reset.i_refclk_bus_out
-set_interface_property o_shoreline_refclk_fail_stat EXPORT_OF gts_reset.o_shoreline_refclk_fail_stat
+# set_interface_property i_refclk_bus_out EXPORT_OF gts_reset.i_refclk_bus_out
+# set_interface_property o_shoreline_refclk_fail_stat EXPORT_OF gts_reset.o_shoreline_refclk_fail_stat
 
 set_interface_property f2h_irq1_in EXPORT_OF sys_hps.fpga2hps_interrupt_irq1
 set_interface_property usb31_io EXPORT_OF sys_hps.usb31_io
