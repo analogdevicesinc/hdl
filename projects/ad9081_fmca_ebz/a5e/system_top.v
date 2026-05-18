@@ -221,13 +221,32 @@ module system_top #(
   wire          gts_reset_i_refclk_bus_out_refclk_bus_out;
   wire [ 9:0]   jesd204_phy_o_refclk_bus_out_refclk_bus_out;
   // wire [ 9:0]   jesd204_phy_os_o_refclk_bus_out_refclk_bus_out;
-  wire          mxfe_rx_os_jesd204_reset_rx_reset;
 
   wire  [ 7:0]  spi_csn_s;
   wire          spi_clk;
   wire          spi_mosi;
 
   assign h2f_warm_reset_reset_ack = h2f_warm_reset_reset_req;
+
+  // ADXCVR -> PHY
+  wire jesd204_phy_rx_reset_ack_rx_reset_ack;
+  wire jesd204_phy_rx_ready_rx_ready;
+  wire [RX_OS_JESD_L+RX_JESD_L-1:0] jesd204_phy_rx_is_lockedtodata_o_rx_is_lockedtodata;
+
+  wire mxfe_rx_jesd204_ready_rx_ready;
+  wire mxfe_rx_jesd204_reset_ack_rx_reset_ack;
+  wire [RX_JESD_L-1:0] mxfe_rx_jesd204_rx_is_lockedtodata_o_rx_is_lockedtodata;
+
+  wire mxfe_rx_os_jesd204_ready_rx_ready;
+  wire mxfe_rx_os_jesd204_reset_ack_rx_reset_ack;
+  wire [RX_OS_JESD_L-1:0] mxfe_rx_os_jesd204_rx_is_lockedtodata_o_rx_is_lockedtodata;
+
+  assign mxfe_rx_jesd204_reset_ack_rx_reset_ack = jesd204_phy_rx_reset_ack_rx_reset_ack;
+  assign mxfe_rx_os_jesd204_reset_ack_rx_reset_ack = jesd204_phy_rx_reset_ack_rx_reset_ack;
+  assign mxfe_rx_jesd204_ready_rx_ready = jesd204_phy_rx_ready_rx_ready;
+  assign mxfe_rx_os_jesd204_ready_rx_ready = jesd204_phy_rx_ready_rx_ready;
+  assign mxfe_rx_jesd204_rx_is_lockedtodata_o_rx_is_lockedtodata = jesd204_phy_rx_is_lockedtodata_o_rx_is_lockedtodata[RX_JESD_L-1:0];
+  assign mxfe_rx_os_jesd204_rx_is_lockedtodata_o_rx_is_lockedtodata = jesd204_phy_rx_is_lockedtodata_o_rx_is_lockedtodata[RX_OS_JESD_L+RX_JESD_L-1:RX_JESD_L];
 
   // Board GPIOs
   assign fpga_led      = gpio_o[3:0];
@@ -302,6 +321,8 @@ module system_top #(
 
   assign gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out = jesd204_phy_o_refclk_bus_out_refclk_bus_out;
   assign gts_reset_i_refclk_on_refclk_on = {10{refclk_ready}};
+
+  wire rx_sync;
 
   system_bd i_system_bd (
     .sys_clk_clk                                             (sys_clk),
@@ -420,15 +441,22 @@ module system_top #(
     .gts_reset_o_pma_cu_clk_clk                                 (gts_reset_o_pma_cu_clk_clk),
 
     .jesd204_phy_i_pma_cu_clk_clk                              (gts_reset_o_pma_cu_clk_clk[PHY_OS_PMA_CLK_IDX]),
-    .jesd204_phy_i_src_rs_grant_src_rs_grant                   (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L-1:0]),
-    .jesd204_phy_o_src_rs_req_src_rs_req                       (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L-1:0]),
+    .jesd204_phy_i_src_rs_grant_src_rs_grant                   (gts_reset_o_src_rs_grant_src_rs_grant),
+    .jesd204_phy_o_src_rs_req_src_rs_req                       (gts_reset_i_src_rs_req_src_rs_req),
     .jesd204_phy_o_refclk_status_bus_out_refclk_status_bus_out (jesd204_phy_o_refclk_bus_out_refclk_bus_out),
     .jesd204_phy_i_refclk_cmd_bus_in_refclk_cmd_bus_in         (gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in),
 
-    .jesd204_phy_os_i_pma_cu_clk_clk                           (gts_reset_o_pma_cu_clk_clk[PHY_OS_PMA_CLK_IDX]),
-    .jesd204_phy_os_i_src_rs_grant_src_rs_grant                (gts_reset_o_src_rs_grant_src_rs_grant[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
-    .jesd204_phy_os_o_src_rs_req_src_rs_req                    (gts_reset_i_src_rs_req_src_rs_req[RX_JESD_L+RX_OS_JESD_L-1:RX_JESD_L]),
-    // .jesd204_phy_os_o_refclk_bus_out_refclk_bus_out            (jesd204_phy_os_o_refclk_bus_out_refclk_bus_out),
+    .jesd204_phy_rx_reset_ack_rx_reset_ack                   (jesd204_phy_rx_reset_ack_rx_reset_ack),
+    .jesd204_phy_rx_ready_rx_ready                           (jesd204_phy_rx_ready_rx_ready),
+    .jesd204_phy_rx_is_lockedtodata_o_rx_is_lockedtodata     (jesd204_phy_rx_is_lockedtodata_o_rx_is_lockedtodata),
+
+    .mxfe_rx_jesd204_ready_rx_ready                          (mxfe_rx_jesd204_ready_rx_ready),
+    .mxfe_rx_jesd204_reset_ack_rx_reset_ack                  (mxfe_rx_jesd204_reset_ack_rx_reset_ack),
+    .mxfe_rx_jesd204_rx_is_lockedtodata_o_rx_is_lockedtodata (mxfe_rx_jesd204_rx_is_lockedtodata_o_rx_is_lockedtodata),
+
+    .mxfe_rx_os_jesd204_ready_rx_ready                       (mxfe_rx_os_jesd204_ready_rx_ready),
+    .mxfe_rx_os_jesd204_reset_ack_rx_reset_ack               (mxfe_rx_os_jesd204_reset_ack_rx_reset_ack),
+    .mxfe_rx_os_jesd204_rx_is_lockedtodata_o_rx_is_lockedtodata (mxfe_rx_os_jesd204_rx_is_lockedtodata_o_rx_is_lockedtodata),
 
     .o_pll_lock_o_pll_lock                                   (syspll_lock),
     .o_syspll_c0_clk                                         (syspll_clk),
@@ -438,14 +466,9 @@ module system_top #(
     .system_pll_clk_clk                                      (syspll_clk),
     .system_pll_lock_system_pll_lock                         (syspll_lock),
 
-    .system_pll_clk_os_clk                                   (syspll_clk),
-    .system_pll_lock_os_system_pll_lock                      (syspll_lock),
-
     .phy_tx_pll_locked_o_tx_pll_locked                       (phy_tx_pll_locked_o_tx_pll_locked),
     .tx_pll_locked_o_tx_pll_locked                           (phy_tx_pll_locked_o_tx_pll_locked[TX_JESD_L-1:0]),
-    .mxfe_rx_os_jesd204_reset_rx_reset                       (mxfe_rx_os_jesd204_reset_rx_reset),
-    .jesd204_phy_os_tx_reset_tx_reset                        (mxfe_rx_os_jesd204_reset_rx_reset),
-    .jesd204_phy_os_rx_reset_rx_reset                        (mxfe_rx_os_jesd204_reset_rx_reset),
+
     .dacfifo_bypass_bypass                                   (dacfifo_bypass),
     // FMC HPC
     .sys_spi_MISO                                            (spi_miso),
@@ -457,20 +480,20 @@ module system_top #(
     .tx_ref_clk_clk                                          (fpga_refclk_in),
     .tx_sync_export                                          (fpga_syncin_0),
     .tx_sysref_export                                        (sysref2),
-    .tx_device_clk_clk                                       (clkin6),
-    .rx_serial_data_i_rx_serial_data                         (rx_data),
-    .rx_serial_data_n_i_rx_serial_data_n                     (rx_data_n),
+    .tx_device_clk_clk                                       (clkin10),
+    .rx_serial_data_i_rx_serial_data                         ({rx_os_data, rx_data}),
+    .rx_serial_data_n_i_rx_serial_data_n                     ({rx_os_data_n, rx_data_n}),
     .rx_ref_clk_clk                                          (fpga_refclk_in),
     .rx_sync_export                                          (fpga_syncout_0),
     .rx_sysref_export                                        (sysref2),
-    .rx_os_ref_clk_clk                                       (fpga_refclk_in),
-    .tx_os_ref_clk_clk                                       (fpga_refclk_in),
-    .rx_os_serial_data_i_rx_serial_data                      (rx_os_data),
-    .rx_os_serial_data_n_i_rx_serial_data_n                  (rx_os_data_n),
+    // .rx_os_ref_clk_clk                                       (fpga_refclk_in),
+    // .tx_os_ref_clk_clk                                       (fpga_refclk_in),
+    // .rx_os_serial_data_i_rx_serial_data                      (rx_os_data),
+    // .rx_os_serial_data_n_i_rx_serial_data_n                  (rx_os_data_n),
     .rx_os_device_clk_clk                                    (clkin6),
     .rx_os_sync_export                                       (fpga_syncout_1),
     .rx_os_sysref_export                                     (sysref2),
-    .rx_device_clk_clk                                       (clkin10),
+    .rx_device_clk_clk                                       (clkin6),
     .mxfe_gpio_export                                        ({1'b0,              // 14
                                                                1'b0,              // 13
                                                                fpga_syncin_1_n,   // 12

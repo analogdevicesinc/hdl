@@ -5,7 +5,7 @@
 
 create_clock -period "10.0000 ns"   -name sys_clk_100mhz      [get_ports {sys_clk}]
 create_clock -period "4.16667 ns"   -name ref_clk             [get_ports {fpga_refclk_in}]
-create_clock -add -period "8.33334 ns"   -name device_clk     [get_ports {clkin10}]
+create_clock -add -period "4.16667 ns"   -name device_clk     [get_ports {clkin10}]
 create_clock -add -period "4.16667 ns"   -name rx_device_clk  [get_ports {clkin6}]
 
 # Ignore these paths since the data is moving through an async fifo inside the link layer
