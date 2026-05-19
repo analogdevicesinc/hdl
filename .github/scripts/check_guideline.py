@@ -1387,6 +1387,7 @@ def check_project_name_vs_path(modified_files, lw, edit_files=False, checked_pro
         # Walk upward as long as we're inside <repo>/projects, but not at its root
         while os.path.commonpath([folder, projects_abs]) == projects_abs and os.path.basename(folder) != "projects":
             tcl_path = os.path.join(folder, "system_project.tcl")
+            tcl_path_rel = os.path.relpath(tcl_path)
 
             if os.path.exists(tcl_path) and folder not in checked_projects:
                 rel_path = os.path.relpath(folder, projects_abs)
@@ -1401,7 +1402,7 @@ def check_project_name_vs_path(modified_files, lw, edit_files=False, checked_pro
                             found = True
                             found_name = m.group(1)
                             if found_name != expected_name:
-                                lw.append(f"{f} : adi_project '{found_name}' does not match expected '{expected_name}'")
+                                lw.append(f"./{tcl_path_rel} : adi_project '{found_name}' does not match expected '{expected_name}'")
                                 if edit_files:
                                     line = re.sub(r'(\s*adi_project\s+)\S+', r'\1' + expected_name, line)
                                     changed = True
@@ -1410,7 +1411,7 @@ def check_project_name_vs_path(modified_files, lw, edit_files=False, checked_pro
                 if edit_files and found and changed:
                     with open(tcl_path, "w") as tclf:
                         tclf.writelines(lines)
-                    lw.append(f"{tcl_path} : adi_project updated to '{expected_name}'")
+                    lw.append(f"./{tcl_path_rel} : adi_project updated to '{expected_name}'")
 
                 checked_projects.add(folder)
                 break
