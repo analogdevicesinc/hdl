@@ -68,6 +68,14 @@ set_interface_property o_pll_lock   EXPORT_OF gts_pll.o_pll_lock
 set_interface_property refclk_xcvr  EXPORT_OF gts_pll.refclk_xcvr
 set_interface_property o_syspll_c0  EXPORT_OF gts_pll.o_syspll_c0
 
+# Internal 100 MHz clock exported
+add_instance sys_cpu_clk_bridge altera_clock_bridge
+set_instance_parameter_value sys_cpu_clk_bridge {EXPLICIT_CLOCK_RATE} {100000000}
+add_connection sys_clk.clk sys_cpu_clk_bridge.in_clk
+
+add_interface sys_cpu_clk clock source
+set_interface_property sys_cpu_clk EXPORT_OF sys_cpu_clk_bridge.out_clk
+
 #system ID
 set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}
 set_instance_parameter_value rom_sys_0 {PATH_TO_FILE} "$mem_init_sys_file_path/mem_init_sys.txt"
