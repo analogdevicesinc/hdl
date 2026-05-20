@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -461,29 +461,14 @@ ad_ip_parameter clk10_gen CONFIG.PRIM_SOURCE {Global_buffer}
 ad_ip_parameter clk10_gen CONFIG.RESET_TYPE {ACTIVE_LOW}
 ad_ip_parameter clk10_gen CONFIG.USE_LOCKED {false}
 
-ad_ip_instance clk_wiz clk125_gen
-ad_ip_parameter clk125_gen CONFIG.CLKIN1_UI_JITTER {0}
-ad_ip_parameter clk125_gen CONFIG.CLKOUT1_REQUESTED_DUTY_CYCLE {50.000}
-ad_ip_parameter clk125_gen CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {125.000}
-ad_ip_parameter clk125_gen CONFIG.CLKOUT1_REQUESTED_PHASE {0.000}
-ad_ip_parameter clk125_gen CONFIG.PRIMITIVE {PLL}
-ad_ip_parameter clk125_gen CONFIG.PRIM_SOURCE {Global_buffer}
-ad_ip_parameter clk125_gen CONFIG.RESET_TYPE {ACTIVE_LOW}
-ad_ip_parameter clk125_gen CONFIG.USE_LOCKED {false}
-
-ad_ip_instance proc_sys_reset sys_125m_rstgen
-ad_connect sys_125m_rstgen/slowest_sync_clk clk125_gen/clk_out1
-ad_connect sys_125m_rstgen/ext_reset_in $sys_dma_resetn
-
 connect_bd_net [get_bd_ports led] [get_bd_pins corundum_hierarchy/ethernet_core/led]
 
 ad_connect corundum_hierarchy/clk_corundum $sys_dma_clk
-ad_connect corundum_rstgen/slowest_sync_clk $sys_dma_clk
-ad_connect corundum_rstgen/ext_reset_in $sys_dma_resetn
+ad_ip_parameter corundum_rstgen CONFIG.C_AUX_RESET_HIGH {0}
+ad_connect corundum_rstgen/slowest_sync_clk sys_ps8/pl_clk1
+ad_connect corundum_rstgen/ext_reset_in sys_ps8/pl_resetn0
 ad_connect clk10_gen/clk_in1 $sys_dma_clk
 ad_connect clk10_gen/resetn $sys_dma_resetn
-ad_connect clk125_gen/clk_in1 $sys_dma_clk
-ad_connect clk125_gen/resetn $sys_dma_resetn
 
 ad_connect corundum_hierarchy/sfp_rx_p sfp_rx_p
 ad_connect corundum_hierarchy/sfp_rx_n sfp_rx_n
