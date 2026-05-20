@@ -143,8 +143,8 @@
 # Code owners for ad9783_ebz folder
 /projects/ad9783_ebz/       iulia.moldovan@analog.com  cristianmihai.popa@analog.com
 
-# Code owners for ad_gmsl2eth_sl folder
-/projects/ad_gmsl2eth_sl/   alin-tudor.sferle@analog.com  paul.pop@analog.com
+# Code owners for adrd8012_01z folder
+/projects/adrd8012_01z/   alin-tudor.sferle@analog.com  paul.pop@analog.com
 
 # Code owners for ad_quadmxfe1_ebz folder
 /projects/ad_quadmxfe1_ebz/ filip.gherman@analog.com  iulia.moldovan@analog.com  laez.barbosa@analog.com
