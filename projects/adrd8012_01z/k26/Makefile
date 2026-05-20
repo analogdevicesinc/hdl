@@ -1,12 +1,12 @@
 ####################################################################################
-## Copyright (c) 2024-2025 Analog Devices, Inc.
+## Copyright (c) 2024-2026 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad_gmsl2eth_sl_k26
+PROJECT_NAME := adrd8012_01z_k26
 
-M_DEPS += ../common/ad_gmsl2eth_sl_bd.tcl
+M_DEPS += ../common/adrd8012_01z_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
@@ -14,7 +14,6 @@ M_DEPS += ../../../library/common/ad_iobuf.v
 
 M_DEPS += ../../../library/corundum/scripts/corundum_k26_cfg.tcl
 M_DEPS += ../../../library/corundum/scripts/corundum.tcl
-
 
 EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl
 EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/rb_drp.tcl
