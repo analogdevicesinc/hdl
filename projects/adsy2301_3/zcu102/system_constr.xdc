@@ -18,10 +18,10 @@ set_property -dict {PACKAGE_PIN Y10 IOSTANDARD LVCMOS18 SLEW FAST} [get_ports CM
 set_property -dict {PACKAGE_PIN L13 IOSTANDARD LVCMOS18          } [get_ports CMD_SPI_MISO]
 
 # Note: both clocks are connected and driven, choose one
-# set_property -dict {PACKAGE_PIN L8} [get_ports aurora_refclk_p]; # MGTREFCLK0P_228
-# set_property -dict {PACKAGE_PIN L7} [get_ports aurora_refclk_n]; # MGTREFCLK0N_228
-set_property -dict {PACKAGE_PIN G8} [get_ports aurora_refclk_p]; # MGTREFCLK0P_229
-set_property -dict {PACKAGE_PIN G7} [get_ports aurora_refclk_n]; # MGTREFCLK0N_229
+set_property -dict {PACKAGE_PIN L8} [get_ports aurora_refclk_p]; # MGTREFCLK0P_228
+set_property -dict {PACKAGE_PIN L7} [get_ports aurora_refclk_n]; # MGTREFCLK0N_228
+# set_property -dict {PACKAGE_PIN G8} [get_ports aurora_refclk_p]; # MGTREFCLK0P_229
+# set_property -dict {PACKAGE_PIN G7} [get_ports aurora_refclk_n]; # MGTREFCLK0N_229
 
 set_property -dict {PACKAGE_PIN M6} [get_ports aurora_txp[0]]; # MGTHTXP3_228
 set_property -dict {PACKAGE_PIN M5} [get_ports aurora_txn[0]]; # MGTHTXN3_228
