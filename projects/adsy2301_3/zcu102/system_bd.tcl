@@ -40,11 +40,6 @@ ad_ip_instance aurora_8b10b aurora_8b10b [list \
   C_LINE_RATE 3.125 \
   C_REFCLK_FREQUENCY 156.25 \
   interface_mode {Streaming} \
-  C_START_QUAD {Quad_X1Y2} \
-  C_START_LANE {X1Y9} \
-  C_REFCLK_SOURCE {MGTREFCLK0 of Quad X1Y2} \
-  C_GT_LOC_2 2 \
-  CHANNEL_ENABLE {X1Y9 X1Y10} \
 ]
 
 ad_connect gt_diff_refclk aurora_8b10b/GT_DIFF_REFCLK1
