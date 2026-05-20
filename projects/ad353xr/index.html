@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The AD3530R/ AD3530 and AD3531R/ AD3531 are low power, 16-bit, buffered voltage output, digital-to-analog converters (DACs) that include a gain bit field, resulting in a full-scale output of 2.5V (gain = 1) or 5V (gain = 2) for a reference voltage of 2.5V. AD3530/ AD3530R has 8 channels, and AD3531/ AD3531R has 4 channels. AD3530R and AD3531R has an on-chip, buffered, 2.5V reference available at the VREF pin, capable of sourcing external loads up to +5mA." name="description" />
+<meta content="The AD3530R/ AD3530, AD3531R/ AD3531, and AD3532R/ AD3532 are low power, 16-bit, buffered voltage output, digital-to-analog converters (DACs) that include a gain bit field, resulting in a full-scale output of 2.5V (gain = 1) or 5V (gain = 2) for a reference voltage of 2.5V. AD3530/ AD3530R has 8 channels, AD3531/ AD3531R has 4 channels, and AD3532/ AD3532R has 16 channels. AD3530R, AD3531R, and AD3532R have an on-chip, buffered, 2.5V reference available at the VREF pin, capable of sourcing external loads up to +5mA." name="description" />
 
     <title>AD353XR HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
@@ -95,6 +95,7 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">AD353XR HDL project</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
@@ -389,13 +390,17 @@ Content on this topic
             
   <section id="ad353xr-hdl-project">
 <span id="ad353xr"></span><h1>AD353XR HDL project<a class="headerlink" href="#ad353xr-hdl-project" title="Permalink to this heading"></a></h1>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD3530R" target="_blank">AD3530R</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3530" target="_blank">AD3530</a> and <a class="icon adi reference external" href="https://www.analog.com/AD3531R" target="_blank">AD3531R</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3531" target="_blank">AD3531</a> are low
-power, 16-bit, buffered voltage output, digital-to-analog converters (DACs) that
-include a gain bit field, resulting in a full-scale output of 2.5V (gain = 1)
-or 5V (gain = 2) for a reference voltage of 2.5V. <a class="icon adi reference external" href="https://www.analog.com/AD3530" target="_blank">AD3530</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3530R" target="_blank">AD3530R</a>
-has 8 channels, and <a class="icon adi reference external" href="https://www.analog.com/AD3531" target="_blank">AD3531</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3531R" target="_blank">AD3531R</a> has 4 channels. <a class="icon adi reference external" href="https://www.analog.com/AD3530R" target="_blank">AD3530R</a>
-and <a class="icon adi reference external" href="https://www.analog.com/AD3531R" target="_blank">AD3531R</a> has an on-chip, buffered, 2.5V reference available at the
-VREF pin, capable of sourcing external loads up to +5mA.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD3530R" target="_blank">AD3530R</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3530" target="_blank">AD3530</a>, <a class="icon adi reference external" href="https://www.analog.com/AD3531R" target="_blank">AD3531R</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3531" target="_blank">AD3531</a>, and
+<a class="icon adi reference external" href="https://www.analog.com/AD3532R" target="_blank">AD3532R</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3532" target="_blank">AD3532</a> are low power, 16-bit, buffered voltage output,
+digital-to-analog converters (DACs) that include a gain bit field, resulting in
+a full-scale output of 2.5V (gain = 1) or 5V (gain = 2) for a reference voltage
+of 2.5V. <a class="icon adi reference external" href="https://www.analog.com/AD3530" target="_blank">AD3530</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3530R" target="_blank">AD3530R</a> has 8 channels, <a class="icon adi reference external" href="https://www.analog.com/AD3531" target="_blank">AD3531</a>/
+<a class="icon adi reference external" href="https://www.analog.com/AD3531R" target="_blank">AD3531R</a> has 4 channels, and <a class="icon adi reference external" href="https://www.analog.com/AD3532" target="_blank">AD3532</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3532R" target="_blank">AD3532R</a> has 16 channels.
+<a class="icon adi reference external" href="https://www.analog.com/AD3530R" target="_blank">AD3530R</a>, <a class="icon adi reference external" href="https://www.analog.com/AD3531R" target="_blank">AD3531R</a>, and <a class="icon adi reference external" href="https://www.analog.com/AD3532R" target="_blank">AD3532R</a> have an on-chip, buffered,
+2.5V reference available at the VREF pin, capable of sourcing external loads up
+to +5mA.</p>
 <p>Each DAC channel has its own Input register and DAC register. The DAC Register
 stores digital code equivalent to the DAC output voltage while the Input
 Register acts as a temporary staging register before being passed on the DAC
@@ -406,12 +411,15 @@ without an LDAC.</p>
 <p><a class="icon adi reference external" href="https://www.analog.com/AD3530R" target="_blank">AD3530R</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3530" target="_blank">AD3530</a> contains eight buffered voltage output DAC
 channels capable of sourcing 50mA and sinking up to 40mA of current.
 <a class="icon adi reference external" href="https://www.analog.com/AD3531R" target="_blank">AD3531R</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3531" target="_blank">AD3531</a> contains four buffered voltage output DAC channels
-capable of sourcing 100mA and sinking 80 mA of current.</p>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD3530R" target="_blank">AD3530R</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3530" target="_blank">AD3530</a> contains a 27:1 multiplexer while
-<a class="icon adi reference external" href="https://www.analog.com/AD3531R" target="_blank">AD3531R</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3531" target="_blank">AD3531</a> contains a 15:1 multiplexer, in which both could
-output a voltage on the MUX_OUT pin that is a representative of either the
-output voltage or output current of a chosen channel, or the internal die
-temperature of the device.</p>
+capable of sourcing 100mA and sinking 80 mA of current. <a class="icon adi reference external" href="https://www.analog.com/AD3532R" target="_blank">AD3532R</a>/
+<a class="icon adi reference external" href="https://www.analog.com/AD3532" target="_blank">AD3532</a> contains sixteen buffered voltage output DAC channels capable of
+sourcing 25mA and sinking up to 20mA of current.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD3530R" target="_blank">AD3530R</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3530" target="_blank">AD3530</a> contains a 27:1 multiplexer,
+<a class="icon adi reference external" href="https://www.analog.com/AD3531R" target="_blank">AD3531R</a>/ <a class="icon adi reference external" href="https://www.analog.com/AD3531" target="_blank">AD3531</a> contains a 15:1 multiplexer, and <a class="icon adi reference external" href="https://www.analog.com/AD3532R" target="_blank">AD3532R</a>/
+<a class="icon adi reference external" href="https://www.analog.com/AD3532" target="_blank">AD3532</a> contains a 51:1 multiplexer, in which all could output a voltage
+on the MUX_OUT pin that is a representative of either the output voltage or
+output current of a chosen channel, or the internal die temperature of the
+device.</p>
 <p>Applications:</p>
 <ul class="simple">
 <li><p>Optical transceivers</p></li>
@@ -419,11 +427,13 @@ temperature of the device.</p>
 <li><p>Industrial automation</p></li>
 <li><p>Data acquisition systems</p></li>
 </ul>
+</section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD3530R" target="_blank">EVAL-AD3530R</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD3531R" target="_blank">EVAL-AD3531R</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD3532R" target="_blank">EVAL-AD3532R</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
@@ -433,6 +443,8 @@ temperature of the device.</p>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD3530R" target="_blank">AD3530R</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD3531" target="_blank">AD3531</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD3531R" target="_blank">AD3531R</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD3532" target="_blank">AD3532</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD3532R" target="_blank">AD3532R</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -583,6 +595,8 @@ the HDL repository, and then build the project as follows:</p>
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD3530R" target="_blank">AD3530R</a></p></li>
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD3531" target="_blank">AD3531</a></p></li>
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD3531R" target="_blank">AD3531R</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD3532" target="_blank">AD3532</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD3532R" target="_blank">AD3532R</a></p></li>
 <li><p><a class="icon link reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad3530r-ug-2276.pdf" target="_blank">UG-1203: EVAL-AD3530RARDZ Board User Guide</a></p></li>
 </ul>
 </section>
