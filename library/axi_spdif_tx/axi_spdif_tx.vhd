@@ -112,7 +112,7 @@ architecture IMP of axi_spdif_tx is
 	signal chstat_freq : std_logic_vector(1 downto 0);
 	signal chstat_gstat, chstat_preem, chstat_copy, chstat_audio : std_logic;
 	signal sample_data_ack : std_logic;
-	signal sample_data: std_logic_vector(15 downto 0);
+	signal sample_data: std_logic_vector(31 downto 0);
 	signal conf_mode : std_logic_vector(3 downto 0);
 	signal conf_ratio : std_logic_vector(7 downto 0);
 	signal conf_tinten, conf_txdata, conf_txen : std_logic;
@@ -135,8 +135,7 @@ begin
 
 	fifo_reset <= not conf_txdata;
 	enable <= conf_txdata = '1';
-	fifo_data_ack <= channel and sample_data_ack;
-
+  fifo_data_ack <= sample_data_ack when conf_mode = "1000" else (channel and sample_data_ack);
 	streaming_dma_gen: if DMA_TYPE = 0 generate
 		fifo: entity axi_streaming_dma_tx_fifo
 			generic map (
@@ -203,14 +202,22 @@ begin
 		dma_req_drlast <= '0';
 	end generate;
 
-	sample_data_mux: process (fifo_data_out, channel) is
-	begin
-		if channel = '0' then
-			sample_data <= fifo_data_out(15 downto 0);
-		else
-			sample_data <= fifo_data_out(31 downto 16);
-		end if;
-	end process;
+  sample_data_mux: process (fifo_data_out, channel, conf_mode) is
+  begin
+      -- 24-bit audio
+      if conf_mode = "1000" then
+          sample_data <= fifo_data_out;
+      -- 16-bit audio
+      else
+          if channel = '0' then
+              sample_data(15 downto 0) <= fifo_data_out(15 downto 0);
+              sample_data(31 downto 16) <= (others => '0');
+          else
+              sample_data(15 downto 0) <= fifo_data_out(31 downto 16);
+              sample_data(31 downto 16) <= (others => '0');
+          end if;
+      end if;
+  end process;
 
 	-- Configuration signals update
 	conf_mode(3 downto 0)  <= config_reg(23 downto 20);
@@ -229,7 +236,7 @@ begin
 	-- Transmit encoder
 	TENC: tx_encoder
 		generic map (
-			DATA_WIDTH => 16
+			DATA_WIDTH => 32  -- always send 32 bits (padding)
 		)
 		port map (
 			up_clk		=> s_axi_aclk,
