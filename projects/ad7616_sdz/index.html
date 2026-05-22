@@ -285,7 +285,6 @@ Content on this topic
 
 <ul class="current">
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad_quadmxfe1_ebz/index.html">AD-QUADMXFE1-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
@@ -338,6 +337,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../admx100x_evb/index.html">ADMX100X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../admx6001_ebz/index.html">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrd8012_01z/index.html">ADRD8012-01Z</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9001/index.html">ADRV9001</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9001_dual/index.html">ADRV9001-DUAL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009/index.html">ADRV9009</a></li>
@@ -475,7 +475,7 @@ Framework</p></li>
 </ul>
 </div></blockquote>
 <ul class="simple">
-<li><p>NUM_OF_SDI: number of SDI lines used, <strong>only in serial interface mode</strong>;</p>
+<li><p>NUM_OF_SDIO: number of SDI lines used, <strong>only in serial interface mode</strong>;</p>
 <ul>
 <li><p>1 - one SDI line</p></li>
 <li><p>2 - two SDI lines (default)</p></li>
@@ -767,13 +767,13 @@ the HDL repository, and then build the project as follows:.</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad7616_sdz/zed$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">INTF</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">NUM_OF_SDI</span><span class="o">=</span><span class="m">2</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">INTF</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">NUM_OF_SDIO</span><span class="o">=</span><span class="m">2</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>The result of the build, if parameters were used, will be in a folder named
 by the configuration used:</p>
 <p>if the following command was run</p>
-<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">INTF=1</span> <span class="pre">NUM_OF_SDI=2</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">INTF=1</span> <span class="pre">NUM_OF_SDIO=2</span></code></p>
 <p>then the folder name will be:</p>
 <p><code class="docutils literal notranslate"><span class="pre">INTF1_NUMOFSDI2</span></code></p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>

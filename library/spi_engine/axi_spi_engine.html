@@ -268,7 +268,6 @@ Content on this topic
 
 <ul>
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_quadmxfe1_ebz/index.html">AD-QUADMXFE1-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
@@ -321,6 +320,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/admx100x_evb/index.html">ADMX100X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/admx6001_ebz/index.html">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrd8012_01z/index.html">ADRD8012-01Z</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001/index.html">ADRV9001</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001_dual/index.html">ADRV9001-DUAL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009/index.html">ADRV9009</a></li>
@@ -506,8 +506,8 @@ generate SPI transactions.</p>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
 <td class="range"><p>From 8 to 256.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDI</span></code></td>
-<td class="description"><p>Number of MISO lines.</p></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDIO</span></code></td>
+<td class="description"><p>Number of MISO/MOSI lines.</p></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
 <td class="range"><p>From 1 to 8.</p></td>
 </tr>
@@ -990,7 +990,7 @@ generate SPI transactions.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
 <td class="description bold"><section>
-<p>Version of the peripheral. Follows semantic versioning. Current version 1.04.02.</p>
+<p>Version of the peripheral. Follows semantic versioning. Current version 2.00.00.</p>
 </section>
 </td>
 </tr>
@@ -998,21 +998,21 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0001</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0002</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x05</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1052,7 +1052,7 @@ In case of multiple instances, each instance will have a unique ID.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[7:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDI</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">NUM_​OF_​SDI</span></code></td>
@@ -1063,7 +1063,7 @@ It is equal with the maximum supported SDI lines in bits.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATA_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">DATA_​WIDTH</span></code></td>
@@ -1380,21 +1380,6 @@ Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3b</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xec</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_MSB</span></code></td>
-<td class="description bold"><p></p></td>
-</tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_MSB</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><p></p></td>
-<td class="description"><section>
-<p>Store SDI’s 32 bits MSB, if exists.</p>
-</section>
-</td>
-</tr>
 <tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3c</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xf0</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_PEEK</span></code></td>
@@ -1619,8 +1604,17 @@ If an application attempts to read data while the FIFO is empty undefined data
 is returned and the state of the FIFO remains unmodified.
 It is possible to read the first entry in the SDI FIFO without removing it by
 reading from the SDI_FIFO_PEEK register.
+It is important to point out that each read represents one active lane of the SPI.
+So, for <code class="docutils literal notranslate"><span class="pre">N</span></code> active lanes it is necessary to read <code class="docutils literal notranslate"><span class="pre">N</span></code> times. Reading
+always starts from lane 0.
 The number of valid entries in the SDI FIFO register can be queried by reading
-the SDI_FIFO_LEVEL register.</p>
+the SDI_FIFO_LEVEL register. This value must be a multiple of <code class="docutils literal notranslate"><span class="pre">NUM_OF_SDIO</span></code>.</p>
+<p>Data can be inserted into the SDO FIFO by writing to the SDO_FIFO register
+<strong>only the valid lanes</strong>. For example, if there are 4 lanes and just 2 of them
+are enabled, then the programmer must write 2 values to this register. The
+remaining lanes will contain <code class="docutils literal notranslate"><span class="pre">SDO_DEFAULT</span></code> value defined in
+<a class="reference internal" href="spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">SPI Engine Execution Module</span></a>. The number of valid lanes are defined in
+<a class="reference internal" href="instruction-format.html#spi-engine-configuration-registers"><span class="std std-ref">Configuration Registers</span></a>.</p>
 <p>If the peripheral is disabled by setting the ENABLE register to 0 any data
 stored in the FIFOs is discarded and the state of the FIFO is reset.</p>
 </section>

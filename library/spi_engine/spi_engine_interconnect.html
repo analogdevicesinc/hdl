@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The SPI Engine Interconnect allows connecting multiple SPI Engine Control Interface managers to a single SPI Engine Control Interface subordinate. This enables multiple command stream generators to connect to a single SPI Engine Execution Module and consequential give them access to the same SPI bus. The interconnect modules take care of properly arbitrating between the different command streams." name="description" />
+<meta content="The SPI Engine Interconnect allows connecting multiple SPI Engine Control Interface managers to a single SPI Engine Control Interface subordinate. This enables two command stream generators to connect to a single SPI Engine Execution Module and consequentially give them access to the same SPI bus. The interconnect module is responsible for proper arbitration between the command streams." name="description" />
 
     <title>SPI Engine Interconnect Module &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
@@ -258,7 +258,6 @@ Content on this topic
 
 <ul>
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_quadmxfe1_ebz/index.html">AD-QUADMXFE1-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
@@ -311,6 +310,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/admx100x_evb/index.html">ADMX100X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/admx6001_ebz/index.html">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrd8012_01z/index.html">ADRD8012-01Z</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001/index.html">ADRV9001</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001_dual/index.html">ADRV9001-DUAL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009/index.html">ADRV9009</a></li>
@@ -377,21 +377,21 @@ Content on this topic
   <section id="spi-engine-interconnect-module">
 <span id="spi-engine-interconnect"></span><h1>SPI Engine Interconnect Module<a class="headerlink" href="#spi-engine-interconnect-module" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330.0 210" width="330.0" class="no-background"><style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 474.0 210" width="474.0" class="no-background"><style>
                 a {
                     text-decoration: none;
                 }
-                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="294.0" height="156" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_interconnect_ctrl"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_interconnect_ctrl</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s0_ctrl"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s0_ctrl</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s1_ctrl"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s1_ctrl</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">clk</text></a><g transform="translate(18,118.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">resetn</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-m_ctrl"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="54">m_ctrl</text></a><g transform="translate(312.0,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><rect x="18" y="18" width="294.0" height="156" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="165.0" y="194">spi_engine_interconnect</text></svg></section>
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="438.0" height="156" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_interconnect_ctrl"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_interconnect_ctrl</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s0_ctrl"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s0_ctrl</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s1_ctrl"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s1_ctrl</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">clk</text></a><g transform="translate(18,118.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">resetn</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-m_ctrl"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="438.0" y="54">m_ctrl</text></a><g transform="translate(456.0,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-m_offload_active_ctrl"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="438.0" y="78">m_offload_active_ctrl</text></a><g transform="translate(456.0,70.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><rect x="18" y="18" width="438.0" height="156" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="237.0" y="194">spi_engine_interconnect</text></svg></section>
 </div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_interconnect" target="_blank">SPI Engine Interconnect</a>
 allows connecting multiple <a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> managers to a single
 <a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> subordinate.
-This enables multiple command stream generators to connect to a single
-<a class="reference internal" href="spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">SPI Engine Execution Module</span></a> and consequential give them access to the same SPI bus.
-The interconnect modules take care of properly arbitrating between the different
-command streams.</p>
-<p>Combining multiple command stream generators in a design and connecting them to
-a single execution module allows for the creation of flexible and efficient
-designs using standard components.</p>
+This enables two command stream generators to connect to a single
+<a class="reference internal" href="spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">SPI Engine Execution Module</span></a> and consequentially give them access to the same SPI bus.
+The interconnect module is responsible for proper arbitration between the command
+streams.</p>
+<p>Combining two command stream generators in a design and connecting them to a single
+execution module allows the creation of an efficient and flexible design by using
+standard components.</p>
 <section id="files">
 <h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
@@ -438,9 +438,9 @@ peripheral.</p></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
 <td class="range"><p>From 8 to 256.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDI</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDIO</span></code></td>
 <td class="description"><section>
-<p>Number of SDI lines on the physical SPI interface.</p>
+<p>Number of SDI/SDO lines on the physical SPI interface.</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
@@ -540,6 +540,10 @@ Connects to the control interface subordinate.</p>
 <section id="bus-interface-s_interconnect_ctrl">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="e3e9546654541a6d9ce58809cddba8a57e27bb3c" name="e3e9546654541a6d9ce58809cddba8a57e27bb3c" type="checkbox"></input><label for="e3e9546654541a6d9ce58809cddba8a57e27bb3c"><div><p>s_interconnect_ctrl</p>
+<section>
+<p>m_interconnect_ctrl (<a class="reference internal" href="spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload Module</span></a>) subordinate.
+Defines whether offload mode is active or not (active high).</p>
+</section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -551,9 +555,38 @@ Connects to the control interface subordinate.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">interconnect_dir</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_interconnect_dir</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">interconnect_dir</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-m_offload_active_ctrl">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="42ec1d547d17d7bd8c38ad884124db6aaa740491" name="42ec1d547d17d7bd8c38ad884124db6aaa740491" type="checkbox"></input><label for="42ec1d547d17d7bd8c38ad884124db6aaa740491"><div><p>m_offload_active_ctrl</p>
+<section>
+<p>Forwards the signals of the s_interconnect_ctrl interface.
+Defines whether offload mode is active or not (active high).</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_offload_active</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">interconnect_dir</span></code></td>
+<td><p>out</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -567,7 +600,7 @@ Connects to the control interface subordinate.</p>
 <input class="collapsible_input" id="28a27ae32dca0eae8918ff580c44e9a102768d26" name="28a27ae32dca0eae8918ff580c44e9a102768d26" type="checkbox"></input><label for="28a27ae32dca0eae8918ff580c44e9a102768d26"><div><p>s0_ctrl</p>
 <section>
 <p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> subordinate.
-Connects to the first control interface manager.</p>
+Connects to the offload control interface manager.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -651,7 +684,7 @@ Connects to the first control interface manager.</p>
 <input class="collapsible_input" id="86f5610da1c6faed728e97644d2f4bb7cbb1c2c6" name="86f5610da1c6faed728e97644d2f4bb7cbb1c2c6" type="checkbox"></input><label for="86f5610da1c6faed728e97644d2f4bb7cbb1c2c6"><div><p>s1_ctrl</p>
 <section>
 <p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> subordinate.
-Connects to the second control interface manager.</p>
+Connects to the fifo control interface manager.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -748,7 +781,9 @@ Connects to the second control interface manager.</p>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>A signals of the module are synchronous to this clock. Buses <code class="docutils literal notranslate"><span class="pre">m_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s_interconnect_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s0_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s1_ctrl</span></code> are synchronous to this clock domain.</p>
+<div class="line-block">
+<div class="line">Buses <code class="docutils literal notranslate"><span class="pre">m_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s_interconnect_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">m_offload_active_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s0_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s1_ctrl</span></code> are synchronous to this clock domain.</div>
+</div>
 </section>
 </td>
 </tr>
@@ -756,7 +791,8 @@ Connects to the second control interface manager.</p>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>Synchronous active-low reset. Resets the internal state of the module. Buses <code class="docutils literal notranslate"><span class="pre">m_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s_interconnect_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s0_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s1_ctrl</span></code> are synchronous to this reset signal.</p>
+<p>Synchronous active-low reset.
+Resets the internal state of the module. Buses <code class="docutils literal notranslate"><span class="pre">m_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s_interconnect_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">m_offload_active_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s0_ctrl</span></code>, <code class="docutils literal notranslate"><span class="pre">s1_ctrl</span></code> are synchronous to this reset signal.</p>
 </section>
 </td>
 </tr>
@@ -769,19 +805,13 @@ Connects to the second control interface manager.</p>
 </div></section>
 <section id="theory-of-operation">
 <h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading"></a></h2>
-<p>The SPI Engine Interconnect module has multiple
-<a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> subordinate ports and a single
-<a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> manager port.
-It can be used to connect multiple command stream generators to a single command
-execution engine. Arbitration between the streams is done on a priority
-basis, streams with a lower index have higher priority. This means if commands
-are present on two streams arbitration will be granted to the one with the lower
-index. Once arbitration has been granted the port it was granted to stays in
-control until it sends a SYNC command. When the interconnect module sees a SYNC
-command arbitration will be re-evaluated after the SYNC command has been
-completed. This makes sure that once a SPI transaction consisting of multiple
-commands has been started it is able to complete without being interrupted by a
-higher priority stream.</p>
+<p>The SPI Engine Interconnect module has two <a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a>
+subordinate ports and a single <a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> manager
+port. It can be used to connect two command stream generators to a single
+command execution engine. Arbitration between streams is done based on the
+<code class="docutils literal notranslate"><span class="pre">s_interconnect_ctrl</span></code> interface, there is a copy of this interface to
+<code class="docutils literal notranslate"><span class="pre">m_offload_active_ctrl</span></code> to indicate whether the stream belongs to offload (s0) or
+fifo mode (s1).</p>
 </section>
 </section>
 

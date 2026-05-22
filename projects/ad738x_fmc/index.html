@@ -277,7 +277,6 @@ Content on this topic
 
 <ul class="current">
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad_quadmxfe1_ebz/index.html">AD-QUADMXFE1-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
@@ -330,6 +329,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../admx100x_evb/index.html">ADMX100X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../admx6001_ebz/index.html">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrd8012_01z/index.html">ADRD8012-01Z</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9001/index.html">ADRV9001</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9001_dual/index.html">ADRV9001-DUAL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009/index.html">ADRV9009</a></li>
@@ -495,12 +495,12 @@ be done on the board and/or <code class="docutils literal notranslate"><span cla
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ALERT_SPI_N</span><span class="o">=</span><span class="m">1</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>The <strong>NUM_OF_SDI</strong> configuration parameter defines the number of SDI lines used:
+<div class="clear-left"></div></div></div><p>The <strong>NUM_OF_SDIO</strong> configuration parameter defines the number of SDI lines used:
 <strong>{1, 2, 4}</strong>. By default is set to 1.</p>
 <p>For the <strong>ALERT</strong> functionality, the following parameters will be used in make
 command: ALERT_SPI_N.</p>
 <p>For the <strong>serial data output</strong> functionality, the following parameters will be
-used in make command: ALERT_SPI_N, NUM_OF_SDI.</p>
+used in make command: ALERT_SPI_N, NUM_OF_SDIO.</p>
 </section>
 <section id="jumper-setup">
 <h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Permalink to this heading"></a></h3>
@@ -841,13 +841,13 @@ the HDL repository, and then build the project as follows:</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad738x_fmc/zed$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ALERT_SPI_N</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">NUM_OF_SDI</span><span class="o">=</span><span class="m">4</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ALERT_SPI_N</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">NUM_OF_SDIO</span><span class="o">=</span><span class="m">4</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>The result of the Xilinx build, if parameters were used, will be in a folder
 named by the configuration used:</p>
 <p>if the following command was run</p>
-<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">ALERT_SPI_N=0</span> <span class="pre">NUM_OF_SDI=4</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">ALERT_SPI_N=0</span> <span class="pre">NUM_OF_SDIO=4</span></code></p>
 <p>then the folder name will be:</p>
 <p><code class="docutils literal notranslate"><span class="pre">ALERTSPIN0_NUMOFSDI4</span></code></p>
 <p><strong>Linux/Cygwin/WSL (for LFCPNX-EVN - Lattice)</strong></p>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The SPI Engine instruction set is a simple 16-bit instruction set of which 13-bits are currently allocated (bits 15,11,10 are always 0)." name="description" />
+<meta content="The SPI Engine instruction set is a 16-bit instruction set of which 13-bits are currently allocated (bits 15 and 11 are always 0). Bit 10 is only being used by the Configuration Write Instruction." name="description" />
 
     <title>SPI Engine Instruction Set Specification &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
@@ -107,6 +107,8 @@
 </li>
 <li><a class="reference internal" href="#configuration-registers">Configuration Registers</a><ul>
 <li><a class="reference internal" href="#spi-configuration-register">SPI Configuration Register</a></li>
+<li><a class="reference internal" href="#sdi-lane-mask-register">SDI Lane Mask Register</a></li>
+<li><a class="reference internal" href="#sdo-lane-mask-register">SDO Lane Mask Register</a></li>
 <li><a class="reference internal" href="#prescaler-configuration-register">Prescaler Configuration Register</a></li>
 <li><a class="reference internal" href="#dynamic-transfer-length-register">Dynamic Transfer Length Register</a></li>
 </ul>
@@ -270,7 +272,6 @@ Content on this topic
 
 <ul>
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_quadmxfe1_ebz/index.html">AD-QUADMXFE1-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
@@ -323,6 +324,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/admx100x_evb/index.html">ADMX100X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/admx6001_ebz/index.html">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrd8012_01z/index.html">ADRD8012-01Z</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001/index.html">ADRV9001</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001_dual/index.html">ADRV9001-DUAL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009/index.html">ADRV9009</a></li>
@@ -388,8 +390,9 @@ Content on this topic
             
   <section id="spi-engine-instruction-set-specification">
 <span id="spi-engine-instruction-format"></span><h1>SPI Engine Instruction Set Specification<a class="headerlink" href="#spi-engine-instruction-set-specification" title="Permalink to this heading"></a></h1>
-<p>The SPI Engine instruction set is a simple 16-bit instruction set of which
-13-bits are currently allocated (bits 15,11,10 are always 0).</p>
+<p>The SPI Engine instruction set is a 16-bit instruction set of which 13-bits are
+currently allocated (bits 15 and 11 are always 0). Bit 10 is only being used by
+the <a class="reference internal" href="#spi-engine-write-configuration-instruction"><span class="std std-ref">Configuration Write Instruction</span></a>.</p>
 <section id="instructions">
 <h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this heading"></a></h2>
 <section id="transfer-instruction">
@@ -416,12 +419,12 @@ Content on this topic
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>0</p></td>
+<tr class="row-even"><td><p>rv</p></td>
 <td><p>0</p></td>
 <td><p>0</p></td>
 <td><p>0</p></td>
-<td><p>0</p></td>
-<td><p>0</p></td>
+<td><p>rv</p></td>
+<td><p>rv</p></td>
 <td><p>r</p></td>
 <td><p>w</p></td>
 <td><p>n</p></td>
@@ -436,16 +439,15 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<p>The transfer instructions perform a low-level SPI transfer. It will generate
-SCLK transitions for the specified amount of cycles according to the SPI
-configuration register. If the r bit is set the SDI pin will be sampled and
-stored in the shift register at the end of each word the data is output on the
-SDI_DATA stream. If the w bit is set the SDO pin will be updated with the data
-received from the SDO_DATA stream. If the w bit is set the sdo_t signal will
-also be set to 0 for the duration of the transfer. If the SDI_DATA stream is not
-able to accept data or the SDO_DATA stream is not able to provide data the
-execution is stalled at the end/start of the transfer until data is
-accepted/becomes available.</p>
+<p>The transfer instruction perform a low-level SPI transfer. It generates SCLK
+transitions for the specified amount of cycles according to the SPI
+configuration register. If the r bit is set, the SDI pin is sampled and stored
+in the shift register up to the end of the word, and then is output in the
+SDI_DATA stream. If the w bit is set, the SDO pin is updated with the data
+received from the SDO_DATA stream. By setting w bit, the sdo_t pin is set to 0
+during the transfer. If the SDI_DATA stream cannot accept any data or SDO_DATA
+stream cannot provide any data, then the execution module is stalled until
+there’s no longer any backpressure condition.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -460,19 +462,23 @@ accepted/becomes available.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>r</p></td>
-<td><p>Read</p></td>
-<td><p>If set to 1 data will be read from the SDI pin during and the read words
-will be available on the SDI_DATA interface.</p></td>
+<tr class="row-even"><td><p>rv</p></td>
+<td><p>Reserved</p></td>
+<td><p>Reserved bit. Must always be set to 0.</p></td>
 </tr>
-<tr class="row-odd"><td><p>w</p></td>
+<tr class="row-odd"><td><p>r</p></td>
+<td><p>Read</p></td>
+<td><p>If set to 1, data is read from the SDI pin and the read words are
+available on the SDI_DATA interface.</p></td>
+</tr>
+<tr class="row-even"><td><p>w</p></td>
 <td><p>Write</p></td>
-<td><p>If set to 1 data will be taken from the SDO_DATA interface and output on
+<td><p>If set to 1, data is consumed from the SDO_DATA interface and output on
 the SDO pin.</p></td>
 </tr>
-<tr class="row-even"><td><p>n</p></td>
+<tr class="row-odd"><td><p>n</p></td>
 <td><p>Length</p></td>
-<td><p>n + 1 number of words that will be transferred.</p></td>
+<td><p>n + 1 number of words to be transferred.</p></td>
 </tr>
 </tbody>
 </table>
@@ -502,12 +508,12 @@ the SDO pin.</p></td>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>0</p></td>
+<tr class="row-even"><td><p>rv</p></td>
 <td><p>0</p></td>
 <td><p>0</p></td>
 <td><p>1</p></td>
-<td><p>0</p></td>
-<td><p>0</p></td>
+<td><p>rv</p></td>
+<td><p>rv</p></td>
 <td><p>t</p></td>
 <td><p>t</p></td>
 <td><p>s</p></td>
@@ -522,21 +528,21 @@ the SDO pin.</p></td>
 </tbody>
 </table>
 </div>
-<p>The chip-select instruction updates the value chip-select output signal of the
-SPI Engine execution module.</p>
-<p>The physical outputs on each pin may be inverted relative to the command
-according to the mask set by <a class="reference internal" href="#spi-engine-cs-invert-mask-instruction"><span class="std std-ref">CS Invert Mask Instruction</span></a>. The
-Invert Mask acts only on the output registers of the Chip-Select pins. Thus, if
-the last 8 bits of the Chip-Select instruction are 0xFE, only CS[0] will be
-active regardless of polarity. The polarity inversion process (if needed) is
-transparent to the programmer.</p>
-<p>Before and after the update is performed the execution module is paused for the
-specified delay. The length of the delay depends on the module clock frequency,
-the setting of the prescaler register and the parameter <span class="math notranslate nohighlight">\(t\)</span> of the
-instruction. This delay is inserted before and after the update of the
-chip-select signal, so the total execution time of the chip-select instruction
-is twice the delay, with an added fixed 2 clock cycles (fast clock, not
-prescaled) before for the internal logic.</p>
+<p>The chip-select instruction updates the value of the chip-select output signal
+of the SPI Engine execution module.</p>
+<p>The physical output value for every pin may differ from what is defined in this
+instruction depending on the mask set in the
+<a class="reference internal" href="#spi-engine-cs-invert-mask-instruction"><span class="std std-ref">CS Invert Mask Instruction</span></a>, because this mask acts only on
+the output registers of the Chip-Select pins. Thus, if the last 8 bits of the
+Chip-Select instruction are 0xFE, only CS[0] is active regardless of polarity.
+The polarity inversion process (if needed) is transparent to the programmer.</p>
+<p>Before and after any update, the execution module is paused for the specified
+delay. The length of the delay depends on the module clock frequency, the
+value of the prescaler register, and the parameter <span class="math notranslate nohighlight">\(t\)</span> of the
+instruction. This delay is inserted before and after any update of the
+chip-select signal which results in twice the delay value defined. Furthermore,
+it is necessary to add 2 clock cycles for the internal logic (fast clock, not
+prescaled).</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
 \[delay\_{before} = 2+ t * \frac{(div + 1)*2}{f_{clk}}\]</div>
@@ -559,11 +565,15 @@ prescaled) before for the internal logic.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>t</p></td>
+<tr class="row-even"><td><p>rv</p></td>
+<td><p>Reserved</p></td>
+<td><p>Reserved bit. Must always be set to 0.</p></td>
+</tr>
+<tr class="row-odd"><td><p>t</p></td>
 <td><p>Delay</p></td>
 <td><p>Delay before and after setting the new configuration.</p></td>
 </tr>
-<tr class="row-odd"><td><p>s</p></td>
+<tr class="row-even"><td><p>s</p></td>
 <td><p>Chip-select</p></td>
 <td><p>The new chip-select configuration.</p></td>
 </tr>
@@ -572,7 +582,7 @@ prescaled) before for the internal logic.</p>
 </div>
 </section>
 <section id="configuration-write-instruction">
-<h3>Configuration Write Instruction<a class="headerlink" href="#configuration-write-instruction" title="Permalink to this heading"></a></h3>
+<span id="spi-engine-write-configuration-instruction"></span><h3>Configuration Write Instruction<a class="headerlink" href="#configuration-write-instruction" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -595,14 +605,14 @@ prescaled) before for the internal logic.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>0</p></td>
+<tr class="row-even"><td><p>rv</p></td>
 <td><p>0</p></td>
 <td><p>1</p></td>
 <td><p>0</p></td>
-<td><p>0</p></td>
-<td><p>0</p></td>
-<td><p>r</p></td>
-<td><p>r</p></td>
+<td><p>rv</p></td>
+<td><p>rg</p></td>
+<td><p>rg</p></td>
+<td><p>rg</p></td>
 <td><p>v</p></td>
 <td><p>v</p></td>
 <td><p>v</p></td>
@@ -615,9 +625,9 @@ prescaled) before for the internal logic.</p>
 </tbody>
 </table>
 </div>
-<p>The configuration writes instruction updates a
-<a class="reference internal" href="#spi-engine-configuration-registers"><span class="std std-ref">Configuration Registers</span></a>
-of the SPI Engine execution module with a new value.</p>
+<p>The configuration write instruction updates the
+<a class="reference internal" href="#spi-engine-configuration-registers"><span class="std std-ref">Configuration Registers</span></a> of the SPI Engine execution module
+with a new value.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -632,14 +642,23 @@ of the SPI Engine execution module with a new value.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>r</p></td>
-<td><p>Register</p></td>
-<td><p>Configuration register address.
-2’b00 = <a class="reference internal" href="#spi-engine-prescaler-configuration-register"><span class="std std-ref">Prescaler Configuration Register</span></a>
-2’b01 = <a class="reference internal" href="#spi-engine-spi-configuration-register"><span class="std std-ref">SPI Configuration Register</span></a>
-2’b10 = <a class="reference internal" href="#spi-engine-dynamic-transfer-length-register"><span class="std std-ref">Dynamic Transfer Length Register</span></a>.</p></td>
+<tr class="row-even"><td><p>rv</p></td>
+<td><p>Reserved</p></td>
+<td><p>Reserved bit. Must always be set to 0.</p></td>
 </tr>
-<tr class="row-odd"><td><p>v</p></td>
+<tr class="row-odd"><td><p>rg</p></td>
+<td><p>Register</p></td>
+<td><p>Configuration register address:</p>
+<ul class="simple">
+<li><p>3’b000 = <a class="reference internal" href="#spi-engine-prescaler-configuration-register"><span class="std std-ref">Prescaler Configuration Register</span></a>.</p></li>
+<li><p>3’b001 = <a class="reference internal" href="#spi-engine-spi-configuration-register"><span class="std std-ref">SPI Configuration Register</span></a>.</p></li>
+<li><p>3’b010 = <a class="reference internal" href="#spi-engine-dynamic-transfer-length-register"><span class="std std-ref">Dynamic Transfer Length Register</span></a>.</p></li>
+<li><p>3’b011 = <a class="reference internal" href="#spi-engine-sdi-lane-mask-register"><span class="std std-ref">SDI Lane Mask Register</span></a>.</p></li>
+<li><p>3’b100 = <a class="reference internal" href="#spi-engine-sdo-lane-mask-register"><span class="std std-ref">SDO Lane Mask Register</span></a>.</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>v</p></td>
 <td><p>Value</p></td>
 <td><p>New value for the configuration register.</p></td>
 </tr>
@@ -671,31 +690,28 @@ of the SPI Engine execution module with a new value.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>0</p></td>
+<tr class="row-even"><td><p>rv</p></td>
 <td><p>0</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
+<td><p>rv</p></td>
+<td><p>rv</p></td>
 <td><p>0</p></td>
 <td><p>0</p></td>
-<td><p>0</p></td>
-<td><p>0</p></td>
-<td><p>n</p></td>
-<td><p>n</p></td>
-<td><p>n</p></td>
-<td><p>n</p></td>
-<td><p>n</p></td>
-<td><p>n</p></td>
-<td><p>n</p></td>
-<td><p>n</p></td>
+<td><p>v</p></td>
+<td><p>v</p></td>
+<td><p>v</p></td>
+<td><p>v</p></td>
+<td><p>v</p></td>
+<td><p>v</p></td>
+<td><p>v</p></td>
+<td><p>v</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>The synchronize instruction generates a synchronization event on the SYNC output
-stream. This can be used to monitor the progress of the command stream. The
-synchronize instruction is also used by the <a class="reference internal" href="spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">SPI Engine Interconnect Module</span></a>
-module to identify the end of a transaction and re-start the arbitration
-process.</p>
+<p>The synchronize instruction generates a synchronization event on the SYNC
+output stream. This can be used to monitor the progress of the command stream.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -710,7 +726,11 @@ process.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>n</p></td>
+<tr class="row-even"><td><p>rv</p></td>
+<td><p>Reserved</p></td>
+<td><p>Reserved bit. Must always be set to 0.</p></td>
+</tr>
+<tr class="row-odd"><td><p>v</p></td>
 <td><p>id</p></td>
 <td><p>Value of the generated synchronization event.</p></td>
 </tr>
@@ -742,12 +762,12 @@ process.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>0</p></td>
+<tr class="row-even"><td><p>rv</p></td>
 <td><p>0</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
-<td><p>0</p></td>
-<td><p>0</p></td>
+<td><p>rv</p></td>
+<td><p>rv</p></td>
 <td><p>0</p></td>
 <td><p>1</p></td>
 <td><p>t</p></td>
@@ -763,10 +783,10 @@ process.</p>
 </table>
 </div>
 <p>The sleep instruction stops the execution of the command stream for the
-specified amount of time. The time is based on the external clock frequency the
-configuration value of the prescaler register and the time parameter of the
-instruction. A fixed delay of two clock cycles (fast, not affected by the prescaler)
-is the minimum, needed by the internal logic.</p>
+specified amount of time. The sleep time relies on the external clock
+frequency, the configuration value of the prescaler register, and the time
+parameter of the instruction. Also, a 2 clock-cycle delay is required for
+internal logic (fast clock, not prescaled).</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
 \[sleep\_time = \frac{2+(t+1) * ((div + 1) * 2)}{f_{clk}}\]</div>
@@ -785,9 +805,13 @@ is the minimum, needed by the internal logic.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>t</p></td>
+<tr class="row-even"><td><p>rv</p></td>
+<td><p>Reserved</p></td>
+<td><p>Reserved bit. Must always be set to 0.</p></td>
+</tr>
+<tr class="row-odd"><td><p>t</p></td>
 <td><p>Time</p></td>
-<td><p>The amount of prescaler cycles to wait, minus one.</p></td>
+<td><p>The amount of prescaler cycles to wait minus one.</p></td>
 </tr>
 </tbody>
 </table>
@@ -817,14 +841,14 @@ is the minimum, needed by the internal logic.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>0</p></td>
+<tr class="row-even"><td><p>rv</p></td>
 <td><p>1</p></td>
 <td><p>0</p></td>
 <td><p>0</p></td>
-<td><p>r</p></td>
-<td><p>r</p></td>
-<td><p>r</p></td>
-<td><p>r</p></td>
+<td><p>rv</p></td>
+<td><p>rv</p></td>
+<td><p>rv</p></td>
+<td><p>rv</p></td>
 <td><p>m</p></td>
 <td><p>m</p></td>
 <td><p>m</p></td>
@@ -837,21 +861,22 @@ is the minimum, needed by the internal logic.</p>
 </tbody>
 </table>
 </div>
-<p>The CS Invert Mask Instructions allows the user to select on a per-pin basis
-whether the Chip Select will be active-low (default) or active-high (inverted).
-Note that the Chip-Select instructions should remain the same because the value
-of CS is inverted at the output register, and additional logic (e.g. reset
-counters) occurs when the CS active state is asserted.</p>
-<p>Since the physical values on the pins are inverted at the output, the current
-Invert Mask does not affect the use of the <a class="reference internal" href="#spi-engine-cs-instruction"><span class="std std-ref">Chip-Select Instruction</span></a>. As
-an example, a Chip-Select Instruction with the ‘s’ field equal to 0xFE will
+<p>The CS Invert Mask Instruction allows the user to select on a per-pin basis
+whether the Chip Select will be active-low (default) or active-high (inverted).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Chip-Select instruction must remain the same since the value of CS is inverted at
+the output register. So, current Invert Mask does not affect the use of the
+<a class="reference internal" href="#spi-engine-cs-instruction"><span class="std std-ref">Chip-Select Instruction</span></a>. Additional logic (e.g. reset counters)
+occurs when the CS active state is asserted.</p>
+</div>
+<p>For example, a Chip-Select Instruction with the ‘s’ field equal to 0xFE will
 always result in only CS[0] being active. For an Invert Mask of 0xFF, this would
 result on only CS[0] being high. For an Invert Mask of 0x00, this would result
 on only CS[0] being low. For an Invert Mask of 0x01, this would result on all CS
 pins being high, but only CS[0] is active in this case (since it’s the only one
 currently treated as active-high).</p>
-<p>This was introduced in
-version 1.02.00 of the core.</p>
+<p><strong>This was introduced in version 1.02.00 of the core.</strong></p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -866,7 +891,7 @@ version 1.02.00 of the core.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>r</p></td>
+<tr class="row-even"><td><p>rv</p></td>
 <td><p>reserved</p></td>
 <td><p>Reserved for future use. Must always be set to 0.</p></td>
 </tr>
@@ -882,11 +907,11 @@ corresponding channel will be inverted at the output.</p></td>
 </section>
 <section id="configuration-registers">
 <span id="spi-engine-configuration-registers"></span><h2>Configuration Registers<a class="headerlink" href="#configuration-registers" title="Permalink to this heading"></a></h2>
-<p>The SPI Engine execution module has a set of 8-bit configuration registers which
-can be used to dynamically modify the behavior of the module at runtime.</p>
+<p>The SPI Engine execution module has a set of 8-bit configuration registers
+which can be used to dynamically modify the behavior of the module at runtime.</p>
 <section id="spi-configuration-register">
 <span id="spi-engine-spi-configuration-register"></span><h3>SPI Configuration Register<a class="headerlink" href="#spi-configuration-register" title="Permalink to this heading"></a></h3>
-<p>The SPI configuration register configures various aspects of the low-level SPI
+<p>The SPI configuration register configures several aspects of the low-level SPI
 bus behavior.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -917,27 +942,41 @@ read-only transfers.</p></td>
 </tr>
 <tr class="row-odd"><td><p>[1]</p></td>
 <td><p>CPOL</p></td>
-<td><p>Configures the polarity of the SCLK signal. When 0, the idle state of
-the SCLK signal is low. When 1, the idle state of the SCLK signal is
-high.</p></td>
+<td><p>Configures the polarity of the SCLK signal:</p>
+<ul class="simple">
+<li><p>When 0, the idle state of the SCLK signal is low.</p></li>
+<li><p>When 1, the idle state of the SCLK signal is high.</p></li>
+</ul>
+</td>
 </tr>
 <tr class="row-even"><td><p>[0]</p></td>
 <td><p>CPHA</p></td>
-<td><p>Configures the phase of the SCLK signal. When 0, data is sampled on the
-leading edge and updated on the trailing edge. When 1, data is
-sampled on the trailing edge and updated on the leading edge.</p></td>
+<td><p>Configures the phase of the SCLK signal:</p>
+<ul class="simple">
+<li><p>When 0, data is sampled on the leading edge and updated on the
+trailing edge.</p></li>
+<li><p>When 1, data is sampled on the trailing edge and updated on the
+leading edge.</p></li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-<section id="prescaler-configuration-register">
-<span id="spi-engine-prescaler-configuration-register"></span><h3>Prescaler Configuration Register<a class="headerlink" href="#prescaler-configuration-register" title="Permalink to this heading"></a></h3>
-<p>The prescaler configuration register configures the divider that is applied to
-the module clock when generating the SCLK signal and other internal control
-signals used by the sleep and chip-select commands.</p>
-<div class="table-wrapper docutils container">
+<section id="sdi-lane-mask-register">
+<span id="spi-engine-sdi-lane-mask-register"></span><h3>SDI Lane Mask Register<a class="headerlink" href="#sdi-lane-mask-register" title="Permalink to this heading"></a></h3>
+<p>This register configures the SDI mask that defines which lanes are active
+(active-high). The user must define a mask that contains up to <code class="docutils literal notranslate"><span class="pre">NUM_OF_SDIO</span></code>
+lanes (the number of activated lanes cannot be bigger than the number of lanes).
+For now, it is possible to have up to 8 lanes due to the instruction size.</p>
+<div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 13.3%" />
+<col style="width: 20.0%" />
+<col style="width: 66.7%" />
+</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Bits</p></th>
 <th class="head"><p>Name</p></th>
@@ -946,8 +985,63 @@ signals used by the sleep and chip-select commands.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[7:0]</p></td>
-<td><p>div</p></td>
-<td><p>Prescaler clock divider</p></td>
+<td><p>SDI lane mask</p></td>
+<td><p>Only bits set to 1 have their respective lane active.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="sdo-lane-mask-register">
+<span id="spi-engine-sdo-lane-mask-register"></span><h3>SDO Lane Mask Register<a class="headerlink" href="#sdo-lane-mask-register" title="Permalink to this heading"></a></h3>
+<p>This register configures the SDO mask that defines which lanes are active
+(active-high). The user must define a mask that contains up to <code class="docutils literal notranslate"><span class="pre">NUM_OF_SDIO</span></code>
+lanes (the number of activated lanes cannot be bigger than the number of lanes).
+For now, it is possible to have up to 8 lanes due to the instruction size.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13.3%" />
+<col style="width: 20.0%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Bits</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[7:0]</p></td>
+<td><p>SDO lane mask</p></td>
+<td><p>Only bits set to 1 have their respective lane active.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="prescaler-configuration-register">
+<span id="spi-engine-prescaler-configuration-register"></span><h3>Prescaler Configuration Register<a class="headerlink" href="#prescaler-configuration-register" title="Permalink to this heading"></a></h3>
+<p>The prescaler configuration register defines the divider that is applied to
+the module clock when generating the SCLK signal and other internal control
+signals used by the sleep and chip-select instructions.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 27.3%" />
+<col style="width: 54.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Bits</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[7:0]</p></td>
+<td><p>Div</p></td>
+<td><p>Prescaler clock divider. The default value of div is 0.</p></td>
 </tr>
 </tbody>
 </table>
@@ -958,17 +1052,21 @@ using the following formula:</p>
 <div class="math notranslate nohighlight">
 \[f\_{sclk} = \frac{f_{clk}}{((div + 1) * 2)}\]</div>
 </div>
-<p>If no prescaler block is present div is 0.</p>
 </section>
 <section id="dynamic-transfer-length-register">
 <span id="spi-engine-dynamic-transfer-length-register"></span><h3>Dynamic Transfer Length Register<a class="headerlink" href="#dynamic-transfer-length-register" title="Permalink to this heading"></a></h3>
 <p>The dynamic transfer length register sets the length (in bits) of a transfer. By
 default, the transfer length is equal to the DATA_WIDTH of the execution module.
-If required the user can reduce this length by setting this register. A general
-rule of thumb is to set the DATA_WIDTH parameter to the largest transfer length
-supported by the target device.</p>
-<div class="table-wrapper docutils container">
+If required, the user can reduce this length by setting this register. A
+general rule of thumb is to set the DATA_WIDTH parameter to be the largest
+transfer length supported by the target device.</p>
+<div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 18.2%" />
+<col style="width: 27.3%" />
+<col style="width: 54.5%" />
+</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Bits</p></th>
 <th class="head"><p>Name</p></th>
@@ -977,8 +1075,8 @@ supported by the target device.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>[7:0]</p></td>
-<td><p>div</p></td>
-<td><p>Dynamic transfer length</p></td>
+<td><p>Div</p></td>
+<td><p>Dynamic transfer length.</p></td>
 </tr>
 </tbody>
 </table>
