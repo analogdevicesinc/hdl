@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The ADV7511 is a 225 MHz High-Definition Multimedia Interface (HDMI) transmitter, which is ideal for home entertainment products including DVD players/recorders, digital set top boxes, A/V receivers, gaming consoles, and PCs." name="description" />
+<meta content="This design has been retired or deprecated, which means it is no longer maintained or actively updated, even though the devices themselves may be Recommended for New Designs or in Production. This page is here for historical/reference purposes only." name="description" />
 
-    <title>ADV7511 HDL project &#8212; HDL  documentation</title>
+    <title>AD-FMCOMMS6-EBZ HDL Project (OBSOLETE) &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=ac863bf0" />
     <script async="async" src="../../_static/app.umd.js?v=09b0c6bc"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="ADV7513 HDL project" href="../adv7513/index.html" />
-    <link rel="prev" title="ADRV9371x HDL reference design" href="../adrv9371x/index.html" />
+    <link rel="next" title="FMCJESDADC1 HDL Project (OBSOLETE)" href="../fmcjesdadc1/index.html" />
+    <link rel="prev" title="AD-FMCOMMS1-EBZ HDL Project (OBSOLETE)" href="../fmcomms1/index.html" />
    
   
   
@@ -94,29 +94,11 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">ADV7511 HDL project</a><ul>
-<li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
-<li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
-<li><a class="reference internal" href="#block-design">Block design</a><ul>
-<li><a class="reference internal" href="#block-diagram">Block diagram</a><ul>
-<li><a class="reference internal" href="#adv7511-block-diagram">ADV7511 Block Diagram</a></li>
-<li><a class="reference internal" href="#adv7511-internal-components">ADV7511 internal components</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
-<li><a class="reference internal" href="#gpio">GPIO</a></li>
-<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
-<li><a class="reference internal" href="#resources">Resources</a><ul>
-<li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
-<li><a class="reference internal" href="#hdl-related">HDL related</a></li>
-<li><a class="reference internal" href="#software-related">Software related</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#more-information">More information</a></li>
-<li><a class="reference internal" href="#support">Support</a></li>
+<li><a class="reference internal" href="#">AD-FMCOMMS6-EBZ HDL Project (OBSOLETE)</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a></li>
+<li><a class="reference internal" href="#supported-carriers">Supported Carriers</a></li>
+<li><a class="reference internal" href="#required-software">Required Software</a></li>
+<li><a class="reference internal" href="#fpga-reference-designs">FPGA Reference Designs</a></li>
 </ul>
 </li>
 </ul>
@@ -339,7 +321,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adrv9361z7035/index.html">ADRV9361Z7035</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9364z7020/index.html">ADRV9364Z7020</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9371x/index.html">ADRV9371x</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">ADV7511</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adv7511/index.html">ADV7511</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adv7513/index.html">ADV7513</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../arradio/index.html">ARRADIO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0363/index.html">CN0363</a></li>
@@ -372,7 +354,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../fmcomms6/index.html">FMCOMMS6 (OBSOLETE)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FMCOMMS6 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../imageon/index.html">IMAGEON (OBSOLETE)</a></li>
 </ul>
@@ -392,313 +374,44 @@ Content on this topic
 </div>
           <div class="body" role="main">
             
-  <section id="adv7511-hdl-project">
-<span id="adv7511"></span><h1>ADV7511 HDL project<a class="headerlink" href="#adv7511-hdl-project" title="Permalink to this heading"></a></h1>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a> is a 225 MHz High-Definition Multimedia Interface (HDMI) transmitter,
-which is ideal for home entertainment products including DVD players/recorders, digital
-set top boxes, A/V receivers, gaming consoles, and PCs.</p>
-<p>The digital video interface contains an HDMI 1.4- and a DVI 1.0-compatible transmitter,
-and supports all HDTV formats (including 1080p with 12-bit Deep Color). The <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a>
-supports the HDMI 1.4-specific features, HEAC (ARC), and 3D video. In addition to these features,
-the <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a> supports x.v.Color™, high bit rate audio, and programmable AVI InfoFrames.
-With the inclusion of HDCP, the <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a> allows the secure transmission of protected content
-as specified by the HDCP 1.4 protocol.</p>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a> supports both S/PDIF and 8-channel I2S audio. Its high fidelity 8-channel I2S
-can transmit either stereo or 7.1 surround audio up to 768 kHz. The S/PDIF can carry compressed
-audio including Dolby® Digital, DTS®, and THX®. Fabricated in an advanced CMOS process, the <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a>
-is provided in a 100-lead LQFP surface-mount plastic package and is specified over the 0°C to
-+70°C temperature range.</p>
+  <section id="ad-fmcomms6-ebz-hdl-project-obsolete">
+<span id="fmcomms6"></span><h1>AD-FMCOMMS6-EBZ HDL Project (OBSOLETE)<a class="headerlink" href="#ad-fmcomms6-ebz-hdl-project-obsolete" title="Permalink to this heading"></a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This design has been retired or deprecated, which means it is no longer
+maintained or actively updated, even though the devices themselves may be
+<strong>Recommended for New Designs</strong> or in <strong>Production</strong>. This page is here for
+historical/reference purposes only.</p>
+</div>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
+<h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCOMMS6-EBZ" target="_blank">EVAL-AD-FMCOMMS6-EBZ</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
+<h2>Supported Carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon link reference external" href="https://www.xilinx.com/ZC702" target="_blank">ZC702</a></p></li>
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></li>
-<li><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></li>
 </ul>
 </section>
-<section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
-<p>The reference design uses HDL-related HDMI cores in order to interface the <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a>
-IC into the ZC702/ZC706/Zed evaluation kits.</p>
-<section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
-<p>The data path and clock domains when interfacing the <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a> IC with the FPGA SoCs,
-and the internal HDL-related components are illustrated below:</p>
-<section id="adv7511-block-diagram">
-<h4>ADV7511 Block Diagram<a class="headerlink" href="#adv7511-block-diagram" title="Permalink to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/adv7511_bd.svg"><img alt="ADV7511 block diagram" class="align-center" src="../../_images/adv7511_bd.svg" width="800" /></a>
-</section>
-<section id="adv7511-internal-components">
-<h4>ADV7511 internal components<a class="headerlink" href="#adv7511-internal-components" title="Permalink to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/adv7511_internal.svg"><img alt="ADV7511 internal components" class="align-center" src="../../_images/adv7511_internal.svg" width="800" /></a>
-</section>
-</section>
-<section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
-<p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>Zynq</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>axi_iic_main</p></td>
-<td><p>0x4160_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_sysid_0</p></td>
-<td><p>0x4500_0000</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_hdmi_clkgen</p></td>
-<td><p>0x7900_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_hdmi_dma</p></td>
-<td><p>0x4300_0000</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_hdmi_core</p></td>
-<td><p>0x70E0_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_spdif_tx_core</p></td>
-<td><p>0x75C0_0000</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_i2s_adi*</p></td>
-<td><p>0x7760_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_iic_fmc*</p></td>
-<td><p>0x4162_0000</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
+<section id="required-software">
+<h2>Required Software<a class="headerlink" href="#required-software" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>  instantiated only for Zed carrier</p></li>
+<li><p>We upgrade the Xilinx tools on every release. The supported version number can be found in our <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">git repository</a>.</p></li>
 </ul>
-</div>
 </section>
-<section id="gpio">
-<h3>GPIO<a class="headerlink" href="#gpio" title="Permalink to this heading"></a></h3>
-<p>The Software GPIO number is calculated as follows:</p>
+<section id="fpga-reference-designs">
+<h2>FPGA Reference Designs<a class="headerlink" href="#fpga-reference-designs" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>Zynq-7000: if PS7 EMIOs are used, then offset is 54</p></li>
+<li><p>Last release with support for this project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2016_r1/projects/fmcomms6" target="_blank">hdl_2016_r1</a></p></li>
 </ul>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>HDL GPIO EMIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
-</tr>
-<tr class="row-even"><th class="head"></th>
-<th class="head"><p>(from FPGA view)</p></th>
-<th class="head"></th>
-<th class="head"><p>Zynq-7000</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-odd"><td><p>gpio_bd[31:0] *</p></td>
-<td><p>INOUT</p></td>
-<td><p>31:0</p></td>
-<td><p>85:54</p></td>
-</tr>
-<tr class="row-even"><td><p>gpio_bd[14:0] **</p></td>
-<td><p>INOUT</p></td>
-<td><p>14:0</p></td>
-<td><p>68:54</p></td>
-</tr>
-<tr class="row-odd"><td><p>gpio_bd[15:0] ***</p></td>
-<td><p>INOUT</p></td>
-<td><p>15:0</p></td>
-<td><p>69:54</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>  instantiated only for Zed carrier</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for ZC706 carrier</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">***</span></code> instantiated only for ZC702 carrier</p></li>
+<li><p>Questions? <a class="icon ez reference external" href="https://ez.analog.com/community/fpga" target="_blank">Ask Help &amp; Support</a>.</p></li>
 </ul>
 </div>
-</section>
-<section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
-<p>Below are the Programmable Logic interrupts used in this project.</p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Instance name</p></th>
-<th class="head"><p>HDL</p></th>
-<th class="head"><p>Linux Zynq</p></th>
-<th class="head"><p>Actual Zynq</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>axi_hdmi_dma/irq</p></td>
-<td><p>15</p></td>
-<td><p>59</p></td>
-<td><p>91</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_iic_main/iic2intc_irpt</p></td>
-<td><p>14</p></td>
-<td><p>58</p></td>
-<td><p>90</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_iic_fmc/iic2intc_irpt*</p></td>
-<td><p>11</p></td>
-<td><p>55</p></td>
-<td><p>87</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>  instantiated only for Zed carrier</p></li>
-</ul>
-</div>
-</section>
-</section>
-<section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
-<p>The design is built upon ADI’s generic HDL reference design framework.
-ADI distributes the bit/elf files of these projects as part of the
-<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
-If you want to build the sources, ADI makes them available on the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
-<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
-the HDL repository, and then build the project as follows:.</p>
-<p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/adv7511/zed
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adv7511/zed$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a>
-user guide.</p>
-</section>
-<section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
-<section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a></p></li>
-</ul>
-</section>
-<section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adv7511" target="_blank">ADV7511 HDL project source code</a></p></li>
-</ul>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 30.0%" />
-<col style="width: 35.0%" />
-<col style="width: 35.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>IP name</p></th>
-<th class="head"><p>Source code link</p></th>
-<th class="head"><p>Documentation link</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>AXI_CLKGEN</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen" target="_blank">library/axi_clkgen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_HDMI_TX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx" target="_blank">library/axi_hdmi_tx</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">AXI HDMI TX</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_I2S_ADI *</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi" target="_blank">library/axi_i2s_adi</a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_SYSID</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>SYSID_ROM</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_SDDIF_TX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx" target="_blank">library/axi_spdif_tx</a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-even"><td><p>UTIL_I2C_MIXER *</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer" target="_blank">library/util_i2c_mixer</a></p></td>
-<td><p>—</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>  instantiated only for Zed carrier</p></li>
-</ul>
-</div>
-</section>
-<section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/gpu/drm/bridge/adv7511" target="_blank">ADV7511 driver source code</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511.dts" target="_blank">ADV7511 - ZED dts source code</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511.dts" target="_blank">ADV7511 - ZC706 dts source code</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zc702-adv7511.dts" target="_blank">ADV7511 - ZC702 dts source code</a></p></li>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/drm/adv7511" target="_blank">ADV7511 driver docs</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adv7511" target="_blank">ADV7511 no-OS project source code</a></p></li>
-</ul>
-</section>
-</section>
-<section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
-</ul>
-</section>
-<section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
-<p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
-using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
-<a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>
-<p>For questions regarding the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> Linux device drivers, device trees, etc.
-from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/" target="_blank">Linux GitHub repository</a>, the team will offer support
-on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers" target="_blank">EngineerZone</a> Linux software drivers forum.</p>
-<p>For questions concerning the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> No-OS drivers, from our
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/" target="_blank">No-OS GitHub repository</a>, the team will offer support on the
-<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers" target="_blank">EngineerZone</a> microcontroller No-OS drivers forum.</p>
-<p>It should be noted, that the older the tools’ versions and release branches
-are, the lower the chances to receive support from <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> engineers.</p>
 </section>
 </section>
 
@@ -706,8 +419,8 @@ are, the lower the chances to receive support from <a class="icon link reference
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../adrv9371x/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADRV9371x HDL reference design</a>
-    <a href="../adv7513/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">ADV7513 HDL project</a>
+    <a href="../fmcomms1/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD-FMCOMMS1-EBZ HDL Project (OBSOLETE)</a>
+    <a href="../fmcjesdadc1/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">FMCJESDADC1 HDL Project (OBSOLETE)</a>
               </div>
           
         </div>
