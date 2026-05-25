@@ -135,7 +135,7 @@ begin
 
 	fifo_reset <= not conf_txdata;
 	enable <= conf_txdata = '1';
-  fifo_data_ack <= sample_data_ack when conf_mode = "1000" else (channel and sample_data_ack);
+  fifo_data_ack <= sample_data_ack when (conf_mode = "1000" or conf_mode = "1001") else (channel and sample_data_ack);
 	streaming_dma_gen: if DMA_TYPE = 0 generate
 		fifo: entity axi_streaming_dma_tx_fifo
 			generic map (
@@ -205,7 +205,7 @@ begin
   sample_data_mux: process (fifo_data_out, channel, conf_mode) is
   begin
       -- 24-bit audio
-      if conf_mode = "1000" then
+      if (conf_mode = "1000" or conf_mode = "1001") then
           sample_data <= fifo_data_out;
       -- 16-bit audio
       else
