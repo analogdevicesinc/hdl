@@ -28,7 +28,8 @@ This specific command is equivalent to running `make` only:
 ```
 make RX_JESD_L=4 \
 RX_JESD_M=16 \
-RX_JESD_S=1
+RX_JESD_S=1 \
+RX_JESD_NP=16
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9083-fmc-ebz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9083-fmc-ebz.dts)

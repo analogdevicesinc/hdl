@@ -387,7 +387,7 @@ sub gen_drp_cmd {
         my $param_value_hex = $param_value;
         $param_value_hex =~ s/^.*'b//;
         ## convert to hex only if it's a binary number, leave it as it is otherwise
-        if ($param_value_hex =~ /^[0-1]+$/) {
+        if ($param_value_hex =~ /^[0-1]+$/ && length($param_value_hex) > 1) {
           $param_value_hex = sprintf('0x%X', oct("0b$param_value_hex"));
         }
         #$t3->row($param_name, $param_value, $param_value_hex);
