@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2023, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -14,6 +14,7 @@ ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 set sys_cstring "RX:L=$ad_project_params(RX_JESD_L)\
 M=$ad_project_params(RX_JESD_M)\
-S=$ad_project_params(RX_JESD_S)"
+S=$ad_project_params(RX_JESD_S)\
+NP=$ad_project_params(RX_JESD_NP)"
 
 sysid_gen_sys_init_file $sys_cstring

@@ -151,9 +151,6 @@ proc adi_xcvr_parameters {file_paths parameters} {
                 if {[string equal $cleaned_value "QPLL_FBDIV_RATIO"]} {
                     set cleaned_value $QPLL_FBDIV_RATIO
                 }
-                if {[string equal $corrected_param "PREIQ_FREQ_BST"]} {
-                    set cleaned_value [expr {$cleaned_value}]
-                }
 
                 dict set updated_params $corrected_param $cleaned_value
             }
