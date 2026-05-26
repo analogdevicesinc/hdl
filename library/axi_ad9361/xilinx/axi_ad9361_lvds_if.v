@@ -215,11 +215,13 @@ module axi_ad9361_lvds_if #(
   end
 
   // frame check
+  // Use case-equality (===) so unknown (X) bits in rx_frame_s never propagate
+  // as X into rx_error. Any unrecognised or X pattern is treated as an error.
 
-  assign rx_error = ~(({rx_frame_s, rx_frame} == 4'b1111) ||
-                      ({rx_frame_s, rx_frame} == 4'b1100) ||
-                      ({rx_frame_s, rx_frame} == 4'b0000) ||
-                      ({rx_frame_s, rx_frame} == 4'b0011));
+  assign rx_error = (({rx_frame_s, rx_frame} === 4'b1111) ||
+                     ({rx_frame_s, rx_frame} === 4'b1100) ||
+                     ({rx_frame_s, rx_frame} === 4'b0000) ||
+                     ({rx_frame_s, rx_frame} === 4'b0011)) ? 1'b0 : 1'b1;
 
   // delineation
 
