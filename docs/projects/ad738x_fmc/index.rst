@@ -347,7 +347,7 @@ Then, to build the project:
 .. shell::
 
    $cd hdl/projects/ad738x_fmc/lfcpnx
-   $make ALERT_SPI_N=0 NUM_OF_SDI=4 SYSMEM_INIT_FILE=<path_to>/<sysmem_init>.mem
+   $make ALERT_SPI_N=0 NUM_OF_SDIO=4 SYSMEM_INIT_FILE=<path_to>/<sysmem_init>.mem
 
 The SYSMEM_INIT_FILE parameter for LFCPNX-EVN is optional, use it to build the 
 project with an already initialized system memory for the RISC-V RX CPU, 
