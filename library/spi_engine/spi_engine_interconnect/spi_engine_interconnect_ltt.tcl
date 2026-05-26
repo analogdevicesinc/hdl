@@ -73,7 +73,17 @@ set ip [ipl::add_interface -ip $ip \
     -description spi_engine_interconnect_ctrl \
     -master_slave slave \
     -portmap { \
-        {"interconnect_dir" "INTERCONNECT_DIR"} \
+        {"s_interconnect_dir" "INTERCONNECT_DIR"} \
+    } \
+    -vlnv {analog.com:ADI:spi_engine_interconnect_ctrl:1.0}]
+
+set ip [ipl::add_interface -ip $ip \
+    -inst_name m_offload_active_ctrl \
+    -display_name m_offload_active_ctrl \
+    -description spi_engine_interconnect_ctrl \
+    -master_slave master \
+    -portmap { \
+        {"m_offload_active" "INTERCONNECT_DIR"} \
     } \
     -vlnv {analog.com:ADI:spi_engine_interconnect_ctrl:1.0}]
 
