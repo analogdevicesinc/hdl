@@ -18,7 +18,8 @@
 # * pb-force and rd-force: you can build the respective projects without
 #   checking for dependencies.
 # * sim: runs Questasim simulation using qsim.do in GUI mode.
-# * sim-cli: runs Questasim simulation using qsim.do in command-line mode.
+# * sim-cli: runs Questasim simulation in command-line mode using a wrapper
+# *   around qsim.do that propagates failures back to make.
 # * open-pb: opens the generated Propel Builder project (.sbx).
 # * open-v: opens the generated verification Propel Builder project (.sbx).
 # * open-rd: opens the generated Radiant project file (.rdf).
@@ -196,7 +197,7 @@ $(SIM_STAMP_FILE): $(SIM_DEPS)
 	fi
 	@touch $(SIM_STAMP_FILE)
 
-DEFAULT_SIM_CMD := cd $(dir $(ADI_SIM_DO)) && $(SIMULATOR) -do $(notdir $(ADI_SIM_DO))
+DEFAULT_SIM_CMD := cd $(dir $(GEN_SIM_DO)) && $(SIMULATOR) -do $(notdir $(GEN_SIM_DO))
 SIM_CMD ?= $(DEFAULT_SIM_CMD)
 
 sim: $(SIM_DEPS)
