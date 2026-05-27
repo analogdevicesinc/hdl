@@ -322,8 +322,12 @@ module spi_engine_offload #(
   end
 
   always @(posedge spi_clk) begin
-    if (!cmd_valid) begin
+    if (!spi_resetn) begin
       spi_cmd_rd_addr <= 'h00;
+      last_cmd <= 1'b0;
+    end else if (!cmd_valid) begin
+      spi_cmd_rd_addr <= 'h00;
+      last_cmd <= (ctrl_cmd_wr_addr == 1);
     end else if (cmd_ready) begin
       spi_cmd_rd_addr <= spi_cmd_rd_addr_next;
       last_cmd <= spi_cmd_rd_addr + 2'h2 == ctrl_cmd_wr_addr;
