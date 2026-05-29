@@ -19,6 +19,7 @@ The COTS project is intended for:
 | ZCU102 | Zynq UltraScale+ MPSoC XCZU9EG | Xilinx evaluation board with Zynq US+ (**requires premium license**) |
 | Microzed | Zynq-7000 XC7Z010 or XC7Z020 | Low-cost Zynq-7000 development board |
 | Zed | Zynq-7000 XC7Z020 | Popular Zynq-7000 evaluation board with HDMI/Audio |
+| KR260 | Kria K26 SOM XCK26 | Robotics Starter Kit with K26 SOM (**requires K26 license**) |
 
 ## Features
 
