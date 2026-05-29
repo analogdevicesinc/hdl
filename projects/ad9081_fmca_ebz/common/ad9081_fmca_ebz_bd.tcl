@@ -27,6 +27,7 @@ if {![info exists ADI_PHY_SEL]} {
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
+source $ad_hdl_dir/library/xilinx/scripts/xcvr_automation.tcl
 
 if {![info exists INTF_CFG]} {
   set INTF_CFG RXTX
@@ -166,38 +167,35 @@ if {!$ADI_PHY_SEL} {
 }
 
 # common xcvr
+
+global xcvr_config_paths
+
 if {$ADI_PHY_SEL == 1} {
-  ad_ip_instance util_adxcvr util_mxfe_xcvr
-  ad_ip_parameter util_mxfe_xcvr CONFIG.CPLL_FBDIV_4_5 5
   switch $INTF_CFG {
     "RXTX" {
-      # Rx & Tx
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
-      ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
     }
     "RX" {
       # Rx only
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES 0
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
-      ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE 0
+      set TX_NUM_OF_LANES 0
+      set TX_LANE_RATE 0
     }
     "TX" {
       # Tx only
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_NUM_OF_LANES 0
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_OUT_DIV 1
-      ad_ip_parameter util_mxfe_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-      ad_ip_parameter util_mxfe_xcvr CONFIG.RX_LANE_RATE 0
-      ad_ip_parameter util_mxfe_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
+      set RX_NUM_OF_LANES 0
+      set RX_LANE_RATE 0
     }
   }
+
+  set util_adxcvr_parameters [adi_xcvr_parameters $xcvr_config_paths [list \
+    RX_NUM_OF_LANES $RX_NUM_OF_LANES\
+    TX_NUM_OF_LANES $TX_NUM_OF_LANES\
+    RX_LANE_RATE $RX_LANE_RATE\
+    TX_LANE_RATE $TX_LANE_RATE\
+    LINK_MODE $ENCODER_SEL\
+  ]]
+  puts "xcvr_config_paths: $xcvr_config_paths"
+  puts "util_adxcvr_parameters: $util_adxcvr_parameters"
+  ad_ip_instance util_adxcvr util_mxfe_xcvr $util_adxcvr_parameters
 } else {
   source $ad_hdl_dir/library/xilinx/scripts/versal_xcvr_subsystem.tcl
 

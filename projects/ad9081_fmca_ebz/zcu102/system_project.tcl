@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2023, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -15,6 +15,19 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #    e.g.
 #      make RX_JESD_L=4 RX_JESD_M=8 RX_JESD_S=1 TX_JESD_L=4 TX_JESD_M=8 TX_JESD_S=1
 #      make RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1
+
+global xcvr_config_paths
+
+# Parameter description:
+#   LANE_RATE: Value of lane rate [gbps]
+#   REF_CLK: Value of the reference clock [MHz] (usually LANE_RATE/20 or LANE_RATE/40)
+#   PLL_TYPE: The PLL used for driving the link [CPLL/QPLL1/QPLL0]
+
+set xcvr_config_paths [adi_xcvr_project [list \
+  LANE_RATE [get_env_param LANE_RATE 11.96] \
+  REF_CLK   [get_env_param REF_CLK  362.424242] \
+  PLL_TYPE  [get_env_param PLL_TYPE  QPLL0] \
+]]
 
 #
 # Parameter description:
@@ -63,6 +76,4 @@ adi_project_files ad9081_fmca_ebz_zcu102 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
-
 adi_project_run ad9081_fmca_ebz_zcu102
-

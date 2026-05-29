@@ -21,6 +21,19 @@ set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timi
 #      make JESD_MODE=64B66B RX_LANE_RATE=16.50 TX_LANE_RATE=16.50 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=2 RX_JESD_NP=12 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=2 TX_JESD_NP=12
 #      make JESD_MODE=8B10B  RX_JESD_L=4 RX_JESD_M=8 TX_JESD_L=4 TX_JESD_M=8
 
+global xcvr_config_paths
+
+# Parameter description:
+#   LANE_RATE: Value of lane rate [gbps]
+#   REF_CLK: Value of the reference clock [MHz] (usually LANE_RATE/20 or LANE_RATE/40)
+#   PLL_TYPE: The PLL used for driving the link [CPLL/QPLL1/QPLL0]
+
+set xcvr_config_paths [adi_xcvr_project [list \
+  LANE_RATE [get_env_param LANE_RATE 16.5] \
+  REF_CLK   [get_env_param REF_CLK    250] \
+  PLL_TYPE  [get_env_param PLL_TYPE QPLL1] \
+]]
+
 #
 # Parameter description:
 #   JESD_MODE : Used link layer encoder mode
