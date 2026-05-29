@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -14,7 +14,7 @@ set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 10
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
+ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 10
 
 set sys_cstring "JESD_MODE=$ad_project_params(JESD_MODE)\
@@ -38,6 +38,6 @@ S=$ad_project_params(RX_OS_JESD_S)\
 NP=$ad_project_params(RX_OS_JESD_NP)\
 LINKS=$ad_project_params(RX_OS_NUM_LINKS)"
 
-sysid_gen_sys_init_file
+sysid_gen_sys_init_file $sys_cstring 10
 
 source ../common/adrv9026_bd.tcl
