@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2023, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 #
 # This script is meant to be used together with gtwizard_generator.tcl
@@ -382,7 +382,7 @@ sub gen_drp_cmd {
     #print "$param_value\n";
     ## ignore all attributes which are related to unused features and
     ## double check attribute validity
-    if ($param_name =~ /^(?!ES_)(?!PCIE_)(?!TXPI_)(?!TX_PI_BIASSET)/) {
+    if ($param_name =~ /^(?!ES_)(?!PCIE_)/) {
       if (exists $$xcvr_params_ref{$param_name}) {
         my $param_value_hex = $param_value;
         $param_value_hex =~ s/^.*'b//;

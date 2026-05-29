@@ -30,6 +30,7 @@ proc adi_xcvr_parameters {file_paths parameters} {
         "QPLL_CP_G3" "10'b0000011111"
         "QPLL_LPF" "10'b0100110111"
         "QPLL_CP" "10'b0001111111"
+        "QPLLCLKOUT_RATE" "HALF"
         "CPLL_FBDIV" "2"
         "CPLL_FBDIV_4_5" "5"
         "CPLL_CFG0" "16'b0000000111111010"
@@ -125,7 +126,7 @@ proc adi_xcvr_parameters {file_paths parameters} {
         set param [lindex $matches $i+1]
         set value [lindex $matches $i+2]
 
-        set cleaned_value [string map {"\\" ""} $value]
+        set cleaned_value [string map {"\\" "" "\"" ""} $value]
         set corrected_param $param
 
         if {[dict exists $correction_map $param]} {
