@@ -119,6 +119,12 @@ proc qpll_ref_clk_gen { gt_type  lane_rate } {
 ###############################################################################
 proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
 
+  if {[info exists ::env(JESD_MODE)]} {
+    set jesd_mode $::env(JESD_MODE)
+  } else {
+    set jesd_mode "8B10B"
+  }
+
   set prj_name [get_property NAME [current_project]]
 
   ## Currently supporting both GTH and GTY's, expected boards are ZCU102/KCU105/VCU108/VCU118
@@ -230,6 +236,11 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
     }
   }
 
+  if {$jesd_mode eq "64B66B"} {
+    set pll_min_range [expr {2 * $pll_min_range}]
+    set pll_max_range [expr {2 * $pll_max_range}]
+  }
+
   set inst_num 0
   foreach lane_rate $lane_rate_l {
 
@@ -284,6 +295,16 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
         incr inst_num
 
         ## check if it is 7series or ultrascale/ultrascale+
+
+        if {$jesd_mode eq "64B66B"} {
+          set gt_encoding "64B66B"
+          set gt_encoding_7s "64B/66B"
+          set gt_int_data_width 64
+        } else {
+          set gt_encoding "8B10B"
+          set gt_encoding_7s "8B/10B"
+          set gt_int_data_width 40
+        }
 
         if {[string equal $gt_type GTXE2]} {
           ## 7 series
@@ -343,12 +364,12 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
             CONFIG.gt15_val_tx_refclk {REFCLK1_Q3} \
             CONFIG.gt15_val_rx_refclk {REFCLK1_Q3} \
             CONFIG.gt0_val_rxusrclk {RXOUTCLK} \
-            CONFIG.gt0_val_decoding {8B/10B} \
-            CONFIG.gt0_val_encoding {8B/10B} \
+            CONFIG.gt0_val_decoding $gt_encoding_7s \
+            CONFIG.gt0_val_encoding $gt_encoding_7s \
             CONFIG.gt0_val_tx_data_width {32} \
-            CONFIG.gt0_val_tx_int_datawidth {40} \
+            CONFIG.gt0_val_tx_int_datawidth $gt_int_data_width \
             CONFIG.gt0_val_rx_data_width {32} \
-            CONFIG.gt0_val_rx_int_datawidth {40} \
+            CONFIG.gt0_val_rx_int_datawidth $gt_int_data_width \
             CONFIG.gt0_val_port_rxchariscomma {true} \
             CONFIG.gt0_val_port_rxcharisk {true} \
             CONFIG.gt0_val_align_pcomma_value {0101111100} \
@@ -396,13 +417,13 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
                 CONFIG.TX_LINE_RATE $lane_rate \
                 CONFIG.TX_PLL_TYPE $pll_type \
                 CONFIG.TX_REFCLK_FREQUENCY $ref_clk \
-                CONFIG.TX_DATA_ENCODING {8B10B} \
-                CONFIG.TX_INT_DATA_WIDTH {40} \
+                CONFIG.TX_DATA_ENCODING $gt_encoding \
+                CONFIG.TX_INT_DATA_WIDTH $gt_int_data_width \
                 CONFIG.RX_LINE_RATE $lane_rate \
                 CONFIG.RX_PLL_TYPE $pll_type \
                 CONFIG.RX_REFCLK_FREQUENCY $ref_clk \
-                CONFIG.RX_DATA_DECODING {8B10B} \
-                CONFIG.RX_INT_DATA_WIDTH {40} \
+                CONFIG.RX_DATA_DECODING $gt_encoding \
+                CONFIG.RX_INT_DATA_WIDTH $gt_int_data_width \
                 CONFIG.RX_EQ_MODE {LPM} \
                 CONFIG.RX_COMMA_P_ENABLE {true} \
                 CONFIG.RX_COMMA_M_ENABLE {true} \
