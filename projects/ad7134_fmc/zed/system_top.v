@@ -83,6 +83,11 @@ module system_top (
 
   input         otg_vbusoc,
 
+  // on-board 100 MHz oscillator IC17 (Fox 767-100-136, 25 ppm)
+  // ZedBoard GCLK — pin Y9, Bank 13
+
+  input         sys_clk,
+
   // ad713x SPI configuration interface
 
 (* mark_debug = "true" *)  input         ad713x_spi_sdi,
@@ -234,6 +239,7 @@ module system_top (
     .ad713x_di_sclk (ad713x_dclk),
     .ad713x_odr (ad713x_odr),
     .ad713x_sdpclk (ad713x_sdpclk),
+    .sys_clk (sys_clk),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 

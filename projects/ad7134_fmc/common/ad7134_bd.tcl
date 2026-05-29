@@ -47,14 +47,28 @@ ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC 256
 ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
 # sdpclk clock - 48 MHz
+# Reference: on-board 100 MHz oscillator IC17 (Fox 767-100-136, 25 ppm).
+# MMCM: 100 × 48/5 = 960 MHz VCO → 960/20 = 48 MHz output.
 
 ad_ip_instance axi_clkgen axi_sdpclk_clkgen
 ad_ip_parameter axi_sdpclk_clkgen CONFIG.VCO_DIV 5
 ad_ip_parameter axi_sdpclk_clkgen CONFIG.VCO_MUL 48
 ad_ip_parameter axi_sdpclk_clkgen CONFIG.CLK0_DIV 20
 
-ad_connect $sys_cpu_clk axi_sdpclk_clkgen/clk
-ad_connect axi_sdpclk_clkgen/clk_0 ad713x_sdpclk
+create_bd_port -dir I -type clk sys_clk
+set_property CONFIG.FREQ_HZ 100000000 [get_bd_ports sys_clk]
+ad_connect sys_clk axi_sdpclk_clkgen/clk
+
+# clkin aligner — gates sdpclk for deterministic dig_clk phase alignment
+# (Sequence.txt). Sits between axi_sdpclk_clkgen/clk_0 and the two sdpclk
+# consumers (the FMC pin and the ODR generator).
+
+ad_ip_instance clkin_aligner clkin_aligner
+
+ad_connect $sys_cpu_clk            clkin_aligner/s_axi_aclk
+ad_connect sys_cpu_resetn          clkin_aligner/s_axi_aresetn
+ad_connect axi_sdpclk_clkgen/clk_0 clkin_aligner/clk_in
+ad_connect clkin_aligner/clk_out   ad713x_sdpclk
 
 # odr generator
 
@@ -66,12 +80,17 @@ ad_ip_parameter odr_generator CONFIG.PULSE_0_OFFSET 3
 ad_ip_parameter odr_generator CONFIG.PULSE_1_PERIOD 85
 ad_ip_parameter odr_generator CONFIG.PULSE_1_WIDTH 13
 
-ad_connect odr_generator/ext_clk axi_sdpclk_clkgen/clk_0
+ad_connect odr_generator/ext_clk clkin_aligner/clk_out
 ad_connect odr_generator/pwm_0 $hier_spi_engine/trigger
-ad_connect odr_generator/pwm_1 ad713x_odr
+
+# Sequence.txt §F.10 — re-register ODR on negedge of XTAL2_CLKIN inside
+# clkin_aligner so transitions align with the CLKin falling edge.
+
+ad_connect odr_generator/pwm_1 clkin_aligner/odr_in
+ad_connect clkin_aligner/odr_out ad713x_odr
 
 ad_connect  axi_ad7134_clkgen/clk_0 $hier_spi_engine/spi_clk
-ad_connect  $sys_cpu_clk axi_ad7134_clkgen/clk 
+ad_connect  $sys_cpu_clk axi_ad7134_clkgen/clk
 ad_connect  $sys_cpu_clk $hier_spi_engine/clk
 ad_connect  axi_ad7134_clkgen/clk_0 axi_ad7134_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn $hier_spi_engine/resetn
@@ -87,11 +106,13 @@ ad_cpu_interconnect 0x44a30000 axi_ad7134_dma
 ad_cpu_interconnect 0x44b00000 odr_generator
 ad_cpu_interconnect 0x44b10000 axi_ad7134_clkgen
 ad_cpu_interconnect 0x44b20000 axi_sdpclk_clkgen
+ad_cpu_interconnect 0x44b30000 clkin_aligner
 
 # interrupts
 
 ad_cpu_interrupt "ps-13" "mb-13" axi_ad7134_dma/irq
 ad_cpu_interrupt "ps-12" "mb-12" $hier_spi_engine/irq
+ad_cpu_interrupt "ps-10" "mb-10" clkin_aligner/irq
 
 # memory interconnects
 
