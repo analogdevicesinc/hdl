@@ -4,6 +4,7 @@
   - [EVAL-AD3530R](https://www.analog.com/eval-ad3530r)
   - [EVAL-AD3531R](https://www.analog.com/eval-ad3531r)
   - [EVAL-AD3532R](https://www.analog.com/eval-ad3532r)
+  - [EVAL-AD3532R](https://www.analog.com/eval-ad3536r)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad353xr
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad353xr/index.html
 - Evaluation board VADJ range: 2.7V - 5.5V
@@ -18,6 +19,8 @@
 | [AD3531R](https://www.analog.com/ad3531r) | 4-Channel, 16-Bit Voltage Output DAC, On-Chip Reference, SPI |
 | [AD3532](https://www.analog.com/ad3532)   | 16-Channel, 16-Bit Voltage Output DAC, On-Chip Reference, SPI |
 | [AD3532R](https://www.analog.com/ad3532r) | 16-Channel, 16-Bit Voltage Output DAC, On-Chip Reference, SPI |
+| [AD3536](https://www.analog.com/ad3536)   | 16-Channel, 12-Bit Voltage Output DAC, On-Chip Reference, SPI |
+| [AD3536R](https://www.analog.com/ad3536r) | 16-Channel, 12-Bit Voltage Output DAC, On-Chip Reference, SPI |
 
 ## Building the project
 
