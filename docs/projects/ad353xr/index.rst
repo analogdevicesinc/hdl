@@ -6,15 +6,16 @@ AD353XR HDL project
 Overview
 --------------------------------------------------------------------------------
 
-The :adi:`AD3530R`/ :adi:`AD3530`, :adi:`AD3531R`/ :adi:`AD3531`, and
-:adi:`AD3532R`/ :adi:`AD3532` are low power, 16-bit, buffered voltage output,
-digital-to-analog converters (DACs) that include a gain bit field, resulting in
-a full-scale output of 2.5V (gain = 1) or 5V (gain = 2) for a reference voltage
-of 2.5V. :adi:`AD3530`/ :adi:`AD3530R` has 8 channels, :adi:`AD3531`/
-:adi:`AD3531R` has 4 channels, and :adi:`AD3532`/ :adi:`AD3532R` has 16 channels.
-:adi:`AD3530R`, :adi:`AD3531R`, and :adi:`AD3532R` have an on-chip, buffered,
-2.5V reference available at the VREF pin, capable of sourcing external loads up
-to +5mA.
+The :adi:`AD3530R`/ :adi:`AD3530`, :adi:`AD3531R`/ :adi:`AD3531`,
+:adi:`AD3532R`/ :adi:`AD3532`, and :adi:`AD3536R`/ :adi:`AD3536` are low power,
+buffered voltage output, digital-to-analog converters (DACs) that include a gain
+bit field, resulting in a full-scale output of 2.5V (gain = 1) or 5V (gain = 2)
+for a reference voltage of 2.5V. :adi:`AD3530`/ :adi:`AD3530R` has 8 channels
+(16-bit), :adi:`AD3531`/ :adi:`AD3531R` has 4 channels (16-bit), :adi:`AD3532`/
+:adi:`AD3532R` has 16 channels (16-bit), and :adi:`AD3536`/ :adi:`AD3536R` has
+16 channels (12-bit). :adi:`AD3530R`, :adi:`AD3531R`, :adi:`AD3532R`, and
+:adi:`AD3536R` have an on-chip, buffered, 2.5V reference available at the VREF
+pin, capable of sourcing external loads up to +5mA.
 
 Each DAC channel has its own Input register and DAC register. The DAC Register 
 stores digital code equivalent to the DAC output voltage while the Input
@@ -28,15 +29,15 @@ without an LDAC.
 channels capable of sourcing 50mA and sinking up to 40mA of current.
 :adi:`AD3531R`/ :adi:`AD3531` contains four buffered voltage output DAC channels
 capable of sourcing 100mA and sinking 80 mA of current. :adi:`AD3532R`/
-:adi:`AD3532` contains sixteen buffered voltage output DAC channels capable of
-sourcing 25mA and sinking up to 20mA of current.
+:adi:`AD3532` and :adi:`AD3536R`/ :adi:`AD3536` contain sixteen buffered voltage
+output DAC channels capable of sourcing 25mA and sinking up to 20mA of current.
 
 The :adi:`AD3530R`/ :adi:`AD3530` contains a 27:1 multiplexer,
-:adi:`AD3531R`/ :adi:`AD3531` contains a 15:1 multiplexer, and :adi:`AD3532R`/
-:adi:`AD3532` contains a 51:1 multiplexer, in which all could output a voltage
-on the MUX_OUT pin that is a representative of either the output voltage or
-output current of a chosen channel, or the internal die temperature of the
-device.
+:adi:`AD3531R`/ :adi:`AD3531` contains a 15:1 multiplexer, :adi:`AD3532R`/
+:adi:`AD3532` contains a 51:1 multiplexer, and :adi:`AD3536R`/ :adi:`AD3536`
+contains a 51:1 multiplexer, in which all could output a voltage on the MUX_OUT
+pin that is a representative of either the output voltage or output current of a
+chosen channel, or the internal die temperature of the device.
 
 Applications:
 
@@ -51,6 +52,7 @@ Supported boards
 - :adi:`EVAL-AD3530R`
 - :adi:`EVAL-AD3531R`
 - :adi:`EVAL-AD3532R`
+- :adi:`EVAL-AD3536R`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -61,6 +63,8 @@ Supported devices
 - :adi:`AD3531R`
 - :adi:`AD3532`
 - :adi:`AD3532R`
+- :adi:`AD3536`
+- :adi:`AD3536R`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -161,6 +165,8 @@ Hardware related
 - Product datasheet: :adi:`AD3531R`
 - Product datasheet: :adi:`AD3532`
 - Product datasheet: :adi:`AD3532R`
+- Product datasheet: :adi:`AD3536`
+- Product datasheet: :adi:`AD3536R`
 
 - `UG-1203: EVAL-AD3530RARDZ Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad3530r-ug-2276.pdf>`__
 
