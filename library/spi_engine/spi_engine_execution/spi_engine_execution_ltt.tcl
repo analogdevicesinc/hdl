@@ -44,6 +44,15 @@ set ip [ipl::add_interface -ip $ip \
     } \
     -vlnv {analog.com:ADI:spi_engine_ctrl:1.0}]
 set ip [ipl::add_interface -ip $ip \
+    -inst_name s_offload_active_ctrl \
+    -display_name s_offload_active_ctrl \
+    -description spi_engine_interconnect_ctrl \
+    -master_slave slave \
+    -portmap { \
+        {"s_offload_active" "INTERCONNECT_DIR"} \
+    } \
+    -vlnv {analog.com:ADI:spi_engine_interconnect_ctrl:1.0}]
+set ip [ipl::add_interface -ip $ip \
     -inst_name spi_master \
     -display_name spi_master \
     -description spi_master \
@@ -60,7 +69,8 @@ set ip [ipl::add_interface -ip $ip \
 
 set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
     "spi_engine_execution.v" \
-    "spi_engine_execution_shiftreg.v" ]]
+    "spi_engine_execution_shiftreg.v" \
+    "spi_engine_execution_shiftreg_data_assemble.v" ]]
 
 set ip [ipl::set_parameter -ip $ip \
     -id DATA_WIDTH \

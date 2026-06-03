@@ -122,11 +122,12 @@ adi_ip_instance -vlnv {analog.com:ip:spi_exec0:1.0} \
 sbp_add_port -direction out spi_master0_cs
 sbp_add_port -direction out spi_master0_sclk
 if { $NUM_OF_SDIO > 1 } {
-sbp_add_port -from [expr $NUM_OF_SDIO - 1] -to 0 -direction in spi_master0_sdi
+  sbp_add_port -from [expr $NUM_OF_SDIO - 1] -to 0 -direction in spi_master0_sdi
+  sbp_add_port -from [expr $NUM_OF_SDIO - 1] -to 0 -direction out spi_master0_sdo
 } else {
   sbp_add_port -direction in spi_master0_sdi
+  sbp_add_port -direction out spi_master0_sdo
 }
-sbp_add_port -direction out spi_master0_sdo
 sbp_add_port -direction out spi_master0_sdo_t
 sbp_add_port -direction out spi_master0_three_wire
 
@@ -199,6 +200,8 @@ sbp_connect_interface_net $project_name/spi_interc0_inst/s1_ctrl \
   $project_name/axi_spi0_inst/spi_engine_ctrl
 sbp_connect_interface_net $project_name/spi_exec0_inst/spi_engine_ctrl \
   $project_name/spi_interc0_inst/m_ctrl
+sbp_connect_interface_net $project_name/spi_interc0_inst/m_offload_active_ctrl \
+  $project_name/spi_exec0_inst/s_offload_active_ctrl
 sbp_connect_interface_net $project_name/axi_interc0_inst/AXIL_M05 \
   $project_name/pwm0_inst/s_axi
 sbp_connect_interface_net $project_name/axi_interc0_inst/AXIL_M04 \
