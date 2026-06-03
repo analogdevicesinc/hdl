@@ -215,13 +215,13 @@ module system_top #(
   wire          refclk_ready_rx;
   wire          refclk_ready_tx;
   wire          refclk_ready_os;
-  wire [TX_JESD_L-1:0] phy_tx_pll_locked_o_tx_pll_locked;
+  wire [TX_JESD_L-1:0]              phy_tx_pll_locked_o_tx_pll_locked;
   wire [RX_JESD_L+RX_OS_JESD_L-1:0] gts_reset_o_src_rs_grant_src_rs_grant;
   wire [RX_JESD_L+RX_OS_JESD_L-1:0] gts_reset_i_src_rs_req_src_rs_req;
-  wire [PHY_OS_PMA_CLK_IDX:0] gts_reset_o_pma_cu_clk_clk;
-  wire          gts_reset_i_refclk_bus_out_refclk_bus_out;
-  wire [ 9:0]   jesd204_phy_o_refclk_bus_out_refclk_bus_out;
-  // wire [ 9:0]   jesd204_phy_os_o_refclk_bus_out_refclk_bus_out;
+  wire [NUM_BANKS-1:0]              gts_reset_o_pma_cu_clk_clk;
+  wire                              gts_reset_i_refclk_bus_out_refclk_bus_out;
+  wire                              jesd204_phy_o_refclk_bus_out_refclk_bus_out;
+  wire                              jesd204_phy_os_o_refclk_bus_out_refclk_bus_out;
 
   wire  [ 7:0]  spi_csn_s;
   wire          spi_clk;
@@ -314,73 +314,7 @@ module system_top #(
 
   assign refclk_ready = refclk_ready_tx || refclk_ready_rx || refclk_ready_os;
 
-  reg  [9:0]                        gts_reset_i_refclk_on_refclk_on;
-  wire [9:0]                        gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out;
-  wire [7:0]                        gts_reset_o_refclk_fail_status_refclk_fail_status;
-  wire                              gts_reset_o_refclk_on_ack_refclk_on_ack;
-  wire [9:0]                        gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in;
-
-  assign gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out = jesd204_phy_o_refclk_bus_out_refclk_bus_out;
-
-  // GTS refclk buffer control state machine
-  localparam GTS_REFCLK_IDLE      = 2'd0;
-  localparam GTS_REFCLK_REQ_ON    = 2'd1;
-  localparam GTS_REFCLK_WAIT_ACK  = 2'd2;
-  localparam GTS_REFCLK_ACTIVE    = 2'd3;
-
-  reg [1:0] gts_refclk_state;
-  reg       refclk_ready_d;
-  wire      refclk_fail_detected;
-
-  assign refclk_fail_detected = |gts_reset_o_refclk_fail_status_refclk_fail_status;
-
-  always @(posedge sys_cpu_clk or negedge sys_reset_n) begin
-    if (!sys_reset_n) begin
-      gts_reset_i_refclk_on_refclk_on <= 'd0;
-      gts_refclk_state <= GTS_REFCLK_IDLE;
-      refclk_ready_d <= 1'b0;
-    end else begin
-      refclk_ready_d <= refclk_ready;
-
-      case (gts_refclk_state)
-        GTS_REFCLK_IDLE: begin
-          gts_reset_i_refclk_on_refclk_on <= 'd0;
-          if (refclk_ready && !refclk_ready_d) begin
-            gts_refclk_state <= GTS_REFCLK_REQ_ON;
-          end
-        end
-
-        GTS_REFCLK_REQ_ON: begin
-          gts_reset_i_refclk_on_refclk_on <= {10{1'b1}};
-          gts_refclk_state <= GTS_REFCLK_WAIT_ACK;
-        end
-
-        GTS_REFCLK_WAIT_ACK: begin
-          if (gts_reset_o_refclk_on_ack_refclk_on_ack) begin
-            gts_reset_i_refclk_on_refclk_on <= 'd0;
-            gts_refclk_state <= GTS_REFCLK_ACTIVE;
-          end
-          if (!refclk_ready) begin
-            gts_reset_i_refclk_on_refclk_on <= 'd0;
-            gts_refclk_state <= GTS_REFCLK_IDLE;
-          end
-        end
-
-        GTS_REFCLK_ACTIVE: begin
-          if (refclk_fail_detected && refclk_ready) begin
-            gts_refclk_state <= GTS_REFCLK_REQ_ON;
-          end
-          if (!refclk_ready) begin
-            gts_refclk_state <= GTS_REFCLK_IDLE;
-          end
-        end
-
-        default: begin
-          gts_refclk_state <= GTS_REFCLK_IDLE;
-        end
-      endcase
-    end
-  end
+  assign gts_reset_i_refclk_bus_out_refclk_bus_out = jesd204_phy_o_refclk_bus_out_refclk_bus_out;
 
   system_bd i_system_bd (
     .sys_clk_clk                                             (sys_clk),
@@ -395,8 +329,8 @@ module system_top #(
     .f2h_irq1_in_irq                                         ('h0),
     .pr_rom_data_nc_rom_data                                 ('h0),
     .o_pma_cu_clk_clk                                        (pma_cu_clk),
-    // .i_refclk_bus_out_refclk_bus_out                         (1'h0),
-    // .o_shoreline_refclk_fail_stat_shoreline_refclk_fail_stat (refclk_fail_stat),
+    .i_refclk_bus_out_refclk_bus_out                         (1'h0),
+    .o_shoreline_refclk_fail_stat_shoreline_refclk_fail_stat (refclk_fail_stat),
 
     .hps_emif_mem_0_mem_cke                                  (emif_hps_mem_cke),
     .hps_emif_mem_0_mem_odt                                  (emif_hps_mem_odt),
@@ -490,21 +424,16 @@ module system_top #(
 
     .sys_cpu_clk_clk                                         (sys_cpu_clk),
 
-    .gts_reset_src_rs_priority_src_rs_priority                  ('h0),
-    .gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out (gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out),
-		.gts_reset_o_refclk_fail_status_refclk_fail_status          (gts_reset_o_refclk_fail_status_refclk_fail_status),
-		.gts_reset_o_refclk_on_ack_refclk_on_ack                    (gts_reset_o_refclk_on_ack_refclk_on_ack),
-		.gts_reset_i_refclk_on_refclk_on                            (gts_reset_i_refclk_on_refclk_on),
-		.gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in        (gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in),
-    .gts_reset_o_src_rs_grant_src_rs_grant                      (gts_reset_o_src_rs_grant_src_rs_grant),
-    .gts_reset_i_src_rs_req_src_rs_req                          (gts_reset_i_src_rs_req_src_rs_req),
-    .gts_reset_o_pma_cu_clk_clk                                 (gts_reset_o_pma_cu_clk_clk),
+    .gts_reset_o_src_rs_grant_src_rs_grant                   (gts_reset_o_src_rs_grant_src_rs_grant),
+    .gts_reset_src_rs_priority_src_rs_priority               ('h0),
+    .gts_reset_i_src_rs_req_src_rs_req                       (gts_reset_i_src_rs_req_src_rs_req),
+    .gts_reset_o_pma_cu_clk_clk                              (gts_reset_o_pma_cu_clk_clk),
+    .gts_reset_i_refclk_bus_out_refclk_bus_out               (gts_reset_i_refclk_bus_out_refclk_bus_out),
 
-    .jesd204_phy_i_pma_cu_clk_clk                               (gts_reset_o_pma_cu_clk_clk[PHY_OS_PMA_CLK_IDX]),
-    .jesd204_phy_i_src_rs_grant_src_rs_grant                    (gts_reset_o_src_rs_grant_src_rs_grant),
-    .jesd204_phy_o_src_rs_req_src_rs_req                        (gts_reset_i_src_rs_req_src_rs_req),
-    .jesd204_phy_o_refclk_status_bus_out_refclk_status_bus_out  (jesd204_phy_o_refclk_bus_out_refclk_bus_out),
-    .jesd204_phy_i_refclk_cmd_bus_in_refclk_cmd_bus_in          (gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in),
+    .jesd204_phy_i_pma_cu_clk_clk                            (gts_reset_o_pma_cu_clk_clk[0]),
+    .jesd204_phy_i_src_rs_grant_src_rs_grant                 (gts_reset_o_src_rs_grant_src_rs_grant),
+    .jesd204_phy_o_src_rs_req_src_rs_req                     (gts_reset_i_src_rs_req_src_rs_req),
+    .jesd204_phy_o_refclk_bus_out_refclk_bus_out             (jesd204_phy_o_refclk_bus_out_refclk_bus_out),
 
     .jesd204_phy_rx_reset_ack_rx_reset_ack                      (jesd204_phy_rx_reset_ack_rx_reset_ack),
     .jesd204_phy_rx_ready_rx_ready                              (jesd204_phy_rx_ready_rx_ready),
