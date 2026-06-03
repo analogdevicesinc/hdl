@@ -81,7 +81,7 @@ ad_ip_instance axi_gpio axi_gpio0 [list \
 ad_ip_instance axi_gpio axi_gpio1 [list \
   C_IS_DUAL 1 \
   C_ALL_OUTPUTS 1 \
-  C_GPIO_WIDTH 4 \
+  C_GPIO_WIDTH 8 \
   C_ALL_INPUTS_2 1 \
   C_GPIO2_WIDTH 17\
 ]
@@ -321,29 +321,3 @@ ad_connect axi_udc_iic/s_axi_aresetn sys_cpu_resetn
 ad_connect axi_smartconnect/M15_AXI axi_udc_iic/S_AXI
 
 ad_connect sys_concat_intc/In8 axi_udc_iic/iic2intc_irpt
-
-# Flash SPI
-
-# create_bd_port -dir O flash_spi_sclk
-# create_bd_port -dir O flash_spi_csb
-# create_bd_port -dir O flash_spi_mosi
-# create_bd_port -dir I flash_spi_miso
-
-# ad_ip_instance axi_quad_spi flash_spi [list \
-#   C_USE_STARTUP 0 \
-#   C_NUM_SS_BITS 1 \
-#   C_SCK_RATIO 2 \
-# ]
-
-# ad_connect flash_spi/sck_o flash_spi_sclk
-# ad_connect flash_spi/ss_o flash_spi_csb
-# ad_connect flash_spi/io0_o flash_spi_mosi
-# ad_connect flash_spi/io1_i flash_spi_miso
-
-# ad_connect flash_spi/s_axi_aclk sys_cpu_clk
-# ad_connect flash_spi/ext_spi_clk clk_wizard/clk_out2
-# ad_connect flash_spi/s_axi_aresetn sys_cpu_resetn
-
-# ad_connect axi_smartconnect/M16_AXI flash_spi/AXI_LITE
-
-# ad_connect sys_concat_intc/In9 flash_spi/ip2intc_irpt
