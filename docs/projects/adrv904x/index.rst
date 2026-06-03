@@ -192,8 +192,8 @@ Example block design for Single link and RX OBS in Non-LinkSharing mode
 
 The Rx links (ADC Path) operate with the following parameters:
 
-- Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
-- Sample Rate: 491.52 MSPS
+- Rx Deframer parameters: L=4, M=16, F=8, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
 - Dual link: No
 - RX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)
 - REF_CLK: 491.52 MHz
@@ -256,6 +256,7 @@ The following are the parameters of this project that can be configured:
 - [RX/TX/RX_OS]_JESD_L: number of lanes per link
 - [RX/TX/RX_OS]_JESD_S: number of samples per frame
 - [RX/TX/RX_OS]_JESD_NP: number of bits per sample
+- [RX/TX/RX_OS]_TPL_WIDTH : TPL data path width in bits
 - [RX/TX/RX_OS]_NUM_LINKS: number of links
 
 Clock scheme
@@ -459,17 +460,29 @@ for that project (adrv904x/carrier or adrv904x/carrier).
    +-------------------+------------------------------------------------------+
    | RX_JESD_S         |                           1                          |
    +-------------------+------------------------------------------------------+
+   | RX_JESD_NP        |                          16                          |
+   +-------------------+------------------------------------------------------+
+   | RX_TPL_WIDTH      |                          {}                          |
+   +-------------------+------------------------------------------------------+
    | TX_JESD_M         |                          16                          |
    +-------------------+------------------------------------------------------+
    | TX_JESD_L         |                           8                          |
    +-------------------+------------------------------------------------------+
    | TX_JESD_S         |                           1                          |
    +-------------------+------------------------------------------------------+
+   | TX_JESD_NP        |                          16                          |
+   +-------------------+------------------------------------------------------+
+   | TX_TPL_WIDTH      |                          {}                          |
+   +-------------------+------------------------------------------------------+
    | RX_OS_JESD_M      |                           0                          |
    +-------------------+------------------------------------------------------+
    | RX_OS_JESD_L      |                           0                          |
    +-------------------+------------------------------------------------------+
    | RX_OS_JESD_S      |                           0                          |
+   +-------------------+------------------------------------------------------+
+   | RX_OS_JESD_NP     |                           0                          |
+   +-------------------+------------------------------------------------------+
+   | RX_OS_TPL_WIDTH   |                          {}                          |
    +-------------------+------------------------------------------------------+
 
 
@@ -484,18 +497,18 @@ ADC - lane mapping
 Due to physical constraints, Rx lanes are reordered as described in the
 following table.
 
-============ ===========================
-ADC phy Lane FPGA Rx lane / Logical Lane
-============ ===========================
-0            0
-1            1
-2            2
-3            3
-4            4
-5            5
-6            6
-7            7
-============ ===========================
+======== =========== ====== ============== ============= ==========
+ADC Lane GTH Channel FMC DP FPGA Rx lane   XCVR Lane     Link layer
+======== =========== ====== ============== ============= ==========
+SERDOUT0 MGTHRX1_228 DP5    rx_data_p/n[0] rx_data_1_p/n rx_phy5
+SERDOUT1 MGTHRX0_228 DP6    rx_data_p/n[1] rx_data_2_p/n rx_phy6
+SERDOUT2 MGTHRX3_228 DP4    rx_data_p/n[2] rx_data_0_p/n rx_phy4
+SERDOUT3 MGTHRX2_228 DP7    rx_data_p/n[3] rx_data_3_p/n rx_phy7
+SERDOUT4 MGTHRX3_229 DP2    rx_data_p/n[4] rx_data_5_p/n rx_phy2
+SERDOUT5 MGTHRX0_229 DP3    rx_data_p/n[5] rx_data_4_p/n rx_phy3
+SERDOUT6 MGTHRX1_229 DP1    rx_data_p/n[6] rx_data_6_p/n rx_phy1
+SERDOUT7 MGTHRX2_229 DP0    rx_data_p/n[7] rx_data_7_p/n rx_phy0
+======== =========== ====== ============== ============= ==========
 
 DAC - lane mapping
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -503,18 +516,18 @@ DAC - lane mapping
 Due to physical constraints, Tx lanes are reordered as described in the
 following table.
 
-============ ===========================
-DAC phy lane FPGA Tx lane / Logical lane
-============ ===========================
-0            7
-1            6
-2            4
-3            5
-4            3
-5            1
-6            0
-7            2
-============ ===========================
+======== =========== ====== ============== ============= ==========
+DAC Lane GTH Channel FMC DP FPGA Tx lane   XCVR Lane     Link layer
+======== =========== ====== ============== ============= ==========
+SERDIN0  MGTHTX2_229 DP0    tx_data_p/n[0] tx_data_7_p/n tx_phy0
+SERDIN1  MGTHTX1_229 DP1    tx_data_p/n[1] tx_data_6_p/n tx_phy1
+SERDIN2  MGTHTX3_229 DP2    tx_data_p/n[2] tx_data_5_p/n tx_phy2
+SERDIN3  MGTHTX0_229 DP3    tx_data_p/n[3] tx_data_4_p/n tx_phy3
+SERDIN4  MGTHTX2_228 DP7    tx_data_p/n[4] tx_data_0_p/n tx_phy4
+SERDIN5  MGTHTX0_228 DP6    tx_data_p/n[5] tx_data_1_p/n tx_phy5
+SERDIN6  MGTHTX1_228 DP5    tx_data_p/n[6] tx_data_2_p/n tx_phy6
+SERDIN7  MGTHTX3_228 DP4    tx_data_p/n[7] tx_data_3_p/n tx_phy7
+======== =========== ====== ============== ============= ==========
 
 Resources
 -------------------------------------------------------------------------------

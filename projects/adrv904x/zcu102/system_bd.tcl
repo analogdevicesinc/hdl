@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -42,3 +42,5 @@ LINKS=$ad_project_params(RX_OS_NUM_LINKS)"
 sysid_gen_sys_init_file
 
 source ../common/adrv904x_bd.tcl
+
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ {300}
