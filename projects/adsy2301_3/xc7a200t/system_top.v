@@ -125,22 +125,26 @@ module system_top (
 
   // BF GPIO 01
   output BF_PA_ON_01,
-  input  BF_PWR_EN_01,
+  // input  BF_PWR_EN_01,
+  output BF_PWR_EN_01,
   input  VGG_PA_PG_N1,
 
   // BF GPIO 02
   output BF_PA_ON_02,
-  input  BF_PWR_EN_02,
+  // input  BF_PWR_EN_02,
+  output BF_PWR_EN_02,
   input  VGG_PA_PG_N2,
 
   // BF GPIO 03
   output BF_PA_ON_03,
-  input  BF_PWR_EN_03,
+  // input  BF_PWR_EN_03,
+  output BF_PWR_EN_03,
   input  VGG_PA_PG_N3,
 
   // BF GPIO 04
   output BF_PA_ON_04,
-  input  BF_PWR_EN_04,
+  // input  BF_PWR_EN_04,
+  output BF_PWR_EN_04,
   input  VGG_PA_PG_N4,
 
   // ADRF5030 GPIO
@@ -213,14 +217,6 @@ module system_top (
   input  UDC_5P0V_LDO_PG,
   input  UDC_3P3V_LDO_PG,
 
-  // FLASH SPI
-  // output FLASH_SPI_SCLK,
-  // output FLASH_SPI_CSB,
-  // input  FLASH_SPI_DQ0,
-  // input  FLASH_SPI_DQ1,
-  // input  FLASH_SPI_DQ2,
-  // input  FLASH_SPI_DQ3,
-
   // Aurora
   input        aurora_refclk_p,
   input        aurora_refclk_n,
@@ -248,7 +244,7 @@ module system_top (
 
   wire [29:0] gpio_o1;
   wire [31:0] gpio_o2;
-  wire [3:0]  gpio_o3;
+  wire [ 7:0] gpio_o3;
   wire [16:0] gpio_i;
 
   assign BF_PA_ON_01      = gpio_o1[0];
@@ -319,14 +315,18 @@ module system_top (
   assign UDC_NEG_PWR_EN  = gpio_o3[1];
   assign UDC_3P3V_PWR_EN = gpio_o3[2];
   assign UDC_5P0V_PWR_EN = gpio_o3[3];
+  assign BF_PWR_EN_01    = gpio_o3[4];
+  assign BF_PWR_EN_02    = gpio_o3[5];
+  assign BF_PWR_EN_03    = gpio_o3[6];
+  assign BF_PWR_EN_04    = gpio_o3[7];
 
-  assign gpio_i[0]  = BF_PWR_EN_01;
+  // assign gpio_i[0]  = BF_PWR_EN_01;
   assign gpio_i[1]  = VGG_PA_PG_N1;
-  assign gpio_i[2]  = BF_PWR_EN_02;
+  // assign gpio_i[2]  = BF_PWR_EN_02;
   assign gpio_i[3]  = VGG_PA_PG_N2;
-  assign gpio_i[4]  = BF_PWR_EN_03;
+  // assign gpio_i[4]  = BF_PWR_EN_03;
   assign gpio_i[5]  = VGG_PA_PG_N3;
-  assign gpio_i[6]  = BF_PWR_EN_04;
+  // assign gpio_i[6]  = BF_PWR_EN_04;
   assign gpio_i[7]  = VGG_PA_PG_N4;
   assign gpio_i[8]  = MUXOUT;
   assign gpio_i[9]  = PG_CARRIER;
@@ -375,12 +375,6 @@ module system_top (
     .rx_spi_csb({RX_SPI_CSB4, RX_SPI_CSB3, RX_SPI_CSB2, RX_SPI_CSB1}),
     .rx_spi_mosi(RX_SPI_MOSI),
     .rx_spi_miso(RX_SPI_MISO),
-    // .flash_spi_sclk(FLASH_SPI_SCLK),
-    // .flash_spi_csb(FLASH_SPI_CSB),
-    // .flash_spi_mosi(FLASH_SPI_DQ0),
-    // .flash_spi_miso(FLASH_SPI_DQ1),
-    // .flash_spi_miso(FLASH_SPI_DQ2),
-    // .flash_spi_miso(FLASH_SPI_DQ3),
     .udc_iic_scl_io(UDC_SCL),
     .udc_iic_sda_io(UDC_SDA),
     .gpio_out1_tri_o(gpio_o1),

@@ -73,13 +73,6 @@ set_property -dict {PACKAGE_PIN M1   IOSTANDARD LVCMOS18 SLEW FAST} [get_ports R
 set_property -dict {PACKAGE_PIN M2   IOSTANDARD LVCMOS18 SLEW FAST} [get_ports RX_SPI_MOSI]
 set_property -dict {PACKAGE_PIN L1   IOSTANDARD LVCMOS18          } [get_ports RX_SPI_MISO]
 
-# set_property -dict {PACKAGE_PIN L12  IOSTANDARD LVCMOS18 SLEW FAST} [get_ports FLASH_SPI_SCLK]
-# set_property -dict {PACKAGE_PIN T19  IOSTANDARD LVCMOS18 SLEW FAST} [get_ports FLASH_SPI_CSB]
-# set_property -dict {PACKAGE_PIN P22  IOSTANDARD LVCMOS18          } [get_ports FLASH_SPI_DQ0]
-# set_property -dict {PACKAGE_PIN R22  IOSTANDARD LVCMOS18          } [get_ports FLASH_SPI_DQ1]
-# set_property -dict {PACKAGE_PIN P21  IOSTANDARD LVCMOS18          } [get_ports FLASH_SPI_DQ2]
-# set_property -dict {PACKAGE_PIN R21  IOSTANDARD LVCMOS18          } [get_ports FLASH_SPI_DQ3]
-
 # I2C
 
 set_property -dict {PACKAGE_PIN J19  IOSTANDARD LVCMOS18 SLEW SLOW PULLUP TRUE} [get_ports UDC_SCL]
@@ -320,20 +313,6 @@ set input_ports [get_ports RX_SPI_MISO]; # list of input ports
 set_input_delay -clock [get_clocks spi_clk] -max [expr $tco_max + $trce_dly_max * 2] [get_ports $input_ports];
 set_input_delay -clock [get_clocks spi_clk] -min [expr $tco_min + $trce_dly_min * 2] [get_ports $input_ports];
 
-# FLASH SPI
-
-# create_generated_clock -name FLASH_SPI_SCLK -source [get_pins -of_objects [get_clocks spi_clk]] -divide_by 2 [get_ports FLASH_SPI_SCLK]
-# set tsu          2.000;      # destination device setup time requirement
-# set thd          2.000;      # destination device hold time requirement
-# set output_ports [get_ports [list FLASH_SPI_CSB FLASH_SPI_DQ0]]; # list of output ports
-# set_output_delay -clock [get_clocks spi_clk] -max [expr $trce_dly_max + $tsu] [get_ports $output_ports];
-# set_output_delay -clock [get_clocks spi_clk] -min [expr $trce_dly_min - $thd] [get_ports $output_ports];
-# set tco_max     10.000;     # Maximum clock to out delay
-# set tco_min     10.000;     # Minimum clock to out delay
-# set input_ports [get_ports FLASH_SPI_DQ1]; # list of input ports
-# set_input_delay -clock [get_clocks spi_clk] -max [expr $tco_max + $trce_dly_max * 2] [get_ports $input_ports];
-# set_input_delay -clock [get_clocks spi_clk] -min [expr $tco_min + $trce_dly_min * 2] [get_ports $input_ports];
-
 # IIC
 
 create_generated_clock -name UDC_SCL -source [get_pins -of_objects [get_clocks sys_clk]] -divide_by 1000 [get_ports UDC_SCL]
@@ -362,19 +341,23 @@ set_false_path -to   [get_ports BF_TR_03]
 set_false_path -to   [get_ports BF_TR_04]
 
 set_false_path -to   [get_ports BF_PA_ON_01]
-set_false_path -from [get_ports BF_PWR_EN_01]
+# set_false_path -from [get_ports BF_PWR_EN_01]
+set_false_path -to   [get_ports BF_PWR_EN_01]
 set_false_path -from [get_ports VGG_PA_PG_N1]
 
 set_false_path -to   [get_ports BF_PA_ON_02]
-set_false_path -from [get_ports BF_PWR_EN_02]
+# set_false_path -from [get_ports BF_PWR_EN_02]
+set_false_path -to   [get_ports BF_PWR_EN_02]
 set_false_path -from [get_ports VGG_PA_PG_N2]
 
 set_false_path -to   [get_ports BF_PA_ON_03]
-set_false_path -from [get_ports BF_PWR_EN_03]
+# set_false_path -from [get_ports BF_PWR_EN_03]
+set_false_path -to   [get_ports BF_PWR_EN_03]
 set_false_path -from [get_ports VGG_PA_PG_N3]
 
 set_false_path -to   [get_ports BF_PA_ON_04]
-set_false_path -from [get_ports BF_PWR_EN_04]
+# set_false_path -from [get_ports BF_PWR_EN_04]
+set_false_path -to   [get_ports BF_PWR_EN_04]
 set_false_path -from [get_ports VGG_PA_PG_N4]
 
 set_false_path -to   [get_ports ADRF5030_CTRL1]
