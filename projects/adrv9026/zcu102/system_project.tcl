@@ -17,8 +17,8 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   RX-OS Non-LinkSharing:
 #    - JESD204B: make ORX_ENABLE=1 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=2 RX_TPL_WIDTH=8
 #    - JESD204C: make JESD_MODE=64B66B ORX_ENABLE=1 TX_LANE_RATE=16.22 RX_LANE_RATE=16.22 \
-                 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=2
-#
+#                RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=2
+
 # Parameter description:
 #   JESD_MODE : Used link layer encoder mode
 #      64B66B - 64b66b link layer defined in JESD 204C
