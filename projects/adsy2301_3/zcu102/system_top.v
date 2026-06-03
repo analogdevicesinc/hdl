@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top # (
+  parameter TDD_SUPPORT = 0
+) (
 
   input   [12:0]  gpio_bd_i,
   output  [ 7:0]  gpio_bd_o,
@@ -76,9 +78,16 @@ module system_top (
   wire [3:0] adsy2301_3_gpio_o;
   wire [1:0] adsy2301_3_gpio_i;
 
-  assign RX_LOAD   = adsy2301_3_gpio_o[0];
-  assign TX_LOAD   = adsy2301_3_gpio_o[1];
-  assign TR_PULSE  = adsy2301_3_gpio_o[2];
+  wire [3:0] tdd_channels;
+  wire       tdd_enabled;
+  wire       tdd_support;
+
+  assign tdd_enabled = tdd_channels[0];
+  assign tdd_support = TDD_SUPPORT ? tdd_enabled : 1'b0;
+
+  assign RX_LOAD   = tdd_support ? tdd_channels[1] : adsy2301_3_gpio_o[0];
+  assign TX_LOAD   = tdd_support ? tdd_channels[2] : adsy2301_3_gpio_o[1];
+  assign TR_PULSE  = tdd_support ? tdd_channels[3] : adsy2301_3_gpio_o[2];
   assign FPGA_TRIG = adsy2301_3_gpio_o[3];
 
   assign adsy2301_3_gpio_i[0] = FPGA_BOOT_GOOD;
@@ -99,6 +108,9 @@ module system_top (
     .gt_serial_tx_txn(aurora_txn),
     .gt_serial_rx_rxp(aurora_rxp),
     .gt_serial_rx_rxn(aurora_rxn),
+    .tdd_sync_in (1'b0),
+    .tdd_sync_out (),
+    .tdd_channels (tdd_channels),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t ());

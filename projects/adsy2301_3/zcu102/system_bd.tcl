@@ -72,6 +72,10 @@ ad_cpu_interconnect 0x80000000 cmd_spi
 ad_cpu_interconnect 0x80010000 gpio_ctrl
 ad_cpu_interconnect 0x90000000 axi_chip2chip
 
+if {$ad_project_params(TDD_SUPPORT) == 1} {
+  ad_cpu_interconnect 0x80020000 axi_tdd_carrier
+}
+
 set_property range 64K [get_bd_addr_segs {sys_ps8/Data/SEG_data_axi_chip2chip}]
 
 # Interrupts
