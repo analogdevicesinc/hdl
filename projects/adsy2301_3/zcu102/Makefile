@@ -17,5 +17,6 @@ M_DEPS += ../../scripts/adi_pd.tcl
 
 LIB_DEPS += axi_sysid
 LIB_DEPS += sysid_rom
+LIB_DEPS += axi_tdd
 
 include ../../scripts/project-xilinx.mk
