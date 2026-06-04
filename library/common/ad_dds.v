@@ -51,7 +51,8 @@ module ad_dds #(
   parameter CORDIC_PHASE_DW = 16,
   // the clock radtio between the device clock(sample rate) and the dac_core clock
   // 2^N, 1<N<6
-  parameter CLK_RATIO = 1
+  parameter CLK_RATIO = 1,
+  parameter DUAL_TONE = 1
 ) (
 
   // interface
@@ -127,14 +128,14 @@ module ad_dds #(
           end else if (sync_min_pulse_m[1] == 1'b1) begin
             if (i == 1) begin
               dac_dds_phase_0[1] <= tone_1_init_offset;
-              dac_dds_phase_1[1] <= tone_2_init_offset;
+              dac_dds_phase_1[1] <= DUAL_TONE ? tone_2_init_offset : 'd0;
             end else if (CLK_RATIO > 1)begin
               dac_dds_phase_0[i] <= dac_dds_phase_0[i-1] + tone_1_freq_word;
-              dac_dds_phase_1[i] <= dac_dds_phase_1[i-1] + tone_2_freq_word;
+              dac_dds_phase_1[i] <= DUAL_TONE ? dac_dds_phase_1[i-1] + tone_2_freq_word : 'd0;
             end
           end else if (dac_valid == 1'b1) begin
             dac_dds_phase_0[i] <= dac_dds_phase_0[i] + dac_dds_incr_0;
-            dac_dds_phase_1[i] <= dac_dds_phase_1[i] + dac_dds_incr_1;
+            dac_dds_phase_1[i] <= DUAL_TONE ? dac_dds_phase_1[i] + dac_dds_incr_1 : 'd0;
           end
 
           if (dac_data_sync == 1'b1 || sync_min_pulse_m[1]) begin
@@ -142,7 +143,7 @@ module ad_dds #(
             dac_dds_phase_1_m[i] <= 'd0;
           end else begin
             dac_dds_phase_0_m[i] <= dac_dds_phase_0[i];
-            dac_dds_phase_1_m[i] <= dac_dds_phase_1[i];
+            dac_dds_phase_1_m[i] <= DUAL_TONE ? dac_dds_phase_1[i] : 'd0;
           end
         end
 
@@ -152,7 +153,8 @@ module ad_dds #(
           .PHASE_DW (PHASE_DW),
           .DDS_TYPE (DDS_TYPE),
           .CORDIC_DW (CORDIC_DW),
-          .CORDIC_PHASE_DW (CORDIC_PHASE_DW)
+          .CORDIC_PHASE_DW (CORDIC_PHASE_DW),
+          .DUAL_TONE (DUAL_TONE)
         ) i_dds_2 (
           .clk (clk),
           .dds_format (dac_dds_format),

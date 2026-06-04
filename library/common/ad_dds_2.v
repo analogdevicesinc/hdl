@@ -46,7 +46,8 @@ module ad_dds_2 #(
   // Range = 8-24
   parameter   CORDIC_DW = 16,
   // Range = 8-24 ( make sure CORDIC_PHASE_DW < CORDIC_DW)
-  parameter   CORDIC_PHASE_DW = 16
+  parameter   CORDIC_PHASE_DW = 16,
+  parameter   DUAL_TONE = 1
 ) (
 
   // interface
@@ -115,16 +116,16 @@ module ad_dds_2 #(
 
     always @(posedge clk) begin
       dds_scale_0_d <= dds_scale_0;
-      dds_scale_1_d <= dds_scale_1;
+      dds_scale_1_d <= DUAL_TONE ? dds_scale_1 : 'd0;
     end
 
     // phase
     if (DDS_P_DW > PHASE_DW) begin
       assign dds_phase_0_s = {dds_phase_0,{DDS_P_DW-PHASE_DW{1'b0}}};
-      assign dds_phase_1_s = {dds_phase_1,{DDS_P_DW-PHASE_DW{1'b0}}};
+      assign dds_phase_1_s = DUAL_TONE ? {dds_phase_1,{DDS_P_DW-PHASE_DW{1'b0}}} : 'd0;
     end else begin
       assign dds_phase_0_s = dds_phase_0[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
-      assign dds_phase_1_s = dds_phase_1[(PHASE_DW-1):PHASE_DW-DDS_P_DW];
+      assign dds_phase_1_s = DUAL_TONE ? dds_phase_1[(PHASE_DW-1):PHASE_DW-DDS_P_DW] : 'd0;
     end
 
     // dds-1
@@ -140,16 +141,19 @@ module ad_dds_2 #(
       .dds_data (dds_data_0_s));
 
     // dds-2
-
-    ad_dds_1 #(
-      .DDS_TYPE(DDS_TYPE),
-      .DDS_D_DW(DDS_D_DW),
-      .DDS_P_DW(DDS_P_DW)
-    ) i_dds_1_1 (
-      .clk (clk),
-      .angle (dds_phase_1_s),
-      .scale (dds_scale_1_d),
-      .dds_data (dds_data_1_s));
+    if (DUAL_TONE) begin
+      ad_dds_1 #(
+        .DDS_TYPE(DDS_TYPE),
+        .DDS_D_DW(DDS_D_DW),
+        .DDS_P_DW(DDS_P_DW)
+      ) i_dds_1_1 (
+        .clk (clk),
+        .angle (dds_phase_1_s),
+        .scale (dds_scale_1_d),
+        .dds_data (dds_data_1_s));
+    end else begin
+      assign dds_data_1_s = dds_data_0_s;
+    end
   endgenerate
 
 endmodule

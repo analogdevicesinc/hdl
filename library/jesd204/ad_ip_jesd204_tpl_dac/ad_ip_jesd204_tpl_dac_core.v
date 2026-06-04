@@ -51,6 +51,7 @@ module ad_ip_jesd204_tpl_dac_core #(
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16,
   parameter DDS_PHASE_DW = 16,
+  parameter DDS_DUAL_TONE = 1,
   parameter EXT_SYNC = 0
 ) (
 
@@ -197,6 +198,7 @@ module ad_ip_jesd204_tpl_dac_core #(
       .DDS_CORDIC_DW (DDS_CORDIC_DW),
       .DDS_CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
       .DDS_PHASE_DW (DDS_PHASE_DW),
+      .DDS_DUAL_TONE (DDS_DUAL_TONE),
       .IQCORRECTION_DISABLE(IQCORRECTION_DISABLE),
       .Q_OR_I_N(i%2)
     ) i_channel (

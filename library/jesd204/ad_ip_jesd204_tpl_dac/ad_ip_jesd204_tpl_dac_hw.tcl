@@ -200,6 +200,11 @@ ad_ip_parameter DDS_CORDIC_PHASE_DW INTEGER 16 true [list \
   GROUP $group \
 ]
 
+ad_ip_parameter DDS_DUAL_TONE boolean 0 true [list \
+  DISPLAY_NAME "DDS DUAL TONE" \
+  GROUP $group \
+]
+
 ad_ip_parameter XBAR_ENABLE boolean 0 true [list \
   DISPLAY_NAME "Channel Crossbar Enable" \
   GROUP $group \

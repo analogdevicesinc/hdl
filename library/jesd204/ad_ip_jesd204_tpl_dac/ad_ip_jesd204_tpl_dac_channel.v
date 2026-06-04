@@ -45,6 +45,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
   parameter DDS_CORDIC_DW = 16,
   parameter DDS_CORDIC_PHASE_DW = 16,
   parameter DDS_PHASE_DW = 16,
+  parameter DDS_DUAL_TONE = 1,
   parameter Q_OR_I_N = 0
 ) (
 
@@ -164,7 +165,8 @@ module ad_ip_jesd204_tpl_dac_channel #(
     .DDS_TYPE (DDS_TYPE),
     .CORDIC_DW (DDS_CORDIC_DW),
     .CORDIC_PHASE_DW (DDS_CORDIC_PHASE_DW),
-    .CLK_RATIO (DATA_PATH_WIDTH)
+    .CLK_RATIO (DATA_PATH_WIDTH),
+    .DUAL_TONE (DDS_DUAL_TONE)
   ) i_dds (
     .clk (clk),
     .dac_dds_format (dac_dds_format),
