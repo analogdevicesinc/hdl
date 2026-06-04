@@ -299,10 +299,16 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
         if {$jesd_mode eq "64B66B"} {
           set gt_encoding "64B66B"
           set gt_encoding_7s "64B/66B"
-          set gt_int_data_width 64
+          set gt_user_data_width 64
+          if {[string equal $gt_type GTHE3] || [string equal $gt_type GTHE4]} {
+            set gt_int_data_width 32
+          } else {
+            set gt_int_data_width 64
+          }
         } else {
           set gt_encoding "8B10B"
           set gt_encoding_7s "8B/10B"
+          set gt_user_data_width 32
           set gt_int_data_width 40
         }
 
@@ -366,9 +372,9 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
             CONFIG.gt0_val_rxusrclk {RXOUTCLK} \
             CONFIG.gt0_val_decoding $gt_encoding_7s \
             CONFIG.gt0_val_encoding $gt_encoding_7s \
-            CONFIG.gt0_val_tx_data_width {32} \
+            CONFIG.gt0_val_tx_data_width {$gt_user_data_width} \
             CONFIG.gt0_val_tx_int_datawidth $gt_int_data_width \
-            CONFIG.gt0_val_rx_data_width {32} \
+            CONFIG.gt0_val_rx_data_width {$gt_user_data_width} \
             CONFIG.gt0_val_rx_int_datawidth $gt_int_data_width \
             CONFIG.gt0_val_port_rxchariscomma {true} \
             CONFIG.gt0_val_port_rxcharisk {true} \
@@ -418,11 +424,13 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
                 CONFIG.TX_PLL_TYPE $pll_type \
                 CONFIG.TX_REFCLK_FREQUENCY $ref_clk \
                 CONFIG.TX_DATA_ENCODING $gt_encoding \
+                CONFIG.TX_USER_DATA_WIDTH $gt_user_data_width \
                 CONFIG.TX_INT_DATA_WIDTH $gt_int_data_width \
                 CONFIG.RX_LINE_RATE $lane_rate \
                 CONFIG.RX_PLL_TYPE $pll_type \
                 CONFIG.RX_REFCLK_FREQUENCY $ref_clk \
                 CONFIG.RX_DATA_DECODING $gt_encoding \
+                CONFIG.RX_USER_DATA_WIDTH $gt_user_data_width \
                 CONFIG.RX_INT_DATA_WIDTH $gt_int_data_width \
                 CONFIG.RX_EQ_MODE {LPM} \
                 CONFIG.RX_COMMA_P_ENABLE {true} \
