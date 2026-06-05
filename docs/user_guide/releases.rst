@@ -90,8 +90,14 @@ Release branches
      - Quartus Pro 25.1.0
      - Vivado 2025.1
      - ---
-     - ---
+     - :ref:`downloads_insert_main`
      - `main <https://swdownloads.analog.com/cse/boot_partition_files/main/latest_boot.txt>`__
+   * - :git-hdl:`hdl_2026_r1 <hdl_2026_r1:>`
+     - Quartus Pro 25.1.0
+     - Vivado 2025.1
+     - `Release notes 2026_R1 <https://github.com/analogdevicesinc/hdl/releases/tag/2026_R1>`__
+     - :ref:`downloads_insert_hdl_2026_r1`
+     - `2026_R1 <https://swdownloads.analog.com/cse/boot_partition_files/2026_r1/latest_boot.txt>`__
    * - :git-hdl:`2023_R2 patch1 <2023_R2_p1:>`
      - Quartus Pro 23.2
      - Vivado 2023.2
