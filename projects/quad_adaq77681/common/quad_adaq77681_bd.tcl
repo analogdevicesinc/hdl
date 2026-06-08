@@ -1,3 +1,8 @@
+###############################################################################
+## Copyright (C) 2022-2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
 # system level parameters
@@ -57,8 +62,6 @@ ad_connect axi_qadc_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
 ad_connect $hier_spi_engine/m_spi quad_adaq77681_spi
 
 ad_connect $sys_cpu_clk $hier_spi_engine/clk
-#ad_connect mclk_clkgen/clk_0 $hier_spi_engine/spi_clk
-#ad_connect mclk_clkgen/clk_0 axi_qadc_dma/s_axis_aclk
 ad_connect sys_cpu_resetn $hier_spi_engine/resetn
 ad_connect sys_cpu_resetn axi_qadc_dma/m_dest_axi_aresetn
 
@@ -78,7 +81,6 @@ ad_connect quad_adaq77681_drdy drdy_chk/Op1
 
 ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44a30000 axi_qadc_dma
-# ad_cpu_interconnect 0x44a70000 spi_clkgen
 ad_cpu_interconnect 0x44b00000 mclk_clkgen
 
 ad_cpu_interrupt "ps-13" "mb-13" axi_qadc_dma/irq
