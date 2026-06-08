@@ -62,6 +62,9 @@ set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8 * $RX_OS_DATAPATH_WI
 set dac_fifo_name axi_tx_fifo
 set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
 
+set PCIE_BUILD [expr {[info exists ad_project_params(PCIE)] && \
+                       $ad_project_params(PCIE) == 1}]
+
 # default ports
 
 create_bd_port -dir O -from 2 -to 0 spi0_csn
@@ -717,67 +720,72 @@ ad_connect axi_tx_fifo/axi_clk ddr4_1/c0_ddr4_ui_clk
 ad_connect dac_fifo_bypass axi_tx_fifo/bypass
 ad_connect util_som_tx_upack/s_axis_valid VCC_1/dout
 
-ad_ip_instance clk_wiz dma_clk_wiz
-ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
-ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
-ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
-ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 332.9
-ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
+if {!$PCIE_BUILD} {
+  ad_ip_instance clk_wiz dma_clk_wiz
+  ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
+  ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
+  ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
+  ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 332.9
+  ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
 
-ad_connect sys_cpu_clk dma_clk_wiz/clk_in1
-ad_connect sys_cpu_resetn dma_clk_wiz/resetn
+  ad_connect sys_cpu_clk dma_clk_wiz/clk_in1
+  ad_connect sys_cpu_resetn dma_clk_wiz/resetn
 
-ad_ip_instance proc_sys_reset sys_dma_rstgen
-ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
+  ad_ip_instance proc_sys_reset sys_dma_rstgen
+  ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
-ad_connect sys_dma_clk dma_clk_wiz/clk_out1
-ad_connect sys_dma_rstgen/ext_reset_in sys_rstgen/peripheral_reset
-ad_connect sys_dma_clk sys_dma_rstgen/slowest_sync_clk
-ad_connect sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
+  ad_connect sys_dma_clk dma_clk_wiz/clk_out1
+  ad_connect sys_dma_rstgen/ext_reset_in sys_rstgen/peripheral_reset
+  ad_connect sys_dma_clk sys_dma_rstgen/slowest_sync_clk
+  ad_connect sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
+}
 
 # Loop back manual sync lines for each TPL
 ad_connect tx_adrv9009_som_tpl_core/dac_tpl_core/dac_sync_manual_req_out tx_adrv9009_som_tpl_core/dac_tpl_core/dac_sync_manual_req_in
 ad_connect rx_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_out rx_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_in
 ad_connect obs_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_out obs_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_in
 
-# interconnect (cpu)
+if {!$PCIE_BUILD} {
 
-ad_cpu_interconnect 0x44A00000 rx_adrv9009_som_tpl_core
-ad_cpu_interconnect 0x44A04000 tx_adrv9009_som_tpl_core
-ad_cpu_interconnect 0x44A08000 obs_adrv9009_som_tpl_core
-ad_cpu_interconnect 0x44A20000 axi_adrv9009_som_tx_xcvr
-ad_cpu_interconnect 0x44A30000 axi_adrv9009_som_tx_jesd
-ad_cpu_interconnect 0x44A40000 axi_adrv9009_som_rx_xcvr
-ad_cpu_interconnect 0x44A50000 axi_adrv9009_som_rx_jesd
-ad_cpu_interconnect 0x44A60000 axi_adrv9009_som_obs_xcvr
-ad_cpu_interconnect 0x44A70000 axi_adrv9009_som_obs_jesd
-ad_cpu_interconnect 0x7c400000 axi_adrv9009_som_tx_dma
-ad_cpu_interconnect 0x7c420000 axi_adrv9009_som_rx_dma
-ad_cpu_interconnect 0x7c440000 axi_adrv9009_som_obs_dma
-ad_cpu_interconnect 0x45000000 axi_sysid_0
+  # interconnect (cpu)
 
-# gt uses hp0, and 100MHz clock for both DRP and AXI4
+  ad_cpu_interconnect 0x44A00000 rx_adrv9009_som_tpl_core
+  ad_cpu_interconnect 0x44A04000 tx_adrv9009_som_tpl_core
+  ad_cpu_interconnect 0x44A08000 obs_adrv9009_som_tpl_core
+  ad_cpu_interconnect 0x44A20000 axi_adrv9009_som_tx_xcvr
+  ad_cpu_interconnect 0x44A30000 axi_adrv9009_som_tx_jesd
+  ad_cpu_interconnect 0x44A40000 axi_adrv9009_som_rx_xcvr
+  ad_cpu_interconnect 0x44A50000 axi_adrv9009_som_rx_jesd
+  ad_cpu_interconnect 0x44A60000 axi_adrv9009_som_obs_xcvr
+  ad_cpu_interconnect 0x44A70000 axi_adrv9009_som_obs_jesd
+  ad_cpu_interconnect 0x7c400000 axi_adrv9009_som_tx_dma
+  ad_cpu_interconnect 0x7c420000 axi_adrv9009_som_rx_dma
+  ad_cpu_interconnect 0x7c440000 axi_adrv9009_som_obs_dma
+  ad_cpu_interconnect 0x45000000 axi_sysid_0
 
-ad_mem_hp0_interconnect sys_cpu_clk sys_ps8/S_AXI_HP0
-ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_som_rx_xcvr/m_axi
-ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_som_obs_xcvr/m_axi
+  # gt uses hp0, and 100MHz clock for both DRP and AXI4
 
-# interconnect (mem/dac)
+  ad_mem_hp0_interconnect sys_cpu_clk sys_ps8/S_AXI_HP0
+  ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_som_rx_xcvr/m_axi
+  ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_som_obs_xcvr/m_axi
 
-ad_mem_hpc0_interconnect sys_dma_clk sys_ps8/S_AXI_HPC0
-ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi
-ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi
-ad_mem_hpc1_interconnect sys_dma_clk sys_ps8/S_AXI_HPC1
-ad_mem_hpc1_interconnect sys_dma_clk axi_adrv9009_som_tx_dma/m_src_axi
+  # interconnect (mem/dac)
 
-# interrupts
+  ad_mem_hpc0_interconnect sys_dma_clk sys_ps8/S_AXI_HPC0
+  ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi
+  ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi
+  ad_mem_hpc1_interconnect sys_dma_clk sys_ps8/S_AXI_HPC1
+  ad_mem_hpc1_interconnect sys_dma_clk axi_adrv9009_som_tx_dma/m_src_axi
 
-ad_cpu_interrupt ps-8 mb-8 axi_adrv9009_som_obs_dma/irq
-ad_cpu_interrupt ps-9 mb-9 axi_adrv9009_som_tx_dma/irq
-ad_cpu_interrupt ps-10 mb-15 axi_adrv9009_som_rx_dma/irq
-ad_cpu_interrupt ps-11 mb-14 axi_adrv9009_som_obs_jesd/irq
-ad_cpu_interrupt ps-12 mb-13 axi_adrv9009_som_tx_jesd/irq
-ad_cpu_interrupt ps-13 mb-12 axi_adrv9009_som_rx_jesd/irq
+  # interrupts
+
+  ad_cpu_interrupt ps-8 mb-8 axi_adrv9009_som_obs_dma/irq
+  ad_cpu_interrupt ps-9 mb-9 axi_adrv9009_som_tx_dma/irq
+  ad_cpu_interrupt ps-10 mb-15 axi_adrv9009_som_rx_dma/irq
+  ad_cpu_interrupt ps-11 mb-14 axi_adrv9009_som_obs_jesd/irq
+  ad_cpu_interrupt ps-12 mb-13 axi_adrv9009_som_tx_jesd/irq
+  ad_cpu_interrupt ps-13 mb-12 axi_adrv9009_som_rx_jesd/irq
+}
 
 create_bd_addr_seg -range 0x80000000 -offset 0x80000000 \
     [get_bd_addr_spaces axi_tx_fifo/axi] [get_bd_addr_segs ddr4_1/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_1_C0_DDR4_ADDRESS_BLOCK

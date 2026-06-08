@@ -239,7 +239,7 @@ module system_top (
   wire    [94:0]  gpio_o;
   wire    [94:0]  gpio_t;
 
-  wire    [2:0]   spi_csn;
+  wire    [5:0]   spi_csn;
 
   wire            ref_clk_a;
   wire            core_clk_a;
@@ -263,33 +263,45 @@ module system_top (
   wire            pcie_ref_clk_div2;
   wire            user_link_up;
 
-  reg  [7:0]     spi_3_to_8_csn;
+  // AXI Quad SPI (C_NUM_SS_BITS=6) drives spi_csn[5:0] as one-hot active-low
+  // CS lines. Wire each bit directly to its physical destination -- no
+  // binary-encoded decoder as in the PS-EMIO variant, since the PL SPI IP
+  // already emits one-hot CS.
+  //
+  //   spi_csn[0] -> adrv9009_a       (DTBO reg=0)
+  //   spi_csn[1] -> adrv9009_b       (DTBO reg=1)
+  //   spi_csn[2] -> hmc7044          (DTBO reg=2)
+  //   spi_csn[3] -> hmc7044_car      (DTBO reg=3)
+  //   spi_csn[4] -> gpio_0_exp_n     (DTBO reg=4, xmwbr1 daughter: hmc7044_ext)
+  //   spi_csn[5] -> gpio_2_exp_n     (DTBO reg=5, xmwbr1 daughter: AD9545)
+  //
+  // Bits [5:4] are reserved for xmwbr1 daughter card expansion. On plain
+  // adrv2crr_fmc (no daughter), those two exp lines are just unpopulated.
+  assign spi_csn_adrv9009_a  = spi_csn[0];
+  assign spi_csn_adrv9009_b  = spi_csn[1];
+  assign spi_csn_hmc7044     = spi_csn[2];
+  assign spi_csn_hmc7044_car = spi_csn[3];
+  assign gpio_0_exp_n        = spi_csn[4];
+  assign gpio_2_exp_n        = spi_csn[5];
 
-  always @(*) begin
-    case (spi_csn)
-      3'h0: spi_3_to_8_csn = 8'b11111110;
-      3'h1: spi_3_to_8_csn = 8'b11111101;
-      3'h2: spi_3_to_8_csn = 8'b11111011;
-      3'h3: spi_3_to_8_csn = 8'b11110111;
-      3'h4: spi_3_to_8_csn = 8'b11101111;
-      3'h5: spi_3_to_8_csn = 8'b11011111;
-      3'h6: spi_3_to_8_csn = 8'b10111111;
-      default: spi_3_to_8_csn = 8'b11111111;
-    endcase
-  end
-
-  assign spi_csn_adrv9009_a = spi_3_to_8_csn[0];
-  assign spi_csn_adrv9009_b = spi_3_to_8_csn[1];
-  assign spi_csn_hmc7044 = spi_3_to_8_csn[2];
-  assign spi_csn_hmc7044_car = spi_3_to_8_csn[3];
-  assign gpio_0_exp_n = spi_3_to_8_csn[4];
-  assign gpio_1_exp_p = spi_clk;
+  // gpio_0_exp_p / gpio_1_exp_p / gpio_1_exp_n form the shared MOSI/SCK/MISO
+  // path to daughter-card SPI chips reached via gpio_0/2_exp_n. On xmwbr1
+  // these are the expansion SPI's MOSI, SCK, and MISO respectively. On a
+  // bare adrv2crr_fmc without the daughter card, the pins are unpopulated
+  // and driving them is harmless.
   assign gpio_0_exp_p = spi_mosi;
-  assign spi_miso_s = ((spi_3_to_8_csn[4] == 1'b0) | (spi_3_to_8_csn[5] == 1'b0))? gpio_1_exp_n : spi_miso;
-  assign gpio_2_exp_n = spi_3_to_8_csn[5];
+  assign gpio_1_exp_p = spi_clk;
 
+  // MISO mux: if either expansion CS (spi_csn[5:4]) is asserted (active low),
+  // route the daughter card's MISO (gpio_1_exp_n) instead of the SoM MISO.
+  assign spi_miso_s = ((spi_csn[4] == 1'b0) | (spi_csn[5] == 1'b0)) ?
+                      gpio_1_exp_n : spi_miso;
+
+  // adrv9009zu11eg_spi's spi_csn port is 8-bit; pad the 2 unused high bits
+  // with 1'b1 (deasserted) so its AND-reduce for the MISO tristate still
+  // recognises "any CS asserted" correctly.
   adrv9009zu11eg_spi i_spi (
-    .spi_csn(spi_3_to_8_csn),
+    .spi_csn({2'b11, spi_csn}),
     .spi_clk(spi_clk),
     .spi_mosi(spi_mosi),
     .spi_miso_i(spi_miso_s),
