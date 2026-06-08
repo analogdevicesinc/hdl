@@ -54,15 +54,55 @@ ad_connect pcie_axi_clk pcie_xdma/axi_aclk
 ad_connect pcie_axi_clk pcie_axi_rstgen/slowest_sync_clk
 ad_connect pcie_xdma/axi_aresetn pcie_axi_rstgen/ext_reset_in
 ad_connect pcie_axi_resetn pcie_axi_rstgen/peripheral_aresetn
-# Reset from software
-# ad_connect sys_ps8/pl_resetn1 pcie_axi_rstgen/aux_reset_in
 
-# Connect XDMA M_AXI (DMA engine) to PS DDR4 via S_AXI_HP3
-ad_mem_hp3_interconnect pcie_axi_clk sys_ps8/S_AXI_HP3
-ad_mem_hp3_interconnect pcie_axi_clk pcie_xdma/M_AXI
+# AXI FIFO Generator — full AXI4 (256-bit, for M_AXI DMA engine port)
+# Async CDC: XDMA axi_aclk (250 MHz) → sys_dma_clk (~333 MHz)
+# Deep data FIFOs (512) to absorb DDR4 refresh pauses
+create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator pcie_fifo_mm
+set_property -dict [list \
+  CONFIG.INTERFACE_TYPE {AXI_MEMORY_MAPPED} \
+  CONFIG.Clock_Type_AXI {Independent_Clock} \
+  CONFIG.DATA_WIDTH {256} \
+  CONFIG.Input_Depth_wach {16} \
+  CONFIG.Input_Depth_wdch {512} \
+  CONFIG.Input_Depth_wrch {16} \
+  CONFIG.Input_Depth_rach {16} \
+  CONFIG.Input_Depth_rdch {512} \
+] [get_bd_cells pcie_fifo_mm]
 
-# Connect XDMA M_AXI_LITE (host bypass BAR) to HP3
-ad_mem_hp3_interconnect pcie_axi_clk pcie_xdma/M_AXI_LITE
+# AXI FIFO Generator — AXI4-Lite (32-bit, for M_AXI_LITE bypass port)
+create_bd_cell -type ip -vlnv xilinx.com:ip:fifo_generator pcie_fifo_lite
+set_property -dict [list \
+  CONFIG.INTERFACE_TYPE {AXI_MEMORY_MAPPED} \
+  CONFIG.PROTOCOL {AXI4_Lite} \
+  CONFIG.Clock_Type_AXI {Independent_Clock} \
+  CONFIG.DATA_WIDTH {32} \
+  CONFIG.Input_Depth_wach {16} \
+  CONFIG.Input_Depth_wdch {512} \
+  CONFIG.Input_Depth_wrch {16} \
+  CONFIG.Input_Depth_rach {16} \
+  CONFIG.Input_Depth_rdch {512} \
+] [get_bd_cells pcie_fifo_lite]
+
+# FIFO slave side: XDMA clock domain (250 MHz)
+ad_connect pcie_xdma/M_AXI pcie_fifo_mm/S_AXI
+ad_connect pcie_axi_clk pcie_fifo_mm/s_aclk
+ad_connect pcie_axi_resetn pcie_fifo_mm/s_aresetn
+
+ad_connect pcie_xdma/M_AXI_LITE pcie_fifo_lite/S_AXI
+ad_connect pcie_axi_clk pcie_fifo_lite/s_aclk
+ad_connect pcie_axi_resetn pcie_fifo_lite/s_aresetn
+
+# FIFO master side: sys_dma_clk domain (~333 MHz)
+# Note: AXI FIFO Generator has only s_aresetn — no m_aresetn pin.
+# The IP internally synchronizes the reset to the master clock domain.
+ad_connect sys_dma_clk pcie_fifo_mm/m_aclk
+ad_connect sys_dma_clk pcie_fifo_lite/m_aclk
+
+# Connect FIFO master ports to PS DDR4 via S_AXI_HP3 SmartConnect (333 MHz)
+ad_mem_hp3_interconnect sys_dma_clk sys_ps8/S_AXI_HP3
+ad_mem_hp3_interconnect sys_dma_clk pcie_fifo_mm/M_AXI
+ad_mem_hp3_interconnect sys_dma_clk pcie_fifo_lite/M_AXI
 
 # Address mapping: XDMA masters can access PS DDR4 (0x0 - 0x7FFFFFFF)
 assign_bd_address -target_address_space pcie_xdma/M_AXI \
