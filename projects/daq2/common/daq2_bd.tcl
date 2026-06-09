@@ -255,3 +255,24 @@ ad_cpu_interrupt ps-10 mb-15 axi_ad9144_jesd/irq
 ad_cpu_interrupt ps-11 mb-14 axi_ad9680_jesd/irq
 ad_cpu_interrupt ps-12 mb-13 axi_ad9144_dma/irq
 ad_cpu_interrupt ps-13 mb-12 axi_ad9680_dma/irq
+
+
+## add sync
+
+ad_ip_instance ilvector_logic manual_sync_or [list \
+  C_SIZE 1 \
+  C_OPERATION {or} \
+]
+
+create_bd_port -dir I ext_sync_in
+ad_ip_parameter axi_ad9680_tpl/adc_tpl_core CONFIG.EXT_SYNC 1
+ad_connect ext_sync_in axi_ad9680_tpl/adc_tpl_core/adc_sync_in
+ad_connect axi_ad9680_tpl/adc_tpl_core/adc_sync_manual_req_out manual_sync_or/Op1
+ad_connect manual_sync_or/Res axi_ad9680_tpl/adc_tpl_core/adc_sync_manual_req_in
+
+
+
+ad_ip_parameter axi_ad9144_tpl/dac_tpl_core CONFIG.EXT_SYNC 1
+ad_connect manual_sync_or/Res axi_ad9144_tpl/dac_tpl_core/dac_sync_manual_req_in
+ad_connect axi_ad9144_tpl/dac_tpl_core/dac_sync_manual_req_out manual_sync_or/Op2
+ad_connect ext_sync_in axi_ad9144_tpl/dac_tpl_core/dac_sync_in
