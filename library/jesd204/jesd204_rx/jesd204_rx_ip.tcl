@@ -28,7 +28,6 @@ adi_ip_files jesd204_rx [list \
   "jesd204_fec_decode.sv" \
   "jesd204_rx_fec_lfsr.sv" \
   "../jesd204_common/lfsr_input.sv" \
-  "jesd204_rx.xdc" \
   "../../common/ad_pack.v" \
   "../../common/ad_upack.v" \
   "../../common/util_pipeline_stage.v" \
