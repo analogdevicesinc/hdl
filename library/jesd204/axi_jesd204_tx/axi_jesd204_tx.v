@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2016-2022 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2016-2022, 2025 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -56,6 +56,7 @@ module axi_jesd204_tx #(
   output core_cfg_skip_ilas,
   output [7:0] core_cfg_mframes_per_ilas,
   output core_cfg_disable_char_replacement,
+  output [1:0] core_cfg_header_mode,
   output core_cfg_disable_scrambler,
 
   output [9:0] device_cfg_octets_per_multiframe,
@@ -82,8 +83,10 @@ module axi_jesd204_tx #(
   input [31:0] status_synth_params2
 );
 
-  localparam PCORE_VERSION = 32'h00010661; // 1.06.a
+  localparam PCORE_VERSION = 32'h00010761; // 1.07.a
   localparam PCORE_MAGIC = 32'h32303454; // 204T
+
+  localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
 
   wire up_reset;
 
@@ -187,6 +190,7 @@ module axi_jesd204_tx #(
     .core_cfg_links_disable(core_cfg_links_disable),
     .core_cfg_disable_scrambler(core_cfg_disable_scrambler),
     .core_cfg_disable_char_replacement(core_cfg_disable_char_replacement),
+    .core_cfg_header_mode(core_cfg_header_mode),
 
     .up_extra_cfg({
       /*    10 */ up_cfg_continuous_cgs,
@@ -220,7 +224,9 @@ module axi_jesd204_tx #(
     .status_synth_params1(status_synth_params1),
     .status_synth_params2(status_synth_params2));
 
-  jesd204_up_sysref i_up_sysref (
+  jesd204_up_sysref #(
+      .DATA_PATH_WIDTH_LOG2 (DATA_PATH_WIDTH_LOG2)
+  ) i_up_sysref (
     .up_clk(s_axi_aclk),
     .up_reset(up_reset),
 

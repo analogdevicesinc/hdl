@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -43,6 +43,7 @@ module ad_ip_jesd204_tpl_adc_deframer #(
   parameter SAMPLES_PER_FRAME = 1,
   parameter OCTETS_PER_BEAT = 8,
   parameter EN_FRAME_ALIGN = 0,
+  parameter NUM_PIPELINE_STAGES = 0,
   parameter LINK_DATA_WIDTH = OCTETS_PER_BEAT * 8 * NUM_LANES,
   parameter ADC_DATA_WIDTH = LINK_DATA_WIDTH * CONVERTER_RESOLUTION / BITS_PER_SAMPLE
 ) (
@@ -65,10 +66,30 @@ module ad_ip_jesd204_tpl_adc_deframer #(
                                        NUM_CHANNELS / NUM_LANES;
   localparam FRAMES_PER_BEAT = OCTETS_PER_BEAT * 8 / BITS_PER_LANE_PER_FRAME;
 
+  wire [LINK_DATA_WIDTH-1:0] link_data_r;
+  wire [LINK_DATA_WIDTH-1:0] frame_data_r;
+  wire [LINK_DATA_WIDTH-1:0] adc_data_r;
+
   wire [LINK_DATA_WIDTH-1:0] link_data_s;
   wire [LINK_DATA_WIDTH-1:0] link_data_msb_s;
   wire [LINK_DATA_WIDTH-1:0] frame_data_s;
   wire [LINK_DATA_WIDTH-1:0] adc_data_msb;
+
+  util_pipeline_stage #(
+    .REGISTERED (NUM_PIPELINE_STAGES),
+    .WIDTH (3*LINK_DATA_WIDTH)
+  ) i_pipeline_stages (
+    .clk (clk),
+    .in ({
+      link_data_s,
+      frame_data_s,
+      adc_data_msb
+    }),
+    .out ({
+      link_data_r,
+      frame_data_r,
+      adc_data_r
+    }));
 
   // data multiplex
 
@@ -77,7 +98,7 @@ module ad_ip_jesd204_tpl_adc_deframer #(
   generate
     /* Reorder octets MSB first */
     for (i = 0; i < LINK_DATA_WIDTH; i = i + 8) begin: g_adc_data
-      assign link_data_msb_s[i+:8] = link_data_s[LINK_DATA_WIDTH-1-i-:8];
+      assign link_data_msb_s[i+:8] = link_data_r[LINK_DATA_WIDTH-1-i-:8];
     end
 
     /* Slice lanes into frames */
@@ -95,7 +116,7 @@ module ad_ip_jesd204_tpl_adc_deframer #(
       .WORDS_PER_GROUP (NUM_CHANNELS),
       .WORD_WIDTH (BITS_PER_CHANNEL_PER_FRAME)
     ) i_frames_to_channels (
-      .data_in (frame_data_s),
+      .data_in (frame_data_r),
       .data_out (adc_data_msb));
 
     /* Reorder samples LSB first and remove tail bits */
@@ -105,7 +126,7 @@ module ad_ip_jesd204_tpl_adc_deframer #(
       localparam src_msb = LINK_DATA_WIDTH - 1 - i * src_w ;
       localparam dst_lsb = i * dst_w;
 
-      assign adc_data[dst_lsb+:dst_w] = adc_data_msb[src_msb-:dst_w];
+      assign adc_data[dst_lsb+:dst_w] = adc_data_r[src_msb-:dst_w];
     end
   endgenerate
 

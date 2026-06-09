@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017, 2018, 2021, 2022 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017, 2018, 2021, 2022, 2025 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -51,7 +51,7 @@ module jesd204_lane_latency_monitor #(
       end
     end
 
-    assign lane_latency[i*14+13:i*14] = {lane_latency_mem[i],lane_frame_align[(i*3)+DPW_LOG2-1:i*3]};
+    assign lane_latency[i*14+13:i*14] = {lane_latency_mem[i],lane_frame_align[(i*DPW_LOG2)+DPW_LOG2-1:i*DPW_LOG2]};
     assign lane_latency_ready[i] = lane_captured[i];
   end
   endgenerate
