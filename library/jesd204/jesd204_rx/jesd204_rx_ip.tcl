@@ -90,6 +90,7 @@ adi_add_bus "rx_cfg" "slave" \
     { "cfg_disable_scrambler" "disable_scrambler" } \
     { "cfg_disable_char_replacement" "disable_char_replacement" } \
     { "cfg_frame_align_err_threshold" "frame_align_err_threshold" } \
+    { "cfg_header_mode" "header_mode" } \
     { "device_cfg_octets_per_multiframe" "device_octets_per_multiframe" } \
     { "device_cfg_octets_per_frame" "device_octets_per_frame" } \
     { "device_cfg_beats_per_multiframe" "device_beats_per_multiframe" } \

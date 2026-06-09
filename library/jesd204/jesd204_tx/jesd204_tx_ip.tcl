@@ -79,6 +79,7 @@ adi_add_bus "tx_cfg" "slave" \
     { "cfg_mframes_per_ilas" "mframes_per_ilas" } \
     { "cfg_disable_char_replacement" "disable_char_replacement" } \
     { "cfg_disable_scrambler" "disable_scrambler" } \
+    { "cfg_header_mode" "header_mode" } \
     { "device_cfg_octets_per_multiframe" "device_octets_per_multiframe" } \
     { "device_cfg_octets_per_frame" "device_octets_per_frame" } \
     { "device_cfg_beats_per_multiframe" "device_beats_per_multiframe" } \

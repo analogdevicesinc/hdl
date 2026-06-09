@@ -157,6 +157,7 @@ add_interface_port config cfg_continuous_cgs continuous_cgs Input 1
 add_interface_port config cfg_continuous_ilas continuous_ilas Input 1
 add_interface_port config cfg_disable_char_replacement disable_char_replacement Input 1
 add_interface_port config cfg_disable_scrambler disable_scrambler Input 1
+add_interface_port config cfg_header_mode header_mode Input 2
 add_interface_port config cfg_lanes_disable lanes_disable Input NUM_LANES
 add_interface_port config cfg_links_disable links_disable Input NUM_LINKS
 add_interface_port config cfg_mframes_per_ilas mframes_per_ilas Input 8
