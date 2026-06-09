@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2018, 2020-2021, 2025-2026 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2018, 2020-2021, 2026 Analog Devices, Inc. All rights reserved.
 ## Short identifier: ADIJESD204
 ##
 ## The ADI JESD204 Core is released under the following license, which is
@@ -61,9 +61,6 @@ set_property ASYNC_REG TRUE \
   [get_cells -hier {up_core_reset_ext_synchronizer_vector_reg*}]
 
 set_false_path \
-  -to [get_cells i_up_rx/gen_lane[*].i_up_rx_lane/up_status_latency_reg[*]]
-
-set_false_path \
   -from [get_pins {i_up_rx/i_cdc_status/in_toggle_d1_reg/C}] \
   -to [get_pins {i_up_rx/i_cdc_status/i_sync_out/cdc_sync_stage1_reg[0]/D}]
 
@@ -103,17 +100,20 @@ set_false_path \
   -from [get_pins {i_sync_frame_align_err/cdc_hold_reg*/C}] \
   -to [get_pins {i_sync_frame_align_err/out_event_reg*/D}]
 
-set_false_path \
+# Don't place them too far appart
+set_max_delay -datapath_only \
   -from [get_pins {i_up_rx/i_cdc_status/cdc_hold_reg[*]/C}] \
-  -to [get_pins {i_up_rx/i_cdc_status/out_data_reg[*]/D}]
+  -to [get_pins {i_up_rx/i_cdc_status/out_data_reg[*]/D}] \
+  [get_property -min PERIOD $axi_clk]
 
 set_false_path \
   -from $core_clk \
   -to [get_pins {i_up_rx/*i_up_rx_lane/i_cdc_status_ready/cdc_sync_stage1_reg*/D}]
 
-set_false_path \
+set_max_delay -datapath_only \
   -from [get_pins {i_up_rx/i_cdc_cfg/cdc_hold_reg[*]/C}] \
-  -to [get_pins {i_up_rx/i_cdc_cfg/out_data_reg[*]/D}]
+  -to [get_pins {i_up_rx/i_cdc_cfg/out_data_reg[*]/D}] \
+  [get_property -min PERIOD $core_clk]
 
 set_max_delay -datapath_only \
   -from $core_clk \
@@ -145,22 +145,27 @@ set_false_path \
 set_false_path \
   -to [get_pins {i_up_common/up_core_reset_ext_synchronizer_vector_reg[*]/PRE}]
 
-set_false_path \
+set_max_delay -datapath_only \
   -from [get_pins {i_up_common/up_cfg_*_reg*/C}] \
-  -to [get_pins {i_up_common/core_cfg_*_reg*/D}]
+  -to [get_pins {i_up_common/core_cfg_*_reg*/D}] \
+  [get_property -min PERIOD $core_clk]
 
-set_false_path \
+set_max_delay -datapath_only \
   -from [get_pins {i_up_common/up_cfg_*_reg*/C}] \
-  -to [get_pins {i_up_common/device_cfg_*_reg*/D}]
+  -to [get_pins {i_up_common/device_cfg_*_reg*/D}] \
+  [get_property -min PERIOD $device_clk]
 
-set_false_path \
+set_max_delay -datapath_only \
   -from [get_pins {i_up_rx/up_cfg_*_reg*/C}] \
-  -to [get_pins {i_up_common/core_extra_cfg_reg[*]/D}]
+  -to [get_pins {i_up_common/core_extra_cfg_reg[*]/D}] \
+  [get_property -min PERIOD $core_clk]
 
-set_false_path \
+set_max_delay -datapath_only \
   -from [get_pins {i_up_rx/up_cfg_*_reg*/C}] \
-  -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}]
+  -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}] \
+  [get_property -min PERIOD $device_clk]
 
-set_false_path \
+set_max_delay -datapath_only \
   -from [get_pins {i_up_sysref/up_cfg_*_reg*/C}] \
-  -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}]
+  -to [get_pins {i_up_common/device_extra_cfg_reg[*]/D}] \
+  [get_property -min PERIOD $device_clk]
