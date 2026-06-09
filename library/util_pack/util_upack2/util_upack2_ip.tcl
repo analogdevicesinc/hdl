@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2023, 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -9,6 +9,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create util_upack2
 adi_ip_files util_upack2 [list \
   "../../common/ad_perfect_shuffle.v" \
+  "../../common/util_pipeline_stage.v" \
   "../util_pack_common/pack_ctrl.v" \
   "../util_pack_common/pack_interconnect.v" \
   "../util_pack_common/pack_network.v" \
@@ -41,6 +42,7 @@ foreach {k v} { \
   "SAMPLES_PER_CHANNEL" "Samples per Channel" \
   "SAMPLE_DATA_WIDTH" "Sample Width" \
   "PARALLEL_OR_SERIAL_N" "Parallel prefix sum calculation" \
+  "PIPELINE_STAGES" "Configure pipeline stages" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]
 #  ipgui::move_param -component $cc -order $i $p -parent $

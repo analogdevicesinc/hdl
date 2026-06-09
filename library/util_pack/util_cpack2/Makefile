@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2023, 2026 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -7,6 +7,7 @@
 LIBRARY_NAME := util_cpack2
 
 GENERIC_DEPS += ../../common/ad_perfect_shuffle.v
+GENERIC_DEPS += ../../common/util_pipeline_stage.v
 GENERIC_DEPS += ../util_pack_common/pack_ctrl.v
 GENERIC_DEPS += ../util_pack_common/pack_interconnect.v
 GENERIC_DEPS += ../util_pack_common/pack_network.v
