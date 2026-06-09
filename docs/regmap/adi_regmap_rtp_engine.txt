@@ -1,0 +1,217 @@
+TITLE
+RTP Engine (rtp_engine)
+RTP_ENGINE
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x0000
+VERSION
+Version
+ENDREG
+
+FIELD
+[31:0] 0x00010000
+VERSION
+RO
+Version number. Unique to all cores.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0001
+DEST_ADDR_LB
+Destination MAC Address - lower bytes
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+DEST_ADDR_LB
+RW
+Configure the 4 LSBs of the destination MAC address
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+REG
+0x0002
+DEST_ADDR_HB
+Destination MAC Address - MSBs
+ENDREG
+
+FIELD
+[15:0] 0x0000
+DEST_ADDR_HB
+RW
+Configure the 2 MSBs of the destination MAC address
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+REG
+0x0003
+SRC_ADDR_LB
+Source MAC Address - lower bytes
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SRC_ADDR_LB
+RW
+Configure the 4 LSBs of the source MAC address
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+REG
+0x0004
+SRC_ADDR_HB
+Source MAC Address - MSBs
+ENDREG
+
+FIELD
+[15:0] 0x0000
+SRC_ADDR_HB
+RW
+Configure the 2 MSBs of the source MAC address
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+REG
+0x0005
+SRC_IP_ADDR
+Source IPv4 Address
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SRC_IP_ADDR
+RW
+Configure the source IPv4 address
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+REG
+0x0006
+DEST_IP_ADDR
+Destination IPv4 Address
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+DEST_IP_ADDR
+RW
+Configure the destination IPv4 address
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+REG
+0x0007
+IP_QOS
+IPv4 QoS field
+ENDREG
+
+FIELD
+[7:0] 0x00
+IP_QOS
+RW
+Configure the IPv4 QoS field
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+
+REG
+0x0008
+UDP_PORTS
+Source and destination UDP Ports
+ENDREG
+
+FIELD
+[15:0] 0x0000
+UDP_SRC_PORT
+RW
+Configure the source UDP port
+ENDFIELD
+
+FIELD
+[15:0] 0x0000
+UDP_DEST_PORT
+RW
+Configure the destination UDP port
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0009
+NUM_LINES
+Number of video lines for a frame
+ENDREG
+
+FIELD
+[11:0] 0x000
+NUM_LINES
+RW
+Configure the number of lines for the transmitted video frame
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+REG
+0x000a
+NUM_PX_P_LINE
+Number of pixels per line
+ENDREG
+
+FIELD
+[11:0] 0x000
+NUM_PX_P_LINE
+RW
+Configure the number of pixels per video line
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
+
+REG
+0x000b
+CONVERT_UYVY_TO_YUYV
+Convert UYVY format to YUYV
+ENDREG
+
+FIELD
+[0:0] 0x0
+CONVERT_UYVY_TO_YUYV
+RW
+Convert UYVY format to YUYV
+ENDFIELD
+
+
+############################################################################################
+############################################################################################
