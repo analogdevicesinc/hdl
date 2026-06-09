@@ -32,17 +32,17 @@ module jesd204_tx_gearbox #(
                       OUT_DATA_PATH_WIDTH*8*NUM_LANES;
   localparam D_LOG2 = $clog2(DEPTH);
 
-  reg [MEM_W-1:0] mem [0:DEPTH-1];
-  reg [D_LOG2-1:0]  in_addr ='h00;
-  reg [D_LOG2-1:0]  out_addr = 'b0;
-  reg               mem_rd_valid = 'b0;
+  reg [MEM_W-1:0]  mem [0:DEPTH-1];
+  reg [D_LOG2-1:0] in_addr ='h00;
+  reg [D_LOG2-1:0] out_addr = 'b0;
+  reg              mem_rd_valid = 'b0;
   reg [MEM_W-1:0]  mem_rd_data = 'b0;
 
-  wire                mem_rd_en;
-  wire                mem_wr_en;
-  wire [D_LOG2-1:0]  in_out_addr;
-  wire [D_LOG2-1:0]  out_in_addr;
-  wire [MEM_W-1:0]  mem_wr_data;
+  wire                 mem_rd_en;
+  wire                 mem_wr_en;
+  wire [D_LOG2-1:0]    in_out_addr;
+  wire [D_LOG2-1:0]    out_in_addr;
+  wire [MEM_W-1:0]     mem_wr_data;
   wire [NUM_LANES-1:0] data_ready;
   wire output_ready_sync;
   wire addr_reset;
@@ -76,7 +76,7 @@ module jesd204_tx_gearbox #(
       end
     end
 
-    assign mem_rd_en = output_ready&data_ready[0];
+    assign mem_rd_en = output_ready & data_ready[0];
 
     always @(posedge link_clk) begin
       if (mem_rd_en) begin
