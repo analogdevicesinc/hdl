@@ -19,7 +19,6 @@ adi_ip_files jesd204_tx [list \
   "../jesd204_common/lfsr_input.sv" \
   "jesd204_tx_constr.ttcl" \
   "jesd204_tx_ooc.ttcl" \
-  "jesd204_tx.xdc" \
   "../../common/ad_pack.v" \
   "../../common/ad_upack.v" \
   "../../common/util_pipeline_stage.v" \
