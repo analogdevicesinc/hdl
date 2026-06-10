@@ -11,10 +11,12 @@ decimate and interpolate the incoming and outcoming data stream.
 
 .. important::
 
-   This example was built using the hdl_2023_r2 release branch, using Vivado and
-   Vitis 2023.2. Sources from older examples can be found under the tag
-   `eg_fmcomms2_fir_filter`_ using Vivado 16.2 and 16.4 versions, and status
-   **are not supported by us anymore**.
+   This example was built using the HDL main branch, using Vivado and
+   Vitis 2025.1. For the hdl_2023_r2 branch with Vivado 2023.2, use the
+   :git-hdl:`fir_filter_2023.tcl <hdl_2023_r2:projects/fmcomms2/zc706/fir_filter_2023.tcl>`
+   script which replaces ``inline_hdl`` IP types
+   (``ilslice``, ``ilconcat``) with their standard equivalents
+   (``xlslice``, ``xlconcat``).
 
 Assuming we want to transmit a sinewave with the :adi:`AD9361` ADI Integrated RF
 transceiver: the sinewave frequency is below 6 MHz, so we can use a lower system
@@ -70,7 +72,7 @@ Decimation FIR filter
 - ``ast``: normalize stopband attenuation = 80
 - ``tw``: normalized transition width = 0.01
 - ``n``: number of coefficients = 128
-- ``interp``: interpolation factor = 8
+- ``decim``: decimation factor = 8
 
 .. code-block::
 
@@ -297,7 +299,7 @@ Connecting the FIR interpolation filters on the Tx side
    connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_0] [get_bd_pins axi_ad9361_dac_fifo/din_enable_0]
    connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_1] [get_bd_pins axi_ad9361_dac_fifo/din_enable_1]
    connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins util_fir_int_0/s_axis_data_tready]
-   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins util_fir_int_0/s_axis_data_tvalid]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_valid] [get_bd_pins util_fir_int_0/s_axis_data_tvalid]
    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_0] [get_bd_pins util_fir_int_0/channel_0]
    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_1] [get_bd_pins util_fir_int_0/channel_1]
    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_0] [get_bd_pins util_fir_int_0/dac_read]
@@ -309,9 +311,9 @@ Connecting the FIR interpolation filters on the Tx side
    connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins util_fir_int_1/aclk]
    connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_2] [get_bd_pins axi_ad9361_dac_fifo/din_enable_2]
    connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_3] [get_bd_pins axi_ad9361_dac_fifo/din_enable_3]
-   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins util_fir_int_1/s_axis_data_tvalid]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_valid] [get_bd_pins util_fir_int_1/s_axis_data_tvalid]
    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_2] [get_bd_pins util_fir_int_1/channel_0]
-   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_3] [get_bd_pins util_fir_int_0/channel_1]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_3] [get_bd_pins util_fir_int_1/channel_1]
    connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_2] [get_bd_pins util_fir_int_1/dac_read]
    connect_bd_net [get_bd_pins concat_1/In0] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_2]
    connect_bd_net [get_bd_pins concat_1/In1] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_3]
@@ -322,9 +324,16 @@ Connecting the FIR interpolation filters on the Tx side
    connect_bd_net [get_bd_pins util_fir_int_0/interpolate] [get_bd_pins interp_slice/Dout]
    connect_bd_net [get_bd_pins util_fir_int_1/interpolate] [get_bd_pins interp_slice/Dout]
 
+   # reconnect rfifo write valid and underflow
+   connect_bd_net [get_bd_pins util_fir_int_0/m_axis_data_tvalid] [get_bd_pins axi_ad9361_dac_fifo/din_valid_in_0]
+   connect_bd_net [get_bd_pins util_fir_int_0/m_axis_data_tvalid] [get_bd_pins axi_ad9361_dac_fifo/din_valid_in_1]
+   connect_bd_net [get_bd_pins util_fir_int_1/m_axis_data_tvalid] [get_bd_pins axi_ad9361_dac_fifo/din_valid_in_2]
+   connect_bd_net [get_bd_pins util_fir_int_1/m_axis_data_tvalid] [get_bd_pins axi_ad9361_dac_fifo/din_valid_in_3]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_underflow] [get_bd_pins axi_ad9361_dac_fifo/din_unf]
+
 In this example, the TX data flow is controlled by the interpolation filter when
 interpolation is activated and by the axi_ad9361_core when interpolation is not
-active. In the reference design, the data flow is controlled by the ad9631_core.
+active. In the reference design, the data flow is controlled by the axi_ad9361_core.
 At this moment, the Interpolation filters are completely integrated into the
 design and the data path should look like the one in the figure below.
 
@@ -343,6 +352,7 @@ Connecting the FIR decimation filters on the Rx side
    connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_data_0] [get_bd_pins fir_decimator_0/channel_0]
    connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_data_1] [get_bd_pins fir_decimator_0/channel_1]
    connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_valid_0] [get_bd_pins fir_decimator_0/s_axis_data_tvalid]
+   connect_bd_net [get_bd_pins util_ad9361_adc_pack/fifo_wr_en] [get_bd_pins fir_decimator_0/m_axis_data_tvalid]
    connect_bd_net [get_bd_pins util_ad9361_adc_pack/enable_0 ] [get_bd_pins util_ad9361_adc_fifo/dout_enable_0]
    connect_bd_net [get_bd_pins util_ad9361_adc_pack/enable_1 ] [get_bd_pins util_ad9361_adc_fifo/dout_enable_1]
    connect_bd_net [get_bd_pins pack0_slice_0/Din] [get_bd_pins fir_decimator_0/m_axis_data_tdata]
@@ -355,7 +365,6 @@ Connecting the FIR decimation filters on the Rx side
    connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_data_2] [get_bd_pins fir_decimator_1/channel_0]
    connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_data_3] [get_bd_pins fir_decimator_1/channel_1]
    connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_valid_2] [get_bd_pins fir_decimator_1/s_axis_data_tvalid]
-   connect_bd_net [get_bd_pins util_ad9361_adc_pack/fifo_wr_en] [get_bd_pins fir_decimator_1/m_axis_data_tvalid]
    connect_bd_net [get_bd_pins util_ad9361_adc_pack/enable_2 ] [get_bd_pins util_ad9361_adc_fifo/dout_enable_2]
    connect_bd_net [get_bd_pins util_ad9361_adc_pack/enable_3 ] [get_bd_pins util_ad9361_adc_fifo/dout_enable_3]
    connect_bd_net [get_bd_pins pack1_slice_0/Din] [get_bd_pins fir_decimator_1/m_axis_data_tdata]
@@ -364,9 +373,9 @@ Connecting the FIR decimation filters on the Rx side
    connect_bd_net [get_bd_pins util_ad9361_adc_pack/fifo_wr_data_3] [get_bd_pins pack1_slice_1/Dout]
 
    #gpio controlled
-   connect_bd_net [get_bd_pins axi_ad9361/up_dac_gpio_out] [get_bd_pins decim_slice/Din]
+   connect_bd_net [get_bd_pins axi_ad9361/up_adc_gpio_out] [get_bd_pins decim_slice/Din]
    connect_bd_net [get_bd_pins fir_decimator_0/decimate] [get_bd_pins decim_slice/Dout]
-   connect_bd_net [get_bd_pins fir_decimator_1/decimate] [get_bd_pins decim_slice/Din]
+   connect_bd_net [get_bd_pins fir_decimator_1/decimate] [get_bd_pins decim_slice/Dout]
 
 Generating the programing files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -381,7 +390,7 @@ Generating the programing files
      ``make`` to generate the bitstream and .xsa file.
    - Now, if your system is based on a **Zynq architecture**, you will have to
      generate the ``BOOT.BIN``. If you have a **MicroBlaze** soft processor
-     in your system, booting the Linux will is simpler.
+     in your system, booting Linux is simpler.
 
 More information at:
 
@@ -432,7 +441,7 @@ one of the two channels will be enabled.
 To better understand what is happening with the data inside the FPGA, 3 ILA
 (Integrated Logic Analyzer) modules were added in the HDL design.
 
-The 1st ILA was connected to the control signals between the ad9361_core and the
+The 1st ILA was connected to the control signals between the axi_ad9361_core and the
 dac_fifo. The 2nd ILA is monitoring the interpolation filters and the 3rd ILA
 the decimation filters. As previously discussed above, **none of the filters are
 active and only one of the channels is enabled at this point**.
@@ -465,7 +474,7 @@ Interpolation filter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the `Connecting the FIR interpolation filters on the Tx side`_ section above,
-we added a GPIO control. The ad9361_core GPIO control register can be found in
+we added a GPIO control. The axi_ad9361_core GPIO control register can be found in
 the register map at the address **0xBC** `AXI AD9361`_.
 
 To activate the interpolation filter, one must go to the Debug mode:
@@ -550,6 +559,9 @@ All filters active characteristic
 Older sources
 -------------------------------------------------------------------------------
 
+- For the hdl_2023_r2 branch with Vivado 2023.2, use the
+  :git-hdl:`fir_filter_2023.tcl <hdl_2023_r2:projects/fmcomms2/zc706/fir_filter_2023.tcl>`
+  script, which replaces ``inline_hdl`` IP types with standard equivalents.
 - Sources from older examples can be found under the tag
   `eg_fmcomms2_fir_filter`_ using Vivado 16.2 and 16.4 versions, and
   **are not supported by us anymore**.
