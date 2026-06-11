@@ -22,7 +22,7 @@ set_property -dict {PACKAGE_PIN J21 IOSTANDARD LVCMOS18} [get_ports {ad713x_din[
 set_property -dict {PACKAGE_PIN J22 IOSTANDARD LVCMOS18} [get_ports {ad713x_din[5]}]
 set_property -dict {PACKAGE_PIN R20 IOSTANDARD LVCMOS18} [get_ports {ad713x_din[6]}]
 set_property -dict {PACKAGE_PIN R21 IOSTANDARD LVCMOS18} [get_ports {ad713x_din[7]}]
-set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS18} [get_ports ad713x_odr]
+set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS18 IOB TRUE SLEW FAST} [get_ports ad713x_odr]
 
 # ad713x GPIO lines
 
@@ -157,7 +157,26 @@ create_clock -period 10.000 -name sys_clk [get_ports sys_clk]
 create_clock -period 40.000 -name spi0_clk [get_pins -hier */EMIOSPI0SCLKO]
 create_clock -period 40.000 -name spi1_clk [get_pins -hier */EMIOSPI1SCLKO]
 
+# ===========================================================================
+# AD7134 CLKIN-to-ODR output timing constraints
+# ===========================================================================
+# The AD7134 internally re-samples ODR on the negative edge of CLKIN.
+# Both signals are source-synchronous outputs from the FPGA.
+#
+# From ADI design slides (AD7134_1.png / AD7134_2.png):
+#   Δt < TCLK/2 (10.4 ns): both chips capture same ODR edge (typical)
+#   Δt > TCLK/2: one chip captures one cycle late (worst case, ±1 TCLK)
+#
+# Constrain external Δt to < 5 ns, leaving ~5 ns margin for on-chip
+# routing mismatch (t1 - t2) between two AD7134 devices.
+# ===========================================================================
 
+create_generated_clock -name clkin_to_adc \
+  -source [get_pins i_system_wrapper/system_i/axi_sdpclk_clkgen/inst/i_mmcm_drp/i_clk_0_bufg/O] \
+  [get_ports ad713x_sdpclk]
+
+set_output_delay -clock clkin_to_adc -clock_fall -max 15.833 [get_ports ad713x_odr]
+set_output_delay -clock clkin_to_adc -clock_fall -min -1.0 [get_ports ad713x_odr]
 
 
 

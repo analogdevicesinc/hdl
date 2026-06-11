@@ -65,18 +65,18 @@ module clkin_aligner #(
 
   // peripheral clock and gated output
 
-(* mark_debug = "true" *)  input                   clk_in,
-(* mark_debug = "true" *)  output                  clk_out,
+/* (* mark_debug = "true" *) */  input                   clk_in,
+/* (* mark_debug = "true" *) */  output                  clk_out,
 
   // interrupt
 
-(* mark_debug = "true" *)  output                  irq,
+/* (* mark_debug = "true" *) */  output                  irq,
 
   // ODR re-registration (Sequence.txt §F.10 — ODR transitions on
   // XTAL2_CLKIN falling edges)
 
-(* mark_debug = "true" *)  input                   odr_in,
-(* mark_debug = "true" *)  output                  odr_out
+/* (* mark_debug = "true" *) */  input                   odr_in,
+/* (* mark_debug = "true" *) */  output                  odr_out
 );
 
   // local parameters
@@ -100,9 +100,9 @@ module clkin_aligner #(
   // control strobes / config (clk_in domain, after CDC inside regmap)
 
   wire            ext_resetn;
-(* mark_debug = "true" *)  wire            startup_fire;
-(* mark_debug = "true" *)  wire            arm_stop_at_align;
-(* mark_debug = "true" *)  wire            resume_strobe;
+/* (* mark_debug = "true" *) */  wire            startup_fire;
+/* (* mark_debug = "true" *) */  wire            arm_stop_at_align;
+/* (* mark_debug = "true" *) */  wire            resume_strobe;
   wire            gate_force_off;
   wire            gate_force_on;
   wire    [15:0]  startup_cycles;
@@ -111,9 +111,9 @@ module clkin_aligner #(
   // status / counters from clk_in domain
 
   wire    [15:0]  edge_count;
-(* mark_debug = "true" *)  wire    [ 4:0]  div32_cnt;
-(* mark_debug = "true" *)  wire            clk_div32;
-(* mark_debug = "true" *)  wire            gate_active;
+/* (* mark_debug = "true" *) */  wire    [ 4:0]  div32_cnt;
+/* (* mark_debug = "true" *) */  wire            clk_div32;
+/* (* mark_debug = "true" *) */  wire            gate_active;
   wire            startup_done;
   wire            stopped_low;
   wire            armed;
@@ -121,9 +121,9 @@ module clkin_aligner #(
 
   // events to regmap (one-cycle pulses in clk_in domain)
 
-(* mark_debug = "true" *)  wire            evt_edge_target_reached;
-(* mark_debug = "true" *)  wire            evt_stop_at_align_done;
-(* mark_debug = "true" *)  wire            evt_startup_done;
+/* (* mark_debug = "true" *) */  wire            evt_edge_target_reached;
+/* (* mark_debug = "true" *) */  wire            evt_stop_at_align_done;
+/* (* mark_debug = "true" *) */  wire            evt_startup_done;
 
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -219,12 +219,12 @@ module clkin_aligner #(
   localparam [2:0] ST_STOPPED_LOW = 3'd3;
   localparam [2:0] ST_RUNNING     = 3'd4;
 
-(* mark_debug = "true" *)  reg [2:0]  state = ST_IDLE;
-(* mark_debug = "true" *)  reg [15:0] startup_cnt = 16'd0;
-(* mark_debug = "true" *)  reg [15:0] edge_cnt    = 16'd0;
-(* mark_debug = "true" *)  reg [ 4:0] div32_q     = 5'd0;
-(* mark_debug = "true" *)  reg        gate_en_req;       // combinational
-(* mark_debug = "true" *)  reg        gate_en_neg = 1'b1; // negedge-registered enable for BUFGCE
+/* (* mark_debug = "true" *) */  reg [2:0]  state = ST_IDLE;
+/* (* mark_debug = "true" *) */  reg [15:0] startup_cnt = 16'd0;
+/* (* mark_debug = "true" *) */  reg [15:0] edge_cnt    = 16'd0;
+/* (* mark_debug = "true" *) */  reg [ 4:0] div32_q     = 5'd0;
+/* (* mark_debug = "true" *) */  reg        gate_en_req;       // combinational
+/* (* mark_debug = "true" *) */  reg        gate_en_neg = 1'b1; // negedge-registered enable for BUFGCE
 
   // /32 phase counter: increments on every delivered clk_in posedge
   // (i.e. when the gate is open). Initial value chosen so that
@@ -300,15 +300,20 @@ module clkin_aligner #(
         end
 
         ST_STARTUP: begin
-          // Counter decrements on every delivered clk_in cycle; when
-          // it reaches zero we have driven exactly STARTUP_CYCLES
-          // pulses to clk_out, so we drop the gate and go STOPPED_LOW.
-          if (startup_cnt == 16'd1) begin
-            state              <= ST_STOPPED_LOW;
-            evt_startup_done_r <= 1'b1;
+          // startup_cnt must advance only on DELIVERED pulses (gate_en_neg),
+          // in lockstep with div32_q. GATE_FORCE_OFF is a level (sync_data CDC)
+          // while STARTUP_FIRE is a strobe (sync_event CDC), so the gate can
+          // stay closed for a few clk_in cycles after the FSM enters STARTUP.
+          // An ungated countdown would race ahead of delivery and stop short,
+          // giving 33-35 pulses (DIV32 0x100-0x102) instead of 36 (0x103).
+          if (gate_en_neg) begin
+            if (startup_cnt == 16'd1) begin
+              state              <= ST_STOPPED_LOW;
+              evt_startup_done_r <= 1'b1;
+            end
+            if (startup_cnt != 16'd0)
+              startup_cnt <= startup_cnt - 16'd1;
           end
-          if (startup_cnt != 16'd0)
-            startup_cnt <= startup_cnt - 16'd1;
         end
 
         ST_ARMED: begin
@@ -367,16 +372,18 @@ module clkin_aligner #(
     .CE (gate_en_neg),
     .O  (clk_out));
 
-  // ---------------- ODR negedge re-registration (Sequence.txt §F.10) ----------------
-  // The chip samples ODR on the falling edge of XTAL2_CLKIN. Re-registering
-  // odr_in on negedge clk_in guarantees ODR transitions are aligned to the
-  // CLKin falling edge regardless of the source's clocking domain.
+  // ---------------- ODR posedge re-registration (experiment: NOT Sequence.txt §F.10) ----------------
+  // EXPERIMENT BUILD: ODR is re-registered on the RISING edge of clk_in,
+  // deliberately violating Sequence.txt §F.10 (which requires falling-edge
+  // alignment). This parks the chip-internal CLKIN-vs-ODR mismatch at the
+  // TCLK/2 boundary (AD7134_2.png worst case) to measure the resulting
+  // inter-chip rung distribution vs the negedge baseline.
 
-(* mark_debug = "true" *)  reg odr_neg = 1'b0;
-  always @(negedge clk_in) begin
-    odr_neg <= odr_in;
+  /* (* mark_debug = "true" *) */ reg odr_pos = 1'b0;
+  always @(posedge clk_in) begin
+    odr_pos <= odr_in;
   end
-  assign odr_out = odr_neg;
+  assign odr_out = odr_pos;
 
   // ---------------- status / outputs ----------------
 

@@ -52,11 +52,10 @@ set_false_path \
 
 set_false_path -from [get_cells -hier -filter {NAME =~ *gate_en_neg_reg*}]
 
-# odr_neg is clocked on negedge clk_in to align ODR transitions with the
-# XTAL2_CLKIN falling edge per Sequence.txt §F.10. The launch is from
-# odr_in (posedge clk_out, axi_pwm_gen) and the half-cycle setup window
-# (10.4 ns at 48 MHz) is more than sufficient for any realistic combinational
-# delay — flag as false path to keep STA reports clean.
+# EXPERIMENT BUILD: odr_pos is clocked on posedge clk_in (rising-edge ODR
+# alignment), deliberately violating Sequence.txt §F.10 (falling-edge). The
+# launch is from odr_in (posedge clk_out, axi_pwm_gen); flag as false path to
+# keep STA reports clean.
 
-set_false_path -to [get_cells -hier -filter {NAME =~ *odr_neg_reg*}]
+set_false_path -to [get_cells -hier -filter {NAME =~ *odr_pos_reg*}]
 

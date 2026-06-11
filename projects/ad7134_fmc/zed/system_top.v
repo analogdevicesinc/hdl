@@ -90,16 +90,16 @@ module system_top (
 
   // ad713x SPI configuration interface
 
-(* mark_debug = "true" *)  input         ad713x_spi_sdi,
-(* mark_debug = "true" *)  output        ad713x_spi_sdo,
-(* mark_debug = "true" *)  output        ad713x_spi_sclk,
-(* mark_debug = "true" *)  output [ 1:0] ad713x_spi_cs,
+/* (* mark_debug = "true" *) */  input         ad713x_spi_sdi,
+/* (* mark_debug = "true" *) */  output        ad713x_spi_sdo,
+/* (* mark_debug = "true" *) */  output        ad713x_spi_sclk,
+/* (* mark_debug = "true" *) */  output [ 1:0] ad713x_spi_cs,
 
   // ad713x data interface
 
-(* mark_debug = "true" *)  output        ad713x_dclk,
-(* mark_debug = "true" *)  input  [ 7:0] ad713x_din,
-(* mark_debug = "true" *)  output        ad713x_odr,
+/* (* mark_debug = "true" *) */  output        ad713x_dclk,
+/* (* mark_debug = "true" *) */  input  [ 7:0] ad713x_din,
+/* (* mark_debug = "true" *) */  output        ad713x_odr,
 
   // ad713x GPIO lines
 
