@@ -58,9 +58,6 @@ module ethernet_vcu118 #(
   input  wire                                     clk,
   input  wire                                     rst,
 
-  input  wire                                     clk_125mhz,
-  input  wire                                     rst_125mhz,
-
   // QSFP DRP
   input  wire [QSFP_CNT-1:0]                      qsfp_drp_clk,
   input  wire [QSFP_CNT-1:0]                      qsfp_drp_rst,
@@ -152,31 +149,7 @@ module ethernet_vcu118 #(
   input  wire [PORT_COUNT-1:0]                    eth_rx_lfc_ack,
   input  wire [PORT_COUNT*8-1:0]                  eth_rx_pfc_en,
   output wire [PORT_COUNT*8-1:0]                  eth_rx_pfc_req,
-  input  wire [PORT_COUNT*8-1:0]                  eth_rx_pfc_ack,
-
-  /*
-  * I2C
-  */
-  input  wire                                     i2c_scl_i,
-  output wire                                     i2c_scl_o,
-  output wire                                     i2c_scl_t,
-  input  wire                                     i2c_sda_i,
-  output wire                                     i2c_sda_o,
-  output wire                                     i2c_sda_t,
-
-  /*
-  * QSPI flash
-  */
-  output wire                                     fpga_boot,
-  output wire                                     qspi_clk,
-  input  wire [3:0]                               qspi_0_dq_i,
-  output wire [3:0]                               qspi_0_dq_o,
-  output wire [3:0]                               qspi_0_dq_oe,
-  output wire                                     qspi_0_cs,
-  input  wire [3:0]                               qspi_1_dq_i,
-  output wire [3:0]                               qspi_1_dq_o,
-  output wire [3:0]                               qspi_1_dq_oe,
-  output wire                                     qspi_1_cs
+  input  wire [PORT_COUNT*8-1:0]                  eth_rx_pfc_ack
 );
 
   genvar n;
@@ -245,7 +218,7 @@ module ethernet_vcu118 #(
         .N(4)
       ) qsfp_sync_reset_inst (
         .clk(qsfp_mgt_refclk_bufg[n +: 1]),
-        .rst(rst_125mhz),
+        .rst(rst),
         .out(qsfp_rst[n +: 1]));
 
       cmac_gty_wrapper #(
@@ -257,7 +230,7 @@ module ethernet_vcu118 #(
         .RX_CLK_FROM_TX(ETH_RX_CLK_FROM_TX),
         .RS_FEC_ENABLE(ETH_RS_FEC_ENABLE)
       ) qsfp_cmac_inst (
-        .xcvr_ctrl_clk(clk_125mhz),
+        .xcvr_ctrl_clk(1'b0),
         .xcvr_ctrl_rst(qsfp_rst[n +: 1]),
 
         /*
@@ -377,20 +350,6 @@ module ethernet_vcu118 #(
   wire [QSFP_CNT-1:0] qsfp_modprsl_int;
   wire [QSFP_CNT-1:0] qsfp_intl_int;
 
-  reg i2c_scl_o_reg = 1'b1;
-  reg i2c_sda_o_reg = 1'b1;
-
-  reg fpga_boot_reg = 1'b0;
-
-  reg qspi_clk_reg = 1'b0;
-  reg qspi_0_cs_reg = 1'b1;
-  reg [3:0] qspi_0_dq_o_reg = 4'd0;
-  reg [3:0] qspi_0_dq_oe_reg = 4'd0;
-
-  reg qspi_1_cs_reg = 1'b1;
-  reg [3:0] qspi_1_dq_o_reg = 4'd0;
-  reg [3:0] qspi_1_dq_oe_reg = 4'd0;
-
   reg ctrl_reg_wr_wait_cmb;
   reg ctrl_reg_wr_ack_cmb;
   reg [AXIL_CTRL_DATA_WIDTH-1:0] ctrl_reg_rd_data_cmb;
@@ -425,22 +384,6 @@ module ethernet_vcu118 #(
   assign qsfp_resetl = ~qsfp_reset_reg;
   assign qsfp_lpmode = qsfp_lpmode_reg;
 
-  assign i2c_scl_o = i2c_scl_o_reg;
-  assign i2c_scl_t = i2c_scl_o_reg;
-  assign i2c_sda_o = i2c_sda_o_reg;
-  assign i2c_sda_t = i2c_sda_o_reg;
-
-  assign fpga_boot = fpga_boot_reg;
-
-  assign qspi_clk = qspi_clk_reg;
-  assign qspi_0_cs = qspi_0_cs_reg;
-  assign qspi_0_dq_o = qspi_0_dq_o_reg;
-  assign qspi_0_dq_oe = qspi_0_dq_oe_reg;
-
-  assign qspi_1_cs = qspi_1_cs_reg;
-  assign qspi_1_dq_o = qspi_1_dq_o_reg;
-  assign qspi_1_dq_oe = qspi_1_dq_oe_reg;
-
   integer i;
 
   always @(posedge clk) begin
@@ -452,21 +395,6 @@ module ethernet_vcu118 #(
       // write operation
       ctrl_reg_wr_ack_reg <= 1'b0;
       case ({ctrl_reg_wr_addr >> 2, 2'b00})
-        // FW ID
-        8'h0C: begin
-          // FW ID: FPGA JTAG ID
-          fpga_boot_reg <= ctrl_reg_wr_data == 32'hFEE1DEAD;
-        end
-        // I2C 0
-        RBB+8'h0C: begin
-          // I2C ctrl: control
-          if (ctrl_reg_wr_strb[0]) begin
-            i2c_scl_o_reg <= ctrl_reg_wr_data[1];
-          end
-          if (ctrl_reg_wr_strb[1]) begin
-            i2c_sda_o_reg <= ctrl_reg_wr_data[9];
-          end
-        end
         // XCVR GPIO
         RBB+8'h1C: begin
           // XCVR GPIO: control 0123
@@ -478,37 +406,6 @@ module ethernet_vcu118 #(
           //   qsfp_reset_reg[1] <= ctrl_reg_wr_data[12];
           //   qsfp_lpmode_reg[1] <= ctrl_reg_wr_data[13];
           // end
-        end
-        // QSPI flash
-        RBB+8'h2C: begin
-          // SPI flash ctrl: format
-          fpga_boot_reg <= ctrl_reg_wr_data == 32'hFEE1DEAD;
-        end
-        RBB+8'h30: begin
-          // SPI flash ctrl: control 0
-          if (ctrl_reg_wr_strb[0]) begin
-            qspi_0_dq_o_reg <= ctrl_reg_wr_data[3:0];
-          end
-          if (ctrl_reg_wr_strb[1]) begin
-            qspi_0_dq_oe_reg <= ctrl_reg_wr_data[11:8];
-          end
-          if (ctrl_reg_wr_strb[2]) begin
-            qspi_clk_reg <= ctrl_reg_wr_data[16];
-            qspi_0_cs_reg <= ctrl_reg_wr_data[17];
-          end
-        end
-        RBB+8'h34: begin
-          // SPI flash ctrl: control 1
-          if (ctrl_reg_wr_strb[0]) begin
-            qspi_1_dq_o_reg <= ctrl_reg_wr_data[3:0];
-          end
-          if (ctrl_reg_wr_strb[1]) begin
-            qspi_1_dq_oe_reg <= ctrl_reg_wr_data[11:8];
-          end
-          if (ctrl_reg_wr_strb[2]) begin
-            qspi_clk_reg <= ctrl_reg_wr_data[16];
-            qspi_1_cs_reg <= ctrl_reg_wr_data[17];
-          end
         end
         default: ctrl_reg_wr_ack_reg <= 1'b0;
       endcase
@@ -524,10 +421,10 @@ module ethernet_vcu118 #(
         RBB+8'h08: ctrl_reg_rd_data_reg <= RB_BASE_ADDR+8'h10;       // I2C ctrl: Next header
         RBB+8'h0C: begin
           // I2C ctrl: control
-          ctrl_reg_rd_data_reg[0] <= i2c_scl_i;
-          ctrl_reg_rd_data_reg[1] <= i2c_scl_o_reg;
-          ctrl_reg_rd_data_reg[8] <= i2c_sda_i;
-          ctrl_reg_rd_data_reg[9] <= i2c_sda_o_reg;
+          ctrl_reg_rd_data_reg[0] <= 1'b0;
+          ctrl_reg_rd_data_reg[1] <= 1'b0;
+          ctrl_reg_rd_data_reg[8] <= 1'b0;
+          ctrl_reg_rd_data_reg[9] <= 1'b0;
         end
         // XCVR GPIO
         RBB+8'h10: ctrl_reg_rd_data_reg <= 32'h0000C101;             // XCVR GPIO: Type
@@ -555,20 +452,6 @@ module ethernet_vcu118 #(
           ctrl_reg_rd_data_reg[11:8]  <= 0;                   // fallback segment
           ctrl_reg_rd_data_reg[31:12] <= 32'h00000000 >> 12;  // first segment size (even split)
         end
-        RBB+8'h30: begin
-          // SPI flash ctrl: control 0
-          ctrl_reg_rd_data_reg[3:0] <= qspi_0_dq_i;
-          ctrl_reg_rd_data_reg[11:8] <= qspi_0_dq_oe;
-          ctrl_reg_rd_data_reg[16] <= qspi_clk;
-          ctrl_reg_rd_data_reg[17] <= qspi_0_cs;
-        end
-        RBB+8'h34: begin
-          // SPI flash ctrl: control 1
-          ctrl_reg_rd_data_reg[3:0] <= qspi_1_dq_i;
-          ctrl_reg_rd_data_reg[11:8] <= qspi_1_dq_oe;
-          ctrl_reg_rd_data_reg[16] <= qspi_clk;
-          ctrl_reg_rd_data_reg[17] <= qspi_1_cs;
-        end
         default: ctrl_reg_rd_ack_reg <= 1'b0;
       endcase
     end
@@ -579,19 +462,6 @@ module ethernet_vcu118 #(
 
       qsfp_reset_reg <= {QSFP_CNT{1'b0}};
       qsfp_lpmode_reg <= {QSFP_CNT{1'b0}};
-
-      i2c_scl_o_reg <= 1'b1;
-      i2c_sda_o_reg <= 1'b1;
-
-      fpga_boot_reg <= 1'b0;
-
-      qspi_clk_reg <= 1'b0;
-      qspi_0_cs_reg <= 1'b1;
-      qspi_0_dq_o_reg <= 4'd0;
-      qspi_0_dq_oe_reg <= 4'd0;
-      qspi_1_cs_reg <= 1'b1;
-      qspi_1_dq_o_reg <= 4'd0;
-      qspi_1_dq_oe_reg <= 4'd0;
     end
   end
 

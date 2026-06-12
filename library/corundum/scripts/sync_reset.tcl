@@ -3,5 +3,5 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set_false_path \
+set_false_path -quiet \
   -to [get_cells -quiet -hier *sync_reg_reg*]

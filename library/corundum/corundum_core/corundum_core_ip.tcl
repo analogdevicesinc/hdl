@@ -846,12 +846,15 @@ adi_if_infer_bus analog.com:interface:if_dma_ram slave data_dma_ram_app [list \
   "rd_resp_ready data_dma_ram_rd_resp_ready_app" \
 ]
 
-adi_if_infer_bus analog.com:interface:if_axis_stat slave m_axis_stat_app [list \
-  "tdata  m_axis_stat_tdata_app" \
-  "tid    m_axis_stat_tid_app" \
-  "tvalid m_axis_stat_tvalid_app" \
-  "tready m_axis_stat_tready_app" \
-]
+adi_add_bus "m_axis_stat_app" "slave" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  [ list \
+    {"m_axis_stat_tdata_app"  "TDATA"} \
+    {"m_axis_stat_tid_app"    "TID"} \
+    {"m_axis_stat_tvalid_app" "TVALID"} \
+    {"m_axis_stat_tready_app" "TREADY"} \
+  ]
 
 # Bus-clock association
 

@@ -172,15 +172,6 @@ adi_if_infer_bus analog.com:interface:if_qsfp master qsfp [list \
   "gtpowergood qsfp_gtpowergood" \
 ]
 
-adi_if_infer_bus analog.com:interface:if_i2c master iic [list \
-  "scl_i i2c_scl_i" \
-  "scl_o i2c_scl_o" \
-  "scl_t i2c_scl_t" \
-  "sda_i i2c_sda_i" \
-  "sda_o i2c_sda_o" \
-  "sda_t i2c_sda_t" \
-]
-
 adi_if_infer_bus analog.com:interface:if_ptp slave ptp_clock [list \
   "ptp_td_sd            ptp_td_sd" \
   "ptp_pps              ptp_pps" \

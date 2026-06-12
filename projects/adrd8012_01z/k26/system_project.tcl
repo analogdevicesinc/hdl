@@ -25,4 +25,6 @@ adi_project_files adrd8012_01z_k26 [list \
   "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" ]
 
+set_property strategy Performance_RefinePlacement [get_runs impl_1]
+
 adi_project_run adrd8012_01z_k26

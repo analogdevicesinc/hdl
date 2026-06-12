@@ -48,7 +48,7 @@ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 sfp_iic
 
 create_bd_port -dir O ref_clk0
 
-create_bd_port -dir O -from 1 -to 0 led
+create_bd_port -dir O -from 1 -to 0 sfp_led
 
 # GSML
 
@@ -150,7 +150,7 @@ set_property -dict [list \
   CONFIG.NUM_MI {4} \
   CONFIG.NUM_SI {1} \
   CONFIG.TDATA_NUM_BYTES {4} \
-  CONFIG.TDEST_WIDTH {4} \
+  CONFIG.TDEST_WIDTH {10} \
   CONFIG.TUSER_WIDTH {2} \
 ] $axis_switch_0
 
@@ -160,7 +160,7 @@ set_property -dict [list \
   CONFIG.NUM_MI {4} \
   CONFIG.NUM_SI {1} \
   CONFIG.TDATA_NUM_BYTES {4} \
-  CONFIG.TDEST_WIDTH {4} \
+  CONFIG.TDEST_WIDTH {10} \
   CONFIG.TUSER_WIDTH {2} \
 ] $axis_switch_1
 
@@ -461,10 +461,9 @@ ad_ip_parameter clk10_gen CONFIG.PRIM_SOURCE {Global_buffer}
 ad_ip_parameter clk10_gen CONFIG.RESET_TYPE {ACTIVE_LOW}
 ad_ip_parameter clk10_gen CONFIG.USE_LOCKED {false}
 
-connect_bd_net [get_bd_ports led] [get_bd_pins corundum_hierarchy/ethernet_core/led]
+connect_bd_net [get_bd_ports sfp_led] [get_bd_pins corundum_hierarchy/ethernet_core/sfp_led]
 
 ad_connect corundum_hierarchy/clk_corundum $sys_dma_clk
-ad_ip_parameter corundum_rstgen CONFIG.C_AUX_RESET_HIGH {0}
 ad_connect corundum_rstgen/slowest_sync_clk sys_ps8/pl_clk1
 ad_connect corundum_rstgen/ext_reset_in sys_ps8/pl_resetn0
 ad_connect clk10_gen/clk_in1 $sys_dma_clk

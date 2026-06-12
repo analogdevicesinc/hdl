@@ -39,7 +39,6 @@ switch $board {
     create_bd_pin -dir I qsfp_mgt_refclk_n
 
     create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
-    create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 qsfp_iic
   }
   K26 {
     create_bd_pin -dir I sfp_rx_p
@@ -58,15 +57,13 @@ switch $board {
   XCVU11P -
   VCU118 {
     create_bd_pin -dir O -from 0 -to 0 -type rst qsfp_rst
-    create_bd_pin -dir O fpga_boot
-    create_bd_pin -dir O -type clk qspi_clk
-    create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi0
-    create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi1
     create_bd_pin -dir I -type rst ptp_rst
     create_bd_pin -dir I -type clk qsfp_mgt_refclk
     create_bd_pin -dir I -type clk qsfp_mgt_refclk_bufg
     create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
-    create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
+
+    create_bd_pin -dir I -type clk clk_125mhz
+    create_bd_pin -dir I -type rst rst_125mhz
 
     if {$DDR_ENABLE == 1} {
       create_bd_pin -dir I -type clk ddr_clk
@@ -79,9 +76,6 @@ switch $board {
       create_bd_pin -dir I -type rst hbm_rst
       create_bd_pin -dir I hbm_status
     }
-
-    create_bd_pin -dir I -type clk clk_125mhz
-    create_bd_pin -dir I -type rst rst_125mhz
   }
 }
 
@@ -263,6 +257,8 @@ switch $board {
       ENABLE_DIC $ENABLE_DIC \
       MIN_FRAME_LENGTH $MIN_FRAME_LENGTH \
       PFC_ENABLE $PFC_ENABLE \
+      AXIS_TX_USER_WIDTH $AXIS_TX_USER_WIDTH \
+      AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
     ]
   }
   K26 {
@@ -276,6 +272,8 @@ switch $board {
       ENABLE_DIC $ENABLE_DIC \
       MIN_FRAME_LENGTH $MIN_FRAME_LENGTH \
       PFC_ENABLE $PFC_ENABLE \
+      AXIS_TX_USER_WIDTH $AXIS_TX_USER_WIDTH \
+      AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
     ]
   }
   XCVU11P {
@@ -385,30 +383,20 @@ switch $board {
     ad_connect ethernet_core/iic sfp_iic
   }
   ADRV9009ZU11EG {
-
     ad_connect ethernet_core/qsfp_mgt_refclk_p qsfp_mgt_refclk_p
     ad_connect ethernet_core/qsfp_mgt_refclk_n qsfp_mgt_refclk_n
     ad_connect ethernet_core/qsfp_rst qsfp_rst
     ad_connect ethernet_core/qsfp qsfp
-
-    ad_connect ethernet_core/iic qsfp_iic
   }
   XCVU11P -
   VCU118 {
-    ad_connect ethernet_core/clk_125mhz clk_125mhz
-    ad_connect ethernet_core/rst_125mhz rst_125mhz
     ad_connect ethernet_core/qsfp_drp_clk clk_125mhz
     ad_connect ethernet_core/qsfp_drp_rst rst_125mhz
     ad_connect ethernet_core/qsfp_mgt_refclk qsfp_mgt_refclk
     ad_connect ethernet_core/qsfp_mgt_refclk_bufg qsfp_mgt_refclk_bufg
     ad_connect ethernet_core/qsfp_rst qsfp_rst
-    ad_connect ethernet_core/fpga_boot fpga_boot
-    ad_connect ethernet_core/qspi_clk qspi_clk
 
-    ad_connect ethernet_core/qspi0 qspi0
-    ad_connect ethernet_core/qspi1 qspi1
     ad_connect ethernet_core/qsfp qsfp
-    ad_connect ethernet_core/i2c i2c
 
     ad_connect corundum_core/ptp_clk qsfp_mgt_refclk_bufg
     ad_connect corundum_core/ptp_rst ptp_rst
@@ -653,7 +641,7 @@ current_bd_instance /
 ad_ip_instance proc_sys_reset corundum_rstgen [list \
   C_EXT_RST_WIDTH 1 \
   C_AUX_RESET_HIGH.VALUE_SRC USER \
-  C_AUX_RESET_HIGH 1 \
+  C_AUX_RESET_HIGH 0 \
 ]
 
 ad_connect corundum_hierarchy/rst_corundum corundum_rstgen/peripheral_reset
@@ -666,6 +654,8 @@ if {[string equal $CPU MB]} {
     C_DOUT_DEFAULT 0x00000000 \
     C_GPIO_WIDTH 1 \
   ]
+
+  ad_ip_parameter corundum_rstgen CONFIG.C_AUX_RESET_HIGH 1
 
   ad_connect corundum_gpio_reset/gpio_io_o corundum_rstgen/aux_reset_in
 }

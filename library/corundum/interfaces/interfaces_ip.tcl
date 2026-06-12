@@ -68,21 +68,9 @@ adi_if_ports  input  -1   tag   none    0
 adi_if_ports  input  -1   valid none    0
 adi_if_ports  output -1   ready none    0
 
-adi_if_define if_jtag
-adi_if_ports  input   1   tdi none    0
-adi_if_ports  output  1   tdo none    0
-adi_if_ports  input   1   tms none    0
-adi_if_ports  input   1   tck none    0
-
 adi_if_define if_gpio
 adi_if_ports  input  -1   gpio_in    none    0
 adi_if_ports  output -1   gpio_out   none    0
-
-adi_if_define if_qspi
-adi_if_ports  input  3   dq_i  none    0
-adi_if_ports  output 3   dq_o  none    0
-adi_if_ports  output 3   dq_oe none    0
-adi_if_ports  output 1   cs    none    0
 
 adi_if_define if_qsfp
 adi_if_ports  output -1   tx_p        none    0
@@ -107,14 +95,6 @@ adi_if_ports  output  1   tx_disable   none    0
 adi_if_ports  input   1   tx_fault     none    0
 adi_if_ports  input   1   rx_los       none    0
 adi_if_ports  input   1   mod_abs      none    0
-
-adi_if_define if_i2c
-adi_if_ports  input   1   scl_i none    0
-adi_if_ports  output  1   scl_o none    0
-adi_if_ports  output  1   scl_t none    0
-adi_if_ports  input   1   sda_i none    0
-adi_if_ports  output  1   sda_o none    0
-adi_if_ports  output  1   sda_t none    0
 
 adi_if_define if_axis_dma_desc
 adi_if_ports  output  -1   dma_addr none    0
@@ -147,9 +127,3 @@ adi_if_ports  output -1   rd_cmd_ready  none    0
 adi_if_ports  output -1   rd_resp_data  none    0
 adi_if_ports  output -1   rd_resp_valid none    0
 adi_if_ports  input  -1   rd_resp_ready none    0
-
-adi_if_define if_axis_stat
-adi_if_ports  output  -1   tdata  none    0
-adi_if_ports  output  -1   tid    none    0
-adi_if_ports  output   1   tvalid none    0
-adi_if_ports  input    1   tready none    0

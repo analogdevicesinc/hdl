@@ -64,8 +64,8 @@ module system_top (
 
   inout         sfp_i2c_scl,
   inout         sfp_i2c_sda,
-  inout         sfp_i2c_rstn,
-  inout         sfp_i2c_en,
+  output        sfp_i2c_rstn,
+  output        sfp_i2c_en,
 
   inout         tca_i2c_scl,
   inout         tca_i2c_sda,
@@ -188,7 +188,7 @@ module system_top (
     .sfp_iic_sda_io (sfp_i2c_sda),
     .tca_iic_scl_io (tca_i2c_scl),
     .tca_iic_sda_io (tca_i2c_sda),
-    .led (sfp_led),
+    .sfp_led (sfp_led),
     .spi0_csn (ad9545_cs),
     .spi0_miso (ad9545_miso),
     .spi0_mosi (ad9545_mosi),

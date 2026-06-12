@@ -68,7 +68,6 @@ module ethernet_k26 #(
   /*
    * GPIO
    */
-  output wire [1:0]                                 led,
   output wire [1:0]                                 sfp_led,
 
   /*

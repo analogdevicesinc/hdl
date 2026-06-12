@@ -187,25 +187,8 @@ module ethernet_adrv9009zu11eg #(
   input  wire [PORT_COUNT*8-1:0]                   eth_rx_pfc_en,
   output wire [PORT_COUNT*8-1:0]                   eth_rx_pfc_req,
   input  wire [PORT_COUNT*8-1:0]                   eth_rx_pfc_ack,
-  output wire [PORT_COUNT-1:0]                     eth_rx_fc_quanta_clk_en,
-
-  /*
-  * I2C
-  */
-  input  wire                                    i2c_scl_i,
-  output reg                                     i2c_scl_o,
-  output reg                                     i2c_scl_t,
-  input  wire                                    i2c_sda_i,
-  output reg                                     i2c_sda_o,
-  output reg                                     i2c_sda_t
+  output wire [PORT_COUNT-1:0]                     eth_rx_fc_quanta_clk_en
 );
-
-  wire qsfp_iic_scl_i_w;
-  wire qsfp_iic_scl_o_w;
-  wire qsfp_iic_scl_t_w;
-  wire qsfp_iic_sda_i_w;
-  wire qsfp_iic_sda_o_w;
-  wire qsfp_iic_sda_t_w;
 
   wire qsfp_drp_clk;
   wire qsfp_drp_rst;
@@ -220,21 +203,6 @@ module ethernet_adrv9009zu11eg #(
   localparam RBB = RB_BASE_ADDR & {AXIL_CTRL_ADDR_WIDTH{1'b1}};
 
   localparam RB_DRP_QSFP_BASE = RB_BASE_ADDR + 16'h20;
-
-  reg qsfp_iic_scl_o_reg = 1'b1;
-  reg qsfp_iic_sda_o_reg = 1'b1;
-
-  always @(posedge clk) begin
-    i2c_scl_o <= qsfp_iic_scl_o_w;
-    i2c_scl_t <= qsfp_iic_scl_t_w;
-    i2c_sda_o <= qsfp_iic_sda_o_w;
-    i2c_sda_t <= qsfp_iic_sda_t_w;
-  end
-
-  assign qsfp_iic_scl_o_w = qsfp_iic_scl_o_reg;
-  assign qsfp_iic_scl_t_w = qsfp_iic_scl_o_reg;
-  assign qsfp_iic_sda_o_w = qsfp_iic_sda_o_reg;
-  assign qsfp_iic_sda_t_w = qsfp_iic_sda_o_reg;
 
   wire clk_156mhz_int;
 
@@ -282,12 +250,12 @@ module ethernet_adrv9009zu11eg #(
   reg qsfp_lpmode_reg = 1'b0;
 
   sync_signal #(
-    .WIDTH(5),
+    .WIDTH(3),
     .N(2)
   ) sync_signal_inst (
     .clk(clk),
-    .in({qsfp_tx_fault,      qsfp_rx_los,     qsfp_mod_abs,     scl_i,   sda_i}),
-    .out({qsfp_tx_fault_int, qsfp_rx_los_int, qsfp_mod_abs_int, qsfp_iic_scl_i_w, qsfp_iic_sda_i_w}));
+    .in({qsfp_tx_fault,      qsfp_rx_los,     qsfp_mod_abs}),
+    .out({qsfp_tx_fault_int, qsfp_rx_los_int, qsfp_mod_abs_int}));
 
   sync_signal #(
     .WIDTH(2),
@@ -801,10 +769,10 @@ module ethernet_adrv9009zu11eg #(
         RBB+8'h08: ctrl_reg_rd_data_reg <= RB_BASE_ADDR+8'h10;       // I2C ctrl: Next header
         RBB+8'h0C: begin
           // I2C ctrl: control
-          ctrl_reg_rd_data_reg[0] <= i2c_scl_i;
-          ctrl_reg_rd_data_reg[1] <= i2c_scl_o_reg;
-          ctrl_reg_rd_data_reg[8] <= i2c_sda_i;
-          ctrl_reg_rd_data_reg[9] <= i2c_sda_o_reg;
+          ctrl_reg_rd_data_reg[0] <= 1'b0;
+          ctrl_reg_rd_data_reg[1] <= 1'b0;
+          ctrl_reg_rd_data_reg[8] <= 1'b0;
+          ctrl_reg_rd_data_reg[9] <= 1'b0;
         end
         // XCVR GPIO
         RBB+8'h10: ctrl_reg_rd_data_reg <= 32'h0000C101;             // XCVR GPIO: Type

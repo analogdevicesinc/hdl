@@ -5,12 +5,6 @@
 
 # Corundum NIC
 create_bd_intf_port -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
-create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 aux_reset_inv
-
-set_property -dict [list \
-  CONFIG.C_OPERATION {not} \
-  CONFIG.C_SIZE {1} \
-] [get_bd_cells aux_reset_inv]
 
 create_bd_port -dir O -from 0 -to 0 -type rst qsfp_rst
 create_bd_port -dir I qsfp_mgt_refclk_p
@@ -46,13 +40,11 @@ ad_ip_parameter smartconnect_corundum CONFIG.NUM_SI 1
 # The Corundum Reset Generator (corundum_rstgen) is used to reset the other
 # Corundum IPs (smartconnect_corundum and corundum_hierarchy).
 
+ad_ip_parameter corundum_rstgen CONFIG.C_AUX_RESET_HIGH 0
+
 ad_connect corundum_rstgen/slowest_sync_clk sys_ps8/pl_clk1
 ad_connect corundum_rstgen/ext_reset_in sys_ps8/pl_resetn0
-
-# Invert the pl_resetn1 before connecting to the corundum_rstgen/aux_reset_in of
-# corundum_rstgen because it's driven HIGH.
-ad_connect sys_ps8/pl_resetn1 aux_reset_inv/Op1
-ad_connect aux_reset_inv/Res corundum_rstgen/aux_reset_in
+ad_connect corundum_rstgen/aux_reset_in sys_ps8/pl_resetn1
 
 ad_connect smartconnect_corundum/ARESETN corundum_rstgen/interconnect_aresetn
 ad_connect smartconnect_corundum/S00_ARESETN corundum_rstgen/interconnect_aresetn
