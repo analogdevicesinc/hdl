@@ -19,6 +19,7 @@ Contents
    Introduction <introduction>
    Git repository <git_repository>
    Releases <releases>
+   Release tables <release_tables/index>
    Build an HDL project <build_hdl>
    Build the BOOT.BIN <build_boot_bin>
    Build the Intel Boot Image <build_intel_boot_image>

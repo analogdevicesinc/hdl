@@ -90,73 +90,79 @@ Release branches
      - Quartus Pro 25.1.0
      - Vivado 2025.1
      - ---
-     - ---
+     - :ref:`downloads_insert_main`
      - `main <https://swdownloads.analog.com/cse/boot_partition_files/main/latest_boot.txt>`__
+   * - :git-hdl:`hdl_2026_r1 <hdl_2026_r1:>`
+     - Quartus Pro 25.1.0
+     - Vivado 2025.1
+     - `Release notes 2026_R1 <https://github.com/analogdevicesinc/hdl/releases/tag/2026_R1>`__
+     - :ref:`downloads_insert_hdl_2026_r1`
+     - `2026_R1 <https://swdownloads.analog.com/cse/boot_partition_files/2026_r1/latest_boot.txt>`__
    * - :git-hdl:`2023_R2 patch1 <2023_R2_p1:>`
      - Quartus Pro 23.2
      - Vivado 2023.2
      - `Release notes 2023_R2_p1 <https://github.com/analogdevicesinc/hdl/releases/tag/2023_R2_p1>`__
-     - `Wiki list for hdl_2023_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2023_r2>`__
+     - :ref:`downloads_insert_hdl_2023_r2`
      - `2023_R2 <https://swdownloads.analog.com/cse/boot_partition_files/2023_r2/latest_boot.txt>`__
    * - :git-hdl:`hdl_2023_r2 <hdl_2023_r2:>`
      - Quartus Pro 23.2
      - Vivado 2023.2
      - `Release notes 2023_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2023_R2>`__
-     - `Wiki list for hdl_2023_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2023_r2>`__
+     - :ref:`downloads_insert_hdl_2023_r2`
      - `2023_R2 <https://swdownloads.analog.com/cse/boot_partition_files/2023_r2/latest_boot.txt>`__
    * - :git-hdl:`hdl_2022_r2 patch1 <2022_r2_p1:>`
      - Quartus Pro 22.4
      - Vivado 2022.2
      - `Release notes 2022_R2_p1 <https://github.com/analogdevicesinc/hdl/releases/tag/2022_r2_p1>`__
-     - `Wiki list for hdl_2022_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2022_r2>`__
+     - :ref:`downloads_insert_hdl_2022_r2`
      - `2023_R2 <https://swdownloads.analog.com/cse/boot_partition_files/2022_r2/latest_boot.txt>`__
    * - :git-hdl:`hdl_2022_r2 <hdl_2022_r2:>`
      - Quartus Pro 22.4
      - Vivado 2022.2
      - `Release notes 2022_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2022_R2>`__
-     - `Wiki list for hdl_2022_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2022_r2>`__
+     - :ref:`downloads_insert_hdl_2022_r2`
      - `2022_R2 <https://swdownloads.analog.com/cse/boot_partition_files/2022_r2/latest_boot.txt>`__
    * - :git-hdl:`hdl_2021_r2 <hdl_2021_r2:>`
      - Quartus Pro 21.4
      - Vivado 2021.2
      - `Release notes 2021_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2021_R2>`__
-     - `Wiki list for hdl_2021_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2021_r2>`__
+     - :ref:`downloads_insert_hdl_2021_r2`
      - `2021_R2 <https://swdownloads.analog.com/cse/boot_partition_files/2021_r2/latest_boot.txt>`__
    * - :git-hdl:`hdl_2021_r1 <hdl_2021_r1:>`
      - Quartus Pro 21.2
      - Vivado 2021.1
      - `Release notes 2021_R1 <https://github.com/analogdevicesinc/hdl/releases/tag/2021_R1>`__
-     - `Wiki list for hdl_2021_r1 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2021_r1>`__
+     - :ref:`downloads_insert_hdl_2021_r1`
      - `2021_R1 <https://swdownloads.analog.com/cse/boot_partition_files/2021_r1/latest_boot.txt>`__
    * - :git-hdl:`hdl_2019_r2 <hdl_2019_r2:>`
      - Quartus Pro 19.3
      - Vivado 2019.1
      - `Release notes 2019_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2019_R2>`__
-     - `Wiki list for hdl_2019_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2019_r2>`__
+     - :ref:`downloads_insert_hdl_2019_r2`
      - `2019_R2 <https://swdownloads.analog.com/cse/boot_partition_files/2019_r2/latest_boot.txt>`__
    * - :git-hdl:`hdl_2019_r1 <hdl_2019_r1:>`
      - Quartus Pro 18.1
      - Vivado 2018.3
      - `Release notes 2019_R1 <https://github.com/analogdevicesinc/hdl/releases/tag/2019_R1>`__
-     - `Wiki list for hdl_2019_r1 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2019_r1>`__
+     - :ref:`downloads_insert_hdl_2019_r1`
      - `2019_R1 <https://swdownloads.analog.com/cse/boot_partition_files/2019_r1/latest_boot.txt>`__
    * - :git-hdl:`hdl_2018_r2 <hdl_2018_r2:>`
      - Quartus Pro 18.0
      - Vivado 2018.2
      - `Release notes 2018_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2018_R2>`__
-     - `Wiki list for hdl_2018_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2018_r2>`__
+     - :ref:`downloads_insert_hdl_2018_r2`
      - ---
    * - :git-hdl:`hdl_2018_r1 <hdl_2018_r1:>`
      - Quartus Pro 17.1.1
      - Vivado 2017.4.1
      - `Release notes 2018_R1 <https://github.com/analogdevicesinc/hdl/releases/tag/2018_R1>`__
-     - `Wiki list for hdl_2018_r1 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2018_r1>`__
+     - :ref:`downloads_insert_hdl_2018_r1`
      - ---
    * - :git-hdl:`hdl_2017_r1 <hdl_2017_r1:>`
      - Quartus Pro 16.1
      - Vivado 2016.4
      - `Release notes 2017_R1 <https://github.com/analogdevicesinc/hdl/releases/tag/2017_R1>`__
-     - `Wiki list for hdl_2017_r1 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2017_r1>`__
+     - :ref:`downloads_insert_hdl_2017_r1`
      - ---
    * - :git-hdl:`hdl_2016_r2 <hdl_2016_r2:>`
      - Quartus Pro 16.0
