@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023, 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2023, 2025-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -14,7 +14,6 @@ ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 set sys_cstring "TWOLANES=$ad_project_params(TWOLANES) \
-ADC_RES=$ad_project_params(ADC_RES) \
-USE_MMCM=$ad_project_params(USE_MMCM)"
+ADC_RES=$ad_project_params(ADC_RES)"
 
 sysid_gen_sys_init_file $sys_cstring
