@@ -566,7 +566,7 @@ proc create_versal_jesd_xcvr_subsystem {
     if {!$has_single_clock} {
       if {$external_link_clk} {
         set tx_phy_clk  ${ip_name}/bufg_gt_tx/usrclk
-        set rx_usrclk   ${ip_name}/tx_usrclk_in
+        set tx_usrclk   ${ip_name}/tx_usrclk_in
       } else {
         set tx_phy_clk  ${ip_name}/bufg_gt_tx/usrclk
         set tx_usrclk   ${ip_name}/tx_clkwiz/clk_out1
