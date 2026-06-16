@@ -56,7 +56,8 @@ module util_adxcvr_xcm #(
   parameter   [15:0]  QPLL_CFG4 = 16'b0000000000000011,
   parameter   [15:0]  QPLL_CP_G3 = 10'b0000011111,
   parameter   [15:0]  QPLL_LPF = 10'b0100110111,
-  parameter   [15:0]  QPLL_CP = 10'b0001111111
+  parameter   [15:0]  QPLL_CP = 10'b0001111111,
+  parameter           QPLLCLKOUT_RATE = "HALF"
 ) (
 
   // reset and clocks
@@ -384,7 +385,7 @@ module util_adxcvr_xcm #(
     .POR_CFG (POR_CFG),
     .PPF0_CFG (PPF0_CFG),
     .PPF1_CFG (PPF1_CFG),
-    .QPLL0CLKOUT_RATE ("HALF"),
+    .QPLL0CLKOUT_RATE (QPLLCLKOUT_RATE),
     .QPLL0_CFG0 (QPLL_CFG0),
     .QPLL0_CFG1 (QPLL_CFG1),
     .QPLL0_CFG1_G3 (QPLL_CFG1_G3),
@@ -408,7 +409,7 @@ module util_adxcvr_xcm #(
     .QPLL0_SDM_CFG0 (16'b0000000010000000),
     .QPLL0_SDM_CFG1 (16'b0000000000000000),
     .QPLL0_SDM_CFG2 (16'b0000000000000000),
-    .QPLL1CLKOUT_RATE ("HALF"),
+    .QPLL1CLKOUT_RATE (QPLLCLKOUT_RATE),
     .QPLL1_CFG0 (QPLL_CFG0),
     .QPLL1_CFG1 (QPLL_CFG1),
     .QPLL1_CFG1_G3 (QPLL_CFG1_G3),
@@ -559,7 +560,7 @@ module util_adxcvr_xcm #(
       .POR_CFG (16'b0000000000000000),
       .PPF0_CFG (PPF0_CFG),
       .PPF1_CFG (PPF1_CFG),
-      .QPLL0CLKOUT_RATE ("HALF"),
+      .QPLL0CLKOUT_RATE (QPLLCLKOUT_RATE),
       .QPLL0_CFG0 (QPLL_CFG0),
       .QPLL0_CFG1 (QPLL_CFG1),
       .QPLL0_CFG1_G3 (QPLL_CFG1_G3),
@@ -583,7 +584,7 @@ module util_adxcvr_xcm #(
       .QPLL0_SDM_CFG0 (16'b0000000010000000),
       .QPLL0_SDM_CFG1 (16'b0000000000000000),
       .QPLL0_SDM_CFG2 (16'b0000000000000000),
-      .QPLL1CLKOUT_RATE ("HALF"),
+      .QPLL1CLKOUT_RATE (QPLLCLKOUT_RATE),
       .QPLL1_CFG0 (QPLL_CFG0),
       .QPLL1_CFG1 (QPLL_CFG1),
       .QPLL1_CFG1_G3 (QPLL_CFG1_G3),
