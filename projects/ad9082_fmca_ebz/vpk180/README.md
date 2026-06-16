@@ -64,6 +64,7 @@ Corresponding device tree: [versal-vpk180-reva-ad9082.dts](https://github.com/an
 make JESD_MODE=64B66B \
 RX_LANE_RATE=11.88 \
 TX_LANE_RATE=11.88 \
+REF_CLK_RATE=180 \
 RX_JESD_M=1 \
 RX_JESD_L=8 \
 RX_JESD_S=4 \
