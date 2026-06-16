@@ -382,7 +382,7 @@ sub gen_drp_cmd {
     #print "$param_value\n";
     ## ignore all attributes which are related to unused features and
     ## double check attribute validity
-    if ($param_name =~ /^(?!ES_)(?!PCIE_)(?!TXPI_)(?!TX_PI_BIASSET)/) {
+    if ($param_name =~ /^(?!ES_)(?!PCIE_)/) {
       if (exists $$xcvr_params_ref{$param_name}) {
         my $param_value_hex = $param_value;
         $param_value_hex =~ s/^.*'b//;
