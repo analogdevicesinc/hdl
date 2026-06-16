@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -68,6 +68,7 @@ module util_adxcvr #(
   parameter   [15:0]  QPLL_CP_G3 = 10'b0000011111,
   parameter   [15:0]  QPLL_LPF = 10'b0100110111,
   parameter   [15:0]  QPLL_CP = 10'b0001111111,
+  parameter           QPLLCLKOUT_RATE = "HALF",
 
   // cpll-configuration
 
@@ -2711,7 +2712,8 @@ module util_adxcvr #(
     .QPLL_CP_G3 (QPLL_CP_G3),
     .QPLL_LPF (QPLL_LPF),
     .QPLL_CP (QPLL_CP),
-    .QPLL_CFG4 (QPLL_CFG4)
+    .QPLL_CFG4 (QPLL_CFG4),
+    .QPLLCLKOUT_RATE (QPLLCLKOUT_RATE)
   ) i_xcm_0 (
     .qpll_ref_clk (qpll_ref_clk_0),
     .qpll_sel (qpll_sel_0),
@@ -3366,7 +3368,8 @@ module util_adxcvr #(
     .QPLL_CP_G3 (QPLL_CP_G3),
     .QPLL_LPF (QPLL_LPF),
     .QPLL_CP (QPLL_CP),
-    .QPLL_CFG4 (QPLL_CFG4)
+    .QPLL_CFG4 (QPLL_CFG4),
+    .QPLLCLKOUT_RATE (QPLLCLKOUT_RATE)
   ) i_xcm_4 (
     .qpll_ref_clk (qpll_ref_clk_4),
     .qpll_sel (qpll_sel_4),
@@ -4021,7 +4024,8 @@ module util_adxcvr #(
     .QPLL_CP_G3 (QPLL_CP_G3),
     .QPLL_LPF (QPLL_LPF),
     .QPLL_CP (QPLL_CP),
-    .QPLL_CFG4 (QPLL_CFG4)
+    .QPLL_CFG4 (QPLL_CFG4),
+    .QPLLCLKOUT_RATE (QPLLCLKOUT_RATE)
   ) i_xcm_8 (
     .qpll_ref_clk (qpll_ref_clk_8),
     .qpll_sel (qpll_sel_8),
@@ -4676,7 +4680,8 @@ module util_adxcvr #(
     .QPLL_CP_G3 (QPLL_CP_G3),
     .QPLL_LPF (QPLL_LPF),
     .QPLL_CP (QPLL_CP),
-    .QPLL_CFG4 (QPLL_CFG4)
+    .QPLL_CFG4 (QPLL_CFG4),
+    .QPLLCLKOUT_RATE (QPLLCLKOUT_RATE)
   ) i_xcm_12 (
     .qpll_ref_clk (qpll_ref_clk_12),
     .qpll_sel (qpll_sel_12),
@@ -5331,7 +5336,8 @@ module util_adxcvr #(
     .QPLL_CP_G3 (QPLL_CP_G3),
     .QPLL_LPF (QPLL_LPF),
     .QPLL_CP (QPLL_CP),
-    .QPLL_CFG4 (QPLL_CFG4)
+    .QPLL_CFG4 (QPLL_CFG4),
+    .QPLLCLKOUT_RATE (QPLLCLKOUT_RATE)
   ) i_xcm_16 (
     .qpll_ref_clk (qpll_ref_clk_16),
     .qpll_sel (qpll_sel_16),
@@ -5986,7 +5992,8 @@ module util_adxcvr #(
     .QPLL_CP_G3 (QPLL_CP_G3),
     .QPLL_LPF (QPLL_LPF),
     .QPLL_CP (QPLL_CP),
-    .QPLL_CFG4 (QPLL_CFG4)
+    .QPLL_CFG4 (QPLL_CFG4),
+    .QPLLCLKOUT_RATE (QPLLCLKOUT_RATE)
   ) i_xcm_20 (
     .qpll_ref_clk (qpll_ref_clk_20),
     .qpll_sel (qpll_sel_20),
@@ -6641,7 +6648,8 @@ module util_adxcvr #(
     .QPLL_CP_G3 (QPLL_CP_G3),
     .QPLL_LPF (QPLL_LPF),
     .QPLL_CP (QPLL_CP),
-    .QPLL_CFG4 (QPLL_CFG4)
+    .QPLL_CFG4 (QPLL_CFG4),
+    .QPLLCLKOUT_RATE (QPLLCLKOUT_RATE)
   ) i_xcm_24 (
     .qpll_ref_clk (qpll_ref_clk_24),
     .qpll_sel (qpll_sel_24),
@@ -7296,7 +7304,8 @@ module util_adxcvr #(
     .QPLL_CP_G3 (QPLL_CP_G3),
     .QPLL_LPF (QPLL_LPF),
     .QPLL_CP (QPLL_CP),
-    .QPLL_CFG4 (QPLL_CFG4)
+    .QPLL_CFG4 (QPLL_CFG4),
+    .QPLLCLKOUT_RATE (QPLLCLKOUT_RATE)
   ) i_xcm_28 (
     .qpll_ref_clk (qpll_ref_clk_28),
     .qpll_sel (qpll_sel_28),
