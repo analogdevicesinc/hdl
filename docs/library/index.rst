@@ -74,6 +74,7 @@ Utilities
 .. toctree::
    :maxdepth: 1
 
+   ad7134_clkin_aligner/index
    axi_adc_decimate/index
    axi_adc_trigger/index
    axi_adxcvr/index
