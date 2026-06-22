@@ -6,8 +6,8 @@
 set_property CFGBVS GND [current_design]
 set_property CONFIG_VOLTAGE 1.8 [current_design]
 
-set_property -dict {PACKAGE_PIN Y18  IOSTANDARD DIFF_SSTL18_I} [get_ports clk_156_p]
-set_property -dict {PACKAGE_PIN Y19  IOSTANDARD DIFF_SSTL18_I} [get_ports clk_156_n]
+set_property -dict {PACKAGE_PIN Y18  IOSTANDARD DIFF_SSTL18_I} [get_ports clk_122_p]
+set_property -dict {PACKAGE_PIN Y19  IOSTANDARD DIFF_SSTL18_I} [get_ports clk_122_n]
 
 # Aurora
 
@@ -193,7 +193,7 @@ set_property -dict {PACKAGE_PIN K6   IOSTANDARD LVCMOS18} [get_ports DELSTR]
 set_property -dict {PACKAGE_PIN J6   IOSTANDARD LVCMOS18} [get_ports DELADJ]
 set_property -dict {PACKAGE_PIN L5   IOSTANDARD LVCMOS18} [get_ports MUXOUT]
 
-create_clock -period 6.400 -name aurora_refclk [get_ports aurora_refclk_p]
+create_clock -period 8.138 -name aurora_refclk [get_ports aurora_refclk_p]
 
 create_generated_clock -name sys_clk [get_pins i_system_wrapper/system_i/clk_wizard/inst/mmcm_adv_inst/CLKOUT0]
 create_generated_clock -name spi_clk [get_pins i_system_wrapper/system_i/clk_wizard/inst/mmcm_adv_inst/CLKOUT1]
