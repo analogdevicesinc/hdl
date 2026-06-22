@@ -61,7 +61,7 @@ set_property -dict {PACKAGE_PIN P1} [get_ports aurora_rxn[1]]; # MGTHRXN1_228
 # set_property -dict {PACKAGE_PIN K33} [get_ports aurora_rxp[1]]; # MGTHRXP1_129
 # set_property -dict {PACKAGE_PIN K34} [get_ports aurora_rxn[1]]; # MGTHRXN1_129
 
-create_clock -period 6.400 -name aurora_refclk [get_ports aurora_refclk_p]
+create_clock -period 8.138 -name aurora_refclk [get_ports aurora_refclk_p]
 
 # set false path to output ports which connect to devices without any clocks
 set_false_path -to   [get_ports FPGA_TRIG]
