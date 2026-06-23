@@ -16,6 +16,8 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   RX-OS disabled: make
 #   RX-OS Non-LinkSharing:
 #    - JESD204B: make ORX_ENABLE=1 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=2 RX_TPL_WIDTH=8
+#        - NP12: make ORX_ENABLE=1 RX_LANE_RATE=14.7456  TX_LANE_RATE=14.7456 \
+                 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=12 RX_JESD_L=2 RX_JESD_NP=12 TX_JESD_NP=12
 #    - JESD204C: make JESD_MODE=64B66B ORX_ENABLE=1 TX_LANE_RATE=16.22 RX_LANE_RATE=16.22 \
 #                RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=2
 
@@ -62,6 +64,7 @@ adi_project adrv9026_zcu102 0 [list \
 adi_project_files adrv9026_zcu102 [list \
   "system_top.v" \
   "system_constr.xdc"\
+  "timing_constr.xdc"\
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 

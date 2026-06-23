@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -54,6 +54,14 @@ set TX_SAMPLE_WIDTH $TX_JESD_NP                            ; # N/NP
 set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_NUM_OF_LANES $TX_NUM_OF_CONVERTERS $TX_SAMPLES_PER_FRAME $TX_SAMPLE_WIDTH $TX_TPL_WIDTH]
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8 * $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
+set TX_DMA_SAMPLE_WIDTH $TX_JESD_NP
+if {$TX_DMA_SAMPLE_WIDTH == 12} {
+  set TX_DMA_SAMPLE_WIDTH 16
+}
+
+set dac_offload_name adrv9026_dac_data_offload
+set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
+
 # RX parameters
 set RX_NUM_OF_LANES [expr $RX_JESD_L * $RX_NUM_LINKS]      ; # L
 set RX_NUM_OF_CONVERTERS [expr $RX_JESD_M * $RX_NUM_LINKS] ; # M
@@ -63,7 +71,13 @@ set RX_SAMPLE_WIDTH $RX_JESD_NP                            ; # N/NP
 set RX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_NUM_OF_LANES $RX_NUM_OF_CONVERTERS $RX_SAMPLES_PER_FRAME $RX_SAMPLE_WIDTH $RX_TPL_WIDTH]
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8 * $RX_DATAPATH_WIDTH / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ;
 
-set adc_dma_data_width [expr $RX_NUM_OF_LANES * 8 * $RX_DATAPATH_WIDTH]
+set RX_DMA_SAMPLE_WIDTH $RX_JESD_NP
+if {$RX_DMA_SAMPLE_WIDTH == 12} {
+  set RX_DMA_SAMPLE_WIDTH 16
+}
+
+# set adc_offload_name adrv9026_adc_data_offload
+set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_CHANNEL]
 
 # RX-OBS parameters
 set RX_OS_NUM_OF_LANES [expr $RX_OS_JESD_L * $RX_OS_NUM_LINKS]      ; # L
@@ -74,17 +88,17 @@ set RX_OS_SAMPLE_WIDTH $RX_OS_JESD_NP                               ; # N/NP
 if {$ORX_ENABLE} {
   set RX_OS_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_OS_NUM_OF_LANES $RX_OS_NUM_OF_CONVERTERS $RX_OS_SAMPLES_PER_FRAME $RX_OS_SAMPLE_WIDTH $RX_OS_TPL_WIDTH]
   set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8 * $RX_OS_DATAPATH_WIDTH / ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)]
-}
 
-set dac_offload_name adrv9026_data_offload
-set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
+  set RX_OS_DMA_SAMPLE_WIDTH $RX_OS_JESD_NP
+  if {$RX_OS_DMA_SAMPLE_WIDTH == 12} {
+    set RX_OS_DMA_SAMPLE_WIDTH 16
+  }
+  set adc_os_data_width [expr $RX_OS_DMA_SAMPLE_WIDTH * $RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLES_PER_CHANNEL]
+}
 
 set MAX_RX_NUM_OF_LANES [expr $ORX_ENABLE ? 2 : 4]
 set MAX_TX_NUM_OF_LANES 4
 set MAX_RX_OS_NUM_OF_LANES [expr $ORX_ENABLE ? 2 : 0]
-
-source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
-source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 
 # adrv9026
 
@@ -114,7 +128,7 @@ ad_ip_parameter axi_adrv9026_tx_jesd/tx CONFIG.TPL_DATA_PATH_WIDTH $TX_DATAPATH_
 ad_ip_instance util_upack2 util_adrv9026_tx_upack [list \
   NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
-  SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
+  SAMPLE_DATA_WIDTH $TX_DMA_SAMPLE_WIDTH \
 ]
 
 adi_tpl_jesd204_tx_create tx_adrv9026_tpl_core $TX_NUM_OF_LANES \
@@ -122,7 +136,7 @@ adi_tpl_jesd204_tx_create tx_adrv9026_tpl_core $TX_NUM_OF_LANES \
                                                $TX_SAMPLES_PER_FRAME \
                                                $TX_SAMPLE_WIDTH \
                                                $TX_DATAPATH_WIDTH \
-                                               $TX_SAMPLE_WIDTH
+                                               $TX_DMA_SAMPLE_WIDTH
 
 ad_ip_instance axi_dmac axi_adrv9026_tx_dma
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_TYPE_SRC 0
@@ -130,9 +144,11 @@ ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_TYPE_DEST 1
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.AXI_SLICE_DEST {true}
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.AXI_SLICE_SRC {true}
+# ad_ip_parameter axi_adrv9026_tx_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_data_width
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
-ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
+ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_data_width
+# ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_LENGTH_WIDTH 32
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
@@ -168,7 +184,7 @@ ad_ip_parameter axi_adrv9026_rx_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH $RX_DATAPATH_
 ad_ip_instance util_cpack2 util_adrv9026_rx_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL \
-  SAMPLE_DATA_WIDTH $RX_SAMPLE_WIDTH \
+  SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
   ]
 
 adi_tpl_jesd204_rx_create rx_adrv9026_tpl_core $RX_NUM_OF_LANES \
@@ -176,7 +192,7 @@ adi_tpl_jesd204_rx_create rx_adrv9026_tpl_core $RX_NUM_OF_LANES \
                                                $RX_SAMPLES_PER_FRAME \
                                                $RX_SAMPLE_WIDTH \
                                                $RX_DATAPATH_WIDTH \
-                                               $RX_SAMPLE_WIDTH
+                                               $RX_DMA_SAMPLE_WIDTH
 
 ad_ip_instance axi_dmac axi_adrv9026_rx_dma
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_TYPE_SRC 2
@@ -184,12 +200,33 @@ ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.AXI_SLICE_DEST {true}
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.AXI_SLICE_SRC {true}
-ad_ip_parameter axi_adrv9026_rx_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
+# ad_ip_parameter axi_adrv9026_rx_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_data_width
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
-ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_data_width
+# ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_LENGTH_WIDTH 32
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
+
+# ad_data_offload_create $adc_offload_name \
+#                        0 \
+#                        0 \
+#                        $adc_offload_size \
+#                        $adc_data_width \
+#                        $adc_data_width \
+#                        {} \
+#                        {} \
+#                        1
+
+# ad_data_offload_create $adc_offload_name \
+#                        0 \
+#                        $adc_offload_type \
+#                        $adc_offload_size \
+#                        $adc_data_width \
+#                        $adc_data_width
+
+# ad_ip_parameter $adc_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+# ad_connect $adc_offload_name/sync_ext GND
 
 if {$ORX_ENABLE} {
   # adc-obs peripherals
@@ -214,7 +251,7 @@ if {$ORX_ENABLE} {
   ad_ip_instance util_cpack2 util_adrv9026_rx_os_cpack [list \
     NUM_OF_CHANNELS $RX_OS_NUM_OF_CONVERTERS \
     SAMPLES_PER_CHANNEL $RX_OS_SAMPLES_PER_CHANNEL \
-    SAMPLE_DATA_WIDTH $RX_OS_SAMPLE_WIDTH \
+    SAMPLE_DATA_WIDTH $RX_OS_DMA_SAMPLE_WIDTH \
     ]
 
   adi_tpl_jesd204_rx_create rx_os_adrv9026_tpl_core $RX_OS_NUM_OF_LANES \
@@ -222,7 +259,7 @@ if {$ORX_ENABLE} {
                                                  $RX_OS_SAMPLES_PER_FRAME \
                                                  $RX_OS_SAMPLE_WIDTH \
                                                  $RX_OS_DATAPATH_WIDTH \
-                                                 $RX_OS_SAMPLE_WIDTH
+                                                 $RX_OS_DMA_SAMPLE_WIDTH
 
   ad_ip_instance axi_dmac axi_adrv9026_rx_os_dma
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_TYPE_SRC 2
@@ -231,10 +268,11 @@ if {$ORX_ENABLE} {
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.AXI_SLICE_DEST {true}
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.AXI_SLICE_SRC {true}
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.SYNC_TRANSFER_START 1
-  ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $RX_OS_SAMPLE_WIDTH * $RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLES_PER_CHANNEL];
+  ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_os_data_width
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.MAX_BYTES_PER_BURST 4096
-  ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+  ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_os_data_width
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.FIFO_SIZE 32
+  # ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_LENGTH_WIDTH 32
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 }
 
@@ -253,11 +291,32 @@ ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_LANE_INVERT 5
 ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_LANE_INVERT 15
 
 if {$JESD_MODE == "8B10B"} {
-  ad_ip_parameter util_adrv9026_xcvr CONFIG.CPLL_FBDIV 4
-  ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_CLK25_DIV 10
-  ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_CLK25_DIV 10
-  ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_PMA_CFG 0x001E7080
   ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_FBDIV 40
+  ad_ip_parameter util_adrv9026_xcvr CONFIG.CPLL_FBDIV 4
+  if {$TX_LANE_RATE > 10} {
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.A_TXDIFFCTRL {0xC}
+  #   ad_ip_parameter util_adrv9026_xcvr CONFIG.DATA_PATH_WIDTH {6}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.PREIQ_FREQ_BST {1}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.POR_CFG {0x0000}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.PPF0_CFG {0x0900}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_CFG0 {0x333C}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_CFG4 {0x0004}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_CP {"0011111111"}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_CP_G3 {"0000111111"}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.RXCDR_CFG0 {0x0003}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.RXCDR_CFG2_GEN4 {0x00164}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.RXCDR_CFG3 {0x001A}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.RXCDR_CFG3_GEN3 {0x001A}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.RXCDR_CFG3_GEN4 {0x0012}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.RXPI_CFG0 {0x0004}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.RXPI_CFG1 {0x000}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_CLK25_DIV {15}
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_CLK25_DIV {15}
+  } else {
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_CLK25_DIV 10
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_CLK25_DIV 10
+    ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_PMA_CFG 0x001E7080
+  }
 } else {
   ad_ip_parameter util_adrv9026_xcvr CONFIG.CPLL_FBDIV 2
   ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_CLK25_DIV 20
@@ -362,14 +421,14 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  util_adrv9026_tx_upack/fifo_rd_data_$i tx_adrv9026_tpl_core/dac_data_$i
 }
 
-ad_connect  tx_adrv9026_tpl_core/dac_valid_0  util_adrv9026_tx_upack/fifo_rd_en
+ad_connect  tx_adrv9026_tpl_core/dac_valid_0 util_adrv9026_tx_upack/fifo_rd_en
 ad_connect  adrv9026_tx_device_clk $dac_offload_name/m_axis_aclk
 ad_connect  adrv9026_tx_device_clk_rstgen/peripheral_aresetn $dac_offload_name/m_axis_aresetn
 ad_connect  util_adrv9026_tx_upack/s_axis $dac_offload_name/m_axis
 
-ad_connect  $sys_dma_clk $dac_offload_name/s_axis_aclk
-ad_connect  $sys_dma_resetn $dac_offload_name/s_axis_aresetn
-ad_connect  $sys_dma_clk axi_adrv9026_tx_dma/m_axis_aclk
+ad_connect  adrv9026_tx_device_clk $dac_offload_name/s_axis_aclk
+ad_connect  adrv9026_tx_device_clk_rstgen/peripheral_aresetn $dac_offload_name/s_axis_aresetn
+ad_connect  adrv9026_tx_device_clk axi_adrv9026_tx_dma/m_axis_aclk
 ad_connect  $sys_dma_resetn axi_adrv9026_tx_dma/m_src_axi_aresetn
 ad_connect  $dac_offload_name/s_axis axi_adrv9026_tx_dma/m_axis
 ad_connect  $dac_offload_name/init_req axi_adrv9026_tx_dma/m_axis_xfer_req
@@ -388,6 +447,37 @@ for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  rx_adrv9026_tpl_core/adc_enable_$i util_adrv9026_rx_cpack/enable_$i
   ad_connect  rx_adrv9026_tpl_core/adc_data_$i util_adrv9026_rx_cpack/fifo_wr_data_$i
 }
+
+# ad_connect  adrv9026_rx_device_clk $adc_offload_name/s_axis_aclk
+# ad_connect  adrv9026_rx_device_clk_rstgen/peripheral_aresetn $adc_offload_name/s_axis_aresetn
+# ad_connect  adrv9026_rx_device_clk_rstgen/peripheral_aresetn $adc_offload_name/m_axis_aresetn
+# ad_connect  util_adrv9026_rx_cpack/packed_fifo_wr_data $adc_offload_name/s_axis_tdata
+# ad_connect  util_adrv9026_rx_cpack/packed_fifo_wr_en $adc_offload_name/s_axis_tvalid
+
+# ad_connect  adrv9026_rx_device_clk axi_adrv9026_rx_dma/s_axis_aclk
+# ad_connect  adrv9026_rx_device_clk $adc_offload_name/m_axis_aclk
+# ad_connect  $sys_dma_resetn axi_adrv9026_rx_dma/m_dest_axi_aresetn
+# ad_connect  $adc_offload_name/m_axis axi_adrv9026_rx_dma/s_axis
+# ad_connect  $adc_offload_name/init_req axi_adrv9026_rx_dma/s_axis_xfer_req
+
+# ad_connect  $sys_dma_resetn axi_adrv9026_rx_dma/m_dest_axi_aresetn
+# ad_connect  $sys_dma_clk axi_adrv9026_rx_dma/s_axis_aclk
+
+# ad_connect  rx_adrv9026_tpl_core/adc_valid_0 util_adrv9026_rx_cpack/fifo_wr_en
+# ad_connect  rx_adrv9026_tpl_core/adc_dovf util_adrv9026_rx_cpack/fifo_wr_overflow
+
+# ad_connect  adrv9026_rx_device_clk $adc_offload_name/s_axis_aclk
+# ad_connect  $sys_dma_clk $adc_offload_name/m_axis_aclk
+# ad_connect  adrv9026_rx_device_clk_rstgen/peripheral_aresetn $adc_offload_name/s_axis_aresetn
+# ad_connect  $sys_dma_resetn $adc_offload_name/m_axis_aresetn
+# ad_connect  $sys_cpu_resetn $adc_offload_name/s_axi_aresetn
+# ad_connect  util_adrv9026_rx_cpack/packed_fifo_wr_data $adc_offload_name/s_axis_tdata
+# ad_connect  util_adrv9026_rx_cpack/packed_fifo_wr_en $adc_offload_name/s_axis_tvalid
+# ad_connect  $adc_offload_name/s_axis_tlast GND
+# ad_connect  $adc_offload_name/s_axis_tkeep VCC
+# ad_connect  $adc_offload_name/m_axis axi_adrv9026_rx_dma/s_axis
+# ad_connect  $adc_offload_name/init_req axi_adrv9026_rx_dma/s_axis_xfer_req
+# ad_connect  $adc_offload_name/sync_ext GND
 ad_connect  $sys_dma_resetn axi_adrv9026_rx_dma/m_dest_axi_aresetn
 
 ad_connect  rx_adrv9026_tpl_core/adc_valid_0 util_adrv9026_rx_cpack/fifo_wr_en
@@ -395,7 +485,7 @@ ad_connect  rx_adrv9026_tpl_core/adc_dovf util_adrv9026_rx_cpack/fifo_wr_overflo
 
 ad_connect  adrv9026_rx_device_clk axi_adrv9026_rx_dma/fifo_wr_clk
 ad_connect  util_adrv9026_rx_cpack/packed_fifo_wr axi_adrv9026_rx_dma/fifo_wr
-ad_connect  util_adrv9026_rx_cpack/packed_sync axi_adrv9026_rx_dma/sync
+# ad_connect  util_adrv9026_rx_cpack/packed_sync axi_adrv9026_rx_dma/sync
 
 if {$ORX_ENABLE} {
 
@@ -422,6 +512,83 @@ if {$ORX_ENABLE} {
   ad_connect  util_adrv9026_rx_os_cpack/packed_sync axi_adrv9026_rx_os_dma/sync
 }
 
+# # Sync at TPL level
+# create_bd_port -dir I ext_sync_in
+# ad_ip_parameter rx_adrv9026_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
+# ad_connect ext_sync_in rx_adrv9026_tpl_core/adc_tpl_core/adc_sync_in
+
+# ad_ip_instance ilvector_logic manual_sync_or [list \
+#   C_SIZE 1 \
+#   C_OPERATION {or} \
+# ]
+
+# ad_connect rx_adrv9026_tpl_core/adc_tpl_core/adc_sync_manual_req_out manual_sync_or/Op1
+
+# ad_ip_parameter tx_adrv9026_tpl_core/dac_tpl_core CONFIG.EXT_SYNC 1
+# ad_connect ext_sync_in tx_adrv9026_tpl_core/dac_tpl_core/dac_sync_in
+
+# ad_connect tx_adrv9026_tpl_core/dac_tpl_core/dac_sync_manual_req_out manual_sync_or/Op2
+# # ad_connect tx_adrv9026_tpl_core/dac_tpl_core/dac_sync_manual_req_out axi_adrv9026_tx_dma/sync
+
+# if {$ORX_ENABLE} {
+#   ad_ip_instance util_vector_logic manual_orx_sync_or [list \
+#     C_SIZE 1 \
+#     C_OPERATION {or} \
+#   ]
+#   ad_ip_parameter rx_os_adrv9026_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
+#   ad_connect ext_sync_in rx_os_adrv9026_tpl_core/adc_tpl_core/adc_sync_in
+
+#   ad_connect rx_os_adrv9026_tpl_core/adc_tpl_core/adc_sync_manual_req_out manual_orx_sync_or/Op1
+
+#   ad_connect manual_sync_or/Res manual_orx_sync_or/Op2
+#   ad_connect manual_orx_sync_or/Res rx_adrv9026_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+#   ad_connect manual_orx_sync_or/Res tx_adrv9026_tpl_core/dac_tpl_core/dac_sync_manual_req_in
+#   ad_connect manual_orx_sync_or/Res rx_os_adrv9026_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+# } else {
+#   ad_connect manual_sync_or/Res rx_adrv9026_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+#   ad_connect manual_sync_or/Res tx_adrv9026_tpl_core/dac_tpl_core/dac_sync_manual_req_in
+# }
+
+# # Reset cpack cores
+# ad_ip_instance ilreduced_logic cpack_rst_logic
+# ad_ip_parameter cpack_rst_logic config.c_operation {or}
+# ad_ip_parameter cpack_rst_logic config.c_size {2}
+
+# ad_ip_instance ilconcat cpack_reset_sources
+# ad_ip_parameter cpack_reset_sources config.num_ports {2}
+# ad_connect adrv9026_rx_device_clk_rstgen/peripheral_reset cpack_reset_sources/in0
+# ad_connect rx_adrv9026_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources/in1
+
+# ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
+# ad_connect cpack_rst_logic/res util_adrv9026_rx_cpack/reset
+
+# if {$ORX_ENABLE} {
+#   ad_ip_instance ilreduced_logic cpack_os_rst_logic
+#   ad_ip_parameter cpack_os_rst_logic config.c_operation {or}
+#   ad_ip_parameter cpack_os_rst_logic config.c_size {2}
+
+#   ad_ip_instance ilconcat cpack_os_reset_sources
+#   ad_ip_parameter cpack_os_reset_sources config.num_ports {2}
+#   ad_connect adrv9026_rx_os_device_clk_rstgen/peripheral_reset cpack_os_reset_sources/in0
+#   ad_connect rx_os_adrv9026_tpl_core/adc_tpl_core/adc_rst cpack_os_reset_sources/in1
+
+#   ad_connect cpack_os_reset_sources/dout cpack_os_rst_logic/op1
+#   ad_connect cpack_os_rst_logic/res util_adrv9026_rx_os_cpack/reset
+# }
+
+# # Reset upack cores
+# ad_ip_instance ilreduced_logic upack_rst_logic
+# ad_ip_parameter upack_rst_logic config.c_operation {or}
+# ad_ip_parameter upack_rst_logic config.c_size {2}
+
+# ad_ip_instance ilconcat upack_reset_sources
+# ad_ip_parameter upack_reset_sources config.num_ports {2}
+# ad_connect adrv9026_tx_device_clk_rstgen/peripheral_reset upack_reset_sources/in0
+# ad_connect tx_adrv9026_tpl_core/dac_tpl_core/dac_rst upack_reset_sources/in1
+
+# ad_connect upack_reset_sources/dout upack_rst_logic/op1
+# ad_connect upack_rst_logic/res util_adrv9026_tx_upack/reset
+
 # interconnect (cpu)
 
 ad_cpu_interconnect 0x44A00000 rx_adrv9026_tpl_core
@@ -435,6 +602,7 @@ ad_cpu_interconnect 0x7C400000 axi_adrv9026_rx_dma
 ad_cpu_interconnect 0x43C10000 axi_adrv9026_rx_clkgen
 ad_cpu_interconnect 0x43C00000 axi_adrv9026_tx_clkgen
 ad_cpu_interconnect 0x7C430000 $dac_offload_name
+# ad_cpu_interconnect 0x7C440000 $adc_offload_name
 if {$ORX_ENABLE} {
   ad_cpu_interconnect 0x44A08000 rx_os_adrv9026_tpl_core
   ad_cpu_interconnect 0x7C800000 axi_adrv9026_rx_os_dma

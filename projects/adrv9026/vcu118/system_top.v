@@ -332,6 +332,7 @@ module system_top (
     .tx_data_3_p (tx_data_p[0]),
     .tx_ref_clk_0 (ref_clk),
     .tx_sync_0 (tx_sync),
-    .tx_sysref_0 (sysref));
+    .tx_sysref_0 (sysref),
+    .ext_sync_in (sysref));
 
 endmodule

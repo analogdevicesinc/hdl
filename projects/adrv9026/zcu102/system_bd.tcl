@@ -7,6 +7,9 @@
 set dac_offload_type 0                   ; ## BRAM
 set dac_offload_size [expr 2*1024*1024]  ; ## 2 MB
 
+# set adc_offload_type 0                     ; ## BRAM
+# set adc_offload_size [expr 1024*1024] ; ## 2 MB
+
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
@@ -39,10 +42,10 @@ LINKS=$ad_project_params(RX_OS_NUM_LINKS)"
 sysid_gen_sys_init_file $sys_cstring;
 
 ad_ip_instance clk_wiz dma_clk_wiz
-ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
+ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE PLL
 ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
 ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
-ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 333
+ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 300
 ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
 
 ad_ip_instance proc_sys_reset sys_dma_rstgen
@@ -63,8 +66,16 @@ ad_connect $sys_dma_clk sys_dma_rstgen/slowest_sync_clk
 
 source ../common/adrv9026_bd.tcl
 
-ad_ip_parameter axi_adrv9026_tx_dma    CONFIG.FIFO_SIZE 16
-ad_ip_parameter axi_adrv9026_rx_dma    CONFIG.FIFO_SIZE 16
+ad_ip_parameter axi_adrv9026_tx_dma CONFIG.FIFO_SIZE 8
+ad_ip_parameter axi_adrv9026_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
+# ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_LENGTH_WIDTH 32
+
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.FIFO_SIZE 16
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
+# ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_LENGTH_WIDTH 32
+
 if {$ORX_ENABLE} {
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.FIFO_SIZE 16
+  ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.MAX_BYTES_PER_BURST 4096
+  # ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_LENGTH_WIDTH 32
 }
