@@ -580,113 +580,119 @@ On-Chip Memory
 AMD platforms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. list-table::
-   :header-rows: 1
-   :widths: 17 18 28 22 15
+.. collapsible:: AMD platforms on-chip memory
 
-   * - Board
-     - Family
-     - BRAM (PL)
-     - UltraRAM (PL)
-     - PS OCM SRAM
-   * - :xilinx:`ZCU102`
-     - Zynq UltraScale+ MPSoC
-     - 912 x 36 Kb (~32 Mb)
-     - ---
-     - 256 KB
-   * - :xilinx:`VCK190`
-     - Versal AI Core
-     - 967 x 36 Kb (~34 Mb)
-     - 463 x 288 Kb (~130 Mb)
-     - 256 KB
-   * - :xilinx:`VMK180`
-     - Versal Prime
-     - 967 x 36 Kb (~34 Mb)
-     - 463 x 288 Kb (~130 Mb)
-     - 256 KB
-   * - :xilinx:`VPK180`
-     - Versal Premium
-     - 4,941 x 36 Kb (~174 Mb)
-     - 2,549 x 288 Kb (~717 Mb)
-     - 256 KB
-   * - :xilinx:`VCU118`
-     - Virtex UltraScale+
-     - 2,160 x 36 Kb (~76 Mb)
-     - 960 x 288 Kb (~270 Mb)
-     - ---
-   * - :xilinx:`KCU105`
-     - Kintex UltraScale
-     - 600 x 36 Kb (~21 Mb)
-     - ---
-     - ---
-   * - :xilinx:`ZC702`
-     - Zynq-7000
-     - 140 x 36 Kb (~5 Mb)
-     - ---
-     - 256 KB
-   * - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
-     - Zynq-7000
-     - 140 x 36 Kb (~5 Mb)
-     - ---
-     - 256 KB
-   * - :xilinx:`AC701` **
-     - Artix-7
-     - 365 x 36 Kb (~13 Mb)
-     - ---
-     - ---
-   * - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
-     - Zynq-7000
-     - 60 x 36 Kb (Z7-10) / 50 x 36 Kb (Z7-07S)
-     - ---
-     - 256 KB
-   * - `Microzed <https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed>`__ **
-     - Zynq-7000
-     - 140 x 36 Kb (7Z020) / 60 x 36 Kb (7Z010)
-     - ---
-     - 256 KB
-   * - :xilinx:`VC709` **
-     - Virtex-7
-     - 1,470 x 36 Kb (~52 Mb)
-     - ---
-     - ---
-   * - `LFCPNX-EVN <https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard>`__
-     - CertusPro-NX (Lattice)
-     - 208 x 18 Kb EBR (~3.7 Mb) + 7 x 512 Kb LRAM (~3.5 Mb)
-     - ---
-     - ---
+   .. list-table::
+      :header-rows: 1
+      :widths: 17 18 28 22 15
+
+      * - Board
+        - Family
+        - BRAM (PL)
+        - UltraRAM (PL)
+        - PS OCM SRAM
+      * - :xilinx:`ZCU102`
+        - Zynq UltraScale+ MPSoC
+        - 912 x 36 Kb (~32 Mb)
+        - ---
+        - 256 KB
+      * - :xilinx:`VCK190`
+        - Versal AI Core
+        - 967 x 36 Kb (~34 Mb)
+        - 463 x 288 Kb (~130 Mb)
+        - 256 KB
+      * - :xilinx:`VMK180`
+        - Versal Prime
+        - 967 x 36 Kb (~34 Mb)
+        - 463 x 288 Kb (~130 Mb)
+        - 256 KB
+      * - :xilinx:`VPK180`
+        - Versal Premium
+        - 4,941 x 36 Kb (~174 Mb)
+        - 2,549 x 288 Kb (~717 Mb)
+        - 256 KB
+      * - :xilinx:`VCU118`
+        - Virtex UltraScale+
+        - 2,160 x 36 Kb (~76 Mb)
+        - 960 x 288 Kb (~270 Mb)
+        - ---
+      * - :xilinx:`KCU105`
+        - Kintex UltraScale
+        - 600 x 36 Kb (~21 Mb)
+        - ---
+        - ---
+      * - :xilinx:`ZC702`
+        - Zynq-7000
+        - 140 x 36 Kb (~5 Mb)
+        - ---
+        - 256 KB
+      * - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
+        - Zynq-7000
+        - 140 x 36 Kb (~5 Mb)
+        - ---
+        - 256 KB
+      * - :xilinx:`AC701` **
+        - Artix-7
+        - 365 x 36 Kb (~13 Mb)
+        - ---
+        - ---
+      * - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
+        - Zynq-7000
+        - 60 x 36 Kb (Z7-10) / 50 x 36 Kb (Z7-07S)
+        - ---
+        - 256 KB
+      * - `Microzed <https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed>`__ **
+        - Zynq-7000
+        - 140 x 36 Kb (7Z020) / 60 x 36 Kb (7Z010)
+        - ---
+        - 256 KB
+      * - :xilinx:`VC709` **
+        - Virtex-7
+        - 1,470 x 36 Kb (~52 Mb)
+        - ---
+        - ---
+      * - `LFCPNX-EVN <https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard>`__
+        - CertusPro-NX (Lattice)
+        - 208 x 18 Kb EBR (~3.7 Mb) + 7 x 512 Kb LRAM (~3.5 Mb)
+        - ---
+        - ---
+
 
 Discontinued AMD platforms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. list-table::
-   :header-rows: 1
-   :widths: 17 18 28 22 15
+.. collapsible:: Discontinued AMD platforms on-chip memory
 
-   * - Board
-     - Family
-     - BRAM (PL)
-     - UltraRAM (PL)
-     - PS OCM SRAM
-   * - :xilinx:`KC705`
-     - Kintex-7
-     - 445 x 36 Kb (~16 Mb)
-     - ---
-     - ---
-   * - :xilinx:`VC707`
-     - Virtex-7
-     - 1,030 x 36 Kb (~37 Mb)
-     - ---
-     - ---
-   * - :xilinx:`VCU128`
-     - Virtex UltraScale+ HBM
-     - 2,016 x 36 Kb (~71 Mb)
-     - 960 x 288 Kb (~270 Mb) + HBM2 8 GB
-     - ---
-   * - :xilinx:`ZC706`
-     - Zynq-7000
-     - 545 x 36 Kb (~19.2 Mb)
-     - ---
-     - 256 KB
+   .. list-table::
+      :header-rows: 1
+      :widths: 17 18 28 22 15
+
+      * - Board
+        - Family
+        - BRAM (PL)
+        - UltraRAM (PL)
+        - PS OCM SRAM
+      * - :xilinx:`KC705`
+        - Kintex-7
+        - 445 x 36 Kb (~16 Mb)
+        - ---
+        - ---
+      * - :xilinx:`VC707`
+        - Virtex-7
+        - 1,030 x 36 Kb (~37 Mb)
+        - ---
+        - ---
+      * - :xilinx:`VCU128`
+        - Virtex UltraScale+ HBM
+        - 2,016 x 36 Kb (~71 Mb)
+        - 960 x 288 Kb (~270 Mb) + HBM2 8 GB
+        - ---
+      * - :xilinx:`ZC706`
+        - Zynq-7000
+        - 545 x 36 Kb (~19.2 Mb)
+        - ---
+        - 256 KB
+
 
 Intel platforms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -694,38 +700,41 @@ Intel platforms
 Intel SoC FPGAs (Arria 10, Stratix 10, Cyclone V, Agilex) include HPS
 on-chip RAM (OCRAM) used by the preloader before external DDR is initialised.
 
-.. list-table::
-   :header-rows: 1
-   :widths: 22 18 40 20
+.. collapsible:: Intel platforms on-chip memory
 
-   * - Board
-     - Family
-     - Fabric BRAM
-     - HPS On-Chip RAM
-   * - :intel:`A10GX <content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html>` **
-     - Arria 10 GX
-     - 2,713 M20K blocks (~53 Mb)
-     - ---
-   * - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
-     - Arria 10 SoC
-     - 2,131 M20K blocks (~42 Mb) + 9,260 MLAB blocks (~6 Mb)
-     - 256 KB
-   * - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`
-     - Stratix 10 SX SoC
-     - 11,721 M20K blocks (~229 Mb) + 45 Mbit eSRAM
-     - 256 KB
-   * - :intel:`C5SoC <content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html>`
-     - Cyclone V SX SoC
-     - 553 M10K blocks (~5.4 Mb) + 994 MLAB blocks (~0.6 Mb)
-     - 64 KB
-   * - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
-     - Cyclone V SE SoC
-     - 553 M10K blocks (~5.4 Mb) + 994 MLAB blocks (~0.6 Mb)
-     - 64 KB
-   * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
-     - Agilex 7 F-Series
-     - 10,464 M20K (AGF023) / 13,272 M20K (AGF027)
-     - 256 KB
+   .. list-table::
+      :header-rows: 1
+      :widths: 22 18 40 20
+
+      * - Board
+        - Family
+        - Fabric BRAM
+        - HPS On-Chip RAM
+      * - :intel:`A10GX <content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html>` **
+        - Arria 10 GX
+        - 2,713 M20K blocks (~53 Mb)
+        - ---
+      * - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
+        - Arria 10 SoC
+        - 2,131 M20K blocks (~42 Mb) + 9,260 MLAB blocks (~6 Mb)
+        - 256 KB
+      * - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`
+        - Stratix 10 SX SoC
+        - 11,721 M20K blocks (~229 Mb) + 45 Mbit eSRAM
+        - 256 KB
+      * - :intel:`C5SoC <content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html>`
+        - Cyclone V SX SoC
+        - 553 M10K blocks (~5.4 Mb) + 994 MLAB blocks (~0.6 Mb)
+        - 64 KB
+      * - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+        - Cyclone V SE SoC
+        - 553 M10K blocks (~5.4 Mb) + 994 MLAB blocks (~0.6 Mb)
+        - 64 KB
+      * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
+        - Agilex 7 F-Series
+        - 10,464 M20K (AGF023) / 13,272 M20K (AGF027)
+        - 256 KB
+
 
 External Memory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -751,309 +760,318 @@ External Memory
 AMD Supported
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. list-table::
-   :header-rows: 1
-   :widths: 11 14 9 8 9 11 17
+.. collapsible:: AMD platforms external memory
 
-   * - Board
-     - Interface
-     - Type
-     - Size
-     - Width
-     - Rate (MT/s)
-     - Bandwidth
-   * - :xilinx:`ZCU102`
-     - PS DDR4 SODIMM (J1)
-     - DDR4
-     - 4 GB
-     - 64-bit
-     - 2,666
-     - ~21.3 GB/s
-   * - :xilinx:`ZCU102`
-     - PL DDR4 component (U2)
-     - DDR4
-     - 512 MB
-     - 16-bit
-     - 2,666
-     - ~5.3 GB/s
-   * - :xilinx:`VCK190`
-     - DDR4 ECC UDIMM (J45)
-     - DDR4
-     - 8 GB
-     - 72-bit
-     - 3,200
-     - ~25.6 GB/s
-   * - :xilinx:`VCK190`
-     - LPDDR4 Interfaces A+B (2x)
-     - LPDDR4
-     - 2 x 4 GB
-     - 2x32-bit
-     - 4,266
-     - ~68.3 GB/s
-   * - :xilinx:`VMK180`
-     - DDR4 ECC UDIMM (J45)
-     - DDR4
-     - 8 GB
-     - 72-bit
-     - 3,200
-     - ~25.6 GB/s
-   * - :xilinx:`VMK180`
-     - LPDDR4 Interfaces A+B (2x)
-     - LPDDR4
-     - 2 x 4 GB
-     - 2x32-bit
-     - 4,266
-     - ~68.3 GB/s
-   * - :xilinx:`VPK180`
-     - LPDDR4 Triplets 1-3 (3x)
-     - LPDDR4
-     - 3 x 4 GB
-     - 2x32-bit
-     - 2,133
-     - ~51.3 GB/s
-   * - :xilinx:`VCU118`
-     - PL DDR4 C1+C2 (U60-U64, U135-U139) (2x)
-     - DDR4
-     - 2 x 2.5 GB
-     - 80-bit
-     - 2,400
-     - ~48.0 GB/s
-   * - :xilinx:`VCU118`
-     - PL RLD3 C3 (U141/U142)
-     - RLDRAM3
-     - 288 MB
-     - 72-bit
-     - 2,133
-     - ~19.2 GB/s
-   * - :xilinx:`KCU105`
-     - PL DDR4 (U60-U63)
-     - DDR4
-     - 2 GB
-     - 64-bit
-     - 2,400
-     - ~19.2 GB/s
-   * - :xilinx:`ZC702`
-     - PS DDR3 (U66-U69)
-     - DDR3
-     - 1 GB
-     - 32-bit
-     - 1,333
-     - ~5.3 GB/s
-   * - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
-     - PS DDR3
-     - DDR3
-     - 512 MB
-     - 32-bit
-     - 1,066
-     - ~4.3 GB/s
-   * - :xilinx:`AC701` **
-     - PL DDR3 SODIMM (J1)
-     - DDR3
-     - 1 GB
-     - 64-bit
-     - 1,600
-     - ~12.8 GB/s
-   * - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
-     - PS DDR3L
-     - DDR3L
-     - 512 MB
-     - 16-bit
-     - 1,066
-     - ~2.1 GB/s
-   * - `Microzed <https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed>`__ **
-     - PS DDR3
-     - DDR3
-     - 1 GB
-     - 32-bit
-     - 1,066
-     - ~4.3 GB/s
-   * - :xilinx:`VC709` **
-     - PL DDR3 SODIMM J1+J3 (2x)
-     - DDR3
-     - 2 x 4 GB
-     - 64-bit
-     - 1,600
-     - ~25.6 GB/s
-   * - `LFCPNX-EVN <https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard>`__
-     - ---
-     - ---
-     - ---
-     - ---
-     - ---
-     - No external DRAM **
+   .. list-table::
+      :header-rows: 1
+      :widths: 11 14 9 8 9 11 17
 
-.. note::
+      * - Board
+        - Interface
+        - Type
+        - Size
+        - Width
+        - Rate (MT/s)
+        - Bandwidth
+      * - :xilinx:`ZCU102`
+        - PS DDR4 SODIMM (J1)
+        - DDR4
+        - 4 GB
+        - 64-bit
+        - 2,666
+        - ~21.3 GB/s
+      * - :xilinx:`ZCU102`
+        - PL DDR4 component (U2)
+        - DDR4
+        - 512 MB
+        - 16-bit
+        - 2,666
+        - ~5.3 GB/s
+      * - :xilinx:`VCK190`
+        - DDR4 ECC UDIMM (J45)
+        - DDR4
+        - 8 GB
+        - 72-bit
+        - 3,200
+        - ~25.6 GB/s
+      * - :xilinx:`VCK190`
+        - LPDDR4 Interfaces A+B (2x)
+        - LPDDR4
+        - 2 x 4 GB
+        - 2x32-bit
+        - 4,266
+        - ~68.3 GB/s
+      * - :xilinx:`VMK180`
+        - DDR4 ECC UDIMM (J45)
+        - DDR4
+        - 8 GB
+        - 72-bit
+        - 3,200
+        - ~25.6 GB/s
+      * - :xilinx:`VMK180`
+        - LPDDR4 Interfaces A+B (2x)
+        - LPDDR4
+        - 2 x 4 GB
+        - 2x32-bit
+        - 4,266
+        - ~68.3 GB/s
+      * - :xilinx:`VPK180`
+        - LPDDR4 Triplets 1-3 (3x)
+        - LPDDR4
+        - 3 x 4 GB
+        - 2x32-bit
+        - 2,133
+        - ~51.3 GB/s
+      * - :xilinx:`VCU118`
+        - PL DDR4 C1+C2 (U60-U64, U135-U139) (2x)
+        - DDR4
+        - 2 x 2.5 GB
+        - 80-bit
+        - 2,400
+        - ~48.0 GB/s
+      * - :xilinx:`VCU118`
+        - PL RLD3 C3 (U141/U142)
+        - RLDRAM3
+        - 288 MB
+        - 72-bit
+        - 2,133
+        - ~19.2 GB/s
+      * - :xilinx:`KCU105`
+        - PL DDR4 (U60-U63)
+        - DDR4
+        - 2 GB
+        - 64-bit
+        - 2,400
+        - ~19.2 GB/s
+      * - :xilinx:`ZC702`
+        - PS DDR3 (U66-U69)
+        - DDR3
+        - 1 GB
+        - 32-bit
+        - 1,333
+        - ~5.3 GB/s
+      * - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
+        - PS DDR3
+        - DDR3
+        - 512 MB
+        - 32-bit
+        - 1,066
+        - ~4.3 GB/s
+      * - :xilinx:`AC701` **
+        - PL DDR3 SODIMM (J1)
+        - DDR3
+        - 1 GB
+        - 64-bit
+        - 1,600
+        - ~12.8 GB/s
+      * - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
+        - PS DDR3L
+        - DDR3L
+        - 512 MB
+        - 16-bit
+        - 1,066
+        - ~2.1 GB/s
+      * - `Microzed <https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed>`__ **
+        - PS DDR3
+        - DDR3
+        - 1 GB
+        - 32-bit
+        - 1,066
+        - ~4.3 GB/s
+      * - :xilinx:`VC709` **
+        - PL DDR3 SODIMM J1+J3 (2x)
+        - DDR3
+        - 2 x 4 GB
+        - 64-bit
+        - 1,600
+        - ~25.6 GB/s
+      * - `LFCPNX-EVN <https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard>`__
+        - ---
+        - ---
+        - ---
+        - ---
+        - ---
+        - No external DRAM **
 
-   ** The CertusPro-NX device itself supports LPDDR4, DDR3/3L and LPDDR2 up
-   to 1,066 Mbps, but no DRAM is populated on the LFCPNX-EVN evaluation board.
+   .. note::
+
+      ** The CertusPro-NX device itself supports LPDDR4, DDR3/3L and LPDDR2 up
+      to 1,066 Mbps, but no DRAM is populated on the LFCPNX-EVN evaluation board.
+
 
 Discontinued AMD platforms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. list-table::
-   :header-rows: 1
-   :widths: 11 14 9 8 9 11 17
+.. collapsible:: Discontinued AMD platforms external memory
 
-   * - Board
-     - Interface
-     - Type
-     - Size
-     - Width
-     - Rate (MT/s)
-     - Bandwidth
-   * - :xilinx:`KC705`
-     - PL DDR3 SODIMM (J1)
-     - DDR3
-     - 1 GB
-     - 64-bit
-     - 1,600
-     - ~12.8 GB/s
-   * - :xilinx:`VC707`
-     - PL DDR3 SODIMM (J1)
-     - DDR3
-     - 1 GB
-     - 64-bit
-     - 1,600
-     - ~12.8 GB/s
-   * - :xilinx:`VCU128`
-     - PL DDR4 (U17-U19/U73/U74)
-     - DDR4
-     - 4.5 GB
-     - 72-bit
-     - 2,666
-     - ~24.0 GB/s
-   * - :xilinx:`VCU128`
-     - PL RLD3 (U37/U39)
-     - RLDRAM3
-     - 288 MB
-     - 72-bit
-     - 1,866
-     - ~16.8 GB/s
-   * - :xilinx:`VCU128`
-     - HBM2 (on-die, 2 stacks)
-     - HBM2
-     - 8 GB
-     - 2,048-bit
-     - 1,800
-     - ~460.8 GB/s
-   * - :xilinx:`ZC706`
-     - PS DDR3 (U2-U5)
-     - DDR3
-     - 1 GB
-     - 32-bit
-     - 1,333
-     - ~5.3 GB/s
-   * - :xilinx:`ZC706`
-     - PL DDR3 SODIMM (J1)
-     - DDR3
-     - 1 GB
-     - 64-bit
-     - 1,600
-     - ~12.8 GB/s
+   .. list-table::
+      :header-rows: 1
+      :widths: 11 14 9 8 9 11 17
+
+      * - Board
+        - Interface
+        - Type
+        - Size
+        - Width
+        - Rate (MT/s)
+        - Bandwidth
+      * - :xilinx:`KC705`
+        - PL DDR3 SODIMM (J1)
+        - DDR3
+        - 1 GB
+        - 64-bit
+        - 1,600
+        - ~12.8 GB/s
+      * - :xilinx:`VC707`
+        - PL DDR3 SODIMM (J1)
+        - DDR3
+        - 1 GB
+        - 64-bit
+        - 1,600
+        - ~12.8 GB/s
+      * - :xilinx:`VCU128`
+        - PL DDR4 (U17-U19/U73/U74)
+        - DDR4
+        - 4.5 GB
+        - 72-bit
+        - 2,666
+        - ~24.0 GB/s
+      * - :xilinx:`VCU128`
+        - PL RLD3 (U37/U39)
+        - RLDRAM3
+        - 288 MB
+        - 72-bit
+        - 1,866
+        - ~16.8 GB/s
+      * - :xilinx:`VCU128`
+        - HBM2 (on-die, 2 stacks)
+        - HBM2
+        - 8 GB
+        - 2,048-bit
+        - 1,800
+        - ~460.8 GB/s
+      * - :xilinx:`ZC706`
+        - PS DDR3 (U2-U5)
+        - DDR3
+        - 1 GB
+        - 32-bit
+        - 1,333
+        - ~5.3 GB/s
+      * - :xilinx:`ZC706`
+        - PL DDR3 SODIMM (J1)
+        - DDR3
+        - 1 GB
+        - 64-bit
+        - 1,600
+        - ~12.8 GB/s
+
 
 Intel platforms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. list-table::
-   :header-rows: 1
-   :widths: 12 16 9 8 12 11 16
+.. collapsible:: Intel platforms external memory
 
-   * - Board
-     - Interface
-     - Type
-     - Size
-     - Width
-     - Rate (MT/s)
-     - Bandwidth
-   * - :intel:`A10GX <content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html>` **
-     - via HiLo daughter card
-     - DDR3L / DDR4
-     - up to 4 GB
-     - 72-bit
-     - 2,133 / 2,666
-     - ~19.2 / ~24.0 GB/s
-   * - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
-     - HPS DDR4 (HiLo)
-     - DDR4
-     - 1 GB
-     - 40-bit (32+ECC)
-     - 2,400
-     - ~12.0 GB/s
-   * - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
-     - Fabric DDR4 (HiLo)
-     - DDR4
-     - 2 GB
-     - 72-bit (64+ECC)
-     - 2,400
-     - ~19.2 GB/s
-   * - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`
-     - Fabric DDR4 SO-DIMM (J28)
-     - DDR4
-     - 16 GB
-     - 72-bit (64+ECC)
-     - 2,400
-     - ~19.2 GB/s
-   * - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`
-     - HPS DDR4 (HiLo J13)
-     - DDR4
-     - 4 GB
-     - 72-bit (64+ECC)
-     - 2,133
-     - ~17.1 GB/s
-   * - :intel:`C5SoC <content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html>`
-     - HPS DDR3
-     - DDR3
-     - 1 GB
-     - 32-bit
-     - 800
-     - ~3.2 GB/s
-   * - :intel:`C5SoC <content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html>`
-     - Fabric DDR3
-     - DDR3
-     - 1 GB
-     - 32-bit
-     - 533
-     - ~2.1 GB/s
-   * - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
-     - HPS DDR3
-     - DDR3
-     - 1 GB
-     - 32-bit
-     - 800
-     - ~3.2 GB/s
-   * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
-     - HPS DDR4 (U15-U19)
-     - DDR4
-     - 1 GB (5 x x8 chips)
-     - 40-bit (32+ECC)
-     - 1,600
-     - ~6.4 GB/s
-   * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
-     - Fabric DDR4 DIMM1 (J4)
-     - DDR4 RDIMM
-     - 16 GB
-     - 72-bit (64+ECC)
-     - 2,666
-     - ~21.3 GB/s
-   * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
-     - Fabric DDR4 DIMM2 (J5)
-     - DDR4 RDIMM
-     - 16 GB
-     - 72-bit (64+ECC)
-     - 2,666
-     - ~21.3 GB/s
+   .. list-table::
+      :header-rows: 1
+      :widths: 12 16 9 8 12 11 16
 
-.. note::
+      * - Board
+        - Interface
+        - Type
+        - Size
+        - Width
+        - Rate (MT/s)
+        - Bandwidth
+      * - :intel:`A10GX <content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html>` **
+        - via HiLo daughter card
+        - DDR3L / DDR4
+        - up to 4 GB
+        - 72-bit
+        - 2,133 / 2,666
+        - ~19.2 / ~24.0 GB/s
+      * - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
+        - HPS DDR4 (HiLo)
+        - DDR4
+        - 1 GB
+        - 40-bit (32+ECC)
+        - 2,400
+        - ~12.0 GB/s
+      * - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
+        - Fabric DDR4 (HiLo)
+        - DDR4
+        - 2 GB
+        - 72-bit (64+ECC)
+        - 2,400
+        - ~19.2 GB/s
+      * - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`
+        - Fabric DDR4 SO-DIMM (J28)
+        - DDR4
+        - 16 GB
+        - 72-bit (64+ECC)
+        - 2,400
+        - ~19.2 GB/s
+      * - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`
+        - HPS DDR4 (HiLo J13)
+        - DDR4
+        - 4 GB
+        - 72-bit (64+ECC)
+        - 2,133
+        - ~17.1 GB/s
+      * - :intel:`C5SoC <content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html>`
+        - HPS DDR3
+        - DDR3
+        - 1 GB
+        - 32-bit
+        - 800
+        - ~3.2 GB/s
+      * - :intel:`C5SoC <content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html>`
+        - Fabric DDR3
+        - DDR3
+        - 1 GB
+        - 32-bit
+        - 533
+        - ~2.1 GB/s
+      * - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+        - HPS DDR3
+        - DDR3
+        - 1 GB
+        - 32-bit
+        - 800
+        - ~3.2 GB/s
+      * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
+        - HPS DDR4 (U15-U19)
+        - DDR4
+        - 1 GB (5 x x8 chips)
+        - 40-bit (32+ECC)
+        - 1,600
+        - ~6.4 GB/s
+      * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
+        - Fabric DDR4 DIMM1 (J4)
+        - DDR4 RDIMM
+        - 16 GB
+        - 72-bit (64+ECC)
+        - 2,666
+        - ~21.3 GB/s
+      * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
+        - Fabric DDR4 DIMM2 (J5)
+        - DDR4 RDIMM
+        - 16 GB
+        - 72-bit (64+ECC)
+        - 2,666
+        - ~21.3 GB/s
 
-   - :intel:`A10GX <content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html>`:
-     **no DDR soldered on-board** - all DDR interfaces require an optional
-     HiLo memory daughter card.
-   - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`:
-     the **HPS DDR4 HiLo card (J13) is not included** with the H-Tile kit
-     and must be purchased separately.
-   - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`:
-     **DIMM2 (J5) is unpopulated** at the factory - socket only, available
-     on the AGF027 variant only.
+   .. note::
+
+      - :intel:`A10GX <content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html>`:
+        **no DDR soldered on-board** - all DDR interfaces require an optional
+        HiLo memory daughter card.
+      - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`:
+        the **HPS DDR4 HiLo card (J13) is not included** with the H-Tile kit
+        and must be purchased separately.
+      - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`:
+        **DIMM2 (J5) is unpopulated** at the factory - socket only, available
+        on the AGF027 variant only.
+
 
 File structure of a project
 -------------------------------------------------------------------------------
