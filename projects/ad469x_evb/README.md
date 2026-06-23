@@ -1,8 +1,8 @@
 # AD469X-EVB HDL Project
 
 - Evaluation boards product pages:
+   - [EVAL-AD4692](https://www.analog.com/eval-ad4692-ardz)
    - [EVAL-AD4696](https://www.analog.com/eval-ad4696)
-   - EVAL-AD4692
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad469x
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad469x_evb/index.html
 - Evaluation board VADJ range for EVAL-AD4696: 1.2V - 1.8V
@@ -12,10 +12,10 @@
 
 | Part name                               | Description                                                  |
 |-----------------------------------------|--------------------------------------------------------------|
-| AD4691                                  |                                                              |
-| AD4692                                  |                                                              |
-| AD4693                                  |                                                              |
-| AD4694                                  |                                                              |
+| [AD4691](https://www.analog.com/ad4691) | 16-Bit, 16-Channel, 500 kSPS, Easy Drive Multiplexed SAR ADC |
+| [AD4692](https://www.analog.com/ad4692) | 16-Bit, 16-Channel, 1 MSPS, Easy Drive Multiplexed SAR ADC   |
+| [AD4693](https://www.analog.com/ad4693) | 16-Bit, 8-Channel, 500 kSPS, Easy Drive Multiplexed SAR ADC  |
+| [AD4694](https://www.analog.com/ad4694) | 16-Bit, 8-Channel, 1 MSPS, Easy Drive Multiplexed SAR ADC    |
 | [AD4695](https://www.analog.com/ad4695) | 16-Bit, 16-Channel, 500 kSPS, Easy Drive Multiplexed SAR ADC |
 | [AD4696](https://www.analog.com/ad4696) | 16-Bit, 16-Channel, 1 MSPS, Easy Drive Multiplexed SAR ADC   |
 | [AD4697](https://www.analog.com/ad4697) | 16-Bit, 8-Channel, 500 kSPS, Easy Drive Multiplexed SAR ADC  |

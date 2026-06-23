@@ -51,3 +51,5 @@ make SPI_4WIRE=0 PWM_OFFLOAD=2
 ```
 make SPI_4WIRE=1 PWM_OFFLOAD=0
 ```
+
+Corresponding device tree: [zynq-coraz7s-ad4692.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad4692.dts)
