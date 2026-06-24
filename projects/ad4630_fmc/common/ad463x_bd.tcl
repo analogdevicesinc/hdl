@@ -90,6 +90,8 @@ ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_0
 ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_1 $CAPTURE_ZONE
 ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_2 $CLK_MODE
 ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_3 $DDR_EN
+# Enable a register slice for timing closure on spi_clk domain for the SDI path
+ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.SRC_REG_SLICE_EN 1
 
 ## to setup the sample rate of the system change the PULSE_PERIOD value of the
 ## CNV generator; the actual sample rate will be PULSE_PERIOD * (1/cnv_ref_clk)

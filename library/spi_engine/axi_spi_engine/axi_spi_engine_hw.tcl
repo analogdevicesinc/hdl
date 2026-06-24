@@ -17,6 +17,7 @@ ad_ip_files axi_spi_engine [list\
   $ad_hdl_dir/library/util_cdc/sync_gray.v \
   $ad_hdl_dir/library/common/ad_mem.v \
   $ad_hdl_dir/library/util_axis_fifo_asym/util_axis_fifo_asym.v \
+  $ad_hdl_dir/library/axi_dmac/axi_register_slice.v \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/common/ad_rst.v \
   $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \
@@ -37,6 +38,7 @@ ad_ip_parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter ID INTEGER 0
 ad_ip_parameter DATA_WIDTH INTEGER 8
 ad_ip_parameter NUM_OF_SDIO INTEGER 1
+ad_ip_parameter SRC_REG_SLICE_EN INTEGER 0
 
 proc p_elaboration {} {
 
