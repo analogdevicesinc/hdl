@@ -76,6 +76,7 @@ set sdo_streaming    0
 
 spi_engine_create $spi_engine_hier $axi_clk $axi_reset $spi_clk $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk $sdo_streaming
 set_instance_parameter_value ${spi_engine_hier}_offload {ASYNC_TRIG} {1}
+set_instance_parameter_value ${spi_engine_hier}_axi_regmap {SRC_REG_SLICE_EN} {1}
 # exported interface
 
 add_interface adc_spi_sclk    clock source

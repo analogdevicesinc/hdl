@@ -90,6 +90,8 @@ set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
     "$ad_hdl_dir/library/common/ad_mem.v" \
     "$ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v" \
     "$ad_hdl_dir/library/util_axis_fifo/util_axis_fifo_address_generator.v" \
+    "$ad_hdl_dir/library/util_axis_fifo_asym/util_axis_fifo_asym.v" \
+    "$ad_hdl_dir/library/axi_dmac/axi_register_slice.v" \
     "axi_spi_engine.v" ]]
 
 set ip [ipl::set_parameter -ip $ip \
@@ -123,6 +125,17 @@ set ip [ipl::set_parameter -ip $ip \
     -default 1 \
     -output_formatter nostr \
     -value_range {(1, 8)} \
+    -group1 {General Configuration} \
+    -group2 Config]
+set ip [ipl::set_parameter -ip $ip \
+    -id SRC_REG_SLICE_EN \
+    -type param \
+    -value_type int \
+    -conn_mod axi_spi_engine \
+    -title {Source register slice enable} \
+    -default 0 \
+    -output_formatter nostr \
+    -options {[('True', 1), ('False', 0)]} \
     -group1 {General Configuration} \
     -group2 Config]
 set ip [ipl::set_parameter -ip $ip \

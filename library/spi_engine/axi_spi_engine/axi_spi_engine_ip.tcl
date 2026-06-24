@@ -203,6 +203,14 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters NUM_OF_SDIO -of_objects $cc]
 
+## SRC_REG_SLICE_EN
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "0" \
+  "value_validation_range_maximum" "1" \
+ ] \
+ [ipx::get_user_parameters SRC_REG_SLICE_EN -of_objects $cc]
+
 ## Customize IP Layout
 
 ## Remove the automatically generated GUI page
@@ -233,6 +241,12 @@ set_property -dict [list \
   "display_name" "Number of MISO/MOSI lines" \
   "tooltip" "\[NUM_OF_SDIO\] Define the number of MISO/MOSI lines" \
 ] [ipgui::get_guiparamspec -name "NUM_OF_SDIO" -component $cc]
+
+ipgui::add_param -name "SRC_REG_SLICE_EN" -component $cc -parent $general_group
+set_property -dict [list \
+  "display_name" "Source register slice enable" \
+  "tooltip" "\[SRC_REG_SLICE_EN\] Enable the source register slice" \
+] [ipgui::get_guiparamspec -name "SRC_REG_SLICE_EN" -component $cc]
 
 ipgui::add_param -name "MM_IF_TYPE" -component $cc -parent $general_group
 set_property -dict [list \

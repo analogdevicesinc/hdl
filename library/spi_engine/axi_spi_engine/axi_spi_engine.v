@@ -52,7 +52,8 @@ module axi_spi_engine #(
   parameter CFG_INFO_0 = 0,
   parameter CFG_INFO_1 = 0,
   parameter CFG_INFO_2 = 0,
-  parameter CFG_INFO_3 = 0
+  parameter CFG_INFO_3 = 0,
+  parameter SRC_REG_SLICE_EN = 0
 ) (
 
   // Slave AXI interface
@@ -513,7 +514,8 @@ module axi_spi_engine #(
     .ALMOST_FULL_THRESHOLD(31),
     .TLAST_EN(0),
     .TKEEP_EN(1),
-    .REDUCED_FIFO(0)
+    .REDUCED_FIFO(0),
+    .SRC_REG_SLICE_EN(SRC_REG_SLICE_EN)
   ) i_sdi_fifo(
     .s_axis_aclk(spi_clk),
     .s_axis_aresetn(spi_resetn),

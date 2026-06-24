@@ -49,6 +49,7 @@ proc spi_engine_create {args} {
     set sdo_fifo_addr_width   [optional_param $args 13 5]
     set sync_fifo_addr_width  [optional_param $args 14 4]
     set cmd_fifo_addr_width   [optional_param $args 15 4]
+    set src_reg_slice_en      [optional_param $args 16 0]
 
   } elseif {$vendor == "intel"} {
     # Intel: name + clocks & resets + optional parameters
@@ -74,6 +75,7 @@ proc spi_engine_create {args} {
     set sdo_fifo_addr_width   [optional_param $args 16 5]
     set sync_fifo_addr_width  [optional_param $args 17 4]
     set cmd_fifo_addr_width   [optional_param $args 18 4]
+    set src_reg_slice_en      [optional_param $args 19 0]
   }
 
   # Component instance names
@@ -129,6 +131,7 @@ proc spi_engine_create {args} {
   ad_ip_parameter $axi_regmap CONFIG.SDO_FIFO_ADDRESS_WIDTH $sdo_fifo_addr_width
   ad_ip_parameter $axi_regmap CONFIG.SYNC_FIFO_ADDRESS_WIDTH $sync_fifo_addr_width
   ad_ip_parameter $axi_regmap CONFIG.CMD_FIFO_ADDRESS_WIDTH $cmd_fifo_addr_width
+  ad_ip_parameter $axi_regmap CONFIG.SRC_REG_SLICE_EN $src_reg_slice_en
 
   # Instantiate Offload and interconnect modules only if offload is enabled
   if {$offload_en == 1} {
