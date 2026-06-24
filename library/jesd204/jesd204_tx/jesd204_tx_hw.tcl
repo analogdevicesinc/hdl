@@ -59,6 +59,11 @@ set_parameter_property NUM_OUTPUT_PIPELINE DISPLAY_NAME "Number of output pipeli
 set_parameter_property NUM_OUTPUT_PIPELINE ALLOWED_RANGES 0:3
 set_parameter_property NUM_OUTPUT_PIPELINE HDL_PARAMETER true
 
+add_parameter NUM_INPUT_PIPELINE INTEGER 0
+set_parameter_property NUM_INPUT_PIPELINE DISPLAY_NAME "Number of input pipeline stages"
+set_parameter_property NUM_INPUT_PIPELINE ALLOWED_RANGES 0:3
+set_parameter_property NUM_INPUT_PIPELINE HDL_PARAMETER true
+
 add_parameter ASYNC_CLK BOOLEAN false
 set_parameter_property ASYNC_CLK DISPLAY_NAME "Link and device clock asynchronous"
 set_parameter_property ASYNC_CLK HDL_PARAMETER true
@@ -152,6 +157,7 @@ add_interface_port config cfg_continuous_cgs continuous_cgs Input 1
 add_interface_port config cfg_continuous_ilas continuous_ilas Input 1
 add_interface_port config cfg_disable_char_replacement disable_char_replacement Input 1
 add_interface_port config cfg_disable_scrambler disable_scrambler Input 1
+add_interface_port config cfg_header_mode header_mode Input 2
 add_interface_port config cfg_lanes_disable lanes_disable Input NUM_LANES
 add_interface_port config cfg_links_disable links_disable Input NUM_LINKS
 add_interface_port config cfg_mframes_per_ilas mframes_per_ilas Input 8

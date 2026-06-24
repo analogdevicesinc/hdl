@@ -137,6 +137,7 @@ add_interface_port config cfg_links_disable links_disable Input NUM_LINKS
 add_interface_port config cfg_octets_per_multiframe octets_per_multiframe Input 10
 add_interface_port config cfg_octets_per_frame octets_per_frame Input 8
 add_interface_port config cfg_disable_scrambler disable_scrambler Input 1
+add_interface_port config cfg_header_mode header_mode Input 2
 add_interface_port config cfg_disable_char_replacement disable_char_replacement Input 1
 add_interface_port config cfg_frame_align_err_threshold frame_align_err_threshold Input 8
 add_interface_port config ctrl_err_statistics_reset err_statistics_reset Input 1
