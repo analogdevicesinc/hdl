@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -11,9 +11,7 @@ set CACHE_COHERENCY false
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
 create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 fixed_io
 
-create_bd_port -dir O spi0_csn_2_o
-create_bd_port -dir O spi0_csn_1_o
-create_bd_port -dir O spi0_csn_0_o
+create_bd_port -dir O -from 2 -to 0 spi0_csn
 create_bd_port -dir I spi0_csn_i
 create_bd_port -dir I spi0_clk_i
 create_bd_port -dir O spi0_clk_o
@@ -21,9 +19,7 @@ create_bd_port -dir I spi0_sdo_i
 create_bd_port -dir O spi0_sdo_o
 create_bd_port -dir I spi0_sdi_i
 
-create_bd_port -dir O spi1_csn_2_o
-create_bd_port -dir O spi1_csn_1_o
-create_bd_port -dir O spi1_csn_0_o
+create_bd_port -dir O -from 2 -to 0 spi1_csn
 create_bd_port -dir I spi1_csn_i
 create_bd_port -dir I spi1_clk_i
 create_bd_port -dir O spi1_clk_o
@@ -97,9 +93,13 @@ ad_connect  fixed_io      sys_ps7/FIXED_IO
 
 # spi connections
 
-ad_connect  spi0_csn_2_o sys_ps7/SPI0_SS2_O
-ad_connect  spi0_csn_1_o sys_ps7/SPI0_SS1_O
-ad_connect  spi0_csn_0_o sys_ps7/SPI0_SS_O
+ad_ip_instance ilconcat spi0_csn_sources
+ad_ip_parameter spi0_csn_sources config.num_ports {3}
+ad_connect  spi0_csn_sources/dout spi0_csn
+
+ad_connect  sys_ps7/SPI0_SS_O  spi0_csn_sources/in0
+ad_connect  sys_ps7/SPI0_SS1_O spi0_csn_sources/in1
+ad_connect  sys_ps7/SPI0_SS2_O spi0_csn_sources/in2
 ad_connect  spi0_csn_i sys_ps7/SPI0_SS_I
 ad_connect  spi0_clk_i sys_ps7/SPI0_SCLK_I
 ad_connect  spi0_clk_o sys_ps7/SPI0_SCLK_O
@@ -107,9 +107,13 @@ ad_connect  spi0_sdo_i sys_ps7/SPI0_MOSI_I
 ad_connect  spi0_sdo_o sys_ps7/SPI0_MOSI_O
 ad_connect  spi0_sdi_i sys_ps7/SPI0_MISO_I
 
-ad_connect  spi1_csn_2_o sys_ps7/SPI1_SS2_O
-ad_connect  spi1_csn_1_o sys_ps7/SPI1_SS1_O
-ad_connect  spi1_csn_0_o sys_ps7/SPI1_SS_O
+ad_ip_instance ilconcat spi1_csn_sources
+ad_ip_parameter spi1_csn_sources config.num_ports {3}
+ad_connect  spi1_csn_sources/dout spi1_csn
+
+ad_connect  sys_ps7/SPI1_SS_O  spi1_csn_sources/in0
+ad_connect  sys_ps7/SPI1_SS1_O spi1_csn_sources/in1
+ad_connect  sys_ps7/SPI1_SS2_O spi1_csn_sources/in2
 ad_connect  spi1_csn_i sys_ps7/SPI1_SS_I
 ad_connect  spi1_clk_i sys_ps7/SPI1_SCLK_I
 ad_connect  spi1_clk_o sys_ps7/SPI1_SCLK_O
