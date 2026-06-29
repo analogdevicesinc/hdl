@@ -239,7 +239,7 @@ module system_top (
   wire    [94:0]  gpio_o;
   wire    [94:0]  gpio_t;
 
-  wire    [2:0]   spi_csn;
+  wire    [5:0]   spi_csn;
 
   wire            ref_clk_a;
   wire            core_clk_a;
@@ -263,33 +263,35 @@ module system_top (
   wire            pcie_ref_clk_div2;
   wire            user_link_up;
 
-  reg  [7:0]     spi_3_to_8_csn;
+  // AXI Quad SPI drives spi_csn[5:0], active-low
+  // Each bit coresponds to its physical destination, no binary-encoded decoder
+  // needed anymore, since we generate this signals from PL, not PS anymore
+  // (Linux AXI Quad SPI driver doesn't have a property for encoded SPI
+  // controll)
+  //   spi_csn[0] -> adrv9009_a
+  //   spi_csn[1] -> adrv9009_b
+  //   spi_csn[2] -> hmc7044
+  //   spi_csn[3] -> hmc7044_car
+  //   spi_csn[4] -> gpio_0_exp_n
+  //   spi_csn[5] -> gpio_2_exp_n
+  assign spi_csn_adrv9009_a  = spi_csn[0];
+  assign spi_csn_adrv9009_b  = spi_csn[1];
+  assign spi_csn_hmc7044     = spi_csn[2];
+  assign spi_csn_hmc7044_car = spi_csn[3];
+  assign gpio_0_exp_n        = spi_csn[4];
+  assign gpio_2_exp_n        = spi_csn[5];
 
-  always @(*) begin
-    case (spi_csn)
-      3'h0: spi_3_to_8_csn = 8'b11111110;
-      3'h1: spi_3_to_8_csn = 8'b11111101;
-      3'h2: spi_3_to_8_csn = 8'b11111011;
-      3'h3: spi_3_to_8_csn = 8'b11110111;
-      3'h4: spi_3_to_8_csn = 8'b11101111;
-      3'h5: spi_3_to_8_csn = 8'b11011111;
-      3'h6: spi_3_to_8_csn = 8'b10111111;
-      default: spi_3_to_8_csn = 8'b11111111;
-    endcase
-  end
-
-  assign spi_csn_adrv9009_a = spi_3_to_8_csn[0];
-  assign spi_csn_adrv9009_b = spi_3_to_8_csn[1];
-  assign spi_csn_hmc7044 = spi_3_to_8_csn[2];
-  assign spi_csn_hmc7044_car = spi_3_to_8_csn[3];
-  assign gpio_0_exp_n = spi_3_to_8_csn[4];
-  assign gpio_1_exp_p = spi_clk;
+  // gpio_0_exp_p / gpio_1_exp_p / gpio_1_exp_n form the shared MOSI/SCK/MISO
+  // path to daughter-card SPI chips reached via gpio_0/2_exp_n.
+  // and driving them is harmless.
   assign gpio_0_exp_p = spi_mosi;
-  assign spi_miso_s = ((spi_3_to_8_csn[4] == 1'b0) | (spi_3_to_8_csn[5] == 1'b0))? gpio_1_exp_n : spi_miso;
-  assign gpio_2_exp_n = spi_3_to_8_csn[5];
+  assign gpio_1_exp_p = spi_clk;
+  // MISO mux: if either expansion CS (spi_csn[5:4]) is asserted (active low),
+  // route the daughter card's MISO (gpio_1_exp_n) instead of the SoM MISO.
+  assign spi_miso_s = ((spi_csn[4] == 1'b0) | (spi_csn[5] == 1'b0)) ? gpio_1_exp_n : spi_miso;
 
   adrv9009zu11eg_spi i_spi (
-    .spi_csn(spi_3_to_8_csn),
+    .spi_csn({2'b11, spi_csn}),
     .spi_clk(spi_clk),
     .spi_mosi(spi_mosi),
     .spi_miso_i(spi_miso_s),

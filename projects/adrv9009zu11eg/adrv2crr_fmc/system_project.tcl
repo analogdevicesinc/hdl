@@ -65,6 +65,8 @@ if {[get_env_param CORUNDUM 0] == 1} {
     "system_constr_pcie.xdc" \
     "system_top_pcie.v"
   ]
+
+  set_property strategy Performance_ExplorePostRoutePhysOpt [get_runs impl_1]
 } else {
   adi_project_files adrv9009zu11eg [list \
     "system_top.v" \
