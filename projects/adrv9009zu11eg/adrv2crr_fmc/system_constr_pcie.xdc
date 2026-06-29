@@ -67,3 +67,8 @@ create_clock -name pcie_ref_clk -period 10.00 [get_ports pcie_clk_p]
 
 # PERST is asynchronous
 set_false_path -from [get_ports pcie_perstn]
+
+# Create SPI clock
+create_generated_clock -name spi0_clk \
+  -source [get_pins i_system_wrapper/system_i/axi_spi/ext_spi_clk] \
+  -divide_by 2 [get_pins i_system_wrapper/system_i/axi_spi/sck_o]
