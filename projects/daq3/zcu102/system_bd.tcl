@@ -4,6 +4,9 @@
 ###############################################################################
 
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
+
+set CACHE_COHERENCY false
+
 source ../common/daq3_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
@@ -30,14 +33,14 @@ ad_ip_parameter axi_ad9152_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_ad9152_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ad9152_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad9152_dma CONFIG.CYCLIC 1
-ad_ip_parameter axi_ad9152_dma CONFIG.MAX_BYTES_PER_BURST 256
+ad_ip_parameter axi_ad9152_dma CONFIG.MAX_BYTES_PER_BURST 2048
 
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_ad9680_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_ad9680_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ad9680_dma CONFIG.AXI_SLICE_DEST 1
-ad_ip_parameter axi_ad9680_dma CONFIG.MAX_BYTES_PER_BURST 256
+ad_ip_parameter axi_ad9680_dma CONFIG.MAX_BYTES_PER_BURST 2048
 
 ad_ip_instance clk_wiz dma_clk_wiz
 ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
@@ -69,7 +72,7 @@ ad_connect axi_ad9680_cpack/packed_fifo_wr axi_ad9680_dma/fifo_wr
 
 ad_mem_hp0_interconnect sys_cpu_clk sys_ps8/S_AXI_HP0
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9680_xcvr/m_axi
-ad_mem_hpc0_interconnect sys_dma_clk sys_ps8/S_AXI_HPC0
-ad_mem_hpc0_interconnect sys_dma_clk axi_ad9680_dma/m_dest_axi
-ad_mem_hpc1_interconnect sys_dma_clk sys_ps8/S_AXI_HPC1
-ad_mem_hpc1_interconnect sys_dma_clk axi_ad9152_dma/m_src_axi
+ad_mem_hp1_interconnect sys_dma_clk sys_ps8/S_AXI_HP1
+ad_mem_hp1_interconnect sys_dma_clk axi_ad9680_dma/m_dest_axi
+ad_mem_hp2_interconnect sys_dma_clk sys_ps8/S_AXI_HP2
+ad_mem_hp2_interconnect sys_dma_clk axi_ad9152_dma/m_src_axi
