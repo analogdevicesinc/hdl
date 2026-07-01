@@ -281,12 +281,6 @@ module spi_engine_offload #(
 
   reg  last_cmd;
   wire last_cmd_accept;
-  wire offload_disable_pending;
-
-  // Detects when offload disable is requested but operations are still in progress.
-  // spi_enable goes low when the user disables offload, but interconnect_dir
-  // remains high while the offload completes its current operations.
-  assign offload_disable_pending = !spi_enable && interconnect_dir;
 
   always @(posedge spi_clk) begin
     if (!spi_resetn) begin
@@ -298,10 +292,9 @@ module spi_engine_offload #(
           spi_active <= 1'b1;
       // Deassert spi_active when offload execution is complete.
       // Conditions for completion:
-      // - (last_cmd_accept || !offload_cmd_valid): Either processed the last command OR no offload commands remain
-      // - !(offload_disable_pending && sdi_data_valid): Prevent mode switch if SDI data is pending during disable
-      // The !offload_cmd_valid condition handles edge cases where sdi_data_valid remains continuously asserted
-      end else if ((last_cmd_accept || !offload_cmd_valid) && !(offload_disable_pending && sdi_data_valid)) begin
+      // - (!offload_cmd_valid): no offload commands remain
+      // - (!sdi_data_valid): no SDI data is pending
+      end else if (!offload_cmd_valid && !sdi_data_valid) begin
         spi_active <= 1'b0;
       end
     end
@@ -329,8 +322,12 @@ module spi_engine_offload #(
   end
 
   always @(posedge spi_clk) begin
-    if (!cmd_valid) begin
+    if (!spi_resetn) begin
       spi_cmd_rd_addr <= 'h00;
+      last_cmd <= 1'b0;
+    end else if (!cmd_valid) begin
+      spi_cmd_rd_addr <= 'h00;
+      last_cmd <= (ctrl_cmd_wr_addr == 1);
     end else if (cmd_ready) begin
       spi_cmd_rd_addr <= spi_cmd_rd_addr_next;
       last_cmd <= spi_cmd_rd_addr + 2'h2 == ctrl_cmd_wr_addr;
