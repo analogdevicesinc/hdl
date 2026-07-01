@@ -14,8 +14,11 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # JESD_MODE: Used link layer encoder mode [64B66B - JESD 204C, 8B10B - JESD 204B]
 
 adi_project xcvr_wizard_zcu102 0 [list \
-  LANE_RATE   [get_env_param LANE_RATE        10 ] \
-  REF_CLK     [get_env_param REF_CLK         500 ] \
-  PLL_TYPE    [get_env_param PLL_TYPE      QPLL0 ] \
-  JESD_MODE   [get_env_param JESD_MODE      8B10B] \
+  LANE_RATE      [get_env_param LANE_RATE        10 ] \
+  REF_CLK        [get_env_param REF_CLK         500 ] \
+  PLL_TYPE       [get_env_param PLL_TYPE      QPLL0 ] \
+  JESD_MODE      [get_env_param JESD_MODE      8B10B] \
+  XCVR_RX_PLL_TYPE    [get_env_param XCVR_RX_PLL_TYPE      {} ] \
+  XCVR_RX_LANE_RATE [get_env_param XCVR_RX_LANE_RATE {} ] \
+  XCVR_RX_REF_CLK     [get_env_param XCVR_RX_REF_CLK       {} ] \
 ]

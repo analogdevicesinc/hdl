@@ -117,13 +117,14 @@ proc qpll_ref_clk_gen { gt_type  lane_rate } {
 ## inside a Ultrascale or Ultrascale+ project.
 ##
 ###############################################################################
-proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
+proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} {xcvr_rx_pll_type {}} {xcvr_rx_lane_rate {}} {xcvr_rx_ref_clk {}} } {
 
   if {[info exists ::env(JESD_MODE)]} {
     set jesd_mode $::env(JESD_MODE)
   } else {
     set jesd_mode "8B10B"
   }
+  puts "NOTE: JESD mode is $jesd_mode. "
 
   set prj_name [get_property NAME [current_project]]
 
@@ -241,6 +242,49 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
     set pll_max_range [expr {2 * $pll_max_range}]
   }
 
+  if {$xcvr_rx_pll_type eq ""} {
+    set xcvr_rx_pll_type $pll_type
+  }
+
+  if {$xcvr_rx_pll_type ne $pll_type} {
+    switch $xcvr_rx_pll_type {
+      CPLL {
+        set rx_pll_min_range 0.5
+        set rx_pll_max_range 12.5
+      }
+      QPLL0 {
+        set rx_pll_min_range 0.6125
+        set rx_pll_max_range 16.375
+      }
+      QPLL {
+        if {[string equal $gt_type GTXE2]} {
+          set rx_pll_min_range 0.5
+          set rx_pll_max_range 10.3125
+        } else {
+          puts "Invalid RX PLL type -- $xcvr_rx_pll_type (QPLL is only valid for 7-series)"
+          return 1
+        }
+      }
+      QPLL1 {
+        set rx_pll_min_range 0.5
+        set rx_pll_max_range 13.0
+      }
+      default {
+        puts "Invalid RX PLL type -- $xcvr_rx_pll_type"
+        return 1
+      }
+    }
+    if {$jesd_mode eq "64B66B"} {
+      set rx_pll_min_range [expr {2 * $rx_pll_min_range}]
+      set rx_pll_max_range [expr {2 * $rx_pll_max_range}]
+    }
+    set rx_lr_check [expr {$xcvr_rx_lane_rate ne "" ? $xcvr_rx_lane_rate : [lindex $lane_rate_l 0]}]
+    if {$rx_lr_check ne "" && ($rx_lr_check < $rx_pll_min_range || $rx_lr_check > $rx_pll_max_range)} {
+      puts "ERROR: RX lane rate $rx_lr_check is out of $xcvr_rx_pll_type range \[$rx_pll_min_range - $rx_pll_max_range\]."
+      return 1
+    }
+  }
+
   set inst_num 0
   foreach lane_rate $lane_rate_l {
 
@@ -291,7 +335,20 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
           set ref_clk [lindex $ref_clk_float 0].[join $float_l ""]
         }
 
-        set ip_name "$gt_type\_$pll_type\_$lane_rate_txt\_$ref_clk_txt"
+        set ip_suffix ""
+        if {$xcvr_rx_pll_type ne $pll_type} {
+          append ip_suffix "_RX${xcvr_rx_pll_type}"
+        }
+        if {$xcvr_rx_lane_rate ne "" && $xcvr_rx_lane_rate ne $lane_rate} {
+          set rx_lr_txt [string map {. _} $xcvr_rx_lane_rate]
+          append ip_suffix "_RXLR${rx_lr_txt}"
+        }
+        if {$xcvr_rx_ref_clk ne "" && $xcvr_rx_ref_clk ne $ref_clk} {
+          set rx_rc_txt [lindex [split $xcvr_rx_ref_clk "."] 0]
+          append ip_suffix "_RXRC${rx_rc_txt}"
+        }
+        set ip_name "$gt_type\_$pll_type${ip_suffix}\_$lane_rate_txt\_$ref_clk_txt"
+        #set ip_name "$gt_type\_$pll_type\_$lane_rate_txt\_$ref_clk_txt"
         incr inst_num
 
         ## check if it is 7series or ultrascale/ultrascale+
@@ -312,26 +369,31 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
           set gt_int_data_width 40
         }
 
+        set rx_lr [expr {$xcvr_rx_lane_rate ne "" ? $xcvr_rx_lane_rate : $lane_rate}]
+        set rx_rc [expr {$xcvr_rx_ref_clk ne "" ? $xcvr_rx_ref_clk : $ref_clk}]
+
         if {[string equal $gt_type GTXE2]} {
           ## 7 series
           ## create a GT instance with the wizard, if already exist skip it
           if {[lsearch [get_ips] $ip_name] == -1} {
 
             set float_clk [format "%.3f" [expr {$ref_clk}]]
+            set rx_float_clk [format "%.3f" [expr {$rx_rc}]]
 
             create_ip -name gtwizard -vendor xilinx.com -library ip -version 3.6 -module_name $ip_name
 
             set_property -dict [list \
             CONFIG.identical_protocol_file {JESD204} \
             CONFIG.identical_val_tx_reference_clock $float_clk \
-            CONFIG.identical_val_rx_reference_clock $float_clk \
-            CONFIG.gt0_val_rx_reference_clock $float_clk \
+            CONFIG.identical_val_rx_reference_clock $rx_float_clk \
+            CONFIG.gt0_val_rx_reference_clock $rx_float_clk \
             CONFIG.gt0_val_tx_reference_clock $float_clk \
             CONFIG.identical_val_tx_line_rate $lane_rate \
-            CONFIG.identical_val_rx_line_rate $lane_rate \
-            CONFIG.gt0_val_rx_line_rate $lane_rate \
+            CONFIG.identical_val_rx_line_rate $rx_lr \
+            CONFIG.gt0_val_rx_line_rate $rx_lr \
             CONFIG.gt0_val_tx_line_rate $lane_rate \
             CONFIG.gt_val_tx_pll $pll_type \
+            CONFIG.gt_val_rx_pll $xcvr_rx_pll_type \
             CONFIG.gt0_usesharedlogic {1} \
             CONFIG.advanced_clocking {true} \
             CONFIG.gt_val_drp {false} \
@@ -426,9 +488,9 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
                 CONFIG.TX_DATA_ENCODING $gt_encoding \
                 CONFIG.TX_USER_DATA_WIDTH $gt_user_data_width \
                 CONFIG.TX_INT_DATA_WIDTH $gt_int_data_width \
-                CONFIG.RX_LINE_RATE $lane_rate \
-                CONFIG.RX_PLL_TYPE $pll_type \
-                CONFIG.RX_REFCLK_FREQUENCY $ref_clk \
+                CONFIG.RX_LINE_RATE $rx_lr \
+                CONFIG.RX_PLL_TYPE $xcvr_rx_pll_type \
+                CONFIG.RX_REFCLK_FREQUENCY $rx_rc \
                 CONFIG.RX_DATA_DECODING $gt_encoding \
                 CONFIG.RX_USER_DATA_WIDTH $gt_user_data_width \
                 CONFIG.RX_INT_DATA_WIDTH $gt_int_data_width \
@@ -469,7 +531,7 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
 ## GitHub documentation: https://analogdevicesinc.github.io/hdl/library/jesd204/xgt_wizard/index.html
 ##
 ###############################################################################
-proc get_diff_params { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} {keep_ip "true"} } {
+proc get_diff_params { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} {xcvr_rx_pll_type {}} {xcvr_rx_lane_rate {}} {xcvr_rx_ref_clk {}} {keep_ip "true"} } {
 
   ## Get the gt_type for the board
   set board [string range [get_property PART [current_project]] 0 6]
@@ -518,7 +580,7 @@ proc get_diff_params { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} {keep_ip "
   set hdl_projects_path [file normalize [file join $current_dir "../.."]]
 
   ## Generate configurations
-  ad_gth_generator $lane_rate_l $pll_type $ref_clk_l
+  ad_gth_generator $lane_rate_l $pll_type $ref_clk_l $xcvr_rx_pll_type $xcvr_rx_lane_rate $xcvr_rx_ref_clk
 
   ## Call parser script gtwiz_parser.pl
   cd $project_name\.gen/sources_1/ip

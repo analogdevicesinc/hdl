@@ -13,7 +13,10 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # PLL_TYPE: The PLL used for driving the link [CPLL/QPLL]
 
 adi_project xcvr_wizard_zc706 0 [list \
-  LANE_RATE   [get_env_param LANE_RATE        10 ] \
-  REF_CLK     [get_env_param REF_CLK         500 ] \
-  PLL_TYPE    [get_env_param PLL_TYPE       QPLL ] \
+  LANE_RATE      [get_env_param LANE_RATE        10 ] \
+  REF_CLK        [get_env_param REF_CLK         500 ] \
+  PLL_TYPE       [get_env_param PLL_TYPE       QPLL ] \
+  XCVR_RX_PLL_TYPE    [get_env_param XCVR_RX_PLL_TYPE      {} ] \
+  XCVR_RX_LANE_RATE [get_env_param XCVR_RX_LANE_RATE {} ] \
+  XCVR_RX_REF_CLK     [get_env_param XCVR_RX_REF_CLK       {} ] \
 ]
