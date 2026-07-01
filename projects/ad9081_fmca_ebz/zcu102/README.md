@@ -41,7 +41,7 @@ The overwritable parameters from the environment are:
 
 ### Example configurations
 
-#### JESD204B subclass 1, TX mode 17, RX mode 18, VCXO 100 MHz (default)
+#### JESD204B subclass 1, TX mode 9, RX mode 10, VCXO 100 MHz (default)
 
 This specific command is equivalent to running `make` only:
 
@@ -51,6 +51,22 @@ RX_LANE_RATE=10 \
 TX_LANE_RATE=10 \
 RX_JESD_M=8 \
 RX_JESD_L=4 \
+RX_JESD_S=1 \
+TX_JESD_M=8 \
+TX_JESD_L=4 \
+TX_JESD_S=1
+```
+
+Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4.dts)
+
+#### JESD204B subclass 1, TX mode 17, RX mode 18, VCXO 100 MHz
+
+```
+make JESD_MODE=8B10B \
+RX_LANE_RATE=15 \
+TX_LANE_RATE=15 \
+RX_JESD_M=4 \
+RX_JESD_L=8 \
 RX_JESD_S=1 \
 TX_JESD_M=4 \
 TX_JESD_L=8 \
