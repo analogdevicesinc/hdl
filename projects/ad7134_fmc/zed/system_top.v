@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -124,11 +124,24 @@ module system_top (
   wire        iic_mux_sda_t_s;
 
   wire [1:0]  cs;
-  wire        resetn;
+  wire        ad713x_sclk_s;
+  wire [7:0]  ad713x_sdi_s;
 
   // instantiations
+
+  // SPI Engine SCLK drives both config SCLK and data DCLK
+  assign ad713x_spi_sclk = ad713x_sclk_s;
+  assign ad713x_dclk     = ad713x_sclk_s;
+
+  // gpio_o[50]: CS broadcast — when 1, both CS pins driven by cs[0]
   assign ad713x_spi_cs = gpio_o[50] ? {cs[0], cs[0]} : cs;
-  assign gpio_i[63:51] = gpio_o[63:51];
+
+  // gpio_o[51]: SDI mux control
+  //   1 -> SDI[0] carries config readback (spi_sdi) for register reads
+  //   0 -> SDI[0] carries data (din[0]) for offload capture
+  assign ad713x_sdi_s = {ad713x_din[7:1], (gpio_o[51] ? ad713x_spi_sdi : ad713x_din[0])};
+
+  assign gpio_i[63:50] = gpio_o[63:50];
 
   ad_iobuf #(
     .DATA_WIDTH(16)
@@ -219,19 +232,18 @@ module system_top (
     .iic_mux_sda_i (iic_mux_sda_i_s),
     .iic_mux_sda_o (iic_mux_sda_o_s),
     .iic_mux_sda_t (iic_mux_sda_t_s),
-    .spi0_clk_i (ad713x_spi_sclk),
-    .spi0_clk_o (ad713x_spi_sclk),
-    .spi0_csn_0_o (cs[0]),
-    .spi0_csn_1_o (cs[1]),
+    .spi0_clk_i (1'b0),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
+    .spi0_csn_1_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (ad713x_spi_sdi),
-    .spi0_sdo_i (ad713x_spi_sdo),
-    .spi0_sdo_o (ad713x_spi_sdo),
-    .ad713x_di_sdo (),
-    .ad713x_di_sdo_t (),
-    .ad713x_di_sdi (ad713x_din),
-    .ad713x_di_cs (),
-    .ad713x_di_sclk (ad713x_dclk),
+    .spi0_sdi_i (1'b0),
+    .spi0_sdo_i (1'b0),
+    .spi0_sdo_o (),
+    .ad713x_spi_sclk (ad713x_sclk_s),
+    .ad713x_spi_cs (cs),
+    .ad713x_spi_sdo (ad713x_spi_sdo),
+    .ad713x_spi_sdi (ad713x_sdi_s),
     .ad713x_odr (ad713x_odr),
     .ad713x_sdpclk (ad713x_sdpclk),
     .otg_vbusoc (otg_vbusoc),

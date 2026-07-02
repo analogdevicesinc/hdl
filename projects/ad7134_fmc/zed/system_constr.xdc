@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -13,15 +13,15 @@ set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS18} [get_ports ad713x_spi_c
 
 # ad713x data interface
 
-set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports ad713x_dclk];   ## FMC_LPC_CLK0_M2C_P
-set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports ad713x_din[0]]; ## FMC_LPC_LA00_N_CC
-set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports ad713x_din[1]]; ## FMC_LPC_LA06_N
-set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports ad713x_din[2]]; ## FMC_LPC_LA02_P
-set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports ad713x_din[3]]; ## FMC_LPC_LA02_N
-set_property -dict {PACKAGE_PIN J21 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports ad713x_din[4]]; ## FMC_LPC_LA08_P
-set_property -dict {PACKAGE_PIN J22 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports ad713x_din[5]]; ## FMC_LPC_LA08_N
-set_property -dict {PACKAGE_PIN R20 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports ad713x_din[6]]; ## FMC_LPC_LA09_P
-set_property -dict {PACKAGE_PIN R21 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports ad713x_din[7]]; ## FMC_LPC_LA09_N
+set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS18} [get_ports ad713x_dclk];            ## FMC_LPC_CLK0_M2C_P
+set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS18} [get_ports ad713x_din[0]];          ## FMC_LPC_LA00_N_CC
+set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS18} [get_ports ad713x_din[1]];          ## FMC_LPC_LA06_N
+set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS18} [get_ports ad713x_din[2]];          ## FMC_LPC_LA02_P
+set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS18} [get_ports ad713x_din[3]];          ## FMC_LPC_LA02_N
+set_property -dict {PACKAGE_PIN J21 IOSTANDARD LVCMOS18} [get_ports ad713x_din[4]];          ## FMC_LPC_LA08_P
+set_property -dict {PACKAGE_PIN J22 IOSTANDARD LVCMOS18} [get_ports ad713x_din[5]];          ## FMC_LPC_LA08_N
+set_property -dict {PACKAGE_PIN R20 IOSTANDARD LVCMOS18} [get_ports ad713x_din[6]];          ## FMC_LPC_LA09_P
+set_property -dict {PACKAGE_PIN R21 IOSTANDARD LVCMOS18} [get_ports ad713x_din[7]];          ## FMC_LPC_LA09_N
 set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS18} [get_ports ad713x_odr];             ## FMC_LPC_LA00_P_CC
 
 # ad713x GPIO lines
@@ -142,3 +142,17 @@ set_property  -dict {PACKAGE_PIN  G17   IOSTANDARD LVCMOS18} [get_ports gpio_bd[
 # Define SPI clock
 create_clock -name spi0_clk      -period 40   [get_pins -hier */EMIOSPI0SCLKO]
 create_clock -name spi1_clk      -period 40   [get_pins -hier */EMIOSPI1SCLKO]
+
+# Virtual clock at 50 MHz representing DCLK/SCLK as seen by the AD713x
+create_clock -period 20.0 -name ad713x_dclk_virt
+
+# DOUTx input delay relative to DCLK (tco_max = 8.2 ns)
+set_input_delay -clock ad713x_dclk_virt -max 8.2 [get_ports ad713x_din[*]]
+set_input_delay -clock ad713x_dclk_virt -min 0.0 [get_ports ad713x_din[*]]
+
+# SDO input delay relative to SCLK falling (tco_max = 8.0 ns)
+set_input_delay -clock ad713x_dclk_virt -clock_fall -max 8.0 [get_ports ad713x_spi_sdi]
+set_input_delay -clock ad713x_dclk_virt -clock_fall -min 0.0 [get_ports ad713x_spi_sdi]
+
+# Virtual clock is unrelated to MMCM domain — SPI Engine handles timing internally
+set_false_path -from [get_clocks ad713x_dclk_virt] -to [get_clocks mmcm_clk_0_s]
