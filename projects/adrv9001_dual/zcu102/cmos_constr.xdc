@@ -89,7 +89,16 @@ set_property  -dict {PACKAGE_PIN AH12   IOSTANDARD LVCMOS18}  [get_ports adrv2_t
 
 # clocks
 
-create_clock -name adrv1_ref_clk  -period  25.00 [get_ports fpga_ref_clk_p]
+set DEV_CLK_REF 32.552
+set ADRV2_REF_PHASE_NS 0.000
+
+create_clock -name adrv1_ref_clk  -period $DEV_CLK_REF \
+  -waveform [list 0.000 [expr {$DEV_CLK_REF / 2.0}]] \
+  [get_ports adrv1_fpga_ref_clk_p]
+
+create_clock -name adrv2_ref_clk  -period $DEV_CLK_REF \
+  -waveform [list $ADRV2_REF_PHASE_NS [expr {$ADRV2_REF_PHASE_NS + ($DEV_CLK_REF / 2.0)}]] \
+  [get_ports adrv2_fpga_ref_clk_p]
 
 create_clock -name adrv1_rx1_dclk_out   -period  12.5 [get_ports adrv1_rx1_dclk_out_p]
 create_clock -name adrv1_rx2_dclk_out   -period  12.5 [get_ports adrv1_rx2_dclk_out_p]
@@ -151,3 +160,17 @@ set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets i_system_wrapper/system_i/axi
 
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports adrv1_tx1_strobe_in_p]
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports adrv1_tx2_idata_in_p]
+
+set_input_delay -clock [get_clocks {adrv1_ref_clk}] -min -add_delay 2.0 [get_ports {adrv1_fpga_mcs_in_p}]
+set_input_delay -clock [get_clocks {adrv1_ref_clk}] -max -add_delay 3.0 [get_ports {adrv1_fpga_mcs_in_p}]
+set_input_delay -clock [get_clocks {adrv2_ref_clk}] -min -add_delay 2.0 [get_ports {adrv1_fpga_mcs_in_p}]
+set_input_delay -clock [get_clocks {adrv2_ref_clk}] -max -add_delay 3.0 [get_ports {adrv1_fpga_mcs_in_p}]
+
+set_output_delay -clock [get_clocks {adrv1_ref_clk}] -min -add_delay 2.0 [get_ports {adrv1_dev_mcs_fpga_out_p}]
+set_output_delay -clock [get_clocks {adrv1_ref_clk}] -max -add_delay 3.0 [get_ports {adrv1_dev_mcs_fpga_out_p}]
+set_output_delay -clock [get_clocks {adrv2_ref_clk}] -min -add_delay 2.0 [get_ports {adrv2_dev_mcs_fpga_out_p}]
+set_output_delay -clock [get_clocks {adrv2_ref_clk}] -max -add_delay 3.0 [get_ports {adrv2_dev_mcs_fpga_out_p}]
+
+set_bus_skew -quiet 0.100 \
+  -from [get_pins -quiet -hier -filter {NAME =~ */axi_adrv9001_*/inst/i_sync/mcs_out_i_reg/Q}] \
+  -to [get_ports -quiet {adrv1_dev_mcs_fpga_out_p adrv2_dev_mcs_fpga_out_p}]

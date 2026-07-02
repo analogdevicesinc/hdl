@@ -49,7 +49,7 @@ set_property  -dict {PACKAGE_PIN V7    IOSTANDARD LVCMOS18}  [get_ports adrv1_pl
 
 # fmc hpc 1
 
-#set_property  -dict {PACKAGE_PIN AE7   IOSTANDARD LVCMOS18}  [get_ports adrv2_dev_clk_in]                        ; #FMC_HPC1_CLK0_M2C_P
+#set_property -dict {PACKAGE_PIN AE7   IOSTANDARD LVCMOS18}  [get_ports adrv2_dev_clk_in]                        ; #FMC_HPC1_CLK0_M2C_P
 set_property  -dict {PACKAGE_PIN AH6   IOSTANDARD LVDS}      [get_ports adrv2_dev_mcs_fpga_out_n]                ; #FMC_HPC1_LA14_N
 set_property  -dict {PACKAGE_PIN AH7   IOSTANDARD LVDS}      [get_ports adrv2_dev_mcs_fpga_out_p]                ; #FMC_HPC1_LA14_P
 
@@ -66,12 +66,14 @@ set_property  -dict {PACKAGE_PIN R13   IOSTANDARD LVCMOS18}  [get_ports adrv2_dg
 set_property  -dict {PACKAGE_PIN AE8   IOSTANDARD LVCMOS18}  [get_ports adrv2_dgpio_10]                          ; #FMC_HPC1_LA11_P
 set_property  -dict {PACKAGE_PIN T10   IOSTANDARD LVCMOS18}  [get_ports adrv2_dgpio_11]                          ; #FMC_HPC1_LA27_N
 
-# set_property  -dict {PACKAGE_PIN xx  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}  [get_ports adrv1_fpga_mcs_in_n]  ; #FMC_HPC1_LA32_N
-# set_property  -dict {PACKAGE_PIN xx  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}  [get_ports adrv1_fpga_mcs_in_p]  ; #FMC_HPC1_LA32_P
+# NO pins available
+# set_property  -dict {PACKAGE_PIN xx  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}  [get_ports adrv2_fpga_mcs_in_n]  ; #FMC_HPC1_LA32_N
+# set_property  -dict {PACKAGE_PIN xx  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}  [get_ports adrv2_fpga_mcs_in_p]  ; #FMC_HPC1_LA32_P
 
 set_property  -dict {PACKAGE_PIN P9    IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}  [get_ports adrv2_fpga_ref_clk_n] ; #FMC_HPC1_CLK1_M2C_N
 set_property  -dict {PACKAGE_PIN P10   IOSTANDARD LVDS DIFF_TERM_ADV TERM_100}  [get_ports adrv2_fpga_ref_clk_p] ; #FMC_HPC1_CLK1_M2C_P
 
+# NO pins available
 #set_property  -dict {PACKAGE_PIN xx   IOSTANDARD LVCMOS18}  [get_ports adrv2_gp_int]                            ; #FMC_HPC1_LA30_P
 set_property  -dict {PACKAGE_PIN AG8   IOSTANDARD LVCMOS18}  [get_ports adrv2_mode]                              ; #FMC_HPC1_LA13_P
 set_property  -dict {PACKAGE_PIN AH8   IOSTANDARD LVCMOS18}  [get_ports adrv2_reset_trx]                         ; #FMC_HPC1_LA13_N
@@ -89,6 +91,7 @@ set_property  -dict {PACKAGE_PIN AD10  IOSTANDARD LVCMOS18}  [get_ports adrv2_sp
 set_property  -dict {PACKAGE_PIN AE2   IOSTANDARD LVCMOS18}  [get_ports adrv2_tx1_en]                            ; #FMC_HPC1_LA09_P
 set_property  -dict {PACKAGE_PIN W12   IOSTANDARD LVCMOS18}  [get_ports adrv2_tx2_en]                            ; #FMC_HPC1_LA29_P
 
+# NO pins available
 #set_property  -dict {PACKAGE_PIN V8   IOSTANDARD LVCMOS18}  [get_ports adrv2_vadj_err]                          ; #FMC_HPC1_LA31_P
 #set_property  -dict {PACKAGE_PIN V7   IOSTANDARD LVCMOS18}  [get_ports adrv2_platform_status]                   ; #FMC_HPC1_LA31_N
 

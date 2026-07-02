@@ -213,6 +213,9 @@ module system_top (
   wire                    adrv1_fpga_ref_clk;
   wire                    adrv2_fpga_ref_clk;
   wire                    adrv1_fpga_mcs_in;
+  wire                    adrv1_fpga_mcs_out;
+  wire                    adrv2_fpga_mcs_out;
+  wire                    mssi_sync;
   wire                    tdd_sync_loc;
   wire                    tdd_sync_i;
   wire                    tdd_sync_cntr;
@@ -235,16 +238,15 @@ module system_top (
     .O (adrv1_fpga_mcs_in));
 
   OBUFDS i_obufds_adrv1_dev_mcs_fpga_in (
-    .I (adrv1_dev_mcs_fpga_in),
+    .I (adrv1_fpga_mcs_out),
     .O (adrv1_dev_mcs_fpga_out_p),
     .OB (adrv1_dev_mcs_fpga_out_n));
 
   OBUFDS i_obufds_adrv2_dev_mcs_fpga_in (
-    .I (adrv2_dev_mcs_fpga_in),
+    .I (adrv2_fpga_mcs_out),
     .O (adrv2_dev_mcs_fpga_out_p),
     .OB (adrv2_dev_mcs_fpga_out_n));
 
-  // to do add MCS support
   assign mssi_sync = gpio_o[54];
 
   assign adrv1_platform_status = adrv1_vadj_err;
@@ -331,6 +333,9 @@ module system_top (
   system_wrapper i_system_wrapper (
     .adrv1_ref_clk (adrv1_fpga_ref_clk),
     .adrv1_fpga_mcs_in (adrv1_fpga_mcs_in),
+    .adrv1_fpga_mcs_out (adrv1_fpga_mcs_out),
+    .adrv2_ref_clk (adrv2_fpga_ref_clk),
+    .adrv2_fpga_mcs_out (adrv2_fpga_mcs_out),
     .mssi_sync (mssi_sync),
 
     .tx_output_enable (1'b1),

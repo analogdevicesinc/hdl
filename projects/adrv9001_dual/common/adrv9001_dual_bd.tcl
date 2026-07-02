@@ -93,9 +93,12 @@ create_bd_port -dir I adrv2_gpio_tx1_enable_in
 create_bd_port -dir I adrv2_gpio_tx2_enable_in
 
 create_bd_port -dir I adrv1_ref_clk
+create_bd_port -dir I adrv2_ref_clk
 create_bd_port -dir I tx_output_enable
 create_bd_port -dir I mssi_sync
 create_bd_port -dir I adrv1_fpga_mcs_in
+create_bd_port -dir O adrv1_fpga_mcs_out
+create_bd_port -dir O adrv2_fpga_mcs_out
 
 set USE_RX_CLK_FOR_TX1 $ad_project_params(USE_RX_CLK_FOR_TX1)
 set USE_RX_CLK_FOR_TX2 $ad_project_params(USE_RX_CLK_FOR_TX2)
@@ -206,9 +209,11 @@ ad_connect  axi_adrv9001_1/dac_2_clk adrv1_util_dac_2_upack/clk
 
 ad_connect adrv1_ref_clk           axi_adrv9001_1/ref_clk
 
-ad_connect tx_output_enable  axi_adrv9001_1/tx_output_enable
+ad_connect tx_output_enable        axi_adrv9001_1/tx_output_enable
 
-ad_connect mssi_sync         axi_adrv9001_1/mssi_sync_in
+ad_connect mssi_sync               axi_adrv9001_1/mssi_sync_in
+ad_connect adrv1_fpga_mcs_in       axi_adrv9001_1/mcs_in
+ad_connect adrv1_fpga_mcs_out      axi_adrv9001_1/mcs_out
 
 ad_connect adrv1_rx1_dclk_in_n     axi_adrv9001_1/rx1_dclk_in_n_NC
 ad_connect adrv1_rx1_dclk_in_p     axi_adrv9001_1/rx1_dclk_in_p_dclk_in
@@ -422,11 +427,13 @@ ad_connect  axi_adrv9001_2/dac_1_clk adrv2_util_dac_1_upack/clk
 ad_connect  axi_adrv9001_2/dac_2_clk axi_adrv9001_2_tx2_dma/m_axis_aclk
 ad_connect  axi_adrv9001_2/dac_2_clk adrv2_util_dac_2_upack/clk
 
-ad_connect adrv1_ref_clk           axi_adrv9001_2/ref_clk
+ad_connect adrv2_ref_clk           axi_adrv9001_2/ref_clk
 
-ad_connect tx_output_enable  axi_adrv9001_2/tx_output_enable
+ad_connect tx_output_enable        axi_adrv9001_2/tx_output_enable
 
-ad_connect mssi_sync         axi_adrv9001_2/mssi_sync_in
+ad_connect mssi_sync               axi_adrv9001_2/mssi_sync_in
+ad_connect adrv1_fpga_mcs_in       axi_adrv9001_2/mcs_in
+ad_connect adrv2_fpga_mcs_out      axi_adrv9001_2/mcs_out
 
 ad_connect adrv2_rx1_dclk_in_n     axi_adrv9001_2/rx1_dclk_in_n_NC
 ad_connect adrv2_rx1_dclk_in_p     axi_adrv9001_2/rx1_dclk_in_p_dclk_in

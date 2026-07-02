@@ -89,7 +89,16 @@ set_property  -dict {PACKAGE_PIN AH12   IOSTANDARD LVDS}                        
 
 # clocks
 
-create_clock -name adrv1_ref_clk       -period  8.00 [get_ports fpga_ref_clk_p]
+set DEV_CLK_REF 32.552
+set ADRV2_REF_PHASE_NS 0.000
+
+create_clock -name adrv1_ref_clk       -period $DEV_CLK_REF \
+  -waveform [list 0.000 [expr {$DEV_CLK_REF / 2.0}]] \
+  [get_ports adrv1_fpga_ref_clk_p]
+
+create_clock -name adrv2_ref_clk       -period $DEV_CLK_REF \
+  -waveform [list $ADRV2_REF_PHASE_NS [expr {$ADRV2_REF_PHASE_NS + ($DEV_CLK_REF / 2.0)}]] \
+  [get_ports adrv2_fpga_ref_clk_p]
 
 create_clock -name adrv1_rx1_dclk_in   -period  2.034 [get_ports adrv1_rx1_dclk_out_p]
 create_clock -name adrv1_rx2_dclk_in   -period  2.034 [get_ports adrv1_rx2_dclk_out_p]
@@ -116,48 +125,62 @@ set_clock_latency -source -late 0.1 [get_clocks adrv2_rx1_dclk_in]
 set_clock_latency -source -late 0.1 [get_clocks adrv2_rx2_dclk_in]
 
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_1 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_rx_1_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_rx_1_phy/i_clk_buf_fast/O]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_1 \
+  [list [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_rx_1_phy/i_div_clk_buf/O}]] \
+        [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_rx_1_phy/i_clk_buf_fast/O}]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_2 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_rx_2_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_2 \
+  [list [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_rx_2_phy/i_div_clk_buf/O}]] \
+        [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O}]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_3 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_1_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_1_phy/i_clk_buf_fast/O]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_3 \
+  [list [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_1_phy/i_div_clk_buf/O}]] \
+        [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_1_phy/i_clk_buf_fast/O}]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_4 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_2_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_4 \
+  [list [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_2_phy/i_div_clk_buf/O}]] \
+        [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O}]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_5 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_1_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_5 \
+  [list [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_1_phy/i_dac_div_clk_rbuf/O}]] \
+        [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_1_phy/i_dac_clk_in_gbuf/O}]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_6 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_2_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_6 \
+  [list [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_2_phy/i_dac_div_clk_rbuf/O}]] \
+        [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_1/inst/i_if/i_tx_2_phy/i_dac_clk_in_gbuf/O}]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_7 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_1_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_7 \
+  [list [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_1_phy/i_dac_div_clk_rbuf/O}]] \
+        [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_1_phy/i_dac_clk_in_gbuf/O}]] \
   ]
 
-set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_8 \
-  [list [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_2_phy/i_div_clk_buf/O]] \
-        [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O]] \
+set_property -quiet CLOCK_DELAY_GROUP BALANCE_CLOCKS_8 \
+  [list [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_2_phy/i_dac_div_clk_rbuf/O}]] \
+        [get_nets -quiet -of_objects [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_2/inst/i_if/i_tx_2_phy/i_dac_clk_in_gbuf/O}]] \
   ]
 
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports adrv1_tx1_strobe_in_p]
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports adrv1_tx2_idata_in_p]
 
-set_false_path -to [get_pins i_system_wrapper/system_i/axi_adrv9001_1/inst/i_sync/mssi_sync_in_d_reg/D]
-set_false_path -to [get_pins i_system_wrapper/system_i/axi_adrv9001_2/inst/i_sync/mssi_sync_in_d_reg/D]
+set_input_delay -clock [get_clocks {adrv1_ref_clk}] -min -add_delay 2.0 [get_ports {adrv1_fpga_mcs_in_p}]
+set_input_delay -clock [get_clocks {adrv1_ref_clk}] -max -add_delay 3.0 [get_ports {adrv1_fpga_mcs_in_p}]
+set_input_delay -clock [get_clocks {adrv2_ref_clk}] -min -add_delay 2.0 [get_ports {adrv1_fpga_mcs_in_p}]
+set_input_delay -clock [get_clocks {adrv2_ref_clk}] -max -add_delay 3.0 [get_ports {adrv1_fpga_mcs_in_p}]
+
+set_output_delay -clock [get_clocks {adrv1_ref_clk}] -min -add_delay 2.0 [get_ports {adrv1_dev_mcs_fpga_out_p}]
+set_output_delay -clock [get_clocks {adrv1_ref_clk}] -max -add_delay 3.0 [get_ports {adrv1_dev_mcs_fpga_out_p}]
+set_output_delay -clock [get_clocks {adrv2_ref_clk}] -min -add_delay 2.0 [get_ports {adrv2_dev_mcs_fpga_out_p}]
+set_output_delay -clock [get_clocks {adrv2_ref_clk}] -max -add_delay 3.0 [get_ports {adrv2_dev_mcs_fpga_out_p}]
+
+set_bus_skew -quiet 0.100 \
+  -from [get_pins -quiet -hier -filter {NAME =~ */axi_adrv9001_*/inst/i_sync/mcs_out_i_reg/Q}] \
+  -to [get_ports -quiet {adrv1_dev_mcs_fpga_out_p adrv2_dev_mcs_fpga_out_p}]
+
+set_false_path -quiet -to [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_1/inst/i_sync/mssi_sync_in_d_reg/D}]
+set_false_path -quiet -to [get_pins -quiet {i_system_wrapper/system_i/axi_adrv9001_2/inst/i_sync/mssi_sync_in_d_reg/D}]
