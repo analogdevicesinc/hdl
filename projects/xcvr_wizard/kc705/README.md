@@ -19,6 +19,11 @@ The overwritable parameters from the environment:
 - LANE_RATE: Value of lane rate [gbps]
 - REF_CLK: Value of the reference clock [MHz] (usually LANE_RATE/20 or LANE_RATE/40)
 - PLL_TYPE: The PLL used for driving the link [CPLL/QPLL]
+- XCVR_RX_LANE_RATE: Value of lane rate for the RX link [gbps] (Optional)
+- XCVR_RX_REF_CLK: Value of the reference clock for the RX link [MHz] (usually
+  XCVR_RX_LANE_RATE/20 or XCVR_RX_LANE_RATE/40) (Optional)
+- XCVR_RX_PLL_TYPE: The PLL used for driving the RX link [CPLL/QPLL1/QPLL0]
+  (Optional)
 
 Note: When running make with parameters, a new folder specific to the chosen
 configuration is created under the project directory. The generated IPs and

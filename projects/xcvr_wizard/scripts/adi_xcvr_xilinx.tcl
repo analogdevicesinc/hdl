@@ -94,7 +94,6 @@ proc adi_xcvr_project {parameters_for_make {carrier_name ""}} {
     set file_local_param [string tolower $config_parser_dir_name]
     append file_local_param "_common.v"
   }
-  puts "INFO: Running make command: $make_command"
   eval exec $make_command
   cd $current_dir
 
