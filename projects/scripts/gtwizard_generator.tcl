@@ -434,9 +434,9 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} {xcvr_rx_
             CONFIG.gt0_val_rxusrclk {RXOUTCLK} \
             CONFIG.gt0_val_decoding $gt_encoding_7s \
             CONFIG.gt0_val_encoding $gt_encoding_7s \
-            CONFIG.gt0_val_tx_data_width {$gt_user_data_width} \
+            CONFIG.gt0_val_tx_data_width $gt_user_data_width \
             CONFIG.gt0_val_tx_int_datawidth $gt_int_data_width \
-            CONFIG.gt0_val_rx_data_width {$gt_user_data_width} \
+            CONFIG.gt0_val_rx_data_width $gt_user_data_width \
             CONFIG.gt0_val_rx_int_datawidth $gt_int_data_width \
             CONFIG.gt0_val_port_rxchariscomma {true} \
             CONFIG.gt0_val_port_rxcharisk {true} \
