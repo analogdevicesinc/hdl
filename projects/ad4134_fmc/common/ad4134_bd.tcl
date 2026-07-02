@@ -32,7 +32,7 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
+set NUM_OF_SDI 4
 
 create_bd_port -dir O ad4134_spi_sclk
 create_bd_port -dir O ad4134_spi_cs
