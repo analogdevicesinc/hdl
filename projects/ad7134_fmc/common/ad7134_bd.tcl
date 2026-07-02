@@ -3,7 +3,13 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad713x_di
+set NUM_OF_SDI 8
+
+create_bd_port -dir O ad713x_spi_sclk
+create_bd_port -dir O -from 1 -to 0 ad713x_spi_cs
+create_bd_port -dir O ad713x_spi_sdo
+create_bd_port -dir I -from [expr $NUM_OF_SDI-1] -to 0 ad713x_spi_sdi
+
 create_bd_port -dir O ad713x_odr
 create_bd_port -dir O ad713x_sdpclk
 
@@ -16,9 +22,9 @@ set hier_spi_engine  dual_ad7134
 set data_width       32
 set async_spi_clk    1
 set offload_en       1
-set num_cs           1
-set num_sdi          8
-set num_sdo          0
+set num_cs           2
+set num_sdi          $NUM_OF_SDI
+set num_sdo          1
 set sdi_delay        0
 set echo_sclk        0
 
@@ -41,7 +47,7 @@ ad_ip_parameter axi_ad7134_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad7134_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad7134_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad7134_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC 256
+ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32 * $NUM_OF_SDI]
 ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
 # odr generator
@@ -65,13 +71,16 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 50.0
 ad_connect ad713x_sdpclk sys_ps7/FCLK_CLK2
 
 ad_connect  axi_ad7134_clkgen/clk_0 $hier_spi_engine/spi_clk
-ad_connect  $sys_cpu_clk axi_ad7134_clkgen/clk 
+ad_connect  $sys_cpu_clk axi_ad7134_clkgen/clk
 ad_connect  $sys_cpu_clk $hier_spi_engine/clk
 ad_connect  axi_ad7134_clkgen/clk_0 axi_ad7134_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn $hier_spi_engine/resetn
 ad_connect  sys_cpu_resetn axi_ad7134_dma/m_dest_axi_aresetn
 
-ad_connect  $hier_spi_engine/m_spi ad713x_di
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sclk ad713x_spi_sclk
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/cs   ad713x_spi_cs
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdo  ad713x_spi_sdo
+ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdi  ad713x_spi_sdi
 ad_connect  axi_ad7134_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
 
 # AXI address definitions
