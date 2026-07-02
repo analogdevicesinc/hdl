@@ -127,10 +127,6 @@ module system_top (
   inout                   tdd_sync
 );
 
-  // internal registers
-  reg         [  2:0] mcs_sync_m = 'd0;
-  reg                 dev_mcs_fpga_in = 1'b0;
-
   // internal signals
   wire        [94:0]      gpio_i;
   wire        [94:0]      gpio_o;
@@ -143,6 +139,8 @@ module system_top (
 
   wire fpga_ref_clk;
   wire fpga_mcs_in;
+  wire mcs_out;
+  wire mssi_sync;
   wire tdd_sync_loc;
   wire tdd_sync_i;
   wire tdd_sync_cntr;
@@ -160,19 +158,10 @@ module system_top (
     .O (fpga_mcs_in));
 
   OBUFDS i_obufds_dev_mcs_fpga_in (
-    .I (dev_mcs_fpga_in),
+    .I (mcs_out),
     .O (dev_mcs_fpga_out_p),
     .OB (dev_mcs_fpga_out_n));
 
-  // multi-chip synchronization
-  //
-  always @(posedge fpga_ref_clk) begin
-    mcs_sync_m <= {mcs_sync_m[1:0], gpio_o[53]};
-    dev_mcs_fpga_in <= mcs_sync_m[2] & ~mcs_sync_m[1];
-  end
-
-  // multi-ssi synchronization
-  //
   assign mssi_sync = gpio_o[54];
 
   assign platform_status = vadj_err;
@@ -226,6 +215,8 @@ module system_top (
 
   system_wrapper i_system_wrapper (
     .ref_clk (fpga_ref_clk),
+    .mcs_in (fpga_mcs_in),
+    .mcs_out (mcs_out),
     .mssi_sync (mssi_sync),
 
     .tx_output_enable (1'b1),
