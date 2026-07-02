@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,9 +35,7 @@
 
 `timescale 1ns/100ps
 
-module system_top #(
-  parameter NUM_OF_SDI = 4
-) (
+module system_top (
 
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
@@ -95,7 +93,7 @@ module system_top #(
   // ad4134 data interface
 
   output          ad4134_dclk,
-  input   [NUM_OF_SDI-1:0]  ad4134_din,
+  input   [3:0]   ad4134_din,
   output          ad4134_odr,
 
   // ad4134 GPIO lines
@@ -129,7 +127,7 @@ module system_top #(
   wire            iic_mux_sda_t_s;
 
   wire            ad4134_sclk_s;
-  wire [NUM_OF_SDI-1:0] ad4134_sdi_s;
+  wire     [3:0]  ad4134_sdi_s;
 
   // instantiations
 
@@ -137,13 +135,10 @@ module system_top #(
   assign ad4134_spi_sclk = ad4134_sclk_s;
   assign ad4134_dclk     = ad4134_sclk_s;
 
-  // NUM_OF_SDI=1: SDI from SDO (ADC muxes via SDO_PIN_SRC_SEL)
-  // NUM_OF_SDI=4: SDI[0] muxed between SDO and DOUT0 via gpio_o[46]
-  assign ad4134_sdi_s = (NUM_OF_SDI == 1) ?
-      {ad4134_spi_sdi} :
-      {ad4134_din[3:1], (gpio_o[46] ? ad4134_spi_sdi : ad4134_din[0])};
+  // SDI[0] muxed between SDO and DOUT0 via gpio_o[46]
+  assign ad4134_sdi_s = {ad4134_din[3:1], (gpio_o[46] ? ad4134_spi_sdi : ad4134_din[0])};
 
-  assign gpio_i[63:46] = gpio_o[63:46];
+  assign gpio_i[63:47] = gpio_o[63:47];
   ad_iobuf #(
     .DATA_WIDTH(14)
   ) i_iobuf_ad4134_gpio (
