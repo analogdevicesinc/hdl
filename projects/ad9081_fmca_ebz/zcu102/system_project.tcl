@@ -12,9 +12,17 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #
 #   Use over-writable parameters from the environment.
 #
-#    e.g.
-#      make RX_JESD_L=4 RX_JESD_M=8 RX_JESD_S=1 TX_JESD_L=4 TX_JESD_M=8 TX_JESD_S=1
+#    e.g. XCVR only
+#      make PLL_TYPE=QPLL0 REF_CLK=250 LANE_RATE=10
+#
+#    e.g. JESD only
 #      make RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1
+#
+#    e.g. JESD and XCVR
+#      make JESD_MODE=8B10B RX_LANE_RATE=2 TX_LANE_RATE=4 RX_JESD_M=8 RX_JESD_L=2 RX_JESD_S=1 TX_JESD_M=8 \
+#           TX_JESD_L=4 TX_JESD_S=1 PLL_TYPE=QPLL0 REF_CLK=100 LANE_RATE=4 XCVR_RX_PLL_TYPE=CPLL XCVR_RX_LANE_RATE=2
+#      make JESD_MODE=64B66B RX_LANE_RATE=5.98 TX_LANE_RATE=11.96 RX_JESD_M=8 RX_JESD_L=1 RX_JESD_S=1 RX_JESD_NP=12 \
+#           TX_JESD_M=8 TX_JESD_L=1 TX_JESD_S=1 TX_JESD_NP=12 PLL_TYPE=QPLL0 REF_CLK=362.424242 LANE_RATE=11.96
 
 global xcvr_config_paths
 
@@ -22,14 +30,16 @@ global xcvr_config_paths
 #   LANE_RATE: Value of lane rate [gbps]
 #   REF_CLK: Value of the reference clock [MHz] (usually LANE_RATE/20 or LANE_RATE/40)
 #   PLL_TYPE: The PLL used for driving the link [CPLL/QPLL1/QPLL0]
+#   XCVR_RX_LANE_RATE: Value of lane rate for the RX link [gbps] (Optional)
+#   XCVR_RX_REF_CLK: Value of the reference clock for the RX link [MHz] (usually XCVR_RX_LANE_RATE/20 or XCVR_RX_LANE_RATE/40) (Optional)
+#   XCVR_RX_PLL_TYPE: The PLL used for driving the RX link [CPLL/QPLL1/QPLL0] (Optional)
 
 set xcvr_config_paths [adi_xcvr_project [list \
-  LANE_RATE [get_env_param LANE_RATE 11.96] \
-  REF_CLK   [get_env_param REF_CLK  362.424242] \
+  LANE_RATE [get_env_param LANE_RATE    10] \
+  REF_CLK   [get_env_param REF_CLK     250] \
   PLL_TYPE  [get_env_param PLL_TYPE  QPLL0] \
 ]]
 
-#
 # Parameter description:
 #   JESD_MODE : Used link layer encoder mode
 #      64B66B - 64b66b link layer defined in JESD 204C, uses Xilinx IP as Physical layer
@@ -41,7 +51,6 @@ set xcvr_config_paths [adi_xcvr_project [list \
 #   [RX/TX]_JESD_L : Number of lanes per link
 #   [RX/TX]_JESD_NP : Number of bits per sample, only 16 is supported
 #   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
-#
 
 adi_project ad9081_fmca_ebz_zcu102 0 [list \
   JESD_MODE        [get_env_param JESD_MODE      8B10B ] \

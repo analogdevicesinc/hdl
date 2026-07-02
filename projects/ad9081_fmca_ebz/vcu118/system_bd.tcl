@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -183,5 +183,4 @@ if {$ad_project_params(CORUNDUM) == "1"} {
 
     ad_connect output_enable_concat_corundum/dout corundum_hierarchy/output_enable
   }
-
 }

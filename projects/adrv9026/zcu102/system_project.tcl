@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -10,14 +10,23 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 # get_env_param retrieves parameter value from the environment if exists,
 # other case use the default value
 #
-# Use over-writable parameters from the environment.
+#    Use over-writable parameters from the environment.
 #
-# e.g.
-#   RX-OS disabled: make
-#   RX-OS Non-LinkSharing:
-#    - JESD204B: make ORX_ENABLE=1 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=2 RX_TPL_WIDTH=8
-#    - JESD204C: make JESD_MODE=64B66B ORX_ENABLE=1 TX_LANE_RATE=16.22 RX_LANE_RATE=16.22 \
-#                RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=2
+#    e.g. JESD only
+#      RX-OS disabled: make
+#      RX-OS Non-LinkSharing:
+#       - JESD204B: make ORX_ENABLE=1 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=2 RX_TPL_WIDTH=8
+#       - JESD204C: make JESD_MODE=64B66B ORX_ENABLE=1 TX_LANE_RATE=16.22 RX_LANE_RATE=16.22 \
+#                       RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=2
+#
+#    e.g. XCVR only
+#      make PLL_TYPE=QPLL0 REF_CLK=245.75 LANE_RATE=9.83
+#
+#    e.g. JESD and XCVR
+#      make JESD_MODE=8B10B ORX_ENABLE=1 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=2 RX_TPL_WIDTH=8 \
+#           PLL_TYPE=QPLL0 REF_CLK=245.75 LANE_RATE=9.83 XCVR_RX_PLL_TYPE=CPLL
+#      make JESD_MODE=64B66B ORX_ENABLE=1 TX_LANE_RATE=16.22 RX_LANE_RATE=16.22 RX_OS_JESD_M=4 RX_OS_JESD_L=2 RX_OS_JESD_S=1 \
+#           RX_OS_JESD_NP=16 RX_JESD_L=2 PLL_TYPE=QPLL0 REF_CLK=491.5151515 LANE_RATE=16.22
 
 global xcvr_config_paths
 
@@ -25,11 +34,14 @@ global xcvr_config_paths
 #   LANE_RATE: Value of lane rate [gbps]
 #   REF_CLK: Value of the reference clock [MHz] (usually LANE_RATE/20 or LANE_RATE/40)
 #   PLL_TYPE: The PLL used for driving the link [CPLL/QPLL1/QPLL0]
+#   XCVR_RX_LANE_RATE: Value of lane rate for the RX link [gbps] (Optional)
+#   XCVR_RX_REF_CLK: Value of the reference clock for the RX link [MHz] (usually XCVR_RX_LANE_RATE/20 or XCVR_RX_LANE_RATE/40) (Optional)
+#   XCVR_RX_PLL_TYPE: The PLL used for driving the RX link [CPLL/QPLL1/QPLL0] (Optional)
 
 set xcvr_config_paths [adi_xcvr_project [list \
-  LANE_RATE [get_env_param LANE_RATE 16.22] \
-  REF_CLK   [get_env_param REF_CLK     491.52] \
-  PLL_TYPE  [get_env_param PLL_TYPE     QPLL0] \
+  LANE_RATE [get_env_param LANE_RATE 9.83] \
+  REF_CLK   [get_env_param REF_CLK 245.75] \
+  PLL_TYPE  [get_env_param PLL_TYPE QPLL0] \
 ]]
 
 # Parameter description:

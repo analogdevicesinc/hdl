@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -13,13 +13,22 @@ set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timi
 #
 #   Use over-writable parameters from the environment.
 #
-#    e.g.
+#    e.g. JESD only
 #      make JESD_MODE=64B66B RX_LANE_RATE=24.75 TX_LANE_RATE=12.375 RX_JESD_L=4 TX_JESD_L=4
 #      make JESD_MODE=64B66B RX_LANE_RATE=16.22016 TX_LANE_RATE=16.22016 RX_JESD_M=8 RX_JESD_L=2 TX_JESD_M=16 TX_JESD_L=4
 #      make JESD_MODE=64B66B RX_LANE_RATE=16.50 TX_LANE_RATE=16.50 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=1 TX_JESD_NP=16
 #      make JESD_MODE=64B66B RX_LANE_RATE=24.75 TX_LANE_RATE=24.75 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=2 RX_JESD_NP=12 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=2 TX_JESD_NP=12
 #      make JESD_MODE=64B66B RX_LANE_RATE=16.50 TX_LANE_RATE=16.50 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=2 RX_JESD_NP=12 TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=2 TX_JESD_NP=12
-#      make JESD_MODE=8B10B  RX_JESD_L=4 RX_JESD_M=8 TX_JESD_L=4 TX_JESD_M=8
+#      make JESD_MODE=8B10B RX_JESD_L=4 RX_JESD_M=8 TX_JESD_L=4 TX_JESD_M=8
+#
+#    e.g. XCVR only
+#      make PLL_TYPE=QPLL0 REF_CLK=500 LANE_RATE=10
+#
+#    e.g. JESD and XCVR
+#      make JESD_MODE=8B10B RX_LANE_RATE=15 TX_LANE_RATE=15 RX_JESD_M=4 RX_JESD_L=8 RX_JESD_S=1 RX_JESD_NP=16 RX_NUM_LINKS=1 \
+#           TX_JESD_M=4 TX_JESD_L=8 TX_JESD_S=1 TX_JESD_NP=16 TX_NUM_LINKS=1 PLL_TYPE=QPLL0 REF_CLK=750 LANE_RATE=15
+#      make JESD_MODE=64B66B RX_LANE_RATE=16.5 TX_LANE_RATE=16.5 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=1 RX_JESD_NP=16 RX_NUM_LINKS=1 \
+#           TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=1 TX_JESD_NP=16 TX_NUM_LINKS=1 PLL_TYPE=QPLL1 REF_CLK=250 LANE_RATE=16.5
 
 global xcvr_config_paths
 
@@ -27,14 +36,16 @@ global xcvr_config_paths
 #   LANE_RATE: Value of lane rate [gbps]
 #   REF_CLK: Value of the reference clock [MHz] (usually LANE_RATE/20 or LANE_RATE/40)
 #   PLL_TYPE: The PLL used for driving the link [CPLL/QPLL1/QPLL0]
+#   XCVR_RX_LANE_RATE: Value of lane rate for the RX link [gbps] (Optional)
+#   XCVR_RX_REF_CLK: Value of the reference clock for the RX link [MHz] (usually XCVR_RX_LANE_RATE/20 or XCVR_RX_LANE_RATE/40) (Optional)
+#   XCVR_RX_PLL_TYPE: The PLL used for driving the RX link [CPLL/QPLL1/QPLL0] (Optional)
 
 set xcvr_config_paths [adi_xcvr_project [list \
-  LANE_RATE [get_env_param LANE_RATE 16.5] \
-  REF_CLK   [get_env_param REF_CLK    250] \
-  PLL_TYPE  [get_env_param PLL_TYPE QPLL1] \
+  LANE_RATE [get_env_param LANE_RATE   10] \
+  REF_CLK   [get_env_param REF_CLK    500] \
+  PLL_TYPE  [get_env_param PLL_TYPE QPLL0] \
 ]]
 
-#
 # Parameter description:
 #   JESD_MODE : Used link layer encoder mode
 #      64B66B - 64b66b link layer defined in JESD 204C
@@ -48,7 +59,6 @@ set xcvr_config_paths [adi_xcvr_project [list \
 #   [RX/TX]_JESD_NP : Number of bits per sample
 #   [RX/TX]_NUM_LINKS : Number of links
 #   [RX/TX]_KS_PER_CHANNEL : Number of samples stored in internal buffers in kilosamples per converter (M)
-#
 
 adi_project ad9081_fmca_ebz_vcu118 0 [list \
   JESD_MODE         [get_env_param JESD_MODE      8B10B ] \

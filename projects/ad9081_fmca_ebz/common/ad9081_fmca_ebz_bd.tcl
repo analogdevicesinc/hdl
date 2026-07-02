@@ -193,8 +193,6 @@ if {$ADI_PHY_SEL == 1} {
     TX_LANE_RATE $TX_LANE_RATE\
     LINK_MODE $ENCODER_SEL\
   ]]
-  puts "xcvr_config_paths: $xcvr_config_paths"
-  puts "util_adxcvr_parameters: $util_adxcvr_parameters"
   ad_ip_instance util_adxcvr util_mxfe_xcvr $util_adxcvr_parameters
 } else {
   source $ad_hdl_dir/library/xilinx/scripts/versal_xcvr_subsystem.tcl
