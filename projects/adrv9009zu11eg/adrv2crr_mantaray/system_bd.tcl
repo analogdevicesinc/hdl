@@ -139,8 +139,12 @@ ad_cpu_interconnect 0x45500000 axi_spi_fmc
 create_bd_port -dir I -from 31 -to 0 fmc_gpio0_i
 create_bd_port -dir O -from 31 -to 0 fmc_gpio0_o
 create_bd_port -dir O -from 31 -to 0 fmc_gpio0_t
+create_bd_port -dir I -from 31 -to 0 fmc_gpio2_i
+create_bd_port -dir O -from 31 -to 0 fmc_gpio2_o
+create_bd_port -dir O -from 31 -to 0 fmc_gpio2_t
 
 ad_ip_instance axi_gpio axi_fmc_gpio
+ad_ip_parameter axi_fmc_gpio CONFIG.C_IS_DUAL 1
 ad_ip_parameter axi_fmc_gpio CONFIG.C_GPIO_WIDTH 32
 ad_ip_parameter axi_fmc_gpio CONFIG.C_GPIO2_WIDTH 32
 ad_ip_parameter axi_fmc_gpio CONFIG.C_INTERRUPT_PRESENT 1
@@ -148,6 +152,9 @@ ad_ip_parameter axi_fmc_gpio CONFIG.C_INTERRUPT_PRESENT 1
 ad_connect fmc_gpio0_i axi_fmc_gpio/gpio_io_i
 ad_connect fmc_gpio0_o axi_fmc_gpio/gpio_io_o
 ad_connect fmc_gpio0_t axi_fmc_gpio/gpio_io_t
+ad_connect fmc_gpio2_i axi_fmc_gpio/gpio2_io_i
+ad_connect fmc_gpio2_o axi_fmc_gpio/gpio2_io_o
+ad_connect fmc_gpio2_t axi_fmc_gpio/gpio2_io_t
 
 ad_cpu_interconnect 0x46000000 axi_fmc_gpio
 
@@ -164,12 +171,14 @@ create_bd_port -dir O tdd_tx_stingray_en
 create_bd_port -dir O tdd_channel_0
 create_bd_port -dir O tdd_channel_1
 create_bd_port -dir O tdd_sync_out
-create_bd_port -dir O tdd_channel_6
-create_bd_port -dir O tdd_channel_7
+create_bd_port -dir O tdd_pa_on
+create_bd_port -dir O tdd_tr
 create_bd_port -dir O tdd_xud_trx0
 create_bd_port -dir O tdd_xud_trx1
 create_bd_port -dir O tdd_xud_trx2
 create_bd_port -dir O tdd_xud_trx3
+create_bd_port -dir O tdd_rx_load
+create_bd_port -dir O tdd_tx_load
 
 if {$TDD_SUPPORT} {
   set tdd_sync_in_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins axi_tdd_0/sync_in]]]
@@ -191,11 +200,118 @@ if {$TDD_SUPPORT} {
   ad_connect axi_tdd_0/tdd_channel_1  tdd_channel_1
   ad_connect axi_tdd_0/sync_out       tdd_sync_out
 
-  ad_connect axi_tdd_0/tdd_channel_6  tdd_channel_6
-  ad_connect axi_tdd_0/tdd_channel_7  tdd_channel_7
+  ad_connect axi_tdd_0/tdd_channel_6  tdd_pa_on
+  ad_connect axi_tdd_0/tdd_channel_7  tdd_tr
 
   ad_connect axi_tdd_0/tdd_channel_8  tdd_xud_trx0
   ad_connect axi_tdd_0/tdd_channel_9  tdd_xud_trx1
   ad_connect axi_tdd_0/tdd_channel_10 tdd_xud_trx2
   ad_connect axi_tdd_0/tdd_channel_11 tdd_xud_trx3
+
+  ad_connect axi_tdd_0/tdd_channel_12 tdd_rx_load
+  ad_connect axi_tdd_0/tdd_channel_13 tdd_tx_load
 }
+
+# CMD SPI
+
+create_bd_port -dir O cmd_spi_sclk
+create_bd_port -dir O cmd_spi_csb
+create_bd_port -dir O cmd_spi_mosi
+create_bd_port -dir I cmd_spi_miso
+
+ad_ip_instance axi_quad_spi cmd_spi [list \
+  C_USE_STARTUP 0 \
+  C_NUM_SS_BITS 1 \
+  C_SCK_RATIO 2 \
+]
+
+ad_connect cmd_spi/sck_o cmd_spi_sclk
+ad_connect cmd_spi/ss_o cmd_spi_csb
+ad_connect cmd_spi/io0_o cmd_spi_mosi
+ad_connect cmd_spi/io1_i cmd_spi_miso
+
+# Chip2chip
+
+ad_ip_instance axi_chip2chip axi_chip2chip [list \
+  C_AXI_STB_WIDTH 16 \
+  C_AXI_DATA_WIDTH 32 \
+  C_INTERFACE_MODE 1 \
+  C_INTERFACE_TYPE 3 \
+]
+
+# Aurora
+
+create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 gt_diff_refclk
+create_bd_intf_port -mode Slave -vlnv xilinx.com:display_aurora:GT_Serial_Transceiver_Pins_RX_rtl:1.0 gt_serial_rx
+create_bd_intf_port -mode Master -vlnv xilinx.com:display_aurora:GT_Serial_Transceiver_Pins_TX_rtl:1.0 gt_serial_tx
+
+set_property -dict [list CONFIG.FREQ_HZ {122880000}] [get_bd_intf_ports gt_diff_refclk]
+
+ad_ip_instance aurora_8b10b aurora_8b10b [list \
+  SupportLevel 1 \
+  C_AURORA_LANES 2 \
+  C_LINE_RATE 2.4576 \
+  C_REFCLK_FREQUENCY 122.88 \
+  interface_mode {Streaming} \
+]
+
+ad_connect gt_diff_refclk aurora_8b10b/GT_DIFF_REFCLK1
+ad_connect gt_serial_rx aurora_8b10b/GT_SERIAL_RX
+ad_connect gt_serial_tx aurora_8b10b/GT_SERIAL_TX
+
+ad_connect axi_chip2chip/axi_c2c_phy_clk aurora_8b10b/user_clk_out
+ad_connect axi_chip2chip/axi_c2c_aurora_channel_up aurora_8b10b/channel_up
+ad_connect aurora_8b10b/init_clk_in axi_chip2chip/aurora_init_clk
+ad_connect axi_chip2chip/aurora_mmcm_not_locked aurora_8b10b/pll_not_locked_out
+ad_connect axi_chip2chip/AXIS_TX aurora_8b10b/USER_DATA_S_AXI_TX
+ad_connect axi_chip2chip/AXIS_RX aurora_8b10b/USER_DATA_M_AXI_RX
+ad_connect axi_chip2chip/aurora_pma_init_in sys_cpu_reset
+ad_connect sys_ps8/pl_clk0 aurora_8b10b/init_clk_in
+ad_connect aurora_8b10b/reset axi_chip2chip/aurora_reset_pb
+ad_connect aurora_8b10b/gt_reset sys_cpu_reset
+
+# Reconfigure PS
+# - Additional general SPI clock @ 10 MHz
+set_property -dict [list \
+  CONFIG.PSU__CRL_APB__PL3_REF_CTRL__FREQMHZ {20} \
+  CONFIG.PSU__FPGA_PL3_ENABLE {1} \
+] [get_bd_cells sys_ps8]
+
+ad_connect sys_ps8/pl_clk3 cmd_spi/ext_spi_clk
+
+# Additional interrupt controller for aurora
+ad_ip_instance axi_intc axi_intc [list \
+  C_IRQ_CONNECTION 1 \
+]
+
+ad_ip_instance xlconcat xlconcat_0
+set_property CONFIG.NUM_PORTS {4} [get_bd_cells xlconcat_0]
+
+for {set j 0} {$j < 4} {incr j} {
+  ad_ip_instance xlslice xlslice_${j}
+  set_property -dict [list \
+    CONFIG.DIN_FROM ${j} \
+    CONFIG.DIN_TO ${j} \
+    CONFIG.DIN_WIDTH {4} \
+  ] [get_bd_cells xlslice_${j}]
+
+  ad_connect axi_chip2chip/axi_c2c_s2m_intr_out xlslice_${j}/Din
+  ad_connect xlslice_${j}/Dout xlconcat_0/In${j}
+}
+
+ad_connect xlconcat_0/dout axi_intc/intr
+
+# Interconnect
+
+ad_cpu_interconnect 0x4A000000 cmd_spi
+ad_cpu_interconnect 0x4A100000 axi_intc
+ad_cpu_interconnect 0x90000000 axi_chip2chip
+
+set_property range 64K [get_bd_addr_segs {sys_ps8/Data/SEG_data_axi_chip2chip}]
+
+# Interrupts
+
+ad_cpu_interrupt ps-0 mb-0 cmd_spi/ip2intc_irpt
+ad_cpu_interrupt ps-1 mb-x axi_intc/irq
+
+assign_bd_address

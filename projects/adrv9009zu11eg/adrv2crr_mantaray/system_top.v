@@ -225,11 +225,9 @@ module system_top #(
   // Stingray 0
   // PMOD0
   output        stingray0_pmod0_PA_ON,
-  output        stingray0_pmod0_TR,
   output        stingray0_pmod0_MOSI,
   output        stingray0_pmod0_TX_LOAD,
   input         stingray0_pmod0_MISO,
-  output        stingray0_pmod0_RX_LOAD,
   output        stingray0_pmod0_SCLK,
   inout         stingray0_pmod0_SCL,
   // PMOD1
@@ -237,19 +235,16 @@ module system_top #(
   output        stingray0_pmod1_CSB2,
   output        stingray0_pmod1_CSB3,
   output        stingray0_pmod1_CSB4,
-  output        stingray0_pmod1_CSB5,
   output    reg stingray0_pmod1_5V_CTRL = 1'b0,
   inout         stingray0_pmod1_SDA,
   output    reg stingray0_pmod1_PWR_UP_DOWN = 1'b0,
 
   // Stingray 1
   // PMOD0
-  output        stingray1_pmod0_PA_ON,
   output        stingray1_pmod0_TR,
   output        stingray1_pmod0_MOSI,
   output        stingray1_pmod0_TX_LOAD,
   input         stingray1_pmod0_MISO,
-  output        stingray1_pmod0_RX_LOAD,
   output        stingray1_pmod0_SCLK,
   inout         stingray1_pmod0_SCL,
   // PMOD1
@@ -257,44 +252,45 @@ module system_top #(
   output        stingray1_pmod1_CSB2,
   output        stingray1_pmod1_CSB3,
   output        stingray1_pmod1_CSB4,
-  output        stingray1_pmod1_CSB5,
   output    reg stingray1_pmod1_5V_CTRL = 1'b0,
   inout         stingray1_pmod1_SDA,
   output    reg stingray1_pmod1_PWR_UP_DOWN = 1'b0,
 
   // FMC1 custom breakout board
-  inout         fmc_bob_xud1_gpio0,
-  inout         fmc_bob_xud1_gpio1,
   output        fmc_bob_xud1_mosi,
   output        fmc_bob_xud1_csb,
   output        fmc_bob_xud1_sclk,
   input         fmc_bob_xud1_miso,
+  inout         fmc_bob_xud1_gpio1,
   inout         fmc_bob_xud1_gpio2,
   inout         fmc_bob_xud1_gpio3,
   inout         fmc_bob_xud1_gpio4,
   inout         fmc_bob_xud1_gpio5,
 
-  // Debug TDD
-  output debug_tdd_sync,
-  output debug_tdd_enabled,
-  output debug_tdd_rx_en,
-  output debug_tdd_tx_en,
-  output debug_tdd_tx_stingray_en,
-  output debug_tdd_channel_0,
-  output debug_tdd_channel_1,
-  output debug_tdd_sync_out
+  // GPIO UDC
+  output FPGA_TRIG,
+  input  UDC_PG,
+  output TR_PULSE,
+  output TX_LOAD,
+  output RX_LOAD,
+  input  FPGA_BOOT_GOOD,
+
+  // CMD SPI
+  output CMD_SPI_SCLK,
+  output CMD_SPI_CSB,
+  output CMD_SPI_MOSI,
+  input  CMD_SPI_MISO,
+
+  // Aurora
+  input        aurora_refclk_p,
+  input        aurora_refclk_n,
+  output [1:0] aurora_txp,
+  output [1:0] aurora_txn,
+  input  [1:0] aurora_rxp,
+  input  [1:0] aurora_rxn
 );
 
   // internal signals
-  wire fmc_bob_xud1_imu_sclk;
-  wire fmc_bob_xud1_imu_mosi;
-  wire fmc_bob_xud1_imu_miso;
-  wire fmc_bob_xud1_imu_csb;
-  wire fmc_bob_xud1_imu_rst;
-  wire fmc_bob_xud1_imu_gpio0;
-  wire fmc_bob_xud1_imu_gpio1;
-  wire fmc_bob_xud1_imu_gpio2;
-  wire fmc_bob_xud1_imu_gpio3;
 
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
@@ -321,9 +317,9 @@ module system_top #(
   wire            spi0_miso;
   wire            spi_miso_s;
 
-  wire     [31:0] fmc_gpio_i;
-  wire     [31:0] fmc_gpio_o;
-  wire     [31:0] fmc_gpio_t;
+  wire     [63:0] fmc_gpio_i;
+  wire     [63:0] fmc_gpio_o;
+  wire     [63:0] fmc_gpio_t;
   wire            tr;
 
   wire     [ 7:0] spi_pmod_csn;
@@ -344,20 +340,23 @@ module system_top #(
   reg  [7:0]      spi_3_to_8_csn;
 
   wire tdd_support;
+  wire tdd_external_trig;
   wire tdd_sync;
   wire tdd_enabled;
   wire tdd_rx_en;
   wire tdd_tx_en;
-  wire tdd_tx_stingray_en;
+  wire tdd_tx_stingray_en; // UNUSED
   wire tdd_channel_0;
   wire tdd_channel_1;
   wire tdd_sync_out;
-  wire tdd_channel_6;
-  wire tdd_channel_7;
+  wire tdd_tr;
+  wire tdd_pa_on;
   wire tdd_xud_trx0;
   wire tdd_xud_trx1;
   wire tdd_xud_trx2;
   wire tdd_xud_trx3;
+  wire tdd_rx_load;
+  wire tdd_tx_load;
 
   always @(*) begin
     case (spi_csn)
@@ -387,7 +386,6 @@ module system_top #(
   assign stingray0_pmod1_CSB2 = spi_pmod_csn[2];
   assign stingray0_pmod1_CSB3 = spi_pmod_csn[3];
   assign stingray0_pmod1_CSB4 = spi_pmod_csn[4];
-  assign stingray0_pmod1_CSB5 = spi_pmod_csn[5];
   assign stingray0_pmod0_SCLK = spi_pmod_clk;
 
   assign stingray1_pmod0_MOSI = spi_pmod_2_mosi;
@@ -395,19 +393,14 @@ module system_top #(
   assign stingray1_pmod1_CSB2 = spi_pmod_2_csn[2];
   assign stingray1_pmod1_CSB3 = spi_pmod_2_csn[3];
   assign stingray1_pmod1_CSB4 = spi_pmod_2_csn[4];
-  assign stingray1_pmod1_CSB5 = spi_pmod_2_csn[5];
   assign stingray1_pmod0_SCLK = spi_pmod_2_clk;
 
   assign fmc_bob_xud1_mosi = spi_fmc_mosi;
-  assign fmc_bob_xud1_csb = spi_fmc_csn[6];
+  assign fmc_bob_xud1_csb  = spi_fmc_csn[6];
   assign fmc_bob_xud1_sclk = spi_fmc_clk;
 
-  // assign fmc_bob_xud1_imu_mosi = spi_fmc_mosi;
-  // assign fmc_bob_xud1_imu_csb = spi_fmc_csn[7];
-  // assign fmc_bob_xud1_imu_sclk = spi_fmc_clk;
-
-  assign spi_pmod_miso = ~&spi_pmod_csn[5:1] ? stingray0_pmod0_MISO : 1'b0;
-  assign spi_pmod_2_miso = ~&spi_pmod_2_csn[5:1] ? stingray1_pmod0_MISO : 1'b0;
+  assign spi_pmod_miso = ~&spi_pmod_csn[4:1] ? stingray0_pmod0_MISO : 1'b0;
+  assign spi_pmod_2_miso = ~&spi_pmod_2_csn[4:1] ? stingray1_pmod0_MISO : 1'b0;
   assign spi_fmc_miso =  ~spi_fmc_csn[6] ? fmc_bob_xud1_miso : 1'b0;
 
   adrv9009zu11eg_spi i_spi (
@@ -546,13 +539,18 @@ module system_top #(
   assign adrv9009_tx1_enable_a = tdd_support ? tdd_tx_en : gpio_o[56];
   assign adrv9009_rx2_enable_a = tdd_support ? tdd_rx_en : gpio_o[55];
   assign adrv9009_rx1_enable_a = tdd_support ? tdd_rx_en : gpio_o[54];
-  assign tr                    = tdd_support ? tdd_channel_7 : fmc_gpio_o[31];
+  assign tr                    = tdd_support ? tdd_tr    : fmc_gpio_o[31];
+
+  assign TR_PULSE = pwr_up_mask ? 1'b0 : tr;
+  assign RX_LOAD  = pwr_up_mask ? 1'b0 : tdd_support ? tdd_rx_load : fmc_gpio_o[28];
+  assign TX_LOAD  = pwr_up_mask ? 1'b0 : tdd_support ? tdd_tx_load : fmc_gpio_o[29];
+  assign FPGA_TRIG = fmc_gpio_o[60];
+  assign fmc_gpio_i[59] = FPGA_BOOT_GOOD;
+  assign fmc_gpio_i[58] = UDC_PG;
 
   // PMOD GPIOs
-  assign stingray0_pmod0_PA_ON       = pwr_up_mask ? 1'b0 : tdd_support ? tdd_channel_6 : fmc_gpio_o[30];
-  assign stingray0_pmod0_TR          = pwr_up_mask ? 1'b0 : tr;
-  assign stingray0_pmod0_TX_LOAD     = pwr_up_mask ? 1'b0 : fmc_gpio_o[29];
-  assign stingray0_pmod0_RX_LOAD     = pwr_up_mask ? 1'b0 : fmc_gpio_o[28];
+  assign stingray0_pmod0_PA_ON   = pwr_up_mask ? 1'b0 : tdd_support ? tdd_pa_on   : fmc_gpio_o[30];
+  assign stingray0_pmod0_TX_LOAD = pwr_up_mask ? 1'b0 : tdd_support ? tdd_tx_load : fmc_gpio_o[29];
 
   reg gpio_o_27_ms = 1'b0;
   reg gpio_o_27_d1 = 1'b0;
@@ -584,54 +582,38 @@ module system_top #(
 
   // XUD GPIOs
   ad_iobuf #(
-    .DATA_WIDTH(10)
+    .DATA_WIDTH(6)
   ) i_xud_iobuf (
-    .dio_t ({tdd_support ? 1'b1 : fmc_gpio_t[25],    // 25   TDD_EXT_TRIG
-             tdd_support ? 1'b0 : fmc_gpio_t[24],    // 24   TDD_XUD1_STINGRAY_SYNC
-             tdd_support ? 1'b0 : fmc_gpio_t[23],    // 23   TDD_RX_SYNC
-             tdd_support ? 1'b0 : fmc_gpio_t[22],    // 22   TDD_TX_SYNC
-             fmc_gpio_t[21],    // 21
+    .dio_t ({tdd_support ? 1'b1 : fmc_gpio_t[25],    // 25   TDD_EXT_SYNC
+             tdd_support ? 1'b0 : fmc_gpio_t[21],    // 21   PLL_SELECT
              tdd_support ? 1'b0 : fmc_gpio_t[20],    // 20   TRX3
              tdd_support ? 1'b0 : fmc_gpio_t[19],    // 19   TRX2
              tdd_support ? 1'b0 : fmc_gpio_t[18],    // 18   TRX1
-             tdd_support ? 1'b0 : fmc_gpio_t[17],    // 17   TRX0
-             fmc_gpio_t[16]     // 16
+             tdd_support ? 1'b0 : fmc_gpio_t[17]     // 17   TRX0
             }),
-    .dio_i ({fmc_gpio_o[25],   // 25   TDD_EXT_TRIG
-             tdd_support ? tdd_tx_stingray_en : fmc_gpio_o[24],   // 24   TDD_XUD1_STINGRAY_SYNC
-             tdd_support ? tdd_rx_en : fmc_gpio_o[23],            // 23   TDD_RX_SYNC
-             tdd_support ? tdd_tx_en : fmc_gpio_o[22],            // 22   TDD_TX_SYNC
-             fmc_gpio_o[21],   // 21
+    .dio_i ({fmc_gpio_o[25],                                // 25   TDD_EXT_SYNC
+             fmc_gpio_o[21],                                // 21   PLL_SELECT
              tdd_support ? tdd_xud_trx3 : fmc_gpio_o[20],   // 20   TRX3
              tdd_support ? tdd_xud_trx2 : fmc_gpio_o[19],   // 19   TRX2
              tdd_support ? tdd_xud_trx1 : fmc_gpio_o[18],   // 18   TRX1
-             tdd_support ? tdd_xud_trx0 : fmc_gpio_o[17],   // 17   TRX0
-             fmc_gpio_o[16]    // 16
+             tdd_support ? tdd_xud_trx0 : fmc_gpio_o[17]    // 17   TRX0
             }),
     .dio_o ({fmc_gpio_i[25],
-             fmc_gpio_i[24],
-             fmc_gpio_i[23],
-             fmc_gpio_i[22],
              fmc_gpio_i[21],
              fmc_gpio_i[20],
              fmc_gpio_i[19],
              fmc_gpio_i[18],
-             fmc_gpio_i[17],
-             fmc_gpio_i[16]
+             fmc_gpio_i[17]
             }),
-    .dio_p ({fmc_bob_xud1_imu_gpio3,   // 25   TDD_EXT_TRIG
-             fmc_bob_xud1_imu_gpio2,   // 24   TDD_XUD1_STINGRAY_SYNC
-             fmc_bob_xud1_imu_gpio1,   // 23   TDD_RX_SYNC
-             fmc_bob_xud1_imu_gpio0,   // 22   TDD_TX_SYNC
+    .dio_p ({tdd_external_trig,        // 25   TDD_EXT_SYNC
              fmc_bob_xud1_gpio5,       // 21   PLL_SELECT
              fmc_bob_xud1_gpio4,       // 20   TRX3
              fmc_bob_xud1_gpio3,       // 19   TRX2
              fmc_bob_xud1_gpio2,       // 18   TRX1
-             fmc_bob_xud1_gpio1,       // 17   TRX0
-             fmc_bob_xud1_gpio0}));    // 16   RX_GAIN_MODE
+             fmc_bob_xud1_gpio1}));    // 17   TRX0
 
   assign tdd_support = TDD_SUPPORT ? tdd_enabled : 1'b0;
-  assign tdd_sync = fmc_gpio_i[25];
+  assign tdd_sync = tdd_enabled ? fmc_gpio_i[25] : 1'b0;
 
   assign fmc_gpio_i[31:26] = fmc_gpio_o[31:26];
   assign fmc_gpio_i[ 7: 0] = fmc_gpio_o[ 7: 0];
@@ -792,9 +774,12 @@ module system_top #(
     .spi0_mosi(spi_mosi),
     .spi0_sclk(spi_clk),
     // PMOD stuff
-    .fmc_gpio0_o(fmc_gpio_o),
-    .fmc_gpio0_t(fmc_gpio_t),
-    .fmc_gpio0_i(fmc_gpio_i),
+    .fmc_gpio0_o(fmc_gpio_o[31:0]),
+    .fmc_gpio0_t(fmc_gpio_t[31:0]),
+    .fmc_gpio0_i(fmc_gpio_i[31:0]),
+    .fmc_gpio2_o(fmc_gpio_o[63:32]),
+    .fmc_gpio2_t(fmc_gpio_t[63:32]),
+    .fmc_gpio2_i(fmc_gpio_i[63:32]),
     .iic_pmod_scl_io (stingray0_pmod0_SCL),
     .iic_pmod_sda_io (stingray0_pmod1_SDA),
     .spi_pmod_clk_i (spi_pmod_clk),
@@ -827,18 +812,28 @@ module system_top #(
     .tdd_tx_stingray_en (tdd_tx_stingray_en),
     .tdd_channel_0 (tdd_channel_0),
     .tdd_channel_1 (tdd_channel_1),
-    .tdd_channel_6 (tdd_channel_6),
-    .tdd_channel_7 (tdd_channel_7),
+    .tdd_pa_on (tdd_pa_on),
+    .tdd_tr (tdd_tr),
     .tdd_xud_trx0 (tdd_xud_trx0),
     .tdd_xud_trx1 (tdd_xud_trx1),
     .tdd_xud_trx2 (tdd_xud_trx2),
     .tdd_xud_trx3 (tdd_xud_trx3),
-    .tdd_sync_out (tdd_sync_out));
+    .tdd_rx_load (tdd_rx_load),
+    .tdd_tx_load (tdd_tx_load),
+    .tdd_sync_out (tdd_sync_out),
+    .cmd_spi_sclk(CMD_SPI_SCLK),
+    .cmd_spi_csb(CMD_SPI_CSB),
+    .cmd_spi_mosi(CMD_SPI_MOSI),
+    .cmd_spi_miso(CMD_SPI_MISO),
+    .gt_diff_refclk_clk_p(aurora_refclk_p),
+    .gt_diff_refclk_clk_n(aurora_refclk_n),
+    .gt_serial_tx_txp(aurora_txp),
+    .gt_serial_tx_txn(aurora_txn),
+    .gt_serial_rx_rxp(aurora_rxp),
+    .gt_serial_rx_rxn(aurora_rxn));
 
-  assign stingray1_pmod0_PA_ON       = pwr_up_mask ? 1'b0 : tdd_enabled ? tdd_channel_6 : fmc_gpio_o[13];
   assign stingray1_pmod0_TR          = pwr_up_mask ? 1'b0 : tr;
-  assign stingray1_pmod0_TX_LOAD     = pwr_up_mask ? 1'b0 : fmc_gpio_o[11];
-  assign stingray1_pmod0_RX_LOAD     = pwr_up_mask ? 1'b0 : fmc_gpio_o[10];
+  assign stingray1_pmod0_TX_LOAD     = pwr_up_mask ? 1'b0 : tdd_support ? tdd_tx_load : fmc_gpio_o[11];
 
   reg gpio_o_9_ms = 1'b0;
   reg gpio_o_9_d1 = 1'b0;
@@ -894,13 +889,4 @@ module system_top #(
       end
     end
 
-    // Debug TDD
-    assign debug_tdd_sync           = tdd_sync;
-    assign debug_tdd_enabled        = tdd_enabled;
-    assign debug_tdd_rx_en          = tdd_rx_en;
-    assign debug_tdd_tx_en          = tdd_tx_en;
-    assign debug_tdd_tx_stingray_en = tdd_tx_stingray_en;
-    assign debug_tdd_channel_0      = tdd_channel_0;
-    assign debug_tdd_channel_1      = tdd_channel_1;
-    assign debug_tdd_sync_out       = tdd_sync_out;
 endmodule
