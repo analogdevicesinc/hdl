@@ -31,6 +31,7 @@ interref_repos = [
         'doctools',
         'documentation',
         'no-OS',
+        'linux',
         'precision-converters-firmware',
         'pyadi-iio',
         'scopy',
