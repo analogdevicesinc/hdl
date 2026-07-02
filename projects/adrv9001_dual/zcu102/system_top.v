@@ -203,10 +203,15 @@ module system_top (
   wire        [94:0]      gpio_i;
   wire        [94:0]      gpio_o;
   wire        [94:0]      gpio_t;
-  wire                    gpio_rx1_enable_in;
-  wire                    gpio_rx2_enable_in;
-  wire                    gpio_tx1_enable_in;
-  wire                    gpio_tx2_enable_in;
+
+  wire                    adrv1_gpio_rx1_enable_in;
+  wire                    adrv1_gpio_rx2_enable_in;
+  wire                    adrv1_gpio_tx1_enable_in;
+  wire                    adrv1_gpio_tx2_enable_in;
+  wire                    adrv2_gpio_rx1_enable_in;
+  wire                    adrv2_gpio_rx2_enable_in;
+  wire                    adrv2_gpio_tx1_enable_in;
+  wire                    adrv2_gpio_tx2_enable_in;
   wire        [ 2:0]      adrv1_spi_csn;
   wire        [ 2:0]      adrv2_spi_csn;
 
@@ -282,27 +287,27 @@ module system_top (
 
   // hpc1
   ad_iobuf #(
-    .DATA_WIDTH(16)
+    .DATA_WIDTH(15)
   ) i_iobuf_adrv2 (
-    .dio_t ({gpio_t[72:57]}),
-    .dio_i ({gpio_o[72:57]}),
-    .dio_o ({gpio_i[72:57]}),
-    .dio_p ({adrv1_sm_fan_tach,  // 72
-             adrv1_reset_trx,    // 71
-             adrv1_mode,         // 70
-             adrv1_gp_int,       // 69
-             adrv1_dgpio_11,     // 68
-             adrv1_dgpio_10,     // 67
-             adrv1_dgpio_9,      // 66
-             adrv1_dgpio_8,      // 65
-             adrv1_dgpio_7,      // 64
-             adrv1_dgpio_6,      // 63
-             adrv1_dgpio_5,      // 62
-             adrv1_dgpio_4,      // 61
-             adrv1_dgpio_3,      // 60
-             adrv1_dgpio_2,      // 59
-             adrv1_dgpio_1,      // 58
-             adrv1_dgpio_0 }));  // 57
+    .dio_t ({gpio_t[71:57]}),
+    .dio_i ({gpio_o[71:57]}),
+    .dio_o ({gpio_i[71:57]}),
+    .dio_p ({adrv2_sm_fan_tach,  // 71
+             adrv2_reset_trx,    // 70
+             adrv2_mode,         // 69
+             //adrv2_gp_int,     // no pin available
+             adrv2_dgpio_11,     // 68
+             adrv2_dgpio_10,     // 67
+             adrv2_dgpio_9,      // 66
+             adrv2_dgpio_8,      // 65
+             adrv2_dgpio_7,      // 64
+             adrv2_dgpio_6,      // 63
+             adrv2_dgpio_5,      // 62
+             adrv2_dgpio_4,      // 61
+             adrv2_dgpio_3,      // 60
+             adrv2_dgpio_2,      // 59
+             adrv2_dgpio_1,      // 58
+             adrv2_dgpio_0 }));  // 57
 
   assign adrv2_gpio_rx1_enable_in = gpio_o[73];
   assign adrv2_gpio_rx2_enable_in = gpio_o[74];
