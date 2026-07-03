@@ -324,10 +324,10 @@ To know how the Software GPIO numbers are calculated, check out
 =======================  =========  =======  =========
 GPIO signal              Direction  HDL no.  Zynq-7000
 =======================  =========  =======  =========
-ad463x_resetn            INOUT      32       86
-adaq42xx_pgia_mux[1:0]*  INOUT      34:33    88:87
-max17687_rst**           INOUT      35       89
 ad463x_trigger           OUT        36       90
+max17687_rst**           INOUT      35       89
+adaq42xx_pgia_mux[1:0]*  INOUT      34:33    88:87
+ad463x_resetn            INOUT      32       86
 =======================  =========  =======  =========
 
 .. admonition:: Legend

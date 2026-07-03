@@ -111,18 +111,18 @@ To know how the Software GPIO numbers are calculated, check out
 ======================  =========  =======  =========
 GPIO signal             Direction  HDL no.  Zynq-7000
 ======================  =========  =======  =========
-ACQ_DRDY                IN         43       97
-ACQ_RESET               OUT        42       96
-ACQ_SYNQ_IN_FMC         OUT        41       95
-ADMX100X_TRIG           IN         40       94
-ADMX100X_DAC_LDAC       OUT        39       93
-ADMX100X_CAL            IN         38       92
-ADMX100X_VALID          OUT        37       91
-ADMX100X_READY          OUT        36       90
-ADMX100X_EN             OUT        35       89
-ADMX100X_SYNC_MODE      IN         34       88
-ADMX100X_RESET          OUT        33       87
-ADMX100X_OT             OUT        32       86
+acq_drdy                IN         43       97
+acq_reset               OUT        42       96
+acq_synq_in_fmc         OUT        41       95
+admx100x_trig           IN         40       94
+admx100x_dac_ldac       OUT        39       93
+admx100x_cal            IN         38       92
+admx100x_valid          OUT        37       91
+admx100x_ready          OUT        36       90
+admx100x_en             OUT        35       89
+admx100x_sync_mode      IN         34       88
+admx100x_reset          OUT        33       87
+admx100x_ot             OUT        32       86
 ======================  =========  =======  =========
 
 .. admonition:: Legend

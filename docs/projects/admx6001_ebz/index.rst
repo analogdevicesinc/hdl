@@ -153,26 +153,26 @@ GPIOs
 To know how the Software GPIO numbers are calculated, check out
 :ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-========================  ============  =======  ===========
-GPIO Signal                Direction    HDL no.  MicroBlaze
-========================  ============  =======  ===========
-ltc2664_tgp                INOUT        55       55
-ltc2664_clr                INOUT        54       54
-ltc2664_ldac               INOUT        53       53
-adl5580_en                 INOUT        52       52
-ada4945_disable            INOUT        51       51
-adg5419_ctrl               INOUT        50       50
-adrf5203_ctrl[2:0]         INOUT        49:47    49:47
-hmc7044_sync_req           INOUT        46       46
-ad9213_rstb                INOUT        45       45
-dig_ext_gpio[1:0]          INOUT        44:43    44:43
-dig_ext_p                  INOUT        42       42
-dig_ext_n                  INOUT        41       41
-dig_ext_hs_p               INOUT        40       40
-dig_ext_hs_n               INOUT        39       39
-ad4080_gpio[3:2]           INOUT        38:37    38:37
-ad9213_gpio[4:0]           INOUT        36:32    36:32
-========================  ============  =======  ===========
+========================  =========  =======  ===========
+GPIO Signal               Direction  HDL no.  MicroBlaze
+========================  =========  =======  ===========
+ltc2664_tgp               INOUT      55       55
+ltc2664_clr               INOUT      54       54
+ltc2664_ldac              INOUT      53       53
+adl5580_en                INOUT      52       52
+ada4945_disable           INOUT      51       51
+adg5419_ctrl              INOUT      50       50
+adrf5203_ctrl[2:0]        INOUT      49:47    49:47
+hmc7044_sync_req          INOUT      46       46
+ad9213_rstb               INOUT      45       45
+dig_ext_gpio[1:0]         INOUT      44:43    44:43
+dig_ext_p                 INOUT      42       42
+dig_ext_n                 INOUT      41       41
+dig_ext_hs_p              INOUT      40       40
+dig_ext_hs_n              INOUT      39       39
+ad4080_gpio[3:2]          INOUT      38:37    38:37
+ad9213_gpio[4:0]          INOUT      36:32    36:32
+========================  =========  =======  ===========
 
 .. admonition:: Legend
    :class: note

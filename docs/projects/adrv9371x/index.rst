@@ -200,20 +200,20 @@ GPIOs
 To know how the Software GPIO numbers are calculated, check out
 :ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-===================  ==========  =======  ========  ==========  ==========  =======
-GPIO signal          Direction   HDL no.  Zynq MP   Zynq-7000   MicroBlaze  A10SoC
-===================  ==========  =======  ========  ==========  ==========  =======
-ad9528_reset_b       INOUT       59       137        113         59         27
-ad9528_sysref_req    INOUT       58       136        112         58         26
-ad9371_tx1_enable    INOUT       57       135        111         57         25
-ad9371_tx2_enable    INOUT       56       134        110         56         24
-ad9371_rx1_enable    INOUT       55       133        109         55         23
-ad9371_rx2_enable    INOUT       54       132        108         54         22
-ad9371_test          INOUT       53       131        107         53         21
-ad9371_reset_b       INOUT       52       130        106         52         20
-ad9371_gpint         INOUT       51       129        105         51         19
-ad9371_gpio_{00:18}  INOUT       50:32    128:110    104:86      50:32      18:0
-===================  ==========  =======  ========  ==========  ==========  =======
+===================  ==========  =======  =======  ==========  ==========  ======
+GPIO signal          Direction   HDL no.  Zynq MP  Zynq-7000   MicroBlaze  A10SoC
+===================  ==========  =======  =======  ==========  ==========  ======
+ad9528_reset_b       INOUT       59       137      113         59          27
+ad9528_sysref_req    INOUT       58       136      112         58          26
+ad9371_tx1_enable    INOUT       57       135      111         57          25
+ad9371_tx2_enable    INOUT       56       134      110         56          24
+ad9371_rx1_enable    INOUT       55       133      109         55          23
+ad9371_rx2_enable    INOUT       54       132      108         54          22
+ad9371_test          INOUT       53       131      107         53          21
+ad9371_reset_b       INOUT       52       130      106         52          20
+ad9371_gpint         INOUT       51       129      105         51          19
+ad9371_gpio_{00:18}  INOUT       50:32    128:110  104:86      50:32       18:0
+===================  ==========  =======  =======  ==========  ==========  ======
 
 .. admonition:: Legend
    :class: note
@@ -433,7 +433,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV9371X Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/ad9371>`
+- :external+linux:ref:`ADRV9371X Linux driver page <ad9371>`
 
 - :git-linux:`ADRV9371X + ZCU102 device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371-jesd204-fsm.dts>`
 - :git-linux:`ADRV9371X + ZC706 device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9371-jesd204-fsm.dts>`

@@ -124,9 +124,9 @@ The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
 ================== ========== ==========
-Instance           ZCU102     ZC706     
+Instance           ZCU102     ZC706
 ================== ========== ==========
-afe_dac_iic        0x7c800000 ---       
+afe_dac_iic        0x7c800000 ---
 axi_ad9694_xcvr    0x44A50000 0x44A50000
 ad9694_tpl_core    0x44A10000 0x44A10000
 ad9694_jesd        0x44AA0000 0x44AA0000
@@ -142,12 +142,12 @@ Instance                         A10SoC
 sys_spi_clockgen                 0x00000060
 sys_spi_vco                      0x00000080
 sys_spi_afe_adc                  0x000000A0
-ad9694_jesd204.link_reconfig     0x00040000 
-ad9694_jesd204.link_management   0x00044000 
-ad9694_jesd204.link_pll_reconfig 0x00045000 
-ad9694_jesd204.phy_reconfig_0    0x00048000 
-ad9694_jesd204.phy_reconfig_1    0x00049000 
-ad9694_jesd204.phy_reconfig_2    0x0004a000 
+ad9694_jesd204.link_reconfig     0x00040000
+ad9694_jesd204.link_management   0x00044000
+ad9694_jesd204.link_pll_reconfig 0x00045000
+ad9694_jesd204.phy_reconfig_0    0x00048000
+ad9694_jesd204.phy_reconfig_1    0x00049000
+ad9694_jesd204.phy_reconfig_2    0x0004a000
 ad9694_jesd204.phy_reconfig_3    0x0004b000
 axi_ad9694_dma                   0x0004c000
 axi_ad9694                       0x00050000
@@ -206,12 +206,12 @@ Below are the Programmable Logic interrupts used in this project.
 ================== === ========== ============ =============
 Instance name      HDL Microblaze Linux ZynqMP Actual ZynqMP
 ================== === ========== ============ =============
-ad9694_jesd        11  14         109          141          
-afe_dac_iic        12  14         109          141          
-ad9694_dma         13  12         107          139          
-axi_spi_vco        10  15         110          142          
-axi_spi_afe_adc    9   8          103          135          
-axi_laser_driver_0 8   7          102          134          
+ad9694_jesd        11  14         109          141
+afe_dac_iic        12  14         109          141
+ad9694_dma         13  12         107          139
+axi_spi_vco        10  15         110          142
+axi_spi_afe_adc    9   8          103          135
+axi_laser_driver_0 8   7          102          134
 ================== === ========== ============ =============
 
 ================== === ======

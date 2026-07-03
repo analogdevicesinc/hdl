@@ -461,28 +461,28 @@ control the reset sequence of the GTY/GTYP transceivers.
 ===========================  =========  =======  =======
 HDL GPIO signal              Direction  HDL no.  Versal
 ===========================  =========  =======  =======
-tx_b_reset_datapath            IN         79      47
-rx_b_reset_datapath            IN         78      46
-tx_b_reset_pll_and_datapath    IN         77      45
-rx_b_reset_pll_and_datapath    IN         76      44
-gt_b_reset                     IN         75      43
-mst_b_resetdone                OUT        74      42
-tx_b_resetdone                 OUT        73      41
-rx_b_resetdone                 OUT        72      40
-tx_reset_datapath              IN         71      39
-rx_reset_datapath              IN         70      38
-tx_reset_pll_and_datapath      IN         69      37
-rx_reset_pll_and_datapath      IN         68      36
-gt_reset                       IN         67      35
-mst_resetdone                  OUT        66      34
-tx_resetdone                   OUT        65      33
-rx_resetdone                   OUT        64      32
-resetb                         OUT        62      30
-trig_b[1:0]                    OUT        61:60   29:28
-trig_a[1:0]                    OUT        59:58   27:26
-trig_in                        IN         53      21
-aux_gpio                       INOUT      48      16
-gpio[30:15]                    INOUT      47:32   15:0
+tx_b_reset_datapath          IN         79       47
+rx_b_reset_datapath          IN         78       46
+tx_b_reset_pll_and_datapath  IN         77       45
+rx_b_reset_pll_and_datapath  IN         76       44
+gt_b_reset                   IN         75       43
+mst_b_resetdone              OUT        74       42
+tx_b_resetdone               OUT        73       41
+rx_b_resetdone               OUT        72       40
+tx_reset_datapath            IN         71       39
+rx_reset_datapath            IN         70       38
+tx_reset_pll_and_datapath    IN         69       37
+rx_reset_pll_and_datapath    IN         68       36
+gt_reset                     IN         67       35
+mst_resetdone                OUT        66       34
+tx_resetdone                 OUT        65       33
+rx_resetdone                 OUT        64       32
+resetb                       OUT        62       30
+trig_b[1:0]                  OUT        61:60    29:28
+trig_a[1:0]                  OUT        59:58    27:26
+trig_in                      IN         53       21
+aux_gpio                     INOUT      48       16
+gpio[30:15]                  INOUT      47:32    15:0
 ===========================  =========  =======  =======
 
 The following table lists the GPIOs that are preset on the Intel
@@ -491,13 +491,13 @@ carriers.
 ======================  =========  =======  ======
 HDL GPIO signal         Direction  HDL no.  FM87
 ======================  =========  =======  ======
-tx_fifo_bypass_bypass    IN         63      31
-resetb                   OUT        62      30
-trig_b[1:0]              OUT        61:60   29:28
-trig_a[1:0]              OUT        59:58   27:26
-trig_in                  IN         53      21
-aux_gpio                 INOUT      48      16
-gpio[30:15]              INOUT      47:32   15:0
+tx_fifo_bypass_bypass   IN         63       31
+resetb                  OUT        62       30
+trig_b[1:0]             OUT        61:60    29:28
+trig_a[1:0]             OUT        59:58    27:26
+trig_in                 IN         53       21
+aux_gpio                INOUT      48       16
+gpio[30:15]             INOUT      47:32    15:0
 ======================  =========  =======  ======
 
 .. admonition:: Legend
