@@ -127,7 +127,7 @@ To know how the Software GPIO numbers are calculated, check out
 :ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
 ===========================================  ======================  ============  ========  ======================
-HW Signal                                    GPIO signal              Direction     HDL no.  Zynq UltraScale+ MP
+HW Signal                                    GPIO signal             Direction     HDL no.   Zynq UltraScale+ MP
 ===========================================  ======================  ============  ========  ======================
 IO_L7N_66_FAN_CTL                            fan_ctl                 OUT           67        145
 IO_66_USB_FLASH_PROG_EN                      usb_flash_prog_en       OUT           66        144

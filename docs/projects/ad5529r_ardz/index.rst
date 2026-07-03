@@ -92,9 +92,9 @@ To know how the Software GPIO numbers are calculated, check out
 ==================  =========  =======  =========
 GPIO signal         Direction  HDL no.  Zynq-7000
 ==================  =========  =======  =========
-ad5529r_ardz_clear    OUT        32       86
-ad5529r_ardz_reset    OUT        33       87
-ad5529r_ardz_alarm    IN         34       88
+ad5529r_ardz_alarm  IN         34       88
+ad5529r_ardz_reset  OUT        33       87
+ad5529r_ardz_clear  OUT        32       86
 ==================  =========  =======  =========
 
 .. admonition:: Legend

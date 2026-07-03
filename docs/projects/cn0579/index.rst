@@ -150,7 +150,7 @@ To know how the Software GPIO numbers are calculated, check out
 ====================  ============  =======  ==========  ===========
 GPIO signal           Direction     HDL no.  Zynq-7000   DE10-Nano
 ====================  ============  =======  ==========  ===========
-RESET_N               OUT           32       86          0
+reset_n               OUT           32       86          0
 ====================  ============  =======  ==========  ===========
 
 .. admonition:: Legend

@@ -100,13 +100,13 @@ To know how the Software GPIO numbers are calculated, check out
 ==================  =========  =======  =====================
 GPIO signal         Direction  HDL no.  Zynq UltraScale+ MP
 ==================  =========  =======  =====================
-fan_en_b            OUT        0        78
-csirxss_rstn        OUT        1        79
-ap_rstn_frmbuf_0    OUT        2        80
-ap_rstn_frmbuf_1    OUT        3        81
-ap_rstn_frmbuf_2    OUT        4        82
-ap_rstn_frmbuf_3    OUT        5        83
 rpi_en              OUT        6        84
+ap_rstn_frmbuf_3    OUT        5        83
+ap_rstn_frmbuf_2    OUT        4        82
+ap_rstn_frmbuf_1    OUT        3        81
+ap_rstn_frmbuf_0    OUT        2        80
+csirxss_rstn        OUT        1        79
+fan_en_b            OUT        0        78
 ==================  =========  =======  =====================
 
 .. admonition:: Legend

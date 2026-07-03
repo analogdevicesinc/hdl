@@ -226,7 +226,7 @@ gpio[32]        OUT        32       86         sdib           0
 **Lattice LFCPNX-EVB Platform:**
 
 =================  =========  ============  ==============  ==============
-GPIO signal        Direction   RISC-V RX    ALERT_SPI_N=1   ALERT_SPI_N=0
+GPIO signal        Direction  RISC-V RX     ALERT_SPI_N=1   ALERT_SPI_N=0
 =================  =========  ============  ==============  ==============
 gpio1[29]          IN         gpio1[29]     sdi[3]          0
 gpio1[28]          IN         gpio1[28]     sdi[1]          0

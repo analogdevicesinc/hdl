@@ -129,11 +129,11 @@ To know how the Software GPIO numbers are calculated, check out
 ====================  =========  =======  ===================
 GPIO signal           Direction  HDL no.  Zynq UltraScale+ MP
 ====================  =========  =======  ===================
-csirxss_rstn          OUT        0        78
-ap_rstn_frmbuf_{0:7}  OUT        2:9      80:87
-sfp_i2c_rstn          INOUT      10       88
-fan_pwm               INOUT      22       100
 fan_tach              INOUT      23       101
+fan_pwm               INOUT      22       100
+sfp_i2c_rstn          INOUT      10       88
+ap_rstn_frmbuf_{7:0}  OUT        9:2      87:80
+csirxss_rstn          OUT        0        78
 ====================  =========  =======  ===================
 
 .. admonition:: Legend
