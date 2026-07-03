@@ -193,7 +193,8 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Zynq UltraScale+ MP: if PS8 EMIOs are used, then offset is 78
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
 ======================================  ============  ========  ======================
 GPIO signal                              Direction     HDL no.  Zynq UltraScale+ MP

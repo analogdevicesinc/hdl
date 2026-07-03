@@ -199,9 +199,8 @@ I2C connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
-
-- Zynq-7000: if PS7 is used, then offset is 54
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
 ===========  =========  =======  =========
 GPIO signal  Direction  HDL no.  Zynq-7000
