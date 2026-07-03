@@ -6,6 +6,6 @@
 
 This project is used internally to generate transceiver configuration files for
 Xilinx carriers. The generated configuration files are later parsed and used by
-other HDL projects (e.g., ADRV9009, DAQ2, DAQ3).
+other HDL projects (e.g., AD9081, AD9083, ADRV9009, ADRV9026, DAQ2, DAQ3).
 Please enter the folder for the FPGA carrier you want to use
 and read the README.md.

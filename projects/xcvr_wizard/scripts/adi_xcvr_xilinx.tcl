@@ -70,8 +70,9 @@ proc adi_xcvr_project {parameters_for_make {carrier_name ""}} {
     set gt_xcvr_file {}
 
     foreach {key value} $parameters_for_make {
+        if {$value eq ""} { continue }
         lappend formatted_params "$key=$value"
-        set key_parsed [string map {"LANE_" "" "_" ""} $key]
+        set key_parsed [string map {"JESD" "" "LANE" "" "_" ""} $key]
         set value_parrsed [string map {. _} $value]
         set ad_project_make_params($key) $value_parrsed
         set tok "${key_parsed}${value_parrsed}"
@@ -83,11 +84,22 @@ proc adi_xcvr_project {parameters_for_make {carrier_name ""}} {
 
     append make_command " " [join $formatted_params " "]
     set gt_xcvr_file [join  $gt_xcvr_file "_"]
-    set config_parser_dir_name "${xcvr_type}_${ad_project_make_params(PLL_TYPE)}_${ad_project_make_params(LANE_RATE)}_${ad_project_make_params(REF_CLK)}"
+    set config_parser_dir_name "${xcvr_type}_${ad_project_make_params(PLL_TYPE)}"
+    foreach {rx_key tx_key prefix} {
+      XCVR_RX_PLL_TYPE  PLL_TYPE  RX
+      XCVR_RX_LANE_RATE LANE_RATE RXLR
+      XCVR_RX_REF_CLK   REF_CLK   RXRC
+    } {
+      if {[info exists ad_project_make_params($rx_key)]
+          && $ad_project_make_params($rx_key) ne ""
+          && $ad_project_make_params($rx_key) ne $ad_project_make_params($tx_key)} {
+        append config_parser_dir_name "_${prefix}$ad_project_make_params($rx_key)"
+      }
+    }
+    append config_parser_dir_name "_${ad_project_make_params(LANE_RATE)}_${ad_project_make_params(REF_CLK)}"
     set file_local_param [string tolower $config_parser_dir_name]
     append file_local_param "_common.v"
   }
-
   eval exec $make_command
   cd $current_dir
 
