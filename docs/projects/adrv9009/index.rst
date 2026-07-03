@@ -195,6 +195,9 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
+
 =====================  =========  =======  ===================  ======  ==========  =========  ==========
 GPIO signal            Direction  HDL no.  Zynq UltraScale+ MP  A10SoC  Stratix 10  Zynq-7000  Microblaze
 =====================  =========  =======  ===================  ======  ==========  =========  ==========

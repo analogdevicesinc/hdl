@@ -107,11 +107,8 @@ LDACB        PMOD P9           J18/FMC_LA05_P T14              AE17
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
-
-- Zynq-7000: if PS7 is used, then the offset is 54
-- DE10-Nano: the offset is -32
-- All supported boards uses the same HDL GPIO EMIO Number
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
 ===========  =========  =======  =========  =========
 GPIO signal  Direction  HDL no.  Zynq-7000  DE10-Nano

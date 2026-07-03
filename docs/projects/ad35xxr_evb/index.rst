@@ -81,6 +81,9 @@ axi_clkgen            0x44B0_0000
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
+
 ==============  =========  =======  =========
 GPIO signal     Direction  HDL no.  Zynq-7000
 ==============  =========  =======  =========

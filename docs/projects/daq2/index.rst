@@ -269,12 +269,8 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
-
-- ZynqMP: the offset is 78
-- A10SoC: the offset is 0
-- Zynq-7000: the offset is 54
-- MicroBlaze: the offset is 0
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
 =================  ============  =======  ==========  ======  ==========  ==========
 GPIO signal        Direction     HDL no.  Zynq MP     A10SoC  Zynq-7000   MicroBlaze

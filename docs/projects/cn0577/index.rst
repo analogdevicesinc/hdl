@@ -108,6 +108,9 @@ axi_pwm_gen          0x44A6_0000
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
+
 ====================  ============  =======  ==========
 GPIO signal           Direction     HDL no.  Zynq-7000
 ====================  ============  =======  ==========
