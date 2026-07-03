@@ -8,10 +8,9 @@
 #   - Interrupt pin: ${iop_name}/dff_en_reset_vector_0/q
 #   - Interrupt ACK GPIO (outside hierarchy): mb_${iop_name}_intr_ack
 
-proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
-  # Creates IOP subsystem with peripherals: GPIO, IIC, SPI
-  # GPIO is directly connected to data pins for simple control
-  # base_addr: Base address for BRAM controller (default 0x40000000)
+proc create_pynq_mb_subsystem { iop_name {base_addr 0x42000000} } {
+  # Creates IOP subsystem with peripherals: GPIO, IIC, SPI, UART
+  # base_addr: Base address for BRAM controller on PS AXI bus
 
   # -----------------------
   # Create hierarchy
@@ -35,15 +34,12 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   create_bd_pin -dir I -from 0 -to 0 -type rst aux_reset_in
   create_bd_pin -dir I -type rst  ext_reset_in
   create_bd_pin -dir I -type clk clk_100M
-  #create_bd_pin -dir I -from 1 -to 0 data_i
   create_bd_pin -dir O  data_o
   create_bd_pin -dir I -from 0 -to 0 intr_ack
   create_bd_pin -dir O  intr_req
   create_bd_pin -dir I -type rst mb_debug_sys_rst
   create_bd_pin -dir O -from 0 -to 0 -type rst peripheral_aresetn
   create_bd_pin -dir I -from 0 -to 0 -type rst s_axi_aresetn
-  #create_bd_pin -dir O -from 1 -to 0 tri_o
-
   # -----------------------
   # Logic constants (needed early for reset)
   # -----------------------
@@ -54,7 +50,6 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   # Processor System Reset
   # -----------------------
   ad_ip_instance proc_sys_reset ${iop_name}_rst
-  #ad_ip_parameter ${iop_name}_rst CONFIG.C_EXT_RESET_HIGH 0
   ad_ip_parameter ${iop_name}_rst CONFIG.C_AUX_RESET_HIGH 1
 
   ad_connect clk_100M ${iop_name}_rst/slowest_sync_clk
@@ -112,22 +107,6 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   # LMB BRAM (shared instruction and data memory)
   # Use standalone BRAM configuration for dual-port access
   # -----------------------
-  # ad_ip_instance blk_mem_gen ${iop_name}_lmb_bram
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Memory_Type True_Dual_Port_RAM
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.use_bram_block Stand_Alone
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Write_Depth_A [expr 1024 *16]
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Write_Width_A 32
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Read_Width_A 32
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Write_Width_B 32
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Read_Width_B 32
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Enable_B Use_ENB_Pin
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Port_B_Clock 100
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Port_B_Enable_Rate 100
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Port_B_Write_Rate 50
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Use_RSTB_Pin true
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Register_PortA_Output_of_Memory_Primitives false
-  # ad_ip_parameter ${iop_name}_lmb_bram CONFIG.Register_PortB_Output_of_Memory_Primitives false
-
   ad_ip_instance blk_mem_gen ${iop_name}_lmb_bram [list \
     Memory_Type True_Dual_Port_RAM  \
     use_bram_block BRAM_Controller \
@@ -162,16 +141,10 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   ad_connect S_AXI mb_bram_ctrl/S_AXI
   ad_connect mb_bram_ctrl/BRAM_PORTA ${iop_name}_lmb_bram/BRAM_PORTB
 
-    # ad_ip_parameter  ${iop_name}_lmb_bram/BRAM_PORTA  CONFIG.MASTER_TYPE	BRAM_CTRL
-    # ad_ip_parameter  ${iop_name}_lmb_bram/BRAM_PORTA  CONFIG.MEM_SIZE	65536
-
-    # ad_ip_parameter  ${iop_name}_lmb_bram/BRAM_PORTB CONFIG.MASTER_TYPE	BRAM_CTRL
-    # ad_ip_parameter  ${iop_name}_lmb_bram/BRAM_PORTB  CONFIG.MEM_SIZE	65536
-
   # -----------------------
   # AXI Interconnect for MicroBlaze peripherals
   # -----------------------
-  # 5 master interfaces: SPI, IIC, GPIO, INTC, INTR
+  # 6 master interfaces: SPI, IIC, GPIO, UART, INTC, INTR
   set num_mi 6
 
   ad_ip_instance axi_interconnect ${iop_name}_axi_periph
@@ -198,7 +171,7 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M00_ARESETN
   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M01_ARESETN
   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M02_ARESETN
-  ad_connect s_axi_aresetn ${iop_name}_axi_periph/M03_ARESETN
+  ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M03_ARESETN
   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M04_ARESETN
   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_axi_periph/M05_ARESETN
   ad_connect ${iop_name}_mb/M_AXI_DP ${iop_name}_axi_periph/S00_AXI
@@ -232,7 +205,7 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   incr mi_index
 
   # -----------------------
-  # AXI GPIO - Direct connection to data pins (2 bits)
+  # AXI GPIO - Output only (1 bit)
   # -----------------------
   ad_ip_instance axi_gpio ${iop_name}_gpio
   ad_ip_parameter ${iop_name}_gpio CONFIG.C_GPIO_WIDTH 1
@@ -244,10 +217,7 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_gpio/s_axi_aresetn
   ad_connect ${iop_name}_axi_periph/M[format "%02d" $mi_index]_AXI ${iop_name}_gpio/S_AXI
 
-  # Connect GPIO directly to data pins
-  #ad_connect ${iop_name}_gpio/gpio_io_i data_i
   ad_connect ${iop_name}_gpio/gpio_io_o data_o
-  #ad_connect ${iop_name}_gpio/gpio_io_t tri_o
   incr mi_index
 
   # -----------------------
@@ -256,7 +226,7 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   ad_ip_instance axi_uartlite ${iop_name}_uart [list C_BAUDRATE 9600]
 
    ad_connect clk_100M ${iop_name}_uart/s_axi_aclk
-   ad_connect s_axi_aresetn ${iop_name}_uart/s_axi_aresetn
+   ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_uart/s_axi_aresetn
     ad_connect ${iop_name}_axi_periph/M[format "%02d" $mi_index]_AXI ${iop_name}_uart/s_axi
     ad_connect UART  ${iop_name}_uart/UART
    incr mi_index
@@ -279,7 +249,7 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   ad_ip_parameter ${iop_name}_intr CONFIG.C_GPIO_WIDTH 1
 
   ad_connect clk_100M ${iop_name}_intr/s_axi_aclk
-  ad_connect s_axi_aresetn ${iop_name}_intr/s_axi_aresetn
+  ad_connect ${iop_name}_rst/peripheral_aresetn ${iop_name}_intr/s_axi_aresetn
   ad_connect ${iop_name}_axi_periph/M[format "%02d" $mi_index]_AXI ${iop_name}_intr/S_AXI
   incr mi_index
 
@@ -295,18 +265,8 @@ proc create_pynq_mb_subsystem { iop_name {base_addr 0x40000000} } {
   ad_connect ${iop_name}_intr_concat/dout ${iop_name}_intc/intr
 
   # -----------------------
-  # Interrupt output: Connect GPIO output directly to intr_req
-  # Use xlconstant to create a proper scalar signal for sys_concat_intc
+  # Interrupt output: util_reg latches the interrupt request
   # -----------------------
-  # Create a constant 0 for when interrupt is not active
-  #ad_ip_instance xlconstant ${iop_name}_intr_const
-  #ad_ip_parameter ${iop_name}_intr_const CONFIG.CONST_VAL 0
-  #ad_ip_parameter ${iop_name}_intr_const CONFIG.CONST_WIDTH 1
-
-  # For now, connect interrupt output to GND (can be modified later)
-  # The interrupt logic needs to match sys_concat_intc input type (scalar)
-  #ad_connect ${iop_name}_intr_const/dout intr_req
-
 ad_ip_instance util_reg  ${iop_name}_util_reg [list \
    IS_FF Flip-Flop \
    NUM_OF_BITS 1 \
@@ -317,11 +277,20 @@ ad_ip_instance util_reg  ${iop_name}_util_reg [list \
    RESET_VALUE 0 \
   ]
 
-  ad_connect  ${iop_name}_util_reg/d  ${iop_name}_logic_1/dout
+ ad_connect  ${iop_name}_util_reg/d  ${iop_name}_logic_1/dout
   ad_connect  ${iop_name}_util_reg/clk   clk_100M
-  ad_connect  ${iop_name}_util_reg/en   ${iop_name}_intr/gpio_io_o 
-  ad_connect  ${iop_name}_util_reg/reset intr_ack
   ad_connect  ${iop_name}_util_reg/q  intr_req
+  ad_connect ${iop_name}_intr/gpio_io_o ${iop_name}_util_reg/en
+
+  ad_ip_instance util_vector_logic ${iop_name}_util_vector_logic_0 [list \
+    C_OPERATION {or} \
+    C_SIZE 1 \
+  ]
+
+  ad_connect ${iop_name}_rst/peripheral_reset ${iop_name}_util_vector_logic_0/Op1
+  ad_connect intr_ack ${iop_name}_util_vector_logic_0/Op2
+  ad_connect  ${iop_name}_util_reg/reset  ${iop_name}_util_vector_logic_0/Res
+
 
 
   # -----------------------
@@ -333,31 +302,7 @@ ad_ip_instance util_reg  ${iop_name}_util_reg [list \
   ad_connect sys_cpu_clk ${iop_name}/clk_100M
   ad_connect sys_cpu_resetn ${iop_name}/s_axi_aresetn
 
-  # -----------------------
-  # PYNQ Reset GPIO (outside hierarchy)
-  # Named mb_${iop_name}_reset for PYNQ compatibility
-  # -----------------------
-   
-
-
-  # Connect reset GPIO output to IOP aux_reset_in (directly, no inversion needed)
-  # When GPIO output is 0 -> MB in reset, when 1 -> MB running
-
   ad_connect sys_ps7/FCLK_RESET0_N ${iop_name}/ext_reset_in
-  # -----------------------
-  # PYNQ Interrupt ACK GPIO (outside hierarchy)
-  # Named mb_${iop_name}_intr_ack for PYNQ compatibility
-  # -----------------------
-  #ad_ip_instance axi_gpio mb_${iop_name}_intr_ack
-  #ad_ip_parameter mb_${iop_name}_intr_ack CONFIG.C_GPIO_WIDTH 1
-  #ad_ip_parameter mb_${iop_name}_intr_ack CONFIG.C_ALL_OUTPUTS 1
-
-  #ad_connect sys_cpu_clk mb_${iop_name}_intr_ack/s_axi_aclk
-  #ad_connect sys_cpu_resetn mb_${iop_name}_intr_ack/s_axi_aresetn
-
-  # Connect interrupt ACK to the DFF clear
- # ad_connect mb_${iop_name}_intr_ack/gpio_io_o ${iop_name}/intr_ack
-
   # -----------------------
   # Connect mb_debug_sys_rst to GND (no debug reset)
   # -----------------------
@@ -371,12 +316,8 @@ ad_ip_instance util_reg  ${iop_name}_util_reg [list \
   # -----------------------
   # CPU Interconnect for PS access to BRAM
   # -----------------------
- ad_cpu_interconnect 0x42000000  ${iop_name}/mb_bram_ctrl
+ ad_cpu_interconnect $base_addr ${iop_name}/mb_bram_ctrl
  set_property range 64K [get_bd_addr_segs {sys_ps7/Data/mb_bram_ctrl}]
-  # CPU Interconnect for reset GPIO
-
-  # CPU Interconnect for interrupt ACK GPIO
-
 
   # -----------------------
   # Address assignment for MicroBlaze LMB (critical for MB to find instructions at 0x0)

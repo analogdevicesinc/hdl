@@ -72,6 +72,7 @@ module system_top (
   inout  SPI_0_io1_i_miso,
   inout  SPI_0_sck_o,
   inout  [0:0]SPI_0_ss_o_cs_n
+
 );
 
 
@@ -99,8 +100,6 @@ module system_top (
     .fixed_io_ps_porb (fixed_io_ps_porb),
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
 
-
-
     .SPI_0_io0_io(SPI_0_io0_o_mosi),
     .SPI_0_io1_io(SPI_0_io1_i_miso),
     .SPI_0_sck_io(SPI_0_sck_o),
@@ -111,7 +110,6 @@ module system_top (
 
     .UART_rxd(uart_rx),
     .UART_txd(uart_tx),
-
 
     .data_o(data_o));
 

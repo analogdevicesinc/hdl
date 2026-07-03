@@ -11,7 +11,6 @@ adi_project template_coraz7s
 adi_project_files template_coraz7s [list \
     "$ad_hdl_dir/library/common/ad_iobuf.v" \
     "$ad_hdl_dir/projects/common/coraz7s/coraz7s_system_constr.xdc" \
-    "system_constr.xdc" \
     "system_top.v" ]
 
 adi_project_run template_coraz7s
