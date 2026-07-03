@@ -132,9 +132,8 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
-
-- DE10-Nano: the offset is -32
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
 ===========  =========  =======  =========
 GPIO signal  Direction  HDL no.  DE10-Nano

@@ -505,7 +505,8 @@ The AD9508 chip select will be used only in the rev. A of the FMCOMMS11.
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Zynq-7000: if PS7 is used, then offset is 54
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
 ======================  ============  =======  =========
 GPIO signal             Direction     HDL no.  Zynq-7000

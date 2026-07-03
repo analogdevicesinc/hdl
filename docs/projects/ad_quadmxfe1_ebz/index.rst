@@ -374,6 +374,9 @@ dedicated SPI bus as well.
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
+
 GPIO muxing enables multiple functions of gpio_0 pins, to have either the
 NCO sync function or to be regular software-controllable GPIOs.
 
