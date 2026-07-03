@@ -1,7 +1,7 @@
 .. _xgt_wizard:
 
 Xilinx FPGAs Transceivers Wizard
-================================================================================
+===============================================================================
 
 The 7 Series and Ultrascale FPGAs Transceivers Wizard can be used to configure
 the transceivers inside the :ref:`util_adxcvr <util_adxcvr>` core. In general
@@ -26,33 +26,45 @@ configuration for a JESD204B interface.
    :xilinx:`UG578 <support/documentation/user_guides/ug578-ultrascale-gty-transceivers.pdf>`
    and :xilinx:`PG168 <support/documentation/user_guides/pg168-gtwizard.pdf>`.
 
-Required features by the JESD204B
---------------------------------------------------------------------------------
+Required features by the JESD204B/C interface
+-------------------------------------------------------------------------------
 
 The following features are required for a JESD204B interface:
 
 - QPLL and CPLL for clock generation
 - 8B/10B encoding and decoding
-- TX and RX buffer to solve rate and phase differences between XCLK (PMA parallel clock) and USRCLK (device clock)
+- TX and RX buffer to solve rate and phase differences between XCLK (PMA
+  parallel clock) and USRCLK (device clock)
 - RX Equalization and CDR
 - RX Byte and Word alignment
 - Tx configurable driver
 - Polarity control
 
+For JESD204C, the following features are used instead of or in addition to the
+above:
+
+- 64B/66B encoding and decoding
+- Wider internal data widths (64-bit user data, 66-bit internal)
+
+The JESD mode (8B10B or 64B66B) is selected via the ``JESD_MODE`` parameter
+during the build. JESD204C (64B66B) is currently supported on ZCU102 (GTHE4) and
+VCU118 (GTYE4). All other carriers support only JESD204B (8B10B).
+
 There are 3 flows for generating transceivers using the wizard
 -------------------------------------------------------------------------------
 
 The first one is an automated flow integrated in the HDL build system. It uses
-project-defined parameters to generate and extract only the necessary transceiver
-settings, with no user interaction required. The second one is using the GT
-wizard manually as explained below:
+project-defined parameters to generate and extract only the necessary
+transceiver settings, with no user interaction required. The second one is using
+the GT wizard manually as explained below:
 :ref:`Using_the_GUI_of_the_Wizard <xgt_wizard_gui_of_the_wizard>` ,
 and a third one that uses a script to generate one or more configurations:
 :ref:`Using_the_generator_script <xgt_wizard_generator_script>` .
-Please keep in mind that the script is capable of generating only **configurations
-where the TX ad RX lane rates are even and supports only JESD204B**. For more
-customization, you can use the script to generate the configurations, then edit
-them manually as you please.
+The automated flow and the generator script support both **JESD204B (8B10B)**
+and **JESD204C (64B66B)** modes, as well as configurations where **TX and RX use
+different PLL types, lane rates or reference clocks**. For more customization,
+you can use the script to generate the configurations, then edit them manually
+as you please.
 
 If you used the script method, there is another script that parses the generated
 configurations and generates a list containing only the parameters that are
@@ -72,39 +84,67 @@ and supporting Tcl scripts.
 The automated transceiver configuration flow is currently integrated into the
 following projects:
 
+- :git-hdl:`AD9081_FMCA_EBZ <projects/ad9081_fmca_ebz>`
+- :git-hdl:`AD9083_EVB <projects/ad9083_evb>`
+- :git-hdl:`ADRV9009 <projects/adrv9009>`
+- :git-hdl:`ADRV9026 <projects/adrv9026>`
+- :git-hdl:`ADRV9371x <projects/adrv9371x>`
 - :git-hdl:`DAQ2 <projects/daq2>`
 - :git-hdl:`DAQ3 <projects/daq3>`
-- :git-hdl:`ADRV9009 <projects/adrv9009>`
-- :git-hdl:`ADRV9371x <projects/adrv9371x>`
 
 xcvr_wizard
 *******************************************************************************
 
-The :git-hdl:`xcvr_wizard HDL project <projects/xcvr_wizard>` is used
-internally to generate transceiver configuration files based on a set of
-parameters:
+The :git-hdl:`xcvr_wizard HDL project <projects/xcvr_wizard>` is used internally
+to generate transceiver configuration files based on a set of parameters. It
+supports the following carrier boards:
 
-- LANE_RATE: lane speed in Gbps
-- REF_CLK: reference clock frequency in MHz
-- PLL_TYPE: the type of PLL used (CPLL or QPLL)
+========  =======  ================  ==================
+Carrier   GT Type  JESD204B (8B10B)  JESD204C (64B66B)
+========  =======  ================  ==================
+ZC706     GTXE2    Yes               No
+KC705     GTXE2    Yes               No
+KCU105    GTHE3    Yes               No
+ZCU102    GTHE4    Yes               Yes
+VCU118    GTYE4    Yes               Yes
+========  =======  ================  ==================
 
-It builds a Vivado project for a specific carrier and configuration, producing
-files such as GT_Type_cfng.txt and, for GTXE2 devices,
-gtxe2_<plltype>_<rate>_<refclk>_common.v. These files are later parsed by
+The required parameters are:
+
+- **LANE_RATE**: Lane speed in Gbps (applies to both TX and RX)
+- **REF_CLK**: Reference clock frequency in MHz
+- **PLL_TYPE**: The type of PLL used (CPLL, QPLL, QPLL0 or QPLL1)
+
+The following optional parameters are also supported:
+
+- **JESD_MODE**: Link layer encoding mode (``8B10B`` or ``64B66B``, default:
+  ``8B10B``). The xcvr_wizard and generator scripts support both modes on GTHE4
+  and GTYE4 transceivers. Each calling project defines whether it uses this
+  parameter.
+- **XCVR_RX_PLL_TYPE**: PLL type for the RX path (e.g., CPLL when TX uses QPLL0)
+- **XCVR_RX_LANE_RATE**: Lane speed in Gbps for the RX path
+- **XCVR_RX_REF_CLK**: Reference clock frequency in MHz for the RX path
+
+When the RX parameters are not provided (or set to empty ``{}``), the RX path
+uses the same values as TX, preserving backward compatibility.
+
+The project builds a Vivado design for a specific carrier and configuration,
+producing files such as ``GT_Type_cfng.txt`` and, for GTXE2 devices,
+``gtxe2_<plltype>_<rate>_<refclk>_common.v``. These files are later parsed by
 automation scripts to extract only the required configuration parameters.
 
 adi_xcvr_project
 *******************************************************************************
 
-This function builds the `xcvr_wizard` using user-defined parameters. These
+This function builds the ``xcvr_wizard`` using user-defined parameters. These
 values define the configuration for which the transceiver settings will be
-generated. The function returns a dictionary (`xcvr_config_paths`) with the
+generated. The function returns a dictionary (``xcvr_config_paths``) with the
 paths to the generated files.
 
-In the HDL build flow, it is called from `system_project.tcl`, located in the
-carrier-specific folder (e.g., `projects/<carrier>/system_project.tcl`).
+In the HDL build flow, it is called from ``system_project.tcl``, located in the
+carrier-specific folder (e.g., ``projects/<project>/carrier/system_project.tcl``).
 
-**Example:**
+**Basic example** (same PLL for TX and RX):
 
 .. code-block:: tcl
 
@@ -115,6 +155,28 @@ carrier-specific folder (e.g., `projects/<carrier>/system_project.tcl`).
      REF_CLK 500
      PLL_TYPE QPLL
    ]]
+
+**Example with different TX/RX lane rates and PLL types**:
+
+.. code-block:: tcl
+
+   global xcvr_config_paths
+
+   set xcvr_config_paths [adi_xcvr_project [list
+     LANE_RATE          [get_env_param LANE_RATE             4]
+     REF_CLK            [get_env_param REF_CLK             100]
+     PLL_TYPE           [get_env_param PLL_TYPE          QPLL0]
+     JESD_MODE          [get_env_param JESD_MODE         8B10B]
+     XCVR_RX_PLL_TYPE   [get_env_param XCVR_RX_PLL_TYPE   CPLL]
+     XCVR_RX_LANE_RATE  [get_env_param XCVR_RX_LANE_RATE     2]
+   ]]
+
+These parameters can also be overridden from the command line:
+
+.. code-block:: bash
+
+   make LANE_RATE=10 REF_CLK=250 PLL_TYPE=QPLL0
+   make JESD_MODE=8B10B RX_LANE_RATE=2 TX_LANE_RATE=4 RX_JESD_M=8 RX_JESD_L=2 RX_JESD_S=1 TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1 PLL_TYPE=QPLL0 REF_CLK=100 LANE_RATE=4 XCVR_RX_PLL_TYPE=CPLL XCVR_RX_LANE_RATE=2
 
 adi_xcvr_parameters
 *******************************************************************************
@@ -158,20 +220,20 @@ the Shared Logic section in order to have both COMMON and CHANNEL instances in
 the generated code.
 
 Line Rate and RefClk Selection
-********************************************************************************
+*******************************************************************************
 
 First, you need to select **JESD204** as targeted **protocol** and specify your
 **line rate** and **reference clock**. A valid reference clock depends on your
-line rate. Make sure that you're using a valid reference clock form the drop-down
-list. Also you should set the used **PLLs** for **TX** and **RX**. If your line
-rate is equal for both directions, you can use the same PLL. Be aware that each
-PLL's VCO has a different frequency range where the circuit can function
-correctly. If your targeted line rate is too high or too low, you may be
-restricted to use just one of the two PLLs. All other settings can be left on
+line rate. Make sure that you're using a valid reference clock form the
+drop-down list. Also you should set the used **PLLs** for **TX** and **RX**. If
+your line rate is equal for both directions, you can use the same PLL. Be aware
+that each PLL's VCO has a different frequency range where the circuit can
+function correctly. If your targeted line rate is too high or too low, you may
+be restricted to use just one of the two PLLs. All other settings can be left on
 their default value in this tab.
 
 Encoding and Clocking
-********************************************************************************
+*******************************************************************************
 
 If you selected **JESD204** to be the used protocol, you don't have to change
 anything here. The JESD204B interface is using 8B/10B encoding/decoding, and
@@ -182,13 +244,13 @@ the TXOUTCLK and RXOUTCLK source selection, you can leave the options unchecked,
 as both clocks are already using PLLREFCLK as their source.
 
 Other tabs
-********************************************************************************
+*******************************************************************************
 
 The setting from the tabs **PCIe, SATA, PRBS** and **CB and CC Sequence** can
 be left to their default values.
 
 Generated files
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Location of the **COMMON** instance:
  - <project_name>/<project_name>.gen/sources_1/ip/<component_name>/<component_name>_common.v
@@ -206,27 +268,28 @@ These instances should be compared with the COMMON and CHANNEL instances used in
 :git-hdl:`util_adxcvr_xch.v <library/xilinx/util_adxcvr/util_adxcvr_xch.v>`.
 
 Ultrascale FPGAs Transceiver Wizard
-********************************************************************************
+*******************************************************************************
 
 The overall workflow with the Ultrascale FPGAs Transceiver Wizard is similar to
 the 7 Series one, it just has a different GUI. To open up the wizard in the
-**Project Manager** select **IP Catalog** and search after the keyword **wizard**,
-then select the **Ultrascale FPGAs Transceivers Wizard**. You can define a
-custom name for your component and leave it on default. The tools should
-recognize your transceiver type automatically, if not, you may have to double
-check if you have the right FPGA device selected for your project. To apply the
-general JESD204B setting, select the **GTH-JESD204 preset**. In the first tab,
-called **Basic** you can find all the necessary settings. Select the targeted
-**line rate, PLL** and **reference clock**. The tool will tell you what PLL and
-reference clock can be used with a specific line rate. Note that the current
-version of the util_adxcvr core does not support **QPLL Fractional-N option**.
+**Project Manager** select **IP Catalog** and search after the keyword
+**wizard**, then select the **Ultrascale FPGAs Transceivers Wizard**. You can
+define a custom name for your component and leave it on default. The tools
+should recognize your transceiver type automatically, if not, you may have to
+double check if you have the right FPGA device selected for your project. To
+apply the general JESD204B setting, select the **GTH-JESD204 preset**. In the
+first tab, called **Basic** you can find all the necessary settings. Select the
+targeted **line rate, PLL** and **reference clock**. The tool will tell you what
+PLL and reference clock can be used with a specific line rate. Note that the
+current version of the util_adxcvr core does not support **QPLL Fractional-N
+option**.
 
 To have both COMMON and CHANNEL instances inside the generated core, in the
-**Structural Options** tab the **Include transceiver COMMON in the Core**
-option must be selected.
+**Structural Options** tab the **Include transceiver COMMON in the Core** option
+must be selected.
 
 Generated files
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 To find the actual instance attributes, two different files should be examined.
 A generic one, which contains the actual software macro instance, and a wrapper,
@@ -262,12 +325,12 @@ and :git-hdl:`util_adxcvr_xch.v <library/xilinx/util_adxcvr/util_adxcvr_xch.v>` 
 .. _xgt_wizard_generator_script:
 
 Using the generator script
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. warning::
 
-   If you are using Windows, please use the ad_gth_generator command followed
-   by the parsing script call, since the get_diff_params only works for linux
+   If you are using Windows, please use the ad_gth_generator command followed by
+   the parsing script call, since the get_diff_params only works for linux
    systems
 
 Open the TCL console inside your Vivado project. Source gtwizard_generator.tcl
@@ -277,12 +340,12 @@ Open the TCL console inside your Vivado project. Source gtwizard_generator.tcl
    source ../../scripts/gtwizard_generator.tcl
 
 Generating configuration
-********************************************************************************
+*******************************************************************************
 
 Here you have 2 options.
 
 ad_gth_generator
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 **Recommended method for generating multiple configurations**
 
@@ -297,8 +360,8 @@ ad_gth_generator with the desired parameters.
 The first parameter represents the lane rate that will be set to both RX and TX.
 The second one can be CPLL, QPLL, QPLL0, QPLL1, depending on the transceiver of
 the board. The third one is the reference clock. If left empty, then it will be
-filled with all the viable values for the lane rate given. This feature does
-not work at the moment for GTXE2 transceivers.
+filled with all the viable values for the lane rate given. This feature does not
+work at the moment for GTXE2 transceivers.
 
 .. code-block:: tcl
 
@@ -310,25 +373,32 @@ IPs with all the combinations between the lane rate and reference clock.
 
 .. code-block:: tcl
 
-   ad_gth_generator {9.8304 4.9152} QPLL0 {245.76 122.88} false
+   ad_gth_generator {9.8304 4.9152} QPLL0 {245.76 122.88}
 
 This call makes 4 instances of transceivers. Now you can double click on the
 <ip_name>.xci from the sources window to further customize the IP, including
-configurations where RX and TX have different rates. After you are all set,
-run the Parsing_script to get the list of parameters that need to be changed
-into the project.
+configurations where RX and TX have different rates. After you are all set, run
+the Parsing_script to get the list of parameters that need to be changed into
+the project.
+
+The optional fourth parameter selects the JESD mode (``8B10B`` or ``64B66B``,
+default: ``8B10B``). Three additional optional parameters allow configuring the
+RX path independently from TX:
+
+.. code-block:: tcl
+
+   ad_gth_generator {9.8304} QPLL0 {245.76} 8B10B CPLL {} {}
+
+The fifth parameter is the RX PLL type, the sixth is the RX lane rate and the
+seventh is the RX reference clock. When left empty, they default to the TX
+values.
 
 get_diff_params
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 **Recommended method for generating a single configuration**
 
 This function generates the IP and calls the parsing script.
-
-.. note::
-
-   This method works only with configurations where TX and RX have the same
-   lane rate
 
 Call the get_diff_params method with the desired parameters.
 
@@ -336,36 +406,43 @@ Call the get_diff_params method with the desired parameters.
 
    get_diff_params 15.4 QPLL0 385
 
-The first parameter represents the lane rate that will be set to both RX and
-TX. The second one can be CPLL, QPLL0, QPLL1. The third one is the reference
-clock. If left empty, then it will be filled with all the viable values for
-the lane rate given.
+The first parameter represents the lane rate that will be set to both RX and TX.
+The second one can be CPLL, QPLL0, QPLL1. The third one is the reference clock.
+If left empty, then it will be filled with all the viable values for the lane
+rate given.
+
+The optional fourth parameter selects the JESD mode (``8B10B`` or ``64B66B``,
+default: ``8B10B``). Three additional optional parameters (5th, 6th, 7th) allow
+configuring the RX path independently. When left empty, they default to the TX
+values:
 
 .. code-block:: tcl
 
-   get_diff_params {9.8304} QPLL0 {} false
+   get_diff_params {9.8304} QPLL0 {245.76} 8B10B CPLL {} {}
 
-The fourth parameter is optional. If you set it to false, the script will
-remove from the project and delete from disk the generated IPs after the
+The 8th parameter controls IP cleanup. If you set it to ``false``, the script
+will remove from the project and delete from disk the generated IPs after the
 list of parameters is done, so you don't have to do that manually.
 
-Both the first and the third parameters are actually lists, so you can use
-that to generate multiple configurations. Keep in mind that the script will
-generate IPs with all the combinations between the lane rate and reference
-clock.
+.. code-block:: tcl
+
+   get_diff_params {9.8304} QPLL0 {} 8B10B {} {} {} false
+
+Both the first and the third parameters are actually lists, so you can use that
+to generate multiple configurations. Keep in mind that the script will generate
+IPs with all the combinations between the lane rate and reference clock.
 
 .. code-block:: tcl
 
-   get_diff_params {9.8304 4.9152} QPLL0 {245.76 122.88} false
+   get_diff_params {9.8304 4.9152} QPLL0 {245.76 122.88}
 
-This call makes 4 instances of transceivers, and also deletes them after
-generating the list because of the 4th parameter is set to false.
+This call makes 4 instances of transceivers.
 
 Parsing script
-********************************************************************************
+*******************************************************************************
 
-If you used the get_diff_params method from the script to generate the IP,
-there is no need to call it again.
+If you used the get_diff_params method from the script to generate the IP, there
+is no need to call it again.
 
 If you used the ad_gth_generator method from the script, you will have to call
 the parsing script from the shell, as explained below.
@@ -381,10 +458,10 @@ the gtwiz_parser.pl script, specifying the GT type as in the example.
    ../../../../../scripts/gtwiz_parser.pl GTHE4
 
 If you run the script wile having multiple configurations, it will include the
-unique parameters for each IP, plus the gt_global list that contains the
-common parameters within generated configurations that are different from the
-default values. Now, you should find the files at <project_name>.gen/sources_1/ip
-Make sure to overwrite the list from system_bd with the one in <GT_Type>_cfng.txt.
+unique parameters for each IP, plus the gt_global list that contains the common
+parameters within generated configurations that are different from the default
+values. Now, you should find the files at <project_name>.gen/sources_1/ip Make
+sure to overwrite the list from system_bd with the one in <GT_Type>_cfng.txt.
 
 .. warning::
 
@@ -392,30 +469,31 @@ Make sure to overwrite the list from system_bd with the one in <GT_Type>_cfng.tx
    paring script will not work
 
 Output products
-********************************************************************************
+*******************************************************************************
 
 Output products can be found at this location: <project_name>.gen/sources_1/ip
 
 Most of the output files make sense in the context of parsing multiple
 configurations at once. If this is not the case, and you just used it to
-generate a single configuration, then the only file you need is <GT_Type>_cfng.txt.
+generate a single configuration, then the only file you need is
+<GT_Type>_cfng.txt.
 
 If you had multiple configurations, all the output files should give you some
 valuable information.
 
 GT_Type_cfng.txt
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This file contains 2 lists. The first one is a list of parameters that are
 unique for the desired configuration/configurations, different from the default
 values, and these parameters should be written into the system_bd file for your
 project. The next list called “gt_global” is a list of parameters that are
 common between the multiple generated configurations. These are also only the
-ones different from the default ones. This list should be empty if you have
-only one configuration generated.
+ones different from the default ones. This list should be empty if you have only
+one configuration generated.
 
 GT_Type_var_dist.txt
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Here you will find a list with the distribution of each DRP attribute in
 relation to the lane rates of your instances.
@@ -451,7 +529,7 @@ relation to the lane rates of your instances.
          };
 
 GT_Type_vco_dist.txt
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Here you will find a list with the distribution of each DRP attribute in
 relation to the VCO frequency of your instances. If this list is empty, that
@@ -459,17 +537,17 @@ means that the attributes are the same for the used VCOs (Probably all the
 instances have the same VCO) This should look similar to “GT_Type_var_dist.txt”
 
 table_common.csv
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-This is a table containing 3 columns: The first one is the name of the parameter.
-The second one is the default value for that parameter, and it is that value
-found in the util_adxcvr file. The third column is called gt_global, and it
-contains the value that all the configurations have in common, but is different
-from the default. If there is an empty cell in this column, it means that there
-is used the default value.
+This is a table containing 3 columns: The first one is the name of the
+parameter. The second one is the default value for that parameter, and it is
+that value found in the util_adxcvr file. The third column is called gt_global,
+and it contains the value that all the configurations have in common, but is
+different from the default. If there is an empty cell in this column, it means
+that there is used the default value.
 
 table_unique.csv
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This table contains the unique parameters for each individual configurations.
 The values found here are the ones that differ among your generated
@@ -479,7 +557,7 @@ configurations.
 
    If you encounter errors using the script, please make sure that you have the
    <project_name>.gen/sources_1/ip and <project_name>.srcs/sources_1/ip folders
-   clear from other previous gtwizard IP instances. Also, the script uses git
-   to update the default util_adxcvr files, and it will probably not work if
-   you are in detached HEAD state, or any state that could generate git
-   conflicts with it.
+   clear from other previous gtwizard IP instances. Also, the script uses git to
+   update the default util_adxcvr files, and it will probably not work if you
+   are in detached HEAD state, or any state that could generate git conflicts
+   with it.
