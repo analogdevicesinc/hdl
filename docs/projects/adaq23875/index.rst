@@ -9,7 +9,7 @@ an analog front-end and an FMC digital interface for :adi:`ADAQ23875`/
 successive approximation register (SAR) ADC with a resolution of 18/16 bits and
 sampling rate up to 15MSPS.
 
-The ADAQ2387x family includes an on-board reference oscillator and a
+The ADAQ2387X family includes an on-board reference oscillator and a
 retiming circuit to minimize signal-to-noise ratio (SNR) degradation due to
 the FPGA additive jitter.
 
@@ -145,34 +145,6 @@ axi_ltc2387          0x44A0_0000
 axi_ltc2387_dma      0x44A3_0000
 axi_pwm_gen          0x44A6_0000
 ==================== ===============
-
-GPIOs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - testpat_cntrl
-     - IN
-     - 32
-     - 86
-     - 110
-   * - pd_cntrl
-     - IN
-     - 33
-     - 87
-     - 111
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

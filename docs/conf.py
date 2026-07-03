@@ -30,6 +30,7 @@ interref_repos = [
         'kuiper',
         'doctools',
         'documentation',
+        'linux',
         'no-OS',
         'precision-converters-firmware',
         'pyadi-iio',

@@ -7,8 +7,8 @@ The EVAL-AD7770 / EVAL-AD7771 / EVAL-AD7779 evaluation kit
 features the :adi:`AD7770`, :adi:`AD7771`, and :adi:`AD7779` 24-bit,
 analog-to-digital converters (ADCs).
 
-The AD777x is an 8-channel, simultaneous sampling analog-to-digital converter
-(ADC). Eight full Σ-Δ ADCs are on-chip. The AD777x provides an ultralow input
+The AD777X is an 8-channel, simultaneous sampling analog-to-digital converter
+(ADC). Eight full Σ-Δ ADCs are on-chip. The AD777X provides an ultralow input
 current to allow direct sensor connection. Each input channel has a
 programmable gain stage allowing gains of 1, 2, 4, and 8 to map lower amplitude
 sensor outputs into the full-scale ADC input range, maximizing the dynamic
@@ -65,7 +65,7 @@ Clock scheme
 .. image:: ad777x_clock_scheme.svg
    :width: 700
    :align: center
-   :alt: AD777x clocking scheme
+   :alt: AD777X clocking scheme
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,48 +90,33 @@ SPI connections
      - CS
    * - PS
      - SPI 0
-     - AD777x
+     - AD777X
      - 0
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - RESET_N
-     - OUT
-     - 39
-     - 93
-   * - GPIO2
-     - INOUT
-     - 38
-     - 92
-   * - SDP_MCLK
-     - OUT
-     - 35
-     - 89
-   * - SDP_CONVST
-     - OUT
-     - 34
-     - 88
-   * - START_N
-     - OUT
-     - 33
-     - 87
-   * - ALERT
-     - IN
-     - 32
-     - 86
+============  =========  =======  =========
+GPIO signal   Direction  HDL no.  Zynq-7000
+============  =========  =======  =========
+gpio2         INOUT      37       91
+reset_n       OUT        36       90
+sdp_mclk      OUT        35       89
+sdp_convst    OUT        34       88
+start_n       OUT        33       87
+alert         IN         32       86
+============  =========  =======  =========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000 is Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -188,7 +173,7 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
-   * - AXI_AD777x
+   * - AXI_AD777X
      - :git-hdl:`library/axi_ad777x`
      - :ref:`axi_ad777x`
    * - AXI_CLKGEN

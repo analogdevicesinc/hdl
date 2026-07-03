@@ -3,7 +3,7 @@
 Projects list and dependencies for hdl_2019_r1
 ==============================================
 
-AD400x-FMCZ
+AD400X-FMCZ
 -----------
 
 .. list-table::
@@ -15,7 +15,7 @@ AD400x-FMCZ
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD400x-FMCZ <eval-ad400x-fmcz>`
+   * - :adi:`AD400X-FMCZ <eval-ad400x-fmcz>`
      - `ad40xx_fmc <https://github.com/analogdevicesinc/hdl/tree/hdl_2019_r1/projects/ad40xx_fmc>`__
      - :git-hdl:`zed <hdl_2019_r1:projects/ad40xx_fmc/zed>`
      - `resources </resources/fpga/docs/hdl/utilization_2019_r1#ad40xx_fmc_zed>`__
@@ -152,7 +152,7 @@ AD7134FMC
        :git-hdl:`util_axis_fifo <hdl_2019_r1:library/util_axis_fifo>`
        :git-hdl:`util_cdc <hdl_2019_r1:library/util_cdc>`
 
-AD738xFMC
+AD738XFMC
 ---------
 
 .. list-table::
@@ -164,7 +164,7 @@ AD738xFMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD738xFMC <eval-ad738xfmcz>`
+   * - :adi:`AD738XFMC <eval-ad738xfmcz>`
      - :git-hdl:`ad738x_fmc <hdl_2019_r1:projects/ad738x_fmc>`
      - :git-hdl:`zed <hdl_2019_r1:projects/ad738x_fmc/zed>`
      - `resources </resources/fpga/docs/hdl/utilization_2019_r1#ad738x_fmc_zed>`__
@@ -828,7 +828,7 @@ DACFMCEBZ
      - 
      - 
      - :git-hdl:`axi_hdmi_tx <hdl_2019_r1:library/axi_hdmi_tx>`
-   * - :adi:`EVAL-AD916x`
+   * - :adi:`EVAL-AD916X`
      - 
      - 
      - 

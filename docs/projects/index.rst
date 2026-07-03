@@ -25,7 +25,7 @@ Contents
    AD4062-ARDZ <ad4062_ardz/index>
    AD4080-FMC-EVB <ad4080_fmc_evb/index>
    AD4110-SDZ <ad4110/index>
-   AD411x-AD717x <ad411x_ad717x/index>
+   AD411X-AD717X <ad411x_ad717x/index>
    AD4134-FMC <ad4134_fmc/index>
    AD4170-ASDZ <ad4170_asdz/index>
    AD4630-FMC <ad4630_fmc/index>
@@ -51,7 +51,7 @@ Contents
    AD9081-FMCA-EBZ-X-BAND <ad9081_fmca_ebz_x_band/index>
    AD9083-EVB <ad9083_evb/index>
    AD9084-EBZ <ad9084_ebz/index>
-   AD916x-FMC <ad916x_fmc/index>
+   AD916X-FMC <ad916x_fmc/index>
    AD9208-DUAL-EBZ <ad9208_dual_ebz/index>
    AD9209-FMCA-EBZ <ad9209_fmca_ebz/index>
    AD9213-DUAL-EBZ <ad9213_dual_ebz/index>
@@ -76,11 +76,11 @@ Contents
    ADRV9009 <adrv9009/index>
    ADRV9009-ZU11EG <adrv9009zu11eg/index>
    ADRV9026 <adrv9026/index>
-   ADRV903x <adrv903x/index>
-   ADRV904x <adrv904x/index>
+   ADRV903X <adrv903x/index>
+   ADRV904X <adrv904x/index>
    ADRV9361Z7035 <adrv9361z7035/index>
    ADRV9364Z7020 <adrv9364z7020/index>
-   ADRV9371x <adrv9371x/index>
+   ADRV9371X <adrv9371x/index>
    ADV7511 <adv7511/index>
    ADV7513 <adv7513/index>
    ARRADIO <arradio/index>

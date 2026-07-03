@@ -228,6 +228,8 @@ There is HDMI support for all carriers which are using the :adi:`ADV7511`
 as HDMI transmitter. The HDMI transmitter core can be found
 :git-hdl:`here (axi_hdmi_tx) <library/axi_hdmi_tx>`.
 
+.. _architecture gpio:
+
 GPIOs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -250,6 +252,10 @@ from the HDL project to obtain the final number used in software:
 - PS8 EMIO offset = **78**
 - MicroBlaze offset = **no offset**
 - Versal offset = **-32**
+- DE10-Nano offset = **-32**
+- Cyclone V SoC offset = **-32**
+- A10Soc offset = **-32**
+- S10Soc offset = **-32**
 
 Connectivity
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

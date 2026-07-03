@@ -1,9 +1,9 @@
 .. _adrv9371x:
 
-ADRV9371x HDL reference design
+ADRV9371X HDL reference design
 ===============================================================================
 
-The ADRV371x HDL reference design is an embedded system built around a
+The ADRV371X HDL reference design is an embedded system built around a
 processor core either ARM, NIOS-II or MicroBlaze. The device digital interface
 is handled by the transceiver IP followed by the JESD204B and device specific
 cores. The JESD204B lanes are shared among the 4 transmit, 4 receive and
@@ -197,58 +197,32 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-   * - ad9528_reset_b
-     - INOUT
-     - 59
-     - 137
-   * - ad9528_sysref_req
-     - INOUT
-     - 58
-     - 136
-   * - adrv9371_tx1_enable
-     - INOUT
-     - 57
-     - 135
-   * - adrv9371_tx2_enable
-     - INOUT
-     - 56
-     - 134
-   * - adrv9371_rx1_enable
-     - INOUT
-     - 55
-     - 133
-   * - adrv9371_rx2_enable
-     - INOUT
-     - 54
-     - 132
-   * - adrv9371_test
-     - INOUT
-     - 53
-     - 131
-   * - adrv9371_reset_b
-     - INOUT
-     - 52
-     - 130
-   * - adrv9371_gpint
-     - INOUT
-     - 51
-     - 129
-   * - adrv9371_gpio_{00:18}
-     - INOUT
-     - 50:32
-     - 128:110
+===================  ==========  =======  =======  ==========  ==========  ======
+GPIO signal          Direction   HDL no.  Zynq MP  Zynq-7000   MicroBlaze  A10SoC
+===================  ==========  =======  =======  ==========  ==========  ======
+ad9528_reset_b       INOUT       59       137      113         59          27
+ad9528_sysref_req    INOUT       58       136      112         58          26
+ad9371_tx1_enable    INOUT       57       135      111         57          25
+ad9371_tx2_enable    INOUT       56       134      110         56          24
+ad9371_rx1_enable    INOUT       55       133      109         55          23
+ad9371_rx2_enable    INOUT       54       132      108         54          22
+ad9371_test          INOUT       53       131      107         53          21
+ad9371_reset_b       INOUT       52       130      106         52          20
+ad9371_gpint         INOUT       51       129      105         51          19
+ad9371_gpio_{00:18}  INOUT       50:32    128:110  104:86      50:32       18:0
+===================  ==========  =======  =======  ==========  ==========  ======
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq MP, Zynq-7000, MicroBlaze, A10SoC = Software GPIOs to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -398,7 +372,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`ADRV9371x HDL project source code <projects/adrv9371x>`
+- :git-hdl:`ADRV9371X HDL project source code <projects/adrv9371x>`
 
 .. list-table::
    :widths: 30 40 35
@@ -459,13 +433,13 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV9371x Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/ad9371>`
+- :external+linux:ref:`ADRV9371X Linux driver page <ad9371>`
 
-- :git-linux:`ADRV9371x + ZCU102 device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371-jesd204-fsm.dts>`
-- :git-linux:`ADRV9371x + ZC706 device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9371-jesd204-fsm.dts>`
-- :git-linux:`ADRV9371x + KCU105 device tree <arch/microblaze/boot/dts/kcu105_adrv9371x.dts>`
-- :git-linux:`ADRV9371x + A10SoC device tree <arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_adrv9371.dts>`
-- :git-no-os:`ADRV9371x NO-OS PROJECT <projects/ad9371>`
+- :git-linux:`ADRV9371X + ZCU102 device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9371-jesd204-fsm.dts>`
+- :git-linux:`ADRV9371X + ZC706 device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9371-jesd204-fsm.dts>`
+- :git-linux:`ADRV9371X + KCU105 device tree <arch/microblaze/boot/dts/kcu105_adrv9371x.dts>`
+- :git-linux:`ADRV9371X + A10SoC device tree <arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_adrv9371.dts>`
+- :git-no-os:`ADRV9371X NO-OS PROJECT <projects/ad9371>`
 
 .. include:: ../common/more_information.rst
 

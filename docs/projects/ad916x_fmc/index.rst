@@ -1,6 +1,6 @@
 .. _ad916x_fmc:
 
-AD916x-FMC HDL project
+AD916X-FMC HDL project
 ================================================================================
 
 The :adi:`AD9161` /:adi:`AD9162` /:adi:`AD9163` /:adi:`AD9164` is a high
@@ -46,7 +46,7 @@ The data path and clock domains are depicted in the below diagram:
 .. image:: ad916x_fmc_zcu102_block_diagram.svg
    :width: 1000
    :align: center
-   :alt: AD916x block diagram
+   :alt: AD916X block diagram
 
 .. collapsible:: Click here for details on the block diagram modules
 
@@ -126,7 +126,7 @@ and Number of Lanes"):
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :adi:`EVAL-AD916x` can be tested using the on-board clock generator or using
+The :adi:`EVAL-AD916X` can be tested using the on-board clock generator or using
 and external clock source. The jumper positions are described below:
 
 ================== ========= ===============================
@@ -177,36 +177,29 @@ SPI connections
      - 1
    * - PS
      - SPI 0
-     - AD916x
+     - AD916X
      - 1
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-- ZCU102: the offset is 78 (PS8)
+===============  =========  =======  ===================
+GPIO signal      Direction  HDL no.  Zynq UltraScale+ MP
+===============  =========  =======  ===================
+fmc_hmc849vctrl  INOUT      23       101
+fmc_txen_0       INOUT      22       100
+===============  =========  =======  ===================
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+.. admonition:: Legend
+   :class: note
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - ZCU102
-   * - fmc_hmc849vctrl
-     - INOUT
-     - 23
-     - 100
-   * - fmc_txen_0
-     - INOUT
-     - 22
-     - 99
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq UltraScale+ MP is Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -238,7 +231,7 @@ the HDL repository, and then build the project as follows:
    $cd hdl/projects/ad916x_fmc/zcu102
    $make
 
-**AD916x** supports various modes for JESD. By default, when running the above
+**AD916X** supports various modes for JESD. By default, when running the above
 command, it will build the project for :adi:`AD9162` in Mode 8, which has the
 following JESD parameters: L=8, M=2, S=2, F=1, N=16, NP=16 at a lane rate of
 12.5 GHz. Other configurations (or for other devices), can be specified by
@@ -288,7 +281,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD916x-FMC HDL project source code <projects/ad916x_fmc>`
+- :git-hdl:`AD916X-FMC HDL project source code <projects/ad916x_fmc>`
 
 .. list-table::
    :widths: 30 35 35

@@ -454,7 +454,7 @@ HDL Example Projects
   - :git-hdl:`AMD Xilinx ZC706 <projects/adrv9009zu11eg/zc706>`
   - :git-hdl:`ADRV9009-ZU11EG-SOM <projects/adrv9009zu11eg>`
 
-- :ref:`AD913x/AD917x/AD9144/AD915x Reference Design (dac_fmc_ebz) <dac_fmc_ebz>` on:
+- :ref:`AD913X/AD917X/AD9144/AD915X Reference Design (dac_fmc_ebz) <dac_fmc_ebz>` on:
 
   - See the :git-hdl:`list of supported parts <projects/dac_fmc_ebz#readme>`
   - :git-hdl:`Intel Arria 10 SoC <projects/dac_fmc_ebz/a10soc>`
@@ -462,7 +462,7 @@ HDL Example Projects
   - :git-hdl:`AMD Xilinx ZC706 <projects/dac_fmc_ebz/zc706>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/dac_fmc_ebz/zcu102>`
 
-- :ref:`AD916x Reference Design <ad916x_fmc>` on:
+- :ref:`AD916X Reference Design <ad916x_fmc>` on:
 
   - See the :git-hdl:`list of supported parts <projects/ad916x_fmc#readme>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/ad916x_fmc/zcu102>`
@@ -531,7 +531,7 @@ HDL Example Projects
   - :git-hdl:`AMD Xilinx VCU118 <projects/adrv9026/vcu118>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/adrv9026/zcu102>`
 
-- :ref:`ADRV904x Reference Design <adrv904x>` on:
+- :ref:`ADRV904X Reference Design <adrv904x>` on:
 
   - :git-hdl:`AMD Xilinx VCK190 <projects/adrv904x/vck190>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/adrv904x/zcu102>`
@@ -554,7 +554,7 @@ JESD204B Rapid Prototyping Platforms
 - :adi:`EVAL-AD-FMCADC4-EBZ` (RETIRED)
 - :adi:`EVAL-AD-FMCDAQ2-EBZ` :dokuwiki:`(User Guide) <resources/eval/user-guides/ad-fmcdaq2-ebz>`
 - :adi:`EVAL-AD-FMCJESDADC1-EBZ`
-- :adi:`EVAL-AD917x <EVAL-AD9172>`
+- :adi:`EVAL-AD917X <EVAL-AD9172>`
 - :adi:`EVAL-ADRV9008-9009` :dokuwiki:`(User Guide) <resources/eval/user-guides/adrv9009>`
 - :adi:`EVAL-ADRV9371` :dokuwiki:`(User Guide) <resources/eval/user-guides/mykonos>`
 - :adi:`EVAL-FMCDAQ3-EBZ`

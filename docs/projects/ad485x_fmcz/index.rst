@@ -1,9 +1,9 @@
 .. _ad485x_fmc:
 
-AD485x_FMCZ HDL project
+AD485X_FMCZ HDL project
 ================================================================================
 
-This design is meant to support the AD485x family. For example,
+This design is meant to support the AD485X family. For example,
 :adi:`EVAL-AD4858` board contains :adi:`AD4858` chip, which is a 20-bit, low
 noise 8-channel simultaneous sampling successive approximation register (SAR)
 ADC, with buffered differential, wide common range picoamp inputs.
@@ -64,7 +64,7 @@ little bit. In the sense that there is an extra clock 'external_fast_clk', see
 the details in the diagram below.
 
 For these evaluation boards, we used an internal clock of the FPGA.
-Therefore, the external clocks given to AXI_AD485x IP are:
+Therefore, the external clocks given to AXI_AD485X IP are:
 
 - in LVDS mode:
 
@@ -108,7 +108,7 @@ SPI connections
      - CS
    * - PS
      - SPI 0
-     - AD485x
+     - AD485X
      - 0
 
 Interrupts
@@ -173,13 +173,13 @@ Here you can find the quick start guides available for these evaluation boards:
 
    * - Evaluation board
      - Zynq-7000
-   * - AD485x_FMCZ
+   * - AD485X_FMCZ
      - :dokuwiki:`zed <resources/fpga/xilinx/fmc/ad485x>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD485x_FMCZ HDL project source code <projects/ad485x_fmcz>`
+- :git-hdl:`AD485X_FMCZ HDL project source code <projects/ad485x_fmcz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -188,7 +188,7 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
-   * - AXI_AD485x
+   * - AXI_AD485X
      - :git-hdl:`library/axi_ad485x`
      - :ref:`axi_ad485x`
    * - AXI_DMAC

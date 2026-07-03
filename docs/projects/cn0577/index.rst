@@ -108,30 +108,24 @@ axi_pwm_gen          0x44A6_0000
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - testpat_cntrl
-     - IN
-     - 32
-     - 86
-     - 110
-   * - pd_cntrl
-     - IN
-     - 33
-     - 87
-     - 111
+====================  ============  =======  ==========
+GPIO signal           Direction     HDL no.  Zynq-7000
+====================  ============  =======  ==========
+pd_cntrl              IN            33       87
+testpat_cntrl         IN            32       86
+====================  ============  =======  ==========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq-7000 = Software GPIO to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

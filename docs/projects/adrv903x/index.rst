@@ -1,9 +1,9 @@
 .. _adrv903x:
 
-ADRV903x HDL reference design
+ADRV903X HDL reference design
 ===============================================================================
 
-The ADRV903x is a highly integrated, system on chip (SoC) radio frequency (RF)
+The ADRV903X is a highly integrated, system on chip (SoC) radio frequency (RF)
 agile transceiver with integrated digital front end (DFE). The SoC contains
 eight transmitters, two observation receivers for monitoring transmitter
 channels, eight receivers, integrated LO and clock synthesizers, and digital
@@ -19,7 +19,7 @@ Supported devices
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-ADRV903x`
+- :adi:`EVAL-ADRV903X`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - EVAL-ADRV903x
+   * - EVAL-ADRV903X
      - :xilinx:`ZCU102`
      - FMC HPC0
 
@@ -49,7 +49,7 @@ Example block design for Single link
 .. image:: adrv9032r_zcu102_jesd204c.svg
    :width: 800
    :align: center
-   :alt: ADRV903x JESD204C M=16 L=8 block diagram
+   :alt: ADRV903X JESD204C M=16 L=8 block diagram
 
 The Rx links (ADC Path) operate with the following parameters:
 
@@ -126,7 +126,7 @@ Clock scheme
 .. image:: adrv903x_zcu102_clocking.svg
    :width: 500
    :align: center
-   :alt: ADRV903x ZCU102 clock scheme
+   :alt: ADRV903X ZCU102 clock scheme
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -169,7 +169,7 @@ SPI connections
      - CS
    * - PS
      - spi0
-     - ADRV903x
+     - ADRV903X
      - 0
    * -
      -
@@ -179,78 +179,36 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq MP
-   * - ad9528_reset_b
-     - INOUT
-     - 69
-     - 147
-   * - ad9528_sysref_req
-     - INOUT
-     - 68
-     - 146
-   * - adrv903x_trx0_enable
-     - INOUT
-     - 67
-     - 145
-   * - adrv903x_trx1_enable
-     - INOUT
-     - 66
-     - 144
-   * - adrv903x_trx2_enable
-     - INOUT
-     - 65
-     - 143
-   * - adrv903x_trx3_enable
-     - INOUT
-     - 64
-     - 142
-   * - adrv903x_trx4_enable
-     - INOUT
-     - 63
-     - 141
-   * - adrv903x_trx5_enable
-     - INOUT
-     - 62
-     - 140
-   * - adrv903x_trx6_enable
-     - INOUT
-     - 61
-     - 139
-   * - adrv903x_trx7_enable
-     - INOUT
-     - 60
-     - 138
-   * - adrv903x_orx0_enable
-     - INOUT
-     - 59
-     - 137
-   * - adrv903x_orx1_enable
-     - INOUT
-     - 58
-     - 136
-   * - adrv903x_test
-     - INOUT
-     - 57
-     - 135
-   * - adrv903x_reset_b
-     - INOUT
-     - 56
-     - 134
-   * - adrv903x_gpio[0:23]
-     - INOUT
-     - 55:32
-     - 133:110
+======================  =========  =======  =======
+GPIO signal             Direction  HDL no.  Zynq MP
+======================  =========  =======  =======
+ad9528_reset_b          INOUT      69       147
+ad9528_sysref_req       INOUT      68       146
+adrv903x_trx0_enable    INOUT      67       145
+adrv903x_trx1_enable    INOUT      66       144
+adrv903x_trx2_enable    INOUT      65       143
+adrv903x_trx3_enable    INOUT      64       142
+adrv903x_trx4_enable    INOUT      63       141
+adrv903x_trx5_enable    INOUT      62       140
+adrv903x_trx6_enable    INOUT      61       139
+adrv903x_trx7_enable    INOUT      60       138
+adrv903x_orx0_enable    INOUT      59       137
+adrv903x_orx1_enable    INOUT      58       136
+adrv903x_test           INOUT      57       135
+adrv903x_reset_b        INOUT      56       134
+adrv903x_gpio[0:23]     INOUT      55:32    133:110
+======================  =========  =======  =======
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq MP is Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -294,7 +252,7 @@ configure this project, depending on the carrier used.
 Where a cell contains a --- (dash) it means that the parameter doesn't exist
 for that project (adrv903x/carrier or adrv903x/carrier).
 
-.. collapsible:: Default values of the ``make`` parameters for ADRV903x
+.. collapsible:: Default values of the ``make`` parameters for ADRV903X
 
    +----------------------+------------------------------------------------------+
    | Parameter            | Default value of the parameters depending on carrier |
@@ -400,7 +358,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`ADRV903x HDL project source code <projects/adrv903x>`
+- :git-hdl:`ADRV903X HDL project source code <projects/adrv903x>`
 
 .. list-table::
    :widths: 30 40 35

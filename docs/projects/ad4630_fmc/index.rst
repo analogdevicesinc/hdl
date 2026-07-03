@@ -214,8 +214,8 @@ digital interface:
 
 The NUM_OF_CHANNEL configuration parameter defines the number of ADC channels:
 
-- 1 - AD403x devices;
-- 2 - AD463x/adaq42xx devices (default).
+- 1 - AD403X devices;
+- 2 - AD463X/adaq42xx devices (default).
 
 The LANES_PER_CHANNEL configuration parameter defines the number of MISO lanes
 per channel of the SPI interface:
@@ -318,46 +318,25 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-- Zynq-7000: if PS7 is used, then offset is 54
-
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - ad463x_resetn
-     - INOUT
-     - 32
-     - 86
-   * - adaq42xx_pgia_mux[0]*
-     - INOUT
-     - 33
-     - 87
-   * - adaq42xx_pgia_mux[1]*
-     - INOUT
-     - 34
-     - 88
-   * - max17687_rst**
-     - INOUT
-     - 35
-     - 89
-   * - ad463x_trigger
-     - OUT
-     - 36
-     - 90
+=======================  =========  =======  =========
+GPIO signal              Direction  HDL no.  Zynq-7000
+=======================  =========  =======  =========
+ad463x_trigger           OUT        36       90
+max17687_rst**           INOUT      35       89
+adaq42xx_pgia_mux[1:0]*  INOUT      34:33    88:87
+ad463x_resetn            INOUT      32       86
+=======================  =========  =======  =========
 
 .. admonition:: Legend
    :class: note
 
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000 is Software GPIO, to be used in device trees
    - ``*`` instantiated, but used for ADAQ4224 only
    - ``**`` instantiated, but used for ADAQ4224 with isolated power supply
 
@@ -486,7 +465,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`AD4630_FMC Linux driver source code <drivers/iio/adc/ad4630.c>`
-- :git-no-os:`AD463x_FMC No-OS project source code <projects/ad463x_fmcz>`
+- :git-no-os:`AD463X_FMC No-OS project source code <projects/ad463x_fmcz>`
 - :dokuwiki:`AD4630 ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad4630>`
 - :dokuwiki:`AD463X ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad463x>`
 - :dokuwiki:`AD4630/AD4030 - No-OS Driver <resources/tools-software/uc-drivers/ad463x>`
