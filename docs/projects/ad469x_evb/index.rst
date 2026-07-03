@@ -256,10 +256,10 @@ To know how the Software GPIO numbers are calculated, check out
 ===================  =========  =======  =========  =========
 GPIO signal          Direction  HDL no.  Zynq-7000  DE10-Nano
 ===================  =========  =======  =========  =========
-ad469x_resetn        INOUT      32       86         0
-gpio[33]             IN         33       87         --
 gpio[34]             OUT        34       88         --
-ad469x_busy_alt_gp0  INPUT      33       --          1
+gpio[33]             IN         33       87         --
+ad469x_busy_alt_gp0  INPUT      33       --         1
+ad469x_resetn        INOUT      32       86         0
 ===================  =========  =======  =========  =========
 
 .. admonition:: Legend
