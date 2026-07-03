@@ -141,7 +141,7 @@ module system_top (
   //   0 -> SDI[0] carries data (din[0]) for offload capture
   assign ad713x_sdi_s = {ad713x_din[7:1], (gpio_o[51] ? ad713x_spi_sdi : ad713x_din[0])};
 
-  assign gpio_i[63:50] = gpio_o[63:50];
+  assign gpio_i[63:52] = gpio_o[63:52];
 
   ad_iobuf #(
     .DATA_WIDTH(16)
