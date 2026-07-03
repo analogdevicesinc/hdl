@@ -183,9 +183,8 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
-
-- ZCU102 (Zynq UltraScale+ MP): the offset is 78 (PS8)
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
 ===============  =========  =======  ===================
 GPIO signal      Direction  HDL no.  Zynq UltraScale+ MP

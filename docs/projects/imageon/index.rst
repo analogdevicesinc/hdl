@@ -101,9 +101,8 @@ axi_iic_imageon           0x43C4_0000
 GPIO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
-
-- Zynq-7000: if PS7 EMIOs are used, then offset is 54
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
 ================  ============  =======  =========
 GPIO signal       Direction     HDL no.  Zynq-7000

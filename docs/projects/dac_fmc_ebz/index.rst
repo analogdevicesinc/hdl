@@ -363,6 +363,9 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
+
 +-----------------+-----------------+----------------+---------------+---------------+---------------+---------------+
 |  GPIO signal    | Direction       | HDL GPIO EMIO  | Software GPIO | Software GPIO | Software GPIO | Software GPIO |
 |                 | (from FPGA      +--------+-------+ Zynq MP       | Zynq-7000     | Microblaze    | Arria 10      |

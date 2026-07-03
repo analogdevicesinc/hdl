@@ -213,11 +213,8 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
-
-**Zynq Platform:**
-
-- Zynq-7000: if PS7 is used, then the offset is 54
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
 ==============  =========  =======  =========  =============  =============
 GPIO signal     Direction  HDL no.  Zynq-7000  ALERT_SPI_N=1  ALERT_SPI_N=0
