@@ -139,10 +139,6 @@ set_property  -dict {PACKAGE_PIN  J15   IOSTANDARD LVCMOS18} [get_ports gpio_bd[
 
 set_property  -dict {PACKAGE_PIN  G17   IOSTANDARD LVCMOS18} [get_ports gpio_bd[31]]      ; ## OTG-RESETN
 
-# Define SPI clock
-create_clock -name spi0_clk      -period 40   [get_pins -hier */EMIOSPI0SCLKO]
-create_clock -name spi1_clk      -period 40   [get_pins -hier */EMIOSPI1SCLKO]
-
 # Virtual clock at 50 MHz representing DCLK/SCLK as seen by the AD713x
 create_clock -period 20.0 -name ad713x_dclk_virt
 
