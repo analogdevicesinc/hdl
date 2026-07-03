@@ -120,3 +120,10 @@ ipcfg
 _bld
 radiantc.*
 ltt
+dni/
+*.jic
+*.stp
+*.legacy
+*.info
+*.tcl.history*
+sm_hssi_port_rotation_param_map.json
