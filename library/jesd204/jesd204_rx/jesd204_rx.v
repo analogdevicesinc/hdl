@@ -488,7 +488,10 @@ module jesd204_rx #(
     .buffer_release_n(link_buffer_release_n),
 
     .status_state(status_ctrl_state),
+    .event_data_phase(event_data_phase),
     .event_unexpected_lane_state_error(event_unexpected_lane_state_error));
+
+  assign err_statistics_reset = ctrl_err_statistics_reset || event_data_phase;
 
   for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
 
@@ -531,7 +534,7 @@ module jesd204_rx #(
       .lmfc_edge(lmfc_edge_synced),
       .emb_lock(emb_lock[i]),
 
-      .ctrl_err_statistics_reset(ctrl_err_statistics_reset),
+      .ctrl_err_statistics_reset(err_statistics_reset),
       .ctrl_err_statistics_mask(ctrl_err_statistics_mask[8:3]),
       .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
 
@@ -550,6 +553,7 @@ module jesd204_rx #(
   assign ilas_config_addr = 'b0;
   assign ilas_config_data = 'b0;
   assign status_lane_cgs_state = 'b0;
+  assign status_lane_frame_align_err_cnt = 'b0;
   assign status_lane_ifs_ready = {NUM_LANES{1'b1}};
   assign event_frame_alignment_error = 1'b0;
 

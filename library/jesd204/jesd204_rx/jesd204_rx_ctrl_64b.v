@@ -23,6 +23,7 @@ module jesd204_rx_ctrl_64b #(
   input buffer_release_n,
 
   output [1:0] status_state,
+  output event_data_phase,
   output reg event_unexpected_lane_state_error
 );
 
@@ -115,5 +116,11 @@ module jesd204_rx_ctrl_64b #(
   end
 
   assign status_state = state;
+
+  // One-cycle pulse when the link enters the DATA phase, used to reset the
+  // per-lane error statistics counters (mirrors event_data_phase in the
+  // 8b/10b jesd204_rx_ctrl).
+  assign event_data_phase = (state == STATE_BLOCK_SYNC) &&
+                            (next_state == STATE_DATA);
 
 endmodule

@@ -83,7 +83,9 @@ module jesd204_rx_lane_64b #(
 
   wire [7:0] sh_count;
 
-  jesd204_rx_header i_rx_header (
+  jesd204_rx_header #(
+    .ENABLE_FEC (ENABLE_FEC)
+  ) i_rx_header (
     .clk(clk),
     .reset(reset),
 
@@ -161,11 +163,9 @@ module jesd204_rx_lane_64b #(
 
   assign err_cnt_rst = reset || ctrl_err_statistics_reset;
 
-  assign fec_en = (cfg_header_mode == 2'd2);
-
   if(ENABLE_FEC) begin : gen_fec
     jesd204_fec_decode #(
-        .DATA_WIDTH     (64)
+      .DATA_WIDTH (64)
     ) jesd204_fec_decode (
       .data_out              (fec_data_out),
       .data_out_valid        (fec_data_out_valid),
@@ -179,15 +179,21 @@ module jesd204_rx_lane_64b #(
       .data_in               (phy_data)
     );
 
+    assign fec_en = cfg_header_mode == 2'd2;
     assign scram_data_in = fec_en ? fec_data_out : phy_data;
     assign event_fec_trapped_error_flag = fec_en && fec_trapped_error_flag;
     assign event_fec_untrapped_error_flag = fec_en && fec_untrapped_error_flag;
   end else begin : gen_no_fec
     assign scram_data_in = phy_data;
+    assign fec_en = 1'b0;
+    assign fec_trapped_error_flag = 1'b0;
+    assign fec_untrapped_error_flag = 1'b0;
+    assign event_fec_trapped_error_flag = 1'b0;
+    assign event_fec_untrapped_error_flag = 1'b0;
   end
 
   error_monitor #(
-  .EVENT_WIDTH(6),
+    .EVENT_WIDTH(6),
     .CNT_WIDTH(32)
   ) i_error_monitor (
     .clk(clk),
