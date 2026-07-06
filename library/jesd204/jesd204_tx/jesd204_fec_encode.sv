@@ -50,14 +50,14 @@
 
 // JESD204C FEC encoder
 module jesd204_fec_encode #(
-   parameter DATA_WIDTH = 64
-)(
-   output logic [25:0]                        fec,
-   input  wire                                clk,
-   input  wire                                rst,
-   input  wire                                shift_en,
-   input  wire                                eomb,
-   input  wire  [DATA_WIDTH-1:0]              data_in
+  parameter DATA_WIDTH = 64
+) (
+  output logic [25:0]                        fec,
+  input  wire                                clk,
+  input  wire                                rst,
+  input  wire                                shift_en,
+  input  wire                                eomb,
+  input  wire  [DATA_WIDTH-1:0]              data_in
 );
 
   localparam [$clog2(DATA_WIDTH)-1:0] SHIFT_CNT = DATA_WIDTH-1;
@@ -92,7 +92,6 @@ module jesd204_fec_encode #(
     .shift_en          (shift_en),
     .shift_reg_reset   (eomb),
     .shift_cnt         (SHIFT_CNT),
-    .data_in           (data_in)
-  );
+    .data_in           (data_in));
 
 endmodule
