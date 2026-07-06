@@ -127,11 +127,14 @@ These rules can be found in the [HDL coding guidelines](https://analogdevicesinc
 
 #### 1. License header
 
+##### 1.1 Copyright year check
+
 It checks that the copyright years after Copyright (C) are up-to-date and properly
 formatted.
 Supported forms: a single year, a range (YYYY-YYYY), or a comma-separated list
 combining singles and/or ranges.
-Exceptions are the JESD files and the ones specified in the `avoid_list` string list.
+Exceptions are the files specified in the `avoid_list` string list (which skips all
+header checks) and the `copyright_skip_list` (which skips only the copyright check).
 
 The following checks are performed (only the last year and, if present, the
 penultimate year are considered):
@@ -156,6 +159,41 @@ Examples:
 ```
 
 If `-e` option is added, the script can update the year range.
+
+##### 1.2 License body validation
+
+For files with a `Short identifier:` tag on the line after the copyright, the script
+validates the full license body text against the corresponding reference file:
+  * `Short identifier: ADIBSD` -> validated against `LICENSE_ADIBSD` file
+  * `Short identifier: ADIJESD204` -> validated against `LICENSE_ADIJESD204` file
+
+If no short identifier is present, the script checks for the dual-license
+(GPL + ADIBSD) header text.
+
+:warning: For ADIBSD or ADIJESD204 licenses the full license text is required,
+and SPDX short identifier is not allowed!
+
+For ADIJESD204 files, the script also validates and (in edit mode) auto-updates the
+secondary copyright year lines inside the license body.
+
+##### 1.3 Copyright skip list
+
+Some files use a third-party or non-standard copyright header that does not follow
+the ADI template. These files are listed in `copyright_skip_list` in the script.
+The copyright and license body checks are skipped for them, but all other guideline
+checks (trailing whitespace, empty lines, module naming, etc.) still apply.
+
+To add a new file to the skip list, append its path (relative to the repository root)
+to the `copyright_skip_list` list in `check_guideline.py`:
+
+```python
+copyright_skip_list = [
+    "library/corundum/corundum_core/corundum_core.v",
+    "library/corundum/corundum_core/mqnic_app_block.v",
+    ...
+    "path/to/new_file.v",
+]
+```
 
 #### 2. Empty lines
 
@@ -241,7 +279,8 @@ If `-e` option is added, the script updates the project name automatically.
 ### Changes done by the script to your files
 
 If edits are enabled (-e), the script may modify:
-* license header, except for files specified in `avoid_list`
+* license header (copyright years and ADIJESD204 inner copyright years), except
+  for files specified in `avoid_list` or `copyright_skip_list`
 * empty lines (two or more consecutive, or at file start/end)
 * trailing whitespaces
 * lines after `endmodule`/`endpackage` tag
@@ -257,12 +296,12 @@ and ensures exactly one newline after `endpackage`
 The script supports several modes of execution, depending on what files you want
 to check and whether edits are allowed:
 
-1. With no arguments: `python3 check_guideline.py`
+1. With no arguments: `python3 ./github/scripts/check_guideline.py`
 Runs on all HDL files under `library/` and `projects/`, in check-only mode (does
 not modify the files).
 
 2. With arguments:
-  1. `-e` with no file specified: `python3 check_guideline.py -e`
+  1. `-e` with no file specified: `python3 ./github/scripts/check_guideline.py -e`
     Checks all files with the properties specified above and applies fixes
     according to the guideline.
 
@@ -284,22 +323,24 @@ not modify the files).
 
 ### Examples of running
 
+All of the examples below are meant to be executed from **/hdl**.
+
 ```
 # Check all files in the repo, no modifications
-python3 check_guideline.py     >> warnings.txt
+python3 ./github/scripts/check_guideline.py >> warnings.txt
 
 # Check and edit every HDL file in the repo
-python3 check_guideline.py -e  >> warnings.txt
+python3 ./github/scripts/check_guideline.py -e >> warnings.txt
 
 # Check a specific file given by name, no modifications
-python3 check_guideline.py -m  axi_ad9783.v >> warnings.txt
+python3 ./github/scripts/check_guideline.py -m  axi_ad9783.v >> warnings.txt
 
 # Check and edit a specific files by name
-python3 check_guideline.py -me axi_ad9783.v axi_ad9783_if.v up_adc_common.v >> warnings.txt
+python3 ./github/scripts/check_guideline.py -me axi_ad9783.v axi_ad9783_if.v up_adc_common.v >> warnings.txt
 
 # Check specific files given by absolute/relative paths, no modifications
-python3 check_guideline.py -p  ./library/axi_ad9783/axi_ad9783.v ./library/common/up_adc_common.v >> warnings.txt
+python3 ./github/scripts/check_guideline.py -p  ./library/axi_ad9783/axi_ad9783.v ./library/common/up_adc_common.v >> warnings.txt
 
 # Check and edit a specific file given by absolute/relative path
-python3 check_guideline.py -pe ./library/axi_ad9783/axi_ad9783_if.v >> warnings.txt
+python3 ./github/scripts/check_guideline.py -pe ./library/axi_ad9783/axi_ad9783_if.v >> warnings.txt
 ```
