@@ -39,7 +39,7 @@ module ad_mem_dist #(
   parameter RAM_WIDTH = 32,
   parameter RAM_ADDR_BITS = 4,
   parameter REGISTERED_OUTPUT = 1
-)(
+) (
   output wire  [RAM_WIDTH-1:0]      rd_data,
   input  wire                       clk,
   input  wire                       wr_en,
