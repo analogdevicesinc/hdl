@@ -7,7 +7,9 @@
 
 `timescale 1ns/100ps
 
-module jesd204_rx_header (
+module jesd204_rx_header #(
+  parameter ENABLE_FEC = 0
+) (
   input clk,
   input reset,
 
@@ -22,7 +24,7 @@ module jesd204_rx_header (
 
   output valid_eomb,
   output valid_eoemb,
-  output reg valid_fec,
+  output valid_fec,
   // Received header data qualified by valid_eomb
   output [11:0] crc12,
   output [2:0] crc3,
@@ -140,19 +142,27 @@ module jesd204_rx_header (
 
   assign invalid_eoemb = (sh_count == 0 && ~eoemb);
   assign invalid_eomb = (sh_count[4:0] == 0 && ~eomb);
-  assign valid_eomb = next_state[BIT_EMB_LOCK] && (sh_count == 0) && eomb;
+  assign valid_eomb = next_state[BIT_EMB_LOCK] && (sh_count[4:0] == 0) && eomb;
   assign valid_eoemb = next_state[BIT_EMB_LOCK] && (sh_count == 0) && eoemb;
 
   assign invalid_sequence = (invalid_eoemb || invalid_eomb);
 
-// FEC signal is available before EOMB
-always @(posedge clk) begin
-  if (reset == 1'b1) begin
-    valid_fec <= 1'b0;
+  generate if (ENABLE_FEC) begin
+    reg valid_fec_r;
+
+    // FEC signal is available before EOMB
+    always @(posedge clk) begin
+      if (reset == 1'b1) begin
+        valid_fec_r <= 1'b0;
+      end else begin
+        valid_fec_r <= next_state[BIT_EMB_LOCK] && (sh_count[4:0] == 26);
+      end
+    end
+    assign valid_fec = valid_fec_r;
   end else begin
-    valid_fec <= next_state[BIT_EMB_LOCK] && (sh_count[4:0] == 26);
+    assign valid_fec = 1'b0;
   end
-end
+  endgenerate
 
   always @(posedge clk) begin
     if (reset == 1'b1) begin
