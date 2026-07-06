@@ -3,6 +3,7 @@
 - Evaluation board product page:
   - [EVAL-AD4030-24FMCZ](https://www.analog.com/eval-ad4030-24)
   - [EVAL-AD4630-16FMCZ](https://www.analog.com/eval-ad4630-16)
+  - [EVAL-AD4630-20FMCZ](https://www.analog.com/eval-ad4630-20)
   - [EVAL-AD4630-24FMCZ](https://www.analog.com/eval-ad4630-24)
   - [EVAL-ADAQ4216-FMCZ](https://www.analog.com/eval-adaq4216-fmcz)
   - [EVAL-ADAQ4224-FMCZ](https://www.analog.com/eval-adaq4224-fmcz)
@@ -15,9 +16,14 @@
 
 | Part name                                                    | Description                                                  |
 |--------------------------------------------------------------|--------------------------------------------------------------|
-| [AD4030](https://www.analog.com/ad4030-24)                   | 24-Bit, 2 MSPS, Single Channel SAR ADC                       |
-| [AD4630](https://www.analog.com/ad4630-24)                   | 24-Bit, 2 MSPS, Dual Channel, Precision Differential SAR ADC |
-| [AD4632](https://www.analog.com/ad4632-24)                   | 24-Bit, 500 kSPS, Dual Channel SAR ADC                       |
+| [AD4030-24](https://www.analog.com/ad4030-24)                | 24-Bit, 2 MSPS, Single Channel SAR ADC                       |
+| [AD4032-24](https://www.analog.com/ad4032-24)                | 24-Bit, 500 kSPS, Single Channel SAR ADC                     |
+| [AD4630-16](https://www.analog.com/ad4630-16)                | 16-Bit, 2 MSPS, Dual Channel, Precision Differential SAR ADC |
+| [AD4630-20](https://www.analog.com/ad4630-20)                | 20-Bit, 2 MSPS, Dual Channel, Precision Differential SAR ADC |
+| [AD4630-24](https://www.analog.com/ad4630-24)                | 24-Bit, 2 MSPS, Dual Channel, Precision Differential SAR ADC |
+| [AD4632-16](https://www.analog.com/ad4632-16)                | 16-Bit, 500 kSPS, Dual Channel SAR ADC                       |
+| [AD4632-20](https://www.analog.com/ad4632-20)                | 20-Bit, 500 kSPS, Dual Channel SAR ADC                       |
+| [AD4632-24](https://www.analog.com/ad4632-24)                | 24-Bit, 500 kSPS, Dual Channel SAR ADC                       |
 | [ADAQ4216](https://www.analog.com/adaq4216)                  | 16-Bit, 2 MSPS, μModule Data-Acquisition Solution            |
 | [ADAQ4224](https://www.analog.com/adaq4224)                  | 24-Bit, 2 MSPS, μModule Data Acquisition Solution            |
 

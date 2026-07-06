@@ -3,25 +3,34 @@
 AD4630-FMC HDL project
 =================================================================================
 
-The :adi:`AD4630-24` is a two-channel, simultaneous sampling, Easy Drive, 2 MSPS
-successive approximation register (SAR) analog-to-digital converter (ADC). The
-:adi:`AD4030-24` is the single channel version. With a guaranteed maximum ±0.9
-ppm INL and no missing codes at 24-bits, the :adi:`AD4630-24` and
-:adi:`AD4030-24` achieve unparalleled precision from −40°C to +125°C.
-The :adi:`AD4030-16` is a 16-bit dual channel version.
+The AD4630 has three variations with precision ranging from 16 to 24 bits, they
+are: :adi:`AD4630-16`, :adi:`AD4630-20` (the newest release), and
+:adi:`AD4630-24`. All of them are dual channel, simultaneous sampling, Easy
+Drive, 2 MSPS successive approximation register (SAR) analog-to-digital
+converter (ADC). The :adi:`AD4630-20` has a guaranteed maximum ±0.8 ppm INL
+and no missing codes at 20-bits. With a guaranteed maximum ±0.9 ppm INL and no
+missing codes at 24-bits, the :adi:`AD4630-24` and :adi:`AD4030-24` achieve
+unparalleled precision from −40°C to +125°C. The :adi:`AD4630-16` has a
+guaranteed maximum ±3 ppm INL and no missing codes at 16-bits. The
+:adi:`AD4030-24` is the single channel version.
 
 A low-drift, internal precision reference buffer eases voltage reference
-sharing with other system circuitry. The AD4630-24 offers a typical dynamic
-range of 106 dB when using a 5 V reference. The :adi:`AD4030-24` offers a typical
-dynamic range of 109 dB using a 5 V reference. The low noise floor enables signal
-chains requiring less gain and lower power. A block averaging filter with
-programmable decimation ratio can increase dynamic range up to 153 dB and
-155.5dB for the :adi:`AD4030`. The wide differential input and common mode ranges
-allow inputs to use the full ±VREF range without saturating, simplifying signal
-conditioning requirements and system calibration. The improved settling of the
-Easy Drive analog inputs broadens the selection of analog front-end components
-compatible with the :adi:`AD4630-24`, :adi:`AD4630-16` and :adi:`AD4030-24`.
-Both single-ended and differential signals are supported.
+sharing with other system circuitry. The :adi:`AD4630-20` and :adi:`AD4630-24`
+offer a typical dynamic range of 106 dB when using a 5 V reference, while the
+:adi:`AD4630-16` offers a typical dynamic range of 97.4 dB. The
+:adi:`AD4030-24` offers a typical dynamic range of 109 dB using a 5 V
+reference.
+
+The low noise floor enables signal chains requiring less gain and lower power.
+A block averaging filter with programmable decimation ratio can increase
+dynamic range up to 153 dB for the :adi:`AD4630-20` and :adi:`AD4630-24`, and
+155.5dB for the :adi:`AD4030-24`. The wide differential input and common mode
+ranges allow inputs to use the full ±VREF range without saturating, simplifying
+signal conditioning requirements and system calibration. The improved settling
+of the Easy Drive analog inputs broadens the selection of analog front-end
+components compatible with the :adi:`AD4630-16`, :adi:`AD4630-20`,
+:adi:`AD4630-24`, and :adi:`AD4030-24`. Both single-ended and differential
+signals are supported.
 
 The versatile Flexi-SPI serial interface eases host processor and ADC
 integration. A wide data clocking window, multiple SDO lanes, and optional DDR
@@ -29,27 +38,29 @@ data clocking can reduce the serial clock to 10 MHz while operating at a
 sample rate of 2 MSPS. Echo clock mode and ADC master clock mode relax the
 timing requirements and simplify the use of digital isolators.
 
-The :adi:`AD4630-24`'s, :adi:`AD4630-16`'s and :adi:`AD4030-24`'s BGA package
-integrates all critical power supply and reference bypass capacitors, reducing
-the footprint and system component count, and lessening sensitivity to board
-layout.
+The :adi:`AD4630-16`'s, :adi:`AD4630-20`'s, :adi:`AD4630-24`'s, and
+:adi:`AD4030-24`'s BGA package integrates all critical power supply and
+reference bypass capacitors, reducing the footprint and system component count,
+and lessening sensitivity to board layout.
 
-The :adi:`ADAQ4224` and :adi:`ADAQ4216` is a μModule® precision data acquisition (DAQ)
-signal chain solution that reduces the development cycle of a precision measurement
-system by transferring the signal chain design challenge of component selection,
-optimization, and layout from the designer to the device. With a guaranteed
-maximum ±1.0 ppm INL and no missing codes at 24 bits, the :adi:`ADAQ4224` and
-:adi:`ADAQ4216` achieves unparalleled precision from −40°C to +105°C.
+The :adi:`ADAQ4224` and :adi:`ADAQ4216` is a μModule® precision data
+acquisition (DAQ) signal chain solution that reduces the development cycle
+of a precision measurement system by transferring the signal chain design
+challenge of component selection, optimization, and layout from the designer
+to the device. With a guaranteed maximum ±1.0 ppm INL and no missing codes at
+24 bits, the :adi:`ADAQ4224` and :adi:`ADAQ4216` achieves unparalleled
+precision from −40°C to +105°C.
 
-The HDL reference design for the :adi:`EVAL-AD4630_FMCZ` and
-:adi:`EVAL-AD4030_FMCZ` provides all the interfaces that are necessary to
-interact with the device using a Xilinx FPGA development board. The design has
-all the necessary infrastructure to acquire data from the :adi:`AD4630-24`
-24-bit dual-channel precision SAR ADC, :adi:`AD4630-16` 16-bit dual channel
-precision SAR ADC and :adi:`AD4030-24` single channel ADC, supporting
-continuous data capture at maximum 2 MSPS data rate. The design targeted to the
-Zedboard, which is a low cost FPGA carrier board from Digilent, using a
-Zynq-7000 re-programmable SoC from Xilinx.
+The HDL reference design for the :adi:`EVAL-AD4030-24`, :adi:`EVAL-AD4630-16`,
+:adi:`EVAL-AD4630-24`, :adi:`EVAL-ADAQ4216-FMCZ`, and :adi:`EVAL-ADAQ4224-FMCZ`
+provide all the interfaces that are necessary to interact with the device using
+a Xilinx FPGA development board. The design has all the necessary
+infrastructure to acquire data from the :adi:`AD4630-16` 16-bit dual channel
+precision SAR ADC, :adi:`AD4630-20` 20-bit dual-channel precision SAR ADC,
+:adi:`AD4630-24` 24-bit dual-channel precision SAR ADC, and :adi:`AD4030-24`
+single channel ADC, supporting continuous data capture at maximum 2 MSPS data
+rate. The design targeted to the Zedboard, which is a low cost FPGA carrier
+board from Digilent, using a Zynq-7000 re-programmable SoC from Xilinx.
 
 Applications:
 
@@ -65,19 +76,25 @@ Supported boards
 
 - :adi:`EVAL-AD4030-24FMCZ`
 - :adi:`EVAL-AD4630-16FMCZ`
+- :adi:`EVAL-AD4630-20FMCZ`
 - :adi:`EVAL-AD4630-24FMCZ`
-- :adi:`EVAL-ADAQ4224-FMCZ`
 - :adi:`EVAL-ADAQ4216-FMCZ`
+- :adi:`EVAL-ADAQ4224-FMCZ`
 - :adi:`EV-ISO-4224-FMCZ`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 - :adi:`AD4030-24`
+- :adi:`AD4032-24`
 - :adi:`AD4630-16`
+- :adi:`AD4630-20`
 - :adi:`AD4630-24`
-- :adi:`ADAQ4224`
+- :adi:`AD4632-16`
+- :adi:`AD4632-20`
+- :adi:`AD4632-24`
 - :adi:`ADAQ4216`
+- :adi:`ADAQ4224`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -94,9 +111,10 @@ for data latching is routed back through the BUSY line, an additional data
 capture module is used for saving the received samples and transmitting
 forward for the DMA.
 
-There are three modes in which the system can run. Refer to the :adi:`AD4630-24`,
-:adi:`AD4630-16` or :adi:`AD4030-24` data sheet section titled SAMPLE CONVERSION
-TIMING AND DATA TRANSFER for more explanation of data transfer zones.
+There are three modes in which the system can run. Refer to the
+:adi:`AD4630-16`, :adi:`AD4630-20`, :adi:`AD4630-24`, or :adi:`AD4030-24` data
+sheet section titled SAMPLE CONVERSION TIMING AND DATA TRANSFER for more
+explanation of data transfer zones.
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,11 +157,11 @@ The last case may instantiate spi_axis_reorder IP if INTERLEAVE_MODE=1 is used.
 SPI mode - transfer zone 2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In this mode, the BUSY signal is not used. Offload trigger is generated by the AXI
-PWM GEN core. CNV is still generated by the "or" function of the AXI PWM GEN and the
-ad463x_trigger (EMIO). The reason for using two PWM outputs instead of a common one
-is to accommodate for the averaging mode where the two signals will have different
-frequencies.
+In this mode, the BUSY signal is not used. Offload trigger is generated by the
+AXI PWM GEN core. CNV is still generated by the "or" function of the AXI PWM
+GEN and the ad463x_trigger (EMIO). The reason for using two PWM outputs instead
+of a common one is to accommodate for the averaging mode where the two signals
+will have different frequencies.
 
 .. image:: ad463x_hdl_cm0_cz2_1.svg
    :width: 800
@@ -227,7 +245,8 @@ per channel of the SPI interface:
 The CAPTURE_ZONE configuration parameter defines the capture zone of the next
 sample. There are two capture zones:
 
-- 1 - from negative edge of the BUSY line until the next CNV positive edge -20ns
+- 1 - from negative edge of the BUSY line until the next CNV positive edge
+  -20ns
 - 2 - from the next consecutive CNV positive edge +20ns until the second next
   consecutive CNV positive edge -20ns
 
@@ -242,14 +261,16 @@ mode is enabled or disabled. Interleaved mode can be only used for
 NUM_OF_CHANNEL = 2 and LANES_PER_CHANNEL = 1 (ad463x). Enabling INTERLEAVE_MODE
 for any other configuration is invalid.
 
-- 0 - interleave mode disabled, each channel has their own MISO lanes. (default);
+- 0 - interleave mode disabled, each channel has their own MISO lanes.
+  (default);
 - 1 - interleave mode enabled, the ad463x ADC share the same MISO lanes.
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at :ref:`architecture cpu-intercon-addr`).
+added to the base address from HDL(see more at
+:ref:`architecture cpu-intercon-addr`).
 
 ========================  ===========
 Instance                  Zynq
@@ -402,7 +423,8 @@ then the folder name will be:
 
 ``NUMOFCHANNEL2_SPERCHANNEL4_CAPTUREZONE2``
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+A more comprehensive build guide can be found in the :ref:`build_hdl` user
+guide.
 
 Resources
 -------------------------------------------------------------------------------
@@ -418,10 +440,15 @@ Hardware related
 - Product datasheets:
 
   - :adi:`AD4030-24`
+  - :adi:`AD4032-24`
   - :adi:`AD4630-16`
+  - :adi:`AD4630-20`
   - :adi:`AD4630-24`
-  - :adi:`ADAQ4224`
+  - :adi:`AD4632-16`
+  - :adi:`AD4632-20`
+  - :adi:`AD4632-24`
   - :adi:`ADAQ4216`
+  - :adi:`ADAQ4224`
 - :dokuwiki:`[Wiki] AD4630/AD4030 Evaluation Board User Guide <resources/eval/ad4630-24-eval-board>`
 
 HDL related
