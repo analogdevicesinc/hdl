@@ -43,7 +43,7 @@ module jesd204_tx_lane_64b #(
   reg [11:0] crc12_d1 = 'b0;
 
   wire [63:0] tx_data_msb_s;
-  wire [63:0] scrambled_data_r;
+  wire [63:0] scrambled_data_s;
   wire [11:0] crc12;
   wire [25:0] fec;
 
@@ -63,7 +63,7 @@ module jesd204_tx_lane_64b #(
     .reset(reset),
     .enable(~cfg_disable_scrambler),
     .data_in(tx_data_msb_s),
-    .data_out(scrambled_data_r));
+    .data_out(scrambled_data_s));
 
   always @(posedge clk) begin
     lmc_edge_d1 <= lmc_edge;
@@ -75,7 +75,7 @@ module jesd204_tx_lane_64b #(
   end
 
   always @(posedge clk) begin
-    scrambled_data <= scrambled_data_r;
+    scrambled_data <= scrambled_data_s;
     scrambled_data_d1 <= scrambled_data;
     phy_data <= scrambled_data_d1;
   end

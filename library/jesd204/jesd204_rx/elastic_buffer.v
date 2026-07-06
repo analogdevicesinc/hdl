@@ -39,7 +39,8 @@ module elastic_buffer #(
 
   reg [ADDR_WIDTH:0] wr_addr = 'h00;
   reg [ADDR_WIDTH:0] rd_addr = 'h00;
-  (* ram_style = "distributed" *) reg [WIDTH-1:0] mem[0:SIZE - 1];
+  (* ram_style = "distributed" *)
+  reg [WIDTH-1:0] mem[0:SIZE - 1];
   reg             mem_rd_valid = 'b0;
   reg [WIDTH-1:0] mem_rd_data;
 
