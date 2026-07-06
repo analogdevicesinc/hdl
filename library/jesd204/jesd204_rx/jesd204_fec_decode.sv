@@ -9,18 +9,18 @@
 
 // JESD204C FEC decoder
 module jesd204_fec_decode #(
-   parameter DATA_WIDTH = 64
-)(
-   output logic [DATA_WIDTH-1:0]              data_out,
-   output logic                               data_out_valid,
-   output logic                               trapped_error_flag,
-   output logic                               untrapped_error_flag,
-   input  wire                                clk,
-   input  wire                                rst,
-   input  wire                                eomb,
-   input  wire                                fec_in_valid,
-   input  wire  [25:0]                        fec_in,
-   input  wire  [DATA_WIDTH-1:0]              data_in
+  parameter DATA_WIDTH = 64
+) (
+  output logic [DATA_WIDTH-1:0]              data_out,
+  output logic                               data_out_valid,
+  output logic                               trapped_error_flag,
+  output logic                               untrapped_error_flag,
+  input  wire                                clk,
+  input  wire                                rst,
+  input  wire                                eomb,
+  input  wire                                fec_in_valid,
+  input  wire  [25:0]                        fec_in,
+  input  wire  [DATA_WIDTH-1:0]              data_in
 );
 
   localparam DATA_WIDTH_WIDTH=$clog2(DATA_WIDTH);
@@ -69,8 +69,8 @@ module jesd204_fec_decode #(
   logic                                       trapped_error_sticky_comb;
   logic                                       error_sticky_comb;
   int jj;
-  genvar ii;
 
+  genvar ii;
   // Reverse order of FEC bits so that bit 25 is shifted in first
   for(ii = 0; ii < 26; ii = ii + 1) begin : fec_reverse_gen
     assign fec_in_reversed[ii] = fec_in[25-ii];
@@ -104,8 +104,7 @@ module jesd204_fec_decode #(
     .wr_en            (buf_wr_en),
     .wr_addr          (buf_wr_addr),
     .wr_data          (buf_wr_data),
-    .rd_addr          (buf_rd_addr)
-  );
+    .rd_addr          (buf_rd_addr));
 
   assign buf_wr_en = data_in_en;
   assign buf_wr_data = data_in;
@@ -169,8 +168,7 @@ module jesd204_fec_decode #(
     .load_data          ('0),
     .shift_en           (data_in_en),
     .shift_cnt          (DATA_WIDTH_WIDTH'(DATA_WIDTH-1)),
-    .data_in            (data_in)
-  );
+    .data_in            (data_in));
 
   // Save codeword_lfsr after the input data syndrome is computed
   always @(posedge clk) begin
@@ -200,8 +198,7 @@ module jesd204_fec_decode #(
     .load_data          (data_in_syndrome_saved),
     .shift_en           (fec_in_valid),
     .shift_cnt          (FEC_WIDTH_WIDTH'(FEC_WIDTH-1)),
-    .data_in            (fec_in_reversed)
-  );
+    .data_in            (fec_in_reversed));
 
   // Error syndrome computation
   jesd204_rx_fec_lfsr #(
@@ -216,8 +213,7 @@ module jesd204_fec_decode #(
     .load_data          (codeword_syndrome),
     .shift_en           (data_out_en),
     .shift_cnt          (DATA_WIDTH_WIDTH'(DATA_WIDTH-1)),
-    .data_in            ({DATA_WIDTH{1'b0}})
-  );
+    .data_in            ({DATA_WIDTH{1'b0}}));
 
   always_ff @(posedge clk) begin
     error_syndrome_next_d <= error_syndrome_next;

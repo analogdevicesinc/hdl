@@ -176,8 +176,7 @@ module jesd204_rx_lane_64b #(
       .eomb                  (eomb),
       .fec_in_valid          (valid_fec),
       .fec_in                (fec_received),
-      .data_in               (phy_data)
-    );
+      .data_in               (phy_data));
 
     assign fec_en = cfg_header_mode == 2'd2;
     assign scram_data_in = fec_en ? fec_data_out : phy_data;

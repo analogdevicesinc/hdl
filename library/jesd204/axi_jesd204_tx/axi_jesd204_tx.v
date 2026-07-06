@@ -225,7 +225,7 @@ module axi_jesd204_tx #(
     .status_synth_params2(status_synth_params2));
 
   jesd204_up_sysref #(
-      .DATA_PATH_WIDTH_LOG2 (DATA_PATH_WIDTH_LOG2)
+    .DATA_PATH_WIDTH_LOG2 (DATA_PATH_WIDTH_LOG2)
   ) i_up_sysref (
     .up_clk(s_axi_aclk),
     .up_reset(up_reset),

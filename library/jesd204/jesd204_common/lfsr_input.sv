@@ -5,33 +5,31 @@
 // ***************************************************************************
 // ***************************************************************************
 
-
 `timescale 1ns / 100ps
-`default_nettype none
 
 // LFSR with input
 module lfsr_input #(
-   parameter LFSR_WIDTH = 32,
-   parameter [LFSR_WIDTH:1] RESET_VAL = {LFSR_WIDTH{1'b0}},
-   // LFSR_POLYNOMIAL[0] must be 1 and is omitted
-   parameter [LFSR_WIDTH:1] LFSR_POLYNOMIAL = {LFSR_WIDTH{1'b0}},
-   parameter MAX_SHIFT_CNT = 64
-)(
-   // One cycle after shift_en = 1,
-   //   data_out[shift_cnt:0] contains the next shift_cnt + 1 output bits
-   //   data_out[MAX_SHIFT_CNT-1:shift_cnt+1] is undefined
-   output logic [MAX_SHIFT_CNT-1:0]               data_out,
-   // Value of the shift register updated one cycle after shift_en is asserted
-   output logic [LFSR_WIDTH:1]                    shift_reg,
-   // Value of the shift register if shift_en is asserted for each value of shift_cnt from 1 to MAX_SHIFT_CNT
-   output logic [LFSR_WIDTH:1]                    shift_reg_next[MAX_SHIFT_CNT-1:0],
-   input  wire                                    clk,
-   input  wire                                    rst,
-   input  wire                                    shift_reg_reset,
-   input  wire                                    shift_en,
-   // Number of bits to shift - 1
-   input  wire   [$clog2(MAX_SHIFT_CNT)-1:0]      shift_cnt,
-   input  wire   [MAX_SHIFT_CNT-1:0]              data_in
+  parameter LFSR_WIDTH = 32,
+  parameter [LFSR_WIDTH:1] RESET_VAL = {LFSR_WIDTH{1'b0}},
+  // LFSR_POLYNOMIAL[0] must be 1 and is omitted
+  parameter [LFSR_WIDTH:1] LFSR_POLYNOMIAL = {LFSR_WIDTH{1'b0}},
+  parameter MAX_SHIFT_CNT = 64
+) (
+  // One cycle after shift_en = 1,
+  //   data_out[shift_cnt:0] contains the next shift_cnt + 1 output bits
+  //   data_out[MAX_SHIFT_CNT-1:shift_cnt+1] is undefined
+  output logic [MAX_SHIFT_CNT-1:0]               data_out,
+  // Value of the shift register updated one cycle after shift_en is asserted
+  output logic [LFSR_WIDTH:1]                    shift_reg,
+  // Value of the shift register if shift_en is asserted for each value of shift_cnt from 1 to MAX_SHIFT_CNT
+  output logic [LFSR_WIDTH:1]                    shift_reg_next[MAX_SHIFT_CNT-1:0],
+  input  wire                                    clk,
+  input  wire                                    rst,
+  input  wire                                    shift_reg_reset,
+  input  wire                                    shift_en,
+  // Number of bits to shift - 1
+  input  wire   [$clog2(MAX_SHIFT_CNT)-1:0]      shift_cnt,
+  input  wire   [MAX_SHIFT_CNT-1:0]              data_in
 );
 
   function automatic [LFSR_WIDTH:1] lfsr_galois_next(input [LFSR_WIDTH:1] cur, input next_data_in);
@@ -47,10 +45,8 @@ module lfsr_input #(
   wire [MAX_SHIFT_CNT-1:0]                 data_out_next;
   reg  [LFSR_WIDTH:1]                      shift_reg_in_start;
   wire [LFSR_WIDTH:1]                      shift_reg_in_next[MAX_SHIFT_CNT-1:0];
+
   genvar jj;
-
-
-
   // Generate shift register values for each number of shifts
   for(jj = 0; jj < MAX_SHIFT_CNT; jj = jj + 1) begin : shift_gen
     // Shift register input is output of previous shift register value
@@ -88,5 +84,3 @@ module lfsr_input #(
   end
 
 endmodule
-
-`default_nettype wire

@@ -103,8 +103,7 @@ module jesd204_tx_lane_64b #(
       .rst         (~tx_ready),
       .shift_en    (tx_ready_d2),
       .eomb        (lmc_edge_d2),
-      .data_in     (scrambled_data)
-    );
+      .data_in     (scrambled_data));
   end else begin : gen_no_fec
     assign fec = 26'b0;
   end
