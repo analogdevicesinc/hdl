@@ -127,11 +127,14 @@ These rules can be found in the [HDL coding guidelines](https://analogdevicesinc
 
 #### 1. License header
 
+##### 1.1 Copyright year check
+
 It checks that the copyright years after Copyright (C) are up-to-date and properly
 formatted.
 Supported forms: a single year, a range (YYYY-YYYY), or a comma-separated list
 combining singles and/or ranges.
-Exceptions are the JESD files and the ones specified in the `avoid_list` string list.
+Exceptions are the files specified in the `avoid_list` string list (which skips all
+header checks) and the `copyright_skip_list` (which skips only the copyright check).
 
 The following checks are performed (only the last year and, if present, the
 penultimate year are considered):
@@ -156,6 +159,42 @@ Examples:
 ```
 
 If `-e` option is added, the script can update the year range.
+
+##### 1.2 License body validation
+
+For files with a `Short identifier:` tag on the line after the copyright, the script
+validates the full license body text against the corresponding reference file:
+  * `Short identifier: ADIBSD` -> validated against `LICENSE_ADIBSD`
+  * `Short identifier: ADIJESD204` -> validated against `LICENSE_ADIJESD204`
+
+If no short identifier is present, the script checks for the old dual-license
+(GPL + ADIBSD) header text.
+
+SPDX-License-Identifier cannot be used for ADIBSD or ADIJESD204 licenses; the full
+license text is required. The script flags any file using
+`SPDX-License-Identifier: ADIBSD` or `SPDX-License-Identifier: ADIJESD204`.
+
+For ADIJESD204 files, the script also validates and (in edit mode) auto-updates the
+secondary copyright year lines inside the license body.
+
+##### 1.3 Copyright skip list
+
+Some files use a third-party or non-standard copyright header that does not follow
+the ADI template. These files are listed in `copyright_skip_list` in the script.
+The copyright and license body checks are skipped for them, but all other guideline
+checks (trailing whitespace, empty lines, module naming, etc.) still apply.
+
+To add a new file to the skip list, append its path (relative to the repository root)
+to the `copyright_skip_list` list in `check_guideline.py`:
+
+```python
+copyright_skip_list = [
+    "library/corundum/corundum_core/corundum_core.v",
+    "library/corundum/corundum_core/mqnic_app_block.v",
+    ...
+    "path/to/new_file.v",
+]
+```
 
 #### 2. Empty lines
 
@@ -241,7 +280,8 @@ If `-e` option is added, the script updates the project name automatically.
 ### Changes done by the script to your files
 
 If edits are enabled (-e), the script may modify:
-* license header, except for files specified in `avoid_list`
+* license header (copyright years and ADIJESD204 inner copyright years), except
+  for files specified in `avoid_list` or `copyright_skip_list`
 * empty lines (two or more consecutive, or at file start/end)
 * trailing whitespaces
 * lines after `endmodule`/`endpackage` tag
