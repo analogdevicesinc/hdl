@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export SIMULATOR=icarus
+
+SOURCE="tb_gearbox_equiv.sv"
+SOURCE+=" ../jesd204_common/gearbox_64b66b.v"
+SOURCE+=" ../jesd204_common/gearbox_66b64b.v"
+
+set -- -g2012
+
+cd `dirname $0`
+source ../../common/tb/run_tb.sh
