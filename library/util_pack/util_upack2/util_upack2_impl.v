@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023, 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -39,7 +39,8 @@ module util_upack2_impl #(
   parameter NUM_OF_CHANNELS = 4,
   parameter SAMPLES_PER_CHANNEL = 1,
   parameter SAMPLE_DATA_WIDTH = 16,
-  parameter PARALLEL_OR_SERIAL_N = 0
+  parameter PARALLEL_OR_SERIAL_N = 0,
+  parameter PIPELINE_STAGES = 0
 ) (
   input clk,
   input reset,
@@ -55,6 +56,44 @@ module util_upack2_impl #(
   output s_axis_ready,
   input [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] s_axis_data
 );
+
+  localparam NUM_OF_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
+
+  localparam
+    SAMPLE_ADDRESS_WIDTH = NUM_OF_SAMPLES > 512 ? 10 :
+    NUM_OF_SAMPLES > 256 ? 9 :
+    NUM_OF_SAMPLES > 128 ? 8 :
+    NUM_OF_SAMPLES > 64 ? 7 :
+    NUM_OF_SAMPLES > 32 ? 6 :
+    NUM_OF_SAMPLES > 16 ? 5 :
+    NUM_OF_SAMPLES > 8 ? 4 :
+    NUM_OF_SAMPLES > 4 ? 3 :
+    NUM_OF_SAMPLES > 2 ? 2 : 1;
+
+  localparam NON_POWER_OF_TWO = NUM_OF_CHANNELS > 2;
+
+  localparam NETWORK0_STAGES = (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2;
+  localparam NETWORK1_STAGES = (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2;
+  localparam EXT_NETWORK_STAGES = NON_POWER_OF_TWO ? 1 : 0;
+
+  // Calculate pipeline latency per network based on PIPELINE_STAGES parameter
+  function integer calc_pipeline_latency;
+    input integer num_stages;
+    begin
+      if (PIPELINE_STAGES == 2)
+        calc_pipeline_latency = num_stages;
+      else if (PIPELINE_STAGES == 1)
+        calc_pipeline_latency = num_stages / 2;
+      else
+        calc_pipeline_latency = 0;
+    end
+  endfunction
+
+  localparam
+    TOTAL_PIPELINE_LATENCY = (NUM_OF_CHANNELS == 1) ? 0 :
+    calc_pipeline_latency(NETWORK0_STAGES) +
+    calc_pipeline_latency(NETWORK1_STAGES) +
+    calc_pipeline_latency(EXT_NETWORK_STAGES);
 
   /*
    * Final output data of the routing network that will be written to
@@ -87,14 +126,48 @@ module util_upack2_impl #(
   assign data_rd_en = fifo_rd_en[0];
 
   assign ce = s_axis_valid & data_rd_en;
-  assign s_axis_ready = ready & ce;
+  /*
+   * Gate s_axis_ready with ~reset_data to immediately stop accepting data
+   * when the core is resetting. Without this the delayed 'ready' signal
+   * would allow data to enter during reset, causing incorrect output.
+   */
+  assign s_axis_ready = ready & ce & ~reset_data;
+
+  wire data_rd_en_delayed;
+  wire s_axis_valid_delayed;
+  wire reset_data_delayed;
+
+  util_pipeline_stage #(
+    .REGISTERED(TOTAL_PIPELINE_LATENCY),
+    .WIDTH(1)
+  ) i_data_rd_en_pipe (
+    .clk(clk),
+    .in(data_rd_en),
+    .out(data_rd_en_delayed));
+
+  util_pipeline_stage #(
+    .REGISTERED(TOTAL_PIPELINE_LATENCY),
+    .WIDTH(1)
+  ) i_s_axis_valid_pipe (
+    .clk(clk),
+    .in(s_axis_valid),
+    .out(s_axis_valid_delayed));
+
+  util_pipeline_stage #(
+    .REGISTERED(TOTAL_PIPELINE_LATENCY),
+    .WIDTH(1)
+  ) i_reset_data_pipe (
+    .clk(clk),
+    .in(reset_data),
+    .out(reset_data_delayed));
 
   pack_shell #(
     .NUM_OF_CHANNELS (NUM_OF_CHANNELS),
     .SAMPLES_PER_CHANNEL (SAMPLES_PER_CHANNEL),
     .SAMPLE_DATA_WIDTH (SAMPLE_DATA_WIDTH),
     .PACK (0),
-    .PARALLEL_OR_SERIAL_N (PARALLEL_OR_SERIAL_N)
+    .PARALLEL_OR_SERIAL_N (PARALLEL_OR_SERIAL_N),
+    .PIPELINE_STAGES (PIPELINE_STAGES)
   ) i_pack_shell (
     .clk (clk),
     .reset (reset),
@@ -124,19 +197,19 @@ module util_upack2_impl #(
     .data_out (deinterleaved_data));
 
   always @(posedge clk) begin
-    /* In case of an underflow the output vector should be zeroed */
-    if (reset_data == 1'b1 ||
-        (data_rd_en == 1'b1 && s_axis_valid == 1'b0)) begin
+    /* In case of an underflow or reset the output vector should be zeroed */
+    if (reset_data_delayed == 1'b1 ||
+        (data_rd_en_delayed == 1'b1 && s_axis_valid_delayed == 1'b0)) begin
       fifo_rd_data <= 'h00;
-    end else if (data_rd_en == 1'b1) begin
+    end else if (data_rd_en_delayed == 1'b1) begin
       fifo_rd_data <= deinterleaved_data;
     end
   end
 
   always @(posedge clk) begin
-    if (data_rd_en == 1'b1) begin
-      fifo_rd_valid <= s_axis_valid & ~reset_data;
-      fifo_rd_underflow <= ~(s_axis_valid & ~reset_data);
+    if (data_rd_en_delayed == 1'b1) begin
+      fifo_rd_valid <= s_axis_valid_delayed & ~reset_data_delayed;
+      fifo_rd_underflow <= ~(s_axis_valid_delayed & ~reset_data_delayed);
     end else begin
       fifo_rd_valid <= 1'b0;
       fifo_rd_underflow <= 1'b0;
