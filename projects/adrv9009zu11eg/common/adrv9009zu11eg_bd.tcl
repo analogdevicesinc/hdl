@@ -36,6 +36,9 @@ set TX_TPL_WIDTH [ expr { [info exists ad_project_params(TX_TPL_WIDTH)] \
 set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_NUM_OF_LANES $TX_NUM_OF_CONVERTERS $TX_SAMPLES_PER_FRAME $TX_SAMPLE_WIDTH $TX_TPL_WIDTH]
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8 * $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
+set dac_data_offload_name adrv9009_tx_data_offload
+set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
+
 # RX parameters
 set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)      ; # L
 set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M) ; # M
@@ -46,6 +49,8 @@ set RX_OCTETS_PER_FRAME [expr $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_FRAME * $R
 set DPW [expr max(4, $RX_OCTETS_PER_FRAME)] ; #max(4, F)
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8 * $DPW / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 8 * DPW / (M* N)
 
+set adc_data_offload_name adrv9009_rx_data_offload
+set adc_data_width [expr $RX_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_CHANNEL]
 set adc_dma_data_width [expr $RX_NUM_OF_LANES * 8 * $DPW]
 
 # RX Observation parameters
@@ -59,9 +64,6 @@ set RX_OS_TPL_WIDTH [ expr { [info exists ad_project_params(RX_OS_TPL_WIDTH)] \
 
 set RX_OS_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_OS_NUM_OF_LANES $RX_OS_NUM_OF_CONVERTERS $RX_OS_SAMPLES_PER_FRAME $RX_OS_SAMPLE_WIDTH $RX_OS_TPL_WIDTH]
 set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8 * $RX_OS_DATAPATH_WIDTH / ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)]
-
-set dac_data_offload_name adrv9009_tx_data_offload
-set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
 
 # default ports
 
@@ -290,6 +292,45 @@ ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.CACHE_COHERENT 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_AXCACHE 0b1111
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_AXPROT 0b010
+
+
+if {[info exists FMCOMMS8]} {
+  create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddr4_rtl:1.0 ddr4_rtl_0
+  create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 ddr4_ref_0
+
+  ad_ip_instance ip:ddr4 ddr4_0
+  ad_ip_parameter ddr4_0 CONFIG.C0.DDR4_DataWidth {32}
+  ad_ip_parameter ddr4_0 CONFIG.C0.DDR4_AxiDataWidth {256}
+  ad_ip_parameter ddr4_0 CONFIG.C0.DDR4_TimePeriod {833}
+  ad_ip_parameter ddr4_0 CONFIG.C0.DDR4_AxiAddressWidth {31}
+  ad_ip_parameter ddr4_0 CONFIG.C0.DDR4_InputClockPeriod {3332}
+  ad_ip_parameter ddr4_0 CONFIG.C0.DDR4_MemoryPart {MT40A512M16LY-075}
+  ad_ip_parameter ddr4_0 CONFIG.C0.BANK_GROUP_WIDTH {1}
+  ad_ip_parameter ddr4_0 CONFIG.C0.DDR4_CasLatency {17}
+
+  ad_connect ddr4_rtl_0 ddr4_0/C0_DDR4
+
+  set_property -dict [list CONFIG.FREQ_HZ {300000000}] [get_bd_intf_ports ddr4_ref_0]
+  ad_connect ddr4_ref_0 ddr4_0/C0_SYS_CLK
+
+  set data_offload_size [expr 1024 * 1024 * 1024]
+  ad_data_offload_create $adc_data_offload_name \
+                         0 \
+                         1 \
+                         $data_offload_size \
+                         $adc_data_width \
+                         $adc_data_width \
+                         256
+
+  ad_ip_parameter $adc_data_offload_name/storage_unit CONFIG.DDR_BASE_ADDDRESS [format "%d" 0x80000000]
+  ad_connect $adc_data_offload_name/sync_ext GND
+
+  create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 ddr4_0_rstgen
+  ad_connect ddr4_0_rstgen/slowest_sync_clk ddr4_0/c0_ddr4_ui_clk
+  ad_connect ddr4_0/c0_ddr4_ui_clk_sync_rst ddr4_0_rstgen/ext_reset_in
+
+  ad_connect sys_reset ddr4_0/sys_rst
+}
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_rx_xcvr
 ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.NUM_OF_LANES $MAX_RX_NUM_OF_LANES
@@ -674,7 +715,6 @@ ad_connect upack_rst_logic/res util_som_tx_upack/reset
 
 ad_connect  core_clk_b rx_adrv9009_som_tpl_core/link_clk
 ad_connect  core_clk_b util_som_rx_cpack/clk
-ad_connect  axi_adrv9009_som_rx_dma/fifo_wr_clk core_clk_b
 
 ad_connect  axi_adrv9009_som_rx_jesd/rx_sof rx_adrv9009_som_tpl_core/link_sof
 ad_connect  axi_adrv9009_som_rx_jesd/rx_data_tdata rx_adrv9009_som_tpl_core/link_data
@@ -688,8 +728,33 @@ for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
 ad_connect  rx_adrv9009_som_tpl_core/adc_dovf util_som_rx_cpack/fifo_wr_overflow
 ad_connect  rx_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_in rx_sysref_0
 
-ad_connect util_som_rx_cpack/packed_fifo_wr axi_adrv9009_som_rx_dma/fifo_wr
-ad_connect util_som_rx_cpack/packed_sync axi_adrv9009_som_rx_dma/sync
+if {[info exists FMCOMMS8]} {
+  ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_SRC 1
+  ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 0
+  ad_ip_parameter util_som_rx_cpack CONFIG.INTERFACE_TYPE 0
+
+  ad_connect sys_dma_clk axi_adrv9009_som_rx_dma/s_axis_aclk
+  ad_connect sys_cpu_clk $adc_data_offload_name/s_axi_aclk
+  ad_connect sys_cpu_resetn $adc_data_offload_name/s_axi_aresetn
+  ad_connect core_clk_b $adc_data_offload_name/s_axis_aclk
+  ad_connect core_clk_b_rstgen/peripheral_aresetn $adc_data_offload_name/s_axis_aresetn
+  ad_connect sys_dma_clk $adc_data_offload_name/m_axis_aclk
+  ad_connect sys_dma_resetn $adc_data_offload_name/m_axis_aresetn
+
+  ad_connect ddr4_0/c0_ddr4_aresetn ddr4_0_rstgen/peripheral_aresetn
+  ad_connect ddr4_0/c0_ddr4_ui_clk $adc_data_offload_name/storage_unit/m_axi_aclk
+  ad_connect ddr4_0/C0_DDR4_S_AXI $adc_data_offload_name/storage_unit/MAXI_0
+  ad_connect ddr4_0_rstgen/peripheral_aresetn $adc_data_offload_name/storage_unit/m_axi_aresetn
+  ad_connect $adc_data_offload_name/i_data_offload/ddr_calib_done ddr4_0/c0_init_calib_complete
+
+  ad_connect util_som_rx_cpack/m_axis $adc_data_offload_name/s_axis
+  ad_connect $adc_data_offload_name/m_axis axi_adrv9009_som_rx_dma/s_axis
+  ad_connect $adc_data_offload_name/init_req axi_adrv9009_som_rx_dma/s_axis_xfer_req
+} else {
+  ad_connect axi_adrv9009_som_rx_dma/fifo_wr_clk core_clk_b
+  ad_connect util_som_rx_cpack/packed_fifo_wr axi_adrv9009_som_rx_dma/fifo_wr
+  ad_connect util_som_rx_cpack/packed_sync axi_adrv9009_som_rx_dma/sync
+}
 
 # Reset pack core
 ad_ip_instance ilconcat cpack_reset_sources
@@ -745,12 +810,12 @@ ad_connect sys_dma_clk $dac_data_offload_name/s_axis_aclk
 ad_connect sys_dma_resetn $dac_data_offload_name/s_axis_aresetn
 
 ad_connect ddr4_1/c0_ddr4_aresetn ddr4_1_rstgen/peripheral_aresetn
-ad_connect util_som_tx_upack/s_axis $dac_data_offload_name/m_axis
 ad_connect ddr4_1/c0_ddr4_ui_clk $dac_data_offload_name/storage_unit/m_axi_aclk
 ad_connect ddr4_1/C0_DDR4_S_AXI $dac_data_offload_name/storage_unit/MAXI_0
 ad_connect ddr4_1_rstgen/peripheral_aresetn $dac_data_offload_name/storage_unit/m_axi_aresetn
 ad_connect $dac_data_offload_name/i_data_offload/ddr_calib_done ddr4_1/c0_init_calib_complete
 
+ad_connect util_som_tx_upack/s_axis $dac_data_offload_name/m_axis
 ad_connect $dac_data_offload_name/s_axis axi_adrv9009_som_tx_dma/m_axis
 ad_connect $dac_data_offload_name/init_req axi_adrv9009_som_tx_dma/m_axis_xfer_req
 
@@ -797,6 +862,9 @@ ad_cpu_interconnect 0x7c410000 $dac_data_offload_name
 ad_cpu_interconnect 0x7c420000 axi_adrv9009_som_rx_dma
 ad_cpu_interconnect 0x7c440000 axi_adrv9009_som_obs_dma
 ad_cpu_interconnect 0x45000000 axi_sysid_0
+if {[info exists FMCOMMS8]} {
+  ad_cpu_interconnect 0x7c430000 $adc_data_offload_name
+}
 
 # gt uses hp0, and 100MHz clock for both DRP and AXI4
 
@@ -823,3 +891,7 @@ ad_cpu_interrupt ps-13 mb-12 axi_adrv9009_som_rx_jesd/irq
 
 create_bd_addr_seg -range 0x40000000 -offset 0x80000000 \
     [get_bd_addr_spaces $dac_data_offload_name/storage_unit/MAXI_0] [get_bd_addr_segs ddr4_1/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_1_C0_DDR4_ADDRESS_BLOCK
+if {[info exists FMCOMMS8]} {
+  create_bd_addr_seg -range 0x40000000 -offset 0x80000000 \
+      [get_bd_addr_spaces $adc_data_offload_name/storage_unit/MAXI_0] [get_bd_addr_segs ddr4_0/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_0_C0_DDR4_ADDRESS_BLOCK
+}
