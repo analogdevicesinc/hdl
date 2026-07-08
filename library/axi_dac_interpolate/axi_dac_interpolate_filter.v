@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -82,6 +82,8 @@ module axi_dac_interpolate_filter #(
   // internal registers
 
   reg               dac_int_ready;
+  reg               transfer_first_sample;
+  reg               transfer_start_m1;
   reg               dac_filt_int_valid;
   reg     [15:0]    interp_rate_cic;
   reg     [ 2:0]    filter_mask_d1;
@@ -175,9 +177,43 @@ module axi_dac_interpolate_filter #(
     end
   end
 
+  // Start-of-transfer channel sync. On the rising edge of transfer_start, arm
+  // transfer_first_sample so the first sample of the new transfer is handled
+  // specially on both channels. When it fires we do two things:
+  //   1. interpolation_counter <= 0 : realign the interpolation phase so both
+  //      channels count from the same origin even at different interpolation
+  //      ratios (different sample rates).
+  //   2. dac_int_ready <= 1'b1 : force the per-channel IDLE->WAIT gate below open
+  //      on this same dac_clk. dac_int_ready is otherwise per-channel (it pulses
+  //      only when that channel's interpolation_counter reaches its own ratio), so
+  //      without this force each channel would leave IDLE at a different, rate-
+  //      dependent time and the two channels' launch would be skewed. Forcing it
+  //      makes both channels leave IDLE together and catch the shared transfer_start
+  //      edge on the same clock -> zero startup skew across channels.
+  // This does NOT reintroduce the last-sample-hold glitch: transfer_first_sample
+  // can only assert AFTER transfer_start rose, and transfer_start requires
+  // transfer_ready (= dma_valid & dma_valid_adjacent in sync mode). So the forced
+  // ready only opens the gate once both channels' DMA already holds valid data --
+  // the FIR/CIC pipeline is fed real samples, not a reset value. (The historical
+  // glitch came from a different change: fully REMOVING the IDLE->WAIT dac_int_ready
+  // gate, which let a channel leave IDLE before dma_valid and emit a reset 0 as the
+  // first output sample. That gate is kept intact below.)
   always @(posedge dac_clk) begin
+    transfer_start_m1 <= transfer_start;
+
+    if (transfer_start && !transfer_start_m1) begin
+      transfer_first_sample <= 1'b1;
+    end else if (transfer_first_sample && dac_filt_int_valid & transfer_ready) begin
+      transfer_first_sample <= 1'b0;
+    end
+
     if (dac_filt_int_valid & transfer_ready) begin
-      if (interpolation_counter == interpolation_ratio) begin
+      if (transfer_first_sample) begin
+        // first sample of a new transfer: realign phase (counter) + force ready so
+        // both channels launch together (see block comment above)
+        interpolation_counter <= 0;
+        dac_int_ready <= 1'b1;
+      end else if (interpolation_counter == interpolation_ratio) begin
         interpolation_counter <= 0;
         dac_int_ready <= 1'b1;
       end else begin
@@ -219,6 +255,11 @@ module axi_dac_interpolate_filter #(
     case (transfer_sm)
       IDLE: begin
         transfer <= 1'b0;
+        // Gate on dac_int_ready: do NOT leave IDLE until the channel is ready
+        // (either the interpolation counter reached its ratio, or the forced
+        // first-sample ready above). Removing this dac_int_ready term lets the
+        // channel leave IDLE before dma_valid and emit a reset 0 as the first
+        // output sample -> one-sample glitch at every buffer transition. Keep it.
         if (dac_int_ready & !dma_transfer_suspend) begin
           transfer_sm_next <= WAIT;
         end

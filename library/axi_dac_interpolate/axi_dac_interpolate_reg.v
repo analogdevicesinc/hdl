@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -73,7 +73,7 @@ module axi_dac_interpolate_reg(
 
   reg     [31:0]  up_version = {16'h0002,     /* MAJOR */
                                  8'h05,       /* MINOR */
-                                 8'h00};      /* PATCH */
+                                 8'h01};      /* PATCH */
   reg     [31:0]  up_scratch = 32'h0;
 
   reg     [31:0]  up_interpolation_ratio_a = 32'h0;
