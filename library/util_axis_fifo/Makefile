@@ -12,6 +12,7 @@ GENERIC_DEPS += util_axis_fifo.v
 GENERIC_DEPS += util_axis_fifo_address_generator.v
 
 XILINX_DEPS += util_axis_fifo_ip.tcl
+XILINX_DEPS += bd/bd.tcl
 
 XILINX_LIB_DEPS += util_cdc
 
