@@ -18,6 +18,11 @@ Features
 * Configurable data width and depth
 * Supports asynchronous (double clocked) mode
 * Supports TLAST to indicate packet boundary
+* Supports TKEEP to indicate valid data bytes
+* Supports TSTRB to indicate position bytes in the transfer
+* Supports TUSER to transfer user-defined signals
+* Supports TID to provide a stream identifier
+* Supports TDEST to provide routing information
 * Supports FULL/EMPTY and ALMOST_FULL/ALMOST_EMPTY status signals
 * Supports zero-deep implementation
 
@@ -55,6 +60,20 @@ Configuration Parameters
      - Enable ``TLAST`` logical port on the AXI streaming interface.
    * - TKEEP_EN
      - Enable ``TKEEP`` logical port on the AXI streaming interface.
+   * - TSTRB_EN
+     - Enable ``TSTRB`` logical port on the AXI streaming interface.
+   * - TUSER_EN
+     - Enable ``TUSER`` logical port on the AXI streaming interface.
+   * - USER_WIDTH
+     - ``TUSER`` signal width if ``TUSER`` is enabled.
+   * - TID_EN
+     - Enable ``TID`` logical port on the AXI streaming interface.
+   * - ID_WIDTH
+     - ``TID`` signal width if ``TID`` is enabled.
+   * - TDEST_EN
+     - Enable ``TDEST`` logical port on the AXI streaming interface.
+   * - DEST_WIDTH
+     - ``TDEST`` signal width if ``TDEST`` is enabled.
 
 Interface
 --------------------------------------------------------------------------------
