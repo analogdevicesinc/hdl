@@ -43,6 +43,7 @@ module axi_adrv9001_core #(
   parameter USE_RX_CLK_FOR_TX1 = 0,
   parameter USE_RX_CLK_FOR_TX2 = 0,
   parameter NUM_LANES = 3,
+  parameter TX_NUM_LANES = 4,
   parameter DRP_WIDTH = 5,
   parameter TDD_DISABLE = 0,
   parameter DDS_DISABLE = 0,
@@ -174,6 +175,11 @@ module axi_adrv9001_core #(
   output                  delay_rx2_rst,
   input                   delay_rx2_locked,
 
+  output                  delay_tx1_rst,
+  input                   delay_tx1_locked,
+  output                  delay_tx2_rst,
+  input                   delay_tx2_locked,
+
   output  [NUM_LANES-1:0]           up_rx1_dld,
   output  [DRP_WIDTH*NUM_LANES-1:0] up_rx1_dwdata,
   input   [DRP_WIDTH*NUM_LANES-1:0] up_rx1_drdata,
@@ -182,6 +188,13 @@ module axi_adrv9001_core #(
   output  [DRP_WIDTH*NUM_LANES-1:0] up_rx2_dwdata,
   input   [DRP_WIDTH*NUM_LANES-1:0] up_rx2_drdata,
 
+  output  [TX_NUM_LANES-1:0]           up_tx1_dld,
+  output  [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx1_dwdata,
+  input   [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx1_drdata,
+
+  output  [TX_NUM_LANES-1:0]           up_tx2_dld,
+  output  [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx2_dwdata,
+  input   [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx2_drdata,
   // TDD interface
   input                   tdd_sync,
   output                  tdd_sync_cntr,
@@ -212,11 +225,9 @@ module axi_adrv9001_core #(
   output  reg             up_rack
 );
 
-  // internal wires
-
-  wire   [8:0]   up_wack_s;
-  wire   [31:0]  up_rdata_s[0:8];
-  wire   [8:0]   up_rack_s;
+  wire   [10:0]  up_wack_s;
+  wire   [31:0]  up_rdata_s[0:10];
+  wire   [10:0]  up_rack_s;
 
   wire           tx1_data_valid_A;
   wire   [15:0]  tx1_data_i_A;
@@ -405,7 +416,9 @@ module axi_adrv9001_core #(
                   up_rdata_s[5] |
                   up_rdata_s[6] |
                   up_rdata_s[7] |
-                  up_rdata_s[8];
+                  up_rdata_s[8] |
+                  up_rdata_s[9] |
+                  up_rdata_s[10];
       up_rack  <= |up_rack_s;
       up_wack  <= |up_wack_s;
     end
@@ -884,5 +897,53 @@ module axi_adrv9001_core #(
     .up_raddr (up_raddr),
     .up_rdata (up_rdata_s[8]),
     .up_rack (up_rack_s[8]));
+
+  // dac delay control
+  up_delay_cntrl #(
+    .DATA_WIDTH(TX_NUM_LANES),
+    .DRP_WIDTH(DRP_WIDTH),
+    .DISABLE(0),
+    .BASE_ADDRESS(6'h15)
+  ) i_delay_cntrl_tx1 (
+    .delay_clk (delay_clk),
+    .delay_rst (delay_tx1_rst),
+    .delay_locked (delay_tx1_locked),
+    .up_dld (up_tx1_dld),
+    .up_dwdata (up_tx1_dwdata),
+    .up_drdata (up_tx1_drdata),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[9]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[9]),
+    .up_rack (up_rack_s[9]));
+
+  up_delay_cntrl #(
+    .DATA_WIDTH(TX_NUM_LANES),
+    .DRP_WIDTH(DRP_WIDTH),
+    .DISABLE(DISABLE_TX2_SSI),
+    .BASE_ADDRESS(6'h16)
+  ) i_delay_cntrl_tx2 (
+    .delay_clk (delay_clk),
+    .delay_rst (delay_tx2_rst),
+    .delay_locked (delay_tx2_locked),
+    .up_dld (up_tx2_dld),
+    .up_dwdata (up_tx2_dwdata),
+    .up_drdata (up_tx2_drdata),
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_wreq (up_wreq),
+    .up_waddr (up_waddr),
+    .up_wdata (up_wdata),
+    .up_wack (up_wack_s[10]),
+    .up_rreq (up_rreq),
+    .up_raddr (up_raddr),
+    .up_rdata (up_rdata_s[10]),
+    .up_rack (up_rack_s[10]));
+
 
 endmodule

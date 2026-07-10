@@ -63,7 +63,10 @@ ad_ip_files axi_adrv9001 [list\
 
 ad_ip_parameter ID INTEGER 0
 ad_ip_parameter CMOS_LVDS_N INTEGER 0
-ad_ip_parameter IO_DELAY_GROUP STRING {dev_if_delay_group}
+ad_ip_parameter IO_DELAY_GROUP_RX_1 STRING {dev_if_delay_group_rx}
+ad_ip_parameter IO_DELAY_GROUP_RX_2 STRING {dev_if_delay_group_rx}
+ad_ip_parameter IO_DELAY_GROUP_TX_1 STRING {dev_if_delay_group_tx}
+ad_ip_parameter IO_DELAY_GROUP_TX_2 STRING {dev_if_delay_group_tx}
 
 adi_add_auto_fpga_spec_params
 
@@ -249,4 +252,3 @@ proc axi_adrv9001_elab {} {
     add_interface_port device_if tx2_enable                  tx2_enable                  Output 1
   }
 }
-

@@ -42,7 +42,13 @@ module ad_serdes_out #(
   parameter   CMOS_LVDS_N = 0,
   parameter   DDR_OR_SDR_N = 1,
   parameter   SERDES_FACTOR = 8,
-  parameter   DATA_WIDTH = 16
+  parameter   DATA_WIDTH = 16,
+  parameter   DRP_WIDTH = 5,
+  parameter   IODELAY_ENABLE = 1,
+  parameter   IODELAY_TYPE = "VAR_LOAD",
+  parameter   IODELAY_VALUE = 0,
+  parameter   IODELAY_CTRL = 0,
+  parameter   IODELAY_GROUP = "dev_if_delay_group"
 ) (
 
   // reset and clocks
@@ -50,6 +56,19 @@ module ad_serdes_out #(
   input                       rst,
   input                       clk,
   input                       div_clk,
+
+  // delay-data interface
+
+  input                       up_clk,
+  input   [(DATA_WIDTH-1):0]  up_dld,
+  input   [((DATA_WIDTH*DRP_WIDTH)-1):0]  up_dwdata,
+  output  [((DATA_WIDTH*DRP_WIDTH)-1):0]  up_drdata,
+
+  // delay-control interface
+
+  input                           delay_clk,
+  input                           delay_rst,
+  output                          delay_locked,
 
   // data interface
   input                       data_oe,
@@ -71,10 +90,16 @@ module ad_serdes_out #(
   localparam  ULTRASCALE_PLUS  = 3;
   localparam  DR_OQ_DDR = DDR_OR_SDR_N == 1'b1 ? "DDR": "SDR";
 
+  localparam IODELAY_CTRL_ENABLED = (IODELAY_ENABLE == 1) ? IODELAY_CTRL : 0;
   localparam SIM_DEVICE = FPGA_TECHNOLOGY == SEVEN_SERIES ? "7SERIES" :
                           FPGA_TECHNOLOGY == ULTRASCALE ? "ULTRASCALE" :
                           FPGA_TECHNOLOGY == ULTRASCALE_PLUS ? "ULTRASCALE_PLUS" :
                           "UNSUPPORTED";
+
+  // when ULTRASCALE_PLUS, use ULTRASCALE because IDELAYCTRL is the same for both
+  // and doesn't know ULTRASCALE_PLUS string
+  localparam SIM_DEVICE_IDELAYCTRL = SIM_DEVICE == "ULTRASCALE_PLUS" ? "ULTRASCALE" :
+                                     SIM_DEVICE;
 
   // internal registers
 
@@ -83,6 +108,7 @@ module ad_serdes_out #(
   // internal signals
 
   wire  [(DATA_WIDTH-1):0]  data_out_s;
+  wire  [(DATA_WIDTH-1):0]  data_out_odelay_s;
   wire  [(DATA_WIDTH-1):0]  serdes_shift1_s;
   wire  [(DATA_WIDTH-1):0]  serdes_shift2_s;
   wire  [(DATA_WIDTH-1):0]  data_t;
@@ -90,6 +116,22 @@ module ad_serdes_out #(
   wire  serdes_rst = serdes_rst_seq[6];
 
   // instantiations
+
+  // delay controller
+
+  generate
+  if (IODELAY_CTRL_ENABLED == 1) begin
+    (* IODELAY_GROUP = IODELAY_GROUP *)
+    IDELAYCTRL #(
+      .SIM_DEVICE(SIM_DEVICE_IDELAYCTRL)
+    ) i_delay_ctrl (
+      .RST (delay_rst),
+      .REFCLK (delay_clk),
+      .RDY (delay_locked));
+  end else begin
+    assign delay_locked = 1'b1;
+  end
+  endgenerate
 
   assign data_out_se =  data_out_s;
   assign buffer_disable = ~data_oe;
@@ -166,6 +208,66 @@ module ad_serdes_out #(
         .OQ (data_out_s[l_inst]),
         .T_OUT (data_t[l_inst]),
         .RST (serdes_rst));
+
+        if (IODELAY_ENABLE == 1) begin
+
+          wire   div_dld;
+          wire   en_vtc;
+          wire   ld_cnt;
+          reg [4:0] vtc_cnt = {5{1'b1}};
+
+          sync_event sync_load (
+            .in_clk (up_clk),
+            .in_event (up_dld[l_inst]),
+            .out_clk (div_clk),
+            .out_event (div_dld));
+
+          if (IODELAY_ENABLE == 1) begin
+            (* IODELAY_GROUP = IODELAY_GROUP *)
+            ODELAYE3 #(
+              .CASCADE ("NONE"),          // Cascade setting (MASTER, NONE, SLAVE_END, SLAVE_MIDDLE)
+              .DELAY_FORMAT ("TIME"),     // Units of the DELAY_VALUE (COUNT, TIME)
+              .DELAY_TYPE(IODELAY_TYPE),   // Set the type of tap delay line (FIXED, VARIABLE, VAR_LOAD)
+              .DELAY_VALUE (IODELAY_VALUE),           // Input delay value setting
+              .IS_CLK_INVERTED (1'b0),    // Optional inversion for CLK
+              .IS_RST_INVERTED (1'b0),    // Optional inversion for RST
+              .REFCLK_FREQUENCY (500.0),  // IDELAYCTRL clock input frequency in MHz (200.0-2667.0)
+              .SIM_DEVICE (SIM_DEVICE),   // Set the device version (ULTRASCALE, ULTRASCALE_PLUS, ULTRASCALE_PLUS_ES1,
+                                          // ULTRASCALE_PLUS_ES2)
+              .UPDATE_MODE ("ASYNC")      // Determines when updates to the delay will take effect (ASYNC, MANUAL, SYNC)
+            ) i_idelay (
+              .CASC_OUT (),                                       // 1-bit output: Cascade delay output to ODELAY input cascade
+              .CNTVALUEOUT (up_drdata[DRP_WIDTH*l_inst +: DRP_WIDTH]), // 9-bit output: Counter value output
+              .DATAOUT (data_out_odelay_s[l_inst]),                // 1-bit output: Delayed data output
+              .CASC_IN (1'b0),                                    // 1-bit input: Cascade delay input from slave ODELAY CASCADE_OUT
+              .CASC_RETURN (1'b0),                                // 1-bit input: Cascade delay returning from slave ODELAY DATAOUT
+              .CE (1'b0),                                         // 1-bit input: Active high enable increment/decrement input
+              .CLK (div_clk),                                     // 1-bit input: Clock input
+              .CNTVALUEIN (up_dwdata[DRP_WIDTH*l_inst +: DRP_WIDTH]),   // 9-bit input: Counter value input
+              .EN_VTC (en_vtc),                                   // 1-bit input: Keep delay constant over VT
+              .ODATAIN (data_out_s[l_inst]),                  // 1-bit input: Data input from the IOBUF
+              .INC (1'b0),                                        // 1-bit input: Increment / Decrement tap delay input
+              .LOAD (ld_cnt),                                     // 1-bit input: Load DELAY_VALUE input
+              .RST (rst));                                        // 1-bit input: Asynchronous Reset to the DELAY_VALUE
+          end
+
+          always @(posedge div_clk) begin
+            if (div_dld) begin
+              vtc_cnt <= 'h0;
+            end else if (~(&vtc_cnt)) begin
+              vtc_cnt <= vtc_cnt + 1;
+            end
+          end
+
+          assign en_vtc = &vtc_cnt;
+          assign ld_cnt = ~vtc_cnt[4] & (&vtc_cnt[3:0]);
+        end else begin
+          assign data_out_odelay_s[l_inst] = data_out_s[l_inst];
+          assign up_drdata[DRP_WIDTH*l_inst +: DRP_WIDTH] = 'h0;
+        end
+    end else begin
+      assign data_out_odelay_s[l_inst] = data_out_s[l_inst];
+      assign up_drdata[DRP_WIDTH*l_inst +: DRP_WIDTH] = 'h0;
     end
 
     // obuf
@@ -173,13 +275,13 @@ module ad_serdes_out #(
     if (CMOS_LVDS_N == 0) begin
       OBUFTDS i_obuftds (
         .T (data_t[l_inst]),
-        .I (data_out_s[l_inst]),
+        .I (data_out_odelay_s[l_inst]),
         .O (data_out_p[l_inst]),
         .OB (data_out_n[l_inst]));
     end else begin
       OBUFT i_obuf (
         .T (data_t[l_inst]),
-        .I (data_out_s[l_inst]),
+        .I (data_out_odelay_s[l_inst]),
         .O (data_out_p[l_inst]));
     end
   end

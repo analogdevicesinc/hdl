@@ -40,7 +40,11 @@ module adrv9001_tx #(
   parameter NUM_LANES = 4,
   parameter FPGA_TECHNOLOGY = 0,
   parameter USE_BUFG = 0,
-  parameter USE_RX_CLK_FOR_TX = 0
+  parameter USE_RX_CLK_FOR_TX = 0,
+  parameter DRP_WIDTH = 5,
+  parameter IODELAY_CTRL = 0,
+  parameter IODELAY_ENABLE = 1,
+  parameter IO_DELAY_GROUP = "dev_if_delay_group"
 ) (
   input                   up_clk,
 
@@ -75,7 +79,15 @@ module adrv9001_tx #(
   input       [7:0]       dac_data_2,
   input       [7:0]       dac_data_3,
   input       [7:0]       dac_data_strb,
-  input       [7:0]       dac_data_clk
+  input       [7:0]       dac_data_clk,
+
+  // delay interface (for IDELAY macros)
+  input   [NUM_LANES-1:0]           up_dac_dld,
+  input   [DRP_WIDTH*NUM_LANES-1:0] up_dac_dwdata,
+  output  [DRP_WIDTH*NUM_LANES-1:0] up_dac_drdata,
+  input                   delay_clk,
+  input                   delay_rst,
+  output                  delay_locked
 );
 
   localparam  SEVEN_SERIES  = 1;
@@ -115,6 +127,11 @@ module adrv9001_tx #(
 
   ad_serdes_out #(
     .CMOS_LVDS_N (CMOS_LVDS_N),
+    .IODELAY_CTRL (IODELAY_CTRL),
+    .IODELAY_ENABLE (IODELAY_ENABLE),
+    .IODELAY_VALUE ('d100),
+    .IODELAY_GROUP (IO_DELAY_GROUP),
+    .DRP_WIDTH (DRP_WIDTH),
     .DDR_OR_SDR_N(1),
     .DATA_WIDTH(NUM_LANES),
     .SERDES_FACTOR(8),
@@ -134,7 +151,14 @@ module adrv9001_tx #(
     .data_s7 (data_s7),
     .data_out_se (),
     .data_out_p (serdes_out_p),
-    .data_out_n (serdes_out_n));
+    .data_out_n (serdes_out_n),
+    .up_clk (up_clk),
+    .up_dld (up_dac_dld),
+    .up_dwdata (up_dac_dwdata),
+    .up_drdata (up_dac_drdata),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_rst),
+    .delay_locked (delay_locked));
 
   generate
   if (CMOS_LVDS_N == 0) begin

@@ -48,9 +48,18 @@ module axi_adrv9001 #(
   parameter DISABLE_TX2_SSI = 0,
   parameter RX_USE_BUFG = 0,
   parameter TX_USE_BUFG = 0,
-  parameter IODELAY_CTRL = 1,
-  parameter IODELAY_ENABLE = 1,
-  parameter IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter IODELAY_CTRL_RX_1 = 0,
+  parameter IODELAY_CTRL_RX_2 = 0,
+  parameter IODELAY_CTRL_TX_1 = 1,
+  parameter IODELAY_CTRL_TX_2 = 0,
+  parameter IODELAY_ENABLE_RX_1 = 0,
+  parameter IODELAY_ENABLE_RX_2 = 0,
+  parameter IODELAY_ENABLE_TX_1 = 1,
+  parameter IODELAY_ENABLE_TX_2 = 1,
+  parameter IO_DELAY_GROUP_RX_1 = "dev_if_delay_group_rx",
+  parameter IO_DELAY_GROUP_RX_2 = "dev_if_delay_group_rx",
+  parameter IO_DELAY_GROUP_TX_1 = "dev_if_delay_group_tx",
+  parameter IO_DELAY_GROUP_TX_2 = "dev_if_delay_group_tx",
   parameter FPGA_TECHNOLOGY = 0,
   parameter FPGA_FAMILY = 0,
   parameter SPEED_GRADE = 0,
@@ -214,6 +223,7 @@ module axi_adrv9001 #(
                          FPGA_TECHNOLOGY == ULTRASCALE_PLUS ? 9 : 5;
 
   localparam NUM_LANES = CMOS_LVDS_N ? 5 : 3;
+  localparam TX_NUM_LANES = NUM_LANES + 1;
 
   // internal signals
   wire            up_wreq_s;
@@ -289,6 +299,18 @@ module axi_adrv9001 #(
   wire                              delay_rx2_rst;
   wire                              delay_rx1_locked;
   wire                              delay_rx2_locked;
+
+  wire    [TX_NUM_LANES-1:0]           up_tx1_dld;
+  wire    [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx1_dwdata;
+  wire    [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx1_drdata;
+  wire    [TX_NUM_LANES-1:0]           up_tx2_dld;
+  wire    [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx2_dwdata;
+  wire    [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx2_drdata;
+  wire                              delay_tx1_rst;
+  wire                              delay_tx2_rst;
+  wire                              delay_tx1_locked;
+  wire                              delay_tx2_locked;
+
   wire                       [31:0] adc_clk_ratio;
   wire                       [31:0] dac_clk_ratio;
   wire                       [ 9:0] rx1_mcs_to_strobe_delay;
@@ -335,12 +357,22 @@ module axi_adrv9001 #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .EN_RX_MCS_TO_STRB_M (EN_RX_MCS_TO_STRB_M),
     .NUM_LANES (NUM_LANES),
+    .TX_NUM_LANES (TX_NUM_LANES),
     .DRP_WIDTH (DRP_WIDTH),
     .RX_USE_BUFG (RX_USE_BUFG),
     .TX_USE_BUFG (TX_USE_BUFG),
-    .IODELAY_CTRL (IODELAY_CTRL),
-    .IODELAY_ENABLE (IODELAY_ENABLE),
-    .IO_DELAY_GROUP (IO_DELAY_GROUP),
+    .IODELAY_CTRL_RX_1 (IODELAY_CTRL_RX_1),
+    .IODELAY_CTRL_RX_2 (IODELAY_CTRL_RX_2),
+    .IODELAY_CTRL_TX_1 (IODELAY_CTRL_TX_1),
+    .IODELAY_CTRL_TX_2 (IODELAY_CTRL_TX_2),
+    .IODELAY_ENABLE_RX_1 (IODELAY_ENABLE_RX_1),
+    .IODELAY_ENABLE_RX_2 (IODELAY_ENABLE_RX_2),
+    .IODELAY_ENABLE_TX_1 (IODELAY_ENABLE_TX_1),
+    .IODELAY_ENABLE_TX_2 (IODELAY_ENABLE_TX_2),
+    .IO_DELAY_GROUP_RX_1 (IO_DELAY_GROUP_RX_1),
+    .IO_DELAY_GROUP_RX_2 (IO_DELAY_GROUP_RX_2),
+    .IO_DELAY_GROUP_TX_1 (IO_DELAY_GROUP_TX_1),
+    .IO_DELAY_GROUP_TX_2 (IO_DELAY_GROUP_TX_2),
     .DISABLE_RX1_SSI (DISABLE_RX1_SSI),
     .DISABLE_TX1_SSI (DISABLE_TX1_SSI),
     .DISABLE_RX2_SSI (DISABLE_RX2_SSI),
@@ -415,6 +447,17 @@ module axi_adrv9001 #(
     .up_rx2_dwdata (up_rx2_dwdata),
     .up_rx2_drdata (up_rx2_drdata),
 
+    .delay_tx1_rst (delay_tx1_rst),
+    .delay_tx2_rst (delay_tx2_rst),
+    .delay_tx1_locked (delay_tx1_locked),
+    .delay_tx2_locked (delay_tx2_locked),
+    .up_tx1_dld (up_tx1_dld),
+    .up_tx1_dwdata (up_tx1_dwdata),
+    .up_tx1_drdata (up_tx1_drdata),
+
+    .up_tx2_dld (up_tx2_dld),
+    .up_tx2_dwdata (up_tx2_dwdata),
+    .up_tx2_drdata (up_tx2_drdata),
     //
     // MCS sync
     //
@@ -482,6 +525,7 @@ module axi_adrv9001 #(
   axi_adrv9001_core #(
     .ID (ID),
     .NUM_LANES (NUM_LANES),
+    .TX_NUM_LANES (TX_NUM_LANES),
     .CMOS_LVDS_N (CMOS_LVDS_N),
     .USE_RX1_CLK_FOR_TX ({30'd0,USE_RX_CLK_FOR_TX2[0], USE_RX_CLK_FOR_TX1[0]}),
     .USE_RX2_CLK_FOR_TX ({30'd0,USE_RX_CLK_FOR_TX2[1], USE_RX_CLK_FOR_TX1[1]}),
@@ -609,6 +653,18 @@ module axi_adrv9001 #(
     .up_rx2_drdata (up_rx2_drdata),
     .delay_rx2_rst (delay_rx2_rst),
     .delay_rx2_locked (delay_rx2_locked),
+
+    .up_tx1_dld (up_tx1_dld),
+    .up_tx1_dwdata (up_tx1_dwdata),
+    .up_tx1_drdata (up_tx1_drdata),
+    .delay_tx1_rst (delay_tx1_rst),
+    .delay_tx1_locked (delay_tx1_locked),
+
+    .up_tx2_dld (up_tx2_dld),
+    .up_tx2_dwdata (up_tx2_dwdata),
+    .up_tx2_drdata (up_tx2_drdata),
+    .delay_tx2_rst (delay_tx2_rst),
+    .delay_tx2_locked (delay_tx2_locked),
 
     // TDD interface
     .tdd_sync (tdd_sync),

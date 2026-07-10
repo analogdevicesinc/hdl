@@ -40,6 +40,7 @@ module axi_adrv9001_if #(
   parameter FPGA_TECHNOLOGY = 0,
   parameter EN_RX_MCS_TO_STRB_M = 0,
   parameter NUM_LANES = 3,
+  parameter TX_NUM_LANES = 4,
   parameter DRP_WIDTH = 5,
   parameter RX_USE_BUFG = 0,
   parameter TX_USE_BUFG = 0,
@@ -47,9 +48,18 @@ module axi_adrv9001_if #(
   parameter DISABLE_TX1_SSI = 0,
   parameter DISABLE_RX2_SSI = 0,
   parameter DISABLE_TX2_SSI = 0,
-  parameter IODELAY_CTRL = 1,
-  parameter IODELAY_ENABLE = 1,
-  parameter IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter IODELAY_CTRL_RX_1 = 1,
+  parameter IODELAY_CTRL_RX_2 = 0,
+  parameter IODELAY_CTRL_TX_1 = 1,
+  parameter IODELAY_CTRL_TX_2 = 0,
+  parameter IODELAY_ENABLE_RX_1 = 1,
+  parameter IODELAY_ENABLE_RX_2 = 1,
+  parameter IODELAY_ENABLE_TX_1 = 1,
+  parameter IODELAY_ENABLE_TX_2 = 1,
+  parameter IO_DELAY_GROUP_RX_1 = "dev_if_delay_group_rx",
+  parameter IO_DELAY_GROUP_RX_2 = "dev_if_delay_group_rx",
+  parameter IO_DELAY_GROUP_TX_1 = "dev_if_delay_group_tx",
+  parameter IO_DELAY_GROUP_TX_2 = "dev_if_delay_group_tx",
   parameter USE_RX_CLK_FOR_TX1 = 0,
   parameter USE_RX_CLK_FOR_TX2 = 0
 ) (
@@ -105,6 +115,10 @@ module axi_adrv9001_if #(
   input             delay_rx2_rst,
   output            delay_rx1_locked,
   output            delay_rx2_locked,
+  input             delay_tx1_rst,
+  input             delay_tx2_rst,
+  output            delay_tx1_locked,
+  output            delay_tx2_locked,
 
   input             up_clk,
 
@@ -115,6 +129,14 @@ module axi_adrv9001_if #(
   input   [NUM_LANES-1:0]           up_rx2_dld,
   input   [DRP_WIDTH*NUM_LANES-1:0] up_rx2_dwdata,
   output  [DRP_WIDTH*NUM_LANES-1:0] up_rx2_drdata,
+
+  input   [TX_NUM_LANES-1:0]           up_tx1_dld,
+  input   [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx1_dwdata,
+  output  [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx1_drdata,
+
+  input   [TX_NUM_LANES-1:0]           up_tx2_dld,
+  input   [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx2_dwdata,
+  output  [DRP_WIDTH*TX_NUM_LANES-1:0] up_tx2_drdata,
 
   // upper layer data interface
 
@@ -173,9 +195,6 @@ module axi_adrv9001_if #(
   input             tx2_symb_8_16b
 );
 
-  // Tx has an extra lane to drive the clock
-  localparam TX_NUM_LANES = NUM_LANES + 1;
-
   wire        adc_1_clk_div;
   wire  [7:0] adc_1_data_0;
   wire  [7:0] adc_1_data_1;
@@ -226,10 +245,10 @@ module axi_adrv9001_if #(
       .EN_RX_MCS_TO_STRB_M (EN_RX_MCS_TO_STRB_M),
       .NUM_LANES (NUM_LANES),
       .DRP_WIDTH (DRP_WIDTH),
-      .IODELAY_CTRL (IODELAY_CTRL),
-      .IODELAY_ENABLE (IODELAY_ENABLE),
+      .IODELAY_CTRL (IODELAY_CTRL_RX_1),
+      .IODELAY_ENABLE (IODELAY_ENABLE_RX_1),
       .USE_BUFG (RX_USE_BUFG),
-      .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
+      .IO_DELAY_GROUP (IO_DELAY_GROUP_RX_1)
     ) i_rx_1_phy (
       .rx_dclk_in_n_NC (rx1_dclk_in_n_NC),
       .rx_dclk_in_p_dclk_in (rx1_dclk_in_p_dclk_in),
@@ -306,10 +325,10 @@ module axi_adrv9001_if #(
       .EN_RX_MCS_TO_STRB_M (EN_RX_MCS_TO_STRB_M),
       .NUM_LANES (NUM_LANES),
       .DRP_WIDTH (DRP_WIDTH),
-      .IODELAY_CTRL (DISABLE_RX1_SSI),
-      .IODELAY_ENABLE (IODELAY_ENABLE),
+      .IODELAY_CTRL (IODELAY_CTRL_RX_2),
+      .IODELAY_ENABLE (IODELAY_ENABLE_RX_2),
       .USE_BUFG (RX_USE_BUFG),
-      .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
+      .IO_DELAY_GROUP (IO_DELAY_GROUP_RX_2)
     ) i_rx_2_phy (
       .rx_dclk_in_n_NC (rx2_dclk_in_n_NC),
       .rx_dclk_in_p_dclk_in (rx2_dclk_in_p_dclk_in),
@@ -393,7 +412,11 @@ module axi_adrv9001_if #(
     .NUM_LANES (TX_NUM_LANES),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .USE_BUFG (TX_USE_BUFG),
-    .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX1)
+    .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX1),
+    .DRP_WIDTH (DRP_WIDTH),
+    .IODELAY_CTRL (IODELAY_CTRL_TX_1),
+    .IODELAY_ENABLE (IODELAY_ENABLE_TX_1),
+    .IO_DELAY_GROUP (IO_DELAY_GROUP_TX_1)
   ) i_tx_1_phy (
     .up_clk (up_clk),
 
@@ -427,6 +450,13 @@ module axi_adrv9001_if #(
 
     .dac_clk_ratio (dac_clk_ratio),
 
+    .up_dac_dld (up_tx1_dld),
+    .up_dac_dwdata (up_tx1_dwdata),
+    .up_dac_drdata (up_tx1_drdata),
+    .delay_clk (delay_clk),
+    .delay_rst (delay_tx1_rst),
+    .delay_locked (delay_tx1_locked),
+
     .mssi_sync (mssi_sync));
 
   adrv9001_tx_link #(
@@ -452,6 +482,8 @@ module axi_adrv9001_if #(
     .tx_symb_op (tx1_symb_op),
     .tx_symb_8_16b (tx1_symb_8_16b));
   end else begin
+    assign delay_tx1_locked = 1'b1;
+    assign up_tx1_drdata = 'h0;
     assign tx1_clk = 1'b0;
     assign tx1_dclk_out_n_NC = 1'b0;
     assign tx1_dclk_out_p_dclk_out = 1'b0;
@@ -481,7 +513,11 @@ module axi_adrv9001_if #(
       .NUM_LANES (TX_NUM_LANES),
       .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
       .USE_BUFG (TX_USE_BUFG),
-      .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX2)
+      .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX2),
+      .DRP_WIDTH (DRP_WIDTH),
+      .IODELAY_CTRL (IODELAY_CTRL_TX_2),
+      .IODELAY_ENABLE (IODELAY_ENABLE_TX_2),
+      .IO_DELAY_GROUP (IO_DELAY_GROUP_TX_2)
     ) i_tx_2_phy (
       .up_clk (up_clk),
 
@@ -512,6 +548,13 @@ module axi_adrv9001_if #(
       .dac_data_clk (dac_2_data_clk),
       .dac_data_valid (dac_2_data_valid),
 
+      .up_dac_dld (up_tx2_dld),
+      .up_dac_dwdata (up_tx2_dwdata),
+      .up_dac_drdata (up_tx2_drdata),
+      .delay_clk (delay_clk),
+      .delay_rst (delay_tx2_rst),
+      .delay_locked (delay_tx2_locked),
+
       .mssi_sync (mssi_sync));
 
     adrv9001_tx_link #(
@@ -537,6 +580,8 @@ module axi_adrv9001_if #(
       .tx_symb_op (tx2_symb_op),
       .tx_symb_8_16b (tx2_symb_8_16b));
   end else begin
+    assign delay_tx2_locked = 1'b1;
+    assign up_tx2_drdata = 'h0;
     assign tx2_clk = 1'b0;
     assign tx2_dclk_out_n_NC = 1'b0;
     assign tx2_dclk_out_p_dclk_out = 1'b0;
