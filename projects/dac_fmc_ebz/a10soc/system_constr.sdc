@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2023, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -19,3 +19,6 @@ foreach async_output {gpio_bd_o[*] txen_0 txen_1 spi_en_n} {
 }
 derive_pll_clocks
 derive_clock_uncertainty
+
+# Force minimum delay on SCLK_reg feedback to fix hold timing violation
+set_min_delay 0.2 -from [get_pins *|sys_spi|*|SCLK_reg|q] -to [get_pins *|sys_spi|*|SCLK_reg|d]

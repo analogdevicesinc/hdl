@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2023, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -73,7 +73,7 @@ set_instance_parameter_values dac_upack [list \
   NUM_OF_CHANNELS $NUM_OF_CHANNELS \
   SAMPLES_PER_CHANNEL $SAMPLES_PER_CHANNEL \
   SAMPLE_DATA_WIDTH $SAMPLE_DATA_WIDTH \
-  INTERFACE_TYPE 1 \
+  INTERFACE_TYPE 0 \
 ]
 
 add_connection dac_jesd204_link.link_clk dac_upack.clk
@@ -81,23 +81,25 @@ add_connection dac_jesd204_link.link_reset dac_upack.reset
 for {set i 0} {$i < $NUM_OF_CHANNELS} {incr i} {
   add_connection dac_jesd204_transport.dac_ch_$i dac_upack.dac_ch_$i
 }
+add_connection dac_jesd204_transport.if_dac_dunf dac_upack.if_fifo_rd_underflow
 
 # DAC offload memory
-ad_dacfifo_create avl_dac_fifo \
-                  $DAC_DATA_WIDTH \
-                  $DAC_DATA_WIDTH \
-                  $dac_fifo_address_width
+set dac_data_offload_name dac_data_offload
+set dac_data_offload_data_width [expr $NUM_OF_CHANNELS * $SAMPLE_DATA_WIDTH * $SAMPLES_PER_CHANNEL]
 
-set_instance_parameter_value avl_dac_fifo DAC_DATA_WIDTH \
-  [expr $NUM_OF_CHANNELS * $SAMPLE_DATA_WIDTH * $SAMPLES_PER_CHANNEL]
+add_instance $dac_data_offload_name adi_data_offload
+set_instance_parameter_value $dac_data_offload_name {DATAPATH_TYPE} {1}
+set_instance_parameter_value $dac_data_offload_name {MEM_TYPE} $dac_data_offload_type
+set_instance_parameter_value $dac_data_offload_name {MEM_SIZE} $dac_data_offload_size
+set_instance_parameter_value $dac_data_offload_name {SOURCE_DWIDTH} $dac_data_offload_data_width
+set_instance_parameter_value $dac_data_offload_name {DESTINATION_DWIDTH} $dac_data_offload_data_width
+set_instance_parameter_value $dac_data_offload_name {AXI_DATA_WIDTH} $dac_axi_data_width
 
-export_interface dac_fifo_bypass avl_dac_fifo.if_bypass
-
-add_connection dac_jesd204_link.link_clk avl_dac_fifo.if_dac_clk
-add_connection dac_jesd204_link.link_reset avl_dac_fifo.if_dac_rst
-add_connection dac_upack.if_packed_fifo_rd_en avl_dac_fifo.if_dac_valid
-add_connection avl_dac_fifo.if_dac_data dac_upack.if_packed_fifo_rd_data
-add_connection avl_dac_fifo.if_dac_dunf dac_jesd204_transport.if_dac_dunf
+add_connection sys_clk.clk $dac_data_offload_name.sys_clk
+add_connection sys_clk.clk_reset $dac_data_offload_name.sys_resetn
+add_connection dac_jesd204_link.link_clk $dac_data_offload_name.m_axis_aclk
+add_connection dac_jesd204_link.link_reset $dac_data_offload_name.m_axis_aresetn
+add_connection $dac_data_offload_name.m_axis dac_upack.s_axis
 
 # DAC DMA
 
@@ -110,15 +112,16 @@ set_instance_parameter_values dac_dma [list \
   DMA_TYPE_SRC 0 \
   FIFO_SIZE 16 \
   HAS_AXIS_TLAST 1 \
+  HAS_AXIS_TKEEP 1 \
   AXI_SLICE_DEST 1 \
   AXI_SLICE_SRC 1 \
 ]
 
-add_connection sys_dma_clk.clk avl_dac_fifo.if_dma_clk
-add_connection sys_dma_clk.clk_reset avl_dac_fifo.if_dma_rst
+add_connection sys_dma_clk.clk $dac_data_offload_name.s_axis_aclk
+add_connection sys_dma_clk.clk_reset $dac_data_offload_name.s_axis_aresetn
 add_connection sys_dma_clk.clk dac_dma.if_m_axis_aclk
-add_connection dac_dma.m_axis avl_dac_fifo.s_axis
-add_connection dac_dma.if_m_axis_xfer_req avl_dac_fifo.if_dma_xfer_req
+add_connection dac_dma.m_axis $dac_data_offload_name.s_axis
+add_connection dac_dma.if_m_axis_xfer_req $dac_data_offload_name.init_req
 add_connection sys_clk.clk_reset dac_dma.s_axi_reset
 add_connection sys_clk.clk dac_dma.s_axi_clock
 add_connection sys_dma_clk.clk_reset dac_dma.m_src_axi_reset
@@ -135,6 +138,7 @@ for {set i 0} {$i < $NUM_OF_LANES} {incr i} {
 }
 ad_cpu_interconnect 0x00030000 dac_jesd204_transport.s_axi
 ad_cpu_interconnect 0x00040000 dac_dma.s_axi
+ad_cpu_interconnect 0x00050000 $dac_data_offload_name.s_axi
 
 # dma interconnects
 
