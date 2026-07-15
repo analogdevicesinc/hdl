@@ -1999,7 +1999,7 @@
          y="295.47202"
          x="-259.28558"
          id="tspan5790-5-6-3"
-         sodipodi:role="line">UTIL_ADC FIFO</tspan></text>
+         sodipodi:role="line">DATA_OFFLOAD</tspan></text>
     <g
        transform="translate(60.65455,132.35248)"
        style="display:inline;opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -2656,7 +2656,7 @@
          id="tspan4439-9-7"
          x="-468.01709"
          y="295.47202"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-width:0.99999994px;stroke-opacity:1">UTIL_DAC FIFO</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-width:0.99999994px;stroke-opacity:1">DATA_OFFLOAD</tspan></text>
     <a
        transform="matrix(3.7795276,0,0,3.7795276,-975.21802,57.851104)"
        id="a21387"

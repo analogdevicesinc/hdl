@@ -38,8 +38,6 @@ set adc_fifo_samples_per_converter [expr $ad_project_params(RX_KS_PER_CHANNEL)*1
 set dac_fifo_samples_per_converter [expr $ad_project_params(TX_KS_PER_CHANNEL)*1024]
 
 source $ad_hdl_dir/projects/common/vck190/vck190_system_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
 # use versal transceiver wizard
 set ADI_PHY_SEL 0

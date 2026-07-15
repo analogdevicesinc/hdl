@@ -518,12 +518,6 @@ HDL related
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
      - :ref:`axi_sysid`
-   * - UTIL_ADCFIFO
-     - :git-hdl:`library/util_adcfifo`
-     - ---
-   * - UTIL_DACFIFO
-     - :git-hdl:`library/util_dacfifo`
-     - ---
    * - UTIL_DO_RAM
      - :git-hdl:`library/util_do_ram`
      - ---

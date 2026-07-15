@@ -11,15 +11,15 @@ transmit chain.
 
 The receive chain transports the captured samples from ADC to the system memory
 (DDR). Before transferring the data to DDR the samples are stored in a buffer
-implemented on block rams from the FPGA fabric (:git-hdl:`util_adcfifo
-<library/util_adcfifo>`). The space allocated in the buffer for each channel
+implemented on block rams from the FPGA fabric (:git-hdl:`data_offload
+<library/data_offload>`). The space allocated in the buffer for each channel
 depends on the number of currently active channels. It goes up to M x 64k
 samples if a single channel is selected or 64k samples per channel if all
 channels are selected.
 
 The transmit chain transports samples from the system memory to the DAC devices.
 Before streaming out the data to the DAC through the JESD link the samples first
-are loaded into a buffer (:git-hdl:`util_dacfifo <library/util_dacfifo>`) which
+are loaded into a buffer (:git-hdl:`data_offload <library/data_offload>`) which
 will cyclically stream the samples at the tx_device_clk data rate. The space
 allocated in the transmit buffer for each channel depends on the number of
 currently active channels. It goes up to M x 64k samples if a single channel is
@@ -464,6 +464,8 @@ mxfe_tx_tpl.s_axi                0x000D_4000
 mxfe_rx_dma.s_axi                0x000D_8000
 mxfe_tx_dma.s_axi                0x000D_C000
 mxfe_gpio.s1                     0x000E_0000
+mxfe_rx_data_offload.s_axi       0x000F_0000
+mxfe_tx_data_offload.s_axi       0x0010_0000
 ===============================  ===========
 
 SPI connections
@@ -890,6 +892,9 @@ HDL related
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
+   * - DATA_OFFLOAD
+     - :git-hdl:`library/data_offload`
+     - :ref:`data_offload`
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
      - :ref:`axi_sysid`
