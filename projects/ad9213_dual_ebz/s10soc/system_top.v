@@ -362,8 +362,11 @@ module system_top (
     .axi_ad9213_dual_tpl_adc_ch_1_valid   (),
     .axi_ad9213_dual_tpl_adc_ch_1_data    ( adc_data_1 ),
     // PACK to ADC FIFO
-    .ad9213_adcfifo_if_adc_wr_valid       ( adc_valid_d1 ),
-    .ad9213_adcfifo_if_adc_wdata_data     ( adc_data_d1 ),
+    .ad9213_data_offload_s_axis_tready    (),
+    .ad9213_data_offload_s_axis_tvalid    ( adc_valid_d1 ),
+    .ad9213_data_offload_s_axis_tdata     ( adc_data_d1 ),
+    .ad9213_data_offload_s_axis_tlast     ( 1'b0 ),
+    .ad9213_data_offload_s_axis_tkeep     ( {128{1'b1}} ),
     // SPI interface for the two ad9213
     .sys_spi_MISO                         ( spi_miso_s ),
     .sys_spi_MOSI                         ( spi_mosi_s ),

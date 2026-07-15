@@ -1,8 +1,9 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2023, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+set adc_data_offload_name ad9213_data_offload
 set adc_data_width 1024
 set adc_dma_data_width 1024
 
@@ -53,12 +54,14 @@ set_instance_parameter_value axi_ad9213_dual_tpl {TWOS_COMPLEMENT} {1}
 set_instance_parameter_value axi_ad9213_dual_tpl {ENABLE_SAMPLES_PER_FRAME_MANUAL} {1}
 set_instance_parameter_value axi_ad9213_dual_tpl {SAMPLES_PER_FRAME_MANUAL} {16}
 
-# ADC FIFO's
+# ad9213-data offload
 
-ad_adcfifo_create "ad9213_adcfifo" $adc_data_width $adc_dma_data_width $adc_fifo_address_width
-
-set_interface_property ad9213_adcfifo_if_adc_wr EXPORT_OF ad9213_adcfifo.if_adc_wr
-set_interface_property ad9213_adcfifo_if_adc_wdata EXPORT_OF ad9213_adcfifo.if_adc_wdata
+add_instance $adc_data_offload_name adi_data_offload
+set_instance_parameter_value $adc_data_offload_name {DATAPATH_TYPE} {0}
+set_instance_parameter_value $adc_data_offload_name {MEM_TYPE} $adc_data_offload_type
+set_instance_parameter_value $adc_data_offload_name {MEM_SIZE} $adc_data_offload_size
+set_instance_parameter_value $adc_data_offload_name {SOURCE_DWIDTH} $adc_data_width
+set_instance_parameter_value $adc_data_offload_name {DESTINATION_DWIDTH} $adc_data_width
 
 # DMA instances
 
@@ -131,16 +134,18 @@ add_connection sys_clk.clk_reset ad9213_dual_pio.reset
 add_connection device_clk.out_clk ad9213_rx_0.device_clk
 add_connection device_clk.out_clk ad9213_rx_1.device_clk
 add_connection device_clk.out_clk axi_ad9213_dual_tpl.link_clk
-add_connection device_clk.out_clk ad9213_adcfifo.if_adc_clk
 
-add_connection ad9213_rx_0.link_reset ad9213_adcfifo.if_adc_rst
+add_connection sys_clk.clk $adc_data_offload_name.sys_clk
+add_connection sys_clk.clk_reset $adc_data_offload_name.sys_resetn
+add_connection device_clk.out_clk $adc_data_offload_name.s_axis_aclk
+add_connection ad9213_rx_0.link_reset $adc_data_offload_name.s_axis_aresetn
 
 # dma clock and reset
 
-add_connection sys_dma_clk.clk ad9213_adcfifo.if_dma_clk
+add_connection sys_dma_clk.clk $adc_data_offload_name.m_axis_aclk
+add_connection sys_dma_clk.clk_reset $adc_data_offload_name.m_axis_aresetn
 add_connection sys_dma_clk.clk axi_ad9213_dma.if_s_axis_aclk
 add_connection sys_dma_clk.clk axi_ad9213_dma.m_dest_axi_clock
-
 add_connection sys_dma_clk.clk_reset axi_ad9213_dma.m_dest_axi_reset
 
 #
@@ -160,24 +165,25 @@ add_interface ad9213_dual_pio         conduit   end
 add_interface adf4377_spi             conduit   end
 add_interface ltc_spi                 conduit   end
 
-set_interface_property rx_ref_clk_0                  EXPORT_OF ad9213_rx_0.ref_clk
-set_interface_property rx_ref_clk_1                  EXPORT_OF ad9213_rx_1.ref_clk
-set_interface_property rx_device_clk                 EXPORT_OF device_clk.in_clk
-set_interface_property rx_sysref_0                   EXPORT_OF ad9213_rx_0.sysref
-set_interface_property rx_sysref_1                   EXPORT_OF ad9213_rx_1.sysref
-set_interface_property rx_sync_0                     EXPORT_OF ad9213_rx_0.sync
-set_interface_property rx_sync_1                     EXPORT_OF ad9213_rx_1.sync
-set_interface_property ad9213_rx_0_serial_data       EXPORT_OF ad9213_rx_0.serial_data
-set_interface_property ad9213_rx_1_serial_data       EXPORT_OF ad9213_rx_1.serial_data
-set_interface_property ad9213_dual_pio               EXPORT_OF ad9213_dual_pio.external_connection
-set_interface_property adf4377_spi                   EXPORT_OF adf4377_spi.external
-set_interface_property ltc_spi                       EXPORT_OF ltc_spi.external
-set_interface_property axi_ad9213_dual_tpl_adc_ch_0    EXPORT_OF axi_ad9213_dual_tpl.adc_ch_0
-set_interface_property axi_ad9213_dual_tpl_adc_ch_1    EXPORT_OF axi_ad9213_dual_tpl.adc_ch_1
-set_interface_property axi_ad9213_dual_tpl_if_adc_dovf EXPORT_OF axi_ad9213_dual_tpl.if_adc_dovf
-set_interface_property axi_ad9213_dual_tpl_link_data   EXPORT_OF axi_ad9213_dual_tpl.link_data
-set_interface_property ad9213_rx_0_link_data         EXPORT_OF ad9213_rx_0.link_data
-set_interface_property ad9213_rx_1_link_data         EXPORT_OF ad9213_rx_1.link_data
+set_interface_property rx_ref_clk_0                     EXPORT_OF ad9213_rx_0.ref_clk
+set_interface_property rx_ref_clk_1                     EXPORT_OF ad9213_rx_1.ref_clk
+set_interface_property rx_device_clk                    EXPORT_OF device_clk.in_clk
+set_interface_property rx_sysref_0                      EXPORT_OF ad9213_rx_0.sysref
+set_interface_property rx_sysref_1                      EXPORT_OF ad9213_rx_1.sysref
+set_interface_property rx_sync_0                        EXPORT_OF ad9213_rx_0.sync
+set_interface_property rx_sync_1                        EXPORT_OF ad9213_rx_1.sync
+set_interface_property ad9213_rx_0_serial_data          EXPORT_OF ad9213_rx_0.serial_data
+set_interface_property ad9213_rx_1_serial_data          EXPORT_OF ad9213_rx_1.serial_data
+set_interface_property ad9213_dual_pio                  EXPORT_OF ad9213_dual_pio.external_connection
+set_interface_property adf4377_spi                      EXPORT_OF adf4377_spi.external
+set_interface_property ltc_spi                          EXPORT_OF ltc_spi.external
+set_interface_property axi_ad9213_dual_tpl_adc_ch_0     EXPORT_OF axi_ad9213_dual_tpl.adc_ch_0
+set_interface_property axi_ad9213_dual_tpl_adc_ch_1     EXPORT_OF axi_ad9213_dual_tpl.adc_ch_1
+set_interface_property axi_ad9213_dual_tpl_if_adc_dovf  EXPORT_OF axi_ad9213_dual_tpl.if_adc_dovf
+set_interface_property axi_ad9213_dual_tpl_link_data    EXPORT_OF axi_ad9213_dual_tpl.link_data
+set_interface_property ad9213_rx_0_link_data            EXPORT_OF ad9213_rx_0.link_data
+set_interface_property ad9213_rx_1_link_data            EXPORT_OF ad9213_rx_1.link_data
+set_interface_property ad9213_data_offload_s_axis       EXPORT_OF $adc_data_offload_name.s_axis
 
 #
 ## data interfaces / data path
@@ -189,8 +195,8 @@ add_connection ad9213_rx_1.link_sof axi_ad9213_dual_tpl.if_link_sof
 # ADC buffer to DMA
 #
 
-add_connection ad9213_adcfifo.m_axis axi_ad9213_dma.s_axis
-add_connection axi_ad9213_dma.if_s_axis_xfer_req ad9213_adcfifo.if_dma_xfer_req
+add_connection $adc_data_offload_name.m_axis axi_ad9213_dma.s_axis
+add_connection $adc_data_offload_name.init_req axi_ad9213_dma.if_s_axis_xfer_req
 
 # DMA to HPS memory
 ad_dma_interconnect axi_ad9213_dma.m_dest_axi
@@ -245,6 +251,7 @@ ad_cpu_interconnect 0x000C8000 ad9213_rx_1.link_reconfig
 ad_cpu_interconnect 0x000CC000 ad9213_rx_1.link_management
 ad_cpu_interconnect 0x000D0000 axi_ad9213_dual_tpl.s_axi
 ad_cpu_interconnect 0x000D2000 axi_ad9213_dma.s_axi
+ad_cpu_interconnect 0x000E0000 $adc_data_offload_name.s_axi
 
 ad_cpu_interconnect 0x00000200 ltc_spi.spi_control_port "avl_peripheral_mm_bridge"
 ad_cpu_interconnect 0x00000400 adf4377_spi.spi_control_port "avl_peripheral_mm_bridge"
