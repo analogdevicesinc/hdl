@@ -212,6 +212,7 @@ rx_ad9083_tpl_core  0x84A0_0000 0x0005_0000 0x44A0_0000
 axi_ad9083_rx_xcvr  0x84A6_0000 0x0004_8000 0x44A6_0000
 axi_ad9083_rx_jesd  0x84AA_0000 0x0004_0000 0x44AA_0000
 axi_ad9083_rx_dma   0x9C40_0000 0x0004_C000 0x7C40_0000
+ad9083_data_offload ---         0x0006_0000 ---
 =================== =========== =========== ===========
 
 SPI connections
@@ -371,9 +372,9 @@ HDL related
    * - UTIL_CPACK2
      - :git-hdl:`library/util_pack/util_cpack2`
      - :ref:`util_cpack2`
-   * - UTIL_ADCFIFO
-     - :git-hdl:`library/util_adcfifo` *
-     - ---
+   * - DATA_OFFLOAD
+     - :git-hdl:`library/data_offload` *
+     - :ref:`data_offload`
    * - UTIL_ADXCVR
      - :git-hdl:`library/xilinx/util_adxcvr` **
      - :ref:`util_adxcvr`
