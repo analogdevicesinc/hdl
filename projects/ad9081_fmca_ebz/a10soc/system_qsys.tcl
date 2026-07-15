@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2024, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -10,8 +10,6 @@ set dac_fifo_samples_per_converter [expr $ad_project_params(TX_KS_PER_CHANNEL)*1
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_qsys.tcl
-source $ad_hdl_dir/projects/common/intel/dacfifo_qsys.tcl
-source $ad_hdl_dir/projects/common/intel/adcfifo_qsys.tcl
 
 set TRANSCEIVER_TYPE "SX"
 if [info exists ad_project_dir] {
