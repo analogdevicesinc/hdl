@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2026 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -11,15 +11,14 @@ M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/intel/adcfifo_qsys.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_qsys.tcl
 M_DEPS += ../../common/a10soc/a10soc_system_assign.tcl
-M_DEPS += ../../common/a10soc/a10soc_plddr4_dacfifo_qsys.tcl
 M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
+LIB_DEPS += intel/adi_data_offload
 LIB_DEPS += intel/adi_jesd204
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
 LIB_DEPS += sysid_rom
-LIB_DEPS += util_adcfifo
 LIB_DEPS += util_pack/util_cpack2
 
 include ../../scripts/project-intel.mk

@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2023, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -11,6 +11,7 @@ set RX_SAMPLE_WIDTH 16          ; # N/NP
 
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 64 / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
 
+set adc_data_offload_name ad9083_data_offload
 set adc_data_width [expr $RX_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_CHANNEL]
 
 #
@@ -60,6 +61,7 @@ add_instance util_ad9083_cpack util_cpack2
 set_instance_parameter_value util_ad9083_cpack {NUM_OF_CHANNELS} $RX_NUM_OF_CONVERTERS
 set_instance_parameter_value util_ad9083_cpack {SAMPLES_PER_CHANNEL} $RX_SAMPLES_PER_FRAME
 set_instance_parameter_value util_ad9083_cpack {SAMPLE_DATA_WIDTH} $RX_SAMPLE_WIDTH
+set_instance_parameter_value util_ad9083_cpack {INTERFACE_TYPE} {0}
 
 add_connection ad9083_jesd204.link_reset util_ad9083_cpack.reset
 add_connection device_clk.out_clk util_ad9083_cpack.clk
@@ -67,20 +69,24 @@ add_connection device_clk.out_clk util_ad9083_cpack.clk
 for {set i 0} {$i< $RX_NUM_OF_CONVERTERS} {incr i} {
   add_connection axi_ad9083.adc_ch_${i} util_ad9083_cpack.adc_ch_${i}
 }
+add_connection axi_ad9083.if_adc_dovf util_ad9083_cpack.if_fifo_wr_overflow
 
-# ADC FIFO's
+# ad9680-data offload
 
-add_instance ad9083_adcfifo util_adcfifo
-set_instance_parameter_value ad9083_adcfifo {ADC_DATA_WIDTH} $adc_data_width
-set_instance_parameter_value ad9083_adcfifo {DMA_DATA_WIDTH} $adc_data_width
-set_instance_parameter_value ad9083_adcfifo {DMA_ADDRESS_WIDTH} {16}
+add_instance $adc_data_offload_name adi_data_offload
+set_instance_parameter_value $adc_data_offload_name {DATAPATH_TYPE} {0}
+set_instance_parameter_value $adc_data_offload_name {MEM_TYPE} $adc_data_offload_type
+set_instance_parameter_value $adc_data_offload_name {MEM_SIZE} $adc_data_offload_size
+set_instance_parameter_value $adc_data_offload_name {SOURCE_DWIDTH} $adc_data_width
+set_instance_parameter_value $adc_data_offload_name {DESTINATION_DWIDTH} $adc_data_width
 
-add_connection sys_clk.clk_reset ad9083_adcfifo.if_adc_rst
-add_connection device_clk.out_clk ad9083_adcfifo.if_adc_clk
-add_connection util_ad9083_cpack.if_packed_fifo_wr_en ad9083_adcfifo.if_adc_wr
-add_connection util_ad9083_cpack.if_packed_fifo_wr_data ad9083_adcfifo.if_adc_wdata
-add_connection sys_dma_clk.clk ad9083_adcfifo.if_dma_clk
-add_connection sys_dma_clk.clk_reset ad9083_adcfifo.if_adc_rst
+add_connection sys_clk.clk $adc_data_offload_name.sys_clk
+add_connection sys_clk.clk_reset $adc_data_offload_name.sys_resetn
+add_connection device_clk.out_clk $adc_data_offload_name.s_axis_aclk
+add_connection sys_clk.clk_reset $adc_data_offload_name.s_axis_aresetn
+add_connection util_ad9083_cpack.m_axis $adc_data_offload_name.s_axis
+add_connection sys_dma_clk.clk $adc_data_offload_name.m_axis_aclk
+add_connection sys_dma_clk.clk_reset $adc_data_offload_name.m_axis_aresetn
 
 # DMA instances
 
@@ -103,9 +109,8 @@ set_instance_parameter_value axi_ad9083_dma {FIFO_SIZE} {16}
 add_connection sys_clk.clk axi_ad9083_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_ad9083_dma.s_axi_reset
 add_connection device_clk.out_clk axi_ad9083.link_clk
-add_connection ad9083_adcfifo.m_axis axi_ad9083_dma.s_axis
-add_connection ad9083_adcfifo.if_dma_xfer_req axi_ad9083_dma.if_s_axis_xfer_req
-add_connection ad9083_adcfifo.if_adc_wovf axi_ad9083.if_adc_dovf
+add_connection $adc_data_offload_name.m_axis axi_ad9083_dma.s_axis
+add_connection $adc_data_offload_name.init_req axi_ad9083_dma.if_s_axis_xfer_req
 add_connection sys_dma_clk.clk axi_ad9083_dma.if_s_axis_aclk
 add_connection sys_dma_clk.clk_reset axi_ad9083_dma.m_dest_axi_reset
 add_connection sys_dma_clk.clk axi_ad9083_dma.m_dest_axi_clock
@@ -142,6 +147,7 @@ for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
 
 ad_cpu_interconnect 0x0004c000 axi_ad9083_dma.s_axi
 ad_cpu_interconnect 0x00050000 axi_ad9083.s_axi
+ad_cpu_interconnect 0x00060000 $adc_data_offload_name.s_axi
 
 # dma interconnects
 ad_dma_interconnect axi_ad9083_dma.m_dest_axi
