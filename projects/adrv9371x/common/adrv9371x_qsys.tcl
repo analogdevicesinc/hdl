@@ -1,9 +1,9 @@
 ###############################################################################
-## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2024, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set dac_fifo_name avl_ad9371_tx_fifo
+set dac_data_offload_name ad9371_data_offload
 set dac_data_width 128
 set dac_dma_data_width 128
 
@@ -123,7 +123,7 @@ add_instance axi_ad9371_tx_upack util_upack2
 set_instance_parameter_value axi_ad9371_tx_upack {NUM_OF_CHANNELS} {4}
 set_instance_parameter_value axi_ad9371_tx_upack {SAMPLES_PER_CHANNEL} {2}
 set_instance_parameter_value axi_ad9371_tx_upack {SAMPLE_DATA_WIDTH} {16}
-set_instance_parameter_value axi_ad9371_tx_upack {INTERFACE_TYPE} {1}
+set_instance_parameter_value axi_ad9371_tx_upack {INTERFACE_TYPE} {0}
 
 add_connection ad9371_tx_jesd204.link_clk axi_ad9371_tx_upack.clk
 add_connection ad9371_tx_jesd204.link_reset axi_ad9371_tx_upack.reset
@@ -131,6 +131,7 @@ add_connection axi_ad9371_tx_upack.dac_ch_0 axi_ad9371_tx.dac_ch_0
 add_connection axi_ad9371_tx_upack.dac_ch_1 axi_ad9371_tx.dac_ch_1
 add_connection axi_ad9371_tx_upack.dac_ch_2 axi_ad9371_tx.dac_ch_2
 add_connection axi_ad9371_tx_upack.dac_ch_3 axi_ad9371_tx.dac_ch_3
+add_connection axi_ad9371_tx_upack.if_fifo_rd_underflow axi_ad9371_tx.if_dac_dunf
 
 add_instance axi_ad9371_rx_cpack util_cpack2
 set_instance_parameter_value axi_ad9371_rx_cpack {NUM_OF_CHANNELS} {4}
@@ -154,18 +155,21 @@ add_connection axi_ad9371_rx_os.adc_ch_0 axi_ad9371_rx_os_cpack.adc_ch_0
 add_connection axi_ad9371_rx_os.adc_ch_1 axi_ad9371_rx_os_cpack.adc_ch_1
 add_connection axi_ad9371_rx_os_cpack.if_fifo_wr_overflow axi_ad9371_rx_os.if_adc_dovf
 
-# dac fifo
+# dac data offload
 
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
+add_instance $dac_data_offload_name adi_data_offload
+set_instance_parameter_value $dac_data_offload_name {DATAPATH_TYPE} {1}
+set_instance_parameter_value $dac_data_offload_name {MEM_TYPE} $dac_data_offload_type
+set_instance_parameter_value $dac_data_offload_name {MEM_SIZE} $dac_data_offload_size
+set_instance_parameter_value $dac_data_offload_name {SOURCE_DWIDTH} $dac_data_width
+set_instance_parameter_value $dac_data_offload_name {DESTINATION_DWIDTH} $dac_data_width
+set_instance_parameter_value $dac_data_offload_name {AXI_DATA_WIDTH} $dac_axi_data_width
 
-add_interface tx_fifo_bypass conduit end
-set_interface_property tx_fifo_bypass EXPORT_OF avl_ad9371_tx_fifo.if_bypass
-
-add_connection ad9371_tx_jesd204.link_clk avl_ad9371_tx_fifo.if_dac_clk
-add_connection ad9371_tx_jesd204.link_reset avl_ad9371_tx_fifo.if_dac_rst
-add_connection axi_ad9371_tx_upack.if_packed_fifo_rd_en avl_ad9371_tx_fifo.if_dac_valid
-add_connection avl_ad9371_tx_fifo.if_dac_data axi_ad9371_tx_upack.if_packed_fifo_rd_data
-add_connection avl_ad9371_tx_fifo.if_dac_dunf axi_ad9371_tx.if_dac_dunf
+add_connection sys_clk.clk $dac_data_offload_name.sys_clk
+add_connection sys_clk.clk_reset $dac_data_offload_name.sys_resetn
+add_connection ad9371_tx_jesd204.link_clk $dac_data_offload_name.m_axis_aclk
+add_connection ad9371_tx_jesd204.link_reset $dac_data_offload_name.m_axis_aresetn
+add_connection $dac_data_offload_name.m_axis axi_ad9371_tx_upack.s_axis
 
 # dac & adc dma
 
@@ -183,11 +187,12 @@ set_instance_parameter_value axi_ad9371_tx_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value axi_ad9371_tx_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value axi_ad9371_tx_dma {FIFO_SIZE} {16}
 set_instance_parameter_value axi_ad9371_tx_dma {HAS_AXIS_TLAST} {1}
-add_connection sys_dma_clk.clk avl_ad9371_tx_fifo.if_dma_clk
-add_connection sys_dma_clk.clk_reset avl_ad9371_tx_fifo.if_dma_rst
+set_instance_parameter_value axi_ad9371_tx_dma {HAS_AXIS_TKEEP} {1}
+add_connection sys_dma_clk.clk $dac_data_offload_name.s_axis_aclk
+add_connection sys_dma_clk.clk_reset $dac_data_offload_name.s_axis_aresetn
 add_connection sys_dma_clk.clk axi_ad9371_tx_dma.if_m_axis_aclk
-add_connection axi_ad9371_tx_dma.m_axis avl_ad9371_tx_fifo.s_axis
-add_connection axi_ad9371_tx_dma.if_m_axis_xfer_req avl_ad9371_tx_fifo.if_dma_xfer_req
+add_connection axi_ad9371_tx_dma.m_axis $dac_data_offload_name.s_axis
+add_connection axi_ad9371_tx_dma.if_m_axis_xfer_req $dac_data_offload_name.init_req
 add_connection sys_clk.clk axi_ad9371_tx_dma.s_axi_clock
 add_connection sys_clk.clk_reset axi_ad9371_tx_dma.s_axi_reset
 add_connection sys_dma_clk.clk axi_ad9371_tx_dma.m_src_axi_clock
@@ -297,6 +302,7 @@ ad_cpu_interconnect 0x00050000 axi_ad9371_rx.s_axi
 ad_cpu_interconnect 0x00054000 axi_ad9371_tx.s_axi
 ad_cpu_interconnect 0x00058000 axi_ad9371_rx_os.s_axi
 ad_cpu_interconnect 0x00060000 avl_ad9371_gpio.s1
+ad_cpu_interconnect 0x00070000 $dac_data_offload_name.s_axi
 
 # dma interconnects
 
@@ -310,4 +316,3 @@ ad_cpu_interrupt 11 axi_ad9371_tx_dma.interrupt_sender
 ad_cpu_interrupt 12 axi_ad9371_rx_dma.interrupt_sender
 ad_cpu_interrupt 13 axi_ad9371_rx_os_dma.interrupt_sender
 ad_cpu_interrupt 14 avl_ad9371_gpio.irq
-
