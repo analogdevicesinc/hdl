@@ -51,6 +51,11 @@ set TX_NUM_OF_LANES [expr $TX_JESD_L * $TX_NUM_LINKS]      ; # L
 set TX_NUM_OF_CONVERTERS [expr $TX_JESD_M * $TX_NUM_LINKS] ; # M
 set TX_SAMPLES_PER_FRAME $ad_project_params(TX_JESD_S)     ; # S
 set TX_SAMPLE_WIDTH $TX_JESD_NP                            ; # N/NP
+set TX_DMA_SAMPLE_WIDTH $TX_JESD_NP
+
+if {$TX_JESD_NP == 12} {
+  set TX_DMA_SAMPLE_WIDTH 16
+}
 
 set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_NUM_OF_LANES $TX_NUM_OF_CONVERTERS $TX_SAMPLES_PER_FRAME $TX_SAMPLE_WIDTH $TX_TPL_WIDTH]
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8 * $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
@@ -60,11 +65,16 @@ set RX_NUM_OF_LANES [expr $RX_JESD_L * $RX_NUM_LINKS]      ; # L
 set RX_NUM_OF_CONVERTERS [expr $RX_JESD_M * $RX_NUM_LINKS] ; # M
 set RX_SAMPLES_PER_FRAME $ad_project_params(RX_JESD_S)     ; # S
 set RX_SAMPLE_WIDTH $RX_JESD_NP                            ; # N/NP
+set RX_DMA_SAMPLE_WIDTH $RX_JESD_NP
+
+if {$RX_JESD_NP == 12} {
+  set RX_DMA_SAMPLE_WIDTH 16
+}
 
 set RX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_NUM_OF_LANES $RX_NUM_OF_CONVERTERS $RX_SAMPLES_PER_FRAME $RX_SAMPLE_WIDTH $RX_TPL_WIDTH]
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8 * $RX_DATAPATH_WIDTH / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ;
 
-set adc_dma_data_width [expr $RX_NUM_OF_LANES * 8 * $RX_DATAPATH_WIDTH]
+set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_CHANNEL]
 
 # RX-OBS parameters
 set RX_OS_NUM_OF_LANES [expr $RX_OS_JESD_L * $RX_OS_NUM_LINKS]      ; # L
@@ -75,10 +85,16 @@ set RX_OS_SAMPLE_WIDTH $RX_OS_JESD_NP                               ; # N/NP
 if {$ORX_ENABLE} {
   set RX_OS_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_OS_NUM_OF_LANES $RX_OS_NUM_OF_CONVERTERS $RX_OS_SAMPLES_PER_FRAME $RX_OS_SAMPLE_WIDTH $RX_OS_TPL_WIDTH]
   set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8 * $RX_OS_DATAPATH_WIDTH / ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)]
+
+  set RX_OS_DMA_SAMPLE_WIDTH $RX_OS_JESD_NP
+  if {$RX_OS_JESD_NP == 12} {
+    set RX_OS_DMA_SAMPLE_WIDTH 16
+  }
+  set adc_os_data_width [expr $RX_OS_DMA_SAMPLE_WIDTH * $RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLES_PER_CHANNEL]
 }
 
 set dac_offload_name adrv9026_data_offload
-set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
+set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
 
 set MAX_RX_NUM_OF_LANES [expr $ORX_ENABLE ? 2 : 4]
 set MAX_TX_NUM_OF_LANES 4
@@ -115,7 +131,7 @@ ad_ip_parameter axi_adrv9026_tx_jesd/tx CONFIG.TPL_DATA_PATH_WIDTH $TX_DATAPATH_
 ad_ip_instance util_upack2 util_adrv9026_tx_upack [list \
   NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
-  SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
+  SAMPLE_DATA_WIDTH $TX_DMA_SAMPLE_WIDTH \
 ]
 
 adi_tpl_jesd204_tx_create tx_adrv9026_tpl_core $TX_NUM_OF_LANES \
@@ -123,7 +139,7 @@ adi_tpl_jesd204_tx_create tx_adrv9026_tpl_core $TX_NUM_OF_LANES \
                                                $TX_SAMPLES_PER_FRAME \
                                                $TX_SAMPLE_WIDTH \
                                                $TX_DATAPATH_WIDTH \
-                                               $TX_SAMPLE_WIDTH
+                                               $TX_DMA_SAMPLE_WIDTH
 
 ad_ip_instance axi_dmac axi_adrv9026_tx_dma
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_TYPE_SRC 0
@@ -133,7 +149,7 @@ ad_ip_parameter axi_adrv9026_tx_dma CONFIG.AXI_SLICE_DEST {true}
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.AXI_SLICE_SRC {true}
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_data_width
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
-ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
+ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_data_width
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
@@ -169,15 +185,15 @@ ad_ip_parameter axi_adrv9026_rx_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH $RX_DATAPATH_
 ad_ip_instance util_cpack2 util_adrv9026_rx_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL \
-  SAMPLE_DATA_WIDTH $RX_SAMPLE_WIDTH \
-  ]
+  SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
+]
 
 adi_tpl_jesd204_rx_create rx_adrv9026_tpl_core $RX_NUM_OF_LANES \
                                                $RX_NUM_OF_CONVERTERS \
                                                $RX_SAMPLES_PER_FRAME \
                                                $RX_SAMPLE_WIDTH \
                                                $RX_DATAPATH_WIDTH \
-                                               $RX_SAMPLE_WIDTH
+                                               $RX_DMA_SAMPLE_WIDTH
 
 ad_ip_instance axi_dmac axi_adrv9026_rx_dma
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_TYPE_SRC 2
@@ -186,9 +202,9 @@ ad_ip_parameter axi_adrv9026_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.AXI_SLICE_DEST {true}
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.AXI_SLICE_SRC {true}
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_data_width
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
-ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_data_width
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
@@ -215,7 +231,7 @@ if {$ORX_ENABLE} {
   ad_ip_instance util_cpack2 util_adrv9026_rx_os_cpack [list \
     NUM_OF_CHANNELS $RX_OS_NUM_OF_CONVERTERS \
     SAMPLES_PER_CHANNEL $RX_OS_SAMPLES_PER_CHANNEL \
-    SAMPLE_DATA_WIDTH $RX_OS_SAMPLE_WIDTH \
+    SAMPLE_DATA_WIDTH $RX_OS_DMA_SAMPLE_WIDTH \
     ]
 
   adi_tpl_jesd204_rx_create rx_os_adrv9026_tpl_core $RX_OS_NUM_OF_LANES \
@@ -223,7 +239,7 @@ if {$ORX_ENABLE} {
                                                  $RX_OS_SAMPLES_PER_FRAME \
                                                  $RX_OS_SAMPLE_WIDTH \
                                                  $RX_OS_DATAPATH_WIDTH \
-                                                 $RX_OS_SAMPLE_WIDTH
+                                                 $RX_OS_DMA_SAMPLE_WIDTH
 
   ad_ip_instance axi_dmac axi_adrv9026_rx_os_dma
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_TYPE_SRC 2
@@ -232,9 +248,9 @@ if {$ORX_ENABLE} {
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.AXI_SLICE_DEST {true}
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.AXI_SLICE_SRC {true}
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.SYNC_TRANSFER_START 1
-  ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $RX_OS_SAMPLE_WIDTH * $RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLES_PER_CHANNEL];
+  ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_os_data_width
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.MAX_BYTES_PER_BURST 4096
-  ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+  ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_os_data_width
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.FIFO_SIZE 32
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 }

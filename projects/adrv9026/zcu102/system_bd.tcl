@@ -68,3 +68,16 @@ ad_ip_parameter axi_adrv9026_rx_dma    CONFIG.FIFO_SIZE 16
 if {$ORX_ENABLE} {
   ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.FIFO_SIZE 16
 }
+
+set max_mem_width 128
+
+ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_SRC \
+  [expr min($max_mem_width, $dac_data_width)]
+
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_DEST \
+  [expr min($max_mem_width, $adc_data_width)]
+
+if {$ORX_ENABLE} {
+  ad_ip_parameter axi_adrv9026_rx_os_dma CONFIG.DMA_DATA_WIDTH_DEST \
+    [expr min($max_mem_width, $adc_os_data_width)]
+}
