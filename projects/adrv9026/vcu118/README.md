@@ -15,7 +15,7 @@ All of the RX/TX link modes can be found in the [ADRV9026 data sheet](https://ww
 
 If other configurations are desired, then the parameters from the HDL project (see below) need to be changed, as well as the Linux/no-OS project configurations.
 
-**Warning**: The JESD link mode is configured using the [ADRV9026 Evaluation Software](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adrv9026.html#eb-relatedsoftware:~:text=Design%20Tool%20(1)-,Evaluation%20Software,-ADRV9026%20Released%20Software) application. The default device tree is: [vcu118_adrv9025.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_adrv9025.dts). For ORX integration in NLS mode the device tree is: [vcu118_adrv9025_nls.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_adrv9025_nls.dts). For JESD204C and ORX in NLS mode the device tree is: [vcu118_adrv9025_jesd204c.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_adrv9025_jesd204c.dts).
+**Warning**: The JESD link mode is configured using the [ADRV9026 Evaluation Software](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-adrv9026.html#eb-relatedsoftware:~:text=Design%20Tool%20(1)-,Evaluation%20Software,-ADRV9026%20Released%20Software) application. The default device tree is: [vcu118_adrv9025.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_adrv9025.dts). For ORX integration in NLS mode the device tree is: [vcu118_adrv9025_nls.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_adrv9025_nls.dts). For ORX in NLS mode with NP=12 the device tree is: [vcu118_adrv9025_nls_np12.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_adrv9025_nls_np12.dts). For JESD204C and ORX in NLS mode the device tree is: [vcu118_adrv9025_jesd204c.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_adrv9025_jesd204c.dts).
 
 
 The overwritable parameters from the environment:
@@ -95,6 +95,27 @@ RX_OS_TPL_WIDTH={}
 ```
 
 Corresponding device tree: [vcu118_adrv9025_nls.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_adrv9025_nls.dts)
+
+#### JESD204B with ORX in NLS mode (NP=12)
+
+```
+make ORX_ENABLE=1 \
+RX_LANE_RATE=14.74 \
+TX_LANE_RATE=14.74 \
+RX_JESD_L=2 \
+RX_JESD_NP=12 \
+TX_JESD_NP=12 \
+RX_OS_LANE_RATE=14.74 \
+RX_OS_JESD_M=4 \
+RX_OS_JESD_L=2 \
+RX_OS_JESD_S=1 \
+RX_OS_JESD_NP=12 \
+PLL_TYPE=QPLL0 \
+REF_CLK=368.5 \
+LANE_RATE=14.74
+```
+
+Corresponding device tree: [vcu118_adrv9025_nls_np12.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_adrv9025_nls_np12.dts)
 
 #### JESD204C with ORX in NLS mode
 
