@@ -229,6 +229,103 @@ The Tx links (DAC Path) operate with the following parameters:
 - JESD204B Lane Rate: 9.83 Gbps
 - QPLL0
 
+Example block design for Single link and RX OBS in Non-LinkSharing mode (NP=12)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: adrv9026_nls_np12_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: ADRV9026 JESD204B NLS NP=12 block diagram
+
+.. collapsible:: Click here for details on the block diagram modules
+
+   .. list-table::
+      :widths: 10 20 35 35
+      :header-rows: 1
+
+      * - Block name
+        - IP name
+        - Documentation
+        - Additional info
+      * - AXI_ADXCVR
+        - :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
+        - :ref:`axi_adxcvr`
+        - 3 instances, one for Rx, one for Rx-os and one for Tx
+      * - AXI_CLKGEN
+        - :git-hdl:`axi_clkgen <library/axi_clkgen>`
+        - :ref:`axi_clkgen`
+        - 3 instances, one for Rx, one for Rx-os and one for Tx
+      * - AXI_DMAC
+        - :git-hdl:`axi_dmac <library/axi_dmac>`
+        - :ref:`axi_dmac`
+        - 3 instances, one for Rx, one for Rx-os and one for Tx
+      * - DATA_OFFLOAD
+        - :git-hdl:`data_offload <library/data_offload>`
+        - :ref:`data_offload`
+        - 1 instance for Tx
+      * - RX JESD LINK
+        - axi_adrv9026_rx_jesd
+        - :ref:`axi_jesd204_rx`
+        - Instantiaded by ``adi_axi_jesd204_rx_create`` procedure
+      * - RX JESD TPL
+        - rx_adrv9026_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_adc`
+        - Instantiated by ``adi_tpl_jesd204_rx_create`` procedure
+      * - RX OS JESD LINK
+        - axi_adrv9026_rx_os_jesd
+        - :ref:`axi_jesd204_rx`
+        - Instantiaded by ``adi_axi_jesd204_rx_create`` procedure
+      * - RX OS JESD TPL
+        - rx_os_adrv9026_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_adc`
+        - Instantiated by ``adi_tpl_jesd204_rx_create`` procedure
+      * - TX JESD LINK
+        - axi_adrv9026_tx_jesd
+        - :ref:`axi_jesd204_tx`
+        - Instantiaded by ``adi_axi_jesd204_tx_create`` procedure
+      * - TX JESD TPL
+        - tx_adrv9026_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_dac`
+        - Instantiated by ``adi_tpl_jesd204_tx_create`` procedure
+      * - UTIL_UPACK
+        - :git-hdl:`util_upack2 <library/util_pack/util_upack2>`
+        - :ref:`util_upack2`
+        - 1 instance for Tx
+      * - UTIL_CPACK
+        - :git-hdl:`util_cpack2 <library/util_pack/util_cpack2>`
+        - :ref:`util_cpack2`
+        - 2 instances one for Rx and one for Rx-os
+
+The Rx links (ADC Path) operate with the following parameters:
+
+- Rx Framer parameters: L=2, M=8, F=6, S=1, NP=12, N=12
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 245.76 MHz
+- REF_CLK: 368.64 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 14.74 Gbps
+- QPLL0
+
+The ORx links (ADC Obs Path) operate with the following parameters:
+
+- Rx Obs Framer parameters: L=2, M=4, F=3, S=1, NP=12, N=12
+- Sample Rate: 491.52 MSPS
+- Dual link: No
+- RX_OS_DEVICE_CLK: 245.76 MHz
+- REF_CLK: 368.64 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 14.74 Gbps
+- QPLL0
+
+The Tx links (DAC Path) operate with the following parameters:
+
+- Tx Deframer parameters: L=4, M=8, F=3, S=1, NP=12, N=12
+- Sample Rate: 491.52 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 245.76 MHz
+- REF_CLK: 368.64 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 14.74 Gbps
+- QPLL0
+
 Example block design for JESD204C and RX OBS in Non-LinkSharing mode
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
