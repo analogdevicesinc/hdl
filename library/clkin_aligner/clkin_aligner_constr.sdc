@@ -9,9 +9,9 @@
 # consumers (FMC pin, axi_pwm_gen) see a defined clock object.
 
 create_generated_clock -name clk_out \
-  -source [get_pins -hier -filter {NAME =~ */i_gate/I}] \
+  -source [get_pins -hier -filter {NAME =~ *i_gate/I}] \
   -divide_by 1 \
-  [get_pins -hier -filter {NAME =~ */i_gate/O}]
+  [get_pins -hier -filter {NAME =~ *i_gate/O}]
 
 # Mark synchronizer stages as ASYNC_REG (recognized by placer; allows
 # placement of stage1 and stage2 in the same slice for minimum MTBF).
@@ -52,10 +52,10 @@ set_false_path \
 
 set_false_path -from [get_cells -hier -filter {NAME =~ *gate_en_neg_reg*}]
 
-# EXPERIMENT BUILD: odr_pos is clocked on posedge clk_in (rising-edge ODR
-# alignment), deliberately violating Sequence.txt §F.10 (falling-edge). The
-# launch is from odr_in (posedge clk_out, axi_pwm_gen); flag as false path to
-# keep STA reports clean.
+# odr_neg is clocked on negedge clk_in (falling-edge ODR alignment) per
+# Sequence.txt §F.10 / Fused_part_sequence docx image16 — the chip digital
+# designer's recommendation. The launch is from odr_in (posedge clk_out,
+# axi_pwm_gen); flag as false path to keep STA reports clean.
 
-set_false_path -to [get_cells -hier -filter {NAME =~ *odr_pos_reg*}]
+set_false_path -to [get_cells -hier -filter {NAME =~ *odr_neg_reg*}]
 

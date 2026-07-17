@@ -37,7 +37,8 @@
 module clkin_aligner #(
   parameter        ID = 0,
   parameter [15:0] STARTUP_CYCLES_DEFAULT = 16'd36,
-  parameter [15:0] EDGE_TARGET_DEFAULT    = 16'd146
+  parameter [15:0] EDGE_TARGET_DEFAULT    = 16'd146,
+  parameter [ 4:0] DIV32_TARGET_DEFAULT   = 5'd3
 ) (
   // AXI-Lite
 
@@ -65,18 +66,23 @@ module clkin_aligner #(
 
   // peripheral clock and gated output
 
-/* (* mark_debug = "true" *) */  input                   clk_in,
-/* (* mark_debug = "true" *) */  output                  clk_out,
+  /* (* mark_debug = "true" *) */  input                   clk_in,
+  (* mark_debug = "true" *)  output                  clk_out,
 
   // interrupt
 
-/* (* mark_debug = "true" *) */  output                  irq,
+  (* mark_debug = "true" *) output                  irq,
 
   // ODR re-registration (Sequence.txt §F.10 — ODR transitions on
   // XTAL2_CLKIN falling edges)
 
-/* (* mark_debug = "true" *) */  input                   odr_in,
-/* (* mark_debug = "true" *) */  output                  odr_out
+ (* mark_debug = "true" *) input                   odr_in,
+  output                  odr_out,
+
+  // ODR sync strobe — one-shot at edge_target (Sequence.txt §F.7, edge 146).
+  // Drives odr_generator/ext_sync to anchor the PWM period counter to edge 146.
+
+ (* mark_debug = "true" *)  output                  odr_sync
 );
 
   // local parameters
@@ -100,9 +106,9 @@ module clkin_aligner #(
   // control strobes / config (clk_in domain, after CDC inside regmap)
 
   wire            ext_resetn;
-/* (* mark_debug = "true" *) */  wire            startup_fire;
-/* (* mark_debug = "true" *) */  wire            arm_stop_at_align;
-/* (* mark_debug = "true" *) */  wire            resume_strobe;
+ (* mark_debug = "true" *)  wire            startup_fire;
+ (* mark_debug = "true" *)  wire            arm_stop_at_align;
+ (* mark_debug = "true" *)  wire            resume_strobe;
   wire            gate_force_off;
   wire            gate_force_on;
   wire    [15:0]  startup_cycles;
@@ -111,9 +117,9 @@ module clkin_aligner #(
   // status / counters from clk_in domain
 
   wire    [15:0]  edge_count;
-/* (* mark_debug = "true" *) */  wire    [ 4:0]  div32_cnt;
-/* (* mark_debug = "true" *) */  wire            clk_div32;
-/* (* mark_debug = "true" *) */  wire            gate_active;
+  (* mark_debug = "true" *)  wire    [ 4:0]  div32_cnt;
+  (* mark_debug = "true" *)  wire            clk_div32;
+  (* mark_debug = "true" *)  wire            gate_active;
   wire            startup_done;
   wire            stopped_low;
   wire            armed;
@@ -121,9 +127,9 @@ module clkin_aligner #(
 
   // events to regmap (one-cycle pulses in clk_in domain)
 
-/* (* mark_debug = "true" *) */  wire            evt_edge_target_reached;
-/* (* mark_debug = "true" *) */  wire            evt_stop_at_align_done;
-/* (* mark_debug = "true" *) */  wire            evt_startup_done;
+  (* mark_debug = "true" *)  wire            evt_edge_target_reached;
+  (* mark_debug = "true" *)  wire            evt_stop_at_align_done;
+  (* mark_debug = "true" *)  wire            evt_startup_done;
 
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -219,25 +225,29 @@ module clkin_aligner #(
   localparam [2:0] ST_STOPPED_LOW = 3'd3;
   localparam [2:0] ST_RUNNING     = 3'd4;
 
-/* (* mark_debug = "true" *) */  reg [2:0]  state = ST_IDLE;
-/* (* mark_debug = "true" *) */  reg [15:0] startup_cnt = 16'd0;
-/* (* mark_debug = "true" *) */  reg [15:0] edge_cnt    = 16'd0;
-/* (* mark_debug = "true" *) */  reg [ 4:0] div32_q     = 5'd0;
+ (* mark_debug = "true" *)  reg [2:0]  state = ST_IDLE;
+ (* mark_debug = "true" *)  reg [15:0] startup_cnt = 16'd0;
+ (* mark_debug = "true" *)  reg [15:0] edge_cnt    = 16'd0;
+ (* mark_debug = "true" *)  reg [ 4:0] div32_q     = 5'd0;
 /* (* mark_debug = "true" *) */  reg        gate_en_req;       // combinational
-/* (* mark_debug = "true" *) */  reg        gate_en_neg = 1'b1; // negedge-registered enable for BUFGCE
+  (* mark_debug = "true" *)  reg        gate_en_neg = 1'b1; // negedge-registered enable for BUFGCE
 
   // /32 phase counter: increments on every delivered clk_in posedge
   // (i.e. when the gate is open). Initial value chosen so that
   // clk_div32 = HIGH for cnt 0..15, LOW for 16..31.
 
-  // Sequence.txt §E.5: when STARTUP_FIRE arrives in IDLE, prime the
-  // counter to 31 so that after the 36-cycle startup the post-§E
-  // reading is (31+36) mod 32 = 3 with clk_div32 = HIGH.
+  // Sequence.txt §E.5: when STARTUP_FIRE arrives in IDLE, prime the /32
+  // counter so that after the startup burst the post-§E reading equals
+  // DIV32_TARGET_DEFAULT with clk_div32 = HIGH. Seed = (target - cycles)
+  // mod 32, computed from the live startup_cycles register so the target
+  // still holds if STARTUP_CYCLES is changed at runtime.
+  //   Sequence.txt: 36 cycles, target 3 -> seed 31.
+  //   Fused video : 39 cycles, target 5 -> seed 30.
   always @(posedge clk_in) begin
     if (!ext_resetn) begin
       div32_q <= 5'd0;
     end else if (state == ST_IDLE && startup_fire) begin
-      div32_q <= 5'd31;
+      div32_q <= DIV32_TARGET_DEFAULT - startup_cycles[4:0];
     end else if (gate_en_neg) begin
       div32_q <= div32_q + 5'd1;
     end
@@ -351,7 +361,11 @@ module clkin_aligner #(
     else if (gate_force_on)
       gate_en_req = 1'b1;
     else case (state)
-      ST_IDLE:        gate_en_req = 1'b1;
+      // OFF in IDLE so the 39-pulse STARTUP burst is the first clock the
+      // AD7134 ever sees (Fused_part_sequence slide 1: nothing before the
+      // train). Do NOT restore 1'b1 — that free-runs XTAL2_CLKIN from FPGA
+      // config, violating the spec. Requires the driver to issue STARTUP_FIRE.
+      ST_IDLE:        gate_en_req = 1'b0;
       ST_STARTUP:     gate_en_req = (startup_cnt != 16'd0);
       ST_ARMED:       gate_en_req = 1'b1;
       ST_STOPPED_LOW: gate_en_req = 1'b0;
@@ -361,7 +375,7 @@ module clkin_aligner #(
   end
 
   always @(negedge clk_in) begin
-    if (!ext_resetn) gate_en_neg <= 1'b1;
+    if (!ext_resetn) gate_en_neg <= 1'b0;
     else             gate_en_neg <= gate_en_req;
   end
 
@@ -372,18 +386,48 @@ module clkin_aligner #(
     .CE (gate_en_neg),
     .O  (clk_out));
 
-  // ---------------- ODR posedge re-registration (experiment: NOT Sequence.txt §F.10) ----------------
-  // EXPERIMENT BUILD: ODR is re-registered on the RISING edge of clk_in,
-  // deliberately violating Sequence.txt §F.10 (which requires falling-edge
-  // alignment). This parks the chip-internal CLKIN-vs-ODR mismatch at the
-  // TCLK/2 boundary (AD7134_2.png worst case) to measure the resulting
-  // inter-chip rung distribution vs the negedge baseline.
+  // ---------------- ODR negedge re-registration (Sequence.txt §F.10 / Fused_part_sequence docx image16) ----------------
+  // ODR is re-registered on the FALLING edge of clk_in so its transitions align
+  // with the XTAL2_CLKIN falling edge, per the chip's digital designer
+  // recommendation (docx image16 shows the ODR launch on the dig_clk negedge).
 
-  /* (* mark_debug = "true" *) */ reg odr_pos = 1'b0;
-  always @(posedge clk_in) begin
-    odr_pos <= odr_in;
+  (* mark_debug = "true" *) reg odr_neg = 1'b0;
+  always @(negedge clk_in) begin
+    odr_neg <= odr_in;
   end
-  assign odr_out = odr_pos;
+  assign odr_out = odr_neg;
+
+  // Fabric-only debug twin of odr_out: odr_neg is packed into the output IOB
+  // (IOB TRUE on ad713x_odr) so its net is unprobeable; this copy drives no port
+  // so it stays in fabric. dont_touch prevents merge/re-absorption into the IOB.
+  (* mark_debug = "true", dont_touch = "true" *) reg odr_out_dbg = 1'b0;
+  always @(negedge clk_in) begin
+    odr_out_dbg <= odr_in;
+  end
+
+  // ---------------- ODR sync strobe (Sequence.txt §F.7 — edge-146 anchor) ----------------
+  // One-shot pulse asserted when edge_cnt first reaches edge_target (edge 146).
+  // Drives odr_generator/ext_sync so the PWM period counter re-zeros at edge 146,
+  // making the first ODR pulse land on a boot-invariant CLKin cycle (removes the
+  // free-running PWM launch-cycle wander). Stretched to ODR_SYNC_WIDTH clk_in cycles
+  // so it survives the ext_sync double-flop (EXT_ASYNC_SYNC) inside axi_pwm_gen.
+  // With FORCE_ALIGN the PWM counter is held while ext_sync is high and released on
+  // its falling edge, so the anchor is a fixed ODR_SYNC_WIDTH-cycle offset from
+  // edge 146 (deterministic; absorb via EDGE_TARGET / PULSE_OFFSET if a specific
+  // launch cycle is required).
+
+  localparam [3:0] ODR_SYNC_WIDTH = 4'd2;
+
+  (* mark_debug = "true" *) reg [3:0] odr_sync_cnt = 4'd0;
+  always @(posedge clk_in) begin
+    if (!ext_resetn)
+      odr_sync_cnt <= 4'd0;
+    else if (evt_edge_target_reached_r)
+      odr_sync_cnt <= ODR_SYNC_WIDTH;
+    else if (odr_sync_cnt != 4'd0)
+      odr_sync_cnt <= odr_sync_cnt - 4'd1;
+  end
+  assign odr_sync = (odr_sync_cnt != 4'd0);
 
   // ---------------- status / outputs ----------------
 

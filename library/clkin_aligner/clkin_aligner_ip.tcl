@@ -62,6 +62,13 @@ set_property -dict [list \
  ] \
 [ipx::get_user_parameters EDGE_TARGET_DEFAULT -of_objects $cc]
 
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "0" \
+  "value_validation_range_maximum" "31" \
+ ] \
+[ipx::get_user_parameters DIV32_TARGET_DEFAULT -of_objects $cc]
+
 # XGUI
 
 ipgui::remove_page -component $cc [ipgui::get_pagespec -name "Page 0" -component $cc]
@@ -87,6 +94,12 @@ set_property -dict [list \
   "display_name" "Edge target (default)" \
   "tooltip" "Edge index after RESUME at which IRQ_PENDING[0] is asserted (Sequence.txt section F.7: edge 146 = first dig_clk rising edge)." \
 ] [ipgui::get_guiparamspec -name "EDGE_TARGET_DEFAULT" -component $cc]
+
+ipgui::add_param -name "DIV32_TARGET_DEFAULT" -component $cc -parent $page0
+set_property -dict [list \
+  "display_name" "div32_cnt target (post-startup)" \
+  "tooltip" "Value of the /32 phase counter (div32_cnt) at the end of the startup burst. The startup seed is computed as (target - startup_cycles) mod 32. Sequence.txt = 3; Fused video = 5." \
+] [ipgui::get_guiparamspec -name "DIV32_TARGET_DEFAULT" -component $cc]
 
 ipx::create_xgui_files $cc
 ipx::save_core $cc

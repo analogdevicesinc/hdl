@@ -171,12 +171,21 @@ create_clock -period 40.000 -name spi1_clk [get_pins -hier */EMIOSPI1SCLKO]
 # routing mismatch (t1 - t2) between two AD7134 devices.
 # ===========================================================================
 
-create_generated_clock -name clkin_to_adc \
-  -source [get_pins i_system_wrapper/system_i/axi_sdpclk_clkgen/inst/i_mmcm_drp/i_clk_0_bufg/O] \
-  [get_ports ad713x_sdpclk]
+# Forwarded XTAL2_CLKIN output clock (same period as source, gated) — -divide_by 1
+# creates the clock at the port (matches the clk_out idiom in clkin_aligner_constr.sdc).
+create_generated_clock -name clkin_to_adc -source [get_pins i_system_wrapper/system_i/axi_sdpclk_clkgen/inst/i_mmcm_drp/i_clk_0_bufg/O] -divide_by 1 [get_ports ad713x_sdpclk]
 
+# -min (positive) = how far ODR is allowed to LEAD the CLKIN falling edge. Set to
+# +5.0 to match the "Δt < 5 ns" tolerance documented above (well inside the
+# TCLK/2 = 10.4 ns same-edge limit). Hold slack = (-min) - 1.941, so +5.0 gives
+# ~3 ns margin. The original -1.0 actually *required* ODR to lag the edge, which
+# the negedge-launched ODR (leads by ~2 ns) cannot satisfy — that was the -2.941
+# hold violation once clkin_to_adc became a real clock.
 set_output_delay -clock clkin_to_adc -clock_fall -max 15.833 [get_ports ad713x_odr]
-set_output_delay -clock clkin_to_adc -clock_fall -min -1.0 [get_ports ad713x_odr]
+set_output_delay -clock clkin_to_adc -clock_fall -min 5.000 [get_ports ad713x_odr]
+
+
+
 
 
 
