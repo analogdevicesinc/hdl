@@ -87,9 +87,7 @@ switch $INTF_CFG {
       CONFIG.PSU__ENET1__GRP_MDIO__ENABLE {1} \
       CONFIG.PSU__ENET1__GRP_MDIO__IO {EMIO} \
       CONFIG.PSU__ENET1__PERIPHERAL__ENABLE {1} \
-      CONFIG.PSU__ENET1__PERIPHERAL__IO {EMIO} \
-      CONFIG.PSU__PCIE__PERIPHERAL__ENABLE {0} \
-      CONFIG.PSU__SATA__PERIPHERAL__ENABLE {0}] [get_bd_cells sys_ps8]
+      CONFIG.PSU__ENET1__PERIPHERAL__IO {EMIO}] [get_bd_cells sys_ps8]
 
     create_bd_port -dir O reset_a
     create_bd_port -dir O reset_b
