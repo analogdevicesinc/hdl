@@ -39,7 +39,7 @@ S=$ad_project_params(RX_OS_JESD_S)\
 NP=$ad_project_params(RX_OS_JESD_NP)\
 LINKS=$ad_project_params(RX_OS_NUM_LINKS)"
 
-sysid_gen_sys_init_file
+sysid_gen_sys_init_file $sys_cstring 10
 
 source ../common/adrv904x_bd.tcl
 

@@ -35,6 +35,20 @@ The overwritable parameters from the environment:
 - [RX/TX/RX_OS]_TPL_WIDTH - [RX/TX/RX_OS] TPL data path width in bits
 - [RX/TX/RX_OS]_NUM_LINKS - [RX/TX/RX_OS] number of links
 
+#### XCVR build parameters
+
+- PLL_TYPE: The PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+- REF_CLK: Value of the reference clock [MHz]
+- LANE_RATE: Value of lane rate [gbps]
+
+#### Optional XCVR overrides
+
+The following parameters allow configuring the RX transceiver independently from the TX path. If omitted, the RX path inherits the corresponding base parameter (PLL_TYPE, LANE_RATE, REF_CLK).
+
+- XCVR_RX_PLL_TYPE - RX PLL type [CPLL/QPLL0/QPLL1]
+- XCVR_RX_LANE_RATE - RX lane rate [gbps]
+- XCVR_RX_REF_CLK - RX reference clock [MHz] (usually XCVR_RX_LANE_RATE/20 or XCVR_RX_LANE_RATE/40)
+
 ### Example configurations
 
 #### Default configuration
@@ -53,17 +67,17 @@ RX_JESD_M=16 \
 RX_JESD_L=8 \
 RX_JESD_S=1 \
 RX_JESD_NP=16 \
-RX_TPL_WIDTH={} \
 TX_JESD_M=16 \
 TX_JESD_L=8 \
 TX_JESD_S=1 \
 TX_JESD_NP=16 \
-TX_TPL_WIDTH={} \
 RX_OS_JESD_M=0 \
 RX_OS_JESD_L=0 \
 RX_OS_JESD_S=0 \
 RX_OS_JESD_NP=0 \
-RX_OS_TPL_WIDTH={}
+PLL_TYPE=QPLL0 \
+REF_CLK=491.5151515 \
+LANE_RATE=16.22
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv904x.dts)
@@ -76,7 +90,10 @@ RX_JESD_L=4 \
 RX_OS_JESD_M=8 \
 RX_OS_JESD_L=4 \
 RX_OS_JESD_S=1 \
-RX_OS_JESD_NP=16
+RX_OS_JESD_NP=16 \
+PLL_TYPE=QPLL0 \
+REF_CLK=491.5151515 \
+LANE_RATE=16.22
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x-nls.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv904x-nls.dts)
@@ -86,7 +103,10 @@ Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x-nls.dts](https://github
 ```
 make JESD_MODE=8B10B \
 RX_LANE_RATE=9.83 \
-TX_LANE_RATE=9.83
+TX_LANE_RATE=9.83 \
+PLL_TYPE=CPLL \
+REF_CLK=245.75 \
+LANE_RATE=9.83
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x-jesd204b-245Msps.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv904x-jesd204b-245Msps.dts)
@@ -97,7 +117,10 @@ Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x-jesd204b-245Msps.dts](h
 ```
 make JESD_MODE=8B10B \
 RX_LANE_RATE=4.915 \
-TX_LANE_RATE=4.915
+TX_LANE_RATE=4.915 \
+PLL_TYPE=QPLL0 \
+REF_CLK=122.875 \
+LANE_RATE=4.915
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x-jesd204b-122Msps.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv904x-jesd204b-122Msps.dts)
