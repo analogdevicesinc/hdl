@@ -7,10 +7,10 @@ The :git-hdl:`DAQ3 <projects/daq3>` reference design showcases the
 :adi:`EVAL-FMCDAQ3-EBZ` evaluation board, which is comprised of the
 :adi:`AD9680` dual, 14-bit, 1.25 GSPS, JESD204B (subclass 1) ADC, the
 :adi:`AD9152` dual, 16-bit, 2.5 GSPS, JESD204B (subclass 1) DAC, and the
-:adi:`AD9528` JESD204B/C clock generator, and some power management
-components. It is clocked by an internally generated carrier platform via the
-FMC connector, comprising a completely self contained data acquisition and
-signal synthesis prototyping platform.
+:adi:`AD9528` JESD204B/C clock generator, and some power management components.
+It is clocked by an internally generated carrier platform via the FMC connector,
+comprising a completely self contained data acquisition and signal synthesis
+prototyping platform.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -210,12 +210,12 @@ Clock scheme
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The design has one JESD204B receive chain and one transmit chain, each with
-4 lanes.
+The design has one JESD204B receive chain and one transmit chain, each with 4
+lanes.
 
-Each chain consists of a transport layer represented by a JESD TPL module,
-a link layer represented by a JESD LINK module, and a physical layer shared
-among chains, represented by an XCVR module.
+Each chain consists of a transport layer represented by a JESD TPL module, a
+link layer represented by a JESD LINK module, and a physical layer shared among
+chains, represented by an XCVR module.
 
 The HDL project in its current state, has the link operating in subclass 1.
 
@@ -225,9 +225,76 @@ The HDL project in its current state, has the link operating in subclass 1.
 
 The following are the parameters of this project that can be configured:
 
+JESD parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 - [RX/TX]_JESD_M: number of converters per link
 - [RX/TX]_JESD_L: number of lanes per link
 - [RX/TX]_JESD_S: number of samples per frame
+
+XCVR build parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- PLL_TYPE: the PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1] (Xilinx
+  only; ZC706 supports only CPLL/QPLL)
+- REF_CLK: value of the reference clock [MHz] (LANE_RATE/20 or LANE_RATE/40)
+- LANE_RATE: value of the lane rate [Gbps]
+
+Default values per carrier:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Parameter
+     - KCU105
+     - VCU118
+     - ZC706
+     - ZCU102
+   * - RX_JESD_M
+     - 2
+     - 2
+     - 2
+     - 2
+   * - RX_JESD_L
+     - 4
+     - 4
+     - 4
+     - 4
+   * - RX_JESD_S
+     - 1
+     - 1
+     - 1
+     - 1
+   * - TX_JESD_M
+     - 2
+     - 2
+     - 2
+     - 2
+   * - TX_JESD_L
+     - 4
+     - 4
+     - 4
+     - 4
+   * - TX_JESD_S
+     - 1
+     - 1
+     - 1
+     - 1
+   * - PLL_TYPE
+     - QPLL0
+     - QPLL0
+     - QPLL
+     - QPLL0
+   * - REF_CLK
+     - 616.5
+     - 625
+     - 500
+     - 616.5
+   * - LANE_RATE
+     - 12.33
+     - 12.5
+     - 10
+     - 12.33
 
 Detailed description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -235,25 +302,25 @@ Detailed description
 The digital interface consists of 4 transmit and 4 receive lanes running at
 12.33 Gbps (default).
 
-The devices' interfaces are shared by the same set of transceivers, followed
-by the individual JESD204B and ADC/DAC pcores. The transceivers then interface
-to the cores at 128 bits at 308.25MHz. The cores are programmable through
-an AXI-lite interface.
+The devices' interfaces are shared by the same set of transceivers, followed by
+the individual JESD204B and ADC/DAC pcores. The transceivers then interface to
+the cores at 128 bits at 308.25MHz. The cores are programmable through an
+AXI-lite interface.
 
-The data path consists of independent :ref:`DMA <axi_dmac>` interfaces for
-the transmit and receive paths. The data is sent or received based on the
+The data path consists of independent :ref:`DMA <axi_dmac>` interfaces for the
+transmit and receive paths. The data is sent or received based on the
 configuration (programmable) from separate transmit and receive chains.
 
 The DAC data may be sourced from an internal data generator (DDS, pattern or
-PRBS) or from the external DDR via DMA. The internal DDS phase and frequency
-are programmable.
+PRBS) or from the external DDR via DMA. The internal DDS phase and frequency are
+programmable.
 
-The ADC data is sent to the DDR via DMA. The core also supports PN monitoring
-at the sample level. This is different from the JESD204B-specific PN sequence
+The ADC data is sent to the DDR via DMA. The core also supports PN monitoring at
+the sample level. This is different from the JESD204B-specific PN sequence
 (though they both claim to be from the same equation).
 
-The device control and monitor signals are interfaced to a GPIO module.
-The SPI signals are controlled by a separate AXI based SPI core.
+The device control and monitor signals are interfaced to a GPIO module. The SPI
+signals are controlled by a separate AXI based SPI core.
 
 - JESD204B in subclass 1 with lane rate 12.33 Gbps
 - Rx, Tx: L=2, M=4, S=1, NP=16
@@ -368,38 +435,51 @@ axi_ad9152_jesd  10     15     54         86          106          138
 Building the HDL project
 -------------------------------------------------------------------------------
 
-The design is built upon ADI's generic HDL reference design framework.
-ADI distributes the bit/elf files of these projects as part of the
-:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
-If you want to build the sources, ADI makes them available on the
-:git-hdl:`HDL repository </>`. To get the source you must
+The design is built upon ADI's generic HDL reference design framework. ADI
+distributes the bit/elf files of these projects as part of the
+:external+documentation:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
+the sources, ADI makes them available on the :git-hdl:`HDL repository </>`. To
+get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the hdl/projects/**daq3**/$carrier location and run the make
-command.
+Then go to the project location, choose your carrier and run the make command by
+typing in your command prompt. Building without parameters will use the default
+configuration (see the table above for default values per carrier, including
+XCVR parameters such as PLL_TYPE, REF_CLK and LANE_RATE).
 
 **Linux/Cygwin/WSL**
-
-Example of running the ``make`` command without parameters (using the default
-configuration):
 
 .. shell:: bash
 
    $cd hdl/projects/daq3/zcu102
    $make
 
-Example of running the ``make`` command with parameters:
+Example for building the project with JESD parameters (XCVR parameters will use
+their default values):
 
 .. shell:: bash
 
    $cd hdl/projects/daq3/zcu102
    $make RX_JESD_M=4 RX_JESD_L=2 TX_JESD_M=4 TX_JESD_L=2
 
-The result of the build, if parameters were used, will be in a folder named
-by the configuration used: ``RXM4_RXL2_TXM4_TXL2``.
+Example for building the project with JESD and XCVR parameters:
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+.. shell:: bash
+
+   $cd hdl/projects/daq3/zcu102
+   $make RX_JESD_M=4 RX_JESD_L=2 TX_JESD_M=4 TX_JESD_L=2 \
+   $     PLL_TYPE=QPLL0 REF_CLK=616.5 LANE_RATE=12.33
+
+The result of the build, if parameters were used, will be in a folder named by
+the configuration used, with truncation of some keywords (``JESD``, ``LANE``,
+etc. are removed) so the path will not exceed OS limits.
+
+The XCVR automation flow creates a sub-build under
+``hdl/projects/xcvr_wizard/$carrier/``. For details on how the folder name is
+formed, see :ref:`xgt_wizard_build_output`.
+
+Refer to the :ref:`build_hdl` user guide for a more comprehensive build guide.
 
 Software considerations
 -------------------------------------------------------------------------------
@@ -415,9 +495,8 @@ DAC - crossbar config
 Due to physical constraints, TX lanes are reordered as described in the
 following table:
 
-For example, physical lane 2 from DAC connects to logical lane 1
-from the FPGA. Therefore the crossbar from the device must be set
-accordingly.
+For example, physical lane 2 from DAC connects to logical lane 1 from the FPGA.
+Therefore the crossbar from the device must be set accordingly.
 
 +---------------+---+---+---+---+
 | logical lane  | 0 | 1 | 2 | 3 |
@@ -431,11 +510,11 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`AD-FMCDAQ3-EBZ on Kintex KCU105 quick start guide <resources/eval/user-guides/ad-fmcdaq3-ebz/quickstart/kcu105>`
-- :dokuwiki:`AD-FMCDAQ3-EBZ on Virtex UltraScale+ VCU118 quick start guide <resources/eval/user-guides/ad-fmcdaq3-ebz/quickstart/vcu118>`
-- :dokuwiki:`AD-FMCDAQ3-EBZ on Zynq ZC706 quick start guide <resources/eval/user-guides/ad-fmcdaq3-ebz/quickstart/zynq>`
-- :dokuwiki:`AD-FMCDAQ3-EBZ on Zynq UltraScale MP ZCU102 quick start guide <resources/eval/user-guides/ad-fmcdaq3-ebz/quickstart/zcu102>`
-- :dokuwiki:`AD-FMCDAQ3-EBZ on Arria 10 Gx (OBSOLETE) quick start guide <resources/eval/user-guides/ad-fmcdaq3-ebz/quickstart/a10gx>`
+- :external+documentation:ref:`AD-FMCDAQ3-EBZ on KCU105 quick start guide <ad_fmcdaq3_ebz quickstart kcu105>`
+- :external+documentation:ref:`AD-FMCDAQ3-EBZ on VCU118 quick start guide <ad_fmcdaq3_ebz quickstart vcu118>`
+- :external+documentation:ref:`AD-FMCDAQ3-EBZ on ZC706 quick start guide <ad_fmcdaq3_ebz quickstart zc706>`
+- :external+documentation:ref:`AD-FMCDAQ3-EBZ on ZCU102 quick start guide <ad_fmcdaq3_ebz quickstart zcu102>`
+- :external+documentation:ref:`AD-FMCDAQ3-EBZ on A10GX (OBSOLETE) quick start guide <ad_fmcdaq3_ebz quickstart a10gx>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ on MicroBlaze quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/quickstart/microblaze>`
   (:dokuwiki:`here <resources/tools-software/linux-drivers/platforms/nios2>`
   you can find prebuilt images for this setup;
@@ -451,7 +530,7 @@ Hardware related
 
 - The schematic can be downloaded from
   :adi:`here <media/en/reference-design-documentation/design-integration-files/ad-fmcdaq3-ebz-designsupport.zip>`
-- :dokuwiki:`AD-FMCDAQ3-EBZ hardware overview <resources/eval/user-guides/ad-fmcdaq3-ebz/hardware>`
+- :external+documentation:ref:`AD-FMCDAQ3-EBZ hardware overview <ad_fmcdaq3_ebz hardware>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -521,7 +600,7 @@ HDL related
 
    - ``*`` - instantiated only for ZC706
 
-- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`generic_jesd_bds`
 - :ref:`jesd204`
 
 Software related
@@ -532,10 +611,10 @@ Software related
 - DAQ3/ZC706 Linux device tree :git-linux:`zynq-zc706-adv7511-fmcdaq3.dts <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcdaq3.dts>`
 - DAQ3/ZCU102 Linux device tree :git-linux:`zynqmp-zcu102-rev10-fmcdaq3.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-fmcdaq3.dts>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ on Zynq ZC706 Linux quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/zynq>`
-- :dokuwiki:`AD-FMCDAQ3-EBZ on Zynq ZC706 no-OS quick start guide <resources/eval/user-guides/ad-fmcdaq3-ebz/software/baremetal>`
+- :external+documentation:ref:`AD-FMCDAQ3-EBZ baremetal (no-OS) guide <ad_fmcdaq3_ebz baremetal>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ on MicroBlaze no-OS quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/microblaze>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ IIO Oscilloscope plugin <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/applications/iio_scope>`
-- :dokuwiki:`FRU EEPROM (fru_dump) utility used on AD-FMCDAQ3-EBZ <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/applications/fru_dump>`
+- :external+documentation:ref:`FRU EEPROM (fru_dump) utility <software fru-dump>`
 
 .. include:: ../common/more_information.rst
 

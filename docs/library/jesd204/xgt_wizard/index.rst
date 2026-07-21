@@ -178,6 +178,31 @@ These parameters can also be overridden from the command line:
    make LANE_RATE=10 REF_CLK=250 PLL_TYPE=QPLL0
    make JESD_MODE=8B10B RX_LANE_RATE=2 TX_LANE_RATE=4 RX_JESD_M=8 RX_JESD_L=2 RX_JESD_S=1 TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1 PLL_TYPE=QPLL0 REF_CLK=100 LANE_RATE=4 XCVR_RX_PLL_TYPE=CPLL XCVR_RX_LANE_RATE=2
 
+.. _xgt_wizard_build_output:
+
+Build output folder structure
+*******************************************************************************
+
+The automated flow creates a sub-build under
+``hdl/projects/xcvr_wizard/$carrier/``. The folder name is composed of the
+XCVR parameters (PLL_TYPE, REF_CLK, LANE_RATE and optionally XCVR_RX_*)
+together with any JESD parameters passed to ``make``. Keywords such as
+``JESD``, ``LANE`` and underscores are truncated to keep the path within
+operating system limits.
+
+For example, on ZCU102 with default XCVR values (PLL_TYPE=QPLL0,
+REF_CLK=500, LANE_RATE=10):
+
+- ``make`` (no parameters) creates:
+  ``PLLTYPEQPLL0_REFCLK500_RATE10``
+- ``make RX_JESD_L=4 RX_JESD_M=16`` creates:
+  ``RXL4_RXM16_PLLTYPEQPLL0_REFCLK500_RATE10``
+- ``make RX_JESD_L=4 RX_JESD_M=16 PLL_TYPE=QPLL0 REF_CLK=500 LANE_RATE=10``
+  creates: ``PLLTYPEQPLL0_REFCLK500_RATE10`` (XCVR tokens that are already
+  present in the project folder name are not duplicated)
+- ``make PLL_TYPE=QPLL0 REF_CLK=100 LANE_RATE=4 XCVR_RX_PLL_TYPE=CPLL XCVR_RX_LANE_RATE=2``
+  creates: ``PLLTYPEQPLL0_REFCLK100_RATE4_XCVRRXPLLTYPECPLL_XCVRRXRATE2``
+
 adi_xcvr_parameters
 *******************************************************************************
 

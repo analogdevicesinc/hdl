@@ -8,9 +8,9 @@ offering four independently controlled transmitters, dedicated observation
 receiver inputs for monitoring each transmitter channel, four independently
 controlled receivers, integrated synthesizers, and digital signal processing
 functions providing a complete transceiver solution. The device provides the
-performance demanded by cellular infrastructure applications, such as small
-cell base station radios, macro 3G/4G/5G systems, and massive multiple
-in/multiple out (MIMO) base stations.
+performance demanded by cellular infrastructure applications, such as small cell
+base station radios, macro 3G/4G/5G systems, and massive multiple in/multiple
+out (MIMO) base stations.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -344,9 +344,8 @@ Configuration modes
 
 The block design supports configuration of parameters and scales.
 
-We have listed a couple of examples at section
-`Building the HDL project`_ and the default modes
-for each project.
+We have listed a couple of examples at section `Building the HDL project`_ and
+the default modes for each project.
 
 .. note::
 
@@ -377,6 +376,30 @@ The following are the parameters of this project that can be configured:
 - [RX/TX/RX_OS]_JESD_NP: number of bits per sample
 - [RX/TX/RX_OS]_TPL_WIDTH : TPL data path width in bits
 - [RX/TX/RX_OS]_NUM_LINKS: number of links
+
+XCVR build parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following parameters configure the transceiver (XCVR) link on Xilinx
+carriers with XCVR automation flow:
+
+- PLL_TYPE: the PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+- REF_CLK: value of the reference clock [MHz] (LANE_RATE/20 or
+  LANE_RATE/40 for JESD204B; LANE_RATE/33 or LANE_RATE/66 for JESD204C)
+- LANE_RATE: value of the lane rate [Gbps]
+
+Optional XCVR overrides
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following optional parameters allow configuring the RX transceiver
+independently from the TX path. If omitted, the RX path inherits the
+corresponding base parameter (PLL_TYPE, LANE_RATE, REF_CLK).
+
+- XCVR_RX_PLL_TYPE: RX PLL type [CPLL/QPLL0/QPLL1]
+- XCVR_RX_LANE_RATE: RX lane rate [Gbps]
+- XCVR_RX_REF_CLK: RX reference clock [MHz] (XCVR_RX_LANE_RATE/20 or
+  XCVR_RX_LANE_RATE/40 for JESD204B; XCVR_RX_LANE_RATE/33 or
+  XCVR_RX_LANE_RATE/66 for JESD204C)
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -653,16 +676,18 @@ axi_adrv9026_rx_os_dma  14  14
 Building the HDL project
 -------------------------------------------------------------------------------
 
-The design is built upon ADI's generic HDL reference design framework.
-ADI distributes the bit/elf files of these projects as part of the
-:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
-If you want to build the sources, ADI makes them available on the
-:git-hdl:`HDL repository </>`. To get the source you must
+The design is built upon ADI's generic HDL reference design framework. ADI
+distributes the bit/elf files of these projects as part of the
+:external+documentation:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
+the sources, ADI makes them available on the :git-hdl:`HDL repository </>`. To
+get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the project location, choose your carrier and run the make command
-by typing in your command prompt:
+Then go to the project location, choose your carrier and run the make command by
+typing in your command prompt. Building without parameters will use the default
+configuration (see the table below for default values per carrier, including
+XCVR parameters such as PLL_TYPE, REF_CLK and LANE_RATE).
 
 **Linux/Cygwin/WSL**
 
@@ -670,6 +695,29 @@ by typing in your command prompt:
 
    $cd hdl/projects/adrv9026/zcu102
    $make
+
+Example for building the project with JESD parameters (XCVR
+parameters will use their default values):
+
+.. shell::
+
+   $cd hdl/projects/adrv9026/zcu102
+   $make JESD_MODE=8B10B ORX_ENABLE=1 \
+   $     RX_OS_JESD_M=4 RX_OS_JESD_L=2 \
+   $     RX_OS_JESD_S=1 RX_OS_JESD_NP=16 \
+   $     RX_JESD_L=2 RX_TPL_WIDTH=8
+
+Example for building the project with JESD and XCVR parameters:
+
+.. shell::
+
+   $cd hdl/projects/adrv9026/zcu102
+   $make JESD_MODE=8B10B ORX_ENABLE=1 \
+   $     RX_OS_JESD_M=4 RX_OS_JESD_L=2 \
+   $     RX_OS_JESD_S=1 RX_OS_JESD_NP=16 \
+   $     RX_JESD_L=2 RX_TPL_WIDTH=8 \
+   $     PLL_TYPE=QPLL0 REF_CLK=245.75 LANE_RATE=9.83 \
+   $     XCVR_RX_PLL_TYPE=CPLL
 
 The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.
@@ -681,6 +729,24 @@ configure this project, depending on the carrier used.
    +----------------------+---------------------------+--------------------------+
    |                      |       ZCU102/VCU118       |          A10SoC          |
    +======================+===========================+==========================+
+   | **XCVR build parameters**                                                   |
+   +----------------------+---------------------------+--------------------------+
+   | PLL_TYPE             |          QPLL0            |            ---           |
+   +----------------------+---------------------------+--------------------------+
+   | REF_CLK              |         245.75            |            ---           |
+   +----------------------+---------------------------+--------------------------+
+   | LANE_RATE            |          9.83             |            ---           |
+   +----------------------+---------------------------+--------------------------+
+   | **Optional XCVR overrides**                                                 |
+   +----------------------+---------------------------+--------------------------+
+   | XCVR_RX_PLL_TYPE     |           ---             |            ---           |
+   +----------------------+---------------------------+--------------------------+
+   | XCVR_RX_LANE_RATE    |           ---             |            ---           |
+   +----------------------+---------------------------+--------------------------+
+   | XCVR_RX_REF_CLK      |           ---             |            ---           |
+   +----------------------+---------------------------+--------------------------+
+   | **JESD and other build parameters**                                         |
+   +----------------------+---------------------------+--------------------------+
    | JESD_MODE            |          8B10B            |           8B10B          |
    +----------------------+---------------------------+--------------------------+
    | ORX_ENABLE           |             0             |            ---           |
@@ -726,7 +792,15 @@ configure this project, depending on the carrier used.
    | RX_OS_JESD_TPL_WIDTH |            {}             |            ---           |
    +----------------------+---------------------------+--------------------------+
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+The result of the build, if parameters were used, will be in a folder named by
+the configuration used, with truncation of some keywords (``JESD``, ``LANE``,
+etc. are removed) so the path will not exceed OS limits.
+
+The XCVR automation flow creates a sub-build under
+``hdl/projects/xcvr_wizard/$carrier/``. For details on how the folder name is
+formed, see :ref:`xgt_wizard_build_output`.
+
+Refer to the :ref:`build_hdl` user guide for a more comprehensive build guide.
 
 Other considerations
 -------------------------------------------------------------------------------
@@ -841,13 +915,13 @@ HDL related
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      - :ref:`ad_ip_jesd204_tpl_dac`
 
-- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`generic_jesd_bds`
 - :ref:`jesd204`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV9026 Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/adrv9025>`
+- :external+linux:ref:`ADRV9026 Linux driver page <adrv9025>`
 
 .. include:: ../common/more_information.rst
 
