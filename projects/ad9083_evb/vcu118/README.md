@@ -13,12 +13,20 @@ make
 
 All of the RX link modes can be found in the [AD9083 data sheet](https://www.analog.com/media/en/technical-documentation/data-sheets/ad9083.pdf). We offer support for only a few of them.
 
+:warning: **Only JESD204B (8B10B) is supported for this project!**
+
 The overwritable parameters from the environment:
 
 - RX_JESD_L - RX number of lanes per link
 - RX_JESD_M - RX number of converters per link
 - RX_JESD_S - RX number of samples per converter per frame
 - RX_JESD_NP - RX number of bits per sample
+
+#### XCVR build parameters
+
+- PLL_TYPE - The PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+- REF_CLK - Value of the reference clock [MHz]
+- LANE_RATE - Value of lane rate [gbps]
 
 ### Example configurations
 
@@ -30,7 +38,10 @@ This specific command is equivalent to running `make` only:
 make RX_JESD_L=4 \
 RX_JESD_M=16 \
 RX_JESD_S=1 \
-RX_JESD_NP=12
+RX_JESD_NP=12 \
+PLL_TYPE=QPLL0 \
+REF_CLK=750 \
+LANE_RATE=15
 ```
 
 Corresponding device tree: [vcu118_ad9083.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_ad9083.dts)

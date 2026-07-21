@@ -31,6 +31,20 @@ The overwritable parameters from the environment are:
 - [RX/TX]_KS_PER_CHANNEL: [RX/TX] number of samples stored in internal buffers in kilosamples per converter (M), for each channel in a block RAM, for a contiguous capture
 - CORUNDUM: includes and enables the Corundum Network Stack in the design
 
+#### XCVR build parameters
+
+- PLL_TYPE: The PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+- REF_CLK: Value of the reference clock [MHz]
+- LANE_RATE: Value of lane rate [gbps]
+
+#### Optional XCVR overrides
+
+The following parameters allow configuring the RX transceiver independently from the TX path. If omitted, the RX path inherits the corresponding base parameter (PLL_TYPE, LANE_RATE, REF_CLK).
+
+- XCVR_RX_PLL_TYPE - RX PLL type [CPLL/QPLL0/QPLL1]
+- XCVR_RX_LANE_RATE - RX lane rate [gbps]
+- XCVR_RX_REF_CLK - RX reference clock [MHz] (usually XCVR_RX_LANE_RATE/20 or XCVR_RX_LANE_RATE/40)
+
 ### Example configurations
 
 #### JESD204B subclass 1, TX mode 9, RX mode 10 (default)
@@ -52,7 +66,10 @@ TX_JESD_S=1 \
 TX_JESD_NP=16 \
 TX_NUM_LINKS=1 \
 RX_KS_PER_CHANNEL=64 \
-TX_KS_PER_CHANNEL=64
+TX_KS_PER_CHANNEL=64 \
+PLL_TYPE=QPLL0 \
+REF_CLK=500 \
+LANE_RATE=10
 ```
 
 Corresponding device tree: [vcu118_ad9081_m8_l4.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_ad9081_m8_l4.dts)
@@ -72,7 +89,10 @@ TX_JESD_M=4 \
 TX_JESD_L=8 \
 TX_JESD_S=1 \
 TX_JESD_NP=16 \
-TX_NUM_LINKS=1
+TX_NUM_LINKS=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=750 \
+LANE_RATE=15
 ```
 
 Corresponding device tree: [vcu118_ad9081.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_ad9081.dts)
@@ -92,7 +112,10 @@ TX_JESD_M=4 \
 TX_JESD_L=4 \
 TX_JESD_S=1 \
 TX_JESD_NP=16 \
-TX_NUM_LINKS=1
+TX_NUM_LINKS=1 \
+PLL_TYPE=QPLL1 \
+REF_CLK=250 \
+LANE_RATE=16.5
 ```
 
 Corresponding device tree: [vcu118_ad9081_204c_txmode_10_rxmode_11.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_ad9081_204c_txmode_10_rxmode_11.dts)
@@ -116,7 +139,10 @@ TX_JESD_M=4 \
 TX_JESD_L=4 \
 TX_JESD_S=1 \
 TX_JESD_NP=16 \
-TX_NUM_LINKS=1
+TX_NUM_LINKS=1 \
+PLL_TYPE=QPLL1 \
+REF_CLK=375 \
+LANE_RATE=24.75
 ```
 
 Corresponding device tree: [vcu118_ad9081_204c_txmode_10_rxmode_11_lr_24_75Gbps.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_ad9081_204c_txmode_10_rxmode_11_lr_24_75Gbps.dts)
@@ -136,7 +162,10 @@ TX_JESD_M=4 \
 TX_JESD_L=4 \
 TX_JESD_S=2 \
 TX_JESD_NP=12 \
-TX_NUM_LINKS=1
+TX_NUM_LINKS=1 \
+PLL_TYPE=QPLL1 \
+REF_CLK=250 \
+LANE_RATE=16.5
 ```
 
 Corresponding device trees:
@@ -159,7 +188,10 @@ TX_JESD_M=8 \
 TX_JESD_L=8 \
 TX_JESD_S=2 \
 TX_JESD_NP=12 \
-TX_NUM_LINKS=1
+TX_NUM_LINKS=1 \
+PLL_TYPE=QPLL1 \
+REF_CLK=375 \
+LANE_RATE=24.75
 ```
 
 Corresponding device tree: [vcu118_ad9081_204c_txmode_24_rxmode_26_lr_24_75Gbps.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_ad9081_204c_txmode_24_rxmode_26_lr_24_75Gbps.dts)
@@ -184,5 +216,8 @@ TX_JESD_NP=16 \
 TX_NUM_LINKS=1 \
 RX_KS_PER_CHANNEL=64 \
 TX_KS_PER_CHANNEL=64 \
-CORUNDUM = 1
+CORUNDUM = 1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=500 \
+LANE_RATE=10
 ```

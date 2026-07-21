@@ -17,6 +17,8 @@ If other configurations than the default one are desired, then the parameters fr
 
 New profiles other than the default one that we provide, can be generated using the [MATLAB Filter Wizard / Profile Generator for ADRV9009](https://www.analog.com/media/en/evaluation-boards-kits/evaluation-software/ADRV9008-x-ADRV9009-profile-config-tool-filter-wizard-v2.4.zip).
 
+:warning: **Only JESD204B (8B10B) is supported for this project!**
+
 The overwritable parameters from the environment:
 
 - [TX/RX/RX_OS]_JESD_M: [TX/RX/RX_OS] number of converters per link
@@ -24,6 +26,12 @@ The overwritable parameters from the environment:
 - [TX/RX/RX_OS]_JESD_S: [TX/RX/RX_OS] number of samples per converter per frame
 
 RX_OS means RX Observation path.
+
+#### XCVR build parameters
+
+- PLL_TYPE: The PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+- REF_CLK: Value of the reference clock [MHz]
+- LANE_RATE: Value of lane rate [gbps]
 
 ### Example configurations
 
@@ -40,7 +48,10 @@ RX_JESD_L=2 \
 RX_JESD_S=1 \
 RX_OS_JESD_M=2 \
 RX_OS_JESD_L=2 \
-RX_OS_JESD_S=1
+RX_OS_JESD_S=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=250 \
+LANE_RATE=10
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-adrv9009-jesd204-fsm.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9009-jesd204-fsm.dts)
