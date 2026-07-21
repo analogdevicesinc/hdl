@@ -10,12 +10,12 @@ receive chain transports the captured samples from ADC to the system memory
 support circuitry required to operate the :adi:`AD9083` in various modes and
 configurations.
 
-The :adi:`AD9083` is a 16-bit, 16 channel with 125 MHz bandwidth per channel
-(2 GSPS total) analog-to-digital converter (ADC) featuring an on-chip
-programmable, single-pole antialiasing filter and termination resistor that
-is designed for low power, small size, and ease of use. The digital outputs
-are designed to use the JESD204B standard, in subclass 1 or 0. The current
-HDL design supports only subclass 1 operations.
+The :adi:`AD9083` is a 16-bit, 16 channel with 125 MHz bandwidth per channel (2
+GSPS total) analog-to-digital converter (ADC) featuring an on-chip programmable,
+single-pole antialiasing filter and termination resistor that is designed for
+low power, small size, and ease of use. The digital outputs are designed to use
+the JESD204B standard, in subclass 1 or 0. The current HDL design supports only
+subclass 1 operations.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -50,8 +50,8 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
-The digital outputs are designed to use the JESD204B standard, in subclass 1
-or 0. The current HDL design supports only subclass 1 operations (deterministic
+The digital outputs are designed to use the JESD204B standard, in subclass 1 or
+0. The current HDL design supports only subclass 1 operations (deterministic
 latency being a system requirement).
 
 Block diagram
@@ -86,6 +86,10 @@ VCU118
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. warning::
+
+   Only JESD204B (8B10B) is supported for this project.
+
 The following are the parameters of this project that can be configured:
 
 .. list-table::
@@ -112,8 +116,34 @@ The following are the parameters of this project that can be configured:
      - 16
      - 12
 
-Other JESD204B output configuration modes can be found in the :adi:`AD9083`
-data sheet, at Table 24.
+XCVR build parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following parameters configure the transceiver (XCVR) link on Xilinx
+carriers with XCVR automation flow:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Parameter
+     - Description
+     - ZCU102
+     - VCU118
+   * - PLL_TYPE
+     - The PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+     - QPLL0
+     - QPLL0
+   * - REF_CLK
+     - Value of the reference clock [MHz] (LANE_RATE/20 or LANE_RATE/40)
+     - 500
+     - 750
+   * - LANE_RATE
+     - Value of the lane rate [Gbps]
+     - 10
+     - 15
+
+Other JESD204B output configuration modes can be found in the :adi:`AD9083` data
+sheet, at Table 24.
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -136,8 +166,8 @@ formulas below:
 
    Device Clock = Link Clock * \frac{DPW}{TPL\_DPW}
 
-Where DPW is the JESD204B link layer datapath width (4 bytes) and TPL_DPW is
-the transport layer datapath width (OCTETS_PER_BEAT).
+Where DPW is the JESD204B link layer datapath width (4 bytes) and TPL_DPW is the
+transport layer datapath width (OCTETS_PER_BEAT).
 
 ZCU102
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -241,11 +271,11 @@ ad9083_jesd204     11  ---          ---           32     ---
 Building the HDL project
 -------------------------------------------------------------------------------
 
-The design is built upon ADI's generic HDL reference design framework.
-ADI distributes the bit/elf files of these projects as part of the
-:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
-If you want to build the sources, ADI makes them available on the
-:git-hdl:`HDL repository </>`. To get the source you must
+The design is built upon ADI's generic HDL reference design framework. ADI
+distributes the bit/elf files of these projects as part of the
+:external+documentation:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
+the sources, ADI makes them available on the :git-hdl:`HDL repository </>`. To
+get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
@@ -254,23 +284,33 @@ command.
 
 **Linux/Cygwin/WSL**
 
-Building the project on ZCU102 without parameters, will use the default
-configuration, meaning L = 4, M = 16 and L = 1.
+Building the project on ZCU102 without parameters will use the default
+configuration, meaning L = 4, M = 16, S = 1, PLL_TYPE = QPLL0, REF_CLK = 500 and
+LANE_RATE = 10.
 
 .. shell::
 
    $cd hdl/projects/ad9083_evb/zcu102
    $make
 
-Example of running the ``make`` command with parameters:
+Example for building the project with JESD parameters (XCVR parameters will use
+their default values):
 
 .. shell::
 
    $cd hdl/projects/ad9083_evb/zcu102
    $make RX_JESD_L=4 RX_JESD_M=16
 
-The result of the build, if parameters were used, will be in a folder named
-by the configuration used:
+Example for building the project with JESD and XCVR parameters:
+
+.. shell::
+
+   $cd hdl/projects/ad9083_evb/zcu102
+   $make RX_JESD_L=4 RX_JESD_M=16 \
+   $     PLL_TYPE=QPLL0 REF_CLK=500 LANE_RATE=10
+
+The result of the build, if parameters were used, will be in a folder named by
+the configuration used:
 
 if the following command was run
 
@@ -278,12 +318,15 @@ if the following command was run
 
 then the folder name will be:
 
-``RXL4_RXM16``
-because of truncation of some keywords so the name will not exceed the limits
-of the Operating System (``JESD``, ``LANE``, etc. are removed) of 260
-characters.
+``RXL4_RXM16`` because of truncation of some keywords so the name will not
+exceed the limits of the Operating System (``JESD``, ``LANE``, etc. are removed)
+of 260 characters.
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+The XCVR automation flow also creates a sub-build under
+``hdl/projects/xcvr_wizard/$carrier/``. For details on how the folder name is
+formed, see :ref:`xgt_wizard_build_output`.
+
+Refer to the :ref:`build_hdl` user guide for a more comprehensive build guide.
 
 Resources
 -------------------------------------------------------------------------------
@@ -293,7 +336,7 @@ Systems related
 
 - Another quick start guide using this evaluation board (but not using our HDL
   code) is
-  :dokuwiki:`AD9083-EVB evaluation using the ADS80V3EBZ capture board <resources/eval/ad9083>`
+  :external+documentation:ref:`AD9083-EVB evaluation using the ADS80V3EBZ capture board <eval-ad9083>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -346,13 +389,13 @@ HDL related
    - ``*`` - used only in A10SoC project
    - ``**`` - used in ZCU102 and VCU118 projects
 
-- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`generic_jesd_bds`
 - :ref:`jesd204`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`Linux driver documentation <resources/tools-software/linux-drivers/iio-adc/ad9083>`
+- :external+linux:ref:`Linux driver documentation <ad9083>`
 - AD9083-EVB/ZCU102 Linux device tree :git-linux:`arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9083-fmc-ebz.dts`
 - AD9083-EVB/A10SoC Linux device tree :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_ad9083_fmc_ebz.dts`
 - AD9083-EVB/VCU118 Linux device tree :git-linux:`arch/microblaze/boot/dts/vcu118_ad9083.dts`

@@ -127,9 +127,9 @@ are followed by the individual JESD204B and ADC/DAC IP cores. The cores are
 programmable through an AXI-lite interface.
 
 The digital interface consists of 4 transmit and 4 receive lanes running at
-10Gbps, by default. The transceivers interface the ADC/DAC cores at
-128bits @250MHz. The data is sent or received based on the configuration of
-separate transmit and receive chains.
+10Gbps, by default. The transceivers interface the ADC/DAC cores at 128bits
+@250MHz. The data is sent or received based on the configuration of separate
+transmit and receive chains.
 
 Evaluation Board Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -147,9 +147,43 @@ Configuration modes
 
 The following are the parameters of this project that can be configured:
 
+JESD parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 - [RX/TX]_JESD_M: number of converters per link
 - [RX/TX]_JESD_L: number of lanes per link
 - [RX/TX]_JESD_S: number of samples per frame
+
+XCVR build parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- PLL_TYPE: the PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+  (ZC706 supports only CPLL/QPLL)
+- REF_CLK: value of the reference clock [MHz] (LANE_RATE/20 or
+  LANE_RATE/40)
+- LANE_RATE: value of the lane rate [Gbps]
+
+Default XCVR values per carrier:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Parameter
+     - KCU105
+     - ZC706
+     - ZCU102
+   * - PLL_TYPE
+     - QPLL0
+     - QPLL
+     - QPLL0
+   * - REF_CLK
+     - 500
+     - 500
+     - 500
+   * - LANE_RATE
+     - 10
+     - 10
+     - 10
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -159,7 +193,7 @@ signals used on the AD-FMCDAQ2-EBZ platform.
 
 The :adi:`AD-FMCDAQ2-EBZ <EVAL-AD-FMCDAQ2-EBZ>` platform only uses the second
 PLL of the :adi:`AD9523-1` with the reference for the PLL being sourced from an
-external 125 MHz crystal. 
+external 125 MHz crystal.
 
 This is the default AD-FMCDAQ2-EBZ configuration with both converters running at
 the maximum supported samplerate of 1 GSPS.
@@ -204,7 +238,7 @@ The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
 ==================== =============== ===========
-Instance             Zynq/Microblaze ZynqMP     
+Instance             Zynq/Microblaze ZynqMP
 ==================== =============== ===========
 axi_ad9144_xcvr      0x44A6_0000     0x84A6_0000
 axi_ad9144_tpl       0x44A0_4000     0x84A0_4000
@@ -428,48 +462,54 @@ Below are the Programmable Logic interrupts used in this project.
 Building the HDL project
 -------------------------------------------------------------------------------
 
-The design is built upon ADI's generic HDL reference design framework.
-ADI distributes the bit/elf files of these projects as part of the
-:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
-If you want to build the sources, ADI makes them available on the
-:git-hdl:`HDL repository </>`. To get the source you must
+The design is built upon ADI's generic HDL reference design framework. ADI
+distributes the bit/elf files of these projects as part of the
+:external+documentation:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
+the sources, ADI makes them available on the :git-hdl:`HDL repository </>`. To
+get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the hdl/projects/daq2/$carrier location and run the make
-command.
+Then go to the hdl/projects/daq2/$carrier location and run the make command.
 
 **Linux/Cygwin/WSL**
-Example of running the ``make`` command without parameters (using the default
-configuration):
 
 .. shell::
 
    $cd hdl/projects/daq2/zcu102
    $make
 
-Example of running the ``make`` command with parameters:
+Building without parameters will use the default configuration (see the table
+above for default values per carrier, including XCVR parameters such as
+PLL_TYPE, REF_CLK and LANE_RATE).
+
+Example for building the project with JESD parameters (XCVR parameters
+will use their default values):
 
 .. shell::
 
    $cd hdl/projects/daq2/zcu102
-   $make RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=4 TX_JESD_L=4 RX_JESD_S=1 
+   $make RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=1 \
+   $     TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=1
 
-The result of the build, if parameters were used, will be in a folder named
-by the configuration used:
+Example for building the project with JESD and XCVR parameters:
 
-if the following command was run
+.. shell::
 
-``make RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=4 TX_JESD_L=4 RX_JESD_S=1``
+   $cd hdl/projects/daq2/zcu102
+   $make RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=1 \
+   $     TX_JESD_M=4 TX_JESD_L=4 TX_JESD_S=1 \
+   $     PLL_TYPE=QPLL0 REF_CLK=500 LANE_RATE=10
 
-then the folder name will be:
+The result of the build, if parameters were used, will be in a folder named by
+the configuration used, with truncation of some keywords (``JESD``, ``LANE``,
+etc. are removed) so the path will not exceed OS limits.
 
-``RXM4_RXL4_RXS1_TXM4_TX_L4_TXS1``
-because of truncation of some keywords so the name will not exceed the limits
-of the Operating System (``JESD``, ``LANE``, etc. are removed) of 260
-characters.
+The XCVR automation flow creates a sub-build under
+``hdl/projects/xcvr_wizard/$carrier/``. For details on how the folder name is
+formed, see :ref:`xgt_wizard_build_output`.
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+Refer to the :ref:`build_hdl` user guide for a more comprehensive build guide.
 
 Software considerations
 -------------------------------------------------------------------------------
@@ -554,7 +594,7 @@ HDL related
      - :git-hdl:`library/data_offload`
      - 	:ref:`data_offload`
 
-- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`generic_jesd_bds`
 - :ref:`jesd204`
 
 Software related

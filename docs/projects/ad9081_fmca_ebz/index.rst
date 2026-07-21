@@ -4,37 +4,33 @@ AD9081/AD9082/AD9986/AD9988 HDL project
 ===============================================================================
 
 The :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` / :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
-reference design (also known as Single MxFE) is a processor based
-(e.g. Microblaze) embedded system.
-This reference design works with :adi:`EVAL-AD9986` and
-:adi:`EVAL-AD9988` as well.
-The design consists from a receive and a transmit chain.
+reference design (also known as Single MxFE) is a processor based (e.g.
+Microblaze) embedded system. This reference design works with :adi:`EVAL-AD9986`
+and :adi:`EVAL-AD9988` as well. The design consists from a receive and a
+transmit chain.
 
-The receive chain transports the captured samples from ADC to the system
-memory (DDR). Before transferring the data to DDR the samples are stored
-in a buffer implemented on block rams from the FPGA fabric
-(:git-hdl:`util_adcfifo <library/util_adcfifo>`).
-The space allocated in the buffer for each channel
-depends on the number of currently active channels. It goes up to M x
-64k samples if a single channel is selected or 64k samples per channel
-if all channels are selected.
+The receive chain transports the captured samples from ADC to the system memory
+(DDR). Before transferring the data to DDR the samples are stored in a buffer
+implemented on block rams from the FPGA fabric (:git-hdl:`util_adcfifo
+<library/util_adcfifo>`). The space allocated in the buffer for each channel
+depends on the number of currently active channels. It goes up to M x 64k
+samples if a single channel is selected or 64k samples per channel if all
+channels are selected.
 
-The transmit chain transports samples from the system memory to the DAC
-devices. Before streaming out the data to the DAC through the JESD link
-the samples first are loaded into a buffer
-(:git-hdl:`util_dacfifo <library/util_dacfifo>`) which will
-cyclically stream the samples at the tx_device_clk data rate. The space
-allocated in the transmit buffer for each channel depends on the number
-of currently active channels. It goes up to M x 64k samples if a single
-channel is selected or 64k samples per channel if all channels are
-selected.
+The transmit chain transports samples from the system memory to the DAC devices.
+Before streaming out the data to the DAC through the JESD link the samples first
+are loaded into a buffer (:git-hdl:`util_dacfifo <library/util_dacfifo>`) which
+will cyclically stream the samples at the tx_device_clk data rate. The space
+allocated in the transmit buffer for each channel depends on the number of
+currently active channels. It goes up to M x 64k samples if a single channel is
+selected or 64k samples per channel if all channels are selected.
 
-All cores from the receive and transmit chains are programmable through
-an AXI-Lite interface.
+All cores from the receive and transmit chains are programmable through an
+AXI-Lite interface.
 
-The transmit and receive chains can operate at different data rates
-having separate rx_device_clk/tx_device_clk and corresponding lane rates
-but must share the same reference clock.
+The transmit and receive chains can operate at different data rates having
+separate rx_device_clk/tx_device_clk and corresponding lane rates but must share
+the same reference clock.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -135,18 +131,17 @@ Supported carriers
    in your setup, the following reworks are required **on the evaluation
    board**:
 
-   - To avoid using an external clock source and fully rely on the HMC7044
-     clock chip, rotate the C6D/C4D caps in C5D/C3D position
-     (Please note: In the latest version of the board, this is now the
-     default configuration, so this configuration step **might not
-     be needed anymore**).
-   - If LEDS V1P0_LED and VINT_LED are not on, please **depopulate R22M
-     and populate R2M**
+   - To avoid using an external clock source and fully rely on the HMC7044 clock
+     chip, rotate the C6D/C4D caps in C5D/C3D position (Please note: In the
+     latest version of the board, this is now the default configuration, so this
+     configuration step **might not be needed anymore**).
+   - If LEDS V1P0_LED and VINT_LED are not on, please **depopulate R22M and
+     populate R2M**
 
    For the carrier,
    :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`,
    the following reworks are mandatory:
-   :dokuwiki:`[Wiki] FMC Pin Connection Configuration <resources/eval/user-guides/ad9081/quickstart/a10soc#fmc_pin_connection_configuration_change>`
+   :external+documentation:ref:`[Wiki] FMC Pin Connection Configuration <ad9081 quickstart a10soc>`
 
 .. warning::
    For
@@ -215,8 +210,8 @@ Example block design for Single link; M=4; L=8
    :align: center
    :alt: AD9081-FMCA-EBZ JESD204B M=4 L=8 block diagram
 
-The Rx links are set for full bandwidth mode and operate with the
-following parameters:
+The Rx links are set for full bandwidth mode and operate with the following
+parameters:
 
 - Rx Deframer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick Config 0x12)
 - Sample Rate: 1550 MSPS
@@ -226,8 +221,8 @@ following parameters:
 - JESD204B Lane Rate: 15.5Gbps
 - QPLL0
 
-The Tx links are set for full bandwidth mode and operate with the
-following parameters:
+The Tx links are set for full bandwidth mode and operate with the following
+parameters:
 
 - Tx Framer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick Config 0x11)
 - Sample Rate: 1550 MSPS
@@ -242,8 +237,8 @@ Example block design for Single link; M=2; L=8; JESD204C
 
 .. note::
 
-   In 2019_R2 release, the AMD JESD Physical layer IP Core is used,
-   however in newer versions it is replaced with ADI's util_adxcvr IP core.
+   In 2019_R2 release, the AMD JESD Physical layer IP Core is used, however in
+   newer versions it is replaced with ADI's util_adxcvr IP core.
 
 .. image:: ad9081_204c_M2L8.svg
    :width: 800
@@ -299,9 +294,8 @@ Configuration modes
 
 The block design supports configuration of parameters and scales.
 
-We have listed a couple of examples at section
-`Building the HDL project`_ and the default modes
-for each project.
+We have listed a couple of examples at section `Building the HDL project`_ and
+the default modes for each project.
 
 .. note::
 
@@ -329,11 +323,12 @@ The following are the parameters of this project that can be configured:
 
   - 64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
     Layer
-  - 8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
-    Layer
+  - 8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical Layer
+  - ZC706 and A10SoC support only 8B10B
 - RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
 - TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)
-- REF_CLK_RATE: the rate of the reference clock
+- REF_CLK_RATE: the rate of the reference clock (LANE_RATE/20 or
+  LANE_RATE/40 for JESD204B; LANE_RATE/33 or LANE_RATE/66 for JESD204C)
 - DEVICE_CLK_RATE: the rate of the device clock (Intel only)
 - [RX/TX]_JESD_M: number of converters per link
 - [RX/TX]_JESD_L: number of lanes per link
@@ -341,8 +336,8 @@ The following are the parameters of this project that can be configured:
 - [RX/TX]_JESD_NP: number of bits per sample
 - [RX/TX]_NUM_LINKS: number of links
 - [RX/TX]_TPL_WIDTH
-- TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization
-  through TDD. Must be set to 1 when SHARED_DEVCLK=1
+- TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization through
+  TDD. Must be set to 1 when SHARED_DEVCLK=1
 - SHARED_DEVCLK
 - TDD_CHANNEL_CNT
 - TDD_SYNC_WIDTH
@@ -353,8 +348,34 @@ The following are the parameters of this project that can be configured:
 - [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
   kilosamples per converter (M)
 - [ADC/DAC]_DO_MEM_TYPE
-- Check out this guide on more details regarding these parameters: :ref:`axi_tdd`
+- Check out this guide on more details regarding these parameters:
+  :ref:`axi_tdd`
 - CORUNDUM: enables the Corundum Network Stack
+
+XCVR build parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following parameters configure the transceiver (XCVR) link on Xilinx
+carriers with XCVR automation flow:
+
+- PLL_TYPE: the PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1] (ZC706
+  supports only CPLL/QPLL)
+- REF_CLK: value of the reference clock [MHz] (LANE_RATE/20 or LANE_RATE/40 for
+  JESD204B; LANE_RATE/33 or LANE_RATE/66 for JESD204C)
+- LANE_RATE: value of the lane rate [Gbps]
+
+Optional XCVR overrides
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following optional parameters allow configuring the RX transceiver
+independently from the TX path. If omitted, the RX path inherits the
+corresponding base parameter (PLL_TYPE, LANE_RATE, REF_CLK).
+
+- XCVR_RX_PLL_TYPE: RX PLL type [CPLL/QPLL0/QPLL1]
+- XCVR_RX_LANE_RATE: RX lane rate [Gbps]
+- XCVR_RX_REF_CLK: RX reference clock [MHz] (XCVR_RX_LANE_RATE/20 or
+  XCVR_RX_LANE_RATE/40 for JESD204B; XCVR_RX_LANE_RATE/33 or
+  XCVR_RX_LANE_RATE/66 for JESD204C)
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -426,8 +447,8 @@ corundum_core       $CORUNDUM==1         0x5000_0000
 corundum_gpio_reset $CORUNDUM==1         0x5200_0000
 =================== ==================== ===========
 
-For the Intel carriers, only a part of the CPU interrupts are specified,
-as the rest depend on the values of $TX_NUM_OF_LANES and $TRANSCEIVER_TYPE
+For the Intel carriers, only a part of the CPU interrupts are specified, as the
+rest depend on the values of $TX_NUM_OF_LANES and $TRANSCEIVER_TYPE
 (see :git-hdl:`projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_qsys.tcl`
 for more details).
 
@@ -518,21 +539,31 @@ corundum_core    5
 Building the HDL project
 -------------------------------------------------------------------------------
 
-The design is built upon ADI's generic HDL reference design framework.
-ADI distributes the bit/elf files of these projects as part of the
-:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
-If you want to build the sources, ADI makes them available on the
-:git-hdl:`HDL repository </>`. To get the source you must
+The design is built upon ADI's generic HDL reference design framework. ADI
+distributes the bit/elf files of these projects as part of the
+:external+documentation:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
+the sources, ADI makes them available on the :git-hdl:`HDL repository </>`. To
+get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
 Then go to the :git-hdl:`projects/ad9081_fmca_ebz` or
 (:git-hdl:`projects/ad9082_fmca_ebz`, for :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`)
-location and run the make command by typing in you command prompt:
-
-Example for building the project with parameters:
+location and run the make command by typing in you command prompt.
 
 **Linux/Cygwin/WSL**
+
+Building the project without parameters will use the default configuration (see
+the table below for default values per carrier, including XCVR parameters such
+as PLL_TYPE, REF_CLK and LANE_RATE).
+
+.. shell::
+
+   $cd hdl/projects/ad9081_fmca_ebz/zcu102
+   $make
+
+Example for building the project with JESD parameters (XCVR parameters
+will use their default values):
 
 .. shell::
 
@@ -542,10 +573,21 @@ Example for building the project with parameters:
    $     RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 \
    $     TX_JESD_S=1 TX_JESD_NP=16
 
+Example for building the project with JESD and XCVR parameters:
+
+.. shell::
+
+   $cd hdl/projects/ad9081_fmca_ebz/zcu102
+   $make JESD_MODE=8B10B RX_LANE_RATE=2 TX_LANE_RATE=4 \
+   $     RX_JESD_M=8 RX_JESD_L=2 RX_JESD_S=1 \
+   $     TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1 \
+   $     PLL_TYPE=QPLL0 REF_CLK=100 LANE_RATE=4 \
+   $     XCVR_RX_PLL_TYPE=CPLL XCVR_RX_LANE_RATE=2
+
 The following dropdowns contain tables with the parameters that can be used to
-configure this project, depending on the carrier used.
-Where a cell contains a --- (dash) it means that the parameter doesn't exist
-for that project (ad9081_fmca_ebz/$carrier or ad9082_fmca_ebz/$carrier).
+configure this project, depending on the carrier used. Where a cell contains a
+--- (dash) it means that the parameter doesn't exist for that project
+(ad9081_fmca_ebz/$carrier or ad9082_fmca_ebz/$carrier).
 
 .. warning::
 
@@ -560,69 +602,87 @@ for that project (ad9081_fmca_ebz/$carrier or ad9082_fmca_ebz/$carrier).
 
 .. collapsible:: Default values of the ``make`` parameters for AD9081-FMCA-EBZ
 
-   +-------------------+--------------------------------------------------------------------------+
-   | Parameter         |      Default value of the parameters depending on carrier                |
-   |                   +----------+----------+--------+--------+--------+--------+-------+--------+
-   |                   |   A10SoC |     FM87 | VCK190 | VPK180 | VCU118 | VCU128 | ZC706 | ZCU102 |
-   +===================+==========+==========+========+========+========+========+=======+========+
-   | JESD_MODE         |      --- |   64B66B | 64B66B | 64B66B |  8B10B |  8B10B | 8B10B |  8B10B |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | RX_LANE_RATE      |       10 |       15 |  24.75 |  24.75 |     10 |     10 |    10 |     10 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TX_LANE_RATE      |       10 |       15 |  24.75 |  24.75 |     10 |     10 |    10 |     10 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | REF_CLK_RATE      |      250 |      375 |    375 |    --- |    375 |    --- |   --- |    --- |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | DEVICE_CLK_RATE   |      250 |      375 |    --- |    --- |    --- |    --- |   --- |    --- |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | RX_JESD_M         |        8 |        8 |      8 |      8 |      8 |      8 |     8 |      8 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | RX_JESD_L         |        4 |        8 |      8 |      8 |      4 |      4 |     4 |      4 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | RX_JESD_S         |        1 |        1 |      2 |      2 |      1 |      1 |     1 |      1 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | RX_JESD_NP        |       16 |       16 |     12 |     12 |     16 |     16 |    16 |     16 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | RX_NUM_LINKS      |        1 |       1  |      1 |      1 |      1 |      1 |     1 |      1 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | RX_TPL_WIDTH      |      --- |      --- |    --- |    --- |    --- |    --- |   --- |     {} |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TX_JESD_M         |        8 |        8 |      8 |      8 |      8 |      8 |     8 |      8 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TX_JESD_L         |        4 |        8 |      8 |      8 |      4 |      4 |     4 |      4 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TX_JESD_S         |        1 |        1 |      2 |      2 |      1 |      1 |     1 |      1 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TX_JESD_NP        |       16 |       16 |     12 |     12 |     16 |     16 |    16 |     16 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TX_NUM_LINKS      |        1 |        1 |      1 |      1 |      1 |      1 |     1 |      1 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TX_TPL_WIDTH      |      --- |      --- |    --- |    --- |    --- |    --- |   --- |     {} |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TDD_SUPPORT       |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      0 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | SHARED_DEVCLK     |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      0 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TDD_CHANNEL_CNT   |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      2 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TDD_SYNC_WIDTH    |      --- |      --- |    --- |    --- |    --- |    --- |   --- |     32 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TDD_SYNC_INT      |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      1 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TDD_SYNC_EXT      |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      0 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TDD_SYNC_EXT_CDC  |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      0 |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | RX_KS_PER_CHANNEL |       16 |       32 |     64 |     64 |     64 |  16384 |   --- |    --- |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | TX_KS_PER_CHANNEL |       16 |       32 |     64 |     64 |     64 |  16384 |   --- |    --- |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | ADC_DO_MEM_TYPE   |      --- |      --- |    --- |    --- |    --- |      2 |   --- |    --- |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | DAC_DO_MEM_TYPE   |      --- |      --- |    --- |    --- |    --- |      2 |   --- |    --- |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
-   | CORUNDUM          |      --- |      --- |    --- |    --- |      0 |    --- |   --- |    --- |
-   +-------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   +---------------------+--------------------------------------------------------------------------+
+   | Parameter           |      Default value of the parameters depending on carrier                |
+   |                     +----------+----------+--------+--------+--------+--------+-------+--------+
+   |                     |   A10SoC |     FM87 | VCK190 | VPK180 | VCU118 | VCU128 | ZC706 | ZCU102 |
+   +=====================+==========+==========+========+========+========+========+=======+========+
+   | **XCVR build parameters**                                                                      |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | PLL_TYPE            |      --- |      --- |    --- |    --- |  QPLL0 |    --- |  QPLL |  QPLL0 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | LANE_RATE           |      --- |      --- |    --- |    --- |     10 |    --- |    10 |     10 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | REF_CLK             |      --- |      --- |    --- |    --- |    500 |    --- |   250 |    500 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | **Optional XCVR overrides**                                                                    |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | XCVR_RX_PLL_TYPE    |      --- |      --- |    --- |    --- |    --- |    --- |   --- |    --- |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | XCVR_RX_LANE_RATE   |      --- |      --- |    --- |    --- |    --- |    --- |   --- |    --- |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | XCVR_RX_REF_CLK     |      --- |      --- |    --- |    --- |    --- |    --- |   --- |    --- |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | **JESD and other build parameters**                                                            |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | JESD_MODE           |      --- |   64B66B | 64B66B | 64B66B |  8B10B |  8B10B | 8B10B |  8B10B |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | RX_LANE_RATE        |       10 |       15 |  24.75 |  24.75 |     10 |     10 |    10 |     10 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TX_LANE_RATE        |       10 |       15 |  24.75 |  24.75 |     10 |     10 |    10 |     10 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | REF_CLK_RATE        |      250 |      375 |    375 |    375 |    --- |    --- |   --- |    --- |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | DEVICE_CLK_RATE     |      250 |      375 |    --- |    --- |    --- |    --- |   --- |    --- |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | RX_JESD_M           |        8 |        8 |      8 |      8 |      8 |      8 |     8 |      8 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | RX_JESD_L           |        4 |        8 |      8 |      8 |      4 |      4 |     4 |      4 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | RX_JESD_S           |        1 |        1 |      2 |      2 |      1 |      1 |     1 |      1 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | RX_JESD_NP          |       16 |       16 |     12 |     12 |     16 |     16 |    16 |     16 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | RX_NUM_LINKS        |        1 |        1 |      1 |      1 |      1 |      1 |     1 |      1 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | RX_TPL_WIDTH        |      --- |      --- |    --- |    --- |    --- |    --- |   --- |     {} |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TX_JESD_M           |        8 |        8 |      8 |      8 |      8 |      8 |     8 |      8 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TX_JESD_L           |        4 |        8 |      8 |      8 |      4 |      4 |     4 |      4 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TX_JESD_S           |        1 |        1 |      2 |      2 |      1 |      1 |     1 |      1 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TX_JESD_NP          |       16 |       16 |     12 |     12 |     16 |     16 |    16 |     16 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TX_NUM_LINKS        |        1 |        1 |      1 |      1 |      1 |      1 |     1 |      1 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TX_TPL_WIDTH        |      --- |      --- |    --- |    --- |    --- |    --- |   --- |     {} |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TDD_SUPPORT         |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      0 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | SHARED_DEVCLK       |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      0 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TDD_CHANNEL_CNT     |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      2 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TDD_SYNC_WIDTH      |      --- |      --- |    --- |    --- |    --- |    --- |   --- |     32 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TDD_SYNC_INT        |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      1 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TDD_SYNC_EXT        |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      0 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TDD_SYNC_EXT_CDC    |      --- |      --- |    --- |    --- |    --- |    --- |   --- |      0 |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | RX_KS_PER_CHANNEL   |       16 |       32 |     64 |     64 |     64 |  16384 |   --- |    --- |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | TX_KS_PER_CHANNEL   |       16 |       32 |     64 |     64 |     64 |  16384 |   --- |    --- |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | ADC_DO_MEM_TYPE     |      --- |      --- |    --- |    --- |    --- |      2 |   --- |    --- |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | DAC_DO_MEM_TYPE     |      --- |      --- |    --- |    --- |    --- |      2 |   --- |    --- |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
+   | CORUNDUM            |      --- |      --- |    --- |    --- |      0 |    --- |   --- |    --- |
+   +---------------------+----------+----------+--------+--------+--------+--------+-------+--------+
 
 .. collapsible:: Default values of the ``make`` parameters for AD9082-FMCA-EBZ
 
@@ -674,8 +734,8 @@ for that project (ad9081_fmca_ebz/$carrier or ad9082_fmca_ebz/$carrier).
 
       ``*`` --- for this carrier only the 8B10B mode is supported
 
-The result of the build, if parameters were used, will be in a folder named
-by the configuration used:
+The result of the build, if parameters were used, will be in a folder named by
+the configuration used:
 
 if the following command was run
 
@@ -683,10 +743,9 @@ if the following command was run
 
 then the folder name will be:
 
-``RXRATE2_5_TXRATE2_5_RXL8_RXM4_RXS1_RXNP16_TXL8_TXM4_TXS1_TXNP16``
-because of truncation of some keywords so the name will not exceed the limits
-of the Operating System (``JESD``, ``LANE``, etc. are removed) of 260
-characters.
+``RXRATE2_5_TXRATE2_5_RXL8_RXM4_RXS1_RXNP16_TXL8_TXM4_TXS1_TXNP16`` because of
+truncation of some keywords so the name will not exceed the limits of the
+Operating System (``JESD``, ``LANE``, etc. are removed) of 260 characters.
 
 In case of the :adi:`VCU118`, if the Corundum Network Stack needs to be added,
 run the make command such as:
@@ -698,7 +757,11 @@ run the make command such as:
    Other build parameters may be added to the make command as shown in the
    previous example with multiple prameters when using the Corundum system.
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+The XCVR automation flow also creates a sub-build under
+``hdl/projects/xcvr_wizard/$carrier/``. For details on how the folder name is
+formed, see :ref:`xgt_wizard_build_output`.
+
+Refer to the :ref:`build_hdl` user guide for a more comprehensive build guide.
 
 Software considerations
 -------------------------------------------------------------------------------
@@ -709,9 +772,8 @@ ADC - crossbar config
 Due to physical constraints, Rx lanes are reordered as described in the
 following table.
 
-e.g physical lane 2 from ADC connects to logical lane 7
-from the FPGA. Therefore the crossbar from the device must be set
-accordingly.
+e.g physical lane 2 from ADC connects to logical lane 7 from the FPGA. Therefore
+the crossbar from the device must be set accordingly.
 
 ============ ===========================
 ADC phy Lane FPGA Rx lane / Logical Lane
@@ -732,9 +794,8 @@ DAC - crossbar config
 Due to physical constraints, Tx lanes are reordered as described in the
 following table.
 
-e.g physical lane 2 from DAC connects to logical lane 7
-from the FPGA. Therefore the crossbar from the device must be set
-accordingly.
+e.g physical lane 2 from DAC connects to logical lane 7 from the FPGA. Therefore
+the crossbar from the device must be set accordingly.
 
 ============ ===========================
 DAC phy lane FPGA Tx lane / Logical lane
@@ -755,9 +816,9 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD9081 & AD9082 & AD9988 & AD9986 Prototyping Platform User Guide <resources/eval/user-guides/ad9081_fmca_ebz>`
+- :external+documentation:ref:`AD9081 & AD9082 & AD9988 & AD9986 Prototyping Platform User Guide <ad9081>`
 - Here you can find all the quick start guides on wiki documentation
-  :dokuwiki:`[Wiki] AD9081/AD9082/AD9986/AD9988 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
+  :external+documentation:ref:`AD9081/AD9082/AD9986/AD9988 Quick Start Guides <ad9081 quickstart>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -773,11 +834,11 @@ Here you can find the quick start guides available for these evaluation boards:
      - Arria 10
      - FM87
    * - AD9081/AD9082/AD9986/AD9988
-     - :dokuwiki:`ZC706 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zynq>`
-     - :dokuwiki:`ZCU102 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zynqmp>`
-     - :dokuwiki:`VCU118 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/microblaze>`
-     - :dokuwiki:`VCK190/VMK180/VPK180 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/versal>`
-     - :dokuwiki:`A10SoC <resources/eval/user-guides/ad9081/quickstart/a10soc>`
+     - :external+documentation:ref:`ZC706 <ad9081 quickstart zc706>`
+     - :external+documentation:ref:`ZCU102 <ad9081 quickstart zcu102>`
+     - :external+documentation:ref:`VCU118 <ad9081 quickstart vcu118>`
+     - :external+documentation:ref:`VCK190 <ad9081 quickstart vck190>`
+     - :external+documentation:ref:`A10SoC <ad9081 quickstart a10soc>`
      - :dokuwiki:`FM87 <resources/eval/user-guides/ad9081/quickstart/fm87>`
 
 Hardware related
@@ -848,13 +909,13 @@ HDL related
      - :git-hdl:`library/corundum/ethernet`
      - :ref:`corundum_ethernet_core`
 
-- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`generic_jesd_bds`
 - :ref:`jesd204`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
+- :external+linux:ref:`AD9081-FMCA-EBZ Linux driver page <ad9081>`
 - Python support:
 
   - `AD9081 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html>`__

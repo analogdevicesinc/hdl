@@ -4,9 +4,9 @@ ADRV9009 HDL reference design
 ===============================================================================
 
 The HDL reference design is an embedded system built around a processor core
-either ARM, NIOS-II or Microblaze. A functional block diagram of the system
-is shown below. The device digital interface is handled by the transceiver
-IP followed by the JESD204B and device specific cores. The JESD204B lanes are
+either ARM, NIOS-II or Microblaze. A functional block diagram of the system is
+shown below. The device digital interface is handled by the transceiver IP
+followed by the JESD204B and device specific cores. The JESD204B lanes are
 shared among the 4 transmit, 2 receive and 2 observation/sniffer receive data
 paths by the same set of transceivers within the IP. The cores are programmable
 through an AXI-lite interface. The delineated data is then passed on to
@@ -93,20 +93,19 @@ Digital Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The digital interface consists of 4 transmit, 2 receive and 2
-observation/sniffer lanes running up to 9.8Gbps. The transceivers then
-interface to the cores at 128bits @245.76MHz in the transmit and
-64bits @245.76MHz for the receive channels. The sniffer/observation rates
-depend on the mode selected. The data is sent or received based on the
-configuration (programmable) from separate transmit and receive chains.
+observation/sniffer lanes running up to 9.8Gbps. The transceivers then interface
+to the cores at 128bits @245.76MHz in the transmit and 64bits @245.76MHz for the
+receive channels. The sniffer/observation rates depend on the mode selected. The
+data is sent or received based on the configuration (programmable) from separate
+transmit and receive chains.
 
 DAC Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The DAC data may be sourced from an internal data generator (DDS or pattern)
-or from the external DDR via DMA. The internal DDS phase and frequency are
+The DAC data may be sourced from an internal data generator (DDS or pattern) or
+from the external DDR via DMA. The internal DDS phase and frequency are
 programmable. :git-hdl:`DAC unpack IP <library/util_pack/util_upack2>` allows
-transfering data from the DMA to a reduced number of channels, at a higher
-rate.
+transfering data from the DMA to a reduced number of channels, at a higher rate.
 
 ADC Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -126,9 +125,12 @@ Configuration modes
 
 The block design supports configuration of parameters and scales.
 
-We have listed a couple of examples at section
-`Building the HDL project`_ and the default modes
-for each project.
+We have listed a couple of examples at section `Building the HDL project`_ and
+the default modes for each project.
+
+.. warning::
+
+   Only JESD204B (8B10B) is supported for this project.
 
 .. note::
 
@@ -144,6 +146,17 @@ The following are the parameters of this project that can be configured:
 - [RX/TX/RX_OS]_JESD_M: number of converters per link
 - [RX/TX/RX_OS]_JESD_L: number of lanes per link
 - [RX/TX/RX_OS]_JESD_S: number of samples per frame
+
+XCVR build parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following parameters configure the transceiver (XCVR) link on Xilinx
+carriers with XCVR automation flow:
+
+- PLL_TYPE: the PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1] (ZC706
+  supports only CPLL/QPLL)
+- REF_CLK: value of the reference clock [MHz] (LANE_RATE/20 or LANE_RATE/40)
+- LANE_RATE: value of the lane rate [Gbps]
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -281,16 +294,18 @@ axi_adrv9009_rx_dma     12  12
 Building the HDL project
 -------------------------------------------------------------------------------
 
-The design is built upon ADI's generic HDL reference design framework.
-ADI distributes the bit/elf files of these projects as part of the
-:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
-If you want to build the sources, ADI makes them available on the
-:git-hdl:`HDL repository </>`. To get the source you must
+The design is built upon ADI's generic HDL reference design framework. ADI
+distributes the bit/elf files of these projects as part of the
+:external+documentation:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
+the sources, ADI makes them available on the :git-hdl:`HDL repository </>`. To
+get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the project location, choose your carrier and run the make command
-by typing in your command prompt:
+Then go to the project location, choose your carrier and run the make command by
+typing in your command prompt. Building without parameters will use the default
+configuration (see the table below for default values per carrier, including
+XCVR parameters such as PLL_TYPE, REF_CLK and LANE_RATE).
 
 **Linux/Cygwin/WSL**
 
@@ -299,36 +314,74 @@ by typing in your command prompt:
    $cd hdl/projects/adrv9009/zcu102
    $make
 
+Example for building the project with JESD parameters (XCVR parameters will use
+their default values):
+
+.. shell::
+
+   $cd hdl/projects/adrv9009/zcu102
+   $make TX_JESD_M=4 TX_JESD_L=4 \
+   $     RX_JESD_M=4 RX_JESD_L=2 \
+   $     RX_OS_JESD_M=2 RX_OS_JESD_L=2
+
+Example for building the project with JESD and XCVR parameters:
+
+.. shell::
+
+   $cd hdl/projects/adrv9009/zcu102
+   $make TX_JESD_M=4 TX_JESD_L=4 \
+   $     RX_JESD_M=4 RX_JESD_L=2 \
+   $     RX_OS_JESD_M=2 RX_OS_JESD_L=2 \
+   $     PLL_TYPE=QPLL0 REF_CLK=250 LANE_RATE=10
+
 The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.
 
 .. collapsible:: Default values of the make parameters for ADRV9009
 
-   +-------------------+------------------------------------------------------+
-   | Parameter         | Default value of the parameters depending on carrier |
-   +-------------------+------------------------------------------------------+
-   |                   |             A10SoC/KCU105/S10SoC/ZC706/ZCU102        |
-   +===================+======================================================+
-   | RX_JESD_M         |                          4                           |
-   +-------------------+------------------------------------------------------+
-   | RX_JESD_L         |                          2                           |
-   +-------------------+------------------------------------------------------+
-   | RX_JESD_S         |                          1                           |
-   +-------------------+------------------------------------------------------+
-   | TX_JESD_M         |                          4                           |
-   +-------------------+------------------------------------------------------+
-   | TX_JESD_L         |                          4                           |
-   +-------------------+------------------------------------------------------+
-   | TX_JESD_S         |                          1                           |
-   +-------------------+------------------------------------------------------+
-   | RX_OS_JESD_M      |                          2                           |
-   +-------------------+------------------------------------------------------+
-   | RX_OS_JESD_L      |                          2                           |
-   +-------------------+------------------------------------------------------+
-   | RX_OS_JESD_S      |                          1                           |
-   +-------------------+------------------------------------------------------+
+   +-------------------+--------+--------+--------+-------+--------+
+   | Parameter         |          Default value                    |
+   |                   +--------+--------+--------+-------+--------+
+   |                   | A10SoC | KCU105 | S10SoC | ZC706 | ZCU102 |
+   +===================+========+========+========+=======+========+
+   | **XCVR build parameters**                                     |
+   +-------------------+--------+--------+--------+-------+--------+
+   | PLL_TYPE          |    --- |  QPLL0 |    --- |  CPLL |  QPLL0 |
+   +-------------------+--------+--------+--------+-------+--------+
+   | REF_CLK           |    --- |    250 |    --- |   125 |    250 |
+   +-------------------+--------+--------+--------+-------+--------+
+   | LANE_RATE         |    --- |     10 |    --- |     5 |     10 |
+   +-------------------+--------+--------+--------+-------+--------+
+   | **JESD build parameters**                                     |
+   +-------------------+--------+--------+--------+-------+--------+
+   | RX_JESD_M         |      4 |      4 |      4 |     4 |      4 |
+   +-------------------+--------+--------+--------+-------+--------+
+   | RX_JESD_L         |      2 |      2 |      2 |     2 |      2 |
+   +-------------------+--------+--------+--------+-------+--------+
+   | RX_JESD_S         |      1 |      1 |      1 |     1 |      1 |
+   +-------------------+--------+--------+--------+-------+--------+
+   | TX_JESD_M         |      4 |      4 |      4 |     4 |      4 |
+   +-------------------+--------+--------+--------+-------+--------+
+   | TX_JESD_L         |      4 |      4 |      4 |     4 |      4 |
+   +-------------------+--------+--------+--------+-------+--------+
+   | TX_JESD_S         |      1 |      1 |      1 |     1 |      1 |
+   +-------------------+--------+--------+--------+-------+--------+
+   | RX_OS_JESD_M      |      2 |      2 |      2 |     2 |      2 |
+   +-------------------+--------+--------+--------+-------+--------+
+   | RX_OS_JESD_L      |      2 |      2 |      2 |     2 |      2 |
+   +-------------------+--------+--------+--------+-------+--------+
+   | RX_OS_JESD_S      |      1 |      1 |      1 |     1 |      1 |
+   +-------------------+--------+--------+--------+-------+--------+
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+The result of the build, if parameters were used, will be in a folder named by
+the configuration used, with truncation of some keywords (``JESD``, ``LANE``,
+etc. are removed) so the path will not exceed OS limits.
+
+The XCVR automation flow creates a sub-build under
+``hdl/projects/xcvr_wizard/$carrier/``. For details on how the folder name is
+formed, see :ref:`xgt_wizard_build_output`.
+
+Refer to the :ref:`build_hdl` user guide for a more comprehensive build guide.
 
 Other considerations
 -------------------------------------------------------------------------------
@@ -451,13 +504,13 @@ HDL related
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      - :ref:`ad_ip_jesd204_tpl_dac`
 
-- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`generic_jesd_bds`
 - :ref:`jesd204`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV9009 Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/adrv9009>`
+- :external+documentation:ref:`ADRV9009 Linux driver page <iio-transceiver adrv9009>`
 
 - :git-linux:`ADRV9009 + ZCU102 device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9009-jesd204-fsm.dts>`
 - :git-linux:`ADRV9009 + ZC706 device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9009-jesd204-fsm.dts>`
