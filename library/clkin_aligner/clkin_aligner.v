@@ -386,24 +386,42 @@ module clkin_aligner #(
     .CE (gate_en_neg),
     .O  (clk_out));
 
-  // ---------------- ODR negedge re-registration (Sequence.txt §F.10 / Fused_part_sequence docx image16) ----------------
-  // ODR is re-registered on the FALLING edge of clk_in so its transitions align
-  // with the XTAL2_CLKIN falling edge, per the chip's digital designer
-  // recommendation (docx image16 shows the ODR launch on the dig_clk negedge).
+  // ---------------- ODR posedge re-registration (Sequence.txt §F.10) ----------------
+  // ODR is re-registered on the RISING edge of clk_in so its transitions align
+  // with the XTAL2_CLKIN rising edge. Bench A/B (ad7134_phase_8ch.py, ~20 boots):
+  // posedge lands the inter-chip offset at ~+7.9 ns (~98-100% inside the <10 ns
+  // spec); negedge is deterministic but out of spec (~+29.9 ns). Datasheet root
+  // cause: the chip samples the ODR RISING edge against its internal XTAL2/2
+  // (24 MHz HP) grid, so a half-CLKIN-cycle shift moves the ODR edge into the
+  // "good bin" away from the metastable sampling point.
+  //
+  // TO REVERT to the FALLING-edge (negedge) variant (docx image16, digital-designer
+  // recommendation): comment the posedge flops below, uncomment the negedge flops,
+  // AND restore -clock_fall on the ad713x_odr set_output_delay in system_constr.xdc.
 
-  (* mark_debug = "true" *) reg odr_neg = 1'b0;
-  always @(negedge clk_in) begin
-    odr_neg <= odr_in;
+  (* mark_debug = "true" *) reg odr_pos = 1'b0;
+  always @(posedge clk_in) begin
+    odr_pos <= odr_in;
   end
-  assign odr_out = odr_neg;
+  assign odr_out = odr_pos;
+  // --- Falling-edge variant (kept for easy revert) ---
+  // (* mark_debug = "true" *) reg odr_neg = 1'b0;
+  // always @(negedge clk_in) begin
+  //   odr_neg <= odr_in;
+  // end
+  // assign odr_out = odr_neg;
 
-  // Fabric-only debug twin of odr_out: odr_neg is packed into the output IOB
+  // Fabric-only debug twin of odr_out: odr_pos is packed into the output IOB
   // (IOB TRUE on ad713x_odr) so its net is unprobeable; this copy drives no port
   // so it stays in fabric. dont_touch prevents merge/re-absorption into the IOB.
   (* mark_debug = "true", dont_touch = "true" *) reg odr_out_dbg = 1'b0;
-  always @(negedge clk_in) begin
+  always @(posedge clk_in) begin
     odr_out_dbg <= odr_in;
   end
+  // Falling-edge debug twin (kept for easy revert):
+  // always @(negedge clk_in) begin
+  //   odr_out_dbg <= odr_in;
+  // end
 
   // ---------------- ODR sync strobe (Sequence.txt §F.7 — edge-146 anchor) ----------------
   // One-shot pulse asserted when edge_cnt first reaches edge_target (edge 146).
