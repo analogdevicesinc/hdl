@@ -27,6 +27,12 @@ The overwritable parameters from the environment are:
 - [RX/TX]_JESD_L - [RX/TX] number of lanes per link
 - [RX/TX]_JESD_S - [RX/TX] number of samples per converter per frame
 
+#### XCVR build parameters
+
+- PLL_TYPE - The PLL used for driving the XCVR link [CPLL/QPLL]
+- REF_CLK - Value of the reference clock [MHz]
+- LANE_RATE - Value of lane rate [gbps]
+
 ### Example configurations
 
 #### Default configuration
@@ -39,7 +45,10 @@ RX_JESD_L=4 \
 RX_JESD_S=1 \
 TX_JESD_M=2 \
 TX_JESD_L=4 \
-TX_JESD_S=1
+TX_JESD_S=1 \
+PLL_TYPE=QPLL \
+REF_CLK=500 \
+LANE_RATE=10
 ```
 
 Corresponding device tree: [zynq-zc706-adv7511-fmcdaq2.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcdaq2.dts)

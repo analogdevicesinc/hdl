@@ -39,6 +39,20 @@ The overwritable parameters from the environment are:
 - TDD_SYNC_EXT
 - TDD_SYNC_EXT_CDC: adds the CDC circuitry for the external sync signal
 
+#### XCVR build parameters
+
+- PLL_TYPE: The PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+- REF_CLK: Value of the reference clock [MHz]
+- LANE_RATE: Value of lane rate [gbps]
+
+#### Optional XCVR overrides
+
+The following parameters allow configuring the RX transceiver independently from the TX path. If omitted, the RX path inherits the corresponding base parameter (PLL_TYPE, LANE_RATE, REF_CLK).
+
+- XCVR_RX_PLL_TYPE - RX PLL type [CPLL/QPLL0/QPLL1]
+- XCVR_RX_LANE_RATE - RX lane rate [gbps]
+- XCVR_RX_REF_CLK - RX reference clock [MHz] (usually XCVR_RX_LANE_RATE/20 or XCVR_RX_LANE_RATE/40)
+
 ### Example configurations
 
 #### JESD204B subclass 1, TX mode 9, RX mode 10, VCXO 100 MHz (default)
@@ -54,7 +68,10 @@ RX_JESD_L=4 \
 RX_JESD_S=1 \
 TX_JESD_M=8 \
 TX_JESD_L=4 \
-TX_JESD_S=1
+TX_JESD_S=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=500 \
+LANE_RATE=10
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4.dts)
@@ -70,7 +87,10 @@ RX_JESD_L=8 \
 RX_JESD_S=1 \
 TX_JESD_M=4 \
 TX_JESD_L=8 \
-TX_JESD_S=1
+TX_JESD_S=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=750 \
+LANE_RATE=15
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081.dts)
@@ -86,7 +106,10 @@ RX_JESD_L=4 \
 RX_JESD_S=1 \
 TX_JESD_M=8 \
 TX_JESD_L=4 \
-TX_JESD_S=1
+TX_JESD_S=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=500 \
+LANE_RATE=10
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4.dts)
@@ -102,7 +125,10 @@ RX_JESD_L=4 \
 RX_JESD_S=1 \
 TX_JESD_M=8 \
 TX_JESD_L=4 \
-TX_JESD_S=1
+TX_JESD_S=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=500 \
+LANE_RATE=10
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4-vcxo122p88.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-vcxo122p88.dts)
@@ -120,7 +146,10 @@ TX_JESD_M=8 \
 TX_JESD_L=4 \
 TX_JESD_S=1 \
 TDD_SUPPORT=1 \
-SHARED_DEVCLK=1
+SHARED_DEVCLK=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=500 \
+LANE_RATE=10
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4-tdd.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-tdd.dts)
@@ -136,7 +165,10 @@ RX_JESD_L=4 \
 RX_JESD_S=1 \
 TX_JESD_M=8 \
 TX_JESD_L=4 \
-TX_JESD_S=1
+TX_JESD_S=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=575 \
+LANE_RATE=11.5
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4-qpllrx.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-qpllrx.dts)
@@ -152,7 +184,10 @@ RX_JESD_L=4 \
 RX_JESD_S=1 \
 TX_JESD_M=8 \
 TX_JESD_L=4 \
-TX_JESD_S=1
+TX_JESD_S=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=288 \
+LANE_RATE=5.76
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4-overlay.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-overlay.dts)
@@ -168,7 +203,12 @@ RX_JESD_L=2 \
 RX_JESD_S=1 \
 TX_JESD_M=8 \
 TX_JESD_L=4 \
-TX_JESD_S=1
+TX_JESD_S=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=100 \
+LANE_RATE=4 \
+XCVR_RX_PLL_TYPE=CPLL \
+XCVR_RX_LANE_RATE=2
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-204b-txmode9-rxmode4.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-204b-txmode9-rxmode4.dts)
@@ -186,7 +226,10 @@ RX_JESD_NP=12 \
 TX_JESD_M=8 \
 TX_JESD_L=1 \
 TX_JESD_S=1 \
-TX_JESD_NP=12
+TX_JESD_NP=12 \
+PLL_TYPE=QPLL0 \
+REF_CLK=181.25 \
+LANE_RATE=11.96
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-204c-txmode0-rxmode1.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-204c-txmode0-rxmode1.dts)
