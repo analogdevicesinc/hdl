@@ -16,6 +16,8 @@ XILINX_DEPS += util_hbm_ooc.ttcl
 XILINX_DEPS += ../interfaces/if_do_ctrl.xml
 XILINX_DEPS += ../interfaces/if_do_ctrl_rtl.xml
 
+XILINX_LIB_DEPS += axi_dmac
+
 XILINX_INTERFACE_DEPS += interfaces
 
 include ../scripts/library.mk
