@@ -126,17 +126,80 @@ ad_connect adcb_filter_data_ready_n  axi_ad4080_adc_b/filter_data_ready_n
 ad_connect $sys_iodelay_clk          axi_ad4080_adc_b/delay_clk
 
 ad_ip_instance util_cpack2 util_ad4880_adc_pack
-ad_ip_parameter util_ad4880_adc_pack CONFIG.NUM_OF_CHANNELS 2 
-ad_ip_parameter util_ad4880_adc_pack CONFIG.SAMPLE_DATA_WIDTH $SAMPLE_DATA_WIDTH 
+ad_ip_parameter util_ad4880_adc_pack CONFIG.NUM_OF_CHANNELS 2
+ad_ip_parameter util_ad4880_adc_pack CONFIG.SAMPLE_DATA_WIDTH $SAMPLE_DATA_WIDTH
+
+# Channel B clock-domain crossing.
+#
+# ADC A and ADC B each recover their own data clock (adca_dco / adcb_dco).
+# The packer and the DMA run entirely in the ADC A clock domain, so ADC B's
+# parallel data has to be resynchronized from the adcb_dco domain into the
+# adca_dco domain before it is packed. Wiring adc_b/adc_data straight into the
+# packer samples a multi-bit bus across unrelated clocks and corrupts the
+# low-order bits of channel B. An asynchronous FIFO performs the CDC: it is
+# written on ADC B's clock/valid and read out one sample per ADC A valid, so
+# the two channels stay sample-aligned.
+
+ad_ip_instance util_vector_logic adc_a_resetn
+ad_ip_parameter adc_a_resetn CONFIG.C_SIZE 1
+ad_ip_parameter adc_a_resetn CONFIG.C_OPERATION {not}
+
+ad_ip_instance util_vector_logic adc_b_resetn
+ad_ip_parameter adc_b_resetn CONFIG.C_SIZE 1
+ad_ip_parameter adc_b_resetn CONFIG.C_OPERATION {not}
+
+ad_connect axi_ad4080_adc_a/adc_rst adc_a_resetn/Op1
+ad_connect axi_ad4080_adc_b/adc_rst adc_b_resetn/Op1
+
+ad_ip_instance util_axis_fifo adc_b_cdc_fifo
+ad_ip_parameter adc_b_cdc_fifo CONFIG.DATA_WIDTH $SAMPLE_DATA_WIDTH
+ad_ip_parameter adc_b_cdc_fifo CONFIG.ADDRESS_WIDTH 4
+ad_ip_parameter adc_b_cdc_fifo CONFIG.ASYNC_CLK 1
+ad_ip_parameter adc_b_cdc_fifo CONFIG.ALMOST_EMPTY_THRESHOLD 2
+ad_ip_parameter adc_b_cdc_fifo CONFIG.TLAST_EN 0
+ad_ip_parameter adc_b_cdc_fifo CONFIG.TKEEP_EN 0
+
+# write side: ADC B native domain (adcb_dco)
+ad_connect axi_ad4080_adc_b/adc_clk   adc_b_cdc_fifo/s_axis_aclk
+ad_connect adc_b_resetn/Res           adc_b_cdc_fifo/s_axis_aresetn
+ad_connect axi_ad4080_adc_b/adc_valid adc_b_cdc_fifo/s_axis_valid
+ad_connect axi_ad4080_adc_b/adc_data  adc_b_cdc_fifo/s_axis_data
+
+# read side: ADC A / packer domain (adca_dco)
+ad_connect axi_ad4080_adc_a/adc_clk   adc_b_cdc_fifo/m_axis_aclk
+ad_connect adc_a_resetn/Res           adc_b_cdc_fifo/m_axis_aresetn
+
+# Prime / underflow guard.
+#
+# Read the FIFO only once it holds more than ALMOST_EMPTY_THRESHOLD words.
+# Both channels run at the same conversion rate, so once primed the occupancy
+# stays constant: the read never races ahead of the write and channel B is
+# never sampled while empty (no stale data), and the resulting inter-channel
+# offset is a fixed, repeatable number of samples. The same gate drives the
+# packer write-enable, so channel A and the channel-B read stay paired - both
+# are held off together during the short startup priming window.
+
+ad_ip_instance util_vector_logic adc_b_fifo_ready
+ad_ip_parameter adc_b_fifo_ready CONFIG.C_SIZE 1
+ad_ip_parameter adc_b_fifo_ready CONFIG.C_OPERATION {not}
+ad_connect adc_b_cdc_fifo/m_axis_almost_empty adc_b_fifo_ready/Op1
+
+ad_ip_instance util_vector_logic adc_pack_wr_en
+ad_ip_parameter adc_pack_wr_en CONFIG.C_SIZE 1
+ad_ip_parameter adc_pack_wr_en CONFIG.C_OPERATION {and}
+ad_connect axi_ad4080_adc_a/adc_valid adc_pack_wr_en/Op1
+ad_connect adc_b_fifo_ready/Res       adc_pack_wr_en/Op2
+
+ad_connect adc_pack_wr_en/Res adc_b_cdc_fifo/m_axis_ready
 
 
 # connect datapath
 
 ad_connect axi_ad4080_adc_a/adc_clk    util_ad4880_adc_pack/clk
 ad_connect axi_ad4080_adc_a/adc_rst    util_ad4880_adc_pack/reset
-ad_connect axi_ad4080_adc_a/adc_valid  util_ad4880_adc_pack/fifo_wr_en
+ad_connect adc_pack_wr_en/Res          util_ad4880_adc_pack/fifo_wr_en
 ad_connect axi_ad4080_adc_a/adc_data   util_ad4880_adc_pack/fifo_wr_data_0
-ad_connect axi_ad4080_adc_b/adc_data   util_ad4880_adc_pack/fifo_wr_data_1
+ad_connect adc_b_cdc_fifo/m_axis_data  util_ad4880_adc_pack/fifo_wr_data_1
 ad_connect axi_ad4080_adc_a/adc_enable util_ad4880_adc_pack/enable_0
 ad_connect axi_ad4080_adc_b/adc_enable util_ad4880_adc_pack/enable_1
 ad_connect axi_ad4080_adc_a/adc_dovf   util_ad4880_adc_pack/fifo_wr_overflow
