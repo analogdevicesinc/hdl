@@ -195,15 +195,15 @@ create_generated_clock -name clkin_to_adc -source [get_pins i_system_wrapper/sys
 #              Models osc14 constraint: ODR cannot arrive more than TCLK/2 before
 #              CLKIN falling at chip (Δt < 10.417 ns for same-edge capture).
 #              Expected hold slack ≈ 3.5 ns.
-set_output_delay -clock clkin_to_adc -clock_fall -max 5.5  [get_ports ad713x_odr]
-set_output_delay -clock clkin_to_adc -clock_fall -min 15.9 [get_ports ad713x_odr]
+# set_output_delay -clock clkin_to_adc -clock_fall -max 5.5  [get_ports ad713x_odr]
+# set_output_delay -clock clkin_to_adc -clock_fall -min 15.9 [get_ports ad713x_odr]
 # --- Previous variants kept for reference ---
 # Rising-edge reference (posedge-launch hack, values carried from negedge build):
 # set_output_delay -clock clkin_to_adc -max 15.833 [get_ports ad713x_odr]
 # set_output_delay -clock clkin_to_adc -min 5.000 [get_ports ad713x_odr]
-# Falling-edge reference, negedge-launch (revert with odr_neg in clkin_aligner.v):
-# set_output_delay -clock clkin_to_adc -clock_fall -max 15.833 [get_ports ad713x_odr]
-# set_output_delay -clock clkin_to_adc -clock_fall -min 5.000 [get_ports ad713x_odr]
+# Falling-edge reference, negedge-launch (revert with odr_pos in clkin_aligner.v):
+set_output_delay -clock clkin_to_adc -clock_fall -max 15.833 [get_ports ad713x_odr]
+set_output_delay -clock clkin_to_adc -clock_fall -min 5.000  [get_ports ad713x_odr]
 
 
 

@@ -399,17 +399,17 @@ module clkin_aligner #(
   // recommendation): comment the posedge flops below, uncomment the negedge flops,
   // AND restore -clock_fall on the ad713x_odr set_output_delay in system_constr.xdc.
 
-  (* mark_debug = "true" *) reg odr_pos = 1'b0;
-  always @(posedge clk_in) begin
-    odr_pos <= odr_in;
-  end
-  assign odr_out = odr_pos;
-  // --- Falling-edge variant (kept for easy revert) ---
-  // (* mark_debug = "true" *) reg odr_neg = 1'b0;
-  // always @(negedge clk_in) begin
-  //   odr_neg <= odr_in;
+  // (* mark_debug = "true" *) reg odr_pos = 1'b0;
+  // always @(posedge clk_in) begin
+  //   odr_pos <= odr_in;
   // end
-  // assign odr_out = odr_neg;
+  // assign odr_out = odr_pos;
+  // --- Falling-edge variant ---
+  (* mark_debug = "true" *) reg odr_neg = 1'b0;
+  always @(negedge clk_in) begin
+    odr_neg <= odr_in;
+  end
+  assign odr_out = odr_neg;
 
   // Fabric-only debug twin of odr_out: odr_pos is packed into the output IOB
   // (IOB TRUE on ad713x_odr) so its net is unprobeable; this copy drives no port
