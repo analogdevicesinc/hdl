@@ -1,0 +1,134 @@
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'Project to build'
+        required: true
+        type: string
+        default: 'ad4062_ardz.coraz7s'
+      ref:
+        description: 'Git reference'
+        required: false
+        type: string
+  workflow_call:
+    inputs:
+      project:
+        required: true
+        type: string
+      ref:
+        required: false
+        type: string
+    secrets:
+      XILINXD_LICENSE_FILE:
+        required: false
+      LM_LICENSE_FILE:
+        required: false
+
+jobs:
+  build:
+    runs-on: ${{ fromJSON(vars.RUNNER) }}
+    continue-on-error: true
+    permissions:
+      contents: read
+    env:
+      SOURCE_AMD_XILINX: ${{ vars.SOURCE_AMD_XILINX }}
+      PROJECT: ${{ inputs.project }}
+      XILINXD_LICENSE_FILE: ${{ secrets.XILINXD_LICENSE_FILE }}
+      LM_LICENSE_FILE: ${{ secrets.LM_LICENSE_FILE }}
+
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        ref: ${{ inputs.ref }}
+    - name: Ensure enviroment
+      run: |
+        [[ -f "$SOURCE_AMD_XILINX" ]] || { echo "::error ::No AMD Xilinx SDK." ; exit 1 ; }
+
+    - name: Parse projects and parameters
+      id: parse
+      if: ${{ !cancelled() }}
+      run: |
+        projects=()
+        parameters=()
+
+        for item in $PROJECT; do
+          [[ "$item" == *=* ]] && parameters+=("$item") || projects+=("$item")
+        done
+
+        mapfile -t projects < <(printf '%s\n' "${projects[@]}" | sort)
+        mapfile -t parameters < <(printf '%s\n' "${parameters[@]}" | sort)
+
+        parameter_names=()
+        for parameter in "${parameters[@]}"; do
+          parameter="${parameter//=/}"
+          # List from project-xilinx.mk
+          parameter="${parameter//JESD/}"
+          parameter="${parameter//LANE/}"
+          parameter="${parameter//_/}"
+          parameter_names+=("$parameter")
+        done
+
+        project_list="${projects[*]}"
+        parameter_list="${parameters[*]}"
+        parameter_dir="$(IFS=_ ; echo "${parameter_names[*]}")"
+        name="$(IFS=+ ; echo "${projects[*]}${parameter_names[*]:+ ${parameter_names[*]}}")"
+        name="${name// /+}"
+        name="${name//\//_}"
+
+        {
+          echo "PROJECT=$project_list"
+          echo "PARAMETERS=$parameter_list"
+          echo "PARAMETER_DIR=$parameter_dir"
+          echo "ARTIFACT_NAME=$name"
+        } >> "$GITHUB_ENV"
+
+    - name: Build
+      if: ${{ !cancelled() }}
+      run: |
+        source "$SOURCE_AMD_XILINX"
+        make $PARAMETERS $PROJECT -j$(nproc) || { ret=$? ; echo "fail=true" >> $GITHUB_ENV ; exit $ret ; }
+
+        for project in $PROJECT; do
+          project_path="${project//./\/}"
+          project_name="${project//./_}"
+          output_path="projects/${project_path}"
+          project_impl_path="${output_path}/${project_name}.runs/impl_1"
+          project_bit="${project_impl_path}/system_top.bit"
+          zynq_bit="${project_impl_path}/zynq.bit"
+          if [[ -f "$project_bit" ]]; then
+            echo "all: { system_top.bit }" > "$zynq_bit"
+            (cd "${project_impl_path}" ; bootgen -image zynq.bit -arch zynq -process_bitstream bin)
+          fi
+        done
+
+    - name: Format upload
+      id: upload
+      if: ${{ !cancelled() }}
+      run: |
+        {
+          echo "name=${ARTIFACT_NAME}"
+          echo "paths<<EOF"
+          for project in $PROJECT; do
+            project_path="${project//./\/}"
+            project_name="${project//./_}"
+            output_path="projects/${project_path}"
+            [[ -n "$PARAMETER_DIR" ]] && output_path="${output_path}/${PARAMETER_DIR}"
+            project_bit="${output_path}/${project_name}.runs/impl_1/system_top.bit"
+            project_bit_bin="${output_path}/${project_name}.runs/impl_1/system_top.bit.bin"
+            project_xsa="${output_path}/${project_name}.sdk/system_top.xsa"
+            [[ -f "$project_bit" ]] && echo "$project_bit"
+            [[ -f "$project_bit_bin" ]] && echo "$project_bit_bin"
+            [[ -f "$project_xsa" ]] && echo "$project_xsa"
+            echo "${output_path}/${project_name}_vivado.log"
+          done
+          [[ "$fail" == "true" ]] && echo "library/**/*_ip.log" || :
+          [[ "$fail" == "true" ]] && echo "library/**/component.xml" || :
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Store the project
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: ${{ steps.upload.outputs.name }}
+        path: ${{ steps.upload.outputs.paths }}
