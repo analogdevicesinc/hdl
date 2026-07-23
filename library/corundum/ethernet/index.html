@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,7 @@
 
     <title>Corundum Ethernet Core &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../../../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -111,7 +111,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../../index.html">
       <img class="only-light" src="../../../_static/HDL_logo_cropped.svg"/>
@@ -232,6 +232,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../data_offload/index.html">Data Offload</a></li>
@@ -371,13 +372,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -404,7 +408,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="corundum-ethernet-core">
-<span id="id1"></span><h1>Corundum Ethernet Core<a class="headerlink" href="#corundum-ethernet-core" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>Corundum Ethernet Core<a class="headerlink" href="#corundum-ethernet-core" title="Link to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/corundum/ethernet_core" target="_blank">Corundum Ethernet Core</a> is used
@@ -420,7 +424,7 @@ diagrams will be available.</p>
 <li><p><a class="reference internal" href="k26/index.html#corundum-ethernet-core-k26"><span class="std std-ref">Corundum Ethernet Core for K26</span></a></p></li>
 </ul>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Supports 10/100 GbE implementations as follows: 100 GbE by leveraging on the
 Xilinx’s CMAC IP core (on the VCU118 evaluation kit) and 10 GbE by using
@@ -428,22 +432,22 @@ Corundum’s support (on the K26-based AD-GMSL2ETH-SL evaluation kit).</p></li>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <p>Depending on the board for which the IP is built, different source files will
 be available.</p>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <p>Depending on the board for which the IP is built, different HDL parameters will
 be available.</p>
 </section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
 <p>Depending on the board for which the IP is built, different HDL interfaces and
 ports will be available.</p>
 </section>
 <section id="building">
-<h2>Building<a class="headerlink" href="#building" title="Permalink to this heading"></a></h2>
+<h2>Building<a class="headerlink" href="#building" title="Link to this heading"></a></h2>
 <p>This IP uses <a class="icon link reference external" href="https://github.com/ucsdsysnet/corundum" target="_blank">Corundum NIC</a>
 repository, which needs to be cloned alongside the HDL repository.
 Do a git checkout to the latest tested version (commit - 37f2607).
@@ -536,7 +540,7 @@ it will build/rebuild it.</p>
 </div>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/corundum/ethernet" target="_blank">library/corundum/ethernet</a></p></li>
 </ul>

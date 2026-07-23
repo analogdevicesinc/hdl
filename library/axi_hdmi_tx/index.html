@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,7 @@
 
     <title>AXI HDMI TX &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -116,7 +116,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -237,6 +237,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
@@ -376,13 +377,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -409,7 +413,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-hdmi-tx">
-<span id="id1"></span><h1>AXI HDMI TX<a class="headerlink" href="#axi-hdmi-tx" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>AXI HDMI TX<a class="headerlink" href="#axi-hdmi-tx" title="Link to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 358.8 570" width="358.8" class="no-background"><style>
                 a {
@@ -419,7 +423,7 @@ Content on this topic
 </div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx" target="_blank">AXI HDMI TX</a> IP core can be used to interface
 the <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a> and <a class="icon adi reference external" href="https://www.analog.com/ADV7123" target="_blank">ADV7123</a> devices using an FPGA.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>AXI based configuration</p></li>
 <li><p>Supports multiple resolution (max 1080p)</p></li>
@@ -432,7 +436,7 @@ the <a class="icon adi reference external" href="https://www.analog.com/ADV7511"
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -449,10 +453,11 @@ the <a class="icon adi reference external" href="https://www.analog.com/ADV7511"
 </div>
 </section>
 <section id="block-diagram">
-<span id="axi-hdmi-tx-block-diagram"></span><h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
-<img alt="AXI HDMI TX block diagram" class="align-center" src="../../_images/block_diagram17.svg" /></section>
+<span id="axi-hdmi-tx-block-diagram"></span><h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
+<img alt="AXI HDMI TX block diagram" class="align-center" src="../../_images/block_diagram25.svg" />
+</section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -512,7 +517,7 @@ data components will be transmitted first in-between green samples. 1 = red, 0 =
 </section>
 </div></section>
 <section id="interfaces">
-<h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading"></a></h2>
+<h2>Interfaces<a class="headerlink" href="#interfaces" title="Link to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="cf4f14a41e89ae452e7f2f396b6e2550eeeebcfc" name="cf4f14a41e89ae452e7f2f396b6e2550eeeebcfc" type="checkbox"></input><label for="cf4f14a41e89ae452e7f2f396b6e2550eeeebcfc"><div><p>s_axi</p>
@@ -996,7 +1001,7 @@ data components will be transmitted first in-between green samples. 1 = red, 0 =
 </section>
 </div></section>
 <section id="detailed-description">
-<h2>Detailed description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
+<h2>Detailed description<a class="headerlink" href="#detailed-description" title="Link to this heading"></a></h2>
 <p>The top module (<strong>axi_hdmi_tx</strong>), instantiates:</p>
 <ul class="simple">
 <li><p>axi_hdmi_tx_core module</p></li>
@@ -1027,7 +1032,7 @@ between the video source, typically a <a class="reference internal" href="../axi
 required resolution.</p>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-HDMI_TX">
 <div class="collapsible docutils container">
@@ -1543,7 +1548,7 @@ e.g. 41 (36 + 5) (1080p)</p>
 </section>
 </div></section>
 <section id="design-considerations">
-<h2>Design considerations<a class="headerlink" href="#design-considerations" title="Permalink to this heading"></a></h2>
+<h2>Design considerations<a class="headerlink" href="#design-considerations" title="Link to this heading"></a></h2>
 <p>Additional IPs needed:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></li>
@@ -1570,7 +1575,7 @@ can programs the registers.
 (<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adv7511" target="_blank">Example adv7511_zc706 no-Os software</a>).</p>
 </section>
 <section id="examples-for-different-data-width-configurations">
-<h2>Examples for different data width configurations<a class="headerlink" href="#examples-for-different-data-width-configurations" title="Permalink to this heading"></a></h2>
+<h2>Examples for different data width configurations<a class="headerlink" href="#examples-for-different-data-width-configurations" title="Link to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/ADV7511_Hardware_Users_Guide.pdf" target="_blank">ADV7511</a>
 can accept video data from as few as eight pins (either YCbCr 4:2:2 double data
 rate [DDR] or YCbCr 4:2:2 with 2x pixel clock) to as many as 36 pins (RGB 4:4:4
@@ -1584,7 +1589,7 @@ or YCbCr 4:4:4). In addition it can accept HSYNC, VSYNC and DE (Data Enable)</p>
 </ul>
 </section>
 <section id="software-support">
-<h2>Software support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
+<h2>Software support<a class="headerlink" href="#software-support" title="Link to this heading"></a></h2>
 <p>The core can be controlled by no-Os or Linux</p>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/drm/adv7511" target="_blank">Linux Driver</a></p></li>
@@ -1593,7 +1598,7 @@ or YCbCr 4:4:4). In addition it can accept HSYNC, VSYNC and DE (Data Enable)</p>
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx" target="_blank">library/axi_hdmi_tx</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_hdmi_tx" target="_blank">AXI HDMI TX on wiki</a></p></li>

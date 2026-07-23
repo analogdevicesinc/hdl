@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,7 @@
 
     <title>AXI Fan Control &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -119,7 +119,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -240,6 +240,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
@@ -379,13 +380,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -412,7 +416,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-fan-control">
-<span id="id1"></span><h1>AXI Fan Control<a class="headerlink" href="#axi-fan-control" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>AXI Fan Control<a class="headerlink" href="#axi-fan-control" title="Link to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 243.6 210" width="243.6" class="no-background"><style>
                 a {
@@ -429,7 +433,7 @@ outputs a PWM signal to control the fan rotation accordingly. The tacho signal
 coming from the fan is also measured and evaluated to ensure that the RPM is
 correct and the fan is working properly.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>AXI Lite control/status interface</p></li>
 <li><p>Allows interpolation by 10/100/1000/10000/100000 with filtering</p></li>
@@ -439,7 +443,7 @@ compensation FIR filter.</p></li>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -456,10 +460,11 @@ compensation FIR filter.</p></li>
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
-<img alt="AXI Fan Control block diagram" class="align-center" src="../../_images/block_diagram15.svg" /></section>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
+<img alt="AXI Fan Control block diagram" class="align-center" src="../../_images/block_diagram23.svg" />
+</section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -613,7 +618,7 @@ compensation FIR filter.</p></li>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="0df7dfe69ef2e21970f0b0c7a0765303d921b2fe" name="0df7dfe69ef2e21970f0b0c7a0765303d921b2fe" type="checkbox"></input><label for="0df7dfe69ef2e21970f0b0c7a0765303d921b2fe"><div><p>s_axi</p>
@@ -836,11 +841,11 @@ compensation FIR filter.</p></li>
 </section>
 </div></section>
 <section id="clocking">
-<h2>Clocking<a class="headerlink" href="#clocking" title="Permalink to this heading"></a></h2>
+<h2>Clocking<a class="headerlink" href="#clocking" title="Link to this heading"></a></h2>
 <p>The IP core runs on the AXI clock and requires a frequency of 100MHz.</p>
 </section>
 <section id="detailed-description">
-<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Link to this heading"></a></h2>
 <p>The main features of this IP core are its independent operation and the fact
 that it does not require an external temperature sensor. All of the mechanisms
 contained inside the core are controlled by a state machine, so that they do not
@@ -851,14 +856,15 @@ have defaults set in hardware and can be modified by the software. The
 INTERNAL_SYSMONE parameter is used to set the temperature values source, 0 when
 reading from temp_in and 1 when instantiating the internal SYSMONE primitive.</p>
 <section id="running-independently">
-<h3>Running independently<a class="headerlink" href="#running-independently" title="Permalink to this heading"></a></h3>
+<h3>Running independently<a class="headerlink" href="#running-independently" title="Link to this heading"></a></h3>
 <p>The hardware can operate with no input from the software; the IP core starts
 working after the bitstream is loaded, without needing to be brought out of
 reset. To activate the interrupts, the software must write to the
 IRQ_MASK register. At this point, the hardware starts operating and a minimal
 feedback is provided.</p>
 <p>There are 9 temperature intervals defined in the hardware as below:</p>
-<img alt="PWM vs Temperature" src="../../_images/pwm_vs_temp.svg" /><p>Five of these intervals have only one possible duty-cycle and four of them can
+<img alt="PWM vs Temperature" src="../../_images/pwm_vs_temp.svg" />
+<p>Five of these intervals have only one possible duty-cycle and four of them can
 have either of the neighbouring values. After reset, the PWM duty-cycle will
 start as 100%. The state-machine will begin reading the temperature and will
 decide on the PWM duty cycle depending on which interval the value matches. The
@@ -921,7 +927,7 @@ duty-cycle the tacho period must stay within 9.6 ms and 16 ms.</em></p>
 <p>A time-out is also used to check if there is any tacho signal at all.</p>
 </section>
 <section id="software-control-and-customization">
-<h3>Software control and customization<a class="headerlink" href="#software-control-and-customization" title="Permalink to this heading"></a></h3>
+<h3>Software control and customization<a class="headerlink" href="#software-control-and-customization" title="Link to this heading"></a></h3>
 <p>The software can overwrite the temperature thresholds and the tacho values if
 needed. The TEMP_00_H -&gt; TEMP_100_L registers can redefine the temperature
 intervals and the TACHO_25 -&gt; TACHO_100 registers can also be used to redefine
@@ -954,7 +960,7 @@ the TACHO_TOLERANCE register. The hardware will only start to monitor the tacho
 signal when the tolerance is provided.</p>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
 <p>The fan controller supports interrupts to both inform the software of any
 possible errors and to facilitate the control of the core. There are four
 interrupt sources:</p>
@@ -975,7 +981,7 @@ seconds.</p></li>
 </section>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-AXI_FAN_CONTROL">
 <div class="collapsible docutils container">
@@ -1645,7 +1651,7 @@ primitive.</p>
 </section>
 </div></section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_fan_control" target="_blank">library/axi_fan_control</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_fan_control" target="_blank">AXI FAN CONTROL on wiki</a></p></li>

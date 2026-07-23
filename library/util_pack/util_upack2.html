@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,7 @@
 
     <title>Channel UPACK Utility &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -111,7 +111,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -232,6 +232,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
@@ -371,13 +372,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -404,7 +408,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="channel-upack-utility">
-<span id="util-upack2"></span><h1>Channel UPACK Utility<a class="headerlink" href="#channel-upack-utility" title="Permalink to this heading"></a></h1>
+<span id="util-upack2"></span><h1>Channel UPACK Utility<a class="headerlink" href="#channel-upack-utility" title="Link to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 349.2 210" width="349.2" class="no-background"><style>
                 a {
@@ -422,7 +426,7 @@ interface consisting of valid and data signals. The enable signals are usually
 controlled by software. The core simply unpacks the DMA data into the individual
 channels as defined by the enables.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Supports Altera and AMD Xilinx devices</p></li>
 <li><p>Supports up to 64 channels</p></li>
@@ -430,7 +434,7 @@ channels as defined by the enables.</p>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -447,7 +451,7 @@ channels as defined by the enables.</p>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -485,7 +489,7 @@ channels as defined by the enables.</p>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
 <div><section id="bus-interface-s_axis">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="8cee4e1d8d5ee50272402e1afe4b2bc7fed7e91d" name="8cee4e1d8d5ee50272402e1afe4b2bc7fed7e91d" type="checkbox"></input><label for="8cee4e1d8d5ee50272402e1afe4b2bc7fed7e91d"><div><p>s_axis</p>
@@ -599,7 +603,7 @@ channels as defined by the enables.</p>
 </section>
 </div></section>
 <section id="detailed-description">
-<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Link to this heading"></a></h2>
 <p>The core “collects” samples from the DMA interface (or any other source) and
 passes it to the DAC on every valid request from the DAC. This is best explained
 through some examples. Let’s consider a 4 channel DAC with a channel data width
@@ -614,23 +618,26 @@ interface translates into a data required count based on the number of enables.
 So if three channels are enabled the requirement is 6 samples, so the core
 initiates a read from the DMA three out of four clock cycles.</p>
 <figure class="align-default" id="id1">
-<img alt="../../_images/upack_4channel.svg" src="../../_images/upack_4channel.svg" /><figcaption>
-<p><span class="caption-text">Four channel enabled (4’b1111)</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+<img alt="../../_images/upack_4channel.svg" src="../../_images/upack_4channel.svg" />
+<figcaption>
+<p><span class="caption-text">Four channel enabled (4’b1111)</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <figure class="align-default" id="id2">
-<img alt="../../_images/upack_3channel.svg" src="../../_images/upack_3channel.svg" /><figcaption>
-<p><span class="caption-text">Three channel enabled (4’b1110)</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+<img alt="../../_images/upack_3channel.svg" src="../../_images/upack_3channel.svg" />
+<figcaption>
+<p><span class="caption-text">Three channel enabled (4’b1110)</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <figure class="align-default" id="id3">
-<img alt="../../_images/upack_2channel.svg" src="../../_images/upack_2channel.svg" /><figcaption>
-<p><span class="caption-text">Two channel enabled (4’b1100)</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+<img alt="../../_images/upack_2channel.svg" src="../../_images/upack_2channel.svg" />
+<figcaption>
+<p><span class="caption-text">Two channel enabled (4’b1100)</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">library/util_pack/util_upack2</a></p></li>
 </ul>

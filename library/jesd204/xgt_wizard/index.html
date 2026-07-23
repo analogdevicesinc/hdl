@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,7 @@
 
     <title>Xilinx FPGAs Transceivers Wizard &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../../../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -96,7 +96,7 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">Xilinx FPGAs Transceivers Wizard</a><ul>
-<li><a class="reference internal" href="#required-features-by-the-jesd204b">Required features by the JESD204B</a></li>
+<li><a class="reference internal" href="#required-features-by-the-jesd204b-c-interface">Required features by the JESD204B/C interface</a></li>
 <li><a class="reference internal" href="#there-are-3-flows-for-generating-transceivers-using-the-wizard">There are 3 flows for generating transceivers using the wizard</a><ul>
 <li><a class="reference internal" href="#using-the-automated-transceiver-configuration-flow">Using the Automated Transceiver Configuration Flow</a><ul>
 <li><a class="reference internal" href="#xcvr-wizard">xcvr_wizard</a></li>
@@ -146,7 +146,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../../index.html">
       <img class="only-light" src="../../../_static/HDL_logo_cropped.svg"/>
@@ -267,6 +267,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../data_offload/index.html">Data Offload</a></li>
@@ -406,13 +407,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -439,7 +443,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="xilinx-fpgas-transceivers-wizard">
-<span id="xgt-wizard"></span><h1>Xilinx FPGAs Transceivers Wizard<a class="headerlink" href="#xilinx-fpgas-transceivers-wizard" title="Permalink to this heading"></a></h1>
+<span id="xgt-wizard"></span><h1>Xilinx FPGAs Transceivers Wizard<a class="headerlink" href="#xilinx-fpgas-transceivers-wizard" title="Link to this heading"></a></h1>
 <p>The 7 Series and Ultrascale FPGAs Transceivers Wizard can be used to configure
 the transceivers inside the <a class="reference internal" href="../../xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">util_adxcvr</span></a> core. In general
 in all reference designs the gigabit transceivers are configured to the highest
@@ -462,74 +466,139 @@ the Wizard, please read the
 <a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug578-ultrascale-gty-transceivers.pdf" target="_blank">UG578</a>
 and <a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/pg168-gtwizard.pdf" target="_blank">PG168</a>.</p>
 </div>
-<section id="required-features-by-the-jesd204b">
-<h2>Required features by the JESD204B<a class="headerlink" href="#required-features-by-the-jesd204b" title="Permalink to this heading"></a></h2>
+<section id="required-features-by-the-jesd204b-c-interface">
+<h2>Required features by the JESD204B/C interface<a class="headerlink" href="#required-features-by-the-jesd204b-c-interface" title="Link to this heading"></a></h2>
 <p>The following features are required for a JESD204B interface:</p>
 <ul class="simple">
 <li><p>QPLL and CPLL for clock generation</p></li>
 <li><p>8B/10B encoding and decoding</p></li>
-<li><p>TX and RX buffer to solve rate and phase differences between XCLK (PMA parallel clock) and USRCLK (device clock)</p></li>
+<li><p>TX and RX buffer to solve rate and phase differences between XCLK (PMA
+parallel clock) and USRCLK (device clock)</p></li>
 <li><p>RX Equalization and CDR</p></li>
 <li><p>RX Byte and Word alignment</p></li>
 <li><p>Tx configurable driver</p></li>
 <li><p>Polarity control</p></li>
 </ul>
+<p>For JESD204C, the following features are used instead of or in addition to the
+above:</p>
+<ul class="simple">
+<li><p>64B/66B encoding and decoding</p></li>
+<li><p>Wider internal data widths (64-bit user data, 66-bit internal)</p></li>
+</ul>
+<p>The JESD mode (8B10B or 64B66B) is selected via the <code class="docutils literal notranslate"><span class="pre">JESD_MODE</span></code> parameter
+during the build. JESD204C (64B66B) is currently supported on ZCU102 (GTHE4) and
+VCU118 (GTYE4). All other carriers support only JESD204B (8B10B).</p>
 </section>
 <section id="there-are-3-flows-for-generating-transceivers-using-the-wizard">
-<h2>There are 3 flows for generating transceivers using the wizard<a class="headerlink" href="#there-are-3-flows-for-generating-transceivers-using-the-wizard" title="Permalink to this heading"></a></h2>
+<h2>There are 3 flows for generating transceivers using the wizard<a class="headerlink" href="#there-are-3-flows-for-generating-transceivers-using-the-wizard" title="Link to this heading"></a></h2>
 <p>The first one is an automated flow integrated in the HDL build system. It uses
-project-defined parameters to generate and extract only the necessary transceiver
-settings, with no user interaction required. The second one is using the GT
-wizard manually as explained below:
+project-defined parameters to generate and extract only the necessary
+transceiver settings, with no user interaction required. The second one is using
+the GT wizard manually as explained below:
 <a class="reference internal" href="#xgt-wizard-gui-of-the-wizard"><span class="std std-ref">Using_the_GUI_of_the_Wizard</span></a> ,
 and a third one that uses a script to generate one or more configurations:
 <a class="reference internal" href="#xgt-wizard-generator-script"><span class="std std-ref">Using_the_generator_script</span></a> .
-Please keep in mind that the script is capable of generating only <strong>configurations
-where the TX ad RX lane rates are even and supports only JESD204B</strong>. For more
-customization, you can use the script to generate the configurations, then edit
-them manually as you please.</p>
+The automated flow and the generator script support both <strong>JESD204B (8B10B)</strong>
+and <strong>JESD204C (64B66B)</strong> modes, as well as configurations where <strong>TX and RX use
+different PLL types, lane rates or reference clocks</strong>. For more customization,
+you can use the script to generate the configurations, then edit them manually
+as you please.</p>
 <p>If you used the script method, there is another script that parses the generated
 configurations and generates a list containing only the parameters that are
 different from the default, the ones that you will have to change/add in your
 system_bd.tcl: Parsing_script. This script does not work at the moment for the
 configurations that are not generated by the script.</p>
 <section id="using-the-automated-transceiver-configuration-flow">
-<span id="xgt-wizard-automated-flow"></span><h3>Using the Automated Transceiver Configuration Flow<a class="headerlink" href="#using-the-automated-transceiver-configuration-flow" title="Permalink to this heading"></a></h3>
+<span id="xgt-wizard-automated-flow"></span><h3>Using the Automated Transceiver Configuration Flow<a class="headerlink" href="#using-the-automated-transceiver-configuration-flow" title="Link to this heading"></a></h3>
 <p>To simplify and streamline the configuration of transceivers in FPGA designs,
 the HDL build system supports an automated flow using <strong>xcvr_wizard</strong> project
 and supporting Tcl scripts.</p>
 <p>The automated transceiver configuration flow is currently integrated into the
 following projects:</p>
 <ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz" target="_blank">AD9081_FMCA_EBZ</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9083_evb" target="_blank">AD9083_EVB</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009" target="_blank">ADRV9009</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9026" target="_blank">ADRV9026</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x" target="_blank">ADRV9371x</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2" target="_blank">DAQ2</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq3" target="_blank">DAQ3</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009" target="_blank">ADRV9009</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x" target="_blank">ADRV9371x</a></p></li>
 </ul>
 <section id="xcvr-wizard">
-<h4>xcvr_wizard<a class="headerlink" href="#xcvr-wizard" title="Permalink to this heading"></a></h4>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/xcvr_wizard" target="_blank">xcvr_wizard HDL project</a> is used
-internally to generate transceiver configuration files based on a set of
-parameters:</p>
+<h4>xcvr_wizard<a class="headerlink" href="#xcvr-wizard" title="Link to this heading"></a></h4>
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/xcvr_wizard" target="_blank">xcvr_wizard HDL project</a> is used internally
+to generate transceiver configuration files based on a set of parameters. It
+supports the following carrier boards:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Carrier</p></th>
+<th class="head"><p>GT Type</p></th>
+<th class="head"><p>JESD204B (8B10B)</p></th>
+<th class="head"><p>JESD204C (64B66B)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ZC706</p></td>
+<td><p>GTXE2</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>KC705</p></td>
+<td><p>GTXE2</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>KCU105</p></td>
+<td><p>GTHE3</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZCU102</p></td>
+<td><p>GTHE4</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>VCU118</p></td>
+<td><p>GTYE4</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The required parameters are:</p>
 <ul class="simple">
-<li><p>LANE_RATE: lane speed in Gbps</p></li>
-<li><p>REF_CLK: reference clock frequency in MHz</p></li>
-<li><p>PLL_TYPE: the type of PLL used (CPLL or QPLL)</p></li>
+<li><p><strong>LANE_RATE</strong>: Lane speed in Gbps (applies to both TX and RX)</p></li>
+<li><p><strong>REF_CLK</strong>: Reference clock frequency in MHz</p></li>
+<li><p><strong>PLL_TYPE</strong>: The type of PLL used (CPLL, QPLL, QPLL0 or QPLL1)</p></li>
 </ul>
-<p>It builds a Vivado project for a specific carrier and configuration, producing
-files such as GT_Type_cfng.txt and, for GTXE2 devices,
-gtxe2_&lt;plltype&gt;_&lt;rate&gt;_&lt;refclk&gt;_common.v. These files are later parsed by
+<p>The following optional parameters are also supported:</p>
+<ul class="simple">
+<li><p><strong>JESD_MODE</strong>: Link layer encoding mode (<code class="docutils literal notranslate"><span class="pre">8B10B</span></code> or <code class="docutils literal notranslate"><span class="pre">64B66B</span></code>, default:
+<code class="docutils literal notranslate"><span class="pre">8B10B</span></code>). The xcvr_wizard and generator scripts support both modes on GTHE4
+and GTYE4 transceivers. Each calling project defines whether it uses this
+parameter.</p></li>
+<li><p><strong>XCVR_RX_PLL_TYPE</strong>: PLL type for the RX path (e.g., CPLL when TX uses QPLL0)</p></li>
+<li><p><strong>XCVR_RX_LANE_RATE</strong>: Lane speed in Gbps for the RX path</p></li>
+<li><p><strong>XCVR_RX_REF_CLK</strong>: Reference clock frequency in MHz for the RX path</p></li>
+</ul>
+<p>When the RX parameters are not provided (or set to empty <code class="docutils literal notranslate"><span class="pre">{}</span></code>), the RX path
+uses the same values as TX, preserving backward compatibility.</p>
+<p>The project builds a Vivado design for a specific carrier and configuration,
+producing files such as <code class="docutils literal notranslate"><span class="pre">GT_Type_cfng.txt</span></code> and, for GTXE2 devices,
+<code class="docutils literal notranslate"><span class="pre">gtxe2_&lt;plltype&gt;_&lt;rate&gt;_&lt;refclk&gt;_common.v</span></code>. These files are later parsed by
 automation scripts to extract only the required configuration parameters.</p>
 </section>
 <section id="adi-xcvr-project">
-<h4>adi_xcvr_project<a class="headerlink" href="#adi-xcvr-project" title="Permalink to this heading"></a></h4>
-<p>This function builds the <cite>xcvr_wizard</cite> using user-defined parameters. These
+<h4>adi_xcvr_project<a class="headerlink" href="#adi-xcvr-project" title="Link to this heading"></a></h4>
+<p>This function builds the <code class="docutils literal notranslate"><span class="pre">xcvr_wizard</span></code> using user-defined parameters. These
 values define the configuration for which the transceiver settings will be
-generated. The function returns a dictionary (<cite>xcvr_config_paths</cite>) with the
+generated. The function returns a dictionary (<code class="docutils literal notranslate"><span class="pre">xcvr_config_paths</span></code>) with the
 paths to the generated files.</p>
-<p>In the HDL build flow, it is called from <cite>system_project.tcl</cite>, located in the
-carrier-specific folder (e.g., <cite>projects/&lt;carrier&gt;/system_project.tcl</cite>).</p>
-<p><strong>Example:</strong></p>
+<p>In the HDL build flow, it is called from <code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code>, located in the
+carrier-specific folder (e.g., <code class="docutils literal notranslate"><span class="pre">projects/&lt;project&gt;/carrier/system_project.tcl</span></code>).</p>
+<p><strong>Basic example</strong> (same PLL for TX and RX):</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">global</span><span class="w"> </span>xcvr_config_paths
 
 <span class="k">set</span><span class="w"> </span>xcvr_config_paths<span class="w"> </span><span class="k">[</span><span class="nv">adi_xcvr_project</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span>
@@ -539,9 +608,27 @@ carrier-specific folder (e.g., <cite>projects/&lt;carrier&gt;/system_project.tcl
 <span class="k">]]</span>
 </pre></div>
 </div>
+<p><strong>Example with different TX/RX lane rates and PLL types</strong>:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">global</span><span class="w"> </span>xcvr_config_paths
+
+<span class="k">set</span><span class="w"> </span>xcvr_config_paths<span class="w"> </span><span class="k">[</span><span class="nv">adi_xcvr_project</span><span class="w"> </span><span class="k">[</span><span class="nb">list</span>
+<span class="w">  </span><span class="nv">LANE_RATE</span><span class="w">          </span><span class="k">[</span><span class="nv">get_env_param</span><span class="w"> </span>LANE_RATE<span class="w">             </span><span class="mi">4</span><span class="k">]</span>
+<span class="w">  </span><span class="nv">REF_CLK</span><span class="w">            </span><span class="k">[</span><span class="nv">get_env_param</span><span class="w"> </span>REF_CLK<span class="w">             </span><span class="mi">100</span><span class="k">]</span>
+<span class="w">  </span><span class="nv">PLL_TYPE</span><span class="w">           </span><span class="k">[</span><span class="nv">get_env_param</span><span class="w"> </span>PLL_TYPE<span class="w">          </span>QPLL0<span class="k">]</span>
+<span class="w">  </span><span class="nv">JESD_MODE</span><span class="w">          </span><span class="k">[</span><span class="nv">get_env_param</span><span class="w"> </span>JESD_MODE<span class="w">         </span><span class="mi">8</span>B10B<span class="k">]</span>
+<span class="w">  </span><span class="nv">XCVR_RX_PLL_TYPE</span><span class="w">   </span><span class="k">[</span><span class="nv">get_env_param</span><span class="w"> </span>XCVR_RX_PLL_TYPE<span class="w">   </span>CPLL<span class="k">]</span>
+<span class="w">  </span><span class="nv">XCVR_RX_LANE_RATE</span><span class="w">  </span><span class="k">[</span><span class="nv">get_env_param</span><span class="w"> </span>XCVR_RX_LANE_RATE<span class="w">     </span><span class="mi">2</span><span class="k">]</span>
+<span class="k">]]</span>
+</pre></div>
+</div>
+<p>These parameters can also be overridden from the command line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">LANE_RATE</span><span class="o">=</span><span class="m">10</span><span class="w"> </span><span class="nv">REF_CLK</span><span class="o">=</span><span class="m">250</span><span class="w"> </span><span class="nv">PLL_TYPE</span><span class="o">=</span>QPLL0
+make<span class="w"> </span><span class="nv">JESD_MODE</span><span class="o">=</span>8B10B<span class="w"> </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="nv">TX_LANE_RATE</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">PLL_TYPE</span><span class="o">=</span>QPLL0<span class="w"> </span><span class="nv">REF_CLK</span><span class="o">=</span><span class="m">100</span><span class="w"> </span><span class="nv">LANE_RATE</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">XCVR_RX_PLL_TYPE</span><span class="o">=</span>CPLL<span class="w"> </span><span class="nv">XCVR_RX_LANE_RATE</span><span class="o">=</span><span class="m">2</span>
+</pre></div>
+</div>
 </section>
 <section id="adi-xcvr-parameters">
-<h4>adi_xcvr_parameters<a class="headerlink" href="#adi-xcvr-parameters" title="Permalink to this heading"></a></h4>
+<h4>adi_xcvr_parameters<a class="headerlink" href="#adi-xcvr-parameters" title="Link to this heading"></a></h4>
 <p>This function takes <cite>xcvr_config_paths</cite> and optionally a list of overrides. It
 extracts only the transceiver parameters that differ from defaults and returns
 them to be passed to <cite>ad_ip_instance</cite>.</p>
@@ -559,9 +646,9 @@ the <cite>common/</cite> folder (e.g., <cite>projects/&lt;project_name&gt;/commo
 </section>
 </section>
 <section id="using-the-gui-of-the-wizard">
-<span id="xgt-wizard-gui-of-the-wizard"></span><h3>Using the GUI of the Wizard<a class="headerlink" href="#using-the-gui-of-the-wizard" title="Permalink to this heading"></a></h3>
+<span id="xgt-wizard-gui-of-the-wizard"></span><h3>Using the GUI of the Wizard<a class="headerlink" href="#using-the-gui-of-the-wizard" title="Link to this heading"></a></h3>
 <section id="series-fpgas-transceiver-wizard">
-<h4>7 Series FPGAs Transceiver Wizard<a class="headerlink" href="#series-fpgas-transceiver-wizard" title="Permalink to this heading"></a></h4>
+<h4>7 Series FPGAs Transceiver Wizard<a class="headerlink" href="#series-fpgas-transceiver-wizard" title="Link to this heading"></a></h4>
 <p>To start the wizard in the Vivado, a project should be loaded with a 7 Series
 FPGA which has gigabit transceivers. In the <strong>Project Manager</strong> select IP
 catalog and search after the keyword <strong>wizard</strong>, then select the <strong>7 Series
@@ -574,19 +661,19 @@ the Shared Logic section in order to have both COMMON and CHANNEL instances in
 the generated code.</p>
 </section>
 <section id="line-rate-and-refclk-selection">
-<h4>Line Rate and RefClk Selection<a class="headerlink" href="#line-rate-and-refclk-selection" title="Permalink to this heading"></a></h4>
+<h4>Line Rate and RefClk Selection<a class="headerlink" href="#line-rate-and-refclk-selection" title="Link to this heading"></a></h4>
 <p>First, you need to select <strong>JESD204</strong> as targeted <strong>protocol</strong> and specify your
 <strong>line rate</strong> and <strong>reference clock</strong>. A valid reference clock depends on your
-line rate. Make sure that you’re using a valid reference clock form the drop-down
-list. Also you should set the used <strong>PLLs</strong> for <strong>TX</strong> and <strong>RX</strong>. If your line
-rate is equal for both directions, you can use the same PLL. Be aware that each
-PLL’s VCO has a different frequency range where the circuit can function
-correctly. If your targeted line rate is too high or too low, you may be
-restricted to use just one of the two PLLs. All other settings can be left on
+line rate. Make sure that you’re using a valid reference clock form the
+drop-down list. Also you should set the used <strong>PLLs</strong> for <strong>TX</strong> and <strong>RX</strong>. If
+your line rate is equal for both directions, you can use the same PLL. Be aware
+that each PLL’s VCO has a different frequency range where the circuit can
+function correctly. If your targeted line rate is too high or too low, you may
+be restricted to use just one of the two PLLs. All other settings can be left on
 their default value in this tab.</p>
 </section>
 <section id="encoding-and-clocking">
-<h4>Encoding and Clocking<a class="headerlink" href="#encoding-and-clocking" title="Permalink to this heading"></a></h4>
+<h4>Encoding and Clocking<a class="headerlink" href="#encoding-and-clocking" title="Link to this heading"></a></h4>
 <p>If you selected <strong>JESD204</strong> to be the used protocol, you don’t have to change
 anything here. The JESD204B interface is using 8B/10B encoding/decoding, and
 the internal data width will be 40 bits. In all the reference designs the DRP
@@ -596,11 +683,11 @@ the TXOUTCLK and RXOUTCLK source selection, you can leave the options unchecked,
 as both clocks are already using PLLREFCLK as their source.</p>
 </section>
 <section id="other-tabs">
-<h4>Other tabs<a class="headerlink" href="#other-tabs" title="Permalink to this heading"></a></h4>
+<h4>Other tabs<a class="headerlink" href="#other-tabs" title="Link to this heading"></a></h4>
 <p>The setting from the tabs <strong>PCIe, SATA, PRBS</strong> and <strong>CB and CC Sequence</strong> can
 be left to their default values.</p>
 <section id="generated-files">
-<h5>Generated files<a class="headerlink" href="#generated-files" title="Permalink to this heading"></a></h5>
+<h5>Generated files<a class="headerlink" href="#generated-files" title="Link to this heading"></a></h5>
 <dl class="simple">
 <dt>Location of the <strong>COMMON</strong> instance:</dt><dd><ul class="simple">
 <li><p>&lt;project_name&gt;/&lt;project_name&gt;.gen/sources_1/ip/&lt;component_name&gt;/&lt;component_name&gt;_common.v</p></li>
@@ -629,24 +716,25 @@ be left to their default values.</p>
 </section>
 </section>
 <section id="ultrascale-fpgas-transceiver-wizard">
-<h4>Ultrascale FPGAs Transceiver Wizard<a class="headerlink" href="#ultrascale-fpgas-transceiver-wizard" title="Permalink to this heading"></a></h4>
+<h4>Ultrascale FPGAs Transceiver Wizard<a class="headerlink" href="#ultrascale-fpgas-transceiver-wizard" title="Link to this heading"></a></h4>
 <p>The overall workflow with the Ultrascale FPGAs Transceiver Wizard is similar to
 the 7 Series one, it just has a different GUI. To open up the wizard in the
-<strong>Project Manager</strong> select <strong>IP Catalog</strong> and search after the keyword <strong>wizard</strong>,
-then select the <strong>Ultrascale FPGAs Transceivers Wizard</strong>. You can define a
-custom name for your component and leave it on default. The tools should
-recognize your transceiver type automatically, if not, you may have to double
-check if you have the right FPGA device selected for your project. To apply the
-general JESD204B setting, select the <strong>GTH-JESD204 preset</strong>. In the first tab,
-called <strong>Basic</strong> you can find all the necessary settings. Select the targeted
-<strong>line rate, PLL</strong> and <strong>reference clock</strong>. The tool will tell you what PLL and
-reference clock can be used with a specific line rate. Note that the current
-version of the util_adxcvr core does not support <strong>QPLL Fractional-N option</strong>.</p>
+<strong>Project Manager</strong> select <strong>IP Catalog</strong> and search after the keyword
+<strong>wizard</strong>, then select the <strong>Ultrascale FPGAs Transceivers Wizard</strong>. You can
+define a custom name for your component and leave it on default. The tools
+should recognize your transceiver type automatically, if not, you may have to
+double check if you have the right FPGA device selected for your project. To
+apply the general JESD204B setting, select the <strong>GTH-JESD204 preset</strong>. In the
+first tab, called <strong>Basic</strong> you can find all the necessary settings. Select the
+targeted <strong>line rate, PLL</strong> and <strong>reference clock</strong>. The tool will tell you what
+PLL and reference clock can be used with a specific line rate. Note that the
+current version of the util_adxcvr core does not support <strong>QPLL Fractional-N
+option</strong>.</p>
 <p>To have both COMMON and CHANNEL instances inside the generated core, in the
-<strong>Structural Options</strong> tab the <strong>Include transceiver COMMON in the Core</strong>
-option must be selected.</p>
+<strong>Structural Options</strong> tab the <strong>Include transceiver COMMON in the Core</strong> option
+must be selected.</p>
 <section id="id1">
-<h5>Generated files<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h5>
+<h5>Generated files<a class="headerlink" href="#id1" title="Link to this heading"></a></h5>
 <p>To find the actual instance attributes, two different files should be examined.
 A generic one, which contains the actual software macro instance, and a wrapper,
 which instanciates the previous file and sets the required attributes.</p>
@@ -705,11 +793,11 @@ and <a class="icon git reference external" href="https://github.com/analogdevice
 </section>
 </section>
 <section id="using-the-generator-script">
-<span id="xgt-wizard-generator-script"></span><h3>Using the generator script<a class="headerlink" href="#using-the-generator-script" title="Permalink to this heading"></a></h3>
+<span id="xgt-wizard-generator-script"></span><h3>Using the generator script<a class="headerlink" href="#using-the-generator-script" title="Link to this heading"></a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>If you are using Windows, please use the ad_gth_generator command followed
-by the parsing script call, since the get_diff_params only works for linux
+<p>If you are using Windows, please use the ad_gth_generator command followed by
+the parsing script call, since the get_diff_params only works for linux
 systems</p>
 </div>
 <p>Open the TCL console inside your Vivado project. Source gtwizard_generator.tcl</p>
@@ -717,10 +805,10 @@ systems</p>
 </pre></div>
 </div>
 <section id="generating-configuration">
-<h4>Generating configuration<a class="headerlink" href="#generating-configuration" title="Permalink to this heading"></a></h4>
+<h4>Generating configuration<a class="headerlink" href="#generating-configuration" title="Link to this heading"></a></h4>
 <p>Here you have 2 options.</p>
 <section id="ad-gth-generator">
-<h5>ad_gth_generator<a class="headerlink" href="#ad-gth-generator" title="Permalink to this heading"></a></h5>
+<h5>ad_gth_generator<a class="headerlink" href="#ad-gth-generator" title="Link to this heading"></a></h5>
 <p><strong>Recommended method for generating multiple configurations</strong></p>
 <p>This function only generates the IPs, but you can edit them using GT wizard
 afterwards. After sourcing the script, you can just run the following command
@@ -731,61 +819,70 @@ ad_gth_generator with the desired parameters.</p>
 <p>The first parameter represents the lane rate that will be set to both RX and TX.
 The second one can be CPLL, QPLL, QPLL0, QPLL1, depending on the transceiver of
 the board. The third one is the reference clock. If left empty, then it will be
-filled with all the viable values for the lane rate given. This feature does
-not work at the moment for GTXE2 transceivers.</p>
+filled with all the viable values for the lane rate given. This feature does not
+work at the moment for GTXE2 transceivers.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_gth_generator</span><span class="w"> </span><span class="k">{</span><span class="nv">9.8304</span><span class="k">}</span><span class="w"> </span>QPLL0<span class="w"> </span><span class="k">{}</span>
 </pre></div>
 </div>
 <p>Both the first and the third parameters are actually lists, so you can use that
 to generate multiple configurations. Keep in mind that the script will generate
 IPs with all the combinations between the lane rate and reference clock.</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_gth_generator</span><span class="w"> </span><span class="k">{</span><span class="nv">9.8304</span><span class="w"> </span><span class="mf">4.9152</span><span class="k">}</span><span class="w"> </span>QPLL0<span class="w"> </span><span class="k">{</span><span class="nv">245.76</span><span class="w"> </span><span class="mf">122.88</span><span class="k">}</span><span class="w"> </span>false
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_gth_generator</span><span class="w"> </span><span class="k">{</span><span class="nv">9.8304</span><span class="w"> </span><span class="mf">4.9152</span><span class="k">}</span><span class="w"> </span>QPLL0<span class="w"> </span><span class="k">{</span><span class="nv">245.76</span><span class="w"> </span><span class="mf">122.88</span><span class="k">}</span>
 </pre></div>
 </div>
 <p>This call makes 4 instances of transceivers. Now you can double click on the
 &lt;ip_name&gt;.xci from the sources window to further customize the IP, including
-configurations where RX and TX have different rates. After you are all set,
-run the Parsing_script to get the list of parameters that need to be changed
-into the project.</p>
+configurations where RX and TX have different rates. After you are all set, run
+the Parsing_script to get the list of parameters that need to be changed into
+the project.</p>
+<p>The optional fourth parameter selects the JESD mode (<code class="docutils literal notranslate"><span class="pre">8B10B</span></code> or <code class="docutils literal notranslate"><span class="pre">64B66B</span></code>,
+default: <code class="docutils literal notranslate"><span class="pre">8B10B</span></code>). Three additional optional parameters allow configuring the
+RX path independently from TX:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_gth_generator</span><span class="w"> </span><span class="k">{</span><span class="nv">9.8304</span><span class="k">}</span><span class="w"> </span>QPLL0<span class="w"> </span><span class="k">{</span><span class="nv">245.76</span><span class="k">}</span><span class="w"> </span><span class="mi">8</span>B10B<span class="w"> </span>CPLL<span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="k">{}</span>
+</pre></div>
+</div>
+<p>The fifth parameter is the RX PLL type, the sixth is the RX lane rate and the
+seventh is the RX reference clock. When left empty, they default to the TX
+values.</p>
 </section>
 <section id="get-diff-params">
-<h5>get_diff_params<a class="headerlink" href="#get-diff-params" title="Permalink to this heading"></a></h5>
+<h5>get_diff_params<a class="headerlink" href="#get-diff-params" title="Link to this heading"></a></h5>
 <p><strong>Recommended method for generating a single configuration</strong></p>
 <p>This function generates the IP and calls the parsing script.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method works only with configurations where TX and RX have the same
-lane rate</p>
-</div>
 <p>Call the get_diff_params method with the desired parameters.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">get_diff_params</span><span class="w"> </span><span class="mf">15.4</span><span class="w"> </span>QPLL0<span class="w"> </span><span class="mi">385</span>
 </pre></div>
 </div>
-<p>The first parameter represents the lane rate that will be set to both RX and
-TX. The second one can be CPLL, QPLL0, QPLL1. The third one is the reference
-clock. If left empty, then it will be filled with all the viable values for
-the lane rate given.</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">get_diff_params</span><span class="w"> </span><span class="k">{</span><span class="nv">9.8304</span><span class="k">}</span><span class="w"> </span>QPLL0<span class="w"> </span><span class="k">{}</span><span class="w"> </span>false
+<p>The first parameter represents the lane rate that will be set to both RX and TX.
+The second one can be CPLL, QPLL0, QPLL1. The third one is the reference clock.
+If left empty, then it will be filled with all the viable values for the lane
+rate given.</p>
+<p>The optional fourth parameter selects the JESD mode (<code class="docutils literal notranslate"><span class="pre">8B10B</span></code> or <code class="docutils literal notranslate"><span class="pre">64B66B</span></code>,
+default: <code class="docutils literal notranslate"><span class="pre">8B10B</span></code>). Three additional optional parameters (5th, 6th, 7th) allow
+configuring the RX path independently. When left empty, they default to the TX
+values:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">get_diff_params</span><span class="w"> </span><span class="k">{</span><span class="nv">9.8304</span><span class="k">}</span><span class="w"> </span>QPLL0<span class="w"> </span><span class="k">{</span><span class="nv">245.76</span><span class="k">}</span><span class="w"> </span><span class="mi">8</span>B10B<span class="w"> </span>CPLL<span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="k">{}</span>
 </pre></div>
 </div>
-<p>The fourth parameter is optional. If you set it to false, the script will
-remove from the project and delete from disk the generated IPs after the
+<p>The 8th parameter controls IP cleanup. If you set it to <code class="docutils literal notranslate"><span class="pre">false</span></code>, the script
+will remove from the project and delete from disk the generated IPs after the
 list of parameters is done, so you don’t have to do that manually.</p>
-<p>Both the first and the third parameters are actually lists, so you can use
-that to generate multiple configurations. Keep in mind that the script will
-generate IPs with all the combinations between the lane rate and reference
-clock.</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">get_diff_params</span><span class="w"> </span><span class="k">{</span><span class="nv">9.8304</span><span class="w"> </span><span class="mf">4.9152</span><span class="k">}</span><span class="w"> </span>QPLL0<span class="w"> </span><span class="k">{</span><span class="nv">245.76</span><span class="w"> </span><span class="mf">122.88</span><span class="k">}</span><span class="w"> </span>false
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">get_diff_params</span><span class="w"> </span><span class="k">{</span><span class="nv">9.8304</span><span class="k">}</span><span class="w"> </span>QPLL0<span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="mi">8</span>B10B<span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="k">{}</span><span class="w"> </span>false
 </pre></div>
 </div>
-<p>This call makes 4 instances of transceivers, and also deletes them after
-generating the list because of the 4th parameter is set to false.</p>
+<p>Both the first and the third parameters are actually lists, so you can use that
+to generate multiple configurations. Keep in mind that the script will generate
+IPs with all the combinations between the lane rate and reference clock.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">get_diff_params</span><span class="w"> </span><span class="k">{</span><span class="nv">9.8304</span><span class="w"> </span><span class="mf">4.9152</span><span class="k">}</span><span class="w"> </span>QPLL0<span class="w"> </span><span class="k">{</span><span class="nv">245.76</span><span class="w"> </span><span class="mf">122.88</span><span class="k">}</span>
+</pre></div>
+</div>
+<p>This call makes 4 instances of transceivers.</p>
 </section>
 </section>
 <section id="parsing-script">
-<h4>Parsing script<a class="headerlink" href="#parsing-script" title="Permalink to this heading"></a></h4>
-<p>If you used the get_diff_params method from the script to generate the IP,
-there is no need to call it again.</p>
+<h4>Parsing script<a class="headerlink" href="#parsing-script" title="Link to this heading"></a></h4>
+<p>If you used the get_diff_params method from the script to generate the IP, there
+is no need to call it again.</p>
 <p>If you used the ad_gth_generator method from the script, you will have to call
 the parsing script from the shell, as explained below.</p>
 <p>If you edited the IP in any way after generating it, make sure to generate
@@ -796,10 +893,10 @@ the gtwiz_parser.pl script, specifying the GT type as in the example.</p>
 </pre></div>
 </div>
 <p>If you run the script wile having multiple configurations, it will include the
-unique parameters for each IP, plus the gt_global list that contains the
-common parameters within generated configurations that are different from the
-default values. Now, you should find the files at &lt;project_name&gt;.gen/sources_1/ip
-Make sure to overwrite the list from system_bd with the one in &lt;GT_Type&gt;_cfng.txt.</p>
+unique parameters for each IP, plus the gt_global list that contains the common
+parameters within generated configurations that are different from the default
+values. Now, you should find the files at &lt;project_name&gt;.gen/sources_1/ip Make
+sure to overwrite the list from system_bd with the one in &lt;GT_Type&gt;_cfng.txt.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Please note that if you used the GUI method to instantiate the wizard, the
@@ -807,25 +904,26 @@ paring script will not work</p>
 </div>
 </section>
 <section id="output-products">
-<h4>Output products<a class="headerlink" href="#output-products" title="Permalink to this heading"></a></h4>
+<h4>Output products<a class="headerlink" href="#output-products" title="Link to this heading"></a></h4>
 <p>Output products can be found at this location: &lt;project_name&gt;.gen/sources_1/ip</p>
 <p>Most of the output files make sense in the context of parsing multiple
 configurations at once. If this is not the case, and you just used it to
-generate a single configuration, then the only file you need is &lt;GT_Type&gt;_cfng.txt.</p>
+generate a single configuration, then the only file you need is
+&lt;GT_Type&gt;_cfng.txt.</p>
 <p>If you had multiple configurations, all the output files should give you some
 valuable information.</p>
 <section id="gt-type-cfng-txt">
-<h5>GT_Type_cfng.txt<a class="headerlink" href="#gt-type-cfng-txt" title="Permalink to this heading"></a></h5>
+<h5>GT_Type_cfng.txt<a class="headerlink" href="#gt-type-cfng-txt" title="Link to this heading"></a></h5>
 <p>This file contains 2 lists. The first one is a list of parameters that are
 unique for the desired configuration/configurations, different from the default
 values, and these parameters should be written into the system_bd file for your
 project. The next list called “gt_global” is a list of parameters that are
 common between the multiple generated configurations. These are also only the
-ones different from the default ones. This list should be empty if you have
-only one configuration generated.</p>
+ones different from the default ones. This list should be empty if you have only
+one configuration generated.</p>
 </section>
 <section id="gt-type-var-dist-txt">
-<h5>GT_Type_var_dist.txt<a class="headerlink" href="#gt-type-var-dist-txt" title="Permalink to this heading"></a></h5>
+<h5>GT_Type_var_dist.txt<a class="headerlink" href="#gt-type-var-dist-txt" title="Link to this heading"></a></h5>
 <p>Here you will find a list with the distribution of each DRP attribute in
 relation to the lane rates of your instances.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$VAR1 = &#39;RX_CLK25_DIV&#39;;
@@ -859,23 +957,23 @@ $VAR6 = {
 </div>
 </section>
 <section id="gt-type-vco-dist-txt">
-<h5>GT_Type_vco_dist.txt<a class="headerlink" href="#gt-type-vco-dist-txt" title="Permalink to this heading"></a></h5>
+<h5>GT_Type_vco_dist.txt<a class="headerlink" href="#gt-type-vco-dist-txt" title="Link to this heading"></a></h5>
 <p>Here you will find a list with the distribution of each DRP attribute in
 relation to the VCO frequency of your instances. If this list is empty, that
 means that the attributes are the same for the used VCOs (Probably all the
 instances have the same VCO) This should look similar to “GT_Type_var_dist.txt”</p>
 </section>
 <section id="table-common-csv">
-<h5>table_common.csv<a class="headerlink" href="#table-common-csv" title="Permalink to this heading"></a></h5>
-<p>This is a table containing 3 columns: The first one is the name of the parameter.
-The second one is the default value for that parameter, and it is that value
-found in the util_adxcvr file. The third column is called gt_global, and it
-contains the value that all the configurations have in common, but is different
-from the default. If there is an empty cell in this column, it means that there
-is used the default value.</p>
+<h5>table_common.csv<a class="headerlink" href="#table-common-csv" title="Link to this heading"></a></h5>
+<p>This is a table containing 3 columns: The first one is the name of the
+parameter. The second one is the default value for that parameter, and it is
+that value found in the util_adxcvr file. The third column is called gt_global,
+and it contains the value that all the configurations have in common, but is
+different from the default. If there is an empty cell in this column, it means
+that there is used the default value.</p>
 </section>
 <section id="table-unique-csv">
-<h5>table_unique.csv<a class="headerlink" href="#table-unique-csv" title="Permalink to this heading"></a></h5>
+<h5>table_unique.csv<a class="headerlink" href="#table-unique-csv" title="Link to this heading"></a></h5>
 <p>This table contains the unique parameters for each individual configurations.
 The values found here are the ones that differ among your generated
 configurations.</p>
@@ -883,10 +981,10 @@ configurations.</p>
 <p class="admonition-title">Note</p>
 <p>If you encounter errors using the script, please make sure that you have the
 &lt;project_name&gt;.gen/sources_1/ip and &lt;project_name&gt;.srcs/sources_1/ip folders
-clear from other previous gtwizard IP instances. Also, the script uses git
-to update the default util_adxcvr files, and it will probably not work if
-you are in detached HEAD state, or any state that could generate git
-conflicts with it.</p>
+clear from other previous gtwizard IP instances. Also, the script uses git to
+update the default util_adxcvr files, and it will probably not work if you
+are in detached HEAD state, or any state that could generate git conflicts
+with it.</p>
 </div>
 </section>
 </section>

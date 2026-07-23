@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,7 @@
 
     <title>AD7405-FMC HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -129,7 +129,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -250,6 +250,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/index.html">Data Offload</a></li>
@@ -389,13 +390,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -422,7 +426,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="ad7405-fmc-hdl-project">
-<span id="ad7405-fmc"></span><h1>AD7405-FMC HDL project<a class="headerlink" href="#ad7405-fmc-hdl-project" title="Permalink to this heading"></a></h1>
+<span id="ad7405-fmc"></span><h1>AD7405-FMC HDL project<a class="headerlink" href="#ad7405-fmc-hdl-project" title="Link to this heading"></a></h1>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7405" target="_blank">EVAL-AD7405</a> is a full-featured evaluation board
 designed to allow the user to easily evaluate all features of the <a class="icon adi reference external" href="https://www.analog.com/AD7405" target="_blank">AD7405</a>
 isolated analog-to-digital converter (ADC).</p>
@@ -432,7 +436,7 @@ One of the main differences between these devices is the type of the digital
 data lines. In the case of <a class="icon adi reference external" href="https://www.analog.com/ADuM7701" target="_blank">ADuM7701</a> and <a class="icon adi reference external" href="https://www.analog.com/AD7403" target="_blank">AD7403</a>, it is single-ended,
 and for <a class="icon adi reference external" href="https://www.analog.com/AD7405" target="_blank">AD7405</a> is differential.</p>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7405" target="_blank">EVAL-AD7405</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7403" target="_blank">EVAL-AD7403</a></p></li>
@@ -440,7 +444,7 @@ and for <a class="icon adi reference external" href="https://www.analog.com/AD74
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7405" target="_blank">AD7405</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7403" target="_blank">AD7403</a></p></li>
@@ -448,7 +452,7 @@ and for <a class="icon adi reference external" href="https://www.analog.com/AD74
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -480,21 +484,23 @@ and for <a class="icon adi reference external" href="https://www.analog.com/AD74
 </div>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagrams:</p>
 <section id="block-design-for-the-differential-signals-ad7405">
-<h4>Block design for the differential signals (<a class="icon adi reference external" href="https://www.analog.com/AD7405" target="_blank">AD7405</a>)<a class="headerlink" href="#block-design-for-the-differential-signals-ad7405" title="Permalink to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/ad7405_zed_lvds_diagram.svg"><img alt="AD7405_FMC/ZedBoard block diagram" class="align-center" src="../../_images/ad7405_zed_lvds_diagram.svg" width="800" /></a>
+<h4>Block design for the differential signals (<a class="icon adi reference external" href="https://www.analog.com/AD7405" target="_blank">AD7405</a>)<a class="headerlink" href="#block-design-for-the-differential-signals-ad7405" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/ad7405_zed_lvds_diagram.svg"><img alt="AD7405_FMC/ZedBoard block diagram" class="align-center" src="../../_images/ad7405_zed_lvds_diagram.svg" width="800" />
+</a>
 </section>
 <section id="block-design-for-the-single-ended-signals-adum7701-and-ad7403">
-<h4>Block design for the single-ended signals (<a class="icon adi reference external" href="https://www.analog.com/ADuM7701" target="_blank">ADuM7701</a> and <a class="icon adi reference external" href="https://www.analog.com/AD7403" target="_blank">AD7403</a>)<a class="headerlink" href="#block-design-for-the-single-ended-signals-adum7701-and-ad7403" title="Permalink to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/ad7405_zed_cmos_diagram.svg"><img alt="AD7405_FMC/ZedBoard block diagram" class="align-center" src="../../_images/ad7405_zed_cmos_diagram.svg" width="800" /></a>
+<h4>Block design for the single-ended signals (<a class="icon adi reference external" href="https://www.analog.com/ADuM7701" target="_blank">ADuM7701</a> and <a class="icon adi reference external" href="https://www.analog.com/AD7403" target="_blank">AD7403</a>)<a class="headerlink" href="#block-design-for-the-single-ended-signals-adum7701-and-ad7403" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/ad7405_zed_cmos_diagram.svg"><img alt="AD7405_FMC/ZedBoard block diagram" class="align-center" src="../../_images/ad7405_zed_cmos_diagram.svg" width="800" />
+</a>
 </section>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
 <ul>
 <li><p>LVDS_CMOS_N: specific to the type of the data and clock signals</p>
 <blockquote>
@@ -507,7 +513,7 @@ and for <a class="icon adi reference external" href="https://www.analog.com/AD74
 </ul>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -532,7 +538,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -555,7 +561,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -592,15 +598,15 @@ the HDL repository.</p>
 <div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/adum770x" target="_blank">[Wiki] ADuM7701 - Reference Design</a></p></li>
 </ul>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
@@ -615,7 +621,7 @@ the HDL repository.</p>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad7405_fmc" target="_blank">AD7405-FMC HDL project source code</a></p></li>
 </ul>
@@ -682,7 +688,7 @@ the HDL repository.</p>
 </div>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>No-OS driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/legacy/adum7701_fmc" target="_blank">legacy/adum7701_fmc</a></p></li>
 <li><p>Linux driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/iio/adc/admc_adc.c" target="_blank">drivers/iio/adc/admc_adc.c</a></p></li>
@@ -690,13 +696,13 @@ the HDL repository.</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

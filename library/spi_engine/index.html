@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,7 @@
 
     <title>SPI Engine &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -113,7 +113,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -234,6 +234,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
@@ -373,13 +374,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -406,7 +410,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="spi-engine">
-<span id="id1"></span><h1>SPI Engine<a class="headerlink" href="#spi-engine" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>SPI Engine<a class="headerlink" href="#spi-engine" title="Link to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <p>SPI Engine is a highly flexible and powerful SPI controller framework.
@@ -425,7 +429,7 @@ when triggered by an external event allows for very low latency response times.
 By using a SPI Engine interconnect it is possible to connect multiple command
 stream manager modules to a SPI Engine execution module.</p>
 <section id="sub-modules">
-<h2>Sub-modules<a class="headerlink" href="#sub-modules" title="Permalink to this heading"></a></h2>
+<h2>Sub-modules<a class="headerlink" href="#sub-modules" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">SPI Engine Execution Module</span></a>: Main module which processes a SPI engine command
 stream and implements the SPI bus interface logic.</p></li>
@@ -438,7 +442,7 @@ to a SPI Engine execution module.</p></li>
 </ul>
 </section>
 <section id="interfaces">
-<h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading"></a></h2>
+<h2>Interfaces<a class="headerlink" href="#interfaces" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a>: SPI Engine command stream.</p></li>
 <li><p><a class="reference internal" href="offload-control-interface.html#spi-engine-offload-control-interface"><span class="std std-ref">SPI Engine Offload Control Interface</span></a>: Program the command stream stored
@@ -447,7 +451,7 @@ in a offload module.</p></li>
 </ul>
 </section>
 <section id="software">
-<h2>Software<a class="headerlink" href="#software" title="Permalink to this heading"></a></h2>
+<h2>Software<a class="headerlink" href="#software" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/spi/spi_engine" target="_blank">Linux Driver</a>:
 Linux driver for the SPI Engine framework.</p></li>
@@ -456,7 +460,7 @@ format.</p></li>
 </ul>
 </section>
 <section id="related-ip-cores">
-<h2>Related IP Cores<a class="headerlink" href="#related-ip-cores" title="Permalink to this heading"></a></h2>
+<h2>Related IP Cores<a class="headerlink" href="#related-ip-cores" title="Link to this heading"></a></h2>
 <p>This list contains cores that are not part of the core SPI engine framework but
 make use of its interfaces and are intended to be used together with the SPI engine
 framework.</p>
@@ -466,7 +470,7 @@ Helper module for interfacing ADCs from the Analog Devices Sigma-Delta family.</
 </ul>
 </section>
 <section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/eval-cn0363-pmdz" target="_blank">CN0363</a>:
 Colorimeter application using the <a class="icon adi reference external" href="https://www.analog.com/AD7175-2" target="_blank">AD7175-2</a> Sigma-Delta ADC.</p></li>
@@ -485,7 +489,7 @@ Evaluation Board for the AD4000 Series 16-/18-/20-Bit Precision SAR ADCs.</p></l
 </ul>
 </section>
 <section id="additional-resources">
-<h2>Additional Resources<a class="headerlink" href="#additional-resources" title="Permalink to this heading"></a></h2>
+<h2>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon reference download external" download="" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi-engine3.pdf"><code class="xref download docutils literal notranslate"><span class="pre">Presentation:</span> <span class="pre">SPI</span> <span class="pre">Engine</span> <span class="pre">Design</span> <span class="pre">Philosophy</span></code></a>.</p></li>
 <li><p><a class="reference internal" href="pipeline-delays.html#spi-engine-pipeline-delays"><span class="std std-ref">SPI Engine Pipeline Delays</span></a></p></li>
@@ -493,7 +497,7 @@ Evaluation Board for the AD4000 Series 16-/18-/20-Bit Precision SAR ADCs.</p></l
 </ul>
 </section>
 <section id="software-support">
-<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
+<h2>Software Support<a class="headerlink" href="#software-support" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>No-OS project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/axi_core/spi_engine" target="_blank">drivers/axi_core/spi_engine</a></p></li>
 <li><p>No-OS driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/axi_core/spi_engine/spi_engine.c" target="_blank">drivers/axi_core/spi_engine/spi_engine.c</a></p></li>
@@ -502,7 +506,7 @@ Evaluation Board for the AD4000 Series 16-/18-/20-Bit Precision SAR ADCs.</p></l
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine" target="_blank">library/spi_engine</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/peripherals/spi_engine" target="_blank">SPI Engine on wiki</a></p></li>

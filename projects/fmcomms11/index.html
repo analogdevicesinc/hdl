@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,13 +8,13 @@
 
     <title>FMCOMMS11 HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="JUPITER-SDR HDL Project" href="../jupiter_sdr/index.html" />
+    <link rel="next" title="HMCAD1520-FMC-EVB HDL project" href="../hmcad1520_ebz/index.html" />
     <link rel="prev" title="FMCOMMS8 HDL reference design" href="../fmcomms8/index.html" />
    
   
@@ -130,7 +130,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -251,6 +251,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/index.html">Data Offload</a></li>
@@ -390,13 +391,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -423,7 +427,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="fmcomms11-hdl-project">
-<span id="fmcomms11"></span><h1>FMCOMMS11 HDL project<a class="headerlink" href="#fmcomms11-hdl-project" title="Permalink to this heading"></a></h1>
+<span id="fmcomms11"></span><h1>FMCOMMS11 HDL project<a class="headerlink" href="#fmcomms11-hdl-project" title="Link to this heading"></a></h1>
 <p>The HDL reference design is an embedded system built around a processor core
 either ARM, NIOS-II or Microblaze. The high speed digital interface of the
 converters is handled by the <a class="reference internal" href="../../library/jesd204/index.html#jesd204"><span class="std std-ref">JESD204B framework</span></a>.
@@ -442,26 +446,26 @@ in data sheet). Both JESD204 interfaces run in Subclass 0.</p>
 all the parties (clock chip, converters and FPGA JESD204 IPs) of the interface
 are reconfigured accordingly.</p>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS11-EBZ" target="_blank">AD-FMCOMMS11-EBZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9162" target="_blank">AD9162</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9625" target="_blank">AD9625</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a> on FMC HPC</p></li>
 </ul>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
 <p>The data path consists of the shared transceivers, then are followed by the
 individual JESD204B link and transport layer IP cores. The cores are
 programmable through an AXI-lite interface. Both JESD204 interfaces run in
@@ -472,9 +476,10 @@ the DAC/ADC cores at 256bits &#64; 245.76MHz and 256bits &#64; 122.88MHz respect
 The data is sent or received based on the configuration of separate transmit
 and receive chains.</p>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/fmcomms11_block_diagram.svg"><img alt="FMCOMMS11 block diagram" class="align-center" src="../../_images/fmcomms11_block_diagram.svg" width="1000" /></a>
+<a class="reference internal image-reference" href="../../_images/fmcomms11_block_diagram.svg"><img alt="FMCOMMS11 block diagram" class="align-center" src="../../_images/fmcomms11_block_diagram.svg" width="1000" />
+</a>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="36152fef72b53b3cd55bbfa08332ddd7c873c955" name="36152fef72b53b3cd55bbfa08332ddd7c873c955" type="checkbox"></input><label for="36152fef72b53b3cd55bbfa08332ddd7c873c955"><p>Click here for details on the block diagram modules</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -541,7 +546,7 @@ and receive chains.</p>
 </div>
 </div></section>
 <section id="clock-scheme">
-<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Link to this heading"></a></h3>
 <p>By default, the board comes with the solders set to
 <strong>internal clock references</strong>.</p>
 <p>The on-board clock reference is provided by a 122.88MHz local oscillator.</p>
@@ -628,7 +633,7 @@ LNA and SPDT switch found on the PCB.</p>
 </div>
 </div></section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
 <p>The current HDL project supports only the following configuration:</p>
 <ul class="simple">
 <li><p>JESD204B interfaces in subclass 0</p></li>
@@ -653,7 +658,7 @@ TP19 and C89.</p>
 </div>
 </section>
 <section id="detailed-description">
-<span id="fmcomms11-detailed-description"></span><h3>Detailed description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h3>
+<span id="fmcomms11-detailed-description"></span><h3>Detailed description<a class="headerlink" href="#detailed-description" title="Link to this heading"></a></h3>
 <p>The design has one JESD204B receive chain and one transmit chain, each with
 8 lanes.</p>
 <p>Each chain consists of a transport layer represented by a JESD TPL module,
@@ -888,7 +893,7 @@ the buffer instantiated, the best place to instantiate it is in
 </div>
 </div></section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -934,7 +939,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -987,7 +992,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <p>The AD9508 chip select will be used only in the rev. A of the FMCOMMS11.</p>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -1041,7 +1046,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1079,7 +1084,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
@@ -1103,9 +1108,9 @@ the HDL repository.</p>
 <div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms11-ebz/quickstart/zynq" target="_blank">[Wiki] AD-FMCOMMS11-EBZ quick start guide</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms11-ebz" target="_blank">[Wiki] AD-FMCOMMS11-EBZ user guide</a></p></li>
@@ -1113,7 +1118,7 @@ the HDL repository.</p>
 </ul>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
@@ -1126,7 +1131,7 @@ the HDL repository.</p>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms11" target="_blank">FMCOMMS11 HDL project source code</a></p></li>
 </ul>
@@ -1209,7 +1214,7 @@ the HDL repository.</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcomms11.dts" target="_blank">FMCOMMS11/ZC706 Linux device tree</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcomms11-RevA.dts" target="_blank">FMCOMMS11 rev. A/ZC706 Linux device tree</a></p></li>
@@ -1218,13 +1223,13 @@ the HDL repository.</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>
@@ -1244,7 +1249,7 @@ are, the lower the chances to receive support from <a class="icon link reference
               <div class="related">
                 &nbsp;
     <a href="../fmcomms8/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">FMCOMMS8 HDL reference design</a>
-    <a href="../jupiter_sdr/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">JUPITER-SDR HDL Project</a>
+    <a href="../hmcad1520_ebz/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">HMCAD1520-FMC-EVB HDL project</a>
               </div>
           
         </div>
