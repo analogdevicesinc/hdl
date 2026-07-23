@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,7 @@
 
     <title>Documentation guidelines &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -108,7 +108,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -229,6 +229,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/data_offload/index.html">Data Offload</a></li>
@@ -368,13 +369,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -401,15 +405,15 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="documentation-guidelines">
-<span id="docs-guidelines"></span><h1>Documentation guidelines<a class="headerlink" href="#documentation-guidelines" title="Permalink to this heading"></a></h1>
+<span id="docs-guidelines"></span><h1>Documentation guidelines<a class="headerlink" href="#documentation-guidelines" title="Link to this heading"></a></h1>
 <p>This documentation is built with <a class="icon link reference external" href="https://www.sphinx-doc.org" target="_blank">Sphinx</a> and
 all source code is available at the path <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs" target="_blank">docs</a>.</p>
 <p>To contribute to it, open a pull request with the changes to
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">this repository</a>, just make sure to read the general
-<a class="icon link reference external" href="https://analogdevicesinc.github.io/doctools/docs_guidelines/index.html#docs-guidelines" target="_blank" title="(in Doctools vv0.4.43)"><span>Documentation guidelines</span></a> first <strong>and</strong> the additional guidelines
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/doctools/docs_guidelines/index.html#docs-guidelines" target="_blank" title="(in Doctools v0.4.44)"><span>Documentation guidelines</span></a> first <strong>and</strong> the additional guidelines
 below specific to the HDL repository.</p>
 <section id="before-creating-a-new-page">
-<h2>Before creating a new page<a class="headerlink" href="#before-creating-a-new-page" title="Permalink to this heading"></a></h2>
+<h2>Before creating a new page<a class="headerlink" href="#before-creating-a-new-page" title="Link to this heading"></a></h2>
 <p>This section has the sole role to present the steps that are required to be
 able to create and build a new documentation related page. Some steps are
 recommended to be revised regularly to keep the necessary tools updated.</p>
@@ -496,7 +500,7 @@ This is done by running the below commands (inside <code class="docutils literal
 a HDL specific Sphinx documentation page.</p>
 </section>
 <section id="templates">
-<h2>Templates<a class="headerlink" href="#templates" title="Permalink to this heading"></a></h2>
+<h2>Templates<a class="headerlink" href="#templates" title="Link to this heading"></a></h2>
 <p>Templates are available:</p>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/library/template_ip" target="_blank">docs/library/template_ip</a> (<a class="reference internal" href="../library/template_ip/index.html#template-ip"><span class="std std-ref">rendered</span></a>).</p></li>
@@ -510,11 +514,11 @@ and make sure to remove any placeholder text and instructive comment.</p>
 <p class="admonition-title">Note</p>
 <p>The old wiki uses <a class="icon link reference external" href="https://www.dokuwiki.org/dokuwiki" target="_blank">dokuwiki</a>. When
 importing text from there, consider <code class="docutils literal notranslate"><span class="pre">pandoc</span></code> and the tips accross the
-<a class="icon link reference external" href="https://analogdevicesinc.github.io/doctools/docs_guidelines/index.html#docs-guidelines" target="_blank" title="(in Doctools vv0.4.43)"><span>Documentation guidelines</span></a> to convert it to reST.</p>
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/doctools/docs_guidelines/index.html#docs-guidelines" target="_blank" title="(in Doctools v0.4.44)"><span>Documentation guidelines</span></a> to convert it to reST.</p>
 </div>
 </section>
 <section id="common-sections">
-<h2>Common sections<a class="headerlink" href="#common-sections" title="Permalink to this heading"></a></h2>
+<h2>Common sections<a class="headerlink" href="#common-sections" title="Link to this heading"></a></h2>
 <p>The <strong>More information</strong> and <strong>Support</strong> sections that are present in
 the HDL project documentation, are actually separate pages inserted as links.
 They’re located at hdl/projects/common/more_information.rst and /support.rst,

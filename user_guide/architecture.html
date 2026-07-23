@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,7 @@
 
     <title>HDL Architecture &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -128,6 +128,21 @@
 </li>
 </ul>
 </li>
+<li><a class="reference internal" href="#memory-specifications">Memory Specifications</a><ul>
+<li><a class="reference internal" href="#on-chip-memory">On-Chip Memory</a><ul>
+<li><a class="reference internal" href="#id1">AMD platforms</a></li>
+<li><a class="reference internal" href="#id2">Discontinued AMD platforms</a></li>
+<li><a class="reference internal" href="#id3">Intel platforms</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#external-memory">External Memory</a><ul>
+<li><a class="reference internal" href="#id4">AMD Platforms</a></li>
+<li><a class="reference internal" href="#id5">Discontinued AMD platforms</a></li>
+<li><a class="reference internal" href="#id6">Intel platforms</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#file-structure-of-a-project">File structure of a project</a><ul>
 <li><a class="reference internal" href="#project-files-for-amd-boards">Project files for AMD boards</a></li>
 <li><a class="reference internal" href="#project-files-for-intel-boards">Project files for Intel boards</a><ul>
@@ -146,7 +161,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -267,6 +282,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/data_offload/index.html">Data Offload</a></li>
@@ -406,13 +422,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -439,7 +458,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="hdl-architecture">
-<span id="architecture"></span><h1>HDL Architecture<a class="headerlink" href="#hdl-architecture" title="Permalink to this heading"></a></h1>
+<span id="architecture"></span><h1>HDL Architecture<a class="headerlink" href="#hdl-architecture" title="Link to this heading"></a></h1>
 <p>Every HDL design of a reference project can be divided into:</p>
 <ol class="arabic simple">
 <li><p>Base design for the <strong>carrier</strong> board (projects/common/$CARRIER) —
@@ -478,12 +497,12 @@ modification, if required.</p></li>
 </li>
 </ol>
 <section id="how-they-re-instantiated">
-<h2>How they’re instantiated<a class="headerlink" href="#how-they-re-instantiated" title="Permalink to this heading"></a></h2>
+<h2>How they’re instantiated<a class="headerlink" href="#how-they-re-instantiated" title="Link to this heading"></a></h2>
 <p>In case of a project, inside the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> file we have to source
 the base design of the carrier first (#1), then the base design of the
 evaluation board (#2).</p>
 <section id="example">
-<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h3>
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
 <p>Take <a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS2-EBZ" target="_blank">FMCOMMS2</a> with
 <a class="icon link reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html" target="_blank">ZedBoard</a>;
 the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> file will have the following designs sourced to be used:</p>
@@ -494,10 +513,11 @@ the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</
 </section>
 </section>
 <section id="typical-project-diagram">
-<h2>Typical project diagram<a class="headerlink" href="#typical-project-diagram" title="Permalink to this heading"></a></h2>
-<img alt="../_images/base_platform.svg" src="../_images/base_platform.svg" /></section>
+<h2>Typical project diagram<a class="headerlink" href="#typical-project-diagram" title="Link to this heading"></a></h2>
+<img alt="../_images/base_platform.svg" src="../_images/base_platform.svg" />
+</section>
 <section id="base-design">
-<h2>Base Design<a class="headerlink" href="#base-design" title="Permalink to this heading"></a></h2>
+<h2>Base Design<a class="headerlink" href="#base-design" title="Link to this heading"></a></h2>
 <p>The base design contains all the I/O peripherals, memory interfaces
 and processing components, which are necessary for a fully functional
 Linux system. The majority of these components are Intel and AMD Xilinx IP
@@ -509,7 +529,7 @@ cores.</p>
 <li><p>Peripheral interfaces</p></li>
 </ul>
 <section id="microprocessor">
-<h3>Microprocessor<a class="headerlink" href="#microprocessor" title="Permalink to this heading"></a></h3>
+<h3>Microprocessor<a class="headerlink" href="#microprocessor" title="Link to this heading"></a></h3>
 <p>In our designs, we use only three types:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -559,7 +579,7 @@ CIPS</a>
 </ul>
 </section>
 <section id="memory-interface-controller">
-<h3>Memory interface controller<a class="headerlink" href="#memory-interface-controller" title="Permalink to this heading"></a></h3>
+<h3>Memory interface controller<a class="headerlink" href="#memory-interface-controller" title="Link to this heading"></a></h3>
 <p>In almost all cases, the carrier board is not made and designed by
 <a class="icon adi reference external" href="https://www.analog.com/" target="_blank">Analog Devices</a>, so the external memory solution of the system is
 given.</p>
@@ -577,14 +597,14 @@ memory solutions for Intel and AMD:</p>
 </ul>
 </section>
 <section id="peripheral-interfaces">
-<h3>Peripheral interfaces<a class="headerlink" href="#peripheral-interfaces" title="Permalink to this heading"></a></h3>
+<h3>Peripheral interfaces<a class="headerlink" href="#peripheral-interfaces" title="Link to this heading"></a></h3>
 <p>These interfaces are used to control external peripherals located on
 the prototyping board or the FMC I/O board.</p>
 <p>In HDL, these ports are named slightly different than how they’re in
 the documentations. Thus, to make it easier for beginners, here you
 have the naming of the ports depending on the microprocessor used.</p>
 <section id="cpu-memory-interconnects-addresses">
-<span id="architecture-cpu-intercon-addr"></span><h4>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h4>
+<span id="architecture-cpu-intercon-addr"></span><h4>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h4>
 <p>The memory addresses that will be used by software are based on the HDL
 addresses of the IP register map, to which an offset is added, depending
 on the architecture of the used FPGA (see also
@@ -616,7 +636,7 @@ available block of a bigger size. In Quartus block design you should be
 able to determine it.</p>
 </section>
 <section id="spi">
-<h4>SPI<a class="headerlink" href="#spi" title="Permalink to this heading"></a></h4>
+<h4>SPI<a class="headerlink" href="#spi" title="Link to this heading"></a></h4>
 <p>In general, the base design of the carrier (#1) has two Serial Peripheral
 Interfaces (SPIs), which are used as a control interface for FMC/HSMC devices.
 These SPI interfaces are controlled by the integrated SPI controller of the
@@ -624,7 +644,7 @@ These SPI interfaces are controlled by the integrated SPI controller of the
 Intel or AMD SPI controller core.</p>
 </section>
 <section id="i2c-i2s-spdif">
-<h4>I2C/I2S/SPDIF<a class="headerlink" href="#i2c-i2s-spdif" title="Permalink to this heading"></a></h4>
+<h4>I2C/I2S/SPDIF<a class="headerlink" href="#i2c-i2s-spdif" title="Link to this heading"></a></h4>
 <p>A couple of carriers require these standard interfaces for different purposes
 (e.g. a configuration interface for an audio peripheral device).
 These peripherals do not necessarily have vital roles in the reference
@@ -632,13 +652,13 @@ design – it’s more like a generic goal to support all the provided
 peripherals of the carrier board.</p>
 </section>
 <section id="hdmi">
-<h4>HDMI<a class="headerlink" href="#hdmi" title="Permalink to this heading"></a></h4>
+<h4>HDMI<a class="headerlink" href="#hdmi" title="Link to this heading"></a></h4>
 <p>There is HDMI support for all carriers which are using the <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a>
 as HDMI transmitter. The HDMI transmitter core can be found
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx" target="_blank">here (axi_hdmi_tx)</a>.</p>
 </section>
 <section id="gpios">
-<h4>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h4>
+<h4>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h4>
 <p>The general rule of thumb is to define 64 GPIO pins for the design:</p>
 <ul class="simple">
 <li><p>bits [31: 0] always belong to the carrier board;</p></li>
@@ -660,7 +680,7 @@ from the HDL project to obtain the final number used in software:</p>
 </ul>
 </section>
 <section id="connectivity">
-<h4>Connectivity<a class="headerlink" href="#connectivity" title="Permalink to this heading"></a></h4>
+<h4>Connectivity<a class="headerlink" href="#connectivity" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><p>Ethernet</p></li>
 <li><p>USB OTG</p></li>
@@ -670,7 +690,7 @@ of the board.</p>
 </section>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
 <p>When developing the Linux software parts for an HDL project, the
 interrupts number to the PS have a different number in the software
 side.</p>
@@ -680,7 +700,7 @@ might be used in the base design of the carrier!</p>
 <p>Always check which are used (in
 <code class="docutils literal notranslate"><span class="pre">/projects/common/$carrier/$carrier_system_bd.tcl</span></code>)</p>
 <section id="interrupts-table">
-<h4>Interrupts table<a class="headerlink" href="#interrupts-table" title="Permalink to this heading"></a></h4>
+<h4>Interrupts table<a class="headerlink" href="#interrupts-table" title="Link to this heading"></a></h4>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -905,9 +925,9 @@ might be used in the base design of the carrier!</p>
 </section>
 </section>
 <section id="board-design-and-capabilities">
-<h2>Board design and capabilities<a class="headerlink" href="#board-design-and-capabilities" title="Permalink to this heading"></a></h2>
+<h2>Board design and capabilities<a class="headerlink" href="#board-design-and-capabilities" title="Link to this heading"></a></h2>
 <section id="amd-platforms">
-<span id="architecture-amd-platforms"></span><h3>AMD platforms<a class="headerlink" href="#amd-platforms" title="Permalink to this heading"></a></h3>
+<span id="architecture-amd-platforms"></span><h3>AMD platforms<a class="headerlink" href="#amd-platforms" title="Link to this heading"></a></h3>
 <p>The board files of these carriers can be found <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">here</a>.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -1044,7 +1064,7 @@ both the carrier and the device(s)</p>
 </div>
 </section>
 <section id="discontinued-amd-platforms">
-<h3>Discontinued AMD platforms<a class="headerlink" href="#discontinued-amd-platforms" title="Permalink to this heading"></a></h3>
+<h3>Discontinued AMD platforms<a class="headerlink" href="#discontinued-amd-platforms" title="Link to this heading"></a></h3>
 <p>Projects with these carriers can still be found on our repository, as well as
 their <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">board files</a>.</p>
 <div class="table-wrapper colwidths-given docutils container">
@@ -1100,7 +1120,7 @@ their <a class="icon git reference external" href="https://github.com/analogdevi
 </div>
 </section>
 <section id="intel-platforms">
-<span id="architecture-intel-platforms"></span><h3>Intel platforms<a class="headerlink" href="#intel-platforms" title="Permalink to this heading"></a></h3>
+<span id="architecture-intel-platforms"></span><h3>Intel platforms<a class="headerlink" href="#intel-platforms" title="Link to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -1148,7 +1168,7 @@ their <a class="icon git reference external" href="https://github.com/analogdevi
 in older releases</p>
 </div>
 <section id="vadj-values">
-<h4>VADJ values<a class="headerlink" href="#vadj-values" title="Permalink to this heading"></a></h4>
+<h4>VADJ values<a class="headerlink" href="#vadj-values" title="Link to this heading"></a></h4>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -1192,15 +1212,689 @@ both the carrier and the device(s)</p>
 </section>
 </section>
 </section>
+<section id="memory-specifications">
+<h2>Memory Specifications<a class="headerlink" href="#memory-specifications" title="Link to this heading"></a></h2>
+<p>This section documents the on-chip and external memory resources of each
+supported carrier.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>This section is a work in progress.</strong></p>
+<ul class="simple">
+<li><p>Data was pulled from a large number of user guides, device datasheets,
+and technical reference manuals. <strong>Mistakes or gaps are possible</strong>.</p></li>
+<li><p>Memory configurations <strong>can vary between board revisions</strong> so what is
+listed here may not match your specific revision.</p></li>
+</ul>
+<p>Always cross-reference with the official documentation for your board
+before making any design decisions based on these numbers.</p>
+</div>
+<section id="on-chip-memory">
+<h3>On-Chip Memory<a class="headerlink" href="#on-chip-memory" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>BRAM</strong> and <strong>UltraRAM</strong> reside in the programmable logic fabric and are
+fully available to HDL designs.</p></li>
+<li><p><strong>UltraRAM</strong> (288 Kb blocks) is present only on UltraScale+ and Versal
+devices.</p></li>
+<li><p>Lattice CertusPro-NX provides <strong>EBR</strong> (18 Kb) and <strong>LRAM</strong> (512 Kb) blocks.</p></li>
+<li><p>Intel Arria 10 / Stratix 10 / Agilex 7 use <strong>M20K</strong> (20 Kb) blocks while
+Cyclone V uses <strong>M10K</strong> (10 Kb) blocks.</p></li>
+<li><p>The <strong>PS/HPS OCM SRAM</strong> is a fixed block inside the processor subsystem
+(Zynq-7000, Zynq UltraScale+ MPSoC, Versal) shared between the
+APU/application processors and PL via the OCM interconnect. Cyclone V
+and Agilex 7 HPS include a smaller 64 KB or 256 KB OCRAM used by the
+preloader before DDR initialisation.</p></li>
+</ul>
+<section id="id1">
+<h4>AMD platforms<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="28616066f26a9dc580c468f43819dde6cbdba936" name="28616066f26a9dc580c468f43819dde6cbdba936" type="checkbox"></input><label for="28616066f26a9dc580c468f43819dde6cbdba936"><p>AMD platforms on-chip memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17.0%" />
+<col style="width: 18.0%" />
+<col style="width: 28.0%" />
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Family</p></th>
+<th class="head"><p>BRAM (PL)</p></th>
+<th class="head"><p>UltraRAM (PL)</p></th>
+<th class="head"><p>PS OCM SRAM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a></p></td>
+<td><p>Zynq UltraScale+ MPSoC</p></td>
+<td><p>912 x 36 Kb (~32 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a></p></td>
+<td><p>Versal AI Core</p></td>
+<td><p>967 x 36 Kb (~34 Mb)</p></td>
+<td><p>463 x 288 Kb (~130 Mb)</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VMK180" target="_blank">VMK180</a></p></td>
+<td><p>Versal Prime</p></td>
+<td><p>967 x 36 Kb (~34 Mb)</p></td>
+<td><p>463 x 288 Kb (~130 Mb)</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VPK180" target="_blank">VPK180</a></p></td>
+<td><p>Versal Premium</p></td>
+<td><p>4,941 x 36 Kb (~174 Mb)</p></td>
+<td><p>2,549 x 288 Kb (~717 Mb)</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a></p></td>
+<td><p>Virtex UltraScale+</p></td>
+<td><p>2,160 x 36 Kb (~76 Mb)</p></td>
+<td><p>960 x 288 Kb (~270 Mb)</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KCU105" target="_blank">KCU105</a></p></td>
+<td><p>Kintex UltraScale</p></td>
+<td><p>600 x 36 Kb (~21 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC702" target="_blank">ZC702</a></p></td>
+<td><p>Zynq-7000</p></td>
+<td><p>140 x 36 Kb (~5 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
+<td><p>Zynq-7000</p></td>
+<td><p>140 x 36 Kb (~5 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/AC701" target="_blank">AC701</a> **</p></td>
+<td><p>Artix-7</p></td>
+<td><p>365 x 36 Kb (~13 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a></p></td>
+<td><p>Zynq-7000</p></td>
+<td><p>60 x 36 Kb (Z7-10) / 50 x 36 Kb (Z7-07S)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed" target="_blank">Microzed</a> **</p></td>
+<td><p>Zynq-7000</p></td>
+<td><p>140 x 36 Kb (7Z020) / 60 x 36 Kb (7Z010)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC709" target="_blank">VC709</a> **</p></td>
+<td><p>Virtex-7</p></td>
+<td><p>1,470 x 36 Kb (~52 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard" target="_blank">LFCPNX-EVN</a></p></td>
+<td><p>CertusPro-NX (Lattice)</p></td>
+<td><p>208 x 18 Kb EBR (~3.7 Mb) + 7 x 512 Kb LRAM (~3.5 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></section>
+<section id="id2">
+<h4>Discontinued AMD platforms<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="f053c19b0498ac1bcb7fb621e437b7f794490697" name="f053c19b0498ac1bcb7fb621e437b7f794490697" type="checkbox"></input><label for="f053c19b0498ac1bcb7fb621e437b7f794490697"><p>Discontinued AMD platforms on-chip memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17.0%" />
+<col style="width: 18.0%" />
+<col style="width: 28.0%" />
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Family</p></th>
+<th class="head"><p>BRAM (PL)</p></th>
+<th class="head"><p>UltraRAM (PL)</p></th>
+<th class="head"><p>PS OCM SRAM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KC705" target="_blank">KC705</a></p></td>
+<td><p>Kintex-7</p></td>
+<td><p>445 x 36 Kb (~16 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC707" target="_blank">VC707</a></p></td>
+<td><p>Virtex-7</p></td>
+<td><p>1,030 x 36 Kb (~37 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU128" target="_blank">VCU128</a></p></td>
+<td><p>Virtex UltraScale+ HBM</p></td>
+<td><p>2,016 x 36 Kb (~71 Mb)</p></td>
+<td><p>960 x 288 Kb (~270 Mb) + HBM2 8 GB</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></td>
+<td><p>Zynq-7000</p></td>
+<td><p>545 x 36 Kb (~19.2 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></section>
+<section id="id3">
+<h4>Intel platforms<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<p>Intel SoC FPGAs (Arria 10, Stratix 10, Cyclone V, Agilex) include HPS
+on-chip RAM (OCRAM) used by the preloader before external DDR is initialised.</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="cb6ea0032867809cbb58a42851ca59475dcc0336" name="cb6ea0032867809cbb58a42851ca59475dcc0336" type="checkbox"></input><label for="cb6ea0032867809cbb58a42851ca59475dcc0336"><p>Intel platforms on-chip memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 18.0%" />
+<col style="width: 40.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Family</p></th>
+<th class="head"><p>Fabric BRAM</p></th>
+<th class="head"><p>HPS On-Chip RAM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html" target="_blank">A10GX</a> **</p></td>
+<td><p>Arria 10 GX</p></td>
+<td><p>2,713 M20K blocks (~53 Mb)</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a></p></td>
+<td><p>Arria 10 SoC</p></td>
+<td><p>2,131 M20K blocks (~42 Mb) + 9,260 MLAB blocks (~6 Mb)</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a></p></td>
+<td><p>Stratix 10 SX SoC</p></td>
+<td><p>11,721 M20K blocks (~229 Mb) + 45 Mbit eSRAM</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html" target="_blank">C5SoC</a></p></td>
+<td><p>Cyclone V SX SoC</p></td>
+<td><p>553 M10K blocks (~5.4 Mb) + 994 MLAB blocks (~0.6 Mb)</p></td>
+<td><p>64 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html" target="_blank">DE10-Nano</a></p></td>
+<td><p>Cyclone V SE SoC</p></td>
+<td><p>553 M10K blocks (~5.4 Mb) + 994 MLAB blocks (~0.6 Mb)</p></td>
+<td><p>64 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a></p></td>
+<td><p>Agilex 7 F-Series</p></td>
+<td><p>10,464 M20K (AGF023) / 13,272 M20K (AGF027)</p></td>
+<td><p>256 KB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></section>
+</section>
+<section id="external-memory">
+<h3>External Memory<a class="headerlink" href="#external-memory" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>PS-side / HPS-side</strong> memory is connected to the hard processor system
+and is the primary DRAM for Linux.</p></li>
+<li><p><strong>PL-side / Fabric-side</strong> memory is connected directly to FPGA fabric
+I/O banks and is available for HDL data-path designs.</p></li>
+<li><p>On <strong>Versal</strong> devices there is no hard PS/PL split; all DDR interfaces
+connect via the Network on Chip (NoC).</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Bandwidth</strong> figures in the tables below are computed as
+<code class="docutils literal notranslate"><span class="pre">Rate</span> <span class="pre">(MT/s)</span> <span class="pre">x</span> <span class="pre">(effective</span> <span class="pre">data</span> <span class="pre">width</span> <span class="pre">in</span> <span class="pre">bytes)</span></code>.
+On 72-bit ECC interfaces (64-bit data + 8-bit ECC), only the
+64-bit / 8-byte data portion is counted - the ECC byte carries
+error-correction overhead, not user payload.
+Example: a 72-bit DDR4-2666 interface =&gt; 2,666 x 8 = ~21.3 GB/s,
+not 2,666 x 9 = ~24.0 GB/s.</p>
+</div>
+<section id="id4">
+<h4>AMD Platforms<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="17e373cfcd715a7f32c765bc259f4af95c8a805a" name="17e373cfcd715a7f32c765bc259f4af95c8a805a" type="checkbox"></input><label for="17e373cfcd715a7f32c765bc259f4af95c8a805a"><p>AMD platforms external memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13.9%" />
+<col style="width: 17.7%" />
+<col style="width: 11.4%" />
+<col style="width: 10.1%" />
+<col style="width: 11.4%" />
+<col style="width: 13.9%" />
+<col style="width: 21.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Interface</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Width</p></th>
+<th class="head"><p>Rate (MT/s)</p></th>
+<th class="head"><p>Bandwidth</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a></p></td>
+<td><p>PS DDR4 SODIMM (J1)</p></td>
+<td><p>DDR4</p></td>
+<td><p>4 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>2,666</p></td>
+<td><p>~21.3 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a></p></td>
+<td><p>PL DDR4 component (U2)</p></td>
+<td><p>DDR4</p></td>
+<td><p>512 MB</p></td>
+<td><p>16-bit</p></td>
+<td><p>2,666</p></td>
+<td><p>~5.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a></p></td>
+<td><p>DDR4 ECC UDIMM (J45)</p></td>
+<td><p>DDR4</p></td>
+<td><p>8 GB</p></td>
+<td><p>72-bit</p></td>
+<td><p>3,200</p></td>
+<td><p>~25.6 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a></p></td>
+<td><p>LPDDR4 Interfaces A+B (2x)</p></td>
+<td><p>LPDDR4</p></td>
+<td><p>2 x 4 GB</p></td>
+<td><p>2x32-bit</p></td>
+<td><p>4,266</p></td>
+<td><p>~68.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VMK180" target="_blank">VMK180</a></p></td>
+<td><p>DDR4 ECC UDIMM (J45)</p></td>
+<td><p>DDR4</p></td>
+<td><p>8 GB</p></td>
+<td><p>72-bit</p></td>
+<td><p>3,200</p></td>
+<td><p>~25.6 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VMK180" target="_blank">VMK180</a></p></td>
+<td><p>LPDDR4 Interfaces A+B (2x)</p></td>
+<td><p>LPDDR4</p></td>
+<td><p>2 x 4 GB</p></td>
+<td><p>2x32-bit</p></td>
+<td><p>4,266</p></td>
+<td><p>~68.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VPK180" target="_blank">VPK180</a></p></td>
+<td><p>LPDDR4 Triplets 1-3 (3x)</p></td>
+<td><p>LPDDR4</p></td>
+<td><p>3 x 4 GB</p></td>
+<td><p>2x32-bit</p></td>
+<td><p>2,133</p></td>
+<td><p>~51.3 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a></p></td>
+<td><p>PL DDR4 C1+C2 (U60-U64, U135-U139) (2x)</p></td>
+<td><p>DDR4</p></td>
+<td><p>2 x 2.5 GB</p></td>
+<td><p>80-bit</p></td>
+<td><p>2,400</p></td>
+<td><p>~48.0 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a></p></td>
+<td><p>PL RLD3 C3 (U141/U142)</p></td>
+<td><p>RLDRAM3</p></td>
+<td><p>288 MB</p></td>
+<td><p>72-bit</p></td>
+<td><p>2,133</p></td>
+<td><p>~19.2 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KCU105" target="_blank">KCU105</a></p></td>
+<td><p>PL DDR4 (U60-U63)</p></td>
+<td><p>DDR4</p></td>
+<td><p>2 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>2,400</p></td>
+<td><p>~19.2 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC702" target="_blank">ZC702</a></p></td>
+<td><p>PS DDR3 (U66-U69)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>1,333</p></td>
+<td><p>~5.3 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
+<td><p>PS DDR3</p></td>
+<td><p>DDR3</p></td>
+<td><p>512 MB</p></td>
+<td><p>32-bit</p></td>
+<td><p>1,066</p></td>
+<td><p>~4.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/AC701" target="_blank">AC701</a> **</p></td>
+<td><p>PL DDR3 SODIMM (J1)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>1,600</p></td>
+<td><p>~12.8 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a></p></td>
+<td><p>PS DDR3L</p></td>
+<td><p>DDR3L</p></td>
+<td><p>512 MB</p></td>
+<td><p>16-bit</p></td>
+<td><p>1,066</p></td>
+<td><p>~2.1 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed" target="_blank">Microzed</a> **</p></td>
+<td><p>PS DDR3</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>1,066</p></td>
+<td><p>~4.3 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC709" target="_blank">VC709</a> **</p></td>
+<td><p>PL DDR3 SODIMM J1+J3 (2x)</p></td>
+<td><p>DDR3</p></td>
+<td><p>2 x 4 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>1,600</p></td>
+<td><p>~25.6 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard" target="_blank">LFCPNX-EVN</a></p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>No external DRAM **</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>** The CertusPro-NX device itself supports LPDDR4, DDR3/3L and LPDDR2 up
+to 1,066 Mbps, but no DRAM is populated on the LFCPNX-EVN evaluation board.</p>
+</div>
+</div>
+</div>
+</div></section>
+<section id="id5">
+<h4>Discontinued AMD platforms<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="8d752be1bd2db7e9311fdbb989831ba16288ea58" name="8d752be1bd2db7e9311fdbb989831ba16288ea58" type="checkbox"></input><label for="8d752be1bd2db7e9311fdbb989831ba16288ea58"><p>Discontinued AMD platforms external memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13.9%" />
+<col style="width: 17.7%" />
+<col style="width: 11.4%" />
+<col style="width: 10.1%" />
+<col style="width: 11.4%" />
+<col style="width: 13.9%" />
+<col style="width: 21.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Interface</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Width</p></th>
+<th class="head"><p>Rate (MT/s)</p></th>
+<th class="head"><p>Bandwidth</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KC705" target="_blank">KC705</a></p></td>
+<td><p>PL DDR3 SODIMM (J1)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>1,600</p></td>
+<td><p>~12.8 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC707" target="_blank">VC707</a></p></td>
+<td><p>PL DDR3 SODIMM (J1)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>1,600</p></td>
+<td><p>~12.8 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU128" target="_blank">VCU128</a></p></td>
+<td><p>PL DDR4 (U17-U19/U73/U74)</p></td>
+<td><p>DDR4</p></td>
+<td><p>4.5 GB</p></td>
+<td><p>72-bit</p></td>
+<td><p>2,666</p></td>
+<td><p>~24.0 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU128" target="_blank">VCU128</a></p></td>
+<td><p>PL RLD3 (U37/U39)</p></td>
+<td><p>RLDRAM3</p></td>
+<td><p>288 MB</p></td>
+<td><p>72-bit</p></td>
+<td><p>1,866</p></td>
+<td><p>~16.8 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU128" target="_blank">VCU128</a></p></td>
+<td><p>HBM2 (on-die, 2 stacks)</p></td>
+<td><p>HBM2</p></td>
+<td><p>8 GB</p></td>
+<td><p>2,048-bit</p></td>
+<td><p>1,800</p></td>
+<td><p>~460.8 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></td>
+<td><p>PS DDR3 (U2-U5)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>1,333</p></td>
+<td><p>~5.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></td>
+<td><p>PL DDR3 SODIMM (J1)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>1,600</p></td>
+<td><p>~12.8 GB/s</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></section>
+<section id="id6">
+<h4>Intel platforms<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="abfce430128ee75260e9af03c4334577dc6951e4" name="abfce430128ee75260e9af03c4334577dc6951e4" type="checkbox"></input><label for="abfce430128ee75260e9af03c4334577dc6951e4"><p>Intel platforms external memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14.3%" />
+<col style="width: 19.0%" />
+<col style="width: 10.7%" />
+<col style="width: 9.5%" />
+<col style="width: 14.3%" />
+<col style="width: 13.1%" />
+<col style="width: 19.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Interface</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Width</p></th>
+<th class="head"><p>Rate (MT/s)</p></th>
+<th class="head"><p>Bandwidth</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html" target="_blank">A10GX</a> **</p></td>
+<td><p>via HiLo daughter card</p></td>
+<td><p>DDR3L / DDR4</p></td>
+<td><p>up to 4 GB</p></td>
+<td><p>72-bit</p></td>
+<td><p>2,133 / 2,666</p></td>
+<td><p>~19.2 / ~24.0 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a></p></td>
+<td><p>HPS DDR4 (HiLo)</p></td>
+<td><p>DDR4</p></td>
+<td><p>1 GB</p></td>
+<td><p>40-bit (32+ECC)</p></td>
+<td><p>2,400</p></td>
+<td><p>~12.0 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a></p></td>
+<td><p>Fabric DDR4 (HiLo)</p></td>
+<td><p>DDR4</p></td>
+<td><p>2 GB</p></td>
+<td><p>72-bit (64+ECC)</p></td>
+<td><p>2,400</p></td>
+<td><p>~19.2 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a></p></td>
+<td><p>Fabric DDR4 SO-DIMM (J28)</p></td>
+<td><p>DDR4</p></td>
+<td><p>16 GB</p></td>
+<td><p>72-bit (64+ECC)</p></td>
+<td><p>2,400</p></td>
+<td><p>~19.2 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a></p></td>
+<td><p>HPS DDR4 (HiLo J13)</p></td>
+<td><p>DDR4</p></td>
+<td><p>4 GB</p></td>
+<td><p>72-bit (64+ECC)</p></td>
+<td><p>2,133</p></td>
+<td><p>~17.1 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html" target="_blank">C5SoC</a></p></td>
+<td><p>HPS DDR3</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>800</p></td>
+<td><p>~3.2 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html" target="_blank">C5SoC</a></p></td>
+<td><p>Fabric DDR3</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>533</p></td>
+<td><p>~2.1 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html" target="_blank">DE10-Nano</a></p></td>
+<td><p>HPS DDR3</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>800</p></td>
+<td><p>~3.2 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a></p></td>
+<td><p>HPS DDR4 (U15-U19)</p></td>
+<td><p>DDR4</p></td>
+<td><p>1 GB (5 x x8 chips)</p></td>
+<td><p>40-bit (32+ECC)</p></td>
+<td><p>1,600</p></td>
+<td><p>~6.4 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a></p></td>
+<td><p>Fabric DDR4 DIMM1 (J4)</p></td>
+<td><p>DDR4 RDIMM</p></td>
+<td><p>16 GB</p></td>
+<td><p>72-bit (64+ECC)</p></td>
+<td><p>2,666</p></td>
+<td><p>~21.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a></p></td>
+<td><p>Fabric DDR4 DIMM2 (J5)</p></td>
+<td><p>DDR4 RDIMM</p></td>
+<td><p>16 GB</p></td>
+<td><p>72-bit (64+ECC)</p></td>
+<td><p>2,666</p></td>
+<td><p>~21.3 GB/s</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html" target="_blank">A10GX</a>:
+<strong>no DDR soldered on-board</strong> - all DDR interfaces require an optional
+HiLo memory daughter card.</p></li>
+<li><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a>:
+the <strong>HPS DDR4 HiLo card (J13) is not included</strong> with the H-Tile kit
+and must be purchased separately.</p></li>
+<li><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a>:
+<strong>DIMM2 (J5) is unpopulated</strong> at the factory - socket only, available
+on the AGF027 variant only.</p></li>
+</ul>
+</div>
+</div>
+</div>
+</div></section>
+</section>
+</section>
 <section id="file-structure-of-a-project">
-<h2>File structure of a project<a class="headerlink" href="#file-structure-of-a-project" title="Permalink to this heading"></a></h2>
+<h2>File structure of a project<a class="headerlink" href="#file-structure-of-a-project" title="Link to this heading"></a></h2>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>In <code class="docutils literal notranslate"><span class="pre">/projects/common/$carrier_name/</span></code> you can find templates for the
 <em>system_top.v</em>, <em>Makefile</em>, etc. to help you when creating a new project.</p>
 </div>
 <section id="project-files-for-amd-boards">
-<h3>Project files for AMD boards<a class="headerlink" href="#project-files-for-amd-boards" title="Permalink to this heading"></a></h3>
+<h3>Project files for AMD boards<a class="headerlink" href="#project-files-for-amd-boards" title="Link to this heading"></a></h3>
 <p>A project for an AMD FPGA board should contain the following files:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP
@@ -1239,7 +1933,7 @@ module, making the connections between the instantiated IPs</p></li>
 </ul>
 </section>
 <section id="project-files-for-intel-boards">
-<h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Permalink to this heading"></a></h3>
+<h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Link to this heading"></a></h3>
 <p>A project for an Intel FPGA board should contain the following files:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP
@@ -1262,7 +1956,7 @@ etc. The I/O ports of this Verilog module will be connected to actual
 I/O pads of the FPGA</p></li>
 </ul>
 <section id="examples">
-<h4>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h4>
+<h4>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h4>
 <p>Some carriers have a different name for these files, for example A10SoC
 has constraints file for both PL side and PS side:</p>
 <ul class="simple">
@@ -1272,7 +1966,7 @@ has constraints file for both PL side and PS side:</p>
 </section>
 </section>
 <section id="project-files-for-lattice-boards">
-<h3>Project files for Lattice boards<a class="headerlink" href="#project-files-for-lattice-boards" title="Permalink to this heading"></a></h3>
+<h3>Project files for Lattice boards<a class="headerlink" href="#project-files-for-lattice-boards" title="Link to this heading"></a></h3>
 <p>A project for a Lattice FPGA board should contain the following files:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP

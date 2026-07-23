@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,7 @@
 
     <title>Releases &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -109,7 +109,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -230,6 +230,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/data_offload/index.html">Data Offload</a></li>
@@ -369,13 +370,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -402,7 +406,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="releases">
-<span id="id1"></span><h1>Releases<a class="headerlink" href="#releases" title="Permalink to this heading"></a></h1>
+<span id="id1"></span><h1>Releases<a class="headerlink" href="#releases" title="Link to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <p>The HDL is released as git branches bi-annually. The release branches
@@ -416,7 +420,7 @@ along with the ADI library cores that are used.</p>
 one must assume these are <strong>not</strong> tested, therefore <strong>not</strong> supported by
 this release.</p>
 <section id="porting-a-release-branch-to-another-tool-version">
-<h2>Porting a release branch to another Tool version<a class="headerlink" href="#porting-a-release-branch-to-another-tool-version" title="Permalink to this heading"></a></h2>
+<h2>Porting a release branch to another Tool version<a class="headerlink" href="#porting-a-release-branch-to-another-tool-version" title="Link to this heading"></a></h2>
 <p>It is possible to port a release branch to another tool version, though
 not recommended. The ADI libraries should work across different versions
 of the tools, but the projects may not. The issues are most likely with
@@ -445,7 +449,7 @@ cases, it should work without much effort. If it doesn’t, do an
 incremental update and debug accordingly.</p>
 </section>
 <section id="use-already-built-files">
-<h2>Use already built files<a class="headerlink" href="#use-already-built-files" title="Permalink to this heading"></a></h2>
+<h2>Use already built files<a class="headerlink" href="#use-already-built-files" title="Link to this heading"></a></h2>
 <p>You can download already built files and use them as they are.</p>
 <p>The BOOT partition files for the main branches can be found in the link inside
 <a class="icon link reference external" href="https://swdownloads.analog.com/cse/boot_partition_files/main/latest_boot.txt" target="_blank">this document</a>.
@@ -460,7 +464,7 @@ are not tested in hardware!</p>
 </div>
 </section>
 <section id="release-branches">
-<h2>Release branches<a class="headerlink" href="#release-branches" title="Permalink to this heading"></a></h2>
+<h2>Release branches<a class="headerlink" href="#release-branches" title="Link to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -619,7 +623,7 @@ are not tested in hardware!</p>
 </div>
 </section>
 <section id="about-the-tools-we-use">
-<h2>About the tools we use<a class="headerlink" href="#about-the-tools-we-use" title="Permalink to this heading"></a></h2>
+<h2>About the tools we use<a class="headerlink" href="#about-the-tools-we-use" title="Link to this heading"></a></h2>
 <p>When Intel or AMD have a new release, we usually follow them and update our
 tools in a timely manner.</p>
 <p>Changing the version of tool used on a branch is done by updating the

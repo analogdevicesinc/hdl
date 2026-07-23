@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,7 +8,7 @@
 
     <title>Porting ADI’s HDL reference designs &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=a8f9a170" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=d3f78147" />
     <script async="async" src="../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -128,7 +128,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -249,6 +249,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ltc235x/index.html">AXI LTC235X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/data_offload/index.html">Data Offload</a></li>
@@ -388,13 +389,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/hmcad1520_ebz/index.html">HMCAD1520</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/jupiter_sdr/index.html">JUPITER-SDR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ltc2378_fmc/index.html">LTC2378-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/admx6020m/index.html">ADMX6020M</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -421,7 +425,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="porting-adi-s-hdl-reference-designs">
-<span id="porting-project"></span><h1>Porting ADI’s HDL reference designs<a class="headerlink" href="#porting-adi-s-hdl-reference-designs" title="Permalink to this heading"></a></h1>
+<span id="porting-project"></span><h1>Porting ADI’s HDL reference designs<a class="headerlink" href="#porting-adi-s-hdl-reference-designs" title="Link to this heading"></a></h1>
 <p>In general, a given reference design for an FMC board is deployed to just a few
 carriers, although several <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">FPGA boards</a>
 are supported in ADI’s HDL repository. The simple reason behind this practice is
@@ -440,7 +444,7 @@ respects a couple of guidelines.</p>
 simple indications for users who wants to port a project to a non-supported
 carrier.</p>
 <section id="quick-compatibility-check">
-<h2>Quick Compatibility Check<a class="headerlink" href="#quick-compatibility-check" title="Permalink to this heading"></a></h2>
+<h2>Quick Compatibility Check<a class="headerlink" href="#quick-compatibility-check" title="Link to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>All ADI’s FPGA Mezzanine Cards (FMC) are designed to respect all the
@@ -490,7 +494,7 @@ FMC board. If you’re not sure, ask!</p>
 </div>
 </section>
 <section id="base-design-files">
-<h2>Base design files<a class="headerlink" href="#base-design-files" title="Permalink to this heading"></a></h2>
+<h2>Base design files<a class="headerlink" href="#base-design-files" title="Link to this heading"></a></h2>
 <p>At <a class="reference internal" href="architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a> it is described a generic base design and possible
 components of it. The user should look at it as a suggestion only.</p>
 <div class="admonition tip">
@@ -511,7 +515,7 @@ The constraint files and custom modules instantiated directly in the
 <code class="docutils literal notranslate"><span class="pre">system_top</span></code> module must be added to the project files list, in
 <code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code>.</p>
 <section id="example-with-an-amd-xilinx-board">
-<h3>Example with an AMD Xilinx board<a class="headerlink" href="#example-with-an-amd-xilinx-board" title="Permalink to this heading"></a></h3>
+<h3>Example with an AMD Xilinx board<a class="headerlink" href="#example-with-an-amd-xilinx-board" title="Link to this heading"></a></h3>
 <p>In this section, we are presenting all the necessary steps to create a base
 design for the AMD <a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a> development board.</p>
 <p>First, you need to create a new directory in <code class="docutils literal notranslate"><span class="pre">hdl/projects/common</span></code> with the
@@ -574,7 +578,7 @@ add a regular expression containing the part name (<code class="docutils literal
 to match other UltraScale+ boards that fit, as well) under the FPGA_TECHNOLOGY
 case.</p>
 <section id="project-flow">
-<h4>Project flow<a class="headerlink" href="#project-flow" title="Permalink to this heading"></a></h4>
+<h4>Project flow<a class="headerlink" href="#project-flow" title="Link to this heading"></a></h4>
 <p>The entry point for project creation is <code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code>. Some support
 scripts are first loaded (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl" target="_blank">scripts/adi_env.tcl</a>) then the project is
 created (
@@ -672,7 +676,7 @@ In this script, several procedures which simplify the design are defined.</p>
 </section>
 </section>
 <section id="example-with-an-intel-board">
-<h3>Example with an Intel board<a class="headerlink" href="#example-with-an-intel-board" title="Permalink to this heading"></a></h3>
+<h3>Example with an Intel board<a class="headerlink" href="#example-with-an-intel-board" title="Link to this heading"></a></h3>
 <p>In this section, we are presenting all the necessary steps to create a base
 design for the Intel Arria 10 SoC development board (abbreviated,
 <a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a>).</p>
@@ -696,7 +700,7 @@ the <strong>adi_project</strong> process:</p>
 </div>
 </section>
 <section id="example-with-a-lattice-board">
-<h3>Example with a Lattice board<a class="headerlink" href="#example-with-a-lattice-board" title="Permalink to this heading"></a></h3>
+<h3>Example with a Lattice board<a class="headerlink" href="#example-with-a-lattice-board" title="Link to this heading"></a></h3>
 <p>To create a new base design for a given Lattice FPGA carrier board, the following
 steps should be taken (the <a class="icon link reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard" target="_blank">lfcpnx</a> carrier was used as an example).</p>
 <p>The following files should be created or copied into the directory:</p>
@@ -717,9 +721,9 @@ by adding the following lines to the file:</p>
 </section>
 </section>
 <section id="project-files">
-<h2>Project files<a class="headerlink" href="#project-files" title="Permalink to this heading"></a></h2>
+<h2>Project files<a class="headerlink" href="#project-files" title="Link to this heading"></a></h2>
 <section id="project-files-for-amd-boards">
-<h3>Project files for AMD boards<a class="headerlink" href="#project-files-for-amd-boards" title="Permalink to this heading"></a></h3>
+<h3>Project files for AMD boards<a class="headerlink" href="#project-files-for-amd-boards" title="Link to this heading"></a></h3>
 <p>To follow the project framework as much as possible, the easiest way is to copy
 all the projects files from an already existing project and to modify those
 files to support the new carrier.</p>
@@ -751,7 +755,7 @@ name, should work with the new project without an issue.</p></li>
 </ul>
 </section>
 <section id="project-files-for-intel-boards">
-<h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Permalink to this heading"></a></h3>
+<h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Link to this heading"></a></h3>
 <p>To follow the project framework as much as possible, the easiest way is to copy
 all the projects file from an already existing project and to modify those
 files to support the new carrier.</p>
@@ -775,7 +779,7 @@ name, it should work with the new project without an issue.</p></li>
 </ul>
 </section>
 <section id="project-files-for-lattice-boards">
-<h3>Project files for Lattice boards<a class="headerlink" href="#project-files-for-lattice-boards" title="Permalink to this heading"></a></h3>
+<h3>Project files for Lattice boards<a class="headerlink" href="#project-files-for-lattice-boards" title="Link to this heading"></a></h3>
 <p>A project for a Lattice FPGA board should contain the following files:</p>
 <ul class="simple">
 <li><p><strong>system_project_pb.tcl</strong> - Used to build the Propel Builder project
@@ -805,9 +809,9 @@ name, it should work with the new project without an issue.</p></li>
 </section>
 </section>
 <section id="tips">
-<h2>Tips<a class="headerlink" href="#tips" title="Permalink to this heading"></a></h2>
+<h2>Tips<a class="headerlink" href="#tips" title="Link to this heading"></a></h2>
 <section id="generating-the-fmc-i-o-constraints">
-<h3>Generating the FMC I/O constraints<a class="headerlink" href="#generating-the-fmc-i-o-constraints" title="Permalink to this heading"></a></h3>
+<h3>Generating the FMC I/O constraints<a class="headerlink" href="#generating-the-fmc-i-o-constraints" title="Link to this heading"></a></h3>
 <p>The easiest way of writing the constraints for FMC I/O pins is making use
 of the script <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_fmc_constr_generator.tcl" target="_blank">projects/scripts/adi_fmc_constr_generator.tcl</a>.</p>
 <p>Required setup:</p>
@@ -851,7 +855,7 @@ But before sourcing or calling it, your current directory needs to be
 (AMD board) or <strong>fmc_constr.tcl</strong> (Intel board). If ran from an open Vivado
 project, the generated file will be automatically added to the project.</p>
 <section id="creating-carrier-common-fmc-connections">
-<span id="creating-fmc"></span><h4>Creating carrier common FMC connections<a class="headerlink" href="#creating-carrier-common-fmc-connections" title="Permalink to this heading"></a></h4>
+<span id="creating-fmc"></span><h4>Creating carrier common FMC connections<a class="headerlink" href="#creating-carrier-common-fmc-connections" title="Link to this heading"></a></h4>
 <p>To create a carrier common FMC connections file:</p>
 <ol class="arabic simple">
 <li><p>Open the space divided .txt file corresponding to the desired connector type,
