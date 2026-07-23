@@ -99,6 +99,9 @@ set cc [ipx::current_core]
 
 ipx::associate_bus_interfaces -clock s_axi_aclk -reset reset_n $cc
 
+# Infer interrupt
+ipx::infer_bus_interface irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
+
 ## ID
 set_property -dict [list \
   "value_validation_type" "range_long" \
