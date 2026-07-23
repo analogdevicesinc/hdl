@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Every HDL design of a reference project can be divided into:" name="description" />
+
+    <title>HDL Architecture &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=d3f78147" />
+    <script async="async" src="../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="icon" href="../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ADI IP cores" href="ip_cores/index.html" />
+    <link rel="prev" title="Generating HDL boot image for Intel projects" href="build_intel_boot_image.html" />
+   
+  
+  
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Docs</label>
+        
+        <a id="logo" href="../index.html">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">HDL Architecture</a><ul>
+<li><a class="reference internal" href="#how-they-re-instantiated">How they’re instantiated</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#typical-project-diagram">Typical project diagram</a></li>
+<li><a class="reference internal" href="#base-design">Base Design</a><ul>
+<li><a class="reference internal" href="#microprocessor">Microprocessor</a></li>
+<li><a class="reference internal" href="#memory-interface-controller">Memory interface controller</a></li>
+<li><a class="reference internal" href="#peripheral-interfaces">Peripheral interfaces</a><ul>
+<li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
+<li><a class="reference internal" href="#spi">SPI</a></li>
+<li><a class="reference internal" href="#i2c-i2s-spdif">I2C/I2S/SPDIF</a></li>
+<li><a class="reference internal" href="#hdmi">HDMI</a></li>
+<li><a class="reference internal" href="#gpios">GPIOs</a></li>
+<li><a class="reference internal" href="#connectivity">Connectivity</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#interrupts">Interrupts</a><ul>
+<li><a class="reference internal" href="#interrupts-table">Interrupts table</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#board-design-and-capabilities">Board design and capabilities</a><ul>
+<li><a class="reference internal" href="#amd-platforms">AMD platforms</a></li>
+<li><a class="reference internal" href="#discontinued-amd-platforms">Discontinued AMD platforms</a></li>
+<li><a class="reference internal" href="#intel-platforms">Intel platforms</a><ul>
+<li><a class="reference internal" href="#vadj-values">VADJ values</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#memory-specifications">Memory Specifications</a><ul>
+<li><a class="reference internal" href="#on-chip-memory">On-Chip Memory</a><ul>
+<li><a class="reference internal" href="#id1">AMD platforms</a></li>
+<li><a class="reference internal" href="#id2">Discontinued AMD platforms</a></li>
+<li><a class="reference internal" href="#id3">Intel platforms</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#external-memory">External Memory</a><ul>
+<li><a class="reference internal" href="#id4">AMD Platforms</a></li>
+<li><a class="reference internal" href="#id5">Discontinued AMD platforms</a></li>
+<li><a class="reference internal" href="#id6">Intel platforms</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#file-structure-of-a-project">File structure of a project</a><ul>
+<li><a class="reference internal" href="#project-files-for-amd-boards">Project files for AMD boards</a></li>
+<li><a class="reference internal" href="#project-files-for-intel-boards">Project files for Intel boards</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#project-files-for-lattice-boards">Project files for Lattice boards</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="logo" href="../index.html">
+      <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
+      <img class="only-dark" src="../_static/HDL_logo_w_cropped.svg"/>
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="releases.html">Releases</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-1" id="toctree-collapse-1-1-1"/><div class="collapse"><a class="reference internal" href="release_tables/projects_list_and_dependencies/index.html">Projects List and Dependencies</a><label for="toctree-collapse-1-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/projects_list_and_dependencies/downloads_insert_main.html">Projects list and dependencies for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/projects_list_and_dependencies/downloads_insert_hdl_2026_r1.html">Projects list and dependencies for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/projects_list_and_dependencies/downloads_insert_hdl_2023_r2.html">Projects list and dependencies for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/projects_list_and_dependencies/downloads_insert_hdl_2022_r2.html">Projects list and dependencies for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r2.html">Projects list and dependencies for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r1.html">Projects list and dependencies for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r2.html">Projects list and dependencies for hdl_2019_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r1.html">Projects list and dependencies for hdl_2019_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r2.html">Projects list and dependencies for hdl_2018_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r1.html">Projects list and dependencies for hdl_2018_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/projects_list_and_dependencies/downloads_insert_hdl_2017_r1.html">Projects list and dependencies for hdl_2017_r1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-2" id="toctree-collapse-1-1-2"/><div class="collapse"><a class="reference internal" href="release_tables/resource_utilization/index.html">Resource Utilization</a><label for="toctree-collapse-1-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/resource_utilization/resource_utilization_table_main.html">Resource utilization for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/resource_utilization/resource_utilization_table_hdl_2026_r1.html">Resource utilization for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/resource_utilization/resource_utilization_table_hdl_2023_r2.html">Resource utilization for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/resource_utilization/resource_utilization_table_hdl_2022_r2.html">Resource utilization for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/resource_utilization/resource_utilization_table_hdl_2021_r2.html">Resource utilization for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/resource_utilization/resource_utilization_table_hdl_2021_r1.html">Resource utilization for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="release_tables/resource_utilization/resource_utilization_table_hdl_2019_r2.html">Resource utilization for hdl_2019_r2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_boot_bin.html">Build the BOOT.BIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_intel_boot_image.html">Build the Intel Boot Image</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-2" id="toctree-collapse-1-2"/><div class="collapse"><a class="reference internal" href="ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="ip_cores/creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip_cores/interfaces.html">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="porting_project.html">Porting HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdl_coding_guidelines.html">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to HDL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="third_party.html">Third party forks</a></li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../library/index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../library/i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/i3c_controller/i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/i3c_controller/interface.html">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../library/jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/generic_jesd_bds/index.html">Generic JESD204 block designs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/xgt_wizard/index.html">Xilinx FPGAs Transceivers Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/versal_transceiver_subsystem/index.html">AMD Versal Adaptive SoC Transceiver Subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/troubleshoot/troubleshoot_jesd204_tx.html">Troubleshooting JESD204 TX links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../library/spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad35xxr/index.html">AXI AD35XXR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad408x/index.html">AXI AD408x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad485x/index.html">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad7405/index.html">AXI AD7405</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad7606x/index.html">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad7616/index.html">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad7768/index.html">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad777x/index.html">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9265/index.html">AXI AD9265</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9361/index.html">AXI AD9361</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9740/index.html">AXI AD9740</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9783/index.html">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9963/index.html">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ada4355/index.html">AXI ADA4355</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adrv9001/index.html">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_hmcad15xx/index.html">AXI HMCAD15XX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ltc235x/index.html">AXI LTC235X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ltc2387/index.html">AXI LTC2387</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/data_offload/index.html">Data Offload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adxcvr/index.html">AXI ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_clock_monitor/index.html">AXI Clock Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_fan_control/index.html">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_laser_driver/index.html">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_logic_analyzer/index.html">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_sysid/index.html">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_tdd/index.html">AXI TDD</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../library/cn0363/index.html">CN0363</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/cn0363/cn0363_dma_sequencer.html">CN0363 DMA Sequencer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/cn0363/cn0363_phase_data_sync.html">CN0363 Phase Data Sync</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../library/corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/corundum/corundum_core/index.html">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../library/corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../library/corundum/ethernet/vcu118/index.html">VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../library/corundum/ethernet/k26/index.html">K26</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_extract/index.html">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_mii_to_rmii/index.html">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_pack/util_cpack2.html">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_pack/util_upack2.html">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_rfifo/index.html">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_wfifo/index.html">Util WFIFO</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9643/index.html">AXI AD9643 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9671/index.html">AXI AD9671 (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad_quadmxfe1_ebz/index.html">AD-QUADMXFE1-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad353xr/index.html">AD353XR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4052_ardz/index.html">AD4052-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4062_ardz/index.html">AD4062-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4080_fmc_evb/index.html">AD4080-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4110/index.html">AD4110-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad411x_ad717x/index.html">AD411x-AD717x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4170_asdz/index.html">AD4170-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4630_fmc/index.html">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad6676evb/index.html">AD6676EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7124_asdz/index.html">AD7124-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7405_fmc/index.html">AD7405-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x_fmc/index.html">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad77681evb/index.html">AD7768-1-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad777x_fmcz/index.html">AD777X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081_fmca_ebz_x_band/index.html">AD9081-FMCA-EBZ-X-BAND</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9083_evb/index.html">AD9083-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9084_ebz/index.html">AD9084-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad916x_fmc/index.html">AD916x-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9208_dual_ebz/index.html">AD9208-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9209_fmca_ebz/index.html">AD9209-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9213_dual_ebz/index.html">AD9213-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9213_evb/index.html">AD9213-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9265_fmc/index.html">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9467_fmc/index.html">AD9467-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9656_fmc/index.html">AD9656-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9740_fmc/index.html">AD9740-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adaq23875/index.html">ADAQ23875</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/admx100x_evb/index.html">ADMX100X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/admx6001_ebz/index.html">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrd8012_01z/index.html">ADRD8012-01Z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001/index.html">ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9001_dual/index.html">ADRV9001-DUAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9009/index.html">ADRV9009</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9009zu11eg/index.html">ADRV9009-ZU11EG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv903x/index.html">ADRV903x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv904x/index.html">ADRV904x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9361z7035/index.html">ADRV9361Z7035</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9364z7020/index.html">ADRV9364Z7020</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9371x/index.html">ADRV9371x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adv7511/index.html">ADV7511</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adv7513/index.html">ADV7513</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/arradio/index.html">ARRADIO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cn0506/index.html">CN0506</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cn0577/index.html">CN0577</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cn0579/index.html">CN0579</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cn0585/index.html">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dac_fmc_ebz/index.html">DAC-FMC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/daq2/index.html">DAQ2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/daq3/index.html">DAQ3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/dc2677a/index.html">DC2677A</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1"/><div class="collapse"><a class="reference internal" href="../projects/fmcomms2/index.html">FMCOMMS2/3/4</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../projects/fmcomms2/fir_filter.html">FMCOMMS2 FIR FILTER</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms5/index.html">FMCOMMS5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms8/index.html">FMCOMMS8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/hmcad1520_ebz/index.html">HMCAD1520</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/jupiter_sdr/index.html">JUPITER-SDR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ltc2378_fmc/index.html">LTC2378-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/m2k/index.html">M2K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/max96724/index.html">MAX96724</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pluto/index.html">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/quad_adaq77681/index.html">QUAD_ADAQ7768-1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/admx6020m/index.html">ADMX6020M</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcadc5/index.html">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms1/index.html">FMCOMMS1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcomms6/index.html">FMCOMMS6 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/fmcjesdadc1/index.html">FMCJESDADC1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/imageon/index.html">IMAGEON (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="index.html">User Guide</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="hdl-architecture">
+<span id="architecture"></span><h1>HDL Architecture<a class="headerlink" href="#hdl-architecture" title="Link to this heading"></a></h1>
+<p>Every HDL design of a reference project can be divided into:</p>
+<ol class="arabic simple">
+<li><p>Base design for the <strong>carrier</strong> board (projects/common/$CARRIER) —
+description of what the carrier contains</p>
+<ul class="simple">
+<li><p>an embedded processor - soft or hard;</p></li>
+<li><p>all the peripheral IPs (that are necessary to run a Linux distribution
+on the system);</p></li>
+<li><p>these designs are specific to each carrier, making them <strong>carrier
+dependent</strong>;</p></li>
+<li><p>it describes part of the <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module;</p></li>
+<li><p>located in <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">projects/common</a>; one for each carrier;</p></li>
+<li><p>here we do most of the PS configuration, add SPI, I2C and GPIOs;</p></li>
+<li><p>in some cases, we have scripts to instantiate the PL DDR as ADC offload
+memory or DAC offload memory.</p></li>
+</ul>
+</li>
+<li><p>Base design for the <strong>evaluation</strong> board (projects/$EVAL_BOARD/common)
+— description of what the evaluation contains</p>
+<ul class="simple">
+<li><p>instantiates all the necessary IPs to control the evaluation board and to
+capture or send data;</p></li>
+<li><p>the data paths defined in this block design are common across multiple
+carrier platforms, making them <strong>carrier independent</strong>;</p></li>
+<li><p>it describes part of the <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module;</p></li>
+<li><p>located at <code class="docutils literal notranslate"><span class="pre">hdl/projects/$EVAL_BOARD/common</span></code> (<code class="docutils literal notranslate"><span class="pre">*_bd.tcl</span></code> for
+AMD Xilinx FPGAs, and <code class="docutils literal notranslate"><span class="pre">*_qsys.tcl</span></code> for Intel FPGAs).</p></li>
+</ul>
+</li>
+<li><p>Specific design for the system (projects/$EVAL_BOARD/$CARRIER)</p>
+<ul class="simple">
+<li><p>we source the carrier board configuration (#1), then the evaluation
+board configuration (#2) and then we do some specific parameter
+modification, if required.</p></li>
+</ul>
+</li>
+</ol>
+<section id="how-they-re-instantiated">
+<h2>How they’re instantiated<a class="headerlink" href="#how-they-re-instantiated" title="Link to this heading"></a></h2>
+<p>In case of a project, inside the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> file we have to source
+the base design of the carrier first (#1), then the base design of the
+evaluation board (#2).</p>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<p>Take <a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS2-EBZ" target="_blank">FMCOMMS2</a> with
+<a class="icon link reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html" target="_blank">ZedBoard</a>;
+the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> file will have the following designs sourced to be used:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>zed<span class="o">/</span>zed_system_bd.tcl
+<span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>common<span class="o">/</span>fmcomms2_bd.tcl
+</pre></div>
+</div>
+</section>
+</section>
+<section id="typical-project-diagram">
+<h2>Typical project diagram<a class="headerlink" href="#typical-project-diagram" title="Link to this heading"></a></h2>
+<img alt="../_images/base_platform.svg" src="../_images/base_platform.svg" />
+</section>
+<section id="base-design">
+<h2>Base Design<a class="headerlink" href="#base-design" title="Link to this heading"></a></h2>
+<p>The base design contains all the I/O peripherals, memory interfaces
+and processing components, which are necessary for a fully functional
+Linux system. The majority of these components are Intel and AMD Xilinx IP
+cores.</p>
+<p>Usually, they contain:</p>
+<ul class="simple">
+<li><p>Microprocessor</p></li>
+<li><p>Memory interface controller</p></li>
+<li><p>Peripheral interfaces</p></li>
+</ul>
+<section id="microprocessor">
+<h3>Microprocessor<a class="headerlink" href="#microprocessor" title="Link to this heading"></a></h3>
+<p>In our designs, we use only three types:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Intel</p></th>
+<th class="head"></th>
+<th class="head"><p>AMD Xilinx</p></th>
+<th class="head"></th>
+<th class="head"></th>
+<th class="head"><p>Lattice</p></th>
+</tr>
+<tr class="row-even"><th class="head"><p><strong>SoC</strong></p></th>
+<th class="head"><p><strong>FPGA</strong></p></th>
+<th class="head"><p><strong>SoC</strong></p></th>
+<th class="head"><p><strong>FPGA</strong></p></th>
+<th class="head"><p><a class="icon link reference external" href="https://www.xilinx.com/an/adaptive-compute-acceleration-platforms.html" target="_blank">ACAP</a></p></th>
+<th class="head"><p><strong>FPGA</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/docs/programmable/683458/current/hard-processor-system-hps.html" target="_blank">HPS</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/programmable/processor/nios-ii.html" target="_blank">NIOS II</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/products/intellectual-property/processing_system7.html" target="_blank">PS7</a>
+<a class="icon link reference external" href="https://www.xilinx.com/products/intellectual-property/zynq-ultra-ps-e.html" target="_blank">PS8</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/products/design-tools/microblaze.html" target="_blank">MicroBlaze</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.xilinx.com/products/silicon-devices/acap/versal.html" target="_blank">Versal</a></p></td>
+<td><p><a class="icon link reference external" href="https://www.latticesemi.com/products/designsoftwareandip/intellectualproperty/ipcore/ipcores04/risc-v-rx-cpu" target="_blank">riscv-rx</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Worth mentioning in case of SoCs, the <strong>Hard Processor System</strong> (HPS)
+or <strong>Processing System 7/8</strong> (PS7/8) do not contain just the dual-core
+ARM® Cortex® - A9 MPCore™ processor, they also have other integrated
+peripherals and memory interfaces. For more information please visit
+the manufacturer’s website, listed in the table above.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PS7</span></code> — <a class="icon link reference external" href="https://docs.xilinx.com/v/u/en-US/pg082-processing-system7" target="_blank">Zynq-7000 SoC Processing
+System</a>
+(<code class="docutils literal notranslate"><span class="pre">processing_system7</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PS8</span></code> — <a class="icon link reference external" href="https://docs.xilinx.com/viewer/book-attachment/xFC3qkokxbD~75kj6nPLuw/2o4flzqn5OqWHaMHwpG3Qg" target="_blank">Zynq UltraScale+ MPSoC Processing
+System</a>
+(<code class="docutils literal notranslate"><span class="pre">zynq_ultra_ps_e</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Versal</span></code> — <a class="icon link reference external" href="https://docs.xilinx.com/r/en-US/pg352-cips/Overview" target="_blank">Versal ACAP
+CIPS</a>
+(<code class="docutils literal notranslate"><span class="pre">versal_cips</span></code>)</p></li>
+</ul>
+</section>
+<section id="memory-interface-controller">
+<h3>Memory interface controller<a class="headerlink" href="#memory-interface-controller" title="Link to this heading"></a></h3>
+<p>In almost all cases, the carrier board is not made and designed by
+<a class="icon adi reference external" href="https://www.analog.com/" target="_blank">Analog Devices</a>, so the external memory solution of the system is
+given.</p>
+<p>Meaning, <strong>we cannot support, modify or alter this important part</strong> of the
+system. In several cases we even have system limitations because of it
+(e.g. the memory interface is not fast enough to handle the required
+data throughput).</p>
+<p>In the following two links, one can find the landing page of the available
+memory solutions for Intel and AMD:</p>
+<ul class="simple">
+<li><p>Intel’s memory interfaces:
+<a class="icon link reference external" href="https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html" target="_blank">https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html</a></p></li>
+<li><p>AMD’s memory interfaces:
+<a class="icon link reference external" href="https://www.xilinx.com/products/intellectual-property/mig.html#documentation" target="_blank">https://www.xilinx.com/products/intellectual-property/mig.html#documentation</a></p></li>
+</ul>
+</section>
+<section id="peripheral-interfaces">
+<h3>Peripheral interfaces<a class="headerlink" href="#peripheral-interfaces" title="Link to this heading"></a></h3>
+<p>These interfaces are used to control external peripherals located on
+the prototyping board or the FMC I/O board.</p>
+<p>In HDL, these ports are named slightly different than how they’re in
+the documentations. Thus, to make it easier for beginners, here you
+have the naming of the ports depending on the microprocessor used.</p>
+<section id="cpu-memory-interconnects-addresses">
+<span id="architecture-cpu-intercon-addr"></span><h4>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h4>
+<p>The memory addresses that will be used by software are based on the HDL
+addresses of the IP register map, to which an offset is added, depending
+on the architecture of the used FPGA (see also
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_board.tcl" target="_blank">ad_cpu_interconnect procedure</a>;
+architecture is specified by <code class="docutils literal notranslate"><span class="pre">sys_zynq</span></code> variable, for AMD FPGAs).</p>
+<p><strong>Zynq-7000 and 7 Series</strong></p>
+<p>Because this was the original target, this is the reference
+address used, the common one, to which depending on the architecture,
+you add an offset to get to the address space for the peripherals (as they
+differ from one to the other).</p>
+<p><strong>Zynq UltraScale+ MP</strong></p>
+<p>If the address is between 0x4000_0000 - 0x4FFF_FFFF then the
+AXI peripherics will be placed in 0x8000_0000 - 0x8FFF_FFFF range
+by adding 0x4000_0000 to the address.</p>
+<p>If the address is between 0x7000_0000 - 0x7FFF_FFFF then the
+AXI peripherics will be placed in 0x9000_0000 - 0x9FFF_FFFF range
+by adding 0x2000_0000 to the address.</p>
+<p><strong>Versal</strong></p>
+<p>If the address is between 0x4400_0000 - 0x4FFF_FFFF then the
+AXI peripherics will be placed in 0xA400_0000 - 0xAFFF_FFFF range
+by adding 0x6000_0000 to the address.</p>
+<p>If the address is between 0x7000_0000 - 0x7FFF_FFFF then the
+AXI peripherics will be placed in 0xB000_0000 - 0xBFFF_FFFF range
+by adding 0x4000_0000 to the address.</p>
+<p><strong>Intel</strong></p>
+<p>Applying to DE10-Nano, C5SoC.</p>
+<p>The address usually (but not always) starts from 0x0002_0000, or the first
+available block of a bigger size. In Quartus block design you should be
+able to determine it.</p>
+</section>
+<section id="spi">
+<h4>SPI<a class="headerlink" href="#spi" title="Link to this heading"></a></h4>
+<p>In general, the base design of the carrier (#1) has two Serial Peripheral
+Interfaces (SPIs), which are used as a control interface for FMC/HSMC devices.
+These SPI interfaces are controlled by the integrated SPI controller of the
+<strong>Hard Processor System</strong> (HPS) or <strong>Processing System 7/8</strong> (PS7/8) or an
+Intel or AMD SPI controller core.</p>
+</section>
+<section id="i2c-i2s-spdif">
+<h4>I2C/I2S/SPDIF<a class="headerlink" href="#i2c-i2s-spdif" title="Link to this heading"></a></h4>
+<p>A couple of carriers require these standard interfaces for different purposes
+(e.g. a configuration interface for an audio peripheral device).
+These peripherals do not necessarily have vital roles in the reference
+design – it’s more like a generic goal to support all the provided
+peripherals of the carrier board.</p>
+</section>
+<section id="hdmi">
+<h4>HDMI<a class="headerlink" href="#hdmi" title="Link to this heading"></a></h4>
+<p>There is HDMI support for all carriers which are using the <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a>
+as HDMI transmitter. The HDMI transmitter core can be found
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx" target="_blank">here (axi_hdmi_tx)</a>.</p>
+</section>
+<section id="gpios">
+<h4>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h4>
+<p>The general rule of thumb is to define 64 GPIO pins for the design:</p>
+<ul class="simple">
+<li><p>bits [31: 0] always belong to the carrier board;</p></li>
+<li><p>bits [63:32] will be assigned to switches, buttons and/or LEDs, which
+can be found on the FMC board;</p></li>
+<li><p>bits [95:64] will be used when the FPGA type is Zynq UltraScale+ MPSoC.</p></li>
+</ul>
+<p>When some of these GPIOs are not used, the input pins should have the
+output pins driven to them, so that
+<a class="icon link reference external" href="https://www.xilinx.com/products/design-tools/vivado.html" target="_blank">Vivado</a> will not complain about
+inputs not being assigned to.</p>
+<p>Depending on the processor type, add these values to the GPIO number
+from the HDL project to obtain the final number used in software:</p>
+<ul class="simple">
+<li><p>PS7 EMIO offset = <strong>54</strong></p></li>
+<li><p>PS8 EMIO offset = <strong>78</strong></p></li>
+<li><p>MicroBlaze offset = <strong>no offset</strong></p></li>
+<li><p>Versal offset = <strong>-32</strong></p></li>
+</ul>
+</section>
+<section id="connectivity">
+<h4>Connectivity<a class="headerlink" href="#connectivity" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>Ethernet</p></li>
+<li><p>USB OTG</p></li>
+</ul>
+<p>These interface designs are borrowed from the golden reference design
+of the board.</p>
+</section>
+</section>
+<section id="interrupts">
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<p>When developing the Linux software parts for an HDL project, the
+interrupts number to the PS have a different number in the software
+side.</p>
+<p>Not a rule, but in our designs we preffer to use firstly the interrupts
+from 15 and to go down to 0. Be careful when assigning one, because it
+might be used in the base design of the carrier!</p>
+<p>Always check which are used (in
+<code class="docutils literal notranslate"><span class="pre">/projects/common/$carrier/$carrier_system_bd.tcl</span></code>)</p>
+<section id="interrupts-table">
+<h4>Interrupts table<a class="headerlink" href="#interrupts-table" title="Link to this heading"></a></h4>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>HDL</p></th>
+<th class="head"><p>Linux Zynq</p></th>
+<th class="head"><p>Actual Zynq</p></th>
+<th class="head"><p>Linux ZynqMP</p></th>
+<th class="head"><p>Actual ZynqMP</p></th>
+<th class="head"><p>S10SoC</p></th>
+<th class="head"><p>Linux Cyclone V</p></th>
+<th class="head"><p>Actual Cyclone V</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>59</p></td>
+<td><p>91</p></td>
+<td><p>111</p></td>
+<td><p>143</p></td>
+<td><p>32</p></td>
+<td><p>55</p></td>
+<td><p>87</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>58</p></td>
+<td><p>90</p></td>
+<td><p>110</p></td>
+<td><p>142</p></td>
+<td><p>31</p></td>
+<td><p>54</p></td>
+<td><p>86</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>57</p></td>
+<td><p>89</p></td>
+<td><p>109</p></td>
+<td><p>141</p></td>
+<td><p>30</p></td>
+<td><p>53</p></td>
+<td><p>85</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>56</p></td>
+<td><p>88</p></td>
+<td><p>108</p></td>
+<td><p>140</p></td>
+<td><p>29</p></td>
+<td><p>52</p></td>
+<td><p>84</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>55</p></td>
+<td><p>87</p></td>
+<td><p>107</p></td>
+<td><p>139</p></td>
+<td><p>28</p></td>
+<td><p>51</p></td>
+<td><p>83</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>54</p></td>
+<td><p>86</p></td>
+<td><p>106</p></td>
+<td><p>138</p></td>
+<td><p>27</p></td>
+<td><p>50</p></td>
+<td><p>82</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>53</p></td>
+<td><p>85</p></td>
+<td><p>105</p></td>
+<td><p>137</p></td>
+<td><p>26</p></td>
+<td><p>49</p></td>
+<td><p>81</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>52</p></td>
+<td><p>84</p></td>
+<td><p>104</p></td>
+<td><p>136</p></td>
+<td><p>25</p></td>
+<td><p>48</p></td>
+<td><p>80</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>36</p></td>
+<td><p>68</p></td>
+<td><p>96</p></td>
+<td><p>128</p></td>
+<td><p>24</p></td>
+<td><p>47</p></td>
+<td><p>79</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>35</p></td>
+<td><p>67</p></td>
+<td><p>95</p></td>
+<td><p>127</p></td>
+<td><p>23</p></td>
+<td><p>46</p></td>
+<td><p>78</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>34</p></td>
+<td><p>66</p></td>
+<td><p>94</p></td>
+<td><p>126</p></td>
+<td><p>22</p></td>
+<td><p>45</p></td>
+<td><p>77</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>33</p></td>
+<td><p>65</p></td>
+<td><p>93</p></td>
+<td><p>125</p></td>
+<td><p>21</p></td>
+<td><p>44</p></td>
+<td><p>76</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>32</p></td>
+<td><p>64</p></td>
+<td><p>92</p></td>
+<td><p>124</p></td>
+<td><p>20</p></td>
+<td><p>43</p></td>
+<td><p>75</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>31</p></td>
+<td><p>63</p></td>
+<td><p>91</p></td>
+<td><p>123</p></td>
+<td><p>19</p></td>
+<td><p>42</p></td>
+<td><p>74</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>30</p></td>
+<td><p>62</p></td>
+<td><p>90</p></td>
+<td><p>122</p></td>
+<td><p>18</p></td>
+<td><p>41</p></td>
+<td><p>73</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>29</p></td>
+<td><p>61</p></td>
+<td><p>89</p></td>
+<td><p>121</p></td>
+<td><p>17</p></td>
+<td><p>40</p></td>
+<td><p>72</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>HDL</p></th>
+<th class="head"><p>riscv-rx no-OS</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>15</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>14</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>13</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>12</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>11</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</section>
+<section id="board-design-and-capabilities">
+<h2>Board design and capabilities<a class="headerlink" href="#board-design-and-capabilities" title="Link to this heading"></a></h2>
+<section id="amd-platforms">
+<span id="architecture-amd-platforms"></span><h3>AMD platforms<a class="headerlink" href="#amd-platforms" title="Link to this heading"></a></h3>
+<p>The board files of these carriers can be found <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">here</a>.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.0%" />
+<col style="width: 16.0%" />
+<col style="width: 18.0%" />
+<col style="width: 18.0%" />
+<col style="width: 16.0%" />
+<col style="width: 16.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board name</p></th>
+<th class="head"><p>Boots from</p></th>
+<th class="head"><p>FMC connector 1</p></th>
+<th class="head"><p>FMC connector 2</p></th>
+<th class="head"><p>VADJ FMC connector</p></th>
+<th class="head"><p>Family</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/AC701" target="_blank">AC701</a> **</p></td>
+<td><p>JTAG</p></td>
+<td><p>HPC (2 GTP &#64; 6.6 Gbps)</p></td>
+<td><p>—</p></td>
+<td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
+<td><p>Artix-7</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a></p></td>
+<td><p>SD card</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>Zynq-7000</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KCU105" target="_blank">KCU105</a></p></td>
+<td><p>JTAG</p></td>
+<td><p>HPC (8 GTH &#64; 16.3 Gbps)</p></td>
+<td><p>LPC (1 GTH &#64; 16.3 Gbps)</p></td>
+<td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
+<td><p>Kintex UltraScale</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed" target="_blank">Microzed</a> **</p></td>
+<td><p>JTAG</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>Zynq-7000</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC709" target="_blank">VC709</a> **</p></td>
+<td><p>JTAG</p></td>
+<td><p>HPC (10 GTH &#64; 13.1 Gbps)</p></td>
+<td><p>—</p></td>
+<td><p><strong>*1.8V</strong></p></td>
+<td><p>Virtex-7</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a></p></td>
+<td><p>SD card</p></td>
+<td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
+<td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
+<td><p><strong>*1.5V</strong>/1.2V</p></td>
+<td><p>Versal AI Core</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a></p></td>
+<td><p>JTAG</p></td>
+<td><p>FMC+ (24 GTY &#64; 28.21 Gbps)</p></td>
+<td><p>LPC</p></td>
+<td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
+<td><p>Virtex UltraScale+</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VMK180" target="_blank">VMK180</a></p></td>
+<td><p>SD card</p></td>
+<td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
+<td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
+<td><p><strong>*1.5V</strong>/1.2V</p></td>
+<td><p>Versal Prime Series</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VPK180" target="_blank">VPK180</a></p></td>
+<td><p>SD card</p></td>
+<td><p>FMC+ (8 GTYP &#64; 32.75 Gbps)</p></td>
+<td><p>—</p></td>
+<td><p><strong>*1.5V</strong>/1.2V</p></td>
+<td><p>Versal Premium</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC702" target="_blank">ZC702</a></p></td>
+<td><p>SD card</p></td>
+<td><p>LPC</p></td>
+<td><p>LPC</p></td>
+<td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
+<td><p>Zynq-7000</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a></p></td>
+<td><p>SD card</p></td>
+<td><p>HPC (8 GTH &#64; 16.3 Gbps)</p></td>
+<td><p>HPC (8 GTH &#64; 16.3 Gbps)</p></td>
+<td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
+<td><p>Zynq UltraScale+ MP SoC</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
+<td><p>SD card</p></td>
+<td><p>LPC</p></td>
+<td><p>—</p></td>
+<td><p>3.3V/2.5V/<strong>*1.8V</strong></p></td>
+<td><p>Zynq-7000</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard" target="_blank">LFCPNX-EVN</a></p></td>
+<td><p>JTAG | SPI flash</p></td>
+<td><p>HPC</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>CertusPro-NX</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The column with the VADJ value applies to the FMC connectors when they
+exist. If both of them exist, then it is the same for both of them.
+If there is only one FMC connector, then it applies to only one.
+If both are missing, then a — (dash) will appear.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>** = not supported anymore, but projects with these carriers can be found
+in older releases</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>(* bold</strong>) = default VADJ
+FMC1 &amp; FMC2 columns -&gt; depending on the power supply of the device
+connected to the FMC, the custom VADJ will have the value supported by
+both the carrier and the device(s)</p>
+</div>
+</section>
+<section id="discontinued-amd-platforms">
+<h3>Discontinued AMD platforms<a class="headerlink" href="#discontinued-amd-platforms" title="Link to this heading"></a></h3>
+<p>Projects with these carriers can still be found on our repository, as well as
+their <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">board files</a>.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.0%" />
+<col style="width: 16.0%" />
+<col style="width: 18.0%" />
+<col style="width: 18.0%" />
+<col style="width: 16.0%" />
+<col style="width: 16.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board name</p></th>
+<th class="head"><p>Boots from</p></th>
+<th class="head"><p>FMC connector 1</p></th>
+<th class="head"><p>FMC connector 2</p></th>
+<th class="head"><p>VADJ FMC connector</p></th>
+<th class="head"><p>Family</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KC705" target="_blank">KC705</a></p></td>
+<td><p>JTAG</p></td>
+<td><p>HPC (4 GTX &#64; 10.3125 Gbps)</p></td>
+<td><p>LPC (1 GTX &#64; 10.3125 Gbps)</p></td>
+<td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
+<td><p>Kintex-7</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC707" target="_blank">VC707</a></p></td>
+<td><p>JTAG</p></td>
+<td><p>HPC (8 GTX &#64; 12.5 Gbps)</p></td>
+<td><p>HPC (8 GTX &#64; 12.5 Gbps)</p></td>
+<td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
+<td><p>Virtex-7</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU128" target="_blank">VCU128</a></p></td>
+<td><p>JTAG</p></td>
+<td><p>FMC+ (24 GTY &#64; 28.21 Gbps)</p></td>
+<td><p>—</p></td>
+<td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
+<td><p>Virtex UltraScale+ HBM</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></td>
+<td><p>SD card</p></td>
+<td><p>HPC (8 GTX &#64; 10.3125 Gbps)</p></td>
+<td><p>LPC (1 GTX &#64; 10.3125 Gbps)</p></td>
+<td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
+<td><p>Zynq-7000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="intel-platforms">
+<span id="architecture-intel-platforms"></span><h3>Intel platforms<a class="headerlink" href="#intel-platforms" title="Link to this heading"></a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board name</p></th>
+<th class="head"><p>Connector 1</p></th>
+<th class="head"><p>Connector 2</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html" target="_blank">A10GX</a> ** (Arria 10 GX)</p></td>
+<td><p>FMC LPC ()</p></td>
+<td><p>FMC HPC (8 x 17.4 Gbps)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a> (Arria 10 SoC)</p></td>
+<td><p>FMC HPC (8)</p></td>
+<td><p>FMC LPC (8)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a> (Stratix 10 SoC)</p></td>
+<td><p>FMC+ (24 &#64; 28.3 Gbps)</p></td>
+<td><p>FMC+ (24 &#64; 28.3 Gbps)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html" target="_blank">C5SoC</a> (Cyclone V SoC)</p></td>
+<td><p>HSMC</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html" target="_blank">DE10-Nano</a></p></td>
+<td><p>Arduino shield</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a> (Agilex 7 I-Series)</p></td>
+<td><p>FMC+ (16 &#64; 32 Gbps)</p></td>
+<td><p>FMC+ (16 &#64; 32 Gbps)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>** = not supported anymore, but projects with these carriers can be found
+in older releases</p>
+</div>
+<section id="vadj-values">
+<h4>VADJ values<a class="headerlink" href="#vadj-values" title="Link to this heading"></a></h4>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board name</p></th>
+<th class="head"><p>FMC connector 1</p></th>
+<th class="head"><p>FMC connector 2</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html" target="_blank">A10GX</a></p></td>
+<td><p><strong>*1.8V</strong>/1.5V/1.35V/1.2V</p></td>
+<td><p><strong>*1.8V</strong>/1.5V/1.35V/1.2V</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a></p></td>
+<td><p><strong>*1.8V</strong>/1.5V/1.35V/1.25V/1.2V/1.1V</p></td>
+<td><p><strong>*1.8V</strong>/1.5V/1.35V/1.2V/1.1V</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a></p></td>
+<td><p><strong>*3.3V</strong>/1.8V/1.2V</p></td>
+<td><p><strong>*3.3V</strong>/1.8V/1.2V</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a></p></td>
+<td><p><strong>*1.2V</strong></p></td>
+<td><p><strong>*1.2V</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>(<strong>* bold</strong>) = default VADJ
+FMC1 &amp; FMC2 columns -&gt; depending on the power supply of the device
+connected to the FMC, the custom VADJ will have the value supported by
+both the carrier and the device(s)</p>
+</div>
+</section>
+</section>
+</section>
+<section id="memory-specifications">
+<h2>Memory Specifications<a class="headerlink" href="#memory-specifications" title="Link to this heading"></a></h2>
+<p>This section documents the on-chip and external memory resources of each
+supported carrier.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>This section is a work in progress.</strong></p>
+<ul class="simple">
+<li><p>Data was pulled from a large number of user guides, device datasheets,
+and technical reference manuals. <strong>Mistakes or gaps are possible</strong>.</p></li>
+<li><p>Memory configurations <strong>can vary between board revisions</strong> so what is
+listed here may not match your specific revision.</p></li>
+</ul>
+<p>Always cross-reference with the official documentation for your board
+before making any design decisions based on these numbers.</p>
+</div>
+<section id="on-chip-memory">
+<h3>On-Chip Memory<a class="headerlink" href="#on-chip-memory" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>BRAM</strong> and <strong>UltraRAM</strong> reside in the programmable logic fabric and are
+fully available to HDL designs.</p></li>
+<li><p><strong>UltraRAM</strong> (288 Kb blocks) is present only on UltraScale+ and Versal
+devices.</p></li>
+<li><p>Lattice CertusPro-NX provides <strong>EBR</strong> (18 Kb) and <strong>LRAM</strong> (512 Kb) blocks.</p></li>
+<li><p>Intel Arria 10 / Stratix 10 / Agilex 7 use <strong>M20K</strong> (20 Kb) blocks while
+Cyclone V uses <strong>M10K</strong> (10 Kb) blocks.</p></li>
+<li><p>The <strong>PS/HPS OCM SRAM</strong> is a fixed block inside the processor subsystem
+(Zynq-7000, Zynq UltraScale+ MPSoC, Versal) shared between the
+APU/application processors and PL via the OCM interconnect. Cyclone V
+and Agilex 7 HPS include a smaller 64 KB or 256 KB OCRAM used by the
+preloader before DDR initialisation.</p></li>
+</ul>
+<section id="id1">
+<h4>AMD platforms<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="28616066f26a9dc580c468f43819dde6cbdba936" name="28616066f26a9dc580c468f43819dde6cbdba936" type="checkbox"></input><label for="28616066f26a9dc580c468f43819dde6cbdba936"><p>AMD platforms on-chip memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17.0%" />
+<col style="width: 18.0%" />
+<col style="width: 28.0%" />
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Family</p></th>
+<th class="head"><p>BRAM (PL)</p></th>
+<th class="head"><p>UltraRAM (PL)</p></th>
+<th class="head"><p>PS OCM SRAM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a></p></td>
+<td><p>Zynq UltraScale+ MPSoC</p></td>
+<td><p>912 x 36 Kb (~32 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a></p></td>
+<td><p>Versal AI Core</p></td>
+<td><p>967 x 36 Kb (~34 Mb)</p></td>
+<td><p>463 x 288 Kb (~130 Mb)</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VMK180" target="_blank">VMK180</a></p></td>
+<td><p>Versal Prime</p></td>
+<td><p>967 x 36 Kb (~34 Mb)</p></td>
+<td><p>463 x 288 Kb (~130 Mb)</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VPK180" target="_blank">VPK180</a></p></td>
+<td><p>Versal Premium</p></td>
+<td><p>4,941 x 36 Kb (~174 Mb)</p></td>
+<td><p>2,549 x 288 Kb (~717 Mb)</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a></p></td>
+<td><p>Virtex UltraScale+</p></td>
+<td><p>2,160 x 36 Kb (~76 Mb)</p></td>
+<td><p>960 x 288 Kb (~270 Mb)</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KCU105" target="_blank">KCU105</a></p></td>
+<td><p>Kintex UltraScale</p></td>
+<td><p>600 x 36 Kb (~21 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC702" target="_blank">ZC702</a></p></td>
+<td><p>Zynq-7000</p></td>
+<td><p>140 x 36 Kb (~5 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
+<td><p>Zynq-7000</p></td>
+<td><p>140 x 36 Kb (~5 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/AC701" target="_blank">AC701</a> **</p></td>
+<td><p>Artix-7</p></td>
+<td><p>365 x 36 Kb (~13 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a></p></td>
+<td><p>Zynq-7000</p></td>
+<td><p>60 x 36 Kb (Z7-10) / 50 x 36 Kb (Z7-07S)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed" target="_blank">Microzed</a> **</p></td>
+<td><p>Zynq-7000</p></td>
+<td><p>140 x 36 Kb (7Z020) / 60 x 36 Kb (7Z010)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC709" target="_blank">VC709</a> **</p></td>
+<td><p>Virtex-7</p></td>
+<td><p>1,470 x 36 Kb (~52 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard" target="_blank">LFCPNX-EVN</a></p></td>
+<td><p>CertusPro-NX (Lattice)</p></td>
+<td><p>208 x 18 Kb EBR (~3.7 Mb) + 7 x 512 Kb LRAM (~3.5 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></section>
+<section id="id2">
+<h4>Discontinued AMD platforms<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="f053c19b0498ac1bcb7fb621e437b7f794490697" name="f053c19b0498ac1bcb7fb621e437b7f794490697" type="checkbox"></input><label for="f053c19b0498ac1bcb7fb621e437b7f794490697"><p>Discontinued AMD platforms on-chip memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17.0%" />
+<col style="width: 18.0%" />
+<col style="width: 28.0%" />
+<col style="width: 22.0%" />
+<col style="width: 15.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Family</p></th>
+<th class="head"><p>BRAM (PL)</p></th>
+<th class="head"><p>UltraRAM (PL)</p></th>
+<th class="head"><p>PS OCM SRAM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KC705" target="_blank">KC705</a></p></td>
+<td><p>Kintex-7</p></td>
+<td><p>445 x 36 Kb (~16 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC707" target="_blank">VC707</a></p></td>
+<td><p>Virtex-7</p></td>
+<td><p>1,030 x 36 Kb (~37 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU128" target="_blank">VCU128</a></p></td>
+<td><p>Virtex UltraScale+ HBM</p></td>
+<td><p>2,016 x 36 Kb (~71 Mb)</p></td>
+<td><p>960 x 288 Kb (~270 Mb) + HBM2 8 GB</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></td>
+<td><p>Zynq-7000</p></td>
+<td><p>545 x 36 Kb (~19.2 Mb)</p></td>
+<td><p>—</p></td>
+<td><p>256 KB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></section>
+<section id="id3">
+<h4>Intel platforms<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<p>Intel SoC FPGAs (Arria 10, Stratix 10, Cyclone V, Agilex) include HPS
+on-chip RAM (OCRAM) used by the preloader before external DDR is initialised.</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="cb6ea0032867809cbb58a42851ca59475dcc0336" name="cb6ea0032867809cbb58a42851ca59475dcc0336" type="checkbox"></input><label for="cb6ea0032867809cbb58a42851ca59475dcc0336"><p>Intel platforms on-chip memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 18.0%" />
+<col style="width: 40.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Family</p></th>
+<th class="head"><p>Fabric BRAM</p></th>
+<th class="head"><p>HPS On-Chip RAM</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html" target="_blank">A10GX</a> **</p></td>
+<td><p>Arria 10 GX</p></td>
+<td><p>2,713 M20K blocks (~53 Mb)</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a></p></td>
+<td><p>Arria 10 SoC</p></td>
+<td><p>2,131 M20K blocks (~42 Mb) + 9,260 MLAB blocks (~6 Mb)</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a></p></td>
+<td><p>Stratix 10 SX SoC</p></td>
+<td><p>11,721 M20K blocks (~229 Mb) + 45 Mbit eSRAM</p></td>
+<td><p>256 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html" target="_blank">C5SoC</a></p></td>
+<td><p>Cyclone V SX SoC</p></td>
+<td><p>553 M10K blocks (~5.4 Mb) + 994 MLAB blocks (~0.6 Mb)</p></td>
+<td><p>64 KB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html" target="_blank">DE10-Nano</a></p></td>
+<td><p>Cyclone V SE SoC</p></td>
+<td><p>553 M10K blocks (~5.4 Mb) + 994 MLAB blocks (~0.6 Mb)</p></td>
+<td><p>64 KB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a></p></td>
+<td><p>Agilex 7 F-Series</p></td>
+<td><p>10,464 M20K (AGF023) / 13,272 M20K (AGF027)</p></td>
+<td><p>256 KB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></section>
+</section>
+<section id="external-memory">
+<h3>External Memory<a class="headerlink" href="#external-memory" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>PS-side / HPS-side</strong> memory is connected to the hard processor system
+and is the primary DRAM for Linux.</p></li>
+<li><p><strong>PL-side / Fabric-side</strong> memory is connected directly to FPGA fabric
+I/O banks and is available for HDL data-path designs.</p></li>
+<li><p>On <strong>Versal</strong> devices there is no hard PS/PL split; all DDR interfaces
+connect via the Network on Chip (NoC).</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Bandwidth</strong> figures in the tables below are computed as
+<code class="docutils literal notranslate"><span class="pre">Rate</span> <span class="pre">(MT/s)</span> <span class="pre">x</span> <span class="pre">(effective</span> <span class="pre">data</span> <span class="pre">width</span> <span class="pre">in</span> <span class="pre">bytes)</span></code>.
+On 72-bit ECC interfaces (64-bit data + 8-bit ECC), only the
+64-bit / 8-byte data portion is counted - the ECC byte carries
+error-correction overhead, not user payload.
+Example: a 72-bit DDR4-2666 interface =&gt; 2,666 x 8 = ~21.3 GB/s,
+not 2,666 x 9 = ~24.0 GB/s.</p>
+</div>
+<section id="id4">
+<h4>AMD Platforms<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="17e373cfcd715a7f32c765bc259f4af95c8a805a" name="17e373cfcd715a7f32c765bc259f4af95c8a805a" type="checkbox"></input><label for="17e373cfcd715a7f32c765bc259f4af95c8a805a"><p>AMD platforms external memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13.9%" />
+<col style="width: 17.7%" />
+<col style="width: 11.4%" />
+<col style="width: 10.1%" />
+<col style="width: 11.4%" />
+<col style="width: 13.9%" />
+<col style="width: 21.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Interface</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Width</p></th>
+<th class="head"><p>Rate (MT/s)</p></th>
+<th class="head"><p>Bandwidth</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a></p></td>
+<td><p>PS DDR4 SODIMM (J1)</p></td>
+<td><p>DDR4</p></td>
+<td><p>4 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>2,666</p></td>
+<td><p>~21.3 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a></p></td>
+<td><p>PL DDR4 component (U2)</p></td>
+<td><p>DDR4</p></td>
+<td><p>512 MB</p></td>
+<td><p>16-bit</p></td>
+<td><p>2,666</p></td>
+<td><p>~5.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a></p></td>
+<td><p>DDR4 ECC UDIMM (J45)</p></td>
+<td><p>DDR4</p></td>
+<td><p>8 GB</p></td>
+<td><p>72-bit</p></td>
+<td><p>3,200</p></td>
+<td><p>~25.6 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCK190" target="_blank">VCK190</a></p></td>
+<td><p>LPDDR4 Interfaces A+B (2x)</p></td>
+<td><p>LPDDR4</p></td>
+<td><p>2 x 4 GB</p></td>
+<td><p>2x32-bit</p></td>
+<td><p>4,266</p></td>
+<td><p>~68.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VMK180" target="_blank">VMK180</a></p></td>
+<td><p>DDR4 ECC UDIMM (J45)</p></td>
+<td><p>DDR4</p></td>
+<td><p>8 GB</p></td>
+<td><p>72-bit</p></td>
+<td><p>3,200</p></td>
+<td><p>~25.6 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VMK180" target="_blank">VMK180</a></p></td>
+<td><p>LPDDR4 Interfaces A+B (2x)</p></td>
+<td><p>LPDDR4</p></td>
+<td><p>2 x 4 GB</p></td>
+<td><p>2x32-bit</p></td>
+<td><p>4,266</p></td>
+<td><p>~68.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VPK180" target="_blank">VPK180</a></p></td>
+<td><p>LPDDR4 Triplets 1-3 (3x)</p></td>
+<td><p>LPDDR4</p></td>
+<td><p>3 x 4 GB</p></td>
+<td><p>2x32-bit</p></td>
+<td><p>2,133</p></td>
+<td><p>~51.3 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a></p></td>
+<td><p>PL DDR4 C1+C2 (U60-U64, U135-U139) (2x)</p></td>
+<td><p>DDR4</p></td>
+<td><p>2 x 2.5 GB</p></td>
+<td><p>80-bit</p></td>
+<td><p>2,400</p></td>
+<td><p>~48.0 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU118" target="_blank">VCU118</a></p></td>
+<td><p>PL RLD3 C3 (U141/U142)</p></td>
+<td><p>RLDRAM3</p></td>
+<td><p>288 MB</p></td>
+<td><p>72-bit</p></td>
+<td><p>2,133</p></td>
+<td><p>~19.2 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KCU105" target="_blank">KCU105</a></p></td>
+<td><p>PL DDR4 (U60-U63)</p></td>
+<td><p>DDR4</p></td>
+<td><p>2 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>2,400</p></td>
+<td><p>~19.2 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC702" target="_blank">ZC702</a></p></td>
+<td><p>PS DDR3 (U66-U69)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>1,333</p></td>
+<td><p>~5.3 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
+<td><p>PS DDR3</p></td>
+<td><p>DDR3</p></td>
+<td><p>512 MB</p></td>
+<td><p>32-bit</p></td>
+<td><p>1,066</p></td>
+<td><p>~4.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/AC701" target="_blank">AC701</a> **</p></td>
+<td><p>PL DDR3 SODIMM (J1)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>1,600</p></td>
+<td><p>~12.8 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a></p></td>
+<td><p>PS DDR3L</p></td>
+<td><p>DDR3L</p></td>
+<td><p>512 MB</p></td>
+<td><p>16-bit</p></td>
+<td><p>1,066</p></td>
+<td><p>~2.1 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed" target="_blank">Microzed</a> **</p></td>
+<td><p>PS DDR3</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>1,066</p></td>
+<td><p>~4.3 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC709" target="_blank">VC709</a> **</p></td>
+<td><p>PL DDR3 SODIMM J1+J3 (2x)</p></td>
+<td><p>DDR3</p></td>
+<td><p>2 x 4 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>1,600</p></td>
+<td><p>~25.6 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard" target="_blank">LFCPNX-EVN</a></p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>No external DRAM **</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>** The CertusPro-NX device itself supports LPDDR4, DDR3/3L and LPDDR2 up
+to 1,066 Mbps, but no DRAM is populated on the LFCPNX-EVN evaluation board.</p>
+</div>
+</div>
+</div>
+</div></section>
+<section id="id5">
+<h4>Discontinued AMD platforms<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="8d752be1bd2db7e9311fdbb989831ba16288ea58" name="8d752be1bd2db7e9311fdbb989831ba16288ea58" type="checkbox"></input><label for="8d752be1bd2db7e9311fdbb989831ba16288ea58"><p>Discontinued AMD platforms external memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13.9%" />
+<col style="width: 17.7%" />
+<col style="width: 11.4%" />
+<col style="width: 10.1%" />
+<col style="width: 11.4%" />
+<col style="width: 13.9%" />
+<col style="width: 21.5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Interface</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Width</p></th>
+<th class="head"><p>Rate (MT/s)</p></th>
+<th class="head"><p>Bandwidth</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/KC705" target="_blank">KC705</a></p></td>
+<td><p>PL DDR3 SODIMM (J1)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>1,600</p></td>
+<td><p>~12.8 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VC707" target="_blank">VC707</a></p></td>
+<td><p>PL DDR3 SODIMM (J1)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>1,600</p></td>
+<td><p>~12.8 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU128" target="_blank">VCU128</a></p></td>
+<td><p>PL DDR4 (U17-U19/U73/U74)</p></td>
+<td><p>DDR4</p></td>
+<td><p>4.5 GB</p></td>
+<td><p>72-bit</p></td>
+<td><p>2,666</p></td>
+<td><p>~24.0 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU128" target="_blank">VCU128</a></p></td>
+<td><p>PL RLD3 (U37/U39)</p></td>
+<td><p>RLDRAM3</p></td>
+<td><p>288 MB</p></td>
+<td><p>72-bit</p></td>
+<td><p>1,866</p></td>
+<td><p>~16.8 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/VCU128" target="_blank">VCU128</a></p></td>
+<td><p>HBM2 (on-die, 2 stacks)</p></td>
+<td><p>HBM2</p></td>
+<td><p>8 GB</p></td>
+<td><p>2,048-bit</p></td>
+<td><p>1,800</p></td>
+<td><p>~460.8 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></td>
+<td><p>PS DDR3 (U2-U5)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>1,333</p></td>
+<td><p>~5.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></td>
+<td><p>PL DDR3 SODIMM (J1)</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>64-bit</p></td>
+<td><p>1,600</p></td>
+<td><p>~12.8 GB/s</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></section>
+<section id="id6">
+<h4>Intel platforms<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="abfce430128ee75260e9af03c4334577dc6951e4" name="abfce430128ee75260e9af03c4334577dc6951e4" type="checkbox"></input><label for="abfce430128ee75260e9af03c4334577dc6951e4"><p>Intel platforms external memory</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14.3%" />
+<col style="width: 19.0%" />
+<col style="width: 10.7%" />
+<col style="width: 9.5%" />
+<col style="width: 14.3%" />
+<col style="width: 13.1%" />
+<col style="width: 19.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board</p></th>
+<th class="head"><p>Interface</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Size</p></th>
+<th class="head"><p>Width</p></th>
+<th class="head"><p>Rate (MT/s)</p></th>
+<th class="head"><p>Bandwidth</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html" target="_blank">A10GX</a> **</p></td>
+<td><p>via HiLo daughter card</p></td>
+<td><p>DDR3L / DDR4</p></td>
+<td><p>up to 4 GB</p></td>
+<td><p>72-bit</p></td>
+<td><p>2,133 / 2,666</p></td>
+<td><p>~19.2 / ~24.0 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a></p></td>
+<td><p>HPS DDR4 (HiLo)</p></td>
+<td><p>DDR4</p></td>
+<td><p>1 GB</p></td>
+<td><p>40-bit (32+ECC)</p></td>
+<td><p>2,400</p></td>
+<td><p>~12.0 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a></p></td>
+<td><p>Fabric DDR4 (HiLo)</p></td>
+<td><p>DDR4</p></td>
+<td><p>2 GB</p></td>
+<td><p>72-bit (64+ECC)</p></td>
+<td><p>2,400</p></td>
+<td><p>~19.2 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a></p></td>
+<td><p>Fabric DDR4 SO-DIMM (J28)</p></td>
+<td><p>DDR4</p></td>
+<td><p>16 GB</p></td>
+<td><p>72-bit (64+ECC)</p></td>
+<td><p>2,400</p></td>
+<td><p>~19.2 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a></p></td>
+<td><p>HPS DDR4 (HiLo J13)</p></td>
+<td><p>DDR4</p></td>
+<td><p>4 GB</p></td>
+<td><p>72-bit (64+ECC)</p></td>
+<td><p>2,133</p></td>
+<td><p>~17.1 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html" target="_blank">C5SoC</a></p></td>
+<td><p>HPS DDR3</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>800</p></td>
+<td><p>~3.2 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html" target="_blank">C5SoC</a></p></td>
+<td><p>Fabric DDR3</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>533</p></td>
+<td><p>~2.1 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html" target="_blank">DE10-Nano</a></p></td>
+<td><p>HPS DDR3</p></td>
+<td><p>DDR3</p></td>
+<td><p>1 GB</p></td>
+<td><p>32-bit</p></td>
+<td><p>800</p></td>
+<td><p>~3.2 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a></p></td>
+<td><p>HPS DDR4 (U15-U19)</p></td>
+<td><p>DDR4</p></td>
+<td><p>1 GB (5 x x8 chips)</p></td>
+<td><p>40-bit (32+ECC)</p></td>
+<td><p>1,600</p></td>
+<td><p>~6.4 GB/s</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a></p></td>
+<td><p>Fabric DDR4 DIMM1 (J4)</p></td>
+<td><p>DDR4 RDIMM</p></td>
+<td><p>16 GB</p></td>
+<td><p>72-bit (64+ECC)</p></td>
+<td><p>2,666</p></td>
+<td><p>~21.3 GB/s</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a></p></td>
+<td><p>Fabric DDR4 DIMM2 (J5)</p></td>
+<td><p>DDR4 RDIMM</p></td>
+<td><p>16 GB</p></td>
+<td><p>72-bit (64+ECC)</p></td>
+<td><p>2,666</p></td>
+<td><p>~21.3 GB/s</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html" target="_blank">A10GX</a>:
+<strong>no DDR soldered on-board</strong> - all DDR interfaces require an optional
+HiLo memory daughter card.</p></li>
+<li><p><a class="icon link reference external" href="https://www.intel.com//content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html" target="_blank">S10SoC</a>:
+the <strong>HPS DDR4 HiLo card (J13) is not included</strong> with the H-Tile kit
+and must be purchased separately.</p></li>
+<li><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html" target="_blank">FM87</a>:
+<strong>DIMM2 (J5) is unpopulated</strong> at the factory - socket only, available
+on the AGF027 variant only.</p></li>
+</ul>
+</div>
+</div>
+</div>
+</div></section>
+</section>
+</section>
+<section id="file-structure-of-a-project">
+<h2>File structure of a project<a class="headerlink" href="#file-structure-of-a-project" title="Link to this heading"></a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">/projects/common/$carrier_name/</span></code> you can find templates for the
+<em>system_top.v</em>, <em>Makefile</em>, etc. to help you when creating a new project.</p>
+</div>
+<section id="project-files-for-amd-boards">
+<h3>Project files for AMD boards<a class="headerlink" href="#project-files-for-amd-boards" title="Link to this heading"></a></h3>
+<p>A project for an AMD FPGA board should contain the following files:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP
+dependencies needed for the project to be built</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code> — script that creates the actual Vivado
+project and runs the synthesis/implementation of the design</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> — sources the base design of the carrier first, then the
+base design of the evaluation board, and afterwards it contains all the IP
+instances and connections that must be added on top of the sourced files, to
+complete the design of the project (these are <strong>specific</strong> to the
+combination of this carrier and board)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_constr.xdc</span></code> — constraints file of the design; it’s the
+connection between the physical pins of the FPGA and the HDL code
+that describes the behavior; here you define the FMC I/O pins,
+board-specific clock signals, timing constraints, etc. The
+constraints specific to the carrier are imported in the
+<em>system_project.tcl</em> file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_top.v</span></code> — contains everything about the HDL part of the
+project; it instantiates the <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module, I/O buffers,
+I/ODDRs, modules that transform signals from LVDS to single-ended,
+etc. The I/O ports of this Verilog module will be connected to actual
+I/O pads of the FPGA.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> — is a tool-generated file and can be found at
+<code class="docutils literal notranslate"><span class="pre">&lt;project_name&gt;.srcs/sources_1/bd/system/hdl/system_wrapper.v</span></code></p>
+<ul>
+<li><p>the I/O ports of this module are declared in either
+<em>system_bd.tcl</em> or in the base design of the evaluation board (#2) file</p></li>
+<li><p>this can be visualized in Vivado at the Block Design section</p></li>
+<li><p>the base design, board design and system_bd.tcl describe this
+module, making the connections between the instantiated IPs</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="project-files-for-intel-boards">
+<h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Link to this heading"></a></h3>
+<p>A project for an Intel FPGA board should contain the following files:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP
+dependencies needed for the project to be built</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code> — script that creates the actual Quartus
+project and runs the synthesis/implementation of the design. It also
+contains the I/O definitions for the interfaces between the board and
+the FPGA</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_qsys.tcl</span></code> — also called <strong>platform designer</strong>; sources the base
+design of the carrier first, then the base design of the evaluation board,
+and afterwards it contains all the IP instances and connections that must
+be added on top of the sourced files, to complete the design of the project
+(these are specific to the combination of this carrier and board)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_constr.sdc</span></code> — contains clock definitions and other path
+constraints</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_top.v</span></code> — contains everything about the HDL part of the
+project; it instantiates the <code class="docutils literal notranslate"><span class="pre">system_bd</span></code> module, I/O buffers, specific
+SPI modules, modules that transform signals from LVDS to single-ended,
+etc. The I/O ports of this Verilog module will be connected to actual
+I/O pads of the FPGA</p></li>
+</ul>
+<section id="examples">
+<h4>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h4>
+<p>Some carriers have a different name for these files, for example A10SoC
+has constraints file for both PL side and PS side:</p>
+<ul class="simple">
+<li><p>a10soc_plddr4_assign.tcl — constraints file for the PL</p></li>
+<li><p>a10soc_system_assign.tcl — constraints file for the PS</p></li>
+</ul>
+</section>
+</section>
+<section id="project-files-for-lattice-boards">
+<h3>Project files for Lattice boards<a class="headerlink" href="#project-files-for-lattice-boards" title="Link to this heading"></a></h3>
+<p>A project for a Lattice FPGA board should contain the following files:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP
+dependencies needed for the project to be built</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_project_pb.tcl</span></code> — used to build the Propel Builder project
+(block design); linked in project-lattice.mk, run by propelbld (Windows),
+propelbldwrap (Linux);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code> — used to build the Radiant project; Linked in
+project-lattice.mk, run by pnmainc (Windows), radiantc (Linux);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_pb.tcl</span></code> — linker script for the projects, sourced in
+adi_project_pb procedure that is called in system_project_pb.tcl and it is
+defined in adi_project_lattice_pb.tcl; sources the base design of the carrier
+first, then the base design of the evaluation board, and afterwards it
+contains all the IP instances and connections that must be added on top of
+the sourced files, to complete the design of the project (these are specific
+to the combination of this carrier and board)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_constr.sdc</span></code> — contains clock definitions and other path constraints</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_constr.pdc</span></code> — contains clock definitions and other path
+constraints  + physical constraints</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_top.v</span></code> — contains everything about the HDL part of the
+project; it instantiates the <strong>&lt;project_name&gt;.v</strong> <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module,
+I/O buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
+etc. The I/O ports of this Verilog module will be connected to actual
+I/O pads of the FPGA</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="build_intel_boot_image.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Generating HDL boot image for Intel projects</a>
+    <a href="ip_cores/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">ADI IP cores</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2025, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

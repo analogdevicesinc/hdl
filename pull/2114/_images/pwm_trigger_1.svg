@@ -1,0 +1,248 @@
+<svg width="180" height="96" version="1.1" viewBox="0 0 180 96" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <mask id="i" x="0" y="0" width="1" height="1" maskUnits="userSpaceOnUse">
+   <image width="1" height="1" image-rendering="optimizeSpeed" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAAXNCSVQI5gpbmQAAAEFJREFUGJWdzEkKgDAQRNGXVjT3v3C7CELSCoK1Kfg1ULQNO0POuMnUQcBIYwJWEPtRMuT92Sz3rfTeJo/GD/CtC3I5CTEZiEGVAAAAAElFTkSuQmCC"/>
+  </mask>
+  <mask id="h" x="0" y="0" width="1" height="1" maskUnits="userSpaceOnUse">
+   <image width="1" height="1" image-rendering="optimizeSpeed" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAASCAAAAABH3BCXAAAAAXNCSVQI5gpbmQAAACpJREFUCJljYGD4/x+CmRgIAGYGBkZGBgZhtp8MTFBt/HiUE20uiQCLuQApXBAg21LM9QAAAABJRU5ErkJggg=="/>
+  </mask>
+  <mask id="g" x="0" y="0" width="1" height="1" maskUnits="userSpaceOnUse">
+   <image width="1" height="1" image-rendering="optimizeSpeed" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAAAAAA77wXdAAAAAXNCSVQI5gpbmQAAAMpJREFUOI3t1aEKwlAUxvG/dzAQBNPqwGQSBJPJ6jMMTL6BD+AbLPkMPoDVtCzzASxLgiIYBEG2cgxzbIbtnmKRfekc+ME9nHAu/CqdspzUmefpu++vE2lItHRKO7s1URGR2C/sNLVZkcTLbe9styK7HK80VmSCARa6xQUYYKjDIwz0ujrsYcCxOwAcjFICtLjFLf5nnClphoHXQ4evGOCowwcAAtXFTQcAOLEGh58H/Ivd7t1iHD+y2Y1bmX6+jWt/oXscjnU7qOYNsGJn24jkxrcAAAAASUVORK5CYII="/>
+  </mask>
+  <mask id="f" x="0" y="0" width="1" height="1" maskUnits="userSpaceOnUse">
+   <image width="1" height="1" image-rendering="optimizeSpeed" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAAXNCSVQI5gpbmQAAAEFJREFUGJWdzEkKgDAQRNGXVjT3v3C7CELSCoK1Kfg1ULQNO0POuMnUQcBIYwJWEPtRMuT92Sz3rfTeJo/GD/CtC3I5CTEZiEGVAAAAAElFTkSuQmCC"/>
+  </mask>
+  <mask id="e" x="0" y="0" width="1" height="1" maskUnits="userSpaceOnUse">
+   <image width="1" height="1" image-rendering="optimizeSpeed" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAASCAAAAABH3BCXAAAAAXNCSVQI5gpbmQAAABpJREFUCJlj/M/AyADBTAxwMHSY5xkYGBgYAFXpA/LpoCBQAAAAAElFTkSuQmCC"/>
+  </mask>
+  <mask id="d" x="0" y="0" width="1" height="1" maskUnits="userSpaceOnUse">
+   <image width="1" height="1" image-rendering="optimizeSpeed" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAAXNCSVQI5gpbmQAAAEFJREFUGJWdzEkKgDAQRNGXVjT3v3C7CELSCoK1Kfg1ULQNO0POuMnUQcBIYwJWEPtRMuT92Sz3rfTeJo/GD/CtC3I5CTEZiEGVAAAAAElFTkSuQmCC"/>
+  </mask>
+  <mask id="c" x="0" y="0" width="1" height="1" maskUnits="userSpaceOnUse">
+   <image width="1" height="1" image-rendering="optimizeSpeed" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAASCAAAAABH3BCXAAAAAXNCSVQI5gpbmQAAAEBJREFUCJlj/M8AA0wMCMDLxsDAzcrAxCaFJMj4n4GRAYKR1WIFjNjNxaUWv7mMcJqF4f/////////w//9/JCsAiJ8TO7U6ytEAAAAASUVORK5CYII="/>
+  </mask>
+  <mask id="b" x="0" y="0" width="1" height="1" maskUnits="userSpaceOnUse">
+   <image width="1" height="1" image-rendering="optimizeSpeed" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAAXNCSVQI5gpbmQAAAEFJREFUGJWdzEkKgDAQRNGXVjT3v3C7CELSCoK1Kfg1ULQNO0POuMnUQcBIYwJWEPtRMuT92Sz3rfTeJo/GD/CtC3I5CTEZiEGVAAAAAElFTkSuQmCC"/>
+  </mask>
+  <mask id="a" x="0" y="0" width="1" height="1" maskUnits="userSpaceOnUse">
+   <image width="1" height="1" image-rendering="optimizeSpeed" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAASCAAAAABH3BCXAAAAAXNCSVQI5gpbmQAAABVJREFUCJljYGD4/x+CmRgIg0GqFgAm8hP3KF94MAAAAABJRU5ErkJggg=="/>
+  </mask>
+ </defs>
+ <g transform="matrix(0 -.29074 .29074 0 203.03 1017.6)">
+  <g transform="rotate(90 2592.5 1274.5)">
+   <path d="m997 242h226l3 1 2 1 1 2 1 3v122l-1 3-1 2-2 1-3 1h-226l-3-1-2-1-1-2-1-3v-122l1-3 1-2 2-1z" fill="#edf6fe"/>
+   <g transform="translate(1110,380)">
+    <text transform="translate(-41.016,8.616)" fill="#41619f" font-family="Helvetica" font-size="12px"><tspan x="0 6.6719999 12.672 15.336 22.007999 28.007999 34.007999 40.007999 42.672001 49.344002 56.015999 62.015999 68.688004 75.360001" y="0">axi_sysid_v1_0</tspan></text>
+   </g>
+  </g>
+  <g fill="none" stroke="#41619f" stroke-miterlimit="10">
+   <path d="m3618-87.942h-122"/>
+   <path d="m3489-94.942v.33c.092 3.78 3.226 6.76 7 6.67"/>
+   <path d="m3489-94.942v-226"/>
+   <path d="m3496-327.94h-.333c-3.774.092-6.759 3.226-6.667 7"/>
+   <path d="m3496-327.94h122"/>
+  </g>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <path d="m697 502h146l3 1 2 1 1 2 1 3v102l-1 3-1 2-2 1-3 1h-146l-3-1-2-1-1-2-1-3v-102l1-3 1-2 2-1z" fill="#edf6fe"/>
+   <g transform="translate(770,500)">
+    <text transform="translate(-63.03,-2.484)" fill="#000000" font-family="Helvetica" font-size="12px"><tspan x="0 6.6719999 13.344 16.007999 22.007999 28.68 32.675999 39.348 46.02 52.692001 58.692001 65.363998 68.699997 72.695999 75.360001 82.031998 88.704002 95.375999 99.372002 106.044 112.716 119.388" y="0">pulsar_adc_trigger_gen</tspan></text>
+   </g>
+   <g transform="translate(770,620)">
+    <text transform="translate(-66.354,8.616)" fill="#41619f" font-family="Helvetica" font-size="12px"><tspan x="0 8.0039997 16.667999 20.004 23.34 31.344 39.348 42.683998 46.02 54.023998 65.351997 75.348 78.683998 88.019997 94.692001 101.364 108.036 112.032 118.704 122.04 128.71201" y="0">ADI AXI PWM Generator</tspan></text>
+   </g>
+   <path d="m680 521h10v18h-10z" fill="#edf6fe"/>
+  </g>
+  <g transform="matrix(0 15 15 0 3329 -625.94)">
+   <image transform="matrix(1,0,0,-1,0,1)" width="1" height="1" image-rendering="optimizeSpeed" mask="url(#i)" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAIhJREFUOI1jZGBg+M9AAWDBJeHp6ckgKyvLICUlxdDQ0IDTACZcEtu3b2c480KGYdM5iJKEhATSDEAHb9++pcwADg4OwgY0NDQwODg4MISGhmIoZGNjw2oAIwOeWDDya2JgYGBgOLepDqfL4AbAFBMLYIYSHQYEXYANEOMFil0wDAzAG4h0cQEAfasd4MeTUvsAAAAASUVORK5CYII="/>
+  </g>
+  <g transform="matrix(0 10 18 0 3328 -637.94)">
+   <image transform="matrix(1,0,0,-1,0,1)" width="1" height="1" image-rendering="optimizeSpeed" mask="url(#h)" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAASCAYAAABit09LAAAABHNCSVQICAgIfAhkiAAAAFhJREFUKJFjZGBg+M/AwMBgnzePgYGBgeHgpCQGbHwmBiIBI8xEQoBoE5EU/kcx3Dl7IYNL2kw4nwXVFQjwje03AzMLJz3caJ83Dx522PiDIxwHv0KqhSMAhtEbD3HNJ58AAAAASUVORK5CYII="/>
+  </g>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(707,530)">
+    <text transform="translate(0,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 5 10.56 16.120001 21.120001" y="0">s_axi</tspan></text>
+   </g>
+  </g>
+  <path d="m3317-637.94v10" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="3"/>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(692,550)">
+    <text transform="translate(0,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 5 10.56 16.120001 21.120001 23.34 28.9 34.459999 39.459999 41.68" y="0">s_axi_aclk</tspan></text>
+   </g>
+  </g>
+  <path d="m3297-627.94c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="3"/>
+  <path d="m3297-637.94v4" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="3"/>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(692,570)">
+    <text transform="translate(0,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 5 10.56 16.120001 21.120001 23.34 28.9 34.459999 37.790001 43.349998 48.349998 53.91 56.689999" y="0">s_axi_aresetn</tspan></text>
+   </g>
+  </g>
+  <path d="m3277-637.94v10" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="3"/>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(692,590)">
+    <text transform="translate(0,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 5.5599999 10.56 13.34 18.9 23.9 26.120001" y="0">ext_clk</tspan></text>
+   </g>
+  </g>
+  <path d="m3307-457.94v-10" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="3"/>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(848,560)">
+    <text transform="translate(-32.23,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 5.5599999 12.78 21.110001 26.67" y="0">pwm_0</tspan></text>
+   </g>
+  </g>
+  <g fill="none" stroke="#41619f" stroke-miterlimit="10">
+   <path d="m3365-620.94v146"/>
+   <path d="m3358-467.94h.333c3.774-.092 6.759-3.226 6.667-7"/>
+   <path d="m3358-467.94h-102"/>
+   <path d="m3249-474.94v.333c.092 3.774 3.226 6.759 7 6.667"/>
+   <path d="m3249-474.94v-146"/>
+   <path d="m3256-627.94h-.333c-3.774.092-6.759 3.226-6.667 7"/>
+   <path d="m3256-627.94h102"/>
+   <path d="m3365-620.94v-.333c-.092-3.774-3.226-6.759-7-6.667"/>
+  </g>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <path d="m1017 452h186l3 1 2 1 1 2 1 3v122l-1 3-1 2-2 1-3 1h-186l-3-1-2-1-1-2-1-3v-122l1-3 1-2 2-1z" fill="#aac4f7"/>
+   <g transform="translate(1110,450)">
+    <text transform="translate(-40.35,-2.484)" fill="#000000" font-family="Helvetica" font-size="12px"><tspan x="0 6 12.672 15.336 22.007999 28.68 35.352001 38.015999 44.015999 50.688 54.683998 61.355999 68.028 74.699997" y="0">spi_pulsar_adc</tspan></text>
+   </g>
+  </g>
+  <g transform="matrix(0 16 16 0 3396 -304.94)">
+   <image transform="matrix(1,0,0,-1,0,1)" width="1" height="1" image-rendering="optimizeSpeed" mask="url(#g)" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAYAAAAehFoBAAAABHNCSVQICAgIfAhkiAAAAXxJREFUWIXtmU1Kw0AUgL8JmvYc4kLpqu0pBP827UHcC6EF8S7ZqD2EGwsieBetOs9FTeo0aZvQTmcC823CGybhY/Lem/woQGgQkWuBuhxUndi7Htn0ACDSipen27VzFCtSoj+4h9kMxE3OiAjH7VPSdGiMlwp3L0YotS+19SjRTCdJHhdyuHvujywAKqJ7dpeHhnBnkKA8K0MB1OF3Hht68adntv/Iit4wjPApF0yUnh8NYfF4D/nzXQh3Bokbk4pkdz8XbtN2JlOF7O5X3umqMn0s7lT9q/HOru9vW1hBELZNELZNELZN7T5c1me3PadOn27cCgdh2zROuHbRbSqQ8PCzRBC2TRC2TRC2zc5fQnfZc8to3ArnwjGxS4/K5MLP6Y1Lj8o0JiWyb9ZR2aCPfOmlb2sAR/GJE5lNKOBtMn8KNITTdIgSXXaOMwT4aC2cCjk8nSReSc9amvc0yeOVv70AepdjRGRvuS0yryMF/ESa14ekMGetsI/8As09Ul5uNt5/AAAAAElFTkSuQmCC"/>
+  </g>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <path d="m1210 491h10v18h-10z" fill="#edf6fe"/>
+  </g>
+  <g transform="matrix(0 15 15 0 3359 -124.94)">
+   <image transform="matrix(1,0,0,-1,0,1)" width="1" height="1" image-rendering="optimizeSpeed" mask="url(#f)" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAIhJREFUOI1jZGBg+M9AAWDBJeHp6ckgKyvLICUlxdDQ0IDTACZcEtu3b2c480KGYdM5iJKEhATSDEAHb9++pcwADg4OwgY0NDQwODg4MISGhmIoZGNjw2oAIwOeWDDya2JgYGBgOLepDqfL4AbAFBMLYIYSHQYEXYANEOMFil0wDAzAG4h0cQEAfasd4MeTUvsAAAAASUVORK5CYII="/>
+  </g>
+  <g transform="matrix(0 10 18 0 3358 -107.94)">
+   <image transform="matrix(1,0,0,-1,0,1)" width="1" height="1" image-rendering="optimizeSpeed" mask="url(#e)" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAASCAYAAABit09LAAAABHNCSVQICAgIfAhkiAAAADRJREFUKJFjdMuZ/P8nEzfDwUlJDAwMDAz2efMYGBgYMPhMDESCgVT4k4l7oKweVThIFQIAk2UKdEPgAjEAAAAASUVORK5CYII="/>
+  </g>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(1193,500)">
+    <text transform="translate(-26.67,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 8.3299999 13.89 18.889999 24.450001" y="0">m_spi</tspan></text>
+   </g>
+   <path d="m1210 511h10v18h-10z" fill="#edf6fe"/>
+  </g>
+  <g transform="matrix(0 15 15 0 3339 -124.94)">
+   <image transform="matrix(1,0,0,-1,0,1)" width="1" height="1" image-rendering="optimizeSpeed" mask="url(#d)" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAIhJREFUOI1jZGBg+M9AAWDBJeHp6ckgKyvLICUlxdDQ0IDTACZcEtu3b2c480KGYdM5iJKEhATSDEAHb9++pcwADg4OwgY0NDQwODg4MISGhmIoZGNjw2oAIwOeWDDya2JgYGBgOLepDqfL4AbAFBMLYIYSHQYEXYANEOMFil0wDAzAG4h0cQEAfasd4MeTUvsAAAAASUVORK5CYII="/>
+  </g>
+  <g transform="matrix(0 10 18 0 3338 -107.94)">
+   <image transform="matrix(1,0,0,-1,0,1)" width="1" height="1" image-rendering="optimizeSpeed" mask="url(#c)" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAASCAYAAABit09LAAAABHNCSVQICAgIfAhkiAAAAHxJREFUKJG9kiEOgDAMRd/IAgjUrsIBdpcJJIeZRHCXXQWNRJCwMAQJgmSkAqj7afv/S1Nl+zEhqEIyBFDEOjGbhuAdwTuqUrOs26nNxGwa4p5QgCha234EIHgHQE6LGcXRYseL8TXHDxn/v6N+bp8ebTegsv94y8oz3tYP5fQtpbkgnLwAAAAASUVORK5CYII="/>
+  </g>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(1193,520)">
+    <text transform="translate(-69.46,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 8.3299999 13.89 19.450001 24.450001 26.67 31.67 37.23 42.23 47.790001 56.119999 61.68 63.900002" y="0">m_axis_sample</tspan></text>
+   </g>
+   <path d="m1e3 471h10v18h-10z" fill="#edf6fe"/>
+  </g>
+  <g transform="matrix(0 15 15 0 3379 -305.94)">
+   <image transform="matrix(1,0,0,-1,0,1)" width="1" height="1" image-rendering="optimizeSpeed" mask="url(#b)" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAIhJREFUOI1jZGBg+M9AAWDBJeHp6ckgKyvLICUlxdDQ0IDTACZcEtu3b2c480KGYdM5iJKEhATSDEAHb9++pcwADg4OwgY0NDQwODg4MISGhmIoZGNjw2oAIwOeWDDya2JgYGBgOLepDqfL4AbAFBMLYIYSHQYEXYANEOMFil0wDAzAG4h0cQEAfasd4MeTUvsAAAAASUVORK5CYII="/>
+  </g>
+  <g transform="matrix(0 10 18 0 3378 -317.94)">
+   <image transform="matrix(1,0,0,-1,0,1)" width="1" height="1" image-rendering="optimizeSpeed" mask="url(#a)" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAASCAYAAABit09LAAAABHNCSVQICAgIfAhkiAAAADxJREFUKJFjZGBg+M/AwMBgnzePgYGBgeHgpCQGbHwmBiIBI8xEQoBoE+EK7fPmwd2FjT/qRuIUjig3AgACpR/LAVfpiQAAAABJRU5ErkJggg=="/>
+  </g>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(1027,480)">
+    <text transform="translate(0,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 5 10.56 16.120001 21.120001" y="0">s_axi</tspan></text>
+   </g>
+  </g>
+  <path d="m3367-317.94v10" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="3"/>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(1012,500)">
+    <text transform="translate(0,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 5 10.56 12.78 18.34 23.34 25.559999" y="0">spi_clk</tspan></text>
+   </g>
+  </g>
+  <path d="m3347-317.94v10" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="3"/>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(1012,520)">
+    <text transform="translate(0,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 5 7.2199998" y="0">clk</tspan></text>
+   </g>
+  </g>
+  <path d="m3327-317.94v10" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="3"/>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(1012,540)">
+    <text transform="translate(0,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 3.3299999 8.8900003 13.89 19.450001 22.23" y="0">resetn</tspan></text>
+   </g>
+  </g>
+  <path d="m3307-317.94v10" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="3"/>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(1012,560)">
+    <text transform="translate(0,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 2.78 6.1100001 8.3299999 13.89 19.450001 25.01" y="0">trigger</tspan></text>
+   </g>
+  </g>
+  <path d="m3327-97.942v-10" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width="3"/>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <g transform="translate(1208,540)">
+    <text transform="translate(-11.11,3.59)" fill="#000000" font-family="Helvetica" font-size="10px"><tspan x="0 2.22 5.5500002" y="0">irq</tspan></text>
+   </g>
+  </g>
+  <g fill="none" stroke-miterlimit="10">
+   <g stroke="#41619f">
+    <g>
+     <path d="m3415-300.94v186"/>
+     <path d="m3408-107.94h.333c3.774-.09 6.759-3.23 6.667-7"/>
+     <path d="m3408-107.94h-122"/>
+     <path d="m3279-114.94v.33c.092 3.78 3.226 6.76 7 6.67"/>
+     <path d="m3279-114.94v-186"/>
+     <path d="m3286-307.94h-.333c-3.774.09-6.759 3.23-6.667 7"/>
+     <path d="m3286-307.94h122"/>
+     <path d="m3415-300.94v-.33c-.092-3.78-3.226-6.76-7-6.67"/>
+    </g>
+    <g stroke-width="4">
+     <path d="m3797-1007.9v-30h-480v320h130v1930h-750v-100"/>
+     <path d="m3677-747.94v370h-290v60"/>
+     <path d="m3657-747.94v740h-350v30"/>
+     <path d="m3637-747.94v320h-700v130"/>
+     <path d="m3617-747.94v40h-280v70"/>
+    </g>
+   </g>
+   <g stroke="#102235">
+    <path d="m3377-997.94v-30h-70v350h90v260h-140v360h300v-20" stroke-width="3"/>
+    <path d="m3067-1467.9v20h370v390h-140v370h120v280h-170v380h130v1170h-140v-30" stroke-width="3"/>
+    <path d="m3277-637.94v-20h130v220h-220v390h-280v-70"/>
+    <path d="m3367-437.94v120"/>
+   </g>
+  </g>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <path d="m878 498h5v5h-5z" fill="#102235"/>
+  </g>
+  <g fill="none" stroke-miterlimit="10">
+   <path d="m3327-97.942v50h250v440" stroke="#102235"/>
+   <path d="m3347-97.942v60h-60v60" stroke="#41619f" stroke-width="4"/>
+   <path d="m3367-97.942v1710" stroke="#41619f" stroke-width="4"/>
+   <g stroke="#102235">
+    <path d="m3047-1467.9v2090h270v510h-220v-20"/>
+    <path d="m3777-1007.9v-40h-490v350h150v300"/>
+    <path d="m3347-397.94v80"/>
+    <path d="m3237-397.94v390"/>
+    <path d="m3317-697.94v60"/>
+    <path d="m3577-337.94v-60h-680v100"/>
+   </g>
+  </g>
+  <g transform="rotate(90 2592.5 1274.5)" fill="#102235">
+   <path d="m918 428h5v5h-5z"/>
+   <path d="m918 518h5v5h-5z"/>
+   <path d="m918 628h5v5h-5z"/>
+  </g>
+  <g fill="none" stroke="#102235" stroke-miterlimit="10" stroke-width="3">
+   <path d="m3757-1007.9v-60h-480v400h150v280"/>
+   <path d="m3327-387.94v70"/>
+   <path d="m3227-387.94v370"/>
+   <path d="m3297-667.94v30"/>
+  </g>
+  <g transform="rotate(90 2592.5 1274.5)">
+   <path d="m647 567h7v7h-7z" fill="#102235"/>
+  </g>
+  <path d="m3557-337.94v-50h-680v90" fill="none" stroke="#102235" stroke-miterlimit="10" stroke-width="3"/>
+  <g transform="rotate(90 2592.5 1274.5)" fill="#102235">
+   <path d="m927 437h7v7h-7z"/>
+   <path d="m927 537h7v7h-7z"/>
+   <path d="m927 637h7v7h-7z"/>
+  </g>
+  <g fill="none" stroke-miterlimit="10">
+   <path d="m3357-1407.9v-20h-880v2590h160v-50" stroke="#102235"/>
+   <path d="m3306-456.94v140" stroke="#fa6e03" stroke-width="2"/>
+   <path d="m3307-457.94v140" stroke="#fd9749" stroke-width="2"/>
+   <path d="m3307-457.94v140" stroke="#fd862b"/>
+  </g>
+ </g>
+</svg>
