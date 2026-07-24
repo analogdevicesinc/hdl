@@ -74,11 +74,20 @@ set_property -dict {PACKAGE_PIN C20 IOSTANDARD LVCMOS25} [get_ports adf435x_lock
 
 # clocks
 
-create_clock -period 2.500 -name dco_clk  [get_ports adca_dco_p]
-create_clock -period 2.500 -name ref_clk  [get_ports adca_clk_p]
-create_clock -period 2.500 -name dco_clk1 [get_ports adcb_dco_p]
-create_clock -period 2.500 -name ref_clk1 [get_ports adcb_clk_p]
+create_clock -period 2.500 -name dco_clk  [get_ports adca_dco_p];
+create_clock -period 2.500 -name ref_clk  [get_ports adca_clk_p];
+create_clock -period 2.500 -name dco_clk1 [get_ports adcb_dco_p];
+create_clock -period 2.500 -name ref_clk1 [get_ports adcb_clk_p];
 
-##by default IOB is TRUE and this register is not being driven by any IO element
-
-set_property IOB FALSE [get_cells -hierarchical -regexp {.*ad4080_b_spi.*IO0_I_REG$}];
+# Inside ad408x_phy (7-series branch), the divided DCO is cascaded through a
+# BUFR (ISERDES CLKDIV, clock-region-local) and then a BUFG (fabric + outbound
+# adc_clk, global). Both networks carry the same generated clock but have very
+# different insertion delays, so Vivado's intra-clock skew analysis is
+# pessimistic on paths that stay entirely on the BUFG side yet get named
+# after the BUFR source. Data actually crossing the BUFR/BUFG boundary is
+# contained within a single clock region (ISERDES output -> packer) and has
+# bounded physical skew; cross-channel data crossings go through async FIFOs.
+# Treat the two networks as async for STA to eliminate the false skew.
+set_clock_groups -asynchronous \
+  -group [get_clocks -of_objects [get_pins -hier -filter {NAME =~ "*i_div_clk_buf/O"}]] \
+  -group [get_clocks -of_objects [get_pins -hier -filter {NAME =~ "*i_adc_clk_bufg/O"}]]

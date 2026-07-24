@@ -181,6 +181,10 @@ module system_top (
 
   wire            adca_filter_data_ready_n;
   wire            adcb_filter_data_ready_n;
+  wire            spi0_ad4080_miso;
+
+  wire            fpga_a_ref_clk;
+  wire            fpga_b_ref_clk;
 
   assign adca_gp0_dir = 1'b0;
   assign adca_gp1_dir = 1'b0;
@@ -201,13 +205,22 @@ module system_top (
   assign gpio_i[34]     = adca_gpio3_fmc;
   assign gpio_i[39]     = adcb_gpio3_fmc;
 
+
+assign adcb_ad4080_sclk = adca_ad4080_sclk;
+assign adcb_ad4080_mosi = adca_ad4080_mosi;
+
+ assign spi0_ad4080_miso = (adca_ad4080_csn == 1'b0) ? adca_ad4080_miso :
+                           (adcb_ad4080_csn == 1'b0) ? adcb_ad4080_miso : 1'b0;
+
   assign en_psu         = 1'b1;
   assign osc_en         = pwrgd;
   assign pd_v33b        = 1'b1;
   assign ad9508_sync    = ~gpio_o[37];
   assign gpio_i[35]     = adf435x_lock;
   assign gpio_i[36]     = pwrgd;
-  assign gpio_i[63:40]  = gpio_o[63:40];
+  assign gpio_i[40]     = adca_doc_fmc;
+  assign gpio_i[41]     = adca_dod_fmc;
+  assign gpio_i[63:42]  = gpio_o[63:42];
 
   IBUFDS a_fpga_clk (
     .I (adca_clk_p),
@@ -291,10 +304,10 @@ module system_top (
     .spi0_clk_i (1'b0),
     .spi0_clk_o (adca_ad4080_sclk),
     .spi0_csn_0_o (adca_ad4080_csn),
-    .spi0_csn_1_o (),
+    .spi0_csn_1_o (adcb_ad4080_csn),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (adca_ad4080_miso),
+    .spi0_sdi_i (spi0_ad4080_miso),
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (adca_ad4080_mosi),
     .spi1_clk_i (1'b0),
@@ -328,15 +341,6 @@ module system_top (
     .adcb_cnv_in_n(adcb_cnv_in_n),
     .adcb_filter_data_ready_n(adcb_filter_data_ready_n),
     .adcb_sync_n (ad9508_sync),
-
-    .ad4080_b_spi_csn_o(adcb_ad4080_csn),
-    .ad4080_b_spi_csn_i(2'b11),
-    .ad4080_b_spi_clk_i(1'b0),
-    .ad4080_b_spi_clk_o(adcb_ad4080_sclk),
-    .ad4080_b_spi_sdo_i(1'b0),
-    .ad4080_b_spi_sdo_o(adcb_ad4080_mosi),
-    .ad4080_b_spi_sdi_i(adcb_ad4080_miso),
-
     .fpga_a_ref_clk(fpga_a_ref_clk),
     .fpga_b_ref_clk(fpga_b_ref_clk));
 
