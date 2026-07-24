@@ -608,6 +608,12 @@ module ad408x_phy #(
    end
   end
 
-  assign adc_valid = filter_enable ?  (packed_data_valid_d & filter_ready) : packed_data_valid_d;
+  // Gate adc_valid with sync_status so consumers only see samples after
+  // bit-alignment has locked. Prevents pre-lock garbage from being written
+  // into downstream FIFOs / packers. Since sync_status transitions and
+  // holds in the adc_clk_div domain, the AND is same-domain and safe.
+  assign adc_valid = sync_status_int &
+                     (filter_enable ? (packed_data_valid_d & filter_ready)
+                                    : packed_data_valid_d);
 
 endmodule

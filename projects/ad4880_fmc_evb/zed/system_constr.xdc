@@ -79,15 +79,14 @@ create_clock -period 2.500 -name ref_clk  [get_ports adca_clk_p];
 create_clock -period 2.500 -name dco_clk1 [get_ports adcb_dco_p];
 create_clock -period 2.500 -name ref_clk1 [get_ports adcb_clk_p];
 
-# Inside ad408x_phy (7-series branch), the divided DCO is cascaded through a
-# BUFR (ISERDES CLKDIV, clock-region-local) and then a BUFG (fabric + outbound
-# adc_clk, global). Both networks carry the same generated clock but have very
-# different insertion delays, so Vivado's intra-clock skew analysis is
-# pessimistic on paths that stay entirely on the BUFG side yet get named
-# after the BUFR source. Data actually crossing the BUFR/BUFG boundary is
-# contained within a single clock region (ISERDES output -> packer) and has
-# bounded physical skew; cross-channel data crossings go through async FIFOs.
-# Treat the two networks as async for STA to eliminate the false skew.
-set_clock_groups -asynchronous \
-  -group [get_clocks -of_objects [get_pins -hier -filter {NAME =~ "*i_div_clk_buf/O"}]] \
-  -group [get_clocks -of_objects [get_pins -hier -filter {NAME =~ "*i_adc_clk_bufg/O"}]]
+# shift_cnt inside ad408x_phy is a pattern-lock training counter: it changes
+# only while searching for bit alignment, then holds constant for the entire
+# capture. Paths from it into the 40->20 barrel shifter feeding
+# adc_data_shifted are therefore quasi-static in normal operation and can be
+# treated as multicycle. This buys ~5 ns of extra budget on those paths and
+# removes the marginal barrel-shift setup violations at 200 MHz on the
+# Artix-7 speed grade of Zynq-7020.
+set_multicycle_path -setup -from \
+  [get_cells -hier -filter {NAME =~ "*ad408x_interface/shift_cnt_reg*"}] 2
+set_multicycle_path -hold  -from \
+  [get_cells -hier -filter {NAME =~ "*ad408x_interface/shift_cnt_reg*"}] 1

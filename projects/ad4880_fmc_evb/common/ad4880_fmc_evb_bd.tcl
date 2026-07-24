@@ -128,7 +128,10 @@ ad_ip_parameter chb_align_fifo CONFIG.TLAST_EN 0
 ad_ip_parameter chb_align_fifo CONFIG.TKEEP_EN 0
 ad_ip_parameter chb_align_fifo CONFIG.M_AXIS_REGISTERED 1
 
-# Pop from both FIFOs only when both have data -> paired sample delivery
+# Pop from both FIFOs only when both have data -> paired sample delivery.
+# Per-channel valid is already gated by sync_status inside ad408x_phy so
+# pre-lock samples never enter the FIFO -> paired-pop stays aligned by
+# construction after both channels lock.
 ad_ip_instance util_vector_logic align_both_valid
 ad_ip_parameter align_both_valid CONFIG.C_OPERATION and
 ad_ip_parameter align_both_valid CONFIG.C_SIZE 1
@@ -136,7 +139,8 @@ ad_ip_parameter align_both_valid CONFIG.C_SIZE 1
 
 # connect datapath
 
-# ADC-A write side: native adc_clk -> fifo write
+# ADC-A write side: native adc_clk -> fifo write (adc_valid is already
+# gated by sync_status inside the PHY, so no pre-lock garbage enters).
 ad_connect axi_ad4080_adc_a/adc_clk    cha_align_fifo/s_axis_aclk
 ad_connect sys_cpu_resetn              cha_align_fifo/s_axis_aresetn
 ad_connect axi_ad4080_adc_a/adc_valid  cha_align_fifo/s_axis_valid
