@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-ADRV903x](https://www.analog.com/eval-adrv903x)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/adrv903x/quickstart/zynqmp
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adrv903x/index.html
+- Transceiver configuration support for Xilinx carriers (xcvr_wizard): https://analogdevicesinc.github.io/hdl/library/jesd204/xgt_wizard/index.html
 - Evaluation board VADJ: 1.8V
 
 ## Supported parts
