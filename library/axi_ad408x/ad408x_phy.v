@@ -145,7 +145,8 @@ module ad408x_phy #(
   wire [19:0]          ad_pack_odata_4_20;
   wire [15:0]          ad_pack_odata_4_16;
   wire [13:0]          ad_pack_odata_4_14;
-  wire                 adc_clk_div;
+  wire                 adc_clk_div;         // BUFG output (or UltraScale BUFGCE_DIV): drives all internal fabric and outbound adc_clk
+  wire                 adc_clk_div_bufr;    // BUFR output (7-series only): drives ISERDES CLKDIV; unused on UltraScale
   wire [NUM_LANES-1:0] serdes_in_p;
   wire [NUM_LANES-1:0] serdes_in_n;
   wire                 clk_in_s;
@@ -184,7 +185,6 @@ module ad408x_phy #(
   assign fall_filter_ready = filter_rdy_n_d[1] & ~filter_rdy_n_d[0];
   assign sync_status       = sync_status_int;
   assign single_lane       = num_lanes[0];
-  assign adc_clk           = adc_clk_div;
   assign pattern_value     = device_code == 2'h0 ? 20'hAC5D6:
                              device_code == 2'h1 ? 20'h0AC5D:
                                                    20'h02B17;
@@ -210,7 +210,19 @@ module ad408x_phy #(
       .CLR(~sync_n),
       .CE(1'b1),
       .I(clk_in_s),
+      .O(adc_clk_div_bufr));
+
+    // BUFR output is clock-region-local, which prevents downstream logic
+    // (e.g. cross-channel FIFOs feeding a common packer) from spanning
+    // clock regions. Drive all internal fabric AND the outbound adc_clk
+    // from a BUFG so every consumer of the divided clock sees the same
+    // global clock network. ISERDES CLKDIV inside ad_serdes_in stays on
+    // adc_clk_div_bufr (BUFR output) as required for ISERDES timing.
+    BUFG i_adc_clk_bufg (
+      .I(adc_clk_div_bufr),
       .O(adc_clk_div));
+
+    assign adc_clk = adc_clk_div;
 
   end else begin
 
@@ -233,6 +245,12 @@ module ad408x_phy #(
       .CE(1'b1),
       .CLR(~sync_n),
       .I(clk_in_s));
+
+    // UltraScale: adc_clk_div is already on a global BUFGCE_DIV. The BUFR
+    // path used by 7-series does not exist here; the ISERDES CLKDIV can be
+    // driven directly from the same global network.
+    assign adc_clk_div_bufr = adc_clk_div;
+    assign adc_clk          = adc_clk_div;
 
   end
   endgenerate
@@ -273,7 +291,7 @@ module ad408x_phy #(
     .rst(serdes_reset_s),
     .ext_serdes_rst(serdes_reset_s),
     .clk(adc_clk_in_fast),
-    .div_clk(adc_clk_div),
+    .div_clk(adc_clk_div_bufr),
     .data_s0(data_s0),
     .data_s1(data_s1),
     .data_s2(data_s2),
