@@ -33,6 +33,8 @@ jobs:
         [[ -n "$XILINXD_LICENSE_FILE" ]] || export NO_AMD_XILINX=true
         [[ -n "$LM_LICENSE_FILE" ]] || export NO_ALTERA=true
         export NO_LATTICE=true
+        changed_files="library/spi_engine/axi_spi_engine/axi_spi_engine.v
+        library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_constr.ttcl"
         projects=$(echo "$changed_files" | python3 .github/scripts/changed_files_to_projects.py)
         [[ -n "$projects" ]] && {
           echo "projects=$projects" >> $GITHUB_OUTPUT
