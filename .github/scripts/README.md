@@ -303,3 +303,22 @@ python3 check_guideline.py -p  ./library/axi_ad9783/axi_ad9783.v ./library/commo
 # Check and edit a specific file given by absolute/relative path
 python3 check_guideline.py -pe ./library/axi_ad9783/axi_ad9783_if.v >> warnings.txt
 ```
+
+---
+
+## User guide for [makefile_deps_tree.py](https://github.com/analogdevicesinc/hdl/tree/main/.github/scripts/makefile_deps_tree.py)
+
+### Prerequisites
+
+* the script must be run while being in the root directory (/hdl)
+* uses Python 3.x
+
+### What does it do
+
+Generates a dependency tree of the repository, including licenses.
+
+### Usage
+
+```
+python3 .github/scripts/makefile_deps_tree.py
+```
