@@ -1,0 +1,31 @@
+on:
+  workflow_call:
+    outputs:
+      projects:
+        value: ${{ jobs.context.outputs.projects }}
+
+jobs:
+  context:
+    runs-on: ${{ fromJSON(vars.RUNNER) }}
+    permissions:
+      contents: read
+    outputs:
+      projects: ${{ steps.context.outputs.projects }}
+
+    steps:
+    - uses: analogdevicesinc/doctools/changed-files@action
+      id: state
+    - uses: actions/checkout@v7
+
+    - name: Get projects to build
+      id: context
+      env:
+        changed_files: ${{ steps.state.outputs.changed_files }}
+      run: |
+        projects=$(echo "$changed_files" | python3 .github/scripts/changed_files_to_projects.py)
+        [[ -n "$projects" ]] && {
+          echo "projects=$projects" >> $GITHUB_OUTPUT
+          echo "::notice ::Got projects $projects."
+        } || echo "::warning ::Got not project for changed files."
+
+
