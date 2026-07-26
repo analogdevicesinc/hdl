@@ -303,3 +303,48 @@ python3 check_guideline.py -p  ./library/axi_ad9783/axi_ad9783.v ./library/commo
 # Check and edit a specific file given by absolute/relative path
 python3 check_guideline.py -pe ./library/axi_ad9783/axi_ad9783_if.v >> warnings.txt
 ```
+
+---
+
+## User guide for [makefile_deps_tree.py](https://github.com/analogdevicesinc/hdl/tree/main/.github/scripts/makefile_deps_tree.py)
+
+### Prerequisites
+
+* the script must be run while being in the root directory (/hdl)
+* uses Python 3.x
+
+### What does it do
+
+Generates a dependency tree of the repository, including licenses.
+
+### Usage
+
+```
+python3 .github/scripts/makefile_deps_tree.py
+```
+
+---
+
+## User guide for [gen_sbom.py](https://github.com/analogdevicesinc/hdl/tree/main/.github/scripts/gen_sbom.py)
+
+### Prerequisites
+
+* the script must be run while being in the root directory (/hdl)
+* uses Python 3.x
+
+### What does it do
+
+Generates one SPDX 3.0.1 JSON-LD SBOM per HDL project.
+
+Uses the Makefile PROJECT_NAME + LIB_DEPS to generate a dependency tree,
+them the SDPX short identifier to describe the license per library.
+
+### Usage
+
+Configuration:
+  OUT      path to write the SBOMs to
+  VERSION  version used in package URLs, e.g. a git tag/sha
+
+```
+OUT=$(mktemp -d) VERSION=2023_R2_p1 python3 .github/scripts/gen_sbom.py
+```
