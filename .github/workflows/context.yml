@@ -3,6 +3,11 @@ on:
     outputs:
       projects:
         value: ${{ jobs.context.outputs.projects }}
+    secrets:
+      XILINXD_LICENSE_FILE:
+        required: false
+      LM_LICENSE_FILE:
+        required: false
 
 jobs:
   context:
@@ -11,6 +16,9 @@ jobs:
       contents: read
     outputs:
       projects: ${{ steps.context.outputs.projects }}
+    env:
+      XILINXD_LICENSE_FILE: ${{ secrets.XILINXD_LICENSE_FILE }}
+      LM_LICENSE_FILE: ${{ secrets.LM_LICENSE_FILE }}
 
     steps:
     - uses: analogdevicesinc/doctools/changed-files@action
@@ -22,6 +30,9 @@ jobs:
       env:
         changed_files: ${{ steps.state.outputs.changed_files }}
       run: |
+        [[ -n "$XILINXD_LICENSE_FILE" ]] || export NO_AMD_XILINX=true
+        [[ -n "$LM_LICENSE_FILE" ]] || export NO_ALTERA=true
+        export NO_LATTICE=true
         projects=$(echo "$changed_files" | python3 .github/scripts/changed_files_to_projects.py)
         [[ -n "$projects" ]] && {
           echo "projects=$projects" >> $GITHUB_OUTPUT

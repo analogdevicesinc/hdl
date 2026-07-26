@@ -16,6 +16,9 @@ jobs:
     if: (github.event_name != 'push' || github.repository_owner == 'analogdevicesinc')
     permissions:
       contents: read
+    secrets:
+      XILINXD_LICENSE_FILE: ${{ secrets.XILINXD_LICENSE_FILE }}
+      LM_LICENSE_FILE: ${{ secrets.LM_LICENSE_FILE }}
   build:
     strategy:
       fail-fast: false
