@@ -3,10 +3,12 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-create_clock      -period "10.0000 ns"   -name sys_clk_100mhz [get_ports {sys_clk}]
-create_clock      -period "4.16667 ns"   -name ref_clk        [get_ports {fpga_refclk_in}]
-create_clock -add -period "4.16667 ns"   -name tx_device_clk  [get_ports {clkin10}]
-create_clock -add -period "4.16667 ns"   -name rx_device_clk  [get_ports {clkin6}]
+source ../../common/a5e/system_constr.sdc
+
+create_clock  -period "10.0000 ns"   -name sys_clk_100mhz [get_ports {sys_clk}]
+create_clock  -period "4.16667 ns"   -name ref_clk        [get_ports {fpga_refclk_in}]
+create_clock  -period "4.16667 ns"   -name tx_device_clk  [get_ports {clkin10}]
+create_clock  -period "4.16667 ns"   -name rx_device_clk  [get_ports {clkin6}]
 
 # Ignore these paths since the data is moving through an async fifo inside the link layer
 set_clock_groups -asynchronous \
@@ -26,7 +28,9 @@ set_false_path -from [get_registers *altera_reset_synchronizer:alt_rst_sync_uq1|
 set device_clk_period [get_clock_info -period tx_device_clk]
 set_input_delay \
   -clock tx_device_clk \
-  [expr $device_clk_period / 2] \
+  [expr $device_clk_period / 8] \
   [get_ports {sysref2}]
 
-set_false_path -from [get_keepers -no_duplicates {i_system_bd|sys_hps|sys_hps|sm_hps|sundancemesa_hps_inst~intosc_clk.reg}] -to [get_keepers -no_duplicates {i_system_bd|sys_hps|sys_hps|sm_hps|sundancemesa_hps_inst~intosc_clk.reg}]
+set_false_path \
+  -from [get_keepers -no_duplicates {i_system_bd|sys_hps|sys_hps|sm_hps|sundancemesa_hps_inst~intosc_clk.reg}] \
+  -to   [get_keepers -no_duplicates {i_system_bd|sys_hps|sys_hps|sm_hps|sundancemesa_hps_inst~intosc_clk.reg}]

@@ -54,7 +54,7 @@ set fpga_family_list { \
         { "SE Base" 5 } \
         { "I-Series with HPS only" 6 } \
         { TX        6 } \
-        { "E-Series with Quad HPS and with XCVR" 7 }}
+        { "E-Series with Quad HPS, XCVR, Crypto Services" 7 }}
 
        #technology 5 generation
        # family Arria SX

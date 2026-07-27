@@ -36,7 +36,7 @@ source ../../scripts/adi_project_intel.tcl
 #   [RX/TX]_KS_PER_CHANNEL : Number of samples stored in internal buffers in kilosamples per converter (M)
 #
 
-set REQUIRED_QUARTUS_VERSION "25.1.1"
+set REQUIRED_QUARTUS_VERSION "25.3.1"
 
 adi_project ad9081_fmca_ebz_a5e [list \
   JESD_MODE            [get_env_param JESD_MODE        8B10B ] \
