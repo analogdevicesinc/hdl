@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -123,9 +123,17 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
+  wire            cn0561_sclk_s;
+  wire    [ 3:0]  cn0561_sdi_s;
+
   // instantiations
 
-  assign gpio_i[63:43] = gpio_o[63:43];
+  assign cn0561_spi_sclk = cn0561_sclk_s;
+  assign cn0561_dclk     = cn0561_sclk_s;
+
+  assign cn0561_sdi_s = {cn0561_din[3:1], (gpio_o[43] ? cn0561_spi_sdi : cn0561_din[0])};
+
+  assign gpio_i[63:44] = gpio_o[63:44];
   ad_iobuf #(
     .DATA_WIDTH(11)
   ) i_iobuf_cn0561_gpio (
@@ -211,15 +219,15 @@ module system_top (
     .iic_mux_sda_i (iic_mux_sda_i_s),
     .iic_mux_sda_o (iic_mux_sda_o_s),
     .iic_mux_sda_t (iic_mux_sda_t_s),
-    .spi0_clk_i (cn0561_spi_sclk),
-    .spi0_clk_o (cn0561_spi_sclk),
-    .spi0_csn_0_o (cn0561_spi_cs),
+    .spi0_clk_i (1'b0),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (cn0561_spi_sdi),
-    .spi0_sdo_i (cn0561_spi_sdo),
-    .spi0_sdo_o (cn0561_spi_sdo),
+    .spi0_sdi_i (1'b0),
+    .spi0_sdo_i (1'b0),
+    .spi0_sdo_o (),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -229,13 +237,11 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .cn0561_di_sdo (),
-    .cn0561_di_sdo_t (),
-    .cn0561_di_sdi (cn0561_din),
-    .cn0561_di_cs (),
-    .cn0561_di_sclk (cn0561_dclk),
+    .cn0561_spi_sclk (cn0561_sclk_s),
+    .cn0561_spi_cs (cn0561_spi_cs),
+    .cn0561_spi_sdo (cn0561_spi_sdo),
+    .cn0561_spi_sdi (cn0561_sdi_s),
     .cn0561_odr (cn0561_odr),
-    .cn0561_di_three_wire (),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 

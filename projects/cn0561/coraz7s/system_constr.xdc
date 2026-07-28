@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -16,3 +16,16 @@ set_property -dict {PACKAGE_PIN R14 IOSTANDARD LVCMOS33} [get_ports cn0561_din[3
 set_property -dict {PACKAGE_PIN T15 IOSTANDARD LVCMOS33} [get_ports cn0561_odr]         ; ## FMC_LPC_LA00_P_CC
 
 set_property -dict {PACKAGE_PIN V13 IOSTANDARD LVCMOS33} [get_ports cn0561_pdn]         ; ## FMC_LPC_LA07_P
+
+# Virtual clock representing DCLK/SCLK as seen by the AD4134
+create_clock -period 20.0 -name cn0561_dclk_virt
+
+# DOUTx input delay relative to DCLK
+set_input_delay -clock cn0561_dclk_virt -max 8.2 [get_ports cn0561_din[*]]
+set_input_delay -clock cn0561_dclk_virt -min 0.0 [get_ports cn0561_din[*]]
+
+# SDO input delay relative to SCLK falling
+set_input_delay -clock cn0561_dclk_virt -clock_fall -max 8.0 [get_ports cn0561_spi_sdi]
+set_input_delay -clock cn0561_dclk_virt -clock_fall -min 0.0 [get_ports cn0561_spi_sdi]
+
+set_false_path -from [get_clocks cn0561_dclk_virt] -to [get_clocks mmcm_clk_0_s]
