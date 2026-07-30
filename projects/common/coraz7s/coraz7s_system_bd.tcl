@@ -12,6 +12,9 @@ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
 create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 fixed_io
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_ard
 
+create_bd_port -dir O sys_100M_clk
+
+
 create_bd_port -dir O spi0_csn_2_o
 create_bd_port -dir O spi0_csn_1_o
 create_bd_port -dir O spi0_csn_0_o
@@ -69,6 +72,7 @@ ad_ip_instance axi_iic axi_iic_ard
 # system reset/clock definitions
 
 ad_connect  sys_cpu_clk sys_ps7/FCLK_CLK0
+ad_connect  sys_cpu_clk sys_100M_clk
 ad_connect  sys_dma_clk sys_ps7/FCLK_CLK1
 ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
 ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn

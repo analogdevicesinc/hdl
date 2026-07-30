@@ -12,6 +12,9 @@ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
 create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 fixed_io
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_fmc
 
+
+create_bd_port -dir O qspi_sys_clk
+
 create_bd_port -dir O spi0_csn_2_o
 create_bd_port -dir O spi0_csn_1_o
 create_bd_port -dir O spi0_csn_0_o
@@ -235,6 +238,7 @@ ad_connect  sys_cpu_clk axi_hdmi_dma/m_axis_aclk
 
 ad_connect  sys_cpu_clk   axi_spdif_tx_core/DMA_REQ_ACLK
 ad_connect  sys_cpu_clk   sys_ps7/DMA0_ACLK
+ad_connect  qspi_sys_clk  sys_ps7/FCLK_CLK1
 
 ad_connect  sys_ps7/DMA0_REQ  axi_spdif_tx_core/DMA_REQ
 ad_connect  sys_ps7/DMA0_ACK  axi_spdif_tx_core/DMA_ACK

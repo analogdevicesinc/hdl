@@ -64,7 +64,15 @@ module system_top (
   inout   [ 5:0]  led,
 
   inout           iic_ard_scl,
-  inout           iic_ard_sda
+  inout           iic_ard_sda,
+
+
+  // qspi interface
+
+  inout   [ 3:0]  qspi_data,
+  input           sclk,
+  input           cs_n
+
 );
 
   // internal signals
@@ -73,7 +81,7 @@ module system_top (
   wire    [63:0]  gpio_t;
 
  // assignments
-  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[63:33] = gpio_o[63:33];
   assign gpio_i[31:8] = gpio_o[31:8];
 
   // instantiations
@@ -85,13 +93,60 @@ module system_top (
     .dio_o (gpio_i[1:0]),
     .dio_p (btn));
 
+
+
+// QSPI slave interface
+
+  wire       sys_rst_n_100m;
+  wire       sys_100M_clk;
+  wire       qspi_rst_n;
+  wire [3:0] io_i;
+  wire [3:0] io_o;
+  wire [3:0] io_oe;
+
   ad_iobuf #(
-    .DATA_WIDTH (6)
+    .DATA_WIDTH (2)
   ) i_iobuf_leds (
-    .dio_t (gpio_t[7:2]),
-    .dio_i (gpio_o[7:2]),
-    .dio_o (gpio_i[7:2]),
-    .dio_p (led));
+    .dio_t (2'b0),
+    .dio_i ({ready,sys_rst_n_100m}),
+    .dio_o (),
+    .dio_p ({led[0],led[3]}));
+
+  assign led[1] = 1'b0;
+  assign led[2] = 1'b0;
+  assign led[4] = 1'b0;
+  assign led[5] = 1'b0;
+  assign qspi_rst_n = gpio_o[32];
+
+  ad_iobuf #(
+    .DATA_WIDTH (4)
+  ) qspi_iobuf (
+    .dio_t (io_oe),
+    .dio_i (io_o),
+    .dio_o (io_i),
+    .dio_p (qspi_data));
+
+ sync_bits i_sync_out (
+    .in_bits(qspi_rst_n),
+    .out_clk(sys_100M_clk),
+    .out_resetn(1'b1),
+    .out_bits(sys_rst_n_100m));
+
+  qspi_slave # (
+    .DEFAULT_READ_LENGTH(8'd1)
+  ) qspi_slave_inst (
+    .sys_clk(sys_100M_clk),
+    .sys_rst_n(sys_rst_n_100m),
+    .ready(ready),
+    .sclk(sclk),
+    .cs_n(cs_n),
+    .io_i(io_i),
+    .io_o(io_o),
+    .io_oe(io_oe)
+  );
+
+
+
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
