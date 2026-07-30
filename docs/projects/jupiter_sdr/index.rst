@@ -201,6 +201,20 @@ HW Signal                        HDL Signal            Software GPIO  HDL       
  IO_L24P_65_ADRV9002_GP_INT      gp_int                78             0         I
 ================================ ===================== ============== ========= ==========
 
+The GPIO connector schematic section is depicted below:
+
+.. image:: ./jupiter_sdr_gpio_connector.png
+   :align: center
+   :width: 300
+   :alt: JUPITER SDR GPIO Connector
+
+The GPIO ESD protection schematic section is depicted below:
+
+.. image:: ./jupiter_sdr_gpio_esd_protection.png
+   :align: center
+   :width: 300
+   :alt: JUPITER SDR GPIO ESD Protection
+
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
