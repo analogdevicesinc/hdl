@@ -64,7 +64,7 @@ set_property -dict {PACKAGE_PIN F37  IOSTANDARD LVCMOS18 SLEW FAST} [get_ports C
 set_property -dict {PACKAGE_PIN C38  IOSTANDARD LVCMOS18          } [get_ports CMD_SPI_MISO]
 
 set_property -dict {PACKAGE_PIN V10} [get_ports aurora_refclk_p]; # MGTREFCLK1P_228
-set_property -dict {PACKAGE_PIN V11} [get_ports aurora_refclk_n]; # MGTREFCLK1N_228
+set_property -dict {PACKAGE_PIN V9 } [get_ports aurora_refclk_n]; # MGTREFCLK1N_228
 
 set_property -dict {PACKAGE_PIN T6} [get_ports aurora_txp[0]]; # MGTHTXP3_228
 set_property -dict {PACKAGE_PIN T5} [get_ports aurora_txn[0]]; # MGTHTXN3_228
