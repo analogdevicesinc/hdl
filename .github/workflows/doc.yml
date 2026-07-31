@@ -1,8 +1,5 @@
 on:
   push:
-    branches:
-      - main
-  pull_request:
 
 jobs:
   build-doc:
@@ -38,9 +35,7 @@ jobs:
 
         export GIT_LFS_TO_LINKS="true"
         export GIT_ORG_REPOSITORY="${{ github.repository }}"
-        [ "${{ github.event_name }}" = "pull_request" ] \
-          && export GIT_BRANCH="${{ github.event.pull_request.head.ref }}" \
-          || export GIT_BRANCH="${{ github.ref_name }}"
+        export GIT_BRANCH="main"
 
         [[ "${{ runner.debug }}" != "1" ]] && j_="-jauto"
         cd docs
@@ -60,15 +55,9 @@ jobs:
       group: gh-pages
     permissions:
       contents: write
-    if: >
-      github.ref == 'refs/heads/main' ||
-      github.event_name == 'pull_request' ||
-      github.ref_type == 'tag'
 
     steps:
     - uses: analogdevicesinc/doctools/gh-pages-deploy@action
       with:
-        new_tag: ${{ github.ref_type == 'tag' }}
-        tag: ${{ github.ref_name }}
         name: html
 
