@@ -77,6 +77,7 @@ Utilities
 
    axi_adc_decimate/index
    axi_adc_trigger/index
+   axi_adf4030/index
    axi_adxcvr/index
    axi_clkgen/index
    axi_clock_monitor/index
