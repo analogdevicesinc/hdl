@@ -38,15 +38,17 @@ proc p_util_adcfifo {} {
   set m_adc_data_width [get_parameter_value "ADC_DATA_WIDTH"]
   set m_dma_addr_width [get_parameter_value "DMA_ADDRESS_WIDTH"]
   set m_dma_data_width [get_parameter_value "DMA_DATA_WIDTH"]
+  set m_fpga_technology [get_parameter_value "FPGA_TECHNOLOGY"]
 
   # intel memory
-
-  add_hdl_instance mem_asym intel_mem_asym 1.0
-  set_instance_parameter_value mem_asym DEVICE_FAMILY $m_device_family
-  set_instance_parameter_value mem_asym A_ADDRESS_WIDTH 0
-  set_instance_parameter_value mem_asym A_DATA_WIDTH $m_adc_data_width
-  set_instance_parameter_value mem_asym B_ADDRESS_WIDTH $m_dma_addr_width
-  set_instance_parameter_value mem_asym B_DATA_WIDTH $m_dma_data_width
+  if {$m_fpga_technology == 1} {
+    add_hdl_instance mem_asym intel_mem_asym 1.0
+    set_instance_parameter_value mem_asym DEVICE_FAMILY $m_device_family
+    set_instance_parameter_value mem_asym A_ADDRESS_WIDTH 0
+    set_instance_parameter_value mem_asym A_DATA_WIDTH $m_adc_data_width
+    set_instance_parameter_value mem_asym B_ADDRESS_WIDTH $m_dma_addr_width
+    set_instance_parameter_value mem_asym B_DATA_WIDTH $m_dma_data_width
+  }
 
   # interfaces
 

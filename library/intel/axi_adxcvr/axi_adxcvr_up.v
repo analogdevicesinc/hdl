@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -48,7 +48,7 @@ module axi_adxcvr_up #(
   parameter   integer XCVR_TYPE = 0,
   parameter   integer TX_OR_RX_N = 0,
   parameter   integer NUM_OF_LANES = 4,
-  parameter           READY_W = (FPGA_TECHNOLOGY != 105) ?  NUM_OF_LANES : 1
+  parameter           READY_W = (FPGA_TECHNOLOGY != 105 && FPGA_TECHNOLOGY != 106) ?  NUM_OF_LANES : 1
 ) (
   // xcvr, lane-pll and ref-pll are shared
 
@@ -56,7 +56,7 @@ module axi_adxcvr_up #(
   input                         up_pll_locked,
   input                         up_rx_lockedtodata,
   input   [READY_W-1:0]         up_ready,
-  input   [READY_W-1:0]         up_reset_ack,
+  input                         up_reset_ack,
 
   // bus interface
 
@@ -81,19 +81,19 @@ module axi_adxcvr_up #(
   reg                           up_wreq_d = 'd0;
   reg     [31:0]                up_scratch = 'd0;
   reg                           up_resetn = 'd0;
+  reg     [ 3:0]                up_rst_cnt = 'd8;
   reg                           up_status_int = 'd0;
   reg                           up_rreq_d = 'd0;
   reg     [31:0]                up_rdata_d = 'd0;
 
   // internal signals
 
-  wire                          up_all_ready_s;
+  wire                          up_ready_s;
   wire    [31:0]                up_status_32_s;
   wire    [31:0]                up_rparam_s;
+  wire                          up_reset_ack_latched_s;
 
-  wire                          up_pll_locked_s;
-  wire                          up_rx_lockedtodata_s;
-  wire                          up_ready_s;
+  reg                           up_reset_ack_latched = 'd0;
 
   // defaults
 
@@ -123,80 +123,47 @@ module axi_adxcvr_up #(
     end
   end
 
-  generate if (FPGA_TECHNOLOGY == 105) begin
-    sync_bits #(
-      .NUM_OF_BITS (3),
-      .ASYNC_CLK (1)
-    ) i_sync_input_ctrl (
-      .in_bits ({up_ready, up_pll_locked, up_rx_lockedtodata}),
-      .out_resetn (1'b1),
-      .out_clk (up_clk),
-      .out_bits({up_ready_s, up_pll_locked_s, up_rx_lockedtodata_s}));
-  end else begin
-    assign up_ready_s = up_ready;
-    assign up_pll_locked_s = up_pll_locked;
-    assign up_rx_lockedtodata_s = up_rx_lockedtodata;
-  end
-  endgenerate
-
-  assign up_all_ready_s = & up_status_32_s[(NUM_OF_LANES-1):0];
+  assign up_rst = up_rst_cnt[3];
+  assign up_ready_s = & up_status_32_s[NUM_OF_LANES:1];
   assign up_status_32_s[31:(NUM_OF_LANES+1)] = 'd0;
-  assign up_status_32_s[NUM_OF_LANES] = FPGA_TECHNOLOGY == 105 ? TX_OR_RX_N ? up_pll_locked_s : up_rx_lockedtodata_s :
-                                                                 up_pll_locked_s;
-  assign up_status_32_s[(NUM_OF_LANES-1):0] = FPGA_TECHNOLOGY == 105 ? {NUM_OF_LANES{up_ready_s}} : up_ready_s;
+  assign up_status_32_s[NUM_OF_LANES] = (FPGA_TECHNOLOGY == 105 || FPGA_TECHNOLOGY == 106) ? TX_OR_RX_N ? up_pll_locked : up_rx_lockedtodata :
+                                                                 up_pll_locked;
+  assign up_status_32_s[(NUM_OF_LANES-1):0] = (FPGA_TECHNOLOGY == 105 || FPGA_TECHNOLOGY == 106) ? {NUM_OF_LANES{up_ready}} : up_ready;
 
-  generate if (FPGA_TECHNOLOGY == 105) begin
-    wire up_reset_ack_s;
-    reg  up_rst_d;
-
-    sync_bits #(
-      .NUM_OF_BITS (1),
-      .ASYNC_CLK (1)
-    ) i_sync_reset_ack (
-      .in_bits (up_reset_ack),
-      .out_resetn (1'b1),
-      .out_clk (up_clk),
-      .out_bits(up_reset_ack_s));
-
-    always @(negedge up_rstn or posedge up_clk) begin
-      if (up_rstn == 0) begin
-        up_rst_d <= 1'b1;
-      end else if (up_resetn == 1'b0) begin
-        up_rst_d <= 1'b1;
-      end else if (up_reset_ack_s) begin
-        up_rst_d <= 1'b0;
-      end
-    end
-    assign up_rst = up_rst_d;
-  end else begin
-    reg [3:0] up_rst_cnt = 'd8;
-
-    always @(negedge up_rstn or posedge up_clk) begin
-      if (up_rstn == 0) begin
-        up_rst_cnt <= 4'h8;
-      end else begin
-        if (up_resetn == 1'b0) begin
-          up_rst_cnt <= 4'h8;
-        end else if (up_rst_cnt[3] == 1'b1) begin
-          up_rst_cnt <= up_rst_cnt + 1'b1;
-        end
-      end
-    end
-    assign up_rst = up_rst_cnt[3];
-  end
-  endgenerate
+  assign up_reset_ack_latched_s = (FPGA_TECHNOLOGY == 105 || FPGA_TECHNOLOGY == 106) ? up_reset_ack_latched : 1'b1;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
+      up_rst_cnt <= 4'h8;
       up_status_int <= 1'b0;
     end else begin
       if (up_resetn == 1'b0) begin
+        up_rst_cnt <= 4'h8;
+      end else if (up_rst_cnt[3] == 1'b1 && up_reset_ack_latched_s) begin
+        up_rst_cnt <= up_rst_cnt + 1'b1;
+      end
+      if (up_resetn == 1'b0) begin
         up_status_int <= 1'b0;
-      end else if (up_all_ready_s) begin
+      end else if (up_ready_s == 1'b1) begin
         up_status_int <= 1'b1;
       end
     end
   end
+
+  generate if (FPGA_TECHNOLOGY == 105 || FPGA_TECHNOLOGY == 106) begin
+    always @(negedge up_rstn or posedge up_clk) begin
+      if (up_rstn == 1'b0) begin
+        up_reset_ack_latched <= 1'b0;
+      end else begin
+        if (up_resetn == 1'b0) begin
+          up_reset_ack_latched <= 1'b0;
+        end else if (up_reset_ack == 1'b1) begin
+          up_reset_ack_latched <= 1'b1;
+        end
+      end
+    end
+  end
+  endgenerate
 
   // Specific to Intel
 
