@@ -92,7 +92,7 @@ TX_LANE_RATE=9.83
 Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x-jesd204b-245Msps.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv904x-jesd204b-245Msps.dts)
 
 
-#### JESD204B @245.76MSPS configuration
+#### JESD204B @122.88MSPS configuration
 
 ```
 make JESD_MODE=8B10B \
