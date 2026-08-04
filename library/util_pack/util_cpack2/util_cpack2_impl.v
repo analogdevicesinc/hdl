@@ -70,6 +70,7 @@ module util_cpack2_impl #(
 
   // Control signals from the pack shell.
   wire ce;
+  wire flush;
   wire ready;
   wire reset_data;
 
@@ -112,6 +113,9 @@ module util_cpack2_impl #(
 
   assign ce = data_wr_en & out_ready_int;
 
+  // Downstream backpressure.
+  assign flush = ~out_ready_int;
+
   /*
    * The cpack core itself has no backpressure. Overflows can only happen
    * downstream.
@@ -146,6 +150,7 @@ module util_cpack2_impl #(
 
     .enable (enable),
     .ce (ce),
+    .flush (flush),
     .ready (ready),
     .in_data (interleaved_data),
     .out_data (out_data),

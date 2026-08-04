@@ -50,6 +50,7 @@ module pack_shell #(
   input [NUM_OF_CHANNELS-1:0] enable,
 
   input ce,
+  input flush,
 
   output reg ready = 1'b0,
   input [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] in_data,
@@ -427,7 +428,11 @@ module pack_shell #(
              * residual data. I.e. when ready is asserted rotate is 0.
              */
             {ready,rotate} <= rotate + enable_count + 1'b1;
-          end else begin
+          end else if (flush == 1'b1) begin
+            /*
+             * Downstream backpressure: discard any partial accumulation so the
+             * next enabled window starts on a clean word boundary.
+             */
             ready <= 1'b0;
             rotate <= 'h0;
           end
