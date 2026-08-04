@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023, 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2025-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -103,6 +103,7 @@ module util_upack2_impl #(
 
     .enable (enable),
     .ce (ce),
+    .flush (1'b0),
     .ready (ready),
     .in_data (s_axis_data),
     .out_data (out_data),
