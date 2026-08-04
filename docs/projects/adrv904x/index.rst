@@ -424,6 +424,30 @@ The following are the parameters of this project that can be configured:
 - [RX/TX/RX_OS]_TPL_WIDTH : TPL data path width in bits
 - [RX/TX/RX_OS]_NUM_LINKS: number of links
 
+XCVR build parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following parameters configure the transceiver (XCVR) link on Xilinx
+carriers with XCVR automation flow:
+
+- PLL_TYPE: the PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+- REF_CLK: value of the reference clock [MHz] (LANE_RATE/20 or LANE_RATE/40 for
+  JESD204B; LANE_RATE/33 or LANE_RATE/66 for JESD204C)
+- LANE_RATE: value of the lane rate [Gbps]
+
+Optional XCVR overrides
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following optional parameters allow configuring the RX transceiver
+independently from the TX path. If omitted, the RX path inherits the
+corresponding base parameter (PLL_TYPE, LANE_RATE, REF_CLK).
+
+- XCVR_RX_PLL_TYPE: RX PLL type [CPLL/QPLL0/QPLL1]
+- XCVR_RX_LANE_RATE: RX lane rate [Gbps]
+- XCVR_RX_REF_CLK: RX reference clock [MHz] (XCVR_RX_LANE_RATE/20 or
+  XCVR_RX_LANE_RATE/40 for JESD204B; XCVR_RX_LANE_RATE/33 or
+  XCVR_RX_LANE_RATE/66 for JESD204C)
+
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -577,14 +601,15 @@ Building the HDL project
 
 The design is built upon ADI's generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
-:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
+:external+documentation:ref:`ADI Kuiper Linux <kuiper>`.
 If you want to build the sources, ADI makes them available on the
 :git-hdl:`HDL repository </>`. To get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the :git-hdl:`projects/adrv904x <projects/adrv904x>`
-location and run the make command by typing in your command prompt:
+Then go to the :git-hdl:`projects/adrv904x <projects/adrv904x>` location and run
+the make command by typing in your command prompt. Building without parameters
+will use the default configuration.
 
 **Linux/Cygwin/WSL**
 
@@ -593,65 +618,114 @@ location and run the make command by typing in your command prompt:
    $cd hdl/projects/adrv904x/zcu102
    $make
 
+Example for building the project with JESD parameters (XCVR
+parameters will use their default values):
+
+.. shell::
+
+   $cd hdl/projects/adrv904x/zcu102
+   $make ORX_ENABLE=1 RX_OS_JESD_M=8 RX_OS_JESD_L=4 \
+   $     RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=4
+
+Example for building the project with JESD and XCVR parameters:
+
+.. shell::
+
+   $cd hdl/projects/adrv904x/zcu102
+   $make ORX_ENABLE=1 RX_OS_JESD_M=8 RX_OS_JESD_L=4 \
+   $     RX_OS_JESD_S=1 RX_OS_JESD_NP=16 RX_JESD_L=4 \
+   $     PLL_TYPE=QPLL0 REF_CLK=491.5151515 LANE_RATE=16.22
+
+Example for building the project in JESD204B mode:
+
+.. shell::
+
+   $cd hdl/projects/adrv904x/zcu102
+   $make JESD_MODE=8B10B TX_LANE_RATE=9.83 RX_LANE_RATE=9.83 \
+   $     PLL_TYPE=CPLL REF_CLK=245.76 LANE_RATE=9.83
+
 The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.
-Where a cell contains a --- (dash) it means that the parameter doesn't exist
-for that project (adrv904x/carrier or adrv904x/carrier).
 
 .. collapsible:: Default values of the ``make`` parameters for ADRV904X
 
-   +-------------------+------------------------------------------------------+
-   | Parameter         | Default value of the parameters depending on carrier |
-   +-------------------+------------------------------------------------------+
-   |                   |                         ZCU102                       |
-   +===================+======================================================+
-   | JESD_MODE         |                         64B66B                       |
-   +-------------------+------------------------------------------------------+
-   | ORX_ENABLE        |                           0                          |
-   +-------------------+------------------------------------------------------+
-   | RX_LANE_RATE      |                         16.22                        |
-   +-------------------+------------------------------------------------------+
-   | TX_LANE_RATE      |                         16.22                        |
-   +-------------------+------------------------------------------------------+
-   | TX_NUM_LINKS      |                           1                          |
-   +-------------------+------------------------------------------------------+
-   | RX_NUM_LINKS      |                           1                          |
-   +-------------------+------------------------------------------------------+
-   | RX_OS_NUM_LINKS   |                           1                          |
-   +-------------------+------------------------------------------------------+
-   | RX_JESD_M         |                          16                          |
-   +-------------------+------------------------------------------------------+
-   | RX_JESD_L         |                           8                          |
-   +-------------------+------------------------------------------------------+
-   | RX_JESD_S         |                           1                          |
-   +-------------------+------------------------------------------------------+
-   | RX_JESD_NP        |                          16                          |
-   +-------------------+------------------------------------------------------+
-   | RX_TPL_WIDTH      |                          {}                          |
-   +-------------------+------------------------------------------------------+
-   | TX_JESD_M         |                          16                          |
-   +-------------------+------------------------------------------------------+
-   | TX_JESD_L         |                           8                          |
-   +-------------------+------------------------------------------------------+
-   | TX_JESD_S         |                           1                          |
-   +-------------------+------------------------------------------------------+
-   | TX_JESD_NP        |                          16                          |
-   +-------------------+------------------------------------------------------+
-   | TX_TPL_WIDTH      |                          {}                          |
-   +-------------------+------------------------------------------------------+
-   | RX_OS_JESD_M      |                           0                          |
-   +-------------------+------------------------------------------------------+
-   | RX_OS_JESD_L      |                           0                          |
-   +-------------------+------------------------------------------------------+
-   | RX_OS_JESD_S      |                           0                          |
-   +-------------------+------------------------------------------------------+
-   | RX_OS_JESD_NP     |                           0                          |
-   +-------------------+------------------------------------------------------+
-   | RX_OS_TPL_WIDTH   |                          {}                          |
-   +-------------------+------------------------------------------------------+
+   +---------------------+------------------------------------------------------+
+   | Parameter           | Default value of the parameters depending on carrier |
+   +---------------------+------------------------------------------------------+
+   |                     |                         ZCU102                       |
+   +=====================+======================================================+
+   | **XCVR build parameters**                                                  |
+   +---------------------+------------------------------------------------------+
+   | PLL_TYPE            |                         QPLL0                        |
+   +---------------------+------------------------------------------------------+
+   | LANE_RATE           |                         16.22                        |
+   +---------------------+------------------------------------------------------+
+   | REF_CLK             |                      491.5151515                     |
+   +---------------------+------------------------------------------------------+
+   | **Optional XCVR overrides**                                                |
+   +---------------------+------------------------------------------------------+
+   | XCVR_RX_PLL_TYPE    |                          ---                         |
+   +---------------------+------------------------------------------------------+
+   | XCVR_RX_LANE_RATE   |                          ---                         |
+   +---------------------+------------------------------------------------------+
+   | XCVR_RX_REF_CLK     |                          ---                         |
+   +---------------------+------------------------------------------------------+
+   | **JESD and other build parameters**                                        |
+   +---------------------+------------------------------------------------------+
+   | JESD_MODE           |                         64B66B                       |
+   +---------------------+------------------------------------------------------+
+   | ORX_ENABLE          |                           0                          |
+   +---------------------+------------------------------------------------------+
+   | RX_LANE_RATE        |                         16.22                        |
+   +---------------------+------------------------------------------------------+
+   | TX_LANE_RATE        |                         16.22                        |
+   +---------------------+------------------------------------------------------+
+   | TX_NUM_LINKS        |                           1                          |
+   +---------------------+------------------------------------------------------+
+   | RX_NUM_LINKS        |                           1                          |
+   +---------------------+------------------------------------------------------+
+   | RX_OS_NUM_LINKS     |                           1                          |
+   +---------------------+------------------------------------------------------+
+   | RX_JESD_M           |                          16                          |
+   +---------------------+------------------------------------------------------+
+   | RX_JESD_L           |                           8                          |
+   +---------------------+------------------------------------------------------+
+   | RX_JESD_S           |                           1                          |
+   +---------------------+------------------------------------------------------+
+   | RX_JESD_NP          |                          16                          |
+   +---------------------+------------------------------------------------------+
+   | RX_TPL_WIDTH        |                          {}                          |
+   +---------------------+------------------------------------------------------+
+   | TX_JESD_M           |                          16                          |
+   +---------------------+------------------------------------------------------+
+   | TX_JESD_L           |                           8                          |
+   +---------------------+------------------------------------------------------+
+   | TX_JESD_S           |                           1                          |
+   +---------------------+------------------------------------------------------+
+   | TX_JESD_NP          |                          16                          |
+   +---------------------+------------------------------------------------------+
+   | TX_TPL_WIDTH        |                          {}                          |
+   +---------------------+------------------------------------------------------+
+   | RX_OS_JESD_M        |                           0                          |
+   +---------------------+------------------------------------------------------+
+   | RX_OS_JESD_L        |                           0                          |
+   +---------------------+------------------------------------------------------+
+   | RX_OS_JESD_S        |                           0                          |
+   +---------------------+------------------------------------------------------+
+   | RX_OS_JESD_NP       |                           0                          |
+   +---------------------+------------------------------------------------------+
+   | RX_OS_TPL_WIDTH     |                          {}                          |
+   +---------------------+------------------------------------------------------+
 
+The result of the build, if parameters were used, will be in a folder named by
+the configuration used, with truncation of some keywords (``JESD``, ``LANE``,
+etc. are removed) so the path will not exceed OS limits.
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+The XCVR automation flow creates a sub-build under
+``hdl/projects/xcvr_wizard/$carrier/``. For details on how the folder name is
+formed, see :ref:`xgt_wizard_build_output`.
+
+Refer to the :ref:`build_hdl` user guide for a more comprehensive build guide.
 
 Other considerations
 -------------------------------------------------------------------------------
