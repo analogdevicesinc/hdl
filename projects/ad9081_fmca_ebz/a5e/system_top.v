@@ -219,7 +219,6 @@ module system_top #(
   wire [RX_JESD_L+RX2_JESD_L-1:0] gts_reset_o_src_rs_grant_src_rs_grant;
   wire [RX_JESD_L+RX2_JESD_L-1:0] gts_reset_i_src_rs_req_src_rs_req;
   wire [PHY_OS_PMA_CLK_IDX:0] gts_reset_o_pma_cu_clk_clk;
-  wire          gts_reset_i_refclk_bus_out_refclk_bus_out;
   wire [ 9:0]   jesd204_phy_o_refclk_bus_out_refclk_bus_out;
 
   wire  [ 7:0]  spi_csn_s;
@@ -474,7 +473,7 @@ module system_top #(
     .i_refclk_rdy_data                                          (refclk_ready),
 
     .system_pll_clk_clk                                         (syspll_clk),
-    .system_pll_lock_system_pll_lock                            (syspll_lock),
+    .system_pll_lock_o_pll_lock                                 (syspll_lock),
 
     .phy_tx_pll_locked_o_tx_pll_locked                          (phy_tx_pll_locked_o_tx_pll_locked),
     .tx_pll_locked_o_tx_pll_locked                              (phy_tx_pll_locked_o_tx_pll_locked[TX_JESD_L-1:0]),
