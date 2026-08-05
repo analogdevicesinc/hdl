@@ -89,4 +89,4 @@ set_property -dict {PACKAGE_PIN A37 IOSTANDARD LVCMOS18                         
 set_property -dict {PACKAGE_PIN B38 IOSTANDARD LVCMOS18                                     } [get_ports fmc_bob_xud1_gpio4]; ## LA25_N
 set_property -dict {PACKAGE_PIN C37 IOSTANDARD LVCMOS18                                     } [get_ports fmc_bob_xud1_gpio5]; ## LA25_P
 
-create_clock -name aurora_ref_clk -period 8.13802 [get_ports aurora_refclk_p]
+create_clock -name aurora_ref_clk -period 6.4 [get_ports aurora_refclk_p]

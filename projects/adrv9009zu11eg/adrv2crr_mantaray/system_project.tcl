@@ -53,6 +53,6 @@ adi_project_files adrv9009zu11eg_mantaray [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
  ]
 
-set_property strategy Performance_EarlyBlockPlacement [get_runs impl_1]
+set_property strategy Performance_ExplorePostRoutePhysOpt [get_runs impl_1]
 
 adi_project_run adrv9009zu11eg_mantaray
