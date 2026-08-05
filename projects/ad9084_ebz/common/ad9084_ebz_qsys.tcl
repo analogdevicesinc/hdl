@@ -8,6 +8,13 @@ set JESD_MODE  $ad_project_params(JESD_MODE)
 set RX_LANE_RATE [expr $ad_project_params(RX_LANE_RATE) * 1000]
 set TX_LANE_RATE [expr $ad_project_params(TX_LANE_RATE) * 1000]
 
+# Transceiver tile of the carrier. The default is the Agilex 7 F-Tile, where the
+# PHY is embedded in the adi_jesd204 core. On the Agilex 5 E-Tile (GTS) the PHY
+# is a separate core shared by the RX and TX links.
+set TRANSCEIVER_TYPE [ expr { [info exists TRANSCEIVER_TYPE] \
+                          ? $TRANSCEIVER_TYPE : "F-Tile" } ]
+set EXTERNAL_PHY [expr {$TRANSCEIVER_TYPE == "E-Tile"} ? 1 : 0]
+
 set ASYMMETRIC_A_B_MODE [ expr { [info exists ad_project_params(ASYMMETRIC_A_B_MODE)] \
                           ? $ad_project_params(ASYMMETRIC_A_B_MODE) : 0 } ]
 if {$ASYMMETRIC_A_B_MODE} {
@@ -59,17 +66,26 @@ if {$RX_DMA_SAMPLE_WIDTH == 12} {
 
 if {$JESD_MODE == "8B10B"} {
   set RX_DATAPATH_WIDTH 4
+  set RX_TPL_DATAPATH_WIDTH 4
   if {$RX_JESD_NP == 12} {
-    set RX_DATAPATH_WIDTH 6
+    set RX_TPL_DATAPATH_WIDTH 6
   }
 } else {
   set RX_DATAPATH_WIDTH 8
+  set RX_TPL_DATAPATH_WIDTH 8
   if {$RX_JESD_NP == 12} {
-    set RX_DATAPATH_WIDTH 12
+    set RX_TPL_DATAPATH_WIDTH 12
   }
 }
 
-set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8* $RX_DATAPATH_WIDTH / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
+# The transport layer must process at least one full frame per beat, otherwise
+# the samples per channel would round down to zero.
+set RX_OCTETS_PER_FRAME [expr $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_FRAME * $RX_SAMPLE_WIDTH / (8 * $RX_NUM_OF_LANES)] ; # F
+if {$RX_OCTETS_PER_FRAME > $RX_TPL_DATAPATH_WIDTH} {
+  set RX_TPL_DATAPATH_WIDTH $RX_OCTETS_PER_FRAME
+}
+
+set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8* $RX_TPL_DATAPATH_WIDTH / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)]
 
 # TX parameters
 set TX_NUM_LINKS $ad_project_params(TX_NUM_LINKS)
@@ -95,17 +111,24 @@ if {$TX_DMA_SAMPLE_WIDTH == 12} {
 
 if {$JESD_MODE == "8B10B"} {
   set TX_DATAPATH_WIDTH 4
+  set TX_TPL_DATAPATH_WIDTH 4
   if {$TX_JESD_NP == 12} {
-    set TX_DATAPATH_WIDTH 6
+    set TX_TPL_DATAPATH_WIDTH 6
   }
 } else {
   set TX_DATAPATH_WIDTH 8
+  set TX_TPL_DATAPATH_WIDTH 8
   if {$TX_JESD_NP == 12} {
-    set TX_DATAPATH_WIDTH 12
+    set TX_TPL_DATAPATH_WIDTH 12
   }
 }
 
-set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
+set TX_OCTETS_PER_FRAME [expr $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_FRAME * $TX_SAMPLE_WIDTH / (8 * $TX_NUM_OF_LANES)] ; # F
+if {$TX_OCTETS_PER_FRAME > $TX_TPL_DATAPATH_WIDTH} {
+  set TX_TPL_DATAPATH_WIDTH $TX_OCTETS_PER_FRAME
+}
+
+set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_TPL_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
 set adc_fifo_name apollo_rx_fifo
 set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
@@ -226,10 +249,58 @@ set DEVICE_CLK_RATE [expr $ad_project_params(DEVICE_CLK_RATE)*1000000]
 # JESD204B clock bridges
 
 add_instance rx_device_clk altera_clock_bridge
-set_instance_parameter_value rx_device_clk {EXPLICIT_CLOCK_RATE} $DEVICE_CLK_RATE
+set_instance_parameter_value rx_device_clk {EXPLICIT_CLOCK_RATE} [expr $DEVICE_CLK_RATE * $RX_DATAPATH_WIDTH / $RX_TPL_DATAPATH_WIDTH]
 
 add_instance tx_device_clk altera_clock_bridge
-set_instance_parameter_value tx_device_clk {EXPLICIT_CLOCK_RATE} $DEVICE_CLK_RATE
+set_instance_parameter_value tx_device_clk {EXPLICIT_CLOCK_RATE} [expr $DEVICE_CLK_RATE * $TX_DATAPATH_WIDTH / $TX_TPL_DATAPATH_WIDTH]
+
+if {$EXTERNAL_PHY} {
+  foreach phy {jesd204_phy_a jesd204_phy_b} {
+    add_instance ${phy} jesd204_e_tile_phy
+    set_instance_parameter_value ${phy} {LINK_MODE} $ENCODER_SEL
+    set_instance_parameter_value ${phy} {LANE_RATE} $RX_LANE_RATE
+    set_instance_parameter_value ${phy} {REFCLK_FREQUENCY} $REF_CLK_RATE
+    set_instance_parameter_value ${phy} {NUM_OF_LANES} $RX_JESD_L
+    set_instance_parameter_value ${phy} {INPUT_PIPELINE_STAGES} {2}
+    set_instance_parameter_value ${phy} {EXTERNAL_LINK_CLK} {1}
+    set_instance_parameter_value ${phy} {INSTANTIATE_RESET_CONTROLLER} {0}
+
+    add_interface ${phy}_system_pll_clk clock sink
+    set_interface_property ${phy}_system_pll_clk EXPORT_OF ${phy}.system_pll_clk
+
+    add_interface ${phy}_system_pll_lock conduit end
+    set_interface_property ${phy}_system_pll_lock EXPORT_OF ${phy}.system_pll_lock
+  }
+
+  # GTS reset sequencer
+  add_instance gts_reset_phy intel_srcss_gts
+  set_instance_parameter_value gts_reset_phy NUM_BANKS_SHORELINE [expr 2 * int(ceil($RX_NUM_OF_LANES / 4.0))]
+  set_instance_parameter_value gts_reset_phy NUM_LANES_SHORELINE $RX_NUM_OF_LANES
+
+  set_interface_property gts_reset_src_rs_priority EXPORT_OF gts_reset_phy.i_src_rs_priority
+  set_interface_property gts_reset_i_refclk_on EXPORT_OF gts_reset_phy.i_refclk_on
+  set_interface_property gts_reset_o_refclk_on_ack EXPORT_OF gts_reset_phy.o_refclk_on_ack
+  set_interface_property gts_reset_i_src_rs_refclk_status_bus EXPORT_OF gts_reset_phy.i_src_rs_refclk_status_bus
+  set_interface_property gts_reset_o_src_rs_refclk_cmd_bus EXPORT_OF gts_reset_phy.o_src_rs_refclk_cmd_bus
+  set_interface_property gts_reset_o_src_rs_grant EXPORT_OF gts_reset_phy.o_src_rs_grant
+  set_interface_property gts_reset_i_src_rs_req EXPORT_OF gts_reset_phy.i_src_rs_req
+  set_interface_property gts_reset_o_pma_cu_clk EXPORT_OF gts_reset_phy.o_pma_cu_clk
+  set_interface_property gts_reset_o_refclk_fail_status EXPORT_OF gts_reset_phy.o_refclk_fail_status
+
+  foreach phy {jesd204_phy_a jesd204_phy_b} {
+    add_interface ${phy}_i_pma_cu_clk conduit end
+    add_interface ${phy}_i_src_rs_grant conduit end
+    add_interface ${phy}_o_src_rs_req conduit end
+    add_interface ${phy}_i_refclk_cmd_bus_in conduit end
+    add_interface ${phy}_o_refclk_status_bus_out conduit end
+
+    set_interface_property ${phy}_i_pma_cu_clk EXPORT_OF ${phy}.i_pma_cu_clk
+    set_interface_property ${phy}_i_src_rs_grant EXPORT_OF ${phy}.i_src_rs_grant
+    set_interface_property ${phy}_o_src_rs_req EXPORT_OF ${phy}.o_src_rs_req
+    set_interface_property ${phy}_i_refclk_cmd_bus_in EXPORT_OF ${phy}.i_refclk_cmd_bus_in
+    set_interface_property ${phy}_o_refclk_status_bus_out EXPORT_OF ${phy}.o_refclk_status_bus_out
+  }
+}
 
 # RX JESD204 PHY-Link layer
 
@@ -242,10 +313,12 @@ set_instance_parameter_value apollo_rx_jesd204 {LANE_RATE} $RX_LANE_RATE
 set_instance_parameter_value apollo_rx_jesd204 {SYSCLK_FREQUENCY} {100.0}
 set_instance_parameter_value apollo_rx_jesd204 {REFCLK_FREQUENCY} $REF_CLK_RATE
 set_instance_parameter_value apollo_rx_jesd204 {INPUT_PIPELINE_STAGES} {2}
-set_instance_parameter_value apollo_rx_jesd204 {NUM_OF_LANES} [expr $RX_NUM_OF_LANES + $RX_B_NUM_OF_LANES]
+set_instance_parameter_value apollo_rx_jesd204 {NUM_OF_LANES} [expr $RX_JESD_L + $RX_B_JESD_L]
+set_instance_parameter_value apollo_rx_jesd204 {NUM_OF_LINKS} $RX_NUM_LINKS
 set_instance_parameter_value apollo_rx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 set_instance_parameter_value apollo_rx_jesd204 {DATA_PATH_WIDTH} $RX_DATAPATH_WIDTH
-set_instance_parameter_value apollo_rx_jesd204 {TPL_DATA_PATH_WIDTH} $RX_DATAPATH_WIDTH
+set_instance_parameter_value apollo_rx_jesd204 {TPL_DATA_PATH_WIDTH} $RX_TPL_DATAPATH_WIDTH
+set_instance_parameter_value apollo_rx_jesd204 {EXTERNAL_PHY} $EXTERNAL_PHY
 
 add_instance apollo_rx_tpl ad_ip_jesd204_tpl_adc
 set_instance_parameter_value apollo_rx_tpl {ID} {0}
@@ -254,7 +327,7 @@ set_instance_parameter_value apollo_rx_tpl {NUM_LANES} [expr $RX_NUM_OF_LANES + 
 set_instance_parameter_value apollo_rx_tpl {BITS_PER_SAMPLE} $RX_SAMPLE_WIDTH
 set_instance_parameter_value apollo_rx_tpl {CONVERTER_RESOLUTION} $RX_SAMPLE_WIDTH
 set_instance_parameter_value apollo_rx_tpl {TWOS_COMPLEMENT} {1}
-set_instance_parameter_value apollo_rx_tpl {OCTETS_PER_BEAT} $RX_DATAPATH_WIDTH
+set_instance_parameter_value apollo_rx_tpl {OCTETS_PER_BEAT} $RX_TPL_DATAPATH_WIDTH
 set_instance_parameter_value apollo_rx_tpl {DMA_BITS_PER_SAMPLE} $RX_DMA_SAMPLE_WIDTH
 
 # TX JESD204 PHY+Link
@@ -267,10 +340,12 @@ set_instance_parameter_value apollo_tx_jesd204 {SOFT_PCS} {true}
 set_instance_parameter_value apollo_tx_jesd204 {LANE_RATE} $TX_LANE_RATE
 set_instance_parameter_value apollo_tx_jesd204 {SYSCLK_FREQUENCY} {100.0}
 set_instance_parameter_value apollo_tx_jesd204 {REFCLK_FREQUENCY} $REF_CLK_RATE
-set_instance_parameter_value apollo_tx_jesd204 {NUM_OF_LANES} [expr $TX_NUM_OF_LANES + $TX_B_NUM_OF_LANES]
+set_instance_parameter_value apollo_tx_jesd204 {NUM_OF_LANES} [expr $TX_JESD_L + $TX_B_JESD_L]
+set_instance_parameter_value apollo_tx_jesd204 {NUM_OF_LINKS} $TX_NUM_LINKS
 set_instance_parameter_value apollo_tx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 set_instance_parameter_value apollo_tx_jesd204 {DATA_PATH_WIDTH} $TX_DATAPATH_WIDTH
-set_instance_parameter_value apollo_tx_jesd204 {TPL_DATA_PATH_WIDTH} $TX_DATAPATH_WIDTH
+set_instance_parameter_value apollo_tx_jesd204 {TPL_DATA_PATH_WIDTH} $TX_TPL_DATAPATH_WIDTH
+set_instance_parameter_value apollo_tx_jesd204 {EXTERNAL_PHY} $EXTERNAL_PHY
 
 add_instance apollo_tx_tpl ad_ip_jesd204_tpl_dac
 set_instance_parameter_value apollo_tx_tpl {ID} {0}
@@ -278,7 +353,7 @@ set_instance_parameter_value apollo_tx_tpl {NUM_CHANNELS} [expr $TX_NUM_OF_CONVE
 set_instance_parameter_value apollo_tx_tpl {NUM_LANES} [expr $TX_NUM_OF_LANES + $TX_B_NUM_OF_LANES]
 set_instance_parameter_value apollo_tx_tpl {BITS_PER_SAMPLE} $TX_SAMPLE_WIDTH
 set_instance_parameter_value apollo_tx_tpl {CONVERTER_RESOLUTION} $TX_SAMPLE_WIDTH
-set_instance_parameter_value apollo_tx_tpl {OCTETS_PER_BEAT} $TX_DATAPATH_WIDTH
+set_instance_parameter_value apollo_tx_tpl {OCTETS_PER_BEAT} $TX_TPL_DATAPATH_WIDTH
 set_instance_parameter_value apollo_tx_tpl {DMA_BITS_PER_SAMPLE} $TX_DMA_SAMPLE_WIDTH
 
 # pack(s) & unpack(s)
@@ -311,7 +386,7 @@ if {$ASYMMETRIC_A_B_MODE} {
 # RX and TX data offload buffers
 
 ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width true
+ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 
 if {$ASYMMETRIC_A_B_MODE} {
   ad_adcfifo_create $adc_b_fifo_name $adc_b_data_width $adc_b_dma_data_width $adc_b_fifo_address_width
@@ -431,6 +506,10 @@ if {$ASYMMETRIC_A_B_MODE} {
 
 add_connection rx_device_clk.out_clk apollo_rx_jesd204.device_clk
 add_connection rx_device_clk.out_clk apollo_rx_tpl.link_clk
+if {$EXTERNAL_PHY} {
+  add_connection jesd204_phy_a.rx_clkout jesd204_phy_a.rx_link_clock
+  add_connection jesd204_phy_b.rx_clkout jesd204_phy_b.rx_link_clock
+}
 add_connection rx_device_clk.out_clk apollo_rx_cpack.clk
 add_connection rx_device_clk.out_clk $adc_fifo_name.if_adc_clk
 if {$ASYMMETRIC_A_B_MODE} {
@@ -440,6 +519,10 @@ if {$ASYMMETRIC_A_B_MODE} {
 
 add_connection tx_device_clk.out_clk apollo_tx_jesd204.device_clk
 add_connection tx_device_clk.out_clk apollo_tx_tpl.link_clk
+if {$EXTERNAL_PHY} {
+  add_connection jesd204_phy_a.tx_clkout jesd204_phy_a.tx_link_clock
+  add_connection jesd204_phy_b.tx_clkout jesd204_phy_b.tx_link_clock
+}
 add_connection tx_device_clk.out_clk apollo_tx_upack.clk
 add_connection tx_device_clk.out_clk $dac_fifo_name.if_dac_clk
 if {$ASYMMETRIC_A_B_MODE} {
@@ -497,36 +580,138 @@ add_connection sys_dma_clk.clk_reset $dac_fifo_name.if_dma_rst
 ## Exported signals
 #
 
-add_interface rx_ref_clk       clock   sink
-add_interface rx_sysref        conduit end
-add_interface rx_sync          conduit end
-add_interface rx_serial_data   conduit end
-add_interface rx_serial_data_n conduit end
+add_interface rx_ref_clk_a       clock   sink
+add_interface rx_ref_clk_b       clock   sink
+add_interface rx_sysref          conduit end
+add_interface rx_sync            conduit end
+add_interface rx_serial_data_a   conduit end
+add_interface rx_serial_data_a_n conduit end
+add_interface rx_serial_data_b   conduit end
+add_interface rx_serial_data_b_n conduit end
 
-add_interface tx_ref_clk       clock   sink
-add_interface rx_device_clk    clock   sink
-add_interface tx_serial_data   conduit end
-add_interface tx_serial_data_n conduit end
-add_interface tx_sysref        conduit end
-add_interface tx_sync          conduit end
-add_interface tx_device_clk    clock   sink
-add_interface tx_fifo_bypass   conduit end
+add_interface tx_ref_clk_a       clock   sink
+add_interface tx_ref_clk_b       clock   sink
+add_interface rx_device_clk      clock   sink
+add_interface tx_serial_data_a   conduit end
+add_interface tx_serial_data_a_n conduit end
+add_interface tx_serial_data_b   conduit end
+add_interface tx_serial_data_b_n conduit end
+add_interface tx_sysref          conduit end
+add_interface tx_sync            conduit end
+add_interface tx_device_clk      clock   sink
+add_interface tx_fifo_bypass     conduit end
 # add_interface tx_b_fifo_bypass conduit end
 
-set_interface_property rx_ref_clk       EXPORT_OF apollo_rx_jesd204.ref_clk
 set_interface_property rx_sysref        EXPORT_OF apollo_rx_jesd204.sysref
 set_interface_property rx_sync          EXPORT_OF apollo_rx_jesd204.sync
-set_interface_property rx_serial_data   EXPORT_OF apollo_rx_jesd204.serial_data
-set_interface_property rx_serial_data_n EXPORT_OF apollo_rx_jesd204.serial_data_n
 set_interface_property rx_device_clk    EXPORT_OF rx_device_clk.in_clk
 
-set_interface_property tx_ref_clk       EXPORT_OF apollo_tx_jesd204.ref_clk
 set_interface_property tx_sysref        EXPORT_OF apollo_tx_jesd204.sysref
 set_interface_property tx_sync          EXPORT_OF apollo_tx_jesd204.sync
-set_interface_property tx_serial_data   EXPORT_OF apollo_tx_jesd204.serial_data
-set_interface_property tx_serial_data_n EXPORT_OF apollo_tx_jesd204.serial_data_n
 set_interface_property tx_device_clk    EXPORT_OF tx_device_clk.in_clk
 set_interface_property tx_fifo_bypass   EXPORT_OF $dac_fifo_name.if_bypass
+
+if {!$EXTERNAL_PHY} {
+  set_interface_property rx_ref_clk       EXPORT_OF apollo_rx_jesd204.ref_clk
+  set_interface_property rx_serial_data   EXPORT_OF apollo_rx_jesd204.serial_data
+  set_interface_property rx_serial_data_n EXPORT_OF apollo_rx_jesd204.serial_data_n
+  set_interface_property tx_ref_clk       EXPORT_OF apollo_tx_jesd204.ref_clk
+  set_interface_property tx_serial_data   EXPORT_OF apollo_tx_jesd204.serial_data
+  set_interface_property tx_serial_data_n EXPORT_OF apollo_tx_jesd204.serial_data_n
+} else {
+  # The external PHY owns the serial data and reference clock pins, and the link
+  # layer cores drive its reset/ready handshake.
+  set_interface_property rx_ref_clk_a         EXPORT_OF jesd204_phy_a.rx_ref_clk
+  set_interface_property rx_ref_clk_b         EXPORT_OF jesd204_phy_b.rx_ref_clk
+  set_interface_property rx_serial_data_a     EXPORT_OF jesd204_phy_a.rx_serial_data
+  set_interface_property rx_serial_data_a_n   EXPORT_OF jesd204_phy_a.rx_serial_data_n
+  set_interface_property rx_serial_data_b     EXPORT_OF jesd204_phy_b.rx_serial_data
+  set_interface_property rx_serial_data_b_n   EXPORT_OF jesd204_phy_b.rx_serial_data_n
+  set_interface_property tx_ref_clk_a         EXPORT_OF jesd204_phy_a.tx_ref_clk
+  set_interface_property tx_ref_clk_b         EXPORT_OF jesd204_phy_b.tx_ref_clk
+  set_interface_property tx_serial_data_a     EXPORT_OF jesd204_phy_a.tx_serial_data
+  set_interface_property tx_serial_data_a_n   EXPORT_OF jesd204_phy_a.tx_serial_data_n
+  set_interface_property tx_serial_data_b     EXPORT_OF jesd204_phy_b.tx_serial_data
+  set_interface_property tx_serial_data_b_n   EXPORT_OF jesd204_phy_b.tx_serial_data_n
+
+  add_connection apollo_tx_jesd204.if_up_rst jesd204_phy_a.tx_link_reset
+  add_connection apollo_tx_jesd204.reset     jesd204_phy_a.tx_reset
+
+  add_connection apollo_tx_jesd204.if_up_rst jesd204_phy_b.tx_link_reset
+  add_connection apollo_tx_jesd204.reset     jesd204_phy_b.tx_reset
+
+  # Both PHYs share the TX reset handshake, so the ack/ready pair is exported
+  # from each PHY and reduced in system_top.v, the same way the RX side is.
+  add_interface jesd204_phy_a_tx_ready conduit end
+  add_interface jesd204_phy_a_tx_reset_ack conduit end
+  add_interface jesd204_phy_b_tx_ready conduit end
+  add_interface jesd204_phy_b_tx_reset_ack conduit end
+  add_interface apollo_tx_jesd204_ready conduit end
+  add_interface apollo_tx_jesd204_reset_ack conduit end
+
+  set_interface_property jesd204_phy_a_tx_ready EXPORT_OF jesd204_phy_a.tx_ready
+  set_interface_property jesd204_phy_a_tx_reset_ack EXPORT_OF jesd204_phy_a.tx_reset_ack
+  set_interface_property jesd204_phy_b_tx_ready EXPORT_OF jesd204_phy_b.tx_ready
+  set_interface_property jesd204_phy_b_tx_reset_ack EXPORT_OF jesd204_phy_b.tx_reset_ack
+  set_interface_property apollo_tx_jesd204_ready EXPORT_OF apollo_tx_jesd204.ready
+  set_interface_property apollo_tx_jesd204_reset_ack EXPORT_OF apollo_tx_jesd204.reset_ack
+
+  # Exported separately so TX_L may be smaller than RX_L - the PHY is sized for
+  # the RX lane count, so Quartus would complain about a width mismatch.
+  add_interface phy_a_tx_pll_locked conduit end
+  set_interface_property phy_a_tx_pll_locked EXPORT_OF jesd204_phy_a.tx_pll_locked
+
+  add_interface phy_b_tx_pll_locked conduit end
+  set_interface_property phy_b_tx_pll_locked EXPORT_OF jesd204_phy_b.tx_pll_locked
+
+  add_interface tx_pll_locked conduit end
+  set_interface_property tx_pll_locked EXPORT_OF apollo_tx_jesd204.tx_pll_locked
+
+  for {set i 0} {$i < [expr $TX_NUM_OF_LANES / 2]} {incr i} {
+    add_connection apollo_tx_jesd204.tx_phy${i} jesd204_phy_a.phy_tx_${i}
+  }
+
+
+  for {set i [expr $TX_NUM_OF_LANES / 2]} {$i < $TX_NUM_OF_LANES} {incr i} {
+    set idx [expr $i - ${TX_NUM_OF_LANES} / 2]
+    add_connection apollo_tx_jesd204.tx_phy${i} jesd204_phy_b.phy_tx_${idx}
+  }
+
+  add_connection apollo_rx_jesd204.if_up_rst jesd204_phy_a.rx_link_reset
+  add_connection apollo_rx_jesd204.reset     jesd204_phy_a.rx_reset
+
+  add_connection apollo_rx_jesd204.if_up_rst jesd204_phy_b.rx_link_reset
+  add_connection apollo_rx_jesd204.reset     jesd204_phy_b.rx_reset
+
+  add_interface jesd204_phy_a_rx_is_lockedtodata conduit end
+  add_interface jesd204_phy_a_rx_ready conduit end
+  add_interface jesd204_phy_a_rx_reset_ack conduit end
+  add_interface jesd204_phy_b_rx_is_lockedtodata conduit end
+  add_interface jesd204_phy_b_rx_ready conduit end
+  add_interface jesd204_phy_b_rx_reset_ack conduit end
+  add_interface apollo_rx_jesd204_rx_is_lockedtodata conduit end
+  add_interface apollo_rx_jesd204_ready conduit end
+  add_interface apollo_rx_jesd204_reset_ack conduit end
+
+  set_interface_property jesd204_phy_a_rx_is_lockedtodata EXPORT_OF jesd204_phy_a.rx_is_lockedtodata
+  set_interface_property jesd204_phy_a_rx_ready EXPORT_OF jesd204_phy_a.rx_ready
+  set_interface_property jesd204_phy_a_rx_reset_ack EXPORT_OF jesd204_phy_a.rx_reset_ack
+  set_interface_property jesd204_phy_b_rx_is_lockedtodata EXPORT_OF jesd204_phy_b.rx_is_lockedtodata
+  set_interface_property jesd204_phy_b_rx_ready EXPORT_OF jesd204_phy_b.rx_ready
+  set_interface_property jesd204_phy_b_rx_reset_ack EXPORT_OF jesd204_phy_b.rx_reset_ack
+  set_interface_property apollo_rx_jesd204_rx_is_lockedtodata EXPORT_OF apollo_rx_jesd204.rx_is_lockedtodata
+  set_interface_property apollo_rx_jesd204_ready EXPORT_OF apollo_rx_jesd204.ready
+  set_interface_property apollo_rx_jesd204_reset_ack EXPORT_OF apollo_rx_jesd204.reset_ack
+
+  for {set i 0} {$i < [expr $RX_NUM_OF_LANES / 2]} {incr i} {
+    add_connection jesd204_phy_a.phy_rx_${i} apollo_rx_jesd204.rx_phy${i}
+  }
+
+  for {set i [expr $RX_NUM_OF_LANES / 2]} {$i < $RX_NUM_OF_LANES} {incr i} {
+    set idx [expr $i - $RX_NUM_OF_LANES / 2]
+    add_connection jesd204_phy_b.phy_rx_${idx} apollo_rx_jesd204.rx_phy${i}
+  }
+}
 if {$ASYMMETRIC_A_B_MODE} {
   set_interface_property tx_b_fifo_bypass EXPORT_OF $dac_b_fifo_name.if_bypass
 }
@@ -562,7 +747,11 @@ add_connection apollo_rx_cpack.if_packed_fifo_wr_data $adc_fifo_name.if_adc_wdat
 add_connection $adc_fifo_name.if_dma_xfer_req apollo_rx_dma.if_s_axis_xfer_req
 add_connection $adc_fifo_name.m_axis apollo_rx_dma.s_axis
 # RX dma to HPS
-ad_dma_interconnect apollo_rx_dma.m_dest_axi
+if {$EXTERNAL_PHY} {
+  ad_dma_interconnect apollo_rx_dma.m_dest_axi 0x0000000 $adc_dma_data_width
+} else {
+  ad_dma_interconnect apollo_rx_dma.m_dest_axi
+}
 
 if {$ASYMMETRIC_A_B_MODE} {
   add_connection $adc_b_fifo_name.if_dma_xfer_req apollo_rx_b_dma.if_s_axis_xfer_req
@@ -597,7 +786,11 @@ add_connection apollo_tx_dma.if_m_axis_xfer_req $dac_fifo_name.if_dma_xfer_req
 add_connection apollo_tx_dma.m_axis $dac_fifo_name.s_axis
 
 # TX dma to HPS
-ad_dma_interconnect apollo_tx_dma.m_src_axi
+if {$EXTERNAL_PHY} {
+  ad_dma_interconnect apollo_tx_dma.m_src_axi 0x0000000 $dac_dma_data_width
+} else {
+  ad_dma_interconnect apollo_tx_dma.m_src_axi
+}
 
 
 if {$ASYMMETRIC_A_B_MODE} {
@@ -614,8 +807,19 @@ if {$ASYMMETRIC_A_B_MODE} {
 ## NOTE: if bridge is used, the address will be bridge_base_addr + peripheral_base_addr
 #
 
-ad_cpu_interconnect 0x00000000 apollo_rx_jesd204.phy_reconfig "avl_mm_bridge_0" 0x10000000 25
-ad_cpu_interconnect 0x01000000 apollo_tx_jesd204.phy_reconfig "avl_mm_bridge_0"
+if {!$EXTERNAL_PHY} {
+  ad_cpu_interconnect 0x00000000 apollo_rx_jesd204.phy_reconfig "avl_mm_bridge_0" 0x10000000 25
+  ad_cpu_interconnect 0x01000000 apollo_tx_jesd204.phy_reconfig "avl_mm_bridge_0"
+} else {
+  # One bridge for rx_adxcvr, the other for tx_adxcvr
+  ad_cpu_interconnect 0x00000000 jesd204_phy_a.reconfig_avmm "avl_mm_bridge_0" 0x01000000 22
+  ad_cpu_interconnect 0x00000000 jesd204_phy_b.reconfig_avmm "avl_mm_bridge_1" 0x02000000 22
+  set_instance_parameter_value avl_mm_bridge_0 {MAX_PENDING_RESPONSES} {1}
+  add_connection sys_clk.clk jesd204_phy_a.reconfig_clk
+  add_connection sys_clk.clk_reset jesd204_phy_a.reconfig_reset
+  add_connection sys_clk.clk jesd204_phy_b.reconfig_clk
+  add_connection sys_clk.clk_reset jesd204_phy_b.reconfig_reset
+}
 
 ad_cpu_interconnect 0x000C0000 apollo_rx_jesd204.link_reconfig
 ad_cpu_interconnect 0x000C4000 apollo_rx_jesd204.link_management
