@@ -99,8 +99,11 @@ proc jesd204_e_tile_phy_composition_callback {} {
   set_instance_parameter_value native_phy tx_pll_txuserclk1_enable 1
   set_instance_parameter_value native_phy tx_pll_txuserclk_div $usr_pll_div
   set_instance_parameter_value native_phy enable_port_tx_clkout2 1
-  set_instance_parameter_value native_phy pldif_tx_clkout_sel "TX_USER_CLK1"
-  set_instance_parameter_value native_phy pldif_tx_clkout_div 1
+  # set_instance_parameter_value native_phy pldif_tx_clkout_sel "TX_USER_CLK1"
+  # set_instance_parameter_value native_phy pldif_tx_clkout_div 1
+  #TODO: Fix me
+  set_instance_parameter_value native_phy pldif_tx_clkout_sel "TX_WORD_CLK"
+  set_instance_parameter_value native_phy pldif_tx_clkout_div 2
   set_instance_parameter_value native_phy pldif_tx_clkout2_sel "TX_WORD_CLK"
   set_instance_parameter_value native_phy pldif_tx_clkout2_div 2
   set_instance_parameter_value native_phy tx_pll_realtime_lock_enable 1

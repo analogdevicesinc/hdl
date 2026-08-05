@@ -100,7 +100,7 @@ add_interface config conduit end
 set_interface_property config associatedClock core_clock
 set_interface_property config associatedReset core_reset
 
-add_interface_port config core_cfg_lanes_disable lanes_disable Output NUM_LANES
+add_interface_port config core_cfg_lanes_disable lanes_disable Output NUM_LINKS*NUM_LANES
 add_interface_port config core_cfg_links_disable links_disable Output NUM_LINKS
 add_interface_port config core_cfg_octets_per_multiframe octets_per_multiframe Output 10
 add_interface_port config core_cfg_octets_per_frame octets_per_frame Output 8
@@ -132,12 +132,12 @@ set_interface_property status associatedClock core_clock
 set_interface_property status associatedReset core_reset
 
 add_interface_port status core_status_ctrl_state ctrl_state Input 2
-add_interface_port status core_status_lane_cgs_state lane_cgs_state Input 2*NUM_LANES
-add_interface_port status core_status_lane_emb_state lane_emb_state Input 3*NUM_LANES
-add_interface_port status core_status_lane_ifs_ready lane_ifs_ready Input NUM_LANES
-add_interface_port status core_status_lane_latency lane_latency Input 14*NUM_LANES
-add_interface_port status core_status_lane_frame_align_err_cnt lane_frame_align_err_cnt Input 8*NUM_LANES
-add_interface_port status core_status_err_statistics_cnt err_statistics_cnt Input 32*NUM_LANES
+add_interface_port status core_status_lane_cgs_state lane_cgs_state Input 2*NUM_LINKS*NUM_LANES
+add_interface_port status core_status_lane_emb_state lane_emb_state Input 3*NUM_LINKS*NUM_LANES
+add_interface_port status core_status_lane_ifs_ready lane_ifs_ready Input NUM_LINKS*NUM_LANES
+add_interface_port status core_status_lane_latency lane_latency Input 14*NUM_LINKS*NUM_LANES
+add_interface_port status core_status_lane_frame_align_err_cnt lane_frame_align_err_cnt Input 8*NUM_LINKS*NUM_LANES
+add_interface_port status core_status_err_statistics_cnt err_statistics_cnt Input 32*NUM_LINKS*NUM_LANES
 add_interface_port status status_synth_params0 synth_params0 Input 32
 add_interface_port status status_synth_params1 synth_params1 Input 32
 add_interface_port status status_synth_params2 synth_params2 Input 32
@@ -157,6 +157,6 @@ add_interface ilas_config conduit end
 set_interface_property ilas_config associatedClock core_clock
 set_interface_property ilas_config associatedReset core_reset
 
-add_interface_port ilas_config core_ilas_config_addr addr Input 2*NUM_LANES
-add_interface_port ilas_config core_ilas_config_data data Input 32*NUM_LANES
-add_interface_port ilas_config core_ilas_config_valid valid Input NUM_LANES
+add_interface_port ilas_config core_ilas_config_addr addr Input 2*NUM_LINKS*NUM_LANES
+add_interface_port ilas_config core_ilas_config_data data Input 32*NUM_LINKS*NUM_LANES
+add_interface_port ilas_config core_ilas_config_valid valid Input NUM_LINKS*NUM_LANES

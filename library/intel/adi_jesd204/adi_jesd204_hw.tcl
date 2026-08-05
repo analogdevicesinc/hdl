@@ -72,6 +72,11 @@ ad_ip_parameter NUM_OF_LANES POSITIVE 4 false { \
   ALLOWED_RANGES 1:16
 }
 
+ad_ip_parameter NUM_OF_LINKS POSITIVE 1 false { \
+  DISPLAY_NAME "Number of links" \
+  ALLOWED_RANGES 1:2
+}
+
 ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN 0 false { \
   DISPLAY_HINT "Clock Network" \
   DISPLAY_NAME "Clock Network" \
@@ -291,10 +296,13 @@ proc jesd204_validate {{quiet false}} {
   set device_family [get_parameter_value "DEVICE_FAMILY"]
   set device [get_parameter_value "DEVICE"]
   set lane_rate [get_parameter_value "LANE_RATE"]
-  set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
+  set real_num_of_lanes [get_parameter_value "NUM_OF_LANES"]
+  set num_of_links [get_parameter_value "NUM_OF_LINKS"]
   set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
   set link_mode [get_parameter_value "LINK_MODE"]
   set external_phy [get_parameter_value "EXTERNAL_PHY"]
+
+  set num_of_lanes [expr $real_num_of_lanes * $num_of_links]
 
   if {$device_family != "Arria 10" && $device_family != "Stratix 10" && $device_family != "Agilex 7" && $device_family != "Agilex 5"} {
     if {!$quiet} {
@@ -351,7 +359,8 @@ proc jesd204_compose {} {
   set id [get_parameter_value "ID"]
   set lane_rate [get_parameter_value "LANE_RATE"]
   set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
-  set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
+  set real_num_of_lanes [get_parameter_value "NUM_OF_LANES"]
+  set num_of_links [get_parameter_value "NUM_OF_LINKS"]
   set sysclk_frequency [get_parameter_value "SYSCLK_FREQUENCY"]
   set refclk_frequency [get_parameter_value "REFCLK_FREQUENCY"]
   set lane_map [get_parameter_value "LANE_MAP"]
@@ -366,6 +375,8 @@ proc jesd204_compose {} {
   set data_path_width [get_parameter_value "DATA_PATH_WIDTH"]
   set link_mode [get_parameter_value "LINK_MODE"]
   set external_phy [get_parameter_value "EXTERNAL_PHY"]
+
+  set num_of_lanes [expr $real_num_of_lanes * $num_of_links]
 
   set sip_tile ""
   set sip_tile_info [quartus::device::get_part_info -sip_tile $device]
@@ -669,14 +680,16 @@ proc jesd204_compose {} {
   }
 
   add_instance axi_jesd204_${tx_rx} axi_jesd204_${tx_rx}
-  set_instance_parameter_value axi_jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
+  set_instance_parameter_value axi_jesd204_${tx_rx} {NUM_LANES} $real_num_of_lanes
+  set_instance_parameter_value axi_jesd204_${tx_rx} {NUM_LINKS} $num_of_links
   set_instance_parameter_value axi_jesd204_${tx_rx} {LINK_MODE} $link_mode
 
   add_connection sys_clock.clk axi_jesd204_${tx_rx}.s_axi_clock
   add_connection sys_clock.clk_reset axi_jesd204_${tx_rx}.s_axi_reset
 
   add_instance jesd204_${tx_rx} jesd204_${tx_rx}
-  set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
+  set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $real_num_of_lanes
+  set_instance_parameter_value jesd204_${tx_rx} {NUM_LINKS} $num_of_links
   set_instance_parameter_value jesd204_${tx_rx} {ASYNC_CLK} $dual_clk_mode
   set_instance_parameter_value jesd204_${tx_rx} {TPL_DATA_PATH_WIDTH} $tpl_data_path_width
   set_instance_parameter_value jesd204_${tx_rx} {DATA_PATH_WIDTH} $data_path_width
