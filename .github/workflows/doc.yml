@@ -1,0 +1,74 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-doc:
+    runs-on: ${{ vars.RUNNER != '' && fromJSON(vars.RUNNER) || 'ubuntu-latest' }}
+    permissions:
+      contents: read
+    env:
+      SOURCE_AMD_XILINX: ${{ vars.SOURCE_AMD_XILINX }}
+
+    steps:
+    - uses: actions/checkout@v7
+    - name: Ensure SDKs
+      run: |
+        [[ -f "$SOURCE_AMD_XILINX" ]] && echo "vivado=true" >> $GITHUB_ENV || :
+
+    - name: Build libraries
+      if: ${{ env.vivado == 'true' }}
+      run: |
+        source "$SOURCE_AMD_XILINX"
+        cd library
+        make -j$(nproc)
+
+    - name: Install pip packages
+      run: |
+        python3 -m venv venv
+        source ./venv/bin/activate
+        python3 -m ensurepip
+        pip3 install -r docs/requirements.txt --upgrade
+
+    - name: Build doc
+      run: |
+        source ./venv/bin/activate
+
+        export GIT_LFS_TO_LINKS="true"
+        export GIT_ORG_REPOSITORY="${{ github.repository }}"
+        [ "${{ github.event_name }}" = "pull_request" ] \
+          && export GIT_BRANCH="${{ github.event.pull_request.head.ref }}" \
+          || export GIT_BRANCH="${{ github.ref_name }}"
+
+        [[ "${{ runner.debug }}" != "1" ]] && j_="-jauto"
+        cd docs
+        sphinx-build -b html $j_ -w "$warnfile" . _build/html --keep-going || err=$?
+        rm -rf _build/html/_sources
+
+    - name: Store the generated doc
+      uses: actions/upload-artifact@v7
+      with:
+        name: html
+        path: docs/_build/html
+
+  deploy:
+    runs-on: ${{ vars.RUNNER != '' && fromJSON(vars.RUNNER) || 'ubuntu-latest' }}
+    needs: [build-doc]
+    concurrency:
+      group: gh-pages
+    permissions:
+      contents: write
+    if: >
+      github.ref == 'refs/heads/main' ||
+      github.event_name == 'pull_request' ||
+      github.ref_type == 'tag'
+
+    steps:
+    - uses: analogdevicesinc/doctools/gh-pages-deploy@action
+      with:
+        new_tag: ${{ github.ref_type == 'tag' }}
+        tag: ${{ github.ref_name }}
+        name: html
+
