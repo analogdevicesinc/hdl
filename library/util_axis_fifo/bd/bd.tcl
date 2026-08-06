@@ -44,12 +44,6 @@ proc async_clock_check {cellpath} {
 	set_property "CONFIG.ASYNC_CLK" $clk_async $ip
 }
 
-proc set_property_propagated {property value ip} {
-	if {[get_property "CONFIG.${property}.VALUE_SRC" $ip] == "PROPAGATED"} {
-		set_property "CONFIG.${property}" $value $ip
-	}
-}
-
 proc parameter_set {cellpath} {
 	set ip [get_bd_cells $cellpath]
 
@@ -60,24 +54,24 @@ proc parameter_set {cellpath} {
 		set_property "CONFIG.DATA_WIDTH" [expr $data_width * 8] $ip
 
 		set tlast_en [get_property "CONFIG.HAS_TLAST" $interface_pin_source]
-		set_property_propagated TLAST_EN $tlast_en $ip
+		set_property "CONFIG.TLAST_EN" $tlast_en $ip
 
 		set tkeep_en [get_property "CONFIG.HAS_TKEEP" $interface_pin_source]
-		set_property_propagated TKEEP_EN $tkeep_en $ip
+		set_property "CONFIG.TKEEP_EN" $tkeep_en $ip
 
 		set tstrb_en [get_property "CONFIG.HAS_TSTRB" $interface_pin_source]
-		set_property_propagated TSTRB_EN $tstrb_en $ip
+		set_property "CONFIG.TSTRB_EN" $tstrb_en $ip
 
 		set tuser_width [get_property "CONFIG.TUSER_WIDTH" $interface_pin_source]
-		set_property_propagated TUSER_EN [expr $tuser_width > 1] $ip
+		set_property "CONFIG.TUSER_EN" [expr $tuser_width > 0] $ip
 		set_property "CONFIG.TUSER_WIDTH" $tuser_width $ip
 
 		set tid_width [get_property "CONFIG.TID_WIDTH" $interface_pin_source]
-		set_property_propagated TID_EN [expr $tid_width > 1] $ip
+		set_property "CONFIG.TID_EN" [expr $tid_width > 0] $ip
 		set_property "CONFIG.TID_WIDTH" $tid_width $ip
 
 		set tdest_width [get_property "CONFIG.TDEST_WIDTH" $interface_pin_source]
-		set_property_propagated TDEST_EN [expr $tdest_width > 1] $ip
+		set_property "CONFIG.TDEST_EN" [expr $tdest_width > 0] $ip
 		set_property "CONFIG.TDEST_WIDTH" $tdest_width $ip
 	}
 
@@ -92,23 +86,23 @@ proc parameter_set {cellpath} {
 		set pin_source [find_bd_objs -relation connected_to [get_bd_pins -of_objects $ip -filter {NAME =~ s_axis_tuser}]]
 		if {$pin_source != {}} {
 			set tuser_width [get_property "LEFT" $pin_source]
-			set_property "CONFIG.TUSER_WIDTH" $tuser_width $ip
+			set_property "CONFIG.TUSER_WIDTH" [expr $tuser_width + 1] $ip
 		}
 	}
 
 	if {[get_property "CONFIG.TID_EN" $ip] == "true"} {
-		set pin_source [find_bd_objs -relation connected_to [get_bd_pins -of_objects $ip -filter {NAME =~ s_axis_id}]]
+		set pin_source [find_bd_objs -relation connected_to [get_bd_pins -of_objects $ip -filter {NAME =~ s_axis_tid}]]
 		if {$pin_source != {}} {
 			set tid_width [get_property "LEFT" $pin_source]
-			set_property "CONFIG.TID_WIDTH" $tid_width $ip
+			set_property "CONFIG.TID_WIDTH" [expr $tid_width + 1] $ip
 		}
 	}
 
 	if {[get_property "CONFIG.TDEST_EN" $ip] == "true"} {
-		set pin_source [find_bd_objs -relation connected_to [get_bd_pins -of_objects $ip -filter {NAME =~ s_axis_dest}]]
+		set pin_source [find_bd_objs -relation connected_to [get_bd_pins -of_objects $ip -filter {NAME =~ s_axis_tdest}]]
 		if {$pin_source != {}} {
 			set tdest_width [get_property "LEFT" $pin_source]
-			set_property "CONFIG.TDEST_WIDTH" $tdest_width $ip
+			set_property "CONFIG.TDEST_WIDTH" [expr $tdest_width + 1] $ip
 		}
 	}
 }
