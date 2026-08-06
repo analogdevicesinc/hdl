@@ -140,7 +140,7 @@ module util_axis_fifo_asym #(
   // instantiate the FIFOs
   genvar i;
   generate
-    for (i=0; i<RATIO; i=i+1) begin: gen_fifo_instances
+    for (i=0; i<RATIO; i=i+1) begin : gen_fifo_instances
       util_axis_fifo #(
         .DATA_WIDTH(A_DATA_WIDTH),
         .ADDRESS_WIDTH(A_ADDRESS_WIDTH),
@@ -199,7 +199,7 @@ module util_axis_fifo_asym #(
 
     if (RATIO_TYPE) begin : big_slave
 
-      for (i=0; i<RATIO; i=i+1) begin: gen_tlast_big_slave
+      for (i=0; i<RATIO; i=i+1) begin : gen_last
         assign s_axis_valid_int_s[i] = s_axis_valid && s_axis_ready;
 
         if (TLAST_EN) begin
@@ -229,7 +229,7 @@ module util_axis_fifo_asym #(
         if (TUSER_BITS_PER_BYTE) begin
           assign s_axis_tuser_int_s = s_axis_tuser;
         end else begin
-          for (i=0; i<RATIO; i=i+1) begin
+          for (i=0; i<RATIO; i=i+1) begin : gen_user
             assign s_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH] = s_axis_tuser;
           end
         end
@@ -237,7 +237,7 @@ module util_axis_fifo_asym #(
         assign s_axis_tuser_int_s = {RATIO*A_TUSER_WIDTH{1'b0}};
       end
 
-      for (i=0; i<RATIO; i=i+1) begin
+      for (i=0; i<RATIO; i=i+1) begin : gen_id_dest
         if (TID_EN) begin
           assign s_axis_tid_int_s[TID_WIDTH*i+:TID_WIDTH] = s_axis_tid;
         end else begin
@@ -268,7 +268,7 @@ module util_axis_fifo_asym #(
 
       reg [RATIO-1:0] s_axis_valid_int_d = {RATIO{1'b0}};
 
-      for (i=0; i<RATIO; i=i+1) begin
+      for (i=0; i<RATIO; i=i+1) begin : gen_data_keep_strb_last_user_id_dest
         assign s_axis_data_int_s[A_DATA_WIDTH*i+:A_DATA_WIDTH] = s_axis_data;
 
         if (TKEEP_EN) begin
@@ -367,7 +367,7 @@ module util_axis_fifo_asym #(
   generate
     if (RATIO_TYPE) begin : small_master
 
-      for (i=0; i<RATIO; i=i+1) begin: gen_ready_small_master
+      for (i=0; i<RATIO; i=i+1) begin : gen_ready
         assign m_axis_ready_int_s[i] = (m_axis_counter == i) ? m_axis_ready : 1'b0;
       end
 
@@ -435,11 +435,11 @@ module util_axis_fifo_asym #(
 
     end else begin : big_master
 
-      for (i=0; i<RATIO; i=i+1) begin: gen_ready_big_master
+      for (i=0; i<RATIO; i=i+1) begin : gen_ready
         assign m_axis_ready_int_s[i] = m_axis_ready && (&m_axis_valid_int_s);
       end
 
-      for (i=0; i<RATIO; i=i+1) begin
+      for (i=0; i<RATIO; i=i+1) begin : gen_keep_strb_user
         if (TKEEP_EN) begin
           assign m_axis_tkeep[i*A_DATA_WIDTH/8+:A_DATA_WIDTH/8] = ((m_axis_tlast_int_s[i:0] == 0) ||
                                                                   (m_axis_tlast_int_s[i])) ?
