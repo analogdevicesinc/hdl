@@ -118,17 +118,17 @@ module util_axis_fifo #(
 
       assign m_axis_valid = m_axis_raddr != m_axis_waddr;
       assign m_axis_level = ~m_axis_ready;
-      assign m_axis_empty = 0;
-      assign m_axis_almost_empty = 0;
-      assign m_axis_full = 0;
-      assign m_axis_almost_full = 0;
+      assign m_axis_empty = 1'b0;
+      assign m_axis_almost_empty = 1'b0;
+      assign m_axis_full = 1'b0;
+      assign m_axis_almost_full = 1'b0;
 
       assign s_axis_ready = s_axis_raddr == s_axis_waddr;
-      assign s_axis_empty = 0;
-      assign s_axis_almost_empty = 0;
-      assign s_axis_full = 0;
-      assign s_axis_almost_full = 0;
       assign s_axis_room = s_axis_ready;
+      assign s_axis_empty = 1'b0;
+      assign s_axis_almost_empty = 1'b0;
+      assign s_axis_full = 1'b0;
+      assign s_axis_almost_full = 1'b0;
 
       always @(posedge s_axis_aclk) begin
         if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1) begin
