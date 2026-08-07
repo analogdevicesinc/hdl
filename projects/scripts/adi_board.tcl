@@ -21,6 +21,54 @@ set xcvr_instance NONE
 
 set use_smartconnect 1
 
+## Globals for the PCIe XDMA interconnect
+#  Callers may override these before invoking ad_pcie_interconnect if their
+#  block design uses different instance/net names.
+#
+set pcie_interconnect_name pcie_ctrl_sc
+set pcie_xdma_name         pcie_xdma
+set pcie_axi_clk_name      pcie_axi_clk
+set pcie_axi_resetn_name   pcie_axi_resetn
+
+## Globals for the PCIe S_AXI_B (FPGA -> host RAM) interconnect
+#  pcie_saxi_interconnect_name  - SmartConnect name created on demand
+#  pcie_saxi_index              - running S port index (auto-incremented)
+#
+#  The host-RAM aperture size is not a global here: it is derived from
+#  pcie_xdma CONFIG.axibar_highaddr_0, so the project's xdma configuration is
+#  the single place it is declared.
+#
+set pcie_saxi_interconnect_name pcie_saxi_sc
+set pcie_saxi_index             -1
+
+## Globals for the PCIe user-interrupt controller (see ad_pcie_interrupt).
+#  pcie_intc_name    - axi_pcie_intc instance created on demand
+#  pcie_intc_address - where its register window lands in the XDMA M_AXI_B
+#                      space. The core decodes 16 bits, so it occupies 64 kB.
+#                      Negative derives it from the endpoint itself: BAR0's AXI
+#                      base, pcie_xdma CONFIG.pciebar2axibar_0, plus one 64 kB
+#                      block. A project that moves its BAR then moves the
+#                      controller with it, and the address exists in one place
+#                      rather than two that can disagree. Set it explicitly only
+#                      to place the core somewhere else entirely.
+#
+#                      One block above the base, not the base itself: the
+#                      endpoint's own MSI-X table and PBA are memory-mapped in
+#                      the same BAR and, at the IP's default offsets, land at
+#                      BAR+0x8000 and BAR+0x8FE0. Those accesses are terminated
+#                      inside the hard block and never reach M_AXI_B, so
+#                      anything the fabric decodes there is unreachable from the
+#                      host -- and a stray write from the other side corrupts a
+#                      live vector's address/data. Reserving the first block for
+#                      the endpoint keeps the MSI-X offsets at their IP defaults
+#                      and out of reach of a growing peripheral map, and leaves
+#                      the host driver no arithmetic beyond one constant: map
+#                      BAR0 at 0x10000, where MAGIC and CONFIG identify the core
+#                      before anything else is touched.
+#
+set pcie_intc_name    pcie_intc
+set pcie_intc_address -1
+
 ## Add an instance of an IP or inline_hdl to the block design.
 #
 # \param[i_ip] - name of the IP
@@ -1202,6 +1250,772 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
   } elseif {$sys_zynq ==  3} {
     ad_hpmx_interconnect "FPD"      $p_address $p_name $p_intf_name
   }
+}
+
+## Create an AXI4 memory mapped connection from the PCIe XDMA (AXI Bridge mode)
+#  M_AXI_B master to a peripheral's AXI slave interface. Instantiates the
+#  SmartConnect on first call and grows CONFIG.NUM_MI on every subsequent call.
+#
+#  The block design is expected to already contain:
+#    - an XDMA instance in AXI_Bridge mode (default name: pcie_xdma)
+#    - an axi clock net    (default: pcie_axi_clk)
+#    - an axi resetn net   (default: pcie_axi_resetn)
+#  The proc creates the SmartConnect (default name: pcie_ctrl_sc) on demand and
+#  wires its S00_AXI to pcie_xdma/M_AXI_B.
+#
+#  \param[p_address] - offset within the pcie_xdma/M_AXI_B address space
+#  \param[p_name]    - name of the peripheral IP cell
+#  \param[p_intf_name] - name of the AXI MM slave interface on the IP (optional).
+#                       When omitted, the first AXI MM slave interface is used.
+#
+proc ad_pcie_interconnect {p_address p_name {p_intf_name {}}} {
+
+  global pcie_interconnect_name
+  global pcie_xdma_name
+  global pcie_axi_clk_name
+  global pcie_axi_resetn_name
+
+  set sc_name $pcie_interconnect_name
+
+  # Resolve the peripheral AXI slave interface pin, either by name or by
+  # picking the first AXI MM slave the cell exposes. We need this before the
+  # SmartConnect setup so we can tear down any pre-existing CPU-side wiring
+  # first (net, address segments, clock/reset).
+  set p_cell [get_bd_cells $p_name]
+  if {$p_intf_name eq ""} {
+    set p_intf [lindex [get_bd_intf_pins -filter \
+      "MODE == Slave && VLNV == xilinx.com:interface:aximm_rtl:1.0" \
+      -of_objects $p_cell] 0]
+    set p_intf_name_bu ""
+  } else {
+    set p_intf [get_bd_intf_pins -filter \
+      "MODE == Slave && VLNV == xilinx.com:interface:aximm_rtl:1.0 && NAME =~ *$p_intf_name*" \
+      -of_objects $p_cell]
+    set p_intf_name_bu _${p_intf_name}
+  }
+
+  # If the IP was previously attached (e.g. via ad_cpu_interconnect), detach
+  # it first: remove the driving intf net, drop CPU-side address segments,
+  # and float the associated clock/reset so we can rewire to pcie_axi_clk.
+  set existing_net [get_bd_intf_nets -quiet -of_objects $p_intf]
+  if {$existing_net ne ""} {
+    delete_bd_objs $existing_net
+  }
+  # ad_cpu_interconnect names its master-side mappings SEG_data_<ip>[_<intf>]
+  # in the CPU master address space (sys_ps8/Data, sys_cips/M_AXI_FPD, ...).
+  # Wildcard across master spaces so this works for any sys_zynq flavor.
+  foreach pat [list \
+      "*/SEG_data_${p_name}" \
+      "*/SEG_data_${p_name}_*" \
+    ] {
+    foreach seg [get_bd_addr_segs -quiet $pat] {
+      delete_bd_objs $seg
+    }
+  }
+  set p_intf_leaf [lindex [split $p_intf "/"] end]
+  set p_intf_clock [get_bd_pins -filter "TYPE == clk && \
+    (CONFIG.ASSOCIATED_BUSIF == ${p_intf_leaf} || \
+    CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_leaf}:* || \
+    CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_leaf} || \
+    CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_leaf}:*)" \
+    -quiet -of_objects $p_cell]
+  set p_intf_reset ""
+  if {$p_intf_clock ne ""} {
+    set p_intf_reset [get_property CONFIG.ASSOCIATED_RESET \
+      [get_bd_pins $p_intf_clock]]
+    if {$p_intf_reset ne ""} {
+      set p_intf_reset [get_bd_pins -filter "NAME == $p_intf_reset" \
+        -of_objects $p_cell]
+    }
+  } else {
+    set p_intf_clock [get_bd_pins -quiet ${p_name}/${p_intf_leaf}_aclk]
+    set p_intf_reset [get_bd_pins -quiet ${p_name}/${p_intf_leaf}_aresetn]
+  }
+  if {$p_intf_clock ne ""} {
+    set clk_net [get_bd_nets -quiet -of_objects $p_intf_clock]
+    if {$clk_net ne ""} {
+      ad_disconnect $clk_net $p_intf_clock
+    }
+  }
+  if {$p_intf_reset ne ""} {
+    set rst_net [get_bd_nets -quiet -of_objects $p_intf_reset]
+    if {$rst_net ne ""} {
+      ad_disconnect $rst_net $p_intf_reset
+    }
+  }
+
+  # Create the SmartConnect the first time we are called.
+  if {[catch {
+    set interconnect_index [get_property CONFIG.NUM_MI [get_bd_cells $sc_name]]
+  } err]} {
+    set interconnect_index 0
+    ad_ip_instance smartconnect $sc_name [ list \
+      NUM_SI   1 \
+      NUM_MI   1 \
+      NUM_CLKS 1 \
+    ]
+    ad_connect $pcie_axi_clk_name    $sc_name/aclk
+    ad_connect $pcie_axi_resetn_name $sc_name/aresetn
+    ad_connect $sc_name/S00_AXI      $pcie_xdma_name/M_AXI_B
+  }
+
+  set i_str [format "M%02d" $interconnect_index]
+  set interconnect_index [expr $interconnect_index + 1]
+  set_property CONFIG.NUM_MI $interconnect_index [get_bd_cells $sc_name]
+
+  ad_connect $sc_name/${i_str}_AXI $p_intf
+
+  # Rewire the AXI-associated clock/reset (computed above during teardown) to
+  # the PCIe axi clock domain. Skip silently if a caller has already routed
+  # them (data-path SG masters wired elsewhere, etc).
+  if {$p_intf_clock ne "" && \
+      [get_bd_nets -quiet -of_objects $p_intf_clock] eq ""} {
+    ad_connect $pcie_axi_clk_name $p_intf_clock
+  }
+  if {$p_intf_reset ne "" && \
+      [get_bd_nets -quiet -of_objects $p_intf_reset] eq ""} {
+    ad_connect $pcie_axi_resetn_name $p_intf_reset
+  }
+
+  # Address assignment inside the pcie_xdma/M_AXI_B space.
+  #
+  # For hierarchical cells the AXI slave interface pin does not itself carry an
+  # address space; the address segment lives on the leaf cell inside. Descend
+  # through hier boundaries the same way ad_hpmx_interconnect does to find the
+  # real slave, then look up its address segment(s) via that leaf pin.
+  set p_hier_cell $p_cell
+  set p_hier_intf $p_intf
+  while {$p_hier_intf ne "" && [get_property TYPE $p_hier_cell] eq "hier"} {
+    set p_hier_intf [find_bd_objs -boundary_type lower \
+      -relation connected_to $p_hier_intf]
+    if {$p_hier_intf ne ""} {
+      set p_hier_cell [get_bd_cells -of_objects $p_hier_intf]
+    } else {
+      set p_hier_cell ""
+    }
+  }
+  if {$p_hier_intf eq ""} {
+    set p_hier_intf $p_intf
+  }
+
+  set p_addr_space [get_bd_addr_spaces -quiet -of_objects $p_hier_intf]
+  if {$p_addr_space eq ""} {
+    error "ERROR: ad_pcie_interconnect: no address space on $p_intf"
+  }
+  set p_seg [get_bd_addr_segs -quiet -of_objects $p_addr_space]
+
+  set p_target_space [get_bd_addr_spaces $pcie_xdma_name/M_AXI_B]
+  set p_index 0
+  foreach p_seg_name $p_seg {
+    if {$p_index == 0} {
+      set p_seg_range [get_property range $p_seg_name]
+      if {$p_seg_range < 0x1000} {
+        set p_seg_range 0x1000
+      }
+      assign_bd_address -target_address_space $p_target_space \
+        -offset $p_address -range $p_seg_range $p_seg_name
+    } else {
+      assign_bd_address -target_address_space $p_target_space $p_seg_name
+    }
+    incr p_index
+  }
+}
+
+## Route an AXI master (typically an axi_dmac data or SG interface) into host
+#  RAM via the PCIe XDMA S_AXI_B slave. Analogous to ad_mem_hpc0_interconnect:
+#  one master per call, growing a SmartConnect (default pcie_saxi_sc) on
+#  demand. The SmartConnect handles CDC between the master's clock and
+#  pcie_axi_clk on the XDMA side.
+#
+#  If the master is currently connected somewhere (e.g. an existing HPCx
+#  SmartConnect), the existing intf net and address segments are torn down
+#  first so the caller does not need to do it manually.
+#
+#  The host-RAM window is read from the XDMA IP, so the project must set
+#  CONFIG.axibar_0 and CONFIG.axibar_highaddr_0 on it before the first call.
+#  The IP defaults both to 0 and declares only a 1 MB BAR0 in its
+#  component.xml, so there is nothing usable to fall back on -- an unset
+#  window fails the build rather than producing a silently unreachable one.
+#
+#  \param[p_clk]  - clock net name driving the master side (e.g. sys_dma_clk)
+#  \param[p_name] - full interface pin path (e.g. axi_foo_dma/m_dest_axi)
+#
+proc ad_pcie_saxi_interconnect {p_clk p_name} {
+
+  global pcie_saxi_interconnect_name
+  global pcie_saxi_index
+  global pcie_xdma_name
+  global pcie_axi_clk_name
+  global pcie_axi_resetn_name
+
+  set sc_name $pcie_saxi_interconnect_name
+  set master_pin [get_bd_intf_pins $p_name]
+  set p_clk_net  [get_bd_nets $p_clk]
+
+  # First call: create the SmartConnect with a single clock slot (aclk on
+  # pcie_axi_clk feeding M00 -> pcie_xdma/S_AXI_B). Additional slots are added
+  # below as more distinct S-side clocks appear.
+  if {$pcie_saxi_index < 0} {
+    ad_ip_instance smartconnect $sc_name [ list \
+      NUM_SI   1 \
+      NUM_MI   1 \
+      NUM_CLKS 1 \
+    ]
+    ad_connect $pcie_axi_clk_name    $sc_name/aclk
+    ad_connect $pcie_axi_resetn_name $sc_name/aresetn
+    ad_connect $sc_name/M00_AXI      $pcie_xdma_name/S_AXI_B
+    # SmartConnect aclk ASSOCIATED_BUSIF is read-only; the IP derives the
+    # busif<->clock mapping from the actual connections. Nothing to set here.
+    set pcie_saxi_index 0
+  }
+
+  # Detach the master from its current interconnect (if any) and clean up
+  # any pre-existing address segments.
+  set existing_net [get_bd_intf_nets -quiet -of_objects $master_pin]
+  if {$existing_net ne ""} {
+    delete_bd_objs $existing_net
+  }
+  set master_space [get_bd_addr_spaces -quiet -of_objects $master_pin]
+  if {$master_space ne ""} {
+    foreach seg [get_bd_addr_segs -quiet -of_objects $master_space] {
+      delete_bd_objs $seg
+    }
+  }
+
+  # Find (or create) the aclk slot carrying $p_clk. NUM_CLKS on smartconnect
+  # is 1..8. aclk_slot("") = /aclk, aclk_slot(1) = /aclk1, etc.
+  set num_clks [get_property CONFIG.NUM_CLKS [get_bd_cells $sc_name]]
+  set clk_slot -1
+  for {set i 0} {$i < $num_clks} {incr i} {
+    set pin_name [expr {$i == 0 ? "aclk" : "aclk$i"}]
+    set pin [get_bd_pins $sc_name/$pin_name]
+    set net [get_bd_nets -quiet -of_objects $pin]
+    if {$net ne "" && [get_bd_nets $net] eq $p_clk_net} {
+      set clk_slot $i
+      break
+    }
+  }
+  if {$clk_slot < 0} {
+    set clk_slot $num_clks
+    incr num_clks
+    set_property CONFIG.NUM_CLKS $num_clks [get_bd_cells $sc_name]
+    set new_pin [get_bd_pins $sc_name/aclk$clk_slot]
+    ad_connect $p_clk $new_pin
+  }
+  set aclk_pin [get_bd_pins $sc_name/[expr {$clk_slot == 0 ? "aclk" : "aclk$clk_slot"}]]
+
+  set i_str [format "S%02d" $pcie_saxi_index]
+  incr pcie_saxi_index
+  set_property CONFIG.NUM_SI $pcie_saxi_index [get_bd_cells $sc_name]
+
+  # Attach the master and map it into the full S_AXI_B window.
+  # (SmartConnect derives which busif is on which aclk from the actual
+  # connections; ASSOCIATED_BUSIF on smartconnect aclk pins is read-only.)
+  ad_connect $sc_name/${i_str}_AXI $master_pin
+
+  # Size and place the segment explicitly. Left to itself, assign_bd_address
+  # takes the range from the xdma IP's declared default for S_AXI_B/BAR0
+  # (component.xml hardcodes 2**20 = 1 MB, with no dependency on anything) and
+  # picks an arbitrary base, which leaves host buffers outside the decode
+  # window -- the DMA then fetches SG descriptors that never reach host RAM.
+  #
+  # Take both ends of the window from the xdma IP rather than keeping a second
+  # copy of the numbers here. CONFIG.axibar_0 is the first address and
+  # CONFIG.axibar_highaddr_0 the last (inclusive) address S_AXI_B/BAR0 decodes,
+  # so the aperture is highaddr - base + 1 bytes. highaddr is absolute, not
+  # relative to base: xdma_v4_2/bd.tcl derives the pair the same way
+  # (cfx_base_high_of_slv: nHigh = nOfs + nRng - 1). Deriving both keeps the
+  # project's axibar_0 / axibar_highaddr_0 the single place the window is
+  # declared -- and they must be set before this proc is called, since the IP
+  # defaults both to 0 and the guards below then fail the build.
+  #
+  # The segment is mapped at axibar_0 rather than unconditionally at 0 so the
+  # address Vivado programs into the fabric decoder agrees with the window the
+  # bridge itself decodes. With the usual axibar_0 = 0 and axibar2pciebar_0 = 0
+  # that is an identity map -- AXI address == host physical address -- which is
+  # what the axi-dmac driver assumes when it programs a dma_addr_t straight
+  # into SG_ADDRESS/DEST_ADDRESS.
+  set xdma_cell [get_bd_cells $pcie_xdma_name]
+  set base      [get_property -quiet CONFIG.axibar_0          $xdma_cell]
+  set highaddr  [get_property -quiet CONFIG.axibar_highaddr_0 $xdma_cell]
+  set xdma_aw   [get_property -quiet CONFIG.axi_addr_width    $xdma_cell]
+  if {$base eq "" || $highaddr eq "" || ![string is integer -strict $xdma_aw]} {
+    error "ERROR: ad_pcie_saxi_interconnect: cannot read \
+$pcie_xdma_name CONFIG.axibar_0 / CONFIG.axibar_highaddr_0 / \
+CONFIG.axi_addr_width"
+  }
+
+  # axi_addr_width bounds what S_AXI_B can decode. Suggest a top address that
+  # fits it, so the guidance below stays valid for a 32-bit bridge too.
+  set xdma_max [expr {$xdma_aw >= 64 ? -1 : (wide(1) << $xdma_aw) - 1}]
+  set suggest  [format 0x%016X $xdma_max]
+
+  # Everything below is signed 64-bit Tcl arithmetic, so reject addresses in
+  # the top half of the space instead of silently comparing negative numbers.
+  # This also catches an all-ones highaddr, which would ask for a 2**64 range
+  # that no -range value can express.
+  foreach {p_str p_val} [list axibar_0 $base axibar_highaddr_0 $highaddr] {
+    if {wide($p_val) < 0} {
+      error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name \
+CONFIG.$p_str ($p_val) is at or above 2**63. Address segments are bounded by \
+signed 64-bit arithmetic, so keep the window inside the low half of the space \
+-- e.g. 0x0 .. 0x0000000FFFFFFFFF for a 36-bit host address space."
+    }
+  }
+
+  if {wide($highaddr) <= wide($base)} {
+    error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name \
+CONFIG.axibar_0 ($base) / CONFIG.axibar_highaddr_0 ($highaddr) leave S_AXI_B \
+with no usable host-RAM aperture. highaddr is the last address in the window, \
+so it must be above axibar_0 -- at most $suggest for the configured \
+axi_addr_width of $xdma_aw bits."
+  }
+
+  set aperture [expr {wide($highaddr) - wide($base) + 1}]
+
+  # Vivado address segments must be a power of two and naturally aligned, so a
+  # window that is not both cannot be expressed at all. Check here rather than
+  # letting assign_bd_address fail, since the fix is in the project's axibar_*
+  # values and not in this proc.
+  if {($aperture & ($aperture - 1)) != 0} {
+    error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name window \
+CONFIG.axibar_0 ($base) .. CONFIG.axibar_highaddr_0 ($highaddr) spans \
+$aperture bytes, which is not a power of two. Address segment ranges must be, \
+so round the window up or down (highaddr is inclusive: a 4 GB window ending \
+at base + 0xFFFFFFFF)."
+  }
+  if {(wide($base) & ($aperture - 1)) != 0} {
+    error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name \
+CONFIG.axibar_0 ($base) is not aligned to the $aperture-byte window it opens. \
+Address segments must be naturally aligned, so move the base down to a \
+multiple of the window size."
+  }
+
+  # A window reaching past axi_addr_width is the silent-corruption case: the
+  # DMA masters are 64-bit, so the per-master clamp below never trips, and
+  # S_AXI_B quietly drops the high address bits. Descriptor fetches then land
+  # at the wrong host address and the DMA delivers garbage, so fail loudly.
+  if {$xdma_max >= 0 && wide($highaddr) > $xdma_max} {
+    error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name \
+CONFIG.axibar_highaddr_0 ($highaddr) exceeds what CONFIG.axi_addr_width \
+($xdma_aw bits, max $suggest) can decode. S_AXI_B would truncate the high \
+address bits. Either widen axi_addr_width or lower axibar_highaddr_0."
+  }
+
+  # Clamp to the master's own address width: the xcvr m_axi ports are 32-bit
+  # and assign_bd_address rejects a range the master cannot drive. Halving
+  # preserves both requirements above -- the range stays a power of two, and a
+  # base aligned to 2**k is aligned to every smaller power of two -- so only
+  # the unreachable top of the window is dropped.
+  set master_aw [get_property -quiet CONFIG.ADDR_WIDTH $master_pin]
+  if {[string is integer -strict $master_aw] && $master_aw < 64} {
+    set master_max [expr {wide(1) << $master_aw}]
+    if {wide($base) >= $master_max} {
+      error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name window starts \
+at CONFIG.axibar_0 ($base), which the ${master_aw}-bit master $p_name cannot \
+address at all. Move the window into the master's reach, or leave this master \
+off the PCIe SmartConnect."
+    }
+    while {wide($base) + $aperture > $master_max} {
+      set aperture [expr {$aperture >> 1}]
+    }
+    if {$aperture < 4096} {
+      error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name window \
+CONFIG.axibar_0 ($base) .. CONFIG.axibar_highaddr_0 ($highaddr) leaves the \
+${master_aw}-bit master $p_name less than 4 kB of reachable aperture, which is \
+smaller than the minimum address segment range."
+    }
+  }
+
+  assign_bd_address -target_address_space $master_pin \
+    [get_bd_addr_segs $pcie_xdma_name/S_AXI_B/BAR0] \
+    -offset $base -range $aperture
+}
+
+## Max vectors (16 = PG195 usr_irq width = 4-bit register index).
+set pcie_intc_max_vectors 16
+
+## Max sources per vector (one 32-bit ENABLE/PENDING word each).
+set pcie_intc_max_src_per_vec 32
+
+## Sources per vector. 1 = one vector per source (no read to dispatch).
+#  Must be set before the first ad_pcie_interrupt call.
+set pcie_intc_src_per_vec 1
+
+## Validate pcie_intc_src_per_vec. For internal use only.
+# FOR INTERNAL USE ONLY!!!
+proc ad_pcie_interrupt_src_per_vec {} {
+
+  global pcie_intc_max_src_per_vec
+  global pcie_intc_src_per_vec
+
+  set spv $pcie_intc_src_per_vec
+
+  if {![string is integer -strict $spv] || $spv < 1 || \
+      $spv > $pcie_intc_max_src_per_vec} {
+    error "ERROR: ad_pcie_interrupt: pcie_intc_src_per_vec is \"$spv\"; it must\
+ be an integer from 1 to $pcie_intc_max_src_per_vec, one 32-bit ENABLE and\
+ PENDING word per vector."
+  }
+
+  return $spv
+}
+
+## The resolved pcie_intc_address: the global when it is non-negative, otherwise
+#  BAR0's AXI base plus the 64 kB block the endpoint keeps for its own MSI-X
+#  table and PBA. Derived here rather than at the global because the xdma cell it
+#  reads does not exist until the project has instantiated it.
+#
+#  For internal use only!
+#
+proc ad_pcie_interrupt_address {} {
+
+  global pcie_xdma_name
+  global pcie_intc_address
+
+  # wideinteger, not integer: a BAR base is routinely above 2**31, and plain
+  # "integer" rejects such a value written in decimal.
+  if {![string is wideinteger -strict $pcie_intc_address]} {
+    error "ERROR: ad_pcie_interrupt: pcie_intc_address is\
+ \"$pcie_intc_address\"; it must be an address, or negative to derive one from\
+ $pcie_xdma_name CONFIG.pciebar2axibar_0."
+  }
+
+  if {wide($pcie_intc_address) >= 0} {
+    return $pcie_intc_address
+  }
+
+  # The AXI address BAR0 translates to, which is where the host's view of the
+  # BAR starts. Unset -- the IP defaults it to 0 -- would silently put the
+  # controller at 0x10000 in whatever the fabric decodes there, so require it.
+  set bar0 [get_property -quiet CONFIG.pciebar2axibar_0 \
+    [get_bd_cells $pcie_xdma_name]]
+  if {![string is wideinteger -strict $bar0] || wide($bar0) <= 0} {
+    error "ERROR: ad_pcie_interrupt: cannot derive pcie_intc_address:\
+ $pcie_xdma_name CONFIG.pciebar2axibar_0 is \"$bar0\". Set it to the AXI base\
+ BAR0 translates to before the first ad_pcie_interrupt call, or set\
+ pcie_intc_address explicitly."
+  }
+
+  return [format 0x%016X [expr {wide($bar0) + 0x10000}]]
+}
+
+## The block-design pin carrying source $index: $pcie_intc_name/intr_<v>
+#  directly when nothing is grouped, otherwise input <index % SRC_PER_VEC> of
+#  vector <v>'s concat. With $create set, a missing concat is instantiated and
+#  all of its inputs tied low; without it, "" means the index is not reachable
+#  yet -- either its vector does not exist (NUM_VECTORS has not grown that far)
+#  or, when grouped, nothing has landed on that vector.
+#
+#  For internal use only!
+#
+proc ad_pcie_interrupt_pin {index create} {
+
+  global pcie_intc_name
+  global pcie_intc_src_per_vec
+
+  set spv $pcie_intc_src_per_vec
+  set vector [expr {$index / $spv}]
+
+  if {$spv == 1} {
+    set p_name $pcie_intc_name/intr_$vector
+    if {[get_bd_pins -quiet $p_name] eq ""} {
+      return ""
+    }
+    return $p_name
+  }
+
+  set concat_name concat_${pcie_intc_name}_v$vector
+  set concat_cell [get_bd_cells -quiet $concat_name]
+  if {$concat_cell eq "" && $create} {
+    ad_ip_instance ilconcat $concat_name [list NUM_PORTS $spv]
+    set concat_cell [get_bd_cells $concat_name]
+
+    # A concat input has no driver value of its own -- unlike intr_<v>, whose
+    # DRIVER_VALUE covers a hole a pinned layout leaves -- and an undriven one
+    # is a validate_bd_design error. So tie the whole group low here and let
+    # each connection displace its own tie-off.
+    for {set i 0} {$i < $spv} {incr i} {
+      ad_connect GND $concat_cell/In$i
+    }
+
+    ad_connect $concat_cell/dout $pcie_intc_name/intr_$vector
+  }
+  if {$concat_cell eq ""} {
+    return ""
+  }
+
+  return $concat_cell/In[expr {$index % $spv}]
+}
+
+## Which source drives source index $index, or "" if the index is available.
+#  A GND tie-off counts as available: it is only a placeholder for a hole in a
+#  pinned vector layout (see ad_pcie_interrupt_pin), and a real source may
+#  replace it. GND_1 is the width-1 constant ad_connect creates for the name
+#  "GND" (ad_connect_int_get_const). Ungrouped, a hole is simply unconnected --
+#  the IP's own DRIVER_VALUE covers it -- so only the grouped configuration
+#  reaches the GND case.
+#
+#  For internal use only!
+#
+proc ad_pcie_interrupt_owner {index} {
+
+  set p_name [ad_pcie_interrupt_pin $index 0]
+  if {$p_name eq ""} {
+    return ""
+  }
+
+  set pin [get_bd_pins -quiet $p_name]
+  if {$pin eq ""} {
+    return ""
+  }
+
+  set src [find_bd_objs -quiet -relation connected_to $pin]
+  if {$src eq ""} {
+    return ""
+  }
+
+  set gnd [get_bd_cells -quiet GND_1]
+  if {$gnd ne "" && [lsearch -exact $src [get_bd_pins $gnd/dout]] >= 0} {
+    return ""
+  }
+
+  return $src
+}
+
+## Size the PCIe user-interrupt path for $n interrupt *sources*: how many
+#  vectors they need at the current pcie_intc_src_per_vec, the endpoint's usr_irq
+#  width, and the MSI/MSI-X capability the host reads at enumeration.
+#
+#  Loads are widened before their drivers, so every transient mismatch is an
+#  under-driven bus rather than a truncated one: xdma (load of usr_irq_req)
+#  first, then the controller that drives it. NUM_VECTORS only ever grows, so
+#  that ordering always holds. The BD tolerates either until
+#  validate_bd_design, but the asymmetry is free.
+#
+#  For internal use only!
+#
+proc ad_pcie_interrupt_resize {n} {
+
+  global pcie_xdma_name
+  global pcie_intc_name
+  global pcie_intc_max_vectors
+  global pcie_intc_max_src_per_vec
+
+  set spv [ad_pcie_interrupt_src_per_vec]
+
+  # Grouping is deliberate, never automatic: SRC_PER_VEC is uniform across the
+  # core, so raising it makes *every* interrupt in the design cost one PENDING
+  # read over PCIe, not just the sources that had to share. That is the cost
+  # this core exists to avoid, so the 17th source is an error naming the knob
+  # rather than a silent regression. It also cannot be raised here: the value
+  # decides which intr_<v> port each source lands on, so changing it once
+  # sources are connected would mean rewiring the block design.
+  if {$n > $pcie_intc_max_vectors * $spv} {
+    error "ERROR: ad_pcie_interrupt: $n sources do not fit in\
+ $pcie_intc_max_vectors vectors of pcie_intc_src_per_vec=$spv source(s). Raise\
+ pcie_intc_src_per_vec before the first ad_pcie_interrupt call -- it fixes which\
+ intr_<v> port each source lands on, so it cannot change afterwards. Grouping\
+ costs every interrupt in the design one PENDING read across the link, and makes\
+ the sources sharing a vector share one CPU; it is uniform, so pinning cannot\
+ exempt a hot source, only choose which sources it shares with. The ceiling is\
+ [expr {$pcie_intc_max_vectors * $pcie_intc_max_src_per_vec}] sources."
+  }
+
+  # Fewest vectors that hold them: the sources occupy vectors 0..ceil(n/spv)-1
+  # either way, so asking for more would only add MSI-X entries that provably
+  # never fire.
+  set vectors [expr {($n + $spv - 1) / $spv}]
+
+  set xdma_cell [get_bd_cells $pcie_xdma_name]
+
+  # Validate against the IP's own declared range rather than PG195's documented
+  # maximum -- the AXI Bridge configuration may permit fewer.
+  set allowed [list_property_value CONFIG.xdma_num_usr_irq $xdma_cell]
+  if {$allowed ne "" && [lsearch -exact $allowed $vectors] == -1} {
+    error "ERROR: ad_pcie_interrupt: $pcie_xdma_name does not support $vectors\
+ user interrupts (CONFIG.xdma_num_usr_irq accepts: $allowed)."
+  }
+  set_property CONFIG.xdma_num_usr_irq $vectors $xdma_cell
+
+  # MSI-X is what makes per-source vectors worth having: it carries a separate
+  # address/data pair per vector, so the host can steer each to its own CPU.
+  # Multi-message MSI shares one address register and cannot, which is why the
+  # MSI capability below is only kept consistent, not relied on. MSI-X table
+  # size uses N-1 encoding, in hex.
+  if {[catch {get_property CONFIG.pf0_msix_enabled $xdma_cell} msix_en] == 0 \
+      && $msix_en eq "true"} {
+    set_property CONFIG.pf0_msix_cap_table_size \
+      [format %X [expr {$vectors - 1}]] $xdma_cell
+  }
+  if {[catch {get_property CONFIG.pf0_msi_enabled $xdma_cell} msi_en] == 0 \
+      && $msi_en eq "true"} {
+    # The MSI capability advertises a power-of-two count, so round up.
+    set msi_n 1
+    while {$msi_n < $vectors} {
+      set msi_n [expr {$msi_n * 2}]
+    }
+    if {$msi_n == 1} {
+      set_property CONFIG.pf0_msi_cap_multimsgcap "1_vector" $xdma_cell
+    } else {
+      set_property CONFIG.pf0_msi_cap_multimsgcap "${msi_n}_vectors" $xdma_cell
+    }
+  }
+
+  # SRC_PER_VEC is set once, at instantiation -- it is the width of every
+  # intr_<v> port, so it is not something a later call site can change.
+  set_property CONFIG.NUM_VECTORS $vectors [get_bd_cells $pcie_intc_name]
+}
+
+## Connect an IP interrupt pin to the PCIe endpoint's user interrupt path.
+#  Creates axi_pcie_intc on the first call, maps it into the XDMA M_AXI_B
+#  space, and grows NUM_VECTORS / xdma_num_usr_irq as more IPs attach.
+#
+#  axi_pcie_intc gives each source its own MSI/MSI-X vector (SRC_PER_VEC=1
+#  by default), so dispatch needs no register read — the handler for vector k
+#  knows its source statically. This avoids the per-interrupt PCIe round-trip
+#  reads that axi_intc's shared-vector chained handler requires.
+#
+#  Peripheral IRQ pins are levels; wiring them straight to usr_irq_req loses
+#  interrupts (PG195 requires req to stay asserted until the host clears it).
+#  axi_pcie_intc implements the W1C PENDING handshake PG195 specifies.
+#
+#  \param[p_name] - interrupt pin (e.g. axi_foo/irq)
+#  \param[p_vector] - source index to pin to, or -1 (default) for auto-assign.
+#    Pinning keeps hwirq numbering stable across build variants.
+#
+proc ad_pcie_interrupt {p_name {p_vector -1}} {
+
+  global pcie_xdma_name
+  global pcie_intc_name
+
+  # Before anything is created, so a bad value names the global rather than
+  # failing as an IP customization error on SRC_PER_VEC.
+  set spv_want [ad_pcie_interrupt_src_per_vec]
+
+  # If the pin was previously routed to a PS interrupt concat
+  # (sys_concat_intc_*), detach it first so ad_connect below does not fail.
+  set p_pin [get_bd_pins -quiet $p_name]
+  if {$p_pin ne ""} {
+    set p_net [get_bd_nets -quiet -of_objects $p_pin]
+    if {$p_net ne ""} {
+      delete_bd_objs $p_net
+    }
+  }
+
+  # Create the controller on the first call with one vector, and grow it as more
+  # IRQs attach.
+  set intc_cell [get_bd_cells -quiet $pcie_intc_name]
+  if {$intc_cell eq ""} {
+    # ASYNC_INTR 1: the sources run on their own clocks (each jesd link, each
+    # dmac), not on the endpoint's AXI clock, so every source bit gets a two-flop
+    # synchronizer. They are independent levels, so per-bit synchronization is
+    # sufficient -- there is no multi-bit value whose coherency could be torn.
+    #
+    # SRC_PER_VEC is fixed here, for the whole design: it is the width of every
+    # intr_<v> port, so it decides where each source lands. The default of 1 is
+    # the whole point -- one source per vector is the configuration that needs no
+    # register read to dispatch.
+    ad_ip_instance axi_pcie_intc $pcie_intc_name [list \
+      NUM_VECTORS  1 \
+      SRC_PER_VEC  $spv_want \
+      ASYNC_INTR   1 \
+    ]
+    set intc_cell [get_bd_cells $pcie_intc_name]
+
+    ad_connect $pcie_intc_name/usr_irq_req  $pcie_xdma_name/usr_irq_req
+
+    # usr_irq_ack feeds only the core's DELIVERED diagnostic -- the request
+    # path deliberately does not wait on the endpoint, so that a masked or
+    # not-yet-enabled MSI-X vector cannot wedge a source. A missing pin
+    # therefore costs a debug register and nothing else.
+    set ack_pin [get_bd_pins -quiet $pcie_xdma_name/usr_irq_ack]
+    if {$ack_pin ne ""} {
+      ad_connect $ack_pin $pcie_intc_name/usr_irq_ack
+    } else {
+      puts "INFO: ad_pcie_interrupt: $pcie_xdma_name has no usr_irq_ack pin;\
+ $pcie_intc_name DELIVERED will read 0."
+    }
+
+    # Clock, reset and the BAR window. ad_pcie_interconnect derives the AXI
+    # clock/reset from ASSOCIATED_BUSIF on s_axi and assigns the slave's own
+    # segment range, so the core's 16-bit decode lands as a 64 kB window.
+    set intc_address [ad_pcie_interrupt_address]
+    puts "INFO: ad_pcie_interrupt: $pcie_intc_name at $intc_address"
+    ad_pcie_interconnect $intc_address $pcie_intc_name s_axi
+  }
+
+  # pcie_intc_src_per_vec is what maps a source index to a port, so a project
+  # that changes it partway through would silently move the sources already
+  # connected. Catch it here rather than at validate_bd_design, which would not
+  # notice: the design builds, and the wrong handler runs.
+  set spv [get_property CONFIG.SRC_PER_VEC $intc_cell]
+  if {$spv != $spv_want} {
+    error "ERROR: ad_pcie_interrupt: pcie_intc_src_per_vec is\
+ $spv_want but $pcie_intc_name was created with SRC_PER_VEC $spv.\
+ It must be set before the first ad_pcie_interrupt call: it fixes which\
+ intr_<v> port each source lands on, so changing it now would move every source\
+ already connected."
+  }
+
+  # Source slots the controller currently carries. Read the geometry back off
+  # the cell rather than recomputing it, so it is decided in one place.
+  set slots [expr {[get_property CONFIG.NUM_VECTORS $intc_cell] * $spv}]
+
+  # Resolve the source index: the caller's, or the lowest available one. An
+  # unconnected slot -- or, when grouped, a tie-off -- counts as available, so
+  # an automatic call reclaims both the holes a pinned layout left and the slack
+  # grouping added, rather than growing.
+  if {$p_vector >= 0} {
+    set index $p_vector
+    set owner [ad_pcie_interrupt_owner $index]
+    if {$owner ne ""} {
+      error "ERROR: ad_pcie_interrupt: index $index is already driven by\
+ $owner, cannot pin $p_name to it."
+    }
+  } else {
+    set index $slots
+    for {set i 0} {$i < $slots} {incr i} {
+      if {[ad_pcie_interrupt_owner $i] eq ""} {
+        set index $i
+        break
+      }
+    }
+  }
+
+  # Widening is the whole of it. The indices a pinned layout skips need no
+  # padding: an enabled but unconnected intr_<v> carries the IP's DRIVER_VALUE,
+  # so an unused source is provably quiet without a constant cell.
+  if {$index >= $slots} {
+    ad_pcie_interrupt_resize [expr {$index + 1}]
+  }
+
+  set pin [ad_pcie_interrupt_pin $index 1]
+
+  # Replacing a tie-off, which only the grouped configuration creates: drop just
+  # this pin from the shared GND net rather than deleting the net, which would
+  # untie every other hole.
+  set net [get_bd_nets -quiet -of_objects [get_bd_pins $pin]]
+  if {$net ne ""} {
+    disconnect_bd_net $net [get_bd_pins $pin]
+  }
+
+  ad_connect $pin $p_name
+
+  # $index is a *source* index -- the hwirq the DT node references. The port and
+  # the vector it lands on are derived, and coincide with it only while nothing
+  # is grouped, so all three are printed: the port is what the block design
+  # shows, and the vector is what determines which MSI-X entry and therefore
+  # which CPU serves the source.
+  #
+  # Worth printing at all because nothing else in the build log records the
+  # mapping. A peripheral whose interrupts = <k> disagrees with this line is the
+  # failure this catches, and it is otherwise silent: the design builds, and the
+  # wrong handler runs.
+  set how [expr {$p_vector >= 0 ? "pinned" : "auto"}]
+  puts "INFO: ad_pcie_interrupt: source $index =\
+ intr_[expr {$index / $spv}]\[[expr {$index % $spv}]\] = vector\
+ [expr {$index / $spv}] = $p_name ($how)"
 }
 
 ## Connects an IP interrupt port to the system's interrupt controller interface.
