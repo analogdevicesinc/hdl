@@ -88,9 +88,11 @@ following projects:
 - :git-hdl:`AD9083_EVB <projects/ad9083_evb>`
 - :git-hdl:`ADRV9009 <projects/adrv9009>`
 - :git-hdl:`ADRV9026 <projects/adrv9026>`
-- :git-hdl:`ADRV9371x <projects/adrv9371x>`
+- :git-hdl:`ADRV9371X <projects/adrv9371x>`
 - :git-hdl:`DAQ2 <projects/daq2>`
 - :git-hdl:`DAQ3 <projects/daq3>`
+- :git-hdl:`ADRV904X <projects/adrv904x>`
+- :git-hdl:`ADRV903X <projects/adrv903x>`
 
 xcvr_wizard
 *******************************************************************************
