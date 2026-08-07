@@ -38,7 +38,6 @@ ad_ip_parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter ID INTEGER 0
 ad_ip_parameter DATA_WIDTH INTEGER 8
 ad_ip_parameter NUM_OF_SDIO INTEGER 1
-ad_ip_parameter SRC_REG_SLICE_EN INTEGER 0
 
 proc p_elaboration {} {
 

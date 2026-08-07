@@ -128,17 +128,6 @@ set ip [ipl::set_parameter -ip $ip \
     -group1 {General Configuration} \
     -group2 Config]
 set ip [ipl::set_parameter -ip $ip \
-    -id SRC_REG_SLICE_EN \
-    -type param \
-    -value_type int \
-    -conn_mod axi_spi_engine \
-    -title {Source register slice enable} \
-    -default 0 \
-    -output_formatter nostr \
-    -options {[('True', 1), ('False', 0)]} \
-    -group1 {General Configuration} \
-    -group2 Config]
-set ip [ipl::set_parameter -ip $ip \
     -id MM_IF_TYPE \
     -type param \
     -value_type int \
