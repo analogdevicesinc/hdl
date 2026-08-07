@@ -22,10 +22,11 @@ Features
 * Supports TLAST to indicate packet boundary
 * Supports TKEEP to indicate valid data bytes
 * Supports TSTRB to indicate position bytes in the transfer
-* Supports TUSER to transfer user-defined signals
+* Supports TUSER to transfer user-defined signal
+* Supports byte-based and transfer-based TUSER signal
 * Supports TID to provide a stream identifier
 * Supports TDEST to provide routing information
-* Supports FULL/EMPTY and ALMOST_FULL/ALMOST_EMPTY status signals
+* Supports ROOM, LEVEL, FULL/EMPTY and ALMOST_FULL/ALMOST_EMPTY status signals
 
 Files
 --------------------------------------------------------------------------------
@@ -79,9 +80,6 @@ Configuration Parameters
      - ``TDEST`` signal width if ``TDEST`` is enabled.
    * - REDUCED_FIFO
      - Reduce the FIFO size when master and slave data widths are not equal
-   * - SRC_REG_SLICE_EN
-     - Add an additional register slice to the slave AXI stream interface. It
-       is deasserted by default.
 
 Interface
 --------------------------------------------------------------------------------
@@ -90,28 +88,36 @@ Interface
 
    * - s_axis
      - Slave AXI stream.
+   * - m_axis
+     - Master AXI stream.
    * - s_axis_aclk
      - Slave AXI stream clock signal
    * - s_axis_aresetn
      - Slave AXI stream reset signal (active low)
    * - s_axis_room
      - Indicates how much space (in data beats) is in the FIFO
+   * - s_axis_empty
+     - If set the FIFO is empty
+   * - s_axis_almost_empty
+     - If set the FIFO is almost empty
+   * - s_axis_full
+     - If set the FIFO is full
    * - s_axis_almost_full
      - If set the FIFO is almost full
-   * - m_axis
-     - Master AXI stream.
    * - m_axis_aclk
      - Master AXI stream clock signal
    * - m_axis_aresetn
      - Master AXI stream reset signal (active low)
    * - m_axis_level
-     - Indicates how much data is in the FIFO
-   * - s_axis_full
-     - If set the FIFO is full
-   * - m_axis_almost_empty
-     - If set the FIFO is almost empty
+     - Indicates how many data beats are in the FIFO
    * - m_axis_empty
      - If set the FIFO is empty
+   * - m_axis_almost_empty
+     - If set the FIFO is almost empty
+   * - m_axis_full
+     - If set the FIFO is full
+   * - m_axis_almost_full
+     - If set the FIFO is almost full
 
 Detailed Description
 --------------------------------------------------------------------------------
@@ -128,16 +134,16 @@ blocks are calculated as follows:
 
    // define which interface has a wider bus
    localparam RATIO_TYPE = (S_DATA_WIDTH >= M_DATA_WIDTH) ? 1 : 0;
+
    // bus width ratio
    localparam RATIO = (RATIO_TYPE) ? S_DATA_WIDTH/M_DATA_WIDTH : M_DATA_WIDTH/S_DATA_WIDTH;
+
    // atomic parameters
    localparam A_DATA_WIDTH = (RATIO_TYPE) ? M_DATA_WIDTH : S_DATA_WIDTH;
    localparam A_ADDRESS_WIDTH = (REDUCED_FIFO) ? (ADDRESS_WIDTH-$clog2(RATIO)) : ADDRESS_WIDTH;
-   localparam A_ALMOST_FULL_THRESHOLD = (REDUCED_FIFO) ? ((ALMOST_FULL_THRESHOLD+RATIO-1)/RATIO) : ALMOST_FULL_THRESHOLD;
-   localparam A_ALMOST_EMPTY_THRESHOLD = (REDUCED_FIFO) ? ((ALMOST_EMPTY_THRESHOLD+RATIO-1)/RATIO) : ALMOST_EMPTY_THRESHOLD;
-   localparam A_TUSER_WIDTH = (TUSER_WIDTH > 0) ? TUSER_WIDTH / RATIO : 1; // set to 1 when tuser width is 0 to avoid synthesis errors
-   localparam A_TID_WIDTH = (TID_WIDTH > 0) ? TID_WIDTH : 1; // set to 1 when tid width is 0 to avoid synthesis errors
-   localparam A_TDEST_WIDTH = (TDEST_WIDTH > 0) ? TDEST_WIDTH : 1; // set to 1 when tdest width is 0 to avoid synthesis errors
+   localparam A_ALMOST_FULL_THRESHOLD = (REDUCED_FIFO) ? $floor((ALMOST_FULL_THRESHOLD+RATIO-1)/RATIO) : ALMOST_FULL_THRESHOLD;
+   localparam A_ALMOST_EMPTY_THRESHOLD = (REDUCED_FIFO) ? $floor((ALMOST_EMPTY_THRESHOLD+RATIO-1)/RATIO) : ALMOST_EMPTY_THRESHOLD;
+   localparam A_TUSER_WIDTH = (TUSER_BITS_PER_BYTE) ? TUSER_WIDTH*A_DATA_WIDTH/8 : TUSER_WIDTH;
 
 FIFO Depth Calculation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -178,9 +184,9 @@ destination logic:
    In case of asynchronous mode, because of the delays introduced by the clock
    domain crossing logic, the ROOM and LEVEL indicators can not reflect
    the actual state of the FIFO in real time. Source and destination logic
-   should take this into account when controlling the data stream into and
-   from the FIFO. Carefully adjusting the ALMOST_EMPTY/ALMOST_FULL indicators
-   can provide a save operating margin.
+   should take this into account when controlling the data stream through the
+   FIFO. Carefully adjusting the ALMOST_EMPTY/ALMOST_FULL indicators can provide
+   a safe operating conditions.
 
 User Signal Transfer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
