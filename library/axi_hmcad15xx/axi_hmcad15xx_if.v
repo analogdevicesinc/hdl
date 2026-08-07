@@ -213,8 +213,8 @@ module axi_hmcad15xx_if #(
       wr_data_int <= {data_out[6][ 7:0], data_out[7][ 7:0], data_out[4][ 7:0], data_out[5][ 7:0], data_out[2][ 7:0], data_out[3][ 7:0], data_out[0][ 7:0], data_out[1][ 7:0],
                       data_out[6][15:8], data_out[7][15:8], data_out[4][15:8], data_out[5][15:8], data_out[2][15:8], data_out[3][15:8], data_out[0][15:8], data_out[1][15:8]};
     end else if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
-      wr_data_int <= {data_out[6][ 7:0], data_out[4][ 7:0], data_out[2][ 7:0], data_out[0][ 7:0], data_out[7][ 7:0], data_out[5][ 7:0], data_out[3][ 7:0], data_out[1][ 7:0],
-                      data_out[6][15:8], data_out[4][15:8], data_out[2][15:8], data_out[0][15:8], data_out[7][15:8], data_out[5][15:8], data_out[3][15:8], data_out[1][15:8]};
+      wr_data_int <= {data_out[7][ 7:0], data_out[5][ 7:0],	data_out[3][ 7:0], data_out[1][ 7:0], data_out[6][ 7:0], data_out[4][ 7:0], data_out[2][ 7:0], data_out[0][ 7:0],
+                      data_out[7][15:8], data_out[5][15:8], data_out[3][15:8], data_out[1][15:8], data_out[6][15:8], data_out[4][15:8], data_out[2][15:8], data_out[0][15:8]};
     end else if((resolution == 2'b00) && (mode == 3'b010)) begin  //  8-bit dual channel
       wr_data_int <= {data_out[7][ 7:0], data_out[3][ 7:0], data_out[6][ 7:0], data_out[2][ 7:0], data_out[5][ 7:0], data_out[1][ 7:0], data_out[4][ 7:0], data_out[0][ 7:0],
                       data_out[7][15:8], data_out[3][15:8], data_out[6][15:8], data_out[2][15:8], data_out[5][15:8], data_out[1][15:8], data_out[4][15:8], data_out[0][15:8]};
