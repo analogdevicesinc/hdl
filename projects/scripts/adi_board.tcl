@@ -21,6 +21,26 @@ set xcvr_instance NONE
 
 set use_smartconnect 1
 
+## Globals for the PCIe XDMA (AXI Bridge mode) interconnect helper.
+#  Callers may override these before invoking ad_pcie_interconnect if their
+#  block design uses different instance/net names.
+#
+set pcie_interconnect_name pcie_ctrl_sc
+set pcie_xdma_name         pcie_xdma
+set pcie_axi_clk_name      pcie_axi_clk
+set pcie_axi_resetn_name   pcie_axi_resetn
+
+## Globals for the PCIe S_AXI_B (FPGA -> host RAM) interconnect helper.
+#  pcie_saxi_interconnect_name  - SmartConnect name created on demand
+#  pcie_saxi_index              - running S port index (auto-incremented)
+#
+#  The host-RAM aperture size is not a global here: it is derived from
+#  pcie_xdma CONFIG.axibar_highaddr_0, so the project's xdma configuration is
+#  the single place it is declared.
+#
+set pcie_saxi_interconnect_name pcie_saxi_sc
+set pcie_saxi_index             -1
+
 ## Add an instance of an IP or inline_hdl to the block design.
 #
 # \param[i_ip] - name of the IP
@@ -1202,6 +1222,459 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
   } elseif {$sys_zynq ==  3} {
     ad_hpmx_interconnect "FPD"      $p_address $p_name $p_intf_name
   }
+}
+
+## Create an AXI4 memory mapped connection from the PCIe XDMA (AXI Bridge mode)
+#  M_AXI_B master to a peripheral's AXI slave interface. Instantiates the
+#  SmartConnect on first call and grows CONFIG.NUM_MI on every subsequent call.
+#
+#  The block design is expected to already contain:
+#    - an XDMA instance in AXI_Bridge mode (default name: pcie_xdma)
+#    - an axi clock net    (default: pcie_axi_clk)
+#    - an axi resetn net   (default: pcie_axi_resetn)
+#  The proc creates the SmartConnect (default name: pcie_ctrl_sc) on demand and
+#  wires its S00_AXI to pcie_xdma/M_AXI_B.
+#
+#  \param[p_address] - offset within the pcie_xdma/M_AXI_B address space
+#  \param[p_name]    - name of the peripheral IP cell
+#  \param[p_intf_name] - name of the AXI MM slave interface on the IP (optional).
+#                       When omitted, the first AXI MM slave interface is used.
+#
+proc ad_pcie_interconnect {p_address p_name {p_intf_name {}}} {
+
+  global pcie_interconnect_name
+  global pcie_xdma_name
+  global pcie_axi_clk_name
+  global pcie_axi_resetn_name
+
+  set sc_name $pcie_interconnect_name
+
+  # Resolve the peripheral AXI slave interface pin, either by name or by
+  # picking the first AXI MM slave the cell exposes. We need this before the
+  # SmartConnect setup so we can tear down any pre-existing CPU-side wiring
+  # first (net, address segments, clock/reset).
+  set p_cell [get_bd_cells $p_name]
+  if {$p_intf_name eq ""} {
+    set p_intf [lindex [get_bd_intf_pins -filter \
+      "MODE == Slave && VLNV == xilinx.com:interface:aximm_rtl:1.0" \
+      -of_objects $p_cell] 0]
+    set p_intf_name_bu ""
+  } else {
+    set p_intf [get_bd_intf_pins -filter \
+      "MODE == Slave && VLNV == xilinx.com:interface:aximm_rtl:1.0 && NAME =~ *$p_intf_name*" \
+      -of_objects $p_cell]
+    set p_intf_name_bu _${p_intf_name}
+  }
+
+  # If the IP was previously attached (e.g. via ad_cpu_interconnect), detach
+  # it first: remove the driving intf net, drop CPU-side address segments,
+  # and float the associated clock/reset so we can rewire to pcie_axi_clk.
+  set existing_net [get_bd_intf_nets -quiet -of_objects $p_intf]
+  if {$existing_net ne ""} {
+    delete_bd_objs $existing_net
+  }
+  # ad_cpu_interconnect names its master-side mappings SEG_data_<ip>[_<intf>]
+  # in the CPU master address space (sys_ps8/Data, sys_cips/M_AXI_FPD, ...).
+  # Wildcard across master spaces so this works for any sys_zynq flavor.
+  foreach pat [list \
+      "*/SEG_data_${p_name}" \
+      "*/SEG_data_${p_name}_*" \
+    ] {
+    foreach seg [get_bd_addr_segs -quiet $pat] {
+      delete_bd_objs $seg
+    }
+  }
+  set p_intf_leaf [lindex [split $p_intf "/"] end]
+  set p_intf_clock [get_bd_pins -filter "TYPE == clk && \
+    (CONFIG.ASSOCIATED_BUSIF == ${p_intf_leaf} || \
+    CONFIG.ASSOCIATED_BUSIF =~ ${p_intf_leaf}:* || \
+    CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_leaf} || \
+    CONFIG.ASSOCIATED_BUSIF =~ *:${p_intf_leaf}:*)" \
+    -quiet -of_objects $p_cell]
+  set p_intf_reset ""
+  if {$p_intf_clock ne ""} {
+    set p_intf_reset [get_property CONFIG.ASSOCIATED_RESET \
+      [get_bd_pins $p_intf_clock]]
+    if {$p_intf_reset ne ""} {
+      set p_intf_reset [get_bd_pins -filter "NAME == $p_intf_reset" \
+        -of_objects $p_cell]
+    }
+  } else {
+    set p_intf_clock [get_bd_pins -quiet ${p_name}/${p_intf_leaf}_aclk]
+    set p_intf_reset [get_bd_pins -quiet ${p_name}/${p_intf_leaf}_aresetn]
+  }
+  if {$p_intf_clock ne ""} {
+    set clk_net [get_bd_nets -quiet -of_objects $p_intf_clock]
+    if {$clk_net ne ""} {
+      ad_disconnect $clk_net $p_intf_clock
+    }
+  }
+  if {$p_intf_reset ne ""} {
+    set rst_net [get_bd_nets -quiet -of_objects $p_intf_reset]
+    if {$rst_net ne ""} {
+      ad_disconnect $rst_net $p_intf_reset
+    }
+  }
+
+  # Create the SmartConnect the first time we are called.
+  if {[catch {
+    set interconnect_index [get_property CONFIG.NUM_MI [get_bd_cells $sc_name]]
+  } err]} {
+    set interconnect_index 0
+    ad_ip_instance smartconnect $sc_name [ list \
+      NUM_SI   1 \
+      NUM_MI   1 \
+      NUM_CLKS 1 \
+    ]
+    ad_connect $pcie_axi_clk_name    $sc_name/aclk
+    ad_connect $pcie_axi_resetn_name $sc_name/aresetn
+    ad_connect $sc_name/S00_AXI      $pcie_xdma_name/M_AXI_B
+  }
+
+  set i_str [format "M%02d" $interconnect_index]
+  set interconnect_index [expr $interconnect_index + 1]
+  set_property CONFIG.NUM_MI $interconnect_index [get_bd_cells $sc_name]
+
+  ad_connect $sc_name/${i_str}_AXI $p_intf
+
+  # Rewire the AXI-associated clock/reset (computed above during teardown) to
+  # the PCIe axi clock domain. Skip silently if a caller has already routed
+  # them (data-path SG masters wired elsewhere, etc).
+  if {$p_intf_clock ne "" && \
+      [get_bd_nets -quiet -of_objects $p_intf_clock] eq ""} {
+    ad_connect $pcie_axi_clk_name $p_intf_clock
+  }
+  if {$p_intf_reset ne "" && \
+      [get_bd_nets -quiet -of_objects $p_intf_reset] eq ""} {
+    ad_connect $pcie_axi_resetn_name $p_intf_reset
+  }
+
+  # Address assignment inside the pcie_xdma/M_AXI_B space.
+  #
+  # For hierarchical cells the AXI slave interface pin does not itself carry an
+  # address space; the address segment lives on the leaf cell inside. Descend
+  # through hier boundaries the same way ad_hpmx_interconnect does to find the
+  # real slave, then look up its address segment(s) via that leaf pin.
+  set p_hier_cell $p_cell
+  set p_hier_intf $p_intf
+  while {$p_hier_intf ne "" && [get_property TYPE $p_hier_cell] eq "hier"} {
+    set p_hier_intf [find_bd_objs -boundary_type lower \
+      -relation connected_to $p_hier_intf]
+    if {$p_hier_intf ne ""} {
+      set p_hier_cell [get_bd_cells -of_objects $p_hier_intf]
+    } else {
+      set p_hier_cell ""
+    }
+  }
+  if {$p_hier_intf eq ""} {
+    set p_hier_intf $p_intf
+  }
+
+  set p_addr_space [get_bd_addr_spaces -quiet -of_objects $p_hier_intf]
+  if {$p_addr_space eq ""} {
+    error "ERROR: ad_pcie_interconnect: no address space on $p_intf"
+  }
+  set p_seg [get_bd_addr_segs -quiet -of_objects $p_addr_space]
+
+  set p_target_space [get_bd_addr_spaces $pcie_xdma_name/M_AXI_B]
+  set p_index 0
+  foreach p_seg_name $p_seg {
+    if {$p_index == 0} {
+      set p_seg_range [get_property range $p_seg_name]
+      if {$p_seg_range < 0x1000} {
+        set p_seg_range 0x1000
+      }
+      assign_bd_address -target_address_space $p_target_space \
+        -offset $p_address -range $p_seg_range $p_seg_name
+    } else {
+      assign_bd_address -target_address_space $p_target_space $p_seg_name
+    }
+    incr p_index
+  }
+}
+
+## Route an AXI master (typically an axi_dmac data or SG interface) into host
+#  RAM via the PCIe XDMA S_AXI_B slave. Analogous to ad_mem_hpc0_interconnect:
+#  one master per call, growing a SmartConnect (default pcie_saxi_sc) on
+#  demand. The SmartConnect handles CDC between the master's clock and
+#  pcie_axi_clk on the XDMA side.
+#
+#  If the master is currently connected somewhere (e.g. an existing HPCx
+#  SmartConnect), the existing intf net and address segments are torn down
+#  first so the caller does not need to do it manually.
+#
+#  The host-RAM window is read from the XDMA IP, so the project must set
+#  CONFIG.axibar_0 and CONFIG.axibar_highaddr_0 on it before the first call.
+#  The IP defaults both to 0 and declares only a 1 MB BAR0 in its
+#  component.xml, so there is nothing usable to fall back on -- an unset
+#  window fails the build rather than producing a silently unreachable one.
+#
+#  \param[p_clk]  - clock net name driving the master side (e.g. sys_dma_clk)
+#  \param[p_name] - full interface pin path (e.g. axi_foo_dma/m_dest_axi)
+#
+proc ad_pcie_saxi_interconnect {p_clk p_name} {
+
+  global pcie_saxi_interconnect_name
+  global pcie_saxi_index
+  global pcie_xdma_name
+  global pcie_axi_clk_name
+  global pcie_axi_resetn_name
+
+  set sc_name $pcie_saxi_interconnect_name
+  set master_pin [get_bd_intf_pins $p_name]
+  set p_clk_net  [get_bd_nets $p_clk]
+
+  # First call: create the SmartConnect with a single clock slot (aclk on
+  # pcie_axi_clk feeding M00 -> pcie_xdma/S_AXI_B). Additional slots are added
+  # below as more distinct S-side clocks appear.
+  if {$pcie_saxi_index < 0} {
+    ad_ip_instance smartconnect $sc_name [ list \
+      NUM_SI   1 \
+      NUM_MI   1 \
+      NUM_CLKS 1 \
+    ]
+    ad_connect $pcie_axi_clk_name    $sc_name/aclk
+    ad_connect $pcie_axi_resetn_name $sc_name/aresetn
+    ad_connect $sc_name/M00_AXI      $pcie_xdma_name/S_AXI_B
+    # SmartConnect aclk ASSOCIATED_BUSIF is read-only; the IP derives the
+    # busif<->clock mapping from the actual connections. Nothing to set here.
+    set pcie_saxi_index 0
+  }
+
+  # Detach the master from its current interconnect (if any) and clean up
+  # any pre-existing address segments.
+  set existing_net [get_bd_intf_nets -quiet -of_objects $master_pin]
+  if {$existing_net ne ""} {
+    delete_bd_objs $existing_net
+  }
+  set master_space [get_bd_addr_spaces -quiet -of_objects $master_pin]
+  if {$master_space ne ""} {
+    foreach seg [get_bd_addr_segs -quiet -of_objects $master_space] {
+      delete_bd_objs $seg
+    }
+  }
+
+  # Find (or create) the aclk slot carrying $p_clk. NUM_CLKS on smartconnect
+  # is 1..8. aclk_slot("") = /aclk, aclk_slot(1) = /aclk1, etc.
+  set num_clks [get_property CONFIG.NUM_CLKS [get_bd_cells $sc_name]]
+  set clk_slot -1
+  for {set i 0} {$i < $num_clks} {incr i} {
+    set pin_name [expr {$i == 0 ? "aclk" : "aclk$i"}]
+    set pin [get_bd_pins $sc_name/$pin_name]
+    set net [get_bd_nets -quiet -of_objects $pin]
+    if {$net ne "" && [get_bd_nets $net] eq $p_clk_net} {
+      set clk_slot $i
+      break
+    }
+  }
+  if {$clk_slot < 0} {
+    set clk_slot $num_clks
+    incr num_clks
+    set_property CONFIG.NUM_CLKS $num_clks [get_bd_cells $sc_name]
+    set new_pin [get_bd_pins $sc_name/aclk$clk_slot]
+    ad_connect $p_clk $new_pin
+  }
+  set aclk_pin [get_bd_pins $sc_name/[expr {$clk_slot == 0 ? "aclk" : "aclk$clk_slot"}]]
+
+  set i_str [format "S%02d" $pcie_saxi_index]
+  incr pcie_saxi_index
+  set_property CONFIG.NUM_SI $pcie_saxi_index [get_bd_cells $sc_name]
+
+  # Attach the master and map it into the full S_AXI_B window.
+  # (SmartConnect derives which busif is on which aclk from the actual
+  # connections; ASSOCIATED_BUSIF on smartconnect aclk pins is read-only.)
+  ad_connect $sc_name/${i_str}_AXI $master_pin
+
+  # Size and place the segment explicitly. Left to itself, assign_bd_address
+  # takes the range from the xdma IP's declared default for S_AXI_B/BAR0
+  # (component.xml hardcodes 2**20 = 1 MB, with no dependency on anything) and
+  # picks an arbitrary base, which leaves host buffers outside the decode
+  # window -- the DMA then fetches SG descriptors that never reach host RAM.
+  #
+  # Take both ends of the window from the xdma IP rather than keeping a second
+  # copy of the numbers here. CONFIG.axibar_0 is the first address and
+  # CONFIG.axibar_highaddr_0 the last (inclusive) address S_AXI_B/BAR0 decodes,
+  # so the aperture is highaddr - base + 1 bytes. highaddr is absolute, not
+  # relative to base: xdma_v4_2/bd.tcl derives the pair the same way
+  # (cfx_base_high_of_slv: nHigh = nOfs + nRng - 1). Deriving both keeps the
+  # project's axibar_0 / axibar_highaddr_0 the single place the window is
+  # declared -- and they must be set before this proc is called, since the IP
+  # defaults both to 0 and the guards below then fail the build.
+  #
+  # The segment is mapped at axibar_0 rather than unconditionally at 0 so the
+  # address Vivado programs into the fabric decoder agrees with the window the
+  # bridge itself decodes. With the usual axibar_0 = 0 and axibar2pciebar_0 = 0
+  # that is an identity map -- AXI address == host physical address -- which is
+  # what the axi-dmac driver assumes when it programs a dma_addr_t straight
+  # into SG_ADDRESS/DEST_ADDRESS.
+  set xdma_cell [get_bd_cells $pcie_xdma_name]
+  set base      [get_property -quiet CONFIG.axibar_0          $xdma_cell]
+  set highaddr  [get_property -quiet CONFIG.axibar_highaddr_0 $xdma_cell]
+  set xdma_aw   [get_property -quiet CONFIG.axi_addr_width    $xdma_cell]
+  if {$base eq "" || $highaddr eq "" || ![string is integer -strict $xdma_aw]} {
+    error "ERROR: ad_pcie_saxi_interconnect: cannot read \
+$pcie_xdma_name CONFIG.axibar_0 / CONFIG.axibar_highaddr_0 / \
+CONFIG.axi_addr_width"
+  }
+
+  # axi_addr_width bounds what S_AXI_B can decode. Suggest a top address that
+  # fits it, so the guidance below stays valid for a 32-bit bridge too.
+  set xdma_max [expr {$xdma_aw >= 64 ? -1 : (wide(1) << $xdma_aw) - 1}]
+  set suggest  [format 0x%016X $xdma_max]
+
+  # Everything below is signed 64-bit Tcl arithmetic, so reject addresses in
+  # the top half of the space instead of silently comparing negative numbers.
+  # This also catches an all-ones highaddr, which would ask for a 2**64 range
+  # that no -range value can express.
+  foreach {p_str p_val} [list axibar_0 $base axibar_highaddr_0 $highaddr] {
+    if {wide($p_val) < 0} {
+      error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name \
+CONFIG.$p_str ($p_val) is at or above 2**63. Address segments are bounded by \
+signed 64-bit arithmetic, so keep the window inside the low half of the space \
+-- e.g. 0x0 .. 0x0000000FFFFFFFFF for a 36-bit host address space."
+    }
+  }
+
+  if {wide($highaddr) <= wide($base)} {
+    error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name \
+CONFIG.axibar_0 ($base) / CONFIG.axibar_highaddr_0 ($highaddr) leave S_AXI_B \
+with no usable host-RAM aperture. highaddr is the last address in the window, \
+so it must be above axibar_0 -- at most $suggest for the configured \
+axi_addr_width of $xdma_aw bits."
+  }
+
+  set aperture [expr {wide($highaddr) - wide($base) + 1}]
+
+  # Vivado address segments must be a power of two and naturally aligned, so a
+  # window that is not both cannot be expressed at all. Check here rather than
+  # letting assign_bd_address fail, since the fix is in the project's axibar_*
+  # values and not in this proc.
+  if {($aperture & ($aperture - 1)) != 0} {
+    error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name window \
+CONFIG.axibar_0 ($base) .. CONFIG.axibar_highaddr_0 ($highaddr) spans \
+$aperture bytes, which is not a power of two. Address segment ranges must be, \
+so round the window up or down (highaddr is inclusive: a 4 GB window ending \
+at base + 0xFFFFFFFF)."
+  }
+  if {(wide($base) & ($aperture - 1)) != 0} {
+    error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name \
+CONFIG.axibar_0 ($base) is not aligned to the $aperture-byte window it opens. \
+Address segments must be naturally aligned, so move the base down to a \
+multiple of the window size."
+  }
+
+  # A window reaching past axi_addr_width is the silent-corruption case: the
+  # DMA masters are 64-bit, so the per-master clamp below never trips, and
+  # S_AXI_B quietly drops the high address bits. Descriptor fetches then land
+  # at the wrong host address and the DMA delivers garbage, so fail loudly.
+  if {$xdma_max >= 0 && wide($highaddr) > $xdma_max} {
+    error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name \
+CONFIG.axibar_highaddr_0 ($highaddr) exceeds what CONFIG.axi_addr_width \
+($xdma_aw bits, max $suggest) can decode. S_AXI_B would truncate the high \
+address bits. Either widen axi_addr_width or lower axibar_highaddr_0."
+  }
+
+  # Clamp to the master's own address width: the xcvr m_axi ports are 32-bit
+  # and assign_bd_address rejects a range the master cannot drive. Halving
+  # preserves both requirements above -- the range stays a power of two, and a
+  # base aligned to 2**k is aligned to every smaller power of two -- so only
+  # the unreachable top of the window is dropped.
+  set master_aw [get_property -quiet CONFIG.ADDR_WIDTH $master_pin]
+  if {[string is integer -strict $master_aw] && $master_aw < 64} {
+    set master_max [expr {wide(1) << $master_aw}]
+    if {wide($base) >= $master_max} {
+      error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name window starts \
+at CONFIG.axibar_0 ($base), which the ${master_aw}-bit master $p_name cannot \
+address at all. Move the window into the master's reach, or leave this master \
+off the PCIe SmartConnect."
+    }
+    while {wide($base) + $aperture > $master_max} {
+      set aperture [expr {$aperture >> 1}]
+    }
+    if {$aperture < 4096} {
+      error "ERROR: ad_pcie_saxi_interconnect: $pcie_xdma_name window \
+CONFIG.axibar_0 ($base) .. CONFIG.axibar_highaddr_0 ($highaddr) leaves the \
+${master_aw}-bit master $p_name less than 4 kB of reachable aperture, which is \
+smaller than the minimum address segment range."
+    }
+  }
+
+  assign_bd_address -target_address_space $master_pin \
+    [get_bd_addr_segs $pcie_xdma_name/S_AXI_B/BAR0] \
+    -offset $base -range $aperture
+}
+
+## Connect an IP interrupt pin to the PCIe XDMA user IRQ concat, auto-growing
+#  concat_xdma_int and pcie_xdma/CONFIG.xdma_num_usr_irq as more IPs attach.
+#  Creates concat_xdma_int on the first call and wires its dout to
+#  pcie_xdma/usr_irq_req. Assumes the PCIe XDMA in AXI Bridge mode already
+#  exists in the block design (default name: pcie_xdma).
+#
+#  \param[p_name] - name of the interrupt pin (e.g. axi_foo/irq)
+#
+proc ad_pcie_interrupt {p_name} {
+
+  global pcie_xdma_name
+
+  # If the pin was previously routed to a PS interrupt concat
+  # (sys_concat_intc_*), detach it first so ad_connect below does not fail.
+  set p_pin [get_bd_pins -quiet $p_name]
+  if {$p_pin ne ""} {
+    set p_net [get_bd_nets -quiet -of_objects $p_pin]
+    if {$p_net ne ""} {
+      delete_bd_objs $p_net
+    }
+  }
+
+  # Create the concat on the first call; start at width 1 and grow as more
+  # IRQs attach.
+  set concat_cell [get_bd_cells -quiet concat_xdma_int]
+  if {$concat_cell eq ""} {
+    ad_ip_instance ilconcat concat_xdma_int [list NUM_PORTS 1]
+    set concat_cell [get_bd_cells concat_xdma_int]
+    ad_connect $pcie_xdma_name/usr_irq_req $concat_cell/dout
+  }
+
+  # Find the first unconnected concat input; grow NUM_PORTS if we are full.
+  set num_ports [get_property CONFIG.NUM_PORTS $concat_cell]
+  set free_index -1
+  for {set i 0} {$i < $num_ports} {incr i} {
+    set pin [get_bd_pins -quiet $concat_cell/In$i]
+    if {[find_bd_objs -quiet -relation connected_to $pin] eq ""} {
+      set free_index $i
+      break
+    }
+  }
+  if {$free_index == -1} {
+    set free_index $num_ports
+    incr num_ports
+    set_property CONFIG.NUM_PORTS $num_ports $concat_cell
+    # Keep the XDMA user-IRQ count in lockstep with the concat width; the
+    # maximum supported by the XDMA IP is 16.
+    set xdma_cell [get_bd_cells $pcie_xdma_name]
+    if {$num_ports > 16} {
+      error "ERROR: ad_pcie_interrupt: xdma_num_usr_irq exceeds 16 (requested $num_ports)"
+    }
+    set_property CONFIG.xdma_num_usr_irq $num_ports $xdma_cell
+
+    # MSI/MSI-X vector counts must be a power of 2 that covers every user IRQ.
+    set vec 1
+    while {$vec < $num_ports} { set vec [expr {$vec * 2}] }
+
+    # MSI-X table size uses N-1 encoding, expressed in hex.
+    if {[catch {get_property CONFIG.pf0_msix_enabled $xdma_cell} msix_en] == 0 \
+        && $msix_en eq "true"} {
+      set_property CONFIG.pf0_msix_cap_table_size \
+        [format "%X" [expr {$vec - 1}]] $xdma_cell
+    }
+    # MSI multi-message capable field, expressed as "N vectors".
+    if {[catch {get_property CONFIG.pf0_msi_enabled $xdma_cell} msi_en] == 0 \
+        && $msi_en eq "true"} {
+      set_property CONFIG.pf0_msi_cap_multimsgcap "${vec}_vectors" $xdma_cell
+    }
+  }
+
+  ad_connect $concat_cell/In$free_index $p_name
 }
 
 ## Connects an IP interrupt port to the system's interrupt controller interface.
