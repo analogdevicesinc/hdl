@@ -87,68 +87,37 @@ ad_mem_hp1_interconnect $sys_cpu_clk axi_ad4080_dma/m_dest_axi
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad4080_dma/irq
 
-# Add PMOD interface ports for SPI slave and data ready
+# PMOD JB interface ports for the SPI slave (to external SPI master).
+# The AD4080 samples are buffered in an asynchronous FIFO inside spi_slave
+# and streamed out over a plain SPI-slave interface. pmod_data_ready (active low)
+# indicates the FIFO is not empty; the external master polls it (or uses it as an
+# interrupt) and then clocks one 32-bit word out on MISO. No PS software is in the
+# datapath. The existing axi_ad4080_dma -> DDR path is left intact in parallel.
 create_bd_port -dir O pmod_spi_miso
 create_bd_port -dir I pmod_spi_mosi
 create_bd_port -dir I pmod_spi_sclk
 create_bd_port -dir I pmod_spi_cs
 create_bd_port -dir O pmod_data_ready
 
-# Dual-clock FIFO for bridging ADC clock domain to SPI clock domain
-ad_ip_instance fifo_generator ad4080_adc_fifo
-ad_ip_parameter ad4080_adc_fifo CONFIG.Fifo_Implementation {Independent_Clocks_Block_RAM}
-ad_ip_parameter ad4080_adc_fifo CONFIG.Input_Data_Width 32
-ad_ip_parameter ad4080_adc_fifo CONFIG.Input_Depth 1024
-ad_ip_parameter ad4080_adc_fifo CONFIG.Output_Data_Width 32
-ad_ip_parameter ad4080_adc_fifo CONFIG.Output_Depth 1024
-ad_ip_parameter ad4080_adc_fifo CONFIG.Use_Embedded_Registers {false}
-ad_ip_parameter ad4080_adc_fifo CONFIG.Reset_Type {Asynchronous_Reset}
-ad_ip_parameter ad4080_adc_fifo CONFIG.Full_Flags_Reset_Value 0
-ad_ip_parameter ad4080_adc_fifo CONFIG.Valid_Flag {true}
-ad_ip_parameter ad4080_adc_fifo CONFIG.Data_Count_Width 10
-ad_ip_parameter ad4080_adc_fifo CONFIG.Write_Data_Count_Width 10
-ad_ip_parameter ad4080_adc_fifo CONFIG.Read_Data_Count_Width 10
-ad_ip_parameter ad4080_adc_fifo CONFIG.Full_Threshold_Assert_Value 1022
-ad_ip_parameter ad4080_adc_fifo CONFIG.Full_Threshold_Negate_Value 1021
+# Custom SPI-slave + async FIFO helper. Write side runs in the ADC clock domain;
+# read side is an oversampled SPI slave in the system clock domain (SCK/CS/MOSI
+# are synchronized in fabric, not used as a clock). Mode 3, MSB-first, 32-bit.
+ad_ip_instance spi_slave ad4080_spi_slave
+ad_ip_parameter ad4080_spi_slave CONFIG.DATA_WIDTH $DMA_DATA_WIDTH_SRC
 
-# AXI Quad SPI in slave mode for microcontroller interface
-ad_ip_instance axi_quad_spi ad4080_spi_slave
-ad_ip_parameter ad4080_spi_slave CONFIG.C_USE_STARTUP {0}
-ad_ip_parameter ad4080_spi_slave CONFIG.C_NUM_SS_BITS {1}
-ad_ip_parameter ad4080_spi_slave CONFIG.C_SCK_RATIO {4}
-ad_ip_parameter ad4080_spi_slave CONFIG.C_NUM_TRANSFER_BITS {32}
-ad_ip_parameter ad4080_spi_slave CONFIG.C_SPI_MEMORY {1}
-ad_ip_parameter ad4080_spi_slave CONFIG.C_TYPE_OF_AXI4_INTERFACE {1}
-ad_ip_parameter ad4080_spi_slave CONFIG.C_XIP_MODE {0}
-ad_ip_parameter ad4080_spi_slave CONFIG.C_USE_SLAVE {1}
+# Fan out the ADC datapath into the FIFO write side (ADC clock domain).
+ad_connect axi_ad4080_adc/adc_clk   ad4080_spi_slave/adc_clk
+ad_connect axi_ad4080_adc/adc_rst   ad4080_spi_slave/adc_rst
+ad_connect axi_ad4080_adc/adc_data  ad4080_spi_slave/adc_data
+ad_connect axi_ad4080_adc/adc_valid ad4080_spi_slave/adc_valid
 
-# Connect ADC data to FIFO write side (tee off from existing DMA path)
-ad_connect axi_ad4080_adc/adc_data  ad4080_adc_fifo/din
-ad_connect axi_ad4080_adc/adc_valid ad4080_adc_fifo/wr_en
-ad_connect axi_ad4080_adc/adc_clk   ad4080_adc_fifo/wr_clk
+# SPI read side runs on the system clock.
+ad_connect $sys_cpu_clk    ad4080_spi_slave/clk
+ad_connect $sys_cpu_resetn ad4080_spi_slave/resetn
 
-# Connect FIFO read side to SPI slave
-ad_connect ad4080_adc_fifo/dout     ad4080_spi_slave/s2mm_cmd_tdata
-ad_connect ad4080_adc_fifo/valid    ad4080_spi_slave/s2mm_cmd_tvalid
-ad_connect ad4080_adc_fifo/rd_en    ad4080_spi_slave/s2mm_cmd_tready
-
-# Connect SPI slave clock domain
-ad_connect $sys_cpu_clk ad4080_adc_fifo/rd_clk
-ad_connect $sys_cpu_clk ad4080_spi_slave/s_axi4_aclk
-ad_connect $sys_cpu_clk ad4080_spi_slave/ext_spi_clk
-
-# Connect resets
-ad_connect $sys_cpu_resetn ad4080_adc_fifo/rst
-ad_connect $sys_cpu_resetn ad4080_spi_slave/s_axi4_aresetn
-
-# Connect SPI slave external interface
-ad_connect pmod_spi_miso  ad4080_spi_slave/io0_o
-ad_connect pmod_spi_mosi  ad4080_spi_slave/io1_i
-ad_connect pmod_spi_sclk  ad4080_spi_slave/sck_i
-ad_connect pmod_spi_cs    ad4080_spi_slave/ss_i
-
-# Data ready signal - indicate when FIFO has data available
-ad_connect ad4080_adc_fifo/empty pmod_data_ready
-
-# Add SPI slave to CPU interconnect
-ad_cpu_interconnect 0x44A50000 ad4080_spi_slave
+# External SPI-slave interface + data-ready (PMOD JB -> external master)
+ad_connect pmod_spi_cs    ad4080_spi_slave/spi_cs
+ad_connect pmod_spi_sclk  ad4080_spi_slave/spi_sclk
+ad_connect pmod_spi_mosi  ad4080_spi_slave/spi_mosi
+ad_connect pmod_spi_miso  ad4080_spi_slave/spi_miso
+ad_connect pmod_data_ready ad4080_spi_slave/data_ready_n

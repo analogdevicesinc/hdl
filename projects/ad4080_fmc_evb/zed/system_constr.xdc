@@ -63,19 +63,12 @@ set_property -dict {PACKAGE_PIN W12  IOSTANDARD LVCMOS33} [get_ports pmod_spi_cs
 set_property -dict {PACKAGE_PIN W11  IOSTANDARD LVCMOS33} [get_ports pmod_spi_sclk];   ## JB2 - SPI Clock (input)
 set_property -dict {PACKAGE_PIN V10  IOSTANDARD LVCMOS33} [get_ports pmod_spi_mosi];   ## JB3 - SPI Master Out Slave In (input)
 set_property -dict {PACKAGE_PIN W8   IOSTANDARD LVCMOS33} [get_ports pmod_spi_miso];   ## JB4 - SPI Master In Slave Out (output)
-set_property -dict {PACKAGE_PIN V8   IOSTANDARD LVCMOS33} [get_ports pmod_data_ready]; ## JB7 - Data Ready (output, active low when FIFO not empty)
+set_property -dict {PACKAGE_PIN V12  IOSTANDARD LVCMOS33} [get_ports pmod_data_ready]; ## JB7 - Data Ready (output, driven by spi_slave, active low)
 
 # SPI slave timing constraints
-# Create a virtual clock for external SPI master (assuming up to 10 MHz)
-create_clock -period 100.0 -name spi_ext_clk [get_ports pmod_spi_sclk]
-
-# Set input delay constraints for SPI slave inputs relative to SPI clock
-set_input_delay -clock [get_clocks spi_ext_clk] -max 10.0 [get_ports {pmod_spi_mosi pmod_spi_cs}]
-set_input_delay -clock [get_clocks spi_ext_clk] -min 2.0  [get_ports {pmod_spi_mosi pmod_spi_cs}]
-
-# Set output delay constraints for SPI slave outputs relative to SPI clock
-set_output_delay -clock [get_clocks spi_ext_clk] -max 15.0 [get_ports pmod_spi_miso]
-set_output_delay -clock [get_clocks spi_ext_clk] -min 5.0  [get_ports pmod_spi_miso]
-
-# Set false path for data ready signal (asynchronous)
-set_false_path -from [get_clocks clk_fpga_0] -to [get_ports pmod_data_ready]
+# The spi_slave helper oversamples the external SPI pins on the system clock:
+# pmod_spi_sclk/cs/mosi are treated as asynchronous data (synchronized in fabric by
+# 2-FF chains), not as a clock. Declare them as false-path inputs, and false-path
+# the pmod_data_ready output, since none of these are timed against the fabric clock.
+set_false_path -from [get_ports {pmod_spi_cs pmod_spi_sclk pmod_spi_mosi}]
+set_false_path -to   [get_ports pmod_data_ready]

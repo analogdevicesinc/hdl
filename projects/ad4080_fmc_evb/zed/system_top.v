@@ -92,8 +92,6 @@ module system_top (
   input           da_n,
   input           db_p,
   input           db_n,
-  input           cnv_in_p,
-  input           cnv_in_n,
 
   input           fpgaclk_p,
   input           fpgaclk_n,
@@ -180,6 +178,9 @@ module system_top (
   assign gpio_i[35]     = adf435x_lock;
   assign gpio_i[36]     = pwrgd;
   assign gpio_i[63:38]  = gpio_o[63:38];
+
+  // pmod_data_ready is driven directly from the spi_slave helper (FIFO
+  // not-empty, active low) through the block design; see i_system_wrapper below.
 
   IBUFDS i_fpga_clk (
     .I (clk_p),
@@ -284,8 +285,11 @@ module system_top (
     .da_n (da_n),
     .db_p (db_p),
     .db_n (db_n),
-    .cnv_in_p(cnv_in_p),
-    .cnv_in_n(cnv_in_n),
+    // CNV copy shares the FMC_CLK1 pin with FPGACLK (see common/ad4080_fmc_evb.txt);
+    // reuse the buffered fpga_100_clk rather than a second IBUFDS on the same pin.
+    // The axi_ad408x core does not use cnv_in (capture is DCO + sync based).
+    .cnv_in_p(fpga_100_clk),
+    .cnv_in_n(1'b0),
     .filter_data_ready_n(filter_data_ready_n),
     .sync_n (ad9508_sync),
     .fpga_ref_clk(fpga_ref_clk),
