@@ -235,7 +235,7 @@ ad_connect cmd_spi/io1_i cmd_spi_miso
 ad_ip_instance axi_chip2chip axi_chip2chip [list \
   C_AXI_STB_WIDTH 16 \
   C_AXI_DATA_WIDTH 32 \
-  C_INTERFACE_MODE 0 \
+  C_INTERFACE_MODE 1 \
   C_INTERFACE_TYPE 3 \
 ]
 
@@ -252,7 +252,6 @@ ad_ip_instance aurora_8b10b aurora_8b10b [list \
   C_AURORA_LANES 2 \
   C_LINE_RATE 3.125 \
   C_REFCLK_FREQUENCY 156.25 \
-  C_LANE_WIDTH 4 \
   interface_mode {Streaming} \
 ]
 
