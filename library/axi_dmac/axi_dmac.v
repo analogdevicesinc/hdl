@@ -53,6 +53,7 @@ module axi_dmac #(
   parameter AXI_SLICE_DEST = 0,
   parameter AXI_SLICE_SRC = 0,
   parameter AXIS_TUSER_SYNC = 1,
+  parameter HAS_AXIS_TKEEP = 0,
   parameter SYNC_TRANSFER_START = 0,
   parameter CYCLIC = 1,
   parameter DMA_AXI_PROTOCOL_DEST = 0,
@@ -391,11 +392,19 @@ module axi_dmac #(
     BYTES_PER_BURST_LIMIT < MAX_BYTES_PER_BURST ?
       BYTES_PER_BURST_LIMIT : MAX_BYTES_PER_BURST;
 
-  /* MM has no alignment requirements */
+  /*
+   * MM has no alignment requirements, since WSTRB masks a partially filled
+   * final beat. A stream destination gains the same freedom once it carries
+   * TKEEP, and a stream source once it consumes it.
+   */
   localparam DMA_LENGTH_ALIGN_SRC =
-    DMA_TYPE_SRC == DMA_TYPE_AXI_MM ? 0 : BYTES_PER_BEAT_WIDTH_SRC;
+    DMA_TYPE_SRC == DMA_TYPE_AXI_MM ? 0 :
+    DMA_TYPE_SRC == DMA_TYPE_AXI_STREAM && HAS_AXIS_TKEEP ? 0 :
+      BYTES_PER_BEAT_WIDTH_SRC;
   localparam DMA_LENGTH_ALIGN_DEST =
-    DMA_TYPE_DEST == DMA_TYPE_AXI_MM ? 0 : BYTES_PER_BEAT_WIDTH_DEST;
+    DMA_TYPE_DEST == DMA_TYPE_AXI_MM ? 0 :
+    DMA_TYPE_DEST == DMA_TYPE_AXI_STREAM && HAS_AXIS_TKEEP ? 0 :
+      BYTES_PER_BEAT_WIDTH_DEST;
 
   /* Choose the larger of the two */
    localparam DMA_LENGTH_ALIGN =
@@ -711,6 +720,7 @@ module axi_dmac #(
     .s_axis_ready(s_axis_ready),
     .s_axis_valid(s_axis_valid),
     .s_axis_data(s_axis_data),
+    .s_axis_keep(s_axis_keep),
     .s_axis_user(s_axis_user),
     .s_axis_last(s_axis_last),
     .s_axis_xfer_req(s_axis_xfer_req),
@@ -719,6 +729,7 @@ module axi_dmac #(
     .m_axis_ready(m_axis_ready),
     .m_axis_valid(m_axis_valid),
     .m_axis_data(m_axis_data),
+    .m_axis_keep(m_axis_keep),
     .m_axis_user(m_axis_user),
     .m_axis_last(m_axis_last),
     .m_axis_xfer_req(m_axis_xfer_req),
@@ -811,7 +822,6 @@ module axi_dmac #(
   assign m_sg_axi_arid = 'h0;
   assign m_sg_axi_arlock = 'h0;
 
-  assign m_axis_keep = {DMA_DATA_WIDTH_DEST/8{1'b1}};
   assign m_axis_strb = {DMA_DATA_WIDTH_DEST/8{1'b1}};
   assign m_axis_id = 'h0;
   assign m_axis_dest = 'h0;
