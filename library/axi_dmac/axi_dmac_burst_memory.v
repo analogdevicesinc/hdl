@@ -160,7 +160,7 @@ module axi_dmac_burst_memory #(
   reg [BYTES_PER_BURST_WIDTH+1-1-DMA_LENGTH_ALIGN:0] burst_len_mem[0:AUX_FIFO_SIZE-1];
 
   wire [BYTES_PER_BURST_WIDTH+1-1:0] src_burst_len_data;
-  reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}};
+  reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = (1 << DMA_LENGTH_ALIGN) - 1;
 
   wire src_beat;
   wire src_last_beat;

@@ -134,6 +134,7 @@ module request_arb #(
   output                              s_axis_ready,
   input                               s_axis_valid,
   input  [DMA_DATA_WIDTH_SRC-1:0]     s_axis_data,
+  input  [DMA_DATA_WIDTH_SRC/8-1:0]   s_axis_keep,
   input                               s_axis_last,
   input  [0:0]                        s_axis_user,
   output                              s_axis_xfer_req,
@@ -143,6 +144,7 @@ module request_arb #(
   input                               m_axis_ready,
   output                              m_axis_valid,
   output [DMA_DATA_WIDTH_DEST-1:0]    m_axis_data,
+  output [DMA_DATA_WIDTH_DEST/8-1:0]  m_axis_keep,
   output [0:0]                        m_axis_user,
   output                              m_axis_last,
   output                              m_axis_xfer_req,
@@ -296,6 +298,27 @@ module request_arb #(
   wire [BYTES_PER_BEAT_WIDTH_SRC-1:0] src_fifo_valid_bytes;
   wire src_fifo_last;
   wire src_fifo_partial_burst;
+
+  /*
+   * src_valid_bytes holds the byte count of a beat minus one -- the same
+   * encoding as req_length[BYTES_PER_BEAT_WIDTH_SRC-1:0], which is where the
+   * memory-mapped source gets its value from. For a TKEEP that is contiguous
+   * from bit 0, as stream packet data is, that count minus one is exactly the
+   * index of the highest set bit.
+   *
+   * An all-zero TKEEP yields a full beat, which is what a master that leaves
+   * the signal tied low gets today.
+   */
+  function [BYTES_PER_BEAT_WIDTH_SRC-1:0] keep_to_valid_bytes;
+    input [DMA_DATA_WIDTH_SRC/8-1:0] keep;
+    integer i;
+    begin
+      keep_to_valid_bytes = {BYTES_PER_BEAT_WIDTH_SRC{1'b1}};
+      for (i = 0; i < DMA_DATA_WIDTH_SRC/8; i = i + 1)
+        if (keep[i] == 1'b1)
+          keep_to_valid_bytes = i[BYTES_PER_BEAT_WIDTH_SRC-1:0];
+    end
+  endfunction
 
   wire                                 src_bl_valid;
   wire                                 src_bl_ready;
@@ -546,11 +569,13 @@ module request_arb #(
     .fifo_valid(dest_valid),
     .fifo_ready(dest_ready),
     .fifo_data(dest_data),
+    .fifo_strb(dest_strb),
     .fifo_last(dest_last),
 
     .m_axis_valid(m_axis_valid),
     .m_axis_ready(m_axis_ready),
     .m_axis_data(m_axis_data),
+    .m_axis_keep(m_axis_keep),
     .m_axis_user(m_axis_user),
     .m_axis_last(m_axis_last));
 
@@ -560,6 +585,7 @@ module request_arb #(
   assign m_axis_last = 1'b0;
   assign m_axis_xfer_req = 1'b0;
   assign m_axis_data = 'h00;
+  assign m_axis_keep = {DMA_DATA_WIDTH_DEST/8{1'b1}};
   assign m_axis_user = 'h00;
 
   end
@@ -777,7 +803,18 @@ module request_arb #(
     .s_axis_user(s_axis_user),
     .s_axis_xfer_req(s_axis_xfer_req));
 
-  assign src_valid_bytes = {BYTES_PER_BEAT_WIDTH_SRC{1'b1}};
+  /*
+   * Only the last beat of a burst is recorded (burst_len_mem in
+   * axi_dmac_burst_memory), and only its low DMA_LENGTH_ALIGN bits are dropped
+   * on the way in. So TKEEP is worth reading exactly when DMA_LENGTH_ALIGN is
+   * zero, which for a stream source is what HAS_AXIS_TKEEP produces; otherwise
+   * the bits cannot be stored and the beat is reported as full, as before.
+   */
+  if (DMA_LENGTH_ALIGN == 0) begin
+    assign src_valid_bytes = keep_to_valid_bytes(s_axis_keep);
+  end else begin
+    assign src_valid_bytes = {BYTES_PER_BEAT_WIDTH_SRC{1'b1}};
+  end
 
   util_axis_fifo #(
     .DATA_WIDTH(ID_WIDTH + 3),

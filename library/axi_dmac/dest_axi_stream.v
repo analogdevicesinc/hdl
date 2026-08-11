@@ -56,12 +56,14 @@ module dest_axi_stream #(
   input m_axis_ready,
   output m_axis_valid,
   output [S_AXIS_DATA_WIDTH-1:0] m_axis_data,
+  output [S_AXIS_DATA_WIDTH/8-1:0] m_axis_keep,
   output reg [0:0] m_axis_user = 1'b1,
   output m_axis_last,
 
   output fifo_ready,
   input fifo_valid,
   input [S_AXIS_DATA_WIDTH-1:0] fifo_data,
+  input [S_AXIS_DATA_WIDTH/8-1:0] fifo_strb,
   input fifo_last,
 
   input req_valid,
@@ -107,6 +109,14 @@ module dest_axi_stream #(
   assign fifo_ready = m_axis_ready & active & has_sync;
   assign m_axis_last = req_xlast_d & fifo_last & data_eot;
   assign m_axis_data = fifo_data;
+
+  /*
+   * Byte strobe for a partially filled final beat, built by
+   * axi_dmac_burst_memory from the source's valid-byte count. It is constant
+   * all-ones unless DMA_LENGTH_ALIGN is 0, since the regmap otherwise pins the
+   * sub-beat bits of the requested length.
+   */
+  assign m_axis_keep = fifo_strb;
 
   always @(posedge s_axis_aclk) begin
     if (req_ready == 1'b1) begin
