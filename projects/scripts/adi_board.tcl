@@ -41,6 +41,15 @@ set pcie_axi_resetn_name   pcie_axi_resetn
 set pcie_saxi_interconnect_name pcie_saxi_sc
 set pcie_saxi_index             -1
 
+## Globals for the PCIe user-interrupt controller (see ad_pcie_interrupt).
+#  pcie_intc_name    - axi_intc instance created on demand
+#  pcie_intc_address - where its register window lands in the XDMA M_AXI_B
+#                      space. Projects may override this before the first
+#                      ad_pcie_interrupt call if it collides with their map.
+#
+set pcie_intc_name    pcie_intc
+set pcie_intc_address 0x84030000
+
 ## Add an instance of an IP or inline_hdl to the block design.
 #
 # \param[i_ip] - name of the IP
@@ -1604,17 +1613,53 @@ smaller than the minimum address segment range."
     -offset $base -range $aperture
 }
 
-## Connect an IP interrupt pin to the PCIe XDMA user IRQ concat, auto-growing
-#  concat_xdma_int and pcie_xdma/CONFIG.xdma_num_usr_irq as more IPs attach.
-#  Creates concat_xdma_int on the first call and wires its dout to
-#  pcie_xdma/usr_irq_req. Assumes the PCIe XDMA in AXI Bridge mode already
-#  exists in the block design (default name: pcie_xdma).
+## Connect an IP interrupt pin to the PCIe XDMA user IRQ path, auto-growing
+#  concat_xdma_int and the axi_intc behind it as more IPs attach. Creates the
+#  axi_intc and the concat on the first call and maps the axi_intc register
+#  window into the XDMA M_AXI_B space. Assumes the PCIe XDMA in AXI Bridge mode
+#  already exists in the block design (default name: pcie_xdma).
+#
+#  Why the interrupt controller, rather than driving usr_irq_req directly:
+#  PG195 says the XDMA bridge emits an MSI on the *assertion* of a usr_irq_req
+#  bit, and that the bit must stay asserted until the host has serviced and
+#  cleared the interrupt. Peripheral irq pins (axi_dmac, axi_jesd, ...) are
+#  levels that stay high while the IP has anything pending, so wiring them
+#  straight to usr_irq_req turns a level source into an edge transport: if a
+#  second event sets a pending bit while the host ISR is between its read and
+#  its write-to-clear, the pin never falls, no new assertion ever occurs, and
+#  that interrupt is lost permanently. A level GIC re-pends and papers over it;
+#  MSI cannot.
+#
+#  axi_intc closes this without asking every peripheral driver to drain its
+#  own pending register perfectly. With C_KIND_OF_INTR = 0 (all inputs level)
+#  it latches each source and re-sets ISR while the input is still high, so
+#  usr_irq_req stays asserted per PG195. The deassertion that arms the next MSI
+#  is produced by the host itself: irq-xilinx-intc.c masks the source at the
+#  intc (CIE) before running the child handler and re-enables it (IAR then SIE)
+#  afterwards, which drops and re-raises irq if the source is still asserted.
+#  That write *is* the "mechanism to know when the interrupt routine has been
+#  serviced" PG195 requires, and its chained handler drains IVR until it reads
+#  -1U, so a child that leaves its own line high is simply re-dispatched.
+#
+#  Because every source now funnels through one intc output, the XDMA needs a
+#  single user IRQ regardless of how many peripherals attach.
+#
+#  The Linux side needs an interrupt-controller node for the intc with
+#  xlnx,num-intr-inputs equal to the number of ad_pcie_interrupt calls and
+#  xlnx,kind-of-intr = 0, parented on the PCIe MSI domain with interrupts = <0>,
+#  and every peripheral re-parented onto it. Each peripheral's interrupts value
+#  is its concat input index, which is unchanged from the old usr_irq_req vector
+#  numbering. On x86 the host kernel needs both CONFIG_XILINX_INTC and
+#  CONFIG_IRQCHIP_XILINX_INTC_MODULE_SUPPORT_EXPERIMENTAL; without the latter
+#  the driver is IRQCHIP_DECLARE-only and never probes there.
 #
 #  \param[p_name] - name of the interrupt pin (e.g. axi_foo/irq)
 #
 proc ad_pcie_interrupt {p_name} {
 
   global pcie_xdma_name
+  global pcie_intc_name
+  global pcie_intc_address
 
   # If the pin was previously routed to a PS interrupt concat
   # (sys_concat_intc_*), detach it first so ad_connect below does not fail.
@@ -1626,13 +1671,79 @@ proc ad_pcie_interrupt {p_name} {
     }
   }
 
-  # Create the concat on the first call; start at width 1 and grow as more
-  # IRQs attach.
+  # Create the intc and the concat feeding it on the first call; start at
+  # width 1 and grow as more IRQs attach.
   set concat_cell [get_bd_cells -quiet concat_xdma_int]
   if {$concat_cell eq ""} {
+    # C_KIND_OF_INTR 0 makes every input level sensitive (the IP default is
+    # 0xFFFFFFFF, i.e. edge detected, which would reintroduce the lost-event
+    # window this controller exists to close). C_IRQ_IS_LEVEL/C_IRQ_ACTIVE
+    # keep the irq output a level, active high, as usr_irq_req expects, and
+    # C_KIND_OF_LVL says all inputs are active high.
+    #
+    # Level is the right choice for *every* input, not just the level sources.
+    # In axi_intc_v4_1_vh_rfs.vhd the level path (LVL_P) is a set-dominant
+    # latch: hw_intr(i) is set whenever the input matches C_KIND_OF_LVL and is
+    # cleared only by iar(i) or reset. So a one-clock pulse is captured and held
+    # until the host acks, exactly like a sustained level -- whereas edge mode
+    # needs a fresh transition and therefore misses a source that is simply
+    # still asserted. Vivado emits WARNING [axi_intc:4.1-7] noting this manual
+    # mask differs from the value it computes from each source's declared
+    # SENSITIVITY; that is expected, and the manual mask is the safer one.
+    #
+    # C_ASYNC_INTR is left alone: the BD propagates it to all-async (the concat
+    # carries no clock association, so it cannot prove the sources share our
+    # clock) and each input then gets C_NUM_SYNC_FF=2 flops. That generate is a
+    # plain shift register, not a toggle synchronizer, so it delays by 2 clocks
+    # without swallowing a single-clock pulse -- nothing to force to 0.
+    #
+    # C_NUM_INTR_INPUTS is deliberately absent: it is read-only and derived
+    # from the width of whatever drives intr, so writing it only earns a
+    # CRITICAL WARNING (BD 41-737). Growing the concat below is what sizes it.
+    #
+    # C_IRQ_CONNECTION 1 = Single: the output is the scalar irq pin rather than
+    # the mbinterrupt_rtl "interrupt" bus interface used for MicroBlaze and for
+    # cascaded intcs. usr_irq_req is a single interrupt input and C_HAS_FAST is
+    # 0, which is exactly the case the IP documents Single for; leaving the
+    # default (Bus) earns WARNING [axi_intc:4.1-13].
+    ad_ip_instance axi_intc $pcie_intc_name [list \
+      C_KIND_OF_INTR    0x0 \
+      C_KIND_OF_LVL     0xFFFFFFFF \
+      C_IRQ_IS_LEVEL    1 \
+      C_IRQ_ACTIVE      0x1 \
+      C_IRQ_CONNECTION  1 \
+      C_HAS_IVR         1 \
+      C_HAS_SIE         1 \
+      C_HAS_CIE         1 \
+      C_HAS_IPR         1 \
+      C_HAS_FAST        0 \
+    ]
+
     ad_ip_instance ilconcat concat_xdma_int [list NUM_PORTS 1]
     set concat_cell [get_bd_cells concat_xdma_int]
-    ad_connect $pcie_xdma_name/usr_irq_req $concat_cell/dout
+
+    ad_connect $concat_cell/dout        $pcie_intc_name/intr
+    ad_connect $pcie_intc_name/irq      $pcie_xdma_name/usr_irq_req
+
+    # Every source funnels through the intc, so one user IRQ vector suffices
+    # no matter how many peripherals attach.
+    set xdma_cell [get_bd_cells $pcie_xdma_name]
+    set_property CONFIG.xdma_num_usr_irq 1 $xdma_cell
+    if {[catch {get_property CONFIG.pf0_msix_enabled $xdma_cell} msix_en] == 0 \
+        && $msix_en eq "true"} {
+      # MSI-X table size uses N-1 encoding, expressed in hex.
+      set_property CONFIG.pf0_msix_cap_table_size 0 $xdma_cell
+    }
+    if {[catch {get_property CONFIG.pf0_msi_enabled $xdma_cell} msi_en] == 0 \
+        && $msi_en eq "true"} {
+      set_property CONFIG.pf0_msi_cap_multimsgcap "1_vector" $xdma_cell
+    }
+
+    # Clock, reset and the BAR window. ad_pcie_interconnect derives the AXI
+    # clock/reset from ASSOCIATED_BUSIF on s_axi and clamps the segment to a
+    # 4 kB minimum, so the intc lands on a page boundary like every other
+    # host-visible peripheral.
+    ad_pcie_interconnect $pcie_intc_address $pcie_intc_name s_axi
   }
 
   # Find the first unconnected concat input; grow NUM_PORTS if we are full.
@@ -1648,30 +1759,14 @@ proc ad_pcie_interrupt {p_name} {
   if {$free_index == -1} {
     set free_index $num_ports
     incr num_ports
+    # A single axi_intc handles 32 inputs; beyond that the IP needs cascade
+    # mode, which the Linux driver does not model.
+    if {$num_ports > 32} {
+      error "ERROR: ad_pcie_interrupt: $pcie_intc_name inputs exceed 32 (requested $num_ports)"
+    }
+    # The intc's C_NUM_INTR_INPUTS follows dout's width by propagation; it is
+    # read-only and must not be set here.
     set_property CONFIG.NUM_PORTS $num_ports $concat_cell
-    # Keep the XDMA user-IRQ count in lockstep with the concat width; the
-    # maximum supported by the XDMA IP is 16.
-    set xdma_cell [get_bd_cells $pcie_xdma_name]
-    if {$num_ports > 16} {
-      error "ERROR: ad_pcie_interrupt: xdma_num_usr_irq exceeds 16 (requested $num_ports)"
-    }
-    set_property CONFIG.xdma_num_usr_irq $num_ports $xdma_cell
-
-    # MSI/MSI-X vector counts must be a power of 2 that covers every user IRQ.
-    set vec 1
-    while {$vec < $num_ports} { set vec [expr {$vec * 2}] }
-
-    # MSI-X table size uses N-1 encoding, expressed in hex.
-    if {[catch {get_property CONFIG.pf0_msix_enabled $xdma_cell} msix_en] == 0 \
-        && $msix_en eq "true"} {
-      set_property CONFIG.pf0_msix_cap_table_size \
-        [format "%X" [expr {$vec - 1}]] $xdma_cell
-    }
-    # MSI multi-message capable field, expressed as "N vectors".
-    if {[catch {get_property CONFIG.pf0_msi_enabled $xdma_cell} msi_en] == 0 \
-        && $msi_en eq "true"} {
-      set_property CONFIG.pf0_msi_cap_multimsgcap "${vec}_vectors" $xdma_cell
-    }
   }
 
   ad_connect $concat_cell/In$free_index $p_name
