@@ -390,3 +390,152 @@ ad_pcie_saxi_interconnect pcie_axi_clk axi_adrv9009_som_obs_dma/m_dest_axi
 ad_pcie_saxi_interconnect pcie_axi_clk axi_adrv9009_som_obs_dma/m_sg_axi
 ad_pcie_saxi_interconnect pcie_axi_clk axi_adrv9009_som_tx_dma/m_src_axi
 ad_pcie_saxi_interconnect pcie_axi_clk axi_adrv9009_som_tx_dma/m_sg_axi
+
+# ---------------------------------------------------------------------------
+# HOST <-> PS NETWORK LINK
+# ---------------------------------------------------------------------------
+
+# 64-bit MM data path rather than the 256-bit used on the RF side. A 64-bit
+# bus at 250 MHz is 2 GB/s, an order of magnitude beyond what this control
+# channel needs, and the width sets the driver's alignment requirement:
+# chan->address_align_mask = max(dest_width, src_width) - 1
+# (dma-axi-dmac.c:912), and axi_dmac_check_addr/check_len reject any
+# unaligned address or length outright (:218-233). Narrow is cheaper to
+# satisfy and cheaper in fabric.
+#
+# MAX_BYTES_PER_BURST 256 and FIFO_SIZE 8 (bursts) match the modest rate.
+# DMA_LENGTH_WIDTH 16 caps a transfer at 64 KB, comfortably above the 8 KB
+# max MTU the driver advertises plus header.
+foreach {dma type_src type_dest} {
+  axi_host_net_tx_dma 0 1
+  axi_host_net_rx_dma 1 0
+  axi_ps_net_tx_dma   0 1
+  axi_ps_net_rx_dma   1 0
+} {
+  ad_ip_instance axi_dmac $dma
+  ad_ip_parameter $dma CONFIG.DMA_TYPE_SRC $type_src
+  ad_ip_parameter $dma CONFIG.DMA_TYPE_DEST $type_dest
+  ad_ip_parameter $dma CONFIG.DMA_DATA_WIDTH_SRC 64
+  ad_ip_parameter $dma CONFIG.DMA_DATA_WIDTH_DEST 64
+  ad_ip_parameter $dma CONFIG.DMA_LENGTH_WIDTH 16
+  ad_ip_parameter $dma CONFIG.MAX_BYTES_PER_BURST 256
+  ad_ip_parameter $dma CONFIG.FIFO_SIZE 8
+  ad_ip_parameter $dma CONFIG.CYCLIC 0
+  ad_ip_parameter $dma CONFIG.DMA_2D_TRANSFER 0
+  ad_ip_parameter $dma CONFIG.DMA_SG_TRANSFER 0
+  ad_ip_parameter $dma CONFIG.SYNC_TRANSFER_START 0
+  ad_ip_parameter $dma CONFIG.AXI_SLICE_SRC 1
+  ad_ip_parameter $dma CONFIG.AXI_SLICE_DEST 1
+  # On a stream destination TKEEP is generated so the trailing beat of a short
+  # frame is marked; on a stream source it is consumed, which drops
+  # DMA_LENGTH_ALIGN to zero and makes the reported transfer length -- and hence
+  # dmaengine residue -- byte exact.
+  ad_ip_parameter $dma CONFIG.HAS_AXIS_TKEEP 1
+}
+
+foreach dma {
+  axi_host_net_tx_dma
+  axi_host_net_rx_dma
+  axi_ps_net_tx_dma
+  axi_ps_net_rx_dma
+} {
+  ad_ip_parameter $dma CONFIG.DMA_AXI_ADDR_WIDTH 64
+  ad_ip_parameter $dma CONFIG.CACHE_COHERENT 1
+  ad_ip_parameter $dma CONFIG.AXI_AXCACHE 0b1111
+  ad_ip_parameter $dma CONFIG.AXI_AXPROT 0b010
+}
+
+foreach dma {
+  axi_host_net_tx_dma
+  axi_host_net_rx_dma
+  axi_ps_net_tx_dma
+  axi_ps_net_rx_dma
+} {
+  ad_ip_parameter $dma CONFIG.ASYNC_CLK_REQ_SRC  0
+  ad_ip_parameter $dma CONFIG.ASYNC_CLK_SRC_DEST 0
+  ad_ip_parameter $dma CONFIG.ASYNC_CLK_DEST_REQ 0
+  ad_ip_parameter $dma CONFIG.ASYNC_CLK_REQ_SG   0
+  ad_ip_parameter $dma CONFIG.ASYNC_CLK_SRC_SG   0
+  ad_ip_parameter $dma CONFIG.ASYNC_CLK_DEST_SG  0
+}
+
+foreach fifo {host_to_ps_net_fifo ps_to_host_net_fifo} {
+  ad_ip_instance axis_data_fifo $fifo
+  ad_ip_parameter $fifo CONFIG.TDATA_NUM_BYTES 8
+  ad_ip_parameter $fifo CONFIG.FIFO_DEPTH 512
+  ad_ip_parameter $fifo CONFIG.FIFO_MEMORY_TYPE block
+  ad_ip_parameter $fifo CONFIG.HAS_TLAST 1
+  # FIFO_MODE 1 (normal) rather than 2 (store-and-forward/packet). Packet mode
+  # withholds a packet until its TLAST arrives, so a transfer that ends without
+  # one wedges the link until the FIFO fills -- the failure needs an eth0 bounce
+  # to clear. Normal mode forwards beats as they arrive and still carries TLAST
+  # through to the receiving DMAC, so a missing TLAST only merges two packets
+  # instead of stalling the pipe, and the link recovers on its own.
+  ad_ip_parameter $fifo CONFIG.FIFO_MODE 1
+  ad_ip_parameter $fifo CONFIG.IS_ACLK_ASYNC 1
+  ad_ip_parameter $fifo CONFIG.HAS_TKEEP 1
+  ad_ip_parameter $fifo CONFIG.HAS_TSTRB 0
+}
+
+# Host -> PS: host DMAC reads host RAM and streams out; FIFO crosses into the
+# PS domain; PS DMAC writes PS DDR.
+ad_connect axi_host_net_tx_dma/m_axis host_to_ps_net_fifo/S_AXIS
+ad_connect host_to_ps_net_fifo/M_AXIS axi_ps_net_rx_dma/s_axis
+
+# PS -> host: mirror image.
+ad_connect axi_ps_net_tx_dma/m_axis   ps_to_host_net_fifo/S_AXIS
+ad_connect ps_to_host_net_fifo/M_AXIS axi_host_net_rx_dma/s_axis
+
+# FIFO clocks: each port runs in the domain of the DMAC it faces, so the FIFO
+# is the only place the two domains meet.
+ad_connect pcie_axi_clk    host_to_ps_net_fifo/s_axis_aclk
+ad_connect pcie_axi_resetn host_to_ps_net_fifo/s_axis_aresetn
+ad_connect sys_cpu_clk     host_to_ps_net_fifo/m_axis_aclk
+
+ad_connect sys_cpu_clk     ps_to_host_net_fifo/s_axis_aclk
+ad_connect sys_cpu_resetn  ps_to_host_net_fifo/s_axis_aresetn
+ad_connect pcie_axi_clk    ps_to_host_net_fifo/m_axis_aclk
+
+# Stream-side DMAC clocks, matching the FIFO port each faces.
+ad_connect pcie_axi_clk axi_host_net_tx_dma/m_axis_aclk
+ad_connect pcie_axi_clk axi_host_net_rx_dma/s_axis_aclk
+ad_connect sys_cpu_clk  axi_ps_net_tx_dma/m_axis_aclk
+ad_connect sys_cpu_clk  axi_ps_net_rx_dma/s_axis_aclk
+
+# Host-side register maps into the XDMA M_AXI_B space. ad_pcie_interconnect
+# also wires s_axi_aclk/s_axi_aresetn to pcie_axi_clk/pcie_axi_resetn.
+#
+# 0x84C30000/0x84C40000 continue the DMA register block: the RF DMACs occupy
+# 0x84C00000 (tx), 0x84C10000 (rx) and 0x84C20000 (obs) above, and axi_sysid_0
+# is at 0x85000000, so this stays inside the existing gap.
+ad_pcie_interconnect 0x84C30000 axi_host_net_tx_dma
+ad_pcie_interconnect 0x84C40000 axi_host_net_rx_dma
+
+# Host-side MM data paths into host RAM via XDMA S_AXI_B. TX reads (m_src_axi),
+# RX writes (m_dest_axi). Both aclks are freshly created and float until now.
+ad_connect pcie_axi_clk    axi_host_net_tx_dma/m_src_axi_aclk
+ad_connect pcie_axi_resetn axi_host_net_tx_dma/m_src_axi_aresetn
+ad_connect pcie_axi_clk    axi_host_net_rx_dma/m_dest_axi_aclk
+ad_connect pcie_axi_resetn axi_host_net_rx_dma/m_dest_axi_aresetn
+
+ad_pcie_saxi_interconnect pcie_axi_clk axi_host_net_tx_dma/m_src_axi
+ad_pcie_saxi_interconnect pcie_axi_clk axi_host_net_rx_dma/m_dest_axi
+
+ad_pcie_interrupt axi_host_net_tx_dma/irq
+ad_pcie_interrupt axi_host_net_rx_dma/irq
+
+ad_cpu_interconnect 0x7c460000 axi_ps_net_tx_dma
+ad_cpu_interconnect 0x7c470000 axi_ps_net_rx_dma
+
+ad_connect sys_cpu_clk    axi_ps_net_rx_dma/m_dest_axi_aclk
+ad_connect sys_cpu_resetn axi_ps_net_rx_dma/m_dest_axi_aresetn
+ad_connect sys_cpu_clk    axi_ps_net_tx_dma/m_src_axi_aclk
+ad_connect sys_cpu_resetn axi_ps_net_tx_dma/m_src_axi_aresetn
+
+ad_mem_hpc0_interconnect sys_cpu_clk sys_ps8/S_AXI_HPC0
+ad_mem_hpc0_interconnect sys_cpu_clk axi_ps_net_rx_dma/m_dest_axi
+ad_mem_hpc1_interconnect sys_cpu_clk sys_ps8/S_AXI_HPC1
+ad_mem_hpc1_interconnect sys_cpu_clk axi_ps_net_tx_dma/m_src_axi
+
+ad_cpu_interrupt ps-8 mb-8 axi_ps_net_tx_dma/irq
+ad_cpu_interrupt ps-9 mb-9 axi_ps_net_rx_dma/irq
