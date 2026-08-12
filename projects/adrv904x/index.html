@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=cae2157c" />
     <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -108,7 +108,11 @@
 <li><a class="reference internal" href="#example-block-design-for-jesd204b-122-88-msps">Example block design for JESD204B &#64;122.88 MSPS</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
+<li><a class="reference internal" href="#configuration-modes">Configuration modes</a><ul>
+<li><a class="reference internal" href="#xcvr-build-parameters">XCVR build parameters</a></li>
+<li><a class="reference internal" href="#optional-xcvr-overrides">Optional XCVR overrides</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#clock-scheme">Clock scheme</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
@@ -140,7 +144,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -332,6 +336,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5706r/index.html">AD5706R</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -437,7 +442,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="adrv904x-hdl-reference-design">
-<span id="adrv904x"></span><h1>ADRV904X HDL reference design<a class="headerlink" href="#adrv904x-hdl-reference-design" title="Link to this heading"></a></h1>
+<span id="adrv904x"></span><h1>ADRV904X HDL reference design<a class="headerlink" href="#adrv904x-hdl-reference-design" title="Permalink to this heading"></a></h1>
 <p>The ADRV904X is a highly integrated, system on chip (SoC) radio frequency (RF)
 agile transceiver with integrated digital front end (DFE). The SoC contains
 eight transmitters, two observation receivers for monitoring transmitter
@@ -447,19 +452,19 @@ power consumption demanded by cellular infrastructure applications including
 small cell basestation radios, macro 3G/4G/5G systems, and massive MIMO base
 stations.</p>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9040" target="_blank">ADRV9040</a></p></li>
 </ul>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV904X" target="_blank">EVAL-ADRV904X</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -483,14 +488,13 @@ stations.</p>
 </div>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagrams:</p>
 <section id="example-block-design-for-single-link-and-rx-obs-disabled">
-<h4>Example block design for Single link and RX OBS disabled<a class="headerlink" href="#example-block-design-for-single-link-and-rx-obs-disabled" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/adrv904x_block_diagram.svg"><img alt="ADRV904X JESD204C M=16 L=8 block diagram" class="align-center" src="../../_images/adrv904x_block_diagram.svg" width="800" />
-</a>
+<h4>Example block design for Single link and RX OBS disabled<a class="headerlink" href="#example-block-design-for-single-link-and-rx-obs-disabled" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/adrv904x_block_diagram.svg"><img alt="ADRV904X JESD204C M=16 L=8 block diagram" class="align-center" src="../../_images/adrv904x_block_diagram.svg" width="800" /></a>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="e91b735948dd04c6b394908f36eb6eaca1604d64" name="e91b735948dd04c6b394908f36eb6eaca1604d64" type="checkbox"></input><label for="e91b735948dd04c6b394908f36eb6eaca1604d64"><p>Click here for details on the block diagram modules</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -587,9 +591,8 @@ stations.</p>
 </ul>
 </section>
 <section id="example-block-design-for-single-link-and-rx-obs-in-non-linksharing-mode">
-<h4>Example block design for Single link and RX OBS in Non-LinkSharing mode<a class="headerlink" href="#example-block-design-for-single-link-and-rx-obs-in-non-linksharing-mode" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/adrv904x_nls_block_diagram.svg"><img alt="ADRV904X JESD204C NLS block diagram" class="align-center" src="../../_images/adrv904x_nls_block_diagram.svg" width="800" />
-</a>
+<h4>Example block design for Single link and RX OBS in Non-LinkSharing mode<a class="headerlink" href="#example-block-design-for-single-link-and-rx-obs-in-non-linksharing-mode" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/adrv904x_nls_block_diagram.svg"><img alt="ADRV904X JESD204C NLS block diagram" class="align-center" src="../../_images/adrv904x_nls_block_diagram.svg" width="800" /></a>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="06066d4c6b823c443295b769eb525b10daa54612" name="06066d4c6b823c443295b769eb525b10daa54612" type="checkbox"></input><label for="06066d4c6b823c443295b769eb525b10daa54612"><p>Click here for details on the block diagram modules</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -706,9 +709,8 @@ stations.</p>
 </ul>
 </section>
 <section id="example-block-design-for-jesd204b-245-76-msps">
-<h4>Example block design for JESD204B &#64;245.76 MSPS<a class="headerlink" href="#example-block-design-for-jesd204b-245-76-msps" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="projects/adrv904x/adrv904x_jesd204b_245MHz_block_diagram.svg"><img alt="ADRV904X JESD204B SampleRate=245MSPS block diagram" class="align-center" src="projects/adrv904x/adrv904x_jesd204b_245MHz_block_diagram.svg" width="800" />
-</a>
+<h4>Example block design for JESD204B &#64;245.76 MSPS<a class="headerlink" href="#example-block-design-for-jesd204b-245-76-msps" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/adrv904x_jesd204b_245MHz_block_diagram.svg"><img alt="ADRV904X JESD204B SampleRate=245MSPS block diagram" class="align-center" src="../../_images/adrv904x_jesd204b_245MHz_block_diagram.svg" width="800" /></a>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="e91b735948dd04c6b394908f36eb6eaca1604d64" name="e91b735948dd04c6b394908f36eb6eaca1604d64" type="checkbox"></input><label for="e91b735948dd04c6b394908f36eb6eaca1604d64"><p>Click here for details on the block diagram modules</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -805,9 +807,8 @@ stations.</p>
 </ul>
 </section>
 <section id="example-block-design-for-jesd204b-122-88-msps">
-<h4>Example block design for JESD204B &#64;122.88 MSPS<a class="headerlink" href="#example-block-design-for-jesd204b-122-88-msps" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="projects/adrv904x/adrv904x_jesd204b_122MHz_block_diagram.svg"><img alt="ADRV904X JESD204B SampleRate=122MSPS block diagram" class="align-center" src="projects/adrv904x/adrv904x_jesd204b_122MHz_block_diagram.svg" width="800" />
-</a>
+<h4>Example block design for JESD204B &#64;122.88 MSPS<a class="headerlink" href="#example-block-design-for-jesd204b-122-88-msps" title="Permalink to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/adrv904x_jesd204b_122MHz_block_diagram.svg"><img alt="ADRV904X JESD204B SampleRate=122MSPS block diagram" class="align-center" src="../../_images/adrv904x_jesd204b_122MHz_block_diagram.svg" width="800" /></a>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="e91b735948dd04c6b394908f36eb6eaca1604d64" name="e91b735948dd04c6b394908f36eb6eaca1604d64" type="checkbox"></input><label for="e91b735948dd04c6b394908f36eb6eaca1604d64"><p>Click here for details on the block diagram modules</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -905,7 +906,7 @@ stations.</p>
 </section>
 </section>
 <section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
 <p>The block design supports configuration of parameters and scales.</p>
 <p>We have listed a couple of examples at section
 <a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a> and the default modes
@@ -949,14 +950,37 @@ hdl/projects/adrv904x/$CARRIER/system_project.tcl</p>
 <li><p>[RX/TX/RX_OS]_TPL_WIDTH : TPL data path width in bits</p></li>
 <li><p>[RX/TX/RX_OS]_NUM_LINKS: number of links</p></li>
 </ul>
+<section id="xcvr-build-parameters">
+<h4>XCVR build parameters<a class="headerlink" href="#xcvr-build-parameters" title="Permalink to this heading"></a></h4>
+<p>The following parameters configure the transceiver (XCVR) link on Xilinx
+carriers with XCVR automation flow:</p>
+<ul class="simple">
+<li><p>PLL_TYPE: the PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]</p></li>
+<li><p>REF_CLK: value of the reference clock [MHz] (LANE_RATE/20 or LANE_RATE/40 for
+JESD204B; LANE_RATE/33 or LANE_RATE/66 for JESD204C)</p></li>
+<li><p>LANE_RATE: value of the lane rate [Gbps]</p></li>
+</ul>
+</section>
+<section id="optional-xcvr-overrides">
+<h4>Optional XCVR overrides<a class="headerlink" href="#optional-xcvr-overrides" title="Permalink to this heading"></a></h4>
+<p>The following optional parameters allow configuring the RX transceiver
+independently from the TX path. If omitted, the RX path inherits the
+corresponding base parameter (PLL_TYPE, LANE_RATE, REF_CLK).</p>
+<ul class="simple">
+<li><p>XCVR_RX_PLL_TYPE: RX PLL type [CPLL/QPLL0/QPLL1]</p></li>
+<li><p>XCVR_RX_LANE_RATE: RX lane rate [Gbps]</p></li>
+<li><p>XCVR_RX_REF_CLK: RX reference clock [MHz] (XCVR_RX_LANE_RATE/20 or
+XCVR_RX_LANE_RATE/40 for JESD204B; XCVR_RX_LANE_RATE/33 or
+XCVR_RX_LANE_RATE/66 for JESD204C)</p></li>
+</ul>
+</section>
 </section>
 <section id="clock-scheme">
-<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="../../_images/adrv904x_zcu102_clocking.svg"><img alt="ADRV904X ZCU102 clock scheme" class="align-center" src="../../_images/adrv904x_zcu102_clocking.svg" width="500" />
-</a>
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
+<a class="reference internal image-reference" href="../../_images/adrv904x_zcu102_clocking.svg"><img alt="ADRV904X ZCU102 clock scheme" class="align-center" src="../../_images/adrv904x_zcu102_clocking.svg" width="500" /></a>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -1023,7 +1047,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -1055,7 +1079,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -1157,7 +1181,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1205,16 +1229,17 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
-<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
+<a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/index.html#kuiper" target="_blank" title="(in System Level Documentation)"><span class="xref std std-ref">ADI Kuiper Linux</span></a>.
 If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
 <a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
 the HDL repository.</p>
-<p>Then go to the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv904x" target="_blank">projects/adrv904x</a>
-location and run the make command by typing in your command prompt:</p>
+<p>Then go to the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv904x" target="_blank">projects/adrv904x</a> location and run
+the make command by typing in your command prompt. Building without parameters
+will use the default configuration.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
@@ -1228,12 +1253,54 @@ location and run the make command by typing in your command prompt:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
+<div class="clear-left"></div></div></div><p>Example for building the project with JESD parameters (XCVR
+parameters will use their default values):</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/adrv904x/zcu102
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv904x/zcu102$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ORX_ENABLE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">RX_OS_JESD_M</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">RX_OS_JESD_L</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_OS_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">RX_OS_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w"> </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">4</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Example for building the project with JESD and XCVR parameters:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/adrv904x/zcu102
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv904x/zcu102$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ORX_ENABLE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">RX_OS_JESD_M</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">RX_OS_JESD_L</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_OS_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">RX_OS_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w"> </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">PLL_TYPE</span><span class="o">=</span>QPLL0<span class="w"> </span><span class="nv">REF_CLK</span><span class="o">=</span><span class="m">491</span>.5151515<span class="w"> </span><span class="nv">LANE_RATE</span><span class="o">=</span><span class="m">16</span>.22
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Example for building the project in JESD204B mode:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/adrv904x/zcu102
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv904x/zcu102$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">JESD_MODE</span><span class="o">=</span>8B10B<span class="w"> </span><span class="nv">TX_LANE_RATE</span><span class="o">=</span><span class="m">9</span>.83<span class="w"> </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">9</span>.83<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">PLL_TYPE</span><span class="o">=</span>CPLL<span class="w"> </span><span class="nv">REF_CLK</span><span class="o">=</span><span class="m">245</span>.76<span class="w"> </span><span class="nv">LANE_RATE</span><span class="o">=</span><span class="m">9</span>.83
+</pre></div>
+</div>
 <div class="clear-left"></div></div></div><p>The following dropdowns contain tables with the parameters that can be used to
-configure this project, depending on the carrier used.
-Where a cell contains a — (dash) it means that the parameter doesn’t exist
-for that project (adrv904x/carrier or adrv904x/carrier).</p>
+configure this project, depending on the carrier used.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="2a9b7a9a5a605652cd53a12934e9d6f42165a092" name="2a9b7a9a5a605652cd53a12934e9d6f42165a092" type="checkbox"></input><label for="2a9b7a9a5a605652cd53a12934e9d6f42165a092"><p>Default values of the ``make`` parameters for ADRV904X</p>
+<input class="collapsible_input" id="651cb3fd9d72dbefb909338e9478e532dbfa8a81" name="651cb3fd9d72dbefb909338e9478e532dbfa8a81" type="checkbox"></input><label for="651cb3fd9d72dbefb909338e9478e532dbfa8a81"><p>Default values of the ``make`` parameters for ADRV904X</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1246,70 +1313,94 @@ for that project (adrv904x/carrier or adrv904x/carrier).</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>JESD_MODE</p></td>
+<tr class="row-odd"><td colspan="2"><p><strong>XCVR build parameters</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>PLL_TYPE</p></td>
+<td><p>QPLL0</p></td>
+</tr>
+<tr class="row-odd"><td><p>LANE_RATE</p></td>
+<td><p>16.22</p></td>
+</tr>
+<tr class="row-even"><td><p>REF_CLK</p></td>
+<td><p>491.5151515</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p><strong>Optional XCVR overrides</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>XCVR_RX_PLL_TYPE</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>XCVR_RX_LANE_RATE</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>XCVR_RX_REF_CLK</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p><strong>JESD and other build parameters</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>JESD_MODE</p></td>
 <td><p>64B66B</p></td>
 </tr>
-<tr class="row-even"><td><p>ORX_ENABLE</p></td>
+<tr class="row-odd"><td><p>ORX_ENABLE</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>RX_LANE_RATE</p></td>
+<tr class="row-even"><td><p>RX_LANE_RATE</p></td>
 <td><p>16.22</p></td>
 </tr>
-<tr class="row-even"><td><p>TX_LANE_RATE</p></td>
+<tr class="row-odd"><td><p>TX_LANE_RATE</p></td>
 <td><p>16.22</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX_NUM_LINKS</p></td>
+<tr class="row-even"><td><p>TX_NUM_LINKS</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_NUM_LINKS</p></td>
+<tr class="row-odd"><td><p>RX_NUM_LINKS</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-odd"><td><p>RX_OS_NUM_LINKS</p></td>
+<tr class="row-even"><td><p>RX_OS_NUM_LINKS</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_JESD_M</p></td>
+<tr class="row-odd"><td><p>RX_JESD_M</p></td>
 <td><p>16</p></td>
 </tr>
-<tr class="row-odd"><td><p>RX_JESD_L</p></td>
+<tr class="row-even"><td><p>RX_JESD_L</p></td>
 <td><p>8</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_JESD_S</p></td>
+<tr class="row-odd"><td><p>RX_JESD_S</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-odd"><td><p>RX_JESD_NP</p></td>
+<tr class="row-even"><td><p>RX_JESD_NP</p></td>
 <td><p>16</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_TPL_WIDTH</p></td>
+<tr class="row-odd"><td><p>RX_TPL_WIDTH</p></td>
 <td><p>{}</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX_JESD_M</p></td>
+<tr class="row-even"><td><p>TX_JESD_M</p></td>
 <td><p>16</p></td>
 </tr>
-<tr class="row-even"><td><p>TX_JESD_L</p></td>
+<tr class="row-odd"><td><p>TX_JESD_L</p></td>
 <td><p>8</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX_JESD_S</p></td>
+<tr class="row-even"><td><p>TX_JESD_S</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-even"><td><p>TX_JESD_NP</p></td>
+<tr class="row-odd"><td><p>TX_JESD_NP</p></td>
 <td><p>16</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX_TPL_WIDTH</p></td>
+<tr class="row-even"><td><p>TX_TPL_WIDTH</p></td>
 <td><p>{}</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_OS_JESD_M</p></td>
+<tr class="row-odd"><td><p>RX_OS_JESD_M</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>RX_OS_JESD_L</p></td>
+<tr class="row-even"><td><p>RX_OS_JESD_L</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_OS_JESD_S</p></td>
+<tr class="row-odd"><td><p>RX_OS_JESD_S</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>RX_OS_JESD_NP</p></td>
+<tr class="row-even"><td><p>RX_OS_JESD_NP</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_OS_TPL_WIDTH</p></td>
+<tr class="row-odd"><td><p>RX_OS_TPL_WIDTH</p></td>
 <td><p>{}</p></td>
 </tr>
 </tbody>
@@ -1317,12 +1408,18 @@ for that project (adrv904x/carrier or adrv904x/carrier).</p>
 </div>
 </div>
 </div>
-</div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+</div><p>The result of the build, if parameters were used, will be in a folder named by
+the configuration used, with truncation of some keywords (<code class="docutils literal notranslate"><span class="pre">JESD</span></code>, <code class="docutils literal notranslate"><span class="pre">LANE</span></code>,
+etc. are removed) so the path will not exceed OS limits.</p>
+<p>The XCVR automation flow creates a sub-build under
+<code class="docutils literal notranslate"><span class="pre">hdl/projects/xcvr_wizard/$carrier/</span></code>. For details on how the folder name is
+formed, see <a class="reference internal" href="../../library/jesd204/xgt_wizard/index.html#xgt-wizard-build-output"><span class="std std-ref">Build output folder structure</span></a>.</p>
+<p>Refer to the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide for a more comprehensive build guide.</p>
 </section>
 <section id="other-considerations">
-<h2>Other considerations<a class="headerlink" href="#other-considerations" title="Link to this heading"></a></h2>
+<h2>Other considerations<a class="headerlink" href="#other-considerations" title="Permalink to this heading"></a></h2>
 <section id="adc-lane-mapping">
-<h3>ADC - lane mapping<a class="headerlink" href="#adc-lane-mapping" title="Link to this heading"></a></h3>
+<h3>ADC - lane mapping<a class="headerlink" href="#adc-lane-mapping" title="Permalink to this heading"></a></h3>
 <p>Due to physical constraints, Rx lanes are reordered as described in the
 following table.</p>
 <div class="table-wrapper docutils container">
@@ -1398,7 +1495,7 @@ following table.</p>
 </div>
 </section>
 <section id="dac-lane-mapping">
-<h3>DAC - lane mapping<a class="headerlink" href="#dac-lane-mapping" title="Link to this heading"></a></h3>
+<h3>DAC - lane mapping<a class="headerlink" href="#dac-lane-mapping" title="Permalink to this heading"></a></h3>
 <p>Due to physical constraints, Tx lanes are reordered as described in the
 following table.</p>
 <div class="table-wrapper docutils container">
@@ -1475,9 +1572,9 @@ following table.</p>
 </section>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading"></a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://analogdevicesinc.github.io/documentation/solutions/reference-designs/eval-adrv904x/index.html#adrv904x" target="_blank" title="(in System Level Documentation)"><span>EVAL-ADRV904x</span></a></p></li>
 </ul>
@@ -1502,13 +1599,13 @@ following table.</p>
 </div>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets: <a class="icon adi reference external" href="https://www.analog.com/ADRV9040" target="_blank">ADRV9040</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv904x" target="_blank">ADRV904X HDL project source code</a></p></li>
 </ul>
@@ -1590,20 +1687,20 @@ following table.</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon link reference external" href="https://analogdevicesinc.github.io/linux/drivers/iio-transceiver/adrv904x.html#adrv904x" target="_blank" title="(in Linux Drivers)"><span>ADRV904x</span></a></p></li>
 </ul>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
 <p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>

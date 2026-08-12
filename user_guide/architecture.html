@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -161,7 +161,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../index.html">
       <img class="only-light" src="../_static/HDL_logo_cropped.svg"/>
@@ -353,6 +353,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad5706r/index.html">AD5706R</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -458,7 +459,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="hdl-architecture">
-<span id="architecture"></span><h1>HDL Architecture<a class="headerlink" href="#hdl-architecture" title="Link to this heading"></a></h1>
+<span id="architecture"></span><h1>HDL Architecture<a class="headerlink" href="#hdl-architecture" title="Permalink to this heading"></a></h1>
 <p>Every HDL design of a reference project can be divided into:</p>
 <ol class="arabic simple">
 <li><p>Base design for the <strong>carrier</strong> board (projects/common/$CARRIER) —
@@ -497,12 +498,12 @@ modification, if required.</p></li>
 </li>
 </ol>
 <section id="how-they-re-instantiated">
-<h2>How they’re instantiated<a class="headerlink" href="#how-they-re-instantiated" title="Link to this heading"></a></h2>
+<h2>How they’re instantiated<a class="headerlink" href="#how-they-re-instantiated" title="Permalink to this heading"></a></h2>
 <p>In case of a project, inside the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> file we have to source
 the base design of the carrier first (#1), then the base design of the
 evaluation board (#2).</p>
 <section id="example">
-<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h3>
 <p>Take <a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS2-EBZ" target="_blank">FMCOMMS2</a> with
 <a class="icon link reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html" target="_blank">ZedBoard</a>;
 the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> file will have the following designs sourced to be used:</p>
@@ -513,11 +514,10 @@ the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</
 </section>
 </section>
 <section id="typical-project-diagram">
-<h2>Typical project diagram<a class="headerlink" href="#typical-project-diagram" title="Link to this heading"></a></h2>
-<img alt="../_images/base_platform.svg" src="../_images/base_platform.svg" />
-</section>
+<h2>Typical project diagram<a class="headerlink" href="#typical-project-diagram" title="Permalink to this heading"></a></h2>
+<img alt="../_images/base_platform.svg" src="../_images/base_platform.svg" /></section>
 <section id="base-design">
-<h2>Base Design<a class="headerlink" href="#base-design" title="Link to this heading"></a></h2>
+<h2>Base Design<a class="headerlink" href="#base-design" title="Permalink to this heading"></a></h2>
 <p>The base design contains all the I/O peripherals, memory interfaces
 and processing components, which are necessary for a fully functional
 Linux system. The majority of these components are Intel and AMD Xilinx IP
@@ -529,7 +529,7 @@ cores.</p>
 <li><p>Peripheral interfaces</p></li>
 </ul>
 <section id="microprocessor">
-<h3>Microprocessor<a class="headerlink" href="#microprocessor" title="Link to this heading"></a></h3>
+<h3>Microprocessor<a class="headerlink" href="#microprocessor" title="Permalink to this heading"></a></h3>
 <p>In our designs, we use only three types:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -579,7 +579,7 @@ CIPS</a>
 </ul>
 </section>
 <section id="memory-interface-controller">
-<h3>Memory interface controller<a class="headerlink" href="#memory-interface-controller" title="Link to this heading"></a></h3>
+<h3>Memory interface controller<a class="headerlink" href="#memory-interface-controller" title="Permalink to this heading"></a></h3>
 <p>In almost all cases, the carrier board is not made and designed by
 <a class="icon adi reference external" href="https://www.analog.com/" target="_blank">Analog Devices</a>, so the external memory solution of the system is
 given.</p>
@@ -597,14 +597,14 @@ memory solutions for Intel and AMD:</p>
 </ul>
 </section>
 <section id="peripheral-interfaces">
-<h3>Peripheral interfaces<a class="headerlink" href="#peripheral-interfaces" title="Link to this heading"></a></h3>
+<h3>Peripheral interfaces<a class="headerlink" href="#peripheral-interfaces" title="Permalink to this heading"></a></h3>
 <p>These interfaces are used to control external peripherals located on
 the prototyping board or the FMC I/O board.</p>
 <p>In HDL, these ports are named slightly different than how they’re in
 the documentations. Thus, to make it easier for beginners, here you
 have the naming of the ports depending on the microprocessor used.</p>
 <section id="cpu-memory-interconnects-addresses">
-<span id="architecture-cpu-intercon-addr"></span><h4>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h4>
+<span id="architecture-cpu-intercon-addr"></span><h4>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h4>
 <p>The memory addresses that will be used by software are based on the HDL
 addresses of the IP register map, to which an offset is added, depending
 on the architecture of the used FPGA (see also
@@ -636,7 +636,7 @@ available block of a bigger size. In Quartus block design you should be
 able to determine it.</p>
 </section>
 <section id="spi">
-<h4>SPI<a class="headerlink" href="#spi" title="Link to this heading"></a></h4>
+<h4>SPI<a class="headerlink" href="#spi" title="Permalink to this heading"></a></h4>
 <p>In general, the base design of the carrier (#1) has two Serial Peripheral
 Interfaces (SPIs), which are used as a control interface for FMC/HSMC devices.
 These SPI interfaces are controlled by the integrated SPI controller of the
@@ -644,7 +644,7 @@ These SPI interfaces are controlled by the integrated SPI controller of the
 Intel or AMD SPI controller core.</p>
 </section>
 <section id="i2c-i2s-spdif">
-<h4>I2C/I2S/SPDIF<a class="headerlink" href="#i2c-i2s-spdif" title="Link to this heading"></a></h4>
+<h4>I2C/I2S/SPDIF<a class="headerlink" href="#i2c-i2s-spdif" title="Permalink to this heading"></a></h4>
 <p>A couple of carriers require these standard interfaces for different purposes
 (e.g. a configuration interface for an audio peripheral device).
 These peripherals do not necessarily have vital roles in the reference
@@ -652,13 +652,13 @@ design – it’s more like a generic goal to support all the provided
 peripherals of the carrier board.</p>
 </section>
 <section id="hdmi">
-<h4>HDMI<a class="headerlink" href="#hdmi" title="Link to this heading"></a></h4>
+<h4>HDMI<a class="headerlink" href="#hdmi" title="Permalink to this heading"></a></h4>
 <p>There is HDMI support for all carriers which are using the <a class="icon adi reference external" href="https://www.analog.com/ADV7511" target="_blank">ADV7511</a>
 as HDMI transmitter. The HDMI transmitter core can be found
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx" target="_blank">here (axi_hdmi_tx)</a>.</p>
 </section>
 <section id="gpios">
-<h4>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h4>
+<h4>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h4>
 <p>The general rule of thumb is to define 64 GPIO pins for the design:</p>
 <ul class="simple">
 <li><p>bits [31: 0] always belong to the carrier board;</p></li>
@@ -680,7 +680,7 @@ from the HDL project to obtain the final number used in software:</p>
 </ul>
 </section>
 <section id="connectivity">
-<h4>Connectivity<a class="headerlink" href="#connectivity" title="Link to this heading"></a></h4>
+<h4>Connectivity<a class="headerlink" href="#connectivity" title="Permalink to this heading"></a></h4>
 <ul class="simple">
 <li><p>Ethernet</p></li>
 <li><p>USB OTG</p></li>
@@ -690,7 +690,7 @@ of the board.</p>
 </section>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>When developing the Linux software parts for an HDL project, the
 interrupts number to the PS have a different number in the software
 side.</p>
@@ -700,7 +700,7 @@ might be used in the base design of the carrier!</p>
 <p>Always check which are used (in
 <code class="docutils literal notranslate"><span class="pre">/projects/common/$carrier/$carrier_system_bd.tcl</span></code>)</p>
 <section id="interrupts-table">
-<h4>Interrupts table<a class="headerlink" href="#interrupts-table" title="Link to this heading"></a></h4>
+<h4>Interrupts table<a class="headerlink" href="#interrupts-table" title="Permalink to this heading"></a></h4>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -925,9 +925,9 @@ might be used in the base design of the carrier!</p>
 </section>
 </section>
 <section id="board-design-and-capabilities">
-<h2>Board design and capabilities<a class="headerlink" href="#board-design-and-capabilities" title="Link to this heading"></a></h2>
+<h2>Board design and capabilities<a class="headerlink" href="#board-design-and-capabilities" title="Permalink to this heading"></a></h2>
 <section id="amd-platforms">
-<span id="architecture-amd-platforms"></span><h3>AMD platforms<a class="headerlink" href="#amd-platforms" title="Link to this heading"></a></h3>
+<span id="architecture-amd-platforms"></span><h3>AMD platforms<a class="headerlink" href="#amd-platforms" title="Permalink to this heading"></a></h3>
 <p>The board files of these carriers can be found <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">here</a>.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -1064,7 +1064,7 @@ both the carrier and the device(s)</p>
 </div>
 </section>
 <section id="discontinued-amd-platforms">
-<h3>Discontinued AMD platforms<a class="headerlink" href="#discontinued-amd-platforms" title="Link to this heading"></a></h3>
+<h3>Discontinued AMD platforms<a class="headerlink" href="#discontinued-amd-platforms" title="Permalink to this heading"></a></h3>
 <p>Projects with these carriers can still be found on our repository, as well as
 their <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">board files</a>.</p>
 <div class="table-wrapper colwidths-given docutils container">
@@ -1120,7 +1120,7 @@ their <a class="icon git reference external" href="https://github.com/analogdevi
 </div>
 </section>
 <section id="intel-platforms">
-<span id="architecture-intel-platforms"></span><h3>Intel platforms<a class="headerlink" href="#intel-platforms" title="Link to this heading"></a></h3>
+<span id="architecture-intel-platforms"></span><h3>Intel platforms<a class="headerlink" href="#intel-platforms" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -1168,7 +1168,7 @@ their <a class="icon git reference external" href="https://github.com/analogdevi
 in older releases</p>
 </div>
 <section id="vadj-values">
-<h4>VADJ values<a class="headerlink" href="#vadj-values" title="Link to this heading"></a></h4>
+<h4>VADJ values<a class="headerlink" href="#vadj-values" title="Permalink to this heading"></a></h4>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -1213,7 +1213,7 @@ both the carrier and the device(s)</p>
 </section>
 </section>
 <section id="memory-specifications">
-<h2>Memory Specifications<a class="headerlink" href="#memory-specifications" title="Link to this heading"></a></h2>
+<h2>Memory Specifications<a class="headerlink" href="#memory-specifications" title="Permalink to this heading"></a></h2>
 <p>This section documents the on-chip and external memory resources of each
 supported carrier.</p>
 <div class="admonition important">
@@ -1229,7 +1229,7 @@ listed here may not match your specific revision.</p></li>
 before making any design decisions based on these numbers.</p>
 </div>
 <section id="on-chip-memory">
-<h3>On-Chip Memory<a class="headerlink" href="#on-chip-memory" title="Link to this heading"></a></h3>
+<h3>On-Chip Memory<a class="headerlink" href="#on-chip-memory" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><strong>BRAM</strong> and <strong>UltraRAM</strong> reside in the programmable logic fabric and are
 fully available to HDL designs.</p></li>
@@ -1245,7 +1245,7 @@ and Agilex 7 HPS include a smaller 64 KB or 256 KB OCRAM used by the
 preloader before DDR initialisation.</p></li>
 </ul>
 <section id="id1">
-<h4>AMD platforms<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<h4>AMD platforms<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="28616066f26a9dc580c468f43819dde6cbdba936" name="28616066f26a9dc580c468f43819dde6cbdba936" type="checkbox"></input><label for="28616066f26a9dc580c468f43819dde6cbdba936"><p>AMD platforms on-chip memory</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1352,7 +1352,7 @@ preloader before DDR initialisation.</p></li>
 </div>
 </div></section>
 <section id="id2">
-<h4>Discontinued AMD platforms<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<h4>Discontinued AMD platforms<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="f053c19b0498ac1bcb7fb621e437b7f794490697" name="f053c19b0498ac1bcb7fb621e437b7f794490697" type="checkbox"></input><label for="f053c19b0498ac1bcb7fb621e437b7f794490697"><p>Discontinued AMD platforms on-chip memory</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1405,7 +1405,7 @@ preloader before DDR initialisation.</p></li>
 </div>
 </div></section>
 <section id="id3">
-<h4>Intel platforms<a class="headerlink" href="#id3" title="Link to this heading"></a></h4>
+<h4>Intel platforms<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
 <p>Intel SoC FPGAs (Arria 10, Stratix 10, Cyclone V, Agilex) include HPS
 on-chip RAM (OCRAM) used by the preloader before external DDR is initialised.</p>
 <div><div class="collapsible docutils container">
@@ -1465,7 +1465,7 @@ on-chip RAM (OCRAM) used by the preloader before external DDR is initialised.</p
 </div></section>
 </section>
 <section id="external-memory">
-<h3>External Memory<a class="headerlink" href="#external-memory" title="Link to this heading"></a></h3>
+<h3>External Memory<a class="headerlink" href="#external-memory" title="Permalink to this heading"></a></h3>
 <blockquote>
 <div><ul class="simple">
 <li><p><strong>PS-side / HPS-side</strong> memory is connected to the hard processor system
@@ -1487,7 +1487,7 @@ Example: a 72-bit DDR4-2666 interface =&gt; 2,666 x 8 = ~21.3 GB/s,
 not 2,666 x 9 = ~24.0 GB/s.</p>
 </div>
 <section id="id4">
-<h4>AMD Platforms<a class="headerlink" href="#id4" title="Link to this heading"></a></h4>
+<h4>AMD Platforms<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="17e373cfcd715a7f32c765bc259f4af95c8a805a" name="17e373cfcd715a7f32c765bc259f4af95c8a805a" type="checkbox"></input><label for="17e373cfcd715a7f32c765bc259f4af95c8a805a"><p>AMD platforms external memory</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1661,7 +1661,7 @@ to 1,066 Mbps, but no DRAM is populated on the LFCPNX-EVN evaluation board.</p>
 </div>
 </div></section>
 <section id="id5">
-<h4>Discontinued AMD platforms<a class="headerlink" href="#id5" title="Link to this heading"></a></h4>
+<h4>Discontinued AMD platforms<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h4>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="8d752be1bd2db7e9311fdbb989831ba16288ea58" name="8d752be1bd2db7e9311fdbb989831ba16288ea58" type="checkbox"></input><label for="8d752be1bd2db7e9311fdbb989831ba16288ea58"><p>Discontinued AMD platforms external memory</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1750,7 +1750,7 @@ to 1,066 Mbps, but no DRAM is populated on the LFCPNX-EVN evaluation board.</p>
 </div>
 </div></section>
 <section id="id6">
-<h4>Intel platforms<a class="headerlink" href="#id6" title="Link to this heading"></a></h4>
+<h4>Intel platforms<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h4>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="abfce430128ee75260e9af03c4334577dc6951e4" name="abfce430128ee75260e9af03c4334577dc6951e4" type="checkbox"></input><label for="abfce430128ee75260e9af03c4334577dc6951e4"><p>Intel platforms external memory</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1887,14 +1887,14 @@ on the AGF027 variant only.</p></li>
 </section>
 </section>
 <section id="file-structure-of-a-project">
-<h2>File structure of a project<a class="headerlink" href="#file-structure-of-a-project" title="Link to this heading"></a></h2>
+<h2>File structure of a project<a class="headerlink" href="#file-structure-of-a-project" title="Permalink to this heading"></a></h2>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>In <code class="docutils literal notranslate"><span class="pre">/projects/common/$carrier_name/</span></code> you can find templates for the
 <em>system_top.v</em>, <em>Makefile</em>, etc. to help you when creating a new project.</p>
 </div>
 <section id="project-files-for-amd-boards">
-<h3>Project files for AMD boards<a class="headerlink" href="#project-files-for-amd-boards" title="Link to this heading"></a></h3>
+<h3>Project files for AMD boards<a class="headerlink" href="#project-files-for-amd-boards" title="Permalink to this heading"></a></h3>
 <p>A project for an AMD FPGA board should contain the following files:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP
@@ -1933,7 +1933,7 @@ module, making the connections between the instantiated IPs</p></li>
 </ul>
 </section>
 <section id="project-files-for-intel-boards">
-<h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Link to this heading"></a></h3>
+<h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Permalink to this heading"></a></h3>
 <p>A project for an Intel FPGA board should contain the following files:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP
@@ -1956,7 +1956,7 @@ etc. The I/O ports of this Verilog module will be connected to actual
 I/O pads of the FPGA</p></li>
 </ul>
 <section id="examples">
-<h4>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h4>
+<h4>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h4>
 <p>Some carriers have a different name for these files, for example A10SoC
 has constraints file for both PL side and PS side:</p>
 <ul class="simple">
@@ -1966,7 +1966,7 @@ has constraints file for both PL side and PS side:</p>
 </section>
 </section>
 <section id="project-files-for-lattice-boards">
-<h3>Project files for Lattice boards<a class="headerlink" href="#project-files-for-lattice-boards" title="Link to this heading"></a></h3>
+<h3>Project files for Lattice boards<a class="headerlink" href="#project-files-for-lattice-boards" title="Permalink to this heading"></a></h3>
 <p>A project for a Lattice FPGA board should contain the following files:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP

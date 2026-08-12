@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -118,7 +118,7 @@
     </div>
 
   
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
     <a id="logo" href="../../index.html">
       <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
@@ -310,6 +310,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/index.html">AD4880-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5529r_ardz/index.html">AD5529R-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5706r/index.html">AD5706R</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
@@ -415,7 +416,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-hmcad15xx">
-<span id="id1"></span><h1>AXI HMCAD15XX<a class="headerlink" href="#axi-hmcad15xx" title="Link to this heading"></a></h1>
+<span id="id1"></span><h1>AXI HMCAD15XX<a class="headerlink" href="#axi-hmcad15xx" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330.0 402" width="330.0" class="no-background"><style>
                 a {
@@ -428,7 +429,7 @@ This documentation only covers the IP core and requires one to be
 familiar with the device, for a complete and better understanding.</p>
 <p>More about the generic framework interfacing ADCs can be read in <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a>.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Support for 8/12/14 bits</p></li>
 <li><p>Single/Dual/Quad channel</p></li>
@@ -437,7 +438,7 @@ familiar with the device, for a complete and better understanding.</p>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -460,11 +461,10 @@ familiar with the device, for a complete and better understanding.</p>
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
-<img alt="AXI HMCAD15XX block diagram" src="../../_images/block_diagram4.svg" />
-</section>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
+<img alt="AXI HMCAD15XX block diagram" src="../../_images/block_diagram3.svg" /></section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -522,7 +522,7 @@ familiar with the device, for a complete and better understanding.</p>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="614bfafcd848d0dc4e744516226a26119d1b5de7" name="614bfafcd848d0dc4e744516226a26119d1b5de7" type="checkbox"></input><label for="614bfafcd848d0dc4e744516226a26119d1b5de7"><div><p>s_axi</p>
@@ -913,7 +913,7 @@ familiar with the device, for a complete and better understanding.</p>
 </div><p>The IP also provides per-channel enable signals (<code class="docutils literal notranslate"><span class="pre">adc_enable_0</span></code> through
 <code class="docutils literal notranslate"><span class="pre">adc_enable_3</span></code>) directly from the ADC channel registers.</p>
 <section id="internal-interface-description">
-<h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Link to this heading"></a></h3>
+<h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Permalink to this heading"></a></h3>
 <p>The axi_hmcad15xx operates as follows:</p>
 <ul class="simple">
 <li><p>The LVDS data is deserialized by the
@@ -931,7 +931,7 @@ asserts.</p></li>
 </section>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <p>The register map of the core contains instances of several generic register maps
 like ADC common, ADC channel,
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_delay_cntrl.v" target="_blank">up_delay_cntrl</a>.
@@ -942,7 +942,7 @@ base address to the registers relative address. For a more detailed explanation,
 see <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#generic-adc-register-access"><span class="std std-ref">ADC register access</span></a>.</p>
 <div class="table-wrapper docutils container" id="id2">
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Register Map base addresses for axi_hmcad15xx</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
+<caption><span class="caption-text">Register Map base addresses for axi_hmcad15xx</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>HDL reg</p></th>
 <th class="head"><p>Software reg</p></th>
@@ -2610,7 +2610,7 @@ Otherwise will be the last set up value.</p>
 </section>
 </div></section>
 <section id="design-guidelines">
-<h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Link to this heading"></a></h2>
+<h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Permalink to this heading"></a></h2>
 <p>The control of the HMCAD15xx chip is done through a SPI interface, which is
 needed at system level.</p>
 <p>The <em>ADC interface signals</em> must be connected directly to the top file of the
@@ -2625,10 +2625,10 @@ processor is available in your system, you can create your own IP starting
 from the interface module.</p>
 </section>
 <section id="software-guidelines">
-<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Link to this heading"></a></h2>
+<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container" id="id3">
 <table class="docutils align-default" id="id3">
-<caption><span class="caption-text">Main registers used to control the AXI HMCAD15xx IP</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
+<caption><span class="caption-text">Main registers used to control the AXI HMCAD15xx IP</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Register</p></th>
@@ -2670,7 +2670,7 @@ will be inverted)</p></td>
 </div>
 </section>
 <section id="software-suppport">
-<h2>Software Suppport<a class="headerlink" href="#software-suppport" title="Link to this heading"></a></h2>
+<h2>Software Suppport<a class="headerlink" href="#software-suppport" title="Permalink to this heading"></a></h2>
 <blockquote>
 <div><ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/iio/adc/hmcad15xx.c" target="_blank">HMCAD15XX Linux driver</a></p></li>
@@ -2680,7 +2680,7 @@ will be inverted)</p></td>
 </div></blockquote>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hmcad15xx" target="_blank">library/axi_hmcad15xx</a></p></li>
 <li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/hmcad1520_ebz" target="_blank">projects/hmcad1520_ebz</a></p></li>
