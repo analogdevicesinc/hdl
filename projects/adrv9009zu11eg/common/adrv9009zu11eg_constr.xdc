@@ -257,3 +257,5 @@ set_property -dict {PACKAGE_PIN AR9 IOSTANDARD LVCMOS18} [get_ports spi_miso]
 
 create_clock -period 100.000 -name spi0_clk [get_pins -hier */EMIOSPI0SCLKO]
 
+
+

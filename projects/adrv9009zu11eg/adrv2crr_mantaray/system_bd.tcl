@@ -235,9 +235,10 @@ ad_connect cmd_spi/io1_i cmd_spi_miso
 ad_ip_instance axi_chip2chip axi_chip2chip [list \
   C_AXI_STB_WIDTH 16 \
   C_AXI_DATA_WIDTH 32 \
-  C_INTERFACE_MODE 1 \
   C_INTERFACE_TYPE 3 \
+  C_INTERFACE_MODE 1 \
 ]
+set_property CONFIG.C_INTERFACE_MODE {1} [get_bd_cells axi_chip2chip]
 
 # Aurora
 
@@ -266,7 +267,7 @@ ad_connect axi_chip2chip/aurora_mmcm_not_locked aurora_8b10b/pll_not_locked_out
 ad_connect axi_chip2chip/AXIS_TX aurora_8b10b/USER_DATA_S_AXI_TX
 ad_connect axi_chip2chip/AXIS_RX aurora_8b10b/USER_DATA_M_AXI_RX
 ad_connect axi_chip2chip/aurora_pma_init_in sys_cpu_reset
-ad_connect sys_ps8/pl_clk3 aurora_8b10b/init_clk_in
+ad_connect sys_ps8/pl_clk0 aurora_8b10b/init_clk_in
 ad_connect aurora_8b10b/reset axi_chip2chip/aurora_reset_pb
 ad_connect aurora_8b10b/gt_reset sys_cpu_reset
 

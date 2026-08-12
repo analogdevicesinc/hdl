@@ -56,3 +56,5 @@ set_property -dict {PACKAGE_PIN AN18 IOSTANDARD LVCMOS18} [get_ports i2c1_sda]
 
 set_property -dict {PACKAGE_PIN AN17 IOSTANDARD LVDS} [get_ports oscout_p]
 set_property -dict {PACKAGE_PIN AP17 IOSTANDARD LVDS} [get_ports oscout_n]
+
+
