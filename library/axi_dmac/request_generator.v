@@ -59,7 +59,7 @@ module request_generator #(
   output [1:0] completion_transfer_id,
 
   input req_valid,
-  output reg req_ready,
+  output req_ready,
   input [BURSTS_PER_TRANSFER_WIDTH-1:0] req_burst_count,
   input req_xlast,
 
@@ -88,6 +88,10 @@ module request_generator #(
 
   wire transfer_id_match;
   reg nx_completion_req_valid;
+
+  reg req_ready_int;
+
+  assign req_ready = req_ready_int & ~(rewind_req_valid & rewind_req_ready);
 
   /*
    * Here we only need to count the number of bursts, which means we can ignore
@@ -137,9 +141,9 @@ module request_generator #(
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
-      req_ready <= 1'b0;
+      req_ready_int <= 1'b0;
     end else begin
-      req_ready <= (nx_state == STATE_IDLE || nx_state == STATE_CONSUME);
+      req_ready_int <= (nx_state == STATE_IDLE || nx_state == STATE_CONSUME);
     end
   end
 
