@@ -15,3 +15,5 @@ Projects List and Dependencies
    downloads_insert_hdl_2018_r2
    downloads_insert_hdl_2018_r1
    downloads_insert_hdl_2017_r1
+   downloads_insert_hdl_2016_r2
+   downloads_insert_hdl_2015_r1
