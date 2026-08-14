@@ -44,7 +44,7 @@ module axi_ad485x_lvds #(
   parameter DELAY_REFCLK_FREQ = 200,
   parameter IODELAY_CTRL = 1,
   parameter IODELAY_ENABLE = 1,
-  parameter N_CHANNELS = 8
+  parameter N_CHANNELS = 8,
   parameter IODELAY_GROUP = "dev_if_delay_group",
   parameter NEG_EDGE = 1
 ) (

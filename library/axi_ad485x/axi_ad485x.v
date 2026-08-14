@@ -194,6 +194,9 @@ module axi_ad485x #(
   wire                    scko_s_p;
   wire                    scko_s_n;
 
+  assign scko_s_p = scko_p;
+  assign scko_s_n = scko_n;
+
   wire                    up_clk;
   wire                    up_rstn;
   wire                    up_rreq_s;
@@ -301,51 +304,6 @@ module axi_ad485x #(
      (* MARK_DEBUG = "TRUE" *)  wire  [7:0]  ila_adc_config_ctrl_s     = adc_config_ctrl_s[7:0];
 
       assign scki = 1'b0;
-      //if (ECHO_CLK_EN == 1'b1) begin
-        axi_ad4858_lvds #(
-          .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-          .DRP_WIDTH (DRP_WIDTH),
-          .ECHO_CLK_EN (ECHO_CLK_EN),
-          .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
-          .IODELAY_CTRL (IODELAY_CTRL),
-          .IODELAY_ENABLE (IODELAY_ENABLE),
-          .IODELAY_GROUP (IODELAY_GROUP)
-        ) i_ad4858_lvds_interface (
-          .rst (adc_if_reset),
-          .clk (adc_clk_s),
-          .fast_clk (external_fast_clk),
-          .adc_enable (adc_enable_s),
-          .adc_crc_enable (adc_crc_enable_s),
-          .packet_format_in (packet_format),
-          .oversampling_en (oversampling_en),
-          .scki_p (scki_p),
-          .scki_n (scki_n),
-          .scko_p (scko_p),
-          .scko_n (scko_n),
-          .sdo_p (sdo_p),
-          .sdo_n (sdo_n),
-          .busy (busy),
-          .cnvs (cnvs),
-          .adc_data (adc_data_if_s),
-          .adc_valid (adc_valid_if),
-          .crc_error (crc_error),
-          .dev_status (),
-          .path_delay_tap (adc_config_ctrl_s[7:0]),
-          .up_clk (up_clk),
-          .up_adc_dld (up_dld),
-          .up_adc_dwdata (up_dwdata),
-          .up_adc_drdata (up_drdata),
-          .delay_clk (delay_clk),
-          .delay_rst (delay_rst),
-          .delay_locked (delay_locked));
-      //end else begin
-      //  if (ECHO_DELAY != 0) begin
-      //    wire [3:0] path_valid_delay_tap = ECHO_DELAY;
-      //    wire [3:0] path_index_delay_tap = ECHO_DELAY + 5;
-      //  end else begin
-      //    wire [3:0] path_valid_delay_tap = adc_config_ctrl_s[7:4];
-      //    wire [3:0] path_index_delay_tap = adc_config_ctrl_s[3:0];
-      //  end
 
       axi_ad485x_lvds #(
         .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
@@ -353,9 +311,8 @@ module axi_ad485x #(
         .ECHO_CLK_EN (ECHO_CLK_EN),
         .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
         .IODELAY_ENABLE (IODELAY_ENABLE),
-        .N_CHANNELS (N_CHANNELS)
+        .N_CHANNELS (N_CHANNELS),
         .IODELAY_CTRL (IODELAY_CTRL),
-        .IODELAY_ENABLE (IODELAY_ENABLE),
         .IODELAY_GROUP (IODELAY_GROUP)
       ) i_ad4858_lvds_interface (
         .rst (adc_if_reset),
@@ -377,6 +334,7 @@ module axi_ad485x #(
         .adc_valid (adc_valid_if),
         .crc_error (crc_error),
         .dev_status (),
+        .path_delay_tap (adc_config_ctrl_s[7:0]),
         .up_clk (up_clk),
         .up_adc_dld (up_dld),
         .up_adc_dwdata (up_dwdata),
@@ -384,7 +342,7 @@ module axi_ad485x #(
         .delay_clk (delay_clk),
         .delay_rst (delay_rst),
         .delay_locked (delay_locked));
-=======
+
       //  axi_ad4858_lvds_nssi #(
       //    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
       //    .DRP_WIDTH (DRP_WIDTH),
@@ -466,9 +424,8 @@ module axi_ad485x #(
         .IODELAY_CTRL (IODELAY_CTRL),
         .IODELAY_ENABLE (IODELAY_ENABLE),
         .ACTIVE_LANE (ACTIVE_LANES),
-        .N_CHANNELS (N_CHANNELS)
-        .IODELAY_GROUP (IODELAY_GROUP),
-        .ACTIVE_LANE (ACTIVE_LANES)
+        .N_CHANNELS (N_CHANNELS),
+        .IODELAY_GROUP (IODELAY_GROUP)
       ) i_ad4858_cmos_interface (
         .rst (adc_if_reset),
         .clk (adc_clk_s),
