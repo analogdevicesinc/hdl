@@ -111,7 +111,7 @@ ad_connect sys_cpu_clk      axi_pwm_gen_1/s_axi_aclk
 
 # axi_ad4858_0
 
-ad_ip_instance axi_ad4858 axi_ad4858_0
+ad_ip_instance axi_ad485x axi_ad4858_0
 ad_ip_parameter axi_ad4858_0 CONFIG.LVDS_CMOS_N $LVDS_CMOS_N
 ad_ip_parameter axi_ad4858_0 CONFIG.EXTERNAL_CLK 1
 ad_ip_parameter axi_ad4858_0 CONFIG.ECHO_CLK_EN 1
@@ -133,7 +133,7 @@ ad_connect  adc_0_busy    axi_ad4858_0/busy
 
 # axi_ad4858_1
 
-ad_ip_instance axi_ad4858 axi_ad4858_1
+ad_ip_instance axi_ad485x axi_ad4858_1
 ad_ip_parameter axi_ad4858_1 CONFIG.LVDS_CMOS_N $LVDS_CMOS_N
 ad_ip_parameter axi_ad4858_1 CONFIG.EXTERNAL_CLK 1
 ad_ip_parameter axi_ad4858_1 CONFIG.ECHO_CLK_EN 0
