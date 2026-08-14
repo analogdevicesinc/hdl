@@ -14,7 +14,7 @@ M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 
-LIB_DEPS += axi_ad4858
+LIB_DEPS += axi_ad485x
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_pwm_gen
