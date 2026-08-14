@@ -32,4 +32,3 @@ set_property -dict {PACKAGE_PIN AD2  IOSTANDARD LVCMOS18}                       
 set_property -dict {PACKAGE_PIN AD1  IOSTANDARD LVCMOS18}                          [get_ports adc_1_pd]           ; ##  H08  FMC_HPC1_LA02_N
 
 create_clock -name scko_0 -period  2 [get_ports adc_0_scko_p]
-create_clock -name scko_1 -period  2 [get_ports adc_1_scko_p]
