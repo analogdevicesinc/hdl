@@ -109,13 +109,37 @@ ad_ip_parameter pcie_xdma CONFIG.pf0_device_id {9038}
 ad_ip_parameter pcie_xdma CONFIG.pcie_blk_locn {X1Y0}
 ad_ip_parameter pcie_xdma CONFIG.pf0_msi_enabled {true}
 
+# MSI-X is what makes one vector per interrupt source worth having: it carries
+# an address/data pair per vector, so the host steers each to its own CPU.
+# Multi-message MSI shares one address register and cannot -- and on x86 it also
+# needs interrupt remapping, since the bare vector domain does not advertise
+# MSI_FLAG_MULTI_PCI_MSI and a multi-vector request then fails to INTx. The MSI
+# capability stays enabled as the fallback; ad_pcie_interrupt_resize keeps both
+# capabilities' vector counts consistent with xdma_num_usr_irq.
+#
+# pf0_msix_table_offset / pf0_msix_pba_offset are deliberately left at their
+# IP defaults of 0x8000 / 0x8FE0 in BAR0. See the address-map note below: the
+# first 64 kB of the BAR is reserved for exactly this.
+ad_ip_parameter pcie_xdma CONFIG.pf0_msix_enabled {true}
+
 # M_AXI_B BAR: host accesses PL peripherals.
 # Base the BAR at AXI 0x8400_0000 so the migrated IPs keep the same AXI
 # addresses they used in the CPU-hosted design (0x84A0_xxxx TPL cores /
-# xcvrs / JESD, 0x8500_0000 sysid). Size = 32 MB so BAR0 covers
-# 0x8400_0000..0x85FF_FFFF -- the XDMA IP defaults to 128 KB which only
+# xcvrs / JESD, 0x84C0_xxxx DMACs, 0x8500_0000 sysid). Size = 32 MB so BAR0
+# covers 0x8400_0000..0x85FF_FFFF -- the XDMA IP defaults to 128 KB which only
 # reaches the SPI + GPIOs at the low end and leaves the RF chain
 # unmapped from the host side.
+#
+# 0x8400_0000..0x8400_FFFF -- the first 64 kB -- is reserved for the endpoint
+# itself and must stay empty. The MSI-X table and PBA are memory-mapped in this
+# BAR at the IP's default offsets 0x8000 and 0x8FE0, and the hard block
+# terminates those accesses locally: they never appear on M_AXI_B. So a slave
+# decoded there is unreachable from the host (its transactions are silently
+# eaten), and a stray write from the fabric side would land on a live vector's
+# address/data -- which the host rewrites on every irq_set_affinity. Reserving
+# the block rather than relocating the table keeps the MSI-X offsets at their
+# defaults, so growing the vector count can never move the table into a
+# peripheral. Everything below starts at 0x8401_0000.
 ad_ip_parameter pcie_xdma CONFIG.pciebar2axibar_0 {0x0000000084000000}
 ad_ip_parameter pcie_xdma CONFIG.pf0_bar0_scale {Megabytes}
 ad_ip_parameter pcie_xdma CONFIG.pf0_bar0_size  {32}
@@ -274,12 +298,20 @@ ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.ASYNC_CLK_DEST_SG  1
 # and grows it on each subsequent call, wiring clocks/resets and assigning the
 # peripheral segment inside the pcie_xdma/M_AXI_B address space.
 
-ad_pcie_interconnect 0x84000000 axi_spi   AXI_LITE
-ad_pcie_interconnect 0x84010000 axi_gpio1 S_AXI
-ad_pcie_interconnect 0x84020000 axi_gpio2 S_AXI
+# 0x84010000 is left to pcie_intc (pcie_intc_address in adi_board.tcl), directly
+# above the 64 kB the endpoint reserves for its MSI-X table: the interrupt
+# controller is the one peripheral that must be identified and armed before any
+# other, so it sits at the first address the host driver can reach with a single
+# constant. These three are PCIe-design-local IPs -- the CPU-hosted design uses
+# the PS GPIO and PS SPI -- not addresses inherited from it, so shifting them up
+# one block costs only their node addresses in the host overlay.
+ad_pcie_interconnect 0x84020000 axi_gpio1 S_AXI
+ad_pcie_interconnect 0x84030000 axi_gpio2 S_AXI
+ad_pcie_interconnect 0x84040000 axi_spi   AXI_LITE
 
-# XDMA user interrupts. ad_pcie_interrupt creates concat_xdma_int on the first
-# call and wires its dout to pcie_xdma/usr_irq_req automatically.
+# XDMA user interrupts. ad_pcie_interrupt creates pcie_intc on the first call
+# and wires its usr_irq_req to pcie_xdma automatically; each source then lands
+# on its own pcie_intc/intr_<k>, i.e. its own MSI-X vector.
 ad_pcie_interrupt axi_spi/ip2intc_irpt
 ad_pcie_interrupt axi_gpio1/ip2intc_irpt
 ad_pcie_interrupt axi_gpio2/ip2intc_irpt
@@ -309,7 +341,7 @@ ad_pcie_interconnect 0x85000000 axi_sysid_0
 
 # Route the IRQs of the moved IPs to the PCIe bridge. ad_pcie_interrupt
 # detaches each pin from its existing sys_concat_intc_* net before attaching
-# to concat_xdma_int.
+# to pcie_intc.
 ad_pcie_interrupt axi_adrv9009_som_obs_dma/irq
 ad_pcie_interrupt axi_adrv9009_som_tx_dma/irq
 ad_pcie_interrupt axi_adrv9009_som_rx_dma/irq

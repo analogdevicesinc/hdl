@@ -65,6 +65,8 @@ endif
 ifeq ($(PCIE), 1)
 	M_DEPS += system_constr_pcie.xdc
 	M_DEPS += system_bd_pcie.tcl
+
+	LIB_DEPS += axi_pcie_intc
 endif
 
 include ../../scripts/project-xilinx.mk
