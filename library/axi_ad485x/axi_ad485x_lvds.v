@@ -322,10 +322,12 @@ module axi_ad485x_lvds #(
         .I(scko_p),
         .IB(scko_n));
     end else begin
+      reg aquire_data_delay_reg = 1'b0;
       always @(posedge fast_clk) begin
         sckio_delay <= {sckio_delay[254:0], aquire_data};
+        aquire_data_delay_reg <= sckio_delay[path_delay_tap];
       end
-      assign aquire_data_delay = sckio_delay[path_delay_tap];
+      assign aquire_data_delay = aquire_data_delay_reg;
       //BUFGCE_1 BUFGCE_inst (
       //  .O(scko_s),
       //  .CE(aquire_data_delay),

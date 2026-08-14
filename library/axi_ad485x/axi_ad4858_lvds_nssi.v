@@ -403,7 +403,7 @@ module axi_ad4858_lvds_nssi #(
       end
   end
 
-  axi_ad4858_crc i_ad4858_crc_8 (
+  axi_ad485x_crc i_ad4858_crc_8 (
     .rst (crc_reset),
     .clk (clk),
     .crc_en (crc_enable),

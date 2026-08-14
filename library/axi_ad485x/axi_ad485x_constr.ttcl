@@ -30,6 +30,44 @@ set_false_path -quiet \
         -from [get_cells -hier -filter {name =~ *packet_format_reg* && IS_SEQUENTIAL}] \
         -to [get_cells -quiet -hier -filter {name =~ *packet_cnt_length_reg* && IS_SEQUENTIAL}]
 
+  # scko/fast_clk -> adc_clk CDC: rx_data shift registers and IDDR into adc_data_init
+  # capture_complete gates the latch so this crossing is safe
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/rx_data_pos_reg* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/genblk3*.adc_data_init_reg* && IS_SEQUENTIAL}] 5.333
+
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/rx_data_neg_reg* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/genblk3*.adc_data_init_reg* && IS_SEQUENTIAL}] 5.333
+
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/i_rx/i_rx_data_iddr* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/genblk3*.adc_data_init_reg* && IS_SEQUENTIAL}] 5.333
+
+  # adc_data_init -> adc_data_store latch (both clocked by adc_clk, safe relaxed path)
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/genblk3*.adc_data_init_reg* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/adc_data_store_reg* && IS_SEQUENTIAL}] 5.333
+
+  # adc_valid_init pipeline (scko -> adc_clk)
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/adc_valid_init_reg* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/adc_valid_init_d_reg* && IS_SEQUENTIAL}] 5.333
+
+  # NSSI: fast_clk -> adc_clk CDC: ISERDES output into rx_data shift register
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/i_adc_data* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/rx_data_reg* && IS_SEQUENTIAL}] 5.333
+
+  # NSSI: adc_clk internal path: rx_data_d -> adc_data_store (written via ch_valid_dn gate)
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/rx_data_d_reg* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/adc_data_store_reg* && IS_SEQUENTIAL}] 5.333
+
+  # IDELAY control: up_clk <-> delay_clk CDC (write-and-forget, read-back after settle)
+  set_false_path -quiet -through [get_pins -quiet -hier -filter {name =~ *i_idelay/CNTVALUEOUT*}]
+  set_false_path -quiet -through [get_pins -quiet -hier -filter {name =~ *i_idelay/CNTVALUEIN*}]
+
 <: } else { :>
 
   # asynchronous reset while destination clock is not active
