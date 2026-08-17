@@ -70,11 +70,11 @@ DATA_WIDTH
 ENDREG
 
 FIELD
-[23:16] NUM_OF_SDI
-NUM_OF_SDI
+[23:16] NUM_OF_SDIO
+NUM_OF_SDIO
 RO
-Number of SDI.
-It is equal with the maximum supported SDI lines in bits.
+Number of SDIOs.
+It is equal with the maximum supported SDIO lines in bits.
 ENDFIELD
 
 FIELD
