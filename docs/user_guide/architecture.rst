@@ -47,7 +47,7 @@ Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Take :adi:`FMCOMMS2 <AD-FMCOMMS2-EBZ>` with
-:xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`;
+`ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__;
 the ``system_bd.tcl`` file will have the following designs sourced to be used:
 
 .. code-block:: tcl
