@@ -139,6 +139,30 @@ The following are the parameters of this project that can be configured:
 - Check out this guide on more details regarding these parameters:
    :ref:`axi_tdd`
 
+XCVR build parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following parameters configure the transceiver (XCVR) link on Xilinx
+carriers with XCVR automation flow:
+
+- PLL_TYPE: the PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+- REF_CLK: value of the reference clock [MHz] (LANE_RATE/20 or LANE_RATE/40 for
+  JESD204B; LANE_RATE/33 or LANE_RATE/66 for JESD204C)
+- LANE_RATE: value of the lane rate [Gbps]
+
+Optional XCVR overrides
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following optional parameters allow configuring the RX transceiver
+independently from the TX path. If omitted, the RX path inherits the
+corresponding base parameter (PLL_TYPE, LANE_RATE, REF_CLK).
+
+- XCVR_RX_PLL_TYPE: RX PLL type [CPLL/QPLL0/QPLL1]
+- XCVR_RX_LANE_RATE: RX lane rate [Gbps]
+- XCVR_RX_REF_CLK: RX reference clock [MHz] (XCVR_RX_LANE_RATE/20 or
+  XCVR_RX_LANE_RATE/40 for JESD204B; XCVR_RX_LANE_RATE/33 or
+  XCVR_RX_LANE_RATE/66 for JESD204C)
+
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -299,10 +323,35 @@ the HDL repository.
 
 **Linux/Cygwin/WSL**
 
+Building the project without parameters will use the default configuration (see
+the table below for default values, including XCVR parameters such as PLL_TYPE,
+REF_CLK and LANE_RATE).
+
 .. shell::
 
    $cd hdl/projects/ad9081_fmca_ebz_x_band/zcu102
    $make
+
+Example for building the project with JESD parameters (XCVR parameters
+will use their default values):
+
+.. shell::
+
+   $cd hdl/projects/ad9081_fmca_ebz_x_band/zcu102
+   $make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5 \
+   $     RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 \
+   $     RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 \
+   $     TX_JESD_S=1 TX_JESD_NP=16
+
+Example for building the project with JESD and XCVR parameters:
+
+.. shell::
+
+   $cd hdl/projects/ad9081_fmca_ebz_x_band/zcu102
+   $make JESD_MODE=8B10B RX_LANE_RATE=10 TX_LANE_RATE=10 \
+   $     RX_JESD_M=8 RX_JESD_L=4 RX_JESD_S=1 \
+   $     TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1 \
+   $     PLL_TYPE=QPLL0 REF_CLK=500 LANE_RATE=10
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -310,6 +359,77 @@ A more comprehensive build guide can be found in the :ref:`build_hdl` user guide
 
    All the details regarding the build parameters can be found on the
    :ref:`AD9081/AD9082/AD9986/AD9988 HDL project page <ad9081_fmca_ebz>`
+
+The following dropdown contains a table with the default values of the
+parameters that can be used to configure this project.
+
+.. collapsible:: Default values of the ``make`` parameters for AD9081-FMCA-EBZ-X-BAND
+
+   +---------------------+----------------+
+   | Parameter           |         ZCU102 |
+   +=====================+================+
+   | **XCVR build parameters**            |
+   +---------------------+----------------+
+   | PLL_TYPE            |          QPLL0 |
+   +---------------------+----------------+
+   | LANE_RATE           |             10 |
+   +---------------------+----------------+
+   | REF_CLK             |            500 |
+   +---------------------+----------------+
+   | **Optional XCVR overrides**          |
+   +---------------------+----------------+
+   | XCVR_RX_PLL_TYPE    |            --- |
+   +---------------------+----------------+
+   | XCVR_RX_LANE_RATE   |            --- |
+   +---------------------+----------------+
+   | XCVR_RX_REF_CLK     |            --- |
+   +---------------------+----------------+
+   | **JESD and other build parameters**  |
+   +---------------------+----------------+
+   | JESD_MODE           |          8B10B |
+   +---------------------+----------------+
+   | RX_LANE_RATE        |             10 |
+   +---------------------+----------------+
+   | TX_LANE_RATE        |             10 |
+   +---------------------+----------------+
+   | RX_JESD_M           |              8 |
+   +---------------------+----------------+
+   | RX_JESD_L           |              4 |
+   +---------------------+----------------+
+   | RX_JESD_S           |              1 |
+   +---------------------+----------------+
+   | RX_JESD_NP          |             16 |
+   +---------------------+----------------+
+   | RX_NUM_LINKS        |              1 |
+   +---------------------+----------------+
+   | TX_JESD_M           |              8 |
+   +---------------------+----------------+
+   | TX_JESD_L           |              4 |
+   +---------------------+----------------+
+   | TX_JESD_S           |              1 |
+   +---------------------+----------------+
+   | TX_JESD_NP          |             16 |
+   +---------------------+----------------+
+   | TX_NUM_LINKS        |              1 |
+   +---------------------+----------------+
+   | RX_KS_PER_CHANNEL   |             64 |
+   +---------------------+----------------+
+   | TX_KS_PER_CHANNEL   |             64 |
+   +---------------------+----------------+
+   | TDD_SUPPORT         |              1 |
+   +---------------------+----------------+
+   | SHARED_DEVCLK       |              1 |
+   +---------------------+----------------+
+   | TDD_CHANNEL_CNT     |              6 |
+   +---------------------+----------------+
+   | TDD_SYNC_WIDTH      |              0 |
+   +---------------------+----------------+
+   | TDD_SYNC_INT        |              0 |
+   +---------------------+----------------+
+   | TDD_SYNC_EXT        |              1 |
+   +---------------------+----------------+
+   | TDD_SYNC_EXT_CDC    |              1 |
+   +---------------------+----------------+
 
 Software considerations
 -------------------------------------------------------------------------------
