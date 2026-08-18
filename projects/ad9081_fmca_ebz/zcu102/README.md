@@ -95,25 +95,6 @@ LANE_RATE=15
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081.dts)
 
-#### JESD204B subclass 1, TX mode 9, RX mode 10, VCXO 100 MHz
-
-```
-make JESD_MODE=8B10B \
-RX_LANE_RATE=10 \
-TX_LANE_RATE=10 \
-RX_JESD_M=8 \
-RX_JESD_L=4 \
-RX_JESD_S=1 \
-TX_JESD_M=8 \
-TX_JESD_L=4 \
-TX_JESD_S=1 \
-PLL_TYPE=QPLL0 \
-REF_CLK=500 \
-LANE_RATE=10
-```
-
-Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4.dts)
-
 #### JESD204B subclass 1, TX mode 9, RX mode 10, VCXO 122.88 MHz
 
 ```
