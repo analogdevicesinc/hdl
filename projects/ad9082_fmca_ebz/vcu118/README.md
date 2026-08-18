@@ -30,6 +30,20 @@ The overwritable parameters from the environment are:
 - [RX/TX]_NUM_LINKS: [RX/TX] number of links, which matches the number of MxFE devices
 - [RX/TX]_KS_PER_CHANNEL: [RX/TX] number of samples stored in internal buffers in kilosamples per converter (M), for each channel in a block RAM, for a contiguous capture
 
+#### XCVR build parameters
+
+- PLL_TYPE: The PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+- REF_CLK: Value of the reference clock [MHz]
+- LANE_RATE: Value of lane rate [gbps]
+
+#### Optional XCVR overrides
+
+The following parameters allow configuring the RX transceiver independently from the TX path. If omitted, the RX path inherits the corresponding base parameter (PLL_TYPE, LANE_RATE, REF_CLK).
+
+- XCVR_RX_PLL_TYPE - RX PLL type [CPLL/QPLL0/QPLL1]
+- XCVR_RX_LANE_RATE - RX lane rate [gbps]
+- XCVR_RX_REF_CLK - RX reference clock [MHz] (usually XCVR_RX_LANE_RATE/20 or XCVR_RX_LANE_RATE/40)
+
 ### Example configurations
 
 #### JESD204B subclass 1, TX mode 17, RX mode 18 (default)
@@ -49,7 +63,10 @@ TX_JESD_S=1 \
 TX_JESD_NP=16 \
 TX_NUM_LINKS=1 \
 RX_KS_PER_CHANNEL=64 \
-TX_KS_PER_CHANNEL=64
+TX_KS_PER_CHANNEL=64 \
+PLL_TYPE=QPLL0 \
+REF_CLK=750 \
+LANE_RATE=15
 ```
 
 Corresponding device tree: [vcu118_ad9082.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_ad9082.dts)
@@ -67,12 +84,15 @@ RX_JESD_NP=16 \
 TX_JESD_M=2 \
 TX_JESD_L=8 \
 TX_JESD_S=2 \
-TX_JESD_NP=16
+TX_JESD_NP=16 \
+PLL_TYPE=QPLL0 \
+REF_CLK=375 \
+LANE_RATE=24.75
 ```
 
 Corresponding device tree: [vcu118_ad9082_204c_txmode_18_rxmode_19_lr_24_75Gbps.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_ad9082_204c_txmode_18_rxmode_19_lr_24_75Gbps.dts)
 
-#### JESD204C subclass 1, TX mode 18, RX mode 19
+#### JESD204C subclass 1, TX mode 11, RX mode 4
 
 ```
 make JESD_MODE=64B66B \
@@ -81,5 +101,8 @@ TX_LANE_RATE=16.22016 \
 RX_JESD_M=8 \
 RX_JESD_L=2 \
 TX_JESD_M=16 \
-TX_JESD_L=4
+TX_JESD_L=4 \
+PLL_TYPE=QPLL0 \
+REF_CLK=245.76 \
+LANE_RATE=16.22016
 ```

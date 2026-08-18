@@ -30,6 +30,20 @@ The overwritable parameters from the environment are:
 - [RX/TX]_JESD_NP: [RX/TX] number of bits per sample, only 16 is supported
 - [RX/TX]_NUM_LINKS: [RX/TX] number of links, which matches the number of MxFE devices
 
+#### XCVR build parameters
+
+- PLL_TYPE: The PLL used for driving the XCVR link [CPLL/QPLL]
+- REF_CLK: Value of the reference clock [MHz]
+- LANE_RATE: Value of lane rate [Gbps]
+
+#### Optional XCVR overrides
+
+The following parameters allow configuring the RX transceiver independently from the TX path. If omitted, the RX path inherits the corresponding base parameter (PLL_TYPE, LANE_RATE, REF_CLK).
+
+- XCVR_RX_PLL_TYPE - RX PLL type [CPLL/QPLL]
+- XCVR_RX_LANE_RATE - RX lane rate [Gbps]
+- XCVR_RX_REF_CLK - RX reference clock [MHz] (usually XCVR_RX_LANE_RATE/20 or XCVR_RX_LANE_RATE/40)
+
 ### Example configurations
 
 #### JESD204B subclass 1, TX mode 9, RX mode 10 (default)
@@ -49,7 +63,10 @@ TX_JESD_M=8 \
 TX_JESD_L=4 \
 TX_JESD_S=1 \
 TX_JESD_NP=16 \
-TX_NUM_LINKS=1
+TX_NUM_LINKS=1 \
+PLL_TYPE=QPLL \
+REF_CLK=250 \
+LANE_RATE=10
 ```
 
 Corresponding device tree: [zynq-zc706-adv7511-ad9082.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9082.dts)

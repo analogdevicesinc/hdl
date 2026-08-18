@@ -39,6 +39,20 @@ The overwritable parameters from the environment:
 - TDD_SYNC_EXT
 - TDD_SYNC_EXT_CDC - adds the CDC circuitry for the external sync signal
 
+#### XCVR build parameters
+
+- PLL_TYPE: The PLL used for driving the XCVR link [CPLL/QPLL0/QPLL1]
+- REF_CLK: Value of the reference clock [MHz]
+- LANE_RATE: Value of lane rate [Gbps]
+
+#### Optional XCVR overrides
+
+The following parameters allow configuring the RX transceiver independently from the TX path. If omitted, the RX path inherits the corresponding base parameter (PLL_TYPE, LANE_RATE, REF_CLK).
+
+- XCVR_RX_PLL_TYPE - RX PLL type [CPLL/QPLL0/QPLL1]
+- XCVR_RX_LANE_RATE - RX lane rate [Gbps]
+- XCVR_RX_REF_CLK - RX reference clock [MHz] (usually XCVR_RX_LANE_RATE/20 or XCVR_RX_LANE_RATE/40)
+
 ### Example configurations
 
 #### RX link mode 10, TX link mode 9, subclass 1 with TDD support (default)
@@ -61,7 +75,10 @@ TDD_CHANNEL_CNT=6 \
 TDD_SYNC_WIDTH=0 \
 TDD_SYNC_INT=0 \
 TDD_SYNC_EXT=1 \
-TDD_SYNC_EXT_CDC=1
+TDD_SYNC_EXT_CDC=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=500 \
+LANE_RATE=10
 ```
 
 Corresponding device trees:
