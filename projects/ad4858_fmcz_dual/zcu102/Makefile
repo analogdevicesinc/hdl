@@ -4,7 +4,7 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad4858_fmcz_zcu102
+PROJECT_NAME := ad4858_fmcz_dual_zcu102
 
 M_DEPS += system_top_lvds.v
 M_DEPS += system_constr_lvds.xdc
