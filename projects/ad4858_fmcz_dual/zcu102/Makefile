@@ -8,6 +8,8 @@ PROJECT_NAME := ad4858_fmcz_dual_zcu102
 
 M_DEPS += system_top_lvds.v
 M_DEPS += system_constr_lvds.xdc
+M_DEPS += system_top_cmos.v
+M_DEPS += system_constr_cmos.xdc
 M_DEPS += ../common/ad4858_fmcz_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
