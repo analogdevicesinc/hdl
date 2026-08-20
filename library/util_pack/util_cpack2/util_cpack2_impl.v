@@ -78,6 +78,29 @@ module util_cpack2_impl #(
   reg out_valid_int = 1'b0;
   reg [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] out_data_int = 'h00;
 
+  // Two-stage skid buffer for the AXIS (INTERFACE_TYPE==0) output. Stage 1
+  // captures the coherent packed word from pack_shell; stage 2 (hold_*) drives
+  // the held TVALID/TDATA. Unused (and constant) in FIFO mode.
+  reg s1_valid = 1'b0;
+  reg s1_sync = 1'b0;
+  reg [TOTAL_DATA_WIDTH-1:0] s1_data = 'h00;
+  reg hold_valid = 1'b0;
+  reg hold_sync = 1'b0;
+  reg [TOTAL_DATA_WIDTH-1:0] hold_data = 'h00;
+  reg overflow_int = 1'b0;
+
+  // Stage-2 handshake is complete when the held beat is accepted.
+  wire hold_accept = hold_valid & out_ready_int;
+  // Stage 2 holds an unaccepted beat: the packer must pause and the current
+  // partial word is discarded via flush.
+  wire skid_stall = hold_valid & ~out_ready_int;
+  // pack_shell produced a coherent word this cycle (out_data valid on ready&ce).
+  wire s1_load = ready & data_wr_en;
+  // Promote stage 1 -> stage 2 only when the bus can take it (out_ready_int).
+  // Gating on out_ready_int is what guarantees a word produced during a
+  // ready-low gap is never offered on the bus (no stale first beat).
+  wire promote = s1_valid & out_ready_int & (~hold_valid | hold_accept);
+
   // Interleaved version of `fifo_wr_data`.
   wire [TOTAL_DATA_WIDTH-1:0] interleaved_data;
 
@@ -86,10 +109,15 @@ module util_cpack2_impl #(
   wire out_sync;
   wire [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL-1:0] out_valid;
 
+  // In FIFO mode the skid buffer is unused; force its stall to 0 so ce/flush
+  // reduce to their legacy values and the FIFO path stays bit-identical.
+  wire skid_stall_int = (INTERFACE_TYPE == 1) ? 1'b0 : skid_stall;
+
   generate if (INTERFACE_TYPE == 1) begin
     assign out_ready_int = 1'b1;
     assign packed_fifo_wr_en = out_valid_int;
     assign packed_fifo_wr_data = out_data_int;
+    assign fifo_wr_overflow = packed_fifo_wr_overflow;
     assign m_axis_valid = 1'b0;
     assign m_axis_data = 'h00;
     assign m_axis_keep = 'h00;
@@ -98,8 +126,10 @@ module util_cpack2_impl #(
     assign out_ready_int = m_axis_ready;
     assign packed_fifo_wr_en = 1'b0;
     assign packed_fifo_wr_data = 'h00;
-    assign m_axis_valid = out_valid_int;
-    assign m_axis_data = out_data_int;
+    // A word dropped because stage 1 was still occupied is an overflow.
+    assign fifo_wr_overflow = packed_fifo_wr_overflow | overflow_int;
+    assign m_axis_valid = hold_valid;
+    assign m_axis_data = hold_data;
     assign m_axis_keep = {(NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL/8){1'b1}};
     assign m_axis_last = 1'b0;
   end endgenerate
@@ -111,17 +141,18 @@ module util_cpack2_impl #(
    */
   assign data_wr_en = fifo_wr_en[0];
 
-  assign ce = data_wr_en & out_ready_int;
-
-  // Downstream backpressure.
-  assign flush = ~out_ready_int;
+  // Pause the packer while the skid stage 2 holds an unaccepted beat; flush the
+  // partial word so the next accepted beat starts on a clean word boundary.
+  // In FIFO mode skid_stall_int is 0, so ce == data_wr_en and flush == 0
+  // (legacy behavior, bit-identical).
+  assign ce = data_wr_en & ~skid_stall_int;
+  assign flush = skid_stall_int;
 
   /*
    * The cpack core itself has no backpressure. Overflows can only happen
-   * downstream.
+   * downstream. fifo_wr_overflow is driven per-interface in the generate block
+   * above.
    */
-
-  assign fifo_wr_overflow = packed_fifo_wr_overflow;
 
   /*
    * Data at the input of the routing network should be interleaved. The cpack
@@ -180,6 +211,64 @@ module util_cpack2_impl #(
         end
       end
     end
+  end
+
+  /*
+   * AXIS (INTERFACE_TYPE==0) two-stage skid buffer.
+   *
+   * Gating TVALID (hold_valid) on m_axis_ready via `promote` is deadlock-free
+   * ONLY because the intended sink (data_offload) drives s_axis_ready
+   * independently of s_axis_valid. This AXIS output is designed for the
+   * data_offload chain and is NOT a universally-safe AXIS master: it would
+   * deadlock against a slave whose TREADY waits for TVALID. Do not wire it to
+   * an arbitrary AXIS slave.
+   */
+
+  // Stage 1: occupancy. Drop-on-stall has priority over load so a word produced
+  // during a ready-low gap is discarded and never promoted as a stale beat.
+  always @(posedge clk) begin
+    if (reset_data == 1'b1)     s1_valid <= 1'b0;
+    else if (skid_stall == 1'b1) s1_valid <= 1'b0;
+    else if (s1_load == 1'b1)    s1_valid <= 1'b1;
+    else if (promote == 1'b1)    s1_valid <= 1'b0;
+  end
+
+  // Stage 1: data. Snapshot the coherent packed word only on the ready&ce cycle
+  // (mandatory for the 6-of-8 / non-power-of-two gen_output_buffer path where
+  // out_data is combinational and only valid on that cycle).
+  always @(posedge clk) begin: gen_s1_data
+    integer i;
+
+    if (s1_load == 1'b1) begin
+      s1_sync <= out_sync;
+      for (i = 0; i < NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL; i = i + 1) begin
+        if (out_valid[i] == 1'b1) begin
+          s1_data[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= out_data[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH];
+        end
+      end
+    end
+  end
+
+  // Stage 2: TVALID. Clears only on an accepted handshake or reset_data, so it
+  // never retracts illegally.
+  always @(posedge clk) begin
+    if (reset_data == 1'b1)        hold_valid <= 1'b0;
+    else if (promote == 1'b1)      hold_valid <= 1'b1;
+    else if (hold_accept == 1'b1)  hold_valid <= 1'b0;
+  end
+
+  // Stage 2: held TDATA/sync, stable while unaccepted.
+  always @(posedge clk) begin
+    if (promote == 1'b1) begin
+      hold_data <= s1_data;
+      hold_sync <= s1_sync;
+    end
+  end
+
+  // A freshly produced word that cannot be captured (stage 1 still occupied and
+  // not draining this cycle) is lost -> overflow.
+  always @(posedge clk) begin
+    overflow_int <= s1_load & s1_valid & ~promote;
   end
 
 endmodule
