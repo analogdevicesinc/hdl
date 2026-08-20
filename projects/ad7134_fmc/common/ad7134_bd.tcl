@@ -114,7 +114,33 @@ ad_ip_parameter odr_generator CONFIG.EXT_SYNC_PHASE_ALIGN 1
 ad_ip_parameter odr_generator CONFIG.FORCE_ALIGN 1
 
 ad_connect odr_generator/ext_clk clkin_aligner/clk_out
-ad_connect odr_generator/pwm_0 $hier_spi_engine/trigger
+
+# Gate the offload trigger with the DMA transfer-request, as ad738x_fmc does
+# (ad738x_bd.tcl:54-64). Without it the offload starts a burst the DMA cannot
+# accept, the execution FSM stalls part-way through on back-pressure
+# (offload_sdi_ready -> sdi_data_ready -> io_ready1 -> sclk) and DCLK then
+# resumes at whatever instant userspace hands a buffer back, unrelated to ODR.
+# Gating the trigger makes a burst atomic: it either never starts, or it starts
+# on a pwm_0 edge and runs to completion.
+#
+# Only pwm_0 is gated. pwm_1 keeps driving ODR so the chips keep converting and
+# the ASRC stays locked; frames are still lost across the gap, but both dies
+# lose them identically and the restart phase is deterministic.
+#
+# xfer_req is in the 100 MHz s_axis_aclk domain and pwm_0 in the 48 MHz
+# clk_out domain, but the AND needs no resynchronizer: ASYNC_TRIG=1 above puts
+# a two-flop sync_bits on the offload's trigger input, and the IP's own
+# constraint file false-paths everything into it. The gate output can only be
+# high while pwm_0 is high, so a posedge landing inside a pulse is displaced by
+# at most one pulse width (20.8 ns) and is common-mode across both dies.
+
+ad_ip_instance ilvector_logic trigger_gate
+ad_ip_parameter trigger_gate CONFIG.C_SIZE 1
+ad_ip_parameter trigger_gate CONFIG.C_OPERATION {and}
+
+ad_connect trigger_gate/Op1 axi_ad7134_dma/s_axis_xfer_req
+ad_connect trigger_gate/Op2 odr_generator/pwm_0
+ad_connect trigger_gate/Res $hier_spi_engine/trigger
 
 # Sequence.txt §F.10 — re-register ODR on negedge of XTAL2_CLKIN inside
 # clkin_aligner so transitions align with the CLKin falling edge.
@@ -134,7 +160,26 @@ ad_connect  sys_cpu_resetn $hier_spi_engine/resetn
 ad_connect  sys_cpu_resetn axi_ad7134_dma/m_dest_axi_aresetn
 
 ad_connect  $hier_spi_engine/m_spi ad713x_di
-ad_connect  axi_ad7134_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
+
+# Frame-slip detector, spliced in-line between the offload and the DMA. It is a
+# zero-latency wire pass-through that only snoops the handshake, so the DMA sees
+# a bit-identical stream.
+
+ad_ip_instance ad7134_slip_detect slip_detect
+
+ad_connect  $hier_spi_engine/M_AXIS_SAMPLE slip_detect/s_axis
+ad_connect  slip_detect/m_axis axi_ad7134_dma/s_axis
+ad_connect  axi_ad7134_clkgen/clk_0 slip_detect/s_axis_aclk
+ad_connect  sys_cpu_resetn slip_detect/s_axis_aresetn
+ad_connect  $sys_cpu_clk slip_detect/s_axi_aclk
+ad_connect  sys_cpu_resetn slip_detect/s_axi_aresetn
+
+# The ODR actually delivered to the FMC pin, so ODR_COUNT counts the pulses the
+# chips saw rather than the pulses the PWM generated. Counting it separately
+# from the captured beats is what makes ODR_COUNT - FRAME_COUNT a dropped-frame
+# count, and it keeps running while the offload trigger is gated off.
+
+ad_connect  clkin_aligner/odr_out slip_detect/odr_in
 
 # AXI address definitions
 
@@ -144,12 +189,14 @@ ad_cpu_interconnect 0x44b00000 odr_generator
 ad_cpu_interconnect 0x44b10000 axi_ad7134_clkgen
 ad_cpu_interconnect 0x44b20000 axi_sdpclk_clkgen
 ad_cpu_interconnect 0x44b30000 clkin_aligner
+ad_cpu_interconnect 0x44b40000 slip_detect
 
 # interrupts
 
 ad_cpu_interrupt "ps-13" "mb-13" axi_ad7134_dma/irq
 ad_cpu_interrupt "ps-12" "mb-12" $hier_spi_engine/irq
 ad_cpu_interrupt "ps-10" "mb-10" clkin_aligner/irq
+ad_cpu_interrupt "ps-9"  "mb-9"  slip_detect/irq
 
 # memory interconnects
 

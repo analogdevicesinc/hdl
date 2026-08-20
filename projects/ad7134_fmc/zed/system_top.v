@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -97,9 +97,18 @@ module system_top (
 
   // ad713x data interface
 
-/* (* mark_debug = "true" *) */  output        ad713x_dclk,
-/* (* mark_debug = "true" *) */  input  [ 7:0] ad713x_din,
-/* (* mark_debug = "true" *) */  output        ad713x_odr,
+  // din[0..3] = DOUT0_1..DOUT3_1 (chip 1), din[4..7] = DOUT0_2..DOUT3_2
+  // (chip 2). These lanes are the only per-die signals in the design; ODR,
+  // DCLK and XTAL2_CLKIN are single nets shared by both chips.
+  //
+  // ad713x_odr stays unmarked: it carries IOB TRUE SLEW FAST
+  // (system_constr.xdc:25) and marking it pulls the flop out of the IOB, which
+  // is what held Dt at 10.4 ns before. Probe clkin_aligner's odr_out_dbg
+  // replica instead, which exists for exactly this.
+
+  (* mark_debug = "true" *)  output        ad713x_dclk,
+  (* mark_debug = "true" *)  input  [ 7:0] ad713x_din,
+  output        ad713x_odr,
 
   // ad713x GPIO lines
 
