@@ -41,7 +41,8 @@ module spi_engine_execution_shiftreg #(
   parameter DATA_WIDTH = 8,
   parameter NUM_OF_SDIO = 1,
   parameter [1:0] SDI_DELAY = 2'b00,
-  parameter ECHO_SCLK = 0
+  parameter ECHO_SCLK = 0,
+  parameter DDR_EN = 0
 ) (
   input   clk,
   input   resetn,
@@ -88,10 +89,14 @@ module spi_engine_execution_shiftreg #(
 
   reg [             7:0] sdi_counter    = 8'b0;
   reg [   SDI_DELAY+1:0] trigger_rx_d   = {(SDI_DELAY+2){1'b0}};
+  reg [   SDI_DELAY+1:0] trigger_tx_d   = {(SDI_DELAY+2){1'b0}};
   wire  data_sdo_v; //data_sdo_v == existence of valid data
   wire sdo_toshiftreg; //it is using the valid data for shifting in this cycle
   wire last_sdi_bit;
   wire trigger_rx_s;
+  wire trigger_tx_s;
+  wire trigger_sdi;
+  wire trigger_sdo;
   wire index_ready;
   wire sdo_data_ready_int;
   wire data_ready_out;
@@ -138,8 +143,8 @@ module spi_engine_execution_shiftreg #(
       always @(posedge clk) begin
         if (!sdo_enabled || !exec_cmd) begin
           data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
-        end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
-          if (first_bit == 1'b1) begin
+        end else if (transfer_active == 1'b1 && trigger_sdo == 1'b1) begin
+          if (first_bit == 1'b1 && trigger_tx == 1'b1) begin
             data_sdo_shift <= sdo_lane_mask[i] ? aligned_sdo_data[i * DATA_WIDTH+:DATA_WIDTH] : {DATA_WIDTH{sdo_idle_state}};
           end else begin
             data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
@@ -162,6 +167,13 @@ module spi_engine_execution_shiftreg #(
     trigger_rx_d <= {trigger_rx_d, trigger_rx};
   end
   assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
+
+  always @(posedge clk) begin
+    trigger_tx_d <= {trigger_tx_d, trigger_tx};
+  end
+  assign trigger_tx_s = trigger_tx_d[SDI_DELAY+1];
+  assign trigger_sdi = trigger_rx_s || (DDR_EN && trigger_tx_s);
+  assign trigger_sdo = trigger_tx || (DDR_EN && trigger_rx);
 
   // Load the serial data into SDI shift register(s), then link it to the output
   // register of the module
@@ -284,7 +296,7 @@ module spi_engine_execution_shiftreg #(
         if (cs_activate) begin
           data_sdi_shift <= 0;
         end else begin
-          if (trigger_rx_s == 1'b1) begin
+          if (trigger_sdi == 1'b1) begin
             data_sdi_shift <= {data_sdi_shift, sdi[i]};
           end
         end
@@ -299,7 +311,7 @@ module spi_engine_execution_shiftreg #(
       if (resetn == 1'b0) begin
         sdi_counter <= 8'b0;
       end else begin
-        if (trigger_rx_s == 1'b1) begin
+        if (trigger_sdi == 1'b1) begin
           sdi_counter <= last_sdi_bit ? 8'b0 : sdi_counter + 1'b1;
         end
       end
@@ -308,7 +320,7 @@ module spi_engine_execution_shiftreg #(
     always @(posedge clk) begin
       if (resetn == 1'b0)
         sdi_data_valid <= 1'b0;
-      else if (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_rx_s == 1'b1)
+      else if (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_sdi == 1'b1)
         sdi_data_valid <= 1'b1;
       else if (sdi_data_ready == 1'b1)
         sdi_data_valid <= 1'b0;
