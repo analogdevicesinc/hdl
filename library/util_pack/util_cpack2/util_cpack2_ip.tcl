@@ -54,7 +54,8 @@ adi_add_bus "m_axis" "master" \
     {"m_axis_valid" "TVALID"} \
     {"m_axis_data" "TDATA"} \
     {"m_axis_keep" "TKEEP"} \
-    {"m_axis_last" "TLAST"}]
+    {"m_axis_last" "TLAST"} \
+    {"m_axis_user" "TUSER"}]
 
 adi_set_bus_dependency "m_axis" "m_axis" \
   "(spirit:decode(id('MODELPARAM_VALUE.INTERFACE_TYPE')) = 0)"

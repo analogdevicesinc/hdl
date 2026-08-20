@@ -93,9 +93,10 @@ proc util_cpack_elab {} {
   set_interface_property m_axis associatedReset reset
   add_interface_port  m_axis  m_axis_valid tvalid  Output  1
   add_interface_port  m_axis  m_axis_ready tready  Input   1
-  add_interface_port  m_axis  m_axis_last  tlast   Output  1
   add_interface_port  m_axis  m_axis_data  tdata   Output  $total_data_width
   add_interface_port  m_axis  m_axis_keep  tkeep   Output  $total_data_width/8
+  add_interface_port  m_axis  m_axis_last  tlast   Output  1
+  add_interface_port  m_axis  m_axis_user  tuser   Output  1
 
   ad_interface signal packed_fifo_wr_en       output 1                 valid
   ad_interface signal packed_fifo_wr_data     output $total_data_width data

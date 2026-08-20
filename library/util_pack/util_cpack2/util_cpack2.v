@@ -183,6 +183,7 @@ module util_cpack2 #(
   output [2**$clog2(NUM_OF_CHANNELS)*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] m_axis_data,
   output [2**$clog2(NUM_OF_CHANNELS)*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL/8-1:0] m_axis_keep,
   output m_axis_last,
+  output m_axis_user,
 
   output packed_fifo_wr_en,
   input packed_fifo_wr_overflow,
@@ -308,6 +309,7 @@ module util_cpack2 #(
     .m_axis_data (m_axis_data),
     .m_axis_keep (m_axis_keep),
     .m_axis_last (m_axis_last),
+    .m_axis_user (m_axis_user),
 
     .packed_fifo_wr_en (packed_fifo_wr_en),
     .packed_fifo_wr_overflow (packed_fifo_wr_overflow),
