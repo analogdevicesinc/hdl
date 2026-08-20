@@ -52,3 +52,10 @@ set_max_delay -from [get_clocks scko_cmos_0] -to [get_clocks -of_objects [get_pi
 set_min_delay -from [get_clocks scko_cmos_0] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcme4/CLKOUT0]] 1.0
 set_max_delay -from [get_clocks scko_cmos_1] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcme4/CLKOUT0]] 10.0
 set_min_delay -from [get_clocks scko_cmos_1] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcme4/CLKOUT0]] 1.0
+
+# scko clocks are asynchronous to the PS clocks - treat all cross-domain paths as false paths
+set_clock_groups -asynchronous \
+  -group [get_clocks scko_cmos_0] \
+  -group [get_clocks scko_cmos_1] \
+  -group [get_clocks mmcm_clk_0_s] \
+  -group [get_clocks clk_pl_0]
