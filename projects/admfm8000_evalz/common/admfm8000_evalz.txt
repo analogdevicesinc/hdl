@@ -1,0 +1,84 @@
+FMC_pin   FMC_port      Schematic_name        System_top_name       IOSTANDARD   Termination
+
+# admfm8000_evalz
+
+G30       LA29_P        DDS_D[0]              dds_d[0]              LVCMOS25     #N/A
+G31       LA29_N        DDS_D[1]              dds_d[1]              LVCMOS25     #N/A
+G9        LA03_P        DDS_D[2]              dds_d[2]              LVCMOS25     #N/A
+G10       LA03_N        DDS_D[3]              dds_d[3]              LVCMOS25     #N/A
+H10       LA04_P        DDS_D[4]              dds_d[4]              LVCMOS25     #N/A
+H11       LA04_N        DDS_D[5]              dds_d[5]              LVCMOS25     #N/A
+D11       LA05_P        DDS_D[6]              dds_d[6]              LVCMOS25     #N/A
+D12       LA05_N        DDS_D[7]              dds_d[7]              LVCMOS25     #N/A
+C10       LA06_P        DDS_D[8]              dds_d[8]              LVCMOS25     #N/A
+C11       LA06_N        DDS_D[9]              dds_d[9]              LVCMOS25     #N/A
+H31       LA28_P        DDS_D[10]             dds_d[10]             LVCMOS25     #N/A
+H32       LA28_N        DDS_D[11]             dds_d[11]             LVCMOS25     #N/A
+G12       LA08_P        DDS_D[12]             dds_d[12]             LVCMOS25     #N/A
+G13       LA08_N        DDS_D[13]             dds_d[13]             LVCMOS25     #N/A
+D14       LA09_P        DDS_D[14]             dds_d[14]             LVCMOS25     #N/A
+D15       LA09_N        DDS_D[15]             dds_d[15]             LVCMOS25     #N/A
+
+D20       LA17_CC_P     DDS_SYNC_CLK          dds_sync_clk          LVCMOS25     #N/A
+H37       LA32_P        DDS_CSB               dds_csb               LVCMOS25     #N/A
+H35       LA30_N        DDS_DRCTRL            dds_drctrl            LVCMOS25     #N/A
+G18       LA16_P        DDS_DRHOLD            dds_drhold            LVCMOS25     #N/A
+G19       LA16_N        DDS_DROVER            dds_drover            LVCMOS25     #N/A
+H23       LA19_N        DDS_EXT_PWR_DWN       dds_ext_pwr_dwn       LVCMOS25     #N/A
+D9        LA01_CC_N     DDS_F[0]              dds_f[0]              LVCMOS25     #N/A
+G7        LA00_CC_N     DDS_F[1]              dds_f[1]              LVCMOS25     #N/A
+H26       LA21_N        DDS_IO_RESET          dds_io_reset          LVCMOS25     #N/A
+H34       LA30_P        DDS_IO_UPDATE         dds_io_update         LVCMOS25     #N/A
+H38       LA32_N        DDS_MAIN_RESET        dds_main_reset        LVCMOS25     #N/A
+G34       LA31_N        DDS_OSK               dds_osk               LVCMOS25     #N/A
+G6        LA00_CC_P     DDS_PDCLK             dds_pdclk             LVCMOS25     #N/A
+C14       LA10_P        DDS_PROFILE0          dds_profile0          LVCMOS25     #N/A
+C15       LA10_N        DDS_PROFILE1          dds_profile1          LVCMOS25     #N/A
+H29       LA24_N        DDS_PROFILE2          dds_profile2          LVCMOS25     #N/A
+H25       LA21_P        DDS_RAM_SWP_OVR       dds_ram_swp_ovr       LVCMOS25     #N/A
+D8        LA01_CC_P     DDS_TXENABLE          dds_txenable          LVCMOS25     #N/A
+
+D21       LA17_N        PLL_LE                pll_le                LVCMOS25     #N/A
+G36       LA33_P        PLL_CE                pll_ce                LVCMOS25     #N/A
+C18       LA14_P        ATT_LE                att_le                LVCMOS25     #N/A
+
+H4        CLK0_M2C_P    ADCA_DCO_P            adca_dco_p            LVDS_25      DIFF_TERM
+H5        CLK0_M2C_N    ADCA_DCO_N            adca_dco_n            LVDS_25      DIFF_TERM
+H7        LA02_P        ADCA_DA_P             adca_da_p             LVDS_25      DIFF_TERM
+H8        LA02_N        ADCA_DA_N             adca_da_n             LVDS_25      DIFF_TERM
+
+G2        CLK1_M2C_P    ADCB_DCO_P            adcb_dco_p            LVDS_25      DIFF_TERM
+G3        CLK1_M2C_N    ADCB_DCO_N            adcb_dco_n            LVDS_25      DIFF_TERM
+G21       LA20_P        ADCB_DA_P             adcb_da_p             LVDS_25      DIFF_TERM
+G22       LA20_N        ADCB_DA_N             adcb_da_n             LVDS_25      DIFF_TERM
+
+C27       LA27_N        ADCA_GPIO1_FMC        adca_gpio1_fmc        LVCMOS25     #N/A
+H16       LA11_P        ADCA_GP0_DIR          adca_gp0_dir          LVCMOS25     #N/A
+C23       LA18_CC_N     ADCA_GP1_DIR          adca_gp1_dir          LVCMOS25     #N/A
+H28       LA24_P        ADCB_GPIO1_FMC        adcb_gpio1_fmc        LVCMOS25     #N/A
+
+G27       LA25_P        ADCA_AD4080_CSN       adca_ad4080_csn       LVCMOS25     #N/A
+H14       LA07_N        ADCA_AD4080_SCLK      adca_ad4080_sclk      LVCMOS25     #N/A
+G28       LA25_N        ADCA_AD4080_MOSI      adca_ad4080_mosi      LVCMOS25     #N/A
+H13       LA07_P        ADCA_AD4080_MISO      adca_ad4080_miso      LVCMOS25     #N/A
+
+G24       LA22_P        ADCB_AD4080_CSN       adcb_ad4080_csn       LVCMOS25     #N/A
+G25       LA22_N        ADCB_AD4080_SCLK      adcb_ad4080_sclk      LVCMOS25     #N/A
+D23       LA23_P        ADCB_AD4080_MOSI      adcb_ad4080_mosi      LVCMOS25     #N/A
+D24       LA23_N        ADCB_AD4080_MISO      adcb_ad4080_miso      LVCMOS25     #N/A
+
+C26       LA27_P        AD9508_SYNC           ad9508_sync           LVCMOS25     #N/A
+D27       LA26_N        AD9508_CSN            ad9508_csn            LVCMOS25     #N/A
+C22       LA18_CC_P     SYNCB                 syncb                 LVCMOS25     #N/A
+D18       LA13_N        AD9508_ADF4350_SCLK   ad9508_adf4350_sclk   LVCMOS25     #N/A
+D17       LA13_P        AD9508_ADF4350_MISO   ad9508_adf4350_miso   LVCMOS25     #N/A
+D26       LA26_P        AD9508_ADF4350_MOSI   ad9508_adf4350_mosi   LVCMOS25     #N/A
+
+H19       LA15_P        EN_PSU                en_psu                LVCMOS25     #N/A
+H20       LA15_N        PWRGD                 pwrgd                 LVCMOS25     #N/A
+H22       LA19_P        PD_V33B               pd_v33b               LVCMOS25     #N/A
+G33       LA31_P        EN_IFVGA              en_ifvga              LVCMOS25     #N/A
+
+H17       LA11_N        SPI_CLK               spi_clk               LVCMOS25     #N/A
+G16       LA12_N        SPI_MISO              spi_miso              LVCMOS25     #N/A
+G15       LA12_P        SPI_MOSI              spi_mosi              LVCMOS25     #N/A
