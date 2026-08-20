@@ -555,10 +555,4 @@ module spi_engine_execution #(
     sdo_t <= sdo_t_int;
   end
 
-  initial begin
-    if (DDR_EN && ECHO_SCLK) begin
-      $error("DDR_EN and ECHO_SCLK cannot both be enabled");
-    end
-  end
-
 endmodule
