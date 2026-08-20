@@ -97,6 +97,12 @@ proc adi_project {project_name {parameter_list {}}} {
     set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
+  if [regexp "_de25nano" $project_name] {
+    set family "Agilex 5"
+    set device A5EB013BB23BE4S
+    set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
+  }
+
   if [regexp "fm87" $project_name] {
     set family "Agilex 7"
     set device AGIB027R31B1E1V
