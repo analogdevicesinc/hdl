@@ -175,35 +175,28 @@ create_clock -period 40.000 -name spi1_clk [get_pins -hier */EMIOSPI1SCLKO]
 # creates the clock at the port (matches the clk_out idiom in clkin_aligner_constr.sdc).
 create_generated_clock -name clkin_to_adc -source [get_pins i_system_wrapper/system_i/axi_sdpclk_clkgen/inst/i_mmcm_drp/i_clk_0_bufg/O] -divide_by 1 [get_ports ad713x_sdpclk]
 
-# POSEDGE (rising-launch) variant: ODR is launched on the RISING edge of clk_in
-# (clkin_aligner.v odr_pos), so the output constraint is referenced to the RISING
-# edge of clkin_to_adc (no -clock_fall). Dropping -clock_fall shifts the reference
-# by half a CLKIN period (10.4 ns) — the same half-cycle shift that moves the ODR
-# into the in-spec "good bin". This mirrors the known-good negedge geometry
-# (launch edge == reference edge = same-edge forwarding), so the -max/-min values
-# and the OLOGIC/IOB packing carry over unchanged. VERIFY after build: check the
-# ad713x_odr path setup/hold slack in the timing report and confirm odr_pos stayed
-# in the output IOB; nudge -max down (setup) or -min up (hold) if either is negative.
-#
-# POSEDGE build — physics-derived constraints (2026-07-21):
-#   -clock_fall: correct reference edge (chip samples ODR on CLKIN falling)
+# NEGEDGE (falling-launch) variant: ODR is launched on the FALLING edge of clk_in
+# (clkin_aligner.v odr_neg), so the output constraint is referenced to the FALLING
+# edge of clkin_to_adc (-clock_fall). Launch edge == reference edge, i.e. plain
+# same-edge forwarding, which is the geometry the -max 15.833 / -min 5.000 pair was
+# originally derived for. VERIFY after build: check the ad713x_odr path setup/hold
+# slack in the timing report and confirm odr_neg stayed in the output IOB; nudge
+# -max down (setup) or -min up (hold) if either is negative.
+set_output_delay -clock clkin_to_adc -clock_fall -max 15.833 [get_ports ad713x_odr]
+set_output_delay -clock clkin_to_adc -clock_fall -min 5.000  [get_ports ad713x_odr]
+# --- Other variants kept for reference ---
+# POSEDGE build — physics-derived constraints (2026-07-21), pairs with odr_pos.
+# Half-cycle path: launch on CLKIN rising, capture referenced to CLKIN falling.
 #   -max 5.5:  board trace asymmetry D_odr - D_clkin ≈ 5.5 ns (measured) + chip
 #              synchronizer Tsu ≈ 0 ns (internal re-sync, no datasheet Tsu spec).
-#              Models: ODR must arrive at chip before CLKIN falling.
 #              Expected setup slack ≈ 7.4 ns (matches scope measurement).
 #   -min 15.9: D_odr - D_clkin (5.5) + TCLK/2 (10.417) = 15.917 ns.
-#              Models osc14 constraint: ODR cannot arrive more than TCLK/2 before
-#              CLKIN falling at chip (Δt < 10.417 ns for same-edge capture).
 #              Expected hold slack ≈ 3.5 ns.
-set_output_delay -clock clkin_to_adc -clock_fall -max 5.500 [get_ports ad713x_odr]
-set_output_delay -clock clkin_to_adc -clock_fall -min 15.900 [get_ports ad713x_odr]
-# --- Previous variants kept for reference ---
+# set_output_delay -clock clkin_to_adc -clock_fall -max 5.500 [get_ports ad713x_odr]
+# set_output_delay -clock clkin_to_adc -clock_fall -min 15.900 [get_ports ad713x_odr]
 # Rising-edge reference (posedge-launch hack, values carried from negedge build):
 # set_output_delay -clock clkin_to_adc -max 15.833 [get_ports ad713x_odr]
 # set_output_delay -clock clkin_to_adc -min 5.000 [get_ports ad713x_odr]
-# Falling-edge reference, negedge-launch (revert with odr_neg in clkin_aligner.v):
-# set_output_delay -clock clkin_to_adc -clock_fall -max 15.833 [get_ports ad713x_odr]
-# set_output_delay -clock clkin_to_adc -clock_fall -min 5.000 [get_ports ad713x_odr]
 
 
 
