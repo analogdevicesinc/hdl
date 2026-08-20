@@ -9,6 +9,7 @@
 <: setFileExtension ".xdc" :>
 <: setFileProcessingOrder late :>
 <: set echo_sclk [getBooleanValue "ECHO_SCLK"] :>
+<: set ddr_en [getBooleanValue "DDR_EN"] :>
 
 # Relax the timing between the SDI shift register and DMA. The shift register
 # runs at negative edge of echoSCLK and the DMA runs at spi_clk. Registers

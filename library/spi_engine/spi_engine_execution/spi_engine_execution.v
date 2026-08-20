@@ -44,7 +44,8 @@ module spi_engine_execution #(
   parameter NUM_OF_SDIO = 1,
   parameter [0:0] SDO_DEFAULT = 1'b0,
   parameter ECHO_SCLK = 0,
-  parameter [1:0] SDI_DELAY = 2'b00
+  parameter [1:0] SDI_DELAY = 2'b00,
+  parameter DDR_EN = 0
 ) (
   input clk,
   input resetn,
@@ -187,7 +188,8 @@ module spi_engine_execution #(
     .DATA_WIDTH(DATA_WIDTH),
     .NUM_OF_SDIO(NUM_OF_SDIO),
     .SDI_DELAY(SDI_DELAY),
-    .ECHO_SCLK(ECHO_SCLK)
+    .ECHO_SCLK(ECHO_SCLK),
+    .DDR_EN(DDR_EN)
   ) shiftreg (
     .clk(clk),
     .resetn(resetn),
@@ -347,7 +349,7 @@ module spi_engine_execution #(
           ntx_rx <= ~ntx_rx;
         end else begin
           if (transfer_active) begin
-            bit_counter <= bit_counter + ntx_rx;
+            bit_counter <= bit_counter + (DDR_EN ? 1 : ntx_rx);
             ntx_rx <= ~ntx_rx;
           end else begin
             sleep_counter_increment <= ~sleep_counter_increment;
@@ -551,6 +553,12 @@ module spi_engine_execution #(
     sclk <= sclk_int;
     sdo <= sdo_int_s;
     sdo_t <= sdo_t_int;
+  end
+
+  initial begin
+    if (DDR_EN && ECHO_SCLK) begin
+      $error("DDR_EN and ECHO_SCLK cannot both be enabled");
+    end
   end
 
 endmodule
