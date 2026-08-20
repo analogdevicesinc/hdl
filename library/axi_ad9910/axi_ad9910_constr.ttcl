@@ -1,0 +1,42 @@
+###############################################################################
+## Copyright (C) 2023, 2025 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+#    "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+<: set measure_clks_en [getBooleanValue "MEASURE_CLKS_EN"] :>
+
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*i_ad9910_interface/fifo_rd_ptr_gray_reg[*]/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_ad9910_interface/fifo_rd_ptr_gray_sync1_reg[*]/D}]
+
+set_false_path \
+  -from [get_pins -hierarchical * -filter {NAME=~*i_ad9910_interface/fifo_wr_ptr_gray_reg[*]/C}] \
+  -to [get_pins -hierarchical * -filter {NAME=~*i_ad9910_interface/fifo_wr_ptr_gray_sync1_reg[*]/D}]
+
+set_multicycle_path -setup 16 \
+  -from [get_cells -hier -filter {NAME =~ *axi_ad9910_0/inst/i_axi_ad9910_regmap/up_*_reg[*]}] \
+  -to   [get_cells -hier -filter {NAME =~ *axi_ad9910_0/inst/i_axi_ad9910_regmap/i_xfer_cntrl_sd/up_xfer_data_reg[*]}]
+
+set_multicycle_path -hold 15 \
+  -from [get_cells -hier -filter {NAME =~ *axi_ad9910_0/inst/i_axi_ad9910_regmap/up_*_reg[*]}] \
+  -to   [get_cells -hier -filter {NAME =~ *axi_ad9910_0/inst/i_axi_ad9910_regmap/i_xfer_cntrl_sd/up_xfer_data_reg[*]}]
+
+<: if { $measure_clks_en } { :>
+
+  set_property ASYNC_REG true [get_cells -hierarchical -filter {name =~ *up_count_running_m*}]
+  set_property ASYNC_REG true [get_cells -hierarchical -filter {name =~ *d_count_run_m*}]
+  set_property ASYNC_REG true [get_cells -hierarchical -filter {name =~ *up_d_count_reg*}]
+
+  set_false_path -from [get_cells -hierarchical -filter {name =~ *d_count_run_m3_reg*  && IS_SEQUENTIAL}] -to [get_cells -hierarchical -filter {name =~ *up_count_running_m1_reg* && IS_SEQUENTIAL}]
+  set_false_path -from [get_cells -hierarchical -filter {name =~ *up_count_run_reg*    && IS_SEQUENTIAL}] -to [get_cells -hierarchical -filter {name =~ *d_count_run_m1_reg* && IS_SEQUENTIAL}]
+  set_false_path -from [get_cells -hierarchical -filter {name =~ *d_count_reg*         && IS_SEQUENTIAL}] -to [get_cells -hierarchical -filter {name =~ *up_d_count_reg* && IS_SEQUENTIAL}]
+
+<: } :>
