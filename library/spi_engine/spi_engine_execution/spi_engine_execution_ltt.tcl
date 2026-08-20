@@ -164,6 +164,18 @@ set ip [ipl::set_parameter -ip $ip \
     -group1 {Custom clocking options} \
     -group2 Config]
 
+set ip [ipl::set_parameter -ip $ip \
+    -id DDR_EN \
+    -type param \
+    -value_type int \
+    -conn_mod spi_engine_execution \
+    -title {DDR mode} \
+    -default 0 \
+    -options {[(True, 1), (False, 0)]} \
+    -output_formatter nostr \
+    -group1 {Custom clocking options} \
+    -group2 Config]
+
 set ip [ipl::ignore_ports -ip $ip \
     -portlist {echo_sclk} \
     -expression {(ECHO_SCLK != 1)}]

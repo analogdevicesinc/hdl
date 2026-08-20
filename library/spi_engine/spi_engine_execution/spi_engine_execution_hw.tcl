@@ -24,6 +24,7 @@ ad_ip_parameter NUM_OF_SDIO INTEGER 1
 ad_ip_parameter SDO_DEFAULT INTEGER 0
 ad_ip_parameter ECHO_SCLK INTEGER 0
 ad_ip_parameter SDI_DELAY INTEGER 0
+ad_ip_parameter DDR_EN INTEGER 0
 
 proc p_elaboration {} {
 

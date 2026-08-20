@@ -138,6 +138,18 @@ set_property -dict [list \
  ] \
  [ipx::get_hdl_parameters ECHO_SCLK -of_objects $cc]
 
+## DDR_EN
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_user_parameters DDR_EN -of_objects $cc]
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_hdl_parameters DDR_EN -of_objects $cc]
+
 ## echo_sclk should be active only when ECHO_SCLK is set
 adi_set_ports_dependency echo_sclk ECHO_SCLK 0
 
@@ -218,6 +230,12 @@ set_property -dict [list \
   "display_name" "Echoed SCLK" \
   "tooltip" "\[ECHO_SCLK\] Activate echo SCLK option (hardware support required)"
 ] [ipgui::get_guiparamspec -name "ECHO_SCLK" -component $cc]
+
+ipgui::add_param -name "DDR_EN" -component $cc -parent $custom_clocking_group
+set_property -dict [list \
+  "display_name" "DDR mode" \
+  "tooltip" "\[DDR_EN\] Enable Dual Data Rate mode (data changes on both SCLK edges)"
+] [ipgui::get_guiparamspec -name "DDR_EN" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

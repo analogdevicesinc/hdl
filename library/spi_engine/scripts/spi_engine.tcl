@@ -50,6 +50,7 @@ proc spi_engine_create {args} {
     set sync_fifo_addr_width  [optional_param $args 14 4]
     set cmd_fifo_addr_width   [optional_param $args 15 4]
     set src_reg_slice_en      [optional_param $args 16 0]
+    set ddr_en                [optional_param $args 17 0]
 
   } elseif {$vendor == "intel"} {
     # Intel: name + clocks & resets + optional parameters
@@ -76,6 +77,7 @@ proc spi_engine_create {args} {
     set sync_fifo_addr_width  [optional_param $args 17 4]
     set cmd_fifo_addr_width   [optional_param $args 18 4]
     set src_reg_slice_en      [optional_param $args 19 0]
+    set ddr_en                [optional_param $args 20 0]
   }
 
   # Component instance names
@@ -118,6 +120,7 @@ proc spi_engine_create {args} {
   ad_ip_parameter $execution CONFIG.SDO_DEFAULT 1
   ad_ip_parameter $execution CONFIG.SDI_DELAY $sdi_delay
   ad_ip_parameter $execution CONFIG.ECHO_SCLK $echo_sclk
+  ad_ip_parameter $execution CONFIG.DDR_EN $ddr_en
 
   ad_ip_instance axi_spi_engine $axi_regmap
   ad_ip_parameter $axi_regmap CONFIG.MM_IF_TYPE 0
