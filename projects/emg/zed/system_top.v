@@ -114,7 +114,23 @@ module system_top (
   output [ 7:0] emg_amp_cs,
   output        emg_amp_sdi,
   input         emg_amp_sdo,
-  output        emg_amp_sclk
+  output        emg_amp_sclk,
+
+  // channel enables CH4..CH7
+
+  output [ 3:0] emg_ch_en,
+
+  // SW phase 2 - AD5940 / MAX30011, pins reserved and held idle
+
+  output        emg_ad5940_cs,
+  output        emg_ad5940_sclk,
+  output        emg_ad5940_sdi,
+  input         emg_ad5940_sdo,
+
+  output        emg_max30011_cs,
+  output        emg_max30011_sclk,
+  output        emg_max30011_sdi,
+  input         emg_max30011_sdo
 );
 
   // internal signals
@@ -135,7 +151,23 @@ module system_top (
   // instantiations
   assign emg_spi_cs = gpio_o[50] ? {cs[0], cs[0]} : cs;
   assign emg_amp_cs = gpio_o[58:51];
+
+  // CH4..CH7 enables reuse the top of the EMIO GPIO range.  The PS7 EMIO GPIO is
+  // 64 bits wide and the rest of it is already allocated, so [63:60] are taken from
+  // the read-back range rather than adding an axi_gpio for four bits.
+  assign emg_ch_en = gpio_o[63:60];
   assign gpio_i[63:48] = gpio_o[63:48];
+
+  // SW phase 2 - AD5940 and MAX30011 are on the FMC but have no controller in the
+  // block design yet.  Hold both buses idle (chip selects high, no clock activity)
+  // so the pins are constrained and the board routing is exercised.
+  assign emg_ad5940_cs = 1'b1;
+  assign emg_ad5940_sclk = 1'b0;
+  assign emg_ad5940_sdi = 1'b0;
+
+  assign emg_max30011_cs = 1'b1;
+  assign emg_max30011_sclk = 1'b0;
+  assign emg_max30011_sdi = 1'b0;
 
   ad_iobuf #(
     .DATA_WIDTH(14)

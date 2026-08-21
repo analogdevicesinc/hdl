@@ -3,64 +3,96 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# ad4134 SPI configuration interface
-# EMG RevB 088765 FMC → Zedboard FMC LPC (Bank 34/35, VADJ=1.8V)
+# EMG 088756 Rev b, sheet 19 (FMC) → Zedboard FMC LPC (Bank 34/35, VADJ=1.8V)
+# Connector P23, ASP-134604-01.  Schematic net names are given in the comments.
 
-set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS18} [get_ports emg_spi_sdi];         ## FMC_LPC_LA03_P
-set_property -dict {PACKAGE_PIN M22 IOSTANDARD LVCMOS18} [get_ports emg_spi_sdo];         ## FMC_LPC_LA04_N
-set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS18} [get_ports emg_spi_sclk];        ## FMC_LPC_LA01_P_CC
-set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS18} [get_ports emg_spi_cs[0]];       ## FMC_LPC_LA05_P
-set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS18} [get_ports emg_spi_cs[1]];       ## FMC_LPC_LA05_N
+# ad4134 SPI configuration interface
+
+set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS18} [get_ports emg_spi_sdi];         ## FMC_LPC_LA03_P     SDO_ADC
+set_property -dict {PACKAGE_PIN M22 IOSTANDARD LVCMOS18} [get_ports emg_spi_sdo];         ## FMC_LPC_LA04_N     SDI_ADC
+set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS18} [get_ports emg_spi_sclk];        ## FMC_LPC_LA01_P_CC  SCLK_ADC
+set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS18} [get_ports emg_spi_cs[0]];       ## FMC_LPC_LA05_P     CS_ADC1
+set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS18} [get_ports emg_spi_cs[1]];       ## FMC_LPC_LA05_N     CS_ADC2
 
 # ad4134 data interface
 
-set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_dclk];   ## FMC_LPC_CLK0_M2C_P
-set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[0]]; ## FMC_LPC_LA00_N_CC
-set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[1]]; ## FMC_LPC_LA06_N
-set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[2]]; ## FMC_LPC_LA02_P
-set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[3]]; ## FMC_LPC_LA02_N
-set_property -dict {PACKAGE_PIN J21 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[4]]; ## FMC_LPC_LA08_P
-set_property -dict {PACKAGE_PIN J22 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[5]]; ## FMC_LPC_LA08_N
-set_property -dict {PACKAGE_PIN R20 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[6]]; ## FMC_LPC_LA09_P
-set_property -dict {PACKAGE_PIN R21 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[7]]; ## FMC_LPC_LA09_N
-set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS18} [get_ports emg_odr];             ## FMC_LPC_LA00_P_CC
+set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_dclk];   ## FMC_LPC_CLK0_M2C_P DCLK
+set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[0]]; ## FMC_LPC_LA00_N_CC  DOUT0_1
+set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[1]]; ## FMC_LPC_LA06_N     DOUT1_1
+set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[2]]; ## FMC_LPC_LA02_P     DOUT2_1
+set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[3]]; ## FMC_LPC_LA02_N     DOUT3_1
+set_property -dict {PACKAGE_PIN J21 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[4]]; ## FMC_LPC_LA08_P     DOUT0_2
+set_property -dict {PACKAGE_PIN J22 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[5]]; ## FMC_LPC_LA08_N     DOUT1_2
+set_property -dict {PACKAGE_PIN R20 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[6]]; ## FMC_LPC_LA09_P     DOUT2_2
+set_property -dict {PACKAGE_PIN R21 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[7]]; ## FMC_LPC_LA09_N     DOUT3_2
+set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS18} [get_ports emg_odr];             ## FMC_LPC_LA00_P_CC  ODR
+
+# Sheet 19 shorts DCLK to CLK0_M2C_N through R140 (0R, fitted) and ODR to LA33_N
+# through R157 (0R, fitted), in addition to the two pins constrained above.
+# Both DCLK and ODR are FPGA outputs here, so driving the second pin as well would
+# put two FPGA drivers on one board net through a 0R link.  Left unconstrained -
+# the pins stay unused and the board net is driven from one end only.
+# Enable one of the pairs below only if the matching 0R is removed on the board.
+#
+# set_property -dict {PACKAGE_PIN L19 IOSTANDARD LVCMOS18} [get_ports emg_dclk_n];        ## FMC_LPC_CLK0_M2C_N DCLK  via R140
+# set_property -dict {PACKAGE_PIN B22 IOSTANDARD LVCMOS18} [get_ports emg_odr_n];         ## FMC_LPC_LA33_N     ODR   via R157
 
 # ad4134 GPIO lines
 
-set_property -dict {PACKAGE_PIN J20 IOSTANDARD LVCMOS18} [get_ports emg_resetn[0]];       ## FMC_LPC_LA16_P
-set_property -dict {PACKAGE_PIN K21 IOSTANDARD LVCMOS18} [get_ports emg_resetn[1]];       ## FMC_LPC_LA16_N
-set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS18} [get_ports emg_pdn[0]];          ## FMC_LPC_LA07_P
-set_property -dict {PACKAGE_PIN T17 IOSTANDARD LVCMOS18} [get_ports emg_pdn[1]];          ## FMC_LPC_LA07_N
-set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVCMOS18} [get_ports emg_mode[0]];         ## FMC_LPC_LA04_P
-set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVCMOS18} [get_ports emg_mode[1]];         ## FMC_LPC_LA03_N
-set_property -dict {PACKAGE_PIN R19 IOSTANDARD LVCMOS18} [get_ports emg_gpio[0]];         ## FMC_LPC_LA10_P
-set_property -dict {PACKAGE_PIN T19 IOSTANDARD LVCMOS18} [get_ports emg_gpio[1]];         ## FMC_LPC_LA10_N
-set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS18} [get_ports emg_gpio[2]];         ## FMC_LPC_LA11_P
-set_property -dict {PACKAGE_PIN N18 IOSTANDARD LVCMOS18} [get_ports emg_gpio[3]];         ## FMC_LPC_LA11_N
-set_property -dict {PACKAGE_PIN P20 IOSTANDARD LVCMOS18} [get_ports emg_gpio[4]];         ## FMC_LPC_LA12_P
-set_property -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS18} [get_ports emg_gpio[5]];         ## FMC_LPC_LA12_N
-set_property -dict {PACKAGE_PIN L17 IOSTANDARD LVCMOS18} [get_ports emg_gpio[6]];         ## FMC_LPC_LA13_P
-set_property -dict {PACKAGE_PIN M17 IOSTANDARD LVCMOS18} [get_ports emg_gpio[7]];         ## FMC_LPC_LA13_N
-set_property -dict {PACKAGE_PIN L21 IOSTANDARD LVCMOS18} [get_ports emg_pinbspi];         ## FMC_LPC_LA06_P
-set_property -dict {PACKAGE_PIN K20 IOSTANDARD LVCMOS18} [get_ports emg_dclkmode];        ## FMC_LPC_LA14_N
+set_property -dict {PACKAGE_PIN J20 IOSTANDARD LVCMOS18} [get_ports emg_resetn[0]];       ## FMC_LPC_LA16_P     RESETB_1
+set_property -dict {PACKAGE_PIN K21 IOSTANDARD LVCMOS18} [get_ports emg_resetn[1]];       ## FMC_LPC_LA16_N     RESETB_2
+set_property -dict {PACKAGE_PIN T16 IOSTANDARD LVCMOS18} [get_ports emg_pdn[0]];          ## FMC_LPC_LA07_P     PDNB_1
+set_property -dict {PACKAGE_PIN T17 IOSTANDARD LVCMOS18} [get_ports emg_pdn[1]];          ## FMC_LPC_LA07_N     PDNB_2
+set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVCMOS18} [get_ports emg_mode[0]];         ## FMC_LPC_LA04_P     MODE_1
+set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVCMOS18} [get_ports emg_mode[1]];         ## FMC_LPC_LA03_N     MODE_2
+set_property -dict {PACKAGE_PIN R19 IOSTANDARD LVCMOS18} [get_ports emg_gpio[0]];         ## FMC_LPC_LA10_P     DCLKRATE0/GPIO0
+set_property -dict {PACKAGE_PIN T19 IOSTANDARD LVCMOS18} [get_ports emg_gpio[1]];         ## FMC_LPC_LA10_N     DCLKRATE1/GPIO1
+set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS18} [get_ports emg_gpio[2]];         ## FMC_LPC_LA11_P     DCLKRATE2/GPIO2
+set_property -dict {PACKAGE_PIN N18 IOSTANDARD LVCMOS18} [get_ports emg_gpio[3]];         ## FMC_LPC_LA11_N     PWRMODE/GPIO3
+set_property -dict {PACKAGE_PIN P20 IOSTANDARD LVCMOS18} [get_ports emg_gpio[4]];         ## FMC_LPC_LA12_P     FILTER0/GPIO4
+set_property -dict {PACKAGE_PIN P21 IOSTANDARD LVCMOS18} [get_ports emg_gpio[5]];         ## FMC_LPC_LA12_N     FILTER1/GPIO5
+set_property -dict {PACKAGE_PIN L17 IOSTANDARD LVCMOS18} [get_ports emg_gpio[6]];         ## FMC_LPC_LA13_P     FRAME0/GPIO6
+set_property -dict {PACKAGE_PIN M17 IOSTANDARD LVCMOS18} [get_ports emg_gpio[7]];         ## FMC_LPC_LA13_N     FRAME1/GPIO7
+set_property -dict {PACKAGE_PIN L21 IOSTANDARD LVCMOS18} [get_ports emg_pinbspi];         ## FMC_LPC_LA06_P     PINB/SPI
+set_property -dict {PACKAGE_PIN K20 IOSTANDARD LVCMOS18} [get_ports emg_dclkmode];        ## FMC_LPC_LA14_N     DEC1/DCLKMODE
 
 # ad4134 reference clock (not used by default)
 
-set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS18} [get_ports emg_sdpclk];          ## FMC_LPC_LA01_N_CC
+set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS18} [get_ports emg_sdpclk];          ## FMC_LPC_LA01_N_CC  SDPCLK
 
 # amplifier SPI interface (Bank 35)
 
-set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[0]];     ## FMC_LPC_LA19_P
-set_property -dict {PACKAGE_PIN G16 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[1]];     ## FMC_LPC_LA19_N
-set_property -dict {PACKAGE_PIN E19 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[2]];     ## FMC_LPC_LA21_P
-set_property -dict {PACKAGE_PIN E20 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[3]];     ## FMC_LPC_LA21_N
-set_property -dict {PACKAGE_PIN A18 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[4]];     ## FMC_LPC_LA24_P
-set_property -dict {PACKAGE_PIN A19 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[5]];     ## FMC_LPC_LA24_N
-set_property -dict {PACKAGE_PIN A16 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[6]];     ## FMC_LPC_LA28_P
-set_property -dict {PACKAGE_PIN A17 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[7]];     ## FMC_LPC_LA28_N
-set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS18} [get_ports emg_amp_sdi];       ## FMC_LPC_LA30_P
-set_property -dict {PACKAGE_PIN B15 IOSTANDARD LVCMOS18} [get_ports emg_amp_sdo];       ## FMC_LPC_LA30_N
-set_property -dict {PACKAGE_PIN A21 IOSTANDARD LVCMOS18} [get_ports emg_amp_sclk];      ## FMC_LPC_LA32_P
+set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[0]];     ## FMC_LPC_LA19_P     CS_AMP0_O
+set_property -dict {PACKAGE_PIN G16 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[1]];     ## FMC_LPC_LA19_N     CS_AMP1_O
+set_property -dict {PACKAGE_PIN E19 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[2]];     ## FMC_LPC_LA21_P     CS_AMP2_O
+set_property -dict {PACKAGE_PIN E20 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[3]];     ## FMC_LPC_LA21_N     CS_AMP3_O
+set_property -dict {PACKAGE_PIN A18 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[4]];     ## FMC_LPC_LA24_P     CS_AMP4_O
+set_property -dict {PACKAGE_PIN A19 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[5]];     ## FMC_LPC_LA24_N     CS_AMP5_O
+set_property -dict {PACKAGE_PIN A16 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[6]];     ## FMC_LPC_LA28_P     CS_AMP6_O
+set_property -dict {PACKAGE_PIN A17 IOSTANDARD LVCMOS18} [get_ports emg_amp_cs[7]];     ## FMC_LPC_LA28_N     CS_AMP7_O
+set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS18} [get_ports emg_amp_sdi];       ## FMC_LPC_LA30_P     SDI_AMP_O
+set_property -dict {PACKAGE_PIN B15 IOSTANDARD LVCMOS18} [get_ports emg_amp_sdo];       ## FMC_LPC_LA30_N     SDO_AMP_O
+set_property -dict {PACKAGE_PIN A21 IOSTANDARD LVCMOS18} [get_ports emg_amp_sclk];      ## FMC_LPC_LA32_P     SCLK_AMP_O
+
+# channel enables CH4..CH7 (Bank 35) - new on 088756 Rev b
+
+set_property -dict {PACKAGE_PIN D20 IOSTANDARD LVCMOS18} [get_ports emg_ch_en[0]];      ## FMC_LPC_LA18_P_CC  CH4_EN_O
+set_property -dict {PACKAGE_PIN C20 IOSTANDARD LVCMOS18} [get_ports emg_ch_en[1]];      ## FMC_LPC_LA18_N_CC  CH5_EN_O
+set_property -dict {PACKAGE_PIN E21 IOSTANDARD LVCMOS18} [get_ports emg_ch_en[2]];      ## FMC_LPC_LA27_P     CH6_EN_O
+set_property -dict {PACKAGE_PIN D21 IOSTANDARD LVCMOS18} [get_ports emg_ch_en[3]];      ## FMC_LPC_LA27_N     CH7_EN_O
+
+# SW phase 2 (AD5940 / MAX30011) - pins reserved, no controller in the block design yet.
+# Held idle in system_top.v so the nets are defined and the routing is proven.
+
+set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS18} [get_ports emg_ad5940_cs];     ## FMC_LPC_LA29_P     CS_AD5940_O
+set_property -dict {PACKAGE_PIN C18 IOSTANDARD LVCMOS18} [get_ports emg_ad5940_sclk];   ## FMC_LPC_LA29_N     SCLK_AD5940_O
+set_property -dict {PACKAGE_PIN B16 IOSTANDARD LVCMOS18} [get_ports emg_ad5940_sdi];    ## FMC_LPC_LA31_P     SDI_AD5940_O
+set_property -dict {PACKAGE_PIN B17 IOSTANDARD LVCMOS18} [get_ports emg_ad5940_sdo];    ## FMC_LPC_LA31_N     SDO_AD5940_O
+
+set_property -dict {PACKAGE_PIN E15 IOSTANDARD LVCMOS18} [get_ports emg_max30011_cs];   ## FMC_LPC_LA23_P     CS_MAX30011
+set_property -dict {PACKAGE_PIN D15 IOSTANDARD LVCMOS18} [get_ports emg_max30011_sdo];  ## FMC_LPC_LA23_N     SDO_MAX30011
+set_property -dict {PACKAGE_PIN F18 IOSTANDARD LVCMOS18} [get_ports emg_max30011_sdi];  ## FMC_LPC_LA26_P     SDI_MAX30011
+set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS18} [get_ports emg_max30011_sclk]; ## FMC_LPC_LA26_N     SCLK_MAX30011
 
 # set IOSTANDARD according to VADJ 1.8V
 
