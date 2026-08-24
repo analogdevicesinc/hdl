@@ -8,8 +8,9 @@ Overview
 
 The ADMFM8000-EVALZ/ZED reference design targets the Digilent ZedBoard.
 The design has an AD9910 transmit/control subsystem and adds two
-AD4080-compatible LVDS ADC interfaces, one capture DMA, and dedicated AXI SPI
-controllers for the two ADC devices.
+AD4080-compatible LVDS ADC interfaces, one capture DMA, and a single AXI Quad
+SPI controller shared by both ADC devices (one chip-select per device, MISO
+muxed by the active chip-select).
 
 The DDS transmit path is driven by the :ref:`axi_ad9910` core:
 
@@ -93,7 +94,8 @@ The design instantiates the standard ZedBoard base system and adds:
 - SPI0 routed to three chip-selects for DDS/PLL/ATT
 - SPI1 routed to the AD9508 clock device chip-select
 - AD9910 control core and a TX DMA for parallel DDS data
-- Two AXI Quad SPI controllers for ADC A and ADC B register access
+- One AXI Quad SPI controller shared between ADC A and ADC B register access
+  (two chip-selects, shared SCLK/MOSI, MISO muxed in fabric)
 - Two AD4080-compatible LVDS ADC cores
 - A two-channel sample packer and RX DMA for ADC capture
 
@@ -147,8 +149,8 @@ Core configuration highlights
        ``IO_DELAY_GROUP=adc_if_delay_group2``
    * - ``util_cpack2``
      - ``NUM_OF_CHANNELS=2``, ``SAMPLE_DATA_WIDTH=SAMPLE_DATA_WIDTH``
-   * - ``ad4080_a/b_spi``
-     - ``axi_quad_spi``: ``C_NUM_SS_BITS=1``, ``C_SCK_RATIO=8``,
+   * - ``ad4080_a_spi``
+     - ``axi_quad_spi``: ``C_NUM_SS_BITS=2``, ``C_SCK_RATIO=8``,
        ``C_USE_STARTUP=0``
 
 The ``SAMPLE_DATA_WIDTH`` and ``DMA_DATA_WIDTH_SRC`` values are derived from the
@@ -177,12 +179,21 @@ SPI chip-select mapping
    * - PS SPI1
      - CS0
      - AD9508 clock device (``ad9508_csn``)
-   * - AXI Quad SPI A
+   * - AXI Quad SPI (shared)
      - SS0
      - ADC A SPI chip-select
-   * - AXI Quad SPI B
-     - SS0
+   * - AXI Quad SPI (shared)
+     - SS1
      - ADC B SPI chip-select
+
+ADC A and ADC B are register-accessed through the single ``ad4080_a_spi``
+core: SCLK and MOSI are shared between the two devices, and MISO is muxed in
+fabric by which chip-select is currently active (asserting both chip-selects
+at once is illegal). Because both channels sit on the same SPI bus and are
+only distinguished by chip-select, the Linux driver now requires both AD4080
+channels to be declared under the same SPI bus/controller node in the
+devicetree, each with its own ``reg`` (chip-select) value, rather than as two
+separate SPI controllers.
 
 AD9910 Signals
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -410,10 +421,7 @@ AXI Address Map
      - Packed ADC RX DMA
    * - ad4080_a_spi
      - 0x44A60000
-     - ADC A AXI Quad SPI
-   * - ad4080_b_spi
-     - 0x44A70000
-     - ADC B AXI Quad SPI
+     - Shared AXI Quad SPI for ADC A and ADC B (SS0/SS1)
 
 PS7 high-performance memory ports
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -516,9 +524,6 @@ Below are the Programmable Logic interrupts used in the project.
    * - ad4080_a_spi
      - 3
      - 47
-   * - ad4080_b_spi
-     - 4
-     - 48
 
 Clocks and sync
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

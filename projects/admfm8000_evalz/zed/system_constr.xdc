@@ -199,4 +199,7 @@ create_clock -period 2.500 -name dco_clk1 [get_ports adcb_dco_p]
 ##by default IOB is TRUE and this register is not being driven by any IO element
 
 set_property IOB FALSE [get_cells -hierarchical -regexp {.*ad4080_a_spi.*IO0_I_REG$}];
-set_property IOB FALSE [get_cells -hierarchical -regexp {.*ad4080_b_spi.*IO0_I_REG$}];
+
+## MISO is muxed in fabric (single SPI master shared by both ADCs), so the io1 input
+## register is no longer driven directly by an IO element and cannot pack into the IOB
+set_property IOB FALSE [get_cells -hierarchical -regexp {.*ad4080_a_spi.*IO1_I_REG$}];

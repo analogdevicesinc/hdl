@@ -187,6 +187,9 @@ module system_top (
   wire            adca_filter_data_ready_n;
   wire            adcb_filter_data_ready_n;
 
+  wire    [ 1:0]  ad4080_a_spi_csn_s;
+  wire            adc_spi_miso_s;
+
   // instantiations
 
   assign adca_gp0_dir = 1'b0;
@@ -194,6 +197,19 @@ module system_top (
 
   assign adca_filter_data_ready_n  = 1'b0;
   assign adcb_filter_data_ready_n  = 1'b0;
+
+  // single SPI master (ad4080_a_spi) shared by both AD4080 ADCs:
+  // one chip-select per device, shared SCLK/MOSI, MISO muxed by active CSN
+  assign adca_ad4080_csn  = ad4080_a_spi_csn_s[0];
+  assign adcb_ad4080_csn  = ad4080_a_spi_csn_s[1];
+
+  assign adcb_ad4080_sclk = adca_ad4080_sclk;
+  assign adcb_ad4080_mosi = adca_ad4080_mosi;
+
+  // MISO from both devices onto the shared SPI MISO line (both selected is illegal)
+  assign adc_spi_miso_s = adca_ad4080_csn ? adcb_ad4080_miso :
+                          adcb_ad4080_csn ? adca_ad4080_miso :
+                          1'b0;
 
   assign adcb_gpio1_fmc = gpio_o[42];
   assign adca_gpio1_fmc = gpio_o[43];
@@ -353,20 +369,12 @@ module system_top (
     .adcb_filter_data_ready_n(adcb_filter_data_ready_n),
     .adcb_sync_n (ad9508_sync),
 
-    .ad4080_a_spi_csn_o(adca_ad4080_csn),
-    .ad4080_a_spi_csn_i(adca_ad4080_csn),
+    .ad4080_a_spi_csn_o(ad4080_a_spi_csn_s),
+    .ad4080_a_spi_csn_i(2'b11),
     .ad4080_a_spi_clk_i(1'b0),
     .ad4080_a_spi_clk_o(adca_ad4080_sclk),
     .ad4080_a_spi_sdo_i(1'b0),
     .ad4080_a_spi_sdo_o(adca_ad4080_mosi),
-    .ad4080_a_spi_sdi_i(adca_ad4080_miso),
-
-    .ad4080_b_spi_csn_o(adcb_ad4080_csn),
-    .ad4080_b_spi_csn_i(2'b11),
-    .ad4080_b_spi_clk_i(1'b0),
-    .ad4080_b_spi_clk_o(adcb_ad4080_sclk),
-    .ad4080_b_spi_sdo_i(1'b0),
-    .ad4080_b_spi_sdo_o(adcb_ad4080_mosi),
-    .ad4080_b_spi_sdi_i(adcb_ad4080_miso));
+    .ad4080_a_spi_sdi_i(adc_spi_miso_s));
 
 endmodule
