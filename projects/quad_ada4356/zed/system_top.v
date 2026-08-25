@@ -137,6 +137,15 @@ module system_top (
   inout         csb_dutd,
   inout         csb_ad9510,
 
+  // APD bias digital pot SPI (PS SPI1)
+  input         miso_pot,
+  output        sclk_pot,
+  output        mosi_pot,
+  output        csb_apd_pot,
+
+  // APD supply enable
+  inout         apd_supp_en,
+
   // TDD LiDAR control
   input         trig_fmc_in,
   output        trig_fmc_out
@@ -162,10 +171,11 @@ module system_top (
   // [34]    - csb_dutc
   // [35]    - csb_dutd
   // [36]    - csb_ad9510
-  // [63:37] - unused
+  // [37]    - apd_supp_en
+  // [63:38] - unused
   // trig_fmc_in/out connected to TDD controller (not GPIO)
 
-  assign gpio_i[63:37] = gpio_o[63:37];
+  assign gpio_i[63:38] = gpio_o[63:38];
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -186,6 +196,14 @@ module system_top (
             csb_dutc,
             csb_dutb,
             csb_duta}));
+
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_iobuf_apd_gpio (
+    .dio_t(gpio_t[37]),
+    .dio_i(gpio_o[37]),
+    .dio_o(gpio_i[37]),
+    .dio_p(apd_supp_en));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -258,14 +276,14 @@ module system_top (
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (mosi),
     .spi1_clk_i (1'b0),
-    .spi1_clk_o (),
-    .spi1_csn_0_o (),
+    .spi1_clk_o (sclk_pot),
+    .spi1_csn_0_o (csb_apd_pot),
     .spi1_csn_1_o (),
     .spi1_csn_2_o (),
     .spi1_csn_i (1'b1),
-    .spi1_sdi_i (1'b0),
+    .spi1_sdi_i (miso_pot),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o (),
+    .spi1_sdo_o (mosi_pot),
 
     // Quad ADA4356 connections
     .dco_0_p (dco_0_p),
