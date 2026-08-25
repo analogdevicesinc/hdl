@@ -35,6 +35,14 @@ $(SUBPROJECTS):
 lib:
 	$(MAKE) -C library/ all
 
+lib-intel:
+	$(MAKE) -C library/ intel
+
+lib-xilinx:
+	$(MAKE) -C library/ xilinx
+
+lib-lattice:
+	$(MAKE) -C library/ lattice
 
 all:
 	$(MAKE) -C projects/ all
