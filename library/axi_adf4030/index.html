@@ -4,17 +4,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The Util WFIFO core is designed to downscale the clock rate of the RX data path. There are scenarios when the device clock (interface clock) is too high (above 200 MHz), making it a challenge to integrate any processing cores between the device core and CPACK/DMA, because of the small timing margins. By reducing the clock rate of the data path, the user can easily integrate any custom processing core into the design." name="description" />
+<meta content="The AXI ADF4030 Controller IP core provides AXI-Lite control of the ADF4030 fractional-N PLL and its associated bidirectional BSYNC signal. It generates up to 8 independently phase-adjusted trigger outputs, each synchronized to the BSYNC clock recovered from the ADF4030 device. The BSYNC signal can be either received from the ADF4030 (as a timing reference) or driven by the FPGA toward an external device, selectable at runtime." name="description" />
 
-    <title>Util WFIFO &#8212; HDL  documentation</title>
+    <title>AXI ADF4030 &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fb8972a4" />
     <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="AMD Xilinx Specific IPs" href="../xilinx/index.html" />
-    <link rel="prev" title="Util VAR FIFO" href="../util_var_fifo/index.html" />
+    <link rel="next" title="AXI ADXCVR" href="../axi_adxcvr/index.html" />
+    <link rel="prev" title="AXI ADC Trigger" href="../axi_adc_trigger/index.html" />
    
   
   
@@ -95,11 +96,21 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Util WFIFO</a><ul>
+<li><a class="reference internal" href="#">AXI ADF4030</a><ul>
 <li><a class="reference internal" href="#features">Features</a></li>
 <li><a class="reference internal" href="#files">Files</a></li>
 <li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
 <li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#register-map">Register Map</a></li>
+<li><a class="reference internal" href="#theory-of-operation">Theory of Operation</a><ul>
+<li><a class="reference internal" href="#bsync-signal-handling">BSYNC Signal Handling</a></li>
+<li><a class="reference internal" href="#trigger-path">Trigger Path</a></li>
+<li><a class="reference internal" href="#per-channel-phase-adjustment">Per-Channel Phase Adjustment</a></li>
+<li><a class="reference internal" href="#clock-domain-crossing">Clock Domain Crossing</a></li>
+<li><a class="reference internal" href="#software-considerations">Software Considerations</a></li>
+<li><a class="reference internal" href="#known-limitations">Known Limitations</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -242,7 +253,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_adf4030/index.html">AXI ADF4030</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AXI ADF4030</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI ADXCVR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_clkgen/index.html">AXI CLK Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_clock_monitor/index.html">AXI Clock Monitor</a></li>
@@ -277,7 +288,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../util_rfifo/index.html">Util RFIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/index.html">Util VAR FIFO</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Util WFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_wfifo/index.html">Util WFIFO</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
@@ -410,41 +421,38 @@ Content on this topic
 </div>
           <div class="body" role="main">
             
-  <section id="util-wfifo">
-<span id="id1"></span><h1>Util WFIFO<a class="headerlink" href="#util-wfifo" title="Permalink to this heading"></a></h1>
+  <section id="axi-adf4030">
+<span id="id1"></span><h1>AXI ADF4030<a class="headerlink" href="#axi-adf4030" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330.0 282" width="330.0" class="no-background"><style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 368.4 282" width="368.4" class="no-background"><style>
                 a {
                     text-decoration: none;
                 }
-                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="294.0" height="228" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-din_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">din_clk</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-din_rst"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">din_rst</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dout_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">dout_clk</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dout_rstn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">dout_rstn</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">dout_ovf</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">din_enable_*</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">din_valid_*</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">din_data_*</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="54">din_ovf</text></a><g transform="translate(312.0,46.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="78">dout_enable_*</text></a><g transform="translate(312.0,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="102">dout_valid_*</text></a><g transform="translate(312.0,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="126">dout_data_*</text></a><g transform="translate(312.0,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="294.0" height="228" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="165.0" y="266">util_wfifo</text></svg></section>
-</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_wfifo" target="_blank">Util WFIFO</a> core
-is designed to downscale the clock rate of the RX data path.
-There are scenarios when the device clock (interface clock) is too high (above
-200 MHz), making it a challenge to integrate any processing cores between the
-device core and CPACK/DMA, because of the small timing margins. By reducing the
-clock rate of the data path, the user can easily integrate any custom processing
-core into the design.</p>
-<p>To define the correct configuration, the following questions need to
-be answered:</p>
-<ol class="arabic simple">
-<li><p>What is the clock rate of the device core’s data interface? (dout_clk)</p></li>
-<li><p>What is the data rate of the device core’s data interface?
-(<code class="docutils literal notranslate"><span class="pre">dout_valid&#64;dout_clk</span></code>)</p></li>
-<li><p>What is the targeted clock rate of the data path (din_clk), and how we can
-achieve it, respecting the main rule of thumb: <strong>input data rate must be
-equal to the output data rate</strong>?</p></li>
-</ol>
-<p>If the device clock rate is equal to the device data rate, the only solution to
-downscale the clock rate is to increase the data width of the output ports of
-the FIFO. Currently the util_wfifo supports four data width ratios:
-1:1/1:2/1:4/1:8.</p>
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="332.4" height="228" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-device_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">device_clk</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-rstn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">rstn</text></a><g transform="translate(18,142.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">bsync_p</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">bsync_n</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">trigger</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="332.4" y="54">sysref</text></a><g transform="translate(350.4,46.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="332.4" y="78">trig_channel</text></a><g transform="translate(350.4,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="332.4" y="102">trig_request_out</text></a><g transform="translate(350.4,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="332.4" height="228" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="184.2" y="266">axi_adf4030</text></svg></section>
+</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adf4030" target="_blank">AXI ADF4030 Controller</a> IP core provides
+AXI-Lite control of the <a class="icon adi reference external" href="https://www.analog.com/ADF4030" target="_blank">ADF4030</a> fractional-N PLL and its associated
+bidirectional BSYNC signal. It generates up to 8 independently phase-adjusted
+trigger outputs, each synchronized to the BSYNC clock recovered from the
+ADF4030 device. The BSYNC signal can be either received from the ADF4030
+(as a timing reference) or driven by the FPGA toward an external device,
+selectable at runtime.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>Supports Altera and AMD Xilinx devices.</p></li>
-<li><p>Downscale the ADC data path’s clock rate.</p></li>
-<li><p>Supports multiple channels (max 8 channels)</p></li>
+<li><p>Bidirectional differential BSYNC interface (<code class="docutils literal notranslate"><span class="pre">IOBUFDS_DCIEN</span></code>) with runtime
+direction control</p></li>
+<li><p>BSYNC receiver with automatic period calibration (no external configuration
+required)</p></li>
+<li><p>Internal BSYNC regeneration after calibration, with optional suppression</p></li>
+<li><p>Optional BSYNC misalignment detection with latched error flag</p></li>
+<li><p>Up to 8 independently phase-configurable trigger output channels</p></li>
+<li><p>Per-channel enable and phase offset, adjustable while running</p></li>
+<li><p>Optional trigger stretcher: aligns narrow trigger pulses to the next BSYNC
+edge before distributing to channels</p></li>
+<li><p>Dual trigger source: external pin (synchronized) or software-generated</p></li>
+<li><p>Full debug override: force all channel outputs to a known state via register</p></li>
+<li><p>AXI4-Lite slave interface with 10-bit address space</p></li>
+<li><p>All cross-clock-domain paths covered by explicit <code class="docutils literal notranslate"><span class="pre">set_false_path</span></code> constraints</p></li>
 </ul>
 </section>
 <section id="files">
@@ -457,8 +465,26 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_wfifo/util_wfifo.v" target="_blank">library/util_wfifo/util_wfifo.v</a></p></td>
-<td><p>Verilog source for the peripheral.</p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adf4030/axi_adf4030.sv" target="_blank">library/axi_adf4030/axi_adf4030.sv</a></p></td>
+<td><p>Top-level module; wires all submodules and the IOBUFDS primitive.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adf4030/axi_adf4030_regmap.sv" target="_blank">library/axi_adf4030/axi_adf4030_regmap.sv</a></p></td>
+<td><p>AXI register map with all CDC synchronizers.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adf4030/bsync_generator.sv" target="_blank">library/axi_adf4030/bsync_generator.sv</a></p></td>
+<td><p>FSM that captures, calibrates, and regenerates the BSYNC signal.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adf4030/trigger_channel.sv" target="_blank">library/axi_adf4030/trigger_channel.sv</a></p></td>
+<td><p>Per-channel FSM that phase-delays the trigger output relative to BSYNC.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adf4030/trigger_bsync_stretcher.sv" target="_blank">library/axi_adf4030/trigger_bsync_stretcher.sv</a></p></td>
+<td><p>Stretches a narrow trigger pulse to the next BSYNC rising edge.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adf4030/axi_adf4030_ip.tcl" target="_blank">library/axi_adf4030/axi_adf4030_ip.tcl</a></p></td>
+<td><p>Vivado IP-integrator packaging script.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adf4030/axi_adf4030_constr.ttcl" target="_blank">library/axi_adf4030/axi_adf4030_constr.ttcl</a></p></td>
+<td><p>Template XDC with timing constraints for all CDC paths.</p></td>
 </tr>
 </tbody>
 </table>
@@ -477,37 +503,37 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_CHANNELS</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><section>
-<p>The number of channels of the device.</p>
+<p>Instance identification number. Readable from the PERIPHERAL_ID register.</p>
 </section>
 </td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td class="range"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DIN_DATA_WIDTH</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">FPGA_FAMILY</span></code></td>
 <td class="description"><section>
-<p>The bus width of the input data (DMA bus width).</p>
+<p>Selects the <code class="docutils literal notranslate"><span class="pre">SIM_DEVICE</span></code> attribute for the <code class="docutils literal notranslate"><span class="pre">IOBUFDS_DCIEN</span></code> primitive. 0 = UltraScale/UltraScale+, 6 = Versal AI Core, 7 = Versal Premium.</p>
 </section>
 </td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">32</span></code></td>
-<td class="range"><p></p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>Unknown (0), artix (1), kintex (2), virtex (3), zynq (4), versalprime (5), versalaicore (6), versalpremium (7)</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DOUT_DATA_WIDTH</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CHANNEL_COUNT</span></code></td>
 <td class="description"><section>
-<p>The bus width of the output data (device core’s data interface bus width).</p>
+<p>Number of active trigger output channels. Range: 1 to 8.</p>
 </section>
 </td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">64</span></code></td>
-<td class="range"><p></p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p>From 1 to 8.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DIN_ADDRESS_WIDTH</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TRIGGER_STRETCH</span></code></td>
 <td class="description"><section>
-<p>The address width of the internal memory of the FIFO.</p>
+<p>When set to 1, inserts a <code class="docutils literal notranslate"><span class="pre">trigger_bsync_stretcher</span></code> between the trigger source and the channel array. This aligns any narrow trigger pulse to the next rising BSYNC edge before it is distributed to all channels.</p>
 </section>
 </td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
-<td class="range"><p></p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 1.</p></td>
 </tr>
 </tbody>
 </table>
@@ -516,9 +542,12 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </div></section>
 <section id="interface">
 <h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
-<div><section id="bus-interface-din_clk">
+<div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="151f94c14c0c6d290df3fcf85a2a18cee68240c5" name="151f94c14c0c6d290df3fcf85a2a18cee68240c5" type="checkbox"></input><label for="151f94c14c0c6d290df3fcf85a2a18cee68240c5"><div><p>din_clk</p>
+<input class="collapsible_input" id="56258d10ccc110d90b8e7d66fbac6e015dd39080" name="56258d10ccc110d90b8e7d66fbac6e015dd39080" type="checkbox"></input><label for="56258d10ccc110d90b8e7d66fbac6e015dd39080"><div><p>s_axi</p>
+<section>
+<p>AXI4-Lite slave. Provides access to the register map.</p>
+</section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -530,7 +559,125 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">din_clk</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
+<td><p>in [9:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
+<td><p>in [3:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
+<td><p>in [9:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aclk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="745c7ccfd04f46d45cc354545a283a4072751f89" name="745c7ccfd04f46d45cc354545a283a4072751f89" type="checkbox"></input><label for="745c7ccfd04f46d45cc354545a283a4072751f89"><div><p>s_axi_aclk</p>
+<section>
+<p>AXI interface clock. The register map is synchronous to this clock.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
@@ -541,9 +688,12 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </div>
 </div>
 </section>
-<section id="bus-interface-din_rst">
+<section id="bus-interface-s_axi_aresetn">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="7f9b6de0773ef717f76118b4db4ef5c728c4d7e4" name="7f9b6de0773ef717f76118b4db4ef5c728c4d7e4" type="checkbox"></input><label for="7f9b6de0773ef717f76118b4db4ef5c728c4d7e4"><div><p>din_rst</p>
+<input class="collapsible_input" id="1d6d921e47301065f7f9738d9285d5d81aeb5f69" name="1d6d921e47301065f7f9738d9285d5d81aeb5f69" type="checkbox"></input><label for="1d6d921e47301065f7f9738d9285d5d81aeb5f69"><div><p>s_axi_aresetn</p>
+<section>
+<p>AXI interface reset, active low.</p>
+</section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -555,7 +705,7 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">din_rst</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
@@ -566,9 +716,12 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </div>
 </div>
 </section>
-<section id="bus-interface-dout_clk">
+<section id="bus-interface-device_clk">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="ad1cc594e662033758dff0b3fe5e02ef689cd67a" name="ad1cc594e662033758dff0b3fe5e02ef689cd67a" type="checkbox"></input><label for="ad1cc594e662033758dff0b3fe5e02ef689cd67a"><div><p>dout_clk</p>
+<input class="collapsible_input" id="721854b7f590f2e74c7a21536de26103f586f966" name="721854b7f590f2e74c7a21536de26103f586f966" type="checkbox"></input><label for="721854b7f590f2e74c7a21536de26103f586f966"><div><p>device_clk</p>
+<section>
+<p>Device clock. All functional logic (bsync_generator, trigger channels) is synchronous to this clock.</p>
+</section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -580,7 +733,7 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dout_clk</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_clk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
@@ -591,9 +744,9 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </div>
 </div>
 </section>
-<section id="bus-interface-dout_rstn">
+<section id="bus-interface-rstn">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="b48f3e794fea20c6e8800afb463b3adf527bdf0a" name="b48f3e794fea20c6e8800afb463b3adf527bdf0a" type="checkbox"></input><label for="b48f3e794fea20c6e8800afb463b3adf527bdf0a"><div><p>dout_rstn</p>
+<input class="collapsible_input" id="31aff69d165153e76e84db98100d50fe4dd47481" name="31aff69d165153e76e84db98100d50fe4dd47481" type="checkbox"></input><label for="31aff69d165153e76e84db98100d50fe4dd47481"><div><p>rstn</p>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -605,9 +758,9 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dout_rstn</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rstn</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
-<td><p>in</p></td>
+<td><p></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -618,7 +771,7 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </section>
 <section id="ports">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="bdac503094d77e45801c31c2a97261527906e5b1" name="bdac503094d77e45801c31c2a97261527906e5b1" type="checkbox"></input><label for="bdac503094d77e45801c31c2a97261527906e5b1"><p>Ports</p>
+<input class="collapsible_input" id="214411b0edfb5ded6725ea883e34c22bd5a4fdb9" name="214411b0edfb5ded6725ea883e34c22bd5a4fdb9" type="checkbox"></input><label for="214411b0edfb5ded6725ea883e34c22bd5a4fdb9"><p>Ports</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -630,67 +783,51 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">din_ovf</span></code></td>
-<td><p>out</p></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">bsync_p</span></code></td>
+<td><p>inout</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>Input data overflow.</p>
+<p>Positive leg of the differential BSYNC signal. Direction controlled at runtime by the DIRECTION control register bit.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dout_ovf</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">bsync_n</span></code></td>
+<td><p>inout</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Negative leg of the differential BSYNC signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">trigger</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>Output data overflow.</p>
+<p>External trigger input. Asynchronous; synchronized to <code class="docutils literal notranslate"><span class="pre">device_clk</span></code> internally. Only used when SELECT_TRIG=1.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">din_enable_*</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Enable.</p>
-</section>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">din_valid_*</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Valid.</p>
-</section>
-</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">din_data_*</span></code></td>
-<td><p>in [31:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Data.</p>
-</section>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dout_enable_*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sysref</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>Enable.</p>
+<p>SYSREF output. Wired directly to the received <code class="docutils literal notranslate"><span class="pre">bsync_p/n</span></code> signal; can be used as a JESD204 SYSREF.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dout_valid_*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">trig_channel</span></code></td>
+<td><p>out [0:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Phase-aligned trigger outputs, one per enabled channel. Width equals <code class="docutils literal notranslate"><span class="pre">CHANNEL_COUNT</span></code>.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">trig_request_out</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>Valid.</p>
-</section>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dout_data_*</span></code></td>
-<td><p>out [63:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Data.</p>
+<p>Pre-channel trigger signal, after the optional stretcher. Asserted when the active trigger source fires, before per-channel phase adjustment.</p>
 </section>
 </td>
 </tr>
@@ -701,10 +838,185 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
 </div>
 </section>
 </div></section>
+<section id="register-map">
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
+<p>The register map occupies a single 10-bit AXI4-Lite address space. All
+registers are 32-bit wide and word-addressed; bits [1:0] of the AXI byte
+address are ignored by the decoder. The TRIG_CHANNEL registers
+(<code class="docutils literal notranslate"><span class="pre">0x07</span></code>–<code class="docutils literal notranslate"><span class="pre">0x0E</span></code>) are always present regardless of <code class="docutils literal notranslate"><span class="pre">CHANNEL_COUNT</span></code>;
+registers beyond the instantiated channel count read as zero and writes to
+their <code class="docutils literal notranslate"><span class="pre">TRIG_PHASE</span></code> fields are silently ignored. The <code class="docutils literal notranslate"><span class="pre">TRIG_CHANNEL_EN</span></code>
+field in the CONTROL register also silently ignores writes to bits above
+<code class="docutils literal notranslate"><span class="pre">CHANNEL_COUNT-1</span></code>.</p>
+<div></div></section>
+<section id="theory-of-operation">
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading"></a></h2>
+<section id="bsync-signal-handling">
+<h3>BSYNC Signal Handling<a class="headerlink" href="#bsync-signal-handling" title="Permalink to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">bsync_p</span></code> / <code class="docutils literal notranslate"><span class="pre">bsync_n</span></code> differential pair can either be received from the
+ADF4030 or driven out toward an external device, selected by the DIRECTION bit
+in the CONTROL register (default: receive). The <code class="docutils literal notranslate"><span class="pre">IOBUFDS_DCIEN</span></code> Xilinx
+primitive is used for the bidirectional I/O; its <code class="docutils literal notranslate"><span class="pre">IBUFDISABLE</span></code> input gates
+the receiver when the FPGA is in drive mode.</p>
+<p>When receiving (DIRECTION=1), the <code class="docutils literal notranslate"><span class="pre">bsync_generator</span></code> module operates as
+follows:</p>
+<ol class="arabic simple">
+<li><p><strong>IDLE</strong> — waits for the first rising edge on the <code class="docutils literal notranslate"><span class="pre">bsync_p/n</span></code> input. A
+3-stage pipeline on the registered signal reduces the probability of
+metastability propagating into the rest of the design.</p></li>
+<li><p><strong>BSYNC_EDGE</strong> — waits for a confirmed stable rising edge.</p></li>
+<li><p><strong>CALIB</strong> — measures the BSYNC half-period by counting <code class="docutils literal notranslate"><span class="pre">device_clk</span></code> cycles
+while the signal is high, recording the result in <code class="docutils literal notranslate"><span class="pre">ratio_counter</span></code>. Once
+calibration completes, <code class="docutils literal notranslate"><span class="pre">BSYNC_READY</span></code> is asserted and the measured
+half-period is visible in the <code class="docutils literal notranslate"><span class="pre">BSYNC_RATIO</span></code> debug field.</p></li>
+<li><p><strong>BSYNC_GEN</strong> — regenerates a local copy of the BSYNC clock using the
+calibrated ratio. The regenerated signal is driven back out through the
+<code class="docutils literal notranslate"><span class="pre">IOBUFDS_DCIEN</span></code> when DIRECTION=0 and <code class="docutils literal notranslate"><span class="pre">DISABLE_INTERNAL_BSYNC</span></code>=0.</p></li>
+<li><p><strong>BSYNC_ALIGNMENT_ERROR</strong> — entered (and latched) if
+<code class="docutils literal notranslate"><span class="pre">ENABLE_MISALIGN_CHECK</span></code>=1 and a subsequent BSYNC edge arrives at a
+different phase than the reference. A <code class="docutils literal notranslate"><span class="pre">SW_RESET</span></code> is required to recover.</p></li>
+</ol>
+<p>The <code class="docutils literal notranslate"><span class="pre">bsync_event</span></code> pulse is generated on every rising edge of the BSYNC signal,
+regardless of FSM state. Trigger channels use this pulse to synchronize their
+phase counting.</p>
+</section>
+<section id="trigger-path">
+<h3>Trigger Path<a class="headerlink" href="#trigger-path" title="Permalink to this heading"></a></h3>
+<p>The active trigger source is selected by the SELECT_TRIG bit:</p>
+<ul class="simple">
+<li><p><strong>SELECT_TRIG=0</strong> — a software trigger is issued by writing 1 to the
+MANUAL_TRIGGER register. The pulse crosses to <code class="docutils literal notranslate"><span class="pre">device_clk</span></code> via
+<code class="docutils literal notranslate"><span class="pre">sync_event</span></code>.</p></li>
+<li><p><strong>SELECT_TRIG=1</strong> — the external <code class="docutils literal notranslate"><span class="pre">trigger</span></code> pin is used, synchronized to
+<code class="docutils literal notranslate"><span class="pre">device_clk</span></code> by a two-flop synchronizer (<code class="docutils literal notranslate"><span class="pre">ad_rst</span></code>).</p></li>
+</ul>
+<p>When <code class="docutils literal notranslate"><span class="pre">TRIGGER_STRETCH</span></code>=1, the active source first passes through the
+<code class="docutils literal notranslate"><span class="pre">trigger_bsync_stretcher</span></code>, which uses a set/reset latch to hold the trigger
+asserted until the next BSYNC rising edge acknowledges it. This ensures channels
+never miss a narrow pulse.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">ENABLE_DEBUG_TRIG</span></code>=1, both the trigger source and the stretcher are
+bypassed. All enabled channel outputs are driven with the value of the
+<code class="docutils literal notranslate"><span class="pre">DEBUG_TRIG</span></code> bit.</p>
+</section>
+<section id="per-channel-phase-adjustment">
+<h3>Per-Channel Phase Adjustment<a class="headerlink" href="#per-channel-phase-adjustment" title="Permalink to this heading"></a></h3>
+<p>Each <code class="docutils literal notranslate"><span class="pre">trigger_channel</span></code> instance runs a 4-state FSM on <code class="docutils literal notranslate"><span class="pre">device_clk</span></code>:</p>
+<ul class="simple">
+<li><p><strong>IDLE</strong> — waits until the channel is enabled (<code class="docutils literal notranslate"><span class="pre">ch_en</span></code>=1) and
+<code class="docutils literal notranslate"><span class="pre">BSYNC_READY</span></code>=1.</p></li>
+<li><p><strong>TRIG_EDGE</strong> — waits for both a trigger event and a <code class="docutils literal notranslate"><span class="pre">bsync_event</span></code> to
+coincide in the same clock cycle.</p></li>
+<li><p><strong>PHASE_READ</strong> — latches the current phase target from the register map
+(CDC-synchronised).</p></li>
+<li><p><strong>TRIG_ADJUST</strong> — counts <code class="docutils literal notranslate"><span class="pre">trig_phase</span></code> cycles of delay, then asserts
+<code class="docutils literal notranslate"><span class="pre">trig_out</span></code> for exactly <code class="docutils literal notranslate"><span class="pre">bsync_ratio</span></code> cycles, producing one trigger pulse
+per bsync_ratio-aligned window.</p></li>
+</ul>
+<p>The effective delay from the trigger+BSYNC coincidence to the output rising edge
+is:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[t_{delay} = \left(2 \times BSYNC\_RATIO - 2 - TRIG\_PHASE\right) \times T_{device\_clk}\]</div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">TRIG_PHASE</span></code> value of 0 places the output pulse as late as possible within
+the current BSYNC window. Increasing <code class="docutils literal notranslate"><span class="pre">TRIG_PHASE</span></code> advances the pulse earlier.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">TRIG_STATE</span></code> field in each channel register reflects the current FSM state
+and is useful for diagnosing whether a channel is waiting for BSYNC, waiting for
+a trigger, or actively adjusting its output.</p>
+</section>
+<section id="clock-domain-crossing">
+<h3>Clock Domain Crossing<a class="headerlink" href="#clock-domain-crossing" title="Permalink to this heading"></a></h3>
+<p>The IP operates across two asynchronous clock domains: <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code> (register
+map) and <code class="docutils literal notranslate"><span class="pre">device_clk</span></code> (functional logic). All paths are handled in
+<code class="docutils literal notranslate"><span class="pre">axi_adf4030_regmap.sv</span></code> using ADI CDC primitives:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Signal(s)</p></th>
+<th class="head"><p>Primitive</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Control bits (direction, select_trig, sw_reset, disable_internal_bsync,
+enable_misalign_check, enable_debug_trig, debug_trig)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sync_bits</span></code></p></td>
+<td><p>AXI → device_clk</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">trig_channel_en</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sync_data</span></code> (toggle handshake)</p></td>
+<td><p>AXI → device_clk</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">trig_channel_phase[N]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sync_data</span></code> per channel (toggle handshake)</p></td>
+<td><p>AXI → device_clk</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">manual_trig</span></code> pulse</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sync_event</span></code></p></td>
+<td><p>AXI → device_clk</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bsync_state</span></code>, <code class="docutils literal notranslate"><span class="pre">bsync_ratio</span></code>, <code class="docutils literal notranslate"><span class="pre">bsync_delay</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sync_data</span></code> (toggle handshake)</p></td>
+<td><p>device_clk → AXI</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bsync_ready</span></code>, <code class="docutils literal notranslate"><span class="pre">bsync_captured</span></code>, <code class="docutils literal notranslate"><span class="pre">bsync_alignment_error</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sync_bits</span></code></p></td>
+<td><p>device_clk → AXI</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">trig_state[N]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sync_data</span></code> per channel (toggle handshake)</p></td>
+<td><p>device_clk → AXI</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>All corresponding <code class="docutils literal notranslate"><span class="pre">set_false_path</span></code> constraints are generated at build time
+from the <code class="docutils literal notranslate"><span class="pre">axi_adf4030_constr.ttcl</span></code> template.</p>
+</section>
+<section id="software-considerations">
+<h3>Software Considerations<a class="headerlink" href="#software-considerations" title="Permalink to this heading"></a></h3>
+<p>Recommended bring-up sequence:</p>
+<ol class="arabic simple">
+<li><p>Set DIRECTION=1 (receive) in the CONTROL register.</p></li>
+<li><p>Wait for <code class="docutils literal notranslate"><span class="pre">BSYNC_READY</span></code>=1 in the DEBUG register. This confirms that the
+BSYNC period has been measured and the regenerated clock is stable.</p></li>
+<li><p>Configure per-channel <code class="docutils literal notranslate"><span class="pre">TRIG_PHASE</span></code> values in the TRIG_CHANNEL registers.
+Phase registers are only writable while the corresponding channel enable bit
+is set (<code class="docutils literal notranslate"><span class="pre">TRIG_CHANNEL_EN[n]</span></code>=1).</p></li>
+<li><p>Set the desired trigger source via <code class="docutils literal notranslate"><span class="pre">SELECT_TRIG</span></code>.</p></li>
+<li><p>Enable individual channels by setting bits in <code class="docutils literal notranslate"><span class="pre">TRIG_CHANNEL_EN</span></code>.</p></li>
+<li><p>Issue triggers via the external pin or the MANUAL_TRIGGER register.</p></li>
+</ol>
+<p>To recover from a <code class="docutils literal notranslate"><span class="pre">BSYNC_ALIGNMENT_ERROR</span></code>, write 1 to the SW_RESET bit. This
+restarts the <code class="docutils literal notranslate"><span class="pre">bsync_generator</span></code> FSM from IDLE without resetting the AXI
+interface or the phase register values.</p>
+</section>
+<section id="known-limitations">
+<h3>Known Limitations<a class="headerlink" href="#known-limitations" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>The IP is <strong>Xilinx-only</strong>: the bidirectional BSYNC uses <code class="docutils literal notranslate"><span class="pre">IOBUFDS_DCIEN</span></code>,
+which is a Xilinx-specific primitive. No Intel/Altera variant is provided.</p></li>
+<li><p>The maximum supported <code class="docutils literal notranslate"><span class="pre">CHANNEL_COUNT</span></code> is 8. The TRIG_CHANNEL register array
+always occupies 8 entries (addresses 0x07–0x0E); registers beyond
+<code class="docutils literal notranslate"><span class="pre">CHANNEL_COUNT</span></code> read as zero.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BSYNC_RATIO</span></code> is a 16-bit field. The maximum measurable BSYNC half-period
+is 65535 <code class="docutils literal notranslate"><span class="pre">device_clk</span></code> cycles.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">trigger_bsync_stretcher</span></code> uses an asynchronous set/reset latch on the
+trigger signal edge. The bsync_stretcher module should only be used when
+setup/hold on <code class="docutils literal notranslate"><span class="pre">trigger</span></code> relative to <code class="docutils literal notranslate"><span class="pre">external_bsync</span></code> cannot be guaranteed.</p></li>
+</ul>
+</section>
+</section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_wfifo" target="_blank">library/util_wfifo</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adf4030" target="_blank">library/axi_adf4030</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4030" target="_blank">ADF4030</a> product page</p></li>
 </ul>
 </section>
 </section>
@@ -713,8 +1025,8 @@ the FIFO. Currently the util_wfifo supports four data width ratios:
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../util_var_fifo/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Util VAR FIFO</a>
-    <a href="../xilinx/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AMD Xilinx Specific IPs</a>
+    <a href="../axi_adc_trigger/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AXI ADC Trigger</a>
+    <a href="../axi_adxcvr/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AXI ADXCVR</a>
               </div>
           
         </div>
