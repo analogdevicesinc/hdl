@@ -64,9 +64,6 @@ set_false_path -quiet \
         -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/rx_data_d_reg* && IS_SEQUENTIAL}] \
         -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/adc_data_store_reg* && IS_SEQUENTIAL}] 5.333
 
-  # IDELAY control: up_clk <-> delay_clk CDC (write-and-forget, read-back after settle)
-  set_false_path -quiet -through [get_pins -quiet -hier -filter {name =~ *i_idelay/CNTVALUEOUT*}]
-  set_false_path -quiet -through [get_pins -quiet -hier -filter {name =~ *i_idelay/CNTVALUEIN*}]
 
 <: } else { :>
 

@@ -39,10 +39,6 @@ set_property -dict {PACKAGE_PIN R12  IOSTANDARD LVCMOS18} [get_ports adc_1_csdo]
 set_property -dict {PACKAGE_PIN AD2  IOSTANDARD LVCMOS18} [get_ports adc_1_cnv]          ; ##  H07  FMC_HPC1_LA02_P
 set_property -dict {PACKAGE_PIN AD1  IOSTANDARD LVCMOS18} [get_ports adc_1_pd]           ; ##  H08  FMC_HPC1_LA02_N
 
-# scko pins are not on CC-capable pins - required for non-CC routing
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {adc_0_scko_IBUF}]
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {adc_1_scko_IBUF}]
-
 # scko_0: echoed clock from ADC 0 (CMOS, 100 MHz max)
 create_clock -name scko_cmos_0 -period 10 [get_ports adc_0_scko]
 # scko_1: echoed clock from ADC 1 (CMOS, 100 MHz max)
@@ -55,7 +51,5 @@ set_min_delay -from [get_clocks scko_cmos_1] -to [get_clocks -of_objects [get_pi
 
 # scko clocks are asynchronous to the PS clocks - treat all cross-domain paths as false paths
 set_clock_groups -asynchronous \
-  -group [get_clocks scko_cmos_0] \
-  -group [get_clocks scko_cmos_1] \
   -group [get_clocks mmcm_clk_0_s] \
   -group [get_clocks clk_pl_0]
