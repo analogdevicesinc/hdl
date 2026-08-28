@@ -44,15 +44,15 @@ module system_top #(
   parameter RX_LANE_RATE       = 10,
   parameter TX_LANE_RATE       = 10,
   parameter RX_JESD_M          = 4,
-  parameter RX_JESD_L          = 4,
+  parameter RX_JESD_L          = 2,
   parameter RX_JESD_S          = 1,
   parameter RX_JESD_NP         = 16,
-  parameter RX_NUM_LINKS       = 1,
+  parameter RX_NUM_LINKS       = 2,
   parameter TX_JESD_M          = 4,
-  parameter TX_JESD_L          = 4,
+  parameter TX_JESD_L          = 2,
   parameter TX_JESD_S          = 1,
   parameter TX_JESD_NP         = 16,
-  parameter TX_NUM_LINKS       = 1,
+  parameter TX_NUM_LINKS       = 2,
   parameter RX_KS_PER_CHANNEL  = 16,
   parameter TX_KS_PER_CHANNEL  = 16,
 
@@ -110,13 +110,13 @@ module system_top #(
   input          rx_device_clk,
   input          sysref_in,
 
-  input          syncinb_a0,
-  input          syncinb_b0,
+  output         syncinb_a0,
+  output         syncinb_b0,
   inout          syncinb_a1_p_gpio,
   inout          syncinb_a1_n_gpio,
 
-  output         syncoutb_a0,
-  output         syncoutb_b0,
+  input          syncoutb_a0,
+  input          syncoutb_b0,
   inout          syncoutb_a1_p_gpio,
   inout          syncoutb_a1_n_gpio,
 
@@ -459,11 +459,11 @@ module system_top #(
      * link layer's per-link SYNC~ reaches the wrong Apollo framer (link 0 goes
      * INIT while Apollo reports A0 deasserted and B0 asserted).
      */
-    .tx_sync_export                                             ({syncinb_a0, syncinb_b0}),
+    .tx_sync_export                                             ({syncoutb_b0, syncoutb_a0}),
     .tx_sysref_export                                           (sysref_in),
     .tx_device_clk_clk                                          (tx_device_clk),
 
-    .rx_sync_export                                             ({syncoutb_a0, syncoutb_b0}),
+    .rx_sync_export                                             ({syncinb_b0, syncinb_a0}),
     .rx_sysref_export                                           (sysref_in),
     .rx_device_clk_clk                                          (rx_device_clk),
 

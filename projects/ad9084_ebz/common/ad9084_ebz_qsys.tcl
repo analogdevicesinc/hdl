@@ -573,12 +573,9 @@ if {$ASYMMETRIC_A_B_MODE} {
 add_connection rx_device_clk.out_clk apollo_rx_jesd204.device_clk
 add_connection rx_device_clk.out_clk apollo_rx_tpl.link_clk
 if {$EXTERNAL_PHY} {
-  # add_connection jesd204_phy_a.rx_clkout jesd204_phy_a.rx_link_clock
-  # add_connection jesd204_phy_b.rx_clkout jesd204_phy_b.rx_link_clock
-  # add_connection jesd204_phy_a.rx_clkout apollo_rx_jesd204.phy_link_clk
-  add_connection rx_device_clk.rx_clkout jesd204_phy_a.rx_link_clock
-  add_connection rx_device_clk.rx_clkout jesd204_phy_b.rx_link_clock
-  add_connection rx_device_clk.rx_clkout apollo_rx_jesd204.phy_link_clk
+  add_connection jesd204_phy_a.rx_clkout jesd204_phy_a.rx_link_clock
+  add_connection jesd204_phy_a.rx_clkout jesd204_phy_b.rx_link_clock
+  add_connection jesd204_phy_a.rx_clkout apollo_rx_jesd204.phy_link_clk
 }
 add_connection rx_device_clk.out_clk apollo_rx_cpack.clk
 add_connection rx_device_clk.out_clk $adc_data_offload_name.s_axis_aclk
@@ -590,25 +587,9 @@ if {$ASYMMETRIC_A_B_MODE} {
 add_connection tx_device_clk.out_clk apollo_tx_jesd204.device_clk
 add_connection tx_device_clk.out_clk apollo_tx_tpl.link_clk
 if {$EXTERNAL_PHY} {
-  # add_connection jesd204_phy_a.tx_clkout jesd204_phy_a.tx_link_clock
-  # add_connection jesd204_phy_b.tx_clkout jesd204_phy_b.tx_link_clock
-  # add_connection jesd204_phy_a.tx_clkout apollo_tx_jesd204.phy_link_clk
-  add_connection tx_device_clk.out_clk jesd204_phy_a.tx_link_clock
-  add_connection tx_device_clk.out_clk jesd204_phy_b.tx_link_clock
-  add_connection tx_device_clk.out_clk apollo_tx_jesd204.phy_link_clk
-
-  # Brought out through a bridge so system_top.v can count both TX word clocks:
-  # Qsys rejects an interface that is both connected internally and exported.
-  foreach phy {a b} {
-    add_instance phy_${phy}_tx_clk_bridge altera_clock_bridge
-    set_instance_parameter_value phy_${phy}_tx_clk_bridge {EXPLICIT_CLOCK_RATE} \
-      [expr $DEVICE_CLK_RATE]
-    add_connection jesd204_phy_${phy}.tx_clkout phy_${phy}_tx_clk_bridge.in_clk
-
-    add_interface jesd204_phy_${phy}_tx_clkout clock source
-    set_interface_property jesd204_phy_${phy}_tx_clkout \
-      EXPORT_OF phy_${phy}_tx_clk_bridge.out_clk
-  }
+  add_connection jesd204_phy_a.tx_clkout jesd204_phy_a.tx_link_clock
+  add_connection jesd204_phy_a.tx_clkout jesd204_phy_b.tx_link_clock
+  add_connection jesd204_phy_a.tx_clkout apollo_tx_jesd204.phy_link_clk
 }
 add_connection tx_device_clk.out_clk apollo_tx_upack.clk
 add_connection tx_device_clk.out_clk $dac_data_offload_name.m_axis_aclk

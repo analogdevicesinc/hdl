@@ -64,9 +64,9 @@ set_global_assignment -name VERILOG_FILE ./gts_refclk_reset.v
 
 # Signal Tap
 
-set_global_assignment -name ENABLE_SIGNALTAP ON
-set_global_assignment -name USE_SIGNALTAP_FILE debug_jesd.stp
-set_global_assignment -name SIGNALTAP_FILE debug_jesd.stp
+# set_global_assignment -name ENABLE_SIGNALTAP ON
+# set_global_assignment -name USE_SIGNALTAP_FILE debug_jesd.stp
+# set_global_assignment -name SIGNALTAP_FILE debug_jesd.stp
 
 # FMC clocks and JESD204 control signals
 
@@ -75,13 +75,13 @@ set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)"          -t
 set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to rx_device_clk
 set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to tx_device_clk
 set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to sysref_out
-set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to syncinb_a0
-set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to syncinb_b0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to syncoutb_a0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to syncoutb_b0
+set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to syncoutb_a0
+set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to syncoutb_b0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to syncinb_a0
+set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to syncinb_b0
 
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to syncinb_a0
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to syncinb_b0
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to syncoutb_a0
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to syncoutb_b0
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref_out
 
 set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to rx_device_clk
@@ -137,12 +137,12 @@ set_location_assignment PIN_AL10  -to "tx_data_b_n[3]"       ; ##
 
 set_location_assignment PIN_A63   -to "syncinb_a0"           ; ## H10  LA04_P
 set_location_assignment PIN_B60   -to "syncinb_a0(n)"        ; ## H11  LA04_N
-set_location_assignment PIN_F55   -to "syncinb_b0"           ; ## D14  LA09_P
-set_location_assignment PIN_D55   -to "syncinb_b0(n)"        ; ## D15  LA09_N
+set_location_assignment PIN_M47   -to "syncinb_b0"           ; ## G12  LA08_P
+set_location_assignment PIN_K47   -to "syncinb_b0(n)"        ; ## G13  LA08_N
 set_location_assignment PIN_B56   -to "syncoutb_a0"          ; ## D11  LA05_P
 set_location_assignment PIN_A60   -to "syncoutb_a0(n)"       ; ## D12  LA05_N
-set_location_assignment PIN_M47   -to "syncoutb_b0"          ; ## G12  LA08_P
-set_location_assignment PIN_K47   -to "syncoutb_b0(n)"       ; ## G13  LA08_N
+set_location_assignment PIN_F55   -to "syncoutb_b0"          ; ## D14  LA09_P
+set_location_assignment PIN_D55   -to "syncoutb_b0(n)"       ; ## D15  LA09_N
 
 set_location_assignment PIN_Y67   -to "syncinb_a1_p_gpio"    ; ## G21  LA20_P
 set_location_assignment PIN_Y65   -to "syncinb_a1_n_gpio"    ; ## G22  LA20_N

@@ -403,7 +403,7 @@ proc jesd204_compose {} {
   set linkclk_frequency [expr $lane_rate / $link_clk_div]
   set deviceclk_frequency [expr $linkclk_frequency * $data_path_width / $tpl_data_path_width]
 
-  set dual_clk_mode [expr $tpl_data_path_width > 4 || $link_mode == 2 || $num_of_links > 1]
+  set dual_clk_mode [expr $tpl_data_path_width > 4 || $link_mode == 2 || ($num_of_links > 1 && $external_phy)]
 
   if {![jesd204_validate true]} {
     return

@@ -166,13 +166,13 @@ module system_top #(
   input          rx_device_clk,
   input          sysref_out,
 
-  input          syncinb_a0,
-  input          syncinb_b0,
+  output         syncinb_a0,
+  output         syncinb_b0,
   inout          syncinb_a1_p_gpio,
   inout          syncinb_a1_n_gpio,
 
-  output         syncoutb_a0,
-  output         syncoutb_b0,
+  input          syncoutb_a0,
+  input          syncoutb_b0,
   inout          syncoutb_a1_p_gpio,
   inout          syncoutb_a1_n_gpio,
 
@@ -251,8 +251,8 @@ module system_top #(
   wire [PHY_NO_LANES-1:0]       phy_a_tx_pll_locked_o_tx_pll_locked;
   wire [PHY_NO_LANES-1:0]       phy_b_tx_pll_locked_o_tx_pll_locked;
 
-  wire                          phy_a_tx_clkout;
-  wire                          phy_b_tx_clkout;
+  // wire                          phy_a_tx_clkout;
+  // wire                          phy_b_tx_clkout;
 //  wire [           4:0]         phy_a_tx_clk_count;
 //  wire [           4:0]         phy_b_tx_clk_count;
 
@@ -525,9 +525,6 @@ module system_top #(
     .gts_reset_i_src_rs_req_src_rs_req                          (gts_reset_i_src_rs_req_src_rs_req),
     .gts_reset_o_pma_cu_clk_clk                                 (gts_reset_o_pma_cu_clk_clk),
 
-    .jesd204_phy_a_tx_clkout_clk                                 (phy_a_tx_clkout),
-    .jesd204_phy_b_tx_clkout_clk                                 (phy_b_tx_clkout),
-
     // JESD204 PHY A - link A lanes
     .jesd204_phy_a_i_pma_cu_clk_clk                             (gts_reset_o_pma_cu_clk_clk[0]),
     .jesd204_phy_a_i_src_rs_grant_src_rs_grant                  (gts_reset_o_src_rs_grant_src_rs_grant[PHY_NO_LANES-1:0]),
@@ -606,11 +603,11 @@ module system_top #(
     .apollo_spi_SCLK                                            (apollo_spi_clk),
     .apollo_spi_SS_n                                            (apollo_spi_csn),
 
-    .tx_sync_export                                             ({syncinb_b0, syncinb_a0}),
+    .tx_sync_export                                             ({syncoutb_b0, syncoutb_a0}),
     .tx_sysref_export                                           (sysref_out),
     .tx_device_clk_clk                                          (tx_device_clk),
 
-    .rx_sync_export                                             ({syncoutb_b0, syncoutb_a0}),
+    .rx_sync_export                                             ({syncinb_b0, syncinb_a0}),
     .rx_sysref_export                                           (sysref_out),
     .rx_device_clk_clk                                          (rx_device_clk),
 
