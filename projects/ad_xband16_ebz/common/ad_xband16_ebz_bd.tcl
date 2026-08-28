@@ -1,6 +1,35 @@
 ###############################################################################
 ## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
-### SPDX short identifier: ADIBSD
+## Short identifier: ADIBSD
+##
+## Redistribution and use in source and binary forms, with or without modification,
+## are permitted provided that the following conditions are met:
+##     - Redistributions of source code must retain the above copyright
+##       notice, this list of conditions and the following disclaimer.
+##     - Redistributions in binary form must reproduce the above copyright
+##       notice, this list of conditions and the following disclaimer in
+##       the documentation and/or other materials provided with the
+##       distribution.
+##     - Neither the name of Analog Devices, Inc. nor the names of its
+##       contributors may be used to endorse or promote products derived
+##       from this software without specific prior written permission.
+##     - The use of this software may or may not infringe the patent rights
+##       of one or more patent holders. This license does not release you
+##       from the requirement that you obtain separate licenses from these
+##       patent holders to use this software.
+##     - Use of the software either in source or binary form, must be run
+##       on or directly connected to an Analog Devices Inc. component.
+##
+## THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+## INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
+## PARTICULAR PURPOSE ARE DISCLAIMED.
+##
+## IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+## EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
+## RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+## BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+## STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
@@ -240,6 +269,7 @@ ad_ip_instance util_cpack2 util_apollo_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL \
   SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
+  PARALLEL_OR_SERIAL_N 1
 ]
 
 ad_ip_parameter util_apollo_cpack CONFIG.PIPELINE_STAGES 2
@@ -255,6 +285,8 @@ ad_data_offload_create $adc_data_offload_name \
                        $SHARED_DEVCLK
 
 ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
+
+ad_ip_parameter $adc_data_offload_name/storage_unit CONFIG.WR_DATA_REGISTERED 1
 
 ad_ip_instance axi_dmac axi_apollo_rx_dma
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_TYPE_SRC 1
@@ -291,6 +323,8 @@ ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.TPL_DATA_PATH_WIDTH $TX_DATAPATH_WI
 
 ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.SYSREF_IOB false
 #ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
+# Since this 1 cycle delay would be relative to SYSREF, we need to check if the receiver can accept it
+ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_INPUT_PIPELINE 1
 
 adi_tpl_jesd204_tx_create tx_apollo_tpl_core $TX_NUM_OF_LANES \
                                            $TX_NUM_OF_CONVERTERS \
@@ -305,10 +339,13 @@ ad_ip_instance util_upack2 util_apollo_upack [list \
   NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
   SAMPLE_DATA_WIDTH $TX_DMA_SAMPLE_WIDTH \
+  PARALLEL_OR_SERIAL_N 1
 ]
 
 ad_ip_parameter rx_apollo_tpl_core/adc_tpl_core CONFIG.PNMON_ENABLE 0
 ad_ip_parameter tx_apollo_tpl_core/dac_tpl_core CONFIG.PNGEN_ENABLE 0
+
+ad_ip_parameter rx_apollo_tpl_core/adc_tpl_core CONFIG.NUM_PIPELINE_STAGES 1
 
 ad_ip_parameter util_apollo_upack CONFIG.PIPELINE_STAGES 2
 
@@ -323,6 +360,8 @@ ad_data_offload_create $dac_data_offload_name \
                        $SHARED_DEVCLK
 
 ad_ip_parameter $dac_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
+
+ad_ip_parameter $dac_data_offload_name/storage_unit CONFIG.WR_DATA_REGISTERED 1
 
 ad_ip_instance axi_dmac axi_apollo_tx_dma
 ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_TYPE_SRC 0
@@ -503,7 +542,7 @@ ad_cpu_interrupt ps-10 mb-15 axi_apollo_tx_jesd/irq
 ad_cpu_interrupt ps-14 mb-8  axi_gpio_2/ip2intc_irpt
 
 #
-# Sync at TPL level 
+# Sync at TPL level
 #
 
 create_bd_port -dir I ext_sync_in

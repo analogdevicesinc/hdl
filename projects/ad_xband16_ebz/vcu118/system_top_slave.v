@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2026 (c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -111,14 +111,14 @@ module system_top (
   output        ad4030_csn,
   output        vco_csn,
 
-  output  [3:0] hsci_ckin_p,
-  output  [3:0] hsci_ckin_n,
-  output  [3:0] hsci_din_p,
-  output  [3:0] hsci_din_n,
-  input   [3:0] hsci_cko_p,
-  input   [3:0] hsci_cko_n,
-  input   [3:0] hsci_do_p,
-  input   [3:0] hsci_do_n,
+  output  [0:3] hsci_ckin_p,
+  output  [0:3] hsci_ckin_n,
+  output  [0:3] hsci_din_p,
+  output  [0:3] hsci_din_n,
+  input   [0:3] hsci_cko_p,
+  input   [0:3] hsci_cko_n,
+  input   [0:3] hsci_do_p,
+  input   [0:3] hsci_do_n,
 
   input         ext_trig,
 
@@ -172,6 +172,10 @@ module system_top (
 
   // internal signals
 
+  reg             trigger_stretched = 1'b0;
+  reg             trigger_sync1 = 1'b0;
+  reg             trigger_sync2 = 1'b0;
+
   wire    [127:0] gpio_i;
   wire    [127:0] gpio_o;
   wire    [127:0] gpio_t;
@@ -217,10 +221,6 @@ module system_top (
   wire            trigger_captured;
   wire            sync_start;
   wire            sync_start_edge;
-
-  reg             trigger_stretched = 1'b0;
-  reg             trigger_sync1 = 1'b0;
-  reg             trigger_sync2 = 1'b0;
 
   assign iic_rstn = 1'b1;
 
