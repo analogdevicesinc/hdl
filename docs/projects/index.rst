@@ -110,6 +110,7 @@ Contents
    PULSAR-ADC <pulsar_adc/index>
    PULSAR-LVDS-ADC <pulsar_lvds_adc/index>
    ADMX6020M <admx6020m/index>
+   TEST-CAPI-SELFTEST <test_capi_selftest/index>
    
 Obsolete projects
 -------------------------------------------------------------------------------
