@@ -268,3 +268,7 @@ set_property  -dict {PACKAGE_PIN R29  IOSTANDARD LVCMOS12                       
 
 set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/I.*]
 set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/T.*]
+
+set_property SLR SLR1 [get_cells -hierarchical *util_apollo_upack*]
+set_property SLR SLR1 [get_cells -hierarchical *apollo_tx_data_offload*]
+set_property SLR SLR1 [get_cells -hierarchical *tx_apollo_tpl_core*]
