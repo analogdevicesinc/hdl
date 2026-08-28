@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="960"
+     viewBox="0 0 1300 960" version="1.1">
+  <title>test_capi_selftest block diagram</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#000000"/>
+    </marker>
+    <marker id="arrow_ps" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#a01414"/>
+    </marker>
+    <marker id="arrow_pl" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0d5c78"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, Helvetica, sans-serif; fill: #000000; }
+    .doctitle { font-size: 20px; font-weight: bold; }
+    .domain   { font-size: 15px; font-weight: bold; }
+    .blk      { font-size: 14px; font-weight: bold; text-anchor: middle; }
+    .sub      { font-size: 12px; text-anchor: middle; }
+    .pin      { font-size: 12px; font-family: "DejaVu Sans Mono", monospace; }
+    .note     { font-size: 13px; font-style: italic; text-anchor: middle; }
+    .wire     { fill: none; stroke: #000000; stroke-width: 1.6; }
+    .loop_ps  { fill: none; stroke: #a01414; stroke-width: 2; }
+    .loop_pl  { fill: none; stroke: #0d5c78; stroke-width: 2; }
+    .ps_blk   { fill: #ffd9d9; stroke: #a01414; stroke-width: 1.5; }
+    .pl_blk   { fill: #cceaf5; stroke: #0d5c78; stroke-width: 1.5; }
+    .glue     { fill: #ebebeb; stroke: #333333; stroke-width: 1.5; }
+  </style>
+
+  <rect x="0" y="0" width="1300" height="960" fill="#ffffff"/>
+
+  <text class="doctitle" x="650" y="30" text-anchor="middle">test_capi_selftest / Cora Z7S &#8211; peripheral loopback self-test</text>
+
+  <!-- ==================== PS domain ==================== -->
+  <text class="domain" x="40" y="56" fill="#a01414">Zynq-7000 PS (sys_ps7)</text>
+  <rect x="40" y="64" width="450" height="730" rx="6" fill="#fff4f4" stroke="#a01414" stroke-width="2"/>
+
+  <rect class="ps_blk" x="70"  y="95"  width="150" height="44" rx="4"/>
+  <text class="blk" x="145" y="122">Cortex-A9 + DDR3</text>
+
+  <rect class="ps_blk" x="240" y="95"  width="150" height="44" rx="4"/>
+  <text class="blk" x="315" y="122">M_AXI_GP0</text>
+
+  <rect class="ps_blk" x="70"  y="155" width="320" height="55" rx="4"/>
+  <text class="blk" x="230" y="178">UART1 (EMIO)</text>
+  <text class="sub" x="230" y="198">TX &#8594; RX loopback, 115200 8N1</text>
+
+  <rect class="ps_blk" x="70"  y="232" width="320" height="55" rx="4"/>
+  <text class="blk" x="230" y="255">SPI0 (EMIO)</text>
+  <text class="sub" x="230" y="275">MOSI &#8594; MISO loopback</text>
+
+  <rect class="ps_blk" x="70"  y="309" width="150" height="44" rx="4"/>
+  <text class="blk" x="145" y="336">TTC0 timer</text>
+
+  <rect class="ps_blk" x="70"  y="390" width="320" height="200" rx="4"/>
+  <text class="blk" x="230" y="414">GPIO (EMIO) [63:0]</text>
+  <text class="pin"  x="86" y="470">[1:0]    &#8594; BTN[1:0]</text>
+  <text class="pin"  x="86" y="492">[7:2]    &#8594; LED[5:0]</text>
+  <text class="pin"  x="86" y="514">[8], [9] &#8596; fabric loopback</text>
+  <text class="pin"  x="86" y="536">[63:10]  gpio_o &#8594; gpio_i</text>
+
+  <rect class="ps_blk" x="240" y="690" width="150" height="55" rx="4"/>
+  <text class="blk" x="315" y="713">I2C0</text>
+  <text class="sub" x="315" y="732">(EMIO)</text>
+
+  <!-- PS UART1 loopback -->
+  <path class="loop_ps" d="M 390 170 H 455 V 196 H 396" marker-end="url(#arrow_ps)"/>
+  <!-- PS SPI0 loopback -->
+  <path class="loop_ps" d="M 390 247 H 455 V 273 H 396" marker-end="url(#arrow_ps)"/>
+
+  <!-- EMIO GPIO fabric loopback pair -->
+  <rect class="glue" x="400" y="498" width="80" height="38" rx="4"/>
+  <text x="440" y="514" font-size="11" text-anchor="middle">ad_iobuf &#215; 2</text>
+  <text x="440" y="528" font-size="11" text-anchor="middle">fabric net</text>
+  <path class="loop_ps" d="M 390 509 H 400"/>
+  <path class="loop_ps" d="M 390 525 H 400"/>
+
+  <!-- board I/O -->
+  <path class="wire" d="M 140 590 V 824" marker-end="url(#arrow)"/>
+  <rect class="glue" x="40" y="830" width="300" height="52" rx="4"/>
+  <text x="190" y="852" font-size="13" font-weight="bold" text-anchor="middle">Cora Z7S board I/O</text>
+  <text x="190" y="870" font-size="12" text-anchor="middle">BTN[1:0], LED[5:0] &#8211; 3.3 V</text>
+
+  <!-- ==================== interconnect ==================== -->
+  <rect class="glue" x="545" y="95" width="55" height="565" rx="4"/>
+  <text x="572" y="377" font-size="14" font-weight="bold" text-anchor="middle"
+        transform="rotate(-90 572 377)">axi_gp0_interconnect</text>
+
+  <path class="wire" d="M 390 117 H 539" marker-end="url(#arrow)"/>
+
+  <!-- ==================== PL domain ==================== -->
+  <text class="domain" x="690" y="56" fill="#0d5c78">Programmable Logic (PL)</text>
+  <rect x="690" y="64" width="570" height="730" rx="6" fill="#f2fbfe" stroke="#0d5c78" stroke-width="2"/>
+
+  <rect class="pl_blk" x="720" y="95"  width="340" height="40" rx="4"/>
+  <text class="blk" x="890" y="120">sys_concat_intc &#8594; IRQ_F2P[15:0]</text>
+
+  <rect class="pl_blk" x="720" y="155" width="340" height="55" rx="4"/>
+  <text class="blk" x="890" y="178">axi_uartlite_0</text>
+  <text class="sub" x="890" y="198">115200, tx &#8594; rx loopback</text>
+
+  <rect class="pl_blk" x="720" y="232" width="340" height="55" rx="4"/>
+  <text class="blk" x="890" y="255">axi_spi</text>
+  <text class="sub" x="890" y="275">SCK ratio 16, io0_o &#8594; io1_i</text>
+
+  <rect class="pl_blk" x="720" y="309" width="340" height="55" rx="4"/>
+  <text class="blk" x="890" y="332">axi_iic_ard</text>
+  <text class="sub" x="890" y="352">PL I2C manager</text>
+
+  <rect class="pl_blk" x="720" y="386" width="340" height="44" rx="4"/>
+  <text class="blk" x="890" y="405">axi_timer_0</text>
+  <text class="sub" x="890" y="422">freeze / capturetrig tied to 0</text>
+
+  <rect class="pl_blk" x="720" y="458" width="340" height="50" rx="4"/>
+  <text class="blk" x="890" y="479">axi_gpio_0</text>
+  <text class="sub" x="890" y="498">32 &#215; output</text>
+
+  <rect class="pl_blk" x="720" y="535" width="340" height="50" rx="4"/>
+  <text class="blk" x="890" y="556">axi_gpio_1</text>
+  <text class="sub" x="890" y="575">32 &#215; input</text>
+
+  <rect class="pl_blk" x="720" y="612" width="340" height="44" rx="4"/>
+  <text class="blk" x="890" y="639">axi_sysid_0 + rom_sys_0</text>
+
+  <!-- AXI stubs -->
+  <path class="wire" d="M 600 182 H 714" marker-end="url(#arrow)"/>
+  <path class="wire" d="M 600 259 H 714" marker-end="url(#arrow)"/>
+  <path class="wire" d="M 600 336 H 714" marker-end="url(#arrow)"/>
+  <path class="wire" d="M 600 408 H 714" marker-end="url(#arrow)"/>
+  <path class="wire" d="M 600 483 H 714" marker-end="url(#arrow)"/>
+  <path class="wire" d="M 600 560 H 714" marker-end="url(#arrow)"/>
+  <path class="wire" d="M 600 634 H 714" marker-end="url(#arrow)"/>
+
+  <!-- interrupts back to the PS -->
+  <path class="wire" d="M 720 115 H 655 V 82 H 145 V 93" marker-end="url(#arrow)"/>
+  <text x="400" y="76" font-size="12">IRQ_F2P[15:0]</text>
+
+  <!-- PL loopbacks -->
+  <path class="loop_pl" d="M 1060 170 H 1120 V 196 H 1066" marker-end="url(#arrow_pl)"/>
+  <path class="loop_pl" d="M 1060 247 H 1120 V 273 H 1066" marker-end="url(#arrow_pl)"/>
+  <path class="loop_pl" d="M 1060 483 H 1160 V 560 H 1066" marker-end="url(#arrow_pl)"/>
+
+  <!-- shared, wired-AND I2C bus between PS I2C0 and axi_iic_ard -->
+  <path class="wire" d="M 396 717 H 830" marker-start="url(#arrow)"/>
+  <rect class="glue" x="830" y="692" width="250" height="50" rx="4"/>
+  <text x="955" y="712" font-size="12" font-weight="bold" text-anchor="middle">scl / sda wired-AND</text>
+  <text x="955" y="730" font-size="11" text-anchor="middle">6 &#215; util_vector_logic</text>
+  <path class="wire" d="M 1080 717 H 1210 V 336 H 1066" marker-end="url(#arrow)"/>
+
+  <text class="note" x="650" y="920">Every peripheral is looped back inside the design &#8211; no external hardware is required.</text>
+</svg>

@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="This design allows controlling, receiving and transmitting sample stream from/to an ADRV9001/ADRV9002 device through two independent source-synchronous interface. Supports both CMOS and LVDS interface, but not at the same time. The selection of the I/O standard must be done by setting a parameter before building the project." name="description" />
+<meta content="The test_capi_selftest project is a self-contained verification design. It does not target an evaluation board and it does not talk to any external device. Instead, it instantiates the peripheral controllers that a software platform layer has to drive - SPI, UART, I2C, timer and GPIO - both in the Processing System (PS) and in the Programmable Logic (PL), and loops each one of them back onto itself inside the FPGA." name="description" />
 
-    <title>ADRV9001 HDL Project &#8212; HDL  documentation</title>
+    <title>TEST-CAPI-SELFTEST HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fb8972a4" />
     <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="ADRV9001-DUAL HDL Project" href="../adrv9001_dual/index.html" />
-    <link rel="prev" title="ADRD8012-01Z HDL project" href="../adrd8012_01z/index.html" />
+    <link rel="next" title="AD9739A-FMC HDL project (OBSOLETE)" href="../ad9739a_fmc/index.html" />
+    <link rel="prev" title="ADMX6020M HDL Project" href="../admx6020m/index.html" />
    
   
   
@@ -95,23 +95,24 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">ADRV9001 HDL Project</a><ul>
+<li><a class="reference internal" href="#">TEST-CAPI-SELFTEST HDL project</a><ul>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
-<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#clock-scheme">Clock scheme</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
+<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
+<li><a class="reference internal" href="#uart-connections">UART connections</a></li>
+<li><a class="reference internal" href="#timers">Timers</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
 <li><a class="reference internal" href="#resources">Resources</a><ul>
-<li><a class="reference internal" href="#systems-related">Systems related</a></li>
 <li><a class="reference internal" href="#hdl-related">HDL related</a></li>
 <li><a class="reference internal" href="#software-related">Software related</a></li>
 </ul>
@@ -364,7 +365,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../admx100x_evb/index.html">ADMX100X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../admx6001_ebz/index.html">ADMX6001-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrd8012_01z/index.html">ADRD8012-01Z</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9001/index.html">ADRV9001</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9001_dual/index.html">ADRV9001-DUAL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009/index.html">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009zu11eg/index.html">ADRV9009-ZU11EG</a></li>
@@ -405,7 +406,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_lvds_adc/index.html">PULSAR-LVDS-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../admx6020m/index.html">ADMX6020M</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../test_capi_selftest/index.html">TEST-CAPI-SELFTEST</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">TEST-CAPI-SELFTEST</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9739a_fmc/index.html">AD9739A-FMC (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/index.html">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcadc2/index.html">FMCADC2 (OBSOLETE)</a></li>
@@ -431,29 +432,72 @@ Content on this topic
 </div>
           <div class="body" role="main">
             
-  <section id="adrv9001-hdl-project">
-<span id="adrv9001"></span><h1>ADRV9001 HDL Project<a class="headerlink" href="#adrv9001-hdl-project" title="Permalink to this heading"></a></h1>
-<p>This design allows controlling, receiving and transmitting sample stream
-from/to an ADRV9001/ADRV9002 device through two independent source-synchronous
-interface.
-Supports both CMOS and LVDS interface, but not at the same time.
-The selection of the I/O standard must be done by setting a parameter before
-building the project.</p>
-<p>The design supports SDR or DDR modes in CMOS mode with 1 or 4 lanes, and
-in LVDS mode with 1 or 2 lanes. This is runtime configurable..
-The complete list of supported modes can be consulted in the
-<a class="reference internal" href="../../library/axi_adrv9001/index.html#axi-adrv9001"><span class="std std-ref">AXI ADRV9001</span></a> Interface Core documentation.</p>
+  <section id="test-capi-selftest-hdl-project">
+<span id="test-capi-selftest"></span><h1>TEST-CAPI-SELFTEST HDL project<a class="headerlink" href="#test-capi-selftest-hdl-project" title="Permalink to this heading"></a></h1>
+<p>The <strong>test_capi_selftest</strong> project is a self-contained verification design. It
+does not target an evaluation board and it does not talk to any external
+device. Instead, it instantiates the peripheral controllers that a software
+platform layer has to drive - SPI, UART, I2C, timer and GPIO - both in the
+Processing System (PS) and in the Programmable Logic (PL), and loops each one
+of them back onto itself inside the FPGA.</p>
+<p>Because every transmitter is wired to its own receiver, software running on the
+carrier can write a pattern through a peripheral, read it back through the same
+peripheral and decide whether the driver - and the C API (CAPI) layer
+underneath it - behaves as expected. No cables, no jumpers and no daughter
+board are required, which makes the design usable for automated regression
+runs.</p>
+<p>The interfaces exercised by the design are:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Interface</p></th>
+<th class="head"><p>PS instance</p></th>
+<th class="head"><p>PL instance</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SPI</p></td>
+<td><p>SPI0 (EMIO), MOSI looped to MISO</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">axi_spi</span></code>, <code class="docutils literal notranslate"><span class="pre">io0_o</span></code> looped to <code class="docutils literal notranslate"><span class="pre">io1_i</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>UART</p></td>
+<td><p>UART1 (EMIO), TX looped to RX</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">axi_uartlite_0</span></code>, <code class="docutils literal notranslate"><span class="pre">tx</span></code> looped to <code class="docutils literal notranslate"><span class="pre">rx</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>I2C</p></td>
+<td><p>I2C0 (EMIO)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">axi_iic_ard</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Timer</p></td>
+<td><p>TTC0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">axi_timer_0</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO</p></td>
+<td><p>EMIO GPIO, bit 9 looped to bit 8 through the fabric</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">axi_gpio_0</span></code> (output) looped to <code class="docutils literal notranslate"><span class="pre">axi_gpio_1</span></code> (input)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The two I2C managers are the exception to the one-peripheral-one-loopback rule:
+they are tied together on a single emulated open-drain bus, so a transfer
+started by one manager is observed by the other. The design contains no I2C
+subordinate.</p>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9002" target="_blank">ADRV9002NP/W1/PCBZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9002" target="_blank">ADRV9002NP/W2/PCBZ</a></p></li>
+<li><p>None. The design is fully self-contained and requires no evaluation board.</p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9002" target="_blank">ADRV9002</a>, in <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9002" target="_blank">ADRV9002NP/W2/PCBZ</a>,</p></li>
+<li><p>None.</p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -472,299 +516,292 @@ The complete list of supported modes can be consulted in the
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>ADRV9002</p></td>
-<td><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></td>
-<td><p>FMC LPC</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p><a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a></p></td>
-<td><p>FMC HPC0</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a></p></td>
-<td><p>FMC LPC</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p><a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a></p></td>
-<td><p>FMC HPCA</p></td>
+<tr class="row-even"><td><p>-</p></td>
+<td><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a></p></td>
+<td><p>-</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<p>The Arduino shield headers of the Cora Z7S are not used by this project; the
+only pins constrained at the top level are the two push buttons and the six
+LEDs of the carrier. The design was tested in hardware with VIO set to 3.3 V.</p>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
-<p>In the <strong>receive</strong> direction, each component of the delineated data is passed
-to a PN monitor. The monitor validates the digital interface signal capture
-and timing. The data then optionally DC-filtered, corrected for I/Q offset and
-phase mismatches and is written to the DDR memory via DMA.</p>
-<p>In the <strong>transmit</strong> direction, complex I and Q signals are generated for each
-RF channel. The digital source could either be an internal DDS or from the DDR
-via VDMA. The internal DDS phase and frequency are programmable.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
-<p>The data path and clock domains are depicted in the below diagram.</p>
-<a class="reference internal image-reference" href="../../_images/adrv9001_diagram.svg"><img alt="ADRV9001 block diagram" class="align-center" src="../../_images/adrv9001_diagram.svg" width="1000" /></a>
-</section>
-<section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001" target="_blank">AXI ADRV9001 IP</a> in this HDL project is
-configured to work in LVDS and CMOS interface; it supports two configuration
-modes:</p>
-<ul class="simple">
-<li><p>2R2T - 2x Rx and 2x Tx independent control and DMAs for the two RF channels</p></li>
-<li><p>1R1T - 1x Rx and 1x Tx common control and DMAs for the two RF channels also
-noted as R1_MODE</p></li>
-</ul>
-<p>For any mode the number of RF channels(two) doesn’t change only the controlling
-instance and the DMAs.</p>
-<p>The design has two receive paths and two transmit paths.
-One of the receive paths (Rx12) has four channels and the other (Rx2) two
-channels. These only work independently, not concomitantly.
-One must chose between two active paths (2R2T), or just the Rx12 (1R1T) path,
-which has four active channels, while Rx2 is disabled.
-The same applies to the transmit path but in the other direction.</p>
-<p>When only the Rx12 path is active with four channels mode, the core will take
-ownership of both source synchronous interfaces. The requirement in this case
-is that both interfaces run at the same rate.</p>
-<p>Regarding the INDEPENDENT_1R1T_SUPPORT and COMMON_2R2T_SUPPORT parameters,
-related to the above modes, their purpose is to remove the unused data paths,
-reducing in this way the resource utilisation. By default all modes/paths are
-available.</p>
-<p>For more info see the parameter section of <a class="reference internal" href="../../library/axi_adrv9001/index.html#axi-adrv9001"><span class="std std-ref">AXI ADRV9001</span></a>.</p>
+<p>The peripherals and their loopback paths are depicted in the below diagram:</p>
+<a class="reference internal image-reference" href="../../_images/test_capi_selftest_block_diagram.svg"><img alt="TEST-CAPI-SELFTEST block diagram" class="align-center" src="../../_images/test_capi_selftest_block_diagram.svg" width="800" /></a>
 </section>
 <section id="clock-scheme">
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
-<p>The clocks are managed by the device and are software programmable. Please
-refer to the device datasheet for the various clocks within the device.</p>
-<p>The board provides a 38.4MHz crystal for the <a class="icon adi reference external" href="https://www.analog.com/ADRV9002" target="_blank">ADRV9002</a>. It can also use
-an external reference clock.</p>
+<p>There is no external clock source and no clock generator in the design. Every
+clock comes from the PS PLLs through the <code class="docutils literal notranslate"><span class="pre">FCLK</span></code> outputs, as configured by the
+Cora Z7S base design.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 15.0%" />
+<col style="width: 60.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Clock</p></th>
+<th class="head"><p>Frequency</p></th>
+<th class="head"><p>Used by</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sys_cpu_clk</span></code> (FCLK_CLK0)</p></td>
+<td><p>100 MHz</p></td>
+<td><p>AXI interconnect and every AXI peripheral, plus the
+<code class="docutils literal notranslate"><span class="pre">ext_spi_clk</span></code> input of <code class="docutils literal notranslate"><span class="pre">axi_spi</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sys_dma_clk</span></code> (FCLK_CLK1)</p></td>
+<td><p>40 MHz</p></td>
+<td><p>not used, the design has no DMA</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Since <code class="docutils literal notranslate"><span class="pre">axi_spi</span></code> is configured with an SCK ratio of 16, the resulting
+PL SPI clock is 6.25 MHz.</p>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
-<p><strong>AMD</strong></p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>Zynq/Microblaze</p></th>
-<th class="head"><p>ZynqMP</p></th>
+<th class="head"><p>Zynq</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_adrv9001</p></td>
+<tr class="row-even"><td><p>axi_iic_ard*</p></td>
+<td><p>0x4160_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_spi</p></td>
 <td><p>0x44A0_0000</p></td>
-<td><p>0x84A00_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_adrv9001_rx1_dma</p></td>
+<tr class="row-even"><td><p>axi_uartlite_0</p></td>
+<td><p>0x44A1_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_timer_0</p></td>
+<td><p>0x44A2_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_gpio_0</p></td>
 <td><p>0x44A3_0000</p></td>
-<td><p>0x84A30_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_adrv9001_rx2_dma</p></td>
+<tr class="row-odd"><td><p>axi_gpio_1</p></td>
 <td><p>0x44A4_0000</p></td>
-<td><p>0x84A40_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_adrv9001_tx1_dma</p></td>
-<td><p>0x44A5_0000</p></td>
-<td><p>0x84A50_0000</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_adrv9001_tx2_dma</p></td>
-<td><p>0x44A6_0000</p></td>
-<td><p>0x84A60_0000</p></td>
+<tr class="row-even"><td><p>axi_sysid_0*</p></td>
+<td><p>0x4500_0000</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p><strong>Intel</strong></p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>HPS</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>axi_adrv9001</p></td>
-<td><p>0x0002_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_adc_dma</p></td>
-<td><p>0x0004_0000</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_adc_dma2</p></td>
-<td><p>0x0004_1000</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_dac_dma</p></td>
-<td><p>0x0004_4000</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_dac_dma2</p></td>
-<td><p>0x0004_5000</p></td>
-</tr>
-<tr class="row-odd"><td><p>avl_adrv9001_gpio</p></td>
-<td><p>0x0006_0000</p></td>
-</tr>
-</tbody>
-</table>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated by the Cora Z7S base design</p>
 </div>
 </section>
 <section id="spi-connections">
 <h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
-<p>The SPI signals are controlled by a separate AXI based SPI core.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
+<col style="width: 15.0%" />
 <col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
+<col style="width: 60.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>SPI type</p></th>
 <th class="head"><p>SPI manager instance</p></th>
-<th class="head"><p>SPI subordinate</p></th>
-<th class="head"><p>CS</p></th>
+<th class="head"><p>Loopback</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>PS</p></td>
-<td><p>SPI 0</p></td>
-<td><p>ADRV9002</p></td>
-<td><p>0</p></td>
+<td><p>SPI0 (EMIO)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SPI0_MOSI_O</span></code> connected to <code class="docutils literal notranslate"><span class="pre">SPI0_MISO_I</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>PL</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">axi_spi</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">io0_o</span></code> connected to <code class="docutils literal notranslate"><span class="pre">io1_i</span></code>; <code class="docutils literal notranslate"><span class="pre">sck_i</span></code> tied to 0, <code class="docutils literal notranslate"><span class="pre">ss_i</span></code> tied to
+1 and <code class="docutils literal notranslate"><span class="pre">io0_i</span></code> tied to 0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>PS SPI1 is enabled on EMIO by the Cora Z7S base design, but this project leaves
+it unconnected at the top level.</p>
+</section>
+<section id="i2c-connections">
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading"></a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 25.0%" />
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>I2C type</p></th>
+<th class="head"><p>I2C manager instance</p></th>
+<th class="head"><p>Alias</p></th>
+<th class="head"><p>I2C subordinate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PS</p></td>
+<td><p>I2C0 (EMIO)</p></td>
+<td><p>-</p></td>
+<td><p>none, the bus is shared with the PL manager</p></td>
+</tr>
+<tr class="row-odd"><td><p>PL</p></td>
+<td><p>axi_iic</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">axi_iic_ard</span></code></p></td>
+<td><p>none, the bus is shared with the PS manager</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">iic_ard</span></code> interface port created by the Cora Z7S base design is removed,
+and the two managers are joined by an open-drain bus model built out of six
+<code class="docutils literal notranslate"><span class="pre">util_vector_logic</span></code> instances (three per line, for <code class="docutils literal notranslate"><span class="pre">scl</span></code> and <code class="docutils literal notranslate"><span class="pre">sda</span></code>): each
+manager’s output enable and output data are OR-ed to obtain its released/driven
+state, and the two results are AND-ed to obtain the wired-AND bus level, which
+is then fed back to both managers’ inputs.</p>
+</section>
+<section id="uart-connections">
+<h3>UART connections<a class="headerlink" href="#uart-connections" title="Permalink to this heading"></a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15.0%" />
+<col style="width: 25.0%" />
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>UART type</p></th>
+<th class="head"><p>UART instance</p></th>
+<th class="head"><p>Baud rate</p></th>
+<th class="head"><p>Loopback</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PS</p></td>
+<td><p>UART1 (EMIO)</p></td>
+<td><p>115200</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">UART1_TX</span></code> connected to <code class="docutils literal notranslate"><span class="pre">UART1_RX</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>PL</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">axi_uartlite_0</span></code></p></td>
+<td><p>115200</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tx</span></code> connected to <code class="docutils literal notranslate"><span class="pre">rx</span></code></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
+<section id="timers">
+<h3>Timers<a class="headerlink" href="#timers" title="Permalink to this heading"></a></h3>
+<p>Two timers are available: the PS TTC0, which is re-enabled by this project, and
+the PL <code class="docutils literal notranslate"><span class="pre">axi_timer_0</span></code>. The unused inputs of the latter (<code class="docutils literal notranslate"><span class="pre">freeze</span></code>,
+<code class="docutils literal notranslate"><span class="pre">capturetrig0</span></code> and <code class="docutils literal notranslate"><span class="pre">capturetrig1</span></code>) are tied to 0.</p>
+</section>
 <section id="gpios">
 <h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
-<p>The device control and monitor signals are interfaced to a GPIO module.</p>
-<div class="table-wrapper docutils container">
+<p>Two independent GPIO paths are provided.</p>
+<p>The PL path is a pure register-to-register loopback: <code class="docutils literal notranslate"><span class="pre">axi_gpio_0</span></code> is
+configured as 32 outputs, <code class="docutils literal notranslate"><span class="pre">axi_gpio_1</span></code> as 32 inputs, and the whole 32-bit
+output vector is connected to the input vector.</p>
+<p>The PS path uses the EMIO GPIO of the <code class="docutils literal notranslate"><span class="pre">sys_ps7</span></code> instance, 64 bits wide. Bits
+0 to 7 leave the FPGA towards the carrier buttons and LEDs, bits 8 and 9 are
+strapped together through a pair of <code class="docutils literal notranslate"><span class="pre">ad_iobuf</span></code> instances on an internal
+fabric net, and the remaining bits are looped back directly from <code class="docutils literal notranslate"><span class="pre">gpio_o</span></code> to
+<code class="docutils literal notranslate"><span class="pre">gpio_i</span></code>.</p>
+<div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 29.4%" />
+<col style="width: 23.5%" />
+<col style="width: 23.5%" />
+<col style="width: 23.5%" />
+</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
-<th class="head"><p>Direction
-(from FPGA view)</p></th>
-<th class="head"><p>HDL EMIOGPIO</p></th>
-<th class="head"><p>Software GPIO
-Zynq MP</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"></th>
+<th class="head"><p>Zynq-7000</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>tdd_sync_loc</p></td>
-<td><p>OUT</p></td>
-<td><p>56</p></td>
-<td><p>134</p></td>
-</tr>
-<tr class="row-odd"><td><p>vadj_err</p></td>
+<tr class="row-odd"><td><p>BTN0</p></td>
 <td><p>IN</p></td>
-<td><p>55</p></td>
-<td><p>133</p></td>
-</tr>
-<tr class="row-even"><td><p>mssi_sync</p></td>
-<td><p>INTERNAL</p></td>
+<td><p>0</p></td>
 <td><p>54</p></td>
-<td><p>132</p></td>
 </tr>
-<tr class="row-odd"><td><p>gpio_tx2_enable_in</p></td>
+<tr class="row-even"><td><p>BTN1</p></td>
+<td><p>IN</p></td>
+<td><p>1</p></td>
+<td><p>55</p></td>
+</tr>
+<tr class="row-odd"><td><p>LED0_B</p></td>
 <td><p>OUT</p></td>
-<td><p>51</p></td>
-<td><p>129</p></td>
+<td><p>2</p></td>
+<td><p>56</p></td>
 </tr>
-<tr class="row-even"><td><p>gpio_tx1_enable_in</p></td>
+<tr class="row-even"><td><p>LED0_R</p></td>
 <td><p>OUT</p></td>
-<td><p>50</p></td>
-<td><p>128</p></td>
+<td><p>3</p></td>
+<td><p>57</p></td>
 </tr>
-<tr class="row-odd"><td><p>gpio_rx2_enable_in</p></td>
+<tr class="row-odd"><td><p>LED0_G</p></td>
 <td><p>OUT</p></td>
-<td><p>49</p></td>
-<td><p>127</p></td>
+<td><p>4</p></td>
+<td><p>58</p></td>
 </tr>
-<tr class="row-even"><td><p>gpio_rx1_enable_in</p></td>
+<tr class="row-even"><td><p>LED1_B</p></td>
 <td><p>OUT</p></td>
-<td><p>48</p></td>
-<td><p>126</p></td>
+<td><p>5</p></td>
+<td><p>59</p></td>
 </tr>
-<tr class="row-odd"><td><p>sm_fan_tach</p></td>
-<td><p>INOUT</p></td>
-<td><p>47</p></td>
-<td><p>125</p></td>
+<tr class="row-odd"><td><p>LED1_R</p></td>
+<td><p>OUT</p></td>
+<td><p>6</p></td>
+<td><p>60</p></td>
 </tr>
-<tr class="row-even"><td><p>reset_trx</p></td>
-<td><p>INOUT</p></td>
-<td><p>46</p></td>
-<td><p>124</p></td>
+<tr class="row-even"><td><p>LED1_G</p></td>
+<td><p>OUT</p></td>
+<td><p>7</p></td>
+<td><p>61</p></td>
 </tr>
-<tr class="row-odd"><td><p>mode</p></td>
-<td><p>INOUT</p></td>
-<td><p>45</p></td>
-<td><p>123</p></td>
+<tr class="row-odd"><td><p>GPIO loopback receiver</p></td>
+<td><p>IN</p></td>
+<td><p>8</p></td>
+<td><p>62</p></td>
 </tr>
-<tr class="row-even"><td><p>gp_int</p></td>
-<td><p>INOUT</p></td>
-<td><p>44</p></td>
-<td><p>122</p></td>
+<tr class="row-even"><td><p>GPIO loopback driver</p></td>
+<td><p>OUT</p></td>
+<td><p>9</p></td>
+<td><p>63</p></td>
 </tr>
-<tr class="row-odd"><td><p>dgpio_11</p></td>
-<td><p>INOUT</p></td>
-<td><p>43</p></td>
-<td><p>121</p></td>
-</tr>
-<tr class="row-even"><td><p>dgpio_10</p></td>
-<td><p>INOUT</p></td>
-<td><p>42</p></td>
-<td><p>120</p></td>
-</tr>
-<tr class="row-odd"><td><p>dgpio_9</p></td>
-<td><p>INOUT</p></td>
-<td><p>41</p></td>
-<td><p>119</p></td>
-</tr>
-<tr class="row-even"><td><p>dgpio_8</p></td>
-<td><p>INOUT</p></td>
-<td><p>40</p></td>
-<td><p>118</p></td>
-</tr>
-<tr class="row-odd"><td><p>dgpio_7</p></td>
-<td><p>INOUT</p></td>
-<td><p>39</p></td>
-<td><p>117</p></td>
-</tr>
-<tr class="row-even"><td><p>dgpio_6</p></td>
-<td><p>INOUT</p></td>
-<td><p>38</p></td>
-<td><p>116</p></td>
-</tr>
-<tr class="row-odd"><td><p>dgpio_5</p></td>
-<td><p>INOUT</p></td>
-<td><p>37</p></td>
-<td><p>115</p></td>
-</tr>
-<tr class="row-even"><td><p>dgpio_4</p></td>
-<td><p>INOUT</p></td>
-<td><p>36</p></td>
-<td><p>114</p></td>
-</tr>
-<tr class="row-odd"><td><p>dgpio_3</p></td>
-<td><p>INOUT</p></td>
-<td><p>35</p></td>
-<td><p>113</p></td>
-</tr>
-<tr class="row-even"><td><p>dgpio_2</p></td>
-<td><p>INOUT</p></td>
-<td><p>34</p></td>
-<td><p>112</p></td>
-</tr>
-<tr class="row-odd"><td><p>dgpio_1</p></td>
-<td><p>INOUT</p></td>
-<td><p>33</p></td>
-<td><p>111</p></td>
-</tr>
-<tr class="row-even"><td><p>dgpio_0</p></td>
-<td><p>INOUT</p></td>
-<td><p>32</p></td>
-<td><p>110</p></td>
+<tr class="row-odd"><td><p>unused, directly looped back</p></td>
+<td><p>-</p></td>
+<td><p>10 to 63</p></td>
+<td><p>64 to 117</p></td>
 </tr>
 </tbody>
 </table>
@@ -772,59 +809,72 @@ Zynq MP</p></th>
 </section>
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
-<p>Below are the Programmable Logic interrupts used in the project.</p>
+<p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance name</p></th>
 <th class="head"><p>HDL</p></th>
 <th class="head"><p>Linux Zynq</p></th>
-<th class="head"><p>Linux ZynqMP</p></th>
+<th class="head"><p>Actual Zynq</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_ad9361_adc_dma</p></td>
-<td><p>13</p></td>
-<td><p>57</p></td>
-<td><p>109</p></td>
+<tr class="row-even"><td><p>axi_spi</p></td>
+<td><p>8</p></td>
+<td><p>52</p></td>
+<td><p>84</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_ad9361_dac_dma</p></td>
-<td><p>12</p></td>
-<td><p>56</p></td>
-<td><p>108</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_ad9361_dac_dma</p></td>
-<td><p>10</p></td>
-<td><p>54</p></td>
-<td><p>106</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_ad9361_dac_dma</p></td>
+<tr class="row-odd"><td><p>axi_uartlite_0</p></td>
 <td><p>9</p></td>
 <td><p>53</p></td>
-<td><p>105</p></td>
+<td><p>85</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_timer_0</p></td>
+<td><p>10</p></td>
+<td><p>54</p></td>
+<td><p>86</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_iic_ard*</p></td>
+<td><p>11</p></td>
+<td><p>55</p></td>
+<td><p>87</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_gpio_0</p></td>
+<td><p>12</p></td>
+<td><p>56</p></td>
+<td><p>88</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_gpio_1</p></td>
+<td><p>13</p></td>
+<td><p>57</p></td>
+<td><p>89</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<p><code class="docutils literal notranslate"><span class="pre">*</span></code> connected by the Cora Z7S base design</p>
 </div>
 </section>
 </section>
 <section id="building-the-hdl-project">
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
-<p>The design is built upon ADI’s generic HDL reference design framework.
-ADI distributes the bit/elf files of these projects as part of the
-<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
-If you want to build the sources, ADI makes them available on the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
+<p>The design is built upon ADI’s generic HDL reference design framework. ADI makes
+the sources available on the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source
+you must
 <a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
-the HDL repository.</p>
+the HDL repository, and then build the project as follows:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
+<p>Building the Cora Z7S project:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/adrv9001/zcu102
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/test_capi_selftest/coraz7s
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv9001/zcu102$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/test_capi_selftest/coraz7s$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
@@ -834,28 +884,10 @@ the HDL repository.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
-<section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
-<p>Here you can find the quick start guides available for these evaluation boards:</p>
-<ul class="simple">
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9002/quickstart" target="_blank">[Wiki] ADRV9001/2 Quick Start Guides</a></p>
-<ul>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9002/quickstart/zed" target="_blank">Zed</a></p></li>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9002/quickstart/zynq" target="_blank">ZC706</a></p></li>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9002/quickstart/zynqmp" target="_blank">ZCU102</a></p></li>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9002/quickstart/a10soc" target="_blank">A10SoC</a></p></li>
-</ul>
-</li>
-</ul>
-<p>Other useful information:</p>
-<ul class="simple">
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9001" target="_blank">[Wiki] ADRV9001/2 User Guide</a></p></li>
-</ul>
-</section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9001" target="_blank">ADRV9001 HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/test_capi_selftest" target="_blank">TEST-CAPI-SELFTEST HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -871,14 +903,6 @@ the HDL repository.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>AXI_ADRV9001</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001" target="_blank">library/axi_adrv9001</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_adrv9001/index.html#axi-adrv9001"><span class="std std-ref">AXI ADRV9001</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_DMAC</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
-</tr>
 <tr class="row-even"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
@@ -887,45 +911,20 @@ the HDL repository.</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_CPACK2</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2" target="_blank">library/util_pack/util_cpack2</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>UTIL_UPACK2</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2" target="_blank">library/util_pack/util_upack2</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>UTIL_TDD_SYNC</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_tdd_sync" target="_blank">library/util_tdd_sync</a></p></td>
-<td><p>—</p></td>
-</tr>
 </tbody>
 </table>
 </div>
+<p>Besides the ADI IPs above, the design uses only AMD LogiCORE IPs, all of them
+delivered with Vivado: <code class="docutils literal notranslate"><span class="pre">processing_system7</span></code>, <code class="docutils literal notranslate"><span class="pre">axi_quad_spi</span></code>,
+<code class="docutils literal notranslate"><span class="pre">axi_uartlite</span></code>, <code class="docutils literal notranslate"><span class="pre">axi_timer</span></code>, <code class="docutils literal notranslate"><span class="pre">axi_gpio</span></code>, <code class="docutils literal notranslate"><span class="pre">axi_iic</span></code>, <code class="docutils literal notranslate"><span class="pre">axi_interconnect</span></code>,
+<code class="docutils literal notranslate"><span class="pre">proc_sys_reset</span></code>, <code class="docutils literal notranslate"><span class="pre">util_vector_logic</span></code> and <code class="docutils literal notranslate"><span class="pre">xlconcat</span></code>.</p>
 </section>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/adrv9002-customization" target="_blank">[Wiki] ADRV9002 Device Driver Customization</a></p></li>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/adrv9002" target="_blank">[Wiki] ADRV9002 Integrated Dual RF Transceiver Linux device driver</a></p></li>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9002/no-os-setup" target="_blank">[Wiki] ADRV9002 No-OS System Level Design</a></p></li>
-</ul>
-<div><div class="collapsible docutils container">
-<input class="collapsible_input" id="3d08587a2339d9339ed504627a62fc767165af6c" name="3d08587a2339d9339ed504627a62fc767165af6c" type="checkbox"></input><label for="3d08587a2339d9339ed504627a62fc767165af6c"><p>Click here to see the list of Linux device trees available.</p>
-<div class="icon"></div></label><div class="collapsible_content docutils container">
-<ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adrv9002.dts" target="_blank">adrv9002 ZedBoard Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adrv9002-rx2tx2.dts" target="_blank">adrv9002 ZedBoard Linux device 2rx2tx tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9002.dts" target="_blank">adrv9002 ZC706 Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9002-rx2tx2.dts" target="_blank">adrv9002 ZC706 Linux device 2rx2tx tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002.dts" target="_blank">adrv9002 ZCU102 (rev10) Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002-rx2tx2.dts" target="_blank">adrv9002 ZCU102 (rev10) Linux device 2rx2tx tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_adrv9002.dts" target="_blank">adrv9002 A10SoC Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_adrv9002_rx2tx2.dts" target="_blank">adrv9002 A10SoC Linux device 2rx2tx tree</a></p></li>
-</ul>
-</div>
-</div>
-</div></section>
+<p>The project is meant to be driven by bare-metal software; no Linux device tree
+is provided for it. The peripheral drivers and the platform C API exercised by
+this design live in the <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/" target="_blank">No-OS repository</a>.</p>
+</section>
 </section>
 <section id="more-information">
 <h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
@@ -953,8 +952,8 @@ are, the lower the chances to receive support from <a class="icon link reference
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../adrd8012_01z/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADRD8012-01Z HDL project</a>
-    <a href="../adrv9001_dual/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">ADRV9001-DUAL HDL Project</a>
+    <a href="../admx6020m/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADMX6020M HDL Project</a>
+    <a href="../ad9739a_fmc/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD9739A-FMC HDL project (OBSOLETE)</a>
               </div>
           
         </div>
