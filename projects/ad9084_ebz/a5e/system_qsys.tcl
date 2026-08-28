@@ -29,6 +29,11 @@ set dacfifo_has_ddr_arg 0
 
 set HSCI_ENABLE 0
 set ASYMMETRIC_A_B_MODE 0
+
+# Lane polarity per PHY, one bit per lane. Both lanes of PHY A are inverted:
+# Apollo reports a bad ILAS checksum on side A while side B is clean.
+# set PHY_A_LANE_INVERT 0x3
+# set PHY_B_LANE_INVERT 0x0
 if [info exists ad_project_dir] {
   source ../../common/ad9084_ebz_qsys.tcl
 } else {
@@ -36,21 +41,27 @@ if [info exists ad_project_dir] {
 }
 
 # GTS system PLL
+#
+# One instance per transceiver bank, each fed by that bank's own reference clock.
+# A single PLL only ever brought up the bank whose refclk it was driven from,
+# regardless of what UG 817660 section 4.4 says about reaching adjacent banks.
 
-add_instance gts_pll intel_systemclk_gts
-set_instance_parameter_value gts_pll syspll_mod_0 {User Configuration}
-set_instance_parameter_value gts_pll syspll_freq_mhz_0 $syspll_freq
-set_instance_parameter_value gts_pll refclk_xcvr_freq_mhz_0 $jesd204_ref_clock
+foreach pll {a b} {
+  add_instance gts_pll_${pll} intel_systemclk_gts
+  set_instance_parameter_value gts_pll_${pll} syspll_mod_0 {User Configuration}
+  set_instance_parameter_value gts_pll_${pll} syspll_freq_mhz_0 $syspll_freq
+  set_instance_parameter_value gts_pll_${pll} refclk_xcvr_freq_mhz_0 $jesd204_ref_clock
 
-add_interface i_refclk_rdy conduit end
-add_interface o_pll_lock   conduit end
-add_interface refclk_xcvr  clock sink
-add_interface o_syspll_c0  clock source
+  add_interface gts_pll_${pll}_i_refclk_rdy conduit end
+  add_interface gts_pll_${pll}_o_pll_lock   conduit end
+  add_interface gts_pll_${pll}_refclk_xcvr  clock sink
+  add_interface gts_pll_${pll}_o_syspll_c0  clock source
 
-set_interface_property i_refclk_rdy EXPORT_OF gts_pll.i_refclk_rdy
-set_interface_property o_pll_lock   EXPORT_OF gts_pll.o_pll_lock
-set_interface_property refclk_xcvr  EXPORT_OF gts_pll.refclk_xcvr
-set_interface_property o_syspll_c0  EXPORT_OF gts_pll.o_syspll_c0
+  set_interface_property gts_pll_${pll}_i_refclk_rdy EXPORT_OF gts_pll_${pll}.i_refclk_rdy
+  set_interface_property gts_pll_${pll}_o_pll_lock   EXPORT_OF gts_pll_${pll}.o_pll_lock
+  set_interface_property gts_pll_${pll}_refclk_xcvr  EXPORT_OF gts_pll_${pll}.refclk_xcvr
+  set_interface_property gts_pll_${pll}_o_syspll_c0  EXPORT_OF gts_pll_${pll}.o_syspll_c0
+}
 
 # Internal 100 MHz clock exported, used by the GTS refclk reset state machine
 

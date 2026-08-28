@@ -669,6 +669,9 @@ proc ad_dma_interconnect {m_port {m_addr 0x00000000} {data_width 128}} {
     # if we are using it in the design
     set f2sdram_data_width [get_instance_parameter_value sys_hps f2sdram_data_width]
     if {$f2sdram_data_width == 0} {
+      if {$data_width > 256} {
+        send_message error "Agilex 5 supports interconnects up to 256 bits"
+      }
       set_instance_parameter_value sys_hps f2sdram_data_width $data_width
       add_connection sys_dma_clk.clk sys_hps.f2sdram_axi_clock
       add_connection sys_dma_clk.clk_reset sys_hps.f2sdram_axi_reset

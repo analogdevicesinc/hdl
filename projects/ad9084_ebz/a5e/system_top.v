@@ -44,22 +44,23 @@ module system_top #(
   parameter RX_LANE_RATE       = 10,
   parameter TX_LANE_RATE       = 10,
   parameter RX_JESD_M          = 4,
-  parameter RX_JESD_L          = 4,
+  parameter RX_JESD_L          = 2,
   parameter RX_JESD_S          = 1,
   parameter RX_JESD_NP         = 16,
-  parameter RX_NUM_LINKS       = 1,
+  parameter RX_NUM_LINKS       = 2,
   parameter TX_JESD_M          = 4,
-  parameter TX_JESD_L          = 4,
+  parameter TX_JESD_L          = 2,
   parameter TX_JESD_S          = 1,
   parameter TX_JESD_NP         = 16,
-  parameter TX_NUM_LINKS       = 1,
+  parameter TX_NUM_LINKS       = 2,
   parameter RX_KS_PER_CHANNEL  = 16,
   parameter TX_KS_PER_CHANNEL  = 16,
 
   parameter RX_NO_LANES = RX_JESD_L * RX_NUM_LINKS,
   parameter TX_NO_LANES = TX_JESD_L * TX_NUM_LINKS,
 
-  parameter PHY_NO_LANES = RX_NO_LANES / 2
+  parameter NUM_OF_PHYS = 2,
+  parameter PHY_NO_LANES = RX_NO_LANES / NUM_OF_PHYS
 ) (
 
   // clock and resets
@@ -163,7 +164,7 @@ module system_top #(
   input          fpga_refclk_in_b,
   input          tx_device_clk,
   input          rx_device_clk,
-  input          sysref_in,
+  input          sysref_out,
 
   input          syncinb_a0,
   input          syncinb_b0,
@@ -209,9 +210,10 @@ module system_top #(
   wire [ 1:0]   usb31_io_usb_ctrl_s;
   wire          pma_cu_clk;
 
-  wire          syspll_clk;
-  wire          syspll_lock;
-  wire          tx_fifo_bypass;
+  wire          syspll_clk_a;
+  wire          syspll_lock_a;
+  wire          syspll_clk_b;
+  wire          syspll_lock_b;
 
   wire          refclk_ready;
   wire          refclk_ready_rx;
@@ -244,23 +246,27 @@ module system_top #(
   wire [           9:0]         jesd204_phy_b_o_refclk_status_bus_out_refclk_status_bus_out;
 
   // PHY A / PHY B -> link layer
-  wire                          jesd204_phy_a_rx_reset_ack_rx_reset_ack;
-  wire                          jesd204_phy_b_rx_reset_ack_rx_reset_ack;
-  wire                          jesd204_phy_a_rx_ready_rx_ready;
-  wire                          jesd204_phy_b_rx_ready_rx_ready;
-  wire                          jesd204_phy_a_tx_reset_ack_tx_reset_ack;
-  wire                          jesd204_phy_b_tx_reset_ack_tx_reset_ack;
-  wire                          jesd204_phy_a_tx_ready_tx_ready;
-  wire                          jesd204_phy_b_tx_ready_tx_ready;
   wire [PHY_NO_LANES-1:0]       jesd204_phy_a_rx_is_lockedtodata_o_rx_is_lockedtodata;
   wire [PHY_NO_LANES-1:0]       jesd204_phy_b_rx_is_lockedtodata_o_rx_is_lockedtodata;
   wire [PHY_NO_LANES-1:0]       phy_a_tx_pll_locked_o_tx_pll_locked;
   wire [PHY_NO_LANES-1:0]       phy_b_tx_pll_locked_o_tx_pll_locked;
 
-  wire                          jesd204_phy_rx_reset_ack;
-  wire                          jesd204_phy_rx_ready;
-  wire                          jesd204_phy_tx_reset_ack;
-  wire                          jesd204_phy_tx_ready;
+  wire                          phy_a_tx_clkout;
+  wire                          phy_b_tx_clkout;
+//  wire [           4:0]         phy_a_tx_clk_count;
+//  wire [           4:0]         phy_b_tx_clk_count;
+
+  // Per-PHY reset status out of axi_adxcvr, already in the sys_clk domain.
+  wire [NUM_OF_PHYS-1:0]        rx_phy_reset_done;
+  wire [NUM_OF_PHYS-1:0]        rx_phy_ready;
+  wire [NUM_OF_PHYS-1:0]        rx_phy_reset_ack;
+  wire [NUM_OF_PHYS-1:0]        tx_phy_reset_done;
+  wire [NUM_OF_PHYS-1:0]        tx_phy_ready;
+  wire [NUM_OF_PHYS-1:0]        tx_phy_reset_ack;
+
+  localparam DBG_STATUS_W = 10 + 4*NUM_OF_PHYS + 4*PHY_NO_LANES;
+
+  wire [DBG_STATUS_W-1:0]       dbg_status_s;
 
   assign h2f_warm_reset_reset_ack = h2f_warm_reset_reset_req;
 
@@ -269,22 +275,36 @@ module system_top #(
   assign gts_reset_i_src_rs_req_src_rs_req = {jesd204_phy_b_o_src_rs_req_src_rs_req,
                                               jesd204_phy_a_o_src_rs_req_src_rs_req};
 
+  /*
+   * Only one IP per device side drives o_refclk_status_bus_out into the reset
+   * sequencer; the others are left unconnected. PHY B's is deliberately unused.
+   */
   assign gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out =
-    jesd204_phy_a_o_refclk_status_bus_out_refclk_status_bus_out |
-    jesd204_phy_b_o_refclk_status_bus_out_refclk_status_bus_out;
+    jesd204_phy_a_o_refclk_status_bus_out_refclk_status_bus_out;
 
-  // Both links share the RX reset handshake, so the link layer may only be
-  // released once both PHYs report ready.
-  assign jesd204_phy_rx_reset_ack = jesd204_phy_a_rx_reset_ack_rx_reset_ack &
-                                    jesd204_phy_b_rx_reset_ack_rx_reset_ack;
-  assign jesd204_phy_rx_ready     = jesd204_phy_a_rx_ready_rx_ready &
-                                    jesd204_phy_b_rx_ready_rx_ready;
-
-  // Same for the TX reset handshake.
-  assign jesd204_phy_tx_reset_ack = jesd204_phy_a_tx_reset_ack_tx_reset_ack &
-                                    jesd204_phy_b_tx_reset_ack_tx_reset_ack;
-  assign jesd204_phy_tx_ready     = jesd204_phy_a_tx_ready_tx_ready &
-                                    jesd204_phy_b_tx_ready_tx_ready;
+//  /*
+//   * Debug: whether each bank's GTS serializer clock is running at all. Nothing
+//   * else in the design observes phy_*_tx_clkout, so a dead TX clock is
+//   * otherwise indistinguishable from a link that never trained.
+//   *
+//   * WIDTH tracked the width of the gpio_i slots these fed. out_count is
+//   * gray-coded: software must decode it before differencing two reads.
+//   */
+//  clk_monitor #(
+//    .WIDTH (5)
+//  ) i_phy_a_tx_clk_monitor (
+//    .clk (phy_a_tx_clkout),
+//    .out_clk (sys_cpu_clk),
+//    .out_resetn (sys_reset_n),
+//    .out_count (phy_a_tx_clk_count));
+//
+//  clk_monitor #(
+//    .WIDTH (5)
+//  ) i_phy_b_tx_clk_monitor (
+//    .clk (phy_b_tx_clkout),
+//    .out_clk (sys_cpu_clk),
+//    .out_resetn (sys_reset_n),
+//    .out_count (phy_b_tx_clk_count));
 
   // Board GPIOs
   assign fpga_led      = gpio_o[3:0];
@@ -294,7 +314,6 @@ module system_top #(
 
   // FMC GPIOs
   assign gpio_i[47:32] = gpio[30:15];
-  assign gpio_i[   53] = trig_in;
 
   assign trig_a[0]  = gpio_o[58];
   assign trig_a[1]  = gpio_o[59];
@@ -302,16 +321,56 @@ module system_top #(
   assign trig_b[1]  = gpio_o[61];
   assign resetb     = gpio_o[62];
 
-  assign tx_fifo_bypass  = gpio_o[63];
   assign refclk_ready_rx = gpio_o[56];
   assign refclk_ready_tx = gpio_o[57];
 
-  assign refclk_ready = refclk_ready_rx || refclk_ready_tx;
+  /*
+   * Both adxcvr instances must report their refclk stable: unlike ad9081, the
+   * RX and TX refclks are separate inputs on this board.
+   */
+  assign refclk_ready = refclk_ready_rx && refclk_ready_tx;
 
-  // Unused GPIOs
-  assign gpio_i[63:54] = gpio_o[63:54];
-  assign gpio_i[52:48] = gpio_o[52:48];
+//  /*
+//   * Debug: per-PHY bring-up status, since the link-layer and axi_adxcvr
+//   * registers only expose these AND-ed across both PHYs. The bit order is the
+//   * concatenation below.
+//   *
+//   * The PIOs generate interrupts, so these paths reach the CPU and have to be
+//   * synchronized rather than declared false.
+//   */
+//  sync_bits #(
+//    .NUM_OF_BITS(DBG_STATUS_W),
+//    .ASYNC_CLK(1)
+//  ) i_dbg_status_cdc (
+//    .in_bits ({syspll_lock_b,
+//               syspll_lock_a,
+//               gts_reset_o_refclk_fail_status_refclk_fail_status,
+//               tx_phy_reset_ack,
+//               rx_phy_reset_ack,
+//               tx_phy_ready,
+//               rx_phy_ready,
+//               phy_b_tx_pll_locked_o_tx_pll_locked,
+//               phy_a_tx_pll_locked_o_tx_pll_locked,
+//               jesd204_phy_b_rx_is_lockedtodata_o_rx_is_lockedtodata,
+//               jesd204_phy_a_rx_is_lockedtodata_o_rx_is_lockedtodata}),
+//    .out_clk (sys_cpu_clk),
+//    .out_resetn (sys_reset_n),
+//    .out_bits (dbg_status_s));
+//
+//  assign gpio_i[31:12] = dbg_status_s[19:0];
+//  assign gpio_i[   54] = dbg_status_s[DBG_STATUS_W-2];
+//  assign gpio_i[   53] = dbg_status_s[DBG_STATUS_W-1];
+//
+//  /* Debug: a count that never changes between two reads means the clock is dead. */
+//  assign gpio_i[52:48] = phy_a_tx_clk_count;
+//  assign gpio_i[59:55] = phy_b_tx_clk_count;
+//  assign gpio_i[61:60] = tx_phy_reset_done;
+//  assign gpio_i[63:62] = rx_phy_reset_done;
+
+  // Debug signals above are commented out; the freed inputs read back what
+  // software wrote so the PIOs stay driven.
   assign gpio_i[31:12] = gpio_o[31:12];
+  assign gpio_i[63:48] = gpio_o[63:48];
 
   assign sys_reset_n = sys_resetn & ~h2f_reset & ~ninit_done;
 
@@ -321,9 +380,9 @@ module system_top #(
   assign spi2_sclk    = spi_clk;
 
   ad_3w_spi #(
-    .NUM_OF_SLAVES(2)
+    .NUM_OF_SLAVES(3)
   ) i_spi (
-    .spi_csn (spi_csn[1:0]),
+    .spi_csn ({spi_csn[4], spi_csn[1:0]}),
     .spi_clk (spi_clk),
     .spi_mosi (spi_sdio),
     .spi_miso (spi_sdo),
@@ -466,6 +525,9 @@ module system_top #(
     .gts_reset_i_src_rs_req_src_rs_req                          (gts_reset_i_src_rs_req_src_rs_req),
     .gts_reset_o_pma_cu_clk_clk                                 (gts_reset_o_pma_cu_clk_clk),
 
+    .jesd204_phy_a_tx_clkout_clk                                 (phy_a_tx_clkout),
+    .jesd204_phy_b_tx_clkout_clk                                 (phy_b_tx_clkout),
+
     // JESD204 PHY A - link A lanes
     .jesd204_phy_a_i_pma_cu_clk_clk                             (gts_reset_o_pma_cu_clk_clk[0]),
     .jesd204_phy_a_i_src_rs_grant_src_rs_grant                  (gts_reset_o_src_rs_grant_src_rs_grant[PHY_NO_LANES-1:0]),
@@ -473,14 +535,10 @@ module system_top #(
     .jesd204_phy_a_o_refclk_status_bus_out_refclk_status_bus_out (jesd204_phy_a_o_refclk_status_bus_out_refclk_status_bus_out),
     .jesd204_phy_a_i_refclk_cmd_bus_in_refclk_cmd_bus_in        (gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in),
 
-    .jesd204_phy_a_rx_reset_ack_rx_reset_ack                    (jesd204_phy_a_rx_reset_ack_rx_reset_ack),
-    .jesd204_phy_a_rx_ready_rx_ready                            (jesd204_phy_a_rx_ready_rx_ready),
     .jesd204_phy_a_rx_is_lockedtodata_o_rx_is_lockedtodata      (jesd204_phy_a_rx_is_lockedtodata_o_rx_is_lockedtodata),
-    .jesd204_phy_a_tx_reset_ack_tx_reset_ack                    (jesd204_phy_a_tx_reset_ack_tx_reset_ack),
-    .jesd204_phy_a_tx_ready_tx_ready                            (jesd204_phy_a_tx_ready_tx_ready),
 
-    .jesd204_phy_a_system_pll_clk_clk                           (syspll_clk),
-    .jesd204_phy_a_system_pll_lock_o_pll_lock                   (syspll_lock),
+    .jesd204_phy_a_system_pll_clk_clk                           (syspll_clk_a),
+    .jesd204_phy_a_system_pll_lock_o_pll_lock                   (syspll_lock_a),
 
     .rx_serial_data_a_i_rx_serial_data                          (rx_data_a_p),
     .rx_serial_data_a_n_i_rx_serial_data_n                      (rx_data_a_n),
@@ -497,14 +555,10 @@ module system_top #(
     .jesd204_phy_b_o_refclk_status_bus_out_refclk_status_bus_out (jesd204_phy_b_o_refclk_status_bus_out_refclk_status_bus_out),
     .jesd204_phy_b_i_refclk_cmd_bus_in_refclk_cmd_bus_in        (gts_reset_o_src_rs_refclk_cmd_bus_refclk_cmd_bus_in),
 
-    .jesd204_phy_b_rx_reset_ack_rx_reset_ack                    (jesd204_phy_b_rx_reset_ack_rx_reset_ack),
-    .jesd204_phy_b_rx_ready_rx_ready                            (jesd204_phy_b_rx_ready_rx_ready),
     .jesd204_phy_b_rx_is_lockedtodata_o_rx_is_lockedtodata      (jesd204_phy_b_rx_is_lockedtodata_o_rx_is_lockedtodata),
-    .jesd204_phy_b_tx_reset_ack_tx_reset_ack                    (jesd204_phy_b_tx_reset_ack_tx_reset_ack),
-    .jesd204_phy_b_tx_ready_tx_ready                            (jesd204_phy_b_tx_ready_tx_ready),
 
-    .jesd204_phy_b_system_pll_clk_clk                           (syspll_clk),
-    .jesd204_phy_b_system_pll_lock_o_pll_lock                   (syspll_lock),
+    .jesd204_phy_b_system_pll_clk_clk                           (syspll_clk_b),
+    .jesd204_phy_b_system_pll_lock_o_pll_lock                   (syspll_lock_b),
 
     .rx_serial_data_b_i_rx_serial_data                          (rx_data_b_p),
     .rx_serial_data_b_n_i_rx_serial_data_n                      (rx_data_b_n),
@@ -514,24 +568,32 @@ module system_top #(
     .tx_ref_clk_b_clk                                           (fpga_refclk_in_b),
     .phy_b_tx_pll_locked_o_tx_pll_locked                        (phy_b_tx_pll_locked_o_tx_pll_locked),
 
-    // Link layer RX reset handshake, driven by both PHYs
-    .apollo_rx_jesd204_reset_ack_rx_reset_ack                   (jesd204_phy_rx_reset_ack),
-    .apollo_rx_jesd204_ready_rx_ready                           (jesd204_phy_rx_ready),
     .apollo_rx_jesd204_rx_is_lockedtodata_o_rx_is_lockedtodata  ({jesd204_phy_b_rx_is_lockedtodata_o_rx_is_lockedtodata,
                                                                   jesd204_phy_a_rx_is_lockedtodata_o_rx_is_lockedtodata}),
 
-    // Link layer TX reset handshake, driven by both PHYs
-    .apollo_tx_jesd204_reset_ack_tx_reset_ack                   (jesd204_phy_tx_reset_ack),
-    .apollo_tx_jesd204_ready_tx_ready                           (jesd204_phy_tx_ready),
+    .rx_phy_status_rx_reset_done                                (rx_phy_reset_done),
+    .rx_phy_status_rx_phy_ready                                 (rx_phy_ready),
+    .rx_phy_status_rx_phy_reset_ack                             (rx_phy_reset_ack),
+    .tx_phy_status_tx_reset_done                                (tx_phy_reset_done),
+    .tx_phy_status_tx_phy_ready                                 (tx_phy_ready),
+    .tx_phy_status_tx_phy_reset_ack                             (tx_phy_reset_ack),
 
     .tx_pll_locked_o_tx_pll_locked                              ({phy_b_tx_pll_locked_o_tx_pll_locked,
                                                                   phy_a_tx_pll_locked_o_tx_pll_locked}),
 
-    // GTS system PLL
-    .o_pll_lock_o_pll_lock                                      (syspll_lock),
-    .o_syspll_c0_clk                                            (syspll_clk),
-    .refclk_xcvr_clk                                            (fpga_refclk_in_a),
-    .i_refclk_rdy_data                                          (refclk_ready),
+    // GTS system PLL, one per transceiver bank
+    .gts_pll_a_o_pll_lock_o_pll_lock                            (syspll_lock_a),
+    .gts_pll_a_o_syspll_c0_clk                                  (syspll_clk_a),
+    .gts_pll_a_refclk_xcvr_clk                                  (fpga_refclk_in_a),
+    .gts_pll_a_i_refclk_rdy_data                                (refclk_ready),
+
+    .gts_pll_b_o_pll_lock_o_pll_lock                            (syspll_lock_b),
+    .gts_pll_b_o_syspll_c0_clk                                  (syspll_clk_b),
+    .gts_pll_b_refclk_xcvr_clk                                  (fpga_refclk_in_b),
+    .gts_pll_b_i_refclk_rdy_data                                (refclk_ready),
+
+    .apollo_rx_data_offload_sync_ext_sync_ext                   (1'b0),
+    .apollo_tx_data_offload_sync_ext_sync_ext                   (1'b0),
 
     // FMC HPC
     .sys_spi_MISO                                               (spi_sdo),
@@ -544,13 +606,12 @@ module system_top #(
     .apollo_spi_SCLK                                            (apollo_spi_clk),
     .apollo_spi_SS_n                                            (apollo_spi_csn),
 
-    .tx_sync_export                                             ({syncinb_a0, syncinb_b0}),
-    .tx_sysref_export                                           (sysref_in),
+    .tx_sync_export                                             ({syncinb_b0, syncinb_a0}),
+    .tx_sysref_export                                           (sysref_out),
     .tx_device_clk_clk                                          (tx_device_clk),
-    .tx_fifo_bypass_bypass                                      (tx_fifo_bypass),
 
-    .rx_sync_export                                             ({syncoutb_a0, syncoutb_b0}),
-    .rx_sysref_export                                           (sysref_in),
+    .rx_sync_export                                             ({syncoutb_b0, syncoutb_a0}),
+    .rx_sysref_export                                           (sysref_out),
     .rx_device_clk_clk                                          (rx_device_clk),
 
     .apollo_gpio_export ({syncinb_a1_n_gpio,  // 19
