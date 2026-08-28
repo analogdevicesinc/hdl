@@ -240,6 +240,7 @@ ad_ip_instance util_cpack2 util_apollo_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL \
   SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
+  PARALLEL_OR_SERIAL_N 1
 ]
 
 ad_ip_parameter util_apollo_cpack CONFIG.PIPELINE_STAGES 2
@@ -305,6 +306,7 @@ ad_ip_instance util_upack2 util_apollo_upack [list \
   NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
   SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
   SAMPLE_DATA_WIDTH $TX_DMA_SAMPLE_WIDTH \
+  PARALLEL_OR_SERIAL_N 1
 ]
 
 ad_ip_parameter rx_apollo_tpl_core/adc_tpl_core CONFIG.PNMON_ENABLE 0
