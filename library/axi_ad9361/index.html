@@ -14,7 +14,7 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="AXI AD9467" href="../axi_ad9467/index.html" />
+    <link rel="next" title="HDL Support for AD9361 TDD Mode" href="tdd_support.html" />
     <link rel="prev" title="AXI AD9265" href="../axi_ad9265/index.html" />
    
   
@@ -100,7 +100,9 @@
 <li><a class="reference internal" href="#features">Features</a></li>
 <li><a class="reference internal" href="#files">Files</a></li>
 <li><a class="reference internal" href="#block-diagram">Block Diagram</a></li>
-<li><a class="reference internal" href="#functional-description">Functional Description</a><ul>
+<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+<li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#detailed-description">Detailed Description</a><ul>
 <li><a class="reference internal" href="#device-ad9361-interface-description">Device (AD9361) Interface Description</a><ul>
 <li><a class="reference internal" href="#altera">Altera</a></li>
 <li><a class="reference internal" href="#amd-xilinx">AMD Xilinx</a><ul>
@@ -118,9 +120,9 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
-<li><a class="reference internal" href="#interface">Interface</a></li>
 <li><a class="reference internal" href="#register-map">Register Map</a></li>
+<li><a class="reference internal" href="#design-guidelines">Design Guidelines</a></li>
+<li><a class="reference internal" href="#software-guidelines">Software Guidelines</a></li>
 <li><a class="reference internal" href="#software-support">Software Support</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
@@ -247,7 +249,10 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad7768/index.html">AXI AD7768</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad777x/index.html">AXI AD777x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">AXI AD9361</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4" checked=""/><div class="collapse"><a class="current reference internal" href="#">AXI AD9361</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="tdd_support.html">TDD Mode Support</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/index.html">AXI AD9740</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
@@ -275,15 +280,15 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_sysid/index.html">AXI System ID</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_tdd/index.html">AXI TDD</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../cn0363/index.html">CN0363</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../cn0363/index.html">CN0363</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../cn0363/cn0363_dma_sequencer.html">CN0363 DMA Sequencer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../cn0363/cn0363_phase_data_sync.html">CN0363 Phase Data Sync</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../corundum/index.html">Corundum Network Stack</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../corundum/corundum_core/index.html">Corundum Core</a></li>
-<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5-1" id="toctree-collapse-2-5-1"/><div class="collapse"><a class="reference internal" href="../corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-5-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6-1" id="toctree-collapse-2-6-1"/><div class="collapse"><a class="reference internal" href="../corundum/ethernet/index.html">Corundum Ethernet Core</a><label for="toctree-collapse-2-6-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l4"><a class="reference internal" href="../corundum/ethernet/vcu118/index.html">VCU118</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../corundum/ethernet/k26/index.html">K26</a></li>
 </ul>
@@ -300,7 +305,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../util_sigma_delta_spi/index.html">Util Sigma Delta SPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-7" id="toctree-collapse-2-7"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-7"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
@@ -434,6 +439,8 @@ Content on this topic
             
   <section id="axi-ad9361">
 <span id="id1"></span><h1>AXI AD9361<a class="headerlink" href="#axi-ad9361" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 368.4 810" width="368.4" class="no-background"><style>
                 a {
@@ -490,166 +497,7 @@ and interfacing DACs in <a class="reference internal" href="../../user_guide/ip_
 </section>
 <section id="block-diagram">
 <h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
-<img alt="AXI AD9361 block diagram" src="../../_images/block_diagram19.svg" /></section>
-<section id="functional-description">
-<h2>Functional Description<a class="headerlink" href="#functional-description" title="Permalink to this heading"></a></h2>
-<p>The axi_ad9361 cores architecture contains:</p>
-<ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361.v#L302" target="_blank">Interface</a> module in either
-CMOS Dual Port Full Duplex or LVDS mode for <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/intel" target="_blank">Intel</a>
-or <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/xilinx" target="_blank">AMD Xilinx</a> devices.</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_rx.v" target="_blank">Receive</a> module, which contains:</p>
-<ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_rx_channel.v" target="_blank">ADC channel processing</a> modules, one for each channel</p>
-<ul>
-<li><p>data processing modules (
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/common/ad_dcfilter.v" target="_blank">DC Filter</a>,
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_iqcor.v" target="_blank">IQ Correction</a> and
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_datafmt.v" target="_blank">Data Format Control</a>)</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_rx_pnmon.v" target="_blank">ADC PN Monitor</a> for interface validation</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v" target="_blank">ADC Channel register map</a></p></li>
-</ul>
-</li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_delay_cntrl.v" target="_blank">Delay Control</a> and
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v" target="_blank">ADC Common register map</a></p></li>
-</ul>
-</li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_tx.v" target="_blank">Transmit</a> module, which contains:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_tx_channel.v" target="_blank">DAC channel processing</a>
-modules, one for each channel</p>
-<ul>
-<li><p>Different data generators (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v" target="_blank">DDS</a>, pattern, PRBS)</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_iqcor.v" target="_blank">IQ Correction</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_channel.v" target="_blank">DAC Channel register map</a></p></li>
-</ul>
-</li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_delay_cntrl.v" target="_blank">Delay Control</a> and
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_common.v" target="_blank">DAC Common register map</a></p></li>
-</ul>
-</div></blockquote>
-</li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_tdd.v" target="_blank">TDD control module</a> for TDD mode,
-see more information on the
-<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-pzsdr2400tdd-eb/reference_hdl" target="_blank">HDL support for AD9361 TDD mode</a>
-wiki page.</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/common/up_axi.v" target="_blank">AXI control and status</a> modules.</p></li>
-</ul>
-<section id="device-ad9361-interface-description">
-<h3>Device (AD9361) Interface Description<a class="headerlink" href="#device-ad9361-interface-description" title="Permalink to this heading"></a></h3>
-<p>The IP supports both LVDS and CMOS Dual Port Full Duplex interfaces
-(configurable, see parameters section). It avoids all the programmable flavors
-of the device interface mess. The interface is in fact quite simple, in LVDS
-mode samples require two active clock edges and in CMOS mode a single edge. The
-samples are then delineated in-order using the FRAME signal. This is applicable
-to both DDR and SDR modes. There is a limitation though, the IP core does NOT
-support swapping of the data ports in CMOS mode. This option is left as a
-constraint. As an example the PZSDR projects uses SWAP on some boards based on
-the board layout.</p>
-<p>Let’s consider the 2R2T configuration, each frame consists of 4 samples in each
-direction. In LVDS-DDR mode that is 8 clock edges (4 full clock cycles)
-identified by a frame pattern of 8’b11110000. The IP interface logic simply
-collects data on consecutive 8 edges and deframes using the FRAME signal and
-outputs the samples. The device does the same in the transmit direction. In CMOS
-mode, the same is done over 4 clock edges.</p>
-<p>The interface also provides a single clock tree for the entire core. This clock
-uses a global buffer that has the minimum skew all across the die. On Altera
-devices, this is done via the PLL and because the LVDS cores do NOT support a
-serialization factor of 2, runs at half the interface clock frequency.
-On AMD Xilinx devices, this is done via the BUFG and the core and interface runs
-at the same clock frequency.</p>
-<section id="altera">
-<h4>Altera<a class="headerlink" href="#altera" title="Permalink to this heading"></a></h4>
-<p>The core is tested to work only on Cyclone V Arrow SOC Kit. Since Altera does
-half-thought board designs that do not favor FMC bank allocations, we are
-incapable of validating the core on other devices.</p>
-</section>
-<section id="amd-xilinx">
-<h4>AMD Xilinx<a class="headerlink" href="#amd-xilinx" title="Permalink to this heading"></a></h4>
-<section id="alternative-clocking-methods">
-<h5>Alternative Clocking Methods<a class="headerlink" href="#alternative-clocking-methods" title="Permalink to this heading"></a></h5>
-<ol class="arabic simple">
-<li><p>Using MMCM 2. Using BUFIO/BUFR</p></li>
-</ol>
-</section>
-<section id="alternative-use-models">
-<h5>Alternative Use Models<a class="headerlink" href="#alternative-use-models" title="Permalink to this heading"></a></h5>
-<p>1. Interface Logic Only 2. Disable DSP Functions 3. Removing AXI interface and
-Processor Control</p>
-</section>
-</section>
-</section>
-<section id="internal-interface-description">
-<h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Permalink to this heading"></a></h3>
-<p>The main purpose of all (including this) ADI IP cores is to provide a common,
-well-defined internal interface within the FPGA. This interface consists of the
-following signals per channel.</p>
-<section id="enable">
-<h4>ENABLE<a class="headerlink" href="#enable" title="Permalink to this heading"></a></h4>
-<p>The enable signal is strictly for software use and is controlled by the
-corresponding register bit. The core simply reflects the programmed bit as an
-output port. In ADI reference projects, this bit is used to activate the channel
-of interest. It is then used by the PACK/UNPACK cores to route the data based on
-total number of channels and the selected number of channels. As an example,
-AXI_AD9361 supports a total of 4 channels 16bits each. This corresponds to a
-packed channel data width of 64bits. If software enables only two channels the
-packed 64bits of data is exclusively shared by the enabled 2 channels (each
-channel gets 32 bits of data).</p>
-</section>
-<section id="valid">
-<h4>VALID<a class="headerlink" href="#valid" title="Permalink to this heading"></a></h4>
-<p>The valid signal is sourced by the core to indicate a valid sample on the DATA
-port. In the receive (ADC) direction this indicates a valid sample and in the
-transmit (DAC) direction this indicates the current sample is being read by the
-core. The valid is simply a ‘reflective’ of the ‘sampling rate’. Note that he
-cores always run at the interface clock. This is to avoid any customized clock
-handling or transfer within this core. However in many cases interface clock may
-not be the sampling clock. As an example for AD9361 the interface clock is
-244Mhz for a sampling clock of 61MHz. That is each channel’s sampling rate is
-61MHz. This translates into the VALID signal being asserted once every 4 clocks.
-In cores where sampling rate is same as the interface clock, VALID is always
-asserted and may be safely ignored.</p>
-<p>A common interpretation of this is that all channels has the same VALID
-behavior. This is NOT necessarily true. A majority of use cases may have this as
-a result of data path equivalency. However, if software decides to
-enable/disable functions differently among channels, the VALID signals of those
-channels will NOT be the same.</p>
-</section>
-<section id="data">
-<h4>DATA<a class="headerlink" href="#data" title="Permalink to this heading"></a></h4>
-<p>The DATA is the raw Analog samples. It follows two simple rules.</p>
-<ol class="arabic simple">
-<li><p>The samples are always 16bits, regardless of the ADC/DAC data width. That is
-the source or destination is intended to handle samples as 16bits. In the
-transmit direction, if the DAC data width is less than 16bits, the most
-significant bits are used. In the receive direction, if the ADC data width is
-less than 16bits, the most significant bits are sign extended. This allows
-the same source or destination portable across different ADC/DAC data widths.
-In other words, if the source is generating a 16bits tone the signal appears
-the same across a 12bit, 14bit or 16bit DAC with only the corresponding
-amplitude change. The source can thus be independent of the number of bits
-supported by DAC. In the receive direction, the samples are sign extended.
-Thus the destination always receives a 16bit sample with different amplitude
-levels corresponding to the number of bits supported by the ADC. This may
-seem to break the symmetry rule, but in most DSP functions the samples are
-rounded up towards the MSB as only precision is allowed to lost or gained at
-the expense of the LSB bits. The MSB bits retains all the physical nature of
-the signal.</p></li>
-<li><p>The DATA is received and transmitted with most significant sample “newest”
-regardless of the channel width. In other words the most significant sample
-is the “newest” sample. If the total channel width is 64bits, it carries 4
-samples (16bits) per clock. If we were to name these samples as S3 (bits 63
-down to 48), S2 (bits 47 down to 32), S1 (bits 31 down to 16) and S0 (bits 15
-down to 0), the following is true. In the transmit direction, S0 is sent
-first and S3 is sent last to the DAC. The analog samples are S0, S1, S2 and
-S3 across time with S0 being the oldest and S3 being the newest sample. In
-the receive direction, S0 carries the oldest sample received and S3 carries
-the newest sample from the ADC.</p></li>
-</ol>
-</section>
-</section>
-</section>
+<img alt="AXI AD9361 block diagram" src="../../_images/block_diagram20.svg" /></section>
 <section id="configuration-parameters">
 <h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
@@ -1577,6 +1425,173 @@ the newest sample from the ADC.</p></li>
 </div>
 </section>
 </div></section>
+<section id="detailed-description">
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
+<p>The axi_ad9361 cores architecture contains:</p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361.v#L302" target="_blank">Interface</a> module in either
+CMOS Dual Port Full Duplex or LVDS mode for
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/intel" target="_blank">Intel</a> or
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/xilinx" target="_blank">AMD Xilinx</a> devices.</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_rx.v" target="_blank">Receive</a> module, which
+contains:</p>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_rx_channel.v" target="_blank">ADC channel processing</a> modules, one for each
+channel</p>
+<ul>
+<li><p>data processing modules (
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/common/ad_dcfilter.v" target="_blank">DC Filter</a>,
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_iqcor.v" target="_blank">IQ Correction</a> and
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_datafmt.v" target="_blank">Data Format Control</a>)</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_rx_pnmon.v" target="_blank">ADC PN Monitor</a>
+for interface validation</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v" target="_blank">ADC Channel register map</a></p></li>
+</ul>
+</li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_delay_cntrl.v" target="_blank">Delay Control</a> and
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v" target="_blank">ADC Common register map</a></p></li>
+</ul>
+</li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_tx.v" target="_blank">Transmit</a> module, which
+contains:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_tx_channel.v" target="_blank">DAC channel processing</a> modules, one for each
+channel</p>
+<ul>
+<li><p>Different data generators (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v" target="_blank">DDS</a>,
+pattern, PRBS)</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_iqcor.v" target="_blank">IQ Correction</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_channel.v" target="_blank">DAC Channel register map</a></p></li>
+</ul>
+</li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_delay_cntrl.v" target="_blank">Delay Control</a> and
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_common.v" target="_blank">DAC Common register map</a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9361/axi_ad9361_tdd.v" target="_blank">TDD control module</a> for
+TDD mode, see more information on the <a class="reference internal" href="tdd_support.html#axi-ad9361-tdd"><span class="std std-ref">HDL Support for AD9361 TDD Mode</span></a> page.</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/common/up_axi.v" target="_blank">AXI control and status</a> modules.</p></li>
+</ul>
+<section id="device-ad9361-interface-description">
+<h3>Device (AD9361) Interface Description<a class="headerlink" href="#device-ad9361-interface-description" title="Permalink to this heading"></a></h3>
+<p>The IP supports both LVDS and CMOS Dual Port Full Duplex interfaces
+(configurable, see parameters section). It avoids all the programmable flavors
+of the device interface mess. The interface is in fact quite simple, in LVDS
+mode samples require two active clock edges and in CMOS mode a single edge. The
+samples are then delineated in-order using the FRAME signal. This is applicable
+to both DDR and SDR modes. There is a limitation though, the IP core does NOT
+support swapping of the data ports in CMOS mode. This option is left as a
+constraint. As an example the PZSDR projects uses SWAP on some boards based on
+the board layout.</p>
+<p>Let’s consider the 2R2T configuration, each frame consists of 4 samples in each
+direction. In LVDS-DDR mode that is 8 clock edges (4 full clock cycles)
+identified by a frame pattern of 8’b11110000. The IP interface logic simply
+collects data on consecutive 8 edges and deframes using the FRAME signal and
+outputs the samples. The device does the same in the transmit direction. In CMOS
+mode, the same is done over 4 clock edges.</p>
+<p>The interface also provides a single clock tree for the entire core. This clock
+uses a global buffer that has the minimum skew all across the die. On Altera
+devices, this is done via the PLL and because the LVDS cores do NOT support a
+serialization factor of 2, runs at half the interface clock frequency.
+On AMD Xilinx devices, this is done via the BUFG and the core and interface runs
+at the same clock frequency.</p>
+<section id="altera">
+<h4>Altera<a class="headerlink" href="#altera" title="Permalink to this heading"></a></h4>
+<p>The core is tested to work only on Cyclone V Arrow SOC Kit. Since Altera does
+half-thought board designs that do not favor FMC bank allocations, we are
+incapable of validating the core on other devices.</p>
+</section>
+<section id="amd-xilinx">
+<h4>AMD Xilinx<a class="headerlink" href="#amd-xilinx" title="Permalink to this heading"></a></h4>
+<section id="alternative-clocking-methods">
+<h5>Alternative Clocking Methods<a class="headerlink" href="#alternative-clocking-methods" title="Permalink to this heading"></a></h5>
+<ol class="arabic simple">
+<li><p>Using MMCM</p></li>
+<li><p>Using BUFIO/BUFR</p></li>
+</ol>
+</section>
+<section id="alternative-use-models">
+<h5>Alternative Use Models<a class="headerlink" href="#alternative-use-models" title="Permalink to this heading"></a></h5>
+<ol class="arabic simple">
+<li><p>Interface Logic Only</p></li>
+<li><p>Disable DSP Functions</p></li>
+<li><p>Removing AXI interface and Processor Control</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="internal-interface-description">
+<h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Permalink to this heading"></a></h3>
+<p>The main purpose of all (including this) ADI IP cores is to provide a common,
+well-defined internal interface within the FPGA. This interface consists of the
+following signals per channel.</p>
+<section id="enable">
+<h4>ENABLE<a class="headerlink" href="#enable" title="Permalink to this heading"></a></h4>
+<p>The enable signal is strictly for software use and is controlled by the
+corresponding register bit. The core simply reflects the programmed bit as an
+output port. In ADI reference projects, this bit is used to activate the channel
+of interest. It is then used by the PACK/UNPACK cores to route the data based on
+total number of channels and the selected number of channels. As an example,
+AXI_AD9361 supports a total of 4 channels 16bits each. This corresponds to a
+packed channel data width of 64bits. If software enables only two channels the
+packed 64bits of data is exclusively shared by the enabled 2 channels (each
+channel gets 32 bits of data).</p>
+</section>
+<section id="valid">
+<h4>VALID<a class="headerlink" href="#valid" title="Permalink to this heading"></a></h4>
+<p>The valid signal is sourced by the core to indicate a valid sample on the DATA
+port. In the receive (ADC) direction this indicates a valid sample and in the
+transmit (DAC) direction this indicates the current sample is being read by the
+core. The valid is simply a ‘reflective’ of the ‘sampling rate’. Note that he
+cores always run at the interface clock. This is to avoid any customized clock
+handling or transfer within this core. However in many cases interface clock may
+not be the sampling clock. As an example for AD9361 the interface clock is
+244Mhz for a sampling clock of 61MHz. That is each channel’s sampling rate is
+61MHz. This translates into the VALID signal being asserted once every 4 clocks.
+In cores where sampling rate is same as the interface clock, VALID is always
+asserted and may be safely ignored.</p>
+<p>A common interpretation of this is that all channels has the same VALID
+behavior. This is NOT necessarily true. A majority of use cases may have this as
+a result of data path equivalency. However, if software decides to
+enable/disable functions differently among channels, the VALID signals of those
+channels will NOT be the same.</p>
+</section>
+<section id="data">
+<h4>DATA<a class="headerlink" href="#data" title="Permalink to this heading"></a></h4>
+<p>The DATA is the raw Analog samples. It follows two simple rules.</p>
+<ol class="arabic simple">
+<li><p>The samples are always 16bits, regardless of the ADC/DAC data width. That is
+the source or destination is intended to handle samples as 16bits. In the
+transmit direction, if the DAC data width is less than 16bits, the most
+significant bits are used. In the receive direction, if the ADC data width is
+less than 16bits, the most significant bits are sign extended. This allows
+the same source or destination portable across different ADC/DAC data widths.
+In other words, if the source is generating a 16bits tone the signal appears
+the same across a 12bit, 14bit or 16bit DAC with only the corresponding
+amplitude change. The source can thus be independent of the number of bits
+supported by DAC. In the receive direction, the samples are sign extended.
+Thus the destination always receives a 16bit sample with different amplitude
+levels corresponding to the number of bits supported by the ADC. This may
+seem to break the symmetry rule, but in most DSP functions the samples are
+rounded up towards the MSB as only precision is allowed to lost or gained at
+the expense of the LSB bits. The MSB bits retains all the physical nature of
+the signal.</p></li>
+<li><p>The DATA is received and transmitted with most significant sample “newest”
+regardless of the channel width. In other words the most significant sample
+is the “newest” sample. If the total channel width is 64bits, it carries 4
+samples (16bits) per clock. If we were to name these samples as S3 (bits 63
+down to 48), S2 (bits 47 down to 32), S1 (bits 31 down to 16) and S0 (bits 15
+down to 0), the following is true. In the transmit direction, S0 is sent
+first and S3 is sent last to the DAC. The analog samples are S0, S1, S2 and
+S3 across time with S0 being the oldest and S3 being the newest sample. In
+the receive direction, S0 carries the oldest sample received and S3 carries
+the newest sample from the ADC.</p></li>
+</ol>
+</section>
+</section>
+</section>
 <section id="register-map">
 <h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <p>The register map of the core contains instances of several generic register maps
@@ -1626,7 +1641,8 @@ see <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.
 <tr class="row-odd"><td><p>0x2000</p></td>
 <td><p>0x8000</p></td>
 <td><p>TDD CONTROL</p></td>
-<td><p>See the <a class="reference external" href="#hdl-regmap-TDD_CNTRL">Transceiver TDD Control</a> table for more details.</p></td>
+<td><p>See the <a class="reference external" href="#hdl-regmap-TDD_CNTRL">Transceiver TDD Control</a> table for
+more details.</p></td>
 </tr>
 </tbody>
 </table>
@@ -5047,6 +5063,37 @@ memory for transmit.</p>
 </section>
 </section>
 </div></section>
+<section id="design-guidelines">
+<h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Permalink to this heading"></a></h2>
+<p>The IP was developed as part of the <a class="reference internal" href="../../projects/fmcomms2/index.html#fmcomms2"><span class="std std-ref">FMCOMMS2/3/4 HDL Project</span></a> reference design.</p>
+<p>The control of the AD9361 is done through an SPI interface, which is needed at
+the system level. The ENABLE and TXNRX signals must be connected at the system
+level to control the ENSM state machine. In TDD mode, these are driven by the
+integrated TDD controller; see <a class="reference internal" href="tdd_support.html#axi-ad9361-tdd"><span class="std std-ref">HDL Support for AD9361 TDD Mode</span></a> for details.</p>
+<p>The <em>ADC/DAC interface signals</em> must be connected directly to the top file of
+the design, as IO primitives are part of the IP.</p>
+<p>The example designs use a DMA to move data between the IP and memory. If the
+data needs to be processed in HDL before moving to memory, this can be done at
+the output of the IP (at system level) or inside the ADC/DAC channel module
+(at IP level).</p>
+<p>The example designs use a processor to program all the registers. If no
+processor is available in your system, you can create your own IP starting from
+the interface module.</p>
+</section>
+<section id="software-guidelines">
+<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading"></a></h2>
+<p>The software for this IP can be found as part of the <a class="reference internal" href="../../projects/fmcomms2/index.html#fmcomms2"><span class="std std-ref">FMCOMMS2/3/4 HDL Project</span></a> reference
+design.</p>
+<p>The AD9361 Linux driver uses the IIO framework and exposes the transceiver as
+an IIO device. When TDD mode is used, the TDD controller is instantiated as a
+separate IIO device. Devicetree configuration is required to instantiate the
+TDD core driver; refer to <a class="reference internal" href="tdd_support.html#axi-ad9361-tdd"><span class="std std-ref">HDL Support for AD9361 TDD Mode</span></a> for the required properties
+and example.</p>
+<p>To switch between FDD and TDD modes, the <code class="docutils literal notranslate"><span class="pre">adi,frequency-division-duplex-mode-enable</span></code>
+devicetree property must be set accordingly. In TDD mode, the
+<code class="docutils literal notranslate"><span class="pre">TDD_DISABLE</span></code> HDL parameter must be set to 0 (default) to enable the
+integrated TDD controller.</p>
+</section>
 <section id="software-support">
 <h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
 <p>The software for this IP can be found as part of the FMCOMMS2/3/4/5
@@ -5078,7 +5125,7 @@ reference designs.</p>
               <div class="related">
                 &nbsp;
     <a href="../axi_ad9265/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AXI AD9265</a>
-    <a href="../axi_ad9467/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AXI AD9467</a>
+    <a href="tdd_support.html" title="Next document (Alt+Shift+RightArrow)" class="next">HDL Support for AD9361 TDD Mode</a>
               </div>
           
         </div>
