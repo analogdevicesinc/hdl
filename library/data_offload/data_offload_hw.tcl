@@ -131,6 +131,28 @@ set_parameter_property SYNC_EXT_ADD_INTERNAL_CDC GROUP $group
 
 set group "AXI Stream Configuration"
 
+# A converter source has no backpressure: util_cpack2 in FIFO mode ties its own
+# ready high and reports loss through fifo_wr_overflow. Selecting FIFO here swaps
+# s_axis for the two conduits that mode drives, mirroring util_upack2_hw.tcl.
+# Default 1 keeps s_axis as it always was, so existing consumers are unaffected.
+add_parameter SRC_HAS_AXIS_TKEEP INTEGER 1
+set_parameter_property SRC_HAS_AXIS_TKEEP DISPLAY_NAME "Subordinate AXI Stream interface has TKEEP"
+set_parameter_property SRC_HAS_AXIS_TKEEP DISPLAY_HINT boolean
+set_parameter_property SRC_HAS_AXIS_TKEEP HDL_PARAMETER false
+set_parameter_property SRC_HAS_AXIS_TKEEP GROUP $group
+
+add_parameter SRC_HAS_AXIS_TLAST INTEGER 1
+set_parameter_property SRC_HAS_AXIS_TLAST DISPLAY_NAME "Subordinate AXI Stream interface has TLAST"
+set_parameter_property SRC_HAS_AXIS_TLAST DISPLAY_HINT boolean
+set_parameter_property SRC_HAS_AXIS_TLAST HDL_PARAMETER false
+set_parameter_property SRC_HAS_AXIS_TLAST GROUP $group
+
+add_parameter SRC_INTERFACE_TYPE INTEGER 0
+set_parameter_property SRC_INTERFACE_TYPE DISPLAY_NAME "Source interface type"
+set_parameter_property SRC_INTERFACE_TYPE ALLOWED_RANGES { "0:AXIS" "1:FIFO" }
+set_parameter_property SRC_INTERFACE_TYPE HDL_PARAMETER false
+set_parameter_property SRC_INTERFACE_TYPE GROUP $group
+
 add_parameter HAS_AXIS_TKEEP INTEGER 0                                                                   
 set_parameter_property HAS_AXIS_TKEEP DISPLAY_NAME "Manager AXI Stream interface has TKEEP"                      
 set_parameter_property HAS_AXIS_TKEEP DISPLAY_HINT boolean                                               
@@ -182,15 +204,6 @@ add_interface_port s_storage_axis  s_storage_axis_keep  tkeep  Input  DST_DATA_W
 ad_interface clock s_axis_aclk input 1 clk
 ad_interface reset-n s_axis_aresetn input 1 if_s_axis_aclk
 
-add_interface s_axis axi4stream end
-set_interface_property s_axis associatedClock if_s_axis_aclk
-set_interface_property s_axis associatedReset if_s_axis_aresetn
-add_interface_port s_axis  s_axis_valid tvalid Input  1
-add_interface_port s_axis  s_axis_last  tlast  Input  1
-add_interface_port s_axis  s_axis_ready tready Output 1
-add_interface_port s_axis  s_axis_data  tdata  Input  SRC_DATA_WIDTH
-add_interface_port s_axis  s_axis_keep  tkeep  Input  SRC_DATA_WIDTH/8
-
 add_interface m_storage_axis axi4stream start
 set_interface_property m_storage_axis associatedClock if_s_axis_aclk
 set_interface_property m_storage_axis associatedReset if_s_axis_aresetn
@@ -218,6 +231,50 @@ ad_interface signal rd_response_eot             Input  1
 ad_interface signal rd_underflow                Input  1
 
 proc data_offload_elaborate {} {
+  # s_axis is declared here rather than at file scope: a disabled interface still
+  # emits its ports into the wrapper, so the fragment view below would connect
+  # them a second time. util_upack2_hw.tcl builds its ports the same way.
+  set src_width [get_parameter_value SRC_DATA_WIDTH]
+
+  if {[get_parameter_value SRC_INTERFACE_TYPE] == 0} {
+    add_interface s_axis axi4stream end
+    set_interface_property s_axis associatedClock if_s_axis_aclk
+    set_interface_property s_axis associatedReset if_s_axis_aresetn
+    add_interface_port s_axis  s_axis_valid tvalid Input  1
+    add_interface_port s_axis  s_axis_last  tlast  Input  1
+    add_interface_port s_axis  s_axis_ready tready Output 1
+    add_interface_port s_axis  s_axis_data  tdata  Input  $src_width
+    add_interface_port s_axis  s_axis_keep  tkeep  Input  [expr $src_width / 8]
+
+    if {[get_parameter_value SRC_HAS_AXIS_TLAST] == 0} {
+      set_port_property s_axis_last TERMINATION TRUE
+      set_port_property s_axis_last TERMINATION_VALUE 0
+    }
+    if {[get_parameter_value SRC_HAS_AXIS_TKEEP] == 0} {
+      set_port_property s_axis_keep TERMINATION TRUE
+      set_port_property s_axis_keep TERMINATION_VALUE [expr (1 << ($src_width / 8)) - 1]
+    }
+  } else {
+    # util_cpack2 in FIFO mode drives valid+data only and ignores ready. The
+    # conduits carry no associatedClock/Reset because cpack's do not either.
+    ad_interface signal src_fifo_wr_en input 1 valid
+    set_port_property src_fifo_wr_en fragment_list "s_axis_valid"
+    ad_interface signal src_fifo_wr_data input $src_width data
+    set_port_property src_fifo_wr_data fragment_list \
+      [format "s_axis_data(%d:0)" [expr $src_width - 1]]
+
+    # cpack drives neither ready, last nor keep. keep must be all ones: it feeds
+    # m_storage_axis_keep (data_offload.v:244), so floating it corrupts the write.
+    add_interface if_src_fifo_unused conduit end
+    add_interface_port if_src_fifo_unused s_axis_ready ready Output 1
+    add_interface_port if_src_fifo_unused s_axis_last  last  Input  1
+    add_interface_port if_src_fifo_unused s_axis_keep  keep  Input  [expr $src_width / 8]
+    set_port_property s_axis_last TERMINATION TRUE
+    set_port_property s_axis_last TERMINATION_VALUE 0
+    set_port_property s_axis_keep TERMINATION TRUE
+    set_port_property s_axis_keep TERMINATION_VALUE [expr (1 << ($src_width / 8)) - 1]
+    set_interface_property if_src_fifo_unused ENABLED false
+  }
   if {[get_parameter_value HAS_AXIS_TKEEP] == 0} {
     set_port_property m_axis_keep termination true
   }

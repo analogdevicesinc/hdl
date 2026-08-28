@@ -15,7 +15,7 @@ set_module_property INTERNAL false
 # parameters
 
 ad_ip_parameter DEVICE STRING "Agilex 5" false
-ad_ip_parameter ID NATURAL 0 false
+ad_ip_parameter ID NATURAL 0 false {AFFECTS_GENERATION true}
 ad_ip_parameter LINK_MODE INTEGER 1 false
 ad_ip_parameter LANE_RATE FLOAT 10000 false
 ad_ip_parameter REFCLK_FREQUENCY FLOAT 500.0 false
@@ -76,81 +76,89 @@ proc jesd204_e_tile_phy_composition_callback {} {
   # Instantiate native PHY in duplex mode because
   # Agilex 5 can't merge transceivers in dual simplex mode
   # unless you use an "approved" intel protocol IP
-  add_instance native_phy intel_directphy_gts
-  set_instance_parameter_value native_phy duplex_mode {duplex}
-  set_instance_parameter_value native_phy xcvr_type "FGT"
-  set_instance_parameter_value native_phy syspll_outclk_freq_mhz $phy_clk_frequency
-  set_instance_parameter_value native_phy num_xcvr_per_sys $num_of_lanes
-  set_instance_parameter_value native_phy clocking_mode "syspll"
-  set_instance_parameter_value native_phy pma_modulation "NRZ"
-  set_instance_parameter_value native_phy pma_data_rate $lane_rate
-  set_instance_parameter_value native_phy pma_width $pma_width
-  set_instance_parameter_value native_phy l_av1_enable 1
-  set_instance_parameter_value native_phy refclk_recovery_en 1
-  set_instance_parameter_value native_phy rx_deskew_en 0
+  #
+  # ID is part of the instance name: two PHY cores in the same system would
+  # otherwise compose identically-named intel_directphy_gts submodules.
+  set native_phy "native_phy_${id}"
+
+  add_instance ${native_phy} intel_directphy_gts
+  set_instance_parameter_value ${native_phy} duplex_mode {duplex}
+  set_instance_parameter_value ${native_phy} xcvr_type "FGT"
+  set_instance_parameter_value ${native_phy} syspll_outclk_freq_mhz $phy_clk_frequency
+  set_instance_parameter_value ${native_phy} num_xcvr_per_sys $num_of_lanes
+  set_instance_parameter_value ${native_phy} clocking_mode "syspll"
+  set_instance_parameter_value ${native_phy} pma_modulation "NRZ"
+  set_instance_parameter_value ${native_phy} pma_data_rate $lane_rate
+  set_instance_parameter_value ${native_phy} pma_width $pma_width
+  set_instance_parameter_value ${native_phy} l_av1_enable 1
+  set_instance_parameter_value ${native_phy} refclk_recovery_en 1
+  set_instance_parameter_value ${native_phy} rx_deskew_en 0
 
   # TX side parameters
-  set_instance_parameter_value native_phy tx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
-  set_instance_parameter_value native_phy pmaif_tx_fifo_mode_s "elastic"
-  set_instance_parameter_value native_phy pldif_tx_double_width_transfer_enable 1
-  set_instance_parameter_value native_phy pldif_tx_fifo_mode "phase_comp"
-  set_instance_parameter_value native_phy pldif_tile_tx_fifo_mode "phase_comp"
-  set_instance_parameter_value native_phy pldif_tx_fifo_pfull_thld 10
-  set_instance_parameter_value native_phy tx_pll_txuserclk1_enable 1
-  set_instance_parameter_value native_phy tx_pll_txuserclk_div $usr_pll_div
-  set_instance_parameter_value native_phy enable_port_tx_clkout2 1
-  # set_instance_parameter_value native_phy pldif_tx_clkout_sel "TX_USER_CLK1"
-  # set_instance_parameter_value native_phy pldif_tx_clkout_div 1
+  set_instance_parameter_value ${native_phy} tx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
+  set_instance_parameter_value ${native_phy} pmaif_tx_fifo_mode_s "elastic"
+  set_instance_parameter_value ${native_phy} pldif_tx_double_width_transfer_enable 1
+  set_instance_parameter_value ${native_phy} pldif_tx_fifo_mode "phase_comp"
+  set_instance_parameter_value ${native_phy} pldif_tile_tx_fifo_mode "phase_comp"
+  set_instance_parameter_value ${native_phy} pldif_tx_fifo_pfull_thld 10
+  set_instance_parameter_value ${native_phy} tx_pll_txuserclk1_enable 1
+  set_instance_parameter_value ${native_phy} tx_pll_txuserclk_div $usr_pll_div
+  set_instance_parameter_value ${native_phy} enable_port_tx_clkout2 1
+  set_instance_parameter_value ${native_phy} pldif_tx_clkout_sel "TX_USER_CLK1"
+  set_instance_parameter_value ${native_phy} pldif_tx_clkout_div 1
   #TODO: Fix me
-  set_instance_parameter_value native_phy pldif_tx_clkout_sel "TX_WORD_CLK"
-  set_instance_parameter_value native_phy pldif_tx_clkout_div 2
-  set_instance_parameter_value native_phy pldif_tx_clkout2_sel "TX_WORD_CLK"
-  set_instance_parameter_value native_phy pldif_tx_clkout2_div 2
-  set_instance_parameter_value native_phy tx_pll_realtime_lock_enable 1
+  # set_instance_parameter_value ${native_phy} pldif_tx_clkout_sel "TX_WORD_CLK"
+  # set_instance_parameter_value ${native_phy} pldif_tx_clkout_div 2
+  set_instance_parameter_value ${native_phy} pldif_tx_clkout2_sel "TX_WORD_CLK"
+  set_instance_parameter_value ${native_phy} pldif_tx_clkout2_div 2
+  set_instance_parameter_value ${native_phy} tx_pll_realtime_lock_enable 1
 
   # RX side parameters
-  set_instance_parameter_value native_phy rx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
-  set_instance_parameter_value native_phy pmaif_rx_fifo_mode_s "elastic"
-  set_instance_parameter_value native_phy pldif_rx_double_width_transfer_enable 1
-  set_instance_parameter_value native_phy rx_cdr_rxuserclk_enable 1
-  set_instance_parameter_value native_phy rx_cdr_rxuserclk_div $usr_pll_div
-  set_instance_parameter_value native_phy pldif_rx_fifo_pfull_thld 10
-  set_instance_parameter_value native_phy enable_port_rx_clkout2 1
-  set_instance_parameter_value native_phy pldif_rx_clkout_sel "RX_USER_CLK1"
-  set_instance_parameter_value native_phy pldif_rx_clkout_div 1
-  set_instance_parameter_value native_phy pldif_rx_clkout2_sel "RX_WORD_CLK"
-  set_instance_parameter_value native_phy pldif_rx_clkout2_div 2
-  set_instance_parameter_value native_phy rx_serdes_adapt_mode {auto}
+  set_instance_parameter_value ${native_phy} rx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
+  set_instance_parameter_value ${native_phy} pmaif_rx_fifo_mode_s "elastic"
+  set_instance_parameter_value ${native_phy} pldif_rx_double_width_transfer_enable 1
+  set_instance_parameter_value ${native_phy} rx_cdr_rxuserclk_enable 1
+  set_instance_parameter_value ${native_phy} rx_cdr_rxuserclk_div $usr_pll_div
+  set_instance_parameter_value ${native_phy} pldif_rx_fifo_pfull_thld 10
+  set_instance_parameter_value ${native_phy} enable_port_rx_clkout2 1
+  set_instance_parameter_value ${native_phy} pldif_rx_clkout_sel "RX_USER_CLK1"
+  #TODO: Fix me
+  set_instance_parameter_value ${native_phy} pldif_rx_clkout_div 1
+  set_instance_parameter_value ${native_phy} pldif_rx_clkout2_sel "RX_WORD_CLK"
+  set_instance_parameter_value ${native_phy} pldif_rx_clkout2_div 2
+  set_instance_parameter_value ${native_phy} rx_serdes_adapt_mode {auto}
 
   if {$instantiate_reset_controller} {
     # GTS Reset IP
-    add_instance gts_reset_phy intel_srcss_gts
-    set_instance_parameter_value gts_reset_phy NUM_BANKS_SHORELINE [expr int(ceil($num_of_lanes / 4.0))]
-    set_instance_parameter_value gts_reset_phy NUM_LANES_SHORELINE $num_of_lanes
+    set gts_reset_phy "gts_reset_phy_${id}"
 
-    add_connection gts_reset_phy.o_pma_cu_clk native_phy.i_pma_cu_clk
-    add_connection gts_reset_phy.o_src_rs_grant native_phy.i_src_rs_grant
-    add_connection native_phy.o_src_rs_req gts_reset_phy.i_src_rs_req
-    # add_connection native_phy.o_refclk_bus_out gts_reset_phy.i_refclk_bus_out
+    add_instance ${gts_reset_phy} intel_srcss_gts
+    set_instance_parameter_value ${gts_reset_phy} NUM_BANKS_SHORELINE [expr int(ceil($num_of_lanes / 4.0))]
+    set_instance_parameter_value ${gts_reset_phy} NUM_LANES_SHORELINE $num_of_lanes
+
+    add_connection ${gts_reset_phy}.o_pma_cu_clk ${native_phy}.i_pma_cu_clk
+    add_connection ${gts_reset_phy}.o_src_rs_grant ${native_phy}.i_src_rs_grant
+    add_connection ${native_phy}.o_src_rs_req ${gts_reset_phy}.i_src_rs_req
+    # add_connection ${native_phy}.o_refclk_bus_out ${gts_reset_phy}.i_refclk_bus_out
 
     add_interface gts_reset_src_rs_priority conduit end
-    set_interface_property gts_reset_src_rs_priority EXPORT_OF gts_reset_phy.i_src_rs_priority
+    set_interface_property gts_reset_src_rs_priority EXPORT_OF ${gts_reset_phy}.i_src_rs_priority
   } else {
     # Use external reset controller
     add_interface o_src_rs_req conduit end
-    set_interface_property o_src_rs_req EXPORT_OF native_phy.o_src_rs_req
+    set_interface_property o_src_rs_req EXPORT_OF ${native_phy}.o_src_rs_req
 
     add_interface i_pma_cu_clk conduit end
-    set_interface_property i_pma_cu_clk EXPORT_OF native_phy.i_pma_cu_clk
+    set_interface_property i_pma_cu_clk EXPORT_OF ${native_phy}.i_pma_cu_clk
 
     add_interface i_src_rs_grant conduit end
-    set_interface_property i_src_rs_grant EXPORT_OF native_phy.i_src_rs_grant
+    set_interface_property i_src_rs_grant EXPORT_OF ${native_phy}.i_src_rs_grant
 
     add_interface i_refclk_cmd_bus_in conduit end
-    set_interface_property i_refclk_cmd_bus_in EXPORT_OF native_phy.i_refclk_cmd_bus_in
+    set_interface_property i_refclk_cmd_bus_in EXPORT_OF ${native_phy}.i_refclk_cmd_bus_in
 
     add_interface o_refclk_status_bus_out conduit end
-    set_interface_property o_refclk_status_bus_out EXPORT_OF native_phy.o_refclk_status_bus_out
+    set_interface_property o_refclk_status_bus_out EXPORT_OF ${native_phy}.o_refclk_status_bus_out
   }
 
   # Instantiate PHY glues (RX and TX)
@@ -174,30 +182,30 @@ proc jesd204_e_tile_phy_composition_callback {} {
   set_interface_property system_pll_clk EXPORT_OF phy_glue.system_pll_clk
 
   add_interface system_pll_lock conduit end
-  set_interface_property system_pll_lock EXPORT_OF native_phy.i_system_pll_lock
+  set_interface_property system_pll_lock EXPORT_OF ${native_phy}.i_system_pll_lock
 
   add_interface tx_reset conduit end
-  set_interface_property tx_reset EXPORT_OF native_phy.i_tx_reset
+  set_interface_property tx_reset EXPORT_OF ${native_phy}.i_tx_reset
   add_interface rx_reset conduit end
-  set_interface_property rx_reset EXPORT_OF native_phy.i_rx_reset
+  set_interface_property rx_reset EXPORT_OF ${native_phy}.i_rx_reset
   foreach x {reset_ack ready} {
     add_interface tx_${x} conduit end
-    set_interface_property tx_${x} EXPORT_OF native_phy.o_tx_${x}
+    set_interface_property tx_${x} EXPORT_OF ${native_phy}.o_tx_${x}
     add_interface rx_${x} conduit end
-    set_interface_property rx_${x} EXPORT_OF native_phy.o_rx_${x}
+    set_interface_property rx_${x} EXPORT_OF ${native_phy}.o_rx_${x}
   }
 
   add_interface tx_pll_locked conduit end
-  set_interface_property tx_pll_locked EXPORT_OF native_phy.o_tx_pll_locked
+  set_interface_property tx_pll_locked EXPORT_OF ${native_phy}.o_tx_pll_locked
 
   add_interface rx_is_lockedtodata conduit end
-  set_interface_property rx_is_lockedtodata EXPORT_OF native_phy.o_rx_is_lockedtodata
+  set_interface_property rx_is_lockedtodata EXPORT_OF ${native_phy}.o_rx_is_lockedtodata
 
   foreach x {serial_data serial_data_n} {
     add_interface tx_${x} conduit end
-    set_interface_property tx_${x} EXPORT_OF native_phy.o_tx_${x}
+    set_interface_property tx_${x} EXPORT_OF ${native_phy}.o_tx_${x}
     add_interface rx_${x} conduit end
-    set_interface_property rx_${x} EXPORT_OF native_phy.i_rx_${x}
+    set_interface_property rx_${x} EXPORT_OF ${native_phy}.i_rx_${x}
   }
 
   if {$link_mode == 2} {
@@ -210,12 +218,12 @@ proc jesd204_e_tile_phy_composition_callback {} {
     add_connection rx_link_clock.clk phy_glue.rx_coreclkin
   }
 
-  add_connection phy_glue.phy_tx_coreclkin native_phy.i_tx_coreclkin
-  add_connection phy_glue.phy_rx_coreclkin native_phy.i_rx_coreclkin
+  add_connection phy_glue.phy_tx_coreclkin ${native_phy}.i_tx_coreclkin
+  add_connection phy_glue.phy_rx_coreclkin ${native_phy}.i_rx_coreclkin
   # Reconfig interface
-  add_connection phy_glue.phy_reconfig_clk native_phy.i_reconfig_clk
-  add_connection phy_glue.phy_reconfig_reset native_phy.i_reconfig_reset
-  add_connection phy_glue.phy_reconfig_avmm native_phy.reconfig
+  add_connection phy_glue.phy_reconfig_clk ${native_phy}.i_reconfig_clk
+  add_connection phy_glue.phy_reconfig_reset ${native_phy}.i_reconfig_reset
+  add_connection phy_glue.phy_reconfig_avmm ${native_phy}.reconfig
 
   add_interface reconfig_clk clock sink
   set_interface_property reconfig_clk EXPORT_OF phy_glue.reconfig_clk
@@ -227,15 +235,15 @@ proc jesd204_e_tile_phy_composition_callback {} {
   set_interface_property reconfig_avmm EXPORT_OF phy_glue.reconfig_avmm
 
   # connect ref clock and output clock from - to GLUE
-  add_connection phy_glue.phy_tx_ref_clk native_phy.i_tx_pll_refclk_p
-  add_connection phy_glue.phy_rx_ref_clk native_phy.i_rx_cdr_refclk_p
-  add_connection phy_glue.phy_system_pll_clk native_phy.i_system_pll_clk
+  add_connection phy_glue.phy_tx_ref_clk ${native_phy}.i_tx_pll_refclk_p
+  add_connection phy_glue.phy_rx_ref_clk ${native_phy}.i_rx_cdr_refclk_p
+  add_connection phy_glue.phy_system_pll_clk ${native_phy}.i_system_pll_clk
 
   # add_connection phy_glue.phy_refclk_xcvr gts_pll.refclk_xcvr
 
   foreach x [list clkout2 clkout] {
-    add_connection phy_glue.phy_tx_${x} native_phy.o_tx_${x}
-    add_connection phy_glue.phy_rx_${x} native_phy.o_rx_${x}
+    add_connection phy_glue.phy_tx_${x} ${native_phy}.o_tx_${x}
+    add_connection phy_glue.phy_rx_${x} ${native_phy}.o_rx_${x}
   }
 
   # This is lane rate / 40 (jesd204b) or lane rate / 64 (jesd204c)
@@ -250,8 +258,8 @@ proc jesd204_e_tile_phy_composition_callback {} {
   add_interface rx_clkout clock source
   set_interface_property rx_clkout EXPORT_OF phy_glue.rx_clkout_0
 
-  add_connection phy_glue.phy_i_tx_parallel_data native_phy.i_tx_parallel_data
-  add_connection phy_glue.phy_o_rx_parallel_data native_phy.o_rx_parallel_data
+  add_connection phy_glue.phy_i_tx_parallel_data ${native_phy}.i_tx_parallel_data
+  add_connection phy_glue.phy_o_rx_parallel_data ${native_phy}.o_rx_parallel_data
 
   # Connect GLUE with PCS
   for {set i 0} {$i < $num_of_lanes} {incr i} {
@@ -298,7 +306,7 @@ proc jesd204_e_tile_phy_composition_callback {} {
       add_instance tx_fifo_${i} fifo
       set_instance_parameter_value tx_fifo_${i} GUI_CLOCKS_ARE_SYNCHRONIZED {0}
       set_instance_parameter_value tx_fifo_${i} GUI_Clock {4}
-      set_instance_parameter_value tx_fifo_${i} GUI_DISABLE_DCFIFO_EMBEDDED_TIMING_CONSTRAINT {1}
+      set_instance_parameter_value tx_fifo_${i} GUI_DISABLE_DCFIFO_EMBEDDED_TIMING_CONSTRAINT {0}
       set_instance_parameter_value tx_fifo_${i} GUI_Depth {32}
       set_instance_parameter_value tx_fifo_${i} GUI_Empty {1}
       set_instance_parameter_value tx_fifo_${i} GUI_Full {1}
@@ -336,7 +344,7 @@ proc jesd204_e_tile_phy_composition_callback {} {
       add_instance rx_fifo_${i} fifo
       set_instance_parameter_value rx_fifo_${i} GUI_CLOCKS_ARE_SYNCHRONIZED {0}
       set_instance_parameter_value rx_fifo_${i} GUI_Clock {4}
-      set_instance_parameter_value rx_fifo_${i} GUI_DISABLE_DCFIFO_EMBEDDED_TIMING_CONSTRAINT {1}
+      set_instance_parameter_value rx_fifo_${i} GUI_DISABLE_DCFIFO_EMBEDDED_TIMING_CONSTRAINT {0}
       set_instance_parameter_value rx_fifo_${i} GUI_Depth {32}
       set_instance_parameter_value rx_fifo_${i} GUI_Empty {1}
       set_instance_parameter_value rx_fifo_${i} GUI_Full {1}

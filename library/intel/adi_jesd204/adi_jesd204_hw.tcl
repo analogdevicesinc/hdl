@@ -123,6 +123,17 @@ ad_ip_parameter EXTERNAL_PHY BOOLEAN 0 false { \
   ALLOWED_RANGES { "0:Internal" "1:External" }
 }
 
+# GTS lanes that span more than one shoreline bank need one external PHY
+# instance per bank; axi_adxcvr then owns a reset handshake per instance.
+ad_ip_parameter NUM_OF_PHYS INTEGER 1 false { \
+  DISPLAY_NAME "Number of external PHY instances" \
+  ALLOWED_RANGES {1:4} \
+}
+
+ad_ip_parameter RESET_FSM_EN BOOLEAN 0 false { \
+  DISPLAY_NAME "Sequence the external PHY reset in axi_adxcvr" \
+}
+
 proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
 
   set device [get_parameter_value DEVICE_FAMILY]
@@ -296,13 +307,11 @@ proc jesd204_validate {{quiet false}} {
   set device_family [get_parameter_value "DEVICE_FAMILY"]
   set device [get_parameter_value "DEVICE"]
   set lane_rate [get_parameter_value "LANE_RATE"]
-  set real_num_of_lanes [get_parameter_value "NUM_OF_LANES"]
+  set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
   set num_of_links [get_parameter_value "NUM_OF_LINKS"]
   set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
   set link_mode [get_parameter_value "LINK_MODE"]
   set external_phy [get_parameter_value "EXTERNAL_PHY"]
-
-  set num_of_lanes [expr $real_num_of_lanes * $num_of_links]
 
   if {$device_family != "Arria 10" && $device_family != "Stratix 10" && $device_family != "Agilex 7" && $device_family != "Agilex 5"} {
     if {!$quiet} {
@@ -359,7 +368,7 @@ proc jesd204_compose {} {
   set id [get_parameter_value "ID"]
   set lane_rate [get_parameter_value "LANE_RATE"]
   set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
-  set real_num_of_lanes [get_parameter_value "NUM_OF_LANES"]
+  set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
   set num_of_links [get_parameter_value "NUM_OF_LINKS"]
   set sysclk_frequency [get_parameter_value "SYSCLK_FREQUENCY"]
   set refclk_frequency [get_parameter_value "REFCLK_FREQUENCY"]
@@ -375,8 +384,8 @@ proc jesd204_compose {} {
   set data_path_width [get_parameter_value "DATA_PATH_WIDTH"]
   set link_mode [get_parameter_value "LINK_MODE"]
   set external_phy [get_parameter_value "EXTERNAL_PHY"]
-
-  set num_of_lanes [expr $real_num_of_lanes * $num_of_links]
+  set num_of_phys [get_parameter_value "NUM_OF_PHYS"]
+  set reset_fsm_en [get_parameter_value "RESET_FSM_EN"]
 
   set sip_tile ""
   set sip_tile_info [quartus::device::get_part_info -sip_tile $device]
@@ -394,7 +403,7 @@ proc jesd204_compose {} {
   set linkclk_frequency [expr $lane_rate / $link_clk_div]
   set deviceclk_frequency [expr $linkclk_frequency * $data_path_width / $tpl_data_path_width]
 
-  set dual_clk_mode [expr $tpl_data_path_width > 4 || $link_mode == 2]
+  set dual_clk_mode [expr $tpl_data_path_width > 4 || $link_mode == 2 || $num_of_links > 1]
 
   if {![jesd204_validate true]} {
     return
@@ -531,6 +540,8 @@ proc jesd204_compose {} {
   set_instance_parameter_value axi_xcvr {ID} $id
   set_instance_parameter_value axi_xcvr {TX_OR_RX_N} $tx_or_rx_n
   set_instance_parameter_value axi_xcvr {NUM_OF_LANES} $num_of_lanes
+  set_instance_parameter_value axi_xcvr {NUM_OF_PHYS} $num_of_phys
+  set_instance_parameter_value axi_xcvr {RESET_FSM_EN} $reset_fsm_en
 
   add_connection sys_clock.clk axi_xcvr.s_axi_clock
   add_connection sys_clock.clk_reset axi_xcvr.s_axi_reset
@@ -640,22 +651,34 @@ proc jesd204_compose {} {
 
     # When running in gearbox mode, the device clock will be slower
     # than the link clock so we can't use it
-    if {$data_path_width < $tpl_data_path_width} {
+    #TODO: Fix me
+    # if {$data_path_width < $tpl_data_path_width} {
       add_interface phy_link_clk clock sink
       set_interface_property phy_link_clk EXPORT_OF link_clock.in_clk
-    } else {
-      add_connection $device_clock link_clock.in_clk
+    # } else {
+      # add_connection $device_clock link_clock.in_clk
+    # }
+
+    add_interface if_up_rst reset source
+    set_interface_property if_up_rst EXPORT_OF axi_xcvr.if_up_rst
+
+    # Mirrors axi_adxcvr: unsuffixed for a single PHY, _<i> above that.
+    for {set i 0} {$i < $num_of_phys} {incr i} {
+      if {$num_of_phys == 1} {
+        set suffix ""
+      } else {
+        set suffix "_$i"
+      }
+      foreach x {ready reset reset_ack} {
+        add_interface ${x}$suffix conduit end
+        set_interface_property ${x}$suffix EXPORT_OF axi_xcvr.${x}$suffix
+      }
     }
 
-    add_interface ready conduit end
-    add_interface reset conduit end
-    add_interface reset_ack conduit end
-    add_interface if_up_rst reset source
-
-    set_interface_property ready EXPORT_OF axi_xcvr.ready
-    set_interface_property reset EXPORT_OF axi_xcvr.reset
-    set_interface_property reset_ack EXPORT_OF axi_xcvr.reset_ack
-    set_interface_property if_up_rst EXPORT_OF axi_xcvr.if_up_rst
+    if {$reset_fsm_en} {
+      add_interface phy_status conduit end
+      set_interface_property phy_status EXPORT_OF axi_xcvr.phy_status
+    }
 
     if {$tx_or_rx_n} {
       add_interface tx_pll_locked conduit end
@@ -680,7 +703,7 @@ proc jesd204_compose {} {
   }
 
   add_instance axi_jesd204_${tx_rx} axi_jesd204_${tx_rx}
-  set_instance_parameter_value axi_jesd204_${tx_rx} {NUM_LANES} $real_num_of_lanes
+  set_instance_parameter_value axi_jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
   set_instance_parameter_value axi_jesd204_${tx_rx} {NUM_LINKS} $num_of_links
   set_instance_parameter_value axi_jesd204_${tx_rx} {LINK_MODE} $link_mode
 
@@ -688,7 +711,7 @@ proc jesd204_compose {} {
   add_connection sys_clock.clk_reset axi_jesd204_${tx_rx}.s_axi_reset
 
   add_instance jesd204_${tx_rx} jesd204_${tx_rx}
-  set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $real_num_of_lanes
+  set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
   set_instance_parameter_value jesd204_${tx_rx} {NUM_LINKS} $num_of_links
   set_instance_parameter_value jesd204_${tx_rx} {ASYNC_CLK} $dual_clk_mode
   set_instance_parameter_value jesd204_${tx_rx} {TPL_DATA_PATH_WIDTH} $tpl_data_path_width

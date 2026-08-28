@@ -48,8 +48,13 @@ module axi_adxcvr #(
   parameter   integer XCVR_TYPE = 0,
   parameter   integer TX_OR_RX_N = 0,
   parameter   integer NUM_OF_LANES = 4,
-  parameter           LOCKED_W = (FPGA_TECHNOLOGY == 105) ?  NUM_OF_LANES : 1,
-  parameter           READY_W = (FPGA_TECHNOLOGY != 105) ?  NUM_OF_LANES : 1
+  parameter   integer NUM_OF_PHYS = 1,
+  parameter   integer RESET_FSM_EN = 0,
+  parameter           GTS = (FPGA_TECHNOLOGY == 105 || FPGA_TECHNOLOGY == 106),
+  parameter           LOCKED_W = GTS ? NUM_OF_LANES : 1,
+  // On GTS the ready/reset_ack handshake is per PHY instance, not per lane.
+  parameter           READY_W = GTS ? NUM_OF_PHYS : NUM_OF_LANES,
+  parameter           RESET_W = GTS ? NUM_OF_PHYS : 1
 ) (
 
   // xcvr, lane-pll and ref-pll are shared
@@ -60,7 +65,13 @@ module axi_adxcvr #(
   input    [READY_W-1  : 0]     up_ready,
   input    [READY_W-1  : 0]     up_reset_ack,
 
-  output                        xcvr_reset,
+  output   [RESET_W-1  : 0]     xcvr_reset,
+
+  // Per-PHY observability. The register map only ever reports these reduced
+  // across every PHY, which cannot say which PHY is holding the link down.
+  output   [RESET_W-1  : 0]     phy_reset_done,
+  output   [READY_W-1  : 0]     phy_ready,
+  output   [READY_W-1  : 0]     phy_reset_ack,
 
   input                         s_axi_aclk,
   input                         s_axi_aresetn,
@@ -85,6 +96,10 @@ module axi_adxcvr #(
   input                         s_axi_rready
 );
 
+  // The register map reports one ready/reset_ack bit, so a multi-PHY link is
+  // only ready once every PHY is.
+  localparam UP_READY_W = GTS ? 1 : NUM_OF_LANES;
+
   // internal signals
 
   wire                          up_rstn;
@@ -103,13 +118,50 @@ module axi_adxcvr #(
   assign up_rstn = s_axi_aresetn;
   assign up_clk = s_axi_aclk;
 
-  assign xcvr_reset = up_rst;
+  wire [READY_W-1:0]    up_ready_s;
+  wire [READY_W-1:0]    up_reset_ack_s;
+  wire                  up_pll_locked_s;
+  wire                  up_rx_lockedtodata_s;
+  wire [RESET_W-1:0]    fsm_ack_latched;
+  wire [UP_READY_W-1:0] up_ready_int;
+  wire                  up_reset_ack_int;
 
-  // CDC
-  wire [READY_W-1:0] up_ready_s;
-  wire [READY_W-1:0] up_reset_ack_s;
-  wire               up_pll_locked_s;
-  wire               up_rx_lockedtodata_s;
+  genvar i;
+  generate
+  if (GTS && RESET_FSM_EN) begin: g_reset_fsm
+
+    for (i = 0; i < NUM_OF_PHYS; i = i + 1) begin: g_phy
+      adxcvr_gts_phy_reset i_phy_reset (
+        .clk (up_clk),
+        .resetn (up_rstn),
+        .req (up_rst),
+        .reset_ack (up_reset_ack_s[i]),
+        .ready (up_ready_s[i]),
+        .reset (xcvr_reset[i]),
+        .ack_latched (fsm_ack_latched[i]),
+        .done (phy_reset_done[i]));
+    end
+
+    assign up_reset_ack_int = &fsm_ack_latched;
+
+  end else begin: g_reset_direct
+
+    assign xcvr_reset = {RESET_W{up_rst}};
+    assign fsm_ack_latched = {RESET_W{1'b0}};
+    assign phy_reset_done = {RESET_W{1'b0}};
+    assign up_reset_ack_int = &up_reset_ack_s;
+
+  end
+
+  assign phy_ready = up_ready_s;
+  assign phy_reset_ack = up_reset_ack_s;
+
+  if (GTS) begin
+    assign up_ready_int = &up_ready_s;
+  end else begin
+    assign up_ready_int = up_ready_s;
+  end
+  endgenerate
 
   sync_bits #(
     .NUM_OF_BITS(1),
@@ -159,13 +211,13 @@ module axi_adxcvr #(
     .FPGA_VOLTAGE (FPGA_VOLTAGE),
     .TX_OR_RX_N (TX_OR_RX_N),
     .NUM_OF_LANES (NUM_OF_LANES),
-    .READY_W (READY_W)
+    .READY_W (UP_READY_W)
   ) i_up (
     .up_rst (up_rst),
     .up_pll_locked (up_pll_locked_s),
     .up_rx_lockedtodata (up_rx_lockedtodata_s),
-    .up_ready (up_ready_s),
-    .up_reset_ack (up_reset_ack_s),
+    .up_ready (up_ready_int),
+    .up_reset_ack (up_reset_ack_int),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),

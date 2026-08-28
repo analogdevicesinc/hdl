@@ -23,6 +23,7 @@ ad_ip_files axi_adxcvr [list \
   $ad_hdl_dir/library/common/up_axi.v \
   axi_adxcvr_up.v \
   axi_adxcvr.v \
+  adxcvr_gts_phy_reset.v \
   axi_adxcvr_constr.sdc \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl \
@@ -44,6 +45,20 @@ add_parameter NUM_OF_LANES INTEGER 4
 set_parameter_property NUM_OF_LANES DISPLAY_NAME NUM_OF_LANES
 set_parameter_property NUM_OF_LANES UNITS None
 set_parameter_property NUM_OF_LANES HDL_PARAMETER true
+
+# GTS only. Lanes that span more than one shoreline bank need one PHY instance
+# per bank, and each instance carries its own reset/ready handshake.
+add_parameter NUM_OF_PHYS INTEGER 1
+set_parameter_property NUM_OF_PHYS DISPLAY_NAME NUM_OF_PHYS
+set_parameter_property NUM_OF_PHYS UNITS None
+set_parameter_property NUM_OF_PHYS ALLOWED_RANGES {1:4}
+set_parameter_property NUM_OF_PHYS HDL_PARAMETER true
+
+add_parameter RESET_FSM_EN INTEGER 0
+set_parameter_property RESET_FSM_EN DISPLAY_NAME RESET_FSM_EN
+set_parameter_property RESET_FSM_EN UNITS None
+set_parameter_property RESET_FSM_EN ALLOWED_RANGES {0:1}
+set_parameter_property RESET_FSM_EN HDL_PARAMETER true
 
 adi_add_auto_fpga_spec_params
 
@@ -70,6 +85,8 @@ proc p_axi_adxcvr {} {
   set fpga_technology [get_parameter_value FPGA_TECHNOLOGY]
   set m_tx_or_rx_n [get_parameter_value TX_OR_RX_N]
   set m_num_of_lanes [get_parameter_value NUM_OF_LANES]
+  set m_num_of_phys [get_parameter_value NUM_OF_PHYS]
+  set m_reset_fsm_en [get_parameter_value RESET_FSM_EN]
 
   if {$m_tx_or_rx_n} {
     set rx_tx "tx"
@@ -80,14 +97,39 @@ proc p_axi_adxcvr {} {
   # 105 = Agilex, see adi_intel_device_info_enc.tcl
   if {$fpga_technology == 105 || $fpga_technology == 106} {
 
-    add_interface ready conduit end
-    add_interface_port ready up_ready ${rx_tx}_ready input 1
+    # A single PHY keeps the unsuffixed interface names, so every existing
+    # consumer of this IP is unaffected. Above one, each PHY gets its own
+    # interface carrying a one-bit fragment of the vector port.
+    for {set i 0} {$i < $m_num_of_phys} {incr i} {
 
-    add_interface reset conduit start
-    add_interface_port reset xcvr_reset ${rx_tx}_reset output 1
+      if {$m_num_of_phys == 1} {
+        set suffix ""
+      } else {
+        set suffix "_$i"
+      }
 
-    add_interface reset_ack conduit end
-    add_interface_port reset_ack up_reset_ack ${rx_tx}_reset_ack input 1
+      add_interface ready$suffix conduit end
+      add_interface_port ready$suffix up_ready$suffix ${rx_tx}_ready input 1
+
+      add_interface reset$suffix conduit start
+      add_interface_port reset$suffix xcvr_reset$suffix ${rx_tx}_reset output 1
+
+      add_interface reset_ack$suffix conduit end
+      add_interface_port reset_ack$suffix up_reset_ack$suffix ${rx_tx}_reset_ack input 1
+
+      if {$m_num_of_phys > 1} {
+        set_port_property up_ready$suffix fragment_list "up_ready($i:$i)"
+        set_port_property xcvr_reset$suffix fragment_list "xcvr_reset($i:$i)"
+        set_port_property up_reset_ack$suffix fragment_list "up_reset_ack($i:$i)"
+      }
+    }
+
+    if {$m_reset_fsm_en} {
+      add_interface phy_status conduit end
+      add_interface_port phy_status phy_reset_done ${rx_tx}_reset_done output $m_num_of_phys
+      add_interface_port phy_status phy_ready ${rx_tx}_phy_ready output $m_num_of_phys
+      add_interface_port phy_status phy_reset_ack ${rx_tx}_phy_reset_ack output $m_num_of_phys
+    }
 
     if {$m_tx_or_rx_n == 0} {
       if {$fpga_technology == 105} {

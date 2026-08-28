@@ -132,7 +132,7 @@ add_interface config conduit end
 set_interface_property config associatedClock clock
 set_interface_property config associatedReset reset
 
-add_interface_port config cfg_lanes_disable lanes_disable Input NUM_LINKS*NUM_LANES
+add_interface_port config cfg_lanes_disable lanes_disable Input NUM_LANES
 add_interface_port config cfg_links_disable links_disable Input NUM_LINKS
 add_interface_port config cfg_octets_per_multiframe octets_per_multiframe Input 10
 add_interface_port config cfg_octets_per_frame octets_per_frame Input 8
@@ -164,12 +164,12 @@ set_interface_property status associatedClock clock
 set_interface_property status associatedReset reset
 
 add_interface_port status status_ctrl_state ctrl_state Output 2
-add_interface_port status status_lane_cgs_state lane_cgs_state Output 2*NUM_LINKS*NUM_LANES
-add_interface_port status status_lane_ifs_ready lane_ifs_ready Output NUM_LINKS*NUM_LANES
-add_interface_port status status_lane_latency lane_latency Output 14*NUM_LINKS*NUM_LANES
-add_interface_port status status_lane_emb_state lane_emb_state Output 3*NUM_LINKS*NUM_LANES
-add_interface_port status status_err_statistics_cnt err_statistics_cnt Output 32*NUM_LINKS*NUM_LANES
-add_interface_port status status_lane_frame_align_err_cnt lane_frame_align_err_cnt Output 8*NUM_LINKS*NUM_LANES
+add_interface_port status status_lane_cgs_state lane_cgs_state Output 2*NUM_LANES
+add_interface_port status status_lane_ifs_ready lane_ifs_ready Output NUM_LANES
+add_interface_port status status_lane_latency lane_latency Output 14*NUM_LANES
+add_interface_port status status_lane_emb_state lane_emb_state Output 3*NUM_LANES
+add_interface_port status status_err_statistics_cnt err_statistics_cnt Output 32*NUM_LANES
+add_interface_port status status_lane_frame_align_err_cnt lane_frame_align_err_cnt Output 8*NUM_LANES
 add_interface_port status status_synth_params0 synth_params0 Output 32
 add_interface_port status status_synth_params1 synth_params1 Output 32
 add_interface_port status status_synth_params2 synth_params2 Output 32
@@ -189,9 +189,9 @@ add_interface ilas_config conduit end
 set_interface_property ilas_config associatedClock clock
 set_interface_property ilas_config associatedReset reset
 
-add_interface_port ilas_config ilas_config_addr addr Output NUM_LINKS*NUM_LANES*2
-add_interface_port ilas_config ilas_config_data data Output NUM_LINKS*NUM_LANES*32
-add_interface_port ilas_config ilas_config_valid valid Output NUM_LINKS*NUM_LANES
+add_interface_port ilas_config ilas_config_addr addr Output NUM_LANES*2
+add_interface_port ilas_config ilas_config_data data Output NUM_LANES*32
+add_interface_port ilas_config ilas_config_valid valid Output NUM_LANES
 
 # rx_eof interface
 
@@ -225,12 +225,11 @@ add_interface_port lmfc_edge lmfc_edge export Output 1
 set_port_property lmfc_edge TERMINATION TRUE
 
 proc jesd204_rx_elaboration_callback {} {
-  set real_num_lanes [get_parameter_value "NUM_LANES"]
+  set num_lanes [get_parameter_value "NUM_LANES"]
   set num_links [get_parameter_value "NUM_LINKS"]
   set tpl_width [get_parameter_value "TPL_DATA_PATH_WIDTH"]
   set phy_width [get_parameter_value "DATA_PATH_WIDTH"]
 
-  set num_lanes [expr $real_num_lanes * $num_links]
   # rx_data interface
 
   add_interface rx_data avalon_streaming source
