@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -154,10 +154,20 @@ module system_top (
   wire              i2c0_out_clk;
   wire              i2c0_scl_in_clk;
 
+  wire              cn0561_sclk_s;
+  wire    [  3:0]   cn0561_sdi_s;
+
   // unused
-  assign gpio_i[63:33] = gpio_o[63:33];
+  assign gpio_i[63:34] = gpio_o[63:34];
   assign gpio_i[31:14] = gpio_o[31:14];
   assign gpio_i[ 7: 0] = gpio_o[ 7: 0];
+
+  // SCLK/DCLK unification — SPI Engine drives both config SCLK and data DCLK
+  assign cn0561_spi_sclk = cn0561_sclk_s;
+  assign cn0561_dclk     = cn0561_sclk_s;
+
+  // SDI mux — gpio_o[33] selects config readback (spi_sdi) vs data capture (din[0])
+  assign cn0561_sdi_s = {cn0561_din[3:1], (gpio_o[33] ? cn0561_spi_sdi : cn0561_din[0])};
 
   // GPIO outputs
   assign ltc2308_cs = gpio_o[41];
@@ -264,15 +274,15 @@ module system_top (
     .sys_gpio_bd_out_port (gpio_o[31:0]),
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
-    .cn0561_spi_sdo_sdo (),
-    .cn0561_spi_sdi_sdi (cn0561_din),
-    .cn0561_spi_cs_cs (),
-    .cn0561_spi_sclk_clk (cn0561_dclk),
+    .cn0561_spi_sclk_clk (cn0561_sclk_s),
+    .cn0561_spi_cs_cs (cn0561_spi_cs),
+    .cn0561_spi_sdi_sdi (cn0561_sdi_s),
+    .cn0561_spi_sdo_sdo (cn0561_spi_sdo),
     .ad4134_odr_if_pwm(cn0561_odr),
-    .sys_spi_MISO (cn0561_spi_sdi),
-    .sys_spi_MOSI (cn0561_spi_sdo),
-    .sys_spi_SCLK (cn0561_spi_sclk),
-    .sys_spi_SS_n (cn0561_spi_cs),
+    .sys_spi_MISO (1'b0),
+    .sys_spi_MOSI (),
+    .sys_spi_SCLK (),
+    .sys_spi_SS_n (),
     .ltc2308_spi_MISO (ltc2308_miso),
     .ltc2308_spi_MOSI (ltc2308_mosi),
     .ltc2308_spi_SCLK (ltc2308_sclk),

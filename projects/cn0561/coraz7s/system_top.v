@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -88,7 +88,15 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
+  wire            cn0561_sclk_s;
+  wire    [ 3:0]  cn0561_sdi_s;
+
   // instantiations
+
+  assign cn0561_spi_sclk = cn0561_sclk_s;
+  assign cn0561_dclk     = cn0561_sclk_s;
+
+  assign cn0561_sdi_s = {cn0561_din[3:1], (gpio_o[33] ? cn0561_spi_sdi : cn0561_din[0])};
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -106,7 +114,7 @@ module system_top (
     .dio_o(gpio_i[7:2]),
     .dio_p(led));
 
-  assign gpio_i[63:33] = gpio_o[63:33];
+  assign gpio_i[63:34] = gpio_o[63:34];
   assign gpio_i[31:8] = gpio_o[31:8];
 
   ad_iobuf #(
@@ -144,15 +152,15 @@ module system_top (
     .gpio_t (gpio_t),
     .iic_ard_scl_io (iic_ard_scl),
     .iic_ard_sda_io (iic_ard_sda),
-    .spi0_clk_i (cn0561_spi_sclk),
-    .spi0_clk_o (cn0561_spi_sclk),
-    .spi0_csn_0_o (cn0561_spi_cs),
+    .spi0_clk_i (1'b0),
+    .spi0_clk_o (),
+    .spi0_csn_0_o (),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (cn0561_spi_sdi),
-    .spi0_sdo_i (cn0561_spi_sdo),
-    .spi0_sdo_o (cn0561_spi_sdo),
+    .spi0_sdi_i (1'b0),
+    .spi0_sdo_i (1'b0),
+    .spi0_sdo_o (),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -162,12 +170,10 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .cn0561_di_sdo (),
-    .cn0561_di_sdo_t (),
-    .cn0561_di_sdi (cn0561_din),
-    .cn0561_di_cs (),
-    .cn0561_di_sclk (cn0561_dclk),
-    .cn0561_di_three_wire (),
+    .cn0561_spi_sclk (cn0561_sclk_s),
+    .cn0561_spi_cs (cn0561_spi_cs),
+    .cn0561_spi_sdo (cn0561_spi_sdo),
+    .cn0561_spi_sdi (cn0561_sdi_s),
     .cn0561_odr (cn0561_odr));
 
 endmodule
