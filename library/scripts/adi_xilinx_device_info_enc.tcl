@@ -116,10 +116,10 @@ proc adi_device_spec {cellpath param} {
       FPGA_TECHNOLOGY {
           switch  -regexp -- $part {
              ^xc7          {set series_name 7series}
-             ^xczu         {set series_name ultrascale+}
-             ^xcvu.?.p     {set series_name ultrascale+}
-             ^x.zu..?p     {set series_name ultrascale+}
-             ^xck26        {set series_name ultrascale+}
+             ^xc(zu|au)       {set series_name ultrascale+}
+             ^xc\d*[vk]u\S*p  {set series_name ultrascale+}
+             ^x.zu..?p        {set series_name ultrascale+}
+             ^xck26           {set series_name ultrascale+}
              ^xc.u         {set series_name ultrascale }
              ^xcv[ecmph]   {set series_name versal}
              default {
