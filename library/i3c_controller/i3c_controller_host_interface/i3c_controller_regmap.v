@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -125,8 +125,8 @@ module i3c_controller_regmap #(
 );
 
   localparam [31:0] CORE_VERSION = {16'h0001,     /* MAJOR */
-                                     8'h00,       /* MINOR */
-                                     8'h01};      /* PATCH */
+                                     8'h01,       /* MINOR */
+                                     8'h00};      /* PATCH */
 
   reg [31:0] up_scratch  = 32'h00; // Scratch register
   reg [31:0] up_pid_l  = {PID_PART_ID, PID_INSTANCE_ID, PID_EXTRA_ID};
