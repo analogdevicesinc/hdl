@@ -97,8 +97,8 @@ module util_axis_fifo_asym #(
   // FIFO level signals
   reg                      s_axis_ready_d;
   reg                      s_axis_valid_d;
-  reg  [              2:0] word_counter;
-  reg  [              2:0] num_of_words;
+  reg  [$clog2(RATIO):0] word_counter;
+  reg  [$clog2(RATIO):0] num_of_words;
   reg  [ADDRESS_WIDTH-1:0] s_input_level;
   reg  [ADDRESS_WIDTH-1:0] s_input_room;
   reg  [ADDRESS_WIDTH-1:0] s_input_level_next;
@@ -226,33 +226,55 @@ module util_axis_fifo_asym #(
   // write or slave logic
   generate
 
-    integer j;
     always @(posedge s_axis_aclk) begin
       if (!s_axis_aresetn) begin
-        num_of_words        <= 1;
-        s_axis_ready_d      <= 0;
-        s_axis_valid_d      <= 0;
+        s_axis_ready_d <= 0;
+        s_axis_valid_d <= 0;
       end else begin
-        s_axis_ready_d      <= s_axis_ready;
-        s_axis_valid_d      <= s_axis_valid;
-        word_counter         = 0;
-        for (j = 0; j < RATIO; j = j + 1) begin
-          word_counter = word_counter + (|s_axis_tkeep[M_DATA_WIDTH/8*j+:M_DATA_WIDTH/8]);
+        s_axis_ready_d <= s_axis_ready;
+        s_axis_valid_d <= s_axis_valid;
+      end
+    end
+
+    if (RATIO_TYPE) begin : gen_word_counter
+      integer j;
+      always @(posedge s_axis_aclk) begin
+        if (!s_axis_aresetn) begin
+          num_of_words <= 1;
+        end else begin
+          word_counter = 0;
+          for (j = 0; j < RATIO; j = j + 1) begin
+            word_counter = word_counter + (|s_axis_tkeep[M_DATA_WIDTH/8*j+:M_DATA_WIDTH/8]);
+          end
+          num_of_words <= word_counter;
         end
-        num_of_words <= word_counter;
+      end
+    end else begin : gen_no_word_counter
+      always @(posedge s_axis_aclk) begin
+        if (!s_axis_aresetn) begin
+          num_of_words <= 1;
+        end
       end
     end
 
     always @(posedge s_axis_aclk) begin
       if (!s_axis_aresetn) begin
         s_input_level <= 0;
-        s_input_room  <= {ADDRESS_WIDTH{1'b1}};
+        s_input_room  <= RATIO * ({A_ADDRESS{1'b1}});
       end else begin
         s_input_room <= s_input_room_next;
         s_input_level <= s_input_level_next;
       end
     end
 
+    // s_input_level: used when slave is wider than master (RATIO_TYPE=1).
+    //   Increments by num_of_words on each wide input write (slave handshake),
+    //   decrements by 1 on each narrow output read (master handshake).
+    // s_input_room: used when slave is narrower than master (RATIO_TYPE=0).
+    //   Decrements by 1 on each narrow input write (slave handshake),
+    //   increments by RATIO on each wide output read (master handshake),
+    //   since one wide read drains all RATIO atomic FIFOs, freeing RATIO
+    //   narrow input slots.
     always @(*) begin
       s_input_level_next = s_input_level;
       s_input_room_next  = s_input_room;
@@ -262,7 +284,7 @@ module util_axis_fifo_asym #(
       end
       if (sdi_output_read_sync) begin
         s_input_level_next = s_input_level_next - 1;
-        s_input_room_next  = s_input_room_next  + num_of_words;
+        s_input_room_next  = s_input_room_next  + RATIO;
       end
     end
 
@@ -489,9 +511,12 @@ module util_axis_fifo_asym #(
         if (!m_axis_aresetn) begin
           m_axis_counter <= 0;
         end else begin
-          // When using tkeep, we might have an internally "valid" data beat without any actually valid bytes.
-          // This will result in m_axis_valid being actually low for the external world.
-          // In this case (tkeep is all 0), we need to increment the counter without waiting for m_axis_ready.
+          // Advance the master counter on two conditions:
+          // 1. Normal handshake: downstream accepted a valid beat (m_axis_ready && m_axis_valid).
+          // 2. Null-beat skip: the atomic FIFO has data (m_axis_valid_int) but all tkeep bits
+          //    are zero and the beat is not externally valid (!m_axis_valid). This second check
+          //    prevents skipping beats that carry tlast, which AXI-Stream requires to be
+          //    handshaked even when tkeep is fully deasserted.
           if ((m_axis_ready && m_axis_valid) || (TKEEP_EN && m_axis_valid_int && !(|m_axis_tkeep) && !m_axis_valid)) begin
             m_axis_counter <= m_axis_counter + 1'b1;
           end
