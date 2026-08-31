@@ -85,7 +85,7 @@ module i3c_controller_host_interface #(
 
   input         cmdp_ready,
   output        cmdp_valid,
-  output [30:0] cmdp,
+  output [31:0] cmdp,
   input  [2:0]  cmdp_error,
   input         cmdp_nop,
   input         cmdp_daa_trigger,

@@ -62,7 +62,7 @@ module i3c_controller_cmd_parser (
 
   input         cmdp_ready,
   output        cmdp_valid,
-  output [30:0] cmdp,
+  output [31:0] cmdp,
   input  [2:0]  cmdp_error,
 
   output        rd_bytes_stop,
@@ -230,6 +230,7 @@ module i3c_controller_cmd_parser (
 
   // Remove reserved bits.
   assign cmdp = {
+    cmdr1[23],
     cmdr2[7:0],
     cmdr1[22:0]
   };
