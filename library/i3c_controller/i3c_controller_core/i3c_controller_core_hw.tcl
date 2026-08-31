@@ -45,6 +45,7 @@ ad_ip_files i3c_controller_core [list \
   i3c_controller_word.vh \
   i3c_controller_bit_mod.v \
   i3c_controller_bit_mod.vh \
+  i3c_controller_trp.v \
 ]
 
 # parameters
@@ -92,7 +93,7 @@ proc p_elaboration {} {
   add_interface cmdp conduit end
   add_interface_port cmdp cmdp_ready       cready      output  1
   add_interface_port cmdp cmdp_valid       cvalid      input   1
-  add_interface_port cmdp cmdp             cdata       input  31
+  add_interface_port cmdp cmdp             cdata       input  32
   add_interface_port cmdp cmdp_error       error       output  3
   add_interface_port cmdp cmdp_nop         nop         output  1
   add_interface_port cmdp cmdp_daa_trigger daa_trigger output  1

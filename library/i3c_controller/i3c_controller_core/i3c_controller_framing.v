@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -73,7 +73,7 @@ module i3c_controller_framing #(
 
   output        cmdp_ready,
   input         cmdp_valid,
-  input  [30:0] cmdp,
+  input  [31:0] cmdp,
   output [2:0]  cmdp_error,
   output reg    cmdp_daa_trigger,
 
@@ -90,6 +90,12 @@ module i3c_controller_framing #(
   input         cmdw_ready,
   input         cmdw_nack_bcast,
   input         cmdw_nack_resp,
+
+  // Target Reset Pattern
+
+  output        trp_valid,
+  input         trp_ready,
+  input         trp_hold,
 
   // Raw SDO input
 
@@ -141,6 +147,7 @@ module i3c_controller_framing #(
   reg [7:0]  cmdw_body;
   reg        ctrl_daa;
   reg        ctrl_validate;
+  reg        ctrl_trp;
   reg [3:0]  j;
   reg [2:0]  dev_char_len;
   reg        daa_trigger;
@@ -160,6 +167,8 @@ module i3c_controller_framing #(
   wire        cmdp_ccc;
   wire [6:0]  cmdp_ccc_id;
   wire        cmdp_ccc_bcast;
+  wire        cmdp_trp;
+  wire        trp_block;
   wire        dev_is_attached;
   wire        dev_is_i2c;
 
@@ -170,6 +179,7 @@ module i3c_controller_framing #(
       st  <= `CMDW_NOP;
       sm <= SM_SETUP;
       ctrl_daa <= 1'b0;
+      ctrl_trp <= 1'b0;
       ibi_requested_auto <= 1'b0;
       cmdp_sr_reg <= 0;
       daa_trigger <= 1'b0;
@@ -195,7 +205,11 @@ module i3c_controller_framing #(
           j <= 0;
           i2c_mode <= 1'b0;
           // Condition where a peripheral requested a IBI during quiet times.
-          if (cmdp_valid) begin
+          if (cmdp_valid & cmdp_trp & ~trp_block) begin
+            cmdp_sr_reg <= 1'b0;
+            st <= `CMDW_TRP;
+            sm <= SM_TRANSFER;
+          end else if (cmdp_valid & ~cmdp_trp) begin
             cmdp_sr_reg <= cmdp_sr;
             // Look last SM_TRANSFER SR flag.
             st <= cmdp_sr_reg ? `CMDW_MSG_SR : `CMDW_START;
@@ -208,7 +222,7 @@ module i3c_controller_framing #(
             sm <= SM_TRANSFER;
             ibi_requested_auto <= 1'b1;
           end
-          cmdp_valid_reg        <= cmdp_valid;
+          cmdp_valid_reg        <= cmdp_valid & ~cmdp_trp;
           cmdp_ccc_reg          <= cmdp_ccc;
           cmdp_ccc_bcast_reg    <= cmdp_ccc_bcast;
           cmdp_ccc_id_reg       <= cmdp_ccc_id;
@@ -335,6 +349,16 @@ module i3c_controller_framing #(
               `CMDW_IBI_MDB: begin
                 st <= cmdp_valid_reg ? `CMDW_SR : `CMDW_STOP_PP;
               end
+              `CMDW_TRP: begin
+                if (trp_valid & trp_ready) begin
+                  ctrl_trp <= 1'b1;
+                end
+                if (ctrl_trp & ~trp_hold) begin
+                  sm <= SM_SETUP;
+                  st <= `CMDW_NOP;
+                  ctrl_trp <= 1'b0;
+                end
+              end
               default: begin
                 st <= `CMDW_NOP;
               end
@@ -407,10 +431,14 @@ module i3c_controller_framing #(
   assign ibi_dev_is_attached = dev_is_attached;
   assign rmap_dev_char_addr  = ibi_requested ? ibi_da : cmdp_da_reg;
 
-  assign cmdp_ready = sm == SM_SETUP & !cmdw_nack_bcast & !cmdw_nack_resp & reset_n;
+  assign cmdp_ready = sm == SM_SETUP & ~(cmdp_trp & trp_block) &
+                      !cmdw_nack_bcast & !cmdw_nack_resp & reset_n;
   assign sdo_ready = (sm == SM_SETUP_SDO | sm == SM_CLEANUP) & !cmdw_nack_bcast & !cmdw_nack_resp & reset_n;
   assign cmdw = {st, cmdw_body};
-  assign cmdw_valid = sm == SM_TRANSFER;
+  assign cmdw_valid = sm == SM_TRANSFER & st != `CMDW_TRP;
+
+  assign trp_block = ibi_listen & nop & rx === 1'b0;
+  assign trp_valid = sm == SM_TRANSFER & st == `CMDW_TRP & ~ctrl_trp & cmdw_ready;
 
   assign ibi_enable = rmap_ibi_config[0];
   assign ibi_listen = rmap_ibi_config[1];
@@ -423,6 +451,7 @@ module i3c_controller_framing #(
   assign cmdp_ccc          = cmdp[22];
   assign cmdp_ccc_id       = cmdp[29:23];
   assign cmdp_ccc_bcast    = cmdp[30];
+  assign cmdp_trp          = cmdp[31];
 
   assign cmdp_error = {error_nack_resp, error_unknown_da, error_nack_bcast};
 
