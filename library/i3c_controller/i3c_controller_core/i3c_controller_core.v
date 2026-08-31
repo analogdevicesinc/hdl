@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -49,7 +49,7 @@ module i3c_controller_core #(
 
   output        cmdp_ready,
   input         cmdp_valid,
-  input  [30:0] cmdp,
+  input  [31:0] cmdp,
   output [2:0]  cmdp_error,
   output        cmdp_nop,
   output        cmdp_daa_trigger,
@@ -109,6 +109,20 @@ module i3c_controller_core #(
   wire nop;
   wire i2c_mode;
 
+  wire bus_reset_n;
+  wire bus_nop;
+
+  wire bit_mod_scl;
+  wire bit_mod_sdo;
+  wire bit_mod_t;
+
+  wire trp_valid;
+  wire trp_ready;
+  wire trp_hold;
+  wire trp_scl;
+  wire trp_sdo;
+  wire trp_t;
+
   i3c_controller_framing #(
     .MAX_DEVS(MAX_DEVS)
   ) i_i3c_controller_framing (
@@ -127,9 +141,12 @@ module i3c_controller_core #(
     .cmdw(cmdw),
     .cmdw_nack_bcast(cmdw_nack_bcast),
     .cmdw_nack_resp(cmdw_nack_resp),
+    .trp_valid(trp_valid),
+    .trp_ready(trp_ready),
+    .trp_hold(trp_hold),
     .rx(rx),
     .i2c_mode(i2c_mode),
-    .nop(nop),
+    .nop(bus_nop),
     .arbitration_valid(arbitration_valid),
     .ibi_dev_is_attached(ibi_dev_is_attached),
     .ibi_bcr_2(ibi_bcr_2),
@@ -142,7 +159,7 @@ module i3c_controller_core #(
 
   i3c_controller_word
   i_i3c_controller_word (
-    .reset_n(reset_n),
+    .reset_n(bus_reset_n),
     .clk(clk),
     .cmdw_valid(cmdw_valid),
     .cmdw_ready(cmdw_ready),
@@ -171,7 +188,7 @@ module i3c_controller_core #(
   i3c_controller_bit_mod #(
     .I2C_MOD(I2C_MOD)
   ) i_i3c_controller_bit_mod (
-    .reset_n(reset_n),
+    .reset_n(bus_reset_n),
     .clk(clk),
     .cmdb(cmdb),
     .cmdb_valid(cmdb_valid),
@@ -181,13 +198,32 @@ module i3c_controller_core #(
     .rx_valid(rx_valid),
     .i2c_mode(i2c_mode),
     .nop(nop),
-    .scl(i3c_scl),
-    .sdo(i3c_sdo),
+    .scl(bit_mod_scl),
+    .sdo(bit_mod_sdo),
     .sdi(i3c_sdi),
-    .t(i3c_t));
+    .t(bit_mod_t));
+
+  i3c_controller_trp
+  i_i3c_controller_trp (
+    .reset_n(reset_n),
+    .clk(clk),
+    .cmd_valid(trp_valid),
+    .cmd_ready(trp_ready),
+    .idle(nop | ~bit_mod_scl),
+    .hold(trp_hold),
+    .scl(trp_scl),
+    .sdo(trp_sdo),
+    .t(trp_t));
+
+  assign bus_reset_n = reset_n & ~trp_hold;
+  assign bus_nop = nop & ~trp_hold;
+
+  assign i3c_scl = trp_hold ? trp_scl : bit_mod_scl;
+  assign i3c_sdo = trp_hold ? trp_sdo : bit_mod_sdo;
+  assign i3c_t   = trp_hold ? trp_t   : bit_mod_t;
 
   assign ibi = {ibi_da, ibi_mdb};
   assign ibi_valid = ibi_tick;
-  assign cmdp_nop = nop;
+  assign cmdp_nop = bus_nop;
 
 endmodule
