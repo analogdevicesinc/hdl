@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -85,7 +85,7 @@ module i3c_controller_host_interface #(
 
   input         cmdp_ready,
   output        cmdp_valid,
-  output [30:0] cmdp,
+  output [31:0] cmdp,
   input  [2:0]  cmdp_error,
   input         cmdp_nop,
   input         cmdp_daa_trigger,

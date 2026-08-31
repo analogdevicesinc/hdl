@@ -146,7 +146,7 @@ proc p_elaboration {} {
   add_interface cmdp conduit start
   add_interface_port cmdp cmdp_ready       cready      input   1
   add_interface_port cmdp cmdp_valid       cvalid      output  1
-  add_interface_port cmdp cmdp             cdata       output 31
+  add_interface_port cmdp cmdp             cdata       output 32
   add_interface_port cmdp cmdp_error       error       input   3
   add_interface_port cmdp cmdp_nop         nop         input   1
   add_interface_port cmdp cmdp_daa_trigger daa_trigger input   1
