@@ -57,5 +57,6 @@
 `define CMDW_SR                    5'd16
 `define CMDW_I2C_TX                5'd17
 `define CMDW_I2C_RX                5'd18
+`define CMDW_TRP                   5'd19
 
 `endif

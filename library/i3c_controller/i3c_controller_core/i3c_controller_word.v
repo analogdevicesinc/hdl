@@ -136,6 +136,7 @@ module i3c_controller_word (
       `CMDW_SR              : i_ =  0;
       `CMDW_I2C_TX          : i_ =  8; // SDO+ACK
       `CMDW_I2C_RX          : i_ =  8; // SDI+ACK
+      `CMDW_TRP             : i_ = 15; // 14-bit SDA w/ SCL Low+Sr+P
       default               : i_ =  0;
     endcase
 
@@ -160,6 +161,7 @@ module i3c_controller_word (
       `CMDW_SR              : sg = 0;
       `CMDW_I2C_TX          : sg = 0;
       `CMDW_I2C_RX          : sg = 0;
+      `CMDW_TRP             : sg = 1;
       default               : sg = 0;
     endcase
   end
@@ -323,6 +325,15 @@ module i3c_controller_word (
             `CMDW_STOP_OD,
             `CMDW_STOP_PP: begin
               cmd_r <= `MOD_BIT_CMD_STOP_;
+            end
+            `CMDW_TRP: begin
+              // 14-bit flipping SDA w/ SCL Low+Sr+P
+              if (i == i_) begin
+                cmd_r <= `MOD_BIT_CMD_STOP_;
+              end else begin
+                cmd_r  <= `MOD_BIT_CMD_PATTERN_;
+                cmd_wr <= i[0];
+              end
             end
             `CMDW_DAA_DEV_CHAR: begin
               cmd_r <= `MOD_BIT_CMD_READ_;

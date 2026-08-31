@@ -125,7 +125,9 @@ module i3c_controller_framing #(
   localparam [2:0] SM_CLEANUP     = 4;
   localparam [2:0] SM_ARBITRATION = 5;
 
-  localparam [6:0] CCC_ENTDAA = 'h07;
+  localparam [6:0] CCC_ENTDAA        = 7'h07;
+  localparam [6:0] CCC_RSTACT_BCAST  = 7'h2a;
+  localparam [6:0] CCC_RSTACT_DIRECT = 7'h1a;
 
   reg [`CMDW_HEADER_WIDTH:0] st;
   reg [BUS_AVAIL:0] bus_avail_reg;
@@ -318,7 +320,12 @@ module i3c_controller_framing #(
               `CMDW_MSG_TX: begin
                 cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
                 if (~|cmdp_buffer_len_reg) begin
-                  st  <= dev_is_i2c ? `CMDW_STOP_OD :`CMDW_STOP_PP;
+                  // The RSTACT Defining Byte configures the reset action; the
+                  // immediately following Target Reset Pattern triggers it.
+                  st  <= cmdp_ccc_reg &&
+                         cmdp_ccc_id_reg == (cmdp_ccc_bcast_reg ?
+                           CCC_RSTACT_DIRECT : CCC_RSTACT_BCAST) ? `CMDW_TRP :
+                         (dev_is_i2c ? `CMDW_STOP_OD : `CMDW_STOP_PP);
                   if (cmdp_sr_reg) begin
                     sm <= SM_SETUP;
                   end
@@ -327,7 +334,8 @@ module i3c_controller_framing #(
                 end
               end
               `CMDW_STOP_OD,
-              `CMDW_STOP_PP: begin
+              `CMDW_STOP_PP,
+              `CMDW_TRP: begin
                 sm <= SM_SETUP;
                 st <= `CMDW_NOP;
                 cmdp_sr_reg <= 1'b0;

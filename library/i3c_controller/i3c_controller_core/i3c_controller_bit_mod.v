@@ -81,10 +81,15 @@ module i3c_controller_bit_mod #(
   output reg t
 );
 
-  localparam [1:0] SM_SETUP    = 0;
-  localparam [1:0] SM_STALL    = 1;
-  localparam [1:0] SM_SCL_LOW  = 2;
-  localparam [1:0] SM_SCL_HIGH = 3;
+  localparam [3:0] SM_SETUP         = 0;
+  localparam [3:0] SM_STALL         = 1;
+  localparam [3:0] SM_SCL_LOW       = 2;
+  localparam [3:0] SM_SCL_HIGH      = 3;
+  localparam [3:0] SM_PATTERN_LOW   = 4;
+  localparam [3:0] SM_PATTERN_HIGH  = 5;
+  localparam [3:0] SM_TRP_SR_SETUP  = 6;
+  localparam [3:0] SM_TRP_SR        = 7;
+  localparam [3:0] SM_TRP_STOP      = 8;
 
   localparam PRESCL = I2C_MOD+5;
   localparam PRESCALER_CLOG = $clog2(PRESCL);
@@ -96,7 +101,10 @@ module i3c_controller_bit_mod #(
   reg       i2c_mode_reg;
   reg       i2c_scl_reg;
   reg [PRESCL-2:0] count_delay;
-  reg [1:0] sm;
+  reg [3:0] sm;
+  reg       trp_active;
+  reg       pattern_sdo;
+  reg       pattern_toggle;
 
   wire [`MOD_BIT_CMD_WIDTH:2] st;
   wire [1:0] count_high;
@@ -123,6 +131,9 @@ module i3c_controller_bit_mod #(
       pp_sg_reg <= 2'b00;
       sr <= 1'b0;
       i2c_mode_reg <= 1'b0;
+      trp_active <= 1'b0;
+      pattern_sdo <= 1'b1;
+      pattern_toggle <= 1'b0;
     end else begin
       if (sm == SM_SETUP & cmdb_valid) begin
         i2c_mode_reg <= i2c_mode;
@@ -148,6 +159,37 @@ module i3c_controller_bit_mod #(
         end
         SM_STALL: begin
         end
+        SM_PATTERN_LOW: begin
+          if (&count[2:0]) begin
+            sm <= SM_PATTERN_HIGH;
+            if (pattern_toggle) begin
+              pattern_sdo <= ~pattern_sdo;
+            end
+          end
+        end
+        SM_PATTERN_HIGH: begin
+          if (&count[2:0]) begin
+            sm <= SM_STALL;
+          end
+        end
+        SM_TRP_SR_SETUP: begin
+          // Raise SCL and allow setup time before asserting Repeated START.
+          if (&count[4:0]) begin
+            sm <= SM_TRP_SR;
+          end
+        end
+        SM_TRP_SR: begin
+          // Hold SDA Low before releasing it for STOP; SCL remains High.
+          if (&count[5:0]) begin
+            sm <= SM_TRP_STOP;
+          end
+        end
+        SM_TRP_STOP: begin
+          if (&count[2:0]) begin
+            sm <= SM_SETUP;
+            trp_active <= 1'b0;
+          end
+        end
       endcase
 
       if (cmdb_ready) begin
@@ -155,8 +197,18 @@ module i3c_controller_bit_mod #(
           cmdb_r <= cmdb[4:2] != `MOD_BIT_CMD_START_ ? cmdb : {cmdb[4:2], 1'b0, cmdb[0]};
           // CMDW_MSG_RX is push-pull, but the Sr to stop from the controller side is open drain.
           pp_sg_reg <= cmdb[1] & cmdb[4:2] != `MOD_BIT_CMD_START_ ? scl_pp_sg : 2'b00;
-          sm <= SM_SCL_LOW;
-        end else begin
+          sm <= cmdb[4:2] == `MOD_BIT_CMD_STOP_ && trp_active ? SM_TRP_SR_SETUP :
+                cmdb[4:2] == `MOD_BIT_CMD_PATTERN_ ? SM_PATTERN_LOW : SM_SCL_LOW;
+          if (cmdb[4:2] == `MOD_BIT_CMD_PATTERN_) begin
+            pattern_toggle <= trp_active;
+            trp_active <= 1'b1;
+            if (!trp_active) begin
+              pattern_sdo <= 1'b1;
+            end
+          end
+        end else if (!trp_active) begin
+          // Preserve the current Pattern command between word-command beats;
+          // loading NOP here would briefly release SDA and add false edges.
           cmdb_r <= {`MOD_BIT_CMD_NOP_, 2'b01};
         end
       end
@@ -194,6 +246,7 @@ module i3c_controller_bit_mod #(
   assign count_high = count[1:0];
   assign cmdb_ready = (sm == SM_SETUP) ||
                       (sm == SM_STALL) ||
+                      (sm == SM_TRP_STOP & &count[2:0]) ||
                       (sm == SM_SCL_HIGH & &count_high);
   assign ss = cmdb_r[1:0];
   assign st = cmdb_r[`MOD_BIT_CMD_WIDTH:2];
@@ -206,7 +259,9 @@ module i3c_controller_bit_mod #(
   assign i2c_scl = count_delay[3];
 
   assign i2c_scl_posedge = i2c_scl & ~i2c_scl_reg;
-  assign i3c_scl_posedge = (sm == SM_SCL_HIGH & &(~count_high));
+  assign i3c_scl_posedge = (sm == SM_SCL_HIGH & &(~count_high)) ||
+                           (sm == SM_PATTERN_HIGH & &count[2:0]) ||
+                           (sm == SM_TRP_STOP & &count[2:0]);
 
   // Multi-cycle-path worst-case:
   // * 4 clks (12.5MHz, half-bit ack, 100MHz clk)
@@ -215,8 +270,10 @@ module i3c_controller_bit_mod #(
                     i3c_scl_posedge;
 
   assign sdo_w = st == `MOD_BIT_CMD_START_   ? sr_sda[i2c_mode_reg] :
-                 st == `MOD_BIT_CMD_STOP_    ? 1'b0  :
+                 st == `MOD_BIT_CMD_STOP_    ?
+                   (sm == SM_TRP_SR_SETUP || sm == SM_TRP_STOP ? 1'b1 : 1'b0) :
                  st == `MOD_BIT_CMD_WRITE_   ? ss[0] :
+                 st == `MOD_BIT_CMD_PATTERN_ ? pattern_sdo :
                  st == `MOD_BIT_CMD_ACK_SDR_ ?
                    (i2c_mode_reg ? 1'b1 : (sm == SM_SCL_HIGH ? rx : 1'b1)) :
                  st == `MOD_BIT_CMD_ACK_IBI_ ?
@@ -235,7 +292,7 @@ module i3c_controller_bit_mod #(
 
   assign scl = st == `MOD_BIT_CMD_START_ ? (sr ? sr_scl[i2c_mode_reg] : 1'b1) :
                i2c_mode_reg ? (i2c_scl || sm == SM_SETUP) :
-               (~(sm == SM_SCL_LOW || sm == SM_STALL));
+               (~(sm == SM_SCL_LOW || sm == SM_STALL || sm == SM_PATTERN_LOW || sm == SM_PATTERN_HIGH));
 
   assign nop = st == `MOD_BIT_CMD_NOP_ & sm == SM_SETUP;
   assign pp_sg = i2c_mode_reg ? PRESCL-2 :
