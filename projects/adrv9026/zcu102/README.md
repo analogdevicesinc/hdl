@@ -94,7 +94,8 @@ RX_OS_JESD_S=1 \
 RX_OS_JESD_NP=16 \
 PLL_TYPE=QPLL0 \
 REF_CLK=245.75 \
-LANE_RATE=9.83
+LANE_RATE=9.83 \
+RX_PLL_TYPE=CPLL
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-adrv9025-nls.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9025-nls.dts)
