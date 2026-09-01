@@ -44,7 +44,7 @@ jobs:
 
         [[ "${{ runner.debug }}" != "1" ]] && j_="-jauto"
         cd docs
-        sphinx-build -b html $j_ -w "$warnfile" . _build/html --keep-going || err=$?
+        sphinx-build -b dirhtml $j_ -w "$warnfile" . _build/html --keep-going || err=$?
         rm -rf _build/html/_sources
 
     - name: Store the generated doc
