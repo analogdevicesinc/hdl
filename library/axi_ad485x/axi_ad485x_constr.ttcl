@@ -88,12 +88,21 @@ set_false_path -quiet \
 
   # constant value after config
   set_false_path -quiet \
-        -from [get_cells -hier -filter {name =~ *i_ad485x_cmos_interface/packet_format_reg*}]  \
+        -from [get_cells -hier -filter {name =~ *i_ad4858_cmos_interface/packet_format_reg*}]  \
         -to [get_cells -hier -filter {name =~ *capture_cnt_reg* && IS_SEQUENTIAL}]
+
+  # packet_format replica -> capture_cnt / adc_captured: relax replicated CDC paths
+  set_max_delay -quiet \
+        -from [get_pins -quiet -hier -filter {name =~ *i_ad4858_cmos_interface/packet_format_reg*_rep*/C}] \
+        -to   [get_pins -quiet -hier -filter {name =~ *i_ad4858_cmos_interface/capture_cnt_reg*/D}] 20.0
+
+  set_max_delay -quiet \
+        -from [get_pins -quiet -hier -filter {name =~ *i_ad4858_cmos_interface/packet_format_reg*_rep*/C}] \
+        -to   [get_pins -quiet -hier -filter {name =~ *i_ad4858_cmos_interface/adc_captured_reg*/D}] 20.0
 
   # asynchronous reset while destination clock is not active
   set_false_path -quiet \
-        -from [get_cells -hier -filter {name =~ *i_ad485x_cmos_interface/packet_format_reg*}]  \
+        -from [get_cells -hier -filter {name =~ *i_ad4858_cmos_interface/packet_format_reg*}]  \
         -to [get_cells -hier -filter {name =~ *adc_captured_reg* && IS_SEQUENTIAL}]
 
   set_max_delay -quiet \
