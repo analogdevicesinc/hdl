@@ -77,6 +77,8 @@ module spi_engine_execution_shiftreg #(
   input   [ 7:0]  latch_last_bit_count,
   input   [ 7:0]  sdo_lane_mask,
 
+  input           ddr_en,
+
   // timing from main fsm
   output      sdo_io_ready,
   output      echo_last_bit,
@@ -172,8 +174,8 @@ module spi_engine_execution_shiftreg #(
     trigger_tx_d <= {trigger_tx_d, trigger_tx};
   end
   assign trigger_tx_s = trigger_tx_d[SDI_DELAY+1];
-  assign trigger_sdi = trigger_rx_s || (DDR_EN && trigger_tx_s);
-  assign trigger_sdo = trigger_tx || (DDR_EN && trigger_rx);
+  assign trigger_sdi = trigger_rx_s || (ddr_en && trigger_tx_s);
+  assign trigger_sdo = trigger_tx || (ddr_en && trigger_rx);
 
   // Load the serial data into SDI shift register(s), then link it to the output
   // register of the module
@@ -188,19 +190,23 @@ module spi_engine_execution_shiftreg #(
   generate
   if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
 
-    reg last_sdi_bit_r;
-    reg latch_sdi;
-    reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_latch = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+    wire last_sdi_bit_r;
+    wire [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_latch;
 
     if ((DEFAULT_SPI_CFG[1:0] == 2'b01) || (DEFAULT_SPI_CFG[1:0] == 2'b10)) begin : g_echo_miso_nshift_reg
 
-      if (DDR_EN) begin : g_ddr
+      if (DDR_EN) begin : g_ddr_capable
 
-        // word_length[7:1] = word_length / 2; DDR requires even word_length
         wire [7:0] ddr_last_bit_count = word_length[7:1] - 8'd1;
         wire [7:0] ddr_latch_last_bit_count = word_length[7:1] - 8'd2;
 
-        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
+        // DDR path: dual-edge capture with interleave
+        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_ddr = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+        reg last_sdi_bit_ddr;
+        reg [7:0] sdi_counter_ddr = 8'b0;
+        reg latch_sdi_ddr;
+
+        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg_ddr
 
           reg [DATA_WIDTH-1:0] data_shift_n;
           always @(negedge echo_sclk or posedge cs_activate) begin
@@ -225,25 +231,68 @@ module spi_engine_execution_shiftreg #(
           end
 
           always @(posedge echo_sclk) begin
-            if (latch_sdi)
-              sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= interleaved;
+            if (latch_sdi_ddr)
+              sdi_data_ddr[i*DATA_WIDTH+:DATA_WIDTH] <= interleaved;
           end
 
         end
 
         always @(posedge echo_sclk or posedge cs_activate) begin
           if (cs_activate) begin
-            sdi_counter     <= 8'b0;
-            last_sdi_bit_r  <= 1'b0;
-            latch_sdi       <= 1'b0;
+            sdi_counter_ddr  <= 8'b0;
+            last_sdi_bit_ddr <= 1'b0;
+            latch_sdi_ddr    <= 1'b0;
           end else begin
-            latch_sdi       <= (sdi_counter == ddr_latch_last_bit_count);
-            last_sdi_bit_r  <= (sdi_counter == ddr_last_bit_count);
-            sdi_counter     <= (sdi_counter == ddr_last_bit_count) ? 8'b0 : sdi_counter + 1'b1;
+            latch_sdi_ddr    <= (sdi_counter_ddr == ddr_latch_last_bit_count);
+            last_sdi_bit_ddr <= (sdi_counter_ddr == ddr_last_bit_count);
+            sdi_counter_ddr  <= (sdi_counter_ddr == ddr_last_bit_count) ? 8'b0 : sdi_counter_ddr + 1'b1;
           end
         end
 
-      end else begin : g_sdr
+        // SDR path: single-edge capture
+        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_sdr = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+        reg last_sdi_bit_sdr;
+        reg [7:0] sdi_counter_sdr = 8'b0;
+        reg latch_sdi_sdr;
+
+        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg_sdr
+          reg [DATA_WIDTH-1:0] data_sdi_shift;
+
+          always @(negedge echo_sclk or posedge cs_activate) begin
+            if (cs_activate) begin
+              data_sdi_shift <= 0;
+            end else begin
+              data_sdi_shift <= {data_sdi_shift, sdi[i]};
+            end
+          end
+
+          always @(negedge echo_sclk) begin
+            if (latch_sdi_sdr)
+              sdi_data_sdr[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
+          end
+        end
+
+        always @(negedge echo_sclk or posedge cs_activate) begin
+          if (cs_activate) begin
+            sdi_counter_sdr  <= 8'b0;
+            last_sdi_bit_sdr <= 1'b0;
+            latch_sdi_sdr    <= 1'b0;
+          end else begin
+            latch_sdi_sdr    <= (sdi_counter_sdr == latch_last_bit_count);
+            last_sdi_bit_sdr <= (sdi_counter_sdr == last_bit_count);
+            sdi_counter_sdr  <= (sdi_counter_sdr == last_bit_count) ? 8'b0 : sdi_counter_sdr + 1'b1;
+          end
+        end
+
+        assign sdi_data_latch = ddr_en ? sdi_data_ddr : sdi_data_sdr;
+        assign last_sdi_bit_r = ddr_en ? last_sdi_bit_ddr : last_sdi_bit_sdr;
+
+      end else begin : g_sdr_only
+
+        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_int = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+        reg last_sdi_bit_int;
+        reg [7:0] sdi_counter_int = 8'b0;
+        reg latch_sdi_int;
 
         for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
           reg [DATA_WIDTH-1:0] data_sdi_shift;
@@ -257,34 +306,42 @@ module spi_engine_execution_shiftreg #(
           end
 
           always @(negedge echo_sclk) begin
-            if (latch_sdi)
-              sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
+            if (latch_sdi_int)
+              sdi_data_int[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
           end
         end
 
         always @(negedge echo_sclk or posedge cs_activate) begin
           if (cs_activate) begin
-            sdi_counter     <= 8'b0;
-            last_sdi_bit_r  <= 1'b0;
-            latch_sdi       <= 1'b0;
+            sdi_counter_int  <= 8'b0;
+            last_sdi_bit_int <= 1'b0;
+            latch_sdi_int    <= 1'b0;
           end else begin
-            latch_sdi       <= (sdi_counter == latch_last_bit_count);
-            last_sdi_bit_r  <= (sdi_counter == last_bit_count);
-            sdi_counter     <= (sdi_counter == last_bit_count) ? 8'b0 : sdi_counter + 1'b1;
+            latch_sdi_int    <= (sdi_counter_int == latch_last_bit_count);
+            last_sdi_bit_int <= (sdi_counter_int == last_bit_count);
+            sdi_counter_int  <= (sdi_counter_int == last_bit_count) ? 8'b0 : sdi_counter_int + 1'b1;
           end
         end
+
+        assign sdi_data_latch = sdi_data_int;
+        assign last_sdi_bit_r = last_sdi_bit_int;
 
       end
 
     end else begin : g_echo_miso_pshift_reg
 
-      if (DDR_EN) begin : g_ddr
+      if (DDR_EN) begin : g_ddr_capable
 
-        // word_length[7:1] = word_length / 2; DDR requires even word_length
         wire [7:0] ddr_last_bit_count = word_length[7:1] - 8'd1;
         wire [7:0] ddr_latch_last_bit_count = word_length[7:1] - 8'd2;
 
-        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
+        // DDR path: dual-edge capture with interleave
+        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_ddr = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+        reg last_sdi_bit_ddr;
+        reg [7:0] sdi_counter_ddr = 8'b0;
+        reg latch_sdi_ddr;
+
+        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg_ddr
 
           reg [DATA_WIDTH-1:0] data_shift_p;
           always @(posedge echo_sclk or posedge cs_activate) begin
@@ -309,25 +366,66 @@ module spi_engine_execution_shiftreg #(
           end
 
           always @(negedge echo_sclk) begin
-            if (latch_sdi)
-              sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= interleaved;
+            if (latch_sdi_ddr)
+              sdi_data_ddr[i*DATA_WIDTH+:DATA_WIDTH] <= interleaved;
           end
 
         end
 
         always @(negedge echo_sclk or posedge cs_activate) begin
           if (cs_activate) begin
-            sdi_counter     <= 8'b0;
-            last_sdi_bit_r  <= 1'b0;
-            latch_sdi       <= 1'b0;
+            sdi_counter_ddr  <= 8'b0;
+            last_sdi_bit_ddr <= 1'b0;
+            latch_sdi_ddr    <= 1'b0;
           end else begin
-            latch_sdi       <= (sdi_counter == ddr_latch_last_bit_count);
-            last_sdi_bit_r  <= (sdi_counter == ddr_last_bit_count);
-            sdi_counter     <= (sdi_counter == ddr_last_bit_count) ? 8'b0 : sdi_counter + 1'b1;
+            latch_sdi_ddr    <= (sdi_counter_ddr == ddr_latch_last_bit_count);
+            last_sdi_bit_ddr <= (sdi_counter_ddr == ddr_last_bit_count);
+            sdi_counter_ddr  <= (sdi_counter_ddr == ddr_last_bit_count) ? 8'b0 : sdi_counter_ddr + 1'b1;
           end
         end
 
-      end else begin : g_sdr
+        // SDR path: single-edge capture
+        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_sdr = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+        reg last_sdi_bit_sdr;
+        reg [7:0] sdi_counter_sdr = 8'b0;
+        reg latch_sdi_sdr;
+
+        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg_sdr
+          reg [DATA_WIDTH-1:0] data_sdi_shift;
+          always @(posedge echo_sclk or posedge cs_activate) begin
+            if (cs_activate) begin
+              data_sdi_shift <= 0;
+            end else begin
+              data_sdi_shift <= {data_sdi_shift, sdi[i]};
+            end
+          end
+          always @(posedge echo_sclk) begin
+            if (latch_sdi_sdr)
+              sdi_data_sdr[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
+          end
+        end
+
+        always @(posedge echo_sclk or posedge cs_activate) begin
+          if (cs_activate) begin
+            sdi_counter_sdr  <= 8'b0;
+            last_sdi_bit_sdr <= 1'b0;
+            latch_sdi_sdr    <= 1'b0;
+          end else begin
+            latch_sdi_sdr    <= (sdi_counter_sdr == latch_last_bit_count);
+            last_sdi_bit_sdr <= (sdi_counter_sdr == last_bit_count);
+            sdi_counter_sdr  <= (sdi_counter_sdr == last_bit_count) ? 8'b0 : sdi_counter_sdr + 1'b1;
+          end
+        end
+
+        assign sdi_data_latch = ddr_en ? sdi_data_ddr : sdi_data_sdr;
+        assign last_sdi_bit_r = ddr_en ? last_sdi_bit_ddr : last_sdi_bit_sdr;
+
+      end else begin : g_sdr_only
+
+        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_int = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+        reg last_sdi_bit_int;
+        reg [7:0] sdi_counter_int = 8'b0;
+        reg latch_sdi_int;
 
         for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
           reg [DATA_WIDTH-1:0] data_sdi_shift;
@@ -339,22 +437,25 @@ module spi_engine_execution_shiftreg #(
             end
           end
           always @(posedge echo_sclk) begin
-            if (latch_sdi)
-              sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
+            if (latch_sdi_int)
+              sdi_data_int[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
           end
         end
 
         always @(posedge echo_sclk or posedge cs_activate) begin
           if (cs_activate) begin
-            sdi_counter     <= 8'b0;
-            last_sdi_bit_r  <= 1'b0;
-            latch_sdi       <= 1'b0;
+            sdi_counter_int  <= 8'b0;
+            last_sdi_bit_int <= 1'b0;
+            latch_sdi_int    <= 1'b0;
           end else begin
-            latch_sdi       <= (sdi_counter == latch_last_bit_count);
-            last_sdi_bit_r  <= (sdi_counter == last_bit_count);
-            sdi_counter     <= (sdi_counter == last_bit_count) ? 8'b0 : sdi_counter + 1'b1;
+            latch_sdi_int    <= (sdi_counter_int == latch_last_bit_count);
+            last_sdi_bit_int <= (sdi_counter_int == last_bit_count);
+            sdi_counter_int  <= (sdi_counter_int == last_bit_count) ? 8'b0 : sdi_counter_int + 1'b1;
           end
         end
+
+        assign sdi_data_latch = sdi_data_int;
+        assign last_sdi_bit_r = last_sdi_bit_int;
 
       end
 
