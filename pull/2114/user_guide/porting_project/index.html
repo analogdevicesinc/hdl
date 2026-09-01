@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="In general, a given reference design for an FMC board is deployed to just a few carriers, although several FPGA boards are supported in ADI’s HDL repository. The simple reason behind this practice is that it would create a tremendous maintenance workload, that would require a lot of human resources, and would increase the required time for testing." name="description" />
+
+    <title>Porting ADI’s HDL reference designs &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fb8972a4" />
+    <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Customize HDL projects" href="../customize_hdl/" />
+    <link rel="prev" title="Generic AXI DAC" href="../ip_cores/axi_dac/" />
+   
+  
+  
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://developer.analog.com/" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Documentation</label>
+        
+        <a id="logo" href="../../">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Porting ADI’s HDL reference designs</a><ul>
+<li><a class="reference internal" href="#quick-compatibility-check">Quick Compatibility Check</a></li>
+<li><a class="reference internal" href="#base-design-files">Base design files</a><ul>
+<li><a class="reference internal" href="#example-with-an-amd-xilinx-board">Example with an AMD Xilinx board</a><ul>
+<li><a class="reference internal" href="#project-flow">Project flow</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-with-an-intel-board">Example with an Intel board</a></li>
+<li><a class="reference internal" href="#example-with-a-lattice-board">Example with a Lattice board</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#project-files">Project files</a><ul>
+<li><a class="reference internal" href="#project-files-for-amd-boards">Project files for AMD boards</a></li>
+<li><a class="reference internal" href="#project-files-for-intel-boards">Project files for Intel boards</a></li>
+<li><a class="reference internal" href="#project-files-for-lattice-boards">Project files for Lattice boards</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tips">Tips</a><ul>
+<li><a class="reference internal" href="#generating-the-fmc-i-o-constraints">Generating the FMC I/O constraints</a><ul>
+<li><a class="reference internal" href="#creating-carrier-common-fmc-connections">Creating carrier common FMC connections</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="logo" href="../../">
+      <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
+      <img class="only-dark" src="../../_static/HDL_logo_w_cropped.svg"/>
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../introduction/">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../git_repository/">Git repository</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../releases/">Releases</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-1" id="toctree-collapse-1-1-1"/><div class="collapse"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/">Projects List and Dependencies</a><label for="toctree-collapse-1-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_main/">Projects list and dependencies for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2026_r1/">Projects list and dependencies for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2023_r2/">Projects list and dependencies for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2022_r2/">Projects list and dependencies for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r2/">Projects list and dependencies for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r1/">Projects list and dependencies for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r2/">Projects list and dependencies for hdl_2019_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r1/">Projects list and dependencies for hdl_2019_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r2/">Projects list and dependencies for hdl_2018_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r1/">Projects list and dependencies for hdl_2018_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2017_r1/">Projects list and dependencies for hdl_2017_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2016_r2/">Projects list and dependencies for hdl_2016_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2015_r1/">Projects list and dependencies for hdl_2015_r1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-2" id="toctree-collapse-1-1-2"/><div class="collapse"><a class="reference internal" href="../release_tables/resource_utilization/">Resource Utilization</a><label for="toctree-collapse-1-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_main/">Resource utilization for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2026_r1/">Resource utilization for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2023_r2/">Resource utilization for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2022_r2/">Resource utilization for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2021_r2/">Resource utilization for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2021_r1/">Resource utilization for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2019_r2/">Resource utilization for hdl_2019_r2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../build_hdl/">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_boot_bin/">Build the BOOT.BIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_intel_boot_image/">Build the Intel Boot Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-2" id="toctree-collapse-1-2"/><div class="collapse"><a class="reference internal" href="../ip_cores/">IP cores</a><label for="toctree-collapse-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ip_cores/creating_new_ip/">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ip_cores/use_adi_ips/">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ip_cores/interfaces/">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ip_cores/axi_adc/">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ip_cores/axi_dac/">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Porting HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../customize_hdl/">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hdl_coding_guidelines/">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs_guidelines/">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/">Contributing to HDL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../third_party/">Third party forks</a></li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../library/">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../library/i3c_controller/">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_host_interface/">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_core/">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/interface/">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../../library/jesd204/">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/generic_jesd_bds/">Generic JESD204 block designs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/">DAC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/xgt_wizard/">Xilinx FPGAs Transceivers Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/versal_transceiver_subsystem/">AMD Versal Adaptive SoC Transceiver Subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/troubleshoot/troubleshoot_jesd204_tx/">Troubleshooting JESD204 TX links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../library/spi_engine/">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_execution/">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/axi_spi_engine/">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_offload/">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect/">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/control-interface/">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/offload-control-interface/">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi-bus-interface/">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/instruction-format/">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/pipeline-delays/">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/tutorial/">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad35xxr/">AXI AD35XXR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/">AXI AD408x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7405/">AXI AD7405</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7768/">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad777x/">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/">AXI AD9265</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../library/axi_ad9361/">AXI AD9361</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/axi_ad9361/tdd_support/">TDD Mode Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9740/">AXI AD9740</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ada4355/">AXI ADA4355</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adrv9001/">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hmcad15xx/">AXI HMCAD15XX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc235x/">AXI LTC235X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc2387/">AXI LTC2387</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/">Data Offload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_rx/">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_tx/">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_decimate/">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_trigger/">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adf4030/">AXI ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adxcvr/">AXI ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_clkgen/">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_clock_monitor/">AXI Clock Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dac_interpolate/">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_fan_control/">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_laser_driver/">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_logic_analyzer/">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_pwm_gen/">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_sysid/">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_tdd/">AXI TDD</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/cn0363/">CN0363</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/cn0363/cn0363_dma_sequencer/">CN0363 DMA Sequencer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/cn0363/cn0363_phase_data_sync/">CN0363 Phase Data Sync</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/common/ad_dds/">AD Direct Digital Synthesis</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../library/corundum/">Corundum Network Stack</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/corundum/corundum_core/">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6-1" id="toctree-collapse-2-6-1"/><div class="collapse"><a class="reference internal" href="../../library/corundum/ethernet/">Corundum Ethernet Core</a><label for="toctree-collapse-2-6-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/vcu118/">VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/k26/">K26</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo/">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo_asym/">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_extract/">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_mii_to_rmii/">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_cpack2/">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_upack2/">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_rfifo/">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_sigma_delta_spi/">Util Sigma Delta SPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_var_fifo/">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_wfifo/">Util WFIFO</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-7" id="toctree-collapse-2-7"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9643/">AXI AD9643 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9671/">AXI AD9671 (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad_quadmxfe1_ebz/">AD-QUADMXFE1-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad353xr/">AD353XR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad35xxr_evb/">AD35XXR-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4052_ardz/">AD4052-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4062_ardz/">AD4062-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4080_fmc_evb/">AD4080-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4110/">AD4110-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad411x_ad717x/">AD411x-AD717x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4170_asdz/">AD4170-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/">AD469X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/">AD485X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5529r_ardz/">AD5529R-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5706r/">AD5706R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/">AD5758-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/">AD57XX-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad6676evb/">AD6676EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7124_asdz/">AD7124-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7134_fmc/">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7405_fmc/">AD7405-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7606x_fmc/">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad77681evb/">AD7768-1-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7768evb/">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad777x_fmcz/">AD777X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/">AD9081-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz_x_band/">AD9081-FMCA-EBZ-X-BAND</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9083_evb/">AD9083-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9084_ebz/">AD9084-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad916x_fmc/">AD916x-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9208_dual_ebz/">AD9208-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9209_fmca_ebz/">AD9209-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9213_dual_ebz/">AD9213-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9213_evb/">AD9213-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9265_fmc/">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9467_fmc/">AD9467-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/">AD9656-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/">AD9694-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/">AD9740-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/">ADA4355-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/">ADAQ23875</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq7980_sdz/">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq8092_fmc/">ADAQ8092-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx100x_evb/">ADMX100X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx6001_ebz/">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrd8012_01z/">ADRD8012-01Z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001/">ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001_dual/">ADRV9001-DUAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009/">ADRV9009</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009zu11eg/">ADRV9009-ZU11EG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9026/">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv903x/">ADRV903x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv904x/">ADRV904x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9361z7035/">ADRV9361Z7035</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9364z7020/">ADRV9364Z7020</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9371x/">ADRV9371x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adv7511/">ADV7511</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adv7513/">ADV7513</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/arradio/">ARRADIO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0363/">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0506/">CN0506</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0561/">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0577/">CN0577</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0579/">CN0579</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0585/">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dac_fmc_ebz/">DAC-FMC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/daq2/">DAQ2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/daq3/">DAQ3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dc2677a/">DC2677A</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1"/><div class="collapse"><a class="reference internal" href="../../projects/fmcomms2/">FMCOMMS2/3/4</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../projects/fmcomms2/fir_filter/">FMCOMMS2 FIR FILTER</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms5/">FMCOMMS5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms8/">FMCOMMS8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms11/">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/hmcad1520_ebz/">HMCAD1520</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/jupiter_sdr/">JUPITER-SDR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ltc2378_fmc/">LTC2378-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/m2k/">M2K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/max96724/">MAX96724</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pluto/">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/quad_adaq77681/">QUAD_ADAQ7768-1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds_adc/">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx6020m/">ADMX6020M</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/test_capi_selftest/">TEST-CAPI-SELFTEST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9739a_fmc/">AD9739A-FMC (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/">FMCADC2 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc5/">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms1/">FMCOMMS1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms6/">FMCOMMS6 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcjesdadc1/">FMCJESDADC1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/imageon/">IMAGEON (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../">User Guide</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="porting-adi-s-hdl-reference-designs">
+<span id="porting-project"></span><h1>Porting ADI’s HDL reference designs<a class="headerlink" href="#porting-adi-s-hdl-reference-designs" title="Link to this heading"></a></h1>
+<p>In general, a given reference design for an FMC board is deployed to just a few
+carriers, although several <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">FPGA boards</a>
+are supported in ADI’s HDL repository. The simple reason behind this practice is
+that it would create a tremendous maintenance workload, that would require a lot
+of human resources, and would increase the required time for testing.</p>
+<p>The general rule of thumb is to support a given project with a fairly popular
+carrier (e.g. <a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a> or
+<a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a>),
+which is powerful enough to showcase the board
+features and maximum performance.</p>
+<p>All the HDL projects were designed to maximize source code reuse, minimize
+maintainability and simplify portability. The result of these design goals is
+that porting a given project to another carrier is fairly simple if the user
+respects a couple of guidelines.</p>
+<p>The main purpose of this page is to discuss these guidelines and provide
+simple indications for users who wants to port a project to a non-supported
+carrier.</p>
+<section id="quick-compatibility-check">
+<h2>Quick Compatibility Check<a class="headerlink" href="#quick-compatibility-check" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All ADI’s FPGA Mezzanine Cards (FMC) are designed to respect all the
+specifications and requirements defined in the ANSI/VITA 57.1/57.4 FPGA
+Mezzanine Card Standard (if not otherwise stated on board’s page).</p>
+<p>If the new FPGA carrier is fully compliant with this standard, there
+will be no obstacles preventing the user to port the project to the required
+carrier card.</p>
+</div>
+<p>There are three types of FMC connectors: LPC (Low Pin Count), HPC (High Pin
+Count) and FMC+ (VITA 57.4).</p>
+<p>In general, an FMC board is using the FMC connector type that has enough
+pins for the required interfaces between the I/O devices and FPGA. A carrier
+with an FMC HPC connector can host FMC boards with an LPC or HPC connector, but
+a carrier with an FMC LPC can host a board just with an FMC LPC connector.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>First, always check out the already available
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">base designs</a>.
+If your board is present among our supported base designs, you do not need
+to verify the following things and you can jump to the Project creation
+section.</p>
+</div>
+<p>The most important things to check before porting are related to the ANSI/VITA
+57.1/57.4 standard (the list is not necessarily exhaustive):</p>
+<ul class="simple">
+<li><p>Power and ground lines - 3P3V/3P3VAUX/12P0V/GND</p></li>
+<li><p>VADJ - adjustable voltage level power from the carrier, each board has a
+specific requirement for VADJ</p></li>
+<li><p>Dedicated pins for clock signals - all the clock dedicated pins should be
+connected to a clock capable pin of the FPGA (I/O pin which is capable to
+receive and/or transmit a clock signal)</p></li>
+<li><p>Dedicated pins for transceiver lines (DPx_[M2C|C2M]_[P|N])</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>To check all the requirements, please refer to the ANSI/VITA 57.1/57.4
+standard.
+The above few hints do not cover all the FMC standards and you
+may miss something that can prevent the porting of the project.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Make sure that you have reviewed all the documentation and design files in
+order to know the electrical specifications and/or requirements of the
+FMC board. If you’re not sure, ask!</p>
+</div>
+</section>
+<section id="base-design-files">
+<h2>Base design files<a class="headerlink" href="#base-design-files" title="Link to this heading"></a></h2>
+<p>At <a class="reference internal" href="../architecture/#architecture"><span class="std std-ref">HDL Architecture</span></a> it is described a generic base design and possible
+components of it. The user should look at it as a suggestion only.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">projects/common</a>/&lt;carrier_name&gt;
+you can find templates for the <em>system_top.v</em>, <em>Makefile</em>, etc. to help you
+when creating a new project.</p>
+</div>
+<p>The entry point for project creation is <code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code>. Some support
+scripts are first loaded (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl" target="_blank">scripts/adi_env.tcl</a>) then the project is
+created (
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_project_xilinx.tcl#L51" target="_blank">adi_project_xilinx</a>,
+or <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_project_intel.tcl#L18" target="_blank">adi_project_intel</a>
+or <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_project_lattice.tcl#L43" target="_blank">adi_project_lattice</a>).</p>
+<p>Based on the suffix of the project name, the FPGA carrier board is automatically
+detected, based on the <code class="docutils literal notranslate"><span class="pre">adi_project</span></code> procedures mentioned above.
+The constraint files and custom modules instantiated directly in the
+<code class="docutils literal notranslate"><span class="pre">system_top</span></code> module must be added to the project files list, in
+<code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code>.</p>
+<section id="example-with-an-amd-xilinx-board">
+<h3>Example with an AMD Xilinx board<a class="headerlink" href="#example-with-an-amd-xilinx-board" title="Link to this heading"></a></h3>
+<p>In this section, we are presenting all the necessary steps to create a base
+design for the AMD <a class="icon link reference external" href="https://www.xilinx.com/ZCU102" target="_blank">ZCU102</a> development board.</p>
+<p>First, you need to create a new directory in <code class="docutils literal notranslate"><span class="pre">hdl/projects/common</span></code> with the
+name of the carrier.</p>
+<p>The <strong>zcu102</strong> directory must contain the following files:</p>
+<ul class="simple">
+<li><p><strong>zcu102_system_bd.tcl</strong> - this script describes the base block design</p></li>
+<li><p><strong>zcu102_system_constr.xdc</strong> - I/O constraint file for the base design. It
+will contain I/O definitions for GPIO, switches, LEDs or other peripherals of
+the board</p></li>
+<li><p>MIG configuration file (if needed) - this file can be borrowed from the
+golden reference design of the board</p></li>
+<li><p>Other constraints files if needed</p></li>
+</ul>
+<p>You should define the board and its device in the project flow script
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_project_xilinx.tcl" target="_blank">projects/scripts/adi_project_xilinx.tcl</a>
+by adding the following lines after the last device specified in
+the <strong>adi_project_create</strong> process:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="k">[</span><span class="nb">regexp</span><span class="w"> </span><span class="s2">"_zcu102"</span><span class="w"> </span><span class="nv">$project_name</span><span class="k">]</span><span class="w"> </span><span class="k">{</span>
+<span class="w">  </span><span class="k">set</span><span class="w"> </span>device<span class="w"> </span><span class="s2">"xczu9eg-ffvb1156-2-e"</span>
+<span class="w">  </span><span class="k">set</span><span class="w"> </span>board<span class="w"> </span><span class="k">[</span><span class="nb">lindex</span><span class="w"> </span><span class="k">[</span><span class="nb">lsearch</span><span class="w"> </span><span class="o">-</span>all<span class="w"> </span><span class="o">-</span>inline<span class="w"> </span><span class="k">[</span><span class="nv">get_board_parts</span><span class="k">]</span><span class="w"> </span><span class="o">*</span>zcu102<span class="o">*</span><span class="k">]</span><span class="w"> </span>end<span class="k">]</span>
+<span class="w">  </span><span class="k">set</span><span class="w"> </span>sys_zynq<span class="w"> </span><span class="mi">2</span>
+<span class="k">}</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The valid board parts and parts can be retrieved by running the
+following commands in Tcl console: <strong>get_parts</strong> and <strong>get_board_parts</strong>.
+Run the commands like <strong>join [get_parts] \n</strong>, so each part name will be
+listed on a separate line.</p>
+</div>
+<p>The <strong>sys_zynq</strong> constant variable should be set in the following way:</p>
+<ul class="simple">
+<li><p>0 - 7 Series FPGA (e.g. Kintex7, Virtex7)</p></li>
+<li><p>1 - Zynq-7000 SoC</p></li>
+<li><p>2 - Zynq UltraScale+ MP SoC</p></li>
+<li><p>3 - Versal</p></li>
+</ul>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>In case you have a custom board based on an AMD Xilinx chip, let’s say
+a Zynq UltraScale+ MP, then you would need to create the board files, similar
+to the ones we have for ZCU102 (projects/common/zcu102/zcu102_*)
+with the note that you need to manually enable all the functions needed in
+the system.</p>
+</div>
+<p>You need to populate the following lists with information regarding your FPGA
+in the file <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl" target="_blank">library/scripts/adi_xilinx_device_info_enc.tcl</a>;
+but keep in mind, if some of the information already exists in a list,
+do not duplicate it!</p>
+<ul class="simple">
+<li><p>fpga_technology_list: we added <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">ultrascale+</span> <span class="pre">3</span> <span class="pre">}</span></code> for ZCU102</p></li>
+<li><p>fpga_family_list: we added <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">zynq</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">4</span> <span class="pre">}</span></code> for ZCU102</p></li>
+<li><p>speed_grade_list: we added <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">-2</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">20</span> <span class="pre">}</span></code> for ZCU102</p></li>
+<li><p>dev_package_list: we added <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">ff</span>&#160;&#160;&#160;&#160;&#160; <span class="pre">3</span>&#160; <span class="pre">}</span></code> for ZCU102</p></li>
+</ul>
+<p>Then, in the same file, under the <code class="docutils literal notranslate"><span class="pre">adi_device_spec</span></code> procedure, you’d need to
+add a regular expression containing the part name (<code class="docutils literal notranslate"><span class="pre">^xc.u</span></code> in our example,
+to match other UltraScale+ boards that fit, as well) under the FPGA_TECHNOLOGY
+case.</p>
+<section id="project-flow">
+<h4>Project flow<a class="headerlink" href="#project-flow" title="Link to this heading"></a></h4>
+<p>The entry point for project creation is <code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code>. Some support
+scripts are first loaded (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl" target="_blank">scripts/adi_env.tcl</a>) then the project is
+created (
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_project_xilinx.tcl#L51" target="_blank">adi_project_xilinx</a>).</p>
+<p>When the project is created, <em>system_bd.tcl</em> is sourced. <em>system_bd.tcl</em>
+will generate the IP Integrator system. The resulting system will be
+instantiated in the <em>system_top</em> module.</p>
+<p>In our example we use this file:
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zcu102/system_project.tcl" target="_blank">projects/ad9081_fmca_ebz/zcu102/system_project.tcl</a>.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>..<span class="o">/</span>..<span class="o">/</span>scripts<span class="o">/</span>adi_env.tcl
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>scripts<span class="o">/</span>adi_project_xilinx.tcl
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>scripts<span class="o">/</span>adi_board.tcl
+</pre></div>
+</div>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="5086bb9f74dea725e27fa28776029d7d573f38f8" name="5086bb9f74dea725e27fa28776029d7d573f38f8" type="checkbox"></input><label for="5086bb9f74dea725e27fa28776029d7d573f38f8"><p>Use ADC/DAC FIFOs in ZCU102 designs</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<p>To use the ADC/DAC FIFOs, the corresponding Tcl files must be sourced in
+the <em>system_bd.tcl</em>.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c">## ADC FIFO depth in samples per converter</span>
+<span class="k">set</span><span class="w"> </span>adc_fifo_samples_per_converter<span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="mi">64</span><span class="o">*</span><span class="mi">1024</span><span class="k">]</span>
+
+<span class="c">## DAC FIFO depth in samples per converter</span>
+<span class="k">set</span><span class="w"> </span>dac_fifo_samples_per_converter<span class="w"> </span><span class="k">[expr</span><span class="w"> </span><span class="mi">64</span><span class="o">*</span><span class="mi">1024</span><span class="k">]</span>
+
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>zcu102<span class="o">/</span>zcu102_system_bd.tcl
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>xilinx<span class="o">/</span>adcfifo_bd.tcl
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>xilinx<span class="o">/</span>dacfifo_bd.tcl
+
+<span class="c"># the adc_fifo_samples_per_converter and dac_fifo_samples_per_converter will be used in the file below</span>
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>ad9081_fmca_ebz<span class="o">/</span>common<span class="o">/</span>ad9081_fmca_ebz_bd.tcl
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>scripts<span class="o">/</span>adi_pd.tcl
+</pre></div>
+</div>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="5f7104ec4f81f009055f2e43ebc442557cc5987b" name="5f7104ec4f81f009055f2e43ebc442557cc5987b" type="checkbox"></input><label for="5f7104ec4f81f009055f2e43ebc442557cc5987b"><p>Use ADC/DAC FIFOs in ZC706 designs</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<p>To use the ADC/DAC FIFOs, the corresponding Tcl files must be sourced in
+the <em>system_bd.tcl</em>.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>zc706<span class="o">/</span>zc706_plddr3_adcfifo_bd.tcl
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>xilinx<span class="o">/</span>dacfifo_bd.tcl
+</pre></div>
+</div>
+<p>If the user wants to swap the resources allocated to the FIFO, the following
+scripts should be sourced instead:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>zc706<span class="o">/</span>zc706_plddr3_dacfifo_bd.tcl
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>xilinx<span class="o">/</span>adcfifo_bd.tcl
+</pre></div>
+</div>
+<p>The following parameters will define the FIFO’s depth. Note, if the FIFO
+is using the PL side DDR interface, the address width parameter can be
+ignored, and the FIFO will have an equal depth with the DDR memory
+(e.g. in case of the <a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a> board is 1Gbyte).</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c"># the DAC FIFO has a 500KSMP depth - 1 Mbyte</span>
+<span class="k">set</span><span class="w"> </span>dac_fifo_address_width<span class="w"> </span><span class="mi">15</span>
+
+<span class="c"># by default PLDDR is used (1 Gbyte), this varible should be ignored</span>
+<span class="k">set</span><span class="w"> </span>adc_fifo_address_width<span class="w"> </span><span class="mi">15</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div><p>Sometimes, to easily change between configurations of the project (whether
+this is about changing the number of lanes, or from LVDS to CMOS interface,
+etc.), it needs build parameters. They are specified like this, and used
+when running the <code class="docutils literal notranslate"><span class="pre">make</span></code> command (“make RX_JESD_L=2 TX_JESD_L=2”).</p>
+<p>The “0” from <code class="code docutils literal notranslate"><span class="pre">adi_project</span> <span class="pre">ad9081_fmca_ebz_zcu102</span> <span class="pre">0</span></code> is the project mode
+justified by <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_project_xilinx.tcl#L149" target="_blank">this</a>
+(or AMD UG892 user guide).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">adi_project</span> <span class="n">ad9081_fmca_ebz_zcu102</span> <span class="mi">0</span> <span class="p">[</span><span class="nb">list</span> \
+  <span class="n">JESD_MODE</span>        <span class="p">[</span><span class="n">get_env_param</span> <span class="n">JESD_MODE</span>      <span class="mi">8</span><span class="n">B10B</span> <span class="p">]</span> \
+  <span class="n">RX_LANE_RATE</span>     <span class="p">[</span><span class="n">get_env_param</span> <span class="n">RX_LANE_RATE</span>      <span class="mi">10</span> <span class="p">]</span> \
+  <span class="n">RX_JESD_L</span>        <span class="p">[</span><span class="n">get_env_param</span> <span class="n">RX_JESD_L</span>          <span class="mi">4</span> <span class="p">]</span> \
+  <span class="n">TX_LANE_RATE</span>     <span class="p">[</span><span class="n">get_env_param</span> <span class="n">TX_LANE_RATE</span>      <span class="mi">10</span> <span class="p">]</span> \
+  <span class="n">TX_JESD_L</span>        <span class="p">[</span><span class="n">get_env_param</span> <span class="n">RX_JESD_L</span>          <span class="mi">4</span> <span class="p">]</span> \
+<span class="p">]</span>
+
+<span class="n">adi_project_files</span> <span class="n">ad9081_fmca_ebz_zcu102</span> <span class="p">[</span><span class="nb">list</span> \
+  <span class="s2">"system_top.v"</span> \
+  <span class="s2">"system_constr.xdc"</span>\
+  <span class="s2">"timing_constr.xdc"</span>\
+  <span class="s2">"../../../library/common/ad_3w_spi.v"</span>\
+  <span class="s2">"$ad_hdl_dir/library/common/ad_iobuf.v"</span> \
+  <span class="s2">"$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc"</span> <span class="p">]</span>
+
+<span class="n">adi_project_run</span> <span class="n">ad9081_fmca_ebz_zcu102</span>
+</pre></div>
+</div>
+<p>When using the <a class="reference internal" href="../../library/jesd204/#jesd204"><span class="std std-ref">JESD204 Framework</span></a> we need to source the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/scripts/jesd204.tcl" target="_blank">JESD204 support script</a>.
+<code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">$ad_hdl_dir/library/jesd204/scripts/jesd204.tcl</span></code>.
+In this script, several procedures which simplify the design are defined.</p>
+</section>
+</section>
+<section id="example-with-an-intel-board">
+<h3>Example with an Intel board<a class="headerlink" href="#example-with-an-intel-board" title="Link to this heading"></a></h3>
+<p>In this section, we are presenting all the necessary steps to create a base
+design for the Intel Arria 10 SoC development board (abbreviated,
+<a class="icon link reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html" target="_blank">A10SoC</a>).</p>
+<p>First, you need to create a new directory in <code class="docutils literal notranslate"><span class="pre">hdl/projects/common</span></code> with the
+name of the carrier.</p>
+<p>The <strong>a10soc</strong> directory must contain the following files:</p>
+<ul class="simple">
+<li><p><strong>a10soc_system_assign.tcl</strong> - global and I/O assignments of the base design</p></li>
+<li><p><strong>a10soc_system_qsys.tcl</strong> - the QSYS base design</p></li>
+</ul>
+<p>You should define the board and its device in the flow script
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_project_intel.tcl" target="_blank">projects/scripts/adi_project_intel.tcl</a>,
+by adding the following lines after the last device specified in
+the <strong>adi_project</strong> process:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="k">[</span><span class="nb">regexp</span><span class="w"> </span><span class="s2">"_a10soc$"</span><span class="w"> </span><span class="nv">$project_name</span><span class="k">]</span><span class="w"> </span><span class="k">{</span>
+<span class="w">  </span><span class="k">set</span><span class="w"> </span>family<span class="w"> </span><span class="s2">"Arria 10"</span>
+<span class="w">  </span><span class="k">set</span><span class="w"> </span>device<span class="w"> </span><span class="mi">10</span>AS066N3F40E2SG
+<span class="w">  </span><span class="k">set</span><span class="w"> </span>system_qip_file<span class="w"> </span>system_bd<span class="o">/</span>system_bd.qip
+<span class="k">}</span>
+</pre></div>
+</div>
+</section>
+<section id="example-with-a-lattice-board">
+<h3>Example with a Lattice board<a class="headerlink" href="#example-with-a-lattice-board" title="Link to this heading"></a></h3>
+<p>To create a new base design for a given Lattice FPGA carrier board, the following
+steps should be taken (the <a class="icon link reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard" target="_blank">lfcpnx</a> carrier was used as an example).</p>
+<p>The following files should be created or copied into the directory:</p>
+<ul class="simple">
+<li><p><strong>lfcpnx_system_constr.pdc</strong> - global and I/O assignments of the base design</p></li>
+<li><p><strong>lfcpnx_system_pb.tcl</strong> - this script describes the base block design</p></li>
+</ul>
+<p>You should define the board and its device in the flow script
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_lattice_dev_select.tcl" target="_blank">projects/scripts/adi_lattice_dev_select.tcl</a>,
+by adding the following lines to the file:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="k">[</span><span class="nb">regexp</span><span class="w"> </span><span class="s2">"_lfcpnx"</span><span class="w"> </span><span class="nv">$project_name</span><span class="k">]</span><span class="w"> </span><span class="k">{</span>
+<span class="w">  </span><span class="k">set</span><span class="w"> </span>device<span class="w"> </span><span class="s2">"LFCPNX-100-9LFG672C"</span>
+<span class="w">  </span><span class="k">set</span><span class="w"> </span>speed<span class="w"> </span><span class="s2">"9_High-Performance_1.0V"</span>
+<span class="w">  </span><span class="k">set</span><span class="w"> </span>board<span class="w"> </span><span class="s2">"Certus Pro NX Evaluation Board"</span>
+<span class="k">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="project-files">
+<h2>Project files<a class="headerlink" href="#project-files" title="Link to this heading"></a></h2>
+<section id="project-files-for-amd-boards">
+<h3>Project files for AMD boards<a class="headerlink" href="#project-files-for-amd-boards" title="Link to this heading"></a></h3>
+<p>To follow the project framework as much as possible, the easiest way is to copy
+all the projects files from an already existing project and to modify those
+files to support the new carrier.</p>
+<p>A project for an AMD FPGA board should contain the following files:</p>
+<ul class="simple">
+<li><p><strong>system_project.tcl</strong> - this script is creating the actual Vivado project
+and runs the synthesis/implementation of the design. The name of the carrier
+from inside the file, must be updated.</p></li>
+<li><p><strong>system_bd.tcl</strong> - in this file is sourced the <strong>base</strong> design’s Tcl script
+and the <strong>board</strong> design’s Tcl script. Again, the name of the carrier must be
+updated.</p></li>
+<li><p><strong>system_constr.xdc</strong> - constraints file of the <strong>board</strong> design.
+Here are defined the FMC I/O pins and board specific clock signals.
+All the I/O definitions must be updated, with the new pin names.</p></li>
+<li><p><strong>system_top.v</strong> - top wrapper file, in which the <strong>system_wrapper.v</strong>
+module is instantiated, and a few I/O macros are defined.
+The I/O port of this Verilog module will be connected to actual I/O pads
+of the FPGA. The simplest way to update the <strong>system_top</strong> is to let
+the synthesis fail and the tool will tell you which ports are missing
+or which ports are redundant.
+The first thing to do after the failure, is to verify the instantiation
+of the <strong>system_wrapper.v</strong>.
+This file is a tool-generated file and can be found at
+<strong>&lt;project_name&gt;.srcs/sources_1/bd/system/hdl/system_wrapper.v</strong>.
+Fixing the instantiation of the wrapper module in most cases eliminates
+all the errors.</p></li>
+<li><p><strong>Makefile</strong> - this is an auto-generated file, but after updating the carrier
+name, should work with the new project without an issue.</p></li>
+</ul>
+</section>
+<section id="project-files-for-intel-boards">
+<h3>Project files for Intel boards<a class="headerlink" href="#project-files-for-intel-boards" title="Link to this heading"></a></h3>
+<p>To follow the project framework as much as possible, the easiest way is to copy
+all the projects file from an already existing project and to modify those
+files to support the new carrier.</p>
+<p>A project for an Intel FPGA board should contain the following files:</p>
+<ul class="simple">
+<li><p><strong>system_project.tcl</strong> - this script is creating the actual Quartus project
+and runs the synthesis/implementation of the design. It also contains the I/O
+definitions for the interfaces between the FMC board and FPGA. The carrier
+name and all the I/O pin names inside the file, must be updated.</p></li>
+<li><p><strong>system_qsys.tcl</strong> - in this file is sourced the <strong>base</strong> design’s Tcl
+script and the <strong>board</strong> design’s Tcl script. Again, the name of the carrier
+must be updated.</p></li>
+<li><p><strong>system_constr.sdc</strong> - contains clock definitions and other path constraints</p></li>
+<li><p><strong>system_top.v</strong> - top wrapper file of the project. The I/O ports of this
+Verilog module will be actual I/O pads of the FPGA. You must make sure that
+the base design’s I/Os are updated (delete nonexistent I/Os or add new ones).
+The simplest way to update the <em>system_top</em> is to let the synthesis fail and
+the tool will you tell which ports are missing or which ports are redundant.</p></li>
+<li><p><strong>Makefile</strong> - this is an auto-generated file, but after updating the carrier
+name, it should work with the new project without an issue.</p></li>
+</ul>
+</section>
+<section id="project-files-for-lattice-boards">
+<h3>Project files for Lattice boards<a class="headerlink" href="#project-files-for-lattice-boards" title="Link to this heading"></a></h3>
+<p>A project for a Lattice FPGA board should contain the following files:</p>
+<ul class="simple">
+<li><p><strong>system_project_pb.tcl</strong> - Used to build the Propel Builder project
+(block design). Linked in project-lattice.mk, run by propelbld (Windows),
+propelbldwrap (Linux).</p></li>
+<li><p><strong>system_project.tcl</strong> - Used to build the Radiant project. Linked in
+project-lattice.mk, run by pnmainc (Windows), radiantc (Linux).</p></li>
+<li><p><strong>system_pb.tcl</strong> - linker script for the projects, sourced in adi_project_pb
+procedure that is called in system_project_pb.tcl and it is
+defined in adi_project_lattice_pb.tcl. Sources the <em>base design first</em>,
+then the <em>board design</em>, and afterwards it contains all the IP instances and
+connections that must be added on top of the sourced files, to
+complete the design of the project (these are specific to the
+combination of this carrier and board).</p></li>
+<li><p><strong>system_constr.sdc</strong> - Contains clock definitions and other path
+constraints.</p></li>
+<li><p><strong>system_constr.pdc</strong> - Contains clock definitions and other path
+constraints + physical constraints.</p></li>
+<li><p><strong>system_top.v</strong> - Contains everything about the HDL part of the
+project. It instantiates the <strong>&lt;project_name&gt;.v</strong> <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module,
+IO buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
+etc. The I/O ports of this Verilog module will be connected to actual
+I/O pads of the FPGA.</p></li>
+<li><p><strong>Makefile</strong> - This is an auto-generated file, but after updating the project
+name, it should work with the new project without an issue.</p></li>
+</ul>
+</section>
+</section>
+<section id="tips">
+<h2>Tips<a class="headerlink" href="#tips" title="Link to this heading"></a></h2>
+<section id="generating-the-fmc-i-o-constraints">
+<h3>Generating the FMC I/O constraints<a class="headerlink" href="#generating-the-fmc-i-o-constraints" title="Link to this heading"></a></h3>
+<p>The easiest way of writing the constraints for FMC I/O pins is making use
+of the script <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_fmc_constr_generator.tcl" target="_blank">projects/scripts/adi_fmc_constr_generator.tcl</a>.</p>
+<p>Required setup:</p>
+<ul class="simple">
+<li><p>Carrier common FMC connections file
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">projects/common</a>/&lt;carrier&gt;/&lt;carrier&gt;_&lt;fmc_port&gt;.txt)</p></li>
+<li><p>Project common FMC connections file
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects" target="_blank">projects</a>/&lt;project&gt;/common/&lt;project&gt;_fmc.txt)</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In cases where these files don’t already exist, you can make your own
+by following some existing ones as an example.
+For project common files, you can easily make them following <a class="reference internal" href="#creating-fmc"><span class="std std-ref">Creating carrier common FMC connections</span></a>.</p>
+</div>
+<p>Calling the script:</p>
+<p>To use this script you can source it in any Tcl shell or simply call the
+adi_fmc_constr_generator.tcl <strong>with argument(s) &lt;fmc_port&gt;</strong>.
+But before sourcing or calling it, your current directory needs to be
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects" target="_blank">projects</a>/&lt;project&gt;/&lt;carrier&gt;.</p>
+<p>For example:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">tclsh</span> <span class="pre">../../scripts/adi_fmc_constr_generator.tcl</span> <span class="pre">fmc0</span></code>
+(the project uses only one FMC port at a time)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">tclsh</span> <span class="pre">../../scripts/adi_fmc_constr_generator.tcl</span> <span class="pre">fmc0</span> <span class="pre">fmc1</span></code>
+(the project uses two FMC ports at a time)</p></li>
+</ul>
+<p>If sourced <strong>without argument(s)</strong>, then you can simply call <code class="docutils literal notranslate"><span class="pre">gen_fmc_constr</span>
+<span class="pre">&lt;fmc_port&gt;</span></code>.</p>
+<p>For example:</p>
+<ul class="simple">
+<li><p><code class="code docutils literal notranslate"><span class="pre">gen_fmc_constr</span> <span class="pre">fmc0</span></code> (the project uses only one FMC port at a time)</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">gen_fmc_constr</span> <span class="pre">fmc0</span> <span class="pre">fmc1</span></code> (the project uses two FMC ports at a time)</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The fmc port name can be deduced from the common carrier file name
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common" target="_blank">projects/common</a>/&lt;carrier&gt;/&lt;carrier&gt;_&lt;fmc_port&gt;.txt).</p>
+</div>
+<p>The generated file will appear in the current directory as <strong>fmc_constr.xdc</strong>
+(AMD board) or <strong>fmc_constr.tcl</strong> (Intel board). If ran from an open Vivado
+project, the generated file will be automatically added to the project.</p>
+<section id="creating-carrier-common-fmc-connections">
+<span id="creating-fmc"></span><h4>Creating carrier common FMC connections<a class="headerlink" href="#creating-carrier-common-fmc-connections" title="Link to this heading"></a></h4>
+<p>To create a carrier common FMC connections file:</p>
+<ol class="arabic simple">
+<li><p>Open the space divided .txt file corresponding to the desired connector type,
+either with a text editor or importing in a spreadsheet editor
+(with Excel, export as .prn).
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/user_guide/sources/fmc.txt" target="_blank">docs/user_guide/sources/fmc.txt</a>,
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/user_guide/sources/fmc_hpc.txt" target="_blank">docs/user_guide/sources/fmc_hpc.txt</a>,
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/user_guide/sources/fmc+.txt" target="_blank">docs/user_guide/sources/fmc+.txt</a>.</p></li>
+<li><p>Fill the table by replacing the <strong>#</strong>’s where it’s needed.</p></li>
+<li><p>Save as .txt inside <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects" target="_blank">projects</a>/&lt;project_name&gt;/common/.</p></li>
+<li><p>Clean up the file by removing the lines containing <strong>#</strong> for system_top_name.</p></li>
+<li><p>Rearrange the lines following one of the existing examples.</p></li>
+<li><p>To generate empty lines, leave an empty line in the .txt file.
+To generate comments, the line should start with <strong>#</strong> sign.</p></li>
+<li><p>Run the script as <code class="code docutils literal notranslate"><span class="pre">tclsh</span> <span class="pre">/path/to/script</span> <span class="pre">{fmc_conn}</span></code>
+(e.g. <code class="code docutils literal notranslate"><span class="pre">tclsh</span> <span class="pre">../../scripts/adi_fmc_constr_generator.tcl</span> <span class="pre">fmc0</span></code>).</p>
+<ul class="simple">
+<li><p>Current directory needs to be hdl/projects/&lt;project_name&gt;/&lt;carrier&gt;.</p></li>
+<li><p>If used from an open project, the generated file would be added to the
+project; otherwise it will appear in the current directory.</p></li>
+<li><p>If the carrier has only one FMC port, the script can be called without
+parameters.</p></li>
+<li><p>If the carrier has more FMC ports, the script should be called with:</p>
+<ul>
+<li><p>One parameter indicating the FMC port: fmc_lpc/hpc, fmc0/1, fmcp0/1
+(see <strong>projects/common/&lt;carrier&gt;/*.txt</strong>).</p></li>
+<li><p>Two parameters indicating both FMC ports in the desired order for
+projects that use both FMC connectors.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../ip_cores/axi_dac/" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Generic AXI DAC</a>
+    <a href="../customize_hdl/" title="Next document (Alt+Shift+RightArrow)" class="next">Customize HDL projects</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2025, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,260 @@
+<svg width="1117.8" height="925.93" shape-rendering="crispEdges" version="1.1" viewBox="0 0 1117.8 925.93" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <marker id="TriangleInM" overflow="visible" orient="auto">
+   <path transform="scale(-.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="TriangleOutM" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="TriangleInM-7" overflow="visible" orient="auto">
+   <path transform="scale(-.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="TriangleOutM-2" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="TriangleInM-7-1" overflow="visible" orient="auto">
+   <path transform="scale(-.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="TriangleOutM-2-8" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="marker1216-9" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="marker1216-0-3" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="marker1216-0-3-9" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="marker1216-9-8" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="marker1216-8-3-7-3-9" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="marker1216-8-3-7-3-1" overflow="visible" orient="auto">
+   <path transform="scale(.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="TriangleInM-7-1-1" overflow="visible" orient="auto">
+   <path transform="scale(-.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="TriangleInM-7-1-1-6" overflow="visible" orient="auto">
+   <path transform="scale(-.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="TriangleInM-7-1-4" overflow="visible" orient="auto">
+   <path transform="scale(-.4)" d="m5.77 0-8.65 5v-10z" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  </marker>
+ </defs>
+ <g transform="translate(737.99 -206.09)">
+  <rect x="-611.26" y="290.31" width="873.34" height="788.97" rx="4.2426" ry="4.2426" fill="#fff" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.848"/>
+  <path d="m205.8 914.03h-135.85" enable-background="new" fill="none" marker-start="url(#TriangleInM-7-1-1)" shape-rendering="crispEdges" stroke="#000" stroke-width="1.6776"/>
+  <path d="m204.75 898.56h-139.32" enable-background="new" fill="none" marker-start="url(#TriangleInM-7-1)" shape-rendering="crispEdges" stroke="#000" stroke-width="1.6776"/>
+  <g transform="matrix(1.2398 0 0 1.0503 -550.87 -27.871)" shape-rendering="crispEdges">
+   <rect x="428.21" y="616.58" width="44.43" height="191.42" enable-background="new" fill="#fcc" stroke="#a01414" stroke-width=".78903"/>
+   <text transform="rotate(-90)" x="-785.66901" y="457.26349" enable-background="new" fill="#000000" font-family="Arial" font-size="12px" letter-spacing="0px" stroke-width=".70319px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-785.66901" y="457.26349" font-family="Arial" font-size="17.5px" font-weight="bold" stroke-width=".70319px" style="line-height:1.25">LVDS INTERFACE</tspan></text>
+  </g>
+  <g transform="matrix(1.0673 0 0 1.8499 219.26 -722.33)" enable-background="new" shape-rendering="crispEdges">
+   <rect x="-457.3" y="678.99" width="299.12" height="177.64" enable-background="new" fill="#4cbeef" fill-opacity="0" stroke="#a01414" stroke-linecap="square" stroke-linejoin="round" stroke-width="1.2462">
+    <title>DAC core frame</title>
+   </rect>
+   <text transform="scale(1.0524 .95019)" x="-352.79053" y="737.88226" enable-background="new" fill="#000000" fill-opacity=".29412" font-family="Arial" font-size="17.405px" font-weight="bold" letter-spacing="0px" stroke-width=".60286" word-spacing="0px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0%" xml:space="preserve"><tspan x="-352.79053" y="737.88226" fill="#000000" fill-opacity="1" font-family="Arial" font-size="17.405px" font-weight="bold" stroke-width=".60286" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25">axi_pulsar_lvds</tspan></text>
+  </g>
+  <path id="path4518" d="m-117 382.44v-25.078" enable-background="new" fill="none" marker-end="url(#TriangleOutM)" marker-start="url(#TriangleInM)" shape-rendering="crispEdges" stroke="#000" stroke-width="1.5"/>
+  <path id="path4518-5" d="m-76.645 382.43v-24.948" enable-background="new" fill="none" marker-end="url(#TriangleOutM-2)" marker-start="url(#TriangleInM-7)" shape-rendering="crispEdges" stroke="#000" stroke-width="1.5"/>
+  <path id="path4518-5-9" d="m-36.292 382.4v-25.078" enable-background="new" fill="none" marker-end="url(#TriangleOutM-2-8)" marker-start="url(#TriangleInM-7-1)" shape-rendering="crispEdges" stroke="#000" stroke-width="1.5"/>
+  <rect id="rect4136" transform="scale(-1,1)" x="-65.556" y="388.33" width="649.5" height="98.17" fill="#ebebeb" shape-rendering="crispEdges" stroke="#000" stroke-linecap="square" stroke-linejoin="round" stroke-miterlimit="0" stroke-width="1.8933"/>
+  <path id="path4179" d="m23.011 389.2v97.524" fill="#a2dcea" fill-rule="evenodd" shape-rendering="crispEdges" stroke="#000" stroke-width="2"/>
+  <path id="path4179-9" d="m-16.591 389.2v97.524" fill="#a2dcea" fill-rule="evenodd" shape-rendering="crispEdges" stroke="#000" stroke-width="2"/>
+  <path id="path4179-0" d="m-175 389.2v97.524" fill="#a2dcea" fill-rule="evenodd" shape-rendering="crispEdges" stroke="#000" stroke-width="2"/>
+  <path id="path4179-4" d="m-135.39 389.2v97.524" fill="#a2dcea" fill-rule="evenodd" shape-rendering="crispEdges" stroke="#000" stroke-width="2"/>
+  <path id="path4179-7" d="m-95.793 389.2v97.524" fill="#a2dcea" fill-rule="evenodd" shape-rendering="crispEdges" stroke="#000" stroke-width="2"/>
+  <path id="path4179-41" d="m-56.192 389.2v97.524" fill="#a2dcea" fill-rule="evenodd" shape-rendering="crispEdges" stroke="#000" stroke-width="2"/>
+  <path id="path4179-0-3" d="m-214.6 389.2v97.524" fill="#a2dcea" fill-rule="evenodd" shape-rendering="crispEdges" stroke="#000" stroke-width="2"/>
+  <text id="text4229" transform="matrix(0 -.92703 1.0787 0 0 0)" x="-504.8009" y="-64.655113" fill="#000000" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-504.8009" y="-64.655113" font-family="Arial" font-size="15.998px" font-weight="bold" stroke-width="1px" style="line-height:1.25">Ethernet</tspan></text>
+  <text id="text4233" transform="matrix(0 -.92703 1.0787 0 0 0)" x="-494.49719" y="-29.391199" fill="#000000" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-494.49719" y="-29.391199" font-family="Arial" font-size="15.998px" font-weight="bold" stroke-width="1px" style="line-height:1.25">UART</tspan></text>
+  <text id="text4237" transform="matrix(0 -.92703 1.0787 0 0 0)" x="-494.13788" y="-100.18722" fill="#000000" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-494.13788" y="-100.18722" font-family="Arial" font-size="15.998px" font-weight="bold" stroke-width="1px" style="line-height:1.25">DDRx</tspan></text>
+  <text id="text4241" transform="matrix(0 -.92703 1.0787 0 0 0)" x="-484.52167" y="44.030613" fill="#000000" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-484.52167" y="44.030613" font-family="Arial" font-size="15.998px" font-weight="bold" stroke-width="1px" style="line-height:1.25">SPI</tspan></text>
+  <text id="text4245" transform="matrix(0 -.92703 1.0787 0 0 0)" x="-484.42786" y="9.2337379" fill="#000000" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-484.42786" y="9.2337379" font-family="Arial" font-size="15.998px" font-weight="bold" stroke-width="1px" style="line-height:1.25">I<tspan baseline-shift="super" font-family="Arial" font-size="15.998px" font-weight="bold" stroke-width="1px">2</tspan>C</tspan></text>
+  <text id="text4251" transform="matrix(0 -.92703 1.0787 0 0 0)" x="-509.3551" y="-137.97501" fill="#000000" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-509.3551" y="-137.97501" font-family="Arial" font-size="15.998px" font-weight="bold" stroke-width="1px" style="line-height:1.25">Interrupts</tspan></text>
+  <text transform="scale(.99283 1.0072)" x="131.22955" y="474.38336" fill="#000000" font-family="Arial" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="131.22955" y="474.38336" font-family="Arial" font-size="15px" font-weight="bold" style="line-height:1.25"/></text>
+  <text id="text4301" transform="matrix(0 -.92703 1.0787 0 0 0)" x="-493.74341" y="-176.10426" fill="#000000" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-493.74341" y="-176.10426" font-family="Arial" font-size="15.998px" font-weight="bold" stroke-width="1px" style="line-height:1.25">Timer</tspan></text>
+  <rect id="rect4589" x="-585.87" y="338.01" width="22.943" height="20.824" enable-background="new" fill="#fcc" shape-rendering="crispEdges" stroke="#a01414"/>
+  <text id="text4595" transform="scale(1.0865 .92038)" x="-512.2265" y="383.52072" enable-background="new" fill="#000000" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-512.2265" y="383.52072" font-family="Arial" font-size="17.776px" stroke-width="1px" style="line-height:1.25">Receive path</tspan></text>
+  <text id="text4482" transform="scale(1.0865 .92038)" x="139.86217" y="478.63379" enable-background="new" fill="#000000" fill-opacity=".8587" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="139.86217" y="478.63379" fill="#000000" fill-opacity=".8587" font-family="Arial" font-size="28.442px" font-weight="bold" stroke-width="1px" text-align="center" text-anchor="middle" style="line-height:1.25">Zed</tspan></text>
+  <text id="text4311-0" transform="scale(1.0787 .92703)" x="-457.88947" y="479.112" enable-background="new" fill="#000000" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-457.88947" y="479.112" font-family="Arial" font-size="21.331px" font-weight="bold" stroke-width="1px" style="line-height:1.25">ARM (Zynq) </tspan></text>
+  <g shape-rendering="crispEdges">
+   <g id="g5654" transform="matrix(3.3206 0 0 1.5398 -947.01 -151.59)" enable-background="new" fill="#a01414" shape-rendering="crispEdges" stroke="#a01414" stroke-width=".44901">
+    <path d="m130.74 546.23 10.032 14.849v-6.8059l20.464-3e-5v-16.084l-20.464 3e-5v-6.8059l-10.032 14.849" fill="#a01414" fill-rule="evenodd" stroke="#a01414" stroke-linecap="round" stroke-width=".44901px"/>
+   </g>
+   <text x="243.93425" y="661.4364" enable-background="new" fill="#000000" font-family="Arial" letter-spacing="0px" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="243.93425" y="661.4364" font-family="Arial" font-size="12.5px" font-weight="bold" text-align="center" text-anchor="middle" style="line-height:1.25"/></text>
+   <g transform="matrix(1.5451 0 0 1.3089 -704.16 583.4)">
+    <path d="m596 84.094h-98" enable-background="new" fill="none" marker-end="url(#marker1216-9)" shape-rendering="crispEdges" stroke="#000" stroke-width="1.4064"/>
+    <text x="522" y="67.094482" fill="#000000" font-family="sans-serif" font-size="16px" letter-spacing="0px" stroke-width=".70319" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="522" y="67.094482" font-size="13.333px" stroke-width=".70319">D+/-</tspan></text>
+   </g>
+  </g>
+  <path transform="matrix(-.78937 0 0 .82317 1077.8 240.07)" d="m1321.6 846.41-62.602-37.396 63.687-35.518-0.5421 36.457z" fill="#3daecc" fill-rule="evenodd"/>
+  <g id="g8892" transform="matrix(1.5451 0 0 1.3089 -662.96 -259.33)" enable-background="new" shape-rendering="crispEdges" stroke-width=".70319">
+   <rect x="366.68" y="431.09" width="26.833" height="23.063" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width=".94123"/>
+   <path d="m371.84 433.48h16.316c1.2826 0 2.3152 1.0326 2.3152 2.3152v13.229c0 1.2826-1.0326 2.3152-2.3152 2.3152h-16.316c-1.2826 0-2.3152-1.0326-2.3152-2.3152v-13.229c0-1.2826 1.0326-2.3152 2.3152-2.3152z" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width=".84383"/>
+   <g transform="matrix(1.2473 0 0 1.2473 -94.75 -45.664)">
+    <path d="m371.16 393.86h6.7774v5.2489h-6.7774z" fill="#fff" stroke="#fff" stroke-width=".337"/>
+    <path d="m383.31 393.86h6.7774v5.2489h-6.7774z" fill="#fff" stroke="#fff" stroke-width=".337"/>
+   </g>
+   <path d="m369.53 445.26h5.8318v2.8261h1.5478v3.2458" fill="none" stroke="#000" stroke-linecap="round" stroke-width=".84383"/>
+   <path d="m390.47 445.29h-5.8928v2.8073h-1.564v3.2243" fill="none" stroke="#000" stroke-linecap="round" stroke-width=".84383"/>
+   <rect x="369.14" y="447.11" width="4.5168" height="3.8939" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width=".68421"/>
+   <rect x="386.27" y="447.11" width="4.5168" height="3.8939" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width=".68421"/>
+   <rect x="371.85" y="433.6" width="1.2439" height="5.1641" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width=".217"/>
+   <rect x="384.4" y="433.6" width="1.2439" height="5.1641" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width=".217"/>
+   <rect x="381.89" y="433.6" width="1.2439" height="5.1641" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width=".217"/>
+   <rect x="379.38" y="433.6" width="1.2439" height="5.1641" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width=".217"/>
+   <rect x="376.87" y="433.6" width="1.2439" height="5.1641" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width=".217"/>
+   <rect x="374.36" y="433.6" width="1.2439" height="5.1641" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width=".217"/>
+   <rect x="386.9" y="433.6" width="1.2439" height="5.1641" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width=".217"/>
+  </g>
+  <g id="uart" transform="matrix(0 -.54286 .64084 0 -295.63 605.42)" enable-background="new" shape-rendering="crispEdges">
+   <rect x="490.75" y="388.11" width="70" height="28.75" rx="2.9124" ry="3.4381" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <path d="m507.25 394.11h37c2.493 0 5.4767 2.2063 4.5 4.5l-3.3 7.75c-0.97668 2.2937-3.507 4.5-6 4.5h-27.8c-2.493 0-4.3739-2.228-5.4-4.5l-3.5-7.75c-1.0261-2.272 2.007-4.5 4.5-4.5z" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <circle cx="497.51" cy="402.49" r="3.1875" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <circle cx="554.14" cy="402.49" r="3.1875" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <ellipse cx="513.74" cy="399.8" rx="1" ry="1.0625" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <ellipse cx="537.74" cy="399.8" rx="1" ry="1.0625" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <ellipse cx="531.74" cy="399.8" rx="1" ry="1.0625" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <ellipse cx="525.74" cy="399.8" rx="1" ry="1.0625" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <ellipse cx="519.74" cy="399.8" rx="1" ry="1.0625" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <ellipse cx="516.74" cy="405.8" rx="1" ry="1.0625" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <ellipse cx="534.74" cy="405.8" rx="1" ry="1.0625" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <ellipse cx="528.74" cy="405.8" rx="1" ry="1.0625" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+   <ellipse cx="522.74" cy="405.8" rx="1" ry="1.0625" fill="#fff" stroke="#000" stroke-linecap="round" stroke-width="1.6954"/>
+  </g>
+  <rect x="-608.16" y="293.99" width="847.83" height="783.4" enable-background="new" fill-opacity="0" shape-rendering="crispEdges" stroke="#000" stroke-linecap="square" stroke-linejoin="round" stroke-miterlimit="0" stroke-width="1.5354"/>
+  <g stroke-width=".81874">
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#path4518"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#path4518-5"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#path4518-5-9"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#rect4136"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#path4179"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#path4179-9"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#path4179-0"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#path4179-4"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#path4179-7"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#path4179-41"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#path4179-0-3"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#text4229"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#text4233"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#text4237"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#text4241"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#text4245"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#text4251"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#text4301"/>
+   <use transform="translate(6.033e-5)" width="100%" height="100%" xlink:href="#rect4589"/>
+   <use transform="translate(6.133e-5)" width="100%" height="100%" xlink:href="#text4595"/>
+  </g>
+  <rect x="-586.86" y="545.19" width="38.809" height="263.14" enable-background="new" fill="#fff" shape-rendering="crispEdges" stroke="#000" stroke-linecap="square" stroke-linejoin="round" stroke-miterlimit="0" stroke-width="1.8402"/>
+  <text transform="matrix(0 -.92038 1.0865 0 0 0)" x="-867.47467" y="-516.21698" enable-background="new" fill="#000000" font-family="Arial" font-size="20.857px" font-weight="bold" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:0%" xml:space="preserve"><tspan x="-867.47467" y="-516.21698" font-family="Arial" font-size="20.857px" font-weight="bold" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25">MEMORY INTERCONNECT</tspan></text>
+  <use transform="translate(6.133e-5)" width="100%" height="100%" stroke-width=".81874" xlink:href="#text4482"/>
+  <g shape-rendering="crispEdges">
+   <rect x="-591.09" y="517.15" width="222.2" height="542.83" enable-background="new" fill="none" stroke="#3f4b55" stroke-dasharray="2.03381, 6.10143" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.0338"/>
+   <rect x="-360.89" y="517.15" width="587.07" height="542.83" enable-background="new" fill="none" stroke="#3f4b55" stroke-dasharray="2.03381, 6.10143" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.0338"/>
+   <text transform="scale(1.1547 .86605)" x="-506.41898" y="1207.4796" enable-background="new" fill="#000000" font-family="sans-serif" font-size="14px" font-weight="bold" letter-spacing="0px" word-spacing="0px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-506.41898" y="1207.4796" font-family="sans-serif" font-size="14px" font-weight="bold" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">SystemClock= 100MHz</tspan></text>
+   <text transform="scale(1.1547 .86605)" x="-188.69106" y="1207.3976" enable-background="new" fill="#000000" font-family="sans-serif" font-size="14px" font-weight="bold" letter-spacing="0px" word-spacing="0px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-188.69106" y="1207.3976" font-family="sans-serif" font-size="14px" font-weight="bold" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">ReferenceClock= 125MHz/166MHz</tspan></text>
+  </g>
+  <use transform="translate(6.033e-5)" width="100%" height="100%" stroke-width=".81874" xlink:href="#text4311-0"/>
+  <g shape-rendering="crispEdges">
+   <use transform="matrix(.66965 0 0 1.0295 5.7143 -13.791)" width="100%" height="100%" stroke-width="1.0136" xlink:href="#g5654"/>
+   <g transform="matrix(1.5451 0 0 1.3089 -706.25 504.73)">
+    <path d="m596 197.09h-98" enable-background="new" fill="none" marker-end="url(#marker1216-0-3)" stroke="#000" stroke-width="1.4064"/>
+    <path d="m596 209.09h-98" enable-background="new" fill="none" marker-end="url(#marker1216-0-3-9)" stroke="#000" stroke-width="1.4064"/>
+    <text x="522.70721" y="191.09448" enable-background="new" fill="#000000" font-family="sans-serif" font-size="16px" letter-spacing="0px" stroke-width=".70319" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="522.70721" y="191.09448" font-size="13.333px" stroke-width=".70319">DCO+/-</tspan></text>
+   </g>
+   <text transform="scale(.95452 1.0477)" x="-103.83724" y="911.82257" enable-background="new" fill="#000000" font-family="sans-serif" font-size="13.326px" letter-spacing="0px" stroke-width=".87852" word-spacing="0px" style="font-feature-settings:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-103.83724" y="911.82257" stroke-width=".87852">clk_gate</tspan></text>
+   <text transform="scale(1.0865 .92038)" x="77.567307" y="972.91711" enable-background="new" fill="#000000" font-family="sans-serif" font-size="22.753px" letter-spacing="0px" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="77.567307" y="972.91711" font-size="18.961px">CNV+/-</tspan></text>
+   <path d="m1.5055 970.9 36.503-0.1737" enable-background="new" fill="none" marker-end="url(#marker1216-8-3-7-3-9)" stroke="#000" stroke-width="1.67"/>
+   <g transform="matrix(1.723 0 0 1.5883 -803.57 -374.74)" enable-background="new" stroke="#000" stroke-width=".85888">
+    <rect transform="rotate(-90)" x="-453.55" y="391.8" width="29.359" height="11.249" fill="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width=".6871"/>
+    <g stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".67391" stroke-width=".57975">
+     <rect transform="rotate(-90)" x="-451.48" y="394.01" width="4.6139" height="6.8414"/>
+     <rect transform="rotate(-90)" x="-444.7" y="394.01" width="4.6139" height="6.8414"/>
+     <rect transform="rotate(-90)" x="-431.13" y="394.01" width="4.6139" height="6.8414"/>
+     <rect transform="rotate(-90)" x="-437.92" y="394.01" width="4.6139" height="6.8414"/>
+    </g>
+    <g fill="none">
+     <path d="m402.95 451.35h3.4684v-24.74h-3.6316" stroke-width=".4729"/>
+     <g stroke-linecap="round" stroke-width=".91642">
+      <path d="m406.05 449h-1.4405"/>
+      <path d="m406.05 430.93h-1.4405"/>
+      <path d="m406.05 433.33h-1.4405"/>
+      <path d="m406.05 435.46h-1.4405"/>
+      <path d="m406.05 437.86h-1.4405"/>
+      <path d="m406.05 439.99h-1.4405"/>
+      <path d="m406.05 442.34h-1.4405"/>
+      <path d="m406.05 444.52h-1.4405"/>
+      <path d="m406.05 446.83h-1.4405"/>
+      <path d="m406.05 430.93h-1.4405"/>
+      <path d="m406.05 428.8h-1.4405"/>
+     </g>
+    </g>
+   </g>
+  </g>
+  <use transform="translate(6.033e-5)" width="100%" height="100%" stroke-width=".81874" xlink:href="#g8892"/>
+  <use transform="translate(6.033e-5)" width="100%" height="100%" stroke-width=".81874" xlink:href="#uart"/>
+  <g shape-rendering="crispEdges">
+   <g transform="matrix(2.4909 0 0 2.1197 -1140.5 -725.63)" enable-background="new" stroke-width=".84118">
+    <g transform="translate(1.9279e-5 1.2997)" stroke-width=".84118">
+     <rect transform="rotate(-90)" x="-658.8" y="357.04" width="32.689" height="84.854" enable-background="new" fill="none" shape-rendering="crispEdges" stroke="#a01414" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2063"/>
+     <text x="399.43216" y="646.07898" fill="#000000" font-family="Arial" letter-spacing="0px" stroke-width=".84118px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="399.43216" y="646.07898" fill="#000000" font-family="Arial" font-size="9.4653px" font-weight="bold" stroke-width=".84118px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25">ADC CHANNEL</tspan></text>
+     <g shape-rendering="crispEdges">
+      <rect transform="rotate(-90)" x="-697.26" y="357.76" width="32.689" height="84.854" enable-background="new" fill="none" stroke="#a01414" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2063"/>
+      <text x="400.15103" y="684.53821" enable-background="new" fill="#000000" font-family="Arial" letter-spacing="0px" stroke-width=".84118px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="400.15103" y="684.53821" fill="#000000" font-family="Arial" font-size="9.4653px" font-weight="bold" stroke-width=".84118px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25">DELAY CONTROL</tspan></text>
+      <rect transform="rotate(-90)" x="-735.47" y="357.15" width="32.689" height="84.854" enable-background="new" fill="none" stroke="#a01414" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2063"/>
+      <text x="399.54886" y="722.75037" enable-background="new" fill="#000000" font-family="Arial" letter-spacing="0px" stroke-width=".84118px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="399.54886" y="722.75037" fill="#000000" font-family="Arial" font-size="9.4653px" font-weight="bold" stroke-width=".84118px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25">ADC COMMON</tspan></text>
+     </g>
+    </g>
+   </g>
+   <text transform="scale(1.0903 .9172)" x="-433.81613" y="760.92261" enable-background="new" fill="#000000" font-family="sans-serif" font-size="26.862px" letter-spacing="0px" stroke-width="1.0153" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="-433.81613" y="760.92261" stroke-width="1.0153">64</tspan></text>
+   <text transform="scale(1.0808 .92527)" x="-309.77429" y="759.1181" enable-background="new" fill="#000000" font-family="sans-serif" font-size="20.211px" letter-spacing="0px" stroke-width="1.0243" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="-309.77429" y="759.1181" font-size="20.211px" stroke-width="1.0243" style="line-height:1.25">16/32</tspan></text>
+  </g>
+  <g fill="none" stroke="#000">
+   <path d="m-32.488 950.41v40.767c16.31-0.8803 34.229-5.9317 34.408-19.726 0.18234-14.009-15.462-21.027-34.408-21.041z" stroke-width="1.6952"/>
+   <g shape-rendering="crispEdges">
+    <path d="m-104.2 906.68 136.41-0.058" enable-background="new" marker-end="url(#marker1216-8-3-7-3-1)" stroke-width="1.6714"/>
+    <path d="m-396.08 923.1 98.824-9e-3" enable-background="new" marker-end="url(#marker1216-8-3-7-3-1)" stroke-width="1.6714"/>
+    <g stroke-width="1.6714">
+     <path d="m-317.24 923.4-0.33448 60.23" enable-background="new" marker-end="url(#marker1216-8-3-7-3-1)"/>
+     <path d="m-40.153 861.19-0.33448 98.223" enable-background="new" marker-end="url(#marker1216-8-3-7-3-1)"/>
+     <path d="m-116.62 960.24 84.134-0.058" enable-background="new" marker-end="url(#marker1216-8-3-7-3-1)"/>
+    </g>
+    <path d="m-317.58 983.63 284.05-0.058" enable-background="new" marker-end="url(#marker1216-8-3-7-3-1)" stroke-width="1.6714"/>
+    <path d="m215.43 676.93h-151.42" enable-background="new" marker-end="url(#marker1216-9-8)" stroke-width="2"/>
+   </g>
+  </g>
+  <g>
+   <rect x="-392.32" y="529.15" width="53.43" height="342.47" enable-background="new" fill="#fcc" shape-rendering="crispEdges" stroke="#a01414" stroke-width=".85266"/>
+   <text transform="matrix(0 -.92038 1.0865 0 0 0)" x="-777.62524" y="-331.76257" enable-background="new" fill="#28170b" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-777.62524" y="-331.76257" fill="#28170b" font-family="Arial" font-size="24.886px" font-weight="bold" stroke-width="1px" style="line-height:1.25">DMA</tspan></text>
+   <ellipse cx="70.032" cy="914.28" rx="3.3295" ry="3.2518" fill-rule="evenodd"/>
+  </g>
+  <path d="m206.66 978.05h-135.85" enable-background="new" fill="none" marker-start="url(#TriangleInM-7-1-1-6)" shape-rendering="crispEdges" stroke="#000" stroke-width="1.6776"/>
+  <path d="m205.61 962.58h-139.32" enable-background="new" fill="none" marker-start="url(#TriangleInM-7-1-4)" shape-rendering="crispEdges" stroke="#000" stroke-width="1.6776"/>
+  <g shape-rendering="crispEdges">
+   <path transform="matrix(-.78937 0 0 .82317 1078.6 304.09)" d="m1321.6 846.41-62.602-37.396 63.687-35.518-0.5421 36.457z" fill="#3daecc" fill-rule="evenodd"/>
+   <text transform="scale(1.0865 .92038)" x="78.355026" y="1042.4747" enable-background="new" fill="#000000" font-family="sans-serif" font-size="22.753px" letter-spacing="0px" word-spacing="0px" style="line-height:1.25" xml:space="preserve"><tspan x="78.355026" y="1042.4747" font-size="18.961px">CLK+/-</tspan></text>
+   <ellipse cx="70.888" cy="978.3" rx="3.3295" ry="3.2518" fill-rule="evenodd"/>
+   <rect transform="rotate(-90)" x="-969.29" y="-298.35" width="88.02" height="193.85" enable-background="new" fill="#63aecc"/>
+  </g>
+  <g fill="#000000" letter-spacing="0px" shape-rendering="crispEdges" word-spacing="0px">
+   <text transform="scale(1.0865 .92038)" x="-140.71672" y="988.16522" enable-background="new" font-family="sans-serif" font-size="11.377px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-140.71672" y="988.16522" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">pwm_0</tspan><tspan x="-140.71672" y="1002.386" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal"/></text>
+   <text transform="scale(1.0865 .92038)" x="-139.63338" y="1041.292" enable-background="new" font-family="sans-serif" font-size="11.377px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-139.63338" y="1041.292" font-family="sans-serif" font-size="11.377px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">pwm_1</tspan></text>
+   <text transform="scale(.96612 1.0351)" x="-295.97568" y="901.9021" enable-background="new" font-family="Arial" font-size="16.093px" stroke-width="1.007px" style="line-height:0%" xml:space="preserve"><tspan x="-295.97568" y="901.9021" fill="#000000" font-family="Arial" font-size="17.596px" font-weight="bold" stroke-width="1.007px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25">AXI_PWM_GEN</tspan></text>
+  </g>
+  <rect transform="rotate(-90)" x="-969.29" y="-584.21" width="88.02" height="193.85" enable-background="new" fill="#63aecc" shape-rendering="crispEdges"/>
+  <g fill="#000000" letter-spacing="0px" shape-rendering="crispEdges" word-spacing="0px">
+   <text transform="scale(.96612 1.0351)" x="-583.25415" y="898.59241" enable-background="new" font-family="Arial" font-size="16.093px" stroke-width="1.007px" style="line-height:0%" xml:space="preserve"><tspan x="-583.25415" y="898.59241" fill="#000000" font-family="Arial" font-size="17.596px" font-weight="bold" stroke-width="1.007px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25">AXI_CLK_GEN</tspan></text>
+   <text transform="scale(1.0865 .92038)" x="-394.65787" y="1006.6296" enable-background="new" font-family="sans-serif" font-size="11.377px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-394.65787" y="1006.6296" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">clk_0</tspan><tspan x="-394.65787" y="1020.8504" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal"/></text>
+   <text transform="scale(1.0865 .92038)" x="-360.28079" y="1000.3776" enable-background="new" font-family="sans-serif" font-size="8.71px" font-weight="bold" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-360.28079" y="1000.3776" font-family="sans-serif" font-size="8.71px" font-weight="bold" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">125MHz/166MHz </tspan></text>
+  </g>
+  <rect x="216.6" y="543.96" width="44.65" height="492.28" enable-background="new" fill="#fff" shape-rendering="crispEdges" stroke="#000" stroke-linecap="square" stroke-linejoin="round" stroke-miterlimit="0" stroke-width="1.7357"/>
+  <text transform="matrix(0 -.92038 1.0865 0 0 0)" x="-964.02057" y="229.37346" enable-background="new" fill="#000000" font-family="Arial" font-size="17.065px" letter-spacing="0px" shape-rendering="crispEdges" stroke-width="1px" word-spacing="0px" style="line-height:0%" xml:space="preserve"><tspan x="-964.02057" y="229.37346" font-family="Arial" font-size="24.886px" font-weight="bold" stroke-width="1px" style="line-height:1.25">FMC CONNECTOR</tspan></text>
+  <text transform="translate(-737.99 206.09)" fill="#000000" font-size="20.211px" stroke="#3f4b55" style="line-height:1.25;shape-inside:url(#rect1);white-space:pre" xml:space="preserve"/>
+ </g>
+</svg>

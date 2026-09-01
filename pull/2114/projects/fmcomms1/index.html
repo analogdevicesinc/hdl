@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="This design has been retired or deprecated, which means it is no longer maintained or actively updated, even though the devices themselves may be Recommended for New Designs or in Production. This page is here for historical/reference purposes only." name="description" />
+
+    <title>AD-FMCOMMS1-EBZ HDL Project (OBSOLETE) &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fb8972a4" />
+    <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="AD-FMCOMMS6-EBZ HDL Project (OBSOLETE)" href="../fmcomms6/" />
+    <link rel="prev" title="FMCADC5 HDL Project (OBSOLETE)" href="../fmcadc5/" />
+   
+  
+  
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://developer.analog.com/" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Documentation</label>
+        
+        <a id="logo" href="../../">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AD-FMCOMMS1-EBZ HDL Project (OBSOLETE)</a><ul>
+<li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
+<li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
+<li><a class="reference internal" href="#downloads">Downloads</a></li>
+<li><a class="reference internal" href="#help-and-support">Help and support</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="logo" href="../../">
+      <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
+      <img class="only-dark" src="../../_static/HDL_logo_w_cropped.svg"/>
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction/">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository/">Git repository</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/releases/">Releases</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-1" id="toctree-collapse-1-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/">Projects List and Dependencies</a><label for="toctree-collapse-1-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_main/">Projects list and dependencies for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2026_r1/">Projects list and dependencies for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2023_r2/">Projects list and dependencies for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2022_r2/">Projects list and dependencies for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r2/">Projects list and dependencies for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r1/">Projects list and dependencies for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r2/">Projects list and dependencies for hdl_2019_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r1/">Projects list and dependencies for hdl_2019_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r2/">Projects list and dependencies for hdl_2018_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r1/">Projects list and dependencies for hdl_2018_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2017_r1/">Projects list and dependencies for hdl_2017_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2016_r2/">Projects list and dependencies for hdl_2016_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2015_r1/">Projects list and dependencies for hdl_2015_r1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-2" id="toctree-collapse-1-1-2"/><div class="collapse"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/">Resource Utilization</a><label for="toctree-collapse-1-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_main/">Resource utilization for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2026_r1/">Resource utilization for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2023_r2/">Resource utilization for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2022_r2/">Resource utilization for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2021_r2/">Resource utilization for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2021_r1/">Resource utilization for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2019_r2/">Resource utilization for hdl_2019_r2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl/">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_boot_bin/">Build the BOOT.BIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_intel_boot_image/">Build the Intel Boot Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture/">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-2" id="toctree-collapse-1-2"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/">IP cores</a><label for="toctree-collapse-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip/">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips/">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces/">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project/">Porting HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl/">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guidelines/">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines/">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/contributing/">Contributing to HDL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party/">Third party forks</a></li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../library/">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../library/i3c_controller/">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_host_interface/">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_core/">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/interface/">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../../library/jesd204/">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/generic_jesd_bds/">Generic JESD204 block designs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/">DAC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/xgt_wizard/">Xilinx FPGAs Transceivers Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/versal_transceiver_subsystem/">AMD Versal Adaptive SoC Transceiver Subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/troubleshoot/troubleshoot_jesd204_tx/">Troubleshooting JESD204 TX links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../library/spi_engine/">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_execution/">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/axi_spi_engine/">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_offload/">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect/">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/control-interface/">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/offload-control-interface/">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi-bus-interface/">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/instruction-format/">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/pipeline-delays/">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/tutorial/">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad35xxr/">AXI AD35XXR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/">AXI AD408x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7405/">AXI AD7405</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7768/">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad777x/">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/">AXI AD9265</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../library/axi_ad9361/">AXI AD9361</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/axi_ad9361/tdd_support/">TDD Mode Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9740/">AXI AD9740</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ada4355/">AXI ADA4355</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adrv9001/">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hmcad15xx/">AXI HMCAD15XX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc235x/">AXI LTC235X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc2387/">AXI LTC2387</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/">Data Offload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_rx/">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_tx/">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_decimate/">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_trigger/">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adf4030/">AXI ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adxcvr/">AXI ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_clkgen/">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_clock_monitor/">AXI Clock Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dac_interpolate/">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_fan_control/">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_laser_driver/">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_logic_analyzer/">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_pwm_gen/">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_sysid/">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_tdd/">AXI TDD</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/cn0363/">CN0363</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/cn0363/cn0363_dma_sequencer/">CN0363 DMA Sequencer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/cn0363/cn0363_phase_data_sync/">CN0363 Phase Data Sync</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/common/ad_dds/">AD Direct Digital Synthesis</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../library/corundum/">Corundum Network Stack</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/corundum/corundum_core/">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6-1" id="toctree-collapse-2-6-1"/><div class="collapse"><a class="reference internal" href="../../library/corundum/ethernet/">Corundum Ethernet Core</a><label for="toctree-collapse-2-6-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/vcu118/">VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/k26/">K26</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo/">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo_asym/">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_extract/">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_mii_to_rmii/">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_cpack2/">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_upack2/">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_rfifo/">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_sigma_delta_spi/">Util Sigma Delta SPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_var_fifo/">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_wfifo/">Util WFIFO</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-7" id="toctree-collapse-2-7"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9643/">AXI AD9643 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9671/">AXI AD9671 (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ad_quadmxfe1_ebz/">AD-QUADMXFE1-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad353xr/">AD353XR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad35xxr_evb/">AD35XXR-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4052_ardz/">AD4052-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4062_ardz/">AD4062-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4080_fmc_evb/">AD4080-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4110/">AD4110-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/">AD411x-AD717x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4170_asdz/">AD4170-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/">AD469X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/">AD485X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5529r_ardz/">AD5529R-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5706r/">AD5706R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/">AD5758-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/">AD57XX-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad6676evb/">AD6676EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7124_asdz/">AD7124-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7134_fmc/">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad719x_asdz/">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad738x_fmc/">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7405_fmc/">AD7405-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7606x_fmc/">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7616_sdz/">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad77681evb/">AD7768-1-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7768evb/">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad777x_fmcz/">AD777X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/">AD9081-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz_x_band/">AD9081-FMCA-EBZ-X-BAND</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9083_evb/">AD9083-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9084_ebz/">AD9084-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad916x_fmc/">AD916x-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9208_dual_ebz/">AD9208-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9209_fmca_ebz/">AD9209-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9213_dual_ebz/">AD9213-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9213_evb/">AD9213-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9265_fmc/">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9434_fmc/">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9467_fmc/">AD9467-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9656_fmc/">AD9656-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9694_fmc/">AD9694-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9695_fmc/">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9740_fmc/">AD9740-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ada4355_fmc/">ADA4355-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adaq23875/">ADAQ23875</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adaq7980_sdz/">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adaq8092_fmc/">ADAQ8092-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admx100x_evb/">ADMX100X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admx6001_ebz/">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrd8012_01z/">ADRD8012-01Z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9001/">ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9001_dual/">ADRV9001-DUAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9009/">ADRV9009</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9009zu11eg/">ADRV9009-ZU11EG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9026/">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv903x/">ADRV903x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv904x/">ADRV904x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9361z7035/">ADRV9361Z7035</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9364z7020/">ADRV9364Z7020</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9371x/">ADRV9371x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adv7511/">ADV7511</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adv7513/">ADV7513</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arradio/">ARRADIO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0363/">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0506/">CN0506</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0540/">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0561/">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0577/">CN0577</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0579/">CN0579</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0585/">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac_fmc_ebz/">DAC-FMC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../daq2/">DAQ2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../daq3/">DAQ3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dc2677a/">DC2677A</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1"/><div class="collapse"><a class="reference internal" href="../fmcomms2/">FMCOMMS2/3/4</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../fmcomms2/fir_filter/">FMCOMMS2 FIR FILTER</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms5/">FMCOMMS5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms8/">FMCOMMS8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms11/">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hmcad1520_ebz/">HMCAD1520</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jupiter_sdr/">JUPITER-SDR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ltc2378_fmc/">LTC2378-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../m2k/">M2K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../max96724/">MAX96724</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pluto/">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quad_adaq77681/">QUAD_ADAQ7768-1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pulsar_adc/">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pulsar_lvds_adc/">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admx6020m/">ADMX6020M</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_capi_selftest/">TEST-CAPI-SELFTEST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9739a_fmc/">AD9739A-FMC (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcadc2/">FMCADC2 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcadc5/">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FMCOMMS1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms6/">FMCOMMS6 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcjesdadc1/">FMCJESDADC1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imageon/">IMAGEON (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../">Projects</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="ad-fmcomms1-ebz-hdl-project-obsolete">
+<span id="fmcomms1"></span><h1>AD-FMCOMMS1-EBZ HDL Project (OBSOLETE)<a class="headerlink" href="#ad-fmcomms1-ebz-hdl-project-obsolete" title="Link to this heading"></a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This design has been retired or deprecated, which means it is no longer
+maintained or actively updated, even though the devices themselves may be
+<strong>Recommended for New Designs</strong> or in <strong>Production</strong>. This page is here for
+historical/reference purposes only.</p>
+</div>
+<section id="supported-devices">
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS1-EBZ" target="_blank">AD-FMCOMMS1-EBZ</a></p></li>
+</ul>
+</section>
+<section id="supported-carriers">
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/AC701" target="_blank">AC701</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/KC705" target="_blank">KC705</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/VC707" target="_blank">VC707</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/ZC702" target="_blank">ZC702</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/ZC706" target="_blank">ZC706</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.avnet.com/wps/portal/us/products/avnet-boards/avnet-board-families/zedboard/" target="_blank">Zed Board</a></p></li>
+</ul>
+</section>
+<section id="downloads">
+<h2>Downloads<a class="headerlink" href="#downloads" title="Link to this heading"></a></h2>
+<p>FPGA Reference Designs on GitHub:</p>
+<ul class="simple">
+<li><p>Main repository, always in sync with the latest release:
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">ADI HDL repository</a></p></li>
+<li><p>Last stable version for Vivado 2015.2.1:
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2015_r2/projects/fmcomms1" target="_blank">hdl_2015_r2</a></p></li>
+</ul>
+</section>
+<section id="help-and-support">
+<h2>Help and support<a class="headerlink" href="#help-and-support" title="Link to this heading"></a></h2>
+<p>Questions? Ask on the <a class="icon ez reference external" href="https://ez.analog.com/community/fpga" target="_blank">FPGA Reference Designs</a> forum.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../fmcadc5/" title="Previous document (Alt+Shift+LeftArrow)" class="prev">FMCADC5 HDL Project (OBSOLETE)</a>
+    <a href="../fmcomms6/" title="Next document (Alt+Shift+RightArrow)" class="next">AD-FMCOMMS6-EBZ HDL Project (OBSOLETE)</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2025, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

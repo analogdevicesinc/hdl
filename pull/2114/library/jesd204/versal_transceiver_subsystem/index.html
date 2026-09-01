@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The Versal Transceiver Subsystem can be used to configure the GTY and GTYP for Versal ACAP devices. In general, across all reference designs, the gigabit transceivers are configured specifically to the Lane rate of the HDL build. This guide provides instructions on using the wizard to generate a transceiver configuration for JESD204B/C interfaces on Versal devices." name="description" />
+
+    <title>Versal Adaptive SoC Transceiver Subsystem &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=fb8972a4" />
+    <script async="async" src="../../../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="icon" href="../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex/" />
+    <link rel="search" title="Search" href="../../../search/" />
+    <link rel="next" title="Troubleshooting JESD204B TX links" href="../troubleshoot/troubleshoot_jesd204_tx/" />
+    <link rel="prev" title="Xilinx FPGAs Transceivers Wizard" href="../xgt_wizard/" />
+   
+  
+  
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://developer.analog.com/" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Documentation</label>
+        
+        <a id="logo" href="../../../">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Versal Adaptive SoC Transceiver Subsystem</a><ul>
+<li><a class="reference internal" href="#versal-acap-transceiver-architecture">Versal ACAP Transceiver Architecture</a><ul>
+<li><a class="reference internal" href="#required-features-by-the-jesd204b">Required features by the JESD204B</a></li>
+<li><a class="reference internal" href="#required-features-by-the-jesd204c">Required features by the JESD204C</a></li>
+<li><a class="reference internal" href="#lane-rate-and-refclk-selection">Lane Rate and RefClk Selection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#versal-adaptive-soc-transceiver-subsystem-wrapper">Versal Adaptive SoC Transceiver Subsystem wrapper</a><ul>
+<li><a class="reference internal" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-transmit-peripheral-adapter">Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Transmit Peripheral adapter</a></li>
+<li><a class="reference internal" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-receive-peripheral-adapter">Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Receive Peripheral adapter</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-vivado-block-design-for-a-jesd204c-interface-on-vck190">Example Vivado block design for a JESD204C interface on VCK190</a><ul>
+<li><a class="reference internal" href="#signal-description">Signal Description</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-usage-of-the-versal-transceiver-subsystem-wrapper-in-a-jesd204b-c-design">Example usage of the Versal Transceiver Subsystem wrapper in a JESD204B/C design</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="logo" href="../../../">
+      <img class="only-light" src="../../../_static/HDL_logo_cropped.svg"/>
+      <img class="only-dark" src="../../../_static/HDL_logo_w_cropped.svg"/>
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../../user_guide/">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/introduction/">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/git_repository/">Git repository</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../../user_guide/releases/">Releases</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-1" id="toctree-collapse-1-1-1"/><div class="collapse"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/">Projects List and Dependencies</a><label for="toctree-collapse-1-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_main/">Projects list and dependencies for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2026_r1/">Projects list and dependencies for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2023_r2/">Projects list and dependencies for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2022_r2/">Projects list and dependencies for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r2/">Projects list and dependencies for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r1/">Projects list and dependencies for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r2/">Projects list and dependencies for hdl_2019_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r1/">Projects list and dependencies for hdl_2019_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r2/">Projects list and dependencies for hdl_2018_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r1/">Projects list and dependencies for hdl_2018_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2017_r1/">Projects list and dependencies for hdl_2017_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2016_r2/">Projects list and dependencies for hdl_2016_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2015_r1/">Projects list and dependencies for hdl_2015_r1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-2" id="toctree-collapse-1-1-2"/><div class="collapse"><a class="reference internal" href="../../../user_guide/release_tables/resource_utilization/">Resource Utilization</a><label for="toctree-collapse-1-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/resource_utilization/resource_utilization_table_main/">Resource utilization for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2026_r1/">Resource utilization for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2023_r2/">Resource utilization for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2022_r2/">Resource utilization for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2021_r2/">Resource utilization for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2021_r1/">Resource utilization for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2019_r2/">Resource utilization for hdl_2019_r2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/build_hdl/">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/build_boot_bin/">Build the BOOT.BIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/build_intel_boot_image/">Build the Intel Boot Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/architecture/">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-2" id="toctree-collapse-1-2"/><div class="collapse"><a class="reference internal" href="../../../user_guide/ip_cores/">IP cores</a><label for="toctree-collapse-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/creating_new_ip/">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/use_adi_ips/">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/interfaces/">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/axi_adc/">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/axi_dac/">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/porting_project/">Porting HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/customize_hdl/">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/hdl_coding_guidelines/">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/docs_guidelines/">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/contributing/">Contributing to HDL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/third_party/">Third party forks</a></li>
+</ul>
+</li>
+</ul>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../../">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../i3c_controller/">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../i3c_controller/i3c_controller_host_interface/">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../i3c_controller/i3c_controller_core/">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../i3c_controller/interface/">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2" checked=""/><div class="collapse"><a class="reference internal" href="../">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../generic_jesd_bds/">Generic JESD204 block designs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../axi_jesd204_tx/">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../axi_jesd204_rx/">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ad_ip_jesd204_tpl_adc/">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ad_ip_jesd204_tpl_dac/">DAC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../xgt_wizard/">Xilinx FPGAs Transceivers Wizard</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">AMD Versal Adaptive SoC Transceiver Subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../troubleshoot/troubleshoot_jesd204_tx/">Troubleshooting JESD204 TX links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../spi_engine/">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_execution/">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/axi_spi_engine/">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_offload/">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_interconnect/">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/control-interface/">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/offload-control-interface/">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi-bus-interface/">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/instruction-format/">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/pipeline-delays/">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/tutorial/">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad35xxr/">AXI AD35XXR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad408x/">AXI AD408x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad485x/">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad7405/">AXI AD7405</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad7606x/">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad7616/">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad7768/">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad777x/">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad9265/">AXI AD9265</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../axi_ad9361/">AXI AD9361</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../axi_ad9361/tdd_support/">TDD Mode Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad9467/">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad9740/">AXI AD9740</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad9783/">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad9963/">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ada4355/">AXI ADA4355</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_adaq8092/">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_adrv9001/">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_hmcad15xx/">AXI HMCAD15XX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ltc235x/">AXI LTC235X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ltc2387/">AXI LTC2387</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../data_offload/">Data Offload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_dmac/">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_hdmi_rx/">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_hdmi_tx/">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_adc_decimate/">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_adc_trigger/">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_adf4030/">AXI ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_adxcvr/">AXI ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_clkgen/">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_clock_monitor/">AXI Clock Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_dac_interpolate/">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_fan_control/">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_laser_driver/">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_logic_analyzer/">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_pwm_gen/">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_sysid/">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_tdd/">AXI TDD</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../cn0363/">CN0363</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cn0363/cn0363_dma_sequencer/">CN0363 DMA Sequencer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cn0363/cn0363_phase_data_sync/">CN0363 Phase Data Sync</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../common/ad_dds/">AD Direct Digital Synthesis</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../corundum/">Corundum Network Stack</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../corundum/corundum_core/">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6-1" id="toctree-collapse-2-6-1"/><div class="collapse"><a class="reference internal" href="../../corundum/ethernet/">Corundum Ethernet Core</a><label for="toctree-collapse-2-6-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../corundum/ethernet/vcu118/">VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../corundum/ethernet/k26/">K26</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo/">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo_asym/">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_extract/">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_mii_to_rmii/">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_pack/util_cpack2/">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_pack/util_upack2/">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_rfifo/">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_sigma_delta_spi/">Util Sigma Delta SPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_var_fifo/">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_wfifo/">Util WFIFO</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-7" id="toctree-collapse-2-7"/><div class="collapse"><a class="reference internal" href="../../xilinx/">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../xilinx/util_adxcvr/">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad9643/">AXI AD9643 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad9671/">AXI AD9671 (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../../projects/">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad_quadmxfe1_ebz/">AD-QUADMXFE1-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad353xr/">AD353XR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad35xxr_evb/">AD35XXR-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4052_ardz/">AD4052-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4062_ardz/">AD4062-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4080_fmc_evb/">AD4080-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4110/">AD4110-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad411x_ad717x/">AD411x-AD717x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4134_fmc/">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4170_asdz/">AD4170-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4630_fmc/">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad469x_evb/">AD469X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad485x_fmcz/">AD485X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4880_fmc_evb/">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5529r_ardz/">AD5529R-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5706r/">AD5706R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5758_sdz/">AD5758-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5766_sdz/">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad57xx_ardz/">AD57XX-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad6676evb/">AD6676EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7124_asdz/">AD7124-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7134_fmc/">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad719x_asdz/">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad738x_fmc/">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7405_fmc/">AD7405-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7606x_fmc/">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7616_sdz/">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad77681evb/">AD7768-1-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7768evb/">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad777x_fmcz/">AD777X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9081_fmca_ebz/">AD9081-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9081_fmca_ebz_x_band/">AD9081-FMCA-EBZ-X-BAND</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9083_evb/">AD9083-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9084_ebz/">AD9084-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad916x_fmc/">AD916x-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9208_dual_ebz/">AD9208-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9209_fmca_ebz/">AD9209-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9213_dual_ebz/">AD9213-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9213_evb/">AD9213-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9265_fmc/">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9434_fmc/">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9467_fmc/">AD9467-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9656_fmc/">AD9656-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9694_fmc/">AD9694-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9695_fmc/">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9740_fmc/">AD9740-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9783_ebz/">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ada4355_fmc/">ADA4355-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adaq23875/">ADAQ23875</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adaq7980_sdz/">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adaq8092_fmc/">ADAQ8092-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/admx100x_evb/">ADMX100X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/admx6001_ebz/">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrd8012_01z/">ADRD8012-01Z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9001/">ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9001_dual/">ADRV9001-DUAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9009/">ADRV9009</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9009zu11eg/">ADRV9009-ZU11EG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9026/">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv903x/">ADRV903x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv904x/">ADRV904x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9361z7035/">ADRV9361Z7035</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9364z7020/">ADRV9364Z7020</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv9371x/">ADRV9371x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adv7511/">ADV7511</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adv7513/">ADV7513</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/arradio/">ARRADIO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0363/">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0506/">CN0506</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0540/">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0561/">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0577/">CN0577</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0579/">CN0579</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0585/">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/dac_fmc_ebz/">DAC-FMC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/daq2/">DAQ2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/daq3/">DAQ3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/dc2677a/">DC2677A</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1"/><div class="collapse"><a class="reference internal" href="../../../projects/fmcomms2/">FMCOMMS2/3/4</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../projects/fmcomms2/fir_filter/">FMCOMMS2 FIR FILTER</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms5/">FMCOMMS5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms8/">FMCOMMS8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms11/">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/hmcad1520_ebz/">HMCAD1520</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/jupiter_sdr/">JUPITER-SDR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ltc2378_fmc/">LTC2378-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/m2k/">M2K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/max96724/">MAX96724</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/pluto/">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/quad_adaq77681/">QUAD_ADAQ7768-1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/pulsar_adc/">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/pulsar_lvds_adc/">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/admx6020m/">ADMX6020M</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/test_capi_selftest/">TEST-CAPI-SELFTEST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9739a_fmc/">AD9739A-FMC (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad_fmclidar1_ebz/">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcadc2/">FMCADC2 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcadc5/">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms1/">FMCOMMS1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcomms6/">FMCOMMS6 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/fmcjesdadc1/">FMCJESDADC1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/imageon/">IMAGEON (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../../">IP Cores</a></li><li><a href="../">JESD204 Interface Framework</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="versal-adaptive-soc-transceiver-subsystem">
+<span id="versal-transceiver-subsystem"></span><h1>Versal Adaptive SoC Transceiver Subsystem<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem" title="Link to this heading"></a></h1>
+<p>The Versal Transceiver Subsystem can be used to configure the GTY and GTYP for
+Versal ACAP devices. In general, across all reference designs, the gigabit
+transceivers are configured specifically to the Lane rate of the HDL build.
+This guide provides instructions on using the wizard to generate a transceiver
+configuration for JESD204B/C interfaces on Versal devices.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To learn more about Versal ACAP transceivers and the Wizard, please consult:</p>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://docs.amd.com/r/en-US/am002-versal-gty-transceivers" target="_blank">Versal Adaptive SoC GTY and GTYP Transceivers Architecture Manual (AM002)</a></p></li>
+<li><p><a class="icon link reference external" href="https://docs.amd.com/r/en-US/pg442-gtwiz-versal" target="_blank">Versal Adaptive SoC Transceiver Subsystem Product Guide (PG442)</a></p></li>
+</ul>
+</div>
+<section id="versal-acap-transceiver-architecture">
+<h2>Versal ACAP Transceiver Architecture<a class="headerlink" href="#versal-acap-transceiver-architecture" title="Link to this heading"></a></h2>
+<p>Versal ACAP devices feature advanced GTY and GTYP transceivers that support:</p>
+<ul class="simple">
+<li><p>Lane rates from 1.2 Gb/s up to 28.21 Gb/s (GTY) and 32.0 Gb/s (GTYP)</p></li>
+<li><p>Multiple PLL options: LCPLL and RPLL for flexible clocking</p></li>
+<li><p>Enhanced performance and power efficiency compared to UltraScale+</p></li>
+<li><p>Native JESD204B and JESD204C protocol support</p></li>
+</ul>
+<section id="required-features-by-the-jesd204b">
+<h3>Required features by the JESD204B<a class="headerlink" href="#required-features-by-the-jesd204b" title="Link to this heading"></a></h3>
+<p>The following features are required for a JESD204B interface:</p>
+<ul class="simple">
+<li><p>LCPLL for clock generation</p></li>
+<li><p>8B/10B encoding and decoding</p></li>
+<li><p>TX and RX buffer to solve rate and phase differences between XCLK
+(PMA parallel clock) and USRCLK (link clock)</p></li>
+<li><p>RX Equalization and CDR</p></li>
+<li><p>RX Byte and Word alignment</p></li>
+</ul>
+</section>
+<section id="required-features-by-the-jesd204c">
+<h3>Required features by the JESD204C<a class="headerlink" href="#required-features-by-the-jesd204c" title="Link to this heading"></a></h3>
+<p>The following features are required for a JESD204C interface:</p>
+<ul class="simple">
+<li><p>LCPLL for clock generation</p></li>
+<li><p>64B/66B async encoding and decoding</p></li>
+<li><p>TX and RX buffer to solve rate and phase differences between XCLK
+(PMA parallel clock) and USRCLK (link clock)</p></li>
+<li><p>RX Equalization and CDR</p></li>
+</ul>
+</section>
+<section id="lane-rate-and-refclk-selection">
+<span id="id1"></span><h3>Lane Rate and RefClk Selection<a class="headerlink" href="#lane-rate-and-refclk-selection" title="Link to this heading"></a></h3>
+<p>In our reference designs, we usually use the following relationship between
+the Lane rate and the reference clock:</p>
+<ul class="simple">
+<li><p>For JESD204B: Reference clock = Lane Rate / 40</p></li>
+<li><p>For JESD204C: Reference clock = Lane Rate / 66</p></li>
+</ul>
+</section>
+</section>
+<section id="versal-adaptive-soc-transceiver-subsystem-wrapper">
+<h2>Versal Adaptive SoC Transceiver Subsystem wrapper<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-wrapper" title="Link to this heading"></a></h2>
+<p>In our reference designs, we use a
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/scripts/versal_xcvr_subsystem.tcl" target="_blank">versal_xcvr_subsystem.tcl</a>
+as a wrapper to instantiate and configure the Versal Transceiver Subsystem IP
+core.</p>
+<p>The script takes the following parameters:</p>
+<ul class="simple">
+<li><p>ip_name - Name of the IP core instance</p></li>
+<li><p>jesd_mode:</p>
+<ul>
+<li><p>8b10b - JESD204B</p></li>
+<li><p>64b66b - JESD204C</p></li>
+</ul>
+</li>
+<li><p>rx_no_lanes - Number of RX lanes</p></li>
+<li><p>tx_no_lanes - Number of TX lanes</p></li>
+<li><p>rx_lane_rate - RX lane rate in Gb/s</p></li>
+<li><p>tx_lane_rate - TX lane rate in Gb/s</p></li>
+<li><p>ref_clock - Reference clock frequency in MHz (see
+<a class="reference internal" href="#lane-rate-and-refclk-selection">Lane Rate and RefClk Selection</a>)</p></li>
+<li><p>transceiver - GTY or GTYP</p></li>
+<li><p>intf_cfg:</p>
+<ul>
+<li><p>RX - Simplex RX</p></li>
+<li><p>TX - Simplex TX</p></li>
+<li><p>RXTX - Simplex RX + Simplex TX</p></li>
+</ul>
+</li>
+</ul>
+<section id="versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-transmit-peripheral-adapter">
+<h3>Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Transmit Peripheral adapter<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-transmit-peripheral-adapter" title="Link to this heading"></a></h3>
+<p>In order to connect the Versal Transceiver Subsystem to the
+<a class="reference internal" href="../axi_jesd204_tx/#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a>, we provide a
+Link-to-Phy adapter.</p>
+<p>This adapter is needed to convert the 64B/66B or 8B/10B encoded data from the
+link layer to the format expected by the transceiver subsystem (physical layer).</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_tx/jesd204_versal_gt_adapter_tx.v" target="_blank">versal_gt_adapter_tx.v</a></p></td>
+<td><p>Verilog source for the TX Link-to-Phy adapter for Versal.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_tx/jesd204_versal_gt_adapter_tx_ip.tcl" target="_blank">versal_gt_adapter_tx_ip.tcl</a></p></td>
+<td><p>TCL script to generate the Vivado IP-integrator project for the
+TX Link-to-Phy adapter for Versal.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-receive-peripheral-adapter">
+<h3>Versal Adaptive SoC Transceiver Subsystem to JESD204B/C Link Receive Peripheral adapter<a class="headerlink" href="#versal-adaptive-soc-transceiver-subsystem-to-jesd204b-c-link-receive-peripheral-adapter" title="Link to this heading"></a></h3>
+<p>In order to connect the Versal Transceiver Subsystem to the
+<a class="reference internal" href="../axi_jesd204_tx/#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a>, we provide a
+Phy-to-Link adapter.</p>
+<p>This adapter is needed to convert the 64B/66B or 8B/10B encoded data from the
+transceiver subsystem (physical layer) to the format expected by the link layer.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_rx/jesd204_versal_gt_adapter_rx.v" target="_blank">versal_gt_adapter_rx.v</a></p></td>
+<td><p>Verilog source for the RX Link-to-Phy adapter for Versal.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_rx/lane_align.v" target="_blank">lane_align.v</a></p></td>
+<td><p>Verilog source for the lane alignment module (JESD204B) for Versal.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_rx/jesd204_versal_gt_adapter_rx_ip.tcl" target="_blank">versal_gt_adapter_rx_ip.tcl</a></p></td>
+<td><p>TCL script to generate the Vivado IP-integrator project for the
+RX Link-to-Phy adapter for Versal.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="example-vivado-block-design-for-a-jesd204c-interface-on-vck190">
+<h2>Example Vivado block design for a JESD204C interface on VCK190<a class="headerlink" href="#example-vivado-block-design-for-a-jesd204c-interface-on-vck190" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Direction</p></th>
+<th class="head"><p>JESD mode</p></th>
+<th class="head"><p>Lane rate</p></th>
+<th class="head"><p>Number of lanes</p></th>
+<th class="head"><p>Number of converters</p></th>
+<th class="head"><p>Converter resolution</p></th>
+<th class="head"><p>Reference clock</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RX</p></td>
+<td><p>JESD204C</p></td>
+<td><p>24.7 Gb/s</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>16 bits</p></td>
+<td><p>375 MHz</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX</p></td>
+<td><p>JESD204C</p></td>
+<td><p>24.7 Gb/s</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>16 bits</p></td>
+<td><p>375 MHz</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<a class="reference internal image-reference" href="https://media.githubusercontent.com/media/analogdevicesinc/hdl/staging/container-docs/docs/library/jesd204/versal_transceiver_subsystem/block_diagram.png"><img alt="JESD204B/C Physical Layer" class="align-center" src="https://media.githubusercontent.com/media/analogdevicesinc/hdl/staging/container-docs/docs/library/jesd204/versal_transceiver_subsystem/block_diagram.png" width="1000" />
+</a>
+<section id="signal-description">
+<h3>Signal Description<a class="headerlink" href="#signal-description" title="Link to this heading"></a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GT_REFCLK</p></td>
+<td><p>Reference clock input to the transceivers</p></td>
+</tr>
+<tr class="row-odd"><td><p>gtpowergood</p></td>
+<td><p>Power good output from the transceivers, the reset inputs are only
+valid when this signal is high</p></td>
+</tr>
+<tr class="row-even"><td><p>gtreset_in</p></td>
+<td><p>Master reset input to the transceivers</p></td>
+</tr>
+<tr class="row-odd"><td><p>gtreset_[rx/tx]_datapath</p></td>
+<td><p>RX/TX datapath reset input to the transceivers</p></td>
+</tr>
+<tr class="row-even"><td><p>gtreset_[rx/tx]_pll_and_datapath</p></td>
+<td><p>RX/TX PLL and datapath reset input to the transceivers</p></td>
+</tr>
+<tr class="row-odd"><td><p>[rx/tx]_resetdone</p></td>
+<td><p>RX/TX reset done output from the transceivers, indicates that the reset
+sequence has completed</p></td>
+</tr>
+<tr class="row-even"><td><p>rxusrclk_out</p></td>
+<td><p>RX user clock output, the JESD204 link clock (24.75 Gbps / 66 = 375 MHz
+in this example)</p></td>
+</tr>
+<tr class="row-odd"><td><p>txusrclk_out</p></td>
+<td><p>TX user clock output, the JESD204 link clock (24.75 Gbps / 66 = 375 MHz
+in this example)</p></td>
+</tr>
+<tr class="row-even"><td><p>rx_0_[n/p]</p></td>
+<td><p>RX differential serial data inputs</p></td>
+</tr>
+<tr class="row-odd"><td><p>tx_0_[n/p]</p></td>
+<td><p>TX differential serial data outputs</p></td>
+</tr>
+<tr class="row-even"><td><p>rx_[0/1]</p></td>
+<td><p>RX parallel data output for the link layer</p></td>
+</tr>
+<tr class="row-odd"><td><p>tx_[0/1]</p></td>
+<td><p>TX parallel data input from the link layer</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="example-usage-of-the-versal-transceiver-subsystem-wrapper-in-a-jesd204b-c-design">
+<h2>Example usage of the Versal Transceiver Subsystem wrapper in a JESD204B/C design<a class="headerlink" href="#example-usage-of-the-versal-transceiver-subsystem-wrapper-in-a-jesd204b-c-design" title="Link to this heading"></a></h2>
+<p>One example of usage of the Versal Transceiver Subsystem wrapper can be found
+in the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/" target="_blank">ad9081_fmca_ebz</a>
+reference design:
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl#L212" target="_blank">adi_axi_jesd204_rx_create</a>.</p>
+<p>The wrapper is called with all the necessary parameters to configure the
+transceivers for a specific use case.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../xgt_wizard/" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Xilinx FPGAs Transceivers Wizard</a>
+    <a href="../troubleshoot/troubleshoot_jesd204_tx/" title="Next document (Alt+Shift+RightArrow)" class="next">Troubleshooting JESD204B TX links</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2025, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

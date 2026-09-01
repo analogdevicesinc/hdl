@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="Depending on the type of connector it uses, the PulSAR family is divided into the products which have PMOD connectors and FMC connectors." name="description" />
+
+    <title>PULSAR-ADC HDL project &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fb8972a4" />
+    <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="PULSAR-LVDS-ADC HDL project" href="../pulsar_lvds_adc/" />
+    <link rel="prev" title="QUAD_ADAQ77681 HDL project" href="../quad_adaq77681/" />
+   
+  
+  
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://developer.analog.com/" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Documentation</label>
+        
+        <a id="logo" href="../../">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">PULSAR-ADC HDL project</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a><ul>
+<li><a class="reference internal" href="#with-pmod">With PMOD</a></li>
+<li><a class="reference internal" href="#with-fmc">With FMC</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
+<li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
+<li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
+<li><a class="reference internal" href="#other-required-hardware">Other required hardware</a></li>
+<li><a class="reference internal" href="#block-design">Block design</a><ul>
+<li><a class="reference internal" href="#block-diagram">Block diagram</a><ul>
+<li><a class="reference internal" href="#pulsar-adc-pmdz">PulSAR_ADC_PMDZ</a></li>
+<li><a class="reference internal" href="#pulsar-adc-fmc">PulSAR_ADC_FMC</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#design-configuration">Design configuration</a></li>
+<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
+<li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
+<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
+<li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
+<li><a class="reference internal" href="#gpios">GPIOs</a></li>
+<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
+<li><a class="reference internal" href="#resources">Resources</a><ul>
+<li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
+<li><a class="reference internal" href="#hdl-related">HDL related</a></li>
+<li><a class="reference internal" href="#software-related">Software related</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#more-information">More information</a></li>
+<li><a class="reference internal" href="#support">Support</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="logo" href="../../">
+      <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
+      <img class="only-dark" src="../../_static/HDL_logo_w_cropped.svg"/>
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction/">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository/">Git repository</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/releases/">Releases</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-1" id="toctree-collapse-1-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/">Projects List and Dependencies</a><label for="toctree-collapse-1-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_main/">Projects list and dependencies for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2026_r1/">Projects list and dependencies for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2023_r2/">Projects list and dependencies for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2022_r2/">Projects list and dependencies for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r2/">Projects list and dependencies for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r1/">Projects list and dependencies for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r2/">Projects list and dependencies for hdl_2019_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r1/">Projects list and dependencies for hdl_2019_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r2/">Projects list and dependencies for hdl_2018_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r1/">Projects list and dependencies for hdl_2018_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2017_r1/">Projects list and dependencies for hdl_2017_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2016_r2/">Projects list and dependencies for hdl_2016_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2015_r1/">Projects list and dependencies for hdl_2015_r1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-2" id="toctree-collapse-1-1-2"/><div class="collapse"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/">Resource Utilization</a><label for="toctree-collapse-1-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_main/">Resource utilization for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2026_r1/">Resource utilization for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2023_r2/">Resource utilization for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2022_r2/">Resource utilization for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2021_r2/">Resource utilization for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2021_r1/">Resource utilization for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2019_r2/">Resource utilization for hdl_2019_r2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl/">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_boot_bin/">Build the BOOT.BIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_intel_boot_image/">Build the Intel Boot Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture/">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-2" id="toctree-collapse-1-2"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/">IP cores</a><label for="toctree-collapse-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip/">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips/">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces/">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project/">Porting HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl/">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guidelines/">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines/">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/contributing/">Contributing to HDL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party/">Third party forks</a></li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../library/">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../library/i3c_controller/">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_host_interface/">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_core/">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/interface/">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../../library/jesd204/">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/generic_jesd_bds/">Generic JESD204 block designs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/">DAC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/xgt_wizard/">Xilinx FPGAs Transceivers Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/versal_transceiver_subsystem/">AMD Versal Adaptive SoC Transceiver Subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/troubleshoot/troubleshoot_jesd204_tx/">Troubleshooting JESD204 TX links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../library/spi_engine/">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_execution/">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/axi_spi_engine/">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_offload/">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect/">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/control-interface/">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/offload-control-interface/">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi-bus-interface/">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/instruction-format/">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/pipeline-delays/">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/tutorial/">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad35xxr/">AXI AD35XXR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/">AXI AD408x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7405/">AXI AD7405</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7768/">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad777x/">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/">AXI AD9265</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../library/axi_ad9361/">AXI AD9361</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/axi_ad9361/tdd_support/">TDD Mode Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9740/">AXI AD9740</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ada4355/">AXI ADA4355</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adrv9001/">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hmcad15xx/">AXI HMCAD15XX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc235x/">AXI LTC235X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc2387/">AXI LTC2387</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/">Data Offload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_rx/">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_tx/">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_decimate/">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_trigger/">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adf4030/">AXI ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adxcvr/">AXI ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_clkgen/">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_clock_monitor/">AXI Clock Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dac_interpolate/">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_fan_control/">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_laser_driver/">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_logic_analyzer/">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_pwm_gen/">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_sysid/">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_tdd/">AXI TDD</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/cn0363/">CN0363</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/cn0363/cn0363_dma_sequencer/">CN0363 DMA Sequencer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/cn0363/cn0363_phase_data_sync/">CN0363 Phase Data Sync</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/common/ad_dds/">AD Direct Digital Synthesis</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../library/corundum/">Corundum Network Stack</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/corundum/corundum_core/">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6-1" id="toctree-collapse-2-6-1"/><div class="collapse"><a class="reference internal" href="../../library/corundum/ethernet/">Corundum Ethernet Core</a><label for="toctree-collapse-2-6-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/vcu118/">VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/k26/">K26</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo/">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo_asym/">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_extract/">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_mii_to_rmii/">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_cpack2/">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_upack2/">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_rfifo/">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_sigma_delta_spi/">Util Sigma Delta SPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_var_fifo/">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_wfifo/">Util WFIFO</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-7" id="toctree-collapse-2-7"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9643/">AXI AD9643 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9671/">AXI AD9671 (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ad_quadmxfe1_ebz/">AD-QUADMXFE1-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad353xr/">AD353XR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad35xxr_evb/">AD35XXR-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4052_ardz/">AD4052-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4062_ardz/">AD4062-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4080_fmc_evb/">AD4080-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4110/">AD4110-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/">AD411x-AD717x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4170_asdz/">AD4170-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/">AD469X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/">AD485X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4880_fmc_evb/">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5529r_ardz/">AD5529R-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5706r/">AD5706R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/">AD5758-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/">AD57XX-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad6676evb/">AD6676EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7124_asdz/">AD7124-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7134_fmc/">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad719x_asdz/">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad738x_fmc/">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7405_fmc/">AD7405-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7606x_fmc/">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7616_sdz/">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad77681evb/">AD7768-1-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7768evb/">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad777x_fmcz/">AD777X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/">AD9081-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz_x_band/">AD9081-FMCA-EBZ-X-BAND</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9083_evb/">AD9083-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9084_ebz/">AD9084-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad916x_fmc/">AD916x-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9208_dual_ebz/">AD9208-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9209_fmca_ebz/">AD9209-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9213_dual_ebz/">AD9213-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9213_evb/">AD9213-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9265_fmc/">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9434_fmc/">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9467_fmc/">AD9467-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9656_fmc/">AD9656-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9694_fmc/">AD9694-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9695_fmc/">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9740_fmc/">AD9740-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ada4355_fmc/">ADA4355-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adaq23875/">ADAQ23875</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adaq7980_sdz/">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adaq8092_fmc/">ADAQ8092-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admx100x_evb/">ADMX100X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admx6001_ebz/">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrd8012_01z/">ADRD8012-01Z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9001/">ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9001_dual/">ADRV9001-DUAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9009/">ADRV9009</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9009zu11eg/">ADRV9009-ZU11EG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9026/">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv903x/">ADRV903x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv904x/">ADRV904x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9361z7035/">ADRV9361Z7035</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9364z7020/">ADRV9364Z7020</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9371x/">ADRV9371x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adv7511/">ADV7511</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adv7513/">ADV7513</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../arradio/">ARRADIO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0363/">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0506/">CN0506</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0540/">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0561/">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0577/">CN0577</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0579/">CN0579</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0585/">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dac_fmc_ebz/">DAC-FMC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../daq2/">DAQ2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../daq3/">DAQ3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dc2677a/">DC2677A</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1"/><div class="collapse"><a class="reference internal" href="../fmcomms2/">FMCOMMS2/3/4</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../fmcomms2/fir_filter/">FMCOMMS2 FIR FILTER</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms5/">FMCOMMS5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms8/">FMCOMMS8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms11/">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hmcad1520_ebz/">HMCAD1520</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../jupiter_sdr/">JUPITER-SDR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ltc2378_fmc/">LTC2378-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../m2k/">M2K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../max96724/">MAX96724</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pluto/">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quad_adaq77681/">QUAD_ADAQ7768-1</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pulsar_lvds_adc/">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../admx6020m/">ADMX6020M</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../test_capi_selftest/">TEST-CAPI-SELFTEST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9739a_fmc/">AD9739A-FMC (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad_fmclidar1_ebz/">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcadc2/">FMCADC2 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcadc5/">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms1/">FMCOMMS1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcomms6/">FMCOMMS6 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fmcjesdadc1/">FMCJESDADC1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../imageon/">IMAGEON (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../">Projects</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="pulsar-adc-hdl-project">
+<span id="pulsar-adc"></span><h1>PULSAR-ADC HDL project<a class="headerlink" href="#pulsar-adc-hdl-project" title="Link to this heading"></a></h1>
+<p>Depending on the type of connector it uses, the PulSAR family is divided into
+the products which have <strong>PMOD</strong> connectors and <strong>FMC</strong> connectors.</p>
+<p>PulSAR converters which have PMOD boards associated with them are low power ADCs
+which offer very high performance from 14-bits up to 18-bits with throughputs
+ranging from 100ksps to 1.3MSPS. The boards are designed to demonstrate the
+ADC’s performance and to provide an easy digital interface for a variety of
+system applications. The PulSAR family share the same interface and the same PCB,
+the differences being found in their performance.  A full description of these
+products are available in their respective data sheets and should be consulted
+when utilizing the boards.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The PulSAR converters are available with PMOD, FMC connectors.</p>
+<section id="with-pmod">
+<h3>With PMOD<a class="headerlink" href="#with-pmod" title="Link to this heading"></a></h3>
+<p>The ADAQ40xx family is also part of the PulSAR converters with PMOD connector.</p>
+<p>This type of boards come with the <a class="icon adi reference external" href="https://www.analog.com/EVAL-PMD-IB1Z" target="_blank">EVAL-PMD-IB1Z</a> PMOD to
+field programmable gate array (FPGA) mezzanine card (FMC) interposer board that
+interfaces with the system demonstration controller board.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/ADAQ4003" target="_blank">ADAQ4003</a> is an 18-bit precision data acquisition sub-system SiP
+design on a laminate that includes the <a class="icon adi reference external" href="https://www.analog.com/AD4003" target="_blank">AD4003</a> ADC with a fully
+differential driver the <a class="icon adi reference external" href="https://www.analog.com/ADA4945-1" target="_blank">ADA4945-1</a>, a reference buffer
+(the <a class="icon adi reference external" href="https://www.analog.com/ADA4807-1" target="_blank">ADA4807-1</a>), a precision resistor iPassive network on a separate die
+along with discrete capacitors and resistors. The device solves many design
+challenges for a wide range of applications similar to AD400x, yet it still
+provides the flexibility. It offers over 75% area savings compared to discrete
+design and reduces TTM.</p>
+</section>
+<section id="with-fmc">
+<h3>With FMC<a class="headerlink" href="#with-fmc" title="Link to this heading"></a></h3>
+<p>PulSAR converters which have FMC boards associated with them are AD40xx family.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD4000" target="_blank">AD4000</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4001" target="_blank">AD4001</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4002" target="_blank">AD4002</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4003" target="_blank">AD4003</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4004" target="_blank">AD4004</a> /
+<a class="icon adi reference external" href="https://www.analog.com/AD4005" target="_blank">AD4005</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4006" target="_blank">AD4006</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4007" target="_blank">AD4007</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4008" target="_blank">AD4008</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4010" target="_blank">AD4010</a> /
+<a class="icon adi reference external" href="https://www.analog.com/AD4011" target="_blank">AD4011</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4020" target="_blank">AD4020</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4021" target="_blank">AD4021</a> are low noise, low power, high speed,
+high-resolution precision successive approximation register (SAR) analog-to-digital
+converters (ADCs). They incorporate ease of use features that reduce signal chain power consumption,
+reduce signal chain complexity, and enable higher channel density. The high-Z
+mode, coupled with a long acquisition phase, eliminates the need for a dedicated
+high power, high speed ADC driver, thus broadening the range of low power
+precision amplifiers that can drive these ADCs directly while still achieving
+optimum performance. The input span compression feature enables the ADC driver
+amplifier and the ADC to operate off common supply rails without the need for a
+negative supply while preserving the full ADC code range. The low serial
+peripheral interface (SPI) clock rate requirement reduces the digital
+input/output power consumption, broadens processor options, and simplifies the
+task of sending data across digital isolation.</p>
+<p>Applications:</p>
+<ul class="simple">
+<li><p>Battery-powered equipment</p></li>
+<li><p>Data acquisition</p></li>
+<li><p>Instrumentation</p></li>
+<li><p>Medical instruments</p></li>
+<li><p>Process controls</p></li>
+<li><p>Machine automation</p></li>
+</ul>
+</section>
+</section>
+<section id="supported-boards">
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<p>PulSAR with PMOD connector:</p>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7685-PMDZ" target="_blank">EVAL-AD7685-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7686-PMDZ" target="_blank">EVAL-AD7686-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7687-PMDZ" target="_blank">EVAL-AD7687-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7688-PMDZ" target="_blank">EVAL-AD7688-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7690-PMDZ" target="_blank">EVAL-AD7690-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7691-PMDZ" target="_blank">EVAL-AD7691-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7693-PMDZ" target="_blank">EVAL-AD7693-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7942-PMDZ" target="_blank">EVAL-AD7942-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7946-PMDZ" target="_blank">EVAL-AD7946-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7980-PMDZ" target="_blank">EVAL-AD7980-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7982-PMDZ" target="_blank">EVAL-AD7982-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7983-PMDZ" target="_blank">EVAL-AD7983-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7984-PMDZ" target="_blank">EVAL-AD7984-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7988-1-PMDZ" target="_blank">EVAL-AD7988-1-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7988-5-PMDZ" target="_blank">EVAL-AD7988-5-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ40xx" target="_blank">EVAL-ADAQ40xx</a></p></li>
+</ul>
+<p>PulSAR with FMC connector:</p>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD400x-FMCZ" target="_blank">EVAL-AD400x-FMCZ</a></p></li>
+</ul>
+</section>
+<section id="supported-devices">
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Link to this heading"></a></h2>
+<p>PulSAR with PMOD connector:</p>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7685" target="_blank">AD7685</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7686" target="_blank">AD7686</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7687" target="_blank">AD7687</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7688" target="_blank">AD7688</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7690" target="_blank">AD7690</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7691" target="_blank">AD7691</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7693" target="_blank">AD7693</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7942" target="_blank">AD7942</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7946" target="_blank">AD7946</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7980" target="_blank">AD7980</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7982" target="_blank">AD7982</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7983" target="_blank">AD7983</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7984" target="_blank">AD7984</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-1" target="_blank">AD7988-1</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-5" target="_blank">AD7988-5</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ4003" target="_blank">ADAQ4003</a></p></li>
+</ul>
+<p>PulSAR with FMC connector:</p>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4000" target="_blank">AD4000</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4001" target="_blank">AD4001</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4002" target="_blank">AD4002</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4003" target="_blank">AD4003</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4004" target="_blank">AD4004</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4005" target="_blank">AD4005</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4006" target="_blank">AD4006</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4007" target="_blank">AD4007</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4008" target="_blank">AD4008</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4010" target="_blank">AD4010</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4011" target="_blank">AD4011</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4020" target="_blank">AD4020</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4021" target="_blank">AD4021</a></p></li>
+</ul>
+</section>
+<section id="supported-carriers">
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development" target="_blank">Cora Z7S</a> PMOD connector</p></li>
+<li><p><a class="icon link reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board" target="_blank">ZedBoard</a> on FMC slot</p></li>
+</ul>
+</section>
+<section id="other-required-hardware">
+<h2>Other required hardware<a class="headerlink" href="#other-required-hardware" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-PMD-IB1Z" target="_blank">EVAL-PMD-IB1Z</a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only for ADAQ40xx</p>
+</div>
+</section>
+<section id="block-design">
+<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<section id="block-diagram">
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
+<p>The data path and clock domains are depicted in the below diagrams:</p>
+<section id="pulsar-adc-pmdz">
+<h4>PulSAR_ADC_PMDZ<a class="headerlink" href="#pulsar-adc-pmdz" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/pulsar_adc_pmod_hdl.svg"><img alt="PulSAR_ADC_PMOD block diagram" class="align-center" src="../../_images/pulsar_adc_pmod_hdl.svg" width="800" />
+</a>
+</section>
+<section id="pulsar-adc-fmc">
+<h4>PulSAR_ADC_FMC<a class="headerlink" href="#pulsar-adc-fmc" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/pulsar_adc_fmc_hdl.svg"><img alt="PulSAR_ADC_FMC block diagram" class="align-center" src="../../_images/pulsar_adc_fmc_hdl.svg" width="800" />
+</a>
+</section>
+</section>
+<section id="design-configuration">
+<h3>Design configuration<a class="headerlink" href="#design-configuration" title="Link to this heading"></a></h3>
+<p>The reference design uses a clock generator for the division of the SPI clock
+and a PWM generator for the conversion signal. The required parameters can be
+set in the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/pulsar_adc/common/pulsar_adc_bd.tcl" target="_blank">pulsar_adc_pmdz_bd.tcl</a>
+file using the following values, where the <code class="docutils literal notranslate"><span class="pre">PULSE_0_PERIOD</span></code> is computed as
+<code class="docutils literal notranslate"><span class="pre">Tcyc_min</span> <span class="pre">/</span> <span class="pre">Tspi_clk</span></code>:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Part</p></th>
+<th class="head"><p>PULSE_0_PERIOD</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AD7942</p></td>
+<td><p>640</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7946</p></td>
+<td><p>320</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7988-1</p></td>
+<td><p>1600</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7685</p></td>
+<td><p>640</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7687</p></td>
+<td><p>640</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7691</p></td>
+<td><p>640</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7686</p></td>
+<td><p>320</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7688</p></td>
+<td><p>320</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7693</p></td>
+<td><p>320</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7988-5</p></td>
+<td><p>320</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7980</p></td>
+<td><p>160</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7983</p></td>
+<td><p>120</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7690</p></td>
+<td><p>250</p></td>
+</tr>
+<tr class="row-odd"><td><p>AD7982</p></td>
+<td><p>160</p></td>
+</tr>
+<tr class="row-even"><td><p>AD7984</p></td>
+<td><p>120</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="configuration-modes">
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
+<p>The Zedboard-based PulSAR ADC project can be built to use either the FMC
+connector or the PMOD JA connector.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">FMC_N_PMOD</span></code> parameter is used to select between them:</p>
+<ul class="simple">
+<li><p>0 - for PMOD</p></li>
+<li><p>1 - for FMC (default)</p></li>
+</ul>
+<p>The PulSAR project supports different configurations required for certain
+ADCs, like the AD7944.</p>
+<p>These modes are selected using the <code class="docutils literal notranslate"><span class="pre">SPI_OP_MODE</span></code> parameter:</p>
+<ul class="simple">
+<li><p>0 - standard FMC version, normal SPI Engine connections (default)</p></li>
+<li><p>1 - FMC version with ADC SDO pin driven by SPI Engine CS and ADC CS pin driven
+by GPIO (3-wire “single” mode)</p></li>
+<li><p>2 - FMC version with ADC SDO pin driven by GPIO and ADC CS pin driven by SPI
+Engine CS</p></li>
+</ul>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>The SPI_OP_MODE parameter must only be used for the FMC variant.</p>
+</div>
+</section>
+<section id="cpu-memory-interconnects-addresses">
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<p>The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture/#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Address</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>spi_pulsar_adc_axi_regmap</p></td>
+<td><p>0x44A0_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_pulsar_adc_dma</p></td>
+<td><p>0x44A3_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>spi_clkgen</p></td>
+<td><p>0x44A7_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>pulsar_adc_trigger_gen</p></td>
+<td><p>0x44B0_0000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="i2c-connections">
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Link to this heading"></a></h3>
+<div class="table-wrapper colwidths-given docutils container" id="id1">
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">ZedBoard</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>I2C type</p></th>
+<th class="head"><p>I2C manager instance</p></th>
+<th class="head"><p>Alias</p></th>
+<th class="head"><p>Address</p></th>
+<th class="head"><p>I2C subordinate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>iic_fmc</p></td>
+<td><p>axi_iic_fmc</p></td>
+<td><p>0x4162_0000</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>PL</p></td>
+<td><p>iic_main</p></td>
+<td><p>axi_iic_main</p></td>
+<td><p>0x4160_0000</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-given docutils container" id="id2">
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">CoraZ7S</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>I2C type</p></th>
+<th class="head"><p>I2C manager instance</p></th>
+<th class="head"><p>Alias</p></th>
+<th class="head"><p>Address</p></th>
+<th class="head"><p>I2C subordinate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>iic_ard</p></td>
+<td><p>axi_ard_fmc</p></td>
+<td><p>0x4160_0000</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only for AD40xx/ADAQ40xx</p>
+</div>
+</section>
+<section id="spi-connections">
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>SPI type</p></th>
+<th class="head"><p>SPI manager instance</p></th>
+<th class="head"><p>SPI subordinate</p></th>
+<th class="head"><p>CS</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>axi_spi_engine</p></td>
+<td><p>PulSAR_ADC</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gpios">
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
+<p>The Software GPIO number is calculated as follows:</p>
+<ul class="simple">
+<li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
+</ul>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 34.8%" />
+<col style="width: 21.7%" />
+<col style="width: 21.7%" />
+<col style="width: 21.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"></th>
+<th class="head"><p>Zynq-7000</p></th>
+</tr>
+<tr class="row-odd"><th class="head"><p>pulsar_gpio[0] (PD)*</p></th>
+<th class="head"><p>INOUT</p></th>
+<th class="head"><p>32</p></th>
+<th class="head"><p>86</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>pulsar_gpio[1] (TURBO)**</p></td>
+<td><p>INOUT</p></td>
+<td><p>33</p></td>
+<td><p>87</p></td>
+</tr>
+<tr class="row-odd"><td><p>pulsar_gpio[2] (SDO - SPI_OP_MODE=2)**</p></td>
+<td><p>INOUT</p></td>
+<td><p>34</p></td>
+<td><p>88</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for PulSAR_ADC_PMDZ projects</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for FMC_N_PMOD=1 (AD40xx)</p></li>
+</ul>
+</div>
+</section>
+<section id="interrupts">
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<p>Below are the Programmable Logic interrupts used in this project.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance name</p></th>
+<th class="head"><p>HDL</p></th>
+<th class="head"><p>Linux Zynq</p></th>
+<th class="head"><p>Actual Zynq</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>axi_pulsar_adc_dma</p></td>
+<td><p>13</p></td>
+<td><p>57</p></td>
+<td><p>89</p></td>
+</tr>
+<tr class="row-odd"><td><p>spi_pulsar_adc</p></td>
+<td><p>12</p></td>
+<td><p>56</p></td>
+<td><p>88</p></td>
+</tr>
+<tr class="row-even"><td><p>iic_fmc/ard</p></td>
+<td><p>11</p></td>
+<td><p>55</p></td>
+<td><p>87</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="building-the-hdl-project">
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
+<p>The design is built upon ADI’s generic HDL reference design framework.
+ADI distributes the bit/elf files of these projects as part of the
+<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux" target="_blank">ADI Kuiper Linux</a>.
+If you want to build the sources, ADI makes them available on the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/" target="_blank">HDL repository</a>. To get the source you must
+<a class="icon link reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository" target="_blank">clone</a>
+the HDL repository, and then build the project as follows:.</p>
+<p><strong>Linux/Cygwin/WSL</strong></p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/pulsar_adc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/pulsar_adc/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">FMC_N_PMOD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">SPI_OP_MODE</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Build examples:</p>
+<p>Zedboard PMOD support</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/pulsar_adc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/pulsar_adc/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">FMC_N_PMOD</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Zedboard standard configuration FMC support (default)</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/pulsar_adc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/pulsar_adc/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">FMC_N_PMOD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">SPI_OP_MODE</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Zedboard FMC support for AD7944 4-wire mode (“multi”)</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/pulsar_adc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/pulsar_adc/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">FMC_N_PMOD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">SPI_OP_MODE</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Zedboard FMC support for AD7944 chain mode or 3-wire “single”</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/pulsar_adc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/pulsar_adc/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">FMC_N_PMOD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">SPI_OP_MODE</span><span class="o">=</span><span class="m">2</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The result of the build, if parameters were used, will be in a folder named
+by the used configuration. If the following command was run</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/pulsar_adc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/pulsar_adc/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">FMC_N_PMOD</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">SPI_OP_MODE</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>then the folder name will be:</p>
+<p><code class="docutils literal notranslate"><span class="pre">FMC_N_PMOD1_SPI_OP_MODE0</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the CoraZ7S-based projects, the build is done without parameters!</p>
+</div>
+<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl/#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<section id="hardware-related">
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
+<p>Datasheets for PulSAR with PMOD connector:</p>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7942" target="_blank">AD7942</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7946" target="_blank">AD7946</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-1" target="_blank">AD7988-1</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7685" target="_blank">AD7685</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7687" target="_blank">AD7687</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7691" target="_blank">AD7691</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7686" target="_blank">AD7686</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7688" target="_blank">AD7688</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7693" target="_blank">AD7693</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-5" target="_blank">AD7988-5</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7980" target="_blank">AD7980</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7983" target="_blank">AD7983</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7690" target="_blank">AD7690</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7982" target="_blank">AD7982</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7984" target="_blank">AD7984</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/6-Lead_SOT-23_ADC_Driver_UG-682.pdf" target="_blank">UG-682, Evaluation Board User Guide</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/UG-340.pdf" target="_blank">UG-340, Evaluation Board User Guide</a></p></li>
+</ul>
+<p>Datasheets PulSAR with FMC connector:</p>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4000" target="_blank">AD4000</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4001" target="_blank">AD4001</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4002" target="_blank">AD4002</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4003" target="_blank">AD4003</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4004" target="_blank">AD4004</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4005" target="_blank">AD4005</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4006" target="_blank">AD4006</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4007" target="_blank">AD4007</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4008" target="_blank">AD4008</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4010" target="_blank">AD4010</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4011" target="_blank">AD4011</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4020" target="_blank">AD4020</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4021" target="_blank">AD4021</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ4003" target="_blank">ADAQ4003</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/UG-1042.pdf" target="_blank">UG-1042, Evaluation Board User Guide</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-adaq4001fmcz_eval-adaq4003fmcz-ug-1533.pdf" target="_blank">UG-1042, Evaluation Board User Guide</a></p></li>
+</ul>
+</section>
+<section id="hdl-related">
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/pulsar_adc" target="_blank">pulsar_adc HDL project source code</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/pulsar_adc_pmods_hdl" target="_blank">[Wiki] PulSAR ADC PMOD HDL start guide</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods" target="_blank">[Wiki] PulSAR ADC PMOD quick start guide</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods" target="_blank">[Wiki] AD40xx/ADAQ40xx quick start guide</a></p></li>
+</ul>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 40.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>IP name</p></th>
+<th class="head"><p>Source code link</p></th>
+<th class="head"><p>Documentation link</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AXI_CLKGEN</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen" target="_blank">library/axi_clkgen</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_DMAC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac" target="_blank">library/axi_dmac</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx" target="_blank">library/axi_hdmi_tx</a> *</p></td>
+<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/#axi-hdmi-tx"><span class="std std-ref">AXI HDMI TX</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi" target="_blank">library/axi_i2s_adi</a> *</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_PWM_GEN</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen" target="_blank">library/axi_pwm_gen</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_pwm_gen/#axi-pwm-gen"><span class="std std-ref">AXI PWM Generator</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx" target="_blank">library/axi_spdif_tx</a> *</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_SYSID</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid" target="_blank">library/axi_sysid</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_SPI_ENGINE</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/axi_spi_engine" target="_blank">library/spi_engine/axi_spi_engine</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine/#spi-engine-axi"><span class="std std-ref">AXI SPI Engine Module</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>SPI_ENGINE_EXECUTION</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_execution" target="_blank">library/spi_engine/spi_engine_execution</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution/#spi-engine-execution"><span class="std std-ref">SPI Engine Execution Module</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_interconnect" target="_blank">library/spi_engine/spi_engine_interconnect</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect/#spi-engine-interconnect"><span class="std std-ref">SPI Engine Interconnect Module</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>SPI_ENGINE_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_offload" target="_blank">library/spi_engine/spi_engine_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload/#spi-engine-offload"><span class="std std-ref">SPI Engine Offload Module</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SYSID_ROM</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom" target="_blank">library/sysid_rom</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer" target="_blank">library/util_i2c_mixer</a> *</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for AD40xx/ADAQ40xx</p>
+</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../library/spi_engine/#spi-engine"><span class="std std-ref">SPI Engine Framework documentation</span></a></p></li>
+</ul>
+</section>
+<section id="software-related">
+<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/iio/adc/ad_pulsar.c" target="_blank">PulSAR ADC PMDZ Linux driver source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/drivers/iio/adc/ad4000.c" target="_blank">AD40xx/ADAQ40xx Linux driver source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4000.dts" target="_blank">AD4000 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4001.dts" target="_blank">AD4001 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4002.dts" target="_blank">AD4002 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4003.dts" target="_blank">AD4003 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4004.dts" target="_blank">AD4004 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4005.dts" target="_blank">AD4005 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4006.dts" target="_blank">AD4006 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4007.dts" target="_blank">AD4007 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4008.dts" target="_blank">AD4008 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4010.dts" target="_blank">AD4010 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4011.dts" target="_blank">AD4011 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4020.dts" target="_blank">AD4020 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4021.dts" target="_blank">AD4021 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7687-pmdz.dts" target="_blank">AD7687 CoraZ7S Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7689-ardz.dts" target="_blank">AD7689 CoraZ7S Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7946.dts" target="_blank">AD7946 CoraZ7S Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7984.dts" target="_blank">AD7984 CoraZ7S  Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq4003.dts" target="_blank">ADAQ4003 Zed Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/ci/arch/arm/boot/dts/xilinx/zynq-coraz7s-adaq4003.dts" target="_blank">ADAQ4003 CoraZ7S Linux device tree</a></p></li>
+</ul>
+</section>
+</section>
+<section id="more-information">
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../user_guide/#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
+</ul>
+</section>
+<section id="support">
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
+<p><a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/" target="_blank">reference design</a> with <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga" target="_blank">EngineerZone</a> FPGA reference designs forum.</p>
+<p>For questions regarding the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> Linux device drivers, device trees, etc.
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/" target="_blank">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers" target="_blank">EngineerZone</a> Linux software drivers forum.</p>
+<p>For questions concerning the <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> No-OS drivers, from our
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/" target="_blank">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers" target="_blank">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<p>It should be noted, that the older the tools’ versions and release branches
+are, the lower the chances to receive support from <a class="icon link reference external" href="https://www.analog.com/en/index.html" target="_blank">ADI</a> engineers.</p>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../quad_adaq77681/" title="Previous document (Alt+Shift+LeftArrow)" class="prev">QUAD_ADAQ77681 HDL project</a>
+    <a href="../pulsar_lvds_adc/" title="Next document (Alt+Shift+RightArrow)" class="next">PULSAR-LVDS-ADC HDL project</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2025, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

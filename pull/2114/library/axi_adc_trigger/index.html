@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="The AXI ADC Trigger IP core implements triggering for the ADC path and also controls two I/O triggering pins." name="description" />
+
+    <title>AXI ADC Trigger &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fb8972a4" />
+    <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="AXI ADF4030" href="../axi_adf4030/" />
+    <link rel="prev" title="AXI ADC Decimate" href="../axi_adc_decimate/" />
+   
+  
+  
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://developer.analog.com/" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Documentation</label>
+        
+        <a id="logo" href="../../">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AXI ADC Trigger</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#block-diagram">Block Diagram</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+<li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#detailed-description">Detailed Description</a></li>
+<li><a class="reference internal" href="#register-map">Register Map</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="logo" href="../../">
+      <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
+      <img class="only-dark" src="../../_static/HDL_logo_w_cropped.svg"/>
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction/">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository/">Git repository</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/releases/">Releases</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-1" id="toctree-collapse-1-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/">Projects List and Dependencies</a><label for="toctree-collapse-1-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_main/">Projects list and dependencies for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2026_r1/">Projects list and dependencies for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2023_r2/">Projects list and dependencies for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2022_r2/">Projects list and dependencies for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r2/">Projects list and dependencies for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r1/">Projects list and dependencies for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r2/">Projects list and dependencies for hdl_2019_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r1/">Projects list and dependencies for hdl_2019_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r2/">Projects list and dependencies for hdl_2018_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r1/">Projects list and dependencies for hdl_2018_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2017_r1/">Projects list and dependencies for hdl_2017_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2016_r2/">Projects list and dependencies for hdl_2016_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/projects_list_and_dependencies/downloads_insert_hdl_2015_r1/">Projects list and dependencies for hdl_2015_r1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-2" id="toctree-collapse-1-1-2"/><div class="collapse"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/">Resource Utilization</a><label for="toctree-collapse-1-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_main/">Resource utilization for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2026_r1/">Resource utilization for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2023_r2/">Resource utilization for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2022_r2/">Resource utilization for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2021_r2/">Resource utilization for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2021_r1/">Resource utilization for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../user_guide/release_tables/resource_utilization/resource_utilization_table_hdl_2019_r2/">Resource utilization for hdl_2019_r2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl/">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_boot_bin/">Build the BOOT.BIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_intel_boot_image/">Build the Intel Boot Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture/">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-2" id="toctree-collapse-1-2"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/">IP cores</a><label for="toctree-collapse-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip/">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips/">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces/">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project/">Porting HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl/">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guidelines/">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines/">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/contributing/">Contributing to HDL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party/">Third party forks</a></li>
+</ul>
+</li>
+</ul>
+
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface/">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core/">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/interface/">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../jesd204/">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/generic_jesd_bds/">Generic JESD204 block designs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_tx/">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_rx/">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_adc/">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_dac/">DAC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/xgt_wizard/">Xilinx FPGAs Transceivers Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/versal_transceiver_subsystem/">AMD Versal Adaptive SoC Transceiver Subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/troubleshoot/troubleshoot_jesd204_tx/">Troubleshooting JESD204 TX links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../spi_engine/">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_execution/">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/axi_spi_engine/">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_offload/">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_interconnect/">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/control-interface/">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/offload-control-interface/">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi-bus-interface/">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/instruction-format/">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/pipeline-delays/">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/tutorial/">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad35xxr/">AXI AD35XXR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad408x/">AXI AD408x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad485x/">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7405/">AXI AD7405</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7606x/">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7616/">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7768/">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad777x/">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/">AXI AD9265</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../axi_ad9361/">AXI AD9361</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../axi_ad9361/tdd_support/">TDD Mode Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9740/">AXI AD9740</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/">AXI ADA4355</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adrv9001/">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hmcad15xx/">AXI HMCAD15XX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ltc235x/">AXI LTC235X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ltc2387/">AXI LTC2387</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_offload/">Data Offload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_rx/">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_tx/">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adc_decimate/">AXI ADC Decimate</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adf4030/">AXI ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/">AXI ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_clkgen/">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_clock_monitor/">AXI Clock Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dac_interpolate/">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_fan_control/">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_laser_driver/">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_logic_analyzer/">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_sysid/">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_tdd/">AXI TDD</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../cn0363/">CN0363</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../cn0363/cn0363_dma_sequencer/">CN0363 DMA Sequencer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cn0363/cn0363_phase_data_sync/">CN0363 Phase Data Sync</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../common/ad_dds/">AD Direct Digital Synthesis</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../corundum/">Corundum Network Stack</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../corundum/corundum_core/">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6-1" id="toctree-collapse-2-6-1"/><div class="collapse"><a class="reference internal" href="../corundum/ethernet/">Corundum Ethernet Core</a><label for="toctree-collapse-2-6-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../corundum/ethernet/vcu118/">VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../corundum/ethernet/k26/">K26</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo/">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo_asym/">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_extract/">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_mii_to_rmii/">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_pack/util_cpack2/">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_pack/util_upack2/">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_rfifo/">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_sigma_delta_spi/">Util Sigma Delta SPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_wfifo/">Util WFIFO</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-7" id="toctree-collapse-2-7"/><div class="collapse"><a class="reference internal" href="../xilinx/">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9643/">AXI AD9643 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/">AXI AD9671 (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad_quadmxfe1_ebz/">AD-QUADMXFE1-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad353xr/">AD353XR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad35xxr_evb/">AD35XXR-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4052_ardz/">AD4052-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4062_ardz/">AD4062-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4080_fmc_evb/">AD4080-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4110/">AD4110-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad411x_ad717x/">AD411x-AD717x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4170_asdz/">AD4170-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/">AD469X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/">AD485X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5529r_ardz/">AD5529R-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5706r/">AD5706R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/">AD5758-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/">AD57XX-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad6676evb/">AD6676EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7124_asdz/">AD7124-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7134_fmc/">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7405_fmc/">AD7405-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7606x_fmc/">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad77681evb/">AD7768-1-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7768evb/">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad777x_fmcz/">AD777X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/">AD9081-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz_x_band/">AD9081-FMCA-EBZ-X-BAND</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9083_evb/">AD9083-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9084_ebz/">AD9084-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad916x_fmc/">AD916x-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9208_dual_ebz/">AD9208-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9209_fmca_ebz/">AD9209-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9213_dual_ebz/">AD9213-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9213_evb/">AD9213-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9265_fmc/">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9467_fmc/">AD9467-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/">AD9656-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/">AD9694-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/">AD9740-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/">ADA4355-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/">ADAQ23875</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq7980_sdz/">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq8092_fmc/">ADAQ8092-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx100x_evb/">ADMX100X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx6001_ebz/">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrd8012_01z/">ADRD8012-01Z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001/">ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001_dual/">ADRV9001-DUAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009/">ADRV9009</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009zu11eg/">ADRV9009-ZU11EG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9026/">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv903x/">ADRV903x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv904x/">ADRV904x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9361z7035/">ADRV9361Z7035</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9364z7020/">ADRV9364Z7020</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9371x/">ADRV9371x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adv7511/">ADV7511</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adv7513/">ADV7513</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/arradio/">ARRADIO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0363/">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0506/">CN0506</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0561/">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0577/">CN0577</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0579/">CN0579</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0585/">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dac_fmc_ebz/">DAC-FMC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/daq2/">DAQ2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/daq3/">DAQ3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dc2677a/">DC2677A</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1"/><div class="collapse"><a class="reference internal" href="../../projects/fmcomms2/">FMCOMMS2/3/4</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../projects/fmcomms2/fir_filter/">FMCOMMS2 FIR FILTER</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms5/">FMCOMMS5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms8/">FMCOMMS8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms11/">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/hmcad1520_ebz/">HMCAD1520</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/jupiter_sdr/">JUPITER-SDR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ltc2378_fmc/">LTC2378-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/m2k/">M2K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/max96724/">MAX96724</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pluto/">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/quad_adaq77681/">QUAD_ADAQ7768-1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds_adc/">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx6020m/">ADMX6020M</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/test_capi_selftest/">TEST-CAPI-SELFTEST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9739a_fmc/">AD9739A-FMC (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/">FMCADC2 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc5/">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms1/">FMCOMMS1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms6/">FMCOMMS6 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcjesdadc1/">FMCJESDADC1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/imageon/">IMAGEON (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../">IP Cores</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="axi-adc-trigger">
+<span id="id1"></span><h1>AXI ADC Trigger<a class="headerlink" href="#axi-adc-trigger" title="Link to this heading"></a></h1>
+<div><section id="hdl-component-diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 378.0 354" width="378.0" class="no-background"><style>
+                a {
+                    text-decoration: none;
+                }
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="342.0" height="300" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">clk</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-reset"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">reset</text></a><g transform="translate(18,142.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">trigger_in</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">trigger_i</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">data_a</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="246">data_b</text></a><g transform="translate(18,238.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="270">data_valid_a</text></a><g transform="translate(18,262.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="294">data_valid_b</text></a><g transform="translate(18,286.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="342.0" y="54">trigger_o</text></a><g transform="translate(360.0,46.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="342.0" y="78">trigger_t</text></a><g transform="translate(360.0,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="342.0" y="102">data_a_trig</text></a><g transform="translate(360.0,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="342.0" y="126">data_b_trig</text></a><g transform="translate(360.0,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="342.0" y="150">data_valid_a_trig</text></a><g transform="translate(360.0,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="342.0" y="174">data_valid_b_trig</text></a><g transform="translate(360.0,166.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="342.0" y="198">trigger_out</text></a><g transform="translate(360.0,190.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="342.0" y="222">trigger_out_la</text></a><g transform="translate(360.0,214.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="342.0" y="246">fifo_depth</text></a><g transform="translate(360.0,238.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="342.0" height="300" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="189.0" y="338">axi_adc_trigger</text></svg></section>
+</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adc_trigger" target="_blank">AXI ADC Trigger</a> IP core implements
+triggering for the ADC path and also controls two I/O triggering pins.</p>
+<p>More about the generic framework interfacing ADCs can be read here at <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a>.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>AXI Lite control/status interface</p></li>
+<li><p>Analog triggers, two channels</p>
+<ul>
+<li><p>Greater than a limit</p></li>
+<li><p>Lower than a limit</p></li>
+<li><p>Passing through the limit, high</p></li>
+<li><p>Passing through the limit, low</p></li>
+</ul>
+</li>
+<li><p>Digital triggers, two trigger pins</p>
+<ul>
+<li><p>Low</p></li>
+<li><p>High</p></li>
+<li><p>Any edge</p></li>
+<li><p>Rising edge</p></li>
+<li><p>Falling edge</p></li>
+</ul>
+</li>
+<li><p>Mixing analog and digital triggers</p></li>
+<li><p>Instrument trigger (from Logic Analyzer)</p></li>
+<li><p>Controls two IO trigger pins</p></li>
+</ul>
+</section>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adc_trigger/axi_adc_trigger.v" target="_blank">library/axi_adc_trigger/axi_adc_trigger.v</a></p></td>
+<td><p>Verilog source for the peripheral.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="block-diagram">
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
+<img alt="AXI ADC Trigger block diagram" class="align-center" src="../../_images/block_diagram10.svg" />
+<section id="submodules">
+<h3>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>Channel trigger</strong></p>
+<ul>
+<li><p>Channel A</p>
+<ul>
+<li><p>Amplitude limit - LIMIT_A (0x0014) - Defines the threshold level for
+the ADC trigger</p></li>
+<li><p>Function - TRIGGER_FUNCTION_A (0x0018) - Lower, higher than limit;
+pass-through limit</p></li>
+<li><p>Hysteresis - TRIGGER_FUNCTION_A (0x001c) - “+-” value. Used for the
+pass-through functions</p></li>
+</ul>
+</li>
+<li><p>Channel B</p>
+<ul>
+<li><p>Amplitude limit - LIMIT_A (0x0024) - Defines the threshold level for
+the ADC trigger</p></li>
+<li><p>Function - TRIGGER_FUNCTION_A (0x0028) - Lower, higher than limit;
+pass-through limit</p></li>
+<li><p>Hysteresis - TRIGGER_FUNCTION_A (0x002c) - “+-” value. Used for the
+pass-through functions</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>External trigger</strong></p>
+<ul>
+<li><p>Pin 0 (Ti)
+Configurations - CONFIG_TRIGGER_I (0x004) allows for:</p>
+<ul>
+<li><p>falling edge (bit 8)</p></li>
+<li><p>rising edge (bit 6)</p></li>
+<li><p>any edge (bit 4)</p></li>
+<li><p>high level (bit 2)</p></li>
+<li><p>low level (bit 0)</p></li>
+</ul>
+</li>
+<li><p>Pin 1 (To)
+Configurations - CONFIG_TRIGGER_I (0x004) allows for:</p>
+<ul>
+<li><p>falling edge (bit 9)</p></li>
+<li><p>rising edge (bit 7)</p></li>
+<li><p>any edge (bit 5)</p></li>
+<li><p>high level (bit 3)</p></li>
+<li><p>low level (bit 1)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>In the case of <a class="icon adi reference external" href="https://www.analog.com/ADALM2000" target="_blank">M2K</a>, the trigger pins (Ti and To) are
+chosen one for input and one for output. This is for the ease of
+configuring a daisy-chain of <a class="icon adi reference external" href="https://www.analog.com/ADALM2000" target="_blank">M2Ks</a>.
+Both pins can be configured as input or output using the IO_SELECTION
+register (0x000c).</p>
+</div>
+<ul class="simple">
+<li><p><strong>Channel A MUX</strong> - TRIGGER_MUX_A(0x0020) - Selects between a combination
+of ADC trigger and the external trigger</p></li>
+<li><p><strong>Channel B MUX</strong> - TRIGGER_MUX_B(0x0030) - Selects between a combination
+of ADC trigger and the external trigger</p></li>
+<li><p><strong>Output MUX</strong> - TRIGGER_OUT_CONTROL(0x0034) - Selects a combination
+between the channel A and/or B MUX’s and the input of the instrument trigger</p></li>
+<li><p><strong>Holdoff counter</strong> (32 bit) - TRIGGER_HOLDOFF(0x0048) - Controls the
+trigger out silent period after an event.</p></li>
+<li><p><strong>Delay counter</strong> (32 bit) - TRIGGER_DELAY(0x0040) - Controls the trigger
+delay</p></li>
+<li><p><strong>External trigger control</strong></p>
+<ul>
+<li><p>IO_SELECTION(0x000c) - Controls the direction of the external trigger pins,
+and the source (for each pin configured as output)</p></li>
+<li><p>TRIGGER_OUT_HOLD_PINS(0x004c) - Controls the hold period after a
+transition to a new logic level.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="configuration-parameters">
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<div><section id="hdl-parameters">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Choices/Range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SIGN_BITS</span></code></td>
+<td class="description"><p>Sign Bits.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">2</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">OUT_PIN_HOLD_N</span></code></td>
+<td class="description"><p>Out Pin Hold N.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">100000</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div></section>
+<section id="interface">
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
+<div><section id="bus-interface-s_axi">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="ec3d4cfb612a8a874d14486cd7ec6a2936de5253" name="ec3d4cfb612a8a874d14486cd7ec6a2936de5253" type="checkbox"></input><label for="ec3d4cfb612a8a874d14486cd7ec6a2936de5253"><div><p>s_axi</p>
+<section>
+<p>Standard AXI Slave Memory Map interface</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
+<td><p>in [6:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
+<td><p>in [3:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
+<td><p>in [6:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aclk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="dac3eedf37822edc32ed91eef489b37b7bb6e1d5" name="dac3eedf37822edc32ed91eef489b37b7bb6e1d5" type="checkbox"></input><label for="dac3eedf37822edc32ed91eef489b37b7bb6e1d5"><div><p>s_axi_aclk</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aresetn">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="b77299934530790cd48965ddd535c69151d4c0bd" name="b77299934530790cd48965ddd535c69151d4c0bd" type="checkbox"></input><label for="b77299934530790cd48965ddd535c69151d4c0bd"><div><p>s_axi_aresetn</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-clk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="4375c13ff15b5e894c9b1edf0057142bba99b4c5" name="4375c13ff15b5e894c9b1edf0057142bba99b4c5" type="checkbox"></input><label for="4375c13ff15b5e894c9b1edf0057142bba99b4c5"><div><p>clk</p>
+<section>
+<p>Clock input</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">clk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-reset">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="47731fb7535d7afbe8515bd4bdb0e2060d785321" name="47731fb7535d7afbe8515bd4bdb0e2060d785321" type="checkbox"></input><label for="47731fb7535d7afbe8515bd4bdb0e2060d785321"><div><p>reset</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">reset</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="ports">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="83dc4ba617f0c6eeeaf5161e0a8fd7e87e83ae1a" name="83dc4ba617f0c6eeeaf5161e0a8fd7e87e83ae1a" type="checkbox"></input><label for="83dc4ba617f0c6eeeaf5161e0a8fd7e87e83ae1a"><p>Ports</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">trigger_in</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Instrument trigger input</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">trigger_i</span></code></td>
+<td><p>in [1:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>External trigger input</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">trigger_o</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Trigger output</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">trigger_t</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Trigger T signal, controlling if pin is input or output</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">data_a</span></code></td>
+<td><p>in [15:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Analog data for channel A</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">data_b</span></code></td>
+<td><p>in [15:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Analog data for channel B</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">data_valid_a</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Data valid signal for channel A</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">data_valid_b</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Data valid signal for channel B</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">data_a_trig</span></code></td>
+<td><p>out [15:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Data with trigger embedded as most significant bit, channel A</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">data_b_trig</span></code></td>
+<td><p>out [15:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Data with trigger embedded as most significant bit, channel B</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">data_valid_a_trig</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Data valid for channel A</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">data_valid_b_trig</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Data valid for channel B</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">trigger_out</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Trigger out of the adc_trigger delayed by 4 clock cycles plus the trigger delay mechanism used with the variable FIFO for history (data before trigger)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">trigger_out_la</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Trigger out of the adc_trigger delayed by 2 clock cycles, minimum delay possible for instrument trigger</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_depth</span></code></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Controls the dynamic depth of the history FIFO</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</div></section>
+<section id="detailed-description">
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Link to this heading"></a></h2>
+<p>The AXI ADC Trigger core implements triggering for the ADC path. The trigger is
+generated based on two external trigger pins, a triggering signal from the logic
+analyzer and the ADC channels.</p>
+<p>The external trigger pins are controlled by the core and can be both input or
+output. For external triggering, they must be set to inputs (independently).</p>
+<p>The analog triggering is based on comparison with a limit. The data format must
+be in 2’s complement and the maximum number of bits of the analog channel is 15.
+The trigger can be transmitted independent or embedded in the output word, at
+bit 15. When embedded, the triggers must be extracted and data must be
+reconstructed, before forwarding the data to the DMA.
+The <a class="reference internal" href="../util_extract/#util-extract"><span class="std std-ref">Util Extract</span></a> IP core can be used for this purpose. Embedding the
+trigger in the data allows for additional IPs with unknown pipeline length
+to be introduced in the path.</p>
+<p>If a history for data before the trigger is needed, a <a class="reference internal" href="../util_var_fifo/#util-var-fifo"><span class="std std-ref">Util VAR FIFO</span></a>
+should be used.
+The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
+</section>
+<section id="register-map">
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
+<div><section id="hdl-regmap">
+<section id="hdl-regmap-AXI_ADC_TRIGGER">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="243e3b1dbf1d4565cdfed0f92af6e0e1e5b65450" name="243e3b1dbf1d4565cdfed0f92af6e0e1e5b65450" type="checkbox"></input><label for="243e3b1dbf1d4565cdfed0f92af6e0e1e5b65450"><p>AXI ADC Trigger (axi_adc_trigger) register map</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap colwidths-given longtable docutils container">
+<table class="regmap longtable docutils align-default">
+<colgroup>
+<col style="width: 8.0%" />
+<col style="width: 8.0%" />
+<col style="width: 6.0%" />
+<col style="width: 14.0%" />
+<col style="width: 6.0%" />
+<col style="width: 10.0%" />
+<col style="width: 48.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>Address</p></th>
+<th class="head" colspan="4"><p>Reg Name</p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<thead>
+<tr class="row-even"><th class="head"><p>HDL</p></th>
+<th class="head"><p>DWORD</p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Field Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
+<td class="description bold"><section>
+<p>Version Register</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00030000</span></code></td>
+<td class="description"><section>
+<p>Version number</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
+<td class="description bold"><section>
+<p>Scratch Register</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Scratch register</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x8</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">TRIGGER_O</span></code></td>
+<td class="description bold"><section>
+<p>Control TRIGGER_O Value</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_O_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Set TRIGGER_O_1 value</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_O_0</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Set TRIGGER_O_0 value</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IO_SELECTION</span></code></td>
+<td class="description bold"><section>
+<p>Control Trigger Pins Direction</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_O_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Select output trigger pin 1 (To PIN):</p>
+<p>0: SOFTWARE TRIGGER - TRRIGER_O_1(0x0004)
+1: TRIGGER_I_1 (PIN)
+2: TRIGGER_I_0 (PIN)
+3: TRIGGER_OUT (axi_adc_trigger) 4: TRIGGER_IN (Logic analyzer)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_O_0</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Select output trigger pin 0 (Ti PIN):</p>
+<p>0: SOFTWARE TRIGGER - TRRIGER_O_0(0x0004)
+1: TRIGGER_I_0 (PIN)
+2: TRIGGER_I_1 (PIN)
+3: TRIGGER_OUT (axi_adc_trigger) 4: TRIGGER_IN (Logic analyzer)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IO_SELECTION_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Drives the TRIGGER_T[1](To) pin.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IO_SELECTION_0</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Drives the TRIGGER_T[0](Ti) pin.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CONFIG_TRIGGER_I</span></code></td>
+<td class="description bold"><section>
+<p>Configure Digital Triggering</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[9:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FALL_EDGE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable falling edge triggering for TRIGGER[0] or TRIGGER[1] pin.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:6]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RISE_EDGE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable rising edge triggering for TRIGGER[0] or TRIGGER[1] pin.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[5:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ANY_EDGE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable any edge triggering for TRIGGER[0] or TRIGGER[1] pin.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">HIGH_LEVEL</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable high level triggering for TRIGGER[0] or TRIGGER[1] pin.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LOW_LEVEL</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable low level triggering for TRIGGER[0] or TRIGGER[1] pin.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x5</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x14</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LIMIT_A</span></code></td>
+<td class="description bold"><section>
+<p>Analog Trigger Level for Channel</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LIMIT_A</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Analog trigger level for channel A. 2’s complement.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x6</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x18</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FUNCTION_A</span></code></td>
+<td class="description bold"><section>
+<p>Analog Triggering Function</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_FUNCTION_A</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Analog triggering function for channel A:</p>
+<p>0: Lower than limit
+1: higher than limit
+2: pass through high limit
+3: passthrough low limit</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x7</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">HYSTERESIS_A</span></code></td>
+<td class="description bold"><section>
+<p>Analog Trigger Hysteresis for Channel</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">HYSTERESIS_A</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Used for the passthrough functions.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x8</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x20</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">TRIGGER_MUX_A</span></code></td>
+<td class="description bold"><section>
+<p>Trigger Selection for Path</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_MUX_A</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Selects trigger a mode:</p>
+<p>0: Always on
+1: Digital triggering, based on trigger[0]
+2: ADC triggering, based on channel A
+3: Reserved
+4: Digital triggering OR ADC triggering
+5: Digital triggering AND ADC triggering
+6: Digital triggering XOR ADC triggering
+7: Option 4 negated
+8: Option 5 negated
+9: Option 6 negated</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x9</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x24</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LIMIT_B</span></code></td>
+<td class="description bold"><section>
+<p>Analog Trigger Level for Channel</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LIMIT_B</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Analog trigger level for channel B. 2’s complement.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xa</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x28</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FUNCTION_B</span></code></td>
+<td class="description bold"><section>
+<p>Analog Triggering Function</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_FUNCTION_B</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Analog triggering function for channel B:</p>
+<p>0: Lower than limit
+1: higher than limit
+2: pass through high limit
+3: passthrough low limit</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xb</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">HYSTERESIS_B</span></code></td>
+<td class="description bold"><section>
+<p>Analog Trigger Hysteresis for Channel</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">HYSTERESIS_B</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Used for the passthrough functions.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x30</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">TRIGGER_MUX_B</span></code></td>
+<td class="description bold"><section>
+<p>Trigger Selection for Path</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_MUX_B</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Selects trigger a mode:</p>
+<p>0: Always on
+1: Digital triggering, based on trigger[0]
+2: ADC triggering, based on channel B
+3: Reserved
+4: Digital triggering OR ADC triggering
+5: Digital triggering AND ADC triggering
+6: Digital triggering XOR ADC triggering
+7: Option 4 negated
+8: Option 5 negated
+9: Option 6 negated</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xd</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x34</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">TRIGGER_OUT_CONTROL</span></code></td>
+<td class="description bold"><section>
+<p>Selection Multiplexer and embedded trigger selection</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">EMBEDDED_TRIGGER</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>When set the bit 15 of the out channel data will be the trigger.
+This allows to keep the data in sync with the trigger in future data processing,
+before feeding the data to the DMA.
+When set a util_extract module is required in the system.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_MUX_OUT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Final Trigger Selection Multiplexer.
+Selects trigger a mode:</p>
+<p>0: Trigger A
+1: Trigger B
+2: Trigger A OR Trigger B
+3: Trigger A AND Trigger B
+4: Trigger A XOR Trigger B
+5: Trigger LA
+6: Trigger A OR Trigger LA
+7: Trigger B OR Trigger LA
+8: Trigger A OR Trigger B OR Trigger LA</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xe</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x38</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FIFO_DEPTH</span></code></td>
+<td class="description bold"><section>
+<p>Controls the Dynamic Depth of the History FIFO</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FIFO_DEPTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Controls the depth of the history FIFO. Should be less than the maximum FIFO depth.
+If set to 0, the FIFO is bypassed.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xf</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">TRIGGERED</span></code></td>
+<td class="description bold"><section>
+<p>Indicates Triggering Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGERED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Indicates if the trigger has been triggered since the last time this register has been
+reset.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">TRIGGER_DELAY</span></code></td>
+<td class="description bold"><section>
+<p>Control the Trigger Delay</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_DELAY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Delays the start of data capture with TRIGGER_DELAY number of samples after the trigger.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x11</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x44</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">STREAMING</span></code></td>
+<td class="description bold"><section>
+<p>Controls Streaming Mode</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">STREAMING</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If the streaming bit is set, after the trigger condition is met data will be continuously
+captured by the DMA. The streaming bit must be set to 0 to reset triggering.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x12</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x48</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">TRIGGER_HOLDOFF</span></code></td>
+<td class="description bold"><section>
+<p>Controls hold off time</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_HOLDOFF</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Defines the time interval, after a trigger event, where the next trigger events will be
+ignored, until the end of the interval. The time interval is set by counter. Down-counting
+on the ADC clock(100MHz). The value written in the register is loaded in the counter at a
+trigger event.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x13</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">TRIGGER_OUT_HOLD_PINS</span></code></td>
+<td class="description bold"><section>
+<p>Controls external trigger hold time</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TRIGGER_OUT_HOLD_PINS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Defines a time period, in which the external trigger pins, configured as outputs, will hold
+the new logic level after a transition. The down-counter, counting on ADC clock, is loaded
+with the value written in the register after a new transition of the source trigger signal,
+if the counter is inactive.</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Access Type</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RO</p></td>
+<td><p>Read-only</p></td>
+<td><p>Reads will return the current register value. Writes have no effect.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RW</p></td>
+<td><p>Read-write</p></td>
+<td><p>Reads will return the current register value. Writes will change the current register value.</p></td>
+</tr>
+<tr class="row-even"><td><p>RW1C</p></td>
+<td><p>Read,write-1-to-clear</p></td>
+<td><p>Reads will return the current register value. Writing the register will clear those bits of the register which were set to 1 in the value written. Bits are set by hardware.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</div></section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adc_trigger" target="_blank">library/axi_adc_trigger</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_adc_trigger" target="_blank">AXI ADC TRIGGER on wiki</a></p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../axi_adc_decimate/" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AXI ADC Decimate</a>
+    <a href="../axi_adf4030/" title="Next document (Alt+Shift+RightArrow)" class="next">AXI ADF4030</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2025, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

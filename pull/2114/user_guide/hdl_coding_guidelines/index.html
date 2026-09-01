@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="This document contains coding and documentation guidelines which must be followed by all HDL projects. The purpose of this document is to establish a set of rules that specify the layout, naming conventions and some general coding practices for the HDL modules implementation. Specific HDL coding practices meant to obtain maximum performance from a FPGA design are described by external documents such as [1] and [2] and are not included in this document." name="description" />
+
+    <title>ADI HDL coding guidelines &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fb8972a4" />
+    <script async="async" src="../../_static/app.umd.js?v=26d0298f"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Documentation guidelines" href="../docs_guidelines/" />
+    <link rel="prev" title="Customize HDL projects" href="../customize_hdl/" />
+   
+  
+  
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head>
+  
+    <body>
+  
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button class="icon"></button>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://developer.analog.com/" aria-label="Analog Devices Inc. landing page"></a>
+        <div class="vertical-divider"></div>
+        
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs">Documentation</label>
+        
+        <a id="logo" href="../../">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div class="header localtoc-header">
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADI HDL coding guidelines</a><ul>
+<li><a class="reference internal" href="#introduction">1. Introduction</a></li>
+<li><a class="reference internal" href="#coding-style">2. Coding style</a><ul>
+<li><a class="reference internal" href="#a-layout">A. Layout</a></li>
+<li><a class="reference internal" href="#b-naming-conventions">B. Naming Conventions</a></li>
+<li><a class="reference internal" href="#c-comments">C. Comments</a></li>
+<li><a class="reference internal" href="#d-general">D. General</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#annexes">3. Annexes</a><ul>
+<li><a class="reference internal" href="#annex-1-verilog-file-format">Annex 1 Verilog file format</a></li>
+<li><a class="reference internal" href="#annex-2-vhdl-file-format">Annex 2 VHDL file format</a></li>
+<li><a class="reference internal" href="#annex-3-systemverilog-package-file-format">Annex 3 SystemVerilog package file format</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="logo" href="../../">
+      <img class="only-light" src="../../_static/HDL_logo_cropped.svg"/>
+      <img class="only-dark" src="../../_static/HDL_logo_w_cropped.svg"/>
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../introduction/">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../git_repository/">Git repository</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../releases/">Releases</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-1" id="toctree-collapse-1-1-1"/><div class="collapse"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/">Projects List and Dependencies</a><label for="toctree-collapse-1-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_main/">Projects list and dependencies for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2026_r1/">Projects list and dependencies for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2023_r2/">Projects list and dependencies for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2022_r2/">Projects list and dependencies for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r2/">Projects list and dependencies for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2021_r1/">Projects list and dependencies for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r2/">Projects list and dependencies for hdl_2019_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2019_r1/">Projects list and dependencies for hdl_2019_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r2/">Projects list and dependencies for hdl_2018_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2018_r1/">Projects list and dependencies for hdl_2018_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2017_r1/">Projects list and dependencies for hdl_2017_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2016_r2/">Projects list and dependencies for hdl_2016_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/projects_list_and_dependencies/downloads_insert_hdl_2015_r1/">Projects list and dependencies for hdl_2015_r1</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1-2" id="toctree-collapse-1-1-2"/><div class="collapse"><a class="reference internal" href="../release_tables/resource_utilization/">Resource Utilization</a><label for="toctree-collapse-1-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_main/">Resource utilization for main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2026_r1/">Resource utilization for hdl_2026_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2023_r2/">Resource utilization for hdl_2023_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2022_r2/">Resource utilization for hdl_2022_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2021_r2/">Resource utilization for hdl_2021_r2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2021_r1/">Resource utilization for hdl_2021_r1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../release_tables/resource_utilization/resource_utilization_table_hdl_2019_r2/">Resource utilization for hdl_2019_r2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../build_hdl/">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_boot_bin/">Build the BOOT.BIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_intel_boot_image/">Build the Intel Boot Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture/">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-2" id="toctree-collapse-1-2"/><div class="collapse"><a class="reference internal" href="../ip_cores/">IP cores</a><label for="toctree-collapse-1-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../ip_cores/creating_new_ip/">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ip_cores/use_adi_ips/">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ip_cores/interfaces/">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ip_cores/axi_adc/">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ip_cores/axi_dac/">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../porting_project/">Porting HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../customize_hdl/">Customize HDL projects</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs_guidelines/">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/">Contributing to HDL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../third_party/">Third party forks</a></li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../library/">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../library/i3c_controller/">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_host_interface/">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_core/">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/interface/">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../../library/jesd204/">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/generic_jesd_bds/">Generic JESD204 block designs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/">DAC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/xgt_wizard/">Xilinx FPGAs Transceivers Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/versal_transceiver_subsystem/">AMD Versal Adaptive SoC Transceiver Subsystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/troubleshoot/troubleshoot_jesd204_tx/">Troubleshooting JESD204 TX links</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../library/spi_engine/">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_execution/">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/axi_spi_engine/">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_offload/">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect/">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/control-interface/">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/offload-control-interface/">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi-bus-interface/">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/instruction-format/">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/pipeline-delays/">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/tutorial/">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad35xxr/">AXI AD35XXR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/">AXI AD408x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7405/">AXI AD7405</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7768/">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad777x/">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/">AXI AD9265</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../library/axi_ad9361/">AXI AD9361</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/axi_ad9361/tdd_support/">TDD Mode Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9740/">AXI AD9740</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ada4355/">AXI ADA4355</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adrv9001/">AXI ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hmcad15xx/">AXI HMCAD15XX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc235x/">AXI LTC235X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc2387/">AXI LTC2387</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/">Data Offload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_rx/">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_tx/">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_decimate/">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_trigger/">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adf4030/">AXI ADF4030</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adxcvr/">AXI ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_clkgen/">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_clock_monitor/">AXI Clock Monitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dac_interpolate/">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_fan_control/">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_laser_driver/">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_logic_analyzer/">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_pwm_gen/">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_sysid/">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_tdd/">AXI TDD</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-5" id="toctree-collapse-2-5"/><div class="collapse"><a class="reference internal" href="../../library/cn0363/">CN0363</a><label for="toctree-collapse-2-5"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/cn0363/cn0363_dma_sequencer/">CN0363 DMA Sequencer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/cn0363/cn0363_phase_data_sync/">CN0363 Phase Data Sync</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/common/ad_dds/">AD Direct Digital Synthesis</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6" id="toctree-collapse-2-6"/><div class="collapse"><a class="reference internal" href="../../library/corundum/">Corundum Network Stack</a><label for="toctree-collapse-2-6"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/corundum/corundum_core/">Corundum Core</a></li>
+<li class="toctree-l3"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-6-1" id="toctree-collapse-2-6-1"/><div class="collapse"><a class="reference internal" href="../../library/corundum/ethernet/">Corundum Ethernet Core</a><label for="toctree-collapse-2-6-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/vcu118/">VCU118</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../library/corundum/ethernet/k26/">K26</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo/">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo_asym/">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_extract/">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_mii_to_rmii/">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_cpack2/">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_upack2/">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_rfifo/">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_sigma_delta_spi/">Util Sigma Delta SPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_var_fifo/">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_wfifo/">Util WFIFO</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-7" id="toctree-collapse-2-7"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-7"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9643/">AXI AD9643 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9671/">AXI AD9671 (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+<ul>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad_quadmxfe1_ebz/">AD-QUADMXFE1-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad353xr/">AD353XR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad35xxr_evb/">AD35XXR-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4052_ardz/">AD4052-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4062_ardz/">AD4062-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4080_fmc_evb/">AD4080-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4110/">AD4110-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad411x_ad717x/">AD411x-AD717x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4170_asdz/">AD4170-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_evb/">AD469X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad485x_fmcz/">AD485X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4880_fmc_evb/">AD4880-FMC-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5529r_ardz/">AD5529R-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5706r/">AD5706R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5758_sdz/">AD5758-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad57xx_ardz/">AD57XX-ARDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad6676evb/">AD6676EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7124_asdz/">AD7124-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7134_fmc/">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7405_fmc/">AD7405-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7606x_fmc/">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad77681evb/">AD7768-1-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7768evb/">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad777x_fmcz/">AD777X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/">AD9081-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz_x_band/">AD9081-FMCA-EBZ-X-BAND</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9083_evb/">AD9083-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9084_ebz/">AD9084-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad916x_fmc/">AD916x-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9208_dual_ebz/">AD9208-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9209_fmca_ebz/">AD9209-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9213_dual_ebz/">AD9213-DUAL-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9213_evb/">AD9213-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9265_fmc/">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9467_fmc/">AD9467-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9656_fmc/">AD9656-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/">AD9694-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/">AD9695-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9740_fmc/">AD9740-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/">ADA4355-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq23875/">ADAQ23875</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq7980_sdz/">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq8092_fmc/">ADAQ8092-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx100x_evb/">ADMX100X-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx6001_ebz/">ADMX6001-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrd8012_01z/">ADRD8012-01Z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001/">ADRV9001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001_dual/">ADRV9001-DUAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009/">ADRV9009</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009zu11eg/">ADRV9009-ZU11EG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9026/">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv903x/">ADRV903x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv904x/">ADRV904x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9361z7035/">ADRV9361Z7035</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9364z7020/">ADRV9364Z7020</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9371x/">ADRV9371x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adv7511/">ADV7511</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adv7513/">ADV7513</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/arradio/">ARRADIO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0363/">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0506/">CN0506</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0561/">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0577/">CN0577</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0579/">CN0579</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0585/">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dac_fmc_ebz/">DAC-FMC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/daq2/">DAQ2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/daq3/">DAQ3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/dc2677a/">DC2677A</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3-1" id="toctree-collapse-3-1"/><div class="collapse"><a class="reference internal" href="../../projects/fmcomms2/">FMCOMMS2/3/4</a><label for="toctree-collapse-3-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../projects/fmcomms2/fir_filter/">FMCOMMS2 FIR FILTER</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms5/">FMCOMMS5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms8/">FMCOMMS8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms11/">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/hmcad1520_ebz/">HMCAD1520</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/jupiter_sdr/">JUPITER-SDR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ltc2378_fmc/">LTC2378-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/m2k/">M2K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/max96724/">MAX96724</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pluto/">PLUTO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/quad_adaq77681/">QUAD_ADAQ7768-1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds_adc/">PULSAR-LVDS-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/admx6020m/">ADMX6020M</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/test_capi_selftest/">TEST-CAPI-SELFTEST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9739a_fmc/">AD9739A-FMC (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad_fmclidar1_ebz/">AD-FMCLIDAR1-EBZ (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc2/">FMCADC2 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcadc5/">FMCADC5 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms1/">FMCOMMS1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms6/">FMCOMMS6 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/fmcjesdadc1/">FMCJESDADC1 (OBSOLETE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/imageon/">IMAGEON (OBSOLETE)</a></li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body-header">
+  <nav class="breadcrumb"><ol><li><a href="../">User Guide</a></li></ol></nav>
+</div>
+          <div class="body" role="main">
+            
+  <section id="adi-hdl-coding-guidelines">
+<span id="hdl-coding-guidelines"></span><h1>ADI HDL coding guidelines<a class="headerlink" href="#adi-hdl-coding-guidelines" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>1. Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>This document contains coding and documentation guidelines which must be
+followed by all HDL projects. The purpose of this document is to
+establish a set of rules that specify the layout, naming conventions and
+some general coding practices for the HDL modules implementation.
+Specific HDL coding practices meant to obtain maximum performance from a
+FPGA design are described by external documents such as
+<a class="icon link reference external" href="http://www.xilinx.com/support/documentation/white_papers/wp231.pdf" target="_blank">[1]</a>
+and
+<a class="icon link reference external" href="http://www.asic-world.com/code/verilog_tutorial/peter_chambers_10_commandments.pdf" target="_blank">[2]</a>
+and are not included in this document.</p>
+<dl class="simple">
+<dt>There are two types of rules: <em>should</em> and <em>must</em> rules</dt><dd><ul class="simple">
+<li><p><em>Should</em> rules are advisory rules. They suggest the recommended way of doing things.</p></li>
+<li><p><strong>Must</strong> rules are mandatory requirements.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The coding rules are intended to be applied to HDL modules written using
+VHDL or Verilog.</p>
+<p>When an external IP is used, the naming conventions practiced by the IP
+<em>should</em> be kept, even if they do not match the rules specified in this
+document.</p>
+</section>
+<section id="coding-style">
+<h2>2. Coding style<a class="headerlink" href="#coding-style" title="Link to this heading"></a></h2>
+<section id="a-layout">
+<h3>A. Layout<a class="headerlink" href="#a-layout" title="Link to this heading"></a></h3>
+<p><strong>A1</strong></p>
+<p>HDL source files <strong>must not</strong> begin or end with empty lines, but <strong>must</strong>
+terminate with exactly one newline character.</p>
+<p><strong>A2</strong></p>
+<p>Spaces <strong>must</strong> be used instead of tabs.</p>
+<p>This allows the code to be properly visualized by any editor. <strong>Do not</strong>
+leave spaces at the end of a line. The following editor settings <strong>must</strong>
+be used: <em>Tab Size</em>: 2, <em>Indent Size</em>: 2.</p>
+<p><strong>A3</strong></p>
+<p>One white space <strong>must</strong> be inserted around operators, such as
+=, ==, &amp;&amp;, ||, &amp;, |, ^, etc.</p>
+<p id="example-a3">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="p">((</span><span class="n">my_signal1</span><span class="o">==</span><span class="mi">1</span><span class="s1">'b0)&amp;&amp;(my_bus[3:0]==4'</span><span class="n">d5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">((</span><span class="n">my_signal</span> <span class="o">==</span> <span class="mi">1</span><span class="s1">'b0) &amp;&amp; (my_bus[3:0] == 4'</span><span class="n">d5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>A4</strong></p>
+<p>The <em>always</em> block <em>should</em> have a space before <a class="reference external" href="mailto:**&#37;&#52;&#48;**">**<span>&#64;</span>**</a> symbol.</p>
+<p id="example-a4">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">always</span><span class="o">@</span><span class="p">(</span><span class="n">posedge</span> <span class="n">clk</span><span class="p">)</span> <span class="n">begin</span>
+  <span class="o">...</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">always</span> <span class="o">@</span><span class="p">(</span><span class="n">posedge</span> <span class="n">clk</span><span class="p">)</span> <span class="n">begin</span>
+  <span class="o">...</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+<p><strong>A5</strong></p>
+<p>The Verilog <code class="docutils literal notranslate"><span class="pre">begin</span></code>/<code class="docutils literal notranslate"><span class="pre">end</span></code> block <strong>must</strong> always be used,
+even if there is only one statement. This makes adding lines of code
+much easier and with fewer errors.</p>
+<p><strong>A6</strong></p>
+<p>Indentation levels <strong>must</strong> be used to show code nesting. Blank
+lines may be used as desired to improve code readability, but <em>not</em> in
+all cases.</p>
+<p id="example-a6">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">if</span> <span class="p">(</span><span class="n">my_signal</span> <span class="o">==</span> <span class="mi">1</span><span class="s1">'b0) begin</span>
+<span class="linenos"> 2</span>  <span class="k">if</span> <span class="p">(</span><span class="n">my_bus</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">4</span><span class="s1">'d5) begin</span>
+<span class="linenos"> 3</span>  <span class="n">statement1</span><span class="p">;</span>
+<span class="linenos"> 4</span>  <span class="n">statement2</span><span class="p">;</span>
+<span class="linenos"> 5</span>  <span class="n">end</span>
+<span class="linenos"> 6</span><span class="n">statement3</span><span class="p">;</span>
+<span class="linenos"> 7</span><span class="n">statement4</span><span class="p">;</span>
+<span class="linenos"> 8</span><span class="n">end</span>
+<span class="linenos"> 9</span><span class="k">else</span>
+<span class="linenos">10</span><span class="n">statement5</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">if</span> <span class="p">(</span><span class="n">my_signal</span> <span class="o">==</span> <span class="mi">1</span><span class="s1">'b0) begin</span>
+<span class="hll"><span class="linenos"> 2</span>  <span class="k">if</span> <span class="p">(</span><span class="n">my_bus</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="s1">'d5) begin</span>
+</span><span class="hll"><span class="linenos"> 3</span>    <span class="n">statement1</span><span class="p">;</span>
+</span><span class="hll"><span class="linenos"> 4</span>    <span class="n">statement2</span><span class="p">;</span>
+</span><span class="linenos"> 5</span>  <span class="n">end</span>
+<span class="linenos"> 6</span>  <span class="n">statement3</span><span class="p">;</span>
+<span class="hll"><span class="linenos"> 7</span>  <span class="n">statement4</span><span class="p">;</span>
+</span><span class="linenos"> 8</span><span class="n">end</span> <span class="k">else</span> <span class="n">begin</span>
+<span class="linenos"> 9</span>  <span class="n">statement5</span><span class="p">;</span>
+<span class="linenos">10</span><span class="n">end</span>
+</pre></div>
+</div>
+<p><strong>A7</strong></p>
+<p>In a <code class="docutils literal notranslate"><span class="pre">case</span></code> definition, indentation levels <strong>must</strong> be used to
+offset the statements that are encapsulated, but the use of blank lines
+can be used or omitted to best show the statement groupings (if really
+necessary). <code class="docutils literal notranslate"><span class="pre">end</span></code> should be indented as in the correct example.</p>
+<p id="example-a7">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">case</span> <span class="p">(</span> <span class="n">my_bus</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+<span class="linenos"> 2</span>  <span class="mi">4</span><span class="s1">'b0000 : my_signal1 = TRUE;</span>
+<span class="linenos"> 3</span>  <span class="mi">4</span><span class="s1">'b0001 : my_signal1 = FALSE;</span>
+<span class="linenos"> 4</span>  <span class="mi">4</span><span class="s1">'b0010 :</span>
+<span class="linenos"> 5</span>  <span class="n">begin</span>
+<span class="linenos"> 6</span>  <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="linenos"> 7</span>  <span class="n">my_signal2</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="linenos"> 8</span>  <span class="n">end</span>
+<span class="linenos"> 9</span>  <span class="mi">4</span><span class="s1">'b0100 : my_signal2 = FALSE;</span>
+<span class="linenos">10</span>  <span class="n">default</span> <span class="p">:</span> <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="linenos">11</span><span class="n">endcase</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">case</span> <span class="p">(</span><span class="n">my_bus</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">])</span>
+<span class="hll"><span class="linenos"> 2</span>  <span class="mi">4</span><span class="s1">'b0000: begin</span>
+</span><span class="hll"><span class="linenos"> 3</span>    <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+</span><span class="hll"><span class="linenos"> 4</span>    <span class="n">end</span>
+</span><span class="linenos"> 5</span>  <span class="mi">4</span><span class="s1">'b0001: begin</span>
+<span class="linenos"> 6</span>    <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="linenos"> 7</span>    <span class="n">end</span>
+<span class="linenos"> 8</span>  <span class="mi">4</span><span class="s1">'b0010: begin</span>
+<span class="linenos"> 9</span>    <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="linenos">10</span>    <span class="n">my_signal2</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="linenos">11</span>    <span class="n">end</span>
+<span class="linenos">12</span>  <span class="mi">4</span><span class="s1">'b0100: begin</span>
+<span class="linenos">13</span>    <span class="n">my_signal2</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">;</span>
+<span class="linenos">14</span>    <span class="n">end</span>
+<span class="linenos">15</span>  <span class="n">default</span><span class="p">:</span> <span class="n">begin</span>
+<span class="linenos">16</span>    <span class="n">my_signal1</span> <span class="o">=</span> <span class="n">TRUE</span><span class="p">;</span>
+<span class="linenos">17</span>    <span class="n">end</span>
+<span class="linenos">18</span><span class="n">endcase</span>
+</pre></div>
+</div>
+<p><strong>A8</strong></p>
+<p>Alignment <strong>should</strong> be used in declarations, assignments,
+multi-line statements, and end of line comments. The code <strong>must</strong> be
+written in a tabular format.</p>
+<p id="example-a8">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">reg</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">my_signal1</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">2</span><span class="n">reg</span><span class="p">[</span><span class="mi">31</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">my_decoded_signal1</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">3</span><span class="n">reg</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">my_signal2</span><span class="p">,</span> <span class="n">my_signal3</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">4</span><span class="n">wire</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">my_select</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">reg</span>  <span class="p">[</span> <span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_signal1</span><span class="p">;</span>         <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">2</span><span class="n">reg</span>  <span class="p">[</span><span class="mi">31</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_decoded_signal1</span><span class="p">;</span> <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">3</span><span class="n">reg</span>  <span class="p">[</span> <span class="mi">4</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_signal2</span><span class="p">;</span>         <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">4</span><span class="n">reg</span>          <span class="n">my_signal3</span><span class="p">;</span>         <span class="o">//</span> <span class="n">description</span>
+<span class="linenos">5</span>
+<span class="linenos">6</span><span class="n">wire</span> <span class="p">[</span> <span class="mi">2</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_select</span><span class="p">;</span>          <span class="o">//</span> <span class="n">description</span>
+</pre></div>
+</div>
+<p><strong>A9</strong></p>
+<p>Parentheses <strong>must</strong> be used around all boolean statements and
+in complex equations, in order to force the order of operations and
+avoid confusion. Complex boolean expressions <em>should</em> be expressed as
+multi-line aligned statements.</p>
+<p id="example-a9">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>if ((my_signal1 &amp;&amp; your_signal1) || (my_signal2 &amp;&amp; your_signal2) || (my_signal3 &amp;&amp; your_signal3)) begin
+<span class="linenos">2</span>  my_signal1 = TRUE;
+<span class="linenos">3</span>  my_delayed_signal1 = !your_signal;
+<span class="linenos">4</span>end
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos">1</span>if ((my_signal1 &amp;&amp; your_signal1) ||
+</span><span class="hll"><span class="linenos">2</span>    (my_signal2 &amp;&amp; your_signal2) ||
+</span><span class="hll"><span class="linenos">3</span>    (my_signal3 &amp;&amp; your_signal3)) begin
+</span><span class="linenos">4</span>  my_signal1 = TRUE;
+<span class="linenos">5</span>  my_delayed_signal1 = !your_signal;
+<span class="linenos">6</span>end
+</pre></div>
+</div>
+<p><strong>A10</strong></p>
+<p>A line <strong>must</strong> not contain more than one statement. <strong>Do not</strong>
+concatenate multiple statements on the same line.</p>
+<p id="example-a10">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>upper_en = (p5type &amp;&amp; xadr1[0]); lower_en = (p5type &amp;&amp; !xadr1[0]);
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>upper_en = (p5type &amp;&amp; xadr1[0]);
+lower_en = (p5type &amp;&amp; !xadr1[0]);
+</pre></div>
+</div>
+<p><strong>A11</strong></p>
+<p>In module instances:</p>
+<p><strong>A11.1</strong></p>
+<p><strong>All</strong> parameters and ports, <strong>must</strong> be written on a
+separate line, even if there are few of them or their names are short.</p>
+<p id="example-a11-1">Incorrect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_module</span> <span class="c1">#(.PARAMETER1 (PARAMETER1)) i_my_module (.clk (clk));</span>
+</pre></div>
+</div>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">my_module</span> <span class="c1">#(</span>
+<span class="linenos">2</span>  <span class="o">.</span><span class="n">PARAMETER1</span> <span class="p">(</span><span class="n">PARAMETER1</span><span class="p">)</span>
+<span class="linenos">3</span><span class="p">)</span> <span class="n">i_my_module</span> <span class="p">(</span>
+<span class="linenos">4</span>  <span class="o">.</span><span class="n">clk</span> <span class="p">(</span><span class="n">clk</span><span class="p">));</span>
+</pre></div>
+</div>
+<p><strong>A11.2</strong></p>
+<p>When instantiating a module, the label of the module instance
+<strong>must</strong> be on a separate line, with the closing parenthesis of the
+parameters list (if that’s the case) and the opening parenthesis of the
+ports list. The closing parenthesis of the ports list must be right next
+to the last parenthesis of the last port.</p>
+<div class="highlight-default notranslate" id="example-a11-2"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">my_module</span> <span class="c1">#(</span>
+<span class="linenos">2</span>  <span class="o">.</span><span class="n">PARAMETER1</span> <span class="p">(</span><span class="n">PARAMETER1</span><span class="p">),</span>
+<span class="linenos">3</span>  <span class="o">.</span><span class="n">PARAMETER2</span> <span class="p">(</span><span class="n">PARAMETER2</span><span class="p">)</span>
+<span class="hll"><span class="linenos">4</span><span class="p">)</span> <span class="n">i_my_module</span> <span class="p">(</span>
+</span><span class="linenos">5</span>  <span class="o">.</span><span class="n">clk</span> <span class="p">(</span><span class="n">clk</span><span class="p">),</span>
+<span class="linenos">6</span>  <span class="o">.</span><span class="n">rst</span> <span class="p">(</span><span class="n">rst</span><span class="p">),</span>
+<span class="linenos">7</span>  <span class="o">.</span><span class="n">data_in</span> <span class="p">(</span><span class="n">data_in</span><span class="p">),</span>
+<span class="linenos">8</span>  <span class="o">.</span><span class="n">en</span> <span class="p">(</span><span class="n">en</span><span class="p">),</span>
+<span class="linenos">9</span>  <span class="o">.</span><span class="n">response_out</span> <span class="p">(</span><span class="n">response_out</span><span class="p">));</span>
+</pre></div>
+</div>
+<p><strong>A11.3</strong></p>
+<p>Commented parts of code <strong>must</strong> not be added to the main
+branch (i.e if, case, module instances, etc).</p>
+<p><strong>A12</strong></p>
+<p>In module declarations:</p>
+<p><strong>A12.1</strong></p>
+<p>Verilog modules <strong>must</strong> use Verilog-2001 style parameter
+declarations. This increases legibility and consistency.</p>
+<div class="highlight-default notranslate" id="example-a12-1"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="n">module</span> <span class="n">my_module</span> <span class="c1">#(</span>
+</span><span class="hll"><span class="linenos"> 2</span>  <span class="n">parameter</span> <span class="n">PARAMETER1</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class="hll"><span class="linenos"> 3</span><span class="p">)</span> <span class="p">(</span>
+</span><span class="hll"><span class="linenos"> 4</span>  <span class="nb">input</span>         <span class="n">clk</span><span class="p">,</span>
+</span><span class="linenos"> 5</span>  <span class="nb">input</span>         <span class="n">rst</span><span class="p">,</span>
+<span class="linenos"> 6</span>  <span class="nb">input</span>  <span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">data_0</span><span class="p">,</span>
+<span class="linenos"> 7</span>  <span class="nb">input</span>  <span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">data_1</span><span class="p">,</span>
+<span class="linenos"> 8</span>  <span class="nb">input</span>         <span class="n">enable</span><span class="p">,</span>
+<span class="linenos"> 9</span>  <span class="nb">input</span>         <span class="n">valid</span><span class="p">,</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>  <span class="o">//</span> <span class="n">interface</span> <span class="mi">1</span>
+<span class="linenos">12</span>  <span class="nb">input</span>         <span class="n">interf1_clk</span><span class="p">,</span>
+<span class="linenos">13</span>  <span class="n">inout</span>         <span class="n">interf1_some_signal</span><span class="p">,</span>
+<span class="linenos">14</span>  <span class="n">output</span> <span class="p">[</span><span class="mi">15</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">interf1_data_i</span><span class="p">,</span>
+<span class="linenos">15</span>  <span class="n">output</span> <span class="p">[</span><span class="mi">15</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">interf1_data_q</span><span class="p">,</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>  <span class="o">//</span> <span class="n">interface</span> <span class="mi">2</span>
+<span class="linenos">18</span>  <span class="nb">input</span>         <span class="n">interf2_some_signal</span><span class="p">,</span>
+<span class="hll"><span class="linenos">19</span>  <span class="n">output</span>        <span class="n">interf2_data_out</span>
+</span><span class="hll"><span class="linenos">20</span><span class="p">);</span>
+</span></pre></div>
+</div>
+<p><strong>A12.2</strong></p>
+<p>Comments are allowed inside a module declaration <strong>only</strong> for
+separating the interfaces by specifying the name and giving
+supplementary explanations.</p>
+<p><strong>A12.3</strong></p>
+<p>When declaring a module, the closing parenthesis of the
+parameters list <strong>must</strong> be on the same line with the last parameter and
+with the opening parenthesis of the ports list (as shown in the correct
+examples).</p>
+<p><strong>A12.4</strong></p>
+<p>After <code class="docutils literal notranslate"><span class="pre">endmodule</span></code> there <strong>must</strong> be only one newline, and
+nothing else after.</p>
+<p><strong>A13</strong></p>
+<p>SystemVerilog packages must follow these rules:</p>
+<p><strong>A13.1</strong></p>
+<p>The package name <strong>must</strong> be the same as the file name.</p>
+<p><strong>A13.2</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">package</span> <span class="pre">&lt;name&gt;;</span></code> declaration <strong>must</strong> start at the beginning of the line,
+with no leading spaces and no extra spaces before or after <code class="docutils literal notranslate"><span class="pre">;</span></code>.</p>
+<p><strong>A13.3</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">endpackage</span></code> statement <strong>must</strong> be on a separate line, with no leading
+spaces and no extra spaces before or after <code class="docutils literal notranslate"><span class="pre">;</span></code>.</p>
+<p><strong>A13.4</strong></p>
+<p>There <strong>must</strong> be only one newline after <code class="docutils literal notranslate"><span class="pre">endpackage</span></code>, and nothing else after.</p>
+<p><strong>A13.5</strong></p>
+<p>In a package body, indentation levels must be used to offset the enclosed
+statements. Blank lines may be used or omitted to improve readability, but only
+where they help clarity.</p>
+<p><strong>A14</strong></p>
+<p>Ports <strong>must</strong> be indicated individually; that is, one port per
+line must be declared, using the direction indication and data type with
+each port.</p>
+<p><strong>A15</strong></p>
+<p>Signals and variables <strong>must</strong> be declared individually; that
+is, one signal/variable per line <strong>must</strong> be declared.</p>
+<p><strong>A16</strong></p>
+<p>All ports and signals <strong>must</strong> be grouped by interface. Group
+ports declaration by direction starting with input, inout and output
+ports.</p>
+<p><strong>A17</strong></p>
+<p>The clock and reset ports <strong>must</strong> be declared first.</p>
+<p><strong>A18</strong></p>
+<p>Verilog wires and registers declarations <strong>must</strong> be grouped in
+separate sections. <strong>Firstly</strong> register types and then wire types.</p>
+<p><strong>A19</strong></p>
+<p>The source files <em>should</em> have the format shown in Annex 1 for
+Verilog code, Annex 2 for VHDL code and Annex 3 for SystemVerilog code.</p>
+<p><strong>A20</strong></p>
+<p>Local parameters <strong>must</strong> be declared first, before declaring wires
+or registers.</p>
+<div class="highlight-default notranslate" id="example-a20"><div class="highlight"><pre><span></span><span class="hll"><span class="linenos"> 1</span><span class="n">localparam</span>   <span class="n">LOCAL_PARAM1</span><span class="p">;</span>
+</span><span class="hll"><span class="linenos"> 2</span><span class="n">localparam</span>   <span class="n">NEXT_LOCAL_PARAM</span><span class="p">;</span>
+</span><span class="hll"><span class="linenos"> 3</span><span class="n">localparam</span>   <span class="n">LOCAL_PARAM2</span><span class="p">;</span>
+</span><span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="n">reg</span>  <span class="p">[</span> <span class="mi">3</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_signal1</span><span class="p">;</span>
+<span class="linenos"> 6</span><span class="n">reg</span>  <span class="p">[</span> <span class="mi">4</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_signal2</span><span class="p">;</span>
+<span class="linenos"> 7</span><span class="n">reg</span>          <span class="n">my_signal3</span><span class="p">;</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="n">wire</span> <span class="p">[</span> <span class="mi">2</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">my_wire1</span><span class="p">;</span>
+<span class="linenos">10</span><span class="n">wire</span>         <span class="n">my_wire2</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><strong>A21</strong></p>
+<p>Local parameter formatting:</p>
+<p><strong>A21.1</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">localparam</span></code> statements <strong>must</strong> be indented by a number of spaces that is a
+multiple of 2, with a minimum of 2 spaces.
+Items in a list (when present) must be indented by +2 spaces relative to the
+<code class="docutils literal notranslate"><span class="pre">localparam</span></code> line.</p>
+<p><strong>A21.2</strong></p>
+<p><strong>Multi-line list form</strong></p>
+<dl class="simple">
+<dt>When declaring multiple local parameters as a list:</dt><dd><ul class="simple">
+<li><p>the list must start on a new line after the <code class="docutils literal notranslate"><span class="pre">localparam</span></code> keyword;</p></li>
+<li><p>each intermediate item must end with a comma <code class="docutils literal notranslate"><span class="pre">,</span></code>; the last item must not end with a comma;</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">=</span></code> operator must be column-aligned across all items in the list.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span> <span class="n">localparam</span>
+<span class="linenos">2</span>   <span class="n">PCORE_VERSION</span> <span class="o">=</span> <span class="mi">32</span><span class="s1">'h00020062,</span>
+<span class="linenos">3</span>   <span class="n">PCORE_MAGIC</span>   <span class="o">=</span> <span class="mi">32</span><span class="s1">'h5444444E;</span>
+</pre></div>
+</div>
+<p><strong>A21.3</strong></p>
+<p><strong>Concatenation form ({ … })</strong></p>
+<dl class="simple">
+<dt>When declaring a local parameter using concatenation:</dt><dd><ul class="simple">
+<li><p>the first element may appear on the same line as <code class="docutils literal notranslate"><span class="pre">{</span></code>; all subsequent elements must start on new lines, indented by +2 spaces;</p></li>
+<li><p>items must be aligned to a common anchor (apostrophes in literals or, otherwise, the first token) for visual alignment;</p></li>
+<li><p>inline comments for items should align to a common column, at least 4 spaces after the longest code element;</p></li>
+<li><p>the closing <code class="docutils literal notranslate"><span class="pre">};</span></code> must be attached to the last element on the same line;</p></li>
+<li><p>comments written after a comma belong to the preceding element and must be attached to that element’s line;</p></li>
+<li><p>any trailing comment after the final semicolon of the whole statement must be attached to the last element’s line.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Correct:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span> <span class="n">localparam</span> <span class="p">[</span><span class="mi">31</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="n">CORE_VERSION</span> <span class="o">=</span> <span class="p">{</span><span class="mi">16</span><span class="s1">'h0002,    /* MAJOR */</span>
+<span class="linenos">2</span>                                    <span class="mi">8</span><span class="s1">'h01,      /* MINOR */</span>
+<span class="linenos">3</span>                                    <span class="mi">8</span><span class="s1">'h01};     /* PATCH */</span>
+</pre></div>
+</div>
+<p><strong>A22</strong></p>
+<p>In <code class="docutils literal notranslate"><span class="pre">typedef</span></code> declarations:</p>
+<p><strong>A22.1</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">typedef</span></code> line must be indented by a number of spaces that is a multiple
+of 2, with a minimum of 2 spaces.</p>
+<p><strong>A22.2</strong></p>
+<p>All items must be on separate lines (no one-liners), indented by +2 spaces
+relative to the typedef line.</p>
+<p><strong>A22.3</strong></p>
+<p>The closing <code class="docutils literal notranslate"><span class="pre">}</span></code> must be aligned with the <code class="docutils literal notranslate"><span class="pre">typedef</span></code> line indentation.
+The type name and semicolon must be on the same line as <code class="docutils literal notranslate"><span class="pre">}</span></code>.</p>
+<p><strong>A22.4</strong></p>
+<p>Inline comments after <code class="docutils literal notranslate"><span class="pre">}</span> <span class="pre">type_name;</span></code> must be moved to a separate line.</p>
+<p>Correct</p>
+<div class="highlight-default notranslate" id="example-a22"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">typedef</span> <span class="n">enum</span> <span class="n">logic</span> <span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="p">{</span>
+<span class="linenos">2</span>  <span class="n">IDLE</span>    <span class="o">=</span> <span class="mi">2</span><span class="s1">'b00,</span>
+<span class="linenos">3</span>  <span class="n">ARMED</span>   <span class="o">=</span> <span class="mi">2</span><span class="s1">'b01,</span>
+<span class="linenos">4</span>  <span class="n">WAITING</span> <span class="o">=</span> <span class="mi">2</span><span class="s1">'b10,</span>
+<span class="linenos">5</span>  <span class="n">RUNNING</span> <span class="o">=</span> <span class="mi">2</span><span class="s1">'b11</span>
+<span class="linenos">6</span><span class="p">}</span> <span class="n">type_name</span><span class="p">;</span>
+<span class="linenos">7</span><span class="o">//</span> <span class="n">comment</span> <span class="n">describing</span> <span class="n">the</span> <span class="nb">type</span>
+</pre></div>
+</div>
+</section>
+<section id="b-naming-conventions">
+<h3>B. Naming Conventions<a class="headerlink" href="#b-naming-conventions" title="Link to this heading"></a></h3>
+<p><strong>B1</strong></p>
+<p>All the names in the source code <strong>must</strong> be written in English.</p>
+<p><strong>B2</strong></p>
+<p>Names <strong>must</strong> start with a letter, be composed of alphanumeric
+characters or underscores <strong>[A-Z, a-z, 0-9,_]</strong>.</p>
+<p><strong>B3</strong></p>
+<p>All modules, signal and register names <strong>must</strong> be lower case,
+delimited by underscores _.</p>
+<div class="highlight-default notranslate" id="example-b3"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">module</span> <span class="n">my_module</span> <span class="p">(</span>
+<span class="linenos">2</span>  <span class="nb">input</span>           <span class="n">ena_fft</span><span class="p">,</span>
+<span class="linenos">3</span>  <span class="nb">input</span>           <span class="n">ena_mdi</span><span class="p">,</span>
+<span class="linenos">4</span>  <span class="nb">input</span>           <span class="n">fft_in</span><span class="p">,</span>
+<span class="linenos">5</span>  <span class="n">output</span>          <span class="n">mdi_out</span><span class="p">,</span>
+<span class="linenos">6</span>  <span class="n">output</span> <span class="p">[</span><span class="mi">15</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>   <span class="n">my_signal1</span>
+<span class="linenos">7</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><strong>B4</strong></p>
+<p>A file <strong>must</strong> contain a single module. File name <strong>must</strong> be
+the same as the module name. For sub-modules the name <strong>must</strong> be
+composed in the following way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">top_module_name</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">sub_module_description</span><span class="o">&gt;.</span>
+</pre></div>
+</div>
+<p><strong>B5</strong></p>
+<p>All parameter names <strong>must</strong> be upper case with underscore
+delimiters.</p>
+<p><strong>B6</strong></p>
+<p>Signals names <em>should</em> be composed in the following way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">interface</span><span class="o">|</span><span class="n">clock</span> <span class="n">domain</span><span class="p">]</span><span class="n">_</span><span class="o">&lt;</span><span class="n">signal_name</span><span class="o">&gt;</span><span class="p">[</span><span class="n">_ns</span><span class="p">][</span><span class="n">_l</span><span class="p">][</span><span class="n">_p</span><span class="p">][</span><span class="n">_n</span><span class="p">][</span><span class="n">_m1</span><span class="p">][</span><span class="n">_m2</span><span class="p">][</span><span class="n">_s</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The suffix component may be used as described below and, in the case of
+multiple suffixes being used in the same signal name, must only be used
+in the order specified in the signal name descriptions above.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_ns</span></code> - State machine next state.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_l</span></code> - Latch output. Optional for signals leaving top-level module
+or sub-module, required for signals internal to a module</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_p</span></code> - Positive side of differential signal.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_n</span></code> - Negative side of differential signal. - Active low signal.
+Can also be used for negative side of differential signal.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_m1/\_m2</span></code> - Used to describe registers synchronizers
+(e.g. up_ack_m1, up_ack_m2)</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_s</span></code> - Used to qualify wires/signals (e.g. up_ack_s)</p>
+<p>This rule is useful for complex modules where it is possible to
+incorrectly use a signal if its name does not contain a suffix to
+specify its purpose. Generally this rule can lead to an unnecessary
+naming complexity and thus can be overlooked unless it is absolutely
+necessary.</p>
+<p><strong>B7</strong></p>
+<p>Ports names <em>should</em> be composed in the following way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">interface_name</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">port_name</span><span class="o">&gt;</span><span class="p">[</span><span class="n">_clk</span><span class="p">][</span><span class="n">_rst</span><span class="p">][</span><span class="n">_p</span><span class="p">][</span><span class="n">_n</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">*_clk</span></code> - Clock signal. Exception: Signals whose names obviously
+indicate clocks (e.g. system_clock or clk32m), or when specifying a
+clock with a certain frequency (in this case clk <em>should</em> be used as a
+prefix: e.g. clk_625mhz)</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_rst</span> <span class="pre">/</span> <span class="pre">\_rstn</span></code> - Reset signal (e.g. module_rst). Exception: Signals
+whose names obviously indicate resets.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_p</span></code> - Positive side of differential signal.</p>
+<p><code class="docutils literal notranslate"><span class="pre">*_n</span></code> - Active low signal. Can also be used for negative side of
+differential signal.</p>
+<p><strong>B8</strong></p>
+<p>Global text macros specified by the <code class="docutils literal notranslate"><span class="pre">`define</span></code> directive
+<strong>must</strong> be preceded with the top-level module name, as in:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">top_level_module_name</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">text</span> <span class="n">macro</span> <span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p><strong>B9</strong></p>
+<p>Consistent usage in the spelling and naming style of nets and
+variables <strong>must</strong> be used throughout the design.</p>
+<p><strong>B10</strong></p>
+<p>Abbreviations used in a module <strong>must</strong> be documented and
+uncommon abbreviations <em>should</em> be avoided.</p>
+<p><strong>B11</strong></p>
+<p>Reset and clock names <strong>must</strong> remain the same across
+hierarchy.</p>
+</section>
+<section id="c-comments">
+<h3>C. Comments<a class="headerlink" href="#c-comments" title="Link to this heading"></a></h3>
+<p><strong>C1</strong></p>
+<p>Comments <strong>must</strong> be used to describe the functionality of the
+HDL code. Liberal use of comments is strongly encouraged. Adding obvious
+comments is discouraged. Basically, extensive comments that proceed
+blocks of code, coupled with sparse back references, guide the reader
+through the code.</p>
+<p><strong>C2</strong></p>
+<p>Each functional section of the code <em>should</em> be preceded by
+comments describing the code’s intent and function.</p>
+<p><strong>C3</strong></p>
+<p>Unusual or non-obvious implementations <strong>must</strong> be explained and
+their limitations documented with a comment.</p>
+<p><strong>C4</strong></p>
+<p>Each port declaration <em>should</em> have a descriptive comment,
+<strong>only</strong> on the preceding line.</p>
+<p><strong>C5</strong></p>
+<p>Other declarations, such as regs, wires, local parameters,
+<em>should</em> have a descriptive comment. Either on the same line
+(discouraged), or on the preceding line. This rule is optional for
+auto-generated code.</p>
+<p><strong>C6</strong></p>
+<p>All synthesis-specific directives <strong>must</strong> be documented where
+used, identifying the reason they are used, the tool and the directive
+used.</p>
+<p><strong>C7</strong></p>
+<p>The comments inserted in the code <strong>must</strong> comply with the
+format shown in Annex 1 for Verilog code and Annex 2 for VHDL code.</p>
+</section>
+<section id="d-general">
+<h3>D. General<a class="headerlink" href="#d-general" title="Link to this heading"></a></h3>
+<p><strong>D1</strong></p>
+<p>A file <strong>must</strong> contain a single module or package.</p>
+<p><strong>D2</strong></p>
+<p>A file <strong>must</strong> contain either: digital-only Verilog code (files
+with .v extension); analog-only Verilog code (files with .va or .vams
+extension); or mixed-signal Verilog code (files with .vams extension).</p>
+<p><strong>D3</strong></p>
+<p>Symbolic constants (local parameter) <em>should</em> be used for
+register field values rather than fixed numerical constants. The fields
+may be one or more bits or the entire register.</p>
+<p><strong>D4</strong></p>
+<p>Port connection width <strong>must</strong> match. In module instantiations,
+nets connected to ports must have the same width as the respective port
+declaration.</p>
+<p><strong>D5</strong></p>
+<p>The ranges in both the vector port declaration and the
+net/variable declaration <strong>must</strong> be equal.</p>
+<p><strong>D6</strong></p>
+<p>Operands sizes <strong>must</strong> match. No expression may have its size
+implicitly extended or reduced. In a <code class="docutils literal notranslate"><span class="pre">case</span></code> statement, all the
+<code class="docutils literal notranslate"><span class="pre">case</span></code> item expressions and the <code class="docutils literal notranslate"><span class="pre">case</span></code> expression must have the same
+size.</p>
+<p><strong>D7</strong></p>
+<p>Combinational logic <strong>must</strong> be specified completely (i.e., a
+value must be assigned to the logic outputs for all input combinations).
+In a construct derived from either a <code class="docutils literal notranslate"><span class="pre">case</span></code> or an <code class="docutils literal notranslate"><span class="pre">if</span></code> statement,
+the outputs may be assigned default values before the <code class="docutils literal notranslate"><span class="pre">case</span></code> or <code class="docutils literal notranslate"><span class="pre">if</span></code>
+statement, and then the logic is completely specified.</p>
+<p><strong>D8</strong></p>
+<p>The sensitivity list of Verilog <code class="docutils literal notranslate"><span class="pre">always</span></code> and VHDL <code class="docutils literal notranslate"><span class="pre">process</span></code>
+constructs <strong>must</strong> be completely specified.</p>
+<p><strong>D9</strong></p>
+<p>Modules <strong>must</strong> be instantiated with all I/O: port names
+and signal connections must be listed on all module instantiations. Do
+not leave any input ports open (even if they are unused), always tie
+them to 0 or 1. Leave unused outputs open <strong>but do</strong> list them.</p>
+<p><strong>D10</strong></p>
+<p>A <code class="docutils literal notranslate"><span class="pre">`timescale</span></code> directive that is best for simulation <em>should</em>
+be used in Verilog modules.</p>
+<p><strong>D11</strong></p>
+<p>Compile warnings <strong>must</strong> be treated as potential errors and
+<em>should</em> always try to be resolved. In case a warning is not resolved
+its cause and effects must be fully understood.</p>
+<p><strong>D12</strong></p>
+<p>Critical warnings <strong>must</strong> be treated and fixed.</p>
+<p><strong>D13</strong></p>
+<p>Each file <strong>must</strong> contain a license header, and when changes
+are made to a file, when making a PR, the year <em>should</em> be updated to
+the current year.</p>
+</section>
+</section>
+<section id="annexes">
+<h2>3. Annexes<a class="headerlink" href="#annexes" title="Link to this heading"></a></h2>
+<section id="annex-1-verilog-file-format">
+<h3>Annex 1 Verilog file format<a class="headerlink" href="#annex-1-verilog-file-format" title="Link to this heading"></a></h3>
+<div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos"> 2</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos"> 3</span><span class="c1">// Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>
+<span class="linenos"> 4</span><span class="c1">//</span>
+<span class="linenos"> 5</span><span class="c1">// In this HDL repository, there are many different and unique modules, consisting</span>
+<span class="linenos"> 6</span><span class="c1">// of various HDL (Verilog or VHDL) components. The individual modules are</span>
+<span class="linenos"> 7</span><span class="c1">// developed independently, and may be accompanied by separate and unique license</span>
+<span class="linenos"> 8</span><span class="c1">// terms.</span>
+<span class="linenos"> 9</span><span class="c1">//</span>
+<span class="linenos">10</span><span class="c1">// The user should read each of these license terms, and understand the</span>
+<span class="linenos">11</span><span class="c1">// freedoms and responsabilities that he or she has by using this source/core.</span>
+<span class="linenos">12</span><span class="c1">//</span>
+<span class="linenos">13</span><span class="c1">// This core is distributed in the hope that it will be useful, but WITHOUT ANY</span>
+<span class="linenos">14</span><span class="c1">// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</span>
+<span class="linenos">15</span><span class="c1">// A PARTICULAR PURPOSE.</span>
+<span class="linenos">16</span><span class="c1">//</span>
+<span class="linenos">17</span><span class="c1">// Redistribution and use of source or resulting binaries, with or without modification</span>
+<span class="linenos">18</span><span class="c1">// of this file, are permitted under one of the following two license terms:</span>
+<span class="linenos">19</span><span class="c1">//</span>
+<span class="linenos">20</span><span class="c1">//   1. The GNU General Public License version 2 as published by the</span>
+<span class="linenos">21</span><span class="c1">//      Free Software Foundation, which can be found in the top level directory</span>
+<span class="linenos">22</span><span class="c1">//      of this repository (LICENSE_GPL2), and also online at:</span>
+<span class="linenos">23</span><span class="c1">//      &lt;https://www.gnu.org/licenses/old-licenses/gpl-2.0.html&gt;</span>
+<span class="linenos">24</span><span class="c1">//</span>
+<span class="linenos">25</span><span class="c1">// OR</span>
+<span class="linenos">26</span><span class="c1">//</span>
+<span class="linenos">27</span><span class="c1">//   2. An ADI specific BSD license, which can be found in the top level directory</span>
+<span class="linenos">28</span><span class="c1">//      of this repository (LICENSE_ADIBSD), and also on-line at:</span>
+<span class="linenos">29</span><span class="c1">//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD</span>
+<span class="linenos">30</span><span class="c1">//      This will allow to generate bit files and not release the source code,</span>
+<span class="linenos">31</span><span class="c1">//      as long as it attaches to an ADI device.</span>
+<span class="linenos">32</span><span class="c1">//</span>
+<span class="linenos">33</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos">34</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="no">`timescale</span><span class="w"> </span><span class="mh">1</span><span class="n">ns</span><span class="o">/</span><span class="mh">100</span><span class="n">ps</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="k">module</span><span class="w"> </span><span class="n">prescaler</span><span class="w"> </span><span class="p">#(</span>
+<span class="linenos">39</span><span class="w">  </span><span class="c1">// range = 1-16</span>
+<span class="linenos">40</span><span class="w">  </span><span class="k">parameter</span><span class="w"> </span><span class="n">FIRST_PARAMETER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">8</span><span class="p">,</span>
+<span class="linenos">41</span><span class="w">  </span><span class="c1">// range = N/A</span>
+<span class="linenos">42</span><span class="w">  </span><span class="k">parameter</span><span class="w"> </span><span class="n">SECOND_PARAMETER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">12</span>
+<span class="linenos">43</span><span class="p">)</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">44</span><span class="w">  </span><span class="k">input</span><span class="w">           </span><span class="n">core_32m_clk</span><span class="p">,</span><span class="w">         </span><span class="c1">// 32 MHz clock</span>
+<span class="linenos">45</span><span class="w">  </span><span class="k">input</span><span class="w">           </span><span class="n">system_clk</span><span class="p">,</span><span class="w">           </span><span class="c1">// system clock</span>
+<span class="linenos">46</span><span class="w">  </span><span class="k">input</span><span class="w">           </span><span class="n">scan_mode_test</span><span class="p">,</span><span class="w">       </span><span class="c1">// scan mode clock</span>
+<span class="linenos">47</span><span class="w">  </span><span class="k">input</span><span class="w">           </span><span class="n">reset_n</span><span class="p">,</span><span class="w">              </span><span class="c1">// active low hard reset, synch w/</span>
+<span class="linenos">48</span><span class="w">                                        </span><span class="c1">// system_clk</span>
+<span class="linenos">49</span><span class="w">  </span><span class="k">output</span><span class="w">  </span><span class="kt">reg</span><span class="w">     </span><span class="n">div16_clk</span><span class="p">,</span><span class="w">            </span><span class="c1">// input clock divided by 16</span>
+<span class="linenos">50</span><span class="w">  </span><span class="k">output</span><span class="w">  </span><span class="kt">reg</span><span class="w">     </span><span class="n">div16_clk_n</span><span class="w">           </span><span class="c1">// input clock divided by 16 and inverted</span>
+<span class="linenos">51</span><span class="p">);</span>
+<span class="linenos">52</span><span class="w">  </span><span class="c1">// local parameters</span>
+<span class="linenos">53</span>
+<span class="linenos">54</span><span class="w">  </span><span class="c1">// registers declarations</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span><span class="w">  </span><span class="kt">reg</span><span class="w">     </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">count</span><span class="p">;</span><span class="w">          </span><span class="c1">// 4-bit counter to make clock divider</span>
+<span class="linenos">57</span><span class="w">  </span><span class="kt">reg</span><span class="w">     </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">count1</span><span class="p">;</span><span class="w">         </span><span class="c1">// 4-bit counter to make clock divider</span>
+<span class="linenos">58</span>
+<span class="linenos">59</span><span class="w">  </span><span class="c1">// wires declarations</span>
+<span class="linenos">60</span>
+<span class="linenos">61</span><span class="w">  </span><span class="kt">wire</span><span class="w">    </span><span class="p">[</span><span class="mh">3</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w">   </span><span class="n">count1_ns</span><span class="p">;</span><span class="w">      </span><span class="c1">// clock divider next state input</span>
+<span class="linenos">62</span>
+<span class="linenos">63</span><span class="w">  </span><span class="c1">// functions definitions</span>
+<span class="linenos">64</span>
+<span class="linenos">65</span><span class="w">  </span><span class="c1">// this block updates the internal counter</span>
+<span class="linenos">66</span><span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="k">posedge</span><span class="w"> </span><span class="n">core_32m_clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">negedge</span><span class="w"> </span><span class="n">reset_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">67</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">reset_n</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">68</span><span class="w">      </span><span class="n">count</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mh">4</span><span class="mb">'b0000</span><span class="p">;</span>
+<span class="linenos">69</span><span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">70</span><span class="w">      </span><span class="c1">// update counter</span>
+<span class="linenos">71</span><span class="w">      </span><span class="n">count</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">4</span><span class="mb">'b0001</span><span class="p">;</span>
+<span class="linenos">72</span><span class="w">    </span><span class="k">end</span>
+<span class="linenos">73</span><span class="w">  </span><span class="k">end</span>
+<span class="linenos">74</span>
+<span class="linenos">75</span><span class="w">  </span><span class="c1">// this block updates the output clock signals</span>
+<span class="linenos">76</span><span class="w">  </span><span class="k">always</span><span class="w"> </span><span class="p">@(</span><span class="n">scan_mode_test</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">system_clk</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">77</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">scan_mode_test</span><span class="p">)</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">78</span><span class="w">      </span><span class="c1">// normal operation clock assign</span>
+<span class="linenos">79</span><span class="w">      </span><span class="n">div16_clk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">count</span><span class="p">[</span><span class="mh">3</span><span class="p">];</span>
+<span class="linenos">80</span><span class="w">      </span><span class="n">div16_clk_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">count</span><span class="p">[</span><span class="mh">3</span><span class="p">];</span>
+<span class="linenos">81</span><span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">begin</span>
+<span class="linenos">82</span><span class="w">      </span><span class="c1">// scan mode clock assign</span>
+<span class="linenos">83</span><span class="w">      </span><span class="n">div16_clk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">system_clk</span><span class="p">;</span>
+<span class="linenos">84</span><span class="w">      </span><span class="n">div16_clk_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">system_clk</span><span class="p">;</span>
+<span class="linenos">85</span><span class="w">    </span><span class="k">end</span>
+<span class="linenos">86</span><span class="w">  </span><span class="k">end</span>
+<span class="linenos">87</span>
+<span class="linenos">88</span><span class="w">  </span><span class="c1">// Modules Instantiations</span>
+<span class="linenos">89</span>
+<span class="linenos">90</span><span class="k">endmodule</span>
+</pre></div>
+</div>
+</section>
+<section id="annex-2-vhdl-file-format">
+<h3>Annex 2 VHDL file format<a class="headerlink" href="#annex-2-vhdl-file-format" title="Link to this heading"></a></h3>
+<div class="highlight-vhdl notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">-- ***************************************************************************</span>
+<span class="linenos"> 2</span><span class="c1">-- ***************************************************************************</span>
+<span class="linenos"> 3</span><span class="c1">-- Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>
+<span class="linenos"> 4</span><span class="c1">--</span>
+<span class="linenos"> 5</span><span class="c1">-- In this HDL repository, there are many different and unique modules, consisting</span>
+<span class="linenos"> 6</span><span class="c1">-- of various HDL (Verilog or VHDL) components. The individual modules are</span>
+<span class="linenos"> 7</span><span class="c1">-- developed independently, and may be accompanied by separate and unique license</span>
+<span class="linenos"> 8</span><span class="c1">-- terms.</span>
+<span class="linenos"> 9</span><span class="c1">--</span>
+<span class="linenos">10</span><span class="c1">-- The user should read each of these license terms, and understand the</span>
+<span class="linenos">11</span><span class="c1">-- freedoms and responsabilities that he or she has by using this source/core.</span>
+<span class="linenos">12</span><span class="c1">--</span>
+<span class="linenos">13</span><span class="c1">-- This core is distributed in the hope that it will be useful, but WITHOUT ANY</span>
+<span class="linenos">14</span><span class="c1">-- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</span>
+<span class="linenos">15</span><span class="c1">-- A PARTICULAR PURPOSE.</span>
+<span class="linenos">16</span><span class="c1">--</span>
+<span class="linenos">17</span><span class="c1">-- Redistribution and use of source or resulting binaries, with or without modification</span>
+<span class="linenos">18</span><span class="c1">-- of this file, are permitted under one of the following two license terms:</span>
+<span class="linenos">19</span><span class="c1">--</span>
+<span class="linenos">20</span><span class="c1">--   1. The GNU General Public License version 2 as published by the</span>
+<span class="linenos">21</span><span class="c1">--      Free Software Foundation, which can be found in the top level directory</span>
+<span class="linenos">22</span><span class="c1">--      of this repository (LICENSE_GPL2), and also online at:</span>
+<span class="linenos">23</span><span class="c1">--      &lt;https://www.gnu.org/licenses/old-licenses/gpl-2.0.html&gt;</span>
+<span class="linenos">24</span><span class="c1">--</span>
+<span class="linenos">25</span><span class="c1">-- OR</span>
+<span class="linenos">26</span><span class="c1">--</span>
+<span class="linenos">27</span><span class="c1">--   2. An ADI specific BSD license, which can be found in the top level directory</span>
+<span class="linenos">28</span><span class="c1">--      of this repository (LICENSE_ADIBSD), and also on-line at:</span>
+<span class="linenos">29</span><span class="c1">--      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD</span>
+<span class="linenos">30</span><span class="c1">--      This will allow to generate bit files and not release the source code,</span>
+<span class="linenos">31</span><span class="c1">--      as long as it attaches to an ADI device.</span>
+<span class="linenos">32</span><span class="c1">--</span>
+<span class="linenos">33</span><span class="c1">-- ***************************************************************************</span>
+<span class="linenos">34</span><span class="c1">-- ***************************************************************************</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span><span class="k">entity</span><span class="w"> </span><span class="nc">prescaler</span><span class="w"> </span><span class="k">is</span>
+<span class="linenos">37</span><span class="w">  </span><span class="k">Port</span><span class="w"> </span><span class="p">(</span>
+<span class="linenos">38</span><span class="w">    </span><span class="n">core_32m_clk</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="kt">std_logic</span><span class="p">,</span><span class="w">    </span><span class="c1">-- 32 MHz clock</span>
+<span class="linenos">39</span><span class="w">    </span><span class="n">system_clk</span><span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="kt">std_logic</span><span class="p">,</span><span class="w">    </span><span class="c1">-- system clock</span>
+<span class="linenos">40</span><span class="w">    </span><span class="n">scan_mode_test</span><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="kt">std_logic</span><span class="p">,</span><span class="w">    </span><span class="c1">-- scan mode clock</span>
+<span class="linenos">41</span><span class="w">    </span><span class="n">reset_n</span><span class="w">           </span><span class="o">:</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="kt">std_logic</span><span class="p">,</span><span class="w">    </span><span class="c1">-- active low hard reset, synch</span>
+<span class="linenos">42</span><span class="w">    </span><span class="c1">-- w/ system_clock</span>
+<span class="linenos">43</span><span class="w">    </span><span class="n">div16_clk</span><span class="w">         </span><span class="o">:</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">std_logic</span><span class="p">,</span><span class="w">    </span><span class="c1">-- input clock divided by 16</span>
+<span class="linenos">44</span><span class="w">    </span><span class="n">div16_clk_n</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">std_logic</span><span class="w">     </span><span class="c1">-- input clock divided by 16</span>
+<span class="linenos">45</span><span class="w">     </span><span class="c1">-- and inverted</span>
+<span class="linenos">46</span><span class="w">  </span><span class="p">);</span>
+<span class="linenos">47</span><span class="k">end</span><span class="w"> </span><span class="nc">prescaler</span><span class="p">;</span>
+<span class="linenos">48</span>
+<span class="linenos">49</span><span class="k">architecture</span><span class="w"> </span><span class="nc">Behavioral</span><span class="w"> </span><span class="k">of</span><span class="w">  </span><span class="nc">prescaler</span><span class="w"> </span><span class="k">is</span>
+<span class="linenos">50</span>
+<span class="linenos">51</span><span class="c1">-- Components Declarations</span>
+<span class="linenos">52</span>
+<span class="linenos">53</span><span class="c1">-- Local Types Declarations</span>
+<span class="linenos">54</span>
+<span class="linenos">55</span><span class="c1">--  Constants Declarations</span>
+<span class="linenos">56</span>
+<span class="linenos">57</span><span class="c1">-- Signals Declarations</span>
+<span class="linenos">58</span><span class="w">  </span><span class="k">signal</span><span class="w"> </span><span class="n">count</span><span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">-- 4-bit counter to</span>
+<span class="linenos">59</span><span class="w">  </span><span class="c1">-- make clock divider</span>
+<span class="linenos">60</span><span class="w">  </span><span class="k">signal</span><span class="w"> </span><span class="n">count_ns</span><span class="w">     </span><span class="o">:</span><span class="w"> </span><span class="kt">std_logic_vector</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="k">downto</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">-- clock divider next</span>
+<span class="linenos">61</span><span class="w">  </span><span class="c1">-- state input</span>
+<span class="linenos">62</span>
+<span class="linenos">63</span><span class="c1">-- Module Implementation</span>
+<span class="linenos">64</span><span class="k">begin</span>
+<span class="linenos">65</span>
+<span class="linenos">66</span><span class="w">  </span><span class="c1">-- This process updates the internal counter</span>
+<span class="linenos">67</span><span class="w">  </span><span class="k">process</span><span class="p">(</span><span class="n">core_32m_clk</span><span class="p">)</span>
+<span class="linenos">68</span><span class="w">  </span><span class="k">begin</span>
+<span class="linenos">69</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rising_edge</span><span class="p">(</span><span class="n">core_32m_clk</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="linenos">70</span><span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reset_n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'0'</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="linenos">71</span><span class="w">        </span><span class="c1">-- reset counter</span>
+<span class="linenos">72</span><span class="w">        </span><span class="n">count</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s">"0000"</span><span class="p">;</span>
+<span class="linenos">73</span><span class="w">      </span><span class="k">else</span>
+<span class="linenos">74</span><span class="w">        </span><span class="c1">-- update counter</span>
+<span class="linenos">75</span><span class="w">        </span><span class="n">count</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"0001"</span><span class="p">;</span>
+<span class="linenos">76</span><span class="w">      </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
+<span class="linenos">77</span><span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
+<span class="linenos">78</span><span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="k">process</span><span class="p">;</span>
+<span class="linenos">79</span>
+<span class="linenos">80</span><span class="w">  </span><span class="c1">-- This process updates the output clock signals</span>
+<span class="linenos">81</span><span class="w">  </span><span class="k">process</span><span class="p">(</span><span class="n">scan_mode_test</span><span class="p">,</span><span class="w"> </span><span class="n">system_clk</span><span class="p">,</span><span class="w"> </span><span class="n">count</span><span class="p">)</span>
+<span class="linenos">82</span><span class="w">  </span><span class="k">begin</span>
+<span class="linenos">83</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scan_mode_test</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'0'</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="linenos">84</span><span class="w">      </span><span class="c1">-- normal operation clock assign</span>
+<span class="linenos">85</span><span class="w">      </span><span class="n">div16_clk</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">count</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="linenos">86</span><span class="w">      </span><span class="n">div16_clk_n</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">count</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="linenos">87</span><span class="w">    </span><span class="k">else</span>
+<span class="linenos">88</span><span class="w">      </span><span class="c1">-- scan mode clock assign</span>
+<span class="linenos">89</span><span class="w">      </span><span class="n">div16_clk</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">system_clk</span><span class="p">;</span>
+<span class="linenos">90</span><span class="w">      </span><span class="n">div16_clk_n</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">system_clk</span><span class="p">;</span>
+<span class="linenos">91</span><span class="w">    </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span>
+<span class="linenos">92</span><span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="k">process</span><span class="p">;</span>
+<span class="linenos">93</span>
+<span class="linenos">94</span><span class="k">end</span><span class="w"> </span><span class="nc">Behavioral</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="annex-3-systemverilog-package-file-format">
+<h3>Annex 3 SystemVerilog package file format<a class="headerlink" href="#annex-3-systemverilog-package-file-format" title="Link to this heading"></a></h3>
+<div class="highlight-verilog notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos">  2</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos">  3</span><span class="c1">// Copyright (C) year-year Analog Devices, Inc. All rights reserved.</span>
+<span class="linenos">  4</span><span class="c1">//</span>
+<span class="linenos">  5</span><span class="c1">// In this HDL repository, there are many different and unique modules, consisting</span>
+<span class="linenos">  6</span><span class="c1">// of various HDL (Verilog or VHDL) components. The individual modules are</span>
+<span class="linenos">  7</span><span class="c1">// developed independently, and may be accompanied by separate and unique license</span>
+<span class="linenos">  8</span><span class="c1">// terms.</span>
+<span class="linenos">  9</span><span class="c1">//</span>
+<span class="linenos"> 10</span><span class="c1">// The user should read each of these license terms, and understand the</span>
+<span class="linenos"> 11</span><span class="c1">// freedoms and responsibilities that he or she has by using this source/core.</span>
+<span class="linenos"> 12</span><span class="c1">//</span>
+<span class="linenos"> 13</span><span class="c1">// This core is distributed in the hope that it will be useful, but WITHOUT ANY</span>
+<span class="linenos"> 14</span><span class="c1">// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR</span>
+<span class="linenos"> 15</span><span class="c1">// A PARTICULAR PURPOSE.</span>
+<span class="linenos"> 16</span><span class="c1">//</span>
+<span class="linenos"> 17</span><span class="c1">// Redistribution and use of source or resulting binaries, with or without modification</span>
+<span class="linenos"> 18</span><span class="c1">// of this file, are permitted under one of the following two license terms:</span>
+<span class="linenos"> 19</span><span class="c1">//</span>
+<span class="linenos"> 20</span><span class="c1">//   1. The GNU General Public License version 2 as published by the</span>
+<span class="linenos"> 21</span><span class="c1">//      Free Software Foundation, which can be found in the top level directory</span>
+<span class="linenos"> 22</span><span class="c1">//      of this repository (LICENSE_GPL2), and also online at:</span>
+<span class="linenos"> 23</span><span class="c1">//      &lt;https://www.gnu.org/licenses/old-licenses/gpl-2.0.html&gt;</span>
+<span class="linenos"> 24</span><span class="c1">//</span>
+<span class="linenos"> 25</span><span class="c1">// OR</span>
+<span class="linenos"> 26</span><span class="c1">//</span>
+<span class="linenos"> 27</span><span class="c1">//   2. An ADI specific BSD license, which can be found in the top level directory</span>
+<span class="linenos"> 28</span><span class="c1">//      of this repository (LICENSE_ADIBSD), and also on-line at:</span>
+<span class="linenos"> 29</span><span class="c1">//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD</span>
+<span class="linenos"> 30</span><span class="c1">//      This will allow to generate bit files and not release the source code,</span>
+<span class="linenos"> 31</span><span class="c1">//      as long as it attaches to an ADI device.</span>
+<span class="linenos"> 32</span><span class="c1">//</span>
+<span class="linenos"> 33</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos"> 34</span><span class="c1">// ***************************************************************************</span>
+<span class="linenos"> 35</span>
+<span class="linenos"> 36</span><span class="kn">package</span> <span class="n">axi_tdd_pkg</span><span class="p">;</span>
+<span class="linenos"> 37</span>
+<span class="linenos"> 38</span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="kt">logic</span><span class="w"> </span><span class="p">[</span><span class="mh">1</span><span class="o">:</span><span class="mh">0</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 39</span><span class="w">  </span><span class="n">IDLE</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span><span class="mb">'b00</span><span class="p">,</span>
+<span class="linenos"> 40</span><span class="w">  </span><span class="n">ARMED</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span><span class="mb">'b01</span><span class="p">,</span>
+<span class="linenos"> 41</span><span class="w">  </span><span class="n">WAITING</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span><span class="mb">'b10</span><span class="p">,</span>
+<span class="linenos"> 42</span><span class="w">  </span><span class="n">RUNNING</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span><span class="mb">'b11</span>
+<span class="linenos"> 43</span><span class="p">}</span><span class="w"> </span><span class="n">state_t</span><span class="p">;</span>
+<span class="linenos"> 44</span><span class="c1">// comment describing the type</span>
+<span class="linenos"> 45</span>
+<span class="linenos"> 46</span><span class="k">localparam</span>
+<span class="linenos"> 47</span><span class="w">  </span><span class="n">PCORE_VERSION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">32'h00020062</span><span class="p">,</span>
+<span class="linenos"> 48</span><span class="w">  </span><span class="n">PCORE_MAGIC</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mh">32'h5444444E</span><span class="p">;</span><span class="w"> </span><span class="c1">// "TDDN", big endian</span>
+<span class="linenos"> 49</span>
+<span class="linenos"> 50</span><span class="c1">// register address offset</span>
+<span class="linenos"> 51</span><span class="k">localparam</span>
+<span class="linenos"> 52</span><span class="w">  </span><span class="n">ADDR_TDD_VERSION</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h00</span><span class="p">,</span>
+<span class="linenos"> 53</span><span class="w">  </span><span class="n">ADDR_TDD_ID</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h01</span><span class="p">,</span>
+<span class="linenos"> 54</span><span class="w">  </span><span class="n">ADDR_TDD_SCRATCH</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h02</span><span class="p">,</span>
+<span class="linenos"> 55</span><span class="w">  </span><span class="n">ADDR_TDD_IDENTIFICATION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h03</span><span class="p">,</span>
+<span class="linenos"> 56</span><span class="w">  </span><span class="n">ADDR_TDD_INTERFACE</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h04</span><span class="p">,</span>
+<span class="linenos"> 57</span><span class="w">  </span><span class="n">ADDR_TDD_DEF_POLARITY</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h05</span><span class="p">,</span>
+<span class="linenos"> 58</span><span class="w">  </span><span class="n">ADDR_TDD_CONTROL</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h10</span><span class="p">,</span>
+<span class="linenos"> 59</span><span class="w">  </span><span class="n">ADDR_TDD_CH_ENABLE</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h11</span><span class="p">,</span>
+<span class="linenos"> 60</span><span class="w">  </span><span class="n">ADDR_TDD_CH_POLARITY</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h12</span><span class="p">,</span>
+<span class="linenos"> 61</span><span class="w">  </span><span class="n">ADDR_TDD_BURST_COUNT</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h13</span><span class="p">,</span>
+<span class="linenos"> 62</span><span class="w">  </span><span class="n">ADDR_TDD_STARTUP_DELAY</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h14</span><span class="p">,</span>
+<span class="linenos"> 63</span><span class="w">  </span><span class="n">ADDR_TDD_FRAME_LENGTH</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h15</span><span class="p">,</span>
+<span class="linenos"> 64</span><span class="w">  </span><span class="n">ADDR_TDD_SYNC_CNT_LOW</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h16</span><span class="p">,</span>
+<span class="linenos"> 65</span><span class="w">  </span><span class="n">ADDR_TDD_SYNC_CNT_HIGH</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h17</span><span class="p">,</span>
+<span class="linenos"> 66</span><span class="w">  </span><span class="n">ADDR_TDD_STATUS</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h18</span><span class="p">,</span>
+<span class="linenos"> 67</span><span class="w">  </span><span class="n">ADDR_TDD_CH_ON</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h20</span><span class="p">,</span>
+<span class="linenos"> 68</span><span class="w">  </span><span class="n">ADDR_TDD_CH_OFF</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mh">8'h21</span><span class="p">;</span>
+<span class="linenos"> 69</span>
+<span class="linenos"> 70</span><span class="c1">// channel offset values</span>
+<span class="linenos"> 71</span><span class="k">localparam</span>
+<span class="linenos"> 72</span><span class="w">  </span><span class="n">CH0</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">0</span><span class="p">,</span>
+<span class="linenos"> 73</span><span class="w">  </span><span class="n">CH1</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">1</span><span class="p">,</span>
+<span class="linenos"> 74</span><span class="w">  </span><span class="n">CH2</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">2</span><span class="p">,</span>
+<span class="linenos"> 75</span><span class="w">  </span><span class="n">CH3</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">3</span><span class="p">,</span>
+<span class="linenos"> 76</span><span class="w">  </span><span class="n">CH4</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">4</span><span class="p">,</span>
+<span class="linenos"> 77</span><span class="w">  </span><span class="n">CH5</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">5</span><span class="p">,</span>
+<span class="linenos"> 78</span><span class="w">  </span><span class="n">CH6</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">6</span><span class="p">,</span>
+<span class="linenos"> 79</span><span class="w">  </span><span class="n">CH7</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">7</span><span class="p">,</span>
+<span class="linenos"> 80</span><span class="w">  </span><span class="n">CH8</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">8</span><span class="p">,</span>
+<span class="linenos"> 81</span><span class="w">  </span><span class="n">CH9</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mh">9</span><span class="p">,</span>
+<span class="linenos"> 82</span><span class="w">  </span><span class="n">CH10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">10</span><span class="p">,</span>
+<span class="linenos"> 83</span><span class="w">  </span><span class="n">CH11</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">11</span><span class="p">,</span>
+<span class="linenos"> 84</span><span class="w">  </span><span class="n">CH12</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">12</span><span class="p">,</span>
+<span class="linenos"> 85</span><span class="w">  </span><span class="n">CH13</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">13</span><span class="p">,</span>
+<span class="linenos"> 86</span><span class="w">  </span><span class="n">CH14</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">14</span><span class="p">,</span>
+<span class="linenos"> 87</span><span class="w">  </span><span class="n">CH15</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">15</span><span class="p">,</span>
+<span class="linenos"> 88</span><span class="w">  </span><span class="n">CH16</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">16</span><span class="p">,</span>
+<span class="linenos"> 89</span><span class="w">  </span><span class="n">CH17</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">17</span><span class="p">,</span>
+<span class="linenos"> 90</span><span class="w">  </span><span class="n">CH18</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">18</span><span class="p">,</span>
+<span class="linenos"> 91</span><span class="w">  </span><span class="n">CH19</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">19</span><span class="p">,</span>
+<span class="linenos"> 92</span><span class="w">  </span><span class="n">CH20</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">20</span><span class="p">,</span>
+<span class="linenos"> 93</span><span class="w">  </span><span class="n">CH21</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">21</span><span class="p">,</span>
+<span class="linenos"> 94</span><span class="w">  </span><span class="n">CH22</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">22</span><span class="p">,</span>
+<span class="linenos"> 95</span><span class="w">  </span><span class="n">CH23</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">23</span><span class="p">,</span>
+<span class="linenos"> 96</span><span class="w">  </span><span class="n">CH24</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">24</span><span class="p">,</span>
+<span class="linenos"> 97</span><span class="w">  </span><span class="n">CH25</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">25</span><span class="p">,</span>
+<span class="linenos"> 98</span><span class="w">  </span><span class="n">CH26</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">26</span><span class="p">,</span>
+<span class="linenos"> 99</span><span class="w">  </span><span class="n">CH27</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">27</span><span class="p">,</span>
+<span class="linenos">100</span><span class="w">  </span><span class="n">CH28</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">28</span><span class="p">,</span>
+<span class="linenos">101</span><span class="w">  </span><span class="n">CH29</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">29</span><span class="p">,</span>
+<span class="linenos">102</span><span class="w">  </span><span class="n">CH30</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">30</span><span class="p">,</span>
+<span class="linenos">103</span><span class="w">  </span><span class="n">CH31</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">31</span><span class="p">;</span>
+<span class="linenos">104</span>
+<span class="linenos">105</span><span class="k">endpackage</span>
+<span class="linenos">106</span>
+<span class="linenos">107</span><span class="w"> </span><span class="mf">4.</span><span class="w"> </span><span class="n">References</span>
+<span class="linenos">108</span><span class="w"> </span><span class="o">-------------------------------------------------------------------------------</span>
+</pre></div>
+</div>
+<p><a class="icon link reference external" href="http://www.xilinx.com/support/documentation/white_papers/wp231.pdf" target="_blank">[1] Philippe Garrault, Brian Philofsky, “HDL Coding Practices to Accelerate
+Design Performance”, Xilinx, 2006</a></p>
+<p><a class="icon link reference external" href="http://www.asic-world.com/code/verilog_tutorial/peter_chambers_10_commandments.pdf" target="_blank">[2] Peter Chambers, “The Ten Commandments of Excellent Design”, VLSI
+Technology, 1997</a></p>
+<p><a class="icon link reference external" href="http://courses.cit.cornell.edu/ece576/Verilog/FreescaleVerilog.pdf" target="_blank">[3] “Verilog Coding Techniques, v3.2”, Freescale Semiconductor, 2005</a></p>
+<p><a class="icon link reference external" href="http://www.engr.sjsu.edu/cpham/VERILOG/VerilogCodingStyle.pdf" target="_blank">[4] Jane Smith, “Verilog Coding Guidelines, Rev. B”, Cisco Systems 2000</a></p>
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../customize_hdl/" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Customize HDL projects</a>
+    <a href="../docs_guidelines/" title="Next document (Alt+Shift+RightArrow)" class="next">Documentation guidelines</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2023-2025, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
