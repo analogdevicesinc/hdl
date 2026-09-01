@@ -417,8 +417,7 @@ module util_axis_fifo_asym #(
         .in_clk   (s_axis_aclk),
         .in_data  (s_input_level),
         .out_clk  (m_axis_aclk),
-        .out_data (m_output_level)
-      );
+        .out_data (m_output_level));
 
     end else begin : big_master
 
