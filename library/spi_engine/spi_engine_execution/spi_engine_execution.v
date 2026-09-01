@@ -121,6 +121,7 @@ module spi_engine_execution #(
   reg [7:0] last_bit_count = DATA_WIDTH-1;
   reg [7:0] latch_last_bit_count = DATA_WIDTH-2;
   reg [7:0] left_aligned = 8'b0;
+  reg ddr_en = 1'b0;
   // sdi_lane_mask: Stores the SDI lane configuration from REG_SDI_LANE_CONFIG
   // write commands (cmd[15:8] == 8'h23). While not directly used in this module,
   // the same command is intercepted by axi_spi_engine to configure sdi_fifo_tkeep_int,
@@ -214,6 +215,7 @@ module spi_engine_execution #(
     .last_bit_count (last_bit_count),
     .latch_last_bit_count (latch_last_bit_count),
     .sdo_lane_mask(sdo_lane_mask),
+    .ddr_en(ddr_en),
     .sdo_io_ready(sdo_io_ready),
     .echo_last_bit(echo_last_bit),
     .transfer_active(transfer_active),
@@ -277,6 +279,7 @@ module spi_engine_execution #(
                                   cpol           <= cmd[1];
                                   three_wire     <= cmd[2];
                                   sdo_idle_state <= cmd[3];
+                                  ddr_en         <= DDR_EN[0] & cmd[4];
                                 end
           REG_WORD_LENGTH     : begin
                                   // the max value of this reg must be DATA_WIDTH
@@ -349,7 +352,7 @@ module spi_engine_execution #(
           ntx_rx <= ~ntx_rx;
         end else begin
           if (transfer_active) begin
-            bit_counter <= bit_counter + (DDR_EN ? 1 : ntx_rx);
+            bit_counter <= bit_counter + (ddr_en ? 1 : ntx_rx);
             ntx_rx <= ~ntx_rx;
           end else begin
             sleep_counter_increment <= ~sleep_counter_increment;
