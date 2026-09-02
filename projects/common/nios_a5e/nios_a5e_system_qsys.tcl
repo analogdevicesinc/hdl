@@ -59,16 +59,21 @@ set_instance_parameter_value sys_cpu {peripheralRegionASize} {0x00100000}
 #   0x00000000..0x000FFFFF  peripheral window (avl_peripheral_mm_bridge)
 #   0x08000000..0x0FFFFFFF  sys_emif.s0_axi4lite - EMIF calibration/config port,
 #                           128 MB span, only 0x0 or 0x8000000 are legal
-#   0x10000000..0x1003FFFF  sys_int_mem - boot and run RAM
-#   0x10100000              sys_cpu.dm_agent - debug module
-#   0x10110000              sys_cpu.timer_sw_agent - machine timer
-#   0x10120000              sys_ddr_window.cntl - DDR window position
+#   0x10000000..0x1017FFFF  sys_int_mem - boot and run RAM (1.5 MB, holds full app)
 #   0x10200000..0x1023FFFF  sys_ddr_window.windowed_slave - 256 KB view of DDR
+#   0x10300000              sys_cpu.dm_agent - debug module
+#   0x10310000              sys_cpu.timer_sw_agent - machine timer
+#   0x10320000              sys_ddr_window.cntl - DDR window position
+#
+# NOTE: sys_int_mem enlarged from 256 KB to 1.5 MB so the full ad9088 app runs
+# entirely on-chip (instruction_manager only reaches OCM + dm_agent). The debug
+# module, machine timer and DDR-window control port were moved up to 0x1030xxxx
+# so they clear the enlarged OCM (which now ends at 0x1017FFFF).
 add_connection sys_clk.clk sys_cpu.clk
 add_connection sys_clk.clk_reset sys_cpu.reset
 
 add_instance sys_int_mem altera_avalon_onchip_memory2
-set_instance_parameter_value sys_int_mem {memorySize} {262144}
+set_instance_parameter_value sys_int_mem {memorySize} {1572864}
 set_instance_parameter_value sys_int_mem {dataWidth} {32}
 set_instance_parameter_value sys_int_mem {dualPort} {0}
 set_instance_parameter_value sys_int_mem {initMemContent} {0}
@@ -84,12 +89,12 @@ add_connection sys_cpu.data_manager sys_int_mem.s1
 set_connection_parameter_value sys_cpu.data_manager/sys_int_mem.s1 baseAddress {0x10000000}
 
 add_connection sys_cpu.instruction_manager sys_cpu.dm_agent
-set_connection_parameter_value sys_cpu.instruction_manager/sys_cpu.dm_agent baseAddress {0x10100000}
+set_connection_parameter_value sys_cpu.instruction_manager/sys_cpu.dm_agent baseAddress {0x10300000}
 add_connection sys_cpu.data_manager sys_cpu.dm_agent
-set_connection_parameter_value sys_cpu.data_manager/sys_cpu.dm_agent baseAddress {0x10100000}
+set_connection_parameter_value sys_cpu.data_manager/sys_cpu.dm_agent baseAddress {0x10300000}
 
 add_connection sys_cpu.data_manager sys_cpu.timer_sw_agent
-set_connection_parameter_value sys_cpu.data_manager/sys_cpu.timer_sw_agent baseAddress {0x10110000}
+set_connection_parameter_value sys_cpu.data_manager/sys_cpu.timer_sw_agent baseAddress {0x10310000}
 
 # stdout: read on the host with juart-terminal
 add_instance sys_uart altera_avalon_jtag_uart
@@ -302,7 +307,7 @@ set_connection_parameter_value sys_ddr_window.expanded_master/sys_emif.s0_axi4 b
 add_connection sys_cpu.data_manager sys_ddr_window.windowed_slave
 set_connection_parameter_value sys_cpu.data_manager/sys_ddr_window.windowed_slave baseAddress {0x10200000}
 add_connection sys_cpu.data_manager sys_ddr_window.cntl
-set_connection_parameter_value sys_cpu.data_manager/sys_ddr_window.cntl baseAddress {0x10120000}
+set_connection_parameter_value sys_cpu.data_manager/sys_ddr_window.cntl baseAddress {0x10320000}
 
 # EMIF sideband (calibration / IOSSM config port)
 
