@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2023-2024, 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 
@@ -8,8 +12,11 @@ set_property name sys_200m_clk [get_bd_nets sys_250m_clk]
 set_property name sys_200m_reset [get_bd_nets sys_250m_reset]
 set_property name sys_200m_resetn [get_bd_nets sys_250m_resetn]
 
-source ../common/ad4858_fmcz_bd.tcl
+source ../common/ad485x_fmcz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
+
+disconnect_bd_net /sys_200m_clk [get_bd_pins axi_ad485x/delay_clk]
+ad_connect sys_ps8/pl_clk2 axi_ad485x/delay_clk
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9

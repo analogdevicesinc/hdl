@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property -dict {PACKAGE_PIN AC2 IOSTANDARD LVCMOS18}                          [get_ports lvds_cmos_n]  ; ##  C10  FMC_LPC_LA06_P
 set_property -dict {PACKAGE_PIN AC1 IOSTANDARD LVCMOS18}                          [get_ports busy]         ; ##  C11  FMC_LPC_LA06_N
@@ -15,4 +19,6 @@ set_property -dict {PACKAGE_PIN K15 IOSTANDARD LVCMOS18}                        
 set_property -dict {PACKAGE_PIN V2  IOSTANDARD LVCMOS18}                          [get_ports cnv]          ; ##  H07  FMC_LPC_LA02_P
 set_property -dict {PACKAGE_PIN V1  IOSTANDARD LVCMOS18}                          [get_ports pd]           ; ##  H08  FMC_LPC_LA02_N
 
-create_clock -name scko_p -period  -2 [get_ports scko]
+create_clock -name scko -period 2 [get_ports scko_p]
+
+set_clock_groups -asynchronous -group [get_clocks mmcm_clk_0_s] -group [get_clocks clk_pl_0]

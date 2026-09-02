@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property -dict {PACKAGE_PIN AC2 IOSTANDARD LVCMOS18} [get_ports lvds_cmos_n]  ; ##  C10  FMC_HPC0_LA06_P
 set_property -dict {PACKAGE_PIN AC1 IOSTANDARD LVCMOS18} [get_ports busy]         ; ##  C11  FMC_HPC0_LA06_N
@@ -24,5 +28,11 @@ set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {scko_IBUF}]
 
 create_clock -name scko_cmos       -period  10 [get_ports scko]
 
-set_max_delay -from [get_clocks scko_cmos] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcm/CLKOUT0]] 10.0
-set_min_delay -from [get_clocks scko_cmos] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcm/CLKOUT0]] 1.0
+set_max_delay -from [get_clocks scko_cmos] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcme4/CLKOUT0]] 10.0
+set_min_delay -from [get_clocks scko_cmos] -to [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcme4/CLKOUT0]] 1.0
+set_max_delay -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcme4/CLKOUT0]] -to [get_clocks scko_cmos] 10.0
+set_min_delay -from [get_clocks -of_objects [get_pins i_system_wrapper/system_i/adc_clkgen/inst/i_mmcm_drp/i_mmcme4/CLKOUT0]] -to [get_clocks scko_cmos] 1.0
+
+set_clock_groups -asynchronous \
+  -group [get_clocks mmcm_clk_0_s] \
+  -group [get_clocks clk_pl_0]
