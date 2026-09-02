@@ -437,7 +437,7 @@ Building the HDL project
 
 The design is built upon ADI's generic HDL reference design framework. ADI
 distributes the bit/elf files of these projects as part of the
-:external+documentation:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
+:external+system-level:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
 the sources, ADI makes them available on the :git-hdl:`HDL repository </>`. To
 get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
@@ -510,11 +510,11 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :external+documentation:ref:`AD-FMCDAQ3-EBZ on KCU105 quick start guide <ad_fmcdaq3_ebz quickstart kcu105>`
-- :external+documentation:ref:`AD-FMCDAQ3-EBZ on VCU118 quick start guide <ad_fmcdaq3_ebz quickstart vcu118>`
-- :external+documentation:ref:`AD-FMCDAQ3-EBZ on ZC706 quick start guide <ad_fmcdaq3_ebz quickstart zc706>`
-- :external+documentation:ref:`AD-FMCDAQ3-EBZ on ZCU102 quick start guide <ad_fmcdaq3_ebz quickstart zcu102>`
-- :external+documentation:ref:`AD-FMCDAQ3-EBZ on A10GX (OBSOLETE) quick start guide <ad_fmcdaq3_ebz quickstart a10gx>`
+- :external+system-level:ref:`AD-FMCDAQ3-EBZ on KCU105 quick start guide <ad_fmcdaq3_ebz quickstart kcu105>`
+- :external+system-level:ref:`AD-FMCDAQ3-EBZ on VCU118 quick start guide <ad_fmcdaq3_ebz quickstart vcu118>`
+- :external+system-level:ref:`AD-FMCDAQ3-EBZ on ZC706 quick start guide <ad_fmcdaq3_ebz quickstart zc706>`
+- :external+system-level:ref:`AD-FMCDAQ3-EBZ on ZCU102 quick start guide <ad_fmcdaq3_ebz quickstart zcu102>`
+- :external+system-level:ref:`AD-FMCDAQ3-EBZ on A10GX (OBSOLETE) quick start guide <ad_fmcdaq3_ebz quickstart a10gx>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ on MicroBlaze quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/quickstart/microblaze>`
   (:dokuwiki:`here <resources/tools-software/linux-drivers/platforms/nios2>`
   you can find prebuilt images for this setup;
@@ -530,7 +530,7 @@ Hardware related
 
 - The schematic can be downloaded from
   :adi:`here <media/en/reference-design-documentation/design-integration-files/ad-fmcdaq3-ebz-designsupport.zip>`
-- :external+documentation:ref:`AD-FMCDAQ3-EBZ hardware overview <ad_fmcdaq3_ebz hardware>`
+- :external+system-level:ref:`AD-FMCDAQ3-EBZ hardware overview <ad_fmcdaq3_ebz hardware>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -611,10 +611,10 @@ Software related
 - DAQ3/ZC706 Linux device tree :git-linux:`zynq-zc706-adv7511-fmcdaq3.dts <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcdaq3.dts>`
 - DAQ3/ZCU102 Linux device tree :git-linux:`zynqmp-zcu102-rev10-fmcdaq3.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-fmcdaq3.dts>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ on Zynq ZC706 Linux quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/zynq>`
-- :external+documentation:ref:`AD-FMCDAQ3-EBZ baremetal (no-OS) guide <ad_fmcdaq3_ebz baremetal>`
+- :external+system-level:ref:`AD-FMCDAQ3-EBZ baremetal (no-OS) guide <ad_fmcdaq3_ebz baremetal>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ on MicroBlaze no-OS quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/microblaze>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ IIO Oscilloscope plugin <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/applications/iio_scope>`
-- :external+documentation:ref:`FRU EEPROM (fru_dump) utility <software fru-dump>`
+- :external+system-level:ref:`FRU EEPROM (fru_dump) utility <software fru-dump>`
 
 .. include:: ../common/more_information.rst
 

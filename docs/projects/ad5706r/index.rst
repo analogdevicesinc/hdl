@@ -121,7 +121,7 @@ Building the HDL project
 
 The design is built upon ADI's generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
-:external+documentation:ref:`kuiper`.
+:external+system-level:ref:`kuiper`.
 If you want to build the sources, ADI makes them available on the
 :git-hdl:`HDL repository </>`. To get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__

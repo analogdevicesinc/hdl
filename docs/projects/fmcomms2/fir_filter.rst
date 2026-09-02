@@ -395,8 +395,8 @@ Generating the programing files
 More information at:
 
 - :ref:`build_hdl`
-- :external+documentation:ref:`linux-kernel zynq`
-- :external+documentation:ref:`linux-kernel microblaze`
+- :external+system-level:ref:`linux-kernel zynq`
+- :external+system-level:ref:`linux-kernel microblaze`
 
 Base system functionality
 -------------------------------------------------------------------------------

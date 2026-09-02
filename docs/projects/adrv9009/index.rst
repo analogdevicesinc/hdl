@@ -296,7 +296,7 @@ Building the HDL project
 
 The design is built upon ADI's generic HDL reference design framework. ADI
 distributes the bit/elf files of these projects as part of the
-:external+documentation:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
+:external+system-level:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
 the sources, ADI makes them available on the :git-hdl:`HDL repository </>`. To
 get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
@@ -427,7 +427,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :external+documentation:ref:`ADRV9009 & ADRV9008 Prototyping Platform User Guide <adrv9009>`
+- :external+system-level:ref:`ADRV9009 & ADRV9008 Prototyping Platform User Guide <adrv9009>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -438,7 +438,7 @@ Here you can find the quick start guides available for these evaluation boards:
    * - Evaluation board
      - Zynq UltraScale+ MP
    * - ADRV9009/ADRV9008
-     - :external+documentation:ref:`adrv9009 quickstart zynqmp`
+     - :external+system-level:ref:`adrv9009 quickstart zynqmp`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -510,7 +510,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :external+documentation:ref:`ADRV9009 Linux driver page <iio-transceiver adrv9009>`
+- :external+system-level:ref:`ADRV9009 Linux driver page <iio-transceiver adrv9009>`
 
 - :git-linux:`ADRV9009 + ZCU102 device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9009-jesd204-fsm.dts>`
 - :git-linux:`ADRV9009 + ZC706 device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9009-jesd204-fsm.dts>`
