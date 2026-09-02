@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 set_property -dict {PACKAGE_PIN AC2 IOSTANDARD LVCMOS18}                          [get_ports adc_0_lvds_cmos_n]  ; ##  C10  FMC_HPC0_LA06_P
 set_property -dict {PACKAGE_PIN AC1 IOSTANDARD LVCMOS18}                          [get_ports adc_0_busy]         ; ##  C11  FMC_HPC0_LA06_N
@@ -32,4 +36,12 @@ set_property -dict {PACKAGE_PIN AD2  IOSTANDARD LVCMOS18}                       
 set_property -dict {PACKAGE_PIN AD1  IOSTANDARD LVCMOS18}                          [get_ports adc_1_pd]           ; ##  H08  FMC_HPC1_LA02_N
 
 create_clock -name scko_0 -period  2 [get_ports adc_0_scko_p]
-create_clock -name scko_1 -period  2 [get_ports adc_1_scko_p]
+
+# axi_ad4858_1 (NSSI): IDELAY control CDC between up_clk and delay_clk is write-and-forget
+set_false_path -through [get_pins -hier -filter {name =~ *axi_ad4858_1*i_idelay/CNTVALUEOUT*}]
+set_false_path -through [get_pins -hier -filter {name =~ *axi_ad4858_1*i_idelay/CNTVALUEIN*}]
+
+# mmcm_clk_0_s (ADC sample clock, from PS PLL1 via MMCM) and clk_pl_0 (AXI clock, from PS PLL0)
+# are asynchronous - they share no common primary clock with a defined phase relationship.
+# All crossings between them are properly synchronised in RTL (sync_bits, up_xfer_cntrl, etc.)
+set_clock_groups -asynchronous -group [get_clocks mmcm_clk_0_s] -group [get_clocks clk_pl_0]
