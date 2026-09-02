@@ -8,7 +8,7 @@
 
 include ../quiet.mk
 
-.PHONY: all lib clean clean-all
+.PHONY: all lib lib-intel lib-xilinx lib-lattice clean clean-all
 all: lib
 
 _LIBS := $(dir $(shell find . -mindepth 2 -name Makefile | sort))
