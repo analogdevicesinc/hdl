@@ -1,5 +1,0 @@
-FMC_pin   FMC_port         Schematic_name   System_top_name     IOSTANDARD    Termination
-# ad7405 - Single ended signals
-
-G6      FMC_LA00_CC_P       MCLK            adc_clk              LVCMOS25        NA
-G7      FMC_LA00_CC_N       MDAT            adc_data             LVCMOS25        NA
