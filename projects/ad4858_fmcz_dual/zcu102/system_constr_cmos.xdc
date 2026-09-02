@@ -1,3 +1,7 @@
+###############################################################################
+## Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 # ADC 0 - FMC_HPC0
 set_property -dict {PACKAGE_PIN AC2  IOSTANDARD LVCMOS18} [get_ports adc_0_lvds_cmos_n] ; ##  C10  FMC_HPC0_LA06_P
