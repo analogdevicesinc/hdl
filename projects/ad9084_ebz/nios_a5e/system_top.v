@@ -108,7 +108,7 @@ module system_top #(
   input          fpga_refclk_in_b,
   input          tx_device_clk,
   input          rx_device_clk,
-  input          sysref_in,
+  input          sysref_out,
 
   output         syncinb_a0,
   output         syncinb_b0,
@@ -460,11 +460,11 @@ module system_top #(
      * INIT while Apollo reports A0 deasserted and B0 asserted).
      */
     .tx_sync_export                                             ({syncoutb_b0, syncoutb_a0}),
-    .tx_sysref_export                                           (sysref_in),
+    .tx_sysref_export                                           (sysref_out),
     .tx_device_clk_clk                                          (tx_device_clk),
 
     .rx_sync_export                                             ({syncinb_b0, syncinb_a0}),
-    .rx_sysref_export                                           (sysref_in),
+    .rx_sysref_export                                           (sysref_out),
     .rx_device_clk_clk                                          (rx_device_clk),
 
     .apollo_gpio_export ({syncinb_a1_n_gpio,  // 19

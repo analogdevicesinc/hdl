@@ -96,8 +96,8 @@ set_location_assignment PIN_T55   -to "rx_device_clk(n)"     ; ## G03  CLK1_M2C_
 set_location_assignment PIN_Y44   -to "tx_device_clk"        ; ## H04  CLK0_M2C_P
 set_location_assignment PIN_Y47   -to "tx_device_clk(n)"     ; ## H05  CLK0_M2C_N
 
-set_location_assignment PIN_T65   -to "sysref_out"            ; ## K04  CLK2_BIDIR_P; used as input only
-set_location_assignment PIN_P65   -to "sysref_out(n)"         ; ## K05  CLK2_BIDIR_N; used as input only
+set_location_assignment PIN_T65   -to "sysref_out"           ; ## K04  CLK2_BIDIR_P; used as input only
+set_location_assignment PIN_P65   -to "sysref_out(n)"        ; ## K05  CLK2_BIDIR_N; used as input only
 
 set_location_assignment PIN_BF1   -to "rx_data_a_p[0]"       ; ## A14  FMC_RX4_P STXA_11_P
 set_location_assignment PIN_BF3   -to "rx_data_a_n[0]"       ; ## A15  FMC_RX4_N STXA_11_N

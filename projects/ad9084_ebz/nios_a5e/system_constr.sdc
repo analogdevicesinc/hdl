@@ -53,4 +53,4 @@ set device_clk_period [get_clock_info -period tx_device_clk]
 set_input_delay \
   -clock tx_device_clk \
   [expr $device_clk_period / 8] \
-  [get_ports {sysref_in}]
+  [get_ports {sysref_out}]
