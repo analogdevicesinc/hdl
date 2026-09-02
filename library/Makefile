@@ -30,7 +30,7 @@ clean: $(_LIBS_CLEAN)
 clean-all: clean
 
 lib: $(_LIBS_ALL)
-lib-intel: $(_LIBS_XILINX)
+lib-intel: $(_LIBS_INTEL)
 lib-xilinx: $(_LIBS_XILINX)
 lib-lattice: $(_LIBS_LATTICE)
 
