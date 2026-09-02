@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2023-2024, 2026 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2024, 2026 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,12 +40,9 @@ module system_top (
   input   [12:0]  gpio_bd_i,
   output  [ 7:0]  gpio_bd_o,
 
-  output          adc_0_scki_p,
-  output          adc_0_scki_n,
-  input           adc_0_scko_p,
-  input           adc_0_scko_n,
-  input           adc_0_sdo_p,
-  input           adc_0_sdo_n,
+  output          adc_0_scki,
+  input           adc_0_scko,
+  input   [ 7:0]  adc_0_sdo,
 
   input           adc_0_busy,
   output          adc_0_cnv,
@@ -57,12 +54,9 @@ module system_top (
   output  reg     adc_0_csdio,
   output  reg     adc_0_cs_n,
 
-  output          adc_1_scki_p,
-  output          adc_1_scki_n,
-  input           adc_1_scko_p,
-  input           adc_1_scko_n,
-  input           adc_1_sdo_p,
-  input           adc_1_sdo_n,
+  output          adc_1_scki,
+  input           adc_1_scko,
+  input   [ 7:0]  adc_1_sdo,
 
   input           adc_1_busy,
   output          adc_1_cnv,
@@ -74,7 +68,6 @@ module system_top (
   output  reg     adc_1_csdio,
   output  reg     adc_1_cs_n
 );
-
 
   // internal signals
 
@@ -95,11 +88,10 @@ module system_top (
   reg     [ 4:0]  cnt_cs0_up = 3'd0;
   reg     [ 4:0]  cnt_cs1_up = 3'd0;
 
-  // assigments
+  // assignments
 
   assign gpio_bd_o = gpio_o[20:13];
   assign gpio_i[12: 0] = gpio_bd_i;
-
   assign gpio_i[94:13] = gpio_o[94:13];
 
   assign spiad0_csn_s = spi0_csn[0];
@@ -153,20 +145,28 @@ module system_top (
     .spi1_mosi (spiad1_sdi_s),
     .spi1_sclk (spiad1_sck_s),
     .system_cpu_clk (cpu_clk),
-    .adc_0_scki_p (adc_0_scki_p),
-    .adc_0_scki_n (adc_0_scki_n),
-    .adc_0_scko_p (adc_0_scko_p),
-    .adc_0_scko_n (adc_0_scko_n),
-    .adc_0_sdo_p (adc_0_sdo_p),
-    .adc_0_sdo_n (adc_0_sdo_n),
+    .adc_0_scki (adc_0_scki),
+    .adc_0_scko (adc_0_scko),
+    .adc_0_lane_0 (adc_0_sdo[0]),
+    .adc_0_lane_1 (adc_0_sdo[1]),
+    .adc_0_lane_2 (adc_0_sdo[2]),
+    .adc_0_lane_3 (adc_0_sdo[3]),
+    .adc_0_lane_4 (adc_0_sdo[4]),
+    .adc_0_lane_5 (adc_0_sdo[5]),
+    .adc_0_lane_6 (adc_0_sdo[6]),
+    .adc_0_lane_7 (adc_0_sdo[7]),
     .adc_0_busy (adc_0_busy),
     .adc_0_cnv (adc_0_cnv),
-    .adc_1_scki_p (adc_1_scki_p),
-    .adc_1_scki_n (adc_1_scki_n),
-    .adc_1_scko_p (adc_1_scko_p),
-    .adc_1_scko_n (adc_1_scko_n),
-    .adc_1_sdo_p (adc_1_sdo_p),
-    .adc_1_sdo_n (adc_1_sdo_n),
+    .adc_1_scki (adc_1_scki),
+    .adc_1_scko (adc_1_scko),
+    .adc_1_lane_0 (adc_1_sdo[0]),
+    .adc_1_lane_1 (adc_1_sdo[1]),
+    .adc_1_lane_2 (adc_1_sdo[2]),
+    .adc_1_lane_3 (adc_1_sdo[3]),
+    .adc_1_lane_4 (adc_1_sdo[4]),
+    .adc_1_lane_5 (adc_1_sdo[5]),
+    .adc_1_lane_6 (adc_1_sdo[6]),
+    .adc_1_lane_7 (adc_1_sdo[7]),
     .adc_1_busy (adc_1_busy),
     .adc_1_cnv (adc_1_cnv),
     .lvds_cmos_n (lvds_cmos_n));
