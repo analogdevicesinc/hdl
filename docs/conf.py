@@ -29,7 +29,7 @@ source_suffix = '.rst'
 interref_repos = [
         'kuiper',
         'doctools',
-        'documentation',
+        'system-level',
         'no-OS',
         'linux',
         'precision-converters-firmware',

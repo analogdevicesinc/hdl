@@ -601,7 +601,7 @@ Building the HDL project
 
 The design is built upon ADI's generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
-:external+documentation:ref:`ADI Kuiper Linux <kuiper>`.
+:external+system-level:ref:`ADI Kuiper Linux <kuiper>`.
 If you want to build the sources, ADI makes them available on the
 :git-hdl:`HDL repository </>`. To get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
@@ -774,7 +774,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :external+documentation:ref:`adrv904x`
+- :external+system-level:ref:`adrv904x`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -785,7 +785,7 @@ Here you can find the quick start guides available for these evaluation boards:
    * - Evaluation board
      - Zynq UltraScale+ MP
    * - ADRV904X
-     - :external+documentation:ref:`adrv904x quickstart zcu102`
+     - :external+system-level:ref:`adrv904x quickstart zcu102`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

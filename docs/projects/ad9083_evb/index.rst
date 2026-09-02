@@ -273,7 +273,7 @@ Building the HDL project
 
 The design is built upon ADI's generic HDL reference design framework. ADI
 distributes the bit/elf files of these projects as part of the
-:external+documentation:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
+:external+system-level:ref:`ADI Kuiper Linux <kuiper>`. If you want to build
 the sources, ADI makes them available on the :git-hdl:`HDL repository </>`. To
 get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
@@ -336,7 +336,7 @@ Systems related
 
 - Another quick start guide using this evaluation board (but not using our HDL
   code) is
-  :external+documentation:ref:`AD9083-EVB evaluation using the ADS80V3EBZ capture board <eval-ad9083>`
+  :external+system-level:ref:`AD9083-EVB evaluation using the ADS80V3EBZ capture board <eval-ad9083>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
