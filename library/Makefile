@@ -21,7 +21,11 @@ _LIBS_LATTICE := $(addsuffix lattice, $(_LIBS))
 _LIBS_CLEAN := $(addsuffix clean, $(_LIBS))
 
 $(_LIBS_ALL) $(_LIBS_INTEL) $(_LIBS_XILINX) $(_LIBS_LATTICE):
-	$(MAKE) -C $(@D) $(@F)
+	@if $(MAKE) -C $(@D) -n $(@F) >/dev/null 2>&1; then \
+		$(MAKE) -C $(@D) $(@F); \
+	else \
+		echo "Skipping $(@F) in $(@D) (target not found)"; \
+	fi
 
 $(_LIBS_CLEAN):
 	$(MAKE) -C $(@D) $(@F)
