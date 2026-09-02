@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2023 - 2024 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2023-2024, 2026 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -403,7 +403,7 @@ module axi_ad4858_lvds_nssi #(
       end
   end
 
-  axi_ad4858_crc i_ad4858_crc_8 (
+  axi_ad485x_crc i_ad4858_crc_8 (
     .rst (crc_reset),
     .clk (clk),
     .crc_en (crc_enable),
