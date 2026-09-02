@@ -1,7 +1,0 @@
-FMC_pin   FMC_port         Schematic_name   System_top_name     IOSTANDARD    Termination
-# ad7405 - Differential signals
-
-G6      FMC_LA00_CC_P        MCLKIN+         adc_clk_p          LVDS_25        NA
-G7      FMC_LA00_CC_N        MCLKIN-         adc_clk_n          LVDS_25        NA
-D8      FMC_LA01_CC_P        MDAT+           adc_data_p         LVDS_25        NA
-D9      FMC_LA01_CC_N        MDAT-           adc_data_n         LVDS_25        NA

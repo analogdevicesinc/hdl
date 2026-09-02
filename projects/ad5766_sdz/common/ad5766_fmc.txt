@@ -1,9 +1,0 @@
-FMC_pin   FMC_port       Schematic_name     System_top_name     IOSTANDARD  Termination
-
-# ad5766
-
-H20       FMC_LA15_N     SCLK               spi_sclk            LVCMOS25    #N/A
-G19       FMC_LA16_N     SDI                spi_sdo             LVCMOS25    #N/A
-H17       FMC_LA11_N     SDO                spi_sdi             LVCMOS25    #N/A
-H19       FMC_LA15_P     SYNCn              spi_cs              LVCMOS25    #N/A
-H25       FMC_LA21_P     RESETn             reset               LVCMOS25    #N/A
