@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="800"
+   width="520"
    height="500"
-   viewBox="0 0 800.00001 500"
+   viewBox="0 0 520 500"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -240,7 +240,7 @@
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInL-9-2-6)"
-       d="m 146.64784,959.42083 -130,0"
+       d="m 146.64784,959.42083 -26.64784,0 a 8,8 0 0 0 -16,0 l -87.35216,0"
        id="path4268-0-8-3"
        inkscape:connector-curvature="0" />
     <path
@@ -315,7 +315,7 @@
       <path
          inkscape:connector-curvature="0"
          id="path4245-7"
-         d="m 183.19647,885.76094 10.42061,7.12398 -10.42061,7.1239 z"
+         d="m 170.70747,885.76094 10.42061,7.12398 -10.42061,7.1239 z"
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.21848881;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
     <circle
@@ -383,7 +383,7 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#00afff;fill-opacity:1">RECEPTION</tspan></text>
     <path
        style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.30876517;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 161.1414,686.6905 10.91242,7.84824 -10.91242,7.84825 z"
+       d="m 148.22047,686.6905 10.91242,7.84824 -10.91242,7.84825 z"
        id="path4245"
        inkscape:connector-curvature="0" />
     <path
