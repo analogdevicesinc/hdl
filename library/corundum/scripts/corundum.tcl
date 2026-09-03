@@ -83,6 +83,29 @@ switch $board {
     create_bd_pin -dir I -type clk clk_125mhz
     create_bd_pin -dir I -type rst rst_125mhz
   }
+  VPK180 -
+  VCK190 {
+    create_bd_pin -dir I gt_ref_clk_p
+    create_bd_pin -dir I gt_ref_clk_n
+    create_bd_pin -dir I -type clk gt_freerun_clk
+
+    if {$board eq "VCK190"} {
+      create_bd_pin -dir I -type clk mrmac_axis_clk
+      create_bd_pin -dir I -type clk mrmac_ts_clk
+    }
+
+    create_bd_pin -dir I -type rst mac_resetn
+
+    create_bd_pin -dir I -type clk ptp_clk
+    create_bd_pin -dir I -type clk ptp_sample_clk
+    create_bd_pin -dir I -type rst ptp_rst
+    create_bd_pin -dir O -type clk ptp_refclk_bufg
+
+    create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:gt_rtl:1.0 qsfp_serial
+
+    create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axi_mac
+    create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axi_gt
+  }
 }
 
 ad_ip_instance corundum_core corundum_core [list \
@@ -332,6 +355,60 @@ switch $board {
       AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
     ]
   }
+  VPK180 {
+    ad_ip_instance ethernet_vpk180 ethernet_core [list \
+      TDMA_BER_ENABLE $TDMA_BER_ENABLE \
+      QSFP_CNT $QSFP_CNT \
+      IF_COUNT $IF_COUNT \
+      PORTS_PER_IF $PORTS_PER_IF \
+      SCHED_PER_IF $SCHED_PER_IF \
+      PORT_COUNT $PORT_COUNT \
+      PORT_MASK $PORT_MASK \
+      PTP_TS_WIDTH $PTP_TS_WIDTH \
+      TX_TAG_WIDTH $TX_TAG_WIDTH \
+      TDMA_INDEX_WIDTH $TDMA_INDEX_WIDTH \
+      PTP_TS_ENABLE $PTP_TS_ENABLE \
+      PTP_TS_FMT_TOD $PTP_TS_FMT_TOD \
+      AXIL_CTRL_DATA_WIDTH $AXIL_CTRL_DATA_WIDTH \
+      AXIL_CTRL_ADDR_WIDTH $AXIL_CTRL_ADDR_WIDTH \
+      AXIL_CTRL_STRB_WIDTH $AXIL_CTRL_STRB_WIDTH \
+      AXIL_CSR_ADDR_WIDTH $AXIL_CSR_ADDR_WIDTH \
+      AXIL_IF_CTRL_ADDR_WIDTH $AXIL_IF_CTRL_ADDR_WIDTH \
+      ETH_RX_CLK_FROM_TX $ETH_RX_CLK_FROM_TX \
+      ETH_RS_FEC_ENABLE $ETH_RS_FEC_ENABLE \
+      AXIS_DATA_WIDTH $AXIS_DATA_WIDTH \
+      AXIS_KEEP_WIDTH $AXIS_KEEP_WIDTH \
+      AXIS_TX_USER_WIDTH $AXIS_TX_USER_WIDTH \
+      AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
+    ]
+  }
+  VCK190 {
+    ad_ip_instance ethernet_vck190 ethernet_core [list \
+      TDMA_BER_ENABLE $TDMA_BER_ENABLE \
+      QSFP_CNT $QSFP_CNT \
+      IF_COUNT $IF_COUNT \
+      PORTS_PER_IF $PORTS_PER_IF \
+      SCHED_PER_IF $SCHED_PER_IF \
+      PORT_COUNT $PORT_COUNT \
+      PORT_MASK $PORT_MASK \
+      PTP_TS_WIDTH $PTP_TS_WIDTH \
+      TX_TAG_WIDTH $TX_TAG_WIDTH \
+      TDMA_INDEX_WIDTH $TDMA_INDEX_WIDTH \
+      PTP_TS_ENABLE $PTP_TS_ENABLE \
+      PTP_TS_FMT_TOD $PTP_TS_FMT_TOD \
+      AXIL_CTRL_DATA_WIDTH $AXIL_CTRL_DATA_WIDTH \
+      AXIL_CTRL_ADDR_WIDTH $AXIL_CTRL_ADDR_WIDTH \
+      AXIL_CTRL_STRB_WIDTH $AXIL_CTRL_STRB_WIDTH \
+      AXIL_CSR_ADDR_WIDTH $AXIL_CSR_ADDR_WIDTH \
+      AXIL_IF_CTRL_ADDR_WIDTH $AXIL_IF_CTRL_ADDR_WIDTH \
+      ETH_RX_CLK_FROM_TX $ETH_RX_CLK_FROM_TX \
+      ETH_RS_FEC_ENABLE $ETH_RS_FEC_ENABLE \
+      AXIS_DATA_WIDTH $AXIS_DATA_WIDTH \
+      AXIS_KEEP_WIDTH $AXIS_KEEP_WIDTH \
+      AXIS_TX_USER_WIDTH $AXIS_TX_USER_WIDTH \
+      AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
+    ]
+  }
 }
 
 ad_connect corundum_core/s_axil_ctrl s_axil_corundum
@@ -427,6 +504,26 @@ switch $board {
     }
 
     ad_connect corundum_core/s_axis_stat_tvalid GND
+  }
+  VPK180 {
+    ad_connect corundum_core/ptp_clk ptp_clk
+    ad_connect corundum_core/ptp_rst ptp_rst
+    ad_connect corundum_core/ptp_sample_clk ptp_sample_clk
+
+    ad_connect corundum_core/s_axis_stat_tvalid GND
+
+    source $ad_hdl_dir/library/corundum/scripts/corundum_vpk180_mac.tcl
+    corundum_vpk180_build_mac
+  }
+  VCK190 {
+    ad_connect corundum_core/ptp_clk ptp_clk
+    ad_connect corundum_core/ptp_rst ptp_rst
+    ad_connect corundum_core/ptp_sample_clk ptp_sample_clk
+
+    ad_connect corundum_core/s_axis_stat_tvalid GND
+
+    source $ad_hdl_dir/library/corundum/scripts/corundum_vck190_mac.tcl
+    corundum_vck190_build_mac
   }
 }
 
