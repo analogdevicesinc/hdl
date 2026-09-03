@@ -50,8 +50,17 @@ set_instance_parameter_value sys_cpu {dtcm2Size} {0}
 set_instance_parameter_value sys_cpu {enableCoreLevelInterruptController} {1}
 set_instance_parameter_value sys_cpu {numCLICPlatformInterrupts} {32}
 
+# Uncached MMIO window. 64 MB, not 1 MB: at 1 MB it stopped short of the data
+# offloads (0x100000, 0x110000) and the two jesd204_phy reconfig apertures
+# (0x1000000, 0x2000000), so register access to those went through the data
+# cache. That is not a performance detail - a cached read returns a stale value,
+# and the low-high edge software uses to re-arm the receive offload collapses to
+# a single writeback and never reaches the peripheral. volatile does not help;
+# cacheability is a region attribute, not a compiler one. 64 MB clears every
+# MMIO slave while leaving sys_int_mem (0x10000000) and the DDR window cacheable,
+# which the DMA buffers need.
 set_instance_parameter_value sys_cpu {peripheralRegionABase} {0x00000000}
-set_instance_parameter_value sys_cpu {peripheralRegionASize} {0x00100000}
+set_instance_parameter_value sys_cpu {peripheralRegionASize} {0x04000000}
 
 # CPU address map. The peripheral window must keep 0x00000000 - the project layer
 # maps its own peripherals there directly, and the device tree assumes it.
@@ -59,23 +68,26 @@ set_instance_parameter_value sys_cpu {peripheralRegionASize} {0x00100000}
 #   0x00000000..0x000FFFFF  peripheral window (avl_peripheral_mm_bridge)
 #   0x08000000..0x0FFFFFFF  sys_emif.s0_axi4lite - EMIF calibration/config port,
 #                           128 MB span, only 0x0 or 0x8000000 are legal
-#   0x10000000..0x1017FFFF  sys_int_mem - boot and run RAM (1.5 MB, holds full app)
-#   0x10200000..0x1023FFFF  sys_ddr_window.windowed_slave - 256 KB view of DDR
-#   0x10300000              sys_cpu.dm_agent - debug module
-#   0x10310000              sys_cpu.timer_sw_agent - machine timer
-#   0x10320000              sys_ddr_window.cntl - DDR window position
+#   0x10000000..0x103FFFFF  sys_int_mem - boot and run RAM (4 MB, app + DMA buffers)
+#   0x10400000              sys_cpu.dm_agent - debug module
+#   0x10410000              sys_cpu.timer_sw_agent - machine timer
+#   0x10420000              sys_ddr_window.cntl - DDR window position
+#   0x10500000..0x105FFFFF  sys_ddr_window.windowed_slave - 1 MB view of DDR
 #
-# NOTE: sys_int_mem enlarged from 256 KB to 1.5 MB so the full ad9088 app runs
-# entirely on-chip (instruction_manager only reaches OCM + dm_agent). The debug
-# module, machine timer and DDR-window control port were moved up to 0x1030xxxx
-# so they clear the enlarged OCM (which now ends at 0x1017FFFF).
+# NOTE: sys_int_mem holds the whole application, because instruction_manager only
+# reaches OCM + dm_agent. It also holds the DMA buffers: the DMA masters are given
+# a view of it at this same base (see ad_dma_interconnect), so a plain C pointer
+# means the same address to the CPU and to a DMA. It was enlarged 256 KB -> 1.5 MB
+# to fit the app, then 1.5 MB -> 4 MB to fit the buffers; each time the agents
+# above had to move up out of the way, hence the 0x104xxxxx / 0x105xxxxx block.
 add_connection sys_clk.clk sys_cpu.clk
 add_connection sys_clk.clk_reset sys_cpu.reset
 
 add_instance sys_int_mem altera_avalon_onchip_memory2
-set_instance_parameter_value sys_int_mem {memorySize} {1572864}
+set_instance_parameter_value sys_int_mem {memorySize} {4194304}
 set_instance_parameter_value sys_int_mem {dataWidth} {32}
-set_instance_parameter_value sys_int_mem {dualPort} {0}
+# Second port is for the DMA masters; the CPU keeps s1 to itself.
+set_instance_parameter_value sys_int_mem {dualPort} {1}
 set_instance_parameter_value sys_int_mem {initMemContent} {0}
 set_instance_parameter_value sys_int_mem {useNonDefaultInitFile} {0}
 set_instance_parameter_value sys_int_mem {resetrequest_enabled} {0}
@@ -89,12 +101,12 @@ add_connection sys_cpu.data_manager sys_int_mem.s1
 set_connection_parameter_value sys_cpu.data_manager/sys_int_mem.s1 baseAddress {0x10000000}
 
 add_connection sys_cpu.instruction_manager sys_cpu.dm_agent
-set_connection_parameter_value sys_cpu.instruction_manager/sys_cpu.dm_agent baseAddress {0x10300000}
+set_connection_parameter_value sys_cpu.instruction_manager/sys_cpu.dm_agent baseAddress {0x10400000}
 add_connection sys_cpu.data_manager sys_cpu.dm_agent
-set_connection_parameter_value sys_cpu.data_manager/sys_cpu.dm_agent baseAddress {0x10300000}
+set_connection_parameter_value sys_cpu.data_manager/sys_cpu.dm_agent baseAddress {0x10400000}
 
 add_connection sys_cpu.data_manager sys_cpu.timer_sw_agent
-set_connection_parameter_value sys_cpu.data_manager/sys_cpu.timer_sw_agent baseAddress {0x10310000}
+set_connection_parameter_value sys_cpu.data_manager/sys_cpu.timer_sw_agent baseAddress {0x10410000}
 
 # stdout: read on the host with juart-terminal
 add_instance sys_uart altera_avalon_jtag_uart
@@ -305,9 +317,9 @@ add_connection sys_ddr_window.expanded_master sys_emif.s0_axi4
 set_connection_parameter_value sys_ddr_window.expanded_master/sys_emif.s0_axi4 baseAddress {0x0}
 
 add_connection sys_cpu.data_manager sys_ddr_window.windowed_slave
-set_connection_parameter_value sys_cpu.data_manager/sys_ddr_window.windowed_slave baseAddress {0x10200000}
+set_connection_parameter_value sys_cpu.data_manager/sys_ddr_window.windowed_slave baseAddress {0x10500000}
 add_connection sys_cpu.data_manager sys_ddr_window.cntl
-set_connection_parameter_value sys_cpu.data_manager/sys_ddr_window.cntl baseAddress {0x10320000}
+set_connection_parameter_value sys_cpu.data_manager/sys_ddr_window.cntl baseAddress {0x10420000}
 
 # EMIF sideband (calibration / IOSSM config port)
 
@@ -324,6 +336,32 @@ add_instance fpga_m altera_jtag_avalon_master
 
 add_connection sys_clk.clk fpga_m.clk
 add_connection sys_clk.clk_reset fpga_m.clk_reset
+
+# Host access to DDR through the JTAG master, for System Console / host-side
+# capture readout without going through the CPU or its debug module.
+#
+# fpga_m has its own address space, so nothing here is visible to sys_cpu and the
+# BSP's system.h is unaffected:
+#   0x00000000..0x000FFFFF  jtag_ddr_window.windowed_slave - 1 MB view of DDR
+#   0x10000000              jtag_ddr_window.cntl - window position
+add_instance jtag_ddr_window altera_address_span_extender
+set_instance_parameter_value jtag_ddr_window {DATA_WIDTH} {32}
+set_instance_parameter_value jtag_ddr_window {BURSTCOUNT_WIDTH} {1}
+set_instance_parameter_value jtag_ddr_window {MASTER_ADDRESS_WIDTH} {33}
+set_instance_parameter_value jtag_ddr_window {SLAVE_ADDRESS_WIDTH} {18}
+set_instance_parameter_value jtag_ddr_window {SLAVE_ADDRESS_SHIFT} {2}
+set_instance_parameter_value jtag_ddr_window {ENABLE_SLAVE_PORT} {1}
+
+add_connection sys_dma_clk.clk jtag_ddr_window.clock
+add_connection sys_dma_clk.clk_reset jtag_ddr_window.reset
+
+add_connection jtag_ddr_window.expanded_master sys_emif.s0_axi4
+set_connection_parameter_value jtag_ddr_window.expanded_master/sys_emif.s0_axi4 baseAddress {0x0}
+
+add_connection fpga_m.master jtag_ddr_window.windowed_slave
+set_connection_parameter_value fpga_m.master/jtag_ddr_window.windowed_slave baseAddress {0x00000000}
+add_connection fpga_m.master jtag_ddr_window.cntl
+set_connection_parameter_value fpga_m.master/jtag_ddr_window.cntl baseAddress {0x10000000}
 
 add_instance axi_sysid_0 axi_sysid
 add_instance rom_sys_0 sysid_rom
@@ -361,7 +399,9 @@ proc ad_dma_interconnect {m_port {m_addr 0x00000000} {data_width 128}} {
   set slave_shift [expr int(log($data_width / 8) / log(2))]
   set_instance_parameter_value ${avm_span} {MASTER_ADDRESS_WIDTH} {33}
   set_instance_parameter_value ${avm_span} {SLAVE_ADDRESS_SHIFT} $slave_shift
-  set_instance_parameter_value ${avm_span} {SLAVE_ADDRESS_WIDTH} [expr 32 - $slave_shift]
+  # 256 MB, not the full 32-bit space: the DDR window has to leave room for OCM
+  # in this master's map, so that 0x10000000 below is free.
+  set_instance_parameter_value ${avm_span} {SLAVE_ADDRESS_WIDTH} [expr 28 - $slave_shift]
   set_instance_parameter_value ${avm_span} {BURSTCOUNT_WIDTH} {8}
   set_instance_parameter_value ${avm_span} {ENABLE_SLAVE_PORT} {0}
 
@@ -373,6 +413,12 @@ proc ad_dma_interconnect {m_port {m_addr 0x00000000} {data_width 128}} {
 
   add_connection ${avm_span}.expanded_master sys_emif.s0_axi4
   set_connection_parameter_value ${avm_span}.expanded_master/sys_emif.s0_axi4 baseAddress {0x0}
+
+  # On-chip memory at the same base the CPU uses, so a buffer's C address is a
+  # valid DMA address without translation. Without this a DMA reaches only DDR,
+  # and a pointer into OCM silently becomes a DDR offset ~256 MB in.
+  add_connection ${m_port} sys_int_mem.s2
+  set_connection_parameter_value ${m_port}/sys_int_mem.s2 baseAddress {0x10000000}
 }
 
 proc ad_cpu_interrupt {m_irq m_port} {
