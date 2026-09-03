@@ -66,7 +66,7 @@ logic required to transmit data to the device.
 
 Currently the Transmit PHY supports two different transmit interface:
 
-* :dokuwiki:`Source synchronous (CMOS or LVDS) interface <resources/fpga/docs/ssd_if>`
+* :ref:`Source synchronous (CMOS or LVDS) interface <source_sync_if>`
 * :ref:`axi_jesd204_tx` [#f1]_
 
 All these interfaces are supported on both Altera (Intel) and Xilinx devices.

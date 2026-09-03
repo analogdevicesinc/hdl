@@ -56,7 +56,7 @@ logic required to receive data from the device.
 
 Currently the Receive PHY supports two different receive interface:
 
-* :dokuwiki:`Source synchronous (CMOS or LVDS) interface <resources/fpga/docs/ssd_if>`
+* :ref:`Source synchronous (CMOS or LVDS) interface <source_sync_if>`
 * :ref:`axi_jesd204_rx` [#f1]_
 
 All these interfaces are supported on both Altera (Intel) and Xilinx devices.
