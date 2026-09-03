@@ -26,6 +26,7 @@ Contents
    IP cores <ip_cores/index>
    Porting HDL projects <porting_project>
    Customize HDL projects <customize_hdl>
+   Debugging with XSDB <debugging_xsdb>
    HDL coding guidelines <hdl_coding_guidelines>
    Documentation guidelines <docs_guidelines>
    Contributing to HDL <contributing>
@@ -42,6 +43,7 @@ Contents
 #. :ref:`user_guide ip_cores`: List of IP cores and IP guides.
 #. :ref:`porting_project`: How to port a project to a non-supported carrier
 #. :ref:`customize_hdl`: Using and modifying the HDL design
+#. :ref:`debugging_xsdb`: Debugging IP cores' register maps with XSDB
 #. :ref:`hdl_coding_guidelines`: The Verilog/VHDL coding guidelines that the
    HDL team follows
 #. :ref:`docs_guidelines`: Documentation guidelines

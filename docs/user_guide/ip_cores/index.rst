@@ -9,6 +9,7 @@ ADI IP cores
    creating_new_ip
    use_adi_ips
    interfaces
+   source_sync_if
    axi_adc/index
    axi_dac/index
 
