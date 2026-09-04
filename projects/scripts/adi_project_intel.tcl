@@ -99,7 +99,7 @@ proc adi_project {project_name {parameter_list {}}} {
 
   if [regexp "_de25nano" $project_name] {
     set family "Agilex 5"
-    set device A5EB013BB23BE4S
+    set device A5EB013BB23BE4SR1
     set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
