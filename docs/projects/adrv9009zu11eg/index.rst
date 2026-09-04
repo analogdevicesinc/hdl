@@ -60,6 +60,102 @@ This is available only if the project was build using the command
    :align: center
    :alt: ADRV9009ZU11EG block diagram Corundum N.I.C
 
+.. _pcie-block-design:
+
+Block design - PCIe 3.0 x8 lanes using XDMA
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is available only if the project was build using the command
+``make PCIE=1``.
+
+.. image:: adrv9009_zu11eg_hdl_pcie.svg
+   :width: 800
+   :align: center
+   :alt: ADRV9009ZU11EG block diagram PCIe
+
+Things which must be taken in consideration regarding this specific HDL design:
+
+- The :adi:`ADRV9009-ZU11EG RF-SOM <ADRV9009-ZU11EG>` SoM supports max. PCIe 3.0
+  and is enabled by the Xilinx
+  `XDMA (DMA/Bridge Subsystem for PCI Express v4.2)
+  <https://docs.amd.com/r/en-US/pg195-pcie-dma/Introduction>`__
+  IP, implemented in the Programmable Logic (PL) of the FPGA
+- The PCIe lanes are routed to the PL GTH transceivers (GT quads 224 and 225),
+  not to the Zynq PS integrated PCIe block; the PS PCIe controller is not wired
+  to the edge connector, which is why the link must be implemented in the PL
+  through the XDMA IP
+- Physically, the :adi:`ADRV2CRR-FMC` is needed, as it has the physical PCIe
+  connector:
+
+    - The 'PCIE PRSNT' jumper near the PCIe connector allows the selection of
+      number of lanes: x1, x4 or x8 lanes
+    - The project was tested only using the x8 lanes option and the XDMA IP
+      configured properly for this setting
+
+- The XDMA is configured in 'AXI Bridge' mode, meaning the XDMA IP doesn't use
+  its internal DMA engines, it just acts as a PCIe transactions translation
+  bridge between the FPGA and the host PC; below are other settings of the XDMA
+  IP:
+
+    - The XDMA acts as a PCIe endpoint, meaning the host PC is considered the
+      PCIe root complex and the ADRV9009-ZU11EG/ADRV2CRR-FMC is regarded as a
+      peripheral attached to the host PC
+    - The PCIe interface is configured to have x8 lanes and support a maximum
+      of 8.0 GT/s
+    - The XDMA IP operates on a 100 MHz PCIe reference clock (sourced from the
+      edge connector through an ``IBUFDS_GTE4`` buffer) and generates the
+      250 MHz ``axi_aclk`` that clocks the entire PCIe AXI domain
+    - MSI-X interrupts are enabled. A custom interrupt controller
+      (:ref:`axi_pcie_intc`) aggregates the eleven peripheral interrupt lines
+      (the three RF ``axi_dmac`` instances, the three JESD204 links, the two
+      network-link ``axi_dmac`` instances, the SPI controller and the two GPIO
+      controllers) onto the XDMA user interrupt request bus, so each source is
+      delivered to the host as its own MSI-X vector and no Zynq PS interrupt
+      line is consumed; the source-to-vector map is listed in the `Interrupts`_
+      section below
+    - The PCIe BARs are configured as follows:
+
+        - BAR0 exposes the ``M_AXI_B`` (host → FPGA) window used to reach the
+          peripheral register maps; it is 32 MB wide and maps to the AXI base
+          address ``0x8400_0000`` (``pciebar2axibar_0 = 0x8400_0000``)
+        - The ``S_AXI_B`` (FPGA → host) path is configured for 64-bit
+          addressing (``axi_addr_width = 64``,
+          ``axibar_highaddr_0 = 0x0000_000F_FFFF_FFFF``) so the ADI DMAs can
+          reach host physical memory located above the 4 GB boundary; this is
+          mandatory when the host IOMMU maps the DMA buffers to high addresses
+
+- The base HDL design for ADRV9009-ZU11EG/ADRV2CRR-FMC suffered major changes:
+
+  - The initial data path, which stored the samples coming from the JESD204 IPs
+    in the Zynq PS DDR4 memory, is no longer present; the samples are streamed
+    directly through the XDMA bridge (``S_AXI_B``) into the host PC's memory.
+    The ADI ``axi_dmac`` instances act as the AXI masters and write/read the
+    host buffers directly, after the host has programmed them over PCIe
+  - In the previous design, all of the IPs were controlled by the Processing
+    System (PS); in this design, their control was rerouted to the XDMA bridge,
+    so they are configured by the host PC over PCIe. The peripherals moved onto
+    the ``M_AXI_B`` (BAR0) bridge are: the three TPL cores (rx/tx/obs), the
+    three JESD204 link layers (rx/tx/obs), the three transceiver (xcvr) cores
+    (rx/tx/obs), the three ADI ``axi_dmac`` instances (rx/tx/obs), the SPI
+    controller, the two GPIO controllers and the SYSID core
+  - New IPs were introduced to allow the XDMA bridge to take on the control of
+    the SPI, GPIO and interrupt signals (PL SPI controllers, GPIO controllers
+    and a custom interrupt controller); the PS doesn't control these signals
+    anymore
+  - The two bridge ports are fanned out by AXI SmartConnects: one on the
+    ``M_AXI_B`` side distributes the host register accesses to the peripheral
+    IPs inside BAR0, and one on the ``S_AXI_B`` side aggregates the DMA master
+    ports before they cross into host memory
+  - The ADI ``axi_dmac`` instances are reconfigured for this data path:
+    scatter-gather mode with 64-bit addressing is enabled and the memory-mapped
+    data width is widened to 256 bits. At the 250 MHz PCIe AXI clock this yields
+    8 GB/s of raw bandwidth per DMA channel, comfortably above the JESD204B
+    sample-rate ceiling
+  - A bidirectional network link between the host PC and the Zynq PS is carried
+    over the same PCIe connection, using four ``axi_dmac`` instances and two
+    asynchronous AXI-Stream FIFOs. It gives the host IP connectivity to the PS
+    (SSH, remote IIO, firmware updates) without a separate Ethernet cable
+
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -164,33 +260,48 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-===================== ===========
-Instance              ZynqMP
-===================== ===========
-rx_adrv9009_tpl_core  0x84A0_0000
-tx_adrv9009_tpl_core  0x84A0_4000
-obs_adrv9009_tpl_core 0x84A0_8000
-axi_adrv9009_rx_xcvr  0x84A4_0000
-axi_adrv9009_tx_xcvr  0x84A2_0000
-axi_adrv9009_obs_xcvr 0x84A6_0000
-axi_adrv9009_tx_jesd  0x84A3_0000
-axi_adrv9009_rx_jesd  0x84A5_0000
-axi_adrv9009_obs_jesd 0x84A7_0000
-axi_adrv9009_rx_dma   0x9C42_0000
-axi_adrv9009_tx_dma   0x9C40_0000
-axi_adrv9009_obs_dma  0x9C44_0000
-axi_sysid_0           0x8500_0000
-===================== ===========
+========================= =========== ===========
+Instance                  ZynqMP      XDMA*
+========================= =========== ===========
+rx_adrv9009_som_tpl_core  0x84A0_0000 0x84A0_0000
+tx_adrv9009_som_tpl_core  0x84A0_4000 0x84A0_4000
+obs_adrv9009_som_tpl_core 0x84A0_8000 0x84A0_8000
+axi_adrv9009_som_rx_xcvr  0x84A4_0000 0x84A4_0000
+axi_adrv9009_som_tx_xcvr  0x84A2_0000 0x84A2_0000
+axi_adrv9009_som_obs_xcvr 0x84A6_0000 0x84A6_0000
+axi_adrv9009_som_tx_jesd  0x84A3_0000 0x84A3_0000
+axi_adrv9009_som_rx_jesd  0x84A5_0000 0x84A5_0000
+axi_adrv9009_som_obs_jesd 0x84A7_0000 0x84A7_0000
+axi_adrv9009_som_rx_dma   0x9C42_0000 0x84C1_0000
+axi_adrv9009_som_tx_dma   0x9C40_0000 0x84C0_0000
+axi_adrv9009_som_obs_dma  0x9C44_0000 0x84C2_0000
+axi_sysid_0               0x8500_0000 0x8500_0000
+========================= =========== ===========
 
 In case of :adi:`ADRV2CRR-FMC`, additional interconnects may be present in
 the system.
 
 ============================================ ===========
-Instance                                     Address
+Instance                                     ZynqMP
 ============================================ ===========
 corundum_hierarchy/corundum_core/s_axil_ctrl 0xA000_0000
 axi_iic                                      0x4300_0000
+axi_ps_net_tx_dma                            0x7c46_0000
+axi_ps_net_rx_dma                            0x7c47_0000
+pcie_intc*                                   0x8401_0000
+axi_gpio1*                                   0x8402_0000
+axi_gpio2*                                   0x8403_0000
+axi_spi*                                     0x8404_0000
+axi_host_net_tx_dma*                         0x84C3_0000
+axi_host_net_rx_dma*                         0x84C4_0000
 ============================================ ===========
+
+.. note::
+
+  \* All the IPs are connected to the XDMA Bridge ``M_AXI_B`` port, via a
+  SmartConnect IP. This is applicable if the project was build uisng ``make
+  PCIE=1``, only for :adi:`ADRV2CRR-FMC` . For more details please check
+  :ref:`pcie-block-design`.
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -220,121 +331,162 @@ SPI connections
      - HMC7044_CAR
      - 3
 
+In case of :adi:`ADRV2CRR-FMC`, when PCIe is enabled, all of the SPI
+subordinates listed above are controlled by an AXI SPI controller, which is
+connected to the XDMA XDMA Bridge ``M_AXI_B`` port, via a SmartConnect IP. No
+longer present on the MIO pins of the Processing System (PS).
+
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 25 20 20 15
+   :widths: 22 14 12 14 24
    :header-rows: 2
 
    * - GPIO signal
      - Direction
      - HDL GPIO EMIO
      - Software GPIO
+     - Software GPIO
    * -
      - (from FPGA view)
      -
-     - Zynq MP
+     - Zynq MP (PS)
+     - XDMA*
    * - gpio_4_exp_n
      - INOUT
      - 92
      - 170
+     - (axi_gpio2) 28
    * - gpio_3_exp_n
      - INOUT
      - 91
      - 169
+     - (axi_gpio2) 27
    * - gpio_3_exp_p
      - INOUT
      - 90
      - 168
+     - (axi_gpio2) 26
    * - hmc7044_gpio_4
      - INOUT
      - 89
      - 167
+     - (axi_gpio2) 25
    * - hmc7044_gpio_3
      - INOUT
      - 88
      - 166
+     - (axi_gpio2) 24
    * - hmc7044_gpio_1
      - INOUT
      - 87
      - 165
+     - (axi_gpio2) 23
    * - hmc7044_gpio_2
      - INOUT
      - 86
      - 164
+     - (axi_gpio2) 22
    * - hmc7044_sync
      - INOUT
      - 85
      - 163
+     - (axi_gpio2) 21
    * - hmc7044_reset
      - INOUT
      - 84
      - 162
+     - (axi_gpio2) 20
    * - adrv9009_tx2_enable_b
      - INOUT
      - 83
      - 161
+     - (axi_gpio2) 19
    * - adrv9009_tx1_enable_b
      - INOUT
      - 82
      - 160
+     - (axi_gpio2) 18
    * - adrv9009_rx2_enable_b
      - INOUT
      - 81
      - 159
+     - (axi_gpio2) 17
    * - adrv9009_rx1_enable_b
      - INOUT
      - 80
      - 158
+     - (axi_gpio2) 16
    * - adrv9009_test_b
      - INOUT
      - 79
      - 157
+     - (axi_gpio2) 15
    * - adrv9009_reset_b_b
      - INOUT
      - 78
      - 156
+     - (axi_gpio2) 14
    * - adrv9009_gpint_b
      - INOUT
      - 77
      - 155
+     - (axi_gpio2) 13
    * - adrv9009_gpio_{18:00}_b
      - INOUT
      - 76:58
      - 154:136
+     - (axi_gpio1) 63:58, (axi_gpio2) 12:00
    * - adrv9009_tx2_enable_a
      - INOUT
      - 57
      - 135
+     - (axi_gpio1) 57
    * - adrv9009_tx1_enable_a
      - INOUT
      - 56
      - 134
+     - (axi_gpio1) 56
    * - adrv9009_rx2_enable_a
      - INOUT
      - 55
      - 133
+     - (axi_gpio1) 55
    * - adrv9009_rx1_enable_a
      - INOUT
      - 54
      - 132
+     - (axi_gpio1) 54
    * - adrv9009_test_a
      - INOUT
      - 53
      - 131
+     - (axi_gpio1) 53
    * - adrv9009_reset_b_a
      - INOUT
      - 52
      - 130
+     - (axi_gpio1) 52
    * - adrv9009_gpint_a
      - INOUT
      - 51
      - 129
+     - (axi_gpio1) 51
    * - adrv9009_gpio_{18:00}_a
      - INOUT
      - 50:32
      - 128:110
+     - (axi_gpio1) 50:32
+
+.. note::
+
+  \* All of the GPIO signals are rerouted to XDMA via two AXI GPIO controllers
+  (axi_gpio1 and axi_gpio2), which are connected to the XDMA XDMA Bridge
+  ``M_AXI_B`` port, via a SmartConnect IP. No longer present on the EMIO pins of
+  the Processing System (PS). This is applicable if the project was build uisng
+  ``make PCIE=1``, only for :adi:`ADRV2CRR-FMC`. For more details please check
+  :ref:`pcie-block-design`.
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -352,7 +504,8 @@ axi_adrv9009_fmc_tx_jesd   12  108          140
 axi_adrv9009_fmc_rx_jesd   13  109          141
 ========================== === ============ =============
 
-In case of :adi:`ADRV2CRR-FMC`, additional interrupts may be present in the system.
+In case of :adi:`ADRV2CRR-FMC`, additional interrupts may be present in the
+system.
 
 ======================= === ============ =============
 Instance name           HDL Linux ZynqMP Actual ZynqMP
@@ -360,6 +513,39 @@ Instance name           HDL Linux ZynqMP Actual ZynqMP
 corundum_hierarcy/irq   4   93           125
 axi_iic                 14  110          142
 ======================= === ============ =============
+
+In case of :adi:`ADRV2CRR-FMC` with PCIe enabled (``make PCIE=1``), the
+interrupts are no longer routed to the Zynq PS GIC. Instead, a custom interrupt
+controller (:ref:`axi_pcie_intc`) collects every peripheral interrupt line and
+forwards it to the host as an MSI-X vector through the XDMA user interrupt
+request bus. In the table below, the single index is at the same time the
+``intr_<n>`` input on the :ref:`axi_pcie_intc`, the MSI-X vector number seen by
+the host, and the value programmed in the ``interrupts`` property of the
+matching device-tree node.
+
+========================= ===========================
+Instance name             axi_pcie_intc line / vector
+========================= ===========================
+axi_spi                   0
+axi_gpio1                 1
+axi_gpio2                 2
+axi_adrv9009_som_obs_dma  3
+axi_adrv9009_som_tx_dma   4
+axi_adrv9009_som_rx_dma   5
+axi_adrv9009_som_obs_jesd 6
+axi_adrv9009_som_tx_jesd  7
+axi_adrv9009_som_rx_jesd  8
+axi_host_net_tx_dma       9
+axi_host_net_rx_dma       10
+========================= ===========================
+
+.. note::
+
+  The interrupt order follows the sequence of ``ad_pcie_interrupt`` calls in
+  ``system_bd_pcie.tcl``: the SPI and GPIO controllers first, then the RF
+  ``axi_dmac`` and JESD204 links, and finally the two host/PS network-link
+  ``axi_dmac`` instances. Adding or reordering those calls shifts every vector
+  below it, so the device-tree ``interrupts`` cells must be kept in sync.
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -439,8 +625,6 @@ location of the project, and build the project using the environment variable
    $cd ../hdl/projects/adrv9009_zu11eg/adrv2crr_fmc
    $make CORUNDUM=1
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
-
 .. admonition:: Publications
 
    The following papers pertain to the Corundum source code:
@@ -452,6 +636,26 @@ A more comprehensive build guide can be found in the :ref:`build_hdl` user guide
 .. _FCCM Paper: https://www.cse.ucsd.edu/~snoeren/papers/corundum-fccm20.pdf
 .. _FCCM Presentation: https://www.fccm.org/past/2020/forums/topic/corundum-an-open-source-100-gbps-nic/
 .. _Thesis: https://escholarship.org/uc/item/3mc9070t
+
+Build the project with PCIe 3.0 support for ADRV9009-ZU11EG/ADRV2CRR-FMC
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For this configuration of the project only, the PCIe 3.0 link is enabled using
+Xilinx XDMA allowing the connection between a host PC and the ADRV9009-ZU11EG
+SoM trough the physical connector present on ADRV2CRR-FMC. As mentioned
+previously, the PCIe link it's configured to have 8 lanes (please see the jumper
+called 'PCIE PRSNT' near the PCIe connector on the ADRV2CRR-FMC carrier card).
+Based on XDMA configuration, the FPGA will act and PCIe endpoint, the host is
+the root complex. For more details, please check :ref:`pcie-block-design`.
+
+**Linux/Cygwin/WSL**
+
+.. shell::
+
+   $cd hdl/projects/adrv9009_zu11eg/adrv2crr_fmc
+   $make PCIE=1
+
+A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
 Other considerations
 -------------------------------------------------------------------------------
@@ -586,6 +790,9 @@ HDL related
    * - ETHERNET_CORE
      - :git-hdl:`library/corundum/ethernet`
      - :ref:`corundum_ethernet_core`
+   * - AXI_PCIE_INTC
+     - :git-hdl:`library/axi_pcie_intc`
+     - :ref:`axi_pcie_intc`
 
 - :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
 - :ref:`jesd204`
