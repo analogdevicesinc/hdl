@@ -40,7 +40,8 @@ module util_cpack2_impl #(
   parameter SAMPLES_PER_CHANNEL = 1,
   parameter SAMPLE_DATA_WIDTH = 16,
   parameter INTERFACE_TYPE = 1,
-  parameter PARALLEL_OR_SERIAL_N = 0
+  parameter PARALLEL_OR_SERIAL_N = 0,
+  parameter PIPELINE_STAGES = 0
 ) (
   input clk,
   input reset,
@@ -64,6 +65,39 @@ module util_cpack2_impl #(
 );
 
   localparam TOTAL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL * NUM_OF_CHANNELS;
+  localparam NUM_OF_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
+
+  localparam
+    SAMPLE_ADDRESS_WIDTH = NUM_OF_SAMPLES > 512 ? 10 :
+    NUM_OF_SAMPLES > 256 ? 9 :
+    NUM_OF_SAMPLES > 128 ? 8 :
+    NUM_OF_SAMPLES > 64 ? 7 :
+    NUM_OF_SAMPLES > 32 ? 6 :
+    NUM_OF_SAMPLES > 16 ? 5 :
+    NUM_OF_SAMPLES > 8 ? 4 :
+    NUM_OF_SAMPLES > 4 ? 3 :
+    NUM_OF_SAMPLES > 2 ? 2 : 1;
+
+  localparam NETWORK0_STAGES = SAMPLE_ADDRESS_WIDTH / 2;
+  localparam NETWORK1_STAGES = SAMPLE_ADDRESS_WIDTH % 2;
+
+  // Calculate pipeline latency per network based on PIPELINE_STAGES parameter
+  function integer calc_pipeline_latency;
+    input integer num_stages;
+    begin
+      if (PIPELINE_STAGES == 2)
+        calc_pipeline_latency = num_stages;
+      else if (PIPELINE_STAGES == 1)
+        calc_pipeline_latency = num_stages / 2;
+      else
+        calc_pipeline_latency = 0;
+    end
+  endfunction
+
+  localparam
+    TOTAL_PIPELINE_LATENCY = (NUM_OF_CHANNELS == 1) ? 0 :
+    calc_pipeline_latency(NETWORK0_STAGES) +
+    calc_pipeline_latency(NETWORK1_STAGES);
 
   //Internal write signal.
   wire data_wr_en;
@@ -109,8 +143,31 @@ module util_cpack2_impl #(
    * somewhat backwards compatible to the previous upack.
    */
   assign data_wr_en = fifo_wr_en[0];
-
   assign ce = data_wr_en & out_ready_int;
+
+  wire data_wr_en_delayed;
+
+  /*
+   * Ce-gated delay for data_wr_en to match the ce-gated data pipeline.
+   * When PIPELINE_STAGES > 0, the data pipeline is ce-gated, so this
+   * delay must also be ce-gated.
+   */
+  generate
+    if (TOTAL_PIPELINE_LATENCY == 0) begin: gen_wr_en_comb
+      assign data_wr_en_delayed = data_wr_en;
+    end else begin: gen_wr_en_pipe
+      (* shreg_extract = "no" *) reg [TOTAL_PIPELINE_LATENCY:0] wr_en_sr = 'h0;
+      integer wei;
+      always @(posedge clk) begin
+        if (data_wr_en == 1'b1) begin
+          wr_en_sr[0] <= data_wr_en;
+          for (wei = 1; wei <= TOTAL_PIPELINE_LATENCY; wei = wei + 1)
+            wr_en_sr[wei] <= wr_en_sr[wei-1];
+        end
+      end
+      assign data_wr_en_delayed = wr_en_sr[TOTAL_PIPELINE_LATENCY];
+    end
+  endgenerate
 
   /*
    * The cpack core itself has no backpressure. Overflows can only happen
@@ -137,7 +194,8 @@ module util_cpack2_impl #(
     .SAMPLES_PER_CHANNEL (SAMPLES_PER_CHANNEL),
     .SAMPLE_DATA_WIDTH (SAMPLE_DATA_WIDTH),
     .PACK (1),
-    .PARALLEL_OR_SERIAL_N (PARALLEL_OR_SERIAL_N)
+    .PARALLEL_OR_SERIAL_N (PARALLEL_OR_SERIAL_N),
+    .PIPELINE_STAGES (PIPELINE_STAGES)
   ) i_pack_shell (
     .clk (clk),
     .reset (reset),
