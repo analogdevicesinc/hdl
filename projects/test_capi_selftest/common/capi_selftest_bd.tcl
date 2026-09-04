@@ -51,7 +51,7 @@ foreach line {scl sda} {
 
   ad_ip_instance ilvector_logic iic_pl_${line}_drv
   ad_ip_parameter iic_pl_${line}_drv CONFIG.C_SIZE 1
-  ad_ip_parameter iic_ps_${line}_drv CONFIG.C_OPERATION or
+  ad_ip_parameter iic_pl_${line}_drv CONFIG.C_OPERATION or
 
   ad_ip_instance ilvector_logic iic_${line}_wand
   ad_ip_parameter iic_${line}_wand CONFIG.C_SIZE 1
