@@ -93,7 +93,6 @@ namespace eval ipl {
             foreach file $interfaces_paths_list {
                 if {[regexp {^.+\/PropelIPLocal} $file PropelIPLocal_path]} {
                     puts $file
-                    set PropelIPLocal_path
                 }
             }
         }
