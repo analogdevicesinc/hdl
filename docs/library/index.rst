@@ -83,6 +83,7 @@ Utilities
    axi_fan_control/index
    axi_laser_driver/index
    axi_logic_analyzer/index
+   axi_pcie_intc/index
    axi_pwm_gen/index
    axi_sysid/index
    axi_tdd/index
