@@ -3,7 +3,7 @@
 ## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
-LATTICE_IP_TOOL := tclsh
+LATTICE_IP_TOOL ?= tclsh
 
 CYGPATH_VERSION := $(shell command -v cygpath --version)
 
