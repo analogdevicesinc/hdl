@@ -41,8 +41,7 @@ module spi_engine_execution_shiftreg #(
   parameter DATA_WIDTH = 8,
   parameter NUM_OF_SDIO = 1,
   parameter [1:0] SDI_DELAY = 2'b00,
-  parameter ECHO_SCLK = 0,
-  parameter DDR_EN = 0
+  parameter ECHO_SCLK = 0
 ) (
   input   clk,
   input   resetn,
@@ -72,9 +71,10 @@ module spi_engine_execution_shiftreg #(
   input           exec_sdo_lane_cmd,
   input           sdo_idle_state,
   input   [ 7:0]  left_aligned,
-  input   [ 7:0]  word_length,
   input   [ 7:0]  last_bit_count,
   input   [ 7:0]  latch_last_bit_count,
+  input   [ 7:0]  ddr_last_bit_count,
+  input   [ 7:0]  ddr_latch_last_bit_count,
   input   [ 7:0]  sdo_lane_mask,
 
   input           ddr_en,
@@ -92,7 +92,7 @@ module spi_engine_execution_shiftreg #(
   reg [             7:0] sdi_counter    = 8'b0;
   reg [   SDI_DELAY+1:0] trigger_rx_d   = {(SDI_DELAY+2){1'b0}};
   reg [   SDI_DELAY+1:0] trigger_tx_d   = {(SDI_DELAY+2){1'b0}};
-  wire  data_sdo_v; //data_sdo_v == existence of valid data
+  wire data_sdo_v; //data_sdo_v == existence of valid data
   wire sdo_toshiftreg; //it is using the valid data for shifting in this cycle
   wire last_sdi_bit;
   wire trigger_rx_s;
@@ -195,269 +195,159 @@ module spi_engine_execution_shiftreg #(
 
     if ((DEFAULT_SPI_CFG[1:0] == 2'b01) || (DEFAULT_SPI_CFG[1:0] == 2'b10)) begin : g_echo_miso_nshift_reg
 
-      if (DDR_EN) begin : g_ddr_capable
+      reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_pos = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+      reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_neg = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
 
-        wire [7:0] ddr_last_bit_count = word_length[7:1] - 8'd1;
-        wire [7:0] ddr_latch_last_bit_count = word_length[7:1] - 8'd2;
+      reg last_sdi_bit_ddr;
+      reg [7:0] sdi_counter_ddr = 8'b0;
+      reg latch_sdi_ddr;
 
-        // DDR path: dual-edge capture with interleave
-        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_ddr = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
-        reg last_sdi_bit_ddr;
-        reg [7:0] sdi_counter_ddr = 8'b0;
-        reg latch_sdi_ddr;
+      // counter comparisons against registered clk-domain inputs are safe
+      // because word_length settles well before transfer_active goes high
+      always @(posedge echo_sclk or posedge cs_activate) begin
+        if (cs_activate) begin
+          sdi_counter_ddr  <= 8'b0;
+          last_sdi_bit_ddr <= 1'b0;
+          latch_sdi_ddr    <= 1'b0;
+        end else begin
+          latch_sdi_ddr    <= (sdi_counter_ddr == ddr_latch_last_bit_count);
+          last_sdi_bit_ddr <= (sdi_counter_ddr == ddr_last_bit_count);
+          sdi_counter_ddr  <= (sdi_counter_ddr == ddr_last_bit_count) ? 8'b0 : sdi_counter_ddr + 1'b1;
+        end
+      end
 
-        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg_ddr
+      reg last_sdi_bit_sdr;
+      reg [7:0] sdi_counter_sdr = 8'b0;
+      reg latch_sdi_sdr;
 
-          reg [DATA_WIDTH-1:0] data_shift_n;
-          always @(negedge echo_sclk or posedge cs_activate) begin
-            if (cs_activate)
-              data_shift_n <= 0;
-            else
-              data_shift_n <= {data_shift_n, sdi[i]};
-          end
+      always @(negedge echo_sclk or posedge cs_activate) begin
+        if (cs_activate) begin
+          sdi_counter_sdr  <= 8'b0;
+          last_sdi_bit_sdr <= 1'b0;
+          latch_sdi_sdr    <= 1'b0;
+        end else begin
+          latch_sdi_sdr    <= (sdi_counter_sdr == latch_last_bit_count);
+          last_sdi_bit_sdr <= (sdi_counter_sdr == last_bit_count);
+          sdi_counter_sdr  <= (sdi_counter_sdr == last_bit_count) ? 8'b0 : sdi_counter_sdr + 1'b1;
+        end
+      end
 
-          reg [DATA_WIDTH-1:0] data_shift_p;
-          always @(posedge echo_sclk or posedge cs_activate) begin
-            if (cs_activate)
-              data_shift_p <= 0;
-            else
-              data_shift_p <= {data_shift_p, sdi[i]};
-          end
+      for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
 
-          wire [DATA_WIDTH-1:0] interleaved;
-          for (j = 0; j < DATA_WIDTH/2; j = j + 1) begin : g_interleave
-            assign interleaved[j*2+1] = data_shift_n[j];
-            assign interleaved[j*2]   = (j > 0) ? data_shift_p[j-1] : sdi[i];
-          end
-
-          always @(posedge echo_sclk) begin
-            if (latch_sdi_ddr)
-              sdi_data_ddr[i*DATA_WIDTH+:DATA_WIDTH] <= interleaved;
-          end
-
+        reg [DATA_WIDTH-1:0] data_shift_n;
+        always @(negedge echo_sclk or posedge cs_activate) begin
+          if (cs_activate)
+            data_shift_n <= 0;
+          else
+            data_shift_n <= {data_shift_n, sdi[i]};
         end
 
+        reg [DATA_WIDTH-1:0] data_shift_p;
         always @(posedge echo_sclk or posedge cs_activate) begin
-          if (cs_activate) begin
-            sdi_counter_ddr  <= 8'b0;
-            last_sdi_bit_ddr <= 1'b0;
-            latch_sdi_ddr    <= 1'b0;
-          end else begin
-            latch_sdi_ddr    <= (sdi_counter_ddr == ddr_latch_last_bit_count);
-            last_sdi_bit_ddr <= (sdi_counter_ddr == ddr_last_bit_count);
-            sdi_counter_ddr  <= (sdi_counter_ddr == ddr_last_bit_count) ? 8'b0 : sdi_counter_ddr + 1'b1;
-          end
+          if (cs_activate)
+            data_shift_p <= 0;
+          else
+            data_shift_p <= {data_shift_p, sdi[i]};
         end
 
-        // SDR path: single-edge capture
-        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_sdr = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
-        reg last_sdi_bit_sdr;
-        reg [7:0] sdi_counter_sdr = 8'b0;
-        reg latch_sdi_sdr;
-
-        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg_sdr
-          reg [DATA_WIDTH-1:0] data_sdi_shift;
-
-          always @(negedge echo_sclk or posedge cs_activate) begin
-            if (cs_activate) begin
-              data_sdi_shift <= 0;
-            end else begin
-              data_sdi_shift <= {data_sdi_shift, sdi[i]};
-            end
-          end
-
-          always @(negedge echo_sclk) begin
-            if (latch_sdi_sdr)
-              sdi_data_sdr[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
-          end
+        wire [DATA_WIDTH-1:0] interleaved;
+        for (j = 0; j < DATA_WIDTH/2; j = j + 1) begin : g_interleave
+          assign interleaved[j*2+1] = data_shift_n[j];
+          assign interleaved[j*2]   = (j > 0) ? data_shift_p[j-1] : sdi[i];
         end
 
-        always @(negedge echo_sclk or posedge cs_activate) begin
-          if (cs_activate) begin
-            sdi_counter_sdr  <= 8'b0;
-            last_sdi_bit_sdr <= 1'b0;
-            latch_sdi_sdr    <= 1'b0;
-          end else begin
-            latch_sdi_sdr    <= (sdi_counter_sdr == latch_last_bit_count);
-            last_sdi_bit_sdr <= (sdi_counter_sdr == last_bit_count);
-            sdi_counter_sdr  <= (sdi_counter_sdr == last_bit_count) ? 8'b0 : sdi_counter_sdr + 1'b1;
-          end
+        always @(posedge echo_sclk) begin
+          if (latch_sdi_ddr)
+            sdi_data_pos[i*DATA_WIDTH+:DATA_WIDTH] <= interleaved;
         end
 
-        assign sdi_data_latch = ddr_en ? sdi_data_ddr : sdi_data_sdr;
-        assign last_sdi_bit_r = ddr_en ? last_sdi_bit_ddr : last_sdi_bit_sdr;
-
-      end else begin : g_sdr_only
-
-        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_int = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
-        reg last_sdi_bit_int;
-        reg [7:0] sdi_counter_int = 8'b0;
-        reg latch_sdi_int;
-
-        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
-          reg [DATA_WIDTH-1:0] data_sdi_shift;
-
-          always @(negedge echo_sclk or posedge cs_activate) begin
-            if (cs_activate) begin
-              data_sdi_shift <= 0;
-            end else begin
-              data_sdi_shift <= {data_sdi_shift, sdi[i]};
-            end
-          end
-
-          always @(negedge echo_sclk) begin
-            if (latch_sdi_int)
-              sdi_data_int[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
-          end
+        always @(negedge echo_sclk) begin
+          if (latch_sdi_sdr)
+            sdi_data_neg[i*DATA_WIDTH+:DATA_WIDTH] <= {data_shift_n[DATA_WIDTH-2:0], sdi[i]};
         end
-
-        always @(negedge echo_sclk or posedge cs_activate) begin
-          if (cs_activate) begin
-            sdi_counter_int  <= 8'b0;
-            last_sdi_bit_int <= 1'b0;
-            latch_sdi_int    <= 1'b0;
-          end else begin
-            latch_sdi_int    <= (sdi_counter_int == latch_last_bit_count);
-            last_sdi_bit_int <= (sdi_counter_int == last_bit_count);
-            sdi_counter_int  <= (sdi_counter_int == last_bit_count) ? 8'b0 : sdi_counter_int + 1'b1;
-          end
-        end
-
-        assign sdi_data_latch = sdi_data_int;
-        assign last_sdi_bit_r = last_sdi_bit_int;
 
       end
+
+      assign sdi_data_latch = ddr_en ? sdi_data_pos : sdi_data_neg;
+      assign last_sdi_bit_r = ddr_en ? last_sdi_bit_ddr : last_sdi_bit_sdr;
 
     end else begin : g_echo_miso_pshift_reg
 
-      if (DDR_EN) begin : g_ddr_capable
+      reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_neg = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+      reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_pos = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
 
-        wire [7:0] ddr_last_bit_count = word_length[7:1] - 8'd1;
-        wire [7:0] ddr_latch_last_bit_count = word_length[7:1] - 8'd2;
+      reg last_sdi_bit_ddr;
+      reg [7:0] sdi_counter_ddr = 8'b0;
+      reg latch_sdi_ddr;
 
-        // DDR path: dual-edge capture with interleave
-        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_ddr = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
-        reg last_sdi_bit_ddr;
-        reg [7:0] sdi_counter_ddr = 8'b0;
-        reg latch_sdi_ddr;
+      // counter comparisons against registered clk-domain inputs are safe
+      // because word_length settles well before transfer_active goes high
+      always @(negedge echo_sclk or posedge cs_activate) begin
+        if (cs_activate) begin
+          sdi_counter_ddr  <= 8'b0;
+          last_sdi_bit_ddr <= 1'b0;
+          latch_sdi_ddr    <= 1'b0;
+        end else begin
+          latch_sdi_ddr    <= (sdi_counter_ddr == ddr_latch_last_bit_count);
+          last_sdi_bit_ddr <= (sdi_counter_ddr == ddr_last_bit_count);
+          sdi_counter_ddr  <= (sdi_counter_ddr == ddr_last_bit_count) ? 8'b0 : sdi_counter_ddr + 1'b1;
+        end
+      end
 
-        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg_ddr
+      reg last_sdi_bit_sdr;
+      reg [7:0] sdi_counter_sdr = 8'b0;
+      reg latch_sdi_sdr;
 
-          reg [DATA_WIDTH-1:0] data_shift_p;
-          always @(posedge echo_sclk or posedge cs_activate) begin
-            if (cs_activate)
-              data_shift_p <= 0;
-            else
-              data_shift_p <= {data_shift_p, sdi[i]};
-          end
+      always @(posedge echo_sclk or posedge cs_activate) begin
+        if (cs_activate) begin
+          sdi_counter_sdr  <= 8'b0;
+          last_sdi_bit_sdr <= 1'b0;
+          latch_sdi_sdr    <= 1'b0;
+        end else begin
+          latch_sdi_sdr    <= (sdi_counter_sdr == latch_last_bit_count);
+          last_sdi_bit_sdr <= (sdi_counter_sdr == last_bit_count);
+          sdi_counter_sdr  <= (sdi_counter_sdr == last_bit_count) ? 8'b0 : sdi_counter_sdr + 1'b1;
+        end
+      end
 
-          reg [DATA_WIDTH-1:0] data_shift_n;
-          always @(negedge echo_sclk or posedge cs_activate) begin
-            if (cs_activate)
-              data_shift_n <= 0;
-            else
-              data_shift_n <= {data_shift_n, sdi[i]};
-          end
+      for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
 
-          wire [DATA_WIDTH-1:0] interleaved;
-          for (j = 0; j < DATA_WIDTH/2; j = j + 1) begin : g_interleave
-            assign interleaved[j*2+1] = data_shift_p[j];
-            assign interleaved[j*2]   = (j > 0) ? data_shift_n[j-1] : sdi[i];
-          end
-
-          always @(negedge echo_sclk) begin
-            if (latch_sdi_ddr)
-              sdi_data_ddr[i*DATA_WIDTH+:DATA_WIDTH] <= interleaved;
-          end
-
+        reg [DATA_WIDTH-1:0] data_shift_p;
+        always @(posedge echo_sclk or posedge cs_activate) begin
+          if (cs_activate)
+            data_shift_p <= 0;
+          else
+            data_shift_p <= {data_shift_p, sdi[i]};
         end
 
+        reg [DATA_WIDTH-1:0] data_shift_n;
         always @(negedge echo_sclk or posedge cs_activate) begin
-          if (cs_activate) begin
-            sdi_counter_ddr  <= 8'b0;
-            last_sdi_bit_ddr <= 1'b0;
-            latch_sdi_ddr    <= 1'b0;
-          end else begin
-            latch_sdi_ddr    <= (sdi_counter_ddr == ddr_latch_last_bit_count);
-            last_sdi_bit_ddr <= (sdi_counter_ddr == ddr_last_bit_count);
-            sdi_counter_ddr  <= (sdi_counter_ddr == ddr_last_bit_count) ? 8'b0 : sdi_counter_ddr + 1'b1;
-          end
+          if (cs_activate)
+            data_shift_n <= 0;
+          else
+            data_shift_n <= {data_shift_n, sdi[i]};
         end
 
-        // SDR path: single-edge capture
-        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_sdr = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
-        reg last_sdi_bit_sdr;
-        reg [7:0] sdi_counter_sdr = 8'b0;
-        reg latch_sdi_sdr;
-
-        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg_sdr
-          reg [DATA_WIDTH-1:0] data_sdi_shift;
-          always @(posedge echo_sclk or posedge cs_activate) begin
-            if (cs_activate) begin
-              data_sdi_shift <= 0;
-            end else begin
-              data_sdi_shift <= {data_sdi_shift, sdi[i]};
-            end
-          end
-          always @(posedge echo_sclk) begin
-            if (latch_sdi_sdr)
-              sdi_data_sdr[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
-          end
+        wire [DATA_WIDTH-1:0] interleaved;
+        for (j = 0; j < DATA_WIDTH/2; j = j + 1) begin : g_interleave
+          assign interleaved[j*2+1] = data_shift_p[j];
+          assign interleaved[j*2]   = (j > 0) ? data_shift_n[j-1] : sdi[i];
         end
 
-        always @(posedge echo_sclk or posedge cs_activate) begin
-          if (cs_activate) begin
-            sdi_counter_sdr  <= 8'b0;
-            last_sdi_bit_sdr <= 1'b0;
-            latch_sdi_sdr    <= 1'b0;
-          end else begin
-            latch_sdi_sdr    <= (sdi_counter_sdr == latch_last_bit_count);
-            last_sdi_bit_sdr <= (sdi_counter_sdr == last_bit_count);
-            sdi_counter_sdr  <= (sdi_counter_sdr == last_bit_count) ? 8'b0 : sdi_counter_sdr + 1'b1;
-          end
+        always @(negedge echo_sclk) begin
+          if (latch_sdi_ddr)
+            sdi_data_neg[i*DATA_WIDTH+:DATA_WIDTH] <= interleaved;
         end
 
-        assign sdi_data_latch = ddr_en ? sdi_data_ddr : sdi_data_sdr;
-        assign last_sdi_bit_r = ddr_en ? last_sdi_bit_ddr : last_sdi_bit_sdr;
-
-      end else begin : g_sdr_only
-
-        reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_int = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
-        reg last_sdi_bit_int;
-        reg [7:0] sdi_counter_int = 8'b0;
-        reg latch_sdi_int;
-
-        for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
-          reg [DATA_WIDTH-1:0] data_sdi_shift;
-          always @(posedge echo_sclk or posedge cs_activate) begin
-            if (cs_activate) begin
-              data_sdi_shift <= 0;
-            end else begin
-              data_sdi_shift <= {data_sdi_shift, sdi[i]};
-            end
-          end
-          always @(posedge echo_sclk) begin
-            if (latch_sdi_int)
-              sdi_data_int[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
-          end
+        always @(posedge echo_sclk) begin
+          if (latch_sdi_sdr)
+            sdi_data_pos[i*DATA_WIDTH+:DATA_WIDTH] <= {data_shift_p[DATA_WIDTH-2:0], sdi[i]};
         end
-
-        always @(posedge echo_sclk or posedge cs_activate) begin
-          if (cs_activate) begin
-            sdi_counter_int  <= 8'b0;
-            last_sdi_bit_int <= 1'b0;
-            latch_sdi_int    <= 1'b0;
-          end else begin
-            latch_sdi_int    <= (sdi_counter_int == latch_last_bit_count);
-            last_sdi_bit_int <= (sdi_counter_int == last_bit_count);
-            sdi_counter_int  <= (sdi_counter_int == last_bit_count) ? 8'b0 : sdi_counter_int + 1'b1;
-          end
-        end
-
-        assign sdi_data_latch = sdi_data_int;
-        assign last_sdi_bit_r = last_sdi_bit_int;
 
       end
+
+      assign sdi_data_latch = ddr_en ? sdi_data_neg : sdi_data_pos;
+      assign last_sdi_bit_r = ddr_en ? last_sdi_bit_ddr : last_sdi_bit_sdr;
 
     end
 
