@@ -148,11 +148,26 @@ module system_top #(
       .I (ad463x_busy),
       .O (busy_ibuf));
 
-    BUFGMUX_CTRL i_echo_sclk_bufgmux (
-      .O  (ad463x_echo_sclk_s),
+    // BUFGCTRL muxes echo_sclk (FIFO/register mode) and busy (offload mode)
+    // on dedicated clock resources, avoiding a LUT on the clock tree.
+    // IGNORE0/1 = 1 bypasses the glitch-free handshake, which requires the
+    // deselected clock to toggle LOW before completing the switch.
+    // Neither echo_sclk nor busy are free-running — they only toggle during
+    // active SPI transfers — so the handshake would stall indefinitely.
+    BUFGCTRL #(
+      .INIT_OUT (0),
+      .PRESELECT_I0 ("TRUE"),
+      .PRESELECT_I1 ("FALSE")
+    ) i_echo_sclk_bufgctrl (
+      .O (ad463x_echo_sclk_s),
       .I0 (echo_sclk_ibuf),
       .I1 (busy_ibuf),
-      .S  (offload_active));
+      .S0 (~offload_active),
+      .S1 (offload_active),
+      .CE0 (1'b1),
+      .CE1 (1'b1),
+      .IGNORE0 (1'b1),
+      .IGNORE1 (1'b1));
 
   end else begin : g_echo_sclk_no_mux
 
