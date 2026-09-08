@@ -96,8 +96,7 @@ module axi_pcie_intc #(
   input                                 s_axi_rready,
 
   // Level-sensitive interrupt sources, one port per vector (SRC_PER_VEC wide).
-  // All sixteen declared (Verilog-2001 cannot parameterize port count); unused
-  // ports above NUM_VECTORS are hidden by IP-XACT packaging.
+  // All sixteen declared unused above NUM_VECTORS are hidden by IP-XACT packaging.
 
   input   [SRC_PER_VEC-1:0]             intr_0,
   input   [SRC_PER_VEC-1:0]             intr_1,
