@@ -120,6 +120,8 @@ module spi_engine_execution #(
   reg [7:0] word_length = DATA_WIDTH;
   reg [7:0] last_bit_count = DATA_WIDTH-1;
   reg [7:0] latch_last_bit_count = DATA_WIDTH-2;
+  reg [7:0] ddr_last_bit_count = (DATA_WIDTH/2)-1;
+  reg [7:0] ddr_latch_last_bit_count = (DATA_WIDTH/2)-2;
   reg [7:0] left_aligned = 8'b0;
   reg ddr_en = 1'b0;
   // sdi_lane_mask: Stores the SDI lane configuration from REG_SDI_LANE_CONFIG
@@ -189,8 +191,7 @@ module spi_engine_execution #(
     .DATA_WIDTH(DATA_WIDTH),
     .NUM_OF_SDIO(NUM_OF_SDIO),
     .SDI_DELAY(SDI_DELAY),
-    .ECHO_SCLK(ECHO_SCLK),
-    .DDR_EN(DDR_EN)
+    .ECHO_SCLK(ECHO_SCLK)
   ) shiftreg (
     .clk(clk),
     .resetn(resetn),
@@ -211,9 +212,10 @@ module spi_engine_execution #(
     .exec_sdo_lane_cmd(exec_sdo_lane_config_reg),
     .sdo_idle_state(sdo_idle_state),
     .left_aligned(left_aligned),
-    .word_length(word_length),
     .last_bit_count (last_bit_count),
     .latch_last_bit_count (latch_last_bit_count),
+    .ddr_last_bit_count (ddr_last_bit_count),
+    .ddr_latch_last_bit_count (ddr_latch_last_bit_count),
     .sdo_lane_mask(sdo_lane_mask),
     .ddr_en(ddr_en),
     .sdo_io_ready(sdo_io_ready),
@@ -302,8 +304,10 @@ module spi_engine_execution #(
   always @(posedge clk) begin
     // we can calculate this from word_length (instead of cmd), with an extra cycle delay
     // because even in the worst case (transfer after config), we still have another cycle before using it
-    last_bit_count       <= word_length - 1; // needed when transfer_active goes high
-    latch_last_bit_count <= word_length - 2;
+    last_bit_count           <= word_length - 1; // needed when transfer_active goes high
+    latch_last_bit_count     <= word_length - 2;
+    ddr_last_bit_count       <= word_length[7:1] - 1;
+    ddr_latch_last_bit_count <= word_length[7:1] - 2;
   end
 
   always @(posedge clk) begin
