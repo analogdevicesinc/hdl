@@ -54,3 +54,7 @@ set_input_delay \
   -clock tx_device_clk \
   [expr $device_clk_period / 8] \
   [get_ports {sysref_out}]
+
+set_false_path \
+  -from [get_keepers -no_duplicates {i_system_bd|sys_hps|sys_hps|sm_hps|sundancemesa_hps_inst~intosc_clk.reg}] \
+  -to   [get_keepers -no_duplicates {i_system_bd|sys_hps|sys_hps|sm_hps|sundancemesa_hps_inst~intosc_clk.reg}]

@@ -66,6 +66,10 @@ set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_3w_spi.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/util_cdc/sync_bits.v
 set_global_assignment -name VERILOG_FILE ./gts_refclk_reset.v
 
+# set_global_assignment -name ENABLE_SIGNALTAP ON
+# set_global_assignment -name USE_SIGNALTAP_FILE jesd_debug.stp
+# set_global_assignment -name SIGNALTAP_FILE jesd_debug.stp
+
 # FMC clocks and JESD204 control signals
 
 set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)"          -to fpga_refclk_in_a
@@ -213,11 +217,39 @@ foreach half {a b} {
   }
 }
 
+# Force RX auto adaptation.
+#
+# The IP is asked for auto (rx_adaptation_mode=auto in the GTS PMA/FEC Direct PHY
+# GUI), but the generated parameters resolve the two channels each bank actually
+# uses to flux_mode=FLUX_MODE_BYPASS with rx_adaptation_mode=DISABLED and
+# CH0/CH1_SRC_FLUX_EN=0, while the unused ch2..ch7 get SRC_FLUX_EN=1
+# (system_bd_jesd204_phy_a.xml). The sniffer engine that performs adaptation ends
+# up off on the lanes carrying data.
+#
+# Without adaptation the receiver runs unequalised, which on hardware measures as
+# 15-23% of octets not-in-table and 10% disparity errors on every lane while
+# rx_is_lockedtodata reads 0xf - a bit error rate of a few percent, not a
+# protocol or alignment fault.
+#
+# These are the assignments the GTS user guide gives for moving a lane from
+# manual equalisation to auto adaptation. The three EQ values must be 0 in auto
+# mode; setting them to anything else is a compile error. Every lane of a bonded
+# IP needs them, because the setting feeds the soft reset controller that
+# sequences the bonded lanes.
 set rx_num_lanes 4
 foreach half {a b} {
   for {set j 0} {$j < $rx_num_lanes} {incr j} {
     foreach pin [list rx_data_${half}_p[$j] rx_data_${half}_n[$j]] {
       set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to $pin
+
+      set_instance_assignment -name HSSI_PARAMETER \
+        "flux_mode=FLUX_MODE_FLUX_MODE_SNIFFER" -to $pin
+      set_instance_assignment -name HSSI_PARAMETER \
+        "rx_adaptation_mode=RX_ADAPTATION_MODE_FLUX_ADAPTATION" -to $pin
+
+      set_instance_assignment -name HSSI_PARAMETER "rx_eq_vga_gain=0"   -to $pin
+      set_instance_assignment -name HSSI_PARAMETER "rx_eq_dfe_tap_1=0"  -to $pin
+      set_instance_assignment -name HSSI_PARAMETER "rx_eq_hf_boost=0"   -to $pin
     }
   }
 }

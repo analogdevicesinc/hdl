@@ -68,7 +68,7 @@ set_instance_parameter_value sys_cpu {peripheralRegionASize} {0x04000000}
 #   0x00000000..0x000FFFFF  peripheral window (avl_peripheral_mm_bridge)
 #   0x08000000..0x0FFFFFFF  sys_emif.s0_axi4lite - EMIF calibration/config port,
 #                           128 MB span, only 0x0 or 0x8000000 are legal
-#   0x10000000..0x103FFFFF  sys_int_mem - boot and run RAM (4 MB, app + DMA buffers)
+#   0x10000000..0x101FFFFF  sys_int_mem - boot and run RAM (2 MB, app + DMA buffers)
 #   0x10400000              sys_cpu.dm_agent - debug module
 #   0x10410000              sys_cpu.timer_sw_agent - machine timer
 #   0x10420000              sys_ddr_window.cntl - DDR window position
@@ -78,13 +78,17 @@ set_instance_parameter_value sys_cpu {peripheralRegionASize} {0x04000000}
 # reaches OCM + dm_agent. It also holds the DMA buffers: the DMA masters are given
 # a view of it at this same base (see ad_dma_interconnect), so a plain C pointer
 # means the same address to the CPU and to a DMA. It was enlarged 256 KB -> 1.5 MB
-# to fit the app, then 1.5 MB -> 4 MB to fit the buffers; each time the agents
-# above had to move up out of the way, hence the 0x104xxxxx / 0x105xxxxx block.
+# to fit the app, then 1.5 MB -> 2 MB to fit the buffers as well.
+#
+# 2 MB is an M20K ceiling, not a need: at 4 MB the fitter reported 2196 M20K
+# blocks against the 1611 this device has. The agents above are nonetheless
+# placed as if OCM were 4 MB, so growing it later moves no addresses and needs
+# no BSP change beyond the region length.
 add_connection sys_clk.clk sys_cpu.clk
 add_connection sys_clk.clk_reset sys_cpu.reset
 
 add_instance sys_int_mem altera_avalon_onchip_memory2
-set_instance_parameter_value sys_int_mem {memorySize} {4194304}
+set_instance_parameter_value sys_int_mem {memorySize} {2097152}
 set_instance_parameter_value sys_int_mem {dataWidth} {32}
 # Second port is for the DMA masters; the CPU keeps s1 to itself.
 set_instance_parameter_value sys_int_mem {dualPort} {1}
@@ -337,13 +341,17 @@ add_instance fpga_m altera_jtag_avalon_master
 add_connection sys_clk.clk fpga_m.clk
 add_connection sys_clk.clk_reset fpga_m.clk_reset
 
-# Host access to DDR through the JTAG master, for System Console / host-side
-# capture readout without going through the CPU or its debug module.
+# Host access for System Console, so a capture can be read out without halting
+# the CPU or going through its debug module.
 #
 # fpga_m has its own address space, so nothing here is visible to sys_cpu and the
 # BSP's system.h is unaffected:
 #   0x00000000..0x000FFFFF  jtag_ddr_window.windowed_slave - 1 MB view of DDR
-#   0x10000000              jtag_ddr_window.cntl - window position
+#   0x00200000              jtag_ddr_window.cntl - window position
+#   0x10000000..0x101FFFFF  sys_int_mem.s2 - on-chip memory at the same base the
+#                           CPU and the DMAs use, so one address means one place
+#                           to all three masters. This is where the capture
+#                           buffers live, so it is what a capture script reads.
 add_instance jtag_ddr_window altera_address_span_extender
 set_instance_parameter_value jtag_ddr_window {DATA_WIDTH} {32}
 set_instance_parameter_value jtag_ddr_window {BURSTCOUNT_WIDTH} {1}
@@ -361,7 +369,10 @@ set_connection_parameter_value jtag_ddr_window.expanded_master/sys_emif.s0_axi4 
 add_connection fpga_m.master jtag_ddr_window.windowed_slave
 set_connection_parameter_value fpga_m.master/jtag_ddr_window.windowed_slave baseAddress {0x00000000}
 add_connection fpga_m.master jtag_ddr_window.cntl
-set_connection_parameter_value fpga_m.master/jtag_ddr_window.cntl baseAddress {0x10000000}
+set_connection_parameter_value fpga_m.master/jtag_ddr_window.cntl baseAddress {0x00200000}
+
+add_connection fpga_m.master sys_int_mem.s2
+set_connection_parameter_value fpga_m.master/sys_int_mem.s2 baseAddress {0x10000000}
 
 add_instance axi_sysid_0 axi_sysid
 add_instance rom_sys_0 sysid_rom
