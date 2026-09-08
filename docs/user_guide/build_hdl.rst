@@ -167,10 +167,10 @@ method in your **~/.bashrc** file as follows:
 
 .. code-block:: bash
 
-   XVERSION=2023.2
+   XVERSION=2025.1
    load_amd ()
    {
-       source /opt/Xilinx/Vivado/$XVERSION/settings64.sh
+       source /opt/Xilinx/$XVERSION/Vivado/settings64.sh
    }
 
 Even though it's convenient, we discourage adding the source scripts to
@@ -204,10 +204,10 @@ For AMD Xilinx Vivado:
 .. shell:: bash
 
    ~/hdl
-   $source /opt/Xilinx/Vivado/2023.2/settings64.sh
+   $source /opt/Xilinx/2025.1/Vivado/settings64.sh
 
-   $export PATH=$PATH:/opt/Xilinx/Vivado/2023.2/bin:/opt/Xilinx/Vitis/2023.2/bin
-   $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/nt/bin
+   $export PATH=$PATH:/opt/Xilinx/2025.1/Vivado/bin:/opt/Xilinx/2025.1/Vitis/bin
+   $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/microblaze/nt/bin
 
 For Intel Quartus:
 
@@ -291,8 +291,8 @@ In the link above, you can find the installation guide for WSL on Windows.
    .. shell:: bash
 
       ~/Downloads
-      $chmod +x FPGAs_AdaptiveSoCs_Unified_2023.2_1113_1001_Lin64.bin
-      $sudo ./FPGAs_AdaptiveSoCs_Unified_2023.2_1113_1001_Lin64.bin
+      $chmod +x FPGAs_AdaptiveSoCs_Unified_SDI_2025.1_0530_0145_Lin64.bin
+      $sudo ./FPGAs_AdaptiveSoCs_Unified_SDI_2025.1_0530_0145_Lin64.bin
 
    The installation directory for AMD Xilinx Vivado & Vitis we chose to be
    ``/opt/Xilinx``.
@@ -302,11 +302,11 @@ In the link above, you can find the installation guide for WSL on Windows.
 
    .. shell:: bash
 
-      $/tools/Xilinx/Vivado/2023.2/bin/rdiArgs.sh: line 31: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory
+      $/tools/Xilinx/2025.1/Vivado/bin/rdiArgs.sh: line 31: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory
       /bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
       terminate called after throwing an instance of 'std::runtime_error'
         what():  locale::facet::_S_create_c_locale name not valid
-      /tools/Xilinx/Vivado/2023.2/bin/rdiArgs.sh: line 312:  4105 Aborted                 "$RDI_PROG" "$@"
+      /tools/Xilinx/2025.1/Vivado/bin/rdiArgs.sh: line 312:  4105 Aborted                 "$RDI_PROG" "$@"
 
    See `here <https://adaptivesupport.amd.com/s/question/0D54U00006FYojlSAD/vivado-20222-on-ubuntu-with-error-lcall-cannot-change-locale-enusutf8?language=en_US>`__
    a thread on the Xilinx community.
@@ -317,7 +317,7 @@ In the link above, you can find the installation guide for WSL on Windows.
 
       ~/Downloads
       $sudo apt-get install locales && sudo localedef -i en_US -f UTF-8 en_US.UTF-8
-      $cd /opt/Xilinx/Vitis/2023.2/scripts
+      $cd /opt/Xilinx/2025.1/Vitis/scripts
       $sudo ./installLibs.sh
       $sudo apt-get install libxrender1 libxtst6 libxi6
       $sudo apt-get install libtinfo5
@@ -328,15 +328,15 @@ In the link above, you can find the installation guide for WSL on Windows.
 
    .. shell:: bash
 
-      $export PATH=$PATH:/opt/Xilinx/Vivado/2023.2/bin
-      $export PATH=$PATH:/opt/Xilinx/Vivado_HLS/2023.2/bin
+      $export PATH=$PATH:/opt/Xilinx/2025.1/Vivado/bin
+      $export PATH=$PATH:/opt/Xilinx/2025.1/Vivado_HLS/bin
 
-      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/bin
-      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/nt/bin
-      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/arm/nt/bin
-      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_be/bin
-      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_le/bin
-      $export PATH=$PATH:/opt/Xilinx/Vitis/2023.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/bin
+      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/microblaze/nt/bin
+      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/arm/nt/bin
+      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/microblaze/linux_toolchain/nt64_be/bin
+      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/microblaze/linux_toolchain/nt64_le/bin
+      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/aarch32/nt/gcc-arm-none-eabi/bin
 
 .. collapsible:: Alternatives to WSL/Linux terminal
 
@@ -349,7 +349,7 @@ In the link above, you can find the installation guide for WSL on Windows.
    Some of these may not be fully functional with our scripts and/or projects.
    If you are an Intel user, the **Nios II Command Shell** does support make.
    If you are an AMD user, use the **gnuwin** installed as part of the SDK,
-   usually at ``C:\Xilinx\Vitis\2023.2\gnuwin\bin``.
+   usually at ``C:\Xilinx\2025.1\Vitis\gnuwin\bin``.
 
 **How to verify your environment setup**
 
@@ -393,14 +393,14 @@ the Vivado Tcl console building mode to build the BOOT.BIN (see
    .. shell:: bash
 
       ~/hdl
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado/2023.2/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado_HLS/2023.2/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/microblaze/nt/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/arm/nt/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_be/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/microblaze/linux_toolchain/nt64_le/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/2023.2/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vivado/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vivado_HLS/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/gnu/microblaze/nt/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/gnu/arm/nt/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/gnu/microblaze/linux_toolchain/nt64_be/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/gnu/microblaze/linux_toolchain/nt64_le/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/gnu/aarch32/nt/gcc-arm-none-eabi/bin
 
    For Intel Quartus:
 
