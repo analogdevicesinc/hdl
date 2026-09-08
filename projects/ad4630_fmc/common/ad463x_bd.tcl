@@ -59,6 +59,8 @@ create_bd_port -dir I ad463x_ext_clk
 
 create_bd_port -dir O max17687_sync_clk
 
+create_bd_port -dir O offload_active
+
 ## To support the 2MSPS (SCLK == 80 MHz), set the spi clock to 160 MHz
 
 ad_ip_instance axi_clkgen spi_clkgen
@@ -92,6 +94,9 @@ ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_2
 ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.CFG_INFO_3 $DDR_EN
 # Enable a register slice for timing closure on spi_clk domain for the SDI path
 ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_axi_regmap CONFIG.SRC_REG_SLICE_EN 1
+
+ad_connect $hier_spi_engine/${hier_spi_engine}_offload/interconnect_dir $hier_spi_engine/${hier_spi_engine}_interconnect/s_interconnect_dir
+ad_connect $hier_spi_engine/${hier_spi_engine}_offload/interconnect_dir offload_active
 
 ## to setup the sample rate of the system change the PULSE_PERIOD value of the
 ## CNV generator; the actual sample rate will be PULSE_PERIOD * (1/cnv_ref_clk)
@@ -188,10 +193,9 @@ if {$CAPTURE_ZONE == 1} {
   ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_offload CONFIG.ASYNC_TRIG 1
   ad_connect cnv_generator/pwm_0 $hier_spi_engine/trigger
 
-  ## SPI mode is using the echo SCLK, on echo SPI and Master mode the BUSY
-  #  is used for SDI latching
-
+  # echo_sclk source is muxed in system_top.v via offload_active and CLK_MODE
   ad_connect $hier_spi_engine/echo_sclk ad463x_echo_sclk
+
   switch $CLK_MODE {
     0 {
       ## SDI is latched by the SPIE execution module
@@ -203,21 +207,15 @@ if {$CAPTURE_ZONE == 1} {
     }
     1 -
     2 {
-      ## SDI is latched by the data capture
-      ad_ip_instance ad463x_data_capture data_capture
-      ad_ip_parameter data_capture CONFIG.DDR_EN $DDR_EN
-      ad_ip_parameter data_capture CONFIG.NUM_OF_LANES $NUM_OF_SDIO
-
-      ad_connect spi_clk data_capture/clk
-      ad_connect ad463x_spi_cs data_capture/csn
-      ad_connect ad463x_busy data_capture/echo_sclk
-      ad_connect ad463x_spi_sdi data_capture/data_in
+      ## In echo/master mode, data is valid on the negedge of BUSY
+      ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_execution CONFIG.DEFAULT_SPI_CFG 1
+      ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_execution CONFIG.DDR_EN $DDR_EN
 
       ## SDI is latched by the SPIE execution module
       if {$NO_REORDER == 0} {
-        ad_connect data_capture/m_axis data_reorder/s_axis
+        ad_connect $hier_spi_engine/m_axis_sample data_reorder/s_axis
       } else {
-        ad_connect data_capture/m_axis axi_ad463x_dma/s_axis
+        ad_connect $hier_spi_engine/m_axis_sample axi_ad463x_dma/s_axis
       }
     }
     default {

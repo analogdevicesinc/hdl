@@ -36,7 +36,8 @@
 `timescale 1ns/100ps
 
 module system_top #(
-  parameter NUM_OF_SDIO = 2
+  parameter NUM_OF_SDIO = 2,
+  parameter CLK_MODE = 0
 ) (
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
@@ -117,6 +118,7 @@ module system_top #(
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
   wire            ad463x_echo_sclk_s;
+  wire            offload_active;
   wire            ad463x_trigger;
 
   // instantiations
@@ -134,14 +136,37 @@ module system_top #(
     .clk_in_n (1'b0),
     .clk (ext_clk_s));
 
-  ad_data_clk #(
-    .SINGLE_ENDED (1)
-  ) i_echo_sclk (
-    .rst (1'b0),
-    .locked (),
-    .clk_in_p (ad463x_echo_sclk),
-    .clk_in_n (1'b0),
-    .clk (ad463x_echo_sclk_s));
+  generate if (CLK_MODE != 0) begin : g_echo_sclk_mux
+    wire echo_sclk_ibuf;
+    wire busy_ibuf;
+
+    IBUFG i_echo_sclk_ibuf (
+      .I (ad463x_echo_sclk),
+      .O (echo_sclk_ibuf));
+
+    IBUFG i_busy_ibuf (
+      .I (ad463x_busy),
+      .O (busy_ibuf));
+
+    BUFGMUX_CTRL i_echo_sclk_bufgmux (
+      .O  (ad463x_echo_sclk_s),
+      .I0 (echo_sclk_ibuf),
+      .I1 (busy_ibuf),
+      .S  (offload_active));
+
+  end else begin : g_echo_sclk_no_mux
+
+    ad_data_clk #(
+      .SINGLE_ENDED (1)
+    ) i_echo_sclk (
+      .rst (1'b0),
+      .locked (),
+      .clk_in_p (ad463x_echo_sclk),
+      .clk_in_n (1'b0),
+      .clk (ad463x_echo_sclk_s));
+
+  end
+  endgenerate
 
   ad_iobuf #(
     .DATA_WIDTH(4)
@@ -243,6 +268,7 @@ module system_top #(
     .ad463x_spi_cs (ad463x_spi_cs),
     .ad463x_spi_sclk (ad463x_spi_sclk),
     .ad463x_echo_sclk (ad463x_echo_sclk_s),
+    .offload_active (offload_active),
     .ad463x_busy (ad463x_busy),
     .ad463x_cnv (ad463x_cnv),
     .ad463x_trigger (ad463x_trigger),

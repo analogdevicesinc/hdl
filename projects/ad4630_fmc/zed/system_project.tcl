@@ -80,6 +80,11 @@ adi_project_files ad4630_fmc_zed [list \
   "system_constr.xdc" \
   "system_top.v" ]
 
+if {[get_env_param CLK_MODE 0] != 0} {
+  adi_project_files ad4630_fmc_zed [list \
+    "system_constr_busy_clk.xdc" ]
+}
+
 switch [get_env_param LANES_PER_CHANNEL 2] {
   1 {
     # For 1 lane per channel, check NUM_OF_CHANNEL
