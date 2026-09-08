@@ -71,7 +71,7 @@ ad_ip_instance axi_dmac axi_ada4355_dma_0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_0 CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ada4355_dma_0 CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_2D_TRANSFER 0
@@ -87,7 +87,7 @@ ad_ip_instance axi_dmac axi_ada4355_dma_1
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_1 CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ada4355_dma_1 CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_2D_TRANSFER 0
@@ -103,7 +103,7 @@ ad_ip_instance axi_dmac axi_ada4355_dma_2
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_2 CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ada4355_dma_2 CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_2D_TRANSFER 0
@@ -119,7 +119,7 @@ ad_ip_instance axi_dmac axi_ada4355_dma_3
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_3 CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_ada4355_dma_3 CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_2D_TRANSFER 0
@@ -240,10 +240,13 @@ ad_connect logic_inv/Res axi_tdd_0/resetn
 ad_connect axi_tdd_0/sync_in trig_fmc_in
 ad_connect axi_tdd_0/tdd_channel_0 trig_fmc_out
 
-# tdd_channel_1..4 previously drove the per-DMA sync inputs. The DMAs now run
-# with SYNC_TRANSFER_START=0, which removes their sync ports entirely, so those
-# connections cannot exist. Restoring TDD-gated capture means setting
-# SYNC_TRANSFER_START back to 1 on all four DMAs and re-adding the connects.
+# Channels 1-4 gate the four DMA captures. With SYNC_TRANSFER_START=1 each
+# DMA holds off until its sync input pulses high, so software can arm all
+# four DMAs then let TDD fire them simultaneously.
+ad_connect axi_tdd_0/tdd_channel_1 axi_ada4355_dma_0/sync
+ad_connect axi_tdd_0/tdd_channel_2 axi_ada4355_dma_1/sync
+ad_connect axi_tdd_0/tdd_channel_3 axi_ada4355_dma_2/sync
+ad_connect axi_tdd_0/tdd_channel_4 axi_ada4355_dma_3/sync
 
 # interconnects
 
