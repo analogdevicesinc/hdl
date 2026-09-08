@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top_pcie (
 
   input               fan_tach,
   output              fan_pwm,
@@ -230,7 +230,6 @@ module system_top (
   input               pcie_clk_n,
   // Rst
   input               pcie_perstn
-
 );
 
   // internal signals
