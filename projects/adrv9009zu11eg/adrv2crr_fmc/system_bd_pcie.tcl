@@ -14,6 +14,9 @@ delete_bd_objs [get_bd_cells spi0_csn_concat]
 # Delete old GPIO lines
 delete_bd_objs [get_bd_nets sys_ps8_emio_gpio_o] [get_bd_nets gpio_i_1] [get_bd_nets sys_ps8_emio_gpio_t]
 
+# Set the number of EMIO pins to 28
+# These GPIOs are carrier related, will be controlled by the PS
+ad_ip_parameter sys_ps8 CONFIG.PSU__GPIO_EMIO__PERIPHERAL__IO {32}
 
 # GPIO controller
 
@@ -58,35 +61,33 @@ ad_ip_parameter concat_gpio2 CONFIG.IN0_WIDTH {32}
 ad_ip_parameter concat_gpio2 CONFIG.IN1_WIDTH {32}
 ad_ip_parameter concat_gpio2 CONFIG.IN2_WIDTH {31}
 
-# Create 2 GPIO controllers to fit the 95 GPIO signals
-# first GPIO controller in dual mode
+# Create 1 GPIO controller to fit the 61 GPIO signals
+# GPIO controller in dual mode
 ad_ip_instance axi_gpio axi_gpio1
 ad_ip_parameter axi_gpio1 CONFIG.C_INTERRUPT_PRESENT {1}
 ad_ip_parameter axi_gpio1 CONFIG.C_IS_DUAL {1}
-
-ad_ip_instance axi_gpio axi_gpio2
-ad_ip_parameter axi_gpio2 CONFIG.C_INTERRUPT_PRESENT {1}
-ad_ip_parameter axi_gpio2 CONFIG.C_GPIO_WIDTH {31}
+ad_ip_parameter axi_gpio1 CONFIG.C_GPIO_WIDTH {32}
+ad_ip_parameter axi_gpio1 CONFIG.C_GPIO2_WIDTH {31}
 
 # Connect the concat & slice modules to the AXI GPIOs
 # GPIO_I
 ad_connect gpio_i slice_gpio1/Din
 ad_connect gpio_i slice_gpio2/Din
 ad_connect gpio_i slice_gpio3/Din
-ad_connect slice_gpio1/Dout axi_gpio1/gpio_io_i
-ad_connect slice_gpio2/Dout axi_gpio1/gpio2_io_i
-ad_connect slice_gpio3/Dout axi_gpio2/gpio_io_i
+ad_connect slice_gpio1/Dout sys_ps8/emio_gpio_i
+ad_connect slice_gpio2/Dout axi_gpio1/gpio_io_i
+ad_connect slice_gpio3/Dout axi_gpio1/gpio2_io_i
 
 # GPIO_O
-ad_connect concat_gpio1/In0 axi_gpio1/gpio_io_o
-ad_connect concat_gpio1/In1 axi_gpio1/gpio2_io_o
-ad_connect concat_gpio1/In2 axi_gpio2/gpio_io_o
+ad_connect concat_gpio1/In0 sys_ps8/emio_gpio_o
+ad_connect concat_gpio1/In1 axi_gpio1/gpio_io_o
+ad_connect concat_gpio1/In2 axi_gpio1/gpio2_io_o
 ad_connect concat_gpio1/dout gpio_o
 
 # GPIO_T
-ad_connect concat_gpio2/In0 axi_gpio1/gpio_io_t
-ad_connect concat_gpio2/In1 axi_gpio1/gpio2_io_t
-ad_connect concat_gpio2/In2 axi_gpio2/gpio_io_t
+ad_connect concat_gpio2/In0 sys_ps8/emio_gpio_t
+ad_connect concat_gpio2/In1 axi_gpio1/gpio_io_t
+ad_connect concat_gpio2/In2 axi_gpio1/gpio2_io_t
 ad_connect concat_gpio2/dout gpio_t
 
 # PCIe XDMA in AXI Bridge mode.
@@ -306,15 +307,13 @@ ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.ASYNC_CLK_DEST_SG  1
 # the PS GPIO and PS SPI -- not addresses inherited from it, so shifting them up
 # one block costs only their node addresses in the host overlay.
 ad_pcie_interconnect 0x84020000 axi_gpio1 S_AXI
-ad_pcie_interconnect 0x84030000 axi_gpio2 S_AXI
-ad_pcie_interconnect 0x84040000 axi_spi   AXI_LITE
+ad_pcie_interconnect 0x84030000 axi_spi   AXI_LITE
 
 # XDMA user interrupts. ad_pcie_interrupt creates pcie_intc on the first call
 # and wires its usr_irq_req to pcie_xdma automatically; each source then lands
 # on its own pcie_intc/intr_<k>, i.e. its own MSI-X vector.
 ad_pcie_interrupt axi_spi/ip2intc_irpt
 ad_pcie_interrupt axi_gpio1/ip2intc_irpt
-ad_pcie_interrupt axi_gpio2/ip2intc_irpt
 
 # ---------------------------------------------------------------------------
 # Migrate the RF/JESD/DMA/SysID register-map slaves from the PS CPU
