@@ -69,6 +69,10 @@ proc ad_data_offload_create {instance_name
         LENGTH_WIDTH [log2 $mem_size] \
       ]
 
+      ad_ip_instance util_axis_buf i_axis_buf [list \
+        DATA_WIDTH $destination_dwidth \
+      ]
+
     } elseif {$mem_type == 1 || $mem_type == 2} {
       ###########################################################################
       # Bridge instance for the external DDR (1) / HBM(2) memory contreller
@@ -99,7 +103,15 @@ proc ad_data_offload_create {instance_name
     ad_connect storage_unit/rd_ctrl i_data_offload/rd_ctrl
 
     ad_connect storage_unit/s_axis i_data_offload/m_storage_axis
-    ad_connect storage_unit/m_axis i_data_offload/s_storage_axis
+    if {$mem_type == 0} {
+      ad_connect storage_unit/m_axis i_axis_buf/s_axis
+      ad_connect i_axis_buf/m_axis i_data_offload/s_storage_axis
+
+      ad_connect i_axis_buf/m_axis_aclk m_axis_aclk
+      ad_connect i_axis_buf/m_axis_aresetn m_axis_aresetn
+    } else {
+      ad_connect storage_unit/m_axis i_data_offload/s_storage_axis
+    }
 
     ad_connect storage_unit/s_axis_aclk s_axis_aclk
     ad_connect storage_unit/s_axis_aresetn s_axis_aresetn
