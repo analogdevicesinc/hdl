@@ -4,16 +4,16 @@
 ###############################################################################
 
 # TX parameters
-set TX_NUM_OF_LANES 4      ; # L
-set TX_NUM_OF_CONVERTERS 4 ; # M
+set TX_NUM_OF_LANES 2      ; # L
+set TX_NUM_OF_CONVERTERS 2 ; # M
 set TX_SAMPLE_WIDTH 16     ; # N/NP
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 32 / \
                                 ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 # RX parameters
-set RX_NUM_OF_LANES 2      ; # L
-set RX_NUM_OF_CONVERTERS 4 ; # M
+set RX_NUM_OF_LANES 1      ; # L
+set RX_NUM_OF_CONVERTERS 2 ; # M
 set RX_SAMPLE_WIDTH 16     ; # N/NP
 
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / \
@@ -28,8 +28,8 @@ set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 32 / \
                                    ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 set dac_fifo_name avl_adrv9009_tx_fifo
-set dac_data_width 128
-set dac_dma_data_width 128
+set dac_data_width 64
+set dac_dma_data_width 64
 
 # NOTE: The real lane rate is 2457.6 Gbps (Tx) and 4915.2 Gbps (RX/Rx_Obs),
 # with a real reference clock frequency of 122.88 MHz. A round up needed
@@ -41,10 +41,10 @@ add_instance adrv9009_tx_jesd204 adi_jesd204
 set_instance_parameter_value adrv9009_tx_jesd204 {ID} {0}
 set_instance_parameter_value adrv9009_tx_jesd204 {TX_OR_RX_N} {1}
 set_instance_parameter_value adrv9009_tx_jesd204 {SOFT_PCS} {true}
-set_instance_parameter_value adrv9009_tx_jesd204 {LANE_RATE} {2460}
+set_instance_parameter_value adrv9009_tx_jesd204 {LANE_RATE} {4920}
 set_instance_parameter_value adrv9009_tx_jesd204 {REFCLK_FREQUENCY} {123}
 set_instance_parameter_value adrv9009_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
-set_instance_parameter_value adrv9009_tx_jesd204 {LANE_MAP} {0 3 2 1}
+set_instance_parameter_value adrv9009_tx_jesd204 {LANE_MAP} {}
 
 add_connection sys_clk.clk adrv9009_tx_jesd204.sys_clk
 add_connection sys_clk.clk_reset adrv9009_tx_jesd204.sys_resetn
@@ -280,21 +280,21 @@ set_interface_property adrv9009_gpio EXPORT_OF avl_adrv9009_gpio.external_connec
 
 # reconfig sharing
 
-for {set i 0} {$i < 4} {incr i} {
-  add_instance avl_adxcfg_${i} avl_adxcfg
-  add_connection sys_clk.clk avl_adxcfg_${i}.rcfg_clk
-  add_connection sys_clk.clk_reset avl_adxcfg_${i}.rcfg_reset_n
-  add_connection avl_adxcfg_${i}.rcfg_m0 adrv9009_tx_jesd204.phy_reconfig_${i}
+# adxcfg for shared transceiver: TX lane 0 + RX_OS lane 0 (both on DP1)
+add_instance avl_adxcfg_0 avl_adxcfg
+add_connection sys_clk.clk avl_adxcfg_0.rcfg_clk
+add_connection sys_clk.clk_reset avl_adxcfg_0.rcfg_reset_n
+set_instance_parameter_value avl_adxcfg_0 {ADDRESS_WIDTH} $xcvr_reconfig_addr_width
+add_connection avl_adxcfg_0.rcfg_m0 adrv9009_tx_jesd204.phy_reconfig_0
+add_connection avl_adxcfg_0.rcfg_m1 adrv9009_rx_os_jesd204.phy_reconfig_0
 
-  set_instance_parameter_value avl_adxcfg_${i} {ADDRESS_WIDTH} $xcvr_reconfig_addr_width
-
-  if {$i < 2} {
-    add_connection avl_adxcfg_${i}.rcfg_m1 adrv9009_rx_jesd204.phy_reconfig_${i}
-  } else {
-    set j [expr $i - 2]
-    add_connection avl_adxcfg_${i}.rcfg_m1 adrv9009_rx_os_jesd204.phy_reconfig_${j}
-  }
-}
+# adxcfg for shared transceiver: TX lane 1 + RX_OS lane 1 (both on DP2)
+add_instance avl_adxcfg_1 avl_adxcfg
+add_connection sys_clk.clk avl_adxcfg_1.rcfg_clk
+add_connection sys_clk.clk_reset avl_adxcfg_1.rcfg_reset_n
+set_instance_parameter_value avl_adxcfg_1 {ADDRESS_WIDTH} $xcvr_reconfig_addr_width
+add_connection avl_adxcfg_1.rcfg_m0 adrv9009_tx_jesd204.phy_reconfig_1
+add_connection avl_adxcfg_1.rcfg_m1 adrv9009_rx_os_jesd204.phy_reconfig_1
 
 # addresses
 
@@ -304,22 +304,19 @@ ad_cpu_interconnect 0x00026000 adrv9009_tx_jesd204.link_pll_reconfig
 ad_cpu_interconnect 0x00028000 adrv9009_tx_jesd204.lane_pll_reconfig
 ad_cpu_interconnect 0x0002a000 avl_adxcfg_0.rcfg_s0
 ad_cpu_interconnect 0x0002c000 avl_adxcfg_1.rcfg_s0
-ad_cpu_interconnect 0x0002e000 avl_adxcfg_2.rcfg_s0
-ad_cpu_interconnect 0x00030000 avl_adxcfg_3.rcfg_s0
 ad_cpu_interconnect 0x00032000 axi_adrv9009_tx_dma.s_axi
 
 ad_cpu_interconnect 0x00040000 adrv9009_rx_jesd204.link_reconfig
 ad_cpu_interconnect 0x00044000 adrv9009_rx_jesd204.link_management
 ad_cpu_interconnect 0x00046000 adrv9009_rx_jesd204.link_pll_reconfig
-ad_cpu_interconnect 0x00048000 avl_adxcfg_0.rcfg_s1
-ad_cpu_interconnect 0x0004a000 avl_adxcfg_1.rcfg_s1
+ad_cpu_interconnect 0x00048000 adrv9009_rx_jesd204.phy_reconfig_0
 ad_cpu_interconnect 0x0004c000 axi_adrv9009_rx_dma.s_axi
 
 ad_cpu_interconnect 0x00050000 adrv9009_rx_os_jesd204.link_reconfig
 ad_cpu_interconnect 0x00054000 adrv9009_rx_os_jesd204.link_management
 ad_cpu_interconnect 0x00056000 adrv9009_rx_os_jesd204.link_pll_reconfig
-ad_cpu_interconnect 0x00058000 avl_adxcfg_2.rcfg_s1
-ad_cpu_interconnect 0x0005a000 avl_adxcfg_3.rcfg_s1
+ad_cpu_interconnect 0x00058000 avl_adxcfg_0.rcfg_s1
+ad_cpu_interconnect 0x0005a000 avl_adxcfg_1.rcfg_s1
 ad_cpu_interconnect 0x0005c000 axi_adrv9009_rx_os_dma.s_axi
 
 ad_cpu_interconnect 0x00060000 axi_adrv9009_rx.s_axi
@@ -339,4 +336,3 @@ ad_cpu_interrupt 11 axi_adrv9009_tx_dma.interrupt_sender
 ad_cpu_interrupt 12 axi_adrv9009_rx_dma.interrupt_sender
 ad_cpu_interrupt 13 axi_adrv9009_rx_os_dma.interrupt_sender
 ad_cpu_interrupt 14 avl_adrv9009_gpio.irq
-

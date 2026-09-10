@@ -14,3 +14,5 @@ set_false_path -to [get_registers *sys_gpio_bd|readdata[12]*]
 set_false_path -to [get_registers *sys_gpio_bd|readdata[13]*]
 
 set_false_path -from [get_registers *altera_reset_synchronizer:alt_rst_sync_uq1|altera_reset_synchronizer_int_chain_out*]
+
+set_multicycle_path -from [get_pins *|sys_spi|sys_spi|SCLK_reg|q] -to [get_registers *|sys_spi|sys_spi|SCLK_reg] -hold -end 9
