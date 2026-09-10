@@ -85,8 +85,8 @@ module system_top (
 
   // ad4134 SPI configuration interface
 
-  input         emg_spi_sdi,
-  output        emg_spi_sdo,
+  input         emg_spi_sdo,
+  output        emg_spi_sdi,
   output        emg_spi_sclk,
   output [ 1:0] emg_spi_cs,
 
@@ -262,9 +262,9 @@ module system_top (
     .spi0_csn_0_o (cs[0]),
     .spi0_csn_1_o (cs[1]),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (emg_spi_sdi),
-    .spi0_sdo_i (emg_spi_sdo),
-    .spi0_sdo_o (emg_spi_sdo),
+    .spi0_sdi_i (emg_spi_sdo),
+    .spi0_sdo_i (emg_spi_sdi),
+    .spi0_sdo_o (emg_spi_sdi),
     .emg_di_sdo (),
     .emg_di_sdo_t (),
     .emg_di_sdi (emg_din),
