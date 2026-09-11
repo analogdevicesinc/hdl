@@ -105,14 +105,16 @@ Things which must be taken in consideration regarding this specific HDL design:
     - The XDMA IP operates on a 100 MHz PCIe reference clock (sourced from the
       edge connector through an ``IBUFDS_GTE4`` buffer) and generates the
       250 MHz ``axi_aclk`` that clocks the entire PCIe AXI domain
-    - MSI-X interrupts are enabled. A custom interrupt controller (:ref:`PCIe Irq. custom controller <axi_pcie_intc>`)
-      aggregates the eleven peripheral interrupt lines (the three RF
-      ``axi_dmac`` instances, the three JESD204 links, the two network-link
-      ``axi_dmac`` instances, the SPI controller and the two GPIO controllers)
-      onto the XDMA user interrupt request bus, so each source is delivered to
-      the host as its own MSI-X vector and no Zynq PS interrupt line is
-      consumed; the source-to-vector map is listed in the `Interrupts`_ section
-      below
+    - MSI-X interrupts are enabled, with 16 vectors
+      (``xdma_num_usr_irq = 16``). A custom interrupt controller
+      (:ref:`PCIe Irq. custom controller <axi_pcie_intc>`) aggregates the ten
+      peripheral interrupt lines (the three RF ``axi_dmac`` instances, the three
+      JESD204 links, the two network-link ``axi_dmac`` instances, the SPI
+      controller and one GPIO controller) onto the XDMA user interrupt request
+      bus, so no Zynq PS interrupt line is consumed. The host driver routes each
+      source onto a vector at runtime; with 16 vectors for 10 sources every
+      source can have one of its own. The source numbering is listed in the
+      `Interrupts`_ section below
     - The PCIe BARs are configured as follows:
 
         - BAR0 exposes the ``M_AXI_B`` (host → FPGA) window used to reach the
@@ -518,33 +520,33 @@ In case of :adi:`ADRV2CRR-FMC` with PCIe enabled (``make PCIE=1``), the
 interrupts are no longer routed to the Zynq PS GIC. Instead, a custom interrupt
 controller (:ref:`PCIe Irq. custom controller <axi_pcie_intc>`) collects every
 peripheral interrupt line and forwards it to the host as an MSI-X vector through
-the XDMA user interrupt request bus. In the table below, the single index is at
-the same time the ``intr_<n>`` input on the :ref:`PCIe Irq. custom controller <axi_pcie_intc>`,
-the MSI-X vector number seen by the host, and the value programmed in the
-``interrupts`` property of the matching device-tree node.
+the XDMA user interrupt request bus. In the table below, the index is bit *n* of
+the :ref:`PCIe Irq. custom controller <axi_pcie_intc>` ``intr`` port and the
+value programmed in the ``interrupts`` property of the matching device-tree node.
+It is not an MSI-X vector number: which vector delivers a source is a runtime
+``SRC_ROUTE`` write the host driver makes after enumeration.
 
-========================= ===========================
-Instance name             axi_pcie_intc line / vector
-========================= ===========================
+========================= ====================
+Instance name             axi_pcie_intc source
+========================= ====================
 axi_spi                   0
 axi_gpio1                 1
-axi_gpio2                 2
-axi_adrv9009_som_obs_dma  3
-axi_adrv9009_som_tx_dma   4
-axi_adrv9009_som_rx_dma   5
-axi_adrv9009_som_obs_jesd 6
-axi_adrv9009_som_tx_jesd  7
-axi_adrv9009_som_rx_jesd  8
-axi_host_net_tx_dma       9
-axi_host_net_rx_dma       10
-========================= ===========================
+axi_adrv9009_som_obs_dma  2
+axi_adrv9009_som_tx_dma   3
+axi_adrv9009_som_rx_dma   4
+axi_adrv9009_som_obs_jesd 5
+axi_adrv9009_som_tx_jesd  6
+axi_adrv9009_som_rx_jesd  7
+axi_host_net_tx_dma       8
+axi_host_net_rx_dma       9
+========================= ====================
 
 .. note::
 
   The interrupt order follows the sequence of ``ad_pcie_interrupt`` calls in
   ``system_bd_pcie.tcl``: the SPI and GPIO controllers first, then the RF
   ``axi_dmac`` and JESD204 links, and finally the two host/PS network-link
-  ``axi_dmac`` instances. Adding or reordering those calls shifts every vector
+  ``axi_dmac`` instances. Adding or reordering those calls shifts every source
   below it, so the device-tree ``interrupts`` cells must be kept in sync.
 
 Building the HDL project
