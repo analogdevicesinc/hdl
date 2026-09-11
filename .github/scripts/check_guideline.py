@@ -1189,8 +1189,7 @@ def get_and_check_module (module_path, lw, edit_files):
             header_status = check_copyright(module_path, list_of_lines, lw, edit_files)
             # GC: check if the license header is updated
             if (header_status == -1):
-                edited = False
-            lw.append(module_path + " : copyright text doesn't match the pattern for the Copyright year")
+                lw.append(module_path + " : copyright text doesn't match the pattern for the Copyright year")
     else:
         header_status = -1
 
@@ -1264,7 +1263,7 @@ def get_and_check_module (module_path, lw, edit_files):
             pos_paranth2 = line.find(")")
 
             if (0 <= pos_paranth2 and pos_paranth2 < pos_paranth1):
-                if (re.search("\)\\s\(", line) != None):
+                if (re.search(r"\)\s\(", line) != None):
 
                     rest_of_line = line.strip().strip("(").strip().strip(")")
                     ## GC: situations when the guideline is not respected:
@@ -1385,7 +1384,7 @@ def get_and_check_module (module_path, lw, edit_files):
                 # 2nd situation
                 if (pos_diez > 0):
                     if (pos_paranth1 == pos_diez + 1):
-                        module_name = re.search("module(.*?)#\(", line)
+                        module_name = re.search(r"module(.*?)#\(", line)
                         if (module_name != None):
                             module_name = module_name.group(1)
                             module_name = module_name.strip()
@@ -1784,14 +1783,14 @@ def set_occurrence_lines (occurrence_item, list_of_lines):
         ## the ports should start from the next line, which is pos_start_ports+1
 
         # find a string that is spread over multiple lines
-        aux_instance_name = re.findall('\)\n(.*?)\(', all_inst_lines, re.M)
+        aux_instance_name = re.findall(r'\)\n(.*?)\(', all_inst_lines, re.M)
 
         # if )\n i_... (
         if (len(aux_instance_name) > 0):
             instance_name = aux_instance_name[0].strip(" ")
         else:
             # if ) i_... (
-            instance_name = re.findall('\)(.*?)\(', all_inst_lines, re.M)[0].strip(" ")
+            instance_name = re.findall(r'\)(.*?)\(', all_inst_lines, re.M)[0].strip(" ")
 
         line_nb = 1
         pos_start_ports = -1
@@ -1884,7 +1883,7 @@ def check_guideline_instances (occurrence_item, lw):
 
                     # for the line where the instance name is
                     # find a string like )\n ... (
-                    aux_instance_name = re.findall('\)\n(.*?)\(', all_inst_lines, re.M)
+                    aux_instance_name = re.findall(r'\)\n(.*?)\(', all_inst_lines, re.M)
                     instance_name = ""
 
                     # if )\n i_... (
@@ -1896,7 +1895,7 @@ def check_guideline_instances (occurrence_item, lw):
                     else:
                         try:
                             # if ) i_... (
-                            instance_name = re.findall('\)(.*?)\(', all_inst_lines, re.M)[0].strip(" ")
+                            instance_name = re.findall(r'\)(.*?)\(', all_inst_lines, re.M)[0].strip(" ")
                         except Exception:
                             lw.append(occurrence_item.path + " : " + str(occurrence_item.line + occurrence_item.pos_start_ports) + " couldn't extract instance name")
 
