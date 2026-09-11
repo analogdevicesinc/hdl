@@ -41,5 +41,5 @@ jobs:
         id: execution
         # -p flag means that files will be specified with their relative path
         run: |
-          python ./.github/scripts/check_guideline.py -p ${{ steps.changed_files.outputs.added_modified_renamed }}
+          python3 ./.github/scripts/check_guideline.py -p ${{ steps.changed_files.outputs.added_modified_renamed }}
         shell: sh
