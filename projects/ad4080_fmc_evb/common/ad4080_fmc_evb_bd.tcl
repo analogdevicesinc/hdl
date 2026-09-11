@@ -86,3 +86,36 @@ ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ad4080_dma/m_dest_axi
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad4080_dma/irq
+
+# spi_slave helper: buffer adc samples and stream them to an spi master
+# (enabled with SPI_SLAVE=1)
+
+if {$ad_project_params(SPI_SLAVE) == 1} {
+
+  # pmod jb interface
+
+  create_bd_port -dir O pmod_spi_miso
+  create_bd_port -dir I pmod_spi_sclk
+  create_bd_port -dir I pmod_spi_cs
+  create_bd_port -dir O pmod_data_ready
+
+  ad_ip_instance spi_slave ad4080_spi_slave
+  ad_ip_parameter ad4080_spi_slave CONFIG.DATA_WIDTH $DMA_DATA_WIDTH_SRC
+
+  # fifo write side (adc clock domain)
+
+  ad_connect axi_ad4080_adc/adc_clk   ad4080_spi_slave/data_clk
+  ad_connect axi_ad4080_adc/adc_rst   ad4080_spi_slave/data_rst
+  ad_connect axi_ad4080_adc/adc_data  ad4080_spi_slave/data
+  ad_connect axi_ad4080_adc/adc_valid ad4080_spi_slave/data_valid
+
+  # spi read side (system clock)
+
+  ad_connect $sys_cpu_clk    ad4080_spi_slave/clk
+  ad_connect $sys_cpu_resetn ad4080_spi_slave/resetn
+
+  ad_connect pmod_spi_cs     ad4080_spi_slave/spi_cs
+  ad_connect pmod_spi_sclk   ad4080_spi_slave/spi_sclk
+  ad_connect pmod_spi_miso   ad4080_spi_slave/spi_miso
+  ad_connect pmod_data_ready ad4080_spi_slave/data_ready_n
+}
