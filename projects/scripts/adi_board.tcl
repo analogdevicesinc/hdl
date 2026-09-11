@@ -1635,137 +1635,22 @@ smaller than the minimum address segment range."
 ## Max vectors (16 = PG195 usr_irq width = 4-bit register index).
 set pcie_intc_max_vectors 16
 
-## Max sources per vector (one 32-bit ENABLE/PENDING word each).
-set pcie_intc_max_src_per_vec 32
-
-## Sources per vector. 1 = one vector per source (no read to dispatch).
-#  Must be set before the first ad_pcie_interrupt call.
-set pcie_intc_src_per_vec 1
-
-## Validate pcie_intc_src_per_vec. For internal use only.
-# FOR INTERNAL USE ONLY!!!
-proc ad_pcie_interrupt_src_per_vec {} {
-
-  global pcie_intc_max_src_per_vec
-  global pcie_intc_src_per_vec
-
-  set spv $pcie_intc_src_per_vec
-
-  if {![string is integer -strict $spv] || $spv < 1 || \
-      $spv > $pcie_intc_max_src_per_vec} {
-    error "ERROR: ad_pcie_interrupt: pcie_intc_src_per_vec is \"$spv\"; it must\
- be an integer from 1 to $pcie_intc_max_src_per_vec, one 32-bit ENABLE and\
- PENDING word per vector."
-  }
-
-  return $spv
-}
-
-## The resolved pcie_intc_address: the global when it is non-negative, otherwise
-#  BAR0's AXI base plus the 64 kB block the endpoint keeps for its own MSI-X
-#  table and PBA. Derived here rather than at the global because the xdma cell it
-#  reads does not exist until the project has instantiated it.
-#
-#  For internal use only!
-#
-proc ad_pcie_interrupt_address {} {
-
-  global pcie_xdma_name
-  global pcie_intc_address
-
-  # wideinteger, not integer: a BAR base is routinely above 2**31, and plain
-  # "integer" rejects such a value written in decimal.
-  if {![string is wideinteger -strict $pcie_intc_address]} {
-    error "ERROR: ad_pcie_interrupt: pcie_intc_address is\
- \"$pcie_intc_address\"; it must be an address, or negative to derive one from\
- $pcie_xdma_name CONFIG.pciebar2axibar_0."
-  }
-
-  if {wide($pcie_intc_address) >= 0} {
-    return $pcie_intc_address
-  }
-
-  # The AXI address BAR0 translates to, which is where the host's view of the
-  # BAR starts. Unset -- the IP defaults it to 0 -- would silently put the
-  # controller at 0x10000 in whatever the fabric decodes there, so require it.
-  set bar0 [get_property -quiet CONFIG.pciebar2axibar_0 \
-    [get_bd_cells $pcie_xdma_name]]
-  if {![string is wideinteger -strict $bar0] || wide($bar0) <= 0} {
-    error "ERROR: ad_pcie_interrupt: cannot derive pcie_intc_address:\
- $pcie_xdma_name CONFIG.pciebar2axibar_0 is \"$bar0\". Set it to the AXI base\
- BAR0 translates to before the first ad_pcie_interrupt call, or set\
- pcie_intc_address explicitly."
-  }
-
-  return [format 0x%016X [expr {wide($bar0) + 0x10000}]]
-}
-
-## The block-design pin carrying source $index: $pcie_intc_name/intr_<v>
-#  directly when nothing is grouped, otherwise input <index % SRC_PER_VEC> of
-#  vector <v>'s concat. With $create set, a missing concat is instantiated and
-#  all of its inputs tied low; without it, "" means the index is not reachable
-#  yet -- either its vector does not exist (NUM_VECTORS has not grown that far)
-#  or, when grouped, nothing has landed on that vector.
-#
-#  For internal use only!
-#
-proc ad_pcie_interrupt_pin {index create} {
-
-  global pcie_intc_name
-  global pcie_intc_src_per_vec
-
-  set spv $pcie_intc_src_per_vec
-  set vector [expr {$index / $spv}]
-
-  if {$spv == 1} {
-    set p_name $pcie_intc_name/intr_$vector
-    if {[get_bd_pins -quiet $p_name] eq ""} {
-      return ""
-    }
-    return $p_name
-  }
-
-  set concat_name concat_${pcie_intc_name}_v$vector
-  set concat_cell [get_bd_cells -quiet $concat_name]
-  if {$concat_cell eq "" && $create} {
-    ad_ip_instance ilconcat $concat_name [list NUM_PORTS $spv]
-    set concat_cell [get_bd_cells $concat_name]
-
-    # A concat input has no driver value of its own -- unlike intr_<v>, whose
-    # DRIVER_VALUE covers a hole a pinned layout leaves -- and an undriven one
-    # is a validate_bd_design error. So tie the whole group low here and let
-    # each connection displace its own tie-off.
-    for {set i 0} {$i < $spv} {incr i} {
-      ad_connect GND $concat_cell/In$i
-    }
-
-    ad_connect $concat_cell/dout $pcie_intc_name/intr_$vector
-  }
-  if {$concat_cell eq ""} {
-    return ""
-  }
-
-  return $concat_cell/In[expr {$index % $spv}]
-}
+## Max interrupt sources (one 32-bit SRC_ENABLE / SRC_PENDING word).
+set pcie_intc_max_sources 32
 
 ## Which source drives source index $index, or "" if the index is available.
-#  A GND tie-off counts as available: it is only a placeholder for a hole in a
-#  pinned vector layout (see ad_pcie_interrupt_pin), and a real source may
-#  replace it. GND_1 is the width-1 constant ad_connect creates for the name
-#  "GND" (ad_connect_int_get_const). Ungrouped, a hole is simply unconnected --
-#  the IP's own DRIVER_VALUE covers it -- so only the grouped configuration
-#  reaches the GND case.
+#  A GND tie-off counts as available: it is only a placeholder keeping an unused
+#  concat input driven, and a real source may replace it. GND_1 is the width-1
+#  constant ad_connect creates for the name "GND" (ad_connect_int_get_const).
+#  An index the concat has not grown to yet is available too.
 #
 #  For internal use only!
 #
 proc ad_pcie_interrupt_owner {index} {
 
-  set p_name [ad_pcie_interrupt_pin $index 0]
-  if {$p_name eq ""} {
-    return ""
-  }
+  global pcie_intc_name
 
-  set pin [get_bd_pins -quiet $p_name]
+  set pin [get_bd_pins -quiet concat_$pcie_intc_name/In$index]
   if {$pin eq ""} {
     return ""
   }
@@ -1783,115 +1668,33 @@ proc ad_pcie_interrupt_owner {index} {
   return $src
 }
 
-## Size the PCIe user-interrupt path for $n interrupt *sources*: how many
-#  vectors they need at the current pcie_intc_src_per_vec, the endpoint's usr_irq
-#  width, and the MSI/MSI-X capability the host reads at enumeration.
-#
-#  Loads are widened before their drivers, so every transient mismatch is an
-#  under-driven bus rather than a truncated one: xdma (load of usr_irq_req)
-#  first, then the controller that drives it. NUM_VECTORS only ever grows, so
-#  that ordering always holds. The BD tolerates either until
-#  validate_bd_design, but the asymmetry is free.
-#
-#  For internal use only!
-#
-proc ad_pcie_interrupt_resize {n} {
-
-  global pcie_xdma_name
-  global pcie_intc_name
-  global pcie_intc_max_vectors
-  global pcie_intc_max_src_per_vec
-
-  set spv [ad_pcie_interrupt_src_per_vec]
-
-  # Grouping is deliberate, never automatic: SRC_PER_VEC is uniform across the
-  # core, so raising it makes *every* interrupt in the design cost one PENDING
-  # read over PCIe, not just the sources that had to share. That is the cost
-  # this core exists to avoid, so the 17th source is an error naming the knob
-  # rather than a silent regression. It also cannot be raised here: the value
-  # decides which intr_<v> port each source lands on, so changing it once
-  # sources are connected would mean rewiring the block design.
-  if {$n > $pcie_intc_max_vectors * $spv} {
-    error "ERROR: ad_pcie_interrupt: $n sources do not fit in\
- $pcie_intc_max_vectors vectors of pcie_intc_src_per_vec=$spv source(s). Raise\
- pcie_intc_src_per_vec before the first ad_pcie_interrupt call -- it fixes which\
- intr_<v> port each source lands on, so it cannot change afterwards. Grouping\
- costs every interrupt in the design one PENDING read across the link, and makes\
- the sources sharing a vector share one CPU; it is uniform, so pinning cannot\
- exempt a hot source, only choose which sources it shares with. The ceiling is\
- [expr {$pcie_intc_max_vectors * $pcie_intc_max_src_per_vec}] sources."
-  }
-
-  # Fewest vectors that hold them: the sources occupy vectors 0..ceil(n/spv)-1
-  # either way, so asking for more would only add MSI-X entries that provably
-  # never fire.
-  set vectors [expr {($n + $spv - 1) / $spv}]
-
-  set xdma_cell [get_bd_cells $pcie_xdma_name]
-
-  # Validate against the IP's own declared range rather than PG195's documented
-  # maximum -- the AXI Bridge configuration may permit fewer.
-  set allowed [list_property_value CONFIG.xdma_num_usr_irq $xdma_cell]
-  if {$allowed ne "" && [lsearch -exact $allowed $vectors] == -1} {
-    error "ERROR: ad_pcie_interrupt: $pcie_xdma_name does not support $vectors\
- user interrupts (CONFIG.xdma_num_usr_irq accepts: $allowed)."
-  }
-  set_property CONFIG.xdma_num_usr_irq $vectors $xdma_cell
-
-  # MSI-X is what makes per-source vectors worth having: it carries a separate
-  # address/data pair per vector, so the host can steer each to its own CPU.
-  # Multi-message MSI shares one address register and cannot, which is why the
-  # MSI capability below is only kept consistent, not relied on. MSI-X table
-  # size uses N-1 encoding, in hex.
-  if {[catch {get_property CONFIG.pf0_msix_enabled $xdma_cell} msix_en] == 0 \
-      && $msix_en eq "true"} {
-    set_property CONFIG.pf0_msix_cap_table_size \
-      [format %X [expr {$vectors - 1}]] $xdma_cell
-  }
-  if {[catch {get_property CONFIG.pf0_msi_enabled $xdma_cell} msi_en] == 0 \
-      && $msi_en eq "true"} {
-    # The MSI capability advertises a power-of-two count, so round up.
-    set msi_n 1
-    while {$msi_n < $vectors} {
-      set msi_n [expr {$msi_n * 2}]
-    }
-    if {$msi_n == 1} {
-      set_property CONFIG.pf0_msi_cap_multimsgcap "1_vector" $xdma_cell
-    } else {
-      set_property CONFIG.pf0_msi_cap_multimsgcap "${msi_n}_vectors" $xdma_cell
-    }
-  }
-
-  # SRC_PER_VEC is set once, at instantiation -- it is the width of every
-  # intr_<v> port, so it is not something a later call site can change.
-  set_property CONFIG.NUM_VECTORS $vectors [get_bd_cells $pcie_intc_name]
-}
-
 ## Connect an IP interrupt pin to the PCIe endpoint's user interrupt path.
-#  Creates axi_pcie_intc on the first call, maps it into the XDMA M_AXI_B
-#  space, and grows NUM_VECTORS / xdma_num_usr_irq as more IPs attach.
+#  Creates axi_pcie_intc on the first call, maps it into the XDMA BAR0 space, and
+#  grows NUM_SOURCES as more IPs attach.
 #
-#  axi_pcie_intc gives each source its own MSI/MSI-X vector (SRC_PER_VEC=1
-#  by default), so dispatch needs no register read — the handler for vector k
-#  knows its source statically. This avoids the per-interrupt PCIe round-trip
-#  reads that axi_intc's shared-vector chained handler requires.
+#  The core gives each source a bit of its flat intr port, not a vector: which
+#  MSI/MSI-X vector delivers a source is a runtime SRC_ROUTE write, so the host
+#  driver decides it after enumeration. NUM_VECTORS therefore comes from the
+#  endpoint -- CONFIG.xdma_num_usr_irq -- and nothing here has to grow it.
 #
 #  Peripheral IRQ pins are levels; wiring them straight to usr_irq_req loses
-#  interrupts (PG195 requires req to stay asserted until the host clears it).
-#  axi_pcie_intc implements the W1C PENDING handshake PG195 specifies.
+#  interrupts, since PG195 requires req to stay asserted until the host has
+#  serviced and cleared it. axi_pcie_intc implements that W1C handshake.
 #
 #  \param[p_name] - interrupt pin (e.g. axi_foo/irq)
-#  \param[p_vector] - source index to pin to, or -1 (default) for auto-assign.
-#    Pinning keeps hwirq numbering stable across build variants.
+#  \param[p_source] - source index to pin to, or -1 (default) to auto-assign.
+#    The index is the hwirq the device-tree node carries, so pinning keeps that
+#    numbering stable across build variants.
 #
-proc ad_pcie_interrupt {p_name {p_vector -1}} {
+proc ad_pcie_interrupt {p_name {p_source -1}} {
 
   global pcie_xdma_name
   global pcie_intc_name
+  global pcie_intc_address
+  global pcie_intc_max_vectors
+  global pcie_intc_max_sources
 
-  # Before anything is created, so a bad value names the global rather than
-  # failing as an IP customization error on SRC_PER_VEC.
-  set spv_want [ad_pcie_interrupt_src_per_vec]
+  set concat_name concat_$pcie_intc_name
 
   # If the pin was previously routed to a PS interrupt concat
   # (sys_concat_intc_*), detach it first so ad_connect below does not fail.
@@ -1903,8 +1706,52 @@ proc ad_pcie_interrupt {p_name {p_vector -1}} {
     }
   }
 
-  # Create the controller on the first call with one vector, and grow it as more
-  # IRQs attach.
+  set xdma_cell [get_bd_cells $pcie_xdma_name]
+
+  # The endpoint owns the vector count: usr_irq_req is its port, and the MSI/MSI-X
+  # capability the host reads at enumeration is its configuration. So read it here
+  # rather than derive it from the sources, and read it on every call -- a project
+  # that reconfigures the bridge after the first one would otherwise leave
+  # usr_irq_req mismatched until validate_bd_design.
+  set vectors [get_property -quiet CONFIG.xdma_num_usr_irq $xdma_cell]
+  if {![string is integer -strict $vectors] || $vectors < 1 || \
+      $vectors > $pcie_intc_max_vectors} {
+    error "ERROR: ad_pcie_interrupt: $pcie_xdma_name CONFIG.xdma_num_usr_irq is\
+ \"$vectors\"; it must be an integer from 1 to $pcie_intc_max_vectors. It is where\
+ $pcie_intc_name takes NUM_VECTORS from, so the project has to declare it."
+  }
+
+  # Validated, not written: the capabilities belong with xdma_num_usr_irq in the
+  # endpoint's own configuration. A table shorter than the vector count is
+  # otherwise silent -- the design builds and the host simply gets fewer vectors
+  # than the fabric drives.
+  if {[catch {get_property CONFIG.pf0_msix_enabled $xdma_cell} msix_en] == 0 && \
+      $msix_en eq "true"} {
+    # MSI-X table size uses N-1 encoding, in hex.
+    set want [format %X [expr {$vectors - 1}]]
+    set have [get_property CONFIG.pf0_msix_cap_table_size $xdma_cell]
+    if {[string toupper $have] ne $want} {
+      error "ERROR: ad_pcie_interrupt: $pcie_xdma_name\
+ CONFIG.pf0_msix_cap_table_size is \"$have\" but xdma_num_usr_irq is $vectors,\
+ which needs \"$want\" -- the table size is N-1, in hex."
+    }
+  }
+  if {[catch {get_property CONFIG.pf0_msi_enabled $xdma_cell} msi_en] == 0 && \
+      $msi_en eq "true"} {
+    # "1_vector" / "16_vectors". The capability advertises a power of two, so it
+    # only has to be large enough, not exact.
+    set have [get_property CONFIG.pf0_msi_cap_multimsgcap $xdma_cell]
+    set msi_n 0
+    regexp {^([0-9]+)_} $have -> msi_n
+    if {$msi_n < $vectors} {
+      error "ERROR: ad_pcie_interrupt: $pcie_xdma_name\
+ CONFIG.pf0_msi_cap_multimsgcap is \"$have\", fewer than the $vectors vector(s)\
+ xdma_num_usr_irq declares."
+    }
+  }
+
+  # Create the controller on the first call with one source, and grow it below as
+  # more IRQs attach.
   set intc_cell [get_bd_cells -quiet $pcie_intc_name]
   if {$intc_cell eq ""} {
     # ASYNC_INTR 1: the sources run on their own clocks (each jesd link, each
@@ -1912,65 +1759,88 @@ proc ad_pcie_interrupt {p_name {p_vector -1}} {
     # synchronizer. They are independent levels, so per-bit synchronization is
     # sufficient -- there is no multi-bit value whose coherency could be torn.
     #
-    # SRC_PER_VEC is fixed here, for the whole design: it is the width of every
-    # intr_<v> port, so it decides where each source lands. The default of 1 is
-    # the whole point -- one source per vector is the configuration that needs no
-    # register read to dispatch.
+    # PCIE_TYPE 0 stated rather than defaulted: it is what makes usr_irq_req the
+    # delivery path instead of an MSI write the core issues itself.
     ad_ip_instance axi_pcie_intc $pcie_intc_name [list \
-      NUM_VECTORS  1 \
-      SRC_PER_VEC  $spv_want \
-      ASYNC_INTR   1 \
+      NUM_VECTORS $vectors \
+      NUM_SOURCES 1 \
+      ASYNC_INTR 1 \
+      PCIE_TYPE 0 \
     ]
     set intc_cell [get_bd_cells $pcie_intc_name]
 
-    ad_connect $pcie_intc_name/usr_irq_req  $pcie_xdma_name/usr_irq_req
+    ad_connect $pcie_intc_name/usr_irq_req $pcie_xdma_name/usr_irq_req
 
-    # usr_irq_ack feeds only the core's DELIVERED diagnostic -- the request
-    # path deliberately does not wait on the endpoint, so that a masked or
-    # not-yet-enabled MSI-X vector cannot wedge a source. A missing pin
-    # therefore costs a debug register and nothing else.
+    # usr_irq_ack is one of the two conditions that release a vector, so an
+    # endpoint that does not expose it cannot drive this core: every vector would
+    # stay asserted after its first interrupt and the hard block would never see
+    # another edge.
     set ack_pin [get_bd_pins -quiet $pcie_xdma_name/usr_irq_ack]
-    if {$ack_pin ne ""} {
-      ad_connect $ack_pin $pcie_intc_name/usr_irq_ack
+    if {$ack_pin eq ""} {
+      error "ERROR: ad_pcie_interrupt: $pcie_xdma_name has no usr_irq_ack pin.\
+ $pcie_intc_name releases a vector only after the acknowledge and the host's\
+ claim read, so every vector would wedge after its first interrupt."
+    }
+    ad_connect $ack_pin $pcie_intc_name/usr_irq_ack
+
+    # intr is one flat port, so sources reach it through a concat whose input
+    # index *is* the source index. Grown in step with NUM_SOURCES below.
+    ad_ip_instance ilconcat $concat_name [list NUM_PORTS 1]
+    ad_connect GND $concat_name/In0
+    ad_connect $concat_name/dout $pcie_intc_name/intr
+
+    # Where the register window lands: pcie_intc_address when it is non-negative,
+    # otherwise BAR0's AXI base plus the 64 kB the endpoint keeps for its own
+    # MSI-X table and PBA. Resolved here rather than at the global because the
+    # xdma cell it reads does not exist until the project has instantiated it.
+    #
+    # wideinteger, not integer: a BAR base is routinely above 2**31, and plain
+    # "integer" rejects such a value written in decimal.
+    if {![string is wideinteger -strict $pcie_intc_address]} {
+      error "ERROR: ad_pcie_interrupt: pcie_intc_address is\
+ \"$pcie_intc_address\"; it must be an address, or negative to derive one from\
+ $pcie_xdma_name CONFIG.pciebar2axibar_0."
+    }
+    if {wide($pcie_intc_address) >= 0} {
+      set intc_address $pcie_intc_address
     } else {
-      puts "INFO: ad_pcie_interrupt: $pcie_xdma_name has no usr_irq_ack pin;\
- $pcie_intc_name DELIVERED will read 0."
+      # The AXI address BAR0 translates to, which is where the host's view of the
+      # BAR starts. Unset -- the IP defaults it to 0 -- would silently put the
+      # controller at 0x10000 in whatever the fabric decodes there, so require it.
+      set bar0 [get_property -quiet CONFIG.pciebar2axibar_0 $xdma_cell]
+      if {![string is wideinteger -strict $bar0] || wide($bar0) <= 0} {
+        error "ERROR: ad_pcie_interrupt: cannot derive pcie_intc_address:\
+ $pcie_xdma_name CONFIG.pciebar2axibar_0 is \"$bar0\". Set it to the AXI base BAR0\
+ translates to before the first ad_pcie_interrupt call, or set pcie_intc_address\
+ explicitly."
+      }
+      set intc_address [format 0x%016X [expr {wide($bar0) + 0x10000}]]
     }
 
     # Clock, reset and the BAR window. ad_pcie_interconnect derives the AXI
     # clock/reset from ASSOCIATED_BUSIF on s_axi and assigns the slave's own
     # segment range, so the core's 16-bit decode lands as a 64 kB window.
-    set intc_address [ad_pcie_interrupt_address]
-    puts "INFO: ad_pcie_interrupt: $pcie_intc_name at $intc_address"
+    puts "INFO: ad_pcie_interrupt: $pcie_intc_name at $intc_address with $vectors\
+ vector(s), from $pcie_xdma_name CONFIG.xdma_num_usr_irq"
     ad_pcie_interconnect $intc_address $pcie_intc_name s_axi
+  } elseif {[get_property CONFIG.NUM_VECTORS $intc_cell] != $vectors} {
+    error "ERROR: ad_pcie_interrupt: $pcie_xdma_name CONFIG.xdma_num_usr_irq is now\
+ $vectors but $pcie_intc_name was created with NUM_VECTORS\
+ [get_property CONFIG.NUM_VECTORS $intc_cell]. The endpoint's vector count has to\
+ be settled before the first ad_pcie_interrupt call."
   }
 
-  # pcie_intc_src_per_vec is what maps a source index to a port, so a project
-  # that changes it partway through would silently move the sources already
-  # connected. Catch it here rather than at validate_bd_design, which would not
-  # notice: the design builds, and the wrong handler runs.
-  set spv [get_property CONFIG.SRC_PER_VEC $intc_cell]
-  if {$spv != $spv_want} {
-    error "ERROR: ad_pcie_interrupt: pcie_intc_src_per_vec is\
- $spv_want but $pcie_intc_name was created with SRC_PER_VEC $spv.\
- It must be set before the first ad_pcie_interrupt call: it fixes which\
- intr_<v> port each source lands on, so changing it now would move every source\
- already connected."
-  }
-
-  # Source slots the controller currently carries. Read the geometry back off
-  # the cell rather than recomputing it, so it is decided in one place.
-  set slots [expr {[get_property CONFIG.NUM_VECTORS $intc_cell] * $spv}]
+  # Source slots the controller currently carries.
+  set slots [get_property CONFIG.NUM_SOURCES $intc_cell]
 
   # Resolve the source index: the caller's, or the lowest available one. An
-  # unconnected slot -- or, when grouped, a tie-off -- counts as available, so
-  # an automatic call reclaims both the holes a pinned layout left and the slack
-  # grouping added, rather than growing.
-  if {$p_vector >= 0} {
-    set index $p_vector
+  # unconnected slot -- or a tie-off -- counts as available, so an automatic call
+  # reclaims the holes a pinned layout left rather than growing past them.
+  if {$p_source >= 0} {
+    set index $p_source
     set owner [ad_pcie_interrupt_owner $index]
     if {$owner ne ""} {
-      error "ERROR: ad_pcie_interrupt: index $index is already driven by\
+      error "ERROR: ad_pcie_interrupt: source index $index is already driven by\
  $owner, cannot pin $p_name to it."
     }
   } else {
@@ -1983,18 +1853,42 @@ proc ad_pcie_interrupt {p_name {p_vector -1}} {
     }
   }
 
-  # Widening is the whole of it. The indices a pinned layout skips need no
-  # padding: an enabled but unconnected intr_<v> carries the IP's DRIVER_VALUE,
-  # so an unused source is provably quiet without a constant cell.
+  # Grow to hold the new index. Loads are widened before their drivers, so every
+  # transient mismatch is an under-driven bus rather than a truncated one: intr is
+  # the load of the concat's dout, so NUM_SOURCES moves first. It only ever grows,
+  # so that ordering always holds.
   if {$index >= $slots} {
-    ad_pcie_interrupt_resize [expr {$index + 1}]
+    set n [expr {$index + 1}]
+    if {$n > $pcie_intc_max_sources} {
+      error "ERROR: ad_pcie_interrupt: source index $index needs $n sources, more\
+ than the $pcie_intc_max_sources $pcie_intc_name carries -- SRC_ENABLE and\
+ SRC_PENDING are one 32-bit register each."
+    }
+
+    set_property CONFIG.NUM_SOURCES $n $intc_cell
+    set_property CONFIG.NUM_PORTS $n [get_bd_cells $concat_name]
+
+    # A concat input has no driver value of its own -- unlike intr, whose
+    # DRIVER_VALUE covers a hole a pinned layout leaves -- and an undriven one is
+    # a validate_bd_design error. So tie every new input low here and let each
+    # connection displace its own tie-off.
+    for {set i $slots} {$i < $n} {incr i} {
+      ad_connect GND $concat_name/In$i
+    }
+
+    # Sharing is legal and the driver handles it, but the VEC_PENDING read it
+    # costs is the round-trip this core exists to avoid, so say when the design
+    # starts paying for it.
+    if {$slots <= $vectors && $n > $vectors} {
+      puts "INFO: ad_pcie_interrupt: $n sources on $vectors vector(s); some share a\
+ vector, so the host reads VEC_PENDING once per interrupt."
+    }
   }
 
-  set pin [ad_pcie_interrupt_pin $index 1]
+  set pin $concat_name/In$index
 
-  # Replacing a tie-off, which only the grouped configuration creates: drop just
-  # this pin from the shared GND net rather than deleting the net, which would
-  # untie every other hole.
+  # Replacing a tie-off: drop just this pin from the shared GND net rather than
+  # deleting the net, which would untie every other hole.
   set net [get_bd_nets -quiet -of_objects [get_bd_pins $pin]]
   if {$net ne ""} {
     disconnect_bd_net $net [get_bd_pins $pin]
@@ -2002,20 +1896,15 @@ proc ad_pcie_interrupt {p_name {p_vector -1}} {
 
   ad_connect $pin $p_name
 
-  # $index is a *source* index -- the hwirq the DT node references. The port and
-  # the vector it lands on are derived, and coincide with it only while nothing
-  # is grouped, so all three are printed: the port is what the block design
-  # shows, and the vector is what determines which MSI-X entry and therefore
-  # which CPU serves the source.
+  # $index is a *source* index -- the hwirq the device-tree node carries. Which
+  # vector delivers it is not decided here at all: SRC_ROUTE is written at runtime.
   #
-  # Worth printing at all because nothing else in the build log records the
-  # mapping. A peripheral whose interrupts = <k> disagrees with this line is the
-  # failure this catches, and it is otherwise silent: the design builds, and the
-  # wrong handler runs.
-  set how [expr {$p_vector >= 0 ? "pinned" : "auto"}]
-  puts "INFO: ad_pcie_interrupt: source $index =\
- intr_[expr {$index / $spv}]\[[expr {$index % $spv}]\] = vector\
- [expr {$index / $spv}] = $p_name ($how)"
+  # Worth printing because nothing else in the build log records the mapping. A
+  # peripheral whose interrupts = <k> disagrees with this line is the failure this
+  # catches, and it is otherwise silent: the design builds, and the wrong handler
+  # runs.
+  set how [expr {$p_source >= 0 ? "pinned" : "auto"}]
+  puts "INFO: ad_pcie_interrupt: source $index = $pin = $p_name ($how)"
 }
 
 ## Connects an IP interrupt port to the system's interrupt controller interface.
