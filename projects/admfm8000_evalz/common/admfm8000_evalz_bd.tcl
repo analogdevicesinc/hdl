@@ -23,13 +23,6 @@ create_bd_port -dir O -from 15 -to 0 db_o
 create_bd_port -dir O -from 1 -to 0 f_o
 create_bd_port -dir O dds_txenable
 
-# AD9910 control + parallel-data
-
-ad_ip_instance axi_ad9910 axi_ad9910_0
-ad_ip_parameter axi_ad9910_0 CONFIG.DELAY_REFCLK_FREQ 200
-ad_ip_parameter axi_ad9910_0 CONFIG.IODELAY_ENABLE 0
-ad_ip_parameter axi_ad9910_0 CONFIG.ID 0
-
 # ad4880 interface
 
 create_bd_port -dir I adca_dco_p
@@ -46,13 +39,17 @@ create_bd_port -dir I adcb_da_n
 create_bd_port -dir I adcb_sync_n
 create_bd_port -dir I adcb_filter_data_ready_n
 
-create_bd_port -dir O -from 1 -to 0 ad4080_a_spi_csn_o
-create_bd_port -dir I -from 1 -to 0 ad4080_a_spi_csn_i
-create_bd_port -dir I ad4080_a_spi_clk_i
-create_bd_port -dir O ad4080_a_spi_clk_o
-create_bd_port -dir I ad4080_a_spi_sdo_i
-create_bd_port -dir O ad4080_a_spi_sdo_o
-create_bd_port -dir I ad4080_a_spi_sdi_i
+create_bd_port -dir O -from 1 -to 0 ad4080_spi_csn
+create_bd_port -dir O ad4080_spi_clk
+create_bd_port -dir O ad4080_spi_mosi
+create_bd_port -dir I ad4080_spi_miso
+
+# AD9910 control + parallel-data
+
+ad_ip_instance axi_ad9910 axi_ad9910
+ad_ip_parameter axi_ad9910 CONFIG.DELAY_REFCLK_FREQ 200
+ad_ip_parameter axi_ad9910 CONFIG.IODELAY_ENABLE 0
+ad_ip_parameter axi_ad9910 CONFIG.ID 0
 
 # DMA
 ad_ip_instance axi_dmac axi_ad9910_dma
@@ -86,12 +83,12 @@ ad_ip_parameter axi_ad4880_dma CONFIG.DMA_DATA_WIDTH_SRC $DMA_DATA_WIDTH_SRC
 ad_ip_parameter axi_ad4880_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # Core clock/reset connections
-ad_connect $sys_iodelay_clk axi_ad9910_0/delay_clk
+ad_connect $sys_iodelay_clk axi_ad9910/delay_clk
 
-ad_connect sys_cpu_clk axi_ad9910_0/s_axi_aclk
-ad_connect sys_cpu_resetn axi_ad9910_0/s_axi_aresetn
-ad_connect sys_cpu_clk axi_ad9910_0/s_axis_aclk
-ad_connect sys_cpu_resetn axi_ad9910_0/s_axis_aresetn
+ad_connect sys_cpu_clk axi_ad9910/s_axi_aclk
+ad_connect sys_cpu_resetn axi_ad9910/s_axi_aresetn
+ad_connect sys_cpu_clk axi_ad9910/s_axis_aclk
+ad_connect sys_cpu_resetn axi_ad9910/s_axis_aresetn
 
 ad_connect sys_cpu_clk axi_ad9910_dma/s_axi_aclk
 ad_connect sys_cpu_resetn axi_ad9910_dma/s_axi_aresetn
@@ -104,37 +101,40 @@ ad_connect sys_cpu_clk axi_ad9910_dma/m_axis_aclk
 ad_connect $sys_cpu_resetn axi_ad4880_dma/m_dest_axi_aresetn
 
 # Device-side connections
-ad_connect dds_sync_clk axi_ad9910_0/sync_clk
-ad_connect dds_pdclk axi_ad9910_0/pd_clk_in
-ad_connect dds_drover axi_ad9910_0/drover
-ad_connect dds_ram_swp_ovr axi_ad9910_0/ram_swp_ovr
+ad_connect dds_sync_clk axi_ad9910/sync_clk
+ad_connect dds_pdclk axi_ad9910/pd_clk_in
+ad_connect dds_drover axi_ad9910/drover
+ad_connect dds_ram_swp_ovr axi_ad9910/ram_swp_ovr
 
-ad_connect axi_ad9910_0/drctl dds_drctrl
-ad_connect axi_ad9910_0/drhold dds_drhold
-ad_connect axi_ad9910_0/tx_enable dds_txenable
+ad_connect axi_ad9910/drctl dds_drctrl
+ad_connect axi_ad9910/drhold dds_drhold
+ad_connect axi_ad9910/tx_enable dds_txenable
 
-ad_connect axi_ad9910_0/db_o db_o
-ad_connect axi_ad9910_0/f_o f_o
+ad_connect axi_ad9910/db_o db_o
+ad_connect axi_ad9910/f_o f_o
 
-ad_connect axi_ad9910_0/profile dds_profile
+ad_connect axi_ad9910/profile dds_profile
 
-ad_connect axi_ad9910_dma/m_axis axi_ad9910_0/s_axis
+ad_connect axi_ad9910_dma/m_axis axi_ad9910/s_axis
+
+ad_connect axi_ad9910/ext_sync GND
 
 # ad4080 AXI_SPI
 
-ad_ip_instance axi_quad_spi ad4080_a_spi
-ad_ip_parameter ad4080_a_spi CONFIG.C_USE_STARTUP 0
-ad_ip_parameter ad4080_a_spi CONFIG.C_NUM_SS_BITS 2
-ad_ip_parameter ad4080_a_spi CONFIG.C_SCK_RATIO 8
+ad_ip_instance axi_quad_spi ad4080_spi
+ad_ip_parameter ad4080_spi CONFIG.C_USE_STARTUP 0
+ad_ip_parameter ad4080_spi CONFIG.C_NUM_SS_BITS 2
+ad_ip_parameter ad4080_spi CONFIG.C_SCK_RATIO 8
 
-ad_connect ad4080_a_spi_csn_i ad4080_a_spi/ss_i
-ad_connect ad4080_a_spi_csn_o ad4080_a_spi/ss_o
-ad_connect ad4080_a_spi_clk_i ad4080_a_spi/sck_i
-ad_connect ad4080_a_spi_clk_o ad4080_a_spi/sck_o
-ad_connect ad4080_a_spi_sdo_o ad4080_a_spi/io0_o
-ad_connect ad4080_a_spi_sdi_i ad4080_a_spi/io1_i
+ad_connect ad4080_spi_csn ad4080_spi/ss_o
+ad_connect ad4080_spi_csn ad4080_spi/ss_i ;# loopback
+ad_connect ad4080_spi_clk ad4080_spi/sck_o
+ad_connect ad4080_spi_clk ad4080_spi/sck_i ;# loopback
+ad_connect ad4080_spi_mosi ad4080_spi/io0_o
+ad_connect ad4080_spi_mosi ad4080_spi/io0_i ;# loopback
+ad_connect ad4080_spi_miso ad4080_spi/io1_i
 
-ad_connect $sys_cpu_clk ad4080_a_spi/ext_spi_clk
+ad_connect $sys_cpu_clk ad4080_spi/ext_spi_clk
 
 # axi_ad408x
 
@@ -192,12 +192,12 @@ ad_connect util_ad4880_adc_pack/packed_sync      axi_ad4880_dma/sync
 ad_connect axi_ad4080_adc_a/adc_clk axi_ad4880_dma/fifo_wr_clk
 
 # interconnects
-ad_cpu_interconnect 0x44A00000 axi_ad9910_0
+ad_cpu_interconnect 0x44A00000 axi_ad9910
 ad_cpu_interconnect 0x44A10000 axi_ad9910_dma
 ad_cpu_interconnect 0x44A20000 axi_ad4080_adc_a
 ad_cpu_interconnect 0x44A30000 axi_ad4080_adc_b
 ad_cpu_interconnect 0x44A40000 axi_ad4880_dma
-ad_cpu_interconnect 0x44A60000 ad4080_a_spi
+ad_cpu_interconnect 0x44A60000 ad4080_spi
 
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9910_dma/m_src_axi
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9910_dma/m_sg_axi
@@ -206,6 +206,6 @@ ad_mem_hp1_interconnect $sys_cpu_clk axi_ad4880_dma/m_dest_axi
 
 # interrupts
 ad_cpu_interrupt ps-0 mb-0 axi_ad9910_dma/irq
-ad_cpu_interrupt ps-1 mb-1 axi_ad9910_0/irq
+ad_cpu_interrupt ps-1 mb-1 axi_ad9910/irq
 ad_cpu_interrupt ps-2 mb-2 axi_ad4880_dma/irq
-ad_cpu_interrupt ps-3 mb-3 ad4080_a_spi/ip2intc_irpt
+ad_cpu_interrupt ps-3 mb-3 ad4080_spi/ip2intc_irpt
