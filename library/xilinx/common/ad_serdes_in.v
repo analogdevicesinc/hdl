@@ -94,11 +94,12 @@ module ad_serdes_in #(
                           FPGA_TECHNOLOGY == ULTRASCALE ? "ULTRASCALE" :
                           FPGA_TECHNOLOGY == ULTRASCALE_PLUS ? "ULTRASCALE_PLUS" :
                           "UNSUPPORTED";
-  // when ULTRASCALE_PLUS, use ULTRASCALE because IDELAYCTRL is the same for both
-  // and doesn't know ULTRASCALE_PLUS string
+  // UG571 lists IDELAYCTRL's SIM_DEVICE as 7SERIES/ULTRASCALE only, but UG974's
+  // 2026.1 template adds ULTRASCALE_PLUS; Vivado 2026.1's DRC is stricter and
+  // requires SIM_DEVICE to match the actual architecture.
   localparam SIM_DEVICE_IDELAYCTRL = FPGA_TECHNOLOGY == SEVEN_SERIES ? "7SERIES" :
                           FPGA_TECHNOLOGY == ULTRASCALE ? "ULTRASCALE" :
-                          FPGA_TECHNOLOGY == ULTRASCALE_PLUS ? "ULTRASCALE" :
+                          FPGA_TECHNOLOGY == ULTRASCALE_PLUS ? "ULTRASCALE_PLUS" :
                           "UNSUPPORTED";
   // internal registers
 
