@@ -105,23 +105,30 @@ ad_ip_parameter pcie_xdma CONFIG.pl_link_cap_max_link_speed {8.0_GT/s}
 ad_ip_parameter pcie_xdma CONFIG.pl_link_cap_max_link_width {X8}
 ad_ip_parameter pcie_xdma CONFIG.axi_data_width {256_bit}
 ad_ip_parameter pcie_xdma CONFIG.axisten_freq {250}
-ad_ip_parameter pcie_xdma CONFIG.axi_addr_width {64}
+ad_ip_parameter pcie_xdma CONFIG.axi_addr_width {38}
 ad_ip_parameter pcie_xdma CONFIG.pf0_device_id {9038}
 ad_ip_parameter pcie_xdma CONFIG.pcie_blk_locn {X1Y0}
 ad_ip_parameter pcie_xdma CONFIG.pf0_msi_enabled {true}
 
-# MSI-X is what makes one vector per interrupt source worth having: it carries
-# an address/data pair per vector, so the host steers each to its own CPU.
+# MSI-X is what makes more than one vector worth having: it carries an
+# address/data pair per vector, so the host steers each to its own CPU.
 # Multi-message MSI shares one address register and cannot -- and on x86 it also
 # needs interrupt remapping, since the bare vector domain does not advertise
 # MSI_FLAG_MULTI_PCI_MSI and a multi-vector request then fails to INTx. The MSI
-# capability stays enabled as the fallback; ad_pcie_interrupt_resize keeps both
-# capabilities' vector counts consistent with xdma_num_usr_irq.
+# capability stays enabled as the fallback.
 #
 # pf0_msix_table_offset / pf0_msix_pba_offset are deliberately left at their
 # IP defaults of 0x8000 / 0x8FE0 in BAR0. See the address-map note below: the
 # first 64 kB of the BAR is reserved for exactly this.
 ad_ip_parameter pcie_xdma CONFIG.pf0_msix_enabled {true}
+
+# usr_irq_req width, and where ad_pcie_interrupt takes pcie_intc's NUM_VECTORS
+# from. 16 is the PG195 maximum. More vectors than sources costs nothing here --
+# the driver routes sources onto them at runtime -- and it leaves every source
+# its own vector, so no interrupt needs a VEC_PENDING read to be attributed.
+ad_ip_parameter pcie_xdma CONFIG.xdma_num_usr_irq {16}
+ad_ip_parameter pcie_xdma CONFIG.pf0_msix_cap_table_size {F}
+ad_ip_parameter pcie_xdma CONFIG.pf0_msi_cap_multimsgcap {16_vectors}
 
 # M_AXI_B BAR: host accesses PL peripherals.
 # Base the BAR at AXI 0x8400_0000 so the migrated IPs keep the same AXI
@@ -154,23 +161,23 @@ ad_ip_parameter pcie_xdma CONFIG.pf0_bar0_size  {32}
 # walks garbage descriptors -- raising EOT on a fixed cadence and delivering
 # zeros. That was the original zero-data symptom.
 #
-# 0x0 .. 0xF_FFFF_FFFF = 64 GB, with axibar2pciebar_0 = 0 for an identity map:
-# AXI address == host physical address, which is what the driver assumes when
-# it programs a dma_addr_t straight into SG_ADDRESS/DEST_ADDRESS.
+# 0x0 .. 0x3F_FFFF_FFFF = 256 GB, with axibar2pciebar_0 = 0 for an identity
+# map: AXI address == host address, which is what the driver assumes when it
+# programs a dma_addr_t straight into SG_ADDRESS/DEST_ADDRESS.
 #
-# 64 GB rather than 4 GB because x86 physical memory maps are sparse -- PCI
-# MMIO displaces RAM above the 4 GB line, so a host with 4 GB installed still
-# has RAM up there. On this host: low RAM ends at ~3.22 GiB (cdff4000) and
-# 510 MiB sits at 0x1_00000000-0x1_1fdfffff. A 4 GB aperture cannot reach that
-# range at all, and the driver is free to allocate there.
-# axi_addr_width=64 above is what makes an aperture this wide reachable.
+# 38 bits exactly, matching axi_addr_width above and DMA_AXI_ADDR_WIDTH on
+# every DMAC below. Under an IOMMU the driver's autodetected DMA mask is the
+# only bound on the IOVA the kernel hands the DMAC -- there is no dma-ranges in
+# the overlay, so of_dma_configure() leaves bus_dma_limit at 0 and cannot clamp
+# it. Any address the DMAC can drive must therefore be an address S_AXI_B can
+# decode, or the IOVA lands outside the window and the bridge drops the access.
 #
 # ad_pcie_saxi_interconnect derives its per-master segment range from
 # axibar_highaddr_0, so this is the only place the aperture size is declared.
 # It must be set before the ad_pcie_saxi_interconnect calls further down.
 ad_ip_parameter pcie_xdma CONFIG.axibar_num {1}
 ad_ip_parameter pcie_xdma CONFIG.axibar_0 {0x0000000000000000}
-ad_ip_parameter pcie_xdma CONFIG.axibar_highaddr_0 {0x0000000FFFFFFFFF}
+ad_ip_parameter pcie_xdma CONFIG.axibar_highaddr_0 {0x0000003FFFFFFFFF}
 ad_ip_parameter pcie_xdma CONFIG.axibar2pciebar_0 {0x0000000000000000}
 
 # PCIe lane connections
@@ -244,15 +251,15 @@ foreach dma {
   axi_adrv9009_som_obs_dma
   axi_adrv9009_som_tx_dma
 } {
-  # 64 to match the S_AXI_B aperture: the axi-dmac driver autodetects the DMA
-  # mask by writing 0xffffffff to DEST_ADDRESS_HIGH and reading it back
-  # (dma-axi-dmac.c, mask = 32 + fls(mask)), so this width is what lets the
-  # kernel place buffers and the SG descriptor ring above the 4 GB line. It
-  # must, because x86 physical maps are sparse -- observed SG ring at
-  # 0x1_0e92e000 on a host whose low RAM ends at ~3.22 GiB with 510 MiB at
-  # 0x1_00000000-0x1_1fdfffff. Verified in silicon: DEST/SRC_ADDRESS_HIGH
-  # reads back 0xffffffff on the built design.
-  ad_ip_parameter $dma CONFIG.DMA_AXI_ADDR_WIDTH 64
+  # Must equal the S_AXI_B aperture width, not merely cover it: the axi-dmac
+  # driver autodetects the DMA mask by writing 0xffffffff to DEST_ADDRESS_HIGH
+  # and reading it back (dma-axi-dmac.c, mask = 32 + fls(mask)), then calls
+  # dma_set_mask_and_coherent() with it. That mask is what bounds the IOVA the
+  # IOMMU allocator returns, so a DMAC wider than the aperture gets addresses
+  # the bridge cannot decode. Above 4 GB is still required, because x86
+  # physical maps are sparse -- observed SG ring at 0x1_0e92e000 on a host
+  # whose low RAM ends at ~3.22 GiB with 510 MiB at 0x1_00000000-0x1_1fdfffff.
+  ad_ip_parameter $dma CONFIG.DMA_AXI_ADDR_WIDTH 38
   ad_ip_parameter $dma CONFIG.DMA_SG_TRANSFER 1
   # PCIe DMA reaches host RAM through XDMA S_AXI_B; the x86 root complex
   # snoops CPU caches on every DMA transaction so the writes ARE coherent
@@ -310,8 +317,10 @@ ad_pcie_interconnect 0x84020000 axi_gpio1 S_AXI
 ad_pcie_interconnect 0x84030000 axi_spi   AXI_LITE
 
 # XDMA user interrupts. ad_pcie_interrupt creates pcie_intc on the first call
-# and wires its usr_irq_req to pcie_xdma automatically; each source then lands
-# on its own pcie_intc/intr_<k>, i.e. its own MSI-X vector.
+# and wires its usr_irq_req/usr_irq_ack to pcie_xdma automatically; each source
+# then lands on one bit of pcie_intc/intr, in call order. That bit index is the
+# hwirq the device tree carries -- which MSI-X vector delivers it is the driver's
+# SRC_ROUTE write, not a property of this design.
 ad_pcie_interrupt axi_spi/ip2intc_irpt
 ad_pcie_interrupt axi_gpio1/ip2intc_irpt
 
@@ -470,7 +479,7 @@ foreach dma {
   axi_ps_net_tx_dma
   axi_ps_net_rx_dma
 } {
-  ad_ip_parameter $dma CONFIG.DMA_AXI_ADDR_WIDTH 64
+  ad_ip_parameter $dma CONFIG.DMA_AXI_ADDR_WIDTH 38
   ad_ip_parameter $dma CONFIG.CACHE_COHERENT 1
   ad_ip_parameter $dma CONFIG.AXI_AXCACHE 0b1111
   ad_ip_parameter $dma CONFIG.AXI_AXPROT 0b010
