@@ -122,13 +122,23 @@ set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
+proc ad_next_pow2 {value} {
+  set result 1
+  while {$result < $value} {
+    set result [expr $result * 2]
+  }
+  return $result
+}
+
 set adc_data_offload_name apollo_rx_data_offload
-set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
+set RX_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $RX_SAMPLES_PER_CHANNEL]
+set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_PACK_SAMPLES_PER_CHANNEL]
 set adc_dma_data_width $adc_data_width
 set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
 
 set dac_data_offload_name apollo_tx_data_offload
-set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL]
+set TX_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $TX_SAMPLES_PER_CHANNEL]
+set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_PACK_SAMPLES_PER_CHANNEL]
 set dac_dma_data_width $dac_data_width
 set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
 
@@ -177,12 +187,14 @@ if {$ASYMMETRIC_A_B_MODE} {
   set TX_B_SAMPLES_PER_CHANNEL [expr $TX_B_NUM_OF_LANES * 8 * $TX_B_DATAPATH_WIDTH / ($TX_B_NUM_OF_CONVERTERS * $TX_B_SAMPLE_WIDTH)]
 
   set adc_b_data_offload_name apollo_rx_b_data_offload
-  set adc_b_data_width [expr $RX_B_DMA_SAMPLE_WIDTH*$RX_B_NUM_OF_CONVERTERS*$RX_B_SAMPLES_PER_CHANNEL]
+  set RX_B_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $RX_B_SAMPLES_PER_CHANNEL]
+  set adc_b_data_width [expr $RX_B_DMA_SAMPLE_WIDTH*$RX_B_NUM_OF_CONVERTERS*$RX_B_PACK_SAMPLES_PER_CHANNEL]
   set adc_b_dma_data_width $adc_b_data_width
   set adc_b_fifo_address_width [expr int(ceil(log(($adc_b_fifo_samples_per_converter*$RX_B_NUM_OF_CONVERTERS) / ($adc_b_data_width/$RX_B_DMA_SAMPLE_WIDTH))/log(2)))]
 
   set dac_b_data_offload_name apollo_tx_b_data_offload
-  set dac_b_data_width [expr $TX_B_DMA_SAMPLE_WIDTH*$TX_B_NUM_OF_CONVERTERS*$TX_B_SAMPLES_PER_CHANNEL]
+  set TX_B_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $TX_B_SAMPLES_PER_CHANNEL]
+  set dac_b_data_width [expr $TX_B_DMA_SAMPLE_WIDTH*$TX_B_NUM_OF_CONVERTERS*$TX_B_PACK_SAMPLES_PER_CHANNEL]
   set dac_b_dma_data_width $dac_b_data_width
   set dac_b_fifo_address_width [expr int(ceil(log(($dac_b_fifo_samples_per_converter*$TX_B_NUM_OF_CONVERTERS) / ($dac_b_data_width/$TX_B_DMA_SAMPLE_WIDTH))/log(2)))]
 
@@ -477,7 +489,7 @@ adi_tpl_jesd204_rx_create rx_apollo_tpl_core $RX_NUM_OF_LANES \
 
 ad_ip_instance util_cpack2 util_apollo_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
-  SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL \
+  SAMPLES_PER_CHANNEL $RX_PACK_SAMPLES_PER_CHANNEL \
   SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
 ]
 
@@ -528,7 +540,7 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   ad_ip_instance util_cpack2 util_apollo_cpack_b [list \
     NUM_OF_CHANNELS $RX_B_NUM_OF_CONVERTERS \
-    SAMPLES_PER_CHANNEL $RX_B_SAMPLES_PER_CHANNEL \
+    SAMPLES_PER_CHANNEL $RX_B_PACK_SAMPLES_PER_CHANNEL \
     SAMPLE_DATA_WIDTH $RX_B_DMA_SAMPLE_WIDTH \
   ]
 
@@ -583,7 +595,7 @@ ad_ip_parameter tx_apollo_tpl_core/dac_tpl_core CONFIG.IQCORRECTION_DISABLE 0
 
 ad_ip_instance util_upack2 util_apollo_upack [list \
   NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
-  SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
+  SAMPLES_PER_CHANNEL $TX_PACK_SAMPLES_PER_CHANNEL \
   SAMPLE_DATA_WIDTH $TX_DMA_SAMPLE_WIDTH \
 ]
 
@@ -636,7 +648,7 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   ad_ip_instance util_upack2 util_apollo_upack_b [list \
     NUM_OF_CHANNELS $TX_B_NUM_OF_CONVERTERS \
-    SAMPLES_PER_CHANNEL $TX_B_SAMPLES_PER_CHANNEL \
+    SAMPLES_PER_CHANNEL $TX_B_PACK_SAMPLES_PER_CHANNEL \
     SAMPLE_DATA_WIDTH $TX_B_DMA_SAMPLE_WIDTH \
   ]
 
@@ -961,7 +973,12 @@ ad_connect  axi_apollo_rx_jesd/rx_data_tvalid rx_apollo_tpl_core/link_valid
 ad_connect rx_apollo_tpl_core/adc_valid_0 util_apollo_cpack/fifo_wr_en
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  rx_apollo_tpl_core/adc_enable_$i util_apollo_cpack/enable_$i
-  ad_connect  rx_apollo_tpl_core/adc_data_$i util_apollo_cpack/fifo_wr_data_$i
+  ad_ip_instance util_width_extend apollo_rx_pack_extend_$i [list \
+    IN_DATA_WIDTH  [expr $RX_SAMPLES_PER_CHANNEL      * $RX_DMA_SAMPLE_WIDTH] \
+    OUT_DATA_WIDTH [expr $RX_PACK_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH] \
+  ]
+  ad_connect  rx_apollo_tpl_core/adc_data_$i apollo_rx_pack_extend_$i/data_in
+  ad_connect  apollo_rx_pack_extend_$i/data_out util_apollo_cpack/fifo_wr_data_$i
 }
 ad_connect rx_apollo_tpl_core/adc_dovf util_apollo_cpack/fifo_wr_overflow
 
@@ -980,7 +997,12 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_connect rx_b_apollo_tpl_core/adc_valid_0 util_apollo_cpack_b/fifo_wr_en
   for {set i 0} {$i < $RX_B_NUM_OF_CONVERTERS} {incr i} {
     ad_connect  rx_b_apollo_tpl_core/adc_enable_$i util_apollo_cpack_b/enable_$i
-    ad_connect  rx_b_apollo_tpl_core/adc_data_$i util_apollo_cpack_b/fifo_wr_data_$i
+    ad_ip_instance util_width_extend apollo_rx_b_pack_extend_$i [list \
+      IN_DATA_WIDTH  [expr $RX_B_SAMPLES_PER_CHANNEL      * $RX_B_DMA_SAMPLE_WIDTH] \
+      OUT_DATA_WIDTH [expr $RX_B_PACK_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH] \
+    ]
+    ad_connect  rx_b_apollo_tpl_core/adc_data_$i apollo_rx_b_pack_extend_$i/data_in
+    ad_connect  apollo_rx_b_pack_extend_$i/data_out util_apollo_cpack_b/fifo_wr_data_$i
   }
   ad_connect rx_b_apollo_tpl_core/adc_dovf util_apollo_cpack_b/fifo_wr_overflow
 
@@ -1001,7 +1023,12 @@ ad_connect  tx_apollo_tpl_core/link axi_apollo_tx_jesd/tx_data
 
 ad_connect  tx_apollo_tpl_core/dac_valid_0 util_apollo_upack/fifo_rd_en
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
-  ad_connect  util_apollo_upack/fifo_rd_data_$i tx_apollo_tpl_core/dac_data_$i
+  ad_ip_instance util_width_extend apollo_tx_unpack_trim_$i [list \
+    IN_DATA_WIDTH  [expr $TX_PACK_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH] \
+    OUT_DATA_WIDTH [expr $TX_SAMPLES_PER_CHANNEL      * $TX_DMA_SAMPLE_WIDTH] \
+  ]
+  ad_connect  util_apollo_upack/fifo_rd_data_$i apollo_tx_unpack_trim_$i/data_in
+  ad_connect  apollo_tx_unpack_trim_$i/data_out tx_apollo_tpl_core/dac_data_$i
   ad_connect  tx_apollo_tpl_core/dac_enable_$i  util_apollo_upack/enable_$i
 }
 
@@ -1018,7 +1045,12 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   ad_connect  tx_b_apollo_tpl_core/dac_valid_0 util_apollo_upack_b/fifo_rd_en
   for {set i 0} {$i < $TX_B_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  util_apollo_upack_b/fifo_rd_data_$i tx_b_apollo_tpl_core/dac_data_$i
+    ad_ip_instance util_width_extend apollo_tx_b_unpack_trim_$i [list \
+      IN_DATA_WIDTH  [expr $TX_B_PACK_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH] \
+      OUT_DATA_WIDTH [expr $TX_B_SAMPLES_PER_CHANNEL      * $TX_B_DMA_SAMPLE_WIDTH] \
+    ]
+    ad_connect  util_apollo_upack_b/fifo_rd_data_$i apollo_tx_b_unpack_trim_$i/data_in
+    ad_connect  apollo_tx_b_unpack_trim_$i/data_out tx_b_apollo_tpl_core/dac_data_$i
     ad_connect  tx_b_apollo_tpl_core/dac_enable_$i  util_apollo_upack_b/enable_$i
   }
 
