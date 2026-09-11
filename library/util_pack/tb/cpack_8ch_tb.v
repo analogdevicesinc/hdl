@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -34,13 +34,12 @@
 // ***************************************************************************
 
 `timescale 1ns/100ps
-
-module cpack_tb;
-  parameter VCD_FILE = {"cpack_tb.vcd"};
-  parameter NUM_OF_CHANNELS = 4;
-  parameter SAMPLES_PER_CHANNEL = 1;
+module cpack_8ch_tb;
+  parameter VCD_FILE = {"cpack_8ch_tb.vcd"};
+  parameter NUM_OF_CHANNELS = 8;
+  parameter SAMPLES_PER_CHANNEL = 4;
   parameter ENABLE_RANDOM = 0;
-  parameter PIPELINE_STAGES = 0;
+  parameter PIPELINE_STAGES = 2;
 
   `define TIMEOUT 3000000
   `include "tb_base.v"
@@ -48,11 +47,11 @@ module cpack_tb;
   localparam NUM_OF_PORTS = SAMPLES_PER_CHANNEL * NUM_OF_CHANNELS;
 
   reg fifo_wr_en = 1'b1;
-  reg [NUM_OF_PORTS*8-1:0] fifo_wr_data = 'h00;
+  reg [NUM_OF_PORTS*16-1:0] fifo_wr_data = 'h00;
 
   wire packed_fifo_wr_en;
-  wire [NUM_OF_PORTS*8-1:0] packed_fifo_wr_data;
-  reg [NUM_OF_PORTS*8-1:0] expected_packed_fifo_wr_data;
+  wire [NUM_OF_PORTS*16-1:0] packed_fifo_wr_data;
+  reg [NUM_OF_PORTS*16-1:0] expected_packed_fifo_wr_data;
 
   reg [NUM_OF_CHANNELS-1:0] enable = 'h1;
   reg [NUM_OF_CHANNELS-1:0] next_enable = 'h1;
@@ -119,10 +118,10 @@ module cpack_tb;
       for (h = 0; h < SAMPLES_PER_CHANNEL; h = h + 1) begin
         for (i = 0; i < NUM_OF_CHANNELS; i = i + 1) begin
           if (enable[i] == 1'b1) begin
-            fifo_wr_data[(i*SAMPLES_PER_CHANNEL+h)*8+:8] <= j;
+            fifo_wr_data[(i*SAMPLES_PER_CHANNEL+h)*16+:16] <= j;
             j = j + 1;
           end else begin
-            fifo_wr_data[(i*SAMPLES_PER_CHANNEL+h)*8+:8] <= 'hxx;
+            fifo_wr_data[(i*SAMPLES_PER_CHANNEL+h)*16+:16] <= 'hxxxx;
           end
         end
       end
@@ -130,7 +129,7 @@ module cpack_tb;
       for (h = 0; h < SAMPLES_PER_CHANNEL; h = h + 1) begin
         for (i = 0; i < NUM_OF_CHANNELS; i = i + 1) begin
           if (enable[i] == 1'b1) begin
-            fifo_wr_data[(i*SAMPLES_PER_CHANNEL+h)*8+:8] <= j;
+            fifo_wr_data[(i*SAMPLES_PER_CHANNEL+h)*16+:16] <= j;
             j = j + 1;
           end
         end
@@ -141,11 +140,11 @@ module cpack_tb;
   always @(posedge clk) begin
     if (reset == 1'b1) begin
       for (i = 0; i < NUM_OF_PORTS; i = i + 1) begin
-        expected_packed_fifo_wr_data[i*8+:8] <= i;
+        expected_packed_fifo_wr_data[i*16+:16] <= i;
       end
     end else if (packed_fifo_wr_en == 1'b1) begin
       for (i = 0; i < NUM_OF_PORTS; i = i + 1) begin
-        expected_packed_fifo_wr_data[i*8+:8] <= expected_packed_fifo_wr_data[i*8+:8] + NUM_OF_PORTS;
+        expected_packed_fifo_wr_data[i*16+:16] <= expected_packed_fifo_wr_data[i*16+:16] + NUM_OF_PORTS;
       end
     end
   end
@@ -161,19 +160,15 @@ module cpack_tb;
   util_cpack2_impl #(
     .NUM_OF_CHANNELS(NUM_OF_CHANNELS),
     .SAMPLES_PER_CHANNEL(SAMPLES_PER_CHANNEL),
-    .SAMPLE_DATA_WIDTH(8),
+    .SAMPLE_DATA_WIDTH(16),
     .PIPELINE_STAGES(PIPELINE_STAGES)
   ) i_cpack (
     .clk(clk),
     .reset(reset),
-
     .enable(enable),
-
     .fifo_wr_en({NUM_OF_CHANNELS{fifo_wr_en}}),
     .fifo_wr_data(fifo_wr_data),
-
     .packed_fifo_wr_en(packed_fifo_wr_en),
     .packed_fifo_wr_data(packed_fifo_wr_data),
     .packed_fifo_wr_overflow(1'b0));
-
 endmodule

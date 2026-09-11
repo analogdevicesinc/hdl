@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -33,7 +33,7 @@
 // ***************************************************************************
 // ***************************************************************************
 
-  reg clk = 1'b1;
+  reg clk = 1'b0;
   reg [3:0] reset_shift = 4'b1111;
   reg trigger_reset = 1'b0;
   wire reset;
@@ -42,13 +42,22 @@
 
   initial
   begin
-    if (VCD_FILE != "") begin
-      $dumpfile (VCD_FILE);
-      $dumpvars;
-    end
+    $dumpfile (VCD_FILE);
+    $dumpvars;
+`ifdef TIMEOUT
+    #`TIMEOUT
+`else
+    #100000
+`endif
+    if (failed == 1'b0)
+      $display("SUCCESS");
+    else
+      $display("FAILED");
+    $finish;
   end
 
-  always @(*) #10 clk <= ~clk;
+  always #10 clk = ~clk;
+
   always @(posedge clk) begin
     if (trigger_reset == 1'b1) begin
       reset_shift <= 4'b1111;
