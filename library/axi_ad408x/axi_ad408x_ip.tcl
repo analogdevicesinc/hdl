@@ -44,7 +44,31 @@ set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_cor
 ipx::infer_bus_interface adc_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 ipx::infer_bus_interface delay_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 
+set cc [ipx::current_core]
+
+set_property -dict [list \
+  "value_validation_type" "list" \
+  "value_validation_list" "1 2" \
+] [ipx::get_user_parameters NUM_LANES -of_objects $cc]
+
+adi_set_ports_dependency "data_b_in_p" \
+  "(spirit:decode(id('MODELPARAM_VALUE.NUM_LANES')) == 2)"
+adi_set_ports_dependency "data_b_in_n" \
+  "(spirit:decode(id('MODELPARAM_VALUE.NUM_LANES')) == 2)"
+
+set_property -dict [list \
+  "value_validation_type" "list" \
+  "value_validation_list" "0 1" \
+] [ipx::get_user_parameters USE_CNV -of_objects $cc]
+
+adi_set_ports_dependency "cnv_in_p" \
+  "(spirit:decode(id('MODELPARAM_VALUE.USE_CNV')) == 1)"
+adi_set_ports_dependency "cnv_in_n" \
+  "(spirit:decode(id('MODELPARAM_VALUE.USE_CNV')) == 1)"
+
+set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects $cc]
+
 adi_add_auto_fpga_spec_params
 
-ipx::create_xgui_files [ipx::current_core]
-ipx::save_core [ipx::current_core]
+ipx::create_xgui_files $cc
+ipx::save_core $cc

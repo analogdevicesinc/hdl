@@ -39,6 +39,7 @@ module axi_ad408x #(
   parameter   ID = 0,
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   NUM_LANES = 2,
+  parameter   USE_CNV = 1,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
   parameter   ADC_N_BITS = 20
 ) (
