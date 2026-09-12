@@ -25,8 +25,13 @@ adi_ip_files jesd204_rx [list \
   "jesd204_rx_constr.ttcl" \
   "jesd204_rx_ooc.ttcl" \
   "jesd204_rx.v" \
+  "jesd204_fec_decode.sv" \
+  "jesd204_rx_fec_lfsr.sv" \
+  "../jesd204_common/lfsr_input.sv" \
   "../../common/ad_pack.v" \
   "../../common/ad_upack.v" \
+  "../../common/util_pipeline_stage.v" \
+  "../../common/ad_mem_dist.v" \
   "bd/bd.tcl"
 ]
 
@@ -84,6 +89,7 @@ adi_add_bus "rx_cfg" "slave" \
     { "cfg_disable_scrambler" "disable_scrambler" } \
     { "cfg_disable_char_replacement" "disable_char_replacement" } \
     { "cfg_frame_align_err_threshold" "frame_align_err_threshold" } \
+    { "cfg_header_mode" "header_mode" } \
     { "device_cfg_octets_per_multiframe" "device_octets_per_multiframe" } \
     { "device_cfg_octets_per_frame" "device_octets_per_frame" } \
     { "device_cfg_beats_per_multiframe" "device_beats_per_multiframe" } \

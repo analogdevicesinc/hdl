@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,49 +35,39 @@
 
 `timescale 1ns/100ps
 
-module gearbox_66b64b (
-  input             clk,
-  input             reset,
-
-  input      [65:0] i_data,
-  input             i_valid,
-
-  output reg [63:0] o_data,
-  output            o_rd_en
+module ad_mem_dist #(
+  parameter RAM_WIDTH = 32,
+  parameter RAM_ADDR_BITS = 4,
+  parameter REGISTERED_OUTPUT = 1
+) (
+  output wire  [RAM_WIDTH-1:0]      rd_data,
+  input  wire                       clk,
+  input  wire                       wr_en,
+  input  wire  [RAM_ADDR_BITS-1:0]  wr_addr,
+  input  wire  [RAM_WIDTH-1:0]      wr_data,
+  input  wire  [RAM_ADDR_BITS-1:0]  rd_addr
 );
 
-  reg  [65:0] buff_r;
-  reg  [ 5:0] gear_cnt;
-  wire        pause;
+  (* ram_style="distributed" *)
+  reg [RAM_WIDTH-1:0] ram [(2**RAM_ADDR_BITS)-1:0];
 
-  wire [131:0] shift_data;
-  wire [ 5:0]  shift_idx;
+  reg [RAM_WIDTH-1:0] rd_data_s;
 
-  always @(posedge clk) begin
-    if (i_valid) begin
-      buff_r <= i_data;
+  always @(posedge clk)
+    if (wr_en)
+      ram[wr_addr] <= wr_data;
+
+  generate if (REGISTERED_OUTPUT) begin
+    always @(posedge clk) begin
+      rd_data_s <= ram[rd_addr];
+    end
+  end else begin
+    always @(*) begin
+      rd_data_s = ram[rd_addr];
     end
   end
+  endgenerate
 
-  always @(posedge clk) begin
-    if (reset) begin
-      gear_cnt <= 6'd0;
-    end else if (gear_cnt[5]) begin
-      gear_cnt <= 6'd0;
-    end else begin
-      gear_cnt <= gear_cnt + 1'b1;
-    end
-  end
-
-  assign pause = gear_cnt[5];
-
-  assign shift_data = {i_data, buff_r};
-  assign shift_idx  = 6'd33 - gear_cnt;
-
-  always @(posedge clk) begin
-    o_data <= shift_data[{shift_idx, 1'b0} +: 64];
-  end
-
-  assign o_rd_en = ~pause;
+  assign rd_data = rd_data_s;
 
 endmodule

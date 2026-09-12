@@ -23,6 +23,7 @@ adi_add_bus "rx_cfg" "master" \
     { "cfg_octets_per_frame" "octets_per_frame" } \
     { "cfg_disable_char_replacement" "disable_char_replacement" } \
     { "cfg_disable_scrambler" "disable_scrambler" } \
+    { "cfg_header_mode" "header_mode"} \
     { "cfg_frame_align_err_threshold" "frame_align_err_threshold" } \
     { "device_cfg_octets_per_multiframe" "device_octets_per_multiframe" } \
     { "device_cfg_octets_per_frame" "device_octets_per_frame" } \
