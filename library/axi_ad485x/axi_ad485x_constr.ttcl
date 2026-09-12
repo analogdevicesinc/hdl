@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023, 2025 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023, 2025-2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -30,6 +30,41 @@ set_false_path -quiet \
         -from [get_cells -hier -filter {name =~ *packet_format_reg* && IS_SEQUENTIAL}] \
         -to [get_cells -quiet -hier -filter {name =~ *packet_cnt_length_reg* && IS_SEQUENTIAL}]
 
+  # scko/fast_clk -> adc_clk CDC: rx_data shift registers and IDDR into adc_data_init
+  # capture_complete gates the latch so this crossing is safe
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/rx_data_pos_reg* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/genblk3*.adc_data_init_reg* && IS_SEQUENTIAL}] 5.333
+
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/rx_data_neg_reg* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/genblk3*.adc_data_init_reg* && IS_SEQUENTIAL}] 5.333
+
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/i_rx/i_rx_data_iddr* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/genblk3*.adc_data_init_reg* && IS_SEQUENTIAL}] 5.333
+
+  # adc_data_init -> adc_data_store latch (both clocked by adc_clk, safe relaxed path)
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/genblk3*.adc_data_init_reg* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/adc_data_store_reg* && IS_SEQUENTIAL}] 5.333
+
+  # adc_valid_init pipeline (scko -> adc_clk)
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/adc_valid_init_reg* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/adc_valid_init_d_reg* && IS_SEQUENTIAL}] 5.333
+
+  # NSSI: fast_clk -> adc_clk CDC: ISERDES output into rx_data shift register
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/i_adc_data* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/rx_data_reg* && IS_SEQUENTIAL}] 5.333
+
+  # NSSI: adc_clk internal path: rx_data_d -> adc_data_store (written via ch_valid_dn gate)
+  set_max_delay -datapath_only \
+        -from [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/rx_data_d_reg* && IS_SEQUENTIAL}] \
+        -to   [get_cells -quiet -hier -filter {name =~ *i_ad4858_lvds_interface/adc_data_store_reg* && IS_SEQUENTIAL}] 5.333
+
+
 <: } else { :>
 
   # asynchronous reset while destination clock is not active
@@ -53,12 +88,21 @@ set_false_path -quiet \
 
   # constant value after config
   set_false_path -quiet \
-        -from [get_cells -hier -filter {name =~ *i_ad485x_cmos_interface/packet_format_reg*}]  \
+        -from [get_cells -hier -filter {name =~ *i_ad4858_cmos_interface/packet_format_reg*}]  \
         -to [get_cells -hier -filter {name =~ *capture_cnt_reg* && IS_SEQUENTIAL}]
+
+  # packet_format replica -> capture_cnt / adc_captured: relax replicated CDC paths
+  set_max_delay -quiet \
+        -from [get_pins -quiet -hier -filter {name =~ *i_ad4858_cmos_interface/packet_format_reg*_rep*/C}] \
+        -to   [get_pins -quiet -hier -filter {name =~ *i_ad4858_cmos_interface/capture_cnt_reg*/D}] 20.0
+
+  set_max_delay -quiet \
+        -from [get_pins -quiet -hier -filter {name =~ *i_ad4858_cmos_interface/packet_format_reg*_rep*/C}] \
+        -to   [get_pins -quiet -hier -filter {name =~ *i_ad4858_cmos_interface/adc_captured_reg*/D}] 20.0
 
   # asynchronous reset while destination clock is not active
   set_false_path -quiet \
-        -from [get_cells -hier -filter {name =~ *i_ad485x_cmos_interface/packet_format_reg*}]  \
+        -from [get_cells -hier -filter {name =~ *i_ad4858_cmos_interface/packet_format_reg*}]  \
         -to [get_cells -hier -filter {name =~ *adc_captured_reg* && IS_SEQUENTIAL}]
 
   set_max_delay -quiet \

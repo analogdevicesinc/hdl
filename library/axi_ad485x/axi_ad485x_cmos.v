@@ -40,6 +40,7 @@ module axi_ad485x_cmos #(
   parameter FPGA_TECHNOLOGY = 0,
   parameter RESOLUTION = 20,
   parameter DELAY_REFCLK_FREQ = 200,
+  parameter IODELAY_CTRL = 1,
   parameter IODELAY_ENABLE = 1,
   parameter IODELAY_GROUP = "dev_if_delay_group",
   parameter ACTIVE_LANE = 8'b11111111,
@@ -379,7 +380,7 @@ module axi_ad485x_cmos #(
         .SINGLE_ENDED (1),
         .DDR_SDR_N (0),
         .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-        .IODELAY_CTRL (1),
+        .IODELAY_CTRL (IODELAY_CTRL),
         .IODELAY_ENABLE (IODELAY_ENABLE),
         .IODELAY_GROUP (IODELAY_GROUP),
         .REFCLK_FREQUENCY (DELAY_REFCLK_FREQ)

@@ -31,11 +31,14 @@ adi_ip_files axi_ad485x [list \
     "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
     "$ad_hdl_dir/library/xilinx/common/ad_serdes_out.v" \
     "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_event.v" \
     "axi_ad485x_constr.ttcl" \
     "axi_ad485x_cmos.v" \
     "axi_ad485x_16b_channel.v" \
     "axi_ad485x_20b_channel.v" \
     "axi_ad485x_crc.v" \
+    "axi_ad4858_lvds_nssi.v" \
+    "$ad_hdl_dir/library/xilinx/common/ad_serdes_in.v" \
     "axi_ad485x_lvds.v" \
     "axi_ad485x.v" ]
 
