@@ -85,20 +85,19 @@ namespace eval ipl {
 
     set check [catch {exec cygpath --version}]
     if {$check == 0} {
-        set PropelIPLocal_path [exec cygpath -H]/[exec whoami]/PropelIPLocal
-        if {[info exists env(LATTICE_INTERFACE_SEARCH_PATH)]} {
+        variable PropelIPLocal_path [exec cygpath -H]/[exec whoami]/PropelIPLocal
+        if {[info exists ::env(LATTICE_INTERFACE_SEARCH_PATH)]} {
             set interfaces_paths_list \
-                [split $env(LATTICE_INTERFACE_SEARCH_PATH) ";"]
+                [split $::env(LATTICE_INTERFACE_SEARCH_PATH) ";"]
 
             foreach file $interfaces_paths_list {
                 if {[regexp {^.+\/PropelIPLocal} $file PropelIPLocal_path]} {
                     puts $file
-                    set PropelIPLocal_path
                 }
             }
         }
     } else {
-        set PropelIPLocal_path $env(HOME)/PropelIPLocal
+        variable PropelIPLocal_path $::env(HOME)/PropelIPLocal
     }
 
     #node: {name attributes content childs}
@@ -541,10 +540,12 @@ namespace eval ipl {
 #                       in default)
 ###############################################################################
     proc generate_interface {if {dpath ""}} {
+        variable PropelIPLocal_path
+
         if {$dpath == ""} {
             if {[info exists ::env(LATTICE_DEFAULT_PATHS)] && \
                 $::env(LATTICE_DEFAULT_PATHS) == 1} {
-                set dpaths [list ./ltt $ipl::PropelIPLocal_path/interfaces]
+                set dpaths [list ./ltt $PropelIPLocal_path/interfaces]
             } else {
                 set dpaths ./ltt
             }
@@ -557,8 +558,10 @@ namespace eval ipl {
     }
 
     proc generate_interface_on_path {if {dpath ""}} {
+        variable PropelIPLocal_path
+
         if {$dpath == ""} {
-            set dpath $ipl::PropelIPLocal_path/interfaces
+            set dpath $PropelIPLocal_path/interfaces
         }
 
         set abstractionDefinition [ipl::getnode \
@@ -1438,7 +1441,7 @@ namespace eval ipl {
             if {$id == ""} {
                 set ip \
                     [ipl::setnode ip_desc/xi:include $::ipl::inclid $node $ip]
-                incr ipl::inclid
+                incr ::ipl::inclid
             } else {
                 set ip [ipl::setnode ip_desc/xi:include $id $node $ip]
             }
@@ -1447,10 +1450,12 @@ namespace eval ipl {
     }
 
     proc generate_ip {ip {dpath ""} {ip_name ""}} {
+        variable PropelIPLocal_path
+
         if {$dpath == ""} {
             if {[info exists ::env(LATTICE_DEFAULT_PATHS)] && \
                 $::env(LATTICE_DEFAULT_PATHS) == 1} {
-                set dpaths [list ./ ltt $ipl::PropelIPLocal_path {}]
+                set dpaths [list ./ ltt $PropelIPLocal_path {}]
             } else {
                 set dpaths [list ./ ltt]
             }
@@ -1463,6 +1468,8 @@ namespace eval ipl {
     }
 
     proc generate_ip_on_path {ip {dpath ""} {ip_name ""}} {
+        variable PropelIPLocal_path
+
         if {$ip_name == ""} {
             set ip_name [ipl::getncont ip_desc/lsccip:general lsccip:name $ip]
         }
@@ -1471,7 +1478,7 @@ namespace eval ipl {
             exit 2
         }
         if {$dpath == ""} {
-            set dpath $ipl::PropelIPLocal_path
+            set dpath $PropelIPLocal_path
         }
         if {[file exist $dpath] != 1} {
             file mkdir $dpath
@@ -2165,32 +2172,32 @@ namespace eval ipl {
         return [ipl::setnode fdeps $dpath $flist $ip]
     }
 
-    set axi4_ports {
+    variable axi4_ports {
         awid awaddr awlen awsize awburst awlock awcache
         awprot awqos awvalid awready wid wdata wstrb wlast wvalid wready bid
         bresp bvalid bready arid araddr arlen arsize arburst arlock arcache
         arprot arqos arvalid arready rid rdata rresp rlast rvalid rready
     }
 
-    set axi4_lite_ports {
+    variable axi4_lite_ports {
         awaddr awprot awvalid awready wdata wstrb wvalid wready bresp bvalid
         bready araddr arprot arvalid arready rdata rresp rvalid rready
     }
 
-    set axi4_stream_ports {
+    variable axi4_stream_ports {
         tvalid tready tdata tstrb tkeep tlast tid tdest tuser
     }
 
-    set axi4_sream_pors {
+    variable axi4_sream_pors {
         valid ready data strb keep last id dest user
     }
 
     proc filter_ports {args} {
         array set opt [list -mod_data "" \
-            -portlist [concat $ipl::axi4_ports \
-                $ipl::axi4_lite_ports \
-                $ipl::axi4_stream_ports \
-                $ipl::axi4_sream_pors] \
+            -portlist [concat $::ipl::axi4_ports \
+                $::ipl::axi4_lite_ports \
+                $::ipl::axi4_stream_ports \
+                $::ipl::axi4_sream_pors] \
         {*}$args]
 
         set mod_data $opt(-mod_data)
