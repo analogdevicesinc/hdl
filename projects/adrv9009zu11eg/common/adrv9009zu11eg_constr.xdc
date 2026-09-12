@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2023, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -71,6 +71,7 @@ set_property PACKAGE_PIN K22 [get_ports {ddr4_rtl_1_cke[0]}]
 set_property PACKAGE_PIN D20 [get_ports ddr4_rtl_1_reset_n]
 
 set_property -dict {PACKAGE_PIN H23 IOSTANDARD LVDS} [get_ports ddr4_ref_1_clk_p]
+set_property -dict {PACKAGE_PIN G23 IOSTANDARD LVDS} [get_ports ddr4_ref_1_clk_n]
 set_property -dict {PACKAGE_PIN K20 IOSTANDARD LVCMOS12} [get_ports ddr4_rtl_1_par]
 set_property -dict {PACKAGE_PIN D19 IOSTANDARD LVCMOS12} [get_ports ddr4_rtl_1_alert_n]
 
