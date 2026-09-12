@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2020 - 2021 Analog Devices, Inc.
+## Copyright (c) 2020 - 2021, 2026 Analog Devices, Inc.
 ## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
@@ -88,6 +88,12 @@ CLEAN_TARGET += ip
 CLEAN_TARGET += qdb
 CLEAN_TARGET += tmp-clearbox
 CLEAN_TARGET += *.log
+CLEAN_TARGET += dni
+CLEAN_TARGET += *.legacy
+CLEAN_TARGET += *.info
+CLEAN_TARGET += mem_init_*.txt
+CLEAN_TARGET += *.tcl.history*
+CLEAN_TARGET += sm_hssi_port_rotation_param_map.json
 ifneq ($(strip $(DIR_NAME)),)
     CLEAN_TARGET := $(addprefix $(DIR_NAME)/,$(CLEAN_TARGET))
 endif
