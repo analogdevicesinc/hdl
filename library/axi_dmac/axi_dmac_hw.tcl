@@ -788,7 +788,7 @@ set_parameter_property HAS_AXIS_TSTRB GROUP $group
 add_parameter HAS_AXIS_TKEEP INTEGER 0
 set_parameter_property HAS_AXIS_TKEEP DISPLAY_NAME "AXI Stream interface has TKEEP"
 set_parameter_property HAS_AXIS_TKEEP DISPLAY_HINT boolean
-set_parameter_property HAS_AXIS_TKEEP HDL_PARAMETER false
+set_parameter_property HAS_AXIS_TKEEP HDL_PARAMETER true
 set_parameter_property HAS_AXIS_TKEEP GROUP $group
 
 add_parameter HAS_AXIS_TLAST INTEGER 0

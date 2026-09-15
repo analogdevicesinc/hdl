@@ -270,6 +270,16 @@ set_false_path -quiet \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
 		-filter {NAME =~ *i_sync_sg_enable* && IS_SEQUENTIAL}]
 
+set_false_path -quiet \
+	-from $req_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *i_sync_control_sg* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+	-from $sg_clk \
+	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+		-filter {NAME =~ *i_sync_status_sg* && IS_SEQUENTIAL}]
+
 set_max_delay -quiet -datapath_only \
 	-from $req_clk \
 	-to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
