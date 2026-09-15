@@ -74,6 +74,53 @@ The data path and clock domains are depicted in the below diagram:
    :align: center
    :alt: AD4080-FMC-EVB/ZedBoard block diagram
 
+SPI slave interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The optional SPI slave interface is enabled at build time with the
+``SPI_SLAVE=1`` make parameter. It instantiates the :ref:`spi_slave` IP,
+which buffers the captured ADC samples in an asynchronous FIFO and streams
+them out to an external SPI master over the ZedBoard PMOD JB header,
+independently of the DMA data path. This lets a device that is not on the
+processor bus (for example a microcontroller acting as an SPI controller)
+read the ADC data without involving the processor or the DMA.
+
+.. image:: ../ad4080_fmc_evb/ad4080_fmc_evb_zed_spi_slave_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: AD4080-FMC-EVB/ZedBoard block diagram with the optional SPI slave
+
+The SPI slave operates in Mode 3 (clock idles high), MSB first, and only
+sources data (there is no MOSI). The external master polls
+``pmod_data_ready`` to know when a new sample is available and frames each
+read as a single transfer. The signals are routed to the PMOD JB header
+using the LVCMOS33 I/O standard, as follows:
+
+.. list-table::
+   :widths: 30 20 20 30
+   :header-rows: 1
+
+   * - Signal
+     - PMOD JB pin
+     - FPGA pin
+     - Direction (FPGA view)
+   * - ``pmod_spi_cs``
+     - JB1
+     - W12
+     - Input
+   * - ``pmod_spi_sclk``
+     - JB2
+     - W11
+     - Input
+   * - ``pmod_spi_miso``
+     - JB3
+     - V10
+     - Output
+   * - ``pmod_data_ready``
+     - JB4
+     - W8
+     - Output
+
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -201,6 +248,14 @@ Example of running the ``make`` command with parameters:
    $cd hdl/projects/ad4080_fmc_evb/zed
    $make ADC_N_BITS=16
 
+Example of running the ``make`` command with the optional SPI slave interface
+enabled on the PMOD JB header:
+
+.. shell::
+
+   $cd hdl/projects/ad4080_fmc_evb/zed
+   $make SPI_SLAVE=1
+
 The following table contains the parameters that can be used to configure this
 project:
 
@@ -214,6 +269,11 @@ project:
    |                | - 20                                                        |
    |                | - 16                                                        |
    |                | - 14                                                        |
+   +----------------+-------------------------------------------------------------+
+   | SPI_SLAVE      | Add the optional SPI slave (PMOD JB) interface (default: 0) |
+   |                |                                                             |
+   |                | - 0                                                         |
+   |                | - 1                                                         |
    +----------------+-------------------------------------------------------------+
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -271,6 +331,9 @@ HDL related
    * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx`
      - ---
+   * - SPI_SLAVE
+     - :git-hdl:`library/spi_slave`
+     - :ref:`spi_slave`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
      - :ref:`axi_sysid`
