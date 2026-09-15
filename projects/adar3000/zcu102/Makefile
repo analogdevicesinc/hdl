@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright 2021(c) Analog Devices, Inc.
+## Copyright (C) 2021, 2026 Analog Devices, Inc. All rights reserved.
 ## Auto-generated, do not modify!
 ####################################################################################
 
