@@ -184,8 +184,8 @@ module axi_pwm_gen_regmap #(
 
     sync_data #(
       .NUM_OF_BITS (3),
-      .ASYNC_CLK (1))
-    i_pwm_controls (
+      .ASYNC_CLK (1)
+    ) i_pwm_controls (
       .in_clk (up_clk),
       .in_data (up_control),
       .out_clk (clk_out),
@@ -194,8 +194,8 @@ module axi_pwm_gen_regmap #(
     for (n = 0; n <= N_PWMS; n = n + 1) begin: pwm_cdc
       sync_data #(
         .NUM_OF_BITS (96),
-        .ASYNC_CLK (1))
-      i_pwm_props (
+        .ASYNC_CLK (1)
+      ) i_pwm_props (
         .in_clk (up_clk),
         .in_data ({up_pwm_period[n],
                    up_pwm_width[n],

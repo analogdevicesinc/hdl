@@ -38,7 +38,7 @@
 module hsci_master_logic #(
   parameter ADDR_WIDTH = 10,
   parameter DATA_WIDTH = 32
-)(
+) (
   input                             clk,
   input                             srstn,
   input       [ADDR_WIDTH-1:0]      I_rd_addr,
@@ -56,7 +56,6 @@ module hsci_master_logic #(
 
   hsci_master_regs_pkg::hsci_master_regs_status_t     I_int;
   hsci_master_regs_pkg::hsci_master_regs_regs_t       O_int;
-
 
   // By default I and O members are passed unmodified to the register map
   // Overrides to the default behaviour are below.
@@ -81,7 +80,6 @@ module hsci_master_logic #(
     .I_wr_data   (I_wr_data),
     .O_read_data (O_read_data),
     .I           (I_int),
-    .O           (O_int)
-   );
+    .O           (O_int));
 
 endmodule

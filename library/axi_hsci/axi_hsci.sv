@@ -37,10 +37,10 @@
 import hsci_master_regs_pkg::*;
 
 module axi_hsci #(
-   parameter AXI_ADDR_WIDTH    =    15,
-   parameter AXI_DATA_WIDTH    =    32,
-   parameter REGMAP_ADDR_WIDTH =    16,
-   parameter S_AXI_ADDR_WIDTH  =    18
+  parameter AXI_ADDR_WIDTH    =    15,
+  parameter AXI_DATA_WIDTH    =    32,
+  parameter REGMAP_ADDR_WIDTH =    16,
+  parameter S_AXI_ADDR_WIDTH  =    18
 ) (
   input  wire                                s_axi_aclk,
   input  wire                                s_axi_aresetn,
@@ -78,7 +78,6 @@ module axi_hsci #(
   input   wire                               hsci_dly_rdy_bsc_tx,
   input   wire                               hsci_vtc_rdy_bsc_rx,
   input   wire                               hsci_dly_rdy_bsc_rx
-
 );
 
   axi4_lite #(32,18)   axi();

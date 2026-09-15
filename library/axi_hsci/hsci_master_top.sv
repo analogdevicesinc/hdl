@@ -41,7 +41,7 @@ module hsci_master_top #(
   parameter AXI_DATA_WIDTH    =    32,
   parameter REGMAP_ADDR_WIDTH =    16,
   parameter S_AXI_ADDR_WIDTH  =    18
-)(
+) (
   input  wire         axi_clk,
   input  wire         axi_resetn,
 
@@ -103,7 +103,6 @@ module hsci_master_top #(
   wire                              hsci_clear_errors;
   logic                             hsci_rstn_async;
   logic                             hsci_rst_sync;
-
 
   assign I.hsci_reset_seq_done = hsci_rst_seq_done;
   assign I.hsci_phy_pll_locked = hsci_pll_locked;
@@ -253,8 +252,8 @@ module hsci_master_top #(
 
    // Convert AXI4 Lite to Yoda register interface
   hsci_master_axi_slave #(
-    .REGMAP_ADDR_WIDTH (REGMAP_ADDR_WIDTH))
-  hsci_master_axi_slave (
+    .REGMAP_ADDR_WIDTH (REGMAP_ADDR_WIDTH)
+  ) hsci_master_axi_slave (
     .axi_clk           (axi_clk),
     .axi_resetn        (axi_resetn),
     .axi               (axi),
@@ -275,15 +274,15 @@ module hsci_master_top #(
   hsci_master_logic #(
     .ADDR_WIDTH  (REGMAP_ADDR_WIDTH),
     .DATA_WIDTH  (AXI_DATA_WIDTH)
-   ) hsci_master_logic (
-      .clk         (axi_clk),
-      .srstn       (axi_resetn),
-      .I_rd_addr   (hsci_regmap_raddr),
-      .I_wr_stb    (hsci_regmap_wr_en),
-      .I_wr_addr   (hsci_regmap_waddr),
-      .I_wr_data   (hsci_regmap_wdata),
-      .O_read_data (hsci_regmap_rdata),
-      .I           (I),
-      .O           (O));
+  ) hsci_master_logic (
+    .clk         (axi_clk),
+    .srstn       (axi_resetn),
+    .I_rd_addr   (hsci_regmap_raddr),
+    .I_wr_stb    (hsci_regmap_wr_en),
+    .I_wr_addr   (hsci_regmap_waddr),
+    .I_wr_data   (hsci_regmap_wdata),
+    .O_read_data (hsci_regmap_rdata),
+    .I           (I),
+    .O           (O));
 
 endmodule

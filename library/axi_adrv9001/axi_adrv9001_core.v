@@ -425,8 +425,7 @@ module axi_adrv9001_core #(
     .ext_sync_arm (adc_1_ext_sync_arm),
     .ext_sync_disarm (adc_1_ext_sync_disarm),
     .sync_in (adc_1_transfer_sync_d2 | adc_sync_1),
-    .sync_armed (adc_1_armed_s)
-  );
+    .sync_armed (adc_1_armed_s));
 
   // rx2 transfer sync
 
@@ -442,8 +441,7 @@ module axi_adrv9001_core #(
     .ext_sync_arm (adc_2_ext_sync_arm | adc_1_ext_sync_arm_cdc_s),
     .ext_sync_disarm (adc_2_ext_sync_disarm | adc_1_ext_sync_disarm_cdc_s),
     .sync_in (adc_2_transfer_sync_d2 | adc_sync_2),
-    .sync_armed (adc_2_armed_s)
-  );
+    .sync_armed (adc_2_armed_s));
 
   // adc DMA sync start
   assign adc_1_start_sync = ~adc_1_armed_s;
@@ -463,8 +461,7 @@ module axi_adrv9001_core #(
     .ext_sync_arm (dac_1_ext_sync_arm),
     .ext_sync_disarm (dac_1_ext_sync_disarm),
     .sync_in (dac_1_transfer_sync_d2),
-    .sync_armed (dac_sync_armed_cd_1_s)
-  );
+    .sync_armed (dac_sync_armed_cd_1_s));
 
   // tx2 transfer sync
 
@@ -480,8 +477,7 @@ module axi_adrv9001_core #(
     .ext_sync_arm (dac_2_ext_sync_arm),
     .ext_sync_disarm (dac_2_ext_sync_disarm),
     .sync_in (dac_2_transfer_sync_d2),
-    .sync_armed (dac_sync_armed_cd_2_s)
-  );
+    .sync_armed (dac_sync_armed_cd_2_s));
 
   assign tx1_rst = tx1_rst_s;
   assign tx2_rst = tx1_r1_mode ? tx2_rst_loc : tx1_rst_cdc_s;
