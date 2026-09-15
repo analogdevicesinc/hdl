@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -14,7 +14,7 @@
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 // A PARTICULAR PURPOSE.
 //
-// Redistribution and use of source or resulting binaries, with or without modificat
+// Redistribution and use of source or resulting binaries, with or without modification
 // of this file, are permitted under one of the following two license terms:
 //
 //   1. The GNU General Public License version 2 as published by the
