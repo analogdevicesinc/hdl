@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2021 (c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -52,7 +52,8 @@ module system_top (
   output                  spi_sel_a,
   output                  spi_clk,
   output                  spi_mosi,
-  input                   spi_miso);
+  input                   spi_miso
+);
 
   // internal signals
 
@@ -65,10 +66,10 @@ module system_top (
   // instantiations
 
   assign gpio_bd_o = gpio_o[20:13];
-  
+
   assign gpio_i[12: 0] = gpio_bd_i;
   assign gpio_i[94:13] = gpio_o[94:13];
-  
+
   assign gpio0 = gpio_o[32];
   assign gpio1 = gpio_o[33];
   assign gpio2 = gpio_o[34];
@@ -77,7 +78,7 @@ module system_top (
   assign gpio5 = gpio_o[37];
   assign gpio6 = gpio_o[38];
   assign gpio7 = gpio_o[39];
-  
+
   assign spi_sel_a = spi0_csn[0];
 
   system_wrapper i_system_wrapper (
@@ -94,6 +95,3 @@ module system_top (
     .spi1_mosi ());
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
