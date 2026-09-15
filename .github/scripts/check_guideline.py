@@ -452,8 +452,11 @@ LICENSE_ONLY_EXTENSIONS = (".tcl", ".ttcl", ".xdc", ".sdc", ".pdc",
 
 def check_license_only_filename(filename):
 
+    # testbench HDL files (those containing "tb") are excluded from the full
+    # guideline check by check_hdl_filename, but they still get the lightweight
+    # license-only check (copyright year + license body), just like non-HDL files.
     if (filename.endswith(".v") or filename.endswith(".sv")):
-        return False
+        return filename.find("tb") != -1
 
     return filename.endswith(LICENSE_ONLY_EXTENSIONS)
 
@@ -476,6 +479,30 @@ def detect_all_hdl_files (directory):
             for file in files:
                 #filename_wout_ext = (os.path.splitext(file)[0])
                 if (check_hdl_filename(file)):
+                    fullpath = os.path.join(folder, file)
+                    detected_files.append(fullpath)
+
+    return detected_files
+
+
+###############################################################################
+# Detect all testbench HDL files (.v, .sv containing "tb") in /library and
+# /projects. These get only the lightweight license-only check, so they are
+# collected separately from the full-check HDL files.
+# Return a list with the relative paths.
+###############################################################################
+def detect_all_tb_files (directory):
+
+    detected_files = []
+    for folder, dirs, files in os.walk(directory):
+        ## folder name must be either library or projects,
+        ## and it must not contain a dot in the name (Vivado generated)
+        if ((folder[1:-2]).find(".") == -1
+            and (folder.find("library") != -1 or folder.find("projects") != -1)):
+
+            for file in files:
+                if ((file.endswith(".v") or file.endswith(".sv"))
+                    and file.find("tb") != -1):
                     fullpath = os.path.join(folder, file)
                     detected_files.append(fullpath)
 
@@ -2119,6 +2146,9 @@ if scan_all_files:
     if all_hdl_files is None:
         all_hdl_files = detect_all_hdl_files("./")
     modified_files = list(all_hdl_files)
+    # testbench files are not part of the full guideline check, but they still
+    # get the lightweight license-only check
+    license_only_files += detect_all_tb_files("./")
 
 # no matter the number of arguments
 if (len(modified_files) <= 0 and len(license_only_files) <= 0):
