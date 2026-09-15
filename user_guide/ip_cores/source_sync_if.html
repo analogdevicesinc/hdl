@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="Clone the GitHub repository:" name="description" />
+<meta content="This page presents a possible design solution for a source synchronous interface, which can be used to interface any converter that has a source synchronous data interface. The main focus is on the generic interface architecture; information regarding FPGA vendor specific hardware modules and IPs can be found on the respective FPGA manufacturer site, some of which are linked in the References section below." name="description" />
 
-    <title>Use ADI IPs into your own project &#8212; HDL  documentation</title>
+    <title>Source Synchronous Interface &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=fb8972a4" />
     <script async="async" src="../../_static/app.umd.js?v=8c78863f"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Interfaces" href="interfaces.html" />
-    <link rel="prev" title="Creating a new IP" href="creating_new_ip.html" />
+    <link rel="next" title="Generic AXI ADC" href="axi_adc/index.html" />
+    <link rel="prev" title="Interfaces" href="interfaces.html" />
    
   
   
@@ -95,18 +95,15 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Use ADI IPs into your own project</a><ul>
-<li><a class="reference internal" href="#vivado">Vivado</a></li>
-<li><a class="reference internal" href="#quartus">Quartus</a></li>
-<li><a class="reference internal" href="#jesd204">JESD204</a><ul>
-<li><a class="reference internal" href="#id1">Vivado</a></li>
+<li><a class="reference internal" href="#">Source Synchronous Interface</a><ul>
+<li><a class="reference internal" href="#what-is-a-source-synchronous-interface">What is a Source Synchronous Interface?</a></li>
+<li><a class="reference internal" href="#architecture">Architecture</a></li>
+<li><a class="reference internal" href="#implementation-with-amd-xilinx-fpgas">Implementation with AMD Xilinx FPGAs</a><ul>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#spi-engine">SPI Engine</a><ul>
-<li><a class="reference internal" href="#id2">Vivado</a></li>
-<li><a class="reference internal" href="#id3">Quartus</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#implementation-with-intel-altera-fpgas">Implementation with Intel/Altera FPGAs</a></li>
 </ul>
 </li>
 </ul>
@@ -174,9 +171,9 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../architecture.html">HDL architecture</a></li>
 <li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-2" id="toctree-collapse-1-2" checked=""/><div class="collapse"><a class="reference internal" href="index.html">IP cores</a><label for="toctree-collapse-1-2"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="creating_new_ip.html">Creating a new IP</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="use_adi_ips.html">Use ADI IPs into your own project</a></li>
 <li class="toctree-l3"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
-<li class="toctree-l3"><a class="reference internal" href="source_sync_if.html">Source Synchronous Interface</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Source Synchronous Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="axi_adc/index.html">Generic AXI ADC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
@@ -422,200 +419,96 @@ Content on this topic
 </div>
           <div class="body" role="main">
             
-  <section id="use-adi-ips-into-your-own-project">
-<span id="use-adi-ips"></span><h1>Use ADI IPs into your own project<a class="headerlink" href="#use-adi-ips-into-your-own-project" title="Permalink to this heading"></a></h1>
-<p>Clone the GitHub repository:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/analogdevicesinc/hdl.git
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><section id="vivado">
-<h2>Vivado<a class="headerlink" href="#vivado" title="Permalink to this heading"></a></h2>
-<p>Navigate to hdl/library and build all the libraries</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>-C<span class="w"> </span>library<span class="w"> </span>all
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>Launch a Vivado GUI and open the Settings window. Go to IP section and expand it.
-There you will find a section called Repository.
-From here you can add the path to the library folder inside the ADI repository
-you just cloned.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;hdl_path&gt;/hdl/library
-</pre></div>
-</div>
-<p>Click apply and Ok to save the changes.
-Wait for the IP Catalog to refresh and now you should be able to see the IPs there,
-under User Repository/Analog Devices section.</p>
+  <section id="source-synchronous-interface">
+<span id="source-sync-if"></span><h1>Source Synchronous Interface<a class="headerlink" href="#source-synchronous-interface" title="Permalink to this heading"></a></h1>
+<p>This page presents a possible design solution for a source synchronous
+interface, which can be used to interface any converter that has a source
+synchronous data interface. The main focus is on the generic interface
+architecture; information regarding FPGA vendor specific hardware modules and
+IPs can be found on the respective FPGA manufacturer site, some of which are
+linked in the References section below.</p>
+<section id="what-is-a-source-synchronous-interface">
+<h2>What is a Source Synchronous Interface?<a class="headerlink" href="#what-is-a-source-synchronous-interface" title="Permalink to this heading"></a></h2>
+<p>A source synchronous interface is a common interface type for chip-to-chip
+communication. The base idea behind the interface is to send a copy of the
+clock along with the data, which simplifies the timing model of the
+interface. This interface type is a successor of the system synchronous
+interface, where both the source and destination IC receive the clock from a
+common source (clock generator IC).</p>
 </section>
-<section id="quartus">
-<h2>Quartus<a class="headerlink" href="#quartus" title="Permalink to this heading"></a></h2>
-<p>Launch a Quartus GUI and select the Tools dropdown from the top menu.
-Click the Options category.
-From the pop-up window, select IP Catalog Search Locations and add the path to
-the library folder inside the ADI repository you just cloned.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;hdl_path&gt;/hdl/library/**/*
-</pre></div>
-</div>
-<p>Wait for the IP Catalog to refresh and now you should be able to see the IPs
-under Library/Analog Devices.</p>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this heading"></a></h2>
+<img alt="Source synchronous interface implementation" class="align-center" src="../../_images/source_sync_if.svg" /><p>In general, a source synchronous interface consists of a clock reception
+module, which contains all the necessary IO resource instances to receive the
+digital interface clock from the device. Depending on the device type, it may
+also contain a data reception and/or a data transmission module. The
+interface exposed to the FPGA logic is a simplified FIFO interface, described
+in more detail <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/adi_fifo_if" target="_blank">here</a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">CORE_CLK</span></code> can have the same frequency as the <code class="docutils literal notranslate"><span class="pre">PHY_CLK</span></code>, or an
+integer division of the <code class="docutils literal notranslate"><span class="pre">PHY_CLK</span></code> frequency. The general rule of thumb is
+to keep the <code class="docutils literal notranslate"><span class="pre">CORE_CLK</span></code> frequency below 200 MHz, since it is used throughout
+the data path and a too high <code class="docutils literal notranslate"><span class="pre">CORE_CLK</span></code> can significantly reduce the timing
+margins, making it difficult (or impossible) to close timing.</p>
+<p>If the frequency of the <code class="docutils literal notranslate"><span class="pre">PHY_CLK</span></code> is too high, SERDES macros are used to
+convert the interface clock and data rate into a more manageable level.</p>
 </section>
-<section id="jesd204">
-<h2>JESD204<a class="headerlink" href="#jesd204" title="Permalink to this heading"></a></h2>
-<section id="id1">
-<h3>Vivado<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
-<p>For the JESD204 IP, it is not as straightforward as for other modules.
-Here you have an example of an instantiation for this interface:
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/common/daq2_bd.tcl" target="_blank">projects/daq2/common/daq2_bd.tcl</a>.
-First, you will have to source the jesd204.tcl script, inside your
-<code class="docutils literal notranslate"><span class="pre">&lt;project&gt;_bd.tcl</span></code>.</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>jesd204<span class="o">/</span>scripts<span class="o">/</span>jesd204.tcl
-</pre></div>
-</div>
-<p>The following code is for the TX/DAC part. The RX/ADC is similar.</p>
-<p>Add the PL (Physical Layer).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ad_ip_instance axi_adxcvr axi_ad9144_xcvr [list \
-  NUM_OF_LANES $TX_NUM_OF_LANES \
-  QPLL_ENABLE 1 \
-  TX_OR_RX_N 1 \
-]
-</pre></div>
-</div>
-<p>Then you have to add the Data Link Layer with the desired number of lanes.
-For RX you will swap this one with <code class="docutils literal notranslate"><span class="pre">adi_axi_jesd204_rx_create</span></code>.</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">adi_axi_jesd204_tx_create</span><span class="w"> </span>axi_ad9144_jesd<span class="w"> </span><span class="nv">$TX_NUM_OF_LANES</span>
-</pre></div>
-</div>
-<p>Let’s instantiate the TPL (Transport Layer). For RX you will swap this one with
-<code class="docutils literal notranslate"><span class="pre">adi_tpl_jesd204_rx_create</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>adi_tpl_jesd204_tx_create axi_ad9144_tpl $TX_NUM_OF_LANES \
-                                           $TX_NUM_OF_CONVERTERS \
-                                           $TX_SAMPLES_PER_FRAME \
-                                           $TX_SAMPLE_WIDTH \
-</pre></div>
-</div>
-<p>You can optionally add the util_upack2 module for unpacking the data.
-For RX you will swap this one with util_cpack2.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ad_ip_instance util_upack2 axi_ad9144_upack [list \
-  NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
-  SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
-  SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
-]
-</pre></div>
-</div>
-<p>After you added the modules for RX and TX logic, you will have to link them
-together with the util_adxcvr IP. This IP includes the shared transceiver core,
-so it will appear only once per RX-TX pair.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ad_ip_instance util_adxcvr util_daq2_xcvr [list \
-  RX_NUM_OF_LANES $MAX_RX_NUM_OF_LANES \
-  TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES \
-  QPLL_REFCLK_DIV 1 \
-  QPLL_FBDIV_RATIO 1 \
-  QPLL_FBDIV 0x30 \
-  RX_OUT_DIV 1 \
-  TX_OUT_DIV 1 \
-  RX_DFE_LPM_CFG 0x0104 \
-  RX_CDR_CFG 0x0B000023FF10400020 \
-]
-</pre></div>
-</div>
-<p>Add the reference clocks and resets.</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_xcvrpll</span><span class="w">  </span>tx_ref_clk_0<span class="w"> </span>util_daq2_xcvr<span class="o">/</span>qpll_ref_clk_<span class="o">*</span>
-<span class="nv">ad_xcvrpll</span><span class="w">  </span>axi_ad9144_xcvr<span class="o">/</span>up_pll_rst<span class="w"> </span>util_daq2_xcvr<span class="o">/</span>up_qpll_rst_<span class="o">*</span>
-</pre></div>
-</div>
-<p>Almost done, now it is time to use the <code class="docutils literal notranslate"><span class="pre">ad_xcvrcon</span></code> to connect the pieces
-together.</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_xcvrcon</span><span class="w">  </span>util_daq2_xcvr<span class="w"> </span>axi_ad9144_xcvr<span class="w"> </span>axi_ad9144_jesd<span class="w"> </span><span class="k">{</span><span class="nv">0</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="nv">$MAX_TX_NUM_OF_LANES</span>
-</pre></div>
-</div>
-<p>Now just add the interconnects and the interrupts for the added layers (PL, TPL, LL).</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_cpu_interconnect</span><span class="w"> </span><span class="mh">0x44A60000</span><span class="w"> </span>axi_ad9144_xcvr
-<span class="nv">ad_cpu_interconnect</span><span class="w"> </span><span class="mh">0x44A04000</span><span class="w"> </span>axi_ad9144_tpl
-<span class="nv">ad_cpu_interconnect</span><span class="w"> </span><span class="mh">0x44A90000</span><span class="w"> </span>axi_ad9144_jesd
-</pre></div>
-</div>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_cpu_interrupt</span><span class="w"> </span>ps-10<span class="w"> </span>mb-15<span class="w"> </span>axi_ad9144_jesd<span class="o">/</span>irq
-</pre></div>
+<section id="implementation-with-amd-xilinx-fpgas">
+<h2>Implementation with AMD Xilinx FPGAs<a class="headerlink" href="#implementation-with-amd-xilinx-fpgas" title="Permalink to this heading"></a></h2>
+<section id="files">
+<h3>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/common/ad_data_clk.v" target="_blank">library/xilinx/common/ad_data_clk.v</a></p></td>
+<td><p>Clock reception module, contains an input clock buffer and a global
+clock buffer for distribution.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/common/ad_data_in.v" target="_blank">library/xilinx/common/ad_data_in.v</a></p></td>
+<td><p>Data reception module, general architecture: <code class="docutils literal notranslate"><span class="pre">ibuf</span> <span class="pre">-&gt;</span> <span class="pre">idelay</span> <span class="pre">-&gt;</span>
+<span class="pre">iddr</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/common/ad_data_out.v" target="_blank">library/xilinx/common/ad_data_out.v</a></p></td>
+<td><p>Data transmission module, general architecture: <code class="docutils literal notranslate"><span class="pre">oddr</span> <span class="pre">-&gt;</span> <span class="pre">odelay</span> <span class="pre">-&gt;</span>
+<span class="pre">obuf</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/common/ad_serdes_clk.v" target="_blank">library/xilinx/common/ad_serdes_clk.v</a></p></td>
+<td><p>Clock reception module for SERDES architecture, general architecture:
+<code class="docutils literal notranslate"><span class="pre">ibuf</span> <span class="pre">-&gt;</span> <span class="pre">mmcm</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/common/ad_serdes_in.v" target="_blank">library/xilinx/common/ad_serdes_in.v</a></p></td>
+<td><p>Data reception module, general architecture: <code class="docutils literal notranslate"><span class="pre">ibuf</span> <span class="pre">-&gt;</span> <span class="pre">idelay</span> <span class="pre">-&gt;</span>
+<span class="pre">iserdes</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/common/ad_serdes_out.v" target="_blank">library/xilinx/common/ad_serdes_out.v</a></p></td>
+<td><p>Data transmission module, general architecture: <code class="docutils literal notranslate"><span class="pre">oserdes</span> <span class="pre">-&gt;</span> <span class="pre">obuf</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </section>
+<section id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug362.pdf" target="_blank">Virtex 6 Clock Resources</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug361.pdf" target="_blank">Virtex 6 SelectIO Resources</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug472_7Series_Clocking.pdf" target="_blank">7 Series Clock Resources</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug471_7Series_SelectIO.pdf" target="_blank">7 Series SelectIO Resources</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug572-ultrascale-clocking.pdf" target="_blank">Ultrascale Clock Resources</a></p></li>
+<li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug571-ultrascale-selectio.pdf" target="_blank">Ultrascale SelectIO Resources</a></p></li>
+</ul>
 </section>
-<section id="spi-engine">
-<h2>SPI Engine<a class="headerlink" href="#spi-engine" title="Permalink to this heading"></a></h2>
-<p>The SPI Engine is a special module too, since it consists of more than one IP.
-In order to use it into your own project, you will have to add all of the
-necessary components. The SPI engine has 4 modules: execution, interconnect,
-regmap and offload, they are instantiated inside the <code class="docutils literal notranslate"><span class="pre">spi_engine_create</span></code>
-function.</p>
-<p>The offload_en parameter defines whether or not offload and interconnect are
-necessary for the project. Vivado an Quartus projects have different parameters
-for the instantiation of the SPI engine. Below you will find examples for both
-tools.</p>
-<section id="id2">
-<h3>Vivado<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
-<p>For Xilinx projects using Vivado, <code class="docutils literal notranslate"><span class="pre">spi_engine_create</span></code> function requires 15
-parameters. Take this example, the code shown here is from the ad4630_fmc
-project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4630_fmc/common/ad463x_bd.tcl" target="_blank">projects/ad4630_fmc/common/ad463x_bd.tcl</a></p>
-<p>Let’s start with sourcing the spi_engine.tcl script inside your <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;_db.tcl</span></code>.</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>spi_engine<span class="o">/</span>scripts<span class="o">/</span>spi_engine.tcl
-</pre></div>
-</div>
-<p>Parameters and default values for Vivado projects:</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">{{</span><span class="nv">name</span><span class="w"> </span><span class="s2">&quot;spi_engine&quot;</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_width</span><span class="w"> </span><span class="mi">32</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">async_spi_clk</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">offload_en</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_cs</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdi</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdo</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_delay</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">echo_sclk</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdo_streaming</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdo_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sync_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}}</span>
-</pre></div>
-</div>
-<p>Name is a mandatory input. An example of instantiation (Xilinx project), using
-the default values for <code class="docutils literal notranslate"><span class="pre">sdo_streaming</span></code>, <code class="docutils literal notranslate"><span class="pre">cmd_mem_addr_width</span></code>,
-<code class="docutils literal notranslate"><span class="pre">data_mem_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sdi_fifo_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sdo_fifo_addr_width</span></code>,
-<code class="docutils literal notranslate"><span class="pre">sync_fifo_addr_width</span></code> and <code class="docutils literal notranslate"><span class="pre">cmd_fifo_addr_width</span></code>:</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c">#                 name         data_width async_spi_clk offload_en num_csn num_sdi     sdi_delay  echo_sclk</span>
-<span class="nv">spi_engine_create</span><span class="w"> </span><span class="s2">&quot;spi_ad463x&quot;</span><span class="w"> </span><span class="mi">32</span><span class="w">         </span><span class="mi">1</span><span class="w">             </span><span class="mi">1</span><span class="w">          </span><span class="mi">1</span><span class="w">       </span><span class="nv">$NUM_OF_SDI</span><span class="w"> </span><span class="mi">0</span><span class="w">          </span><span class="mi">1</span>
-<span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>execution<span class="w"> </span>CONFIG.DEFAULT_SPI_CFG<span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="k">;</span>
-
-<span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_0<span class="w"> </span><span class="nv">$NUM_OF_SDIO</span>
-<span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_1<span class="w"> </span><span class="nv">$CAPTURE_ZONE</span>
-<span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_2<span class="w"> </span><span class="nv">$CLK_MODE</span>
-<span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_3<span class="w"> </span><span class="nv">$DDR_EN</span>
-</pre></div>
-</div>
 </section>
-<section id="id3">
-<h3>Quartus<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
-<p>For Altera projects using Quartus, <code class="docutils literal notranslate"><span class="pre">spi_engine_create</span></code> function requires 18
-parameters. Parameters and default values for Quartus projects:</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">{{</span><span class="nv">name</span><span class="w"> </span><span class="s2">&quot;spi_engine&quot;</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">axi_clk</span><span class="w"> </span>sys_clk.clk<span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">axi_reset</span><span class="w"> </span>sys_clk.clk_reset<span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">spi_clk</span><span class="w"> </span>spi_clk_pll.outclk0<span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_width</span><span class="w"> </span><span class="mi">32</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">async_spi_clk</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">offload_en</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_cs</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdi</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdo</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_delay</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">echo_sclk</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdo_streaming</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdo_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sync_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}}</span>
-</pre></div>
+<section id="implementation-with-intel-altera-fpgas">
+<h2>Implementation with Intel/Altera FPGAs<a class="headerlink" href="#implementation-with-intel-altera-fpgas" title="Permalink to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Intel/Altera implementation of this interface is not documented yet.</p>
 </div>
-<p>Name, axi_clk, axi_reset, and spi_clk are mandatory inputs. An example of
-instantiation (Quartus project), using the default values for
-<code class="docutils literal notranslate"><span class="pre">sdo_streaming</span></code>, <code class="docutils literal notranslate"><span class="pre">cmd_mem_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">data_mem_addr_width</span></code>,
-<code class="docutils literal notranslate"><span class="pre">sdi_fifo_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sdo_fifo_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sync_fifo_addr_width</span></code>,
-and <code class="docutils literal notranslate"><span class="pre">cmd_fifo_addr_width</span></code>:</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>spi_engine<span class="o">/</span>scripts<span class="o">/</span>spi_engine.tcl
-
-<span class="k">set</span><span class="w"> </span>spi_engine_hier<span class="w"> </span>spi_ad57xx
-
-<span class="k">set</span><span class="w"> </span>data_width<span class="w">     </span><span class="mi">32</span>
-<span class="k">set</span><span class="w"> </span>async_spi_clk<span class="w">  </span><span class="mi">1</span>
-<span class="k">set</span><span class="w"> </span>offload_en<span class="w">     </span><span class="mi">1</span>
-<span class="k">set</span><span class="w"> </span>num_cs<span class="w">         </span><span class="mi">1</span>
-<span class="k">set</span><span class="w"> </span>num_sdi<span class="w">        </span><span class="mi">1</span>
-<span class="k">set</span><span class="w"> </span>num_sdo<span class="w">        </span><span class="mi">1</span>
-<span class="k">set</span><span class="w"> </span>sdi_delay<span class="w">      </span><span class="mi">0</span>
-<span class="k">set</span><span class="w"> </span>echo_sclk<span class="w">      </span><span class="mi">0</span>
-<span class="k">set</span><span class="w"> </span>sdo_streaming<span class="w">  </span><span class="mi">1</span>
-
-<span class="k">set</span><span class="w"> </span>axi_clk<span class="w"> </span>sys_clk.clk
-<span class="k">set</span><span class="w"> </span>axi_reset<span class="w"> </span>sys_clk.clk_reset
-<span class="k">set</span><span class="w"> </span>spi_clk<span class="w"> </span>spi_clk_pll.outclk0
-
-<span class="nv">spi_engine_create</span><span class="w"> </span><span class="nv">$spi_engine_hier</span><span class="w"> </span><span class="nv">$axi_clk</span><span class="w"> </span><span class="nv">$axi_reset</span><span class="w"> </span><span class="nv">$spi_clk</span><span class="w"> </span><span class="nv">$data_width</span><span class="w"> </span><span class="nv">$async_spi_clk</span><span class="w"> </span><span class="nv">$offload_en</span><span class="w"> </span><span class="nv">$num_cs</span><span class="w"> </span><span class="nv">$num_sdi</span><span class="w"> </span><span class="nv">$num_sdo</span><span class="w"> </span><span class="nv">$sdi_delay</span><span class="w"> </span><span class="nv">$echo_sclk</span><span class="w"> </span><span class="nv">$sdo_streaming</span>
-</pre></div>
-</div>
-</section>
 </section>
 </section>
 
@@ -623,8 +516,8 @@ and <code class="docutils literal notranslate"><span class="pre">cmd_fifo_addr_w
           </div>
               <div class="related">
                 &nbsp;
-    <a href="creating_new_ip.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Creating a new IP</a>
-    <a href="interfaces.html" title="Next document (Alt+Shift+RightArrow)" class="next">Interfaces</a>
+    <a href="interfaces.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Interfaces</a>
+    <a href="axi_adc/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">Generic AXI ADC</a>
               </div>
           
         </div>

@@ -208,12 +208,14 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/source_sync_if.html">Source Synchronous Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/debugging_xsdb.html">Debugging with XSDB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guidelines.html">HDL coding guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/contributing.html">Contributing to HDL</a></li>
@@ -1677,7 +1679,7 @@ configure this project, depending on the carrier used. Where a cell contains a
 </div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="0f84ab6ccd2cfa06db5254938ddcac99c530d92c" name="0f84ab6ccd2cfa06db5254938ddcac99c530d92c" type="checkbox"></input><label for="0f84ab6ccd2cfa06db5254938ddcac99c530d92c"><p>Default values of the ``make`` parameters for AD9082-FMCA-EBZ</p>
+<input class="collapsible_input" id="ea863ed8480a24347c39f61d9ef4b2657c659889" name="ea863ed8480a24347c39f61d9ef4b2657c659889" type="checkbox"></input><label for="ea863ed8480a24347c39f61d9ef4b2657c659889"><p>Default values of the ``make`` parameters for AD9082-FMCA-EBZ</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1697,126 +1699,174 @@ configure this project, depending on the carrier used. Where a cell contains a
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>JESD_MODE</p></td>
+<tr class="row-odd"><td colspan="6"><p><strong>XCVR build parameters</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>PLL_TYPE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>QPLL0</p></td>
+<td><p>QPLL</p></td>
+<td><p>QPLL0</p></td>
+</tr>
+<tr class="row-odd"><td><p>LANE_RATE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>15</p></td>
+<td><p>10</p></td>
+<td><p>15</p></td>
+</tr>
+<tr class="row-even"><td><p>REF_CLK</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>750</p></td>
+<td><p>250</p></td>
+<td><p>750</p></td>
+</tr>
+<tr class="row-odd"><td colspan="6"><p><strong>Optional XCVR overrides</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>XCVR_RX_PLL_TYPE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>XCVR_RX_LANE_RATE</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>XCVR_RX_REF_CLK</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td colspan="6"><p><strong>JESD and other build parameters</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>JESD_MODE</p></td>
 <td><p>64B66B</p></td>
 <td><p>64B66B</p></td>
 <td><p>8B10B</p></td>
 <td><p><span class="red">8B10B*</span></p></td>
-<td><p><span class="red">8B10B*</span></p></td>
+<td><p>8B10B</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_LANE_RATE</p></td>
+<tr class="row-odd"><td><p>RX_LANE_RATE</p></td>
 <td><p>24.75</p></td>
 <td><p>24.75</p></td>
 <td><p>15</p></td>
 <td><p>10</p></td>
 <td><p>15</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX_LANE_RATE</p></td>
+<tr class="row-even"><td><p>TX_LANE_RATE</p></td>
 <td><p>24.75</p></td>
 <td><p>24.75</p></td>
 <td><p>15</p></td>
 <td><p>10</p></td>
 <td><p>15</p></td>
 </tr>
-<tr class="row-even"><td><p>REF_CLK_RATE</p></td>
+<tr class="row-odd"><td><p>REF_CLK_RATE</p></td>
 <td><p>375</p></td>
 <td><p>375</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-odd"><td><p>RX_JESD_M</p></td>
+<tr class="row-even"><td><p>RX_JESD_M</p></td>
 <td><p>4</p></td>
 <td><p>4</p></td>
 <td><p>4</p></td>
 <td><p>8</p></td>
 <td><p>4</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_JESD_L</p></td>
+<tr class="row-odd"><td><p>RX_JESD_L</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
 <td><p>4</p></td>
 <td><p>8</p></td>
 </tr>
-<tr class="row-odd"><td><p>RX_JESD_S</p></td>
+<tr class="row-even"><td><p>RX_JESD_S</p></td>
 <td><p>4</p></td>
 <td><p>4</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_JESD_NP</p></td>
+<tr class="row-odd"><td><p>RX_JESD_NP</p></td>
 <td><p>12</p></td>
 <td><p>12</p></td>
 <td><p>16</p></td>
 <td><p>16</p></td>
 <td><p>16</p></td>
 </tr>
-<tr class="row-odd"><td><p>RX_NUM_LINKS</p></td>
+<tr class="row-even"><td><p>RX_NUM_LINKS</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-even"><td><p>RX_TPL_WIDTH</p></td>
+<tr class="row-odd"><td><p>RX_TPL_WIDTH</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>{}</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX_JESD_M</p></td>
+<tr class="row-even"><td><p>TX_JESD_M</p></td>
 <td><p>4</p></td>
 <td><p>4</p></td>
 <td><p>4</p></td>
 <td><p>8</p></td>
 <td><p>4</p></td>
 </tr>
-<tr class="row-even"><td><p>TX_JESD_L</p></td>
+<tr class="row-odd"><td><p>TX_JESD_L</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
 <td><p>4</p></td>
 <td><p>8</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX_JESD_S</p></td>
+<tr class="row-even"><td><p>TX_JESD_S</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-even"><td><p>TX_JESD_NP</p></td>
+<tr class="row-odd"><td><p>TX_JESD_NP</p></td>
 <td><p>12</p></td>
 <td><p>12</p></td>
 <td><p>16</p></td>
 <td><p>16</p></td>
 <td><p>16</p></td>
 </tr>
-<tr class="row-odd"><td><p>TX_NUM_LINKS</p></td>
+<tr class="row-even"><td><p>TX_NUM_LINKS</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 </tr>
-<tr class="row-even"><td><p>TX_TPL_WIDTH</p></td>
+<tr class="row-odd"><td><p>TX_TPL_WIDTH</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>{}</p></td>
 </tr>
-<tr class="row-odd"><td><p>RX_KS_PER_CHANNEL</p></td>
+<tr class="row-even"><td><p>RX_KS_PER_CHANNEL</p></td>
 <td><p>64</p></td>
 <td><p>64</p></td>
 <td><p>64</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-even"><td><p>TX_KS_PER_CHANNEL</p></td>
+<tr class="row-odd"><td><p>TX_KS_PER_CHANNEL</p></td>
 <td><p>64</p></td>
 <td><p>64</p></td>
 <td><p>64</p></td>
