@@ -139,11 +139,12 @@ Things which must be taken in consideration regarding this specific HDL design:
     the ``M_AXI_B`` (BAR0) bridge are: the three TPL cores (rx/tx/obs), the
     three JESD204 link layers (rx/tx/obs), the three transceiver (xcvr) cores
     (rx/tx/obs), the three ADI ``axi_dmac`` instances (rx/tx/obs), the SPI
-    controller, the two GPIO controllers and the SYSID core
+    controller, the GPIO controller and the SYSID core
   - New IPs were introduced to allow the XDMA bridge to take on the control of
-    the SPI, GPIO and interrupt signals (PL SPI controllers, GPIO controllers
-    and a custom interrupt controller); the PS doesn't control these signals
-    anymore
+    the SPI, GPIO and interrupt signals (a PL SPI controller, one AXI GPIO
+    controller and a custom interrupt controller). The SoM device-control GPIOs
+    are driven by ``axi_gpio1`` over PCIe, while the carrier-specific and unused
+    GPIOs are kept on the PS EMIO pins
   - The two bridge ports are fanned out by AXI SmartConnects: one on the
     ``M_AXI_B`` side distributes the host register accesses to the peripheral
     IPs inside BAR0, and one on the ``S_AXI_B`` side aggregates the DMA master
@@ -292,8 +293,7 @@ axi_ps_net_tx_dma                            0x7c46_0000
 axi_ps_net_rx_dma                            0x7c47_0000
 pcie_intc*                                   0x8401_0000
 axi_gpio1*                                   0x8402_0000
-axi_gpio2*                                   0x8403_0000
-axi_spi*                                     0x8404_0000
+axi_spi*                                     0x8403_0000
 axi_host_net_tx_dma*                         0x84C3_0000
 axi_host_net_rx_dma*                         0x84C4_0000
 ============================================ ===========
@@ -301,7 +301,7 @@ axi_host_net_rx_dma*                         0x84C4_0000
 .. note::
 
   \* All the IPs are connected to the XDMA Bridge ``M_AXI_B`` port, via a
-  SmartConnect IP. This is applicable if the project was build uisng ``make
+  SmartConnect IP. This is applicable if the project was built using ``make
   PCIE=1``, only for :adi:`ADRV2CRR-FMC` . For more details please check
   :ref:`pcie-block-design`.
 
@@ -335,7 +335,7 @@ SPI connections
 
 In case of :adi:`ADRV2CRR-FMC`, when PCIe is enabled, all of the SPI
 subordinates listed above are controlled by an AXI SPI controller, which is
-connected to the XDMA XDMA Bridge ``M_AXI_B`` port, via a SmartConnect IP. No
+connected to the XDMA Bridge ``M_AXI_B`` port, via a SmartConnect IP. No
 longer present on the MIO pins of the Processing System (PS).
 
 GPIOs
@@ -359,135 +359,138 @@ GPIOs
      - INOUT
      - 92
      - 170
-     - (axi_gpio2) 28
+     - (axi_gpio1) 60
    * - gpio_3_exp_n
      - INOUT
      - 91
      - 169
-     - (axi_gpio2) 27
+     - (axi_gpio1) 59
    * - gpio_3_exp_p
      - INOUT
      - 90
      - 168
-     - (axi_gpio2) 26
+     - (axi_gpio1) 58
    * - hmc7044_gpio_4
      - INOUT
      - 89
      - 167
-     - (axi_gpio2) 25
+     - (axi_gpio1) 57
    * - hmc7044_gpio_3
      - INOUT
      - 88
      - 166
-     - (axi_gpio2) 24
+     - (axi_gpio1) 56
    * - hmc7044_gpio_1
      - INOUT
      - 87
      - 165
-     - (axi_gpio2) 23
+     - (axi_gpio1) 55
    * - hmc7044_gpio_2
      - INOUT
      - 86
      - 164
-     - (axi_gpio2) 22
+     - (axi_gpio1) 54
    * - hmc7044_sync
      - INOUT
      - 85
      - 163
-     - (axi_gpio2) 21
+     - (axi_gpio1) 53
    * - hmc7044_reset
      - INOUT
      - 84
      - 162
-     - (axi_gpio2) 20
+     - (axi_gpio1) 52
    * - adrv9009_tx2_enable_b
      - INOUT
      - 83
      - 161
-     - (axi_gpio2) 19
+     - (axi_gpio1) 51
    * - adrv9009_tx1_enable_b
      - INOUT
      - 82
      - 160
-     - (axi_gpio2) 18
+     - (axi_gpio1) 50
    * - adrv9009_rx2_enable_b
      - INOUT
      - 81
      - 159
-     - (axi_gpio2) 17
+     - (axi_gpio1) 49
    * - adrv9009_rx1_enable_b
      - INOUT
      - 80
      - 158
-     - (axi_gpio2) 16
+     - (axi_gpio1) 48
    * - adrv9009_test_b
      - INOUT
      - 79
      - 157
-     - (axi_gpio2) 15
+     - (axi_gpio1) 47
    * - adrv9009_reset_b_b
      - INOUT
      - 78
      - 156
-     - (axi_gpio2) 14
+     - (axi_gpio1) 46
    * - adrv9009_gpint_b
      - INOUT
      - 77
      - 155
-     - (axi_gpio2) 13
+     - (axi_gpio1) 45
    * - adrv9009_gpio_{18:00}_b
      - INOUT
      - 76:58
      - 154:136
-     - (axi_gpio1) 63:58, (axi_gpio2) 12:00
+     - (axi_gpio1) 44:26
    * - adrv9009_tx2_enable_a
      - INOUT
      - 57
      - 135
-     - (axi_gpio1) 57
+     - (axi_gpio1) 25
    * - adrv9009_tx1_enable_a
      - INOUT
      - 56
      - 134
-     - (axi_gpio1) 56
+     - (axi_gpio1) 24
    * - adrv9009_rx2_enable_a
      - INOUT
      - 55
      - 133
-     - (axi_gpio1) 55
+     - (axi_gpio1) 23
    * - adrv9009_rx1_enable_a
      - INOUT
      - 54
      - 132
-     - (axi_gpio1) 54
+     - (axi_gpio1) 22
    * - adrv9009_test_a
      - INOUT
      - 53
      - 131
-     - (axi_gpio1) 53
+     - (axi_gpio1) 21
    * - adrv9009_reset_b_a
      - INOUT
      - 52
      - 130
-     - (axi_gpio1) 52
+     - (axi_gpio1) 20
    * - adrv9009_gpint_a
      - INOUT
      - 51
      - 129
-     - (axi_gpio1) 51
+     - (axi_gpio1) 19
    * - adrv9009_gpio_{18:00}_a
      - INOUT
      - 50:32
      - 128:110
-     - (axi_gpio1) 50:32
+     - (axi_gpio1) 18:0
 
 .. note::
 
-  \* All of the GPIO signals are rerouted to XDMA via two AXI GPIO controllers
-  (axi_gpio1 and axi_gpio2), which are connected to the XDMA XDMA Bridge
-  ``M_AXI_B`` port, via a SmartConnect IP. No longer present on the EMIO pins of
-  the Processing System (PS). This is applicable if the project was build uisng
-  ``make PCIE=1``, only for :adi:`ADRV2CRR-FMC`. For more details please check
+  \* The SoM device-control GPIOs listed above are routed to the host through a
+  single dual-channel AXI GPIO controller (``axi_gpio1``), connected to the XDMA
+  Bridge ``M_AXI_B`` port via a SmartConnect IP. Channel 1 (lines 0–31) carries
+  HDL EMIO bits 32–63 and channel 2 (lines 32–62) carries HDL EMIO bits 64–94,
+  so the software line offset equals ``HDL EMIO − 32``. The carrier-specific and
+  unused GPIOs (HDL EMIO bits 0–31) are kept on the EMIO pins of the Processing
+  System (PS). This is applicable if the project was built using ``make
+  PCIE=1``, only for :adi:`ADRV2CRR-FMC`. For more details please check
   :ref:`pcie-block-design`.
 
 Interrupts
