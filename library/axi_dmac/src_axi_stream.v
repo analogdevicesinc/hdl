@@ -68,6 +68,7 @@ module src_axi_stream #(
   output s_axis_ready,
   input s_axis_valid,
   input [S_AXIS_DATA_WIDTH-1:0] s_axis_data,
+  input [S_AXIS_DATA_WIDTH/8-1:0] s_axis_keep,
   input [0:0] s_axis_user,
   input s_axis_last,
   output s_axis_xfer_req,
@@ -127,6 +128,7 @@ module src_axi_stream #(
     .s_axi_valid(s_axis_valid),
     .s_axi_ready(s_axis_ready),
     .s_axi_data(s_axis_data),
+    .s_axi_keep(s_axis_keep),
     .s_axi_last(s_axis_last),
     .s_axi_sync(sync),
 

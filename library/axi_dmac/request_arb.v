@@ -134,6 +134,7 @@ module request_arb #(
   output                              s_axis_ready,
   input                               s_axis_valid,
   input  [DMA_DATA_WIDTH_SRC-1:0]     s_axis_data,
+  input  [DMA_DATA_WIDTH_SRC/8-1:0]   s_axis_keep,
   input                               s_axis_last,
   input  [0:0]                        s_axis_user,
   output                              s_axis_xfer_req,
@@ -773,6 +774,7 @@ module request_arb #(
     .s_axis_valid(s_axis_valid),
     .s_axis_ready(s_axis_ready),
     .s_axis_data(s_axis_data),
+    .s_axis_keep(s_axis_keep),
     .s_axis_last(s_axis_last),
     .s_axis_user(s_axis_user),
     .s_axis_xfer_req(s_axis_xfer_req));

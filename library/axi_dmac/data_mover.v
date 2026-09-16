@@ -67,6 +67,7 @@ module data_mover #(
   output s_axi_ready,
   input s_axi_valid,
   input [DATA_WIDTH-1:0] s_axi_data,
+  input [DATA_WIDTH/8-1:0] s_axi_keep,
   input s_axi_last,
   input s_axi_sync,
 
@@ -103,6 +104,11 @@ module data_mover #(
   wire last_load;
   wire last;
   wire early_tlast;
+  // A beat whose TKEEP is all-zero is a null beat (e.g. a stale sample marked
+  // by an upstream packer). It is consumed on the source side but dropped: it
+  // is never forwarded to the burst memory and never advances the beat/burst
+  // counters, so the stale bytes do not land in DMA memory.
+  wire beat_is_null;
 
   assign xfer_req = active;
 
@@ -113,8 +119,15 @@ module data_mover #(
 
   assign has_sync = ~needs_sync | s_axi_sync;
 
+  assign beat_is_null = (s_axi_keep == {(DATA_WIDTH/8){1'b0}});
+
+  // s_axi_ready is unchanged: the null beat is still accepted (consumed) on the
+  // source side so it does not stall the upstream stream. Only the forward path
+  // (m_axi_valid) is suppressed for null beats -- so all downstream counters,
+  // last/EOT tracking and the abort/early-tlast logic (which key off
+  // m_axi_valid) skip the dropped beat entirely.
   assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s & has_sync;
-  assign m_axi_valid = s_axi_valid & s_axi_ready;
+  assign m_axi_valid = s_axi_valid & s_axi_ready & ~beat_is_null;
   assign m_axi_data = s_axi_data;
   assign m_axi_last = last || early_tlast;
   assign m_axi_partial_burst = early_tlast;

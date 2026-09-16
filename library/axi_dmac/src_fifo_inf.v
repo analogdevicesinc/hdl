@@ -124,6 +124,7 @@ module src_fifo_inf #(
     .s_axi_ready(ready),
     .s_axi_valid(valid),
     .s_axi_data(din),
+    .s_axi_keep({(DATA_WIDTH/8){1'b1}}),
     .s_axi_sync(sync),
     .s_axi_last(1'b0),
 
