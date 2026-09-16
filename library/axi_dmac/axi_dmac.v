@@ -711,6 +711,7 @@ module axi_dmac #(
     .s_axis_ready(s_axis_ready),
     .s_axis_valid(s_axis_valid),
     .s_axis_data(s_axis_data),
+    .s_axis_keep(s_axis_keep),
     .s_axis_user(s_axis_user),
     .s_axis_last(s_axis_last),
     .s_axis_xfer_req(s_axis_xfer_req),
