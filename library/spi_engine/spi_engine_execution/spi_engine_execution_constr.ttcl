@@ -39,13 +39,6 @@
 <: setFileProcessingOrder late :>
 <: set echo_sclk [getBooleanValue "ECHO_SCLK"] :>
 
-# Relax the timing between the SDI shift register and DMA. The shift register
-# runs at negative edge of echoSCLK and the DMA runs at spi_clk. Registers
-# will have valid data at worst case (fastest rate) in every 8 echoSCLK cycle.
-
-set_multicycle_path -setup -from [get_pins -hier -filter {name=~*data_sdi_shift_reg[*]/C}] 8
-set_multicycle_path -hold -from [get_pins -hier -filter {name=~*data_sdi_shift_reg[*]/C}] 7
-
 # word_length is updated before transfer, never changes during transfer, therefor
 # it's safe to define a false path between word_length and sdi_counter
 set_false_path -from [get_cells -hierarchical -filter {NAME=~*word_length_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*sdi_counter_reg[*]}]
@@ -64,19 +57,13 @@ set_false_path -to [get_pins -hierarchical -filter {NAME=~*g_echo_sclk_miso_latc
 set_false_path -to [get_pins -hierarchical -filter {NAME=~*g_echo_sclk_miso_latch.*.sdi_data_pos_reg[*]/CE}]
 set_false_path -to [get_pins -hierarchical -filter {NAME=~*g_echo_sclk_miso_latch.*.sdi_data_neg_reg[*]/CE}]
 
-# Relax the timing between the SDI latch registers and DMA
-set_multicycle_path -setup -from [get_pins -hier -filter {name=~*sdi_data_pos_reg[*]/C}] 8
-set_multicycle_path -hold -from [get_pins -hier -filter {name=~*sdi_data_pos_reg[*]/C}] 7
-set_multicycle_path -setup -from [get_pins -hier -filter {name=~*sdi_data_neg_reg[*]/C}] 8
-set_multicycle_path -hold -from [get_pins -hier -filter {name=~*sdi_data_neg_reg[*]/C}] 7
-
 # last_bit_count and related registers settle before transfer_active goes high,
 # safe to define false paths to echo_sclk domain counters and status registers
-set_false_path -from [get_cells -hierarchical -filter {NAME=~*last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*sdi_counter_sdr_reg[*]}]
-set_false_path -from [get_cells -hierarchical -filter {NAME=~*last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*last_sdi_bit_sdr_reg}]
-set_false_path -from [get_cells -hierarchical -filter {NAME=~*latch_last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*latch_sdi_sdr_reg}]
-set_false_path -from [get_cells -hierarchical -filter {NAME=~*ddr_last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*sdi_counter_ddr_reg[*]}]
-set_false_path -from [get_cells -hierarchical -filter {NAME=~*ddr_last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*last_sdi_bit_ddr_reg}]
-set_false_path -from [get_cells -hierarchical -filter {NAME=~*ddr_latch_last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*latch_sdi_ddr_reg}]
+set_false_path -from [get_cells -hierarchical -filter {NAME=~*last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*sdi_counter_?_reg[*]}]
+set_false_path -from [get_cells -hierarchical -filter {NAME=~*last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*last_sdi_bit_?_reg}]
+set_false_path -from [get_cells -hierarchical -filter {NAME=~*latch_last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*latch_sdi_?_reg}]
+set_false_path -from [get_cells -hierarchical -filter {NAME=~*ddr_last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*sdi_counter_?_reg[*]}]
+set_false_path -from [get_cells -hierarchical -filter {NAME=~*ddr_last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*last_sdi_bit_?_reg}]
+set_false_path -from [get_cells -hierarchical -filter {NAME=~*ddr_latch_last_bit_count_reg[*]}] -to [get_cells -hierarchical -filter {NAME=~*latch_sdi_?_reg}]
 
 <: } :>
