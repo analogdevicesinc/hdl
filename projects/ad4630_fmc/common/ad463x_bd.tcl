@@ -236,8 +236,6 @@ if {$CAPTURE_ZONE == 1} {
     }
     1 -
     2 {
-      ## In echo/master mode, data is valid on the negedge of BUSY
-      ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_execution CONFIG.DEFAULT_SPI_CFG 1
       ad_ip_parameter $hier_spi_engine/${hier_spi_engine}_execution CONFIG.DDR_EN $DDR_EN
 
       ## SDI is latched by the SPIE execution module
