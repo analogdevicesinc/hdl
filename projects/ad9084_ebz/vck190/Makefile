@@ -41,6 +41,7 @@ LIB_DEPS += util_adcfifo
 LIB_DEPS += util_dacfifo
 LIB_DEPS += util_do_ram
 LIB_DEPS += util_hbm
+LIB_DEPS += util_width_extend
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
 LIB_DEPS += util_tdd_sync
