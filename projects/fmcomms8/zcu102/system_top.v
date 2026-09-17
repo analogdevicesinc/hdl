@@ -176,13 +176,18 @@ module system_top (
   assign spi_csn_adrv9009_d = spi_3_to_8_csn[1];
   assign spi_csn_hmc7044 = spi_3_to_8_csn[2];
 
-  fmcomms8_spi i_spi (
-    .spi_csn(spi_3_to_8_csn),
-    .spi_clk(spi_clk),
-    .spi_mosi(spi_mosi),
-    .spi_miso_i(spi_miso),
-    .spi_miso_o(spi0_miso),
-    .spi_sdio(spi_sdio));
+  ad_3w_spi #(
+    .NUM_OF_SLAVES(1)
+  ) fmcomms8_spi (
+    .spi_csn (spi_3_to_8_csn[2]),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi),
+    .spi_miso (fmcomms8_miso_3w),
+    .spi_sdio (spi_sdio),
+    .spi_dir ());
+
+  assign spi0_miso = ~spi_3_to_8_csn[2] ? fmcomms8_miso_3w : spi_miso;
+  assign spi_sdio =  ~&spi_3_to_8_csn[1:0] ? spi_mosi : 1'bz;
 
   assign tx_sync = tx_sync_c & tx_sync_d;
 
