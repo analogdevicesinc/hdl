@@ -7,7 +7,17 @@ source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project quad_ada4356_zed
+# Parameter description:
+#   TDD_SUPPORT : capture mode
+#      1 - axi_tdd gates the four DMAs, triggered/one-shot capture (default)
+#      0 - DMAs free-run, continuous capture, no axi_tdd instance
+#
+#    e.g.
+#      make TDD_SUPPORT=0
+
+adi_project quad_ada4356_zed 0 [list \
+  TDD_SUPPORT [get_env_param TDD_SUPPORT 1] \
+]
 
 adi_project_files quad_ada4356_zed [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \

@@ -3,7 +3,16 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
+# Capture gating, selected at build time:
+#   TDD_SUPPORT = 1 : axi_tdd gates the four DMAs; each buffer waits for a pulse
+#   TDD_SUPPORT = 0 : no axi_tdd, each buffer starts as soon as it is submitted
+# Neither mode is cyclic: CYCLIC stays 0 and one transfer is still one buffer.
+set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
+                          ? $ad_project_params(TDD_SUPPORT) : 1 } ]
+
+if {$TDD_SUPPORT} {
+  source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
+}
 
 # ada4355 interfaces for 4 instances
 
@@ -71,7 +80,7 @@ ad_ip_instance axi_dmac axi_ada4355_dma_0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_0 CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ada4355_dma_0 CONFIG.SYNC_TRANSFER_START $TDD_SUPPORT
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_2D_TRANSFER 0
@@ -87,7 +96,7 @@ ad_ip_instance axi_dmac axi_ada4355_dma_1
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_1 CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ada4355_dma_1 CONFIG.SYNC_TRANSFER_START $TDD_SUPPORT
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_2D_TRANSFER 0
@@ -103,7 +112,7 @@ ad_ip_instance axi_dmac axi_ada4355_dma_2
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_2 CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ada4355_dma_2 CONFIG.SYNC_TRANSFER_START $TDD_SUPPORT
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_2D_TRANSFER 0
@@ -119,38 +128,40 @@ ad_ip_instance axi_dmac axi_ada4355_dma_3
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.CYCLIC 0
-ad_ip_parameter axi_ada4355_dma_3 CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ada4355_dma_3 CONFIG.SYNC_TRANSFER_START $TDD_SUPPORT
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_DATA_WIDTH_DEST 64
 
-# TDD controller for LiDAR timing control
-# Channel 0: Laser trigger output
-# Channels 1-4: Per-DMA sync (controls when each DMA starts capturing)
+if {$TDD_SUPPORT} {
+  # TDD controller for LiDAR timing control
+  # Channel 0: Laser trigger output
+  # Channels 1-4: Per-DMA sync (controls when each DMA starts capturing)
 
-set TDD_CHANNEL_CNT 5
-set TDD_DEFAULT_POL 0b00000
-set TDD_REG_WIDTH 32
-set TDD_BURST_WIDTH 32
-set TDD_SYNC_WIDTH 64
-set TDD_SYNC_INT 1
-set TDD_SYNC_EXT 1
-set TDD_SYNC_EXT_CDC 1
+  set TDD_CHANNEL_CNT 5
+  set TDD_DEFAULT_POL 0b00000
+  set TDD_REG_WIDTH 32
+  set TDD_BURST_WIDTH 32
+  set TDD_SYNC_WIDTH 64
+  set TDD_SYNC_INT 1
+  set TDD_SYNC_EXT 1
+  set TDD_SYNC_EXT_CDC 1
 
-ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
-  $TDD_DEFAULT_POL \
-  $TDD_REG_WIDTH \
-  $TDD_BURST_WIDTH \
-  $TDD_SYNC_WIDTH \
-  $TDD_SYNC_INT \
-  $TDD_SYNC_EXT \
-  $TDD_SYNC_EXT_CDC
+  ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
+    $TDD_DEFAULT_POL \
+    $TDD_REG_WIDTH \
+    $TDD_BURST_WIDTH \
+    $TDD_SYNC_WIDTH \
+    $TDD_SYNC_INT \
+    $TDD_SYNC_EXT \
+    $TDD_SYNC_EXT_CDC
 
-ad_ip_instance ilvector_logic logic_inv [list \
-  C_OPERATION {not} \
-  C_SIZE 1]
+  ad_ip_instance ilvector_logic logic_inv [list \
+    C_OPERATION {not} \
+    C_SIZE 1]
+}
 
 # connect interfaces to axi_ada4355 instances
 
@@ -234,19 +245,25 @@ ad_connect $sys_cpu_resetn axi_ada4355_dma_3/m_dest_axi_aresetn
 
 # TDD connections
 
-ad_connect axi_ada4355_adc_0/adc_clk axi_tdd_0/clk
-ad_connect $sys_cpu_reset logic_inv/Op1
-ad_connect logic_inv/Res axi_tdd_0/resetn
-ad_connect axi_tdd_0/sync_in trig_fmc_in
-ad_connect axi_tdd_0/tdd_channel_0 trig_fmc_out
+if {$TDD_SUPPORT} {
+  ad_connect axi_ada4355_adc_0/adc_clk axi_tdd_0/clk
+  ad_connect $sys_cpu_reset logic_inv/Op1
+  ad_connect logic_inv/Res axi_tdd_0/resetn
+  ad_connect axi_tdd_0/sync_in trig_fmc_in
+  ad_connect axi_tdd_0/tdd_channel_0 trig_fmc_out
 
-# Channels 1-4 gate the four DMA captures. With SYNC_TRANSFER_START=1 each
-# DMA holds off until its sync input pulses high, so software can arm all
-# four DMAs then let TDD fire them simultaneously.
-ad_connect axi_tdd_0/tdd_channel_1 axi_ada4355_dma_0/sync
-ad_connect axi_tdd_0/tdd_channel_2 axi_ada4355_dma_1/sync
-ad_connect axi_tdd_0/tdd_channel_3 axi_ada4355_dma_2/sync
-ad_connect axi_tdd_0/tdd_channel_4 axi_ada4355_dma_3/sync
+  # Channels 1-4 gate the four DMA captures. With SYNC_TRANSFER_START=1 each
+  # DMA holds off until its sync input pulses high, so software can arm all
+  # four DMAs then let TDD fire them simultaneously.
+  ad_connect axi_tdd_0/tdd_channel_1 axi_ada4355_dma_0/sync
+  ad_connect axi_tdd_0/tdd_channel_2 axi_ada4355_dma_1/sync
+  ad_connect axi_tdd_0/tdd_channel_3 axi_ada4355_dma_2/sync
+  ad_connect axi_tdd_0/tdd_channel_4 axi_ada4355_dma_3/sync
+} else {
+  # The FMC trigger pins stay in the port list so system_top.v and the XDC are
+  # mode-independent; with no TDD there is nothing to drive the output.
+  ad_connect trig_fmc_out GND
+}
 
 # interconnects
 
@@ -260,7 +277,9 @@ ad_cpu_interconnect 0x44A50000 axi_ada4355_dma_1
 ad_cpu_interconnect 0x44A60000 axi_ada4355_dma_2
 ad_cpu_interconnect 0x44A70000 axi_ada4355_dma_3
 
-ad_cpu_interconnect 0x44A80000 axi_tdd_0
+if {$TDD_SUPPORT} {
+  ad_cpu_interconnect 0x44A80000 axi_tdd_0
+}
 
 # Memory interconnect for all DMAs
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1

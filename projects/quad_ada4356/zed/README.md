@@ -2,29 +2,33 @@
 
 ## Building the project
 
-The parameters configurable through the `make` command, can be found below, as well as in the **system_project.tcl** file; it contains the default configuration.
-
 ```
 cd projects/quad_ada4356/zed
 make
 ```
 
-The overwritable parameters from the environment:
+### Build parameters
 
-- BUFMRCE_EN - Enable BUFMRCE buffer for multi-region clock alignment.
-  values:
-   - 0 (default) - Standard clock buffering
-   - 1 - BUFMRCE-based clock gating (needed when ADC instances span multiple clock regions)
+- `TDD_SUPPORT` — capture gating (default `1`)
+  - `1`: an `axi_tdd` instance at `0x44A80000` drives `trig_fmc_out` on channel 0
+    and gates each DMA on channels 1–4. The DMAs are built with
+    `SYNC_TRANSFER_START=1`, so a submitted transfer stalls until TDD pulses its
+    sync — triggered, one buffer per trigger. The TDD's own `sync_start_enable`
+    must be armed or nothing fires.
+  - `0`: no `axi_tdd`. The DMAs are built with `SYNC_TRANSFER_START=0` and each
+    transfer starts the moment software submits it — ungated/free-running.
+    `trig_fmc_out` is tied low; `trig_fmc_in` is unused.
 
-### Example configurations
+Note that `SYNC_TRANSFER_START` is hardwired from the build parameter
+(`axi_dmac_regmap_request.v`), so gating cannot be changed at runtime. Neither
+mode is cyclic — `CYCLIC` is 0 in both, so a transfer is still one buffer and an
+uninterrupted stream depends on the driver refilling buffers back to back.
 
-#### Default configuration
-
-This specific command is equivalent to running `make` only:
+Building with a non-default parameter places the project in its own
+subdirectory, e.g.:
 
 ```
-cd projects/quad_ada4356/zed
-make BUFMRCE_EN=0
+make TDD_SUPPORT=0     # -> TDDSUPPORT_0/quad_ada4356_zed.xpr
 ```
 
 ## Design details
