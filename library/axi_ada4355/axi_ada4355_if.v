@@ -157,10 +157,14 @@ module axi_ada4355_if #(
 
     assign adc_clk_in_fast_frame = adc_clk_in_fast;
 
+      // CLR re-phases the /4 divider. Without it the ISERDES word boundary is
+      // whatever the divider happened to pick the first time it saw a clock,
+      // which on a cold boot is before the clock chip is programmed. sync_n is
+      // asynchronous and external, so holding CLR cannot starve its own release.
       BUFR #(
         .BUFR_DIVIDE("4")
       ) i_div_clk_buf (
-        .CLR(1'b0),
+        .CLR(~sync_n),
         .CE(1'b1),
         .I(clk_in_s),
         .O(adc_clk_div));

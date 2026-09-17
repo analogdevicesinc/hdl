@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
+  parameter TDD_SUPPORT = 1
+) (
 
   inout  [14:0] ddr_addr,
   inout  [ 2:0] ddr_ba,
@@ -172,7 +174,11 @@ module system_top (
   // [35]    - csb_dutd
   // [36]    - csb_ad9510
   // [37]    - apd_supp_en
-  // [63:38] - unused
+  // [38]    - serdes_rst_0 (active high, drives sync_0_n inverted)
+  // [39]    - serdes_rst_1
+  // [40]    - serdes_rst_2
+  // [41]    - serdes_rst_3
+  // [63:42] - unused
   // trig_fmc_in/out connected to TDD controller (not GPIO)
 
   assign gpio_i[63:38] = gpio_o[63:38];
@@ -294,7 +300,7 @@ module system_top (
     .d1a_0_n (d1a_0_n),
     .frame_0_p (frame_0_p),
     .frame_0_n (frame_0_n),
-    .sync_0_n (1'b1),
+    .sync_0_n (~gpio_o[38]),
 
     .dco_1_p (dco_1_p),
     .dco_1_n (dco_1_n),
@@ -304,7 +310,7 @@ module system_top (
     .d1a_1_n (d1a_1_n),
     .frame_1_p (frame_1_p),
     .frame_1_n (frame_1_n),
-    .sync_1_n (1'b1),
+    .sync_1_n (~gpio_o[39]),
 
     .dco_2_p (dco_2_p),
     .dco_2_n (dco_2_n),
@@ -314,7 +320,7 @@ module system_top (
     .d1a_2_n (d1a_2_n),
     .frame_2_p (frame_2_p),
     .frame_2_n (frame_2_n),
-    .sync_2_n (1'b1),
+    .sync_2_n (~gpio_o[40]),
 
     .dco_3_p (dco_3_p),
     .dco_3_n (dco_3_n),
@@ -324,7 +330,7 @@ module system_top (
     .d1a_3_n (d1a_3_n),
     .frame_3_p (frame_3_p),
     .frame_3_n (frame_3_n),
-    .sync_3_n (1'b1),
+    .sync_3_n (~gpio_o[41]),
 
     // TDD LiDAR control
     .trig_fmc_in (trig_fmc_in),
