@@ -335,15 +335,14 @@ module axi_ad485x_lvds #(
       //);
 
       BUFGCE #(
-       .CE_TYPE("SYNC"),          // ASYNC, HARDSYNC, SYNC
-       .IS_CE_INVERTED(1'b0),     // Programmable inversion on CE
-       .IS_I_INVERTED(1'b1),      // Programmable inversion on I
-       .SIM_DEVICE("ULTRASCALE")  // ULTRASCALE
+        .CE_TYPE("SYNC"),          // ASYNC, HARDSYNC, SYNC
+        .IS_CE_INVERTED(1'b0),     // Programmable inversion on CE
+        .IS_I_INVERTED(1'b1),      // Programmable inversion on I
+        .SIM_DEVICE("ULTRASCALE")  // ULTRASCALE
       ) BUFGCE_inst (
-         .O(scko_s),             // 1-bit output: Buffer
-         .CE(aquire_data_delay), // 1-bit input: Buffer enable
-         .I(fast_clk)            // 1-bit input: Buffer
-      );
+        .O(scko_s),             // 1-bit output: Buffer
+        .CE(aquire_data_delay), // 1-bit input: Buffer enable
+        .I(fast_clk));          // 1-bit input: Buffer
     end
   endgenerate
 

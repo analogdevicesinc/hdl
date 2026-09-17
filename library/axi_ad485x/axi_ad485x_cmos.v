@@ -101,12 +101,12 @@ module axi_ad485x_cmos #(
   reg         [31:0]  adc_lane_6;
   reg         [31:0]  adc_lane_7;
 
-  reg         [ 1:0]  packet_format;
+  reg         [ 1:0]  packet_format = 'h0;
   reg         [ 5:0]  data_counter = 6'h0;
   reg         [ 5:0]  scki_counter = 6'h0;
-  reg                 adc_captured;
-  reg                 adc_captured_d;
-  reg         [ 6:0]  capture_cnt;
+  reg                 adc_captured = 'h0;
+  reg                 adc_captured_d = 'h0;
+  reg         [ 6:0]  capture_cnt = 'h0;
 
   reg                 scki_i;
   reg                 scki_d;
@@ -143,21 +143,21 @@ module axi_ad485x_cmos #(
   reg                 cnvs_d;
   reg         [31:0]  period_cnt;
 
-  reg                 adc_valid_d;
+  reg                 adc_valid_d = 'h0;
   reg                 conversion_quiet_time;
   reg                 run_busy_period_cnt;
   reg         [31:0]  busy_conversion_cnt;
   reg         [31:0]  busy_measure_value;
   reg                 start_transfer;
 
-  reg                 crc_enable_window;
-  reg                 run_crc;
-  reg                 run_crc_d;
+  reg                 crc_enable_window = 'h0;
+  reg                 run_crc = 'h0;
+  reg                 run_crc_d = 'h0;
   reg        [FBW:0]  crc_data_in;
   reg        [FBW:0]  crc_data_in_sh;
   reg         [15:0]  crc_cnt;
   reg         [ 7:0]  data_in_byte;
-  reg         [15:0]  crc_data_length;
+  reg         [15:0]  crc_data_length = 'h0;
 
   reg         [ 3:0]  ch_0_index = 4'd0;
   reg         [ 3:0]  ch_1_index = 4'd1;
