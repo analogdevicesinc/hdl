@@ -7,6 +7,30 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_ad408x
+# Create ILA debug core for PHY data alignment debugging
+create_ip -name ila -vendor xilinx.com -library ip -version 6.2 -module_name ila_0
+set_property -dict [list \
+  CONFIG.C_PROBE13_WIDTH {1} \
+  CONFIG.C_PROBE12_WIDTH {1} \
+  CONFIG.C_PROBE11_WIDTH {2} \
+  CONFIG.C_PROBE10_WIDTH {1} \
+  CONFIG.C_PROBE9_WIDTH {1} \
+  CONFIG.C_PROBE8_WIDTH {1} \
+  CONFIG.C_PROBE7_WIDTH {1} \
+  CONFIG.C_PROBE6_WIDTH {5} \
+  CONFIG.C_PROBE5_WIDTH {20} \
+  CONFIG.C_PROBE4_WIDTH {20} \
+  CONFIG.C_PROBE3_WIDTH {20} \
+  CONFIG.C_PROBE2_WIDTH {8} \
+  CONFIG.C_PROBE1_WIDTH {4} \
+  CONFIG.C_PROBE0_WIDTH {4} \
+  CONFIG.C_DATA_DEPTH {4096} \
+  CONFIG.C_NUM_OF_PROBES {14} \
+  CONFIG.C_TRIGOUT_EN {false} \
+  CONFIG.C_TRIGIN_EN {false} \
+] [get_ips ila_0]
+
+generate_target {instantiation_template} [get_files ila_0.xci]
 
 adi_ip_files axi_ad408x [list \
   "$ad_hdl_dir/library/xilinx/common/ad_serdes_in.v" \

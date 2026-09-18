@@ -617,5 +617,29 @@ module ad408x_phy #(
                                     : packed_data_valid_d);
 
 
+  // Global clock for ILA (BUFR is regional, can't drive ILA logic outside clock region)
+  wire adc_clk_div_bufg;
+  BUFG i_ila_clk_bufg (
+    .I(adc_clk_div),
+    .O(adc_clk_div_bufg));
+
+  // Debug ILA for data alignment
+  ila_0 i_ila_phy (
+    .clk    (adc_clk_div_bufg),
+    .probe0 (serdes_data_0),           // [3:0]  raw SERDES lane 0
+    .probe1 (serdes_data_1),           // [3:0]  raw SERDES lane 1
+    .probe2 (serdes_data_8),           // [7:0]  combined SERDES data (dual lane)
+    .probe3 (ad_pack_odata_20),        // [19:0] packed 20-bit data
+    .probe4 (adc_data_shifted),        // [19:0] shifted data for pattern match
+    .probe5 (pattern_value),           // [19:0] expected sync pattern
+    .probe6 (shift_cnt),               // [4:0]  current shift count
+    .probe7 (sync_status_int),         // [0:0]  alignment achieved
+    .probe8 (shift_cnt_en),            // [0:0]  shift counter enabled
+    .probe9 (bitslip_enable),          // [0:0]  bitslip enable input
+    .probe10(packed_data_valid),       // [0:0]  packer output valid
+    .probe11(serdes_valid),            // [1:0]  SERDES valid
+    .probe12(serdes_reset_s),          // [0:0]  SERDES reset
+    .probe13(sync_n)                   // [0:0]  sync input
+  );
 
 endmodule
