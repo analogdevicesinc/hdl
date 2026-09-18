@@ -573,9 +573,9 @@ if {$ASYMMETRIC_A_B_MODE} {
 add_connection rx_device_clk.out_clk apollo_rx_jesd204.device_clk
 add_connection rx_device_clk.out_clk apollo_rx_tpl.link_clk
 if {$EXTERNAL_PHY} {
-  add_connection jesd204_phy_a.rx_clkout jesd204_phy_a.rx_link_clock
-  add_connection jesd204_phy_a.rx_clkout jesd204_phy_b.rx_link_clock
-  add_connection jesd204_phy_a.rx_clkout apollo_rx_jesd204.phy_link_clk
+  add_connection rx_device_clk.out_clk jesd204_phy_a.rx_link_clock
+  add_connection rx_device_clk.out_clk jesd204_phy_b.rx_link_clock
+  add_connection rx_device_clk.out_clk apollo_rx_jesd204.phy_link_clk
 }
 add_connection rx_device_clk.out_clk apollo_rx_cpack.clk
 add_connection rx_device_clk.out_clk $adc_data_offload_name.s_axis_aclk
@@ -587,9 +587,9 @@ if {$ASYMMETRIC_A_B_MODE} {
 add_connection tx_device_clk.out_clk apollo_tx_jesd204.device_clk
 add_connection tx_device_clk.out_clk apollo_tx_tpl.link_clk
 if {$EXTERNAL_PHY} {
-  add_connection jesd204_phy_a.tx_clkout jesd204_phy_a.tx_link_clock
-  add_connection jesd204_phy_a.tx_clkout jesd204_phy_b.tx_link_clock
-  add_connection jesd204_phy_a.tx_clkout apollo_tx_jesd204.phy_link_clk
+  add_connection tx_device_clk.out_clk jesd204_phy_a.tx_link_clock
+  add_connection tx_device_clk.out_clk jesd204_phy_b.tx_link_clock
+  add_connection tx_device_clk.out_clk apollo_tx_jesd204.phy_link_clk
 }
 add_connection tx_device_clk.out_clk apollo_tx_upack.clk
 add_connection tx_device_clk.out_clk $dac_data_offload_name.m_axis_aclk

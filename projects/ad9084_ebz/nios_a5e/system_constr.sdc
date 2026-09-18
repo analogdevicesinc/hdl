@@ -10,10 +10,10 @@ source ../../common/nios_a5e/system_constr.sdc
 ##   DEVICE_CLK_RATE = 168.75 MHz
 ## When changing the lane rate these have to be updated as well!
 
-create_clock  -period "6.400 ns"  -name ref_clk_a      [get_ports {fpga_refclk_in_a}]
-create_clock  -period "6.400 ns"  -name ref_clk_b      [get_ports {fpga_refclk_in_b}]
-create_clock  -period "6.400 ns"  -name rx_device_clk  [get_ports {rx_device_clk}]
-create_clock  -period "6.400 ns"  -name tx_device_clk  [get_ports {tx_device_clk}]
+create_clock  -period "5.9259 ns"  -name ref_clk_a      [get_ports {fpga_refclk_in_a}]
+create_clock  -period "5.9259 ns"  -name ref_clk_b      [get_ports {fpga_refclk_in_b}]
+create_clock  -period "5.9259 ns"  -name rx_device_clk  [get_ports {rx_device_clk}]
+create_clock  -period "5.9259 ns"  -name tx_device_clk  [get_ports {tx_device_clk}]
 
 derive_clock_uncertainty
 
