@@ -85,8 +85,9 @@ module data_offload #(
   output                                      s_axis_ready,
   input                                       s_axis_valid,
   input  [SRC_DATA_WIDTH-1:0]                 s_axis_data,
-  input                                       s_axis_last,
   input  [SRC_DATA_WIDTH/8-1:0]               s_axis_keep,
+  input                                       s_axis_last,
+  input                                       s_axis_user,
 
   // AXI4 stream master for destination stream (RX_DMA or DAC) -- Destination
   // interface
@@ -97,8 +98,9 @@ module data_offload #(
   input                                       m_axis_ready,
   output                                      m_axis_valid,
   output  [DST_DATA_WIDTH-1:0]                m_axis_data,
-  output                                      m_axis_last,
   output  [DST_DATA_WIDTH/8-1:0]              m_axis_keep,
+  output                                      m_axis_last,
+  output                                      m_axis_user,
 
   // initialization request interface
 
@@ -113,16 +115,18 @@ module data_offload #(
   input                                       m_storage_axis_ready,
   output                                      m_storage_axis_valid,
   output  [SRC_DATA_WIDTH-1:0]                m_storage_axis_data,
-  output                                      m_storage_axis_last,
   output  [SRC_DATA_WIDTH/8-1:0]              m_storage_axis_keep,
+  output                                      m_storage_axis_last,
+  output                                      m_storage_axis_user,
 
   // AXI stream slave for destination stream from storage (BRAM/URAM/DDR/HBM)
   // runs on m_axis_aclk and m_axis_aresetn
   output                                      s_storage_axis_ready,
   input                                       s_storage_axis_valid,
   input  [DST_DATA_WIDTH-1:0]                 s_storage_axis_data,
-  input                                       s_storage_axis_last,
   input  [DST_DATA_WIDTH/8-1:0]               s_storage_axis_keep,
+  input                                       s_storage_axis_last,
+  input                                       s_storage_axis_user,
 
   // Control interface for storage for m_storage_axis interface
   output                                      wr_request_enable,
@@ -234,14 +238,16 @@ module data_offload #(
   // sample.
   assign m_axis_data  = TX_OR_RXN_PATH[0] & ~m_axis_valid ? {DST_DATA_WIDTH{1'b0}} :
                         (dst_bypass_s) ? data_bypass_s  : s_storage_axis_data;
-  assign m_axis_last  = (dst_bypass_s) ? 1'b0           : s_storage_axis_last;
   assign m_axis_keep  = (dst_bypass_s) ? {DST_DATA_WIDTH/8{1'b1}} : s_storage_axis_keep;
+  assign m_axis_last  = (dst_bypass_s) ? 1'b0           : s_storage_axis_last;
+  assign m_axis_user  = (dst_bypass_s) ? 1'b0           : s_storage_axis_user;
   assign s_axis_ready =  src_bypass_s ? ready_bypass_s : (wr_ready & m_storage_axis_ready);
 
   assign m_storage_axis_valid = s_axis_valid & wr_ready;
   assign m_storage_axis_data = s_axis_data;
-  assign m_storage_axis_last = s_axis_last;
   assign m_storage_axis_keep = s_axis_keep;
+  assign m_storage_axis_last = s_axis_last;
+  assign m_storage_axis_user = s_axis_user;
 
   assign s_storage_axis_ready = rd_ready & m_axis_ready;
 

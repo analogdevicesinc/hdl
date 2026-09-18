@@ -41,8 +41,9 @@ module util_axis_fifo #(
   parameter M_AXIS_REGISTERED = 1,
   parameter [ADDRESS_WIDTH-1:0] ALMOST_EMPTY_THRESHOLD = 16,
   parameter [ADDRESS_WIDTH-1:0] ALMOST_FULL_THRESHOLD = 16,
-  parameter TLAST_EN = 0,
   parameter TKEEP_EN = 0,
+  parameter TLAST_EN = 0,
+  parameter TUSER_EN = 0,
   parameter REMOVE_NULL_BEAT_EN = 0
 ) (
   input m_axis_aclk,
@@ -52,6 +53,7 @@ module util_axis_fifo #(
   output [DATA_WIDTH-1:0] m_axis_data,
   output [DATA_WIDTH/8-1:0] m_axis_tkeep,
   output m_axis_tlast,
+  output m_axis_tuser,
   output [ADDRESS_WIDTH-1:0] m_axis_level,
   output m_axis_empty,
   output m_axis_almost_empty,
@@ -63,15 +65,15 @@ module util_axis_fifo #(
   input [DATA_WIDTH-1:0] s_axis_data,
   input [DATA_WIDTH/8-1:0] s_axis_tkeep,
   input s_axis_tlast,
+  input s_axis_tuser,
   output [ADDRESS_WIDTH-1:0] s_axis_room,
   output s_axis_full,
   output s_axis_almost_full
 );
 
-  localparam MEM_WORD = (TKEEP_EN & TLAST_EN) ? (DATA_WIDTH+DATA_WIDTH/8+1) :
-                        (TKEEP_EN)            ? (DATA_WIDTH+DATA_WIDTH/8)   :
-                        (TLAST_EN)            ? (DATA_WIDTH+1)              :
-                                                (DATA_WIDTH);
+  localparam MEM_WORD = DATA_WIDTH + (TKEEP_EN ? DATA_WIDTH/8 : 0)
+                                   + (TLAST_EN ? 1 : 0)
+                                   + (TUSER_EN ? 1 : 0);
 
   wire [MEM_WORD-1:0] s_axis_data_int_s;
   wire [MEM_WORD-1:0] m_axis_data_int_s;
@@ -138,6 +140,19 @@ module util_axis_fifo #(
 
         assign m_axis_data = cdc_sync_fifo_ram;
 
+        // TKEEP support
+        if (TKEEP_EN) begin
+
+          reg [DATA_WIDTH/8-1:0] axis_tkeep_d;
+
+          always @(posedge s_axis_aclk) begin
+            if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1)
+              axis_tkeep_d <= s_axis_tkeep;
+          end
+          assign m_axis_tkeep = axis_tkeep_d;
+        end else
+          assign m_axis_tkeep = ~0;
+
         // TLAST support
         if (TLAST_EN) begin
 
@@ -151,18 +166,18 @@ module util_axis_fifo #(
         end else
           assign m_axis_tlast = 1'b1;
 
-        // TKEEP support
-        if (TKEEP_EN) begin
+        // TUSER support
+        if (TUSER_EN) begin
 
-          reg [DATA_WIDTH/8-1:0] axis_tkeep_d;
+          reg axis_tuser_d;
 
           always @(posedge s_axis_aclk) begin
             if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1)
-              axis_tkeep_d <= s_axis_tkeep;
+              axis_tuser_d <= s_axis_tuser;
           end
-          assign m_axis_tkeep = axis_tkeep_d;
+          assign m_axis_tuser = axis_tuser_d;
         end else
-          assign m_axis_tkeep = ~0;
+          assign m_axis_tuser = 1'b1;
 
     end /* zerodeep */
     else
@@ -193,6 +208,21 @@ module util_axis_fifo #(
       assign s_axis_almost_full  = 1'b0;
       assign s_axis_room  = 1'b0;
 
+      // TKEEP support
+      if (TKEEP_EN) begin
+        reg [DATA_WIDTH/8-1:0] axis_tkeep_d;
+
+        always @(posedge s_axis_aclk) begin
+          if (!s_axis_aresetn) begin
+            axis_tkeep_d <= 1'b0;
+          end else if (s_axis_ready) begin
+            axis_tkeep_d <= s_axis_tkeep;
+          end
+        end
+        assign m_axis_tkeep = axis_tkeep_d;
+      end else
+        assign m_axis_tkeep = ~0;
+
       // TLAST support
       if (TLAST_EN) begin
         reg  axis_tlast_d;
@@ -208,20 +238,20 @@ module util_axis_fifo #(
       end else
         assign m_axis_tlast = 1'b1;
 
-      // TKEEP support
-      if (TKEEP_EN) begin
-        reg [DATA_WIDTH/8-1:0] axis_tkeep_d;
+      // TUSER support
+      if (TUSER_EN) begin
+        reg  axis_tuser_d;
 
         always @(posedge s_axis_aclk) begin
           if (!s_axis_aresetn) begin
-            axis_tkeep_d <= 1'b0;
+            axis_tuser_d <= 1'b0;
           end else if (s_axis_ready) begin
-            axis_tkeep_d <= s_axis_tkeep;
+            axis_tuser_d <= s_axis_tuser;
           end
         end
-        assign m_axis_tkeep = axis_tkeep_d;
+        assign m_axis_tuser = axis_tuser_d;
       end else
-        assign m_axis_tkeep = ~0;
+        assign m_axis_tuser = 1'b1;
 
      end /* !ASYNC_CLK */
 
@@ -280,28 +310,34 @@ module util_axis_fifo #(
       .s_axis_waddr(s_axis_waddr),
       .s_axis_room(s_axis_room));
 
-    // TLAST and TKEEP support
-    if (TLAST_EN & TKEEP_EN) begin
-      assign s_axis_data_int_s = {s_axis_tkeep, s_axis_tlast, s_axis_data};
-      assign m_axis_tkeep = m_axis_data_int_s[MEM_WORD-1-:DATA_WIDTH/8];
-      assign m_axis_tlast = m_axis_data_int_s[DATA_WIDTH];
-      assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
-    end else if (TKEEP_EN) begin
-      assign s_axis_data_int_s = {s_axis_tkeep, s_axis_data};
-      assign m_axis_tkeep = m_axis_data_int_s[MEM_WORD-1-:DATA_WIDTH/8];
-      assign m_axis_tlast = 1'b1;
-      assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
-    end else if (TLAST_EN) begin
-      assign s_axis_data_int_s = {s_axis_tlast, s_axis_data};
-      assign m_axis_tkeep = ~0;
-      assign m_axis_tlast = m_axis_data_int_s[DATA_WIDTH];
-      assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
+    if (TKEEP_EN) begin
+      assign s_axis_data_int_s[DATA_WIDTH*9/8-1:0] = {s_axis_tkeep, s_axis_data};
+      assign m_axis_tkeep = m_axis_data_int_s[DATA_WIDTH*9/8-1-:DATA_WIDTH/8];
     end else begin
-      assign s_axis_data_int_s = {s_axis_data};
+      assign s_axis_data_int_s[DATA_WIDTH-1:0] = s_axis_data;
       assign m_axis_tkeep = ~0;
-      assign m_axis_tlast = 1'b1;
-      assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
     end
+
+    if (TLAST_EN) begin
+      if (TUSER_EN) begin
+        assign s_axis_data_int_s[MEM_WORD-2] = s_axis_tlast;
+        assign m_axis_tlast = m_axis_data_int_s[MEM_WORD-2];
+      end else begin
+        assign s_axis_data_int_s[MEM_WORD-1] = s_axis_tlast;
+        assign m_axis_tlast = m_axis_data_int_s[MEM_WORD-1];
+      end
+    end else begin
+      assign m_axis_tlast = 1'b1;
+    end
+
+    if (TUSER_EN) begin
+      assign s_axis_data_int_s[MEM_WORD-1] = s_axis_tuser;
+      assign m_axis_tuser = m_axis_data_int_s[MEM_WORD-1];
+    end else begin
+      assign m_axis_tuser = 1'b1;
+    end
+
+    assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
 
     if (ASYNC_CLK == 1) begin : async_clocks /* Asynchronous WRITE/READ clocks */
 

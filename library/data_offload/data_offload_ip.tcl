@@ -74,8 +74,9 @@ adi_add_bus "m_axis" "master" \
     {"m_axis_ready" "TREADY"} \
     {"m_axis_valid" "TVALID"} \
     {"m_axis_data" "TDATA"} \
+    {"m_axis_keep" "TKEEP"} \
     {"m_axis_last" "TLAST"} \
-    {"m_axis_keep" "TKEEP"} ]
+    {"m_axis_user" "TUSER"} ]
 
 ## source interface (e.g. TX_DMA or ADC core)
 
@@ -86,8 +87,9 @@ adi_add_bus "s_axis" "slave" \
     {"s_axis_ready" "TREADY"} \
     {"s_axis_valid" "TVALID"} \
     {"s_axis_data" "TDATA"} \
+    {"s_axis_keep" "TKEEP"} \
     {"s_axis_last" "TLAST"} \
-    {"s_axis_keep" "TKEEP"} ]
+    {"s_axis_user" "TUSER"} ]
 
 adi_add_bus "wr_ctrl" "master" \
   "analog.com:interface:if_do_ctrl_rtl:1.0" \
@@ -119,7 +121,8 @@ adi_add_bus "s_storage_axis" "slave" \
     {"s_storage_axis_valid" "TVALID"} \
     {"s_storage_axis_data" "TDATA"} \
     {"s_storage_axis_keep" "TKEEP"} \
-    {"s_storage_axis_last" "TLAST"}]
+    {"s_storage_axis_last" "TLAST"} \
+    {"s_storage_axis_user" "TUSER"}]
 
 adi_add_bus "m_storage_axis" "master" \
   "xilinx.com:interface:axis_rtl:1.0" \
@@ -128,7 +131,8 @@ adi_add_bus "m_storage_axis" "master" \
     {"m_storage_axis_valid" "TVALID"} \
     {"m_storage_axis_data" "TDATA"} \
     {"m_storage_axis_keep" "TKEEP"} \
-    {"m_storage_axis_last" "TLAST"}]
+    {"m_storage_axis_last" "TLAST"} \
+    {"m_storage_axis_user" "TUSER"}]
 
 adi_add_bus_clock "m_axis_aclk" "s_storage_axis:m_axis" "m_axis_aresetn"
 adi_add_bus_clock "s_axis_aclk" "m_storage_axis:s_axis" "s_axis_aresetn"

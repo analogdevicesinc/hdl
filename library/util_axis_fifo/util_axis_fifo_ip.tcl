@@ -66,12 +66,15 @@ adi_add_bus "s_axis" "slave" \
 		{"s_axis_data"  "TDATA"} \
 		{"s_axis_tlast" "TLAST"} \
 		{"s_axis_tkeep" "TKEEP"} \
+		{"s_axis_tuser" "TUSER"} \
 	}
 
-adi_set_ports_dependency "s_axis_tlast" \
-		"(spirit:decode(id('MODELPARAM_VALUE.TLAST_EN')) = 1)"
 adi_set_ports_dependency "s_axis_tkeep" \
 		"(spirit:decode(id('MODELPARAM_VALUE.TKEEP_EN')) = 1)"
+adi_set_ports_dependency "s_axis_tlast" \
+		"(spirit:decode(id('MODELPARAM_VALUE.TLAST_EN')) = 1)"
+adi_set_ports_dependency "s_axis_tuser" \
+		"(spirit:decode(id('MODELPARAM_VALUE.TUSER_EN')) = 1)"
 
 adi_add_bus "m_axis" "master" \
 	"xilinx.com:interface:axis_rtl:1.0" \
@@ -82,12 +85,15 @@ adi_add_bus "m_axis" "master" \
 		{"m_axis_data"  "TDATA"} \
 		{"m_axis_tlast" "TLAST"} \
 		{"m_axis_tkeep" "TKEEP"} \
+		{"m_axis_tuser" "TUSER"} \
 	}
 
-adi_set_ports_dependency "m_axis_tlast" \
-		"(spirit:decode(id('MODELPARAM_VALUE.TLAST_EN')) = 1)"
 adi_set_ports_dependency "m_axis_tkeep" \
 		"(spirit:decode(id('MODELPARAM_VALUE.TKEEP_EN')) = 1)"
+adi_set_ports_dependency "m_axis_tlast" \
+		"(spirit:decode(id('MODELPARAM_VALUE.TLAST_EN')) = 1)"
+adi_set_ports_dependency "m_axis_tuser" \
+		"(spirit:decode(id('MODELPARAM_VALUE.TUSER_EN')) = 1)"
 
 adi_add_bus_clock "m_axis_aclk" "m_axis" "m_axis_aresetn"
 adi_add_bus_clock "s_axis_aclk" "s_axis" "s_axis_aresetn"
@@ -130,8 +136,9 @@ set_property -dict [list \
 
 foreach {k v} { \
 	    "M_AXIS_REGISTERED"   "true" \
-	    "TLAST_EN"            "false" \
 	    "TKEEP_EN"            "true" \
+	    "TLAST_EN"            "false" \
+	    "TUSER_EN"            "false" \
 	    "REMOVE_NULL_BEAT_EN" "false" \
 } { \
   set_property -dict [list \
@@ -193,17 +200,23 @@ set_property -dict [list \
 	  "tooltip" "\[ALMOST_EMPTY_THRESHOLD\] The offset between the almost empty assertion and empty assertion in number of FIFO words." \
 	  ] [ipgui::get_guiparamspec -name "ALMOST_EMPTY_THRESHOLD" -component [ipx::current_core]]
 
+ipgui::add_param -name "TKEEP_EN" -component [ipx::current_core] -parent $interface_group
+set_property -dict [list \
+	  "display_name" "TKEEP Enable" \
+	  "tooltip" "\[TKEEP_EN\] Enable the TKEEP for the AXI stream interface, for data byte qualification for each AXIS beat." \
+	  ] [ipgui::get_guiparamspec -name "TKEEP_EN" -component [ipx::current_core]]
+
 ipgui::add_param -name "TLAST_EN" -component [ipx::current_core] -parent $interface_group
 set_property -dict [list \
 	  "display_name" "TLAST Enable" \
 	  "tooltip" "\[TLAST_EN\] Enable the TLAST for the AXI stream interface, signaling packet boundaries." \
 	  ] [ipgui::get_guiparamspec -name "TLAST_EN" -component [ipx::current_core]]
 
-ipgui::add_param -name "TKEEP_EN" -component [ipx::current_core] -parent $interface_group
+ipgui::add_param -name "TUSER_EN" -component [ipx::current_core] -parent $interface_group
 set_property -dict [list \
-	  "display_name" "TKEEP Enable" \
-	  "tooltip" "\[TKEEP_EN\] Enable the TKEEP for the AXI stream interface, for data byte qualification for each AXIS beat." \
-	  ] [ipgui::get_guiparamspec -name "TKEEP_EN" -component [ipx::current_core]]
+	  "display_name" "TUSER Enable" \
+	  "tooltip" "\[TUSER_EN\] Enable the TUSER for the AXI stream interface, signaling the latest beats after resume." \
+	  ] [ipgui::get_guiparamspec -name "TLAST_EN" -component [ipx::current_core]]
 
 set other_group [ipgui::add_group -name "Other Features" -component [ipx::current_core] \
 	    -parent $page0 -display_name "Other Features" ]
