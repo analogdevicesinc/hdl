@@ -126,17 +126,74 @@ ad_connect adcb_filter_data_ready_n  axi_ad4080_adc_b/filter_data_ready_n
 ad_connect $sys_iodelay_clk          axi_ad4080_adc_b/delay_clk
 
 ad_ip_instance util_cpack2 util_ad4880_adc_pack
-ad_ip_parameter util_ad4880_adc_pack CONFIG.NUM_OF_CHANNELS 2 
-ad_ip_parameter util_ad4880_adc_pack CONFIG.SAMPLE_DATA_WIDTH $SAMPLE_DATA_WIDTH 
+ad_ip_parameter util_ad4880_adc_pack CONFIG.NUM_OF_CHANNELS 2
+ad_ip_parameter util_ad4880_adc_pack CONFIG.SAMPLE_DATA_WIDTH $SAMPLE_DATA_WIDTH
+
+# Cross-channel alignment: absorb the phase difference between adca_dco and
+# adcb_dco (same source chip, same nominal freq, unknown FPGA phase) with a
+# pair of async FIFOs and a paired read. Both channels reach the cpack in
+# the same clock cycle on adc_a's clock, giving cycle-accurate alignment.
+# NOTE: this requires axi_ad408x/adc_clk to be on a global BUFG (BUFR output
+# is clock-region-local and cannot bridge Bank 34 <-> Bank 35 on Zynq-7020).
+# The BUFG cascade is instantiated inside ad408x_phy.v (7-series branch).
+ad_ip_instance util_axis_fifo cha_align_fifo
+ad_ip_parameter cha_align_fifo CONFIG.ASYNC_CLK 1
+ad_ip_parameter cha_align_fifo CONFIG.DATA_WIDTH $SAMPLE_DATA_WIDTH
+ad_ip_parameter cha_align_fifo CONFIG.ADDRESS_WIDTH 4
+ad_ip_parameter cha_align_fifo CONFIG.TLAST_EN 0
+ad_ip_parameter cha_align_fifo CONFIG.TKEEP_EN 0
+ad_ip_parameter cha_align_fifo CONFIG.M_AXIS_REGISTERED 1
+
+ad_ip_instance util_axis_fifo chb_align_fifo
+ad_ip_parameter chb_align_fifo CONFIG.ASYNC_CLK 1
+ad_ip_parameter chb_align_fifo CONFIG.DATA_WIDTH $SAMPLE_DATA_WIDTH
+ad_ip_parameter chb_align_fifo CONFIG.ADDRESS_WIDTH 4
+ad_ip_parameter chb_align_fifo CONFIG.TLAST_EN 0
+ad_ip_parameter chb_align_fifo CONFIG.TKEEP_EN 0
+ad_ip_parameter chb_align_fifo CONFIG.M_AXIS_REGISTERED 1
+
+# Pop from both FIFOs only when both have data -> paired sample delivery.
+# Per-channel valid is already gated by sync_status inside ad408x_phy so
+# pre-lock samples never enter the FIFO -> paired-pop stays aligned by
+# construction after both channels lock.
+ad_ip_instance util_vector_logic align_both_valid
+ad_ip_parameter align_both_valid CONFIG.C_OPERATION and
+ad_ip_parameter align_both_valid CONFIG.C_SIZE 1
 
 
 # connect datapath
 
+# ADC-A write side: native adc_clk -> fifo write (adc_valid is already
+# gated by sync_status inside the PHY, so no pre-lock garbage enters).
+ad_connect axi_ad4080_adc_a/adc_clk    cha_align_fifo/s_axis_aclk
+ad_connect sys_cpu_resetn              cha_align_fifo/s_axis_aresetn
+ad_connect axi_ad4080_adc_a/adc_valid  cha_align_fifo/s_axis_valid
+ad_connect axi_ad4080_adc_a/adc_data   cha_align_fifo/s_axis_data
+
+# ADC-B write side: native adc_clk -> fifo write
+ad_connect axi_ad4080_adc_b/adc_clk    chb_align_fifo/s_axis_aclk
+ad_connect sys_cpu_resetn              chb_align_fifo/s_axis_aresetn
+ad_connect axi_ad4080_adc_b/adc_valid  chb_align_fifo/s_axis_valid
+ad_connect axi_ad4080_adc_b/adc_data   chb_align_fifo/s_axis_data
+
+# Common read side: ADC-A's adc_clk drains both fifos
+ad_connect axi_ad4080_adc_a/adc_clk    cha_align_fifo/m_axis_aclk
+ad_connect sys_cpu_resetn              cha_align_fifo/m_axis_aresetn
+ad_connect axi_ad4080_adc_a/adc_clk    chb_align_fifo/m_axis_aclk
+ad_connect sys_cpu_resetn              chb_align_fifo/m_axis_aresetn
+
+# both_valid = m_axis_valid_a & m_axis_valid_b : gates the paired pop
+ad_connect cha_align_fifo/m_axis_valid align_both_valid/Op1
+ad_connect chb_align_fifo/m_axis_valid align_both_valid/Op2
+ad_connect align_both_valid/Res        cha_align_fifo/m_axis_ready
+ad_connect align_both_valid/Res        chb_align_fifo/m_axis_ready
+
+# Feed cpack: single common clock, paired data, common write enable
 ad_connect axi_ad4080_adc_a/adc_clk    util_ad4880_adc_pack/clk
 ad_connect axi_ad4080_adc_a/adc_rst    util_ad4880_adc_pack/reset
-ad_connect axi_ad4080_adc_a/adc_valid  util_ad4880_adc_pack/fifo_wr_en
-ad_connect axi_ad4080_adc_a/adc_data   util_ad4880_adc_pack/fifo_wr_data_0
-ad_connect axi_ad4080_adc_b/adc_data   util_ad4880_adc_pack/fifo_wr_data_1
+ad_connect align_both_valid/Res        util_ad4880_adc_pack/fifo_wr_en
+ad_connect cha_align_fifo/m_axis_data  util_ad4880_adc_pack/fifo_wr_data_0
+ad_connect chb_align_fifo/m_axis_data  util_ad4880_adc_pack/fifo_wr_data_1
 ad_connect axi_ad4080_adc_a/adc_enable util_ad4880_adc_pack/enable_0
 ad_connect axi_ad4080_adc_b/adc_enable util_ad4880_adc_pack/enable_1
 ad_connect axi_ad4080_adc_a/adc_dovf   util_ad4880_adc_pack/fifo_wr_overflow
