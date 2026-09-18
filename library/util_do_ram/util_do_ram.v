@@ -65,8 +65,8 @@ module util_do_ram #(
   input  [SRC_DATA_WIDTH-1:0]              s_axis_data,
   input  [SRC_DATA_WIDTH/8-1:0]            s_axis_strb,
   input  [SRC_DATA_WIDTH/8-1:0]            s_axis_keep,
-  input  [0:0]                             s_axis_user,
   input                                    s_axis_last,
+  input                                    s_axis_user,
 
   // Master streaming AXI interface
   input                                    m_axis_aclk,
@@ -76,8 +76,8 @@ module util_do_ram #(
   output [DST_DATA_WIDTH-1:0]              m_axis_data,
   output [DST_DATA_WIDTH/8-1:0]            m_axis_strb,
   output [DST_DATA_WIDTH/8-1:0]            m_axis_keep,
-  output [0:0]                             m_axis_user,
-  output                                   m_axis_last
+  output                                   m_axis_last,
+  output                                   m_axis_user
 );
 
   //   src = s_axis_* = wr
@@ -100,15 +100,18 @@ module util_do_ram #(
   wire                        rd_last_beat;
   wire [DST_DATA_WIDTH-1:0]   rd_data;
   wire [DST_DATA_WIDTH/8-1:0] rd_keep;
+  wire                        rd_user;
   wire                        rd_valid_s;
   wire                        rd_last_s;
   wire [DST_DATA_WIDTH-1:0]   rd_data_s;
   wire [DST_DATA_WIDTH/8-1:0] rd_keep_s;
+  wire                        rd_user_s;
   wire                        rd_fifo_s_ready;
   wire                        rd_fifo_s_valid;
   wire                        rd_fifo_s_last;
   wire [DST_DATA_WIDTH-1:0]   rd_fifo_s_data;
   wire [DST_DATA_WIDTH/8-1:0] rd_fifo_s_keep;
+  wire                        rd_fifo_s_user;
 
   reg                         wr_full = 1'b0;
   reg [SRC_ADDRESS_WIDTH-1:0] wr_addr = 'h0;
@@ -123,6 +126,7 @@ module util_do_ram #(
   reg                         rd_last_l2 = 1'b0;
   reg [DST_DATA_WIDTH-1:0]    rd_data_l2 = 'h0;
   reg [DST_DATA_WIDTH/8-1:0]  rd_keep_l2 = 'h0;
+  reg                         rd_user_l2 = 1'b0;
 
   always @(posedge s_axis_aclk) begin
     if (~s_axis_aresetn)
@@ -211,6 +215,22 @@ module util_do_ram #(
     .addrb (rd_addr),
     .doutb (rd_keep));
 
+  ad_mem_asym #(
+    .A_ADDRESS_WIDTH (SRC_ADDRESS_WIDTH),
+    .A_DATA_WIDTH (1),
+    .B_ADDRESS_WIDTH (DST_ADDRESS_WIDTH),
+    .B_DATA_WIDTH (1)
+  ) i_mem_user (
+    .clka (s_axis_aclk),
+    .wea (wr_enable),
+    .addra (wr_addr),
+    .dina (s_axis_user),
+
+    .clkb (m_axis_aclk),
+    .reb (1'b1),
+    .addrb (rd_addr),
+    .doutb (rd_user));
+
   always @(posedge m_axis_aclk) begin
     if (~rd_request_enable)
       rd_req_cnt <= 2'b0;
@@ -258,7 +278,7 @@ module util_do_ram #(
   end
 
   util_pipeline_stage #(
-    .WIDTH(DST_DATA_WIDTH*9/8+2),
+    .WIDTH(DST_DATA_WIDTH*9/8+3),
     .REGISTERED(RD_DATA_REGISTERED)
   ) i_rd_pipeline_stage (
     .clk(m_axis_aclk),
@@ -266,12 +286,14 @@ module util_do_ram #(
       rd_valid_l1,
       rd_last_l1,
       rd_data,
-      rd_keep}),
+      rd_keep,
+      rd_user}),
     .out({
       rd_valid_s,
       rd_last_s,
       rd_data_s,
-      rd_keep_s}));
+      rd_keep_s,
+      rd_user_s}));
 
   // Extra pipeline to be sucked in by the BRAM/URAM output stage
   always @(posedge m_axis_aclk) begin
@@ -282,6 +304,11 @@ module util_do_ram #(
   always @(posedge m_axis_aclk) begin
     if (rd_valid_s)
       rd_keep_l2 <= rd_keep_s;
+  end
+
+  always @(posedge m_axis_aclk) begin
+    if (rd_valid_s)
+      rd_user_l2 <= rd_user_s;
   end
 
   always @(posedge m_axis_aclk) begin
@@ -298,6 +325,7 @@ module util_do_ram #(
   assign rd_fifo_s_last = rd_last_l2;
   assign rd_fifo_s_data = rd_data_l2;
   assign rd_fifo_s_keep = rd_keep_l2;
+  assign rd_fifo_s_user = rd_user_l2;
 
   // Read datapath to AXIS logic
   util_axis_fifo #(
@@ -305,8 +333,9 @@ module util_do_ram #(
     .ADDRESS_WIDTH(RD_FIFO_ADDRESS_WIDTH),
     .ASYNC_CLK(0),
     .M_AXIS_REGISTERED(0),
+    .TKEEP_EN(1),
     .TLAST_EN(1),
-    .TKEEP_EN(1)
+    .TUSER_EN(1)
   ) i_rd_fifo (
     .s_axis_aclk(m_axis_aclk),
     .s_axis_aresetn(m_axis_aresetn & rd_request_enable),
@@ -317,6 +346,7 @@ module util_do_ram #(
     .s_axis_room(rd_fifo_room),
     .s_axis_tkeep(rd_fifo_s_keep),
     .s_axis_tlast(rd_fifo_s_last),
+    .s_axis_tuser(rd_fifo_s_user),
     .s_axis_almost_full(),
 
     .m_axis_aclk(m_axis_aclk),
@@ -328,6 +358,7 @@ module util_do_ram #(
     .m_axis_empty(),
     .m_axis_tkeep(m_axis_keep),
     .m_axis_tlast(m_axis_last),
+    .m_axis_tuser(m_axis_user),
     .m_axis_almost_empty());
 
 endmodule

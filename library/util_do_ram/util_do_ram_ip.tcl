@@ -69,8 +69,8 @@ adi_add_bus "s_axis" "slave" \
     {"s_axis_data" "TDATA"} \
     {"s_axis_strb" "TSTRB"} \
     {"s_axis_keep" "TKEEP"} \
-    {"s_axis_user" "TUSER"} \
-    {"s_axis_last" "TLAST"}]
+    {"s_axis_last" "TLAST"} \
+    {"s_axis_user" "TUSER"}]
 
 adi_add_bus "m_axis" "master" \
   "xilinx.com:interface:axis_rtl:1.0" \
@@ -80,8 +80,8 @@ adi_add_bus "m_axis" "master" \
     {"m_axis_data" "TDATA"} \
     {"m_axis_strb" "TSTRB"} \
     {"m_axis_keep" "TKEEP"} \
-    {"m_axis_user" "TUSER"} \
-    {"m_axis_last" "TLAST"}]
+    {"m_axis_last" "TLAST"} \
+    {"m_axis_user" "TUSER"}]
 
 adi_add_bus "wr_ctrl" "slave" \
   "analog.com:interface:if_do_ctrl_rtl:1.0" \
