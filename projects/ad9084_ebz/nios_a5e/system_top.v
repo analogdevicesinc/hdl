@@ -142,6 +142,9 @@ module system_top #(
 );
 
   // internal signals
+  wire   [1:0]  rx_syncout;
+  wire   [1:0]  tx_syncin;
+
   wire  [63:0]  gpio_i;
   wire  [63:0]  gpio_o;
 
@@ -293,6 +296,28 @@ module system_top #(
   // Unused GPIOs
   assign gpio_i[63:56] = gpio_o[63:56];
   assign gpio_i[   52] = gpio_o[52];
+
+  /*
+   * Bit 0 of the sync vectors is the side-B pin: with the opposite order the
+   * link layer's per-link SYNC~ reaches the wrong Apollo framer (link 0 goes
+   * INIT while Apollo reports A0 deasserted and B0 asserted).
+   *
+   * 64B66B has no SYNC~: the link layer ties its sync output low and never
+   * looks at its sync input (library/jesd204/jesd204_rx/jesd204_rx.v, "Assign
+   * unused outputs"; jesd204_tx_ctrl is instantiated only in mode_8b10b). All
+   * four ports go VIRTUAL_PIN in that mode (system_project.tcl), leaving the
+   * FMC nets unconnected, so nothing here may fight the AD9084 for a pin whose
+   * direction changes with the link mode.
+   */
+  assign {syncinb_b0, syncinb_a0} = rx_syncout;
+
+  generate
+  if (JESD_MODE == "8B10B") begin
+    assign tx_syncin = {syncoutb_b0, syncoutb_a0};
+  end else begin
+    assign tx_syncin = 2'b11;
+  end
+  endgenerate
 
   assign sys_reset_n = sys_resetn & ~ninit_done;
 
@@ -454,16 +479,11 @@ module system_top #(
     .apollo_spi_SCLK                                            (apollo_spi_clk),
     .apollo_spi_SS_n                                            (apollo_spi_csn),
 
-    /*
-     * Bit 0 of the sync vectors is the side-B pin: with the opposite order the
-     * link layer's per-link SYNC~ reaches the wrong Apollo framer (link 0 goes
-     * INIT while Apollo reports A0 deasserted and B0 asserted).
-     */
-    .tx_sync_export                                             ({syncoutb_b0, syncoutb_a0}),
+    .tx_sync_export                                             (tx_syncin),
     .tx_sysref_export                                           (sysref_out),
     .tx_device_clk_clk                                          (tx_device_clk),
 
-    .rx_sync_export                                             ({syncinb_b0, syncinb_a0}),
+    .rx_sync_export                                             (rx_syncout),
     .rx_sysref_export                                           (sysref_out),
     .rx_device_clk_clk                                          (rx_device_clk),
 

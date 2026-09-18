@@ -198,6 +198,9 @@ module system_top #(
 );
 
   // internal signals
+  wire   [1:0]  rx_syncout;
+  wire   [1:0]  tx_syncin;
+
   wire  [63:0]  gpio_i;
   wire  [63:0]  gpio_o;
 
@@ -251,11 +254,6 @@ module system_top #(
   wire [PHY_NO_LANES-1:0]       phy_a_tx_pll_locked_o_tx_pll_locked;
   wire [PHY_NO_LANES-1:0]       phy_b_tx_pll_locked_o_tx_pll_locked;
 
-  // wire                          phy_a_tx_clkout;
-  // wire                          phy_b_tx_clkout;
-//  wire [           4:0]         phy_a_tx_clk_count;
-//  wire [           4:0]         phy_b_tx_clk_count;
-
   // Per-PHY reset status out of axi_adxcvr, already in the sys_clk domain.
   wire [NUM_OF_PHYS-1:0]        rx_phy_reset_done;
   wire [NUM_OF_PHYS-1:0]        rx_phy_ready;
@@ -263,10 +261,6 @@ module system_top #(
   wire [NUM_OF_PHYS-1:0]        tx_phy_reset_done;
   wire [NUM_OF_PHYS-1:0]        tx_phy_ready;
   wire [NUM_OF_PHYS-1:0]        tx_phy_reset_ack;
-
-  localparam DBG_STATUS_W = 10 + 4*NUM_OF_PHYS + 4*PHY_NO_LANES;
-
-  wire [DBG_STATUS_W-1:0]       dbg_status_s;
 
   assign h2f_warm_reset_reset_ack = h2f_warm_reset_reset_req;
 
@@ -281,30 +275,6 @@ module system_top #(
    */
   assign gts_reset_i_src_rs_refclk_status_bus_refclk_status_bus_out =
     jesd204_phy_a_o_refclk_status_bus_out_refclk_status_bus_out;
-
-//  /*
-//   * Debug: whether each bank's GTS serializer clock is running at all. Nothing
-//   * else in the design observes phy_*_tx_clkout, so a dead TX clock is
-//   * otherwise indistinguishable from a link that never trained.
-//   *
-//   * WIDTH tracked the width of the gpio_i slots these fed. out_count is
-//   * gray-coded: software must decode it before differencing two reads.
-//   */
-//  clk_monitor #(
-//    .WIDTH (5)
-//  ) i_phy_a_tx_clk_monitor (
-//    .clk (phy_a_tx_clkout),
-//    .out_clk (sys_cpu_clk),
-//    .out_resetn (sys_reset_n),
-//    .out_count (phy_a_tx_clk_count));
-//
-//  clk_monitor #(
-//    .WIDTH (5)
-//  ) i_phy_b_tx_clk_monitor (
-//    .clk (phy_b_tx_clkout),
-//    .out_clk (sys_cpu_clk),
-//    .out_resetn (sys_reset_n),
-//    .out_count (phy_b_tx_clk_count));
 
   // Board GPIOs
   assign fpga_led      = gpio_o[3:0];
@@ -323,54 +293,16 @@ module system_top #(
 
   assign refclk_ready_rx = gpio_o[56];
   assign refclk_ready_tx = gpio_o[57];
-
-  /*
-   * Both adxcvr instances must report their refclk stable: unlike ad9081, the
-   * RX and TX refclks are separate inputs on this board.
-   */
   assign refclk_ready = refclk_ready_rx && refclk_ready_tx;
 
-//  /*
-//   * Debug: per-PHY bring-up status, since the link-layer and axi_adxcvr
-//   * registers only expose these AND-ed across both PHYs. The bit order is the
-//   * concatenation below.
-//   *
-//   * The PIOs generate interrupts, so these paths reach the CPU and have to be
-//   * synchronized rather than declared false.
-//   */
-//  sync_bits #(
-//    .NUM_OF_BITS(DBG_STATUS_W),
-//    .ASYNC_CLK(1)
-//  ) i_dbg_status_cdc (
-//    .in_bits ({syspll_lock_b,
-//               syspll_lock_a,
-//               gts_reset_o_refclk_fail_status_refclk_fail_status,
-//               tx_phy_reset_ack,
-//               rx_phy_reset_ack,
-//               tx_phy_ready,
-//               rx_phy_ready,
-//               phy_b_tx_pll_locked_o_tx_pll_locked,
-//               phy_a_tx_pll_locked_o_tx_pll_locked,
-//               jesd204_phy_b_rx_is_lockedtodata_o_rx_is_lockedtodata,
-//               jesd204_phy_a_rx_is_lockedtodata_o_rx_is_lockedtodata}),
-//    .out_clk (sys_cpu_clk),
-//    .out_resetn (sys_reset_n),
-//    .out_bits (dbg_status_s));
-//
-//  assign gpio_i[31:12] = dbg_status_s[19:0];
-//  assign gpio_i[   54] = dbg_status_s[DBG_STATUS_W-2];
-//  assign gpio_i[   53] = dbg_status_s[DBG_STATUS_W-1];
-//
-//  /* Debug: a count that never changes between two reads means the clock is dead. */
-//  assign gpio_i[52:48] = phy_a_tx_clk_count;
-//  assign gpio_i[59:55] = phy_b_tx_clk_count;
-//  assign gpio_i[61:60] = tx_phy_reset_done;
-//  assign gpio_i[63:62] = rx_phy_reset_done;
-
-  // Debug signals above are commented out; the freed inputs read back what
-  // software wrote so the PIOs stay driven.
   assign gpio_i[31:12] = gpio_o[31:12];
   assign gpio_i[63:48] = gpio_o[63:48];
+
+  generate if (JESD_MODE == "8B10B") begin
+    assign tx_syncin = {syncoutb_b0, syncoutb_a0};
+    assign {syncinb_b0, syncinb_a0} = rx_syncout;
+  end
+  endgenerate
 
   assign sys_reset_n = sys_resetn & ~h2f_reset & ~ninit_done;
 
@@ -603,11 +535,11 @@ module system_top #(
     .apollo_spi_SCLK                                            (apollo_spi_clk),
     .apollo_spi_SS_n                                            (apollo_spi_csn),
 
-    .tx_sync_export                                             ({syncoutb_b0, syncoutb_a0}),
+    .tx_sync_export                                             (tx_syncin),
     .tx_sysref_export                                           (sysref_out),
     .tx_device_clk_clk                                          (tx_device_clk),
 
-    .rx_sync_export                                             ({syncinb_b0, syncinb_a0}),
+    .rx_sync_export                                             (rx_syncout),
     .rx_sysref_export                                           (sysref_out),
     .rx_device_clk_clk                                          (rx_device_clk),
 

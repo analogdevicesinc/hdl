@@ -33,8 +33,10 @@ source ../../scripts/adi_project_intel.tcl
 #   [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M)
 #
 
+set jesd_mode [get_env_param JESD_MODE 8B10B]
+
 adi_project ad9084_ebz_a5e [list \
-  JESD_MODE           [get_env_param JESD_MODE        8B10B ] \
+  JESD_MODE           $jesd_mode \
   REF_CLK_RATE        [get_env_param REF_CLK_RATE       250 ] \
   DEVICE_CLK_RATE     [get_env_param DEVICE_CLK_RATE    250 ] \
   RX_LANE_RATE        [get_env_param RX_LANE_RATE        10 ] \
@@ -60,13 +62,6 @@ source $ad_hdl_dir/projects/common/a5e/a5e_system_assign.tcl
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_3w_spi.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/util_cdc/sync_bits.v
 set_global_assignment -name VERILOG_FILE ./gts_refclk_reset.v
-# set_global_assignment -name VERILOG_FILE ./clk_monitor.v
-
-# Signal Tap
-
-# set_global_assignment -name ENABLE_SIGNALTAP ON
-# set_global_assignment -name USE_SIGNALTAP_FILE debug_jesd.stp
-# set_global_assignment -name SIGNALTAP_FILE debug_jesd.stp
 
 # FMC clocks and JESD204 control signals
 
@@ -75,13 +70,6 @@ set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)"          -t
 set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to rx_device_clk
 set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to tx_device_clk
 set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to sysref_out
-set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to syncoutb_a0
-set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to syncoutb_b0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to syncinb_a0
-set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to syncinb_b0
-
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to syncoutb_a0
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to syncoutb_b0
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref_out
 
 set_instance_assignment -name GLOBAL_SIGNAL "GLOBAL CLOCK" -to rx_device_clk
@@ -135,14 +123,29 @@ set_location_assignment PIN_AN10  -to "tx_data_b_n[2]"       ; ##
 set_location_assignment PIN_AL7   -to "tx_data_b_p[3]"       ; ##
 set_location_assignment PIN_AL10  -to "tx_data_b_n[3]"       ; ##
 
-set_location_assignment PIN_A63   -to "syncinb_a0"           ; ## H10  LA04_P
-set_location_assignment PIN_B60   -to "syncinb_a0(n)"        ; ## H11  LA04_N
-set_location_assignment PIN_M47   -to "syncinb_b0"           ; ## G12  LA08_P
-set_location_assignment PIN_K47   -to "syncinb_b0(n)"        ; ## G13  LA08_N
-set_location_assignment PIN_B56   -to "syncoutb_a0"          ; ## D11  LA05_P
-set_location_assignment PIN_A60   -to "syncoutb_a0(n)"       ; ## D12  LA05_N
-set_location_assignment PIN_F55   -to "syncoutb_b0"          ; ## D14  LA09_P
-set_location_assignment PIN_D55   -to "syncoutb_b0(n)"       ; ## D15  LA09_N
+# 64B66B has no SYNC~ wire, so all four sync pins go virtual and LA04/05/08/09
+# are left unconnected on the FMC.
+if {$jesd_mode eq "64B66B"} {
+  foreach port {syncinb_a0 syncinb_b0 syncoutb_a0 syncoutb_b0} {
+    set_instance_assignment -name VIRTUAL_PIN ON -to $port
+  }
+} else {
+  set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to syncoutb_a0
+  set_instance_assignment -name IO_STANDARD "1.2-V TRUE DIFFERENTIAL SIGNALING" -to syncoutb_b0
+  set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to syncinb_a0
+  set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL"           -to syncinb_b0
+  set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to syncoutb_a0
+  set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to syncoutb_b0
+
+  set_location_assignment PIN_A63   -to "syncinb_a0"           ; ## H10  LA04_P
+  set_location_assignment PIN_B60   -to "syncinb_a0(n)"        ; ## H11  LA04_N
+  set_location_assignment PIN_M47   -to "syncinb_b0"           ; ## G12  LA08_P
+  set_location_assignment PIN_K47   -to "syncinb_b0(n)"        ; ## G13  LA08_N
+  set_location_assignment PIN_B56   -to "syncoutb_a0"          ; ## D11  LA05_P
+  set_location_assignment PIN_A60   -to "syncoutb_a0(n)"       ; ## D12  LA05_N
+  set_location_assignment PIN_F55   -to "syncoutb_b0"          ; ## D14  LA09_P
+  set_location_assignment PIN_D55   -to "syncoutb_b0(n)"       ; ## D15  LA09_N
+}
 
 set_location_assignment PIN_Y67   -to "syncinb_a1_p_gpio"    ; ## G21  LA20_P
 set_location_assignment PIN_Y65   -to "syncinb_a1_n_gpio"    ; ## G22  LA20_N

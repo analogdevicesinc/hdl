@@ -43,8 +43,11 @@ set_clock_groups -asynchronous \
 # SYNC~ is asynchronous to the link clock; it is captured by sync_bits
 # synchronizers inside the link layer.
 set_false_path -to [get_registers {*|i_cdc_sync|cdc_sync_stage*[0]}]
-set_false_path -from [get_ports {syncinb_a0 syncinb_b0}]
-set_false_path -to [get_ports {syncoutb_a0 syncoutb_b0}]
+# In 64B66B these ports are virtual, so the collections come back empty.
+if {[llength [get_ports -nowarn {syncoutb_a0 syncoutb_b0}]]} {
+  set_false_path -from [get_ports {syncoutb_a0 syncoutb_b0}]
+  set_false_path -to [get_ports {syncinb_a0 syncinb_b0}]
+}
 
 # The PHY status and handshake signals are resynchronized into sys_cpu_clk by
 # sync_bits instances; only their first stage needs the exception.
