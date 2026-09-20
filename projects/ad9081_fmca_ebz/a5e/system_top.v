@@ -211,7 +211,6 @@ module system_top #(
   wire          refclk_fail_stat;
   wire          syspll_clk;
   wire          syspll_lock;
-  wire          dacfifo_bypass;
   wire          refclk_ready;
   wire          refclk_ready_rx;
   wire          refclk_ready_tx;
@@ -266,7 +265,6 @@ module system_top #(
   assign txen[0]    = gpio_o[58];
   assign txen[1]    = gpio_o[59];
 
-  assign dacfifo_bypass  = gpio_o[60];
   assign refclk_ready_rx = gpio_o[61];
   assign refclk_ready_tx = gpio_o[62];
   assign refclk_ready_os = gpio_o[63];
@@ -526,7 +524,9 @@ module system_top #(
     .phy_tx_pll_locked_o_tx_pll_locked                       (phy_tx_pll_locked_o_tx_pll_locked),
     .tx_pll_locked_o_tx_pll_locked                           (phy_tx_pll_locked_o_tx_pll_locked[TX_JESD_L-1:0]),
 
-    .dacfifo_bypass_bypass                                   (dacfifo_bypass),
+    .mxfe_rx_data_offload_sync_ext_sync_ext                  (1'b0),
+    .mxfe_rx_os_data_offload_sync_ext_sync_ext               (1'b0),
+    .mxfe_tx_data_offload_sync_ext_sync_ext                  (1'b0),
     // FMC HPC
     .sys_spi_MISO                                            (spi_miso),
     .sys_spi_MOSI                                            (spi_mosi),

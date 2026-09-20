@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -49,7 +49,8 @@ module data_offload #(
 
   parameter          AUTO_BRINGUP = 1,
   parameter          SYNC_EXT_ADD_INTERNAL_CDC = 1,
-  parameter          HAS_BYPASS = 1
+  parameter          HAS_BYPASS = 1,
+  parameter          ASYNC_CLK = 1
 ) (
 
   // AXI4 Slave for configuration
@@ -85,7 +86,7 @@ module data_offload #(
   input                                       s_axis_valid,
   input  [SRC_DATA_WIDTH-1:0]                 s_axis_data,
   input                                       s_axis_last,
-  input  [SRC_DATA_WIDTH/8-1:0]               s_axis_tkeep,
+  input  [SRC_DATA_WIDTH/8-1:0]               s_axis_keep,
 
   // AXI4 stream master for destination stream (RX_DMA or DAC) -- Destination
   // interface
@@ -97,7 +98,7 @@ module data_offload #(
   output                                      m_axis_valid,
   output  [DST_DATA_WIDTH-1:0]                m_axis_data,
   output                                      m_axis_last,
-  output  [DST_DATA_WIDTH/8-1:0]              m_axis_tkeep,
+  output  [DST_DATA_WIDTH/8-1:0]              m_axis_keep,
 
   // initialization request interface
 
@@ -113,7 +114,7 @@ module data_offload #(
   output                                      m_storage_axis_valid,
   output  [SRC_DATA_WIDTH-1:0]                m_storage_axis_data,
   output                                      m_storage_axis_last,
-  output  [SRC_DATA_WIDTH/8-1:0]              m_storage_axis_tkeep,
+  output  [SRC_DATA_WIDTH/8-1:0]              m_storage_axis_keep,
 
   // AXI stream slave for destination stream from storage (BRAM/URAM/DDR/HBM)
   // runs on m_axis_aclk and m_axis_aresetn
@@ -121,7 +122,7 @@ module data_offload #(
   input                                       s_storage_axis_valid,
   input  [DST_DATA_WIDTH-1:0]                 s_storage_axis_data,
   input                                       s_storage_axis_last,
-  input  [DST_DATA_WIDTH/8-1:0]               s_storage_axis_tkeep,
+  input  [DST_DATA_WIDTH/8-1:0]               s_storage_axis_keep,
 
   // Control interface for storage for m_storage_axis interface
   output                                      wr_request_enable,
@@ -234,46 +235,51 @@ module data_offload #(
   assign m_axis_data  = TX_OR_RXN_PATH[0] & ~m_axis_valid ? {DST_DATA_WIDTH{1'b0}} :
                         (dst_bypass_s) ? data_bypass_s  : s_storage_axis_data;
   assign m_axis_last  = (dst_bypass_s) ? 1'b0           : s_storage_axis_last;
-  assign m_axis_tkeep = (dst_bypass_s) ? {DST_DATA_WIDTH/8{1'b1}} : s_storage_axis_tkeep;
-
+  assign m_axis_keep  = (dst_bypass_s) ? {DST_DATA_WIDTH/8{1'b1}} : s_storage_axis_keep;
   assign s_axis_ready =  src_bypass_s ? ready_bypass_s : (wr_ready & m_storage_axis_ready);
 
   assign m_storage_axis_valid = s_axis_valid & wr_ready;
   assign m_storage_axis_data = s_axis_data;
   assign m_storage_axis_last = s_axis_last;
-  assign m_storage_axis_tkeep = s_axis_tkeep;
+  assign m_storage_axis_keep = s_axis_keep;
 
   assign s_storage_axis_ready = rd_ready & m_axis_ready;
 
   // Bypass module instance -- the same FIFO, just a smaller depth
   // NOTE: Generating an overflow is making sense just in BYPASS mode, and
   // it's supported just with the FIFO interface
-  util_axis_fifo_asym #(
-    .S_DATA_WIDTH (SRC_DATA_WIDTH),
-    .ADDRESS_WIDTH (SRC_ADDR_WIDTH_BYPASS),
-    .M_DATA_WIDTH (DST_DATA_WIDTH),
-    .ASYNC_CLK (1)
-  ) i_bypass_fifo (
-    .m_axis_aclk (m_axis_aclk),
-    .m_axis_aresetn (dst_rstn),
-    .m_axis_ready (m_axis_ready),
-    .m_axis_valid (valid_bypass_s),
-    .m_axis_data  (data_bypass_s),
-    .m_axis_tlast (),
-    .m_axis_empty (),
-    .m_axis_almost_empty (),
-    .m_axis_tkeep (),
-    .m_axis_level (),
-    .s_axis_aclk  (s_axis_aclk),
-    .s_axis_aresetn (src_rstn),
-    .s_axis_ready (ready_bypass_s),
-    .s_axis_valid (s_axis_valid & src_bypass_s),
-    .s_axis_data  (s_axis_data),
-    .s_axis_tlast (),
-    .s_axis_full  (),
-    .s_axis_almost_full (),
-    .s_axis_tkeep (),
-    .s_axis_room ());
+  generate if (HAS_BYPASS) begin
+    util_axis_fifo_asym #(
+      .S_DATA_WIDTH (SRC_DATA_WIDTH),
+      .ADDRESS_WIDTH (SRC_ADDR_WIDTH_BYPASS),
+      .M_DATA_WIDTH (DST_DATA_WIDTH),
+      .ASYNC_CLK (ASYNC_CLK)
+    ) i_bypass_fifo (
+      .m_axis_aclk (m_axis_aclk),
+      .m_axis_aresetn (dst_rstn),
+      .m_axis_ready (m_axis_ready),
+      .m_axis_valid (valid_bypass_s),
+      .m_axis_data  (data_bypass_s),
+      .m_axis_tlast (),
+      .m_axis_empty (),
+      .m_axis_almost_empty (),
+      .m_axis_tkeep (),
+      .m_axis_level (),
+      .s_axis_aclk  (s_axis_aclk),
+      .s_axis_aresetn (src_rstn),
+      .s_axis_ready (ready_bypass_s),
+      .s_axis_valid (s_axis_valid & src_bypass_s),
+      .s_axis_data  (s_axis_data),
+      .s_axis_tlast (),
+      .s_axis_full  (),
+      .s_axis_almost_full (),
+      .s_axis_tkeep (),
+      .s_axis_room ());
+  end else begin
+      assign valid_bypass_s = 1'b0;
+      assign data_bypass_s = 'd0;
+      assign ready_bypass_s = 1'b0;
+  end endgenerate
 
   // register map
 
@@ -352,7 +358,7 @@ module data_offload #(
   util_axis_fifo #(
     .DATA_WIDTH(MEM_SIZE_LOG2),
     .ADDRESS_WIDTH(0),
-    .ASYNC_CLK(1)
+    .ASYNC_CLK(ASYNC_CLK)
   ) i_measured_length_cdc (
     .s_axis_aclk(s_axis_aclk),
     .s_axis_aresetn(s_axis_aresetn),

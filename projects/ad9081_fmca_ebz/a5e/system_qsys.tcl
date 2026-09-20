@@ -13,8 +13,6 @@ set dac_fifo_samples_per_converter [expr $ad_project_params(TX_KS_PER_CHANNEL)*1
 
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
-source $ad_hdl_dir/projects/common/intel/dacfifo_qsys.tcl
-source $ad_hdl_dir/projects/common/intel/adcfifo_qsys.tcl
 
 set JESD_MODE     $ad_project_params(JESD_MODE)
 set RX_JESD_M     $ad_project_params(RX_JESD_M)

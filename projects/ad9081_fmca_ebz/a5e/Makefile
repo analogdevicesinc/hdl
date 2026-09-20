@@ -8,8 +8,6 @@ PROJECT_NAME := ad9081_fmca_ebz_a5e
 
 M_DEPS += ../common/ad9081_fmca_ebz_qsys.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
-M_DEPS += ../../common/intel/dacfifo_qsys.tcl
-M_DEPS += ../../common/intel/adcfifo_qsys.tcl
 M_DEPS += ../../common/a5e/a5e_system_qsys.tcl
 M_DEPS += ../../common/a5e/a5e_system_assign.tcl
 M_DEPS += ../../../library/common/ad_3w_spi.v
@@ -22,6 +20,7 @@ LIB_DEPS += sysid_rom
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
 
+INTEL_LIB_DEPS += intel/adi_data_offload
 INTEL_LIB_DEPS += intel/adi_jesd204
 INTEL_LIB_DEPS += intel/jesd204c/jesd204_f_tile_adapter_rx
 INTEL_LIB_DEPS += intel/jesd204c/jesd204_f_tile_adapter_tx

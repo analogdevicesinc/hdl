@@ -138,20 +138,17 @@ set REF_CLK_RATE $ad_project_params(REF_CLK_RATE)
 # Device Clock Rate
 set DEVICE_CLK_RATE [expr $ad_project_params(DEVICE_CLK_RATE)*1000000]
 
-set adc_fifo_name mxfe_adc_fifo
+set adc_data_offload_name mxfe_rx_data_offload
 set adc_data_width [expr 8*$RX_TPL_DATA_PATH_WIDTH*$RX_NUM_OF_LANES*$RX_DMA_SAMPLE_WIDTH/$RX_SAMPLE_WIDTH]
 set adc_dma_data_width $adc_data_width
-set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
 
-set adc_os_fifo_name mxfe_os_adc_fifo
+set adc_os_data_offload_name mxfe_rx_os_data_offload
 set adc_os_data_width [expr 8*$RX_OS_TPL_DATA_PATH_WIDTH*$RX_OS_NUM_OF_LANES*$RX_OS_DMA_SAMPLE_WIDTH/$RX_OS_SAMPLE_WIDTH]
 set adc_os_dma_data_width $adc_os_data_width
-set adc_os_fifo_address_width [expr int(ceil(log(($adc_os_fifo_samples_per_converter*$RX_OS_NUM_OF_CONVERTERS) / ($adc_os_data_width/$RX_OS_DMA_SAMPLE_WIDTH))/log(2)))]
 
-set dac_fifo_name mxfe_dac_fifo
+set dac_data_offload_name mxfe_tx_data_offload
 set dac_data_width [expr 8*$TX_TPL_DATA_PATH_WIDTH*$TX_NUM_OF_LANES*$TX_DMA_SAMPLE_WIDTH/$TX_SAMPLE_WIDTH]
 set dac_dma_data_width $dac_data_width
-set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
 
 if {$EXTERNAL_PHY && $RX_NUM_OF_LANES < $TX_NUM_OF_LANES} {
   send_message error "In duplex mode RX_NUM_OF_LANES >= TX_NUM_OF_LANES!"
@@ -328,7 +325,7 @@ add_instance mxfe_tx_upack util_upack2
 set_instance_parameter_value mxfe_tx_upack {NUM_OF_CHANNELS} $TX_NUM_OF_CONVERTERS
 set_instance_parameter_value mxfe_tx_upack {SAMPLES_PER_CHANNEL} $TX_SAMPLES_PER_CHANNEL
 set_instance_parameter_value mxfe_tx_upack {SAMPLE_DATA_WIDTH} $TX_DMA_SAMPLE_WIDTH
-set_instance_parameter_value mxfe_tx_upack {INTERFACE_TYPE} {1}
+set_instance_parameter_value mxfe_tx_upack {INTERFACE_TYPE} {0}
 
 add_instance mxfe_rx_cpack util_cpack2
 set_instance_parameter_value mxfe_rx_cpack {NUM_OF_CHANNELS} $RX_NUM_OF_CONVERTERS
@@ -342,12 +339,40 @@ set_instance_parameter_value mxfe_rx_os_cpack {SAMPLE_DATA_WIDTH} $RX_OS_DMA_SAM
 
 # RX and TX data offload buffers
 
-ad_adcfifo_create $adc_fifo_name    $adc_data_width    $adc_dma_data_width    $adc_fifo_address_width
-ad_adcfifo_create $adc_os_fifo_name $adc_os_data_width $adc_os_dma_data_width $adc_os_fifo_address_width 1
-ad_dacfifo_create $dac_fifo_name    $dac_data_width    $dac_dma_data_width    $dac_fifo_address_width
+# MEM_SIZE is in bytes and only accepts powers of two (adi_data_offload_hw.tcl
+# log2's it), so the per-converter sample budget the project asks for is rounded
+# up.
 
-add_interface dacfifo_bypass conduit end
-set_interface_property dacfifo_bypass EXPORT_OF $dac_fifo_name.if_bypass
+proc ad9081_offload_size {samples_per_converter num_of_converters sample_width} {
+  set bytes [expr $samples_per_converter * $num_of_converters * $sample_width / 8]
+  return [expr 1 << int(ceil(log($bytes) / log(2)))]
+}
+
+proc ad9081_offload_create {name datapath_type mem_size src_dwidth dst_dwidth} {
+  add_instance $name adi_data_offload
+  set_instance_parameter_value $name {INSTANCE_NAME} $name
+  set_instance_parameter_value $name {DATAPATH_TYPE} $datapath_type
+  # RX source is util_cpack2 in FIFO mode; TX source is the DMA on AXIS.
+  set_instance_parameter_value $name {SRC_INTERFACE_TYPE} [expr {$datapath_type == 0}]
+  set_instance_parameter_value $name {SRC_HAS_AXIS_TKEEP} {0}
+  set_instance_parameter_value $name {SRC_HAS_AXIS_TLAST} [expr {$datapath_type == 1}]
+  set_instance_parameter_value $name {MEM_TYPE} {0}
+  set_instance_parameter_value $name {MEM_SIZE} $mem_size
+  set_instance_parameter_value $name {SOURCE_DWIDTH} $src_dwidth
+  set_instance_parameter_value $name {DESTINATION_DWIDTH} $dst_dwidth
+  add_interface ${name}_sync_ext conduit end
+  set_interface_property ${name}_sync_ext EXPORT_OF ${name}.sync_ext
+}
+
+ad9081_offload_create $adc_data_offload_name 0 \
+  [ad9081_offload_size $adc_fifo_samples_per_converter $RX_NUM_OF_CONVERTERS $RX_DMA_SAMPLE_WIDTH] \
+  $adc_data_width $adc_dma_data_width
+ad9081_offload_create $adc_os_data_offload_name 0 \
+  [ad9081_offload_size $adc_os_fifo_samples_per_converter $RX_OS_NUM_OF_CONVERTERS $RX_OS_DMA_SAMPLE_WIDTH] \
+  $adc_os_data_width $adc_os_dma_data_width
+ad9081_offload_create $dac_data_offload_name 1 \
+  [ad9081_offload_size $dac_fifo_samples_per_converter $TX_NUM_OF_CONVERTERS $TX_DMA_SAMPLE_WIDTH] \
+  $dac_dma_data_width $dac_data_width
 
 # RX and TX DMA instance and connections
 
@@ -361,10 +386,10 @@ set_instance_parameter_value mxfe_tx_dma {AXI_SLICE_DEST} {1}
 set_instance_parameter_value mxfe_tx_dma {AXI_SLICE_SRC} {1}
 set_instance_parameter_value mxfe_tx_dma {SYNC_TRANSFER_START} {0}
 set_instance_parameter_value mxfe_tx_dma {CYCLIC} {1}
+set_instance_parameter_value mxfe_tx_dma {HAS_AXIS_TLAST} {1}
 set_instance_parameter_value mxfe_tx_dma {DMA_TYPE_DEST} {1}
 set_instance_parameter_value mxfe_tx_dma {DMA_TYPE_SRC} {0}
 # set_instance_parameter_value mxfe_tx_dma {FIFO_SIZE} {8}
-set_instance_parameter_value mxfe_tx_dma {HAS_AXIS_TLAST} {1}
 set_instance_parameter_value mxfe_tx_dma {DMA_AXI_PROTOCOL_SRC} {0}
 set_instance_parameter_value mxfe_tx_dma {MAX_BYTES_PER_BURST} {2048}
 
@@ -453,9 +478,9 @@ if {$EXTERNAL_PHY} {
   }
 }
 add_connection rx_device_clk.out_clk mxfe_rx_cpack.clk
-add_connection rx_device_clk.out_clk $adc_fifo_name.if_adc_clk
+add_connection rx_device_clk.out_clk $adc_data_offload_name.s_axis_aclk
 add_connection rx_os_device_clk.out_clk mxfe_rx_os_cpack.clk
-add_connection rx_os_device_clk.out_clk $adc_os_fifo_name.if_adc_clk
+add_connection rx_os_device_clk.out_clk $adc_os_data_offload_name.s_axis_aclk
 
 add_connection tx_device_clk.out_clk mxfe_tx_jesd204.device_clk
 add_connection tx_device_clk.out_clk mxfe_tx_tpl.link_clk
@@ -467,38 +492,46 @@ if {$EXTERNAL_PHY} {
   }
 }
 add_connection tx_device_clk.out_clk mxfe_tx_upack.clk
-add_connection tx_device_clk.out_clk $dac_fifo_name.if_dac_clk
+add_connection tx_device_clk.out_clk $dac_data_offload_name.m_axis_aclk
 
 
 add_connection mxfe_rx_jesd204.link_reset mxfe_rx_cpack.reset
-add_connection mxfe_rx_jesd204.link_reset $adc_fifo_name.if_adc_rst
+add_connection mxfe_rx_jesd204.link_reset $adc_data_offload_name.s_axis_aresetn
 
 add_connection mxfe_rx_os_jesd204.link_reset mxfe_rx_os_cpack.reset
-add_connection mxfe_rx_os_jesd204.link_reset $adc_os_fifo_name.if_adc_rst
+add_connection mxfe_rx_os_jesd204.link_reset $adc_os_data_offload_name.s_axis_aresetn
 
 add_connection mxfe_tx_jesd204.link_reset mxfe_tx_upack.reset
-add_connection mxfe_tx_jesd204.link_reset $dac_fifo_name.if_dac_rst
+add_connection mxfe_tx_jesd204.link_reset $dac_data_offload_name.m_axis_aresetn
 
 # dma clock and reset
 
-add_connection sys_dma_clk.clk $adc_fifo_name.if_dma_clk
+add_connection sys_clk.clk $adc_data_offload_name.sys_clk
+add_connection sys_clk.clk_reset $adc_data_offload_name.sys_resetn
+add_connection sys_dma_clk.clk $adc_data_offload_name.m_axis_aclk
+add_connection sys_dma_clk.clk_reset $adc_data_offload_name.m_axis_aresetn
 add_connection sys_dma_clk.clk mxfe_rx_dma.if_s_axis_aclk
 add_connection sys_dma_clk.clk mxfe_rx_dma.m_dest_axi_clock
 
 add_connection sys_dma_clk.clk_reset mxfe_rx_dma.m_dest_axi_reset
 
-add_connection sys_dma_clk.clk $adc_os_fifo_name.if_dma_clk
+add_connection sys_clk.clk $adc_os_data_offload_name.sys_clk
+add_connection sys_clk.clk_reset $adc_os_data_offload_name.sys_resetn
+add_connection sys_dma_clk.clk $adc_os_data_offload_name.m_axis_aclk
+add_connection sys_dma_clk.clk_reset $adc_os_data_offload_name.m_axis_aresetn
 add_connection sys_dma_clk.clk mxfe_rx_os_dma.if_s_axis_aclk
 add_connection sys_dma_clk.clk mxfe_rx_os_dma.m_dest_axi_clock
 
 add_connection sys_dma_clk.clk_reset mxfe_rx_os_dma.m_dest_axi_reset
 
-add_connection sys_dma_clk.clk $dac_fifo_name.if_dma_clk
+add_connection sys_clk.clk $dac_data_offload_name.sys_clk
+add_connection sys_clk.clk_reset $dac_data_offload_name.sys_resetn
+add_connection sys_dma_clk.clk $dac_data_offload_name.s_axis_aclk
+add_connection sys_dma_clk.clk_reset $dac_data_offload_name.s_axis_aresetn
 add_connection sys_dma_clk.clk mxfe_tx_dma.if_m_axis_aclk
 add_connection sys_dma_clk.clk mxfe_tx_dma.m_src_axi_clock
 
 add_connection sys_dma_clk.clk_reset mxfe_tx_dma.m_src_axi_reset
-add_connection sys_dma_clk.clk_reset $dac_fifo_name.if_dma_rst
 
 #
 ## Exported signals
@@ -625,13 +658,13 @@ add_connection mxfe_rx_jesd204.link_data mxfe_rx_tpl.link_data
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
   add_connection mxfe_rx_tpl.adc_ch_$i mxfe_rx_cpack.adc_ch_$i
 }
-add_connection mxfe_rx_tpl.if_adc_dovf $adc_fifo_name.if_adc_wovf
+add_connection mxfe_rx_tpl.if_adc_dovf mxfe_rx_cpack.if_fifo_wr_overflow
 # RX cpack to offload
-add_connection mxfe_rx_cpack.if_packed_fifo_wr_en $adc_fifo_name.if_adc_wr
-add_connection mxfe_rx_cpack.if_packed_fifo_wr_data $adc_fifo_name.if_adc_wdata
+add_connection mxfe_rx_cpack.if_packed_fifo_wr_en $adc_data_offload_name.if_src_fifo_wr_en
+add_connection mxfe_rx_cpack.if_packed_fifo_wr_data $adc_data_offload_name.if_src_fifo_wr_data
 # RX offload to dma
-add_connection $adc_fifo_name.if_dma_xfer_req mxfe_rx_dma.if_s_axis_xfer_req
-add_connection $adc_fifo_name.m_axis mxfe_rx_dma.s_axis
+add_connection mxfe_rx_dma.if_s_axis_xfer_req $adc_data_offload_name.init_req
+add_connection $adc_data_offload_name.m_axis mxfe_rx_dma.s_axis
 # RX dma to HPS
 if {$TRANSCEIVER_TYPE == "E-Tile"} {
   ad_dma_interconnect mxfe_rx_dma.m_dest_axi 0x0000000 $adc_dma_data_width
@@ -646,13 +679,13 @@ add_connection mxfe_rx_os_jesd204.link_data mxfe_rx_os_tpl.link_data
 for {set i 0} {$i < $RX_OS_NUM_OF_CONVERTERS} {incr i} {
   add_connection mxfe_rx_os_tpl.adc_ch_$i mxfe_rx_os_cpack.adc_ch_$i
 }
-add_connection mxfe_rx_os_tpl.if_adc_dovf $adc_os_fifo_name.if_adc_wovf
+add_connection mxfe_rx_os_tpl.if_adc_dovf mxfe_rx_os_cpack.if_fifo_wr_overflow
 # RX OS cpack to offload
-add_connection mxfe_rx_os_cpack.if_packed_fifo_wr_en $adc_os_fifo_name.if_adc_wr
-add_connection mxfe_rx_os_cpack.if_packed_fifo_wr_data $adc_os_fifo_name.if_adc_wdata
+add_connection mxfe_rx_os_cpack.if_packed_fifo_wr_en $adc_os_data_offload_name.if_src_fifo_wr_en
+add_connection mxfe_rx_os_cpack.if_packed_fifo_wr_data $adc_os_data_offload_name.if_src_fifo_wr_data
 # RX OS offload to dma
-add_connection $adc_os_fifo_name.if_dma_xfer_req mxfe_rx_os_dma.if_s_axis_xfer_req
-add_connection $adc_os_fifo_name.m_axis mxfe_rx_os_dma.s_axis
+add_connection mxfe_rx_os_dma.if_s_axis_xfer_req $adc_os_data_offload_name.init_req
+add_connection $adc_os_data_offload_name.m_axis mxfe_rx_os_dma.s_axis
 # RX OS dma to HPS
 if {$TRANSCEIVER_TYPE == "E-Tile"} {
   ad_dma_interconnect mxfe_rx_os_dma.m_dest_axi 0x0000000 $adc_os_dma_data_width
@@ -666,13 +699,12 @@ add_connection mxfe_tx_tpl.link_data mxfe_tx_jesd204.link_data
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   add_connection mxfe_tx_upack.dac_ch_$i mxfe_tx_tpl.dac_ch_$i
 }
-# TX pack to offload
-add_connection mxfe_tx_upack.if_packed_fifo_rd_en $dac_fifo_name.if_dac_valid
-add_connection $dac_fifo_name.if_dac_data mxfe_tx_upack.if_packed_fifo_rd_data
-add_connection $dac_fifo_name.if_dac_dunf mxfe_tx_tpl.if_dac_dunf
-# TX offload to dma
-add_connection mxfe_tx_dma.if_m_axis_xfer_req $dac_fifo_name.if_dma_xfer_req
-add_connection mxfe_tx_dma.m_axis $dac_fifo_name.s_axis
+# TX offload to pack
+add_connection $dac_data_offload_name.m_axis mxfe_tx_upack.s_axis
+add_connection mxfe_tx_tpl.if_dac_dunf mxfe_tx_upack.if_fifo_rd_underflow
+# TX dma to offload
+add_connection mxfe_tx_dma.if_m_axis_xfer_req $dac_data_offload_name.init_req
+add_connection mxfe_tx_dma.m_axis $dac_data_offload_name.s_axis
 # TX dma to HPS
 if {$TRANSCEIVER_TYPE == "E-Tile"} {
   ad_dma_interconnect mxfe_tx_dma.m_src_axi 0x0000000 $dac_dma_data_width
@@ -766,6 +798,12 @@ ad_cpu_interconnect 0x000D4000 mxfe_tx_tpl.s_axi
 ad_cpu_interconnect 0x000D8000 mxfe_rx_dma.s_axi
 ad_cpu_interconnect 0x000DC000 mxfe_tx_dma.s_axi
 ad_cpu_interconnect 0x000E0000 mxfe_gpio.s1
+
+# data_offload s_axi spans 64 kB (16-bit address), so it cannot sit in the 8 kB
+# grid the rest of the peripherals use.
+ad_cpu_interconnect 0x00100000 $adc_data_offload_name.s_axi
+ad_cpu_interconnect 0x00110000 $dac_data_offload_name.s_axi
+ad_cpu_interconnect 0x00120000 $adc_os_data_offload_name.s_axi
 
 #
 ## interrupts
