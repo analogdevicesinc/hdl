@@ -28,3 +28,4 @@ INTEL_LIB_DEPS += intel/jesd204c/jesd204_f_tile_adapter_tx
 INTEL_LIB_DEPS += intel/common/f2sdram_adapter
 
 include ../../scripts/project-intel.mk
+INTEL_LIB_DEPS += intel/jesd204_phy

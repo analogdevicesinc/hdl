@@ -173,17 +173,25 @@ set_instance_parameter_value rx_os_device_clk {EXPLICIT_CLOCK_RATE} [expr $DEVIC
 #
 
 if {$EXTERNAL_PHY} {
-  add_instance jesd204_phy jesd204_e_tile_phy
-  set_instance_parameter_value jesd204_phy {LINK_MODE} $LINK_MODE
-  set_instance_parameter_value jesd204_phy {LANE_RATE} $RX_LANE_RATE
-  set_instance_parameter_value jesd204_phy {REFCLK_FREQUENCY} $REF_CLK_RATE
-  set_instance_parameter_value jesd204_phy {NUM_OF_LANES} [expr $RX_NUM_OF_LANES + $RX_OS_NUM_OF_LANES]
-  set_instance_parameter_value jesd204_phy {INPUT_PIPELINE_STAGES} {2}
-  set_instance_parameter_value jesd204_phy {EXTERNAL_LINK_CLK} {1}
-  set_instance_parameter_value jesd204_phy {INSTANTIATE_RESET_CONTROLLER} {0}
+  # The RX and the RX OS path each get their own transceiver IP, with the lanes
+  # of both in the same shoreline bank.
+  set PHY_LIST {jesd204_phy jesd204_phy_os}
+  set PHY_NUM_OF_LANES [list $RX_NUM_OF_LANES $RX_OS_NUM_OF_LANES]
 
-  # add_interface gts_reset_src_rs_priority conduit end
-  # set_interface_property gts_reset_src_rs_priority EXPORT_OF jesd204_phy.gts_reset_src_rs_priority
+  set phy_id 0
+  foreach phy $PHY_LIST {
+    add_instance ${phy} jesd204_e_tile_phy
+    # ID keeps the composed intel_directphy_gts instance names distinct.
+    set_instance_parameter_value ${phy} {ID} $phy_id
+    set_instance_parameter_value ${phy} {LINK_MODE} $LINK_MODE
+    set_instance_parameter_value ${phy} {LANE_RATE} $RX_LANE_RATE
+    set_instance_parameter_value ${phy} {REFCLK_FREQUENCY} $REF_CLK_RATE
+    set_instance_parameter_value ${phy} {NUM_OF_LANES} [lindex $PHY_NUM_OF_LANES $phy_id]
+    set_instance_parameter_value ${phy} {INPUT_PIPELINE_STAGES} {2}
+    set_instance_parameter_value ${phy} {EXTERNAL_LINK_CLK} {1}
+    set_instance_parameter_value ${phy} {INSTANTIATE_RESET_CONTROLLER} {0}
+    incr phy_id
+  }
 
   add_interface system_pll_clk clock sink
   set_interface_property system_pll_clk EXPORT_OF jesd204_phy.system_pll_clk
@@ -191,21 +199,11 @@ if {$EXTERNAL_PHY} {
   add_interface system_pll_lock conduit end
   set_interface_property system_pll_lock EXPORT_OF jesd204_phy.system_pll_lock
 
+  add_interface system_pll_clk_os clock sink
+  set_interface_property system_pll_clk_os EXPORT_OF jesd204_phy_os.system_pll_clk
 
-  # add_instance jesd204_phy_os jesd204_e_tile_phy
-  # set_instance_parameter_value jesd204_phy_os {LINK_MODE} $LINK_MODE
-  # set_instance_parameter_value jesd204_phy_os {LANE_RATE} $RX_LANE_RATE
-  # set_instance_parameter_value jesd204_phy_os {REFCLK_FREQUENCY} $REF_CLK_RATE
-  # set_instance_parameter_value jesd204_phy_os {NUM_OF_LANES} $RX_OS_NUM_OF_LANES
-  # set_instance_parameter_value jesd204_phy_os {INPUT_PIPELINE_STAGES} {2}
-  # set_instance_parameter_value jesd204_phy_os {EXTERNAL_LINK_CLK} {1}
-  # set_instance_parameter_value jesd204_phy_os {INSTANTIATE_RESET_CONTROLLER} {0}
-
-  # add_interface system_pll_clk_os clock sink
-  # set_interface_property system_pll_clk_os EXPORT_OF jesd204_phy_os.system_pll_clk
-
-  # add_interface system_pll_lock_os conduit end
-  # set_interface_property system_pll_lock_os EXPORT_OF jesd204_phy_os.system_pll_lock
+  add_interface system_pll_lock_os conduit end
+  set_interface_property system_pll_lock_os EXPORT_OF jesd204_phy_os.system_pll_lock
 
   # GTS reset IP
   add_instance gts_reset_phy intel_srcss_gts
@@ -222,7 +220,7 @@ if {$EXTERNAL_PHY} {
   set_interface_property gts_reset_o_pma_cu_clk EXPORT_OF gts_reset_phy.o_pma_cu_clk
   set_interface_property gts_reset_o_refclk_fail_status EXPORT_OF gts_reset_phy.o_refclk_fail_status
 
-  foreach phy {jesd204_phy} {
+  foreach phy $PHY_LIST {
     add_interface ${phy}_i_pma_cu_clk conduit end
     add_interface ${phy}_i_src_rs_grant conduit end
     add_interface ${phy}_o_src_rs_req conduit end
@@ -446,12 +444,12 @@ add_connection rx_os_device_clk.out_clk mxfe_rx_os_jesd204.device_clk
 add_connection rx_os_device_clk.out_clk mxfe_rx_os_tpl.link_clk
 if {$EXTERNAL_PHY} {
   add_connection jesd204_phy.rx_clkout jesd204_phy.rx_link_clock
-  # add_connection jesd204_phy_os.rx_clkout jesd204_phy_os.rx_link_clock
+  add_connection jesd204_phy_os.rx_clkout jesd204_phy_os.rx_link_clock
   if {$RX_TPL_DATA_PATH_WIDTH > $RX_DATA_PATH_WIDTH} {
     add_connection jesd204_phy.rx_clkout mxfe_rx_jesd204.phy_link_clk
   }
   if {$RX_OS_TPL_DATA_PATH_WIDTH > $RX_OS_DATA_PATH_WIDTH} {
-    add_connection jesd204_phy.rx_clkout mxfe_rx_os_jesd204.phy_link_clk
+    add_connection jesd204_phy_os.rx_clkout mxfe_rx_os_jesd204.phy_link_clk
   }
 }
 add_connection rx_device_clk.out_clk mxfe_rx_cpack.clk
@@ -463,6 +461,7 @@ add_connection tx_device_clk.out_clk mxfe_tx_jesd204.device_clk
 add_connection tx_device_clk.out_clk mxfe_tx_tpl.link_clk
 if {$EXTERNAL_PHY} {
   add_connection jesd204_phy.tx_clkout jesd204_phy.tx_link_clock
+  add_connection jesd204_phy_os.tx_clkout jesd204_phy_os.tx_link_clock
   if {$TX_TPL_DATA_PATH_WIDTH > $TX_DATA_PATH_WIDTH} {
     add_connection jesd204_phy.tx_clkout mxfe_tx_jesd204.phy_link_clk
   }
@@ -555,6 +554,12 @@ if {!$EXTERNAL_PHY} {
   add_connection jesd204_phy.tx_reset_ack  mxfe_tx_jesd204.reset_ack
   add_connection jesd204_phy.tx_ready      mxfe_tx_jesd204.ready
 
+  # intel_directphy_gts is duplex only, so the RX OS PHY has a TX side with no
+  # link layer behind it. It is taken through the same reset sequence as the TX
+  # PHY, and its ready/ack/pll_locked are deliberately left unconnected.
+  add_connection mxfe_tx_jesd204.if_up_rst jesd204_phy_os.tx_link_reset
+  add_connection mxfe_tx_jesd204.reset     jesd204_phy_os.tx_reset
+
   # Export those two so we can have TX_L < RX_L otherwise Quartus complains about
   # the number of bits mismatch...
   add_interface phy_tx_pll_locked conduit end
@@ -569,16 +574,24 @@ if {!$EXTERNAL_PHY} {
 
   add_connection mxfe_rx_jesd204.if_up_rst jesd204_phy.rx_link_reset
   add_connection mxfe_rx_jesd204.reset     jesd204_phy.rx_reset
+  add_connection jesd204_phy.rx_reset_ack  mxfe_rx_jesd204.reset_ack
+  add_connection jesd204_phy.rx_ready      mxfe_rx_jesd204.ready
+
+  add_connection mxfe_rx_os_jesd204.if_up_rst  jesd204_phy_os.rx_link_reset
+  add_connection mxfe_rx_os_jesd204.reset      jesd204_phy_os.rx_reset
+  add_connection jesd204_phy_os.rx_reset_ack   mxfe_rx_os_jesd204.reset_ack
+  add_connection jesd204_phy_os.rx_ready       mxfe_rx_os_jesd204.ready
+
+  # rx_is_lockedtodata is one bit per lane; the link layer core does not expose a
+  # matching conduit start, so it is wired up at the top level.
+  add_interface jesd204_phy_rx_is_lockedtodata conduit end
+  add_interface jesd204_phy_os_rx_is_lockedtodata conduit end
+  add_interface mxfe_rx_jesd204_rx_is_lockedtodata conduit end
+  add_interface mxfe_rx_os_jesd204_rx_is_lockedtodata conduit end
 
   set_interface_property jesd204_phy_rx_is_lockedtodata EXPORT_OF jesd204_phy.rx_is_lockedtodata
+  set_interface_property jesd204_phy_os_rx_is_lockedtodata EXPORT_OF jesd204_phy_os.rx_is_lockedtodata
   set_interface_property mxfe_rx_jesd204_rx_is_lockedtodata EXPORT_OF mxfe_rx_jesd204.rx_is_lockedtodata
-  set_interface_property jesd204_phy_rx_ready EXPORT_OF jesd204_phy.rx_ready
-  set_interface_property mxfe_rx_jesd204_ready EXPORT_OF mxfe_rx_jesd204.ready
-  set_interface_property jesd204_phy_rx_reset_ack EXPORT_OF jesd204_phy.rx_reset_ack
-  set_interface_property mxfe_rx_jesd204_reset_ack EXPORT_OF mxfe_rx_jesd204.reset_ack
-
-  set_interface_property mxfe_rx_os_jesd204_reset_ack EXPORT_OF mxfe_rx_os_jesd204.reset_ack
-  set_interface_property mxfe_rx_os_jesd204_ready EXPORT_OF mxfe_rx_os_jesd204.ready
   set_interface_property mxfe_rx_os_jesd204_rx_is_lockedtodata EXPORT_OF mxfe_rx_os_jesd204.rx_is_lockedtodata
 
   for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
@@ -586,17 +599,16 @@ if {!$EXTERNAL_PHY} {
   }
 
   for {set i 0} {$i < $RX_OS_NUM_OF_LANES} {incr i} {
-    set idx [expr $RX_NUM_OF_LANES + $i]
-    add_connection jesd204_phy.phy_rx_${idx} mxfe_rx_os_jesd204.rx_phy${i}
+    add_connection jesd204_phy_os.phy_rx_${i} mxfe_rx_os_jesd204.rx_phy${i}
   }
 
   set_interface_property rx_ref_clk          EXPORT_OF jesd204_phy.rx_ref_clk
   set_interface_property rx_serial_data      EXPORT_OF jesd204_phy.rx_serial_data
   set_interface_property rx_serial_data_n    EXPORT_OF jesd204_phy.rx_serial_data_n
-  # set_interface_property rx_os_ref_clk       EXPORT_OF jesd204_phy_os.rx_ref_clk
-  # set_interface_property rx_os_serial_data   EXPORT_OF jesd204_phy_os.rx_serial_data
-  # set_interface_property rx_os_serial_data_n EXPORT_OF jesd204_phy_os.rx_serial_data_n
-  # set_interface_property tx_os_ref_clk       EXPORT_OF jesd204_phy_os.tx_ref_clk
+  set_interface_property rx_os_ref_clk       EXPORT_OF jesd204_phy_os.rx_ref_clk
+  set_interface_property rx_os_serial_data   EXPORT_OF jesd204_phy_os.rx_serial_data
+  set_interface_property rx_os_serial_data_n EXPORT_OF jesd204_phy_os.rx_serial_data_n
+  set_interface_property tx_os_ref_clk       EXPORT_OF jesd204_phy_os.tx_ref_clk
   set_interface_property tx_ref_clk          EXPORT_OF jesd204_phy.tx_ref_clk
   set_interface_property tx_serial_data      EXPORT_OF jesd204_phy.tx_serial_data
   set_interface_property tx_serial_data_n    EXPORT_OF jesd204_phy.tx_serial_data_n
@@ -730,16 +742,15 @@ if {!$EXTERNAL_PHY} {
     ad_cpu_interconnect 0x000D0000 mxfe_tx_jesd204.lane_pll_reconfig
   }
 } else {
-  # One bridge for rx_adxcvr, the other for tx_adxcvr
+  # One bridge per transceiver IP
   ad_cpu_interconnect 0x00000000 jesd204_phy.reconfig_avmm "avl_mm_bridge_0" 0x01000000 22
-  # ad_cpu_interconnect 0x00200000 jesd204_phy_os.reconfig_avmm "avl_mm_bridge_0"
-  ad_cpu_interconnect 0x00000000 jesd204_phy.reconfig_avmm "avl_mm_bridge_1" 0x02000000 22
+  ad_cpu_interconnect 0x00000000 jesd204_phy_os.reconfig_avmm "avl_mm_bridge_1" 0x02000000 22
   set_instance_parameter_value avl_mm_bridge_0 {MAX_PENDING_RESPONSES} {1}
-  # set_instance_parameter_value avl_mm_bridge_1 {MAX_PENDING_RESPONSES} {1}
+  set_instance_parameter_value avl_mm_bridge_1 {MAX_PENDING_RESPONSES} {1}
   add_connection sys_clk.clk jesd204_phy.reconfig_clk
   add_connection sys_clk.clk_reset jesd204_phy.reconfig_reset
-  # add_connection sys_clk.clk jesd204_phy_os.reconfig_clk
-  # add_connection sys_clk.clk_reset jesd204_phy_os.reconfig_reset
+  add_connection sys_clk.clk jesd204_phy_os.reconfig_clk
+  add_connection sys_clk.clk_reset jesd204_phy_os.reconfig_reset
 }
 
 ad_cpu_interconnect 0x000B0000 mxfe_rx_os_jesd204.link_reconfig

@@ -11,12 +11,15 @@ create_clock  -period "4.16667 ns"   -name tx_device_clk  [get_ports {clkin10}]
 create_clock  -period "4.16667 ns"   -name rx_device_clk  [get_ports {clkin6}]
 
 # Ignore these paths since the data is moving through an async fifo inside the link layer
+# The instance name is wildcarded: each PHY composes its transceiver as
+# native_phy_<ID>.
 set_clock_groups -asynchronous \
     -group [get_clocks tx_device_clk] \
     -group [get_clocks rx_device_clk] \
-    -group [get_clocks {i_system_bd|jesd204_phy|jesd204_phy|native_phy|sip_inst|o_rx_clkout[0]}]  \
-    -group [get_clocks {i_system_bd|jesd204_phy|jesd204_phy|native_phy|sip_inst|o_tx_clkout[0]}] \
-    -group [get_clocks {i_system_bd|jesd204_phy_os|jesd204_phy_os|native_phy|sip_inst|o_rx_clkout[0]}]
+    -group [get_clocks {*|jesd204_phy|*|sip_inst|o_rx_clkout[0]}] \
+    -group [get_clocks {*|jesd204_phy|*|sip_inst|o_tx_clkout[0]}] \
+    -group [get_clocks {*|jesd204_phy_os|*|sip_inst|o_rx_clkout[0]}] \
+    -group [get_clocks {*|jesd204_phy_os|*|sip_inst|o_tx_clkout[0]}]
 
 derive_clock_uncertainty
 
