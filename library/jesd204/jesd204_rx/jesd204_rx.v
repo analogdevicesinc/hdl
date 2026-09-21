@@ -12,6 +12,11 @@ module jesd204_rx #(
   parameter NUM_LINKS = 1,
   parameter NUM_INPUT_PIPELINE = 1,
   parameter NUM_OUTPUT_PIPELINE = 1,
+  // Pipeline stages on the all_buffer_ready_n broadcast towards each lane
+  // (64B/66B only). Relieves the routing from the OR reduce back out to every
+  // channel; the lanes compensate the evaluation point so the behaviour is
+  // unchanged. Does not affect the buffer release path.
+  parameter NUM_BUFFER_READY_PIPELINE = 1,
   parameter LINK_MODE = 1, // 2 - 64B/66B;  1 - 8B/10B
   /* Only 4 is supported at the moment for 8b/10b and 8 for 64b */
   parameter DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4,
@@ -498,11 +503,25 @@ module jesd204_rx #(
     localparam H_STOP = H_START + 2-1;
 
     wire [7:0] status_lane_skew;
+    wire all_buffer_ready_n_d;
+
+    // Pipeline the aggregated ready status at the lane, so that the OR reduce
+    // and the route out to the channel become a register to register path with
+    // no logic behind it. The lane moves its evaluation point by the same
+    // number of stages, see ALL_BUFFER_READY_DELAY.
+    util_pipeline_stage #(
+      .WIDTH(1),
+      .REGISTERED(NUM_BUFFER_READY_PIPELINE)
+    ) i_all_buffer_ready_pipeline_stage (
+      .clk(clk),
+      .in(all_buffer_ready_n),
+      .out(all_buffer_ready_n_d));
 
     jesd204_rx_lane_64b #(
       .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
       .TPL_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
-      .ASYNC_CLK(ASYNC_CLK)
+      .ASYNC_CLK(ASYNC_CLK),
+      .ALL_BUFFER_READY_DELAY(NUM_BUFFER_READY_PIPELINE)
     ) i_lane (
       .clk(clk),
       .reset(reset),
@@ -523,7 +542,7 @@ module jesd204_rx #(
 
       .buffer_release_n(buffer_release_n),
       .buffer_ready_n(buffer_ready_n[i]),
-      .all_buffer_ready_n(all_buffer_ready_n),
+      .all_buffer_ready_n(all_buffer_ready_n_d),
 
       .lmfc_edge(lmfc_edge_synced),
       .emb_lock(emb_lock[i]),

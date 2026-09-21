@@ -10,7 +10,11 @@
 module jesd204_rx_lane_64b #(
   parameter ELASTIC_BUFFER_SIZE = 256,
   parameter TPL_DATA_PATH_WIDTH = 8,
-  parameter ASYNC_CLK = 0
+  parameter ASYNC_CLK = 0,
+  // Number of pipeline stages present on the all_buffer_ready_n input. The
+  // beat on which the input is evaluated is moved by the same amount, so the
+  // sampled value is always the one from the half multiblock beat.
+  parameter ALL_BUFFER_READY_DELAY = 0
 ) (
   input clk,
   input reset,
@@ -164,6 +168,15 @@ module jesd204_rx_lane_64b #(
         data_descrambled
       }));
 
+  // Beat on which the aggregated ready status of all the lanes is evaluated.
+  // ALL_BUFFER_READY_DELAY compensates for the pipeline stages on the
+  // all_buffer_ready_n input, keeping the evaluated value the one from the half
+  // multiblock beat. sh_count wraps at cfg_beats_per_multiframe (= E*32-1) and
+  // eoemb is expected on sh_count 0, so as long as the delay stays well below
+  // half a multiblock this cannot collide with either boundary.
+  wire [7:0] buffer_abort_beat = {1'b0,cfg_beats_per_multiframe[7:1]} +
+                                 ALL_BUFFER_READY_DELAY;
+
   // Control when data is written to the elastic buffer
   // Start writing to the buffer when current lane is multiblock locked, but if
   // other lanes are not writing in the next half multiblock period stop
@@ -172,7 +185,7 @@ module jesd204_rx_lane_64b #(
   always @(posedge clk) begin
     if (reset | ~emb_lock) begin
       buffer_ready_n <= 1'b1;
-    end else if (sh_count == {1'b0,cfg_beats_per_multiframe[7:1]} && all_buffer_ready_n) begin
+    end else if (sh_count == buffer_abort_beat && all_buffer_ready_n) begin
       buffer_ready_n <= 1'b1;
     end else if (eoemb) begin
       buffer_ready_n <= 1'b0;

@@ -16,6 +16,9 @@ module loopback_64b_tb;
   parameter ENABLE_SCRAMBLER = 1;
   parameter BUFFER_EARLY_RELEASE = 0;
   parameter LANE_DELAY = 1;
+  // Skew in beats between two adjacent lanes. 1 is the historical behaviour.
+  parameter LANE_SKEW = 1;
+  parameter BUFFER_READY_PIPELINE = 1;
   parameter DATA_PATH_WIDTH = 8;
 
   localparam BEATS_PER_MULTIFRAME = OCTETS_PER_FRAME * FRAMES_PER_MULTIFRAME / 8;
@@ -77,7 +80,8 @@ module loopback_64b_tb;
     sysref_tx <= sysref_rx;
   end
 
-  localparam MAX_LANE_DELAY = LANE_DELAY + NUM_LANES;
+  // Lane i is delayed by LANE_DELAY + i*LANE_SKEW beats
+  localparam MAX_LANE_DELAY = LANE_DELAY + (NUM_LANES-1)*LANE_SKEW + 1;
 
   reg [10:0] phy_delay_fifo_wr;
   reg [(2+64)*NUM_LANES-1:0] phy_delay_fifo[0:MAX_LANE_DELAY-1];
@@ -94,7 +98,7 @@ module loopback_64b_tb;
 
   genvar i;
   generate for (i = 0; i < NUM_LANES; i = i + 1) begin
-    localparam OFF = MAX_LANE_DELAY - (i + LANE_DELAY);
+    localparam OFF = MAX_LANE_DELAY - (LANE_DELAY + i*LANE_SKEW);
 
     assign phy_data_in[64*i+63:64*i] =
       phy_delay_fifo[(phy_delay_fifo_wr + OFF) % MAX_LANE_DELAY][64*i+63:64*i];
@@ -275,7 +279,8 @@ module loopback_64b_tb;
     .LINK_MODE(2),
     .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
     .TPL_DATA_PATH_WIDTH(DATA_PATH_WIDTH),
-    .ASYNC_CLK(0)
+    .ASYNC_CLK(0),
+    .NUM_BUFFER_READY_PIPELINE(BUFFER_READY_PIPELINE)
   ) i_rx (
     .clk(clk),
     .reset(reset),
@@ -348,6 +353,14 @@ module loopback_64b_tb;
     .status_synth_params0(),
     .status_synth_params1(),
     .status_synth_params2());
+
+  // Beyond the supported lane skew the elastic buffer is never released, so
+  // rx_valid never asserts. That is the expected outcome rather than an error,
+  // hence it is reported separately from the SUCCESS/FAILED verdict.
+  initial begin
+    @(posedge rx_valid);
+    $display("LINK_UP");
+  end
 
   integer ii;
   reg rx_status_mismatch = 1'b0;
