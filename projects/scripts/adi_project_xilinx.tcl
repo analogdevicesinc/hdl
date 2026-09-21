@@ -157,6 +157,10 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
     set device "xcvp1802-lsvc4072-2MP-e-S"
     set board [lindex [lsearch -all -inline [get_board_parts] *vpk180*] end]
   }
+  if [regexp "_vpk120" $project_name] {
+    set device "xcvp1202-vsva2785-2MP-e-S"
+    set board [lindex [lsearch -all -inline [get_board_parts] *vpk120*] end]
+  }
   if [regexp "_vc709" $project_name] {
     set device "xc7vx690tffg1761-2"
     set board [lindex [lsearch -all -inline [get_board_parts] *vc709*] end]
