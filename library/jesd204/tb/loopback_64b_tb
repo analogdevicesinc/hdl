@@ -10,7 +10,8 @@ SOURCE+=" ../jesd204_rx_static_config/jesd204_rx_static_config.v"
 SOURCE+=" ../jesd204_tx/jesd204_tx.v ../jesd204_tx/jesd204_tx_lane_64b.v ../jesd204_tx/jesd204_tx_header.v"
 SOURCE+=" ../jesd204_tx_static_config/jesd204_tx_static_config.v"
 SOURCE+=" ../jesd204_tx_static_config/jesd204_ilas_cfg_static.v"
-SOURCE+=" ../../util_cdc/sync_bits.v"
+SOURCE+=" ../jesd204_common/jesd204_frame_mark.v"
+SOURCE+=" ../../util_cdc/sync_bits.v ../../util_cdc/sync_event.v"
 
 cd `dirname $0`
 source ../../common/tb/run_tb.sh
