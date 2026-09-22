@@ -82,7 +82,7 @@ ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.CYCLIC 0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.SYNC_TRANSFER_START $TDD_SUPPORT
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.AXI_SLICE_SRC 1
-ad_ip_parameter axi_ada4355_dma_0 CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ada4355_dma_0 CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ada4355_dma_0 CONFIG.DMA_DATA_WIDTH_DEST 64
@@ -98,7 +98,7 @@ ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.CYCLIC 0
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.SYNC_TRANSFER_START $TDD_SUPPORT
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.AXI_SLICE_SRC 1
-ad_ip_parameter axi_ada4355_dma_1 CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ada4355_dma_1 CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ada4355_dma_1 CONFIG.DMA_DATA_WIDTH_DEST 64
@@ -114,7 +114,7 @@ ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.CYCLIC 0
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.SYNC_TRANSFER_START $TDD_SUPPORT
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.AXI_SLICE_SRC 1
-ad_ip_parameter axi_ada4355_dma_2 CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ada4355_dma_2 CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ada4355_dma_2 CONFIG.DMA_DATA_WIDTH_DEST 64
@@ -130,7 +130,7 @@ ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.CYCLIC 0
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.SYNC_TRANSFER_START $TDD_SUPPORT
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.AXI_SLICE_SRC 1
-ad_ip_parameter axi_ada4355_dma_3 CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ada4355_dma_3 CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ada4355_dma_3 CONFIG.DMA_DATA_WIDTH_DEST 64
@@ -220,28 +220,28 @@ ad_connect axi_ada4355_adc_0/adc_data  axi_ada4355_dma_0/fifo_wr_din
 ad_connect axi_ada4355_adc_0/adc_valid axi_ada4355_dma_0/fifo_wr_en
 ad_connect axi_ada4355_adc_0/adc_dovf  axi_ada4355_dma_0/fifo_wr_overflow
 ad_connect axi_ada4355_adc_0/adc_clk   axi_ada4355_dma_0/fifo_wr_clk
-ad_connect $sys_cpu_resetn axi_ada4355_dma_0/m_dest_axi_aresetn
+ad_connect $sys_dma_resetn axi_ada4355_dma_0/m_dest_axi_aresetn
 
 # Instance 1
 ad_connect axi_ada4355_adc_1/adc_data  axi_ada4355_dma_1/fifo_wr_din
 ad_connect axi_ada4355_adc_1/adc_valid axi_ada4355_dma_1/fifo_wr_en
 ad_connect axi_ada4355_adc_1/adc_dovf  axi_ada4355_dma_1/fifo_wr_overflow
 ad_connect axi_ada4355_adc_1/adc_clk   axi_ada4355_dma_1/fifo_wr_clk
-ad_connect $sys_cpu_resetn axi_ada4355_dma_1/m_dest_axi_aresetn
+ad_connect $sys_dma_resetn axi_ada4355_dma_1/m_dest_axi_aresetn
 
 # Instance 2
 ad_connect axi_ada4355_adc_2/adc_data  axi_ada4355_dma_2/fifo_wr_din
 ad_connect axi_ada4355_adc_2/adc_valid axi_ada4355_dma_2/fifo_wr_en
 ad_connect axi_ada4355_adc_2/adc_dovf  axi_ada4355_dma_2/fifo_wr_overflow
 ad_connect axi_ada4355_adc_2/adc_clk   axi_ada4355_dma_2/fifo_wr_clk
-ad_connect $sys_cpu_resetn axi_ada4355_dma_2/m_dest_axi_aresetn
+ad_connect $sys_dma_resetn axi_ada4355_dma_2/m_dest_axi_aresetn
 
 # Instance 3
 ad_connect axi_ada4355_adc_3/adc_data  axi_ada4355_dma_3/fifo_wr_din
 ad_connect axi_ada4355_adc_3/adc_valid axi_ada4355_dma_3/fifo_wr_en
 ad_connect axi_ada4355_adc_3/adc_dovf  axi_ada4355_dma_3/fifo_wr_overflow
 ad_connect axi_ada4355_adc_3/adc_clk   axi_ada4355_dma_3/fifo_wr_clk
-ad_connect $sys_cpu_resetn axi_ada4355_dma_3/m_dest_axi_aresetn
+ad_connect $sys_dma_resetn axi_ada4355_dma_3/m_dest_axi_aresetn
 
 # TDD connections
 
@@ -281,12 +281,19 @@ if {$TDD_SUPPORT} {
   ad_cpu_interconnect 0x44A80000 axi_tdd_0
 }
 
-# Memory interconnect for all DMAs
-ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect $sys_cpu_clk axi_ada4355_dma_0/m_dest_axi
-ad_mem_hp1_interconnect $sys_cpu_clk axi_ada4355_dma_1/m_dest_axi
-ad_mem_hp1_interconnect $sys_cpu_clk axi_ada4355_dma_2/m_dest_axi
-ad_mem_hp1_interconnect $sys_cpu_clk axi_ada4355_dma_3/m_dest_axi
+# Memory interconnect for all DMAs.
+#
+# On sys_cpu_clk (100 MHz) the single 64-bit HP1 port tops out at 800 MB/s,
+# but four channels at 125 MSPS x 2 B demand 1000 MB/s. The DMAC FIFOs absorb
+# the deficit for the first few thousand samples, then silently drop samples,
+# which shows up as inter-channel skew that grows through the buffer.
+# The carrier re-points sys_dma_clk at a faster clock to lift that ceiling; see
+# zed/system_bd.tcl, which puts it on FCLK_CLK2 at 142.857 MHz => 1143 MB/s.
+ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_dma_clk axi_ada4355_dma_0/m_dest_axi
+ad_mem_hp1_interconnect $sys_dma_clk axi_ada4355_dma_1/m_dest_axi
+ad_mem_hp1_interconnect $sys_dma_clk axi_ada4355_dma_2/m_dest_axi
+ad_mem_hp1_interconnect $sys_dma_clk axi_ada4355_dma_3/m_dest_axi
 
 # interrupts
 #
