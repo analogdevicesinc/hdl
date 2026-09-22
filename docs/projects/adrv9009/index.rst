@@ -438,7 +438,7 @@ Here you can find the quick start guides available for these evaluation boards:
    * - Evaluation board
      - Zynq UltraScale+ MP
    * - ADRV9009/ADRV9008
-     - :external+system-level:ref:`adrv9009 quickstart zynqmp`
+     - :external+system-level:ref:`adrv9009 quickstart`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
