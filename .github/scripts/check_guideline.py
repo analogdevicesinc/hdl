@@ -1707,27 +1707,38 @@ def check_project_name_vs_path(modified_files, lw, edit_files=False, checked_pro
 
             if os.path.exists(tcl_path) and folder not in checked_projects:
                 rel_path = os.path.relpath(folder, projects_abs)
-                expected_name = rel_path.replace(os.sep, "_")
+                parts = rel_path.split(os.sep)
+                # carrier templates live under projects/common/<carrier> and are
+                # named template_<carrier> instead of <project>_<carrier>
+                if parts[0] == "common":
+                    expected_name = "template_" + "_".join(parts[1:])
+                else:
+                    expected_name = rel_path.replace(os.sep, "_")
+
+                # matches the project name after adi_project, adi_project_files
+                # and adi_project_run (group 1 = command + spacing, group 2 = name)
+                cmd_re = re.compile(r'^(\s*adi_project(?:_files|_run)?\s+)(\S+)')
 
                 lines, found, changed = [], False, False
 
                 with open(tcl_path, "r") as tclf:
                     for line in tclf:
-                        m = re.match(r'\s*adi_project\s+(\S+)', line)
+                        m = cmd_re.match(line)
                         if m:
                             found = True
-                            found_name = m.group(1)
+                            cmd_name = m.group(1).strip()
+                            found_name = m.group(2)
                             if found_name != expected_name:
-                                lw.append(f"./{tcl_path_rel} : adi_project '{found_name}' does not match expected '{expected_name}'")
+                                lw.append(f"./{tcl_path_rel} : {cmd_name} '{found_name}' does not match expected '{expected_name}'")
                                 if edit_files:
-                                    line = re.sub(r'(\s*adi_project\s+)\S+', r'\1' + expected_name, line)
+                                    line = cmd_re.sub(lambda mm: mm.group(1) + expected_name, line)
                                     changed = True
                         lines.append(line)
 
                 if edit_files and found and changed:
                     with open(tcl_path, "w") as tclf:
                         tclf.writelines(lines)
-                    lw.append(f"./{tcl_path_rel} : adi_project updated to '{expected_name}'")
+                    lw.append(f"./{tcl_path_rel} : adi_project name(s) updated to '{expected_name}'")
 
                 checked_projects.add(folder)
                 break
@@ -2230,6 +2241,8 @@ if modified_files:
 for file_path in license_only_files:
     lw = []
     check_license_header(file_path, lw, edit_files)
+    # project name check applies to system_project.tcl (and sibling project files)
+    check_project_name_vs_path([file_path], lw, edit_files, checked_projects=PROJECTS_CHECKED)
 
     if (len(lw) > 0):
         guideline_ok = False
