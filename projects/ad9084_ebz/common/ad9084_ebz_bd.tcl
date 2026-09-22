@@ -90,6 +90,14 @@ if {$JESD_MODE == "8B10B"} {
   set ENCODER_SEL 2
 }
 
+proc ad_next_pow2 {value} {
+  set result 1
+  while {$result < $value} {
+    set result [expr $result * 2]
+  }
+  return $result
+}
+
 # These are max values specific to the board
 set MAX_RX_LANES_PER_LINK 12
 set MAX_TX_LANES_PER_LINK 12
@@ -151,13 +159,25 @@ set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
+# The pack cores, the data offload and the DMA all need a power of two width.
+# When the transport layer does not give one - JESD mode 77 carries 24 samples
+# per channel per beat - a gearbox converts the rate instead of the width and
+# the pack chain runs on its own clock. See the gearbox instantiations below.
+set RX_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $RX_SAMPLES_PER_CHANNEL]
+set RX_GEARBOX [expr $RX_PACK_SAMPLES_PER_CHANNEL != $RX_SAMPLES_PER_CHANNEL]
+set rx_pack_clk_net [expr {$RX_GEARBOX ? "rx_pack_clk" : "rx_device_clk"}]
+set rx_pack_rstgen_net [expr {$RX_GEARBOX ? "rx_pack_rstgen" : "rx_device_clk_rstgen"}]
+
+set TX_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $TX_SAMPLES_PER_CHANNEL]
+set TX_GEARBOX [expr $TX_PACK_SAMPLES_PER_CHANNEL != $TX_SAMPLES_PER_CHANNEL]
+
 set adc_data_offload_name apollo_rx_data_offload
-set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
+set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_PACK_SAMPLES_PER_CHANNEL]
 set adc_dma_data_width $adc_data_width
 set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
 
 set dac_data_offload_name apollo_tx_data_offload
-set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL]
+set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_PACK_SAMPLES_PER_CHANNEL]
 set dac_dma_data_width $dac_data_width
 set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
 
@@ -205,13 +225,21 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   set TX_B_SAMPLES_PER_CHANNEL [expr $TX_B_NUM_OF_LANES * 8 * $TX_B_DATAPATH_WIDTH / ($TX_B_NUM_OF_CONVERTERS * $TX_B_SAMPLE_WIDTH)]
 
+  set RX_B_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $RX_B_SAMPLES_PER_CHANNEL]
+  set RX_B_GEARBOX [expr $RX_B_PACK_SAMPLES_PER_CHANNEL != $RX_B_SAMPLES_PER_CHANNEL]
+  set rx_b_pack_clk_net [expr {$RX_B_GEARBOX ? "rx_b_pack_clk" : "rx_b_device_clk"}]
+  set rx_b_pack_rstgen_net [expr {$RX_B_GEARBOX ? "rx_b_pack_rstgen" : "rx_b_device_clk_rstgen"}]
+
+  set TX_B_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $TX_B_SAMPLES_PER_CHANNEL]
+  set TX_B_GEARBOX [expr $TX_B_PACK_SAMPLES_PER_CHANNEL != $TX_B_SAMPLES_PER_CHANNEL]
+
   set adc_b_data_offload_name apollo_rx_b_data_offload
-  set adc_b_data_width [expr $RX_B_DMA_SAMPLE_WIDTH*$RX_B_NUM_OF_CONVERTERS*$RX_B_SAMPLES_PER_CHANNEL]
+  set adc_b_data_width [expr $RX_B_DMA_SAMPLE_WIDTH*$RX_B_NUM_OF_CONVERTERS*$RX_B_PACK_SAMPLES_PER_CHANNEL]
   set adc_b_dma_data_width $adc_b_data_width
   set adc_b_fifo_address_width [expr int(ceil(log(($adc_b_fifo_samples_per_converter*$RX_B_NUM_OF_CONVERTERS) / ($adc_b_data_width/$RX_B_DMA_SAMPLE_WIDTH))/log(2)))]
 
   set dac_b_data_offload_name apollo_tx_b_data_offload
-  set dac_b_data_width [expr $TX_B_DMA_SAMPLE_WIDTH*$TX_B_NUM_OF_CONVERTERS*$TX_B_SAMPLES_PER_CHANNEL]
+  set dac_b_data_width [expr $TX_B_DMA_SAMPLE_WIDTH*$TX_B_NUM_OF_CONVERTERS*$TX_B_PACK_SAMPLES_PER_CHANNEL]
   set dac_b_dma_data_width $dac_b_data_width
   set dac_b_fifo_address_width [expr int(ceil(log(($dac_b_fifo_samples_per_converter*$TX_B_NUM_OF_CONVERTERS) / ($dac_b_data_width/$TX_B_DMA_SAMPLE_WIDTH))/log(2)))]
 
@@ -914,10 +942,62 @@ if {$ASYMMETRIC_A_B_MODE} {
   }
 }
 
+# The pack chain runs slower than the device clock by exactly the gearbox width
+# ratio, so the narrow beat at the device rate and the wide beat here carry the
+# same bits per second. Each side gets its own MMCM fed from its own device
+# clock: the two must stay frequency-locked or the async FIFO between them
+# drifts into overflow, and ASYMMETRIC_A_B_MODE allows the two sides to run at
+# different lane rates.
+proc ad_pack_clkgen_create {name device_clk resetn lane_rate jesd_mode samples
+                            pack_samples versal} {
+  set divisor [expr {$jesd_mode == "8B10B" ? 40 : 66}]
+  set device_freq [expr $lane_rate * 1000.0 / $divisor]
+  set pack_freq [expr $device_freq * $samples / double($pack_samples)]
+
+  if {$versal} {
+    # clk_wiz is not available for Versal parts.
+    ad_ip_instance clk_wizard ${name}_clkgen
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIMITIVE_TYPE {MMCM}
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIM_SOURCE {No_buffer}
+    ad_ip_parameter ${name}_clkgen CONFIG.RESET_TYPE ACTIVE_LOW
+    ad_ip_parameter ${name}_clkgen CONFIG.USE_LOCKED {false}
+    ad_ip_parameter ${name}_clkgen CONFIG.JITTER_SEL {Min_O_Jitter}
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIM_IN_FREQ $device_freq
+    ad_ip_parameter ${name}_clkgen CONFIG.CLKOUT_REQUESTED_OUT_FREQUENCY $pack_freq
+  } else {
+    ad_ip_instance clk_wiz ${name}_clkgen
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIMITIVE MMCM
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIM_SOURCE No_buffer
+    ad_ip_parameter ${name}_clkgen CONFIG.RESET_TYPE ACTIVE_LOW
+    ad_ip_parameter ${name}_clkgen CONFIG.USE_LOCKED false
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIM_IN_FREQ $device_freq
+    ad_ip_parameter ${name}_clkgen CONFIG.CLKOUT1_REQUESTED_OUT_FREQ $pack_freq
+  }
+
+  ad_connect $device_clk ${name}_clkgen/clk_in1
+  ad_connect $resetn ${name}_clkgen/resetn
+  ad_connect ${name}_clk ${name}_clkgen/clk_out1
+
+  ad_ip_instance proc_sys_reset ${name}_rstgen
+  ad_connect ${name}_clk ${name}_rstgen/slowest_sync_clk
+  ad_connect $resetn ${name}_rstgen/ext_reset_in
+}
+
+set VERSAL [expr $ADI_PHY_SEL == 0]
+
+if {$RX_GEARBOX} {
+  ad_pack_clkgen_create rx_pack rx_device_clk $sys_cpu_resetn $RX_LANE_RATE \
+    $JESD_MODE $RX_SAMPLES_PER_CHANNEL $RX_PACK_SAMPLES_PER_CHANNEL $VERSAL
+}
+if {$ASYMMETRIC_A_B_MODE && $RX_B_GEARBOX} {
+  ad_pack_clkgen_create rx_b_pack rx_b_device_clk $sys_cpu_resetn $RX_B_LANE_RATE \
+    $JESD_MODE $RX_B_SAMPLES_PER_CHANNEL $RX_B_PACK_SAMPLES_PER_CHANNEL $VERSAL
+}
+
 # device clock domain
 ad_connect  rx_device_clk rx_apollo_tpl_core/link_clk
-ad_connect  rx_device_clk util_apollo_cpack/clk
-ad_connect  rx_device_clk $adc_data_offload_name/s_axis_aclk
+ad_connect  $rx_pack_clk_net util_apollo_cpack/clk
+ad_connect  $rx_pack_clk_net $adc_data_offload_name/s_axis_aclk
 
 ad_connect  tx_device_clk tx_apollo_tpl_core/link_clk
 ad_connect  tx_device_clk util_apollo_upack/clk
@@ -925,8 +1005,8 @@ ad_connect  tx_device_clk $dac_data_offload_name/m_axis_aclk
 
 if {$ASYMMETRIC_A_B_MODE} {
   ad_connect  rx_b_device_clk rx_b_apollo_tpl_core/link_clk
-  ad_connect  rx_b_device_clk util_apollo_cpack_b/clk
-  ad_connect  rx_b_device_clk $adc_b_data_offload_name/s_axis_aclk
+  ad_connect  $rx_b_pack_clk_net util_apollo_cpack_b/clk
+  ad_connect  $rx_b_pack_clk_net $adc_b_data_offload_name/s_axis_aclk
 
   ad_connect  tx_b_device_clk tx_b_apollo_tpl_core/link_clk
   ad_connect  tx_b_device_clk util_apollo_upack_b/clk
@@ -956,7 +1036,7 @@ if {$ASYMMETRIC_A_B_MODE} {
 # create_bd_port -dir O rx_device_clk_rstn
 # ad_connect rx_device_clk_rstn rx_device_clk_rstgen/peripheral_aresetn
 
-ad_connect  rx_device_clk_rstgen/peripheral_aresetn $adc_data_offload_name/s_axis_aresetn
+ad_connect  $rx_pack_rstgen_net/peripheral_aresetn $adc_data_offload_name/s_axis_aresetn
 ad_connect  $sys_dma_resetn $adc_data_offload_name/m_axis_aresetn
 ad_connect  tx_device_clk_rstgen/peripheral_aresetn $dac_data_offload_name/m_axis_aresetn
 ad_connect  $sys_dma_resetn $dac_data_offload_name/s_axis_aresetn
@@ -967,7 +1047,7 @@ ad_connect  $sys_cpu_resetn $dac_data_offload_name/s_axi_aresetn
 ad_connect  $sys_cpu_resetn $adc_data_offload_name/s_axi_aresetn
 
 if {$ASYMMETRIC_A_B_MODE} {
-  ad_connect  rx_b_device_clk_rstgen/peripheral_aresetn $adc_b_data_offload_name/s_axis_aresetn
+  ad_connect  $rx_b_pack_rstgen_net/peripheral_aresetn $adc_b_data_offload_name/s_axis_aresetn
   ad_connect  $sys_dma_resetn $adc_b_data_offload_name/m_axis_aresetn
   ad_connect  tx_b_device_clk_rstgen/peripheral_aresetn $dac_b_data_offload_name/m_axis_aresetn
   ad_connect  $sys_dma_resetn $dac_b_data_offload_name/s_axis_aresetn
@@ -987,10 +1067,75 @@ ad_connect  axi_apollo_rx_jesd/rx_sof rx_apollo_tpl_core/link_sof
 ad_connect  axi_apollo_rx_jesd/rx_data_tdata rx_apollo_tpl_core/link_data
 ad_connect  axi_apollo_rx_jesd/rx_data_tvalid rx_apollo_tpl_core/link_valid
 
-ad_connect rx_apollo_tpl_core/adc_valid_0 util_apollo_cpack/fifo_wr_en
+if {$RX_GEARBOX} {
+  ad_ip_instance util_pack_cdc apollo_rx_pack_cdc [list \
+    NUM_OF_ENABLES $RX_NUM_OF_CONVERTERS \
+  ]
+  ad_connect rx_device_clk apollo_rx_pack_cdc/device_clk
+  ad_connect rx_device_clk_rstgen/peripheral_aresetn apollo_rx_pack_cdc/device_aresetn
+  ad_connect rx_apollo_tpl_core/adc_tpl_core/adc_rst apollo_rx_pack_cdc/adc_rst
+  ad_connect axi_apollo_rx_dma/s_axis_xfer_req apollo_rx_pack_cdc/xfer_req
+
+  ad_connect $rx_pack_clk_net apollo_rx_pack_cdc/pack_clk
+  ad_connect $rx_pack_rstgen_net/peripheral_aresetn apollo_rx_pack_cdc/pack_aresetn
+  ad_connect rx_apollo_tpl_core/adc_tpl_core/enable apollo_rx_pack_cdc/enable_in
+
+  # One FIFO for all channels, not one each: each async FIFO resolves its
+  # gray pointers on its own metastability timing, so per-channel FIFOs drift
+  # apart by a beat and cpack then interleaves samples from different times.
+  ad_ip_instance ilconcat apollo_rx_pack_concat [list \
+    NUM_PORTS $RX_NUM_OF_CONVERTERS \
+  ]
+  ad_ip_instance util_axis_fifo apollo_rx_pack_fifo [list \
+    DATA_WIDTH [expr $RX_PACK_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS] \
+    ADDRESS_WIDTH 5 \
+    ASYNC_CLK 1 \
+  ]
+  ad_connect rx_device_clk apollo_rx_pack_fifo/s_axis_aclk
+  ad_connect $rx_pack_clk_net apollo_rx_pack_fifo/m_axis_aclk
+  ad_connect rx_device_clk_rstgen/peripheral_aresetn apollo_rx_pack_fifo/s_axis_aresetn
+  ad_connect $rx_pack_rstgen_net/peripheral_aresetn apollo_rx_pack_fifo/m_axis_aresetn
+  ad_connect apollo_rx_pack_concat/dout apollo_rx_pack_fifo/s_axis_data
+  ad_connect VCC apollo_rx_pack_fifo/m_axis_ready
+}
+
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
-  ad_connect  rx_apollo_tpl_core/adc_enable_$i util_apollo_cpack/enable_$i
-  ad_connect  rx_apollo_tpl_core/adc_data_$i util_apollo_cpack/fifo_wr_data_$i
+  if {$RX_GEARBOX} {
+    ad_ip_instance ilslice apollo_rx_enable_slice_$i [list \
+      DIN_WIDTH $RX_NUM_OF_CONVERTERS \
+      DIN_FROM $i \
+      DIN_TO $i \
+    ]
+    ad_connect apollo_rx_pack_cdc/enable_out apollo_rx_enable_slice_$i/Din
+    ad_connect apollo_rx_enable_slice_$i/Dout util_apollo_cpack/enable_$i
+
+    ad_ip_instance util_axis_gearbox apollo_rx_gearbox_$i [list \
+      S_DATA_WIDTH [expr $RX_SAMPLES_PER_CHANNEL      * $RX_DMA_SAMPLE_WIDTH] \
+      M_DATA_WIDTH [expr $RX_PACK_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH] \
+    ]
+    ad_connect  rx_device_clk apollo_rx_gearbox_$i/clk
+    ad_connect  rx_apollo_tpl_core/adc_data_$i apollo_rx_gearbox_$i/s_axis_data
+    ad_connect  rx_apollo_tpl_core/adc_valid_0 apollo_rx_gearbox_$i/s_axis_valid
+    ad_connect  apollo_rx_pack_fifo/s_axis_ready apollo_rx_gearbox_$i/m_axis_ready
+    ad_connect  apollo_rx_gearbox_$i/m_axis_data apollo_rx_pack_concat/In$i
+
+    ad_ip_instance ilslice apollo_rx_pack_slice_$i [list \
+      DIN_WIDTH [expr $RX_PACK_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS] \
+      DIN_FROM [expr $RX_PACK_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH * ($i+1) - 1] \
+      DIN_TO   [expr $RX_PACK_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH * $i] \
+    ]
+    ad_connect  apollo_rx_pack_fifo/m_axis_data apollo_rx_pack_slice_$i/Din
+    ad_connect  apollo_rx_pack_slice_$i/Dout util_apollo_cpack/fifo_wr_data_$i
+  } else {
+    ad_connect  rx_apollo_tpl_core/adc_enable_$i util_apollo_cpack/enable_$i
+    ad_connect  rx_apollo_tpl_core/adc_data_$i util_apollo_cpack/fifo_wr_data_$i
+  }
+}
+if {$RX_GEARBOX} {
+  ad_connect apollo_rx_gearbox_0/m_axis_valid apollo_rx_pack_fifo/s_axis_valid
+  ad_connect apollo_rx_pack_fifo/m_axis_valid util_apollo_cpack/fifo_wr_en
+} else {
+  ad_connect rx_apollo_tpl_core/adc_valid_0 util_apollo_cpack/fifo_wr_en
 }
 ad_connect rx_apollo_tpl_core/adc_dovf util_apollo_cpack/fifo_wr_overflow
 
@@ -1006,10 +1151,73 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_connect  axi_apollo_rx_b_jesd/rx_data_tdata rx_b_apollo_tpl_core/link_data
   ad_connect  axi_apollo_rx_b_jesd/rx_data_tvalid rx_b_apollo_tpl_core/link_valid
 
-  ad_connect rx_b_apollo_tpl_core/adc_valid_0 util_apollo_cpack_b/fifo_wr_en
+  if {$RX_B_GEARBOX} {
+    ad_ip_instance util_pack_cdc apollo_rx_b_pack_cdc [list \
+      NUM_OF_ENABLES $RX_B_NUM_OF_CONVERTERS \
+    ]
+    ad_connect rx_b_device_clk apollo_rx_b_pack_cdc/device_clk
+    ad_connect rx_b_device_clk_rstgen/peripheral_aresetn apollo_rx_b_pack_cdc/device_aresetn
+    ad_connect rx_b_apollo_tpl_core/adc_tpl_core/adc_rst apollo_rx_b_pack_cdc/adc_rst
+    ad_connect axi_apollo_rx_b_dma/s_axis_xfer_req apollo_rx_b_pack_cdc/xfer_req
+
+    ad_connect $rx_b_pack_clk_net apollo_rx_b_pack_cdc/pack_clk
+    ad_connect $rx_b_pack_rstgen_net/peripheral_aresetn apollo_rx_b_pack_cdc/pack_aresetn
+    ad_connect rx_b_apollo_tpl_core/adc_tpl_core/enable apollo_rx_b_pack_cdc/enable_in
+
+    # One FIFO for all channels, not one each - see the A side above.
+    ad_ip_instance ilconcat apollo_rx_b_pack_concat [list \
+      NUM_PORTS $RX_B_NUM_OF_CONVERTERS \
+    ]
+    ad_ip_instance util_axis_fifo apollo_rx_b_pack_fifo [list \
+      DATA_WIDTH [expr $RX_B_PACK_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH * $RX_B_NUM_OF_CONVERTERS] \
+      ADDRESS_WIDTH 5 \
+      ASYNC_CLK 1 \
+    ]
+    ad_connect rx_b_device_clk apollo_rx_b_pack_fifo/s_axis_aclk
+    ad_connect $rx_b_pack_clk_net apollo_rx_b_pack_fifo/m_axis_aclk
+    ad_connect rx_b_device_clk_rstgen/peripheral_aresetn apollo_rx_b_pack_fifo/s_axis_aresetn
+    ad_connect $rx_b_pack_rstgen_net/peripheral_aresetn apollo_rx_b_pack_fifo/m_axis_aresetn
+    ad_connect apollo_rx_b_pack_concat/dout apollo_rx_b_pack_fifo/s_axis_data
+    ad_connect VCC apollo_rx_b_pack_fifo/m_axis_ready
+  }
+
   for {set i 0} {$i < $RX_B_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  rx_b_apollo_tpl_core/adc_enable_$i util_apollo_cpack_b/enable_$i
-    ad_connect  rx_b_apollo_tpl_core/adc_data_$i util_apollo_cpack_b/fifo_wr_data_$i
+    if {$RX_B_GEARBOX} {
+      ad_ip_instance ilslice apollo_rx_b_enable_slice_$i [list \
+        DIN_WIDTH $RX_B_NUM_OF_CONVERTERS \
+        DIN_FROM $i \
+        DIN_TO $i \
+      ]
+      ad_connect apollo_rx_b_pack_cdc/enable_out apollo_rx_b_enable_slice_$i/Din
+      ad_connect apollo_rx_b_enable_slice_$i/Dout util_apollo_cpack_b/enable_$i
+
+      ad_ip_instance util_axis_gearbox apollo_rx_b_gearbox_$i [list \
+        S_DATA_WIDTH [expr $RX_B_SAMPLES_PER_CHANNEL      * $RX_B_DMA_SAMPLE_WIDTH] \
+        M_DATA_WIDTH [expr $RX_B_PACK_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH] \
+      ]
+      ad_connect  rx_b_device_clk apollo_rx_b_gearbox_$i/clk
+      ad_connect  rx_b_apollo_tpl_core/adc_data_$i apollo_rx_b_gearbox_$i/s_axis_data
+      ad_connect  rx_b_apollo_tpl_core/adc_valid_0 apollo_rx_b_gearbox_$i/s_axis_valid
+      ad_connect  apollo_rx_b_pack_fifo/s_axis_ready apollo_rx_b_gearbox_$i/m_axis_ready
+      ad_connect  apollo_rx_b_gearbox_$i/m_axis_data apollo_rx_b_pack_concat/In$i
+
+      ad_ip_instance ilslice apollo_rx_b_pack_slice_$i [list \
+        DIN_WIDTH [expr $RX_B_PACK_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH * $RX_B_NUM_OF_CONVERTERS] \
+        DIN_FROM [expr $RX_B_PACK_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH * ($i+1) - 1] \
+        DIN_TO   [expr $RX_B_PACK_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH * $i] \
+      ]
+      ad_connect  apollo_rx_b_pack_fifo/m_axis_data apollo_rx_b_pack_slice_$i/Din
+      ad_connect  apollo_rx_b_pack_slice_$i/Dout util_apollo_cpack_b/fifo_wr_data_$i
+    } else {
+      ad_connect  rx_b_apollo_tpl_core/adc_enable_$i util_apollo_cpack_b/enable_$i
+      ad_connect  rx_b_apollo_tpl_core/adc_data_$i util_apollo_cpack_b/fifo_wr_data_$i
+    }
+  }
+  if {$RX_B_GEARBOX} {
+    ad_connect apollo_rx_b_gearbox_0/m_axis_valid apollo_rx_b_pack_fifo/s_axis_valid
+    ad_connect apollo_rx_b_pack_fifo/m_axis_valid util_apollo_cpack_b/fifo_wr_en
+  } else {
+    ad_connect rx_b_apollo_tpl_core/adc_valid_0 util_apollo_cpack_b/fifo_wr_en
   }
   ad_connect rx_b_apollo_tpl_core/adc_dovf util_apollo_cpack_b/fifo_wr_overflow
 
@@ -1028,10 +1236,79 @@ if {$ASYMMETRIC_A_B_MODE} {
 #
 ad_connect  tx_apollo_tpl_core/link axi_apollo_tx_jesd/tx_data
 
-ad_connect  tx_apollo_tpl_core/dac_valid_0 util_apollo_upack/fifo_rd_en
+# upack has to be a power of two wide because its s_axis comes straight from the
+# data offload, so it emits TX_PACK_SAMPLES_PER_CHANNEL samples while the DAC
+# transport layer wants TX_SAMPLES_PER_CHANNEL.  A gearbox does the reduction.
+#
+# The direction is what makes this cheap compared to RX.  For 512 -> 384 the
+# gearbox holds 128-bit units and settles into level 4,5,6,3,4,... which means
+# m_axis_valid is high every cycle and s_axis_ready drops one cycle in four.
+# The stall therefore lands on the offload, which has backpressure, instead of
+# on the transport layer, which has none - so no second clock and no CDC here.
+if {$TX_GEARBOX} {
+  # upack is a pull with one cycle of latency and no hold: fifo_rd_data and
+  # fifo_rd_valid only update when fifo_rd_en was high the cycle before, and
+  # fifo_rd_valid goes low otherwise.  Driving fifo_rd_en from the gearbox
+  # s_axis_ready would therefore skip the request in every stall cycle and
+  # leave the gearbox with nothing to hand out in the cycle after it, putting a
+  # bubble on the DAC side.  A shallow synchronous FIFO supplies the missing
+  # beat of lookahead: request while it still has room for two, so the answer
+  # always fits.
+  #
+  # One FIFO for all channels and then slice, for the same reason as on RX:
+  # every gearbox must see the same valid and the same ready, or the channels
+  # drift apart and the DAC gets I and Q from different times.
+  ad_ip_instance ilconcat apollo_tx_unpack_concat [list \
+    NUM_PORTS $TX_NUM_OF_CONVERTERS \
+  ]
+  ad_ip_instance util_axis_fifo apollo_tx_unpack_fifo [list \
+    DATA_WIDTH [expr $TX_PACK_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS] \
+    ADDRESS_WIDTH 3 \
+    ASYNC_CLK 0 \
+    ALMOST_FULL_THRESHOLD 2 \
+  ]
+  ad_connect tx_device_clk apollo_tx_unpack_fifo/s_axis_aclk
+  ad_connect tx_device_clk apollo_tx_unpack_fifo/m_axis_aclk
+  ad_connect apollo_tx_unpack_concat/dout apollo_tx_unpack_fifo/s_axis_data
+  ad_connect util_apollo_upack/fifo_rd_valid apollo_tx_unpack_fifo/s_axis_valid
+
+  ad_ip_instance ilvector_logic apollo_tx_unpack_rd_en [list \
+    C_SIZE 1 \
+    C_OPERATION {not} \
+  ]
+  ad_connect apollo_tx_unpack_fifo/s_axis_almost_full apollo_tx_unpack_rd_en/Op1
+  ad_connect apollo_tx_unpack_rd_en/Res util_apollo_upack/fifo_rd_en
+} else {
+  ad_connect  tx_apollo_tpl_core/dac_valid_0 util_apollo_upack/fifo_rd_en
+}
+
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
-  ad_connect  util_apollo_upack/fifo_rd_data_$i tx_apollo_tpl_core/dac_data_$i
+  if {$TX_GEARBOX} {
+    ad_connect  util_apollo_upack/fifo_rd_data_$i apollo_tx_unpack_concat/In$i
+
+    ad_ip_instance ilslice apollo_tx_unpack_slice_$i [list \
+      DIN_WIDTH [expr $TX_PACK_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS] \
+      DIN_FROM [expr $TX_PACK_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH * ($i+1) - 1] \
+      DIN_TO   [expr $TX_PACK_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH * $i] \
+    ]
+    ad_connect  apollo_tx_unpack_fifo/m_axis_data apollo_tx_unpack_slice_$i/Din
+
+    ad_ip_instance util_axis_gearbox apollo_tx_gearbox_$i [list \
+      S_DATA_WIDTH [expr $TX_PACK_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH] \
+      M_DATA_WIDTH [expr $TX_SAMPLES_PER_CHANNEL      * $TX_DMA_SAMPLE_WIDTH] \
+    ]
+    ad_connect  tx_device_clk apollo_tx_gearbox_$i/clk
+    ad_connect  apollo_tx_unpack_slice_$i/Dout apollo_tx_gearbox_$i/s_axis_data
+    ad_connect  apollo_tx_unpack_fifo/m_axis_valid apollo_tx_gearbox_$i/s_axis_valid
+    ad_connect  tx_apollo_tpl_core/dac_valid_0 apollo_tx_gearbox_$i/m_axis_ready
+    ad_connect  apollo_tx_gearbox_$i/m_axis_data tx_apollo_tpl_core/dac_data_$i
+  } else {
+    ad_connect  util_apollo_upack/fifo_rd_data_$i tx_apollo_tpl_core/dac_data_$i
+  }
   ad_connect  tx_apollo_tpl_core/dac_enable_$i  util_apollo_upack/enable_$i
+}
+if {$TX_GEARBOX} {
+  ad_connect apollo_tx_gearbox_0/s_axis_ready apollo_tx_unpack_fifo/m_axis_ready
 }
 
 ad_connect $dac_data_offload_name/s_axis axi_apollo_tx_dma/m_axis
@@ -1045,10 +1322,60 @@ ad_connect tx_apollo_tpl_core/dac_dunf GND
 if {$ASYMMETRIC_A_B_MODE} {
   ad_connect  tx_b_apollo_tpl_core/link axi_apollo_tx_b_jesd/tx_data
 
-  ad_connect  tx_b_apollo_tpl_core/dac_valid_0 util_apollo_upack_b/fifo_rd_en
+  # See the A side above for why 512 -> 384 needs no second clock and why the
+  # lookahead FIFO is there.
+  if {$TX_B_GEARBOX} {
+    ad_ip_instance ilconcat apollo_tx_b_unpack_concat [list \
+      NUM_PORTS $TX_B_NUM_OF_CONVERTERS \
+    ]
+    ad_ip_instance util_axis_fifo apollo_tx_b_unpack_fifo [list \
+      DATA_WIDTH [expr $TX_B_PACK_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH * $TX_B_NUM_OF_CONVERTERS] \
+      ADDRESS_WIDTH 3 \
+      ASYNC_CLK 0 \
+      ALMOST_FULL_THRESHOLD 2 \
+    ]
+    ad_connect tx_b_device_clk apollo_tx_b_unpack_fifo/s_axis_aclk
+    ad_connect tx_b_device_clk apollo_tx_b_unpack_fifo/m_axis_aclk
+    ad_connect apollo_tx_b_unpack_concat/dout apollo_tx_b_unpack_fifo/s_axis_data
+    ad_connect util_apollo_upack_b/fifo_rd_valid apollo_tx_b_unpack_fifo/s_axis_valid
+
+    ad_ip_instance ilvector_logic apollo_tx_b_unpack_rd_en [list \
+      C_SIZE 1 \
+      C_OPERATION {not} \
+    ]
+    ad_connect apollo_tx_b_unpack_fifo/s_axis_almost_full apollo_tx_b_unpack_rd_en/Op1
+    ad_connect apollo_tx_b_unpack_rd_en/Res util_apollo_upack_b/fifo_rd_en
+  } else {
+    ad_connect  tx_b_apollo_tpl_core/dac_valid_0 util_apollo_upack_b/fifo_rd_en
+  }
+
   for {set i 0} {$i < $TX_B_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  util_apollo_upack_b/fifo_rd_data_$i tx_b_apollo_tpl_core/dac_data_$i
+    if {$TX_B_GEARBOX} {
+      ad_connect  util_apollo_upack_b/fifo_rd_data_$i apollo_tx_b_unpack_concat/In$i
+
+      ad_ip_instance ilslice apollo_tx_b_unpack_slice_$i [list \
+        DIN_WIDTH [expr $TX_B_PACK_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH * $TX_B_NUM_OF_CONVERTERS] \
+        DIN_FROM [expr $TX_B_PACK_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH * ($i+1) - 1] \
+        DIN_TO   [expr $TX_B_PACK_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH * $i] \
+      ]
+      ad_connect  apollo_tx_b_unpack_fifo/m_axis_data apollo_tx_b_unpack_slice_$i/Din
+
+      ad_ip_instance util_axis_gearbox apollo_tx_b_gearbox_$i [list \
+        S_DATA_WIDTH [expr $TX_B_PACK_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH] \
+        M_DATA_WIDTH [expr $TX_B_SAMPLES_PER_CHANNEL      * $TX_B_DMA_SAMPLE_WIDTH] \
+      ]
+      ad_connect  tx_b_device_clk apollo_tx_b_gearbox_$i/clk
+      ad_connect  apollo_tx_b_unpack_slice_$i/Dout apollo_tx_b_gearbox_$i/s_axis_data
+      ad_connect  apollo_tx_b_unpack_fifo/m_axis_valid apollo_tx_b_gearbox_$i/s_axis_valid
+      ad_connect  tx_b_apollo_tpl_core/dac_valid_0 apollo_tx_b_gearbox_$i/m_axis_ready
+      ad_connect  apollo_tx_b_gearbox_$i/m_axis_data tx_b_apollo_tpl_core/dac_data_$i
+    } else {
+      ad_connect  util_apollo_upack_b/fifo_rd_data_$i tx_b_apollo_tpl_core/dac_data_$i
+    }
     ad_connect  tx_b_apollo_tpl_core/dac_enable_$i  util_apollo_upack_b/enable_$i
+  }
+  if {$TX_B_GEARBOX} {
+    ad_connect apollo_tx_b_gearbox_0/s_axis_ready apollo_tx_b_unpack_fifo/m_axis_ready
   }
 
   ad_connect $dac_b_data_offload_name/s_axis axi_apollo_tx_b_dma/m_axis
@@ -1196,9 +1523,16 @@ if {$ASYMMETRIC_A_B_MODE == 0} {
 }
 
 # Reset pack cores
+#
+# On the gearbox path cpack runs on rx_pack_clk, so its reset comes from that
+# domain's rstgen; adc_rst is left out of it because it belongs to
+# rx_device_clk and cpack has nothing of its own to flush - the gearbox
+# upstream is what holds the state, and it is reset from device_resetn below.
+set RX_CPACK_RST_SOURCES [expr {$RX_GEARBOX ? 2 : 3}]
+
 ad_ip_instance ilreduced_logic cpack_rst_logic
 ad_ip_parameter cpack_rst_logic config.c_operation {or}
-ad_ip_parameter cpack_rst_logic config.c_size {3}
+ad_ip_parameter cpack_rst_logic config.c_size $RX_CPACK_RST_SOURCES
 
 ad_ip_instance  ilvector_logic rx_do_rstout_logic
 ad_ip_parameter rx_do_rstout_logic config.c_operation {not}
@@ -1207,18 +1541,34 @@ ad_ip_parameter rx_do_rstout_logic config.c_size {1}
 ad_connect $adc_data_offload_name/s_axis_tready rx_do_rstout_logic/Op1
 
 ad_ip_instance ilconcat cpack_reset_sources
-ad_ip_parameter cpack_reset_sources config.num_ports {3}
-ad_connect rx_device_clk_rstgen/peripheral_reset cpack_reset_sources/in0
-ad_connect rx_apollo_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources/in1
-ad_connect rx_do_rstout_logic/res cpack_reset_sources/in2
+ad_ip_parameter cpack_reset_sources config.num_ports $RX_CPACK_RST_SOURCES
+ad_connect $rx_pack_rstgen_net/peripheral_reset cpack_reset_sources/in0
+if {$RX_GEARBOX} {
+  ad_connect rx_do_rstout_logic/res cpack_reset_sources/in1
+} else {
+  ad_connect rx_apollo_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources/in1
+  ad_connect rx_do_rstout_logic/res cpack_reset_sources/in2
+}
 
 ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
 ad_connect cpack_rst_logic/res util_apollo_cpack/reset
 
+# The gearbox holds part of a packed word, so it must come out of reset with
+# the pack chain and not a cycle either side of it - a private reset would
+# leave a stale remainder and rotate every channel by it.
+if {$RX_GEARBOX} {
+  for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
+    ad_connect apollo_rx_pack_cdc/device_resetn apollo_rx_gearbox_$i/resetn
+  }
+}
+
 if {$ASYMMETRIC_A_B_MODE} {
+  # See the A side above.
+  set RX_B_CPACK_RST_SOURCES [expr {$RX_B_GEARBOX ? 2 : 3}]
+
   ad_ip_instance ilreduced_logic cpack_b_rst_logic
   ad_ip_parameter cpack_b_rst_logic config.c_operation {or}
-  ad_ip_parameter cpack_b_rst_logic config.c_size {3}
+  ad_ip_parameter cpack_b_rst_logic config.c_size $RX_B_CPACK_RST_SOURCES
 
   ad_ip_instance  ilvector_logic rx_b_do_rstout_logic
   ad_ip_parameter rx_b_do_rstout_logic config.c_operation {not}
@@ -1227,13 +1577,23 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_connect $adc_b_data_offload_name/s_axis_tready rx_b_do_rstout_logic/Op1
 
   ad_ip_instance ilconcat cpack_b_reset_sources
-  ad_ip_parameter cpack_b_reset_sources config.num_ports {3}
-  ad_connect rx_b_device_clk_rstgen/peripheral_reset cpack_b_reset_sources/in0
-  ad_connect rx_b_apollo_tpl_core/adc_tpl_core/adc_rst cpack_b_reset_sources/in1
-  ad_connect rx_b_do_rstout_logic/res cpack_b_reset_sources/in2
+  ad_ip_parameter cpack_b_reset_sources config.num_ports $RX_B_CPACK_RST_SOURCES
+  ad_connect $rx_b_pack_rstgen_net/peripheral_reset cpack_b_reset_sources/in0
+  if {$RX_B_GEARBOX} {
+    ad_connect rx_b_do_rstout_logic/res cpack_b_reset_sources/in1
+  } else {
+    ad_connect rx_b_apollo_tpl_core/adc_tpl_core/adc_rst cpack_b_reset_sources/in1
+    ad_connect rx_b_do_rstout_logic/res cpack_b_reset_sources/in2
+  }
 
   ad_connect cpack_b_reset_sources/dout cpack_b_rst_logic/op1
   ad_connect cpack_b_rst_logic/res util_apollo_cpack_b/reset
+
+  if {$RX_B_GEARBOX} {
+    for {set i 0} {$i < $RX_B_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect apollo_rx_b_pack_cdc/device_resetn apollo_rx_b_gearbox_$i/resetn
+    }
+  }
 }
 
 # Reset unpack cores
@@ -1249,6 +1609,23 @@ ad_connect tx_apollo_tpl_core/dac_tpl_core/dac_rst upack_reset_sources/in1
 ad_connect upack_reset_sources/dout upack_rst_logic/op1
 ad_connect upack_rst_logic/res util_apollo_upack/reset
 
+# The gearbox and its lookahead FIFO hold part of a packed word, so they must
+# come out of reset with upack and not a cycle either side of it - a private
+# reset would leave a stale remainder and rotate every channel by whatever it
+# happened to be holding.  Same source, just active low.
+if {$TX_GEARBOX} {
+  ad_ip_instance ilvector_logic tx_gearbox_rstn [list \
+    C_SIZE 1 \
+    C_OPERATION {not} \
+  ]
+  ad_connect upack_rst_logic/res tx_gearbox_rstn/Op1
+  ad_connect tx_gearbox_rstn/Res apollo_tx_unpack_fifo/s_axis_aresetn
+  ad_connect tx_gearbox_rstn/Res apollo_tx_unpack_fifo/m_axis_aresetn
+  for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+    ad_connect tx_gearbox_rstn/Res apollo_tx_gearbox_$i/resetn
+  }
+}
+
 if {$ASYMMETRIC_A_B_MODE} {
   ad_ip_instance ilreduced_logic upack_b_rst_logic
   ad_ip_parameter upack_b_rst_logic config.c_operation {or}
@@ -1261,6 +1638,19 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   ad_connect upack_b_reset_sources/dout upack_b_rst_logic/op1
   ad_connect upack_b_rst_logic/res util_apollo_upack_b/reset
+
+  if {$TX_B_GEARBOX} {
+    ad_ip_instance ilvector_logic tx_b_gearbox_rstn [list \
+      C_SIZE 1 \
+      C_OPERATION {not} \
+    ]
+    ad_connect upack_b_rst_logic/res tx_b_gearbox_rstn/Op1
+    ad_connect tx_b_gearbox_rstn/Res apollo_tx_b_unpack_fifo/s_axis_aresetn
+    ad_connect tx_b_gearbox_rstn/Res apollo_tx_b_unpack_fifo/m_axis_aresetn
+    for {set i 0} {$i < $TX_B_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect tx_b_gearbox_rstn/Res apollo_tx_b_gearbox_$i/resetn
+    }
+  }
 }
 
 if {$TDD_SUPPORT} {

@@ -105,3 +105,21 @@ set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[1]]
 set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[0]]
 set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[1]]
 set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[2]]
+
+# The pack clocks are MMCM outputs derived from the device clock, so the tool
+# treats them as related and times every crossing between the two domains
+# against a real edge relationship. util_axis_fifo carries no constraints of its
+# own and its gray-coded pointer synchronisers cannot meet that; they are built
+# for an unrelated capture clock. The 3/4 frequency lock is what keeps the FIFO
+# from drifting - it is not a path-timing relationship.
+#
+# The globs are on the clkgen instance name rather than on clk_out1_* so that
+# they match both the clk_wiz and the clk_wizard naming, and -quiet keeps them
+# inert in the builds where no gearbox - and so no pack clock - exists.
+set_clock_groups -asynchronous \
+  -group [get_clocks -quiet *rx_pack_clkgen*] \
+  -group [get_clocks -quiet tx_device_clk]
+
+set_clock_groups -asynchronous \
+  -group [get_clocks -quiet *rx_b_pack_clkgen*] \
+  -group [get_clocks -quiet tx_device_clk]
