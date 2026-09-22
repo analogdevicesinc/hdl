@@ -271,15 +271,27 @@ format.
 
 #### 10. Project name vs. path
 
-It checks that in each system_project.tcl, the project name used in `adi_project`
-matches the relative project path under `projects/`.
+It checks that in each system_project.tcl, the project name matches the relative
+project path under `projects/`. The name is checked on all three commands that
+declare it: `adi_project`, `adi_project_files` and `adi_project_run`.
 
 Example:
 ```
-projects/ad9783_ebz/zcu102 ⇒ adi_project ad9783_ebz_zcu102
+projects/ad9783_ebz/zcu102 ⇒ adi_project      ad9783_ebz_zcu102
+                             adi_project_files ad9783_ebz_zcu102 [list ...]
+                             adi_project_run   ad9783_ebz_zcu102
 ```
 
-If `-e` option is added, the script updates the project name automatically.
+Exception — the `common/` folder holds the carrier templates, not real projects,
+so the expected name is `template_<carrier>` instead of `<project>_<carrier>`.
+
+Example:
+```
+projects/common/zc702 ⇒ adi_project template_zc702
+```
+
+If `-e` option is added, the script updates the project name automatically on all
+three commands.
 
 #### 11. Non-HDL and testbench file license check
 
