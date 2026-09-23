@@ -20,9 +20,14 @@ M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
 M_DEPS += ../../../projects/common/xilinx/data_offload_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
+M_DEPS += ../../../library/axi_fsrc/scripts/axi_fsrc.tcl
 
+LIB_DEPS += axi_adf4030
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
+LIB_DEPS += axi_fsrc/axi_fsrc_rx
+LIB_DEPS += axi_fsrc/axi_fsrc_sequencer
+LIB_DEPS += axi_fsrc/axi_fsrc_tx
 LIB_DEPS += axi_hsci
 LIB_DEPS += axi_sysid
 LIB_DEPS += axi_tdd
