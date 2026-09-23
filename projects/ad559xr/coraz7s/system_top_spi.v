@@ -66,7 +66,7 @@ module system_top (
   inout           iic_ard_scl,
   inout           iic_ard_sda,
 
-  // AD5596R SPI interface
+  // AD5596R SPI interface - PMOD JA
   output          spi_sclk,
   output          spi_mosi,
   input           spi_miso,

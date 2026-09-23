@@ -32,16 +32,49 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-source ../../../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project ad559xr_ad5597r_coraz7s
+# get_env_param retrieves parameter value from the environment if exists,
+# other case use the default value.
+#
+#   How to use over-writable parameters from the environment:
+#
+#    e.g.
+#      make INTF=SPI
+#      make INTF=I2C
+#
+# Parameter description:
+#
+# INTF: Communication interface
+#       SPI - Serial Peripheral Interface, AD5596R (default)
+#       I2C - Inter-Integrated Circuit, AD5597R
 
-adi_project_files ad559xr_ad5597r_coraz7s [list \
+set intf [get_env_param INTF SPI]
+
+adi_project ad559xr_coraz7s
+
+adi_project_files ad559xr_coraz7s [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/coraz7s/coraz7s_system_constr.xdc"  \
-  "system_constr.xdc" \
-  "system_top.v"]
+  "$ad_hdl_dir/projects/common/coraz7s/coraz7s_system_constr.xdc"]
 
-adi_project_run ad559xr_ad5597r_coraz7s
+switch $intf {
+  SPI {
+    adi_project_files ad559xr_coraz7s [list \
+      "system_constr_spi.xdc" \
+      "system_top_spi.v"]
+  }
+  I2C {
+    adi_project_files ad559xr_coraz7s [list \
+      "system_constr_i2c.xdc" \
+      "system_top_i2c.v"]
+  }
+  default {
+    adi_project_files ad559xr_coraz7s [list \
+      "system_constr_spi.xdc" \
+      "system_top_spi.v"]
+  }
+}
+
+adi_project_run ad559xr_coraz7s

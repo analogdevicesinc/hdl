@@ -15,4 +15,4 @@
 
 ## Building the project
 
-Please enter the folder for the part variant you want to use and read the README.md.
+Please enter the carrier folder and read the README.md for build instructions and available parameters.
