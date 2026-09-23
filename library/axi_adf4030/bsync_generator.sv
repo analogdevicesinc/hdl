@@ -67,9 +67,9 @@ module bsync_generator (
   logic                    b_edge;
   logic                    b_captured;
   logic                    bsync_buf;
-  logic                    bsync_r  = 1'b0;
-  logic                    bsync_d1 = 1'b0;
-  logic                    bsync_d2 = 1'b0;
+  (* ASYNC_REG = "TRUE" *) logic bsync_r  = 1'b0;
+  (* ASYNC_REG = "TRUE" *) logic bsync_d1 = 1'b0;
+  (* ASYNC_REG = "TRUE" *) logic bsync_d2 = 1'b0;
   logic                    bsync_d3 = 1'b0;
   logic [4:0]              bsync_alignment;
   logic                    bsync_misaligned;
@@ -77,7 +77,6 @@ module bsync_generator (
   logic                    dir_changed = 1'b0;
   logic                    direction_r = 1'b0;
   logic                    direction_s;
-  logic                    bsync_edge;
 
   sync_bits #(
     .NUM_OF_BITS (1),
@@ -98,7 +97,7 @@ module bsync_generator (
       end
 
       BSYNC_EDGE : begin
-        if(bsync_edge) begin
+        if(b_edge) begin
           next_state = CALIB;
         end
       end
@@ -133,7 +132,6 @@ module bsync_generator (
 
   always @(posedge clk) begin
     bsync_r <= bsync_in;
-    bsync_edge <= (bsync_in && !bsync_r);
   end
 
   /*
@@ -172,7 +170,7 @@ module bsync_generator (
       bsync_counter <= 1'b0;
     end else begin
       if (curr_state == CALIB) begin
-        if (bsync_in) begin
+        if (bsync_d2) begin
           ratio_counter <= ratio_counter + 1'b1;
         end else begin
           if (bsync_counter < ratio_counter) begin
@@ -216,7 +214,7 @@ module bsync_generator (
     if (direction_s && !direction_r) begin
       dir_changed <= 1'b1;
     end else begin
-      if (b_captured && bsync_edge) begin
+      if (b_captured && b_edge) begin
         dir_changed <= 1'b0;
       end
     end
@@ -227,7 +225,7 @@ module bsync_generator (
       bsync_alignment <= 'h000;
       bsync_next_alignment <= 'h000;
     end else begin
-      if (curr_state == BSYNC_GEN && enable_misalign_check && bsync_edge) begin
+      if (curr_state == BSYNC_GEN && enable_misalign_check && b_edge) begin
         if (dir_changed) begin
           bsync_alignment <= bsync_counter[4:0];
           bsync_next_alignment <= bsync_counter[4:0];
@@ -252,6 +250,6 @@ module bsync_generator (
   assign bsync_alignment_error = bsync_misaligned;
   assign bsync_captured = b_captured;
   assign bsync_state = curr_state;
-  assign bsync_event = bsync_edge;
+  assign bsync_event = b_edge;
 
 endmodule
