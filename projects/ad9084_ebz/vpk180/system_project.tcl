@@ -53,6 +53,8 @@ source ../../../projects/scripts/adi_board.tcl
 #
 #   REF_CLK_RATE : Reference clock frequency in MHz, should be Lane Rate / 66 for JESD204C or Lane Rate / 40 for JESD204B
 #   HSCI_ENABLE : If set, adds and enables the HSCI core in the design
+#   AION_ENABLE : If set, adds and enables the AION core in the design; the adf4030
+#     then sources sysref and drives the trigger pins
 #   RX_LANE_RATE :  Lane rate of the Rx link ( Apollo to FPGA )
 #   TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to Apollo )
 #   [RX/TX]_JESD_M : Number of converters per link
@@ -67,12 +69,19 @@ source ../../../projects/scripts/adi_board.tcl
 #   [RX/TX]_B_JESD_L : Number of lanes per link for B side
 #   [RX/TX]_B_JESD_NP : Number of bits per sample for B side
 #   [RX/TX]_B_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M) for B side
+#   FSRC_ENABLE : When set, fractional sample rate conversion is inserted in
+#                 both directions: RX deletes the samples Apollo marked invalid
+#                 and compacts what is left, TX leaves holes where Apollo will
+#                 not read
+#   FSRC_ACCUM_WIDTH : Width of the FSRC rate accumulator, which sets the
+#                 granularity of the achievable ratio
 #
 
 adi_project ad9084_ebz_vpk180 0 [list \
   JESD_MODE           [get_env_param JESD_MODE       64B66B ] \
   REF_CLK_RATE        [get_env_param REF_CLK_RATE     312.5 ] \
   HSCI_ENABLE         [get_env_param HSCI_ENABLE          1 ] \
+  AION_ENABLE         [get_env_param AION_ENABLE           0 ] \
   RX_LANE_RATE        [get_env_param RX_LANE_RATE    20.625 ] \
   TX_LANE_RATE        [get_env_param TX_LANE_RATE    20.625 ] \
   RX_JESD_M           [get_env_param RX_JESD_M            4 ] \
@@ -100,6 +109,8 @@ adi_project ad9084_ebz_vpk180 0 [list \
   TX_B_JESD_NP        [get_env_param TX_B_JESD_NP        16 ] \
   RX_B_KS_PER_CHANNEL [get_env_param RX_B_KS_PER_CHANNEL 64 ] \
   TX_B_KS_PER_CHANNEL [get_env_param TX_B_KS_PER_CHANNEL 64 ] \
+  FSRC_ENABLE         [get_env_param FSRC_ENABLE          0 ] \
+  FSRC_ACCUM_WIDTH    [get_env_param FSRC_ACCUM_WIDTH    56 ] \
 ]
 
 adi_project_files ad9084_ebz_vpk180 [list \

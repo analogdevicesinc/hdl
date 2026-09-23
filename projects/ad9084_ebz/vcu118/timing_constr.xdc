@@ -105,3 +105,6 @@ set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[1]]
 set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[0]]
 set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[1]]
 set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[2]]
+
+set_false_path -quiet \
+  -through [get_nets -quiet -hierarchical -regexp {.*IOBUFDS_inst/(I|IBUFDISABLE|T)$}]

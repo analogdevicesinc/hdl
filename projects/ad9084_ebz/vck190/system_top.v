@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -38,7 +38,9 @@
 module system_top #(
   parameter TX_NUM_LINKS = 1,
   parameter RX_NUM_LINKS = 1,
-  parameter ASYMMETRIC_A_B_MODE = 0
+  parameter ASYMMETRIC_A_B_MODE = 0,
+  parameter FSRC_ENABLE = 0,
+  parameter AION_ENABLE = 0
 ) (
   input          sys_clk_n,
   input          sys_clk_p,
@@ -102,8 +104,8 @@ module system_top #(
   output         sysref_b_n,
   input          sysref_p,
   input          sysref_n,
-  input          sysref_in_p,
-  input          sysref_in_n,
+  inout          sysref_in_p,
+  inout          sysref_in_n,
 
   output         spi2_sclk,
   inout          spi2_sdio,
@@ -156,6 +158,9 @@ module system_top #(
   wire              ref_clk;
   wire              ref_clk_replica;
   wire              sysref;
+  wire    [ 3:0]    fsrc_trig_out;
+  wire    [ 3:0]    adf4030_trig_channel;
+  wire              adf4030_sysref;
   wire [SYNC_W-1:0] tx_syncin;
   wire [SYNC_W-1:0] rx_syncout;
 
@@ -198,10 +203,7 @@ module system_top #(
     .O (ref_clk),
     .ODIV2 ());
 
-  IBUFDS i_ibufds_sysref_in (
-    .I (sysref_in_p),
-    .IB (sysref_in_n),
-    .O (sysref));
+  assign sysref = adf4030_sysref;
 
   OBUFDS i_obufds_sysref_a (
     .I (1'b0),
@@ -294,10 +296,18 @@ module system_top #(
 
   assign gpio_i[53] = trig_in;
 
-  assign trig_a[0]  = gpio_o[58];
-  assign trig_a[1]  = gpio_o[59];
-  assign trig_b[0]  = gpio_o[60];
-  assign trig_b[1]  = gpio_o[61];
+  generate
+    if (AION_ENABLE == 1) begin
+      assign trig_a = adf4030_trig_channel[1:0];
+      assign trig_b = adf4030_trig_channel[3:2];
+    end else if (FSRC_ENABLE == 1) begin
+      assign trig_a = fsrc_trig_out[1:0];
+      assign trig_b = fsrc_trig_out[3:2];
+    end else begin
+      assign trig_a = {gpio_o[59], gpio_o[58]};
+      assign trig_b = {gpio_o[61], gpio_o[60]};
+    end
+  endgenerate
   assign resetb     = gpio_o[62];
 
   assign gpio_i[64] = rx_resetdone;
@@ -434,6 +444,17 @@ module system_top #(
     .tx_sync_0 (tx_syncin[0]),
     .rx_sync_12 (rx_syncout[1]),
     .tx_sync_12 (tx_syncin[1]),
+    .adf4030_bsync_p (sysref_in_p),
+    .adf4030_bsync_n (sysref_in_n),
+    .adf4030_clk (rx_device_clk),
+    .adf4030_trigger (aux_gpio),
+    .adf4030_sysref (adf4030_sysref),
+    .adf4030_trig_channel (adf4030_trig_channel),
+
+    .fsrc_sysref (sysref),
+    .fsrc_trig_in (trig_in),
+    .fsrc_trig_out (fsrc_trig_out),
+    .fsrc_ctrl (),
     .rx_sysref_0 (sysref),
     .tx_sysref_0 (sysref),
     .rx_sysref_12 (sysref),
