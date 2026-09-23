@@ -64,8 +64,8 @@ module system_top (
   inout   [ 5:0]  led,
 
   // AD5597R I2C interface - PMOD JA
-  inout           i2c_scl,
-  inout           i2c_sda,
+  inout           iic_ard_scl,
+  inout           iic_ard_sda,
 
   // AD5597R GPIO
   output          resetb
@@ -128,8 +128,8 @@ module system_top (
     .gpio_t (gpio_t),
 
     // I2C routed to PMOD JA (axi_iic_ard instance from base board design)
-    .iic_ard_scl_io (i2c_scl),
-    .iic_ard_sda_io (i2c_sda),
+    .iic_ard_scl_io (iic_ard_scl),
+    .iic_ard_sda_io (iic_ard_sda),
 
     .spi0_clk_i (1'b0),
     .spi0_clk_o (),

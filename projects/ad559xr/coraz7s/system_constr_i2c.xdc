@@ -34,8 +34,8 @@
 
 # AD5597R I2C interface - PMOD JA
 
-set_property -dict {PACKAGE_PIN Y18 IOSTANDARD LVCMOS33} [get_ports i2c_scl]    ; ## ja_p[1]
-set_property -dict {PACKAGE_PIN Y16 IOSTANDARD LVCMOS33} [get_ports i2c_sda]    ; ## ja_p[2]
+set_property -dict {PACKAGE_PIN Y18 IOSTANDARD LVCMOS33} [get_ports iic_ard_scl]    ; ## ja_p[1]
+set_property -dict {PACKAGE_PIN Y16 IOSTANDARD LVCMOS33} [get_ports iic_ard_sda]    ; ## ja_p[2]
 
 # AD5597R GPIO
 set_property -dict {PACKAGE_PIN U18 IOSTANDARD LVCMOS33} [get_ports resetb]     ; ## ja_p[3]
