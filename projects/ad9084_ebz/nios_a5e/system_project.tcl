@@ -98,35 +98,35 @@ set_location_assignment PIN_BF1   -to "rx_data_a_p[0]"       ; ## A14  FMC_RX4_P
 set_location_assignment PIN_BF3   -to "rx_data_a_n[0]"       ; ## A15  FMC_RX4_N STXA_11_N
 set_location_assignment PIN_BD1   -to "rx_data_a_p[1]"       ; ## A18  FMC_RX5_P STXA_3_P
 set_location_assignment PIN_BD3   -to "rx_data_a_n[1]"       ; ## A19  FMC_RX5_N STXA_3_N
-set_location_assignment PIN_BB1   -to "rx_data_a_p[2]"       ; ##
-set_location_assignment PIN_BB3   -to "rx_data_a_n[2]"       ; ##
-set_location_assignment PIN_AY1   -to "rx_data_a_p[3]"       ; ##
-set_location_assignment PIN_AY3   -to "rx_data_a_n[3]"       ; ##
-set_location_assignment PIN_AV1   -to "rx_data_b_p[0]"       ; ##  C7  FMC_RX0_P STXB_3_P
-set_location_assignment PIN_AV3   -to "rx_data_b_n[0]"       ; ##  C8  FMC_RX0_N STXB_3_N
+set_location_assignment PIN_BB1   -to "rx_data_a_p[2]"       ; ## B16  FMC_RX6_P STXA_8_P
+set_location_assignment PIN_BB3   -to "rx_data_a_n[2]"       ; ## B17  FMC_RX6_N STXA_8_N
+set_location_assignment PIN_AY1   -to "rx_data_a_p[3]"       ; ## B12  FMC_RX7_P STXA_9_P
+set_location_assignment PIN_AY3   -to "rx_data_a_n[3]"       ; ## B13  FMC_RX7_N STXA_9_N
+set_location_assignment PIN_AV1   -to "rx_data_b_p[0]"       ; ##  C6  FMC_RX0_P STXB_3_P
+set_location_assignment PIN_AV3   -to "rx_data_b_n[0]"       ; ##  C7  FMC_RX0_N STXB_3_N
 set_location_assignment PIN_AT1   -to "rx_data_b_p[1]"       ; ##  A2  FMC_RX1_P STXB_2_P
 set_location_assignment PIN_AT3   -to "rx_data_b_n[1]"       ; ##  A3  FMC_RX1_N STXB_2_N
-set_location_assignment PIN_AP1   -to "rx_data_b_p[2]"       ; ##
-set_location_assignment PIN_AP3   -to "rx_data_b_n[2]"       ; ##
-set_location_assignment PIN_AM1   -to "rx_data_b_p[3]"       ; ##
-set_location_assignment PIN_AM3   -to "rx_data_b_n[3]"       ; ##
+set_location_assignment PIN_AP1   -to "rx_data_b_p[2]"       ; ##  A6  FMC_RX2_P STXB_5_P
+set_location_assignment PIN_AP3   -to "rx_data_b_n[2]"       ; ##  A7  FMC_RX2_N STXB_5_N
+set_location_assignment PIN_AM1   -to "rx_data_b_p[3]"       ; ## A10  FMC_RX3_P STXB_7_P
+set_location_assignment PIN_AM3   -to "rx_data_b_n[3]"       ; ## A11  FMC_RX3_N STXB_7_N
 
-set_location_assignment PIN_BE7   -to "tx_data_a_p[0]"       ; ## A35  FMC_TX4_P SRXA_5_P
-set_location_assignment PIN_BE10  -to "tx_data_a_n[0]"       ; ## A36  FMC_TX4_N SRXA_5_N
+set_location_assignment PIN_BE7   -to "tx_data_a_p[0]"       ; ## A34  FMC_TX4_P SRXA_5_P
+set_location_assignment PIN_BE10  -to "tx_data_a_n[0]"       ; ## A35  FMC_TX4_N SRXA_5_N
 set_location_assignment PIN_BC7   -to "tx_data_a_p[1]"       ; ## A38  FMC_TX5_P SRXA_1_P
 set_location_assignment PIN_BC10  -to "tx_data_a_n[1]"       ; ## A39  FMC_TX5_N SRXA_1_N
-set_location_assignment PIN_BA7   -to "tx_data_a_p[2]"       ; ##
-set_location_assignment PIN_BA10  -to "tx_data_a_n[2]"       ; ##
-set_location_assignment PIN_AW7   -to "tx_data_a_p[3]"       ; ##
-set_location_assignment PIN_AW10  -to "tx_data_a_n[3]"       ; ##
+set_location_assignment PIN_BA7   -to "tx_data_a_p[2]"       ; ## B36  FMC_TX6_P SRXA_3_P
+set_location_assignment PIN_BA10  -to "tx_data_a_n[2]"       ; ## B37  FMC_TX6_N SRXA_3_N
+set_location_assignment PIN_AW7   -to "tx_data_a_p[3]"       ; ## B32  FMC_TX7_P SRXA_7_P
+set_location_assignment PIN_AW10  -to "tx_data_a_n[3]"       ; ## B33  FMC_TX7_N SRXA_7_N
 set_location_assignment PIN_AU7   -to "tx_data_b_p[0]"       ; ##  C2  FMC_TX0_P SRXB_1_P
 set_location_assignment PIN_AU10  -to "tx_data_b_n[0]"       ; ##  C3  FMC_TX0_N SRXB_1_N
 set_location_assignment PIN_AR7   -to "tx_data_b_p[1]"       ; ## A22  FMC_TX1_P SRXB_7_P
 set_location_assignment PIN_AR10  -to "tx_data_b_n[1]"       ; ## A23  FMC_TX1_N SRXB_7_N
-set_location_assignment PIN_AN7   -to "tx_data_b_p[2]"       ; ##
-set_location_assignment PIN_AN10  -to "tx_data_b_n[2]"       ; ##
-set_location_assignment PIN_AL7   -to "tx_data_b_p[3]"       ; ##
-set_location_assignment PIN_AL10  -to "tx_data_b_n[3]"       ; ##
+set_location_assignment PIN_AN7   -to "tx_data_b_p[2]"       ; ## A26  FMC_TX2_P SRXB_10_P
+set_location_assignment PIN_AN10  -to "tx_data_b_n[2]"       ; ## A27  FMC_TX2_N SRXB_10_N
+set_location_assignment PIN_AL7   -to "tx_data_b_p[3]"       ; ## A30  FMC_TX3_P SRXB_3_P
+set_location_assignment PIN_AL10  -to "tx_data_b_n[3]"       ; ## A31  FMC_TX3_N SRXB_3_N
 
 # 64B66B has no SYNC~ wire, so all four sync pins go virtual and LA04/05/08/09
 # are left unconnected on the FMC.
