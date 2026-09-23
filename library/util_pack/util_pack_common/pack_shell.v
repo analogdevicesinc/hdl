@@ -427,10 +427,17 @@ module pack_shell #(
              * residual data. I.e. when ready is asserted rotate is 0.
              */
             {ready,rotate} <= rotate + enable_count + 1'b1;
-          end else begin
-            ready <= 1'b0;
-            rotate <= 'h0;
           end
+          /*
+           * No else branch on purpose. `ce_ctrl` low means no data moved, so
+           * the alignment must not move either: every other state element in
+           * this module freezes on a gap the same way. Clearing `ready` here
+           * instead would clear it one cycle too late to be restored, and the
+           * beat that arrives in the cycle right after a gap would be written
+           * into the output register without a write enable, so it would be
+           * lost. A gapless producer never takes this path at all, so its
+           * behaviour is unchanged.
+           */
         end
 
         assign data[0] = in_data;
