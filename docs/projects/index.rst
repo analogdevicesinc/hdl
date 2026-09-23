@@ -19,6 +19,7 @@ Contents
    :maxdepth: 1
 
    AD-QUADMXFE1-EBZ <ad_quadmxfe1_ebz/index>
+   AD-XBAND16-EBZ <ad_xband16_ebz/index>
    AD353XR <ad353xr/index>
    AD35XXR-EVB <ad35xxr_evb/index>
    AD4052-ARDZ <ad4052_ardz/index>
