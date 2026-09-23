@@ -81,3 +81,6 @@ set_input_delay -clock [get_clocks tx_device_clk] -add_delay\
   [get_ports {sysref_in*}]
 
 set_clock_groups -group rx_device_clk -group tx_device_clk -asynchronous
+
+set_false_path -quiet \
+  -through [get_nets -quiet -hierarchical -regexp {.*IOBUFDS_inst/(I|IBUFDISABLE|T)$}]
