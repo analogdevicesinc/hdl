@@ -91,6 +91,7 @@ Utilities
    cn0363/index
    common/ad_dds/index
    corundum/index
+   spi_slave/index
    util_axis_fifo/index
    util_axis_fifo_asym/index
    util_extract/index
