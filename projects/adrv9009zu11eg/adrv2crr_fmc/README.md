@@ -53,3 +53,21 @@ make CORUNDUM=1
 All of the binaries resulted from the build will be present in a folder called **CORUNDUM1**.
 
 Corresponding device tree: [zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-100-qsfp.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-100-qsfp.dts)
+
+#### PCIe 3.0 support
+
+This configuration ONLY, ADRV9009ZU11EG/ADRV2CRR-FMC, supports PCIe 3.0, with 8
+lanes, at a maximum rate of 8 GT/s, using Xilinx
+[XDMA](https://docs.amd.com/r/en-US/pg195-pcie-dma/Introduction) IP. All of the
+other parameters and configuration remain the same. To use this variant of the
+project and use the PCIe features, build the project using the following
+command:
+
+```
+make PCIE=1
+```
+All of the binaries resulted from the build will be present in a folder called **CORUNDUM1**.
+
+Corresponding device tree: -
+
+> **NOTE:** Corundum and PCIe variants of the project cannot be build together in the same design!
