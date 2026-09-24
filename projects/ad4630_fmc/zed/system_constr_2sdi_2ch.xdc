@@ -35,10 +35,13 @@
 # Constraints for 1 SDI per channel, 2 Channels configuration with reorder (NO_REORDER=0)
 # This results in 2 SDI lines total
 # input delays for MISO lines (SDO for the device)
-# data is latched on negative edge
+#
+# Table 4 (SPI Compatible Mode): tDSDO=5.6ns max, tHSDO=1.4ns min, SCK falling edge.
+# For CLK_MODE=1, system_constr_busy_clk.xdc overrides these with Table 3 values
+# and adds BUSY_clk (SCKOUT) constraints for source-synchronous DDR capture.
 
 set tsetup 5.6
-set thold 1.4
+set thold  1.4
 
 set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS25} [get_ports {ad463x_spi_sdi[0]}]       ; ## H07  FMC_LPC_LA02_P
 set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVCMOS25} [get_ports {ad463x_spi_sdi[1]}]       ; ## H10  FMC_LPC_LA04_P
