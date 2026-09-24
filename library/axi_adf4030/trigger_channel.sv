@@ -70,8 +70,7 @@ module trigger_channel (
   logic                    out;
   logic  [15:0]            trig_phase;
 
-  // trigger and bsync_event both lag by 3 cycles (synchroniser stages)
-  assign trig_phase = ((2 * bsync_ratio) - 5) - ch_phase;
+  assign trig_phase = ((2 * bsync_ratio) - 2) - ch_phase;
 
   always @* begin
     next_state = curr_state;
