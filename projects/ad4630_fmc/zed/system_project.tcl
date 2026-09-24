@@ -109,11 +109,6 @@ adi_project_files ad4630_fmc_zed [list \
   "system_constr.xdc" \
   "system_top.v" ]
 
-if {[get_env_param CLK_MODE 0] != 0} {
-  adi_project_files ad4630_fmc_zed [list \
-    "system_constr_busy_clk.xdc" ]
-}
-
 switch [get_env_param LANES_PER_CHANNEL 2] {
   1 {
     # For 1 lane per channel, check NUM_OF_CHANNEL
@@ -162,6 +157,13 @@ switch [get_env_param LANES_PER_CHANNEL 2] {
     adi_project_files ad4630_fmc_zed [list \
       "system_constr_4sdi_2ch.xdc" ]
   }
+}
+
+# CLK_MODE=1: override echo_sclk input delays (Table 3) and add BUSY_clk
+# constraints (Tables 5/6). Loaded after per-SDI files to override their values.
+if {[get_env_param CLK_MODE 0] != 0} {
+  adi_project_files ad4630_fmc_zed [list \
+    "system_constr_busy_clk.xdc" ]
 }
 
 adi_project_run ad4630_fmc_zed

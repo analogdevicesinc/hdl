@@ -70,8 +70,8 @@ set_output_delay -clock [get_clocks SCLK_clk] -max 1.500 [get_ports ad463x_spi_s
 set_output_delay -clock [get_clocks SCLK_clk] -min 1.500 [get_ports ad463x_spi_sdo]
 
 # relax the SDO path to help closing timing at high frequencies
-set_multicycle_path -setup -from [get_clocks spi_clk] -to [get_cells -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]}] 8
-set_multicycle_path -hold  -from [get_clocks spi_clk] -to [get_cells -hierarchical -filter {NAME=~*/data_sdo_shift_reg[*]}] 7
+set_multicycle_path -setup -from [get_clocks spi_clk] -to [get_cells -hierarchical -filter {NAME=~*data_sdo_shift_reg[*]}] 8
+set_multicycle_path -hold  -from [get_clocks spi_clk] -to [get_cells -hierarchical -filter {NAME=~*data_sdo_shift_reg[*]}] 7
 
 set_multicycle_path -setup -from [get_clocks spi_clk] -to [get_cells -hierarchical -filter NAME=~*/spi_ad463x_execution/inst/left_aligned_reg*] 8
 set_multicycle_path -hold  -from [get_clocks spi_clk] -to [get_cells -hierarchical -filter NAME=~*/spi_ad463x_execution/inst/left_aligned_reg*] 7
