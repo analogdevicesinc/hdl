@@ -42,6 +42,16 @@ set_false_path -to [get_cells -hier -filter {name =~ *up_tx_rst_done_m1_reg && I
 set_false_path -to [get_cells -hier -filter {name =~ *rx_rate_m1_reg* && IS_SEQUENTIAL}]
 set_false_path -to [get_cells -hier -filter {name =~ *tx_rate_m1_reg* && IS_SEQUENTIAL}]
 
+set_multicycle_path 2 -setup \
+  -from [get_cells -quiet -hier -filter {name =~ *rx_rate_m2_reg* && IS_SEQUENTIAL}]
+set_multicycle_path 1 -hold \
+  -from [get_cells -quiet -hier -filter {name =~ *rx_rate_m2_reg* && IS_SEQUENTIAL}]
+
+set_multicycle_path 2 -setup \
+  -from [get_cells -quiet -hier -filter {name =~ *tx_rate_m2_reg* && IS_SEQUENTIAL}]
+set_multicycle_path 1 -hold \
+  -from [get_cells -quiet -hier -filter {name =~ *tx_rate_m2_reg* && IS_SEQUENTIAL}]
+
 # sync bits i_sync_bits_tx_prbs_in
 set_false_path \
   -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
@@ -70,4 +80,3 @@ set_false_path \
 set_false_path \
   -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
     -filter {NAME =~ *i_sync_bits_bufstatus_out* && IS_SEQUENTIAL}]
-    
