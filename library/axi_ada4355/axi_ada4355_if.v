@@ -55,6 +55,7 @@ module axi_ada4355_if #(
   input fco_p,
   input fco_n,
   input sync_n,
+  input clkgen_rst,
   input aresetn,
 
   // delay interface(for IDELAY macros)
@@ -143,6 +144,16 @@ module axi_ada4355_if #(
   reg        data_err_lane_1_r;
   reg [15:0] test_pattern;
 
+  /*
+   * Two sources restart the receive path: sync_n from the pin, and clkgen_rst
+   * from ADI_REG_RSTN[1]. The latter powers up asserted, so the /4 divider is
+   * parked from configuration until software releases it. Without that the
+   * divider anchors its word boundary to whatever reaches the DCO pin first,
+   * which on a cold boot is a clock generator that has not been programmed yet.
+   */
+  wire serdes_rst_n_s;
+  assign serdes_rst_n_s = sync_n & ~clkgen_rst;
+
   IBUFGDS i_clk_in_ibuf(
     .I(dco_p),
     .IB(dco_n),
@@ -159,12 +170,13 @@ module axi_ada4355_if #(
 
       // CLR re-phases the /4 divider. Without it the ISERDES word boundary is
       // whatever the divider happened to pick the first time it saw a clock,
-      // which on a cold boot is before the clock chip is programmed. sync_n is
-      // asynchronous and external, so holding CLR cannot starve its own release.
+      // which on a cold boot is before the clock chip is programmed. Both reset
+      // sources are asynchronous to this clock, so holding CLR cannot starve
+      // its own release.
       BUFR #(
         .BUFR_DIVIDE("4")
       ) i_div_clk_buf (
-        .CLR(~sync_n),
+        .CLR(~serdes_rst_n_s),
         .CE(1'b1),
         .I(clk_in_s),
         .O(adc_clk_div));
@@ -274,8 +286,8 @@ module axi_ada4355_if #(
     .delay_rst(delay_rst),
     .delay_locked(delay_locked_frame));
 
-  always @(posedge adc_clk_div or negedge sync_n) begin
-    if(~sync_n) begin
+  always @(posedge adc_clk_div or negedge serdes_rst_n_s) begin
+    if(~serdes_rst_n_s) begin
       serdes_reset <= 10'b0000000110;
     end else begin
       serdes_reset <= {serdes_reset[8:0],1'b0};

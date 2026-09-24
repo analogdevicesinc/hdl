@@ -109,6 +109,7 @@ module axi_ada4355 #(
   wire        adc_clk_s;
   wire        adc_rst_s;
   wire        delay_rst;
+  wire        clkgen_rst_s;
   wire        adc_pn_err_s;
   wire        up_adc_pn_err_s;
   wire        up_adc_pn_oos_s;
@@ -218,7 +219,13 @@ module axi_ada4355 #(
   up_adc_common #(
     .ID(ID)
   ) i_up_adc_common (
-    .mmcm_rst(),
+    /*
+     * ADI_REG_RSTN[1]. Named for the MMCM that BUFR-clocked cores like this one
+     * do not have, but it is the only core reset generated from up_clk, so it is
+     * the only one that can hold the divider that produces adc_clk. It powers up
+     * asserted and is released by software, after the clock generator is locked.
+     */
+    .mmcm_rst(clkgen_rst_s),
     .adc_clk(adc_clk_s),
     .adc_rst(adc_rst_s),
     .adc_r1_mode(),
@@ -295,7 +302,8 @@ module axi_ada4355 #(
     .aresetn(up_rstn),
     .adc_pn_err(adc_pn_err_s),
     .enable_error(enable_error_s),
-    .sync_n(sync_n));
+    .sync_n(sync_n),
+    .clkgen_rst(clkgen_rst_s));
 
   // adc delay control
 
