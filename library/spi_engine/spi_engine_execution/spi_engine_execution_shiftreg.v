@@ -41,7 +41,9 @@ module spi_engine_execution_shiftreg #(
   parameter DATA_WIDTH = 8,
   parameter NUM_OF_SDIO = 1,
   parameter [1:0] SDI_DELAY = 2'b00,
-  parameter ECHO_SCLK = 0
+  parameter ECHO_SCLK = 0,
+  parameter DDR_EN = 0,
+  parameter FPGA_TECHNOLOGY = 0
 ) (
   input   clk,
   input   resetn,
@@ -72,9 +74,7 @@ module spi_engine_execution_shiftreg #(
   input           sdo_idle_state,
   input   [ 7:0]  left_aligned,
   input   [ 7:0]  last_bit_count,
-  input   [ 7:0]  latch_last_bit_count,
   input   [ 7:0]  ddr_last_bit_count,
-  input   [ 7:0]  ddr_latch_last_bit_count,
   input   [ 7:0]  sdo_lane_mask,
 
   input           ddr_en,
@@ -193,111 +193,102 @@ module spi_engine_execution_shiftreg #(
     wire last_sdi_bit_r;
     wire [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_latch;
 
-    reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_pos = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
-    reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_neg = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
-
-    // Posedge counter — counts SDR words when sdi_negedge=0,
-    // DDR half-words (trailing edge) when sdi_negedge=1 and ddr_en=1.
-    // sdi_negedge and ddr_en are stable during transfers (set by CONFIG).
-    wire [7:0] last_target_p  = (ddr_en & sdi_negedge) ? ddr_last_bit_count
-                                                        : last_bit_count;
-    wire [7:0] latch_target_p = (ddr_en & sdi_negedge) ? ddr_latch_last_bit_count
-                                                        : latch_last_bit_count;
+    // Posedge counter — uses DDR half-word target when posedge is trailing.
+    wire [7:0] last_target_p = (ddr_en & sdi_negedge) ? ddr_last_bit_count
+                                                       : last_bit_count;
 
     reg last_sdi_bit_p;
     reg [7:0] sdi_counter_p = 8'b0;
-    reg latch_sdi_p;
 
     always @(posedge echo_sclk or posedge cs_activate) begin
       if (cs_activate) begin
         sdi_counter_p  <= 8'b0;
         last_sdi_bit_p <= 1'b0;
-        latch_sdi_p    <= 1'b0;
       end else begin
-        latch_sdi_p    <= (sdi_counter_p == latch_target_p);
         last_sdi_bit_p <= (sdi_counter_p == last_target_p);
         sdi_counter_p  <= (sdi_counter_p == last_target_p) ? 8'b0 : sdi_counter_p + 1'b1;
       end
     end
 
-    // Negedge counter — counts SDR words when sdi_negedge=1,
-    // DDR half-words (trailing edge) when sdi_negedge=0 and ddr_en=1.
-    wire [7:0] last_target_n  = (ddr_en & ~sdi_negedge) ? ddr_last_bit_count
-                                                         : last_bit_count;
-    wire [7:0] latch_target_n = (ddr_en & ~sdi_negedge) ? ddr_latch_last_bit_count
-                                                         : latch_last_bit_count;
+    // Negedge counter — uses DDR half-word target when negedge is trailing.
+    wire [7:0] last_target_n = (ddr_en & ~sdi_negedge) ? ddr_last_bit_count
+                                                        : last_bit_count;
 
     reg last_sdi_bit_n;
     reg [7:0] sdi_counter_n = 8'b0;
-    reg latch_sdi_n;
 
     always @(negedge echo_sclk or posedge cs_activate) begin
       if (cs_activate) begin
         sdi_counter_n  <= 8'b0;
         last_sdi_bit_n <= 1'b0;
-        latch_sdi_n    <= 1'b0;
       end else begin
-        latch_sdi_n    <= (sdi_counter_n == latch_target_n);
         last_sdi_bit_n <= (sdi_counter_n == last_target_n);
         sdi_counter_n  <= (sdi_counter_n == last_target_n) ? 8'b0 : sdi_counter_n + 1'b1;
       end
     end
 
-    for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
+    for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin : g_sdi_shift_reg
 
-      reg [DATA_WIDTH-1:0] data_shift_p;
+      // IDDR captures DDR input at the IOB (OPPOSITE_EDGE mode).
+      // When DDR_EN=0, pass raw sdi through.
+      wire sdi_cap_p, sdi_cap_n;
+      if (DDR_EN) begin : g_iddr
+        ad_iddr #(
+          .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)
+        ) i_iddr (
+          .clk     (echo_sclk),
+          .data_in (sdi[i]),
+          .data_p  (sdi_cap_p),
+          .data_n  (sdi_cap_n));
+      end else begin : g_no_iddr
+        assign sdi_cap_p = sdi[i];
+        assign sdi_cap_n = sdi[i];
+      end
+
+      reg [DATA_WIDTH-1:0] data_shift_sdr_p;
+      reg [DATA_WIDTH-1:0] data_shift_ddr_p;
       always @(posedge echo_sclk or posedge cs_activate) begin
-        if (cs_activate)
-          data_shift_p <= 0;
-        else
-          data_shift_p <= {data_shift_p, sdi[i]};
+        if (cs_activate) begin
+          data_shift_sdr_p <= 0;
+          data_shift_ddr_p <= 0;
+        end else begin
+          data_shift_sdr_p <= {data_shift_sdr_p, sdi[i]};
+          data_shift_ddr_p <= {data_shift_ddr_p, sdi_cap_p};
+        end
       end
 
-      reg [DATA_WIDTH-1:0] data_shift_n;
+      reg [DATA_WIDTH-1:0] data_shift_sdr_n;
+      reg [DATA_WIDTH-1:0] data_shift_ddr_n;
       always @(negedge echo_sclk or posedge cs_activate) begin
-        if (cs_activate)
-          data_shift_n <= 0;
-        else
-          data_shift_n <= {data_shift_n, sdi[i]};
+        if (cs_activate) begin
+          data_shift_sdr_n <= 0;
+          data_shift_ddr_n <= 0;
+        end else begin
+          data_shift_sdr_n <= {data_shift_sdr_n, sdi[i]};
+          data_shift_ddr_n <= {data_shift_ddr_n, sdi_cap_n};
+        end
       end
 
-      // Both interleave patterns as combinational wires.
-      // sdi_negedge selects which one is latched at runtime.
-      wire [DATA_WIDTH-1:0] interleaved_p_leads;
-      wire [DATA_WIDTH-1:0] interleaved_n_leads;
-      for (j = 0; j < DATA_WIDTH/2; j = j + 1) begin : g_interleave
-        assign interleaved_p_leads[j*2+1] = data_shift_p[j];
-        assign interleaved_p_leads[j*2]   = (j > 0) ? data_shift_n[j-1] : sdi[i];
-
-        assign interleaved_n_leads[j*2+1] = data_shift_n[j];
-        assign interleaved_n_leads[j*2]   = (j > 0) ? data_shift_p[j-1] : sdi[i];
-      end
-
-      // Posedge latch: SDR posedge data OR DDR interleaved (negedge-leading,
-      // posedge is trailing)
-      always @(posedge echo_sclk) begin
-        if (latch_sdi_p)
-          sdi_data_pos[i*DATA_WIDTH+:DATA_WIDTH] <= ddr_en ? interleaved_n_leads
-                                                           : {data_shift_p[DATA_WIDTH-2:0], sdi[i]};
-      end
-
-      // Negedge latch: SDR negedge data OR DDR interleaved (posedge-leading,
-      // negedge is trailing)
-      always @(negedge echo_sclk) begin
-        if (latch_sdi_n)
-          sdi_data_neg[i*DATA_WIDTH+:DATA_WIDTH] <= ddr_en ? interleaved_p_leads
-                                                           : {data_shift_n[DATA_WIDTH-2:0], sdi[i]};
+      if (DDR_EN) begin : g_ddr_il
+        wire [DATA_WIDTH-1:0] interleaved;
+        for (j = 0; j < DATA_WIDTH/2; j = j + 1) begin : g_interleave
+          assign interleaved[j*2]   = (j == 0) ? (sdi_negedge ? sdi_cap_p : sdi_cap_n)
+                                               : (sdi_negedge ? data_shift_ddr_p[j-1] : data_shift_ddr_n[j-1]);
+          assign interleaved[j*2+1] = (j == 0) ? (sdi_negedge ? sdi_cap_n : sdi_cap_p)
+                                               : (sdi_negedge ? data_shift_ddr_n[j-1] : data_shift_ddr_p[j-1]);
+        end
+        assign sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] = ddr_en ? interleaved
+            : (sdi_negedge ? {data_shift_sdr_n[DATA_WIDTH-2:0], sdi[i]}
+                           : {data_shift_sdr_p[DATA_WIDTH-2:0], sdi[i]});
+      end else begin : g_sdr_il
+        assign sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] = sdi_negedge ? data_shift_sdr_n : data_shift_sdr_p;
       end
 
     end
 
-    // Output mux: SDR latches on the capture (primary) edge,
-    // DDR latches on the trailing (opposite) edge.
-    assign sdi_data_latch = (ddr_en ^ sdi_negedge) ? sdi_data_neg : sdi_data_pos;
     assign last_sdi_bit_r = (ddr_en ^ sdi_negedge) ? last_sdi_bit_n : last_sdi_bit_p;
 
-    // sdi_data_valid is synchronous to SPI clock, so synchronize the
-    // last_sdi_bit to SPI clock
+    // Synchronize last_sdi_bit to SPI clock domain
 
     reg [3:0] last_sdi_bit_m = 4'b0;
     always @(posedge clk) begin
@@ -310,7 +301,7 @@ module spi_engine_execution_shiftreg #(
 
     assign sdi_data = sdi_data_latch;
     assign last_sdi_bit = last_sdi_bit_r;
-    assign echo_last_bit =  !last_sdi_bit_m[3] && last_sdi_bit_m[2];
+    assign echo_last_bit = !last_sdi_bit_m[3] && last_sdi_bit_m[2];
 
     always @(posedge clk) begin
       if (sdi_enabled == 1'b1 && echo_last_bit) begin

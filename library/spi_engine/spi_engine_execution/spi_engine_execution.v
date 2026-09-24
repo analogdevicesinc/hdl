@@ -45,7 +45,8 @@ module spi_engine_execution #(
   parameter [0:0] SDO_DEFAULT = 1'b0,
   parameter ECHO_SCLK = 0,
   parameter [1:0] SDI_DELAY = 2'b00,
-  parameter DDR_EN = 0
+  parameter DDR_EN = 0,
+  parameter FPGA_TECHNOLOGY = 0
 ) (
   input clk,
   input resetn,
@@ -119,12 +120,10 @@ module spi_engine_execution #(
   reg echo_last_transfer;
   reg [7:0] word_length = DATA_WIDTH;
   reg [7:0] last_bit_count = DATA_WIDTH-1;
-  reg [7:0] latch_last_bit_count = DATA_WIDTH-2;
   reg [7:0] ddr_last_bit_count = (DATA_WIDTH/2)-1;
-  reg [7:0] ddr_latch_last_bit_count = (DATA_WIDTH/2)-2;
   reg [7:0] left_aligned = 8'b0;
   reg ddr_en = 1'b0;
-  reg sdi_negedge = DEFAULT_SPI_CFG[1] ^ DEFAULT_SPI_CFG[0];
+  wire sdi_negedge = cpol ^ cpha;
   // sdi_lane_mask: Stores the SDI lane configuration from REG_SDI_LANE_CONFIG
   // write commands (cmd[15:8] == 8'h23). While not directly used in this module,
   // the same command is intercepted by axi_spi_engine to configure sdi_fifo_tkeep_int,
@@ -192,7 +191,9 @@ module spi_engine_execution #(
     .DATA_WIDTH(DATA_WIDTH),
     .NUM_OF_SDIO(NUM_OF_SDIO),
     .SDI_DELAY(SDI_DELAY),
-    .ECHO_SCLK(ECHO_SCLK)
+    .ECHO_SCLK(ECHO_SCLK),
+    .DDR_EN(DDR_EN),
+    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY)
   ) shiftreg (
     .clk(clk),
     .resetn(resetn),
@@ -214,9 +215,7 @@ module spi_engine_execution #(
     .sdo_idle_state(sdo_idle_state),
     .left_aligned(left_aligned),
     .last_bit_count (last_bit_count),
-    .latch_last_bit_count (latch_last_bit_count),
     .ddr_last_bit_count (ddr_last_bit_count),
-    .ddr_latch_last_bit_count (ddr_latch_last_bit_count),
     .sdo_lane_mask(sdo_lane_mask),
     .ddr_en(ddr_en),
     .sdi_negedge(sdi_negedge),
@@ -239,6 +238,9 @@ module spi_engine_execution #(
       sdi_enabled <= cmd[9];
     end
   end
+
+  // When exec_transfer_cmd is false, sdo_enabled_io uses the registered sdo_enabled.
+  // When exec_transfer_cmd is true, sdo_enabled_io uses cmd[8] (lookahead).
   assign sdo_enabled_io = (exec_transfer_cmd) ? cmd[8] : sdo_enabled;
 
   always @(posedge clk) begin
@@ -271,7 +273,6 @@ module spi_engine_execution #(
       word_length    <= DATA_WIDTH;
       left_aligned   <= 0;
       ddr_en         <= 1'b0;
-      sdi_negedge    <= DEFAULT_SPI_CFG[1] ^ DEFAULT_SPI_CFG[0];
       sdi_lane_mask  <= ALL_ACTIVE_LANE_MASK;
       sdo_lane_mask  <= ALL_ACTIVE_LANE_MASK;
     end else begin
@@ -286,7 +287,6 @@ module spi_engine_execution #(
                                   three_wire     <= cmd[2];
                                   sdo_idle_state <= cmd[3];
                                   ddr_en         <= DDR_EN[0] & cmd[4];
-                                  sdi_negedge    <= cmd[5];
                                 end
           REG_WORD_LENGTH     : begin
                                   // the max value of this reg must be DATA_WIDTH
@@ -309,10 +309,8 @@ module spi_engine_execution #(
   always @(posedge clk) begin
     // we can calculate this from word_length (instead of cmd), with an extra cycle delay
     // because even in the worst case (transfer after config), we still have another cycle before using it
-    last_bit_count           <= word_length - 1; // needed when transfer_active goes high
-    latch_last_bit_count     <= word_length - 2;
+    last_bit_count           <= word_length - 1;
     ddr_last_bit_count       <= word_length[7:1] - 1;
-    ddr_latch_last_bit_count <= word_length[7:1] - 2;
   end
 
   always @(posedge clk) begin
@@ -453,11 +451,25 @@ module spi_engine_execution #(
   // The sdi_data_valid signal has inherent delays due to ECHO_SCLK and SCLK timing.
   // To handle backpressure, pending_sdi_data_valid is asserted when the last bit
   // is received and remains high until sdi_data_ready acknowledges the data.
+  //
+  // io_ready1 is split into two variants to break a critical timing path.
+  // The serial chain cmd -> exec_transfer_cmd -> sdo_enabled_io -> io_ready1
+  // is too deep when cmd comes from a Block RAM (FIFO) with high Tco.
+  //
+  // io_ready1_exec_xfer: used when exec_transfer_cmd is true.
+  //   Substitutes cmd[8] directly for sdo_enabled_io, so it can be computed
+  //   in parallel with exec_transfer_cmd (both derive from cmd bits).
+  //
+  // io_ready1: used when exec_transfer_cmd is false.
+  //   sdo_enabled_io resolves to the registered sdo_enabled, so no critical path.
+  wire io_ready1_exec_xfer =  (pending_sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
+                              (cmd[8] == 1'b0 || sdo_io_ready == 1'b1);
+
   assign io_ready1 =  (pending_sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
                       (sdo_enabled_io == 1'b0 || sdo_io_ready == 1'b1);
 
-  assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
-                     (sdo_enabled_io == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
+  assign io_ready2 =  (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
+                      (sdo_enabled_io == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
 
   always @(posedge clk) begin
     if (idle) begin
@@ -499,8 +511,8 @@ module spi_engine_execution #(
       wait_for_io <= 1'b0;
     end else begin
       if (exec_transfer_cmd) begin
-        wait_for_io <= ~io_ready1;
-        transfer_active <= io_ready1;
+        wait_for_io <= ~io_ready1_exec_xfer;
+        transfer_active <= io_ready1_exec_xfer;
       end else if (wait_for_io && io_ready1) begin
         wait_for_io <= 1'b0;
         transfer_active <= ~last_transfer;
