@@ -269,7 +269,8 @@ set_property  -dict {PACKAGE_PIN R29  IOSTANDARD LVCMOS12                       
 set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/I.*]
 set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/T.*]
 
-# USER_SLR_ASSIGNMENT and USER_CROSSING_SLR properties documented in UG912.
+
+# USER_SLR_ASSIGNMENT property documented in UG912.
 # Putting each of these TX IPs in a single SLR, since otherwise the tools would have a
 # tendency of splitting them across two SLRs (SLR1 and SLR2, respectively).
 set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical *util_apollo_upack*]
@@ -293,8 +294,8 @@ set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical *mode_*.gen_lane[
 set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical *mode_*.gen_lane[14].i_lane*]
 set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical *mode_*.gen_lane[15].i_lane*]
 
-# Make sure the i_all_buffer_ready_pipeline_stage circuit does not get merged with other pipeline stages.
-set_property DONT_TOUCH TRUE [get_cells -hierarchical *mode_64b66b.gen_lane[*].i_all_buffer_ready_pipeline_stage*]
+# Make sure that each i_all_buffer_ready_pipeline_stage circuit does not drive more than one output.
+set_property FORCE_MAX_FANOUT 1 [get_nets -hierarchical *mode_64b66b.gen_lane[*].all_buffer_ready_n_d]
 # These constraints are necessary since there are many i_all_buffer_ready_pipeline_stage input paths starting in one SLR
 # and going to another SLR. Also, there are many i_all_buffer_ready_pipeline_stage output paths going back to the original
 # SLR. Thus, putting i_all_buffer_ready_pipeline_stage in the SLR opposite to the output paths' SLR ensures that each
