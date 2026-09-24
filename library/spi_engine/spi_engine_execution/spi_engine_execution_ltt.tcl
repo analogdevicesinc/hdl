@@ -99,7 +99,8 @@ set ip [ipl::add_interface -ip $ip \
 set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
     "spi_engine_execution.v" \
     "spi_engine_execution_shiftreg.v" \
-    "spi_engine_execution_shiftreg_data_assemble.v" ]]
+    "spi_engine_execution_shiftreg_data_assemble.v" \
+    "../../common/ad_iddr.v" ]]
 
 set ip [ipl::set_parameter -ip $ip \
     -id DATA_WIDTH \
@@ -201,6 +202,17 @@ set ip [ipl::set_parameter -ip $ip \
     -title {DDR mode} \
     -default 0 \
     -options {[(True, 1), (False, 0)]} \
+    -output_formatter nostr \
+    -group1 {Custom clocking options} \
+    -group2 Config]
+
+set ip [ipl::set_parameter -ip $ip \
+    -id FPGA_TECHNOLOGY \
+    -type param \
+    -value_type int \
+    -conn_mod spi_engine_execution \
+    -title {FPGA technology} \
+    -default 201 \
     -output_formatter nostr \
     -group1 {Custom clocking options} \
     -group2 Config]

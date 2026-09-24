@@ -6,6 +6,7 @@
 
 LIBRARY_NAME := spi_engine_execution
 
+GENERIC_DEPS += ../../common/ad_iddr.v
 GENERIC_DEPS += spi_engine_execution.v
 GENERIC_DEPS += spi_engine_execution_shiftreg.v
 GENERIC_DEPS += spi_engine_execution_shiftreg_data_assemble.v
