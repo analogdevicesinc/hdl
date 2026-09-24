@@ -132,7 +132,14 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
 
-set_property strategy Flow_AreaOptimized_high [get_runs synth_1]
-set_property strategy Performance_NetDelay_high [get_runs impl_1]
+#set_property strategy Flow_AreaOptimized_high [get_runs synth_1]
+#set_property strategy Performance_NetDelay_high [get_runs impl_1]
+
+set_property STEPS.OPT_DESIGN.ARGS.DIRECTIVE ExploreSequentialArea [get_runs impl_1]
+set_property STEPS.PLACE_DESIGN.ARGS.DIRECTIVE SSI_HighUtilSLRs [get_runs impl_1]
+set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE AggressiveExplore [get_runs impl_1]
+set_property STEPS.ROUTE_DESIGN.TCL.POST {} [get_runs impl_1]
+set_property STEPS.ROUTE_DESIGN.ARGS.DIRECTIVE NoTimingRelaxation [get_runs impl_1]
+set_property -name {STEPS.ROUTE_DESIGN.ARGS.MORE OPTIONS} -value -tns_cleanup -objects [get_runs impl_1]
 
 adi_project_run ad_xband16_ebz_vcu118
