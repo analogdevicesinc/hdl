@@ -162,15 +162,23 @@ set bsync_stretch_reg [get_cells -hier \
 set_false_path -to   $bsync_stretch_reg
 set_false_path -from $bsync_stretch_reg
 
-set bsync_net [get_nets -of_objects [get_pins -hier \
-  -filter {NAME =~ *i_trigger_stretcher/trigger_sync1_reg/C}]]
+# sync_start gates the pulse with BSYNC itself, so it is asynchronous to
+# device_clk and only the trigger_channel synchronizer may capture it.
+set_false_path -to [get_cells -hier \
+  -filter {NAME =~ *i_channel/trig_r_reg && IS_SEQUENTIAL}]
+
+# The clock is defined on the register pins, not on the net: the same net
+# carries BSYNC as data to bsync_r (and to any SYSREF consumer outside the IP),
+# and a clock on the net would override their input delay constraints.
+set bsync_clk_pins [get_pins -hier \
+  -filter {NAME =~ *i_trigger_stretcher/trigger_sync*_reg/C}]
 set bsync_device_clk [get_clocks -of_objects [get_pins -hier \
   -filter {NAME =~ *i_bsync_gen/bsync_counter_reg[0]/C}]]
 
 create_clock -name adf4030_bsync_clk \
-  -period [get_property PERIOD $bsync_device_clk] $bsync_net
+  -period [get_property PERIOD $bsync_device_clk] $bsync_clk_pins
 # driven from the IOBUFDS through fabric, not through a clock buffer
-set_property CLOCK_DEDICATED_ROUTE FALSE $bsync_net
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets -of_objects $bsync_clk_pins]
 # free running external signal: asynchronous to every other clock
 set_clock_groups -asynchronous -group [get_clocks adf4030_bsync_clk]
 <: } :>

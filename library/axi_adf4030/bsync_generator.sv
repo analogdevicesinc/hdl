@@ -67,7 +67,8 @@ module bsync_generator (
   logic                    b_edge;
   logic                    b_captured;
   logic                    bsync_buf;
-  (* ASYNC_REG = "TRUE" *) logic bsync_r  = 1'b0;
+  (* IOB = "TRUE" *)       logic bsync_r  = 1'b0;
+  (* IOB = "TRUE" *)       logic bsync_out_r = 1'b0;
   (* ASYNC_REG = "TRUE" *) logic bsync_d1 = 1'b0;
   (* ASYNC_REG = "TRUE" *) logic bsync_d2 = 1'b0;
   logic                    bsync_d3 = 1'b0;
@@ -195,19 +196,53 @@ module bsync_generator (
   assign bsync_ready = calib_done;
   assign bsync_ratio = ratio_counter;
 
+  /*
+   * bsync_counter is referenced to b_edge, 4 cycles after bsync_r captures the
+   * pad. Toggling BSYNC_LEAD cycles early (4 + 1 for bsync_out_r) launches
+   * the regenerated edge on the same device_clk edge that captures
+   * the received one.
+   * BSYNC_RATIO must be >= 3.
+   */
+  localparam BSYNC_LEAD = 5;
+
+  wire [16:0] bsync_period = {ratio_counter, 1'b0};
+  wire [16:0] toggle_full  = (bsync_period >= BSYNC_LEAD) ? bsync_period - BSYNC_LEAD : (bsync_period * 2) - BSYNC_LEAD;
+  wire [16:0] toggle_half  = (ratio_counter >= BSYNC_LEAD) ? ratio_counter - BSYNC_LEAD : ratio_counter + bsync_period - BSYNC_LEAD;
+
+  /*
+   * bsync_event is predicted from the counter so it lands 3 cycles before
+   * b_edge, where the single-stage edge detector used to be. The b_edge
+   * pipeline would otherwise eat 3 cycles of the trigger_channel phase range.
+   * Compared one cycle early because the pulse is registered. Gated by
+   * b_captured so no events are produced while the FPGA drives BSYNC.
+   */
+  wire [16:0] event_point  = bsync_period - 4;
+
+  logic bsync_event_r = 1'b0;
+
+  always @(posedge clk) begin
+    bsync_event_r <= curr_state == BSYNC_GEN && b_captured && bsync_counter == event_point;
+  end
+
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
       bsync_buf <= 1'b1;
     end else begin
       if (calib_done) begin
-        if (bsync_counter == (ratio_counter - 1) || bsync_counter == (ratio_counter * 2) - 1) begin
-          bsync_buf <= !bsync_buf;
+        if (bsync_counter == toggle_half) begin
+          bsync_buf <= 1'b0;
+        end else if (bsync_counter == toggle_full) begin
+          bsync_buf <= 1'b1;
         end
       end
     end
   end
 
-  assign bsync_out = (curr_state == BSYNC_GEN && !disable_internal_bsync) ? bsync_buf : 1'b0;
+  always @(posedge clk) begin
+    bsync_out_r <= (curr_state == BSYNC_GEN && !disable_internal_bsync) ? bsync_buf : 1'b0;
+  end
+
+  assign bsync_out = bsync_out_r;
 
   always @(posedge clk) begin
     direction_r <= direction_s;
@@ -250,6 +285,6 @@ module bsync_generator (
   assign bsync_alignment_error = bsync_misaligned;
   assign bsync_captured = b_captured;
   assign bsync_state = curr_state;
-  assign bsync_event = b_edge;
+  assign bsync_event = bsync_event_r;
 
 endmodule
