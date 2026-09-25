@@ -603,6 +603,8 @@ proc ad_mem_hpc0_interconnect {p_clk p_name} {
 
   global sys_zynq
 
+  if {($sys_zynq != 2) && ($p_name eq "sys_ps8/S_AXI_HPC0")} {return}
+  if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HPC0" $p_clk $p_name}
 }
 
@@ -616,6 +618,8 @@ proc ad_mem_hpc1_interconnect {p_clk p_name} {
 
   global sys_zynq
 
+  if {($sys_zynq != 2) && ($p_name eq "sys_ps8/S_AXI_HPC1")} {return}
+  if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HPC1" $p_clk $p_name}
 }
 
