@@ -256,6 +256,14 @@ module util_hbm #(
     wire s_axis_xfer_req;
     wire m_axis_xfer_req;
 
+    // Null-beat filter on the write (into memory) path. cpack marks stale beats
+    // with TKEEP=0; REMOVE_NULL_BEAT_EN drops whole-null beats here so they are
+    // never written to memory.
+    wire                            wr_filt_valid;
+    wire                            wr_filt_ready;
+    wire [SRC_DATA_WIDTH_PER_M-1:0] wr_filt_data;
+    wire                            wr_filt_last;
+
     reg rd_needs_reset_d = 1'b0;
 
     // 2Gb (256MB) per segment
@@ -275,6 +283,39 @@ module util_hbm #(
 
     // Overflow whenever s_axis_ready deasserts during capture (RX_PATH)
     assign wr_overflow_loc[i] =  TX_RX_N[0] ? 1'b0 : s_axis_xfer_req & ~s_axis_ready_loc[i];
+
+    // Drop whole-null (TKEEP=0) beats before they reach the write DMAC, so the
+    // stale lead-in samples marked by cpack are never stored in memory.
+    util_axis_fifo #(
+      .DATA_WIDTH(SRC_DATA_WIDTH_PER_M),
+      .ADDRESS_WIDTH(2),
+      .ASYNC_CLK(0),
+      .M_AXIS_REGISTERED(0),
+      .REMOVE_NULL_BEAT_EN(1),
+      .TLAST_EN(1),
+      .TKEEP_EN(1)
+    ) i_wr_null_filter (
+      .s_axis_aclk(s_axis_aclk),
+      .s_axis_aresetn(s_axis_aresetn & wr_request_enable),
+      .s_axis_valid(s_axis_valid),
+      .s_axis_ready(s_axis_ready_loc[i]),
+      .s_axis_full(),
+      .s_axis_data(s_axis_data[SRC_DATA_WIDTH_PER_M*i+:SRC_DATA_WIDTH_PER_M]),
+      .s_axis_room(),
+      .s_axis_tkeep(s_axis_keep[(SRC_DATA_WIDTH_PER_M/8)*i+:(SRC_DATA_WIDTH_PER_M/8)]),
+      .s_axis_tlast(s_axis_last),
+      .s_axis_almost_full(),
+
+      .m_axis_aclk(s_axis_aclk),
+      .m_axis_aresetn(s_axis_aresetn & wr_request_enable),
+      .m_axis_valid(wr_filt_valid),
+      .m_axis_ready(wr_filt_ready),
+      .m_axis_data(wr_filt_data),
+      .m_axis_level(),
+      .m_axis_empty(),
+      .m_axis_tkeep(),
+      .m_axis_tlast(wr_filt_last),
+      .m_axis_almost_empty());
 
     // AXIS to AXI3
     axi_dmac_transfer #(
@@ -394,11 +435,11 @@ module util_hbm #(
       .m_sg_axi_rresp(2'b00),
 
       .s_axis_aclk(s_axis_aclk),
-      .s_axis_ready(s_axis_ready_loc[i]),
-      .s_axis_valid(s_axis_valid),
-      .s_axis_data(s_axis_data[SRC_DATA_WIDTH_PER_M*i+:SRC_DATA_WIDTH_PER_M]),
+      .s_axis_ready(wr_filt_ready),
+      .s_axis_valid(wr_filt_valid),
+      .s_axis_data(wr_filt_data),
       .s_axis_user(s_axis_user),
-      .s_axis_last(s_axis_last),
+      .s_axis_last(wr_filt_last),
       .s_axis_xfer_req(s_axis_xfer_req),
 
       .m_axis_aclk(1'b0),
