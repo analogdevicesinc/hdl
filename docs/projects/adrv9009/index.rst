@@ -438,7 +438,7 @@ Here you can find the quick start guides available for these evaluation boards:
    * - Evaluation board
      - Zynq UltraScale+ MP
    * - ADRV9009/ADRV9008
-     - :external+system-level:ref:`adrv9009 quickstart zynqmp`
+     - :external+system-level:ref:`adrv9009 quickstart`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -510,7 +510,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :external+system-level:ref:`ADRV9009 Linux driver page <iio-transceiver adrv9009>`
+- :external+linux:ref:`ADRV9009 Linux driver page <adrv9009>`
 
 - :git-linux:`ADRV9009 + ZCU102 device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9009-jesd204-fsm.dts>`
 - :git-linux:`ADRV9009 + ZC706 device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9009-jesd204-fsm.dts>`
