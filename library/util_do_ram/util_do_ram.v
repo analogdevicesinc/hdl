@@ -305,6 +305,7 @@ module util_do_ram #(
     .ADDRESS_WIDTH(RD_FIFO_ADDRESS_WIDTH),
     .ASYNC_CLK(0),
     .M_AXIS_REGISTERED(0),
+    .REMOVE_NULL_BEAT_EN(1),
     .TLAST_EN(1),
     .TKEEP_EN(1)
   ) i_rd_fifo (
