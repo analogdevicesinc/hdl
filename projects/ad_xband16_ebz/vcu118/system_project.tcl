@@ -77,6 +77,7 @@ adi_project ad_xband16_ebz_vcu118 0 [list \
 adi_project_files ad_xband16_ebz_vcu118 [list \
   "system_constr.xdc"\
   "timing_constr.xdc"\
+  "placement_constr.xdc"\
   "../common/hsci_phy_top.sv"\
   "$ad_hdl_dir/library/common/ad_3w_spi.v" \
   "$ad_hdl_dir/library/common/ad_rst.v"\
