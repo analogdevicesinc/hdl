@@ -126,12 +126,7 @@ module util_upack2_impl #(
   assign data_rd_en = fifo_rd_en[0];
 
   assign ce = s_axis_valid & data_rd_en;
-  /*
-   * Gate s_axis_ready with ~reset_data to immediately stop accepting data
-   * when the core is resetting. Without this the delayed 'ready' signal
-   * would allow data to enter during reset, causing incorrect output.
-   */
-  assign s_axis_ready = ready & ce & ~reset_data;
+  assign s_axis_ready = ready & ce;
 
   wire data_rd_en_delayed;
   wire s_axis_valid_delayed;
@@ -197,9 +192,17 @@ module util_upack2_impl #(
     .data_in (out_data),
     .data_out (deinterleaved_data));
 
+  /*
+   * `reset_data_delayed` lags `reset_data`, so words read just before a reset
+   * (or before the first one, while `reset_data` still has its power-up value)
+   * would leave the network after the reset was released. Suppress output
+   * while either copy is asserted.
+   */
+  wire reset_out = reset_data | reset_data_delayed;
+
   always @(posedge clk) begin
     /* In case of an underflow or reset the output vector should be zeroed */
-    if (reset_data_delayed == 1'b1 ||
+    if (reset_out == 1'b1 ||
         (data_rd_en_delayed == 1'b1 && s_axis_valid_delayed == 1'b0)) begin
       fifo_rd_data <= 'h00;
     end else if (data_rd_en_delayed == 1'b1) begin
@@ -209,8 +212,8 @@ module util_upack2_impl #(
 
   always @(posedge clk) begin
     if (data_rd_en_delayed == 1'b1) begin
-      fifo_rd_valid <= s_axis_valid_delayed & ~reset_data_delayed;
-      fifo_rd_underflow <= ~(s_axis_valid_delayed & ~reset_data_delayed);
+      fifo_rd_valid <= s_axis_valid_delayed & ~reset_out;
+      fifo_rd_underflow <= ~(s_axis_valid_delayed & ~reset_out);
     end else begin
       fifo_rd_valid <= 1'b0;
       fifo_rd_underflow <= 1'b0;
