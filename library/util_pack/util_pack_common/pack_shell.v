@@ -290,12 +290,6 @@ module pack_shell #(
       wire ce_ctrl;
 
       /*
-       * Extended version of the `enable` signal that takes SAMPLES_PER_CHANNEL
-       * into account.
-       */
-      wire [NUM_OF_SAMPLES-1:0] samples_enable;
-
-      /*
        * Used to connect the different intermediary stages of the routing
        * network. There can be up to three sub-networks.
        */
@@ -308,70 +302,105 @@ module pack_shell #(
       wire [SAMPLE_ADDRESS_WIDTH-1:0] prefix_count_s[0:NUM_OF_SAMPLES];
 
       /*
-       * Used for the vectorized approach when PARALLEL_OR_SERIAL_N == 1
-       */
-      wire [SAMPLE_ADDRESS_WIDTH-1:0] prefix_count_tmp[0:LOG2_NUM_OF_SAMPLES+1][0:NUM_OF_SAMPLES-1];
-
-      /*
-       * Samples are interleaved, so the sample mask is just the channel mask
-       * concatenated with itself SAMPLES_PER_CHANNEL times.
-       */
-      assign samples_enable = {SAMPLES_PER_CHANNEL{enable_int}};
-
-      /*
        * Control pipeline is active and should compute the next state either
        * during the startup phase or when a output data set is consumed.
        */
       assign ce_ctrl = startup_ctrl | ce;
 
-      if (PARALLEL_OR_SERIAL_N == 1) begin
-        /*
-        * Calculate the prefix sum using a vectorized approach.
-        * This way we should have at most log2(NUM_OF_SAMPLES)
-        * adders in series for the rightmost element and even less
-        * for the elements before it since we just propagate it to
-        * the last row from where it was calculated.
-        */
+      /*
+       * The prefix sum is computed in two register stages to keep its adders
+       * out of a single cycle. The samples are split into blocks of
+       * PREFIX_BLOCK. The first stage registers the running count of disabled
+       * samples within each block and the second stage adds the count of all
+       * preceding blocks. The first stage is computed from the same
+       * expression that loads `enable_int`, so its registers always hold the
+       * value `enable_int` would produce and `prefix_count_s` keeps its
+       * original timing. PARALLEL_OR_SERIAL_N selects a log-depth or a serial
+       * adder structure inside both stages.
+       */
+      localparam PREFIX_BLOCK_LOG2 = (LOG2_NUM_OF_SAMPLES + 1) / 2;
+      localparam PREFIX_BLOCK = 2**PREFIX_BLOCK_LOG2;
+      localparam PREFIX_NUM_BLOCKS = (NUM_OF_SAMPLES + PREFIX_BLOCK - 1) / PREFIX_BLOCK;
+      localparam PREFIX_NUM_BLOCKS_LOG2 = PREFIX_NUM_BLOCKS > 1 ? $clog2(PREFIX_NUM_BLOCKS) : 0;
 
+      wire [NUM_OF_CHANNELS-1:0] enable_next = reset == 1'b1 ? {NUM_OF_CHANNELS{1'b0}} : enable;
+
+      /*
+       * Samples are interleaved, so the sample mask is just the channel mask
+       * concatenated with itself SAMPLES_PER_CHANNEL times.
+       */
+      wire [NUM_OF_SAMPLES-1:0] samples_enable_next = {SAMPLES_PER_CHANNEL{enable_next}};
+
+      /* Running count of disabled samples inside each block, inclusive. */
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_count_s[0:PREFIX_BLOCK_LOG2][0:NUM_OF_SAMPLES-1];
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_count_next[0:NUM_OF_SAMPLES-1];
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_count[0:NUM_OF_SAMPLES-1];
+
+      /* Number of disabled samples in all blocks preceding a block. */
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_offset_s[0:PREFIX_NUM_BLOCKS_LOG2][0:PREFIX_NUM_BLOCKS-1];
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_offset[0:PREFIX_NUM_BLOCKS-1];
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_total[0:PREFIX_NUM_BLOCKS-1];
+
+      genvar i, j;
+      for (i = 0; i < NUM_OF_SAMPLES; i = i + 1) begin: gen_block_count
         /*
-         * The first row holds a 1 for every disabled sample. Do not write it
-         * as ~samples_enable[j]: the operand is widened to the row width
-         * before the inversion, so every entry would become -1 or -2.
+         * Do not write this as ~samples_enable_next[i]: the operand is
+         * widened to the full width before the inversion.
          */
-        genvar j;
-        for (j = 0; j < NUM_OF_SAMPLES; j = j + 1) begin: samples_enable_copy
-          assign prefix_count_tmp[0][j] = samples_enable[j] ? 1'b0 : 1'b1;
-        end
+        assign block_count_s[0][i] = samples_enable_next[i] ? 1'b0 : 1'b1;
 
-        /*
-        * E.g: for samples_enable = '1 1 1 1 1 1 1 1':
-        * prefix_count_tmp[0] = '1 1 1 1 1 1 1 1' (copy of samples_enable)
-        * prefix_count_tmp[1] = '1 2 2 2 2 2 2 2'
-        * prefix_count_tmp[2] = '1 2 3 4 4 4 4 4'
-        * prefix_count_tmp[3] = '1 2 3 4 5 6 7 8'
-        */
-        genvar k;
-        for (j = 1; j < LOG2_NUM_OF_SAMPLES + 1; j = j + 1) begin: prefix_count_tmp_lines
-          for (k = 0; k < NUM_OF_SAMPLES; k = k + 1) begin: prefix_count_tmp_cols
-            if (k < 2 ** (j-1)) begin
-              assign prefix_count_tmp[j][k] = prefix_count_tmp[j-1][k];
-            end else begin
-              assign prefix_count_tmp[j][k] = prefix_count_tmp[j-1][k] + prefix_count_tmp[j-1][k - 2 ** (j-1)];
-            end
+        for (j = 1; j <= PREFIX_BLOCK_LOG2; j = j + 1) begin: gen_row
+          if (PARALLEL_OR_SERIAL_N == 1 && i % PREFIX_BLOCK >= 2**(j-1)) begin
+            assign block_count_s[j][i] = block_count_s[j-1][i] + block_count_s[j-1][i-2**(j-1)];
+          end else if (PARALLEL_OR_SERIAL_N == 0 && j == PREFIX_BLOCK_LOG2 && i % PREFIX_BLOCK != 0) begin
+            assign block_count_s[j][i] = block_count_next[i-1] + block_count_s[0][i];
+          end else begin
+            assign block_count_s[j][i] = block_count_s[j-1][i];
           end
         end
+
+        assign block_count_next[i] = block_count_s[PREFIX_BLOCK_LOG2][i];
+
+        /* Power-up value matches `enable_int` = 0, i.e. all samples disabled */
+        reg [SAMPLE_ADDRESS_WIDTH-1:0] block_count_r = (i % PREFIX_BLOCK) + 1;
+
+        always @(posedge clk) begin
+          block_count_r <= block_count_next[i];
+        end
+
+        assign block_count[i] = block_count_r;
+      end
+
+      for (i = 0; i < PREFIX_NUM_BLOCKS; i = i + 1) begin: gen_block_offset
+        localparam LAST = (i + 1) * PREFIX_BLOCK - 1 < NUM_OF_SAMPLES ? (i + 1) * PREFIX_BLOCK - 1 : NUM_OF_SAMPLES - 1;
+
+        /* Row 0 holds the total of the preceding block, shifted by one. */
+        if (i == 0) begin
+          assign block_offset_s[0][i] = 'h0;
+        end else begin
+          assign block_offset_s[0][i] = block_total[i-1];
+        end
+        assign block_total[i] = block_count[LAST];
+
+        for (j = 1; j <= PREFIX_NUM_BLOCKS_LOG2; j = j + 1) begin: gen_row
+          if (PARALLEL_OR_SERIAL_N == 1 && i >= 2**(j-1)) begin
+            assign block_offset_s[j][i] = block_offset_s[j-1][i] + block_offset_s[j-1][i-2**(j-1)];
+          end else if (PARALLEL_OR_SERIAL_N == 0 && j == PREFIX_NUM_BLOCKS_LOG2 && i > 0) begin
+            assign block_offset_s[j][i] = block_offset[i-1] + block_offset_s[0][i];
+          end else begin
+            assign block_offset_s[j][i] = block_offset_s[j-1][i];
+          end
+        end
+
+        assign block_offset[i] = block_offset_s[PREFIX_NUM_BLOCKS_LOG2][i];
       end
 
       /* First channel has no other channels before it */
       assign prefix_count_s[0] = 'h0;
 
-      genvar i;
       for (i = 0; i < NUM_OF_SAMPLES; i = i + 1) begin: gen_prefix_count
-        if (PARALLEL_OR_SERIAL_N == 1) begin
-          assign prefix_count_s[i+1] = prefix_count_tmp[LOG2_NUM_OF_SAMPLES][i];
-        end else begin
-          assign prefix_count_s[i+1] = prefix_count_s[i] + (samples_enable[i] ? 1'b0 : 1'b1);
-        end
+        assign prefix_count_s[i+1] = block_offset[i / PREFIX_BLOCK] + block_count[i];
+
         if (i < 2 || NUM_OF_CHANNELS <= 2) begin
           /* This will only be one bit, no need to register it */
           always @(prefix_count_s[i]) begin
