@@ -1,0 +1,93 @@
+// ***************************************************************************
+// ***************************************************************************
+// Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+//
+// In this HDL repository, there are many different and unique modules, consisting
+// of various HDL (Verilog or VHDL) components. The individual modules are
+// developed independently, and may be accompanied by separate and unique license
+// terms.
+//
+// The user should read each of these license terms, and understand the
+// freedoms and responsibilities that he or she has by using this source/core.
+//
+// This core is distributed in the hope that it will be useful, but WITHOUT ANY
+// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+// A PARTICULAR PURPOSE.
+//
+// Redistribution and use of source or resulting binaries, with or without modification
+// of this file, are permitted under one of the following two license terms:
+//
+//   1. The GNU General Public License version 2 as published by the
+//      Free Software Foundation, which can be found in the top level directory
+//      of this repository (LICENSE_GPL2), and also online at:
+//      <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
+//
+// OR
+//
+//   2. An ADI specific BSD license, which can be found in the top level directory
+//      of this repository (LICENSE_ADIBSD), and also on-line at:
+//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
+//      This will allow to generate bit files and not release the source code,
+//      as long as it attaches to an ADI device.
+//
+// ***************************************************************************
+// ***************************************************************************
+
+`timescale 1ns/100ps
+
+// Accumulator with set and overflow
+
+`default_nettype none
+
+module tx_fsrc_sample_en_gen #(
+  parameter ACCUM_WIDTH = 64,
+  parameter NUM_SAMPLES = 8
+)(
+  input  wire                                     clk,
+  input  wire                                     en,
+
+  output logic [NUM_SAMPLES-1:0]                  sample_en,
+  input  wire  [NUM_SAMPLES-1:0][ACCUM_WIDTH-1:0] set_val,
+  input  wire                                     set,
+  input  wire  [ACCUM_WIDTH-1:0]                  add_val,
+  input  wire  [ACCUM_WIDTH-1:0]                  step_val,
+  input  wire  [7:0]                              group_beats_m1,
+  input  wire  [7:0]                              group_start
+);
+
+  // Apollo's rate match FIFO takes a conv_clk worth of samples as all valid or
+  // all invalid, so the accumulators advance once per group of beats.
+
+  logic [7:0] group_cnt = 8'd0;
+  logic       group_add;
+
+  assign group_add = en && (group_cnt == group_beats_m1);
+
+  always_ff @(posedge clk) begin
+    if (set) begin
+      group_cnt <= group_start;
+    end else if (en) begin
+      group_cnt <= group_add ? 8'd0 : group_cnt + 1'b1;
+    end
+  end
+
+  genvar ii;
+
+  for(ii=0; ii<NUM_SAMPLES; ii=ii+1) begin : accum_gen
+    accum_set #(
+      .WIDTH  (ACCUM_WIDTH)
+    ) i_accum_set (
+      .clk         (clk),
+      .set_val     (set_val[ii]),
+      .set         (set),
+      .add_val     (add_val),
+      .step_val    (step_val),
+      .add         (group_add),
+      .accum       (),
+      .overflow    (sample_en[ii])
+    );
+end
+
+endmodule
+
+`default_nettype wire

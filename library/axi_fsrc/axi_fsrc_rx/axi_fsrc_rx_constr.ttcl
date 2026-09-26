@@ -1,0 +1,20 @@
+###############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+
+# The register map is written from the AXI clock and read in the data clock,
+# which have no relation to each other, so the tool derives a requirement from
+# whichever edges happen to line up. The synchroniser is the whole point of the
+# crossing.
+set_property ASYNC_REG TRUE [get_cells -quiet -hier *cdc_sync_stage*_reg* \
+  -filter {IS_SEQUENTIAL}]
+
+set_false_path -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+  -filter {IS_SEQUENTIAL}]

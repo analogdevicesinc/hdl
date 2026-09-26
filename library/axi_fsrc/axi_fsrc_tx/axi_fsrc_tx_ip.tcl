@@ -1,0 +1,53 @@
+###############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+source ../../../scripts/adi_env.tcl
+source ../../scripts/adi_ip_xilinx.tcl
+
+adi_ip_create axi_fsrc_tx
+adi_ip_files axi_fsrc_tx [list \
+  "$ad_hdl_dir/library/common/ad_rst.v" \
+  "$ad_hdl_dir/library/common/up_axi.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_event.v" \
+  "accum_set.sv" \
+  "fifo_sync_2deep.v" \
+  "tx_fsrc_make_holes.sv" \
+  "tx_fsrc_sample_en_gen.sv" \
+  "tx_fsrc.sv" \
+  "axi_fsrc_tx_regmap.sv" \
+  "axi_fsrc_tx.sv" \
+]
+
+adi_ip_properties axi_fsrc_tx
+adi_ip_ttcl axi_fsrc_tx "axi_fsrc_tx_constr.ttcl"
+set_property display_name "ADI AXI FSRC TX" [ipx::current_core]
+set_property description "ADI AXI FSRC TX" [ipx::current_core]
+
+adi_ip_add_core_dependencies [list \
+  analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
+
+adi_init_bd_tcl
+
+proc add_reset {name polarity} {
+  set reset_intf [ipx::infer_bus_interface $name xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]]
+  set reset_polarity [ipx::add_bus_parameter "POLARITY" $reset_intf]
+  set_property value $polarity $reset_polarity
+}
+
+ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface s_axi_aclk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
+add_reset reset ACTIVE_HIGH
+add_reset s_axi_aresetn ACTIVE_LOW
+
+ipx::add_bus_parameter ASSOCIATED_BUSIF [ipx::get_bus_interfaces s_axi_aclk -of_objects [ipx::current_core]]
+set_property value s_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF -of_objects [ipx::get_bus_interfaces s_axi_aclk -of_objects [ipx::current_core]]]
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
+
+ipx::save_core [ipx::current_core]

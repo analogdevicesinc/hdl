@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SOURCE="tx_fsrc_tb.v"
+SOURCE+=" ../tx_fsrc.sv"
+SOURCE+=" ../tx_fsrc_make_holes.sv"
+SOURCE+=" ../tx_fsrc_sample_en_gen.sv"
+SOURCE+=" ../accum_set.sv"
+SOURCE+=" ../fifo_sync_2deep.v"
+
+cd `dirname $0`
+source ../../../common/tb/run_tb.sh -g2005-sv
