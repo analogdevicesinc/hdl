@@ -69,6 +69,12 @@ module pack_shell #(
   localparam TOTAL_DATA_WIDTH = CHANNEL_DATA_WIDTH * NUM_OF_CHANNELS;
   localparam NUM_OF_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
   localparam LOG2_NUM_OF_SAMPLES = $clog2(NUM_OF_SAMPLES);
+  /*
+   * Number of copies of the routing network control registers. Two copies
+   * measurably help large configurations; four add enough control fanout to
+   * make timing worse.
+   */
+  localparam CTRL_REPLICAS = NUM_OF_SAMPLES >= 32 && SAMPLE_DATA_WIDTH % 2 == 0 ? 2 : 1;
 
   // Function to calculate pipeline latency for a given number of MUX stages.
   function integer calc_pipeline_latency;
@@ -534,7 +540,8 @@ module pack_shell #(
           .NUM_STAGES (1),
           .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH),
           .PIPELINE_STAGES (PIPELINE_STAGES),
-          .PIPELINE_OFFSET (0)
+          .PIPELINE_OFFSET (0),
+          .CTRL_REPLICAS (CTRL_REPLICAS)
         ) i_ext_ctrl_interconnect (
           .clk (clk),
           .ce_ctrl (ce_ctrl),
@@ -642,7 +649,8 @@ module pack_shell #(
             .NUM_STAGES (NUM_STAGES),
             .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH),
             .PIPELINE_STAGES (PIPELINE_STAGES),
-            .PIPELINE_OFFSET (PIPELINE_OFFSET)
+            .PIPELINE_OFFSET (PIPELINE_OFFSET),
+            .CTRL_REPLICAS (CTRL_REPLICAS)
           ) i_ctrl_interconnect (
             .clk (clk),
             .ce_ctrl (ce_ctrl),
