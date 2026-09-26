@@ -196,9 +196,18 @@ module pack_shell #(
       wire out_sync_int;
       wire [NUM_OF_SAMPLES-1:0] out_valid_int;
 
+      /*
+       * Unpack must produce an output word a fixed number of cycles after
+       * each read, whether or not input data was available, so its routing
+       * network is a pure retiming that advances every clock; the consumer
+       * delays its read strobes by TOTAL_PIPELINE_LATENCY clocks. `ready` then
+       * refers to the unpipelined input side and must not be delayed.
+       */
+      wire pipe_ce = PACK ? ce : 1'b1;
+
       // Ce-gated pipeline delay for ready signal
       // TOTAL_PIPELINE_LATENCY stages of ce-gated delay to match data pipeline
-      if (TOTAL_PIPELINE_LATENCY == 0) begin: gen_ready_comb
+      if (TOTAL_PIPELINE_LATENCY == 0 || PACK == 0) begin: gen_ready_comb
         assign ready = ready_int;
       end else begin: gen_ready_pipe
         (* shreg_extract = "no" *) reg [TOTAL_PIPELINE_LATENCY-1:0] ready_sr = 'h0;
@@ -500,7 +509,7 @@ module pack_shell #(
         ) i_ext_ctrl_interconnect (
           .clk (clk),
           .ce_ctrl (ce_ctrl),
-          .ce (ce),
+          .ce (pipe_ce),
 
           .rotate ({rotate_msb,rotate}),
           .prefix_count (ext_prefix_count),
@@ -608,7 +617,7 @@ module pack_shell #(
           ) i_ctrl_interconnect (
             .clk (clk),
             .ce_ctrl (ce_ctrl),
-            .ce (ce),
+            .ce (pipe_ce),
 
             .rotate (rotate),
             .prefix_count (prefix_count),
