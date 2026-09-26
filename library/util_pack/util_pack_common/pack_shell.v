@@ -324,10 +324,14 @@ module pack_shell #(
         * the last row from where it was calculated.
         */
 
-        /* Copy the samples_enable to the first row to make addressing it easier */
+        /*
+         * The first row holds a 1 for every disabled sample. Do not write it
+         * as ~samples_enable[j]: the operand is widened to the row width
+         * before the inversion, so every entry would become -1 or -2.
+         */
         genvar j;
         for (j = 0; j < NUM_OF_SAMPLES; j = j + 1) begin: samples_enable_copy
-          assign prefix_count_tmp[0][j] = ~samples_enable[j];
+          assign prefix_count_tmp[0][j] = samples_enable[j] ? 1'b0 : 1'b1;
         end
 
         /*
