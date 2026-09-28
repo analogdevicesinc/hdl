@@ -168,7 +168,7 @@ module axi_jesd204_rx_regmap_tb;
     for (i = 0; i < 1024; i = i + 1)
       expected_reg_mem[i] <= 'h00;
     /* Non zero power-on-reset values */
-    set_reset_reg_value('h00, 32'h00010761); /* PCORE version register */
+    set_reset_reg_value('h00, 32'h00010861); /* PCORE version register */
     set_reset_reg_value('h0c, 32'h32303452); /* PCORE magic register */
     set_reset_reg_value('h10, NUM_LANES); /* Number of lanes */
     set_reset_reg_value('h18, NUM_LINKS); /* Number of links */
@@ -299,6 +299,8 @@ module axi_jesd204_rx_regmap_tb;
     check_all_registers();
     write_reg_and_update('h214, 32'h03);
     check_all_registers();
+    write_reg_and_update('h214, 32'h0f); /* header mode */
+    check_all_registers();
 
     /* Check links enable */
     write_reg_and_update('h218, {NUM_LINKS{1'b1}});
@@ -308,15 +310,28 @@ module axi_jesd204_rx_regmap_tb;
     write_reg_and_update('h240, 32'h103fc);
     check_all_registers();
 
+    /* SYSREF LMFC offset reads back as written, upper bits reserved */
+    write_reg('h104, 32'hffffff81);
+    expected_reg_mem['h104/4] <= 32'h81;
+    check_all_registers();
+
+
     /* Reset core */
     write_reg_and_update('hc0, 32'h0);
+    check_all_registers();
+
+    /* Error statistics mask, including the FEC event bits; only writable
+     * while the core is out of reset */
+    write_reg_and_update('h244, 32'h1ff00);
     check_all_registers();
 
     /* Should be read-only when core is out of reset */
     invert_register('h200); /* lanes enable */
     invert_register('h210); /* octets per frame, octets per multiframe */
+    invert_register('h214); /* header mode, char replacement, scrambler */
     invert_register('h218); /* links enable */
     invert_register('h240); /* char replacement, scrambler */
+    invert_register('h104); /* SYSREF LMFC offset */
 
     check_all_registers();
 
