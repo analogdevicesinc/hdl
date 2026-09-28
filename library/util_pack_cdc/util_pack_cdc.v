@@ -60,6 +60,10 @@ module util_pack_cdc #(
 
   wire xfer_req_s;
 
+  // Registered so the gearbox and FSRC resets are driven from a flop that
+  // Vivado can replicate, not from the gate combining the three sources.
+  reg device_resetn_r = 1'b0;
+
   sync_bits #(
     .NUM_OF_BITS (1),
     .ASYNC_CLK (1)
@@ -69,7 +73,11 @@ module util_pack_cdc #(
     .out_resetn (device_aresetn),
     .out_bits (xfer_req_s));
 
-  assign device_resetn = device_aresetn & ~adc_rst & xfer_req_s;
+  always @(posedge device_clk) begin
+    device_resetn_r <= device_aresetn & ~adc_rst & xfer_req_s;
+  end
+
+  assign device_resetn = device_resetn_r;
 
   sync_bits #(
     .NUM_OF_BITS (NUM_OF_ENABLES),
