@@ -66,7 +66,7 @@ module jesd204_rx_header #(
   output valid_eomb,
   output valid_eoemb,
   output valid_fec,
-  // Received header data qualified by valid_eomb
+  // Received header data qualified by valid_eomb (fec by valid_fec)
   output [11:0] crc12,
   output [2:0] crc3,
   output [25:0] fec,
@@ -220,7 +220,10 @@ module jesd204_rx_header #(
 
   always @(posedge clk) begin
     event_invalid_header <= (~state[BIT_EMB_INIT]) && (header[0] == header[1]);
-    event_unexpected_eomb <= (~state[BIT_EMB_INIT]) && (sh_count[4:0] != 0 && eomb);
+    // FEC parity bits are unconstrained and regularly contain the EoMB
+    // pattern, so an off-boundary EoMB is only an error in the other modes.
+    event_unexpected_eomb <= (~state[BIT_EMB_INIT]) && (cfg_header_mode != 2'd2) &&
+                             (sh_count[4:0] != 0 && eomb);
     event_unexpected_eoemb <= (~state[BIT_EMB_INIT]) && invalid_eoemb;
   end
 
