@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 // Short identifier: ADIJESD204
 //
 // The ADI JESD204 Core is released under the following license, which is
@@ -49,68 +49,95 @@
 `timescale 1ns / 100ps
 `default_nettype none
 
+// Checks jesd204_fec_encode against a bit-serial division of each 2048-bit
+// block by g(x). data_in[0] is the first bit of a word and eomb marks the
+// last word of a block, as the encoder expects.
+
 module tb_jesd204_fec_encode;
-
-  localparam FEC_WIDTH = 26;
   localparam DATA_WIDTH = 64;
-
-  // localparam INPUT_DATA_WIDTH = 64;
-  // localparam logic [INPUT_DATA_WIDTH-1:0] DATA_VALUE = 64'h8001020305050423;
-  localparam INPUT_DATA_WIDTH = 2048;
-  localparam logic [INPUT_DATA_WIDTH-1:0] DATA_VALUE = {1'b1, 2047'b0};
+  localparam [25:0] G_LOW = (1 << 21) | (1 << 17) | (1 << 9) | (1 << 4) | 1;
+  localparam NUM_BLOCKS = 60;
 
   parameter VCD_FILE = {"tb_jesd204_fec_encode.vcd"};
   `include "tb_base.v"
 
-  logic [INPUT_DATA_WIDTH-1:0]    DATA_VALUE_REVERSED;
-  logic [DATA_WIDTH-1:0]          data;
+  logic [25:0]            fec;
+  logic                   rst = 1'b1;
+  logic                   eomb = 1'b0;
+  logic [DATA_WIDTH-1:0]  data_in = '0;
+  logic [25:0]            rem = '0;
+  logic [25:0]            exp_fec = '0;
+  logic                   check = 1'b0;
+  logic                   check_d = 1'b0;
+  logic [25:0]            exp_fec_d = '0;
+  int                     cnt = 0;
+  int                     blocks = 0;
+  int                     errors = 0;
 
-  logic [FEC_WIDTH-1:0]           fec;
-  logic                           rst;
-  logic                           shift_en;
-  logic [DATA_WIDTH-1:0]          data_in;
-
-  int                             data_in_cnt;
-  int ii;
-
-  always #5 clk = ~clk;
+  function automatic logic [25:0] div_word(input logic [25:0] r, input logic [DATA_WIDTH-1:0] w);
+    logic fb;
+    for (int j = 0; j < DATA_WIDTH; j++) begin
+      fb = r[25] ^ w[j];
+      r = {r[24:0], 1'b0} ^ (fb ? G_LOW : 26'd0);
+    end
+    return r;
+  endfunction
 
   initial begin
-    // Shift data in MSb-first by reversing the data
-    for(ii = 0; ii < INPUT_DATA_WIDTH; ii = ii + 1) begin
-      DATA_VALUE_REVERSED[ii] = DATA_VALUE[INPUT_DATA_WIDTH-1-ii];
-    end
-    rst = 1'b1;
-    #100ns;
-    rst = 1'b0;
+    repeat (4) @(posedge clk);
+    rst <= 1'b0;
   end
 
-  always_ff @(posedge clk) begin
-    if(rst) begin
-      shift_en <= 1'b0;
-      data <= DATA_VALUE_REVERSED;
-      data_in_cnt <= '0;
-    end else begin
-      if(data_in_cnt < INPUT_DATA_WIDTH) begin
-        data_in <= data[0+:DATA_WIDTH];
-        data <= data >> DATA_WIDTH;
-        shift_en <= 1'b1;
-        data_in_cnt <= data_in_cnt + DATA_WIDTH;
-      end else begin
-        shift_en <= 1'b0;
+  always @(posedge clk) begin
+    // fec is valid one edge after the encoder samples eomb
+    if (check_d) begin
+      if (fec !== exp_fec_d) begin
+        $display("block %0d: fec %h, expected %h", blocks, fec, exp_fec_d);
+        errors = errors + 1;
+      end
+      blocks = blocks + 1;
+    end
+    check_d = check;
+    exp_fec_d = exp_fec;
+    check = 1'b0;
+
+    if (!rst) begin
+      data_in <= {$urandom, $urandom};
+      eomb <= (cnt % 32) == 31;
+      cnt <= cnt + 1;
+    end
+
+    if (blocks == NUM_BLOCKS) begin
+      if (errors != 0) failed <= 1'b1;
+      $display("%0d blocks, %0d errors", NUM_BLOCKS, errors);
+      if (errors == 0)
+        $display("SUCCESS");
+      else
+        $display("FAILED");
+      $finish;
+    end
+  end
+
+  always @(negedge clk) begin
+    if (!rst && cnt > 0) begin
+      rem = div_word(rem, data_in);
+      if (eomb) begin
+        exp_fec = rem;
+        rem = '0;
+        check = 1'b1;
       end
     end
   end
 
   jesd204_fec_encode #(
-    .DATA_WIDTH     (DATA_WIDTH)
+    .DATA_WIDTH  (DATA_WIDTH)
   ) jesd204_fec_encode (
     .fec         (fec),
     .clk         (clk),
     .rst         (rst),
-    .shift_en    (shift_en),
-    .data_in     (data_in)
-  );
+    .shift_en    (~rst),
+    .eomb        (eomb),
+    .data_in     (data_in));
 
 endmodule
 
