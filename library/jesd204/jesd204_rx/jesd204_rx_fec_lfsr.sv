@@ -50,7 +50,6 @@
 
 // JESD204C RX FEC DECODER LFSR
 module jesd204_rx_fec_lfsr #(
-  localparam LFSR_WIDTH = 26,
   parameter MAX_SHIFT_CNT = 64
 ) (
   // One cycle after shift_en = 1,
@@ -58,19 +57,20 @@ module jesd204_rx_fec_lfsr #(
   //   data_out[MAX_SHIFT_CNT-1:shift_cnt+1] is undefined
   output logic [MAX_SHIFT_CNT-1:0]               data_out,
   // Value of the shift register updated one cycle after shift_en is asserted
-  output logic [LFSR_WIDTH:1]                    shift_reg,
+  output logic [26:1]                            shift_reg,
   // Value of the shift register if shift_en is asserted for each value of shift_cnt from 1 to MAX_SHIFT_CNT
-  output logic [LFSR_WIDTH:1]                    shift_reg_next[MAX_SHIFT_CNT-1:0],
+  output logic [26:1]                            shift_reg_next[MAX_SHIFT_CNT-1:0],
   input  wire                                    clk,
   input  wire                                    rst,
   input  wire                                    load_en,
-  input  wire  [LFSR_WIDTH:1]                    load_data,
+  input  wire  [26:1]                            load_data,
   input  wire                                    shift_en,
   // Number of bits to shift - 1
   input  wire  [$clog2(MAX_SHIFT_CNT)-1:0]       shift_cnt,
   input  wire  [MAX_SHIFT_CNT-1:0]               data_in
 );
 
+  localparam LFSR_WIDTH = 26;
   localparam [LFSR_WIDTH:1] RESET_VAL = {LFSR_WIDTH{1'b0}};
 
   // 𝑥^26 + 𝑥^21 + 𝑥^17 + 𝑥^9 + 𝑥^4 + 1
@@ -92,7 +92,8 @@ module jesd204_rx_fec_lfsr #(
 
   function automatic [LFSR_WIDTH:1] fec_decode_galois_next(input [LFSR_WIDTH:1] cur, input next_data_in);
     int ii;
-    reg x_26 = cur[1];
+    reg x_26;
+    x_26 = cur[1];
     fec_decode_galois_next[LFSR_WIDTH] = next_data_in ^ x_26;
     for(ii = LFSR_WIDTH-1; ii > 0; ii=ii-1) begin : shift_reg_gen
       fec_decode_galois_next[ii] = cur[ii+1] ^ (x_26 & FEC_POLYNOMIAL_1[ii]) ^ (next_data_in & FEC_POLYNOMIAL_2[ii]);
