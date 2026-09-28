@@ -76,6 +76,7 @@ module jesd204_fec_decode #(
   localparam BUFFER_ADDR_WIDTH = $clog2(BUFFER_DEPTH);
   localparam NUM_BLOCKS_WIDTH = $clog2(BUFFER_NUM_BLOCKS);
   localparam CYCLE_WIDTH = $clog2(BLOCK_CYCLE_CNT);
+  localparam PARITY_TRAP_CNT = FEC_WIDTH-1;
 
   logic [FEC_WIDTH-1:0]                       fec_in_reversed;
   logic [FEC_WIDTH:1]                         data_in_syndrome;
@@ -105,6 +106,12 @@ module jesd204_fec_decode #(
   logic [DATA_WIDTH-1:0]                      error;
   logic                                       any_error_trapped;
   logic                                       any_error;
+  logic                                       first_error_trapped;
+  logic                                       first_error_trapped_d;
+  logic                                       first_error_d;
+  logic [FEC_WIDTH:1]                         parity_syndrome_next[PARITY_TRAP_CNT-1:0];
+  logic [PARITY_TRAP_CNT-1:0]                 parity_trapped;
+  logic [PARITY_TRAP_CNT-1:0]                 parity_error;
   logic                                       trapped_error_sticky;
   logic                                       error_sticky;
   logic                                       trapped_error_sticky_comb;
@@ -267,9 +274,39 @@ module jesd204_fec_decode #(
     assign error[ii] = error_syndrome_next_d[ii][1];
   end
 
+  // error_trapped[ii] corrects bits ii+1 and up, so a burst starting at bit 0
+  // of the block is trapped by the loaded syndrome itself, before any shift.
+  // codeword_syndrome still holds that value while eomb_d[1] is high.
+  assign first_error_trapped = codeword_syndrome[1] && ~|(codeword_syndrome[26:10]);
+
+  // Bursts starting in the parity bits (codeword bits 2049-2073) need no data
+  // correction but must still count as trapped. Continue shifting the syndrome
+  // left after the last data block (2048 shifts) for the remaining positions;
+  // the results are valid while eomb_d[1] is high.
+  jesd204_rx_fec_lfsr #(
+    .MAX_SHIFT_CNT      (PARITY_TRAP_CNT)
+  ) parity_lfsr (
+    .data_out           (),
+    .shift_reg          (),
+    .shift_reg_next     (parity_syndrome_next),
+    .clk                (clk),
+    .rst                (rst),
+    .load_en            (eomb),
+    .load_data          (error_syndrome_next[DATA_WIDTH-1]),
+    .shift_en           (1'b0),
+    .shift_cnt          ('0),
+    .data_in            ('0));
+
+  for(ii = 0; ii < PARITY_TRAP_CNT; ii = ii + 1) begin : parity_trap_gen
+    assign parity_trapped[ii] = parity_syndrome_next[ii][1] && ~|(parity_syndrome_next[ii][26:10]);
+    assign parity_error[ii] = parity_syndrome_next[ii][1];
+  end
+
   always @(posedge clk) begin
-    any_error_trapped <= |error_trapped;
-    any_error <= |error;
+    first_error_trapped_d <= eomb_d[1] && first_error_trapped;
+    first_error_d <= eomb_d[1] && codeword_syndrome[1];
+    any_error_trapped <= |error_trapped || first_error_trapped_d || (eomb_d[1] && |parity_trapped);
+    any_error <= |error || first_error_d || (eomb_d[1] && |parity_error);
   end
 
   // Shift syndromes to align with data
@@ -290,7 +327,7 @@ module jesd204_fec_decode #(
   // Save remaining error bits to use next cycle
   always @(posedge clk) begin
     if(eomb_d[1]) begin
-      error_bits_prev <= '0;
+      error_bits_prev <= first_error_trapped ? codeword_syndrome[MAX_BURST_LEN:1] : '0;
     end else begin
       error_bits_prev <= error_bits[DATA_WIDTH+:MAX_BURST_LEN];
     end
