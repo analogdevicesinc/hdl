@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export SIMULATOR=icarus
+export SIMULATOR=${SIMULATOR:-icarus}
 
 SOURCE="tb_gearbox_equiv.sv"
 SOURCE+=" ../jesd204_common/gearbox_64b66b.v"

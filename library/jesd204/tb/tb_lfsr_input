@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export SIMULATOR=modelsim
+export SIMULATOR=${SIMULATOR:-modelsim}
 
 SOURCE="tb_lfsr_input.sv"
 SOURCE+=" ../jesd204_common/lfsr_input.sv"
