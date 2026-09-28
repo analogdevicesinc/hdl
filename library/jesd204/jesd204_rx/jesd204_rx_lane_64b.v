@@ -204,20 +204,37 @@ module jesd204_rx_lane_64b #(
 
   assign err_cnt_rst = reset || ctrl_err_statistics_reset;
 
+  genvar j;
+
   if(ENABLE_FEC) begin : gen_fec
+    wire [63:0] fec_data_in;
+    wire [63:0] fec_data_out_rev;
+    wire fec_eomb;
+
+    // The decoder shifts data_in[0] first and expects eomb with the last
+    // block of the multiblock; bit 63 is the first bit on the wire and
+    // valid_eomb only asserts one block later, with the first block of the
+    // next multiblock.
+    for (j = 0; j < 64; j = j + 1) begin: g_fec_data_rev
+      assign fec_data_in[j] = phy_data[63-j];
+      assign fec_data_out[j] = fec_data_out_rev[63-j];
+    end
+
+    assign fec_eomb = emb_lock && (sh_count[4:0] == 5'd31);
+
     jesd204_fec_decode #(
       .DATA_WIDTH (64)
     ) jesd204_fec_decode (
-      .data_out              (fec_data_out),
+      .data_out              (fec_data_out_rev),
       .data_out_valid        (fec_data_out_valid),
       .trapped_error_flag    (fec_trapped_error_flag),
       .untrapped_error_flag  (fec_untrapped_error_flag),
       .clk                   (clk),
       .rst                   (reset),
-      .eomb                  (eomb),
+      .eomb                  (fec_eomb),
       .fec_in_valid          (valid_fec),
       .fec_in                (fec_received),
-      .data_in               (phy_data));
+      .data_in               (fec_data_in));
 
     assign fec_en = cfg_header_mode == 2'd2;
     assign scram_data_in = fec_en ? fec_data_out : phy_data;
