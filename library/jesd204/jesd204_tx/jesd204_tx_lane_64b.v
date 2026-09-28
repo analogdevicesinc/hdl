@@ -136,6 +136,15 @@ module jesd204_tx_lane_64b #(
     .crc12(crc12));
 
   if(ENABLE_FEC) begin : gen_fec
+    wire [63:0] fec_data_in;
+
+    // The encoder shifts data_in[0] first and expects eomb with the last
+    // block of the multiblock; bit 63 is the first bit on the wire and
+    // scrambled_data_d1 holds the last block while lmc_edge_d2 is high.
+    for (i = 0; i < 64; i = i + 1) begin: g_fec_data_in
+      assign fec_data_in[i] = scrambled_data_d1[63-i];
+    end
+
     jesd204_fec_encode #(
       .DATA_WIDTH     (64)
     ) jesd204_fec_encode (
@@ -144,7 +153,7 @@ module jesd204_tx_lane_64b #(
       .rst         (~tx_ready),
       .shift_en    (tx_ready_d2),
       .eomb        (lmc_edge_d2),
-      .data_in     (scrambled_data));
+      .data_in     (fec_data_in));
   end else begin : gen_no_fec
     assign fec = 26'b0;
   end
