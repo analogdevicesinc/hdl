@@ -335,7 +335,7 @@ module jesd204_up_common #(
         /* 00-09 */ up_cfg_octets_per_multiframe
       };
       12'h85: up_rdata = {
-        /* 04-31 */ 30'h00, /* Reserved for future additions */
+        /* 04-31 */ 28'h00, /* Reserved for future additions */
         /* 03-02 */ up_cfg_header_mode, /* 0 - CRC12 ; 1 - CRC3; 2 - FEC; 3 - CMD */
         /*    01 */ up_cfg_disable_char_replacement, /* Disable character replacement */
         /*    00 */ up_cfg_disable_scrambler /* Disable scrambler */
