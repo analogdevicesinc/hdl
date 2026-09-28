@@ -149,7 +149,7 @@ module jesd204_up_rx #(
       /* 02-09 */ up_cfg_buffer_delay, /* Buffer release delay */
       /* 00-01 */ 2'b00 /* Data path width alignment */
     };
-    12'h91: up_rdata <= {
+    12'h91: up_rdata = {
       /* 17-31 */ 15'h00, /* Reserved for future additions */
       /* 08-16 */ up_ctrl_err_statistics_mask,
       /* 01-07 */ 7'h0,
