@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -48,6 +48,7 @@ module util_ext_sync #(
   output reg sync_armed = 1'b0
 );
 
+  reg sync_in_d0 = 1'b0;
   reg sync_in_d1 = 1'b0;
   reg sync_in_d2 = 1'b0;
   reg ext_sync_arm_d1 = 1'b0;
@@ -58,7 +59,8 @@ module util_ext_sync #(
     ext_sync_arm_d1 <= ext_sync_arm;
     ext_sync_disarm_d1 <= ext_sync_disarm;
 
-    sync_in_d1 <= sync_in ;
+    sync_in_d0 <= sync_in;
+    sync_in_d1 <= sync_in_d0;
     sync_in_d2 <= sync_in_d1;
 
     if (ENABLED == 1'b0) begin

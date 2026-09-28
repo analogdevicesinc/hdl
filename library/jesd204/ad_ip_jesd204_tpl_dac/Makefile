@@ -37,6 +37,7 @@ XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += ../../xilinx/common/up_clock_mon_constr.xdc
 XILINX_DEPS += ../../xilinx/common/up_xfer_cntrl_constr.xdc
 XILINX_DEPS += ../../xilinx/common/up_xfer_status_constr.xdc
+XILINX_DEPS += ../../xilinx/common/util_ext_sync_constr.xdc
 XILINX_DEPS += ad_ip_jesd204_tpl_dac_ip.tcl
 
 INTEL_DEPS += ../../intel/common/ad_mul.v
