@@ -9,7 +9,7 @@ ENDTITLE
 REG
 0x00
 VERSION
-Version of the peripheral. Follows semantic versioning. Current version 1.03.a.
+Version of the peripheral. Follows semantic versioning. Current version 1.07.a.
 ENDREG
 
 FIELD
@@ -19,7 +19,7 @@ RO
 ENDFIELD
 
 FIELD
-[15:8] 0x00000003
+[15:8] 0x00000007
 VERSION_MINOR
 RO
 ENDFIELD
@@ -332,16 +332,17 @@ SYSREF LMFC offset
 ENDREG
 
 FIELD
-[31:10] 0x00000000
+[31:8] 0x00000000
 RESERVED
 RO
 ENDFIELD
 
 FIELD
-[9:0] 0x00000000
+[7:0] 0x00000000
 SYSREF_LMFC_OFFSET
 RW
-Offset between SYSREF event and internal LMFC event in octets.
+Offset between SYSREF event and internal LMFC event, in device clock cycles
+(beats of the transport layer data path width).
 ENDFIELD
 
 ############################################################################################
@@ -437,9 +438,18 @@ JESD204B link configuration.
 ENDREG
 
 FIELD
-[31:2] 0x00000000
+[31:4] 0x00000000
 RESERVED
 RO
+ENDFIELD
+
+FIELD
+[3:2] 0x00000000
+HEADER_MODE
+RW
+Sync header usage (0 = CRC-12, 1 = CRC-3, 2 = FEC, 3 = stand-alone command channel).
+CRC-3 and the command channel are not implemented. FEC requires the core to be built
+with ENABLE_FEC=1. Valid for 64B/66B link. Available starting from version 1.07.a;
 ENDFIELD
 
 FIELD
