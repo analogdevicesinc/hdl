@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 // Short identifier: ADIJESD204
 //
 // The ADI JESD204 Core is released under the following license, which is
@@ -46,41 +46,64 @@
 // ***************************************************************************
 // ***************************************************************************
 
-
 `timescale 1ns / 100ps
 `default_nettype none
 
-module tb_link_layer_fec;
-  localparam NUM_LANES=2;
-  localparam NUM_LINKS=1;
+// JESD204C TX -> RX loopback with FEC enabled on both sides.
+//
+// Directed mode (RANDOM_BURSTS = 0) sends fixed data patterns and injects one
+// 2-bit burst; random mode sends random data with one random 1..MAX_BURST_LEN
+// bit burst on lane 0 in every other multiblock. Bursts are contiguous on the
+// wire (bit 63 of a data word is sent first), stay inside one multiblock and
+// are only injected once the link is in DATA, so each must be counted exactly
+// once by the lane 0 error counter, with all error sources unmasked.
+
+module tb_link_layer_fec #(
+  parameter RANDOM_BURSTS = 0,
+  parameter MAX_BURST_LEN = 9,
+  parameter NUM_INPUT_PIPELINE = 1
+);
+  localparam NUM_LANES = 2;
+  localparam NUM_LINKS = 1;
   localparam SCR = 0;
   localparam DATA_PATH_WIDTH = 8;
   localparam DATA_WIDTH = DATA_PATH_WIDTH*8;
 
-  localparam INPUT_DATA_WIDTH = 2048*9*2;
-  localparam INPUT_DATA_CYCLES = INPUT_DATA_WIDTH/DATA_WIDTH;
-  localparam logic [INPUT_DATA_WIDTH-1:0] DATA_VALUE = {2{{2048{1'b1}}, 1'b1, 2047'b0, {64{32'h12345678}}, {2048{1'b1}}, 2047'b0, 1'b1, {64{32'hABCDEF01}}, {64{32'h23456789}}, {2048{1'b1}}, 1'b1, 2047'b0}};
-  localparam ERROR_CYCLE = (32*8)+4;    // Cycle of decoder data input to corrupt
-  // localparam RECOVERABLE_ERROR_BITS = 64'h1FF000;
-  localparam RECOVERABLE_ERROR_BITS = 64'h8000000000000000;
-  localparam UNRECOVERABLE_ERROR_BITS = 64'h1FFFFF;
-  localparam ERROR_BITS =  RECOVERABLE_ERROR_BITS; // Bits of decoder input data to corrupt
-  localparam NEXT_ERROR_BITS = 64'h1;
-  // localparam NEXT_ERROR_BITS = 64'h0000000000000000;
-  localparam REPORT_GOOD_DATA = 1'b1;
+  localparam DIRECTED_DATA_WIDTH = 2048*9*2;
+  localparam logic [DIRECTED_DATA_WIDTH-1:0] DATA_VALUE = {2{{2048{1'b1}}, 1'b1, 2047'b0, {64{32'h12345678}}, {2048{1'b1}}, 2047'b0, 1'b1, {64{32'hABCDEF01}}, {64{32'h23456789}}, {2048{1'b1}}, 1'b1, 2047'b0}};
+  localparam INPUT_DATA_CYCLES = RANDOM_BURSTS ? 32*240 : DIRECTED_DATA_WIDTH/DATA_WIDTH;
+
+  // Directed burst: bit 0 of one word and bit 63 of the next, i.e. the last
+  // bit of a word and the first bit of the following word on the wire.
+  localparam DIRECTED_ERROR_WORD = 4;
+  localparam [DATA_WIDTH-1:0] DIRECTED_ERROR_BITS = 64'h1;
+  localparam [DATA_WIDTH-1:0] DIRECTED_NEXT_ERROR_BITS = 64'h8000000000000000;
+
+  // Stop injecting early enough for the last bursts to be decoded and counted
+  localparam INJECT_STOP_CYCLE = INPUT_DATA_CYCLES - 32*2;
+  localparam MAX_RX_OFFSET = 32*12;
+  // The directed patterns repeat within two multiblocks, so match three
+  localparam MATCH_LEN = 96;
+  localparam NUM_WINDOWS = INPUT_DATA_CYCLES/32 + 64;
 
   parameter VCD_FILE = {"tb_link_layer_fec.vcd"};
+  `define TIMEOUT 2000000
   `include "tb_base.v"
 
   logic                           rst;
-  logic [INPUT_DATA_WIDTH-1:0]    DATA_VALUE_REVERSED;
-  logic [INPUT_DATA_WIDTH-1:0]    data;
+  logic [DIRECTED_DATA_WIDTH-1:0] data;
   logic [DATA_WIDTH-1:0]          data_in;
   logic [DATA_WIDTH-1:0]          data_in_swap;
   int                             data_in_cnt;
   int ii;
   int tx_cycle_cnt;
   int rx_cycle_cnt;
+  int data_cycle;
+  int mb_phase;
+  int phase_votes[32];
+  logic [3:0] sh_hist;
+  int n_mismatch;
+  int n_bursts;
   genvar jj;
 
   logic [NUM_LANES-1:0] tx_cfg_lanes_disable;
@@ -127,109 +150,64 @@ module tb_link_layer_fec;
   logic [1:0] rx_cfg_header_mode;
   logic [7:0] rx_cfg_frame_align_err_threshold;
 
-
   logic [DATA_PATH_WIDTH*8*NUM_LANES-1:0] tx_phy_data;
   logic [2*NUM_LANES-1:0] tx_phy_header;
   logic [DATA_PATH_WIDTH*8*NUM_LANES-1:0] rx_phy_data;
   logic [2*NUM_LANES-1:0] rx_phy_header;
   logic [DATA_PATH_WIDTH*NUM_LANES-1:0] phy_charisk;
-  logic [DATA_PATH_WIDTH*NUM_LANES-1:0] phy_notintable;
-  logic [DATA_PATH_WIDTH*NUM_LANES-1:0] phy_disperr;
-  logic [NUM_LANES-1:0] phy_block_sync;
   logic  rx_lmfc_edge;
   logic  rx_lmfc_clk;
-  logic  phy_en_char_align;
   logic  [DATA_PATH_WIDTH*8*NUM_LANES-1:0] rx_data;
   logic  rx_valid;
   logic  [DATA_PATH_WIDTH-1:0] rx_eof;
   logic  [DATA_PATH_WIDTH-1:0] rx_sof;
   logic  [DATA_PATH_WIDTH-1:0] rx_eomf;
   logic  [DATA_PATH_WIDTH-1:0] rx_somf;
+  logic  [1:0] rx_status_ctrl_state;
   logic  rx_ctrl_err_statistics_reset;
   logic [8:0] rx_ctrl_err_statistics_mask;
   logic [32*NUM_LANES-1:0] rx_status_err_statistics_cnt;
 
-  logic tx_data_dropped;
-  logic cur_error_cycle;
-  logic [DATA_PATH_WIDTH*8*NUM_LANES-1:0] tx_data_q[$];
-  logic [DATA_PATH_WIDTH*8*NUM_LANES-1:0] cur_tx_data;
+  logic [DATA_PATH_WIDTH*8*NUM_LANES-1:0] tx_hist [INPUT_DATA_CYCLES];
+  logic [DATA_PATH_WIDTH*8*NUM_LANES-1:0] rx_first [MATCH_LEN];
+  int rx_offset;
 
-  always #5ns clk = ~clk;
+  logic link_sysref = 1'b0;
+  logic [7:0] sysref_cnt = '0;
+  logic [2047:0] burst_mask [NUM_WINDOWS];
+  logic [DATA_WIDTH-1:0] cur_err;
 
-  always #(5ns*32*8) sysref = ~sysref;
+  // SYSREF period of 8 multiblocks
+  always @(posedge clk) begin
+    sysref_cnt <= sysref_cnt + 1'b1;
+    link_sysref <= sysref_cnt[7];
+  end
 
   initial begin
     rst = 1'b1;
-    #100ns;
-    rst = 1'b0;
+    #200ns;
+    @(posedge clk) rst = 1'b0;
   end
 
   assign tx_valid = 1'b1;
-  // assign tx_data = {DATA_PATH_WIDTH*8*NUM_LANES{1'b1}};
 
   initial begin
-    // Shift data in MSb-first by reversing the data
-    for(ii = 0; ii < INPUT_DATA_WIDTH; ii = ii + 1) begin
-      DATA_VALUE_REVERSED[ii] = DATA_VALUE[INPUT_DATA_WIDTH-1-ii];
+    // Shift directed data in MSb-first
+    for(ii = 0; ii < DIRECTED_DATA_WIDTH; ii = ii + 1) begin
+      data[ii] = DATA_VALUE[DIRECTED_DATA_WIDTH-1-ii];
     end
-    rst = 1'b1;
-    #100ns;
-    rst = 1'b0;
-  end
-
-  initial begin
-    data = DATA_VALUE_REVERSED;
     data_in_cnt = '0;
-    data_in = '0;
+    data_in = RANDOM_BURSTS ? {$urandom, $urandom} : data[0+:DATA_WIDTH];
     forever begin
-      data_in = data[0+:DATA_WIDTH];
       @(posedge clk);
       #0;
       if(tx_ready && (data_in_cnt < INPUT_DATA_CYCLES)) begin
         data = data >> DATA_WIDTH;
+        data_in = RANDOM_BURSTS ? {$urandom, $urandom} : data[0+:DATA_WIDTH];
         data_in_cnt = data_in_cnt + 1;
       end
     end
   end
-
-  // // TX data is dropped until the first EoMB is seen
-  // initial begin
-  //   tx_data_dropped = 1'b1;
-  //   forever begin
-  //     @(negedge clk);
-  //     if(tx_ready & tx_eomf[DATA_PATH_WIDTH-1]) begin
-  //       tx_data_dropped = 1'b0;
-  //     end
-  //   end
-  // end
-
-  // The first 7 multiblocks of data are dropped, one by TX, 6 by RX
-  // TODO: is this dependent on TX data pattern when scrambling is disabled?
-  initial begin
-    tx_data_dropped = 1'b1;
-    forever begin
-      @(negedge clk);
-      if(tx_ready && (data_in_cnt >= (32 * 7))) begin
-        tx_data_dropped = 1'b0;
-      end
-    end
-  end
-
-  // always_ff @(posedge clk) begin
-  //   if(rst) begin
-  //     data <= DATA_VALUE_REVERSED;
-  //     data_in_cnt <= '0;
-  //     data_in <= '0;
-  //   end else begin
-  //     if(tx_ready) begin
-  //       if(data_in_cnt < INPUT_DATA_WIDTH) begin
-  //         data_in <= data[0+:DATA_WIDTH];
-  //         data <= data >> DATA_WIDTH;
-  //         data_in_cnt <= data_in_cnt + DATA_WIDTH;
-  //       end
-  //     end
-  //   end
-  // end
 
   always_ff @(posedge clk) begin
     if(rst) begin
@@ -248,40 +226,161 @@ module tb_link_layer_fec;
 
   assign tx_data = {NUM_LANES{data_in_swap}};
 
-  assign rx_phy_data = (tx_cycle_cnt == ERROR_CYCLE) ? (tx_phy_data ^ ERROR_BITS) : (tx_cycle_cnt == ERROR_CYCLE+1) ? (tx_phy_data ^ NEXT_ERROR_BITS) : tx_phy_data;
-  // assign rx_phy_data = tx_phy_data;
-  assign rx_phy_header = tx_phy_header;
-
-  assign rx_ctrl_err_statistics_mask = 8'h3F;  // FEC trapped and non-trapped error
-  assign rx_ctrl_err_statistics_reset = 1'b0;
-
-  assign cur_error_cycle = tx_cycle_cnt == ERROR_CYCLE;
-
   initial begin
-    tx_data_q = {};
-    forever begin
-      @(negedge clk);
-      if(tx_ready && !tx_data_dropped && (data_in_cnt < INPUT_DATA_CYCLES)) begin
-        tx_data_q.push_back(tx_data);
-        // $display("%t TX Cycle %d: %X", $time, tx_cycle_cnt, tx_data);
+    int len;
+    int pos;
+    for (int w = 0; w < NUM_WINDOWS; w++) begin
+      burst_mask[w] = '0;
+      if (RANDOM_BURSTS && w % 2 == 0) begin
+        len = 1 + ($urandom % MAX_BURST_LEN);
+        pos = $urandom % (2048 - len + 1);
+        for (int k = 0; k < len; k++)
+          if (k == 0 || k == len-1 || ($urandom & 1))
+            burst_mask[w][pos + k] = 1'b1;
       end
     end
   end
 
+  // Multiblock phase: the last word of a multiblock carries the final bits of
+  // the 00001 pilot in its sync header. FEC parity can mimic the pilot, so vote.
+  always @(posedge clk) begin
+    if (rst) begin
+      sh_hist <= '0;
+      for (int k = 0; k < 32; k++) phase_votes[k] <= 0;
+    end else if (tx_ready) begin
+      sh_hist <= {sh_hist[2:0], tx_phy_header[0]};
+      if ({sh_hist, tx_phy_header[0]} == 5'b00001)
+        phase_votes[(tx_cycle_cnt+1)%32] <= phase_votes[(tx_cycle_cnt+1)%32] + 1;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (rst) begin
+      data_cycle <= -1;
+      mb_phase <= 0;
+    end else if (data_cycle < 0 && rx_status_ctrl_state == 2'd3) begin
+      data_cycle <= tx_cycle_cnt;
+      for (int k = 0; k < 32; k++)
+        if (phase_votes[k] > phase_votes[mb_phase]) mb_phase <= k;
+    end
+  end
+
+  function automatic int mb_index(int cyc);
+    return (cyc - mb_phase) / 32;
+  endfunction
+
+  function automatic int mb_word(int cyc);
+    return (cyc - mb_phase) % 32;
+  endfunction
+
+  function automatic int first_burst_word(int mb);
+    for (int k = 0; k < 2048; k++)
+      if (burst_mask[mb][k]) return k/64;
+    return -1;
+  endfunction
+
+  // Injection starts two multiblocks after DATA, once mb_phase is settled
+  function automatic bit inject_mb(int cyc);
+    return data_cycle >= 0 && cyc < INJECT_STOP_CYCLE &&
+           mb_index(cyc) >= mb_index(data_cycle) + 2;
+  endfunction
+
+  always @(*) begin
+    cur_err = '0;
+    if (inject_mb(tx_cycle_cnt)) begin
+      if (RANDOM_BURSTS) begin
+        for (int b = 0; b < 64; b++)
+          cur_err[63-b] = burst_mask[mb_index(tx_cycle_cnt)][mb_word(tx_cycle_cnt)*64 + b];
+      end else if (mb_index(tx_cycle_cnt) == mb_index(data_cycle) + 2) begin
+        if (mb_word(tx_cycle_cnt) == DIRECTED_ERROR_WORD)
+          cur_err = DIRECTED_ERROR_BITS;
+        else if (mb_word(tx_cycle_cnt) == DIRECTED_ERROR_WORD + 1)
+          cur_err = DIRECTED_NEXT_ERROR_BITS;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (rst) begin
+      n_bursts <= 0;
+    end else if (cur_err != '0 &&
+                 (RANDOM_BURSTS ? mb_word(tx_cycle_cnt) == first_burst_word(mb_index(tx_cycle_cnt)) :
+                                  mb_word(tx_cycle_cnt) == DIRECTED_ERROR_WORD)) begin
+      n_bursts <= n_bursts + 1;
+    end
+  end
+
+  assign rx_phy_data = tx_phy_data ^ {{(DATA_WIDTH*(NUM_LANES-1)){1'b0}}, cur_err};
+  assign rx_phy_header = tx_phy_header;
+
+  assign rx_ctrl_err_statistics_mask = 9'h0;
+  assign rx_ctrl_err_statistics_reset = 1'b0;
+
+  initial begin
+    forever begin
+      @(negedge clk);
+      if(tx_ready && (data_in_cnt < INPUT_DATA_CYCLES)) begin
+        tx_hist[data_in_cnt] = tx_data;
+      end
+    end
+  end
+
+  // How many words the link drops at startup depends on the SYSREF/LMFC
+  // phase, so locate the first RX words in the TX history instead of assuming.
+  function automatic int find_rx_offset();
+    for (int o = 0; o < MAX_RX_OFFSET; o++) begin
+      bit match = 1'b1;
+      for (int k = 0; k < MATCH_LEN; k++)
+        if (tx_hist[o+k] !== rx_first[k]) match = 1'b0;
+      if (match) return o;
+    end
+    return -1;
+  endfunction
+
+  task automatic finish_test();
+    $display("Words checked: %0d, mismatches: %0d, bursts injected: %0d",
+      rx_cycle_cnt, n_mismatch, n_bursts);
+    $display("Error statistics lane0: %0d lane1: %0d",
+      rx_status_err_statistics_cnt[31:0], rx_status_err_statistics_cnt[63:32]);
+    if (n_bursts == 0 ||
+        rx_status_err_statistics_cnt[31:0] != n_bursts ||
+        rx_status_err_statistics_cnt[63:32] != 0) begin
+      $display("Unexpected error statistics");
+      failed = 1'b1;
+    end
+    if (failed == 1'b0)
+      $display("SUCCESS");
+    else
+      $display("FAILED");
+    $finish;
+  endtask
+
   initial begin
     rx_cycle_cnt = 0;
+    n_mismatch = 0;
+    rx_offset = -1;
     forever begin
       @(negedge clk);
       if(rx_valid) begin
-        if(tx_data_q.size() == 0) begin
-          $finish;
-        end
-        cur_tx_data = tx_data_q.pop_front();
-        if(cur_tx_data !== rx_data) begin
-          $error("RX Cycle: %d Data mismatch. Expected: %X  Observed: %X", rx_cycle_cnt, cur_tx_data, rx_data);
-          failed = 1'b1;
-        end else if(REPORT_GOOD_DATA) begin
-          $display("RX Cycle: %d Good data:%X", rx_cycle_cnt, cur_tx_data);
+        if (rx_cycle_cnt < MATCH_LEN) begin
+          rx_first[rx_cycle_cnt] = rx_data;
+          if (rx_cycle_cnt == MATCH_LEN-1) begin
+            rx_offset = find_rx_offset();
+            if (rx_offset < 0) begin
+              $error("RX data does not match any TX start offset");
+              failed = 1'b1;
+              finish_test();
+            end
+          end
+        end else begin
+          if (rx_offset + rx_cycle_cnt >= INPUT_DATA_CYCLES)
+            finish_test();
+          if (tx_hist[rx_offset + rx_cycle_cnt] !== rx_data) begin
+            $error("RX Cycle: %d Data mismatch. Expected: %X  Observed: %X",
+              rx_cycle_cnt, tx_hist[rx_offset + rx_cycle_cnt], rx_data);
+            n_mismatch = n_mismatch + 1;
+            failed = 1'b1;
+          end
         end
         rx_cycle_cnt = rx_cycle_cnt + 1;
       end
@@ -322,7 +421,7 @@ module tb_link_layer_fec;
   jesd204_tx #(
     .NUM_LANES                            (NUM_LANES),
     .NUM_LINKS                            (NUM_LINKS),
-    .NUM_INPUT_PIPELINE                   (1),
+    .NUM_INPUT_PIPELINE                   (NUM_INPUT_PIPELINE),
     .NUM_OUTPUT_PIPELINE                  (0),
     .LINK_MODE                            (2),
     .ENABLE_FEC                           (1),
@@ -335,7 +434,7 @@ module tb_link_layer_fec;
     .phy_data                             (tx_phy_data),
     .phy_charisk                          (phy_charisk),
     .phy_header                           (tx_phy_header),
-    .sysref                               (sysref),
+    .sysref                               (link_sysref),
     .lmfc_edge                            (tx_lmfc_edge),
     .lmfc_clk                             (tx_lmfc_clk),
     .sync                                 ('0),
@@ -419,7 +518,7 @@ module tb_link_layer_fec;
     .phy_notintable                       ('0),
     .phy_disperr                          ('0),
     .phy_block_sync                       ('1),
-    .sysref                               (sysref),
+    .sysref                               (link_sysref),
     .lmfc_edge                            (rx_lmfc_edge),
     .lmfc_clk                             (rx_lmfc_clk),
     .device_event_sysref_alignment_error  (),
@@ -456,14 +555,13 @@ module tb_link_layer_fec;
     .ilas_config_valid                    (),
     .ilas_config_addr                     (),
     .ilas_config_data                     (),
-    .status_ctrl_state                    (),
+    .status_ctrl_state                    (rx_status_ctrl_state),
     .status_lane_cgs_state                (),
     .status_lane_ifs_ready                (),
     .status_lane_latency                  (),
     .status_lane_emb_state                (),
     .status_lane_frame_align_err_cnt      ()
   );
-
 
 endmodule
 
