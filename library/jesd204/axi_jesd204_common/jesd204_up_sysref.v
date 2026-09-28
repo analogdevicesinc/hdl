@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2016-2018, 2020-2022, 2025-2026 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2016-2018, 2020-2022, 2026 Analog Devices, Inc. All rights reserved.
 // Short identifier: ADIJESD204
 //
 // The ADI JESD204 Core is released under the following license, which is
