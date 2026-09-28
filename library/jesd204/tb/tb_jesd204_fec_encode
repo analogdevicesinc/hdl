@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export SIMULATOR=modelsim
+export SIMULATOR=${SIMULATOR:-modelsim}
 
 SOURCE="tb_jesd204_fec_encode.sv"
 SOURCE+=" ../jesd204_common/lfsr_input.sv"
