@@ -2,7 +2,8 @@
 
 export SIMULATOR=${SIMULATOR:-modelsim}
 
-SOURCE="tb_link_layer_fec.sv"
+SOURCE="tb_link_layer_fec_rand.sv"
+SOURCE+=" tb_link_layer_fec.sv"
 SOURCE+=" ../../util_cdc/sync_bits.v"
 SOURCE+=" ../../util_cdc/sync_event.v"
 SOURCE+=" ../../common/ad_mem_dist.v"
