@@ -231,6 +231,9 @@ module spi_engine_execution #(
       sdi_enabled <= cmd[9];
     end
   end
+
+  // When exec_transfer_cmd is false, sdo_enabled_io uses the registered sdo_enabled.
+  // When exec_transfer_cmd is true, sdo_enabled_io uses cmd[8] (lookahead).
   assign sdo_enabled_io = (exec_transfer_cmd) ? cmd[8] : sdo_enabled;
 
   always @(posedge clk) begin
@@ -439,6 +442,21 @@ module spi_engine_execution #(
   // The sdi_data_valid signal has inherent delays due to ECHO_SCLK and SCLK timing.
   // To handle backpressure, pending_sdi_data_valid is asserted when the last bit
   // is received and remains high until sdi_data_ready acknowledges the data.
+  //
+  // io_ready1 is split into two variants to break a critical timing path.
+  // The serial chain cmd -> exec_transfer_cmd -> sdo_enabled_io -> io_ready1
+  // is too deep when cmd comes from a Block RAM (FIFO) with high Tco.
+  //
+  // io_ready1_exec_xfer: used when exec_transfer_cmd is true.
+  //   Substitutes cmd[8] directly for sdo_enabled_io, so it can be computed
+  //   in parallel with exec_transfer_cmd (both derive from cmd bits).
+  //
+  // io_ready1: used when exec_transfer_cmd is false.
+  //   sdo_enabled_io resolves to the registered sdo_enabled, so no critical path.
+  wire io_ready1_exec_xfer =
+      (pending_sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
+      (cmd[8] == 1'b0 || sdo_io_ready == 1'b1);
+
   assign io_ready1 =  (pending_sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
                       (sdo_enabled_io == 1'b0 || sdo_io_ready == 1'b1);
 
@@ -485,8 +503,8 @@ module spi_engine_execution #(
       wait_for_io <= 1'b0;
     end else begin
       if (exec_transfer_cmd) begin
-        wait_for_io <= ~io_ready1;
-        transfer_active <= io_ready1;
+        wait_for_io <= ~io_ready1_exec_xfer;
+        transfer_active <= io_ready1_exec_xfer;
       end else if (wait_for_io && io_ready1) begin
         wait_for_io <= 1'b0;
         transfer_active <= ~last_transfer;
