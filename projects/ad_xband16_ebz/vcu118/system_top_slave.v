@@ -111,14 +111,14 @@ module system_top (
   output        ad4030_csn,
   output        vco_csn,
 
-  output  [3:0] hsci_ckin_p,
-  output  [3:0] hsci_ckin_n,
-  output  [3:0] hsci_din_p,
-  output  [3:0] hsci_din_n,
-  input   [3:0] hsci_cko_p,
-  input   [3:0] hsci_cko_n,
-  input   [3:0] hsci_do_p,
-  input   [3:0] hsci_do_n,
+  output  [0:3] hsci_ckin_p,
+  output  [0:3] hsci_ckin_n,
+  output  [0:3] hsci_din_p,
+  output  [0:3] hsci_din_n,
+  input   [0:3] hsci_cko_p,
+  input   [0:3] hsci_cko_n,
+  input   [0:3] hsci_do_p,
+  input   [0:3] hsci_do_n,
 
   input         ext_trig,
 

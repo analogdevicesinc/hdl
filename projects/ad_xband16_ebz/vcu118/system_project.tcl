@@ -78,6 +78,7 @@ adi_project_files ad_xband16_ebz_vcu118 [list \
   "system_constr.xdc"\
   "timing_constr.xdc"\
   "placement_constr.xdc"\
+  "hsci_lvds_constr.xdc"\
   "../common/hsci_phy_top.sv"\
   "$ad_hdl_dir/library/common/ad_3w_spi.v" \
   "$ad_hdl_dir/library/common/ad_rst.v"\
@@ -128,13 +129,10 @@ generate_target {instantiation_template} [get_files ./ad_xband16_ebz_vcu118.srcs
 generate_target all [get_files ./ad_xband16_ebz_vcu118.srcs/sources_1/ip/high_speed_selectio_wiz_1/high_speed_selectio_wiz_1.xci]
 
 # Avoid critical warning in OOC mode from the clock definitions
-# since at that stage the submodules are not stiched together yet
+# since at that stage the submodules are not stitched together yet
 if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
-
-#set_property strategy Flow_AreaOptimized_high [get_runs synth_1]
-#set_property strategy Performance_NetDelay_high [get_runs impl_1]
 
 set_property STEPS.OPT_DESIGN.ARGS.DIRECTIVE ExploreSequentialArea [get_runs impl_1]
 set_property STEPS.PLACE_DESIGN.ARGS.DIRECTIVE SSI_HighUtilSLRs [get_runs impl_1]
@@ -142,5 +140,40 @@ set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE AggressiveExplore [get_runs im
 set_property STEPS.ROUTE_DESIGN.TCL.POST {} [get_runs impl_1]
 set_property STEPS.ROUTE_DESIGN.ARGS.DIRECTIVE NoTimingRelaxation [get_runs impl_1]
 set_property -name {STEPS.ROUTE_DESIGN.ARGS.MORE OPTIONS} -value -tns_cleanup -objects [get_runs impl_1]
+
+# WORKAROUND (Vivado 2025.1): open_run/readConstrs segfaults (SIGSEGV 11 in
+# HXIUtil::readXDCForRefNameScoppedCells -> HANUCollectCellview::filterByOrigName)
+# while reading the REF-name-scoped XDC of either high_speed_selectio_wiz
+# instance. These are the only non-BD, project-level OOC IPs in the design; the
+# 150+ block-design IP XDCs go through the same reader without issue.
+#
+# There is no way to re-scope these files: the IP flow re-derives SCOPED_TO_REF
+# for IP-owned XDCs on every design open, so a SCOPED_TO_CELLS override is
+# interpreted relative to the IP module and cannot resolve. They are therefore
+# disabled outright and their contents replicated at top level --
+# hsci_lvds_constr.xdc, plus the pin assignments already in system_constr.xdc.
+#
+# IS_ENABLED is set first because it states the intent; the deliberately
+# unresolvable SCOPED_TO_CELLS is kept as a backstop in case the IP flow
+# re-derives IS_ENABLED too, since the fallback behaviour (Designutils 20-1275,
+# "will not be read for this cell") is what actually keeps the file out of the
+# constraint pass. Both together are harmless.
+foreach hssio_ip {high_speed_selectio_wiz_0 high_speed_selectio_wiz_1} {
+  set hssio_xdc [get_files -quiet -all ${hssio_ip}.xdc]
+  if {[llength $hssio_xdc] != 1} {
+    puts "WARNING: expected exactly 1 ${hssio_ip}.xdc, got [llength $hssio_xdc]; NOT disabled -- open_run may segfault"
+  } else {
+    if {[catch {set_property IS_ENABLED false $hssio_xdc} err]} {
+      puts "WARNING: could not disable ${hssio_ip}.xdc: $err"
+    }
+    if {[catch {
+      reset_property SCOPED_TO_REF $hssio_xdc
+      set_property SCOPED_TO_CELLS unresolvable_by_design $hssio_xdc
+    } err]} {
+      puts "WARNING: could not re-scope ${hssio_ip}.xdc: $err"
+    }
+    puts "INFO: suppressed ${hssio_ip}.xdc (replaced by hsci_lvds_constr.xdc)"
+  }
+}
 
 adi_project_run ad_xband16_ebz_vcu118
