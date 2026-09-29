@@ -10,7 +10,7 @@ zypper install -y --no-recommends \
 # utils
 zypper install -y --no-recommends \
     git find tcl \
-    python313 python313-devel \
+    python3 python3-devel \
     gcc13 gcc13-c++ \
     graphviz
 
