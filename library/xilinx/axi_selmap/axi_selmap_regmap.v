@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,6 +40,7 @@ module axi_selmap_regmap #(
 ) (
   input                        device_ready,
   input                        done,
+  input                        fifo_full,
   output                       reset,
 
   output      [DATA_WIDTH-1:0] data,
@@ -121,6 +122,7 @@ module axi_selmap_regmap #(
           14'h6: up_rdata <= up_data;
           14'h7: up_rdata <= up_byte_counter;
           14'h8: up_rdata <= done;
+          14'h9: up_rdata <= fifo_full;
           default: up_rdata <= 0;
          endcase
       end else begin

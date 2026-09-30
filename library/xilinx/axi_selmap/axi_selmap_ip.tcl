@@ -41,7 +41,6 @@ global VIVADO_IP_LIBRARY
 adi_ip_create axi_selmap
 adi_ip_files axi_selmap [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "async_cdc_fifo.v" \
   "axi_selmap_regmap.v" \
   "axi_selmap.v"]
 
@@ -51,6 +50,7 @@ set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_selmap
 
 adi_ip_add_core_dependencies [list \
 	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+	analog.com:$VIVADO_IP_LIBRARY:util_axis_fifo:1.0 \
 ]
 
 set cc [ipx::current_core]

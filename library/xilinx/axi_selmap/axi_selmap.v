@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -94,31 +94,12 @@ module axi_selmap #(
   wire                    up_data_written;
   wire                    up_csi_b;
   wire                    up_program_b;
-  wire                    up_cclk;
   wire   [DATA_WIDTH-1:0] up_data_swapped;
-  wire   [DATA_WIDTH-1:0] data_sync;
-  wire                    rd_valid;
-  reg                     up_cclk_div;
+  wire                    up_fifo_full;
   reg                     up_init_b;
   reg                     up_device_ready;
   reg                     up_done;
   reg                     prev_init_b;
-  reg    [$clog2(CLK_DIV)-1:0] counter = 0;
-
-  assign up_cclk = (CLK_DIV > 1) ? up_cclk_div : up_clk;
-  reg    up_cclk_delayed;
-
-  always @(posedge up_clk) begin
-    if (CLK_DIV > 1) begin
-      counter <= counter + 1'b1;
-      if (counter >= (CLK_DIV - 1))
-        counter <= 0;
-      up_cclk_div <= (counter < CLK_DIV / 2) ? 1'b1 : 1'b0;
-    end else begin
-      up_cclk_div <= 1'b0;
-    end
-    up_cclk_delayed <= up_cclk;
-  end
 
   always @(posedge up_clk) begin
     if (!up_rstn || !up_reset) begin
@@ -152,21 +133,28 @@ module axi_selmap #(
     .up_rack (up_rack_s),
     .device_ready (up_device_ready),
     .done (up_done),
+    .fifo_full (up_fifo_full),
     .reset (up_reset),
     .data (up_data),
     .data_written (up_data_written),
     .csi_b (up_csi_b),
     .program_b (up_program_b));
 
+  // A write to the data register is held off while the FIFO is full, so a
+  // processor writing back to back cannot overflow it. The FIFO frees a slot
+  // every CCLK period, which bounds the stall.
+
+  wire up_data_stall = up_fifo_full & (s_axi_awaddr[15:2] == 14'h6);
+
   up_axi  #(
     .AXI_ADDRESS_WIDTH (16)
   ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
-    .up_axi_awvalid (s_axi_awvalid),
+    .up_axi_awvalid (s_axi_awvalid & ~up_data_stall),
     .up_axi_awaddr (s_axi_awaddr),
     .up_axi_awready (s_axi_awready),
-    .up_axi_wvalid (s_axi_wvalid),
+    .up_axi_wvalid (s_axi_wvalid & ~up_data_stall),
     .up_axi_wdata (s_axi_wdata),
     .up_axi_wstrb (s_axi_wstrb),
     .up_axi_wready (s_axi_wready),
@@ -215,26 +203,105 @@ module axi_selmap #(
   end
   endgenerate
 
-  /*Add async_fifo in case of CLK_DIV*/
-  generate if (CLK_DIV > 1) begin
-    async_cdc_fifo #(
-      .DATA_WIDTH(DATA_WIDTH),
-      .CLK_DIV (CLK_DIV),
-      .FIFO_DEPTH(FIFO_DEPTH)
-    ) i_cdc_fifo (
-      .wr_clk (up_clk),
-      .rd_clk (up_clk),
-      .rstn (up_rstn),
-      .wr_en (up_data_written),
-      .wr_data (up_data_swapped),
-      .fifo_full (full_flag),
-      .rd_en (up_cclk),
-      .rd_data (data_sync),
-      .fifo_empty (empty_flag),
-      .rd_data_valid (rd_valid));
+  /* Divided CCLK: the written bytes are buffered and sent one per CCLK period */
+  generate if (CLK_DIV > 1) begin: g_cclk_div
+
+    localparam COUNT_WIDTH = $clog2(CLK_DIV);
+
+    reg  [COUNT_WIDTH-1:0] period_count = 'd0;
+    reg                    period_has_byte = 1'b0;
+    reg                    cclk_div = 1'b0;
+    reg  [DATA_WIDTH-1:0]  cclk_data = 'd0;
+    reg                    byte_popped = 1'b0;
+
+    wire                   cclk_resetn;
+    wire [COUNT_WIDTH-1:0] period_count_next;
+    wire                   period_end;
+    wire                   period_has_byte_next;
+    wire                   fifo_valid;
+    wire [DATA_WIDTH-1:0]  fifo_data;
+
+    // A soft reset also drops the bytes that are still buffered
+
+    assign cclk_resetn = up_rstn & up_reset;
+
+    util_axis_fifo #(
+      .DATA_WIDTH (DATA_WIDTH),
+      .ADDRESS_WIDTH ($clog2(FIFO_DEPTH)),
+      .ASYNC_CLK (0),
+      .M_AXIS_REGISTERED (1),
+      .ALMOST_EMPTY_THRESHOLD (0),
+      .ALMOST_FULL_THRESHOLD (0)
+    ) i_fifo (
+      .m_axis_aclk (up_clk),
+      .m_axis_aresetn (cclk_resetn),
+      .m_axis_ready (period_end),
+      .m_axis_valid (fifo_valid),
+      .m_axis_data (fifo_data),
+      .m_axis_tkeep (),
+      .m_axis_tlast (),
+      .m_axis_level (),
+      .m_axis_empty (),
+      .m_axis_almost_empty (),
+      .s_axis_aclk (up_clk),
+      .s_axis_aresetn (cclk_resetn),
+      .s_axis_ready (),
+      .s_axis_valid (up_data_written),
+      .s_axis_data (up_data_swapped),
+      .s_axis_tkeep ({DATA_WIDTH/8{1'b1}}),
+      .s_axis_tlast (1'b0),
+      .s_axis_room (),
+      .s_axis_full (up_fifo_full),
+      .s_axis_almost_full ());
+
+    assign period_end = (period_count == CLK_DIV - 1);
+    assign period_count_next = period_end ? 'd0 : period_count + 1'b1;
+
+    always @(posedge up_clk) begin
+      period_count <= period_count_next;
+    end
+
+    always @(posedge up_clk) begin
+      if (!cclk_resetn) begin
+        byte_popped <= 1'b0;
+      end else begin
+        byte_popped <= period_end & fifo_valid;
+      end
+      if (period_end & fifo_valid) begin
+        cclk_data <= fifo_data;
+      end
+    end
+
+    assign period_has_byte_next = byte_popped | (period_has_byte & ~period_end);
+
+    always @(posedge up_clk) begin
+      if (!cclk_resetn) begin
+        period_has_byte <= 1'b0;
+      end else begin
+        period_has_byte <= period_has_byte_next;
+      end
+    end
+
+    // CCLK is high in the second half of a period that has a byte, so the byte
+    // is stable for half a period before and after the CCLK rising edge
+
+    always @(posedge up_clk) begin
+      if (!cclk_resetn) begin
+        cclk_div <= 1'b0;
+      end else begin
+        cclk_div <= (period_count_next >= CLK_DIV / 2) & period_has_byte_next;
+      end
+    end
+
+    assign data = cclk_data;
+    assign cclk = cclk_div;
+
+  end else begin: g_cclk_direct
+
+    assign data = up_data_swapped;
+    assign cclk = up_clk & up_data_written;
+    assign up_fifo_full = 1'b0;
+
   end
   endgenerate
-
-  assign data = (CLK_DIV > 1) ? data_sync : up_data_swapped;
-  assign cclk = (CLK_DIV > 1) ? (up_cclk_delayed & rd_valid) : (up_cclk & up_data_written);
 endmodule
