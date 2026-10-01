@@ -67,6 +67,13 @@ module util_cpack2_impl #(
   localparam TOTAL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL * NUM_OF_CHANNELS;
   localparam NUM_OF_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
 
+  /*
+   * Pipelining is not supported with the AXI-Stream interface: m_axis_ready
+   * stalls the packer and the pipelined path then repeats and drops beats.
+   * PIPELINE_STAGES is ignored in that case.
+   */
+  localparam PIPELINE_STAGES_INT = INTERFACE_TYPE == 1 ? PIPELINE_STAGES : 0;
+
   localparam
     SAMPLE_ADDRESS_WIDTH = NUM_OF_SAMPLES > 512 ? 10 :
     NUM_OF_SAMPLES > 256 ? 9 :
@@ -85,9 +92,9 @@ module util_cpack2_impl #(
   function integer calc_pipeline_latency;
     input integer num_stages;
     begin
-      if (PIPELINE_STAGES == 2)
+      if (PIPELINE_STAGES_INT == 2)
         calc_pipeline_latency = num_stages;
-      else if (PIPELINE_STAGES == 1)
+      else if (PIPELINE_STAGES_INT == 1)
         calc_pipeline_latency = num_stages / 2;
       else
         calc_pipeline_latency = 0;
@@ -199,7 +206,7 @@ module util_cpack2_impl #(
     .SAMPLE_DATA_WIDTH (SAMPLE_DATA_WIDTH),
     .PACK (1),
     .PARALLEL_OR_SERIAL_N (PARALLEL_OR_SERIAL_N),
-    .PIPELINE_STAGES (PIPELINE_STAGES)
+    .PIPELINE_STAGES (PIPELINE_STAGES_INT)
   ) i_pack_shell (
     .clk (clk),
     .reset (reset),
