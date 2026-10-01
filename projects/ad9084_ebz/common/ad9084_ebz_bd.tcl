@@ -46,6 +46,7 @@ source $ad_hdl_dir/library/axi_fsrc/scripts/axi_fsrc.tcl
 
 add_files -norecurse [list \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
+  $ad_hdl_dir/library/util_cdc/sync_data.v \
   $ad_hdl_dir/projects/ad9084_ebz/common/util_pack_cdc.v]
 add_files -norecurse -fileset constrs_1 \
   $ad_hdl_dir/projects/ad9084_ebz/common/util_pack_cdc_constr.xdc
