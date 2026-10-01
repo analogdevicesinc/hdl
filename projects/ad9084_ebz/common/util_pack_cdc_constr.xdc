@@ -3,8 +3,8 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set_property ASYNC_REG TRUE [get_cells -quiet -hier *cdc_sync_stage*_reg* \
-  -filter {IS_SEQUENTIAL}]
+set_property ASYNC_REG TRUE [get_cells -quiet -hier \
+  -filter {NAME =~ *_pack_cdc/*cdc_sync_stage*_reg* && IS_SEQUENTIAL}]
 
-set_false_path -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-  -filter {IS_SEQUENTIAL}]
+set_false_path -quiet -to [get_cells -quiet -hier \
+  -filter {NAME =~ *_pack_cdc/*cdc_sync_stage1_reg* && IS_SEQUENTIAL}]

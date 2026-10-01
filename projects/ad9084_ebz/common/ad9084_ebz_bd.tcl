@@ -44,6 +44,12 @@ source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/library/axi_fsrc/scripts/axi_fsrc.tcl
 
+add_files -norecurse [list \
+  $ad_hdl_dir/library/util_cdc/sync_bits.v \
+  $ad_hdl_dir/projects/ad9084_ebz/common/util_pack_cdc.v]
+add_files -norecurse -fileset constrs_1 \
+  $ad_hdl_dir/projects/ad9084_ebz/common/util_pack_cdc_constr.xdc
+
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
 set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
@@ -1080,9 +1086,8 @@ ad_connect  axi_apollo_rx_jesd/rx_data_tdata rx_apollo_tpl_core/link_data
 ad_connect  axi_apollo_rx_jesd/rx_data_tvalid rx_apollo_tpl_core/link_valid
 
 if {$FSRC_ENABLE} {
-  ad_ip_instance util_pack_cdc apollo_rx_pack_cdc [list \
-    NUM_OF_ENABLES $RX_NUM_OF_CONVERTERS \
-  ]
+  create_bd_cell -type module -reference util_pack_cdc apollo_rx_pack_cdc
+  ad_ip_parameter apollo_rx_pack_cdc CONFIG.NUM_OF_ENABLES $RX_NUM_OF_CONVERTERS
   ad_connect rx_device_clk apollo_rx_pack_cdc/device_clk
   ad_connect rx_device_clk_rstgen/peripheral_aresetn apollo_rx_pack_cdc/device_aresetn
   ad_connect rx_apollo_tpl_core/adc_tpl_core/adc_rst apollo_rx_pack_cdc/adc_rst
@@ -1124,9 +1129,8 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_connect  axi_apollo_rx_b_jesd/rx_data_tvalid rx_b_apollo_tpl_core/link_valid
 
   if {$FSRC_ENABLE} {
-    ad_ip_instance util_pack_cdc apollo_rx_b_pack_cdc [list \
-      NUM_OF_ENABLES $RX_B_NUM_OF_CONVERTERS \
-    ]
+    create_bd_cell -type module -reference util_pack_cdc apollo_rx_b_pack_cdc
+    ad_ip_parameter apollo_rx_b_pack_cdc CONFIG.NUM_OF_ENABLES $RX_B_NUM_OF_CONVERTERS
     ad_connect rx_b_device_clk apollo_rx_b_pack_cdc/device_clk
     ad_connect rx_b_device_clk_rstgen/peripheral_aresetn apollo_rx_b_pack_cdc/device_aresetn
     ad_connect rx_b_apollo_tpl_core/adc_tpl_core/adc_rst apollo_rx_b_pack_cdc/adc_rst
