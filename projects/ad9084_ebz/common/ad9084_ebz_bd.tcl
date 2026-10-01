@@ -71,6 +71,8 @@ set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
                           ? $ad_project_params(SHARED_DEVCLK) : 0 } ]
 set DO_HAS_BYPASS [ expr { [info exists ad_project_params(DO_HAS_BYPASS)] \
                           ? $ad_project_params(DO_HAS_BYPASS) : 1 } ]
+set PNMON_ENABLE [ expr { [info exists ad_project_params(PNMON_ENABLE)] \
+                          ? $ad_project_params(PNMON_ENABLE) : 1 } ]
 set AION_ENABLE [ expr { [info exists ad_project_params(AION_ENABLE)] \
                           ? $ad_project_params(AION_ENABLE) : 0 } ]
 set FSRC_ENABLE [ expr { [info exists ad_project_params(FSRC_ENABLE)] \
@@ -586,6 +588,7 @@ adi_tpl_jesd204_rx_create rx_apollo_tpl_core $RX_NUM_OF_LANES \
                                            $RX_SAMPLE_WIDTH \
                                            $RX_DATAPATH_WIDTH \
                                            $RX_DMA_SAMPLE_WIDTH
+ad_ip_parameter rx_apollo_tpl_core/adc_tpl_core CONFIG.PNMON_ENABLE $PNMON_ENABLE
 
 ad_ip_instance util_cpack2 util_apollo_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
@@ -637,6 +640,7 @@ if {$ASYMMETRIC_A_B_MODE} {
                                                  $RX_B_SAMPLE_WIDTH \
                                                  $RX_B_DATAPATH_WIDTH \
                                                  $RX_B_DMA_SAMPLE_WIDTH
+  ad_ip_parameter rx_b_apollo_tpl_core/adc_tpl_core CONFIG.PNMON_ENABLE $PNMON_ENABLE
 
   ad_ip_instance util_cpack2 util_apollo_cpack_b [list \
     NUM_OF_CHANNELS $RX_B_NUM_OF_CONVERTERS \
