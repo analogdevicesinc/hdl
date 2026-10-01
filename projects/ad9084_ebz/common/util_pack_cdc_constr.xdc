@@ -32,15 +32,8 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-source ../../scripts/adi_env.tcl
-source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
+set_property ASYNC_REG TRUE [get_cells -quiet -hier \
+  -filter {NAME =~ *_pack_cdc/*cdc_sync_stage*_reg* && IS_SEQUENTIAL}]
 
-adi_ip_create util_pack_cdc
-adi_ip_files util_pack_cdc [list \
-  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
-  "util_pack_cdc_constr.xdc" \
-  "util_pack_cdc.v" ]
-
-adi_ip_properties_lite util_pack_cdc
-
-ipx::save_core [ipx::current_core]
+set_false_path -quiet -to [get_cells -quiet -hier \
+  -filter {NAME =~ *_pack_cdc/*cdc_sync_stage1_reg* && IS_SEQUENTIAL}]

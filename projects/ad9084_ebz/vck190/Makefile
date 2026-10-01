@@ -22,6 +22,8 @@ M_DEPS += ../../../library/common/ad_3w_spi.v
 M_DEPS += ../../../projects/common/xilinx/data_offload_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/axi_fsrc/scripts/axi_fsrc.tcl
+M_DEPS += ../../../projects/ad9084_ebz/common/util_pack_cdc.v
+M_DEPS += ../../../projects/ad9084_ebz/common/util_pack_cdc_constr.xdc
 
 LIB_DEPS += axi_adf4030
 LIB_DEPS += axi_clkgen
@@ -48,7 +50,6 @@ LIB_DEPS += util_do_ram
 LIB_DEPS += util_hbm
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
-LIB_DEPS += util_pack_cdc
 LIB_DEPS += util_tdd_sync
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/util_adxcvr
