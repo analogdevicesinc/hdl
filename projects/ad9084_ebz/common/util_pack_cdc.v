@@ -51,14 +51,16 @@ module util_pack_cdc #(
   input                        xfer_req,
   output reg                   device_resetn,
 
-  (* X_INTERFACE_PARAMETER = "ASSOCIATED_RESET pack_aresetn" *)
+  (* X_INTERFACE_PARAMETER = "ASSOCIATED_RESET pack_aresetn:pack_resetn" *)
   input                        pack_clk,
   input                        pack_aresetn,
   input  [NUM_OF_ENABLES-1:0]  enable_in,
-  output [NUM_OF_ENABLES-1:0]  enable_out
+  output [NUM_OF_ENABLES-1:0]  enable_out,
+  output reg                   pack_resetn
 );
 
   wire xfer_req_s;
+  wire device_resetn_s;
 
   sync_bits #(
     .NUM_OF_BITS (1),
@@ -78,8 +80,21 @@ module util_pack_cdc #(
     .out_clk (pack_clk),
     .out_data (enable_out));
 
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_device_resetn_sync (
+    .in_bits (device_resetn),
+    .out_clk (pack_clk),
+    .out_resetn (pack_aresetn),
+    .out_bits (device_resetn_s));
+
   always @(posedge device_clk) begin
     device_resetn <= device_aresetn & ~adc_rst & xfer_req_s;
+  end
+
+  always @(posedge pack_clk) begin
+    pack_resetn <= pack_aresetn & device_resetn_s;
   end
 
 endmodule
