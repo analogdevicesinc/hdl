@@ -17,6 +17,7 @@ M_DEPS += ../../ad9084_ebz/common/ad9084_ebz_bd.tcl
 M_DEPS += ../../../library/xilinx/scripts/versal_xcvr_subsystem.tcl
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
 M_DEPS += ../../../library/util_cdc/sync_bits.v
+M_DEPS += ../../../library/util_cdc/sync_data.v
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
 M_DEPS += ../../../projects/common/xilinx/data_offload_bd.tcl

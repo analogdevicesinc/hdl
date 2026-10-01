@@ -23,6 +23,7 @@ M_DEPS += ../../../projects/common/xilinx/data_offload_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/axi_fsrc/scripts/axi_fsrc.tcl
 M_DEPS += ../../../library/util_cdc/sync_bits.v
+M_DEPS += ../../../library/util_cdc/sync_data.v
 M_DEPS += ../../../projects/ad9084_ebz/common/util_pack_cdc.v
 M_DEPS += ../../../projects/ad9084_ebz/common/util_pack_cdc_constr.xdc
 

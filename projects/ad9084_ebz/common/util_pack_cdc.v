@@ -39,8 +39,6 @@
 // DMA bursts, so no partial beat survives a burst boundary. xfer_req is
 // synchronised here rather than in the block design because a proc_sys_reset
 // would stretch it into the start of the burst.
-//
-// enable_out carries the quasi-static converter enable mask into pack_clk.
 
 module util_pack_cdc #(
 
@@ -71,14 +69,14 @@ module util_pack_cdc #(
     .out_resetn (device_aresetn),
     .out_bits (xfer_req_s));
 
-  sync_bits #(
+  sync_data #(
     .NUM_OF_BITS (NUM_OF_ENABLES),
     .ASYNC_CLK (1)
   ) i_enable_sync (
-    .in_bits (enable_in),
+    .in_clk (device_clk),
+    .in_data (enable_in),
     .out_clk (pack_clk),
-    .out_resetn (pack_aresetn),
-    .out_bits (enable_out));
+    .out_data (enable_out));
 
   always @(posedge device_clk) begin
     device_resetn <= device_aresetn & ~adc_rst & xfer_req_s;
