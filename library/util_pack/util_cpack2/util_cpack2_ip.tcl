@@ -38,6 +38,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create util_cpack2
 adi_ip_files util_cpack2 [list \
   "../../common/ad_perfect_shuffle.v" \
+  "../../common/util_pipeline_stage.v" \
   "../util_pack_common/pack_ctrl.v" \
   "../util_pack_common/pack_interconnect.v" \
   "../util_pack_common/pack_network.v" \
@@ -98,6 +99,10 @@ set_property -dict [list \
   } \
 ] [ipx::get_user_parameters PARALLEL_OR_SERIAL_N -of_objects $cc]
 
+# Pipelining is not supported with the AXI-Stream interface
+set_property enablement_tcl_expr {$INTERFACE_TYPE == 1} \
+  [ipx::get_user_parameters PIPELINE_STAGES -of_objects $cc]
+
 set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
 
 set order 0
@@ -107,6 +112,7 @@ foreach {k v} { \
   "SAMPLE_DATA_WIDTH" "Sample Width" \
   "INTERFACE_TYPE" "Interface Type" \
   "PARALLEL_OR_SERIAL_N" "Parallel prefix sum calculation" \
+  "PIPELINE_STAGES" "Configure pipeline stages" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]
   ipgui::move_param -component $cc -order $order $p -parent $page0
