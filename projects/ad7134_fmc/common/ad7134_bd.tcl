@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2026 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2019, 2021-2026  Analog Devices, Inc. All rights reserved.
 ## Short identifier: ADIBSD
 ##
 ## Redistribution and use in source and binary forms, with or without modification,
