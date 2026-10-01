@@ -84,6 +84,12 @@ proc util_cpack_elab {} {
   set sample_data_width [get_parameter_value SAMPLE_DATA_WIDTH]
   set interface_type [get_parameter_value INTERFACE_TYPE]
 
+  # Pipelining is not supported with the AXI-Stream interface
+  set_parameter_property PIPELINE_STAGES ENABLED [expr {$interface_type == 1}]
+  if {$interface_type == 0 && [get_parameter_value PIPELINE_STAGES] != 0} {
+    send_message warning "PIPELINE_STAGES is ignored with the AXI-Stream interface"
+  }
+
   set channel_data_width [expr $sample_data_width * $samples_per_channel]
   set total_data_width [expr $num_channels * $channel_data_width]
   set disabled_intfs {}
