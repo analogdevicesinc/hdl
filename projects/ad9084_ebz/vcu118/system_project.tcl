@@ -77,6 +77,8 @@ set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timi
 #                 not read
 #   FSRC_ACCUM_WIDTH : Width of the FSRC rate accumulator, which sets the
 #                 granularity of the achievable ratio
+#   PNMON_ENABLE : When cleared, removes the RX transport layer PN monitors,
+#                 which are hard to close timing on at high device clock rates
 #
 
 adi_project ad9084_ebz_vcu118 0 [list \
@@ -109,6 +111,7 @@ adi_project ad9084_ebz_vcu118 0 [list \
   RX_B_KS_PER_CHANNEL [get_env_param RX_B_KS_PER_CHANNEL 32 ] \
   TX_B_KS_PER_CHANNEL [get_env_param TX_B_KS_PER_CHANNEL 32 ] \
   DO_HAS_BYPASS       [get_env_param DO_HAS_BYPASS        0 ] \
+  PNMON_ENABLE        [get_env_param PNMON_ENABLE         1 ] \
   AION_ENABLE         [get_env_param AION_ENABLE          0 ] \
   FSRC_ENABLE         [get_env_param FSRC_ENABLE          0 ] \
   FSRC_ACCUM_WIDTH    [get_env_param FSRC_ACCUM_WIDTH    56 ] \
