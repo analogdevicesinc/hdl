@@ -41,6 +41,7 @@ module axi_ad408x #(
   parameter   NUM_LANES = 2,
   parameter   USE_CNV = 1,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter   INIT_DELAY = 0,
   parameter   ADC_N_BITS = 20
 ) (
 
@@ -317,6 +318,7 @@ module axi_ad408x #(
   up_delay_cntrl #(
     .DATA_WIDTH(DELAY_CTRL_NUM_LANES),
     .DRP_WIDTH(DELAY_CTRL_DRP_WIDTH),
+    .INIT_DELAY(INIT_DELAY),
     .BASE_ADDRESS(6'h02)
   ) i_delay_cntrl (
     .core_rst(1'b0),

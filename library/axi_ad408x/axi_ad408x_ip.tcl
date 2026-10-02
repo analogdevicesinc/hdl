@@ -90,6 +90,12 @@ adi_set_ports_dependency "cnv_in_p" \
 adi_set_ports_dependency "cnv_in_n" \
   "(spirit:decode(id('MODELPARAM_VALUE.USE_CNV')) == 1)"
 
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "0" \
+  "value_validation_range_maximum" "31" \
+] [ipx::get_user_parameters INIT_DELAY -of_objects $cc]
+
 set_property driver_value 0 [ipx::get_ports -filter "direction==in" -of_objects $cc]
 
 adi_add_auto_fpga_spec_params
