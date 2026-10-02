@@ -38,22 +38,27 @@
 module upack_tb;
   parameter VCD_FILE = {"upack_tb.vcd"};
   parameter NUM_OF_CHANNELS = 8;
-  parameter SAMPLES_PER_CHANNEL = 1;
-  parameter ENABLE_RANDOM = 0;
+  parameter SAMPLES_PER_CHANNEL = 8;
+  parameter ENABLE_RANDOM = 1;
+  parameter SAMPLE_DATA_WIDTH = 16;
+  parameter PIPELINE_STAGES = 1;
+  parameter DATA_OFFSET = 16'hFF80;
+  parameter DATA_PHASES_PER_ENABLE_SETTING = 240;
+  parameter PARALLEL_OR_SERIAL_N = 0;
 
-  `define TIMEOUT 1500000
+  `define TIMEOUT 10000000
   `include "tb_base.v"
 
   localparam NUM_OF_PORTS = SAMPLES_PER_CHANNEL * NUM_OF_CHANNELS;
 
   reg fifo_rd_en = 1'b1;
-  wire [NUM_OF_PORTS*8-1:0] fifo_rd_data;
-  reg [NUM_OF_PORTS*8-1:0] expected_fifo_rd_data = 'h00;
+  wire [NUM_OF_PORTS*SAMPLE_DATA_WIDTH-1:0] fifo_rd_data;
+  reg [NUM_OF_PORTS*SAMPLE_DATA_WIDTH-1:0] expected_fifo_rd_data = 'h00;
   wire fifo_rd_valid;
 
   reg s_axis_valid = 1'b1;
   wire s_axis_ready;
-  reg [NUM_OF_PORTS*8-1:0] s_axis_data = 'h00;
+  reg [NUM_OF_PORTS*SAMPLE_DATA_WIDTH-1:0] s_axis_data = 'h00;
 
   reg [NUM_OF_CHANNELS-1:0] enable = 'h1;
   reg [NUM_OF_CHANNELS-1:0] next_enable = 'h1;
@@ -61,7 +66,7 @@ module upack_tb;
   integer counter;
 
   always @(*) begin
-    if (counter == 15) do_trigger_reset();
+    if (counter == DATA_PHASES_PER_ENABLE_SETTING) do_trigger_reset();
   end
 
   always @(posedge clk) begin
@@ -91,7 +96,7 @@ module upack_tb;
   always @(posedge clk) begin
     for (i = 0; i < NUM_OF_PORTS; i = i + 1) begin
       if (reset == 1'b0 && fifo_rd_valid == 1'b1 && enable[i/SAMPLES_PER_CHANNEL] == 1'b1 &&
-        fifo_rd_data[i*8+:8] !== expected_fifo_rd_data[i*8+:8]) begin
+        fifo_rd_data[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] !== expected_fifo_rd_data[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH]) begin
           failed <= 1'b1;
           $display("Failed for enable mask: %x. Expected data %x, got %x",
             enable, expected_fifo_rd_data, fifo_rd_data);
@@ -109,10 +114,10 @@ module upack_tb;
       for (h = 0; h < SAMPLES_PER_CHANNEL; h = h + 1) begin
         for (i = 0; i < NUM_OF_CHANNELS; i = i + 1) begin
           if (enable[i] == 1'b1) begin
-            expected_fifo_rd_data[(i*SAMPLES_PER_CHANNEL+h)*8+:8] <= j;
+            expected_fifo_rd_data[(i*SAMPLES_PER_CHANNEL+h)*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= DATA_OFFSET - j;
             j = j + 1;
           end else begin
-            expected_fifo_rd_data[(i*SAMPLES_PER_CHANNEL+h)*8+:8] <= 'hxx;
+            expected_fifo_rd_data[(i*SAMPLES_PER_CHANNEL+h)*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= 'hxx;
           end
         end
       end
@@ -120,7 +125,7 @@ module upack_tb;
       for (h = 0; h < SAMPLES_PER_CHANNEL; h = h + 1) begin
         for (i = 0; i < NUM_OF_CHANNELS; i = i + 1) begin
           if (enable[i] == 1'b1) begin
-            expected_fifo_rd_data[(i*SAMPLES_PER_CHANNEL+h)*8+:8] <= j;
+            expected_fifo_rd_data[(i*SAMPLES_PER_CHANNEL+h)*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= DATA_OFFSET - j;
             j = j + 1;
           end
         end
@@ -131,11 +136,11 @@ module upack_tb;
   always @(posedge clk) begin
     if (reset == 1'b1) begin
       for (i = 0; i < NUM_OF_PORTS; i = i + 1) begin
-        s_axis_data[i*8+:8] <= i;
+        s_axis_data[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= DATA_OFFSET - i;
       end
     end else if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1) begin
       for (i = 0; i < NUM_OF_PORTS; i = i + 1) begin
-        s_axis_data[i*8+:8] <= s_axis_data[i*8+:8] + NUM_OF_PORTS;
+        s_axis_data[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= s_axis_data[i*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] - NUM_OF_PORTS;
       end
     end
   end
@@ -150,7 +155,9 @@ module upack_tb;
   util_upack2_impl #(
     .NUM_OF_CHANNELS(NUM_OF_CHANNELS),
     .SAMPLES_PER_CHANNEL(SAMPLES_PER_CHANNEL),
-    .SAMPLE_DATA_WIDTH(8)
+    .SAMPLE_DATA_WIDTH(SAMPLE_DATA_WIDTH),
+    .PIPELINE_STAGES(PIPELINE_STAGES),
+    .PARALLEL_OR_SERIAL_N(PARALLEL_OR_SERIAL_N)
   ) i_unpack (
     .clk(clk),
     .reset(reset),
