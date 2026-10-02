@@ -39,10 +39,12 @@ create_bd_port -dir I adcb_da_n
 create_bd_port -dir I adcb_sync_n
 create_bd_port -dir I adcb_filter_data_ready_n
 
-create_bd_port -dir O -from 1 -to 0 ad4080_spi_csn
-create_bd_port -dir O ad4080_spi_clk
-create_bd_port -dir O ad4080_spi_mosi
-create_bd_port -dir I ad4080_spi_miso
+# AD9508 clock divider + AD5313R DAC SPI
+
+create_bd_port -dir O -from 1 -to 0 ad9508_ad5313r_spi_csn
+create_bd_port -dir O ad9508_ad5313r_spi_clk
+create_bd_port -dir O ad9508_ad5313r_spi_mosi
+create_bd_port -dir I ad9508_ad5313r_spi_miso
 
 # AD9910 control + parallel-data
 
@@ -119,22 +121,22 @@ ad_connect axi_ad9910_dma/m_axis axi_ad9910/s_axis
 
 ad_connect axi_ad9910/ext_sync GND
 
-# ad4080 AXI_SPI
+# AD9508 + AD5313R AXI_SPI
 
-ad_ip_instance axi_quad_spi ad4080_spi
-ad_ip_parameter ad4080_spi CONFIG.C_USE_STARTUP 0
-ad_ip_parameter ad4080_spi CONFIG.C_NUM_SS_BITS 2
-ad_ip_parameter ad4080_spi CONFIG.C_SCK_RATIO 8
+ad_ip_instance axi_quad_spi ad9508_ad5313r_spi
+ad_ip_parameter ad9508_ad5313r_spi CONFIG.C_USE_STARTUP 0
+ad_ip_parameter ad9508_ad5313r_spi CONFIG.C_NUM_SS_BITS 2
+ad_ip_parameter ad9508_ad5313r_spi CONFIG.C_SCK_RATIO 8
 
-ad_connect ad4080_spi_csn ad4080_spi/ss_o
-ad_connect ad4080_spi_csn ad4080_spi/ss_i ;# loopback
-ad_connect ad4080_spi_clk ad4080_spi/sck_o
-ad_connect ad4080_spi_clk ad4080_spi/sck_i ;# loopback
-ad_connect ad4080_spi_mosi ad4080_spi/io0_o
-ad_connect ad4080_spi_mosi ad4080_spi/io0_i ;# loopback
-ad_connect ad4080_spi_miso ad4080_spi/io1_i
+ad_connect ad9508_ad5313r_spi_csn ad9508_ad5313r_spi/ss_o
+ad_connect ad9508_ad5313r_spi_csn ad9508_ad5313r_spi/ss_i ;# loopback
+ad_connect ad9508_ad5313r_spi_clk ad9508_ad5313r_spi/sck_o
+ad_connect ad9508_ad5313r_spi_clk ad9508_ad5313r_spi/sck_i ;# loopback
+ad_connect ad9508_ad5313r_spi_mosi ad9508_ad5313r_spi/io0_o
+ad_connect ad9508_ad5313r_spi_mosi ad9508_ad5313r_spi/io0_i ;# loopback
+ad_connect ad9508_ad5313r_spi_miso ad9508_ad5313r_spi/io1_i
 
-ad_connect $sys_cpu_clk ad4080_spi/ext_spi_clk
+ad_connect $sys_cpu_clk ad9508_ad5313r_spi/ext_spi_clk
 
 # axi_ad408x
 
@@ -199,7 +201,7 @@ ad_cpu_interconnect 0x44A10000 axi_ad9910_dma
 ad_cpu_interconnect 0x44A20000 axi_ad4080_adc_a
 ad_cpu_interconnect 0x44A30000 axi_ad4080_adc_b
 ad_cpu_interconnect 0x44A40000 axi_ad4880_dma
-ad_cpu_interconnect 0x44A60000 ad4080_spi
+ad_cpu_interconnect 0x44A60000 ad9508_ad5313r_spi
 
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9910_dma/m_src_axi
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9910_dma/m_sg_axi
@@ -210,4 +212,4 @@ ad_mem_hp1_interconnect $sys_cpu_clk axi_ad4880_dma/m_dest_axi
 ad_cpu_interrupt ps-0 mb-0 axi_ad9910_dma/irq
 ad_cpu_interrupt ps-1 mb-1 axi_ad9910/irq
 ad_cpu_interrupt ps-2 mb-2 axi_ad4880_dma/irq
-ad_cpu_interrupt ps-3 mb-3 ad4080_spi/ip2intc_irpt
+ad_cpu_interrupt ps-3 mb-3 ad9508_ad5313r_spi/ip2intc_irpt

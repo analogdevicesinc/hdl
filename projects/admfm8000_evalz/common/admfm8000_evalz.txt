@@ -69,7 +69,7 @@ D24       LA23_N        ADCB_AD4080_MISO      adcb_ad4080_miso      LVCMOS25    
 
 C26       LA27_P        AD9508_SYNC           ad9508_sync           LVCMOS25     #N/A
 D27       LA26_N        AD9508_CSN            ad9508_csn            LVCMOS25     #N/A
-C22       LA18_CC_P     SYNCB                 syncb                 LVCMOS25     #N/A
+C22       LA18_CC_P     SYNCB                 ad5313r_syncb         LVCMOS25     #N/A
 D18       LA13_N        AD9508_ADF4350_SCLK   ad9508_adf4350_sclk   LVCMOS25     #N/A
 D17       LA13_P        AD9508_ADF4350_MISO   ad9508_adf4350_miso   LVCMOS25     #N/A
 D26       LA26_P        AD9508_ADF4350_MOSI   ad9508_adf4350_mosi   LVCMOS25     #N/A

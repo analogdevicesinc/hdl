@@ -160,7 +160,7 @@ module system_top (
   output          ad9508_adf4350_sclk,
   output          ad9508_adf4350_mosi,
   output          ad9508_csn,
-  output          syncb
+  output          ad5313r_syncb
 );
 
   // internal registers
@@ -187,7 +187,7 @@ module system_top (
   wire            adca_filter_data_ready_n;
   wire            adcb_filter_data_ready_n;
 
-  wire    [ 1:0]  ad4080_spi_csn_s;
+  wire    [ 1:0]  ad9508_ad5313r_spi_csn_s;
   wire            adc_spi_miso_s;
 
   // instantiations
@@ -198,13 +198,14 @@ module system_top (
   assign adca_filter_data_ready_n  = 1'b0;
   assign adcb_filter_data_ready_n  = 1'b0;
 
-  // single SPI controller (ad4080_spi) shared by both AD4080 ADCs:
-  // one chip-select per device, shared SCLK/MOSI, MISO muxed by active CSN
-  assign adca_ad4080_csn  = ad4080_spi_csn_s[0];
-  assign adcb_ad4080_csn  = ad4080_spi_csn_s[1];
-
+  // PS SPI1 is shared by both AD4080 ADCs: one chip-select per device
+  // (spi1_csn_0_o/spi1_csn_1_o), shared SCLK/MOSI, MISO muxed by active CSN
   assign adcb_ad4080_sclk = adca_ad4080_sclk;
   assign adcb_ad4080_mosi = adca_ad4080_mosi;
+
+  // AXI Quad SPI chip-selects: AD9508 clock divider and AD5313R DAC
+  assign ad9508_csn       = ad9508_ad5313r_spi_csn_s[0];
+  assign ad5313r_syncb    = ad9508_ad5313r_spi_csn_s[1];
 
   // MISO from both devices onto the shared SPI MISO line (both selected is illegal)
   assign adc_spi_miso_s = adca_ad4080_csn ? adcb_ad4080_miso :
@@ -333,15 +334,15 @@ module system_top (
     .spi0_sdi_i (spi_miso),
     .spi0_sdo_i (spi_mosi),
     .spi0_sdo_o (spi_mosi),
-    .spi1_clk_i (1'b0),
-    .spi1_clk_o (ad9508_adf4350_sclk),
-    .spi1_csn_0_o (ad9508_csn),
-    .spi1_csn_1_o (syncb),
+    .spi1_clk_i (adca_ad4080_sclk),
+    .spi1_clk_o (adca_ad4080_sclk),
+    .spi1_csn_0_o (adca_ad4080_csn),
+    .spi1_csn_1_o (adcb_ad4080_csn),
     .spi1_csn_2_o (),
     .spi1_csn_i (1'b1),
-    .spi1_sdi_i (ad9508_adf4350_miso),
-    .spi1_sdo_i (1'b0),
-    .spi1_sdo_o (ad9508_adf4350_mosi),
+    .spi1_sdi_i (adc_spi_miso_s),
+    .spi1_sdo_i (adca_ad4080_mosi),
+    .spi1_sdo_o (adca_ad4080_mosi),
 
     .dds_sync_clk (sync_clk),
     .dds_drover (dds_drover),
@@ -368,9 +369,9 @@ module system_top (
     .adcb_filter_data_ready_n(adcb_filter_data_ready_n),
     .adcb_sync_n (ad9508_sync),
 
-    .ad4080_spi_csn (ad4080_spi_csn_s),
-    .ad4080_spi_clk (adca_ad4080_sclk),
-    .ad4080_spi_mosi (adca_ad4080_mosi),
-    .ad4080_spi_miso (adc_spi_miso_s));
+    .ad9508_ad5313r_spi_csn (ad9508_ad5313r_spi_csn_s),
+    .ad9508_ad5313r_spi_clk (ad9508_adf4350_sclk),
+    .ad9508_ad5313r_spi_mosi (ad9508_adf4350_mosi),
+    .ad9508_ad5313r_spi_miso (ad9508_adf4350_miso));
 
 endmodule

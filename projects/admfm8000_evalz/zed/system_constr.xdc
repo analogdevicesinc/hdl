@@ -81,7 +81,7 @@ set_property -dict {PACKAGE_PIN D15 IOSTANDARD LVCMOS25} [get_ports adcb_ad4080_
 set_property -dict {PACKAGE_PIN E21 IOSTANDARD LVCMOS25} [get_ports ad9508_sync];           ## C26  FMC_LPC_LA27_P      AD9508_SYNC/CNVEN
 
 set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS25} [get_ports ad9508_csn];            ## D27  FMC_LPC_LA26_N      CS1_0
-set_property -dict {PACKAGE_PIN D20 IOSTANDARD LVCMOS25} [get_ports syncb];                 ## C22  FMC_LPC_LA18_CC_P
+set_property -dict {PACKAGE_PIN D20 IOSTANDARD LVCMOS25} [get_ports ad5313r_syncb];         ## C22  FMC_LPC_LA18_CC_P
 
 set_property -dict {PACKAGE_PIN M17 IOSTANDARD LVCMOS25} [get_ports ad9508_adf4350_sclk];   ## D18  FMC_LPC_LA13_N      SCLK1
 set_property -dict {PACKAGE_PIN L17 IOSTANDARD LVCMOS25} [get_ports ad9508_adf4350_miso];   ## D17  FMC_LPC_LA13_P      SDO_1
@@ -195,9 +195,3 @@ create_clock -name pd_clk         -period  4 [get_ports dds_pdclk]
 
 create_clock -period 2.500 -name dco_clk  [get_ports adca_dco_p]
 create_clock -period 2.500 -name dco_clk1 [get_ports adcb_dco_p]
-
-##by default IOB is TRUE and this register is not being driven by any IO element
-
-## MISO is muxed in fabric (single SPI master shared by both ADCs), so the io1 input
-## register is no longer driven directly by an IO element and cannot pack into the IOB
-set_property IOB FALSE [get_cells -hierarchical -regexp {.*ad4080_spi.*IO1_I_REG$}];
