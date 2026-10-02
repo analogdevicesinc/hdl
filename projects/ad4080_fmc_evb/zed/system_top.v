@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -122,6 +122,15 @@ module system_top (
   output          pd_v33b,
   output          osc_en,
   output          ad9508_sync,
+
+`ifdef SPI_SLAVE
+  // PMOD JB interface
+
+  input           pmod_spi_cs,
+  input           pmod_spi_sclk,
+  output          pmod_spi_miso,
+  output          pmod_data_ready,
+`endif
 
   // ADC SPI
 
@@ -252,6 +261,12 @@ module system_top (
     .iic_mux_sda_t (iic_mux_sda_t_s),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
+`ifdef SPI_SLAVE
+    .pmod_spi_cs (pmod_spi_cs),
+    .pmod_spi_sclk (pmod_spi_sclk),
+    .pmod_spi_miso (pmod_spi_miso),
+    .pmod_data_ready (pmod_data_ready),
+`endif
     .spi0_clk_i (1'b0),
     .spi0_clk_o (ad4080_sclk),
     .spi0_csn_0_o (ad4080_csn),
