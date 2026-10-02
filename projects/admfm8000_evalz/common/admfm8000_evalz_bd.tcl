@@ -142,12 +142,14 @@ ad_connect $sys_cpu_clk ad4080_spi/ext_spi_clk
 ad_ip_instance axi_ad408x axi_ad4080_adc_a
 ad_ip_parameter axi_ad4080_adc_a CONFIG.ADC_N_BITS $ADC_N_BITS
 ad_ip_parameter axi_ad4080_adc_a CONFIG.NUM_LANES 1
+ad_ip_parameter axi_ad4080_adc_a CONFIG.INIT_DELAY 4
 
 # axi_ad4080_adc_b
 ad_ip_instance axi_ad408x axi_ad4080_adc_b
 ad_ip_parameter axi_ad4080_adc_b CONFIG.IO_DELAY_GROUP adc_if_delay_group2
 ad_ip_parameter axi_ad4080_adc_b CONFIG.ADC_N_BITS $ADC_N_BITS
 ad_ip_parameter axi_ad4080_adc_b CONFIG.NUM_LANES 1
+ad_ip_parameter axi_ad4080_adc_b CONFIG.INIT_DELAY 4
 
 # connect interface to axi_ad4080_adc_a
 
