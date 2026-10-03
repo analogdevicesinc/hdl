@@ -151,6 +151,12 @@ set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
+# The TX xcvr owns the QPLLs and exposes one up_cm port per 4 of its lanes.
+# Each link starts on a new quad, so pad all but the last link to a quad
+# boundary; otherwise the quads of the following links get no up_cm port.
+set TX_XCVR_LANES_PER_LINK [expr 4 * int(ceil($TX_JESD_L / 4.0))]
+set TX_XCVR_NUM_OF_LANES   [expr ($TX_NUM_LINKS - 1) * $TX_XCVR_LANES_PER_LINK + $TX_JESD_L]
+
 set adc_data_offload_name apollo_rx_data_offload
 set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
 set adc_dma_data_width $adc_data_width
@@ -375,7 +381,7 @@ if {$ADI_PHY_SEL} {
   ad_ip_instance axi_adxcvr axi_apollo_tx_xcvr
   ad_ip_parameter axi_apollo_tx_xcvr CONFIG.ID 0
   ad_ip_parameter axi_apollo_tx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-  ad_ip_parameter axi_apollo_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
+  ad_ip_parameter axi_apollo_tx_xcvr CONFIG.NUM_OF_LANES $TX_XCVR_NUM_OF_LANES
   ad_ip_parameter axi_apollo_tx_xcvr CONFIG.TX_OR_RX_N 1
   ad_ip_parameter axi_apollo_tx_xcvr CONFIG.QPLL_ENABLE 1
   ad_ip_parameter axi_apollo_tx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
@@ -851,8 +857,11 @@ if {$ASYMMETRIC_A_B_MODE} {
     }
   }
 
-  for {set i 0}  {$i < $RX_NUM_LINKS} {incr i} {
-    for {set j $RX_JESD_L}  {$j < $MAX_RX_LANES_PER_LINK} {incr j} {
+  # ad_xcvrcon wires all $MAX_RX_LANES lanes, so also list the lanes of the
+  # links that are not used
+  for {set i 0}  {$i < $MAX_RX_LINKS} {incr i} {
+    set first_unused_lane [expr {$i < $RX_NUM_LINKS ? $RX_JESD_L : 0}]
+    for {set j $first_unused_lane}  {$j < $MAX_RX_LANES_PER_LINK} {incr j} {
       set cur_lane [expr $i*$MAX_RX_LANES_PER_LINK+$j]
       lappend lane_map [lindex $max_lane_map $cur_lane]
     }
@@ -890,8 +899,11 @@ if {$ASYMMETRIC_A_B_MODE} {
     }
   }
 
-  for {set i 0}  {$i < $TX_NUM_LINKS} {incr i} {
-    for {set j $TX_JESD_L}  {$j < $MAX_TX_LANES_PER_LINK} {incr j} {
+  # ad_xcvrcon wires all $MAX_TX_LANES lanes, so also list the lanes of the
+  # links that are not used
+  for {set i 0}  {$i < $MAX_TX_LINKS} {incr i} {
+    set first_unused_lane [expr {$i < $TX_NUM_LINKS ? $TX_JESD_L : 0}]
+    for {set j $first_unused_lane}  {$j < $MAX_TX_LANES_PER_LINK} {incr j} {
       set cur_lane [expr $i*$MAX_TX_LANES_PER_LINK+$j]
       lappend lane_map [lindex $max_lane_map $cur_lane]
     }
@@ -900,14 +912,27 @@ if {$ASYMMETRIC_A_B_MODE} {
   if {$ADI_PHY_SEL} {
     ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_xcvr axi_apollo_tx_jesd $lane_map {} tx_device_clk $MAX_TX_LANES
 
-    if {$TX_JESD_L == 8} {
-      delete_bd_objs [get_bd_intf_nets axi_apollo_tx_xcvr_up_cm_8]
-      delete_bd_objs [get_bd_intf_nets axi_apollo_tx_xcvr_up_cm_12]
-      connect_bd_intf_net [get_bd_intf_pins axi_apollo_tx_xcvr/up_cm_8] [get_bd_intf_pins util_apollo_xcvr/up_cm_12]
-      connect_bd_intf_net [get_bd_intf_pins axi_apollo_tx_xcvr/up_cm_12] [get_bd_intf_pins util_apollo_xcvr/up_cm_16]
-    } elseif {$TX_JESD_L == 4} {
-      delete_bd_objs [get_bd_intf_nets axi_apollo_tx_xcvr_up_cm_4]
-      connect_bd_intf_net [get_bd_intf_pins axi_apollo_tx_xcvr/up_cm_4] [get_bd_intf_pins util_apollo_xcvr/up_cm_12]
+    # ad_xcvrcon pairs up_ch_n with JESD lane n and up_cm_n with the n-th
+    # logical quad. Rewire both so xcvr lane n sits in the physical quad of
+    # its link; the padding lanes take the spare channels of those quads.
+    set tx_xcvr_intfs {}
+    for {set n 0} {$n < $TX_XCVR_NUM_OF_LANES} {incr n} {
+      lappend tx_xcvr_intfs axi_apollo_tx_xcvr/up_ch_$n
+      if {$n % 4 == 0} {
+        lappend tx_xcvr_intfs axi_apollo_tx_xcvr/up_cm_$n
+      }
+    }
+    set tx_xcvr_nets [get_bd_intf_nets -quiet -of_objects [get_bd_intf_pins $tx_xcvr_intfs]]
+    if {$tx_xcvr_nets ne ""} {
+      delete_bd_objs $tx_xcvr_nets
+    }
+
+    for {set n 0} {$n < $TX_XCVR_NUM_OF_LANES} {incr n} {
+      set phys_lane [expr ($n / $TX_XCVR_LANES_PER_LINK) * $MAX_TX_LANES_PER_LINK + ($n % $TX_XCVR_LANES_PER_LINK)]
+      ad_connect axi_apollo_tx_xcvr/up_ch_$n util_apollo_xcvr/up_tx_$phys_lane
+      if {$n % 4 == 0} {
+        ad_connect axi_apollo_tx_xcvr/up_cm_$n util_apollo_xcvr/up_cm_$phys_lane
+      }
     }
     create_bd_port -dir I tx_sysref_12
     create_bd_port -dir I tx_sync_12
