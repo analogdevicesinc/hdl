@@ -166,7 +166,7 @@ module axi_jesd204_tx_regmap_tb;
     for (i = 0; i < 1024; i = i + 1)
       expected_reg_mem[i] <= 'h00;
     /* Non zero power-on-reset values */
-    set_reset_reg_value('h00, 32'h00010661); /* PCORE version register */
+    set_reset_reg_value('h00, 32'h00010761); /* PCORE version register */
     set_reset_reg_value('h0c, 32'h32303454); /* PCORE magic register */
     set_reset_reg_value('h10, NUM_LANES); /* Number of lanes */
     set_reset_reg_value('h14, 'h2); /* Datapath width */
@@ -255,6 +255,8 @@ module axi_jesd204_tx_regmap_tb;
     check_all_registers();
     write_reg_and_update('h214, 32'h03);
     check_all_registers();
+    write_reg_and_update('h214, 32'h0f); /* header mode */
+    check_all_registers();
 
     /* Check links disable */
     write_reg_and_update('h218, {NUM_LINKS{1'b1}});
@@ -262,6 +264,11 @@ module axi_jesd204_tx_regmap_tb;
 
     /* Check JESD TX configuration */
     write_reg_and_update('h240, 32'h07);
+    check_all_registers();
+
+    /* SYSREF LMFC offset reads back as written, upper bits reserved */
+    write_reg('h104, 32'hffffff81);
+    expected_reg_mem['h104/4] <= 32'h81;
     check_all_registers();
 
     /* Check mframes per ILAS - RO at the moment */
@@ -308,6 +315,7 @@ module axi_jesd204_tx_regmap_tb;
     invert_register('h214);
     invert_register('h218);
     invert_register('h240);
+    invert_register('h104); /* SYSREF LMFC offset */
     invert_register('h244);
     for (i = 0; i < NUM_LANES; i = i + 1) begin
       invert_register('h310 + i * 32);

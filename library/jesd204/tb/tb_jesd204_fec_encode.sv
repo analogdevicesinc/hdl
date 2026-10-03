@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2016-2018, 2020-2022, 2026 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 // Short identifier: ADIJESD204
 //
 // The ADI JESD204 Core is released under the following license, which is
@@ -46,101 +46,99 @@
 // ***************************************************************************
 // ***************************************************************************
 
-`timescale 1ns/100ps
+`timescale 1ns / 100ps
+`default_nettype none
 
-module jesd204_up_sysref (
-  input up_clk,
-  input up_reset,
+// Checks jesd204_fec_encode against a bit-serial division of each 2048-bit
+// block by g(x). data_in[0] is the first bit of a word and eomb marks the
+// last word of a block, as the encoder expects.
 
-  input core_clk,
+module tb_jesd204_fec_encode;
+  localparam DATA_WIDTH = 64;
+  localparam [25:0] G_LOW = (1 << 21) | (1 << 17) | (1 << 9) | (1 << 4) | 1;
+  localparam NUM_BLOCKS = 60;
 
-  input device_clk,
+  parameter VCD_FILE = {"tb_jesd204_fec_encode.vcd"};
+  `include "tb_base.v"
 
-  input [11:0] up_raddr,
-  output reg [31:0] up_rdata,
+  logic [25:0]            fec;
+  logic                   rst = 1'b1;
+  logic                   eomb = 1'b0;
+  logic [DATA_WIDTH-1:0]  data_in = '0;
+  logic [25:0]            rem = '0;
+  logic [25:0]            exp_fec = '0;
+  logic                   check = 1'b0;
+  logic                   check_d = 1'b0;
+  logic [25:0]            exp_fec_d = '0;
+  int                     cnt = 0;
+  int                     blocks = 0;
+  int                     errors = 0;
 
-  input up_wreq,
-  input [11:0] up_waddr,
-  input [31:0] up_wdata,
+  function automatic logic [25:0] div_word(input logic [25:0] r, input logic [DATA_WIDTH-1:0] w);
+    logic fb;
+    for (int j = 0; j < DATA_WIDTH; j++) begin
+      fb = r[25] ^ w[j];
+      r = {r[24:0], 1'b0} ^ (fb ? G_LOW : 26'd0);
+    end
+    return r;
+  endfunction
 
-  input up_cfg_is_writeable,
+  initial begin
+    repeat (4) @(posedge clk);
+    rst <= 1'b0;
+  end
 
-  output reg up_cfg_sysref_oneshot,
-  output reg [7:0] up_cfg_lmfc_offset,
-  output reg up_cfg_sysref_disable,
+  always @(posedge clk) begin
+    // fec is valid one edge after the encoder samples eomb
+    if (check_d) begin
+      if (fec !== exp_fec_d) begin
+        $display("block %0d: fec %h, expected %h", blocks, fec, exp_fec_d);
+        errors = errors + 1;
+      end
+      blocks = blocks + 1;
+    end
+    check_d = check;
+    exp_fec_d = exp_fec;
+    check = 1'b0;
 
-  input device_event_sysref_alignment_error,
-  input device_event_sysref_edge
-);
+    if (!rst) begin
+      data_in <= {$urandom, $urandom};
+      eomb <= (cnt % 32) == 31;
+      cnt <= cnt + 1;
+    end
 
-  reg [1:0] up_sysref_status;
-  reg [1:0] up_sysref_status_clear;
-  wire [1:0] up_sysref_event;
-
-  sync_event #(
-    .NUM_OF_EVENTS(2)
-  ) i_cdc_sysref_event (
-    .in_clk(device_clk),
-    .in_event({
-      device_event_sysref_alignment_error,
-      device_event_sysref_edge
-    }),
-    .out_clk(up_clk),
-    .out_event(up_sysref_event));
-
-  always @(posedge up_clk) begin
-    if (up_reset == 1'b1) begin
-      up_sysref_status <= 2'b00;
-    end else begin
-      up_sysref_status <= (up_sysref_status & ~up_sysref_status_clear) | up_sysref_event;
+    if (blocks == NUM_BLOCKS) begin
+      if (errors != 0) failed <= 1'b1;
+      $display("%0d blocks, %0d errors", NUM_BLOCKS, errors);
+      if (errors == 0)
+        $display("SUCCESS");
+      else
+        $display("FAILED");
+      $finish;
     end
   end
 
-  always @(*) begin
-    case (up_raddr)
-      /* JESD SYSREF configuraton */
-      12'h040: up_rdata = {
-        /* 02-31 */ 30'h00, /* Reserved for future use */
-        /*    01 */ up_cfg_sysref_oneshot,
-        /*    00 */ up_cfg_sysref_disable
-      };
-      12'h041: up_rdata = {
-        /* 08-31 */ 24'h00, /* Reserved for future use */
-        /* 00-07 */ up_cfg_lmfc_offset /* In device clock cycles */
-      };
-      12'h042: up_rdata = {
-        /* 02-31 */ 30'h00,
-        /* 00-01 */ up_sysref_status
-      };
-      default: up_rdata = 32'h00000000;
-    endcase
-  end
-
-  always @(posedge up_clk) begin
-    if (up_reset == 1'b1) begin
-      up_cfg_sysref_oneshot <= 1'b0;
-      up_cfg_lmfc_offset <= 'h00;
-      up_cfg_sysref_disable <= 1'b0;
-    end else if (up_wreq == 1'b1 && up_cfg_is_writeable == 1'b1) begin
-      case (up_waddr)
-        /* JESD SYSREF configuraton */
-        12'h040: begin
-          up_cfg_sysref_oneshot <= up_wdata[1];
-          up_cfg_sysref_disable <= up_wdata[0];
-        end
-        12'h041: begin
-          up_cfg_lmfc_offset <= up_wdata[7:0];
-        end
-      endcase
+  always @(negedge clk) begin
+    if (!rst && cnt > 0) begin
+      rem = div_word(rem, data_in);
+      if (eomb) begin
+        exp_fec = rem;
+        rem = '0;
+        check = 1'b1;
+      end
     end
   end
 
-  always @(*) begin
-    if (up_wreq == 1'b1 && up_waddr == 12'h042) begin
-      up_sysref_status_clear = up_wdata[1:0];
-    end else begin
-      up_sysref_status_clear = 2'b00;
-    end
-  end
+  jesd204_fec_encode #(
+    .DATA_WIDTH  (DATA_WIDTH)
+  ) jesd204_fec_encode (
+    .fec         (fec),
+    .clk         (clk),
+    .rst         (rst),
+    .shift_en    (~rst),
+    .eomb        (eomb),
+    .data_in     (data_in));
 
 endmodule
+
+`default_nettype wire
