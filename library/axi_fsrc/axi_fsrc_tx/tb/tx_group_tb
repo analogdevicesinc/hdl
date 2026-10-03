@@ -1,0 +1,16 @@
+#!/bin/bash
+
+SOURCE="tx_group_tb.v"
+SOURCE+=" ../axi_fsrc_tx.sv"
+SOURCE+=" ../axi_fsrc_tx_regmap.sv"
+SOURCE+=" ../tx_fsrc.sv"
+SOURCE+=" ../tx_fsrc_make_holes.sv"
+SOURCE+=" ../tx_fsrc_sample_en_gen.sv"
+SOURCE+=" ../accum_set.sv"
+SOURCE+=" ../fifo_sync_2deep.v"
+SOURCE+=" ../../../common/up_axi.v"
+SOURCE+=" ../../../util_cdc/sync_bits.v"
+SOURCE+=" ../../../util_cdc/sync_event.v"
+
+cd `dirname $0`
+source ../../../common/tb/run_tb.sh -g2005-sv
