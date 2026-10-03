@@ -1,6 +1,35 @@
 ###############################################################################
 ## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
-### SPDX short identifier: ADIBSD
+## Short identifier: ADIBSD
+##
+## Redistribution and use in source and binary forms, with or without modification,
+## are permitted provided that the following conditions are met:
+##     - Redistributions of source code must retain the above copyright
+##       notice, this list of conditions and the following disclaimer.
+##     - Redistributions in binary form must reproduce the above copyright
+##       notice, this list of conditions and the following disclaimer in
+##       the documentation and/or other materials provided with the
+##       distribution.
+##     - Neither the name of Analog Devices, Inc. nor the names of its
+##       contributors may be used to endorse or promote products derived
+##       from this software without specific prior written permission.
+##     - The use of this software may or may not infringe the patent rights
+##       of one or more patent holders. This license does not release you
+##       from the requirement that you obtain separate licenses from these
+##       patent holders to use this software.
+##     - Use of the software either in source or binary form, must be run
+##       on or directly connected to an Analog Devices Inc. component.
+##
+## THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+## INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
+## PARTICULAR PURPOSE ARE DISCLAIMED.
+##
+## IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+## EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
+## RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+## BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+## STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
 <: set ComponentName [getComponentNameString] :>
@@ -8,41 +37,22 @@
 <: setFileName [ttcl_add $ComponentName "_constr"] :>
 <: setFileExtension ".xdc" :>
 <: setFileProcessingOrder late :>
+<: set trigger_stretch [get_property MODELPARAM_VALUE.TRIGGER_STRETCH] :>
 
 set_property ASYNC_REG TRUE \
   [get_cells -hier {*cdc_sync_stage1_reg*}] \
   [get_cells -hier {*cdc_sync_stage2_reg*}]
 
 set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_direction_reg}] \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_direction_reg*}] \
   -to [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/bsync_counter_reg[*]}]
 
 set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_direction_reg_replica}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/bsync_counter_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_sw_reset_reg}] \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_sw_reset_reg*}] \
   -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[1]}]
 
 set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_sw_reset_reg_replica}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[1]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_sw_resetn_reg[*]}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_disable_internal_bsync_reg[*]}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_direction_reg[*]}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/i_control_signals/cdc_sync_stage1_reg[0]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_direction_reg[*]}] \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_direction_reg*}] \
   -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
@@ -114,10 +124,6 @@ set_false_path \
   -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_phase/out_data_reg[*]}]
 
 set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/out_toggle_d1_reg_replica}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/i_sync_in/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
   -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/in_toggle_d1_reg}] \
   -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/i_sync_out/cdc_sync_stage1_reg[*]}]
 
@@ -130,8 +136,12 @@ set_false_path \
   -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_manual_trig_reg}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_manual_trig/cdc_sync_stage1_reg[*]}]
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_manual_trig/in_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_manual_trig/i_sync_out/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_manual_trig/out_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_manual_trig/i_sync_in/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
   -from [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/b_captured_reg}] \
@@ -144,10 +154,6 @@ set_false_path \
 set_false_path \
   -from [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/bsync_misaligned_reg}] \
   -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_debug_signals/cdc_sync_stage1_reg[*]}]
-
-set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_direction_reg_replica_1}] \
-  -to [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/i_control_signals/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
   -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_disable_internal_bsync_reg}] \
@@ -166,9 +172,41 @@ set_false_path \
   -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
-  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/out_toggle_d1_reg}] \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/out_toggle_d1_reg*}] \
   -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/i_sync_in/cdc_sync_stage1_reg[*]}]
 
 set_false_path \
   -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
     -filter {NAME =~ *i_bsync_gen/i_control_signals* && IS_SEQUENTIAL}]
+
+<: if {$trigger_stretch} { :>
+
+set_property ASYNC_REG TRUE [get_cells -hier \
+  -filter {NAME =~ *i_trigger_stretcher/trigger_sync*_reg && IS_SEQUENTIAL}]
+
+# trigger_stretched is clocked by trig and asynchronously cleared by
+# trigger_sync2, so both directions cross into or out of the bsync domain.
+set bsync_stretch_reg [get_cells -hier \
+  -filter {NAME =~ *i_trigger_stretcher/trigger_stretched_reg && IS_SEQUENTIAL}]
+set_false_path -to   $bsync_stretch_reg
+set_false_path -from $bsync_stretch_reg
+
+# sync_start gates the pulse with BSYNC itself, so it is asynchronous to
+# device_clk and only the trigger_channel synchronizer may capture it.
+set_false_path -to [get_cells -hier \
+  -filter {NAME =~ *i_channel/trig_r_reg && IS_SEQUENTIAL}]
+
+# The clock is defined on the register pins, not on the net: the same net
+# carries BSYNC as data to bsync_r (and to any SYSREF consumer outside the IP),
+# and a clock on the net would override their input delay constraints.
+set bsync_clk_pins [get_pins -hier \
+  -filter {NAME =~ *i_trigger_stretcher/trigger_sync*_reg/C}]
+set bsync_device_clk [get_clocks -of_objects [get_pins -hier \
+  -filter {NAME =~ *i_bsync_gen/bsync_counter_reg[0]/C}]]
+
+create_clock -name adf4030_bsync_clk \
+  -period [get_property PERIOD $bsync_device_clk] $bsync_clk_pins
+# driven from the IOBUFDS through fabric, not through a clock buffer
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets -of_objects $bsync_clk_pins]
+set_clock_groups -asynchronous -group [get_clocks adf4030_bsync_clk]
+<: } :>
