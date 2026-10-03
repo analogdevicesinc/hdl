@@ -360,14 +360,17 @@ if {$ASYMMETRIC_A_B_MODE} {
 }
 
 if {$ADI_PHY_SEL} {
-  ad_ip_instance util_adxcvr util_apollo_xcvr
-  ad_ip_parameter util_apollo_xcvr CONFIG.CPLL_FBDIV_4_5 5
-  ad_ip_parameter util_apollo_xcvr CONFIG.TX_NUM_OF_LANES $MAX_APOLLO_LANES
-  ad_ip_parameter util_apollo_xcvr CONFIG.RX_NUM_OF_LANES $MAX_APOLLO_LANES
-  ad_ip_parameter util_apollo_xcvr CONFIG.RX_OUT_DIV 1
-  ad_ip_parameter util_apollo_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-  ad_ip_parameter util_apollo_xcvr CONFIG.RX_LANE_RATE $MAX_RX_LANE_RATE
-  ad_ip_parameter util_apollo_xcvr CONFIG.TX_LANE_RATE $MAX_TX_LANE_RATE
+  source $ad_hdl_dir/library/xilinx/scripts/xcvr_automation.tcl
+  global xcvr_config_paths
+
+  set util_adxcvr_parameters [adi_xcvr_parameters $xcvr_config_paths [list \
+    RX_NUM_OF_LANES $MAX_APOLLO_LANES \
+    TX_NUM_OF_LANES $MAX_APOLLO_LANES \
+    RX_LANE_RATE $MAX_RX_LANE_RATE \
+    TX_LANE_RATE $MAX_TX_LANE_RATE \
+    LINK_MODE $ENCODER_SEL \
+  ]]
+  ad_ip_instance util_adxcvr util_apollo_xcvr $util_adxcvr_parameters
 
   ad_ip_instance axi_adxcvr axi_apollo_rx_xcvr
   ad_ip_parameter axi_apollo_rx_xcvr CONFIG.ID 0
