@@ -73,7 +73,7 @@ proc checksum8bit {hex} {
       set byte [string index $hex $i];
       }
   };
-  return [format %0.2x [expr 255 - [expr "0x[string range [format %0.2x $chks] [expr [string length [format %0.2x $chks]] -2] [expr [string length [format %0.2x $chks]] -1]]"] +1]];
+  return [format %02x [expr {(256 - ($chks & 0xFF)) & 0xFF}]];
 }
 
 ## Flips the characters of a string, four at a time. Used to fix endianness.
