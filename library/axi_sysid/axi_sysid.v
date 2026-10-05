@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -69,7 +69,7 @@ module axi_sysid #(
 
   localparam          AXI_ADDRESS_WIDTH    = 12;
   localparam  [31:0]  CORE_VERSION         = {16'h0001,     /* MAJOR */
-                                                8'h01,      /* MINOR */
+                                                8'h02,      /* MINOR */
                                                 8'h61};     /* PATCH */
   localparam  [31:0]  CORE_MAGIC           = 32'h53594944;  // SYID
 
