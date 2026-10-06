@@ -279,8 +279,8 @@ module spi_engine_execution_shiftreg #(
                                                : (sdi_negedge ? data_shift_ddr_n[j-1] : data_shift_ddr_p[j-1]);
         end
         assign sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] = ddr_en ? interleaved
-            : (sdi_negedge ? {data_shift_sdr_n[DATA_WIDTH-2:0], sdi[i]}
-                           : {data_shift_sdr_p[DATA_WIDTH-2:0], sdi[i]});
+            : (sdi_negedge ? data_shift_sdr_n
+                           : data_shift_sdr_p);
       end else begin : g_sdr_il
         assign sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] = sdi_negedge ? data_shift_sdr_n : data_shift_sdr_p;
       end
