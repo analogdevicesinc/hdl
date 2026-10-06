@@ -40,7 +40,8 @@ module pack_shell #(
   parameter SAMPLES_PER_CHANNEL = 1,
   parameter SAMPLE_DATA_WIDTH = 16,
   parameter PACK = 0,
-  parameter PARALLEL_OR_SERIAL_N = 0
+  parameter PARALLEL_OR_SERIAL_N = 0,
+  parameter PIPELINE_STAGES = 0
 ) (
   input clk,
   input reset,
@@ -52,7 +53,7 @@ module pack_shell #(
   input ce,
   input flush,
 
-  output reg ready = 1'b0,
+  output ready,
   input [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] in_data,
 
   output [NUM_OF_CHANNELS*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] out_data,
@@ -68,6 +69,25 @@ module pack_shell #(
   localparam TOTAL_DATA_WIDTH = CHANNEL_DATA_WIDTH * NUM_OF_CHANNELS;
   localparam NUM_OF_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
   localparam LOG2_NUM_OF_SAMPLES = $clog2(NUM_OF_SAMPLES);
+  /*
+   * Number of copies of the routing network control registers. Two copies
+   * measurably help large configurations; four add enough control fanout to
+   * make timing worse.
+   */
+  localparam CTRL_REPLICAS = NUM_OF_SAMPLES >= 32 && SAMPLE_DATA_WIDTH % 2 == 0 ? 2 : 1;
+
+  // Function to calculate pipeline latency for a given number of MUX stages.
+  function integer calc_pipeline_latency;
+    input integer num_stages;
+    begin
+      if (PIPELINE_STAGES == 2)
+        calc_pipeline_latency = num_stages;
+      else if (PIPELINE_STAGES == 1)
+        calc_pipeline_latency = num_stages / 2;
+      else
+        calc_pipeline_latency = 0;
+    end
+  endfunction
 
   /*
    * Reset and control signals for the state machine. Data and control have
@@ -134,13 +154,10 @@ module pack_shell #(
       assign out_data = in_data;
       assign out_sync = 1'b1;
       assign out_valid = {NUM_OF_SAMPLES{1'b1}};
-
-      always @(*) begin
-        ready <= ce & ~reset_data;
-      end
+      assign ready = ce & ~reset_data;
     end else begin
-      localparam SAMPLE_ADDRESS_WIDTH =
-        NUM_OF_SAMPLES > 512 ? 10 :
+      localparam
+        SAMPLE_ADDRESS_WIDTH = NUM_OF_SAMPLES > 512 ? 10 :
         NUM_OF_SAMPLES > 256 ? 9 :
         NUM_OF_SAMPLES > 128 ? 8 :
         NUM_OF_SAMPLES > 64 ? 7 :
@@ -149,6 +166,110 @@ module pack_shell #(
         NUM_OF_SAMPLES > 8 ? 4 :
         NUM_OF_SAMPLES > 4 ? 3 :
         NUM_OF_SAMPLES > 2 ? 2 : 1;
+
+      /*
+       * Calculate total pipeline latency from all pack_network stages.
+       * For PACK mode:
+       *   gen_network[0]: SAMPLE_ADDRESS_WIDTH / 2 stages (4:1 MUX)
+       *   gen_network[1]: SAMPLE_ADDRESS_WIDTH % 2 stages (2:1 MUX)
+       * For UNPACK mode:
+       *   i_ext_ctrl_interconnect: 1 stage (only if NON_POWER_OF_TWO)
+       *   gen_network[0]: (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2 stages
+       *   gen_network[1]: (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2 stages
+       */
+      localparam
+        NETWORK0_STAGES = PACK ? (SAMPLE_ADDRESS_WIDTH / 2) :
+        ((SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2);
+      localparam
+        NETWORK1_STAGES = PACK ? (SAMPLE_ADDRESS_WIDTH % 2) :
+        ((SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2);
+      localparam EXT_NETWORK_STAGES = (NON_POWER_OF_TWO == 1 && PACK == 0) ? 1 : 0;
+
+      localparam
+        TOTAL_PIPELINE_LATENCY = calc_pipeline_latency(NETWORK0_STAGES) +
+        calc_pipeline_latency(NETWORK1_STAGES) +
+        calc_pipeline_latency(EXT_NETWORK_STAGES);
+
+      /*
+       * Internal versions of control signals before pipeline delay.
+       * These are delayed by TOTAL_PIPELINE_LATENCY clock enable cycles to match the
+       * ce-gated data path latency through the pack/unpack network.
+       *
+       * When PIPELINE_STAGES > 0, the data pipeline is ce-gated and control
+       * signal delays must also be ce-gated to maintain alignment.
+       */
+      reg ready_int = 1'b0;
+      wire out_sync_int;
+      wire [NUM_OF_SAMPLES-1:0] out_valid_int;
+
+      /*
+       * Unpack must produce an output word a fixed number of cycles after
+       * each read, whether or not input data was available, so its routing
+       * network is a pure retiming that advances every clock; the consumer
+       * delays its read strobes by TOTAL_PIPELINE_LATENCY clocks. `ready` then
+       * refers to the unpipelined input side and must not be delayed.
+       */
+      wire pipe_ce = PACK ? ce : 1'b1;
+
+      // Ce-gated pipeline delay for ready signal
+      // TOTAL_PIPELINE_LATENCY stages of ce-gated delay to match data pipeline
+      if (TOTAL_PIPELINE_LATENCY == 0 || PACK == 0) begin: gen_ready_comb
+        assign ready = ready_int;
+      end else begin: gen_ready_pipe
+        (* shreg_extract = "no" *) reg [TOTAL_PIPELINE_LATENCY-1:0] ready_sr = 'h0;
+        integer ri;
+        always @(posedge clk) begin
+          if (reset_ctrl == 1'b1) begin
+            ready_sr <= 'h0;
+          end else if (ce == 1'b1) begin
+            ready_sr[0] <= ready_int;
+            for (ri = 1; ri < TOTAL_PIPELINE_LATENCY; ri = ri + 1)
+              ready_sr[ri] <= ready_sr[ri-1];
+          end
+        end
+        assign ready = ready_sr[TOTAL_PIPELINE_LATENCY-1];
+      end
+
+      // Ce-gated pipeline delay for out_sync signal
+      if (TOTAL_PIPELINE_LATENCY == 0) begin: gen_sync_comb
+        assign out_sync = out_sync_int;
+      end else begin: gen_sync_pipe
+        (* shreg_extract = "no" *) reg [TOTAL_PIPELINE_LATENCY-1:0] sync_sr = 'h0;
+        integer si;
+        always @(posedge clk) begin
+          if (reset_ctrl == 1'b1) begin
+            sync_sr <= 'h0;
+          end else if (ce == 1'b1) begin
+            sync_sr[0] <= out_sync_int;
+            for (si = 1; si < TOTAL_PIPELINE_LATENCY; si = si + 1)
+              sync_sr[si] <= sync_sr[si-1];
+          end
+        end
+        assign out_sync = sync_sr[TOTAL_PIPELINE_LATENCY-1];
+      end
+
+      // Ce-gated pipeline delay for out_valid signal
+      if (TOTAL_PIPELINE_LATENCY == 0) begin: gen_valid_comb
+        assign out_valid = out_valid_int;
+      end else begin: gen_valid_pipe
+        (* shreg_extract = "no" *) reg [NUM_OF_SAMPLES-1:0] valid_sr [0:TOTAL_PIPELINE_LATENCY-1];
+        integer vi, vj;
+        initial begin
+          for (vi = 0; vi < TOTAL_PIPELINE_LATENCY; vi = vi + 1)
+            valid_sr[vi] = {NUM_OF_SAMPLES{1'b0}};
+        end
+        always @(posedge clk) begin
+          if (reset_ctrl == 1'b1) begin
+            for (vj = 0; vj < TOTAL_PIPELINE_LATENCY; vj = vj + 1)
+              valid_sr[vj] <= {NUM_OF_SAMPLES{1'b0}};
+          end else if (ce == 1'b1) begin
+            valid_sr[0] <= out_valid_int;
+            for (vj = 1; vj < TOTAL_PIPELINE_LATENCY; vj = vj + 1)
+              valid_sr[vj] <= valid_sr[vj-1];
+          end
+        end
+        assign out_valid = valid_sr[TOTAL_PIPELINE_LATENCY-1];
+      end
 
       /*
        * `rotate` is used as an offset into the input data vector. When not all
@@ -175,12 +296,6 @@ module pack_shell #(
       wire ce_ctrl;
 
       /*
-       * Extended version of the `enable` signal that takes SAMPLES_PER_CHANNEL
-       * into account.
-       */
-      wire [NUM_OF_SAMPLES-1:0] samples_enable;
-
-      /*
        * Used to connect the different intermediary stages of the routing
        * network. There can be up to three sub-networks.
        */
@@ -193,66 +308,105 @@ module pack_shell #(
       wire [SAMPLE_ADDRESS_WIDTH-1:0] prefix_count_s[0:NUM_OF_SAMPLES];
 
       /*
-       * Used for the vectorized approach when PARALLEL_OR_SERIAL_N == 1
-       */
-      wire [SAMPLE_ADDRESS_WIDTH-1:0] prefix_count_tmp[0:LOG2_NUM_OF_SAMPLES+1][0:NUM_OF_SAMPLES-1];
-
-      /*
-       * Samples are interleaved, so the sample mask is just the channel mask
-       * concatenated with itself SAMPLES_PER_CHANNEL times.
-       */
-      assign samples_enable = {SAMPLES_PER_CHANNEL{enable_int}};
-
-      /*
        * Control pipeline is active and should compute the next state either
        * during the startup phase or when a output data set is consumed.
        */
       assign ce_ctrl = startup_ctrl | ce;
 
-      if (PARALLEL_OR_SERIAL_N == 1) begin
-        /*
-        * Calculate the prefix sum using a vectorized approach.
-        * This way we should have at most log2(NUM_OF_SAMPLES)
-        * adders in series for the rightmost element and even less
-        * for the elements before it since we just propagate it to
-        * the last row from where it was calculated.
-        */
+      /*
+       * The prefix sum is computed in two register stages to keep its adders
+       * out of a single cycle. The samples are split into blocks of
+       * PREFIX_BLOCK. The first stage registers the running count of disabled
+       * samples within each block and the second stage adds the count of all
+       * preceding blocks. The first stage is computed from the same
+       * expression that loads `enable_int`, so its registers always hold the
+       * value `enable_int` would produce and `prefix_count_s` keeps its
+       * original timing. PARALLEL_OR_SERIAL_N selects a log-depth or a serial
+       * adder structure inside both stages.
+       */
+      localparam PREFIX_BLOCK_LOG2 = (LOG2_NUM_OF_SAMPLES + 1) / 2;
+      localparam PREFIX_BLOCK = 2**PREFIX_BLOCK_LOG2;
+      localparam PREFIX_NUM_BLOCKS = (NUM_OF_SAMPLES + PREFIX_BLOCK - 1) / PREFIX_BLOCK;
+      localparam PREFIX_NUM_BLOCKS_LOG2 = PREFIX_NUM_BLOCKS > 1 ? $clog2(PREFIX_NUM_BLOCKS) : 0;
 
-        /* Copy the samples_enable to the first row to make addressing it easier */
-        genvar j;
-        for (j = 0; j < NUM_OF_SAMPLES; j = j + 1) begin: samples_enable_copy
-          assign prefix_count_tmp[0][j] = ~samples_enable[j];
-        end
+      wire [NUM_OF_CHANNELS-1:0] enable_next = reset == 1'b1 ? {NUM_OF_CHANNELS{1'b0}} : enable;
 
+      /*
+       * Samples are interleaved, so the sample mask is just the channel mask
+       * concatenated with itself SAMPLES_PER_CHANNEL times.
+       */
+      wire [NUM_OF_SAMPLES-1:0] samples_enable_next = {SAMPLES_PER_CHANNEL{enable_next}};
+
+      /* Running count of disabled samples inside each block, inclusive. */
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_count_s[0:PREFIX_BLOCK_LOG2][0:NUM_OF_SAMPLES-1];
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_count_next[0:NUM_OF_SAMPLES-1];
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_count[0:NUM_OF_SAMPLES-1];
+
+      /* Number of disabled samples in all blocks preceding a block. */
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_offset_s[0:PREFIX_NUM_BLOCKS_LOG2][0:PREFIX_NUM_BLOCKS-1];
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_offset[0:PREFIX_NUM_BLOCKS-1];
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] block_total[0:PREFIX_NUM_BLOCKS-1];
+
+      genvar i, j;
+      for (i = 0; i < NUM_OF_SAMPLES; i = i + 1) begin: gen_block_count
         /*
-        * E.g: for samples_enable = '1 1 1 1 1 1 1 1':
-        * prefix_count_tmp[0] = '1 1 1 1 1 1 1 1' (copy of samples_enable)
-        * prefix_count_tmp[1] = '1 2 2 2 2 2 2 2'
-        * prefix_count_tmp[2] = '1 2 3 4 4 4 4 4'
-        * prefix_count_tmp[3] = '1 2 3 4 5 6 7 8'
-        */
-        genvar k;
-        for (j = 1; j < LOG2_NUM_OF_SAMPLES + 1; j = j + 1) begin: prefix_count_tmp_lines
-          for (k = 0; k < NUM_OF_SAMPLES; k = k + 1) begin: prefix_count_tmp_cols
-            if (k < 2 ** (j-1)) begin
-              assign prefix_count_tmp[j][k] = prefix_count_tmp[j-1][k];
-            end else begin
-              assign prefix_count_tmp[j][k] = prefix_count_tmp[j-1][k] + prefix_count_tmp[j-1][k - 2 ** (j-1)];
-            end
+         * Do not write this as ~samples_enable_next[i]: the operand is
+         * widened to the full width before the inversion.
+         */
+        assign block_count_s[0][i] = samples_enable_next[i] ? 1'b0 : 1'b1;
+
+        for (j = 1; j <= PREFIX_BLOCK_LOG2; j = j + 1) begin: gen_row
+          if (PARALLEL_OR_SERIAL_N == 1 && i % PREFIX_BLOCK >= 2**(j-1)) begin
+            assign block_count_s[j][i] = block_count_s[j-1][i] + block_count_s[j-1][i-2**(j-1)];
+          end else if (PARALLEL_OR_SERIAL_N == 0 && j == PREFIX_BLOCK_LOG2 && i % PREFIX_BLOCK != 0) begin
+            assign block_count_s[j][i] = block_count_next[i-1] + block_count_s[0][i];
+          end else begin
+            assign block_count_s[j][i] = block_count_s[j-1][i];
           end
         end
+
+        assign block_count_next[i] = block_count_s[PREFIX_BLOCK_LOG2][i];
+
+        /* Power-up value matches `enable_int` = 0, i.e. all samples disabled */
+        reg [SAMPLE_ADDRESS_WIDTH-1:0] block_count_r = (i % PREFIX_BLOCK) + 1;
+
+        always @(posedge clk) begin
+          block_count_r <= block_count_next[i];
+        end
+
+        assign block_count[i] = block_count_r;
+      end
+
+      for (i = 0; i < PREFIX_NUM_BLOCKS; i = i + 1) begin: gen_block_offset
+        localparam LAST = (i + 1) * PREFIX_BLOCK - 1 < NUM_OF_SAMPLES ? (i + 1) * PREFIX_BLOCK - 1 : NUM_OF_SAMPLES - 1;
+
+        /* Row 0 holds the total of the preceding block, shifted by one. */
+        if (i == 0) begin
+          assign block_offset_s[0][i] = 'h0;
+        end else begin
+          assign block_offset_s[0][i] = block_total[i-1];
+        end
+        assign block_total[i] = block_count[LAST];
+
+        for (j = 1; j <= PREFIX_NUM_BLOCKS_LOG2; j = j + 1) begin: gen_row
+          if (PARALLEL_OR_SERIAL_N == 1 && i >= 2**(j-1)) begin
+            assign block_offset_s[j][i] = block_offset_s[j-1][i] + block_offset_s[j-1][i-2**(j-1)];
+          end else if (PARALLEL_OR_SERIAL_N == 0 && j == PREFIX_NUM_BLOCKS_LOG2 && i > 0) begin
+            assign block_offset_s[j][i] = block_offset[i-1] + block_offset_s[0][i];
+          end else begin
+            assign block_offset_s[j][i] = block_offset_s[j-1][i];
+          end
+        end
+
+        assign block_offset[i] = block_offset_s[PREFIX_NUM_BLOCKS_LOG2][i];
       end
 
       /* First channel has no other channels before it */
       assign prefix_count_s[0] = 'h0;
 
-      genvar i;
       for (i = 0; i < NUM_OF_SAMPLES; i = i + 1) begin: gen_prefix_count
-        if (PARALLEL_OR_SERIAL_N == 1) begin
-          assign prefix_count_s[i+1] = prefix_count_tmp[LOG2_NUM_OF_SAMPLES][i];
-        end else begin
-          assign prefix_count_s[i+1] = prefix_count_s[i] + (samples_enable[i] ? 1'b0 : 1'b1);
-        end
+        assign prefix_count_s[i+1] = block_offset[i / PREFIX_BLOCK] + block_count[i];
+
         if (i < 2 || NUM_OF_CHANNELS <= 2) begin
           /* This will only be one bit, no need to register it */
           always @(prefix_count_s[i]) begin
@@ -331,7 +485,7 @@ module pack_shell #(
          * no configurations in which they'd be required.
          */
         always @(posedge clk) begin
-          if (ce == 1'b1 && ready == 1'b1) begin /* Just ready ??? */
+          if (ce == 1'b1 && ready_int == 1'b1) begin
             data_d1 <= in_data[TOTAL_DATA_WIDTH-1:2*CHANNEL_DATA_WIDTH];
           end
         end
@@ -341,13 +495,13 @@ module pack_shell #(
 
         always @(posedge clk) begin
           if (reset_ctrl == 1'b1) begin
-            ready <= 1'b0;
+            ready_int <= 1'b0;
             rotate_msb <= 1'b0;
 
             rotate <= 'h0;
             rotate_next <= 'h0;
           end else if (ce_ctrl == 1'b1) begin
-            ready <= 1'b0;
+            ready_int <= 1'b0;
             rotate_msb <= 1'b0;
 
             /*
@@ -357,7 +511,7 @@ module pack_shell #(
              */
             if (rotate_next_next[SAMPLE_ADDRESS_WIDTH] &
                 |rotate_next_next[SAMPLE_ADDRESS_WIDTH-1:0]) begin
-              ready <= 1'b1;
+              ready_int <= 1'b1;
               rotate_msb <= 1'b1;
             end
             /*
@@ -366,7 +520,7 @@ module pack_shell #(
              * previous cycle due to overconsumption.
              */
             if (rotate_next[SAMPLE_ADDRESS_WIDTH] == 1'b1 && rotate_msb == 1'b0) begin
-              ready <= 1'b1;
+              ready_int <= 1'b1;
             end
 
             rotate <= rotate_next;
@@ -384,10 +538,14 @@ module pack_shell #(
           .MUX_ORDER (2),
           .MIN_STAGE (0),
           .NUM_STAGES (1),
-          .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH)
+          .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH),
+          .PIPELINE_STAGES (PIPELINE_STAGES),
+          .PIPELINE_OFFSET (0),
+          .CTRL_REPLICAS (CTRL_REPLICAS)
         ) i_ext_ctrl_interconnect (
           .clk (clk),
           .ce_ctrl (ce_ctrl),
+          .ce (pipe_ce),
 
           .rotate ({rotate_msb,rotate}),
           .prefix_count (ext_prefix_count),
@@ -417,7 +575,7 @@ module pack_shell #(
       end else begin
         always @(posedge clk) begin
           if (reset_ctrl == 1'b1) begin
-            ready <= 1'b0;
+            ready_int <= 1'b0;
             rotate <= 'h0;
           end else if (ce_ctrl == 1'b1) begin
             /*
@@ -427,15 +585,25 @@ module pack_shell #(
              * evenly divisible into the output data and there is no fractional
              * residual data. I.e. when ready is asserted rotate is 0.
              */
-            {ready,rotate} <= rotate + enable_count + 1'b1;
+            {ready_int,rotate} <= rotate + enable_count + 1'b1;
           end else if (flush == 1'b1) begin
             /*
              * Downstream backpressure: discard any partial accumulation so the
              * next enabled window starts on a clean word boundary.
              */
-            ready <= 1'b0;
+            ready_int <= 1'b0;
             rotate <= 'h0;
           end
+          /*
+           * Only flush clears the alignment. A plain `ce_ctrl` gap means no
+           * data moved, so the alignment must not move either: every other
+           * state element in this module freezes on a gap the same way.
+           * Clearing `ready` on such a gap would clear it one cycle too late to
+           * be restored, and the beat that arrives in the cycle right after the
+           * gap would be written into the output register without a write
+           * enable, so it would be lost. A gapless producer never takes this
+           * path at all, so its behaviour is unchanged.
+           */
         end
 
         assign data[0] = in_data;
@@ -455,11 +623,22 @@ module pack_shell #(
        */
       for (i = 0; i < 2; i = i + 1) begin: gen_network
         localparam MUX_ORDER = i == 0 ? 2 : 1;
-        localparam MIN_STAGE = PACK ? (i == 0 ? SAMPLE_ADDRESS_WIDTH % 2 : 0) :
-                                      (i == 0 ? NON_POWER_OF_TWO : SAMPLE_ADDRESS_WIDTH - 1);
-        localparam NUM_STAGES = PACK ? (i == 0 ? SAMPLE_ADDRESS_WIDTH / 2 : SAMPLE_ADDRESS_WIDTH % 2) :
-                                       (i == 0 ? (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2 :
-                                                 (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2);
+        localparam
+          MIN_STAGE = PACK ? (i == 0 ? SAMPLE_ADDRESS_WIDTH % 2 : 0) :
+          (i == 0 ? NON_POWER_OF_TWO : SAMPLE_ADDRESS_WIDTH - 1);
+        localparam
+          NUM_STAGES = PACK ?
+          (i == 0 ? SAMPLE_ADDRESS_WIDTH / 2 : SAMPLE_ADDRESS_WIDTH % 2) :
+          (i == 0 ? (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) / 2 :
+          (SAMPLE_ADDRESS_WIDTH - NON_POWER_OF_TWO) % 2);
+        // Cumulative pipeline delay from previous networks
+        // gen_network[0]: includes ext network latency (if present)
+        // gen_network[1]: includes ext network + gen_network[0] latency
+        localparam
+          PIPELINE_OFFSET = (i == 0) ?
+          calc_pipeline_latency(EXT_NETWORK_STAGES) :
+          calc_pipeline_latency(EXT_NETWORK_STAGES) +
+          calc_pipeline_latency(NETWORK0_STAGES);
 
         if (NUM_STAGES > 0) begin
           pack_network #(
@@ -468,10 +647,14 @@ module pack_shell #(
             .MUX_ORDER (MUX_ORDER),
             .MIN_STAGE (MIN_STAGE),
             .NUM_STAGES (NUM_STAGES),
-            .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH)
+            .PORT_DATA_WIDTH (SAMPLE_DATA_WIDTH),
+            .PIPELINE_STAGES (PIPELINE_STAGES),
+            .PIPELINE_OFFSET (PIPELINE_OFFSET),
+            .CTRL_REPLICAS (CTRL_REPLICAS)
           ) i_ctrl_interconnect (
             .clk (clk),
             .ce_ctrl (ce_ctrl),
+            .ce (pipe_ce),
 
             .rotate (rotate),
             .prefix_count (prefix_count),
@@ -497,9 +680,17 @@ module pack_shell #(
          */
         reg [NUM_OF_SAMPLES-2*SAMPLES_PER_CHANNEL-1:0] prev_valid = 'h00;
 
+        /*
+         * Compute which positions are being filled. The mask is extended to
+         * the full width (NUM_OF_SAMPLES + prev_valid width) before shifting
+         * so that overflow bits properly go into prev_valid.
+         */
+        localparam PREV_VALID_WIDTH = NUM_OF_SAMPLES - 2 * SAMPLES_PER_CHANNEL;
+        localparam MASK_WIDTH = NUM_OF_SAMPLES + PREV_VALID_WIDTH;
+
         always @(posedge clk) begin
           if (ce_ctrl == 1'b1) begin
-            {prev_valid,valid} <= (({NUM_OF_SAMPLES{1'b1}} >> ~enable_count) << rotate) | prev_valid;
+            {prev_valid,valid} <= ({{PREV_VALID_WIDTH{1'b0}}, {NUM_OF_SAMPLES{1'b1}} >> ~enable_count} << rotate) | {{PREV_VALID_WIDTH{1'b0}}, prev_valid};
           end
         end
 
@@ -516,10 +707,38 @@ module pack_shell #(
           reg [DELAYED_DATA_WIDTH-1:0] data_d1 = 'h00;
 
           /*
-           * `prev_valid` delayed by one clock cyle. This is to compensate for
-           * the control pipeline delay.
+           * prev_valid_d1 needs ce-gated delay to match data_d1 timing.
+           * With ce-gated data pipeline of TOTAL_PIPELINE_LATENCY stages:
+           *   prev_valid: is set when overflow occurs
+           *   data_d1: captures overflow data (TOTAL_PIPELINE_LATENCY + 1) ce-cycles later
+           *   prev_valid_d1: must match this timing
+           *
+           * Use shift register for PV_DELAY ce-cycles delay.
            */
-          reg [NUM_OF_SAMPLES-2*SAMPLES_PER_CHANNEL-1:0] prev_valid_d1 = 'h00;
+          localparam PV_WIDTH = NUM_OF_SAMPLES - 2*SAMPLES_PER_CHANNEL;
+          localparam PV_DELAY = TOTAL_PIPELINE_LATENCY + 1;
+
+          (* shreg_extract = "no" *) reg [PV_WIDTH-1:0] pv_sr [0:PV_DELAY-1];
+          wire [PV_WIDTH-1:0] prev_valid_d1;
+
+          integer pv_i;
+          initial begin
+            for (pv_i = 0; pv_i < PV_DELAY; pv_i = pv_i + 1)
+              pv_sr[pv_i] = {PV_WIDTH{1'b0}};
+          end
+
+          always @(posedge clk) begin
+            if (reset_ctrl == 1'b1) begin
+              for (pv_i = 0; pv_i < PV_DELAY; pv_i = pv_i + 1)
+                pv_sr[pv_i] <= {PV_WIDTH{1'b0}};
+            end else if (ce_ctrl == 1'b1) begin
+              pv_sr[0] <= prev_valid;
+              for (pv_i = 1; pv_i < PV_DELAY; pv_i = pv_i + 1)
+                pv_sr[pv_i] <= pv_sr[pv_i-1];
+            end
+          end
+
+          assign prev_valid_d1 = pv_sr[PV_DELAY-1];
 
           /*
            * synchronization signal that indicates whether the first enabled
@@ -531,18 +750,12 @@ module pack_shell #(
           always @(posedge clk) begin
             if (reset_ctrl == 1'b1) begin
               sync <= 1'b1;
-            end else if (ready == 1'b1 && ce == 1'b1) begin
+            end else if (ready_int == 1'b1 && ce == 1'b1) begin
               if (rotate == 'h0) begin
                 sync <= 1'b1;
               end else begin
                 sync <= 1'b0;
               end
-            end
-          end
-
-          always @(posedge clk) begin
-            if (ce_ctrl == 1'b1) begin
-              prev_valid_d1 <= prev_valid;
             end
           end
 
@@ -562,16 +775,16 @@ module pack_shell #(
             end
           end
 
-          assign out_sync = sync;
+          assign out_sync_int = sync;
         end else begin
           assign out_data = data[2];
-          assign out_sync = 1'b1;
+          assign out_sync_int = 1'b1;
         end
 
-        assign out_valid = valid;
+        assign out_valid_int = valid;
       end else begin
-        assign out_sync = 1'b1;
-        assign out_valid = {NUM_OF_SAMPLES{1'b1}};
+        assign out_sync_int = 1'b1;
+        assign out_valid_int = {NUM_OF_SAMPLES{1'b1}};
         assign out_data = data[2];
       end
     end

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,8 +40,12 @@ module pack_interconnect #(
   parameter PORT_ADDRESS_WIDTH = 3,
   parameter MUX_ORDER = 2,
   parameter NUM_STAGES = 2,
-  parameter PACK = 0 // 0 = Unpack, 1 = Pack
+  parameter PACK = 0, // 0 = Unpack, 1 = Pack
+  parameter PIPELINE_STAGES = 0, // 0 = no pipeline, 1 = pipeline every 2 stages, 2 = pipeline every stage
+  parameter PIPELINE_OFFSET = 0  // Cumulative pipeline delay from previous networks
 ) (
+  input clk,
+  (* max_fanout = 100 *) input ce,  // Clock enable for data pipeline registers
   input [2**PORT_ADDRESS_WIDTH*MUX_ORDER*NUM_STAGES-1:0] ctrl,
 
   input [PORT_DATA_WIDTH * 2**PORT_ADDRESS_WIDTH-1:0] data_in,
@@ -59,11 +63,62 @@ module pack_interconnect #(
 
   localparam NUM_PORTS = 2**PORT_ADDRESS_WIDTH;
   localparam TOTAL_DATA_WIDTH = PORT_DATA_WIDTH * NUM_PORTS;
+  localparam CTRL_WIDTH_PER_STAGE = NUM_PORTS * MUX_ORDER;
 
+  wire [TOTAL_DATA_WIDTH-1:0] interconnect_comb[0:NUM_STAGES];
   wire [TOTAL_DATA_WIDTH-1:0] interconnect[0:NUM_STAGES];
 
-  assign interconnect[0] = data_in;
+  assign interconnect_comb[0] = data_in;
   assign data_out = interconnect[NUM_STAGES];
+
+  /*
+   * Function to calculate cumulative pipeline delay for each stage.
+   * The control signals for each stage must be delayed to match when data arrives.
+   */
+  function integer calc_ctrl_delay;
+    input integer stage;
+    integer delay;
+    integer s;
+    begin
+      delay = 0;
+      for (s = 1; s <= stage; s = s + 1) begin
+        if (PIPELINE_STAGES == 2) begin
+          delay = delay + 1;
+        end else if (PIPELINE_STAGES == 1 && s % 2 == 0) begin
+          delay = delay + 1;
+        end
+      end
+      calc_ctrl_delay = delay;
+    end
+  endfunction
+
+  // Generate pipeline stages between MUX stages for DATA path
+  generate
+    genvar p;
+    for (p = 0; p <= NUM_STAGES; p = p + 1) begin: gen_pipeline
+      // PIPELINE_STAGES=0: no pipelining
+      // PIPELINE_STAGES=1: pipeline after every 2 MUX stages (at p=2,4,6,...)
+      // PIPELINE_STAGES=2: pipeline after every MUX stage (at p=1,2,3,...)
+      localparam
+        SHOULD_REGISTER = (PIPELINE_STAGES == 2 && p > 0) ||
+        (PIPELINE_STAGES == 1 && p > 0 && p % 2 == 0);
+
+      if (SHOULD_REGISTER == 0) begin
+        // No pipeline register, pass through
+        assign interconnect[p] = interconnect_comb[p];
+      end else begin
+        // Pipeline register advances only when ce is asserted
+        // This ensures data pipeline timing matches ce-gated control signals
+        (* shreg_extract = "no" *) reg [TOTAL_DATA_WIDTH-1:0] data_pipe = {TOTAL_DATA_WIDTH{1'b0}};
+        always @(posedge clk) begin
+          if (ce == 1'b1) begin
+            data_pipe <= interconnect_comb[p];
+          end
+        end
+        assign interconnect[p] = data_pipe;
+      end
+    end
+  endgenerate
 
   generate
     genvar i, j;
@@ -76,10 +131,42 @@ module pack_interconnect #(
     for (i = 0; i < NUM_STAGES; i = i + 1) begin: gen_stages
       // Pack network are in the opposite direction
       localparam ctrl_stage = PACK ? NUM_STAGES - i - 1 : i;
+
+      // Calculate cumulative delay for this stage control signals
+      // Include PIPELINE_OFFSET from previous networks
+      localparam CTRL_DELAY = calc_ctrl_delay(i) + PIPELINE_OFFSET;
+
       wire [TOTAL_DATA_WIDTH-1:0] shuffle_in;
       wire [TOTAL_DATA_WIDTH-1:0] shuffle_out;
       wire [TOTAL_DATA_WIDTH-1:0] mux_in;
       wire [TOTAL_DATA_WIDTH-1:0] mux_out;
+
+      wire [CTRL_WIDTH_PER_STAGE-1:0] ctrl_stage_in;
+      wire [CTRL_WIDTH_PER_STAGE-1:0] ctrl_stage_delayed;
+
+      // Extract control bits for this stage
+      assign ctrl_stage_in = ctrl[ctrl_stage*CTRL_WIDTH_PER_STAGE +: CTRL_WIDTH_PER_STAGE];
+
+      // Delay control signals to match ce-gated data pipeline latency
+      // Control signals must also be ce-gated to maintain timing alignment
+      if (CTRL_DELAY == 0) begin: gen_ctrl_comb
+        assign ctrl_stage_delayed = ctrl_stage_in;
+      end else begin: gen_ctrl_pipe
+        (* shreg_extract = "no" *) reg [CTRL_WIDTH_PER_STAGE-1:0] ctrl_sr [0:CTRL_DELAY-1];
+        integer ci, cj;
+        initial begin
+          for (ci = 0; ci < CTRL_DELAY; ci = ci + 1)
+            ctrl_sr[ci] = {CTRL_WIDTH_PER_STAGE{1'b0}};
+        end
+        always @(posedge clk) begin
+          if (ce == 1'b1) begin
+            ctrl_sr[0] <= ctrl_stage_in;
+            for (cj = 1; cj < CTRL_DELAY; cj = cj + 1)
+              ctrl_sr[cj] <= ctrl_sr[cj-1];
+          end
+        end
+        assign ctrl_stage_delayed = ctrl_sr[CTRL_DELAY-1];
+      end
 
       // Unpack uses forward shuffle and pack a reverse shuffle
       ad_perfect_shuffle #(
@@ -91,7 +178,7 @@ module pack_interconnect #(
         .data_out (shuffle_out));
 
       for (j = 0; j < NUM_PORTS; j = j + 1) begin: gen_ports
-        localparam ctrl_base = (ctrl_stage * NUM_PORTS + j) * MUX_ORDER;
+        localparam ctrl_offset = j * MUX_ORDER;
         localparam sel_base = j & ~(z-1); // base increments in 2**MUX_ORDER steps
 
         /*
@@ -107,22 +194,24 @@ module pack_interconnect #(
          * results in a different look-up table.
          */
 
-        wire [MUX_ORDER-1:0] sel = ctrl[ctrl_base+:MUX_ORDER];// + j % z;
+        // Use delayed control signals for proper timing alignment
+        wire [MUX_ORDER-1:0] sel = ctrl_stage_delayed[ctrl_offset+:MUX_ORDER];
         assign mux_out[j*w+:w] = mux_in[(sel_base+sel)*w+:w];
       end
 
       /*
        * Pack is MUX followed by shuffle.
        * Unpack is shuffle followed by MUX.
+       * Read from interconnect (pipelined) and write to interconnect_comb (combinational).
        */
       if (PACK) begin
         assign mux_in = interconnect[i];
         assign shuffle_in = mux_out;
-        assign interconnect[i+1] = shuffle_out;
+        assign interconnect_comb[i+1] = shuffle_out;
       end else begin
         assign shuffle_in = interconnect[i];
         assign mux_in = shuffle_out;
-        assign interconnect[i+1] = mux_out;
+        assign interconnect_comb[i+1] = mux_out;
       end
   end
   endgenerate
