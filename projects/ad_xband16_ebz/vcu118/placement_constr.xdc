@@ -1,3 +1,8 @@
+###############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
 # USER_SLR_ASSIGNMENT property documented in UG912.
 # Putting each of these TX IPs in a single SLR, since otherwise the tools would have a
 # tendency of splitting them across two SLRs (SLR1 and SLR2, respectively).
