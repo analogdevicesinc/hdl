@@ -129,13 +129,10 @@ generate_target {instantiation_template} [get_files ./ad_xband16_ebz_vcu118.srcs
 generate_target all [get_files ./ad_xband16_ebz_vcu118.srcs/sources_1/ip/high_speed_selectio_wiz_1/high_speed_selectio_wiz_1.xci]
 
 # Avoid critical warning in OOC mode from the clock definitions
-# since at that stage the submodules are not stiched together yet
+# since at that stage the submodules are not stitched together yet
 if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
-
-#set_property strategy Flow_AreaOptimized_high [get_runs synth_1]
-#set_property strategy Performance_NetDelay_high [get_runs impl_1]
 
 set_property STEPS.OPT_DESIGN.ARGS.DIRECTIVE ExploreSequentialArea [get_runs impl_1]
 set_property STEPS.PLACE_DESIGN.ARGS.DIRECTIVE SSI_HighUtilSLRs [get_runs impl_1]
