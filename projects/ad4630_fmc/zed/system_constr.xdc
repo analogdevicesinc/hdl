@@ -56,9 +56,20 @@ create_clock -period 10.000 -name cnv_ext_clk [get_ports ad463x_ext_clk]
 # SCLK echod clock, tuned to 80 MHz //, phase shifted with 30% (aprox. 4ns)
 create_clock -period 12.500 -name ECHOSCLK_clk [get_ports ad463x_echo_sclk]
 
+# Source-synchronous: echo_sclk and SDO are co-aligned from AD4630.
+# BUFG insertion delay on ECHOSCLK_clk is not clock-data skew — waive intra-clock hold.
+set_false_path -hold -from [get_clocks ECHOSCLK_clk] -to [get_clocks ECHOSCLK_clk]
+
 # rename auto-generated clock for SPIEngine to spi_clk - 160MHz
 # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk
 create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]] -master_clock clk_fpga_0 [get_pins -filter name=~*CLKOUT0 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]]
+
+# SDI data (shift registers, IDDR outputs, raw sdi pad) feeds combinationally
+# into sdi_data via the interleaved/SDR mux. Data is stable for 3+ spi_clk
+# cycles before sdi_data_valid fires (implicit synchronizer: last_sdi_bit_m[0..2]
+# + edge detector). ECHOSCLK_clk and spi_clk are asynchronous (no common primary
+# clock) — constrain only the combinational datapath delay (two spi_clk cycles).
+set_max_delay -datapath_only -from [get_clocks ECHOSCLK_clk] -to [get_clocks spi_clk] [expr {[get_property PERIOD [get_clocks spi_clk]] * 2}]
 
 # create a generated clock for SCLK - fSCLK=spi_clk/2 - 80MHz
 create_generated_clock -name SCLK_clk -source [get_pins -hier -filter name=~*sclk_reg/C] -edges {1 3 5} [get_ports ad463x_spi_sclk]
