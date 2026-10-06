@@ -51,7 +51,8 @@ module ad_ip_jesd204_tpl_adc_core #(
   parameter EXT_SYNC = 0,
   parameter PNMON_ENABLE = 1,
   parameter PN7_ENABLE = 1,
-  parameter PN15_ENABLE = 1
+  parameter PN15_ENABLE = 1,
+  parameter NUM_PIPELINE_STAGES = 0
 ) (
   input clk,
 
@@ -85,6 +86,7 @@ module ad_ip_jesd204_tpl_adc_core #(
   localparam CDW_FMT = DMA_BITS_PER_SAMPLE * DATA_PATH_WIDTH;
 
   wire [ADC_DATA_WIDTH-1:0] raw_data_s;
+  wire link_valid_s;
   wire link_valid_tmp;
 
   reg link_valid_d = 1'b0;
@@ -96,8 +98,17 @@ module ad_ip_jesd204_tpl_adc_core #(
   assign adc_sync_status = adc_sync_armed;
   assign adc_rst_sync = adc_sync_armed;
 
+  // Match the 3 * NUM_PIPELINE_STAGES register stages of the deframer
+  util_pipeline_stage #(
+    .REGISTERED (3*NUM_PIPELINE_STAGES),
+    .WIDTH (1)
+  ) i_link_valid_pipeline (
+    .clk (clk),
+    .in (link_valid),
+    .out (link_valid_s));
+
   always @(posedge clk) begin
-    link_valid_d <= link_valid;
+    link_valid_d <= link_valid_s;
     link_valid_dd <= link_valid_d;
   end
 
@@ -120,7 +131,8 @@ module ad_ip_jesd204_tpl_adc_core #(
     .OCTETS_PER_BEAT (OCTETS_PER_BEAT),
     .EN_FRAME_ALIGN (EN_FRAME_ALIGN),
     .LINK_DATA_WIDTH (LINK_DATA_WIDTH),
-    .ADC_DATA_WIDTH (ADC_DATA_WIDTH)
+    .ADC_DATA_WIDTH (ADC_DATA_WIDTH),
+    .NUM_PIPELINE_STAGES (NUM_PIPELINE_STAGES)
   ) i_deframer (
     .clk (clk),
     .link_sof (link_sof),
