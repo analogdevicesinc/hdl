@@ -42,6 +42,14 @@ if {![info exists EXTERNAL_LINK_CLK]} {
 
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/library/axi_fsrc/scripts/axi_fsrc.tcl
+
+add_files -norecurse [list \
+  $ad_hdl_dir/library/util_cdc/sync_bits.v \
+  $ad_hdl_dir/library/util_cdc/sync_data.v \
+  $ad_hdl_dir/projects/ad9084_ebz/common/util_pack_cdc.v]
+add_files -norecurse -fileset constrs_1 \
+  $ad_hdl_dir/projects/ad9084_ebz/common/util_pack_cdc_constr.xdc
 
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
@@ -63,6 +71,14 @@ set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
                           ? $ad_project_params(SHARED_DEVCLK) : 0 } ]
 set DO_HAS_BYPASS [ expr { [info exists ad_project_params(DO_HAS_BYPASS)] \
                           ? $ad_project_params(DO_HAS_BYPASS) : 1 } ]
+set PNMON_ENABLE [ expr { [info exists ad_project_params(PNMON_ENABLE)] \
+                          ? $ad_project_params(PNMON_ENABLE) : 1 } ]
+set AION_ENABLE [ expr { [info exists ad_project_params(AION_ENABLE)] \
+                          ? $ad_project_params(AION_ENABLE) : 0 } ]
+set FSRC_ENABLE [ expr { [info exists ad_project_params(FSRC_ENABLE)] \
+                          ? $ad_project_params(FSRC_ENABLE) : 0 } ]
+set FSRC_ACCUM_WIDTH [ expr { [info exists ad_project_params(FSRC_ACCUM_WIDTH)] \
+                          ? $ad_project_params(FSRC_ACCUM_WIDTH) : 56 } ]
 
 if {$SIDE_B_ONLY && $ASYMMETRIC_A_B_MODE} {
   error "ERROR: SIDE_B_ONLY and ASYMMETRIC_A_B_MODE cannot be both enabled!"
@@ -88,6 +104,14 @@ if {$JESD_MODE == "8B10B"} {
   set DATAPATH_WIDTH 8
   set NP12_DATAPATH_WIDTH 12
   set ENCODER_SEL 2
+}
+
+proc ad_next_pow2 {value} {
+  set result 1
+  while {$result < $value} {
+    set result [expr $result * 2]
+  }
+  return $result
 }
 
 # These are max values specific to the board
@@ -151,13 +175,26 @@ set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
+# The pack cores, the data offload and the DMA need a power of two width. When
+# the transport layer does not give one (mode 77: 24 samples per beat), a
+# gearbox converts the rate instead and the pack chain runs on its own clock.
+set RX_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $RX_SAMPLES_PER_CHANNEL]
+set RX_GEARBOX [expr $RX_PACK_SAMPLES_PER_CHANNEL != $RX_SAMPLES_PER_CHANNEL]
+set rx_pack_clk_net [expr {$RX_GEARBOX ? "rx_pack_clk" : "rx_device_clk"}]
+set rx_pack_rstgen_net [expr {$RX_GEARBOX ? "rx_pack_rstgen" : "rx_device_clk_rstgen"}]
+
+set TX_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $TX_SAMPLES_PER_CHANNEL]
+set TX_GEARBOX [expr $TX_PACK_SAMPLES_PER_CHANNEL != $TX_SAMPLES_PER_CHANNEL]
+set tx_pack_clk_net [expr {$TX_GEARBOX ? "tx_pack_clk" : "tx_device_clk"}]
+set tx_pack_rstgen_net [expr {$TX_GEARBOX ? "tx_pack_rstgen" : "tx_device_clk_rstgen"}]
+
 set adc_data_offload_name apollo_rx_data_offload
-set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
+set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_PACK_SAMPLES_PER_CHANNEL]
 set adc_dma_data_width $adc_data_width
 set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
 
 set dac_data_offload_name apollo_tx_data_offload
-set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL]
+set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_PACK_SAMPLES_PER_CHANNEL]
 set dac_dma_data_width $dac_data_width
 set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
 
@@ -205,13 +242,23 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   set TX_B_SAMPLES_PER_CHANNEL [expr $TX_B_NUM_OF_LANES * 8 * $TX_B_DATAPATH_WIDTH / ($TX_B_NUM_OF_CONVERTERS * $TX_B_SAMPLE_WIDTH)]
 
+  set RX_B_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $RX_B_SAMPLES_PER_CHANNEL]
+  set RX_B_GEARBOX [expr $RX_B_PACK_SAMPLES_PER_CHANNEL != $RX_B_SAMPLES_PER_CHANNEL]
+  set rx_b_pack_clk_net [expr {$RX_B_GEARBOX ? "rx_b_pack_clk" : "rx_b_device_clk"}]
+  set rx_b_pack_rstgen_net [expr {$RX_B_GEARBOX ? "rx_b_pack_rstgen" : "rx_b_device_clk_rstgen"}]
+
+  set TX_B_PACK_SAMPLES_PER_CHANNEL [ad_next_pow2 $TX_B_SAMPLES_PER_CHANNEL]
+  set TX_B_GEARBOX [expr $TX_B_PACK_SAMPLES_PER_CHANNEL != $TX_B_SAMPLES_PER_CHANNEL]
+  set tx_b_pack_clk_net [expr {$TX_B_GEARBOX ? "tx_b_pack_clk" : "tx_b_device_clk"}]
+  set tx_b_pack_rstgen_net [expr {$TX_B_GEARBOX ? "tx_b_pack_rstgen" : "tx_b_device_clk_rstgen"}]
+
   set adc_b_data_offload_name apollo_rx_b_data_offload
-  set adc_b_data_width [expr $RX_B_DMA_SAMPLE_WIDTH*$RX_B_NUM_OF_CONVERTERS*$RX_B_SAMPLES_PER_CHANNEL]
+  set adc_b_data_width [expr $RX_B_DMA_SAMPLE_WIDTH*$RX_B_NUM_OF_CONVERTERS*$RX_B_PACK_SAMPLES_PER_CHANNEL]
   set adc_b_dma_data_width $adc_b_data_width
   set adc_b_fifo_address_width [expr int(ceil(log(($adc_b_fifo_samples_per_converter*$RX_B_NUM_OF_CONVERTERS) / ($adc_b_data_width/$RX_B_DMA_SAMPLE_WIDTH))/log(2)))]
 
   set dac_b_data_offload_name apollo_tx_b_data_offload
-  set dac_b_data_width [expr $TX_B_DMA_SAMPLE_WIDTH*$TX_B_NUM_OF_CONVERTERS*$TX_B_SAMPLES_PER_CHANNEL]
+  set dac_b_data_width [expr $TX_B_DMA_SAMPLE_WIDTH*$TX_B_NUM_OF_CONVERTERS*$TX_B_PACK_SAMPLES_PER_CHANNEL]
   set dac_b_dma_data_width $dac_b_data_width
   set dac_b_fifo_address_width [expr int(ceil(log(($dac_b_fifo_samples_per_converter*$TX_B_NUM_OF_CONVERTERS) / ($dac_b_data_width/$TX_B_DMA_SAMPLE_WIDTH))/log(2)))]
 
@@ -224,6 +271,18 @@ create_bd_port -dir I rx_device_clk
 create_bd_port -dir I tx_device_clk
 create_bd_port -dir I rx_b_device_clk
 create_bd_port -dir I tx_b_device_clk
+
+create_bd_port -dir I fsrc_sysref
+create_bd_port -dir I fsrc_trig_in
+create_bd_port -dir O -from 3 -to 0 fsrc_trig_out
+create_bd_port -dir O -from 39 -to 0 fsrc_ctrl
+
+create_bd_port -dir IO adf4030_bsync_p
+create_bd_port -dir IO adf4030_bsync_n
+create_bd_port -dir I adf4030_clk
+create_bd_port -dir I adf4030_trigger
+create_bd_port -dir O adf4030_sysref
+create_bd_port -dir O -from 3 -to 0 adf4030_trig_channel
 
 ##AXI_HSCI IP
 if {$HSCI_ENABLE} {
@@ -342,6 +401,32 @@ if {$HSCI_ENABLE} {
       ad_connect axi_hsci_0/hsci_pll_reset hsci_phy/bank${i}_pll_rst_pll
     }
   }
+}
+
+##AXI_ADF4030 IP
+
+if {$AION_ENABLE} {
+  ad_ip_instance axi_adf4030 axi_adf4030_0
+  ad_ip_parameter axi_adf4030_0 CONFIG.CHANNEL_COUNT 4
+
+  ad_connect axi_adf4030_0/bsync_p adf4030_bsync_p
+  ad_connect axi_adf4030_0/bsync_n adf4030_bsync_n
+  ad_connect axi_adf4030_0/device_clk adf4030_clk
+  if {!$FSRC_ENABLE} {
+    # With FSRC the request comes from the sequencer instead; see below, where
+    # that instance exists.
+    ad_connect axi_adf4030_0/trigger adf4030_trigger
+  }
+  ad_connect axi_adf4030_0/sysref adf4030_sysref
+  ad_connect axi_adf4030_0/trig_channel adf4030_trig_channel
+} else {
+  ad_ip_instance util_ds_buf sysref_in_ibufds [list \
+    C_BUF_TYPE IBUFDS \
+  ]
+  ad_connect adf4030_bsync_p sysref_in_ibufds/IBUF_DS_P
+  ad_connect adf4030_bsync_n sysref_in_ibufds/IBUF_DS_N
+  ad_connect sysref_in_ibufds/IBUF_OUT adf4030_sysref
+  ad_connect GND adf4030_trig_channel
 }
 
 # common xcvr
@@ -503,10 +588,11 @@ adi_tpl_jesd204_rx_create rx_apollo_tpl_core $RX_NUM_OF_LANES \
                                            $RX_SAMPLE_WIDTH \
                                            $RX_DATAPATH_WIDTH \
                                            $RX_DMA_SAMPLE_WIDTH
+ad_ip_parameter rx_apollo_tpl_core/adc_tpl_core CONFIG.PNMON_ENABLE $PNMON_ENABLE
 
 ad_ip_instance util_cpack2 util_apollo_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
-  SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL \
+  SAMPLES_PER_CHANNEL $RX_PACK_SAMPLES_PER_CHANNEL \
   SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
 ]
 
@@ -554,10 +640,11 @@ if {$ASYMMETRIC_A_B_MODE} {
                                                  $RX_B_SAMPLE_WIDTH \
                                                  $RX_B_DATAPATH_WIDTH \
                                                  $RX_B_DMA_SAMPLE_WIDTH
+  ad_ip_parameter rx_b_apollo_tpl_core/adc_tpl_core CONFIG.PNMON_ENABLE $PNMON_ENABLE
 
   ad_ip_instance util_cpack2 util_apollo_cpack_b [list \
     NUM_OF_CHANNELS $RX_B_NUM_OF_CONVERTERS \
-    SAMPLES_PER_CHANNEL $RX_B_SAMPLES_PER_CHANNEL \
+    SAMPLES_PER_CHANNEL $RX_B_PACK_SAMPLES_PER_CHANNEL \
     SAMPLE_DATA_WIDTH $RX_B_DMA_SAMPLE_WIDTH \
   ]
 
@@ -612,7 +699,7 @@ ad_ip_parameter tx_apollo_tpl_core/dac_tpl_core CONFIG.IQCORRECTION_DISABLE 0
 
 ad_ip_instance util_upack2 util_apollo_upack [list \
   NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
-  SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
+  SAMPLES_PER_CHANNEL $TX_PACK_SAMPLES_PER_CHANNEL \
   SAMPLE_DATA_WIDTH $TX_DMA_SAMPLE_WIDTH \
 ]
 
@@ -665,7 +752,7 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   ad_ip_instance util_upack2 util_apollo_upack_b [list \
     NUM_OF_CHANNELS $TX_B_NUM_OF_CONVERTERS \
-    SAMPLES_PER_CHANNEL $TX_B_SAMPLES_PER_CHANNEL \
+    SAMPLES_PER_CHANNEL $TX_B_PACK_SAMPLES_PER_CHANNEL \
     SAMPLE_DATA_WIDTH $TX_B_DMA_SAMPLE_WIDTH \
   ]
 
@@ -851,8 +938,13 @@ if {$ASYMMETRIC_A_B_MODE} {
     }
   }
 
-  for {set i 0}  {$i < $RX_NUM_LINKS} {incr i} {
-    for {set j $RX_JESD_L}  {$j < $MAX_RX_LANES_PER_LINK} {incr j} {
+  # The unused lanes of every physical link have to end up in the map as well,
+  # including the links this configuration does not use at all, otherwise the
+  # map is shorter than MAX_RX_LANES and ad_xcvrcon connects nothing for the
+  # lanes past its end.
+  for {set i 0}  {$i < $MAX_RX_LINKS} {incr i} {
+    set first_unused [expr {$i < $RX_NUM_LINKS ? $RX_JESD_L : 0}]
+    for {set j $first_unused}  {$j < $MAX_RX_LANES_PER_LINK} {incr j} {
       set cur_lane [expr $i*$MAX_RX_LANES_PER_LINK+$j]
       lappend lane_map [lindex $max_lane_map $cur_lane]
     }
@@ -890,8 +982,13 @@ if {$ASYMMETRIC_A_B_MODE} {
     }
   }
 
-  for {set i 0}  {$i < $TX_NUM_LINKS} {incr i} {
-    for {set j $TX_JESD_L}  {$j < $MAX_TX_LANES_PER_LINK} {incr j} {
+  # The unused lanes of every physical link have to end up in the map as well,
+  # including the links this configuration does not use at all, otherwise the
+  # map is shorter than MAX_TX_LANES and ad_xcvrcon connects nothing for the
+  # lanes past its end.
+  for {set i 0}  {$i < $MAX_TX_LINKS} {incr i} {
+    set first_unused [expr {$i < $TX_NUM_LINKS ? $TX_JESD_L : 0}]
+    for {set j $first_unused}  {$j < $MAX_TX_LANES_PER_LINK} {incr j} {
       set cur_lane [expr $i*$MAX_TX_LANES_PER_LINK+$j]
       lappend lane_map [lindex $max_lane_map $cur_lane]
     }
@@ -914,23 +1011,83 @@ if {$ASYMMETRIC_A_B_MODE} {
   }
 }
 
+# The pack clock is the device clock scaled by the gearbox ratio and must stay
+# frequency locked to it, or the async FIFO between them drifts into overflow.
+# TX has backpressure and runs faster by the headroom factor instead: at the
+# exact ratio the FIFO never fills past its start-up level and the gearbox,
+# which needs a beat on almost every cycle, underruns on the first late pointer.
+proc ad_pack_clkgen_create {name device_clk resetn lane_rate jesd_mode samples
+                            pack_samples versal {headroom 1.0}} {
+  set divisor [expr {$jesd_mode == "8B10B" ? 40 : 66}]
+  set device_freq [expr $lane_rate * 1000.0 / $divisor]
+  set pack_freq [expr $device_freq * $samples / double($pack_samples) * $headroom]
+
+  if {$versal} {
+    ad_ip_instance clk_wizard ${name}_clkgen
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIMITIVE_TYPE {MMCM}
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIM_SOURCE {No_buffer}
+    ad_ip_parameter ${name}_clkgen CONFIG.RESET_TYPE ACTIVE_LOW
+    ad_ip_parameter ${name}_clkgen CONFIG.USE_LOCKED {false}
+    ad_ip_parameter ${name}_clkgen CONFIG.JITTER_SEL {Min_O_Jitter}
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIM_IN_FREQ $device_freq
+    ad_ip_parameter ${name}_clkgen CONFIG.CLKOUT_REQUESTED_OUT_FREQUENCY $pack_freq
+  } else {
+    ad_ip_instance clk_wiz ${name}_clkgen
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIMITIVE MMCM
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIM_SOURCE No_buffer
+    ad_ip_parameter ${name}_clkgen CONFIG.RESET_TYPE ACTIVE_LOW
+    ad_ip_parameter ${name}_clkgen CONFIG.USE_LOCKED false
+    ad_ip_parameter ${name}_clkgen CONFIG.PRIM_IN_FREQ $device_freq
+    ad_ip_parameter ${name}_clkgen CONFIG.CLKOUT1_REQUESTED_OUT_FREQ $pack_freq
+  }
+
+  ad_connect $device_clk ${name}_clkgen/clk_in1
+  ad_connect $resetn ${name}_clkgen/resetn
+  ad_connect ${name}_clk ${name}_clkgen/clk_out1
+
+  ad_ip_instance proc_sys_reset ${name}_rstgen
+  ad_connect ${name}_clk ${name}_rstgen/slowest_sync_clk
+  ad_connect $resetn ${name}_rstgen/ext_reset_in
+}
+
+set VERSAL [expr $ADI_PHY_SEL == 0]
+
+if {$RX_GEARBOX} {
+  ad_pack_clkgen_create rx_pack rx_device_clk $sys_cpu_resetn $RX_LANE_RATE \
+    $JESD_MODE $RX_SAMPLES_PER_CHANNEL $RX_PACK_SAMPLES_PER_CHANNEL $VERSAL
+}
+if {$ASYMMETRIC_A_B_MODE && $RX_B_GEARBOX} {
+  ad_pack_clkgen_create rx_b_pack rx_b_device_clk $sys_cpu_resetn $RX_B_LANE_RATE \
+    $JESD_MODE $RX_B_SAMPLES_PER_CHANNEL $RX_B_PACK_SAMPLES_PER_CHANNEL $VERSAL
+}
+if {$TX_GEARBOX} {
+  ad_pack_clkgen_create tx_pack tx_device_clk $sys_cpu_resetn $TX_LANE_RATE \
+    $JESD_MODE $TX_SAMPLES_PER_CHANNEL $TX_PACK_SAMPLES_PER_CHANNEL $VERSAL \
+    [expr 16.0 / 15]
+}
+if {$ASYMMETRIC_A_B_MODE && $TX_B_GEARBOX} {
+  ad_pack_clkgen_create tx_b_pack tx_b_device_clk $sys_cpu_resetn $TX_B_LANE_RATE \
+    $JESD_MODE $TX_B_SAMPLES_PER_CHANNEL $TX_B_PACK_SAMPLES_PER_CHANNEL $VERSAL \
+    [expr 16.0 / 15]
+}
+
 # device clock domain
 ad_connect  rx_device_clk rx_apollo_tpl_core/link_clk
-ad_connect  rx_device_clk util_apollo_cpack/clk
-ad_connect  rx_device_clk $adc_data_offload_name/s_axis_aclk
+ad_connect  $rx_pack_clk_net util_apollo_cpack/clk
+ad_connect  $rx_pack_clk_net $adc_data_offload_name/s_axis_aclk
 
 ad_connect  tx_device_clk tx_apollo_tpl_core/link_clk
-ad_connect  tx_device_clk util_apollo_upack/clk
-ad_connect  tx_device_clk $dac_data_offload_name/m_axis_aclk
+ad_connect  $tx_pack_clk_net util_apollo_upack/clk
+ad_connect  $tx_pack_clk_net $dac_data_offload_name/m_axis_aclk
 
 if {$ASYMMETRIC_A_B_MODE} {
   ad_connect  rx_b_device_clk rx_b_apollo_tpl_core/link_clk
-  ad_connect  rx_b_device_clk util_apollo_cpack_b/clk
-  ad_connect  rx_b_device_clk $adc_b_data_offload_name/s_axis_aclk
+  ad_connect  $rx_b_pack_clk_net util_apollo_cpack_b/clk
+  ad_connect  $rx_b_pack_clk_net $adc_b_data_offload_name/s_axis_aclk
 
   ad_connect  tx_b_device_clk tx_b_apollo_tpl_core/link_clk
-  ad_connect  tx_b_device_clk util_apollo_upack_b/clk
-  ad_connect  tx_b_device_clk $dac_b_data_offload_name/m_axis_aclk
+  ad_connect  $tx_b_pack_clk_net util_apollo_upack_b/clk
+  ad_connect  $tx_b_pack_clk_net $dac_b_data_offload_name/m_axis_aclk
 }
 
 # Clocks
@@ -956,9 +1113,9 @@ if {$ASYMMETRIC_A_B_MODE} {
 # create_bd_port -dir O rx_device_clk_rstn
 # ad_connect rx_device_clk_rstn rx_device_clk_rstgen/peripheral_aresetn
 
-ad_connect  rx_device_clk_rstgen/peripheral_aresetn $adc_data_offload_name/s_axis_aresetn
+ad_connect  $rx_pack_rstgen_net/peripheral_aresetn $adc_data_offload_name/s_axis_aresetn
 ad_connect  $sys_dma_resetn $adc_data_offload_name/m_axis_aresetn
-ad_connect  tx_device_clk_rstgen/peripheral_aresetn $dac_data_offload_name/m_axis_aresetn
+ad_connect  $tx_pack_rstgen_net/peripheral_aresetn $dac_data_offload_name/m_axis_aresetn
 ad_connect  $sys_dma_resetn $dac_data_offload_name/s_axis_aresetn
 
 ad_connect  $sys_dma_resetn axi_apollo_rx_dma/m_dest_axi_aresetn
@@ -967,15 +1124,52 @@ ad_connect  $sys_cpu_resetn $dac_data_offload_name/s_axi_aresetn
 ad_connect  $sys_cpu_resetn $adc_data_offload_name/s_axi_aresetn
 
 if {$ASYMMETRIC_A_B_MODE} {
-  ad_connect  rx_b_device_clk_rstgen/peripheral_aresetn $adc_b_data_offload_name/s_axis_aresetn
+  ad_connect  $rx_b_pack_rstgen_net/peripheral_aresetn $adc_b_data_offload_name/s_axis_aresetn
   ad_connect  $sys_dma_resetn $adc_b_data_offload_name/m_axis_aresetn
-  ad_connect  tx_b_device_clk_rstgen/peripheral_aresetn $dac_b_data_offload_name/m_axis_aresetn
+  ad_connect  $tx_b_pack_rstgen_net/peripheral_aresetn $dac_b_data_offload_name/m_axis_aresetn
   ad_connect  $sys_dma_resetn $dac_b_data_offload_name/s_axis_aresetn
 
   ad_connect  $sys_dma_resetn axi_apollo_rx_b_dma/m_dest_axi_aresetn
   ad_connect  $sys_dma_resetn axi_apollo_tx_b_dma/m_src_axi_aresetn
   ad_connect  $sys_cpu_resetn $dac_b_data_offload_name/s_axi_aresetn
   ad_connect  $sys_cpu_resetn $adc_b_data_offload_name/s_axi_aresetn
+}
+
+if {$FSRC_ENABLE} {
+  ad_ip_instance axi_fsrc_sequencer fsrc_sequencer [list \
+    CTRL_WIDTH 40 \
+    NUM_TRIG 4 \
+  ]
+  ad_connect tx_device_clk fsrc_sequencer/clk
+  ad_connect tx_device_clk_rstgen/peripheral_reset fsrc_sequencer/reset
+  ad_connect fsrc_sysref fsrc_sequencer/sysref
+  ad_connect fsrc_trig_in fsrc_sequencer/trig_in
+  ad_connect fsrc_sequencer/trig_out fsrc_trig_out
+  ad_connect fsrc_sequencer/ctrl fsrc_ctrl
+
+  if {$ASYMMETRIC_A_B_MODE} {
+    ad_ip_instance axi_fsrc_sequencer fsrc_sequencer_b [list \
+      CTRL_WIDTH 40 \
+      NUM_TRIG 4 \
+    ]
+    ad_connect tx_b_device_clk fsrc_sequencer_b/clk
+    ad_connect tx_b_device_clk_rstgen/peripheral_reset fsrc_sequencer_b/reset
+    ad_connect fsrc_sysref fsrc_sequencer_b/sysref
+    ad_connect fsrc_trig_in fsrc_sequencer_b/trig_in
+  }
+
+  if {$AION_ENABLE} {
+    ad_ip_instance ilslice fsrc_trig_req_slice [list \
+      DIN_WIDTH 4 \
+      DIN_FROM  0 \
+      DIN_TO    0 \
+    ]
+    ad_connect fsrc_sequencer/trig_out fsrc_trig_req_slice/Din
+    ad_connect fsrc_trig_req_slice/Dout axi_adf4030_0/trigger
+  }
+} else {
+  ad_connect GND fsrc_trig_out
+  ad_connect GND fsrc_ctrl
 }
 
 #
@@ -987,10 +1181,100 @@ ad_connect  axi_apollo_rx_jesd/rx_sof rx_apollo_tpl_core/link_sof
 ad_connect  axi_apollo_rx_jesd/rx_data_tdata rx_apollo_tpl_core/link_data
 ad_connect  axi_apollo_rx_jesd/rx_data_tvalid rx_apollo_tpl_core/link_valid
 
-ad_connect rx_apollo_tpl_core/adc_valid_0 util_apollo_cpack/fifo_wr_en
+if {$RX_GEARBOX} {
+  create_bd_cell -type module -reference util_pack_cdc apollo_rx_pack_cdc
+  ad_ip_parameter apollo_rx_pack_cdc CONFIG.NUM_OF_ENABLES $RX_NUM_OF_CONVERTERS
+  ad_connect rx_device_clk apollo_rx_pack_cdc/device_clk
+  ad_connect rx_device_clk_rstgen/peripheral_aresetn apollo_rx_pack_cdc/device_aresetn
+  ad_connect rx_apollo_tpl_core/adc_tpl_core/adc_rst apollo_rx_pack_cdc/adc_rst
+  ad_connect axi_apollo_rx_dma/s_axis_xfer_req apollo_rx_pack_cdc/xfer_req
+
+  ad_connect $rx_pack_clk_net apollo_rx_pack_cdc/pack_clk
+  ad_connect $rx_pack_rstgen_net/peripheral_aresetn apollo_rx_pack_cdc/pack_aresetn
+  ad_connect rx_apollo_tpl_core/adc_tpl_core/enable apollo_rx_pack_cdc/enable_in
+
+  # One FIFO for all channels, not one each: each async FIFO resolves its
+  # gray pointers on its own metastability timing, so per-channel FIFOs drift
+  # apart by a beat and cpack then interleaves samples from different times.
+  ad_ip_instance ilconcat apollo_rx_pack_concat [list \
+    NUM_PORTS $RX_NUM_OF_CONVERTERS \
+  ]
+  ad_ip_instance util_axis_fifo apollo_rx_pack_fifo [list \
+    DATA_WIDTH [expr $RX_PACK_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS] \
+    ADDRESS_WIDTH 5 \
+    ASYNC_CLK 1 \
+  ]
+  ad_connect rx_device_clk apollo_rx_pack_fifo/s_axis_aclk
+  ad_connect $rx_pack_clk_net apollo_rx_pack_fifo/m_axis_aclk
+  ad_connect rx_device_clk_rstgen/peripheral_aresetn apollo_rx_pack_fifo/s_axis_aresetn
+  ad_connect $rx_pack_rstgen_net/peripheral_aresetn apollo_rx_pack_fifo/m_axis_aresetn
+  ad_connect apollo_rx_pack_concat/dout apollo_rx_pack_fifo/s_axis_data
+  ad_connect VCC apollo_rx_pack_fifo/m_axis_ready
+}
+
+if {$FSRC_ENABLE} {
+  if {!$RX_GEARBOX} {
+    create_bd_cell -type module -reference util_pack_cdc apollo_rx_pack_cdc
+    ad_ip_parameter apollo_rx_pack_cdc CONFIG.NUM_OF_ENABLES $RX_NUM_OF_CONVERTERS
+    ad_connect rx_device_clk apollo_rx_pack_cdc/device_clk
+    ad_connect rx_device_clk_rstgen/peripheral_aresetn apollo_rx_pack_cdc/device_aresetn
+    ad_connect rx_apollo_tpl_core/adc_tpl_core/adc_rst apollo_rx_pack_cdc/adc_rst
+    ad_connect axi_apollo_rx_dma/s_axis_xfer_req apollo_rx_pack_cdc/xfer_req
+    ad_connect rx_device_clk apollo_rx_pack_cdc/pack_clk
+    ad_connect rx_device_clk_rstgen/peripheral_aresetn apollo_rx_pack_cdc/pack_aresetn
+    ad_connect rx_apollo_tpl_core/adc_tpl_core/enable apollo_rx_pack_cdc/enable_in
+  }
+
+  adi_fsrc_rx_create fsrc_rx rx_device_clk apollo_rx_pack_cdc/device_resetn \
+    $RX_NUM_OF_CONVERTERS \
+    [expr $RX_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH] \
+    $RX_DMA_SAMPLE_WIDTH
+  ad_connect rx_apollo_tpl_core/adc_valid_0 fsrc_rx/data_in_valid
+}
+
+set rx_data_src  [expr {$FSRC_ENABLE ? "fsrc_rx/data_out" : "rx_apollo_tpl_core/adc_data"}]
+set rx_valid_src [expr {$FSRC_ENABLE ? "fsrc_rx/data_out_valid" : "rx_apollo_tpl_core/adc_valid_0"}]
+
 for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
-  ad_connect  rx_apollo_tpl_core/adc_enable_$i util_apollo_cpack/enable_$i
-  ad_connect  rx_apollo_tpl_core/adc_data_$i util_apollo_cpack/fifo_wr_data_$i
+  if {$FSRC_ENABLE} {
+    ad_connect rx_apollo_tpl_core/adc_data_$i fsrc_rx/data_in_$i
+  }
+  if {$RX_GEARBOX} {
+    ad_ip_instance ilslice apollo_rx_enable_slice_$i [list \
+      DIN_WIDTH $RX_NUM_OF_CONVERTERS \
+      DIN_FROM $i \
+      DIN_TO $i \
+    ]
+    ad_connect apollo_rx_pack_cdc/enable_out apollo_rx_enable_slice_$i/Din
+    ad_connect apollo_rx_enable_slice_$i/Dout util_apollo_cpack/enable_$i
+
+    ad_ip_instance util_axis_gearbox apollo_rx_gearbox_$i [list \
+      S_DATA_WIDTH [expr $RX_SAMPLES_PER_CHANNEL      * $RX_DMA_SAMPLE_WIDTH] \
+      M_DATA_WIDTH [expr $RX_PACK_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH] \
+    ]
+    ad_connect  rx_device_clk apollo_rx_gearbox_$i/clk
+    ad_connect  ${rx_data_src}_$i apollo_rx_gearbox_$i/s_axis_data
+    ad_connect  $rx_valid_src apollo_rx_gearbox_$i/s_axis_valid
+    ad_connect  apollo_rx_pack_fifo/s_axis_ready apollo_rx_gearbox_$i/m_axis_ready
+    ad_connect  apollo_rx_gearbox_$i/m_axis_data apollo_rx_pack_concat/In$i
+
+    ad_ip_instance ilslice apollo_rx_pack_slice_$i [list \
+      DIN_WIDTH [expr $RX_PACK_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH * $RX_NUM_OF_CONVERTERS] \
+      DIN_FROM [expr $RX_PACK_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH * ($i+1) - 1] \
+      DIN_TO   [expr $RX_PACK_SAMPLES_PER_CHANNEL * $RX_DMA_SAMPLE_WIDTH * $i] \
+    ]
+    ad_connect  apollo_rx_pack_fifo/m_axis_data apollo_rx_pack_slice_$i/Din
+    ad_connect  apollo_rx_pack_slice_$i/Dout util_apollo_cpack/fifo_wr_data_$i
+  } else {
+    ad_connect  rx_apollo_tpl_core/adc_enable_$i util_apollo_cpack/enable_$i
+    ad_connect  ${rx_data_src}_$i util_apollo_cpack/fifo_wr_data_$i
+  }
+}
+if {$RX_GEARBOX} {
+  ad_connect apollo_rx_gearbox_0/m_axis_valid apollo_rx_pack_fifo/s_axis_valid
+  ad_connect apollo_rx_pack_fifo/m_axis_valid util_apollo_cpack/fifo_wr_en
+} else {
+  ad_connect $rx_valid_src util_apollo_cpack/fifo_wr_en
 }
 ad_connect rx_apollo_tpl_core/adc_dovf util_apollo_cpack/fifo_wr_overflow
 
@@ -1006,10 +1290,97 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_connect  axi_apollo_rx_b_jesd/rx_data_tdata rx_b_apollo_tpl_core/link_data
   ad_connect  axi_apollo_rx_b_jesd/rx_data_tvalid rx_b_apollo_tpl_core/link_valid
 
-  ad_connect rx_b_apollo_tpl_core/adc_valid_0 util_apollo_cpack_b/fifo_wr_en
+  if {$RX_B_GEARBOX} {
+    create_bd_cell -type module -reference util_pack_cdc apollo_rx_b_pack_cdc
+    ad_ip_parameter apollo_rx_b_pack_cdc CONFIG.NUM_OF_ENABLES $RX_B_NUM_OF_CONVERTERS
+    ad_connect rx_b_device_clk apollo_rx_b_pack_cdc/device_clk
+    ad_connect rx_b_device_clk_rstgen/peripheral_aresetn apollo_rx_b_pack_cdc/device_aresetn
+    ad_connect rx_b_apollo_tpl_core/adc_tpl_core/adc_rst apollo_rx_b_pack_cdc/adc_rst
+    ad_connect axi_apollo_rx_b_dma/s_axis_xfer_req apollo_rx_b_pack_cdc/xfer_req
+
+    ad_connect $rx_b_pack_clk_net apollo_rx_b_pack_cdc/pack_clk
+    ad_connect $rx_b_pack_rstgen_net/peripheral_aresetn apollo_rx_b_pack_cdc/pack_aresetn
+    ad_connect rx_b_apollo_tpl_core/adc_tpl_core/enable apollo_rx_b_pack_cdc/enable_in
+
+    ad_ip_instance ilconcat apollo_rx_b_pack_concat [list \
+      NUM_PORTS $RX_B_NUM_OF_CONVERTERS \
+    ]
+    ad_ip_instance util_axis_fifo apollo_rx_b_pack_fifo [list \
+      DATA_WIDTH [expr $RX_B_PACK_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH * $RX_B_NUM_OF_CONVERTERS] \
+      ADDRESS_WIDTH 5 \
+      ASYNC_CLK 1 \
+    ]
+    ad_connect rx_b_device_clk apollo_rx_b_pack_fifo/s_axis_aclk
+    ad_connect $rx_b_pack_clk_net apollo_rx_b_pack_fifo/m_axis_aclk
+    ad_connect rx_b_device_clk_rstgen/peripheral_aresetn apollo_rx_b_pack_fifo/s_axis_aresetn
+    ad_connect $rx_b_pack_rstgen_net/peripheral_aresetn apollo_rx_b_pack_fifo/m_axis_aresetn
+    ad_connect apollo_rx_b_pack_concat/dout apollo_rx_b_pack_fifo/s_axis_data
+    ad_connect VCC apollo_rx_b_pack_fifo/m_axis_ready
+  }
+
+  if {$FSRC_ENABLE} {
+    if {!$RX_B_GEARBOX} {
+      create_bd_cell -type module -reference util_pack_cdc apollo_rx_b_pack_cdc
+      ad_ip_parameter apollo_rx_b_pack_cdc CONFIG.NUM_OF_ENABLES $RX_B_NUM_OF_CONVERTERS
+      ad_connect rx_b_device_clk apollo_rx_b_pack_cdc/device_clk
+      ad_connect rx_b_device_clk_rstgen/peripheral_aresetn apollo_rx_b_pack_cdc/device_aresetn
+      ad_connect rx_b_apollo_tpl_core/adc_tpl_core/adc_rst apollo_rx_b_pack_cdc/adc_rst
+      ad_connect axi_apollo_rx_b_dma/s_axis_xfer_req apollo_rx_b_pack_cdc/xfer_req
+      ad_connect rx_b_device_clk apollo_rx_b_pack_cdc/pack_clk
+      ad_connect rx_b_device_clk_rstgen/peripheral_aresetn apollo_rx_b_pack_cdc/pack_aresetn
+      ad_connect rx_b_apollo_tpl_core/adc_tpl_core/enable apollo_rx_b_pack_cdc/enable_in
+    }
+
+    adi_fsrc_rx_create fsrc_rx_b rx_b_device_clk apollo_rx_b_pack_cdc/device_resetn \
+      $RX_B_NUM_OF_CONVERTERS \
+      [expr $RX_B_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH] \
+      $RX_B_DMA_SAMPLE_WIDTH
+    ad_connect rx_b_apollo_tpl_core/adc_valid_0 fsrc_rx_b/data_in_valid
+  }
+
+  set rx_b_data_src  [expr {$FSRC_ENABLE ? "fsrc_rx_b/data_out" : "rx_b_apollo_tpl_core/adc_data"}]
+  set rx_b_valid_src [expr {$FSRC_ENABLE ? "fsrc_rx_b/data_out_valid" : "rx_b_apollo_tpl_core/adc_valid_0"}]
+
   for {set i 0} {$i < $RX_B_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  rx_b_apollo_tpl_core/adc_enable_$i util_apollo_cpack_b/enable_$i
-    ad_connect  rx_b_apollo_tpl_core/adc_data_$i util_apollo_cpack_b/fifo_wr_data_$i
+    if {$FSRC_ENABLE} {
+      ad_connect rx_b_apollo_tpl_core/adc_data_$i fsrc_rx_b/data_in_$i
+    }
+    if {$RX_B_GEARBOX} {
+      ad_ip_instance ilslice apollo_rx_b_enable_slice_$i [list \
+        DIN_WIDTH $RX_B_NUM_OF_CONVERTERS \
+        DIN_FROM $i \
+        DIN_TO $i \
+      ]
+      ad_connect apollo_rx_b_pack_cdc/enable_out apollo_rx_b_enable_slice_$i/Din
+      ad_connect apollo_rx_b_enable_slice_$i/Dout util_apollo_cpack_b/enable_$i
+
+      ad_ip_instance util_axis_gearbox apollo_rx_b_gearbox_$i [list \
+        S_DATA_WIDTH [expr $RX_B_SAMPLES_PER_CHANNEL      * $RX_B_DMA_SAMPLE_WIDTH] \
+        M_DATA_WIDTH [expr $RX_B_PACK_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH] \
+      ]
+      ad_connect  rx_b_device_clk apollo_rx_b_gearbox_$i/clk
+      ad_connect  ${rx_b_data_src}_$i apollo_rx_b_gearbox_$i/s_axis_data
+      ad_connect  $rx_b_valid_src apollo_rx_b_gearbox_$i/s_axis_valid
+      ad_connect  apollo_rx_b_pack_fifo/s_axis_ready apollo_rx_b_gearbox_$i/m_axis_ready
+      ad_connect  apollo_rx_b_gearbox_$i/m_axis_data apollo_rx_b_pack_concat/In$i
+
+      ad_ip_instance ilslice apollo_rx_b_pack_slice_$i [list \
+        DIN_WIDTH [expr $RX_B_PACK_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH * $RX_B_NUM_OF_CONVERTERS] \
+        DIN_FROM [expr $RX_B_PACK_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH * ($i+1) - 1] \
+        DIN_TO   [expr $RX_B_PACK_SAMPLES_PER_CHANNEL * $RX_B_DMA_SAMPLE_WIDTH * $i] \
+      ]
+      ad_connect  apollo_rx_b_pack_fifo/m_axis_data apollo_rx_b_pack_slice_$i/Din
+      ad_connect  apollo_rx_b_pack_slice_$i/Dout util_apollo_cpack_b/fifo_wr_data_$i
+    } else {
+      ad_connect  rx_b_apollo_tpl_core/adc_enable_$i util_apollo_cpack_b/enable_$i
+      ad_connect  ${rx_b_data_src}_$i util_apollo_cpack_b/fifo_wr_data_$i
+    }
+  }
+  if {$RX_B_GEARBOX} {
+    ad_connect apollo_rx_b_gearbox_0/m_axis_valid apollo_rx_b_pack_fifo/s_axis_valid
+    ad_connect apollo_rx_b_pack_fifo/m_axis_valid util_apollo_cpack_b/fifo_wr_en
+  } else {
+    ad_connect $rx_b_valid_src util_apollo_cpack_b/fifo_wr_en
   }
   ad_connect rx_b_apollo_tpl_core/adc_dovf util_apollo_cpack_b/fifo_wr_overflow
 
@@ -1028,10 +1399,113 @@ if {$ASYMMETRIC_A_B_MODE} {
 #
 ad_connect  tx_apollo_tpl_core/link axi_apollo_tx_jesd/tx_data
 
-ad_connect  tx_apollo_tpl_core/dac_valid_0 util_apollo_upack/fifo_rd_en
+# The TX FSRC and gearbox are ready/valid consumers and upack cannot be stalled
+# directly, so the FIFO throttles it.
+set TX_UNPACK_FIFO [expr {$TX_GEARBOX || $FSRC_ENABLE}]
+
+if {$TX_GEARBOX} {
+  create_bd_cell -type module -reference util_pack_cdc apollo_tx_pack_cdc
+  ad_ip_parameter apollo_tx_pack_cdc CONFIG.NUM_OF_ENABLES $TX_NUM_OF_CONVERTERS
+  ad_connect tx_device_clk apollo_tx_pack_cdc/device_clk
+  ad_connect tx_device_clk_rstgen/peripheral_aresetn apollo_tx_pack_cdc/device_aresetn
+  ad_connect tx_apollo_tpl_core/dac_tpl_core/dac_rst apollo_tx_pack_cdc/adc_rst
+  ad_connect VCC apollo_tx_pack_cdc/xfer_req
+  ad_connect $tx_pack_clk_net apollo_tx_pack_cdc/pack_clk
+  ad_connect $tx_pack_rstgen_net/peripheral_aresetn apollo_tx_pack_cdc/pack_aresetn
+  ad_connect tx_apollo_tpl_core/dac_tpl_core/enable apollo_tx_pack_cdc/enable_in
+}
+
+if {$TX_UNPACK_FIFO} {
+  # One FIFO for all channels and then slice: every channel must see the same
+  # valid and the same ready, or the channels drift apart and the DAC gets I
+  # and Q from different times.
+  ad_ip_instance ilconcat apollo_tx_unpack_concat [list \
+    NUM_PORTS $TX_NUM_OF_CONVERTERS \
+  ]
+  ad_ip_instance util_axis_fifo apollo_tx_unpack_fifo [list \
+    DATA_WIDTH [expr $TX_PACK_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS] \
+    ADDRESS_WIDTH 5 \
+    ASYNC_CLK $TX_GEARBOX \
+    ALMOST_FULL_THRESHOLD 8 \
+  ]
+  ad_connect $tx_pack_clk_net apollo_tx_unpack_fifo/s_axis_aclk
+  ad_connect tx_device_clk apollo_tx_unpack_fifo/m_axis_aclk
+  ad_connect apollo_tx_unpack_concat/dout apollo_tx_unpack_fifo/s_axis_data
+  ad_connect util_apollo_upack/fifo_rd_valid apollo_tx_unpack_fifo/s_axis_valid
+
+  ad_ip_instance ilvector_logic apollo_tx_unpack_rd_en [list \
+    C_SIZE 1 \
+    C_OPERATION {not} \
+  ]
+  ad_connect apollo_tx_unpack_fifo/s_axis_almost_full apollo_tx_unpack_rd_en/Op1
+  ad_connect apollo_tx_unpack_rd_en/Res util_apollo_upack/fifo_rd_en
+} else {
+  ad_connect  tx_apollo_tpl_core/dac_valid_0 util_apollo_upack/fifo_rd_en
+}
+
+if {$FSRC_ENABLE} {
+  adi_fsrc_tx_create fsrc_tx tx_device_clk \
+    $TX_NUM_OF_CONVERTERS \
+    [expr $TX_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH] \
+    $TX_DMA_SAMPLE_WIDTH $FSRC_ACCUM_WIDTH
+  ad_connect fsrc_sequencer/tx_data_start fsrc_tx/tx_data_start
+  # The transport layer has no valid input; dac_valid_0 is its request for the
+  # next beat, so it is the FSRC output ready.
+  ad_connect tx_apollo_tpl_core/dac_valid_0 fsrc_tx/data_out_ready
+}
+
+set tx_gearbox_sink [expr {$FSRC_ENABLE ? "fsrc_tx/data_in" : "tx_apollo_tpl_core/dac_data"}]
+set tx_gearbox_ready [expr {$FSRC_ENABLE ? "fsrc_tx/data_in_ready" : "tx_apollo_tpl_core/dac_valid_0"}]
+
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
-  ad_connect  util_apollo_upack/fifo_rd_data_$i tx_apollo_tpl_core/dac_data_$i
-  ad_connect  tx_apollo_tpl_core/dac_enable_$i  util_apollo_upack/enable_$i
+  if {$TX_UNPACK_FIFO} {
+    ad_connect  util_apollo_upack/fifo_rd_data_$i apollo_tx_unpack_concat/In$i
+
+    ad_ip_instance ilslice apollo_tx_unpack_slice_$i [list \
+      DIN_WIDTH [expr $TX_PACK_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS] \
+      DIN_FROM [expr $TX_PACK_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH * ($i+1) - 1] \
+      DIN_TO   [expr $TX_PACK_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH * $i] \
+    ]
+    ad_connect  apollo_tx_unpack_fifo/m_axis_data apollo_tx_unpack_slice_$i/Din
+  }
+  if {$TX_GEARBOX} {
+    ad_ip_instance util_axis_gearbox apollo_tx_gearbox_$i [list \
+      S_DATA_WIDTH [expr $TX_PACK_SAMPLES_PER_CHANNEL * $TX_DMA_SAMPLE_WIDTH] \
+      M_DATA_WIDTH [expr $TX_SAMPLES_PER_CHANNEL      * $TX_DMA_SAMPLE_WIDTH] \
+    ]
+    ad_connect  tx_device_clk apollo_tx_gearbox_$i/clk
+    ad_connect  apollo_tx_unpack_slice_$i/Dout apollo_tx_gearbox_$i/s_axis_data
+    ad_connect  apollo_tx_unpack_fifo/m_axis_valid apollo_tx_gearbox_$i/s_axis_valid
+    ad_connect  $tx_gearbox_ready apollo_tx_gearbox_$i/m_axis_ready
+    ad_connect  apollo_tx_gearbox_$i/m_axis_data ${tx_gearbox_sink}_$i
+  } elseif {$FSRC_ENABLE} {
+    ad_connect  apollo_tx_unpack_slice_$i/Dout fsrc_tx/data_in_$i
+  } else {
+    ad_connect  util_apollo_upack/fifo_rd_data_$i tx_apollo_tpl_core/dac_data_$i
+  }
+  if {$FSRC_ENABLE} {
+    ad_connect  fsrc_tx/data_out_$i tx_apollo_tpl_core/dac_data_$i
+  }
+  if {$TX_GEARBOX} {
+    ad_ip_instance ilslice apollo_tx_enable_slice_$i [list \
+      DIN_WIDTH $TX_NUM_OF_CONVERTERS \
+      DIN_FROM $i \
+      DIN_TO $i \
+    ]
+    ad_connect apollo_tx_pack_cdc/enable_out apollo_tx_enable_slice_$i/Din
+    ad_connect apollo_tx_enable_slice_$i/Dout util_apollo_upack/enable_$i
+  } else {
+    ad_connect  tx_apollo_tpl_core/dac_enable_$i  util_apollo_upack/enable_$i
+  }
+}
+if {$TX_GEARBOX} {
+  ad_connect apollo_tx_gearbox_0/s_axis_ready apollo_tx_unpack_fifo/m_axis_ready
+  if {$FSRC_ENABLE} {
+    ad_connect apollo_tx_gearbox_0/m_axis_valid fsrc_tx/data_in_valid
+  }
+} elseif {$FSRC_ENABLE} {
+  ad_connect fsrc_tx/data_in_ready apollo_tx_unpack_fifo/m_axis_ready
+  ad_connect apollo_tx_unpack_fifo/m_axis_valid fsrc_tx/data_in_valid
 }
 
 ad_connect $dac_data_offload_name/s_axis axi_apollo_tx_dma/m_axis
@@ -1045,10 +1519,106 @@ ad_connect tx_apollo_tpl_core/dac_dunf GND
 if {$ASYMMETRIC_A_B_MODE} {
   ad_connect  tx_b_apollo_tpl_core/link axi_apollo_tx_b_jesd/tx_data
 
-  ad_connect  tx_b_apollo_tpl_core/dac_valid_0 util_apollo_upack_b/fifo_rd_en
+  set TX_B_UNPACK_FIFO [expr {$TX_B_GEARBOX || $FSRC_ENABLE}]
+
+  if {$TX_B_GEARBOX} {
+    create_bd_cell -type module -reference util_pack_cdc apollo_tx_b_pack_cdc
+    ad_ip_parameter apollo_tx_b_pack_cdc CONFIG.NUM_OF_ENABLES $TX_B_NUM_OF_CONVERTERS
+    ad_connect tx_b_device_clk apollo_tx_b_pack_cdc/device_clk
+    ad_connect tx_b_device_clk_rstgen/peripheral_aresetn apollo_tx_b_pack_cdc/device_aresetn
+    ad_connect tx_b_apollo_tpl_core/dac_tpl_core/dac_rst apollo_tx_b_pack_cdc/adc_rst
+    ad_connect VCC apollo_tx_b_pack_cdc/xfer_req
+    ad_connect $tx_b_pack_clk_net apollo_tx_b_pack_cdc/pack_clk
+    ad_connect $tx_b_pack_rstgen_net/peripheral_aresetn apollo_tx_b_pack_cdc/pack_aresetn
+    ad_connect tx_b_apollo_tpl_core/dac_tpl_core/enable apollo_tx_b_pack_cdc/enable_in
+  }
+
+  if {$TX_B_UNPACK_FIFO} {
+    ad_ip_instance ilconcat apollo_tx_b_unpack_concat [list \
+      NUM_PORTS $TX_B_NUM_OF_CONVERTERS \
+    ]
+    ad_ip_instance util_axis_fifo apollo_tx_b_unpack_fifo [list \
+      DATA_WIDTH [expr $TX_B_PACK_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH * $TX_B_NUM_OF_CONVERTERS] \
+      ADDRESS_WIDTH 5 \
+      ASYNC_CLK $TX_B_GEARBOX \
+      ALMOST_FULL_THRESHOLD 8 \
+    ]
+    ad_connect $tx_b_pack_clk_net apollo_tx_b_unpack_fifo/s_axis_aclk
+    ad_connect tx_b_device_clk apollo_tx_b_unpack_fifo/m_axis_aclk
+    ad_connect apollo_tx_b_unpack_concat/dout apollo_tx_b_unpack_fifo/s_axis_data
+    ad_connect util_apollo_upack_b/fifo_rd_valid apollo_tx_b_unpack_fifo/s_axis_valid
+
+    ad_ip_instance ilvector_logic apollo_tx_b_unpack_rd_en [list \
+      C_SIZE 1 \
+      C_OPERATION {not} \
+    ]
+    ad_connect apollo_tx_b_unpack_fifo/s_axis_almost_full apollo_tx_b_unpack_rd_en/Op1
+    ad_connect apollo_tx_b_unpack_rd_en/Res util_apollo_upack_b/fifo_rd_en
+  } else {
+    ad_connect  tx_b_apollo_tpl_core/dac_valid_0 util_apollo_upack_b/fifo_rd_en
+  }
+
+  if {$FSRC_ENABLE} {
+    adi_fsrc_tx_create fsrc_tx_b tx_b_device_clk \
+      $TX_B_NUM_OF_CONVERTERS \
+      [expr $TX_B_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH] \
+      $TX_B_DMA_SAMPLE_WIDTH $FSRC_ACCUM_WIDTH
+    ad_connect fsrc_sequencer_b/tx_data_start fsrc_tx_b/tx_data_start
+    ad_connect tx_b_apollo_tpl_core/dac_valid_0 fsrc_tx_b/data_out_ready
+  }
+
+  set tx_b_gearbox_sink [expr {$FSRC_ENABLE ? "fsrc_tx_b/data_in" : "tx_b_apollo_tpl_core/dac_data"}]
+  set tx_b_gearbox_ready [expr {$FSRC_ENABLE ? "fsrc_tx_b/data_in_ready" : "tx_b_apollo_tpl_core/dac_valid_0"}]
+
   for {set i 0} {$i < $TX_B_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  util_apollo_upack_b/fifo_rd_data_$i tx_b_apollo_tpl_core/dac_data_$i
-    ad_connect  tx_b_apollo_tpl_core/dac_enable_$i  util_apollo_upack_b/enable_$i
+    if {$TX_B_UNPACK_FIFO} {
+      ad_connect  util_apollo_upack_b/fifo_rd_data_$i apollo_tx_b_unpack_concat/In$i
+
+      ad_ip_instance ilslice apollo_tx_b_unpack_slice_$i [list \
+        DIN_WIDTH [expr $TX_B_PACK_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH * $TX_B_NUM_OF_CONVERTERS] \
+        DIN_FROM [expr $TX_B_PACK_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH * ($i+1) - 1] \
+        DIN_TO   [expr $TX_B_PACK_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH * $i] \
+      ]
+      ad_connect  apollo_tx_b_unpack_fifo/m_axis_data apollo_tx_b_unpack_slice_$i/Din
+    }
+    if {$TX_B_GEARBOX} {
+      ad_ip_instance util_axis_gearbox apollo_tx_b_gearbox_$i [list \
+        S_DATA_WIDTH [expr $TX_B_PACK_SAMPLES_PER_CHANNEL * $TX_B_DMA_SAMPLE_WIDTH] \
+        M_DATA_WIDTH [expr $TX_B_SAMPLES_PER_CHANNEL      * $TX_B_DMA_SAMPLE_WIDTH] \
+      ]
+      ad_connect  tx_b_device_clk apollo_tx_b_gearbox_$i/clk
+      ad_connect  apollo_tx_b_unpack_slice_$i/Dout apollo_tx_b_gearbox_$i/s_axis_data
+      ad_connect  apollo_tx_b_unpack_fifo/m_axis_valid apollo_tx_b_gearbox_$i/s_axis_valid
+      ad_connect  $tx_b_gearbox_ready apollo_tx_b_gearbox_$i/m_axis_ready
+      ad_connect  apollo_tx_b_gearbox_$i/m_axis_data ${tx_b_gearbox_sink}_$i
+    } elseif {$FSRC_ENABLE} {
+      ad_connect  apollo_tx_b_unpack_slice_$i/Dout fsrc_tx_b/data_in_$i
+    } else {
+      ad_connect  util_apollo_upack_b/fifo_rd_data_$i tx_b_apollo_tpl_core/dac_data_$i
+    }
+    if {$FSRC_ENABLE} {
+      ad_connect  fsrc_tx_b/data_out_$i tx_b_apollo_tpl_core/dac_data_$i
+    }
+    if {$TX_B_GEARBOX} {
+      ad_ip_instance ilslice apollo_tx_b_enable_slice_$i [list \
+        DIN_WIDTH $TX_B_NUM_OF_CONVERTERS \
+        DIN_FROM $i \
+        DIN_TO $i \
+      ]
+      ad_connect apollo_tx_b_pack_cdc/enable_out apollo_tx_b_enable_slice_$i/Din
+      ad_connect apollo_tx_b_enable_slice_$i/Dout util_apollo_upack_b/enable_$i
+    } else {
+      ad_connect  tx_b_apollo_tpl_core/dac_enable_$i  util_apollo_upack_b/enable_$i
+    }
+  }
+  if {$TX_B_GEARBOX} {
+    ad_connect apollo_tx_b_gearbox_0/s_axis_ready apollo_tx_b_unpack_fifo/m_axis_ready
+    if {$FSRC_ENABLE} {
+      ad_connect apollo_tx_b_gearbox_0/m_axis_valid fsrc_tx_b/data_in_valid
+    }
+  } elseif {$FSRC_ENABLE} {
+    ad_connect fsrc_tx_b/data_in_ready apollo_tx_b_unpack_fifo/m_axis_ready
+    ad_connect apollo_tx_b_unpack_fifo/m_axis_valid fsrc_tx_b/data_in_valid
   }
 
   ad_connect $dac_b_data_offload_name/s_axis axi_apollo_tx_b_dma/m_axis
@@ -1079,9 +1649,17 @@ ad_cpu_interconnect 0x7c420000 axi_apollo_rx_dma
 ad_cpu_interconnect 0x7c430000 axi_apollo_tx_dma
 ad_cpu_interconnect 0x7c440000 $dac_data_offload_name
 ad_cpu_interconnect 0x7c450000 $adc_data_offload_name
+if {$FSRC_ENABLE} {
+  ad_cpu_interconnect 0x44500000 fsrc_rx
+  ad_cpu_interconnect 0x44510000 fsrc_tx
+  ad_cpu_interconnect 0x44540000 fsrc_sequencer
+}
 if {$HSCI_ENABLE} {
   ad_cpu_interconnect 0x44ad0000 axi_hsci_clkgen
   ad_cpu_interconnect 0x7c500000 axi_hsci_0
+}
+if {$AION_ENABLE} {
+  ad_cpu_interconnect 0x7c600000 axi_adf4030_0
 }
 # Reserved for TDD! 0x7c460000
 
@@ -1103,6 +1681,11 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_cpu_interconnect 0x7c480000 axi_apollo_tx_b_dma
   ad_cpu_interconnect 0x7c490000 $dac_b_data_offload_name
   ad_cpu_interconnect 0x7c4a0000 $adc_b_data_offload_name
+  if {$FSRC_ENABLE} {
+    ad_cpu_interconnect 0x44520000 fsrc_rx_b
+    ad_cpu_interconnect 0x44530000 fsrc_tx_b
+    ad_cpu_interconnect 0x44550000 fsrc_sequencer_b
+  }
 }
 
 # interconnect (gt/adc)
@@ -1196,9 +1779,14 @@ if {$ASYMMETRIC_A_B_MODE == 0} {
 }
 
 # Reset pack cores
+#
+# On the gearbox path cpack runs on rx_pack_clk and holds no state of its own,
+# so adc_rst, which belongs to rx_device_clk, is left out of its reset.
+set RX_CPACK_RST_SOURCES [expr {$RX_GEARBOX ? 2 : 3}]
+
 ad_ip_instance ilreduced_logic cpack_rst_logic
 ad_ip_parameter cpack_rst_logic config.c_operation {or}
-ad_ip_parameter cpack_rst_logic config.c_size {3}
+ad_ip_parameter cpack_rst_logic config.c_size $RX_CPACK_RST_SOURCES
 
 ad_ip_instance  ilvector_logic rx_do_rstout_logic
 ad_ip_parameter rx_do_rstout_logic config.c_operation {not}
@@ -1207,18 +1795,30 @@ ad_ip_parameter rx_do_rstout_logic config.c_size {1}
 ad_connect $adc_data_offload_name/s_axis_tready rx_do_rstout_logic/Op1
 
 ad_ip_instance ilconcat cpack_reset_sources
-ad_ip_parameter cpack_reset_sources config.num_ports {3}
-ad_connect rx_device_clk_rstgen/peripheral_reset cpack_reset_sources/in0
-ad_connect rx_apollo_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources/in1
-ad_connect rx_do_rstout_logic/res cpack_reset_sources/in2
+ad_ip_parameter cpack_reset_sources config.num_ports $RX_CPACK_RST_SOURCES
+ad_connect $rx_pack_rstgen_net/peripheral_reset cpack_reset_sources/in0
+if {$RX_GEARBOX} {
+  ad_connect rx_do_rstout_logic/res cpack_reset_sources/in1
+} else {
+  ad_connect rx_apollo_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources/in1
+  ad_connect rx_do_rstout_logic/res cpack_reset_sources/in2
+}
 
 ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
 ad_connect cpack_rst_logic/res util_apollo_cpack/reset
 
+if {$RX_GEARBOX} {
+  for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
+    ad_connect apollo_rx_pack_cdc/device_resetn apollo_rx_gearbox_$i/resetn
+  }
+}
+
 if {$ASYMMETRIC_A_B_MODE} {
+  set RX_B_CPACK_RST_SOURCES [expr {$RX_B_GEARBOX ? 2 : 3}]
+
   ad_ip_instance ilreduced_logic cpack_b_rst_logic
   ad_ip_parameter cpack_b_rst_logic config.c_operation {or}
-  ad_ip_parameter cpack_b_rst_logic config.c_size {3}
+  ad_ip_parameter cpack_b_rst_logic config.c_size $RX_B_CPACK_RST_SOURCES
 
   ad_ip_instance  ilvector_logic rx_b_do_rstout_logic
   ad_ip_parameter rx_b_do_rstout_logic config.c_operation {not}
@@ -1227,13 +1827,23 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_connect $adc_b_data_offload_name/s_axis_tready rx_b_do_rstout_logic/Op1
 
   ad_ip_instance ilconcat cpack_b_reset_sources
-  ad_ip_parameter cpack_b_reset_sources config.num_ports {3}
-  ad_connect rx_b_device_clk_rstgen/peripheral_reset cpack_b_reset_sources/in0
-  ad_connect rx_b_apollo_tpl_core/adc_tpl_core/adc_rst cpack_b_reset_sources/in1
-  ad_connect rx_b_do_rstout_logic/res cpack_b_reset_sources/in2
+  ad_ip_parameter cpack_b_reset_sources config.num_ports $RX_B_CPACK_RST_SOURCES
+  ad_connect $rx_b_pack_rstgen_net/peripheral_reset cpack_b_reset_sources/in0
+  if {$RX_B_GEARBOX} {
+    ad_connect rx_b_do_rstout_logic/res cpack_b_reset_sources/in1
+  } else {
+    ad_connect rx_b_apollo_tpl_core/adc_tpl_core/adc_rst cpack_b_reset_sources/in1
+    ad_connect rx_b_do_rstout_logic/res cpack_b_reset_sources/in2
+  }
 
   ad_connect cpack_b_reset_sources/dout cpack_b_rst_logic/op1
   ad_connect cpack_b_rst_logic/res util_apollo_cpack_b/reset
+
+  if {$RX_B_GEARBOX} {
+    for {set i 0} {$i < $RX_B_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect apollo_rx_b_pack_cdc/device_resetn apollo_rx_b_gearbox_$i/resetn
+    }
+  }
 }
 
 # Reset unpack cores
@@ -1247,7 +1857,39 @@ ad_connect tx_device_clk_rstgen/peripheral_reset upack_reset_sources/in0
 ad_connect tx_apollo_tpl_core/dac_tpl_core/dac_rst upack_reset_sources/in1
 
 ad_connect upack_reset_sources/dout upack_rst_logic/op1
-ad_connect upack_rst_logic/res util_apollo_upack/reset
+if {$TX_GEARBOX} {
+  ad_ip_instance ilvector_logic upack_pack_rst [list \
+    C_SIZE 1 \
+    C_OPERATION {not} \
+  ]
+  ad_connect apollo_tx_pack_cdc/pack_resetn upack_pack_rst/Op1
+  ad_connect upack_pack_rst/Res util_apollo_upack/reset
+} else {
+  ad_connect upack_rst_logic/res util_apollo_upack/reset
+}
+
+if {$FSRC_ENABLE} {
+  ad_connect upack_rst_logic/res fsrc_tx/reset
+}
+
+if {$TX_UNPACK_FIFO} {
+  ad_ip_instance ilvector_logic tx_unpack_fifo_rstn [list \
+    C_SIZE 1 \
+    C_OPERATION {not} \
+  ]
+  ad_connect upack_rst_logic/res tx_unpack_fifo_rstn/Op1
+  if {$TX_GEARBOX} {
+    ad_connect apollo_tx_pack_cdc/pack_resetn apollo_tx_unpack_fifo/s_axis_aresetn
+  } else {
+    ad_connect tx_unpack_fifo_rstn/Res apollo_tx_unpack_fifo/s_axis_aresetn
+  }
+  ad_connect tx_unpack_fifo_rstn/Res apollo_tx_unpack_fifo/m_axis_aresetn
+  if {$TX_GEARBOX} {
+    for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect tx_unpack_fifo_rstn/Res apollo_tx_gearbox_$i/resetn
+    }
+  }
+}
 
 if {$ASYMMETRIC_A_B_MODE} {
   ad_ip_instance ilreduced_logic upack_b_rst_logic
@@ -1260,7 +1902,39 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_connect tx_b_apollo_tpl_core/dac_tpl_core/dac_rst upack_b_reset_sources/in1
 
   ad_connect upack_b_reset_sources/dout upack_b_rst_logic/op1
-  ad_connect upack_b_rst_logic/res util_apollo_upack_b/reset
+  if {$TX_B_GEARBOX} {
+    ad_ip_instance ilvector_logic upack_b_pack_rst [list \
+      C_SIZE 1 \
+      C_OPERATION {not} \
+    ]
+    ad_connect apollo_tx_b_pack_cdc/pack_resetn upack_b_pack_rst/Op1
+    ad_connect upack_b_pack_rst/Res util_apollo_upack_b/reset
+  } else {
+    ad_connect upack_b_rst_logic/res util_apollo_upack_b/reset
+  }
+
+  if {$FSRC_ENABLE} {
+    ad_connect upack_b_rst_logic/res fsrc_tx_b/reset
+  }
+
+  if {$TX_B_UNPACK_FIFO} {
+    ad_ip_instance ilvector_logic tx_b_unpack_fifo_rstn [list \
+      C_SIZE 1 \
+      C_OPERATION {not} \
+    ]
+    ad_connect upack_b_rst_logic/res tx_b_unpack_fifo_rstn/Op1
+    if {$TX_B_GEARBOX} {
+      ad_connect apollo_tx_b_pack_cdc/pack_resetn apollo_tx_b_unpack_fifo/s_axis_aresetn
+    } else {
+      ad_connect tx_b_unpack_fifo_rstn/Res apollo_tx_b_unpack_fifo/s_axis_aresetn
+    }
+    ad_connect tx_b_unpack_fifo_rstn/Res apollo_tx_b_unpack_fifo/m_axis_aresetn
+    if {$TX_B_GEARBOX} {
+      for {set i 0} {$i < $TX_B_NUM_OF_CONVERTERS} {incr i} {
+        ad_connect tx_b_unpack_fifo_rstn/Res apollo_tx_b_gearbox_$i/resetn
+      }
+    }
+  }
 }
 
 if {$TDD_SUPPORT} {

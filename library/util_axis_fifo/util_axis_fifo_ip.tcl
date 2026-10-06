@@ -43,9 +43,11 @@ adi_ip_files util_axis_fifo [list \
 	"../common/ad_mem.v" \
 	"../common/ad_mem_asym.v" \
 	"util_axis_fifo.v" \
+	"util_axis_fifo_constr.ttcl" \
 ]
 
 adi_ip_properties_lite util_axis_fifo
+adi_ip_ttcl util_axis_fifo "util_axis_fifo_constr.ttcl"
 
 adi_ip_add_core_dependencies [list \
 	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \

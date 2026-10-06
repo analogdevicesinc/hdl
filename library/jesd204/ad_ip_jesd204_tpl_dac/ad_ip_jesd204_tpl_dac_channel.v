@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -157,6 +157,14 @@ module ad_ip_jesd204_tpl_dac_channel #(
 
   // dds
 
+  // The sync clears the phase registers of every DDS sample slot; registering
+  // it here gives each channel its own copy of that high fanout reset.
+  reg dac_dds_sync = 1'b1;
+
+  always @(posedge clk) begin
+    dac_dds_sync <= dac_data_sync;
+  end
+
   ad_dds #(
     .DISABLE (DATAPATH_DISABLE),
     .DDS_DW (CONVERTER_RESOLUTION),
@@ -168,7 +176,7 @@ module ad_ip_jesd204_tpl_dac_channel #(
   ) i_dds (
     .clk (clk),
     .dac_dds_format (dac_dds_format),
-    .dac_data_sync (dac_data_sync),
+    .dac_data_sync (dac_dds_sync),
     .dac_valid (1'b1),
     .tone_1_scale (dac_dds_scale_0),
     .tone_2_scale (dac_dds_scale_1),
