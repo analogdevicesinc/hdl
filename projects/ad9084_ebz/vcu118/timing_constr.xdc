@@ -85,12 +85,14 @@ set_input_delay -clock [get_clocks tx_device_clk] -add_delay\
   [get_property PERIOD [get_clocks tx_device_clk]] \
   [get_ports {sysref_in*}]
 
-set_clock_groups -group rx_device_clk -group tx_device_clk -asynchronous
-
 create_clock -name rx_b_device_clk     -period  $rx_device_clk_period [get_ports ref_clk_p[1]]
 create_clock -name tx_b_device_clk     -period  $tx_device_clk_period [get_ports ref_clk_p[2]]
 
-set_clock_groups -group rx_b_device_clk -group tx_b_device_clk -asynchronous
+set_clock_groups -asynchronous \
+  -group rx_device_clk \
+  -group tx_device_clk \
+  -group rx_b_device_clk \
+  -group tx_b_device_clk
 
 # For transceiver output clocks use reference clock divided by one
 # This will help autoderive the clocks correcly
@@ -105,3 +107,6 @@ set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXSYSCLKSEL[1]]
 set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[0]]
 set_case_analysis -quiet 1 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[1]]
 set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/RXOUTCLKSEL[2]]
+
+set_false_path -quiet \
+  -through [get_nets -quiet -hierarchical -regexp {.*IOBUFDS_inst/(I|IBUFDISABLE|T)$}]
