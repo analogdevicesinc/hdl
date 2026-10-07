@@ -6,6 +6,8 @@
 
 PROJECT_NAME := ad738x_fmc_zed
 
+M_DEPS += system_constr_pmod.xdc
+M_DEPS += system_constr_fmc.xdc
 M_DEPS += system_constr_4sdi.xdc
 M_DEPS += system_constr_2sdi.xdc
 M_DEPS += system_constr_1sdi.xdc

@@ -38,38 +38,57 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 # Parameter description
 
+# FMC_N_PMOD - Selects the connector used for the ADC interface
+#  - Options : PMOD JA(0)/FMC(1)
+#  - PMOD supports only the 1 SDI/SDO variant (ALERT_SPI_N=0, NUM_OF_SDIO=1)
 # ALERT_SPI_N - SDOB-SDOD/ALERT pin can operate as a serial data output pin or alert indication output
 #  - Options : SDOB-SDOD(0)/ALERT(1)
 # NUM_OF_SDIO - Number of SDI lines used
 #  - Options : 1,2,4
 
+set FMC_N_PMOD  [get_env_param FMC_N_PMOD  1]
+set ALERT_SPI_N [get_env_param ALERT_SPI_N 0]
+set NUM_OF_SDIO [get_env_param NUM_OF_SDIO 1]
+
+if {$FMC_N_PMOD == 0 && ($ALERT_SPI_N != 0 || $NUM_OF_SDIO != 1)} {
+  return -code error "ERROR: FMC_N_PMOD=0 (PMOD) supports only ALERT_SPI_N=0 and NUM_OF_SDIO=1"
+}
+
 adi_project ad738x_fmc_zed 0 [list \
-  ALERT_SPI_N [get_env_param ALERT_SPI_N  0]\
-  NUM_OF_SDIO [get_env_param NUM_OF_SDIO    1] ]
+  FMC_N_PMOD  $FMC_N_PMOD \
+  ALERT_SPI_N $ALERT_SPI_N \
+  NUM_OF_SDIO $NUM_OF_SDIO ]
 
 adi_project_files ad738x_fmc_zed [list \
     "$ad_hdl_dir/library/common/ad_iobuf.v" \
     "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" \
-    "system_constr.xdc" \
-    "system_top.v" ]
+    "system_constr.xdc" ]
 
-switch [get_env_param NUM_OF_SDIO 1] {
-  1 {
-    adi_project_files ad738x_fmc_zed [list \
-      "system_constr_1sdi.xdc" ]
+if {$FMC_N_PMOD == 0} {
+  adi_project_files ad738x_fmc_zed [list \
+    "system_top_pmod.v" \
+    "system_constr_pmod.xdc" ]
+} elseif {$FMC_N_PMOD == 1} {
+  adi_project_files ad738x_fmc_zed [list \
+    "system_top.v" \
+    "system_constr_fmc.xdc" ]
+
+  switch $NUM_OF_SDIO {
+    2 {
+      adi_project_files ad738x_fmc_zed [list \
+        "system_constr_2sdi.xdc" ]
+    }
+    4 {
+      adi_project_files ad738x_fmc_zed [list \
+        "system_constr_4sdi.xdc" ]
+    }
+    default {
+      adi_project_files ad738x_fmc_zed [list \
+        "system_constr_1sdi.xdc" ]
+    }
   }
-  2 {
-    adi_project_files ad738x_fmc_zed [list \
-     "system_constr_2sdi.xdc" ]
- }
-  4 {
-   adi_project_files ad738x_fmc_zed [list \
-     "system_constr_4sdi.xdc" ]
-  }
-  default {
-    adi_project_files ad738x_fmc_zed [list \
-      "system_constr_1sdi.xdc" ]
-  }
+} else {
+  return -code error "ERROR: Invalid FMC_N_PMOD value! Options: 0 (PMOD), 1 (FMC)"
 }
 
 adi_project_run ad738x_fmc_zed
