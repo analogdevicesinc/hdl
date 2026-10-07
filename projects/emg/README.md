@@ -10,6 +10,7 @@
 | Part name                               | Description                                                               |
 |-----------------------------------------|---------------------------------------------------------------------------|
 | [AD4134](https://www.analog.com/ad4134) | 24-Bit, 4-Channel Simultaneous Sampling 1.5 MSPS Precision Alias Free ADC |
+| [AD5940](https://www.analog.com/ad5940) | High Precision, Impedance and Electrochemical Front End                   |
 
 ## Building the project
 

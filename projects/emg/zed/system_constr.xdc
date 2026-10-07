@@ -112,11 +112,19 @@ set_property -dict {PACKAGE_PIN D21 IOSTANDARD LVCMOS18} [get_ports emg_ch_en[3]
 
 # SW phase 2 (auxiliary SPI buses) - pins reserved, no controller in the block design yet.
 # Held idle in system_top.v so the nets are defined and the routing is proven.
+# aux0 is the AD5940.
 
 set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVCMOS18} [get_ports emg_aux0_cs];       ## G30 FMC_LPC_LA29_P  IO_L11P_T1_SRCC_35     CS_AUX0_O
 set_property -dict {PACKAGE_PIN C18 IOSTANDARD LVCMOS18} [get_ports emg_aux0_sclk];     ## G31 FMC_LPC_LA29_N  IO_L11N_T1_SRCC_35     SCLK_AUX0_O
 set_property -dict {PACKAGE_PIN B16 IOSTANDARD LVCMOS18} [get_ports emg_aux0_sdi];      ## G33 FMC_LPC_LA31_P  IO_L8P_T1_AD10P_35     SDI_AUX0_O
 set_property -dict {PACKAGE_PIN B17 IOSTANDARD LVCMOS18} [get_ports emg_aux0_sdo];      ## G34 FMC_LPC_LA31_N  IO_L8N_T1_AD10N_35     SDO_AUX0_O
+
+# aux0 (AD5940) reset and interrupt go through the U49 TXU0204 level shifter
+# (LT_1V8 <-> LT_3V3, OE set by jumper P61):
+# RESETB_AD5940_O A1 -> B1Y (FPGA output), INT_AD5940 B3 -> A3Y (FPGA input).
+
+set_property -dict {PACKAGE_PIN B19 IOSTANDARD LVCMOS18} [get_ports emg_aux0_resetn];   ## D20 FMC_LPC_LA17_P_CC IO_L13P_T2_MRCC_35   RESETB_AD5940_O
+set_property -dict {PACKAGE_PIN B20 IOSTANDARD LVCMOS18} [get_ports emg_aux0_int];      ## D21 FMC_LPC_LA17_N_CC IO_L13N_T2_MRCC_35   INT_AD5940_O
 
 set_property -dict {PACKAGE_PIN E15 IOSTANDARD LVCMOS18} [get_ports emg_aux1_cs];       ## D23 FMC_LPC_LA23_P  IO_L3P_T0_DQS_AD1P_35  CS_AUX1
 set_property -dict {PACKAGE_PIN D15 IOSTANDARD LVCMOS18} [get_ports emg_aux1_sdo];      ## D24 FMC_LPC_LA23_N  IO_L3N_T0_DQS_AD1N_35  SDO_AUX1

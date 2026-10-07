@@ -121,11 +121,14 @@ module system_top (
   output [ 3:0] emg_ch_en,
 
   // SW phase 2 - two reserved SPI buses, pins reserved and held idle
+  // aux0 is the AD5940 (SPI, reset and interrupt)
 
   output        emg_aux0_cs,
   output        emg_aux0_sclk,
   output        emg_aux0_sdi,
   input         emg_aux0_sdo,
+  output        emg_aux0_resetn,
+  input         emg_aux0_int,
 
   output        emg_aux1_cs,
   output        emg_aux1_sclk,
@@ -156,7 +159,12 @@ module system_top (
   // 64 bits wide and the rest of it is already allocated, so [63:60] are taken from
   // the read-back range rather than adding an axi_gpio for four bits.
   assign emg_ch_en = gpio_o[63:60];
-  assign gpio_i[63:48] = gpio_o[63:48];
+  assign gpio_i[63:50] = gpio_o[63:50];
+
+  // aux0 (AD5940) reset (output) and interrupt (input) on EMIO GPIO [48] and [49]
+  assign emg_aux0_resetn = gpio_o[48];
+  assign gpio_i[49] = emg_aux0_int;
+  assign gpio_i[48] = gpio_o[48];
 
   // SW phase 2 - both auxiliary devices are on the FMC but have no controller in
   // the block design yet.  Hold both buses idle (chip selects high, no clock
