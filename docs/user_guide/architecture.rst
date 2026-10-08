@@ -228,6 +228,8 @@ There is HDMI support for all carriers which are using the :adi:`ADV7511`
 as HDMI transmitter. The HDMI transmitter core can be found
 :git-hdl:`here (axi_hdmi_tx) <library/axi_hdmi_tx>`.
 
+.. _architecture gpio:
+
 GPIOs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

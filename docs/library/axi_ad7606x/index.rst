@@ -1,11 +1,11 @@
 .. _axi_ad7606x:
 
-AXI AD7606x
+AXI AD7606X
 ================================================================================
 
 .. hdl-component-diagram::
 
-The :git-hdl:`AXI AD7606x <library/axi_ad7606x>` IP core can be used to
+The :git-hdl:`AXI AD7606X <library/axi_ad7606x>` IP core can be used to
 interface the :adi:`AD7606B`, :adi:`AD7606C-16`, :adi:`AD7606C-18`,
 :adi:`AD7605-4`, :adi:`AD7606`, :adi:`AD7606-6`, :adi:`AD7606-4`,
 :adi:`AD7607`, :adi:`AD7608` and :adi:`AD7609` devices using an FPGA.
@@ -24,7 +24,7 @@ Files
    * - Name
      - Description
    * - :git-hdl:`library/axi_ad7606x/axi_ad7606x.v`
-     - Verilog source for the AXI AD7606x.
+     - Verilog source for the AXI AD7606X.
    * - :git-hdl:`library/common/up_adc_common.v`
      - Verilog source for the ADC Common regmap.
    * - :git-hdl:`library/common/up_adc_channel.v`
@@ -34,7 +34,7 @@ Block Diagram
 --------------------------------------------------------------------------------
 
 .. image:: block_diagram.svg
-   :alt: AXI AD7606x block diagram
+   :alt: AXI AD7606X block diagram
 
 Configuration Parameters
 --------------------------------------------------------------------------------
@@ -139,10 +139,10 @@ map, **adc_config_ctrl** signal, that is available in the *up_adc_common*
 module, is used in this way: bit 1 - RD ('b1) \| WR ('b0) and bit 0 - enable
 WR/RD operation.
 
-ADC Register Mode (AD7606x familiy)
+ADC Register Mode (AD7606X familiy)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As regards the register mode, AD7606x family devices have the following
+As regards the register mode, AD7606X family devices have the following
 workflow: DB[15] - RD ('b0) \| WR ('b1), DB[14:8] - register address and DB[7:0]
 - register data or don't care data. Besides the data output signal, WR_N and
 RD_N signals are also used in order to make a write or read request to the
@@ -175,7 +175,7 @@ operation followed by a write operation.
 .. image:: wavedrom-1.svg
 
 The following timing diagrams illustrate available ADC read modes using the
-AD7606x family devices.
+AD7606X family devices.
 
 ADC Read Mode (AD7606B/C-16)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

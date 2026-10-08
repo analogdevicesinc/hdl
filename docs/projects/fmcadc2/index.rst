@@ -121,30 +121,25 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - adc_irq
-     - INOUT
-     - 33
-     - 87
-     - 111
-   * - adc_fd
-     - INOUT
-     - 32
-     - 86
-     - 110
+=============  ============  =======  =========  ======================
+GPIO signal    Direction     HDL no.  Zynq-7000  Zynq UltraScale+ MP
+=============  ============  =======  =========  ======================
+adc_irq        INOUT         33       87         111
+adc_fd         INOUT         32       86         110
+=============  ============  =======  =========  ======================
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000, Zynq UltraScale+ MP = Software GPIOs to be used in
+     device trees
+
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

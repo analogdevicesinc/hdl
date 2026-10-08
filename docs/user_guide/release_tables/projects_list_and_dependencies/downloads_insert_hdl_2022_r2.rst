@@ -273,7 +273,7 @@ AD719XASDZ
      - :ref:`ad719x_asdz_coraz7s <util_hdl_2022_r2_ad719x_asdz_coraz7s>`
      - :git-hdl:`axi_sysid <hdl_2022_r2:library/axi_sysid>`
 
-AD738xFMC
+AD738XFMC
 ---------
 
 .. list-table::
@@ -285,7 +285,7 @@ AD738xFMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD738xFMC <eval-ad738xfmcz>`
+   * - :adi:`AD738XFMC <eval-ad738xfmcz>`
      - :git-hdl:`ad738x_fmc <hdl_2022_r2:projects/ad738x_fmc>`
      - :git-hdl:`zed <hdl_2022_r2:projects/ad738x_fmc/zed>`
      - :ref:`ad738x_fmc_zed <util_hdl_2022_r2_ad738x_fmc_zed>`
@@ -1384,7 +1384,7 @@ DACFMCEBZ
      - 
      - 
      - :git-hdl:`axi_hdmi_tx <hdl_2022_r2:library/axi_hdmi_tx>`
-   * - :adi:`EVAL-AD916x`
+   * - :adi:`EVAL-AD916X`
      - 
      - 
      - 

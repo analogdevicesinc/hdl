@@ -3,7 +3,7 @@
 AD719X-ASDZ HDL project
 ================================================================================
 
-The AD719x-ASDZ HDL project supports the EVAL-AD719xASDZ family, comprised of
+The AD719X-ASDZ HDL project supports the EVAL-AD719XASDZ family, comprised of
 :adi:`EVAL-AD7190ASDZ`, :adi:`EVAL-AD7193ASDZ`, :adi:`EVAL-AD7195ASDZ`,
 as well as the :adi:`EVAL-AD4131-8`, :adi:`EVAL-AD4130-8` and
 :adi:`EVAL-AD4129-8`.
@@ -104,7 +104,7 @@ The data path and clock domains are depicted in the below diagram:
 .. image:: ad719x_block_diagram.png
    :width: 1000
    :align: center
-   :alt: AD719x/CoraZ7S block diagram
+   :alt: AD719X/CoraZ7S block diagram
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,43 +119,37 @@ SPI connections
      - CS
    * - PS
      - SPI 0
-     - AD719x
+     - AD719X
      - 0
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction (from FPGA view)
-     - HDL GPIO EMIO
-     - Software GPIO (for Zynq-7000)
-   * - adc_syncn *
-     - OUT
-     - 33
-     - 87
-   * - adc_spi_miso_rdyn
-     - OUT
-     - 32
-     - 86
-   * - adc_int **
-     - OUT
-     - 31
-     - 85
+===================  =========  =======  =========  =========
+GPIO signal          Direction  HDL no.  Zynq-7000  DE10-Nano
+===================  =========  =======  =========  =========
+ad719x_sync_n *      OUT        33       --         1
+ad719x_spi_miso *    IN         32       --         0
+adc_spi_miso_rdyn    IN         32       86         --
+adc_syncn **         INOUT      33       87         --
+adc_int **           IN         31       85         --
+===================  =========  =======  =========  =========
 
 .. admonition:: Legend
    :class: note
 
-   - ``*`` - ``adc_syncn`` exists all the time on the DE10-Nano project, **but**
-     on the Cora Z7S project it exists only when the project was built with
-     ``ARDZ_PMOD_N=1`` parameter (used when connecting the eval. board through
-     the Arduino header)
-   - ``**`` - ``adc_int`` exists on the Cora Z7S project only when the project
-     as built with ``ARDZ_PMOD_N=1`` parameter (used when connecting the eval.
-     board through the Arduino header)
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, DE10-Nano are Software GPIOs, to be used in device trees
+   - ``*`` - signals present only in the DE10-Nano project
+   - ``**`` - signals present only in the Cora Z7S project when built with
+     ``ARDZ_PMOD_N=1`` (eval. board connected through the Arduino header)
+   - ``adc_spi_miso_rdyn`` is present in all Cora Z7S variants
+
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -263,14 +257,14 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`AD719x Linux driver <drivers/iio/adc/ad7192.c>`
+- :git-linux:`AD719X Linux driver <drivers/iio/adc/ad7192.c>`
 - :git-linux:`AD7190/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7190.dts>`
 - :git-linux:`AD7192/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7192.dts>`
 - :git-linux:`AD7193/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7193.dts>`
 - :git-linux:`AD7194/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7194.dts>`
 - :git-linux:`AD7195/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7195.dts>`
-- :git-no-os:`AD719x no-OS project <projects/ad719x>`
-- :git-no-os:`AD719x no-OS driver <drivers/adc/ad719x>`
+- :git-no-os:`AD719X no-OS project <projects/ad719x>`
+- :git-no-os:`AD719X no-OS driver <drivers/adc/ad719x>`
 - :dokuwiki:`AD7190 - Microcontroller No-OS Driver <resources/tools-software/uc-drivers/renesas/ad7190>`
 - :dokuwiki:`Supported devices <resources/tools-software/uc-drivers/ad7193>`
 

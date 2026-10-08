@@ -1,11 +1,11 @@
 .. _axi_ad777x:
 
-AXI AD777x
+AXI AD777X
 ================================================================================
 
 .. hdl-component-diagram::
 
-The :git-hdl:`AXI AD777x <library/axi_ad777x>` IP core
+The :git-hdl:`AXI AD777X <library/axi_ad777x>` IP core
 can be used to interface the :adi:`AD7770`, :adi:`AD7771` and :adi:`AD7779`
 converters using an FPGA in 1, 2, or 4 data lines active.
 More about the generic framework interfacing ADCs, that contains the
@@ -29,9 +29,9 @@ Files
    * - Name
      - Description
    * - :git-hdl:`library/axi_ad777x/axi_ad777x.v`
-     - Verilog source for the AXI AD777x.
+     - Verilog source for the AXI AD777X.
    * - :git-hdl:`library/axi_ad777x/axi_ad777x_if.v`
-     - Verilog source for the AXI AD777x interface module.
+     - Verilog source for the AXI AD777X interface module.
    * - :git-hdl:`library/axi_ad777x/axi_ad777x_ip.tcl`
      - TCL script to generate the Vivado IP-integrator project.
    * - :git-hdl:`library/axi_ad777x/axi_ad777x_hw.tcl`
@@ -41,7 +41,7 @@ Block Diagram
 --------------------------------------------------------------------------------
 
 .. image:: block_diagram.svg
-   :alt: AXI AD777x block diagram
+   :alt: AXI AD777X block diagram
 
 Configuration Parameters
 --------------------------------------------------------------------------------
@@ -89,19 +89,19 @@ Detailed Architecture
 --------------------------------------------------------------------------------
 
 .. image:: detailed_architecture.svg
-   :alt: AXI AD777x detailed architecture
+   :alt: AXI AD777X detailed architecture
 
 Detailed Description
 --------------------------------------------------------------------------------
 
 The top module, axi_ad777x, instantiates:
 
-* The AD777x interface module
+* The AD777X interface module
 * The ADC channel register map
 * The ADC common register map
 * The AXI handling interface
 
-The AD777x interface module has as input the serial data lines, the ready_in
+The AD777X interface module has as input the serial data lines, the ready_in
 signal and the interface clock. Data is deserialized according to the number
 of active lanes. The interface module also implements a parallel CRC check
 algorithm.
@@ -158,7 +158,7 @@ see :ref:`ADC register access <generic-adc-register-access>`.
 Design Guidelines
 --------------------------------------------------------------------------------
 
-The control of the ad777x chip is done through a SPI interface, which is needed
+The control of the AD777X chip is done through a SPI interface, which is needed
 at system level.
 
 The *ADC interface signals* must be connected directly to the top file of the
