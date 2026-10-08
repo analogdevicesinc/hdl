@@ -61,10 +61,12 @@ Each one of these platforms has their own FPGA design suites:
 - Intel with `Intel Quartus Prime Pro and Standard`_
 - Lattice with `Lattice Radiant`_ and `Lattice Propel`_
 
-#. The **required** Vivado/Quartus/Propel/Radiant version can be found in:
+.. warning::
 
-   - :git-hdl:`scripts/adi_env.tcl`
-   - or in the `release notes <https://github.com/analogdevicesinc/hdl/releases>`__
+   The **required** tool versions change with every release and are **not**
+   maintained on this page. Always check the
+   `Releases page <https://github.com/analogdevicesinc/hdl/releases>`__
+   or :git-hdl:`scripts/adi_env.tcl` for the exact versions to use.
 
    More details can be found at :ref:`build_hdl tool-versions`.
    Make sure that you're always using the latest release.
@@ -136,7 +138,7 @@ want to switch to any other branch you need to checkout that branch:
 .. shell:: bash
 
    ~/hdl
-   $git checkout hdl_2023_r2
+   $git checkout hdl_202x_rx
 
 If this is your first time cloning, you have the latest source files.
 If not, you can simply pull the latest sources using ``git pull`` or
@@ -146,7 +148,7 @@ If not, you can simply pull the latest sources using ``git pull`` or
 
    ~/hdl
    $git fetch origin               # shows what changes will be pulled on your local copy
-   $git rebase origin/hdl_2023_r2  # updates your local copy
+   $git rebase origin/hdl_202x_rx  # updates your local copy
 
 .. _build_hdl environment:
 
@@ -167,7 +169,7 @@ method in your **~/.bashrc** file as follows:
 
 .. code-block:: bash
 
-   XVERSION=2025.1
+   XVERSION=202x.y
    load_amd ()
    {
        source /opt/Xilinx/$XVERSION/Vivado/settings64.sh
@@ -204,26 +206,26 @@ For AMD Xilinx Vivado:
 .. shell:: bash
 
    ~/hdl
-   $source /opt/Xilinx/2025.1/Vivado/settings64.sh
+   $source /opt/Xilinx/202x.y/Vivado/settings64.sh
 
-   $export PATH=$PATH:/opt/Xilinx/2025.1/Vivado/bin:/opt/Xilinx/2025.1/Vitis/bin
-   $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/microblaze/nt/bin
+   $export PATH=$PATH:/opt/Xilinx/202x.y/Vivado/bin:/opt/Xilinx/202x.y/Vitis/bin
+   $export PATH=$PATH:/opt/Xilinx/202x.y/Vitis/gnu/microblaze/nt/bin
 
 For Intel Quartus:
 
 .. shell:: bash
 
    ~/hdl
-   $export PATH=$PATH:/opt/intelFPGA_pro/2x.x/quartus/bin
+   $export PATH=$PATH:/opt/intelFPGA_pro/2x.y/quartus/bin
 
 For Lattice:
 
 .. shell:: bash
 
    ~/hdl
-   $export PATH=$PATH:/opt/lscc/propel/2025.2/builder/rtf/bin/lin64
-   $export PATH=$PATH:/opt/lscc/radiant/2025.2/bin/lin64
-   $export PATH=$PATH:/opt/lscc/propel/2025.2/questasim/linux_x86_64
+   $export PATH=$PATH:/opt/lscc/propel/202x.y/builder/rtf/bin/lin64
+   $export PATH=$PATH:/opt/lscc/radiant/202x.y/bin/lin64
+   $export PATH=$PATH:/opt/lscc/propel/202x.y/questasim/linux_x86_64
 
 3b. Windows environment setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -240,7 +242,9 @@ To be able to access the GUI, **WSL2 is recommended**. This is done using
 PowerShell or Windows Command Prompt in Administrator mode.
 In the link above, you can find the installation guide for WSL on Windows.
 
-:red:`We do not offer support on WSL-related issues or on Vivado/Vitis issues!`
+.. warning::
+
+   We do not offer support on WSL-related issues or on Vivado/Vitis issues!
 
 .. collapsible:: How to install WSL
 
@@ -291,8 +295,8 @@ In the link above, you can find the installation guide for WSL on Windows.
    .. shell:: bash
 
       ~/Downloads
-      $chmod +x FPGAs_AdaptiveSoCs_Unified_SDI_2025.1_0530_0145_Lin64.bin
-      $sudo ./FPGAs_AdaptiveSoCs_Unified_SDI_2025.1_0530_0145_Lin64.bin
+      $chmod +x FPGAs_AdaptiveSoCs_Unified_SDI_202x.y_xxxx_xxxx_Lin64.bin
+      $sudo ./FPGAs_AdaptiveSoCs_Unified_SDI_202x.y_xxxx_xxxx_Lin64.bin
 
    The installation directory for AMD Xilinx Vivado & Vitis we chose to be
    ``/opt/Xilinx``.
@@ -302,11 +306,11 @@ In the link above, you can find the installation guide for WSL on Windows.
 
    .. shell:: bash
 
-      $/tools/Xilinx/2025.1/Vivado/bin/rdiArgs.sh: line 31: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory
+      $/tools/Xilinx/202x.y/Vivado/bin/rdiArgs.sh: line 31: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory
       /bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
       terminate called after throwing an instance of 'std::runtime_error'
         what():  locale::facet::_S_create_c_locale name not valid
-      /tools/Xilinx/2025.1/Vivado/bin/rdiArgs.sh: line 312:  4105 Aborted                 "$RDI_PROG" "$@"
+      /tools/Xilinx/202x.y/Vivado/bin/rdiArgs.sh: line 312:  4105 Aborted                 "$RDI_PROG" "$@"
 
    See `here <https://adaptivesupport.amd.com/s/question/0D54U00006FYojlSAD/vivado-20222-on-ubuntu-with-error-lcall-cannot-change-locale-enusutf8?language=en_US>`__
    a thread on the Xilinx community.
@@ -317,7 +321,7 @@ In the link above, you can find the installation guide for WSL on Windows.
 
       ~/Downloads
       $sudo apt-get install locales && sudo localedef -i en_US -f UTF-8 en_US.UTF-8
-      $cd /opt/Xilinx/2025.1/Vitis/scripts
+      $cd /opt/Xilinx/202x.y/Vitis/scripts
       $sudo ./installLibs.sh
       $sudo apt-get install libxrender1 libxtst6 libxi6
       $sudo apt-get install libtinfo5
@@ -328,15 +332,28 @@ In the link above, you can find the installation guide for WSL on Windows.
 
    .. shell:: bash
 
-      $export PATH=$PATH:/opt/Xilinx/2025.1/Vivado/bin
-      $export PATH=$PATH:/opt/Xilinx/2025.1/Vivado_HLS/bin
+      $export PATH=$PATH:/opt/Xilinx/202x.y/Vivado/bin
+      $export PATH=$PATH:/opt/Xilinx/202x.y/Vivado_HLS/bin
 
-      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/bin
-      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/microblaze/nt/bin
-      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/arm/nt/bin
-      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/microblaze/linux_toolchain/nt64_be/bin
-      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/microblaze/linux_toolchain/nt64_le/bin
-      $export PATH=$PATH:/opt/Xilinx/2025.1/Vitis/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+      $export PATH=$PATH:/opt/Xilinx/202x.y/Vitis/bin
+      $export PATH=$PATH:/opt/Xilinx/202x.y/Vitis/gnu/microblaze/nt/bin
+      $export PATH=$PATH:/opt/Xilinx/202x.y/Vitis/gnu/arm/nt/bin
+      $export PATH=$PATH:/opt/Xilinx/202x.y/Vitis/gnu/microblaze/linux_toolchain/nt64_be/bin
+      $export PATH=$PATH:/opt/Xilinx/202x.y/Vitis/gnu/microblaze/linux_toolchain/nt64_le/bin
+      $export PATH=$PATH:/opt/Xilinx/202x.y/Vitis/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+
+   Now you need to install the AMD Xilinx Linux cable drivers, otherwise your
+   JTAG cable connected to your PC won't be visible:
+
+   .. shell:: bash
+
+      $cd /${path_to_vivado_install_dir}/data/xicom/cable_drivers/lin64/install_script/install_drivers/
+      $./install_drivers
+      $sudo adduser $USER dialout
+
+   If the above information is not working, please take a look at this article:
+   `Install Cable Drivers <https://digilent.com/reference/programmable-logic/guides/install-cable-drivers>`__
+   and know that we do not offer support for these non-ADI related issues.
 
 .. collapsible:: Alternatives to WSL/Linux terminal
 
@@ -349,7 +366,7 @@ In the link above, you can find the installation guide for WSL on Windows.
    Some of these may not be fully functional with our scripts and/or projects.
    If you are an Intel user, the **Nios II Command Shell** does support make.
    If you are an AMD user, use the **gnuwin** installed as part of the SDK,
-   usually at ``C:\Xilinx\2025.1\Vitis\gnuwin\bin``.
+   usually at ``C:\Xilinx\202x.y\Vitis\gnuwin\bin``.
 
 **How to verify your environment setup**
 
@@ -363,9 +380,9 @@ current environment, for example:
    $which make
     /usr/bin/make
    $which vivado
-    /opt/Xilinx/Vivado/2024.2/bin/vivado
+    /opt/Xilinx/202x.y/Vivado/bin/vivado
    $which quartus
-    /opt/intelFPGA/24.2/quartus/bin/quartus
+    /opt/intelFPGA_pro/2x.y/quartus/bin/quartus
 
 .. _build_hdl cygwin:
 
@@ -375,7 +392,9 @@ Cygwin (NOT RECOMMENDED)
 Using `Cygwin <https://www.cygwin.com/>`__ is not recommended anymore, and if
 one encounters issues with this flow, we will not offer support for this.
 
-:red:`We do not offer support on Cygwin-related issues or on Vivado/Vitis issues!`
+.. warning::
+
+   We do not offer support on Cygwin-related issues or on Vivado/Vitis issues!
 
 Please note, that using Cygwin to build the HDL project has limitations!
 One cannot build the boot file needed for the setup, but instead should use
@@ -393,30 +412,30 @@ the Vivado Tcl console building mode to build the BOOT.BIN (see
    .. shell:: bash
 
       ~/hdl
-      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vivado/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vivado_HLS/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/gnu/microblaze/nt/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/gnu/arm/nt/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/gnu/microblaze/linux_toolchain/nt64_be/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/gnu/microblaze/linux_toolchain/nt64_le/bin
-      $export PATH=$PATH:/cygdrive/c/Xilinx/2025.1/Vitis/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/202x.y/Vivado/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/202x.y/Vivado_HLS/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/202x.y/Vitis/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/202x.y/Vitis/gnu/microblaze/nt/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/202x.y/Vitis/gnu/arm/nt/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/202x.y/Vitis/gnu/microblaze/linux_toolchain/nt64_be/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/202x.y/Vitis/gnu/microblaze/linux_toolchain/nt64_le/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/202x.y/Vitis/gnu/aarch32/nt/gcc-arm-none-eabi/bin
 
    For Intel Quartus:
 
    .. shell:: bash
 
       ~/hdl
-      $export PATH=$PATH:/cygdrive/c/intelFPGA_pro/2x.x/quartus/bin64
+      $export PATH=$PATH:/cygdrive/c/intelFPGA_pro/2x.y/quartus/bin64
 
    For Lattice:
 
    .. shell:: bash
 
       ~/hdl
-      $export PATH=$PATH:/cygdrive/c/lscc/propel/2025.2/builder/rtf/bin/nt64
-      $export PATH=$PATH:/cygdrive/c/lscc/radiant/2025.2/bin/nt64
-      $export PATH=$PATH:/cygdrive/c/lscc/propel/2025.2/questasim/win64
+      $export PATH=$PATH:/cygdrive/c/lscc/propel/202x.y/builder/rtf/bin/nt64
+      $export PATH=$PATH:/cygdrive/c/lscc/radiant/202x.y/bin/nt64
+      $export PATH=$PATH:/cygdrive/c/lscc/propel/202x.y/questasim/win64
 
 .. collapsible::  Building the libraries and the project in Vivado GUI
 
@@ -1224,7 +1243,7 @@ Check this
 
 Once you are done with that, you can go on with the following steps.
 
-For AMD FPGAs
+5a. For AMD FPGAs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the BOOT partition recently created, you will find folders for each
@@ -1424,11 +1443,14 @@ AMD Xilinx Vivado
 
 .. code-block::
 
-   ERROR: [BD 5-216] VLNV <analog.com:user:axi_clkgen:1.0> is not supported for the current part.
+   ERROR: [BD 5-216] VLNV <analog.com:user:axi_clkgen:1.0> is not supported for
+   the current part.
 
-   ERROR: [Common 17-39] 'create_bd_cell' failed due to earlier errors while executing
-   "create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen" invoked from within
-   "set axi_hdmi_clkgen [create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]" (file "../../../projects/common/zc706/zc706_system_bd.tcl" line 57)
+   ERROR: [Common 17-39] 'create_bd_cell' failed due to earlier errors while
+   executing "create_bd_cell -type ip -vlnv analog.com:user:axi_clkgen:1.0
+   axi_hdmi_clkgen" invoked from within "set axi_hdmi_clkgen [create_bd_cell
+   -type ip -vlnv analog.com:user:axi_clkgen:1.0 axi_hdmi_clkgen]" (file
+   "../../../projects/common/zc706/zc706_system_bd.tcl" line 57)
 
 You haven't generated the library component or have the wrong user IP
 repository setting. If you were using the GUI flow, now is a good time
