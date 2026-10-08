@@ -70,8 +70,8 @@ ad_connect sys_clk axi_sdpclk_clkgen/clk
 
 ad_ip_instance clkin_aligner clkin_aligner
 
-# Startup calibration per Fused_part_sequence.docx (designer's revised video
-# capture, supersedes Sequence.txt 36/3): 39 XTAL2_CLKIN startup pulses, with
+# Startup calibration per "AD4134_Phase Sequence Environement" pptx slides 2-3
+# (supersedes the NI Sequence.txt 36/3): 39 XTAL2_CLKIN startup pulses, with
 # div32_cnt landing on 5 at the end of the burst. The RTL derives the div32
 # seed as (DIV32_TARGET_DEFAULT - STARTUP_CYCLES_DEFAULT) mod 32 = (5-39) mod 32
 # = 30, so after 39 edges (30+39) mod 32 = 5.
@@ -80,7 +80,8 @@ ad_ip_instance clkin_aligner clkin_aligner
 # pipeline between the odr_sync anchor (fired at edge_target) and the first ODR
 # pulse (evt reg +1, ext_sync double-flop +2, PWM pulse_1 phase ~5, F.10 negedge
 # +0.5). ILA-confirmed over 5 boots: with 137 the first ODR lands on the falling
-# edge of CLKin edge 146 (Fused_part_sequence), boot-invariant. NOTE: this also
+# edge of CLKin edge 146 (AD4134 Phase Sequence docx p1), boot-invariant.
+# NOTE: this also
 # moves the F.7 edge_target_reached IRQ to edge 137 (~187 ns earlier); harmless
 # (the driver uses it only as a "clock aligned, proceed" signal).
 ad_ip_parameter clkin_aligner CONFIG.STARTUP_CYCLES_DEFAULT 39
@@ -174,12 +175,14 @@ ad_connect  sys_cpu_resetn slip_detect/s_axis_aresetn
 ad_connect  $sys_cpu_clk slip_detect/s_axi_aclk
 ad_connect  sys_cpu_resetn slip_detect/s_axi_aresetn
 
-# The ODR actually delivered to the FMC pin, so ODR_COUNT counts the pulses the
-# chips saw rather than the pulses the PWM generated. Counting it separately
-# from the captured beats is what makes ODR_COUNT - FRAME_COUNT a dropped-frame
-# count, and it keeps running while the offload trigger is gated off.
+# Tapped before clkin_aligner, not after: odr_out must stay single-load so its
+# launch flop packs into the ad713x_odr output IOB (IOB TRUE in system_constr.xdc)
+# and the pin delay stays placement-independent. The aligner only retimes the
+# pulse by half a CLKin cycle, so the pulse *count* is identical and
+# ODR_COUNT - FRAME_COUNT is still exactly the dropped-frame count. It keeps
+# running while the offload trigger is gated off.
 
-ad_connect  clkin_aligner/odr_out slip_detect/odr_in
+ad_connect  odr_generator/pwm_1 slip_detect/odr_in
 
 # AXI address definitions
 

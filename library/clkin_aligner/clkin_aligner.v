@@ -34,6 +34,13 @@
 // ***************************************************************************
 `timescale 1ns/100ps
 
+// Spec provenance: the §E/§F lettering cited below is from
+// files/NI_Start-up_Sequence_Fused_Parts-soft.txt ("Sequence.txt"). The
+// constants are from the later "AD4134_Phase Sequence Environement"
+// pptx/docx, which supersede it on 39 startup cycles (not 36) and div32
+// target 5 (not 3). The defaults below are the superseded values;
+// ad7134_bd.tcl overrides them to 39/137/5 for the shipping bitstream.
+
 module clkin_aligner #(
   parameter        ID = 0,
   parameter [15:0] STARTUP_CYCLES_DEFAULT = 16'd36,
@@ -241,8 +248,8 @@ module clkin_aligner #(
   // DIV32_TARGET_DEFAULT with clk_div32 = HIGH. Seed = (target - cycles)
   // mod 32, computed from the live startup_cycles register so the target
   // still holds if STARTUP_CYCLES is changed at runtime.
-  //   Sequence.txt: 36 cycles, target 3 -> seed 31.
-  //   Fused video : 39 cycles, target 5 -> seed 30.
+  //   Sequence.txt (superseded)   : 36 cycles, target 3 -> seed 31.
+  //   AD4134 Phase Sequence (built): 39 cycles, target 5 -> seed 30.
   always @(posedge clk_in) begin
     if (!ext_resetn) begin
       div32_q <= 5'd0;
@@ -315,7 +322,7 @@ module clkin_aligner #(
           // while STARTUP_FIRE is a strobe (sync_event CDC), so the gate can
           // stay closed for a few clk_in cycles after the FSM enters STARTUP.
           // An ungated countdown would race ahead of delivery and stop short,
-          // giving 33-35 pulses (DIV32 0x100-0x102) instead of 36 (0x103).
+          // giving 36-38 pulses (DIV32 0x102-0x104) instead of 39 (0x105).
           if (gate_en_neg) begin
             if (startup_cnt == 16'd1) begin
               state              <= ST_STOPPED_LOW;
@@ -362,8 +369,8 @@ module clkin_aligner #(
       gate_en_req = 1'b1;
     else case (state)
       // OFF in IDLE so the 39-pulse STARTUP burst is the first clock the
-      // AD7134 ever sees (Fused_part_sequence slide 1: nothing before the
-      // train). Do NOT restore 1'b1 — that free-runs XTAL2_CLKIN from FPGA
+      // AD7134 ever sees (AD4134 Phase Sequence pptx slide 2: nothing before
+      // the train). Do NOT restore 1'b1 — that free-runs XTAL2_CLKIN from FPGA
       // config, violating the spec. Requires the driver to issue STARTUP_FIRE.
       ST_IDLE:        gate_en_req = 1'b0;
       ST_STARTUP:     gate_en_req = (startup_cnt != 16'd0);
@@ -406,7 +413,9 @@ module clkin_aligner #(
   // end
   // assign odr_out = odr_pos;
   // --- Falling-edge variant ---
-  (* mark_debug = "true" *) reg odr_neg = 1'b0;
+  // No mark_debug here: a debug probe is a fabric load and would evict this flop
+  // from the output IOB. Probe odr_out_dbg below instead.
+  reg odr_neg = 1'b0;
   always @(negedge clk_in) begin
     odr_neg <= odr_in;
   end

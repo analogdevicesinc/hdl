@@ -45,9 +45,21 @@ set_property -dict {PACKAGE_PIN J16 IOSTANDARD LVCMOS18} [get_ports {ad713x_dclk
 set_property -dict {PACKAGE_PIN L21 IOSTANDARD LVCMOS18} [get_ports ad713x_pinbspi]
 set_property -dict {PACKAGE_PIN K20 IOSTANDARD LVCMOS18} [get_ports ad713x_dclkmode]
 
-# ad713x reference clock (not used by default)
+# ad713x XTAL2_CLKIN — the gated 48 MHz both dies run from (clkin_aligner clk_out).
+#
+# SLEW FAST matches ad713x_odr (line 25). Each die compares these two outputs against
+# each other at its internal re-synchronizer (ADI design slides: Δt > TCLK/2 → ±TCLK
+# device-to-device error), so any asymmetry between the two drivers lands directly in
+# the Δt budget. Default SLEW is SLOW on 7-series: ~1-2 ns more output delay than FAST,
+# and more supply-noise sensitive, none of it common-mode with the FAST ODR buffer.
+#
+# NOT fully symmetric even so: ad713x_odr launches from a flop packed in its IOB, while
+# this port is driven straight off the BUFGCE with no register, so the paths still
+# differ by one flop Tco. Making them structurally identical needs ODDR clock
+# forwarding, which must first be shown to still stop LOW when the BUFGCE gate closes
+# (Sequence.txt §A).
 
-set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS18} [get_ports ad713x_sdpclk]
+set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS18 SLEW FAST} [get_ports ad713x_sdpclk]
 
 # set IOSTANDARD according to VADJ 1.8V
 

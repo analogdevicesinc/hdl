@@ -120,7 +120,9 @@ module system_top (
   inout         ad713x_pinbspi,
   inout         ad713x_dclkmode,
 
-  // ad713x reference clock (not used by default)
+  // ad713x XTAL2_CLKIN — the gated 48 MHz both dies run from (clkin_aligner
+  // clk_out). Driven straight off the BUFGCE with no register, unlike
+  // ad713x_odr which launches from a flop in its IOB; see system_constr.xdc.
 
   output        ad713x_sdpclk
 );
