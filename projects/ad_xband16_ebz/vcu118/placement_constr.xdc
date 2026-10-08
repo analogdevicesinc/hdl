@@ -28,4 +28,26 @@ set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ 
 set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ */mode_*.gen_lane[15].i_lane}]
 
 # Make sure that each i_all_buffer_ready_pipeline_stage circuit does not drive more than one output.
-set_property FORCE_MAX_FANOUT 1 [get_nets -hierarchical *mode_64b66b.gen_lane[*].all_buffer_ready_n_d]
+set_property FORCE_MAX_FANOUT 1 [get_nets -hierarchical -filter {NAME =~ *mode_64b66b.gen_lane[*].all_buffer_ready_n_d}]
+
+# Reduce max fanout for each dac_sync_int[] FF for better timing.
+set_property FORCE_MAX_FANOUT 100 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */tx_apollo_tpl_core/*/i_core/dac_sync_int*[*]/Q}]]
+
+# Force max fanout for data_offload paths going to BRAM blocks to half of what it normally is, to reduce routing delays
+set_property FORCE_MAX_FANOUT 14 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */apollo_tx_data_offload/storage_unit/inst/i_mem_data/m_ram_reg_bram*_i_*/O}]]
+set_property FORCE_MAX_FANOUT 4 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */apollo_rx_data_offload/storage_unit/inst/i_mem_data/m_ram_reg_bram*_i_*/O}]]
+
+# Constrain all_buffer_ready pipeline stage to be in SLR1, same as most of the logic preceding it.
+# Thus, the paths upstream from this register would have just one SLR crossing (SLR0 -> SLR1).
+# The paths downstream from this register have at most one SLR crossing anyway, since the downstream
+# logic is entirely in one lane per pipeline replica (thus entirely in SLR0 or entirely in SLR1).
+set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */mode_*.gen_lane[*].i_all_buffer_ready_pipeline_stage}]
+
+# Reduce fanout on high fanout nets which also have a SLR crossing.
+# RX side
+set_property FORCE_MAX_FANOUT 64 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */mode_*.i_jesd204_rx_ctrl_64b/status_err_cnt[*]_i_*/O}]]
+# TX side
+set_property FORCE_MAX_FANOUT 35 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/out_addr_reg[*]*/Q}]]
+set_property FORCE_MAX_FANOUT 19 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.tx_ready_64b_reg*/Q}]]
+set_property FORCE_MAX_FANOUT 8 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.gen_lane[*].i_lane/i_header_gen/sync_word[*]_i_*/O}]]
+set_property FORCE_MAX_FANOUT 16 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.gen_lane[*].i_lane/lmc_edge_d3_reg*/Q}]]
