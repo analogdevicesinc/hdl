@@ -84,7 +84,6 @@ adi_project ad9084_ebz_fm87 [list \
 # source common_assign.tcl
 
 source $ad_hdl_dir/projects/common/fm87/fm87_system_assign.tcl
-source $ad_hdl_dir/projects/common/fm87/fm87_plddr_system_assign.tcl
 
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_3w_spi.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
