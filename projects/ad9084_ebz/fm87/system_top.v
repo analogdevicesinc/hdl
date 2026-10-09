@@ -141,11 +141,13 @@ module system_top #(
   inout  [30:15] gpio,
   inout          aux_gpio,
 
-  input          syncinb_a0,
+  output         syncinb_a0,
+  output         syncinb_b0,
   inout          syncinb_a1_p_gpio,
   inout          syncinb_a1_n_gpio,
 
-  output         syncoutb_a0,
+  input          syncoutb_a0,
+  input          syncoutb_b0,
   inout          syncoutb_a1_p_gpio,
   inout          syncoutb_a1_n_gpio,
 
@@ -181,6 +183,8 @@ module system_top #(
   wire          sys_reset_n;
   wire          h2f_reset;
   wire  [43:0]  stm_hw_events;
+  wire  [TX_NUM_LINKS-1:0] tx_syncin;
+  wire  [RX_NUM_LINKS-1:0] rx_syncout;
 
   wire          spi_clk;
   wire  [ 7:0]  spi_csn;
@@ -212,6 +216,12 @@ module system_top #(
   assign dut_sdio = apollo_spi_sdio;
 
   assign apollo_spi_sdo = ~apollo_spi_csn[0] ? dut_sdo : 1'b0;
+
+  generate if (JESD_MODE == "8B10B") begin
+    assign tx_syncin = {syncoutb_b0, syncoutb_a0};
+    assign {syncinb_b0, syncinb_a0} = rx_syncout;
+  end
+  endgenerate
 
   // Board GPIOs
   assign fpga_led      = gpio_o[7:0];
@@ -355,13 +365,13 @@ module system_top #(
     .tx_serial_data_tx_serial_data     (tx_data_p),
     .tx_serial_data_n_tx_serial_data_n (tx_data_n),
     .tx_ref_clk_clk (refclk_fgt_2),
-    .tx_sync_export (syncinb_a0),
+    .tx_sync_export (tx_syncin),
     .tx_sysref_export (sysref_in),
     .tx_device_clk_clk (device_clk),
     .rx_serial_data_rx_serial_data     (rx_data_p),
     .rx_serial_data_n_rx_serial_data_n (rx_data_n),
     .rx_ref_clk_clk (refclk_fgt_2),
-    .rx_sync_export (syncoutb_a0),
+    .rx_sync_export (rx_syncout),
     .rx_sysref_export (sysref_in),
     .rx_device_clk_clk (device_clk),
     .ref_clk_in_in_refclk_fgt_2 (fpga_refclk_in),
