@@ -8,8 +8,6 @@ PROJECT_NAME := ad9081_fmca_ebz_fm87
 
 M_DEPS += ../common/ad9081_fmca_ebz_qsys.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
-M_DEPS += ../../common/intel/dacfifo_qsys.tcl
-M_DEPS += ../../common/intel/adcfifo_qsys.tcl
 M_DEPS += ../../common/fm87/fm87_system_qsys.tcl
 M_DEPS += ../../common/fm87/fm87_system_assign.tcl
 M_DEPS += ../../common/fm87/gpio_slave.v
@@ -17,6 +15,7 @@ M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
+LIB_DEPS += intel/adi_data_offload
 LIB_DEPS += intel/adi_jesd204
 LIB_DEPS += intel/jesd204c/jesd204_f_tile_adapter_rx
 LIB_DEPS += intel/jesd204c/jesd204_f_tile_adapter_tx
