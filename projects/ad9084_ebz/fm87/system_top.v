@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -89,25 +89,6 @@ module system_top #(
   inout   [ 8:0]   emif_hps_mem_dbi_n,
   inout   [71:0]   emif_hps_mem_dq,
   input            emif_hps_oct_rzq,
-
-  // sys-ddr
-  input            sys_ddr_ref_clk_clk,
-  output           sys_ddr_mem_mem_clk_p,
-  output           sys_ddr_mem_mem_clk_n,
-  output  [16:0]   sys_ddr_mem_mem_a,
-  output           sys_ddr_mem_mem_act_n,
-  output  [ 1:0]   sys_ddr_mem_mem_ba,
-  output  [ 1:0]   sys_ddr_mem_mem_bg,
-  output           sys_ddr_mem_mem_cke,
-  output           sys_ddr_mem_mem_cs_n,
-  output           sys_ddr_mem_mem_odt,
-  output           sys_ddr_mem_mem_reset_n,
-  output           sys_ddr_mem_mem_par,
-  input            sys_ddr_mem_mem_alert_n,
-  inout   [17:0]   sys_ddr_mem_mem_dqs_p,
-  inout   [17:0]   sys_ddr_mem_mem_dqs_n,
-  inout   [71:0]   sys_ddr_mem_mem_dq,
-  input            sys_ddr_oct_oct_rzq,
 
   // hps-emac
   input            hps_emac_rxclk,
@@ -212,12 +193,6 @@ module system_top #(
   wire          apollo_spi_sdo;
   wire          apollo_spi_sdio;
 
-  wire sys_ddr_status_local_cal_success;
-  wire sys_ddr_status_local_cal_fail;
-  wire sys_ddr4_local_reset_status_local_reset_done;
-  wire sys_ddr4_pll_locked_pll_locked;
-  wire tx_fifo_bypass;
-
   wire refclk_fgt_2;
 
   assign spi2_cs[5:0] = spi_csn[5:0];
@@ -255,8 +230,6 @@ module system_top #(
   assign trig_b[0]  = gpio_o[60];
   assign trig_b[1]  = gpio_o[61];
   assign resetb     = gpio_o[62];
-
-  assign tx_fifo_bypass = gpio_o[63];
 
   // Unused GPIOs
   assign gpio_i[63:54] = gpio_o[63:54];
@@ -304,29 +277,6 @@ module system_top #(
     .emif_hps_ddr_mem_dbi_n   (emif_hps_mem_dbi_n),
     .emif_hps_oct_rzqin       (emif_hps_oct_rzq),
     .emif_hps_pll_ref_clk     (emif_hps_pll_ref_clk),
-
-    .sys_ddr_ref_clk_clk (sys_ddr_ref_clk_clk),
-    .sys_ddr_mem_mem_ck (sys_ddr_mem_mem_clk_p),
-    .sys_ddr_mem_mem_ck_n (sys_ddr_mem_mem_clk_n),
-    .sys_ddr_mem_mem_a (sys_ddr_mem_mem_a),
-    .sys_ddr_mem_mem_act_n (sys_ddr_mem_mem_act_n),
-    .sys_ddr_mem_mem_ba (sys_ddr_mem_mem_ba),
-    .sys_ddr_mem_mem_bg (sys_ddr_mem_mem_bg),
-    .sys_ddr_mem_mem_cke (sys_ddr_mem_mem_cke),
-    .sys_ddr_mem_mem_cs_n (sys_ddr_mem_mem_cs_n),
-    .sys_ddr_mem_mem_odt (sys_ddr_mem_mem_odt),
-    .sys_ddr_mem_mem_reset_n (sys_ddr_mem_mem_reset_n),
-    .sys_ddr_mem_mem_par (sys_ddr_mem_mem_par),
-    .sys_ddr_mem_mem_alert_n (sys_ddr_mem_mem_alert_n),
-    .sys_ddr_mem_mem_dqs (sys_ddr_mem_mem_dqs_p),
-    .sys_ddr_mem_mem_dqs_n (sys_ddr_mem_mem_dqs_n),
-    .sys_ddr_mem_mem_dq (sys_ddr_mem_mem_dq),
-    .sys_ddr_oct_oct_rzqin (sys_ddr_oct_oct_rzq),
-    .sys_ddr_status_local_cal_success (sys_ddr_status_local_cal_success),
-    .sys_ddr_status_local_cal_fail (sys_ddr_status_local_cal_fail),
-    .sys_ddr4_pll_locked_pll_locked (sys_ddr4_pll_locked_pll_locked),
-    .sys_ddr4_local_reset_local_reset_req (sys_ddr4_pll_locked_pll_locked),
-    .sys_ddr4_local_reset_status_local_reset_done (sys_ddr4_local_reset_status_local_reset_done),
 
     .sys_hps_io_EMAC0_TX_CLK (hps_emac_txclk),
     .sys_hps_io_EMAC0_TX_CTL (hps_emac_txctl),
@@ -408,7 +358,6 @@ module system_top #(
     .tx_sync_export (syncinb_a0),
     .tx_sysref_export (sysref_in),
     .tx_device_clk_clk (device_clk),
-    .tx_fifo_bypass_bypass (tx_fifo_bypass),
     .rx_serial_data_rx_serial_data     (rx_data_p),
     .rx_serial_data_n_rx_serial_data_n (rx_data_n),
     .rx_ref_clk_clk (refclk_fgt_2),
