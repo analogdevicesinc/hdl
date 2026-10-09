@@ -561,8 +561,8 @@ Software related
 - :git-linux:`AD4021 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4021.dts>`
 - :git-linux:`AD7687 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7687-pmdz.dts>`
 - :git-linux:`AD7689 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7689-ardz.dts>`
-- :git-linux:`AD7946 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7946.dts>`
-- :git-linux:`AD7984 CoraZ7S  Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7984.dts>`
+- :git-linux:`AD7946 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7946-pmdz.dts>`
+- :git-linux:`AD7984 CoraZ7S  Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7984-pmdz.dts>`
 - :git-linux:`ADAQ4003 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq4003.dts>`
 - :git-linux:`ADAQ4003 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-adaq4003.dts>`
 

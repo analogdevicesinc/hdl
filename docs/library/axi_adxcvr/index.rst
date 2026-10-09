@@ -325,7 +325,7 @@ Software Support
 * No-OS device driver at  :git-no-OS:`drivers/axi_core/jesd204/axi_adxcvr.c`
 * No-OS device driver documentation
   :dokuwiki:`on wiki <resources/tools-software/uc-drivers/jesd204/axi_adxcvr>`
-* Linux project at :git-linux:`linux/drivers/iio/jesd204`
+* Linux project at :git-linux:`drivers/iio/jesd204`
 * Linux device driver at :git-linux:`drivers/iio/jesd204/axi_adxcvr.c`
 * Linux device driver documentation
   :dokuwiki:`on wiki <resources/tools-software/linux-drivers/jesd204/axi_adxcvr>`

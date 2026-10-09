@@ -299,7 +299,7 @@ Register Map
 --------------------------------------------------------------------------------
 
 The register map of the core contains instances of several generic register maps
-like ADC common, ADC channel, :git-hdl:`up_delay_ctrl <library/common/up_delay_ctrl.v>`.
+like ADC common, ADC channel, :git-hdl:`up_delay_cntrl <library/common/up_delay_cntrl.v>`.
 The following table presents the base addresses of each instance, after it you
 can find the detailed description of each generic register map.
 
@@ -351,7 +351,7 @@ Design Guidelines
 --------------------------------------------------------------------------------
 
 The IP was developed part of the
-:dokuwiki:`AD485x Native FMC Card Reference Design <resources/fpga/xilinx/fmc/ad485x>`.
+:git-hdl:`AD485x Native FMC Card Reference Design <projects/ad485x_fmcz>`.
 
 The control of the AD485x chip is done through a SPI interface, which is needed
 at system level.

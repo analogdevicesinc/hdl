@@ -214,9 +214,9 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`IMAGEON dts source code (arm32) <arch/arm/boot/dts/zynq-zed-imageon.dts>`
+- :git-linux:`IMAGEON dts source code (arm32) <arch/arm/boot/dts/xilinx/zynq-zed-imageon.dts>`
 - :git-linux:`ADV7604 Linux driver <drivers/media/i2c/adv7604.c>`
-- :git-linux:`ADV7511 Linux driver <drivers/media/i2c/adv7511.c>`
+- :git-linux:`ADV7511 Linux driver <drivers/media/i2c/adv7511-v4l2.c>`
 - :dokuwiki:`ADV7511 driver docs <resources/tools-software/linux-drivers/drm/adv7511>`
 
 .. include:: ../common/more_information.rst
