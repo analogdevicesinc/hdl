@@ -28,7 +28,7 @@ Supported carriers
 -------------------------------------------------------------------------------
 
 - :adi:`ADRV1CRR-BOB`
-- :dokuwiki:`ADRV1CRR-PACKRF <resources/eval/user-guides/pzsdr/carriers/packrf>` (OBSOLETE)
+- :external+system-level:ref:`ADRV1CRR-PACKRF <pzsdr carriers packrf>` (OBSOLETE)
 - ADRV1CRR-USB (OBSOLETE)
 
 Block design

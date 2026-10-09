@@ -271,7 +271,7 @@ Hardware related
 - Product datasheet: :adi:`AD9363`
 
 - :dokuwiki:`[Wiki] About AD9361/AD9363/AD9364 <resources/eval/user-guides/ad-fmcomms2-ebz/ad9361>`
-- :dokuwiki:`[Wiki] About I/Q rotation <resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation>`
+- :external+system-level:ref:`[Wiki] About I/Q rotation <fmcomms2 common iq-rotation>`
 - :dokuwiki:`[Wiki] Configuration options for <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options>`
 - :dokuwiki:`[Wiki] Tuning the AD9361/AD9364 <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/tuning>`
 
@@ -318,7 +318,7 @@ Software related
 - :dokuwiki:`[Wiki] Windows Drivers <university/tools/pluto/drivers/linux>`
 - :dokuwiki:`[Wiki] AD936x IIO Oscilloscope plugin description <resources/tools-software/linux-software/fmcomms2_plugin>`
 
-- :dokuwiki:`[Wiki] Pluto Support <university/tools/pluto/help_support>`
+- :external+system-level:ref:`[Wiki] Pluto Support <pluto help_support>`
 - :dokuwiki:`[Wiki] ADALM-PLUTO Troubleshooting <university/tools/pluto/troubleshooting>`
 
 .. include:: ../common/more_information.rst

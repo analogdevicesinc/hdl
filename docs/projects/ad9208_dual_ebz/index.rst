@@ -277,7 +277,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`AD9208-DUL-EBZ Virtex UltraScale+ quick start guide <resources/eval/user-guides/ad9208_dual_ebz/quickstart/vcu118>`
+- :external+system-level:ref:`AD9208-DUL-EBZ Virtex UltraScale+ quick start guide <ad9208 dual ebz quickstart vcu118>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -13,7 +13,7 @@ Evaluating the target device
 
 The aim of this project is to provide support for a family of ADCs which come in
 the form of
-:dokuwiki:`pulsar-adc-pmods <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`.
+:external+system-level:ref:`pulsar-adc-pmods <pulsar-adc pmods>`.
 They all share the same interface and the same PCB, the differences being found
 in their performance. The table below offers a comparison between the timing
 parameters of the SPI interface for these devices. Using this table we can see
