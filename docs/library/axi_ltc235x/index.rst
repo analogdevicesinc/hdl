@@ -260,7 +260,7 @@ Detailed Description
 The top module :git-hdl:`library/axi_ltc235x/axi_ltc235x.v` instantiates:
 
 - the :git-hdl:`(CMOS) interface module <library/axi_ltc235x/axi_ltc235x_cmos.v>`
-- the :git-hdl:`(LVDS) interface module <library/axi_ltc235x/axi_ltc235x_lcds.v>`
+- the :git-hdl:`(LVDS) interface module <library/axi_ltc235x/axi_ltc235x_lvds.v>`
 - the :git-hdl:`ADC channel register map <library/common/up_adc_channel.v>`
 - the :git-hdl:`ADC common register map <library/common/up_adc_common.v>`
 - the :git-hdl:`AXI handling interface <library/common/up_axi.v>`
@@ -352,7 +352,7 @@ Software Support
 -------------------------------------------------------------------------------
 
 - Linux device driver at :git-linux:`drivers/iio/adc/ltc2358.c`
-- LTC235X Linux device tree at :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_sockit_dc2677a.dts`
+- LTC235X Linux device tree at :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_sockit_dc2677a.dts`
 
 References
 -------------------------------------------------------------------------------

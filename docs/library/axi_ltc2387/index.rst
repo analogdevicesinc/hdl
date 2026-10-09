@@ -182,8 +182,8 @@ Software Support
 --------------------------------------------------------------------------------
 
 * Linux device driver at :git-linux:`drivers/iio/adc/ltc2387.c`
-* LTC2387 Linux device tree at :git-linux:`arch/arm/boot/dts/zynq-zed-adv7511-ltc2387.dts`
-* CN0577 Linux device tree at :git-linux:`arch/arm/boot/dts/zynq-zed-adv7511-cn0577.dts`
+* LTC2387 Linux device tree at :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ltc2387.dts`
+* CN0577 Linux device tree at :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-cn0577.dts`
 * Linux documentation at :dokuwiki:`[Wiki] <resources/tools-software/linux-drivers/iio-adc/ltc2387>`
 
 References

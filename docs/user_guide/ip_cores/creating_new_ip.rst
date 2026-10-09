@@ -490,7 +490,7 @@ Yet, here is the Makefile for the example mentioned before:
 
 
 This example was made starting from the axi_ad9361 IP found in our repo, under the library directory:
-:git-hdl:`ibrary/axi_ad9361`.
+:git-hdl:`library/axi_ad9361`.
 
 Lattice
 --------------------------------------------------------------------------------

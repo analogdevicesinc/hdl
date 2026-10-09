@@ -336,7 +336,7 @@ Software related
 
 Linux support:
 
-- :git-linux:`Linux driver ad9162.c <drivers/iio/adc/ad9162.c>`
+- :git-linux:`Linux driver ad9162.c <drivers/iio/frequency/ad9162.c>`
 - :dokuwiki:`[Wiki] AD916X DAC Linux Driver wiki page <resources/tools-software/linux-drivers/iio-pll/ad9162>`
 
 .. collapsible:: Linux devicetrees:

@@ -230,9 +230,9 @@ Software Support
 --------------------------------------------------------------------------------
 
 * No-OS project at :git-no-OS:`drivers/adc/adaq8092`
-* No-OS device driver at  :git-no-OS:`drivers/adc/drivers/adc/adaq8092/adaq8092.c`
+* No-OS device driver at  :git-no-OS:`drivers/adc/adaq8092/adaq8092.c`
 * Linux device driver at :git-linux:`drivers/iio/adc/adaq8092.c`
-* Linux device tree at :git-linux:`arch/arm/boot/dts/zynq-zed-adv7511-adaq8092.dts`
+* Linux device tree at :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq8092.dts`
 * Linux device driver documentation
   :dokuwiki:`on wiki <resources/tools-software/linux-drivers/iio-adc/adaq8092>`
 

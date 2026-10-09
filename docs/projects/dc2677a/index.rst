@@ -194,7 +194,7 @@ HDL related
      - :git-hdl:`library/axi_pwm_gen`
      - :ref:`axi_pwm_gen`
    * - UTIL_CPACK2
-     - :git-hdl:`library/util_cpack2`
+     - :git-hdl:`library/util_pack/util_cpack2`
      - :ref:`util_cpack2`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`

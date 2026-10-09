@@ -266,7 +266,7 @@ ADRV9371/Arria 10
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - HDL Project: :git-hdl:`projects/adrv9371x/a10soc`
-- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts`
+- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_adrv9371.dts`
 
 Building the Linux Kernel image and the Devicetree
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -476,7 +476,7 @@ ARRADIO/Terasic C5 SoC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - HDL Project: :git-hdl:`projects/arradio/c5soc`
-- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts`
+- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_sockit_arradio.dts`
 
 Building the Linux Kernel image and the Devicetree
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -726,7 +726,7 @@ CN0540/DE10Nano
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - HDL Project: :git-hdl:`projects/cn0540/de10nano`
-- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts`
+- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_cn0540.dts`
 
 Building the Linux Kernel image and the Devicetree
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

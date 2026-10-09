@@ -18,8 +18,8 @@ This documentation only covers the IP core and requires that one must be
 familiar with the device for a complete and better understanding.
 
 More about the generic framework interfacing ADCs that contains the
-:git-hdl:`up_adc_channel <library/up_adc_channel.v>` and
-:git-hdl:`up_adc_common <library/up_adc_common.v>` modules can be read in
+:git-hdl:`up_adc_channel <library/common/up_adc_channel.v>` and
+:git-hdl:`up_adc_common <library/common/up_adc_common.v>` modules can be read in
 :ref:`axi_adc`. Regarding the DAC, more information related to its generic
 framework can be found at :ref:`axi_dac`.
 
@@ -94,12 +94,12 @@ The :git-hdl:`axi_adrv9001 <library/axi_adrv9001>` core's architecture contains:
 
   - :git-hdl:`Interface <library/axi_adrv9001/axi_adrv9001_if.v>` module
 
-    - :git-hdl:`Receive PHY <library/adrv9001/adrv9001_rx.v>` (CMOS or LVDS interface)
-    - :git-hdl:`Receive Link Layer<library/adrv9001/adrv9001_rx_link.v>`
-    - :git-hdl:`Transmit PHY <library/adrv9001/adrv9001_tx.v>` (CMOS or LVDS interface)
-    - :git-hdl:`Transmit Link Layer <library/adrv9001/adrv9001_tx_link.v>`
+    - :git-hdl:`Receive PHY <library/axi_adrv9001/adrv9001_rx.v>` (CMOS or LVDS interface)
+    - :git-hdl:`Receive Link Layer<library/axi_adrv9001/adrv9001_rx_link.v>`
+    - :git-hdl:`Transmit PHY <library/axi_adrv9001/adrv9001_tx.v>` (CMOS or LVDS interface)
+    - :git-hdl:`Transmit Link Layer <library/axi_adrv9001/adrv9001_tx_link.v>`
 
-  - :git-hdl:`TPL (core) <library/axi_adrv9001/axi_adrv9001_core>`, containing:
+  - :git-hdl:`TPL (core) <library/axi_adrv9001/axi_adrv9001_core.v>`, containing:
 
     - :git-hdl:`Receive <library/axi_adrv9001/axi_adrv9001_rx.v>` - common receive module, containing:
 
@@ -130,7 +130,7 @@ The :git-hdl:`axi_adrv9001 <library/axi_adrv9001>` core's architecture contains:
 
     - :git-hdl:`TDD control module <library/axi_adrv9001/axi_adrv9001_tdd.v>`
 
-  - :git-hdl:`AXI control and status <common/up_axi.v>` modules.
+  - :git-hdl:`AXI control and status <library/common/up_axi.v>` modules.
 
 Physical Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
