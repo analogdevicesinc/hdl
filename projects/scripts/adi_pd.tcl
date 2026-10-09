@@ -73,7 +73,7 @@ proc checksum8bit {hex} {
       set byte [string index $hex $i];
       }
   };
-  return [format %0.2x [expr 255 - [expr "0x[string range [format %0.2x $chks] [expr [string length [format %0.2x $chks]] -2] [expr [string length [format %0.2x $chks]] -1]]"] +1]];
+  return [format %02x [expr {(256 - ($chks & 0xFF)) & 0xFF}]];
 }
 
 ## Flips the characters of a string, four at a time. Used to fix endianness.
@@ -167,7 +167,7 @@ proc sysid_gen_sys_init_file {{custom_string {}} {address_bits {9}}} {
   puts "git_clean_string: $git_clean_string";
   puts "git_clean_hex: $git_clean_hex";
 
-  set git_branch_hex [hexstr_flip [stringtohex $gitbranch_string 28]];
+  set git_branch_hex [hexstr_flip [stringtohex $gitbranch_string 128]];
   puts "gitbranch_string: $gitbranch_string";
   puts "git_branch_hex: $git_branch_hex";
 
@@ -190,7 +190,7 @@ proc sysid_gen_sys_init_file {{custom_string {}} {address_bits {9}}} {
   set verh_hex [format %0-[expr [expr $verh_size] * 8]s $verh_hex];
   set table_size 16;
   set comh_size [expr 8 * $table_size];
-  set comh_ver_hex "00000002";
+  set comh_ver_hex "00000003";
 
   set boardname_string [lindex [split $project_name _] [expr [llength [split $project_name _]] - 1]];
   set boardname_hex [hexstr_flip [stringtohex $boardname_string 32]];
