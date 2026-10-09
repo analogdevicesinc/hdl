@@ -1146,7 +1146,7 @@ Simulation flow for the hdl/projects/ad738x_fmc/lfcpnx project:
 2. Copy the generated SGE folder from
    ``hdl/projects/ad738x_fmc/lfcpnx/_bld/ad738x_fmc_lfcpnx/``
    to the corresponding no-OS project root (for example,
-   `no-OS/projects/ad738x_fmcz <https://github.com/analogdevicesinc/no-OS/tree/add_lattice_riscvrx_ad738x_fmcz/projects/ad738x_fmcz>`__).
+   `no-OS/projects/ad738x_fmcz <https://github.com/analogdevicesinc/no-OS/tree/ad738x_fmcz_lattice/projects/ad738x_fmcz>`__).
 
 3. Build the no-OS project with simulation enabled:
 
