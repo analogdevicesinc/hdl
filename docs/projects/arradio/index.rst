@@ -196,7 +196,7 @@ Systems related
 Here you can find the quick start guides available for this evaluation board:
 
 - :dokuwiki:`ARRADIO <resources/eval/user-guides/arradio>`
-- :dokuwiki:`ARRADIO Terasic C5 SoCkit Quick Start Guide <resources/eval/user-guides/arradio/quickstart/alterasockit>`
+- :external+system-level:ref:`ARRADIO Terasic C5 SoCkit Quick Start Guide <arradio quick-start>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

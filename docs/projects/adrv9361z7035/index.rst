@@ -28,7 +28,7 @@ Supported carriers
 -------------------------------------------------------------------------------
 
 - :adi:`ADRV1CRR-BOB`
-- :dokuwiki:`ADRV1CRR-FMC <resources/eval/user-guides/pzsdr/carriers/packrf>`
+- :external+system-level:ref:`ADRV1CRR-FMC <pzsdr carriers packrf>`
 - :adi:`ADRV1CRR-FMC`
 - ADRV1CRR-PCI (OBSOLETE)
 - ADRV1CRR-USB (OBSOLETE)

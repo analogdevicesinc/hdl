@@ -545,7 +545,7 @@ Systems related
 Here you can find the quick start guides available for this evaluation board:
 
 - :dokuwiki:`[Wiki] M2K Quick Start <university/tools/m2k/users/quick_start>`
-- :dokuwiki:`[Wiki] M2K Reference Manual <university/tools/m2k/users/reference_manual>`
+- :external+system-level:ref:`[Wiki] M2K Reference Manual <m2k reference_manual>`
 
 Other useful information:
 

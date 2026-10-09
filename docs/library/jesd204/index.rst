@@ -359,8 +359,8 @@ Linux
 - :dokuwiki:`JESD204B/C Receive Linux Driver <resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx>`:
   Linux driver for the JESD204B receive core.
 - :dokuwiki:`JESD204B/C AXI_ADXCVR Highspeed Transceivers Linux Driver <resources/tools-software/linux-drivers/jesd204/axi_adxcvr>`
-- :dokuwiki:`JESD204B Statistical Eyescan Application <resources/tools-software/linux-software/jesd_eye_scan>`
-- :dokuwiki:`JESD204B Status Utility <resources/tools-software/linux-software/jesd_status>`
+- :external+system-level:ref:`JESD204B Statistical Eyescan Application <software jesd-eye-scan>`
+- :external+system-level:ref:`JESD204B Status Utility <software jesd-status>`
 - :dokuwiki:`AXI DAC HDL Linux Driver <resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`
 
   - :dokuwiki:`AD9172 DAC Linux Driver <resources/tools-software/linux-drivers/iio-dds/ad9172>`

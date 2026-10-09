@@ -484,8 +484,8 @@ HDL related
 
 - :git-hdl:`pulsar_adc HDL project source code <projects/pulsar_adc>`
 - :dokuwiki:`[Wiki] PulSAR ADC PMOD HDL start guide <resources/eval/user-guides/pulsar_adc_pmods_hdl>`
-- :dokuwiki:`[Wiki] PulSAR ADC PMOD quick start guide <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`
-- :dokuwiki:`[Wiki] AD40xx/ADAQ40xx quick start guide <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`
+- :external+system-level:ref:`[Wiki] PulSAR ADC PMOD quick start guide <pulsar-adc pmods>`
+- :external+system-level:ref:`[Wiki] AD40xx/ADAQ40xx quick start guide <pulsar-adc pmods>`
 
 .. list-table::
    :widths: 30 40 30

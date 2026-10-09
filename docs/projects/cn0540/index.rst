@@ -285,8 +285,8 @@ Systems related
 
 Here you can find the quick start guides available for these evaluation boards:
 
-- :dokuwiki:`[Wiki] CN0540 with Cora Z7S quick start guide <resources/eval/user-guides/circuits-from-the-lab/cn0540/coraz7s>`
-- :dokuwiki:`[Wiki] CN0540 with DE10-Nano quick start quide <resources/eval/user-guides/circuits-from-the-lab/cn0540/de10-nano>`
+- :external+system-level:ref:`[Wiki] CN0540 with Cora Z7S quick start guide <eval-cn0540-ardz quickstart coraz7s>`
+- :external+system-level:ref:`[Wiki] CN0540 with DE10-Nano quick start quide <eval-cn0540-ardz quickstart de10nano>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

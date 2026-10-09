@@ -185,8 +185,8 @@ Systems related
 Here you can find the quick start guides available for these evaluation boards:
 
 - :dokuwiki:`[Wiki] EVAL-CN0363-PMDZ user guide <resources/eval/user-guides/eval-cn0363-pmdz>`
-- :dokuwiki:`[Wiki] EVAL-CN0363-PMDZ Zed quick start guide <resources/eval/user-guides/eval-cn0363-pmdz/quickstart/zynq>`
-- :dokuwiki:`[Wiki] CN0363 Colorimeter Application user guide <resources/tools-software/linux-software/colorimeter>`
+- :external+system-level:ref:`[Wiki] EVAL-CN0363-PMDZ Zed quick start guide <eval-cn0363-pmdz-quickstart-zynq>`
+- :external+system-level:ref:`[Wiki] CN0363 Colorimeter Application user guide <eval-cn0363-pmdz-colorimeter>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -202,7 +202,7 @@ Hardware related
 
 - :dokuwiki:`EVAL-CN0363-PMDZ Introduction <resources/eval/user-guides/eval-cn0363-pmdz/introduction>`
 - :dokuwiki:`EVAL-CN0363-PMDZ Hardware <resources/eval/user-guides/eval-cn0363-pmdz/hardware>`
-- :dokuwiki:`EVAL-CN0363-PMDZ Hardware Setup <resources/eval/user-guides/eval-cn0363-pmdz/prerequisites>`
+- :external+system-level:ref:`EVAL-CN0363-PMDZ Hardware Setup <eval-cn0363-pmdz-prerequisites>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
