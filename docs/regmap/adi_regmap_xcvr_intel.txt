@@ -83,7 +83,7 @@ FIELD
 [0]
 STATUS
 RO
-After setting the RESETN bit above, wait for this bit to set. If set, indicates successful link activation.
+After setting the RESETN bit above, wait for this bit to set. Set while every condition in STATUS_32 holds and has held for 16 consecutive register clock cycles; cleared while RESETN is clear, during the reset sequence and whenever one of those conditions is lost.
 ENDFIELD
 
 ############################################################################################
@@ -96,10 +96,17 @@ Status Reporting Register
 ENDREG
 
 FIELD
-[31:NUM_OF_LANES+1]
+[31:NUM_OF_LANES+2]
 RESERVED
 RO
 0
+ENDFIELD
+
+FIELD
+[NUM_OF_LANES+1]
+LINK_PLL_LOCKED
+RO
+Lock of the PLL generating the link clock outside the transceiver (gearbox mode with an external PHY). Reads 1 when there is no such PLL. Part of the STATUS condition.
 ENDFIELD
 
 FIELD
