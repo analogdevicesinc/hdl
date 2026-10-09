@@ -790,4 +790,4 @@ Help & Support
 * The :ref:`carriers (abbreviations can be found here) <build_hdl>` are commonly available FPGA evaluation boards.
 * The :ref:`HDL user guide <user_guide>` contains all the documentation, build instructions and register map tables.
 * The following quick links allows you to browse the github repository for a list of current `branches <http://github.com/analogdevicesinc/hdl/branches/active>`__, :git-hdl:`library components <master:library>`, and :git-hdl:`projects <master:projects>`.
-* Questions? We can help with `FPGA questions <https://ez.analog.com/community/fpga>`__, `Linux driver questions <https://ez.analog.com/community/linux-device-drivers/linux-software-drivers>`__, `No-OS Drivers questions <https://ez.analog.com/community/linux-device-drivers/microcontroller-no-os-drivers>`__.
+* Questions? We can help with `FPGA questions <https://ez.analog.com/community/fpga>`__, `Linux driver questions <https://ez.analog.com/linux-software-drivers/>`__, `No-OS Drivers questions <https://ez.analog.com/microcontroller-no-os-drivers/>`__.
