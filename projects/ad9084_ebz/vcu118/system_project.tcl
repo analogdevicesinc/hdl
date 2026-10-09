@@ -69,6 +69,24 @@ set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timi
 #   [RX/TX]_B_JESD_NP : Number of bits per sample for B side
 #   [RX/TX]_B_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M) for B side
 #
+#   Transceiver configuration, generated with the xcvr_wizard project:
+#   LANE_RATE : Lane rate of the QPLL0 (side A) configuration [gbps], defaults to TX_LANE_RATE
+#   REF_CLK   : Reference clock [MHz], defaults to LANE_RATE/66 for 64B66B or LANE_RATE/40 for 8B10B
+#   PLL_TYPE  : The PLL used for driving the link [CPLL/QPLL1/QPLL0]
+#
+
+global xcvr_config_paths
+
+set xcvr_jesd_mode [get_env_param JESD_MODE 64B66B]
+set xcvr_lane_rate [get_env_param LANE_RATE [get_env_param TX_LANE_RATE 20.625]]
+set xcvr_ref_clk_ratio [expr {$xcvr_jesd_mode == "64B66B" ? 66 : 40}]
+
+set xcvr_config_paths [adi_xcvr_project [list \
+  LANE_RATE $xcvr_lane_rate \
+  REF_CLK   [get_env_param REF_CLK [format %g [expr {$xcvr_lane_rate * 1000.0 / $xcvr_ref_clk_ratio}]]] \
+  PLL_TYPE  [get_env_param PLL_TYPE QPLL0] \
+  JESD_MODE $xcvr_jesd_mode \
+]]
 
 adi_project ad9084_ebz_vcu118 0 [list \
   JESD_MODE           [get_env_param JESD_MODE       64B66B ] \
