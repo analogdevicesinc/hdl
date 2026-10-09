@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="work.spi_translator_tb.wdb" id="1">
+         <top_modules>
+            <top_module name="spi_translator_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.0000 us"></ZoomStartTime>
+      <ZoomEndTime time="184.0001 us"></ZoomEndTime>
+      <Cursor1Time time="0.0050 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="276"></NameColumnWidth>
+      <ValueColumnWidth column_width="68"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="104" />
+   <wvobject fp_name="divider25" type="divider">
+      <obj_property name="label">SPI TRANSLATOR</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/resetn">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider20" type="divider">
+      <obj_property name="label">New Divider 0</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sclk">
+      <obj_property name="ElementShortName">sclk</obj_property>
+      <obj_property name="ObjectShortName">sclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sdi">
+      <obj_property name="ElementShortName">sdi</obj_property>
+      <obj_property name="ObjectShortName">sdi</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sdo">
+      <obj_property name="ElementShortName">sdo</obj_property>
+      <obj_property name="ObjectShortName">sdo</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sdi_t">
+      <obj_property name="ElementShortName">sdi_t</obj_property>
+      <obj_property name="ObjectShortName">sdi_t</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/cs">
+      <obj_property name="ElementShortName">cs</obj_property>
+      <obj_property name="ObjectShortName">cs</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider21" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/cmd_ready">
+      <obj_property name="ElementShortName">cmd_ready</obj_property>
+      <obj_property name="ObjectShortName">cmd_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/cmd_valid">
+      <obj_property name="ElementShortName">cmd_valid</obj_property>
+      <obj_property name="ObjectShortName">cmd_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/cmd">
+      <obj_property name="ElementShortName">cmd[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cmd[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider22" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sdo_data_ready">
+      <obj_property name="ElementShortName">sdo_data_ready</obj_property>
+      <obj_property name="ObjectShortName">sdo_data_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sdo_data_valid">
+      <obj_property name="ElementShortName">sdo_data_valid</obj_property>
+      <obj_property name="ObjectShortName">sdo_data_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/sdo_data">
+      <obj_property name="ElementShortName">sdo_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sdo_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider23" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sdi_data_ready">
+      <obj_property name="ElementShortName">sdi_data_ready</obj_property>
+      <obj_property name="ObjectShortName">sdi_data_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sdi_data_valid">
+      <obj_property name="ElementShortName">sdi_data_valid</obj_property>
+      <obj_property name="ObjectShortName">sdi_data_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/sdi_data">
+      <obj_property name="ElementShortName">sdi_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sdi_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider24" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sync_ready">
+      <obj_property name="ElementShortName">sync_ready</obj_property>
+      <obj_property name="ObjectShortName">sync_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sync_valid">
+      <obj_property name="ElementShortName">sync_valid</obj_property>
+      <obj_property name="ObjectShortName">sync_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/sync_data">
+      <obj_property name="ElementShortName">sync_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sync_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider26" type="divider">
+      <obj_property name="label">SPI SLAVE</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_spi_slave/cs_rise">
+      <obj_property name="ElementShortName">cs_rise</obj_property>
+      <obj_property name="ObjectShortName">cs_rise</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_spi_slave/cs_fall">
+      <obj_property name="ElementShortName">cs_fall</obj_property>
+      <obj_property name="ObjectShortName">cs_fall</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_spi_slave/frame_start">
+      <obj_property name="ElementShortName">frame_start</obj_property>
+      <obj_property name="ObjectShortName">frame_start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_spi_slave/frame_end">
+      <obj_property name="ElementShortName">frame_end</obj_property>
+      <obj_property name="ObjectShortName">frame_end</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_spi_slave/frame_active">
+      <obj_property name="ElementShortName">frame_active</obj_property>
+      <obj_property name="ObjectShortName">frame_active</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider32" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_spi_slave/sclk_s">
+      <obj_property name="ElementShortName">sclk_s</obj_property>
+      <obj_property name="ObjectShortName">sclk_s</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_spi_slave/bit_cnt">
+      <obj_property name="ElementShortName">bit_cnt[2:0]</obj_property>
+      <obj_property name="ObjectShortName">bit_cnt[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_spi_slave/sdi_shift">
+      <obj_property name="ElementShortName">sdi_shift[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sdi_shift[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_spi_slave/sdi_hold">
+      <obj_property name="ElementShortName">sdi_hold[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sdi_hold[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_spi_slave/sdi_tog">
+      <obj_property name="ElementShortName">sdi_tog</obj_property>
+      <obj_property name="ObjectShortName">sdi_tog</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider37" type="divider">
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_spi_slave/rx_data">
+      <obj_property name="ElementShortName">rx_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_spi_slave/rx_valid">
+      <obj_property name="ElementShortName">rx_valid</obj_property>
+      <obj_property name="ObjectShortName">rx_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider41" type="divider">
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/idx">
+      <obj_property name="ElementShortName">idx[8:0]</obj_property>
+      <obj_property name="ObjectShortName">idx[8:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/hdr0">
+      <obj_property name="ElementShortName">hdr0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">hdr0[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/hdr1">
+      <obj_property name="ElementShortName">hdr1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">hdr1[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/hdr2">
+      <obj_property name="ElementShortName">hdr2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">hdr2[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider48" type="divider">
+      <obj_property name="label">SPI DECODER</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/commit">
+      <obj_property name="ElementShortName">commit</obj_property>
+      <obj_property name="ObjectShortName">commit</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/commit_rw">
+      <obj_property name="ElementShortName">commit_rw</obj_property>
+      <obj_property name="ObjectShortName">commit_rw</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/commit_target">
+      <obj_property name="ElementShortName">commit_target[1:0]</obj_property>
+      <obj_property name="ObjectShortName">commit_target[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/commit_long">
+      <obj_property name="ElementShortName">commit_long</obj_property>
+      <obj_property name="ObjectShortName">commit_long</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/commit_len">
+      <obj_property name="ElementShortName">commit_len[7:0]</obj_property>
+      <obj_property name="ObjectShortName">commit_len[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/commit_wlen">
+      <obj_property name="ElementShortName">commit_wlen[7:0]</obj_property>
+      <obj_property name="ObjectShortName">commit_wlen[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider53" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/payload_we">
+      <obj_property name="ElementShortName">payload_we</obj_property>
+      <obj_property name="ObjectShortName">payload_we</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/payload_addr">
+      <obj_property name="ElementShortName">payload_addr[7:0]</obj_property>
+      <obj_property name="ObjectShortName">payload_addr[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/payload_data">
+      <obj_property name="ElementShortName">payload_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">payload_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider57" type="divider">
+      <obj_property name="label">SPI EXECUTION</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/commit">
+      <obj_property name="ElementShortName">commit</obj_property>
+      <obj_property name="ObjectShortName">commit</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/state">
+      <obj_property name="ElementShortName">state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">state[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider61" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/cur_rw">
+      <obj_property name="ElementShortName">cur_rw</obj_property>
+      <obj_property name="ObjectShortName">cur_rw</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/cur_long">
+      <obj_property name="ElementShortName">cur_long</obj_property>
+      <obj_property name="ObjectShortName">cur_long</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/cur_target">
+      <obj_property name="ElementShortName">cur_target[1:0]</obj_property>
+      <obj_property name="ObjectShortName">cur_target[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/cur_len">
+      <obj_property name="ElementShortName">cur_len[7:0]</obj_property>
+      <obj_property name="ObjectShortName">cur_len[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/cur_wlen">
+      <obj_property name="ElementShortName">cur_wlen[7:0]</obj_property>
+      <obj_property name="ObjectShortName">cur_wlen[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/cur_tag">
+      <obj_property name="ElementShortName">cur_tag[7:0]</obj_property>
+      <obj_property name="ObjectShortName">cur_tag[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/cur_div">
+      <obj_property name="ElementShortName">cur_div[7:0]</obj_property>
+      <obj_property name="ObjectShortName">cur_div[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/cur_cfg">
+      <obj_property name="ElementShortName">cur_cfg[3:0]</obj_property>
+      <obj_property name="ObjectShortName">cur_cfg[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider65" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/cmd_ready">
+      <obj_property name="ElementShortName">cmd_ready</obj_property>
+      <obj_property name="ObjectShortName">cmd_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/cmd_valid">
+      <obj_property name="ElementShortName">cmd_valid</obj_property>
+      <obj_property name="ObjectShortName">cmd_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/cmd">
+      <obj_property name="ElementShortName">cmd[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cmd[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider67" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/sdo_data_ready">
+      <obj_property name="ElementShortName">sdo_data_ready</obj_property>
+      <obj_property name="ObjectShortName">sdo_data_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/sdo_data_valid">
+      <obj_property name="ElementShortName">sdo_data_valid</obj_property>
+      <obj_property name="ObjectShortName">sdo_data_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/sdo_data">
+      <obj_property name="ElementShortName">sdo_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sdo_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider79" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_slot_mem/clka">
+      <obj_property name="ElementShortName">clka</obj_property>
+      <obj_property name="ObjectShortName">clka</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_slot_mem/wea">
+      <obj_property name="ElementShortName">wea</obj_property>
+      <obj_property name="ObjectShortName">wea</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/i_slot_mem/addra">
+      <obj_property name="ElementShortName">addra[7:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/i_slot_mem/dina">
+      <obj_property name="ElementShortName">dina[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dina[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_slot_mem/clkb">
+      <obj_property name="ElementShortName">clkb</obj_property>
+      <obj_property name="ObjectShortName">clkb</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_slot_mem/reb">
+      <obj_property name="ElementShortName">reb</obj_property>
+      <obj_property name="ObjectShortName">reb</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/i_slot_mem/addrb">
+      <obj_property name="ElementShortName">addrb[7:0]</obj_property>
+      <obj_property name="ObjectShortName">addrb[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/i_slot_mem/doutb">
+      <obj_property name="ElementShortName">doutb[7:0]</obj_property>
+      <obj_property name="ObjectShortName">doutb[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/i_slot_mem/m_ram">
+      <obj_property name="ElementShortName">m_ram[0:255][7:0]</obj_property>
+      <obj_property name="ObjectShortName">m_ram[0:255][7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider348" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/payload_we">
+      <obj_property name="ElementShortName">payload_we</obj_property>
+      <obj_property name="ObjectShortName">payload_we</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/payload_addr">
+      <obj_property name="ElementShortName">payload_addr[7:0]</obj_property>
+      <obj_property name="ObjectShortName">payload_addr[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/payload_data">
+      <obj_property name="ElementShortName">payload_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">payload_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider356" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/sdo_data_ready">
+      <obj_property name="ElementShortName">sdo_data_ready</obj_property>
+      <obj_property name="ObjectShortName">sdo_data_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/sdo_data_valid">
+      <obj_property name="ElementShortName">sdo_data_valid</obj_property>
+      <obj_property name="ObjectShortName">sdo_data_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/sdo_data">
+      <obj_property name="ElementShortName">sdo_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sdo_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/transfer">
+      <obj_property name="ElementShortName">transfer</obj_property>
+      <obj_property name="ObjectShortName">transfer</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/sdo_rd">
+      <obj_property name="ElementShortName">sdo_rd</obj_property>
+      <obj_property name="ObjectShortName">sdo_rd</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider99" type="divider">
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_engine/cs">
+      <obj_property name="ElementShortName">cs[3:0]</obj_property>
+      <obj_property name="ObjectShortName">cs[3:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_engine/sclk">
+      <obj_property name="ElementShortName">sclk</obj_property>
+      <obj_property name="ObjectShortName">sclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_engine/sdo[0]">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">[0]</obj_property>
+      <obj_property name="ObjectShortName">[0]</obj_property>
+      <obj_property name="label">sdo</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider107" type="divider">
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/sdo_ptr">
+      <obj_property name="ElementShortName">sdo_ptr[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sdo_ptr[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/sdi_ptr">
+      <obj_property name="ElementShortName">sdi_ptr[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sdi_ptr[7:0]</obj_property>
+   </wvobject>
+</wave_config>

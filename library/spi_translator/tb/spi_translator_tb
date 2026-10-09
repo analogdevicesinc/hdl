@@ -1,0 +1,15 @@
+#!/bin/bash
+
+SOURCE="spi_translator_tb.v spi_dev_model.v"
+SOURCE+=" ../spi_translator_slave.v ../spi_translator.v ../spi_translator_regmap.v"
+SOURCE+=" ../spi_translator_decoder.v ../spi_translator_execution.v"
+SOURCE+=" ../../common/ad_mem.v ../../common/ad_mem_asym.v"
+SOURCE+=" ../../util_cdc/sync_bits.v ../../util_cdc/sync_event.v"
+SOURCE+=" ../../util_axis_fifo/util_axis_fifo.v"
+SOURCE+=" ../../util_axis_fifo/util_axis_fifo_address_generator.v"
+SOURCE+=" ../../spi_engine/spi_engine_execution/spi_engine_execution.v"
+SOURCE+=" ../../spi_engine/spi_engine_execution/spi_engine_execution_shiftreg.v"
+SOURCE+=" ../../spi_engine/spi_engine_execution/spi_engine_execution_shiftreg_data_assemble.v"
+
+cd `dirname $0`
+source ../../common/tb/run_tb.sh
