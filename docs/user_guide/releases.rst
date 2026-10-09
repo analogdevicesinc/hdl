@@ -93,7 +93,7 @@ Release branches
      - List of supported projects and IP cores
      - BOOT partition files
    * - :git-hdl:`main <main:/>`
-     - Quartus Pro 25.1.0
+     - Quartus Pro 26.1.1
      - Vivado 2025.1
      - ---
      - :ref:`downloads_insert_main`
