@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017, 2020, 2021, 2026 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
 ## Short identifier: ADIJESD204
 ##
 ## The ADI JESD204 Core is released under the following license, which is
@@ -48,10 +48,8 @@ set script_dir [file dirname [info script]]
 
 source "$script_dir/util_cdc_constr.tcl"
 
-# SYNC~ is a asynchronous interface
-set_false_path \
-  -from [get_registers *|jesd204_rx_ctrl:mode_8b10b.i_rx_ctrl|sync_n[0]]
-
-util_cdc_sync_bits_constr {*|sync_bits:i_all_buffer_ready_cdc}
-util_cdc_sync_bits_constr {*|sync_bits:mode_64b66b.i_buffer_release_cdc}
-util_cdc_sync_event_constr {*|sync_event:i_sync_lmfc}
+util_cdc_sync_bits_constr {*|sync_bits:i_pll_locked_cdc}
+util_cdc_sync_bits_constr {*|sync_bits:i_rx_lockedtodata_cdc}
+util_cdc_sync_bits_constr {*|sync_bits:i_link_pll_locked_cdc}
+util_cdc_sync_bits_constr {*|sync_bits:i_ready_cdc}
+util_cdc_sync_bits_constr {*|sync_bits:i_reset_ack_cdc}
