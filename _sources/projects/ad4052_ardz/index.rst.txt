@@ -259,7 +259,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD4052-ARDZ HDL project source code <projects/ad4052-ardz>`
+-  :git-hdl:`AD4052-ARDZ HDL project source code <projects/ad4052_ardz>`
 
 .. list-table::
    :widths: 30 35 35

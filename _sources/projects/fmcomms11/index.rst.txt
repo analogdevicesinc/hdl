@@ -582,7 +582,7 @@ Systems related
 
 - :dokuwiki:`[Wiki] AD-FMCOMMS11-EBZ quick start guide <resources/eval/user-guides/ad-fmcomms11-ebz/quickstart/zynq>`
 - :dokuwiki:`[Wiki] AD-FMCOMMS11-EBZ user guide <resources/eval/user-guides/ad-fmcomms11-ebz>`
-- :dokuwiki:`[Wiki] AD-FMCOMMS11-EBZ characteristics & performance <resources/eval/user-guides/ad-fmcomms11-ebz/hardware/card_specification>`
+- :external+system-level:ref:`[Wiki] AD-FMCOMMS11-EBZ characteristics & performance <fmcomms11 card-specification>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -657,7 +657,7 @@ Software related
 
 - :git-linux:`FMCOMMS11/ZC706 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcomms11.dts>`
 - :git-linux:`FMCOMMS11 rev. A/ZC706 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcomms11-RevA.dts>`
-- :dokuwiki:`[Wiki] FMCOMMS11 IIO Oscilloscope plugin wiki page <resources/tools-software/linux-software/fmcomms11_plugin>`
+- :external+system-level:ref:`[Wiki] FMCOMMS11 IIO Oscilloscope plugin wiki page <fmcomms11-plugin>`
 
 .. include:: ../common/more_information.rst
 

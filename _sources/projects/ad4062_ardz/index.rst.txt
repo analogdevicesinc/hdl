@@ -233,7 +233,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD4062-ARDZ HDL project source code <projects/ad4062-ardz>`
+-  :git-hdl:`AD4062-ARDZ HDL project source code <projects/ad4062_ardz>`
 
 .. list-table::
    :widths: 30 35 35

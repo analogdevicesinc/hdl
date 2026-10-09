@@ -40,4 +40,4 @@ Interface
 References
 --------------------------------------------------------------------------------
 
-* HDL IP core at :git-hdl:`library/corundum/ethernet_core`
+* HDL IP core at :git-hdl:`library/corundum/ethernet`

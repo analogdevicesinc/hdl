@@ -299,7 +299,7 @@ AFE Board
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD-FMCLIDAR1-EBZ <resources/eval/user-guides/ad-fmclidar1-ebz>`
+- :external+system-level:ref:`[Wiki] AD-FMCLIDAR1-EBZ <ad-fmclidar1-ebz>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

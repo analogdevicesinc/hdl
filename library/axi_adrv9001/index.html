@@ -453,8 +453,8 @@ interface the ADRV9001 family, meaning:</p>
 <p>This documentation only covers the IP core and requires that one must be
 familiar with the device for a complete and better understanding.</p>
 <p>More about the generic framework interfacing ADCs that contains the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/up_adc_channel.v" target="_blank">up_adc_channel</a> and
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/up_adc_common.v" target="_blank">up_adc_common</a> modules can be read in
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v" target="_blank">up_adc_channel</a> and
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v" target="_blank">up_adc_common</a> modules can be read in
 <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a>. Regarding the DAC, more information related to its generic
 framework can be found at <a class="reference internal" href="../../user_guide/ip_cores/axi_dac/#axi-dac"><span class="std std-ref">Generic AXI DAC</span></a>.</p>
 <section id="features">
@@ -547,13 +547,13 @@ framework can be found at <a class="reference internal" href="../../user_guide/i
 <ul>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001/axi_adrv9001_if.v" target="_blank">Interface</a> module</p>
 <ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/adrv9001/adrv9001_rx.v" target="_blank">Receive PHY</a> (CMOS or LVDS interface)</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/adrv9001/adrv9001_rx_link.v" target="_blank">Receive Link Layer</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/adrv9001/adrv9001_tx.v" target="_blank">Transmit PHY</a> (CMOS or LVDS interface)</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/adrv9001/adrv9001_tx_link.v" target="_blank">Transmit Link Layer</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001/adrv9001_rx.v" target="_blank">Receive PHY</a> (CMOS or LVDS interface)</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001/adrv9001_rx_link.v" target="_blank">Receive Link Layer</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001/adrv9001_tx.v" target="_blank">Transmit PHY</a> (CMOS or LVDS interface)</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001/adrv9001_tx_link.v" target="_blank">Transmit Link Layer</a></p></li>
 </ul>
 </li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001/axi_adrv9001_core" target="_blank">TPL (core)</a>, containing:</p>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001/axi_adrv9001_core.v" target="_blank">TPL (core)</a>, containing:</p>
 <ul>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001/axi_adrv9001_rx.v" target="_blank">Receive</a> - common receive module, containing:</p>
 <ul>
@@ -589,7 +589,7 @@ modules, one for each channel</p>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001/axi_adrv9001_tdd.v" target="_blank">TDD control module</a></p></li>
 </ul>
 </li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/common/up_axi.v" target="_blank">AXI control and status</a> modules.</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_axi.v" target="_blank">AXI control and status</a> modules.</p></li>
 </ul>
 </li>
 </ul>

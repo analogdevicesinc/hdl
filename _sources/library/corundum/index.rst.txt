@@ -26,7 +26,7 @@ Sub-modules
 Software support
 --------------------------------------------------------------------------------
 
-* :git-linux:`Linux Driver <staging/corundum:drivers/net/mqnic/mqnic_main.c>`:
+* :git-linux:`Linux Driver <drivers/net/mqnic/mqnic_main.c>`:
   Linux driver for the Corundum Network Stack.
 
 .. admonition:: Publications

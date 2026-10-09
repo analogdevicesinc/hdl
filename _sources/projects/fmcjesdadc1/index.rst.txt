@@ -186,8 +186,8 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`AD-FMCJESDADC1-EBZ Microblaze Quick start guide <resources/eval/user-guides/ad-fmcjesdadc1-ebz/quickstart/microblaze>`
-- :dokuwiki:`AD-FMCJESDADC1-EBZ Zynq Quick start guide <resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz/quickstart>``
+- :external+system-level:ref:`AD-FMCJESDADC1-EBZ Microblaze Quick start guide <ad_fmcjesdadc1_ebz microblaze_quickstart>`
+- :external+system-level:ref:`AD-FMCJESDADC1-EBZ Zynq Quick start guide <ad_fmcjesdadc1_ebz quickstart>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

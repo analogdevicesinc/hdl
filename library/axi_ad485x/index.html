@@ -1096,7 +1096,7 @@ all of the 8 channels and lanes enabled.</p>
 <section id="register-map">
 <h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
 <p>The register map of the core contains instances of several generic register maps
-like ADC common, ADC channel, <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_delay_ctrl.v" target="_blank">up_delay_ctrl</a>.
+like ADC common, ADC channel, <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_delay_cntrl.v" target="_blank">up_delay_cntrl</a>.
 The following table presents the base addresses of each instance, after it you
 can find the detailed description of each generic register map.</p>
 <p>The absolute address of a register should be calculated by adding the instance
@@ -2773,7 +2773,7 @@ Otherwise will be the last set up value.</p>
 <section id="design-guidelines">
 <h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Link to this heading"></a></h2>
 <p>The IP was developed part of the
-<a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/ad485x" target="_blank">AD485x Native FMC Card Reference Design</a>.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad485x_fmcz" target="_blank">AD485x Native FMC Card Reference Design</a>.</p>
 <p>The control of the AD485x chip is done through a SPI interface, which is needed
 at system level.</p>
 <p>The <em>ADC interface signals</em> must be connected directly to the top file of the

@@ -515,8 +515,8 @@ Systems related
 - :external+system-level:ref:`AD-FMCDAQ3-EBZ on ZC706 quick start guide <ad_fmcdaq3_ebz quickstart zc706>`
 - :external+system-level:ref:`AD-FMCDAQ3-EBZ on ZCU102 quick start guide <ad_fmcdaq3_ebz quickstart zcu102>`
 - :external+system-level:ref:`AD-FMCDAQ3-EBZ on A10GX (OBSOLETE) quick start guide <ad_fmcdaq3_ebz quickstart a10gx>`
-- :dokuwiki:`AD-FMCDAQ3-EBZ on MicroBlaze quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/quickstart/microblaze>`
-  (:dokuwiki:`here <resources/tools-software/linux-drivers/platforms/nios2>`
+- :external+system-level:ref:`AD-FMCDAQ3-EBZ on MicroBlaze quick start guide <ad_fmcdaq2_ebz quickstart microblaze>`
+  (:external+system-level:ref:`here <linux-kernel nios2>`
   you can find prebuilt images for this setup;
   **these are not maintained anymore!**)
 

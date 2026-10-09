@@ -516,7 +516,7 @@ Here you can find the quick start guides available for these evaluation boards:
    * - Evaluation board
      - Zynq UltraScale+ MP
    * - ADRV9009ZU11EG
-     - :dokuwiki:`ADRV2CRR-FMC <resources/eval/user-guides/adrv9009-zu11eg/quick-start-guide>`
+     - :external+system-level:ref:`ADRV2CRR-FMC <adrv9009-zu11eg quick-start>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

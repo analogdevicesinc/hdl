@@ -278,7 +278,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-no-os:`AD4170 no-OS driver ad4170.c <drivers/iio/adc/ad4170/ad4170.c>`
+- :git-no-os:`AD4170 no-OS driver ad4170.c <drivers/adc/ad4170/ad4170.c>`
 
 .. include:: ../common/more_information.rst
 

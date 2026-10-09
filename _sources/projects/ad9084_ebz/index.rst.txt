@@ -845,9 +845,9 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD9084 Prototyping Platform User Guide <resources/eval/user-guides/ad9084_ebz>`
+- :external+system-level:ref:`AD9084 Prototyping Platform User Guide <ad9084>`
 - Here you can find all the quick start guides on wiki documentation
-  :dokuwiki:`[Wiki] AD9084 Quick Start Guides <resources/eval/user-guides/ad9084_ebz/quickstart>`
+  :external+system-level:ref:`AD9084 Quick Start Guides <ad9084 quickstart>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -860,9 +860,9 @@ Here you can find the quick start guides available for these evaluation boards:
      - Versal
      - Agilex 7
    * - AD9084
-     - :dokuwiki:`VCU118 <resources/eval/user-guides/ad9084_ebz/quickstart/microblaze>`
-     - :dokuwiki:`VCK190/VMK180/VPK180 <resources/eval/user-guides/ad9084_ebz/quickstart/versal>`
-     - :dokuwiki:`FM87 <resources/eval/user-guides/ad9084_ebz/quickstart/fm87>`
+     - :external+system-level:ref:`VCU118 <ad9084 quickstart microblaze>`
+     - :external+system-level:ref:`VCK190/VMK180/VPK180 <ad9084 quickstart versal>`
+     - :external+system-level:ref:`FM87 <ad9084 quickstart agilex>`
 
 
 Hardware related

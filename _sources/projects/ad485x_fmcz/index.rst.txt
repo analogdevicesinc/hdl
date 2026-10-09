@@ -123,7 +123,7 @@ axi_ad485x_dma   10  54         86
 ================ === ========== ===========
 
 These are the board-specific interrupts
-(found in :git-hdl:`here <projects/ad485x_fmc/common/ad485x_bd.tcl>`).
+(found in :git-hdl:`here <projects/ad485x_fmcz/common/ad485x_fmcz_bd.tcl>`).
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ Here you can find the quick start guides available for these evaluation boards:
    * - Evaluation board
      - Zynq-7000
    * - AD485x_FMCZ
-     - :dokuwiki:`zed <resources/fpga/xilinx/fmc/ad485x>`
+     - :git-hdl:`zed <library/axi_ad485x>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -117,7 +117,7 @@ The axi_hmcad15xx operates as follows:
   :git-hdl:`ad_serdes_in<library/xilinx/common/ad_serdes_in.v>` module with
   a 1:8 ratio.
 * The data lanes are processed by
-  :git-hdl:`sample_assembly<library/hmcad15xx/sample_assembly.v>` based
+  :git-hdl:`sample_assembly<library/axi_hmcad15xx/sample_assembly.v>` based
   on resolution and frame_data. For 8-bit resolution data gets packed into
   8-bit words, for 12/14 bit resolution data gets packed into 16-bit words.
 * 14-bit resoltion works only in Quad Channel Mode.

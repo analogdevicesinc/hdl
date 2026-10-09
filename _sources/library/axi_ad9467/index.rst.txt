@@ -205,7 +205,7 @@ Software Support
 * Linux device trees at:
 
   * :git-linux:`arch/microblaze/boot/dts/kc705_ad9467_fmc.dts`
-  * :git-linux:`arch/arm/boot/dts/zynq-zed-adv7511-ad9467-fmc-250ebz.dts`
+  * :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9467-fmc-250ebz.dts`
 
 * No-OS device driver at :git-no-os:`drivers/adc/ad9467`
 * No-OS project at :git-no-os:`projects/ad9467`
