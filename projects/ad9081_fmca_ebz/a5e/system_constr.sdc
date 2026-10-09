@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2024, 2026 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
 ## Short identifier: ADIBSD
 ##
 ## Redistribution and use in source and binary forms, with or without modification,
@@ -32,32 +32,41 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-## ADC FIFO depth in samples per converter
-set adc_fifo_samples_per_converter [expr $ad_project_params(RX_KS_PER_CHANNEL)*1024]
-## DAC FIFO depth in samples per converter
-set dac_fifo_samples_per_converter [expr $ad_project_params(TX_KS_PER_CHANNEL)*1024]
+source [file join [file dirname [info script]] ../../common/a5e/system_constr.sdc]
 
-source $ad_hdl_dir/projects/scripts/adi_pd.tcl
-source $ad_hdl_dir/projects/common/s10soc/s10soc_system_qsys.tcl
+create_clock  -period "4.16666 ns"  -name ref_clk        [get_ports {fpga_refclk_in}]
 
-set TRANSCEIVER_TYPE "H-Tile"
-if [info exists ad_project_dir] {
-  source ../../common/ad9081_fmca_ebz_qsys.tcl
-} else {
-  source ../common/ad9081_fmca_ebz_qsys.tcl
+# In gearbox builds the device clocks also feed the link clock IOPLLs, whose
+# SDC is read first and already creates a clock on the pin. Use that one.
+proc device_clk {name period port} {
+  foreach_in_collection clk [get_clocks -nowarn] {
+    foreach_in_collection target [get_clock_info -targets $clk] {
+      if {[get_node_info -name $target] eq $port} {
+        return [get_clock_info -name $clk]
+      }
+    }
+  }
+  create_clock -period $period -name $name [get_ports $port]
+  return $name
+}
+set tx_device_clk [device_clk tx_device_clk "4.16666 ns" clkin10]
+set rx_device_clk [device_clk rx_device_clk "4.16666 ns" clkin6]
+
+# The two device clocks come from separate clock chip outputs. Nothing crosses
+# between them except SYSREF, which every link captures on its own device clock.
+set_clock_groups -asynchronous \
+    -group [get_clocks $tx_device_clk] \
+    -group [get_clocks $rx_device_clk]
+
+# Assumption is that REFCLK and SYSREF have similar propagation delay,
+# and the SYSREF is a source synchronous Edge-Aligned signal to REFCLK
+foreach clk [list $tx_device_clk $rx_device_clk] {
+  set_input_delay -add_delay \
+    -clock $clk \
+    [expr [get_clock_info -period $clk] / 8] \
+    [get_ports {sysref2}]
 }
 
-#system ID
-
-if {[info exists ::env(ADI_PROJECT_DIR)]} {
-  set mem_init_sys_file_path "$::env(ADI_PROJECT_DIR)mem_init_sys.txt";
-} else {
-  set mem_init_sys_file_path mem_init_sys.txt;
-}
-
-set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}
-set_instance_parameter_value rom_sys_0 {ROM_ADDR_BITS} {9}
-
-set_instance_parameter_value rom_sys_0 {PATH_TO_FILE} $mem_init_sys_file_path
-
-sysid_gen_sys_init_file
+set_false_path \
+  -from [get_keepers -no_duplicates {i_system_bd|sys_hps|sys_hps|sm_hps|sundancemesa_hps_inst~intosc_clk.reg}] \
+  -to   [get_keepers -no_duplicates {i_system_bd|sys_hps|sys_hps|sm_hps|sundancemesa_hps_inst~intosc_clk.reg}]
