@@ -61,8 +61,10 @@ source ../../../projects/scripts/adi_project_intel.tcl
 #   [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M)
 #
 
+set jesd_mode [get_env_param JESD_MODE 64B66B]
+
 adi_project ad9084_ebz_fm87 [list \
-  JESD_MODE           [get_env_param JESD_MODE       64B66B ] \
+  JESD_MODE           $jesd_mode \
   REF_CLK_RATE        [get_env_param REF_CLK_RATE     312.5 ] \
   DEVICE_CLK_RATE     [get_env_param DEVICE_CLK_RATE  312.5 ] \
   RX_LANE_RATE        [get_env_param RX_LANE_RATE    20.625 ] \
@@ -84,19 +86,15 @@ adi_project ad9084_ebz_fm87 [list \
 # source common_assign.tcl
 
 source $ad_hdl_dir/projects/common/fm87/fm87_system_assign.tcl
-source $ad_hdl_dir/projects/common/fm87/fm87_plddr_system_assign.tcl
 
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_3w_spi.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/projects/common/fm87/gpio_slave.v
 
 set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)"    -to fpga_refclk_in
-set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to syncinb_a0
-set_instance_assignment -name IO_STANDARD "Differential 1.2-V HSTL"     -to syncoutb_a0
 set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to sysref_in
 set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to device_clk
 
-set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to syncinb_a0
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref_in
 
 set_location_assignment PIN_CN56 -to "fpga_refclk_in"     ; ## D4  GBTCLK0_M2C_P
@@ -195,10 +193,29 @@ set_location_assignment PIN_DA42 -to "syncinb_a1_n_gpio"  ; ## G22 FMC_B_LA_N20
 set_location_assignment PIN_DD41 -to "syncoutb_a1_p_gpio" ; ## H25 FMC_B_LA_P21
 set_location_assignment PIN_DE42 -to "syncoutb_a1_n_gpio" ; ## H26 FMC_B_LA_N21
 
-set_location_assignment PIN_DD39 -to "syncinb_a0"         ; ## H10 FMC_B_LA_P4
-set_location_assignment PIN_DE40 -to "syncinb_a0(n)"      ; ## H11 FMC_B_LA_N4
-set_location_assignment PIN_DF41 -to "syncoutb_a0"        ; ## D11 FMC_B_LA_P5
-set_location_assignment PIN_DG42 -to "syncoutb_a0(n)"     ; ## D12 FMC_B_LA_N5
+# 64B66B has no SYNC~, and Apollo does not boot in a 204C mode with these pins
+# driven: make them virtual so LA04/LA05 stay unconnected on the FMC.
+if {$jesd_mode eq "64B66B"} {
+  foreach port {syncinb_a0 syncinb_b0 syncoutb_a0 syncoutb_b0} {
+    set_instance_assignment -name VIRTUAL_PIN ON -to $port
+  }
+} else {
+  set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to syncoutb_a0
+  set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to syncoutb_b0
+  set_instance_assignment -name IO_STANDARD "Differential 1.2-V HSTL"     -to syncinb_a0
+  set_instance_assignment -name IO_STANDARD "Differential 1.2-V HSTL"     -to syncinb_b0
+  set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to syncoutb_a0
+  set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to syncoutb_b0
+
+  set_location_assignment PIN_DD39 -to "syncinb_a0"         ; ## H10 FMC_B_LA_P4
+  set_location_assignment PIN_DE40 -to "syncinb_a0(n)"      ; ## H11 FMC_B_LA_N4
+  set_location_assignment PIN_DK39 -to "syncinb_b0"         ; ## G12 FMC_B_LA_P8
+  set_location_assignment PIN_DJ40 -to "syncinb_b0(n)"      ; ## G13 FMC_B_LA_N8
+  set_location_assignment PIN_DF41 -to "syncoutb_a0"        ; ## D11 FMC_B_LA_P5
+  set_location_assignment PIN_DG42 -to "syncoutb_a0(n)"     ; ## D12 FMC_B_LA_N5
+  set_location_assignment PIN_DP43 -to "syncoutb_b0"        ; ## D14 FMC_B_LA_P9
+  set_location_assignment PIN_DR44 -to "syncoutb_b0(n)"     ; ## D15 FMC_B_LA_N9
+}
 
 set_location_assignment PIN_CW42 -to "sysref_in"          ; ## G36 FMC_B_LA_P33
 set_location_assignment PIN_CY41 -to "sysref_in(n)"       ; ## G37 FMC_B_LA_N33

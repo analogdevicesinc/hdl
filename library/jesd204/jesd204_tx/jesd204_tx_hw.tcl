@@ -153,7 +153,7 @@ add_interface_port sysref sysref export Input 1
 add_interface sync conduit end
 set_interface_property sync associatedClock clock
 set_interface_property sync associatedReset reset
-add_interface_port sync sync export Input 1
+add_interface_port sync sync export Input NUM_LINKS
 
 # ilas_config interface
 
@@ -219,7 +219,7 @@ set_interface_property status associatedClock clock
 set_interface_property status associatedReset reset
 
 add_interface_port status status_state state Output 2
-add_interface_port status status_sync sync Output 1
+add_interface_port status status_sync sync Output NUM_LINKS
 add_interface_port status status_synth_params0 synth_params0 Output 32
 add_interface_port status status_synth_params1 synth_params1 Output 32
 add_interface_port status status_synth_params2 synth_params2 Output 32
@@ -242,6 +242,7 @@ set_port_property lmfc_edge TERMINATION TRUE
 
 proc jesd204_tx_elaboration_callback {} {
   set num_lanes [get_parameter_value "NUM_LANES"]
+  set num_links [get_parameter_value "NUM_LINKS"]
   set tpl_width [get_parameter_value "TPL_DATA_PATH_WIDTH"]
   set phy_width [get_parameter_value "DATA_PATH_WIDTH"]
 

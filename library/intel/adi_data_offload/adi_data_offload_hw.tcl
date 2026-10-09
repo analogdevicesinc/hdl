@@ -74,6 +74,22 @@ ad_ip_parameter AXI_ADDR_WIDTH INTEGER 32 false { \
   DISPLAY_NAME "AXI address width" \
 }
 
+ad_ip_parameter SRC_HAS_AXIS_TKEEP INTEGER 1 false { \
+  DISPLAY_HINT "boolean" \
+  DISPLAY_NAME "Source AXI Stream has TKEEP" \
+}
+
+ad_ip_parameter SRC_HAS_AXIS_TLAST INTEGER 1 false { \
+  DISPLAY_HINT "boolean" \
+  DISPLAY_NAME "Source AXI Stream has TLAST" \
+}
+
+ad_ip_parameter SRC_INTERFACE_TYPE INTEGER 0 false { \
+  DISPLAY_HINT "radio" \
+  DISPLAY_NAME "Source interface type" \
+  ALLOWED_RANGES { "0:AXIS" "1:FIFO" }
+}
+
 ad_ip_parameter SHARED_DEVCLK INTEGER 0 false { \
   DISPLAY_HINT "radio" \
   DISPLAY_NAME "CDC Circuit for sync_ext" \
@@ -91,6 +107,9 @@ proc data_offload_compose {} {
   set axi_data_width [get_parameter_value "AXI_DATA_WIDTH"]
   set axi_addr_width [get_parameter_value "AXI_ADDR_WIDTH"]
   set shared_devclk [get_parameter_value "SHARED_DEVCLK"]
+  set src_interface_type [get_parameter_value "SRC_INTERFACE_TYPE"]
+  set src_has_axis_tkeep [get_parameter_value "SRC_HAS_AXIS_TKEEP"]
+  set src_has_axis_tlast [get_parameter_value "SRC_HAS_AXIS_TLAST"]
 
   set source_addresses [expr ($mem_size * 8) / $source_dwidth]
   set source_awidth [log2 $source_addresses]
@@ -140,6 +159,9 @@ proc data_offload_compose {} {
   set_instance_parameter_value i_data_offload {DST_DATA_WIDTH} $destination_dwidth
   set_instance_parameter_value i_data_offload {DST_CYCLIC_EN} $datapath_type
   set_instance_parameter_value i_data_offload {SYNC_EXT_ADD_INTERNAL_CDC} [expr {!$shared_devclk}]
+  set_instance_parameter_value i_data_offload {SRC_INTERFACE_TYPE} $src_interface_type
+  set_instance_parameter_value i_data_offload {SRC_HAS_AXIS_TKEEP} $src_has_axis_tkeep
+  set_instance_parameter_value i_data_offload {SRC_HAS_AXIS_TLAST} $src_has_axis_tlast
 
   add_interface s_axi axi4lite slave
   set_interface_property s_axi EXPORT_OF i_data_offload.s_axi
@@ -147,8 +169,16 @@ proc data_offload_compose {} {
   add_interface m_axis axi4stream start
   set_interface_property m_axis EXPORT_OF i_data_offload.m_axis
 
-  add_interface s_axis axi4stream end
-  set_interface_property s_axis EXPORT_OF i_data_offload.s_axis
+  if {$src_interface_type == 0} {
+    add_interface s_axis axi4stream end
+    set_interface_property s_axis EXPORT_OF i_data_offload.s_axis
+  } else {
+    add_interface if_src_fifo_wr_en conduit end
+    set_interface_property if_src_fifo_wr_en EXPORT_OF i_data_offload.if_src_fifo_wr_en
+
+    add_interface if_src_fifo_wr_data conduit end
+    set_interface_property if_src_fifo_wr_data EXPORT_OF i_data_offload.if_src_fifo_wr_data
+  }
 
   add_interface init_req conduit end
   set_interface_property init_req EXPORT_OF i_data_offload.if_init_req

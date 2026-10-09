@@ -71,7 +71,8 @@ set fpga_technology_list { \
         { "Cyclone 10" 102 } \
         { "Arria 10"   103 } \
         { "Stratix 10" 104 } \
-        { "Agilex 7"   105 }}
+        { "Agilex 7"   105 } \
+        { "Agilex 5"   106 }}
 
 set fpga_family_list { \
         { Unknown   0 } \
@@ -81,7 +82,8 @@ set fpga_family_list { \
         { GZ        4 } \
         { "SE Base" 5 } \
         { "I-Series with HPS only" 6 } \
-        { TX        6 }}
+        { TX        6 } \
+        { "E-Series with Quad HPS, XCVR, Crypto Services" 7 }}
 
        #technology 5 generation
        # family Arria SX
@@ -111,7 +113,8 @@ set dev_package_list { \
         { TQFP     10 } \
         { UBGA     11 } \
         { UFBGA    12 } \
-        { MBGA     13 }}
+        { MBGA     13 } \
+        { VPBGA    14 }}
 
 # Ball-Grid Array (BGA)
 # Ceramic Pin-Grid Array (PGA)
@@ -124,6 +127,8 @@ set dev_package_list { \
 # Power Quad Flat Pack (RQFP)
 # Thin Quad Flat Pack (TQFP)
 # Ultra FineLine BGA (UBGA-UFBGA)
+# Micro Fineline BGA (MBGA)
+# Variable Pitch BGA (VPBGA)
 
 # transceiver speedgrade
 set xcvr_type_list { 0 9 }
@@ -164,7 +169,7 @@ proc get_part_param {} {
     }
 
     # user and system values (sys_val)
-    if { $fpga_technology == "{{Agilex 7}}" } {
+    if { $fpga_technology == "{{Agilex 7}}" || $fpga_technology == "{{Agilex 5}}" } {
       # TODO : Transform VID2 to some voltage
       set fpga_voltage "0"
     } else {
