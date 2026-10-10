@@ -6,6 +6,7 @@ JESD204 Interface Framework
 .. toctree::
    :maxdepth: 1
 
+   System Architecture <system_architecture/index>
    Generic JESD204 block designs <generic_jesd_bds/index>
    JESD204B/C Link Transmit Peripheral <axi_jesd204_tx/index>
    JESD204B/C Link Receive Peripheral <axi_jesd204_rx/index>
@@ -387,7 +388,7 @@ No-OS
 Tutorial
 --------------------------------------------------------------------------------
 
-#. :dokuwiki:`System Architecture <resources/fpga/peripherals/jesd204/tutorial/system_architecture>`
+#. :ref:`jesd204-system-architecture`
 #. :ref:`generic_jesd_bds`.
    This will help you understand the generic blocks for the next steps.
 #. Checkout the :ref:`HDL Source <build_hdl>`, and then build either one of:
