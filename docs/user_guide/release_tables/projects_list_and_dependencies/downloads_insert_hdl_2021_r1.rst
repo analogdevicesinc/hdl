@@ -77,7 +77,7 @@ AD469XFMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD469XFMC <eval-ad4696-fmc>`
+   * - :adi:`AD469XFMC <EVAL-AD4696FMCZ>`
      - :git-hdl:`ad469x_fmc <hdl_2021_r1:projects/ad469x_fmc>`
      - :git-hdl:`zed <hdl_2021_r1:projects/ad469x_fmc/zed>`
      - ad469x_fmc_zed
@@ -720,7 +720,7 @@ ADQUADMXFE1EBZ
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`ADQUADMXFE1EBZ <ad-quasmxfe1-ebz>`
+   * - :adi:`ADQUADMXFE1EBZ`
      - :git-hdl:`ad_quadmxfe1_ebz <hdl_2021_r1:projects/ad_quadmxfe1_ebz>`
      - :git-hdl:`vcu118 <hdl_2021_r1:projects/ad_quadmxfe1_ebz/vcu118>`
      - :ref:`ad_quadmxfe1_ebz_vcu118 <util_hdl_2021_r1_ad_quadmxfe1_ebz_vcu118>`
@@ -779,7 +779,7 @@ ADAQ8092FMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`ADAQ8092-FMC <eval-adaq9082-fmc>`
+   * - :adi:`ADAQ8092-FMC <EVAL-ADAQ8092-FMCZ>`
      - :git-hdl:`adaq8092_fmc <hdl_2021_r1:projects/adaq8092_fmc>`
      - :git-hdl:`zed <hdl_2021_r1:projects/adaq8092_fmc/zed>`
      - :ref:`adaq8092_fmc_zed <util_hdl_2021_r1_adaq8092_fmc_zed>`
@@ -805,7 +805,7 @@ ADRV9001
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD-ADRV9001 <eval-adrv9001>`
+   * - :adi:`ADRV9001`
      - :git-hdl:`adrv9001 <hdl_2021_r1:projects/adrv9001>`
      - :git-hdl:`a10soc <hdl_2021_r1:projects/adrv9001/a10soc>`
        :git-hdl:`zc706 <hdl_2021_r1:projects/adrv9001/zc706>`
@@ -1626,7 +1626,7 @@ PLUTO_NG
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`ADALM-PLUTO-NG`
+   * - :adi:`ADALM-PLUTO`
      - :git-hdl:`pluto_ng <hdl_2021_r1:projects/pluto_ng>`
      - :git-hdl:`pluto_ng <hdl_2021_r1:projects/pluto_ng>`
      - pluto_ng_pluto_ng
