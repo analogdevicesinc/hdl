@@ -3,8 +3,8 @@
 - Evaluation boards product pages:
   - [EVAL-AD400x-FMCZ](https://www.analog.com/eval-ad400x-fmcz) (with-FMC)
   - [EVAL-ADAQ40xx](https://www.analog.com/eval-adaq40xx) (with PMOD)
-- System documentation: https://wiki.analog.com/resources/eval/10-lead-pulsar-adc-evaluation-board
-- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/pulsar_adc/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/pulsar_adc/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/pulsar_adc/
 - Evaluation board VIO: 3.3V
 
 ## Supported parts

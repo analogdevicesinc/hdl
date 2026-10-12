@@ -1,13 +1,13 @@
 # AD9081-FMCA-EBZ-X-BAND HDL Project
 
--  Evaluation board product page:
+-  Evaluation boards product pages:
   - [X-Band Phased Array Platform](https://www.analog.com/x-band-development-platform)
   - [EVAL-AD9081](https://www.analog.com/eval-ad9081)
   - [ADAR1000EVAL1Z (Stingray)](https://wiki.analog.com/resources/eval/user-guides/stingray)
   - [ADXUD1AEBZ](https://wiki.analog.com/resources/eval/user-guides/xud1a)
 - System documentation: https://wiki.analog.com/resources/eval/developer-kits/x-band-dev-kit
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad9081_fmca_ebz_x_band/index.html
-- Transceiver configuration support for Xilinx carriers (xcvr_wizard): https://analogdevicesinc.github.io/hdl/library/jesd204/xgt_wizard/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad9081_fmca_ebz_x_band/
+- Transceiver configuration support for Xilinx carriers (xcvr_wizard): https://developer.analog.com/docs/hdl/library/jesd204/xgt_wizard/
 - Evaluation board VADJ range: 1.2V - 3.3V (for the XUD custom break out board as well; PMODs are with 3.3V)
 
 ## Supported parts

@@ -2,7 +2,7 @@
 
 - Evaluation board product page: [ADRD8012-01Z](https://www.analog.com/adrd8012-01z)
 - System documentation: https://analogdevicesinc.github.io/documentation/solutions/reference-designs/adrd8012-01Z/index.html
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adrd8012_01z/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/adrd8012_01z/
 
 ## Supported parts
 

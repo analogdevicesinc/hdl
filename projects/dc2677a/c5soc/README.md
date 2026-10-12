@@ -2,7 +2,7 @@
 
 # DC2677A/C5SOC HDL Project
 
-- VADJ with which it was tested in hardware: 
+- VADJ with which it was tested in hardware:
   - 2.5V - LVDS
   - 3.3V - CMOS
 
@@ -20,6 +20,7 @@ The overwritable parameter from the environment:
 - LVDS_CMOS_N - specific to the type of the data and clock signals
   - 0 - Single-ended data and clock signals (default)
   - 1 - Differential data and clock signals
+
 ### Example configurations
 
 #### Configuration using CMOS interface (default)

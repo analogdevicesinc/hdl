@@ -1,8 +1,8 @@
 # FMCOMMS8 HDL Project
 
 - Evaluation board product page: [EVAL-AD-FMCOMMS8-EBZ](https://www.analog.com/eval-ad-fmcomms8-ebz)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms8-ebz
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/fmcomms8/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/fmcomms8/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/fmcomms8/
 - Evaluation board VADJ: 1.8V
 
 ## Supported parts

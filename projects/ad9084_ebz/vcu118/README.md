@@ -13,7 +13,7 @@ cd projects/ad9084_ebz/vcu118
 make
 ```
 
-All of the RX/TX link modes can be found in the [AD9084 data sheet](https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad9084-ug-2326.pdf). We offer support for only a few of them.
+All of the RX/TX link modes can be found in the [AD9084 data sheet](https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad9084-ad9088-ug-2326.pdf). We offer support for only a few of them.
 
 The overwritable parameters from the environment are:
 

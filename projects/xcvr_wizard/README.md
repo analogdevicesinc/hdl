@@ -1,6 +1,6 @@
 # XCVR-WIZARD HDL Project
 
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/library/jesd204/xgt_wizard/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/library/jesd204/xgt_wizard/
 
 ## Building the project
 

@@ -15,7 +15,7 @@ make
 
 The overwritable parameter from the environment:
 
-- INTF - specifies the interface to be used; 
+- INTF - specifies the interface to be used;
   - 0 - parallel interface (default)
   - 1 - serial interface
 
