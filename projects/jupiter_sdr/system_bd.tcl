@@ -310,10 +310,23 @@ create_bd_port -dir I s_1v8_mgtravtt_sns_n
 
 set USE_RX_CLK_FOR_TX1 $ad_project_params(USE_RX_CLK_FOR_TX1)
 set USE_RX_CLK_FOR_TX2 $ad_project_params(USE_RX_CLK_FOR_TX2)
+set TDD_DISABLE $ad_project_params(TDD_DISABLE)
+set DDS_DISABLE $ad_project_params(DDS_DISABLE)
+set INDEPENDENT_1R1T_SUPPORT $ad_project_params(INDEPENDENT_1R1T_SUPPORT)
+set COMMON_2R2T_SUPPORT $ad_project_params(COMMON_2R2T_SUPPORT)
+set IODELAY_ENABLE $ad_project_params(IODELAY_ENABLE)
+set EXT_SYNC $ad_project_params(EXT_SYNC)
+set ENABLE_REF_CLK_MON $ad_project_params(ENABLE_REF_CLK_MON)
 
 ad_ip_instance axi_adrv9001 axi_adrv9001
 ad_ip_parameter axi_adrv9001 CONFIG.CMOS_LVDS_N 0
-ad_ip_parameter axi_adrv9001 CONFIG.EXT_SYNC 1
+ad_ip_parameter axi_adrv9001 CONFIG.TDD_DISABLE $TDD_DISABLE
+ad_ip_parameter axi_adrv9001 CONFIG.DDS_DISABLE $DDS_DISABLE
+ad_ip_parameter axi_adrv9001 CONFIG.INDEPENDENT_1R1T_SUPPORT $INDEPENDENT_1R1T_SUPPORT
+ad_ip_parameter axi_adrv9001 CONFIG.COMMON_2R2T_SUPPORT $COMMON_2R2T_SUPPORT
+ad_ip_parameter axi_adrv9001 CONFIG.IODELAY_ENABLE $IODELAY_ENABLE
+ad_ip_parameter axi_adrv9001 CONFIG.EXT_SYNC $EXT_SYNC
+ad_ip_parameter axi_adrv9001 CONFIG.ENABLE_REF_CLK_MON $ENABLE_REF_CLK_MON
 ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX1 $USE_RX_CLK_FOR_TX1
 ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX2 $USE_RX_CLK_FOR_TX2
 
@@ -339,6 +352,8 @@ ad_ip_instance util_cpack2 util_adc_1_pack { \
 
 # dma for rx2
 
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+
 ad_ip_instance axi_dmac axi_adrv9001_rx2_dma
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_TYPE_DEST 0
@@ -355,6 +370,8 @@ ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.AXI_AXPROT 0b010
 ad_ip_instance util_cpack2 util_adc_2_pack { \
   NUM_OF_CHANNELS 4 \
   SAMPLE_DATA_WIDTH 16 \
+}
+
 }
 
 # dma for tx1
@@ -379,6 +396,8 @@ ad_ip_instance util_upack2 util_dac_1_upack { \
 
 # dma for tx2
 
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+
 ad_ip_instance axi_dmac axi_adrv9001_tx2_dma
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_TYPE_DEST 1
@@ -396,20 +415,26 @@ ad_ip_instance util_upack2 util_dac_2_upack { \
   NUM_OF_CHANNELS 2 \
   SAMPLE_DATA_WIDTH 16 \
 }
+
+}
 # ad9001 connections
 
 ad_connect  $sys_iodelay_clk       axi_adrv9001/delay_clk
 ad_connect  axi_adrv9001/adc_1_clk axi_adrv9001_rx1_dma/fifo_wr_clk
 ad_connect  axi_adrv9001/adc_1_clk util_adc_1_pack/clk
 
-ad_connect  axi_adrv9001/adc_2_clk axi_adrv9001_rx2_dma/fifo_wr_clk
-ad_connect  axi_adrv9001/adc_2_clk util_adc_2_pack/clk
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_connect  axi_adrv9001/adc_2_clk axi_adrv9001_rx2_dma/fifo_wr_clk
+  ad_connect  axi_adrv9001/adc_2_clk util_adc_2_pack/clk
+}
 
 ad_connect  axi_adrv9001/dac_1_clk axi_adrv9001_tx1_dma/m_axis_aclk
 ad_connect  axi_adrv9001/dac_1_clk util_dac_1_upack/clk
 
-ad_connect  axi_adrv9001/dac_2_clk axi_adrv9001_tx2_dma/m_axis_aclk
-ad_connect  axi_adrv9001/dac_2_clk util_dac_2_upack/clk
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_connect  axi_adrv9001/dac_2_clk axi_adrv9001_tx2_dma/m_axis_aclk
+  ad_connect  axi_adrv9001/dac_2_clk util_dac_2_upack/clk
+}
 
 ad_connect ref_clk           axi_adrv9001/ref_clk
 ad_connect mcs_in            axi_adrv9001/mcs_in
@@ -476,21 +501,23 @@ ad_connect util_adc_1_pack/packed_fifo_wr axi_adrv9001_rx1_dma/fifo_wr
 ad_connect axi_adrv9001/adc_1_start_sync  axi_adrv9001_rx1_dma/sync
 
 # RX2 - CPACK - RX_DMA2
-ad_connect  axi_adrv9001/adc_2_rst       util_adc_2_pack/reset
-ad_connect  axi_adrv9001/adc_2_valid_i0  util_adc_2_pack/fifo_wr_en
-ad_connect  axi_adrv9001/adc_2_enable_i0 util_adc_2_pack/enable_0
-ad_connect  axi_adrv9001/adc_2_data_i0   util_adc_2_pack/fifo_wr_data_0
-ad_connect  axi_adrv9001/adc_2_enable_q0 util_adc_2_pack/enable_1
-ad_connect  axi_adrv9001/adc_2_data_q0   util_adc_2_pack/fifo_wr_data_1
-ad_connect  GND                          util_adc_2_pack/enable_2
-ad_connect  GND                          util_adc_2_pack/fifo_wr_data_2
-ad_connect  GND                          util_adc_2_pack/enable_3
-ad_connect  GND                          util_adc_2_pack/fifo_wr_data_3
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_connect  axi_adrv9001/adc_2_rst       util_adc_2_pack/reset
+  ad_connect  axi_adrv9001/adc_2_valid_i0  util_adc_2_pack/fifo_wr_en
+  ad_connect  axi_adrv9001/adc_2_enable_i0 util_adc_2_pack/enable_0
+  ad_connect  axi_adrv9001/adc_2_data_i0   util_adc_2_pack/fifo_wr_data_0
+  ad_connect  axi_adrv9001/adc_2_enable_q0 util_adc_2_pack/enable_1
+  ad_connect  axi_adrv9001/adc_2_data_q0   util_adc_2_pack/fifo_wr_data_1
+  ad_connect  GND                          util_adc_2_pack/enable_2
+  ad_connect  GND                          util_adc_2_pack/fifo_wr_data_2
+  ad_connect  GND                          util_adc_2_pack/enable_3
+  ad_connect  GND                          util_adc_2_pack/fifo_wr_data_3
 
-ad_connect  axi_adrv9001/adc_2_dovf       util_adc_2_pack/fifo_wr_overflow
+  ad_connect  axi_adrv9001/adc_2_dovf       util_adc_2_pack/fifo_wr_overflow
 
-ad_connect util_adc_2_pack/packed_fifo_wr axi_adrv9001_rx2_dma/fifo_wr
-ad_connect axi_adrv9001/adc_2_start_sync  axi_adrv9001_rx2_dma/sync
+  ad_connect util_adc_2_pack/packed_fifo_wr axi_adrv9001_rx2_dma/fifo_wr
+  ad_connect axi_adrv9001/adc_2_start_sync  axi_adrv9001_rx2_dma/sync
+}
 
 # TX_DMA1 - UPACK - TX1
 ad_connect  axi_adrv9001/dac_1_rst        util_dac_1_upack/reset
@@ -508,15 +535,17 @@ ad_connect  axi_adrv9001_tx1_dma/m_axis   util_dac_1_upack/s_axis
 ad_connect  axi_adrv9001/dac_1_dunf       util_dac_1_upack/fifo_rd_underflow
 
 # TX_DMA2 - UPACK - TX2
-ad_connect  axi_adrv9001/dac_2_rst        util_dac_2_upack/reset
-ad_connect  axi_adrv9001/dac_2_valid_i0   util_dac_2_upack/fifo_rd_en
-ad_connect  axi_adrv9001/dac_2_enable_i0  util_dac_2_upack/enable_0
-ad_connect  axi_adrv9001/dac_2_data_i0    util_dac_2_upack/fifo_rd_data_0
-ad_connect  axi_adrv9001/dac_2_enable_q0  util_dac_2_upack/enable_1
-ad_connect  axi_adrv9001/dac_2_data_q0    util_dac_2_upack/fifo_rd_data_1
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_connect  axi_adrv9001/dac_2_rst        util_dac_2_upack/reset
+  ad_connect  axi_adrv9001/dac_2_valid_i0   util_dac_2_upack/fifo_rd_en
+  ad_connect  axi_adrv9001/dac_2_enable_i0  util_dac_2_upack/enable_0
+  ad_connect  axi_adrv9001/dac_2_data_i0    util_dac_2_upack/fifo_rd_data_0
+  ad_connect  axi_adrv9001/dac_2_enable_q0  util_dac_2_upack/enable_1
+  ad_connect  axi_adrv9001/dac_2_data_q0    util_dac_2_upack/fifo_rd_data_1
 
-ad_connect  axi_adrv9001_tx2_dma/m_axis   util_dac_2_upack/s_axis
-ad_connect  axi_adrv9001/dac_2_dunf       util_dac_2_upack/fifo_rd_underflow
+  ad_connect  axi_adrv9001_tx2_dma/m_axis   util_dac_2_upack/s_axis
+  ad_connect  axi_adrv9001/dac_2_dunf       util_dac_2_upack/fifo_rd_underflow
+}
 
 ad_connect  gpio_rx1_enable_in            axi_adrv9001/gpio_rx1_enable_in
 ad_connect  gpio_rx2_enable_in            axi_adrv9001/gpio_rx2_enable_in
@@ -618,28 +647,44 @@ ad_connect sys_cpu_resetn  pl_sysmon/s_axi_aresetn
 
 ad_cpu_interconnect 0x44A00000  axi_adrv9001
 ad_cpu_interconnect 0x44A30000  axi_adrv9001_rx1_dma
-ad_cpu_interconnect 0x44A40000  axi_adrv9001_rx2_dma
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_cpu_interconnect 0x44A40000  axi_adrv9001_rx2_dma
+}
 ad_cpu_interconnect 0x44A50000  axi_adrv9001_tx1_dma
-ad_cpu_interconnect 0x44A60000  axi_adrv9001_tx2_dma
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_cpu_interconnect 0x44A60000  axi_adrv9001_tx2_dma
+}
 ad_cpu_interconnect 0x45000000  axi_sysid_0
 ad_cpu_interconnect 0x44A70000  pl_sysmon
 
 ad_mem_hpc0_interconnect $sys_dma_clk sys_ps7/S_AXI_HPC0
 ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_rx1_dma/m_dest_axi
-ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_rx2_dma/m_dest_axi
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_rx2_dma/m_dest_axi
+}
 ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_tx1_dma/m_src_axi
-ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_tx2_dma/m_src_axi
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_tx2_dma/m_src_axi
+}
 
 ad_connect $sys_dma_resetn axi_adrv9001_rx1_dma/m_dest_axi_aresetn
-ad_connect $sys_dma_resetn axi_adrv9001_rx2_dma/m_dest_axi_aresetn
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_connect $sys_dma_resetn axi_adrv9001_rx2_dma/m_dest_axi_aresetn
+}
 ad_connect $sys_dma_resetn axi_adrv9001_tx1_dma/m_src_axi_aresetn
-ad_connect $sys_dma_resetn axi_adrv9001_tx2_dma/m_src_axi_aresetn
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_connect $sys_dma_resetn axi_adrv9001_tx2_dma/m_src_axi_aresetn
+}
 
 # interrupts
 ad_cpu_interrupt ps-13 mb-12 axi_adrv9001_rx1_dma/irq
-ad_cpu_interrupt ps-12 mb-11 axi_adrv9001_rx2_dma/irq
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_cpu_interrupt ps-12 mb-11 axi_adrv9001_rx2_dma/irq
+}
 ad_cpu_interrupt ps-11 mb-6 axi_adrv9001_tx1_dma/irq
-ad_cpu_interrupt ps-10 mb-5 axi_adrv9001_tx2_dma/irq
+if {$INDEPENDENT_1R1T_SUPPORT == 1} {
+  ad_cpu_interrupt ps-10 mb-5 axi_adrv9001_tx2_dma/irq
+}
 ad_cpu_interrupt ps-9 mb-4 pl_sysmon/ip2intc_irpt
 
 #system ID
@@ -647,6 +692,13 @@ ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
-set sys_cstring "USE_RX_CLK_FOR_TX1=$USE_RX_CLK_FOR_TX1,\
+set sys_cstring "TDD_DISABLE=$TDD_DISABLE,\
+DDS_DISABLE=$DDS_DISABLE,\
+INDEPENDENT_1R1T_SUPPORT=$INDEPENDENT_1R1T_SUPPORT,\
+COMMON_2R2T_SUPPORT=$COMMON_2R2T_SUPPORT,\
+IODELAY_ENABLE=$IODELAY_ENABLE,\
+EXT_SYNC=$EXT_SYNC,\
+ENABLE_REF_CLK_MON=$ENABLE_REF_CLK_MON,\
+USE_RX_CLK_FOR_TX1=$USE_RX_CLK_FOR_TX1,\
 USE_RX_CLK_FOR_TX2=$USE_RX_CLK_FOR_TX2"
 sysid_gen_sys_init_file $sys_cstring
