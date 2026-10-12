@@ -21,6 +21,8 @@ M_FLIST += if_xcvr_cm.xml
 M_FLIST += if_xcvr_cm_rtl.xml
 M_FLIST += if_xcvr_ch.xml
 M_FLIST += if_xcvr_ch_rtl.xml
+M_FLIST += if_xcvr_qm.xml
+M_FLIST += if_xcvr_qm_rtl.xml
 M_FLIST += if_gt_qpll.xml
 M_FLIST += if_gt_qpll_rtl.xml
 M_FLIST += if_gt_pll.xml
@@ -35,7 +37,7 @@ M_FLIST += if_gt_rx_ksig_rtl.xml
 
 .PHONY: all xilinx clean clean-all
 all: xilinx
-xilinx: if_xcvr_cm.xml if_xcvr_cm_rtl.xml if_xcvr_ch.xml if_xcvr_ch_rtl.xml if_gt_qpll.xml if_gt_qpll_rtl.xml if_gt_pll.xml if_gt_pll_rtl.xml if_gt_rx.xml if_gt_rx_rtl.xml if_gt_tx.xml if_gt_tx_rtl.xml if_gt_rx_ksig.xml if_gt_rx_ksig_rtl.xml 
+xilinx: if_xcvr_cm.xml if_xcvr_cm_rtl.xml if_xcvr_ch.xml if_xcvr_ch_rtl.xml if_gt_qpll.xml if_gt_qpll_rtl.xml if_gt_pll.xml if_gt_pll_rtl.xml if_gt_rx.xml if_gt_rx_rtl.xml if_gt_tx.xml if_gt_tx_rtl.xml if_gt_rx_ksig.xml if_gt_rx_ksig_rtl.xml if_xcvr_qm.xml if_xcvr_qm_rtl.xml
 
 clean:clean-all
 

@@ -71,6 +71,16 @@ module  jesd204_versal_gt_adapter_tx #(
   wire i_reset;
   wire o_reset;
 
+  function [63:0] bit_reverse;
+    input [63:0] d;
+    integer i;
+    begin
+      for (i = 0; i < 64; i = i + 1) begin
+        bit_reverse[63-i] = d[i];
+      end
+    end
+  endfunction
+
   sync_bits #(
     .NUM_OF_BITS(1),
     .ASYNC_CLK(1)
@@ -98,8 +108,6 @@ module  jesd204_versal_gt_adapter_tx #(
       wire        o_fifo_full;
       reg  [63:0] o_phy_data_r;
       reg  [ 1:0] o_phy_header_r;
-      wire [63:0] o_phy_data_rev;
-      wire [ 1:0] o_phy_header_rev;
 
       wire         wr_rst_busy;
       wire         rd_rst_busy;
@@ -116,12 +124,6 @@ module  jesd204_versal_gt_adapter_tx #(
         o_phy_data_r <= tx_data;
         o_phy_header_r <= tx_header;
       end
-
-      genvar i;
-      for (i=0; i < 64; i=i+1) begin
-        assign o_phy_data_rev[63-i] = o_phy_data_r[i];
-      end
-      assign o_phy_header_rev = {o_phy_header_r[0], o_phy_header_r[1]};
 
       // CDC from LR / 66 to LR / 64
       assign wr_en = ~o_fifo_full & ~wr_rst_busy;
@@ -160,7 +162,7 @@ module  jesd204_versal_gt_adapter_tx #(
         .wr_rst_busy (wr_rst_busy),
         .wr_clk (usr_clk),
         .wr_en (wr_en),
-        .din ({o_phy_data_rev, o_phy_header_rev}),
+        .din ({bit_reverse(o_phy_data_r), o_phy_header_r[0], o_phy_header_r[1]}),
         .full (o_fifo_full),
         .rst (o_reset));
 
@@ -169,7 +171,7 @@ module  jesd204_versal_gt_adapter_tx #(
         .clk (phy_clk),
         .reset (i_reset),
         .i_data (rd_data),
-        .i_valid (~i_fifo_empty & i_gb_read),
+        .i_valid (rd_en),
         .o_data (o_gb_data),
         .o_rd_en (i_gb_read));
 
@@ -220,24 +222,16 @@ module  jesd204_versal_gt_adapter_tx #(
     end
 
     if (LINK_MODE == 2) begin
-      wire [63:0] tx_data_flip;
-      wire [ 1:0] tx_header_flip;
-      genvar i;
-      for (i = 0; i < 64; i=i+1) begin
-        assign tx_data_flip[63-i] = txdata_d[i];
-      end
-      assign tx_header_flip = {txheader_d[0], txheader_d[1]};
-
       // Flip header bits and data
-      assign txdata   = {64'b0, tx_data_flip};
-      assign txheader = {4'b0, tx_header_flip};
+      assign txdata   = {64'b0, bit_reverse(txdata_d)};
+      assign txheader = {4'b0, txheader_d[0], txheader_d[1]};
 
       assign txctrl0  = 16'b0;
       assign txctrl1  = 16'b0;
       assign txctrl2  = 16'b0;
     end else begin
       assign txdata   = {96'b0, txdata_d[31:0]};
-      assign txheader = {4'b0, txheader_d};
+      assign txheader = 6'b0;
       assign txctrl2  = {4'b0, txcharisk_d};
       assign txctrl0  = 16'b0;
       assign txctrl1  = 16'b0;
