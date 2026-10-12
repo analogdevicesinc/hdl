@@ -32,6 +32,10 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
+if {[info exists ad_hdl_dir]} {
+  source $ad_hdl_dir/library/xilinx/scripts/adi_xcvr_versal.tcl
+}
+
 ## Global variables for interconnect interface indexing
 #
 set sys_hpc0_interconnect_index -1
@@ -365,6 +369,10 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
   }
   set link_mode $link_mode_u
 
+  if {$xcvr_type == 0 && [regexp {^xcv[ecmph]} [get_property PART [current_project]]]} {
+    error "ERROR: ad_xcvrcon: $u_xcvr has no XCVR_TYPE on a Versal part; set TRANSCEIVER_TYPE (GTY, GTYP or GTM) for the project"
+  }
+
   set jesd204_bd_type [get_property TYPE [get_bd_cells $a_jesd]]
 
   if {$jesd204_bd_type == "hier"} {
@@ -415,6 +423,28 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
 
   if {$num_of_max_lanes != -1} {
     set max_no_of_lanes $num_of_max_lanes
+  }
+
+  set slots {}
+  for {set n 0} {$n < $no_of_lanes} {incr n} {
+    if {$partial_lane_map != {}} {
+      set s [lindex $partial_lane_map $n]
+      if {$s eq {}} continue
+    } elseif {$lane_map != {}} {
+      set s [lindex $lane_map $n]
+    } else {
+      set s [expr {$n + $index}]
+    }
+    lappend slots $s
+  }
+  if {$xcvr_type >= 11} {
+    if {$partial_lane_map != {}} {
+      error "ERROR: ad_xcvrcon: partial_lane_map is not supported on Versal ($u_xcvr)"
+    }
+    if {$link_mode_u != $link_mode_a} {
+      error "ERROR: LINK_MODE mismatch between $u_xcvr ($link_mode_u) and $a_xcvr ($link_mode_a)"
+    }
+    ad_xcvr_versal_prepare $u_xcvr $a_xcvr $tx_or_rx_n $qpll_enable $slots $index
   }
   create_bd_port -dir I $m_sysref
   create_bd_port -from [expr $num_of_links - 1] -to 0 -dir ${ctrl_dir} $m_sync
@@ -496,7 +526,7 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
           ad_connect  ${a_xcvr}/up_es_${n} ${u_xcvr}/up_es_${phys_lane}
         }
 
-        if {(($n%4) == 0) && ($qpll_enable == 1)} {
+        if {($xcvr_type < 11) && (($n%4) == 0) && ($qpll_enable == 1)} {
           ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${m}
         }
         ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${phys_lane}
@@ -535,7 +565,7 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
         }
       }
 
-      if {(($n%4) == 0) && ($qpll_enable == 1)} {
+      if {($xcvr_type < 11) && (($n%4) == 0) && ($qpll_enable == 1)} {
         ad_connect  ${a_xcvr}/up_cm_${n} ${u_xcvr}/up_cm_${m}
       }
       ad_connect  ${a_xcvr}/up_ch_${n} ${u_xcvr}/up_${txrx}_${phys_lane}
@@ -580,6 +610,13 @@ proc ad_xcvrcon {u_xcvr a_xcvr a_jesd {lane_map {}} {link_clk {}} {device_clk {}
           }
 	}
       }
+    }
+  }
+
+  if {$xcvr_type >= 11} {
+    set quads [get_property CONFIG.NUM_OF_QUADS [get_bd_cells $a_xcvr]]
+    for {set w 0} {$w < $quads} {incr w} {
+      ad_connect  ${a_xcvr}/up_qm_$w ${u_xcvr}/up_qm_${txrx}_[expr {$index / 4 + $w}]
     }
   }
 
@@ -666,6 +703,21 @@ proc ad_mem_hp0_interconnect {p_clk p_name} {
   if {$sys_zynq == 3} {ad_mem_hpx_interconnect "NOC" $p_clk $p_name}
 }
 
+## Caps a DMA memory-side data width to what the platform interconnect
+#  accepts: the Versal NoC ports are at most 512 bits wide.
+#
+#  \param[width] - requested data width
+#
+proc ad_mem_cap_data_width {width} {
+
+  global sys_zynq
+
+  if {[info exists sys_zynq] && $sys_zynq == 3} {
+    return [expr {min(512, $width)}]
+  }
+  return $width
+}
+
 ## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
 #  HP1 high speed interface in case of PSx.
 #
@@ -729,6 +781,25 @@ proc ad_mem_hp3_interconnect {p_clk p_name} {
 #  \param[p_clk]  - name of the clock or reset source
 #  \param[p_name] - name or list of names of the clock or reset sink
 #
+## Returns 0 when <cell>/<pin> names a pin that an ADI IP has disabled
+#  (e.g. axi_adxcvr m_axi on Versal). Everything else is kept: callers pass
+#  generic PS names such as sys_ps7/S_AXI_HP1 or sys_ps8/S_AXI_HP0 that
+#  ad_mem_hpx_interconnect remaps, enables or renames per platform.
+#
+#  \param[p] - pin or interface pin name
+#
+proc ad_mem_hpx_keep {p} {
+
+  set cell [get_bd_cells -quiet [file dirname $p]]
+  if {$cell eq "" || ![string match "analog.com:*" [get_property VLNV $cell]]} {
+    return 1
+  }
+  if {[get_bd_intf_pins -quiet $p] eq "" && [get_bd_pins -quiet $p] eq ""} {
+    return 0
+  }
+  return 1
+}
+
 proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
   global sys_zynq
@@ -742,6 +813,19 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
   global sys_mem_interconnect_index
   global sys_mem_clk_index
   global use_smartconnect
+
+  set p_name_present {}
+  foreach p $p_name {
+    if {[ad_mem_hpx_keep $p]} {
+      lappend p_name_present $p
+    } else {
+      puts "INFO: ad_mem_hpx_interconnect: $p is not present (disabled by its IP), skipped"
+    }
+  }
+  if {$p_name_present eq ""} {
+    return
+  }
+  set p_name $p_name_present
 
   set p_name_int $p_name
   set p_clk_source [get_bd_pins -filter {DIR == O} -of_objects [get_bd_nets $p_clk]]
