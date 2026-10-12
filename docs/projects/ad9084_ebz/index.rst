@@ -287,7 +287,7 @@ The following are the parameters of this project that can be configured:
 - JESD_MODE: used link layer encoder mode
 
   - 64B66B - 64b66b link layer defined in JESD204C, uses ADI IP as Physical
-    Layer (except for Versal / Intel)
+    Layer (except for Intel)
   - 8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
     Layer
 - HSCI_ENABLE: enables the HSCI IP (Xilinx only)
@@ -353,31 +353,30 @@ The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL
 (see more at :ref:`architecture cpu-intercon-addr`).
 
-Depending on the values of parameters $ASYMMETRIC_A_B_MODE, $ADI_PHY_SEL
-and $HSCI_ENABLE,
+Depending on the values of parameters $ASYMMETRIC_A_B_MODE and $HSCI_ENABLE,
 some IPs are instatiated and some are not.
 
 Check-out the table below to find out the conditions.
 
 ========================= ========================================= =============== ============
-Instance                  Depends on parameter                      Microblaze      ZynqMP
+Instance                  Depends on parameter                      Microblaze      Versal
 ========================= ========================================= =============== ============
-apollo_rx_xcvr            $ADI_PHY_SEL==1                            0x44A6_0000    N/A
+apollo_rx_xcvr                                                       0x44A6_0000    0xA4A6_0000
 apollo_rx_jesd                                                       0x44A9_0000    0xA4A9_0000
 rx_apollo_tpl_core                                                   0x44A1_0000    0xA4A1_0000
 apollo_rx_dma                                                        0x7C42_0000    0xBC42_0000
 apollo_rx_data_offload                                               0x7C45_0000    0xBC45_0000
-apollo_rx_b_xcvr          $ADI_PHY_SEL==1 & $ASYMMETRIC_A_B_MODE==1  0x44AA_0000    N/A
+apollo_rx_b_xcvr          $ASYMMETRIC_A_B_MODE==1                    0x44AA_0000    0xA4AA_0000
 apollo_rx_b_jesd          $ASYMMETRIC_A_B_MODE==1                    0x44AC_0000    0xA4AC_0000
 rx_b_apollo_tpl_core      $ASYMMETRIC_A_B_MODE==1                    0x44AB_0000    0xA4AB_0000
 apollo_rx_b_dma           $ASYMMETRIC_A_B_MODE==1                    0x7C47_0000    0xBC47_0000
 apollo_rx_b_data_offload  $ASYMMETRIC_A_B_MODE==1                    0x7C4A_0000    0xBC4A_0000
-apollo_tx_xcvr            $ADI_PHY_SEL==1                            0x44B6_0000    N/A
+apollo_tx_xcvr                                                       0x44B6_0000    0xA4B6_0000
 apollo_tx_jesd                                                       0x44B9_0000    0xA4B9_0000
 tx_apollo_tpl_core                                                   0x44B1_0000    0xA4B1_0000
 apollo_tx_dma                                                        0x7C43_0000    0xBC43_0000
 apollo_tx_data_offload                                               0x7C44_0000    0xBC44_0000
-apollo_tx_b_xcvr          $ADI_PHY_SEL==1 & $ASYMMETRIC_A_B_MODE==1  0x44BA_0000    N/A
+apollo_tx_b_xcvr          $ASYMMETRIC_A_B_MODE==1                    0x44BA_0000    0xA4BA_0000
 apollo_tx_b_jesd          $ASYMMETRIC_A_B_MODE==1                    0x44BC_0000    0xA4BC_0000
 tx_b_apollo_tpl_core      $ASYMMETRIC_A_B_MODE==1                    0x44BB_0000    0xA4BB_0000
 apollo_tx_b_dma           $ASYMMETRIC_A_B_MODE==1                    0x7C48_0000    0xBC48_0000
@@ -455,28 +454,9 @@ gpio[30:15]         INOUT      47:32    47:32
 The following table lists the GPIO signals that are present
 in the Versal projects.
 
-They are used from the linux kernel to
-control the reset sequence of the GTY/GTYP transceivers.
-
 ===========================  =========  =======  =======
 HDL GPIO signal              Direction  HDL no.  Versal
 ===========================  =========  =======  =======
-tx_b_reset_datapath          IN         79       47
-rx_b_reset_datapath          IN         78       46
-tx_b_reset_pll_and_datapath  IN         77       45
-rx_b_reset_pll_and_datapath  IN         76       44
-gt_b_reset                   IN         75       43
-mst_b_resetdone              OUT        74       42
-tx_b_resetdone               OUT        73       41
-rx_b_resetdone               OUT        72       40
-tx_reset_datapath            IN         71       39
-rx_reset_datapath            IN         70       38
-tx_reset_pll_and_datapath    IN         69       37
-rx_reset_pll_and_datapath    IN         68       36
-gt_reset                     IN         67       35
-mst_resetdone                OUT        66       34
-tx_resetdone                 OUT        65       33
-rx_resetdone                 OUT        64       32
 resetb                       OUT        62       30
 trig_b[1:0]                  OUT        61:60    29:28
 trig_a[1:0]                  OUT        59:58    27:26
