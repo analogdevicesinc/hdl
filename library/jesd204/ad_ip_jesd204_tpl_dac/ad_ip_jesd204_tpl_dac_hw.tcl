@@ -248,7 +248,7 @@ ad_ip_parameter XBAR_ENABLE boolean 0 true [list \
 
 # axi4 slave
 
-ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
+ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 13
 
 # core clock and start of frame
 
