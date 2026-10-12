@@ -75,7 +75,22 @@ source ../../../projects/scripts/adi_board.tcl
 #                 not read
 #   FSRC_ACCUM_WIDTH : Width of the FSRC rate accumulator, which sets the
 #                 granularity of the achievable ratio
+#   XCVR_RX_LANE_RATES / XCVR_TX_LANE_RATES : optional lists of up to 8 lane
+#     rates [Gbps] built into the transceiver for run-time switching; the first
+#     entry must equal RX_LANE_RATE / TX_LANE_RATE. All rates share REF_CLK_RATE.
 #
+
+global xcvr_config_paths
+
+# The quads of link 0 (GTYP_201) and link 1 (GTYP_200, below it) are not in the
+# order the Transceivers Wizard chains quads: each is configured on its own.
+set xcvr_config_paths [adi_xcvr_project [list \
+  TRANSCEIVER_TYPE      GTYP \
+  REF_CLK               [get_env_param REF_CLK_RATE        312.5 ] \
+  XCVR_RX_LANE_RATES    [get_env_param XCVR_RX_LANE_RATES  ""    ] \
+  XCVR_TX_LANE_RATES    [get_env_param XCVR_TX_LANE_RATES  ""    ] \
+  NON_CONSECUTIVE_QUADS 1 \
+]]
 
 adi_project ad9084_ebz_vpk180 0 [list \
   JESD_MODE           [get_env_param JESD_MODE       64B66B ] \
@@ -118,7 +133,6 @@ adi_project_files ad9084_ebz_vpk180 [list \
   "system_constr.xdc" \
   "timing_constr.tcl" \
   "../common/versal_hsci_phy.tcl" \
-  "$ad_hdl_dir/library/xilinx/scripts/versal_xcvr_subsystem.tcl" \
   "$ad_hdl_dir/library/common/ad_3w_spi.v" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vpk180/vpk180_system_constr.xdc" ]
