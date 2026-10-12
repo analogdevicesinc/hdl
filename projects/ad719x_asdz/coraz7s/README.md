@@ -32,11 +32,11 @@ make ARDZ_PMOD_N=0
 
 Corresponding device trees:
 
-- [zynq-coraz7s-ad7190.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-coraz7s-ad7190.dts)
-- [zynq-coraz7s-ad7192.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-coraz7s-ad7192.dts)
-- [zynq-coraz7s-ad7193.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-coraz7s-ad7193.dts)
-- [zynq-coraz7s-ad7194.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-coraz7s-ad7194.dts)
-- [zynq-coraz7s-ad7195.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-coraz7s-ad7195.dts)
+- [zynq-coraz7s-ad7190.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7190.dts)
+- [zynq-coraz7s-ad7192.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7192.dts)
+- [zynq-coraz7s-ad7193.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7193.dts)
+- [zynq-coraz7s-ad7194.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7194.dts)
+- [zynq-coraz7s-ad7195.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7195.dts)
 
 #### Configuration using Arduino shield
 

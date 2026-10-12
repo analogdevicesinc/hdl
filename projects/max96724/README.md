@@ -2,7 +2,7 @@
 
 - Evaluation board product page: [MAX96724/F/R EVALUATION KIT](https://www.analog.com/max96724f-bak-evk)
 - System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/max96724/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/max96724/
 - Evaluation board VADJ range: 1.8V - 3.3V
 
 ## Supported parts

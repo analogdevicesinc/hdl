@@ -62,4 +62,4 @@ and start the simulation.
 
 NOTE:
 
-The Software support is still work in progress and can be found here: https://github.com/analogdevicesinc/no-OS/tree/add_lattice_riscvrx_ad738x_fmcz/projects/ad738x_fmcz
+The Software support is still work in progress and can be found here: https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad738x_fmcz

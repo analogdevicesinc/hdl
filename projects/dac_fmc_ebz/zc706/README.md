@@ -17,7 +17,7 @@ If other configurations are desired, then the parameters from the HDL project (s
 
 The overwritable parameters from the environment:
 
-- ADI_DAC_DEVICE: desired device (currently supported: AD9144, AD9154, AD917x); 
+- ADI_DAC_DEVICE: desired device (currently supported: AD9144, AD9154, AD917x);
 - ADI_DAC_MODE: configuration mode of JESD parameters supported by the device (check **common/config.tcl**);
 - M: TX number of converters per link
 - L: TX number of lanes per link
@@ -32,7 +32,7 @@ This specific command is equivalent to running `make` only:
 
 ```
 make ADI_DAC_DEVICE=AD9172 ADI_DAC_MODE=04
-``` 
+```
 
 Corresponding device tree: [zynq-zc706-adv7511-ad9172-fmc-ebz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9172-fmc-ebz.dts)
 
@@ -40,6 +40,6 @@ Corresponding device tree: [zynq-zc706-adv7511-ad9172-fmc-ebz.dts](https://githu
 
 ```
 make ADI_DAC_DEVICE=AD9136 ADI_DAC_MODE=11
-``` 
+```
 
 Corresponding device tree: [zynq-zc706-adv7511-ad9136-fmc-ebz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9136-fmc-ebz.dts)
