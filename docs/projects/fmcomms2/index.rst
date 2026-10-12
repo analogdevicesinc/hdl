@@ -22,7 +22,7 @@ The :adi:`AD9361` and :adi:`AD9364` chips operate in the 70MHz to 6GHz range,
 covering most licensed and unlicensed bands. The boards, due to discrete
 external components may have less performance on some of the RF input/output
 connectors (for example - the :adi:`FMCOMMS2 <EVAL-AD-FMCOMMS2>` and specific
-connectors on the :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>` are specifically tuned
+connectors on the :adi:`FMCOMMS5 <AD-FMCOMMS5-EBZ>` are specifically tuned
 to 2.4GHz). The :adi:`AD9361` and :adi:`AD9364` both supports channel
 bandwidths from less than 200kHz to 56MHz by both changing sample rate, and by
 changing digital filters, and decimation inside the device itself.
@@ -36,14 +36,14 @@ Supported boards
 -------------------------------------------------------------------------------
 
 - :adi:`FMCOMMS2 <EVAL-AD-FMCOMMS2>`
-- :adi:`FMCOMMS3 <EVAL-AD-FMCOMMS3>`
+- :adi:`FMCOMMS3 <AD-FMCOMMS3-EBZ>`
 - :adi:`FMCOMMS4 <EVAL-AD-FMCOMMS4-EBZ>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 - :adi:`AD9361`, in :adi:`FMCOMMS2 <EVAL-AD-FMCOMMS2>`,
-  :adi:`FMCOMMS3 <EVAL-AD-FMCOMMS3>`
+  :adi:`FMCOMMS3 <AD-FMCOMMS3-EBZ>`
 - :adi:`AD9364`, in :adi:`FMCOMMS4 <EVAL-AD-FMCOMMS4-EBZ>`
 
 Supported carriers

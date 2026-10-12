@@ -25,7 +25,7 @@ for capturing continuous samples at the maximum sample rate.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD4170-ASDZ`
+- :adi:`EVAL-AD4170-4ARDZ`
 - EVAL-AD4190-ARDZ
 
 Supported devices
