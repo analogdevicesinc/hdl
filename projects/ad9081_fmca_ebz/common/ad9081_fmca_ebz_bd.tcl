@@ -49,9 +49,6 @@
 #         RX : RX only
 #         Tx : TX only
 
-if {![info exists ADI_PHY_SEL]} {
-  set ADI_PHY_SEL 1
-}
 
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
@@ -60,14 +57,6 @@ source $ad_hdl_dir/library/xilinx/scripts/xcvr_automation.tcl
 
 if {![info exists INTF_CFG]} {
   set INTF_CFG RXTX
-}
-
-if {![info exists TRANSCEIVER_TYPE]} {
-  set TRANSCEIVER_TYPE GTY
-}
-
-if {![info exists EXTERNAL_LINK_CLK]} {
-  set EXTERNAL_LINK_CLK 0
 }
 
 # Common parameter for TX and RX
@@ -165,10 +154,6 @@ set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8 * $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
-# TODO: Increase the maximum number of quads if necessary
-set max_num_quads 2
-set num_quads [expr int(ceil(1.0 * $RX_NUM_OF_LANES / 4))]
-
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 set adc_data_offload_name mxfe_rx_data_offload
@@ -186,130 +171,46 @@ create_bd_port -dir I ref_clk_q0
 create_bd_port -dir I ref_clk_q1
 create_bd_port -dir I tx_device_clk
 create_bd_port -dir I rx_device_clk
-if {!$ADI_PHY_SEL} {
-  create_bd_port -dir I rx_sysref_0
-  create_bd_port -dir I tx_sysref_0
-  create_bd_port -dir O rx_sync_0
-  create_bd_port -dir I tx_sync_0
-  create_bd_port -dir I rx_usrclk_in
-  create_bd_port -dir I tx_usrclk_in
-}
 
 # common xcvr
 
 global xcvr_config_paths
 
-if {$ADI_PHY_SEL == 1} {
-  switch $INTF_CFG {
-    "RXTX" {
-    }
-    "RX" {
-      # Rx only
-      set TX_NUM_OF_LANES 0
-      set TX_LANE_RATE 0
-    }
-    "TX" {
-      # Tx only
-      set RX_NUM_OF_LANES 0
-      set RX_LANE_RATE 0
-    }
+switch $INTF_CFG {
+  "RXTX" {
   }
-
-  set util_adxcvr_parameters [adi_xcvr_parameters $xcvr_config_paths [list \
-    RX_NUM_OF_LANES $RX_NUM_OF_LANES\
-    TX_NUM_OF_LANES $TX_NUM_OF_LANES\
-    RX_LANE_RATE $RX_LANE_RATE\
-    TX_LANE_RATE $TX_LANE_RATE\
-    LINK_MODE $ENCODER_SEL\
-  ]]
-  ad_ip_instance util_adxcvr util_mxfe_xcvr $util_adxcvr_parameters
-} else {
-  source $ad_hdl_dir/library/xilinx/scripts/versal_xcvr_subsystem.tcl
-
-  set REF_CLK_RATE [ expr { [info exists ad_project_params(REF_CLK_RATE)] \
-                            ? $ad_project_params(REF_CLK_RATE) : 375 } ]
-
-  create_bd_port -dir I gt_reset
-  create_bd_port -dir I gt_reset_rx_pll_and_datapath
-  create_bd_port -dir I gt_reset_tx_pll_and_datapath
-  create_bd_port -dir I gt_reset_rx_datapath
-  create_bd_port -dir I gt_reset_tx_datapath
-  create_bd_port -dir O gt_powergood
-  create_bd_port -dir O rx_resetdone
-  create_bd_port -dir O tx_resetdone
-
-  switch $INTF_CFG {
-    "RXTX" {
-      create_versal_jesd_xcvr_subsystem jesd204_phy_rxtx $JESD_MODE $RX_NUM_OF_LANES $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG true $EXTERNAL_LINK_CLK
-      set rx_phy jesd204_phy_rxtx
-      set tx_phy jesd204_phy_rxtx
-      ad_connect ref_clk_q0      ${rx_phy}/GT_REFCLK
-      ad_connect gt_reset        ${rx_phy}/gtreset_in
-      ad_connect $sys_cpu_clk    ${rx_phy}/s_axi_clk
-      ad_connect $sys_cpu_resetn ${rx_phy}/s_axi_resetn
-      ad_connect ${rx_phy}/gtpowergood gt_powergood
-      ad_connect ${rx_phy}/gtreset_rx_datapath gt_reset_rx_datapath
-      ad_connect ${rx_phy}/gtreset_tx_datapath gt_reset_tx_datapath
-      ad_connect ${rx_phy}/gtreset_rx_pll_and_datapath gt_reset_rx_pll_and_datapath
-      ad_connect ${rx_phy}/gtreset_tx_pll_and_datapath gt_reset_tx_pll_and_datapath
-      ad_connect ${rx_phy}/rx_resetdone rx_resetdone
-      ad_connect ${rx_phy}/tx_resetdone tx_resetdone
-      if {$EXTERNAL_LINK_CLK && $JESD_MODE == "64B66B"} {
-        ad_connect rx_usrclk_in     ${rx_phy}/rx_usrclk_in
-        ad_connect tx_usrclk_in     ${tx_phy}/tx_usrclk_in
-      }
-    }
-    "RX" {
-      create_versal_jesd_xcvr_subsystem jesd204_phy_rx $JESD_MODE $RX_NUM_OF_LANES 0 $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG true $EXTERNAL_LINK_CLK
-      set rx_phy jesd204_phy_rx
-      ad_connect ref_clk_q0      ${rx_phy}/GT_REFCLK
-      ad_connect gt_reset        ${rx_phy}/gtreset_in
-      ad_connect $sys_cpu_clk    ${rx_phy}/s_axi_clk
-      ad_connect $sys_cpu_resetn ${rx_phy}/s_axi_resetn
-      ad_connect ${rx_phy}/gtpowergood gt_powergood
-      ad_connect ${rx_phy}/gtreset_rx_datapath gt_reset_rx_datapath
-      ad_connect ${rx_phy}/gtreset_rx_pll_and_datapath gt_reset_rx_pll_and_datapath
-      ad_connect ${rx_phy}/rx_resetdone rx_resetdone
-      if {$EXTERNAL_LINK_CLK && $JESD_MODE == "64B66B"} {
-        ad_connect rx_usrclk_in     ${rx_phy}/rx_usrclk_in
-      }
-    }
-    "TX" {
-      create_versal_jesd_xcvr_subsystem jesd204_phy_tx $JESD_MODE 0 $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG true $EXTERNAL_LINK_CLK
-      set tx_phy jesd204_phy_tx
-      ad_connect ref_clk_q0      ${tx_phy}/GT_REFCLK
-      ad_connect gt_reset        ${tx_phy}/gtreset_in
-      ad_connect $sys_cpu_clk    ${tx_phy}/s_axi_clk
-      ad_connect $sys_cpu_resetn ${tx_phy}/s_axi_resetn
-      ad_connect ${tx_phy}/gtpowergood gt_powergood
-      ad_connect ${tx_phy}/gtreset_tx_datapath gt_reset_tx_datapath
-      ad_connect ${tx_phy}/gtreset_tx_pll_and_datapath gt_reset_tx_pll_and_datapath
-      ad_connect ${tx_phy}/tx_resetdone tx_resetdone
-      if {$EXTERNAL_LINK_CLK && $JESD_MODE == "64B66B"} {
-        ad_connect tx_usrclk_in     ${tx_phy}/tx_usrclk_in
-      }
-    }
+  "RX" {
+    # Rx only
+    set TX_NUM_OF_LANES 0
+    set TX_LANE_RATE 0
+  }
+  "TX" {
+    # Tx only
+    set RX_NUM_OF_LANES 0
+    set RX_LANE_RATE 0
   }
 }
 
+set util_adxcvr_parameters [adi_xcvr_parameters $xcvr_config_paths [list \
+  RX_NUM_OF_LANES $RX_NUM_OF_LANES\
+  TX_NUM_OF_LANES $TX_NUM_OF_LANES\
+  RX_LANE_RATE $RX_LANE_RATE\
+  TX_LANE_RATE $TX_LANE_RATE\
+  LINK_MODE $ENCODER_SEL\
+]]
+ad_ip_instance util_adxcvr util_mxfe_xcvr $util_adxcvr_parameters
+
 # Instantiate ADC (Rx) path
 if {$INTF_CFG != "TX"} {
-  if {$ADI_PHY_SEL == 1} {
-    ad_ip_instance axi_adxcvr axi_mxfe_rx_xcvr
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.ID 0
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.TX_OR_RX_N 0
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.QPLL_ENABLE 0
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.LPM_OR_DFE_N 1
-    ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
-  }
-  if {$ADI_PHY_SEL == 0} {
-    # reset generator
-    ad_ip_instance proc_sys_reset rx_device_clk_rstgen
-    ad_connect  rx_device_clk rx_device_clk_rstgen/slowest_sync_clk
-    ad_connect  $sys_cpu_resetn rx_device_clk_rstgen/ext_reset_in
-  }
+  ad_ip_instance axi_adxcvr axi_mxfe_rx_xcvr
+  ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.ID 0
+  ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+  ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
+  ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.TX_OR_RX_N 0
+  ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.QPLL_ENABLE 0
+  ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.LPM_OR_DFE_N 1
+  ad_ip_parameter axi_mxfe_rx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
+
 
   adi_axi_jesd204_rx_create axi_mxfe_rx_jesd $RX_NUM_OF_LANES $RX_NUM_LINKS $ENCODER_SEL
   ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH $RX_DATAPATH_WIDTH
@@ -352,31 +253,20 @@ if {$INTF_CFG != "TX"} {
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.CYCLIC 0
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
-  if {$ADI_PHY_SEL} {
-    ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_dma_data_width
-  } else {
-    ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_dma_data_width)]
-  }
+  ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [ad_mem_cap_data_width $adc_dma_data_width]
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 }
 
 # Instantiate DAC (Tx) path
 if {$INTF_CFG != "RX"} {
-  if {$ADI_PHY_SEL == 1} {
-    ad_ip_instance axi_adxcvr axi_mxfe_tx_xcvr
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.ID 0
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.TX_OR_RX_N 1
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.QPLL_ENABLE 1
-    ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
-  }
-  if {$ADI_PHY_SEL == 0} {
-    # reset generator
-    ad_ip_instance proc_sys_reset tx_device_clk_rstgen
-    ad_connect  tx_device_clk tx_device_clk_rstgen/slowest_sync_clk
-    ad_connect  $sys_cpu_resetn tx_device_clk_rstgen/ext_reset_in
-  }
+  ad_ip_instance axi_adxcvr axi_mxfe_tx_xcvr
+  ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.ID 0
+  ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+  ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
+  ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.TX_OR_RX_N 1
+  ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.QPLL_ENABLE 1
+  ad_ip_parameter axi_mxfe_tx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
+
 
   adi_axi_jesd204_tx_create axi_mxfe_tx_jesd $TX_NUM_OF_LANES $TX_NUM_LINKS $ENCODER_SEL
   ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.TPL_DATA_PATH_WIDTH $TX_DATAPATH_WIDTH
@@ -420,64 +310,28 @@ if {$INTF_CFG != "RX"} {
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_2D_TRANSFER 0
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.CYCLIC 1
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
-  if {$ADI_PHY_SEL} {
-    ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_dma_data_width
-  } else {
-    ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(512, $dac_dma_data_width)]
-  }
+  ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [ad_mem_cap_data_width $dac_dma_data_width]
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 }
 
-if {$ADI_PHY_SEL == 1} {
-  for {set i 0} {$i < [expr max($TX_NUM_OF_LANES,$RX_NUM_OF_LANES)]} {incr i} {
-    set quad_index [expr int($i / 4)]
-    ad_xcvrpll  ref_clk_q$quad_index  util_mxfe_xcvr/cpll_ref_clk_$i
-    if {[expr $i % 4] == 0} {
-      ad_xcvrpll  ref_clk_q$quad_index  util_mxfe_xcvr/qpll_ref_clk_$i
-    }
+for {set i 0} {$i < [expr max($TX_NUM_OF_LANES,$RX_NUM_OF_LANES)]} {incr i} {
+  set quad_index [expr int($i / 4)]
+  ad_xcvrpll  ref_clk_q$quad_index  util_mxfe_xcvr/cpll_ref_clk_$i
+  if {[expr $i % 4] == 0} {
+    ad_xcvrpll  ref_clk_q$quad_index  util_mxfe_xcvr/qpll_ref_clk_$i
   }
-  ad_connect  $sys_cpu_resetn util_mxfe_xcvr/up_rstn
-  ad_connect  $sys_cpu_clk util_mxfe_xcvr/up_clk
+}
+ad_connect  $sys_cpu_resetn util_mxfe_xcvr/up_rstn
+ad_connect  $sys_cpu_clk util_mxfe_xcvr/up_clk
 
-  if {$INTF_CFG != "TX"} {
-    ad_xcvrpll  axi_mxfe_rx_xcvr/up_pll_rst util_mxfe_xcvr/up_cpll_rst_*
-    ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd {} {} rx_device_clk
-  }
-  if {$INTF_CFG != "RX"} {
-    ad_xcvrpll  axi_mxfe_tx_xcvr/up_pll_rst util_mxfe_xcvr/up_qpll_rst_*
-    ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd {} {} tx_device_clk
-  }
-} else {
-  if {$INTF_CFG != "TX"} {
-    set rx_link_clock  ${rx_phy}/rxusrclk_out
-    # Connect PHY to Link Layer
-    for {set j 0}  {$j < $RX_NUM_OF_LANES} {incr j} {
-      ad_connect  axi_mxfe_rx_jesd/rx_phy${j} ${rx_phy}/rx${j}
-    }
-    ad_connect  $rx_link_clock /axi_mxfe_rx_jesd/link_clk
-    ad_connect  rx_device_clk /axi_mxfe_rx_jesd/device_clk
-
-
-    ad_connect axi_mxfe_rx_jesd/sysref rx_sysref_0
-    if {$JESD_MODE == "8B10B"} {
-      ad_connect axi_mxfe_rx_jesd/phy_en_char_align ${rx_phy}/en_char_align
-      ad_connect axi_mxfe_rx_jesd/sync rx_sync_0
-    }
-  }
-  if {$INTF_CFG != "RX"} {
-    set tx_link_clock  ${tx_phy}/txusrclk_out
-    # Connect PHY to Link Layer
-    for {set j 0}  {$j < $TX_NUM_OF_LANES} {incr j} {
-      ad_connect  axi_mxfe_tx_jesd/tx_phy${j} ${tx_phy}/tx${j}
-    }
-    ad_connect  $tx_link_clock /axi_mxfe_tx_jesd/link_clk
-    ad_connect  tx_device_clk /axi_mxfe_tx_jesd/device_clk
-    ad_connect axi_mxfe_tx_jesd/sysref tx_sysref_0
-    if {$JESD_MODE == "8B10B"} {
-      ad_connect axi_mxfe_tx_jesd/sync tx_sync_0
-    }
-  }
+if {$INTF_CFG != "TX"} {
+  ad_xcvrpll  axi_mxfe_rx_xcvr/up_pll_rst util_mxfe_xcvr/up_cpll_rst_*
+  ad_xcvrcon  util_mxfe_xcvr axi_mxfe_rx_xcvr axi_mxfe_rx_jesd {} {} rx_device_clk
+}
+if {$INTF_CFG != "RX"} {
+  ad_xcvrpll  axi_mxfe_tx_xcvr/up_pll_rst util_mxfe_xcvr/up_qpll_rst_*
+  ad_xcvrcon  util_mxfe_xcvr axi_mxfe_tx_xcvr axi_mxfe_tx_jesd {} {} tx_device_clk
 }
 
 if {$INTF_CFG != "TX"} {
@@ -520,17 +374,15 @@ if {$INTF_CFG != "TX"} {
 
   # Interconnect
   # CPU
-  if {$ADI_PHY_SEL == 1} {
-    ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
-  }
+  ad_cpu_interconnect 0x44a60000 axi_mxfe_rx_xcvr
+
   ad_cpu_interconnect 0x44a10000 rx_mxfe_tpl_core
   ad_cpu_interconnect 0x44a90000 axi_mxfe_rx_jesd
   ad_cpu_interconnect 0x7c420000 axi_mxfe_rx_dma
   ad_cpu_interconnect 0x7c450000 $adc_data_offload_name
   # GT / ADC
-  if {$ADI_PHY_SEL == 1} {
-    ad_mem_hp0_interconnect $sys_cpu_clk axi_mxfe_rx_xcvr/m_axi
-  }
+  ad_mem_hp0_interconnect $sys_cpu_clk axi_mxfe_rx_xcvr/m_axi
+
   if {$CACHE_COHERENCY} {
     ad_mem_hpc0_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC0
     ad_mem_hpc0_interconnect $sys_dma_clk axi_mxfe_rx_dma/m_dest_axi
@@ -577,10 +429,9 @@ if {$INTF_CFG != "RX"} {
   ad_connect tx_mxfe_tpl_core/dac_dunf GND
 
   # Interconnect
-  if {$ADI_PHY_SEL == 1} {
-    # CPU
-    ad_cpu_interconnect 0x44b60000 axi_mxfe_tx_xcvr
-  }
+  # CPU
+  ad_cpu_interconnect 0x44b60000 axi_mxfe_tx_xcvr
+
   # CPU
   ad_cpu_interconnect 0x44b10000 tx_mxfe_tpl_core
   ad_cpu_interconnect 0x44b90000 axi_mxfe_tx_jesd
@@ -600,61 +451,19 @@ if {$INTF_CFG != "RX"} {
   ad_cpu_interrupt ps-10 mb-15 axi_mxfe_tx_jesd/irq
 }
 
-# Connect PHY Quads to CPU
-if {!$ADI_PHY_SEL} {
-  for {set i 0} {$i < $num_quads} {incr i} {
-    set addr [expr 0x44040000 + $i * 0x40000]
-    if {$INTF_CFG == "RXTX"} {
-      ad_cpu_interconnect $addr $rx_phy s_axi_${i}
-    } elseif {$INTF_CFG == "RX"} {
-      ad_cpu_interconnect $addr $rx_phy s_axi_${i}
-    } elseif {$INTF_CFG == "TX"} {
-      ad_cpu_interconnect $addr $rx_phy s_axi_${i}
-    }
+# Dummy outputs for unused lanes
+if {$INTF_CFG != "TX"} {
+  # Unused Rx lanes
+  for {set i $RX_NUM_OF_LANES} {$i < 8} {incr i} {
+    create_bd_port -dir I rx_data_${i}_n
+    create_bd_port -dir I rx_data_${i}_p
   }
 }
-
-# Dummy outputs for unused lanes
-if {$ADI_PHY_SEL == 1} {
-  if {$INTF_CFG != "TX"} {
-    # Unused Rx lanes
-    for {set i $RX_NUM_OF_LANES} {$i < 8} {incr i} {
-      create_bd_port -dir I rx_data_${i}_n
-      create_bd_port -dir I rx_data_${i}_p
-    }
-  }
-  if {$INTF_CFG != "RX"} {
-    # Unused Tx lanes
-    for {set i $TX_NUM_OF_LANES} {$i < 8} {incr i} {
-      create_bd_port -dir O tx_data_${i}_n
-      create_bd_port -dir O tx_data_${i}_p
-    }
-  }
-} else {
-  for {set j 0} {$j < $num_quads} {incr j} {
-    if {$INTF_CFG != "TX"} {
-      create_bd_port -dir I -from 3 -to 0 rx_${j}_p
-      create_bd_port -dir I -from 3 -to 0 rx_${j}_n
-      ad_connect rx_${j}_p ${rx_phy}/rx_${j}_p
-      ad_connect rx_${j}_n ${rx_phy}/rx_${j}_n
-    }
-    if {$INTF_CFG != "RX"} {
-      create_bd_port -dir O -from 3 -to 0 tx_${j}_p
-      create_bd_port -dir O -from 3 -to 0 tx_${j}_n
-      ad_connect tx_${j}_p ${rx_phy}/tx_${j}_p
-      ad_connect tx_${j}_n ${rx_phy}/tx_${j}_n
-    }
-  }
-  # Unused serial lanes
-  for {set j $num_quads} {$j < $max_num_quads} {incr j} {
-    if {$INTF_CFG != "TX"} {
-      create_bd_port -dir I -from 3 -to 0 rx_${j}_p
-      create_bd_port -dir I -from 3 -to 0 rx_${j}_n
-    }
-    if {$INTF_CFG != "RX"} {
-      create_bd_port -dir O -from 3 -to 0 tx_${j}_p
-      create_bd_port -dir O -from 3 -to 0 tx_${j}_n
-    }
+if {$INTF_CFG != "RX"} {
+  # Unused Tx lanes
+  for {set i $TX_NUM_OF_LANES} {$i < 8} {incr i} {
+    create_bd_port -dir O tx_data_${i}_n
+    create_bd_port -dir O tx_data_${i}_p
   }
 }
 
