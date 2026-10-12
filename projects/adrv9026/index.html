@@ -9,12 +9,12 @@
     <title>ADRV9026 HDL reference design &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=b1d7a81a" />
-    <script async="async" src="../../_static/app.umd.js?v=daa30c51"></script>
+    <script async="async" src="../../_static/app.umd.js?v=048c1170"></script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex/" />
     <link rel="search" title="Search" href="../../search/" />
-    <link rel="next" title="ADRV903x HDL reference design" href="../adrv903x/" />
+    <link rel="next" title="ADRV903X HDL reference design" href="../adrv903x/" />
     <link rel="prev" title="ADRV9009ZU11EG HDL reference design" href="../adrv9009zu11eg/" />
    
   
@@ -118,6 +118,7 @@
 <li><a class="reference internal" href="#gpios">GPIOs</a><ul>
 <li><a class="reference internal" href="#zcu102">ZCU102</a></li>
 <li><a class="reference internal" href="#vcu118">VCU118</a></li>
+<li><a class="reference internal" href="#a10soc">A10SoC</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
@@ -257,13 +258,13 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad35xxr/">AXI AD35XXR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/">AXI AD408x</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/">AXI AD408X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/">AXI AD485X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7405/">AXI AD7405</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/">AXI AD7606X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/">AXI AD7616</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7768/">AXI AD7768</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad777x/">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad777x/">AXI AD777X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/">AXI AD9265</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../library/axi_ad9361/">AXI AD9361</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../library/axi_ad9361/tdd_support/">TDD Mode Support</a></li>
@@ -340,7 +341,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad4062_ardz/">AD4062-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4080_fmc_evb/">AD4080-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4110/">AD4110-SDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/">AD411x-AD717x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/">AD411X-AD717X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4170_asdz/">AD4170-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/">AD4630-FMC</a></li>
@@ -367,7 +368,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz_x_band/">AD9081-FMCA-EBZ-X-BAND</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9083_evb/">AD9083-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9084_ebz/">AD9084-EBZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad916x_fmc/">AD916x-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad916x_fmc/">AD916X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9208_dual_ebz/">AD9208-DUAL-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9209_fmca_ebz/">AD9209-FMCA-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9213_dual_ebz/">AD9213-DUAL-EBZ</a></li>
@@ -392,11 +393,11 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009/">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009zu11eg/">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">ADRV9026</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../adrv903x/">ADRV903x</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../adrv904x/">ADRV904x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv903x/">ADRV903X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv904x/">ADRV904X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9361z7035/">ADRV9361Z7035</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9364z7020/">ADRV9364Z7020</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../adrv9371x/">ADRV9371x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9371x/">ADRV9371X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adv7511/">ADV7511</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adv7513/">ADV7513</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../arradio/">ARRADIO</a></li>
@@ -1055,120 +1056,111 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 <section id="gpios">
 <h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
+<p>To know how the Software GPIO numbers are calculated, check out
+<a class="reference internal" href="../../user_guide/architecture/#architecture-gpio"><span class="std std-ref">GPIOs - HDL Architecture page</span></a>.</p>
 <section id="zcu102">
 <h4>ZCU102<a class="headerlink" href="#zcu102" title="Link to this heading"></a></h4>
-<div class="table-wrapper colwidths-given docutils container">
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 31.2%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 18.8%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
 <th class="head"><p>Direction</p></th>
-<th class="head"><p>HDL GPIO EMIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
-</tr>
-<tr class="row-even"><th class="head"></th>
-<th class="head"><p>(from FPGA view)</p></th>
-<th class="head"></th>
-<th class="head"><p>Zynq MP</p></th>
+<th class="head"><p>HDL no.</p></th>
+<th class="head"><p>Zynq UltraScale+ MP</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>ad9528_reset_b</p></td>
+<tr class="row-even"><td><p>ad9528_reset_b</p></td>
 <td><p>INOUT</p></td>
 <td><p>68</p></td>
 <td><p>146</p></td>
 </tr>
-<tr class="row-even"><td><p>ad9528_sysref_req</p></td>
+<tr class="row-odd"><td><p>ad9528_sysref_req</p></td>
 <td><p>INOUT</p></td>
 <td><p>67</p></td>
 <td><p>145</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_tx1_enable</p></td>
+<tr class="row-even"><td><p>adrv9026_tx1_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>66</p></td>
 <td><p>144</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_tx2_enable</p></td>
+<tr class="row-odd"><td><p>adrv9026_tx2_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>65</p></td>
 <td><p>143</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_tx3_enable</p></td>
+<tr class="row-even"><td><p>adrv9026_tx3_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>64</p></td>
 <td><p>142</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_tx4_enable</p></td>
+<tr class="row-odd"><td><p>adrv9026_tx4_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>63</p></td>
 <td><p>141</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_rx1_enable</p></td>
+<tr class="row-even"><td><p>adrv9026_rx1_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>62</p></td>
 <td><p>140</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_rx2_enable</p></td>
+<tr class="row-odd"><td><p>adrv9026_rx2_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>61</p></td>
 <td><p>139</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_rx3_enable</p></td>
+<tr class="row-even"><td><p>adrv9026_rx3_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>60</p></td>
 <td><p>138</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_rx4_enable</p></td>
+<tr class="row-odd"><td><p>adrv9026_rx4_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>59</p></td>
 <td><p>137</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_test</p></td>
+<tr class="row-even"><td><p>adrv9026_test</p></td>
 <td><p>INOUT</p></td>
 <td><p>58</p></td>
 <td><p>136</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_reset_b</p></td>
+<tr class="row-odd"><td><p>adrv9026_reset_b</p></td>
 <td><p>INOUT</p></td>
 <td><p>57</p></td>
 <td><p>135</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_gpint1</p></td>
+<tr class="row-even"><td><p>adrv9026_gpint1</p></td>
 <td><p>INOUT</p></td>
 <td><p>56</p></td>
 <td><p>134</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_gpint2</p></td>
+<tr class="row-odd"><td><p>adrv9026_gpint2</p></td>
 <td><p>INOUT</p></td>
 <td><p>55</p></td>
 <td><p>133</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_orx_ctrl_a</p></td>
+<tr class="row-even"><td><p>adrv9026_orx_ctrl_a</p></td>
 <td><p>INOUT</p></td>
 <td><p>54</p></td>
 <td><p>132</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_orx_ctrl_b</p></td>
+<tr class="row-odd"><td><p>adrv9026_orx_ctrl_b</p></td>
 <td><p>INOUT</p></td>
 <td><p>53</p></td>
 <td><p>131</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_orx_ctrl_c</p></td>
+<tr class="row-even"><td><p>adrv9026_orx_ctrl_c</p></td>
 <td><p>INOUT</p></td>
 <td><p>52</p></td>
 <td><p>130</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_orx_ctrl_d</p></td>
+<tr class="row-odd"><td><p>adrv9026_orx_ctrl_d</p></td>
 <td><p>INOUT</p></td>
 <td><p>51</p></td>
 <td><p>129</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_gpio[0:18]</p></td>
+<tr class="row-even"><td><p>adrv9026_gpio_{00:18}</p></td>
 <td><p>INOUT</p></td>
 <td><p>50:32</p></td>
 <td><p>128:110</p></td>
@@ -1179,124 +1171,194 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 <section id="vcu118">
 <h4>VCU118<a class="headerlink" href="#vcu118" title="Link to this heading"></a></h4>
-<div class="table-wrapper colwidths-given docutils container">
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 31.2%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 18.8%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
 <th class="head"><p>Direction</p></th>
-<th class="head"><p>HDL GPIO EMIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
-</tr>
-<tr class="row-even"><th class="head"></th>
-<th class="head"><p>(from FPGA view)</p></th>
-<th class="head"></th>
+<th class="head"><p>HDL no.</p></th>
 <th class="head"><p>Microblaze</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>ad9528_reset_b</p></td>
-<td><p>INOUT</p></td>
-<td><p>62</p></td>
-<td><p>62</p></td>
-</tr>
 <tr class="row-even"><td><p>ad9528_reset_b</p></td>
 <td><p>INOUT</p></td>
+<td><p>62</p></td>
+<td><p>62</p></td>
+</tr>
+<tr class="row-odd"><td><p>ad9528_sysref_req</p></td>
+<td><p>INOUT</p></td>
 <td><p>61</p></td>
 <td><p>61</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_tx1_enable</p></td>
+<tr class="row-even"><td><p>adrv9026_tx1_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>60</p></td>
 <td><p>60</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_tx2_enable</p></td>
+<tr class="row-odd"><td><p>adrv9026_tx2_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>59</p></td>
 <td><p>59</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_tx3_enable</p></td>
+<tr class="row-even"><td><p>adrv9026_tx3_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>58</p></td>
 <td><p>58</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_tx4_enable</p></td>
+<tr class="row-odd"><td><p>adrv9026_tx4_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>57</p></td>
 <td><p>57</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_rx1_enable</p></td>
+<tr class="row-even"><td><p>adrv9026_rx1_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>56</p></td>
 <td><p>56</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_rx2_enable</p></td>
+<tr class="row-odd"><td><p>adrv9026_rx2_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>55</p></td>
 <td><p>55</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_rx3_enable</p></td>
+<tr class="row-even"><td><p>adrv9026_rx3_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>54</p></td>
 <td><p>54</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_rx4_enable</p></td>
+<tr class="row-odd"><td><p>adrv9026_rx4_enable</p></td>
 <td><p>INOUT</p></td>
 <td><p>53</p></td>
 <td><p>53</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_test</p></td>
+<tr class="row-even"><td><p>adrv9026_test</p></td>
 <td><p>INOUT</p></td>
 <td><p>52</p></td>
 <td><p>52</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_reset_b</p></td>
+<tr class="row-odd"><td><p>adrv9026_reset_b</p></td>
 <td><p>INOUT</p></td>
 <td><p>51</p></td>
 <td><p>51</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_gpint1</p></td>
+<tr class="row-even"><td><p>adrv9026_gpint1</p></td>
 <td><p>INOUT</p></td>
 <td><p>50</p></td>
 <td><p>50</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_gpint2</p></td>
+<tr class="row-odd"><td><p>adrv9026_gpint2</p></td>
 <td><p>INOUT</p></td>
 <td><p>49</p></td>
 <td><p>49</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_orx_ctrl_a</p></td>
+<tr class="row-even"><td><p>adrv9026_orx_ctrl_a</p></td>
 <td><p>INOUT</p></td>
 <td><p>48</p></td>
 <td><p>48</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_orx_ctrl_b</p></td>
+<tr class="row-odd"><td><p>adrv9026_orx_ctrl_b</p></td>
 <td><p>INOUT</p></td>
 <td><p>47</p></td>
 <td><p>47</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_orx_ctrl_c</p></td>
+<tr class="row-even"><td><p>adrv9026_orx_ctrl_c</p></td>
 <td><p>INOUT</p></td>
 <td><p>46</p></td>
 <td><p>46</p></td>
 </tr>
-<tr class="row-even"><td><p>adrv9026_orx_ctrl_d</p></td>
+<tr class="row-odd"><td><p>adrv9026_orx_ctrl_d</p></td>
 <td><p>INOUT</p></td>
 <td><p>45</p></td>
 <td><p>45</p></td>
 </tr>
-<tr class="row-odd"><td><p>adrv9026_gpio[0:18]</p></td>
+<tr class="row-even"><td><p>adrv9026_gpio_{00:18}</p></td>
 <td><p>INOUT</p></td>
 <td><p>44:26</p></td>
 <td><p>44:26</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+</section>
+<section id="a10soc">
+<h4>A10SoC<a class="headerlink" href="#a10soc" title="Link to this heading"></a></h4>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL no.</p></th>
+<th class="head"><p>A10SoC</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ad9528_reset_b</p></td>
+<td><p>INOUT</p></td>
+<td><p>59</p></td>
+<td><p>27</p></td>
+</tr>
+<tr class="row-odd"><td><p>ad9528_sysref_req</p></td>
+<td><p>INOUT</p></td>
+<td><p>58</p></td>
+<td><p>26</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_tx1_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>57</p></td>
+<td><p>25</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_tx2_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>56</p></td>
+<td><p>24</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_rx1_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>55</p></td>
+<td><p>23</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_rx2_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>54</p></td>
+<td><p>22</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_test</p></td>
+<td><p>INOUT</p></td>
+<td><p>53</p></td>
+<td><p>21</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_reset_b</p></td>
+<td><p>INOUT</p></td>
+<td><p>52</p></td>
+<td><p>20</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_gpint1</p></td>
+<td><p>INOUT</p></td>
+<td><p>51</p></td>
+<td><p>19</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_gpint2</p></td>
+<td><p>INOUT</p></td>
+<td><p>50</p></td>
+<td><p>18</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_gpio[18:0]</p></td>
+<td><p>INOUT</p></td>
+<td><p>49:32</p></td>
+<td><p>17:0?</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p>GPIO signal = name of the GPIO in the HDL project</p></li>
+<li><p>Direction = from the FPGA point of view</p></li>
+<li><p>HDL no. = HDL GPIO EMIO range</p></li>
+<li><p>Zynq UltraScale+ MP, Microblaze, A10SoC = Software GPIOs to be used in
+device trees</p></li>
+</ul>
 </div>
 </section>
 </section>
@@ -1806,7 +1868,7 @@ are, the lower the chances to receive support from <a class="icon link reference
               <div class="related">
                 &nbsp;
     <a href="../adrv9009zu11eg/" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADRV9009ZU11EG HDL reference design</a>
-    <a href="../adrv903x/" title="Next document (Alt+Shift+RightArrow)" class="next">ADRV903x HDL reference design</a>
+    <a href="../adrv903x/" title="Next document (Alt+Shift+RightArrow)" class="next">ADRV903X HDL reference design</a>
               </div>
           
         </div>

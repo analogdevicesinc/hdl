@@ -1,6 +1,6 @@
 .. _ad411x_ad717x:
 
-AD411x-AD717x HDL project
+AD411X-AD717X HDL project
 ==================================================================================
 
 The :adi:`AD4111` /:adi:`AD4112` /:adi:`AD4114` /:adi:`AD4115`/ :adi:`AD4116` is
@@ -33,7 +33,7 @@ can select different filter settings depending on the requirements of
 each channel in the application.
 
 This project has a :ref:`spi_engine` instance to control and acquire data from
-the AD411x/AD717x precision ADC. This instance provides support for
+the AD411X/AD717X precision ADC. This instance provides support for
 capturing continuous samples at the maximum sample rate.
 
 Supported boards
@@ -79,7 +79,7 @@ The data path and clock domains are depicted in the below diagram:
 .. image:: ad411x_ad717x_hdl.svg
    :width: 800
    :align: center
-   :alt: AD411x_ad717x block diagram
+   :alt: AD411X_AD717X block diagram
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -132,34 +132,24 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-- DE10-Nano: the offset is 32
+===========  =========  =======  =========
+GPIO signal  Direction  HDL no.  DE10-Nano
+===========  =========  =======  =========
+spi_miso     IN         34       2
+error        IN         33       1
+sync_error   IN         32       0
+===========  =========  =======  =========
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+.. admonition:: Legend
+   :class: note
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - DE10-Nano
-   * - spi_miso
-     - INPUT
-     - 34
-     - 2
-   * - error
-     - INPUT
-     - 33
-     - 1
-   * - sync_error
-     - INPUT
-     - 32
-     - 0
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - DE10-Nano is Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -218,7 +208,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD411x_AD717x HDL project source code <projects/ad411x_ad717x>`
+- :git-hdl:`AD411X_AD717X HDL project source code <projects/ad411x_ad717x>`
 
 .. list-table::
    :widths: 30 35 35

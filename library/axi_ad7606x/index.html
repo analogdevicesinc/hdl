@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta content="The AXI AD7606x IP core can be used to interface the AD7606B, AD7606C-16, AD7606C-18, AD7605-4, AD7606, AD7606-6, AD7606-4, AD7607, AD7608 and AD7609 devices using an FPGA." name="description" />
+<meta content="The AXI AD7606X IP core can be used to interface the AD7606B, AD7606C-16, AD7606C-18, AD7605-4, AD7606, AD7606-6, AD7606-4, AD7607, AD7608 and AD7609 devices using an FPGA." name="description" />
 
-    <title>AXI AD7606x &#8212; HDL  documentation</title>
+    <title>AXI AD7606X &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=b1d7a81a" />
-    <script async="async" src="../../_static/app.umd.js?v=daa30c51"></script>
+    <script async="async" src="../../_static/app.umd.js?v=048c1170"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex/" />
     <link rel="search" title="Search" href="../../search/" />
@@ -95,14 +95,14 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AXI AD7606x</a><ul>
+<li><a class="reference internal" href="#">AXI AD7606X</a><ul>
 <li><a class="reference internal" href="#files">Files</a></li>
 <li><a class="reference internal" href="#block-diagram">Block Diagram</a></li>
 <li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
 <li><a class="reference internal" href="#interface">Interface</a></li>
 <li><a class="reference internal" href="#register-map">Register Map</a></li>
 <li><a class="reference internal" href="#theory-of-operation">Theory of operation</a><ul>
-<li><a class="reference internal" href="#adc-register-mode-ad7606x-familiy">ADC Register Mode (AD7606x familiy)</a></li>
+<li><a class="reference internal" href="#adc-register-mode-ad7606x-familiy">ADC Register Mode (AD7606X familiy)</a></li>
 <li><a class="reference internal" href="#adc-read-mode-ad7606b-c-16">ADC Read Mode (AD7606B/C-16)</a></li>
 <li><a class="reference internal" href="#adc-read-mode-ad7606c-18">ADC Read Mode (AD7606C-18)</a></li>
 <li><a class="reference internal" href="#adc-read-mode-with-crc-enabled-ad7606b-c-16">ADC Read Mode with CRC enabled (AD7606B/C-16)</a></li>
@@ -233,13 +233,13 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad35xxr/">AXI AD35XXR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad408x/">AXI AD408x</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad485x/">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad408x/">AXI AD408X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad485x/">AXI AD485X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad7405/">AXI AD7405</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">AXI AD7606x</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AXI AD7606X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad7616/">AXI AD7616</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad7768/">AXI AD7768</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad777x/">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad777x/">AXI AD777X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/">AXI AD9265</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../axi_ad9361/">AXI AD9361</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../axi_ad9361/tdd_support/">TDD Mode Support</a></li>
@@ -316,7 +316,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4062_ardz/">AD4062-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4080_fmc_evb/">AD4080-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4110/">AD4110-SDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/ad411x_ad717x/">AD411x-AD717x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad411x_ad717x/">AD411X-AD717X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4170_asdz/">AD4170-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/">AD4630-FMC</a></li>
@@ -343,7 +343,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz_x_band/">AD9081-FMCA-EBZ-X-BAND</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9083_evb/">AD9083-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9084_ebz/">AD9084-EBZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/ad916x_fmc/">AD916x-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad916x_fmc/">AD916X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9208_dual_ebz/">AD9208-DUAL-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9209_fmca_ebz/">AD9209-FMCA-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9213_dual_ebz/">AD9213-DUAL-EBZ</a></li>
@@ -368,11 +368,11 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009/">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9009zu11eg/">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9026/">ADRV9026</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv903x/">ADRV903x</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv904x/">ADRV904x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv903x/">ADRV903X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv904x/">ADRV904X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9361z7035/">ADRV9361Z7035</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9364z7020/">ADRV9364Z7020</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9371x/">ADRV9371x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9371x/">ADRV9371X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adv7511/">ADV7511</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adv7513/">ADV7513</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/arradio/">ARRADIO</a></li>
@@ -432,14 +432,14 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-ad7606x">
-<span id="id1"></span><h1>AXI AD7606x<a class="headerlink" href="#axi-ad7606x" title="Link to this heading"></a></h1>
+<span id="id1"></span><h1>AXI AD7606X<a class="headerlink" href="#axi-ad7606x" title="Link to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330.0 330" width="330.0" class="no-background"><style>
                 a {
                     text-decoration: none;
                 }
                 </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="294.0" height="276" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">rx_db_i</text></a><g transform="translate(18,118.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">rx_busy</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">first_data</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">adc_dovf</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-adc_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="54">adc_clk</text></a><g transform="translate(312.0,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-adc_reset"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="78">adc_reset</text></a><g transform="translate(312.0,70.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="102">rx_cs_n</text></a><g transform="translate(312.0,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="126">rx_db_o</text></a><g transform="translate(312.0,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="150">rx_db_t</text></a><g transform="translate(312.0,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="174">rx_rd_n</text></a><g transform="translate(312.0,166.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="198">rx_wr_n</text></a><g transform="translate(312.0,190.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="222">adc_valid</text></a><g transform="translate(312.0,214.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="246">adc_data_*</text></a><g transform="translate(312.0,238.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="294.0" y="270">adc_enable_*</text></a><g transform="translate(312.0,262.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="294.0" height="276" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="165.0" y="314">axi_ad7606x</text></svg></section>
-</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7606x" target="_blank">AXI AD7606x</a> IP core can be used to
+</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7606x" target="_blank">AXI AD7606X</a> IP core can be used to
 interface the <a class="icon adi reference external" href="https://www.analog.com/AD7606B" target="_blank">AD7606B</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7606C-16" target="_blank">AD7606C-16</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7606C-18" target="_blank">AD7606C-18</a>,
 <a class="icon adi reference external" href="https://www.analog.com/AD7605-4" target="_blank">AD7605-4</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7606" target="_blank">AD7606</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7606-6" target="_blank">AD7606-6</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7606-4" target="_blank">AD7606-4</a>,
 <a class="icon adi reference external" href="https://www.analog.com/AD7607" target="_blank">AD7607</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7608" target="_blank">AD7608</a> and <a class="icon adi reference external" href="https://www.analog.com/AD7609" target="_blank">AD7609</a> devices using an FPGA.</p>
@@ -458,7 +458,7 @@ More about the generic framework interfacing ADCs, that contains the
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7606x/axi_ad7606x.v" target="_blank">library/axi_ad7606x/axi_ad7606x.v</a></p></td>
-<td><p>Verilog source for the AXI AD7606x.</p></td>
+<td><p>Verilog source for the AXI AD7606X.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v" target="_blank">library/common/up_adc_common.v</a></p></td>
 <td><p>Verilog source for the ADC Common regmap.</p></td>
@@ -472,7 +472,7 @@ More about the generic framework interfacing ADCs, that contains the
 </section>
 <section id="block-diagram">
 <h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
-<img alt="AXI AD7606x block diagram" src="../../_images/block_diagram15.svg" />
+<img alt="AXI AD7606X block diagram" src="../../_images/block_diagram11.svg" />
 </section>
 <section id="configuration-parameters">
 <h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
@@ -2476,8 +2476,8 @@ map, <strong>adc_config_ctrl</strong> signal, that is available in the <em>up_ad
 module, is used in this way: bit 1 - RD (‘b1) | WR (‘b0) and bit 0 - enable
 WR/RD operation.</p>
 <section id="adc-register-mode-ad7606x-familiy">
-<h3>ADC Register Mode (AD7606x familiy)<a class="headerlink" href="#adc-register-mode-ad7606x-familiy" title="Link to this heading"></a></h3>
-<p>As regards the register mode, AD7606x family devices have the following
+<h3>ADC Register Mode (AD7606X familiy)<a class="headerlink" href="#adc-register-mode-ad7606x-familiy" title="Link to this heading"></a></h3>
+<p>As regards the register mode, AD7606X family devices have the following
 workflow: DB[15] - RD (‘b0) | WR (‘b1), DB[14:8] - register address and DB[7:0]
 - register data or don’t care data. Besides the data output signal, WR_N and
 RD_N signals are also used in order to make a write or read request to the
@@ -2493,13 +2493,13 @@ be DB2 in <a class="icon adi reference external" href="https://www.analog.com/AD
 <a class="icon adi reference external" href="https://www.analog.com/AD7606C-18" target="_blank">AD7606C-18</a> chip can be obtained from the page 12 of the
 <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/ad7606c-18.pdf" target="_blank">AD7606C-18 Datasheet</a>.</p>
 </div>
-<img alt="../../_images/wavedrom-13.svg" src="../../_images/wavedrom-13.svg" />
+<img alt="../../_images/wavedrom-11.svg" src="../../_images/wavedrom-11.svg" />
 <p>The following timing diagrams illustrate available ADC read modes using the
-AD7606x family devices.</p>
+AD7606X family devices.</p>
 </section>
 <section id="adc-read-mode-ad7606b-c-16">
 <h3>ADC Read Mode (AD7606B/C-16)<a class="headerlink" href="#adc-read-mode-ad7606b-c-16" title="Link to this heading"></a></h3>
-<img alt="../../_images/wavedrom-23.svg" src="../../_images/wavedrom-23.svg" />
+<img alt="../../_images/wavedrom-21.svg" src="../../_images/wavedrom-21.svg" />
 </section>
 <section id="adc-read-mode-ad7606c-18">
 <h3>ADC Read Mode (AD7606C-18)<a class="headerlink" href="#adc-read-mode-ad7606c-18" title="Link to this heading"></a></h3>

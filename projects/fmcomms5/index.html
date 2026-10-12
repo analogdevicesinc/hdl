@@ -9,7 +9,7 @@
     <title>FMCOMMS5 HDL Project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=b1d7a81a" />
-    <script async="async" src="../../_static/app.umd.js?v=daa30c51"></script>
+    <script async="async" src="../../_static/app.umd.js?v=048c1170"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex/" />
     <link rel="search" title="Search" href="../../search/" />
@@ -107,7 +107,7 @@
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a><ul>
-<li><a class="reference internal" href="#zc706">ZC706</a></li>
+<li><a class="reference internal" href="#zc706-zc702">ZC706/ZC702</a></li>
 <li><a class="reference internal" href="#zcu102">ZCU102</a></li>
 </ul>
 </li>
@@ -242,13 +242,13 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad35xxr/">AXI AD35XXR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/">AXI AD408x</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/">AXI AD408X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/">AXI AD485X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7405/">AXI AD7405</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/">AXI AD7606X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/">AXI AD7616</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7768/">AXI AD7768</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad777x/">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad777x/">AXI AD777X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/">AXI AD9265</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../library/axi_ad9361/">AXI AD9361</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../library/axi_ad9361/tdd_support/">TDD Mode Support</a></li>
@@ -325,7 +325,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad4062_ardz/">AD4062-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4080_fmc_evb/">AD4080-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4110/">AD4110-SDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/">AD411x-AD717x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/">AD411X-AD717X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4170_asdz/">AD4170-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/">AD4630-FMC</a></li>
@@ -352,7 +352,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz_x_band/">AD9081-FMCA-EBZ-X-BAND</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9083_evb/">AD9083-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9084_ebz/">AD9084-EBZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad916x_fmc/">AD916x-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad916x_fmc/">AD916X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9208_dual_ebz/">AD9208-DUAL-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9209_fmca_ebz/">AD9209-FMCA-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9213_dual_ebz/">AD9213-DUAL-EBZ</a></li>
@@ -377,11 +377,11 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009/">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009zu11eg/">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9026/">ADRV9026</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../adrv903x/">ADRV903x</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../adrv904x/">ADRV904x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv903x/">ADRV903X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv904x/">ADRV904X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9361z7035/">ADRV9361Z7035</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9364z7020/">ADRV9364Z7020</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../adrv9371x/">ADRV9371x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9371x/">ADRV9371X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adv7511/">ADV7511</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adv7513/">ADV7513</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../arradio/">ARRADIO</a></li>
@@ -626,16 +626,18 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 <section id="gpios">
 <h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
+<p>To know how the Software GPIO numbers are calculated, check out
+<a class="reference internal" href="../../user_guide/architecture/#architecture-gpio"><span class="std std-ref">GPIOs - HDL Architecture page</span></a>.</p>
 <p>The device control and monitor signals are interfaced to a GPIO module.</p>
-<section id="zc706">
-<h4>ZC706<a class="headerlink" href="#zc706" title="Link to this heading"></a></h4>
+<section id="zc706-zc702">
+<h4>ZC706/ZC702<a class="headerlink" href="#zc706-zc702" title="Link to this heading"></a></h4>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
 <th class="head"><p>Direction</p></th>
-<th class="head"><p>HDL GPIO EMIO</p></th>
-<th class="head"><p>Zynq-700 GPIO</p></th>
+<th class="head"><p>HDL no.</p></th>
+<th class="head"><p>Zynq-7000</p></th>
 </tr>
 </thead>
 <tbody>
@@ -664,12 +666,12 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <td><p>55</p></td>
 <td><p>109</p></td>
 </tr>
-<tr class="row-odd"><td><p>gpio_calsw_2_1</p></td>
+<tr class="row-odd"><td><p>gpio_calsw_2_0</p></td>
 <td><p>INOUT</p></td>
 <td><p>54</p></td>
 <td><p>108</p></td>
 </tr>
-<tr class="row-even"><td><p>gpio_calsw_1_1</p></td>
+<tr class="row-even"><td><p>gpio_calsw_1_0</p></td>
 <td><p>INOUT</p></td>
 <td><p>53</p></td>
 <td><p>107</p></td>
@@ -719,25 +721,35 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <td><p>42</p></td>
 <td><p>96</p></td>
 </tr>
-<tr class="row-even"><td><p>gpio_debug_2_1</p></td>
+<tr class="row-even"><td><p>gpio_debug_2_0</p></td>
 <td><p>INOUT</p></td>
 <td><p>41</p></td>
 <td><p>95</p></td>
 </tr>
-<tr class="row-odd"><td><p>gpio_debug_1_1</p></td>
+<tr class="row-odd"><td><p>gpio_debug_1_0</p></td>
 <td><p>INOUT</p></td>
 <td><p>40</p></td>
 <td><p>94</p></td>
 </tr>
-<tr class="row-even"><td><p>gpio_ctl_0[3:0]</p></td>
+<tr class="row-even"><td><p>gpio_ctl_1[3:0]</p></td>
 <td><p>INOUT</p></td>
 <td><p>39:36</p></td>
 <td><p>93:90</p></td>
 </tr>
-<tr class="row-odd"><td><p>gpio_ctl_1[3:0]</p></td>
+<tr class="row-odd"><td><p>gpio_ctl_0[3:0]</p></td>
 <td><p>INOUT</p></td>
 <td><p>35:32</p></td>
 <td><p>89:86</p></td>
+</tr>
+<tr class="row-even"><td><p>gpio_status_1[7:0]</p></td>
+<td><p>INOUT</p></td>
+<td><p>31:24</p></td>
+<td><p>85:78</p></td>
+</tr>
+<tr class="row-odd"><td><p>gpio_status_0[7:0]</p></td>
+<td><p>INOUT</p></td>
+<td><p>23:16</p></td>
+<td><p>77:70</p></td>
 </tr>
 </tbody>
 </table>
@@ -750,8 +762,8 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <thead>
 <tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
 <th class="head"><p>Direction</p></th>
-<th class="head"><p>HDL GPIO EMIO</p></th>
-<th class="head"><p>Zynq MP GPIO</p></th>
+<th class="head"><p>HDL no.</p></th>
+<th class="head"><p>Zynq UltraScale+ MP</p></th>
 </tr>
 </thead>
 <tbody>
@@ -850,23 +862,38 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <td><p>46</p></td>
 <td><p>124</p></td>
 </tr>
-<tr class="row-odd"><td><p>gpio_ctl_1</p></td>
+<tr class="row-odd"><td><p>gpio_ctl_1[3:0]</p></td>
 <td><p>OUT</p></td>
 <td><p>45:42</p></td>
 <td><p>123:120</p></td>
 </tr>
-<tr class="row-even"><td><p>gpio_ctl_0</p></td>
+<tr class="row-even"><td><p>gpio_ctl_0[3:0]</p></td>
 <td><p>OUT</p></td>
 <td><p>41:38</p></td>
 <td><p>119:116</p></td>
 </tr>
-<tr class="row-odd"><td><p>gpio_status_1</p></td>
+<tr class="row-odd"><td><p>gpio_status_1[7:0]</p></td>
 <td><p>IN</p></td>
 <td><p>37:30</p></td>
 <td><p>115:108</p></td>
 </tr>
+<tr class="row-even"><td><p>gpio_status_0[7:0]</p></td>
+<td><p>IN</p></td>
+<td><p>29:22</p></td>
+<td><p>107:100</p></td>
+</tr>
 </tbody>
 </table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p>GPIO signal = name of the GPIO in the HDL project</p></li>
+<li><p>Direction = from the FPGA point of view</p></li>
+<li><p>HDL no. = EMIO GPIO number in the HDL</p></li>
+<li><p>Zynq-7000, Zynq UltraScale+ MP = Software GPIOs to
+be used in device trees</p></li>
+</ul>
 </div>
 </section>
 </section>
@@ -1045,7 +1072,7 @@ command.</p>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal" target="_blank">[Wiki] AD9361 no-OS software documentation</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9361" target="_blank">[Wiki] AD9361 Linux device driver documentation</a></p></li>
 <li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz/software/linux" target="_blank">[Wiki] FMCOMMS2/3/4/5 Linux support</a></p></li>
-<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/fmcomms2_plugin" target="_blank">[Wiki] AD936x IIO Oscilloscope plugin description</a></p></li>
+<li><p><a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/fmcomms2_plugin" target="_blank">[Wiki] AD936X IIO Oscilloscope plugin description</a></p></li>
 </ul>
 </section>
 </section>

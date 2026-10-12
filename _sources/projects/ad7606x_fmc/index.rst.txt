@@ -79,7 +79,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagrams:
 
-AD7606x_FMCZ serial interface
+AD7606X_FMCZ serial interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ad7606x_serial_hdl.svg
@@ -87,7 +87,7 @@ AD7606x_FMCZ serial interface
    :align: center
    :alt: AD7606X_FMC using the serial interface block diagram
 
-AD7606x_FMCZ parallel interface
+AD7606X_FMCZ parallel interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ad7606x_parallel_hdl.svg
@@ -220,54 +220,28 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-- Zynq-7000: if PS7 is used, then offset is 54
-
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - adc_serpar
-     - OUT
-     - 39
-     - 93
-   * - adc_refsel *
-     - OUT
-     - 38
-     - 92
-   * - adc_first_data **
-     - IN
-     - 38
-     - 92
-   * - adc_reset
-     - OUT
-     - 37
-     - 91
-   * - adc_stby
-     - OUT
-     - 36
-     - 90
-   * - adc_range
-     - OUT
-     - 35
-     - 89
-   * - adc_os
-     - OUT
-     - 34-32
-     - 88-86
+=================  =========  =======  =========
+GPIO signal        Direction  HDL no.  Zynq-7000
+=================  =========  =======  =========
+adc_serpar         OUT        39       93
+adc_refsel *       OUT        38       92
+adc_first_data **  IN         38       92
+adc_reset          OUT        37       91
+adc_stby           OUT        36       90
+adc_range          OUT        35       89
+adc_os             OUT        34:32    88:86
+=================  =========  =======  =========
 
 .. admonition:: Legend
    :class: note
 
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000 is Software GPIO, to be used in device trees
    - ``*`` instantiated only for INTF=0 (parallel interface)
    - ``**`` instantiated only for INTF=1 (serial interface)
 
@@ -374,7 +348,7 @@ HDL related
    * - AD_EDGE_DETECT
      - :git-hdl:`library/common/ad_edge_detect.v`
      - ---
-   * - AXI_AD7606x
+   * - AXI_AD7606X
      - :git-hdl:`library/axi_ad7606x` *
      - :ref:`axi_ad7606x`
    * - AXI_CLKGEN
