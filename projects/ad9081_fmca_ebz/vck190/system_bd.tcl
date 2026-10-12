@@ -41,10 +41,6 @@ source $ad_hdl_dir/projects/common/vck190/vck190_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
-# use versal transceiver wizard
-set ADI_PHY_SEL 0
-set TRANSCEIVER_TYPE GTY
-set EXTERNAL_LINK_CLK 0
 
 source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
