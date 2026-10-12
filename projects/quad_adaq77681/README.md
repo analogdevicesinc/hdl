@@ -3,7 +3,7 @@
 - Evaluation board product page:
   - [](https://www.analog.com)
 - System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/quad_adaq77681/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/quad_adaq77681/
 - Evaluation board VADJ range: 2.5V
 
 ## Supported parts

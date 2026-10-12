@@ -1,9 +1,9 @@
 # ADRV904X HDL Project
 
 - Evaluation board product page: [EVAL-ADRV904x](https://www.analog.com/eval-adrv904x)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/adrv904x/quickstart/zynqmp
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adrv904x/index.html
-- Transceiver configuration support for Xilinx carriers (xcvr_wizard): https://analogdevicesinc.github.io/hdl/library/jesd204/xgt_wizard/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-adrv904x/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/adrv904x/
+- Transceiver configuration support for Xilinx carriers (xcvr_wizard): https://developer.analog.com/docs/hdl/library/jesd204/xgt_wizard/
 - Evaluation board VADJ: 1.8V
 
 ## Supported parts

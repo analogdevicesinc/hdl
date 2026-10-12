@@ -1,8 +1,8 @@
 # AD7405-FMC HDL Project
 
 - Evaluation board product page: [EVAL-AD7405](https://www.analog.com/eval-ad7405)
-- System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad7405_fmc/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/ad7405-fmc/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad7405_fmc/
 - Evaluation board VADJ: 2.5V
 
 ## Supported parts

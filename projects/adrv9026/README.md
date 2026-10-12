@@ -1,9 +1,9 @@
 # ADRV9026 HDL Project
 
 - Evaluation board product page: [EVAL-ADRV9026/ADRV9029](https://www.analog.com/eval-adrv9026)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/adrv9026/quickstart
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adrv9026/index.html
-- Transceiver configuration support for Xilinx carriers (xcvr_wizard): https://analogdevicesinc.github.io/hdl/library/jesd204/xgt_wizard/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-adrv902x/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/adrv9026/
+- Transceiver configuration support for Xilinx carriers (xcvr_wizard): https://developer.analog.com/docs/hdl/library/jesd204/xgt_wizard/
 - Evaluation board VADJ: 1.8V
 
 ## Supported parts

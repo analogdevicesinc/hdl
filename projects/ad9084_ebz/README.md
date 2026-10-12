@@ -1,7 +1,7 @@
 # AD9084-EBZ HDL Project
 
 - Evaluation board product page: [EVAL-AD9084](https://www.analog.com/eval-ad9084)
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad9084_ebz/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad9084_ebz/
 - Evaluation board VADJ range: 1.2V - 3.3V
 
 ## Supported parts

@@ -1,12 +1,11 @@
 # AD353XR HDL Project
 
-- Evaluation boards product page:
+- Evaluation boards product pages:
   - [EVAL-AD3530R](https://www.analog.com/eval-ad3530r)
   - [EVAL-AD3531R](https://www.analog.com/eval-ad3531r)
-  - [EVAL-AD3532R](https://www.analog.com/eval-ad3532r)
-  - [EVAL-AD3532R](https://www.analog.com/eval-ad3536r)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad353xr
-- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad353xr/index.html
+  - [EVAL-AD3532R](https://www.analog.com/eval-ad3532r) (also supports AD3536R)
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-ad353XR/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad353xr/
 - Evaluation board VADJ range: 2.7V - 5.5V
 
 ## Supported parts

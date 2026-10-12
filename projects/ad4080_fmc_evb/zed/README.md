@@ -32,4 +32,4 @@ cd projects/ad4080_fmc_evb/zed
 make ADC_N_BITS=20
 ```
 
-Corresponding device tree: [zynq-zed-adv7511-ad4080.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4080.dts)
+Corresponding device tree: [zynq-zed-ad4080.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-ad4080.dts)

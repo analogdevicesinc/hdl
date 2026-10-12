@@ -1,8 +1,8 @@
 # ADRV9001 HDL Project
 
 - Evaluation board product page: [ADRV9002](https://www.analog.com/eval-adrv9002)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/adrv9002/quickstart
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adrv9001/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/adrv9002/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/adrv9001/
 - Evaluation board VADJ: 1.8V
 
 ## Supported parts

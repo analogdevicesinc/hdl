@@ -6,8 +6,8 @@
   - [EVAL-AD9986](https://www.analog.com/eval-ad9986)
   - [EVAL-AD9988](https://www.analog.com/eval-ad9988)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz/quickstart
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad9081_fmca_ebz/index.html
-- Transceiver configuration support for Xilinx carriers (xcvr_wizard): https://analogdevicesinc.github.io/hdl/library/jesd204/xgt_wizard/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad9081_fmca_ebz/
+- Transceiver configuration support for Xilinx carriers (xcvr_wizard): https://developer.analog.com/docs/hdl/library/jesd204/xgt_wizard/
 - Evaluation board VADJ range: 1.2V - 3.3V
 
 ## Supported parts
