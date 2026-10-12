@@ -70,6 +70,16 @@ adi_if_ports input     1  ready
 adi_if_ports output    2  bufstatus
 adi_if_ports output    1  bufstatus_rst
 
+adi_if_define if_xcvr_qm
+adi_if_ports output    1  enb
+adi_if_ports output   16  addr
+adi_if_ports output    1  wr
+adi_if_ports output   32  wdata
+adi_if_ports input    32  rdata
+adi_if_ports input     1  ready
+adi_if_ports input     1  slverr
+adi_if_ports input     1  powergood
+
 adi_if_define if_gt_qpll
 adi_if_ports output    1  qpll_rst            reset
 adi_if_ports output    1  qpll_ref_clk        clock

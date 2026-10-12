@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -53,8 +53,8 @@ module axi_adxcvr_up #(
   parameter           LPM_OR_DFE_N = 1,
   parameter   [ 2:0]  RATE = 3'd0,
   parameter   [ 3:0]  TX_DIFFCTRL = 4'd8,
-  parameter   [ 4:0]  TX_POSTCURSOR = 5'd0,
-  parameter   [ 4:0]  TX_PRECURSOR = 5'd0,
+  parameter   [ 5:0]  TX_POSTCURSOR = 6'd0,
+  parameter   [ 5:0]  TX_PRECURSOR = 6'd0,
   parameter   [ 1:0]  SYS_CLK_SEL = 2'd3,
   parameter   [ 2:0]  OUT_CLK_SEL = 3'd4
 ) (
@@ -75,6 +75,7 @@ module axi_adxcvr_up #(
   output              up_ch_rst,
   output              up_ch_user_ready,
   input               up_ch_rst_done,
+  input               up_pg_n,
   output              up_ch_prbsforceerr,
   output     [ 3:0]   up_ch_prbssel,
   output              up_ch_prbscntreset,
@@ -87,8 +88,8 @@ module axi_adxcvr_up #(
   output     [ 1:0]   up_ch_sys_clk_sel,
   output     [ 2:0]   up_ch_out_clk_sel,
   output     [ 4:0]   up_ch_tx_diffctrl,
-  output     [ 4:0]   up_ch_tx_postcursor,
-  output     [ 4:0]   up_ch_tx_precursor,
+  output     [((XCVR_TYPE == 13) ? 5 : 4):0]  up_ch_tx_postcursor,
+  output     [((XCVR_TYPE == 13) ? 5 : 4):0]  up_ch_tx_precursor,
   output     [ 7:0]   up_ch_sel,
   output              up_ch_enb,
   output     [11:0]   up_ch_addr,
@@ -135,7 +136,9 @@ module axi_adxcvr_up #(
 
   // parameters
 
-  localparam  [31:0]  VERSION = 32'h00110561;
+  localparam  [31:0]  VERSION = 32'h00110661;
+  // GTM (XCVR_TYPE 13) TX cursors are 6 bits, the other transceivers' 5 bits
+  localparam  integer TX_CURSOR_W = (XCVR_TYPE == 13) ? 6 : 5;
 
   // internal registers
 
@@ -151,8 +154,8 @@ module axi_adxcvr_up #(
   reg     [ 1:0]  up_sys_clk_sel = SYS_CLK_SEL;
   reg     [ 2:0]  up_out_clk_sel = OUT_CLK_SEL;
   reg     [ 4:0]  up_tx_diffctrl = TX_DIFFCTRL;
-  reg     [ 4:0]  up_tx_postcursor = TX_POSTCURSOR;
-  reg     [ 4:0]  up_tx_precursor = TX_PRECURSOR;
+  reg     [TX_CURSOR_W-1:0]  up_tx_postcursor = TX_POSTCURSOR;
+  reg     [TX_CURSOR_W-1:0]  up_tx_precursor = TX_PRECURSOR;
   reg     [ 7:0]  up_icm_sel = 'd0;
   reg             up_icm_enb = 'd0;
   reg             up_icm_wr = 'd0;
@@ -291,10 +294,10 @@ module axi_adxcvr_up #(
         up_tx_diffctrl <= up_wdata[4:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h031)) begin
-        up_tx_postcursor <= up_wdata[4:0];
+        up_tx_postcursor <= up_wdata[TX_CURSOR_W-1:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h032)) begin
-        up_tx_precursor <= up_wdata[4:0];
+        up_tx_precursor <= up_wdata[TX_CURSOR_W-1:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr == 10'h060)) begin
         up_prbssel <= up_wdata[3:0];
@@ -534,7 +537,7 @@ module axi_adxcvr_up #(
           10'h001: up_rdata_d <= ID;
           10'h002: up_rdata_d <= up_scratch;
           10'h004: up_rdata_d <= {30'd0, up_bufstatus_rst, up_resetn};
-          10'h005: up_rdata_d <= {25'd0, up_ch_bufstatus[1], up_ch_bufstatus[0], ~up_ch_pll_locked, 3'b0, up_status_int};
+          10'h005: up_rdata_d <= {24'd0, up_pg_n, up_ch_bufstatus[1], up_ch_bufstatus[0], ~up_ch_pll_locked, 3'b0, up_status_int};
           10'h006: up_rdata_d <= {17'd0, up_user_ready_cnt, up_rst_cnt, up_pll_rst_cnt};
           10'h007: up_rdata_d <= {FPGA_TECHNOLOGY,FPGA_FAMILY,SPEED_GRADE,DEV_PACKAGE}; // [8,8,8,8]
           10'h008: up_rdata_d <= {19'd0, up_lpm_dfe_n, 1'd0, up_rate, 2'd0, up_sys_clk_sel, 1'd0, up_out_clk_sel};

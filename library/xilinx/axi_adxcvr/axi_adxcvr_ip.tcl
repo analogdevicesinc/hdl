@@ -44,6 +44,7 @@ adi_ip_files axi_adxcvr [list \
   "axi_adxcvr_up.v" \
   "axi_adxcvr_mdrp.v" \
   "axi_adxcvr_mstatus.v" \
+  "axi_adxcvr_versal_regs.v" \
   "axi_adxcvr.v" ]
 
 set_property used_in_simulation false [get_files $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl]
@@ -130,6 +131,31 @@ for {set n 0} {$n < 32} {incr n} {
 
 }
 
+set versal "(spirit:decode(id('MODELPARAM_VALUE.XCVR_TYPE')) >= 11)"
+set lanes "spirit:decode(id('MODELPARAM_VALUE.NUM_OF_LANES'))"
+
+adi_add_multi_bus 8 "up_qm_" "master" \
+  "analog.com:interface:if_xcvr_qm_rtl:1.0" \
+  "analog.com:interface:if_xcvr_qm:1.0" \
+  [list \
+    {"up_qm_enb" "enb" 1} \
+    {"up_qm_addr" "addr" 16} \
+    {"up_qm_wr" "wr" 1} \
+    {"up_qm_wdata" "wdata" 32} \
+    {"up_qm_rdata" "rdata" 32} \
+    {"up_qm_ready" "ready" 1} \
+    {"up_qm_slverr" "slverr" 1} \
+    {"up_qm_powergood" "powergood" 1} \
+  ] \
+  "$versal and ((spirit:decode(id('MODELPARAM_VALUE.NUM_OF_QUADS')) > {i}) or ((spirit:decode(id('MODELPARAM_VALUE.NUM_OF_QUADS')) = 0) and ($lanes > {i} * 4)))"
+
+adi_set_ports_dependency "up_qm_" $versal 0
+adi_set_ports_dependency "m_axi_" \
+  "(spirit:decode(id('MODELPARAM_VALUE.XCVR_TYPE')) < 11)" 0
+foreach p {NUM_RATES LANE_RATES_KHZ REF_CLK_KHZ NUM_OF_QUADS LANE_SLOTS} {
+  set_property enablement_tcl_expr {$XCVR_TYPE >= 11} [ipx::get_user_parameters $p -of_objects [ipx::current_core]]
+}
+
 ipx::infer_bus_interface up_pll_rst xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
 ipx::add_bus_parameter POLARITY [ipx::get_bus_interfaces up_pll_rst -of_objects [ipx::current_core]]
 set_property VALUE ACTIVE_HIGH [ipx::get_bus_parameters POLARITY -of [ipx::get_bus_interfaces up_pll_rst]]
@@ -143,7 +169,8 @@ set_property value s_axi:m_axi [ipx::get_bus_parameters ASSOCIATED_BUSIF \
   -of_objects [ipx::get_bus_interfaces s_axi_aclk -of_objects [ipx::current_core]]]
 
 set_property enablement_dependency \
-  {spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0} \
+  {(spirit:decode(id('MODELPARAM_VALUE.TX_OR_RX_N')) = 0) and \
+  (spirit:decode(id('MODELPARAM_VALUE.XCVR_TYPE')) < 11)} \
   [ipx::get_bus_interfaces m_axi -of_objects [ipx::current_core]]
 
 set_property enablement_dependency \
