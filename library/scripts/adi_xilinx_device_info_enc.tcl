@@ -124,7 +124,10 @@ set xcvr_type_list { \
         { GTRE4_NOT_SUPPORTED 7 } \
         { GTHE4               8 } \
         { GTYE4               9 } \
-        { GTME4_NOT_SUPPORTED 10}}
+        { GTME4_NOT_SUPPORTED 10} \
+        { GTYE5               11} \
+        { GTYP                12} \
+        { GTME5               13}}
 
 set fpga_voltage_list {0 5000} ;# 0 to 5000mV
 
@@ -178,6 +181,26 @@ proc adi_device_spec {cellpath param} {
       }
       XCVR_TYPE {
           set matched ""
+          if {[regexp {^xcv[ecmph]} $part]} {
+              # Versal Premium parts carry two GT types (e.g. GTME5 and GTYP);
+              # the project must then choose with TRANSCEIVER_TYPE.
+              set found {}
+              foreach x [list_property $part] {
+                  if {[regexp {^(GT[A-Z0-9]+)_TRANSCEIVERS$} $x -> gt] && [get_property $x $part] > 0} {
+                      lappend found $gt
+                  }
+              }
+              if {[llength $found] == 1} {
+                  foreach i $xcvr_type_list {
+                      if {[lindex $i 0] eq [lindex $found 0]} {set matched [lindex $i 0]}
+                  }
+              }
+              if {$matched eq ""} {
+                  puts "INFO: \"$found\" transceivers on $part, XCVR_TYPE must be set by the project"
+                  set matched "Unknown"
+              }
+              return "$matched"
+          }
           set dev_transcivers "none"
           foreach x [list_property $part] {
               regexp ^GT..._TRANSCEIVERS $x dev_transcivers

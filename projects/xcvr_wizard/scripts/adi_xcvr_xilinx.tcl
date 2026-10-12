@@ -41,6 +41,34 @@
 #   adi_xcvr_project {LANE_RATE 10 REF_CLK 100}
 #   adi_xcvr_project {LANE_RATE 10 REF_CLK 100} kcu105
 #
+proc adi_xcvr_project_versal {parameters_for_make carrier_name} {
+
+  set codes {GTY 11 GTYP 12 GTM 13}
+  set defaults {vck190 GTY vmk180 GTY vpk180 GTYP}
+  set p [dict create {*}$parameters_for_make]
+
+  if {[dict exists $p TRANSCEIVER_TYPE] && [dict get $p TRANSCEIVER_TYPE] ne ""} {
+    set ttype [dict get $p TRANSCEIVER_TYPE]
+  } else {
+    set ttype [dict get $defaults $carrier_name]
+  }
+  if {![dict exists $codes $ttype]} {
+    error "ERROR adi_xcvr_project: TRANSCEIVER_TYPE must be GTY, GTYP or GTM (got '$ttype')"
+  }
+  if {![dict exists $p REF_CLK]} {
+    error "ERROR adi_xcvr_project: REF_CLK is required for $carrier_name"
+  }
+
+  set versal [dict create XCVR_TYPE [dict get $codes $ttype] REF_CLK_RATE [dict get $p REF_CLK]]
+  foreach {key param} {XCVR_RX_LANE_RATES RX_LANE_RATES XCVR_TX_LANE_RATES TX_LANE_RATES EXTERNAL_LINK_CLK EXTERNAL_LINK_CLK
+                       NON_CONSECUTIVE_QUADS NON_CONSECUTIVE_QUADS} {
+    if {[dict exists $p $key] && [dict get $p $key] ne ""} {
+      dict set versal $param [dict get $p $key]
+    }
+  }
+  return [dict create param_file_path "" cfng_file_path "" versal $versal]
+}
+
 proc adi_xcvr_project {parameters_for_make {carrier_name ""}} {
 
   global ad_hdl_dir
@@ -76,6 +104,11 @@ proc adi_xcvr_project {parameters_for_make {carrier_name ""}} {
     }
     "vcu128" {
       set xcvr_type GTYE4
+    }
+    "vck190" -
+    "vmk180" -
+    "vpk180" {
+      return [adi_xcvr_project_versal $parameters_for_make $carrier_name]
     }
     default {
       puts "ERROR adi_project_make: Unsupported carrier (device)."
