@@ -139,6 +139,7 @@ added to the base address from HDL (see more at :ref:`architecture cpu-intercon-
 ====================  ============
 Instance              Versal
 ====================  ============
+axi_mxfe_rx_xcvr      0xA4A6_00000
 rx_mxfe_tpl_core      0xA4A1_00000
 axi_mxfe_rx_jesd      0xA4A9_00000
 axi_mxfe_rx_dma       0xBC42_00000
