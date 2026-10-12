@@ -201,22 +201,6 @@ module system_top #(
   wire    [ 7:0]  data_to_fabric;
   wire    [ 7:0]  hsci_data_in;
 
-  wire gt_reset;
-  wire rx_reset_pll_and_datapath;
-  wire tx_reset_pll_and_datapath;
-  wire rx_reset_datapath;
-  wire tx_reset_datapath;
-  wire rx_resetdone;
-  wire tx_resetdone;
-  wire gt_b_reset;
-  wire rx_b_reset_pll_and_datapath;
-  wire tx_b_reset_pll_and_datapath;
-  wire rx_b_reset_datapath;
-  wire tx_b_reset_datapath;
-  wire rx_b_resetdone;
-  wire tx_b_resetdone;
-  wire gt_powergood;
-
   // instantiations
 
   IBUFDS_GTE5 i_ibufds_ref_clk (
@@ -333,23 +317,8 @@ module system_top #(
   endgenerate
   assign resetb     = gpio_o[62];
 
-  assign gpio_i[64] = rx_resetdone;
-  assign gpio_i[65] = tx_resetdone;
-  assign gpio_i[66] = rx_resetdone & tx_resetdone;
-  assign gt_reset   = gpio_o[67];
-  assign rx_reset_pll_and_datapath = gpio_o[68];
-  assign tx_reset_pll_and_datapath = gpio_o[69];
-  assign rx_reset_datapath = gpio_o[70];
-  assign tx_reset_datapath = gpio_o[71];
-
-  assign gpio_i[72] = rx_b_resetdone;
-  assign gpio_i[73] = tx_b_resetdone;
-  assign gpio_i[74] = rx_b_resetdone & tx_b_resetdone;
-  assign gt_b_reset = gpio_o[75];
-  assign rx_b_reset_pll_and_datapath = gpio_o[76];
-  assign tx_b_reset_pll_and_datapath = gpio_o[77];
-  assign rx_b_reset_datapath = gpio_o[78];
-  assign tx_b_reset_datapath = gpio_o[79];
+  assign gpio_i[66:64] = 3'd0;
+  assign gpio_i[74:72] = 3'd0;
 
   ad_iobuf #(
     .DATA_WIDTH(17)
@@ -432,37 +401,42 @@ module system_top #(
     .gpio2_o (gpio_o[95:64]),
     .gpio2_t (gpio_t[95:64]),
 
-    // FMC HPC
-    // Apollo A-side
-    .tx_0_p (srxa_p[3:0]),
-    .tx_0_n (srxa_n[3:0]),
-    .rx_0_p (stxa_p[3:0]),
-    .rx_0_n (stxa_n[3:0]),
-    // Apollo B-Side
-    .tx_1_p (srxb_p[3:0]),
-    .tx_1_n (srxb_n[3:0]),
-    .rx_1_p (stxb_p[3:0]),
-    .rx_1_n (stxb_n[3:0]),
+    // FMC: lanes 0-3 Apollo A side (GTYP_201), lanes 4-7 B side (GTYP_200)
+    .rx_data_0_n (stxa_n[0]),
+    .rx_data_0_p (stxa_p[0]),
+    .rx_data_1_n (stxa_n[1]),
+    .rx_data_1_p (stxa_p[1]),
+    .rx_data_2_n (stxa_n[2]),
+    .rx_data_2_p (stxa_p[2]),
+    .rx_data_3_n (stxa_n[3]),
+    .rx_data_3_p (stxa_p[3]),
+    .rx_data_4_n (stxb_n[0]),
+    .rx_data_4_p (stxb_p[0]),
+    .rx_data_5_n (stxb_n[1]),
+    .rx_data_5_p (stxb_p[1]),
+    .rx_data_6_n (stxb_n[2]),
+    .rx_data_6_p (stxb_p[2]),
+    .rx_data_7_n (stxb_n[3]),
+    .rx_data_7_p (stxb_p[3]),
+    .tx_data_0_n (srxa_n[0]),
+    .tx_data_0_p (srxa_p[0]),
+    .tx_data_1_n (srxa_n[1]),
+    .tx_data_1_p (srxa_p[1]),
+    .tx_data_2_n (srxa_n[2]),
+    .tx_data_2_p (srxa_p[2]),
+    .tx_data_3_n (srxa_n[3]),
+    .tx_data_3_p (srxa_p[3]),
+    .tx_data_4_n (srxb_n[0]),
+    .tx_data_4_p (srxb_p[0]),
+    .tx_data_5_n (srxb_n[1]),
+    .tx_data_5_p (srxb_p[1]),
+    .tx_data_6_n (srxb_n[2]),
+    .tx_data_6_p (srxb_p[2]),
+    .tx_data_7_n (srxb_n[3]),
+    .tx_data_7_p (srxb_p[3]),
 
-    .gt_powergood (gt_powergood),
-    .gt_reset (gt_reset & gt_powergood),
-    .gt_reset_rx_datapath (rx_reset_datapath),
-    .gt_reset_tx_datapath (tx_reset_datapath),
-    .gt_reset_rx_pll_and_datapath (rx_reset_pll_and_datapath),
-    .gt_reset_tx_pll_and_datapath (tx_reset_pll_and_datapath),
-    .rx_resetdone (rx_resetdone),
-    .tx_resetdone (tx_resetdone),
-
-    .gt_b_reset (gt_b_reset & gt_powergood),
-    .gt_b_reset_rx_datapath (rx_b_reset_datapath),
-    .gt_b_reset_tx_datapath (tx_b_reset_datapath),
-    .gt_b_reset_rx_pll_and_datapath (rx_b_reset_pll_and_datapath),
-    .gt_b_reset_tx_pll_and_datapath (tx_b_reset_pll_and_datapath),
-    .rx_b_resetdone (rx_b_resetdone),
-    .tx_b_resetdone (tx_b_resetdone),
-
-    .ref_clk_a (ref_clk),
-    .ref_clk_b (ref_clk),
+    .ref_clk_q0 (ref_clk),
+    .ref_clk_q1 (ref_clk),
     .rx_device_clk (rx_device_clk),
     .tx_device_clk (tx_device_clk),
     .rx_b_device_clk (rx_device_clk),

@@ -38,11 +38,11 @@
 # Maximum values for Link clock:
 # 204B - 15.5 Gbps /40 = 387.5MHz
 # 204C - 24.75 Gbps /66 = 375MHz
-set jesd_mode [dict get [dict get [get_property QUAD0_PROT0_SETTINGS [get_cells i_system_wrapper/system_i/jesd204_phy/xcvr/inst]] LR0_SETTINGS] INTERNAL_PRESET]
-set link_mode [expr {$jesd_mode=="JESD204_64B66B" ? 2:1}]
+set xcvr [get_cells i_system_wrapper/system_i/util_apollo_xcvr/inst]
+set link_mode [get_property LINK_MODE $xcvr]
 
-set rx_lane_rate [dict get [dict get [get_property QUAD0_PROT0_SETTINGS [get_cells i_system_wrapper/system_i/jesd204_phy/xcvr/inst]] LR0_SETTINGS] RX_LINE_RATE]
-set tx_lane_rate [dict get [dict get [get_property QUAD0_PROT1_SETTINGS [get_cells i_system_wrapper/system_i/jesd204_phy/xcvr/inst]] LR0_SETTINGS] TX_LINE_RATE]
+set rx_lane_rate [get_property RX_LANE_RATE $xcvr]
+set tx_lane_rate [get_property TX_LANE_RATE $xcvr]
 
 set rx_link_clk [expr $rx_lane_rate*1000/[expr {$link_mode==2?66:40}]]
 set tx_link_clk [expr $tx_lane_rate*1000/[expr {$link_mode==2?66:40}]]

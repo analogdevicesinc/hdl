@@ -51,10 +51,10 @@ source $ad_hdl_dir/projects/common/vpk180/vpk180_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
-set ADI_PHY_SEL 0
-set MAX_NUMBER_OF_QUADS 2
-set TRANSCEIVER_TYPE GTYP
-set EXTERNAL_LINK_CLK 0
+# FMC: link 0 on GTYP_201 and link 1 on GTYP_200, four lanes each
+set MAX_RX_LANES_PER_LINK 4
+set MAX_TX_LANES_PER_LINK 4
+set MAX_APOLLO_LANES 8
 set HSCI_BANKS 1
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]
