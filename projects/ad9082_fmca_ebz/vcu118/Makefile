@@ -19,7 +19,6 @@ M_DEPS += ../../ad9081_fmca_ebz/vcu118/system_constr.xdc
 M_DEPS += ../../ad9081_fmca_ebz/vcu118/system_constr_corundum.xdc
 M_DEPS += ../../ad9081_fmca_ebz/vcu118/system_bd.tcl
 M_DEPS += ../../ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
-M_DEPS += ../../../library/xilinx/scripts/versal_xcvr_subsystem.tcl
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
