@@ -267,6 +267,7 @@ set_port_property lmfc_edge TERMINATION TRUE
 
 proc jesd204_rx_elaboration_callback {} {
   set num_lanes [get_parameter_value "NUM_LANES"]
+  set num_links [get_parameter_value "NUM_LINKS"]
   set tpl_width [get_parameter_value "TPL_DATA_PATH_WIDTH"]
   set phy_width [get_parameter_value "DATA_PATH_WIDTH"]
 

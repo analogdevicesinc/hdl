@@ -33,7 +33,6 @@
 ###############################################################################
 
 create_clock -period "10.000 ns"  -name sys_clk_100mhz      [get_ports {sys_clk}]
-create_clock -period "6.0000 ns"  -name sys_ddr_ref_clk     [get_ports {sys_ddr_ref_clk_clk}]
 create_clock -period "6.0000 ns"  -name emif_ref_clk        [get_ports {emif_hps_pll_ref_clk}]
 
 create_clock -period "3.2000 ns"  -name ref_clk             [get_ports {fpga_refclk_in}]
