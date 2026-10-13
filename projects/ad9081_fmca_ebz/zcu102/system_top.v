@@ -70,6 +70,7 @@ module system_top  #(
   inout    fpga_syncout_1_n,
   inout    fpga_syncout_1_p,
   inout  [10:0] gpio,
+  inout  [2:0]  pmod_gpio,
   inout         hmc_gpio1,
   output        hmc_sync,
   input  [1:0]  irqb,
@@ -186,6 +187,14 @@ module system_top  #(
     .dio_p ({hmc_gpio1,       // 43
              gpio[10:0]}));   // 42-32
 
+    ad_iobuf #(
+      .DATA_WIDTH(3)
+    ) i_pmod_iobuf (
+      .dio_t (gpio_t[31:29]),
+      .dio_i (gpio_o[31:29]),
+      .dio_o (gpio_i[31:29]),
+      .dio_p (pmod_gpio[2:0]));   // 31:29
+
   assign gpio_i[44] = agc0[0];
   assign gpio_i[45] = agc0[1];
   assign gpio_i[46] = agc1[0];
@@ -239,7 +248,7 @@ module system_top  #(
   // Unused GPIOs
   assign gpio_i[59:54] = gpio_o[59:54];
   assign gpio_i[94:64] = gpio_o[94:64];
-  assign gpio_i[31:21] = gpio_o[31:21];
+  assign gpio_i[28:21] = gpio_o[28:21];
   assign gpio_i[7:0] = gpio_o[7:0];
 
   system_wrapper i_system_wrapper (

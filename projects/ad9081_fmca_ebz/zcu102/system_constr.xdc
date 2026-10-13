@@ -119,4 +119,7 @@ set_property         -dict {PACKAGE_PIN AA6   IOSTANDARD LVDS     DIFF_TERM_ADV 
 set_property         -dict {PACKAGE_PIN AA7   IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports sysref2_p        ]    ; ## FMC0_CLK0_M2C_P     IO_L12P_T1U_N10_GC_66
 set_property         -dict {PACKAGE_PIN W2    IOSTANDARD LVCMOS18                                     } [get_ports txen[0]          ]    ; ## FMC0_LA09_P         IO_L24P_T3U_N10_66
 set_property         -dict {PACKAGE_PIN W1    IOSTANDARD LVCMOS18                                     } [get_ports txen[1]          ]    ; ## FMC0_LA09_N         IO_L24N_T3U_N11_66
+set_property         -dict {PACKAGE_PIN A20   IOSTANDARD LVCMOS33                                     } [get_ports pmod_gpio[0]     ]    ; ## PMOD0_0             IO_L12N_AD0N_47
+set_property         -dict {PACKAGE_PIN B20   IOSTANDARD LVCMOS33                                     } [get_ports pmod_gpio[1]     ]    ; ## PMOD0_1             IO_L12P_AD0P_47
+set_property         -dict {PACKAGE_PIN A22   IOSTANDARD LVCMOS33                                     } [get_ports pmod_gpio[2]     ]    ; ## PMOD0_2             IO_L11N_AD1N_47
 
