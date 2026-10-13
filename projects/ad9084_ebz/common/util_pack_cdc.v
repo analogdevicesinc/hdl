@@ -39,26 +39,28 @@
 // DMA bursts, so no partial beat survives a burst boundary. xfer_req is
 // synchronised here rather than in the block design because a proc_sys_reset
 // would stretch it into the start of the burst.
-//
-// enable_out carries the quasi-static converter enable mask into pack_clk.
 
 module util_pack_cdc #(
 
   parameter NUM_OF_ENABLES = 2
 ) (
+  (* X_INTERFACE_PARAMETER = "ASSOCIATED_RESET device_aresetn:device_resetn" *)
   input                        device_clk,
   input                        device_aresetn,
   input                        adc_rst,
   input                        xfer_req,
-  output                       device_resetn,
+  output reg                   device_resetn,
 
+  (* X_INTERFACE_PARAMETER = "ASSOCIATED_RESET pack_aresetn:pack_resetn" *)
   input                        pack_clk,
   input                        pack_aresetn,
   input  [NUM_OF_ENABLES-1:0]  enable_in,
-  output [NUM_OF_ENABLES-1:0]  enable_out
+  output [NUM_OF_ENABLES-1:0]  enable_out,
+  output reg                   pack_resetn
 );
 
   wire xfer_req_s;
+  wire device_resetn_s;
 
   sync_bits #(
     .NUM_OF_BITS (1),
@@ -69,15 +71,30 @@ module util_pack_cdc #(
     .out_resetn (device_aresetn),
     .out_bits (xfer_req_s));
 
-  assign device_resetn = device_aresetn & ~adc_rst & xfer_req_s;
-
-  sync_bits #(
+  sync_data #(
     .NUM_OF_BITS (NUM_OF_ENABLES),
     .ASYNC_CLK (1)
   ) i_enable_sync (
-    .in_bits (enable_in),
+    .in_clk (device_clk),
+    .in_data (enable_in),
+    .out_clk (pack_clk),
+    .out_data (enable_out));
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_device_resetn_sync (
+    .in_bits (device_resetn),
     .out_clk (pack_clk),
     .out_resetn (pack_aresetn),
-    .out_bits (enable_out));
+    .out_bits (device_resetn_s));
+
+  always @(posedge device_clk) begin
+    device_resetn <= device_aresetn & ~adc_rst & xfer_req_s;
+  end
+
+  always @(posedge pack_clk) begin
+    pack_resetn <= pack_aresetn & device_resetn_s;
+  end
 
 endmodule
