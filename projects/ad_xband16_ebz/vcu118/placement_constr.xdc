@@ -34,7 +34,6 @@ set_property FORCE_MAX_FANOUT 1 [get_nets -hierarchical -filter {NAME =~ *mode_6
 set_property FORCE_MAX_FANOUT 100 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */tx_apollo_tpl_core/*/i_core/dac_sync_int*[*]/Q}]]
 
 # Force max fanout for data_offload paths going to BRAM blocks to half of what it normally is, to reduce routing delays
-set_property FORCE_MAX_FANOUT 14 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */apollo_tx_data_offload/storage_unit/inst/i_mem_data/m_ram_reg_bram*_i_*/O}]]
 set_property FORCE_MAX_FANOUT 4 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */apollo_rx_data_offload/storage_unit/inst/i_mem_data/m_ram_reg_bram*_i_*/O}]]
 
 # Constrain all_buffer_ready pipeline stage to be in SLR1, same as most of the logic preceding it.
@@ -49,10 +48,13 @@ set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {N
 set_property FORCE_MAX_FANOUT 16 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_*.i_jesd204_rx_ctrl_64b/status_err_cnt[*]_i_*/O}]]
 
 # TX side
-set_property FORCE_MAX_FANOUT 35 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/out_addr_reg[*]*/Q}]]
+set_property FORCE_MAX_FANOUT 15 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/out_addr_reg[*]*/Q}]]
 set_property FORCE_MAX_FANOUT 19 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.tx_ready_64b_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 16 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.gen_lane[*].i_lane/lmc_edge_d3_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 2 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.gen_lane[*].i_lane/i_header_gen/sync_word[*]_i_*/O}]]
 set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_cfg_lanes_disable[*]_i_*/O}]]
 set_property FORCE_MAX_FANOUT 2 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/mem_rd_data_reg[*]/Q}]]
-set_property FORCE_MAX_FANOUT 2 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.gen_lane[*].i_lane/i_scrambler/state_reg[*]/Q}]]
+set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.gen_lane[*].i_lane/i_scrambler/state_reg[*]/Q}]]
+set_property FORCE_MAX_FANOUT 2 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.gen_lane[*].i_lane/i_scrambler/state[*]_i_*/O}]]
+set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_cfg_lanes_disable_reg[*]/Q}]]
+set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/system_tx_0*/O}]]
