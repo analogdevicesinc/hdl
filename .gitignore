@@ -108,6 +108,8 @@ _build
 .github/CODEOWNERS
 .github/PULL_REQUEST_TEMPLATE.md
 library/**/.lock
+library/xilinx/util_adxcvr/versal_gen/
+projects/**/versal_xcvr/
 library/**/interfaces/*.sv
 .backstage_yaml
 bin/

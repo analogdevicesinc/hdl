@@ -32,42 +32,135 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-set_property ASYNC_REG TRUE -quiet [get_cells -hier -filter {name =~ *up_rx_rst_done*}]
-set_property ASYNC_REG TRUE -quiet [get_cells -hier -filter {name =~ *up_tx_rst_done*}]
-set_property ASYNC_REG TRUE -quiet [get_cells -hier -filter {name =~ *rx_rate*}]
-set_property ASYNC_REG TRUE -quiet [get_cells -hier -filter {name =~ *tx_rate*}]
+set_property ASYNC_REG TRUE -quiet [get_cells -quiet -hier -filter {name =~ *up_rx_rst_done*}]
+set_property ASYNC_REG TRUE -quiet [get_cells -quiet -hier -filter {name =~ *up_tx_rst_done*}]
+set_property ASYNC_REG TRUE -quiet [get_cells -quiet -hier -filter {name =~ *rx_rate*}]
+set_property ASYNC_REG TRUE -quiet [get_cells -quiet -hier -filter {name =~ *tx_rate*}]
 
-set_false_path -to [get_cells -hier -filter {name =~ *up_rx_rst_done_m1_reg && IS_SEQUENTIAL}]
-set_false_path -to [get_cells -hier -filter {name =~ *up_tx_rst_done_m1_reg && IS_SEQUENTIAL}]
-set_false_path -to [get_cells -hier -filter {name =~ *rx_rate_m1_reg* && IS_SEQUENTIAL}]
-set_false_path -to [get_cells -hier -filter {name =~ *tx_rate_m1_reg* && IS_SEQUENTIAL}]
+set_false_path -quiet -to [get_cells -quiet -hier -filter {name =~ *up_rx_rst_done_m1_reg && IS_SEQUENTIAL}]
+set_false_path -quiet -to [get_cells -quiet -hier -filter {name =~ *up_tx_rst_done_m1_reg && IS_SEQUENTIAL}]
+set_false_path -quiet -to [get_cells -quiet -hier -filter {name =~ *rx_rate_m1_reg* && IS_SEQUENTIAL}]
+set_false_path -quiet -to [get_cells -quiet -hier -filter {name =~ *tx_rate_m1_reg* && IS_SEQUENTIAL}]
 
 # sync bits i_sync_bits_tx_prbs_in
-set_false_path \
+set_false_path -quiet \
   -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
     -filter {NAME =~ *i_sync_bits_tx_prbs_in* && IS_SEQUENTIAL}
     ]
 
 # sync bits i_sync_bits_rx_prbs_in
-set_false_path \
+set_false_path -quiet \
   -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
     -filter {NAME =~ *i_sync_bits_rx_prbs_in* && IS_SEQUENTIAL}
     ]
 
 # sync bits i_sync_bits_rx_prbs_out
-set_false_path \
+set_false_path -quiet \
   -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
     -filter {NAME =~ *i_sync_bits_rx_prbs_out* && IS_SEQUENTIAL}
     ]
 
 # sync bits i_sync_bits_rx_bufstatus_in
-set_false_path \
+set_false_path -quiet \
   -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
     -filter {NAME =~ *i_sync_bits_rx_bufstatus_in* && IS_SEQUENTIAL}
     ]
 
 # sync bits i_sync_bits_bufstatus_out
-set_false_path \
+set_false_path -quiet \
   -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
     -filter {NAME =~ *i_sync_bits_bufstatus_out* && IS_SEQUENTIAL}]
     
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_i_reset* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_o_reset* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_resetdone* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_bits_rx_in* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_bits_status* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_lcplllock* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_powergood* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_link_clk_locked* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_data_rx_prbssel* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_data_tx_prbssel* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE -quiet \
+  [get_cells -quiet -hier *cdc_sync_stage*_reg* \
+    -filter {NAME =~ *i_sync_i_reset* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE -quiet \
+  [get_cells -quiet -hier *cdc_sync_stage*_reg* \
+    -filter {NAME =~ *i_sync_o_reset* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE -quiet \
+  [get_cells -quiet -hier *cdc_sync_stage*_reg* \
+    -filter {NAME =~ *i_sync_resetdone* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE -quiet \
+  [get_cells -quiet -hier *cdc_sync_stage*_reg* \
+    -filter {NAME =~ *i_sync_bits_rx_in* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE -quiet \
+  [get_cells -quiet -hier *cdc_sync_stage*_reg* \
+    -filter {NAME =~ *i_sync_bits_status* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE -quiet \
+  [get_cells -quiet -hier *cdc_sync_stage*_reg* \
+    -filter {NAME =~ *i_sync_lcplllock* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE -quiet \
+  [get_cells -quiet -hier *cdc_sync_stage*_reg* \
+    -filter {NAME =~ *i_sync_powergood* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE -quiet \
+  [get_cells -quiet -hier *cdc_sync_stage*_reg* \
+    -filter {NAME =~ *i_sync_link_clk_locked* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE -quiet \
+  [get_cells -quiet -hier *cdc_sync_stage*_reg* \
+    -filter {NAME =~ *i_sync_data_rx_prbssel* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE -quiet \
+  [get_cells -quiet -hier *cdc_sync_stage*_reg* \
+    -filter {NAME =~ *i_sync_data_tx_prbssel* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -from [get_cells -quiet -hier *cdc_hold_reg* -filter {NAME =~ *i_sync_data_rx_prbssel* && IS_SEQUENTIAL}] \
+  -to [get_cells -quiet -hier *out_data_reg* -filter {NAME =~ *i_sync_data_rx_prbssel* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -from [get_cells -quiet -hier *cdc_hold_reg* -filter {NAME =~ *i_sync_data_tx_prbssel* && IS_SEQUENTIAL}] \
+  -to [get_cells -quiet -hier *out_data_reg* -filter {NAME =~ *i_sync_data_tx_prbssel* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hier *usr_rate_m1_reg* -filter {IS_SEQUENTIAL}]
+set_property ASYNC_REG TRUE -quiet \
+  [get_cells -quiet -hier *usr_rate_m*_reg* -filter {IS_SEQUENTIAL}]

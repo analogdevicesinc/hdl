@@ -57,7 +57,6 @@ module  jesd204_versal_gt_adapter_rx #(
   input  [  5 : 0] rxheader,
   input  [ 15 : 0] rxctrl0,
   input  [ 15 : 0] rxctrl1,
-  input  [  7 : 0] rxctrl2,
   input  [  7 : 0] rxctrl3,
   output           rxgearboxslip,
   input  [  1 : 0] rxheadervalid,
@@ -80,6 +79,16 @@ module  jesd204_versal_gt_adapter_rx #(
 
   wire i_reset;
   wire o_reset;
+
+  function [63:0] bit_reverse;
+    input [63:0] d;
+    integer i;
+    begin
+      for (i = 0; i < 64; i = i + 1) begin
+        bit_reverse[63-i] = d[i];
+      end
+    end
+  endfunction
 
   sync_bits #(
     .NUM_OF_BITS(1),
@@ -115,8 +124,6 @@ module  jesd204_versal_gt_adapter_rx #(
 
       wire [63:0] o_data_aligned;
       wire [ 1:0] o_header_aligned;
-      wire [63:0] o_data_rev;
-      wire [ 1:0] o_header_rev;
       wire        o_bitslip;
       wire        o_bitslip_done;
 
@@ -181,16 +188,10 @@ module  jesd204_versal_gt_adapter_rx #(
         .bitslip_done (o_bitslip_done),
         .data_out ({o_data_aligned, o_header_aligned}));
 
-      genvar i;
-      for (i=0; i < 64; i=i+1) begin
-        assign o_data_rev[63-i] = o_data_aligned[i];
-      end
-      assign o_header_rev = {o_header_aligned[0], o_header_aligned[1]};
-
       sync_header_align i_header_align (
         .clk (usr_clk),
         .reset (o_reset),
-        .i_data ({o_header_rev, o_data_rev}),
+        .i_data ({o_header_aligned[0], o_header_aligned[1], bit_reverse(o_data_aligned)}),
         .i_slip (o_bitslip),
         .i_slip_done (o_bitslip_done),
         .o_data (rx_data),
@@ -228,13 +229,13 @@ module  jesd204_versal_gt_adapter_rx #(
       assign rxgearboxslip = 1'b0;
     end
   end else begin
-    reg [63:0] rxdata_d;
-    reg [ 1:0] rxheader_d;
-    reg        rxgearboxslip_d;
-    reg [ 1:0] rxheadervalid_d;
-    reg [15:0] rxctrl0_d;
-    reg [15:0] rxctrl1_d;
-    reg [ 7:0] rxctrl3_d;
+    reg [63:0] rxdata_d = 64'd0;
+    reg [ 1:0] rxheader_d = 2'd0;
+    reg        rxgearboxslip_d = 1'b0;
+    reg [ 1:0] rxheadervalid_d = 2'd0;
+    reg [15:0] rxctrl0_d = 16'd0;
+    reg [15:0] rxctrl1_d = 16'd0;
+    reg [ 7:0] rxctrl3_d = 8'd0;
     wire       rxgearboxslip_s;
 
     always @(posedge usr_clk) begin
@@ -267,20 +268,12 @@ module  jesd204_versal_gt_adapter_rx #(
       assign rxgearboxslip_s = rx_bitslip_req_s & ~rx_bitslip_req_s_d;
       assign rxgearboxslip = rxgearboxslip_d;
 
-      wire [63:0] rxdata_flip;
-      wire [ 1:0] rxheader_flip;
-      genvar i;
-      for (i = 0; i < 64; i=i+1) begin
-        assign rxdata_flip[63-i] = rxdata_d[i];
-      end
-      assign rxheader_flip = {rxheader_d[0], rxheader_d[1]};
-
       // Sync header alignment
       sync_header_align i_sync_header_align (
         .clk(usr_clk),
         .reset(~rxheadervalid_d[0]),
         // Flip header bits and data
-        .i_data({rxheader_flip, rxdata_flip}),
+        .i_data({rxheader_d[0], rxheader_d[1], bit_reverse(rxdata_d)}),
         .i_slip(rx_bitslip_req_s),
         .i_slip_done(rx_bitslip_done_cnt[5]),
         .o_data(rx_data),

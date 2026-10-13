@@ -324,6 +324,9 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
 
   create_bd_design "system"
   source system_bd.tcl
+  if {[llength [info procs ad_xcvr_versal_finalize]]} {
+    ad_xcvr_versal_finalize
+  }
 
   save_bd_design
   validate_bd_design

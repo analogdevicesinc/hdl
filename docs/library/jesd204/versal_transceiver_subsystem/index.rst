@@ -3,11 +3,18 @@
 Versal Adaptive SoC Transceiver Subsystem
 ===============================================================================
 
-The Versal Transceiver Subsystem can be used to configure the GTY and GTYP for
+The Versal Transceiver Subsystem can be used to configure the GTY, GTYP and GTM for
 Versal ACAP devices. In general, across all reference designs, the gigabit
 transceivers are configured specifically to the Lane rate of the HDL build.
 This guide provides instructions on using the wizard to generate a transceiver
 configuration for JESD204B/C interfaces on Versal devices.
+
+.. warning::
+
+   This subsystem (``versal_xcvr_subsystem.tcl``) and the
+   ``jesd204_versal_gt_adapter_rx/tx`` cores are deprecated. New designs use
+   :ref:`UTIL_ADXCVR <util_adxcvr versal>` and
+   :ref:`AXI_ADXCVR <axi_adxcvr versal>` with ``ad_xcvrcon``.
 
 .. note::
 
@@ -81,7 +88,7 @@ The script takes the following parameters:
 - tx_lane_rate - TX lane rate in Gb/s
 - ref_clock - Reference clock frequency in MHz (see
   `Lane Rate and RefClk Selection`_)
-- transceiver - GTY or GTYP
+- transceiver - GTY, GTYP or GTM
 - intf_cfg:
 
   - RX - Simplex RX

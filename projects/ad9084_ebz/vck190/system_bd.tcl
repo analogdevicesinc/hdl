@@ -64,10 +64,11 @@ if {!$SIDE_B_ONLY} {
   ]
 }
 
-set ADI_PHY_SEL 0
-set MAX_NUMBER_OF_QUADS 3
-set TRANSCEIVER_TYPE GTY
-set EXTERNAL_LINK_CLK 0
+# FMC2: link 0 on GTY_205 and link 1 on GTY_204, four lanes each; with
+# SIDE_B_ONLY lanes 0-3 on GTY_204 and lanes 4-7 on GTY_206
+set MAX_RX_LANES_PER_LINK 4
+set MAX_TX_LANES_PER_LINK 4
+set MAX_APOLLO_LANES 8
 set HSCI_BANKS 2
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]

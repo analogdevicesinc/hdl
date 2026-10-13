@@ -24,6 +24,7 @@ Features
 -  Reconfiguration interface control with broadcast capability for AMD Xilinx.
 -  Access to the Statistical eye scan interface of the PHY (AMD Xilinx).
 -  Supports up to 16 transceiver lanes per link (AMD Xilinx).
+-  Supports the Versal GTY, GTYP and GTM transceiver quads (AMD Xilinx).
 
 .. _axi_adxcvr intel:
 
@@ -118,7 +119,8 @@ Parameters
    * - NUM_OF_LANES
      - The number of lanes (primitives) used in this link
    * - XCVR_TYPE
-     - Define the current GT type, GTXE2(2), GTHE3(5), GTHE4(7)
+     - Define the current GT type, GTXE2(2), GTHE3(5), GTHE4(8), GTYE4(9),
+       GTYE5(11), GTYP(12), GTME5(13)
    * - FPGA_TECHNOLOGY
      - Encoded value describing the technology/generation of the FPGA device
        (7series/ultrascale)
@@ -155,6 +157,13 @@ Parameters
    * - OUT_CLK_SEL
      - select the transceiver reference clock as the source of TXOUTCLK
        :ref:`Table 2 <axi_adxcvr table_two_label>`
+   * - NUM_RATES
+     - Versal, set by ``ad_xcvrcon``: number of built lane rates
+   * - LANE_RATES_KHZ
+     - Versal, set by ``ad_xcvrcon``: eight 32-bit lane rates [kHz], rate 0 in
+       the low word
+   * - REF_CLK_KHZ
+     - Versal, set by ``ad_xcvrcon``: reference clock [kHz]
 
 Interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -280,6 +289,37 @@ Table 2
 The REFCLK selected by OUTCLK_SEL depends on the SYSCLK_SEL, it may be CPLL,
 QPLL0 or QPLL1 refclk.
 
+.. _axi_adxcvr versal:
+
+Versal devices
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On Versal (XCVR_TYPE 11 GTYE5, 12 GTYP, 13 GTME5) the core controls the quads
+that UTIL_ADXCVR instantiates; ``ad_xcvrcon`` copies XCVR_TYPE, the lane rates
+and the reference clock into it. The register map differs as follows:
+
+* There is no DRP. The quad registers (AM002 / AM017 address map) are reached
+  through the QREG window (0x0013-0x0017): select the quad in QREG_SEL, set
+  QREG_WDATA for a write, write the word address and WR to QREG_CTRL, wait
+  for QREG_STATUS.BUSY to clear, then check SLVERR and read QREG_RDATA.
+* CM_* (0x0010-0x0012) have no common block behind them: do not use them,
+  BUSY never clears. CH_* (0x0018-0x001A) complete with zero read data.
+* The eye-scan registers (0x0020-0x002F) read 0 and there is no ``m_axi``
+  interface; eye scan goes through QREG.
+* SYNTH_VERSAL (0x000A) gives the number of quads and lane rates, and whether
+  TX_DIFFCTRL, LPM_DFE_N and eye scan are supported (not on GTM).
+* RATE_TABLE_n (0x0070-0x0077) and REF_CLK_KHZ (0x0078) hold the built lane
+  rates and their reference clock; CONTROL.RATE selects one.
+* LANE_SLOT_n (0x0079-0x0080) give the slot (quad * 4 + channel) of each
+  lane.
+* STATUS.GTPOWERGOOD_N is set until all quads are powered up; the resets wait
+  for it.
+
+To start a link, or change its rate, keep RESETN at 0x0, start the reference
+clock, write CONTROL.RATE, set RESETN to 0x1 and wait for STATUS. On a rate
+change the quads finish their reset at the old rate, switch and reset again;
+STATUS is set after the last sequence.
+
 Physical layer PRBS testing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -340,3 +380,5 @@ References
 * :intel:`Intel® Arria® 10 Transceiver PHY User Guide <content/dam/www/programmable/us/en/pdfs/literature/hb/arria-10/ug_arria10_xcvr_phy.pdf>`
 * `7 Series FPGAs GTX/GTH Transceivers User Guide - AMD Xilinx <https://docs.amd.com/v/u/en-US/ug476_7Series_Transceivers>`_
 * `Ultrascale Architecture GTH Transceivers User Guide - AMD Xilinx <https://docs.amd.com/v/u/en-US/ug576-ultrascale-gth-transceivers>`_
+* `Versal Adaptive SoC GTY and GTYP Transceivers Architecture Manual (AM002) <https://docs.amd.com/r/en-US/am002-versal-gty-transceivers>`_
+* `Versal Adaptive SoC GTM Transceivers Architecture Manual (AM017) <https://docs.amd.com/r/en-US/am017-versal-gtm-transceivers>`_

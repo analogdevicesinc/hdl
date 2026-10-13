@@ -84,6 +84,13 @@ Status Reporting Register
 ENDREG
 
 FIELD
+[7]
+GTPOWERGOOD_N
+RO
+Set while a quad does not report GTPOWERGOOD; the transceiver resets wait for it. Versal only, 0 elsewhere. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
 [6:5]
 BUFSTATUS
 RO
@@ -161,7 +168,7 @@ FIELD
 [10:8]
 RATE
 RW
-Transceiver primitive control, refer Xilinx documentation.
+Transceiver primitive control, refer Xilinx documentation. On Versal it selects a built lane rate (RATE_TABLE_n), applied on the next RESETN release.
 ENDFIELD
 
 FIELD
@@ -203,7 +210,7 @@ FIELD
 [19:16]
 XCVR_TYPE
 RO
-:git-hdl:`Xilinx encoded values <library/scripts/adi_xilinx_device_info_enc.tcl>`.
+:git-hdl:`Xilinx encoded values <library/scripts/adi_xilinx_device_info_enc.tcl>`. Versal: 11 GTYE5, 12 GTYP, 13 GTME5.
 ENDFIELD
 
 FIELD
@@ -225,6 +232,57 @@ FIELD
 NUM_OF_LANES
 RO
 Physical layer number of lanes.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x000A
+SYNTH_VERSAL
+Versal Transceiver Configuration Register
+ENDREG
+
+FIELD
+[19]
+HAS_LANE_SLOTS
+RO
+LANE_SLOT_n are present. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[18]
+HAS_EYESCAN
+RO
+Eye scan through QREG (GTY/GTYP). Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[17]
+HAS_LPM
+RO
+CONTROL.LPM_DFE_N selects the RX equalizer (GTY/GTYP). Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[16]
+HAS_DIFFCTRL
+RO
+TX_DIFFCTRL sets the TX swing (GTY/GTYP). Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[11:8]
+NUM_QUADS
+RO
+Number of quad windows, from the first to the last used quad. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[3:0]
+NUM_RATES
+RO
+Number of built lane rates. Versal only. Available from version 17.6.a.
 ENDFIELD
 
 ############################################################################################
@@ -294,6 +352,100 @@ FIELD
 CM_RDATA
 RW
 Transceiver common-DRP read data.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0013
+QREG_SEL
+Quad Register Access Select
+ENDREG
+
+FIELD
+[3:0]
+QUAD
+RW
+Quad of the QREG_* access; ignored while BUSY. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0014
+QREG_CTRL
+Quad Register Access Control
+ENDREG
+
+FIELD
+[28]
+WR
+RW
+1: write QREG_WDATA, 0: read into QREG_RDATA.
+ENDFIELD
+
+FIELD
+[15:0]
+ADDR
+RW
+Quad register word address (AM002/AM017). Writing it starts the access; ignored while BUSY. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0015
+QREG_WDATA
+Quad Register Write Data
+ENDREG
+
+FIELD
+[31:0]
+WDATA
+RW
+Data for a quad register write. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0016
+QREG_STATUS
+Quad Register Access Status
+ENDREG
+
+FIELD
+[17]
+SLVERR
+RO
+The last access failed: quad out of range, reserved address (0x0000-0x000C, 0x5FFD-0x5FFF) or slave error.
+ENDFIELD
+
+FIELD
+[16]
+BUSY
+RO
+An access is in progress. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0017
+QREG_RDATA
+Quad Register Read Data
+ENDREG
+
+FIELD
+[31:0]
+RDATA
+RO
+Data of the last quad register read. Versal only. Available from version 17.6.a.
 ENDFIELD
 
 ############################################################################################
@@ -564,10 +716,10 @@ Transceiver primitive control, refer Xilinx documentation.
 ENDREG
 
 FIELD
-[31:0]
+[5:0]
 TX_POSTCURSOR
 RW
-Transmiter post-cursor TX pre-emphasis control.
+Transmitter post-cursor TX pre-emphasis control: 6 bits on Versal GTM, 5 bits elsewhere (bit 5 reads 0).
 ENDFIELD
 
 ############################################################################################
@@ -580,10 +732,10 @@ Transceiver primitive control, refer Xilinx documentation.
 ENDREG
 
 FIELD
-[31:0]
+[5:0]
 TX_PRECURSOR
 RW
-Transmiter pre-cursor TX pre-emphasis control.
+Transmitter pre-cursor TX pre-emphasis control: 6 bits on Versal GTM, 5 bits elsewhere (bit 5 reads 0).
 ENDFIELD
 
 ############################################################################################
@@ -653,6 +805,446 @@ FIELD
 PRBSLOCKED
 RO
 Ignore this bit for GTX transceivers. For others: Indicates that the RX PRBS checker has been error free for 15 XCLK cycles after reset. Once asserted High, it does not deassert until reset of the RX pattern checker via PRBSCNTRESET
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0070
+RATE_TABLE_0
+Line Rate Configuration 0
+ENDREG
+
+FIELD
+[31:0]
+LANE_RATE_KHZ
+RO
+Lane rate [kHz] for CONTROL.RATE = 0; 0 if not built. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0071
+RATE_TABLE_1
+Line Rate Configuration 1
+ENDREG
+
+FIELD
+[31:0]
+LANE_RATE_KHZ
+RO
+Lane rate [kHz] for CONTROL.RATE = 1; 0 if not built. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0072
+RATE_TABLE_2
+Line Rate Configuration 2
+ENDREG
+
+FIELD
+[31:0]
+LANE_RATE_KHZ
+RO
+Lane rate [kHz] for CONTROL.RATE = 2; 0 if not built. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0073
+RATE_TABLE_3
+Line Rate Configuration 3
+ENDREG
+
+FIELD
+[31:0]
+LANE_RATE_KHZ
+RO
+Lane rate [kHz] for CONTROL.RATE = 3; 0 if not built. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0074
+RATE_TABLE_4
+Line Rate Configuration 4
+ENDREG
+
+FIELD
+[31:0]
+LANE_RATE_KHZ
+RO
+Lane rate [kHz] for CONTROL.RATE = 4; 0 if not built. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0075
+RATE_TABLE_5
+Line Rate Configuration 5
+ENDREG
+
+FIELD
+[31:0]
+LANE_RATE_KHZ
+RO
+Lane rate [kHz] for CONTROL.RATE = 5; 0 if not built. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0076
+RATE_TABLE_6
+Line Rate Configuration 6
+ENDREG
+
+FIELD
+[31:0]
+LANE_RATE_KHZ
+RO
+Lane rate [kHz] for CONTROL.RATE = 6; 0 if not built. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0077
+RATE_TABLE_7
+Line Rate Configuration 7
+ENDREG
+
+FIELD
+[31:0]
+LANE_RATE_KHZ
+RO
+Lane rate [kHz] for CONTROL.RATE = 7; 0 if not built. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0078
+REF_CLK_KHZ
+Transceiver Reference Clock
+ENDREG
+
+FIELD
+[31:0]
+REF_CLK_KHZ
+RO
+Reference clock [kHz] of the built lane rates. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0079
+LANE_SLOT_0
+Transceiver Slots of Lanes 0-3
+ENDREG
+
+FIELD
+[31:24]
+LANE_3_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 3. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[23:16]
+LANE_2_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 2. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[15:8]
+LANE_1_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 1. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[7:0]
+LANE_0_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 0. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x007A
+LANE_SLOT_1
+Transceiver Slots of Lanes 4-7
+ENDREG
+
+FIELD
+[31:24]
+LANE_7_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 7. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[23:16]
+LANE_6_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 6. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[15:8]
+LANE_5_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 5. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[7:0]
+LANE_4_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 4. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x007B
+LANE_SLOT_2
+Transceiver Slots of Lanes 8-11
+ENDREG
+
+FIELD
+[31:24]
+LANE_11_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 11. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[23:16]
+LANE_10_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 10. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[15:8]
+LANE_9_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 9. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[7:0]
+LANE_8_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 8. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x007C
+LANE_SLOT_3
+Transceiver Slots of Lanes 12-15
+ENDREG
+
+FIELD
+[31:24]
+LANE_15_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 15. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[23:16]
+LANE_14_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 14. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[15:8]
+LANE_13_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 13. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[7:0]
+LANE_12_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 12. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x007D
+LANE_SLOT_4
+Transceiver Slots of Lanes 16-19
+ENDREG
+
+FIELD
+[31:24]
+LANE_19_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 19. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[23:16]
+LANE_18_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 18. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[15:8]
+LANE_17_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 17. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[7:0]
+LANE_16_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 16. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x007E
+LANE_SLOT_5
+Transceiver Slots of Lanes 20-23
+ENDREG
+
+FIELD
+[31:24]
+LANE_23_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 23. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[23:16]
+LANE_22_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 22. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[15:8]
+LANE_21_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 21. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[7:0]
+LANE_20_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 20. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x007F
+LANE_SLOT_6
+Transceiver Slots of Lanes 24-27
+ENDREG
+
+FIELD
+[31:24]
+LANE_27_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 27. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[23:16]
+LANE_26_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 26. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[15:8]
+LANE_25_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 25. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[7:0]
+LANE_24_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 24. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0080
+LANE_SLOT_7
+Transceiver Slots of Lanes 28-31
+ENDREG
+
+FIELD
+[31:24]
+LANE_31_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 31. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[23:16]
+LANE_30_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 30. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[15:8]
+LANE_29_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 29. Versal only. Available from version 17.6.a.
+ENDFIELD
+
+FIELD
+[7:0]
+LANE_28_SLOT
+RO
+Slot (quad * 4 + channel, from the first quad window) of lane 28. Versal only. Available from version 17.6.a.
 ENDFIELD
 
 ############################################################################################
