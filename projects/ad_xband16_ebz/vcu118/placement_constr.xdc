@@ -6,8 +6,8 @@
 # USER_SLR_ASSIGNMENT property documented in UG912.
 # Putting each of these TX IPs in a single SLR, since otherwise the tools would have a
 # tendency of splitting them across two SLRs (SLR1 and SLR2, respectively).
-set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */util_apollo_upack}]
 set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */apollo_tx_data_offload}]
+set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */util_apollo_upack}]
 set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */tx_apollo_tpl_core}]
 # Putting each JESD204 lane in a single SLR, where its transceiver is also located.
 set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */mode_*.gen_lane[0].i_lane}]
@@ -55,6 +55,7 @@ set_property FORCE_MAX_FANOUT 2 [get_nets -of [get_pins -hierarchical -filter {N
 set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_cfg_lanes_disable[*]_i_*/O}]]
 set_property FORCE_MAX_FANOUT 2 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/mem_rd_data_reg[*]/Q}]]
 set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.gen_lane[*].i_lane/i_scrambler/state_reg[*]/Q}]]
-set_property FORCE_MAX_FANOUT 2 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.gen_lane[*].i_lane/i_scrambler/state[*]_i_*/O}]]
-set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_cfg_lanes_disable_reg[*]/Q}]]
 set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/system_tx_0*/O}]]
+
+# Remap to LUTs single CARRY cells that are not part of a carry chain.
+set_property CARRY_REMAP 1 [get_cells -hier -filter {ref_name == CARRY8}]
