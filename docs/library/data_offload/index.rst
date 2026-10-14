@@ -153,6 +153,15 @@ The initialization and data transfer looks as follows:
   to work); the BYPASS mode is used when an initially high rate path is downgraded
   to lower rates.
 
+To send a new buffer in cyclic mode to the DAC, simply write the new data buffer
+to the Data Offload Engine.
+
+To stop a cyclic transfer to the DAC, set the ONESHOT_EN bit from the CONTROL
+register, then send a buffer filled with zeros to the Data Offload Engine. Thus,
+the ONESHOT_EN bit will be taken into account and the buffer filled with zeros will
+be sent once to the DAC. The Data Offload Engine will then stop transfers to the
+DAC.
+
 Generic Architecture
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
