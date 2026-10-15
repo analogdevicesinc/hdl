@@ -169,7 +169,7 @@ Internal Use Area
    * - Field size
      - Field
      - Data format
-   * - 28B \*
+   * - 128B \*
      - Git branch
      - hex
    * - 44B \*
