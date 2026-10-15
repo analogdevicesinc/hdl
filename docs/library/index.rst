@@ -101,6 +101,7 @@ Utilities
    util_sigma_delta_spi/index
    util_var_fifo/index
    util_wfifo/index
+   intel/index
    xilinx/index
 
 Obsolete IPs
