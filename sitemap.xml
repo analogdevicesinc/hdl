@@ -153,13 +153,13 @@
 <url><loc>https://analogdevicesinc.github.io/hdl/library/cn0363/cn0363_dma_sequencer/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/cn0363/cn0363_phase_data_sync/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/cn0363/</loc><lastmod>2026-10-12</lastmod></url>
-<url><loc>https://analogdevicesinc.github.io/hdl/library/common/ad_dds/</loc><lastmod>2026-10-13</lastmod></url>
+<url><loc>https://analogdevicesinc.github.io/hdl/library/common/ad_dds/</loc><lastmod>2026-10-15</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/corundum/corundum_core/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/corundum/ethernet/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/corundum/ethernet/k26/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/corundum/ethernet/vcu118/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/corundum/</loc><lastmod>2026-10-12</lastmod></url>
-<url><loc>https://analogdevicesinc.github.io/hdl/library/data_offload/</loc><lastmod>2026-10-13</lastmod></url>
+<url><loc>https://analogdevicesinc.github.io/hdl/library/data_offload/</loc><lastmod>2026-10-15</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/i3c_controller/i3c_controller_core/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/i3c_controller/i3c_controller_host_interface/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/i3c_controller/</loc><lastmod>2026-10-12</lastmod></url>
@@ -194,8 +194,8 @@
 <url><loc>https://analogdevicesinc.github.io/hdl/library/util_axis_fifo/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/util_extract/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/util_mii_to_rmii/</loc><lastmod>2026-10-13</lastmod></url>
-<url><loc>https://analogdevicesinc.github.io/hdl/library/util_pack/util_cpack2/</loc><lastmod>2026-10-13</lastmod></url>
-<url><loc>https://analogdevicesinc.github.io/hdl/library/util_pack/util_upack2/</loc><lastmod>2026-10-13</lastmod></url>
+<url><loc>https://analogdevicesinc.github.io/hdl/library/util_pack/util_cpack2/</loc><lastmod>2026-10-15</lastmod></url>
+<url><loc>https://analogdevicesinc.github.io/hdl/library/util_pack/util_upack2/</loc><lastmod>2026-10-15</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/util_rfifo/</loc><lastmod>2026-10-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/util_sigma_delta_spi/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/util_var_fifo/</loc><lastmod>2026-10-12</lastmod></url>
@@ -326,7 +326,7 @@
 <url><loc>https://analogdevicesinc.github.io/hdl/user_guide/ip_cores/axi_dac/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/user_guide/ip_cores/creating_new_ip/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/user_guide/ip_cores/</loc><lastmod>2026-10-12</lastmod></url>
-<url><loc>https://analogdevicesinc.github.io/hdl/user_guide/ip_cores/interfaces/</loc><lastmod>2026-10-13</lastmod></url>
+<url><loc>https://analogdevicesinc.github.io/hdl/user_guide/ip_cores/interfaces/</loc><lastmod>2026-10-15</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/user_guide/ip_cores/source_sync_if/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/user_guide/ip_cores/use_adi_ips/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/user_guide/porting_project/</loc><lastmod>2026-10-12</lastmod></url>

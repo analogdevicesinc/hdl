@@ -509,7 +509,22 @@ bus, as defined by the ADC enables.</p>
 </table>
 </div>
 </section>
-</div></section>
+</div><p>The INTERFACE_TYPE parameter refers to the upstream interface type: 1 means
+FIFO interface, 0 means AXI Stream interface.</p>
+<p>The PARALLEL_OR_SERIAL_N parameter refers to how the prefix sum is being
+implemented inside the IP: 1 means a log-depth structure, 0 means a serial
+structure. The former may pass timing easier at higher frequencies, while the
+latter may use fewer resources. Choosing one or the other does not affect the
+IP functionality.</p>
+<p>The PIPELINE_STAGES parameter refers to how or if pipeline stages are added to
+the design: 0 means no pipeline added, 1 means a pipeline after every 2 MUX
+stages, 2 means a pipeline after every MUX stage.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Pipelining is not supported in AXI Stream interface mode (i.e. if
+INTERFACE_TYPE=0). In this case, the PIPELINE_STAGES parameter is ignored.</p>
+</div>
+</section>
 <section id="interface">
 <h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
 <div><section id="bus-interface-m_axis">
