@@ -50,12 +50,21 @@ module axi_ada4355_regmap (
   output reg        up_rack,
   input             clk_div,
   output     [ 2:0] enable_error_sync,
+  input      [ 2:0] adc_shift_cnt,
+  input             adc_frame_unaligned,
+  input      [ 7:0] adc_realign_cnt,
+  output            adc_realign_clr,
   input             adc_rst
 );
 
   // internal registers
 
   reg [ 2:0]  up_enable_error = 'd0;
+  reg         up_realign_clr_toggle = 1'b0;
+  reg         adc_realign_clr_toggle_d = 1'b0;
+
+  wire [11:0] up_align_status_s;
+  wire        adc_realign_clr_toggle_s;
 
   // processor write interface
 
@@ -67,6 +76,9 @@ module axi_ada4355_regmap (
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr[6:0] == 7'h32)) begin
         up_enable_error <= up_wdata[2:0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h33)) begin
+        up_realign_clr_toggle <= ~up_realign_clr_toggle;
       end
     end
   end
@@ -82,6 +94,9 @@ module axi_ada4355_regmap (
       if (up_rreq == 1'b1) begin
         case (up_raddr)
           7'h32: up_rdata <= {29'd0, up_enable_error};
+          // [2:0] shift_cnt, [3] frame aligned, [15:8] re-alignments since clear (saturating)
+          7'h33: up_rdata <= {16'd0, up_align_status_s[11:4], 4'd0,
+                              ~up_align_status_s[3], up_align_status_s[2:0]};
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -98,5 +113,32 @@ module axi_ada4355_regmap (
     .out_resetn (~adc_rst),
     .out_clk (clk_div),
     .out_bits (enable_error_sync));
+
+  // Accumulates by OR over each transfer window, so 'unaligned' reads 1 if lock
+  // was lost at any point in it; the static fields read back exactly.
+  up_xfer_status #(
+    .DATA_WIDTH (12)
+  ) i_align_status (
+    .up_rstn (up_rstn),
+    .up_clk (up_clk),
+    .up_data_status (up_align_status_s),
+    .d_rst (adc_rst),
+    .d_clk (clk_div),
+    .d_data_status ({adc_realign_cnt, adc_frame_unaligned, adc_shift_cnt}));
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_realign_clr_sync (
+    .in_bits (up_realign_clr_toggle),
+    .out_resetn (~adc_rst),
+    .out_clk (clk_div),
+    .out_bits (adc_realign_clr_toggle_s));
+
+  always @(posedge clk_div) begin
+    adc_realign_clr_toggle_d <= adc_realign_clr_toggle_s;
+  end
+
+  assign adc_realign_clr = adc_realign_clr_toggle_s ^ adc_realign_clr_toggle_d;
 
 endmodule

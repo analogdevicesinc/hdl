@@ -39,7 +39,8 @@ module axi_ada4355 #(
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   IO_DELAY_GROUP = "adc_if_delay_group",
   parameter   IODELAY_CTRL = 1,
-  parameter   BUFMRCE_EN = 0
+  parameter   BUFMRCE_EN = 0,
+  parameter   CLK_SHARE = 0
 ) (
 
   // ADC interface
@@ -53,6 +54,15 @@ module axi_ada4355 #(
   input         fco_p,
   input         fco_n,
   input         sync_n,
+
+  // shared DCO, see axi_ada4355_if CLK_SHARE
+
+  output        shr_dco_o,
+  output        shr_clr_o,
+  input         shr_dco_i,
+  input         shr_clr_i,
+  input  [ 2:0] shr_rel_i,
+  output        serdes_rel_o,
 
   // output data interface
 
@@ -114,6 +124,10 @@ module axi_ada4355 #(
   wire        up_adc_pn_err_s;
   wire        up_adc_pn_oos_s;
   wire [ 2:0] enable_error_s;
+  wire [ 2:0] adc_shift_cnt_s;
+  wire        adc_frame_unaligned_s;
+  wire [ 7:0] adc_realign_cnt_s;
+  wire        adc_realign_clr_s;
 
   wire        up_rstn;
   wire        up_clk;
@@ -278,7 +292,8 @@ module axi_ada4355 #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .IO_DELAY_GROUP(IO_DELAY_GROUP),
     .IODELAY_CTRL(IODELAY_CTRL),
-    .BUFMRCE_EN(BUFMRCE_EN)
+    .BUFMRCE_EN(BUFMRCE_EN),
+    .CLK_SHARE(CLK_SHARE)
   ) i_ada4355_interface (
     .dco_n(dco_n),
     .dco_p(dco_p),
@@ -302,6 +317,16 @@ module axi_ada4355 #(
     .aresetn(up_rstn),
     .adc_pn_err(adc_pn_err_s),
     .enable_error(enable_error_s),
+    .adc_shift_cnt(adc_shift_cnt_s),
+    .adc_frame_unaligned(adc_frame_unaligned_s),
+    .adc_realign_cnt(adc_realign_cnt_s),
+    .adc_realign_clr(adc_realign_clr_s),
+    .shr_dco_o(shr_dco_o),
+    .shr_clr_o(shr_clr_o),
+    .shr_dco_i(shr_dco_i),
+    .shr_clr_i(shr_clr_i),
+    .shr_rel_i(shr_rel_i),
+    .serdes_rel_o(serdes_rel_o),
     .sync_n(sync_n),
     .clkgen_rst(clkgen_rst_s));
 
@@ -342,6 +367,10 @@ module axi_ada4355 #(
     .up_rack(up_rack_s[3]),
     .clk_div(adc_clk_s),
     .enable_error_sync(enable_error_s),
+    .adc_shift_cnt(adc_shift_cnt_s),
+    .adc_frame_unaligned(adc_frame_unaligned_s),
+    .adc_realign_cnt(adc_realign_cnt_s),
+    .adc_realign_clr(adc_realign_clr_s),
     .adc_rst(adc_rst_s));
 
   // up bus interface
