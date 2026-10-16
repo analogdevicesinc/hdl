@@ -12,6 +12,7 @@ jobs:
     permissions:
       contents: read
     env:
+      XILINXD_LICENSE_FILE: ${{ secrets.XILINXD_LICENSE_FILE }}
       SOURCE_AMD_XILINX: ${{ vars.SOURCE_AMD_XILINX }}
 
     steps:
