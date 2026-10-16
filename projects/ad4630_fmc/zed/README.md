@@ -73,6 +73,7 @@ Corresponding device trees:
 - [zynq-zed-adv7511-adaq4224-24.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq4224-24.dts)
 
 #### 1-Channel options
+
 #### Clock mode SPI, 1 channel, MISO lane 1, Capture zone 2, SDR
 
 ```
@@ -128,6 +129,7 @@ make CLK_MODE=1 NUM_OF_CHANNEL=1 LANES_PER_CHANNEL=4 CAPTURE_ZONE=2 DDR_EN=1
 ```
 
 #### 2-Channel options
+
 #### Clock mode SPI, 2 channels, MISO lanes 2 (1 per channel), Capture zone 2, SDR
 
 ```

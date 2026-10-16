@@ -109,7 +109,7 @@ REF_CLK=245.75 \
 LANE_RATE=9.83
 ```
 
-Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x-jesd204b-245Msps.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv904x-jesd204b-245Msps.dts)
+Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x-245MHz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv904x-245MHz.dts)
 
 
 #### JESD204B @122.88MSPS configuration
@@ -123,4 +123,4 @@ REF_CLK=122.875 \
 LANE_RATE=4.915
 ```
 
-Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x-jesd204b-122Msps.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv904x-jesd204b-122Msps.dts)
+Corresponding device tree: [zynqmp-zcu102-rev10-adrv904x-122MHz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv904x-122MHz.dts)

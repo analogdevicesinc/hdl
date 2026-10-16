@@ -1,10 +1,10 @@
 # ADMX100X-EVB HDL Project
 
-- Evaluation boards product page:
+- Evaluation boards product pages:
   - [EVAL-ADMX1001](https://www.analog.com/eval-admx1001)
   - [EVAL-ADMX1002](https://www.analog.com/eval-admx1002)
-- System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/admx100xevb/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/admx100x_evb/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/admx100x_evb/
 - Evaluation board VADJ: 3.3V
 
 ## Supported parts

@@ -1,8 +1,8 @@
 # AD5758-SDZ HDL Project
 
 - Evaluation board product page: [EVAL-AD5758-SDZ](https://www.analog.com/eval-ad5758)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad5758
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad5758_sdz/index.html
+- System documentation: https://developer.analog.com/docs/no-os/projects/dac/ad5758-sdz.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad5758_sdz/
 - Evaluation board VADJ: 3.3V
 
 ## Supported parts

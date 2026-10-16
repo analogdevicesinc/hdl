@@ -793,8 +793,8 @@ Hardware related
 
 - Product datasheet: :adi:`AD9084`
 
-  - :adi:`UG-1578, AD9084/AD9088 Device User Guide <media/en/technical-documentation/user-guides/ad9084-ad9088-device-ug-2300.pdf>`
-  - :adi:`UG-2326, Evaluating the AD9084 Apollo MxFE Quad, 16-Bit 28GSPS RF DAC and Quad 12-Bit, 20GSPS RF ADC <media/en/technical-documentation/user-guides/eval-ad9084-ug-2326.pdf>`
+  - :adi:`UG-1578, AD9084/AD9088 Device User Guide <media/en/technical-documentation/user-guides/ad9084-ad9088-ug.pdf>`
+  - :adi:`UG-2326, Evaluating the AD9084 Apollo MxFE Quad, 16-Bit 28GSPS RF DAC and Quad 12-Bit, 20GSPS RF ADC <media/en/technical-documentation/user-guides/eval-ad9084-ad9088-ug-2326.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

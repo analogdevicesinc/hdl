@@ -1,15 +1,15 @@
 # AD4630-FMC HDL Project
 
-- Evaluation board product page:
+- Evaluation boards product pages:
   - [EVAL-AD4030-24FMCZ](https://www.analog.com/eval-ad4030-24)
   - [EVAL-AD4630-16FMCZ](https://www.analog.com/eval-ad4630-16)
-  - [EVAL-AD4630-20FMCZ](https://www.analog.com/eval-ad4630-20)
+  - [EVAL-AD4630-20FMCZ](https://www.analog.com/EVAL-AD4630-20FMCZ)
   - [EVAL-AD4630-24FMCZ](https://www.analog.com/eval-ad4630-24)
   - [EVAL-ADAQ4216-FMCZ](https://www.analog.com/eval-adaq4216-fmcz)
   - [EVAL-ADAQ4224-FMCZ](https://www.analog.com/eval-adaq4224-fmcz)
   - [EV-ISO-4224-FMCZ](https://www.analog.com/ev-iso-4224-fmcz)
 - System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad4630_fmc/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad4630_fmc/
 - Evaluation board VADJ range: 1.2V - 3.3V
 
 ## Supported parts

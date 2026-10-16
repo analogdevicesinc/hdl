@@ -1,8 +1,8 @@
 # CN0579 HDL Project
 
 - Evaluation board product page: [EVAL-CN0579](https://www.analog.com/cn0579)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0579 
-- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/cn0579/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-cn0579-ardz/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/cn0579/
 - Evaluation board VIO: 3.3V
 
 ## Supported parts

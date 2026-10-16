@@ -1,8 +1,8 @@
 # AD9213-EVB HDL Project
 
 - Evaluation board product page: [EVAL-AD213](https://www.analog.com/eval-ad9213)
-- System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad9213_evb/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-ad9213/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad9213_evb/
 - Evaluation board VADJ: 1.8V
 
 ## Supported parts

@@ -288,7 +288,7 @@ AD4630FMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD4630FMC <eval-ad4630-fmc>`
+   * - :adi:`AD4630FMC <EVAL-AD4630-24FMCZ>`
      - :git-hdl:`ad4630_fmc <hdl_2026_r1:projects/ad4630_fmc>`
      - :git-hdl:`zed <hdl_2026_r1:projects/ad4630_fmc/zed>`
      - :ref:`ad4630_fmc_zed <util_hdl_2026_r1_ad4630_fmc_zed>`
@@ -324,7 +324,7 @@ EVAL-AD469X-EVB
      - :git-hdl:`coraz7s <hdl_2026_r1:projects/ad469x_evb/coraz7s>`
      - ad469x_evb_coraz7s
      - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-   * - :adi:`EVAL-AD4692`
+   * - :adi:`EVAL-AD4692-ARDZ`
      - 
      - :git-hdl:`de10nano <hdl_2026_r1:projects/ad469x_evb/de10nano>`
        :git-hdl:`zed <hdl_2026_r1:projects/ad469x_evb/zed>`
@@ -385,7 +385,7 @@ EVAL-AD4880-FMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`EVAL-AD4880-FMC`
+   * - :adi:`EVAL-AD4880-FMCZ`
      - :git-hdl:`ad4880_fmc_evb <hdl_2026_r1:projects/ad4880_fmc_evb>`
      - :git-hdl:`zed <hdl_2026_r1:projects/ad4880_fmc_evb/zed>`
      - ad4880_fmc_evb_zed
@@ -1083,7 +1083,7 @@ AD9209
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD9209 <eval-ad9209>`
+   * - :adi:`AD9209-FMCA-EBZ`
      - :git-hdl:`ad9209_fmca_ebz <hdl_2026_r1:projects/ad9209_fmca_ebz>`
      - :git-hdl:`vck190 <hdl_2026_r1:projects/ad9209_fmca_ebz/vck190>`
      - :ref:`ad9209_fmca_ebz_vck190 <util_hdl_2026_r1_ad9209_fmca_ebz_vck190>`
@@ -1141,7 +1141,7 @@ AD9213EVB
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD9213EVB <eval-ad9213-evb>`
+   * - :adi:`AD9213EVB <EVAL-AD9213>`
      - :git-hdl:`ad9213_evb <hdl_2026_r1:projects/ad9213_evb>`
      - :git-hdl:`vcu118 <hdl_2026_r1:projects/ad9213_evb/vcu118>`
      - ad9213_evb_vcu118
@@ -1322,7 +1322,7 @@ AD9783EBZ
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD9783-EBZ <eval-ad9783-ebz>`
+   * - :adi:`EVAL-AD9783`
      - :git-hdl:`ad9783_ebz <hdl_2026_r1:projects/ad9783_ebz>`
      - :git-hdl:`zcu102 <hdl_2026_r1:projects/ad9783_ebz/zcu102>`
      - :ref:`ad9783_ebz_zcu102 <util_hdl_2026_r1_ad9783_ebz_zcu102>`
@@ -1367,7 +1367,7 @@ ADQUADMXFE1EBZ
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`ADQUADMXFE1EBZ <ad-quasmxfe1-ebz>`
+   * - :adi:`ADQUADMXFE1EBZ`
      - :git-hdl:`ad_quadmxfe1_ebz <hdl_2026_r1:projects/ad_quadmxfe1_ebz>`
      - :git-hdl:`vcu118 <hdl_2026_r1:projects/ad_quadmxfe1_ebz/vcu118>`
      - ad_quadmxfe1_ebz_vcu118
@@ -1488,7 +1488,7 @@ ADAQ8092FMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`ADAQ8092-FMC <eval-adaq9082-fmc>`
+   * - :adi:`ADAQ8092-FMC <EVAL-ADAQ8092-FMCZ>`
      - :git-hdl:`adaq8092_fmc <hdl_2026_r1:projects/adaq8092_fmc>`
      - :git-hdl:`zed <hdl_2026_r1:projects/adaq8092_fmc/zed>`
      - :ref:`adaq8092_fmc_zed <util_hdl_2026_r1_adaq8092_fmc_zed>`
@@ -1542,7 +1542,7 @@ EVAL-ADMX6001-EBZ
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`EVAL-ADMX6001-EBZ`
+   * - :adi:`ADMX6001-EBZ`
      - :git-hdl:`admx6001_ebz <hdl_2026_r1:projects/admx6001_ebz>`
      - :git-hdl:`vcu118 <hdl_2026_r1:projects/admx6001_ebz/vcu118>`
      - :ref:`admx6001_ebz_vcu118 <util_hdl_2026_r1_admx6001_ebz_vcu118>`
@@ -1572,7 +1572,7 @@ ADRV9001
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD-ADRV9001 <eval-adrv9001>`
+   * - :adi:`ADRV9001`
      - :git-hdl:`adrv9001 <hdl_2026_r1:projects/adrv9001>`
      - :git-hdl:`a10soc <hdl_2026_r1:projects/adrv9001/a10soc>`
        :git-hdl:`zcu102 <hdl_2026_r1:projects/adrv9001/zcu102>`

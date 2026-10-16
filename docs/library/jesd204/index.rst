@@ -549,7 +549,7 @@ JESD204B Rapid Prototyping Platforms
 
 - :adi:`AD-FMCOMMS11-EBZ` :dokuwiki:`(User Guide) <resources/eval/user-guides/ad-fmcomms11-ebz>`
 - :adi:`ADRV9009-ZU11EG` :dokuwiki:`ADRV9009-ZU11EG (User Guide) <resources/eval/user-guides/adrv9009-zu11eg>`
-- :adi:`EVAL-AD-FMCADC2-EBZ`
+- :adi:`AD-FMCADC2-EBZ`
 - :adi:`EVAL-AD-FMCADC3-EBZ` (RETIRED)
 - :adi:`EVAL-AD-FMCADC4-EBZ` (RETIRED)
 - :adi:`EVAL-AD-FMCDAQ2-EBZ` :dokuwiki:`(User Guide) <resources/eval/user-guides/ad-fmcdaq2-ebz>`
