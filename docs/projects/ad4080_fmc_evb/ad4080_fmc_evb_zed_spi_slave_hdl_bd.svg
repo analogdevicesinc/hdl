@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1180" height="781" viewBox="0 0 1180 781" version="1.1" id="svg" sodipodi:docname="ad4080_fmc_evb_zed_spi_slave_hdl_bd.svg" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd">
+<sodipodi:namedview id="namedview" pagecolor="#ffffff" inkscape:document-units="px"/>
+<defs id="defs"><marker id="ArrowEnd" orient="auto" markerWidth="6" markerHeight="6" viewBox="0 0 6 6" refX="5" refY="3" markerUnits="strokeWidth" style="overflow:visible"><path d="M 0,0 L 6,3 L 0,6 Z" style="fill:context-stroke;stroke:none"/></marker><marker id="ArrowStart" orient="auto-start-reverse" markerWidth="6" markerHeight="6" viewBox="0 0 6 6" refX="5" refY="3" markerUnits="strokeWidth" style="overflow:visible"><path d="M 0,0 L 6,3 L 0,6 Z" style="fill:context-stroke;stroke:none"/></marker></defs>
+<rect id="background" x="0" y="0" width="1180" height="781" style="fill:#ffffff;stroke:none"/>
+<g id="layer1" inkscape:groupmode="layer" inkscape:label="Board">
+<text id="text3" x="1100" y="111" style="font-family:Arial;font-weight:bold;font-size:20px;fill:#000000;text-anchor:end;dominant-baseline:auto">ZedBoard</text>
+<path id="frame44" inkscape:label="ZedBoard" d="M 50,566 L 50,76 L 1120,76 L 1120,146 M 1120,721 L 1120,761 L 50,761 L 50,716" style="fill:none;stroke:#000000;stroke-width:2;stroke-linejoin:miter;stroke-linecap:square"/>
+</g>
+<g id="layer2" inkscape:groupmode="layer" inkscape:label="Clock domains">
+<rect id="rect28" inkscape:label="sys_cpu_clk = 100 MHz" x="85" y="246" width="270" height="495" style="fill:none;fill-opacity:1;stroke:#754d00;stroke-width:2;stroke-linejoin:miter;stroke-dasharray:6,4"/>
+<text id="text29" x="91" y="735" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:start;dominant-baseline:auto">sys_cpu_clk = 100 MHz</text>
+<rect id="rect30" inkscape:label="adc_clk = dco_clk / 2 = 200 MHz" x="365" y="246" width="430" height="495" style="fill:none;fill-opacity:1;stroke:#754d00;stroke-width:2;stroke-linejoin:miter;stroke-dasharray:6,4"/>
+<text id="text31" x="371" y="735" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:start;dominant-baseline:auto">adc_clk = dco_clk / 2 = 200 MHz</text>
+<rect id="rect32" inkscape:label="dco_clk = 400 MHz" x="805" y="246" width="280" height="495" style="fill:none;fill-opacity:1;stroke:#754d00;stroke-width:2;stroke-linejoin:miter;stroke-dasharray:6,4"/>
+<text id="text33" x="811" y="735" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:start;dominant-baseline:auto">dco_clk = 400 MHz</text>
+</g>
+<g id="layer3" inkscape:groupmode="layer" inkscape:label="Blocks">
+<rect id="rect8" x="70" y="96" width="720" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect10" x="438" y="96" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect12" x="482" y="96" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect14" x="526" y="96" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect16" x="570" y="96" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect18" x="614" y="96" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect20" x="658" y="96" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect22" x="702" y="96" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect24" x="746" y="96" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect26" inkscape:label="FMC CONNECTOR" x="1095" y="146" width="50" height="575" style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect34" inkscape:label="AXI_AD408X" x="600" y="271" width="230" height="440" style="fill:#ffcccc;fill-opacity:1;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect36" inkscape:label="AXI_DMAC" x="330" y="271" width="60" height="270" style="fill:#ffcccc;fill-opacity:1;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect38" inkscape:label="MEMORY INTERCONNECT" x="110" y="271" width="50" height="270" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect40" inkscape:label="SPI_SLAVE" x="330" y="571" width="60" height="140" style="fill:#ffcccc;fill-opacity:1;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect42" inkscape:label="PMOD JB" x="25" y="566" width="50" height="150" style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+</g>
+<g id="layer4" inkscape:groupmode="layer" inkscape:label="Arrows">
+<path id="bus45" d="M 600,396 L 408,396 L 408,389 L 390,406 L 408,423 L 408,416 L 600,416 Z" style="fill:#a01414;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<path id="bus47" d="M 330,396 L 178,396 L 178,389 L 160,406 L 178,423 L 178,416 L 330,416 Z" style="fill:#a01414;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<path id="bus49" d="M 600,631 L 408,631 L 408,624 L 390,641 L 408,658 L 408,651 L 600,651 Z" style="fill:#a01414;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<path id="path51" d="M 1095,364.5 L 832,364.5" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path53" d="M 1095,397.5 L 832,397.5" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path55" d="M 1095,474.5 L 832,474.5" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path57" d="M 1095,507.5 L 832,507.5" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path59" d="M 1095,584.5 L 832,584.5" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path61" d="M 1095,617.5 L 832,617.5" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path63" d="M 75,593 L 328,593" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path65" d="M 75,621 L 328,621" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path67" d="M 330,649 L 77,649" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path69" d="M 330,677 L 77,677" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+</g>
+<g id="layer5" inkscape:groupmode="layer" inkscape:label="Labels">
+<text id="text9" x="254" y="156" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central">ARM (Zynq)</text>
+<text id="text11" x="460" y="156" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 460 156)">Interrupts</text>
+<text id="text13" x="504" y="156" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 504 156)">Timer</text>
+<text id="text15" x="548" y="156" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 548 156)">DDRx</text>
+<text id="text17" x="592" y="156" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 592 156)">Ethernet</text>
+<text id="text19" x="636" y="156" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 636 156)">UART</text>
+<text id="text21" x="680" y="156" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 680 156)">I2C</text>
+<text id="text23" x="724" y="156" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 724 156)">GPIO</text>
+<text id="text25" x="768" y="156" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 768 156)">SPI</text>
+<text id="text27" x="1120" y="433.5" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 1120 433.5)">FMC CONNECTOR</text>
+<text id="text35" x="715" y="491" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central">AXI_AD408X</text>
+<text id="text37" x="360" y="406" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 360 406)">AXI_DMAC</text>
+<text id="text39" x="135" y="406" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 135 406)">MEMORY INTERCONNECT</text>
+<text id="text41" x="360" y="641" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 360 641)">SPI_SLAVE</text>
+<text id="text43" x="50" y="641" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 50 641)">PMOD JB</text>
+<text id="text46" x="504" y="406" style="font-family:Arial;font-weight:normal;font-size:12px;fill:#ffffff;text-anchor:middle;dominant-baseline:central">32b/16b</text>
+<text id="text48" x="254" y="406" style="font-family:Arial;font-weight:normal;font-size:12px;fill:#ffffff;text-anchor:middle;dominant-baseline:central">64b</text>
+<text id="text50" x="504" y="641" style="font-family:Arial;font-weight:normal;font-size:12px;fill:#ffffff;text-anchor:middle;dominant-baseline:central">32b/16b</text>
+<text id="text52" x="1073" y="358.5" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:end;dominant-baseline:auto">dco_p</text>
+<text id="text54" x="1073" y="391.5" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:end;dominant-baseline:auto">dco_n</text>
+<text id="text56" x="1073" y="468.5" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:end;dominant-baseline:auto">da_p</text>
+<text id="text58" x="1073" y="501.5" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:end;dominant-baseline:auto">da_n</text>
+<text id="text60" x="1073" y="578.5" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:end;dominant-baseline:auto">db_p</text>
+<text id="text62" x="1073" y="611.5" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:end;dominant-baseline:auto">db_n</text>
+<text id="text64" x="95" y="587" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:start;dominant-baseline:auto">pmod_spi_cs</text>
+<text id="text66" x="95" y="615" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:start;dominant-baseline:auto">pmod_spi_sclk</text>
+<text id="text68" x="95" y="643" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:start;dominant-baseline:auto">pmod_spi_miso</text>
+<text id="text70" x="95" y="671" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:start;dominant-baseline:auto">pmod_data_ready</text>
+</g>
+<g id="layer6" inkscape:groupmode="layer" inkscape:label="Legend">
+<rect id="rect4" x="30" y="22" width="34" height="16" style="fill:#ffcccc;fill-opacity:1;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<text id="text5" x="74" y="30" style="font-family:Arial;font-weight:normal;font-size:12px;fill:#000000;text-anchor:start;dominant-baseline:central">Receive path</text>
+<rect id="rect6" x="30" y="46" width="34" height="16" style="fill:none;fill-opacity:1;stroke:#754d00;stroke-width:2;stroke-linejoin:miter;stroke-dasharray:6,4"/>
+<text id="text7" x="74" y="54" style="font-family:Arial;font-weight:normal;font-size:12px;fill:#000000;text-anchor:start;dominant-baseline:central">Clock domain</text>
+</g>
+<g id="layer7" inkscape:groupmode="layer" inkscape:label="Border">
+<rect id="rect1" inkscape:label="outer border" x="1" y="1" width="1178" height="779" style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<text id="text2" x="1100" y="59" style="font-family:Arial;font-weight:bold;font-size:20px;fill:#000000;text-anchor:end;dominant-baseline:auto">EVAL-AD4080-FMC</text>
+</g>
+</svg>
