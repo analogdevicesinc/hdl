@@ -124,7 +124,7 @@ The Link layer consists of L number of lanes which form the link.
 More information on the TX Link layer can be found in
 :ref:`axi_jesd204_tx` page.
 
-Example 1: TX link with L=4, M=1, S=1, F=2, NP=16
+Example 1: TX link with L=4, M=1, S=4, F=2, NP=16
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this mode, the Transport Layer will output 2 frames in every clock cycle
@@ -187,7 +187,7 @@ The Link layer consists from L number of lanes which form the link.
 More information on the RX Link layer can be found in
 :ref:`axi_jesd204_rx` page.
 
-Example: RX link with L=4, M=1, S=1, F=2, NP=16
+Example: RX link with L=4, M=1, S=4, F=2, NP=16
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this mode the Transport Layer will accept two frames in every clock cycle.
