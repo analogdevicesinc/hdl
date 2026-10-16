@@ -48,6 +48,7 @@ ad_ip_instance axi_quad_spi axi_spi_host
 ad_ip_parameter axi_spi_host CONFIG.C_USE_STARTUP 0
 ad_ip_parameter axi_spi_host CONFIG.C_NUM_SS_BITS 1
 ad_ip_parameter axi_spi_host CONFIG.C_SCK_RATIO 8
+ad_ip_parameter axi_spi_host CONFIG.C_FIFO_DEPTH 256
 
 ad_connect spi_pmod_csn_i axi_spi_host/ss_i
 ad_connect spi_pmod_csn_o axi_spi_host/ss_o
