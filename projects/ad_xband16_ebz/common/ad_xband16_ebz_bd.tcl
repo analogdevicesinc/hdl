@@ -292,6 +292,8 @@ ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.TPL_DATA_PATH_WIDTH $TX_DATAPATH_WI
 
 ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.SYSREF_IOB false
 #ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
+# Since this 1 cycle delay would be relative to SYSREF, we need to check if the receiver can accept it
+ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_INPUT_PIPELINE 1
 
 adi_tpl_jesd204_tx_create tx_apollo_tpl_core $TX_NUM_OF_LANES \
                                            $TX_NUM_OF_CONVERTERS \
