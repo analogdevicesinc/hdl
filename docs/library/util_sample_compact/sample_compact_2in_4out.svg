@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="644.85" height="216" viewBox="0 0 644.85 216">
+<defs><marker id="arrow" orient="auto" refX="0" refY="0" style="overflow:visible"><path d="M 5.77,0 -8.65,5 V -5 Z" style="fill:#000000;stroke:none" transform="scale(0.8)"/></marker></defs>
+<rect x="0" y="0" width="644.85" height="216" style="fill:#ffffff"/>
+<rect x="182" y="30" width="120" height="128" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="242.0" y="102.0" style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:bold;fill:#000000;text-anchor:middle">COMPACT</text>
+<rect x="20" y="116.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="132.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">a</text>
+<rect x="20" y="94.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="110.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">b</text>
+<rect x="20" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">d</text>
+<rect x="20" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">e</text>
+<rect x="58" y="116.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="132.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">g</text>
+<rect x="58" y="94.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="110.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">h</text>
+<rect x="58" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">i</text>
+<rect x="58" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">j</text>
+<text x="96" y="46.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="96" y="148.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<line x1="182" y1="94.0" x2="108" y2="94.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<line x1="134.0" y1="102.0" x2="146.0" y2="86.0" style="stroke:#000000;stroke-width:1.5"/>
+<text x="140.0" y="82.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">64 bits</text>
+<line x1="388" y1="94.0" x2="318" y2="94.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<line x1="342.0" y1="102.0" x2="354.0" y2="86.0" style="stroke:#000000;stroke-width:1.5"/>
+<text x="348.0" y="82.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">32 bits</text>
+<rect x="392" y="94.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="409.0" y="110.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">a</text>
+<rect x="392" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="409.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">b</text>
+<rect x="430" y="94.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="447.0" y="110.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">c</text>
+<line x1="434" y1="112.0" x2="460" y2="98.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="430" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="447.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">d</text>
+<rect x="468" y="94.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="485.0" y="110.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">e</text>
+<rect x="468" y="72.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="485.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">f</text>
+<line x1="472" y1="90.0" x2="498" y2="76.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="506" y="94.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="523.0" y="110.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">g</text>
+<rect x="506" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="523.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">h</text>
+<rect x="544" y="94.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="561.0" y="110.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">i</text>
+<rect x="544" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="561.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">j</text>
+<rect x="582" y="94.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="599.0" y="110.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">k</text>
+<line x1="586" y1="112.0" x2="612" y2="98.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="582" y="72.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="599.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">l</text>
+<line x1="586" y1="90.0" x2="612" y2="76.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<text x="620" y="76.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="620" y="126.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<text x="20" y="182" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">IN_SLOTS = 2, OUT_SLOTS = 4, SLOT_W = 16</text>
+<text x="20" y="200" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">crossed slots have ikeep = 0</text>
+</svg>
