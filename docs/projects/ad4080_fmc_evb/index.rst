@@ -168,7 +168,9 @@ the HDL repository, and then build the project as follows:
 **Linux/Cygwin/WSL**
 
 Example of running the ``make`` command without parameters (using the default
-configuration (ADC_N_BITS=20):
+configuration, all bit depths enabled on two lanes; a two lane build also
+runs a converter set to one lane, the driver selects the lane mode at run
+time):
 
 .. shell::
 
@@ -180,7 +182,7 @@ Example of running the ``make`` command with parameters:
 .. shell::
 
    $cd hdl/projects/ad4080_fmc_evb/zed
-   $make ADC_N_BITS=16
+   $make ENABLE_20BIT=0 ENABLE_14BIT=0
 
 The following table contains the parameters that can be used to configure this
 project:
@@ -190,12 +192,26 @@ project:
    +----------------+-------------------------------------------------------------+
    | Parameter      | Description                                                 |
    +================+=============================================================+
-   | ADC_N_BITS     | ADC resolution (default: 20)                                |
+   | NUM_LANES      | Number of LVDS data lanes (default: 2)                      |
    |                |                                                             |
-   |                | - 20                                                        |
-   |                | - 16                                                        |
-   |                | - 14                                                        |
+   |                | - 1                                                         |
+   |                | - 2                                                         |
    +----------------+-------------------------------------------------------------+
+   | ENABLE_20BIT   | Build the 20-bit datapath (default: 1)                      |
+   +----------------+-------------------------------------------------------------+
+   | ENABLE_16BIT   | Build the 16-bit datapath (default: 1)                      |
+   +----------------+-------------------------------------------------------------+
+   | ENABLE_14BIT   | Build the 14-bit datapath (default: 1)                      |
+   +----------------+-------------------------------------------------------------+
+
+   At least one bit depth must be enabled; only the enabled depths are built.
+   Width of the adc_data output of the AXI_AD408X IP, one word per adc_valid,
+   which is also the DMA source width: 32 bits when ENABLE_20BIT is set, or
+   when ENABLE_14BIT is set with NUM_LANES=2, and 16 bits otherwise.
+
+   A 32-bit word holds one 20-bit sample sign extended, or two 16-bit or
+   14-bit samples, each sign extended to 16 bits, the earlier one in [15:0]. A
+   16-bit word holds one 16-bit or 14-bit sample, sign extended.
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 

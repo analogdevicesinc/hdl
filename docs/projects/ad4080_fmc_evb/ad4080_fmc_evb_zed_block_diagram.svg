@@ -1603,7 +1603,7 @@
          x="80.724274"
          y="154.93251"
          id="tspan1"
-         sodipodi:role="line">REF_CLK: DCO_CLK(400MHz) / 2 </tspan></text>
+         sodipodi:role="line">REF_CLK = DCO_CLK / 4</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
@@ -1614,7 +1614,7 @@
          id="tspan41770-2-5"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="157.8167"
-         y="149.63438">REF_CLK= DCO_CLK(400MHz) </tspan></text>
+         y="149.63438">REF_CLK = DCO_CLK</tspan></text>
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"

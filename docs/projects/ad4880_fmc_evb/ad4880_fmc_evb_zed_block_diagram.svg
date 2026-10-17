@@ -1197,17 +1197,22 @@
     <text
        transform="rotate(-0.31795285)"
        id="text5788-4"
-       y="124.14346"
-       x="71.168358"
-       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#28170b;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       y="121.24346"
+       x="79.0"
+       style="text-anchor:middle;text-align:center;font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#28170b;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.63021px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#28170b;stroke:none;stroke-width:0.264583px;stroke-opacity:1"
-         y="124.14346"
-         x="71.168358"
+         y="121.24346"
+         x="79.0"
          id="tspan5790-7"
-         sodipodi:role="line">CPACK</tspan></text>
+         sodipodi:role="line">SAMPLE</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.63021px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#28170b;stroke:none;stroke-width:0.264583px;stroke-opacity:1"
+         y="127.04346"
+         x="79.0"
+         id="tspan5790-8"
+         sodipodi:role="line">PACK</tspan></text>
     <text
        transform="scale(0.99282989,1.0072219)"
        id="text4311-0"
@@ -1878,7 +1883,7 @@
          id="tspan41770-2"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="44.984196"
-         y="175.84045">REF_CLK= DCO_CLK(400MHz) / 4 </tspan></text>
+         y="175.84045">REF_CLK = DCO_CLK / 4</tspan></text>
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
@@ -2353,7 +2358,7 @@
          x="100.68515"
          y="95.988953"><tspan
    style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:1.76389px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-   id="tspan17">31</tspan> if ADC_N_BITS = 20</tspan></text>
+   id="tspan17">31</tspan> if 32-bit converter word</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.76389px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke-width:0.264583"
@@ -2366,7 +2371,7 @@
          x="100.50645"
          y="98.892853"><tspan
    style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:1.76389px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-   id="tspan19">15</tspan> if ADC_N_BITS &lt;= 16</tspan></text>
+   id="tspan19">15</tspan> if 16-bit converter word</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.76389px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke-width:0.264583"
@@ -2379,7 +2384,7 @@
          x="100.30607"
          y="133.13887"><tspan
    style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:1.76389px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-   id="tspan21">31</tspan> if ADC_N_BITS = 20</tspan></text>
+   id="tspan21">31</tspan> if 32-bit converter word</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.76389px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke-width:0.264583"
@@ -2392,7 +2397,7 @@
          x="100.12737"
          y="136.04277"><tspan
    style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:1.76389px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-   id="tspan23">15</tspan> if ADC_N_BITS &lt;= 16</tspan></text>
+   id="tspan23">15</tspan> if 16-bit converter word</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.76389px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke-width:0.264583"
@@ -2405,12 +2410,12 @@
          x="46.368752"
          y="125.72697"><tspan
    style="font-weight:bold"
-   id="tspan30">64</tspan> if </tspan><tspan
+   id="tspan30">64</tspan> if 32-bit</tspan><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.76389px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="46.368752"
          y="127.93184"
-         id="tspan31">ADC_N_BITS = 20</tspan></text>
+         id="tspan31">converter word</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.76389px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;direction:ltr;fill:#000000;stroke-width:0.264583"
@@ -2423,11 +2428,11 @@
          x="46.331738"
          y="131.07585"><tspan
    style="font-weight:bold"
-   id="tspan29">32</tspan> if </tspan><tspan
+   id="tspan29">32</tspan> if 16-bit</tspan><tspan
          sodipodi:role="line"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.76389px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="46.331738"
          y="133.28072"
-         id="tspan32">ADC_N_BITS &lt;=16</tspan></text>
+         id="tspan32">converter word</tspan></text>
   </g>
 </svg>
