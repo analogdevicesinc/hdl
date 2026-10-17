@@ -176,11 +176,15 @@ module system_top (
   wire            rx_sync;
   wire            glbl_clk_0;
   wire            glbl_clk_buf;
-  wire            filter_data_ready_n;
   wire  [1:0]     hmc7044_adf4371_csn;
   wire            ad4080_sync_n;
   wire            sync_capture_ctrl;
   wire            sync_capture;
+  wire            ad4080_miso;
+  wire            filter_data_ready_n;
+
+  assign ad4080_miso         = ad4080_gpio[0];
+  assign filter_data_ready_n = ad4080_gpio[1];
 
   assign sync_capture      = (sync_capture_ctrl) ? ~hmc7044_ch2_sync : 1'b1;
   assign adf4371_csb       = hmc7044_adf4371_csn[1];
@@ -307,24 +311,6 @@ module system_top (
     .spi_miso (adl5580_miso),
     .spi_sdio (adl5580_sdio),
     .spi_dir ());
-
-  // instantiations
-
-  ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_miso_ad4080 (
-    .dio_t(1'b1),
-    .dio_i(1'b0),
-    .dio_o(ad4080_miso),
-    .dio_p(ad4080_gpio[0]));
-
-  ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_flt_rdy_ad4080 (
-    .dio_t(1'b1),
-    .dio_i(1'b0),
-    .dio_o(filter_data_ready_n),
-    .dio_p(ad4080_gpio[1]));
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
