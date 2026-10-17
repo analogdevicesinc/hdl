@@ -11,6 +11,7 @@ GENERIC_DEPS += ../common/ad_mem_asym.v
 GENERIC_DEPS += util_axis_fifo.v
 GENERIC_DEPS += util_axis_fifo_address_generator.v
 
+XILINX_DEPS += util_axis_fifo_constr.ttcl
 XILINX_DEPS += util_axis_fifo_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc

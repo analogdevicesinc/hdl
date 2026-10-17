@@ -47,6 +47,7 @@ set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timi
 #    ID=47   make JESD_MODE=64B66B RX_LANE_RATE=10.3125 TX_LANE_RATE=10.3125 RX_JESD_M=4 TX_JESD_M=4 RX_JESD_L=8  TX_JESD_L=8  RX_JESD_S=1 TX_JESD_S=1 RX_JESD_NP=16 TX_JESD_NP=16 RX_B_LANE_RATE=10.3125 TX_B_LANE_RATE=10.3125 RX_B_JESD_M=4 TX_B_JESD_M=4 RX_B_JESD_L=8  TX_B_JESD_L=8  RX_B_JESD_S=1 TX_B_JESD_S=1 RX_B_JESD_NP=16 TX_B_JESD_NP=16
 #    ID=47+  make JESD_MODE=64B66B RX_LANE_RATE=20.6250 TX_LANE_RATE=20.6250 RX_JESD_M=4 TX_JESD_M=4 RX_JESD_L=8  TX_JESD_L=8  RX_JESD_S=1 TX_JESD_S=1 RX_JESD_NP=16 TX_JESD_NP=16 RX_B_LANE_RATE=20.6250 TX_B_LANE_RATE=20.625 RX_B_JESD_M=4 TX_B_JESD_M=4 RX_B_JESD_L=8  TX_B_JESD_L=8  RX_B_JESD_S=1 TX_B_JESD_S=1 RX_B_JESD_NP=16 TX_B_JESD_NP=16
 #    ID=68   make JESD_MODE=64B66B RX_LANE_RATE=20.6250 TX_LANE_RATE=20.6250 RX_JESD_M=1 TX_JESD_M=1 RX_JESD_L=12 TX_JESD_L=12 RX_JESD_S=8 TX_JESD_S=8 RX_JESD_NP=12 TX_JESD_NP=12 RX_B_LANE_RATE=20.6250 TX_B_LANE_RATE=20.625 RX_B_JESD_M=1 TX_B_JESD_M=1 RX_B_JESD_L=12 TX_B_JESD_L=12 RX_B_JESD_S=8 TX_B_JESD_S=8 RX_B_JESD_NP=12 TX_B_JESD_NP=12
+#    ID=77   make JESD_MODE=64B66B RX_LANE_RATE=27.5 TX_LANE_RATE=27.5 RX_JESD_M=2 TX_JESD_M=2 RX_JESD_L=12 TX_JESD_L=12 RX_JESD_S=3 TX_JESD_S=3 RX_JESD_NP=16 TX_JESD_NP=16 RX_B_LANE_RATE=27.5 TX_B_LANE_RATE=27.5 RX_B_JESD_M=2 TX_B_JESD_M=2 RX_B_JESD_L=12 TX_B_JESD_L=12 RX_B_JESD_S=3 TX_B_JESD_S=3 RX_B_JESD_NP=16 TX_B_JESD_NP=16
 
 #
 # Parameter description:
@@ -76,6 +77,8 @@ set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timi
 #                 not read
 #   FSRC_ACCUM_WIDTH : Width of the FSRC rate accumulator, which sets the
 #                 granularity of the achievable ratio
+#   PNMON_ENABLE : When cleared, removes the RX transport layer PN monitors,
+#                 which are hard to close timing on at high device clock rates
 #
 
 adi_project ad9084_ebz_vcu118 0 [list \
@@ -108,6 +111,7 @@ adi_project ad9084_ebz_vcu118 0 [list \
   RX_B_KS_PER_CHANNEL [get_env_param RX_B_KS_PER_CHANNEL 32 ] \
   TX_B_KS_PER_CHANNEL [get_env_param TX_B_KS_PER_CHANNEL 32 ] \
   DO_HAS_BYPASS       [get_env_param DO_HAS_BYPASS        0 ] \
+  PNMON_ENABLE        [get_env_param PNMON_ENABLE         1 ] \
   AION_ENABLE         [get_env_param AION_ENABLE          0 ] \
   FSRC_ENABLE         [get_env_param FSRC_ENABLE          0 ] \
   FSRC_ACCUM_WIDTH    [get_env_param FSRC_ACCUM_WIDTH    56 ] \

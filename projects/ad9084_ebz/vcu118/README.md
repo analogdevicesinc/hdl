@@ -15,6 +15,15 @@ make
 
 All of the RX/TX link modes can be found in the [AD9084 data sheet](https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad9084-ug-2326.pdf). We offer support for only a few of them.
 
+Modes whose samples per channel per beat is not a power of two - for example
+mode 77, M=2 L=12 S=3 NP=16 at 27.5 Gbps, which carries 24 - are supported
+through a `util_axis_gearbox` in front of the pack cores. The gearbox converts
+the rate rather than the width, and the pack chain then runs on its own clock at
+the same fraction of the device clock, so the data offload and the DMA still see
+a power of two width with no padding and no bandwidth lost. Modes that are
+already a power of two build exactly as before, with no gearbox and no extra
+clock.
+
 The overwritable parameters from the environment are:
 
 - JESD_MODE : Used link layer encoder mode
