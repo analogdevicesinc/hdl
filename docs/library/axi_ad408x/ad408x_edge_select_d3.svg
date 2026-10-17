@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1064.7" height="244" viewBox="0 0 1064.7 244">
+<defs><marker id="arrow" orient="auto" refX="0" refY="0" style="overflow:visible"><path d="M 5.77,0 -8.65,5 V -5 Z" style="fill:#000000;stroke:none" transform="scale(0.8)"/></marker></defs>
+<rect x="0" y="0" width="1064.7" height="244" style="fill:#ffffff"/>
+<rect x="448" y="30" width="120" height="84" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="508.0" y="68.0" style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:bold;fill:#000000;text-anchor:middle">EDGE</text>
+<text x="508.0" y="92.0" style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:bold;fill:#000000;text-anchor:middle">SELECT</text>
+<rect x="20" y="72.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="37.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r0</text>
+<line x1="24" y1="90.0" x2="50" y2="76.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="20" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r1</text>
+<rect x="58" y="72.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="75.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r1</text>
+<line x1="62" y1="90.0" x2="88" y2="76.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="58" y="50.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="75.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r1</text>
+<line x1="62" y1="68.0" x2="88" y2="54.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="96" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r2</text>
+<rect x="96" y="50.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="113.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r2</text>
+<line x1="100" y1="68.0" x2="126" y2="54.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="134" y="72.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="151.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r2</text>
+<line x1="138" y1="90.0" x2="164" y2="76.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="134" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="151.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r3</text>
+<rect x="172" y="72.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="189.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r3</text>
+<line x1="176" y1="90.0" x2="202" y2="76.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="172" y="50.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="189.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r3</text>
+<line x1="176" y1="68.0" x2="202" y2="54.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="210" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="227.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r4</text>
+<rect x="210" y="50.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="227.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r4</text>
+<line x1="214" y1="68.0" x2="240" y2="54.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="248" y="72.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="265.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r4</text>
+<line x1="252" y1="90.0" x2="278" y2="76.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="248" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="265.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r5</text>
+<rect x="286" y="72.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="303.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r5</text>
+<line x1="290" y1="90.0" x2="316" y2="76.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="286" y="50.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="303.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r5</text>
+<line x1="290" y1="68.0" x2="316" y2="54.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="324" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="341.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r6</text>
+<rect x="324" y="50.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="341.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">r6</text>
+<line x1="328" y1="68.0" x2="354" y2="54.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<text x="362" y="46.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">slot 1</text>
+<text x="362" y="104.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">slot 0</text>
+<line x1="448" y1="72.0" x2="398" y2="72.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<text x="418.0" y="62.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">okeep</text>
+<line x1="679" y1="72.0" x2="584" y2="72.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<text x="626.5" y="62.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">present, level</text>
+<rect x="683" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="700.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r0</text>
+<rect x="683" y="50.0" width="34" height="22" style="fill:#ffe9a8;stroke:#808080;stroke-width:2"/>
+<text x="700.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r1</text>
+<rect x="721" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="738.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r1</text>
+<rect x="721" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="738.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r1</text>
+<rect x="759" y="72.0" width="34" height="22" style="fill:#ffe9a8;stroke:#808080;stroke-width:2"/>
+<text x="776.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r2</text>
+<rect x="759" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="776.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r2</text>
+<rect x="797" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="814.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r2</text>
+<rect x="797" y="50.0" width="34" height="22" style="fill:#ffe9a8;stroke:#808080;stroke-width:2"/>
+<text x="814.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r3</text>
+<rect x="835" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="852.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r3</text>
+<rect x="835" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="852.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r3</text>
+<rect x="873" y="72.0" width="34" height="22" style="fill:#ffe9a8;stroke:#808080;stroke-width:2"/>
+<text x="890.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r4</text>
+<rect x="873" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="890.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r4</text>
+<rect x="911" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="928.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r4</text>
+<rect x="911" y="50.0" width="34" height="22" style="fill:#ffe9a8;stroke:#808080;stroke-width:2"/>
+<text x="928.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r5</text>
+<rect x="949" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="966.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r5</text>
+<rect x="949" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="966.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r5</text>
+<rect x="987" y="72.0" width="34" height="22" style="fill:#ffe9a8;stroke:#808080;stroke-width:2"/>
+<text x="1004.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r6</text>
+<rect x="987" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="1004.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#000000;text-anchor:middle">r6</text>
+<text x="1025" y="46.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">slot 1</text>
+<text x="1025" y="104.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">slot 0</text>
+<text x="20" y="138" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">Extra example, SAMPLES = 2, EDGE = FALL: a result every 3 samples</text>
+<text x="20" y="156" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">(not a decimation of the converter)</text>
+<text x="20" y="174" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">shaded: filter_rdy_n low; crossed: okeep = 0</text>
+<text x="20" y="192" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">the kept sample moves between the slots, the edge of r2 and r5</text>
+<text x="20" y="210" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">is found across a word boundary</text>
+<text x="20" y="228" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">the samples are shown for orientation; the selection sees only present and the level</text>
+</svg>
