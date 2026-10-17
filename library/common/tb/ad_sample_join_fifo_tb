@@ -1,0 +1,9 @@
+#!/bin/bash
+
+SOURCE="ad_sample_join_fifo_tb.v"
+SOURCE+=" ../ad_sample_join_fifo.v"
+SOURCE+=" ../../util_cdc/sync_bits.v"
+SOURCE+=" ../../util_cdc/sync_event.v"
+
+cd `dirname $0`
+source run_tb.sh

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SOURCE="util_sample_pack_tb.v"
+SOURCE+=" ../ad_sample_pack.v"
+SOURCE+=" ../ad_sample_join_fifo.v"
+SOURCE+=" ../../util_sample_pack/util_sample_pack.v"
+SOURCE+=" ../../util_cdc/sync_bits.v"
+SOURCE+=" ../../util_cdc/sync_event.v"
+
+cd `dirname $0`
+source run_tb.sh
