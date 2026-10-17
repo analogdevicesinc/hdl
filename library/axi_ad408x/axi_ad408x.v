@@ -40,7 +40,21 @@ module axi_ad408x #(
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   NUM_LANES = 2,
   parameter   IO_DELAY_GROUP = "dev_if_delay_group",
-  parameter   ADC_N_BITS = 20
+  // Supported converter bit depths. Only the logic of the enabled depths is
+  // generated. At least one must be enabled.
+  parameter   ENABLE_20BIT = 1,
+  parameter   ENABLE_16BIT = 1,
+  parameter   ENABLE_14BIT = 1,
+  // 1: filter_rdy_n is deserialized beside the data, bit accurate, and the
+  //    FILTER_ENABLE control selects one sample per decimation period. It
+  //    must come straight from a pin in the I/O bank of the data clock.
+  // 0: no filter support: filter_rdy_n is unused and FILTER_ENABLE has no
+  //    effect. Use this when the line is not connected, or is not a plain
+  //    input pin in the I/O bank of the data clock.
+  parameter   EN_FILTER_RDY = 1,
+  // 16 bit slots, the earliest sample in the low bits; the DMA source width
+  // must match this
+  parameter   ADC_DATA_WIDTH = ((ENABLE_20BIT != 0) || ((ENABLE_14BIT != 0) && (NUM_LANES == 2))) ? 32 : 16
 ) (
 
   // ADC interface
@@ -57,15 +71,17 @@ module axi_ad408x #(
   input                   cnv_in_n,
 
   input                   sync_n,
-  input                   filter_data_ready_n,
+  input                   filter_rdy_n,
 
   // output data interface
 
   output                                      adc_enable,
   output                                      adc_rst,
   output                                      adc_clk,
-  output  [((ADC_N_BITS > 16)? 31 : 15):0]    adc_data,
+  output  [ADC_DATA_WIDTH-1:0]                adc_data,
   output                                      adc_valid,
+  // log2 of the 16 bit slots per sample: 1 (two slots) with the 20 bit depth selected, 0 otherwise
+  output                                      adc_sample_slots_select,
   input                                       adc_dovf,
 
   // delay interface
@@ -97,15 +113,20 @@ module axi_ad408x #(
   input         [ 2:0]    s_axi_arprot
 );
 
-  localparam DELAY_CTRL_NUM_LANES = NUM_LANES;
+  // One delay channel per data lane plus one for the filter ready line, which
+  // has its own serdes beside the data. The filter channel is the highest
+  // index, so the per lane delay register space is unchanged.
+  localparam DELAY_CTRL_NUM_LANES = NUM_LANES + 1;
   localparam DELAY_CTRL_DRP_WIDTH = 5;
-  localparam ADC_DATA_WIDTH  = ((ADC_N_BITS > 16)? 32 : 16);
+  localparam DELAY_CTRL_ADC_BITS  = DELAY_CTRL_DRP_WIDTH * NUM_LANES;
 
   // internal signals
 
   wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_dwdata;
   wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_drdata;
   wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
+  wire  [DELAY_CTRL_ADC_BITS-1:0]                        up_adc_drdata_s;
+  wire  [DELAY_CTRL_DRP_WIDTH-1:0]                       up_filter_drdata_s;
 
   wire   [ 7:0]    adc_custom_control_s;
   wire   [ 1:0]    adc_device_code;
@@ -145,6 +166,9 @@ module axi_ad408x #(
   assign up_rstn = s_axi_aresetn;
   assign adc_rst = adc_rst_s;
   assign adc_device_code = adc_custom_control_s[3:2];
+  assign adc_sample_slots_select = (ENABLE_20BIT != 0) &&
+                                   (((ENABLE_16BIT == 0) && (ENABLE_14BIT == 0)) ||
+                                    (adc_device_code == 2'h0));
   assign self_sync       = adc_custom_control_s[1];
   assign filter_enable   = adc_custom_control_s[0];
 
@@ -235,7 +259,7 @@ module axi_ad408x #(
     .adc_sync_status(sync_status),
     .adc_status_ovf(adc_dovf),
     .adc_custom_control(adc_custom_control_s),
-    .adc_clk_ratio(32'd2),
+    .adc_clk_ratio(32'd4),
     .adc_start_code(),
     .adc_sref_sync(),
     .adc_sync(bitslip_enable),
@@ -280,7 +304,10 @@ module axi_ad408x #(
     .NUM_LANES(NUM_LANES),
     .IO_DELAY_GROUP(IO_DELAY_GROUP),
     .IODELAY_CTRL(1),
-    .ADC_N_BITS(ADC_N_BITS),
+    .ENABLE_20BIT(ENABLE_20BIT),
+    .ENABLE_16BIT(ENABLE_16BIT),
+    .ENABLE_14BIT(ENABLE_14BIT),
+    .EN_FILTER_RDY(EN_FILTER_RDY),
     .ADC_DATA_WIDTH(ADC_DATA_WIDTH)
   ) ad408x_interface (
     .dclk_in_n(dclk_in_n),
@@ -295,9 +322,12 @@ module axi_ad408x #(
     .device_code(adc_device_code),
     .self_sync(self_sync),
     .up_clk(up_clk),
-    .up_adc_dld(up_dld),
-    .up_adc_dwdata(up_dwdata),
-    .up_adc_drdata(up_drdata),
+    .up_adc_dld(up_dld[NUM_LANES-1:0]),
+    .up_adc_dwdata(up_dwdata[DELAY_CTRL_ADC_BITS-1:0]),
+    .up_adc_drdata(up_adc_drdata_s),
+    .up_filter_dld(up_dld[NUM_LANES]),
+    .up_filter_dwdata(up_dwdata[DELAY_CTRL_ADC_BITS+DELAY_CTRL_DRP_WIDTH-1:DELAY_CTRL_ADC_BITS]),
+    .up_filter_drdata(up_filter_drdata_s),
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked),
@@ -308,10 +338,12 @@ module axi_ad408x #(
     .bitslip_enable(bitslip_enable),
     .sync_status(sync_status),
     .filter_enable(filter_enable),
-    .filter_rdy_n(filter_data_ready_n),
+    .filter_rdy_n(filter_rdy_n),
     .sync_n(sync_n));
 
   // adc delay control
+
+  assign up_drdata = {up_filter_drdata_s,up_adc_drdata_s};
 
   up_delay_cntrl #(
     .DATA_WIDTH(DELAY_CTRL_NUM_LANES),

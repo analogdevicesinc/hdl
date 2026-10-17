@@ -1,14 +1,17 @@
 ####################################################################################
-## Copyright (c) 2018 - 2024 Analog Devices, Inc.
+## Copyright (c) 2018 - 2026 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
 LIBRARY_NAME := axi_ad408x
 
+GENERIC_DEPS += ../common/ad_bitslip_align.v
 GENERIC_DEPS += ../common/ad_datafmt.v
 GENERIC_DEPS += ../common/ad_pack.v
 GENERIC_DEPS += ../common/ad_rst.v
+GENERIC_DEPS += ../common/ad_sample_compact.v
+GENERIC_DEPS += ../common/ad_sample_edge_select.v
 GENERIC_DEPS += ../common/up_adc_channel.v
 GENERIC_DEPS += ../common/up_adc_common.v
 GENERIC_DEPS += ../common/up_axi.v
