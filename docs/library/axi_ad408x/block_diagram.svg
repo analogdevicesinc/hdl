@@ -868,7 +868,7 @@
            id="tspan56449-8-0-4-5"
            style="font-size:3.175px;stroke-width:0.264583"
            x="36.71307"
-           y="67.386765">filter_data_ready_n</tspan></text>
+           y="67.386765">filter_rdy_n</tspan></text>
       <path
          style="fill:none;stroke:#000000;stroke-width:0.665;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutM-6-1-7-6-7)"
          d="m 34.955054,68.810651 c 31.451263,0 31.451263,0 31.451263,0"
@@ -946,32 +946,29 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:2.00906px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke-width:0.265;stroke-dasharray:none"
+       style="font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';fill:#005aaa;fill-opacity:1;stroke-width:0.265"
        x="169.13988"
-       y="80.680878"
+       y="73.625343"
        id="text1"><tspan
          sodipodi:role="line"
-         style="stroke-width:0.265;stroke-dasharray:none"
          x="169.13988"
-         y="80.680878"
-         id="tspan2">             <tspan
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#005aaa;fill-opacity:1;stroke-width:0.265;stroke-dasharray:none"
-   id="tspan4">DWIDTH =</tspan></tspan><tspan
+         y="73.625343"
+         id="tspan_dw0">DWIDTH =</tspan><tspan
          sodipodi:role="line"
-         style="stroke-width:0.265;stroke-dasharray:none"
+         x="169.13988"
+         y="77.153114"
+         id="tspan_dw1">(ENABLE_20BIT ||</tspan><tspan
+         sodipodi:role="line"
+         x="169.13988"
+         y="80.680885"
+         id="tspan_dw2"> (ENABLE_14BIT &amp;&amp;</tspan><tspan
+         sodipodi:role="line"
          x="169.13988"
          y="84.208656"
-         id="tspan3"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#005aaa;fill-opacity:1;stroke-width:0.265;stroke-dasharray:none"
-           id="tspan5">((ADC_N_BITS &gt; 16)? </tspan></tspan><tspan
+         id="tspan_dw3">  NUM_LANES == 2))</tspan><tspan
          sodipodi:role="line"
-         style="stroke-width:0.265;stroke-dasharray:none"
          x="169.13988"
          y="87.736427"
-         id="tspan11"><tspan
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#005aaa;fill-opacity:1;stroke-width:0.265;stroke-dasharray:none"
-   id="tspan12">         32 : 16)</tspan><tspan
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-   id="tspan10"> </tspan> </tspan></text>
+         id="tspan_dw4">? 32 : 16</tspan></text>
   </g>
 </svg>
