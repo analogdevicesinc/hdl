@@ -99,6 +99,9 @@ Utilities
    util_pack/util_cpack2
    util_pack/util_upack2
    util_rfifo/index
+   util_sample_compact/index
+   util_sample_join_fifo/index
+   util_sample_pack/index
    util_sigma_delta_spi/index
    util_var_fifo/index
    util_wfifo/index
