@@ -1,0 +1,81 @@
+###############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+## Short identifier: ADIBSD
+##
+## Redistribution and use in source and binary forms, with or without modification,
+## are permitted provided that the following conditions are met:
+##     - Redistributions of source code must retain the above copyright
+##       notice, this list of conditions and the following disclaimer.
+##     - Redistributions in binary form must reproduce the above copyright
+##       notice, this list of conditions and the following disclaimer in
+##       the documentation and/or other materials provided with the
+##       distribution.
+##     - Neither the name of Analog Devices, Inc. nor the names of its
+##       contributors may be used to endorse or promote products derived
+##       from this software without specific prior written permission.
+##     - The use of this software may or may not infringe the patent rights
+##       of one or more patent holders. This license does not release you
+##       from the requirement that you obtain separate licenses from these
+##       patent holders to use this software.
+##     - Use of the software either in source or binary form, must be run
+##       on or directly connected to an Analog Devices Inc. component.
+##
+## THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+## INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
+## PARTICULAR PURPOSE ARE DISCLAIMED.
+##
+## IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+## EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
+## RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+## BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+## STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+###############################################################################
+
+# Follows the constraint scripts of the Vivado XPM macros: xpm_cdc_gray for
+# the pointers, xpm_fifo_rst for the distributed RAM, xpm_cdc_single and
+# xpm_cdc_async_rst for the level and reset synchronizers.
+
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+<: set num_ch [getIntValue "NUM_CHANNELS"] :>
+
+set out_clk    [get_clocks -of_objects [get_ports out_clk]]
+set out_period [get_property -min PERIOD $out_clk]
+
+set_property ASYNC_REG TRUE \
+  [get_cells -hier -filter {NAME =~ *i_join/*cdc_sync_stage*_reg* && IS_SEQUENTIAL}]
+
+set_false_path -through [get_ports async_resetn]
+
+set_false_path -to [get_cells -hier -filter {IS_SEQUENTIAL && \
+  (NAME =~ *i_join/i_reset_sync/cdc_sync_stage1_reg* || \
+   NAME =~ *i_join/i_enable_sync/cdc_sync_stage1_reg* || \
+   NAME =~ *i_join/*.i_reset_sync/cdc_sync_stage1_reg* || \
+   NAME =~ *i_join/*i_overflow_sync/*cdc_sync_stage1_reg* || \
+   NAME =~ *i_join/*i_xfer_sync/cdc_sync_stage1_reg*)}]
+<: for {set i 0} {$i < $num_ch} {incr i} { :>
+
+# channel <=: $i :>
+set ch_clk    [get_clocks -of_objects [get_ports clk_<=: $i :>]]
+set ch_period [get_property -min PERIOD $ch_clk]
+set skew      [expr {min($ch_period, $out_period)}]
+
+# the sources are taken from the fan-in, as synthesis may merge equal pointers
+set w_dst [get_cells -hier -filter {NAME =~ *i_join/g_ch?<=: $i :>?.i_w_gray_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+set w_src [get_cells -of_objects [all_fanin -flat -startpoints_only [get_pins -of_objects $w_dst -filter {REF_PIN_NAME == D}]]]
+set_max_delay -datapath_only -from $w_src -to $w_dst $ch_period
+set_bus_skew -from $w_src -to $w_dst $skew
+
+set r_dst [get_cells -hier -filter {NAME =~ *i_join/g_ch?<=: $i :>?.i_r_gray_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+set r_src [get_cells -of_objects [all_fanin -flat -startpoints_only [get_pins -of_objects $r_dst -filter {REF_PIN_NAME == D}]]]
+set_max_delay -datapath_only -from $r_src -to $r_dst $out_period
+set_bus_skew -from $r_src -to $r_dst $skew
+
+set_max_delay -datapath_only \
+  -from [get_cells -hier -filter {NAME =~ *i_join/g_ch?<=: $i :>?.mem_reg* && IS_SEQUENTIAL}] \
+  -to $out_clk $ch_period
+<: } :>

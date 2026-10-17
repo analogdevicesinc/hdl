@@ -19,14 +19,18 @@ case "$SIMULATOR" in
 
 	xsim)
 		# XSim flow
-		xvlog -log ${NAME}_xvlog.log --sourcelibdir . ${SOURCE} || exit 1
-		xelab -log ${NAME}_xelab.log -debug all ${NAME} || exit 1
+		# XVLOG_OPTS and XELAB_OPTS are optional and empty by default. A test
+		# bench that needs vendor primitive libraries or parameter overrides sets
+		# them before sourcing this script, for example
+		# XELAB_OPTS="-L unisims_ver glbl -generic_top NUM_LANES=2"
+		xvlog -log ${NAME}_xvlog.log --sourcelibdir . ${XVLOG_OPTS} ${SOURCE} || exit 1
+		xelab -log ${NAME}_xelab.log -debug all ${NAME} ${XELAB_OPTS} || exit 1
 		if [[ "$MODE" == "-gui" ]]; then
 			echo "log_wave -r *" > xsim_gui_cmd.tcl
 			echo "run all" >> xsim_gui_cmd.tcl
-			xsim work.${NAME} -gui -tclbatch xsim_gui_cmd.tcl -log ${NAME}_xsim.log
+			xsim ${XSIM_SNAPSHOT:-work.${NAME}} -gui -tclbatch xsim_gui_cmd.tcl -log ${NAME}_xsim.log
 		else
-			xsim work.${NAME} -R -log ${NAME}_xsim.log
+			xsim ${XSIM_SNAPSHOT:-work.${NAME}} -R -log ${NAME}_xsim.log
 		fi
 		;;
 

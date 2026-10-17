@@ -1,0 +1,9 @@
+#!/bin/bash
+
+SOURCE="ad_sample_chain_tb.v"
+SOURCE+=" ../ad_sample_skip.v"
+SOURCE+=" ../ad_sample_edge_select.v"
+SOURCE+=" ../ad_sample_compact.v"
+
+cd `dirname $0`
+source run_tb.sh
