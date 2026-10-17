@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Bit alignment, packing and filter strobe timing test for ad408x_phy.
+#
+# The design instantiates 7 series primitives, so the elaboration needs the
+# unisims library and the glbl module.
+#
+# All build configurations run in one simulation, see ad408x_phy_tb.v.
+#
+# MODE=batch runs without the GUI.
+
+cd `dirname $0`
+
+SOURCE="ad408x_phy_tb.v"
+SOURCE+=" ad408x_phy.v"
+SOURCE+=" ../common/ad_pack.v"
+SOURCE+=" ../common/ad_sample_compact.v"
+SOURCE+=" ../common/ad_bitslip_align.v"
+SOURCE+=" ../common/ad_sample_edge_select.v"
+SOURCE+=" ../xilinx/common/ad_serdes_in.v"
+SOURCE+=" ../util_cdc/sync_event.v"
+SOURCE+=" ../util_cdc/sync_bits.v"
+# glbl drives GSR for the unisim primitive models
+SOURCE+=" ${XILINX_VIVADO:-$(dirname $(dirname $(which xelab)))}/data/verilog/src/glbl.v"
+
+export SIMULATOR=${SIMULATOR:-xsim}
+# glbl is a second top, so the snapshot gets a composite name and has to be
+# named explicitly for xsim to find it.
+export XELAB_OPTS="-L unisims_ver -L secureip glbl -s ad408x_phy_tb_snap"
+export XSIM_SNAPSHOT="ad408x_phy_tb_snap"
+
+source ../common/tb/run_tb.sh
