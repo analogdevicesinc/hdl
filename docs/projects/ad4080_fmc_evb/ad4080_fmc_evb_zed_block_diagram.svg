@@ -1603,7 +1603,7 @@
          x="80.724274"
          y="154.93251"
          id="tspan1"
-         sodipodi:role="line">REF_CLK: DCO_CLK(400MHz) / 2 </tspan></text>
+         sodipodi:role="line">REF_CLK = DCO_CLK / 4</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
@@ -1614,7 +1614,7 @@
          id="tspan41770-2-5"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="157.8167"
-         y="149.63438">REF_CLK= DCO_CLK(400MHz) </tspan></text>
+         y="149.63438">REF_CLK = DCO_CLK</tspan></text>
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
@@ -1688,15 +1688,25 @@
        y="110.49844"
        id="text2"
        transform="scale(0.94915879,1.0535645)"><tspan
-         id="tspan2"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.00906px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.251131"
          x="89.098938"
          y="110.49844"
-         sodipodi:role="line">32 if ADC_N_BITS==20</tspan><tspan
+         sodipodi:role="line"
+         id="tspan2">32 if ENABLE_20BIT or</tspan><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.00906px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.251131"
          x="89.098938"
          y="114.26542"
          sodipodi:role="line"
-         id="tspan3">16 if ADC_N_BITS&lt;=16</tspan></text>
+         id="tspan3">(ENABLE_14BIT and</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.00906px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.251131"
+         x="89.098938"
+         y="118.03240"
+         sodipodi:role="line"
+         id="tspan4">NUM_LANES == 2),</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.00906px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.251131"
+         x="89.098938"
+         y="121.79938"
+         sodipodi:role="line"
+         id="tspan5">16 otherwise</tspan></text>
   </g>
 </svg>
