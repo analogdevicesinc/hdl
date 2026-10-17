@@ -3,6 +3,14 @@
 AD4880-FMC-EVB HDL project
 ================================================================================
 
+.. caution::
+
+   Although the :adi:`AD4880` supports CMOS interface, this HDL project does not
+   support it. The only available interface for this project is LVDS, in DDR
+   mode.
+   Single lane mode is fully tested and supported. Dual lane mode is supported
+   in the HDL but has not been tested yet.
+
 The :adi:`EVAL-AD4880-FMCZ <eval-ad4880>` is designed to demonstrate the :adi:`AD4880`
 performance.
 
@@ -15,7 +23,7 @@ the following :adi:`AD4880` , :adi:`AD4884` features:
 - Analog-to-digital converter (ADC) configuration via serial peripheral
   interface (SPI)
 - Sampling rate capability between 1.25 MSPS and 40 MSPS
-- Synchronized capture between the channels
+- Capture of both channels joined word by word into one DMA stream
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -76,6 +84,84 @@ Clock scheme
    :align: center
    :alt: AD4880-FMC-EVB/ZedBoard clock scheme
 
+Data path
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each converter has its own AXI_AD408X IP: A on axi_ad4080_adc_a, B on
+axi_ad4080_adc_b. Each IP delivers one data word per adc_valid on its adc_data
+output, on the clock of its own converter. The word holds one or two samples,
+each sign extended: a 20-bit sample fills 32 bits, a 16-bit or 14-bit sample
+16 bits, and of two samples the earlier one is in [15:0].
+
+util_sample_pack takes the words of both IPs. Its join FIFO brings them onto
+the clock of converter A and passes them on one word of each converter at a
+time, when both have one. The design expects the clocks of the two
+converters, and so their DCO clocks, to be derived from the same reference at
+the same frequency; they may start at different times. On the related
+evaluation boards, :adi:`EVAL-AD4880-FMCZ` and :adi:`EVAL-AD4884-FMCZ`, both
+come from the same reference, on separate outputs of the :adi:`AD9508`.
+Clocks from independent references would drift apart and words would be lost
+now and then. The packer then fills the DMA
+words with the samples of the enabled channels; a disabled channel takes no
+place in them, see the examples in the figure. Its DMA source width is twice
+the adc_data width.
+
+.. figure:: ad4880_fmc_evb_data_path.svg
+   :width: 50%
+
+   Data path from the two AXI_AD408X IPs to the DMA (click to enlarge)
+
+.. note::
+
+   Sampling alignment of the two converters is not implemented.
+
+   The join FIFO passes one word of each converter at a time. If the data
+   rates differ, the slower one defines the rate and samples of the other side
+   are skipped: use the same filter and decimation settings on both
+   converters.
+
+How wide the words are and how many samples they hold depends on the build:
+
+.. list-table::
+   :widths: 30 20 25 25
+   :header-rows: 1
+
+   * - Build
+     - adc_data of each IP
+     - Samples per word
+     - DMA words, both channels
+   * - ENABLE_20BIT only
+     - 32 bits
+     - one 20-bit sample
+     - 64 bits: A B
+   * - ENABLE_20BIT and ENABLE_16BIT and/or ENABLE_14BIT
+     - 32 bits
+     - one 20-bit sample, or two samples of an enabled 16-bit or 14-bit depth,
+       each in a 16-bit slot
+     - 64 bits: A B, or A0 B0 A1 B1
+   * - ENABLE_14BIT on NUM_LANES=2, no ENABLE_20BIT
+     - 32 bits
+     - two 14-bit samples, each in a 16-bit slot; with ENABLE_16BIT also
+       two 16-bit samples
+     - 64 bits: A0 B0 A1 B1
+   * - all other builds: ENABLE_16BIT and/or ENABLE_14BIT on NUM_LANES=1, or
+       ENABLE_16BIT only on NUM_LANES=2
+     - 16 bits
+     - one sample of an enabled 16-bit or 14-bit depth, in a 16-bit slot
+     - 32 bits: A B
+
+In the first, third and fourth rows the sample size is fixed by the build, and
+util_sample_pack moves every sample as one unit. Only the second row switches
+the sample size at run time. There util_sample_pack works on 16-bit slots: a
+20-bit sample takes two slots, which stay together, and a 16-bit or 14-bit
+sample takes one. The size follows the DEVICE_CODE of converter A, through the
+adc_sample_slots_select output of axi_ad4080_adc_a, so both converters must be
+set to the same bit depth. The channel enables and the sample size are held
+while a DMA transfer runs, so one buffer never mixes layouts.
+
+The DMA words in the table hold both channels. With one channel enabled its
+samples fill the DMA words in the same way, e.g. A0 A1 instead of A0 B0.
+
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -88,8 +174,7 @@ Instance             Zynq/Microblaze
 axi_ad4080_adc_a     0x44A0_0000
 axi_ad4080_adc_b     0x44A1_0000
 axi_ad4880_dma       0x44A3_0000
-ad4080_b_spi         0x44A7_0000
-ad408x_clock_monitor 0x44A8_0000
+ad4880_clock_monitor 0x44A8_0000
 ==================== ===============
 
 SPI connections
@@ -107,10 +192,10 @@ SPI connections
      - SPI 0
      - AD4880_A
      - 0
-   * - PL
-     - ad4080_b_spi
+   * - PS
+     - SPI 0
      - AD4880_B
-     - 0
+     - 1
    * - PS
      - SPI 1
      - AD9508
@@ -155,7 +240,6 @@ Below are the Programmable Logic interrupts used in this project.
 Instance name    HDL Linux Zynq Actual Zynq
 ================ === ========== ===========
 axi_ad4880_dma   13  57         89
-ad4080_b_spi     10  54         86
 ================ === ========== ===========
 
 Building the HDL project
@@ -172,7 +256,9 @@ the HDL repository, and then build the project as follows:
 **Linux/Cygwin/WSL**
 
 Example of running the ``make`` command without parameters (using the default
-configuration (ADC_N_BITS=20):
+configuration, all bit depths enabled on two lanes; a two lane build also
+runs a converter set to one lane, the driver selects the lane mode at run
+time):
 
 .. shell::
 
@@ -184,7 +270,29 @@ Example of running the ``make`` command with parameters:
 .. shell::
 
    $cd hdl/projects/ad4880_fmc_evb/zed
-   $make ADC_N_BITS=16
+   $make ENABLE_20BIT=0 ENABLE_14BIT=0
+
+The following table contains the parameters that can be used to configure this
+project:
+
+.. collapsible:: Default make parameters of the AD4880-FMC-EVB HDL project
+
+   +----------------+----------------------------------------------------------+
+   | Parameter      | Description                                              |
+   +================+==========================================================+
+   | NUM_LANES      | Number of LVDS data lanes per converter (default: 2)     |
+   |                |                                                          |
+   |                | - 1                                                      |
+   |                | - 2                                                      |
+   +----------------+----------------------------------------------------------+
+   | ENABLE_20BIT   | Build the 20-bit datapath (default: 1)                   |
+   +----------------+----------------------------------------------------------+
+   | ENABLE_16BIT   | Build the 16-bit datapath (default: 1)                   |
+   +----------------+----------------------------------------------------------+
+   | ENABLE_14BIT   | Build the 14-bit datapath (default: 1)                   |
+   +----------------+----------------------------------------------------------+
+
+   At least one bit depth must be enabled; only the enabled depths are built.
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -243,9 +351,9 @@ HDL related
    * - UTIL_I2C_MIXER
      - :git-hdl:`library/util_i2c_mixer`
      - 	—
-   * - UTIL_CPACK2
-     - :git-hdl:`library/util_pack/util_cpack2`
-     - :ref:`util_cpack2`
+   * - UTIL_SAMPLE_PACK
+     - :git-hdl:`library/util_sample_pack`
+     - —
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

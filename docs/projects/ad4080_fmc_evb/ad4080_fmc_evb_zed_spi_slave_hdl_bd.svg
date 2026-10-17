@@ -10,9 +10,9 @@
 <g id="layer2" inkscape:groupmode="layer" inkscape:label="Clock domains">
 <rect id="rect26" inkscape:label="sys_cpu_clk = 100 MHz" x="70" y="196" width="255" height="624" style="fill:none;fill-opacity:1;stroke:#754d00;stroke-width:2;stroke-linejoin:miter;stroke-dasharray:6,4"/>
 <text xml:space="preserve" id="text27" x="238" y="802" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:middle;dominant-baseline:auto">sys_cpu_clk = 100 MHz</text>
-<rect id="rect28" inkscape:label="adc_clk = 200 MHz (dco_clk / 2)" x="335" y="196" width="230" height="624" style="fill:none;fill-opacity:1;stroke:#754d00;stroke-width:2;stroke-linejoin:miter;stroke-dasharray:6,4"/>
-<text xml:space="preserve" id="text29" x="450" y="802" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:middle;dominant-baseline:auto">adc_clk = 200 MHz</text>
-<text xml:space="preserve" id="text30" x="450" y="814" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:middle;dominant-baseline:auto">(dco_clk / 2)</text>
+<rect id="rect28" inkscape:label="adc_clk = 100 MHz (dco_clk / 4)" x="335" y="196" width="230" height="624" style="fill:none;fill-opacity:1;stroke:#754d00;stroke-width:2;stroke-linejoin:miter;stroke-dasharray:6,4"/>
+<text xml:space="preserve" id="text29" x="450" y="802" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:middle;dominant-baseline:auto">adc_clk = 100 MHz</text>
+<text xml:space="preserve" id="text30" x="450" y="814" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:middle;dominant-baseline:auto">(dco_clk / 4)</text>
 <rect id="rect31" inkscape:label="dco_clk = 400 MHz" x="575" y="196" width="257.5" height="624" style="fill:none;fill-opacity:1;stroke:#754d00;stroke-width:2;stroke-linejoin:miter;stroke-dasharray:6,4"/>
 <text xml:space="preserve" id="text32" x="703.75" y="802" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:middle;dominant-baseline:auto">dco_clk = 400 MHz</text>
 </g>

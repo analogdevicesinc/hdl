@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1059.6000000000001" height="1188" viewBox="0 0 1059.6000000000001 1188">
+<defs><marker id="arrow" orient="auto" refX="0" refY="0" style="overflow:visible"><path d="M 5.77,0 -8.65,5 V -5 Z" style="fill:#000000;stroke:none" transform="scale(0.8)"/></marker></defs>
+<rect x="0" y="0" width="1059.6000000000001" height="1188" style="fill:#ffffff"/>
+<rect x="20" y="70" width="170" height="64" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="105.0" y="98.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">axi_ad4080_adc_a</text>
+<text x="105.0" y="115.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">AXI_AD408X</text>
+<text x="105.0" y="150" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#505050;text-anchor:middle">clock of converter A</text>
+<rect x="20" y="250" width="170" height="64" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="105.0" y="278.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">axi_ad4080_adc_b</text>
+<text x="105.0" y="295.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">AXI_AD408X</text>
+<text x="105.0" y="330" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#505050;text-anchor:middle">clock of converter B</text>
+<rect x="380" y="40" width="430" height="346" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="595.0" y="60" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">util_sample_pack</text>
+<rect x="410" y="100" width="130" height="186" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="475.0" y="189.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">join</text>
+<text x="475.0" y="206.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">FIFO</text>
+<text x="475.0" y="320" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">onto the clock of A, one word</text>
+<text x="475.0" y="333" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">of each channel at a time;</text>
+<text x="475.0" y="346" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;fill:#505050;text-anchor:middle">with different rates the slower</text>
+<text x="475.0" y="359" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;fill:#505050;text-anchor:middle">one sets the rate, samples of</text>
+<text x="475.0" y="372" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;fill:#505050;text-anchor:middle">the other side are skipped</text>
+<rect x="630" y="100" width="150" height="186" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="705.0" y="198.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">pack</text>
+<text x="705.0" y="223.0" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">fills the DMA words</text>
+<text x="705.0" y="237.0" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">with the samples of</text>
+<text x="705.0" y="251.0" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">the enabled channels</text>
+<line x1="540" y1="193.0" x2="621" y2="193.0" style="stroke:#000000;stroke-width:2"/>
+<polygon points="630,193.0 621,197.0 621,189.0" style="fill:#000000;stroke:none"/>
+<text x="585.0" y="185.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">data</text>
+<line x1="190" y1="80.0" x2="670" y2="80.0" style="stroke:#707070;stroke-width:1.5"/>
+<line x1="670" y1="80.0" x2="670" y2="91" style="stroke:#707070;stroke-width:1.5"/>
+<polygon points="670,100 666,91 674,91" style="fill:#707070;stroke:none"/>
+<text x="285.0" y="76.0" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#707070;text-anchor:middle">enable</text>
+<line x1="190" y1="104.0" x2="401" y2="104.0" style="stroke:#000000;stroke-width:2"/>
+<polygon points="410,104.0 401,108.0 401,100.0" style="fill:#000000;stroke:none"/>
+<text x="285.0" y="98.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">data, valid</text>
+<line x1="410" y1="120.0" x2="199" y2="120.0" style="stroke:#2e7d32;stroke-width:1.5;stroke-dasharray:2,3"/>
+<polygon points="190,120.0 199,116.0 199,124.0" style="fill:#2e7d32;stroke:none"/>
+<text x="285.0" y="136.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#2e7d32;text-anchor:middle">overflow_0 → adc_dovf</text>
+<line x1="410" y1="260.0" x2="199" y2="260.0" style="stroke:#2e7d32;stroke-width:1.5;stroke-dasharray:2,3"/>
+<polygon points="190,260.0 199,256.0 199,264.0" style="fill:#2e7d32;stroke:none"/>
+<text x="285.0" y="254.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#2e7d32;text-anchor:middle">overflow_1 → adc_dovf</text>
+<line x1="190" y1="284.0" x2="401" y2="284.0" style="stroke:#000000;stroke-width:2"/>
+<polygon points="410,284.0 401,288.0 401,280.0" style="fill:#000000;stroke:none"/>
+<text x="285.0" y="278.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">data, valid</text>
+<line x1="190" y1="306.0" x2="670" y2="306.0" style="stroke:#707070;stroke-width:1.5"/>
+<line x1="670" y1="306.0" x2="670" y2="295" style="stroke:#707070;stroke-width:1.5"/>
+<polygon points="670,286 674,295 666,295" style="fill:#707070;stroke:none"/>
+<text x="285.0" y="320.0" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#707070;text-anchor:middle">enable</text>
+<line x1="160" y1="70" x2="160" y2="18" style="stroke:#707070;stroke-width:1.5"/>
+<line x1="160" y1="18" x2="758" y2="18" style="stroke:#707070;stroke-width:1.5"/>
+<line x1="758" y1="18" x2="758" y2="91" style="stroke:#707070;stroke-width:1.5"/>
+<polygon points="758,100 754,91 762,91" style="fill:#707070;stroke:none"/>
+<text x="459.0" y="12" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#707070;text-anchor:middle">sample_slots_select of A: the sample size from its DEVICE_CODE (20 bit with 16/14 bit builds)</text>
+<rect x="900" y="140" width="110" height="106" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="955.0" y="189.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">axi_ad4880</text>
+<text x="955.0" y="206.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">_dma</text>
+<line x1="780" y1="183.0" x2="891" y2="183.0" style="stroke:#000000;stroke-width:2"/>
+<polygon points="900,183.0 891,187.0 891,179.0" style="fill:#000000;stroke:none"/>
+<text x="855.0" y="175.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">fifo_wr</text>
+<line x1="900" y1="207.0" x2="819" y2="207.0" style="stroke:#2e7d32;stroke-width:1.5;stroke-dasharray:2,3"/>
+<polygon points="810,207.0 819,203.0 819,211.0" style="fill:#2e7d32;stroke:none"/>
+<text x="855.0" y="223.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#2e7d32;text-anchor:middle">xfer_req,</text>
+<text x="855.0" y="237.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#2e7d32;text-anchor:middle">overflow</text>
+<text x="955.0" y="266" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">clock of A</text>
+<text x="20" y="424" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:start">Example 1: 16-bit samples on the 32-bit bus, both channels</text>
+<rect x="20.0" y="435" width="212.4" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="126.2" y="448" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">DEVICE_CODE (0x4C) = 01, 16 bit</text>
+<rect x="242.4" y="435" width="250.8" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="367.8" y="448" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">sample_slots_select = 0: 2^0 = 1 slot</text>
+<rect x="503.20000000000005" y="435" width="193.20000000000002" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="599.8000000000001" y="448" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">channel ENABLE: A = 1, B = 1</text>
+<text x="20" y="468" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#505050;text-anchor:start">Builds: ENABLE_20BIT=1 with ENABLE_16BIT=1, or NUM_LANES=2 with ENABLE_14BIT=1 and ENABLE_16BIT=1; the converters set to 16 bits</text>
+<text x="20" y="534" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">adc_data of A</text>
+<rect x="20" y="564" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="580.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A0</text>
+<rect x="20" y="542" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="558.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A1</text>
+<rect x="58" y="564" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="580.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A2</text>
+<rect x="58" y="542" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="558.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A3</text>
+<text x="146" y="534" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">adc_data of B</text>
+<rect x="146" y="564" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="163.0" y="580.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B0</text>
+<rect x="146" y="542" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="163.0" y="558.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B1</text>
+<rect x="184" y="564" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="201.0" y="580.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B2</text>
+<rect x="184" y="542" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="201.0" y="558.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B3</text>
+<text x="282" y="569" style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:normal;fill:#000000;text-anchor:middle">→</text>
+<text x="322" y="490" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">DMA words, 64 bits</text>
+<rect x="322" y="564" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="339.0" y="580.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A0</text>
+<rect x="322" y="542" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="339.0" y="558.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B0</text>
+<rect x="322" y="520" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="339.0" y="536.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A1</text>
+<rect x="322" y="498" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="339.0" y="514.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B1</text>
+<rect x="360" y="564" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="377.0" y="580.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A2</text>
+<rect x="360" y="542" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="377.0" y="558.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B2</text>
+<rect x="360" y="520" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="377.0" y="536.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A3</text>
+<rect x="360" y="498" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="377.0" y="514.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B3</text>
+<text x="402" y="507" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="402" y="596" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<text x="20" y="632" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:start">Example 2: 20-bit samples, each sign extended to 32 bits, both channels</text>
+<rect x="20.0" y="643" width="212.4" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="126.2" y="656" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">DEVICE_CODE (0x4C) = 00, 20 bit</text>
+<rect x="242.39999999999998" y="643" width="257.20000000000005" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="371.0" y="656" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">sample_slots_select = 1: 2^1 = 2 slots</text>
+<rect x="509.6" y="643" width="193.20000000000002" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="606.2" y="656" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">channel ENABLE: A = 1, B = 1</text>
+<text x="20" y="676" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#505050;text-anchor:start">Builds: ENABLE_20BIT=1, alone or with ENABLE_16BIT/ENABLE_14BIT; the converters set to 20 bits</text>
+<text x="20" y="742" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">adc_data of A</text>
+<rect x="20" y="750" width="34" height="44" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="777.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A0</text>
+<rect x="58" y="750" width="34" height="44" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="777.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A1</text>
+<text x="146" y="742" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">adc_data of B</text>
+<rect x="146" y="750" width="34" height="44" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="163.0" y="777.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B0</text>
+<rect x="184" y="750" width="34" height="44" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="201.0" y="777.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B1</text>
+<text x="282" y="777" style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:normal;fill:#000000;text-anchor:middle">→</text>
+<text x="322" y="698" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">DMA words, 64 bits</text>
+<rect x="322" y="750" width="34" height="44" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="339.0" y="777.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A0</text>
+<rect x="322" y="706" width="34" height="44" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="339.0" y="733.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B0</text>
+<rect x="360" y="750" width="34" height="44" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="377.0" y="777.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A1</text>
+<rect x="360" y="706" width="34" height="44" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="377.0" y="733.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B1</text>
+<text x="402" y="715" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="402" y="804" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<text x="20" y="840" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:start">Example 3: 16-bit samples on the 32-bit bus, only channel A</text>
+<rect x="20.0" y="851" width="212.4" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="126.2" y="864" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">DEVICE_CODE (0x4C) = 01, 16 bit</text>
+<rect x="242.4" y="851" width="250.8" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="367.8" y="864" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">sample_slots_select = 0: 2^0 = 1 slot</text>
+<rect x="503.20000000000005" y="851" width="193.20000000000002" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="599.8000000000001" y="864" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">channel ENABLE: A = 1, B = 0</text>
+<text x="20" y="884" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#505050;text-anchor:start">Builds: ENABLE_20BIT=1 with ENABLE_16BIT=1, or NUM_LANES=2 with ENABLE_14BIT=1 and ENABLE_16BIT=1; the converters set to 16 bits</text>
+<text x="20" y="950" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">adc_data of A</text>
+<rect x="20" y="980" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="996.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A0</text>
+<rect x="20" y="958" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="974.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A1</text>
+<rect x="58" y="980" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="996.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A2</text>
+<rect x="58" y="958" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="974.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A3</text>
+<text x="146" y="950" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">adc_data of B</text>
+<rect x="146" y="980" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="163.0" y="996.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">B0</text>
+<line x1="150" y1="998" x2="176" y2="984" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="146" y="958" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="163.0" y="974.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">B1</text>
+<line x1="150" y1="976" x2="176" y2="962" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="184" y="980" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="201.0" y="996.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">B2</text>
+<line x1="188" y1="998" x2="214" y2="984" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="184" y="958" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="201.0" y="974.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">B3</text>
+<line x1="188" y1="976" x2="214" y2="962" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<text x="282" y="985" style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:normal;fill:#000000;text-anchor:middle">→</text>
+<text x="322" y="906" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">DMA words, 64 bits</text>
+<rect x="322" y="980" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="339.0" y="996.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A0</text>
+<rect x="322" y="958" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="339.0" y="974.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A1</text>
+<rect x="322" y="936" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="339.0" y="952.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A2</text>
+<rect x="322" y="914" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="339.0" y="930.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A3</text>
+<text x="364" y="923" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="364" y="1012" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<text x="20" y="1032" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">Words are drawn as columns, the earliest sample in the low bits; crossed: channel disabled.</text>
+<text x="20" y="1050" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">DEVICE_CODE and ENABLE are register fields of the IPs; sample_slots_select is the log2 of the slots per sample, a signal from IP A.</text>
+<text x="20" y="1068" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">sample_slots_select switches only in builds with ENABLE_20BIT and a 16 or 14 bit depth; in the other builds the slot size is fixed by the build, as shown.</text>
+<text x="20" y="1090" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;fill:#000000;text-anchor:start">Sampling alignment of the two converters is not implemented.</text>
+<text x="20" y="1108" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;fill:#000000;text-anchor:start">Use the same filter and decimation settings on both converters: with different rates the slower one sets the rate and samples of the other side are skipped.</text>
+<line x1="20" y1="1142" x2="60" y2="1142" style="stroke:#000000;stroke-width:2"/>
+<text x="68" y="1146" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">samples</text>
+<line x1="180" y1="1142" x2="220" y2="1142" style="stroke:#2e7d32;stroke-width:1.5;stroke-dasharray:2,3"/>
+<text x="228" y="1146" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#2e7d32;text-anchor:start">overflow (status), xfer_req (capture start); no backpressure</text>
+<line x1="600" y1="1142" x2="640" y2="1142" style="stroke:#707070;stroke-width:1.5"/>
+<text x="648" y="1146" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#707070;text-anchor:start">sample size, channel enable</text>
+<rect x="20.599999999999998" y="1159" width="58.800000000000004" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="50" y="1172" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">setting</text>
+<text x="90" y="1172" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#505050;text-anchor:start">the settings of an example: register fields of the IPs and sample_slots_select</text>
+</svg>
