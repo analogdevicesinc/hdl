@@ -32,12 +32,18 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-set ADC_N_BITS $ad_project_params(ADC_N_BITS)
-if {$ADC_N_BITS <= 16} {
-    set DMA_DATA_WIDTH_SRC 16
-} else {
-    set DMA_DATA_WIDTH_SRC 32
-}
+set NUM_LANES    $ad_project_params(NUM_LANES)
+set ENABLE_20BIT $ad_project_params(ENABLE_20BIT)
+set ENABLE_16BIT $ad_project_params(ENABLE_16BIT)
+set ENABLE_14BIT $ad_project_params(ENABLE_14BIT)
+
+# Bit depth enables and lane count are propagated to the PHY. The data bus width
+# follows the same derivation as ad408x_phy: 32 bits for the 20 bit depth, and
+# on two lanes for the 14 bit depth, 16 bits otherwise. On the 32 bit bus the
+# 16 and 14 bit depths carry two samples per word in 16 bit slots, so the
+# memory holds 16 bit samples in both cases.
+set ADC_DATA_WIDTH [expr {($ENABLE_20BIT || ($ENABLE_14BIT && $NUM_LANES == 2)) ? 32 : 16}]
+set DMA_DATA_WIDTH_SRC $ADC_DATA_WIDTH
 
 # ad4080 interface
 
@@ -66,7 +72,10 @@ ad_connect fpga_100_clk  ad4080_clock_monitor/clock_1
 # axi_ad408x
 
 ad_ip_instance axi_ad408x axi_ad4080_adc
-ad_ip_parameter axi_ad4080_adc CONFIG.ADC_N_BITS $ADC_N_BITS
+ad_ip_parameter axi_ad4080_adc CONFIG.NUM_LANES $NUM_LANES
+ad_ip_parameter axi_ad4080_adc CONFIG.ENABLE_20BIT $ENABLE_20BIT
+ad_ip_parameter axi_ad4080_adc CONFIG.ENABLE_16BIT $ENABLE_16BIT
+ad_ip_parameter axi_ad4080_adc CONFIG.ENABLE_14BIT $ENABLE_14BIT
 
 # dma for rx data
 
@@ -92,7 +101,7 @@ ad_connect db_n                 axi_ad4080_adc/data_b_in_n
 ad_connect sync_n               axi_ad4080_adc/sync_n
 ad_connect cnv_in_p             axi_ad4080_adc/cnv_in_p
 ad_connect cnv_in_n             axi_ad4080_adc/cnv_in_n
-ad_connect filter_data_ready_n  axi_ad4080_adc/filter_data_ready_n
+ad_connect filter_data_ready_n  axi_ad4080_adc/filter_rdy_n
 ad_connect $sys_iodelay_clk     axi_ad4080_adc/delay_clk
 
 # connect datapath

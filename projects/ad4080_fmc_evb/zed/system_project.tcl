@@ -37,11 +37,17 @@ source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timing_fix_xilinx.tcl]
 
-set ADC_N_BITS [get_env_param ADC_N_BITS 20]
-set SPI_SLAVE [get_env_param SPI_SLAVE 0]
+set NUM_LANES    [get_env_param NUM_LANES    2]
+set ENABLE_20BIT [get_env_param ENABLE_20BIT 1]
+set ENABLE_16BIT [get_env_param ENABLE_16BIT 1]
+set ENABLE_14BIT [get_env_param ENABLE_14BIT 1]
+set SPI_SLAVE    [get_env_param SPI_SLAVE    0]
 
 adi_project ad4080_fmc_evb_zed 0 [list \
-  ADC_N_BITS $ADC_N_BITS \
+  NUM_LANES $NUM_LANES \
+  ENABLE_20BIT $ENABLE_20BIT \
+  ENABLE_16BIT $ENABLE_16BIT \
+  ENABLE_14BIT $ENABLE_14BIT \
   SPI_SLAVE $SPI_SLAVE \
 ]
 
