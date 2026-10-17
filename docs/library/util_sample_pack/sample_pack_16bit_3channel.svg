@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="606.85" height="360" viewBox="0 0 606.85 360">
+<defs><marker id="arrow" orient="auto" refX="0" refY="0" style="overflow:visible"><path d="M 5.77,0 -8.65,5 V -5 Z" style="fill:#000000;stroke:none" transform="scale(0.8)"/></marker></defs>
+<rect x="0" y="0" width="606.85" height="360" style="fill:#ffffff"/>
+<rect x="220" y="30" width="120" height="272" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="280.0" y="162.0" style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:bold;fill:#000000;text-anchor:middle">SAMPLE</text>
+<text x="280.0" y="186.0" style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:bold;fill:#000000;text-anchor:middle">PACK</text>
+<rect x="20" y="232.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="248.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A0</text>
+<rect x="20" y="210.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="226.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B0</text>
+<rect x="20" y="188.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="204.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C0</text>
+<rect x="20" y="166.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="182.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A1</text>
+<rect x="20" y="144.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="160.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B1</text>
+<rect x="20" y="122.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="138.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C1</text>
+<rect x="20" y="100.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="116.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A2</text>
+<rect x="20" y="78.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="94.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B2</text>
+<rect x="58" y="232.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="248.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C2</text>
+<rect x="58" y="210.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="226.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A3</text>
+<rect x="58" y="188.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="204.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B3</text>
+<rect x="58" y="166.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="182.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C3</text>
+<rect x="58" y="144.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="160.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A4</text>
+<rect x="58" y="122.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="138.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B4</text>
+<rect x="58" y="100.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="116.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C4</text>
+<rect x="58" y="78.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="94.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A5</text>
+<rect x="96" y="232.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="248.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B5</text>
+<rect x="96" y="210.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="226.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C5</text>
+<rect x="96" y="188.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="204.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A6</text>
+<rect x="96" y="166.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="182.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B6</text>
+<rect x="96" y="144.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="160.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C6</text>
+<rect x="96" y="122.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="138.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A7</text>
+<rect x="96" y="100.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="116.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B7</text>
+<rect x="96" y="78.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="94.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C7</text>
+<text x="134" y="74.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="134" y="264.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<line x1="220" y1="166.0" x2="146" y2="166.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<line x1="172.0" y1="174.0" x2="184.0" y2="158.0" style="stroke:#000000;stroke-width:1.5"/>
+<text x="178.0" y="154.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">128 bits</text>
+<line x1="426" y1="72.0" x2="356" y2="72.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<line x1="380.0" y1="80.0" x2="392.0" y2="64.0" style="stroke:#000000;stroke-width:1.5"/>
+<text x="386.0" y="60.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">32 bits</text>
+<rect x="430" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="447.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A0</text>
+<rect x="430" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="447.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A1</text>
+<rect x="468" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="485.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A2</text>
+<rect x="468" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="485.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A3</text>
+<rect x="506" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="523.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A4</text>
+<rect x="506" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="523.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A5</text>
+<rect x="544" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="561.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A6</text>
+<rect x="544" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="561.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">A7</text>
+<text x="582" y="54.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="582" y="104.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<line x1="426" y1="142.0" x2="356" y2="142.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<line x1="380.0" y1="150.0" x2="392.0" y2="134.0" style="stroke:#000000;stroke-width:1.5"/>
+<text x="386.0" y="130.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">32 bits</text>
+<rect x="430" y="142.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="447.0" y="158.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B0</text>
+<rect x="430" y="120.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="447.0" y="136.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B1</text>
+<rect x="468" y="142.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="485.0" y="158.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B2</text>
+<rect x="468" y="120.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="485.0" y="136.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B3</text>
+<rect x="506" y="142.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="523.0" y="158.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B4</text>
+<rect x="506" y="120.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="523.0" y="136.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B5</text>
+<rect x="544" y="142.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="561.0" y="158.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B6</text>
+<rect x="544" y="120.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="561.0" y="136.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">B7</text>
+<text x="582" y="124.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="582" y="174.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<line x1="426" y1="212.0" x2="356" y2="212.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<line x1="380.0" y1="220.0" x2="392.0" y2="204.0" style="stroke:#000000;stroke-width:1.5"/>
+<text x="386.0" y="200.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">32 bits</text>
+<rect x="430" y="212.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="447.0" y="228.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C0</text>
+<rect x="430" y="190.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="447.0" y="206.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C1</text>
+<rect x="468" y="212.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="485.0" y="228.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C2</text>
+<rect x="468" y="190.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="485.0" y="206.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C3</text>
+<rect x="506" y="212.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="523.0" y="228.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C4</text>
+<rect x="506" y="190.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="523.0" y="206.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C5</text>
+<rect x="544" y="212.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="561.0" y="228.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C6</text>
+<rect x="544" y="190.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="561.0" y="206.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#0066cc;text-anchor:middle">C7</text>
+<text x="582" y="194.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="582" y="244.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<line x1="426" y1="271.0" x2="356" y2="271.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<line x1="380.0" y1="279.0" x2="392.0" y2="263.0" style="stroke:#000000;stroke-width:1.5"/>
+<text x="386.0" y="259.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">32 bits</text>
+<rect x="430" y="260.0" width="90" height="22" style="fill:#ffffff;stroke:#a0a0a0;stroke-width:2"/>
+<text x="475" y="276.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">DISABLED</text>
+<text x="20" y="326" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">NUM_CH = 4, CH_SLOTS = 2, SLOT_W = 16</text>
+<text x="20" y="344" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">sample_slots_select = 0, enable = D C B A = 0 1 1 1</text>
+</svg>

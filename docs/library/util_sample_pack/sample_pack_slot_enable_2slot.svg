@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="623.45" height="242" viewBox="0 0 623.45 242">
+<defs><marker id="arrow" orient="auto" refX="0" refY="0" style="overflow:visible"><path d="M 5.77,0 -8.65,5 V -5 Z" style="fill:#000000;stroke:none" transform="scale(0.8)"/></marker></defs>
+<rect x="0" y="0" width="623.45" height="242" style="fill:#ffffff"/>
+<rect x="220" y="30" width="120" height="154" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="280.0" y="103.0" style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:bold;fill:#000000;text-anchor:middle">SAMPLE</text>
+<text x="280.0" y="127.0" style="font-family:Arial,Helvetica,sans-serif;font-size:20px;font-weight:bold;fill:#000000;text-anchor:middle">PACK</text>
+<rect x="20" y="129.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="145.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">X0</text>
+<rect x="20" y="107.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="123.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#e07000;text-anchor:middle">Y0</text>
+<rect x="20" y="85.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="101.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">Z0</text>
+<rect x="20" y="63.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="37.0" y="79.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">X1</text>
+<rect x="58" y="129.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="145.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#e07000;text-anchor:middle">Y1</text>
+<rect x="58" y="107.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="123.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">Z1</text>
+<rect x="58" y="85.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="101.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">X2</text>
+<rect x="58" y="63.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="75.0" y="79.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#e07000;text-anchor:middle">Y2</text>
+<rect x="96" y="129.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="145.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">Z2</text>
+<rect x="96" y="107.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="123.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">X3</text>
+<rect x="96" y="85.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="101.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#e07000;text-anchor:middle">Y3</text>
+<rect x="96" y="63.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="113.0" y="79.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">Z3</text>
+<text x="134" y="59.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="134" y="161.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<line x1="220" y1="107.0" x2="146" y2="107.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<line x1="172.0" y1="115.0" x2="184.0" y2="99.0" style="stroke:#000000;stroke-width:1.5"/>
+<text x="178.0" y="95.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">64 bits</text>
+<line x1="426" y1="72.0" x2="356" y2="72.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<line x1="380.0" y1="80.0" x2="392.0" y2="64.0" style="stroke:#000000;stroke-width:1.5"/>
+<text x="386.0" y="60.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">32 bits</text>
+<rect x="430" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="447.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">X0</text>
+<rect x="430" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="447.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#e07000;text-anchor:middle">Y0</text>
+<rect x="468" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="485.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">X1</text>
+<rect x="468" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="485.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#e07000;text-anchor:middle">Y1</text>
+<rect x="506" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="523.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">X2</text>
+<rect x="506" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="523.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#e07000;text-anchor:middle">Y2</text>
+<rect x="544" y="72.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="561.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#d40000;text-anchor:middle">X3</text>
+<rect x="544" y="50.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="561.0" y="66.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#e07000;text-anchor:middle">Y3</text>
+<text x="582" y="54.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="582" y="104.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<line x1="426" y1="142.0" x2="356" y2="142.0" style="stroke:#000000;stroke-width:2" marker-end="url(#arrow)"/>
+<line x1="380.0" y1="150.0" x2="392.0" y2="134.0" style="stroke:#000000;stroke-width:1.5"/>
+<text x="386.0" y="130.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:middle">32 bits</text>
+<rect x="430" y="142.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="447.0" y="158.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">Z0</text>
+<rect x="430" y="120.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="447.0" y="136.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">-</text>
+<line x1="434" y1="138.0" x2="460" y2="124.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="468" y="142.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="485.0" y="158.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">Z1</text>
+<rect x="468" y="120.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="485.0" y="136.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">-</text>
+<line x1="472" y1="138.0" x2="498" y2="124.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="506" y="142.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="523.0" y="158.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">Z2</text>
+<rect x="506" y="120.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="523.0" y="136.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">-</text>
+<line x1="510" y1="138.0" x2="536" y2="124.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<rect x="544" y="142.0" width="34" height="22" style="fill:#ffffff;stroke:#808080;stroke-width:2"/>
+<text x="561.0" y="158.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#008000;text-anchor:middle">Z3</text>
+<rect x="544" y="120.0" width="34" height="22" style="fill:#f0f0f0;stroke:#b0b0b0;stroke-width:2"/>
+<text x="561.0" y="136.0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:normal;fill:#a0a0a0;text-anchor:middle">-</text>
+<line x1="548" y1="138.0" x2="574" y2="124.0" style="stroke:#a0a0a0;stroke-width:1.5"/>
+<text x="582" y="124.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">MSB</text>
+<text x="582" y="174.0" style="font-family:Arial,Helvetica,sans-serif;font-size:9px;font-weight:normal;fill:#808080;text-anchor:start">LSB</text>
+<text x="20" y="208" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">NUM_CH = 2, CH_SLOTS = 2, SLOT_W = 16</text>
+<text x="20" y="226" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">sample_slots_select = 1, enable = 1 1, slot_enable = 0111 (slot 1 of channel 1 off)</text>
+</svg>
