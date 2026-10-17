@@ -302,7 +302,7 @@ ad_connect da_n                 axi_ad4080_adc/data_a_in_n
 ad_connect db_p                 axi_ad4080_adc/data_b_in_p
 ad_connect db_n                 axi_ad4080_adc/data_b_in_n
 ad_connect sync_n               axi_ad4080_adc/sync_n
-ad_connect filter_data_ready_n  axi_ad4080_adc/filter_data_ready_n
+ad_connect filter_data_ready_n  axi_ad4080_adc/filter_rdy_n
 ad_connect $sys_iodelay_clk     axi_ad4080_adc/delay_clk
 ad_connect GND                  axi_ad4080_adc/cnv_in_p
 ad_connect GND                  axi_ad4080_adc/cnv_in_n
