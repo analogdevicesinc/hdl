@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module jesd204_h_tile_adapter_rx (
+module jesd204_h_tile_adapter_rx #(
+  parameter INVERT = 0
+) (
   // PHY interface
   input        i_clk,
   input [63:0] i_phy_data,
@@ -103,8 +105,8 @@ module jesd204_h_tile_adapter_rx (
 
   // Register data to ease timing
   always @(posedge i_clk) begin
-    i_data <= i_phy_data;
-    i_header <= i_phy_control;
+    i_data <= INVERT ? ~i_phy_data : i_phy_data;
+    i_header <= INVERT ? ~i_phy_control : i_phy_control;
     i_data_valid <= i_phy_data_valid;
   end
 

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -37,6 +37,7 @@
 
 module jesd204_f_tile_adapter_rx #(
   parameter I_WIDTH = 80,
+  parameter INVERT = 0,
   parameter DATA_PATH_WIDTH = 8
 ) (
   // PHY interface
@@ -99,7 +100,8 @@ module jesd204_f_tile_adapter_rx #(
 
   // Register the input data to ease timing
   always @(posedge i_clk) begin
-    i_data <= {i_phy_data[71:40], i_phy_data[31:0]};
+    i_data <= INVERT ? ~{i_phy_data[71:40], i_phy_data[31:0]} :
+                        {i_phy_data[71:40], i_phy_data[31:0]};
   end
 
   gearbox_64b66b i_gearbox (

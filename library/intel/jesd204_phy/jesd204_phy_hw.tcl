@@ -415,6 +415,8 @@ proc jesd204_phy_composition_callback {} {
           } else {
             # JESD204C
             add_instance tx_adapter_${i} jesd204_h_tile_adapter_tx
+            set_instance_parameter_value tx_adapter_${i} INVERT \
+              [expr ($lane_invert >> $i) & 1]
 
             add_connection phy_clk.clk                     tx_adapter_${i}.phy_tx_clock
             add_connection link_clock.clk                  tx_adapter_${i}.link_clock
@@ -471,6 +473,8 @@ proc jesd204_phy_composition_callback {} {
           } else {
             # JESD204C
             add_instance rx_adapter_${i} jesd204_h_tile_adapter_rx
+            set_instance_parameter_value rx_adapter_${i} INVERT \
+              [expr ($lane_invert >> $i) & 1]
             add_connection phy_clk.clk                     rx_adapter_${i}.phy_rx_clock
             add_connection link_clock.clk                  rx_adapter_${i}.link_clock
             add_connection link_clock.clk_reset            rx_adapter_${i}.reset
@@ -605,6 +609,8 @@ proc jesd204_phy_composition_callback {} {
         } else {
           # JESD204C
           add_instance tx_adapter_${i} jesd204_f_tile_adapter_tx
+          set_instance_parameter_value tx_adapter_${i} INVERT \
+            [expr ($lane_invert >> $i) & 1]
           add_connection phy_clk.clk               tx_adapter_${i}.phy_tx_clock
           add_connection link_clock.clk            tx_adapter_${i}.link_clock
           add_connection link_clock.clk_reset      tx_adapter_${i}.reset
@@ -655,6 +661,8 @@ proc jesd204_phy_composition_callback {} {
         } else {
           # JESD204C
           add_instance rx_adapter_${i} jesd204_f_tile_adapter_rx
+          set_instance_parameter_value rx_adapter_${i} INVERT \
+            [expr ($lane_invert >> $i) & 1]
           add_connection phy_clk.clk                rx_adapter_${i}.phy_rx_clock
           add_connection link_clock.clk             rx_adapter_${i}.link_clock
           add_connection link_clock.clk_reset       rx_adapter_${i}.reset

@@ -308,6 +308,8 @@ proc jesd204_gts_phy_composition_callback {} {
       # JESD204C
       add_instance tx_adapter_${i} jesd204_f_tile_adapter_tx
       set_instance_parameter_value tx_adapter_${i} DEVICE {Agilex 5}
+      set_instance_parameter_value tx_adapter_${i} INVERT \
+        [expr ($lane_invert >> $i) & 1]
 
       add_connection phy_glue.tx_clkout2_0     tx_adapter_${i}.phy_tx_clock
       add_connection tx_link_clock.clk         tx_adapter_${i}.link_clock
@@ -345,6 +347,8 @@ proc jesd204_gts_phy_composition_callback {} {
 
       add_instance rx_adapter_${i} jesd204_f_tile_adapter_rx
       set_instance_parameter_value rx_adapter_${i} DEVICE {Agilex 5}
+      set_instance_parameter_value rx_adapter_${i} INVERT \
+        [expr ($lane_invert >> $i) & 1]
 
       add_connection phy_glue.rx_clkout2_0      rx_adapter_${i}.phy_rx_clock
       add_connection rx_link_clock.clk          rx_adapter_${i}.link_clock

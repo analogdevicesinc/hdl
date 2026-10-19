@@ -54,6 +54,7 @@ ad_ip_create jesd204_f_tile_adapter_rx "ADI JESD204C F-Tile/GTS PHY Adapter RX"
 # parameters
 
 ad_ip_parameter DEVICE STRING "Agilex 7" false
+ad_ip_parameter INVERT INTEGER 0
 
 # files
 

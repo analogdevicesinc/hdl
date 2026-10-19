@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -37,6 +37,7 @@
 
 module jesd204_f_tile_adapter_tx #(
   parameter O_WIDTH = 80,
+  parameter INVERT = 0,
   parameter DATA_PATH_WIDTH = 8
 ) (
   // PHY interface
@@ -151,8 +152,8 @@ module jesd204_f_tile_adapter_tx #(
     o_phy_data <= 'd0;
     o_phy_data[79] <= 1'b1;
     o_phy_data[38] <= 1'b1;
-    o_phy_data[71:40] <= o_gb_data[63:32];
-    o_phy_data[31: 0] <= o_gb_data[31: 0];
+    o_phy_data[71:40] <= INVERT ? ~o_gb_data[63:32] : o_gb_data[63:32];
+    o_phy_data[31: 0] <= INVERT ? ~o_gb_data[31: 0] : o_gb_data[31: 0];
   end
 
 endmodule

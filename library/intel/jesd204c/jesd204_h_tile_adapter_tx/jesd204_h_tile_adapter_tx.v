@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module jesd204_h_tile_adapter_tx (
+module jesd204_h_tile_adapter_tx #(
+  parameter INVERT = 0
+) (
   // PHY interface
   input             o_clk,
   output reg [63:0] o_phy_data,
@@ -136,8 +138,8 @@ module jesd204_h_tile_adapter_tx (
   // The FIFO output follows a read by one cycle and holds between reads, so
   // the word registered on a read cycle is the one from the previous read.
   always @(posedge o_clk) begin
-    o_phy_data <= o_data;
-    o_phy_control <= o_header;
+    o_phy_data <= INVERT ? ~o_data : o_data;
+    o_phy_control <= INVERT ? ~o_header : o_header;
     o_phy_data_valid <= rd_en;
   end
 

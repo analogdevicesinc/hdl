@@ -42,6 +42,7 @@ ad_ip_create jesd204_h_tile_adapter_tx "ADI JESD204C H-Tile PHY Adapter TX"
 # parameters
 
 ad_ip_parameter DEVICE STRING "Stratix 10" false
+ad_ip_parameter INVERT INTEGER 0
 
 # files
 
