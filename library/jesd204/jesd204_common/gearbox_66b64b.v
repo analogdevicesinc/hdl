@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -49,7 +49,9 @@ module gearbox_66b64b (
   reg  [65:0] buff_r;
   reg  [ 5:0] gear_cnt;
   wire        pause;
-  wire [63:0] gears [0:32];
+
+  wire [131:0] shift_data;
+  wire [ 5:0]  shift_idx;
 
   always @(posedge clk) begin
     if (i_valid) begin
@@ -69,21 +71,11 @@ module gearbox_66b64b (
 
   assign pause = gear_cnt[5];
 
-  generate
-    genvar i;
-    for (i=0; i < 33; i=i+1) begin
-      if (i == 0) begin
-        assign gears[0] = i_data[63:0];
-      end else if (i == 32) begin
-        assign gears[32] = buff_r[65:2];
-      end else begin
-        assign gears[i] = {i_data[63-2*i:0], buff_r[65:66-2*i]};
-      end
-    end
-  endgenerate
+  assign shift_data = {i_data, buff_r};
+  assign shift_idx  = 6'd33 - gear_cnt;
 
   always @(posedge clk) begin
-    o_data <= gears[gear_cnt];
+    o_data <= shift_data[{shift_idx, 1'b0} +: 64];
   end
 
   assign o_rd_en = ~pause;
