@@ -112,6 +112,7 @@ module ad_ip_jesd204_tpl_dac_core #(
   wire [DAC_CDW-1:0] pn15_data;
 
   wire [LINK_DATA_WIDTH-1:0] dac_ddata_int;
+  wire dac_sync_armed;
 
   assign link_valid = 1'b1;
   assign dac_sync_in_status = dac_sync_armed;
