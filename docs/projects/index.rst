@@ -96,6 +96,7 @@ Contents
    DAQ2 <daq2/index>
    DAQ3 <daq3/index>
    DC2677A <dc2677a/index>
+   FMC-XM105 <fmc_xm105/index>
    FMCOMMS2/3/4 <fmcomms2/index>
    FMCOMMS5 <fmcomms5/index>
    FMCOMMS8 <fmcomms8/index>
