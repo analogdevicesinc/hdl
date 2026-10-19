@@ -537,8 +537,6 @@ module jesd204_rx #(
     .event_data_phase(event_data_phase),
     .event_unexpected_lane_state_error(event_unexpected_lane_state_error));
 
-  assign err_statistics_reset = ctrl_err_statistics_reset || event_data_phase;
-
   for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
 
     localparam D_START = i * DATA_PATH_WIDTH*8;
@@ -550,6 +548,8 @@ module jesd204_rx #(
 
     wire [7:0] status_lane_skew;
     wire all_buffer_ready_n_d;
+    wire err_statistics_reset_64b;
+    reg event_data_phase_reg = 1'b0;
 
     // Pipeline the aggregated ready status at the lane, so that the OR reduce
     // and the route out to the channel become a register to register path with
@@ -562,6 +562,18 @@ module jesd204_rx #(
       .clk(clk),
       .in(all_buffer_ready_n),
       .out(all_buffer_ready_n_d));
+
+    // Register event_data_phase signal to break the combinational path coming
+    // from jesd204_rx_ctrl_64b and going into jesd204_rx_lane_64b.
+    always @(posedge clk) begin
+      if (reset == 1'b1) begin
+        event_data_phase_reg <= 1'b0;
+      end else begin
+        event_data_phase_reg <= event_data_phase;
+      end
+    end
+    
+    assign err_statistics_reset_64b = ctrl_err_statistics_reset || event_data_phase_reg;
 
     jesd204_rx_lane_64b #(
       .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
@@ -594,7 +606,7 @@ module jesd204_rx #(
       .lmfc_edge(lmfc_edge_synced),
       .emb_lock(emb_lock[i]),
 
-      .ctrl_err_statistics_reset(err_statistics_reset),
+      .ctrl_err_statistics_reset(err_statistics_reset_64b),
       .ctrl_err_statistics_mask(ctrl_err_statistics_mask[8:3]),
       .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
 
