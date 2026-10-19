@@ -48,6 +48,7 @@ package require qsys 14.0
 
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
+source $ad_hdl_dir/library/intel/jesd204_phy/jesd204_cdc_fifo.tcl
 
 #
 # Instantiates the Arria 10 native PHY and configures it for JESD204 operation.
@@ -427,29 +428,7 @@ proc jesd204_phy_composition_callback {} {
 
             set_interface_property phy_${i} EXPORT_OF tx_adapter_${i}.link_tx
 
-            # instantiate the CDC fifo
-            add_instance tx_fifo_${i} fifo
-            set_instance_parameter_value tx_fifo_${i} GUI_CLOCKS_ARE_SYNCHRONIZED {0}
-            set_instance_parameter_value tx_fifo_${i} GUI_Clock {4}
-            set_instance_parameter_value tx_fifo_${i} GUI_DISABLE_DCFIFO_EMBEDDED_TIMING_CONSTRAINT {1}
-            set_instance_parameter_value tx_fifo_${i} GUI_Depth {32}
-            set_instance_parameter_value tx_fifo_${i} GUI_Empty {1}
-            set_instance_parameter_value tx_fifo_${i} GUI_Full {1}
-            set_instance_parameter_value tx_fifo_${i} GUI_LegacyRREQ {1}
-            set_instance_parameter_value tx_fifo_${i} GUI_MAX_DEPTH {Auto}
-            set_instance_parameter_value tx_fifo_${i} GUI_RAM_BLOCK_TYPE {Auto}
-            set_instance_parameter_value tx_fifo_${i} GUI_UsedW {1}
-            set_instance_parameter_value tx_fifo_${i} GUI_Width {66}
-            set_instance_parameter_value tx_fifo_${i} GUI_dc_aclr {1}
-            set_instance_parameter_value tx_fifo_${i} GUI_delaypipe {5}
-            set_instance_parameter_value tx_fifo_${i} GUI_diff_widths {0}
-            set_instance_parameter_value tx_fifo_${i} GUI_output_width {8}
-            set_instance_parameter_value tx_fifo_${i} GUI_read_aclr_synch {1}
-            set_instance_parameter_value tx_fifo_${i} GUI_rsEmpty {1}
-            set_instance_parameter_value tx_fifo_${i} GUI_synStage {3}
-            set_instance_parameter_value tx_fifo_${i} GUI_write_aclr_synch {1}
-            set_instance_parameter_value tx_fifo_${i} GUI_wsEmpty {0}
-            set_instance_parameter_value tx_fifo_${i} GUI_wsFull {1}
+            jesd204_add_cdc_fifo tx_fifo_${i}
 
             add_connection tx_fifo_${i}.fifo_input  tx_adapter_${i}.fifo_input
             add_connection tx_fifo_${i}.fifo_output tx_adapter_${i}.fifo_output
@@ -485,29 +464,7 @@ proc jesd204_phy_composition_callback {} {
 
             set_interface_property phy_${i} EXPORT_OF rx_adapter_${i}.link_rx
 
-            # instantiate the CDC fifo
-            add_instance rx_fifo_${i} fifo
-            set_instance_parameter_value rx_fifo_${i} GUI_CLOCKS_ARE_SYNCHRONIZED {0}
-            set_instance_parameter_value rx_fifo_${i} GUI_Clock {4}
-            set_instance_parameter_value rx_fifo_${i} GUI_DISABLE_DCFIFO_EMBEDDED_TIMING_CONSTRAINT {1}
-            set_instance_parameter_value rx_fifo_${i} GUI_Depth {32}
-            set_instance_parameter_value rx_fifo_${i} GUI_Empty {1}
-            set_instance_parameter_value rx_fifo_${i} GUI_Full {1}
-            set_instance_parameter_value rx_fifo_${i} GUI_LegacyRREQ {1}
-            set_instance_parameter_value rx_fifo_${i} GUI_MAX_DEPTH {Auto}
-            set_instance_parameter_value rx_fifo_${i} GUI_RAM_BLOCK_TYPE {Auto}
-            set_instance_parameter_value rx_fifo_${i} GUI_UsedW {1}
-            set_instance_parameter_value rx_fifo_${i} GUI_Width {66}
-            set_instance_parameter_value rx_fifo_${i} GUI_dc_aclr {1}
-            set_instance_parameter_value rx_fifo_${i} GUI_delaypipe {5}
-            set_instance_parameter_value rx_fifo_${i} GUI_diff_widths {0}
-            set_instance_parameter_value rx_fifo_${i} GUI_output_width {8}
-            set_instance_parameter_value rx_fifo_${i} GUI_read_aclr_synch {1}
-            set_instance_parameter_value rx_fifo_${i} GUI_rsEmpty {1}
-            set_instance_parameter_value rx_fifo_${i} GUI_synStage {3}
-            set_instance_parameter_value rx_fifo_${i} GUI_write_aclr_synch {1}
-            set_instance_parameter_value rx_fifo_${i} GUI_wsEmpty {0}
-            set_instance_parameter_value rx_fifo_${i} GUI_wsFull {1}
+            jesd204_add_cdc_fifo rx_fifo_${i}
 
             add_connection rx_fifo_${i}.fifo_input  rx_adapter_${i}.fifo_input
             add_connection rx_fifo_${i}.fifo_output rx_adapter_${i}.fifo_output
@@ -618,29 +575,7 @@ proc jesd204_phy_composition_callback {} {
 
           set_interface_property phy_${i} EXPORT_OF tx_adapter_${i}.link_tx
 
-          # instantiate the CDC fifo
-          add_instance tx_fifo_${i} fifo
-          set_instance_parameter_value tx_fifo_${i} GUI_CLOCKS_ARE_SYNCHRONIZED {0}
-          set_instance_parameter_value tx_fifo_${i} GUI_Clock {4}
-          set_instance_parameter_value tx_fifo_${i} GUI_DISABLE_DCFIFO_EMBEDDED_TIMING_CONSTRAINT {1}
-          set_instance_parameter_value tx_fifo_${i} GUI_Depth {32}
-          set_instance_parameter_value tx_fifo_${i} GUI_Empty {1}
-          set_instance_parameter_value tx_fifo_${i} GUI_Full {1}
-          set_instance_parameter_value tx_fifo_${i} GUI_LegacyRREQ {1}
-          set_instance_parameter_value tx_fifo_${i} GUI_MAX_DEPTH {Auto}
-          set_instance_parameter_value tx_fifo_${i} GUI_RAM_BLOCK_TYPE {Auto}
-          set_instance_parameter_value tx_fifo_${i} GUI_UsedW {1}
-          set_instance_parameter_value tx_fifo_${i} GUI_Width {66}
-          set_instance_parameter_value tx_fifo_${i} GUI_dc_aclr {1}
-          set_instance_parameter_value tx_fifo_${i} GUI_delaypipe {5}
-          set_instance_parameter_value tx_fifo_${i} GUI_diff_widths {0}
-          set_instance_parameter_value tx_fifo_${i} GUI_output_width {8}
-          set_instance_parameter_value tx_fifo_${i} GUI_read_aclr_synch {1}
-          set_instance_parameter_value tx_fifo_${i} GUI_rsEmpty {1}
-          set_instance_parameter_value tx_fifo_${i} GUI_synStage {3}
-          set_instance_parameter_value tx_fifo_${i} GUI_write_aclr_synch {1}
-          set_instance_parameter_value tx_fifo_${i} GUI_wsEmpty {0}
-          set_instance_parameter_value tx_fifo_${i} GUI_wsFull {1}
+          jesd204_add_cdc_fifo tx_fifo_${i}
 
           add_connection tx_fifo_${i}.fifo_input  tx_adapter_${i}.fifo_input
           add_connection tx_fifo_${i}.fifo_output tx_adapter_${i}.fifo_output
@@ -670,29 +605,7 @@ proc jesd204_phy_composition_callback {} {
 
           set_interface_property phy_${i} EXPORT_OF rx_adapter_${i}.link_rx
 
-          # instantiate the CDC fifo
-          add_instance rx_fifo_${i} fifo
-          set_instance_parameter_value rx_fifo_${i} GUI_CLOCKS_ARE_SYNCHRONIZED {0}
-          set_instance_parameter_value rx_fifo_${i} GUI_Clock {4}
-          set_instance_parameter_value rx_fifo_${i} GUI_DISABLE_DCFIFO_EMBEDDED_TIMING_CONSTRAINT {1}
-          set_instance_parameter_value rx_fifo_${i} GUI_Depth {32}
-          set_instance_parameter_value rx_fifo_${i} GUI_Empty {1}
-          set_instance_parameter_value rx_fifo_${i} GUI_Full {1}
-          set_instance_parameter_value rx_fifo_${i} GUI_LegacyRREQ {1}
-          set_instance_parameter_value rx_fifo_${i} GUI_MAX_DEPTH {Auto}
-          set_instance_parameter_value rx_fifo_${i} GUI_RAM_BLOCK_TYPE {Auto}
-          set_instance_parameter_value rx_fifo_${i} GUI_UsedW {1}
-          set_instance_parameter_value rx_fifo_${i} GUI_Width {66}
-          set_instance_parameter_value rx_fifo_${i} GUI_dc_aclr {1}
-          set_instance_parameter_value rx_fifo_${i} GUI_delaypipe {5}
-          set_instance_parameter_value rx_fifo_${i} GUI_diff_widths {0}
-          set_instance_parameter_value rx_fifo_${i} GUI_output_width {8}
-          set_instance_parameter_value rx_fifo_${i} GUI_read_aclr_synch {1}
-          set_instance_parameter_value rx_fifo_${i} GUI_rsEmpty {1}
-          set_instance_parameter_value rx_fifo_${i} GUI_synStage {3}
-          set_instance_parameter_value rx_fifo_${i} GUI_write_aclr_synch {1}
-          set_instance_parameter_value rx_fifo_${i} GUI_wsEmpty {0}
-          set_instance_parameter_value rx_fifo_${i} GUI_wsFull {1}
+          jesd204_add_cdc_fifo rx_fifo_${i}
 
           add_connection rx_fifo_${i}.fifo_input  rx_adapter_${i}.fifo_input
           add_connection rx_fifo_${i}.fifo_output rx_adapter_${i}.fifo_output
