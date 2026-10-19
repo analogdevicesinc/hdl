@@ -101,12 +101,12 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#generic-tx-path">Generic TX path</a><ul>
-<li><a class="reference internal" href="#example-1-tx-link-with-l-4-m-1-s-1-f-2-np-16">Example 1: TX link with L=4, M=1, S=1, F=2, NP=16</a></li>
+<li><a class="reference internal" href="#example-1-tx-link-with-l-4-m-1-s-4-f-2-np-16">Example 1: TX link with L=4, M=1, S=4, F=2, NP=16</a></li>
 <li><a class="reference internal" href="#example-2-tx-link-with-l-4-m-4-s-1-f-2-np-16">Example 2: TX link with L=4, M=4, S=1, F=2, NP=16</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#generic-rx-path">Generic RX path</a><ul>
-<li><a class="reference internal" href="#example-rx-link-with-l-4-m-1-s-1-f-2-np-16">Example: RX link with L=4, M=1, S=1, F=2, NP=16</a></li>
+<li><a class="reference internal" href="#example-rx-link-with-l-4-m-1-s-4-f-2-np-16">Example: RX link with L=4, M=1, S=4, F=2, NP=16</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#jesd204-modes-with-f-8">JESD204 modes with F=8</a><ul>
@@ -563,8 +563,8 @@ e.g: <code class="docutils literal notranslate"><span class="pre">DAC_interpolat
 <p>The Link layer consists of L number of lanes which form the link.
 More information on the TX Link layer can be found in
 <a class="reference internal" href="../axi_jesd204_tx/#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a> page.</p>
-<section id="example-1-tx-link-with-l-4-m-1-s-1-f-2-np-16">
-<h3>Example 1: TX link with L=4, M=1, S=1, F=2, NP=16<a class="headerlink" href="#example-1-tx-link-with-l-4-m-1-s-1-f-2-np-16" title="Link to this heading"></a></h3>
+<section id="example-1-tx-link-with-l-4-m-1-s-4-f-2-np-16">
+<h3>Example 1: TX link with L=4, M=1, S=4, F=2, NP=16<a class="headerlink" href="#example-1-tx-link-with-l-4-m-1-s-4-f-2-np-16" title="Link to this heading"></a></h3>
 <p>In this mode, the Transport Layer will output 2 frames in every clock cycle
 (32 bits / (F*8) = 2).
 The Application Layer must provide 8 samples each cycle to be able to fill
@@ -609,8 +609,8 @@ each lane.</p>
 <p>The Link layer consists from L number of lanes which form the link.
 More information on the RX Link layer can be found in
 <a class="reference internal" href="../axi_jesd204_rx/#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a> page.</p>
-<section id="example-rx-link-with-l-4-m-1-s-1-f-2-np-16">
-<h3>Example: RX link with L=4, M=1, S=1, F=2, NP=16<a class="headerlink" href="#example-rx-link-with-l-4-m-1-s-1-f-2-np-16" title="Link to this heading"></a></h3>
+<section id="example-rx-link-with-l-4-m-1-s-4-f-2-np-16">
+<h3>Example: RX link with L=4, M=1, S=4, F=2, NP=16<a class="headerlink" href="#example-rx-link-with-l-4-m-1-s-4-f-2-np-16" title="Link to this heading"></a></h3>
 <p>In this mode the Transport Layer will accept two frames in every clock cycle.
 32 bits / (F*8) = 2;
 The Application Layer must accept 8 samples each cycle so the transport layer
