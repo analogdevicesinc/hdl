@@ -548,8 +548,10 @@ module jesd204_rx #(
 
     wire [7:0] status_lane_skew;
     wire all_buffer_ready_n_d;
-    wire err_statistics_reset_64b;
-    reg event_data_phase_reg = 1'b0;
+    // Make sure these two signals do not optimized as single instance for all
+    // channels. Keeping one instance per channel would help with timing.
+    (* dont_touch = "yes" *) wire err_statistics_reset_64b;
+    (* dont_touch = "yes" *) reg event_data_phase_reg = 1'b0;
 
     // Pipeline the aggregated ready status at the lane, so that the OR reduce
     // and the route out to the channel become a register to register path with
