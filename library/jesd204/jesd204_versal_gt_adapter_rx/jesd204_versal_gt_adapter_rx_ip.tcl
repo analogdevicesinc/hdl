@@ -89,7 +89,6 @@ adi_add_bus "RX_GT_IP_Interface" "master" \
    { "rxheader" "ch_rxheader" } \
    { "rxctrl0"  "ch_rxctrl0"  } \
    { "rxctrl1"  "ch_rxctrl1"  } \
-   { "rxctrl2"  "ch_rxctrl2"  } \
    { "rxctrl3"  "ch_rxctrl3"  } \
    { "rxslide"  "ch_rxslide" } \
    { "rxheadervalid" "ch_rxheadervalid" } \

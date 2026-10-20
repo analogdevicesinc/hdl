@@ -32,9 +32,7 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-if {![info exists ADI_PHY_SEL]} {
-  set ADI_PHY_SEL 1
-}
+set VERSAL_ASYM [expr {$sys_zynq == 3 && $ASYMMETRIC_A_B_MODE}]
 
 if {![info exists EXTERNAL_LINK_CLK]} {
   set EXTERNAL_LINK_CLK 0
@@ -98,13 +96,19 @@ if {$JESD_MODE == "8B10B"} {
 }
 
 # These are max values specific to the board
-set MAX_RX_LANES_PER_LINK 12
-set MAX_TX_LANES_PER_LINK 12
+if {![info exists MAX_RX_LANES_PER_LINK]} {
+  set MAX_RX_LANES_PER_LINK 12
+}
+if {![info exists MAX_TX_LANES_PER_LINK]} {
+  set MAX_TX_LANES_PER_LINK 12
+}
 set MAX_RX_LINKS [expr $ASYMMETRIC_A_B_MODE ? 1 : 2]
 set MAX_TX_LINKS [expr $ASYMMETRIC_A_B_MODE ? 1 : 2]
 set MAX_RX_LANES [expr $MAX_RX_LANES_PER_LINK*$MAX_RX_LINKS]
 set MAX_TX_LANES [expr $MAX_TX_LANES_PER_LINK*$MAX_TX_LINKS]
-set MAX_APOLLO_LANES 24
+if {![info exists MAX_APOLLO_LANES]} {
+  set MAX_APOLLO_LANES 24
+}
 
 # RX parameters
 set RX_NUM_LINKS $ad_project_params(RX_NUM_LINKS)
@@ -157,6 +161,12 @@ if {$TX_DMA_SAMPLE_WIDTH == 12} {
 set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX_JESD_M $TX_JESD_S $TX_JESD_NP]
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8* $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
+
+# The TX xcvr owns the QPLLs and exposes one up_cm port per 4 of its lanes.
+# Each link starts on a new quad, so pad all but the last link to a quad
+# boundary; otherwise the quads of the following links get no up_cm port.
+set TX_XCVR_LANES_PER_LINK [expr 4 * int(ceil($TX_JESD_L / 4.0))]
+set TX_XCVR_NUM_OF_LANES   [expr ($TX_NUM_LINKS - 1) * $TX_XCVR_LANES_PER_LINK + $TX_JESD_L]
 
 set adc_data_offload_name apollo_rx_data_offload
 set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
@@ -246,7 +256,7 @@ create_bd_port -dir O -from 3 -to 0 adf4030_trig_channel
 
 ##AXI_HSCI IP
 if {$HSCI_ENABLE} {
-  if {$ADI_PHY_SEL} {
+  if {$sys_zynq != 3} {
     create_bd_port -dir O selectio_clk_in
     create_bd_port -dir O hsci_pll_reset
     create_bd_port -dir O -from 7 -to 0 hsci_menc_clk
@@ -398,140 +408,64 @@ if {$ASYMMETRIC_A_B_MODE} {
   set MAX_TX_LANE_RATE $TX_LANE_RATE
 }
 
-if {$ADI_PHY_SEL} {
-  ad_ip_instance util_adxcvr util_apollo_xcvr
-  ad_ip_parameter util_apollo_xcvr CONFIG.CPLL_FBDIV_4_5 5
-  ad_ip_parameter util_apollo_xcvr CONFIG.TX_NUM_OF_LANES $MAX_APOLLO_LANES
-  ad_ip_parameter util_apollo_xcvr CONFIG.RX_NUM_OF_LANES $MAX_APOLLO_LANES
-  ad_ip_parameter util_apollo_xcvr CONFIG.RX_OUT_DIV 1
-  ad_ip_parameter util_apollo_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-  ad_ip_parameter util_apollo_xcvr CONFIG.RX_LANE_RATE $MAX_RX_LANE_RATE
-  ad_ip_parameter util_apollo_xcvr CONFIG.TX_LANE_RATE $MAX_TX_LANE_RATE
+source $ad_hdl_dir/library/xilinx/scripts/xcvr_automation.tcl
+global xcvr_config_paths
 
-  ad_ip_instance axi_adxcvr axi_apollo_rx_xcvr
-  ad_ip_parameter axi_apollo_rx_xcvr CONFIG.ID 0
-  ad_ip_parameter axi_apollo_rx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-  ad_ip_parameter axi_apollo_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
-  ad_ip_parameter axi_apollo_rx_xcvr CONFIG.TX_OR_RX_N 0
-  ad_ip_parameter axi_apollo_rx_xcvr CONFIG.QPLL_ENABLE 0
-  ad_ip_parameter axi_apollo_rx_xcvr CONFIG.LPM_OR_DFE_N 1
-  ad_ip_parameter axi_apollo_rx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
-
-  ad_ip_instance axi_adxcvr axi_apollo_tx_xcvr
-  ad_ip_parameter axi_apollo_tx_xcvr CONFIG.ID 0
-  ad_ip_parameter axi_apollo_tx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-  ad_ip_parameter axi_apollo_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
-  ad_ip_parameter axi_apollo_tx_xcvr CONFIG.TX_OR_RX_N 1
-  ad_ip_parameter axi_apollo_tx_xcvr CONFIG.QPLL_ENABLE 1
-  ad_ip_parameter axi_apollo_tx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
-} else {
-  source $ad_hdl_dir/library/xilinx/scripts/versal_xcvr_subsystem.tcl
-
-  # Reset gpios
-  create_bd_port -dir O gt_powergood
-  create_bd_port -dir I gt_reset
-  create_bd_port -dir I gt_reset_rx_datapath
-  create_bd_port -dir I gt_reset_rx_pll_and_datapath
-  create_bd_port -dir I gt_reset_tx_datapath
-  create_bd_port -dir I gt_reset_tx_pll_and_datapath
-  create_bd_port -dir O rx_resetdone
-  create_bd_port -dir O tx_resetdone
-
-  create_bd_port -dir I gt_b_reset
-  create_bd_port -dir I gt_b_reset_rx_datapath
-  create_bd_port -dir I gt_b_reset_rx_pll_and_datapath
-  create_bd_port -dir I gt_b_reset_tx_datapath
-  create_bd_port -dir I gt_b_reset_tx_pll_and_datapath
-  create_bd_port -dir O rx_b_resetdone
-  create_bd_port -dir O tx_b_resetdone
-
-  create_bd_port -dir I ref_clk_a
-  create_bd_port -dir I ref_clk_b
-  create_bd_port -dir I rx_sysref_0
-  create_bd_port -dir I tx_sysref_0
-  create_bd_port -dir I rx_sysref_12
-  create_bd_port -dir I tx_sysref_12
-  create_bd_port -dir O rx_sync_12
-  create_bd_port -dir I tx_sync_12
-  create_bd_port -dir O -from [expr $RX_NUM_LINKS - 1] -to 0 rx_sync_0
-  create_bd_port -dir I -from [expr $RX_NUM_LINKS - 1] -to 0 tx_sync_0
-
-  set REF_CLK_RATE $ad_project_params(REF_CLK_RATE)
-  set CONSECUTIVE_QUAD_MODE [expr { $ASYMMETRIC_A_B_MODE == 1 ? true : false }]
-  # instantiate versal phy
-  create_versal_jesd_xcvr_subsystem jesd204_phy $JESD_MODE $RX_NUM_OF_LANES $TX_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX $CONSECUTIVE_QUAD_MODE $EXTERNAL_LINK_CLK
-  # reset generator
-  ad_ip_instance proc_sys_reset rx_device_clk_rstgen
-  ad_connect rx_device_clk rx_device_clk_rstgen/slowest_sync_clk
-  ad_connect $sys_cpu_resetn rx_device_clk_rstgen/ext_reset_in
-
-  ad_ip_instance proc_sys_reset tx_device_clk_rstgen
-  ad_connect tx_device_clk tx_device_clk_rstgen/slowest_sync_clk
-  ad_connect $sys_cpu_resetn tx_device_clk_rstgen/ext_reset_in
-
-  ad_connect gt_reset jesd204_phy/gtreset_in
-  ad_connect gt_reset_rx_datapath jesd204_phy/gtreset_rx_datapath
-  ad_connect gt_reset_rx_pll_and_datapath jesd204_phy/gtreset_rx_pll_and_datapath
-  ad_connect gt_reset_tx_datapath jesd204_phy/gtreset_tx_datapath
-  ad_connect gt_reset_tx_pll_and_datapath jesd204_phy/gtreset_tx_pll_and_datapath
-  ad_connect rx_resetdone jesd204_phy/rx_resetdone
-  ad_connect tx_resetdone jesd204_phy/tx_resetdone
-
-  # gt powergood
-  ad_ip_instance ilconcat gt_powergood_concat [list \
-   NUM_PORTS 2 \
-  ]
-  ad_ip_instance ilreduced_logic gt_powergood_and [list \
-     C_SIZE 2 \
-  ]
-  ad_connect jesd204_phy/gtpowergood gt_powergood_concat/In0
-  if {!$ASYMMETRIC_A_B_MODE} {
-    ad_connect VCC gt_powergood_concat/In1
+if {$VERSAL_ASYM} {
+  foreach {u rx_rate tx_rate} [list util_apollo_xcvr $RX_LANE_RATE $TX_LANE_RATE \
+                                    util_apollo_xcvr_b $RX_B_LANE_RATE $TX_B_LANE_RATE] {
+    ad_ip_instance util_adxcvr $u [adi_xcvr_parameters $xcvr_config_paths [list \
+      RX_NUM_OF_LANES $MAX_RX_LANES \
+      TX_NUM_OF_LANES $MAX_TX_LANES \
+      RX_LANE_RATE $rx_rate \
+      TX_LANE_RATE $tx_rate \
+      LINK_MODE $ENCODER_SEL \
+    ]]
   }
-  ad_connect gt_powergood_concat/dout gt_powergood_and/Op1
-  ad_connect gt_powergood_and/Res gt_powergood
+} else {
+  ad_ip_instance util_adxcvr util_apollo_xcvr [adi_xcvr_parameters $xcvr_config_paths [list \
+    RX_NUM_OF_LANES $MAX_APOLLO_LANES \
+    TX_NUM_OF_LANES $MAX_APOLLO_LANES \
+    RX_LANE_RATE $MAX_RX_LANE_RATE \
+    TX_LANE_RATE $MAX_TX_LANE_RATE \
+    LINK_MODE $ENCODER_SEL \
+  ]]
 }
 
+ad_ip_instance axi_adxcvr axi_apollo_rx_xcvr
+ad_ip_parameter axi_apollo_rx_xcvr CONFIG.ID 0
+ad_ip_parameter axi_apollo_rx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+ad_ip_parameter axi_apollo_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
+ad_ip_parameter axi_apollo_rx_xcvr CONFIG.TX_OR_RX_N 0
+ad_ip_parameter axi_apollo_rx_xcvr CONFIG.QPLL_ENABLE 0
+ad_ip_parameter axi_apollo_rx_xcvr CONFIG.LPM_OR_DFE_N 1
+ad_ip_parameter axi_apollo_rx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
+
+ad_ip_instance axi_adxcvr axi_apollo_tx_xcvr
+ad_ip_parameter axi_apollo_tx_xcvr CONFIG.ID 0
+ad_ip_parameter axi_apollo_tx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+ad_ip_parameter axi_apollo_tx_xcvr CONFIG.NUM_OF_LANES [expr {$sys_zynq != 3 ? $TX_XCVR_NUM_OF_LANES : $TX_NUM_OF_LANES}]
+ad_ip_parameter axi_apollo_tx_xcvr CONFIG.TX_OR_RX_N 1
+ad_ip_parameter axi_apollo_tx_xcvr CONFIG.QPLL_ENABLE 1
+ad_ip_parameter axi_apollo_tx_xcvr CONFIG.SYS_CLK_SEL 0x3 ; # QPLL0
+
 if {$ASYMMETRIC_A_B_MODE} {
-  if ($ADI_PHY_SEL) {
-    ad_ip_instance axi_adxcvr axi_apollo_rx_b_xcvr
-    ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.ID 0
-    ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-    ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.NUM_OF_LANES $RX_B_NUM_OF_LANES
-    ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.TX_OR_RX_N 0
-    ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.QPLL_ENABLE 0
-    ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.LPM_OR_DFE_N 1
-    ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.SYS_CLK_SEL 0x2 ; # QPLL1
+  ad_ip_instance axi_adxcvr axi_apollo_rx_b_xcvr
+  ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.ID 0
+  ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+  ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.NUM_OF_LANES $RX_B_NUM_OF_LANES
+  ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.TX_OR_RX_N 0
+  ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.QPLL_ENABLE 0
+  ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.LPM_OR_DFE_N 1
+  ad_ip_parameter axi_apollo_rx_b_xcvr CONFIG.SYS_CLK_SEL 0x2 ; # QPLL1
 
-    ad_ip_instance axi_adxcvr axi_apollo_tx_b_xcvr
-    ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.ID 0
-    ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-    ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.NUM_OF_LANES $TX_B_NUM_OF_LANES
-    ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.TX_OR_RX_N 1
-    ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.QPLL_ENABLE 1
-    ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.SYS_CLK_SEL 0x2 ; # QPLL1
-  } else {
-    # instantiate versal phy
-    create_versal_jesd_xcvr_subsystem jesd204_phy_b $JESD_MODE $RX_B_NUM_OF_LANES $TX_B_NUM_OF_LANES $MAX_RX_LANE_RATE $MAX_TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE RXTX $CONSECUTIVE_QUAD_MODE $EXTERNAL_LINK_CLK
-
-    ad_connect gt_b_reset jesd204_phy_b/gtreset_in
-    ad_connect gt_b_reset_rx_datapath jesd204_phy_b/gtreset_rx_datapath
-    ad_connect gt_b_reset_rx_pll_and_datapath jesd204_phy_b/gtreset_rx_pll_and_datapath
-    ad_connect gt_b_reset_tx_datapath jesd204_phy_b/gtreset_tx_datapath
-    ad_connect gt_b_reset_tx_pll_and_datapath jesd204_phy_b/gtreset_tx_pll_and_datapath
-    ad_connect rx_b_resetdone jesd204_phy_b/rx_resetdone
-    ad_connect tx_b_resetdone jesd204_phy_b/tx_resetdone
-
-    ad_connect jesd204_phy_b/gtpowergood gt_powergood_concat/In1
-    # reset generator
-    ad_ip_instance proc_sys_reset rx_b_device_clk_rstgen
-    ad_connect rx_b_device_clk rx_b_device_clk_rstgen/slowest_sync_clk
-    ad_connect $sys_cpu_resetn rx_b_device_clk_rstgen/ext_reset_in
-
-    ad_ip_instance proc_sys_reset tx_b_device_clk_rstgen
-    ad_connect tx_b_device_clk tx_b_device_clk_rstgen/slowest_sync_clk
-    ad_connect $sys_cpu_resetn tx_b_device_clk_rstgen/ext_reset_in
-  }
+  ad_ip_instance axi_adxcvr axi_apollo_tx_b_xcvr
+  ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.ID 0
+  ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+  ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.NUM_OF_LANES $TX_B_NUM_OF_LANES
+  ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.TX_OR_RX_N 1
+  ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.QPLL_ENABLE 1
+  ad_ip_parameter axi_apollo_tx_b_xcvr CONFIG.SYS_CLK_SEL 0x2 ; # QPLL1
 }
 
 # adc peripherals
@@ -579,7 +513,7 @@ ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_apollo_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_apollo_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_data_width
-if {$ADI_PHY_SEL} {
+if {$sys_zynq != 3} {
   ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(1024, $adc_data_width)]
 } else {
   # Versal limitation
@@ -630,7 +564,7 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_ip_parameter axi_apollo_rx_b_dma CONFIG.MAX_BYTES_PER_BURST 4096
   ad_ip_parameter axi_apollo_rx_b_dma CONFIG.CYCLIC 0
   ad_ip_parameter axi_apollo_rx_b_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_b_data_width
-  if {$ADI_PHY_SEL} {
+  if {$sys_zynq != 3} {
     ad_ip_parameter axi_apollo_rx_b_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_b_data_width
   } else {
   # Versal limitation
@@ -684,7 +618,7 @@ ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_apollo_tx_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_apollo_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
-if {$ADI_PHY_SEL} {
+if {$sys_zynq != 3} {
   ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(1024, $dac_data_width)]
 } else {
   # Versal limitation
@@ -737,7 +671,7 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_ip_parameter axi_apollo_tx_b_dma CONFIG.DMA_2D_TRANSFER 0
   ad_ip_parameter axi_apollo_tx_b_dma CONFIG.CYCLIC 1
   ad_ip_parameter axi_apollo_tx_b_dma CONFIG.MAX_BYTES_PER_BURST 4096
-  if {$ADI_PHY_SEL} {
+  if {$sys_zynq != 3} {
     ad_ip_parameter axi_apollo_tx_b_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_b_data_width
   } else {
     # Versal limitation
@@ -748,7 +682,25 @@ if {$ASYMMETRIC_A_B_MODE} {
 
 # reference clocks & resets
 
-if {$ADI_PHY_SEL} {
+if {$VERSAL_ASYM} {
+  # side A on ref_clk_q0.., side B on the reference clock ports after A's
+  set nquads [expr {int(ceil(max($MAX_TX_LANES, $MAX_RX_LANES) / 4.0))}]
+  foreach {u q0 tx_xcvr rx_xcvr} [list util_apollo_xcvr 0 axi_apollo_tx_xcvr axi_apollo_rx_xcvr \
+                                       util_apollo_xcvr_b $nquads axi_apollo_tx_b_xcvr axi_apollo_rx_b_xcvr] {
+    for {set i 0} {$i < [expr max($MAX_TX_LANES,$MAX_RX_LANES)]} {incr i} {
+      set quad_index [expr $q0 + int($i / 4)]
+      if {[expr $i % 4] == 0} {
+        create_bd_port -dir I ref_clk_q$quad_index
+        ad_xcvrpll  ref_clk_q$quad_index  $u/qpll_ref_clk_$i
+      }
+      ad_xcvrpll  ref_clk_q$quad_index  $u/cpll_ref_clk_$i
+      ad_xcvrpll  $tx_xcvr/up_pll_rst $u/up_qpll_rst_${i}
+      ad_xcvrpll  $rx_xcvr/up_pll_rst $u/up_cpll_rst_${i}
+    }
+    ad_connect  $sys_cpu_resetn $u/up_rstn
+    ad_connect  $sys_cpu_clk $u/up_clk
+  }
+} else {
   for {set i 0} {$i < $MAX_APOLLO_LANES} {incr i} {
     set quad_index [expr int($i / 4)]
     if {[expr $i % 4] == 0} {
@@ -768,107 +720,6 @@ if {$ADI_PHY_SEL} {
 
   ad_connect  $sys_cpu_resetn util_apollo_xcvr/up_rstn
   ad_connect  $sys_cpu_clk util_apollo_xcvr/up_clk
-} else {
-  ad_connect ref_clk_a jesd204_phy/GT_REFCLK
-
-  for {set j 0} {$j < $RX_NUM_OF_LANES} {incr j} {
-    ad_connect axi_apollo_rx_jesd/rx_phy${j} jesd204_phy/rx${j}
-    ad_connect axi_apollo_tx_jesd/tx_phy${j} jesd204_phy/tx${j}
-  }
-
-  ad_connect jesd204_phy/rxusrclk_out /axi_apollo_rx_jesd/link_clk
-  ad_connect rx_device_clk /axi_apollo_rx_jesd/device_clk
-
-  ad_connect jesd204_phy/txusrclk_out /axi_apollo_tx_jesd/link_clk
-  ad_connect tx_device_clk /axi_apollo_tx_jesd/device_clk
-
-  ad_connect axi_apollo_rx_jesd/sysref rx_sysref_0
-  ad_connect axi_apollo_tx_jesd/sysref tx_sysref_0
-
-  ad_connect $sys_cpu_clk jesd204_phy/s_axi_clk
-  ad_connect $sys_cpu_resetn jesd204_phy/s_axi_resetn
-
-  if {$JESD_MODE == "8B10B"} {
-    ad_connect axi_apollo_rx_jesd/phy_en_char_align jesd204_phy/en_char_align
-    ad_connect axi_apollo_rx_jesd/sync rx_sync_0
-    ad_connect axi_apollo_tx_jesd/sync tx_sync_0
-  }
-
-  if {$ASYMMETRIC_A_B_MODE} {
-    ad_connect ref_clk_b jesd204_phy_b/GT_REFCLK
-
-    for {set j 0} {$j < $RX_B_NUM_OF_LANES} {incr j} {
-      ad_connect axi_apollo_rx_b_jesd/rx_phy${j} jesd204_phy_b/rx${j}
-      ad_connect axi_apollo_tx_b_jesd/tx_phy${j} jesd204_phy_b/tx${j}
-    }
-
-    ad_connect jesd204_phy_b/rxusrclk_out /axi_apollo_rx_b_jesd/link_clk
-    ad_connect rx_b_device_clk /axi_apollo_rx_b_jesd/device_clk
-
-    ad_connect jesd204_phy_b/txusrclk_out /axi_apollo_tx_b_jesd/link_clk
-    ad_connect tx_b_device_clk /axi_apollo_tx_b_jesd/device_clk
-
-    ad_connect axi_apollo_rx_b_jesd/sysref rx_sysref_12
-    ad_connect axi_apollo_tx_b_jesd/sysref tx_sysref_12
-
-    ad_connect $sys_cpu_clk jesd204_phy_b/s_axi_clk
-    ad_connect $sys_cpu_resetn jesd204_phy_b/s_axi_resetn
-    if {$JESD_MODE == "8B10B"} {
-    ad_connect axi_apollo_rx_b_jesd/phy_en_char_align jesd204_phy_b/en_char_align
-    ad_connect axi_apollo_rx_b_jesd/sync rx_sync_12
-    ad_connect axi_apollo_tx_b_jesd/sync tx_sync_0
-    }
-  }
-
-  # Export serial interfaces
-  for {set j 0} {$j < $MAX_NUMBER_OF_QUADS} {incr j} {
-    create_bd_port -dir I -from 3 -to 0 rx_${j}_p
-    create_bd_port -dir I -from 3 -to 0 rx_${j}_n
-    create_bd_port -dir O -from 3 -to 0 tx_${j}_p
-    create_bd_port -dir O -from 3 -to 0 tx_${j}_n
-  }
-
-  if {!$SIDE_B_ONLY} {
-    if {!$ASYMMETRIC_A_B_MODE} {
-      set half_lanes [expr max($RX_NUM_OF_LANES, $TX_NUM_OF_LANES) / 2]
-      set half_quads [expr int(ceil($half_lanes / 4.0))]
-      for {set j 0} {$j < $half_quads} {incr j} {
-        set jj [expr $j + 1]
-        ad_connect rx_${j}_p jesd204_phy/rx_${j}_p
-        ad_connect rx_${j}_n jesd204_phy/rx_${j}_n
-        ad_connect tx_${j}_p jesd204_phy/tx_${j}_p
-        ad_connect tx_${j}_n jesd204_phy/tx_${j}_n
-
-        ad_connect rx_${jj}_p jesd204_phy/rx_${jj}_p
-        ad_connect rx_${jj}_n jesd204_phy/rx_${jj}_n
-        ad_connect tx_${jj}_p jesd204_phy/tx_${jj}_p
-        ad_connect tx_${jj}_n jesd204_phy/tx_${jj}_n
-      }
-    } else {
-      for {set j 0} {$j < $num_quads_a} {incr j} {
-        ad_connect rx_${j}_p jesd204_phy/rx_${j}_p
-        ad_connect rx_${j}_n jesd204_phy/rx_${j}_n
-        ad_connect tx_${j}_p jesd204_phy/tx_${j}_p
-        ad_connect tx_${j}_n jesd204_phy/tx_${j}_n
-      }
-      for {set j $num_quads_a} {$j < $num_quads} {incr j} {
-        set jj [expr $j - $num_quads_a]
-        ad_connect rx_${j}_p jesd204_phy_b/rx_${jj}_p
-        ad_connect rx_${j}_n jesd204_phy_b/rx_${jj}_n
-        ad_connect tx_${j}_p jesd204_phy_b/tx_${jj}_p
-        ad_connect tx_${j}_n jesd204_phy_b/tx_${jj}_n
-      }
-    }
-  } else {
-    # Map the serial lanes to side B only
-    for {set j 0} {$j < $num_quads} {incr j} {
-      set idx [expr $j + 1]
-      ad_connect rx_${idx}_p jesd204_phy/rx_${j}_p
-      ad_connect rx_${idx}_n jesd204_phy/rx_${j}_n
-      ad_connect tx_${idx}_p jesd204_phy/tx_${j}_p
-      ad_connect tx_${idx}_n jesd204_phy/tx_${j}_n
-    }
-  }
 }
 
 # connections (adc)
@@ -877,14 +728,29 @@ if {$ADI_PHY_SEL} {
 #  lane_map = {11  2  3  5 10  1  9  0  6  7  8  4 15 21 17 16 14 18 13 19 20 23 12 22}
 #
 
-if {$ASYMMETRIC_A_B_MODE} {
-  if {$ADI_PHY_SEL} {
-    # set lane_map {11 2 3 5 10 1 9 0 6 7 8 4}
-    ad_xcvrcon  util_apollo_xcvr axi_apollo_rx_xcvr axi_apollo_rx_jesd {0 1 2 3 4 5 6 7 8 9 10 11} {} rx_device_clk $MAX_RX_LANES
-
-    # set lane_map {15 21 17 16 14 18 13 19 20 23 12 22}
-    ad_xcvrcon  util_apollo_xcvr axi_apollo_rx_b_xcvr axi_apollo_rx_b_jesd {12 13 14 15 16 17 18 19 20 21 22 23} {} rx_b_device_clk $MAX_RX_LANES
+if {$VERSAL_ASYM} {
+  # both directions of side A, then of side B: ad_xcvrcon numbers the ports
+  # per util_adxcvr (side B: rx/tx_data_1_<n>, rx/tx_sysref_1_0, rx/tx_sync_1_0);
+  # side B takes the names of the second link (data 4-7, sysref/sync 12)
+  ad_xcvrcon  util_apollo_xcvr axi_apollo_rx_xcvr axi_apollo_rx_jesd {} {} rx_device_clk $MAX_RX_LANES
+  ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_xcvr axi_apollo_tx_jesd {} {} tx_device_clk $MAX_TX_LANES
+  ad_xcvrcon  util_apollo_xcvr_b axi_apollo_rx_b_xcvr axi_apollo_rx_b_jesd {} {} rx_b_device_clk $MAX_RX_LANES
+  ad_xcvrcon  util_apollo_xcvr_b axi_apollo_tx_b_xcvr axi_apollo_tx_b_jesd {} {} tx_b_device_clk $MAX_TX_LANES
+  foreach {d lanes} [list rx $MAX_RX_LANES tx $MAX_TX_LANES] {
+    for {set n 0} {$n < $lanes} {incr n} {
+      foreach pn {p n} {
+        set_property name ${d}_data_[expr {$lanes + $n}]_$pn [get_bd_ports ${d}_data_1_${n}_$pn]
+      }
+    }
+    set_property name ${d}_sysref_12 [get_bd_ports ${d}_sysref_1_0]
+    set_property name ${d}_sync_12 [get_bd_ports ${d}_sync_1_0]
   }
+} elseif {$ASYMMETRIC_A_B_MODE} {
+  # set lane_map {11 2 3 5 10 1 9 0 6 7 8 4}
+  ad_xcvrcon  util_apollo_xcvr axi_apollo_rx_xcvr axi_apollo_rx_jesd {0 1 2 3 4 5 6 7 8 9 10 11} {} rx_device_clk $MAX_RX_LANES
+
+  # set lane_map {15 21 17 16 14 18 13 19 20 23 12 22}
+  ad_xcvrcon  util_apollo_xcvr axi_apollo_rx_b_xcvr axi_apollo_rx_b_jesd {12 13 14 15 16 17 18 19 20 21 22 23} {} rx_b_device_clk $MAX_RX_LANES
 } else {
   set max_lane_map {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23}
   set lane_map {}
@@ -908,11 +774,9 @@ if {$ASYMMETRIC_A_B_MODE} {
     }
   }
 
-  if {$ADI_PHY_SEL} {
-    ad_xcvrcon  util_apollo_xcvr axi_apollo_rx_xcvr axi_apollo_rx_jesd $lane_map {} rx_device_clk $MAX_RX_LANES
-    create_bd_port -dir I rx_sysref_12
-    create_bd_port -dir O rx_sync_12
-  }
+  ad_xcvrcon  util_apollo_xcvr axi_apollo_rx_xcvr axi_apollo_rx_jesd $lane_map {} rx_device_clk $MAX_RX_LANES
+  create_bd_port -dir I rx_sysref_12
+  create_bd_port -dir O rx_sync_12
 }
 
 # connections (dac)
@@ -921,14 +785,14 @@ if {$ASYMMETRIC_A_B_MODE} {
 #  lane_map = {11  5 10  6  8  4  9  7  1  2  0  3 15 16 14 19 12 20 13 17 21 22 18 23}
 #
 
-if {$ASYMMETRIC_A_B_MODE} {
-  if {$ADI_PHY_SEL} {
-    # set lane_map {11 5 10 6 8 4 9 7 1 2 0 3}
-    ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_xcvr axi_apollo_tx_jesd {0 1 2 3 4 5 6 7 8 9 10 11} {} tx_device_clk $MAX_TX_LANES
+if {$VERSAL_ASYM} {
+  # connected with the RX side
+} elseif {$ASYMMETRIC_A_B_MODE} {
+  # set lane_map {11 5 10 6 8 4 9 7 1 2 0 3}
+  ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_xcvr axi_apollo_tx_jesd {0 1 2 3 4 5 6 7 8 9 10 11} {} tx_device_clk $MAX_TX_LANES
 
-    # set lane_map {15 16 14 19 12 20 13 17 21 22 18 23}
-    ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_b_xcvr axi_apollo_tx_b_jesd {12 13 14 15 16 17 18 19 20 21 22 23} {} tx_b_device_clk $MAX_TX_LANES
-  }
+  # set lane_map {15 16 14 19 12 20 13 17 21 22 18 23}
+  ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_b_xcvr axi_apollo_tx_b_jesd {12 13 14 15 16 17 18 19 20 21 22 23} {} tx_b_device_clk $MAX_TX_LANES
 } else {
   set max_lane_map {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23}
   set lane_map {}
@@ -952,21 +816,35 @@ if {$ASYMMETRIC_A_B_MODE} {
     }
   }
 
-  if {$ADI_PHY_SEL} {
-    ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_xcvr axi_apollo_tx_jesd $lane_map {} tx_device_clk $MAX_TX_LANES
+  ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_xcvr axi_apollo_tx_jesd $lane_map {} tx_device_clk $MAX_TX_LANES
 
-    if {$TX_JESD_L == 8} {
-      delete_bd_objs [get_bd_intf_nets axi_apollo_tx_xcvr_up_cm_8]
-      delete_bd_objs [get_bd_intf_nets axi_apollo_tx_xcvr_up_cm_12]
-      connect_bd_intf_net [get_bd_intf_pins axi_apollo_tx_xcvr/up_cm_8] [get_bd_intf_pins util_apollo_xcvr/up_cm_12]
-      connect_bd_intf_net [get_bd_intf_pins axi_apollo_tx_xcvr/up_cm_12] [get_bd_intf_pins util_apollo_xcvr/up_cm_16]
-    } elseif {$TX_JESD_L == 4} {
-      delete_bd_objs [get_bd_intf_nets axi_apollo_tx_xcvr_up_cm_4]
-      connect_bd_intf_net [get_bd_intf_pins axi_apollo_tx_xcvr/up_cm_4] [get_bd_intf_pins util_apollo_xcvr/up_cm_12]
+  # the QPLL common ports (not on Versal) follow the lane map
+  if {$sys_zynq != 3} {
+    # ad_xcvrcon pairs up_ch_n with JESD lane n and up_cm_n with the n-th
+    # logical quad. Rewire both so xcvr lane n sits in the physical quad of
+    # its link; the padding lanes take the spare channels of those quads.
+    set tx_xcvr_intfs {}
+    for {set n 0} {$n < $TX_XCVR_NUM_OF_LANES} {incr n} {
+      lappend tx_xcvr_intfs axi_apollo_tx_xcvr/up_ch_$n
+      if {$n % 4 == 0} {
+        lappend tx_xcvr_intfs axi_apollo_tx_xcvr/up_cm_$n
+      }
     }
-    create_bd_port -dir I tx_sysref_12
-    create_bd_port -dir I tx_sync_12
+    set tx_xcvr_nets [get_bd_intf_nets -quiet -of_objects [get_bd_intf_pins $tx_xcvr_intfs]]
+    if {$tx_xcvr_nets ne ""} {
+      delete_bd_objs $tx_xcvr_nets
+    }
+
+    for {set n 0} {$n < $TX_XCVR_NUM_OF_LANES} {incr n} {
+      set phys_lane [expr ($n / $TX_XCVR_LANES_PER_LINK) * $MAX_TX_LANES_PER_LINK + ($n % $TX_XCVR_LANES_PER_LINK)]
+      ad_connect axi_apollo_tx_xcvr/up_ch_$n util_apollo_xcvr/up_tx_$phys_lane
+      if {$n % 4 == 0} {
+        ad_connect axi_apollo_tx_xcvr/up_cm_$n util_apollo_xcvr/up_cm_$phys_lane
+      }
+    }
   }
+  create_bd_port -dir I tx_sysref_12
+  create_bd_port -dir I tx_sync_12
 }
 
 # device clock domain
@@ -1319,15 +1197,8 @@ if {$ASYMMETRIC_A_B_MODE} {
 
 # interconnect (cpu)
 
-if {$ADI_PHY_SEL} {
-  ad_cpu_interconnect 0x44a60000 axi_apollo_rx_xcvr
-  ad_cpu_interconnect 0x44b60000 axi_apollo_tx_xcvr
-} else {
-  for {set i 0} {$i < $num_quads} {incr i} {
-    set addr [expr 0x44040000 + $i * 0x40000]
-    ad_cpu_interconnect $addr jesd204_phy s_axi_${i}
-  }
-}
+ad_cpu_interconnect 0x44a60000 axi_apollo_rx_xcvr
+ad_cpu_interconnect 0x44b60000 axi_apollo_tx_xcvr
 ad_cpu_interconnect 0x44a10000 rx_apollo_tpl_core
 ad_cpu_interconnect 0x44b10000 tx_apollo_tpl_core
 ad_cpu_interconnect 0x44a90000 axi_apollo_rx_jesd
@@ -1351,15 +1222,8 @@ if {$AION_ENABLE} {
 # Reserved for TDD! 0x7c460000
 
 if {$ASYMMETRIC_A_B_MODE} {
-  if {$ADI_PHY_SEL} {
-    ad_cpu_interconnect 0x44aa0000 axi_apollo_rx_b_xcvr
-    ad_cpu_interconnect 0x44ba0000 axi_apollo_tx_b_xcvr
-  } else {
-    for {set i 0} {$i < $num_quads} {incr i} {
-      set addr [expr 0x44140000 + $i * 0x40000]
-      ad_cpu_interconnect $addr jesd204_phy_b s_axi_${i}
-    }
-  }
+  ad_cpu_interconnect 0x44aa0000 axi_apollo_rx_b_xcvr
+  ad_cpu_interconnect 0x44ba0000 axi_apollo_tx_b_xcvr
   ad_cpu_interconnect 0x44ab0000 rx_b_apollo_tpl_core
   ad_cpu_interconnect 0x44bb0000 tx_b_apollo_tpl_core
   ad_cpu_interconnect 0x44ac0000 axi_apollo_rx_b_jesd
@@ -1377,18 +1241,14 @@ if {$ASYMMETRIC_A_B_MODE} {
 
 # interconnect (gt/adc)
 
-if ${ADI_PHY_SEL} {
-  ad_mem_hp0_interconnect $sys_cpu_clk axi_apollo_rx_xcvr/m_axi
-}
+ad_mem_hp0_interconnect $sys_cpu_clk axi_apollo_rx_xcvr/m_axi
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_dma_clk axi_apollo_rx_dma/m_dest_axi
 ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect $sys_dma_clk axi_apollo_tx_dma/m_src_axi
 
 if {$ASYMMETRIC_A_B_MODE} {
-  if ${ADI_PHY_SEL} {
-    ad_mem_hp0_interconnect $sys_cpu_clk axi_apollo_rx_b_xcvr/m_axi
-  }
+  ad_mem_hp0_interconnect $sys_cpu_clk axi_apollo_rx_b_xcvr/m_axi
   ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
   ad_mem_hp1_interconnect $sys_dma_clk axi_apollo_rx_b_dma/m_dest_axi
   ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2

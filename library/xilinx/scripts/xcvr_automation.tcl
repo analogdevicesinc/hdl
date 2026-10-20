@@ -101,6 +101,11 @@ proc adi_xcvr_parameters {file_paths parameters} {
         "TXPI_CFG0" "16'b0000001100000000"
         "TXPI_CFG1" "16'b0001000000000000"
         "TXSWBST_EN" "0"
+        "XCVR_TYPE" "0"
+        "REF_CLK_RATE" "0"
+        "RX_LANE_RATES" ""
+        "TX_LANE_RATES" ""
+        "EXTERNAL_LINK_CLK" "0"
     }
 
     set correction_map {
@@ -113,6 +118,10 @@ proc adi_xcvr_parameters {file_paths parameters} {
     set updated_params {}
     set param_file_path [dict get $file_paths param_file_path]
     set cfng_file_path [dict get $file_paths cfng_file_path]
+
+    if {[dict exists $file_paths versal]} {
+        set updated_params [dict get $file_paths versal]
+    }
 
     if {$param_file_path ne ""} {
 
@@ -141,51 +150,53 @@ proc adi_xcvr_parameters {file_paths parameters} {
         }
     }
 
-    set file_content [read [open $cfng_file_path r]]
-    set match ""
-    regexp {QPLL[0-9]+} $cfng_file_path match
+    if {$cfng_file_path ne ""} {
+        set file_content [read [open $cfng_file_path r]]
+        set match ""
+        regexp {QPLL[0-9]+} $cfng_file_path match
 
-    # Define a regex pattern for extracting parameters and their values
-    set pattern {'([^']+)' => '([^']+\\?'?[0-9a-hA-H]*)'}
-    set results {}
-    set matches [regexp -all -inline $pattern $file_content]
+        # Define a regex pattern for extracting parameters and their values
+        set pattern {'([^']+)' => '([^']+\\?'?[0-9a-hA-H]*)'}
+        set results {}
+        set matches [regexp -all -inline $pattern $file_content]
 
-    for {set i 0} {$i < [llength $matches]} {incr i 3} {
+        for {set i 0} {$i < [llength $matches]} {incr i 3} {
 
-        set param [lindex $matches $i+1]
-        set value [lindex $matches $i+2]
+            set param [lindex $matches $i+1]
+            set value [lindex $matches $i+2]
 
-        set cleaned_value [string map {"\\" "" "\"" ""} $value]
-        set corrected_param $param
+            set cleaned_value [string map {"\\" "" "\"" ""} $value]
+            set corrected_param $param
 
-        if {[dict exists $correction_map $param]} {
-            set corrected_param [dict get $correction_map $param]
-        }
-
-         if {[string first $match $param] == 0} {
-
-            if {[regexp {^(QPLL)[0-9]+(.*)} $param _ prefix rest]} {
-                set corrected_param "${prefix}${rest}"
+            if {[dict exists $correction_map $param]} {
+                set corrected_param [dict get $correction_map $param]
             }
-        }
 
-        if {[dict exists $default_parameters $corrected_param]} {
+             if {[string first $match $param] == 0} {
 
-            set default_value [dict get $default_parameters $corrected_param]
-
-            if {$cleaned_value != $default_value} {
-
-                if {[string equal $cleaned_value "QPLL_FBDIV_IN"]} {
-                    set cleaned_value $QPLL_FBDIV_IN
+                if {[regexp {^(QPLL)[0-9]+(.*)} $param _ prefix rest]} {
+                    set corrected_param "${prefix}${rest}"
                 }
-                if {[string equal $cleaned_value "QPLL_FBDIV_RATIO"]} {
-                    set cleaned_value $QPLL_FBDIV_RATIO
-                }
-
-                dict set updated_params $corrected_param $cleaned_value
             }
+
+            if {[dict exists $default_parameters $corrected_param]} {
+
+                set default_value [dict get $default_parameters $corrected_param]
+
+                if {$cleaned_value != $default_value} {
+
+                    if {[string equal $cleaned_value "QPLL_FBDIV_IN"]} {
+                        set cleaned_value $QPLL_FBDIV_IN
+                    }
+                    if {[string equal $cleaned_value "QPLL_FBDIV_RATIO"]} {
+                        set cleaned_value $QPLL_FBDIV_RATIO
+                    }
+
+                    dict set updated_params $corrected_param $cleaned_value
+                }
+            }
+            lappend results [list $corrected_param $cleaned_value]
         }
-        lappend results [list $corrected_param $cleaned_value]
     }
 
     if {[llength $parameters] > 0} {

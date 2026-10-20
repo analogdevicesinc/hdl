@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024-2024, 2026 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
 ## Short identifier: ADIBSD
 ##
 ## Redistribution and use in source and binary forms, with or without modification,
@@ -63,6 +63,19 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   [RX/TX]_KS_PER_CHANNEL : Number of samples stored in internal buffers in kilosamples per converter (M)
 
 #      make JESD_MODE=64B66B RX_LANE_RATE=24.75 TX_LANE_RATE=24.75 RX_JESD_M=8 RX_JESD_L=8 RX_JESD_S=2 RX_JESD_NP=12 TX_JESD_M=8 TX_JESD_L=8 TX_JESD_S=2 TX_JESD_NP=12
+
+global xcvr_config_paths
+
+# Parameter description:
+#   XCVR_RX_LANE_RATES / XCVR_TX_LANE_RATES : optional lists of up to 8 lane
+#     rates [Gbps] built into the transceiver for run-time switching; the first
+#     entry must equal RX_LANE_RATE / TX_LANE_RATE. All rates share REF_CLK_RATE.
+set xcvr_config_paths [adi_xcvr_project [list \
+  TRANSCEIVER_TYPE    GTYP \
+  REF_CLK             [get_env_param REF_CLK_RATE        375 ] \
+  XCVR_RX_LANE_RATES  [get_env_param XCVR_RX_LANE_RATES  ""  ] \
+  XCVR_TX_LANE_RATES  [get_env_param XCVR_TX_LANE_RATES  ""  ] \
+]]
 
 adi_project ad9081_fmca_ebz_vpk180 0 [list \
   JESD_MODE              [get_env_param JESD_MODE              64B66B ]\

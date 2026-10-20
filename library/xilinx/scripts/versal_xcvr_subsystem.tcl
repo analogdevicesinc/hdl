@@ -32,8 +32,7 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-# Constants
-set ::LANES_PER_QUAD 4
+source [file join [file dirname [info script]] adi_xcvr_versal.tcl]
 
 # Parameter description:
 #   ip_name : The name of the created ip
@@ -43,7 +42,7 @@ set ::LANES_PER_QUAD 4
 #   ref_clock : Frequency of reference clock in MHz used in 64B66B mode (LANE_RATE/66) or 8B10B mode (LANE_RATE/40)
 #   rx_lane_rate : Line rate of the Rx link ( e.g. MxFE to FPGA ) in GHz
 #   tx_lane_rate : Line rate of the Tx link ( e.g. FPGA to MxFE ) in GHz
-#   transceiver : Type of transceiver to use (GTY or GTYP)
+#   transceiver : Type of transceiver to use (GTY, GTYP or GTM)
 #   direction : Direction of the transceivers
 #       RXTX : Duplex mode
 #       RX   : Rx link only
@@ -60,184 +59,10 @@ proc create_xcvr_subsystem {
   {transceiver GTY}
   {direction RX}
 } {
-  global LANES_PER_QUAD
-
-  # Input validation
-  if {$jesd_mode ni {64B66B 8B10B}} {
-    error "Invalid jesd_mode '$jesd_mode'. Must be 64B66B or 8B10B."
-  }
-  if {$direction ni {RXTX RX TX}} {
-    error "Invalid direction '$direction'. Must be RXTX, RX, or TX."
-  }
-  if {$transceiver ni {GTY GTYP GTM}} {
-    error "Invalid transceiver '$transceiver'. Must be GTY or GTYP."
-  }
-
-  set preset                   ${transceiver}-JESD204_${jesd_mode}
-  set is_64b66b                [expr {$jesd_mode == "64B66B"}]
-  set clk_divider              [expr {$is_64b66b ? 66 : 40}]
-  set datapath_width           [expr {$is_64b66b ? 64 : 32}]
-  set internal_datapath_width  [expr {$is_64b66b ? 64 : 40}]
-  set data_encoding            [expr {$is_64b66b ? "64B66B_ASYNC" : "8B10B"}]
-  set comma_mask               [expr {$is_64b66b ? "0000000000" : "1111111111"}]
-  set comma_p_enable           [expr {$is_64b66b ? false : false}]
-  set comma_m_enable           [expr {$is_64b66b ? false : false}]
-  if {$transceiver == "GTM"} {
-    set preset                 ${transceiver}-NRZ_JESD
-    set clk_divider            [expr {$jesd_mode == "64B66B" ? 64 : 40}]
-  }
-
-  set rx_progdiv_clock         [format %.3f [expr {$rx_lane_rate * 1000.0 / $clk_divider}]]
-  set tx_progdiv_clock         [format %.3f [expr {$tx_lane_rate * 1000.0 / $clk_divider}]]
-
-  if {$direction == "RXTX"} {
-    set no_lanes [expr {max($rx_no_lanes, $tx_no_lanes)}]
-  } elseif {$direction == "RX"} {
-    set no_lanes $rx_no_lanes
-  } else {
-    set no_lanes $tx_no_lanes
-  }
-  set num_quads [expr {int(ceil(1.0 * $no_lanes / $LANES_PER_QUAD))}]
-
   ad_ip_instance gtwiz_versal ${ip_name}
-
-  set xcvr_param [dict create]
-
-  # RX parameters
-  dict set xcvr_param RX_LINE_RATE ${rx_lane_rate}
-  dict set xcvr_param RX_DATA_DECODING [expr {$transceiver != "GTM" ? $data_encoding : "RAW"}]
-  dict set xcvr_param RX_USER_DATA_WIDTH [expr {$transceiver != "GTM" ? $datapath_width : $internal_datapath_width}]
-  dict set xcvr_param RX_REFCLK_FREQUENCY ${ref_clock}
-  if {$transceiver != "GTM"} {
-    dict set xcvr_param RX_INT_DATA_WIDTH ${internal_datapath_width}
-  }
-  dict set xcvr_param RX_OUTCLK_SOURCE {RXPROGDIVCLK}
-  dict set xcvr_param RXRECCLK_FREQ_VAL ${rx_progdiv_clock}
-  dict set xcvr_param RXPROGDIV_FREQ_VAL ${rx_progdiv_clock}
-  dict set xcvr_param RX_PLL_TYPE {LCPLL}
-  if {!$is_64b66b} {
-    dict set xcvr_param RX_COMMA_P_ENABLE ${comma_p_enable}
-    dict set xcvr_param RX_COMMA_M_ENABLE ${comma_m_enable}
-    dict set xcvr_param RX_COMMA_SHOW_REALIGN_ENABLE {false}
-    dict set xcvr_param RX_SLIDE_MODE {PCS}
-  }
-
-  # TX parameters
-  dict set xcvr_param TX_LINE_RATE ${tx_lane_rate}
-  dict set xcvr_param TX_DATA_ENCODING [expr {$transceiver != "GTM" ? $data_encoding : "RAW"}]
-  dict set xcvr_param TX_USER_DATA_WIDTH [expr {$transceiver != "GTM" ? $datapath_width : $internal_datapath_width}]
-  dict set xcvr_param TX_REFCLK_FREQUENCY ${ref_clock}
-  if {$transceiver != "GTM"} {
-    dict set xcvr_param TX_INT_DATA_WIDTH ${internal_datapath_width}
-  }
-  dict set xcvr_param TX_OUTCLK_SOURCE {TXPROGDIVCLK}
-  dict set xcvr_param TXPROGDIV_FREQ_VAL ${tx_progdiv_clock}
-  dict set xcvr_param TX_PLL_TYPE {LCPLL}
-
-  set phy_params [dict create]
-  dict set phy_params CONFIG.ENABLE_REG_INTERFACE {true}
-  dict set phy_params CONFIG.REG_CONF_INTF {AXI_LITE}
-  dict set phy_params CONFIG.GT_TYPE ${transceiver}
-  dict set phy_params CONFIG.NO_OF_QUADS ${num_quads}
-  dict set phy_params CONFIG.NO_OF_INTERFACE {1}
-  dict set phy_params CONFIG.LOCATE_BUFG {EXAMPLE_DESIGN}
-  dict set phy_params CONFIG.INTF0_PRESET ${preset}
-  dict set phy_params CONFIG.INTF0_GT_SETTINGS(LR0_SETTINGS) ${xcvr_param}
-  if {$direction != "RXTX"} {
-    dict set phy_params CONFIG.INTF0_GT_DIRECTION SIMPLEX_${direction}
-    dict set phy_params CONFIG.INTF0_NO_OF_LANES ${no_lanes}
-  } else {
-    # When RXTX is selected, create two interfaces
-    # Interface 0 for RX
-    # Interface 1 for TX
-    # This is mandatory if we want to have different number of lanes for RX and TX
-    dict set phy_params CONFIG.NO_OF_INTERFACE {2}
-    dict set phy_params CONFIG.INTF0_GT_DIRECTION {SIMPLEX_RX}
-    dict set phy_params CONFIG.INTF1_GT_DIRECTION {SIMPLEX_TX}
-    dict set phy_params CONFIG.INTF0_NO_OF_LANES $rx_no_lanes
-    dict set phy_params CONFIG.INTF1_NO_OF_LANES $tx_no_lanes
-    dict set phy_params CONFIG.INTF1_PRESET ${preset}
-    dict set phy_params CONFIG.INTF1_GT_SETTINGS(LR0_SETTINGS) ${xcvr_param}
-  }
-
-  if {$direction != "RXTX"} {
-    # Simplex RX or Simplex TX
-    # One single interface (Interface 0)
-    dict set phy_params "CONFIG.QUAD0_${direction}0_OUTCLK_EN" {true}
-    dict set phy_params "CONFIG.QUAD0_PROT0_${direction}MSTCLK" ${direction}0
-    for {set i 0} {$i < [expr {$LANES_PER_QUAD * $num_quads}]} {incr i} {
-      set quad_idx [expr {$i / $LANES_PER_QUAD}]
-      set lane_idx [expr {$i % $LANES_PER_QUAD}]
-      dict set phy_params "CONFIG.QUAD${quad_idx}_PROT0_${direction}${lane_idx}_EN" [expr {$i < $no_lanes}]
-    }
-    for {set i 0} {$i < $num_quads} {incr i} {
-      dict set phy_params "CONFIG.QUAD${i}_PROT0_LANES" [expr {min($LANES_PER_QUAD, max(0, $no_lanes - $LANES_PER_QUAD * $i))}]
-    }
-  } else {
-    # Interface 0 = RX
-    # Interface 1 = TX
-
-    dict set phy_params "CONFIG.QUAD0_RX0_OUTCLK_EN" {true}
-    dict set phy_params "CONFIG.QUAD0_TX0_OUTCLK_EN" {true}
-    dict set phy_params "CONFIG.QUAD0_PROT0_RXMSTCLK" {RX0}
-    # Map RX lanes
-    for {set i 0} {$i < $num_quads} {incr i} {
-      set lanes [expr {min($LANES_PER_QUAD, max(0, $rx_no_lanes - $LANES_PER_QUAD * $i))}]
-      if {$lanes != 0} {
-        dict set phy_params "CONFIG.QUAD${i}_PROT0_LANES" ${lanes}
-        dict set phy_params "CONFIG.QUAD${i}_NO_PROT" {1}
-      }
-    }
-    for {set i 0} {$i < [expr {$LANES_PER_QUAD * $num_quads}]} {incr i} {
-      set quad_idx [expr {$i / $LANES_PER_QUAD}]
-      set lane_idx [expr {$i % $LANES_PER_QUAD}]
-      dict set phy_params "CONFIG.QUAD${quad_idx}_PROT0_RX${lane_idx}_EN" [expr {$i < $rx_no_lanes}]
-    }
-
-    # Map TX lanes
-    dict set phy_params "CONFIG.QUAD0_PROT1_TXMSTCLK" {TX0}
-    for {set i 0} {$i < $num_quads} {incr i} {
-      set lanes [expr {min($LANES_PER_QUAD, max(0, $tx_no_lanes - $LANES_PER_QUAD * $i))}]
-      if {$lanes != 0} {
-        if {[dict exists $phy_params "CONFIG.QUAD${i}_PROT0_LANES"]} {
-          # Both RX and TX lanes in the same quad
-          dict set phy_params "CONFIG.QUAD${i}_NO_PROT" {2}
-          dict set phy_params "CONFIG.QUAD${i}_PROT1_LANES" ${lanes}
-        } else {
-          # Only TX lanes in this quad
-          dict set phy_params "CONFIG.QUAD${i}_NO_PROT" {1}
-          dict set phy_params "CONFIG.QUAD${i}_PROT0" {INTF1}
-          dict set phy_params "CONFIG.QUAD${i}_PROT0_LANES" ${lanes}
-        }
-      }
-    }
-    for {set i 0} {$i < [expr {$LANES_PER_QUAD * $num_quads}]} {incr i} {
-      set quad_idx [expr {$i / $LANES_PER_QUAD}]
-      set lane_idx [expr {$i % $LANES_PER_QUAD}]
-      # Safely check if NO_PROT exists before accessing
-      if {[dict exists $phy_params "CONFIG.QUAD${quad_idx}_NO_PROT"]} {
-        set prot_idx [expr {[dict get $phy_params "CONFIG.QUAD${quad_idx}_NO_PROT"] - 1}]
-        dict set phy_params "CONFIG.QUAD${quad_idx}_PROT${prot_idx}_TX${lane_idx}_EN" [expr {$i < $tx_no_lanes}]
-      }
-    }
-  }
-
-  for {set i 0} {$i < $num_quads} {incr i} {
-    # Calculate lanes used in this specific quad
-    set lanes_in_quad [expr {min($LANES_PER_QUAD, max(0, $no_lanes - $LANES_PER_QUAD * $i))}]
-    # HSCLK1 is needed only if lanes 2-3 are used in this quad
-    set needs_hsclk1 [expr {$lanes_in_quad > 2}]
-
-    for {set j 0} {$j < $lanes_in_quad} {incr j} {
-      dict set phy_params "CONFIG.QUAD${i}_CH${j}_ILORESET_EN" {true}
-    }
-    dict set phy_params "CONFIG.QUAD${i}_HSCLK0_LCPLLRESET_EN" {true}
-    dict set phy_params "CONFIG.QUAD${i}_HSCLK1_LCPLLRESET_EN" $needs_hsclk1
-    dict set phy_params "CONFIG.QUAD${i}_HSCLK0_LCPLL_LOCK_EN" {true}
-    dict set phy_params "CONFIG.QUAD${i}_HSCLK1_LCPLL_LOCK_EN" $needs_hsclk1
-  }
-
-  set_property -dict $phy_params [get_bd_cells ${ip_name}]
+  set_property -dict [versal_xcvr_wizard_params $jesd_mode $rx_no_lanes $tx_no_lanes \
+    [list $rx_lane_rate] [list $tx_lane_rate] $ref_clock $transceiver $direction] \
+    [get_bd_cells ${ip_name}]
 }
 
 # Utility function to connect the datapath of the transceiver subsystem
@@ -422,7 +247,7 @@ proc xcvr_create_resetdone_logic {ip_name xcvr_list intf dir} {
 #   ref_clock : Frequency of reference clock in MHz used in 64B66B mode (LANE_RATE/66) or 8B10B mode (LANE_RATE/40)
 #   rx_lane_rate : Line rate of the Rx link ( e.g. MxFE to FPGA ) in GHz
 #   tx_lane_rate : Line rate of the Tx link ( e.g. FPGA to MxFE ) in GHz
-#   transceiver : Type of transceiver to use (GTY or GTYP)
+#   transceiver : Type of transceiver to use (GTY, GTYP or GTM)
 #   intf_cfg : Direction of the transceivers (RXTX, RX, or TX)
 #   consecutive_quad_mode : true to use consecutive quads for RX and TX, false to split RX and TX across different quads
 #   external_link_clk : applies to GTM and JESD204C:
@@ -444,6 +269,7 @@ proc create_versal_jesd_xcvr_subsystem {
   {external_link_clk 0}
 } {
   global LANES_PER_QUAD
+  puts "WARNING: create_versal_jesd_xcvr_subsystem is deprecated, use util_adxcvr + axi_adxcvr with ad_xcvrcon"
 
   # Input validation
   if {$intf_cfg ni {RXTX RX TX}} {

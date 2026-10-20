@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024-2024, 2026 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
 ## Short identifier: ADIBSD
 ##
 ## Redistribution and use in source and binary forms, with or without modification,
@@ -41,10 +41,6 @@ source $ad_hdl_dir/projects/common/vpk180/vpk180_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
-# use versal transceiver wizard
-set ADI_PHY_SEL 0
-set TRANSCEIVER_TYPE GTYP
-set EXTERNAL_LINK_CLK 0
 
 source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl

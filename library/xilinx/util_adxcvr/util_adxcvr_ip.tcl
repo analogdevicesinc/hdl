@@ -38,15 +38,34 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 global VIVADO_IP_LIBRARY
 
+source scripts/util_adxcvr_versal_helpers.tcl
+set versal_files [util_adxcvr_versal_helpers versal_gen]
+
 adi_ip_create util_adxcvr
-adi_ip_files util_adxcvr [list \
+adi_ip_files util_adxcvr [concat $versal_files [list \
   "$ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl" \
   "$ad_hdl_dir/library/jesd204/jesd204_common/sync_header_align.v" \
+  "$ad_hdl_dir/library/jesd204/jesd204_common/gearbox_64b66b.v" \
+  "$ad_hdl_dir/library/jesd204/jesd204_common/gearbox_66b64b.v" \
+  "$ad_hdl_dir/library/jesd204/jesd204_common/bitslip.v" \
+  "$ad_hdl_dir/library/jesd204/jesd204_soft_pcs_rx/jesd204_soft_pcs_rx.v" \
+  "$ad_hdl_dir/library/jesd204/jesd204_soft_pcs_rx/jesd204_8b10b_decoder.v" \
+  "$ad_hdl_dir/library/jesd204/jesd204_soft_pcs_rx/jesd204_pattern_align.v" \
+  "$ad_hdl_dir/library/jesd204/jesd204_soft_pcs_tx/jesd204_soft_pcs_tx.v" \
+  "$ad_hdl_dir/library/jesd204/jesd204_soft_pcs_tx/jesd204_8b10b_encoder.v" \
+  "$ad_hdl_dir/library/jesd204/jesd204_versal_gt_adapter_rx/jesd204_versal_gt_adapter_rx.v" \
+  "$ad_hdl_dir/library/jesd204/jesd204_versal_gt_adapter_rx/lane_align.v" \
+  "$ad_hdl_dir/library/jesd204/jesd204_versal_gt_adapter_tx/jesd204_versal_gt_adapter_tx.v" \
   "util_adxcvr_constr.xdc" \
   "util_adxcvr_xcm.v" \
   "util_adxcvr_xch.v" \
+  "util_adxcvr_versal_rate.v" \
+  "util_adxcvr_xch_versal.v" \
+  "util_adxcvr_xcm_versal.v" \
+  "util_adxcvr_quad_versal.v" \
+  "util_adxcvr_versal_rst.v" \
   "util_adxcvr.v" \
-  "bd/bd.tcl" ]
+  "bd/bd.tcl" ]]
 
 set_property used_in_simulation false [get_files ./bd/bd.tcl]
 set_property used_in_simulation false [get_files $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl]
@@ -2126,6 +2145,64 @@ set_property -dict [list \
   value_tcl_expr {expr {$XCVR_TYPE == 9} ? 0 : 1} \
 ] $param
 
+
+set versal "(spirit:decode(id('MODELPARAM_VALUE.XCVR_TYPE')) >= 11)"
+set rx_lanes "spirit:decode(id('MODELPARAM_VALUE.RX_NUM_OF_LANES'))"
+set tx_lanes "spirit:decode(id('MODELPARAM_VALUE.TX_NUM_OF_LANES'))"
+
+foreach d {rx tx} {
+  adi_add_multi_bus 8 "up_qm_${d}_" "slave" \
+    "analog.com:interface:if_xcvr_qm_rtl:1.0" \
+    "analog.com:interface:if_xcvr_qm:1.0" \
+    [list \
+      [list "up_qm_${d}_enb" "enb" 1] \
+      [list "up_qm_${d}_addr" "addr" 16] \
+      [list "up_qm_${d}_wr" "wr" 1] \
+      [list "up_qm_${d}_wdata" "wdata" 32] \
+      [list "up_qm_${d}_rdata" "rdata" 32] \
+      [list "up_qm_${d}_ready" "ready" 1] \
+      [list "up_qm_${d}_slverr" "slverr" 1] \
+      [list "up_qm_${d}_powergood" "powergood" 1] \
+    ] \
+    "$versal and ([set ${d}_lanes] > {i} * 4)"
+}
+
+foreach p [ipx::get_ports -of_objects [ipx::current_core] -filter {NAME =~ gt_*_phy_clk_out || NAME =~ rx_link_clk_* || NAME =~ tx_link_clk_*}] {
+  set_property ENABLEMENT_DEPENDENCY $versal $p
+}
+foreach p [ipx::get_ports -of_objects [ipx::current_core] -filter {NAME =~ *_link_clk_locked}] {
+  set_property DRIVER_VALUE 1 $p
+}
+foreach c {gt_rx_phy_clk_out gt_tx_phy_clk_out rx_link_clk_in tx_link_clk_in} {
+  ipx::infer_bus_interface $c xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+  set_property ENABLEMENT_DEPENDENCY $versal [ipx::get_bus_interfaces $c -of_objects [ipx::current_core]]
+}
+foreach p [ipx::get_user_parameters -of_objects [ipx::current_core] -filter {NAME =~ QA_* || NAME =~ Q?_* || NAME =~ QUAD?_MEM_FILE}] {
+  set_property enablement_tcl_expr {$XCVR_TYPE >= 11} $p
+}
+foreach p {RX_LANE_RATES TX_LANE_RATES REF_CLK_RATE EXTERNAL_LINK_CLK PLL_RST_SEL NON_CONSECUTIVE_QUADS} {
+  set_property enablement_tcl_expr {$XCVR_TYPE >= 11} [ipx::get_user_parameters $p -of_objects [ipx::current_core]]
+}
+
+# The link clock inputs and PHY clock outputs are used only by GTM 64B/66B: the
+# link clock is link_refclk (the LR/66 reference clock), or rx/tx_link_clk_in
+# with EXTERNAL_LINK_CLK. An enabled but unconnected clock input fails BD
+# validation.
+set gtm_64b66b "(spirit:decode(id('MODELPARAM_VALUE.XCVR_TYPE')) = 13) and (spirit:decode(id('MODELPARAM_VALUE.LINK_MODE')) = 2)"
+set ext_link_clk "(spirit:decode(id('MODELPARAM_VALUE.EXTERNAL_LINK_CLK')) = 1)"
+foreach {d lanes} [list rx $rx_lanes tx $tx_lanes] {
+  set dep "$versal and ($lanes > 0) and $gtm_64b66b"
+  set_property ENABLEMENT_DEPENDENCY $dep [ipx::get_ports gt_${d}_phy_clk_out -of_objects [ipx::current_core]]
+  set_property ENABLEMENT_DEPENDENCY $dep [ipx::get_bus_interfaces gt_${d}_phy_clk_out -of_objects [ipx::current_core]]
+  foreach p [list ${d}_link_clk_in ${d}_link_clk_locked] {
+    set_property ENABLEMENT_DEPENDENCY "$dep and $ext_link_clk" [ipx::get_ports $p -of_objects [ipx::current_core]]
+  }
+  set_property ENABLEMENT_DEPENDENCY "$dep and $ext_link_clk" [ipx::get_bus_interfaces ${d}_link_clk_in -of_objects [ipx::current_core]]
+}
+ipx::infer_bus_interface link_refclk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+set dep "$versal and (($rx_lanes > 0) or ($tx_lanes > 0)) and $gtm_64b66b and (spirit:decode(id('MODELPARAM_VALUE.EXTERNAL_LINK_CLK')) = 0)"
+set_property ENABLEMENT_DEPENDENCY $dep [ipx::get_ports link_refclk -of_objects [ipx::current_core]]
+set_property ENABLEMENT_DEPENDENCY $dep [ipx::get_bus_interfaces link_refclk -of_objects [ipx::current_core]]
 
 ipx::create_xgui_files [ipx::current_core]
 
