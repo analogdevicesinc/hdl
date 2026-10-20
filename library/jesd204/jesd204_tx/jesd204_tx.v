@@ -140,17 +140,11 @@ module jesd204_tx #(
   localparam DW = DATA_PATH_WIDTH * 8 * NUM_LANES;
   localparam CW = DATA_PATH_WIDTH * NUM_LANES;
   localparam HW = 2 * NUM_LANES;
-  localparam INPUT_PIPELINE_WIDTH = (LINK_MODE[0] == 1) ? (1+2*DW+CW+NUM_LANES+2*DATA_PATH_WIDTH) : (4+DW);
-
-  wire [DW-1:0] tx_data_r;
-  wire          tx_ready_r;
 
   wire [DW-1:0] phy_data_r;
   wire [CW-1:0] phy_charisk_r;
   wire [HW-1:0] phy_header_r;
 
-  wire [INPUT_PIPELINE_WIDTH-1:0] input_pipeline_in;
-  wire [INPUT_PIPELINE_WIDTH-1:0] input_pipeline_out;
   wire eof_gen_reset;
   wire tx_ready_64b_next;
   reg  tx_ready_64b = 1'b0;
@@ -366,131 +360,156 @@ module jesd204_tx #(
     tx_eomf_fm_d2 <= tx_eomf_fm_d1;
   end
 
-  util_pipeline_stage #(
-    .WIDTH(INPUT_PIPELINE_WIDTH),
-    .REGISTERED(NUM_INPUT_PIPELINE)
-  ) i_input_pipeline_stage (
-    .clk(clk),
-    .in(input_pipeline_in),
-    .out(input_pipeline_out));
-
   generate
   genvar i;
 
   if (LINK_MODE[0] == 1) begin : mode_8b10b
 
-  wire [NUM_LANES-1:0] lane_cgs_enable;
-  wire [DW-1:0] ilas_data;
-  wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk;
+    localparam INPUT_PIPELINE_WIDTH = (LINK_MODE[0] == 1) ? (1+2*DW+CW+NUM_LANES+2*DATA_PATH_WIDTH) : (4+DW);
 
-  reg  [DATA_PATH_WIDTH-1:0] tx_eof_fm_d3;
-  reg  [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d3;
-  wire [DATA_PATH_WIDTH-1:0] tx_eof_fm_d3_r;
-  wire [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d3_r;
-  wire [NUM_LANES-1:0] lane_cgs_enable_r;
-  wire [DW-1:0] ilas_data_r;
-  wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk_r;
+    wire [INPUT_PIPELINE_WIDTH-1:0] input_pipeline_in;
+    wire [NUM_LANES-1:0] lane_cgs_enable;
+    wire [DW-1:0] ilas_data;
+    wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk;
 
-  wire cfg_generate_eomf = 1'b1;
+    reg  [DATA_PATH_WIDTH-1:0] tx_eof_fm_d3;
+    reg  [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d3;
 
-  always @(posedge clk) begin
-    tx_eof_fm_d3 <= tx_eof_fm_d2;
-    tx_eomf_fm_d3 <= tx_eomf_fm_d2;
-  end
+    always @(posedge clk) begin
+      tx_eof_fm_d3 <= tx_eof_fm_d2;
+      tx_eomf_fm_d3 <= tx_eomf_fm_d2;
+    end
 
-  assign input_pipeline_in = {link_tx_ready, gearbox_data, ilas_charisk, ilas_data, lane_cgs_enable, tx_eomf_fm_d3, tx_eof_fm_d3};
-  assign {tx_ready_r, tx_data_r, ilas_charisk_r, ilas_data_r, lane_cgs_enable_r, tx_eomf_fm_d3_r, tx_eof_fm_d3_r} = input_pipeline_out;
+    assign input_pipeline_in = {link_tx_ready, gearbox_data, ilas_charisk, ilas_data, lane_cgs_enable, tx_eomf_fm_d3, tx_eof_fm_d3};
 
-  jesd204_tx_ctrl #(
-    .NUM_LANES(NUM_LANES),
-    .NUM_LINKS(NUM_LINKS),
-    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
-  ) i_tx_ctrl (
-    .clk(clk),
-    .reset(reset),
-
-    .sync(sync),
-    .lmfc_edge(link_lmfc_edge),
-    .somf(tx_somf_fm_d2),
-    .somf_early2(tx_somf_fm),
-    .eomf(tx_eomf_fm_d2),
-
-    .lane_cgs_enable(lane_cgs_enable),
-    .eof_reset(eof_gen_reset),
-
-    .tx_ready(link_tx_ready),
-    .tx_ready_nx(tx_ready_nx),
-    .tx_next_mf_ready(tx_next_mf_ready),
-
-    .ilas_data(ilas_data),
-    .ilas_charisk(ilas_charisk),
-
-    .ilas_config_addr(ilas_config_addr),
-    .ilas_config_rd(ilas_config_rd),
-    .ilas_config_data(ilas_config_data),
-
-    .cfg_lanes_disable(cfg_lanes_disable),
-    .cfg_links_disable(cfg_links_disable),
-    .cfg_continuous_cgs(cfg_continuous_cgs),
-    .cfg_continuous_ilas(cfg_continuous_ilas),
-    .cfg_skip_ilas(cfg_skip_ilas),
-    .cfg_mframes_per_ilas(cfg_mframes_per_ilas),
-    .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
-    .ctrl_manual_sync_request(ctrl_manual_sync_request),
-
-    .status_sync(status_sync),
-    .status_state(status_state));
-
-  for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
-
-    localparam D_START = i * DATA_PATH_WIDTH*8;
-    localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
-    localparam C_START = i * DATA_PATH_WIDTH;
-    localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
-
-    jesd204_tx_lane #(
-      .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
-      .ENABLE_CHAR_REPLACE(ENABLE_CHAR_REPLACE)
-    ) i_lane (
+    jesd204_tx_ctrl #(
+      .NUM_LANES(NUM_LANES),
+      .NUM_LINKS(NUM_LINKS),
+      .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+    ) i_tx_ctrl (
       .clk(clk),
+      .reset(reset),
 
-      .eof(tx_eof_fm_d3_r),
-      .eomf(tx_eomf_fm_d3_r),
+      .sync(sync),
+      .lmfc_edge(link_lmfc_edge),
+      .somf(tx_somf_fm_d2),
+      .somf_early2(tx_somf_fm),
+      .eomf(tx_eomf_fm_d2),
 
-      .cgs_enable(lane_cgs_enable_r[i]),
+      .lane_cgs_enable(lane_cgs_enable),
+      .eof_reset(eof_gen_reset),
 
-      .ilas_data(ilas_data_r[D_STOP:D_START]),
-      .ilas_charisk(ilas_charisk_r[C_STOP:C_START]),
+      .tx_ready(link_tx_ready),
+      .tx_ready_nx(tx_ready_nx),
+      .tx_next_mf_ready(tx_next_mf_ready),
 
-      .tx_data(tx_data_r[D_STOP:D_START]),
-      .tx_ready(tx_ready_r),
+      .ilas_data(ilas_data),
+      .ilas_charisk(ilas_charisk),
 
-      .phy_data(phy_data_r[D_STOP:D_START]),
-      .phy_charisk(phy_charisk_r[C_STOP:C_START]),
+      .ilas_config_addr(ilas_config_addr),
+      .ilas_config_rd(ilas_config_rd),
+      .ilas_config_data(ilas_config_data),
 
-      .cfg_octets_per_frame(cfg_octets_per_frame),
-      .cfg_disable_char_replacement(cfg_disable_char_replacement),
-      .cfg_disable_scrambler(cfg_disable_scrambler));
-  end
+      .cfg_lanes_disable(cfg_lanes_disable),
+      .cfg_links_disable(cfg_links_disable),
+      .cfg_continuous_cgs(cfg_continuous_cgs),
+      .cfg_continuous_ilas(cfg_continuous_ilas),
+      .cfg_skip_ilas(cfg_skip_ilas),
+      .cfg_mframes_per_ilas(cfg_mframes_per_ilas),
+      .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
+      .ctrl_manual_sync_request(ctrl_manual_sync_request),
 
-  assign phy_header_r = 'h0;
+      .status_sync(status_sync),
+      .status_state(status_state));
+
+    for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+
+      localparam D_START = i * DATA_PATH_WIDTH*8;
+      localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
+      localparam C_START = i * DATA_PATH_WIDTH;
+      localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
+
+      wire [INPUT_PIPELINE_WIDTH-1:0] input_pipeline_out;
+      wire          tx_ready_r;
+      wire [DW-1:0] tx_data_r;
+      wire [DATA_PATH_WIDTH*NUM_LANES-1:0] ilas_charisk_r;
+      wire [DW-1:0] ilas_data_r;
+      wire [NUM_LANES-1:0] lane_cgs_enable_r;
+      wire [DATA_PATH_WIDTH-1:0] tx_eomf_fm_d3_r;
+      wire [DATA_PATH_WIDTH-1:0] tx_eof_fm_d3_r;
+
+      assign {tx_ready_r, tx_data_r, ilas_charisk_r, ilas_data_r, lane_cgs_enable_r, tx_eomf_fm_d3_r, tx_eof_fm_d3_r} = input_pipeline_out;
+
+      util_pipeline_stage #(
+        .WIDTH(INPUT_PIPELINE_WIDTH),
+        .REGISTERED(NUM_INPUT_PIPELINE)
+      ) i_input_pipeline_stage (
+        .clk(clk),
+        .in(input_pipeline_in),
+        .out(input_pipeline_out));
+
+      jesd204_tx_lane #(
+        .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+        .ENABLE_CHAR_REPLACE(ENABLE_CHAR_REPLACE)
+      ) i_lane (
+        .clk(clk),
+
+        .eof(tx_eof_fm_d3_r),
+        .eomf(tx_eomf_fm_d3_r),
+
+        .cgs_enable(lane_cgs_enable_r[i]),
+
+        .ilas_data(ilas_data_r[D_STOP:D_START]),
+        .ilas_charisk(ilas_charisk_r[C_STOP:C_START]),
+
+        .tx_data(tx_data_r[D_STOP:D_START]),
+        .tx_ready(tx_ready_r),
+
+        .phy_data(phy_data_r[D_STOP:D_START]),
+        .phy_charisk(phy_charisk_r[C_STOP:C_START]),
+
+        .cfg_octets_per_frame(cfg_octets_per_frame),
+        .cfg_disable_char_replacement(cfg_disable_char_replacement),
+        .cfg_disable_scrambler(cfg_disable_scrambler));
+    end
+
+    assign phy_header_r = 'h0;
 
   end
 
   if (LINK_MODE[1] == 1) begin : mode_64b66b
-  wire lmc_edge_r;
-  wire lmc_quarter_edge_r;
-  wire eoemb_r;
-  wire tx_ready_64b_r;
 
-  assign input_pipeline_in = {eoemb, lmc_quarter_edge, lmc_edge, tx_ready_64b, gearbox_data};
-  assign {eoemb_r, lmc_quarter_edge_r, lmc_edge_r, tx_ready_64b_r, tx_data_r} = input_pipeline_out;
+    localparam INPUT_PIPELINE_WIDTH = (LINK_MODE[0] == 1) ? (1+2*DW+CW+NUM_LANES+2*DATA_PATH_WIDTH) : (4+DW);
+
+    (* dont_touch = "yes" *) wire [INPUT_PIPELINE_WIDTH-1:0] input_pipeline_in;
+
+    assign input_pipeline_in = {eoemb, lmc_quarter_edge, lmc_edge, tx_ready_64b, gearbox_data};
 
     for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
       localparam D_START = i * DATA_PATH_WIDTH*8;
       localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
       localparam H_START = i * 2;
       localparam H_STOP = H_START + 2 -1;
+
+      wire [INPUT_PIPELINE_WIDTH-1:0] input_pipeline_out;
+      wire lmc_edge_r;
+      wire lmc_quarter_edge_r;
+      wire eoemb_r;
+      wire tx_ready_64b_r;
+      wire [DW-1:0] tx_data_r;
+
+      assign {eoemb_r, lmc_quarter_edge_r, lmc_edge_r, tx_ready_64b_r, tx_data_r} = input_pipeline_out;
+
+      // Make sure this instance is kept on a per-lane basis and it is not
+      // optimized to a single instance for all lanes. 
+      (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+        .WIDTH(INPUT_PIPELINE_WIDTH),
+        .REGISTERED(NUM_INPUT_PIPELINE)
+      ) i_input_pipeline_stage (
+        .clk(clk),
+        .in(input_pipeline_in),
+        .out(input_pipeline_out));
+
       jesd204_tx_lane_64b #(
         .ENABLE_FEC(ENABLE_FEC)
       ) i_lane(
