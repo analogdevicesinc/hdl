@@ -193,8 +193,7 @@ module spi_engine_execution_shiftreg #(
     wire last_sdi_bit_r;
     wire [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_latch;
 
-    // Posedge counter — uses DDR half-word target when posedge is trailing.
-    wire [7:0] last_target_p = ddr_en ? ddr_last_bit_count : last_bit_count;
+    wire [7:0] last_target = ddr_en ? ddr_last_bit_count : last_bit_count;
 
     reg last_sdi_bit_p;
     reg [7:0] sdi_counter_p = 8'b0;
@@ -204,13 +203,10 @@ module spi_engine_execution_shiftreg #(
         sdi_counter_p  <= 8'b0;
         last_sdi_bit_p <= 1'b0;
       end else begin
-        last_sdi_bit_p <= (sdi_counter_p == last_target_p);
-        sdi_counter_p  <= (sdi_counter_p == last_target_p) ? 8'b0 : sdi_counter_p + 1'b1;
+        last_sdi_bit_p <= (sdi_counter_p == last_target);
+        sdi_counter_p  <= (sdi_counter_p == last_target) ? 8'b0 : sdi_counter_p + 1'b1;
       end
     end
-
-    // Negedge counter — uses DDR half-word target when negedge is trailing.
-    wire [7:0] last_target_n = ddr_en ? ddr_last_bit_count : last_bit_count;
 
     reg last_sdi_bit_n;
     reg [7:0] sdi_counter_n = 8'b0;
@@ -220,10 +216,14 @@ module spi_engine_execution_shiftreg #(
         sdi_counter_n  <= 8'b0;
         last_sdi_bit_n <= 1'b0;
       end else begin
-        last_sdi_bit_n <= (sdi_counter_n == last_target_n);
-        sdi_counter_n  <= (sdi_counter_n == last_target_n) ? 8'b0 : sdi_counter_n + 1'b1;
+        last_sdi_bit_n <= (sdi_counter_n == last_target);
+        sdi_counter_n  <= (sdi_counter_n == last_target) ? 8'b0 : sdi_counter_n + 1'b1;
       end
     end
+
+    wire last_sdi_leading  = sdi_negedge ? last_sdi_bit_n : last_sdi_bit_p;
+    wire last_sdi_trailing = sdi_negedge ? last_sdi_bit_p : last_sdi_bit_n;
+    assign last_sdi_bit_r = ddr_en ? last_sdi_trailing : last_sdi_leading;
 
     for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin : g_sdi_shift_reg
 
@@ -268,24 +268,26 @@ module spi_engine_execution_shiftreg #(
         end
       end
 
+      wire [DATA_WIDTH-1:0] sdr_data = sdi_negedge ? data_shift_sdr_n : data_shift_sdr_p;
+
       if (DDR_EN) begin : g_ddr_il
+        wire [DATA_WIDTH/2-1:0] extended_p = {data_shift_ddr_p[DATA_WIDTH/2-2:0], sdi_cap_p};
+        wire [DATA_WIDTH/2-1:0] extended_n = {data_shift_ddr_n[DATA_WIDTH/2-2:0], sdi_cap_n};
+
+        wire [DATA_WIDTH/2-1:0] leading  = sdi_negedge ? extended_p : extended_n;
+        wire [DATA_WIDTH/2-1:0] trailing = sdi_negedge ? extended_n : extended_p;
+
         wire [DATA_WIDTH-1:0] interleaved;
         for (j = 0; j < DATA_WIDTH/2; j = j + 1) begin : g_interleave
-          assign interleaved[j*2]   = (j == 0) ? (sdi_negedge ? sdi_cap_p : sdi_cap_n)
-                                               : (sdi_negedge ? data_shift_ddr_p[j-1] : data_shift_ddr_n[j-1]);
-          assign interleaved[j*2+1] = (j == 0) ? (sdi_negedge ? sdi_cap_n : sdi_cap_p)
-                                               : (sdi_negedge ? data_shift_ddr_n[j-1] : data_shift_ddr_p[j-1]);
+          assign interleaved[j*2]   = leading[j];
+          assign interleaved[j*2+1] = trailing[j];
         end
-        assign sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] = ddr_en ? interleaved
-            : (sdi_negedge ? data_shift_sdr_n
-                           : data_shift_sdr_p);
+        assign sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] = ddr_en ? interleaved : sdr_data;
       end else begin : g_sdr_il
-        assign sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] = sdi_negedge ? data_shift_sdr_n : data_shift_sdr_p;
+        assign sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] = sdr_data;
       end
 
     end
-
-    assign last_sdi_bit_r = (ddr_en ^ sdi_negedge) ? last_sdi_bit_n : last_sdi_bit_p;
 
     // Synchronize last_sdi_bit to SPI clock domain
 
