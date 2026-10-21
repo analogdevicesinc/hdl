@@ -159,7 +159,11 @@ module spi_engine_execution_shiftreg #(
   // be set to 0, to reduce the core clock's speed, this delay will mean that SDI will
   // be latched at one of the next consecutive SCLK edge.
   always @(posedge clk) begin
-    trigger_rx_d <= {trigger_rx_d, trigger_rx};
+    if (resetn == 1'b0) begin
+      trigger_rx_d <= {(SDI_DELAY+2){1'b0}};
+    end else begin
+      trigger_rx_d <= {trigger_rx_d, trigger_rx};
+    end
   end
   assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
 
