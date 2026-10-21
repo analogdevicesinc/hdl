@@ -100,10 +100,13 @@ module spi_engine_execution_shiftreg #(
   //   ((!data_ready_out) || (sdo_toshiftreg))
   //      there's room for storing sdo data
   //    AND
-  //    (s_offload_active || (exec_cmd & index_ready))
-  //      when s_offload_active, it is possible to prefetch
-  //      when !s_offload_active, wait for a write instruction and for end of processing lane mask
-  assign sdo_data_ready_int = ((!data_ready_out) || (sdo_toshiftreg)) && (s_offload_active || (exec_cmd & index_ready));
+  //    (index_ready && ((s_offload_active && !exec_sdo_lane_cmd) || exec_cmd))
+  //      always wait for end of processing lane mask (index_ready), then
+  //      when s_offload_active, it is possible to prefetch, except in the
+  //      exec_sdo_lane_cmd cycle: index_ready only drops a cycle later, so the
+  //      lane mapping would still be the old one
+  //      when !s_offload_active, wait for a write instruction
+  assign sdo_data_ready_int = ((!data_ready_out) || (sdo_toshiftreg)) && (index_ready && ((s_offload_active && !exec_sdo_lane_cmd) || exec_cmd));
   assign sdo_data_ready = sdo_data_ready_int;
   assign sdo_io_ready = data_sdo_v;
 
