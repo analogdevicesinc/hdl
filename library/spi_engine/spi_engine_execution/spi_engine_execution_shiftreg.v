@@ -82,6 +82,8 @@ module spi_engine_execution_shiftreg #(
   input       transfer_active,
   input       trigger_tx,
   input       trigger_rx,
+  output      trigger_rx_s,
+  output      last_sdi_bit,
   input       first_bit,
   input       cs_activate
 );
@@ -90,8 +92,6 @@ module spi_engine_execution_shiftreg #(
   reg [   SDI_DELAY+1:0] trigger_rx_d   = {(SDI_DELAY+2){1'b0}};
   wire  data_sdo_v; //data_sdo_v == existence of valid data
   wire sdo_toshiftreg; //it is using the valid data for shifting in this cycle
-  wire last_sdi_bit;
-  wire trigger_rx_s;
   wire index_ready;
   wire sdo_data_ready_int;
   wire data_ready_out;
