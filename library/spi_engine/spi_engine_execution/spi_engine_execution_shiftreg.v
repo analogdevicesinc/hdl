@@ -216,7 +216,8 @@ module spi_engine_execution_shiftreg #(
         end else begin
           // these paths would be unsafe it there wasn't a guarantee of some settling time between word_length changing and a transfer starting
           latch_sdi       <= (sdi_counter == latch_last_bit_count);
-          last_sdi_bit_r  <= (sdi_counter == last_bit_count);
+          // toggle instead of level-latch: at word_length=1 the compare is true on every edge
+          last_sdi_bit_r  <= last_sdi_bit_r ^ (sdi_counter == last_bit_count);
           sdi_counter     <= (sdi_counter == last_bit_count) ? 8'b0 : sdi_counter + 1'b1;
         end
       end
@@ -248,7 +249,8 @@ module spi_engine_execution_shiftreg #(
         end else begin
           // these paths would be unsafe it there wasn't a guarantee of some settling time between word_length changing and a transfer starting
           latch_sdi       <= (sdi_counter == latch_last_bit_count);
-          last_sdi_bit_r  <= (sdi_counter == last_bit_count);
+          // toggle instead of level-latch: at word_length=1 the compare is true on every edge
+          last_sdi_bit_r  <= last_sdi_bit_r ^ (sdi_counter == last_bit_count);
           sdi_counter     <= (sdi_counter == last_bit_count) ? 8'b0 : sdi_counter + 1'b1;
         end
       end
@@ -269,7 +271,8 @@ module spi_engine_execution_shiftreg #(
 
     assign sdi_data = sdi_data_latch;
     assign last_sdi_bit = last_sdi_bit_r;
-    assign echo_last_bit =  !last_sdi_bit_m[3] && last_sdi_bit_m[2];
+    // last_sdi_bit_r toggles once per word, so detect either edge.
+    assign echo_last_bit =  last_sdi_bit_m[3] ^ last_sdi_bit_m[2];
 
     always @(posedge clk) begin
       if (resetn == 1'b0) begin
