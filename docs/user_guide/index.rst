@@ -21,6 +21,7 @@ Contents
    Releases <releases>
    Build an HDL project <build_hdl>
    Build the BOOT.BIN <build_boot_bin>
+   Build the boot.scr <build_boot_scr>
    Build the Intel Boot Image <build_intel_boot_image>
    HDL architecture <architecture>
    IP cores <ip_cores/index>
@@ -37,6 +38,7 @@ Contents
 #. :ref:`releases`: Releases and supported tool versions
 #. :ref:`build_hdl`: Building and generating the programming files
 #. :ref:`build_boot_bin`: Generating the BOOT.BIN for AMD Xilinx projects
+#. :ref:`build_boot_scr`: Building the boot.scr / u-boot.scr boot script
 #. :ref:`build_intel_boot_image`: Building and generating the programming files
    for Intel projects
 #. :ref:`architecture`: HDL project architecture explained
