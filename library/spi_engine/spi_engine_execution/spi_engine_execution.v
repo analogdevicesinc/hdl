@@ -172,6 +172,7 @@ module spi_engine_execution #(
   wire trigger_rx;
   wire trigger_rx_s;
   wire sdi_last_bit_s;
+  wire sdi_word_s;
 
   // Undelayed last bit of an SDI word. Only used by the non-echo SDI_DELAY path.
   wire sdi_capture_start = !ECHO_SCLK && sdi_enabled == 1'b1 && last_bit == 1'b1 && trigger_rx == 1'b1;
@@ -227,6 +228,8 @@ module spi_engine_execution #(
     .trigger_rx(trigger_rx),
     .trigger_rx_s(trigger_rx_s),
     .last_sdi_bit(sdi_last_bit_s),
+    .sdi_word_trigger(sdi_capture_start),
+    .sdi_word_s(sdi_word_s),
     .first_bit(first_bit),
     .cs_activate(cs_activate));
 
@@ -381,20 +384,19 @@ module spi_engine_execution #(
     end
   end
 
-  // last_bit rolls over into the next transfer before the delayed capture
-  // (trigger_rx_s) fires, so it cannot detect the capture's completion.
-  // sdi_last_bit_s is the shiftreg's own last-bit tracking, aligned with trigger_rx_s.
-  // Gated !ECHO_SCLK: SDI_DELAY does not feed trigger_rx_s in echo mode, and
-  // sdi_last_bit_s is an echo_sclk-domain signal (unsynchronized with clk).
-  wire pending_sdi_trigger = !ECHO_SCLK && sdi_last_bit_s && trigger_rx_s;
+  // Delayed copy of sdi_capture_start (tag pipeline in the shiftreg, same length
+  // as trigger_rx_d). The live sdi_enabled/last_bit_count cannot be used at the
+  // delayed time: they may already belong to the next transfer.
+  // Constant 0 when ECHO_SCLK=1.
+  wire pending_sdi_trigger = sdi_word_s;
 
   // echo_last_bit is already synchronized to clk, unlike sdi_last_bit_s/trigger_rx_s.
   wire pending_sdi_echo_trigger = ECHO_SCLK && echo_last_bit;
 
   // Words held in the shiftreg's output+skid buffer: +1 on capture, -1 on drain.
   // A single bit cannot tell empty from one word left after a skid->output promotion.
-  wire sdi_capture_event = sdi_enabled == 1'b1 &&
-                            (pending_sdi_trigger == 1'b1 || pending_sdi_echo_trigger == 1'b1);
+  wire sdi_capture_event = pending_sdi_trigger == 1'b1 ||
+                           (sdi_enabled == 1'b1 && pending_sdi_echo_trigger == 1'b1);
   wire sdi_drain_event = sdi_data_valid == 1'b1 && sdi_data_ready == 1'b1;
 
   always @(posedge clk) begin
@@ -412,6 +414,9 @@ module spi_engine_execution #(
   // before the last bit is sampled; sdi_pending_count only counts landed words.
   // CLEAR is checked after SET so a same-cycle coincidence resolves to "not pending"
   // instead of latching stuck. resetn overrides both.
+  // SET and CLEAR are the same event SDI_DELAY+2 clocks apart. The 1:1 pairing relies
+  // on the io_ready1/io_ready2 stall keeping the next SET >= 3 clocks after the
+  // previous CLEAR.
   always @(posedge clk) begin
     if (sdi_capture_start == 1'b1) begin
       sdi_capture_pending <= 1'b1;

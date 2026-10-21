@@ -85,6 +85,8 @@ module spi_engine_execution_shiftreg #(
   input       trigger_rx,
   output      trigger_rx_s,
   output      last_sdi_bit,
+  input       sdi_word_trigger,
+  output      sdi_word_s,
   input       first_bit,
   input       cs_activate
 );
@@ -170,6 +172,19 @@ module spi_engine_execution_shiftreg #(
     end
   end
   assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
+
+  // Tags a read's last-bit strobe at its source (sdi_word_trigger), so the delayed
+  // strobe is not re-qualified against the next transfer's sdi_enabled/word_length.
+  // Must stay the same length as trigger_rx_d.
+  reg [SDI_DELAY+1:0] sdi_word_d = {(SDI_DELAY+2){1'b0}};
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      sdi_word_d <= {(SDI_DELAY+2){1'b0}};
+    end else begin
+      sdi_word_d <= {sdi_word_d, sdi_word_trigger};
+    end
+  end
+  assign sdi_word_s = sdi_word_d[SDI_DELAY+1];
 
   // Load the serial data into SDI shift register(s), then link it to the output
   // register of the module
@@ -362,7 +377,7 @@ module spi_engine_execution_shiftreg #(
     end
 
     // Same push/hold/promote scheme as the ECHO_SCLK=1 buffer above.
-    wire sdi_word_valid = (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_rx_s == 1'b1);
+    wire sdi_word_valid = sdi_word_s;
     always @(posedge clk) begin
       sdi_data_overflow <= 1'b0;
       if (resetn == 1'b0) begin
