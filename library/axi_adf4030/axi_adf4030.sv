@@ -133,7 +133,9 @@ module axi_adf4030 #(
 
   assign sysref = external_bsync;
 
-  bsync_generator i_bsync_gen (
+  bsync_generator #(
+    .SIM_DEVICE             (SIM_DEVICE)
+  ) i_bsync_gen (
     .clk                    (device_clk),
     .rstn                   (rstn),
     .direction              (direction),
