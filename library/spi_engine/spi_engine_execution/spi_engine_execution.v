@@ -169,7 +169,7 @@ module spi_engine_execution #(
   wire trigger_tx;
   wire trigger_rx;
 
-  reg sleep_counter_compare;
+  reg sleep_counter_compare = 1'b0;
   reg cs_sleep_counter_compare;
   reg cs_sleep_early_exit;
   reg cs_sleep_repeat;
@@ -233,6 +233,9 @@ module spi_engine_execution #(
   end
   assign sdo_enabled_io = (exec_transfer_cmd) ? cmd[8] : sdo_enabled;
 
+  // resetn is checked last so it overrides without freezing the sibling
+  // registers: exec_cmd can stay true while resetn is low, which would skip
+  // every register that is only cleared in the exec_cmd-false branch.
   always @(posedge clk) begin
     if (exec_cmd) begin
       cmd_d1                   <= cmd;
@@ -247,7 +250,12 @@ module spi_engine_execution #(
       exec_sdo_lane_config_reg <= (inst == CMD_WRITE) && (cmd[10:8] == REG_SDO_LANE_CONFIG);
     end else begin
       exec_sdo_lane_config_reg <= 1'b0;
-      sleep_counter_compare <= sleep_counter == cmd_d1_time && clk_div_last && sleep_counter_increment;
+      sleep_counter_compare    <= sleep_counter == cmd_d1_time && clk_div_last && sleep_counter_increment;
+    end
+    if (!resetn) begin
+      exec_transfer_cmd_reg    <= 1'b0;
+      exec_sdo_lane_config_reg <= 1'b0;
+      sleep_counter_compare    <= 1'b0;
     end
   end
 
