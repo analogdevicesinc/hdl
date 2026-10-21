@@ -67,8 +67,7 @@ module bsync_generator (
   logic                    b_edge;
   logic                    b_captured;
   logic                    bsync_buf;
-  (* IOB = "TRUE" *)       logic bsync_r  = 1'b0;
-  (* IOB = "TRUE" *)       logic bsync_out_r = 1'b0;
+  logic                    bsync_r;
   (* ASYNC_REG = "TRUE" *) logic bsync_d1 = 1'b0;
   (* ASYNC_REG = "TRUE" *) logic bsync_d2 = 1'b0;
   logic                    bsync_d3 = 1'b0;
@@ -78,6 +77,7 @@ module bsync_generator (
   logic                    dir_changed = 1'b0;
   logic                    direction_r = 1'b0;
   logic                    direction_s;
+  logic                    bsync_lcl;
 
   sync_bits #(
     .NUM_OF_BITS (1),
@@ -131,9 +131,17 @@ module bsync_generator (
     end
   end
 
-  always @(posedge clk) begin
-    bsync_r <= bsync_in;
-  end
+  IDDRE1 #(
+    .DDR_CLK_EDGE   ("OPPOSITE_EDGE"),
+    .IS_CB_INVERTED (1'b1),
+    .IS_C_INVERTED  (1'b0)
+  ) i_bsync_iddr (
+    .Q1 (bsync_r),     // rising-edge sample, same timing as the old FDRE
+    .Q2 (),
+    .C  (clk),
+    .CB (clk),         // same clock, inverted inside the primitive
+    .D  (bsync_in),
+    .R  (1'b0));
 
   /*
    * Unfortunately setup and hold are often ignored on the bsync signal relative
@@ -198,7 +206,7 @@ module bsync_generator (
 
   /*
    * bsync_counter is referenced to b_edge, 4 cycles after bsync_r captures the
-   * pad. Toggling BSYNC_LEAD cycles early (4 + 1 for bsync_out_r) launches
+   * pad. Toggling BSYNC_LEAD cycles early (4 + 1 for bsync_out) launches
    * the regenerated edge on the same device_clk edge that captures
    * the received one.
    * BSYNC_RATIO must be >= 3.
@@ -238,11 +246,20 @@ module bsync_generator (
     end
   end
 
-  always @(posedge clk) begin
-    bsync_out_r <= (curr_state == BSYNC_GEN && !disable_internal_bsync) ? bsync_buf : 1'b0;
-  end
+  assign bsync_lcl = (curr_state == BSYNC_GEN && !disable_internal_bsync) ? bsync_buf : 1'b0;
 
-  assign bsync_out = bsync_out_r;
+  ODDRE1 #(
+    .IS_C_INVERTED(1'b0),      // Optional inversion for C
+    .IS_D1_INVERTED(1'b0),     // Unsupported, do not use
+    .IS_D2_INVERTED(1'b0),     // Unsupported, do not use
+    .SIM_DEVICE("ULTRASCALE_PLUS"), // Set the device version for simulation functionality
+    .SRVAL(1'b0)               // Initializes the ODDRE1 Flip-Flops to the specified value (1'b0, 1'b1)
+  ) i_bsync_out_oddr (
+    .Q(bsync_out),   // 1-bit output: Data output to IOB
+    .C(clk),   // 1-bit input: High-speed clock input
+    .D1(bsync_lcl), // 1-bit input: Parallel data input 1
+    .D2(bsync_lcl), // 1-bit input: Parallel data input 2
+    .SR(1'b0));  // 1-bit input: Active-High Async Reset
 
   always @(posedge clk) begin
     direction_r <= direction_s;
