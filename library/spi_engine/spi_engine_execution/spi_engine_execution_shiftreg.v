@@ -269,7 +269,9 @@ module spi_engine_execution_shiftreg #(
     assign echo_last_bit =  !last_sdi_bit_m[3] && last_sdi_bit_m[2];
 
     always @(posedge clk) begin
-      if (sdi_enabled == 1'b1 && echo_last_bit) begin
+      if (resetn == 1'b0) begin
+        sdi_data_valid <= 1'b0;
+      end else if (sdi_enabled == 1'b1 && echo_last_bit) begin
         sdi_data_valid <= 1'b1;
       end else if (sdi_data_ready == 1'b1) begin
         sdi_data_valid <= 1'b0;
