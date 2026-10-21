@@ -83,6 +83,7 @@ module jesd204_tx_lane_64b #(
   reg eoemb_d1 = 'b0;
   reg [11:0] crc12_d1 = 'b0;
   reg cfg_lane_disable_int;
+  reg [1:0] cfg_header_mode_int;
 
   wire [63:0] tx_data_msb_s;
   wire [63:0] scrambled_data_s;
@@ -159,16 +160,17 @@ module jesd204_tx_lane_64b #(
     assign fec = 26'b0;
   end
 
-  // Pipeline lane disable signal, for better timing
+  // Pipeline lane disable signal and header mode signals, for better timing.
   always @(posedge clk) begin
     cfg_lane_disable_int <= cfg_lane_disable;
+    cfg_header_mode_int <= cfg_header_mode;
   end
 
   jesd204_tx_header i_header_gen (
     .clk(clk),
     .reset(~tx_ready | cfg_lane_disable_int),
 
-    .cfg_header_mode(cfg_header_mode),
+    .cfg_header_mode(cfg_header_mode_int),
 
     .lmc_edge(lmc_edge_d3),
     .lmc_quarter_edge(lmc_quarter_edge_d3),
