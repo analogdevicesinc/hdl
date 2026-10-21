@@ -499,13 +499,15 @@ module spi_engine_execution #(
   // delayed capture is still in flight.
   // io_ready1 takes the same last_transfer bypass as io_ready2: on the last
   // repeat there is no further SDO word to prefetch, so waiting would deadlock.
+  // last_transfer is still 1 in the first idle cycle after a transfer; !idle keeps
+  // the bypass from applying to a back-to-back transfer accepted in that cycle.
   assign io_ready1 =  (sdi_capture_in_flight == 1'b0) &&
                       (sdi_pending_count == 2'd0 || sdi_data_ready == 1'b1) &&
-                      (sdo_enabled_io == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
+                      (sdo_enabled_io == 1'b0 || (last_transfer == 1'b1 && !idle) || sdo_io_ready == 1'b1);
 
   assign io_ready2 = (sdi_capture_in_flight == 1'b0) &&
                      (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
-                     (sdo_enabled_io == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
+                     (sdo_enabled_io == 1'b0 || (last_transfer == 1'b1 && !idle) || sdo_io_ready == 1'b1);
 
   always @(posedge clk) begin
     if (idle) begin
