@@ -61,6 +61,7 @@ module spi_engine_execution #(
   input sdi_data_ready,
   output sdi_data_valid,
   output [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data,
+  output sdi_data_overflow,
 
   input sync_ready,
   output reg sync_valid,
@@ -207,6 +208,7 @@ module spi_engine_execution #(
     .sdi_data(sdi_data),
     .sdi_data_valid(sdi_data_valid),
     .sdi_data_ready(sdi_data_ready),
+    .sdi_data_overflow(sdi_data_overflow),
     .sdo_enabled(sdo_enabled),
     .sdi_enabled(sdi_enabled),
     .current_cmd(cmd_d1),

@@ -62,6 +62,7 @@ module spi_engine_execution_shiftreg #(
   output  [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data,
   output reg                              sdi_data_valid,
   input                                   sdi_data_ready,
+  output reg                              sdi_data_overflow,
 
   // cfg and status
   input           sdo_enabled,
@@ -187,6 +188,13 @@ module spi_engine_execution_shiftreg #(
     reg latch_sdi;
     reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_latch = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
 
+    // Skid buffer: sdi_data_latch is overwritten by the next word whether or not
+    // sdi_data_ready accepted the current one. sdi_data_r is the stable output;
+    // sdi_data_skid holds a second word that completes before the first is accepted.
+    reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_r = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+    reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_skid = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+    reg sdi_data_skid_valid = 1'b0;
+
     if ((DEFAULT_SPI_CFG[1:0] == 2'b01) || (DEFAULT_SPI_CFG[1:0] == 2'b10)) begin : g_echo_miso_nshift_reg
 
       // MISO shift register runs on negative echo_sclk
@@ -269,24 +277,58 @@ module spi_engine_execution_shiftreg #(
       end
     end
 
-    assign sdi_data = sdi_data_latch;
+    assign sdi_data = sdi_data_r;
     assign last_sdi_bit = last_sdi_bit_r;
     // last_sdi_bit_r toggles once per word, so detect either edge.
     assign echo_last_bit =  last_sdi_bit_m[3] ^ last_sdi_bit_m[2];
 
+    // Captured word goes to sdi_data_r when it is empty, to sdi_data_skid when
+    // sdi_data_r is valid and unaccepted, and is promoted from there once accepted.
     always @(posedge clk) begin
+      sdi_data_overflow <= 1'b0;
       if (resetn == 1'b0) begin
         sdi_data_valid <= 1'b0;
-      end else if (sdi_enabled == 1'b1 && echo_last_bit) begin
-        sdi_data_valid <= 1'b1;
-      end else if (sdi_data_ready == 1'b1) begin
-        sdi_data_valid <= 1'b0;
+        sdi_data_skid_valid <= 1'b0;
+      end else if (sdi_data_valid == 1'b1 && sdi_data_ready == 1'b1) begin
+        if (sdi_data_skid_valid == 1'b1) begin
+          sdi_data_r <= sdi_data_skid;
+          sdi_data_skid_valid <= 1'b0;
+        end else if (sdi_enabled == 1'b1 && echo_last_bit) begin
+          sdi_data_r <= sdi_data_latch;
+        end else begin
+          sdi_data_valid <= 1'b0;
+        end
+      end else if (sdi_data_valid == 1'b0) begin
+        if (sdi_enabled == 1'b1 && echo_last_bit) begin
+          sdi_data_r <= sdi_data_latch;
+          sdi_data_valid <= 1'b1;
+        end
+      end else begin
+        // Hold sdi_data and stash a new word in the skid register. If the skid
+        // is full, drop the word and pulse sdi_data_overflow.
+        if (sdi_enabled == 1'b1 && echo_last_bit) begin
+          if (sdi_data_skid_valid == 1'b1) begin
+            sdi_data_overflow <= 1'b1;
+          end else begin
+            sdi_data_skid <= sdi_data_latch;
+            sdi_data_skid_valid <= 1'b1;
+          end
+        end
       end
     end
 
   end /* g_echo_sclk_miso_latch */
   else
   begin : g_sclk_miso_latch
+
+    // Skid buffer: at clk_div=0 data_sdi_shift is overwritten every word period
+    // regardless of sdi_data_ready. sdi_data_next is the word it is about to hold;
+    // it goes through sdi_data_r + sdi_data_skid so sdi_data is stable while
+    // valid && !ready.
+    wire [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_next;
+    reg  [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_r = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+    reg  [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_skid = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+    reg                                   sdi_data_skid_valid = 1'b0;
 
     for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
 
@@ -302,9 +344,11 @@ module spi_engine_execution_shiftreg #(
         end
       end
 
-      assign sdi_data[i*DATA_WIDTH+:DATA_WIDTH] = data_sdi_shift;
+      assign sdi_data_next[i*DATA_WIDTH+:DATA_WIDTH] = {data_sdi_shift[DATA_WIDTH-2:0], sdi[i]};
 
     end
+
+    assign sdi_data = sdi_data_r;
 
     assign last_sdi_bit = (sdi_counter == last_bit_count);
     always @(posedge clk) begin
@@ -317,13 +361,39 @@ module spi_engine_execution_shiftreg #(
       end
     end
 
+    // Same push/hold/promote scheme as the ECHO_SCLK=1 buffer above.
+    wire sdi_word_valid = (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_rx_s == 1'b1);
     always @(posedge clk) begin
-      if (resetn == 1'b0)
+      sdi_data_overflow <= 1'b0;
+      if (resetn == 1'b0) begin
         sdi_data_valid <= 1'b0;
-      else if (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_rx_s == 1'b1)
-        sdi_data_valid <= 1'b1;
-      else if (sdi_data_ready == 1'b1)
-        sdi_data_valid <= 1'b0;
+        sdi_data_skid_valid <= 1'b0;
+      end else if (sdi_data_valid == 1'b1 && sdi_data_ready == 1'b1) begin
+        if (sdi_data_skid_valid == 1'b1) begin
+          sdi_data_r <= sdi_data_skid;
+          sdi_data_skid_valid <= 1'b0;
+        end else if (sdi_word_valid) begin
+          sdi_data_r <= sdi_data_next;
+        end else begin
+          sdi_data_valid <= 1'b0;
+        end
+      end else if (sdi_data_valid == 1'b0) begin
+        if (sdi_word_valid) begin
+          sdi_data_r <= sdi_data_next;
+          sdi_data_valid <= 1'b1;
+        end
+      end else begin
+        // Hold sdi_data and stash a new word in the skid register. If the skid
+        // is full, drop the word and pulse sdi_data_overflow.
+        if (sdi_word_valid) begin
+          if (sdi_data_skid_valid == 1'b1) begin
+            sdi_data_overflow <= 1'b1;
+          end else begin
+            sdi_data_skid <= sdi_data_next;
+            sdi_data_skid_valid <= 1'b1;
+          end
+        end
+      end
     end
 
   end /* g_sclk_miso_latch */
