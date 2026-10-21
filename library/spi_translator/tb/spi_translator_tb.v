@@ -315,6 +315,34 @@ module spi_translator_tb;
     check("sync id 3", resp[3], 8'h13);
     check("err", err, 0);
 
+    // individual commands
+    begin_frame();
+    put16(`CFG(2'd0));
+    send_frame();
+
+    begin_frame();
+    put16(`PRESCALE(8'h02));
+    send_frame();
+
+    begin_frame();
+    put16(`CS(8'hff & ~(8'h01 << 2'd0)));
+    send_frame();
+
+    begin_frame();
+    put16(`WR(3));
+    put_data(3, 8'h10, 8'h10);
+    send_frame();
+
+    begin_frame();
+    put16(`CS(8'hff));
+    send_frame();
+
+    begin_frame();
+    put16(`SYNC(8'h10 + 2'd0));
+    send_frame();
+
+    wait_idle();
+
     // full-duplex read on target 1 (mode 3): SDI bytes, then the SYNC id
 
     //r0 = resp_count;

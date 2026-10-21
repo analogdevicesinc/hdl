@@ -64,7 +64,6 @@
  *       than one CTRL_W
  *   [1] does not fit in the room left in the CMD or SDO FIFO
  *   [2] ends inside an instruction or its SDO data
- *   [3] ends with a target still selected
  * FLUSH clears err.
  *
  * Only 8-bit SDO words are supported: the engine is built with
@@ -129,13 +128,11 @@ module spi_translator_decoder (
   reg   [7:0]                 hi = 8'h00;
   reg   [8:0]                 sdo_left = 9'h000;
   reg                         seen = 1'b0;
-  reg                         cs_open = 1'b0;
   reg   [1:0]                 frame_err = 2'b00;
   reg                         reg_pending = 1'b0;
   reg   [7:0]                 reg_addr = 8'h00;
   reg   [7:0]                 reg_data = 8'h00;
   reg                         flush_pending = 1'b0;
-  reg   [1:0]                 frame_end_d = 2'b00;
 
   wire                        byte_in;
   wire  [2:0]                 inst;
@@ -147,7 +144,7 @@ module spi_translator_decoder (
   wire                        store_sdo;
   wire                        no_room;
   wire                        done;
-  wire  [3:0]                 end_err;
+  wire  [2:0]                 end_err;
 
   assign byte_in = rx_valid & frame_active;
   assign inst    = hi[6:4];
@@ -177,25 +174,14 @@ module spi_translator_decoder (
   assign cmd_wdata = {hi, rx_data};
   assign sdo_we    = store_sdo & ~sdo_full;
   assign sdo_wdata = rx_data;
+  assign done      = frame_end;
 
-  // let the last byte of the frame through the slave before closing it
-  assign done = frame_end_d[1];
-
-  assign end_err = {cs_open, state != S_HI, frame_err};
-
-  always @(posedge clk) begin
-    if (resetn == 1'b0) begin
-      frame_end_d <= 2'b00;
-    end else begin
-      frame_end_d <= {frame_end_d[0], frame_end};
-    end
-  end
+  assign end_err   = {state != S_HI, frame_err};
 
   always @(posedge clk) begin
     if (resetn == 1'b0 || frame_start == 1'b1) begin
       state <= S_HI;
       seen <= 1'b0;
-      cs_open <= 1'b0;
       frame_err <= 2'b00;
       reg_pending <= 1'b0;
       flush_pending <= 1'b0;
@@ -222,9 +208,6 @@ module spi_translator_decoder (
             if (inst == CMD_TRANSFER && hi[0] == 1'b1) begin
               sdo_left <= {1'b0, rx_data} + 1'b1;
               state <= S_SDO;
-            end
-            if (inst == CMD_CHIPSELECT) begin
-              cs_open <= (sel != 4'h0);
             end
           end
         end
@@ -262,7 +245,7 @@ module spi_translator_decoder (
       reg_wr_en <= 1'b0;
       flush_req <= 1'b0;
       if (done && seen) begin
-        if (end_err != 4'h0) begin
+        if (end_err != 3'h0) begin
           rollback <= 1'b1;
           err <= err | end_err;
         end else if (flush_pending) begin
