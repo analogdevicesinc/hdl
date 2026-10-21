@@ -550,8 +550,8 @@ module jesd204_rx #(
     wire all_buffer_ready_n_d;
     // Make sure these two signals do not optimized as single instance for all
     // channels. Keeping one instance per channel would help with timing.
-    (* dont_touch = "yes" *) wire err_statistics_reset_64b;
-    (* dont_touch = "yes" *) reg event_data_phase_reg = 1'b0;
+    (* dont_touch = "yes" *) reg err_statistics_reset_64b;
+    (* dont_touch = "yes" *) reg event_data_phase_int = 1'b0;
 
     // Pipeline the aggregated ready status at the lane, so that the OR reduce
     // and the route out to the channel become a register to register path with
@@ -567,15 +567,31 @@ module jesd204_rx #(
 
     // Register event_data_phase signal to break the combinational path coming
     // from jesd204_rx_ctrl_64b and going into jesd204_rx_lane_64b.
+    // Now, the error statistics counters will be reset one clock cycle after
+    // entering data phase, but no error event would be lost due to a register
+    // on error_event itself.
     always @(posedge clk) begin
       if (reset == 1'b1) begin
-        event_data_phase_reg <= 1'b0;
+        event_data_phase_int <= 1'b0;
       end else begin
-        event_data_phase_reg <= event_data_phase;
+        event_data_phase_int <= event_data_phase;
       end
     end
-    
-    assign err_statistics_reset_64b = ctrl_err_statistics_reset || event_data_phase_reg;
+
+    // Register err_statistics_reset_64b signal to reduce the combinational
+    // delay on the path from the AXI register, for better timing in case a
+    // SLR crossing is used on it.
+    // Now, the error statistics counters will be reset two clock cycles after
+    // entering data phase, but no error event would be lost due to a register
+    // on error_event itself and due to the err signal inside error_monitor
+    // not having a reset.
+    always @(posedge clk) begin
+      if (reset == 1'b1) begin
+        err_statistics_reset_64b <= 1'b0;
+      end else begin
+        err_statistics_reset_64b <= ctrl_err_statistics_reset || event_data_phase_int;
+      end
+    end
 
     jesd204_rx_lane_64b #(
       .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
