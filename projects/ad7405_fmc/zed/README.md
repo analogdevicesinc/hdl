@@ -1,4 +1,4 @@
-<!-- no_dts, no_no_os -->
+<!-- no_no_os -->
 
 # AD7405-FMC/ZED HDL Project
 
@@ -28,3 +28,13 @@ This specific command is equivalent to running "make" only:
 ```
 make LVDS_CMOS_N=0
 ```
+
+Corresponding device tree: [zynq-zed-adum7701.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adum7701.dts)
+
+#### Configuration using LVDS interface
+
+```
+make LVDS_CMOS_N=1
+```
+
+Corresponding device tree: [zynq-zed-ad7405.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-ad7405.dts)
