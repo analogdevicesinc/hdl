@@ -6,7 +6,9 @@ AXI AD7405
 .. hdl-component-diagram::
 
 The :git-hdl:`AXI AD7405 <library/axi_ad7405>` IP core
-can be used to interface the :adi:`AD7405` device using an
+can be used to interface the :adi:`AD7405` and compatible devices (:adi:`AD7403`,
+:adi:`ADuM7701`, :adi:`ADuM7702`, :adi:`ADuM7703`, :adi:`ADuM7801`,
+:adi:`ADuM7802`, :adi:`ADuM7811`, :adi:`ADuM7812`) using an
 FPGA. The core has a AXI Memory Map interface for configuration, supports the
 data interface of the device, and has a simple FIFO interface for the
 DMAC.
@@ -109,3 +111,11 @@ Refereces
 * HDL project at :git-hdl:`projects/ad7405_fmc`
 * HDL project documentation at :ref:`ad7405_fmc`
 * :adi:`AD7405`
+* :adi:`AD7403`
+* :adi:`ADuM7701`
+* :adi:`ADuM7702`
+* :adi:`ADuM7703`
+* :adi:`ADuM7801`
+* :adi:`ADuM7802`
+* :adi:`ADuM7811`
+* :adi:`ADuM7812`
