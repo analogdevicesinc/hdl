@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -42,6 +42,7 @@ module util_do_ram #(
   parameter DST_DATA_WIDTH = 128,
   parameter LENGTH_WIDTH = 16,
   parameter RD_DATA_REGISTERED = 0,
+  parameter RD_ADDRESS_REGISTERED = 0,
   parameter RD_FIFO_ADDRESS_WIDTH = 2
 ) (
   input                                    wr_request_enable,
@@ -84,7 +85,7 @@ module util_do_ram #(
   //   dst = m_axis_* = rd
   //
 
-  localparam RAM_LATENCY = RD_DATA_REGISTERED + 2;
+  localparam RAM_LATENCY = RD_ADDRESS_REGISTERED + RD_DATA_REGISTERED + 2;
 
   localparam SRC_ADDR_ALIGN = $clog2(SRC_DATA_WIDTH/8);
   localparam DST_ADDR_ALIGN = $clog2(DST_DATA_WIDTH/8);
@@ -98,6 +99,9 @@ module util_do_ram #(
   wire                        rd_enable;
   wire [1:0]                  rd_fifo_room;
   wire                        rd_last_beat;
+  wire                        rd_enable_s;
+  wire                        rd_last_beat_s;
+  wire [DST_ADDRESS_WIDTH-1:0] rd_mem_addr;
   wire [DST_DATA_WIDTH-1:0]   rd_data;
   wire [DST_DATA_WIDTH/8-1:0] rd_keep;
   wire                        rd_valid_s;
@@ -192,7 +196,7 @@ module util_do_ram #(
 
     .clkb (m_axis_aclk),
     .reb (1'b1),
-    .addrb (rd_addr),
+    .addrb (rd_mem_addr),
     .doutb (rd_data));
 
   ad_mem_asym #(
@@ -208,7 +212,7 @@ module util_do_ram #(
 
     .clkb (m_axis_aclk),
     .reb (1'b1),
-    .addrb (rd_addr),
+    .addrb (rd_mem_addr),
     .doutb (rd_keep));
 
   always @(posedge m_axis_aclk) begin
@@ -251,10 +255,26 @@ module util_do_ram #(
       rd_addr <= rd_addr + 1;
   end
 
+  // The RAM address port fans out to every memory block, so a registered copy
+  // keeps the rd_addr next-state logic off that route.
+  util_pipeline_stage #(
+    .WIDTH(DST_ADDRESS_WIDTH+2),
+    .REGISTERED(RD_ADDRESS_REGISTERED)
+  ) i_rd_addr_pipeline_stage (
+    .clk(m_axis_aclk),
+    .in({
+      rd_enable,
+      rd_last_beat,
+      rd_addr}),
+    .out({
+      rd_enable_s,
+      rd_last_beat_s,
+      rd_mem_addr}));
+
   // Delay read enable with latency cycles
   always @(posedge m_axis_aclk) begin
-    rd_valid_l1 <= rd_enable;
-    rd_last_l1 <= rd_last_beat;
+    rd_valid_l1 <= rd_enable_s;
+    rd_last_l1 <= rd_last_beat_s;
   end
 
   util_pipeline_stage #(

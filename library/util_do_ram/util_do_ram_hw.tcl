@@ -18,6 +18,7 @@ set_module_property GROUP "Analog Devices"
 ad_ip_files util_do_ram [list \
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v \
   $ad_hdl_dir/library/common/ad_mem_asym.v \
+  $ad_hdl_dir/library/common/util_pipeline_stage.v \
   util_do_ram.v \
   util_do_ram_constr.sdc \
 ]
@@ -28,6 +29,7 @@ ad_ip_parameter SRC_DATA_WIDTH        INTEGER 512
 ad_ip_parameter DST_DATA_WIDTH        INTEGER 128
 ad_ip_parameter LENGTH_WIDTH          INTEGER 16
 ad_ip_parameter RD_DATA_REGISTERED    INTEGER 0
+ad_ip_parameter RD_ADDRESS_REGISTERED INTEGER 0
 ad_ip_parameter RD_FIFO_ADDRESS_WIDTH INTEGER 2
 
 # axis destination/source
