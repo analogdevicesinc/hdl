@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017, 2018, 2020-2022, 2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017, 2018, 2020-2022, 2025-2026 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -86,6 +86,7 @@ module jesd204_rx_lane #(
 
   reg  [DATA_PATH_WIDTH-1:0] unexpected_char;
   reg  [DATA_PATH_WIDTH-1:0] phy_char_err;
+  reg  [DPW_LOG2:0] phy_char_err_cnt = 'h0;
 
   wire ilas_monitor_reset_s;
   wire ilas_monitor_reset;
@@ -149,11 +150,18 @@ module jesd204_rx_lane #(
   end
   endfunction
 
+  // The error count is registered so the accumulate is a single 32-bit carry
+  // chain; with the population count inside the loop it missed a 337.5 MHz
+  // 8B10B link clock on Agilex 5.
   always @(posedge clk) begin
     if (reset == 1'b1 || err_statistics_reset == 1'b1) begin
+      phy_char_err_cnt <= 'h0;
       status_err_statistics_cnt <= 32'h0;
-    end else if (status_err_statistics_cnt[31:5] != 27'h7ffffff) begin
-      status_err_statistics_cnt <= status_err_statistics_cnt + num_set_bits(phy_char_err);
+    end else begin
+      phy_char_err_cnt <= num_set_bits(phy_char_err);
+      if (status_err_statistics_cnt[31:5] != 27'h7ffffff) begin
+        status_err_statistics_cnt <= status_err_statistics_cnt + phy_char_err_cnt;
+      end
     end
   end
 
