@@ -96,6 +96,11 @@ ad_ip_parameter SHARED_DEVCLK INTEGER 0 false { \
   ALLOWED_RANGES { "0:Disable" "1:Enable" }
 }
 
+ad_ip_parameter RD_ADDRESS_REGISTERED INTEGER 0 false { \
+  DISPLAY_NAME "Register the internal RAM read address" \
+  ALLOWED_RANGES { "0:Disable" "1:Enable" }
+}
+
 proc data_offload_compose {} {
 
   set instance_name [get_parameter_value "INSTANCE_NAME"]
@@ -110,6 +115,7 @@ proc data_offload_compose {} {
   set src_interface_type [get_parameter_value "SRC_INTERFACE_TYPE"]
   set src_has_axis_tkeep [get_parameter_value "SRC_HAS_AXIS_TKEEP"]
   set src_has_axis_tlast [get_parameter_value "SRC_HAS_AXIS_TLAST"]
+  set rd_address_registered [get_parameter_value "RD_ADDRESS_REGISTERED"]
 
   set source_addresses [expr ($mem_size * 8) / $source_dwidth]
   set source_awidth [log2 $source_addresses]
@@ -195,6 +201,7 @@ proc data_offload_compose {} {
     set_instance_parameter_value storage_unit {SRC_DATA_WIDTH} $source_dwidth
     set_instance_parameter_value storage_unit {DST_DATA_WIDTH} $destination_dwidth
     set_instance_parameter_value storage_unit {LENGTH_WIDTH} [log2 $mem_size]
+    set_instance_parameter_value storage_unit {RD_ADDRESS_REGISTERED} $rd_address_registered
 
   } else {
     ###########################################################################
