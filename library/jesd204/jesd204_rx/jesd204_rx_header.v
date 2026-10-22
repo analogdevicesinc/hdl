@@ -92,6 +92,8 @@ module jesd204_rx_header #(
 
   reg [31:0] sync_word = 'h0;
 
+  reg sh_count_wrap = 1'b0;
+
   wire header_bit;
   wire invalid_sequence;
   wire invalid_eoemb;
@@ -130,12 +132,24 @@ module jesd204_rx_header #(
   assign eomb  = sync_word[4:0] == 5'b00001;
   assign eoemb = sync_word[9] & eomb;
 
+  // sh_count is only used outside EMB_INIT. Loading 1 while in EMB_INIT would
+  // therefore not matter.
+  // On the first EMB_HUNT cycle, sh_count would have the value 1, as expected.
   always @(posedge clk) begin
-    if (next_state[BIT_EMB_INIT] || sh_count == cfg_beats_per_multiframe) begin
+    if (state[BIT_EMB_INIT]) begin
+      sh_count <= 'h1;
+    end else if (sh_count_wrap) begin
       sh_count <= 'h0;
     end else begin
       sh_count <= sh_count + 8'b1;
     end
+  end
+
+  // High when sh_count == cfg_beats_per_multiframe, computed one beat early to
+  // compensate for its output register.
+  always @(posedge clk) begin
+    sh_count_wrap <= ~state[BIT_EMB_INIT] &&
+                     (sh_count == cfg_beats_per_multiframe - 8'd1);
   end
 
   reg [1:0] emb_vcount = 'b0;
