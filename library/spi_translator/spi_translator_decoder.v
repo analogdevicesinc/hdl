@@ -59,9 +59,9 @@
  *
  * A frame is rejected, and the matching sticky err bit set, when it:
  *   [0] uses a reserved encoding (bit 15, class 101/110, an unknown bridge
- *       op, reserved TRANSFER or WRITE fields), selects more than one target
- *       in a CHIPSELECT, sets a word length outside 1..8, or carries more
- *       than one CTRL_W
+ *       op, reserved TRANSFER or WRITE fields), selects more than one of
+ *       CS[NUM_OF_CS-1:0] in a CHIPSELECT, sets a word length outside 1..8,
+ *       or carries more than one CTRL_W
  *   [1] does not fit in the room left in the CMD or SDO FIFO
  *   [2] ends inside an instruction or its SDO data
  * FLUSH clears err.
@@ -70,7 +70,9 @@
  * DATA_WIDTH = 8, so each SDO word is one byte.
  */
 
-module spi_translator_decoder (
+module spi_translator_decoder #(
+  parameter NUM_OF_CS = 4
+) (
   input                               clk,
   input                               resetn,
 
@@ -133,10 +135,11 @@ module spi_translator_decoder (
   reg   [7:0]                 reg_addr = 8'h00;
   reg   [7:0]                 reg_data = 8'h00;
   reg                         flush_pending = 1'b0;
+  reg   [1:0]                 frame_end_d = 2'b00;
 
   wire                        byte_in;
   wire  [2:0]                 inst;
-  wire  [3:0]                 sel;
+  wire  [NUM_OF_CS-1:0]       sel;
   wire                        sel_ok;
   wire                        is_bridge;
   wire                        cmd_ok;
@@ -149,9 +152,10 @@ module spi_translator_decoder (
   assign byte_in = rx_valid & frame_active;
   assign inst    = hi[6:4];
 
-  // targets a CHIPSELECT pulls low; at most one of the four is allowed
-  assign sel    = ~rx_data[3:0];
-  assign sel_ok = (sel & (sel - 1'b1)) == 4'h0;
+  // targets a CHIPSELECT pulls low; at most one of the NUM_OF_CS is allowed,
+  // bits above NUM_OF_CS are not checked
+  assign sel    = ~rx_data[NUM_OF_CS-1:0];
+  assign sel_ok = (sel & (sel - 1'b1)) == {NUM_OF_CS{1'b0}};
 
   // checks on the instruction {hi, rx_data}, evaluated on its second byte
   assign is_bridge = (inst == CMD_BRIDGE);
@@ -174,7 +178,17 @@ module spi_translator_decoder (
   assign cmd_wdata = {hi, rx_data};
   assign sdo_we    = store_sdo & ~sdo_full;
   assign sdo_wdata = rx_data;
-  assign done      = frame_end;
+
+  // let the last byte of the frame through the slave before closing it
+  assign done = frame_end_d[1];
+
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      frame_end_d <= 2'b00;
+    end else begin
+      frame_end_d <= {frame_end_d[0], frame_end};
+    end
+  end
 
   assign end_err   = {state != S_HI, frame_err};
 

@@ -10,15 +10,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="10.088334 us"></ZoomStartTime>
-      <ZoomEndTime time="127.282916 us"></ZoomEndTime>
-      <Cursor1Time time="25.555000 us"></Cursor1Time>
+      <ZoomStartTime time="25,228.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="26,172.001 ns"></ZoomEndTime>
+      <Cursor1Time time="25,545.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="266"></NameColumnWidth>
+      <NameColumnWidth column_width="254"></NameColumnWidth>
       <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="57" />
+   <WVObjectSize size="108" />
    <wvobject fp_name="divider25" type="divider">
       <obj_property name="label">SPI TRANSLATOR</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -38,22 +38,32 @@
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sclk">
       <obj_property name="ElementShortName">sclk</obj_property>
       <obj_property name="ObjectShortName">sclk</obj_property>
+      <obj_property name="CustomSignalColor">#E0FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sdi">
       <obj_property name="ElementShortName">sdi</obj_property>
       <obj_property name="ObjectShortName">sdi</obj_property>
+      <obj_property name="CustomSignalColor">#E0FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sdo">
       <obj_property name="ElementShortName">sdo</obj_property>
       <obj_property name="ObjectShortName">sdo</obj_property>
+      <obj_property name="CustomSignalColor">#E0FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/sdi_t">
       <obj_property name="ElementShortName">sdi_t</obj_property>
       <obj_property name="ObjectShortName">sdi_t</obj_property>
+      <obj_property name="CustomSignalColor">#E0FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/cs">
       <obj_property name="ElementShortName">cs</obj_property>
       <obj_property name="ObjectShortName">cs</obj_property>
+      <obj_property name="CustomSignalColor">#E0FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject fp_name="divider21" type="divider">
    </wvobject>
@@ -126,10 +136,14 @@
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_spi_slave/frame_start">
       <obj_property name="ElementShortName">frame_start</obj_property>
       <obj_property name="ObjectShortName">frame_start</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_spi_slave/frame_end">
       <obj_property name="ElementShortName">frame_end</obj_property>
       <obj_property name="ObjectShortName">frame_end</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_spi_slave/frame_active">
       <obj_property name="ElementShortName">frame_active</obj_property>
@@ -228,5 +242,221 @@
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/sel_ok">
       <obj_property name="ElementShortName">sel_ok</obj_property>
       <obj_property name="ObjectShortName">sel_ok</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider58" type="divider">
+      <obj_property name="label">SPI ENGINE</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_engine/sclk">
+      <obj_property name="ElementShortName">sclk</obj_property>
+      <obj_property name="ObjectShortName">sclk</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_engine/sdo[0]">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">[0]</obj_property>
+      <obj_property name="ObjectShortName">[0]</obj_property>
+      <obj_property name="label">sdo</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_engine/sdo_t">
+      <obj_property name="ElementShortName">sdo_t</obj_property>
+      <obj_property name="ObjectShortName">sdo_t</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_engine/sdi[0]">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">[0]</obj_property>
+      <obj_property name="ObjectShortName">[0]</obj_property>
+      <obj_property name="label">sdi</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_engine/cs">
+      <obj_property name="ElementShortName">cs[3:0]</obj_property>
+      <obj_property name="ObjectShortName">cs[3:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider64" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_engine/cmd_ready">
+      <obj_property name="ElementShortName">cmd_ready</obj_property>
+      <obj_property name="ObjectShortName">cmd_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_engine/cmd_valid">
+      <obj_property name="ElementShortName">cmd_valid</obj_property>
+      <obj_property name="ObjectShortName">cmd_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_engine/cmd">
+      <obj_property name="ElementShortName">cmd[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cmd[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider68" type="divider">
+      <obj_property name="label">SPI DECODER</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/rx_data">
+      <obj_property name="ElementShortName">rx_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/rx_valid">
+      <obj_property name="ElementShortName">rx_valid</obj_property>
+      <obj_property name="ObjectShortName">rx_valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/frame_start">
+      <obj_property name="ElementShortName">frame_start</obj_property>
+      <obj_property name="ObjectShortName">frame_start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/frame_end">
+      <obj_property name="ElementShortName">frame_end</obj_property>
+      <obj_property name="ObjectShortName">frame_end</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/frame_active">
+      <obj_property name="ElementShortName">frame_active</obj_property>
+      <obj_property name="ObjectShortName">frame_active</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider74" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/cmd_we">
+      <obj_property name="ElementShortName">cmd_we</obj_property>
+      <obj_property name="ObjectShortName">cmd_we</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/cmd_wdata">
+      <obj_property name="ElementShortName">cmd_wdata[15:0]</obj_property>
+      <obj_property name="ObjectShortName">cmd_wdata[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/cmd_full">
+      <obj_property name="ElementShortName">cmd_full</obj_property>
+      <obj_property name="ObjectShortName">cmd_full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/commit">
+      <obj_property name="ElementShortName">commit</obj_property>
+      <obj_property name="ObjectShortName">commit</obj_property>
+      <obj_property name="CustomSignalColor">#FF0000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider79" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/done">
+      <obj_property name="ElementShortName">done</obj_property>
+      <obj_property name="ObjectShortName">done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/seen">
+      <obj_property name="ElementShortName">seen</obj_property>
+      <obj_property name="ObjectShortName">seen</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/end_err">
+      <obj_property name="ElementShortName">end_err[2:0]</obj_property>
+      <obj_property name="ObjectShortName">end_err[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/commit">
+      <obj_property name="ElementShortName">commit</obj_property>
+      <obj_property name="ObjectShortName">commit</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider85" type="divider">
+      <obj_property name="label">SPI EXECUTION</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider88" type="divider">
+      <obj_property name="label">CMD FIFO</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/resetn">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/clear">
+      <obj_property name="ElementShortName">clear</obj_property>
+      <obj_property name="ObjectShortName">clear</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/s_valid">
+      <obj_property name="ElementShortName">s_valid</obj_property>
+      <obj_property name="ObjectShortName">s_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/s_data">
+      <obj_property name="ElementShortName">s_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/s_full">
+      <obj_property name="ElementShortName">s_full</obj_property>
+      <obj_property name="ObjectShortName">s_full</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/s_room">
+      <obj_property name="ElementShortName">s_room[4:0]</obj_property>
+      <obj_property name="ObjectShortName">s_room[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/commit">
+      <obj_property name="ElementShortName">commit</obj_property>
+      <obj_property name="ObjectShortName">commit</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/rollback">
+      <obj_property name="ElementShortName">rollback</obj_property>
+      <obj_property name="ObjectShortName">rollback</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/m_valid">
+      <obj_property name="ElementShortName">m_valid</obj_property>
+      <obj_property name="ObjectShortName">m_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/m_data">
+      <obj_property name="ElementShortName">m_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">m_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/m_ready">
+      <obj_property name="ElementShortName">m_ready</obj_property>
+      <obj_property name="ObjectShortName">m_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider109" type="divider">
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/commit_ptr">
+      <obj_property name="ElementShortName">commit_ptr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">commit_ptr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/wr">
+      <obj_property name="ElementShortName">wr</obj_property>
+      <obj_property name="ObjectShortName">wr</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/wr_ptr">
+      <obj_property name="ElementShortName">wr_ptr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_ptr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/commit">
+      <obj_property name="ElementShortName">commit</obj_property>
+      <obj_property name="ObjectShortName">commit</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider114" type="divider">
+   </wvobject>
+   <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/rd_ptr">
+      <obj_property name="ElementShortName">rd_ptr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_ptr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/m_ready">
+      <obj_property name="ElementShortName">m_ready</obj_property>
+      <obj_property name="ObjectShortName">m_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/m_valid">
+      <obj_property name="ElementShortName">m_valid</obj_property>
+      <obj_property name="ObjectShortName">m_valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/i_cmd_fifo/rd">
+      <obj_property name="ElementShortName">rd</obj_property>
+      <obj_property name="ObjectShortName">rd</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
 </wave_config>

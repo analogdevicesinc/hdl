@@ -40,7 +40,8 @@
  * select reach multiple downstream SPI targets. The upstream side is a SPI
  * slave receiving a serialized SPI Engine instruction stream, see
  * spi_translator_decoder.v for the format; the downstream side replays it into
- * spi_engine_execution (NUM_OF_CS = 4, DATA_WIDTH = 8, NUM_OF_SDIO = 1).
+ * spi_engine_execution (DATA_WIDTH = 8, NUM_OF_SDIO = 1, NUM_OF_CS matching
+ * this core's NUM_OF_CS).
  *
  * SDI bytes and SYNC ids come out on the resp_* stream until the upstream
  * MISO path returns them to the host.
@@ -50,6 +51,7 @@ module spi_translator #(
   parameter UP_CPOL = 0,
   parameter UP_CPHA = 0,
   parameter HEADER_CRC_EN = 1,
+  parameter NUM_OF_CS = 4,
   parameter CMD_FIFO_ADDRESS_WIDTH = 9,
   parameter SDO_FIFO_ADDRESS_WIDTH = 12,
   parameter RESP_FIFO_ADDRESS_WIDTH = 9
@@ -146,7 +148,9 @@ module spi_translator #(
     .spi_miso_t (sdi_t),
     .spi_cs (cs));
 
-  spi_translator_decoder i_decoder (
+  spi_translator_decoder #(
+    .NUM_OF_CS (NUM_OF_CS)
+  ) i_decoder (
     .clk (clk),
     .resetn (resetn),
     .rx_data (rx_data),

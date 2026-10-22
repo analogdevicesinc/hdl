@@ -84,5 +84,12 @@ foreach {param} {UP_CPOL UP_CPHA HEADER_CRC_EN} {
   ] [ipx::get_hdl_parameters $param -of_objects $cc]
 }
 
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "8" \
+ ] \
+ [ipx::get_user_parameters NUM_OF_CS -of_objects $cc]
+
 ipx::create_xgui_files $cc
 ipx::save_core $cc
