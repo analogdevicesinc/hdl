@@ -37,10 +37,10 @@ source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 ##--------------------------------------------------------------
-# IMPORTANT: Set AD7405/ADuM7701 operation and interface mode
+# IMPORTANT: Set AD7405/ADuM7701/ADuM7801/ADuM7802/ADuM7811/ADuM7812 operation and interface mode
 #
 #    LVDS_CMOS_N - Defines the type of the data line:
-#    single ended (ADuM7701, AD7403) or differential (AD7405)
+#    single ended (AD7403, ADuM7701, ADuM7801/ADuM7802/ADuM7811/ADuM7812) or differential (AD7405)
 #
 # LEGEND: single ended - 0
 #         differential - 1

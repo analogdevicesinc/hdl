@@ -11,6 +11,13 @@
 |---------------------------------------------|--------------------------------------------------------|
 | [AD7405](https://www.analog.com/ad7405)     | 16-Bit, Isolated Sigma-Delta Modulator, LVDS Interface |
 | [AD7403](https://www.analog.com/ad7403)     | 16-Bit, Isolated Sigma-Delta Modulator                 |
+| [ADuM7701](https://www.analog.com/adum7701) | 16-Bit, Isolated Sigma-Delta Modulator                 |
+| [ADuM7702](https://www.analog.com/adum7702) | 16-Bit, Isolated Sigma-Delta Modulator                 |
+| [ADuM7703](https://www.analog.com/adum7703) | 16-Bit, Isolated Sigma-Delta Modulator                 |
+| [ADuM7801](https://www.analog.com/adum7801) | 16-Bit, Isolated Sigma-Delta Modulator                 |
+| [ADuM7802](https://www.analog.com/adum7802) | 16-Bit, Isolated Sigma-Delta Modulator                 |
+| [ADuM7811](https://www.analog.com/adum7811) | 16-Bit, Isolated Sigma-Delta Modulator                 |
+| [ADuM7812](https://www.analog.com/adum7812) | 16-Bit, Isolated Sigma-Delta Modulator                 |
 
 ## Building the project
 
