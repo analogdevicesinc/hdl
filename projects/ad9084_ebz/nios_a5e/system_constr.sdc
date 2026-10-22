@@ -5,15 +5,15 @@
 
 source ../../common/nios_a5e/system_constr.sdc
 
-## Default configuration: 8B10B, 6.75 Gbps lane rate
-##   REF_CLK_RATE    = 6750 / 40 = 168.75 MHz -> 5.926 ns
-##   DEVICE_CLK_RATE = 168.75 MHz
+## Default configuration: 8B10B, 13.5 Gbps lane rate
+##   REF_CLK_RATE    = 13500 / 40 = 337.5 MHz -> 2.963 ns
+##   DEVICE_CLK_RATE = 337.5 MHz
 ## When changing the lane rate these have to be updated as well!
 
-create_clock  -period "5.9259 ns"  -name ref_clk_a      [get_ports {fpga_refclk_in_a}]
-create_clock  -period "5.9259 ns"  -name ref_clk_b      [get_ports {fpga_refclk_in_b}]
-create_clock  -period "5.9259 ns"  -name rx_device_clk  [get_ports {rx_device_clk}]
-create_clock  -period "5.9259 ns"  -name tx_device_clk  [get_ports {tx_device_clk}]
+create_clock  -period "2.96296 ns"  -name ref_clk_a      [get_ports {fpga_refclk_in_a}]
+create_clock  -period "2.96296 ns"  -name ref_clk_b      [get_ports {fpga_refclk_in_b}]
+create_clock  -period "2.96296 ns"  -name rx_device_clk  [get_ports {rx_device_clk}]
+create_clock  -period "2.96296 ns"  -name tx_device_clk  [get_ports {tx_device_clk}]
 
 derive_clock_uncertainty
 

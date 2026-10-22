@@ -13,6 +13,13 @@ source $ad_hdl_dir/projects/common/intel/dacfifo_qsys.tcl
 source $ad_hdl_dir/projects/common/intel/adcfifo_qsys.tcl
 source $ad_hdl_dir/projects/common/nios_a5e/nios_a5e_system_qsys.tcl
 
+# The JESD204 PHYs get their own reset sequencer (gts_reset_phy); the carrier's
+# would be left with an unloaded o_pma_cu_clk, a Design Assistant IPC-40039
+# critical violation.
+
+remove_interface o_pma_cu_clk
+remove_instance gts_reset
+
 set jesd_mode $ad_project_params(JESD_MODE)
 
 set jesd204_ref_clock [format {%.6f} $ad_project_params(REF_CLK_RATE)]
@@ -32,6 +39,13 @@ if [info exists ad_project_dir] {
 } else {
   source ../common/ad9084_ebz_qsys.tcl
 }
+
+# In 8B10B mode the TX device clock is lane rate / 40 (337.5 MHz at 13.5 Gbps),
+# too fast for the offload read address to reach every M20K of the buffer in
+# one cycle.
+
+set_instance_parameter_value $dac_data_offload_name {RD_ADDRESS_REGISTERED} {1}
+set_instance_parameter_value apollo_tx_upack {PIPELINE_STAGES} {1}
 
 # GTS system PLL
 #

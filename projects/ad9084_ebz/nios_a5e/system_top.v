@@ -151,7 +151,6 @@ module system_top #(
   wire          sys_cpu_clk;
   wire          ninit_done;
   wire          sys_reset_n;
-  wire          pma_cu_clk;
 
   wire          syspll_clk_a;
   wire          syspll_lock_a;
@@ -364,7 +363,6 @@ module system_top #(
     .rst_ninit_done                                             (ninit_done),
 
     .pr_rom_data_nc_rom_data                                    ('h0),
-    .o_pma_cu_clk_clk                                           (pma_cu_clk),
 
     .emif_mem_0_mem_cke                                         (emif_mem_cke),
     .emif_mem_0_mem_odt                                         (emif_mem_odt),
