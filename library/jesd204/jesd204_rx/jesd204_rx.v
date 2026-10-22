@@ -169,10 +169,10 @@ module jesd204_rx #(
     MAX_BEATS_PER_MULTIFRAME > 2 ? 2 : 1;
 
   /* Helper for common expressions */
-  localparam DW = 8*DATA_PATH_WIDTH*NUM_LANES;
+  localparam DW = 8*DATA_PATH_WIDTH;
   localparam ODW = 8*TPL_DATA_PATH_WIDTH*NUM_LANES;
-  localparam CW = DATA_PATH_WIDTH*NUM_LANES;
-  localparam HW = 2*NUM_LANES;
+  localparam CW = DATA_PATH_WIDTH;
+  localparam HW = 2;
 
   wire [7:0] cfg_beats_per_multiframe = cfg_octets_per_multiframe >> DPW_LOG2;
   wire [7:0] device_cfg_beats_per_multiframe_s;
@@ -189,11 +189,6 @@ module jesd204_rx #(
 
   reg eof_reset = 1'b1;
 
-  wire [DW-1:0] phy_data_r;
-  wire [HW-1:0] phy_header_r;
-  wire [CW-1:0] phy_charisk_r;
-  wire [CW-1:0] phy_notintable_r;
-  wire [CW-1:0] phy_disperr_r;
   wire [NUM_LANES-1:0] phy_block_sync_r;
 
   wire [ODW-1:0] rx_data_s;
@@ -247,28 +242,6 @@ module jesd204_rx #(
     buffer_release_d1 <= ~buffer_release_n;
     eof_reset <= buffer_release_n;
   end
-
-  util_pipeline_stage #(
-    .WIDTH(NUM_LANES + (3 * CW) + HW + DW),
-    .REGISTERED(NUM_INPUT_PIPELINE)
-  ) i_input_pipeline_stage (
-    .clk(clk),
-    .in({
-      phy_data,
-      phy_header,
-      phy_charisk,
-      phy_notintable,
-      phy_disperr,
-      phy_block_sync
-    }),
-    .out({
-      phy_data_r,
-      phy_header_r,
-      phy_charisk_r,
-      phy_notintable_r,
-      phy_disperr_r,
-      phy_block_sync_r
-    }));
 
   util_pipeline_stage #(
     .WIDTH(ODW+2),
@@ -387,6 +360,29 @@ module jesd204_rx #(
     localparam C_START = i * DATA_PATH_WIDTH;
     localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
 
+    wire [DW-1:0] phy_data_r;
+    wire [CW-1:0] phy_charisk_r;
+    wire [CW-1:0] phy_notintable_r;
+    wire [CW-1:0] phy_disperr_r;
+
+    util_pipeline_stage #(
+      .WIDTH((3 * CW) + DW),
+      .REGISTERED(NUM_INPUT_PIPELINE)
+    ) i_input_pipeline_stage (
+      .clk(clk),
+      .in({
+        phy_data[D_STOP:D_START],
+        phy_charisk[C_STOP:C_START],
+        phy_notintable[C_STOP:C_START],
+        phy_disperr[C_STOP:C_START]
+      }),
+      .out({
+        phy_data_r,
+        phy_charisk_r,
+        phy_notintable_r,
+        phy_disperr_r
+      }));
+
     jesd204_rx_lane #(
       .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
       .TPL_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
@@ -404,10 +400,10 @@ module jesd204_rx #(
       .device_clk(device_clk),
       .device_reset(device_reset),
 
-      .phy_data(phy_data_r[D_STOP:D_START]),
-      .phy_charisk(phy_charisk_r[C_STOP:C_START]),
-      .phy_notintable(phy_notintable_r[C_STOP:C_START]),
-      .phy_disperr(phy_disperr_r[C_STOP:C_START]),
+      .phy_data(phy_data_r),
+      .phy_charisk(phy_charisk_r),
+      .phy_notintable(phy_notintable_r),
+      .phy_disperr(phy_disperr_r),
 
       .cgs_reset(cgs_reset[i]),
       .cgs_ready(cgs_ready[i]),
@@ -553,6 +549,25 @@ module jesd204_rx #(
     (* dont_touch = "yes" *) reg err_statistics_reset_64b;
     (* dont_touch = "yes" *) reg event_data_phase_int = 1'b0;
 
+    wire [DW-1:0] phy_data_r;
+    wire [HW-1:0] phy_header_r;
+
+    (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+      .WIDTH(1 + HW + DW),
+      .REGISTERED(NUM_INPUT_PIPELINE)
+    ) i_input_pipeline_stage (
+      .clk(clk),
+      .in({
+        phy_data[D_STOP:D_START],
+        phy_header[H_STOP:H_START],
+        phy_block_sync[i]
+      }),
+      .out({
+        phy_data_r,
+        phy_header_r,
+        phy_block_sync_r[i]
+      }));
+
     // Pipeline the aggregated ready status at the lane, so that the OR reduce
     // and the route out to the channel become a register to register path with
     // no logic behind it. The lane moves its evaluation point by the same
@@ -606,8 +621,8 @@ module jesd204_rx #(
       .device_clk(device_clk),
       .device_reset(device_reset),
 
-      .phy_data(phy_data_r[D_STOP:D_START]),
-      .phy_header(phy_header_r[H_STOP:H_START]),
+      .phy_data(phy_data_r),
+      .phy_header(phy_header_r),
       .phy_block_sync(phy_block_sync_r[i]),
 
       .cfg_disable_scrambler(cfg_disable_scrambler),
