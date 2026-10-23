@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Typical project HDL block diagram -->
+<svg
+   width="1020"
+   height="1160"
+   viewBox="0 0 1020 1160"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="base_platform.svg"
+   inkscape:version="1.4"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview id="namedview1" pagecolor="#ffffff" bordercolor="#000000" borderopacity="0.25"
+     inkscape:showpageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" inkscape:document-units="px" />
+  <defs id="defs1">
+    <marker id="ArrowBlack" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="5" markerHeight="5"
+       orient="auto" style="overflow:visible">
+      <path id="ArrowBlackPath" d="M 0,0 L 10,5 L 0,10 Z" style="fill:#000000;stroke:none" />
+    </marker>
+  </defs>
+  <g inkscape:groupmode="layer" inkscape:label="Border" id="layer_border">
+    <rect id="fpga_border" x="20" y="110" width="970" height="1040" style="fill:none;stroke:#000000;stroke-width:2" />
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="Clock domains" id="layer_clock_domains">
+    <rect id="domain_dma_clk" x="50" y="290" width="241" height="840" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,4" />
+    <text id="label_domain_dma_clk" x="58" y="1124" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:10.6667px;fill:#754d00">dma_clk</text>
+    <rect id="domain_tx_device_clk" x="299" y="290" width="501" height="400" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,4" />
+    <rect id="domain_tx_lane_rate" x="830" y="290" width="130" height="400" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,4" />
+    <text id="label_domain_tx_device_clk_0" x="307" y="305" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:10.6667px;fill:#754d00">TX Global Clock = tx_device_clk = (JESD204C) TX Lane Rate/66</text>
+    <text id="label_domain_tx_device_clk_1" x="463" y="318" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:10.6667px;fill:#754d00">= (JESD204B) TX Lane Rate/40</text>
+    <text id="label_domain_tx_lane_rate" x="838" y="305" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:10.6667px;fill:#754d00">TX Lane Rate</text>
+    <rect id="domain_rx_device_clk" x="299" y="715" width="501" height="415" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,4" />
+    <rect id="domain_rx_lane_rate" x="830" y="715" width="130" height="415" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,4" />
+    <text id="label_domain_rx_device_clk_0" x="307" y="1108" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:10.6667px;fill:#754d00">RX Global Clock = rx_device_clk = (JESD204C) RX Lane Rate/66</text>
+    <text id="label_domain_rx_device_clk_1" x="464.8" y="1121" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:10.6667px;fill:#754d00">= (JESD204B) RX Lane Rate/40</text>
+    <text id="label_domain_rx_lane_rate" x="838" y="1108" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:10.6667px;fill:#754d00">RX Lane Rate</text>
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="Connections" id="layer_connections">
+    <path id="clk_tx_device_clk" d="M 970,400 H 782 V 670 H 320 V 640" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowBlack)" />
+    <path id="clk_tx_link_clk" d="M 782,580 H 760" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowBlack)" />
+    <circle id="dot_tx_link_clk" cx="782" cy="580" r="4" style="fill:#000000;stroke:none" />
+    <path id="clk_tx_pack" d="M 430.0,670 V 640" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowBlack)" />
+    <circle id="dot_tx_pack" cx="430" cy="670" r="4" style="fill:#000000;stroke:none" />
+    <path id="clk_tx_tpl" d="M 565.0,670 V 640" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowBlack)" />
+    <circle id="dot_tx_tpl" cx="565" cy="670" r="4" style="fill:#000000;stroke:none" />
+    <path id="clk_tx_link" d="M 715.0,670 V 640" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowBlack)" />
+    <circle id="dot_tx_link" cx="715" cy="670" r="4" style="fill:#000000;stroke:none" />
+    <path id="clk_rx_device_clk" d="M 970,1010 H 782 V 1075 H 320 V 1045" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowBlack)" />
+    <path id="clk_rx_link_clk" d="M 782,1010 V 985 H 760" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowBlack)" />
+    <circle id="dot_rx_link_clk" cx="782" cy="1010" r="4" style="fill:#000000;stroke:none" />
+    <path id="clk_rx_pack" d="M 430.0,1075 V 1045" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowBlack)" />
+    <circle id="dot_rx_pack" cx="430" cy="1075" r="4" style="fill:#000000;stroke:none" />
+    <path id="clk_rx_tpl" d="M 565.0,1075 V 1045" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowBlack)" />
+    <circle id="dot_rx_tpl" cx="565" cy="1075" r="4" style="fill:#000000;stroke:none" />
+    <path id="clk_rx_link" d="M 715.0,1075 V 1045" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowBlack)" />
+    <circle id="dot_rx_link" cx="715" cy="1075" r="4" style="fill:#000000;stroke:none" />
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="Data path" id="layer_data_path">
+    <path id="tx_bus_0" d="M 70,474 H 114 V 468 L 130,485 L 114,502 V 496 H 70 Z" style="fill:#0f3296;stroke:none" />
+    <path id="tx_bus_1" d="M 190,474 H 234 V 468 L 250,485 L 234,502 V 496 H 190 Z" style="fill:#0f3296;stroke:none" />
+    <path id="tx_bus_2" d="M 340,474 H 384 V 468 L 400,485 L 384,502 V 496 H 340 Z" style="fill:#0f3296;stroke:none" />
+    <path id="tx_bus_3" d="M 610,474 H 654 V 468 L 670,485 L 654,502 V 496 H 610 Z" style="fill:#0f3296;stroke:none" />
+    <path id="tx_bus_4" d="M 760,474 H 844 V 468 L 860,485 L 844,502 V 496 H 760 Z" style="fill:#0f3296;stroke:none" />
+    <path id="tx_bus_ch0" d="M 460,419 H 504 V 413 L 520,430 L 504,447 V 441 H 460 Z" style="fill:#0f3296;stroke:none" />
+    <path id="tx_bus_ch1" d="M 460,529 H 504 V 523 L 520,540 L 504,557 V 551 H 460 Z" style="fill:#0f3296;stroke:none" />
+    <circle id="tx_bus_ch_dots_0" cx="490" cy="471" r="3" style="fill:#000000;stroke:none" />
+    <circle id="tx_bus_ch_dots_1" cx="490" cy="485" r="3" style="fill:#000000;stroke:none" />
+    <circle id="tx_bus_ch_dots_2" cx="490" cy="499" r="3" style="fill:#000000;stroke:none" />
+    <path id="rx_bus_0" d="M 130,879 H 86 V 873 L 70,890 L 86,907 V 901 H 130 Z" style="fill:#a01414;stroke:none" />
+    <path id="rx_bus_1" d="M 250,879 H 206 V 873 L 190,890 L 206,907 V 901 H 250 Z" style="fill:#a01414;stroke:none" />
+    <path id="rx_bus_2" d="M 400,879 H 356 V 873 L 340,890 L 356,907 V 901 H 400 Z" style="fill:#a01414;stroke:none" />
+    <path id="rx_bus_3" d="M 670,879 H 626 V 873 L 610,890 L 626,907 V 901 H 670 Z" style="fill:#a01414;stroke:none" />
+    <path id="rx_bus_4" d="M 860,879 H 776 V 873 L 760,890 L 776,907 V 901 H 860 Z" style="fill:#a01414;stroke:none" />
+    <path id="rx_bus_ch0" d="M 520,824 H 476 V 818 L 460,835 L 476,852 V 846 H 520 Z" style="fill:#a01414;stroke:none" />
+    <path id="rx_bus_ch1" d="M 520,934 H 476 V 928 L 460,945 L 476,962 V 956 H 520 Z" style="fill:#a01414;stroke:none" />
+    <circle id="rx_bus_ch_dots_0" cx="490" cy="876" r="3" style="fill:#000000;stroke:none" />
+    <circle id="rx_bus_ch_dots_1" cx="490" cy="890" r="3" style="fill:#000000;stroke:none" />
+    <circle id="rx_bus_ch_dots_2" cx="490" cy="904" r="3" style="fill:#000000;stroke:none" />
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="Blocks" id="layer_blocks">
+    <rect id="blk_processor" x="50" y="135" width="300" height="130" style="fill:#e5e5e5;stroke:#000000;stroke-width:2" />
+    <path id="lbl_processor_divider" d="M 70.0,203 H 330.0" style="fill:none;stroke:#000000;stroke-width:2" />
+    <rect id="blk_cell_timer" x="350" y="135" width="45" height="130" style="fill:#e5e5e5;stroke:#000000;stroke-width:2" />
+    <rect id="blk_cell_interrupts" x="395" y="135" width="45" height="130" style="fill:#e5e5e5;stroke:#000000;stroke-width:2" />
+    <rect id="blk_cell_ddrx" x="440" y="135" width="45" height="130" style="fill:#e5e5e5;stroke:#000000;stroke-width:2" />
+    <rect id="blk_cell_ethernet" x="485" y="135" width="45" height="130" style="fill:#e5e5e5;stroke:#000000;stroke-width:2" />
+    <rect id="blk_cell_uart" x="530" y="135" width="45" height="130" style="fill:#e5e5e5;stroke:#000000;stroke-width:2" />
+    <rect id="blk_cell_i2c" x="575" y="135" width="45" height="130" style="fill:#e5e5e5;stroke:#000000;stroke-width:2" />
+    <rect id="blk_cell_spi" x="620" y="135" width="45" height="130" style="fill:#e5e5e5;stroke:#000000;stroke-width:2" />
+    <rect id="blk_mem_interconnect" x="30" y="330" width="40" height="715" style="fill:#e5e5e5;stroke:#000000;stroke-width:2" />
+    <rect id="blk_connector" x="970" y="330" width="40" height="715" style="fill:#e5e5e5;stroke:#000000;stroke-width:2" />
+    <rect id="blk_xcvr" x="860" y="430" width="80" height="542" style="fill:#9bd79a;stroke:#338c3c;stroke-width:2" />
+    <rect id="blk_tx_dma" x="130" y="330" width="60" height="310" style="fill:#d2e6eb;stroke:#0f3296;stroke-width:2" />
+    <rect id="blk_tx_do" x="250" y="330" width="90" height="310" style="fill:#d2e6eb;stroke:#0f3296;stroke-width:2" />
+    <rect id="blk_tx_pack" x="400" y="330" width="60" height="310" style="fill:#d2e6eb;stroke:#0f3296;stroke-width:2" />
+    <rect id="blk_tx_tpl" x="520" y="330" width="90" height="310" style="fill:#d2e6eb;stroke:#0f3296;stroke-width:2" />
+    <rect id="blk_tx_link" x="670" y="330" width="90" height="310" style="fill:#d2e6eb;stroke:#0f3296;stroke-width:2" />
+    <rect id="blk_rx_dma" x="130" y="735" width="60" height="310" style="fill:#ffcccc;stroke:#a01414;stroke-width:2" />
+    <rect id="blk_rx_do" x="250" y="735" width="90" height="310" style="fill:#ffcccc;stroke:#a01414;stroke-width:2" />
+    <rect id="blk_rx_pack" x="400" y="735" width="60" height="310" style="fill:#ffcccc;stroke:#a01414;stroke-width:2" />
+    <rect id="blk_rx_tpl" x="520" y="735" width="90" height="310" style="fill:#ffcccc;stroke:#a01414;stroke-width:2" />
+    <rect id="blk_rx_link" x="670" y="735" width="90" height="310" style="fill:#ffcccc;stroke:#a01414;stroke-width:2" />
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="Text" id="layer_text">
+    <text id="title_carrier_0" x="827" y="195" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:20px;fill:#000000;text-anchor:middle">A10GX/A10SOC</text>
+    <text id="title_carrier_1" x="827" y="237" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:20px;fill:#000000;text-anchor:middle">KCU105/ZCU102</text>
+    <text id="lbl_processor_0" x="200" y="190" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:20px;fill:#000000;text-anchor:middle">Microblaze / Nios II</text>
+    <text id="lbl_processor_1" x="200" y="235" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:20px;fill:#000000;text-anchor:middle">SoC / Zynq</text>
+    <text id="lbl_cell_timer" x="0" y="0" transform="translate(378,200) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">Timer</text>
+    <text id="lbl_cell_interrupts" x="0" y="0" transform="translate(423,200) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">Interrupts</text>
+    <text id="lbl_cell_ddrx" x="0" y="0" transform="translate(468,200) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">DDRx</text>
+    <text id="lbl_cell_ethernet" x="0" y="0" transform="translate(513,200) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">Ethernet</text>
+    <text id="lbl_cell_uart" x="0" y="0" transform="translate(558,200) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">UART</text>
+    <text id="lbl_cell_i2c" x="0" y="0" transform="translate(603,200) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">I2C</text>
+    <text id="lbl_cell_spi" x="0" y="0" transform="translate(648,200) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">SPI</text>
+    <text id="lbl_mem_interconnect_0" x="0" y="0" transform="translate(56.5,687.5) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">MEMORY INTERCONNECT</text>
+    <text id="lbl_connector_0" x="0" y="0" transform="translate(996.5,687.5) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">FMC CONNECTOR</text>
+    <text id="lbl_xcvr_0" x="0" y="0" transform="translate(906.5,701) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">JESD PHY</text>
+    <text id="lbl_tx_dma_0" x="0" y="0" transform="translate(166.5,485) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">TX DMA</text>
+    <text id="lbl_tx_do_0" x="0" y="0" transform="translate(301.5,485) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">TX DATA OFFLOAD</text>
+    <text id="lbl_tx_pack_0" x="0" y="0" transform="translate(436.5,485) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">TX UPACK</text>
+    <text id="lbl_tx_tpl_0" x="0" y="0" transform="translate(571.5,485) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">TX JESD TPL</text>
+    <text id="lbl_tx_link_0" x="0" y="0" transform="translate(721.5,485) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">TX JESD LINK</text>
+    <text id="txt_tx_device_clk" x="952" y="393" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:end">tx_device_clk</text>
+    <text id="port_tx_link_link_clk" x="752" y="585" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:end">link_clk</text>
+    <text id="port_tx_do_0" x="295" y="612" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">m_axis_</text>
+    <text id="port_tx_do_1" x="295" y="630" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">aclk</text>
+    <text id="port_tx_pack_0" x="430" y="630" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">clk</text>
+    <text id="port_tx_tpl_0" x="565" y="630" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">link_clk</text>
+    <text id="port_tx_link_0" x="715" y="630" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">device_clk</text>
+    <text id="lbl_rx_dma_0" x="0" y="0" transform="translate(166.5,890) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">RX DMA</text>
+    <text id="lbl_rx_do_0" x="0" y="0" transform="translate(301.5,890) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">RX DATA OFFLOAD</text>
+    <text id="lbl_rx_pack_0" x="0" y="0" transform="translate(436.5,890) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">RX CPACK</text>
+    <text id="lbl_rx_tpl_0" x="0" y="0" transform="translate(571.5,890) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">RX JESD TPL</text>
+    <text id="lbl_rx_link_0" x="0" y="0" transform="translate(721.5,890) rotate(-90)" style="font-family:Arial;-inkscape-font-specification:'Arial Bold';font-weight:bold;font-size:18.6667px;fill:#000000;text-anchor:middle">RX JESD LINK</text>
+    <text id="txt_rx_device_clk" x="952" y="1003" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:end">rx_device_clk</text>
+    <text id="port_rx_link_link_clk" x="752" y="990" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:end">link_clk</text>
+    <text id="port_rx_do_0" x="295" y="1017" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">s_axis_</text>
+    <text id="port_rx_do_1" x="295" y="1035" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">aclk</text>
+    <text id="port_rx_pack_0" x="430" y="1035" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">clk</text>
+    <text id="port_rx_tpl_0" x="565" y="1035" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">link_clk</text>
+    <text id="port_rx_link_0" x="715" y="1035" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle">device_clk</text>
+  </g>
+  <g inkscape:groupmode="layer" inkscape:label="Legend" id="layer_legend">
+    <rect id="leg_box_0" x="20" y="18" width="24" height="12" style="fill:#d2e6eb;stroke:#0f3296;stroke-width:2" />
+    <text id="leg_txt_0" x="52" y="28.5" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:12px;fill:#000000">Transmit path</text>
+    <rect id="leg_box_1" x="20" y="38" width="24" height="12" style="fill:#ffcccc;stroke:#a01414;stroke-width:2" />
+    <text id="leg_txt_1" x="52" y="48.5" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:12px;fill:#000000">Receive path</text>
+    <rect id="leg_box_2" x="20" y="58" width="24" height="12" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:4,2" />
+    <text id="leg_txt_2" x="52" y="68.5" style="font-family:Arial;-inkscape-font-specification:Arial;font-weight:normal;font-size:12px;fill:#000000">Clock domain</text>
+  </g>
+</svg>
