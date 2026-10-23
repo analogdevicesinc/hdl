@@ -429,6 +429,46 @@ module spi_translator_tb;
     check("whole transfer sent", d3.count, c3 + 4);
     check("last byte", d3.mem[c3+3], 8'h64);
 
+    // CTRL_W acts at once: several per frame, and a CTRL_R after one reads
+    // the new value; replies land at rxb[6] and rxb[8]
+
+    begin_frame();
+    put16(`BR_CTRL_W(8'h04, 8'h11)); put16(`BR_CTRL_W(8'h0d, 8'h22));
+    put16(`BR_CTRL_R(8'h04)); put16(`BR_CTRL_R(8'h0d)); put16(`BR_NOP);
+    send_frame();
+    check("read after write SCRATCH", rxb[6], 8'h11);
+    check("read after write GPIO_OUT", rxb[8], 8'h22);
+    check("two CTRL_W accepted", err, 3'h0);
+
+    // a CTRL_W stays applied when the rest of its frame is rejected
+
+    c3 = d3.count;
+    begin_frame();
+    put16(`BR_CTRL_W(8'h04, 8'h77));
+    put16(`CS(8'hf7)); put16(`WR(2)); put8(8'haa);
+    send_frame();
+    check("truncated after CTRL_W", err, 3'h4);
+    check("truncated write not sent", d3.count, c3);
+    ctrl_r(8'h04, v); check("CTRL_W kept", v, 8'h77);
+
+    // FLUSH in the middle of a frame drops what came before it, keeps what
+    // follows, and clears err; the engine restarts from its reset settings
+
+    c3 = d3.count;
+    cs3_releases = 0;
+    begin_frame();
+    put16(`CS(8'hf7)); put16(`WR(1)); put8(8'hee);
+    put16(`BR_FLUSH);
+    put16(`CFG(2'd2)); put16(`PRESCALE(8'h04));
+    put16(`CS(8'hf7)); put16(`WR(1)); put8(8'h5a); put16(`CS(8'hff));
+    send_frame();
+    wait_idle();
+    check("err cleared by mid-frame FLUSH", err, 3'h0);
+    check("only the part after FLUSH sent", d3.count, c3 + 1);
+    check("byte after FLUSH", d3.mem[c3], 8'h5a);
+    check("one transaction after FLUSH", cs3_releases, 1);
+    check("SCLK idle vs CPOL after FLUSH", d3.mode_err, 1'b0);
+
     // FETCH: a rejected FETCH frame returns the data but leaves it queued
 
     //c3 = d3.count;
@@ -538,7 +578,7 @@ module spi_translator_tb;
     //check("err after half instr", err, 4'h4);
     //begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
-    // bridge register write: applied at the end of a good frame
+    // bridge register write: applied as soon as it is decoded
 
     //begin_frame(); put16(`BR_CTRL_W(8'h04, 8'h3c)); send_frame(); wait_idle();
     //check("CTRL_W address", i_dut.reg_wr_addr, 8'h04);
