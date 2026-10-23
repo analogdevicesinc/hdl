@@ -286,9 +286,10 @@ STATUS
      - Free space in eighths of the fuller of the CMD and SDO FIFOs,
        saturated at 7. Exact values are in CMD_ROOM and SDO_ROOM.
 
-GPIO writes take effect at the end of their frame, not in order with engine
-instructions queued before them. To change a GPIO after earlier traffic has
-run, for example to release a reset, wait for BUSY to clear first.
+GPIO writes take effect as soon as their CTRL_W is decoded, not in order with
+engine instructions: queued instructions, including those of the same frame,
+run after the change. To change a GPIO after earlier traffic has run, for
+example to release a reset, wait for BUSY to clear first.
 
 Theory of Operation
 --------------------------------------------------------------------------------
@@ -311,6 +312,10 @@ Engine instructions are written into the CMD FIFO and their SDO bytes into the
 SDO FIFO as they arrive. At CS deassert the decoder either commits the frame to
 both FIFOs in the same cycle, or rolls both back. Frame *k* executes while
 frame *k + 1* is being received.
+
+Bridge instructions act during the frame instead: CTRL_R and FETCH reply on
+MISO, CTRL_W and FLUSH take effect as soon as they are decoded, and only the
+bytes a FETCH reads wait for the commit to be released.
 
 Bridge instructions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -337,8 +342,7 @@ bridge and are never forwarded. Their high byte is ``{1, op[2:0], addr[3:0]}``.
    * - ``0xAadd``
      - 2
      - CTRL_W
-     - At the end of a good frame, write ``dd`` to register ``a``. At most one
-       per frame.
+     - Write ``dd`` to register ``a``, immediately.
    * - ``0xBa00``
      - 3
      - CTRL_R
@@ -346,12 +350,26 @@ bridge and are never forwarded. Their high byte is ``{1, op[2:0], addr[3:0]}``.
    * - ``0xC0xx``
      - 4
      - FLUSH
-     - At the end of a good frame, drop all queued work and SDI data, reset
-       the engine (deasserting every downstream CS), clear the ERR bits.
+     - Immediately drop all queued work and SDI data, including the earlier
+       part of its own frame, reset the engine (deasserting every downstream
+       CS) and clear the ERR bits.
 
 Opcodes 5 to 7 are reserved. ``addr`` must be 0 for NOP, FETCH and FLUSH, and
 the low byte of CTRL_R must be ``0x00``. FETCH filler bytes are ignored.
 Bridge and engine instructions can be mixed in one frame.
+
+CTRL_W and FLUSH take effect about four ``clk`` cycles after their low byte,
+as long as nothing earlier in the frame has failed: an instruction after an
+error may be misaligned data, so it is ignored. They are not undone if the
+frame is rejected later; register writes are absolute and FLUSH is idempotent,
+so resending the frame is harmless. Consequently:
+
+- several CTRL_W can be sent in one frame, and a CTRL_R after a CTRL_W reads
+  the new value;
+- the instructions after a FLUSH are kept and committed normally, so a frame
+  such as ``FLUSH, CFG, PRESCALE, CS, ...`` recovers and starts again. The
+  engine restarts from its reset configuration, so the frame sets the mode and
+  clock again.
 
 Replies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -413,8 +431,9 @@ Validation and errors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A frame that fails any check is rolled back as a unit: nothing from it reaches
-a downstream device, its FETCH reads are rewound, its CTRL_W and FLUSH are not
-applied, and the matching ERR bit in STATUS is set.
+a downstream device, its FETCH reads are rewound, and the matching ERR bit in
+STATUS is set. CTRL_W and FLUSH decoded before the failure stay applied;
+those after it are ignored.
 
 .. list-table::
    :header-rows: 1
@@ -424,7 +443,7 @@ applied, and the matching ERR bit in STATUS is set.
    * - 3
      - Bad instruction: engine class ``101`` to ``111``, bridge opcode 5 to 7,
        reserved TRANSFER, WRITE or bridge fields, a CHIPSELECT selecting more
-       than one target, a word length outside 1..8, or more than one CTRL_W.
+       than one target, or a word length outside 1..8.
    * - 4
      - The frame does not fit in the room left in the CMD or SDO FIFO.
    * - 5
@@ -570,6 +589,23 @@ a stock core, the engine has three free WRITE addresses and no read-back, and
 registers such as ERR clear or FLUSH must act immediately, not when the engine
 reaches them behind queued frames.
 
+Immediate CTRL_W and FLUSH
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+CTRL_W and FLUSH act as soon as they are decoded rather than at the commit.
+This allows several register writes per frame, read-after-write within a frame,
+and a FLUSH that recovers and restarts in one frame. The cost is that they are
+not part of the frame's all-or-nothing: if the frame is rejected later, they
+stay applied. Without a CRC that loses nothing, since a corrupted CTRL_W would
+be applied at the commit just the same. When CRC checkpoints are added, they
+become the point at which CTRL_W and FLUSH take effect, keeping them protected
+without returning to commit-time writes.
+
+Immediate does not mean ordered with SPI traffic: the frame's engine
+instructions only run after the commit, so a GPIO written by CTRL_W changes
+before them. Timed GPIO sequences would need a GPIO instruction stored in the
+CMD FIFO and executed by the bridge at the FIFO output, once the engine is idle.
+
 Framing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -583,7 +619,10 @@ Current limitations
 --------------------------------------------------------------------------------
 
 - **No CRC.** A corrupted frame that still parses is executed, and corrupted
-  MISO data is not detected. A frame trailer carrying a CRC is planned.
+  MISO data is not detected. A checkpoint instruction carrying a CRC over
+  everything since the previous one is planned; CTRL_W and FLUSH will then take
+  effect when the next checkpoint passes, so their meaning for the host stays
+  the same.
 - **No status byte on MISO.** Status is read through CTRL_R of STATUS; sending
   it in the first MISO byte of every frame, with the last SYNC id in the
   second, is planned.
