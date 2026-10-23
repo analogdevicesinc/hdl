@@ -36,6 +36,8 @@ Supported carriers
 +--------------------+          |          |
 | :adi:`EVAL-AD4857` |          |          |
 +--------------------+----------+----------+
+| :adi:`EVAL-AD4858` | ZCU102   | FMC HPC0 |
++--------------------+----------+----------+
 
 Block design
 -------------------------------------------------------------------------------
@@ -55,6 +57,52 @@ AD4857_FMCZ Block diagram
    :width: 800
    :align: center
    :alt: AD4857_FMCZ/ZED block diagram
+
+AD4858_FMCZ/ZCU102 Block diagram
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The diagram shows the default configuration of the ZCU102 project (CMOS
+interface).
+
+.. image:: ad485x_fmcz_zcu102_hdl_bd.svg
+   :width: 800
+   :align: center
+   :alt: AD4858_FMCZ/ZCU102 block diagram
+
+.. collapsible:: Click here for details on the block diagram modules
+
+   .. list-table::
+      :widths: 10 20 35 35
+      :header-rows: 1
+
+      * - Block name
+        - IP name
+        - Documentation
+        - Additional info
+      * - AXI_AD485x
+        - :git-hdl:`axi_ad485x <library/axi_ad485x>`
+        - :ref:`axi_ad485x`
+        - 8 channels, 32-bit ``adc_data_[7:0]``, clocked by ``adc_clk``
+      * - CPACK
+        - :git-hdl:`util_cpack2 <library/util_pack/util_cpack2>`
+        - :ref:`util_cpack2`
+        - Packs 8 x 32-bit samples into a 256-bit word
+      * - DMA
+        - :git-hdl:`axi_dmac <library/axi_dmac>`
+        - :ref:`axi_dmac`
+        - Rx only; 256-bit stream source, 64-bit memory-mapped destination
+      * - AXI_PWM_GEN
+        - :git-hdl:`axi_pwm_gen <library/axi_pwm_gen>`
+        - :ref:`axi_pwm_gen`
+        - Generates the conversion start signal ``cnvs``
+      * - AXI_CLKGEN
+        - :git-hdl:`axi_clkgen <library/axi_clkgen>`
+        - :ref:`axi_clkgen`
+        - Generates ``adc_clk`` (200 MHz) from ``sys_200m_clk``
+      * - AXI_SYSID
+        - :git-hdl:`axi_sysid <library/axi_sysid>`
+        - :ref:`axi_sysid`
+        - Instantiated together with ``sysid_rom``
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -87,7 +135,7 @@ The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL(see more at :ref:`architecture cpu-intercon-addr`).
 
 ============== ===========
-Instance       Zynq
+Instance       Zynq/ZynqMP
 ============== ===========
 axi_ad485x     0x43C0_0000
 axi_pwm_gen    0x43D0_0000
@@ -116,14 +164,14 @@ Interrupts
 
 Below are the Programmable Logic interrupts used in this project.
 
-================ === ========== ===========
-Instance name    HDL Linux Zynq Actual Zynq
-================ === ========== ===========
-axi_ad485x_dma   10  54         86
-================ === ========== ===========
+================ === ========== =========== ============ =============
+Instance name    HDL Linux Zynq Actual Zynq Linux ZynqMP Actual ZynqMP
+================ === ========== =========== ============ =============
+axi_ad485x_dma   10  54         86          106          138
+================ === ========== =========== ============ =============
 
 These are the board-specific interrupts
-(found in :git-hdl:`here <projects/ad485x_fmc/common/ad485x_bd.tcl>`).
+(found in :git-hdl:`here <projects/ad485x_fmcz/common/ad485x_fmcz_bd.tcl>`).
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -136,7 +184,7 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the project location (**projects/ad485x_fmc/carrier**) and run the
+Then go to the project location (**projects/ad485x_fmcz/carrier**) and run the
 make command by typing in your command prompt (this example is for
 `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__):
 
@@ -146,14 +194,30 @@ The default version of the interface is CMOS:
 
 .. shell:: bash
 
-   $cd hdl/projects/ad485x_fmc/zed
+   $cd hdl/projects/ad485x_fmcz/zed
    $make
 
 To build the LVDS version of the interface, run:
 
 .. shell:: bash
 
-   $cd hdl/projects/ad485x_fmc/zed
+   $cd hdl/projects/ad485x_fmcz/zed
+   $make LVDS_CMOS_N=1
+
+For the `ZCU102 <https://www.xilinx.com/products/boards-and-kits/ek-u1-zcu102-g.html>`__
+carrier, connect the evaluation board to the FMC HPC0 connector. The
+default interface is also CMOS:
+
+.. shell:: bash
+
+   $cd hdl/projects/ad485x_fmcz/zcu102
+   $make
+
+To build the LVDS version of the interface, run:
+
+.. shell:: bash
+
+   $cd hdl/projects/ad485x_fmcz/zcu102
    $make LVDS_CMOS_N=1
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user
@@ -168,13 +232,15 @@ Systems related
 Here you can find the quick start guides available for these evaluation boards:
 
 .. list-table::
-   :widths: 20 10
+   :widths: 20 10 10
    :header-rows: 1
 
    * - Evaluation board
      - Zynq-7000
+     - ZynqMP
    * - AD485x_FMCZ
      - :dokuwiki:`zed <resources/fpga/xilinx/fmc/ad485x>`
+     - ---
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
