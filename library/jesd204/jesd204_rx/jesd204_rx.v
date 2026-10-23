@@ -170,7 +170,7 @@ module jesd204_rx #(
 
   /* Helper for common expressions */
   localparam DW = 8*DATA_PATH_WIDTH;
-  localparam ODW = 8*TPL_DATA_PATH_WIDTH*NUM_LANES;
+  localparam ODW = 8*TPL_DATA_PATH_WIDTH;
   localparam CW = DATA_PATH_WIDTH;
   localparam HW = 2;
 
@@ -190,8 +190,6 @@ module jesd204_rx #(
   reg eof_reset = 1'b1;
 
   wire [NUM_LANES-1:0] phy_block_sync_r;
-
-  wire [ODW-1:0] rx_data_s;
 
   wire rx_valid_s = buffer_release_d1;
 
@@ -242,22 +240,6 @@ module jesd204_rx #(
     buffer_release_d1 <= ~buffer_release_n;
     eof_reset <= buffer_release_n;
   end
-
-  util_pipeline_stage #(
-    .WIDTH(ODW+2),
-    .REGISTERED(NUM_OUTPUT_PIPELINE)
-  ) i_output_pipeline_stage (
-    .clk(device_clk),
-    .in({
-      eof_reset,
-      rx_data_s,
-      rx_valid_s
-    }),
-    .out({
-      eof_reset_d,
-      rx_data,
-      rx_valid
-    }));
 
   // If input and output widths are symmetric keep the calculation for backwards
   // compatibility of the software.
@@ -364,6 +346,7 @@ module jesd204_rx #(
     wire [CW-1:0] phy_charisk_r;
     wire [CW-1:0] phy_notintable_r;
     wire [CW-1:0] phy_disperr_r;
+    wire [ODW-1:0] rx_data_s;
 
     util_pipeline_stage #(
       .WIDTH((3 * CW) + DW),
@@ -410,7 +393,7 @@ module jesd204_rx #(
 
       .ifs_reset(ifs_reset[i]),
 
-      .rx_data(rx_data_s[OD_STOP:OD_START]),
+      .rx_data(rx_data_s),
 
       .buffer_release_n(buffer_release_n),
       .buffer_ready_n(buffer_ready_n[i]),
@@ -433,6 +416,35 @@ module jesd204_rx #(
       .status_frame_align(frame_align[3*i+2:3*i]),
 
       .status_frame_align_err_cnt(status_lane_frame_align_err_cnt[8*i+7:8*i]));
+
+    // Channel 0 output pipeline also registers the eof_reset and rx_valid_s signals.
+    // Since there is only one instance of them to be used on the module output, there
+    // is no need to register those signals in the other channels.
+    if (i == 0) begin
+      (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+          .WIDTH(ODW+2),
+          .REGISTERED(NUM_OUTPUT_PIPELINE)
+        ) i_output_pipeline_stage (
+          .clk(device_clk),
+          .in({
+            eof_reset,
+            rx_data_s,
+            rx_valid_s
+          }),
+          .out({
+            eof_reset_d,
+            rx_data[OD_STOP:OD_START],
+            rx_valid
+          }));
+    end else begin
+      (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+          .WIDTH(ODW),
+          .REGISTERED(NUM_OUTPUT_PIPELINE)
+        ) i_output_pipeline_stage (
+          .clk(device_clk),
+          .in(rx_data_s),
+          .out(rx_data[OD_STOP:OD_START]));
+    end
 
     if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align_err_thresh
       always @(posedge clk) begin
@@ -544,13 +556,19 @@ module jesd204_rx #(
 
     wire [7:0] status_lane_skew;
     wire all_buffer_ready_n_d;
-    // Make sure these two signals do not optimized as single instance for all
+    // Make sure these signals do not get optimized as single instance for all
     // channels. Keeping one instance per channel would help with timing.
     (* dont_touch = "yes" *) reg err_statistics_reset_64b;
     (* dont_touch = "yes" *) reg event_data_phase_int = 1'b0;
+    (* dont_touch = "yes" *) reg cfg_beats_per_multiframe_r;
 
     wire [DW-1:0] phy_data_r;
     wire [HW-1:0] phy_header_r;
+    wire [ODW-1:0] rx_data_s;
+
+    always @(posedge clk) begin
+      cfg_beats_per_multiframe_r <= cfg_beats_per_multiframe;
+    end
 
     (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
       .WIDTH(1 + HW + DW),
@@ -628,9 +646,9 @@ module jesd204_rx #(
       .cfg_disable_scrambler(cfg_disable_scrambler),
       .cfg_header_mode(cfg_header_mode),
       .cfg_rx_thresh_emb_err(5'd8),
-      .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
+      .cfg_beats_per_multiframe(cfg_beats_per_multiframe_r),
 
-      .rx_data(rx_data_s[TPL_D_STOP:TPL_D_START]),
+      .rx_data(rx_data_s),
 
       .buffer_release_n(buffer_release_n),
       .buffer_ready_n(buffer_ready_n[i]),
@@ -646,7 +664,36 @@ module jesd204_rx #(
       .status_lane_emb_state(status_lane_emb_state[3*i+2:3*i]),
       .status_lane_skew(status_lane_skew));
 
-  assign status_lane_latency[14*(i+1)-1:14*i] = {3'b0,status_lane_skew,3'b0};
+    // Channel 0 output pipeline also registers the eof_reset and rx_valid_s signals.
+    // Since there is only one instance of them to be used on the module output, there
+    // is no need to register those signals in the other channels.
+    if (i == 0) begin
+      (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+        .WIDTH(ODW+2),
+        .REGISTERED(NUM_OUTPUT_PIPELINE)
+      ) i_output_pipeline_stage (
+        .clk(device_clk),
+        .in({
+          eof_reset,
+          rx_data_s,
+          rx_valid_s
+        }),
+        .out({
+          eof_reset_d,
+          rx_data[TPL_D_STOP:TPL_D_START],
+          rx_valid
+        }));
+    end else begin
+      (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+        .WIDTH(ODW),
+        .REGISTERED(NUM_OUTPUT_PIPELINE)
+      ) i_output_pipeline_stage (
+        .clk(device_clk),
+        .in(rx_data_s),
+        .out(rx_data[TPL_D_STOP:TPL_D_START]));
+    end
+
+    assign status_lane_latency[14*(i+1)-1:14*i] = {3'b0,status_lane_skew,3'b0};
 
   end
 
