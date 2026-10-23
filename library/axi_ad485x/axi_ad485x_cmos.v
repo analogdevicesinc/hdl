@@ -375,7 +375,7 @@ module axi_ad485x_cmos #(
 
   genvar i;
   generate
-    if (IODELAY_ENABLE == 1) begin
+    if (1'b1) begin: g_rx_lane_0
       ad_data_in #(
         .SINGLE_ENDED (1),
         .DDR_SDR_N (0),

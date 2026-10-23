@@ -244,7 +244,15 @@ module axi_ad485x #(
   assign adc_enable_6 = adc_enable_s[6];
   assign adc_enable_7 = adc_enable_s[7];
 
-  assign adc_valid = adc_valid_s[0];
+  // util_cpack2 only writes when its registered ready (one clock after a valid)
+  // overlaps with fifo_wr_en, so hold the valid for two clock cycles.
+  reg                     adc_valid_d = 1'b0;
+
+  always @(posedge adc_clk_s) begin
+    adc_valid_d <= adc_valid_s[0];
+  end
+
+  assign adc_valid = adc_valid_s[0] | adc_valid_d;
 
   assign adc_data_0 = adc_data_s[0];
   assign adc_data_1 = adc_data_s[1];
