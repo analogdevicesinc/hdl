@@ -14,6 +14,7 @@ JESD204 Interface Framework
    Xilinx FPGAs Transceivers Wizard <xgt_wizard/index>
    AMD Versal Adaptive SoC Transceiver Subsystem <versal_transceiver_subsystem/index>
    Troubleshooting JESD204 TX links <troubleshoot/troubleshoot_jesd204_tx>
+   JESD204 Component-Level Testbenches <component_testbenches/index>
 
 The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface
 standard was created through the JEDEC committee to standardize and reduce the
