@@ -41,7 +41,8 @@ set_module_property ELABORATION_CALLBACK p_elaboration
 ad_ip_files spi_engine_execution [list\
   spi_engine_execution.v \
   spi_engine_execution_shiftreg.v \
-  spi_engine_execution_shiftreg_data_assemble.v]
+  spi_engine_execution_shiftreg_data_assemble.v \
+  ../../common/ad_iddr.v]
 
 # parameters
 
@@ -53,6 +54,8 @@ ad_ip_parameter NUM_OF_SDIO INTEGER 1
 ad_ip_parameter SDO_DEFAULT INTEGER 0
 ad_ip_parameter ECHO_SCLK INTEGER 0
 ad_ip_parameter SDI_DELAY INTEGER 0
+ad_ip_parameter DDR_EN INTEGER 0
+ad_ip_parameter FPGA_TECHNOLOGY INTEGER 0
 
 proc p_elaboration {} {
 

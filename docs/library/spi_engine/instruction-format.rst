@@ -450,9 +450,15 @@ bus behavior.
    * - Bits
      - Name
      - Description
-   * - [7:4]
+   * - [7:5]
      - reserved
      - Must always be 0.
+   * - [4]
+     - ddr_en
+     - It is used to select between DDR and SDR mode:
+
+       -  When 0, the module will operate in SDR;
+       -  When 1, the module will operate in DDR.
    * - [3]
      - sdo_idle_state
      - Configures the output of the SDO pin when CS is inactive or during
