@@ -45,6 +45,23 @@ set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ 
 set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ */mode_*.gen_lane[14].i_input_pipeline_stage}]
 set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ */mode_*.gen_lane[15].i_input_pipeline_stage}]
 
+set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[0].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[1].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[2].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[3].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[4].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[5].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[6].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[7].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[8].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[9].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[10].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[11].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[12].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[13].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[14].i_output_pipeline_stage}]
+set_property USER_SLR_ASSIGNMENT SLR0 [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[15].i_output_pipeline_stage}]
+
 # Make sure that each i_all_buffer_ready_pipeline_stage circuit does not drive more than one output.
 set_property FORCE_MAX_FANOUT 1 [get_nets -hierarchical -filter {NAME =~ *mode_64b66b.gen_lane[*].all_buffer_ready_n_d}]
 
@@ -69,6 +86,8 @@ set_property FORCE_MAX_FANOUT 8 [get_nets -of [get_pins -hierarchical -filter {N
 set_property FORCE_MAX_FANOUT 30 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_reset_dly2*/Q}]]
 set_property FORCE_MAX_FANOUT 80 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_cfg_disable_scrambler_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 16 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_cfg_header_mode_reg[*]*/Q}]]
+set_property FORCE_MAX_FANOUT 37 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/buffer_release_n_reg*/Q}]]
+set_property FORCE_MAX_FANOUT 250 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_*.gen_lane[*].i_lane/i_elastic_buffer/mem_rd_data[*]_i*/O}]]
 
 # TX side
 set_property FORCE_MAX_FANOUT 15 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/out_addr_reg[*]*/Q}]]
