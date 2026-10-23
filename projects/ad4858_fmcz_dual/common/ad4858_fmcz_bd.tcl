@@ -226,6 +226,7 @@ ad_connect adc_clk  ad4858_adc_pack_0/clk
 ad_connect adc_reset ad4858_adc_pack_0/reset
 ad_connect axi_ad4858_0/adc_valid        ad4858_adc_pack_0/fifo_wr_en
 ad_connect ad4858_adc_pack_0/packed_fifo_wr ad4858_dma_0/fifo_wr
+ad_connect ad4858_adc_pack_0/packed_sync ad4858_dma_0/sync
 ad_connect ad4858_adc_pack_0/fifo_wr_overflow axi_ad4858_0/adc_dovf
 
 for {set i 0} {$i < 8} {incr i} {
@@ -246,6 +247,7 @@ ad_connect adc_clk  ad4858_adc_pack_1/clk
 ad_connect adc_reset ad4858_adc_pack_1/reset
 ad_connect axi_ad4858_1/adc_valid        ad4858_adc_pack_1/fifo_wr_en
 ad_connect ad4858_adc_pack_1/packed_fifo_wr ad4858_dma_1/fifo_wr
+ad_connect ad4858_adc_pack_1/packed_sync ad4858_dma_1/sync
 ad_connect ad4858_adc_pack_1/fifo_wr_overflow axi_ad4858_1/adc_dovf
 
 for {set i 0} {$i < 8} {incr i} {
