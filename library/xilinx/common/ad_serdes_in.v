@@ -42,6 +42,7 @@ module ad_serdes_in #(
   parameter   DDR_OR_SDR_N = 0,
   parameter   SERDES_FACTOR = 8,
   parameter   DATA_WIDTH = 16,
+  parameter   ISERDES3_DATA_WIDTH = 8,
   parameter   DRP_WIDTH = 5,
   parameter   IODELAY_ENABLE = 1,
   parameter   IODELAY_CTRL = 0,
@@ -306,7 +307,7 @@ module ad_serdes_in #(
       assign ld_cnt = ~vtc_cnt[4] & (&vtc_cnt[3:0]);
 
       ISERDESE3 #(
-        .DATA_WIDTH (8),            // Parallel data width (4,8)
+        .DATA_WIDTH (ISERDES3_DATA_WIDTH), // Parallel data width (4,8)
         .FIFO_ENABLE ("FALSE"),     // Enables the use of the FIFO
         .FIFO_SYNC_MODE ("FALSE"),  // Enables the use of internal 2-stage synchronizers on the FIFO
         .IS_CLK_B_INVERTED (1'b0),  // Optional inversion for CLK_B

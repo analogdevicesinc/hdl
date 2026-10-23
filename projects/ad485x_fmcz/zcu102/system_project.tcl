@@ -1,0 +1,40 @@
+###############################################################################
+## Copyright (C) 2023-2024, 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+source ../../../scripts/adi_env.tcl
+source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
+source $ad_hdl_dir/projects/scripts/adi_board.tcl
+
+# if the interface is not build defined, set CMOS as default inferface
+set LVDS_CMOS_N 0
+if [info exists ::env(LVDS_CMOS_N)] {
+  set LVDS_CMOS_N $::env(LVDS_CMOS_N)
+} else {
+  set env(LVDS_CMOS_N) $LVDS_CMOS_N
+}
+
+set DEVICE "AD4858"
+if [info exists ::env(DEVICE)] {
+  set DEVICE $::env(DEVICE)
+} else {
+  set env(DEVICE) $DEVICE
+}
+
+adi_project ad485x_fmcz_zcu102 0 [list \
+  LVDS_CMOS_N     $LVDS_CMOS_N \
+  DEVICE          $DEVICE \
+]
+
+if {$LVDS_CMOS_N == "0"} {
+  set top_file [list "system_top_cmos.v" "system_constr_cmos.xdc"]
+} else {
+  set top_file [list "system_top_lvds.v" "system_constr_lvds.xdc"]
+}
+
+adi_project_files ad485x_fmcz_zcu102 [linsert $top_file 0 \
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
+
+adi_project_run ad485x_fmcz_zcu102
