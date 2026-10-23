@@ -82,14 +82,22 @@
  * they arrive. Both FIFOs are transactional: the frame is committed to them
  * together only after CS deasserts and the whole frame has checked out, and
  * rolled back otherwise. A rejected frame is dropped as a unit, so nothing
- * from it reaches a downstream device. Register writes and FLUSH also take
- * effect only at the end of a good frame; CTRL_R and FETCH reply during it.
+ * from it reaches a downstream device.
+ *
+ * CTRL_W and FLUSH take effect as soon as the instruction is complete, as long
+ * as nothing earlier in the frame has failed; they are not undone if the frame
+ * is rejected later. Several CTRL_W may be sent in one frame, and a CTRL_R
+ * after a CTRL_W reads the new value. A FLUSH discards everything queued
+ * before it, including the earlier part of its own frame; the instructions
+ * after it are kept and committed normally, so a frame can recover and start
+ * again. The FIFOs are cleared two cycles after the FLUSH is decoded, well
+ * before the next upstream byte arrives. CTRL_R and FETCH reply during the
+ * frame.
  *
  * A frame is rejected, and the matching sticky err bit set, when it:
  *   [0] uses a reserved encoding (engine class 101 to 111, bridge opcode 5
  *       to 7, reserved TRANSFER, WRITE or bridge fields), selects more than
- *       one target in a CHIPSELECT, sets a word length outside 1..8, or
- *       carries more than one CTRL_W
+ *       one target in a CHIPSELECT, or sets a word length outside 1..8
  *   [1] does not fit in the room left in the CMD or SDO FIFO
  *   [2] ends inside an instruction, its SDO data or a FETCH's filler bytes
  * FLUSH clears err.
@@ -178,10 +186,6 @@ module spi_translator_decoder #(
   reg   [8:0]                 sdo_left = 9'h000;
   reg                         seen = 1'b0;
   reg   [1:0]                 frame_err = 2'b00;
-  reg                         reg_pending = 1'b0;
-  reg   [7:0]                 reg_addr = 8'h00;
-  reg   [7:0]                 reg_data = 8'h00;
-  reg                         flush_pending = 1'b0;
   reg   [1:0]                 frame_end_d = 2'b00;
   reg   [8:0]                 pad_left = 9'h000;
 
@@ -202,6 +206,7 @@ module spi_translator_decoder #(
   wire                        no_room;
   wire                        done;
   wire  [2:0]                 end_err;
+  wire                        br_exec;
   wire                        rep_start_r;
   wire                        rep_start_f;
   wire                        rep_start;
@@ -220,7 +225,7 @@ module spi_translator_decoder #(
   // checks on the instruction {hi, rx_data}, evaluated on its second byte
   assign is_bridge = hi[7];
   assign cmd_ok = is_bridge ? (
-    (op == BR_CTRL_W && ~reg_pending) ||
+    (op == BR_CTRL_W) ||
     (op == BR_CTRL_R && rx_data == 8'h00) ||
     ((op == BR_NOP || op == BR_FETCH || op == BR_FLUSH) && hi[3:0] == 4'h0)) : (
     (inst == CMD_TRANSFER   && hi[3:2] == 2'b00) ||
@@ -300,8 +305,6 @@ module spi_translator_decoder #(
       state <= S_HI;
       seen <= 1'b0;
       frame_err <= 2'b00;
-      reg_pending <= 1'b0;
-      flush_pending <= 1'b0;
     end else if (byte_in) begin
       seen <= 1'b1;
       case (state)
@@ -314,14 +317,6 @@ module spi_translator_decoder #(
           if (~cmd_ok) begin
             frame_err[ERR_INSTR] <= 1'b1;
           end else if (is_bridge) begin
-            if (op == BR_CTRL_W) begin
-              reg_addr <= {4'h0, hi[3:0]};
-              reg_data <= rx_data;
-              reg_pending <= 1'b1;
-            end
-            if (op == BR_FLUSH) begin
-              flush_pending <= 1'b1;
-            end
             if (op == BR_FETCH) begin
               pad_left <= {1'b0, rx_data} + 9'd2;
               state <= S_PAD;
@@ -353,33 +348,46 @@ module spi_translator_decoder #(
     end
   end
 
-  // frame completion
+  // CTRL_W and FLUSH act at once, unless the frame has already failed: an
+  // instruction after an error may be misaligned data
+  assign br_exec = byte_in && state == S_LO && cmd_ok && is_bridge &&
+                   frame_err == 2'b00;
+
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      reg_wr_en <= 1'b0;
+      reg_wr_addr <= 8'h00;
+      reg_wr_data <= 8'h00;
+      flush_req <= 1'b0;
+    end else begin
+      reg_wr_en <= br_exec && op == BR_CTRL_W;
+      flush_req <= br_exec && op == BR_FLUSH;
+      if (br_exec && op == BR_CTRL_W) begin
+        reg_wr_addr <= {4'h0, hi[3:0]};
+        reg_wr_data <= rx_data;
+      end
+    end
+  end
+
+  // frame completion; FLUSH clears err
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       commit <= 1'b0;
       rollback <= 1'b0;
-      reg_wr_en <= 1'b0;
-      flush_req <= 1'b0;
       err <= 3'h0;
     end else begin
       commit <= 1'b0;
       rollback <= 1'b0;
-      reg_wr_en <= 1'b0;
-      flush_req <= 1'b0;
+      if (flush_req) begin
+        err <= 3'h0;
+      end
       if (done && seen) begin
         if (end_err != 3'h0) begin
           rollback <= 1'b1;
           err <= err | end_err;
-        end else if (flush_pending) begin
-          rollback <= 1'b1;
-          flush_req <= 1'b1;
-          err <= 3'h0;
         end else begin
           commit <= 1'b1;
-          reg_wr_en <= reg_pending;
-          reg_wr_addr <= reg_addr;
-          reg_wr_data <= reg_data;
         end
       end
     end
