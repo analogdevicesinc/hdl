@@ -92,6 +92,7 @@ Utilities
    common/ad_dds/index
    corundum/index
    spi_slave/index
+   spi_translator/index
    util_axis_fifo/index
    util_axis_fifo_asym/index
    util_extract/index
