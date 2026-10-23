@@ -125,6 +125,7 @@ module jesd204_rx_lane_64b #(
   wire buffer_ready_next;
   reg [2:1] buffer_not_ready_r;
   reg [2:1] buffer_ready_r;
+  reg [5:0] ctrl_err_statistics_mask_r;
 
   wire [7:0] sh_count;
 
@@ -253,6 +254,10 @@ module jesd204_rx_lane_64b #(
     assign event_fec_untrapped_error_flag = 1'b0;
   end
 
+  always @(posedge clk) begin
+    ctrl_err_statistics_mask_r <= ctrl_err_statistics_mask;
+  end
+
   error_monitor #(
     .EVENT_WIDTH(6),
     .CNT_WIDTH(32)
@@ -268,7 +273,7 @@ module jesd204_rx_lane_64b #(
       event_unexpected_eoemb,
       event_crc12_mismatch
     }),
-    .error_event_mask(ctrl_err_statistics_mask),
+    .error_event_mask(ctrl_err_statistics_mask_r),
     .status_err_cnt(status_err_statistics_cnt));
 
   jesd204_scrambler_64b #(
