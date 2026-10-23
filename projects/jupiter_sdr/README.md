@@ -1,8 +1,8 @@
 # JUPITER-SDR HDL Project
 
 - Evaluation board product page: [AD-JUPITER-EBZ](https://www.analog.com/ad-jupiter-ebz)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/jupiter-sdr
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/jupiter_sdr/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/ad-jupiter-ebz/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/jupiter_sdr/
 
 ## Supported parts
 

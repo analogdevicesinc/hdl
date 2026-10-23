@@ -17,7 +17,7 @@ If other configurations are desired, then the parameters from the HDL project (s
 
 The available configuration:
 
-- JESD_MODE: link layer encoder mode used; 
+- JESD_MODE: link layer encoder mode used;
   - 8B10B - 8b10b link layer defined in JESD204B
 - RX_JESD_M: **1**; RX number of converters per link
 - RX_JESD_L: **16**; RX number of lanes per link

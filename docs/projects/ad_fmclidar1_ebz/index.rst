@@ -280,7 +280,7 @@ Parts
 Laser Board
 
 - :adi:`3.3 V, 200 Mbps, Half-Duplex, High Speed M-LVDS Transceiver with Type 1 Receiver <ADN4691E>`
-- :adi:`High Speed, Dual, 4 A MOSFET Driver, non-inverting A/B input pins, 9.5V < VIN < 18V <ADP3634>`
+- :adi:`High Speed, Dual, 4 A MOSFET Driver, non-inverting A/B input pins, 9.5 V to 18 V VIN <ADP3634>`
 - :adi:`Ultralow Noise Drivers for Low Voltage ADCs <ADA4930-1>`
 
 DAQ Board
@@ -288,7 +288,7 @@ DAQ Board
 - :adi:`8-Bit, 1 GSPS, JESD204B, Quad Analog-to-Digital Converter <AD9094>`
 - :adi:`Integrated Synthesizer and VCO <ADF4360-7>`
 - :adi:`JESD204B/JESD204C Clock Generator with 14 LVDS/HSTL Outputs <AD9528>`
-- :adi:`1.2 A, Ultralow Noise, High PSRR, Fixed Output, RF Linear Regulator <aADP7156>`
+- :adi:`1.2 A, Ultralow Noise, High PSRR, Fixed Output, RF Linear Regulator <ADP7156>`
 - :adi:`2 A, Ultralow Noise, High PSRR, Adjustable Output, RF Linear Regulator <ADP7159>`
 
 AFE Board

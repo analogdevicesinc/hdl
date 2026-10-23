@@ -52,4 +52,4 @@ make CORUNDUM=1
 ```
 All of the binaries resulted from the build will be present in a folder called **CORUNDUM1**.
 
-Corresponding device tree: [zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-100-qsfp.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-100-qsfp.dts)
+Corresponding device tree: TO BE ADDED

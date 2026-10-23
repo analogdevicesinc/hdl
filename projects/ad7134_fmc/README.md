@@ -1,8 +1,8 @@
 # AD7134-FMC HDL Project
 
 - Evaluation board product page: [EVAL-AD7134-FMCZ](https://www.analog.com/eval-ad7134fmcz)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad713x/hdl
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad7134_fmc/index.html
+- System documentation: https://developer.analog.com/docs/hdl/projects/ad7134_fmc/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad7134_fmc/
 - Evaluation board VADJ: 1.8V
 
 ## Supported parts

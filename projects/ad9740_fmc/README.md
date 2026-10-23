@@ -6,7 +6,7 @@
    - [EVAL-AD9744](https://www.analog.com/eval-ad9744)
    - [EVAL-AD9748](https://www.analog.com/eval-ad9748)
 - System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad9740_fmc/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad9740_fmc/
 - Evaluation board VADJ range: 3.3V
 
 ## Supported parts

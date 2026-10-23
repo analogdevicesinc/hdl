@@ -3,8 +3,8 @@
 The AD9081-FMCA-EBZ is used to evaluate the AD9209 (the RX side).
 
 - Evaluation board product page: [EVAL-AD9081](https://www.analog.com/eval-ad9081)
-- System documentation: TO BE ADDED
-- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad9209_fmca_ebz/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/ad9209-fmca-ebz/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad9209_fmca_ebz/
 - Evaluation board VADJ range: 1.2V - 3.3V
 
 ## Supported parts

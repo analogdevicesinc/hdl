@@ -6,7 +6,7 @@ AXI HMCAD15XX
 .. hdl-component-diagram::
 
 The :git-hdl:`AXI HMCAD15XX <library/axi_hmcad15xx>` IP core can be used to
-interface the :adi:`HMCAD1511, HMCAD1520` devices.
+interface the :adi:`HMCAD1511`, :adi:`HMCAD1520` devices.
 This documentation only covers the IP core and requires one to be
 familiar with the device, for a complete and better understanding.
 

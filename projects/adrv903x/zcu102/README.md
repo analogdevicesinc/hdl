@@ -17,7 +17,7 @@ All of the RX/TX link modes can be found in the [ADRV9032R data sheet](https://w
 
 If other configurations are desired, then the parameters from the HDL project (see below) need to be changed, as well as the Linux/no-OS project configurations.
 
-**Warning**: The JESD link mode is configured using the ADRV903x plugin from [ACE](https://wiki.analog.com/resources/tools-software/ace) application. The device tree is the same, regardless of the configuration: [zynqmp-zcu102-rev10-adrv9032r.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9032r.dts)
+**Warning**: The JESD link mode is configured using the ADRV903x plugin from [ACE](https://wiki.analog.com/resources/tools-software/ace) application. The device tree is the same, regardless of the configuration: [zynqmp-zcu102-rev10-adrv9032r-nls.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9032r-nls.dts)
 
 The overwritable parameters from the environment:
 

@@ -2,14 +2,14 @@
 
 - Evaluation board product page: [ADALM-PLUTO](https://www.analog.com/adalm-pluto)
 - System documentation: https://analogdevicesinc.github.io/documentation/tools/pluto/index.html
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/pluto/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/pluto/
 - Evaluation board VADJ: 1.8V
 
 ## Supported parts
 
 | Part name                                      | Description                                                  |
 |------------------------------------------------|--------------------------------------------------------------|
-| [AD9363](https://www.analog.com/ad9363)        | Radio frequency (RF) 2 × 2 transceiver with integrated 12-bit DACs and ADCs |                                        |
+| [AD9363](https://www.analog.com/ad9363)        | Radio frequency (RF) 2 × 2 transceiver with integrated 12-bit DACs and ADCs |
 
 ## Building the project
 
