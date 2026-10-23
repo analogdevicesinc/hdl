@@ -11,17 +11,12 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   TDD_SUPPORT : capture mode
 #      1 - axi_tdd gates the four DMAs, triggered/one-shot capture (default)
 #      0 - DMAs free-run, continuous capture, no axi_tdd instance
-#   SHARED_DCO : capture clocking
-#      0 - each ADC captured on its own DCO (default)
-#      1 - all four captured on ADC B's DCO, one adc_clk for every core and DMA
 #
 #    e.g.
 #      make TDD_SUPPORT=0
-#      make TDD_SUPPORT=1 SHARED_DCO=1
 
 adi_project quad_ada4356_zed 0 [list \
   TDD_SUPPORT [get_env_param TDD_SUPPORT 1] \
-  SHARED_DCO  [get_env_param SHARED_DCO 0] \
 ]
 
 adi_project_files quad_ada4356_zed [list \

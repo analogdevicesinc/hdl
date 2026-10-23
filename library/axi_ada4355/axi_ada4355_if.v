@@ -42,8 +42,7 @@ module axi_ada4355_if #(
   parameter DRP_WIDTH = 5,
   parameter NUM_LANES = 3,  // 2 lanes of data, 1 frame
   parameter FPGA_FAMILY = 1,
-  parameter BUFMRCE_EN = 0,
-  parameter CLK_SHARE = 0  // 0: own DCO, 1: DCO master (MRCC pin), 2: DCO slave
+  parameter BUFMRCE_EN = 0
 ) (
 
   // device interface
@@ -85,15 +84,7 @@ module axi_ada4355_if #(
   output [ 2:0]                      adc_shift_cnt,
   output                             adc_frame_unaligned,
   output [ 7:0]                      adc_realign_cnt,
-  input                              adc_realign_clr,
-
-  // shared DCO (CLK_SHARE != 0)
-  output                             shr_dco_o,
-  output                             shr_clr_o,
-  input                              shr_dco_i,
-  input                              shr_clr_i,
-  input  [ 2:0]                      shr_rel_i,
-  output                             serdes_rel_o
+  input                              adc_realign_clr
 );
 
   // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
@@ -161,14 +152,6 @@ module axi_ada4355_if #(
   reg        frame_aligned = 1'b0;
   reg        frame_aligned_d = 1'b0;
   reg [ 7:0] realign_cnt = 8'd0;
-  reg [ 6:0] up_shr_cnt = 7'd0;
-  reg        up_shr_ce = 1'b0;
-  reg        up_shr_clr = 1'b1;
-
-  wire       clk_src_s;
-  wire       clk_clr_s;
-  wire       shr_dco_s;
-  wire       up_shr_go_s;
 
   /*
    * Two sources restart the receive path: sync_n from the pin, and clkgen_rst
@@ -179,43 +162,6 @@ module axi_ada4355_if #(
    */
   wire serdes_rst_n_s;
   assign serdes_rst_n_s = sync_n & ~clkgen_rst;
-  assign serdes_rel_o = serdes_rst_n_s;
-
-  // shared DCO master: the first core released starts the clock for all four
-
-  sync_bits #(
-    .NUM_OF_BITS (1),
-    .ASYNC_CLK (1)
-  ) i_shr_go_sync (
-    .in_bits (serdes_rst_n_s | (|shr_rel_i)),
-    .out_resetn (1'b1),
-    .out_clk (up_clk),
-    .out_bits (up_shr_go_s));
-
-  // UG472: CLR applied with the clock running (p.54), released with the clock
-  // stopped so every BUFR leaves reset on the same edge (p.110), then restarted
-
-  always @(posedge up_clk) begin
-    if (up_shr_go_s == 1'b0) begin
-      up_shr_cnt <= 7'd0;
-      up_shr_ce <= 1'b0;
-      up_shr_clr <= 1'b1;
-    end else begin
-      if (up_shr_cnt != 7'h7f) begin
-        up_shr_cnt <= up_shr_cnt + 1'b1;
-      end
-      up_shr_ce <= ((up_shr_cnt >= 7'd16) && (up_shr_cnt < 7'd48)) || (up_shr_cnt >= 7'd80);
-      up_shr_clr <= (up_shr_cnt < 7'd64);
-    end
-  end
-
-  assign shr_dco_o = shr_dco_s;
-  assign shr_clr_o = up_shr_clr;
-
-  assign clk_src_s = (CLK_SHARE == 2) ? shr_dco_i :
-                     (CLK_SHARE == 1) ? shr_dco_s : clk_in_s;
-  assign clk_clr_s = (CLK_SHARE == 2) ? shr_clr_i :
-                     (CLK_SHARE == 1) ? up_shr_clr : ~serdes_rst_n_s;
 
   IBUFGDS i_clk_in_ibuf(
     .I(dco_p),
@@ -223,23 +169,10 @@ module axi_ada4355_if #(
     .O(clk_in_s));
 
   generate
-  if (CLK_SHARE == 1) begin
-    BUFMRCE #(
-      .CE_TYPE("SYNC")
-    ) i_shr_bufmrce (
-      .I(clk_in_s),
-      .CE(up_shr_ce),
-      .O(shr_dco_s));
-  end else begin
-    assign shr_dco_s = 1'b0;
-  end
-  endgenerate
-
-  generate
   if(FPGA_TECHNOLOGY == FPGA_FAMILY) begin
     if (BUFMRCE_EN == 0) begin
       BUFIO i_clk_buf (
-        .I(clk_src_s),
+        .I(clk_in_s),
         .O(adc_clk_in_fast));
 
     assign adc_clk_in_fast_frame = adc_clk_in_fast;
@@ -252,9 +185,9 @@ module axi_ada4355_if #(
       BUFR #(
         .BUFR_DIVIDE("4")
       ) i_div_clk_buf (
-        .CLR(clk_clr_s),
+        .CLR(~serdes_rst_n_s),
         .CE(1'b1),
-        .I(clk_src_s),
+        .I(clk_in_s),
         .O(adc_clk_div));
 
     assign adc_clk_div_frame = adc_clk_div;

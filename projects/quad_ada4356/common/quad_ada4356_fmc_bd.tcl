@@ -14,13 +14,6 @@ if {$TDD_SUPPORT} {
   source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
 }
 
-# Capture clocking, selected at build time:
-#   SHARED_DCO = 0 : each core captures on its own DCO
-#   SHARED_DCO = 1 : all cores capture on ADC B's DCO (MRCC pin M19), so the
-#                    four adc_clk, the TDD and the DMAs are one clock
-set SHARED_DCO [ expr { [info exists ad_project_params(SHARED_DCO)] \
-                         ? $ad_project_params(SHARED_DCO) : 0 } ]
-
 # ada4355 interfaces for 4 instances
 
 # Instance 0
@@ -219,20 +212,6 @@ ad_connect sync_3_n             axi_ada4355_adc_3/sync_n
 ad_connect frame_3_p            axi_ada4355_adc_3/fco_p
 ad_connect frame_3_n            axi_ada4355_adc_3/fco_n
 ad_connect $sys_iodelay_clk     axi_ada4355_adc_3/delay_clk
-
-if {$SHARED_DCO} {
-  ad_ip_parameter axi_ada4355_adc_1 CONFIG.CLK_SHARE 1
-  ad_ip_instance ilconcat shr_rel_concat [list NUM_PORTS 3]
-  foreach n {0 2 3} {
-    ad_ip_parameter axi_ada4355_adc_$n CONFIG.CLK_SHARE 2
-    ad_connect axi_ada4355_adc_1/shr_dco_o axi_ada4355_adc_$n/shr_dco_i
-    ad_connect axi_ada4355_adc_1/shr_clr_o axi_ada4355_adc_$n/shr_clr_i
-  }
-  ad_connect axi_ada4355_adc_0/serdes_rel_o shr_rel_concat/In0
-  ad_connect axi_ada4355_adc_2/serdes_rel_o shr_rel_concat/In1
-  ad_connect axi_ada4355_adc_3/serdes_rel_o shr_rel_concat/In2
-  ad_connect shr_rel_concat/dout axi_ada4355_adc_1/shr_rel_i
-}
 
 # connect datapaths for all instances
 
