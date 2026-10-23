@@ -66,7 +66,9 @@ set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {N
 set_property FORCE_MAX_FANOUT 16 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.i_jesd204_rx_ctrl_64b/status_err_cnt[*]_i_*/O}]]
 set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_*.gen_lane[*].i_lane/buffer_ready_n_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 8 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_cfg_octets_per_multiframe_reg[*]*/Q}]]
-set_property FORCE_MAX_FANOUT 100 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_reset_dly2*/Q}]]
+set_property FORCE_MAX_FANOUT 30 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_reset_dly2*/Q}]]
+set_property FORCE_MAX_FANOUT 80 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_cfg_disable_scrambler_reg*/Q}]]
+set_property FORCE_MAX_FANOUT 16 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_cfg_header_mode_reg[*]*/Q}]]
 
 # TX side
 set_property FORCE_MAX_FANOUT 15 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/out_addr_reg[*]*/Q}]]
