@@ -92,13 +92,17 @@ proc ad_data_offload_create {instance_name
       # Internal storage instance (BRAMs)
       ###########################################################################
 
+      ad_ip_instance util_axis_buf i_axis_in_buf [list \
+        DATA_WIDTH $source_dwidth \
+      ]
+
       ad_ip_instance util_do_ram storage_unit [list \
         SRC_DATA_WIDTH $source_dwidth \
         DST_DATA_WIDTH $destination_dwidth \
         LENGTH_WIDTH [log2 $mem_size] \
       ]
 
-      ad_ip_instance util_axis_buf i_axis_buf [list \
+      ad_ip_instance util_axis_buf i_axis_out_buf [list \
         DATA_WIDTH $destination_dwidth \
       ]
 
@@ -131,14 +135,19 @@ proc ad_data_offload_create {instance_name
     ad_connect storage_unit/wr_ctrl i_data_offload/wr_ctrl
     ad_connect storage_unit/rd_ctrl i_data_offload/rd_ctrl
 
-    ad_connect storage_unit/s_axis i_data_offload/m_storage_axis
     if {$mem_type == 0} {
-      ad_connect storage_unit/m_axis i_axis_buf/s_axis
-      ad_connect i_axis_buf/m_axis i_data_offload/s_storage_axis
+      ad_connect i_data_offload/m_storage_axis i_axis_in_buf/s_axis
+      ad_connect i_axis_in_buf/m_axis storage_unit/s_axis
+      
+      ad_connect storage_unit/m_axis i_axis_out_buf/s_axis
+      ad_connect i_axis_out_buf/m_axis i_data_offload/s_storage_axis
 
-      ad_connect i_axis_buf/m_axis_aclk m_axis_aclk
-      ad_connect i_axis_buf/m_axis_aresetn m_axis_aresetn
+      ad_connect i_axis_in_buf/m_axis_aclk s_axis_aclk
+      ad_connect i_axis_in_buf/m_axis_aresetn s_axis_aresetn
+      ad_connect i_axis_out_buf/m_axis_aclk m_axis_aclk
+      ad_connect i_axis_out_buf/m_axis_aresetn m_axis_aresetn
     } else {
+      ad_connect storage_unit/s_axis i_data_offload/m_storage_axis
       ad_connect storage_unit/m_axis i_data_offload/s_storage_axis
     }
 
