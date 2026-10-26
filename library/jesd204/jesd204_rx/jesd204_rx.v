@@ -590,7 +590,7 @@ module jesd204_rx #(
     // and the route out to the channel become a register to register path with
     // no logic behind it. The lane moves its evaluation point by the same
     // number of stages, see ALL_BUFFER_READY_DELAY.
-    util_pipeline_stage #(
+    (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
       .WIDTH(1),
       .REGISTERED(NUM_BUFFER_READY_PIPELINE)
     ) i_all_buffer_ready_pipeline_stage (
