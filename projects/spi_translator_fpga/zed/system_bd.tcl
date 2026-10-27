@@ -36,9 +36,32 @@ source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
 source ../common/spi_translator_fpga_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
-#system ID
+# System ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
+
+# ILA
+create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_spi_translator
+set_property -dict [list \
+  CONFIG.C_DATA_DEPTH {2048} \
+  CONFIG.C_EN_STRG_QUAL {1} \
+  CONFIG.C_MONITOR_TYPE {Native} \
+  CONFIG.C_NUM_OF_PROBES {6} \
+  CONFIG.C_PROBE0_WIDTH {1} \
+  CONFIG.C_PROBE1_WIDTH {1} \
+  CONFIG.C_PROBE2_WIDTH {1} \
+  CONFIG.C_PROBE3_WIDTH {1} \
+  CONFIG.C_PROBE4_WIDTH {1} \
+  CONFIG.C_PROBE5_WIDTH {4} \
+] [get_bd_cells ila_spi_translator]
+
+ad_connect ila_spi_translator/clk     $sys_cpu_clk
+ad_connect ila_spi_translator/probe0  axi_spi_host/sck_o
+ad_connect ila_spi_translator/probe1  axi_spi_host/io0_o
+ad_connect ila_spi_translator/probe2  axi_spi_host/ss_o
+ad_connect ila_spi_translator/probe3  spi_execution/sclk
+ad_connect ila_spi_translator/probe4  spi_execution/sdo
+ad_connect ila_spi_translator/probe5  spi_execution/cs
 
 sysid_gen_sys_init_file

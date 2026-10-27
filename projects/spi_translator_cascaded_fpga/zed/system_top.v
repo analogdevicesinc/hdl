@@ -81,26 +81,7 @@ module system_top (
   inout       [ 1:0]      iic_mux_scl,
   inout       [ 1:0]      iic_mux_sda,
 
-  input                   otg_vbusoc,
-
-  output                  spi_pmod1_clk,
-  output                  spi_pmod1_copi,
-  output                  spi_pmod1_cipo,
-  output                  spi_pmod1_csn,
-  output                  spi_pmod2_clk,
-  output                  spi_pmod2_copi,
-  input                   spi_pmod2_cipo,
-  output      [ 3:0]      spi_pmod2_csn,
-  output                  spi_pmod3_clk,
-  output                  spi_pmod3_copi,
-  input                   spi_pmod3_cipo,
-  output                  spi_pmod3_cs4,
-  output      [ 3:0]      spi_pmod3_csn,
-  output                  spi_pmod4_clk,
-  output                  spi_pmod4_copi,
-  input                   spi_pmod4_cipo,
-  output                  spi_pmod4_cs5,
-  output      [ 3:0]      spi_pmod4_csn
+  input                   otg_vbusoc
 );
 
   // internal signals
@@ -115,6 +96,10 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
+  wire            spi_quad_clk;
+  wire            spi_quad_copi;
+  wire            spi_quad_csn;
+
   wire            spi_eng_sclk;
   wire            spi_eng_sdo;
   wire            spi_eng_sdi;
@@ -124,17 +109,8 @@ module system_top (
 
   // instantiations
 
-  // spi_execution: CS 0-3 on the PMOD, CS 4 and 5 drive the cascaded
-  // translators; SDI comes from whichever translator is selected
-
-  assign spi_pmod2_clk = spi_eng_sclk;
-  assign spi_pmod2_copi = spi_eng_sdo;
-  assign spi_pmod2_csn = spi_eng_cs[3:0];
-  assign spi_pmod3_cs4 = spi_eng_cs[4];
-  assign spi_pmod4_cs5 = spi_eng_cs[5];
-
   assign spi_eng_sdi = ~spi_eng_cs[4] ? spi_sn1_sdo :
-                       ~spi_eng_cs[5] ? spi_sn2_sdo : spi_pmod2_cipo;
+                       ~spi_eng_cs[5] ? spi_sn2_sdo : 1'b0;
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -225,13 +201,12 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .spi_pmod_clk_i (spi_pmod1_clk),
-    .spi_pmod_clk_o (spi_pmod1_clk),
-    .spi_pmod_csn_i (spi_pmod1_csn),
-    .spi_pmod_csn_o (spi_pmod1_csn),
-    .spi_pmod_sdi_o (spi_pmod1_cipo),
-    .spi_pmod_sdo_i (spi_pmod1_copi),
-    .spi_pmod_sdo_o (spi_pmod1_copi),
+    .spi_quad_clk_i (spi_quad_clk),
+    .spi_quad_clk_o (spi_quad_clk),
+    .spi_quad_csn_i (spi_quad_csn),
+    .spi_quad_csn_o (spi_quad_csn),
+    .spi_quad_sdo_i (spi_quad_copi),
+    .spi_quad_sdo_o (spi_quad_copi),
     .spi_eng_sclk (spi_eng_sclk),
     .spi_eng_sdo (spi_eng_sdo),
     .spi_eng_sdo_t (),
@@ -247,18 +222,6 @@ module system_top (
     .spi_sn2_sdi (spi_eng_sdo),
     .spi_sn2_sdo (spi_sn2_sdo),
     .spi_sn2_sdo_t (),
-    .spi_sn2_cs (spi_eng_cs[5]),
-    .spi_eng_1_sclk (spi_pmod3_clk),
-    .spi_eng_1_sdo (spi_pmod3_copi),
-    .spi_eng_1_sdo_t (),
-    .spi_eng_1_sdi (spi_pmod3_cipo),
-    .spi_eng_1_cs (spi_pmod3_csn),
-    .spi_eng_1_three_wire (),
-    .spi_eng_2_sclk (spi_pmod4_clk),
-    .spi_eng_2_sdo (spi_pmod4_copi),
-    .spi_eng_2_sdo_t (),
-    .spi_eng_2_sdi (spi_pmod4_cipo),
-    .spi_eng_2_cs (spi_pmod4_csn),
-    .spi_eng_2_three_wire ());
+    .spi_sn2_cs (spi_eng_cs[5]));
 
 endmodule

@@ -33,15 +33,19 @@
 ###############################################################################
 
 # SPI Connections
-create_bd_port -dir O spi_pmod_csn_o
-create_bd_port -dir I spi_pmod_csn_i
-create_bd_port -dir I spi_pmod_clk_i
-create_bd_port -dir O spi_pmod_clk_o
-create_bd_port -dir I spi_pmod_sdo_i
-create_bd_port -dir O spi_pmod_sdo_o
-create_bd_port -dir O spi_pmod_sdi_o
+create_bd_port -dir O spi_quad_csn_o
+create_bd_port -dir I spi_quad_csn_i
+create_bd_port -dir I spi_quad_clk_i
+create_bd_port -dir O spi_quad_clk_o
+create_bd_port -dir I spi_quad_sdo_i
+create_bd_port -dir O spi_quad_sdo_o
 
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 spi_eng
+create_bd_port -dir O spi_eng_sclk
+create_bd_port -dir O spi_eng_sdo
+create_bd_port -dir O spi_eng_sdo_t
+create_bd_port -dir I spi_eng_sdi
+create_bd_port -dir O -from 5 -to 0 spi_eng_cs
+create_bd_port -dir O spi_eng_three_wire
 
 # cascaded translators, their upstream side is driven by spi_execution
 # (CS 4 and 5) through system_top
@@ -52,8 +56,6 @@ for {set i 1} {$i <= 2} {incr i} {
   create_bd_port -dir O spi_sn${i}_sdo
   create_bd_port -dir O spi_sn${i}_sdo_t
   create_bd_port -dir I spi_sn${i}_cs
-
-  create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 spi_eng_${i}
 }
 
 # SPI at 100/8 = 12.5 MHz
@@ -63,12 +65,12 @@ ad_ip_parameter axi_spi_host CONFIG.C_NUM_SS_BITS 1
 ad_ip_parameter axi_spi_host CONFIG.C_SCK_RATIO 8
 ad_ip_parameter axi_spi_host CONFIG.C_FIFO_DEPTH 256
 
-ad_connect spi_pmod_csn_i axi_spi_host/ss_i
-ad_connect spi_pmod_csn_o axi_spi_host/ss_o
-ad_connect spi_pmod_clk_i axi_spi_host/sck_i
-ad_connect spi_pmod_clk_o axi_spi_host/sck_o
-ad_connect spi_pmod_sdo_i axi_spi_host/io0_i
-ad_connect spi_pmod_sdo_o axi_spi_host/io0_o
+ad_connect spi_quad_csn_i axi_spi_host/ss_i
+ad_connect spi_quad_csn_o axi_spi_host/ss_o
+ad_connect spi_quad_clk_i axi_spi_host/sck_i
+ad_connect spi_quad_clk_o axi_spi_host/sck_o
+ad_connect spi_quad_sdo_i axi_spi_host/io0_i
+ad_connect spi_quad_sdo_o axi_spi_host/io0_o
 
 # SPI translator
 ad_ip_instance spi_translator spi_slave
@@ -82,11 +84,16 @@ ad_ip_parameter spi_execution CONFIG.NUM_OF_SDIO 1
 ad_connect axi_spi_host/sck_o spi_slave/sclk
 ad_connect axi_spi_host/io0_o spi_slave/sdi
 ad_connect axi_spi_host/io1_i spi_slave/sdo
-ad_connect spi_pmod_sdi_o spi_slave/sdo
 ad_connect axi_spi_host/ss_o  spi_slave/cs
 
 ad_connect spi_slave/spi_engine_ctrl spi_execution/ctrl
-ad_connect spi_execution/spi spi_eng
+
+ad_connect spi_execution/sclk spi_eng_sclk
+ad_connect spi_execution/sdo spi_eng_sdo
+ad_connect spi_execution/sdo_t spi_eng_sdo_t
+ad_connect spi_execution/sdi spi_eng_sdi
+ad_connect spi_execution/cs spi_eng_cs
+ad_connect spi_execution/three_wire spi_eng_three_wire
 
 # the response stream is not returned upstream yet, drain it
 ad_connect spi_slave/resp_ready VCC
@@ -114,7 +121,7 @@ for {set i 1} {$i <= 2} {incr i} {
   ad_connect spi_sn${i}_cs spi_slave_${i}/cs
 
   ad_connect spi_slave_${i}/spi_engine_ctrl spi_execution_${i}/ctrl
-  ad_connect spi_execution_${i}/spi spi_eng_${i}
+  ad_connect spi_execution_${i}/sdi GND
 
   ad_connect spi_slave_${i}/resp_ready VCC
 

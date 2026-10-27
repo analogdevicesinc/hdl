@@ -81,16 +81,7 @@ module system_top (
   inout       [ 1:0]      iic_mux_scl,
   inout       [ 1:0]      iic_mux_sda,
 
-  input                   otg_vbusoc,
-
-  output                  spi_pmod1_clk,
-  output                  spi_pmod1_copi,
-  output                  spi_pmod1_cipo,
-  output                  spi_pmod1_csn,
-  output                  spi_pmod2_clk,
-  output                  spi_pmod2_copi,
-  input                   spi_pmod2_cipo,
-  output      [ 3:0]      spi_pmod2_csn
+  input                   otg_vbusoc
 );
 
   // internal signals
@@ -104,6 +95,9 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
+  wire            spi_quad_clk;
+  wire            spi_quad_copi;
+  wire            spi_quad_csn;
 
   // instantiations
 
@@ -196,18 +190,11 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .spi_pmod_clk_i (spi_pmod1_clk),
-    .spi_pmod_clk_o (spi_pmod1_clk),
-    .spi_pmod_csn_i (spi_pmod1_csn),
-    .spi_pmod_csn_o (spi_pmod1_csn),
-    .spi_pmod_sdi_o (spi_pmod1_cipo),
-    .spi_pmod_sdo_i (spi_pmod1_copi),
-    .spi_pmod_sdo_o (spi_pmod1_copi),
-    .spi_eng_sclk (spi_pmod2_clk),
-    .spi_eng_sdo (spi_pmod2_copi),
-    .spi_eng_sdo_t (),
-    .spi_eng_sdi (spi_pmod2_cipo),
-    .spi_eng_cs (spi_pmod2_csn),
-    .spi_eng_three_wire ());
+    .spi_quad_clk_i (spi_quad_clk),
+    .spi_quad_clk_o (spi_quad_clk),
+    .spi_quad_csn_i (spi_quad_csn),
+    .spi_quad_csn_o (spi_quad_csn),
+    .spi_quad_sdo_i (spi_quad_copi),
+    .spi_quad_sdo_o (spi_quad_copi));
 
 endmodule

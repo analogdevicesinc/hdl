@@ -32,45 +32,6 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-# quad spi pmod JB1
-
-set_property  -dict {PACKAGE_PIN  W12    IOSTANDARD LVCMOS33}     [get_ports spi_pmod1_clk]               ; ## JB1
-set_property  -dict {PACKAGE_PIN  W11    IOSTANDARD LVCMOS33}     [get_ports spi_pmod1_copi]              ; ## JB2
-set_property  -dict {PACKAGE_PIN  V10    IOSTANDARD LVCMOS33}     [get_ports spi_pmod1_cipo]              ; ## JB3
-set_property  -dict {PACKAGE_PIN  W8     IOSTANDARD LVCMOS33}     [get_ports spi_pmod1_csn]               ; ## JB4
-
-# spi engine pmod JA1
-
-set_property  -dict {PACKAGE_PIN  Y11    IOSTANDARD LVCMOS33}     [get_ports spi_pmod2_clk]               ; ## JA1
-set_property  -dict {PACKAGE_PIN  AA11   IOSTANDARD LVCMOS33}     [get_ports spi_pmod2_copi]              ; ## JA2
-set_property  -dict {PACKAGE_PIN  Y10    IOSTANDARD LVCMOS33}     [get_ports spi_pmod2_cipo]              ; ## JA3
-set_property  -dict {PACKAGE_PIN  AB11   IOSTANDARD LVCMOS33}     [get_ports spi_pmod2_csn[0]]            ; ## JA7
-set_property  -dict {PACKAGE_PIN  AB10   IOSTANDARD LVCMOS33}     [get_ports spi_pmod2_csn[1]]            ; ## JA8
-set_property  -dict {PACKAGE_PIN  AB9    IOSTANDARD LVCMOS33}     [get_ports spi_pmod2_csn[2]]            ; ## JA9
-set_property  -dict {PACKAGE_PIN  AA8    IOSTANDARD LVCMOS33}     [get_ports spi_pmod2_csn[3]]            ; ## JA10
-
-# spi engine pmod JC1, behind spi_slave_1 (spi_execution CS 4)
-
-set_property  -dict {PACKAGE_PIN  AB7    IOSTANDARD LVCMOS33}     [get_ports spi_pmod3_clk]               ; ## JC1P
-set_property  -dict {PACKAGE_PIN  AB6    IOSTANDARD LVCMOS33}     [get_ports spi_pmod3_copi]              ; ## JC1N
-set_property  -dict {PACKAGE_PIN  Y4     IOSTANDARD LVCMOS33}     [get_ports spi_pmod3_cipo]              ; ## JC2P
-set_property  -dict {PACKAGE_PIN  AA4    IOSTANDARD LVCMOS33}     [get_ports spi_pmod3_cs4]               ; ## JC2N
-set_property  -dict {PACKAGE_PIN  R6     IOSTANDARD LVCMOS33}     [get_ports spi_pmod3_csn[0]]            ; ## JC3P
-set_property  -dict {PACKAGE_PIN  T6     IOSTANDARD LVCMOS33}     [get_ports spi_pmod3_csn[1]]            ; ## JC3N
-set_property  -dict {PACKAGE_PIN  T4     IOSTANDARD LVCMOS33}     [get_ports spi_pmod3_csn[2]]            ; ## JC4P
-set_property  -dict {PACKAGE_PIN  U4     IOSTANDARD LVCMOS33}     [get_ports spi_pmod3_csn[3]]            ; ## JC4N
-
-# spi engine pmod JD1, behind spi_slave_2 (spi_execution CS 5)
-
-set_property  -dict {PACKAGE_PIN  V7     IOSTANDARD LVCMOS33}     [get_ports spi_pmod4_clk]               ; ## JD1P
-set_property  -dict {PACKAGE_PIN  W7     IOSTANDARD LVCMOS33}     [get_ports spi_pmod4_copi]              ; ## JD1N
-set_property  -dict {PACKAGE_PIN  V5     IOSTANDARD LVCMOS33}     [get_ports spi_pmod4_cipo]              ; ## JD2P
-set_property  -dict {PACKAGE_PIN  V4     IOSTANDARD LVCMOS33}     [get_ports spi_pmod4_cs5]               ; ## JD2N
-set_property  -dict {PACKAGE_PIN  W6     IOSTANDARD LVCMOS33}     [get_ports spi_pmod4_csn[0]]            ; ## JD3P
-set_property  -dict {PACKAGE_PIN  W5     IOSTANDARD LVCMOS33}     [get_ports spi_pmod4_csn[1]]            ; ## JD3N
-set_property  -dict {PACKAGE_PIN  U6     IOSTANDARD LVCMOS33}     [get_ports spi_pmod4_csn[2]]            ; ## JD4P
-set_property  -dict {PACKAGE_PIN  U5     IOSTANDARD LVCMOS33}     [get_ports spi_pmod4_csn[3]]            ; ## JD4N
-
 # upstream SCLK: the axi_spi_host flop driving spi_slave/sclk,
 # ext_spi_clk (clk_fpga_0, 100 MHz) / C_SCK_RATIO 8 = 12.5 MHz
 

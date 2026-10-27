@@ -33,15 +33,12 @@
 ###############################################################################
 
 # SPI Connections
-create_bd_port -dir O spi_pmod_csn_o
-create_bd_port -dir I spi_pmod_csn_i
-create_bd_port -dir I spi_pmod_clk_i
-create_bd_port -dir O spi_pmod_clk_o
-create_bd_port -dir I spi_pmod_sdo_i
-create_bd_port -dir O spi_pmod_sdo_o
-create_bd_port -dir O spi_pmod_sdi_o
-
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 spi_eng
+create_bd_port -dir O spi_quad_csn_o
+create_bd_port -dir I spi_quad_csn_i
+create_bd_port -dir I spi_quad_clk_i
+create_bd_port -dir O spi_quad_clk_o
+create_bd_port -dir I spi_quad_sdo_i
+create_bd_port -dir O spi_quad_sdo_o
 
 # SPI at 100/8 = 12.5 MHz
 ad_ip_instance axi_quad_spi axi_spi_host
@@ -50,12 +47,12 @@ ad_ip_parameter axi_spi_host CONFIG.C_NUM_SS_BITS 1
 ad_ip_parameter axi_spi_host CONFIG.C_SCK_RATIO 8
 ad_ip_parameter axi_spi_host CONFIG.C_FIFO_DEPTH 256
 
-ad_connect spi_pmod_csn_i axi_spi_host/ss_i
-ad_connect spi_pmod_csn_o axi_spi_host/ss_o
-ad_connect spi_pmod_clk_i axi_spi_host/sck_i
-ad_connect spi_pmod_clk_o axi_spi_host/sck_o
-ad_connect spi_pmod_sdo_i axi_spi_host/io0_i
-ad_connect spi_pmod_sdo_o axi_spi_host/io0_o
+ad_connect spi_quad_csn_i axi_spi_host/ss_i
+ad_connect spi_quad_csn_o axi_spi_host/ss_o
+ad_connect spi_quad_clk_i axi_spi_host/sck_i
+ad_connect spi_quad_clk_o axi_spi_host/sck_o
+ad_connect spi_quad_sdo_i axi_spi_host/io0_i
+ad_connect spi_quad_sdo_o axi_spi_host/io0_o
 
 # SPI translator
 ad_ip_instance spi_translator spi_slave
@@ -68,11 +65,10 @@ ad_ip_parameter spi_execution CONFIG.NUM_OF_SDIO 1
 ad_connect axi_spi_host/sck_o spi_slave/sclk
 ad_connect axi_spi_host/io0_o spi_slave/sdi
 ad_connect axi_spi_host/io1_i spi_slave/sdo
-ad_connect spi_pmod_sdi_o spi_slave/sdo
 ad_connect axi_spi_host/ss_o  spi_slave/cs
 
 ad_connect spi_slave/spi_engine_ctrl spi_execution/ctrl
-ad_connect spi_execution/spi spi_eng
+ad_connect spi_execution/sdi GND
 
 # the response stream is not returned upstream yet, drain it
 ad_connect spi_slave/resp_ready VCC
