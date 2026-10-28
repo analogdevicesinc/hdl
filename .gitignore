@@ -127,3 +127,5 @@ dni/
 *.info
 *.tcl.history*
 sm_hssi_port_rotation_param_map.json
+support_logic
+*_ioaux_*_param_table.hex

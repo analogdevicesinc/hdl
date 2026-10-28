@@ -94,6 +94,8 @@ CLEAN_TARGET += *.info
 CLEAN_TARGET += mem_init_*.txt
 CLEAN_TARGET += *.tcl.history*
 CLEAN_TARGET += sm_hssi_port_rotation_param_map.json
+CLEAN_TARGET += support_logic
+CLEAN_TARGET += *_ioaux_*_param_table.hex
 ifneq ($(strip $(DIR_NAME)),)
     CLEAN_TARGET := $(addprefix $(DIR_NAME)/,$(CLEAN_TARGET))
 endif
