@@ -286,6 +286,8 @@ ad_data_offload_create $adc_data_offload_name \
 
 ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
 
+ad_ip_parameter $adc_data_offload_name/storage_unit CONFIG.WR_DATA_REGISTERED 1
+
 ad_ip_instance axi_dmac axi_apollo_rx_dma
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_TYPE_SRC 1
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_TYPE_DEST 0
@@ -356,6 +358,8 @@ ad_data_offload_create $dac_data_offload_name \
                        $SHARED_DEVCLK
 
 ad_ip_parameter $dac_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
+
+ad_ip_parameter $dac_data_offload_name/storage_unit CONFIG.WR_DATA_REGISTERED 1
 
 ad_ip_instance axi_dmac axi_apollo_tx_dma
 ad_ip_parameter axi_apollo_tx_dma CONFIG.DMA_TYPE_SRC 0
