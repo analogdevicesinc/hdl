@@ -29,6 +29,7 @@ ad_ip_parameter DST_DATA_WIDTH        INTEGER 128
 ad_ip_parameter LENGTH_WIDTH          INTEGER 16
 ad_ip_parameter RD_DATA_REGISTERED    INTEGER 0
 ad_ip_parameter RD_FIFO_ADDRESS_WIDTH INTEGER 2
+ad_ip_parameter WR_DATA_REGISTERED    INTEGER 0
 
 # axis destination/source
 
