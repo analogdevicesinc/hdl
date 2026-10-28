@@ -33,7 +33,7 @@
 ###############################################################################
 
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
-source ../common/spi_translator_fpga_cascaded_bd.tcl
+source ../common/spi_translator_cascaded_fpga_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID
@@ -44,7 +44,7 @@ ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 # ILA
 create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_spi_translator
 set_property -dict [list \
-  CONFIG.C_DATA_DEPTH {2048} \
+  CONFIG.C_DATA_DEPTH {65536} \
   CONFIG.C_EN_STRG_QUAL {1} \
   CONFIG.C_MONITOR_TYPE {Native} \
   CONFIG.C_NUM_OF_PROBES {12} \

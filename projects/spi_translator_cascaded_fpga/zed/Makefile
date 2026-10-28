@@ -6,7 +6,7 @@
 
 PROJECT_NAME := spi_translator_cascaded_fpga_zed
 
-M_DEPS += ../common/spi_translator_fpga_cascaded_bd.tcl
+M_DEPS += ../common/spi_translator_cascaded_fpga_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
