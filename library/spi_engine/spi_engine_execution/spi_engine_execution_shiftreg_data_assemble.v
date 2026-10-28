@@ -100,9 +100,11 @@ module spi_engine_execution_shiftreg_data_assemble #(
   reg                                  word_ready_aligned_int;
 
   // Pipeline registers for timing closure
+  // word_ready_tok: one-cycle pulse, aligned with data_reg, on a word's last-lane handshake
   reg [                  N_STAGES-1:0] word_ready_pipe;
   reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] aligned_data;
   reg [              (DATA_WIDTH)-1:0] data_reg;
+  reg                                  word_ready_tok;
   reg [     (N_STAGES*DATA_WIDTH)-1:0] data_pipe_reg;
 
   // Lane indexing and mapping
@@ -119,8 +121,10 @@ module spi_engine_execution_shiftreg_data_assemble #(
 
   assign data_assembled      = aligned_data;
   assign word_ready          = word_ready_int;
-  assign word_ready_aligned  = word_ready_aligned_int;
-  assign lane_cfg_ready      = lane_cfg_ready_reg;
+  // Gated by lane_cfg_ready so words already in the delay line from before a reconfig are not reported ready.
+  assign word_ready_aligned  = word_ready_aligned_int & lane_cfg_ready;
+  // Drops in the same cycle lane_cfg_valid asserts, closing the T+1 window where a handshake was accepted on the old lane_lookup.
+  assign lane_cfg_ready      = lane_cfg_ready_reg & ~lane_cfg_valid;
 
   // Register incoming data on handshake
   always @(posedge clk) begin
@@ -137,14 +141,23 @@ module spi_engine_execution_shiftreg_data_assemble #(
   // Stage 0: Left-shift data for MSB alignment (left_shift_count = DATA_WIDTH - word_length)
   //          Compute bit position in aligned_data (physical_lane * DATA_WIDTH)
   // Stages 1+: Propagate data and position through pipeline for timing closure
+  // The word-ready token travels in word_ready_pipe alongside the data, one stage ahead
+  // of aligned_data, so word_ready_aligned_int is set only for a word that is in the pipeline.
   always @(posedge clk) begin
-    word_ready_pipe[0]            <= word_ready_int;
+    word_ready_tok                <= data_ready && data_valid && (active_lane_idx == last_active_idx);
+    word_ready_pipe[0]            <= word_ready_tok;
     bit_position_pipe[0+:8]       <= physical_lane * DATA_WIDTH;
     data_pipe_reg[0+: DATA_WIDTH] <= data_reg << left_shift_count;
     for (i = N_STAGES-1; i > 0; i = i - 1) begin
       word_ready_pipe[i]                       <= word_ready_pipe[i-1];
       bit_position_pipe[i*8+:8]                <= bit_position_pipe[(i-1)*8+:8];
       data_pipe_reg[i*DATA_WIDTH+: DATA_WIDTH] <= data_pipe_reg[(i-1)*DATA_WIDTH+: DATA_WIDTH];
+    end
+    // Flush on reconfig: entries in flight were assembled under the old mask.
+    // Reset also clears the pipe and token.
+    if (lane_cfg_valid || !resetn) begin
+      word_ready_pipe <= {N_STAGES{1'b0}};
+      word_ready_tok  <= 1'b0;
     end
   end
 
@@ -209,6 +222,9 @@ module spi_engine_execution_shiftreg_data_assemble #(
   always @(posedge clk) begin
     if (!resetn) begin
       active_lane_idx <= 0;
+    end else if (lane_cfg_valid) begin
+      // Restart at the new mask's first active lane.
+      active_lane_idx <= 0;
     end else begin
       if (data_ready && data_valid) begin
         if (active_lane_idx < last_active_idx) begin
@@ -222,15 +238,28 @@ module spi_engine_execution_shiftreg_data_assemble #(
 
   // Handshake and Ready Signaling
   // word_ready_int: Asserted when last active lane's data received (active_lane_idx == last_active_idx).
-  //                 Cleared when shift register consumes the data (sdo_toshiftreg).
-  // word_ready_aligned_int: Pipelined version aligned with data_assembled output timing.
+  // Cleared when shift register consumes the data (sdo_toshiftreg), or on lane_cfg_valid:
+  // an unconsumed word from the old lane mask must not reach a transfer under the new one.
+  // Priority: resetn > lane_cfg_valid > data handshake > sdo_toshiftreg.
+  // word_ready_aligned_int: Set when the word-ready token reaches the stage before aligned_data,
+  // i.e. the word credited to the next shift-register load is at the output. Cleared by that
+  // load (sdo_toshiftreg) or by lane_cfg_valid.
+  // Priority: lane_cfg_valid > token > sdo_toshiftreg, so a token arriving in a load cycle keeps the flag high.
   always @(posedge clk) begin
     if (!resetn) begin
       word_ready_int         <= 1'b0;
       word_ready_aligned_int <= 1'b0;
     end else begin
-      word_ready_aligned_int <= word_ready_pipe[N_STAGES-2];
-      if (data_ready && data_valid) begin
+      if (lane_cfg_valid) begin
+        word_ready_aligned_int <= 1'b0;
+      end else if (word_ready_pipe[N_STAGES-2]) begin
+        word_ready_aligned_int <= 1'b1;
+      end else if (sdo_toshiftreg) begin
+        word_ready_aligned_int <= 1'b0;
+      end
+      if (lane_cfg_valid) begin
+        word_ready_int <= 1'b0;
+      end else if (data_ready && data_valid) begin
         word_ready_int <= (active_lane_idx == last_active_idx);
       end else if (sdo_toshiftreg) begin
         word_ready_int <= 1'b0;

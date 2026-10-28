@@ -61,6 +61,7 @@ module spi_engine_execution #(
   input sdi_data_ready,
   output sdi_data_valid,
   output [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data,
+  output sdi_data_overflow,
 
   input sync_ready,
   output reg sync_valid,
@@ -136,7 +137,8 @@ module spi_engine_execution #(
 
   reg sdo_enabled = 1'b0;
   reg sdi_enabled = 1'b0;
-  reg pending_sdi_data_valid = 1'b0;
+  reg [1:0] sdi_pending_count = 2'b00;
+  reg sdi_capture_pending = 1'b0;
   wire sdo_enabled_io;
 
   wire [NUM_OF_SDIO-1:0] sdo_int_s;
@@ -168,8 +170,14 @@ module spi_engine_execution #(
 
   wire trigger_tx;
   wire trigger_rx;
+  wire trigger_rx_s;
+  wire sdi_last_bit_s;
+  wire sdi_word_s;
 
-  reg sleep_counter_compare;
+  // Undelayed last bit of an SDI word. Only used by the non-echo SDI_DELAY path.
+  wire sdi_capture_start = !ECHO_SCLK && sdi_enabled == 1'b1 && last_bit == 1'b1 && trigger_rx == 1'b1;
+
+  reg sleep_counter_compare = 1'b0;
   reg cs_sleep_counter_compare;
   reg cs_sleep_early_exit;
   reg cs_sleep_repeat;
@@ -201,6 +209,7 @@ module spi_engine_execution #(
     .sdi_data(sdi_data),
     .sdi_data_valid(sdi_data_valid),
     .sdi_data_ready(sdi_data_ready),
+    .sdi_data_overflow(sdi_data_overflow),
     .sdo_enabled(sdo_enabled),
     .sdi_enabled(sdi_enabled),
     .current_cmd(cmd_d1),
@@ -217,6 +226,10 @@ module spi_engine_execution #(
     .transfer_active(transfer_active),
     .trigger_tx(trigger_tx),
     .trigger_rx(trigger_rx),
+    .trigger_rx_s(trigger_rx_s),
+    .last_sdi_bit(sdi_last_bit_s),
+    .sdi_word_trigger(sdi_capture_start),
+    .sdi_word_s(sdi_word_s),
     .first_bit(first_bit),
     .cs_activate(cs_activate));
 
@@ -233,6 +246,9 @@ module spi_engine_execution #(
   end
   assign sdo_enabled_io = (exec_transfer_cmd) ? cmd[8] : sdo_enabled;
 
+  // resetn is checked last so it overrides without freezing the sibling
+  // registers: exec_cmd can stay true while resetn is low, which would skip
+  // every register that is only cleared in the exec_cmd-false branch.
   always @(posedge clk) begin
     if (exec_cmd) begin
       cmd_d1                   <= cmd;
@@ -247,7 +263,12 @@ module spi_engine_execution #(
       exec_sdo_lane_config_reg <= (inst == CMD_WRITE) && (cmd[10:8] == REG_SDO_LANE_CONFIG);
     end else begin
       exec_sdo_lane_config_reg <= 1'b0;
-      sleep_counter_compare <= sleep_counter == cmd_d1_time && clk_div_last && sleep_counter_increment;
+      sleep_counter_compare    <= sleep_counter == cmd_d1_time && clk_div_last && sleep_counter_increment;
+    end
+    if (!resetn) begin
+      exec_transfer_cmd_reg    <= 1'b0;
+      exec_sdo_lane_config_reg <= 1'b0;
+      sleep_counter_compare    <= 1'b0;
     end
   end
 
@@ -363,13 +384,54 @@ module spi_engine_execution #(
     end
   end
 
+  // Delayed copy of sdi_capture_start (tag pipeline in the shiftreg, same length
+  // as trigger_rx_d). The live sdi_enabled/last_bit_count cannot be used at the
+  // delayed time: they may already belong to the next transfer.
+  // Constant 0 when ECHO_SCLK=1.
+  wire pending_sdi_trigger = sdi_word_s;
+
+  // echo_last_bit is already synchronized to clk, unlike sdi_last_bit_s/trigger_rx_s.
+  wire pending_sdi_echo_trigger = ECHO_SCLK && echo_last_bit;
+
+  // Words held in the shiftreg's output+skid buffer: +1 on capture, -1 on drain.
+  // A single bit cannot tell empty from one word left after a skid->output promotion.
+  wire sdi_capture_event = pending_sdi_trigger == 1'b1 ||
+                           (sdi_enabled == 1'b1 && pending_sdi_echo_trigger == 1'b1);
+  wire sdi_drain_event = sdi_data_valid == 1'b1 && sdi_data_ready == 1'b1;
+
   always @(posedge clk) begin
-    if (sdi_enabled == 1'b1 && last_bit && trigger_rx == 1'b1) begin
-      pending_sdi_data_valid <= 1'b1;
-    end else if (sdi_data_ready == 1'b1) begin
-      pending_sdi_data_valid <= 1'b0;
+    if (!resetn) begin
+      sdi_pending_count <= 2'b00;
+    end else if (sdi_capture_event && !sdi_drain_event) begin
+      sdi_pending_count <= sdi_pending_count + 2'b01;
+    end else if (!sdi_capture_event && sdi_drain_event && sdi_pending_count != 2'b00) begin
+      sdi_pending_count <= sdi_pending_count - 2'b01;
     end
   end
+
+  // High from the undelayed last bit (sdi_capture_start) until the delayed capture
+  // (pending_sdi_trigger) lands. Keeps io_ready1/io_ready2 from advancing the FSM
+  // before the last bit is sampled; sdi_pending_count only counts landed words.
+  // CLEAR is checked after SET so a same-cycle coincidence resolves to "not pending"
+  // instead of latching stuck. resetn overrides both.
+  // SET and CLEAR are the same event SDI_DELAY+2 clocks apart. The 1:1 pairing relies
+  // on the io_ready1/io_ready2 stall keeping the next SET >= 3 clocks after the
+  // previous CLEAR.
+  always @(posedge clk) begin
+    if (sdi_capture_start == 1'b1) begin
+      sdi_capture_pending <= 1'b1;
+    end
+    if (pending_sdi_trigger == 1'b1) begin
+      sdi_capture_pending <= 1'b0;
+    end
+    if (!resetn) begin
+      sdi_capture_pending <= 1'b0;
+    end
+  end
+
+  // Also true in the SET cycle: sdi_capture_pending is registered, so without this
+  // io_ready1/io_ready2 would miss the first cycle.
+  wire sdi_capture_in_flight = sdi_capture_pending || sdi_capture_start;
 
   always @(posedge clk) begin
     if (!resetn) begin
@@ -437,13 +499,20 @@ module spi_engine_execution #(
   assign sync = cmd_d1[7:0];
 
   // The sdi_data_valid signal has inherent delays due to ECHO_SCLK and SCLK timing.
-  // To handle backpressure, pending_sdi_data_valid is asserted when the last bit
-  // is received and remains high until sdi_data_ready acknowledges the data.
-  assign io_ready1 =  (pending_sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
-                      (sdo_enabled_io == 1'b0 || sdo_io_ready == 1'b1);
+  // sdi_pending_count blocks a new capture while a word is unconsumed.
+  // sdi_capture_pending is checked separately: the count can read 0 while a
+  // delayed capture is still in flight.
+  // io_ready1 takes the same last_transfer bypass as io_ready2: on the last
+  // repeat there is no further SDO word to prefetch, so waiting would deadlock.
+  // last_transfer is still 1 in the first idle cycle after a transfer; !idle keeps
+  // the bypass from applying to a back-to-back transfer accepted in that cycle.
+  assign io_ready1 =  (sdi_capture_in_flight == 1'b0) &&
+                      (sdi_pending_count == 2'd0 || sdi_data_ready == 1'b1) &&
+                      (sdo_enabled_io == 1'b0 || (last_transfer == 1'b1 && !idle) || sdo_io_ready == 1'b1);
 
-  assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
-                     (sdo_enabled_io == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
+  assign io_ready2 = (sdi_capture_in_flight == 1'b0) &&
+                     (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
+                     (sdo_enabled_io == 1'b0 || (last_transfer == 1'b1 && !idle) || sdo_io_ready == 1'b1);
 
   always @(posedge clk) begin
     if (idle) begin
@@ -510,7 +579,7 @@ module spi_engine_execution #(
       if (ECHO_SCLK) begin
         transfer_done <= echo_last_bit && echo_last_transfer;
       end else begin
-        transfer_done <= (wait_for_io && io_ready1 && last_transfer) || (~wait_for_io && transfer_active && end_of_word && last_transfer);
+        transfer_done <= (wait_for_io && io_ready1 && last_transfer) || (~wait_for_io && transfer_active && end_of_word && last_transfer && io_ready2);
       end
     end
   end
