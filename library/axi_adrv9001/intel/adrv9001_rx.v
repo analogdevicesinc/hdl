@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2020-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -38,6 +38,7 @@
 module adrv9001_rx #(
   parameter CMOS_LVDS_N = 0,
   parameter FPGA_TECHNOLOGY = 0,
+  parameter EN_RX_MCS_TO_STRB_M = 0,
   parameter NUM_LANES = 3,
   parameter DRP_WIDTH = 5,
   parameter IODELAY_ENABLE = 0,
@@ -56,9 +57,12 @@ module adrv9001_rx #(
   input                   rx_strobe_in_n_NC,
   input                   rx_strobe_in_p_strobe_in,
 
+  input                   mcs_6th_pulse,
+
   // internal reset and clocks
   input                   adc_rst,
   output                  adc_clk,
+  output                  adc_if_rst,
   output                  adc_clk_div,
   output      [7:0]       adc_data_0,
   output      [7:0]       adc_data_1,
@@ -68,6 +72,7 @@ module adrv9001_rx #(
   output                  adc_valid,
 
   output     [31:0]       adc_clk_ratio,
+  output     [ 9:0]       mcs_to_strobe_delay,
 
   // delay interface (for IDELAY macros)
   input                             up_clk,
@@ -78,10 +83,7 @@ module adrv9001_rx #(
   input                   delay_rst,
   output                  delay_locked,
 
-  input                   mssi_sync,
-  output                  ssi_sync_out,
-  input                   ssi_sync_in,
-  output                  ssi_rst
+  input                   mssi_sync
 );
 
   reg [3:0] valid_gen = 4'b0001;
@@ -145,12 +147,12 @@ module adrv9001_rx #(
   assign adc_clk_div = rx_clk;
   assign adc_clk = rx_clk;
   assign adc_clk_ratio = 1;
+  assign adc_if_rst = adc_rst;
 
   // Drive unused signals
   assign delay_locked = 'b0;
   assign up_adc_drdata = 'b0;
 
-  assign ssi_sync_out = 'b0;
-  assign ssi_rst = 'b0;
+  assign mcs_to_strobe_delay = 'b0;
 
 endmodule

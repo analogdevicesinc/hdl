@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -42,7 +42,6 @@ module adrv9001_tx #(
   parameter USE_BUFG = 0,
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
-  input                   ref_clk,
   input                   up_clk,
 
   input                   mssi_sync,
@@ -62,13 +61,13 @@ module adrv9001_tx #(
 
   input                   rx_clk_div,
   input                   rx_clk,
-  input                   rx_ssi_rst,
 
   // internal resets and clocks
 
   output     [31:0]       dac_clk_ratio,
 
   input                   dac_rst,
+  output                  dac_if_rst,
   output                  dac_clk_div,
 
   input       [7:0]       dac_data_0,
@@ -136,5 +135,6 @@ module adrv9001_tx #(
   assign dac_clk = tx_clk;
 
   assign dac_clk_ratio = 1;
+  assign dac_if_rst = dac_rst;
 
 endmodule
