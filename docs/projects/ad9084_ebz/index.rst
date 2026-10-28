@@ -133,6 +133,17 @@ Block design
    - S = 1
    - N = NP = 16
 
+On the :xilinx:`VCU118`, **ASYMMETRIC_A_B_MODE = 0** with **NUM_LINKS = 2**
+only works when the number of lanes per link (L) is a multiple of 4, i.e.
+L = 4, 8 or 12. For fewer lanes, such as the AD9088 8T8R mode with L = 2
+(M = 8, NP = 16), use **ASYMMETRIC_A_B_MODE = 1**.
+
+In this mode, a single TX transceiver controller drives both links and
+programs one QPLL per group of 4 of its lanes, while the side B lanes start
+at physical lane 12. With L < 4, a group spans the side A and side B quads,
+so the QPLL of the side B quad is never programmed and side B does not
+link up. In asymmetric mode, each side has its own transceiver controller.
+
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -253,6 +264,71 @@ The Tx link is operating with the following parameters:
 - REF_CLK: 625 MHz (Lane Rate/33)
 - JESD204C Lane Rate: 20.625 Gbps
 - QPLL1
+
+Example build for the AD9088 8T8R mode on VCU118; M=8; L=2; JESD204C
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is the default 8T8R use case of the AD9088 (device profile
+``204C_8T8R_M8_L2_NP16_8p0_4x8``). With 2 lanes per link it must be built in
+asymmetric mode on the :xilinx:`VCU118`, see the warning on the lanes per link
+above.
+
+.. warning::
+
+   **Build instructions:**
+
+   The project must be built with the following parameters:
+
+   .. shell:: bash
+      :no-path:
+
+      $make JESD_MODE=64B66B  \
+      $     RX_LANE_RATE=16.5 \
+      $     TX_LANE_RATE=16.5 \
+      $     RX_JESD_M=8       \
+      $     RX_JESD_L=2       \
+      $     RX_JESD_S=1       \
+      $     RX_JESD_NP=16     \
+      $     TX_JESD_M=8       \
+      $     TX_JESD_L=2       \
+      $     TX_JESD_S=1       \
+      $     TX_JESD_NP=16     \
+      $     ASYMMETRIC_A_B_MODE=1 \
+      $     RX_B_LANE_RATE=16.5 \
+      $     TX_B_LANE_RATE=16.5 \
+      $     RX_B_JESD_M=8     \
+      $     RX_B_JESD_L=2     \
+      $     RX_B_JESD_S=1     \
+      $     RX_B_JESD_NP=16   \
+      $     TX_B_JESD_M=8     \
+      $     TX_B_JESD_L=2     \
+      $     TX_B_JESD_S=1     \
+      $     TX_B_JESD_NP=16
+
+The Rx link is operating with the following parameters on each Apollo side:
+
+- Rx Deframer parameters: L=2, M=8, F=8, S=1, NP=16, N=16
+- Sample Rate: 250 MSPS
+- RX_DEVICE_CLK: 250 MHz (Lane Rate/66)
+- REF_CLK: 250 MHz (Lane Rate/66)
+- JESD204C Lane Rate: 16.5 Gbps
+- QPLL1
+
+The Tx link is operating with the following parameters on each Apollo side:
+
+- Tx Framer parameters: L=2, M=8, F=8, S=1, NP=16, N=16
+- Sample Rate: 250 MSPS
+- TX_DEVICE_CLK: 250 MHz (Lane Rate/66)
+- REF_CLK: 250 MHz (Lane Rate/66)
+- JESD204C Lane Rate: 16.5 Gbps
+- QPLL1
+
+.. note::
+
+   16.5 Gbps needs the QPLL1 in full-rate mode, with the VCO at 8.25 GHz. The
+   QPLL0 of the GTY4 (VCO 9.8 to 16.375 GHz) can't generate it, neither at
+   16.5 GHz (half rate) nor at 8.25 GHz (full rate), so the devicetree has to
+   select the QPLL1 (``adi,sys-clk-select`` = ``XCVR_QPLL1``).
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
