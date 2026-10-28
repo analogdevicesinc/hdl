@@ -743,7 +743,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV9026 & ADRV9029 Prototyping Platform User Guide <resources/eval/user-guides/adrv9025>`
+- :external+system-level:ref:`ADRV9026 & ADRV9029 Prototyping Platform User Guide <adrv902x>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -754,7 +754,7 @@ Here you can find the quick start guides available for these evaluation boards:
    * - Evaluation board
      - Zynq UltraScale+ MP
    * - ADRV9026/ADRV9029
-     - :dokuwiki:`ZCU102 <resources/eval/user-guides/adrv9026/quickstart/zynqmp>`
+     - :external+system-level:ref:`ZCU102 <adrv902x quickstart zcu102>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
