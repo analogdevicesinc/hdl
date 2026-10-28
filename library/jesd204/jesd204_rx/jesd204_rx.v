@@ -174,6 +174,8 @@ module jesd204_rx #(
   localparam CW = DATA_PATH_WIDTH;
   localparam HW = 2;
 
+  localparam HALF_NO_OF_LANES = NUM_LANES / 2;
+
   wire [7:0] cfg_beats_per_multiframe = cfg_octets_per_multiframe >> DPW_LOG2;
   wire [7:0] device_cfg_beats_per_multiframe_s;
 
@@ -185,6 +187,8 @@ module jesd204_rx #(
   reg buffer_release_d1 = 1'b0;
   wire [NUM_LANES-1:0] buffer_ready_n;
   wire all_buffer_ready_n;
+  wire all_buffer_ready_n_1;
+  wire all_buffer_ready_n_2;
   wire dev_all_buffer_ready_n;
 
   reg eof_reset = 1'b1;
@@ -219,6 +223,9 @@ module jesd204_rx #(
   end
 
   assign all_buffer_ready_n = |(buffer_ready_n & ~cfg_lanes_disable);
+
+  assign all_buffer_ready_n_1 = |(buffer_ready_n[HALF_NO_OF_LANES-1:0] & ~cfg_lanes_disable[HALF_NO_OF_LANES-1:0]);
+  assign all_buffer_ready_n_2 = |(buffer_ready_n[NUM_LANES-1:HALF_NO_OF_LANES] & ~cfg_lanes_disable[NUM_LANES-1:HALF_NO_OF_LANES]);
 
   sync_bits #(
     .NUM_OF_BITS (1),
@@ -556,6 +563,8 @@ module jesd204_rx #(
 
     wire [7:0] status_lane_skew;
     wire all_buffer_ready_n_d;
+    wire all_buffer_ready_n_d_1;
+    wire all_buffer_ready_n_d_2;
     // Make sure these signals do not get optimized as single instance for all
     // channels. Keeping one instance per channel would help with timing.
     (* dont_touch = "yes" *) reg err_statistics_reset_64b;
@@ -593,10 +602,19 @@ module jesd204_rx #(
     (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
       .WIDTH(1),
       .REGISTERED(NUM_BUFFER_READY_PIPELINE)
-    ) i_all_buffer_ready_pipeline_stage (
+    ) i_all_buffer_ready_pipeline_stage_1 (
       .clk(clk),
-      .in(all_buffer_ready_n),
-      .out(all_buffer_ready_n_d));
+      .in(all_buffer_ready_n_1),
+      .out(all_buffer_ready_n_d_1));
+    (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+      .WIDTH(1),
+      .REGISTERED(NUM_BUFFER_READY_PIPELINE)
+    ) i_all_buffer_ready_pipeline_stage_2 (
+      .clk(clk),
+      .in(all_buffer_ready_n_2),
+      .out(all_buffer_ready_n_d_2));
+
+    assign all_buffer_ready_n_d = all_buffer_ready_n_d_1 | all_buffer_ready_n_d_2;
 
     // Register event_data_phase signal to break the combinational path coming
     // from jesd204_rx_ctrl_64b and going into jesd204_rx_lane_64b.
