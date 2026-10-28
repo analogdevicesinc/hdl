@@ -166,7 +166,7 @@ module jesd204_tx_lane_64b #(
     cfg_header_mode_int <= cfg_header_mode;
   end
 
-  jesd204_tx_header i_header_gen (
+  (* DONT_TOUCH = "yes" *) jesd204_tx_header i_header_gen (
     .clk(clk),
     .reset(~tx_ready | cfg_lane_disable_int),
 
