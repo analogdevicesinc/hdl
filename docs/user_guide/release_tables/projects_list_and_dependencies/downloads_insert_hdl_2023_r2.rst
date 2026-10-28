@@ -1961,7 +1961,7 @@ JUPITERSDR
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`JUPITER-SDR`
+   * - :adi:`JUPITER-SDR <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-jupiter-ebz.html>`
      - :git-hdl:`jupiter_sdr <hdl_2023_r2:projects/jupiter_sdr>`
      - :git-hdl:`jupiter_sdr <hdl_2023_r2:projects/jupiter_sdr>`
      - jupiter_sdr_jupiter_sdr
@@ -2002,7 +2002,7 @@ PULSAR_ADC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`PULSAR-ADC-PMDZ <pulsar_adc_evaluation_tools>`
+   * - :adi:`PULSAR-ADC-PMDZ <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/PulsarPMODs.html>`
      - :git-hdl:`pulsar_adc <hdl_2023_r2:projects/pulsar_adc>`
      - :git-hdl:`coraz7s <hdl_2023_r2:projects/pulsar_adc/coraz7s>`
        :git-hdl:`zed <hdl_2022_r2:projects/pulsar_adc/zed>`
@@ -2030,7 +2030,7 @@ PULSAR_LVDS_ADC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`PULSAR-ADC-PMDZ <pulsar_adc_evaluation_tools>`
+   * - :adi:`PULSAR-ADC-PMDZ <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/PulsarPMODs.html>`
      - :git-hdl:`pulsar_lvds_adc <hdl_2023_r2:projects/pulsar_lvds_adc>`
      - :git-hdl:`zed <hdl_2023_r2:projects/pulsar_lvds_adc/zed>`
      - :ref:`pulsar_lvds_adc_zed <util_hdl_2023_r2_pulsar_lvds_adc_zed>`
@@ -2042,7 +2042,7 @@ PULSAR_LVDS_ADC
        :git-hdl:`axi_pwm_gen <hdl_2023_r2:library/axi_pwm_gen>`
        :git-hdl:`axi_spdif_tx <hdl_2023_r2:library/axi_spdif_tx>`
        :git-hdl:`axi_sysid <hdl_2023_r2:library/axi_sysid>`
-       :git-hdl:`axi_sysid_rom <hdl_2023_r2:library/axi_sysid_rom>`
+       :git-hdl:`sysid_rom <hdl_2023_r2:library/sysid_rom>`
        :git-hdl:`util_i2c_mixer <hdl_2023_r2:library/util_i2c_mixer>`
 
 Help & Support

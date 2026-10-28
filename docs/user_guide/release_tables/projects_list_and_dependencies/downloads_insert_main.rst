@@ -474,7 +474,7 @@ EVAL-AD57XX-ARDZ
      - :git-hdl:`de10nano <projects/ad57xx_ardz/de10nano>`
      - NA
      - :git-hdl:`axi_dmac <library/axi_dmac>`
-   * - :adi:`EVAL-AD5782-ARDZ <eval-ad5782ardz>`
+   * - EVAL-AD5782-ARDZ
      - 
      - 
      - 
@@ -2143,10 +2143,14 @@ FMCDAQ2
      - Library Cores
    * - :adi:`AD-FMCDAQ2-EBZ`
      - :git-hdl:`daq2 <projects/daq2>`
-     - :git-hdl:`zed <projects/daq2/zed>`
-       :git-hdl:`a10soc <projects/daq2/a10soc>`
-     - daq2_zed
-       NA
+     - :git-hdl:`a10soc <projects/daq2/a10soc>`
+       :git-hdl:`kcu105 <projects/daq2/kcu105>`
+       :git-hdl:`zc706 <projects/daq2/zc706>`
+       :git-hdl:`zcu102 <projects/daq2/zcu102>`
+     - NA
+       :ref:`daq2_kcu105 <util_main_daq2_kcu105>`
+       :ref:`daq2_zc706 <util_main_daq2_zc706>`
+       :ref:`daq2_zcu102 <util_main_daq2_zcu102>`
      - :git-hdl:`ad_ip_jesd204_tpl_adc <library/jesd204/ad_ip_jesd204_tpl_adc>`
        :git-hdl:`ad_ip_jesd204_tpl_dac <library/jesd204/ad_ip_jesd204_tpl_dac>`
        :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
@@ -2314,7 +2318,7 @@ JUPITERSDR
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`JUPITER-SDR`
+   * - :adi:`JUPITER-SDR <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-jupiter-ebz.html>`
      - :git-hdl:`jupiter_sdr <projects/jupiter_sdr>`
      - :git-hdl:`jupiter_sdr <projects/jupiter_sdr>`
      - jupiter_sdr_jupiter_sdr
@@ -2354,7 +2358,7 @@ PULSAR_ADC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`PULSAR-ADC-PMDZ <pulsar_adc_evaluation_tools>`
+   * - :adi:`PULSAR-ADC-PMDZ <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/PulsarPMODs.html>`
      - :git-hdl:`pulsar_adc <projects/pulsar_adc>`
      - :git-hdl:`coraz7s <projects/pulsar_adc/coraz7s>`
        :git-hdl:`zed <projects/pulsar_adc/zed>`

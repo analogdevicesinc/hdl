@@ -170,7 +170,7 @@ Examples:
 
 * :git-hdl:`docs/regmap/adi_regmap_spi_engine.txt`
 * :git-hdl:`docs/regmap/adi_regmap_adc.txt`, uses ``WHERE``
-* :git-hdl:`docs/regmap/adi_regmap_axi_ad3552r.txt`, uses ``USING``
+* :git-hdl:`docs/regmap/adi_regmap_axi_ad35xxr.txt`, uses ``USING``
 
 .. _hdl-regmap-using:
 

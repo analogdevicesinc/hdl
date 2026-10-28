@@ -1102,7 +1102,7 @@ CN0501
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`CN0501`
+   * - CN0501
      - :git-hdl:`cn0501 <hdl_2021_r2:projects/cn0501>`
      - :git-hdl:`coraz7s <hdl_2021_r2:projects/cn0501/coraz7s>`
      - :ref:`cn0501_coraz7s <util_hdl_2021_r2_cn0501_coraz7s>`
@@ -1674,7 +1674,7 @@ PULSAR_ADC_PMDZ
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`PULSAR-ADC-PMDZ <pulsar_adc_evaluation_tools>`
+   * - :adi:`PULSAR-ADC-PMDZ <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/PulsarPMODs.html>`
      - :git-hdl:`pulsar_adc_pmdz <hdl_2021_r2:projects/pulsar_adc_pmdz>`
      - :git-hdl:`coraz7s <hdl_2021_r2:projects/pulsar_adc_pmdz/coraz7s>`
      - :ref:`pulsar_adc_pmdz_coraz7s <util_hdl_2021_r2_pulsar_adc_pmdz_coraz7s>`
