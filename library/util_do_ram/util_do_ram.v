@@ -42,7 +42,8 @@ module util_do_ram #(
   parameter DST_DATA_WIDTH = 128,
   parameter LENGTH_WIDTH = 16,
   parameter RD_DATA_REGISTERED = 0,
-  parameter RD_FIFO_ADDRESS_WIDTH = 2
+  parameter RD_FIFO_ADDRESS_WIDTH = 2,
+  parameter WR_DATA_REGISTERED = 0
 ) (
   input                                    wr_request_enable,
   input                                    wr_request_valid,
@@ -304,7 +305,7 @@ module util_do_ram #(
     .DATA_WIDTH(DST_DATA_WIDTH),
     .ADDRESS_WIDTH(RD_FIFO_ADDRESS_WIDTH),
     .ASYNC_CLK(0),
-    .M_AXIS_REGISTERED(0),
+    .M_AXIS_REGISTERED(WR_DATA_REGISTERED),
     .TLAST_EN(1),
     .TKEEP_EN(1)
   ) i_rd_fifo (
