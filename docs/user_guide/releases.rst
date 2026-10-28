@@ -174,37 +174,37 @@ Release branches
      - Quartus Pro 16.0
      - Vivado 2016.2
      - `Release notes 2016_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2016_r2>`__
-     - `Wiki list for hdl_2016_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2016_r2>`__
+     - :ref:`downloads_insert_hdl_2016_r2`
      - ---
    * - :git-hdl:`hdl_2016_r1 <hdl_2016_r1:>`
      - Quartus Pro 15.1
      - Vivado 2015.4.2
      - `Release notes 2016_R1 <https://github.com/analogdevicesinc/hdl/releases/tag/2016_r1>`__
-     - `Wiki list for hdl_2016_r1 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2016_r1>`__
+     - ---
      - ---
    * - :git-hdl:`hdl_2015_r2 <hdl_2015_r2:>`
      - Quartus Pro 15.0.2
      - Vivado 2015.2
      - `Release notes 2015_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2015_r2>`__
-     - `Wiki list for hdl_2015_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2015_r2>`__
+     - ---
      - ---
    * - :git-hdl:`hdl_2015_r1 <hdl_2015_r1:>`
      - Quartus Pro 14.1
      - Vivado 2014.4.1
      - `Release notes 2015_R1 <https://github.com/analogdevicesinc/hdl/releases/tag/2015_r1>`__
-     - `Wiki list for hdl_2015_r1 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2015_r1>`__
+     - :ref:`downloads_insert_hdl_2015_r1`
      - ---
    * - :git-hdl:`hdl_2014_r2 <hdl_2014_r2:>`
      - Quartus Pro 14.0
      - Vivado 2014.2
      - `Release notes 2014_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2014_r2>`__
-     - `Wiki list for hdl_2014_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2014_r2>`__
+     - ---
      - ---
    * - :git-hdl:`hdl_2014_r1 <hdl_2014_r1:>`
      - Quartus Pro 14.0
      - Vivado 2013.4
      - `Release notes 2014_R1 <https://github.com/analogdevicesinc/hdl/releases/tag/2014_r1>`__
-     - `Wiki list for hdl_2014_r1 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2014_r1>`__
+     - ---
      - ---
 
 About the tools we use

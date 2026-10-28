@@ -142,7 +142,7 @@ Code-related check list
 #.  We also created a
     :git-hdl:`script <.github/scripts/check_guideline.py>`
     to check some of those rules. To see which ones and how to use the script,
-    :git-hdl:`click here <.github/scripts/readme_check_guideline.md>`
+    :git-hdl:`click here <.github/scripts/README.md>`
     (this is part of our GitHub actions check as well, and if this fails,
     the PR will not be approved).
 #.  Check if in the meantime there were any **changes to the common IPs**
