@@ -169,6 +169,7 @@
 <url><loc>https://analogdevicesinc.github.io/hdl/library/jesd204/ad_ip_jesd204_tpl_dac/</loc><lastmod>2026-10-29</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/jesd204/axi_jesd204_rx/</loc><lastmod>2026-10-29</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/jesd204/axi_jesd204_tx/</loc><lastmod>2026-10-29</lastmod></url>
+<url><loc>https://analogdevicesinc.github.io/hdl/library/jesd204/component_testbenches/</loc><lastmod>2026-10-29</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/jesd204/generic_jesd_bds/</loc><lastmod>2026-10-29</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/jesd204/</loc><lastmod>2026-10-29</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/jesd204/troubleshoot/troubleshoot_jesd204_tx/</loc><lastmod>2026-10-29</lastmod></url>
@@ -185,6 +186,7 @@
 <url><loc>https://analogdevicesinc.github.io/hdl/library/spi_engine/spi_engine_interconnect/</loc><lastmod>2026-10-29</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/spi_engine/spi_engine_offload/</loc><lastmod>2026-10-29</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/spi_engine/tutorial/</loc><lastmod>2026-10-29</lastmod></url>
+<url><loc>https://analogdevicesinc.github.io/hdl/library/spi_slave/</loc><lastmod>2026-10-29</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/template_framework/</loc><lastmod>2026-10-29</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/template_framework/instruction-set/</loc><lastmod>2026-10-29</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/template_framework/interface/</loc><lastmod>2026-10-29</lastmod></url>

@@ -322,7 +322,7 @@ CFTLSTD
      -
      -
      -
-   * - :adi:`CN0357`
+   * - :adi:`CN0357 <design-center/reference-designs/circuits-from-the-lab/cn0357>`
      -
      -
      -

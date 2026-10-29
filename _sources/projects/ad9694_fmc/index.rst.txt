@@ -117,7 +117,7 @@ parameters:
 - F: 2 octets per frame
 
 For more details, check *Table 27, JESD204B Output Configurations* from the
-:adi:`AD9694 data sheet`.
+:adi:`AD9694 data sheet <AD9694>`.
 
 Deframer paramaters: L=4, M=4, F=2, S=1, NP=16
 
