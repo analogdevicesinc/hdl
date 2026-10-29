@@ -69,6 +69,7 @@ Contents
    ADAQ23875 <adaq23875/index>
    ADAQ7980-SDZ <adaq7980_sdz/index>
    ADAQ8092-FMC <adaq8092_fmc/index>
+   ADAR3000 <adar3000/index>
    ADMX100X-EVB <admx100x_evb/index>
    ADMX6001-EBZ <admx6001_ebz/index>
    ADRD8012-01Z <adrd8012_01z/index>
