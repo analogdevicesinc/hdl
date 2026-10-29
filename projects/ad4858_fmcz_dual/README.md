@@ -4,7 +4,7 @@
   - [EVAL-AD4858](https://www.analog.com/eval-ad4858)
 
 - System documentation: TO BE ADDED
-- HDL project documentation: TO BE ADDED
+- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad4858_fmcz_dual/index.html
 - Evaluation board VADJ range: 1.8V - 3.3V
 
 :warning: Make sure the power supplies on the evaluation board are configured as expected, from jumper selection. In particular, pay attention to JVIO to be equal to VADJ, otherwise you risk damaging the FPGA and EVAL-AD4858 board.
