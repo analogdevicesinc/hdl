@@ -116,74 +116,74 @@ set_property PACKAGE_PIN AF2 [get_ports {rx_p_3[6]}]
 set_property PACKAGE_PIN AE4 [get_ports {rx_p_3[7]}]
 
 # PL DDR
-set_property -dict {PACKAGE_PIN F27 IOSTANDARD LVDS} [get_ports ddr4_ref_0_clk_p]
+set_property -dict {PACKAGE_PIN F27 IOSTANDARD LVDS} [get_ports ddr4_ref_0_clk_p]  ;# PL_DDR4_0_CKIN_P, MIG reference clock
 
-set_property PACKAGE_PIN C31 [get_ports {ddr4_rtl_0_adr[0]}]
-set_property PACKAGE_PIN B31 [get_ports {ddr4_rtl_0_adr[1]}]
-set_property PACKAGE_PIN A27 [get_ports {ddr4_rtl_0_adr[2]}]
-set_property PACKAGE_PIN A28 [get_ports {ddr4_rtl_0_adr[3]}]
-set_property PACKAGE_PIN A30 [get_ports {ddr4_rtl_0_adr[4]}]
-set_property PACKAGE_PIN A31 [get_ports {ddr4_rtl_0_adr[5]}]
-set_property PACKAGE_PIN C28 [get_ports {ddr4_rtl_0_adr[6]}]
-set_property PACKAGE_PIN C29 [get_ports {ddr4_rtl_0_adr[7]}]
-set_property PACKAGE_PIN B29 [get_ports {ddr4_rtl_0_adr[8]}]
-set_property PACKAGE_PIN B30 [get_ports {ddr4_rtl_0_adr[9]}]
-set_property PACKAGE_PIN C27 [get_ports {ddr4_rtl_0_adr[10]}]
-set_property PACKAGE_PIN B28 [get_ports {ddr4_rtl_0_adr[11]}]
-set_property PACKAGE_PIN F30 [get_ports {ddr4_rtl_0_adr[12]}]
-set_property PACKAGE_PIN F31 [get_ports {ddr4_rtl_0_adr[13]}]
-set_property PACKAGE_PIN E29 [get_ports {ddr4_rtl_0_adr[14]}]
-set_property PACKAGE_PIN D29 [get_ports {ddr4_rtl_0_adr[15]}]
-set_property PACKAGE_PIN E30 [get_ports {ddr4_rtl_0_adr[16]}]
-set_property PACKAGE_PIN G30 [get_ports {ddr4_rtl_0_dq[0]}]
-set_property PACKAGE_PIN F26 [get_ports {ddr4_rtl_0_dq[1]}]
-set_property PACKAGE_PIN H28 [get_ports {ddr4_rtl_0_dq[2]}]
-set_property PACKAGE_PIN G26 [get_ports {ddr4_rtl_0_dq[3]}]
-set_property PACKAGE_PIN H29 [get_ports {ddr4_rtl_0_dq[4]}]
-set_property PACKAGE_PIN J27 [get_ports {ddr4_rtl_0_dq[5]}]
-set_property PACKAGE_PIN G31 [get_ports {ddr4_rtl_0_dq[6]}]
-set_property PACKAGE_PIN J26 [get_ports {ddr4_rtl_0_dq[7]}]
-set_property PACKAGE_PIN M25 [get_ports {ddr4_rtl_0_dq[8]}]
-set_property PACKAGE_PIN L27 [get_ports {ddr4_rtl_0_dq[9]}]
-set_property PACKAGE_PIN J25 [get_ports {ddr4_rtl_0_dq[10]}]
-set_property PACKAGE_PIN K28 [get_ports {ddr4_rtl_0_dq[11]}]
-set_property PACKAGE_PIN L25 [get_ports {ddr4_rtl_0_dq[12]}]
-set_property PACKAGE_PIN J29 [get_ports {ddr4_rtl_0_dq[13]}]
-set_property PACKAGE_PIN K25 [get_ports {ddr4_rtl_0_dq[14]}]
-set_property PACKAGE_PIN L28 [get_ports {ddr4_rtl_0_dq[15]}]
-set_property PACKAGE_PIN M18 [get_ports {ddr4_rtl_0_dq[16]}]
-set_property PACKAGE_PIN L15 [get_ports {ddr4_rtl_0_dq[17]}]
-set_property PACKAGE_PIN L18 [get_ports {ddr4_rtl_0_dq[18]}]
-set_property PACKAGE_PIN M16 [get_ports {ddr4_rtl_0_dq[19]}]
-set_property PACKAGE_PIN N19 [get_ports {ddr4_rtl_0_dq[20]}]
-set_property PACKAGE_PIN M15 [get_ports {ddr4_rtl_0_dq[21]}]
-set_property PACKAGE_PIN N18 [get_ports {ddr4_rtl_0_dq[22]}]
-set_property PACKAGE_PIN N16 [get_ports {ddr4_rtl_0_dq[23]}]
-set_property PACKAGE_PIN K17 [get_ports {ddr4_rtl_0_dq[24]}]
-set_property PACKAGE_PIN G16 [get_ports {ddr4_rtl_0_dq[25]}]
-set_property PACKAGE_PIN H18 [get_ports {ddr4_rtl_0_dq[26]}]
-set_property PACKAGE_PIN H17 [get_ports {ddr4_rtl_0_dq[27]}]
-set_property PACKAGE_PIN J17 [get_ports {ddr4_rtl_0_dq[28]}]
-set_property PACKAGE_PIN H16 [get_ports {ddr4_rtl_0_dq[29]}]
-set_property PACKAGE_PIN H19 [get_ports {ddr4_rtl_0_dq[30]}]
-set_property PACKAGE_PIN J16 [get_ports {ddr4_rtl_0_dq[31]}]
-set_property PACKAGE_PIN H26 [get_ports {ddr4_rtl_0_dqs_t[0]}]
-set_property PACKAGE_PIN M26 [get_ports {ddr4_rtl_0_dqs_t[1]}]
-set_property PACKAGE_PIN L17 [get_ports {ddr4_rtl_0_dqs_t[2]}]
-set_property PACKAGE_PIN K19 [get_ports {ddr4_rtl_0_dqs_t[3]}]
-set_property PACKAGE_PIN D30 [get_ports {ddr4_rtl_0_ba[0]}]
-set_property PACKAGE_PIN D26 [get_ports {ddr4_rtl_0_ba[1]}]
-set_property PACKAGE_PIN D27 [get_ports {ddr4_rtl_0_bg[0]}]
-set_property PACKAGE_PIN E27 [get_ports {ddr4_rtl_0_ck_t[0]}]
-set_property PACKAGE_PIN D31 [get_ports {ddr4_rtl_0_odt[0]}]
-set_property PACKAGE_PIN G28 [get_ports {ddr4_rtl_0_dm_n[0]}]
-set_property PACKAGE_PIN K29 [get_ports {ddr4_rtl_0_dm_n[1]}]
-set_property PACKAGE_PIN N14 [get_ports {ddr4_rtl_0_dm_n[2]}]
-set_property PACKAGE_PIN K15 [get_ports {ddr4_rtl_0_dm_n[3]}]
-set_property PACKAGE_PIN G29 [get_ports {ddr4_rtl_0_cs_n[0]}]
-set_property PACKAGE_PIN J30 [get_ports ddr4_rtl_0_act_n]
-set_property PACKAGE_PIN K30 [get_ports {ddr4_rtl_0_cke[0]}]
+set_property PACKAGE_PIN C31 [get_ports {ddr4_rtl_0_adr[0]}]  ;# U30, U31 A0
+set_property PACKAGE_PIN B31 [get_ports {ddr4_rtl_0_adr[1]}]  ;# U30, U31 A1
+set_property PACKAGE_PIN A27 [get_ports {ddr4_rtl_0_adr[2]}]  ;# U30, U31 A2
+set_property PACKAGE_PIN A28 [get_ports {ddr4_rtl_0_adr[3]}]  ;# U30, U31 A3
+set_property PACKAGE_PIN A30 [get_ports {ddr4_rtl_0_adr[4]}]  ;# U30, U31 A4
+set_property PACKAGE_PIN A31 [get_ports {ddr4_rtl_0_adr[5]}]  ;# U30, U31 A5
+set_property PACKAGE_PIN C28 [get_ports {ddr4_rtl_0_adr[6]}]  ;# U30, U31 A6
+set_property PACKAGE_PIN C29 [get_ports {ddr4_rtl_0_adr[7]}]  ;# U30, U31 A7
+set_property PACKAGE_PIN B29 [get_ports {ddr4_rtl_0_adr[8]}]  ;# U30, U31 A8
+set_property PACKAGE_PIN B30 [get_ports {ddr4_rtl_0_adr[9]}]  ;# U30, U31 A9
+set_property PACKAGE_PIN C27 [get_ports {ddr4_rtl_0_adr[10]}]  ;# U30, U31 A10
+set_property PACKAGE_PIN B28 [get_ports {ddr4_rtl_0_adr[11]}]  ;# U30, U31 A11
+set_property PACKAGE_PIN F30 [get_ports {ddr4_rtl_0_adr[12]}]  ;# U30, U31 A12
+set_property PACKAGE_PIN F31 [get_ports {ddr4_rtl_0_adr[13]}]  ;# U30, U31 A13
+set_property PACKAGE_PIN E29 [get_ports {ddr4_rtl_0_adr[14]}]  ;# U30, U31 WE_N/A14
+set_property PACKAGE_PIN D29 [get_ports {ddr4_rtl_0_adr[15]}]  ;# U30, U31 CAS_N/A15
+set_property PACKAGE_PIN E30 [get_ports {ddr4_rtl_0_adr[16]}]  ;# U30, U31 RAS_N/A16
+set_property PACKAGE_PIN G30 [get_ports {ddr4_rtl_0_dq[0]}]  ;# U30 DQ0
+set_property PACKAGE_PIN F26 [get_ports {ddr4_rtl_0_dq[1]}]  ;# U30 DQ1
+set_property PACKAGE_PIN H28 [get_ports {ddr4_rtl_0_dq[2]}]  ;# U30 DQ2
+set_property PACKAGE_PIN G26 [get_ports {ddr4_rtl_0_dq[3]}]  ;# U30 DQ3
+set_property PACKAGE_PIN H29 [get_ports {ddr4_rtl_0_dq[4]}]  ;# U30 DQ4
+set_property PACKAGE_PIN J27 [get_ports {ddr4_rtl_0_dq[5]}]  ;# U30 DQ5
+set_property PACKAGE_PIN G31 [get_ports {ddr4_rtl_0_dq[6]}]  ;# U30 DQ6
+set_property PACKAGE_PIN J26 [get_ports {ddr4_rtl_0_dq[7]}]  ;# U30 DQ7
+set_property PACKAGE_PIN M25 [get_ports {ddr4_rtl_0_dq[8]}]  ;# U30 DQ8
+set_property PACKAGE_PIN L27 [get_ports {ddr4_rtl_0_dq[9]}]  ;# U30 DQ9
+set_property PACKAGE_PIN J25 [get_ports {ddr4_rtl_0_dq[10]}]  ;# U30 DQ10
+set_property PACKAGE_PIN K28 [get_ports {ddr4_rtl_0_dq[11]}]  ;# U30 DQ11
+set_property PACKAGE_PIN L25 [get_ports {ddr4_rtl_0_dq[12]}]  ;# U30 DQ12
+set_property PACKAGE_PIN J29 [get_ports {ddr4_rtl_0_dq[13]}]  ;# U30 DQ13
+set_property PACKAGE_PIN K25 [get_ports {ddr4_rtl_0_dq[14]}]  ;# U30 DQ14
+set_property PACKAGE_PIN L28 [get_ports {ddr4_rtl_0_dq[15]}]  ;# U30 DQ15
+set_property PACKAGE_PIN M18 [get_ports {ddr4_rtl_0_dq[16]}]  ;# U31 DQ0
+set_property PACKAGE_PIN L15 [get_ports {ddr4_rtl_0_dq[17]}]  ;# U31 DQ1
+set_property PACKAGE_PIN L18 [get_ports {ddr4_rtl_0_dq[18]}]  ;# U31 DQ2
+set_property PACKAGE_PIN M16 [get_ports {ddr4_rtl_0_dq[19]}]  ;# U31 DQ3
+set_property PACKAGE_PIN N19 [get_ports {ddr4_rtl_0_dq[20]}]  ;# U31 DQ4
+set_property PACKAGE_PIN M15 [get_ports {ddr4_rtl_0_dq[21]}]  ;# U31 DQ5
+set_property PACKAGE_PIN N18 [get_ports {ddr4_rtl_0_dq[22]}]  ;# U31 DQ6
+set_property PACKAGE_PIN N16 [get_ports {ddr4_rtl_0_dq[23]}]  ;# U31 DQ7
+set_property PACKAGE_PIN K17 [get_ports {ddr4_rtl_0_dq[24]}]  ;# U31 DQ8
+set_property PACKAGE_PIN G16 [get_ports {ddr4_rtl_0_dq[25]}]  ;# U31 DQ9
+set_property PACKAGE_PIN H18 [get_ports {ddr4_rtl_0_dq[26]}]  ;# U31 DQ10
+set_property PACKAGE_PIN H17 [get_ports {ddr4_rtl_0_dq[27]}]  ;# U31 DQ11
+set_property PACKAGE_PIN J17 [get_ports {ddr4_rtl_0_dq[28]}]  ;# U31 DQ12
+set_property PACKAGE_PIN H16 [get_ports {ddr4_rtl_0_dq[29]}]  ;# U31 DQ13
+set_property PACKAGE_PIN H19 [get_ports {ddr4_rtl_0_dq[30]}]  ;# U31 DQ14
+set_property PACKAGE_PIN J16 [get_ports {ddr4_rtl_0_dq[31]}]  ;# U31 DQ15
+set_property PACKAGE_PIN H26 [get_ports {ddr4_rtl_0_dqs_t[0]}]  ;# U30 LDQS_T
+set_property PACKAGE_PIN M26 [get_ports {ddr4_rtl_0_dqs_t[1]}]  ;# U30 UDQS_T
+set_property PACKAGE_PIN L17 [get_ports {ddr4_rtl_0_dqs_t[2]}]  ;# U31 LDQS_T
+set_property PACKAGE_PIN K19 [get_ports {ddr4_rtl_0_dqs_t[3]}]  ;# U31 UDQS_T
+set_property PACKAGE_PIN D30 [get_ports {ddr4_rtl_0_ba[0]}]  ;# U30, U31 BA0
+set_property PACKAGE_PIN D26 [get_ports {ddr4_rtl_0_ba[1]}]  ;# U30, U31 BA1
+set_property PACKAGE_PIN D27 [get_ports {ddr4_rtl_0_bg[0]}]  ;# U30, U31 BG0
+set_property PACKAGE_PIN E27 [get_ports {ddr4_rtl_0_ck_t[0]}]  ;# U30, U31 CK_T
+set_property PACKAGE_PIN D31 [get_ports {ddr4_rtl_0_odt[0]}]  ;# U30, U31 ODT
+set_property PACKAGE_PIN G28 [get_ports {ddr4_rtl_0_dm_n[0]}]  ;# U30 LDM_N
+set_property PACKAGE_PIN K29 [get_ports {ddr4_rtl_0_dm_n[1]}]  ;# U30 UDM_N
+set_property PACKAGE_PIN N14 [get_ports {ddr4_rtl_0_dm_n[2]}]  ;# U31 LDM_N
+set_property PACKAGE_PIN K15 [get_ports {ddr4_rtl_0_dm_n[3]}]  ;# U31 UDM_N
+set_property PACKAGE_PIN G29 [get_ports {ddr4_rtl_0_cs_n[0]}]  ;# U30, U31 CS_N
+set_property PACKAGE_PIN J30 [get_ports ddr4_rtl_0_act_n]  ;# U30, U31 ACT_N
+set_property PACKAGE_PIN K30 [get_ports {ddr4_rtl_0_cke[0]}]  ;# U30, U31 CKE
 
-set_property PACKAGE_PIN M14 [get_ports ddr4_rtl_0_reset_n]
-set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS12} [get_ports ddr4_rtl_0_alert_n]
-set_property -dict {PACKAGE_PIN K27 IOSTANDARD LVCMOS12} [get_ports ddr4_rtl_0_par]
+set_property PACKAGE_PIN M14 [get_ports ddr4_rtl_0_reset_n]  ;# U30, U31 RESET_N
+set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS12} [get_ports ddr4_rtl_0_alert_n]  ;# U30, U31 ALERT_N
+set_property -dict {PACKAGE_PIN K27 IOSTANDARD LVCMOS12} [get_ports ddr4_rtl_0_par]  ;# U30, U31 PAR

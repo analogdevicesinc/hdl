@@ -1,74 +1,74 @@
 
-set_property PACKAGE_PIN G24 [get_ports {ddr4_rtl_1_adr[0]}]
-set_property PACKAGE_PIN G25 [get_ports {ddr4_rtl_1_adr[1]}]
-set_property PACKAGE_PIN G20 [get_ports {ddr4_rtl_1_adr[2]}]
-set_property PACKAGE_PIN G21 [get_ports {ddr4_rtl_1_adr[3]}]
-set_property PACKAGE_PIN J24 [get_ports {ddr4_rtl_1_adr[4]}]
-set_property PACKAGE_PIN H24 [get_ports {ddr4_rtl_1_adr[5]}]
-set_property PACKAGE_PIN J21 [get_ports {ddr4_rtl_1_adr[6]}]
-set_property PACKAGE_PIN H21 [get_ports {ddr4_rtl_1_adr[7]}]
-set_property PACKAGE_PIN J22 [get_ports {ddr4_rtl_1_adr[8]}]
-set_property PACKAGE_PIN H22 [get_ports {ddr4_rtl_1_adr[9]}]
-set_property PACKAGE_PIN J20 [get_ports {ddr4_rtl_1_adr[10]}]
-set_property PACKAGE_PIN N21 [get_ports {ddr4_rtl_1_adr[11]}]
-set_property PACKAGE_PIN M21 [get_ports {ddr4_rtl_1_adr[12]}]
-set_property PACKAGE_PIN K23 [get_ports {ddr4_rtl_1_adr[13]}]
-set_property PACKAGE_PIN K24 [get_ports {ddr4_rtl_1_adr[14]}]
-set_property PACKAGE_PIN L21 [get_ports {ddr4_rtl_1_adr[15]}]
-set_property PACKAGE_PIN M20 [get_ports {ddr4_rtl_1_adr[16]}]
-set_property PACKAGE_PIN E20 [get_ports {ddr4_rtl_1_dq[0]}]
-set_property PACKAGE_PIN D16 [get_ports {ddr4_rtl_1_dq[1]}]
-set_property PACKAGE_PIN G18 [get_ports {ddr4_rtl_1_dq[2]}]
-set_property PACKAGE_PIN E17 [get_ports {ddr4_rtl_1_dq[3]}]
-set_property PACKAGE_PIN G19 [get_ports {ddr4_rtl_1_dq[4]}]
-set_property PACKAGE_PIN F18 [get_ports {ddr4_rtl_1_dq[5]}]
-set_property PACKAGE_PIN F20 [get_ports {ddr4_rtl_1_dq[6]}]
-set_property PACKAGE_PIN D17 [get_ports {ddr4_rtl_1_dq[7]}]
-set_property PACKAGE_PIN B19 [get_ports {ddr4_rtl_1_dq[8]}]
-set_property PACKAGE_PIN A16 [get_ports {ddr4_rtl_1_dq[9]}]
-set_property PACKAGE_PIN B20 [get_ports {ddr4_rtl_1_dq[10]}]
-set_property PACKAGE_PIN C17 [get_ports {ddr4_rtl_1_dq[11]}]
-set_property PACKAGE_PIN A20 [get_ports {ddr4_rtl_1_dq[12]}]
-set_property PACKAGE_PIN B16 [get_ports {ddr4_rtl_1_dq[13]}]
-set_property PACKAGE_PIN B18 [get_ports {ddr4_rtl_1_dq[14]}]
-set_property PACKAGE_PIN C16 [get_ports {ddr4_rtl_1_dq[15]}]
-set_property PACKAGE_PIN B25 [get_ports {ddr4_rtl_1_dq[16]}]
-set_property PACKAGE_PIN C21 [get_ports {ddr4_rtl_1_dq[17]}]
-set_property PACKAGE_PIN B24 [get_ports {ddr4_rtl_1_dq[18]}]
-set_property PACKAGE_PIN C22 [get_ports {ddr4_rtl_1_dq[19]}]
-set_property PACKAGE_PIN B26 [get_ports {ddr4_rtl_1_dq[20]}]
-set_property PACKAGE_PIN A21 [get_ports {ddr4_rtl_1_dq[21]}]
-set_property PACKAGE_PIN B21 [get_ports {ddr4_rtl_1_dq[23]}]
-set_property PACKAGE_PIN B23 [get_ports {ddr4_rtl_1_dq[22]}]
-set_property PACKAGE_PIN E23 [get_ports {ddr4_rtl_1_dq[24]}]
-set_property PACKAGE_PIN F21 [get_ports {ddr4_rtl_1_dq[25]}]
-set_property PACKAGE_PIN F23 [get_ports {ddr4_rtl_1_dq[26]}]
-set_property PACKAGE_PIN F22 [get_ports {ddr4_rtl_1_dq[27]}]
-set_property PACKAGE_PIN E25 [get_ports {ddr4_rtl_1_dq[28]}]
-set_property PACKAGE_PIN D22 [get_ports {ddr4_rtl_1_dq[29]}]
-set_property PACKAGE_PIN F25 [get_ports {ddr4_rtl_1_dq[30]}]
-set_property PACKAGE_PIN D21 [get_ports {ddr4_rtl_1_dq[31]}]
-set_property PACKAGE_PIN E19 [get_ports {ddr4_rtl_1_dqs_t[0]}]
-set_property PACKAGE_PIN A18 [get_ports {ddr4_rtl_1_dqs_t[1]}]
-set_property PACKAGE_PIN A25 [get_ports {ddr4_rtl_1_dqs_t[2]}]
-set_property PACKAGE_PIN D24 [get_ports {ddr4_rtl_1_dqs_t[3]}]
-set_property PACKAGE_PIN L22 [get_ports {ddr4_rtl_1_ba[0]}]
-set_property PACKAGE_PIN L23 [get_ports {ddr4_rtl_1_ba[1]}]
-set_property PACKAGE_PIN L20 [get_ports {ddr4_rtl_1_bg[0]}]
-set_property PACKAGE_PIN N22 [get_ports {ddr4_rtl_1_ck_t[0]}]
-set_property PACKAGE_PIN D25 [get_ports {ddr4_rtl_1_odt[0]}]
-set_property PACKAGE_PIN F17 [get_ports {ddr4_rtl_1_dm_n[0]}]
-set_property PACKAGE_PIN C19 [get_ports {ddr4_rtl_1_dm_n[1]}]
-set_property PACKAGE_PIN A22 [get_ports {ddr4_rtl_1_dm_n[2]}]
-set_property PACKAGE_PIN E24 [get_ports {ddr4_rtl_1_dm_n[3]}]
-set_property PACKAGE_PIN A23 [get_ports {ddr4_rtl_1_cs_n[0]}]
-set_property PACKAGE_PIN E22 [get_ports ddr4_rtl_1_act_n]
-set_property PACKAGE_PIN K22 [get_ports {ddr4_rtl_1_cke[0]}]
-set_property PACKAGE_PIN D20 [get_ports ddr4_rtl_1_reset_n]
+set_property PACKAGE_PIN G24 [get_ports {ddr4_rtl_1_adr[0]}]  ;# U41, U42 A0
+set_property PACKAGE_PIN G25 [get_ports {ddr4_rtl_1_adr[1]}]  ;# U41, U42 A1
+set_property PACKAGE_PIN G20 [get_ports {ddr4_rtl_1_adr[2]}]  ;# U41, U42 A2
+set_property PACKAGE_PIN G21 [get_ports {ddr4_rtl_1_adr[3]}]  ;# U41, U42 A3
+set_property PACKAGE_PIN J24 [get_ports {ddr4_rtl_1_adr[4]}]  ;# U41, U42 A4
+set_property PACKAGE_PIN H24 [get_ports {ddr4_rtl_1_adr[5]}]  ;# U41, U42 A5
+set_property PACKAGE_PIN J21 [get_ports {ddr4_rtl_1_adr[6]}]  ;# U41, U42 A6
+set_property PACKAGE_PIN H21 [get_ports {ddr4_rtl_1_adr[7]}]  ;# U41, U42 A7
+set_property PACKAGE_PIN J22 [get_ports {ddr4_rtl_1_adr[8]}]  ;# U41, U42 A8
+set_property PACKAGE_PIN H22 [get_ports {ddr4_rtl_1_adr[9]}]  ;# U41, U42 A9
+set_property PACKAGE_PIN J20 [get_ports {ddr4_rtl_1_adr[10]}]  ;# U41, U42 A10
+set_property PACKAGE_PIN N21 [get_ports {ddr4_rtl_1_adr[11]}]  ;# U41, U42 A11
+set_property PACKAGE_PIN M21 [get_ports {ddr4_rtl_1_adr[12]}]  ;# U41, U42 A12
+set_property PACKAGE_PIN K23 [get_ports {ddr4_rtl_1_adr[13]}]  ;# U41, U42 A13
+set_property PACKAGE_PIN K24 [get_ports {ddr4_rtl_1_adr[14]}]  ;# U41, U42 WE_N/A14
+set_property PACKAGE_PIN L21 [get_ports {ddr4_rtl_1_adr[15]}]  ;# U41, U42 CAS_N/A15
+set_property PACKAGE_PIN M20 [get_ports {ddr4_rtl_1_adr[16]}]  ;# U41, U42 RAS_N/A16
+set_property PACKAGE_PIN E20 [get_ports {ddr4_rtl_1_dq[0]}]  ;# U41 DQ0
+set_property PACKAGE_PIN D16 [get_ports {ddr4_rtl_1_dq[1]}]  ;# U41 DQ1
+set_property PACKAGE_PIN G18 [get_ports {ddr4_rtl_1_dq[2]}]  ;# U41 DQ2
+set_property PACKAGE_PIN E17 [get_ports {ddr4_rtl_1_dq[3]}]  ;# U41 DQ3
+set_property PACKAGE_PIN G19 [get_ports {ddr4_rtl_1_dq[4]}]  ;# U41 DQ4
+set_property PACKAGE_PIN F18 [get_ports {ddr4_rtl_1_dq[5]}]  ;# U41 DQ5
+set_property PACKAGE_PIN F20 [get_ports {ddr4_rtl_1_dq[6]}]  ;# U41 DQ6
+set_property PACKAGE_PIN D17 [get_ports {ddr4_rtl_1_dq[7]}]  ;# U41 DQ7
+set_property PACKAGE_PIN B19 [get_ports {ddr4_rtl_1_dq[8]}]  ;# U41 DQ8
+set_property PACKAGE_PIN A16 [get_ports {ddr4_rtl_1_dq[9]}]  ;# U41 DQ9
+set_property PACKAGE_PIN B20 [get_ports {ddr4_rtl_1_dq[10]}]  ;# U41 DQ10
+set_property PACKAGE_PIN C17 [get_ports {ddr4_rtl_1_dq[11]}]  ;# U41 DQ11
+set_property PACKAGE_PIN A20 [get_ports {ddr4_rtl_1_dq[12]}]  ;# U41 DQ12
+set_property PACKAGE_PIN B16 [get_ports {ddr4_rtl_1_dq[13]}]  ;# U41 DQ13
+set_property PACKAGE_PIN B18 [get_ports {ddr4_rtl_1_dq[14]}]  ;# U41 DQ14
+set_property PACKAGE_PIN C16 [get_ports {ddr4_rtl_1_dq[15]}]  ;# U41 DQ15
+set_property PACKAGE_PIN B25 [get_ports {ddr4_rtl_1_dq[16]}]  ;# U42 DQ0
+set_property PACKAGE_PIN C21 [get_ports {ddr4_rtl_1_dq[17]}]  ;# U42 DQ1
+set_property PACKAGE_PIN B24 [get_ports {ddr4_rtl_1_dq[18]}]  ;# U42 DQ2
+set_property PACKAGE_PIN C22 [get_ports {ddr4_rtl_1_dq[19]}]  ;# U42 DQ3
+set_property PACKAGE_PIN B26 [get_ports {ddr4_rtl_1_dq[20]}]  ;# U42 DQ4
+set_property PACKAGE_PIN A21 [get_ports {ddr4_rtl_1_dq[21]}]  ;# U42 DQ5
+set_property PACKAGE_PIN B21 [get_ports {ddr4_rtl_1_dq[23]}]  ;# U42 DQ7
+set_property PACKAGE_PIN B23 [get_ports {ddr4_rtl_1_dq[22]}]  ;# U42 DQ6
+set_property PACKAGE_PIN E23 [get_ports {ddr4_rtl_1_dq[24]}]  ;# U42 DQ8
+set_property PACKAGE_PIN F21 [get_ports {ddr4_rtl_1_dq[25]}]  ;# U42 DQ9
+set_property PACKAGE_PIN F23 [get_ports {ddr4_rtl_1_dq[26]}]  ;# U42 DQ10
+set_property PACKAGE_PIN F22 [get_ports {ddr4_rtl_1_dq[27]}]  ;# U42 DQ11
+set_property PACKAGE_PIN E25 [get_ports {ddr4_rtl_1_dq[28]}]  ;# U42 DQ12
+set_property PACKAGE_PIN D22 [get_ports {ddr4_rtl_1_dq[29]}]  ;# U42 DQ13
+set_property PACKAGE_PIN F25 [get_ports {ddr4_rtl_1_dq[30]}]  ;# U42 DQ14
+set_property PACKAGE_PIN D21 [get_ports {ddr4_rtl_1_dq[31]}]  ;# U42 DQ15
+set_property PACKAGE_PIN E19 [get_ports {ddr4_rtl_1_dqs_t[0]}]  ;# U41 LDQS_T
+set_property PACKAGE_PIN A18 [get_ports {ddr4_rtl_1_dqs_t[1]}]  ;# U41 UDQS_T
+set_property PACKAGE_PIN A25 [get_ports {ddr4_rtl_1_dqs_t[2]}]  ;# U42 LDQS_T
+set_property PACKAGE_PIN D24 [get_ports {ddr4_rtl_1_dqs_t[3]}]  ;# U42 UDQS_T
+set_property PACKAGE_PIN L22 [get_ports {ddr4_rtl_1_ba[0]}]  ;# U41, U42 BA0
+set_property PACKAGE_PIN L23 [get_ports {ddr4_rtl_1_ba[1]}]  ;# U41, U42 BA1
+set_property PACKAGE_PIN L20 [get_ports {ddr4_rtl_1_bg[0]}]  ;# U41, U42 BG0
+set_property PACKAGE_PIN N22 [get_ports {ddr4_rtl_1_ck_t[0]}]  ;# U41, U42 CK_T
+set_property PACKAGE_PIN D25 [get_ports {ddr4_rtl_1_odt[0]}]  ;# U41, U42 ODT
+set_property PACKAGE_PIN F17 [get_ports {ddr4_rtl_1_dm_n[0]}]  ;# U41 LDM_N
+set_property PACKAGE_PIN C19 [get_ports {ddr4_rtl_1_dm_n[1]}]  ;# U41 UDM_N
+set_property PACKAGE_PIN A22 [get_ports {ddr4_rtl_1_dm_n[2]}]  ;# U42 LDM_N
+set_property PACKAGE_PIN E24 [get_ports {ddr4_rtl_1_dm_n[3]}]  ;# U42 UDM_N
+set_property PACKAGE_PIN A23 [get_ports {ddr4_rtl_1_cs_n[0]}]  ;# U41, U42 CS_N
+set_property PACKAGE_PIN E22 [get_ports ddr4_rtl_1_act_n]  ;# U41, U42 ACT_N
+set_property PACKAGE_PIN K22 [get_ports {ddr4_rtl_1_cke[0]}]  ;# U41, U42 CKE
+set_property PACKAGE_PIN D20 [get_ports ddr4_rtl_1_reset_n]  ;# U41, U42 RESET_N
 
-set_property -dict {PACKAGE_PIN H23 IOSTANDARD LVDS} [get_ports ddr4_ref_1_clk_p]
-set_property -dict {PACKAGE_PIN K20 IOSTANDARD LVCMOS12} [get_ports ddr4_rtl_1_par]
-set_property -dict {PACKAGE_PIN D19 IOSTANDARD LVCMOS12} [get_ports ddr4_rtl_1_alert_n]
+set_property -dict {PACKAGE_PIN H23 IOSTANDARD LVDS} [get_ports ddr4_ref_1_clk_p]  ;# PL_DDR4_1_CKIN_P, MIG reference clock
+set_property -dict {PACKAGE_PIN K20 IOSTANDARD LVCMOS12} [get_ports ddr4_rtl_1_par]  ;# U41, U42 PAR
+set_property -dict {PACKAGE_PIN D19 IOSTANDARD LVCMOS12} [get_ports ddr4_rtl_1_alert_n]  ;# U41, U42 ALERT_N
 
 set_property PACKAGE_PIN N12    [get_ports ref_clk_a_p];
 set_property PACKAGE_PIN N11    [get_ports ref_clk_a_n];
