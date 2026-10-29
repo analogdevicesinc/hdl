@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -171,13 +171,13 @@ module axi_hdmi_tx_core #(
   reg             hdmi_clip_hs_d = 'd0;
   reg             hdmi_clip_vs_d = 'd0;
   reg             hdmi_clip_de_d = 'd0;
+  reg     [15:0]  hdmi_hl_width_s = 'd0;
+  reg     [15:0]  hdmi_vf_width_s = 'd0;
+  reg     [15:0]  hdmi_he_width_s = 'd0;
+  reg     [15:0]  hdmi_ve_width_s = 'd0;
 
   // internal wires
 
-  wire    [15:0]  hdmi_hl_width_s;
-  wire    [15:0]  hdmi_vf_width_s;
-  wire    [15:0]  hdmi_he_width_s;
-  wire    [15:0]  hdmi_ve_width_s;
   wire            hdmi_fs_ret_s;
   wire            hdmi_de_s;
   wire    [47:0]  hdmi_rdata_s;
@@ -229,12 +229,15 @@ module axi_hdmi_tx_core #(
     end
   end
 
-  // calculate useful limits
+  // calculate useful limits, registered to keep the subtractors out of the
+  // counter compare paths (the inputs are static while the core is enabled)
 
-  assign hdmi_hl_width_s = hdmi_hl_width - 1'b1;
-  assign hdmi_vf_width_s = hdmi_vf_width - 1'b1;
-  assign hdmi_he_width_s = hdmi_hl_width - (hdmi_hl_active + 1'b1);
-  assign hdmi_ve_width_s = hdmi_vf_width - (hdmi_vf_active + 1'b1);
+  always @(posedge reference_clk) begin
+    hdmi_hl_width_s <= hdmi_hl_width - 1'b1;
+    hdmi_vf_width_s <= hdmi_vf_width - 1'b1;
+    hdmi_he_width_s <= hdmi_hl_width - (hdmi_hl_active + 1'b1);
+    hdmi_ve_width_s <= hdmi_vf_width - (hdmi_vf_active + 1'b1);
+  end
 
   // hdmi counters
 
