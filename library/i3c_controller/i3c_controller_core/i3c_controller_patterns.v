@@ -33,20 +33,25 @@
 // ***************************************************************************
 // ***************************************************************************
 /**
- * Modulates the Target Reset Pattern (TRP).
+ * Modulates I3C bus patterns.
  *
- * The TRP is fourteen SDA transitions while SCL is kept Low, followed by a
- * Repeated START and a STOP. Each cycle is 40ns.
+ * Pattern 0 – Target Reset Pattern (TRP):
+ *   Fourteen SDA transitions while SCL is kept Low, followed by a
+ *   Repeated START and a STOP.
+ *
+ * Pattern 1 – HDR Exit Pattern:
+ *   Eight SDA transitions while SCL is kept Low, followed by a STOP.
  */
 
 `timescale 1ns/100ps
 
-module i3c_controller_trp (
+module i3c_controller_patterns (
   input      clk,
   input      reset_n,
 
-  input      cmd_valid,
-  output     cmd_ready,
+  input [6:0] cmd_pattern,
+  input       cmd_valid,
+  output      cmd_ready,
 
   input      idle,
   output     hold,
@@ -62,13 +67,18 @@ module i3c_controller_trp (
   localparam [4:0] PH_SR_SETUP = 15;
   localparam [4:0] PH_SR       = 16;
   localparam [4:0] PH_STOP     = 17;
+  localparam [4:0] PH_HDR_TOGGLE = 7;
+  localparam [4:0] PH_HDR_SETUP  = 8;
+  localparam [4:0] PH_HDR_STOP   = 9;
 
   reg       sm;
   reg [4:0] ph;
   reg [1:0] count;
+  reg [6:0] cmd_pattern_r;
 
-  wire start;
-  wire ph_end;
+  wire [4:0] stop;
+  wire       start;
+  wire       ph_end;
 
   always @(posedge clk) begin
     if (!reset_n) begin
@@ -81,6 +91,7 @@ module i3c_controller_trp (
           ph <= 0;
           count <= 0;
           if (start) begin
+            cmd_pattern_r <= cmd_pattern;
             sm <= SM_RUN;
           end
         end
@@ -88,7 +99,7 @@ module i3c_controller_trp (
           count <= count + 1;
           if (ph_end) begin
             ph <= ph + 1;
-            if (ph == PH_STOP) begin
+            if (ph == stop) begin
               sm <= SM_IDLE;
             end
           end
@@ -97,17 +108,35 @@ module i3c_controller_trp (
     end
   end
 
-  assign ph_end = &count;
-
   always @(posedge clk) begin
-    if (start || (sm == SM_RUN && ph < PH_SR_SETUP)) begin
+    if (start) begin
       scl <= 1'b0;
-      sdo <= start ? 1'b1 : ~ph[0];
+      sdo <= 1'b1;
       t   <= 1'b0;
-    end else if (sm == SM_RUN) begin
-      scl <= 1'b1;
-      sdo <= ph != PH_SR;
-      t   <= ph != PH_SR;
+    end else if (cmd_pattern_r == 7'd0) begin
+      if (sm == SM_RUN && ph < PH_SR_SETUP) begin
+        scl <= 1'b0;
+        sdo <= ~ph[0];
+        t   <= 1'b0;
+      end else if (sm == SM_RUN) begin
+        scl <= 1'b1;
+        sdo <= ph != PH_SR;
+        t   <= ph != PH_SR;
+      end
+    end else if (cmd_pattern_r == 7'd1) begin
+      if (sm == SM_RUN && ph <= PH_HDR_TOGGLE) begin
+        scl <= 1'b0;
+        sdo <= ~ph[0];
+        t   <= 1'b0;
+      end else if (sm == SM_RUN && ph == PH_HDR_SETUP) begin
+        scl <= 1'b1;
+        sdo <= 1'b0;
+        t   <= 1'b0;
+      end else if (sm == SM_RUN && ph == PH_HDR_STOP) begin
+        scl <= 1'b1;
+        sdo <= 1'b1;
+        t   <= 1'b0;
+      end
     end else begin
       scl <= 1'b1;
       sdo <= 1'b1;
@@ -115,6 +144,8 @@ module i3c_controller_trp (
     end
   end
 
+  assign ph_end = &count;
+  assign stop = cmd_pattern_r == 7'd0 ? PH_STOP : cmd_pattern_r == 7'd1 ? PH_HDR_STOP : 5'd0;
   assign start = sm == SM_IDLE & cmd_valid & idle;
   assign cmd_ready = sm == SM_IDLE & idle;
   assign hold = sm == SM_RUN;

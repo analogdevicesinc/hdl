@@ -35,7 +35,7 @@ The generic structure of command 0 is:
 +=========+=======+==================================================+
 |         | 31:24 | Reserved.                                        |
 +---------+-------+--------------------------------------------------+
-| Is TRP  | 23    | Sends the Target Reset Pattern (1).              |
+| Pattern | 23    | Bus pattern instruction (1).                     |
 +---------+-------+--------------------------------------------------+
 | Is CCC  | 22    | Indicate if it is a CCC transfer (1) or not (0). |
 +---------+-------+--------------------------------------------------+
@@ -59,8 +59,8 @@ The Sr flag will be ignored if the next Command Descriptor is available at the
 correct clock cycle.
 Also, the software must ensure the next Command Descriptor is from the same branch
 of the state machine, for example, cannot jump from a Private Transfer to a
-Broadcast CCC, must always return to Start (Sr=0); Except the
-:ref:`i3c_controller trp` instruction.
+Broadcast CCC, must always return to Start (Sr=0); Except
+:ref:`bus pattern <i3c_controller bus-patterns>` instructions.
 For a flowchart of the those paths, see Fig. 168, p.387 from MIPI I3C
 specification\ [#f1]_.
 
@@ -160,36 +160,56 @@ transfer.
 +=========+=======+=========+==================================================+
 +---------+-------+---------+--------------------------------------------------+
 
+.. _i3c_controller bus-patterns:
+
+Bus Patterns
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Bus pattern instructions modulate the I3C bus with a predefined sequence.
+The pattern type is selected by command 1.
+
+Bits not presented in the tables are assumed 0.
+When Value is filled, it means it is the required constant value for this
+transfer.
+
++------------------------------------------------------------------------------+
+| Command 0, bus pattern instruction                                           |
++----------+-------+--------+--------------------------------------------------+
+| Name     | Range | Value  | Description                                      |
++==========+=======+========+==================================================+
+| Pattern  | 23    | 1      | Bus pattern instruction.                         |
++----------+-------+--------+--------------------------------------------------+
+
++------------------------------------------------------------------------------+
+| Command 1, bus pattern instruction                                           |
++---------+-------+---------+--------------------------------------------------+
+| Name    | Range | Value   | Description                                      |
++=========+=======+=========+==================================================+
+| Type    |  6:0  |         | Pattern type (0 = TRP, 1 = HDR Exit).            |
++---------+-------+---------+--------------------------------------------------+
+
 .. _i3c_controller trp:
 
-Target Reset Pattern
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Target Reset Pattern (type 0)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Yields the Target Reset Pattern to reset target devices. The targets apply the
 reset action configured by the previous RSTACT CCCs (broadcast or direct to one
 or more targets).
 
-Bits not presented in the tables are assumed 0.
-When Value is filled, it means it is is the required constant value for this
-transfer.
+Fourteen SDA transitions while SCL is kept Low, followed by a Repeated START
+and a STOP.
 
-+------------------------------------------------------------------------------+
-| Command 0, Target Reset Pattern instruction                                  |
-+----------+-------+--------+--------------------------------------------------+
-| Name     | Range | Value  | Description                                      |
-+==========+=======+========+==================================================+
-| Is TRP   | 23    | 1      | Target Reset Pattern instruction.                |
-+----------+-------+--------+--------------------------------------------------+
-
-+------------------------------------------------------------------------------+
-| Command 1, Target Reset Pattern instruction (unused)                         |
-+---------+-------+---------+--------------------------------------------------+
-| Name    | Range | Value   | Description                                      |
-+=========+=======+=========+==================================================+
-+---------+-------+---------+--------------------------------------------------+
-
-It is recommended to set Sr (1) of the preceeding RSTACT CCC, otherwise a
+It is recommended to set Sr (1) of the preceding RSTACT CCC, otherwise a
 target could pull SDA low before the pattern.
+
+.. _i3c_controller hdr-exit:
+
+HDR Exit Pattern (type 1)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Exits HDR mode by sending four SDA falling edges while SCL is kept Low,
+followed by a STOP.
 
 .. _i3c_controller cmdr:
 
