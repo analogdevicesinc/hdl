@@ -69,8 +69,17 @@ module trigger_channel (
   logic                    trig_event;
   logic                    out;
   logic  [15:0]            trig_phase;
+  logic  [15:0]            trig_phase_d = 0;
 
   assign trig_phase = ((2 * bsync_ratio) - 2) - ch_phase;
+
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+      trig_phase_d <= 0;
+    end else begin
+      trig_phase_d <= trig_phase;
+    end
+  end
 
   always @* begin
     next_state = curr_state;
@@ -83,7 +92,7 @@ module trigger_channel (
 
       TRIG_EDGE : begin
         if (ch_en && bsync_ready) begin
-          if (current_phase != trig_phase) begin
+          if (current_phase != trig_phase_d) begin
             next_state = PHASE_READ;
           end else if (trig_event && bsync_event) begin
             next_state = TRIG_ADJUST;
@@ -96,7 +105,7 @@ module trigger_channel (
       end
 
       PHASE_READ : begin
-        if (current_phase == trig_phase) begin
+        if (current_phase == trig_phase_d) begin
           next_state = TRIG_EDGE;
         end
       end
@@ -145,7 +154,7 @@ module trigger_channel (
           trig_event <= 1;
         end
       end else if (curr_state == PHASE_READ) begin
-        current_phase <= trig_phase;
+        current_phase <= trig_phase_d;
         adjust_done <= 1'b0;
       end else if (curr_state == TRIG_ADJUST) begin
         if (phase_counter < current_phase) begin
