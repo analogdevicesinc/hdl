@@ -159,6 +159,7 @@ set_property FORCE_MAX_FANOUT 2 [get_nets -of [get_pins -hierarchical -filter {N
 set_property FORCE_MAX_FANOUT 64 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_cfg_disable_scrambler_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 100 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_reset_dly2*/Q}]]
 set_property FORCE_MAX_FANOUT 36 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/GenMemPerLane[*].out_addr_reg[*]*/Q}]]
+set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_reset_dly_reg*/Q}]]
 # Reduce max fanout for each dac_sync_int[] FF for better timing.
 set_property FORCE_MAX_FANOUT 100 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */tx_apollo_tpl_core/*/i_core/dac_sync_int*[*]/Q}]]
 
