@@ -202,10 +202,11 @@ module i3c_controller_core #(
     .sdi(i3c_sdi),
     .t(bit_mod_t));
 
-  i3c_controller_trp
-  i_i3c_controller_trp (
+  i3c_controller_patterns
+  i_i3c_controller_patterns (
     .reset_n(reset_n),
     .clk(clk),
+    .cmd_pattern(cmdp[29:23]),
     .cmd_valid(trp_cmd_valid),
     .cmd_ready(trp_cmd_ready),
     .idle(trp_idle),
