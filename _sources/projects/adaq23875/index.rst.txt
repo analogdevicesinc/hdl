@@ -165,7 +165,7 @@ ADC_RES=18):
 
 The built project will be found in a folder called TWOS0_ADCRES18.
 
-Example configuration for :adi:`EVAL-ADAQ23875`/:adi:`EVAL-ADQ23876` in
+Example configuration for :adi:`EVAL-ADAQ23875`/:adi:`EVAL-ADAQ23876` in
 two-lane mode (TWOLANES=1, ADC_RES=16):
 
 .. shell:: bash

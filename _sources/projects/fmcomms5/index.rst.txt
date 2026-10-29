@@ -3,11 +3,11 @@
 FMCOMMS5 HDL Project
 ===============================================================================
 
-The :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>` is a high-speed analog module designed
+The :adi:`FMCOMMS5 <AD-FMCOMMS5-EBZ>` is a high-speed analog module designed
 to showcase the :adi:`AD9361` in multiple-input, multiple-output (MIMO)
 applications. The :adi:`AD9361`  is a high performance, highly integrated RF
 transceiver that operates from 70 MHz to 6 GHz, and supports bandwidths from
-less than 200 kHz to 56 MHz. The :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>` supports
+less than 200 kHz to 56 MHz. The :adi:`FMCOMMS5 <AD-FMCOMMS5-EBZ>` supports
 dual :adi:`AD9361` devices, allowing for the creation of a 4x4 MIMO system.
 This platform is intended to enable the prototyping and development of many
 software defined radio applications.
@@ -25,7 +25,7 @@ share a single clock. The data is sent or received based on the configuration
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>`
+- :adi:`FMCOMMS5 <AD-FMCOMMS5-EBZ>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ Multi-cores operation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The core supports multiple instances of the same synchronized to a common
-clock. The :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>` uses two instances of this
+clock. The :adi:`FMCOMMS5 <AD-FMCOMMS5-EBZ>` uses two instances of this
 core synchronized to a common clock. The data is recovered in each individual
 clock domain and transfers the data to a single clock domain. The multiple
 cores must all be using the same clock.

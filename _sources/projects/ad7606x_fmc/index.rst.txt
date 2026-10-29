@@ -31,8 +31,8 @@ are designed to help users to easily evaluate the features of :adi:`AD7606B`,
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD7606B`
-- :adi:`EVAL-AD7606C-16`
+- :adi:`EVAL-AD7606BFMCZ`
+- :adi:`EVAL-AD7606C16FMCZ`
 - :adi:`EVAL-AD7606C-18`
 - :adi:`EVAL-AD7605-4`
 - :adi:`EVAL-AD7606-8`

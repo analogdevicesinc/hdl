@@ -9,7 +9,7 @@ FMCADC2 HDL Project (OBSOLETE)
    has been discontinued, the latest release branch where it can be found is
    ``hdl_2021_r2``. This page is left for legacy purposes only.
 
-The :adi:`AD-FMCADC2-EBZ <EVAL-AD-FMCADC2-EBZ>` is a high-speed data
+The :adi:`AD-FMCADC2-EBZ <AD-FMCADC2-EBZ>` is a high-speed data
 acquisition (1 ADC channel at 2500 MSPS), in an FMC form factor, which has one
 high-speed JESD204B Analog to Digital converter (:adi:`AD9625`) on it.
 
@@ -32,7 +32,7 @@ registers via SPI.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`AD-FMCADC2-EBZ <EVAL-AD-FMCADC2-EBZ>`
+- :adi:`AD-FMCADC2-EBZ <AD-FMCADC2-EBZ>`
 
 .. note::
 
@@ -62,7 +62,7 @@ Block design
 Clock configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :adi:`AD-FMCADC2-EBZ <EVAL-AD-FMCADC2-EBZ>` provides multiple options for
+The :adi:`AD-FMCADC2-EBZ <AD-FMCADC2-EBZ>` provides multiple options for
 clocking the :adi:`AD9625`.
 The default configuration of the board clocks the ADC using an on-board 2.5 GHz,
 low noise, crystal oscillator. This oscillator is then routed through a wide
@@ -78,7 +78,7 @@ both the CLK+ and CLK- inputs. Then referencing the schematic make the
 component changes to directly route the differential input bypassing the
 transformer.
 
-The :adi:`AD-FMCADC2-EBZ <EVAL-AD-FMCADC2-EBZ>` uses a passive front end
+The :adi:`AD-FMCADC2-EBZ <AD-FMCADC2-EBZ>` uses a passive front end
 designed for very wide bandwidth.
 A single ended input needs to be provided to "Ain". A 500 kHz to 6 GHz broadband
 balun then converts the input signal to differential.
