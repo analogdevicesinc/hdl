@@ -3,7 +3,7 @@
 AD4880-FMC-EVB HDL project
 ================================================================================
 
-The :adi:`EVAL-AD4880-FMCZ` is designed to demonstrate the :adi:`AD4880`
+The :adi:`EVAL-AD4880-FMC` is designed to demonstrate the :adi:`AD4880`
 performance.
 
 The :git-hdl:`AD4880-FMC-EVB HDL project <projects/ad4880_fmc_evb>` supports
@@ -20,8 +20,8 @@ the following :adi:`AD4880` , :adi:`AD4884` features:
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD4880-FMCZ`
-- :adi:`EVAL-AD4884-FMCZ`
+- :adi:`EVAL-AD4880-FMC`
+- :adi:`EVAL-AD4884-FMC`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -44,10 +44,10 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`EVAL-AD4880-FMCZ`
+   * - :adi:`EVAL-AD4880-FMC`
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC-LPC
-   * - :adi:`EVAL-AD4884-FMCZ`
+   * - :adi:`EVAL-AD4884-FMC`
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC-LPC
 

@@ -46,7 +46,7 @@ AD469XFMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD469XFMC <EVAL-AD4696FMCZ>`
+   * - :adi:`AD469XFMC <eval-ad4696-fmc>`
      - :git-hdl:`ad469x_fmc <hdl_2019_r2:projects/ad469x_fmc>`
      - :git-hdl:`zed <hdl_2019_r2:projects/ad469x_fmc/zed>`
      - :ref:`ad469x_fmc_zed <util_hdl_2019_r2_ad469x_fmc_zed>`
@@ -611,7 +611,7 @@ ADRV9001
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`ADRV9001`
+   * - :adi:`AD-ADRV9001 <eval-adrv9001>`
      - :git-hdl:`adrv9001 <hdl_2019_r2:projects/adrv9001>`
      - :git-hdl:`zcu102 <hdl_2019_r2:projects/adrv9001/zcu102>`
        :git-hdl:`zed <hdl_2019_r2:projects/adrv9001/zed>`

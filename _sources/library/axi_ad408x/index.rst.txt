@@ -6,7 +6,7 @@ AXI AD408X
 .. hdl-component-diagram::
 
 The :git-hdl:`AXI AD408X <library/axi_ad408x>` IP core can be used to interface
-the :adi:`AD4080`, :adi:`AD4083`, :adi:`AD4086` devices.
+the :adi:`AD4080` device.
 This documentation only covers the IP core and requires one to be
 familiar with the device, for a complete and better understanding.
 

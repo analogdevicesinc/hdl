@@ -117,7 +117,7 @@ parameters:
 - F: 2 octets per frame in case of ``L=2``, and 4 in case of ``L=1``
 
 For more details, check *Table 19, JESD204B Output Configurations* from the
-:adi:`AD6676 datasheet <media/en/technical-documentation/data-sheets/AD6676.pdf>`
+:adi:`AD6676 data sheet`.
 
 Deframer paramaters: L=2, M=2, F=2, S=1, NP=16
 

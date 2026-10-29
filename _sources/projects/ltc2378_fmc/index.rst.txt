@@ -53,20 +53,14 @@ Supported devices
 - :adi:`LTC2376-20`
 - :adi:`LTC2370-16`
 - :adi:`LTC2369-18`
-- :adi:`LTC2368-16`
-- :adi:`LTC2368-18`
-- :adi:`LTC2367-16`
-- :adi:`LTC2367-18`
-- :adi:`LTC2364-16`
-- :adi:`LTC2364-18`
+- :adi:`LTC2368-16/18`
+- :adi:`LTC2367-16/18`
+- :adi:`LTC2364-16/18`
 - :adi:`LTC2380-16`
 - :adi:`LTC2379-18`
-- :adi:`LTC2378-16`
-- :adi:`LTC2378-18`
-- :adi:`LTC2377-16`
-- :adi:`LTC2377-18`
-- :adi:`LTC2376-16`
-- :adi:`LTC2376-18`
+- :adi:`LTC2378-16/18`
+- :adi:`LTC2377-16/18`
+- :adi:`LTC2376-16/18`
 - :adi:`LTC2338-18`
 
 Supported carriers
@@ -208,20 +202,14 @@ Hardware related
   - :adi:`LTC2376-20`
   - :adi:`LTC2370-16`
   - :adi:`LTC2369-18`
-  - :adi:`LTC2368-16`
-- :adi:`LTC2368-18`
-  - :adi:`LTC2367-16`
-- :adi:`LTC2367-18`
-  - :adi:`LTC2364-16`
-- :adi:`LTC2364-18`
+  - :adi:`LTC2368-16/18`
+  - :adi:`LTC2367-16/18`
+  - :adi:`LTC2364-16/18`
   - :adi:`LTC2380-16`
   - :adi:`LTC2379-18`
-  - :adi:`LTC2378-16`
-- :adi:`LTC2378-18`
-  - :adi:`LTC2377-16`
-- :adi:`LTC2377-18`
-  - :adi:`LTC2376-16`
-- :adi:`LTC2376-18`
+  - :adi:`LTC2378-16/18`
+  - :adi:`LTC2377-16/18`
+  - :adi:`LTC2376-16/18`
   - :adi:`LTC2338-18`
 
 HDL related

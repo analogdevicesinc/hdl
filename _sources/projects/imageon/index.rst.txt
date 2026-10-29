@@ -50,7 +50,7 @@ In terms of audio part, the axi_spdif module is used to manage the audio output
 transmission on the HDMI connector. Additionally, a conversion from RGB to
 YCbCr and a downsampling from 444 to 422 are done in the transmit and receive
 (in reverse) datapaths as a default operation. To ensure the setup of the
-:adi:`ADV7511` and :adi:`ADV7611` ICs, Xilinx's AXI IIC module is used.
+:adi:`ADV7511` and :adi:`ADV75611` ICs, Xilinx's AXI IIC module is used.
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

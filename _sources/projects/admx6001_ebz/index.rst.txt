@@ -13,7 +13,7 @@ This design is ideal for high performance time-domain instruments such as
 time-of-flight mass spectrometry (TOFMS), distributed fiber optic sensing
 (DFOS), and digital oscilloscope.
 
-The :adi:`ADMX6001-EBZ` reference design is a
+The :adi:`EVAL-ADMX6001-EBZ` reference design is a
 processor based (e.g. Microblaze) embedded system.
 
 The design implements a high-speed receive chain using JESD204B and a
@@ -30,7 +30,7 @@ an AXI-Lite interface.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`ADMX6001-EBZ`
+- :adi:`EVAL-ADMX6001-EBZ`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`ADMX6001-EBZ`
+   * - :adi:`EVAL-ADMX6001-EBZ`
      - :xilinx:`VCU118`
      - FMC+
 
@@ -231,7 +231,7 @@ Hardware related
 
 - :adi:`AD9213 device data sheet <media/en/technical-documentation/data-sheets/AD9213.pdf>`
 - :adi:`AD4080 device data sheet <media/en/technical-documentation/data-sheets/AD4080.pdf>`
-- :adi:`Evaluation Board <ADMX6001-EBZ>`
+- :adi:`Evaluation Board <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-admx6001-ebz.html>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

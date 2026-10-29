@@ -265,7 +265,7 @@ Example block design for Single link; M=2; L=8; JESD204C
       $     TX_JESD_S=4       \
       $     TX_JESD_NP=8
 
-  In the case of :xilinx:`VCU118` board, a CORUNDUM parameter is also available,
+  In the case of :adi:`VCU118` board, a CORUNDUM parameter is also available,
   which enables or disables the Corundum Network Stack. By default it is
   disabled, set to 0. To enable it, set the value to 1.
 
@@ -437,7 +437,7 @@ mxfe_tx_data_offload $INTF_CFG!="RX"                   0x7C44_0000     0x9C44_00
 axi_tdd_0            $TDD_SUPPORT==1                   0x7C46_0000     0x9C46_0000 0xBC46_00000
 ==================== ================================= =============== =========== ============
 
-In case of :xilinx:`VCU118`, additional CPU interconnects may be present in the
+In case of :adi:`VCU118`, additional CPU interconnects may be present in the
 system.
 
 =================== ==================== ===========
@@ -531,7 +531,7 @@ axi_mxfe_rx_jesd 11  55         87          107          139
 axi_mxfe_tx_jesd 10  54         86          106          138
 ================ === ========== =========== ============ =============
 
-In case of :xilinx:`VCU118`, additional interrupts may be present in the system.
+In case of :adi:`VCU118`, additional interrupts may be present in the system.
 
 ================ ======
 Instance name    HDL MB
@@ -768,7 +768,7 @@ then the folder name will be:
 truncation of some keywords so the name will not exceed the limits of the
 Operating System (``JESD``, ``LANE``, etc. are removed) of 260 characters.
 
-In case of the :xilinx:`VCU118`, if the Corundum Network Stack needs to be added,
+In case of the :adi:`VCU118`, if the Corundum Network Stack needs to be added,
 run the make command such as:
 
 ``make CORUNDUM=1``
