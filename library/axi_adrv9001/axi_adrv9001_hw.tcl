@@ -97,12 +97,22 @@ ad_ip_files axi_adrv9001 [list\
 ad_ip_parameter ID INTEGER 0
 ad_ip_parameter CMOS_LVDS_N INTEGER 0
 ad_ip_parameter IO_DELAY_GROUP STRING {dev_if_delay_group}
+ad_ip_parameter EN_RX_MCS_TO_STRB_M INTEGER 0
+ad_ip_parameter ENABLE_REF_CLK_MON INTEGER 0
 
 adi_add_auto_fpga_spec_params
 
 # interfaces
 
 ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn
+
+ad_interface clock ref_clk input 1
+
+add_interface mcs_if conduit end
+add_interface_port mcs_if mssi_sync_in mssi_sync_in Input 1
+add_interface_port mcs_if mcs_in mcs_in Input 1
+add_interface_port mcs_if mcs_out mcs_out Output 1
+add_interface_port mcs_if mcs_src mcs_src Output 1
 
 #ad_interface clock delay_clk input 1
 ad_interface clock adc_1_clk output 1

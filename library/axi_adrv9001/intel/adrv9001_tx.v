@@ -79,8 +79,11 @@ module adrv9001_tx #(
   input                   dac_data_valid
 );
 
+  reg [2:0] sync_rst = 3'b0;
+
   wire [6*8-1:0] serdes_in;
   wire [5:0] gpio_out;
+  wire mssi_sync_s;
 
   periphery_clk_buf tx_clk_buf(
     .inclk (tx_dclk_in_p_dclk_in),
@@ -135,6 +138,23 @@ module adrv9001_tx #(
   assign dac_clk = tx_clk;
 
   assign dac_clk_ratio = 1;
-  assign dac_if_rst = dac_rst;
+
+  // Hold the interface in reset across the MSSI sync, so the core restarts
+  // its TX words (and with them the tx_link qualifier) on the same tx_clk
+  // edge in every PHY.
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_mssi_sync (
+    .in_bits (mssi_sync),
+    .out_resetn (1'b1),
+    .out_clk (tx_clk),
+    .out_bits (mssi_sync_s));
+
+  always @(posedge tx_clk) begin
+    sync_rst <= {sync_rst[1:0],mssi_sync_s};
+  end
+
+  assign dac_if_rst = dac_rst | mssi_sync_s | (|sync_rst);
 
 endmodule
