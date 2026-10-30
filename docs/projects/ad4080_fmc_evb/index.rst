@@ -105,12 +105,12 @@ read the ADC data without involving the processor or the DMA.
         - :ref:`axi_ad408x`
         - Instance ``axi_ad4080_adc``; captures the LVDS data clocked by
           ``dco_clk`` (``dco_p/n``, 400 MHz) and outputs ``adc_data`` in the
-          ``adc_clk`` domain (``dco_clk`` / 2 = 200 MHz)
+          ``adc_clk`` domain (``dco_clk`` / 4 = 100 MHz)
       * - AXI DMAC
         - :git-hdl:`axi_dmac <library/axi_dmac>`
         - :ref:`axi_dmac`
-        - Instance ``axi_ad4080_dma``; RX only, 32-bit (or 16-bit) source,
-          64-bit destination
+        - Instance ``axi_ad4080_dma``; RX only, 32-bit or 16-bit source as
+          set by the make parameters below, 64-bit destination
       * - SPI SLAVE
         - :git-hdl:`spi_slave <library/spi_slave>`
         - :ref:`spi_slave`
@@ -118,10 +118,24 @@ read the ADC data without involving the processor or the DMA.
           ``pmod_data_ready`` is active low
 
 The SPI slave operates in Mode 3 (clock idles high), MSB first, and only
-sources data (there is no MOSI). The external master polls
-``pmod_data_ready`` to know when a new sample is available and frames each
-read as a single transfer. The signals are routed to the PMOD JB header
-using the LVCMOS33 I/O standard, as follows:
+sources data (there is no MOSI). While ``pmod_data_ready`` is low, a word is
+waiting; the master reads it with one transfer.
+
+Each transfer shifts out one ``adc_data`` word of the AXI_AD408X IP. The word
+size is fixed at build time: 32 bits when ENABLE_20BIT is set, or when
+ENABLE_14BIT is set with NUM_LANES=2, and 16 bits otherwise. The master clocks
+that many bits per transfer.
+
+What a transfer carries depends on the bit depth the converter runs at:
+
+* 32-bit word, 20-bit mode: one sample, sign extended to 32 bits.
+* 32-bit word, 16-bit or 14-bit mode: two consecutive samples, each sign
+  extended to 16 bits. The newer sample comes first (bits 31:16), then the
+  older one (bits 15:0).
+* 16-bit word: one sample, sign extended to 16 bits.
+
+The signals are routed to the PMOD JB header using the LVCMOS33 I/O standard,
+as follows:
 
 .. list-table::
    :widths: 30 20 20 30
@@ -242,7 +256,9 @@ the HDL repository, and then build the project as follows:
 **Linux/Cygwin/WSL**
 
 Example of running the ``make`` command without parameters (using the default
-configuration (ADC_N_BITS=20):
+configuration, all bit depths enabled on two lanes; a two lane build also
+runs a converter set to one lane, the driver selects the lane mode at run
+time):
 
 .. shell::
 
@@ -254,7 +270,7 @@ Example of running the ``make`` command with parameters:
 .. shell::
 
    $cd hdl/projects/ad4080_fmc_evb/zed
-   $make ADC_N_BITS=16
+   $make ENABLE_20BIT=0 ENABLE_14BIT=0
 
 Example of running the ``make`` command with the optional SPI slave interface
 enabled on the PMOD JB header:
@@ -272,17 +288,31 @@ project:
    +----------------+-------------------------------------------------------------+
    | Parameter      | Description                                                 |
    +================+=============================================================+
-   | ADC_N_BITS     | ADC resolution (default: 20)                                |
+   | NUM_LANES      | Number of LVDS data lanes (default: 2)                      |
    |                |                                                             |
-   |                | - 20                                                        |
-   |                | - 16                                                        |
-   |                | - 14                                                        |
+   |                | - 1                                                         |
+   |                | - 2                                                         |
+   +----------------+-------------------------------------------------------------+
+   | ENABLE_20BIT   | Build the 20-bit datapath (default: 1)                      |
+   +----------------+-------------------------------------------------------------+
+   | ENABLE_16BIT   | Build the 16-bit datapath (default: 1)                      |
+   +----------------+-------------------------------------------------------------+
+   | ENABLE_14BIT   | Build the 14-bit datapath (default: 1)                      |
    +----------------+-------------------------------------------------------------+
    | SPI_SLAVE      | Add the optional SPI slave (PMOD JB) interface (default: 0) |
    |                |                                                             |
    |                | - 0                                                         |
    |                | - 1                                                         |
    +----------------+-------------------------------------------------------------+
+
+   At least one bit depth must be enabled; only the enabled depths are built.
+   Width of the adc_data output of the AXI_AD408X IP, one word per adc_valid,
+   which is also the DMA source width: 32 bits when ENABLE_20BIT is set, or
+   when ENABLE_14BIT is set with NUM_LANES=2, and 16 bits otherwise.
+
+   A 32-bit word holds one 20-bit sample sign extended, or two 16-bit or
+   14-bit samples, each sign extended to 16 bits, the earlier one in [15:0]. A
+   16-bit word holds one 16-bit or 14-bit sample, sign extended.
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 

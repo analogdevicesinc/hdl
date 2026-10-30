@@ -181,6 +181,13 @@ module system_top (
 
   wire            adca_filter_data_ready_n;
   wire            adcb_filter_data_ready_n;
+  wire            spi0_miso;
+
+  // both ADCs on spi0: CS0 is ADC A, CS1 is ADC B
+  assign adcb_ad4080_sclk = adca_ad4080_sclk;
+  assign adcb_ad4080_mosi = adca_ad4080_mosi;
+  assign spi0_miso = ~adca_ad4080_csn ? adca_ad4080_miso :
+                     ~adcb_ad4080_csn ? adcb_ad4080_miso : 1'b0;
 
   assign adca_gp0_dir = 1'b0;
   assign adca_gp1_dir = 1'b0;
@@ -291,10 +298,10 @@ module system_top (
     .spi0_clk_i (1'b0),
     .spi0_clk_o (adca_ad4080_sclk),
     .spi0_csn_0_o (adca_ad4080_csn),
-    .spi0_csn_1_o (),
+    .spi0_csn_1_o (adcb_ad4080_csn),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (adca_ad4080_miso),
+    .spi0_sdi_i (spi0_miso),
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (adca_ad4080_mosi),
     .spi1_clk_i (1'b0),
@@ -328,14 +335,6 @@ module system_top (
     .adcb_cnv_in_n(adcb_cnv_in_n),
     .adcb_filter_data_ready_n(adcb_filter_data_ready_n),
     .adcb_sync_n (ad9508_sync),
-
-    .ad4080_b_spi_csn_o(adcb_ad4080_csn),
-    .ad4080_b_spi_csn_i(2'b11),
-    .ad4080_b_spi_clk_i(1'b0),
-    .ad4080_b_spi_clk_o(adcb_ad4080_sclk),
-    .ad4080_b_spi_sdo_i(1'b0),
-    .ad4080_b_spi_sdo_o(adcb_ad4080_mosi),
-    .ad4080_b_spi_sdi_i(adcb_ad4080_miso),
 
     .fpga_a_ref_clk(fpga_a_ref_clk),
     .fpga_b_ref_clk(fpga_b_ref_clk));

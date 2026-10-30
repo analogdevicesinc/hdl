@@ -54,15 +54,41 @@ Configuration Parameters
      - Core ID should be unique for each IP in the system
    * - FPGA_TECHNOLOGY
      - Used to select between FPGA devices, auto set in project.
-   * - ADC_N_BITS
-     - ADC resolution (default: 20). Supported values: 20, 16, 14
+   * - NUM_LANES
+     - Number of LVDS data lanes the interface is built for (default: 2).
+       A single lane build does not generate the dual lane datapaths. A two
+       lane build also runs a converter set to one lane: the driver selects
+       the lane mode at run time through the NUM_LANES field of CNTRL, and
+       the reset value selects one lane.
+   * - ENABLE_20BIT
+     - Build the 20-bit converter datapath (default: 1).
+   * - ENABLE_16BIT
+     - Build the 16-bit converter datapath (default: 1).
+   * - ENABLE_14BIT
+     - Build the 14-bit converter datapath (default: 1).
+   * - EN_FILTER_RDY
+     - 1 (default): filter_rdy_n is deserialized beside the data, bit accurate.
+       It must come straight from a pin in the I/O bank of the data clock.
+       0: no filter support, filter_rdy_n is unused and FILTER_ENABLE has no
+       effect. Use this when the line is not such a pin, comes through an IOBUF
+       or is not connected.
+   * - ADC_DATA_WIDTH
+     - Derived, do not override. Width of the adc_data bus, and therefore the
+       required DMA source width: 32 when ENABLE_20BIT is set, or when
+       ENABLE_14BIT is set on two lanes, 16 otherwise. On the 32-bit bus a 20-bit sample is sign extended to 32 bits,
+       while the 16-bit and 14-bit depths carry two samples per word, each sign
+       extended to its own 16-bit half, the earlier sample in [15:0]. The memory
+       then holds 16-bit samples in time order, exactly as with one sample per
+       beat on a 16-bit bus. Only the logic of the enabled bit depths is
+       generated, and at least one of ENABLE_20BIT, ENABLE_16BIT or ENABLE_14BIT
+       must be set.
 
 Interface
 --------------------------------------------------------------------------------
 
 .. hdl-interfaces::
 
-   * - filter_data_ready_n
+   * - filter_rdy_n
      - Signals when the filtered data is ready at the interface
    * - sync_n
      - Signals when the clock is disabled and the design should be in reset
@@ -101,19 +127,44 @@ Internal Interface Description
 
 The axi_ad408x operates as follows:
 
-* The LVDS data is deserialized by the
-  :git-hdl:`ad_serdes_in<library/xilinx/common/ad_serdes_in.v>` module with
-  a 1:4 ratio.
-* After deserialization, the data is sent to the
-  :git-hdl:`ad_pack<library/common/ad_pack.v>` module, which packs the 4/8-bit
-  (single lane/dual lane)data into a 20/16/14-bit format based on the DEVICE_CODE
-  field of the 0x4C (ADC Common) register.
+* The LVDS data lanes are deserialized by an
+  :git-hdl:`ad_serdes_in<library/xilinx/common/ad_serdes_in.v>` instance, and
+  the single ended filter_rdy_n line by a second one on the same clocks, so
+  the filter level arrives bit for bit beside the data. Every lane uses a 1:8
+  ratio on a clock divided by 4, so the fabric receives an 8-bit word per
+  cycle on a single lane and a 16-bit word on two lanes. A dual lane build
+  with the converter set to one lane joins two lane A words into one 16-bit
+  word.
+* The fabric word is bit aligned before packing by
+  :git-hdl:`ad_bitslip_align<library/common/ad_bitslip_align.v>`: the offset
+  found by the pattern search is selected from a short delay line of words and
+  takes effect with the next word, so the samples leave the packer on fixed
+  bit positions.
+* The aligned words are sent to the
+  :git-hdl:`ad_pack<library/common/ad_pack.v>` module, which packs them into a
+  20/16/14-bit sample based on the DEVICE_CODE field of the 0x4C (ADC Common)
+  register. The 14-bit packer of a dual lane build emits two samples at a time,
+  since 16 bits per cycle can hold more than one 14-bit sample; every other
+  packer emits one.
+* The filter gives every sample its own keep bit, in
+  :git-hdl:`ad_sample_edge_select<library/common/ad_sample_edge_select.v>`,
+  without added latency. On the
+  32-bit bus the kept 16-bit and 14-bit samples are paired by
+  :git-hdl:`ad_sample_compact<library/common/ad_sample_compact.v>`, which
+  closes the gaps left by dropped samples, so a word always carries two
+  consecutive kept samples.
 * When the bit-slip (synchronization process) is enabled, the software
   configures the ADC to output a fixed pattern, and the interface module will
-  adjust the data alignment until the pattern is captured.
-* When the filter is enabled, the adc_valid signal is gated by the
-  filter_data_ready_n signal, and the data is sent to the output only when the
-  filtered data is available.
+  adjust the data alignment until the pattern is captured. Only valid samples
+  are compared, and only once the samples of a changed offset have reached the
+  comparison.
+* When the filter is enabled, exactly one sample per decimation period is
+  validated: the first output of a new filter result, where the Filter Result
+  Ready (active low) level, taken in the middle of each sample, falls. The
+  converter repeats the result for the rest of the period. With the
+  EN_FILTER_RDY parameter set the line is deserialized beside the data and
+  must come from a pin in the I/O bank of the data clock; with it cleared there
+  is no filter support and FILTER_ENABLE has no effect.
 
 Register Map
 --------------------------------------------------------------------------------
@@ -222,7 +273,10 @@ Software Guidelines
      - [3:2]
      - Resolution selection code for the LVDS DATA deserialization
        (00: 20-bit, 01: 16-bit, 10: 14-bit).
-       When you use an IP parameter ADC_N_BITS<=16 the 20-bit mode is not available.
+       Only the bit depths enabled at build time through ENABLE_20BIT,
+       ENABLE_16BIT and ENABLE_14BIT are available. When exactly one depth is
+       built the selection is a constant and this field has no effect, so any
+       value the driver writes still yields correct operation.
    * - SYNC_STATUS *
      - 0x68 (ADC Common)
      - 0

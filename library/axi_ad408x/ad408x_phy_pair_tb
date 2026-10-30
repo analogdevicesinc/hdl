@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Two ad408x_phy instances joined and packed by util_sample_pack, as in
+# ad4880_fmc_evb.
+#
+# The design instantiates 7 series primitives, so the elaboration needs the
+# unisims library and the glbl module.
+#
+# See ad408x_phy_pair_tb.v.
+#
+# MODE=batch runs without the GUI.
+
+cd `dirname $0`
+
+SOURCE="ad408x_phy_pair_tb.v"
+SOURCE+=" ad408x_phy.v"
+SOURCE+=" ../common/ad_pack.v"
+SOURCE+=" ../common/ad_sample_compact.v"
+SOURCE+=" ../common/ad_bitslip_align.v"
+SOURCE+=" ../common/ad_sample_edge_select.v"
+SOURCE+=" ../xilinx/common/ad_serdes_in.v"
+SOURCE+=" ../common/ad_sample_join_fifo.v"
+SOURCE+=" ../common/ad_sample_pack.v"
+SOURCE+=" ../util_sample_pack/util_sample_pack.v"
+SOURCE+=" ../util_cdc/sync_event.v"
+SOURCE+=" ../util_cdc/sync_bits.v"
+# glbl drives GSR for the unisim primitive models
+SOURCE+=" ${XILINX_VIVADO:-$(dirname $(dirname $(which xelab)))}/data/verilog/src/glbl.v"
+
+export SIMULATOR=${SIMULATOR:-xsim}
+# glbl is a second top, so the snapshot gets a composite name and has to be
+# named explicitly for xsim to find it.
+export XELAB_OPTS="-L unisims_ver -L secureip glbl -s ad408x_phy_pair_tb_snap"
+export XSIM_SNAPSHOT="ad408x_phy_pair_tb_snap"
+
+source ../common/tb/run_tb.sh

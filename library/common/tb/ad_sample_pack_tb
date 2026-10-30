@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SOURCE="ad_sample_pack_tb.v"
+SOURCE+=" ../ad_sample_pack.v"
+SOURCE+=" ../../util_cdc/sync_bits.v"
+
+cd `dirname $0`
+source run_tb.sh
