@@ -50,11 +50,11 @@
 --
 
 library ieee;
-use ieee.std_logic_1164.all; 
+use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity tx_encoder is	 
-  generic (DATA_WIDTH: integer range 16 to 32 := 32); 
+entity tx_encoder is
+  generic (DATA_WIDTH: integer range 16 to 32 := 32);
   port (
     up_clk: in std_logic;             -- clock
     data_clk : in std_logic;          -- data clock
@@ -91,7 +91,7 @@ architecture rtl of tx_encoder is
   signal audio : std_logic_vector(23 downto 0);
   signal par_vector : std_logic_vector(26 downto 0);
   signal send_audio : std_logic;
-  
+
   signal cdc_sync_stage0_tick_counter : std_logic := '0';
   signal cdc_sync_stage1_tick_counter : std_logic := '0';
   signal cdc_sync_stage2_tick_counter : std_logic := '0';
@@ -112,7 +112,7 @@ architecture rtl of tx_encoder is
     signal audio      : std_logic_vector(23 downto 0);
     signal toggle     : std_logic;
     signal prev_spdif : std_logic)      -- prev. value of spdif signal
-       
+
     return std_logic is
     variable spdif, next_bit : std_logic;
   begin
@@ -143,7 +143,7 @@ architecture rtl of tx_encoder is
     end if;
     return(spdif);
   end encode_bit;
-  
+
 begin
 
 -- SPDIF clock enable generation. The clock is a fraction of the data clock,
@@ -166,7 +166,7 @@ begin
   tick_counter <= cdc_sync_stage3_tick_counter xor cdc_sync_stage2_tick_counter;
 
   CGEN: process (up_clk)
-  begin 
+  begin
     if rising_edge(up_clk) then
       if resetn = '0' or conf_txen = '0' then
          clk_cnt <= 0;
@@ -187,7 +187,7 @@ begin
   end process CGEN;
 
   SRD: process (up_clk)
-  begin 
+  begin
     if rising_edge(up_clk) then
       if resetn = '0' or conf_txdata = '0' then
         bufctrl <= IDLE;
@@ -218,7 +218,7 @@ begin
             if chb_samp_ack = '1' then
               sample_data_ack <= '1';
               bufctrl <= READ_CHA;
-            end if;  
+            end if;
           when others =>
             bufctrl <= IDLE;
         end case;
@@ -232,11 +232,11 @@ begin
         spdif_tx_o <= spdif_out;
     end if;
   end process TXSYNC;
- 
+
 -- State machine that generates sub-frames and blocks
-  
+
   FRST: process (up_clk)
-  begin 
+  begin
     if rising_edge(up_clk) then
       if resetn = '0' or conf_txen = '0' then
         framest <= IDLE;
@@ -285,7 +285,7 @@ begin
                                         par_cnt, active_user_data,
                                         active_ch_status,
                                         audio, toggle, spdif_out);
-                if bit_cnt = 31 then 
+                if bit_cnt = 31 then
                   inv_preamble <= encode_bit(bit_cnt, valid, frame_cnt,
                                              par_cnt, active_user_data,
                                              active_ch_status,
@@ -294,7 +294,7 @@ begin
                 if toggle = '0' then
                   if bit_cnt > 3 and bit_cnt < 31 and
                     par_vector(bit_cnt - 4) = '1' then
-                    par_cnt <= par_cnt + 1;  
+                    par_cnt <= par_cnt + 1;
                   end if;
                 end if;
               end if;
@@ -330,7 +330,7 @@ begin
                                         par_cnt, active_user_data,
                                         active_ch_status,
                                         audio, toggle, spdif_out);
-                if bit_cnt = 31 then 
+                if bit_cnt = 31 then
                   inv_preamble <= encode_bit(bit_cnt, valid, frame_cnt,
                                              par_cnt, active_user_data,
                                              active_ch_status,
@@ -339,7 +339,7 @@ begin
                 if toggle = '0' then
                   if bit_cnt > 3 and bit_cnt < 31 and
                     par_vector(bit_cnt - 4) = '1' then
-                    par_cnt <= par_cnt + 1;  
+                    par_cnt <= par_cnt + 1;
                   end if;
                 end if;
               end if;
@@ -383,7 +383,7 @@ begin
                                         par_cnt, active_user_data,
                                         active_ch_status,
                                         audio, toggle, spdif_out);
-                if bit_cnt = 31 then 
+                if bit_cnt = 31 then
                   inv_preamble <= encode_bit(bit_cnt, valid, frame_cnt,
                                              par_cnt, active_user_data,
                                              active_ch_status,
@@ -392,7 +392,7 @@ begin
                 if toggle = '0' then
                   if bit_cnt > 3 and bit_cnt < 31 and
                     par_vector(bit_cnt - 4) = '1' then
-                    par_cnt <= par_cnt + 1;  
+                    par_cnt <= par_cnt + 1;
                   end if;
                 end if;
               end if;
@@ -407,7 +407,7 @@ begin
 -- Audio data latching
   DA32: if DATA_WIDTH = 32 generate
     ALAT: process (up_clk)
-    begin 
+    begin
       if rising_edge(up_clk) then
         if send_audio = '0' then
           audio(23 downto 0) <= (others => '0');
@@ -439,6 +439,8 @@ begin
               audio(0) <= '0';
             when 8 =>                   -- 24 bit audio
               audio(23 downto 0) <= sample_data(23 downto 0);
+            when 9 =>                   -- 32-bit audio (left aligned - only take 24 MS bits)
+              audio(23 downto 0) <= sample_data(31 downto 8);
             when others =>                -- unsupported modes
               audio(23 downto 0) <= (others => '0');
           end case;
@@ -449,7 +451,7 @@ begin
 
   DA16: if DATA_WIDTH = 16 generate
     ALAT: process (up_clk)
-    begin 
+    begin
       if rising_edge(up_clk) then
         if send_audio = '0' then
           audio(23 downto 0) <= (others => '0');
@@ -460,13 +462,13 @@ begin
       end if;
     end process ALAT;
   end generate DA16;
-                         
+
 -- Parity vector. These bits are counted to generate even parity
   par_vector(23 downto 0) <= audio(23 downto 0);
   par_vector(24) <= valid;
   par_vector(25) <= active_user_data(frame_cnt);
   par_vector(26) <= active_ch_status(frame_cnt);
-                             
+
 -- Channel status and user datat to be used if buffers are disabled.
 -- User data is then all zero, while channel status bits are taken from
 -- register TxChStat.
@@ -488,8 +490,8 @@ begin
 
 -- Generate channel status vector based on configuration register setting.
   active_ch_status <= def_ch_status;
-  
+
 -- Generate user data vector based on configuration register setting.
   active_user_data <= def_user_data;
-  
+
 end rtl;
