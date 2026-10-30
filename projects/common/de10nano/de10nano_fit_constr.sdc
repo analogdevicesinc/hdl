@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023, 2026 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
 ## Short identifier: ADIBSD
 ##
 ## Redistribution and use in source and binary forms, with or without modification,
@@ -32,11 +32,12 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-source ../../../scripts/adi_env.tcl
-source ../../scripts/adi_project_intel.tcl
-
-adi_project template_a10gx
-
-source $ad_hdl_dir/projects/common/a10gx/a10gx_system_assign.tcl
-
-execute_flow -compile
+# Fitter-only hold margin on sys_clk: in Quartus 25.1std the HPS lightweight
+# bridge outputs land up to ~90 ps short of hold, depending on placement.
+# Sign-off STA uses the real constraints.
+if {$::TimeQuestInfo(nameofexecutable) eq "quartus_fit"} {
+  foreach_in_collection clk [get_clocks -nowarn {sys_clk sys_clk_50mhz}] {
+    set name [get_clock_info -name $clk]
+    set_clock_uncertainty -add -hold -from $name -to $name 0.1
+  }
+}
