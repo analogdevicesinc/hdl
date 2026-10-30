@@ -125,10 +125,9 @@ module jesd204_up_common #(
   assign up_reset = up_reset_vector[0];
 
   /* Reset signal generation for the JESD core */
-  reg [2:0] core_reset_vector = 3'b111;
-  reg core_reset_dly = 1'b1;
-  reg core_reset_dly2 = 1'b1;
-  assign core_reset = core_reset_dly2;
+  reg [1:0] core_reset_vector = 2'b11;
+  reg [2:0] core_reset_vector_dly = 3'b111;
+  assign core_reset = core_reset_vector_dly[0];
 
   reg [4:0] device_reset_vector = 5'b11111;
   assign device_reset = device_reset_vector[0];
@@ -150,7 +149,7 @@ module jesd204_up_common #(
 
   /* Transfer two cycles before the core comes out of reset */
   wire core_cfg_transfer_en;
-  assign core_cfg_transfer_en = core_reset_vector[0] ^ core_reset_dly;
+  assign core_cfg_transfer_en = core_reset_vector_dly[2] ^ core_reset_vector_dly[1];
 
   wire device_cfg_transfer_en;
   assign device_cfg_transfer_en = device_reset_vector[2] ^ device_reset_vector[1];
@@ -171,13 +170,11 @@ module jesd204_up_common #(
 
   always @(posedge core_clk or posedge core_reset_all) begin
     if (core_reset_all == 1'b1) begin
-      core_reset_vector <= 3'b111;
-      core_reset_dly <= 1'b1;
-      core_reset_dly2 <= 1'b1;
+      core_reset_vector <= 2'b11;
+      core_reset_vector_dly <= 3'b111;
     end else begin
-      core_reset_vector <= {1'b0,core_reset_vector[2:1]};
-      core_reset_dly <= core_reset_vector[0];
-      core_reset_dly2 <= core_reset_dly;
+      core_reset_vector <= {1'b0,core_reset_vector[1]};
+      core_reset_vector_dly <= {core_reset_vector[0],core_reset_vector_dly[2:1]};
     end
   end
 
