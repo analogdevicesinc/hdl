@@ -46,6 +46,7 @@ set_property USER_SLR_ASSIGNMENT SLR1 [get_cells -hierarchical -filter {NAME =~ 
 # RX side
 set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_*.gen_lane[*].i_lane/i_rx_header/system_rx_0_jes30_LUT6_5/O}]]
 set_property FORCE_MAX_FANOUT 16 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.i_jesd204_rx_ctrl_64b/status_err_cnt[*]_i_*/O}]]
+set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[*].event_data_phase_reg*}]]
 
 # TX side
 set_property FORCE_MAX_FANOUT 15 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/out_addr_reg[*]*/Q}]]
