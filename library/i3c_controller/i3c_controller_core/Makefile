@@ -10,6 +10,7 @@ GENERIC_DEPS += i3c_controller_bit_mod.v
 GENERIC_DEPS += i3c_controller_bit_mod.vh
 GENERIC_DEPS += i3c_controller_core.v
 GENERIC_DEPS += i3c_controller_framing.v
+GENERIC_DEPS += i3c_controller_trp.v
 GENERIC_DEPS += i3c_controller_word.v
 GENERIC_DEPS += i3c_controller_word.vh
 
