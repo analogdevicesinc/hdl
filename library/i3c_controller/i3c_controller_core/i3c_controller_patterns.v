@@ -145,7 +145,7 @@ module i3c_controller_patterns (
   end
 
   assign ph_end = &count;
-  assign stop = cmd_pattern_r == 7'd0 ? PH_STOP : cmd_pattern_r == 7'd1 ? PH_HDR_STOP : 5'd0;
+  assign stop = (cmd_pattern_r == 7'd0) ? PH_STOP : ((cmd_pattern_r == 7'd1) ? PH_HDR_STOP : 5'd0);
   assign start = sm == SM_IDLE & cmd_valid & idle;
   assign cmd_ready = sm == SM_IDLE & idle;
   assign hold = sm == SM_RUN;
