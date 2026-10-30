@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -162,6 +162,7 @@ module i3c_controller_framing #(
   wire        cmdp_ccc_bcast;
   wire        dev_is_attached;
   wire        dev_is_i2c;
+  wire        cmdp_entdaa;
 
   always @(posedge clk) begin
     error_unknown_da <= 1'b0;
@@ -177,7 +178,7 @@ module i3c_controller_framing #(
     end else if (cmdw_nack_bcast | cmdw_nack_resp) begin
       j <= 0;
       st  <= `CMDW_NOP;
-      sm <= cmdp_ccc_id_reg == CCC_ENTDAA ? SM_SETUP :
+      sm <= cmdp_entdaa ? SM_SETUP :
              cmdp_rnw_reg ? SM_SETUP : SM_CLEANUP;
       ctrl_daa <= 1'b0;
     end else begin
@@ -372,7 +373,7 @@ module i3c_controller_framing #(
             // No IBI requested during CMDW_BCAST_7E_W0.
             end else if (cmdp_valid_reg) begin
               st <= cmdp_ccc_reg ?
-                    (cmdp_ccc_id_reg == CCC_ENTDAA ? `CMDW_CCC_OD : `CMDW_CCC_PP) : `CMDW_MSG_SR;
+                    (cmdp_entdaa ? `CMDW_CCC_OD : `CMDW_CCC_PP) : `CMDW_MSG_SR;
             end else begin
               st <= `CMDW_STOP_OD;
             end
@@ -423,6 +424,8 @@ module i3c_controller_framing #(
   assign cmdp_ccc          = cmdp[22];
   assign cmdp_ccc_id       = cmdp[29:23];
   assign cmdp_ccc_bcast    = cmdp[30];
+
+  assign cmdp_entdaa = cmdp_ccc_reg & ~cmdp_ccc_bcast_reg & (cmdp_ccc_id_reg == CCC_ENTDAA);
 
   assign cmdp_error = {error_nack_resp, error_unknown_da, error_nack_bcast};
 

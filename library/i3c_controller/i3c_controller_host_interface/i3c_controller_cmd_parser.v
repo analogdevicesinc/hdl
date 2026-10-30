@@ -106,6 +106,7 @@ module i3c_controller_cmd_parser (
   wire        cmdp_rnw;
   wire [11:0] cmdp_buffer_len;
   wire        cmdp_ccc;
+  wire        cmdp_ccc_direct;
   wire [6:0]  cmdp_ccc_id;
   wire        error_nack_bcast;
   wire        error_unknown_da;
@@ -125,8 +126,8 @@ module i3c_controller_cmd_parser (
           cmdr2 <= 8'd0;
           if (cmd_valid) begin
             cmdr1 <= cmd;
-            /* cmd[22] is cmdp_ccc */
-            sm <= cmd[22] ? SM_CCC_WAIT : SM_XFER_WAIT;
+            /* cmd[22] is cmdp_ccc and cmd[23] is pattern */
+            sm <= ( cmd[22] | cmd[23] ) ? SM_CCC_WAIT : SM_XFER_WAIT;
           end else begin
             sm <= SM_RECEIVE;
           end
@@ -221,7 +222,8 @@ module i3c_controller_cmd_parser (
   assign cmdp_ccc        = cmdr1[22];
   // The Linux implementation sets ENTDAA buffer length to 0,
   // but we need with 1 to contiguously fetch the DAs.
-  assign cmdp_buffer_len = cmdp_ccc_id == CCC_ENTDAA ? 1 : cmdr1[19:08];
+  assign cmdp_ccc_direct = cmdr2[7];
+  assign cmdp_buffer_len = ~cmdp_ccc_direct & (cmdp_ccc_id == CCC_ENTDAA) ? 1 : cmdr1[19:08];
   assign cmdp_ccc_id     = cmdr2[6:0];
 
   assign error_nack_bcast = cmdp_error[0];
