@@ -104,7 +104,7 @@ In our designs, we use only three types:
 
 .. _ACAP: https://www.xilinx.com/an/adaptive-compute-acceleration-platforms.html
 .. _HPS: https://www.intel.com/content/www/us/en/docs/programmable/683458/current/hard-processor-system-hps.html
-.. _NIOS II: https://www.intel.com/content/www/us/en/products/programmable/processor/nios-ii.html
+.. _NIOS II: https://www.intel.com/content/www/us/en/products/sku/148615/nios-ii-processor/specifications.html
 .. _PS7: https://www.xilinx.com/products/intellectual-property/processing_system7.html
 .. _PS8: https://www.xilinx.com/products/intellectual-property/zynq-ultra-ps-e.html
 .. _MicroBlaze: https://www.xilinx.com/products/design-tools/microblaze.html
@@ -492,22 +492,22 @@ Intel platforms
    * - Board name
      - Connector 1
      - Connector 2
-   * - :intel:`A10GX <content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html>` ** (Arria 10 GX)
+   * - `A10GX <https://www.altera.com/products/devkit/po-3320/arria-10-gx-fpga-development-kit>`__ ** (Arria 10 GX)
      - FMC LPC ()
      - FMC HPC (8 x 17.4 Gbps)
-   * - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>` (Arria 10 SoC)
+   * - `A10SoC <https://www.altera.com/products/devkit/po-3006/arria-10-sx-soc-development-kit>`__ (Arria 10 SoC)
      - FMC HPC (8)
      - FMC LPC (8)
-   * - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>` (Stratix 10 SoC)
+   * - `S10SoC <https://www.altera.com/products/devkit/po-3031/stratix-10-sx-soc-development-kit>`__ (Stratix 10 SoC)
      - FMC+ (24 @ 28.3 Gbps)
      - FMC+ (24 @ 28.3 Gbps)
-   * - :intel:`C5SoC <content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html>` (Cyclone V SoC)
+   * - `C5SoC <https://www.altera.com/products/devkit/po-3010/cyclone-v-sx-soc-development-kit>`__ (Cyclone V SoC)
      - HSMC
      - ---
    * - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield
      - ---
-   * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>` (Agilex 7 I-Series)
+   * - `FM87 <https://www.altera.com/products/devkit/po-3248/agilex-7-fpga-i-series-transceiver-soc-development-kit-4x-f-tile>`__ (Agilex 7 I-Series)
      - FMC+ (16 @ 32 Gbps)
      - FMC+ (16 @ 32 Gbps)
 

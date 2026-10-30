@@ -321,16 +321,10 @@ EVAL-AD469X-EVB
      - Library Cores
    * - :adi:`EVAL-AD4696`
      - :git-hdl:`ad469x_evb <hdl_2026_r1:projects/ad469x_evb>`
-     - :git-hdl:`coraz7s <hdl_2026_r1:projects/ad469x_evb/coraz7s>`
-     - ad469x_evb_coraz7s
+     - :git-hdl:`zed <hdl_2026_r1:projects/ad469x_evb/zed>`
+     - :ref:`ad469x_evb_zed <util_hdl_2026_r1_ad469x_evb_zed>`
      - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-   * - :adi:`EVAL-AD4692-ARDZ`
-     - 
-     - :git-hdl:`de10nano <hdl_2026_r1:projects/ad469x_evb/de10nano>`
-       :git-hdl:`zed <hdl_2026_r1:projects/ad469x_evb/zed>`
-     - NA
-       :ref:`ad469x_evb_zed <util_hdl_2026_r1_ad469x_evb_zed>`
-     - :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
+       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
        :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
        :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
        :git-hdl:`axi_pwm_gen <hdl_2026_r1:library/axi_pwm_gen>`
@@ -368,33 +362,6 @@ EVAL-AD485X-FMCZ
        :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
        :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
        :git-hdl:`axi_pwm_gen <hdl_2026_r1:library/axi_pwm_gen>`
-       :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-       :git-hdl:`util_cpack2 <hdl_2026_r1:library/util_pack/util_cpack2>`
-
-EVAL-AD4880-FMC
----------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`EVAL-AD4880-FMCZ`
-     - :git-hdl:`ad4880_fmc_evb <hdl_2026_r1:projects/ad4880_fmc_evb>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/ad4880_fmc_evb/zed>`
-     - ad4880_fmc_evb_zed
-     - :git-hdl:`axi_ad408x <hdl_2026_r1:library/axi_ad408x>`
-       :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-       :git-hdl:`axi_clock_monitor <hdl_2026_r1:library/axi_clock_monitor>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
        :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
        :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
        :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
@@ -451,40 +418,6 @@ AD5766SDZ
        :git-hdl:`spi_engine_execution <hdl_2026_r1:library/spi_engine/spi_engine_execution>`
        :git-hdl:`spi_engine_interconnect <hdl_2026_r1:library/spi_engine/spi_engine_interconnect>`
        :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-
-EVAL-AD57XX-ARDZ
-----------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`EVAL-AD5780-ARDZ <eval-ad5780ardz>`
-     - :git-hdl:`ad57xx_ardz <hdl_2026_r1:projects/ad57xx_ardz>`
-     - :git-hdl:`coraz7s <hdl_2026_r1:projects/ad57xx_ardz/coraz7s>`
-     - ad57xx_ardz_coraz7s
-     - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-   * - :adi:`EVAL-AD5781-ARDZ <eval-ad5781ardz>`
-     - 
-     - :git-hdl:`de10nano <hdl_2026_r1:projects/ad57xx_ardz/de10nano>`
-     - NA
-     - :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-   * - :adi:`EVAL-AD5782-ARDZ <eval-ad5782ardz>`
-     - 
-     - 
-     - 
-     - :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_pwm_gen <hdl_2026_r1:library/axi_pwm_gen>`
-       :git-hdl:`axi_spi_engine <hdl_2026_r1:library/spi_engine/axi_spi_engine>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`spi_engine_execution <hdl_2026_r1:library/spi_engine/spi_engine_execution>`
-       :git-hdl:`spi_engine_interconnect <hdl_2026_r1:library/spi_engine/spi_engine_interconnect>`
-       :git-hdl:`spi_engine_offload <hdl_2026_r1:library/spi_engine/spi_engine_offload>`
 
 AD6676EVB
 ---------
@@ -1331,30 +1264,6 @@ AD9783EBZ
        :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
        :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
 
-AD-GMSL2ETH-SL
---------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`AD-GMSL2ETH-SL`
-     - :git-hdl:`ad_gmsl2eth_sl <hdl_2026_r1:projects/ad_gmsl2eth_sl>`
-     - :git-hdl:`k26 <hdl_2026_r1:projects/ad_gmsl2eth_sl/k26>`
-     - ad_gmsl2eth_sl_k26
-     - :git-hdl:`axi_pwm_gen <hdl_2026_r1:library/axi_pwm_gen>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`corundum_core <hdl_2026_r1:library/corundum/corundum_core>`
-       :git-hdl:`ethernet_adrv9009zu11eg <hdl_2026_r1:library/corundum/ethernet/adrv9009zu11eg>`
-       :git-hdl:`ethernet_k26 <hdl_2026_r1:library/corundum/ethernet/k26>`
-       :git-hdl:`ethernet_vcu118 <hdl_2026_r1:library/corundum/ethernet/vcu118>`
-       :git-hdl:`ethernet_xcvu11p <hdl_2026_r1:library/corundum/ethernet/xcvu11p>`
-
 ADQUADMXFE1EBZ
 --------------
 
@@ -1529,36 +1438,6 @@ EVAL-ADMX100X-EVB
        :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
        :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
        :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-
-EVAL-ADMX6001-EBZ
------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`ADMX6001-EBZ`
-     - :git-hdl:`admx6001_ebz <hdl_2026_r1:projects/admx6001_ebz>`
-     - :git-hdl:`vcu118 <hdl_2026_r1:projects/admx6001_ebz/vcu118>`
-     - :ref:`admx6001_ebz_vcu118 <util_hdl_2026_r1_admx6001_ebz_vcu118>`
-     - :git-hdl:`axi_ad408x <hdl_2026_r1:library/axi_ad408x>`
-       :git-hdl:`axi_adxcvr <hdl_2026_r1:library/xilinx/axi_adxcvr>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_jesd204_rx <hdl_2026_r1:library/jesd204/axi_jesd204_rx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`data_offload <hdl_2026_r1:library/data_offload>`
-       :git-hdl:`jesd204_rx <hdl_2026_r1:library/jesd204/jesd204_rx>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-       :git-hdl:`util_adcfifo <hdl_2026_r1:library/util_adcfifo>`
-       :git-hdl:`util_adxcvr <hdl_2026_r1:library/xilinx/util_adxcvr>`
-       :git-hdl:`util_axis_fifo <hdl_2026_r1:library/util_axis_fifo>`
-       :git-hdl:`util_cdc <hdl_2026_r1:library/util_cdc>`
-       :git-hdl:`util_do_ram <hdl_2026_r1:library/util_do_ram>`
 
 ADRV9001
 --------
@@ -2160,10 +2039,12 @@ FMCDAQ2
      - Library Cores
    * - :adi:`AD-FMCDAQ2-EBZ`
      - :git-hdl:`daq2 <hdl_2026_r1:projects/daq2>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/daq2/zed>`
-       :git-hdl:`a10soc <hdl_2026_r1:projects/daq2/a10soc>`
-     - daq2_zed
-       NA
+     - :git-hdl:`kcu105 <hdl_2026_r1:projects/daq2/kcu105>`
+       :git-hdl:`zc706 <hdl_2026_r1:projects/daq2/zc706>`
+       :git-hdl:`zcu102 <hdl_2026_r1:projects/daq2/zcu102>`
+     - :ref:`daq2_kcu105 <util_hdl_2026_r1_daq2_kcu105>`
+       :ref:`daq2_zc706 <util_hdl_2026_r1_daq2_zc706>`
+       :ref:`daq2_zcu102 <util_hdl_2026_r1_daq2_zcu102>`
      - :git-hdl:`ad_ip_jesd204_tpl_adc <hdl_2026_r1:library/jesd204/ad_ip_jesd204_tpl_adc>`
        :git-hdl:`ad_ip_jesd204_tpl_dac <hdl_2026_r1:library/jesd204/ad_ip_jesd204_tpl_dac>`
        :git-hdl:`axi_adxcvr <hdl_2026_r1:library/xilinx/axi_adxcvr>`
@@ -2331,7 +2212,7 @@ JUPITERSDR
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`JUPITER-SDR`
+   * - :adi:`JUPITER-SDR <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-jupiter-ebz.html>`
      - :git-hdl:`jupiter_sdr <hdl_2026_r1:projects/jupiter_sdr>`
      - :git-hdl:`jupiter_sdr <hdl_2026_r1:projects/jupiter_sdr>`
      - jupiter_sdr_jupiter_sdr
@@ -2371,7 +2252,7 @@ PULSAR_ADC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`PULSAR-ADC-PMDZ <pulsar_adc_evaluation_tools>`
+   * - :adi:`PULSAR-ADC-PMDZ <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/PulsarPMODs.html>`
      - :git-hdl:`pulsar_adc <hdl_2026_r1:projects/pulsar_adc>`
      - :git-hdl:`coraz7s <hdl_2026_r1:projects/pulsar_adc/coraz7s>`
        :git-hdl:`zed <hdl_2026_r1:projects/pulsar_adc/zed>`

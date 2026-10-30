@@ -1753,7 +1753,7 @@ JUPITERSDR
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`JUPITER-SDR`
+   * - :adi:`JUPITER-SDR <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-jupiter-ebz.html>`
      - :git-hdl:`jupiter_sdr <hdl_2022_r2:projects/jupiter_sdr>`
      - :git-hdl:`jupiter_sdr <hdl_2022_r2:projects/jupiter_sdr>`
      - jupiter_sdr_jupiter_sdr
@@ -1775,7 +1775,7 @@ PULSAR_ADC_PMDZ
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`PULSAR-ADC-PMDZ <pulsar_adc_evaluation_tools>`
+   * - :adi:`PULSAR-ADC-PMDZ <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/PulsarPMODs.html>`
      - :git-hdl:`pulsar_adc_pmdz <hdl_2022_r2:projects/pulsar_adc_pmdz>`
      - :git-hdl:`coraz7s <hdl_2022_r2:projects/pulsar_adc_pmdz/coraz7s>`
      - :ref:`pulsar_adc_pmdz_coraz7s <util_hdl_2022_r2_pulsar_adc_pmdz_coraz7s>`

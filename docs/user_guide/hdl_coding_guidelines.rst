@@ -1117,7 +1117,7 @@ Technology, 1997
 <http://www.asic-world.com/code/verilog_tutorial/peter_chambers_10_commandments.pdf>`__
 
 `[3] "Verilog Coding Techniques, v3.2", Freescale Semiconductor, 2005
-<http://courses.cit.cornell.edu/ece576/Verilog/FreescaleVerilog.pdf>`__
+<https://people.ece.cornell.edu/land/courses/ece5760/Verilog/FreescaleVerilog.pdf>`__
 
 `[4] Jane Smith, "Verilog Coding Guidelines, Rev. B", Cisco Systems 2000
 <http://www.engr.sjsu.edu/cpham/VERILOG/VerilogCodingStyle.pdf>`__
