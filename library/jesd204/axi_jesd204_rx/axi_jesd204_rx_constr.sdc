@@ -65,10 +65,14 @@ set_false_path \
 
 set_false_path \
   -from [get_registers {*|jesd204_up_common:i_up_common|up_reset_core}] \
+  -to [get_registers {*|jesd204_up_common:i_up_common|core_reset_vector_dly[*]*}]
+
+set_false_path \
+  -from [get_registers {*|jesd204_up_common:i_up_common|up_reset_core}] \
   -to [get_registers {*|jesd204_up_common:i_up_common|device_reset_vector[*]}]
 
 set_false_path \
-  -from [get_registers {*|jesd204_up_common:i_up_common|core_reset_vector[0]}] \
+  -from [get_registers {*|jesd204_up_common:i_up_common|core_reset_vector_dly[0]*}] \
   -to [get_registers {*|jesd204_up_common:i_up_common|up_reset_synchronizer_vector[*]}]
 
 set_false_path \
