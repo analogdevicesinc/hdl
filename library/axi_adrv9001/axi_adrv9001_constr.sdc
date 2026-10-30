@@ -44,4 +44,16 @@ set_false_path -from [get_registers *up_xfer_cntrl:i_xfer_tdd_control|up_xfer_da
 
 util_cdc_sync_bits_constr {*|sync_bits:i_rx1_ctrl_sync}
 util_cdc_sync_bits_constr {*|sync_bits:i_tx1_ctrl_sync}
+util_cdc_sync_bits_constr {*|sync_bits:i_mssi_sync}
+util_cdc_sync_bits_constr {*|sync_bits:i_mcs_sync_in}
 
+util_cdc_sync_bits_constr {*|sync_bits:i_rate_sync_in}
+util_cdc_sync_bits_constr {*|sync_bits:i_transfer_sync_in}
+
+# MCS request and MSSI sync inputs, sampled on ref_clk
+set_false_path -to [get_registers *axi_adrv9001_sync:i_sync|request_m1]
+set_false_path -to [get_registers *axi_adrv9001_sync:i_sync|mssi_sync_in_d]
+
+set_false_path -from [get_registers *axi_adrv9001_sync_ctrl:*|up_xfer_cntrl:i_xfer|d_xfer_toggle*]  -to [get_registers *axi_adrv9001_sync_ctrl:*|up_xfer_cntrl:i_xfer|up_xfer_state_m1*]
+set_false_path -from [get_registers *axi_adrv9001_sync_ctrl:*|up_xfer_cntrl:i_xfer|up_xfer_toggle*] -to [get_registers *axi_adrv9001_sync_ctrl:*|up_xfer_cntrl:i_xfer|d_xfer_toggle_m1*]
+set_false_path -from [get_registers *axi_adrv9001_sync_ctrl:*|up_xfer_cntrl:i_xfer|up_xfer_data*]   -to [get_registers *axi_adrv9001_sync_ctrl:*|up_xfer_cntrl:i_xfer|d_data_cntrl*]

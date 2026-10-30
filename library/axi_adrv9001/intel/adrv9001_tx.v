@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -42,7 +42,6 @@ module adrv9001_tx #(
   parameter USE_BUFG = 0,
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
-  input                   ref_clk,
   input                   up_clk,
 
   input                   mssi_sync,
@@ -62,13 +61,13 @@ module adrv9001_tx #(
 
   input                   rx_clk_div,
   input                   rx_clk,
-  input                   rx_ssi_rst,
 
   // internal resets and clocks
 
   output     [31:0]       dac_clk_ratio,
 
   input                   dac_rst,
+  output                  dac_if_rst,
   output                  dac_clk_div,
 
   input       [7:0]       dac_data_0,
@@ -80,8 +79,11 @@ module adrv9001_tx #(
   input                   dac_data_valid
 );
 
+  reg [2:0] sync_rst = 3'b0;
+
   wire [6*8-1:0] serdes_in;
   wire [5:0] gpio_out;
+  wire mssi_sync_s;
 
   periphery_clk_buf tx_clk_buf(
     .inclk (tx_dclk_in_p_dclk_in),
@@ -136,5 +138,23 @@ module adrv9001_tx #(
   assign dac_clk = tx_clk;
 
   assign dac_clk_ratio = 1;
+
+  // Hold the interface in reset across the MSSI sync, so the core restarts
+  // its TX words (and with them the tx_link qualifier) on the same tx_clk
+  // edge in every PHY.
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_mssi_sync (
+    .in_bits (mssi_sync),
+    .out_resetn (1'b1),
+    .out_clk (tx_clk),
+    .out_bits (mssi_sync_s));
+
+  always @(posedge tx_clk) begin
+    sync_rst <= {sync_rst[1:0],mssi_sync_s};
+  end
+
+  assign dac_if_rst = dac_rst | mssi_sync_s | (|sync_rst);
 
 endmodule

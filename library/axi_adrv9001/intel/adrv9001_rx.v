@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2020-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -38,6 +38,7 @@
 module adrv9001_rx #(
   parameter CMOS_LVDS_N = 0,
   parameter FPGA_TECHNOLOGY = 0,
+  parameter EN_RX_MCS_TO_STRB_M = 0,
   parameter NUM_LANES = 3,
   parameter DRP_WIDTH = 5,
   parameter IODELAY_ENABLE = 0,
@@ -56,9 +57,12 @@ module adrv9001_rx #(
   input                   rx_strobe_in_n_NC,
   input                   rx_strobe_in_p_strobe_in,
 
+  input                   mcs_6th_pulse,
+
   // internal reset and clocks
   input                   adc_rst,
   output                  adc_clk,
+  output                  adc_if_rst,
   output                  adc_clk_div,
   output      [7:0]       adc_data_0,
   output      [7:0]       adc_data_1,
@@ -68,6 +72,7 @@ module adrv9001_rx #(
   output                  adc_valid,
 
   output     [31:0]       adc_clk_ratio,
+  output     [ 9:0]       mcs_to_strobe_delay,
 
   // delay interface (for IDELAY macros)
   input                             up_clk,
@@ -78,16 +83,15 @@ module adrv9001_rx #(
   input                   delay_rst,
   output                  delay_locked,
 
-  input                   mssi_sync,
-  output                  ssi_sync_out,
-  input                   ssi_sync_in,
-  output                  ssi_rst
+  input                   mssi_sync
 );
 
   reg [3:0] valid_gen = 4'b0001;
+  reg [2:0] sync_rst = 3'b0;
 
   wire [4:0] gpio_in;
   wire [39:0] deser_out;
+  wire mssi_sync_s;
 
   periphery_clk_buf rx_clk_buf(
     .inclk (rx_dclk_in_p_dclk_in),
@@ -132,8 +136,24 @@ module adrv9001_rx #(
     end
   endgenerate
 
+  // There is no clock divider to clear on MSSI sync, as the Xilinx PHY
+  // does; restart the qualifier instead, so all PHYs start their 8-bit
+  // words on the same rx_clk edge after the sync is released.
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_mssi_sync (
+    .in_bits (mssi_sync),
+    .out_resetn (1'b1),
+    .out_clk (rx_clk),
+    .out_bits (mssi_sync_s));
+
   always @(posedge rx_clk) begin
-    if (adc_rst) begin
+    sync_rst <= {sync_rst[1:0],mssi_sync_s};
+  end
+
+  always @(posedge rx_clk) begin
+    if (adc_rst | mssi_sync_s) begin
       valid_gen <= 4'b0001;
     end else begin
       valid_gen <= {valid_gen[2:0],valid_gen[3]};
@@ -145,12 +165,85 @@ module adrv9001_rx #(
   assign adc_clk_div = rx_clk;
   assign adc_clk = rx_clk;
   assign adc_clk_ratio = 1;
+  assign adc_if_rst = adc_rst | mssi_sync_s | (|sync_rst);
 
   // Drive unused signals
   assign delay_locked = 'b0;
   assign up_adc_drdata = 'b0;
 
-  assign ssi_sync_out = 'b0;
-  assign ssi_rst = 'b0;
+  generate
+  if (EN_RX_MCS_TO_STRB_M == 1'b1) begin
+
+    reg [9:0] mcs_to_strobe_cnt;
+    reg       mcs_6th_pulse_d;
+    reg [9:0] mcs_to_strobe_fine_delay;
+    reg [9:0] mcs_to_strobe_8_delays;
+    reg [9:0] mcs_to_strobe_delay_res;
+    reg       fine_count_run;
+    reg [9:0] fine_count;
+    reg [9:0] coarse_count;
+
+    wire      mcs_6th_pulse_s;
+    wire      mcs_rise_s;
+
+    sync_bits #(
+      .NUM_OF_BITS (1),
+      .ASYNC_CLK (1)
+    ) i_mcs_sync_in (
+      .in_bits (mcs_6th_pulse),
+      .out_resetn (1'b1),
+      .out_clk (rx_clk),
+      .out_bits (mcs_6th_pulse_s));
+
+    // Same measurement as the Xilinx PHY, in 8-bit words: count only the
+    // qualified rx_clk cycles, where adc_data_strobe holds a whole word.
+    always @(posedge rx_clk) begin
+      if (adc_valid) begin
+        mcs_6th_pulse_d <= mcs_6th_pulse_s;
+      end
+    end
+
+    assign mcs_rise_s = adc_valid & !mcs_6th_pulse_d & mcs_6th_pulse_s;
+
+    always @(posedge rx_clk) begin
+      if (mcs_rise_s) begin
+        mcs_to_strobe_cnt <= 0;
+      end else if (adc_valid) begin
+        if (mcs_6th_pulse_s & !(|adc_data_strobe) & !fine_count_run) begin
+          mcs_to_strobe_cnt <= mcs_to_strobe_cnt + 1;
+        end
+      end
+    end
+
+    always @(posedge rx_clk) begin
+      if (mcs_rise_s) begin
+        mcs_to_strobe_fine_delay <= 'd0;
+        fine_count_run <= 1'b0;
+        fine_count <= 'd0;
+        coarse_count <= 'd0;
+        mcs_to_strobe_8_delays <= 'd0;
+      end else if (adc_valid) begin
+        if (|adc_data_strobe & !fine_count_run) begin
+          mcs_to_strobe_8_delays <= mcs_to_strobe_cnt;
+          mcs_to_strobe_fine_delay <= {2'b00, adc_data_strobe};
+          fine_count_run <= 1'b1;
+        end else if (fine_count_run) begin
+          if (|mcs_to_strobe_fine_delay) begin
+            fine_count <= fine_count + 1'b1;
+            coarse_count <= mcs_to_strobe_8_delays << 3;
+            mcs_to_strobe_fine_delay <= mcs_to_strobe_fine_delay >> 1;
+          end else begin
+            mcs_to_strobe_delay_res <= fine_count + coarse_count;
+          end
+        end
+      end
+    end
+
+    assign mcs_to_strobe_delay = mcs_to_strobe_delay_res;
+
+  end else begin
+    assign mcs_to_strobe_delay = 10'd0;
+  end
+  endgenerate
 
 endmodule

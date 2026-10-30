@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -113,15 +113,12 @@ module system_top (
   input             spi_do,
   output            spi_en,
 
-  input             fpga_ref_clk_n,
-  input             fpga_ref_clk_p,
+  input             fpga_ref_clk,
   // Device clock passed through 9001
   input             dev_clk_in,
 
-  input             fpga_mcs_in_n,
-  input             fpga_mcs_in_p,
-  output            dev_mcs_fpga_out_n,
-  output            dev_mcs_fpga_out_p,
+  input             fpga_mcs_in,
+  output            dev_mcs_fpga_out,
 
   inout             dgpio_0,
   inout             dgpio_1,
@@ -341,6 +338,12 @@ module system_top (
     .adrv9001_tdd_if_tx1_enable_in (gpio_tx1_enable_in),
     .adrv9001_tdd_if_tx2_enable_in (gpio_tx2_enable_in),
     .adrv9001_tdd_if_tdd_sync_in (1'b0),
+
+    .adrv9001_ref_clk_clk (fpga_ref_clk),
+    .adrv9001_mcs_if_mssi_sync_in (mssi_sync),
+    .adrv9001_mcs_if_mcs_in (fpga_mcs_in),
+    .adrv9001_mcs_if_mcs_out (dev_mcs_fpga_out),
+    .adrv9001_mcs_if_mcs_src (),
 
     .sys_spi_MISO (spi_do),
     .sys_spi_MOSI (spi_dio),
