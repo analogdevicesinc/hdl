@@ -109,7 +109,7 @@ module i3c_controller_core #(
   wire nop;
   wire i2c_mode;
 
-  wire bus_reset_n;
+  reg bus_reset_n;
   wire framing_cmdp_ready;
   wire framing_cmdp_valid;
 
@@ -215,14 +215,16 @@ module i3c_controller_core #(
     .sdo(trp_sdo),
     .t(trp_t));
 
-  assign trp_cmd_valid      = cmdp_valid &  cmdp[31];
-  assign framing_cmdp_valid = cmdp_valid & ~cmdp[31];
+  assign trp_cmd_valid      = cmdp_valid &&  cmdp[31];
+  assign framing_cmdp_valid = cmdp_valid && !cmdp[31];
   assign cmdp_ready = cmdp[31] ? trp_cmd_ready : framing_cmdp_ready;
 
-  assign trp_idle = framing_cmdp_ready & cmdw_ready & (nop | ~bit_mod_scl) &
-                    ~(rmap_ibi_config[1] & ~rx);
+  assign trp_idle = framing_cmdp_ready && cmdw_ready && (nop || !bit_mod_scl) &&
+                    !(rmap_ibi_config[1] && !rx);
 
-  assign bus_reset_n = reset_n & ~trp_hold;
+  always @(posedge clk) begin
+    bus_reset_n <= reset_n && !trp_hold;
+  end
 
   assign i3c_scl = trp_hold ? trp_scl : bit_mod_scl;
   assign i3c_sdo = trp_hold ? trp_sdo : bit_mod_sdo;
@@ -230,6 +232,6 @@ module i3c_controller_core #(
 
   assign ibi = {ibi_da, ibi_mdb};
   assign ibi_valid = ibi_tick;
-  assign cmdp_nop = nop & ~trp_hold;
+  assign cmdp_nop = nop && !trp_hold;
 
 endmodule
