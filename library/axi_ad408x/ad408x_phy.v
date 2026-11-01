@@ -612,8 +612,11 @@ module ad408x_phy #(
     end
 
     // offset: cleared by adc_rst, kept through sync_n; the next one on a
-    // mismatch
+    // mismatch. A request restarts it from 0 when it is above the range of
+    // the current depth (left by a longer depth).
     if (adc_rst) begin
+      shift_cnt <= 5'd0;
+    end else if (slip_req && (shift_cnt > shift_cnt_max)) begin
       shift_cnt <= 5'd0;
     end else if (compare && !pattern_match) begin
       shift_cnt <= (shift_cnt >= shift_cnt_max) ? 5'd0 : shift_cnt + 5'd1;
