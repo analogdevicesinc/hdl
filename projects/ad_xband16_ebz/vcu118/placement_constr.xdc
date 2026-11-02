@@ -66,15 +66,23 @@ add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {
 add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[5].i_output_pipeline_stage}]
 add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[6].i_output_pipeline_stage}]
 add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[7].i_output_pipeline_stage}]
-# Constrain each JESD204 RX all_buffer_ready pipeline instance to be in the same SLR as its corresponding lane.
-add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[0].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[1].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[2].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[3].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[4].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[5].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[6].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[7].i_all_buffer_ready_pipeline_stage}]
+# Putting each JESD204 RX lane all_buffer_ready pipeline stage in a single SLR, where its lane is also located.
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[0].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[1].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[2].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[3].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[4].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[5].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[6].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[7].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[0].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[1].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[2].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[3].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[4].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[5].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[6].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR1] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[7].i_all_buffer_ready_pipeline_stage_u}]
 resize_pblock [get_pblocks Pblock_SLR1] -add {SLICE_X0Y300:SLICE_X168Y599}
 resize_pblock [get_pblocks Pblock_SLR1] -add {DSP48E2_X0Y120:DSP48E2_X18Y239}
 resize_pblock [get_pblocks Pblock_SLR1] -add {RAMB18_X0Y120:RAMB18_X11Y239}
@@ -110,15 +118,23 @@ add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {
 add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[13].i_output_pipeline_stage}]
 add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[14].i_output_pipeline_stage}]
 add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[15].i_output_pipeline_stage}]
-# Constrain each JESD204 RX all_buffer_ready pipeline instance to be in the same SLR as its corresponding lane.
-add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[8].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[9].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[10].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[11].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[12].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[13].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[14].i_all_buffer_ready_pipeline_stage}]
-add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[15].i_all_buffer_ready_pipeline_stage}]
+# Putting each JESD204 RX lane all_buffer_ready pipeline stage in a single SLR, where its lane is also located.
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[8].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[9].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[10].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[11].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[12].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[13].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[14].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[15].i_all_buffer_ready_pipeline_stage_l}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[8].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[9].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[10].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[11].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[12].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[13].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[14].i_all_buffer_ready_pipeline_stage_u}]
+add_cells_to_pblock [get_pblocks Pblock_SLR0] [get_cells -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[15].i_all_buffer_ready_pipeline_stage_u}]
 resize_pblock [get_pblocks Pblock_SLR0] -add {SLICE_X0Y0:SLICE_X168Y299}
 resize_pblock [get_pblocks Pblock_SLR0] -add {DSP48E2_X0Y0:DSP48E2_X18Y119}
 resize_pblock [get_pblocks Pblock_SLR0] -add {RAMB18_X0Y0:RAMB18_X11Y119}
@@ -131,7 +147,6 @@ set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {N
 set_property FORCE_MAX_FANOUT 16 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.i_jesd204_rx_ctrl_64b/status_err_cnt[*]_i_*/O}]]
 set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_*.gen_lane[*].i_lane/buffer_ready_n_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 8 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_cfg_octets_per_multiframe_reg[*]*/Q}]]
-set_property FORCE_MAX_FANOUT 15 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_reset_dly2*/Q}]]
 set_property FORCE_MAX_FANOUT 80 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_cfg_disable_scrambler_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 16 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_cfg_header_mode_reg[*]*/Q}]]
 set_property FORCE_MAX_FANOUT 37 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/buffer_release_n_reg*/Q}]]
@@ -139,7 +154,7 @@ set_property FORCE_MAX_FANOUT 250 [get_nets -of [get_pins -hierarchical -filter 
 set_property FORCE_MAX_FANOUT 32 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/i_sync_lmfc/out_event_reg[*]*/Q}]]
 set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[*].i_lane/i_rx_header/sync_word_reg[*]*/Q}]]
 set_property FORCE_MAX_FANOUT 8 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[*].i_lane/ctrl_err_statistics_mask_r_reg[*]*/Q}]]
-set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_reset_dly_reg*/Q}]]
+set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_reset_vector_dly_reg[*]*/Q}]]
 set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_rx/i_cdc_cfg/out_toggle_d1_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */rx_apollo_tpl_core/adc_tpl_core/inst/i_core/i_deframer/g_xcvr_if[*].i_xcvr_if/rx_ip_sof_hold_reg[*]*/Q}]]
 # Force max fanout for data_offload paths going to BRAM blocks to half of what it normally is, to reduce routing delays
@@ -158,9 +173,8 @@ set_property FORCE_MAX_FANOUT 16 [get_nets -of [get_pins -hierarchical -filter {
 set_property FORCE_MAX_FANOUT 16 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.gen_lane[*].i_lane/lmc_edge_d1_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 2 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/mode_*.gen_lane[*].i_lane/scrambled_data_reg[*]*/Q}]]
 set_property FORCE_MAX_FANOUT 64 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_cfg_disable_scrambler_reg*/Q}]]
-set_property FORCE_MAX_FANOUT 100 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_reset_dly2*/Q}]]
 set_property FORCE_MAX_FANOUT 36 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/GenMemPerLane[*].out_addr_reg[*]*/Q}]]
-set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_reset_dly_reg*/Q}]]
+set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_reset_vector_dly_reg[*]*/Q}]]
 # Reduce max fanout for each dac_sync_int[] FF for better timing.
 set_property FORCE_MAX_FANOUT 100 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */tx_apollo_tpl_core/*/i_core/dac_sync_int*[*]/Q}]]
 
