@@ -34,8 +34,8 @@
 
 # Primary clock definitions
 
-# Set clocks depending on the requested LANE_RATE paramter from the util_adxcvr block 
-# Maximum values for Link clock: 
+# Set clocks depending on the requested LANE_RATE paramter from the util_adxcvr block
+# Maximum values for Link clock:
 # 204C - 24.75 Gbps /66 = 375MHz
 
 set link_mode [get_property LINK_MODE [get_cells i_system_wrapper/system_i/util_apollo_xcvr/inst]]
@@ -60,7 +60,7 @@ set rx_device_clk_period [expr 1000/$rx_device_clk]
 set tx_device_clk_period [expr 1000/$tx_device_clk]
 
 # refclk and refclk_replica are connect to the same source on the PCB
-# Set reference clock to same frequency as the link clock, 
+# Set reference clock to same frequency as the link clock,
 # this will ease the XCVR out clocks propagation calculation.
 # TODO: this restricts RX_LANE_RATE=TX_LANE_RATE
 create_clock -name refclk0 -period  $rx_link_clk_period [get_ports ref_clk_p[0]]
@@ -87,7 +87,7 @@ set_input_delay -clock [get_clocks tx_device_clk] -add_delay\
   [get_ports {sysref_m2c*}]
 set_clock_groups -group rx_device_clk -group tx_device_clk -asynchronous
 
-# For transceiver output clocks use reference clock divided by one 
+# For transceiver output clocks use reference clock divided by one
 # This will help autoderive the clocks correcly
 set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXSYSCLKSEL[0]]
 set_case_analysis -quiet 0 [get_pins -quiet -hier *_channel/TXSYSCLKSEL[1]]

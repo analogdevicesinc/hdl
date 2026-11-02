@@ -172,6 +172,10 @@ module system_top (
 
   // internal signals
 
+  reg             trigger_stretched = 1'b0;
+  reg             trigger_sync1 = 1'b0;
+  reg             trigger_sync2 = 1'b0;
+
   wire    [127:0] gpio_i;
   wire    [127:0] gpio_o;
   wire    [127:0] gpio_t;
@@ -217,10 +221,6 @@ module system_top (
   wire            trigger_captured;
   wire            sync_start;
   wire            sync_start_edge;
-
-  reg             trigger_stretched = 1'b0;
-  reg             trigger_sync1 = 1'b0;
-  reg             trigger_sync2 = 1'b0;
 
   assign iic_rstn = 1'b1;
 

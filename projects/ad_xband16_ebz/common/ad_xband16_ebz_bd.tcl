@@ -540,7 +540,7 @@ ad_cpu_interrupt ps-10 mb-15 axi_apollo_tx_jesd/irq
 ad_cpu_interrupt ps-14 mb-8  axi_gpio_2/ip2intc_irpt
 
 #
-# Sync at TPL level 
+# Sync at TPL level
 #
 
 create_bd_port -dir I ext_sync_in
