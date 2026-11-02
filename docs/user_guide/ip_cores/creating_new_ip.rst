@@ -883,3 +883,84 @@ The following is an example for ``Makefile``:
 
 Now you can run ``make`` from the IP directory.
 After that the IP will be accessible in Lattice Propel Builder.
+
+Microchip
+--------------------------------------------------------------------------------
+
+On Microchip (Libero SoC) the library cores are not packaged in a library
+build. A project packages them when it instantiates them in its SmartDesign
+block design, as Libero **HDL+ cores**, with the procedures of
+:git-hdl:`library/scripts/adi_ip_microchip.tcl` (``ipm`` namespace):
+
+.. code:: tcl
+
+   set params [list "REGMAP_INTERFACE:1" "ROM_ADDR_BITS:9" "ROM_WIDTH:32"]
+   ipm::instantiate_hdl_core {axi_sysid} {axi_sysid_0} -sd_name $sd_name -params $params
+
+``ipm::instantiate_hdl_core`` finds the ``<core>_mc.tcl`` script of the core
+by its name anywhere in the repository, sources it, then generates a wrapper
+with the parameter values, creates the HDL+ core with its bus interfaces and
+instantiates it. The bus interfaces are detected from the port names: AXI4,
+AXI4-Lite and AXI4-Stream from the ``<prefix>_aclk`` / ``<prefix>_aresetn``
+groups, APB from the ``<prefix>_penable`` ports. A core that is used with
+different parameters is packaged once per instance.
+
+The role of an interface (master or slave) comes from the port directions.
+SmartDesign connects a master only to a mirrored master (e.g. the slave side of
+an interconnect) and a slave only to a mirrored slave; when a core port has to
+connect directly to another master or slave, ``-bif_roles`` sets the role of
+the instance's interface, for example a pipeline stage right at the MSS FIC3
+APB initiator:
+
+.. code:: tcl
+
+   ipm::instantiate_hdl_core {util_apb_pipe} {fic3_apb_pipe_0} -sd_name $sd_name -bif_roles {s_apb mirroredMaster}
+
+TCL File
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The tcl file must be named ``<top_module_name>_mc.tcl`` and the name must be
+unique in the repository. It runs inside the open Libero project: it imports
+the sources of the core and sets ``src_file`` to the top level module, for
+example:
+
+.. code:: tcl
+
+   global ad_hdl_dir
+
+   set script_dir [file dirname [file normalize [info script]]]
+   set src_file [file join $script_dir <top_module_name>.v]
+
+   import_files -library work -hdl_source $src_file
+   import_files -library work -hdl_source [file join $ad_hdl_dir library common up_apb.v]
+   build_design_hierarchy
+
+The Microchip projects use the APB register interface of the cores, because the
+PolarFire SoC MSS reaches the fabric registers on FIC3 APB. A core gets it next
+to its AXI4-Lite interface: the ``REGMAP_INTERFACE`` parameter (0: AXI4-Lite,
+the default, 1: APB) selects ``up_axi`` or ``up_apb`` for the same register
+map, e.g. :git-hdl:`library/axi_ad9361`, :git-hdl:`library/axi_dmac` and
+:git-hdl:`library/axi_sysid`. The project excludes the unused AXI slave ports
+from the interface detection (``-axi_xptn_portlist``) and ties them off.
+The Microchip specific modules (IO interface, DSP) are in
+:git-hdl:`library/microchip/common`.
+
+Makefile
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Microchip dependencies are in ``MICROCHIP_DEPS``. ``make microchip`` (part
+of ``make``) only touches the ``.timestamp_microchip`` file when one of the
+dependencies changed, so the projects rebuild when a core source changes:
+
+.. code:: makefile
+
+   LIBRARY_NAME := <top_module_name>
+
+   GENERIC_DEPS += ../common/up_apb.v
+   GENERIC_DEPS += <top_module_name>.v
+
+   MICROCHIP_DEPS += <top_module_name>_mc.tcl
+
+   include ../scripts/library.mk
+
+A project lists the cores it uses in ``LIB_DEPS`` of its Makefile.
