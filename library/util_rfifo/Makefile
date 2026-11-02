@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2023, 2026 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -14,5 +14,8 @@ XILINX_DEPS += util_rfifo_ip.tcl
 
 INTEL_DEPS += util_rfifo_constr.sdc
 INTEL_DEPS += util_rfifo_hw.tcl
+
+MICROCHIP_DEPS += util_rfifo.v
+MICROCHIP_DEPS += util_rfifo_mc.tcl
 
 include ../scripts/library.mk
