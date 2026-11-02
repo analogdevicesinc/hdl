@@ -1,0 +1,73 @@
+###############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+## SPDX short identifier: ADIBSD
+###############################################################################
+
+# FMCOMMS2 FIC3 APB-driven DAC-to-ADC DMA loopback test.
+memmap BASE_AD9361  0x44020000
+memmap BASE_ADC_DMA 0x44400000
+memmap BASE_DAC_DMA 0x44420000
+memmap BASE_SYSID   0x44a30000
+memmap RX_BUFFER    0xc0001000
+int adc_xfer_done
+
+procedure fmcomms2_fic3_loopback
+
+  header "FMCOMMS2 DAC to ADC DMA loopback"
+
+  # axi_sysid: version, magic "SYID", scratch, first system ROM word
+  readcheck w BASE_SYSID 0x000 0x00010161
+  readcheck w BASE_SYSID 0x00c 0x53594944
+  write w BASE_SYSID 0x008 0x5a5aa5a5
+  readcheck w BASE_SYSID 0x008 0x5a5aa5a5
+  readcheck w BASE_SYSID 0x800 0x00000002
+  print "FMCOMMS2 axi_sysid check passed"
+
+  readcheck w BASE_ADC_DMA 0x00c 0x444d4143
+  readcheck w BASE_DAC_DMA 0x00c 0x444d4143
+
+  # Release the ADC and DAC datapaths before enabling the DMA engines.
+  write w BASE_AD9361 0x4418 0x00000002
+  write w BASE_AD9361 0x4458 0x00000002
+  write w BASE_AD9361 0x4498 0x00000002
+  write w BASE_AD9361 0x44d8 0x00000002
+  write w BASE_AD9361 0x0040 0x00000003
+  write w BASE_AD9361 0x4040 0x00000003
+  write w BASE_AD9361 0x404c 0x00000003
+  write w BASE_AD9361 0x0400 0x00000001
+  write w BASE_AD9361 0x0440 0x00000001
+  write w BASE_AD9361 0x0480 0x00000001
+  write w BASE_AD9361 0x04c0 0x00000001
+  wait 20
+  readcheck w BASE_AD9361 0x0400 0x00000001
+  readcheck w BASE_AD9361 0x0440 0x00000001
+  readcheck w BASE_AD9361 0x0480 0x00000001
+  readcheck w BASE_AD9361 0x04c0 0x00000001
+
+  # Capture repeatedly while the DAC marker source is running.
+  write w BASE_ADC_DMA 0x0400 0x00000000
+  write w BASE_ADC_DMA 0x0088 0x00000003
+  write w BASE_ADC_DMA 0x0080 0x00000000
+  write w BASE_ADC_DMA 0x0410 0xc0001000
+  write w BASE_ADC_DMA 0x0418 0x0000001f
+  write w BASE_ADC_DMA 0x040c 0x00000003
+  write w BASE_ADC_DMA 0x0400 0x00000001
+  write w BASE_ADC_DMA 0x0408 0x00000001
+
+  # Start one finite DAC transfer from the PROCESSOR BFM's TX buffer.
+  write w BASE_DAC_DMA 0x0400 0x00000000
+  write w BASE_DAC_DMA 0x0088 0x00000003
+  write w BASE_DAC_DMA 0x0080 0x00000000
+  write w BASE_DAC_DMA 0x0414 0xc0000000
+  write w BASE_DAC_DMA 0x0418 0x00000017
+  write w BASE_DAC_DMA 0x040c 0x00000003
+  write w BASE_DAC_DMA 0x0400 0x00000001
+  write w BASE_DAC_DMA 0x0408 0x00000001
+
+  wait 2000
+  write w BASE_ADC_DMA 0x0400 0x00000000
+  print "FMCOMMS2 ADC DMA cyclic capture stopped"
+  write w BASE_DAC_DMA 0x0400 0x00000000
+  print "FMCOMMS2 DAC DMA stopped after ADC capture"
+
+return

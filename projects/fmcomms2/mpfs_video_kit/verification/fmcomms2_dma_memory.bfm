@@ -1,0 +1,93 @@
+###############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+## SPDX short identifier: ADIBSD
+###############################################################################
+
+# MSS DDR buffers used by the FIC1 DAC and FIC0 ADC DMA masters.
+memmap TX_BUFFER 0xc0000000
+memmap RX_BUFFER 0xc0001000
+
+procedure preload_tx_buffer
+
+  int sample_index
+  int byte_offset
+  int i0
+  int q0
+  int i1
+  int q1
+  int low_word
+  int high_word
+
+  header "Preload DAC DMA TX buffer"
+  loop sample_index 0 255 1
+    set byte_offset sample_index * 8
+    set i0 0x1000 + sample_index
+    set q0 0x2000 + sample_index
+    set i1 i0 + 0x2000
+    set q1 q0 + 0x2000
+    set low_word q0 << 16
+    set low_word low_word | i0
+    set high_word q1 << 16
+    set high_word high_word | i1
+    write w TX_BUFFER byte_offset low_word
+    set byte_offset byte_offset + 4
+    write w TX_BUFFER byte_offset high_word
+  endloop
+  print "FMCOMMS2 TX buffer writes issued"
+
+return
+
+procedure check_tx_buffer
+
+  int sample_index
+  int byte_offset
+  int i0
+  int q0
+  int i1
+  int q1
+  int low_word
+  int high_word
+
+  header "Check full DAC DMA TX buffer"
+  readcheck w TX_BUFFER 0x000 0x67809ab0
+  readcheck w TX_BUFFER 0x004 0x01203450
+  readcheck w TX_BUFFER 0x008 0xdf204680
+  readcheck w TX_BUFFER 0x00c 0x135079b0
+  readcheck w TX_BUFFER 0x010 0x5a303cc0
+  readcheck w TX_BUFFER 0x014 0xa5a055a0
+  readcheck w TX_BUFFER 0x018 0x67809ab0
+  readcheck w TX_BUFFER 0x01c 0x01203450
+  loop sample_index 4 255 1
+    set byte_offset sample_index * 8
+    set i0 0x1000 + sample_index
+    set q0 0x2000 + sample_index
+    set i1 i0 + 0x2000
+    set q1 q0 + 0x2000
+    set low_word q0 << 16
+    set low_word low_word | i0
+    set high_word q1 << 16
+    set high_word high_word | i1
+    readcheck w TX_BUFFER byte_offset low_word
+    set byte_offset byte_offset + 4
+    readcheck w TX_BUFFER byte_offset high_word
+  endloop
+  print "FMCOMMS2 full TX buffer preload passed"
+
+return
+
+procedure read_rx_buffer
+
+  int rx_word_index
+  int rx_byte_offset
+  int rx_buffer_word
+
+  header "FMCOMMS2 RX DDR buffer readback"
+  print "========== FMCOMMS2 RX DDR READBACK BEGIN =========="
+  loop rx_word_index 0 7 1
+    set rx_byte_offset rx_word_index * 4
+    readstore w RX_BUFFER rx_byte_offset rx_buffer_word
+    print "FMCOMMS2 RX_BUFFER address=0xc000%04x offset=0x%03x raw_word=0x%08x" rx_byte_offset rx_byte_offset rx_buffer_word
+  endloop
+  print "========== FMCOMMS2 RX DDR READBACK END =========="
+
+return

@@ -6,6 +6,8 @@
 PROJECT_NAME := fmcomms2_mpfs_video_kit
 DDR_INIT_USER_MEM := verification/fmcomms2_tx_user.mem
 SIM_WAVE += verification/wave.do
+# The run time of the testbench (the simulation of Libero only generates run.do)
+SIM_RUN_CMD ?= run 120us
 
 MSS_CONFIG ?= mss_base.cfg
 
