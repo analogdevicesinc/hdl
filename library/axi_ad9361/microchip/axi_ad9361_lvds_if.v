@@ -42,6 +42,11 @@ module axi_ad9361_lvds_if #(
   parameter   CLK_DESKEW = 0,
   parameter   USE_SSI_CLK = 1,
 
+  // Dummy parameters, required keep the code consistency(used on Xilinx)
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group",
+  parameter   IODELAY_CTRL = 1,
+  parameter   RX_NODPA = 0,
+
   // As REFCLK_FREQUENCY of the Xilinx IDELAYE2, whose tap is
   // 1 / (64 * REFCLK_FREQUENCY), 78 ps at 200 MHz: one step of the delay
   // interface (up_dwdata) moves 625 / DELAY_REFCLK_FREQUENCY IOD taps, 3 at

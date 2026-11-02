@@ -57,6 +57,7 @@ ad_ip_files axi_ad9361 [list\
   $ad_hdl_dir/library/common/ad_addsub.v \
   $ad_hdl_dir/library/common/ad_tdd_control.v \
   $ad_hdl_dir/library/common/ad_pps_receiver.v \
+  $ad_hdl_dir/library/common/up_apb.v \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/common/up_xfer_cntrl.v \
   $ad_hdl_dir/library/common/up_xfer_status.v \
@@ -104,6 +105,9 @@ ad_ip_parameter DAC_IQCORRECTION_DISABLE INTEGER 0
 ad_ip_parameter IO_DELAY_GROUP STRING {dev_if_delay_group}
 ad_ip_parameter MIMO_ENABLE INTEGER 0
 ad_ip_parameter RX_NODPA INTEGER 0
+ad_ip_parameter REGMAP_INTERFACE INTEGER 0
+set_parameter_property REGMAP_INTERFACE DISPLAY_NAME "Register Map Interface"
+set_parameter_property REGMAP_INTERFACE ALLOWED_RANGES {"0:AXI" "1:APB"}
 
 adi_add_auto_fpga_spec_params
 
@@ -278,5 +282,43 @@ proc axi_ad9361_elab {} {
 
   add_interface_port device_if enable enable Output 1
   add_interface_port device_if txnrx txnrx Output 1
+
+  # register map interface: AXI (REGMAP_INTERFACE = 0) or APB (1)
+
+  ad_interface clock   s_apb_pclk    input  1
+  ad_interface reset-n s_apb_presetn input  1  if_s_apb_pclk
+  add_interface s_apb apb end
+  set_interface_property s_apb associatedClock if_s_apb_pclk
+  set_interface_property s_apb associatedReset if_s_apb_presetn
+  add_interface_port s_apb s_apb_paddr   paddr   Input  16
+  add_interface_port s_apb s_apb_psel    psel    Input  1
+  add_interface_port s_apb s_apb_penable penable Input  1
+  add_interface_port s_apb s_apb_pwrite  pwrite  Input  1
+  add_interface_port s_apb s_apb_pwdata  pwdata  Input  32
+  add_interface_port s_apb s_apb_prdata  prdata  Output 32
+  add_interface_port s_apb s_apb_pready  pready  Output 1
+  add_interface_port s_apb s_apb_pslverr pslverr Output 1
+
+  if {[get_parameter_value REGMAP_INTERFACE] == 1} {
+    set_interface_property s_axi ENABLED false
+    foreach port {s_axi_awvalid s_axi_awaddr s_axi_awprot s_axi_wvalid \
+                  s_axi_wdata s_axi_wstrb s_axi_bready s_axi_arvalid \
+                  s_axi_araddr s_axi_arprot s_axi_rready} {
+      set_port_property $port termination true
+    }
+    set_port_property s_axi_aclk termination true
+    set_port_property s_axi_aresetn termination true
+    set_port_property s_axi_aresetn termination_value 1
+  } else {
+    set_interface_property s_apb ENABLED false
+    foreach port {paddr penable psel pwdata pwrite} {
+      set_port_property s_apb_$port termination true
+    }
+    set_interface_property if_s_apb_pclk ENABLED false
+    set_interface_property if_s_apb_presetn ENABLED false
+    set_port_property s_apb_pclk termination true
+    set_port_property s_apb_presetn termination true
+    set_port_property s_apb_presetn termination_value 1
+  }
 }
 

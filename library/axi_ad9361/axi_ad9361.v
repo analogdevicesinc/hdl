@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -70,7 +70,8 @@ module axi_ad9361 #(
   parameter   MIMO_ENABLE = 0,
   parameter   USE_SSI_CLK = 1,
   parameter   DELAY_REFCLK_FREQUENCY = 200,
-  parameter   RX_NODPA = 0
+  parameter   RX_NODPA = 0,
+  parameter   REGMAP_INTERFACE = 0
 ) (
 
   // physical interface (receive-lvds)
@@ -163,7 +164,7 @@ module axi_ad9361 #(
   input           dac_dunf,
   output          dac_r1_mode,
 
-  // axi interface
+  // axi interface (REGMAP_INTERFACE = 0)
 
   input           s_axi_aclk,
   input           s_axi_aresetn,
@@ -186,6 +187,19 @@ module axi_ad9361 #(
   output  [31:0]  s_axi_rdata,
   output  [ 1:0]  s_axi_rresp,
   input           s_axi_rready,
+
+  // apb interface (REGMAP_INTERFACE = 1)
+
+  input           s_apb_pclk,
+  input           s_apb_presetn,
+  input   [15:0]  s_apb_paddr,
+  input           s_apb_penable,
+  output  [31:0]  s_apb_prdata,
+  output          s_apb_pready,
+  input           s_apb_psel,
+  output          s_apb_pslverr,
+  input   [31:0]  s_apb_pwdata,
+  input           s_apb_pwrite,
 
   // gpio
 
@@ -303,11 +317,6 @@ module axi_ad9361 #(
   wire            up_irq_mask_s;
   wire            adc_up_pps_irq_mask_s;
   wire            dac_up_pps_irq_mask_s;
-
-  // signal name changes
-
-  assign up_clk = s_axi_aclk;
-  assign up_rstn = s_axi_aresetn;
 
   // processor read interface
 
@@ -724,35 +733,87 @@ module axi_ad9361 #(
     .up_rdata (up_rdata_tx_s),
     .up_rack (up_rack_tx_s));
 
-  // axi interface
+  // register map interface
 
-  up_axi i_up_axi (
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_axi_awvalid (s_axi_awvalid),
-    .up_axi_awaddr (s_axi_awaddr),
-    .up_axi_awready (s_axi_awready),
-    .up_axi_wvalid (s_axi_wvalid),
-    .up_axi_wdata (s_axi_wdata),
-    .up_axi_wstrb (s_axi_wstrb),
-    .up_axi_wready (s_axi_wready),
-    .up_axi_bvalid (s_axi_bvalid),
-    .up_axi_bresp (s_axi_bresp),
-    .up_axi_bready (s_axi_bready),
-    .up_axi_arvalid (s_axi_arvalid),
-    .up_axi_araddr (s_axi_araddr),
-    .up_axi_arready (s_axi_arready),
-    .up_axi_rvalid (s_axi_rvalid),
-    .up_axi_rresp (s_axi_rresp),
-    .up_axi_rdata (s_axi_rdata),
-    .up_axi_rready (s_axi_rready),
-    .up_wreq (up_wreq_s),
-    .up_waddr (up_waddr_s),
-    .up_wdata (up_wdata_s),
-    .up_wack (up_wack),
-    .up_rreq (up_rreq_s),
-    .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata),
-    .up_rack (up_rack));
+  localparam S_AXI = 0;
+  localparam S_APB = 1;
+
+  generate
+  if (REGMAP_INTERFACE == S_APB) begin
+
+    assign up_clk = s_apb_pclk;
+    assign up_rstn = s_apb_presetn;
+
+    up_apb #(
+      .APB_ADDRESS_WIDTH (16)
+    ) i_up_apb (
+      .up_apb_presetn (up_rstn),
+      .up_apb_clk (up_clk),
+      .up_apb_paddr (s_apb_paddr),
+      .up_apb_penable (s_apb_penable),
+      .up_apb_prdata (s_apb_prdata),
+      .up_apb_pready (s_apb_pready),
+      .up_apb_pselx (s_apb_psel),
+      .up_apb_pslverr (s_apb_pslverr),
+      .up_apb_pwdata (s_apb_pwdata),
+      .up_apb_pwrite (s_apb_pwrite),
+      .up_wreq (up_wreq_s),
+      .up_waddr (up_waddr_s),
+      .up_wdata (up_wdata_s),
+      .up_wack (up_wack),
+      .up_rreq (up_rreq_s),
+      .up_raddr (up_raddr_s),
+      .up_rdata (up_rdata),
+      .up_rack (up_rack));
+
+    assign s_axi_awready = 1'b0;
+    assign s_axi_wready = 1'b0;
+    assign s_axi_bvalid = 1'b0;
+    assign s_axi_bresp = 2'd0;
+    assign s_axi_arready = 1'b0;
+    assign s_axi_rvalid = 1'b0;
+    assign s_axi_rresp = 2'd0;
+    assign s_axi_rdata = 32'd0;
+
+  end else begin
+
+    assign up_clk = s_axi_aclk;
+    assign up_rstn = s_axi_aresetn;
+
+    up_axi i_up_axi (
+      .up_rstn (up_rstn),
+      .up_clk (up_clk),
+      .up_axi_awvalid (s_axi_awvalid),
+      .up_axi_awaddr (s_axi_awaddr),
+      .up_axi_awready (s_axi_awready),
+      .up_axi_wvalid (s_axi_wvalid),
+      .up_axi_wdata (s_axi_wdata),
+      .up_axi_wstrb (s_axi_wstrb),
+      .up_axi_wready (s_axi_wready),
+      .up_axi_bvalid (s_axi_bvalid),
+      .up_axi_bresp (s_axi_bresp),
+      .up_axi_bready (s_axi_bready),
+      .up_axi_arvalid (s_axi_arvalid),
+      .up_axi_araddr (s_axi_araddr),
+      .up_axi_arready (s_axi_arready),
+      .up_axi_rvalid (s_axi_rvalid),
+      .up_axi_rresp (s_axi_rresp),
+      .up_axi_rdata (s_axi_rdata),
+      .up_axi_rready (s_axi_rready),
+      .up_wreq (up_wreq_s),
+      .up_waddr (up_waddr_s),
+      .up_wdata (up_wdata_s),
+      .up_wack (up_wack),
+      .up_rreq (up_rreq_s),
+      .up_raddr (up_raddr_s),
+      .up_rdata (up_rdata),
+      .up_rack (up_rack));
+
+    assign s_apb_prdata = 32'd0;
+    assign s_apb_pready = 1'b0;
+    assign s_apb_pslverr = 1'b0;
+
+  end
+  endgenerate
 
 endmodule
