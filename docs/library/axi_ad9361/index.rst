@@ -29,6 +29,9 @@ Features
 * Programmable line delays
 * Receive and transmit loop back
 * Supports both Altera and AMD Xilinx devices
+* An APB variant for Microchip PolarFire SoC, with the same register map, is
+  at :git-hdl:`library/axi_ad9361/apb_ad9361`; its IO interface is in
+  :git-hdl:`library/axi_ad9361/microchip`
 
 Files
 --------------------------------------------------------------------------------
