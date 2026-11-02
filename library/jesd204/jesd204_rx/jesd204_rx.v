@@ -68,76 +68,76 @@ module jesd204_rx #(
   parameter ASYNC_CLK = 1,
   parameter TPL_DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4
 ) (
-  input clk,   // Link clock, lane rate / 40 or lane rate / 20 or lane rate / 66
-  input reset,
+  input                                        clk,   // Link clock, lane rate / 40 or lane rate / 20 or lane rate / 66
+  input                                        reset,
 
-  input device_clk, // Integer multiple of frame clock
-  input device_reset,
+  input                                        device_clk, // Integer multiple of frame clock
+  input                                        device_reset,
 
-  input [DATA_PATH_WIDTH*8*NUM_LANES-1:0] phy_data,
-  input [2*NUM_LANES-1:0] phy_header,
-  input [DATA_PATH_WIDTH*NUM_LANES-1:0] phy_charisk,
-  input [DATA_PATH_WIDTH*NUM_LANES-1:0] phy_notintable,
-  input [DATA_PATH_WIDTH*NUM_LANES-1:0] phy_disperr,
-  input [NUM_LANES-1:0] phy_block_sync,
+  input  [DATA_PATH_WIDTH*8*NUM_LANES-1:0]     phy_data,
+  input  [2*NUM_LANES-1:0]                     phy_header,
+  input  [DATA_PATH_WIDTH*NUM_LANES-1:0]       phy_charisk,
+  input  [DATA_PATH_WIDTH*NUM_LANES-1:0]       phy_notintable,
+  input  [DATA_PATH_WIDTH*NUM_LANES-1:0]       phy_disperr,
+  input  [NUM_LANES-1:0]                       phy_block_sync,
 
-  input sysref,
-  output lmfc_edge,
-  output lmfc_clk,
+  input                                        sysref,
+  output                                       lmfc_edge,
+  output                                       lmfc_clk,
 
-  output device_event_sysref_alignment_error,
-  output device_event_sysref_edge,
-  output event_frame_alignment_error,
-  output event_unexpected_lane_state_error,
+  output                                       device_event_sysref_alignment_error,
+  output                                       device_event_sysref_edge,
+  output                                       event_frame_alignment_error,
+  output                                       event_unexpected_lane_state_error,
 
-  output [NUM_LINKS-1:0] sync,
+  output [NUM_LINKS-1:0]                       sync,
 
-  output phy_en_char_align,
+  output                                       phy_en_char_align,
 
   output [TPL_DATA_PATH_WIDTH*8*NUM_LANES-1:0] rx_data,
-  output rx_valid,
-  output [TPL_DATA_PATH_WIDTH-1:0] rx_eof,
-  output [TPL_DATA_PATH_WIDTH-1:0] rx_sof,
-  output [TPL_DATA_PATH_WIDTH-1:0] rx_eomf,
-  output [TPL_DATA_PATH_WIDTH-1:0] rx_somf,
+  output                                       rx_valid,
+  output [TPL_DATA_PATH_WIDTH-1:0]             rx_eof,
+  output [TPL_DATA_PATH_WIDTH-1:0]             rx_sof,
+  output [TPL_DATA_PATH_WIDTH-1:0]             rx_eomf,
+  output [TPL_DATA_PATH_WIDTH-1:0]             rx_somf,
 
-  input [NUM_LANES-1:0] cfg_lanes_disable,
-  input [NUM_LINKS-1:0] cfg_links_disable,
-  input [9:0] cfg_octets_per_multiframe,
-  input [7:0] cfg_octets_per_frame,
-  input cfg_disable_scrambler,
-  input [1:0] cfg_header_mode,
-  input cfg_disable_char_replacement,
-  input [7:0] cfg_frame_align_err_threshold,
+  input  [NUM_LANES-1:0]                       cfg_lanes_disable,
+  input  [NUM_LINKS-1:0]                       cfg_links_disable,
+  input  [9:0]                                 cfg_octets_per_multiframe,
+  input  [7:0]                                 cfg_octets_per_frame,
+  input                                        cfg_disable_scrambler,
+  input  [1:0]                                 cfg_header_mode,
+  input                                        cfg_disable_char_replacement,
+  input  [7:0]                                 cfg_frame_align_err_threshold,
 
-  input [9:0] device_cfg_octets_per_multiframe,
-  input [7:0] device_cfg_octets_per_frame,
-  input [7:0] device_cfg_beats_per_multiframe,
-  input [7:0] device_cfg_lmfc_offset,
-  input device_cfg_sysref_oneshot,
-  input device_cfg_sysref_disable,
-  input device_cfg_buffer_early_release,
-  input [7:0] device_cfg_buffer_delay,
+  input  [9:0]                                 device_cfg_octets_per_multiframe,
+  input  [7:0]                                 device_cfg_octets_per_frame,
+  input  [7:0]                                 device_cfg_beats_per_multiframe,
+  input  [7:0]                                 device_cfg_lmfc_offset,
+  input                                        device_cfg_sysref_oneshot,
+  input                                        device_cfg_sysref_disable,
+  input                                        device_cfg_buffer_early_release,
+  input  [7:0]                                 device_cfg_buffer_delay,
 
-  input ctrl_err_statistics_reset,
-  input [8:0] ctrl_err_statistics_mask,
+  input                                        ctrl_err_statistics_reset,
+  input  [8:0]                                 ctrl_err_statistics_mask,
 
-  output [32*NUM_LANES-1:0] status_err_statistics_cnt,
+  output [32*NUM_LANES-1:0]                    status_err_statistics_cnt,
 
-  output [NUM_LANES-1:0] ilas_config_valid,
-  output [NUM_LANES*2-1:0] ilas_config_addr,
-  output [NUM_LANES*DATA_PATH_WIDTH*8-1:0] ilas_config_data,
+  output [NUM_LANES-1:0]                       ilas_config_valid,
+  output [NUM_LANES*2-1:0]                     ilas_config_addr,
+  output [NUM_LANES*DATA_PATH_WIDTH*8-1:0]     ilas_config_data,
 
-  output [1:0] status_ctrl_state,
-  output [2*NUM_LANES-1:0] status_lane_cgs_state,
-  output [NUM_LANES-1:0] status_lane_ifs_ready,
-  output [14*NUM_LANES-1:0] status_lane_latency,
-  output [3*NUM_LANES-1:0] status_lane_emb_state,
-  output [8*NUM_LANES-1:0] status_lane_frame_align_err_cnt,
+  output [1:0]                                 status_ctrl_state,
+  output [2*NUM_LANES-1:0]                     status_lane_cgs_state,
+  output [NUM_LANES-1:0]                       status_lane_ifs_ready,
+  output [14*NUM_LANES-1:0]                    status_lane_latency,
+  output [3*NUM_LANES-1:0]                     status_lane_emb_state,
+  output [8*NUM_LANES-1:0]                     status_lane_frame_align_err_cnt,
 
-  output [31:0] status_synth_params0,
-  output [31:0] status_synth_params1,
-  output [31:0] status_synth_params2
+  output [31:0]                                status_synth_params0,
+  output [31:0]                                status_synth_params1,
+  output [31:0]                                status_synth_params2
 );
 
   /*
@@ -176,42 +176,43 @@ module jesd204_rx #(
 
   localparam HALF_NO_OF_LANES = NUM_LANES / 2;
 
-  wire [7:0] cfg_beats_per_multiframe = cfg_octets_per_multiframe >> DPW_LOG2;
-  wire [7:0] device_cfg_beats_per_multiframe_s;
+  reg                    buffer_release_n = 1'b1;
+  reg                    buffer_release_d1 = 1'b0;
 
-  wire [NUM_LANES-1:0] cgs_reset;
-  wire [NUM_LANES-1:0] cgs_ready;
-  wire [NUM_LANES-1:0] ifs_reset;
+  reg                    eof_reset = 1'b1;
 
-  reg buffer_release_n = 1'b1;
-  reg buffer_release_d1 = 1'b0;
-  wire [NUM_LANES-1:0] buffer_ready_n;
-  wire all_buffer_ready_n;
-  wire all_buffer_ready_n_l;
-  wire all_buffer_ready_n_u;
-  wire dev_all_buffer_ready_n;
+  reg  [NUM_LANES-1:0]   frame_align_err_thresh_met = {NUM_LANES{1'b0}};
+  reg  [NUM_LANES-1:0]   event_frame_alignment_error_per_lane = {NUM_LANES{1'b0}};
 
-  reg eof_reset = 1'b1;
+  reg                    buffer_release_opportunity = 1'b0;
 
-  wire [NUM_LANES-1:0] phy_block_sync_r;
+  wire [7:0]             cfg_beats_per_multiframe = cfg_octets_per_multiframe >> DPW_LOG2;
+  wire [7:0]             device_cfg_beats_per_multiframe_s;
 
-  wire rx_valid_s = buffer_release_d1;
+  wire [NUM_LANES-1:0]   cgs_reset;
+  wire [NUM_LANES-1:0]   cgs_ready;
+  wire [NUM_LANES-1:0]   ifs_reset;
 
-  wire [7:0] lmfc_counter;
-  wire latency_monitor_reset;
+  wire [NUM_LANES-1:0]   buffer_ready_n;
+  wire                   all_buffer_ready_n;
+  wire                   all_buffer_ready_n_l;
+  wire                   all_buffer_ready_n_u;
+  wire                   dev_all_buffer_ready_n;
+
+  wire [NUM_LANES-1:0]   phy_block_sync_r;
+
+  wire                   rx_valid_s = buffer_release_d1;
+
+  wire [7:0]             lmfc_counter;
+  wire                   latency_monitor_reset;
 
   wire [3*NUM_LANES-1:0] frame_align;
-  wire [NUM_LANES-1:0] ifs_ready;
+  wire [NUM_LANES-1:0]   ifs_ready;
 
-  wire event_data_phase;
-  wire err_statistics_reset;
+  wire                   event_data_phase;
+  wire                   err_statistics_reset;
 
-  wire lmfc_edge_synced;
-
-  reg [NUM_LANES-1:0] frame_align_err_thresh_met = {NUM_LANES{1'b0}};
-  reg [NUM_LANES-1:0] event_frame_alignment_error_per_lane = {NUM_LANES{1'b0}};
-
-  reg buffer_release_opportunity = 1'b0;
+  wire                   lmfc_edge_synced;
 
   always @(posedge device_clk) begin
     if (lmfc_counter == device_cfg_buffer_delay ||
@@ -292,442 +293,443 @@ module jesd204_rx #(
     .eomf (rx_eomf));
 
   generate
-  genvar i;
+    genvar i;
 
-  sync_event #(
-    .NUM_OF_EVENTS (1),
-    .ASYNC_CLK(ASYNC_CLK)
-  ) i_sync_lmfc (
-    .in_clk(device_clk),
-    .in_event(lmfc_edge),
-    .out_clk(clk),
-    .out_event(lmfc_edge_synced));
-
-  if (LINK_MODE[0] == 1) begin : mode_8b10b
-
-  wire unexpected_lane_state_error;
-  reg unexpected_lane_state_error_d = 1'b0;
-
-  jesd204_rx_ctrl #(
-    .NUM_LANES (NUM_LANES),
-    .NUM_LINKS (NUM_LINKS),
-    .ENABLE_FRAME_ALIGN_ERR_RESET (ENABLE_FRAME_ALIGN_ERR_RESET)
-  ) i_rx_ctrl (
-    .clk (clk),
-    .reset (reset),
-
-    .cfg_lanes_disable (cfg_lanes_disable),
-    .cfg_links_disable (cfg_links_disable),
-
-    .phy_ready (1'b1),
-    .phy_en_char_align (phy_en_char_align),
-
-    .lmfc_edge (lmfc_edge_synced),
-    .frame_align_err_thresh_met (frame_align_err_thresh_met),
-    .sync (sync),
-
-    .latency_monitor_reset (latency_monitor_reset),
-
-    .cgs_reset (cgs_reset),
-    .cgs_ready (cgs_ready),
-
-    .ifs_reset (ifs_reset),
-
-    .status_state (status_ctrl_state),
-
-    .event_data_phase (event_data_phase));
-
-  assign err_statistics_reset = ctrl_err_statistics_reset ||
-                                event_data_phase;
-
-  for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
-
-    localparam D_START = i * DATA_PATH_WIDTH*8;
-    localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
-    localparam OD_START = i * TPL_DATA_PATH_WIDTH*8;
-    localparam OD_STOP = OD_START + TPL_DATA_PATH_WIDTH*8-1;
-    localparam C_START = i * DATA_PATH_WIDTH;
-    localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
-
-    wire [DW-1:0] phy_data_r;
-    wire [CW-1:0] phy_charisk_r;
-    wire [CW-1:0] phy_notintable_r;
-    wire [CW-1:0] phy_disperr_r;
-    wire [ODW-1:0] rx_data_s;
-
-    util_pipeline_stage #(
-      .WIDTH((3 * CW) + DW),
-      .REGISTERED(NUM_INPUT_PIPELINE)
-    ) i_input_pipeline_stage (
-      .clk(clk),
-      .in({
-        phy_data[D_STOP:D_START],
-        phy_charisk[C_STOP:C_START],
-        phy_notintable[C_STOP:C_START],
-        phy_disperr[C_STOP:C_START]
-      }),
-      .out({
-        phy_data_r,
-        phy_charisk_r,
-        phy_notintable_r,
-        phy_disperr_r
-      }));
-
-    jesd204_rx_lane #(
-      .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
-      .TPL_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
-      .CHAR_INFO_REGISTERED(CHAR_INFO_REGISTERED),
-      .ALIGN_MUX_REGISTERED(ALIGN_MUX_REGISTERED),
-      .SCRAMBLER_REGISTERED(SCRAMBLER_REGISTERED),
-      .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
-      .ENABLE_FRAME_ALIGN_CHECK(ENABLE_FRAME_ALIGN_CHECK),
-      .ENABLE_CHAR_REPLACE(ENABLE_CHAR_REPLACE),
+    sync_event #(
+      .NUM_OF_EVENTS (1),
       .ASYNC_CLK(ASYNC_CLK)
-    ) i_lane (
-      .clk(clk),
-      .reset(reset),
+    ) i_sync_lmfc (
+      .in_clk(device_clk),
+      .in_event(lmfc_edge),
+      .out_clk(clk),
+      .out_event(lmfc_edge_synced));
 
-      .device_clk(device_clk),
-      .device_reset(device_reset),
+    if (LINK_MODE[0] == 1) begin : mode_8b10b
 
-      .phy_data(phy_data_r),
-      .phy_charisk(phy_charisk_r),
-      .phy_notintable(phy_notintable_r),
-      .phy_disperr(phy_disperr_r),
+      reg unexpected_lane_state_error_d = 1'b0;
+      wire unexpected_lane_state_error;
 
-      .cgs_reset(cgs_reset[i]),
-      .cgs_ready(cgs_ready[i]),
+      jesd204_rx_ctrl #(
+        .NUM_LANES (NUM_LANES),
+        .NUM_LINKS (NUM_LINKS),
+        .ENABLE_FRAME_ALIGN_ERR_RESET (ENABLE_FRAME_ALIGN_ERR_RESET)
+      ) i_rx_ctrl (
+        .clk (clk),
+        .reset (reset),
 
-      .ifs_reset(ifs_reset[i]),
+        .cfg_lanes_disable (cfg_lanes_disable),
+        .cfg_links_disable (cfg_links_disable),
 
-      .rx_data(rx_data_s),
+        .phy_ready (1'b1),
+        .phy_en_char_align (phy_en_char_align),
 
-      .buffer_release_n(buffer_release_n),
-      .buffer_ready_n(buffer_ready_n[i]),
+        .lmfc_edge (lmfc_edge_synced),
+        .frame_align_err_thresh_met (frame_align_err_thresh_met),
+        .sync (sync),
 
-      .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
-      .cfg_octets_per_frame(cfg_octets_per_frame),
-      .cfg_disable_char_replacement(cfg_disable_char_replacement),
-      .cfg_disable_scrambler(cfg_disable_scrambler),
+        .latency_monitor_reset (latency_monitor_reset),
 
-      .err_statistics_reset(err_statistics_reset),
-      .ctrl_err_statistics_mask(ctrl_err_statistics_mask[2:0]),
-      .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
+        .cgs_reset (cgs_reset),
+        .cgs_ready (cgs_ready),
 
-      .ilas_config_valid(ilas_config_valid[i]),
-      .ilas_config_addr(ilas_config_addr[2*i+1:2*i]),
-      .ilas_config_data(ilas_config_data[D_STOP:D_START]),
+        .ifs_reset (ifs_reset),
 
-      .status_cgs_state(status_lane_cgs_state[2*i+1:2*i]),
-      .status_ifs_ready(ifs_ready[i]),
-      .status_frame_align(frame_align[3*i+2:3*i]),
+        .status_state (status_ctrl_state),
 
-      .status_frame_align_err_cnt(status_lane_frame_align_err_cnt[8*i+7:8*i]));
+        .event_data_phase (event_data_phase));
 
-    // Channel 0 output pipeline also registers the eof_reset and rx_valid_s signals.
-    // Since there is only one instance of them to be used on the module output, there
-    // is no need to register those signals in the other channels.
-    if (i == 0) begin
-      (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
-          .WIDTH(ODW+2),
-          .REGISTERED(NUM_OUTPUT_PIPELINE)
-        ) i_output_pipeline_stage (
-          .clk(device_clk),
+      assign err_statistics_reset = ctrl_err_statistics_reset ||
+                                    event_data_phase;
+
+      for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+
+        localparam D_START = i * DATA_PATH_WIDTH*8;
+        localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
+        localparam OD_START = i * TPL_DATA_PATH_WIDTH*8;
+        localparam OD_STOP = OD_START + TPL_DATA_PATH_WIDTH*8-1;
+        localparam C_START = i * DATA_PATH_WIDTH;
+        localparam C_STOP = C_START + DATA_PATH_WIDTH-1;
+
+        wire [DW-1:0] phy_data_r;
+        wire [CW-1:0] phy_charisk_r;
+        wire [CW-1:0] phy_notintable_r;
+        wire [CW-1:0] phy_disperr_r;
+        wire [ODW-1:0] rx_data_s;
+
+        util_pipeline_stage #(
+          .WIDTH((3 * CW) + DW),
+          .REGISTERED(NUM_INPUT_PIPELINE)
+        ) i_input_pipeline_stage (
+          .clk(clk),
           .in({
-            eof_reset,
-            rx_data_s,
-            rx_valid_s
+            phy_data[D_STOP:D_START],
+            phy_charisk[C_STOP:C_START],
+            phy_notintable[C_STOP:C_START],
+            phy_disperr[C_STOP:C_START]
           }),
           .out({
-            eof_reset_d,
-            rx_data[OD_STOP:OD_START],
-            rx_valid
+            phy_data_r,
+            phy_charisk_r,
+            phy_notintable_r,
+            phy_disperr_r
           }));
-    end else begin
-      (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
-          .WIDTH(ODW),
-          .REGISTERED(NUM_OUTPUT_PIPELINE)
-        ) i_output_pipeline_stage (
-          .clk(device_clk),
-          .in(rx_data_s),
-          .out(rx_data[OD_STOP:OD_START]));
-    end
 
-    if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align_err_thresh
-      always @(posedge clk) begin
-        if (reset) begin
-          frame_align_err_thresh_met[i] <= 1'b0;
-          event_frame_alignment_error_per_lane[i] <= 1'b0;
+        jesd204_rx_lane #(
+          .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+          .TPL_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
+          .CHAR_INFO_REGISTERED(CHAR_INFO_REGISTERED),
+          .ALIGN_MUX_REGISTERED(ALIGN_MUX_REGISTERED),
+          .SCRAMBLER_REGISTERED(SCRAMBLER_REGISTERED),
+          .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
+          .ENABLE_FRAME_ALIGN_CHECK(ENABLE_FRAME_ALIGN_CHECK),
+          .ENABLE_CHAR_REPLACE(ENABLE_CHAR_REPLACE),
+          .ASYNC_CLK(ASYNC_CLK)
+        ) i_lane (
+          .clk(clk),
+          .reset(reset),
+
+          .device_clk(device_clk),
+          .device_reset(device_reset),
+
+          .phy_data(phy_data_r),
+          .phy_charisk(phy_charisk_r),
+          .phy_notintable(phy_notintable_r),
+          .phy_disperr(phy_disperr_r),
+
+          .cgs_reset(cgs_reset[i]),
+          .cgs_ready(cgs_ready[i]),
+
+          .ifs_reset(ifs_reset[i]),
+
+          .rx_data(rx_data_s),
+
+          .buffer_release_n(buffer_release_n),
+          .buffer_ready_n(buffer_ready_n[i]),
+
+          .cfg_octets_per_multiframe(cfg_octets_per_multiframe),
+          .cfg_octets_per_frame(cfg_octets_per_frame),
+          .cfg_disable_char_replacement(cfg_disable_char_replacement),
+          .cfg_disable_scrambler(cfg_disable_scrambler),
+
+          .err_statistics_reset(err_statistics_reset),
+          .ctrl_err_statistics_mask(ctrl_err_statistics_mask[2:0]),
+          .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
+
+          .ilas_config_valid(ilas_config_valid[i]),
+          .ilas_config_addr(ilas_config_addr[2*i+1:2*i]),
+          .ilas_config_data(ilas_config_data[D_STOP:D_START]),
+
+          .status_cgs_state(status_lane_cgs_state[2*i+1:2*i]),
+          .status_ifs_ready(ifs_ready[i]),
+          .status_frame_align(frame_align[3*i+2:3*i]),
+
+          .status_frame_align_err_cnt(status_lane_frame_align_err_cnt[8*i+7:8*i]));
+
+        // Channel 0 output pipeline also registers the eof_reset and rx_valid_s signals.
+        // Since there is only one instance of them to be used on the module output, there
+        // is no need to register those signals in the other channels.
+        if (i == 0) begin
+          (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+              .WIDTH(ODW+2),
+              .REGISTERED(NUM_OUTPUT_PIPELINE)
+            ) i_output_pipeline_stage (
+              .clk(device_clk),
+              .in({
+                eof_reset,
+                rx_data_s,
+                rx_valid_s
+              }),
+              .out({
+                eof_reset_d,
+                rx_data[OD_STOP:OD_START],
+                rx_valid
+              }));
         end else begin
-          if (status_lane_frame_align_err_cnt[8*i+7:8*i] >= cfg_frame_align_err_threshold) begin
-            frame_align_err_thresh_met[i] <= cgs_ready[i];
-            event_frame_alignment_error_per_lane[i] <= ~frame_align_err_thresh_met[i];
-          end else begin
+          (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+              .WIDTH(ODW),
+              .REGISTERED(NUM_OUTPUT_PIPELINE)
+            ) i_output_pipeline_stage (
+              .clk(device_clk),
+              .in(rx_data_s),
+              .out(rx_data[OD_STOP:OD_START]));
+        end
+
+        if(ENABLE_FRAME_ALIGN_CHECK) begin : gen_frame_align_err_thresh
+          always @(posedge clk) begin
+            if (reset) begin
+              frame_align_err_thresh_met[i] <= 1'b0;
+              event_frame_alignment_error_per_lane[i] <= 1'b0;
+            end else begin
+              if (status_lane_frame_align_err_cnt[8*i+7:8*i] >= cfg_frame_align_err_threshold) begin
+                frame_align_err_thresh_met[i] <= cgs_ready[i];
+                event_frame_alignment_error_per_lane[i] <= ~frame_align_err_thresh_met[i];
+              end else begin
+                frame_align_err_thresh_met[i] <= 1'b0;
+                event_frame_alignment_error_per_lane[i] <= 1'b0;
+              end
+            end
+          end
+        end else begin : gen_no_frame_align_err_thresh
+          always @(*) begin
             frame_align_err_thresh_met[i] <= 1'b0;
             event_frame_alignment_error_per_lane[i] <= 1'b0;
           end
         end
       end
-    end else begin : gen_no_frame_align_err_thresh
+
+      assign event_frame_alignment_error = |event_frame_alignment_error_per_lane;
+
+      /* If one of the enabled lanes falls out of DATA phase while the link is in DATA phase
+       * report an error event */
+      assign unexpected_lane_state_error = |(~(cgs_ready|cfg_lanes_disable)) & &status_ctrl_state;
+      always @(posedge clk) begin
+        unexpected_lane_state_error_d <= unexpected_lane_state_error;
+      end
+      assign event_unexpected_lane_state_error = unexpected_lane_state_error & ~unexpected_lane_state_error_d;
+
+      /* Delay matching based on the number of pipeline stages */
+      reg [NUM_LANES-1:0] ifs_ready_d1 = 1'b0;
+      reg [NUM_LANES-1:0] ifs_ready_d2 = 1'b0;
+      reg [NUM_LANES-1:0] ifs_ready_mux;
+
+      always @(posedge clk) begin
+        ifs_ready_d1 <= ifs_ready;
+        ifs_ready_d2 <= ifs_ready_d1;
+      end
+
       always @(*) begin
-        frame_align_err_thresh_met[i] <= 1'b0;
-        event_frame_alignment_error_per_lane[i] <= 1'b0;
+        case (SCRAMBLER_REGISTERED + ALIGN_MUX_REGISTERED)
+        1: ifs_ready_mux = ifs_ready_d1;
+        2: ifs_ready_mux = ifs_ready_d2;
+        default: ifs_ready_mux = ifs_ready;
+        endcase
       end
-    end
-  end
 
-  assign event_frame_alignment_error = |event_frame_alignment_error_per_lane;
+      jesd204_lane_latency_monitor #(
+        .NUM_LANES(NUM_LANES),
+        .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+      ) i_lane_latency_monitor (
+        .clk(clk),
+        .reset(latency_monitor_reset),
 
-  /* If one of the enabled lanes falls out of DATA phase while the link is in DATA phase
-   * report an error event */
-  assign unexpected_lane_state_error = |(~(cgs_ready|cfg_lanes_disable)) & &status_ctrl_state;
-  always @(posedge clk) begin
-    unexpected_lane_state_error_d <= unexpected_lane_state_error;
-  end
-  assign event_unexpected_lane_state_error = unexpected_lane_state_error & ~unexpected_lane_state_error_d;
+        .lane_ready(ifs_ready_mux),
+        .lane_frame_align(frame_align),
+        .lane_latency_ready(status_lane_ifs_ready),
+        .lane_latency(status_lane_latency));
 
-  /* Delay matching based on the number of pipeline stages */
-  reg [NUM_LANES-1:0] ifs_ready_d1 = 1'b0;
-  reg [NUM_LANES-1:0] ifs_ready_d2 = 1'b0;
-  reg [NUM_LANES-1:0] ifs_ready_mux;
+      assign status_lane_emb_state = 'b0;
 
-  always @(posedge clk) begin
-    ifs_ready_d1 <= ifs_ready;
-    ifs_ready_d2 <= ifs_ready_d1;
-  end
-
-  always @(*) begin
-    case (SCRAMBLER_REGISTERED + ALIGN_MUX_REGISTERED)
-    1: ifs_ready_mux = ifs_ready_d1;
-    2: ifs_ready_mux = ifs_ready_d2;
-    default: ifs_ready_mux = ifs_ready;
-    endcase
-  end
-
-  jesd204_lane_latency_monitor #(
-    .NUM_LANES(NUM_LANES),
-    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
-  ) i_lane_latency_monitor (
-    .clk(clk),
-    .reset(latency_monitor_reset),
-
-    .lane_ready(ifs_ready_mux),
-    .lane_frame_align(frame_align),
-    .lane_latency_ready(status_lane_ifs_ready),
-    .lane_latency(status_lane_latency));
-
-  assign status_lane_emb_state = 'b0;
-
-  end
-
-  if (LINK_MODE[1] == 1) begin : mode_64b66b
-
-  wire [NUM_LANES-1:0] emb_lock;
-  wire link_buffer_release_n;
-
-  sync_bits #(
-    .NUM_OF_BITS (1),
-    .ASYNC_CLK(ASYNC_CLK)
-  ) i_buffer_release_cdc (
-    .in_bits(buffer_release_n),
-    .out_clk(clk),
-    .out_resetn(1'b1),
-    .out_bits(link_buffer_release_n));
-
-  jesd204_rx_ctrl_64b  #(
-    .NUM_LANES(NUM_LANES)
-  ) i_jesd204_rx_ctrl_64b (
-    .clk(clk),
-    .reset(reset),
-
-    .cfg_lanes_disable(cfg_lanes_disable),
-
-    .phy_block_sync(phy_block_sync_r),
-    .emb_lock(emb_lock),
-
-    .all_emb_lock(all_emb_lock),
-    .buffer_release_n(link_buffer_release_n),
-
-    .status_state(status_ctrl_state),
-    .event_data_phase(event_data_phase),
-    .event_unexpected_lane_state_error(event_unexpected_lane_state_error));
-
-  for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
-
-    localparam D_START = i * DATA_PATH_WIDTH*8;
-    localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
-    localparam TPL_D_START = i * TPL_DATA_PATH_WIDTH*8;
-    localparam TPL_D_STOP = TPL_D_START + TPL_DATA_PATH_WIDTH*8-1;
-    localparam H_START = i * 2;
-    localparam H_STOP = H_START + 2-1;
-
-    wire [7:0] status_lane_skew;
-    wire all_buffer_ready_n_d;
-    wire all_buffer_ready_n_d_l;
-    wire all_buffer_ready_n_d_u;
-    // Make sure these signals do not get optimized as single instance for all
-    // channels. Keeping one instance per channel would help with timing.
-    (* dont_touch = "yes" *) reg err_statistics_reset_64b;
-    (* dont_touch = "yes" *) reg event_data_phase_int = 1'b0;
-    (* dont_touch = "yes" *) reg cfg_beats_per_multiframe_r;
-
-    wire [DW-1:0] phy_data_r;
-    wire [HW-1:0] phy_header_r;
-    wire [ODW-1:0] rx_data_s;
-
-    always @(posedge clk) begin
-      cfg_beats_per_multiframe_r <= cfg_beats_per_multiframe;
     end
 
-    (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
-      .WIDTH(1 + HW + DW),
-      .REGISTERED(NUM_INPUT_PIPELINE)
-    ) i_input_pipeline_stage (
-      .clk(clk),
-      .in({
-        phy_data[D_STOP:D_START],
-        phy_header[H_STOP:H_START],
-        phy_block_sync[i]
-      }),
-      .out({
-        phy_data_r,
-        phy_header_r,
-        phy_block_sync_r[i]
-      }));
+    if (LINK_MODE[1] == 1) begin : mode_64b66b
 
-    // Pipeline the aggregated ready status at the lane, so that the OR reduce
-    // and the route out to the channel become a register to register path with
-    // no logic behind it. The lane moves its evaluation point by the same
-    // number of stages, see ALL_BUFFER_READY_DELAY.
-    (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
-      .WIDTH(1),
-      .REGISTERED(NUM_BUFFER_READY_PIPELINE)
-    ) i_all_buffer_ready_pipeline_stage_l (
-      .clk(clk),
-      .in(all_buffer_ready_n_l),
-      .out(all_buffer_ready_n_d_l));
-    (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
-      .WIDTH(1),
-      .REGISTERED(NUM_BUFFER_READY_PIPELINE)
-    ) i_all_buffer_ready_pipeline_stage_u (
-      .clk(clk),
-      .in(all_buffer_ready_n_u),
-      .out(all_buffer_ready_n_d_u));
+      wire [NUM_LANES-1:0] emb_lock;
+      wire link_buffer_release_n;
 
-    assign all_buffer_ready_n_d = all_buffer_ready_n_d_l | all_buffer_ready_n_d_u;
+      sync_bits #(
+        .NUM_OF_BITS (1),
+        .ASYNC_CLK(ASYNC_CLK)
+      ) i_buffer_release_cdc (
+        .in_bits(buffer_release_n),
+        .out_clk(clk),
+        .out_resetn(1'b1),
+        .out_bits(link_buffer_release_n));
 
-    // Register event_data_phase signal to break the combinational path coming
-    // from jesd204_rx_ctrl_64b and going into jesd204_rx_lane_64b.
-    // Now, the error statistics counters will be reset one clock cycle after
-    // entering data phase, but no error event would be lost due to a register
-    // on error_event itself.
-    always @(posedge clk) begin
-      if (reset == 1'b1) begin
-        event_data_phase_int <= 1'b0;
-      end else begin
-        event_data_phase_int <= event_data_phase;
+      jesd204_rx_ctrl_64b  #(
+        .NUM_LANES(NUM_LANES)
+      ) i_jesd204_rx_ctrl_64b (
+        .clk(clk),
+        .reset(reset),
+
+        .cfg_lanes_disable(cfg_lanes_disable),
+
+        .phy_block_sync(phy_block_sync_r),
+        .emb_lock(emb_lock),
+
+        .all_emb_lock(all_emb_lock),
+        .buffer_release_n(link_buffer_release_n),
+
+        .status_state(status_ctrl_state),
+        .event_data_phase(event_data_phase),
+        .event_unexpected_lane_state_error(event_unexpected_lane_state_error));
+
+      for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
+
+        localparam D_START = i * DATA_PATH_WIDTH*8;
+        localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
+        localparam TPL_D_START = i * TPL_DATA_PATH_WIDTH*8;
+        localparam TPL_D_STOP = TPL_D_START + TPL_DATA_PATH_WIDTH*8-1;
+        localparam H_START = i * 2;
+        localparam H_STOP = H_START + 2-1;
+
+        // Make sure these signals do not get optimized as single instance for all
+        // channels. Keeping one instance per channel would help with timing.
+        (* dont_touch = "yes" *) reg err_statistics_reset_64b;
+        (* dont_touch = "yes" *) reg event_data_phase_int = 1'b0;
+        (* dont_touch = "yes" *) reg cfg_beats_per_multiframe_r;
+
+        wire [7:0] status_lane_skew;
+        wire all_buffer_ready_n_d;
+        wire all_buffer_ready_n_d_l;
+        wire all_buffer_ready_n_d_u;
+
+        wire [DW-1:0] phy_data_r;
+        wire [HW-1:0] phy_header_r;
+        wire [ODW-1:0] rx_data_s;
+
+        always @(posedge clk) begin
+          cfg_beats_per_multiframe_r <= cfg_beats_per_multiframe;
+        end
+
+        (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+          .WIDTH(1 + HW + DW),
+          .REGISTERED(NUM_INPUT_PIPELINE)
+        ) i_input_pipeline_stage (
+          .clk(clk),
+          .in({
+            phy_data[D_STOP:D_START],
+            phy_header[H_STOP:H_START],
+            phy_block_sync[i]
+          }),
+          .out({
+            phy_data_r,
+            phy_header_r,
+            phy_block_sync_r[i]
+          }));
+
+        // Pipeline the aggregated ready status at the lane, so that the OR reduce
+        // and the route out to the channel become a register to register path with
+        // no logic behind it. The lane moves its evaluation point by the same
+        // number of stages, see ALL_BUFFER_READY_DELAY.
+        (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+          .WIDTH(1),
+          .REGISTERED(NUM_BUFFER_READY_PIPELINE)
+        ) i_all_buffer_ready_pipeline_stage_l (
+          .clk(clk),
+          .in(all_buffer_ready_n_l),
+          .out(all_buffer_ready_n_d_l));
+        (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+          .WIDTH(1),
+          .REGISTERED(NUM_BUFFER_READY_PIPELINE)
+        ) i_all_buffer_ready_pipeline_stage_u (
+          .clk(clk),
+          .in(all_buffer_ready_n_u),
+          .out(all_buffer_ready_n_d_u));
+
+        assign all_buffer_ready_n_d = all_buffer_ready_n_d_l | all_buffer_ready_n_d_u;
+
+        // Register event_data_phase signal to break the combinational path coming
+        // from jesd204_rx_ctrl_64b and going into jesd204_rx_lane_64b.
+        // Now, the error statistics counters will be reset one clock cycle after
+        // entering data phase, but no error event would be lost due to a register
+        // on error_event itself.
+        always @(posedge clk) begin
+          if (reset == 1'b1) begin
+            event_data_phase_int <= 1'b0;
+          end else begin
+            event_data_phase_int <= event_data_phase;
+          end
+        end
+
+        // Register err_statistics_reset_64b signal to reduce the combinational
+        // delay on the path from the AXI register, for better timing in case a
+        // SLR crossing is used on it.
+        // Now, the error statistics counters will be reset two clock cycles after
+        // entering data phase, but no error event would be lost due to a register
+        // on error_event itself and due to the err signal inside error_monitor
+        // not having a reset.
+        always @(posedge clk) begin
+          if (reset == 1'b1) begin
+            err_statistics_reset_64b <= 1'b0;
+          end else begin
+            err_statistics_reset_64b <= ctrl_err_statistics_reset || event_data_phase_int;
+          end
+        end
+
+        jesd204_rx_lane_64b #(
+          .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
+          .ENABLE_FEC(ENABLE_FEC),
+          .TPL_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
+          .ASYNC_CLK(ASYNC_CLK),
+          .ALL_BUFFER_READY_DELAY(NUM_BUFFER_READY_PIPELINE)
+        ) i_lane (
+          .clk(clk),
+          .reset(reset),
+
+          .device_clk(device_clk),
+          .device_reset(device_reset),
+
+          .phy_data(phy_data_r),
+          .phy_header(phy_header_r),
+          .phy_block_sync(phy_block_sync_r[i]),
+
+          .cfg_disable_scrambler(cfg_disable_scrambler),
+          .cfg_header_mode(cfg_header_mode),
+          .cfg_rx_thresh_emb_err(5'd8),
+          .cfg_beats_per_multiframe(cfg_beats_per_multiframe_r),
+
+          .rx_data(rx_data_s),
+
+          .buffer_release_n(buffer_release_n),
+          .buffer_ready_n(buffer_ready_n[i]),
+          .all_buffer_ready_n(all_buffer_ready_n_d),
+
+          .lmfc_edge(lmfc_edge_synced),
+          .emb_lock(emb_lock[i]),
+
+          .ctrl_err_statistics_reset(err_statistics_reset_64b),
+          .ctrl_err_statistics_mask(ctrl_err_statistics_mask[8:3]),
+          .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
+
+          .status_lane_emb_state(status_lane_emb_state[3*i+2:3*i]),
+          .status_lane_skew(status_lane_skew));
+
+        // Channel 0 output pipeline also registers the eof_reset and rx_valid_s signals.
+        // Since there is only one instance of them to be used on the module output, there
+        // is no need to register those signals in the other channels.
+        if (i == 0) begin
+          (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+            .WIDTH(ODW+2),
+            .REGISTERED(NUM_OUTPUT_PIPELINE)
+          ) i_output_pipeline_stage (
+            .clk(device_clk),
+            .in({
+              eof_reset,
+              rx_data_s,
+              rx_valid_s
+            }),
+            .out({
+              eof_reset_d,
+              rx_data[TPL_D_STOP:TPL_D_START],
+              rx_valid
+            }));
+        end else begin
+          (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+            .WIDTH(ODW),
+            .REGISTERED(NUM_OUTPUT_PIPELINE)
+          ) i_output_pipeline_stage (
+            .clk(device_clk),
+            .in(rx_data_s),
+            .out(rx_data[TPL_D_STOP:TPL_D_START]));
+        end
+
+        assign status_lane_latency[14*(i+1)-1:14*i] = {3'b0,status_lane_skew,3'b0};
+
       end
+
+      // Assign unused outputs
+      assign sync = 'b0;
+      assign phy_en_char_align = 1'b0;
+
+      assign ilas_config_valid ='b0;
+      assign ilas_config_addr = 'b0;
+      assign ilas_config_data = 'b0;
+      assign status_lane_cgs_state = 'b0;
+      assign status_lane_frame_align_err_cnt = 'b0;
+      assign status_lane_ifs_ready = {NUM_LANES{1'b1}};
+      assign event_frame_alignment_error = 1'b0;
+
     end
-
-    // Register err_statistics_reset_64b signal to reduce the combinational
-    // delay on the path from the AXI register, for better timing in case a
-    // SLR crossing is used on it.
-    // Now, the error statistics counters will be reset two clock cycles after
-    // entering data phase, but no error event would be lost due to a register
-    // on error_event itself and due to the err signal inside error_monitor
-    // not having a reset.
-    always @(posedge clk) begin
-      if (reset == 1'b1) begin
-        err_statistics_reset_64b <= 1'b0;
-      end else begin
-        err_statistics_reset_64b <= ctrl_err_statistics_reset || event_data_phase_int;
-      end
-    end
-
-    jesd204_rx_lane_64b #(
-      .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
-      .ENABLE_FEC(ENABLE_FEC),
-      .TPL_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
-      .ASYNC_CLK(ASYNC_CLK),
-      .ALL_BUFFER_READY_DELAY(NUM_BUFFER_READY_PIPELINE)
-    ) i_lane (
-      .clk(clk),
-      .reset(reset),
-
-      .device_clk(device_clk),
-      .device_reset(device_reset),
-
-      .phy_data(phy_data_r),
-      .phy_header(phy_header_r),
-      .phy_block_sync(phy_block_sync_r[i]),
-
-      .cfg_disable_scrambler(cfg_disable_scrambler),
-      .cfg_header_mode(cfg_header_mode),
-      .cfg_rx_thresh_emb_err(5'd8),
-      .cfg_beats_per_multiframe(cfg_beats_per_multiframe_r),
-
-      .rx_data(rx_data_s),
-
-      .buffer_release_n(buffer_release_n),
-      .buffer_ready_n(buffer_ready_n[i]),
-      .all_buffer_ready_n(all_buffer_ready_n_d),
-
-      .lmfc_edge(lmfc_edge_synced),
-      .emb_lock(emb_lock[i]),
-
-      .ctrl_err_statistics_reset(err_statistics_reset_64b),
-      .ctrl_err_statistics_mask(ctrl_err_statistics_mask[8:3]),
-      .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
-
-      .status_lane_emb_state(status_lane_emb_state[3*i+2:3*i]),
-      .status_lane_skew(status_lane_skew));
-
-    // Channel 0 output pipeline also registers the eof_reset and rx_valid_s signals.
-    // Since there is only one instance of them to be used on the module output, there
-    // is no need to register those signals in the other channels.
-    if (i == 0) begin
-      (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
-        .WIDTH(ODW+2),
-        .REGISTERED(NUM_OUTPUT_PIPELINE)
-      ) i_output_pipeline_stage (
-        .clk(device_clk),
-        .in({
-          eof_reset,
-          rx_data_s,
-          rx_valid_s
-        }),
-        .out({
-          eof_reset_d,
-          rx_data[TPL_D_STOP:TPL_D_START],
-          rx_valid
-        }));
-    end else begin
-      (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
-        .WIDTH(ODW),
-        .REGISTERED(NUM_OUTPUT_PIPELINE)
-      ) i_output_pipeline_stage (
-        .clk(device_clk),
-        .in(rx_data_s),
-        .out(rx_data[TPL_D_STOP:TPL_D_START]));
-    end
-
-    assign status_lane_latency[14*(i+1)-1:14*i] = {3'b0,status_lane_skew,3'b0};
-
-  end
-
-  // Assign unused outputs
-  assign sync = 'b0;
-  assign phy_en_char_align = 1'b0;
-
-  assign ilas_config_valid ='b0;
-  assign ilas_config_addr = 'b0;
-  assign ilas_config_data = 'b0;
-  assign status_lane_cgs_state = 'b0;
-  assign status_lane_frame_align_err_cnt = 'b0;
-  assign status_lane_ifs_ready = {NUM_LANES{1'b1}};
-  assign event_frame_alignment_error = 1'b0;
-
-  end
 
   endgenerate
 
