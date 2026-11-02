@@ -58,14 +58,14 @@ module jesd204_tx_gearbox #(
   parameter NUM_LANES = 1,
   parameter DEPTH = 16
 ) (
-  input link_clk,
-  input reset,
-  input device_clk,
-  input device_reset,
-  input [NUM_LANES*IN_DATA_PATH_WIDTH*8-1:0] device_data,
-  input device_lmfc_edge,
+  input                                        link_clk,
+  input                                        reset,
+  input                                        device_clk,
+  input                                        device_reset,
+  input  [NUM_LANES*IN_DATA_PATH_WIDTH*8-1:0]  device_data,
+  input                                        device_lmfc_edge,
   output [NUM_LANES*OUT_DATA_PATH_WIDTH*8-1:0] link_data,
-  input output_ready
+  input                                        output_ready
 );
 
   localparam MEM_W = (OUT_DATA_PATH_WIDTH <= IN_DATA_PATH_WIDTH) ?
@@ -74,9 +74,9 @@ module jesd204_tx_gearbox #(
   localparam D_LOG2 = $clog2(DEPTH);
 
   wire [NUM_LANES-1:0] data_ready;
-  wire output_ready_sync;
-  wire addr_reset;
-  wire packer_reset;
+  wire                 output_ready_sync;
+  wire                 addr_reset;
+  wire                 packer_reset;
 
   sync_bits i_sync_ready (
     .in_bits(output_ready),
@@ -193,7 +193,7 @@ module jesd204_tx_gearbox #(
       assign link_data[i*OUT_DATA_PATH_WIDTH*8+:OUT_DATA_PATH_WIDTH*8] = mem_rd_data;
 
     end
-  
+
   end
   endgenerate
 

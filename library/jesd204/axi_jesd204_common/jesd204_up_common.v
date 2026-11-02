@@ -60,65 +60,65 @@ module jesd204_up_common #(
   parameter DEV_EXTRA_CFG_WIDTH = 1,
   parameter ENABLE_LINK_STATS = 0
 ) (
-  input up_clk,
-  input ext_resetn,
+  input                                up_clk,
+  input                                ext_resetn,
 
-  output up_reset,
+  output                               up_reset,
 
-  output up_reset_synchronizer,
+  output                               up_reset_synchronizer,
 
-  input core_clk,
-  input core_reset_ext,
-  output core_reset,
+  input                                core_clk,
+  input                                core_reset_ext,
+  output                               core_reset,
 
-  input device_clk,
-  output device_reset,
+  input                                device_clk,
+  output                               device_reset,
 
-  input [11:0] up_raddr,
-  output reg [31:0] up_rdata,
+  input      [11:0]                    up_raddr,
+  output reg [31:0]                    up_rdata,
 
-  input up_wreq,
-  input [11:0] up_waddr,
-  input [31:0] up_wdata,
+  input                                up_wreq,
+  input      [11:0]                    up_waddr,
+  input      [31:0]                    up_wdata,
 
-  input [EXTRA_CFG_WIDTH-1:0] up_extra_cfg,
-  input [DEV_EXTRA_CFG_WIDTH-1:0] up_dev_extra_cfg,
+  input      [EXTRA_CFG_WIDTH-1:0]     up_extra_cfg,
+  input      [DEV_EXTRA_CFG_WIDTH-1:0] up_dev_extra_cfg,
 
-  input [NUM_IRQS-1:0] up_irq_trigger,
-  output reg irq,
+  input      [NUM_IRQS-1:0]            up_irq_trigger,
+  output reg                           irq,
 
-  output up_cfg_is_writeable,
+  output                               up_cfg_is_writeable,
 
-  output reg [NUM_LANES-1:0] core_cfg_lanes_disable = {NUM_LANES{1'b0}},
-  output reg [NUM_LINKS-1:0] core_cfg_links_disable = {NUM_LINKS{1'b0}},
-  output reg [9:0] core_cfg_octets_per_multiframe = 'h00,
-  output reg [7:0] core_cfg_octets_per_frame = 'h00,
-  output reg core_cfg_disable_scrambler = 'h00,
-  output reg core_cfg_disable_char_replacement = 'h00,
-  output reg [1:0] core_cfg_header_mode = 'h00,
-  output reg [EXTRA_CFG_WIDTH-1:0] core_extra_cfg = 'h00,
+  output reg [NUM_LANES-1:0]           core_cfg_lanes_disable = {NUM_LANES{1'b0}},
+  output reg [NUM_LINKS-1:0]           core_cfg_links_disable = {NUM_LINKS{1'b0}},
+  output reg [9:0]                     core_cfg_octets_per_multiframe = 'h00,
+  output reg [7:0]                     core_cfg_octets_per_frame = 'h00,
+  output reg                           core_cfg_disable_scrambler = 'h00,
+  output reg                           core_cfg_disable_char_replacement = 'h00,
+  output reg [1:0]                     core_cfg_header_mode = 'h00,
+  output reg [EXTRA_CFG_WIDTH-1:0]     core_extra_cfg = 'h00,
 
   output reg [DEV_EXTRA_CFG_WIDTH-1:0] device_extra_cfg = 'h00,
 
-  output reg [9:0] device_cfg_octets_per_multiframe = 'h00,
-  output reg [7:0] device_cfg_octets_per_frame = 'h00,
-  output reg [7:0] device_cfg_beats_per_multiframe = 'h00,
+  output reg [9:0]                     device_cfg_octets_per_multiframe = 'h00,
+  output reg [7:0]                     device_cfg_octets_per_frame = 'h00,
+  output reg [7:0]                     device_cfg_beats_per_multiframe = 'h00,
 
-  input [31:0] status_synth_params0,
-  input [31:0] status_synth_params1,
-  input [31:0] status_synth_params2
+  input      [31:0]                    status_synth_params0,
+  input      [31:0]                    status_synth_params1,
+  input      [31:0]                    status_synth_params2
 );
 
-  reg [31:0] up_scratch = 32'h00000000;
+  reg [31:0]          up_scratch = 32'h00000000;
 
-  reg [7:0] up_cfg_octets_per_frame = 'h00;
-  reg [9:0] up_cfg_octets_per_multiframe = {DATA_PATH_WIDTH_LOG2{1'b1}};
-  reg [7:0] up_cfg_beats_per_multiframe = 'h00;
+  reg [7:0]           up_cfg_octets_per_frame = 'h00;
+  reg [9:0]           up_cfg_octets_per_multiframe = {DATA_PATH_WIDTH_LOG2{1'b1}};
+  reg [7:0]           up_cfg_beats_per_multiframe = 'h00;
   reg [NUM_LANES-1:0] up_cfg_lanes_disable = {NUM_LANES{1'b0}};
   reg [NUM_LINKS-1:0] up_cfg_links_disable = {NUM_LINKS{1'b0}};
-  reg up_cfg_disable_char_replacement = 1'b0;
-  reg [1:0] up_cfg_header_mode = 1'b0;
-  reg up_cfg_disable_scrambler = 1'b0;
+  reg                 up_cfg_disable_char_replacement = 1'b0;
+  reg [1:0]           up_cfg_header_mode = 1'b0;
+  reg                 up_cfg_disable_scrambler = 1'b0;
 
   /* Reset for the register map */
   reg [2:0] up_reset_vector = 3'b111;
@@ -143,6 +143,9 @@ module jesd204_up_common #(
    * can be shown in the register map. This is useful for debugging.
    */
   reg [1:0] up_core_reset_ext_synchronizer_vector = 2'b11;
+
+  reg up_reset_core = 1'b1;
+
   wire up_core_reset_ext;
 
   assign up_core_reset_ext = up_core_reset_ext_synchronizer_vector[0];
@@ -153,8 +156,6 @@ module jesd204_up_common #(
 
   wire device_cfg_transfer_en;
   assign device_cfg_transfer_en = device_reset_vector[2] ^ device_reset_vector[1];
-
-  reg up_reset_core = 1'b1;
 
   assign up_cfg_is_writeable = up_reset_core;
 

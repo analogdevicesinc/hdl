@@ -51,32 +51,32 @@
 module jesd204_rx_header #(
   parameter ENABLE_FEC = 0
 ) (
-  input clk,
-  input reset,
+  input             clk,
+  input             reset,
 
-  input sh_lock,
-  input [1:0] header,
+  input             sh_lock,
+  input      [1:0]  header,
 
-  input [1:0] cfg_header_mode,  // 0 - CRC12 ; 1 - CRC3; 2 - FEC; 3 - CMD
-  input [4:0] cfg_rx_thresh_emb_err,
-  input [7:0] cfg_beats_per_multiframe,
+  input      [1:0]  cfg_header_mode,  // 0 - CRC12 ; 1 - CRC3; 2 - FEC; 3 - CMD
+  input      [4:0]  cfg_rx_thresh_emb_err,
+  input      [7:0]  cfg_beats_per_multiframe,
 
-  output emb_lock,
+  output            emb_lock,
 
-  output valid_eomb,
-  output valid_eoemb,
-  output valid_fec,
+  output            valid_eomb,
+  output            valid_eoemb,
+  output            valid_fec,
   // Received header data qualified by valid_eomb (fec by valid_fec)
-  output [11:0] crc12,
-  output [2:0] crc3,
-  output [25:0] fec,
-  output [18:0] cmd,
-  output reg [7:0] sh_count = 'h0,
+  output     [11:0] crc12,
+  output     [2:0]  crc3,
+  output     [25:0] fec,
+  output     [18:0] cmd,
+  output reg [7:0]  sh_count = 'h0,
 
-  output [2:0] status_lane_emb_state,
-  output reg event_invalid_header,
-  output reg event_unexpected_eomb,
-  output reg event_unexpected_eoemb
+  output     [2:0]  status_lane_emb_state,
+  output reg        event_invalid_header,
+  output reg        event_unexpected_eomb,
+  output reg        event_unexpected_eoemb
 );
 
   localparam STATE_EMB_INIT = 3'b001;
@@ -87,22 +87,22 @@ module jesd204_rx_header #(
   localparam BIT_EMB_HUNT = 1;
   localparam BIT_EMB_LOCK = 2;
 
-  reg [2:0] state = STATE_EMB_INIT;
-  reg [2:0] next_state;
+  reg  [2:0]  state = STATE_EMB_INIT;
+  reg  [2:0]  next_state;
 
-  reg [31:0] sync_word = 'h0;
+  reg  [31:0] sync_word = 'h0;
 
-  reg sh_count_wrap = 1'b0;
+  reg         sh_count_wrap = 1'b0;
 
-  wire header_bit;
-  wire invalid_sequence;
-  wire invalid_eoemb;
-  wire invalid_eomb;
-  wire [6:0] cmd0;
-  wire [6:0] cmd1;
+  wire        header_bit;
+  wire        invalid_sequence;
+  wire        invalid_eoemb;
+  wire        invalid_eomb;
+  wire [6:0]  cmd0;
+  wire [6:0]  cmd1;
   wire [18:0] cmd3;
-  wire eoemb;
-  wire eomb;
+  wire        eoemb;
+  wire        eomb;
 
   assign header_bit = header == 2'b01;
 

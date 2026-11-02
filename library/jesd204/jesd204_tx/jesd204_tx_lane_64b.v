@@ -51,39 +51,39 @@
 module jesd204_tx_lane_64b #(
   parameter ENABLE_FEC = 1'b0
 ) (
-  input clk,
-  input reset,
+  input             clk,
+  input             reset,
 
-  input [63:0] tx_data,
-  input tx_ready,
+  input      [63:0] tx_data,
+  input             tx_ready,
 
   output reg [63:0] phy_data,
-  output     [1:0] phy_header,
+  output     [1:0]  phy_header,
 
-  input lmc_edge,
-  input lmc_quarter_edge,
-  input eoemb,
+  input             lmc_edge,
+  input             lmc_quarter_edge,
+  input             eoemb,
 
   // Scrambling mandatory in 64bxxb, keep this for debugging purposes
-  input cfg_disable_scrambler,
-  input [1:0] cfg_header_mode,
-  input cfg_lane_disable
+  input             cfg_disable_scrambler,
+  input      [1:0]  cfg_header_mode,
+  input             cfg_lane_disable
 );
 
-  reg [63:0] scrambled_data;
-  reg [63:0] scrambled_data_d1;
-  reg lmc_edge_d1 = 'b0;
-  reg lmc_edge_d2 = 'b0;
-  reg lmc_edge_d3 = 'b0;
-  reg lmc_quarter_edge_d1 = 'b0;
-  reg lmc_quarter_edge_d2 = 'b0;
-  reg lmc_quarter_edge_d3 = 'b0;
-  reg tx_ready_d1 = 'b0;
-  reg tx_ready_d2 = 'b0;
-  reg eoemb_d1 = 'b0;
-  reg [11:0] crc12_d1 = 'b0;
-  reg cfg_lane_disable_int;
-  reg [1:0] cfg_header_mode_int;
+  reg  [63:0] scrambled_data;
+  reg  [63:0] scrambled_data_d1;
+  reg         lmc_edge_d1 = 'b0;
+  reg         lmc_edge_d2 = 'b0;
+  reg         lmc_edge_d3 = 'b0;
+  reg         lmc_quarter_edge_d1 = 'b0;
+  reg         lmc_quarter_edge_d2 = 'b0;
+  reg         lmc_quarter_edge_d3 = 'b0;
+  reg         tx_ready_d1 = 'b0;
+  reg         tx_ready_d2 = 'b0;
+  reg         eoemb_d1 = 'b0;
+  reg  [11:0] crc12_d1 = 'b0;
+  reg         cfg_lane_disable_int;
+  reg  [1:0]  cfg_header_mode_int;
 
   wire [63:0] tx_data_msb_s;
   wire [63:0] scrambled_data_s;
