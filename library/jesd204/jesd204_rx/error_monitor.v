@@ -52,27 +52,27 @@ module error_monitor #(
   parameter EVENT_WIDTH = 16,
   parameter CNT_WIDTH = 32
 ) (
-  input clk,
-  input reset,
-  input active,
-  input [EVENT_WIDTH-1:0] error_event,
-  input [EVENT_WIDTH-1:0] error_event_mask,
-  output [CNT_WIDTH-1:0] status_err_cnt
+  input                    clk,
+  input                    reset,
+  input                    active,
+  input  [EVENT_WIDTH-1:0] error_event,
+  input  [EVENT_WIDTH-1:0] error_event_mask,
+  output [CNT_WIDTH-1:0]   status_err_cnt
 );
 
   localparam EVENT_WIDTH_LOG = $clog2(EVENT_WIDTH+1);
   localparam CNT_LOW_WIDTH = CNT_WIDTH / 2;
   localparam CNT_HIGH_WIDTH = CNT_WIDTH - CNT_LOW_WIDTH;
 
-  wire [CNT_LOW_WIDTH:0]  cnt_low_nx  = {1'b0, cnt_low} + err_incr;
-  wire [CNT_HIGH_WIDTH-1:0] cnt_high_nx = cnt_high + cnt_carry;
-
-  reg  [EVENT_WIDTH-1:0] err;
+  reg  [EVENT_WIDTH-1:0]     err;
   reg  [EVENT_WIDTH_LOG-1:0] err_incr = 'h0;
-  reg  [CNT_LOW_WIDTH-1:0] cnt_low  = 'h0;
-  reg  [CNT_LOW_WIDTH-1:0] cnt_low_dly  = 'h0;
-  reg  [CNT_HIGH_WIDTH-1:0] cnt_high = 'h0;
-  reg  cnt_carry = 1'b0;
+  reg  [CNT_LOW_WIDTH-1:0]   cnt_low  = 'h0;
+  reg  [CNT_LOW_WIDTH-1:0]   cnt_low_dly  = 'h0;
+  reg  [CNT_HIGH_WIDTH-1:0]  cnt_high = 'h0;
+  reg                        cnt_carry = 1'b0;
+
+  wire [CNT_LOW_WIDTH:0]     cnt_low_nx  = {1'b0, cnt_low} + err_incr;
+  wire [CNT_HIGH_WIDTH-1:0]  cnt_high_nx = cnt_high + cnt_carry;
 
   function [EVENT_WIDTH_LOG-1:0] num_set_bits;
   input [EVENT_WIDTH-1:0] x;

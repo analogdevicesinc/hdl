@@ -71,10 +71,10 @@ module loopback_64b_tb;
 
   reg [5:0] tx_counter = 'h00;
   reg [5:0] rx_counter = 'h00;
+  reg data_mismatch = 1'b1;
   wire tx_ready;
   wire rx_valid;
   wire [NUM_LANES*64-1:0] rx_data;
-  reg data_mismatch = 1'b1;
 
   always @(posedge clk) begin
     if (tx_ready == 1'b1) begin
@@ -96,6 +96,12 @@ module loopback_64b_tb;
     end
   end
 
+  reg [NUM_LANES-1:0] phy_block_sync = {NUM_LANES{1'b1}};
+
+  reg [5:0] sysref_counter = 'h00;
+  reg sysref_rx = 1'b0;
+  reg sysref_tx = 1'b0;
+
   wire [63:0] tx_data =
       {{tx_counter,2'h0,tx_counter,2'h1,tx_counter,2'h2,tx_counter,2'h3},
        {tx_counter,2'h3,tx_counter,2'h2,tx_counter,2'h1,tx_counter,2'h0}};
@@ -107,12 +113,6 @@ module loopback_64b_tb;
   wire [NUM_LANES*2-1:0] phy_header_out;
   wire [NUM_LANES*64-1:0] phy_data_in;
   wire [NUM_LANES*2-1:0] phy_header_in;
-
-  reg [NUM_LANES-1:0] phy_block_sync = {NUM_LANES{1'b1}};
-
-  reg [5:0] sysref_counter = 'h00;
-  reg sysref_rx = 1'b0;
-  reg sysref_tx = 1'b0;
 
   always @(posedge clk) begin
     if (sysref_counter == 'h2f)

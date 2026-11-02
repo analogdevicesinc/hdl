@@ -58,39 +58,43 @@ module jesd204_rx_lane_64b #(
   // sampled value is always the one from the half multiblock beat.
   parameter ALL_BUFFER_READY_DELAY = 0
 ) (
-  input clk,
-  input reset,
+  input                                  clk,
+  input                                  reset,
 
-  input device_clk,
-  input device_reset,
+  input                                  device_clk,
+  input                                  device_reset,
 
-  input [63:0] phy_data,
-  input [1:0] phy_header,
-  input phy_block_sync,
+  input      [63:0]                      phy_data,
+  input      [1:0]                       phy_header,
+  input                                  phy_block_sync,
 
-  output [TPL_DATA_PATH_WIDTH*8-1:0] rx_data,
+  output     [TPL_DATA_PATH_WIDTH*8-1:0] rx_data,
 
-  output reg buffer_ready_n = 'b1,
-  input all_buffer_ready_n,
-  input buffer_release_n,
+  output reg                             buffer_ready_n = 'b1,
+  input                                  all_buffer_ready_n,
+  input                                  buffer_release_n,
 
-  input lmfc_edge,
-  output emb_lock,
+  input                                  lmfc_edge,
+  output                                 emb_lock,
 
-  input cfg_disable_scrambler,
-  input [1:0] cfg_header_mode,  // 0 - CRC12 ; 1 - CRC3; 2 - FEC; 3 - CMD
-  input [4:0] cfg_rx_thresh_emb_err,
-  input [7:0] cfg_beats_per_multiframe,
+  input                                  cfg_disable_scrambler,
+  input      [1:0]                       cfg_header_mode,  // 0 - CRC12 ; 1 - CRC3; 2 - FEC; 3 - CMD
+  input      [4:0]                       cfg_rx_thresh_emb_err,
+  input      [7:0]                       cfg_beats_per_multiframe,
 
-  input ctrl_err_statistics_reset,
-  input [5:0] ctrl_err_statistics_mask,
-  output [31:0] status_err_statistics_cnt,
+  input                                  ctrl_err_statistics_reset,
+  input      [5:0]                       ctrl_err_statistics_mask,
+  output     [31:0]                      status_err_statistics_cnt,
 
-  output [2:0] status_lane_emb_state,
-  output reg [7:0] status_lane_skew
+  output     [2:0]                       status_lane_emb_state,
+  output reg [7:0]                       status_lane_skew
 );
 
   reg  [11:0] crc12_calculated_prev;
+
+  reg  [2:1]  buffer_not_ready_r;
+  reg  [2:1]  buffer_ready_r;
+  reg  [5:0]  ctrl_err_statistics_mask_r;
 
   wire [63:0] phy_data_r;
   wire [11:0] crc12_received_r;
@@ -100,34 +104,31 @@ module jesd204_rx_lane_64b #(
   wire [11:0] crc12_received;
   wire [11:0] crc12_calculated;
 
-  wire event_invalid_header;
-  wire event_unexpected_eomb;
-  wire event_unexpected_eoemb;
-  wire event_crc12_mismatch;
-  wire event_fec_trapped_error_flag;
-  wire event_fec_untrapped_error_flag;
-  wire err_cnt_rst;
+  wire        event_invalid_header;
+  wire        event_unexpected_eomb;
+  wire        event_unexpected_eoemb;
+  wire        event_crc12_mismatch;
+  wire        event_fec_trapped_error_flag;
+  wire        event_fec_untrapped_error_flag;
+  wire        err_cnt_rst;
 
   wire [63:0] rx_data_msb_s;
 
-  wire eomb;
-  wire eoemb;
-  wire eomb_r;
-  wire valid_fec;
+  wire        eomb;
+  wire        eoemb;
+  wire        eomb_r;
+  wire        valid_fec;
   wire [25:0] fec_received;
-  wire fec_en;
+  wire        fec_en;
   wire [63:0] fec_data_out;
   wire [63:0] scram_data_in;
-  wire fec_data_out_valid;
-  wire fec_trapped_error_flag;
-  wire fec_untrapped_error_flag;
-  wire buffer_not_ready_next;
-  wire buffer_ready_next;
-  reg [2:1] buffer_not_ready_r;
-  reg [2:1] buffer_ready_r;
-  reg [5:0] ctrl_err_statistics_mask_r;
+  wire        fec_data_out_valid;
+  wire        fec_trapped_error_flag;
+  wire        fec_untrapped_error_flag;
+  wire        buffer_not_ready_next;
+  wire        buffer_ready_next;
 
-  wire [7:0] sh_count;
+  wire [7:0]  sh_count;
 
   jesd204_rx_header #(
     .ENABLE_FEC (ENABLE_FEC)
