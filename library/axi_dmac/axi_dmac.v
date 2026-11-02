@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -88,10 +88,11 @@ module axi_dmac #(
   parameter AUTORUN_DEST_STRIDE = 0,
   parameter AUTORUN_SG_ADDRESS = 0,
   parameter AUTORUN_FRAMELOCK_CONFIG = 0,
-  parameter AUTORUN_FRAMELOCK_STRIDE = 0
+  parameter AUTORUN_FRAMELOCK_STRIDE = 0,
+  parameter REGMAP_INTERFACE = 0
 ) (
 
-  // Slave AXI interface
+  // Slave AXI interface (REGMAP_INTERFACE = 0)
   input s_axi_aclk,
   input s_axi_aresetn,
 
@@ -114,6 +115,18 @@ module axi_dmac #(
   input         s_axi_rready,
   output [ 1:0] s_axi_rresp,
   output [31:0] s_axi_rdata,
+
+  // Slave APB interface (REGMAP_INTERFACE = 1)
+  input         s_apb_pclk,
+  input         s_apb_presetn,
+  input  [10:0] s_apb_paddr,
+  input         s_apb_penable,
+  output [31:0] s_apb_prdata,
+  output        s_apb_pready,
+  input         s_apb_psel,
+  output        s_apb_pslverr,
+  input  [31:0] s_apb_pwdata,
+  input         s_apb_pwrite,
 
   // Interrupt
   output irq,
@@ -420,6 +433,21 @@ module axi_dmac #(
                               DMA_TYPE_DEST != DMA_TYPE_AXI_MM;
 
   // ID signals from the DMAC, just for debugging
+  // clock and reset of the register map interface, also of the control side
+  // of the transfer
+  wire ctrl_clk;
+  wire ctrl_resetn;
+
+  generate
+  if (REGMAP_INTERFACE == 1) begin
+    assign ctrl_clk = s_apb_pclk;
+    assign ctrl_resetn = s_apb_presetn;
+  end else begin
+    assign ctrl_clk = s_axi_aclk;
+    assign ctrl_resetn = s_axi_aresetn;
+  end
+  endgenerate
+
   wire [ID_WIDTH-1:0] dest_request_id;
   wire [ID_WIDTH-1:0] dest_data_id;
   wire [ID_WIDTH-1:0] dest_address_id;
@@ -511,10 +539,11 @@ module axi_dmac #(
     .AUTORUN_DEST_STRIDE(AUTORUN_DEST_STRIDE),
     .AUTORUN_SG_ADDRESS(AUTORUN_SG_ADDRESS),
     .AUTORUN_FRAMELOCK_CONFIG(AUTORUN_FRAMELOCK_CONFIG),
-    .AUTORUN_FRAMELOCK_STRIDE(AUTORUN_FRAMELOCK_STRIDE)
+    .AUTORUN_FRAMELOCK_STRIDE(AUTORUN_FRAMELOCK_STRIDE),
+    .REGMAP_INTERFACE(REGMAP_INTERFACE)
   ) i_regmap (
-    .s_axi_aclk(s_axi_aclk),
-    .s_axi_aresetn(s_axi_aresetn),
+    .s_axi_aclk(ctrl_clk),
+    .s_axi_aresetn(ctrl_resetn),
 
     .s_axi_awvalid(s_axi_awvalid),
     .s_axi_awaddr(s_axi_awaddr),
@@ -535,6 +564,15 @@ module axi_dmac #(
     .s_axi_rready(s_axi_rready),
     .s_axi_rresp(s_axi_rresp),
     .s_axi_rdata(s_axi_rdata),
+
+    .s_apb_paddr(s_apb_paddr),
+    .s_apb_penable(s_apb_penable),
+    .s_apb_prdata(s_apb_prdata),
+    .s_apb_pready(s_apb_pready),
+    .s_apb_psel(s_apb_psel),
+    .s_apb_pslverr(s_apb_pslverr),
+    .s_apb_pwdata(s_apb_pwdata),
+    .s_apb_pwrite(s_apb_pwrite),
 
     // Interrupt
     .irq(irq),
@@ -617,8 +655,8 @@ module axi_dmac #(
     .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
     .USE_EXT_SYNC(USE_EXT_SYNC)
   ) i_transfer (
-    .ctrl_clk(s_axi_aclk),
-    .ctrl_resetn(s_axi_aresetn),
+    .ctrl_clk(ctrl_clk),
+    .ctrl_resetn(ctrl_resetn),
 
     .ctrl_enable(ctrl_enable),
     .ctrl_pause(ctrl_pause),
