@@ -81,9 +81,9 @@ global xcvr_config_paths
 set JESD_MODE [get_env_param JESD_MODE 64B66B]
 
 set xcvr_config_paths [adi_xcvr_project [list \
-  LANE_RATE [get_env_param LANE_RATE 16.22] \
-  REF_CLK   [get_env_param REF_CLK   491.5151515] \
-  PLL_TYPE  [get_env_param PLL_TYPE  QPLL0] \
+  LANE_RATE [get_env_param LANE_RATE 4.05504] \
+  REF_CLK   [get_env_param REF_CLK   122.88] \
+  PLL_TYPE  [get_env_param PLL_TYPE  QPLL1] \
   JESD_MODE $JESD_MODE \
 ]]
 
@@ -106,18 +106,18 @@ set xcvr_config_paths [adi_xcvr_project [list \
 adi_project adrv904x_zcu102 0 [list \
   JESD_MODE       $JESD_MODE \
   ORX_ENABLE      [get_env_param ORX_ENABLE         0] \
-  TX_LANE_RATE    [get_env_param TX_LANE_RATE   16.22] \
-  RX_LANE_RATE    [get_env_param RX_LANE_RATE   16.22] \
+  TX_LANE_RATE    [get_env_param TX_LANE_RATE   4.05504] \
+  RX_LANE_RATE    [get_env_param RX_LANE_RATE   4.05504] \
   TX_NUM_LINKS    [get_env_param TX_NUM_LINKS       1] \
   RX_NUM_LINKS    [get_env_param RX_NUM_LINKS       1] \
   RX_OS_NUM_LINKS [get_env_param RX_OS_NUM_LINKS    1] \
   TX_JESD_M       [get_env_param TX_JESD_M         16] \
-  TX_JESD_L       [get_env_param TX_JESD_L          8] \
+  TX_JESD_L       [get_env_param TX_JESD_L          4] \
   TX_JESD_S       [get_env_param TX_JESD_S          1] \
   TX_JESD_NP      [get_env_param TX_JESD_NP        16] \
   TX_TPL_WIDTH    [get_env_param TX_TPL_WIDTH      {}] \
   RX_JESD_M       [get_env_param RX_JESD_M         16] \
-  RX_JESD_L       [get_env_param RX_JESD_L          8] \
+  RX_JESD_L       [get_env_param RX_JESD_L          4] \
   RX_JESD_S       [get_env_param RX_JESD_S          1] \
   RX_JESD_NP      [get_env_param RX_JESD_NP        16] \
   RX_TPL_WIDTH    [get_env_param RX_TPL_WIDTH      {}] \

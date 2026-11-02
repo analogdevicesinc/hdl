@@ -143,6 +143,13 @@ set_property -dict {PACKAGE_PIN U4   IOSTANDARD LVCMOS18} [get_ports spi_mosi]  
 
 # clocks
 
-create_clock -period 4.069 -name device_clk [get_ports core_clk_p]
-create_clock -period 4.069 -name tx_ref_clk [get_ports ref_clk0_p]
-create_clock -period 4.069 -name rx_ref_clk [get_ports ref_clk1_p]
+create_clock -period 16.276 -name device_clk [get_ports core_clk_p]
+create_clock -period 8.138 -name tx_ref_clk [get_ports ref_clk0_p]
+create_clock -period 8.138 -name rx_ref_clk [get_ports ref_clk1_p]
+
+# debug capture (PROBE_RX=1 builds only)
+
+set_false_path -quiet -to [get_cells -quiet -hier -filter {NAME =~ *rx_capture_0*arm_sync_reg*}]
+set_false_path -quiet -to [get_cells -quiet -hier -filter {NAME =~ *rx_capture_0*ctrl_d1_reg*}]
+set_false_path -quiet -to [get_cells -quiet -hier -filter {NAME =~ *rx_capture_0*done_sync_reg*}]
+set_false_path -quiet -to [get_cells -quiet -hier -filter {NAME =~ *rx_capture_0*rd_word_reg*}]

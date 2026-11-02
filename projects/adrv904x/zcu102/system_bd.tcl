@@ -73,3 +73,45 @@ sysid_gen_sys_init_file $sys_cstring 10
 source ../common/adrv904x_bd.tcl
 
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ {300}
+
+set_property -dict [list \
+  CONFIG.RXCDR_CFG2 {0x0256} \
+  CONFIG.RXCDR_CFG2_GEN2 {0x256} \
+] [get_bd_cells util_adrv904x_xcvr]
+
+if {[info exists ::env(PROBE_RX)] && $::env(PROBE_RX) == 1} {
+  add_files -norecurse -fileset sources_1 $ad_hdl_dir/projects/adrv904x/common/rx_capture.v
+  update_compile_order -fileset sources_1
+  create_bd_cell -type module -reference rx_capture rx_capture_0
+  ad_ip_instance xlconcat probe_rx_hdr [list \
+    NUM_PORTS 4 \
+    IN0_WIDTH 2 \
+    IN1_WIDTH 2 \
+    IN2_WIDTH 2 \
+    IN3_WIDTH 2 \
+  ]
+  ad_ip_instance xlconcat probe_rx_bs [list NUM_PORTS 4]
+  ad_connect util_adrv904x_xcvr/rx_header_1     probe_rx_hdr/In0
+  ad_connect util_adrv904x_xcvr/rx_header_0     probe_rx_hdr/In1
+  ad_connect util_adrv904x_xcvr/rx_header_3     probe_rx_hdr/In2
+  ad_connect util_adrv904x_xcvr/rx_header_2     probe_rx_hdr/In3
+  ad_connect util_adrv904x_xcvr/rx_block_sync_1 probe_rx_bs/In0
+  ad_connect util_adrv904x_xcvr/rx_block_sync_0 probe_rx_bs/In1
+  ad_connect util_adrv904x_xcvr/rx_block_sync_3 probe_rx_bs/In2
+  ad_connect util_adrv904x_xcvr/rx_block_sync_2 probe_rx_bs/In3
+  ad_connect util_adrv904x_xcvr/rx_out_clk_div2_0 rx_capture_0/rx_clk
+  ad_connect util_adrv904x_xcvr/rx_data_1         rx_capture_0/rx_data
+  ad_connect probe_rx_hdr/dout                    rx_capture_0/rx_header
+  ad_connect probe_rx_bs/dout                     rx_capture_0/rx_block_sync
+  ad_connect sys_cpu_clk                          rx_capture_0/up_clk
+  ad_ip_instance axi_gpio probe_rx_gpio [list \
+    C_IS_DUAL 1 \
+    C_ALL_OUTPUTS 1 \
+    C_ALL_INPUTS_2 1 \
+    C_GPIO_WIDTH 32 \
+    C_GPIO2_WIDTH 32 \
+  ]
+  ad_connect probe_rx_gpio/gpio_io_o   rx_capture_0/up_ctrl
+  ad_connect rx_capture_0/up_rdata     probe_rx_gpio/gpio2_io_i
+  ad_cpu_interconnect 0x44B00000 probe_rx_gpio
+}

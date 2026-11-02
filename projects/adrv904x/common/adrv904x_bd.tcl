@@ -146,17 +146,17 @@ create_bd_port -dir I rx_os_sysref
 # dac peripherals
 ad_ip_instance axi_clkgen axi_adrv904x_tx_clkgen
 ad_ip_parameter axi_adrv904x_tx_clkgen CONFIG.ID 2
-ad_ip_parameter axi_adrv904x_tx_clkgen CONFIG.CLKIN_PERIOD 4
+ad_ip_parameter axi_adrv904x_tx_clkgen CONFIG.CLKIN_PERIOD 16.276
 ad_ip_parameter axi_adrv904x_tx_clkgen CONFIG.VCO_DIV 1
-ad_ip_parameter axi_adrv904x_tx_clkgen CONFIG.VCO_MUL 4
-ad_ip_parameter axi_adrv904x_tx_clkgen CONFIG.CLK0_DIV 4
+ad_ip_parameter axi_adrv904x_tx_clkgen CONFIG.VCO_MUL 16
+ad_ip_parameter axi_adrv904x_tx_clkgen CONFIG.CLK0_DIV 16
 
 ad_ip_instance axi_adxcvr axi_adrv904x_tx_xcvr
 ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
 ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.NUM_OF_LANES $MAX_TX_NUM_OF_LANES
 ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.QPLL_ENABLE 1
 ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.TX_OR_RX_N 1
-ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.SYS_CLK_SEL 3
+ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.SYS_CLK_SEL 2
 ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.OUT_CLK_SEL 3
 
 adi_axi_jesd204_tx_create axi_adrv904x_tx_jesd $TX_NUM_OF_LANES $TX_NUM_LINKS $ENCODER_SEL
@@ -204,17 +204,17 @@ ad_ip_parameter axi_adrv904x_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 # adc peripherals
 ad_ip_instance axi_clkgen axi_adrv904x_rx_clkgen
 ad_ip_parameter axi_adrv904x_rx_clkgen CONFIG.ID 2
-ad_ip_parameter axi_adrv904x_rx_clkgen CONFIG.CLKIN_PERIOD 4
+ad_ip_parameter axi_adrv904x_rx_clkgen CONFIG.CLKIN_PERIOD 16.276
 ad_ip_parameter axi_adrv904x_rx_clkgen CONFIG.VCO_DIV 1
-ad_ip_parameter axi_adrv904x_rx_clkgen CONFIG.VCO_MUL 4
-ad_ip_parameter axi_adrv904x_rx_clkgen CONFIG.CLK0_DIV 4
+ad_ip_parameter axi_adrv904x_rx_clkgen CONFIG.VCO_MUL 16
+ad_ip_parameter axi_adrv904x_rx_clkgen CONFIG.CLK0_DIV 16
 
 ad_ip_instance axi_adxcvr axi_adrv904x_rx_xcvr
 ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
 ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.NUM_OF_LANES $MAX_RX_NUM_OF_LANES
 ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.QPLL_ENABLE 0
 ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.TX_OR_RX_N 0
-ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.SYS_CLK_SEL 3
+ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.SYS_CLK_SEL 0
 ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.OUT_CLK_SEL 3
 
 adi_axi_jesd204_rx_create axi_adrv904x_rx_jesd $RX_NUM_OF_LANES $RX_NUM_LINKS $ENCODER_SEL
@@ -261,10 +261,10 @@ if {$ORX_ENABLE} {
   # adc-obs peripherals
   ad_ip_instance axi_clkgen axi_adrv904x_rx_os_clkgen
   ad_ip_parameter axi_adrv904x_rx_os_clkgen CONFIG.ID 2
-  ad_ip_parameter axi_adrv904x_rx_os_clkgen CONFIG.CLKIN_PERIOD 4
+  ad_ip_parameter axi_adrv904x_rx_os_clkgen CONFIG.CLKIN_PERIOD 16.276
   ad_ip_parameter axi_adrv904x_rx_os_clkgen CONFIG.VCO_DIV 1
-  ad_ip_parameter axi_adrv904x_rx_os_clkgen CONFIG.VCO_MUL 4
-  ad_ip_parameter axi_adrv904x_rx_os_clkgen CONFIG.CLK0_DIV 4
+  ad_ip_parameter axi_adrv904x_rx_os_clkgen CONFIG.VCO_MUL 16
+  ad_ip_parameter axi_adrv904x_rx_os_clkgen CONFIG.CLK0_DIV 16
 
   ad_ip_instance axi_adxcvr axi_adrv904x_rx_os_xcvr
   ad_ip_parameter axi_adrv904x_rx_os_xcvr CONFIG.LINK_MODE $ENCODER_SEL
@@ -322,6 +322,8 @@ global xcvr_config_paths
 set util_adxcvr_parameters [adi_xcvr_parameters $xcvr_config_paths [list \
   RX_NUM_OF_LANES [expr $MAX_RX_NUM_OF_LANES + $MAX_RX_OS_NUM_OF_LANES] \
   TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES \
+  RX_LANE_RATE $RX_LANE_RATE\
+  TX_LANE_RATE $TX_LANE_RATE\
   RX_LANE_INVERT 255 \
   TX_LANE_INVERT 240 \
   LINK_MODE $ENCODER_SEL \
@@ -339,6 +341,7 @@ ad_connect adrv904x_tx_device_clk axi_adrv904x_tx_clkgen/clk_0
 ad_connect core_clk axi_adrv904x_tx_clkgen/clk
 
 ad_xcvrcon util_adrv904x_xcvr axi_adrv904x_tx_xcvr axi_adrv904x_tx_jesd {} {} adrv904x_tx_device_clk $MAX_TX_NUM_OF_LANES {6 5 7 4 2 0 1 3}
+# ad_xcvrcon util_adrv904x_xcvr axi_adrv904x_tx_xcvr axi_adrv904x_tx_jesd {} {} adrv904x_tx_device_clk $TX_NUM_OF_LANES {2 0 1 3}
 
 ad_xcvrpll $tx_ref_clk util_adrv904x_xcvr/qpll_ref_clk_0
 ad_xcvrpll axi_adrv904x_tx_xcvr/up_pll_rst util_adrv904x_xcvr/up_qpll_rst_0
@@ -350,6 +353,7 @@ ad_connect adrv904x_rx_device_clk axi_adrv904x_rx_clkgen/clk_0
 ad_connect core_clk axi_adrv904x_rx_clkgen/clk
 
 ad_xcvrcon  util_adrv904x_xcvr axi_adrv904x_rx_xcvr axi_adrv904x_rx_jesd {} {} adrv904x_rx_device_clk $MAX_RX_NUM_OF_LANES {1 0 3 2 7 4 5 6}
+# ad_xcvrcon  util_adrv904x_xcvr axi_adrv904x_rx_xcvr axi_adrv904x_rx_jesd {} {} adrv904x_rx_device_clk $RX_NUM_OF_LANES {1 0 3 2}
 
 for {set i 0} {$i < $MAX_RX_NUM_OF_LANES} {incr i} {
   if {$i < 4} {
