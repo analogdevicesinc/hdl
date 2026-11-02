@@ -16,6 +16,9 @@ bit file, to facilitate future debugging actions. This information will be
 stored internally in a ROM and will be made available to the system via the
 AXI Lite interface.
 
+An APB variant for Microchip PolarFire SoC, with the same register map, is at
+:git-hdl:`library/axi_sysid/apb_sysid`.
+
 Files
 --------------------------------------------------------------------------------
 
