@@ -32,6 +32,7 @@ CLEAN_TARGET += *.hw
 CLEAN_TARGET += *.sim
 CLEAN_TARGET += .Xil
 CLEAN_TARGET += .timestamp_intel
+CLEAN_TARGET += .timestamp_microchip
 CLEAN_TARGET += *.hbs
 CLEAN_TARGET += tb/*.log
 CLEAN_TARGET += tb/*.xml
@@ -60,9 +61,9 @@ endif
 
 GENERIC_DEPS += $(HDL_LIBRARY_PATH)../scripts/adi_env.tcl
 
-.PHONY: all intel xilinx lattice clean clean-all ltt-interfaces clean-ltt-interfaces
+.PHONY: all intel xilinx lattice microchip clean clean-all ltt-interfaces clean-ltt-interfaces
 
-all: intel xilinx lattice
+all: intel xilinx lattice microchip
 
 clean: clean-all
 
@@ -170,5 +171,22 @@ ltt-interfaces:
 
 clean-ltt-interfaces:
 	$(foreach dep,$(_LATTICE_INTF_DEPS),$(MAKE) -C $(dep) clean-all;)
+
+endif
+
+ifneq ($(MICROCHIP_DEPS),)
+
+MICROCHIP_DEPS += $(GENERIC_DEPS)
+MICROCHIP_DEPS += $(EXTERNAL_DEPS)
+
+microchip: .timestamp_microchip
+
+.timestamp_microchip: $(MICROCHIP_DEPS)
+	touch $@
+
+else
+
+microchip:
+	@true
 
 endif
