@@ -93,6 +93,20 @@ module util_do_ram #(
   localparam SRC_ADDRESS_WIDTH = LENGTH_WIDTH - SRC_ADDR_ALIGN;
   localparam DST_ADDRESS_WIDTH = LENGTH_WIDTH - DST_ADDR_ALIGN;
 
+  reg                         wr_full = 1'b0;
+  reg [SRC_ADDRESS_WIDTH-1:0] wr_addr = 'h0;
+  reg [SRC_ADDRESS_WIDTH-1:0] wr_length = 'h0;
+  reg                         rd_active = 1'b0;
+  reg [1:0]                   rd_req_cnt = 2'b0;
+  reg [DST_ADDRESS_WIDTH-1:0] rd_addr = 'h0;
+  reg [DST_ADDRESS_WIDTH-1:0] rd_length = 'h0;
+  reg                         rd_valid_l1 = 1'b0;
+  reg                         rd_valid_l2 = 1'b0;
+  reg                         rd_last_l1 = 1'b0;
+  reg                         rd_last_l2 = 1'b0;
+  reg [DST_DATA_WIDTH-1:0]    rd_data_l2 = 'h0;
+  reg [DST_DATA_WIDTH/8-1:0]  rd_keep_l2 = 'h0;
+
   wire                        wr_enable;
   wire                        wr_last_beat;
   wire                        rd_early_finish;
@@ -110,20 +124,6 @@ module util_do_ram #(
   wire                        rd_fifo_s_last;
   wire [DST_DATA_WIDTH-1:0]   rd_fifo_s_data;
   wire [DST_DATA_WIDTH/8-1:0] rd_fifo_s_keep;
-
-  reg                         wr_full = 1'b0;
-  reg [SRC_ADDRESS_WIDTH-1:0] wr_addr = 'h0;
-  reg [SRC_ADDRESS_WIDTH-1:0] wr_length = 'h0;
-  reg                         rd_active = 1'b0;
-  reg [1:0]                   rd_req_cnt = 2'b0;
-  reg [DST_ADDRESS_WIDTH-1:0] rd_addr = 'h0;
-  reg [DST_ADDRESS_WIDTH-1:0] rd_length = 'h0;
-  reg                         rd_valid_l1 = 1'b0;
-  reg                         rd_valid_l2 = 1'b0;
-  reg                         rd_last_l1 = 1'b0;
-  reg                         rd_last_l2 = 1'b0;
-  reg [DST_DATA_WIDTH-1:0]    rd_data_l2 = 'h0;
-  reg [DST_DATA_WIDTH/8-1:0]  rd_keep_l2 = 'h0;
 
   always @(posedge s_axis_aclk) begin
     if (~s_axis_aresetn)
