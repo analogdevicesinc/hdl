@@ -1,8 +1,8 @@
-# ADAQ7980-SDZ HDL Project
+# ADAQ7980 HDL Project
 
 - Evaluation board product page: [EVAL-ADAQ7980](https://www.analog.com/eval-adaq7980)
 - System documentation: https://developer.analog.com/docs/no-os/projects/adc/adaq7980_sdz.html
-- HDL project documentation: https://developer.analog.com/docs/hdl/projects/adaq7980_sdz/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/adaq7980/
 - Evaluation board VADJ: 3.3V
 
 ## Supported parts

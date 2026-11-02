@@ -36,11 +36,11 @@ source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project adaq7980_sdz_zed
+adi_project adaq7980_zed
 
-adi_project_files adaq7980_sdz_zed [list \
+adi_project_files adaq7980_zed [list \
     "$ad_hdl_dir/library/common/ad_iobuf.v" \
     "system_top.v" \
     "system_constr.xdc"]
 
-adi_project_run adaq7980_sdz_zed
+adi_project_run adaq7980_zed
