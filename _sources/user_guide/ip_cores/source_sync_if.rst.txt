@@ -31,8 +31,9 @@ In general, a source synchronous interface consists of a clock reception
 module, which contains all the necessary IO resource instances to receive the
 digital interface clock from the device. Depending on the device type, it may
 also contain a data reception and/or a data transmission module. The
-interface exposed to the FPGA logic is a simplified FIFO interface, described
-in more detail :dokuwiki:`here <resources/fpga/docs/adi_fifo_if>`.
+interface exposed to the FPGA logic is a simplified FIFO interface in the
+``CORE_CLK`` domain, made of per-channel enable, valid and data signals, like
+the Write FIFO interface of the :ref:`axi_adc` IP core.
 
 The ``CORE_CLK`` can have the same frequency as the ``PHY_CLK``, or an
 integer division of the ``PHY_CLK`` frequency. The general rule of thumb is

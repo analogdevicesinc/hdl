@@ -453,8 +453,9 @@ common source (clock generator IC).</p>
 module, which contains all the necessary IO resource instances to receive the
 digital interface clock from the device. Depending on the device type, it may
 also contain a data reception and/or a data transmission module. The
-interface exposed to the FPGA logic is a simplified FIFO interface, described
-in more detail <a class="icon dokuwiki reference external" href="https://wiki.analog.com/resources/fpga/docs/adi_fifo_if" target="_blank">here</a>.</p>
+interface exposed to the FPGA logic is a simplified FIFO interface in the
+<code class="docutils literal notranslate"><span class="pre">CORE_CLK</span></code> domain, made of per-channel enable, valid and data signals, like
+the Write FIFO interface of the <a class="reference internal" href="../axi_adc/#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a> IP core.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">CORE_CLK</span></code> can have the same frequency as the <code class="docutils literal notranslate"><span class="pre">PHY_CLK</span></code>, or an
 integer division of the <code class="docutils literal notranslate"><span class="pre">PHY_CLK</span></code> frequency. The general rule of thumb is
 to keep the <code class="docutils literal notranslate"><span class="pre">CORE_CLK</span></code> frequency below 200 MHz, since it is used throughout
