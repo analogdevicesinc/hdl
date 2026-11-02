@@ -53,11 +53,49 @@ set ip [ipl::general -ip $ip \
 
 set ip [ipl::add_axi_interfaces -ip $ip -mod_data $mod_data]
 
+set ip [ipl::add_interface -ip $ip \
+    -inst_name s_apb \
+    -display_name s_apb \
+    -description s_apb \
+    -master_slave slave \
+    -portmap [list {"s_apb_paddr" "PADDR"} \
+                    {"s_apb_penable" "PENABLE"} \
+                    {"s_apb_prdata" "PRDATA"} \
+                    {"s_apb_pready" "PREADY"} \
+                    {"s_apb_psel" "PSELx"} \
+                    {"s_apb_pslverr" "PSLVERR"} \
+                    {"s_apb_pwdata" "PWDATA"} \
+                    {"s_apb_pwrite" "PWRITE"}] \
+    -mem_map_ref axi_sysid_mem_map \
+    -vlnv "amba.com:AMBA3:APB:r1p0"]
+
 # Use this only if you don't want to costumize the IP parameters!
 set ip [ipl::add_parameters_from_module -ip $ip -mod_data $mod_data]
 
+set ip [ipl::set_parameter -ip $ip \
+    -id REGMAP_INTERFACE \
+    -type param \
+    -value_type int \
+    -conn_mod axi_sysid \
+    -title {Register Map Interface} \
+    -options {[('AXI', 0), ('APB', 1)]} \
+    -default 0 \
+    -output_formatter nostr \
+    -group1 {Register Control} \
+    -group2 GLOB]
+
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
+    -mod_data $mod_data \
+    -v_prefix s_axi \
+    -expression {(REGMAP_INTERFACE != 0)}]
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
+    -mod_data $mod_data \
+    -v_prefix s_apb \
+    -expression {(REGMAP_INTERFACE != 1)}]
+
 set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
    axi_sysid.v \
+   ../common/up_apb.v \
    ../common/up_axi.v \
 ]]
 

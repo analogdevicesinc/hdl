@@ -38,6 +38,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_sysid
 adi_ip_files axi_sysid [list \
+  "$ad_hdl_dir/library/common/up_apb.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "axi_sysid.v"]
 
@@ -46,5 +47,41 @@ adi_ip_properties axi_sysid
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_sysid} [ipx::current_core]
 
 set cc [ipx::current_core]
+
+# register map interface: AXI (REGMAP_INTERFACE = 0) or APB (1)
+
+set_property ENABLEMENT_DEPENDENCY \
+  "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 0)" \
+  [ipx::get_bus_interfaces s_axi -of_objects $cc]
+foreach intf {s_axi_aclk s_axi_aresetn} {
+  set_property ENABLEMENT_DEPENDENCY \
+    "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 0)" \
+    [ipx::get_bus_interfaces $intf -of_objects $cc]
+}
+foreach port {aclk aresetn awvalid awaddr awprot awready wvalid wdata wstrb \
+              wready bvalid bresp bready arvalid araddr arprot arready rvalid \
+              rresp rdata rready} {
+  adi_set_ports_dependency "s_axi_$port" \
+    "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 0)" 0
+}
+foreach intf {s_apb_pclk s_apb_presetn} {
+  set_property ENABLEMENT_DEPENDENCY \
+    "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 1)" \
+    [ipx::get_bus_interfaces $intf -of_objects $cc]
+}
+adi_set_bus_dependency "s_apb" "s_apb" \
+  "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 1)"
+
+set_property -dict [list \
+  "display_name" "Register Map Interface" \
+  "value_validation_type" "pairs" \
+  "value_validation_pairs" {"AXI" "0" "APB" "1"} \
+] [ipx::get_user_parameters REGMAP_INTERFACE -of_objects $cc]
+set_property -dict [list \
+  "widget" "comboBox" \
+  "display_name" "Register Map Interface" \
+] [ipgui::get_guiparamspec -name "REGMAP_INTERFACE" -component $cc]
+
+ipx::create_xgui_files $cc
 
 ipx::save_core $cc
