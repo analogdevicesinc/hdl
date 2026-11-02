@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -36,9 +36,11 @@
 
 module axi_sysid #(
   parameter ROM_WIDTH = 32,
-  parameter ROM_ADDR_BITS = 9
+  parameter ROM_ADDR_BITS = 9,
+  parameter REGMAP_INTERFACE = 0
 ) (
-   //axi interface
+
+  // axi interface (REGMAP_INTERFACE = 0)
 
   input           s_axi_aclk,
   input           s_axi_aresetn,
@@ -62,12 +64,27 @@ module axi_sysid #(
   output  [31:0]  s_axi_rdata,
   input           s_axi_rready,
 
+  // apb interface (REGMAP_INTERFACE = 1)
+
+  input           s_apb_pclk,
+  input           s_apb_presetn,
+  input   [15:0]  s_apb_paddr,
+  input           s_apb_penable,
+  output  [31:0]  s_apb_prdata,
+  output          s_apb_pready,
+  input           s_apb_psel,
+  output          s_apb_pslverr,
+  input   [31:0]  s_apb_pwdata,
+  input           s_apb_pwrite,
+
   input   [ROM_WIDTH-1:0]           sys_rom_data,
   input   [ROM_WIDTH-1:0]           pr_rom_data,
   output  [ROM_ADDR_BITS-1:0]       rom_addr
 );
 
   localparam          AXI_ADDRESS_WIDTH    = 12;
+  localparam          S_AXI                = 0;
+  localparam          S_APB                = 1;
   localparam  [31:0]  CORE_VERSION         = {16'h0001,     /* MAJOR */
                                                 8'h01,      /* MINOR */
                                                 8'h61};     /* PATCH */
@@ -88,50 +105,96 @@ module axi_sysid #(
   wire  [31:0]                    up_wdata_s;
   wire  [31:0]                    rom_data_s;
 
-  assign up_clk = s_axi_aclk;
-  assign up_rstn = s_axi_aresetn;
-
   assign rom_addr = up_raddr_s [ROM_ADDR_BITS-1:0];
   assign rom_data_s = (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h1) ? sys_rom_data :
                     (up_raddr_s [ROM_ADDR_BITS + 1'h1: ROM_ADDR_BITS] == 2'h2) ? pr_rom_data : 'h0;
 
-  up_axi #(
-    .AXI_ADDRESS_WIDTH(ROM_ADDR_BITS+4)
-  ) i_up_axi (
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_axi_awvalid (s_axi_awvalid),
-    .up_axi_awaddr (s_axi_awaddr[ROM_ADDR_BITS+3:0]),
-    .up_axi_awready (s_axi_awready),
-    .up_axi_wvalid (s_axi_wvalid),
-    .up_axi_wdata (s_axi_wdata),
-    .up_axi_wstrb (s_axi_wstrb),
-    .up_axi_wready (s_axi_wready),
-    .up_axi_bvalid (s_axi_bvalid),
-    .up_axi_bresp (s_axi_bresp),
-    .up_axi_bready (s_axi_bready),
-    .up_axi_arvalid (s_axi_arvalid),
-    .up_axi_araddr (s_axi_araddr[ROM_ADDR_BITS+3:0]),
-    .up_axi_arready (s_axi_arready),
-    .up_axi_rvalid (s_axi_rvalid),
-    .up_axi_rresp (s_axi_rresp),
-    .up_axi_rdata (s_axi_rdata),
-    .up_axi_rready (s_axi_rready),
-    .up_wreq (up_wreq_s),
-    .up_waddr (up_waddr_s),
-    .up_wdata (up_wdata_s),
-    .up_wack (up_wack),
-    .up_rreq (up_rreq_s),
-    .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_s),
-    .up_rack (up_rack_s));
+  generate
+  if (REGMAP_INTERFACE == S_APB) begin
+
+    assign up_clk = s_apb_pclk;
+    assign up_rstn = s_apb_presetn;
+
+    up_apb #(
+      .APB_ADDRESS_WIDTH (ROM_ADDR_BITS+4)
+    ) i_up_apb (
+      .up_apb_presetn (up_rstn),
+      .up_apb_clk (up_clk),
+      .up_apb_paddr (s_apb_paddr[ROM_ADDR_BITS+3:0]),
+      .up_apb_penable (s_apb_penable),
+      .up_apb_prdata (s_apb_prdata),
+      .up_apb_pready (s_apb_pready),
+      .up_apb_pselx (s_apb_psel),
+      .up_apb_pslverr (s_apb_pslverr),
+      .up_apb_pwdata (s_apb_pwdata),
+      .up_apb_pwrite (s_apb_pwrite),
+      .up_wreq (up_wreq_s),
+      .up_waddr (up_waddr_s),
+      .up_wdata (up_wdata_s),
+      .up_wack (up_wack),
+      .up_rreq (up_rreq_s),
+      .up_raddr (up_raddr_s),
+      .up_rdata (up_rdata_s),
+      .up_rack (up_rack_s));
+
+    assign s_axi_awready = 1'b0;
+    assign s_axi_wready = 1'b0;
+    assign s_axi_bvalid = 1'b0;
+    assign s_axi_bresp = 2'd0;
+    assign s_axi_arready = 1'b0;
+    assign s_axi_rvalid = 1'b0;
+    assign s_axi_rresp = 2'd0;
+    assign s_axi_rdata = 32'd0;
+
+  end else begin
+
+    assign up_clk = s_axi_aclk;
+    assign up_rstn = s_axi_aresetn;
+
+    up_axi #(
+      .AXI_ADDRESS_WIDTH(ROM_ADDR_BITS+4)
+    ) i_up_axi (
+      .up_rstn (up_rstn),
+      .up_clk (up_clk),
+      .up_axi_awvalid (s_axi_awvalid),
+      .up_axi_awaddr (s_axi_awaddr[ROM_ADDR_BITS+3:0]),
+      .up_axi_awready (s_axi_awready),
+      .up_axi_wvalid (s_axi_wvalid),
+      .up_axi_wdata (s_axi_wdata),
+      .up_axi_wstrb (s_axi_wstrb),
+      .up_axi_wready (s_axi_wready),
+      .up_axi_bvalid (s_axi_bvalid),
+      .up_axi_bresp (s_axi_bresp),
+      .up_axi_bready (s_axi_bready),
+      .up_axi_arvalid (s_axi_arvalid),
+      .up_axi_araddr (s_axi_araddr[ROM_ADDR_BITS+3:0]),
+      .up_axi_arready (s_axi_arready),
+      .up_axi_rvalid (s_axi_rvalid),
+      .up_axi_rresp (s_axi_rresp),
+      .up_axi_rdata (s_axi_rdata),
+      .up_axi_rready (s_axi_rready),
+      .up_wreq (up_wreq_s),
+      .up_waddr (up_waddr_s),
+      .up_wdata (up_wdata_s),
+      .up_wack (up_wack),
+      .up_rreq (up_rreq_s),
+      .up_raddr (up_raddr_s),
+      .up_rdata (up_rdata_s),
+      .up_rack (up_rack_s));
+
+    assign s_apb_prdata = 32'd0;
+    assign s_apb_pready = 1'b0;
+    assign s_apb_pslverr = 1'b0;
+
+  end
+  endgenerate
 
   //delaying data read with 1 tck to compensate for the ROM latency
   always @(posedge up_clk) begin
     up_rreq_s_d <= up_rreq_s;
   end
 
-  //axi registers read
+  //registers read
   always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_rack_s <= 'd0;
@@ -155,7 +218,7 @@ module axi_sysid #(
     end
   end
 
-  //axi registers write
+  //registers write
   always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
       up_wack <= 'd0;
