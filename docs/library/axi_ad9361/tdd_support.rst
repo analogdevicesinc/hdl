@@ -63,8 +63,7 @@ data flow from or to the device will be controlled by this module.
    axi_ad9361 IP block diagram
 
 The AXI register map of the TDD controller, and the description of each
-registers can be found under the following link:
-`TDD REGISTER MAP <resources/fpga/docs/hdl/regmap#transceiver_tdd_control_axi_ad>`__
+registers can be found in the `Register Map`_ section below.
 
 The foundation of the TDD controller is a counter, which can be configured to
 count until a specified frame length. The maximum value of the counter can be

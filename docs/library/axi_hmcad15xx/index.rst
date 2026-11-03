@@ -233,12 +233,12 @@ Software Guidelines
   \* The register already exist in ADC Common. This is just a detailed
      explanation.
 
-Software Suppport
+Software Support
 --------------------------------------------------------------------------------
 
-  - :git-linux:`HMCAD15XX Linux driver <drivers/iio/adc/hmcad15xx.c>`
-  - :git-linux:`HMCAD15XX-FMC-EVB Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-hmcad15xx.dts>`
-  - :git-linux:`ADMX6020M device tree (8-bit) <arch/arm/boot/dts/xilinx/zynq-admx6020m.dts>`
+  - :git-linux:`HMCAD15XX Linux driver <gui+sharkbyte_pr:drivers/iio/adc/hmcad15xx.c>`
+  - :git-linux:`HMCAD15XX-FMC-EVB Linux device tree <gui+sharkbyte_pr:arch/arm/boot/dts/xilinx/zynq-zed-adv7511-hmcad15xx.dts>`
+  - :git-linux:`ADMX6020M device tree (8-bit) <gui+sharkbyte_pr:arch/arm/boot/dts/xilinx/zynq-admx6020m.dts>`
 
 References
 -------------------------------------------------------------------------------

@@ -223,11 +223,11 @@ Software Support
 
 .. collapsible:: Linux driver and device tree sources
 
-   * Linux device driver at :git-linux:`drivers/iio/dac/ad9740.c`
-   * Linux device tree at :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9740.dts`
-   * Linux device tree at :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9742.dts`
-   * Linux device tree at :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9744.dts`
-   * Linux device tree at :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9748.dts`
+   * Linux device driver at :git-linux:`dev_ad9740_wip:drivers/iio/dac/ad9740.c`
+   * Linux device tree at :git-linux:`dev_ad9740_wip:arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9740.dts`
+   * Linux device tree at :git-linux:`dev_ad9740_wip:arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9742.dts`
+   * Linux device tree at :git-linux:`dev_ad9740_wip:arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9744.dts`
+   * Linux device tree at :git-linux:`dev_ad9740_wip:arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9748.dts`
 
 References
 -------------------------------------------------------------------------------
