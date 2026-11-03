@@ -102,9 +102,9 @@ see :ref:`ADC register access <generic-adc-register-access>`.
 Software Support
 --------------------------------------------------------------------------------
 
-Linux driver at: :git-hdl:`drivers/iio/adc/ad7405.c`
+Linux driver at: :git-linux:`drivers/iio/adc/ad7405.c <main:drivers/iio/adc/ad7405.c>`
 
-Refereces
+References
 --------------------------------------------------------------------------------
 
 * HDL IP core at :git-hdl:`library/axi_ad7405`

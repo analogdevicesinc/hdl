@@ -451,9 +451,9 @@ HDL Example Projects
 
 - :ref:`ADRV9009-ZU11EG-SOM Reference Design <adrv9009zu11eg>` on:
 
-  - :git-hdl:`Intel Arria 10 SoC <projects/adrv9009zu11eg/a10soc>`
-  - :git-hdl:`Intel A10Gx (RETIRED) <hdl_2021_r1:projects/adrv9009zu11eg/a10gx>`
-  - :git-hdl:`AMD Xilinx ZC706 <projects/adrv9009zu11eg/zc706>`
+  - :git-hdl:`ADRV2CRR-FMC <projects/adrv9009zu11eg/adrv2crr_fmc>`
+  - :git-hdl:`ADRV2CRR-FMC + FMCOMMS8 <projects/adrv9009zu11eg/adrv2crr_fmcomms8>`
+  - :git-hdl:`ADRV2CRR-FMC + FMCXMWBR1 <projects/adrv9009zu11eg/adrv2crr_fmcxmwbr1>`
   - :git-hdl:`ADRV9009-ZU11EG-SOM <projects/adrv9009zu11eg>`
 
 - :ref:`AD913X/AD917X/AD9144/AD915X Reference Design (dac_fmc_ebz) <dac_fmc_ebz>` on:
@@ -529,13 +529,11 @@ HDL Example Projects
 - :ref:`ADRV9026 Reference Design <adrv9026>` on:
 
   - :git-hdl:`Intel Arria 10 SoC <projects/adrv9026/a10soc>`
-  - :git-hdl:`AMD Xilinx VCK190 <projects/adrv9026/vck190>`
   - :git-hdl:`AMD Xilinx VCU118 <projects/adrv9026/vcu118>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/adrv9026/zcu102>`
 
 - :ref:`ADRV904X Reference Design <adrv904x>` on:
 
-  - :git-hdl:`AMD Xilinx VCK190 <projects/adrv904x/vck190>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/adrv904x/zcu102>`
 
 Technical Articles

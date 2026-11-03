@@ -273,7 +273,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`AD4052 Linux driver ad4052.c <drivers/iio/adc/ad4052.c>`
+- :git-linux:`AD4052 Linux driver ad4052.c <staging/xlnx/main/ad4052:drivers/iio/adc/ad4052.c>`
 
 .. include:: ../common/more_information.rst
 

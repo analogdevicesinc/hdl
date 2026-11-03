@@ -52,7 +52,6 @@ Supported boards
 - :adi:`EVAL-AD3530R`
 - :adi:`EVAL-AD3531R`
 - :adi:`EVAL-AD3532R`
-- :adi:`EVAL-AD3536R`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -203,10 +202,9 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-no-os:`AD353XR No-OS project source code <projects/ad353xr>`
-- :git-no-os:`AD353XR No-OS Driver source code <drivers/afe/ad353xr>`
-- :dokuwiki:`AD353XR No-OS Driver documentation <resources/tools-software/uc-drivers/ad353xr>`
-- :dokuwiki:`AD353XR IIO Application <resources/tools-software/product-support-software/ad353xr_mbed_iio_application>`
+- :git-no-os:`AD353XR No-OS Driver source code <drivers/dac/ad3530r>`
+- `AD353XR No-OS Driver documentation <https://analogdevicesinc.github.io/no-OS/drivers/dac/ad3530r/index.html>`__
+- `AD353XR IIO Application <https://analogdevicesinc.github.io/precision-converters-firmware/source/projects/ad353xr_iio/ad353xr_iio.html>`__
 
 .. include:: ../common/more_information.rst
 
