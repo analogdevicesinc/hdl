@@ -83,6 +83,7 @@ Utilities
    axi_clock_monitor/index
    axi_dac_interpolate/index
    axi_fan_control/index
+   axi_hsci/index
    axi_laser_driver/index
    axi_logic_analyzer/index
    axi_pwm_gen/index
