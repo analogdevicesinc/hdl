@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -265,7 +265,8 @@ module up_adc_common #(
         end
       end else if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h12)) begin
         up_adc_ext_sync_manual_req <= up_wdata[8];
-      end else if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h13)) begin
+      end
+      if ((up_wreq_s == 1'b1) && (up_waddr[6:0] == 7'h13)) begin
         up_adc_crc_enable <= up_wdata[8];
         up_adc_custom_control <= up_wdata[7:0];
       end
