@@ -125,8 +125,8 @@ module i3c_controller_cmd_parser (
           cmdr2 <= 8'd0;
           if (cmd_valid) begin
             cmdr1 <= cmd;
-            /* cmd[22] is cmdp_ccc */
-            sm <= cmd[22] ? SM_CCC_WAIT : SM_XFER_WAIT;
+            /* cmd[22] is cmdp_ccc and cmd[23] is pattern */
+            sm <= ( cmd[22] | cmd[23] ) ? SM_CCC_WAIT : SM_XFER_WAIT;
           end else begin
             sm <= SM_RECEIVE;
           end
