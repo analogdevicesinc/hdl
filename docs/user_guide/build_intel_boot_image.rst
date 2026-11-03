@@ -801,7 +801,6 @@ clone the ``u-boot-socfpga`` image. Before that, create a new BSP settings file:
    $cd software/bootloader ; pwd
     ~/hdl/projects/cn0540/de10nano/software/bootloader
    $git clone https://github.com/altera-opensource/u-boot-socfpga.git
-   $git checkout socfpga_v2021.10
 
 Then run the qts filter and build the preloader and bootloader images:
 
@@ -812,7 +811,7 @@ Then run the qts filter and build the preloader and bootloader images:
     ~/hdl/projects/cn0540/de10nano/software/bootloader
    $cd u-boot-socfpga ; pwd
     ~/hdl/projects/cn0540/de10nano/software/bootloader/u-boot-socfpga
-   $./arch/arm/mach-socfpga/qts-filter.sh cyclone5 ../../../../../board/altera/cyclone5-socdk/qts/
+   $python2 ./tools/cv_bsp_generator/cv_bsp_generator.py -i ./../../../hps_isw_handoff/system_bd_sys_hps -o ./board/altera/cyclone5-socdk/qts
    $make socfpga_cyclone5_defconfig
    $make
 

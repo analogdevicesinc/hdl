@@ -638,4 +638,5 @@ set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
 set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"
 set_global_assignment -name ECO_REGENERATE_REPORT ON
 set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS ON
+set_global_assignment -name SDC_FILE $ad_hdl_dir/projects/common/de10nano/de10nano_fit_constr.sdc
 

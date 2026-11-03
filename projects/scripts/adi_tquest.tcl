@@ -37,31 +37,20 @@ report_timing -detail full_path -npaths 20 -hold -append -file timing_impl.log
 report_timing -detail full_path -npaths 20 -recovery -append -file timing_impl.log
 report_timing -detail full_path -npaths 20 -removal -append -file timing_impl.log
 
-set worst_path [get_timing_paths -npaths 1 -setup]
-foreach_in_collection path $worst_path {
-  set slack [get_path_info $path -slack]
-}
-
-if {$slack > 0} {
-  set worst_path [get_timing_paths -npaths 1 -hold]
-  foreach_in_collection path $worst_path {
-    set slack [get_path_info $path -slack]
+# The report script runs only for the first corner, so check all of them.
+set slack 0
+set default_oc [get_operating_conditions]
+foreach_in_collection oc [get_available_operating_conditions] {
+  set_operating_conditions $oc
+  update_timing_netlist
+  foreach analysis {setup hold recovery removal} {
+    foreach_in_collection path [get_timing_paths -npaths 1 -$analysis] {
+      set slack [expr {min($slack, [get_path_info $path -slack])}]
+    }
   }
 }
-
-if {$slack > 0} {
-  set worst_path [get_timing_paths -npaths 1 -recovery]
-  foreach_in_collection path $worst_path {
-    set slack [get_path_info $path -slack]
-  }
-}
-
-if {$slack > 0} {
-  set worst_path [get_timing_paths -npaths 1 -removal]
-  foreach_in_collection path $worst_path {
-    set slack [get_path_info $path -slack]
-  }
-}
+set_operating_conditions $default_oc
+update_timing_netlist
 
 if {$slack < 0} {
   set sof_files [glob *.sof]
