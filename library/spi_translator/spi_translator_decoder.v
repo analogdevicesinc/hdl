@@ -53,8 +53,12 @@
  *   0xAadd  CTRL_W data dd to register a
  *   0xBa00  CTRL_R from register a
  *   0xC0xx  FLUSH
+ *   0xD?ii  GPIO_W to GPIO ii; high byte {4'hd, sel, value, 2'b00}, sel 0
+ *           writing OUT and 1 writing DIR (0 = output, 1 = input)
+ *   0xE0ii  GPIO_R of GPIO ii; reply {5'b0, DIR, OUT, IN}
  *
- * Opcodes 5 to 7 are reserved.
+ * Opcode 7 is reserved. Without GPIOs (GPIO_EN = 0), GPIO_W and GPIO_R are
+ * reserved as well and rejected as bad instructions.
  *
  * A reply byte is ready two bytes after the byte that completes its request:
  *
@@ -64,6 +68,10 @@
  *
  *   FETCH   MOSI [0x90][ nn ][fill][fill] ... [fill]
  *           MISO [ .. ][ .. ][turn][data 0]   [data n]
+ *
+ *   GPIO_R  MOSI [0xE0][ ii ][next hi][next lo] the index is the low byte,
+ *           MISO [ .. ][ .. ][ turn  ][ pin   ] so the reply comes a byte
+ *                                               later than for CTRL_R
  *
  * Like a TRANSFER, FETCH counts n + 1, so one FETCH collects the SDI bytes of
  * one full-length read TRANSFER (up to 256).
@@ -84,15 +92,17 @@
  * rolled back otherwise. A rejected frame is dropped as a unit, so nothing
  * from it reaches a downstream device.
  *
- * CTRL_W and FLUSH take effect as soon as the instruction is complete, as long
- * as nothing earlier in the frame has failed; they are not undone if the frame
- * is rejected later. Several CTRL_W may be sent in one frame, and a CTRL_R
- * after a CTRL_W reads the new value. A FLUSH discards everything queued
+ * CTRL_W, GPIO_W and FLUSH take effect as soon as the instruction is
+ * complete, as long as nothing earlier in the frame has failed; they are not
+ * undone if the frame is rejected later. Several may be sent in one frame,
+ * and a CTRL_R or GPIO_R after a write reads the new value. GPIO writes are
+ * therefore not ordered with the frame's engine instructions, which only run
+ * after the commit. A FLUSH discards everything queued
  * before it, including the earlier part of its own frame; the instructions
  * after it are kept and committed normally, so a frame can recover and start
  * again. The FIFOs are cleared two cycles after the FLUSH is decoded, well
- * before the next upstream byte arrives. CTRL_R and FETCH reply during the
- * frame.
+ * before the next upstream byte arrives. CTRL_R, GPIO_R and FETCH reply
+ * during the frame.
  *
  * A frame is rejected, and the matching sticky err bit set, when it:
  *   [0] uses a reserved encoding (engine class 101 to 111, bridge opcode 5
@@ -113,7 +123,8 @@
  */
 
 module spi_translator_decoder #(
-  parameter NUM_OF_CS = 4
+  parameter NUM_OF_CS = 4,
+  parameter GPIO_EN = 1
 ) (
   input                               clk,
   input                               resetn,
@@ -157,14 +168,23 @@ module spi_translator_decoder #(
   output  reg [7:0]                   reg_wr_addr,
   output  reg [7:0]                   reg_wr_data,
 
+  // GPIOs
+
+  output  reg                         gpio_wr_en,
+  output  reg [7:0]                   gpio_wr_index,
+  output  reg                         gpio_wr_sel,
+  output  reg                         gpio_wr_value,
+  output      [7:0]                   gpio_rd_index,
+  input       [7:0]                   gpio_rd_data,
+
   output  reg                         flush_req,
   output  reg [2:0]                   err
 );
 
-  localparam [2:0] S_HI  = 3'd0;
-  localparam [2:0] S_LO  = 3'd1;
-  localparam [2:0] S_SDO = 3'd2;
-  localparam [2:0] S_PAD = 3'd3;
+  localparam [1:0] S_HI  = 2'd0;
+  localparam [1:0] S_LO  = 2'd1;
+  localparam [1:0] S_SDO = 2'd2;
+  localparam [1:0] S_SDI = 2'd3;
 
   localparam [2:0] CMD_TRANSFER   = 3'b000;
   localparam [2:0] CMD_CHIPSELECT = 3'b001;
@@ -177,17 +197,19 @@ module spi_translator_decoder #(
   localparam [2:0] BR_CTRL_W = 3'd2;
   localparam [2:0] BR_CTRL_R = 3'd3;
   localparam [2:0] BR_FLUSH  = 3'd4;
+  localparam [2:0] BR_GPIO_W = 3'd5;
+  localparam [2:0] BR_GPIO_R = 3'd6;
 
   localparam ERR_INSTR = 0;
   localparam ERR_OVF   = 1;
 
-  reg   [2:0]                 state = S_HI;
+  reg   [1:0]                 state = S_HI;
   reg   [7:0]                 hi = 8'h00;
+  reg   [8:0]                 sdi_left = 9'h000;
   reg   [8:0]                 sdo_left = 9'h000;
   reg                         seen = 1'b0;
   reg   [1:0]                 frame_err = 2'b00;
   reg   [1:0]                 frame_end_d = 2'b00;
-  reg   [8:0]                 pad_left = 9'h000;
 
   // reply in progress: data bytes still to send
   reg                         rep_fetch = 1'b0;
@@ -209,6 +231,7 @@ module spi_translator_decoder #(
   wire                        br_exec;
   wire                        rep_start_r;
   wire                        rep_start_f;
+  wire                        rep_start_g;
   wire                        rep_start;
   wire                        rep_data;
   wire  [7:0]                 rep_byte;
@@ -227,11 +250,12 @@ module spi_translator_decoder #(
   assign cmd_ok = is_bridge ? (
     (op == BR_CTRL_W) ||
     (op == BR_CTRL_R && rx_data == 8'h00) ||
+    (op == BR_GPIO_W && GPIO_EN != 0 && hi[1:0] == 2'b00) ||
+    (op == BR_GPIO_R && GPIO_EN != 0 && hi[3:0] == 4'h0) ||
     ((op == BR_NOP || op == BR_FETCH || op == BR_FLUSH) && hi[3:0] == 4'h0)) : (
     (inst == CMD_TRANSFER   && hi[3:2] == 2'b00) ||
     (inst == CMD_CHIPSELECT && sel_ok) ||
-    (inst == CMD_WRITE      && hi[3] == 1'b0 && hi[2:0] <= 3'b100 &&
-                               (hi[2:0] != 3'b010 || (rx_data != 8'h00 && rx_data <= 8'd8))) ||
+    (inst == CMD_WRITE      && hi[3] == 1'b0 && hi[2:0] <= 3'b100) ||
     (inst == CMD_MISC) ||
     (inst == CMD_CS_INV));
 
@@ -248,22 +272,24 @@ module spi_translator_decoder #(
 
   // reply generation, one byte per received byte; a reply byte loaded here
   // goes out on MISO two bytes later. CTRL_R starts on its high byte, which
-  // already carries the address; FETCH on its low byte, which carries n.
-  // A register read has no side effect, so the CTRL_R reply may start before
-  // its low byte has been checked.
+  // already carries the address; FETCH and GPIO_R on their low byte, which
+  // carries n or the GPIO index. A register or pin read has no side effect,
+  // so the CTRL_R reply may start before its low byte has been checked.
 
   assign rep_start_r = byte_in && state == S_HI && rx_data[7] && rx_data[6:4] == BR_CTRL_R;
   assign rep_start_f = byte_in && state == S_LO && cmd_ok && is_bridge && op == BR_FETCH;
-  assign rep_start   = rep_start_r | rep_start_f;
+  assign rep_start_g = byte_in && state == S_LO && cmd_ok && is_bridge && op == BR_GPIO_R;
+  assign rep_start   = rep_start_r | rep_start_f | rep_start_g;
 
   // a data byte is produced in this cycle
-  assign rep_data = rep_start_r ? 1'b1 :
-                    rep_start_f ? 1'b1 :
-                                  (state == S_PAD && rep_idx < rep_len);
+  assign rep_data = rep_start ? 1'b1 : (state == S_SDI && rep_idx < rep_len);
 
-  assign reg_rd_addr = {4'h0, rx_data[3:0]};
+  assign reg_rd_addr   = {4'h0, rx_data[3:0]};
+  assign gpio_rd_index = rx_data;
 
-  assign rep_byte = rep_start_r ? reg_rd_data : (resp_valid ? resp_data : 8'h00);
+  assign rep_byte = rep_start_r ? reg_rd_data :
+                    rep_start_g ? gpio_rd_data :
+                    (resp_valid ? resp_data : 8'h00);
 
   // FETCH data bytes pop the response FIFO; CTRL_R never does
   assign resp_ready = byte_in && rep_data && resp_valid &&
@@ -281,7 +307,7 @@ module spi_translator_decoder #(
         rep_fetch <= rep_start_f;
         rep_len <= rep_start_f ? {1'b0, rx_data} + 9'd1 : 9'h001;
         rep_idx <= 9'h001;
-      end else if (state == S_PAD) begin
+      end else if (state == S_SDI) begin
         rep_idx <= rep_idx + 1'b1;
       end
     end
@@ -306,7 +332,6 @@ module spi_translator_decoder #(
       seen <= 1'b0;
       frame_err <= 2'b00;
     end else if (byte_in) begin
-      seen <= 1'b1;
       case (state)
         S_HI: begin
           hi <= rx_data;
@@ -318,8 +343,8 @@ module spi_translator_decoder #(
             frame_err[ERR_INSTR] <= 1'b1;
           end else if (is_bridge) begin
             if (op == BR_FETCH) begin
-              pad_left <= {1'b0, rx_data} + 9'd2;
-              state <= S_PAD;
+              sdi_left <= {1'b0, rx_data} + 9'd2;
+              state <= S_SDI;
             end
           end else begin
             if (inst == CMD_TRANSFER && hi[0] == 1'b1) begin
@@ -334,22 +359,27 @@ module spi_translator_decoder #(
             state <= S_HI;
           end
         end
-        default: begin
-          pad_left <= pad_left - 1'b1;
-          if (pad_left == 9'h001) begin
+        S_SDI: begin
+          sdi_left <= sdi_left - 1'b1;
+          if (sdi_left == 9'h001) begin
             state <= S_HI;
           end
         end
+        default: begin
+          state <= S_HI;
+          frame_err[ERR_INSTR] <= 1'b1;
+        end
       endcase
 
+      seen <= 1'b1;
       if (no_room) begin
         frame_err[ERR_OVF] <= 1'b1;
       end
     end
   end
 
-  // CTRL_W and FLUSH act at once, unless the frame has already failed: an
-  // instruction after an error may be misaligned data
+  // CTRL_W, GPIO_W and FLUSH act at once, unless the frame has already
+  // failed: an instruction after an error may be misaligned data
   assign br_exec = byte_in && state == S_LO && cmd_ok && is_bridge &&
                    frame_err == 2'b00;
 
@@ -358,13 +388,23 @@ module spi_translator_decoder #(
       reg_wr_en <= 1'b0;
       reg_wr_addr <= 8'h00;
       reg_wr_data <= 8'h00;
+      gpio_wr_en <= 1'b0;
+      gpio_wr_index <= 8'h00;
+      gpio_wr_sel <= 1'b0;
+      gpio_wr_value <= 1'b0;
       flush_req <= 1'b0;
     end else begin
       reg_wr_en <= br_exec && op == BR_CTRL_W;
+      gpio_wr_en <= br_exec && op == BR_GPIO_W;
       flush_req <= br_exec && op == BR_FLUSH;
       if (br_exec && op == BR_CTRL_W) begin
         reg_wr_addr <= {4'h0, hi[3:0]};
         reg_wr_data <= rx_data;
+      end
+      if (br_exec && op == BR_GPIO_W) begin
+        gpio_wr_index <= rx_data;
+        gpio_wr_sel <= hi[3];
+        gpio_wr_value <= hi[2];
       end
     end
   end

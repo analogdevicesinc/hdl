@@ -38,10 +38,11 @@ set_false_path \
   -from [get_cells -hier -filter {NAME =~ *i_decoder/tx_data_reg[*] && IS_SEQUENTIAL}] \
   -to   [get_cells -hier -filter {NAME =~ *i_spi_slave/tx_shift_reg[*] && IS_SEQUENTIAL}]
 
-# GPIO inputs are asynchronous to clk
+# GPIO inputs are asynchronous to clk; -quiet as there are none with
+# NUM_OF_GPIO = 0
 
 set_property ASYNC_REG TRUE \
-  [get_cells -hier -filter {NAME =~ *i_regmap/i_gpio_sync/cdc_sync_stage* && IS_SEQUENTIAL}]
+  [get_cells -quiet -hier -filter {NAME =~ *i_gpio/i_gpio_sync/cdc_sync_stage* && IS_SEQUENTIAL}]
 
 set_false_path \
-  -to [get_cells -hier -filter {NAME =~ *i_regmap/i_gpio_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+  -to [get_cells -quiet -hier -filter {NAME =~ *i_gpio/i_gpio_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]

@@ -15,6 +15,7 @@ adi_ip_files spi_translator [list \
   "spi_translator_decoder.v" \
   "spi_translator_execution.v" \
   "spi_translator_fifo.v" \
+  "spi_translator_gpio.v" \
   "spi_translator_regmap.v" \
   "spi_translator.v" \
   "spi_translator_constr.xdc" \
@@ -82,6 +83,31 @@ set_property -dict [list \
   "value_validation_range_maximum" "8" \
  ] \
  [ipx::get_user_parameters NUM_OF_CS -of_objects $cc]
+
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "0" \
+  "value_validation_range_maximum" "256" \
+ ] \
+ [ipx::get_user_parameters NUM_OF_GPIO -of_objects $cc]
+
+## GPIO reset state: 256-bit strings, bit g for GPIO g
+foreach {param} {GPIO_DEFAULT_DIR GPIO_DEFAULT_OUT} {
+  set_property -dict [list \
+    "value" "0x[string repeat 0 64]" \
+    "value_bit_string_length" "256" \
+    "value_format" "bitString" \
+  ] [ipx::get_user_parameters $param -of_objects $cc]
+  set_property -dict [list \
+    "value" "0x[string repeat 0 64]" \
+    "value_bit_string_length" "256" \
+    "value_format" "bitString" \
+  ] [ipx::get_hdl_parameters $param -of_objects $cc]
+}
+
+## no GPIO ports without GPIOs
+adi_set_ports_dependency "gpio_" \
+  "(spirit:decode(id('MODELPARAM_VALUE.NUM_OF_GPIO')) > 0)" 0
 
 ipx::create_xgui_files $cc
 ipx::save_core $cc
