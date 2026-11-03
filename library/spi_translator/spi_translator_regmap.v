@@ -53,17 +53,18 @@
  *  0x0a SDO_ROOM_H  R    free SDO FIFO bytes, high byte
  *  0x0b SDI_LEVEL_L R    SDI bytes waiting for FETCH, low byte
  *  0x0c SDI_LEVEL_H R    SDI bytes waiting for FETCH, high byte
- *  0x0d GPIO_OUT    RW   output value of each GPIO
- *  0x0e GPIO_DIR    RW   1 = output, 0 = input (reset: all inputs)
- *  0x0f GPIO_IN     R    pin level of each GPIO, synchronized to clk
  *
- * GPIO writes take effect at the end of their frame, not in order with the
- * engine instructions queued before them; to change a GPIO after earlier
- * traffic has run, wait for BUSY to clear first.
+ *  0x0d GPIO_NUM_L  R    number of GPIOs, low byte; 0 = none
+ *  0x0e GPIO_NUM_H  R    number of GPIOs, high byte
+ *
+ * 0x0f is free and reads 0. The GPIOs themselves are not in the register map:
+ * they are written and read one pin at a time by GPIO_W and GPIO_R, see
+ * spi_translator_gpio.v.
  */
 
 module spi_translator_regmap #(
-  parameter [7:0] PERIPHERAL_ID = 8'h00
+  parameter [7:0] PERIPHERAL_ID = 8'h00,
+  parameter NUM_OF_GPIO = 8
 ) (
   input                       clk,
   input                       resetn,
@@ -78,51 +79,24 @@ module spi_translator_regmap #(
   input       [15:0]          cmd_room,
   input       [15:0]          sdo_room,
   input       [7:0]           last_sync,
-  input       [15:0]          sdi_level,
-
-  // GPIOs
-
-  input       [7:0]           gpio_i,
-  output      [7:0]           gpio_o,
-  output      [7:0]           gpio_t
+  input       [15:0]          sdi_level
 );
 
   localparam [7:0] VERSION_MAJOR = 8'h01;
   localparam [7:0] VERSION_MINOR = 8'h00;
   localparam [7:0] VERSION_PATCH = 8'h00;
 
+  localparam [15:0] GPIO_NUM = NUM_OF_GPIO;
+
   reg   [7:0]                 scratch = 8'h00;
-  reg   [7:0]                 gpio_out = 8'h00;
-  reg   [7:0]                 gpio_dir = 8'h00;
-
-  wire  [7:0]                 gpio_in;
-
-  assign gpio_o = gpio_out;
-  assign gpio_t = ~gpio_dir;
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       scratch <= 8'h00;
-      gpio_out <= 8'h00;
-      gpio_dir <= 8'h00;
-    end else if (wr_en) begin
-      case (wr_addr)
-        8'h04: scratch <= wr_data;
-        8'h0d: gpio_out <= wr_data;
-        8'h0e: gpio_dir <= wr_data;
-        default: ;
-      endcase
+    end else if (wr_en && wr_addr == 8'h04) begin
+      scratch <= wr_data;
     end
   end
-
-  sync_bits #(
-    .NUM_OF_BITS (8),
-    .ASYNC_CLK (1)
-  ) i_gpio_sync (
-    .in_bits (gpio_i),
-    .out_clk (clk),
-    .out_resetn (resetn),
-    .out_bits (gpio_in));
 
   always @(*) begin
     case (rd_addr)
@@ -139,9 +113,8 @@ module spi_translator_regmap #(
       8'h0a:   rd_data = sdo_room[15:8];
       8'h0b:   rd_data = sdi_level[7:0];
       8'h0c:   rd_data = sdi_level[15:8];
-      8'h0d:   rd_data = gpio_out;
-      8'h0e:   rd_data = gpio_dir;
-      8'h0f:   rd_data = gpio_in;
+      8'h0d:   rd_data = GPIO_NUM[7:0];
+      8'h0e:   rd_data = GPIO_NUM[15:8];
       default: rd_data = 8'h00;
     endcase
   end

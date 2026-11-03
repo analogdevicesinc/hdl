@@ -42,7 +42,7 @@
  * target, full-duplex and read-only transfers, a transfer split over two
  * frames with the target held selected, frame rejection (bad instruction, two
  * targets selected, truncated, no room in the FIFOs), frames queuing behind a
- * slow one, register reads and writes, GPIOs and FLUSH. The master captures
+ * slow one, register reads and writes, and FLUSH. The master captures
  * MISO for CTRL_R and FETCH, including a FETCH retried after its frame was
  * rejected. The CMD and SDO FIFOs are built small so they can be filled.
  */
@@ -68,10 +68,14 @@ module spi_translator_tb;
   `define BR_CTRL_W(a, d) (16'hA000 | (((a) & 16'h000f) << 8) | (d))
   `define BR_CTRL_R(a)    (16'hB000 | (((a) & 16'h000f) << 8))
   `define BR_FLUSH        16'hC000
+  `define BR_GPIO_W(s, v, i) (16'hD000 | ((s) << 11) | ((v) << 10) | (i))
+  `define BR_GPIO_R(i)    (16'hE000 | (i))
 
   reg           clk = 1'b0;
   reg           resetn = 1'b0;
   reg           failed = 1'b0;
+
+  integer       test_count = 0;
 
   always #5 clk = ~clk;
 
@@ -96,10 +100,11 @@ module spi_translator_tb;
   wire          spi_resetn;
 
   // GPIO pins: driven by the bridge when an output, by gpio_ext otherwise
-  reg   [7:0]   gpio_ext = 8'h3c;
-  wire  [7:0]   gpio_o;
-  wire  [7:0]   gpio_t;
-  wire  [7:0]   gpio_pin = (gpio_t & gpio_ext) | (~gpio_t & gpio_o);
+  localparam    NG = 12;
+  reg   [NG-1:0] gpio_ext = 12'ha5c;
+  wire  [NG-1:0] gpio_o;
+  wire  [NG-1:0] gpio_t;
+  wire  [NG-1:0] gpio_pin = (gpio_t & gpio_ext) | (~gpio_t & gpio_o);
 
   // internal state, observed without a STATUS read
   wire          busy = i_dut.i_exec.busy;
@@ -113,7 +118,12 @@ module spi_translator_tb;
   wire  [3:0]   miso_d;
   wire          sdi_bus;
 
+  // reset state like regulator controls: pin 1 an active-low enable held off
+  // (high), pin 11 a power-good input, all others enables driven low (off)
   spi_translator #(
+    .NUM_OF_GPIO (NG),
+    .GPIO_DEFAULT_DIR (12'h800),
+    .GPIO_DEFAULT_OUT (12'h002),
     .CMD_FIFO_ADDRESS_WIDTH (4),
     .SDO_FIFO_ADDRESS_WIDTH (5)
   ) i_dut (
@@ -357,6 +367,7 @@ module spi_translator_tb;
 
     // posted writes, one frame per target, each in that target's own mode
 
+    test_count = 0;
     write_target(2'd0, 2'd0, 8'h02, 3, 8'h10);
     write_target(2'd1, 2'd3, 8'h03, 3, 8'h11);
     write_target(2'd2, 2'd1, 8'h02, 3, 8'h12);
@@ -371,12 +382,14 @@ module spi_translator_tb;
 
     // posted writes leave only their SYNC id, nothing to FETCH
 
+    test_count = test_count+1;
     ctrl_r(8'h06, v); check("SYNC_ID after writes", v, 8'h13);
     ctrl_r(8'h0b, v); check("SDI_LEVEL after writes", v, 8'h00);
     ctrl_r(8'h05, s); check("no RESP_RDY without SDI data", s[6], 1'b0);
 
     // register reads
 
+    test_count = test_count+1;
     ctrl_r(8'h05, s);
     check("idle status", s, 8'h07);       // all FIFOs empty: credit 7
     ctrl_r(8'h00, v); check("VERSION_MAJOR", v, 8'h01);
@@ -389,14 +402,16 @@ module spi_translator_tb;
     ctrl_r(8'h04, v); check("SCRATCH after RO write", v, 8'h3c);
     ctrl_r(8'h09, v); check("SDO_ROOM_L", v, 8'd32);
 
+    test_count = test_count+1;
     begin_frame();                        // chained reads, one per 2 bytes
     put16(`BR_CTRL_R(8'h00)); put16(`BR_CTRL_R(8'h04)); put16(`BR_CTRL_R(8'h0e));
     put16(`BR_NOP);
     send_frame();
     check("chained VERSION_MAJOR", rxb[2], 8'h01);
     check("chained SCRATCH", rxb[4], 8'h3c);
-    check("chained GPIO_DIR", rxb[6], 8'h00);
+    check("chained unused address", rxb[6], 8'h00);
 
+    test_count = test_count+1;
     c3 = d3.count;
     begin_frame();                        // an error shows in the status
     put16(`CS(8'hf7)); put16(`WR(2)); put8(8'haa);
@@ -410,6 +425,7 @@ module spi_translator_tb;
     // a transfer split over two frames: the first ends with target 3 still
     // selected, the second continues and releases it
 
+    test_count = test_count+1;
     c3 = d3.count;
     cs3_releases = 0;
     begin_frame();
@@ -430,18 +446,20 @@ module spi_translator_tb;
     check("last byte", d3.mem[c3+3], 8'h64);
 
     // CTRL_W acts at once: several per frame, and a CTRL_R after one reads
-    // the new value; replies land at rxb[6] and rxb[8]
+    // the new value; replies land at rxb[4] and rxb[8]
 
+    test_count = test_count+1;
     begin_frame();
-    put16(`BR_CTRL_W(8'h04, 8'h11)); put16(`BR_CTRL_W(8'h0d, 8'h22));
-    put16(`BR_CTRL_R(8'h04)); put16(`BR_CTRL_R(8'h0d)); put16(`BR_NOP);
+    put16(`BR_CTRL_W(8'h04, 8'h11)); put16(`BR_CTRL_R(8'h04));
+    put16(`BR_CTRL_W(8'h04, 8'h22)); put16(`BR_CTRL_R(8'h04)); put16(`BR_NOP);
     send_frame();
-    check("read after write SCRATCH", rxb[6], 8'h11);
-    check("read after write GPIO_OUT", rxb[8], 8'h22);
+    check("read after first CTRL_W", rxb[4], 8'h11);
+    check("read after second CTRL_W", rxb[8], 8'h22);
     check("two CTRL_W accepted", err, 3'h0);
 
     // a CTRL_W stays applied when the rest of its frame is rejected
 
+    test_count = test_count+1;
     c3 = d3.count;
     begin_frame();
     put16(`BR_CTRL_W(8'h04, 8'h77));
@@ -454,6 +472,7 @@ module spi_translator_tb;
     // FLUSH in the middle of a frame drops what came before it, keeps what
     // follows, and clears err; the engine restarts from its reset settings
 
+    test_count = test_count+1;
     c3 = d3.count;
     cs3_releases = 0;
     begin_frame();
@@ -469,29 +488,84 @@ module spi_translator_tb;
     check("one transaction after FLUSH", cs3_releases, 1);
     check("SCLK idle vs CPOL after FLUSH", d3.mode_err, 1'b0);
 
+    // GPIOs, one pin per instruction; a GPIO_R reply lands two bytes after
+    // its index byte, in the low byte of the next instruction
+
+    // DIR: 0 = output, 1 = input; replies are {DIR, OUT, IN}
+
+    test_count = test_count+1;
+    check("reset gpio_t from GPIO_DEFAULT_DIR", gpio_t, 12'h800);
+    check("reset gpio_o from GPIO_DEFAULT_OUT", gpio_o, 12'h002);
+    ctrl_r(8'h0d, v); check("GPIO_NUM_L", v, NG);
+    ctrl_r(8'h0e, v); check("GPIO_NUM_H", v, 8'h00);
+    begin_frame();
+    put16(`BR_GPIO_R(8'd11)); put16(`BR_GPIO_R(8'd1)); put16(`BR_GPIO_R(8'd2));
+    put16(`BR_NOP);
+    send_frame();
+    check("GPIO 11 power-good input", rxb[3], 8'h05);   // ext bit 11 is 1
+    check("GPIO 1 enable held high", rxb[5], 8'h03);
+    check("GPIO 2 enable held low", rxb[7], 8'h00);
+
+    test_count = test_count+1;
+    begin_frame();                        // GPIO 2 to input, 0 high, 1 low
+    put16(`BR_GPIO_W(1, 1, 8'd2)); put16(`BR_GPIO_W(0, 1, 8'd0));
+    put16(`BR_GPIO_W(0, 0, 8'd1));
+    send_frame();
+    check("gpio_t", gpio_t, 12'h804);
+    check("gpio_o", gpio_o, 12'h001);
+    check("GPIO writes accepted", err, 3'h0);
+
+    test_count = test_count+1;
+    begin_frame();                        // chained reads: 0, 11, 2
+    put16(`BR_GPIO_R(8'd0)); put16(`BR_GPIO_R(8'd11)); put16(`BR_GPIO_R(8'd2));
+    put16(`BR_NOP);
+    send_frame();
+    check("GPIO 0 {DIR, OUT, IN}", rxb[3], 8'h03);
+    check("GPIO 11 {DIR, OUT, IN}", rxb[5], 8'h05);
+    check("GPIO 2 {DIR, OUT, IN}", rxb[7], 8'h05);    // now input, ext bit 2 is 1
+
+    test_count = test_count+1;
+    begin_frame();                        // beyond NUM_OF_GPIO: ignored, reads 0
+    put16(`BR_GPIO_W(1, 1, 8'd20)); put16(`BR_GPIO_R(8'd20)); put16(`BR_NOP);
+    send_frame();
+    check("out of range reads 0", rxb[5], 8'h00);
+    check("out of range write ignored", gpio_t, 12'h804);
+
+    test_count = test_count+1;
+    begin_frame();                        // reserved GPIO_W bits: bad instruction
+    put16(16'hD501);                      // would set GPIO 1 high
+    send_frame();
+    check("reserved GPIO_W bits", err, 3'h1);
+    check("rejected GPIO_W not applied", gpio_o, 12'h001);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+
     // FETCH: a rejected FETCH frame returns the data but leaves it queued
 
-    //c3 = d3.count;
-    //begin_frame();
-    //put16(`CS(8'hf7)); put16(`RD(1)); put16(`CS(8'hff)); put16(`SYNC(8'h31));
-    //send_frame();
-    //wait_idle();
-    //wait_sync(8'h31);
-    //ctrl_r(8'h0b, v); check("SDI_LEVEL after read", v, 8'd1);
-    //fetch(1, 1'b1);
-    //check("rejected FETCH data", rep[0], 8'hd0 + c3);
-    //check("err after rejected FETCH", err, 4'h4);
-    //ctrl_r(8'h0b, v); check("SDI_LEVEL kept", v, 8'd1);
-    //fetch(1, 1'b0);
-    //check("retried FETCH data", rep[0], 8'hd0 + c3);
-    //ctrl_r(8'h0b, v); check("SDI_LEVEL released", v, 8'd0);
-    //begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+    test_count = test_count+1;
+    c3 = d3.count;
+    begin_frame();
+    put16(`CFG(2'd2)); put16(`PRESCALE(8'h04));   // engine reset by the FLUSH above
+    put16(`CS(8'hf7)); put16(`RD(1)); put16(`CS(8'hff)); put16(`SYNC(8'h31));
+    send_frame();
+    wait_idle();
+    wait_sync(8'h31);
+    ctrl_r(8'h0b, v); check("SDI_LEVEL after read", v, 8'd1);
+    fetch(1, 1'b1);
+    check("rejected FETCH data", rep[0], 8'hd0 + c3);
+    check("err after rejected FETCH", err, 3'h4);
+    ctrl_r(8'h0b, v); check("SDI_LEVEL kept", v, 8'd1);
+    fetch(1, 1'b0);
+    check("retried FETCH data", rep[0], 8'hd0 + c3);
+    ctrl_r(8'h0b, v); check("SDI_LEVEL released", v, 8'd0);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
-    //fetch(2, 1'b0);                       // empty FIFO pads with zeros
-    //check("empty FETCH", {rep[0], rep[1]}, 16'h0000);
+    test_count = test_count+1;
+    fetch(2, 1'b0);                       // empty FIFO pads with zeros
+    check("empty FETCH", {rep[0], rep[1]}, 16'h0000);
 
     // full-duplex read on target 1 (mode 3): wait for the SYNC id, then FETCH
 
+    test_count = test_count+1;
     begin_frame();
     put16(`CFG(2'd3));
     put16(`PRESCALE(8'h03));
@@ -509,6 +583,7 @@ module spi_translator_tb;
 
     // read-only transfer on target 0: no SDO bytes follow the instruction
 
+    test_count = test_count+1;
     begin_frame();
     put16(`CFG(2'd0));
     put16(`PRESCALE(8'h02));
@@ -526,97 +601,82 @@ module spi_translator_tb;
     ctrl_r(8'h0b, v); check("SDI_LEVEL after FETCH", v, 8'd0);
     ctrl_r(8'h05, s); check("RESP_RDY after FETCH", s[6], 1'b0);
 
-    // GPIOs: all inputs after reset, then the low nibble as outputs
-
-    check("GPIOs tristated at reset", gpio_t, 8'hff);
-    ctrl_r(8'h0e, v); check("GPIO_DIR reset", v, 8'h00);
-    ctrl_r(8'h0f, v); check("GPIO_IN all inputs", v, 8'h3c);
-    ctrl_w(8'h0d, 8'ha5);
-    ctrl_w(8'h0e, 8'h0f);
-    check("gpio_o", gpio_o, 8'ha5);
-    check("gpio_t", gpio_t, 8'hf0);
-    ctrl_r(8'h0d, v); check("GPIO_OUT", v, 8'ha5);
-    ctrl_r(8'h0f, v); check("GPIO_IN mixed", v, 8'h35);
-
     // rejected frames: nothing reaches target 2, sticky err bit set
 
-    //c2 = d2.count;
+    test_count = test_count+1;
+    c2 = d2.count;
 
-    //begin_frame();                        // reserved instruction class 101
-    //put16(`CS(8'hfb)); put16(`WR(1)); put8(8'hee);
-    //put16(16'h5000);
-    //put16(`CS(8'hff));
-    //send_frame();
-    //wait_idle();
-    //check("bad instr not forwarded", d2.count, c2);
-    //check("err after bad instr", err, 4'h1);
+    begin_frame();                        // reserved instruction class 101
+    put16(`CS(8'hfb)); put16(`WR(1)); put8(8'hee);
+    put16(16'h5000);
+    put16(`CS(8'hff));
+    send_frame();
+    wait_idle();
+    check("bad instr not forwarded", d2.count, c2);
+    check("err after bad instr", err, 3'h1);
 
-    //begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
-    //check("err cleared by FLUSH", err, 4'h0);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+    check("err cleared by FLUSH", err, 3'h0);
 
-    //begin_frame();                        // targets 2 and 3 at once
-    //put16(`CS(8'hf3)); put16(`WR(1)); put8(8'hee); put16(`CS(8'hff));
-    //send_frame();
-    //wait_idle();
-    //check("two targets not forwarded", d2.count, c2);
-    //check("err after two targets", err, 4'h1);
-    //begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+    begin_frame();                        // targets 2 and 3 at once
+    put16(`CS(8'hf3)); put16(`WR(1)); put8(8'hee); put16(`CS(8'hff));
+    send_frame();
+    wait_idle();
+    check("two targets not forwarded", d2.count, c2);
+    check("err after two targets", err, 3'h1);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
-    //begin_frame();                        // 2 of 3 SDO bytes
-    //put16(`CS(8'hfb)); put16(`WR(3)); put8(8'h01); put8(8'h02);
-    //send_frame();
-    //wait_idle();
-    //check("truncated not forwarded", d2.count, c2);
-    //check("err after truncation", err, 3'h4);
-    //begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+    begin_frame();                        // 2 of 3 SDO bytes
+    put16(`CS(8'hfb)); put16(`WR(3)); put8(8'h01); put8(8'h02);
+    send_frame();
+    wait_idle();
+    check("truncated not forwarded", d2.count, c2);
+    check("err after truncation", err, 3'h4);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
-    //begin_frame();                        // half an instruction
-    //put16(`CS(8'hfb)); put16(`WR(1)); put8(8'h01); put16(`CS(8'hff)); put8(8'h30);
-    //send_frame();
-    //wait_idle();
-    //check("half instr not forwarded", d2.count, c2);
-    //check("err after half instr", err, 4'h4);
-    //begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
-
-    // bridge register write: applied as soon as it is decoded
-
-    //begin_frame(); put16(`BR_CTRL_W(8'h04, 8'h3c)); send_frame(); wait_idle();
-    //check("CTRL_W address", i_dut.reg_wr_addr, 8'h04);
-    //check("CTRL_W data", i_dut.reg_wr_data, 8'h3c);
+    begin_frame();                        // half an instruction
+    put16(`CS(8'hfb)); put16(`WR(1)); put8(8'h01); put16(`CS(8'hff)); put8(8'h30);
+    send_frame();
+    wait_idle();
+    check("half instr not forwarded", d2.count, c2);
+    check("err after half instr", err, 3'h4);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
     // queuing: frames are committed behind a slow one while it executes;
     // a frame that no longer fits in the 32-byte SDO FIFO is rejected whole
 
-    //begin_frame();
-    //put16(`CFG(2'd0)); put16(`PRESCALE(8'hff));
-    //put16(`CS(8'hfe)); put16(`WR(12)); put_data(12, 8'h77, 8'h00); put16(`CS(8'hff));
-    //send_frame();
-    //begin_frame();
-    //put16(`CS(8'hfe)); put16(`WR(12)); put_data(12, 8'h78, 8'h00); put16(`CS(8'hff));
-    //send_frame();
-    //check("second frame queued", i_dut.i_exec.busy, 1);
-    //begin_frame();
-    //put16(`CS(8'hfe)); put16(`WR(20)); put_data(20, 8'h79, 8'h00); put16(`CS(8'hff));
-    //send_frame();
-    //check("err with no room", err, 4'h2);
-    //wait_idle();
-    //check("d0 count after queuing", d0.count, 3 + 2 + 24);
-    //check("d0 first frame", d0.mem[5], 8'h77);
-    //check("d0 second frame", d0.mem[17], 8'h78);
-    //check("d0 second frame last", d0.mem[28], 8'h78);
+    test_count = test_count+1;
+    begin_frame();
+    put16(`CFG(2'd0)); put16(`PRESCALE(8'hff));
+    put16(`CS(8'hfe)); put16(`WR(12)); put_data(12, 8'h77, 8'h00); put16(`CS(8'hff));
+    send_frame();
+    begin_frame();
+    put16(`CS(8'hfe)); put16(`WR(12)); put_data(12, 8'h78, 8'h00); put16(`CS(8'hff));
+    send_frame();
+    check("second frame queued", i_dut.i_exec.busy, 1);
+    begin_frame();
+    put16(`CS(8'hfe)); put16(`WR(20)); put_data(20, 8'h79, 8'h00); put16(`CS(8'hff));
+    send_frame();
+    check("err with no room", err, 3'h2);
+    wait_idle();
+    check("d0 count after queuing", d0.count, 3 + 2 + 24);
+    check("d0 first frame", d0.mem[5], 8'h77);
+    check("d0 second frame", d0.mem[17], 8'h78);
+    check("d0 second frame last", d0.mem[28], 8'h78);
 
     // FLUSH in the middle of a slow write releases the target
 
-    //begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
-    //begin_frame();
-    //put16(`PRESCALE(8'hff));
-    //put16(`CS(8'hfe)); put16(`WR(8)); put_data(8, 8'h01, 8'h01); put16(`CS(8'hff));
-    //send_frame();
-    //#(20000);
-    //check("target selected mid write", cs[0], 1'b0);
-    //begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
-    //check("CS released by FLUSH", cs, 4'hf);
-    //check("write cut short", d0.count < 29 + 8, 1);
+    test_count = test_count+1;
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+    begin_frame();
+    put16(`PRESCALE(8'hff));
+    put16(`CS(8'hfe)); put16(`WR(8)); put_data(8, 8'h01, 8'h01); put16(`CS(8'hff));
+    send_frame();
+    #(20000);
+    check("target selected mid write", cs[0], 1'b0);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+    check("CS released by FLUSH", cs, 4'hf);
+    check("write cut short", d0.count < 29 + 8, 1);
 
     if (failed == 1'b0)
       $display("SUCCESS");
@@ -626,7 +686,7 @@ module spi_translator_tb;
   end
 
   initial begin
-    #5000000;
+    #10000000;
     $display("FAILED: timeout");
     $finish;
   end
