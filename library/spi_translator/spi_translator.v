@@ -52,6 +52,9 @@ module spi_translator #(
   parameter UP_CPHA = 0,
   parameter HEADER_CRC_EN = 1,
   parameter NUM_OF_CS = 4,
+  parameter NUM_OF_GPIO = 8,
+  parameter [255:0] GPIO_DEFAULT_DIR = 256'h0,
+  parameter [255:0] GPIO_DEFAULT_OUT = 256'h0,
   parameter CMD_FIFO_ADDRESS_WIDTH = 8,
   parameter SDO_FIFO_ADDRESS_WIDTH = 8,
   parameter RESP_FIFO_ADDRESS_WIDTH = 8
@@ -87,11 +90,13 @@ module spi_translator #(
 
   output                      spi_resetn,
 
-  // GPIOs, e.g. downstream reset lines; connect through ad_iobuf
+  // GPIOs, one pin at a time through GPIO_W and GPIO_R; connect through
+  // ad_iobuf, gpio_t high means input. With NUM_OF_GPIO = 0 there are no
+  // GPIOs: the ports are one bit wide and unused, gpio_t tied high
 
-  input       [7:0]           gpio_i,
-  output      [7:0]           gpio_o,
-  output      [7:0]           gpio_t
+  input   [((NUM_OF_GPIO > 0) ? NUM_OF_GPIO : 1)-1:0] gpio_i,
+  output  [((NUM_OF_GPIO > 0) ? NUM_OF_GPIO : 1)-1:0] gpio_o,
+  output  [((NUM_OF_GPIO > 0) ? NUM_OF_GPIO : 1)-1:0] gpio_t
 );
 
   // internal signals
@@ -111,6 +116,13 @@ module spi_translator #(
   wire  [7:0]                 reg_wr_data;
   wire  [7:0]                 reg_rd_addr;
   wire  [7:0]                 reg_rd_data;
+
+  wire                        gpio_wr_en;
+  wire  [7:0]                 gpio_wr_index;
+  wire                        gpio_wr_sel;
+  wire                        gpio_wr_value;
+  wire  [7:0]                 gpio_rd_index;
+  wire  [7:0]                 gpio_rd_data;
 
   wire                        cmd_we;
   wire  [15:0]                cmd_wdata;
@@ -151,7 +163,8 @@ module spi_translator #(
     .spi_cs (cs));
 
   spi_translator_decoder #(
-    .NUM_OF_CS (NUM_OF_CS)
+    .NUM_OF_CS (NUM_OF_CS),
+    .GPIO_EN (NUM_OF_GPIO > 0)
   ) i_decoder (
     .clk (clk),
     .resetn (resetn),
@@ -177,6 +190,12 @@ module spi_translator #(
     .reg_wr_en (reg_wr_en),
     .reg_wr_addr (reg_wr_addr),
     .reg_wr_data (reg_wr_data),
+    .gpio_wr_en (gpio_wr_en),
+    .gpio_wr_index (gpio_wr_index),
+    .gpio_wr_sel (gpio_wr_sel),
+    .gpio_wr_value (gpio_wr_value),
+    .gpio_rd_index (gpio_rd_index),
+    .gpio_rd_data (gpio_rd_data),
     .flush_req (flush),
     .err (err));
 
@@ -220,7 +239,8 @@ module spi_translator #(
     .spi_resetn (spi_resetn));
 
   spi_translator_regmap #(
-    .PERIPHERAL_ID (PERIPHERAL_ID)
+    .PERIPHERAL_ID (PERIPHERAL_ID),
+    .NUM_OF_GPIO (NUM_OF_GPIO)
   ) i_regmap (
     .clk (clk),
     .resetn (resetn),
@@ -233,9 +253,31 @@ module spi_translator #(
     .cmd_room ({{(15-CMD_FIFO_ADDRESS_WIDTH){1'b0}}, cmd_room}),
     .sdo_room ({{(15-SDO_FIFO_ADDRESS_WIDTH){1'b0}}, sdo_room}),
     .last_sync (last_sync),
-    .sdi_level ({{(15-RESP_FIFO_ADDRESS_WIDTH){1'b0}}, resp_level}),
-    .gpio_i (gpio_i),
-    .gpio_o (gpio_o),
-    .gpio_t (gpio_t));
+    .sdi_level ({{(15-RESP_FIFO_ADDRESS_WIDTH){1'b0}}, resp_level}));
+
+  generate
+    if (NUM_OF_GPIO > 0) begin : g_gpio
+      spi_translator_gpio #(
+        .NUM_OF_GPIO (NUM_OF_GPIO),
+        .DEFAULT_DIR (GPIO_DEFAULT_DIR[NUM_OF_GPIO-1:0]),
+        .DEFAULT_OUT (GPIO_DEFAULT_OUT[NUM_OF_GPIO-1:0])
+      ) i_gpio (
+        .clk (clk),
+        .resetn (resetn),
+        .wr_en (gpio_wr_en),
+        .wr_index (gpio_wr_index),
+        .wr_sel (gpio_wr_sel),
+        .wr_value (gpio_wr_value),
+        .rd_index (gpio_rd_index),
+        .rd_data (gpio_rd_data),
+        .gpio_i (gpio_i),
+        .gpio_o (gpio_o),
+        .gpio_t (gpio_t));
+    end else begin : g_no_gpio
+      assign gpio_rd_data = 8'h00;
+      assign gpio_o = 1'b0;
+      assign gpio_t = 1'b1;
+    end
+  endgenerate
 
 endmodule

@@ -12,6 +12,7 @@ GENERIC_DEPS += spi_translator.v
 GENERIC_DEPS += spi_translator_decoder.v
 GENERIC_DEPS += spi_translator_execution.v
 GENERIC_DEPS += spi_translator_fifo.v
+GENERIC_DEPS += spi_translator_gpio.v
 GENERIC_DEPS += spi_translator_regmap.v
 
 XILINX_DEPS += spi_translator_constr.xdc

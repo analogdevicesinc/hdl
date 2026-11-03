@@ -30,7 +30,8 @@ Features
 - Two-frame reads (request, then FETCH), retryable
 - A downstream transfer can be split over several frames, for cascading
   translators
-- Register file with status, FIFO levels, last SYNC id and 8 GPIOs
+- Register file with status, FIFO levels and last SYNC id
+- Up to 256 GPIOs, written and read one pin per instruction
 
 Files
 --------------------------------------------------------------------------------
@@ -52,7 +53,7 @@ Files
    * - :git-hdl:`library/spi_translator/spi_translator_fifo.v`
      - Single-clock FIFO with commit and rollback.
    * - :git-hdl:`library/spi_translator/spi_translator_regmap.v`
-     - Bridge register file and GPIOs.
+     - Bridge register file.
    * - :git-hdl:`library/spi_translator/spi_translator_constr.xdc`
      - Clock-domain crossing constraints.
    * - :git-hdl:`library/spi_translator/spi_translator_ip.tcl`
@@ -81,7 +82,7 @@ Block Diagram
                                  CTRL_W|  |   +------------------- +------+ |
                                        v  |CTRL_R                  | RESP | |
                                      +--------+     sdi            +------+ |
-                         GPIO <----->| regmap |<--- SYNC id: last_sync      |
+                                     | regmap |<--- SYNC id: last_sync      |
                                      +--------+                             |
                                                   FLUSH: engine reset ------+
                                                                   spi_resetn
@@ -100,9 +101,27 @@ Configuration Parameters
    * - Name
      - Default
      - Description
+   * - ``PERIPHERAL_ID``
+     - 0
+     - Value of the PERIPHERAL_ID register.
    * - ``UP_CPOL``, ``UP_CPHA``
      - 0, 0
      - Upstream SPI mode. Fixed at synthesis, see `The upstream slave`_.
+   * - ``NUM_OF_CS``
+     - 4
+     - Number of downstream targets, 1 to 8. Must match the engine's
+       ``NUM_OF_CS``.
+   * - ``NUM_OF_GPIO``
+     - 8
+     - Number of GPIOs, 0 to 256. 0 leaves the GPIO logic out, see `GPIOs`_.
+   * - ``GPIO_DEFAULT_DIR``
+     - 0
+     - Direction of each GPIO after reset, bit *g* for GPIO *g*: 0 = output,
+       1 = input. 256 bits; bits from ``NUM_OF_GPIO`` up are ignored.
+   * - ``GPIO_DEFAULT_OUT``
+     - 0
+     - Output value of each GPIO after reset, bit *g* for GPIO *g*. 256 bits;
+       bits from ``NUM_OF_GPIO`` up are ignored.
    * - ``HEADER_CRC_EN``
      - 1
      - Not used by this version.
@@ -188,12 +207,12 @@ Interface
    * - ``spi_resetn``
      - out
      - Reset for ``spi_engine_execution``; pulsed low by FLUSH.
-   * - ``gpio_i[7:0]``, ``gpio_o[7:0]``, ``gpio_t[7:0]``
+   * - ``gpio_i``, ``gpio_o``, ``gpio_t``
      - in/out
-     - GPIOs, e.g. downstream reset lines. Connect through ``ad_iobuf``;
-       ``gpio_t`` high means input.
+     - ``NUM_OF_GPIO`` wide. Connect through ``ad_iobuf``; ``gpio_t`` high
+       means input. Not present when ``NUM_OF_GPIO = 0``.
 
-The engine must be built with ``NUM_OF_CS = 4``, ``DATA_WIDTH = 8`` and
+The engine must be built with the same ``NUM_OF_CS``, ``DATA_WIDTH = 8`` and
 ``NUM_OF_SDIO = 1``.
 
 Register Map
@@ -249,18 +268,14 @@ CTRL_R.
      - SDI_LEVEL
      - R
      - SDI bytes waiting for FETCH, low and high byte.
-   * - ``0xD``
-     - GPIO_OUT
-     - RW
-     - Output value of each GPIO.
-   * - ``0xE``
-     - GPIO_DIR
-     - RW
-     - 1 = output, 0 = input. Resets to all inputs.
-   * - ``0xF``
-     - GPIO_IN
+   * - ``0xD``, ``0xE``
+     - GPIO_NUM
      - R
-     - Pin level of each GPIO, synchronized to ``clk``.
+     - ``NUM_OF_GPIO``, low and high byte; 0 means no GPIOs.
+   * - ``0xF``
+     - --
+     - --
+     - Free; reads 0.
 
 STATUS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -286,10 +301,8 @@ STATUS
      - Free space in eighths of the fuller of the CMD and SDO FIFOs,
        saturated at 7. Exact values are in CMD_ROOM and SDO_ROOM.
 
-GPIO writes take effect as soon as their CTRL_W is decoded, not in order with
-engine instructions: queued instructions, including those of the same frame,
-run after the change. To change a GPIO after earlier traffic has run, for
-example to release a reset, wait for BUSY to clear first.
+GPIOs are not in the register map; they are reached one pin at a time with
+GPIO_W and GPIO_R, see `GPIOs`_.
 
 Theory of Operation
 --------------------------------------------------------------------------------
@@ -353,19 +366,31 @@ bridge and are never forwarded. Their high byte is ``{1, op[2:0], addr[3:0]}``.
      - Immediately drop all queued work and SDI data, including the earlier
        part of its own frame, reset the engine (deasserting every downstream
        CS) and clear the ERR bits.
+   * - ``0xD?ii``
+     - 5
+     - GPIO_W
+     - Write one bit of GPIO ``ii``, immediately. High byte
+       ``{4'hD, sel, value, 2'b00}``: sel 0 writes OUT, 1 writes DIR
+       (0 = output, 1 = input).
+   * - ``0xE0ii``
+     - 6
+     - GPIO_R
+     - Reply with ``{5'b0, DIR, OUT, IN}`` of GPIO ``ii``.
 
-Opcodes 5 to 7 are reserved. ``addr`` must be 0 for NOP, FETCH and FLUSH, and
-the low byte of CTRL_R must be ``0x00``. FETCH filler bytes are ignored.
-Bridge and engine instructions can be mixed in one frame.
+Opcode 7 is reserved, and so are GPIO_W and GPIO_R in a translator built
+without GPIOs. ``addr`` must be 0 for NOP, FETCH, FLUSH and GPIO_R, the
+two low bits of the GPIO_W high byte must be 0, and the low byte of CTRL_R must
+be ``0x00``. FETCH filler bytes are ignored. Bridge and engine instructions can
+be mixed in one frame.
 
-CTRL_W and FLUSH take effect about four ``clk`` cycles after their low byte,
+CTRL_W, GPIO_W and FLUSH take effect about four ``clk`` cycles after their low byte,
 as long as nothing earlier in the frame has failed: an instruction after an
 error may be misaligned data, so it is ignored. They are not undone if the
 frame is rejected later; register writes are absolute and FLUSH is idempotent,
 so resending the frame is harmless. Consequently:
 
-- several CTRL_W can be sent in one frame, and a CTRL_R after a CTRL_W reads
-  the new value;
+- several CTRL_W or GPIO_W can be sent in one frame, and a CTRL_R or GPIO_R
+  after a write reads the new value;
 - the instructions after a FLUSH are kept and committed normally, so a frame
   such as ``FLUSH, CFG, PRESCALE, CS, ...`` recovers and starts again. The
   engine restarts from its reset configuration, so the frame sets the mode and
@@ -386,6 +411,9 @@ after the byte that completes its request:
    FETCH   MOSI  [0x90][ nn ][fill][fill]    ... [fill]
            MISO  [ .. ][ .. ][turn][data 0]  ... [data n]
 
+   GPIO_R  MOSI  [0xE0][ ii ][next hi][next lo]  the index is in the low byte;
+           MISO  [ .. ][ .. ][ turn  ][  pin  ]  the reply comes one byte later
+
 CTRL_R needs no filler: its data goes out during the first byte of whatever
 instruction follows it. Register reads can therefore be chained at one per two
 bytes, and a CTRL_R that ends a frame is followed by a NOP to clock its data
@@ -395,6 +423,80 @@ out:
 
    MOSI  [CTRL_R a][CTRL_R b][CTRL_R c][NOP  ]
    MISO  [ ..  ..][a   ..  ][b   ..  ][c  ..]
+
+GPIO_R chains the same way, its reply landing in the low byte of the following
+instruction.
+
+GPIOs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Each of the ``NUM_OF_GPIO`` pins has an output value (OUT), a direction (DIR,
+0 = output, 1 = input, the same polarity as ``gpio_t``) and an input level (IN,
+synchronized to ``clk``). GPIO_W writes one bit of OUT or DIR, GPIO_R returns
+all three bits of one pin. An index at or above ``NUM_OF_GPIO`` is
+ignored on write and reads 0. With an 8-bit index a translator has up to 256
+GPIOs; cascaded translators each have their own.
+
+A translator that needs no GPIOs, such as the first stage of a cascade whose
+pins are all on the later stages, is built with ``NUM_OF_GPIO = 0``. The GPIO
+logic is then left out, the IP has no GPIO ports, and GPIO_W and GPIO_R are
+rejected as bad instructions, so a host addressing the wrong stage gets an
+error rather than silence. Software can tell which stages have GPIOs from
+GPIO_NUM.
+
+Reset state
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After reset each pin takes its bit of ``GPIO_DEFAULT_DIR`` and
+``GPIO_DEFAULT_OUT``; by default every pin is an output driven low. Both
+parameters are 256-bit strings whatever ``NUM_OF_GPIO`` is, so in a block
+design they are set as hex values, e.g.
+``CONFIG.GPIO_DEFAULT_OUT {0x...0002}`` with leading zeros up to 64 digits. The
+parameters are set per project to match what the pins control. For the main
+use, regulator enables of the downstream chips:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Pin
+     - ``GPIO_DEFAULT_DIR`` bit
+     - ``GPIO_DEFAULT_OUT`` bit
+   * - Active-high enable (``EN``)
+     - 0 (output)
+     - 0: regulator off
+   * - Active-low enable (``EN_N``, ``SHDN_N``)
+     - 0 (output)
+     - 1: regulator off
+   * - Power-good or fault from a regulator (``PG``, ``FAULT_N``)
+     - 1 (input)
+     - --
+
+Every regulator is then off after reset, and software switches them on in the
+order the chips' power sequencing requires. A pin that another device drives
+must default to input, or the two drive it against each other until software
+reconfigures it.
+
+Two points lie outside the core:
+
+- Before the bitstream is loaded the FPGA pins are high-Z, possibly with
+  pull-ups depending on the configuration settings. Each enable needs a board
+  pull resistor to its off level, matching ``GPIO_DEFAULT_OUT``, so the
+  regulators stay off from power-up until the core's reset drives the pins.
+- Asserting ``resetn`` returns every pin to its default, switching the
+  regulators off. Drive it from a system-level reset only. FLUSH does not
+  affect the GPIOs.
+
+The instructions match the Linux GPIO API, which sets and gets one line at a
+time: a ``gpio_chip`` in the shim sends one small frame per call, and drivers
+such as ``one-bit-adc-dac`` bind to the lines unmodified. Writing one pin never
+touches the others, so no read-modify-write is needed.
+
+GPIO_W acts immediately, like CTRL_W, so it is not ordered with the frame's
+engine instructions, which only run after the commit. A pin that must change
+after some SPI traffic, such as a load or reset line, is written in a later
+frame once BUSY has cleared. Minimum hold times are kept by the host waiting
+between frames; exact timing relative to SPI traffic would need the GPIO change
+to travel in the instruction stream itself.
 
 Reads
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -602,9 +704,9 @@ become the point at which CTRL_W and FLUSH take effect, keeping them protected
 without returning to commit-time writes.
 
 Immediate does not mean ordered with SPI traffic: the frame's engine
-instructions only run after the commit, so a GPIO written by CTRL_W changes
-before them. Timed GPIO sequences would need a GPIO instruction stored in the
-CMD FIFO and executed by the bridge at the FIFO output, once the engine is idle.
+instructions only run after the commit, so a register written by CTRL_W changes
+before them. Anything that must happen after some SPI traffic, such as a GPIO
+sequence, is sent in a later frame once BUSY has cleared, see `GPIOs`_.
 
 Framing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -629,14 +731,13 @@ Current limitations
 - **Partial bytes** cut short by CS are dropped silently by the slave.
 - **8-bit SDO words only** (engine ``DATA_WIDTH = 8``).
 - **No downstream watchdog**; a hung engine is recovered with FLUSH.
-- **GPIO writes are not ordered** with queued engine instructions.
 
 Simulation
 --------------------------------------------------------------------------------
 
 The testbench drives the bridge with an upstream mode 0 SPI master task that
 also captures MISO, in front of a stock ``spi_engine_execution`` and four
-behavioural targets in modes 0 to 3, plus a GPIO pin model. The FIFOs are
+behavioural targets in modes 0 to 3. The FIFOs are
 built small (16 instructions, 32 SDO bytes) so they can be filled. It runs
 with Vivado xsim:
 
