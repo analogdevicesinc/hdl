@@ -155,6 +155,7 @@ set_property FORCE_MAX_FANOUT 32 [get_nets -of [get_pins -hierarchical -filter {
 set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[*].i_lane/i_rx_header/sync_word_reg[*]*/Q}]]
 set_property FORCE_MAX_FANOUT 8 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx/inst/mode_64b66b.gen_lane[*].i_lane/ctrl_err_statistics_mask_r_reg[*]*/Q}]]
 set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/core_reset_vector_dly_reg[*]*/Q}]]
+set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/device_reset_vector_dly_reg[*]*/Q}]]
 set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_rx/i_cdc_cfg/out_toggle_d1_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */rx_apollo_tpl_core/adc_tpl_core/inst/i_core/i_deframer/g_xcvr_if[*].i_xcvr_if/rx_ip_sof_hold_reg[*]*/Q}]]
 # Force max fanout for data_offload paths going to BRAM blocks to half of what it normally is, to reduce routing delays
@@ -175,6 +176,7 @@ set_property FORCE_MAX_FANOUT 2 [get_nets -of [get_pins -hierarchical -filter {N
 set_property FORCE_MAX_FANOUT 64 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_cfg_disable_scrambler_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 36 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx/inst/dual_lmfc_mode.i_tx_gearbox/GenMemPerLane[*].out_addr_reg[*]*/Q}]]
 set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/core_reset_vector_dly_reg[*]*/Q}]]
+set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/device_reset_vector_dly_reg[*]*/Q}]]
 # Reduce max fanout for each dac_sync_int[] FF for better timing.
 set_property FORCE_MAX_FANOUT 100 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */tx_apollo_tpl_core/*/i_core/dac_sync_int*[*]/Q}]]
 
