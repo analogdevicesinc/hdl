@@ -109,7 +109,7 @@ module i3c_controller_core #(
   wire nop;
   wire i2c_mode;
 
-  wire bus_reset_n;
+  reg  bus_reset_n;
   wire bus_nop;
 
   wire bit_mod_scl;
@@ -203,20 +203,24 @@ module i3c_controller_core #(
     .sdi(i3c_sdi),
     .t(bit_mod_t));
 
-  i3c_controller_trp
-  i_i3c_controller_trp (
+  i3c_controller_patterns
+  i_i3c_controller_patterns (
     .reset_n(reset_n),
     .clk(clk),
+    .cmd_pattern(cmdp[29:23]),
     .cmd_valid(trp_valid),
     .cmd_ready(trp_ready),
-    .idle(nop | ~bit_mod_scl),
+    .idle(nop || !bit_mod_scl),
     .hold(trp_hold),
     .scl(trp_scl),
     .sdo(trp_sdo),
     .t(trp_t));
 
-  assign bus_reset_n = reset_n & ~trp_hold;
-  assign bus_nop = nop & ~trp_hold;
+  always @(posedge clk) begin
+    bus_reset_n <= reset_n && !trp_hold;
+  end
+
+  assign bus_nop = nop && !trp_hold;
 
   assign i3c_scl = trp_hold ? trp_scl : bit_mod_scl;
   assign i3c_sdo = trp_hold ? trp_sdo : bit_mod_sdo;
