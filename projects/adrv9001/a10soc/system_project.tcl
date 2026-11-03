@@ -60,8 +60,8 @@ source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_assign.tcl
 ## adrv9001
 #
 set_location_assignment PIN_E5   -to dev_clk_in          ; ## FMCA_HPC_CLK0_M2C_P
-set_location_assignment PIN_J10  -to dev_mcs_fpga_out_n  ; ## FMCA_HPC_LA14_N
-set_location_assignment PIN_J9   -to dev_mcs_fpga_out_p  ; ## FMCA_HPC_LA14_P
+set_location_assignment PIN_J9   -to dev_mcs_fpga_out       ; ## FMCA_HPC_LA14_P
+set_location_assignment PIN_J10  -to "dev_mcs_fpga_out(n)"  ; ## FMCA_HPC_LA14_N
 set_location_assignment PIN_D6   -to dgpio_0             ; ## FMCA_HPC_LA16_P
 set_location_assignment PIN_E6   -to dgpio_1             ; ## FMCA_HPC_LA16_N
 set_location_assignment PIN_D5   -to dgpio_2             ; ## FMCA_HPC_LA15_N
@@ -74,10 +74,10 @@ set_location_assignment PIN_L5   -to dgpio_8             ; ## FMCA_HPC_LA28_P
 set_location_assignment PIN_M5   -to dgpio_9             ; ## FMCA_HPC_LA28_N
 set_location_assignment PIN_C9   -to dgpio_10            ; ## FMCA_HPC_LA11_P
 set_location_assignment PIN_H2   -to dgpio_11            ; ## FMCA_HPC_LA27_N
-set_location_assignment PIN_L9   -to fpga_mcs_in_n       ; ## FMCA_HPC_LA32_N
-set_location_assignment PIN_L8   -to fpga_mcs_in_p       ; ## FMCA_HPC_LA32_P
-set_location_assignment PIN_W6   -to fpga_ref_clk_n      ; ## FMCA_HPC_CLK1_M2C_N
-set_location_assignment PIN_W5   -to fpga_ref_clk_p      ; ## FMCA_HPC_CLK1_M2C_P
+set_location_assignment PIN_L8   -to fpga_mcs_in            ; ## FMCA_HPC_LA32_P
+set_location_assignment PIN_L9   -to "fpga_mcs_in(n)"       ; ## FMCA_HPC_LA32_N
+set_location_assignment PIN_W5   -to fpga_ref_clk           ; ## FMCA_HPC_CLK1_M2C_P
+set_location_assignment PIN_W6   -to "fpga_ref_clk(n)"      ; ## FMCA_HPC_CLK1_M2C_N
 set_location_assignment PIN_P9   -to gp_int              ; ## FMCA_HPC_LA30_P
 set_location_assignment PIN_J11  -to mode                ; ## FMCA_HPC_LA13_P
 set_location_assignment PIN_K11  -to reset_trx           ; ## FMCA_HPC_LA13_N
@@ -128,6 +128,15 @@ set_location_assignment PIN_F3   -to tx2_qdata_out_n     ; ## FMCA_HPC_LA25_N
 set_location_assignment PIN_E3   -to tx2_qdata_out_p     ; ## FMCA_HPC_LA25_P
 set_location_assignment PIN_E2   -to tx2_strobe_out_n    ; ## FMCA_HPC_LA24_N
 set_location_assignment PIN_E1   -to tx2_strobe_out_p    ; ## FMCA_HPC_LA24_P
+
+set_instance_assignment -name IO_STANDARD LVDS -to dev_mcs_fpga_out
+set_instance_assignment -name IO_STANDARD LVDS -to "dev_mcs_fpga_out(n)"
+set_instance_assignment -name IO_STANDARD LVDS -to fpga_mcs_in
+set_instance_assignment -name IO_STANDARD LVDS -to "fpga_mcs_in(n)"
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_mcs_in
+set_instance_assignment -name IO_STANDARD LVDS -to fpga_ref_clk
+set_instance_assignment -name IO_STANDARD LVDS -to "fpga_ref_clk(n)"
+set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_ref_clk
 
 execute_flow -compile
 
