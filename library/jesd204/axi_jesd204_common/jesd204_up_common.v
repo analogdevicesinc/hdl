@@ -129,8 +129,9 @@ module jesd204_up_common #(
   reg [2:0] core_reset_vector_dly = 3'b111;
   assign core_reset = core_reset_vector_dly[0];
 
-  reg [4:0] device_reset_vector = 5'b11111;
-  assign device_reset = device_reset_vector[0];
+  reg [1:0] device_reset_vector = 2'b11;
+  reg [2:0] device_reset_vector_dly = 3'b111;
+  assign device_reset = device_reset_vector_dly[0];
 
   /* Transfer the reset signal back to the up domain, used to keep the
    * synchronizers in reset until the core is ready. This is done in order to
@@ -155,7 +156,7 @@ module jesd204_up_common #(
   assign core_cfg_transfer_en = core_reset_vector_dly[2] ^ core_reset_vector_dly[1];
 
   wire device_cfg_transfer_en;
-  assign device_cfg_transfer_en = device_reset_vector[2] ^ device_reset_vector[1];
+  assign device_cfg_transfer_en = device_reset_vector_dly[2] ^ device_reset_vector_dly[1];
 
   assign up_cfg_is_writeable = up_reset_core;
 
@@ -181,9 +182,11 @@ module jesd204_up_common #(
 
   always @(posedge device_clk or posedge core_reset_all) begin
     if (core_reset_all == 1'b1) begin
-      device_reset_vector <= 5'b11111;
+      device_reset_vector <= 2'b11;
+      device_reset_vector_dly <= 3'b111;
     end else begin
-      device_reset_vector <= {1'b0,device_reset_vector[4:1]};
+      device_reset_vector <= {1'b0,device_reset_vector[1]};
+      device_reset_vector_dly <= {device_reset_vector[0],device_reset_vector_dly[2:1]};
     end
   end
 

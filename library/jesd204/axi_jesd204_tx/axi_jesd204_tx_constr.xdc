@@ -103,6 +103,10 @@ set_false_path \
   -to [get_pins {i_up_common/device_reset_vector_reg[*]/PRE}]
 
 set_false_path \
+  -from [get_pins {i_up_common/up_reset_core_reg/C}] \
+  -to [get_pins {i_up_common/device_reset_vector_dly_reg[*]/PRE}]
+
+set_false_path \
   -from [get_pins {i_up_common/core_reset_vector_dly_reg[0]*/C}] \
   -to [get_pins {i_up_common/up_reset_synchronizer_vector_reg[*]/PRE}]
 
