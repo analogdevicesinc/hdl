@@ -21,7 +21,7 @@ set_property -dict {PACKAGE_PIN C11} [get_ports aurora_rxn[1]]
 
 set_property -dict {PACKAGE_PIN E2   IOSTANDARD LVCMOS18} [get_ports FPGA_TRIG]
 
-create_clock -period 8.138 -name aurora_refclk [get_ports aurora_refclk_p]
+create_clock -period 6.400 -name aurora_refclk [get_ports aurora_refclk_p]
 
 create_generated_clock -name sys_clk [get_pins i_system_wrapper/system_i/clk_wizard/inst/mmcm_adv_inst/CLKOUT0]
 create_generated_clock -name spi_clk [get_pins i_system_wrapper/system_i/clk_wizard/inst/mmcm_adv_inst/CLKOUT1]

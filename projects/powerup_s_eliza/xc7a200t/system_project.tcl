@@ -19,4 +19,4 @@ adi_project_files powerup_s_eliza_xc7a200t [list \
 
 set_property used_in_synthesis false [get_files "$ad_hdl_dir/projects/powerup_s_eliza/xc7a200t/system_constr.xdc"]
 
-# adi_project_run powerup_s_eliza_xc7a200t
+adi_project_run powerup_s_eliza_xc7a200t
