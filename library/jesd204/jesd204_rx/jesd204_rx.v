@@ -174,6 +174,7 @@ module jesd204_rx #(
   localparam CW = DATA_PATH_WIDTH;
   localparam HW = 2;
 
+  localparam QUARTER_NO_OF_LANES = NUM_LANES / 4;
   localparam HALF_NO_OF_LANES = NUM_LANES / 2;
 
   reg                    buffer_release_n = 1'b1;
@@ -195,8 +196,10 @@ module jesd204_rx #(
 
   wire [NUM_LANES-1:0]   buffer_ready_n;
   wire                   all_buffer_ready_n;
-  wire                   all_buffer_ready_n_l;
-  wire                   all_buffer_ready_n_u;
+  wire                   all_buffer_ready_n_1;
+  wire                   all_buffer_ready_n_2;
+  wire                   all_buffer_ready_n_3;
+  wire                   all_buffer_ready_n_4;
   wire                   dev_all_buffer_ready_n;
 
   wire [NUM_LANES-1:0]   phy_block_sync_r;
@@ -225,8 +228,10 @@ module jesd204_rx #(
 
   assign all_buffer_ready_n = |(buffer_ready_n & ~cfg_lanes_disable);
 
-  assign all_buffer_ready_n_l = |(buffer_ready_n[HALF_NO_OF_LANES-1:0] & ~cfg_lanes_disable[HALF_NO_OF_LANES-1:0]);
-  assign all_buffer_ready_n_u = |(buffer_ready_n[NUM_LANES-1:HALF_NO_OF_LANES] & ~cfg_lanes_disable[NUM_LANES-1:HALF_NO_OF_LANES]);
+  assign all_buffer_ready_n_1 = |(buffer_ready_n[QUARTER_NO_OF_LANES-1:0] & ~cfg_lanes_disable[QUARTER_NO_OF_LANES-1:0]);
+  assign all_buffer_ready_n_2 = |(buffer_ready_n[HALF_NO_OF_LANES-1:QUARTER_NO_OF_LANES] & ~cfg_lanes_disable[HALF_NO_OF_LANES-1:QUARTER_NO_OF_LANES]);
+  assign all_buffer_ready_n_3 = |(buffer_ready_n[HALF_NO_OF_LANES+QUARTER_NO_OF_LANES-1:HALF_NO_OF_LANES] & ~cfg_lanes_disable[HALF_NO_OF_LANES+QUARTER_NO_OF_LANES-1:HALF_NO_OF_LANES]);
+  assign all_buffer_ready_n_4 = |(buffer_ready_n[NUM_LANES-1:HALF_NO_OF_LANES+QUARTER_NO_OF_LANES] & ~cfg_lanes_disable[NUM_LANES-1:HALF_NO_OF_LANES+QUARTER_NO_OF_LANES]);
 
   sync_bits #(
     .NUM_OF_BITS (1),
@@ -570,8 +575,10 @@ module jesd204_rx #(
 
         wire [7:0] status_lane_skew;
         wire all_buffer_ready_n_d;
-        wire all_buffer_ready_n_d_l;
-        wire all_buffer_ready_n_d_u;
+        wire all_buffer_ready_n_d_1;
+        wire all_buffer_ready_n_d_2;
+        wire all_buffer_ready_n_d_3;
+        wire all_buffer_ready_n_d_4;
 
         wire [DW-1:0] phy_data_r;
         wire [HW-1:0] phy_header_r;
@@ -604,19 +611,33 @@ module jesd204_rx #(
         (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
           .WIDTH(1),
           .REGISTERED(NUM_BUFFER_READY_PIPELINE)
-        ) i_all_buffer_ready_pipeline_stage_l (
+        ) i_all_buffer_ready_pipeline_stage_1 (
           .clk(clk),
-          .in(all_buffer_ready_n_l),
-          .out(all_buffer_ready_n_d_l));
+          .in(all_buffer_ready_n_1),
+          .out(all_buffer_ready_n_d_1));
         (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
           .WIDTH(1),
           .REGISTERED(NUM_BUFFER_READY_PIPELINE)
-        ) i_all_buffer_ready_pipeline_stage_u (
+        ) i_all_buffer_ready_pipeline_stage_2 (
           .clk(clk),
-          .in(all_buffer_ready_n_u),
-          .out(all_buffer_ready_n_d_u));
+          .in(all_buffer_ready_n_2),
+          .out(all_buffer_ready_n_d_2));
+        (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+          .WIDTH(1),
+          .REGISTERED(NUM_BUFFER_READY_PIPELINE)
+        ) i_all_buffer_ready_pipeline_stage_3 (
+          .clk(clk),
+          .in(all_buffer_ready_n_3),
+          .out(all_buffer_ready_n_d_3));
+        (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+          .WIDTH(1),
+          .REGISTERED(NUM_BUFFER_READY_PIPELINE)
+        ) i_all_buffer_ready_pipeline_stage_4 (
+          .clk(clk),
+          .in(all_buffer_ready_n_4),
+          .out(all_buffer_ready_n_d_4));
 
-        assign all_buffer_ready_n_d = all_buffer_ready_n_d_l | all_buffer_ready_n_d_u;
+        assign all_buffer_ready_n_d = all_buffer_ready_n_d_1 | all_buffer_ready_n_d_2 | all_buffer_ready_n_d_3 | all_buffer_ready_n_d_4;
 
         // Register event_data_phase signal to break the combinational path coming
         // from jesd204_rx_ctrl_64b and going into jesd204_rx_lane_64b.
