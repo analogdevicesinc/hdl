@@ -362,7 +362,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - AD9209/VCK190 Linux device tree at :git-linux:`arch/arm64/boot/dts/xilinx/versal-vck190-reva-ad9209.dts`
-- :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
+- :external+linux:ref:`AD9081-FMCA-EBZ Linux driver page <ad9081>`
   applies to the AD9209-FMCA-EBZ board as well, just the RX side
 - Python support:
 

@@ -260,7 +260,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD7768 IIO Precision ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad7768>`
+- :external+linux:doc:`AD7768 IIO Precision ADC Linux Driver <drivers/iio-adc/ad7768>`
 
 - Python support:
 

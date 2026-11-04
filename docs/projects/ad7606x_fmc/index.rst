@@ -406,7 +406,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-no-os:`AD7606_FMC No-OS driver source code <drivers/adc/ad7606>`
-- :dokuwiki:`AD7606 - No-OS Driver [Wiki] <resources/tools-software/uc-drivers/ad7606>`
+- :external+no-OS:doc:`AD7606 - No-OS Driver <projects/adc/ad7606x-fmc>`
 
 .. include:: ../common/more_information.rst
 

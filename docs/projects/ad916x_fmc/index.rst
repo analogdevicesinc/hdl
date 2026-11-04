@@ -330,7 +330,7 @@ Software related
 Linux support:
 
 - :git-linux:`Linux driver ad9162.c <drivers/iio/frequency/ad9162.c>`
-- :dokuwiki:`[Wiki] AD916X DAC Linux Driver wiki page <resources/tools-software/linux-drivers/iio-pll/ad9162>`
+- :external+linux:doc:`AD916X DAC Linux Driver page <drivers/iio-pll/ad9162>`
 
 .. collapsible:: Linux devicetrees:
 
@@ -340,7 +340,7 @@ Linux support:
   - (AD9162) :git-linux:`Linux device tree (MODE 8) zynqmp-zcu102-rev10-ad9162-fmc-ebz_m2_s2.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9162-fmc-ebz_m2_s2.dts>`
   - (AD9163) :git-linux:`Linux device tree (MODE 8) adi-ad9163-fmc-ebz.dtsi <arch/arm64/boot/dts/xilinx/adi-ad9163-fmc-ebz.dtsi>`
   - (AD9163) :git-linux:`Linux device tree (MODE 8) zynqmp-zcu102-rev10-ad9163-fmc-ebz_m2_l8.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9163-fmc-ebz_m2_l8.dts>`
-  - (AD9163) :git-linux:`Linux device tree (MODE 2) zynqmp-zcu102-rev10-ad9163-fmc-ebz_m2_l2_s1_f1.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9163-fmc-ebz_m2_l2_s1_f1.dts>`
+  - (AD9163) :git-linux:`Linux device tree (MODE 2) zynqmp-zcu102-rev10-ad9163-fmc-ebz_m2_l2_f2_s1.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9163-fmc-ebz_m2_l2_f2_s1.dts>`
   - (AD9164) :git-linux:`Linux device tree (MODE 8) adi-ad9164-fmc-ebz.dtsi <arch/arm64/boot/dts/xilinx/adi-ad9164-fmc-ebz.dtsi>`
   - (AD9164) :git-linux:`Linux device tree (MODE 8) zynqmp-zcu102-rev10-ad9164-fmc-ebz_m2_s2.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9164-fmc-ebz_m2_s2.dts>`
 

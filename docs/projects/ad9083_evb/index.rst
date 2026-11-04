@@ -401,7 +401,7 @@ Software related
 - :external+linux:ref:`Linux driver documentation <ad9083>`
 - AD9083-EVB/ZCU102 Linux device tree :git-linux:`arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9083-fmc-ebz.dts`
 - AD9083-EVB/A10SoC Linux device tree :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_ad9083_fmc_ebz.dts`
-- AD9083-EVB/VCU118 Linux device tree :git-linux:`arch/microblaze/boot/dts/vcu118_ad9083.dts`
+- AD9083-EVB/VCU118 Linux device tree :git-linux:`arch/microblaze/boot/dts/vcu118_ad9083.dts <ad9083_vcu118_support:arch/microblaze/boot/dts/vcu118_ad9083.dts>`
 
 .. include:: ../common/more_information.rst
 

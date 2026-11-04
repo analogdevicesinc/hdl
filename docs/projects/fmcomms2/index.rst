@@ -352,10 +352,10 @@ Software related
    - :git-linux:`FMCOMMS4 ZCU102 (revB) Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB-ad9364-fmcomms4.dts>`
    - :git-linux:`FMCOMMS4 ZCU102 (rev10) Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9364-fmcomms4.dts>`
 
-- :dokuwiki:`[Wiki] AD9361 no-OS software documentation <resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal>`
-- :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
-- :dokuwiki:`[Wiki] FMCOMMS2/3/4/5 Linux support <resources/eval/user-guides/ad-fmcomms2-ebz/software/linux>`
-- :dokuwiki:`[Wiki] AD936X IIO Oscilloscope plugin description <resources/tools-software/linux-software/fmcomms2_plugin>`
+- :external+no-OS:doc:`AD9361 no-OS software documentation <drivers/rf-transceiver/ad9361>`
+- :external+linux:doc:`AD9361 Linux device driver documentation <drivers/iio-transceiver/ad9361>`
+- :external+system-level:doc:`FMCOMMS2/3/4/5 Linux support <solutions/reference-designs/fmcomms2/software/linux>`
+- :external+system-level:doc:`AD936X IIO Oscilloscope plugin description <solutions/reference-designs/fmcomms2/software/ad9361_plugin>`
 
 .. include:: ../common/more_information.rst
 

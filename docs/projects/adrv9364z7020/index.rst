@@ -301,7 +301,7 @@ Software related
 - :git-linux:`ADRV9364-Z7020 ccbob_cmos Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9364-z7020-bob-cmos.dts>`
 - :git-linux:`ADRV9364-Z7020 ccbob_lvds Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9364-z7020-bob.dts>`
 
-- :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
+- :external+linux:doc:`AD9361 Linux device driver documentation <drivers/iio-transceiver/ad9361>`
 
 .. include:: ../common/more_information.rst
 

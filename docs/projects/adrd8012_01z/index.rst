@@ -257,7 +257,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - `GMSL-related repository <https://github.com/analogdevicesinc/gmsl>`_
-- :git-linux:`GMSL drivers/dts <gmsl_k26/xilinx_v6.1_LTS>`
+- :git-linux:`GMSL drivers/dts <gmsl_k26/xilinx_v6.1_LTS:/>`
 
 .. include:: ../common/more_information.rst
 
