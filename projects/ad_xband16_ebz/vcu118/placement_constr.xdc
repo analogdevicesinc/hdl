@@ -189,6 +189,7 @@ set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {N
 set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/device_reset_vector_dly_reg[*]*/Q}]]
 set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_rx/i_cdc_cfg/out_toggle_d1_reg*/Q}]]
 set_property FORCE_MAX_FANOUT 1 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */rx_apollo_tpl_core/adc_tpl_core/inst/i_core/i_deframer/g_xcvr_if[*].i_xcvr_if/rx_ip_sof_hold_reg[*]*/Q}]]
+set_property FORCE_MAX_FANOUT 5 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_rx_jesd/rx_axi/inst/i_up_common/device_cfg_octets_per_frame_reg[*]*/Q}]]
 # Force max fanout for data_offload paths going to BRAM blocks to half of what it normally is, to reduce routing delays
 set_property FORCE_MAX_FANOUT 4 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */apollo_rx_data_offload/storage_unit/inst/i_mem_data/m_ram_reg_bram*_i_*/O}]]
 
@@ -210,6 +211,9 @@ set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {N
 set_property FORCE_MAX_FANOUT 6 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_apollo_tx_jesd/tx_axi/inst/i_up_common/device_reset_vector_dly_reg[*]*/Q}]]
 # Reduce max fanout for each dac_sync_int[] FF for better timing.
 set_property FORCE_MAX_FANOUT 100 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */tx_apollo_tpl_core/*/i_core/dac_sync_int*[*]/Q}]]
+
+# axi_adf4030
+set_property FORCE_MAX_FANOUT 19 [get_nets -of [get_pins -hierarchical -filter {NAME =~ */axi_adf4030_0/inst/i_bsync_gen/ratio_counter_reg[*]*/Q}]]
 
 # Remap to LUTs single CARRY cells that are not part of a carry chain.
 set_property CARRY_REMAP 1 [get_cells -hier -filter {ref_name == CARRY8}]
