@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1300" height="910" viewBox="0 0 1300 910">
+  <title>QUAD-ADA4356/ZedBoard HDL block diagram - TDD_SUPPORT=0</title>
+  <rect x="1" y="1" width="1298" height="908" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+  <rect x="30.00" y="20.00" width="26.00" height="14.00" style="fill:#a01414;stroke:#a01414;stroke-width:1"/>
+  <text x="64.00" y="32.00" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">Receive path</text>
+  <path d="M 170,27 L 202,27" style="fill:none;stroke:#754d00;stroke-width:1.3;stroke-dasharray:5.2,5.2"/>
+  <text x="210.00" y="32.00" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">Clock domain</text>
+  <text x="1275.00" y="40.00" style="font-family:Arial;font-size:20px;font-weight:bold;fill:#000000;text-anchor:end">EVAL-ADA4356EBZ</text>
+  <rect x="20.00" y="60.00" width="1100.00" height="820.00" style="fill:none;stroke:#000000;stroke-width:2"/>
+  <rect x="40.00" y="80.00" width="442.30" height="74.90" style="fill:#ebebeb;stroke:#000000;stroke-width:1.94"/>
+  <text x="56.81" y="117.45" transform="rotate(-90 56.81 117.45)" style="font-family:Arial;font-size:11.25px;font-weight:bold;fill:#000000;text-anchor:middle">Timer</text>
+  <path d="M 66.63,80.00 L 66.63,154.90" style="fill:none;stroke:#000000;stroke-width:2"/>
+  <text x="84.44" y="117.45" transform="rotate(-90 84.44 117.45)" style="font-family:Arial;font-size:11.25px;font-weight:bold;fill:#000000;text-anchor:middle">Interrupts</text>
+  <path d="M 94.26,80.00 L 94.26,154.90" style="fill:none;stroke:#000000;stroke-width:2"/>
+  <text x="112.07" y="117.45" transform="rotate(-90 112.07 117.45)" style="font-family:Arial;font-size:11.25px;font-weight:bold;fill:#000000;text-anchor:middle">DDRx</text>
+  <path d="M 121.89,80.00 L 121.89,154.90" style="fill:none;stroke:#000000;stroke-width:2"/>
+  <text x="139.70" y="117.45" transform="rotate(-90 139.70 117.45)" style="font-family:Arial;font-size:11.25px;font-weight:bold;fill:#000000;text-anchor:middle">Ethernet</text>
+  <path d="M 149.52,80.00 L 149.52,154.90" style="fill:none;stroke:#000000;stroke-width:2"/>
+  <text x="167.33" y="117.45" transform="rotate(-90 167.33 117.45)" style="font-family:Arial;font-size:11.25px;font-weight:bold;fill:#000000;text-anchor:middle">UART</text>
+  <path d="M 177.15,80.00 L 177.15,154.90" style="fill:none;stroke:#000000;stroke-width:2"/>
+  <text x="194.96" y="117.45" transform="rotate(-90 194.96 117.45)" style="font-family:Arial;font-size:11.25px;font-weight:bold;fill:#000000;text-anchor:middle">I2C</text>
+  <path d="M 204.78,80.00 L 204.78,154.90" style="fill:none;stroke:#000000;stroke-width:2"/>
+  <text x="222.59" y="117.45" transform="rotate(-90 222.59 117.45)" style="font-family:Arial;font-size:11.25px;font-weight:bold;fill:#000000;text-anchor:middle">SPI</text>
+  <path d="M 232.41,80.00 L 232.41,154.90" style="fill:none;stroke:#000000;stroke-width:2"/>
+  <text x="357.86" y="122.95" style="font-family:Arial;font-size:15px;font-weight:bold;fill:#000000;text-anchor:middle">ARM (Zynq)</text>
+  <text x="801.15" y="125.00" style="font-family:Arial;font-size:20px;font-weight:bold;fill:#000000;text-anchor:middle">ZedBoard</text>
+  <rect x="70.00" y="200.00" width="185.00" height="640.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
+  <text x="162.00" y="823.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">sys_143m_clk</text>
+  <text x="162.00" y="836.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">=142.857MHz</text>
+  <rect x="265.00" y="202.00" width="565.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
+  <text x="578.00" y="340.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk</text>
+  <text x="578.00" y="353.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">=125MHz</text>
+  <rect x="265.00" y="372.00" width="565.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
+  <text x="578.00" y="510.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk</text>
+  <text x="578.00" y="523.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">=125MHz</text>
+  <rect x="265.00" y="542.00" width="565.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
+  <text x="578.00" y="680.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk</text>
+  <text x="578.00" y="693.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">=125MHz</text>
+  <rect x="265.00" y="712.00" width="565.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
+  <text x="578.00" y="850.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk</text>
+  <text x="578.00" y="863.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">=125MHz</text>
+  <path d="M 245.00,154.90 L 245.00,191.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
+  <polygon points="245.00,200.00 240.50,191.00 249.50,191.00" style="fill:#754d00;stroke:none"/>
+  <path d="M 460.00,154.90 L 460.00,162.90 L 850.00,162.90 L 850.00,706.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
+  <text x="650.00" y="158.90" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">sys_200m_clk=200MHz</text>
+  <circle cx="850.00" cy="196.00" r="3" style="fill:#754d00;stroke:none"/>
+  <path d="M 850.00,196.00 L 790.00,196.00 L 790.00,201.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
+  <polygon points="790.00,210.00 785.50,201.00 794.50,201.00" style="fill:#754d00;stroke:none"/>
+  <circle cx="850.00" cy="366.00" r="3" style="fill:#754d00;stroke:none"/>
+  <path d="M 850.00,366.00 L 790.00,366.00 L 790.00,371.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
+  <polygon points="790.00,380.00 785.50,371.00 794.50,371.00" style="fill:#754d00;stroke:none"/>
+  <circle cx="850.00" cy="536.00" r="3" style="fill:#754d00;stroke:none"/>
+  <path d="M 850.00,536.00 L 790.00,536.00 L 790.00,541.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
+  <polygon points="790.00,550.00 785.50,541.00 794.50,541.00" style="fill:#754d00;stroke:none"/>
+  <path d="M 850.00,706.00 L 790.00,706.00 L 790.00,711.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
+  <polygon points="790.00,720.00 785.50,711.00 794.50,711.00" style="fill:#754d00;stroke:none"/>
+  <rect x="88.00" y="230.00" width="40.00" height="580.00" style="fill:#e8e8e8;stroke:#000000;stroke-width:2"/>
+  <text x="114.50" y="520.00" transform="rotate(-90 114.50 520.00)" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">MEMORY INTERCONNECT</text>
+  <polygon points="100.00,230.00 100.00,170.90 94.00,170.90 108.00,154.90 122.00,170.90 116.00,170.90 116.00,230.00" style="fill:#a01414;stroke:none"/>
+  <text x="112.20" y="200.45" transform="rotate(-90 112.20 200.45)" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#ffffff;text-anchor:middle">64b</text>
+  <rect x="620.00" y="210.00" width="200.00" height="110.00" style="fill:#ffcccc;stroke:#a01414;stroke-width:2"/>
+  <text x="720.00" y="271.50" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">AXI ADA4355 (0)</text>
+  <rect x="180.00" y="230.00" width="160.00" height="70.00" style="fill:#ffcccc;stroke:#a01414;stroke-width:2"/>
+  <text x="260.00" y="271.50" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">AXI DMAC (0)</text>
+  <polygon points="620.00,257.00 356.00,257.00 356.00,251.00 340.00,265.00 356.00,279.00 356.00,273.00 620.00,273.00" style="fill:#a01414;stroke:none"/>
+  <text x="578.00" y="269.20" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#ffffff;text-anchor:middle">16b</text>
+  <polygon points="180.00,257.00 144.00,257.00 144.00,251.00 128.00,265.00 144.00,279.00 144.00,273.00 180.00,273.00" style="fill:#a01414;stroke:none"/>
+  <text x="162.00" y="269.20" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#ffffff;text-anchor:middle">64b</text>
+  <path d="M 1100.00,226.00 L 829.00,226.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,226.00 829.00,221.50 829.00,230.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="221.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">dco_0_p / dco_0_n</text>
+  <path d="M 1100.00,252.00 L 829.00,252.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,252.00 829.00,247.50 829.00,256.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="247.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">d0a_0_p / d0a_0_n</text>
+  <path d="M 1100.00,278.00 L 829.00,278.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,278.00 829.00,273.50 829.00,282.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="273.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">d1a_0_p / d1a_0_n</text>
+  <path d="M 1100.00,304.00 L 829.00,304.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,304.00 829.00,299.50 829.00,308.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="299.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">frame_0_p / frame_0_n</text>
+  <rect x="620.00" y="380.00" width="200.00" height="110.00" style="fill:#ffcccc;stroke:#a01414;stroke-width:2"/>
+  <text x="720.00" y="441.50" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">AXI ADA4355 (1)</text>
+  <rect x="180.00" y="400.00" width="160.00" height="70.00" style="fill:#ffcccc;stroke:#a01414;stroke-width:2"/>
+  <text x="260.00" y="441.50" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">AXI DMAC (1)</text>
+  <polygon points="620.00,427.00 356.00,427.00 356.00,421.00 340.00,435.00 356.00,449.00 356.00,443.00 620.00,443.00" style="fill:#a01414;stroke:none"/>
+  <text x="578.00" y="439.20" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#ffffff;text-anchor:middle">16b</text>
+  <polygon points="180.00,427.00 144.00,427.00 144.00,421.00 128.00,435.00 144.00,449.00 144.00,443.00 180.00,443.00" style="fill:#a01414;stroke:none"/>
+  <text x="162.00" y="439.20" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#ffffff;text-anchor:middle">64b</text>
+  <path d="M 1100.00,396.00 L 829.00,396.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,396.00 829.00,391.50 829.00,400.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="391.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">dco_1_p / dco_1_n</text>
+  <path d="M 1100.00,422.00 L 829.00,422.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,422.00 829.00,417.50 829.00,426.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="417.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">d0a_1_p / d0a_1_n</text>
+  <path d="M 1100.00,448.00 L 829.00,448.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,448.00 829.00,443.50 829.00,452.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="443.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">d1a_1_p / d1a_1_n</text>
+  <path d="M 1100.00,474.00 L 829.00,474.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,474.00 829.00,469.50 829.00,478.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="469.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">frame_1_p / frame_1_n</text>
+  <rect x="620.00" y="550.00" width="200.00" height="110.00" style="fill:#ffcccc;stroke:#a01414;stroke-width:2"/>
+  <text x="720.00" y="611.50" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">AXI ADA4355 (2)</text>
+  <rect x="180.00" y="570.00" width="160.00" height="70.00" style="fill:#ffcccc;stroke:#a01414;stroke-width:2"/>
+  <text x="260.00" y="611.50" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">AXI DMAC (2)</text>
+  <polygon points="620.00,597.00 356.00,597.00 356.00,591.00 340.00,605.00 356.00,619.00 356.00,613.00 620.00,613.00" style="fill:#a01414;stroke:none"/>
+  <text x="578.00" y="609.20" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#ffffff;text-anchor:middle">16b</text>
+  <polygon points="180.00,597.00 144.00,597.00 144.00,591.00 128.00,605.00 144.00,619.00 144.00,613.00 180.00,613.00" style="fill:#a01414;stroke:none"/>
+  <text x="162.00" y="609.20" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#ffffff;text-anchor:middle">64b</text>
+  <path d="M 1100.00,566.00 L 829.00,566.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,566.00 829.00,561.50 829.00,570.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="561.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">dco_2_p / dco_2_n</text>
+  <path d="M 1100.00,592.00 L 829.00,592.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,592.00 829.00,587.50 829.00,596.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="587.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">d0a_2_p / d0a_2_n</text>
+  <path d="M 1100.00,618.00 L 829.00,618.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,618.00 829.00,613.50 829.00,622.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="613.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">d1a_2_p / d1a_2_n</text>
+  <path d="M 1100.00,644.00 L 829.00,644.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,644.00 829.00,639.50 829.00,648.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="639.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">frame_2_p / frame_2_n</text>
+  <rect x="620.00" y="720.00" width="200.00" height="110.00" style="fill:#ffcccc;stroke:#a01414;stroke-width:2"/>
+  <text x="720.00" y="781.50" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">AXI ADA4355 (3)</text>
+  <rect x="180.00" y="740.00" width="160.00" height="70.00" style="fill:#ffcccc;stroke:#a01414;stroke-width:2"/>
+  <text x="260.00" y="781.50" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">AXI DMAC (3)</text>
+  <polygon points="620.00,767.00 356.00,767.00 356.00,761.00 340.00,775.00 356.00,789.00 356.00,783.00 620.00,783.00" style="fill:#a01414;stroke:none"/>
+  <text x="578.00" y="779.20" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#ffffff;text-anchor:middle">16b</text>
+  <polygon points="180.00,767.00 144.00,767.00 144.00,761.00 128.00,775.00 144.00,789.00 144.00,783.00 180.00,783.00" style="fill:#a01414;stroke:none"/>
+  <text x="162.00" y="779.20" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#ffffff;text-anchor:middle">64b</text>
+  <path d="M 1100.00,736.00 L 829.00,736.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,736.00 829.00,731.50 829.00,740.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="731.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">dco_3_p / dco_3_n</text>
+  <path d="M 1100.00,762.00 L 829.00,762.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,762.00 829.00,757.50 829.00,766.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="757.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">d0a_3_p / d0a_3_n</text>
+  <path d="M 1100.00,788.00 L 829.00,788.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,788.00 829.00,783.50 829.00,792.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="783.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">d1a_3_p / d1a_3_n</text>
+  <path d="M 1100.00,814.00 L 829.00,814.00" style="fill:none;stroke:#000000;stroke-width:1.5"/>
+  <polygon points="820.00,814.00 829.00,809.50 829.00,818.50" style="fill:#000000;stroke:none"/>
+  <text x="975.00" y="809.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">frame_3_p / frame_3_n</text>
+  <rect x="1100.00" y="198.00" width="40.00" height="644.00" style="fill:#e8e8e8;stroke:#000000;stroke-width:2"/>
+  <text x="1126.50" y="520.00" transform="rotate(-90 1126.50 520.00)" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">FMC</text>
+</svg>
