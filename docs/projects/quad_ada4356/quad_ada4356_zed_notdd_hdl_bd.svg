@@ -2,11 +2,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1300" height="910" viewBox="0 0 1300 910">
   <title>QUAD-ADA4356/ZedBoard HDL block diagram - TDD_SUPPORT=0</title>
   <rect x="1" y="1" width="1298" height="908" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
-  <rect x="30.00" y="20.00" width="26.00" height="14.00" style="fill:#a01414;stroke:#a01414;stroke-width:1"/>
+  <rect x="30.00" y="20.00" width="26.00" height="14.00" style="fill:#ffcccc;stroke:#a01414;stroke-width:2"/>
   <text x="64.00" y="32.00" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">Receive path</text>
   <path d="M 170,27 L 202,27" style="fill:none;stroke:#754d00;stroke-width:1.3;stroke-dasharray:5.2,5.2"/>
   <text x="210.00" y="32.00" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">Clock domain</text>
-  <text x="1275.00" y="40.00" style="font-family:Arial;font-size:20px;font-weight:bold;fill:#000000;text-anchor:end">EVAL-ADA4356EBZ</text>
+  <text x="1140.00" y="40.00" style="font-family:Arial;font-size:20px;font-weight:bold;fill:#000000;text-anchor:end">EVAL-ADA4356EBZ</text>
   <rect x="20.00" y="60.00" width="1100.00" height="820.00" style="fill:none;stroke:#000000;stroke-width:2"/>
   <rect x="40.00" y="80.00" width="442.30" height="74.90" style="fill:#ebebeb;stroke:#000000;stroke-width:1.94"/>
   <text x="56.81" y="117.45" transform="rotate(-90 56.81 117.45)" style="font-family:Arial;font-size:11.25px;font-weight:bold;fill:#000000;text-anchor:middle">Timer</text>
@@ -28,37 +28,22 @@
   <rect x="70.00" y="200.00" width="185.00" height="640.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
   <text x="162.00" y="823.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">sys_143m_clk</text>
   <text x="162.00" y="836.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">=142.857MHz</text>
-  <rect x="265.00" y="202.00" width="565.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
-  <text x="578.00" y="340.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk</text>
+  <rect x="265.00" y="202.00" width="835.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
+  <text x="578.00" y="340.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk_0</text>
   <text x="578.00" y="353.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">=125MHz</text>
-  <rect x="265.00" y="372.00" width="565.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
-  <text x="578.00" y="510.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk</text>
+  <rect x="265.00" y="372.00" width="835.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
+  <text x="578.00" y="510.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk_1</text>
   <text x="578.00" y="523.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">=125MHz</text>
-  <rect x="265.00" y="542.00" width="565.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
-  <text x="578.00" y="680.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk</text>
+  <rect x="265.00" y="542.00" width="835.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
+  <text x="578.00" y="680.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk_2</text>
   <text x="578.00" y="693.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">=125MHz</text>
-  <rect x="265.00" y="712.00" width="565.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
-  <text x="578.00" y="850.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk</text>
+  <rect x="265.00" y="712.00" width="835.00" height="158.00" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:8,8"/>
+  <text x="578.00" y="850.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">adc_clk_3</text>
   <text x="578.00" y="863.00" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">=125MHz</text>
   <path d="M 245.00,154.90 L 245.00,191.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
   <polygon points="245.00,200.00 240.50,191.00 249.50,191.00" style="fill:#754d00;stroke:none"/>
-  <path d="M 460.00,154.90 L 460.00,162.90 L 850.00,162.90 L 850.00,706.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
-  <text x="650.00" y="158.90" style="font-family:Arial;font-size:10.67px;font-weight:normal;fill:#754d00;text-anchor:middle">sys_200m_clk=200MHz</text>
-  <circle cx="850.00" cy="196.00" r="3" style="fill:#754d00;stroke:none"/>
-  <path d="M 850.00,196.00 L 790.00,196.00 L 790.00,201.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
-  <polygon points="790.00,210.00 785.50,201.00 794.50,201.00" style="fill:#754d00;stroke:none"/>
-  <circle cx="850.00" cy="366.00" r="3" style="fill:#754d00;stroke:none"/>
-  <path d="M 850.00,366.00 L 790.00,366.00 L 790.00,371.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
-  <polygon points="790.00,380.00 785.50,371.00 794.50,371.00" style="fill:#754d00;stroke:none"/>
-  <circle cx="850.00" cy="536.00" r="3" style="fill:#754d00;stroke:none"/>
-  <path d="M 850.00,536.00 L 790.00,536.00 L 790.00,541.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
-  <polygon points="790.00,550.00 785.50,541.00 794.50,541.00" style="fill:#754d00;stroke:none"/>
-  <path d="M 850.00,706.00 L 790.00,706.00 L 790.00,711.00" style="fill:none;stroke:#754d00;stroke-width:1.5"/>
-  <polygon points="790.00,720.00 785.50,711.00 794.50,711.00" style="fill:#754d00;stroke:none"/>
   <rect x="88.00" y="230.00" width="40.00" height="580.00" style="fill:#e8e8e8;stroke:#000000;stroke-width:2"/>
   <text x="114.50" y="520.00" transform="rotate(-90 114.50 520.00)" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">MEMORY INTERCONNECT</text>
-  <polygon points="100.00,230.00 100.00,170.90 94.00,170.90 108.00,154.90 122.00,170.90 116.00,170.90 116.00,230.00" style="fill:#a01414;stroke:none"/>
-  <text x="112.20" y="200.45" transform="rotate(-90 112.20 200.45)" style="font-family:Arial;font-size:12px;font-weight:normal;fill:#ffffff;text-anchor:middle">64b</text>
   <rect x="620.00" y="210.00" width="200.00" height="110.00" style="fill:#ffcccc;stroke:#a01414;stroke-width:2"/>
   <text x="720.00" y="271.50" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">AXI ADA4355 (0)</text>
   <rect x="180.00" y="230.00" width="160.00" height="70.00" style="fill:#ffcccc;stroke:#a01414;stroke-width:2"/>
@@ -140,5 +125,5 @@
   <polygon points="820.00,814.00 829.00,809.50 829.00,818.50" style="fill:#000000;stroke:none"/>
   <text x="975.00" y="809.00" style="font-family:Arial;font-size:16px;font-weight:normal;fill:#000000;text-anchor:middle">frame_3_p / frame_3_n</text>
   <rect x="1100.00" y="198.00" width="40.00" height="644.00" style="fill:#e8e8e8;stroke:#000000;stroke-width:2"/>
-  <text x="1126.50" y="520.00" transform="rotate(-90 1126.50 520.00)" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">FMC</text>
+  <text x="1126.50" y="520.00" transform="rotate(-90 1126.50 520.00)" style="font-family:Arial;font-size:18.67px;font-weight:bold;fill:#000000;text-anchor:middle">FMC CONNECTOR</text>
 </svg>
