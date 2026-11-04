@@ -1,11 +1,18 @@
-<!-- no_build_example, no_dts -->
+<!-- no_dts -->
 
 # AD7606X-FMC/ZED HDL Project
 
 - VADJ with which it was tested in hardware: 2.5V
 
+## Building the project
+
 The parameters configurable through the `make` command, can be found below, as well as in the **system_project.tcl** file; it contains the default
 configuration.
+
+```
+cd projects/ad7606x_fmc/zed
+make
+```
 
 If other configurations are desired, then the parameters from the HDL project (see below) need to be changed, as well as the Linux/no-OS project configurations.
 

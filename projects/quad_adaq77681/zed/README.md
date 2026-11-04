@@ -1,4 +1,4 @@
-<!-- no_build_example, no_no_os -->
+<!-- no_build_example, no_dts, no_no_os -->
 
 # QUAD-ADAQ77681/ZED HDL Project
 
@@ -10,5 +10,3 @@
 cd projects/quad_adaq77681/zed
 make
 ```
-
-Corresponding device tree:

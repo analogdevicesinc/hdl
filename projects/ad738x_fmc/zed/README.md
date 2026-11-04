@@ -1,5 +1,3 @@
-<!-- no_no_os -->
-
 # AD738X-FMC/ZED HDL Project
 
 - VADJ with which it was tested in hardware: 2.5V
@@ -36,3 +34,5 @@ make ALERT_SPI_N=0 NUM_OF_SDIO=1
 ```
 
 Corresponding device tree: [zynq-zed-adv7511-ad7380.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad7380.dts)
+
+Corresponding No-OS project: [ad738x_fmcz](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad738x_fmcz)

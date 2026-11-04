@@ -1,4 +1,4 @@
-<!-- no_build_example, no_dts, no_no_os -->
+<!-- no_dts, no_no_os -->
 
 # AD9084-EBZ/VCK190 HDL Project
 
@@ -27,6 +27,7 @@ The overwritable parameters from the environment are:
 - TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to Apollo )
 - [RX/TX]_JESD_M : Number of converters per link
 - [RX/TX]_JESD_L : Number of lanes per link
+- [RX/TX]_JESD_S : Number of samples per converter per frame
 - [RX/TX]_JESD_NP : Number of bits per sample
 - [RX/TX]_NUM_LINKS : Number of links - only when ASYMMETRIC_A_B_MODE = 0
 - [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M)
@@ -35,5 +36,41 @@ The overwritable parameters from the environment are:
 - TX_B_LANE_RATE :  Lane rate of the Tx link ( FPGA to Apollo ) for B side
 - [RX/TX]_B_JESD_M : Number of converters per link for B side
 - [RX/TX]_B_JESD_L : Number of lanes per link for B side
+- [RX/TX]_B_JESD_S : Number of samples per converter per frame for B side
 - [RX/TX]_B_JESD_NP : Number of bits per sample for B side
 - [RX/TX]_B_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M) for B side
+- AION_ENABLE : If set, adds and enables the AION core in the design; the adf4030 then sources sysref and drives the trigger pins
+- SIDE_B_ONLY : When set, use only the B side of the Apollo device (maximum 8 lanes instead of 4)
+- FSRC_ENABLE : When set, fractional sample rate conversion is inserted in both directions: RX deletes the samples Apollo marked invalid and compacts what is left, TX leaves holes where Apollo will not read
+- FSRC_ACCUM_WIDTH : Width of the FSRC rate accumulator, which sets the granularity of the achievable ratio
+
+### Example configurations
+
+#### JESD204C, 20.625 Gbps lane rate (default)
+
+This specific command is equivalent to running `make` only:
+
+```
+make JESD_MODE=64B66B \
+REF_CLK_RATE=312.5 \
+HSCI_ENABLE=1 \
+AION_ENABLE=0 \
+SIDE_B_ONLY=0 \
+RX_LANE_RATE=20.625 \
+TX_LANE_RATE=20.625 \
+RX_JESD_M=4 \
+RX_JESD_L=4 \
+RX_JESD_S=1 \
+RX_JESD_NP=16 \
+RX_NUM_LINKS=2 \
+TX_JESD_M=4 \
+TX_JESD_L=4 \
+TX_JESD_S=1 \
+TX_JESD_NP=16 \
+TX_NUM_LINKS=2 \
+RX_KS_PER_CHANNEL=64 \
+TX_KS_PER_CHANNEL=64 \
+ASYMMETRIC_A_B_MODE=0 \
+FSRC_ENABLE=0 \
+FSRC_ACCUM_WIDTH=56
+```

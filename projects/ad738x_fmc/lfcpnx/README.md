@@ -1,3 +1,5 @@
+<!-- no_dts -->
+
 # AD738X-FMC/LFCPNX HDL Project
 
 ## Requirements
@@ -33,6 +35,8 @@ The overwritable parameters from the environment:
   (<path_to>/<sysmem_file>.mem). It can be used to build a project with an
   already initialized system memory, otherwise you can load it using the
   OCM debugger from Lattice Propel SDK.
+- DATA_WIDTH - The word length, in bits, of the SDO simulation model used in the
+  simulation project (default 16).
 
 ### Example configurations
 
@@ -41,7 +45,7 @@ The overwritable parameters from the environment:
 This specific command is equivalent to running `make` only:
 
 ```
-make ALERT_SPI_N=0 NUM_OF_SDIO=1
+make ALERT_SPI_N=0 NUM_OF_SDIO=1 DATA_WIDTH=16
 ```
 
 #### Default configuration with SYSMEM_INIT_FILE
