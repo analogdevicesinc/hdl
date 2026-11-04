@@ -128,7 +128,7 @@ create_bd_port -dir O tdd_sync_out
 create_bd_port -dir O -from [expr $TDD_CHANNEL_CNT - 1] -to 0 tdd_channels
 
 if {$TDD_SUPPORT} {
-  ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
+  ad_tdd_gen_create axi_tdd_1 $TDD_CHANNEL_CNT \
                               $TDD_DEFAULT_POL \
                               $TDD_REG_WIDTH \
                               $TDD_BURST_WIDTH \
@@ -141,15 +141,15 @@ if {$TDD_SUPPORT} {
     NUM_PORTS ${TDD_CHANNEL_CNT} \
   ]
 
-  ad_connect sys_250m_clk     axi_tdd_0/clk
-  ad_connect sys_250m_resetn  axi_tdd_0/resetn
-  ad_connect sys_cpu_clk      axi_tdd_0/s_axi_aclk
-  ad_connect sys_cpu_resetn   axi_tdd_0/s_axi_aresetn
+  ad_connect sys_250m_clk     axi_tdd_1/clk
+  ad_connect sys_250m_resetn  axi_tdd_1/resetn
+  ad_connect sys_cpu_clk      axi_tdd_1/s_axi_aclk
+  ad_connect sys_cpu_resetn   axi_tdd_1/s_axi_aresetn
   for {set j 0} {$j < $TDD_CHANNEL_CNT} {incr j} {
-    ad_connect axi_tdd_0/tdd_channel_${j} tdd_channel_concat/In${j}
+    ad_connect axi_tdd_1/tdd_channel_${j} tdd_channel_concat/In${j}
   }
 
-  ad_connect tdd_sync         axi_tdd_0/sync_in
-  ad_connect tdd_sync_out     axi_tdd_0/sync_out
+  ad_connect tdd_sync         axi_tdd_1/sync_in
+  ad_connect tdd_sync_out     axi_tdd_1/sync_out
   ad_connect tdd_channels     tdd_channel_concat/dout
 }

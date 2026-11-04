@@ -43,7 +43,7 @@ ad_cpu_interconnect 0x80040000 xud_spi
 ad_cpu_interconnect 0x80050000 gpio_0
 
 if {$ad_project_params(TDD_SUPPORT) == 1} {
-  ad_cpu_interconnect 0x80060000 axi_tdd_0
+  ad_cpu_interconnect 0x80060000 axi_tdd_1
 }
 
 # Interrupts
