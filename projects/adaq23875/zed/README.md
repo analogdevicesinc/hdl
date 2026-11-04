@@ -33,7 +33,7 @@ make TWOLANES=1 \
 ADC_RES=18
 ```
 
-Corresponding device tree: [zynq-zed-adv7511-adaq23878.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23878.dts)
+Corresponding device tree: [zynq-zed-adv7511-adaq23878.dts](https://github.com/analogdevicesinc/linux/blob/add_adaq2387x_support/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23878.dts)
 
 #### One lane, 18-bit resolution
 
@@ -49,7 +49,7 @@ make TWOLANES=1 \
 ADC_RES=16
 ```
 
-Corresponding device tree: [zynq-zed-adv7511-adaq23875.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23875.dts)
+Corresponding device tree: [zynq-zed-adv7511-adaq23875.dts](https://github.com/analogdevicesinc/linux/blob/add_adaq2387x_support/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23875.dts)
 
 #### One lane, 16-bit resolution
 

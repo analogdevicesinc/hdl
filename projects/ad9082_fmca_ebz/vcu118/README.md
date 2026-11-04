@@ -29,6 +29,7 @@ The overwritable parameters from the environment are:
 - [RX/TX]_JESD_NP: [RX/TX] number of bits per sample, only 16 is supported
 - [RX/TX]_NUM_LINKS: [RX/TX] number of links, which matches the number of MxFE devices
 - [RX/TX]_KS_PER_CHANNEL: [RX/TX] number of samples stored in internal buffers in kilosamples per converter (M), for each channel in a block RAM, for a contiguous capture
+- CORUNDUM: includes and enables the Corundum Network Stack in the design
 
 #### XCVR build parameters
 
@@ -70,6 +71,32 @@ LANE_RATE=15
 ```
 
 Corresponding device tree: [vcu118_ad9082.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_ad9082.dts)
+
+#### JESD204B subclass 1, TX mode 17, RX mode 18 (default) with Corundum Network Stack
+
+This specific command is equivalent to running `make CORUNDUM=1`:
+
+```
+make JESD_MODE=8B10B \
+RX_LANE_RATE=15 \
+TX_LANE_RATE=15 \
+RX_JESD_M=4 \
+RX_JESD_L=8 \
+RX_JESD_S=1 \
+RX_JESD_NP=16 \
+RX_NUM_LINKS=1 \
+TX_JESD_M=4 \
+TX_JESD_L=8 \
+TX_JESD_S=1 \
+TX_JESD_NP=16 \
+TX_NUM_LINKS=1 \
+RX_KS_PER_CHANNEL=64 \
+TX_KS_PER_CHANNEL=64 \
+CORUNDUM=1 \
+PLL_TYPE=QPLL0 \
+REF_CLK=750 \
+LANE_RATE=15
+```
 
 #### JESD204C subclass 1, TX mode 18, RX mode 19
 

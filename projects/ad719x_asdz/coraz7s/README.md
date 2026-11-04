@@ -1,4 +1,4 @@
-<!-- no_build_example, no_no_os -->
+<!-- no_no_os -->
 
 # AD719X-ASDZ/CORAZ7S HDL Project
 

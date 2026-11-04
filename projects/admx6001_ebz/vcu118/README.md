@@ -23,4 +23,4 @@ The parameters from the environment:
 - RX_JESD_NP: **16**; RX number of bits per sample
 - RX_SAMPLE_WIDTH: **16**; RX data width
 
-Corresponding device tree: [vcu118-admx6001-ebz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_admx6001_ebz.dts)
+Corresponding device tree: [vcu118_ad9213_ad4080_evb.dts](https://github.com/analogdevicesinc/linux/blob/admx6001_v1.1/arch/microblaze/boot/dts/vcu118_ad9213_ad4080_evb.dts)

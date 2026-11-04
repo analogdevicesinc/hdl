@@ -1,5 +1,3 @@
-<!-- no_no_os -->
-
 # AD469X-EVB/ZED HDL Project
 
 - VADJ with which it was tested in hardware: 1.8V
@@ -53,3 +51,5 @@ make SPI_4WIRE=0 PWM_OFFLOAD=2
 ```
 make SPI_4WIRE=1 PWM_OFFLOAD=0
 ```
+
+Corresponding No-OS project: [ad469x_evb](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad469x_evb)

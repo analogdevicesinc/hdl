@@ -1,5 +1,3 @@
-<!-- no_no_os -->
-
 # ADRV9001/ZCU102 HDL Project
 
 - VADJ with which it was tested in hardware: 1.8V
@@ -30,3 +28,5 @@ make CMOS_LVDS_N=1
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-adrv9002.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002.dts)
+
+Corresponding No-OS project: [adrv9001](https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv9001)

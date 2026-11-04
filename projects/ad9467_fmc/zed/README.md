@@ -1,4 +1,4 @@
-<!-- no_build_example, no_no_os -->
+<!-- no_build_example -->
 
 # AD9467-FMC/ZED HDL Project
 
@@ -12,3 +12,5 @@ make
 ```
 
 Corresponding device tree: [zynq-zed-adv7511-ad9467-fmc-250ebz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9467-fmc-250ebz.dts)
+
+Corresponding No-OS project: [ad9467](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9467)

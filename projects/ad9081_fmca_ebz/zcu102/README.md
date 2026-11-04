@@ -1,5 +1,3 @@
-<!-- no_no_os -->
-
 # AD9081-FMCA-EBZ/ZCU102 HDL Project
 
 - VADJ with which it was tested in hardware: 1.8V
@@ -214,3 +212,5 @@ LANE_RATE=11.96
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-204c-txmode0-rxmode1.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-204c-txmode0-rxmode1.dts)
+
+Corresponding No-OS project: [ad9081](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9081)

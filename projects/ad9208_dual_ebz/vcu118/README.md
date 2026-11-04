@@ -1,4 +1,4 @@
-<!-- no_build_example, no_no_os -->
+<!-- no_build_example -->
 
 # AD9208-DUAL-EBZ/VCU118 HDL Project
 
@@ -26,3 +26,5 @@ The fixed configuration:
 - RX_KS_PER_CHANNEL: **8**; RX number of samples stored in internal buffers in kilosamples per converter (M), for each channel in a block RAM, for a contiguous capture
 
 Corresponding device tree: [vcu118_dual_ad9208.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_dual_ad9208.dts)
+
+Corresponding No-OS project: [ad9208](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9208)

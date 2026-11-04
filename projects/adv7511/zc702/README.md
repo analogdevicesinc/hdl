@@ -1,4 +1,4 @@
-<!-- no_build_example, no-no-os -->
+<!-- no_build_example, no_no_os -->
 
 # ADV7511/ZC702 HDL Project
 

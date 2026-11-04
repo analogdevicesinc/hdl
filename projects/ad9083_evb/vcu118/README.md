@@ -44,4 +44,4 @@ REF_CLK=750 \
 LANE_RATE=15
 ```
 
-Corresponding device tree: [vcu118_ad9083.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/vcu118_ad9083.dts)
+Corresponding device tree: [vcu118_ad9083.dts](https://github.com/analogdevicesinc/linux/blob/ad9083_vcu118_support/arch/microblaze/boot/dts/vcu118_ad9083.dts)

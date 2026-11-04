@@ -1,5 +1,3 @@
-<!-- no_no_os -->
-
 # ADRV9009/ZC706 HDL Project
 
 - VADJ with which it was tested in hardware: 2.5V
@@ -55,3 +53,5 @@ LANE_RATE=5
 ```
 
 Corresponding device tree: [zynq-zc706-adv7511-adrv9009-jesd204-fsm.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9009-jesd204-fsm.dts)
+
+Corresponding No-OS project: [adrv9009](https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv9009)

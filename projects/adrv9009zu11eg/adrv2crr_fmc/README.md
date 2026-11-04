@@ -1,4 +1,4 @@
-<!-- no_no_os -->
+<!-- no_dts, no_no_os -->
 
 # ADRV9009ZU11EG/ADRV2CRR-FMC HDL Project
 
@@ -51,5 +51,3 @@ This configuration ONLY, ADRV9009ZU11EG/ADRV2CRR-FMC, supports Corundum Network 
 make CORUNDUM=1
 ```
 All of the binaries resulted from the build will be present in a folder called **CORUNDUM1**.
-
-Corresponding device tree: TO BE ADDED

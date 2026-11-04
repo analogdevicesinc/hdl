@@ -1,5 +1,3 @@
-<!-- no_no_os -->
-
 # ADRV903X/ZCU102 HDL Project
 
 - VADJ with which it was tested in hardware: 1.8V
@@ -81,3 +79,5 @@ LANE_RATE=16.22
 ```
 
 Corresponding device tree: [zynqmp-zcu102-rev10-adrv9032r-nls.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9032r-nls.dts)
+
+Corresponding No-OS project: [adrv903x](https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv903x)

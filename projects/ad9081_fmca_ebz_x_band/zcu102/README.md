@@ -1,5 +1,3 @@
-<!-- no_no_os -->
-
 # AD9081-FMCA-EBZ-X-BAND/ZCU102 HDL Project
 
 - VADJ with which it was tested in hardware: 1.8V
@@ -85,3 +83,5 @@ Corresponding device trees:
 
 - [zynqmp-zcu102-rev10-stingray.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray.dts)
 - using VCXO of 100MHz: [zynqmp-zcu102-rev10-stingray-vcxo100.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-vcxo100.dts)
+
+Corresponding No-OS project: [ad9081](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9081)
