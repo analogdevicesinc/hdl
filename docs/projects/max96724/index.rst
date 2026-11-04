@@ -185,7 +185,7 @@ Software related
 - `GMSL-related repository <https://github.com/analogdevicesinc/gmsl>`_
 - The user guide that exemplify the system interfaced using
   :adi:`AD-GMSLCAMRPI-ADP adaptor <AD-GMSLCAMRPI-ADP>` is available at
-  :dokuwiki:`wiki page <resources/eval/user-guides/ad-gmslcamrpi-adp/ug_amd_kria>`
+  :external+system-level:doc:`AMD Kria guide <solutions/reference-designs/ad-gmslcamrpi-adp/amd-kria/index>`
 - :git-linux:`GMSL drivers/dts <gmsl/xilinx_v6.1_LTS:/>`
 
 .. include:: ../common/more_information.rst

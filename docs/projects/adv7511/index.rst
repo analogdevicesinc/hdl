@@ -201,7 +201,7 @@ Software related
 - :git-linux:`ADV7511 - ZED dts source code <arch/arm/boot/dts/xilinx/zynq-zed-adv7511.dts>`
 - :git-linux:`ADV7511 - ZC706 dts source code <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511.dts>`
 - :git-linux:`ADV7511 - ZC702 dts source code <arch/arm/boot/dts/xilinx/zynq-zc702-adv7511.dts>`
-- :dokuwiki:`ADV7511 driver docs <resources/tools-software/linux-drivers/drm/adv7511>`
+- :external+linux:doc:`ADV7511 driver docs <drivers/drm/adv7511>`
 - :git-no-OS:`ADV7511 no-OS project source code <projects/adv7511>`
 
 .. include:: ../common/more_information.rst

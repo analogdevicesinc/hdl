@@ -193,7 +193,7 @@ Software related
 
 Linux support:
 
-- :dokuwiki:`AD5758 IIO DAC Linux Driver <resources/tools-software/linux-drivers/iio-dac/ad5758>`
+- :external+linux:doc:`AD5758 IIO DAC Linux Driver <drivers/iio-dac/ad5758>`
 - :git-linux:`AD5758_SDZ Linux driver source code <drivers/iio/dac/ad5758.c>`
 
 No-OS support:

@@ -155,7 +155,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`ADV7513 driver source code <drivers/gpu/drm/bridge/adv7511>`
-- :dokuwiki:`ADV7511 driver docs <resources/tools-software/linux-drivers/drm/adv7511>`
+- :external+linux:doc:`ADV7511 driver docs <drivers/drm/adv7511>`
 
 .. include:: ../common/more_information.rst
 

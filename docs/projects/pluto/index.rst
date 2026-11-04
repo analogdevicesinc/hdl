@@ -303,7 +303,7 @@ Software related
 
 - :dokuwiki:`[Wiki] Linux Drivers <university/tools/pluto/drivers/linux>`
 - :dokuwiki:`[Wiki] Windows Drivers <university/tools/pluto/drivers/linux>`
-- :dokuwiki:`[Wiki] AD936X IIO Oscilloscope plugin description <resources/tools-software/linux-software/fmcomms2_plugin>`
+- :external+system-level:doc:`AD936X IIO Oscilloscope plugin description <solutions/reference-designs/fmcomms2/software/ad9361_plugin>`
 
 - :external+system-level:ref:`[Wiki] Pluto Support <pluto help_support>`
 - :dokuwiki:`[Wiki] ADALM-PLUTO Troubleshooting <university/tools/pluto/troubleshooting>`

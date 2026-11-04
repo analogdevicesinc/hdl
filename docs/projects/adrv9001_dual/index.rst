@@ -319,8 +319,8 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV9002 Device Driver Customization <resources/tools-software/linux-drivers/iio-transceiver/adrv9002-customization>`
-- :dokuwiki:`[Wiki] ADRV9002 Integrated Dual RF Transceiver Linux device driver <resources/tools-software/linux-drivers/iio-transceiver/adrv9002>`
+- :external+linux:doc:`ADRV9002 Device Driver Customization <drivers/iio-transceiver/adrv9002-customization>`
+- :external+linux:doc:`ADRV9002 Integrated Dual RF Transceiver Linux device driver <drivers/iio-transceiver/adrv9002>`
 
 .. include:: ../common/more_information.rst
 

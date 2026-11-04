@@ -312,7 +312,7 @@ Software related
 - :git-linux:`CN0506 MII - ZED dts source code (arm32) <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-cn0506-mii.dts>`
 - :git-linux:`CN0506 RGMII - ZED dts source code (arm32) <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-cn0506-rgmii.dts>`
 - :git-linux:`CN0506 RMII - ZED dts source code (arm32) <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-cn0506-rmii.dts>`
-- :dokuwiki:`ADIN1300 driver docs <resources/tools-software/linux-drivers/net-phy/adin>`
+- :external+linux:doc:`ADIN1300 driver docs <drivers/net-phy/adin>`
 
 .. include:: ../common/more_information.rst
 

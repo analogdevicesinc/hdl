@@ -687,7 +687,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`Quad-MxFE Software Quick Start Guide <resources/eval/user-guides/quadmxfe/quick-start>`
+- :external+system-level:doc:`Quad-MxFE Software Quick Start Guide <solutions/reference-designs/quadmxfe/quickstart/vcu118>`
 
 .. collapsible:: Click here to see a list of all the Linux device trees available.
 

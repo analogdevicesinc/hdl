@@ -222,7 +222,7 @@ No-OS support:
 
 - :git-no-os:`AD4134_FMC No-OS project source code <projects/ad413x>`
 - :git-no-os:`AD4134 No-OS Driver source code <drivers/adc/ad713x>`
-- :dokuwiki:`AD4134 No-OS Software documentation[Wiki] <resources/tools-software/uc-drivers/ad713x>`
+- :external+no-OS:doc:`AD4134 No-OS Software documentation <projects/adc/ad713x_fmcz>`
 
 .. include:: ../common/more_information.rst
 

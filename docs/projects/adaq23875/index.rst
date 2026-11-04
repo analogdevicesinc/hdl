@@ -244,9 +244,9 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] LTC2387 SAR ADC IIO Linux driver page <resources/tools-software/linux-drivers/iio-adc/ltc2387>`
-- :git-linux:`ADAQ23875/ADAQ23876 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23875.dts>`
-- :git-linux:`ADAQ23878 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23878.dts>`
+- :external+linux:doc:`LTC2387 SAR ADC IIO Linux driver page <drivers/iio-adc/ltc2387>`
+- :git-linux:`ADAQ23875/ADAQ23876 Linux device tree <add_adaq2387x_support:arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23875.dts>`
+- :git-linux:`ADAQ23878 Linux device tree <add_adaq2387x_support:arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23878.dts>`
 - :git-linux:`LTC2387 Linux driver <drivers/iio/adc/ltc2387.c>`
 
 .. include:: ../common/more_information.rst

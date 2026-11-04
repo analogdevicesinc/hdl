@@ -450,7 +450,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-no-os:`AD738X_FMC No-OS project <projects/ad738x_fmcz>`
-- :dokuwiki:`AD738X_FMC - No-OS Driver [Wiki] <resources/eval/user-guides/ad738x>`
+- :external+no-OS:doc:`AD738X_FMC - No-OS Driver <projects/adc/ad738x_fmcz>`
 - AD7380 ZED Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad7380.dts`
 
 .. include:: ../common/more_information.rst

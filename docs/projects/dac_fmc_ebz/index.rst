@@ -559,8 +559,8 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD917X DAC Linux Driver wiki page <resources/tools-software/linux-drivers/iio-dds/ad9172>`
-- :dokuwiki:`[Wiki] AXI DAC HDL Linux Driver wiki page <resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`
+- :external+linux:doc:`AD917X DAC Linux Driver page <drivers/iio-dds/ad9172>`
+- :external+linux:doc:`AXI DAC HDL Linux Driver page <drivers/iio-dds/axi-dac-dds-hdl>`
 
 .. include:: ../common/more_information.rst
 
