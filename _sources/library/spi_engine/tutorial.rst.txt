@@ -333,11 +333,11 @@ To check the overall performance of the design and also to expose any major
 bugs, the system can be tested using a testbench from :git-testbenches:`/`.
 
 The testbench framework is designed to use the same bd.tcl as the actual project
-:git-testbenches:`main:pulsar_adc_pmdz/system_bd.tcl#L50`
+:git-testbenches:`main:testbenches/project/pulsar_adc_pmdz/system_bd.tcl#L48`
 
 The setup assumes the testbenches repo is cloned inside the hdl repo. To build
 the testbench project simply run :code:`make cfg1` from the
-*hdl/testbenches/pulsar_adc_pmdz/* folder. Besides exposing possible bugs,
+*hdl/testbenches/testbenches/project/pulsar_adc_pmdz/* folder. Besides exposing possible bugs,
 using the testbench will provide the user with an early way of evaluating the
 timing of the design. The testbench can also be a very useful tool for IP
 development.

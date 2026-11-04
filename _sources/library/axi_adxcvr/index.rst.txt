@@ -325,8 +325,8 @@ Software Support
 * No-OS device driver at  :git-no-OS:`drivers/axi_core/jesd204/axi_adxcvr.c`
 * No-OS device driver documentation
   :dokuwiki:`on wiki <resources/tools-software/uc-drivers/jesd204/axi_adxcvr>`
-* Linux project at :git-linux:`drivers/iio/jesd204`
-* Linux device driver at :git-linux:`drivers/iio/jesd204/axi_adxcvr.c`
+* Linux project at :git-linux:`drivers/iio/jesd204 <main:drivers/iio/jesd204>`
+* Linux device driver at :git-linux:`drivers/iio/jesd204/axi_adxcvr.c <main:drivers/iio/jesd204/axi_adxcvr.c>`
 * Linux device driver documentation
   :dokuwiki:`on wiki <resources/tools-software/linux-drivers/jesd204/axi_adxcvr>`
 
@@ -337,6 +337,6 @@ References
 * HDL Xilinx IP core at :git-hdl:`library/xilinx/axi_adxcvr`
 * :dokuwiki:`AXI ADXCVR on wiki <resources/fpga/docs/axi_adxcvr>`
 * :ref:`jesd204`
-* :intel:`Intel® Arria® 10 Transceiver PHY User Guide <content/dam/www/programmable/us/en/pdfs/literature/hb/arria-10/ug_arria10_xcvr_phy.pdf>`
+* `Intel® Arria® 10 Transceiver PHY User Guide <https://docs.altera.com/r/docs/683617/current>`__
 * `7 Series FPGAs GTX/GTH Transceivers User Guide - AMD Xilinx <https://docs.amd.com/v/u/en-US/ug476_7Series_Transceivers>`_
 * `Ultrascale Architecture GTH Transceivers User Guide - AMD Xilinx <https://docs.amd.com/v/u/en-US/ug576-ultrascale-gth-transceivers>`_

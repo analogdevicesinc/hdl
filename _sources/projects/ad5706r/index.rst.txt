@@ -148,7 +148,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD5706R HDL project source code <drivers/dac/ad5706r>`
+- :git-hdl:`AD5706R HDL project source code <projects/ad5706r>`
 
 .. list-table::
    :widths: 30 35 35
@@ -169,7 +169,7 @@ Software related
 
 - :git-no-os:`AD5706R No-OS project source code <drivers/dac/ad5706r>`
 - :git-no-os:`AD5706R No-OS Driver source code <drivers/dac/ad5706r>`
-- :git-linux:`AD5706R Linux Driver source code <drivers/iio/dac/ad5706r>`
+- :git-linux:`AD5706R Linux Driver source code <dev_ad5706r_1:drivers/iio/dac/ad5706r.c>`
 
 .. include:: ../common/more_information.rst
 

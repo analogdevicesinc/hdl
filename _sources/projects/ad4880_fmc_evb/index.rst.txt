@@ -3,7 +3,7 @@
 AD4880-FMC-EVB HDL project
 ================================================================================
 
-The :adi:`EVAL-AD4880-FMCZ` is designed to demonstrate the :adi:`AD4880`
+The :adi:`EVAL-AD4880-FMCZ <eval-ad4880>` is designed to demonstrate the :adi:`AD4880`
 performance.
 
 The :git-hdl:`AD4880-FMC-EVB HDL project <projects/ad4880_fmc_evb>` supports
@@ -20,8 +20,8 @@ the following :adi:`AD4880` , :adi:`AD4884` features:
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD4880-FMCZ`
-- :adi:`EVAL-AD4884-FMCZ`
+- :adi:`EVAL-AD4880-FMCZ <eval-ad4880>`
+- :adi:`EVAL-AD4884-FMCZ <eval-ad4884>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -44,10 +44,10 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`EVAL-AD4880-FMCZ`
+   * - :adi:`EVAL-AD4880-FMCZ <eval-ad4880>`
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC-LPC
-   * - :adi:`EVAL-AD4884-FMCZ`
+   * - :adi:`EVAL-AD4884-FMCZ <eval-ad4884>`
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC-LPC
 
@@ -255,9 +255,9 @@ Software related
    -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
    -  `PyADI-IIO example <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4880/examples/ad4880_example.py>`__
    -  `PyADI-IIO class <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4880/adi/ad4880.py>`__
-   -  AD4880-FMC-EVB Linux device tree :git-linux:`zynq-zed-adv7511-ad4880.dts
-      <arch/arm/boot/dts/zynq-zed-adv7511-ad4880.dts>`
-   -  AD4880 Linux driver :git-linux:`ad4080.c <drivers/iio/adc/ad4080.c>`
+   -  AD4880-FMC-EVB Linux device tree :git-linux:`zynq-zed-ad4880.dts
+      <main:arch/arm/boot/dts/xilinx/zynq-zed-ad4880.dts>`
+   -  AD4880 Linux driver :git-linux:`ad4080.c <main:drivers/iio/adc/ad4080.c>`
 
 .. include:: ../common/more_information.rst
 

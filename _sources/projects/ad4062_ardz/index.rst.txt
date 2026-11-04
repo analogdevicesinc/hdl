@@ -21,8 +21,8 @@ from the precision ADC.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD4060-ARDZ`
-- :adi:`EVAL-AD4062-ARDZ`
+- :adi:`EVAL-AD4060-ARDZ <eval-ad4060-eval-ad4062>`
+- :adi:`EVAL-AD4062-ARDZ <eval-ad4060-eval-ad4062>`
 
 Supported devices
 -------------------------------------------------------------------------------

@@ -5,7 +5,7 @@ Corundum Ethernet Core for VCU118
 
 .. hdl-component-diagram::
 
-The :git-hdl:`Corundum Ethernet Core <library/corundum/corundum_ethernet_core_k26>`
+The :git-hdl:`Corundum Ethernet Core <library/corundum/ethernet/vcu118>`
 is used by the Corundum Network Stack. This Ethernet Core is specific to the
 VCU118 FPGA board and encompasses the Ethernet physical layer and other
 auxiliary structures such as SPI and I2C that are required by the Corundum
@@ -21,9 +21,9 @@ Files
 
    * - Name
      - Description
-   * - :git-hdl:`library/corundum/ethernet_core/ethernet_core_vcu118.v`
+   * - :git-hdl:`library/corundum/ethernet/vcu118/ethernet_vcu118.v`
      - Verilog source for the Ethernet Core top module for the VCU118 board.
-   * - :git-hdl:`library/corundum/ethernet_core/ethernet_ip.tcl`
+   * - :git-hdl:`library/corundum/ethernet/vcu118/ethernet_vcu118_ip.tcl`
      - TCL script to generate the Vivado IP-integrator project.
 
 Configuration Parameters

@@ -139,7 +139,7 @@ the HDL repository, and then build the project as follows:
 
 .. shell::
 
-   $cd hdl/projects/ad5529r/coraz7s
+   $cd hdl/projects/ad5529r_ardz/coraz7s
    $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -163,7 +163,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`ad5529r HDL project source code <projects/ad5529r>`
+- :git-hdl:`ad5529r HDL project source code <projects/ad5529r_ardz>`
 
 .. list-table::
    :widths: 30 40 30
