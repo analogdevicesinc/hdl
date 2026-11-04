@@ -96,6 +96,8 @@ module jesd204_rx_lane_64b #(
   reg  [2:1]  buffer_ready_r;
   reg  [5:0]  ctrl_err_statistics_mask_r;
 
+  reg         emb_lock_r = 1'b0;
+
   wire [63:0] phy_data_r;
   wire [11:0] crc12_received_r;
   wire [63:0] data_descrambled_s;
@@ -322,8 +324,18 @@ module jesd204_rx_lane_64b #(
     buffer_ready_r <= {buffer_ready_r[1], buffer_ready_next};
   end
 
+  // Register emb_lock signal for improving timing on this long combinational path.
+  // Upon locking onto the input data stream, this would cause buffer_ready_n to
+  // become 0 one multiblock later.
+  // Upon losing the lock, buffer_ready_n would become 1 one clock cycle later.
+  // buffer_ready_next (i.e. eomb) should not assert in that clock cycle, since a
+  // valid end of multiblock has not been detected.
   always @(posedge clk) begin
-    if (reset | ~emb_lock | (fec_en & ~fec_data_out_valid)) begin
+    emb_lock_r <= emb_lock;
+  end
+
+  always @(posedge clk) begin
+    if (reset | ~emb_lock_r | (fec_en & ~fec_data_out_valid)) begin
       buffer_ready_n <= 1'b1;
     end else begin
       // FEC data is delayed by 2 cycles
