@@ -83,7 +83,7 @@ module jesd204_tx_lane_64b #(
   reg         eoemb_d1 = 'b0;
   reg  [11:0] crc12_d1 = 'b0;
   reg         cfg_lane_disable_int;
-  reg  [1:0]  cfg_header_mode_int;
+  (* dont_touch = "yes" *) reg  [1:0]  cfg_header_mode_int;
 
   wire [63:0] tx_data_msb_s;
   wire [63:0] scrambled_data_s;
