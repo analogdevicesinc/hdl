@@ -322,9 +322,9 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV9002 Device Driver Customization <resources/tools-software/linux-drivers/iio-transceiver/adrv9002-customization>`
-- :dokuwiki:`[Wiki] ADRV9002 Integrated Dual RF Transceiver Linux device driver <resources/tools-software/linux-drivers/iio-transceiver/adrv9002>`
-- :dokuwiki:`[Wiki] ADRV9002 No-OS System Level Design <resources/eval/user-guides/adrv9002/no-os-setup>`
+- :external+linux:doc:`ADRV9002 Device Driver Customization <drivers/iio-transceiver/adrv9002-customization>`
+- :external+linux:doc:`ADRV9002 Integrated Dual RF Transceiver Linux device driver <drivers/iio-transceiver/adrv9002>`
+- :external+no-OS:doc:`ADRV9002 No-OS System Level Design <build_guide>`
 
 .. collapsible:: Click here to see the list of Linux device trees available.
 

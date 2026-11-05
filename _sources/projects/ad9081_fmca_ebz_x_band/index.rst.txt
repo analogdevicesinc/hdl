@@ -553,7 +553,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :dokuwiki:`[Wiki] X-Band Platform Software  <resources/eval/user-guides/x-band-platform/software>`
-- :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
+- :external+linux:ref:`AD9081-FMCA-EBZ Linux driver page <ad9081>`
 
 - Stingray devicetrees:
 

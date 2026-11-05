@@ -306,10 +306,10 @@ Software related
 - Linux driver :git-linux:`drivers/iio/adc/ad6676.c`
 - AD6676EVB VC707 Linux device tree :git-linux:`arch/microblaze/boot/dts/vc707_ad6676evb.dts`
 - AD6676EVB ZC706 Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad6676-fmc.dts`
-- :dokuwiki:`AD6676 Linux device driver documentation <resources/tools-software/linux-drivers/iio-adc/ad6676>`
+- :external+linux:doc:`AD6676 Linux device driver documentation <drivers/iio-adc/ad6676>`
 - AD6676 no-OS driver :git-no-os:`drivers/adc/ad6676`
 - AD6676 no-OS project :git-no-os:`projects/ad6676-ebz`
-- :dokuwiki:`AD6676 No-OS driver documentation <resources/eval/user-guides/ad6676-ebz/software/baremetal>`
+- :external+no-OS:doc:`AD6676 No-OS driver documentation <projects/adc/ad6676-ebz>`
 
 .. include:: ../common/more_information.rst
 

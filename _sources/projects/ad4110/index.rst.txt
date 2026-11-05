@@ -194,8 +194,8 @@ Software related
 
 - :git-no-os:`AD4110 No-OS project source code <projects/ad4110>`
 - :git-no-os:`AD4110 No-OS Driver source code <drivers/afe/ad4110>`
-- :dokuwiki:`AD4110 No-OS Driver documentation <resources/tools-software/uc-drivers/ad4110>`
-- :dokuwiki:`AD4110 IIO Application <resources/tools-software/product-support-software/ad4110_mbed_iio_application>`
+- :external+system-level:doc:`AD4110 No-OS Driver documentation <solutions/reference-designs/eval-ad4110/index>`
+- :external+system-level:doc:`AD4110 IIO Application <solutions/reference-designs/eval-ad4110/index>`
 
 .. include:: ../common/more_information.rst
 

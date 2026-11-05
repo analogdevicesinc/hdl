@@ -590,7 +590,7 @@ Software related
 - DAQ3/ZCU102 Linux device tree :git-linux:`zynqmp-zcu102-rev10-fmcdaq3.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-fmcdaq3.dts>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ on Zynq ZC706 Linux quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/zynq>`
 - :external+system-level:ref:`AD-FMCDAQ3-EBZ baremetal (no-OS) guide <ad_fmcdaq3_ebz baremetal>`
-- :dokuwiki:`AD-FMCDAQ3-EBZ on MicroBlaze no-OS quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/microblaze>`
+- :external+system-level:doc:`AD-FMCDAQ3-EBZ on MicroBlaze no-OS quick start guide <solutions/reference-designs/ad-fmcdaq2-ebz/quickstart/microblaze>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ IIO Oscilloscope plugin <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/applications/iio_scope>`
 - :external+system-level:ref:`FRU EEPROM (fru_dump) utility <software fru-dump>`
 

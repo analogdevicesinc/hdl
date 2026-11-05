@@ -297,7 +297,7 @@ Software related
 
 - :git-no-os:`CN0561 No-OS project source code <projects/cn0561>`
 - :git-no-os:`AD4134/AD7134 No-OS Driver source code <drivers/adc/ad713x>`
-- :dokuwiki:`AD4134/AD7134 No-OS Driver documentation <resources/tools-software/uc-drivers/ad713x>`
+- :external+no-OS:doc:`AD4134/AD7134 No-OS Driver documentation <projects/adc/ad713x_fmcz>`
 
 .. include:: ../common/more_information.rst
 

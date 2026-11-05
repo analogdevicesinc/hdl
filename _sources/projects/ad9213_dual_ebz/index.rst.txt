@@ -328,7 +328,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] Stratix 10 SoC Development Kit Linux Quick Start Guide <resources/eval/user-guides/ad9213_dual_ebz/software>`
+- :external+system-level:doc:`Stratix 10 SoC Development Kit Linux Quick Start Guide <solutions/reference-designs/eval-ad9213-dual/quickstart/stratix10>`
 
 .. include:: ../common/more_information.rst
 

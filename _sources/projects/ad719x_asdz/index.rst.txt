@@ -258,11 +258,11 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`AD719X Linux driver <drivers/iio/adc/ad7192.c>`
-- :git-linux:`AD7190/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7190.dts>`
-- :git-linux:`AD7192/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7192.dts>`
-- :git-linux:`AD7193/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7193.dts>`
-- :git-linux:`AD7194/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7194.dts>`
-- :git-linux:`AD7195/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7195.dts>`
+- :git-linux:`AD7190/CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7190.dts>`
+- :git-linux:`AD7192/CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7192.dts>`
+- :git-linux:`AD7193/CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7193.dts>`
+- :git-linux:`AD7194/CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7194.dts>`
+- :git-linux:`AD7195/CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7195.dts>`
 - :git-no-os:`AD719X no-OS project <projects/ad719x>`
 - :git-no-os:`AD719X no-OS driver <drivers/adc/ad719x>`
 - :dokuwiki:`AD7190 - Microcontroller No-OS Driver <resources/tools-software/uc-drivers/renesas/ad7190>`

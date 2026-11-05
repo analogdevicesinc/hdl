@@ -246,7 +246,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`FMCADC2/VC707 Linux device tree <2021_R2:arch/microblaze/boot/dts/vc707_fmcadc2.dts>`
-- :git-linux:`FMCADC2/ZC706 Linux device tree <2021_R2:arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9625-fmcadc2.dts>`
+- :git-linux:`FMCADC2/ZC706 Linux device tree <2021_R2:arch/arm/boot/dts/zynq-zc706-adv7511-ad9625-fmcadc2.dts>`
 
 .. include:: ../common/more_information.rst
 

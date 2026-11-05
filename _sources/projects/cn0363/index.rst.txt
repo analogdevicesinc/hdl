@@ -265,7 +265,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`CN0363 Linux driver source code <drivers/iio/adc/ad_adc.c>`
-- :dokuwiki:`CN0363 Linux Driver [Wiki] <resources/eval/user-guides/eval-cn0363-pmdz/software/linux/drivers>`
+- :external+linux:doc:`CN0363 Linux Driver <drivers/iio-adc/ad7173>`
 
 .. include:: ../common/more_information.rst
 

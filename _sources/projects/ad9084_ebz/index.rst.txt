@@ -851,7 +851,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD9084-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/ad9084>`
+- :external+linux:ref:`AD9084-EBZ Linux driver page <ad9088>`
 - Python support:
 
   - `AD9084 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9084.html>`__

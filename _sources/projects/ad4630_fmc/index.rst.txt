@@ -493,9 +493,9 @@ Software related
 
 - :git-linux:`AD4630_FMC Linux driver source code <drivers/iio/adc/ad4630.c>`
 - :git-no-os:`AD463X_FMC No-OS project source code <projects/ad463x_fmcz>`
-- :dokuwiki:`AD4630 ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad4630>`
-- :dokuwiki:`AD463X ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad463x>`
-- :dokuwiki:`AD4630/AD4030 - No-OS Driver <resources/tools-software/uc-drivers/ad463x>`
+- :external+linux:doc:`AD4630 ADC Linux Driver <drivers/iio-adc/ad4630>`
+- :external+linux:doc:`AD463X ADC Linux Driver <drivers/iio-adc/ad463x>`
+- :external+no-OS:doc:`AD4630/AD4030 - No-OS Driver <projects/adc/ad463x_fmcz>`
 
 .. include:: ../common/more_information.rst
 

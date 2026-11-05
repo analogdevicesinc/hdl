@@ -252,7 +252,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - :git-linux:`FMCJESDADC1/KC705 Linux device tree <2021_R2:arch/microblaze/boot/dts/kc705_fmcjesdadc1.dts>`
 - :git-linux:`FMCJESDADC1/VC707 Linux device tree <2021_R2:arch/microblaze/boot/dts/vc707_fmcjesdadc1.dts>`
-- :git-linux:`FMCJESDADC1/ZC706 Linux device tree <2021_R2:arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcjesdadc1.dts>`
+- :git-linux:`FMCJESDADC1/ZC706 Linux device tree <2021_R2:arch/arm/boot/dts/zynq-zc706-adv7511-fmcjesdadc1.dts>`
 
 .. include:: ../common/more_information.rst
 

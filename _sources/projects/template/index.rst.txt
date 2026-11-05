@@ -752,7 +752,7 @@ Software related
 ..
    THIS IS JUST AN EXAMPLE
 
-- :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
+- :external+linux:ref:`AD9081-FMCA-EBZ Linux driver page <ad9081>`
 
 If there is no Linux driver page, then insert a link to the code of the driver
 and of the device tree.

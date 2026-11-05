@@ -261,7 +261,7 @@ Software related
 
 - :git-no-os:`AD5766 no-OS project <projects/ad5766-sdz>`
 - :git-no-os:`AD5766 no-OS driver source code ad5766.c <drivers/dac/ad5766/ad5766.c>`
-- :dokuwiki:`[Wiki] AD5766 no-OS driver doc. <resources/tools-software/uc-drivers/ad5766>`
+- :external+no-OS:doc:`AD5766 no-OS driver doc. <projects/dac/ad5766-sdz>`
 
 .. include:: ../common/more_information.rst
 

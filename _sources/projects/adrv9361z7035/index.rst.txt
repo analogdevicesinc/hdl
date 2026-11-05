@@ -332,7 +332,7 @@ Software related
 - :git-linux:`ADRV9361-Z7035 ccfmc_lvds Linux device tree - TDD mode <arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-fmc-rfcard-tdd.dts>`
 
 - :dokuwiki:`[Wiki] ADRV9361-Z7035 User Guide - Software documentation<resources/eval/user-guides/adrv936x_rfsom/user-guide/software>`
-- :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
+- :external+linux:doc:`AD9361 Linux device driver documentation <drivers/iio-transceiver/ad9361>`
 
 .. include:: ../common/more_information.rst
 

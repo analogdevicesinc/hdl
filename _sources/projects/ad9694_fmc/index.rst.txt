@@ -302,7 +302,7 @@ Software related
 
 - Linux driver :git-linux:`drivers/iio/adc/ad9208.c` (common for AD9694 as well)
 - AD9694-500EBZ ZCU102 Linux device tree :git-linux:`arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9694.dts`
-- :dokuwiki:`AD9208 Linux device driver documentation <resources/tools-software/linux-drivers/iio-adc/ad9208>`
+- :external+linux:doc:`AD9208 Linux device driver documentation <drivers/iio-adc/ad9208>`
 
 .. include:: ../common/more_information.rst
 

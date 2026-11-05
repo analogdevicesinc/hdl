@@ -431,7 +431,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV9009 Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/adrv9009>`
+- :external+linux:doc:`ADRV9009 Linux driver page <drivers/iio-transceiver/adrv9009>`
 
 - :git-linux:`FMCOMMS8 + ZCU102 device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9009-fmcomms8-jesd204-fsm.dts>`
 - :git-linux:`FMCOMMS8 + A10SoC device tree <arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_fmcomms8.dts>`

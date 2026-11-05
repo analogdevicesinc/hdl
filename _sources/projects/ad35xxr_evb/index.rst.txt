@@ -203,7 +203,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD3552R Dual Channel, 16-Bit, 33 MUPS, Multispan, Multi-IO SPI DAC Linux device driver </resources/tools-software/linux-drivers/iio-dac/axi-ad3552r>`
+- :external+linux:doc:`AD3552R Dual Channel, 16-Bit, 33 MUPS, Multispan, Multi-IO SPI DAC Linux device driver <drivers/iio-dac/ad3552r-hs>`
 
 .. include:: ../common/more_information.rst
 
