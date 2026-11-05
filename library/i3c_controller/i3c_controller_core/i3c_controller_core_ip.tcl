@@ -45,6 +45,7 @@ adi_ip_files i3c_controller_core [list \
   "i3c_controller_word.vh" \
   "i3c_controller_bit_mod.v" \
   "i3c_controller_bit_mod.vh" \
+  "i3c_controller_patterns.v" \
 ]
 
 adi_ip_properties_lite i3c_controller_core

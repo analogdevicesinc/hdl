@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -62,7 +62,7 @@ module i3c_controller_cmd_parser (
 
   input         cmdp_ready,
   output        cmdp_valid,
-  output [30:0] cmdp,
+  output [31:0] cmdp,
   input  [2:0]  cmdp_error,
 
   output        rd_bytes_stop,
@@ -125,8 +125,8 @@ module i3c_controller_cmd_parser (
           cmdr2 <= 8'd0;
           if (cmd_valid) begin
             cmdr1 <= cmd;
-            /* cmd[22] is cmdp_ccc */
-            sm <= cmd[22] ? SM_CCC_WAIT : SM_XFER_WAIT;
+            /* cmd[22] is cmdp_ccc and cmd[23] is pattern */
+            sm <= ( cmd[22] | cmd[23] ) ? SM_CCC_WAIT : SM_XFER_WAIT;
           end else begin
             sm <= SM_RECEIVE;
           end
@@ -230,6 +230,7 @@ module i3c_controller_cmd_parser (
 
   // Remove reserved bits.
   assign cmdp = {
+    cmdr1[23],
     cmdr2[7:0],
     cmdr1[22:0]
   };
