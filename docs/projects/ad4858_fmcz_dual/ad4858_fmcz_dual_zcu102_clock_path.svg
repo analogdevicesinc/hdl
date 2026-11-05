@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="470" viewBox="0 0 1200 470"><title>ad4858_fmcz_dual clock path (ZCU102)</title>
+<rect x="12" y="40" width="124" height="130" fill="#ddd3e8" stroke="#4d346f" stroke-width="2"/>
+<text x="74.0" y="32" text-anchor="middle" font-size="16" font-family="sans-serif" font-weight="bold" fill="#000">ZynqMP PS8</text>
+<text x="129" y="79" text-anchor="end" font-size="13.333" font-family="Arial" fill="#000">pl_clk0</text>
+<text x="129" y="109" text-anchor="end" font-size="13.333" font-family="Arial" fill="#000">pl_clk1</text>
+<text x="129" y="139" text-anchor="end" font-size="13.333" font-family="Arial" fill="#000">pl_clk2</text>
+<text x="138" y="71" text-anchor="start" font-size="10.667" font-family="Arial" fill="#000">100 MHz</text>
+<text x="138" y="101" text-anchor="start" font-size="10.667" font-family="Arial" fill="#000">200 MHz</text>
+<text x="138" y="131" text-anchor="start" font-size="10.667" font-family="Arial" fill="#000">500 MHz</text>
+<rect x="300" y="44" width="161" height="90" fill="#e8e8e8" stroke="#000000" stroke-width="2"/>
+<text x="380.5" y="36" text-anchor="middle" font-size="16" font-family="sans-serif" font-weight="bold" fill="#000">axi_clkgen</text>
+<text x="308" y="79" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">s_axi_aclk</text>
+<text x="308" y="109" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">clk</text>
+<text x="453" y="79" text-anchor="end" font-size="13.333" font-family="Arial" fill="#000">clk0</text>
+<text x="453" y="109" text-anchor="end" font-size="13.333" font-family="Arial" fill="#000">clk1</text>
+<rect x="560" y="44" width="161" height="90" fill="#e8e8e8" stroke="#000000" stroke-width="2"/>
+<text x="640.5" y="36" text-anchor="middle" font-size="16" font-family="sans-serif" font-weight="bold" fill="#000">axi_pwm_gen (0)</text>
+<text x="568" y="79" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">ext_clk</text>
+<text x="568" y="109" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">s_axi_aclk</text>
+<text x="713" y="93" text-anchor="end" font-size="13.333" font-family="Arial" fill="#000">pwm_0</text>
+<rect x="560" y="250" width="212" height="200" fill="#ffcccc" stroke="#a01414" stroke-width="2"/>
+<text x="666.0" y="242" text-anchor="middle" font-size="16" font-family="sans-serif" font-weight="bold" fill="#000">axi_ad485x (0)</text>
+<text x="568" y="281" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">delay_clk</text>
+<text x="568" y="305" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">external_clk</text>
+<text x="568" y="329" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">external_fast_clk</text>
+<text x="568" y="353" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">cnvs</text>
+<text x="568" y="377" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">s_axi_aclk</text>
+<text x="568" y="403" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">scko</text>
+<text x="764" y="433" text-anchor="end" font-size="13.333" font-family="Arial" fill="#000">scki</text>
+<polyline points="721,90 745,90 745,219 548,219 548,350 552,350" fill="none" stroke="#ff8000" stroke-width="2"/>
+<polygon points="560,350 552,346 552,354" fill="#ff8000"/>
+<polyline points="480,400 552,400" fill="none" stroke="#009e00" stroke-width="2"/>
+<polygon points="560,400 552,396 552,404" fill="#009e00"/>
+<polyline points="772,430 844,430" fill="none" stroke="#009e00" stroke-width="2"/>
+<polygon points="852,430 844,426 844,434" fill="#009e00"/>
+<rect x="880" y="44" width="161" height="90" fill="#e8e8e8" stroke="#000000" stroke-width="2"/>
+<text x="960.5" y="36" text-anchor="middle" font-size="16" font-family="sans-serif" font-weight="bold" fill="#000">axi_pwm_gen (1)</text>
+<text x="888" y="79" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">ext_clk</text>
+<text x="888" y="109" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">s_axi_aclk</text>
+<text x="1033" y="93" text-anchor="end" font-size="13.333" font-family="Arial" fill="#000">pwm_0</text>
+<rect x="880" y="250" width="212" height="200" fill="#ffcccc" stroke="#a01414" stroke-width="2"/>
+<text x="986.0" y="242" text-anchor="middle" font-size="16" font-family="sans-serif" font-weight="bold" fill="#000">axi_ad485x (1)</text>
+<text x="888" y="281" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">delay_clk</text>
+<text x="888" y="305" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">external_clk</text>
+<text x="888" y="329" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">external_fast_clk</text>
+<text x="888" y="353" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">cnvs</text>
+<text x="888" y="377" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">s_axi_aclk</text>
+<text x="888" y="403" text-anchor="start" font-size="13.333" font-family="Arial" fill="#000">scko</text>
+<text x="1084" y="433" text-anchor="end" font-size="13.333" font-family="Arial" fill="#000">scki</text>
+<polyline points="1041,90 1065,90 1065,219 868,219 868,350 872,350" fill="none" stroke="#ff8000" stroke-width="2"/>
+<polygon points="880,350 872,346 872,354" fill="#ff8000"/>
+<polyline points="800,400 872,400" fill="none" stroke="#009e00" stroke-width="2"/>
+<polygon points="880,400 872,396 872,404" fill="#009e00"/>
+<polyline points="1092,430 1164,430" fill="none" stroke="#009e00" stroke-width="2"/>
+<polygon points="1172,430 1164,426 1164,434" fill="#009e00"/>
+<polyline points="136,76 292,76" fill="none" stroke="#cccc00" stroke-width="2"/>
+<polygon points="300,76 292,72 292,80" fill="#cccc00"/>
+<circle cx="200" cy="76" r="4.5" fill="#cccc00"/>
+<polyline points="200,76 200,160 835,160" fill="none" stroke="#cccc00" stroke-width="2"/>
+<circle cx="520" cy="160" r="4.5" fill="#cccc00"/>
+<polyline points="520,106 520,374" fill="none" stroke="#cccc00" stroke-width="2"/>
+<polyline points="520,106 552,106" fill="none" stroke="#cccc00" stroke-width="2"/>
+<polygon points="560,106 552,102 552,110" fill="#cccc00"/>
+<polyline points="520,374 552,374" fill="none" stroke="#cccc00" stroke-width="2"/>
+<polygon points="560,374 552,370 552,378" fill="#cccc00"/>
+<circle cx="835" cy="160" r="4.5" fill="#cccc00"/>
+<polyline points="835,106 835,374" fill="none" stroke="#cccc00" stroke-width="2"/>
+<polyline points="835,106 872,106" fill="none" stroke="#cccc00" stroke-width="2"/>
+<polygon points="880,106 872,102 872,110" fill="#cccc00"/>
+<polyline points="835,374 872,374" fill="none" stroke="#cccc00" stroke-width="2"/>
+<polygon points="880,374 872,370 872,378" fill="#cccc00"/>
+<polyline points="136,106 292,106" fill="none" stroke="#b266ff" stroke-width="2"/>
+<polygon points="300,106 292,102 292,110" fill="#b266ff"/>
+<polyline points="136,136 170,136 170,208 820,208 820,278 872,278" fill="none" stroke="#8c4a00" stroke-width="2"/>
+<polygon points="880,278 872,274 872,282" fill="#8c4a00"/>
+<circle cx="535" cy="208" r="4.5" fill="#8c4a00"/>
+<polyline points="535,208 535,278 552,278" fill="none" stroke="#8c4a00" stroke-width="2"/>
+<polygon points="560,278 552,274 552,282" fill="#8c4a00"/>
+<polyline points="461,76 552,76" fill="none" stroke="#0000ff" stroke-width="2"/>
+<polygon points="560,76 552,72 552,80" fill="#0000ff"/>
+<circle cx="500" cy="76" r="4.5" fill="#0000ff"/>
+<polyline points="500,76 500,302 552,302" fill="none" stroke="#0000ff" stroke-width="2"/>
+<polygon points="560,302 552,298 552,306" fill="#0000ff"/>
+<circle cx="500" cy="176" r="4.5" fill="#0000ff"/>
+<polyline points="500,176 790,176" fill="none" stroke="#0000ff" stroke-width="2"/>
+<circle cx="790" cy="176" r="4.5" fill="#0000ff"/>
+<polyline points="790,76 790,302" fill="none" stroke="#0000ff" stroke-width="2"/>
+<polyline points="790,76 872,76" fill="none" stroke="#0000ff" stroke-width="2"/>
+<polygon points="880,76 872,72 872,80" fill="#0000ff"/>
+<polyline points="790,302 872,302" fill="none" stroke="#0000ff" stroke-width="2"/>
+<polygon points="880,302 872,298 872,306" fill="#0000ff"/>
+<polyline points="461,106 480,106 480,326 552,326" fill="none" stroke="#ff0000" stroke-width="3"/>
+<polygon points="560,326 552,322 552,330" fill="#ff0000"/>
+<circle cx="480" cy="192" r="4.5" fill="#ff0000"/>
+<polyline points="480,192 805,192 805,326 872,326" fill="none" stroke="#ff0000" stroke-width="3"/>
+<polygon points="880,326 872,322 872,330" fill="#ff0000"/>
+<text x="472" y="262" text-anchor="end" font-size="12" font-family="Arial" font-weight="bold" fill="#ff0000">Exists ONLY in LVDS mode!</text>
+<text x="876" y="380" text-anchor="end" font-size="11" font-family="Arial" font-weight="bold" fill="#009e00">CMOS mode or</text>
+<text x="876" y="394" text-anchor="end" font-size="11" font-family="Arial" font-weight="bold" fill="#009e00">LVDS with SSI_N=1</text>
+</svg>
