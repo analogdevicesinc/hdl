@@ -169,17 +169,6 @@ module system_top #(
   wire [ 1:0] iic_mux_sda_o_s;
   wire        iic_mux_sda_t_s;
 
-  // GPIO mapping:
-  // [31: 0] - gpio_bd (Zedboard LEDs, switches, buttons)
-  // [32]    - csb_duta
-  // [33]    - csb_dutb
-  // [34]    - csb_dutc
-  // [35]    - csb_dutd
-  // [36]    - csb_ad9510
-  // [37]    - apd_supp_en
-  // [63:38] - unused
-  // trig_fmc_in/out connected to TDD controller (not GPIO)
-
   assign gpio_i[63:38] = gpio_o[63:38];
 
   ad_iobuf #(
