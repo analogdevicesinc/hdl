@@ -811,6 +811,9 @@ HDL related
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
+   * - AXI_HSCI
+     - :git-hdl:`library/axi_hsci`
+     - :ref:`axi_hsci`
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
      - :ref:`axi_sysid`
