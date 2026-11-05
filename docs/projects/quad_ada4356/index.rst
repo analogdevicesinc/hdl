@@ -135,6 +135,46 @@ Clock scheme
 - ``sys_cpu_clk`` (PS ``FCLK_CLK0``, 100 MHz) clocks the AXI-Lite register
   interfaces.
 
+The DCO of each ADA4356 enters the FPGA on a clock-capable FMC pin:
+
+.. list-table::
+   :widths: 25 10 20 10 15 10
+   :header-rows: 1
+
+   * - Instance
+     - DUT
+     - DCO clock
+     - DCO pin
+     - Clock-capable
+     - IO Bank
+   * - axi_ada4355_adc_0
+     - A
+     - FMC_LA01_CC
+     - N19
+     - SRCC
+     - 34
+   * - axi_ada4355_adc_1
+     - B
+     - FMC_LA00_CC
+     - M19
+     - MRCC
+     - 34
+   * - axi_ada4355_adc_2
+     - C
+     - FMC_LA17_CC
+     - B19
+     - MRCC
+     - 35
+   * - axi_ada4355_adc_3
+     - D
+     - FMC_LA18_CC
+     - D20
+     - SRCC
+     - 35
+
+Only an MRCC pin can drive a BUFMRCE, so only B and C could ever share their
+DCO with another bank; each instance clocks its own capture from its own DCO.
+
 Limitations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -170,24 +210,24 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-Depending on the value of parameter $TDD_SUPPORT, some IPs are instantiated
-and some are not.
+==================== ===========
+Instance             Zynq
+==================== ===========
+axi_ada4355_adc_0    0x44A0_0000
+axi_ada4355_adc_1    0x44A1_0000
+axi_ada4355_adc_2    0x44A2_0000
+axi_ada4355_adc_3    0x44A3_0000
+axi_ada4355_dma_0    0x44A4_0000
+axi_ada4355_dma_1    0x44A5_0000
+axi_ada4355_dma_2    0x44A6_0000
+axi_ada4355_dma_3    0x44A7_0000
+axi_tdd_0 *          0x44A8_0000
+==================== ===========
 
-Check-out the table below to find out the conditions.
+.. admonition:: Legend
+   :class: note
 
-==================== =========================== ===============
-Instance             Depends on parameter        Zynq/Microblaze
-==================== =========================== ===============
-axi_ada4355_adc_0                                0x44A0_0000
-axi_ada4355_adc_1                                0x44A1_0000
-axi_ada4355_adc_2                                0x44A2_0000
-axi_ada4355_adc_3                                0x44A3_0000
-axi_ada4355_dma_0                                0x44A4_0000
-axi_ada4355_dma_1                                0x44A5_0000
-axi_ada4355_dma_2                                0x44A6_0000
-axi_ada4355_dma_3                                0x44A7_0000
-axi_tdd_0            $TDD_SUPPORT==1             0x44A8_0000
-==================== =========================== ===============
+   - ``*`` instantiated only for TDD_SUPPORT=1
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -431,7 +471,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`AD9517-4 Linux driver <drivers/iio/frequency/ad9517.c>`
+.. No software support upstream yet.
 
 .. include:: ../common/more_information.rst
 

@@ -108,7 +108,7 @@ Contents
    MAX96724 <max96724/index>
    PLUTO <pluto/index>
    QUAD-ADA4356 <quad_ada4356/index>
-   QUAD_ADAQ7768-1 <quad_adaq77681/index>
+   QUAD-ADAQ7768-1 <quad_adaq77681/index>
    QUAD-QUAD-MXFE <quad_quad_mxfe/index>
    PULSAR-ADC <pulsar_adc/index>
    PULSAR-LVDS-ADC <pulsar_lvds_adc/index>
