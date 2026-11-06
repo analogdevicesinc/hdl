@@ -36,8 +36,8 @@
 `timescale 1ns/100ps
 
 /*
- * GPIOs of the bridge, written and read one pin at a time by the GPIO_W and
- * GPIO_R bridge instructions, see spi_translator_decoder.v. Up to 256 pins,
+ * GPIOs of the bridge, written and read one pin at a time by the GPIO bridge
+ * instruction (op 3), see spi_translator_decoder.v. Up to 256 pins,
  * each with an output value, a direction (0 = output, 1 = input; the same
  * polarity as the gpio_t tristate control) and an input level synchronized to
  * clk. Writes act immediately; an index at or above NUM_OF_GPIO is ignored on

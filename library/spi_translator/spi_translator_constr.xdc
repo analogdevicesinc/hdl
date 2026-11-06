@@ -32,11 +32,17 @@ set_false_path -to [get_pins -hier -filter {NAME =~ *i_spi_slave/bit_cnt_reg[*]/
 set_false_path -to [get_pins -hier -filter {NAME =~ *i_spi_slave/sdi_shift_reg[*]/CLR}]
 
 # clk -> sclk: tx_data only changes in the cycle after a byte has been
-# received, so it is stable whenever the sclk domain loads it
+# received, so it is stable whenever the sclk domain loads it; it is loaded
+# into tx_hold with the standard launch (default) and directly into tx_shift
+# with EARLY_LAUNCH, so only one of the two endpoints exists
 
-set_false_path \
+set_false_path -quiet \
   -from [get_cells -hier -filter {NAME =~ *i_decoder/tx_data_reg[*] && IS_SEQUENTIAL}] \
-  -to   [get_cells -hier -filter {NAME =~ *i_spi_slave/tx_shift_reg[*] && IS_SEQUENTIAL}]
+  -to   [get_cells -quiet -hier -filter {NAME =~ *i_spi_slave/*tx_hold_reg[*] && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -from [get_cells -hier -filter {NAME =~ *i_decoder/tx_data_reg[*] && IS_SEQUENTIAL}] \
+  -to   [get_cells -quiet -hier -filter {NAME =~ *i_spi_slave/tx_shift_reg[*] && IS_SEQUENTIAL}]
 
 # GPIO inputs are asynchronous to clk; -quiet as there are none with
 # NUM_OF_GPIO = 0
