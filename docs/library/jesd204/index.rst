@@ -402,14 +402,11 @@ Tutorial
 HDL Example Projects
 --------------------------------------------------------------------------------
 
-- :ref:`AD-FMCADC2-EBZ Reference Design (RETIRED) <fmcadc2>`
 - :dokuwiki:`AD-FMCADC3-EBZ Reference Design (RETIRED) <resources/fpga/xilinx/fmc/ad-fmcadc3-ebz>`
 - :dokuwiki:`AD-FMCADC4-EBZ Reference Design (RETIRED) <resources/fpga/xilinx/fmc/ad-fmcadc4-ebz>` on:
 
   - :git-hdl:`AMD Xilinx ZC706 <hdl_2018_r2:projects/fmcadc4/zc706>`
 
-- :ref:`AD-FMCADC5-EBZ Reference Design (RETIRED) <fmcadc5>`
-- :ref:`AD-FMCJESDADC1-EBZ Reference Design (RETIRED) <fmcjesdadc1>`
 - :ref:`AD-FMCOMMS8-EBZ Reference Design <fmcomms8>` on:
 
   - :git-hdl:`Intel Arria 10 SoC <projects/fmcomms8/a10soc>`
@@ -525,7 +522,6 @@ HDL Example Projects
 
   - :git-hdl:`AMD Xilinx VCU118 <projects/ad_quadmxfe1_ebz/vcu118>`
 
-- :ref:`AD-FMCLIDAR1-EBZ Reference Design (RETIRED) <ad_fmclidar1_ebz>`
 - :ref:`ADRV9026 Reference Design <adrv9026>` on:
 
   - :git-hdl:`Intel Arria 10 SoC <projects/adrv9026/a10soc>`

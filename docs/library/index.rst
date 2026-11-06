@@ -108,12 +108,6 @@ Utilities
 Obsolete IPs
 -------------------------------------------------------------------------------
 
-.. toctree::
-   :maxdepth: 1
-
-   axi_ad9643/index
-   axi_ad9671/index
-
 The following IPs are obsolete and **not maintained anymore**. The latest
 available sources can be found in the following release branches:
 
