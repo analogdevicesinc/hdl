@@ -73,6 +73,7 @@ ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN false false
 ad_ip_parameter NUM_OF_LANES POSITIVE 4 true
 ad_ip_parameter LINK_MODE POSITIVE 1 false
 ad_ip_parameter LANE_INVERT INTEGER 0 true
+ad_ip_parameter TX_NUM_OF_LANES NATURAL 0 false
 ad_ip_parameter WIDTH NATURAL 20 true { \
   DERIVED true \
 }
@@ -120,7 +121,7 @@ proc glue_add_if_port {num ifname port role dir width {bcast false} {phy_role {}
   }
 
   set device [get_parameter DEVICE]
-  if {[string equal $device "Agilex 7"]} {
+  if {[string equal $device "Agilex 7"] || [string equal $device "Agilex 5"]} {
     if {$phy_role == {}} {
       set phy_role $port
     }
@@ -234,6 +235,108 @@ proc glue_add_const_conduit {port width} {
   set const_offset [expr $const_offset + $width]
 }
 
+proc glue_elab_duplex {num_of_lanes tx_num_of_lanes soft_pcs parallel_data_w reconfig_avmm_address_width unused_width_per_lane} {
+  variable sig_offset
+  variable const_offset
+
+  glue_add_if 1 reconfig_clk clock sink true
+  glue_add_if_port 1 reconfig_clk reconfig_clk clk Input 1 true clk
+
+  glue_add_if 1 reconfig_reset reset sink true
+  glue_add_if_port 1 reconfig_reset reconfig_reset reset Input 1 true reset
+
+  glue_add_if 1 reconfig_avmm avalon sink true
+  set_interface_property reconfig_avmm associatedClock reconfig_clk
+  set_interface_property reconfig_avmm associatedReset reconfig_reset
+  set_interface_property reconfig_avmm maximumPendingReadTransactions 4
+
+  glue_add_if_port 1 reconfig_avmm reconfig_write write Input 1 true write
+  glue_add_if_port 1 reconfig_avmm reconfig_read read Input 1 true read
+  glue_add_if_port 1 reconfig_avmm reconfig_address address Input $reconfig_avmm_address_width true address
+
+  glue_add_if_port 1 reconfig_avmm i_reconfig_byteenable byteenable Input 4 true byteenable
+  glue_add_if_port 1 reconfig_avmm i_reconfig_writedata writedata Input 32 true writedata
+
+  glue_add_if_port 1 reconfig_avmm o_reconfig_readdata readdata Output 32 true readdata
+  glue_add_if_port 1 reconfig_avmm o_reconfig_readdatavalid readdatavalid Output 1 true readdatavalid
+  glue_add_if_port 1 reconfig_avmm o_reconfig_waitrequest waitrequest Output 1 true waitrequest
+
+  set_interface_property reconfig_reset associatedClock reconfig_clk
+  set_interface_property reconfig_reset synchronousEdges DEASSERT
+
+  glue_add_if 1 system_pll_clk clock sink true
+  glue_add_if_port 1 system_pll_clk system_pll_clk clk Input 1 true clk
+
+  glue_add_if $num_of_lanes tx_coreclkin clock sink true
+  glue_add_if_port $num_of_lanes tx_coreclkin i_tx_coreclkin clk Input 1 true
+
+  glue_add_if 1 tx_ref_clk clock sink true
+  glue_add_if_port 1 tx_ref_clk tx_ref_clk clk Input 1 true clk
+
+  glue_add_if $num_of_lanes tx_clkout2 clock source
+  glue_add_if_port $num_of_lanes tx_clkout2 o_tx_clkout2 clk Output 1
+
+  glue_add_if $num_of_lanes tx_clkout clock source
+  glue_add_if_port $num_of_lanes tx_clkout o_tx_clkout clk Output 1
+
+  if {$soft_pcs} {
+    set unused_width [expr $num_of_lanes * $unused_width_per_lane]
+
+    glue_add_const_conduit tx_enh_data_valid $num_of_lanes
+
+    for {set i 0} {$i < $num_of_lanes} {incr i} {
+      add_interface tx_raw_data_${i} conduit start
+    }
+    glue_add_if_port_conduit $num_of_lanes tx_raw_data raw_data i_tx_parallel_data Input $parallel_data_w
+  } else {
+    send_message error "Only soft PCS is supported on Agilex 5."
+  }
+
+  glue_add_const_conduit unused_tx_parallel_data $unused_width
+
+  glue_add_if $num_of_lanes rx_coreclkin clock sink true
+  glue_add_if_port $num_of_lanes rx_coreclkin i_rx_coreclkin clk Input 1 true
+
+  glue_add_if 1 rx_ref_clk clock sink true
+  glue_add_if_port 1 rx_ref_clk rx_ref_clk clk Input 1 true clk
+
+  glue_add_if $num_of_lanes rx_clkout2 clock source
+  glue_add_if_port $num_of_lanes rx_clkout2 o_rx_clkout2 clk Output 1
+
+  glue_add_if $num_of_lanes rx_clkout clock source
+  glue_add_if_port $num_of_lanes rx_clkout o_rx_clkout clk Output 1
+
+  if {$soft_pcs} {
+    for {set i 0} {$i < $num_of_lanes} {incr i} {
+      add_interface rx_raw_data_${i} conduit start
+    }
+    glue_add_if_port_conduit $num_of_lanes rx_raw_data raw_data o_rx_parallel_data Output $parallel_data_w
+  } else {
+    send_message error "Only soft PCS is supported on Agilex 5."
+  }
+
+  # Unlike the RX-only glue, const_out is already in use by the TX constants
+  # above, so it must not be redeclared nor const_offset reset.
+
+  add_interface phy_rx_polinv conduit end
+  add_interface_port phy_rx_polinv polinv rx_polinv Output $num_of_lanes
+  set_port_property polinv TERMINATION $soft_pcs
+
+  # The duplex PHY can have more lanes than the TX link uses: only pass on the
+  # TX PLL lock of the lanes the TX link layer drives.
+  add_interface phy_tx_pll_locked conduit end
+  add_interface_port phy_tx_pll_locked phy_tx_pll_locked o_tx_pll_locked Input $num_of_lanes
+  set_port_property phy_tx_pll_locked fragment_list \
+    [format "in(%d:%d)" [expr $sig_offset + $num_of_lanes - 1] $sig_offset]
+
+  add_interface tx_pll_locked conduit end
+  add_interface_port tx_pll_locked tx_pll_locked o_tx_pll_locked Output $tx_num_of_lanes
+  set_port_property tx_pll_locked fragment_list \
+    [format "out(%d:%d)" [expr $sig_offset + $tx_num_of_lanes - 1] $sig_offset]
+
+  set sig_offset [expr $sig_offset + $num_of_lanes]
+}
+
 proc jesd204_phy_glue_elab {} {
   variable sig_offset
   variable const_offset
@@ -255,13 +358,26 @@ proc jesd204_phy_glue_elab {} {
   } elseif {[string equal $device "Stratix 10"]} {
     set reconfig_avmm_address_width 11
     set unused_width_per_lane 40
-  } elseif {[string equal $device "Agilex 7"]} {
+  } elseif {[string equal $device "Agilex 7"] || [string equal $device "Agilex 5"]} {
     set parallel_data_w 80
     set reconfig_avmm_address_width [expr 18 + int(ceil((log($num_of_lanes) / log(2))))]
     # Unused are unused here
     set unused_width_per_lane 88
   } else {
-    send_message error "Only Arria 10/Stratix 10/Agilex 7 are supported."
+    send_message error "Only Arria 10/Stratix 10/Agilex 7/Agilex 5 are supported."
+  }
+
+  # The Agilex 5 PHY is always duplex, see jesd204_gts_phy_hw.tcl
+  if {[string equal $device "Agilex 5"]} {
+    set tx_num_of_lanes [get_parameter TX_NUM_OF_LANES]
+    if {$tx_num_of_lanes == 0} {
+      set tx_num_of_lanes $num_of_lanes
+    }
+    glue_elab_duplex $num_of_lanes $tx_num_of_lanes $soft_pcs $parallel_data_w \
+      $reconfig_avmm_address_width $unused_width_per_lane
+    set_parameter_value WIDTH $sig_offset
+    set_parameter_value CONST_WIDTH $const_offset
+    return
   }
 
   if {[string equal $device "Agilex 7"]} {
