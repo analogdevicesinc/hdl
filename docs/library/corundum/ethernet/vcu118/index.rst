@@ -21,9 +21,9 @@ Files
 
    * - Name
      - Description
-   * - :git-hdl:`library/corundum/ethernet_core/ethernet_core_vcu118.v`
+   * - :git-hdl:`library/corundum/ethernet/vcu118/ethernet_vcu118.v`
      - Verilog source for the Ethernet Core top module for the VCU118 board.
-   * - :git-hdl:`library/corundum/ethernet_core/ethernet_ip.tcl`
+   * - :git-hdl:`library/corundum/ethernet/vcu118/ethernet_vcu118_ip.tcl`
      - TCL script to generate the Vivado IP-integrator project.
 
 Configuration Parameters

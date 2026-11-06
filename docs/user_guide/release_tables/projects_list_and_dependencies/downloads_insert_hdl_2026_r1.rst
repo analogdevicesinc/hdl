@@ -16,14 +16,14 @@ EVAL-AD3530R
      - Resource Utilization
      - Library Cores
    * - :adi:`EVAL-AD3530R`
-     - :git-hdl:`ad353xr <hdl_2026_r1:projects/ad353xr>`
-     - :git-hdl:`coraz7s <hdl_2026_r1:projects/ad353xr/coraz7s>`
+     - :git-hdl:`ad353xr <projects/ad353xr>`
+     - :git-hdl:`coraz7s <projects/ad353xr/coraz7s>`
      - ad353xr_coraz7s
      - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
    * - :adi:`EVAL-AD3531R`
      - 
-     - :git-hdl:`de10nano <hdl_2026_r1:projects/ad353xr/de10nano>`
-       :git-hdl:`zed <hdl_2026_r1:projects/ad353xr/zed>`
+     - :git-hdl:`de10nano <projects/ad353xr/de10nano>`
+       :git-hdl:`zed <projects/ad353xr/zed>`
      - NA
        ad353xr_zed
      - :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
@@ -46,8 +46,8 @@ EVAL-AD3552R
      - Resource Utilization
      - Library Cores
    * - :adi:`EVAL-AD3552R`
-     - :git-hdl:`ad35xxr_evb <hdl_2026_r1:projects/ad35xxr_evb>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/ad35xxr_evb/zed>`
+     - :git-hdl:`ad35xxr_evb <projects/ad35xxr_evb>`
+     - :git-hdl:`zed <projects/ad35xxr_evb/zed>`
      - ad35xxr_evb_zed
      - :git-hdl:`axi_ad35xxr <hdl_2026_r1:library/axi_ad35xxr>`
        :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
@@ -71,13 +71,13 @@ EVAL-AD4052-ARDZ
      - Resource Utilization
      - Library Cores
    * - :adi:`EVAL-AD4050-ARDZ`
-     - :git-hdl:`ad4052_ardz <hdl_2026_r1:projects/ad4052_ardz>`
-     - :git-hdl:`coraz7s <hdl_2026_r1:projects/ad4052_ardz/coraz7s>`
+     - :git-hdl:`ad4052_ardz <projects/ad4052_ardz>`
+     - :git-hdl:`coraz7s <projects/ad4052_ardz/coraz7s>`
      - :ref:`ad4052_ardz_coraz7s <util_hdl_2026_r1_ad4052_ardz_coraz7s>`
      - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
    * - :adi:`EVAL-AD4052-ARDZ`
      - 
-     - :git-hdl:`de10nano <hdl_2026_r1:projects/ad4052_ardz/de10nano>`
+     - :git-hdl:`de10nano <projects/ad4052_ardz/de10nano>`
      - NA
      - :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
        :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
@@ -101,9 +101,9 @@ EVAL-AD4062-ARDZ
      - Resource Utilization
      - Library Cores
    * - :adi:`EVAL-AD4060/AD4062 <eval-ad4060-eval-ad4062>`
-     - :git-hdl:`ad4062_ardz <hdl_2026_r1:projects/ad4062_ardz>`
-     - :git-hdl:`coraz7s <hdl_2026_r1:projects/ad4062_ardz/coraz7s>`
-       :git-hdl:`de10nano <hdl_2026_r1:projects/ad4062_ardz/de10nano>`
+     - :git-hdl:`ad4062_ardz <projects/ad4062_ardz>`
+     - :git-hdl:`coraz7s <projects/ad4062_ardz/coraz7s>`
+       :git-hdl:`de10nano <projects/ad4062_ardz/de10nano>`
      - :ref:`ad4062_ardz_coraz7s <util_hdl_2026_r1_ad4062_ardz_coraz7s>`
        NA
      - :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
@@ -126,8 +126,8 @@ EVAL-AD4080-FMC
      - Resource Utilization
      - Library Cores
    * - :adi:`EVAL-AD4080-FMC`
-     - :git-hdl:`ad4080_fmc_evb <hdl_2026_r1:projects/ad4080_fmc_evb>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/ad4080_fmc_evb/zed>`
+     - :git-hdl:`ad4080_fmc_evb <projects/ad4080_fmc_evb>`
+     - :git-hdl:`zed <projects/ad4080_fmc_evb/zed>`
      - :ref:`ad4080_fmc_evb_zed <util_hdl_2026_r1_ad4080_fmc_evb_zed>`
      - :git-hdl:`axi_ad408x <hdl_2026_r1:library/axi_ad408x>`
        :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
@@ -152,8 +152,8 @@ AD4110
      - Resource Utilization
      - Library Cores
    * - :adi:`AD4110-1 <eval-ad4110-1>`
-     - :git-hdl:`ad4110 <hdl_2026_r1:projects/ad4110>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/ad4110/zed>`
+     - :git-hdl:`ad4110 <projects/ad4110>`
+     - :git-hdl:`zed <projects/ad4110/zed>`
      - :ref:`ad4110_zed <util_hdl_2026_r1_ad4110_zed>`
      - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
        :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
@@ -176,8 +176,8 @@ EVAL-AD411X/AD717X
      - Resource Utilization
      - Library Cores
    * - :adi:`EVAL-AD4111`
-     - :git-hdl:`ad411x_ad717x <hdl_2026_r1:projects/ad411x_ad717x>`
-     - :git-hdl:`de10nano <hdl_2026_r1:projects/ad411x_ad717x/de10nano>`
+     - :git-hdl:`ad411x_ad717x <projects/ad411x_ad717x>`
+     - :git-hdl:`de10nano <projects/ad411x_ad717x/de10nano>`
      - NA
      - :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
    * - :adi:`EVAL-AD4112`
@@ -233,8 +233,8 @@ AD4134FMC
      - Resource Utilization
      - Library Cores
    * - :adi:`AD4134 <eval-ad4134>`
-     - :git-hdl:`ad4134_fmc <hdl_2026_r1:projects/ad4134_fmc>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/ad4134_fmc/zed>`
+     - :git-hdl:`ad4134_fmc <projects/ad4134_fmc>`
+     - :git-hdl:`zed <projects/ad4134_fmc/zed>`
      - :ref:`ad4134_fmc_zed <util_hdl_2026_r1_ad4134_fmc_zed>`
      - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
        :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
@@ -262,9 +262,9 @@ EVAL-AD4170-ASDZ
      - Resource Utilization
      - Library Cores
    * - :adi:`EVAL-AD4170-4`
-     - :git-hdl:`ad4170_asdz <hdl_2026_r1:projects/ad4170_asdz>`
-     - :git-hdl:`coraz7s <hdl_2026_r1:projects/ad4170_asdz/coraz7s>`
-       :git-hdl:`de10nano <hdl_2026_r1:projects/ad4170_asdz/de10nano>`
+     - :git-hdl:`ad4170_asdz <projects/ad4170_asdz>`
+     - :git-hdl:`coraz7s <projects/ad4170_asdz/coraz7s>`
+       :git-hdl:`de10nano <projects/ad4170_asdz/de10nano>`
      - :ref:`ad4170_asdz_coraz7s <util_hdl_2026_r1_ad4170_asdz_coraz7s>`
        NA
      - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
@@ -320,27 +320,27 @@ EVAL-AD469X-EVB
      - Resource Utilization
      - Library Cores
    * - :adi:`EVAL-AD4696`
-     - :git-hdl:`ad469x_evb <hdl_2026_r1:projects/ad469x_evb>`
-     - :git-hdl:`coraz7s <hdl_2026_r1:projects/ad469x_evb/coraz7s>`
+     - :git-hdl:`ad469x_evb <projects/ad469x_evb>`
+     - :git-hdl:`coraz7s <projects/ad469x_evb/coraz7s>`
      - ad469x_evb_coraz7s
-     - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
+     - :git-hdl:`axi_clkgen <library/axi_clkgen>`
    * - :adi:`EVAL-AD4692`
      - 
-     - :git-hdl:`de10nano <hdl_2026_r1:projects/ad469x_evb/de10nano>`
-       :git-hdl:`zed <hdl_2026_r1:projects/ad469x_evb/zed>`
+     - :git-hdl:`de10nano <projects/ad469x_evb/de10nano>`
+       :git-hdl:`zed <projects/ad469x_evb/zed>`
      - NA
        :ref:`ad469x_evb_zed <util_hdl_2026_r1_ad469x_evb_zed>`
-     - :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
-       :git-hdl:`axi_pwm_gen <hdl_2026_r1:library/axi_pwm_gen>`
-       :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
-       :git-hdl:`axi_spi_engine <hdl_2026_r1:library/spi_engine/axi_spi_engine>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`spi_engine_execution <hdl_2026_r1:library/spi_engine/spi_engine_execution>`
-       :git-hdl:`spi_engine_interconnect <hdl_2026_r1:library/spi_engine/spi_engine_interconnect>`
-       :git-hdl:`spi_engine_offload <hdl_2026_r1:library/spi_engine/spi_engine_offload>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
+     - :git-hdl:`axi_dmac <library/axi_dmac>`
+       :git-hdl:`axi_hdmi_tx <library/axi_hdmi_tx>`
+       :git-hdl:`axi_i2s_adi <library/axi_i2s_adi>`
+       :git-hdl:`axi_pwm_gen <library/axi_pwm_gen>`
+       :git-hdl:`axi_spdif_tx <library/axi_spdif_tx>`
+       :git-hdl:`axi_spi_engine <library/spi_engine/axi_spi_engine>`
+       :git-hdl:`axi_sysid <library/axi_sysid>`
+       :git-hdl:`spi_engine_execution <library/spi_engine/spi_engine_execution>`
+       :git-hdl:`spi_engine_interconnect <library/spi_engine/spi_engine_interconnect>`
+       :git-hdl:`spi_engine_offload <library/spi_engine/spi_engine_offload>`
+       :git-hdl:`sysid_rom <library/sysid_rom>`
 
 EVAL-AD485X-FMCZ
 ----------------
@@ -355,23 +355,23 @@ EVAL-AD485X-FMCZ
      - Resource Utilization
      - Library Cores
    * - :adi:`EVAL-AD4857`
-     - :git-hdl:`ad485x_fmcz <hdl_2026_r1:projects/ad485x_fmcz>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/ad485x_fmcz/zed>`
+     - :git-hdl:`ad485x_fmcz <projects/ad485x_fmcz>`
+     - :git-hdl:`zed <projects/ad485x_fmcz/zed>`
      - ad485x_fmcz_zed
-     - :git-hdl:`axi_ad485x <hdl_2026_r1:library/axi_ad485x>`
+     - :git-hdl:`axi_ad485x <library/axi_ad485x>`
    * - :adi:`EVAL-AD4858`
      - 
      - 
      - 
-     - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
-       :git-hdl:`axi_pwm_gen <hdl_2026_r1:library/axi_pwm_gen>`
-       :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-       :git-hdl:`util_cpack2 <hdl_2026_r1:library/util_pack/util_cpack2>`
+     - :git-hdl:`axi_clkgen <library/axi_clkgen>`
+       :git-hdl:`axi_dmac <library/axi_dmac>`
+       :git-hdl:`axi_hdmi_tx <library/axi_hdmi_tx>`
+       :git-hdl:`axi_i2s_adi <library/axi_i2s_adi>`
+       :git-hdl:`axi_pwm_gen <library/axi_pwm_gen>`
+       :git-hdl:`axi_spdif_tx <library/axi_spdif_tx>`
+       :git-hdl:`axi_sysid <library/axi_sysid>`
+       :git-hdl:`sysid_rom <library/sysid_rom>`
+       :git-hdl:`util_cpack2 <library/util_pack/util_cpack2>`
 
 EVAL-AD4880-FMC
 ---------------
@@ -386,19 +386,19 @@ EVAL-AD4880-FMC
      - Resource Utilization
      - Library Cores
    * - :adi:`EVAL-AD4880-FMC`
-     - :git-hdl:`ad4880_fmc_evb <hdl_2026_r1:projects/ad4880_fmc_evb>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/ad4880_fmc_evb/zed>`
+     - :git-hdl:`ad4880_fmc_evb <projects/ad4880_fmc_evb>`
+     - :git-hdl:`zed <projects/ad4880_fmc_evb/zed>`
      - ad4880_fmc_evb_zed
-     - :git-hdl:`axi_ad408x <hdl_2026_r1:library/axi_ad408x>`
-       :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-       :git-hdl:`axi_clock_monitor <hdl_2026_r1:library/axi_clock_monitor>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
-       :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-       :git-hdl:`util_cpack2 <hdl_2026_r1:library/util_pack/util_cpack2>`
+     - :git-hdl:`axi_ad408x <library/axi_ad408x>`
+       :git-hdl:`axi_clkgen <library/axi_clkgen>`
+       :git-hdl:`axi_clock_monitor <library/axi_clock_monitor>`
+       :git-hdl:`axi_dmac <library/axi_dmac>`
+       :git-hdl:`axi_hdmi_tx <library/axi_hdmi_tx>`
+       :git-hdl:`axi_i2s_adi <library/axi_i2s_adi>`
+       :git-hdl:`axi_spdif_tx <library/axi_spdif_tx>`
+       :git-hdl:`axi_sysid <library/axi_sysid>`
+       :git-hdl:`sysid_rom <library/sysid_rom>`
+       :git-hdl:`util_cpack2 <library/util_pack/util_cpack2>`
 
 AD5758SDZ
 ---------
@@ -413,16 +413,16 @@ AD5758SDZ
      - Resource Utilization
      - Library Cores
    * - :adi:`AD5766SDZ <eval-ad5758>`
-     - :git-hdl:`ad5758_sdz <hdl_2026_r1:projects/ad5758_sdz>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/ad5758_sdz/zed>`
+     - :git-hdl:`ad5758_sdz <projects/ad5758_sdz>`
+     - :git-hdl:`zed <projects/ad5758_sdz/zed>`
      - :ref:`ad5758_sdz_zed <util_hdl_2026_r1_ad5758_sdz_zed>`
-     - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
-       :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
+     - :git-hdl:`axi_clkgen <library/axi_clkgen>`
+       :git-hdl:`axi_dmac <library/axi_dmac>`
+       :git-hdl:`axi_hdmi_tx <library/axi_hdmi_tx>`
+       :git-hdl:`axi_i2s_adi <library/axi_i2s_adi>`
+       :git-hdl:`axi_spdif_tx <library/axi_spdif_tx>`
+       :git-hdl:`axi_sysid <library/axi_sysid>`
+       :git-hdl:`sysid_rom <library/sysid_rom>`
 
 AD5766SDZ
 ---------
@@ -437,20 +437,20 @@ AD5766SDZ
      - Resource Utilization
      - Library Cores
    * - :adi:`AD5766SDZ <eval-ad5766>`
-     - :git-hdl:`ad5766_sdz <hdl_2026_r1:projects/ad5766_sdz>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/ad5766_sdz/zed>`
+     - :git-hdl:`ad5766_sdz <projects/ad5766_sdz>`
+     - :git-hdl:`zed <projects/ad5766_sdz/zed>`
      - :ref:`ad5766_sdz_zed <util_hdl_2026_r1_ad5766_sdz_zed>`
-     - :git-hdl:`axi_ad5766 <hdl_2026_r1:library/axi_ad5766>`
-       :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
-       :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
-       :git-hdl:`axi_spi_engine <hdl_2026_r1:library/spi_engine/axi_spi_engine>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`spi_engine_execution <hdl_2026_r1:library/spi_engine/spi_engine_execution>`
-       :git-hdl:`spi_engine_interconnect <hdl_2026_r1:library/spi_engine/spi_engine_interconnect>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
+     - :git-hdl:`axi_ad5766 <library/axi_ad5766>`
+       :git-hdl:`axi_clkgen <library/axi_clkgen>`
+       :git-hdl:`axi_dmac <library/axi_dmac>`
+       :git-hdl:`axi_hdmi_tx <library/axi_hdmi_tx>`
+       :git-hdl:`axi_i2s_adi <library/axi_i2s_adi>`
+       :git-hdl:`axi_spdif_tx <library/axi_spdif_tx>`
+       :git-hdl:`axi_spi_engine <library/spi_engine/axi_spi_engine>`
+       :git-hdl:`axi_sysid <library/axi_sysid>`
+       :git-hdl:`spi_engine_execution <library/spi_engine/spi_engine_execution>`
+       :git-hdl:`spi_engine_interconnect <library/spi_engine/spi_engine_interconnect>`
+       :git-hdl:`sysid_rom <library/sysid_rom>`
 
 EVAL-AD57XX-ARDZ
 ----------------
@@ -465,26 +465,26 @@ EVAL-AD57XX-ARDZ
      - Resource Utilization
      - Library Cores
    * - :adi:`EVAL-AD5780-ARDZ <eval-ad5780ardz>`
-     - :git-hdl:`ad57xx_ardz <hdl_2026_r1:projects/ad57xx_ardz>`
-     - :git-hdl:`coraz7s <hdl_2026_r1:projects/ad57xx_ardz/coraz7s>`
+     - :git-hdl:`ad57xx_ardz <projects/ad57xx_ardz>`
+     - :git-hdl:`coraz7s <projects/ad57xx_ardz/coraz7s>`
      - ad57xx_ardz_coraz7s
-     - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
+     - :git-hdl:`axi_clkgen <library/axi_clkgen>`
    * - :adi:`EVAL-AD5781-ARDZ <eval-ad5781ardz>`
      - 
-     - :git-hdl:`de10nano <hdl_2026_r1:projects/ad57xx_ardz/de10nano>`
+     - :git-hdl:`de10nano <library/projects/ad57xx_ardz/de10nano>`
      - NA
-     - :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
+     - :git-hdl:`axi_dmac <library/axi_dmac>`
    * - :adi:`EVAL-AD5782-ARDZ <eval-ad5782ardz>`
      - 
      - 
      - 
-     - :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_pwm_gen <hdl_2026_r1:library/axi_pwm_gen>`
-       :git-hdl:`axi_spi_engine <hdl_2026_r1:library/spi_engine/axi_spi_engine>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`spi_engine_execution <hdl_2026_r1:library/spi_engine/spi_engine_execution>`
-       :git-hdl:`spi_engine_interconnect <hdl_2026_r1:library/spi_engine/spi_engine_interconnect>`
-       :git-hdl:`spi_engine_offload <hdl_2026_r1:library/spi_engine/spi_engine_offload>`
+     - :git-hdl:`axi_hdmi_tx <library/axi_hdmi_tx>`
+       :git-hdl:`axi_pwm_gen <library/axi_pwm_gen>`
+       :git-hdl:`axi_spi_engine <library/spi_engine/axi_spi_engine>`
+       :git-hdl:`axi_sysid <library/axi_sysid>`
+       :git-hdl:`spi_engine_execution <library/spi_engine/spi_engine_execution>`
+       :git-hdl:`spi_engine_interconnect <library/spi_engine/spi_engine_interconnect>`
+       :git-hdl:`spi_engine_offload <library/spi_engine/spi_engine_offload>`
 
 AD6676EVB
 ---------
@@ -499,19 +499,19 @@ AD6676EVB
      - Resource Utilization
      - Library Cores
    * - :adi:`AD6676EBZ <eval-ad6676>`
-     - :git-hdl:`ad6676evb <hdl_2026_r1:projects/ad6676evb>`
-     - :git-hdl:`zc706 <hdl_2026_r1:projects/ad6676evb/zc706>`
+     - :git-hdl:`ad6676evb <library/projects/ad6676evb>`
+     - :git-hdl:`zc706 <library/projects/ad6676evb/zc706>`
      - :ref:`ad6676evb_zc706 <util_hdl_2026_r1_ad6676evb_zc706>`
-     - :git-hdl:`axi_adxcvr <hdl_2026_r1:library/xilinx/axi_adxcvr>`
-       :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_jesd204_rx <hdl_2026_r1:library/jesd204/axi_jesd204_rx>`
-       :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`jesd204_rx <hdl_2026_r1:library/jesd204/jesd204_rx>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-       :git-hdl:`util_adxcvr <hdl_2026_r1:library/xilinx/util_adxcvr>`
+     - :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
+       :git-hdl:`axi_clkgen <library/axi_clkgen>`
+       :git-hdl:`axi_dmac <library/axi_dmac>`
+       :git-hdl:`axi_hdmi_tx <library/axi_hdmi_tx>`
+       :git-hdl:`axi_jesd204_rx <library/jesd204/axi_jesd204_rx>`
+       :git-hdl:`axi_spdif_tx <library/axi_spdif_tx>`
+       :git-hdl:`axi_sysid <library/axi_sysid>`
+       :git-hdl:`jesd204_rx <library/jesd204/jesd204_rx>`
+       :git-hdl:`sysid_rom <library/sysid_rom>`
+       :git-hdl:`util_adxcvr <library/xilinx/util_adxcvr>`
 
 EVAL-AD7124-ASDZ
 ----------------

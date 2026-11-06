@@ -191,22 +191,21 @@ The **axi_hdmi_tx** core support the following video input connections:
 * 36 bits with HSYNC, VSYNC and DE (:git-hdl:`hdl_2017_r1:projects/adv7511/vc707` development board)
 * 24 bits with HSYNC, VSYNC and DE (:git-hdl:`projects/adv7511/zc706` development board)
 * 16 bits with HSYNC, VSYNC and DE (:git-hdl:`projects/adv7511/zed`)
-* 16 bits with embedded SYNC (TX interface of the :git-hdl:`IMAGEON <projects/imageon>` board)
+* 16 bits with embedded SYNC (TX interface of the :git-hdl:`IMAGEON <hdl_2023_r2:projects/imageon>` board)
 
 Software support
 -------------------------------------------------------------------------------
 
 The core can be controlled by no-Os or Linux
 
-* :dokuwiki:`Linux Driver <resources/tools-software/linux-drivers/drm/adv7511>`
-* :dokuwiki:`Reference design with no-OS example <resources/fpga/xilinx/kc705/adv7511>`
+* :external+linux:ref:`Linux Driver <adv7511>`
+* :ref:`Reference design with no-OS example <adv7511>`
 * :git-no-OS:`projects/adv7511`
 
 References
 -------------------------------------------------------------------------------
 
 * HDL IP core at :git-hdl:`library/axi_hdmi_tx`
-* :dokuwiki:`AXI HDMI TX on wiki <resources/fpga/docs/axi_hdmi_tx>`
-* :dokuwiki:`Zynq & Altera SoC Quick Start Guide <resources/tools-software/linux-software/kuiper-linux>`
-* :dokuwiki:`FMC-IMAGEON Xilinx Reference Design <resources/fpga/xilinx/fmc/fmc-imageon>`
-* :dokuwiki:`ADV7511 Xilinx Evaluation Boards Reference Design <resources/fpga/xilinx/kc705/adv7511>`
+* :external+kuiper:ref:`ADI Kuiper Linux Quick Start Guide <quick-start>`
+* :ref:`FMC-IMAGEON Xilinx Reference Design <imageon>`
+* :ref:`ADV7511 Xilinx Evaluation Boards Reference Design <adv7511>`

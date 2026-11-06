@@ -246,11 +246,10 @@ This problem only affects Lidar Rev B.
 Building the HDL project
 -------------------------------------------------------------------------------
 
-The design is built upon ADI's generic HDL reference design framework.
-ADI distributed the bit/elf files of this project as part of the
-:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`
-until the 2019_R1 release. The prebuilt files can be found in the previous link.
-Afterwards, it was discontinued.
+The design is built upon ADI's generic HDL reference design framework. ADI
+distributed the bit/elf files of this project as part of the
+:external+kuiper:doc:`ADI Kuiper Linux <index>` until the 2019_R1 release.
+Afterwards, it was discontinued, and the prebuilt files are no longer available.
 
 But, if you want to build the sources, ADI makes them available on the
 :git-hdl:`HDL repository </>`. To get the source you must
@@ -288,7 +287,7 @@ DAQ Board
 - :adi:`8-Bit, 1 GSPS, JESD204B, Quad Analog-to-Digital Converter <AD9094>`
 - :adi:`Integrated Synthesizer and VCO <ADF4360-7>`
 - :adi:`JESD204B/JESD204C Clock Generator with 14 LVDS/HSTL Outputs <AD9528>`
-- :adi:`1.2 A, Ultralow Noise, High PSRR, Fixed Output, RF Linear Regulator <aADP7156>`
+- :adi:`1.2 A, Ultralow Noise, High PSRR, Fixed Output, RF Linear Regulator <ADP7156>`
 - :adi:`2 A, Ultralow Noise, High PSRR, Adjustable Output, RF Linear Regulator <ADP7159>`
 
 AFE Board
@@ -302,7 +301,7 @@ AFE Board
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :external+system-level:ref:`[Wiki] AD-FMCLIDAR1-EBZ <ad-fmclidar1-ebz>`
+- :external+system-level:ref:`AD-FMCLIDAR1-EBZ <ad-fmclidar1-ebz>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -321,9 +320,9 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
-   * - AXI_AD9739A
-     - :git-hdl:`hdl_2019_r1:library/axi_ad9739a`
-     - ---
+   * - AXI_LASER_DRIVER
+     - :git-hdl:`hdl_2019_r1:library/axi_laser_driver`
+     - :ref:`axi_laser_driver`
    * - AXI_DMAC
      - :git-hdl:`hdl_2019_r1:library/axi_dmac`
      - :ref:`axi_dmac`
@@ -343,7 +342,7 @@ HDL related
      - :git-hdl:`hdl_2019_r1:library/sysid_rom`
      - :ref:`axi_sysid`
    * - UTIL_CPACK2
-     - :git-hdl:`hdl_2019_r1:library/util_cpack2`
+     - :git-hdl:`hdl_2019_r1:library/util_pack/util_cpack2`
      - :ref:`util_cpack2`
    * - JESD204_RX
      - :git-hdl:`hdl_2019_r1:library/jesd204/jesd204_rx`
@@ -354,6 +353,12 @@ HDL related
    * - AD_IP_JESD204_TPL_ADC
      - :git-hdl:`hdl_2019_r1:library/jesd204/ad_ip_jesd204_tpl_adc`
      - :ref:`ad_ip_jesd204_tpl_adc`
+   * - AXI_ADXCVR
+     - :git-hdl:`hdl_2019_r1:library/xilinx/axi_adxcvr`
+     - :ref:`axi_adxcvr`
+   * - UTIL_ADXCVR
+     - :git-hdl:`hdl_2019_r1:library/xilinx/util_adxcvr`
+     - :ref:`util_adxcvr`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
