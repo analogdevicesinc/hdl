@@ -28,6 +28,9 @@ Features
 - Framelock
 - AutoRun
 
+An APB variant for Microchip PolarFire SoC, with the same register map, is at
+:git-hdl:`library/axi_dmac/apb_dmac`.
+
 Utilization
 --------------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -154,6 +154,7 @@ module axi_ad9361_tx #(
   // internal signals
 
   wire            dac_data_sync_s;
+  wire            dac_sync;
   wire            dac_dds_format_s;
   wire    [15:0]  dac_datarate_s;
   wire    [47:0]  dac_data_int_s;

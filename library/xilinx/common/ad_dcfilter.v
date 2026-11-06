@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -33,6 +33,11 @@
 // ***************************************************************************
 // ***************************************************************************
 // dc filter- y(n) = c*x(n) + (1-c)*y(n-1)
+//
+// The DC estimate is the P register of the DSP (y = P[32:17], c is
+// dcfilt_coeff / 2^17), accumulated on itself: P = P + (D - A) * B. P and M
+// are held in reset while the filter is disabled, so the estimate starts from
+// 0 when it is enabled.
 
 `timescale 1ps/1ps
 
@@ -61,8 +66,6 @@ module ad_dcfilter #(
   // internal registers
 
   reg     [15:0]  dcfilt_coeff_d = 'd0;
-  reg     [47:0]  dc_offset = 'd0;
-  reg     [47:0]  dc_offset_d = 'd0;
   reg             valid_d = 'd0;
   reg     [15:0]  data_d = 'd0;
   reg             valid_2d = 'd0;
@@ -96,15 +99,13 @@ module ad_dcfilter #(
   // removing dc offset
 
   always @(posedge clk) begin
-    dc_offset   <= dc_offset_s;
-    dc_offset_d <= dc_offset;
     valid_d <= valid;
     if (valid == 1'b1) begin
       data_d <= data + dcfilt_offset;
     end
     valid_2d <= valid_d;
     data_2d  <= data_d;
-    data_dcfilt <= data_d - dc_offset[32:17];
+    data_dcfilt <= data_d - dc_offset_s[32:17];
     if (dcfilt_enb == 1'b1) begin
       valid_int <= valid_2d;
       data_int  <= data_dcfilt;
@@ -114,7 +115,7 @@ module ad_dcfilter #(
     end
   end
 
-  // dsp slice instance ((D-A)*B)+C
+  // dsp slice instance ((D-A)*B)+P
 
   DSP48E1 #(
     .ACASCREG (1),
@@ -128,7 +129,7 @@ module ad_dcfilter #(
     .B_INPUT ("DIRECT"),
     .CARRYINREG (0),
     .CARRYINSELREG (0),
-    .CREG (1),
+    .CREG (0),
     .DREG (0),
     .INMODEREG (0),
     .MASK (48'h3fffffffffff),
@@ -146,7 +147,7 @@ module ad_dcfilter #(
     .CLK (clk),
     .A ({{14{dc_offset_s[32]}}, dc_offset_s[32:17]}),
     .B ({{2{dcfilt_coeff_d[15]}}, dcfilt_coeff_d}),
-    .C (dc_offset_d),
+    .C (48'd0),
     .D ({{9{data_d[15]}}, data_d}),
     .MULTSIGNIN (1'd0),
     .CARRYIN (1'd0),
@@ -164,7 +165,7 @@ module ad_dcfilter #(
     .ALUMODE (4'd0),
     .CARRYINSEL (3'd0),
     .INMODE (5'b01100),
-    .OPMODE (7'b0110101),
+    .OPMODE (7'b0100101),
     .PATTERNBDETECT (),
     .PATTERNDETECT (),
     .OVERFLOW (),
@@ -175,13 +176,13 @@ module ad_dcfilter #(
     .CEALUMODE (1'd0),
     .CEB1 (1'd0),
     .CEB2 (1'd1),
-    .CEC (1'd1),
+    .CEC (1'd0),
     .CECARRYIN (1'd0),
     .CECTRL (1'd0),
     .CED (1'd1),
     .CEINMODE (1'd0),
     .CEM (1'd1),
-    .CEP (1'd0),
+    .CEP (1'd1),
     .RSTA (1'd0),
     .RSTALLCARRYIN (1'd0),
     .RSTALUMODE (1'd0),
@@ -190,7 +191,7 @@ module ad_dcfilter #(
     .RSTCTRL (1'd0),
     .RSTD (1'd0),
     .RSTINMODE (1'd0),
-    .RSTM (1'd0),
-    .RSTP (1'd0));
+    .RSTM (~dcfilt_enb),
+    .RSTP (~dcfilt_enb));
 
 endmodule
