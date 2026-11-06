@@ -58,7 +58,7 @@
  *  0x0e GPIO_NUM_H  R    number of GPIOs, high byte
  *
  * 0x0f is free and reads 0. The GPIOs themselves are not in the register map:
- * they are written and read one pin at a time by GPIO_W and GPIO_R, see
+ * they are written and read one pin at a time by the GPIO instruction, see
  * spi_translator_gpio.v.
  */
 

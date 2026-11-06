@@ -50,6 +50,7 @@ module spi_translator #(
   parameter PERIPHERAL_ID = 0,
   parameter UP_CPOL = 0,
   parameter UP_CPHA = 0,
+  parameter UP_EARLY_LAUNCH = 0,
   parameter HEADER_CRC_EN = 1,
   parameter NUM_OF_CS = 4,
   parameter NUM_OF_GPIO = 8,
@@ -90,7 +91,7 @@ module spi_translator #(
 
   output                      spi_resetn,
 
-  // GPIOs, one pin at a time through GPIO_W and GPIO_R; connect through
+  // GPIOs, one pin at a time through the GPIO instruction; connect through
   // ad_iobuf, gpio_t high means input. With NUM_OF_GPIO = 0 there are no
   // GPIOs: the ports are one bit wide and unused, gpio_t tied high
 
@@ -146,7 +147,8 @@ module spi_translator #(
   spi_translator_slave #(
     .DATA_WIDTH (8),
     .CPOL (UP_CPOL),
-    .CPHA (UP_CPHA)
+    .CPHA (UP_CPHA),
+    .EARLY_LAUNCH (UP_EARLY_LAUNCH)
   ) i_spi_slave (
     .clk (clk),
     .resetn (resetn),

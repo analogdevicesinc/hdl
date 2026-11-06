@@ -66,7 +66,7 @@ set_property value "ACTIVE_LOW" [ipx::add_bus_parameter "POLARITY" $reset_inf]
 
 ## Parameter validations
 
-foreach {param} {UP_CPOL UP_CPHA HEADER_CRC_EN} {
+foreach {param} {UP_CPOL UP_CPHA UP_EARLY_LAUNCH HEADER_CRC_EN} {
   set_property -dict [list \
     "value_format" "bool" \
     "value" [expr {$param == "HEADER_CRC_EN" ? "true" : "false"}] \

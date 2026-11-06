@@ -107,6 +107,11 @@ Configuration Parameters
    * - ``UP_CPOL``, ``UP_CPHA``
      - 0, 0
      - Upstream SPI mode. Fixed at synthesis, see `The upstream slave`_.
+   * - ``UP_EARLY_LAUNCH``
+     - 0
+     - Upstream MISO timing: 0 = standard, MISO changes on the drive edge;
+       1 = early launch, MISO changes on the sample edge. See
+       `The upstream slave`_.
    * - ``NUM_OF_CS``
      - 4
      - Number of downstream targets, 1 to 8. Must match the engine's
@@ -302,7 +307,7 @@ STATUS
        saturated at 7. Exact values are in CMD_ROOM and SDO_ROOM.
 
 GPIOs are not in the register map; they are reached one pin at a time with
-GPIO_W and GPIO_R, see `GPIOs`_.
+the GPIO instruction, see `GPIOs`_.
 
 Theory of Operation
 --------------------------------------------------------------------------------
@@ -326,15 +331,17 @@ SDO FIFO as they arrive. At CS deassert the decoder either commits the frame to
 both FIFOs in the same cycle, or rolls both back. Frame *k* executes while
 frame *k + 1* is being received.
 
-Bridge instructions act during the frame instead: CTRL_R and FETCH reply on
-MISO, CTRL_W and FLUSH take effect as soon as they are decoded, and only the
+Bridge instructions act during the frame instead: CTRL_R, GPIO reads and FETCH
+reply on MISO, CTRL_W, GPIO writes and FLUSH take effect as soon as they are decoded, and only the
 bytes a FETCH reads wait for the commit to be released.
 
 Bridge instructions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Instructions with bit 15 set, which the engine leaves reserved, belong to the
-bridge and are never forwarded. Their high byte is ``{1, op[2:0], addr[3:0]}``.
+bridge and are never forwarded. Their high byte is ``{1, op[2:0], field[3:0]}``.
+Opcodes 0 to 3 act on the bridge itself (registers, pins), opcodes 4 to 7 on
+the engine side (routing, responses, reset, commit).
 
 .. list-table::
    :header-rows: 1
@@ -347,50 +354,60 @@ bridge and are never forwarded. Their high byte is ``{1, op[2:0], addr[3:0]}``.
      - 0
      - NOP
      - None.
-   * - ``0x90nn`` + ``n + 2`` filler bytes
+   * - ``0x9add``
      - 1
+     - CTRL_W
+     - Write ``dd`` to register ``a``, immediately.
+   * - ``0xAa00``
+     - 2
+     - CTRL_R
+     - Reply with register ``a``.
+   * - ``0xB?ii``
+     - 3
+     - GPIO
+     - Access GPIO ``ii``. High byte ``{4'hB, rd, sel, value, 1'b0}``.
+       With rd = 0 (``0xB0`` to ``0xB6``), write ``value`` immediately, to OUT
+       for sel 0 or to DIR for sel 1 (0 = output, 1 = input). With rd = 1
+       (``0xB8``, sel and value 0), reply with ``{5'b0, DIR, OUT, IN}``.
+   * - ``0xCe00``
+     - 4
+     - SELECT
+     - Reserved for selecting downstream engine ``e`` (up to 16); not
+       implemented yet. A slave is numbered ``{e, cs[2:0]}``, up to 128:
+       SELECT carries the MSBs and the CHIPSELECT mask of the following
+       instructions picks one of the engine's up to 8 CS. The low byte is
+       reserved and must be ``0x00``.
+   * - ``0xD0nn`` + ``n + 2`` filler bytes
+     - 5
      - FETCH
      - Reply with the next ``n + 1`` bytes of the response FIFO (1 to 256,
        counted like a TRANSFER).
-   * - ``0xAadd``
-     - 2
-     - CTRL_W
-     - Write ``dd`` to register ``a``, immediately.
-   * - ``0xBa00``
-     - 3
-     - CTRL_R
-     - Reply with register ``a``.
-   * - ``0xC0xx``
-     - 4
+   * - ``0xE0xx``
+     - 6
      - FLUSH
      - Immediately drop all queued work and SDI data, including the earlier
        part of its own frame, reset the engine (deasserting every downstream
        CS) and clear the ERR bits.
-   * - ``0xD?ii``
-     - 5
-     - GPIO_W
-     - Write one bit of GPIO ``ii``, immediately. High byte
-       ``{4'hD, sel, value, 2'b00}``: sel 0 writes OUT, 1 writes DIR
-       (0 = output, 1 = input).
-   * - ``0xE0ii``
-     - 6
-     - GPIO_R
-     - Reply with ``{5'b0, DIR, OUT, IN}`` of GPIO ``ii``.
+   * - ``0xF0..``
+     - 7
+     - CHECK
+     - Reserved for the frame integrity check; not implemented yet.
 
-Opcode 7 is reserved, and so are GPIO_W and GPIO_R in a translator built
-without GPIOs. ``addr`` must be 0 for NOP, FETCH, FLUSH and GPIO_R, the
-two low bits of the GPIO_W high byte must be 0, and the low byte of CTRL_R must
-be ``0x00``. FETCH filler bytes are ignored. Bridge and engine instructions can
+SELECT and CHECK are rejected as bad instructions until they are implemented,
+and so is GPIO in a translator built without GPIOs. ``field`` must be 0 for
+NOP, FETCH and FLUSH, the low bit of a GPIO write high byte and the three low
+bits of a GPIO read high byte must be 0, and the low byte of CTRL_R must be
+``0x00``. FETCH filler bytes are ignored. Bridge and engine instructions can
 be mixed in one frame.
 
-CTRL_W, GPIO_W and FLUSH take effect about four ``clk`` cycles after their low byte,
+CTRL_W, GPIO writes and FLUSH take effect about four ``clk`` cycles after their low byte,
 as long as nothing earlier in the frame has failed: an instruction after an
 error may be misaligned data, so it is ignored. They are not undone if the
 frame is rejected later; register writes are absolute and FLUSH is idempotent,
 so resending the frame is harmless. Consequently:
 
-- several CTRL_W or GPIO_W can be sent in one frame, and a CTRL_R or GPIO_R
-  after a write reads the new value;
+- several CTRL_W or GPIO writes can be sent in one frame, and a CTRL_R or
+  GPIO read after a write reads the new value;
 - the instructions after a FLUSH are kept and committed normally, so a frame
   such as ``FLUSH, CFG, PRESCALE, CS, ...`` recovers and starts again. The
   engine restarts from its reset configuration, so the frame sets the mode and
@@ -405,13 +422,13 @@ after the byte that completes its request:
 
 .. code-block:: text
 
-   CTRL_R  MOSI  [0xBa][0x00][next hi]         the address is in the high byte;
+   CTRL_R  MOSI  [0xAa][0x00][next hi]         the address is in the high byte;
            MISO  [ .. ][turn][ data  ]         the low byte is the turnaround
 
-   FETCH   MOSI  [0x90][ nn ][fill][fill]    ... [fill]
+   FETCH   MOSI  [0xD0][ nn ][fill][fill]    ... [fill]
            MISO  [ .. ][ .. ][turn][data 0]  ... [data n]
 
-   GPIO_R  MOSI  [0xE0][ ii ][next hi][next lo]  the index is in the low byte;
+   GPIO rd MOSI  [0xB8][ ii ][next hi][next lo]  the index is in the low byte;
            MISO  [ .. ][ .. ][ turn  ][  pin  ]  the reply comes one byte later
 
 CTRL_R needs no filler: its data goes out during the first byte of whatever
@@ -424,7 +441,7 @@ out:
    MOSI  [CTRL_R a][CTRL_R b][CTRL_R c][NOP  ]
    MISO  [ ..  ..][a   ..  ][b   ..  ][c  ..]
 
-GPIO_R chains the same way, its reply landing in the low byte of the following
+GPIO reads chain the same way, its reply landing in the low byte of the following
 instruction.
 
 GPIOs
@@ -432,14 +449,14 @@ GPIOs
 
 Each of the ``NUM_OF_GPIO`` pins has an output value (OUT), a direction (DIR,
 0 = output, 1 = input, the same polarity as ``gpio_t``) and an input level (IN,
-synchronized to ``clk``). GPIO_W writes one bit of OUT or DIR, GPIO_R returns
-all three bits of one pin. An index at or above ``NUM_OF_GPIO`` is
+synchronized to ``clk``). A GPIO write sets one bit of OUT or DIR, a GPIO read
+returns all three bits of one pin. An index at or above ``NUM_OF_GPIO`` is
 ignored on write and reads 0. With an 8-bit index a translator has up to 256
 GPIOs; cascaded translators each have their own.
 
 A translator that needs no GPIOs, such as the first stage of a cascade whose
 pins are all on the later stages, is built with ``NUM_OF_GPIO = 0``. The GPIO
-logic is then left out, the IP has no GPIO ports, and GPIO_W and GPIO_R are
+logic is then left out, the IP has no GPIO ports, and the GPIO instruction is
 rejected as bad instructions, so a host addressing the wrong stage gets an
 error rather than silence. Software can tell which stages have GPIOs from
 GPIO_NUM.
@@ -491,7 +508,7 @@ time: a ``gpio_chip`` in the shim sends one small frame per call, and drivers
 such as ``one-bit-adc-dac`` bind to the lines unmodified. Writing one pin never
 touches the others, so no read-modify-write is needed.
 
-GPIO_W acts immediately, like CTRL_W, so it is not ordered with the frame's
+A GPIO write acts immediately, like CTRL_W, so it is not ordered with the frame's
 engine instructions, which only run after the commit. A pin that must change
 after some SPI traffic, such as a load or reset line, is written in a later
 frame once BUSY has cleared. Minimum hold times are kept by the host waiting
@@ -543,8 +560,8 @@ those after it are ignored.
    * - STATUS bit
      - Condition
    * - 3
-     - Bad instruction: engine class ``101`` to ``111``, bridge opcode 5 to 7,
-       reserved TRANSFER, WRITE or bridge fields, a CHIPSELECT selecting more
+     - Bad instruction: engine class ``101`` to ``111``, SELECT, CHECK, GPIO
+       without GPIOs, reserved TRANSFER, WRITE or bridge fields, a CHIPSELECT selecting more
        than one target, or a word length outside 1..8.
    * - 4
      - The frame does not fit in the room left in the CMD or SDO FIFO.
@@ -575,13 +592,24 @@ FLUSH.
 The upstream slave
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Everything in the SCLK domain is clocked on the sample edge: rising for
-  modes 0 and 3, falling for modes 1 and 2. The inversion is a constant
+- MOSI is captured on the sample edge: rising for modes 0 and 3, falling for
+  modes 1 and 2. The inversion is a constant
   absorbed into the flip-flop clock input, which is why ``UP_CPOL`` and
   ``UP_CPHA`` are parameters: a register-selected inversion would put logic
   in the clock path.
-- MISO is launched on the sample edge too, right after the master has sampled
-  the previous bit, so each bit has a full SCLK period to reach the master.
+- MISO follows the SPI convention by default (``UP_EARLY_LAUNCH = 0``): it
+  changes on the drive edge, the edge opposite the sample edge, and holds
+  until the next one. This is what masters that sample late rely on, such as
+  SPI Engine with ``SDI_DELAY`` or ``ECHO_SCLK``, which is the case for a
+  cascaded translator, and SoC controllers with an RX sample delay.
+- With ``UP_EARLY_LAUNCH = 1``, MISO changes on the sample edge instead,
+  right after the master has sampled the previous bit, so each bit has a full
+  SCLK period to reach the master instead of half: roughly 50 to 80 MHz instead
+  of 25 to 40 MHz on Artix-7. Use it only when the master samples at its edge
+  and the link has been verified by timing analysis; a master that samples
+  later reads the next bit.
+- The first MISO byte of a frame is undefined in both modes; replies start
+  later.
 - CS asynchronously resets the bit counter, since SCLK does not run while CS
   is high.
 - **Receive crossing.** A completed byte is copied to a holding register and a
@@ -589,7 +617,9 @@ The upstream slave
   ``clk``; the holding register is sampled once the toggle shows it is stable.
 - **Transmit crossing.** ``tx_data`` only changes in the cycle after a byte has
   been received, so it is stable at every byte boundary, where the SCLK domain
-  loads it.
+  captures it on the sample edge in both modes. With the standard launch, the
+  captured byte is then moved into the output shift register on the next drive
+  edge, inside the SCLK domain, so the crossing is the same at any SCLK rate.
 
 Timing requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

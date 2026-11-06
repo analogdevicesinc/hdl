@@ -43,11 +43,22 @@
  * holding register and a toggle flipped; only the toggle is synchronized into
  * clk, and the holding register is sampled once it is known stable.
  *
- * Transmit: MISO is launched on the sample edge too, right after the master
- * has sampled the previous bit, so each bit has a full SCLK period to reach
- * the master. On the edge completing a byte the slave loads tx_data as the
- * next byte to send; tx_data is expected to change only in the cycle after
- * rx_valid, so it is stable at every byte boundary.
+ * Transmit: on the sample edge completing a byte, the slave captures tx_data
+ * as the next byte to send; tx_data is expected to change only in the cycle
+ * after rx_valid, so it is stable at every byte boundary. How MISO is then
+ * driven depends on EARLY_LAUNCH:
+ *
+ *   0 (default): standard SPI timing. MISO changes on the drive edge, the
+ *     edge opposite the sample edge, and holds until the next one; the byte
+ *     captured at the boundary is moved into the output shift register on the
+ *     first drive edge of the next byte. Safe for masters that sample late,
+ *     such as SPI Engine with SDI_DELAY.
+ *   1: early launch. MISO changes on the sample edge, right after the master
+ *     has sampled the previous bit, so each bit has a full SCLK period to
+ *     reach the master instead of half. Only for links whose master samples
+ *     at its edge, verified by timing analysis.
+ *
+ * Either way the first MISO byte of a frame is undefined; replies start later.
  *
  * Timing: one SCLK byte must exceed the rx_valid latency plus one clk
  * (about 6 clk).
@@ -56,7 +67,8 @@
 module spi_translator_slave #(
   parameter DATA_WIDTH = 8,
   parameter CPOL = 1,
-  parameter CPHA = 1
+  parameter CPHA = 1,
+  parameter EARLY_LAUNCH = 0
 ) (
 
   // system clock / reset
@@ -142,13 +154,42 @@ module spi_translator_slave #(
 
   // MISO: one tx_data byte per byte boundary
 
-  always @(posedge sclk_s) begin
-    if (bit_cnt == DATA_WIDTH-1) begin
-      tx_shift <= tx_data;
-    end else begin
-      tx_shift <= {tx_shift[DATA_WIDTH-2:0], 1'b0};
+  generate
+    if (EARLY_LAUNCH != 0) begin : g_early_launch
+
+      // load and shift on the sample edge
+      always @(posedge sclk_s) begin
+        if (bit_cnt == DATA_WIDTH-1) begin
+          tx_shift <= tx_data;
+        end else begin
+          tx_shift <= {tx_shift[DATA_WIDTH-2:0], 1'b0};
+        end
+      end
+
+    end else begin : g_standard_launch
+
+      reg [DATA_WIDTH-1:0] tx_hold = {DATA_WIDTH{1'b0}};
+
+      // capture tx_data at the byte boundary, as in early launch, so the
+      // crossing from clk is the same at any SCLK rate
+      always @(posedge sclk_s) begin
+        if (bit_cnt == DATA_WIDTH-1) begin
+          tx_hold <= tx_data;
+        end
+      end
+
+      // drive edge: the bit counter has wrapped to 0 after the last sample
+      // edge of a byte, so the first drive edge of the next byte loads it
+      always @(negedge sclk_s) begin
+        if (bit_cnt == {BIT_COUNTER_WIDTH{1'b0}}) begin
+          tx_shift <= tx_hold;
+        end else begin
+          tx_shift <= {tx_shift[DATA_WIDTH-2:0], 1'b0};
+        end
+      end
+
     end
-  end
+  endgenerate
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin

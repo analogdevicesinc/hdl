@@ -51,6 +51,10 @@ module spi_translator_tb;
 
   parameter VCD_FILE = "spi_translator_tb.vcd";
 
+  // upstream MISO timing: 0 = standard (drive edge), 1 = early launch; the
+  // master samples MISO just before each sample edge, so both must pass
+  parameter EARLY_LAUNCH = 0;
+
   localparam T = 200;   // upstream SCLK period: 5 MHz, clk/20
 
   // SPI Engine instructions
@@ -63,13 +67,17 @@ module spi_translator_tb;
   `define SYNC(id)      (16'h3000 | (id))
 
   // bridge instructions
+  // bridge side: 0 NOP, 1 CTRL_W, 2 CTRL_R, 3 GPIO
+  // engine side: 4 SELECT, 5 FETCH, 6 FLUSH, 7 CHECK
   `define BR_NOP          16'h8000
-  `define BR_FETCH(n)     (16'h9000 | ((n) - 1))
-  `define BR_CTRL_W(a, d) (16'hA000 | (((a) & 16'h000f) << 8) | (d))
-  `define BR_CTRL_R(a)    (16'hB000 | (((a) & 16'h000f) << 8))
-  `define BR_FLUSH        16'hC000
-  `define BR_GPIO_W(s, v, i) (16'hD000 | ((s) << 11) | ((v) << 10) | (i))
-  `define BR_GPIO_R(i)    (16'hE000 | (i))
+  `define BR_CTRL_W(a, d) (16'h9000 | (((a) & 16'h000f) << 8) | (d))
+  `define BR_CTRL_R(a)    (16'hA000 | (((a) & 16'h000f) << 8))
+  `define BR_GPIO_W(s, v, i) (16'hB000 | ((s) << 10) | ((v) << 9) | (i))
+  `define BR_GPIO_R(i)    (16'hB800 | (i))
+  `define BR_SELECT(e)    (16'hC000 | (((e) & 16'h000f) << 8))
+  `define BR_FETCH(n)     (16'hD000 | ((n) - 1))
+  `define BR_FLUSH        16'hE000
+  `define BR_CHECK        16'hF000
 
   reg           clk = 1'b0;
   reg           resetn = 1'b0;
@@ -121,6 +129,7 @@ module spi_translator_tb;
   // reset state like regulator controls: pin 1 an active-low enable held off
   // (high), pin 11 a power-good input, all others enables driven low (off)
   spi_translator #(
+    .UP_EARLY_LAUNCH (EARLY_LAUNCH),
     .NUM_OF_GPIO (NG),
     .GPIO_DEFAULT_DIR (12'h800),
     .GPIO_DEFAULT_OUT (12'h002),
@@ -488,7 +497,7 @@ module spi_translator_tb;
     check("one transaction after FLUSH", cs3_releases, 1);
     check("SCLK idle vs CPOL after FLUSH", d3.mode_err, 1'b0);
 
-    // GPIOs, one pin per instruction; a GPIO_R reply lands two bytes after
+    // GPIOs, one pin per instruction; a GPIO read reply lands two bytes after
     // its index byte, in the low byte of the next instruction
 
     // DIR: 0 = output, 1 = input; replies are {DIR, OUT, IN}
@@ -532,11 +541,28 @@ module spi_translator_tb;
     check("out of range write ignored", gpio_t, 12'h804);
 
     test_count = test_count+1;
-    begin_frame();                        // reserved GPIO_W bits: bad instruction
-    put16(16'hD501);                      // would set GPIO 1 high
+    begin_frame();                        // reserved GPIO write bit: bad instruction
+    put16(16'hB301);                      // would set GPIO 1 high
     send_frame();
-    check("reserved GPIO_W bits", err, 3'h1);
-    check("rejected GPIO_W not applied", gpio_o, 12'h001);
+    check("reserved GPIO write bit", err, 3'h1);
+    check("rejected GPIO write not applied", gpio_o, 12'h001);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+
+    test_count = test_count+1;
+    begin_frame();                        // reserved GPIO read bits: bad instruction
+    put16(16'hB901); put16(`BR_NOP);
+    send_frame();
+    check("reserved GPIO read bits", err, 3'h1);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+
+    // SELECT and CHECK are not implemented yet: rejected as bad instructions
+
+    test_count = test_count+1;
+    begin_frame(); put16(`BR_SELECT(1)); send_frame();
+    check("SELECT rejected", err, 3'h1);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+    begin_frame(); put16(`BR_CHECK); send_frame();
+    check("CHECK rejected", err, 3'h1);
     begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
     // FETCH: a rejected FETCH frame returns the data but leaves it queued
