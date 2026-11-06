@@ -32,8 +32,24 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-set_property ASYNC_REG TRUE [get_cells -quiet -hier *cdc_sync_stage*_reg* \
-  -filter {IS_SEQUENTIAL}]
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+<: set async_clk [getBooleanValue "ASYNC_CLK"] :>
 
-set_false_path -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
-  -filter {IS_SEQUENTIAL}]
+<: if { $async_clk == 1 } { :>
+
+set_property ASYNC_REG TRUE \
+  [get_cells -quiet -hierarchical *cdc_sync_stage1_reg*] \
+  [get_cells -quiet -hierarchical *cdc_sync_stage2_reg*]
+
+set_false_path -quiet \
+  -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_*addr_sync*/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+# ADDRESS_WIDTH == 0: the word is held until its handshake has crossed back
+set_false_path -quiet \
+  -from [get_cells -quiet -hierarchical -filter {NAME =~ *cdc_sync_fifo_ram_reg* && IS_SEQUENTIAL}]
+
+<: } :>

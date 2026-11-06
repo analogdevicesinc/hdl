@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -48,17 +48,30 @@ module util_ext_sync #(
   output reg sync_armed = 1'b0
 );
 
+  wire sync_in_s;
+
   reg sync_in_d1 = 1'b0;
   reg sync_in_d2 = 1'b0;
   reg ext_sync_arm_d1 = 1'b0;
   reg ext_sync_disarm_d1 = 1'b0;
+
+  // sync_in comes from outside the core: an external pin, or another core's
+  // manual request in a different clock domain.
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_sync_in_cdc (
+    .in_bits (sync_in),
+    .out_clk (clk),
+    .out_resetn (1'b1),
+    .out_bits (sync_in_s));
 
   // External sync
   always @(posedge clk) begin
     ext_sync_arm_d1 <= ext_sync_arm;
     ext_sync_disarm_d1 <= ext_sync_disarm;
 
-    sync_in_d1 <= sync_in ;
+    sync_in_d1 <= sync_in_s;
     sync_in_d2 <= sync_in_d1;
 
     if (ENABLED == 1'b0) begin
