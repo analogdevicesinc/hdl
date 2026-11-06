@@ -122,13 +122,13 @@ Software support
 
 The core can be controlled by no-Os or Linux
 
-* :ref:`FMC-IMAGEON Xilinx Reference Design <imageon>`
+* :git-hdl:`FMC-IMAGEON Xilinx Reference Design <hdl_2023_r2:projects/imageon>`
 * :git-linux:`ADV7604, ADV7611, ADV7612 Linux Driver <drivers/media/i2c/adv7604.c>`
 
 References
 -------------------------------------------------------------------------------
 
 * HDL IP core at :git-hdl:`library/axi_hdmi_rx`
-* HDL project at :git-hdl:`hdl_2023_r2:projects/imageon`
-* HDL project documentation at :ref:`imageon`
-* :external+kuiper:ref:`ADI Kuiper Linux Quick Start Guide <quick-start>`
+* :dokuwiki:`AXI HDMI RX on wiki <resources/fpga/docs/axi_hdmi_rx>`
+* :dokuwiki:`FMC-IMAGEON Xilinx Reference Design <resources/fpga/xilinx/fmc/fmc-imageon>`
+* :dokuwiki:`Zynq & Altera SoC Quick Start Guide <resources/tools-software/linux-software/kuiper-linux>`
