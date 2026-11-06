@@ -94,6 +94,9 @@ ad_ip_parameter axi_spi_subnode_4 CONFIG.C_FIFO_DEPTH 256
 
 # SPI translator
 ad_ip_instance spi_translator spi_slave
+ad_ip_parameter spi_slave CONFIG.NUM_OF_GPIO 4
+ad_ip_parameter spi_slave CONFIG.GPIO_DEFAULT_DIR 0x0
+ad_ip_parameter spi_slave CONFIG.GPIO_DEFAULT_OUT 0xA
 
 ad_ip_instance spi_engine_execution spi_execution
 ad_ip_parameter spi_execution CONFIG.NUM_OF_CS 4
