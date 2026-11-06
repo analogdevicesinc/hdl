@@ -116,20 +116,6 @@ Contents
    
 Obsolete projects
 -------------------------------------------------------------------------------
-.. toctree::
-   :maxdepth: 1
-
-   AD9739A-FMC (OBSOLETE) <ad9739a_fmc/index>
-   AD-FMCLIDAR1-EBZ (OBSOLETE) <ad_fmclidar1_ebz/index>
-   FMCADC2 (OBSOLETE) <fmcadc2/index>
-   FMCADC5 (OBSOLETE) <fmcadc5/index>
-   FMCOMMS1 (OBSOLETE) <fmcomms1/index>
-   FMCOMMS6 (OBSOLETE) <fmcomms6/index>
-   FMCJESDADC1 (OBSOLETE) <fmcjesdadc1/index>
-   IMAGEON (OBSOLETE) <imageon/index>
-
-.. toctree::
-   :maxdepth: 1
 
 The following projects are obsolete and **not maintained anymore**.
 Support is limited. The latest tested sources for these projects can be
