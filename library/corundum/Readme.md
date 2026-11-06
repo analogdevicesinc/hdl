@@ -21,6 +21,7 @@ hdl/library/corundum> make &
 | Patch | Needed when |
 |-------|-------------|
 | `patch_axis_xgmii_rx_64.patch` | a 10G-based implementation is used |
+| `patch_dma_if_axi_rd.patch` | AXI DMA bursts can reach 4 KiB (512-bit, 256-beat); otherwise their data never reaches the packet RAM |
 
 ## Publications
 
