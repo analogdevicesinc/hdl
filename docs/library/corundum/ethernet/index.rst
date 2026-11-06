@@ -52,9 +52,10 @@ Building
 
 This IP uses `Corundum NIC <https://github.com/ucsdsysnet/corundum>`_
 repository, which needs to be cloned alongside the HDL repository.
-Do a git checkout to the latest tested version (commit - 37f2607).
-When the 10G-based implementation (e.g., in case of K26) is used,
-apply the indicated patch.
+Do a git checkout to the latest tested version (commit - 37f2607), then apply
+the patches in ``library/corundum`` with ``apply_patches.sh``. It skips the
+patches that are already applied; ``library/corundum/Readme.md`` describes what
+each one fixes.
 
 .. shell::
 
@@ -62,15 +63,15 @@ apply the indicated patch.
    $git clone https://github.com/ucsdsysnet/corundum.git
    $cd corundum
    $git checkout 37f2607
-   $git apply ../hdl/library/corundum/patch_axis_xgmii_rx_64.patch
-   $cd hdl/library/corundum/ethernet_core
+   $../hdl/library/corundum/apply_patches.sh
+   $cd ../hdl/library/corundum/ethernet/vcu118
 
 An environment variable must be exported for this IP, so Vivado builds the
 appropriate configuration.
 
 .. shell::
 
-   ~/workspace/hdl/library/corundum/ethernet_core
+   ~/workspace/hdl/library/corundum/ethernet/vcu118
    $export BOARD=VCU118
    $make
 
@@ -88,7 +89,7 @@ appropriate configuration.
 .. shell::
 
    ~/workspace
-   $cd hdl/library/corundum/ethernet_core
+   $cd hdl/library/corundum/ethernet/vcu118
    $cat board.env
 
 .. important::
