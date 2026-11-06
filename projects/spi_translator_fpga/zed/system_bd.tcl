@@ -47,13 +47,17 @@ set_property -dict [list \
   CONFIG.C_DATA_DEPTH {65536} \
   CONFIG.C_EN_STRG_QUAL {1} \
   CONFIG.C_MONITOR_TYPE {Native} \
-  CONFIG.C_NUM_OF_PROBES {8} \
+  CONFIG.C_NUM_OF_PROBES {10} \
   CONFIG.C_PROBE0_WIDTH {1} \
   CONFIG.C_PROBE1_WIDTH {1} \
   CONFIG.C_PROBE2_WIDTH {1} \
   CONFIG.C_PROBE3_WIDTH {1} \
   CONFIG.C_PROBE4_WIDTH {1} \
+  CONFIG.C_PROBE5_WIDTH {1} \
+  CONFIG.C_PROBE6_WIDTH {1} \
   CONFIG.C_PROBE7_WIDTH {4} \
+  CONFIG.C_PROBE8_WIDTH {4} \
+  CONFIG.C_PROBE9_WIDTH {4} \
 ] [get_bd_cells ila_spi_translator]
 
 ad_connect ila_spi_translator/clk     $sys_cpu_clk
@@ -65,5 +69,7 @@ ad_connect ila_spi_translator/probe4  spi_execution/sclk
 ad_connect ila_spi_translator/probe5  spi_execution/sdo
 ad_connect ila_spi_translator/probe6  spi_eng_sdi
 ad_connect ila_spi_translator/probe7  spi_execution/cs
+ad_connect ila_spi_translator/probe8  spi_slave/gpio_o
+ad_connect ila_spi_translator/probe9  spi_slave/gpio_t
 
 sysid_gen_sys_init_file
