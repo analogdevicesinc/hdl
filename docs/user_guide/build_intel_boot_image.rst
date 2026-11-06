@@ -940,7 +940,7 @@ AD9081/Agilex 7
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - HDL Project: :git-hdl:`projects/ad9081_fmca_ebz/fm87`
-- ADI's Linux kernel: :git-linux:`../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts`
+- ADI's Linux kernel: :git-linux:`agilex:arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts`
 
 Get aarch64-none-linux-gnu and set CROSS_COMPILE and ARCH variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

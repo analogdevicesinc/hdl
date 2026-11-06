@@ -276,7 +276,7 @@ Here you can find the quick start guides available for these evaluation boards:
 
 - :dokuwiki:`[Wiki] ADRV9001/2 Quick Start Guides <resources/eval/user-guides/adrv9002/quickstart>`
 
-  - :external+system-level:doc:`Zed </solutions/reference-designs/adrv9002/quickstart/zed>`
+  - :external+system-level:ref:`Zed <adrv9002-zed>`
   - :dokuwiki:`ZC706 <resources/eval/user-guides/adrv9002/quickstart/zynq>`
   - :dokuwiki:`ZCU102 <resources/eval/user-guides/adrv9002/quickstart/zynqmp>`
   - :external+system-level:ref:`A10SoC <adrv9002-a10soc>`

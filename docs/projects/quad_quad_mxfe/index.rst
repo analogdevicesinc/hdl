@@ -24,8 +24,8 @@ Software support
 
 Software support for other MxFE projects:
 
--  :external+linux:doc:`AD9081 MxFE Linux Driver <drivers/iio-trx-rf/ad9081>`
--  :external+system-level:ref:`Quad-MxFE Software Quick Start Guide <quadmxfe quick-start>`
+-  :external+linux:ref:`AD9081 MxFE Linux Driver <ad9081>`
+-  :external+system-level:ref:`Quad-MxFE Software Quick Start Guide <quadmxfe quickstart>`
 
 Block design
 -------------------------------------------------------------------------------
