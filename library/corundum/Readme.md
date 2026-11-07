@@ -22,6 +22,7 @@ hdl/library/corundum> make &
 |-------|-------------|
 | `patch_axis_xgmii_rx_64.patch` | a 10G-based implementation is used |
 | `patch_dma_if_axi_rd.patch` | AXI DMA bursts can reach 4 KiB (512-bit, 256-beat); otherwise their data never reaches the packet RAM |
+| `patch_mqnic_interface_tx_fifo_depth.patch` | TX_FIFO_DEPTH is larger than RX_FIFO_DEPTH; otherwise synthesis fails |
 
 ## Publications
 
