@@ -23,6 +23,7 @@ hdl/library/corundum> make &
 | `patch_axis_xgmii_rx_64.patch` | a 10G-based implementation is used |
 | `patch_dma_if_axi_rd.patch` | AXI DMA bursts can reach 4 KiB (512-bit, 256-beat); otherwise their data never reaches the packet RAM |
 | `patch_mqnic_interface_tx_fifo_depth.patch` | TX_FIFO_DEPTH is larger than RX_FIFO_DEPTH; otherwise synthesis fails |
+| `patch_ptp_td_leaf_time_err_int.patch` | a PTP port runs at 390.625 MHz; it pipelines the servo integrator and leaves the timestamps unchanged |
 
 ## Publications
 

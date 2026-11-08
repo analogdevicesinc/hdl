@@ -1,0 +1,86 @@
+diff --git a/fpga/lib/eth/rtl/ptp_td_leaf.v b/fpga/lib/eth/rtl/ptp_td_leaf.v
+index 3c5e5f8a..4cbacfdd 100644
+--- a/fpga/lib/eth/rtl/ptp_td_leaf.v
++++ b/fpga/lib/eth/rtl/ptp_td_leaf.v
+@@ -619,6 +619,9 @@ reg [9+CMP_FNS_W-1:0] ts_ns_diff_reg = 0, ts_ns_diff_next;
+ reg ts_ns_diff_valid_reg = 1'b0, ts_ns_diff_valid_next;
+ 
+ reg [TIME_ERR_INT_W-1:0] time_err_int_reg = 0, time_err_int_next;
++reg [TIME_ERR_INT_W-1:0] time_err_int_sum_reg = 0, time_err_int_sum_next;
++reg [1:0] time_err_int_ovf_reg = 0, time_err_int_ovf_next;
++reg time_err_int_sum_valid_reg = 1'b0, time_err_int_sum_valid_next;
+ 
+ reg [1:0] ptp_ovf;
+ 
+@@ -678,6 +681,9 @@ always @* begin
+     ts_ns_diff_valid_next = 1'b0;
+ 
+     time_err_int_next = time_err_int_reg;
++    time_err_int_sum_next = time_err_int_sum_reg;
++    time_err_int_ovf_next = time_err_int_ovf_reg;
++    time_err_int_sum_valid_next = 1'b0;
+ 
+     freq_lock_count_next = freq_lock_count_reg;
+     freq_locked_next = freq_locked_reg;
+@@ -838,6 +844,19 @@ always @* begin
+         ts_ns_diff_next = src_ns_sync_reg - dst_ns_capt_reg;
+     end
+ 
++    if (time_err_int_sum_valid_reg) begin
++        // saturate
++        if (time_err_int_ovf_reg[1]) begin
++            // sign bit set indicating underflow across zero; saturate to zero
++            time_err_int_next = {TIME_ERR_INT_W{1'b0}};
++        end else if (time_err_int_ovf_reg[0]) begin
++            // sign bit clear but carry bit set indicating overflow; saturate to all 1
++            time_err_int_next = {TIME_ERR_INT_W{1'b1}};
++        end else begin
++            time_err_int_next = time_err_int_sum_reg;
++        end
++    end
++
+     if (phase_err_out_valid_reg) begin
+         // coarse phase/frequency lock of PTP clock
+         if ($signed(phase_err_out_reg) > 4 || $signed(phase_err_out_reg) < -4) begin
+@@ -878,20 +897,12 @@ always @* begin
+             default: gain_sel_next = 1'b0;
+         endcase
+ 
+         // time integral of error
+         case (gain_sel_reg)
+-            1'b0: {ptp_ovf, time_err_int_next} = $signed({1'b0, time_err_int_reg}) + ($signed(ts_ns_diff_reg) / 2**4);
+-            1'b1: {ptp_ovf, time_err_int_next} = $signed({1'b0, time_err_int_reg}) + ($signed(ts_ns_diff_reg) * 2**2);
++            1'b0: {time_err_int_ovf_next, time_err_int_sum_next} = $signed({1'b0, time_err_int_reg}) + ($signed(ts_ns_diff_reg) / 2**4);
++            1'b1: {time_err_int_ovf_next, time_err_int_sum_next} = $signed({1'b0, time_err_int_reg}) + ($signed(ts_ns_diff_reg) * 2**2);
+         endcase
+-
+-        // saturate
+-        if (ptp_ovf[1]) begin
+-            // sign bit set indicating underflow across zero; saturate to zero
+-            time_err_int_next = {TIME_ERR_INT_W{1'b0}};
+-        end else if (ptp_ovf[0]) begin
+-            // sign bit clear but carry bit set indicating overflow; saturate to all 1
+-            time_err_int_next = {TIME_ERR_INT_W{1'b1}};
+-        end
++        time_err_int_sum_valid_next = 1'b1;
+ 
+         // compute output
+         case (gain_sel_reg)
+@@ -973,6 +984,9 @@ always @(posedge clk) begin
+     ts_ns_diff_valid_reg <= ts_ns_diff_valid_next;
+ 
+     time_err_int_reg <= time_err_int_next;
++    time_err_int_sum_reg <= time_err_int_sum_next;
++    time_err_int_ovf_reg <= time_err_int_ovf_next;
++    time_err_int_sum_valid_reg <= time_err_int_sum_valid_next;
+ 
+     freq_lock_count_reg <= freq_lock_count_next;
+     freq_locked_reg <= freq_locked_next;
+@@ -1011,6 +1025,7 @@ always @(posedge clk) begin
+         ts_ns_diff_valid_reg <= 1'b0;
+ 
+         time_err_int_reg <= 0;
++        time_err_int_sum_valid_reg <= 1'b0;
+ 
+         freq_lock_count_reg <= 0;
+         freq_locked_reg <= 1'b0;
