@@ -526,7 +526,7 @@ Software related
 - :git-linux:`ADRV9009ZU11EG device tree <arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm.dts>`
 - :git-linux:`ADRV9009ZU11EG + FMCOMMS8 device tree <arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-sync-fmcomms8-jesd204-fsm.dts>`
 - :git-linux:`ADRV9009ZU11EG + FMCXMWBR1 device tree <arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-xmicrowave.dts>`
-- :git-linux:`ADRV9009ZU11EG + ADRV2CRR-FMC CORUNDUM device tree <arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-100-qsfp.dts>`
+- :git-linux:`ADRV9009ZU11EG + ADRV2CRR-FMC CORUNDUM device tree <adrv9009zu11eg_qsfp_10:arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-100-qsfp.dts>`
 - :git-no-os:`ADRV9009ZU11EG NO-OS PROJECT <projects/adrv9009>`
 
 .. include:: ../common/more_information.rst

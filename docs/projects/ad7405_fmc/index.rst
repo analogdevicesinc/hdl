@@ -244,7 +244,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* No-OS driver at :git-no-os:`legacy/adum7701_fmc`
+* No-OS driver available on request, `here <https://support.analog.com/en-US/create-case-driver/?partnumber=ADUM7701>`__
 * Linux driver at :git-linux:`drivers/iio/adc/ad7405.c`
 * AD7405 ZED Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-ad7405.dts`
 * ADuM7701 ZED Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adum7701.dts`

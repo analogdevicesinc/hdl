@@ -24,7 +24,7 @@ lower Vdrive operation, diagnostics, additional oversampling ratios and per
 channel analog input range selection with bipolar differential, bipolar
 single-ended and unipolar single-ended options.
 
-The :adi:`EVAL-AD7606B-FMCZ` and :adi:`EVAL-AD7606C-18` evaluation boards
+The :adi:`EVAL-AD7606B-FMCZ <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7606b-fmcz.html>` and :adi:`EVAL-AD7606C-18` evaluation boards
 are designed to help users to easily evaluate the features of :adi:`AD7606B`,
 :adi:`AD7606C-16` and :adi:`AD7606C-18` analog-to-digital converters (ADCs).
 
@@ -35,7 +35,7 @@ Supported boards
 - :adi:`EVAL-AD7606C16FMCZ`
 - :adi:`EVAL-AD7606C-18`
 - :adi:`EVAL-AD7605-4`
-- :adi:`EVAL-AD7606-8`
+- :adi:`EVAL-AD7606 <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7606.html>`
 - :adi:`EVAL-AD7606-6`
 - :adi:`EVAL-AD7606-4`
 - :adi:`EVAL-AD7607`

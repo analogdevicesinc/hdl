@@ -767,6 +767,6 @@ and of the device tree.
 
 .. include:: ../common/support.rst
 
-.. _Example link: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html
+.. _Example link: https://www.altera.com/products/devkit/po-3006/arria-10-sx-soc-development-kit
 .. _AMD PG198: https://docs.amd.com/v/u/en-US/pg198-jesd204-phy
 .. _AMD UG578: https://docs.amd.com/v/u/en-US/ug578-ultrascale-gty-transceivers

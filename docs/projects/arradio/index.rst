@@ -4,7 +4,7 @@ ARRADIO HDL Project
 ===============================================================================
 
 The `ARRADIO <https://www.terasic.com.tw/cgi-bin/page/archive.pl?No=946>`__
-board is an `HSMC <http://www.altera.com/literature/ds/hsmc_spec.pdf>`__ 
+board is an `HSMC <https://docs.altera.com/r/docs/683460/current/max-10-fpga-development-kit-user-guide/hsmc>`__
 board by `Arrow <https://www.arrow.com/en/manufacturers/analog-devices>`__ & 
 `Terasic <http://arradio.terasic.com/>`_ for the :adi:`AD9361`, a highly
 integrated RF Agile Transceiver. The complete chip level design package can be
@@ -31,7 +31,7 @@ waveforms from a RF team before their custom hardware is complete. Take a look a
 :dokuwiki:`Configuration options<resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options>`
 section).
 
-The ARRADIO board is very similar to the :adi:`AD-ARRADIO-EBZ`, except it utilizes
+The ARRADIO board is very similar to the `AD-ARRADIO-EBZ <https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=225&No=946&PartNo=1#contents>`__, except it utilizes
 the HSMC connector which connects to the `Arrow SoCKit <https://www.arrow.com/en/products/sockit/arrow-development-tools>`__ .
 
 Supported boards
@@ -47,7 +47,7 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-- :intel:`C5SoC <content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html>`
+- `C5SoC <https://www.altera.com/products/devkit/po-3010/cyclone-v-sx-soc-development-kit>`__
   (Cyclone V SoC) on HSMC
  
 Block design
@@ -243,4 +243,4 @@ Software related
 
 .. include:: ../common/support.rst
 
-.. _AD9361 Reference Manual: https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf
+.. _AD9361 Reference Manual: https://www.analog.com/media/en/technical-documentation/user-guides/ad9361.pdf

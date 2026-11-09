@@ -254,7 +254,7 @@ Other useful information:
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- `AD9361 reference manual <https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf>`__
+- :adi:`AD9361 reference manual <media/en/technical-documentation/user-guides/ad9361.pdf>`
 - Product datasheet: :adi:`AD9363`
 
 - :dokuwiki:`[Wiki] About AD9361/AD9363/AD9364 <resources/eval/user-guides/ad-fmcomms2-ebz/ad9361>`
@@ -312,4 +312,4 @@ Software related
 
 .. include:: ../common/support.rst
 
-.. _AD9361 Reference Manual: https://ez.analog.com/cfs-file/__key/telligent-evolution-components-attachments/00-441-00-00-00-07-91-97/AD9361_5F00_Reference_5F00_Manual_5F00_UG_2D00_570.pdf
+.. _AD9361 Reference Manual: https://www.analog.com/media/en/technical-documentation/user-guides/ad9361.pdf

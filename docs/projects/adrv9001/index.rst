@@ -46,7 +46,7 @@ Supported carriers
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC LPC
    * -
-     - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
+     - `A10SoC <https://www.altera.com/products/devkit/po-3006/arria-10-sx-soc-development-kit>`__
      - FMC HPCA
 
 Block design

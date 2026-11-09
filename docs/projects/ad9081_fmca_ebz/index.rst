@@ -71,10 +71,10 @@ Supported carriers
      - Carrier
      - FMC slot
    * - :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
-     - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
+     - `A10SoC <https://www.altera.com/products/devkit/po-3006/arria-10-sx-soc-development-kit>`__
      - FMCA
    * -
-     - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
+     - `FM87 <https://www.altera.com/products/devkit/po-3248/agilex-7-fpga-i-series-transceiver-soc-development-kit-4x-f-tile>`__
      - FMCA
    * -
      - :xilinx:`VCK190`
@@ -127,7 +127,7 @@ Supported carriers
 .. warning::
 
    When using
-   :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
+   `A10SoC <https://www.altera.com/products/devkit/po-3006/arria-10-sx-soc-development-kit>`__
    in your setup, the following reworks are required **on the evaluation
    board**:
 
@@ -139,19 +139,19 @@ Supported carriers
      populate R2M**
 
    For the carrier,
-   :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`,
+   `A10SoC <https://www.altera.com/products/devkit/po-3006/arria-10-sx-soc-development-kit>`__,
    the following reworks are mandatory:
    :external+system-level:ref:`[Wiki] FMC Pin Connection Configuration <ad9081 quickstart a10soc>`
 
 .. warning::
    For
-   :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
+   `FM87 <https://www.altera.com/products/devkit/po-3248/agilex-7-fpga-i-series-transceiver-soc-development-kit-4x-f-tile>`__
    setups, the following reworks are required on the evaluation board:
 
    - C39B, C40B: 50 ohm
 
    For the carrier
-   :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`,
+   `FM87 <https://www.altera.com/products/devkit/po-3248/agilex-7-fpga-i-series-transceiver-soc-development-kit-4x-f-tile>`__,
    the following reworks are required:
 
    - R1433, R1434: 50 ohm
