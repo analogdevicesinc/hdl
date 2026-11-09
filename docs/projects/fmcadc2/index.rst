@@ -218,7 +218,7 @@ HDL related
      - :git-hdl:`hdl_2021_r2:library/axi_hdmi_rx`
      - :ref:`axi_hdmi_rx`
    * - AXI_ADCFIFO
-     - :git-hdl:`hdl_2021_r2:library/axi_adcfifo`
+     - :git-hdl:`library/xilinx/axi_adcfifo <hdl_2021_r2:library/xilinx/axi_adcfifo>`
      - ---
    * - AXI_SYSID
      - :git-hdl:`hdl_2021_r2:library/axi_sysid`
