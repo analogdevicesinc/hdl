@@ -44,8 +44,10 @@ module header_inserter #(
   input  wire                         clk,
   input  wire                         rstn,
 
-  // Header
+  // Header, held stable from header_valid until header_ready
   input  wire [HEADER_WIDTH-1:0]      header,
+  input  wire                         header_valid,
+  output wire                         header_ready,
 
   // Input
   output reg                          input_axis_tready,
@@ -62,18 +64,11 @@ module header_inserter #(
   output wire                         output_axis_tlast
 );
 
-  localparam HEADER_PARTS = (HEADER_WIDTH > AXIS_DATA_WIDTH) ? (HEADER_WIDTH-1)/AXIS_DATA_WIDTH : 0;
+  localparam HEADER_PARTS = HEADER_WIDTH/AXIS_DATA_WIDTH;
+  localparam REMAINDER_WIDTH = HEADER_WIDTH%AXIS_DATA_WIDTH;
+  localparam KEEP_WIDTH = AXIS_DATA_WIDTH/8;
 
-  localparam SPLIT_PAYLOAD = (HEADER_WIDTH % AXIS_DATA_WIDTH) ? 1 : 0;
-
-  localparam TEMP_WIDTH = (HEADER_WIDTH < AXIS_DATA_WIDTH) ? HEADER_WIDTH :
-    ((SPLIT_PAYLOAD) ? HEADER_WIDTH % AXIS_DATA_WIDTH : AXIS_DATA_WIDTH);
-
-  localparam BYPASS_WIDTH = AXIS_DATA_WIDTH-TEMP_WIDTH;
-
-  reg [$clog2(HEADER_PARTS):0] header_part_counter;
-
-  reg new_packet;
+  reg  [$clog2(HEADER_PARTS+1):0] header_part_counter;
 
   reg                          buffer_axis_tvalid;
   wire                         buffer_axis_tready;
@@ -81,211 +76,128 @@ module header_inserter #(
   reg  [AXIS_DATA_WIDTH/8-1:0] buffer_axis_tkeep;
   reg                          buffer_axis_tlast;
 
-  reg [TEMP_WIDTH-1:0]   temp_axis_tdata;
-  reg [TEMP_WIDTH/8-1:0] temp_axis_tkeep;
-  reg                    temp_axis_tlast;
+  wire header_phase = (header_part_counter != HEADER_PARTS);
 
-  // temporary storage
-  always @(posedge clk)
-  begin
-    if (!rstn) begin
-      temp_axis_tdata <= {TEMP_WIDTH{1'b0}};
-      temp_axis_tkeep <= {TEMP_WIDTH/8{1'b0}};
-      temp_axis_tlast <= 1'b0;
-    end else begin
-      if (input_axis_tvalid && input_axis_tready) begin
-        temp_axis_tdata <= input_axis_tdata[AXIS_DATA_WIDTH-1:BYPASS_WIDTH];
-        temp_axis_tkeep <= input_axis_tkeep[AXIS_DATA_WIDTH/8-1:BYPASS_WIDTH/8];
-        temp_axis_tlast <= input_axis_tlast;
-      end else if (buffer_axis_tvalid) begin
-        temp_axis_tlast <= 1'b0;
-      end
-    end
-  end
-
-  always @(posedge clk)
-  begin
-    if (!rstn) begin
-      header_part_counter <= 'd0;
-    end else begin
-      if (buffer_axis_tready) begin
-        if (((SPLIT_PAYLOAD) ? new_packet && (header_part_counter != HEADER_PARTS && (header_part_counter < HEADER_PARTS || (input_axis_tvalid && input_axis_tready))) : new_packet && header_part_counter != HEADER_PARTS)) begin
-          header_part_counter <= header_part_counter + 1;
-        end else if (input_axis_tready && input_axis_tvalid && !new_packet) begin
-          header_part_counter <= 'd0;
-        end
-      end
-    end
-  end
+  wire [(HEADER_PARTS+1)*AXIS_DATA_WIDTH-1:0] header_padded =
+    {{(HEADER_PARTS+1)*AXIS_DATA_WIDTH-HEADER_WIDTH{1'b0}}, header};
 
   generate
 
-    if (SPLIT_PAYLOAD) begin
+    if (REMAINDER_WIDTH) begin
 
-      reg [BYPASS_WIDTH-1:0]   bypass_axis_tdata;
-      reg [BYPASS_WIDTH/8-1:0] bypass_axis_tkeep;
-      reg                      bypass_axis_tlast;
+      localparam REMAINDER_KEEP_WIDTH = REMAINDER_WIDTH/8;
+      localparam BYPASS_WIDTH = AXIS_DATA_WIDTH-REMAINDER_WIDTH;
+      localparam BYPASS_KEEP_WIDTH = KEEP_WIDTH-REMAINDER_KEEP_WIDTH;
 
-      reg no_remainder;
+      reg                            first_beat;
+      reg                            tail_beat;
+      reg  [REMAINDER_WIDTH-1:0]     temp_axis_tdata;
+      reg  [REMAINDER_KEEP_WIDTH-1:0] temp_axis_tkeep;
+
+      // the last input beat spills into an extra output beat when it has data
+      // above the bypass part
+      wire input_spill = |input_axis_tkeep[KEEP_WIDTH-1:BYPASS_KEEP_WIDTH];
+
+      wire header_wait = (header_phase || first_beat) && !header_valid;
+
+      assign header_ready = buffer_axis_tvalid && buffer_axis_tready && !header_phase && !tail_beat && first_beat;
 
       always @(*)
       begin
-        bypass_axis_tdata = input_axis_tdata[BYPASS_WIDTH-1:0];
-        bypass_axis_tkeep = input_axis_tkeep[BYPASS_WIDTH/8-1:0];
-        bypass_axis_tlast = input_axis_tlast;
+        input_axis_tready = buffer_axis_tready && !header_phase && !tail_beat && !header_wait;
       end
 
-      // ready signal generation
       always @(*)
       begin
-        input_axis_tready = buffer_axis_tready && (!new_packet || header_part_counter == HEADER_PARTS) && (!temp_axis_tlast || new_packet);
+        if (header_phase) begin
+          buffer_axis_tvalid = input_axis_tvalid && header_valid;
+          buffer_axis_tdata = header_padded[header_part_counter*AXIS_DATA_WIDTH +: AXIS_DATA_WIDTH];
+          buffer_axis_tkeep = {KEEP_WIDTH{1'b1}};
+          buffer_axis_tlast = 1'b0;
+        end else if (tail_beat) begin
+          buffer_axis_tvalid = 1'b1;
+          buffer_axis_tdata = {{BYPASS_WIDTH{1'b0}}, temp_axis_tdata};
+          buffer_axis_tkeep = {{BYPASS_KEEP_WIDTH{1'b0}}, temp_axis_tkeep};
+          buffer_axis_tlast = 1'b1;
+        end else begin
+          buffer_axis_tvalid = input_axis_tvalid && !header_wait;
+          buffer_axis_tdata = {input_axis_tdata[BYPASS_WIDTH-1:0],
+            first_beat ? header[HEADER_PARTS*AXIS_DATA_WIDTH +: REMAINDER_WIDTH] : temp_axis_tdata};
+          buffer_axis_tkeep = {input_axis_tkeep[BYPASS_KEEP_WIDTH-1:0],
+            first_beat ? {REMAINDER_KEEP_WIDTH{1'b1}} : temp_axis_tkeep};
+          buffer_axis_tlast = input_axis_tlast && !input_spill;
+        end
       end
 
       always @(posedge clk)
       begin
         if (!rstn) begin
-          no_remainder <= 1'b0;
-        end else begin
-          if (input_axis_tkeep[AXIS_DATA_WIDTH/8-1:BYPASS_WIDTH/8] && input_axis_tlast) begin
-            no_remainder <= 1'b0;
+          header_part_counter <= 'd0;
+          first_beat <= 1'b1;
+          tail_beat <= 1'b0;
+        end else if (buffer_axis_tvalid && buffer_axis_tready) begin
+          if (header_phase) begin
+            header_part_counter <= header_part_counter + 1;
+          end else if (tail_beat) begin
+            header_part_counter <= 'd0;
+            first_beat <= 1'b1;
+            tail_beat <= 1'b0;
           end else begin
-            no_remainder <= 1'b1;
-          end
-        end
-      end
-
-      // new packet marking
-      always @(posedge clk)
-      begin
-        if (!rstn) begin
-          new_packet <= 1'b1;
-        end else begin
-          if (buffer_axis_tready) begin
-            if (header_part_counter == HEADER_PARTS && input_axis_tvalid && new_packet) begin
-              new_packet <= 1'b0;
-            end else if (((input_axis_tkeep[AXIS_DATA_WIDTH/8-1:BYPASS_WIDTH/8]) ? temp_axis_tlast : bypass_axis_tlast) || (temp_axis_tlast && !no_remainder)) begin
-              new_packet <= 1'b1;
+            first_beat <= 1'b0;
+            if (input_axis_tlast) begin
+              if (input_spill) begin
+                tail_beat <= 1'b1;
+              end else begin
+                header_part_counter <= 'd0;
+                first_beat <= 1'b1;
+              end
             end
           end
         end
       end
 
-      // header insertion
       always @(posedge clk)
       begin
-        if (!rstn) begin
-          buffer_axis_tvalid <= 1'b0;
-          buffer_axis_tdata <= {AXIS_DATA_WIDTH-1{1'b0}};
-          buffer_axis_tkeep <= {AXIS_DATA_WIDTH/8-1{1'b0}};
-          buffer_axis_tlast <= 1'b0;
-        end else begin
-          if (buffer_axis_tready) begin
-            buffer_axis_tvalid <= (new_packet && header_part_counter != HEADER_PARTS) || (input_axis_tvalid && input_axis_tready) || (temp_axis_tlast && !no_remainder);
-
-            if (HEADER_PARTS) begin
-
-              if (new_packet && header_part_counter < HEADER_PARTS) begin
-                buffer_axis_tdata <= header[header_part_counter*AXIS_DATA_WIDTH +: AXIS_DATA_WIDTH];
-                buffer_axis_tkeep <= {AXIS_DATA_WIDTH/8{1'b1}};
-                buffer_axis_tlast <= 1'b0;
-              end else if (new_packet && header_part_counter == HEADER_PARTS) begin
-                buffer_axis_tdata <= {bypass_axis_tdata, header[header_part_counter*AXIS_DATA_WIDTH +: TEMP_WIDTH]};
-                buffer_axis_tkeep <= {bypass_axis_tkeep, {HEADER_WIDTH/8{1'b1}}};
-                buffer_axis_tlast <= 1'b0;
-              end else if (!temp_axis_tlast) begin
-                buffer_axis_tdata <= {bypass_axis_tdata, temp_axis_tdata};
-                buffer_axis_tkeep <= {bypass_axis_tkeep, temp_axis_tkeep};
-                buffer_axis_tlast <= (input_axis_tkeep[AXIS_DATA_WIDTH/8-1:BYPASS_WIDTH/8]) ? 1'b0 : bypass_axis_tlast;
-              end else begin
-                buffer_axis_tdata <= {{BYPASS_WIDTH{1'b0}}, temp_axis_tdata};
-                buffer_axis_tkeep <= {{BYPASS_WIDTH/8{1'b0}}, temp_axis_tkeep};
-                buffer_axis_tlast <= temp_axis_tlast;
-              end
-
-            end else begin
-
-              if (new_packet) begin
-                buffer_axis_tdata <= {bypass_axis_tdata, header};
-                buffer_axis_tkeep <= {bypass_axis_tkeep, {HEADER_WIDTH/8{1'b1}}};
-                buffer_axis_tlast <= 1'b0;
-              end else if (!temp_axis_tlast) begin
-                buffer_axis_tdata <= {bypass_axis_tdata, temp_axis_tdata};
-                buffer_axis_tkeep <= {bypass_axis_tkeep, temp_axis_tkeep};
-                buffer_axis_tlast <= (input_axis_tkeep[AXIS_DATA_WIDTH/8-1:BYPASS_WIDTH/8]) ? 1'b0 : bypass_axis_tlast;
-              end else begin
-                buffer_axis_tdata <= {{BYPASS_WIDTH{1'b0}}, temp_axis_tdata};
-                buffer_axis_tkeep <= {{BYPASS_WIDTH/8{1'b0}}, temp_axis_tkeep};
-                buffer_axis_tlast <= temp_axis_tlast;
-              end
-
-            end
-
-          end
+        if (input_axis_tvalid && input_axis_tready) begin
+          temp_axis_tdata <= input_axis_tdata[AXIS_DATA_WIDTH-1:BYPASS_WIDTH];
+          temp_axis_tkeep <= input_axis_tkeep[KEEP_WIDTH-1:BYPASS_KEEP_WIDTH];
         end
       end
 
     end else begin
 
-      // ready signal generation
+      assign header_ready = buffer_axis_tvalid && buffer_axis_tready && header_phase &&
+        (header_part_counter == HEADER_PARTS-1);
+
       always @(*)
       begin
-        input_axis_tready = buffer_axis_tready && !new_packet;
+        input_axis_tready = buffer_axis_tready && !header_phase;
       end
 
-      // new packet marking
-      always @(posedge clk)
+      always @(*)
       begin
-        if (!rstn) begin
-          new_packet <= 1'b1;
+        if (header_phase) begin
+          buffer_axis_tvalid = input_axis_tvalid && header_valid;
+          buffer_axis_tdata = header_padded[header_part_counter*AXIS_DATA_WIDTH +: AXIS_DATA_WIDTH];
+          buffer_axis_tkeep = {KEEP_WIDTH{1'b1}};
+          buffer_axis_tlast = 1'b0;
         end else begin
-          if (buffer_axis_tready) begin
-            if (input_axis_tlast && input_axis_tvalid) begin
-              new_packet <= 1'b1;
-            end else if (header_part_counter == HEADER_PARTS) begin
-              new_packet <= 1'b0;
-            end
-          end
+          buffer_axis_tvalid = input_axis_tvalid;
+          buffer_axis_tdata = input_axis_tdata;
+          buffer_axis_tkeep = input_axis_tkeep;
+          buffer_axis_tlast = input_axis_tlast;
         end
       end
 
-      // header insertion
       always @(posedge clk)
       begin
         if (!rstn) begin
-          buffer_axis_tvalid <= 1'b0;
-          buffer_axis_tdata <= {AXIS_DATA_WIDTH-1{1'b0}};
-          buffer_axis_tkeep <= {AXIS_DATA_WIDTH/8-1{1'b0}};
-          buffer_axis_tlast <= 1'b0;
-        end else begin
-          if (buffer_axis_tready) begin
-            buffer_axis_tvalid <= new_packet || (input_axis_tvalid && input_axis_tready);
-
-            if (HEADER_PARTS) begin
-
-              if (new_packet) begin
-                buffer_axis_tdata <= header[header_part_counter*AXIS_DATA_WIDTH +: AXIS_DATA_WIDTH];
-                buffer_axis_tkeep <= {AXIS_DATA_WIDTH/8{1'b1}};
-                buffer_axis_tlast <= 1'b0;
-              end else begin
-                buffer_axis_tdata <= input_axis_tdata;
-                buffer_axis_tkeep <= input_axis_tkeep;
-                buffer_axis_tlast <= input_axis_tlast;
-              end
-
-            end else begin
-
-              if (new_packet) begin
-                buffer_axis_tdata <= header;
-                buffer_axis_tkeep <= {AXIS_DATA_WIDTH/8{1'b1}};
-                buffer_axis_tlast <= 1'b0;
-              end else begin
-                buffer_axis_tdata <= input_axis_tdata;
-                buffer_axis_tkeep <= input_axis_tkeep;
-                buffer_axis_tlast <= input_axis_tlast;
-              end
-
-            end
-
+          header_part_counter <= 'd0;
+        end else if (buffer_axis_tvalid && buffer_axis_tready) begin
+          if (header_phase) begin
+            header_part_counter <= header_part_counter + 1;
+          end else if (input_axis_tlast) begin
+            header_part_counter <= 'd0;
           end
         end
       end

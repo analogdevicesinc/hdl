@@ -108,7 +108,9 @@ module application_regmap #(
   output reg  [15:0]                     sample_count,
 
   output reg                             rx_enable,
-  input  wire [31:0]                     rx_frames_dropped
+  input  wire [31:0]                     rx_frames_dropped,
+
+  input  wire                            ptp_locked
 );
 
   wire                              up_wreq;
@@ -254,6 +256,7 @@ module application_regmap #(
           'h24: up_rdata <= {{16{1'b0}}, sample_count};
           'h25: up_rdata <= {{31{1'b0}}, rx_enable};
           'h26: up_rdata <= rx_frames_dropped;
+          'h27: up_rdata <= {{31{1'b0}}, ptp_locked};
           default: up_rdata <= 32'd0;
         endcase
       end else begin

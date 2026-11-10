@@ -612,6 +612,7 @@ module application_core #
 
   wire        rx_enable;
   wire [31:0] rx_frames_dropped;
+  wire        ptp_locked;
 
   application_tx #(
     .IF_COUNT(IF_COUNT),
@@ -670,7 +671,13 @@ module application_core #
     .sample_count(sample_count),
 
     .ber_test(ber_test),
-    .insert_bit_error(insert_bit_error));
+    .insert_bit_error(insert_bit_error),
+
+    .ptp_clk(ptp_clk),
+    .ptp_rst(ptp_rst),
+    .ptp_sample_clk(ptp_sample_clk),
+    .ptp_td_sd(ptp_td_sd),
+    .ptp_locked(ptp_locked));
 
   application_rx #(
     .IF_COUNT(IF_COUNT),
@@ -785,7 +792,8 @@ module application_core #
     .sample_count(sample_count),
 
     .rx_enable(rx_enable),
-    .rx_frames_dropped(rx_frames_dropped));
+    .rx_frames_dropped(rx_frames_dropped),
+    .ptp_locked(ptp_locked));
 
   ////----------------------------------------Others-----------------//
   //////////////////////////////////////////////////

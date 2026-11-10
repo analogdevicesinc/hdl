@@ -48,6 +48,8 @@ module packetizer #(
   input  wire                         input_axis_tvalid,
   input  wire [AXIS_DATA_WIDTH-1:0]   input_axis_tdata,
   input  wire [AXIS_DATA_WIDTH/8-1:0] input_axis_tkeep,
+  // tlast that the current input beat will get
+  output wire                         input_axis_tlast,
 
   // output
   input  wire                         output_axis_tready,
@@ -59,28 +61,21 @@ module packetizer #(
   input  wire [31:0]                  packet_size
 );
 
-  reg [31:0] sample_counter;
-  reg        packet_last;
+  reg  [31:0] sample_counter;
+  wire        packet_last;
+
+  assign packet_last = (packet_size <= 32'd1) || (sample_counter >= packet_size - 32'd1);
+  assign input_axis_tlast = packet_last;
 
   always @(posedge clk)
   begin
     if (!rstn) begin
-      if (sample_counter < packet_size-1) begin
-        sample_counter <= 32'd1;
-        packet_last <= 1'b0;
-      end else begin
+      sample_counter <= 32'd0;
+    end else if (input_axis_tvalid && input_axis_tready) begin
+      if (packet_last) begin
         sample_counter <= 32'd0;
-        packet_last <= 1'b1;
-      end
-    end else begin
-      if (input_axis_tvalid && input_axis_tready) begin
-        if (sample_counter < packet_size-1) begin
-          sample_counter <= sample_counter + 1;
-          packet_last <= 1'b0;
-        end else begin
-          sample_counter <= 32'd0;
-          packet_last <= 1'b1;
-        end
+      end else begin
+        sample_counter <= sample_counter + 1;
       end
     end
   end

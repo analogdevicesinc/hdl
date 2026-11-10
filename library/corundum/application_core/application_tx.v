@@ -35,6 +35,8 @@
 
 `timescale 1ns/100ps
 
+`include "macro_definitions.vh"
+
 module application_tx #(
 
   // Structural configuration
@@ -113,10 +115,43 @@ module application_tx #(
 
   // BER
   input  wire                            ber_test,
-  input  wire                            insert_bit_error
+  input  wire                            insert_bit_error,
+
+  input  wire                            ptp_clk,
+  input  wire                            ptp_rst,
+  input  wire                            ptp_sample_clk,
+  input  wire                            ptp_td_sd,
+  output wire                            ptp_locked
 );
 
   localparam INPUT_WIDTH = CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH;
+  localparam OUTPUT_BEAT_SAMPLES = AXIS_DATA_WIDTH/SAMPLE_DATA_WIDTH;
+  localparam WIDTH_RATIO = (INPUT_WIDTH > AXIS_DATA_WIDTH) ? INPUT_WIDTH/AXIS_DATA_WIDTH : AXIS_DATA_WIDTH/INPUT_WIDTH;
+
+  // A frame must fit in the space the input FIFO keeps free above its
+  // almost-full threshold, otherwise the converter overruns it mid-frame.
+  localparam MAX_FRAME_BYTES = 2**13;
+  localparam MAX_FRAME_BEATS = MAX_FRAME_BYTES*8/AXIS_DATA_WIDTH;
+  localparam INPUT_FIFO_FRAME_BEATS = MAX_FRAME_BYTES*8/INPUT_WIDTH;
+  localparam INPUT_FIFO_ADDRESS_WIDTH = $clog2(INPUT_FIFO_FRAME_BEATS)+1;
+
+  // A frame must be a whole number of input and of output beats, so its
+  // sample count is a multiple of the samples in the wider of the two.
+  localparam FRAME_UNIT_SAMPLES = (INPUT_WIDTH > AXIS_DATA_WIDTH) ? INPUT_WIDTH/SAMPLE_DATA_WIDTH : OUTPUT_BEAT_SAMPLES;
+  localparam FRAME_UNIT_LOG2 = $clog2(FRAME_UNIT_SAMPLES);
+  localparam MAX_FRAME_SAMPLES = MAX_FRAME_BEATS*OUTPUT_BEAT_SAMPLES;
+
+  // Ethernet, IPv4, UDP and the frame timestamp (PTP seconds and nanoseconds)
+  localparam HEADER_WIDTH = 112+160+64+64;
+
+  initial begin
+    if (2**FRAME_UNIT_LOG2 != FRAME_UNIT_SAMPLES) begin
+      $error("Samples per beat (%0d) must be a power of two (instance %m)", FRAME_UNIT_SAMPLES);
+      $finish;
+    end
+  end
+
+  `HTOND(64)
 
   ////----------------------------------------Start application---------------//
   //////////////////////////////////////////////////
@@ -131,6 +166,10 @@ module application_tx #(
 
   wire packet_axis_tlast;
 
+  // Stopping takes effect at a frame boundary at the packetizer input, so no
+  // partial packet is left in the pipeline.
+  wire packetizer_input_last;
+
   always @(posedge clk)
   begin
     if (!rstn) begin
@@ -138,7 +177,7 @@ module application_tx #(
     end else begin
       if (start_app) begin
         run_packetizer <= 1'b1;
-      end else if (packet_axis_tlast) begin
+      end else if (packetizer_input_last) begin
         run_packetizer <= 1'b0;
       end
     end
@@ -166,7 +205,9 @@ module application_tx #(
   assign input_rstn_gated = input_rstn && !packet_generated_cdc;
   assign rstn_output_gated = rstn && !packet_generated;
 
-  assign input_axis_tready = input_axis_tready_fifo && run_packetizer_cdc;
+  // The packer stays in reset until the FIFO is out of reset as well, so the
+  // first beat of every run starts with the first enabled channel.
+  assign input_axis_tready = input_axis_tready_fifo && run_packetizer_cdc && input_rstn_gated;
 
   ////----------------------------------------Buffer, CDC and Scaling FIFO----//
   //////////////////////////////////////////////////
@@ -191,53 +232,134 @@ module application_tx #(
     .out_clk(clk),
     .out_data(input_enable_cdc));
 
-  wire [15:0] sample_count_cdc;
-
-  sync_data #(
-    .NUM_OF_BITS(16)
-  ) sync_data_sample_count (
-    .in_clk(clk),
-    .in_data(sample_count),
-    .out_clk(input_clk),
-    .out_data(sample_count_cdc));
-
-  // calculate the number of inputs base on enabled channels and requested samples
-  reg  [31:0] input_counter;
-  reg  [31:0] input_sample_total_requested;
-  wire [31:0] input_count_requested;
-
-  always @(posedge input_clk)
-  begin
-    if (!input_rstn) begin
-      input_sample_total_requested <= 32'h0;
-    end else begin
-      input_sample_total_requested <= converters(input_enable) * sample_count_cdc;
-    end
-  end
-
-  assign input_count_requested = input_sample_total_requested / (INPUT_WIDTH/SAMPLE_DATA_WIDTH) +
-    ((INPUT_WIDTH > AXIS_DATA_WIDTH) ? ((input_sample_total_requested % (INPUT_WIDTH/SAMPLE_DATA_WIDTH) != 'd0) ? 1 : 0) : 0);
-
-  wire input_axis_tvalid_buffered;
-
-  always @(posedge input_clk)
-  begin
-    if (!input_rstn) begin
-      input_counter <= 'd1;
-    end else begin
-      if (input_counter >= input_count_requested) begin
-        input_counter <= 'd1;
-      end else begin
-        if (input_axis_tvalid_buffered && input_axis_tready_fifo && !input_packer_reset) begin
-          input_counter <= input_counter + 1;
+  // Frame size, from which every other count is derived. sample_count is
+  // rounded down so that a frame holds whole sets of the enabled channels and
+  // whole beats on both sides; a drop then never splits a sample set.
+  //
+  // It only follows sample_count and input_enable while the datapath is
+  // flushed: both clock domains count frames with it and must agree on every
+  // frame boundary, otherwise packets and timestamps get out of step. A run
+  // starts only once the value has been stable long enough to reach the
+  // input clock domain.
+  function [15:0] count_unit(input [31:0] channels);
+    integer i;
+    reg     done;
+    begin
+      count_unit = FRAME_UNIT_SAMPLES;
+      done = 1'b0;
+      for (i=0; i<FRAME_UNIT_LOG2; i=i+1) begin
+        if (!done && !channels[i]) begin
+          count_unit = count_unit >> 1;
+        end else begin
+          done = 1'b1;
         end
+      end
+    end
+  endfunction
+
+  function [15:0] max_count(input [31:0] channels);
+    integer i;
+    begin
+      max_count = MAX_FRAME_SAMPLES;
+      for (i=1; i<=CHANNELS; i=i+1) begin
+        if (channels == i) begin
+          max_count = MAX_FRAME_SAMPLES/i;
+        end
+      end
+    end
+  endfunction
+
+  reg  [$clog2(CHANNELS):0] frame_channels;
+  reg  [15:0] frame_sample_count;
+  reg  [5:0]  frame_config_age;
+  reg  [15:0] frame_unit;
+  reg  [15:0] frame_count_capped;
+  reg  [15:0] frame_count;
+  reg  [31:0] frame_samples;
+  reg  [31:0] frame_beats;
+  reg  [15:0] input_frame_beats;
+  wire [15:0] input_frame_beats_cdc;
+
+  wire frame_config_settled = frame_config_age[5];
+
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      frame_config_age <= 6'd0;
+    end else if (packet_generated) begin
+      if (frame_channels != converters(input_enable_cdc) || frame_sample_count != sample_count) begin
+        frame_config_age <= 6'd0;
+      end else if (!frame_config_settled) begin
+        frame_config_age <= frame_config_age + 1;
       end
     end
   end
 
-  // packetizer reset logic
+  always @(posedge clk)
+  begin
+    if (packet_generated) begin
+      frame_channels <= converters(input_enable_cdc);
+      frame_sample_count <= sample_count;
+    end
+
+    frame_unit <= count_unit(frame_channels);
+    frame_count_capped <= (frame_sample_count > max_count(frame_channels)) ?
+      max_count(frame_channels) : frame_sample_count;
+
+    if (frame_count_capped < frame_unit) begin
+      frame_count <= frame_unit;
+    end else begin
+      frame_count <= frame_count_capped & ~(frame_unit - 16'd1);
+    end
+
+    frame_samples <= frame_channels * frame_count;
+
+    if (frame_samples < OUTPUT_BEAT_SAMPLES) begin
+      frame_beats <= 32'd1;
+    end else begin
+      frame_beats <= frame_samples / OUTPUT_BEAT_SAMPLES;
+    end
+
+    if (INPUT_WIDTH > AXIS_DATA_WIDTH) begin
+      input_frame_beats <= frame_beats / WIDTH_RATIO;
+    end else begin
+      input_frame_beats <= frame_beats * WIDTH_RATIO;
+    end
+  end
+
+  sync_data #(
+    .NUM_OF_BITS(16)
+  ) sync_data_input_frame_beats (
+    .in_clk(clk),
+    .in_data(input_frame_beats),
+    .out_clk(input_clk),
+    .out_data(input_frame_beats_cdc));
+
+  reg  [15:0] input_counter;
+
+  wire input_axis_tvalid_buffered;
+  wire input_beat;
+  wire input_frame_last;
+
+  assign input_beat = input_axis_tvalid_buffered && input_axis_tready_fifo;
+  assign input_frame_last = input_beat && (input_counter >= input_frame_beats_cdc);
+
+  always @(posedge input_clk)
+  begin
+    if (!input_rstn_gated) begin
+      input_counter <= 'd1;
+    end else if (input_beat) begin
+      if (input_frame_last) begin
+        input_counter <= 'd1;
+      end else begin
+        input_counter <= input_counter + 1;
+      end
+    end
+  end
+
   wire input_fifo_almost_empty;
   wire input_fifo_almost_full;
+  wire timestamp_fifo_almost_full;
 
   always @(posedge input_clk)
   begin
@@ -246,33 +368,63 @@ module application_tx #(
     end else begin
       if (input_fifo_almost_empty) begin
         input_packer_reset <= 1'b0;
-      end else begin
-        if (input_counter == input_count_requested && input_fifo_almost_full) begin
-          input_packer_reset <= 1'b1;
-        end
+      end else if (input_frame_last && (input_fifo_almost_full || timestamp_fifo_almost_full)) begin
+        input_packer_reset <= 1'b1;
       end
     end
   end
 
-  assign input_axis_tvalid_buffered = input_axis_tvalid && !input_packer_reset;
+  // PTP time of day in the input clock domain, sampled at the first beat of
+  // every frame that enters the FIFO. Dropped frames show up as gaps between
+  // packets. The header carries the low 32 bits of seconds and the
+  // nanoseconds.
+  wire [95:0] input_ptp_tod;
+  wire        input_ptp_locked;
+  reg         input_ptp_locked_d = 1'b0;
+  wire [63:0] input_timestamp;
+  wire        input_frame_first;
 
-  // calculate the number of inputs base on enabled channels and requested samples
-  reg  [31:0] output_counter;
-  reg  [31:0] output_count_requested;
-  wire [31:0] output_count_requested_max;
-  reg         output_sent;
+  assign input_timestamp = {input_ptp_tod[79:48], input_ptp_tod[47:16]};
+  assign input_frame_first = input_beat && (input_counter == 'd1);
 
-  always @(posedge clk)
-  begin
-    if (!rstn) begin
-      output_count_requested <= 32'h0;
-    end else begin
-      output_count_requested <= converters(input_enable_cdc) * sample_count / (AXIS_DATA_WIDTH/SAMPLE_DATA_WIDTH);
-    end
+  ptp_td_leaf #(
+    .TS_REL_EN(1),
+    .TS_TOD_EN(1),
+    .TS_FNS_W(16),
+    .TS_REL_NS_W(48),
+    .TS_TOD_S_W(48),
+    .TS_REL_W(64),
+    .TS_TOD_W(96),
+    .TD_SDI_PIPELINE(2)
+  ) input_ptp_td_leaf (
+    .clk(input_clk),
+    .rst(!input_rstn),
+    .sample_clk(ptp_sample_clk),
+    .ptp_clk(ptp_clk),
+    .ptp_rst(ptp_rst),
+    .ptp_td_sdi(ptp_td_sd),
+    .output_ts_rel(),
+    .output_ts_rel_step(),
+    .output_ts_tod(input_ptp_tod),
+    .output_ts_tod_step(),
+    .output_pps(),
+    .output_pps_str(),
+    .locked(input_ptp_locked));
+
+  // locked is an AND of three leaf registers, so register it before the CDC
+  always @(posedge input_clk) begin
+    input_ptp_locked_d <= input_ptp_locked;
   end
 
-  assign output_count_requested_max = output_count_requested +
-    ((INPUT_WIDTH > AXIS_DATA_WIDTH) ? ((output_count_requested % (INPUT_WIDTH/AXIS_DATA_WIDTH) != 'd0) ? ((INPUT_WIDTH/AXIS_DATA_WIDTH) - output_count_requested % (INPUT_WIDTH/AXIS_DATA_WIDTH)) : 0) : 0);
+  sync_bits #(
+    .NUM_OF_BITS(1)
+  ) sync_bits_ptp_locked (
+    .in_bits(input_ptp_locked_d),
+    .out_resetn(rstn),
+    .out_clk(clk),
+    .out_bits(ptp_locked));
+
+  assign input_axis_tvalid_buffered = input_axis_tvalid && !input_packer_reset && run_packetizer_cdc;
 
   wire [AXIS_DATA_WIDTH-1:0] cdc_axis_tdata;
   wire [AXIS_KEEP_WIDTH-1:0] cdc_axis_tkeep;
@@ -281,50 +433,20 @@ module application_tx #(
   reg                        cdc_axis_tvalid_gated;
   reg                        cdc_axis_tready_gated;
 
-  always @(posedge clk)
-  begin
-    if (!rstn) begin
-      output_counter <= 'd1;
-    end else begin
-      if (output_counter >= output_count_requested_max) begin
-        output_counter <= 'd1;
-      end else begin
-        if (cdc_axis_tvalid && cdc_axis_tready) begin
-          output_counter <= output_counter + 1;
-        end
-      end
-    end
-  end
-
-  always @(posedge clk)
-  begin
-    if (!rstn) begin
-      output_sent <= 1'b0;
-    end else begin
-      if (output_counter >= output_count_requested_max) begin
-        output_sent <= 1'b0;
-      end else begin
-        if (cdc_axis_tvalid && cdc_axis_tready && output_counter >= output_count_requested) begin
-          output_sent <= 1'b1;
-        end
-      end
-    end
-  end
-
   always @(*)
   begin
-    cdc_axis_tvalid_gated = (output_sent) ? 1'b0 : cdc_axis_tvalid && !packet_generated;
-    cdc_axis_tready_gated = output_sent || cdc_axis_tready;
+    cdc_axis_tvalid_gated = cdc_axis_tvalid && !packet_generated;
+    cdc_axis_tready_gated = cdc_axis_tready;
   end
 
   util_axis_fifo_asym #(
     .ASYNC_CLK(1),
     .S_DATA_WIDTH(INPUT_WIDTH),
-    .ADDRESS_WIDTH($clog2(2**13 * 8 / INPUT_WIDTH)+1),
+    .ADDRESS_WIDTH(INPUT_FIFO_ADDRESS_WIDTH),
     .M_DATA_WIDTH(AXIS_DATA_WIDTH),
     .M_AXIS_REGISTERED(1),
-    .ALMOST_EMPTY_THRESHOLD(4096/INPUT_WIDTH),
-    .ALMOST_FULL_THRESHOLD($clog2(2**13 * 8 / INPUT_WIDTH)),
+    .ALMOST_EMPTY_THRESHOLD((4096/INPUT_WIDTH > 0) ? 4096/INPUT_WIDTH : 1),
+    .ALMOST_FULL_THRESHOLD(INPUT_FIFO_FRAME_BEATS),
     .TLAST_EN(0),
     .TKEEP_EN(1),
     .REDUCED_FIFO(0)
@@ -355,6 +477,49 @@ module application_tx #(
     .s_axis_almost_full(input_fifo_almost_full),
     .s_axis_room());
 
+  // One entry per frame held in cdc_scale_fifo or further down to the header
+  // inserter, so it must stay deeper than cdc_scale_fifo.
+  wire        timestamp_valid;
+  wire        timestamp_ready;
+  wire [63:0] frame_timestamp;
+
+  util_axis_fifo #(
+    .DATA_WIDTH(64),
+    .ADDRESS_WIDTH(INPUT_FIFO_ADDRESS_WIDTH+1),
+    .ASYNC_CLK(1),
+    .M_AXIS_REGISTERED(1),
+    .ALMOST_EMPTY_THRESHOLD(),
+    .ALMOST_FULL_THRESHOLD(2),
+    .TLAST_EN(0),
+    .TKEEP_EN(0),
+    .REMOVE_NULL_BEAT_EN(0)
+  ) timestamp_fifo (
+    .m_axis_aclk(clk),
+    .m_axis_aresetn(rstn_output_gated),
+    .m_axis_ready(timestamp_ready),
+    .m_axis_valid(timestamp_valid),
+    .m_axis_data(frame_timestamp),
+    .m_axis_tkeep(),
+    .m_axis_tlast(),
+    .m_axis_level(),
+    .m_axis_empty(),
+    .m_axis_almost_empty(),
+    .m_axis_full(),
+    .m_axis_almost_full(),
+
+    .s_axis_aclk(input_clk),
+    .s_axis_aresetn(input_rstn_gated),
+    .s_axis_ready(),
+    .s_axis_valid(input_frame_first),
+    .s_axis_data(input_timestamp),
+    .s_axis_tkeep(),
+    .s_axis_tlast(1'b0),
+    .s_axis_room(),
+    .s_axis_empty(),
+    .s_axis_almost_empty(),
+    .s_axis_full(),
+    .s_axis_almost_full(timestamp_fifo_almost_full));
+
   ////----------------------------------------BER--------------------//
   //////////////////////////////////////////////////
 
@@ -382,6 +547,8 @@ module application_tx #(
   //////////////////////////////////////////////////
 
   wire                       packetizer_axis_tready;
+  wire                       packetizer_input_tready;
+  wire                       packetizer_input_tlast;
   reg                        packetizer_axis_tvalid;
   reg  [AXIS_DATA_WIDTH-1:0] packetizer_axis_tdata;
   reg  [AXIS_KEEP_WIDTH-1:0] packetizer_axis_tkeep;
@@ -410,25 +577,24 @@ module application_tx #(
   ////----------------------------------------Packetizer--------------------//
   //////////////////////////////////////////////////
 
+  wire packetizer_run = run_packetizer && !packet_generated;
+
+  assign packetizer_axis_tready = packetizer_input_tready && packetizer_run;
+  assign packetizer_input_last = packetizer_axis_tvalid && packetizer_axis_tready && packetizer_input_tlast;
+
   wire                       packet_axis_tready;
   wire                       packet_axis_tvalid;
   wire [AXIS_DATA_WIDTH-1:0] packet_axis_tdata;
   wire [AXIS_KEEP_WIDTH-1:0] packet_axis_tkeep;
-
-  reg [31:0] packet_size;
-
-  always @(posedge clk)
-  begin
-    packet_size <= sample_count * converters(input_enable_cdc) / (AXIS_DATA_WIDTH/SAMPLE_DATA_WIDTH);
-  end
 
   packetizer #(
     .AXIS_DATA_WIDTH(AXIS_DATA_WIDTH)
   ) packetizer_inst (
     .clk(clk),
     .rstn(rstn_output_gated),
-    .input_axis_tready(packetizer_axis_tready),
-    .input_axis_tvalid(packetizer_axis_tvalid),
+    .input_axis_tready(packetizer_input_tready),
+    .input_axis_tvalid(packetizer_axis_tvalid && packetizer_run),
+    .input_axis_tlast(packetizer_input_tlast),
     .input_axis_tdata(packetizer_axis_tdata),
     .input_axis_tkeep(packetizer_axis_tkeep),
 
@@ -438,7 +604,7 @@ module application_tx #(
     .output_axis_tkeep(packet_axis_tkeep),
     .output_axis_tlast(packet_axis_tlast),
 
-    .packet_size(packet_size));
+    .packet_size(frame_beats));
 
   ////----------------------------------------Header Inserter---------------//
   //////////////////////////////////////////////////
@@ -449,7 +615,7 @@ module application_tx #(
 
   always @(posedge clk)
   begin
-    udp_payload_size <= sample_count * converters(input_enable_cdc) * (SAMPLE_DATA_WIDTH/8);
+    udp_payload_size <= frame_beats * (AXIS_DATA_WIDTH/8) + 16'd8;
   end
 
   udp_header udp_header_inst (
@@ -490,9 +656,17 @@ module application_tx #(
     .ethernet_type(ethernet_type),
     .header(ethernet_header_part));
 
-  wire [336-1:0] complete_header;
+  // BER packets carry no ADC data, so they do not consume timestamps
+  wire header_valid;
+  wire header_ready;
+
+  assign header_valid = ber_test || timestamp_valid;
+  assign timestamp_ready = header_ready && !ber_test;
+
+  wire [HEADER_WIDTH-1:0] complete_header;
 
   assign complete_header = {
+    htond_64(ber_test ? 64'd0 : frame_timestamp),
     udp_header_part,
     ip_header_part,
     ethernet_header_part};
@@ -505,11 +679,13 @@ module application_tx #(
 
   header_inserter #(
     .AXIS_DATA_WIDTH(AXIS_DATA_WIDTH),
-    .HEADER_WIDTH(336)
+    .HEADER_WIDTH(HEADER_WIDTH)
   ) header_inserter_inst (
     .clk(clk),
     .rstn(rstn_output_gated),
     .header(complete_header),
+    .header_valid(header_valid),
+    .header_ready(header_ready),
 
     .input_axis_tready(packet_axis_tready),
     .input_axis_tvalid(packet_axis_tvalid),
@@ -575,14 +751,34 @@ module application_tx #(
     end
   end
 
+  // Packets that entered the packetizer and have not left on the MAC side yet.
+  // The datapath is flushed only after the last of them is sent.
+  reg [8:0] packets_in_flight;
+
+  always @(posedge clk)
+  begin
+    if (!rstn_output_gated) begin
+      packets_in_flight <= 9'd0;
+    end else begin
+      case ({output_packet_last, packetizer_input_last})
+        2'b01: packets_in_flight <= packets_in_flight + 1;
+        2'b10: packets_in_flight <= packets_in_flight - 1;
+        default:;
+      endcase
+    end
+  end
+
   always @(posedge clk)
   begin
     if (!rstn) begin
       packet_generated <= 1'b1;
     end else begin
       if (run_packetizer) begin
-        packet_generated <= 1'b0;
-      end else if (output_packet_last) begin
+        if (frame_config_settled) begin
+          packet_generated <= 1'b0;
+        end
+      end else if (packets_in_flight == 9'd0 ||
+                   (packets_in_flight == 9'd1 && output_packet_last)) begin
         packet_generated <= 1'b1;
       end
     end

@@ -31,6 +31,8 @@ GENERIC_DEPS += macro_definitions.vh
 GENERIC_DEPS += ../../common/ad_rst.v
 GENERIC_DEPS += ../../common/up_axi.v
 
+EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/ptp_td_leaf.v
+
 XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += application_core_constr.ttcl
 
