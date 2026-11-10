@@ -610,6 +610,9 @@ module application_core #
   wire [63:0] error_bits_total;
   wire [31:0] out_of_sync_total;
 
+  wire        rx_enable;
+  wire [31:0] rx_frames_dropped;
+
   application_tx #(
     .IF_COUNT(IF_COUNT),
     .PORTS_PER_IF(PORTS_PER_IF),
@@ -699,27 +702,14 @@ module application_core #
     .output_axis_tdata(output_axis_tdata),
     .output_axis_tvalid(output_axis_tvalid),
     .output_axis_tready(output_axis_tready),
-    .output_enable(output_enable),
 
-    .start_app(start_app),
-    .ethernet_destination_MAC(ethernet_destination_MAC),
-    .ethernet_source_MAC(ethernet_source_MAC),
-    .ethernet_type(ethernet_type),
-    .ip_version(ip_version),
-    .ip_header_length(ip_header_length),
-    .ip_type_of_service(ip_type_of_service),
-    .ip_identification(ip_identification),
-    .ip_flags(ip_flags),
-    .ip_fragment_offset(ip_fragment_offset),
-    .ip_time_to_live(ip_time_to_live),
-    .ip_protocol(ip_protocol),
+    .rx_enable(rx_enable),
+    .rx_frames_dropped(rx_frames_dropped),
+
     .ip_source_IP_address(ip_source_IP_address),
     .ip_destination_IP_address(ip_destination_IP_address),
     .udp_source(udp_source),
     .udp_destination(udp_destination),
-    .udp_checksum(udp_checksum),
-
-    .sample_count(sample_count),
 
     .ber_test(ber_test),
     .reset_ber(reset_ber),
@@ -792,7 +782,10 @@ module application_core #
     .error_bits_total(error_bits_total),
     .out_of_sync_total(out_of_sync_total),
 
-    .sample_count(sample_count));
+    .sample_count(sample_count),
+
+    .rx_enable(rx_enable),
+    .rx_frames_dropped(rx_frames_dropped));
 
   ////----------------------------------------Others-----------------//
   //////////////////////////////////////////////////

@@ -65,14 +65,13 @@ module application_rx #(
   input  wire [IF_COUNT*PORTS_PER_IF-1:0]                     s_axis_sync_rx_tlast,
   input  wire [IF_COUNT*PORTS_PER_IF*AXIS_RX_USER_WIDTH-1:0]  s_axis_sync_rx_tuser,
 
-  output reg  [IF_COUNT*PORTS_PER_IF*AXIS_DATA_WIDTH-1:0]     m_axis_sync_rx_tdata,
-  output reg  [IF_COUNT*PORTS_PER_IF*AXIS_KEEP_WIDTH-1:0]     m_axis_sync_rx_tkeep,
-  output reg  [IF_COUNT*PORTS_PER_IF-1:0]                     m_axis_sync_rx_tvalid,
+  output wire [IF_COUNT*PORTS_PER_IF*AXIS_DATA_WIDTH-1:0]     m_axis_sync_rx_tdata,
+  output wire [IF_COUNT*PORTS_PER_IF*AXIS_KEEP_WIDTH-1:0]     m_axis_sync_rx_tkeep,
+  output wire [IF_COUNT*PORTS_PER_IF-1:0]                     m_axis_sync_rx_tvalid,
   input  wire [IF_COUNT*PORTS_PER_IF-1:0]                     m_axis_sync_rx_tready,
-  output reg  [IF_COUNT*PORTS_PER_IF-1:0]                     m_axis_sync_rx_tlast,
-  output reg  [IF_COUNT*PORTS_PER_IF*AXIS_RX_USER_WIDTH-1:0]  m_axis_sync_rx_tuser,
+  output wire [IF_COUNT*PORTS_PER_IF-1:0]                     m_axis_sync_rx_tlast,
+  output wire [IF_COUNT*PORTS_PER_IF*AXIS_RX_USER_WIDTH-1:0]  m_axis_sync_rx_tuser,
 
-  // Input data
   input  wire                            output_clk,
   input  wire                            output_rstn,
 
@@ -80,34 +79,14 @@ module application_rx #(
   output wire                                                      output_axis_tvalid,
   input  wire                                                      output_axis_tready,
 
-  input  wire [CHANNELS-1:0]             output_enable,
+  input  wire                            rx_enable,
+  output reg  [31:0]                     rx_frames_dropped,
 
-  input  wire                            start_app,
-
-  // Ethernet header
-  input  wire [48-1:0]                   ethernet_destination_MAC,
-  input  wire [48-1:0]                   ethernet_source_MAC,
-  input  wire [16-1:0]                   ethernet_type,
-
-  // IPv4 header
-  input  wire [4-1:0]                    ip_version,
-  input  wire [4-1:0]                    ip_header_length,
-  input  wire [8-1:0]                    ip_type_of_service,
-  input  wire [16-1:0]                   ip_identification,
-  input  wire [3-1:0]                    ip_flags,
-  input  wire [13-1:0]                   ip_fragment_offset,
-  input  wire [8-1:0]                    ip_time_to_live,
-  input  wire [8-1:0]                    ip_protocol,
+  // Addresses of the FPGA side (TX source) and of the host side (TX destination)
   input  wire [32-1:0]                   ip_source_IP_address,
   input  wire [32-1:0]                   ip_destination_IP_address,
-
-  // UDP header
   input  wire [16-1:0]                   udp_source,
   input  wire [16-1:0]                   udp_destination,
-  input  wire [16-1:0]                   udp_checksum,
-
-  // Sample count per channel
-  input  wire [15:0]                     sample_count,
 
   // BER
   input  wire                            ber_test,
@@ -119,50 +98,35 @@ module application_rx #(
 );
 
   localparam OUTPUT_WIDTH = CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH;
-  localparam HEADER_LENGTH = 336;
 
-  wire [CHANNELS-1:0] output_enable_cdc;
-
-  sync_data #(
-    .NUM_OF_BITS(CHANNELS)
-  ) sync_data_output_enable (
-    .in_clk(output_clk),
-    .in_data(output_enable),
-    .out_clk(clk),
-    .out_data(output_enable_cdc));
+  // Ethernet, IPv4, UDP and the 64-bit frame timestamp, as sent by application_tx
+  localparam HEADER_LENGTH = 112+160+64+64;
 
   ////----------------------------------------Arbiter-------------------------//
   //////////////////////////////////////////////////
 
-  function [$clog2(CHANNELS):0] converters(input [CHANNELS-1:0] input_enable);
-    integer i;
-    begin
-      converters = 0;
-      for (i=0; i<CHANNELS; i=i+1) begin
-        converters = converters + input_enable[i];
-      end
-    end
-  endfunction
-
-  // header creation
-  wire [64-1:0] udp_header_part;
-  wire [15:0] udp_length;
-
-  reg [15:0] udp_payload_size;
+  // Frames addressed to the FPGA go to the DAC. In BER mode the FPGA's own
+  // packets are expected back through a loopback, so the TX destination is
+  // matched instead.
+  reg [32-1:0] match_ip_destination;
+  reg [16-1:0] match_udp_destination;
 
   always @(posedge clk)
   begin
-    udp_payload_size <= sample_count * converters(output_enable_cdc) * (SAMPLE_DATA_WIDTH/8);
+    match_ip_destination <= ber_test ? ip_destination_IP_address : ip_source_IP_address;
+    match_udp_destination <= ber_test ? udp_destination : udp_source;
   end
+
+  wire [64-1:0] udp_header_part;
 
   udp_header udp_header_inst (
     .clk(clk),
     .rstn(rstn),
-    .udp_source(udp_source),
-    .udp_destination(udp_destination),
-    .udp_length(udp_length),
-    .udp_checksum(udp_checksum),
-    .payload_length(udp_payload_size),
+    .udp_source(16'd0),
+    .udp_destination(match_udp_destination),
+    .udp_length(),
+    .udp_checksum(16'd0),
+    .payload_length(16'd0),
     .header(udp_header_part));
 
   wire [160-1:0] ip_header_part;
@@ -170,32 +134,33 @@ module application_rx #(
   ip_header ip_header_inst (
     .clk(clk),
     .rstn(rstn),
-    .ip_version(ip_version),
-    .ip_header_length(ip_header_length),
-    .ip_type_of_service(ip_type_of_service),
+    .ip_version(4'h4),
+    .ip_header_length(4'h5),
+    .ip_type_of_service(8'h00),
     .ip_total_length(),
-    .ip_identification(ip_identification),
-    .ip_flags(ip_flags),
-    .ip_fragment_offset(ip_fragment_offset),
-    .ip_time_to_live(ip_time_to_live),
-    .ip_protocol(ip_protocol),
+    .ip_identification(16'h0000),
+    .ip_flags(3'h0),
+    .ip_fragment_offset(13'h0000),
+    .ip_time_to_live(8'h00),
+    .ip_protocol(8'h11),
     .ip_header_checksum(),
-    .ip_source_IP_address(ip_source_IP_address),
-    .ip_destination_IP_address(ip_destination_IP_address),
-    .payload_length(udp_length),
+    .ip_source_IP_address(32'd0),
+    .ip_destination_IP_address(match_ip_destination),
+    .payload_length(16'd0),
     .header(ip_header_part));
 
   wire [112-1:0] ethernet_header_part;
 
   ethernet_header ethernet_header_inst (
-    .ethernet_destination_MAC(ethernet_destination_MAC),
-    .ethernet_source_MAC(ethernet_source_MAC),
-    .ethernet_type(ethernet_type),
+    .ethernet_destination_MAC(48'd0),
+    .ethernet_source_MAC(48'd0),
+    .ethernet_type(16'h0800),
     .header(ethernet_header_part));
 
   wire [HEADER_LENGTH-1:0] complete_header;
 
   assign complete_header = {
+    64'd0,
     udp_header_part,
     ip_header_part,
     ethernet_header_part};
@@ -205,7 +170,7 @@ module application_rx #(
 
   udp_header_mask udp_header_routing_mask_inst (
     .udp_source(1'b0),
-    .udp_destination(1'b0),
+    .udp_destination(1'b1),
     .udp_length(1'b0),
     .udp_checksum(1'b0),
     .header_mask(udp_header_routing_mask_part));
@@ -213,17 +178,17 @@ module application_rx #(
   wire [160-1:0] ip_header_routing_mask_part;
 
   ip_header_mask ip_header_routing_mask_inst (
-    .ip_version(1'b0),
-    .ip_header_length(1'b0),
+    .ip_version(1'b1),
+    .ip_header_length(1'b1),
     .ip_type_of_service(1'b0),
     .ip_total_length(1'b0),
     .ip_identification(1'b0),
     .ip_flags(1'b0),
     .ip_fragment_offset(1'b0),
     .ip_time_to_live(1'b0),
-    .ip_protocol(1'b0),
+    .ip_protocol(1'b1),
     .ip_header_checksum(1'b0),
-    .ip_source_IP_address(1'b1),
+    .ip_source_IP_address(1'b0),
     .ip_destination_IP_address(1'b1),
     .header_mask(ip_header_routing_mask_part));
 
@@ -232,12 +197,13 @@ module application_rx #(
   ethernet_header_mask ethernet_header_routing_mask_inst (
     .ethernet_destination_MAC(1'b0),
     .ethernet_source_MAC(1'b0),
-    .ethernet_type(1'b0),
+    .ethernet_type(1'b1),
     .header_mask(ethernet_header_routing_mask_part));
 
   wire [HEADER_LENGTH-1:0] complete_header_routing_mask;
 
   assign complete_header_routing_mask = {
+    64'd0,
     udp_header_routing_mask_part,
     ip_header_routing_mask_part,
     ethernet_header_routing_mask_part};
@@ -280,12 +246,75 @@ module application_rx #(
   wire [HEADER_LENGTH-1:0] complete_header_validation_mask;
 
   assign complete_header_validation_mask = {
+    64'd0,
     udp_header_validation_mask_part,
     ip_header_validation_mask_part,
     ethernet_header_validation_mask_part};
 
   wire valid;
   wire switch;
+
+  // Keeps s_axis_sync_rx_tready registered at full throughput: a beat accepted
+  // while the output is stalled is parked in the temp register.
+  localparam SKID_WIDTH = IF_COUNT*PORTS_PER_IF*(AXIS_DATA_WIDTH+AXIS_KEEP_WIDTH+1+AXIS_RX_USER_WIDTH);
+
+  wire [SKID_WIDTH-1:0] skid_input_data;
+  reg                   skid_input_tready;
+  wire                  skid_input_tready_early;
+
+  reg                   skid_output_tvalid;
+  wire                  skid_output_tready;
+  reg  [SKID_WIDTH-1:0] skid_output_data;
+
+  reg                   skid_temp_tvalid;
+  reg  [SKID_WIDTH-1:0] skid_temp_data;
+
+  wire [IF_COUNT*PORTS_PER_IF*AXIS_DATA_WIDTH-1:0]    skid_axis_tdata;
+  wire [IF_COUNT*PORTS_PER_IF*AXIS_KEEP_WIDTH-1:0]    skid_axis_tkeep;
+  wire                                                skid_axis_tlast;
+  wire [IF_COUNT*PORTS_PER_IF*AXIS_RX_USER_WIDTH-1:0] skid_axis_tuser;
+
+  assign skid_input_data = {s_axis_sync_rx_tuser, s_axis_sync_rx_tlast, s_axis_sync_rx_tkeep, s_axis_sync_rx_tdata};
+  assign {skid_axis_tuser, skid_axis_tlast, skid_axis_tkeep, skid_axis_tdata} = skid_output_data;
+
+  assign s_axis_sync_rx_tready = skid_input_tready;
+
+  assign skid_input_tready_early = skid_output_tready ||
+    (!skid_temp_tvalid && (!skid_output_tvalid || !s_axis_sync_rx_tvalid));
+
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      skid_input_tready <= 1'b0;
+      skid_output_tvalid <= 1'b0;
+      skid_temp_tvalid <= 1'b0;
+    end else begin
+      skid_input_tready <= skid_input_tready_early;
+      if (skid_input_tready) begin
+        if (skid_output_tready || !skid_output_tvalid) begin
+          skid_output_tvalid <= s_axis_sync_rx_tvalid;
+        end else begin
+          skid_temp_tvalid <= s_axis_sync_rx_tvalid;
+        end
+      end else if (skid_output_tready) begin
+        skid_output_tvalid <= skid_temp_tvalid;
+        skid_temp_tvalid <= 1'b0;
+      end
+    end
+  end
+
+  always @(posedge clk)
+  begin
+    if (skid_input_tready) begin
+      if (skid_output_tready || !skid_output_tvalid) begin
+        skid_output_data <= skid_input_data;
+      end else begin
+        skid_temp_data <= skid_input_data;
+      end
+    end else if (skid_output_tready) begin
+      skid_output_data <= skid_temp_data;
+    end
+  end
 
   rx_arbiter #(
     .AXIS_DATA_WIDTH(AXIS_DATA_WIDTH),
@@ -294,135 +323,130 @@ module application_rx #(
   ) rx_arbiter_inst (
     .clk(clk),
     .rstn(rstn),
-    .start_app(start_app),
+    .enable(rx_enable),
     .header(complete_header),
     .header_routing_list(complete_header_routing_mask),
     .header_validation_list(complete_header_validation_mask),
-    .input_axis_tvalid(s_axis_sync_rx_tvalid),
-    .input_axis_tready(s_axis_sync_rx_tready),
-    .input_axis_tdata(s_axis_sync_rx_tdata),
-    .input_axis_tlast(s_axis_sync_rx_tlast),
+    .input_axis_tvalid(skid_output_tvalid),
+    .input_axis_tready(skid_output_tready),
+    .input_axis_tdata(skid_axis_tdata),
+    .input_axis_tlast(skid_axis_tlast),
     .valid(valid),
     .switch(switch));
 
   ////----------------------------------------Datapath switch-----------------//
   //////////////////////////////////////////////////
-  reg [IF_COUNT*PORTS_PER_IF*AXIS_DATA_WIDTH-1:0]    axis_sync_rx_tdata_reg;
-  reg [IF_COUNT*PORTS_PER_IF*AXIS_KEEP_WIDTH-1:0]    axis_sync_rx_tkeep_reg;
-  reg [IF_COUNT*PORTS_PER_IF-1:0]                    axis_sync_rx_tvalid_reg;
-  reg [IF_COUNT*PORTS_PER_IF-1:0]                    axis_sync_rx_tready_reg;
-  reg [IF_COUNT*PORTS_PER_IF-1:0]                    axis_sync_rx_tlast_reg;
-  reg [IF_COUNT*PORTS_PER_IF*AXIS_RX_USER_WIDTH-1:0] axis_sync_rx_tuser_reg;
+
+  // rx_arbiter registers switch/valid on the same handshake that loads this
+  // stage, so they always describe the frame the stage currently holds.
+  reg [IF_COUNT*PORTS_PER_IF*AXIS_DATA_WIDTH-1:0]    rx_axis_tdata;
+  reg [IF_COUNT*PORTS_PER_IF*AXIS_KEEP_WIDTH-1:0]    rx_axis_tkeep;
+  reg                                                rx_axis_tvalid;
+  wire                                               rx_axis_tready;
+  reg                                                rx_axis_tlast;
+  reg [IF_COUNT*PORTS_PER_IF*AXIS_RX_USER_WIDTH-1:0] rx_axis_tuser;
+
+  assign skid_output_tready = !rx_axis_tvalid || rx_axis_tready;
 
   always @(posedge clk)
   begin
     if (!rstn) begin
-      axis_sync_rx_tdata_reg <= {IF_COUNT*PORTS_PER_IF*AXIS_DATA_WIDTH{1'b0}};
-      axis_sync_rx_tkeep_reg <= {IF_COUNT*PORTS_PER_IF*AXIS_KEEP_WIDTH{1'b0}};
-      axis_sync_rx_tvalid_reg <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-      axis_sync_rx_tlast_reg <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-      axis_sync_rx_tuser_reg <= {IF_COUNT*PORTS_PER_IF*AXIS_RX_USER_WIDTH{1'b0}};
-    end else begin
-      axis_sync_rx_tdata_reg <= s_axis_sync_rx_tdata;
-      axis_sync_rx_tkeep_reg <= s_axis_sync_rx_tkeep;
-      axis_sync_rx_tvalid_reg <= s_axis_sync_rx_tvalid;
-      axis_sync_rx_tlast_reg <= s_axis_sync_rx_tlast;
-      axis_sync_rx_tuser_reg <= s_axis_sync_rx_tuser;
+      rx_axis_tvalid <= 1'b0;
+    end else if (skid_output_tready) begin
+      rx_axis_tvalid <= skid_output_tvalid;
     end
   end
 
-  reg [HEADER_LENGTH-1:0] bypass_axis_tdata_reg;
-  reg [HEADER_LENGTH-1:0] bypass_axis_tkeep_reg;
-
-  reg [AXIS_DATA_WIDTH-HEADER_LENGTH-1:0]   temp_axis_tdata_reg;
-  reg [AXIS_KEEP_WIDTH-HEADER_LENGTH/8-1:0] temp_axis_tkeep_reg;
-
-  always @(*)
-  begin
-    bypass_axis_tdata_reg = axis_sync_rx_tdata_reg[HEADER_LENGTH-1:0];
-    bypass_axis_tkeep_reg = axis_sync_rx_tkeep_reg[HEADER_LENGTH/8-1:0];
-  end
-
   always @(posedge clk)
   begin
-    temp_axis_tdata_reg <= axis_sync_rx_tdata_reg[AXIS_DATA_WIDTH-1:HEADER_LENGTH];
-    temp_axis_tkeep_reg <= axis_sync_rx_tkeep_reg[AXIS_DATA_WIDTH/8-1:HEADER_LENGTH/8];
+    if (skid_output_tready) begin
+      rx_axis_tdata <= skid_axis_tdata;
+      rx_axis_tkeep <= skid_axis_tkeep;
+      rx_axis_tlast <= skid_axis_tlast;
+      rx_axis_tuser <= skid_axis_tuser;
+    end
   end
 
-  reg [AXIS_DATA_WIDTH-1:0] buffer_axis_tdata_reg;
-  reg [AXIS_KEEP_WIDTH-1:0] buffer_axis_tkeep_reg;
+  assign m_axis_sync_rx_tdata = rx_axis_tdata;
+  assign m_axis_sync_rx_tkeep = rx_axis_tkeep;
+  assign m_axis_sync_rx_tvalid = rx_axis_tvalid && !switch;
+  assign m_axis_sync_rx_tlast = rx_axis_tlast;
+  assign m_axis_sync_rx_tuser = rx_axis_tuser;
 
-  reg [IF_COUNT*PORTS_PER_IF-1:0] input_axis_tvalid_reg [1:0];
-  reg [IF_COUNT*PORTS_PER_IF-1:0] input_axis_tready_reg;
-  reg [IF_COUNT*PORTS_PER_IF-1:0] input_axis_tlast_reg;
+  // header removal: each output beat is the low part of the current beat
+  // above the high part of the previous one
+  //
+  // The app path always accepts, so a stalled DAC side cannot block the
+  // traffic shared with the host. A frame is dropped whole when the FIFO
+  // cannot take a full-size frame at its start, and the remainder of a frame
+  // is dropped if the FIFO still overflows.
+  wire strip_axis_tvalid;
+
+  reg                                       strip_first;
+  reg  [AXIS_DATA_WIDTH-HEADER_LENGTH-1:0]  strip_temp;
+
+  reg                                       app_axis_tvalid;
+  wire                                      app_axis_tready;
+  reg  [AXIS_DATA_WIDTH-1:0]                app_axis_tdata;
+  wire                                      app_axis_almost_full;
+
+  reg                                       app_drop;
+
+  wire app_frame_start = strip_axis_tvalid && strip_first;
+  wire app_frame_drop = app_frame_start && app_axis_almost_full;
+  wire app_overflow = app_axis_tvalid && !app_drop && !app_axis_tready;
+
+  assign rx_axis_tready = !switch ? m_axis_sync_rx_tready : 1'b1;
+
+  assign strip_axis_tvalid = rx_axis_tvalid && switch && valid;
 
   always @(posedge clk)
   begin
     if (!rstn) begin
-      m_axis_sync_rx_tdata <= {IF_COUNT*PORTS_PER_IF*AXIS_DATA_WIDTH{1'b0}};
-      m_axis_sync_rx_tkeep <= {IF_COUNT*PORTS_PER_IF*AXIS_KEEP_WIDTH{1'b0}};
-      m_axis_sync_rx_tvalid <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-      axis_sync_rx_tready_reg <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-      m_axis_sync_rx_tlast <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-      m_axis_sync_rx_tuser <= {IF_COUNT*PORTS_PER_IF*AXIS_RX_USER_WIDTH{1'b0}};
+      strip_first <= 1'b1;
+      app_axis_tvalid <= 1'b0;
+      app_drop <= 1'b0;
+      rx_frames_dropped <= 32'd0;
     end else begin
-      if (!switch) begin
-        m_axis_sync_rx_tdata <= axis_sync_rx_tdata_reg;
-        m_axis_sync_rx_tkeep <= axis_sync_rx_tkeep_reg;
-        m_axis_sync_rx_tvalid <= axis_sync_rx_tvalid_reg;
-        m_axis_sync_rx_tlast <= axis_sync_rx_tlast_reg;
-        m_axis_sync_rx_tuser <= axis_sync_rx_tuser_reg;
+      app_axis_tvalid <= strip_axis_tvalid && !strip_first;
+      if (strip_axis_tvalid) begin
+        strip_first <= rx_axis_tlast;
+      end
+      if (app_frame_start) begin
+        app_drop <= app_axis_almost_full;
+      end else if (app_overflow) begin
+        app_drop <= 1'b1;
+      end
+      rx_frames_dropped <= rx_frames_dropped + app_frame_drop + app_overflow;
+    end
+  end
 
-        buffer_axis_tdata_reg <= {IF_COUNT*PORTS_PER_IF*AXIS_DATA_WIDTH{1'b0}};
-        buffer_axis_tkeep_reg <= {IF_COUNT*PORTS_PER_IF*AXIS_KEEP_WIDTH{1'b0}};
-
-        input_axis_tvalid_reg[0] <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-        input_axis_tvalid_reg[1] <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-
-        input_axis_tlast_reg <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-
-        axis_sync_rx_tready_reg <= m_axis_sync_rx_tready;
-      end else begin
-        m_axis_sync_rx_tdata <= {IF_COUNT*PORTS_PER_IF*AXIS_DATA_WIDTH{1'b0}};
-        m_axis_sync_rx_tkeep <= {IF_COUNT*PORTS_PER_IF*AXIS_KEEP_WIDTH{1'b0}};
-        m_axis_sync_rx_tvalid <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-        m_axis_sync_rx_tlast <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-        m_axis_sync_rx_tuser <= {IF_COUNT*PORTS_PER_IF*AXIS_RX_USER_WIDTH{1'b0}};
-
-        if (!valid) begin
-          buffer_axis_tdata_reg <= {IF_COUNT*PORTS_PER_IF*AXIS_DATA_WIDTH{1'b0}};
-          buffer_axis_tkeep_reg <= {IF_COUNT*PORTS_PER_IF*AXIS_KEEP_WIDTH{1'b0}};
-
-          input_axis_tvalid_reg[0] <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-          input_axis_tvalid_reg[1] <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-
-          input_axis_tlast_reg <= {IF_COUNT*PORTS_PER_IF{1'b0}};
-
-          axis_sync_rx_tready_reg <= {IF_COUNT*PORTS_PER_IF{1'b1}};
-        end else begin
-          // header extraction
-          buffer_axis_tdata_reg <= {bypass_axis_tdata_reg, temp_axis_tdata_reg};
-          buffer_axis_tkeep_reg <= {bypass_axis_tkeep_reg, temp_axis_tkeep_reg};
-
-          input_axis_tvalid_reg[0] <= axis_sync_rx_tvalid_reg;
-          input_axis_tvalid_reg[1] <= input_axis_tvalid_reg[0] && !input_axis_tlast_reg;
-
-          input_axis_tlast_reg <= axis_sync_rx_tlast_reg;
-
-          axis_sync_rx_tready_reg <= input_axis_tready_reg;
-        end
+  // The part of the last beat above HEADER_LENGTH is dropped: payloads are
+  // expected to be a multiple of the bus width.
+  always @(posedge clk)
+  begin
+    if (strip_axis_tvalid) begin
+      strip_temp <= rx_axis_tdata[AXIS_DATA_WIDTH-1:HEADER_LENGTH];
+      if (!strip_first) begin
+        app_axis_tdata <= {rx_axis_tdata[HEADER_LENGTH-1:0], strip_temp};
       end
     end
   end
 
-  assign s_axis_sync_rx_tready = axis_sync_rx_tready_reg;
-
   ////----------------------------------------Buffer, CDC and Scaling FIFO----//
   //////////////////////////////////////////////////
+
+  localparam MAX_FRAME_BEATS = 2**13*8/AXIS_DATA_WIDTH;
+
+  // The threshold counts entries of each atomic FIFO. With a wider output,
+  // input beats are spread over RATIO of them, which differ by up to one entry.
+  localparam FIFO_RATIO = (OUTPUT_WIDTH > AXIS_DATA_WIDTH) ? OUTPUT_WIDTH/AXIS_DATA_WIDTH : 1;
+  localparam FIFO_FRAME_THRESHOLD = MAX_FRAME_BEATS/FIFO_RATIO + 2;
 
   wire                       jesd_axis_tready;
   reg                        jesd_axis_tvalid;
   reg  [AXIS_DATA_WIDTH-1:0] jesd_axis_tdata;
+  wire                       jesd_axis_almost_full;
 
   util_axis_fifo_asym #(
     .ASYNC_CLK(1),
@@ -431,7 +455,7 @@ module application_rx #(
     .M_DATA_WIDTH(OUTPUT_WIDTH),
     .M_AXIS_REGISTERED(1),
     .ALMOST_EMPTY_THRESHOLD(0),
-    .ALMOST_FULL_THRESHOLD(0),
+    .ALMOST_FULL_THRESHOLD(FIFO_FRAME_THRESHOLD),
     .TLAST_EN(0),
     .TKEEP_EN(0),
     .REDUCED_FIFO(0)
@@ -459,7 +483,7 @@ module application_rx #(
     .s_axis_empty(),
     .s_axis_almost_empty(),
     .s_axis_full(),
-    .s_axis_almost_full(),
+    .s_axis_almost_full(jesd_axis_almost_full),
     .s_axis_room());
 
   ////----------------------------------------BER----//
@@ -473,7 +497,7 @@ module application_rx #(
 
   always @(posedge clk)
   begin
-    ber_enable <= start_app && ber_test;
+    ber_enable <= rx_enable && ber_test;
   end
 
   ber_tester_rx #(
@@ -498,22 +522,21 @@ module application_rx #(
   always @(*)
   begin
     if (!ber_test) begin
-      jesd_axis_tvalid = input_axis_tvalid_reg[1];
-      jesd_axis_tdata = buffer_axis_tdata_reg;
+      jesd_axis_tvalid = app_axis_tvalid && !app_drop;
+      jesd_axis_tdata = app_axis_tdata;
 
       ber_axis_tvalid = 1'b0;
       ber_axis_tdata = {AXIS_DATA_WIDTH{1'b0}};
-
-      input_axis_tready_reg = jesd_axis_tready;
     end else begin
       jesd_axis_tvalid = 1'b0;
       jesd_axis_tdata = {AXIS_DATA_WIDTH{1'b0}};
 
-      ber_axis_tvalid = input_axis_tvalid_reg[1];
-      ber_axis_tdata = buffer_axis_tdata_reg;
-
-      input_axis_tready_reg = ber_axis_tready;
+      ber_axis_tvalid = app_axis_tvalid && !app_drop;
+      ber_axis_tdata = app_axis_tdata;
     end
   end
+
+  assign app_axis_tready = ber_test ? ber_axis_tready : jesd_axis_tready;
+  assign app_axis_almost_full = ber_test ? 1'b0 : jesd_axis_almost_full;
 
 endmodule

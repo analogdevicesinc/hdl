@@ -105,7 +105,10 @@ module application_regmap #(
   input  wire [31:0]                     out_of_sync_total,
 
   // Sample count per channel
-  output reg  [15:0]                     sample_count
+  output reg  [15:0]                     sample_count,
+
+  output reg                             rx_enable,
+  input  wire [31:0]                     rx_frames_dropped
 );
 
   wire                              up_wreq;
@@ -157,6 +160,7 @@ module application_regmap #(
       insert_bit_error <= 1'b0;
       // Sample count per channel
       sample_count <= 16'd64;
+      rx_enable <= 1'b0;
     end else begin
       up_wack <= up_wreq;
       up_rack <= up_rreq;
@@ -195,6 +199,7 @@ module application_regmap #(
           'h23: insert_bit_error <= up_wdata[0];
           // Sample count per channel
           'h24: sample_count <= up_wdata[15:0];
+          'h25: rx_enable <= up_wdata[0];
           default: ;
         endcase
       end else begin
@@ -247,6 +252,8 @@ module application_regmap #(
           'h23: up_rdata <= {{31{1'b0}}, insert_bit_error};
           // Sample count per channel
           'h24: up_rdata <= {{16{1'b0}}, sample_count};
+          'h25: up_rdata <= {{31{1'b0}}, rx_enable};
+          'h26: up_rdata <= rx_frames_dropped;
           default: up_rdata <= 32'd0;
         endcase
       end else begin

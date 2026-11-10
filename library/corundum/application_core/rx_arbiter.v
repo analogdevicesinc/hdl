@@ -47,7 +47,7 @@ module rx_arbiter #(
   input  wire                         clk,
   input  wire                         rstn,
 
-  input  wire                         start_app,
+  input  wire                         enable,
 
   // header
   input  wire [HEADER_LENGTH-1:0]     header,
@@ -107,7 +107,7 @@ module rx_arbiter #(
       if (state == 1'b0 && input_axis_tvalid && input_axis_tready) begin
         switch <= 1'b0;
         valid <= 1'b0;
-        if (start_app) begin
+        if (enable) begin
           if (header_routing_checklist == header_routing_actual) begin
             switch <= 1'b1;
             if (VALIDATION_EN) begin
