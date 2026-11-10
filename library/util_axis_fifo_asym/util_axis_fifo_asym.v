@@ -547,13 +547,14 @@ module util_axis_fifo_asym #(
       end
 
       assign m_axis_data = m_axis_data_int_s;
-      // if every instance has a valid data, the interface has valid data,
-      // otherwise valid is asserted only if TLAST is asserted
-      if (TLAST_EN) begin
-        assign m_axis_valid_int = (|(m_axis_tlast_int_s & m_axis_valid_int_s)) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
-      end else begin
-        assign m_axis_valid_int = &m_axis_valid_int_s;
-      end
+      // The interface has valid data only when every atomic instance does,
+      // TLAST included: small_slave pads a short packet to the RATIO boundary,
+      // so its last row is always complete, and the atomic instances are only
+      // popped together, when all of them are valid. Each instance
+      // synchronizes its write pointer separately, so lanes of one row can
+      // become valid a cycle apart. Asserting valid on a partial row would
+      // hand out a beat without popping it and send the row twice.
+      assign m_axis_valid_int = &m_axis_valid_int_s;
       assign m_axis_valid = m_axis_valid_int;
       // if one of the atomic instance is empty, m_axis_empty should be asserted
       assign m_axis_empty = |m_axis_empty_int_s;
