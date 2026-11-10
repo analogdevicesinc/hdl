@@ -82,6 +82,29 @@ module util_axis_fifo_asym #(
   localparam A_ALMOST_FULL_THRESHOLD = (REDUCED_FIFO) ? ((ALMOST_FULL_THRESHOLD+RATIO-1)/RATIO) : ALMOST_FULL_THRESHOLD;
   localparam A_ALMOST_EMPTY_THRESHOLD = (REDUCED_FIFO) ? ((ALMOST_EMPTY_THRESHOLD+RATIO-1)/RATIO) : ALMOST_EMPTY_THRESHOLD;
 
+  // Occupancy tracking parameters (used only when TKEEP_EN, see
+  // gen_accurate_level / gen_accurate_room).
+  //   FIFO_CAP: usable depth in narrow-interface words. Each of the RATIO
+  //     atomic FIFOs reports full at (2**A_ADDRESS - 1) entries.
+  //   OUT_MAX: largest value the ADDRESS_WIDTH-bit room/level ports can carry.
+  //     Equal to FIFO_CAP when REDUCED_FIFO=1. When REDUCED_FIFO=0 the
+  //     narrow-side capacity does not fit the ports, and the outputs saturate
+  //     at OUT_MAX.
+  //   CNT_WIDTH: width of the occupancy counters. Before saturation, the
+  //     counter difference can exceed FIFO_CAP (each atomic output register
+  //     holds one entry its read pointer has already released) and can dip
+  //     below 0 (the far count is stale). It must never wrap, or the clamp
+  //     would turn into an over-report:
+  //     - room (sync_gray, same depth as the atomics' own pointer sync):
+  //       stays within [-2*RATIO, FIFO_CAP]
+  //     - level (sync_data): dips by the reads made during one sync_data
+  //       round trip, which depends on the clock ratio, not on parameters
+  //     Three bits above FIFO_CAP give a signed range of at least
+  //     +/-4*(FIFO_CAP+1), covering both with margin.
+  localparam integer FIFO_CAP = RATIO * ((2**A_ADDRESS) - 1);
+  localparam integer OUT_MAX = (FIFO_CAP < (2**ADDRESS_WIDTH) - 1) ? FIFO_CAP : (2**ADDRESS_WIDTH) - 1;
+  localparam CNT_WIDTH = $clog2(FIFO_CAP + 1) + 3;
+
   localparam MEM_WORD = (TKEEP_EN & TLAST_EN) ? (A_WIDTH+A_WIDTH/8+1) :
                         (TKEEP_EN)            ? (A_WIDTH+A_WIDTH/8)   :
                         (TLAST_EN)            ? (A_WIDTH+1)           :
@@ -94,17 +117,9 @@ module util_axis_fifo_asym #(
   reg [$clog2(RATIO)-1:0] s_axis_counter;
   reg [$clog2(RATIO)-1:0] m_axis_counter;
 
-  // FIFO level signals
-  reg                      s_axis_ready_d;
-  reg                      s_axis_valid_d;
-  reg  [$clog2(RATIO):0] word_counter;
-  reg  [$clog2(RATIO):0] num_of_words;
-  reg  [ADDRESS_WIDTH-1:0] s_input_level;
-  reg  [ADDRESS_WIDTH-1:0] s_input_room;
-  reg  [ADDRESS_WIDTH-1:0] s_input_level_next;
-  reg  [ADDRESS_WIDTH-1:0] s_input_room_next;
-  wire [ADDRESS_WIDTH-1:0] m_output_level;
-  wire                     sdi_output_read_sync;
+  // narrow-side room/level registers (driven only when TKEEP_EN)
+  reg [ADDRESS_WIDTH-1:0] m_axis_level_reg;
+  reg [ADDRESS_WIDTH-1:0] s_axis_room_reg;
 
   wire [RATIO-1:0] m_axis_ready_int_s;
   wire [RATIO-1:0] m_axis_valid_int_s;
@@ -223,70 +238,182 @@ module util_axis_fifo_asym #(
     end
   endgenerate
 
-  // write or slave logic
-  generate
+  // ---------------------------------------------------------------------------
+  // Accurate room/level tracking under TKEEP_EN
+  //
+  // Only the narrow interface's metric is replaced. On the wide side one beat
+  // is one atomic-FIFO entry, so the atomic FIFO's own room/level is exact.
+  //
+  // Occupancy is the difference of two free-running counters, one per clock
+  // domain. The far counter's value crosses the clock boundary (never event
+  // pulses), so no count is lost under back-to-back transfers and any lag
+  // corrects itself. The reported metric is a registered, saturating
+  // difference, so the output is a plain register.
+  //
+  //   RATIO_TYPE=1 (wide slave / narrow master): m_axis_level, in output
+  //     words. The write side adds the number of words each wide beat will
+  //     produce; the read side adds 1 per narrow handshake. The write count
+  //     can jump by up to RATIO per beat, so it cannot use a gray
+  //     synchronizer and crosses with sync_data.
+  //   RATIO_TYPE=0 (narrow slave / wide master): s_axis_room, in atomic-FIFO
+  //     slots. Room is memory, so tkeep does not matter: a narrow write takes
+  //     one slot (a TLAST beat is padded to the RATIO boundary and takes
+  //     RATIO-s_axis_counter), a wide read frees RATIO. The read side counts
+  //     wide beats, a +1 counter, so it crosses with sync_gray at the same
+  //     depth as the atomic FIFOs' own read pointer sync.
+  //
+  // The far count is always stale, which only ever makes the result read low:
+  //   level = true level - (words written but not yet in the synced count)
+  //   room  = true room  - (slots read but not yet in the synced count)
+  // Before saturation the difference can still fall below 0 or exceed
+  // FIFO_CAP (see CNT_WIDTH), so the clamp to [0, OUT_MAX] is required.
+  //
+  // The counters reset with their own domain's reset, like the atomic FIFOs'
+  // pointers. As with the atomic FIFOs, s_axis_aresetn and m_axis_aresetn must
+  // be asserted together; they may be released at different times.
+  // ---------------------------------------------------------------------------
+  generate if (TKEEP_EN && RATIO_TYPE) begin : gen_accurate_level
 
+    reg  [$clog2(RATIO):0] word_counter;
+    reg  [$clog2(RATIO):0] num_of_words;
+    reg                    s_axis_ready_d;
+    reg                    s_axis_valid_d;
+    reg  [CNT_WIDTH-1:0]   s_words_wr;
+    reg  [CNT_WIDTH-1:0]   m_words_rd;
+    wire [CNT_WIDTH-1:0]   m_words_rd_next;
+    wire [CNT_WIDTH-1:0]   s_words_wr_m;
+    wire [CNT_WIDTH-1:0]   level_raw;
+    integer j;
+
+    // words this wide beat will produce on the narrow side: one per lane with
+    // any tkeep bit set, or one for an all-null beat that carries TLAST
     always @(posedge s_axis_aclk) begin
       if (!s_axis_aresetn) begin
-        s_axis_ready_d <= 0;
-        s_axis_valid_d <= 0;
+        num_of_words <= 0;
+      end else begin
+        word_counter = 0;
+        for (j = 0; j < RATIO; j = j + 1) begin
+          word_counter = word_counter + (|s_axis_tkeep[A_WIDTH/8*j+:A_WIDTH/8]);
+        end
+        if (TLAST_EN && (word_counter == 0) && s_axis_tlast) begin
+          word_counter = 1;
+        end
+        num_of_words <= word_counter;
+      end
+    end
+
+    // num_of_words lags its beat by one cycle, so it is added on the handshake
+    // delayed by the same cycle
+    always @(posedge s_axis_aclk) begin
+      if (!s_axis_aresetn) begin
+        s_axis_ready_d <= 1'b0;
+        s_axis_valid_d <= 1'b0;
+        s_words_wr <= {CNT_WIDTH{1'b0}};
       end else begin
         s_axis_ready_d <= s_axis_ready;
         s_axis_valid_d <= s_axis_valid;
+        if (s_axis_ready_d && s_axis_valid_d) begin
+          s_words_wr <= s_words_wr + num_of_words;
+        end
       end
     end
 
-    if (RATIO_TYPE) begin : gen_word_counter
-      integer j;
-      always @(posedge s_axis_aclk) begin
-        if (!s_axis_aresetn) begin
-          num_of_words <= 1;
-        end else begin
-          word_counter = 0;
-          for (j = 0; j < RATIO; j = j + 1) begin
-            word_counter = word_counter + (|s_axis_tkeep[M_DATA_WIDTH/8*j+:M_DATA_WIDTH/8]);
-          end
-          num_of_words <= word_counter;
-        end
-      end
-    end else begin : gen_no_word_counter
-      always @(posedge s_axis_aclk) begin
-        if (!s_axis_aresetn) begin
-          num_of_words <= 1;
-        end
+    assign m_words_rd_next = m_words_rd + (m_axis_ready && m_axis_valid);
+
+    always @(posedge m_axis_aclk) begin
+      if (!m_axis_aresetn) begin
+        m_words_rd <= {CNT_WIDTH{1'b0}};
+      end else begin
+        m_words_rd <= m_words_rd_next;
       end
     end
+
+    sync_data #(
+      .NUM_OF_BITS (CNT_WIDTH),
+      .ASYNC_CLK   (ASYNC_CLK)
+    ) i_wr_count_sync (
+      .in_clk   (s_axis_aclk),
+      .in_data  (s_words_wr),
+      .out_clk  (m_axis_aclk),
+      .out_data (s_words_wr_m));
+
+    // Uses the read count including this cycle's handshake, so the registered
+    // level never counts a word that has already left. Signed: below 0 while
+    // the reader has consumed words that the synchronized write count does not
+    // include yet.
+    assign level_raw = s_words_wr_m - m_words_rd_next;
+
+    always @(posedge m_axis_aclk) begin
+      if (!m_axis_aresetn) begin
+        m_axis_level_reg <= {ADDRESS_WIDTH{1'b0}};
+      end else begin
+        m_axis_level_reg <= level_raw[CNT_WIDTH-1] ? {ADDRESS_WIDTH{1'b0}} :
+                            (level_raw > OUT_MAX)  ? OUT_MAX :
+                                                     level_raw;
+      end
+    end
+
+  end else if (TKEEP_EN) begin : gen_accurate_room
+
+    localparam BEAT_WIDTH = CNT_WIDTH - $clog2(RATIO);
+
+    reg  [CNT_WIDTH-1:0]  s_slots_wr;
+    wire [CNT_WIDTH-1:0]  s_slots_wr_next;
+    reg  [BEAT_WIDTH-1:0] m_beats_rd;
+    wire [BEAT_WIDTH-1:0] m_beats_rd_s;
+    wire [CNT_WIDTH-1:0]  room_raw;
+
+    assign s_slots_wr_next = (s_axis_ready && s_axis_valid) ?
+                               s_slots_wr + (s_axis_tlast ? (RATIO - s_axis_counter) : 1) :
+                               s_slots_wr;
 
     always @(posedge s_axis_aclk) begin
       if (!s_axis_aresetn) begin
-        s_input_level <= 0;
-        s_input_room  <= RATIO * ({A_ADDRESS{1'b1}});
+        s_slots_wr <= {CNT_WIDTH{1'b0}};
       end else begin
-        s_input_room <= s_input_room_next;
-        s_input_level <= s_input_level_next;
+        s_slots_wr <= s_slots_wr_next;
       end
     end
 
-    // s_input_level: used when slave is wider than master (RATIO_TYPE=1).
-    //   Increments by num_of_words on each wide input write (slave handshake),
-    //   decrements by 1 on each narrow output read (master handshake).
-    // s_input_room: used when slave is narrower than master (RATIO_TYPE=0).
-    //   Decrements by 1 on each narrow input write (slave handshake),
-    //   increments by RATIO on each wide output read (master handshake),
-    //   since one wide read drains all RATIO atomic FIFOs, freeing RATIO
-    //   narrow input slots.
-    always @(*) begin
-      s_input_level_next = s_input_level;
-      s_input_room_next  = s_input_room;
-      if (s_axis_ready_d && s_axis_valid_d) begin
-        s_input_level_next = s_input_level_next + num_of_words;
-        s_input_room_next  = s_input_room_next  - 1;
-      end
-      if (sdi_output_read_sync) begin
-        s_input_level_next = s_input_level_next - 1;
-        s_input_room_next  = s_input_room_next  + RATIO;
+    always @(posedge m_axis_aclk) begin
+      if (!m_axis_aresetn) begin
+        m_beats_rd <= {BEAT_WIDTH{1'b0}};
+      end else if (m_axis_ready && m_axis_valid) begin
+        m_beats_rd <= m_beats_rd + 1'b1;
       end
     end
+
+    sync_gray #(
+      .DATA_WIDTH (BEAT_WIDTH),
+      .ASYNC_CLK  (ASYNC_CLK)
+    ) i_rd_count_sync (
+      .in_clk     (m_axis_aclk),
+      .in_resetn  (m_axis_aresetn),
+      .in_count   (m_beats_rd),
+      .out_resetn (s_axis_aresetn),
+      .out_clk    (s_axis_aclk),
+      .out_count  (m_beats_rd_s));
+
+    // Uses the write count including this cycle's handshake, so the registered
+    // room never offers a slot that has just been taken. Signed: slightly below
+    // 0 while the atomic output registers hold entries whose slots the read
+    // pointers have already released.
+    assign room_raw = FIFO_CAP + {m_beats_rd_s, {$clog2(RATIO){1'b0}}} - s_slots_wr_next;
+
+    always @(posedge s_axis_aclk) begin
+      if (!s_axis_aresetn) begin
+        s_axis_room_reg <= OUT_MAX;
+      end else begin
+        s_axis_room_reg <= room_raw[CNT_WIDTH-1] ? {ADDRESS_WIDTH{1'b0}} :
+                           (room_raw > OUT_MAX)  ? OUT_MAX :
+                                                   room_raw;
+      end
+    end
+
+  end endgenerate
+
+  // write or slave logic
+  generate
 
     if (RATIO_TYPE) begin : big_slave
 
@@ -322,7 +449,7 @@ module util_axis_fifo_asym #(
       // if one of the atomic instance is full, s_axis_full is asserted
       assign s_axis_full = |s_axis_full_int_s;
       assign s_axis_almost_full = |s_axis_almost_full_int_s;
-      // the FIFO has the same room as the atomic FIFO
+      // slave is the wide side: the FIFO has the same room as the atomic FIFO
       assign s_axis_room = s_axis_room_int_s[A_ADDRESS-1:0];
 
     end else begin : small_slave
@@ -355,15 +482,13 @@ module util_axis_fifo_asym #(
       assign s_axis_full = s_axis_full_int_s[RATIO-1];
 
       // FIFO room behavior relies on the TKEEP_EN parameter
-      //    When TKEEP_EN == 0, the FIFO has the same room as
-      //    the last atomic instance multiplied by RATIO. The
-      //    value of the room is only updated every RATIO reads.
-      //    s_axis_room == {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS], {$clog2(RATIO){1'b1}}}
-      //
-      //    When TKEEP_EN == 1, it is using a counter whose decrement
-      //    relies on the tkeep.
-      //    s_axis_room == s_input_room
-      assign s_axis_room = (TKEEP_EN) ? s_input_room : {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS], {$clog2(RATIO){1'b1}}};
+      //    When TKEEP_EN == 0, the FIFO reports the room of the last atomic
+      //    instance multiplied by RATIO; it is only updated every RATIO reads
+      //    and is not the exact room value.
+      //    When TKEEP_EN == 1, s_axis_room is the free slot count from
+      //    s_axis_room_reg. It lags the read side by a few cycles and only
+      //    ever reads low (see gen_accurate_room).
+      assign s_axis_room = (TKEEP_EN) ? s_axis_room_reg : {s_axis_room_int_s[A_ADDRESS*(RATIO-1)+:A_ADDRESS], {$clog2(RATIO){1'b1}}};
 
     end
 
@@ -398,26 +523,15 @@ module util_axis_fifo_asym #(
       assign m_axis_tlast = m_axis_tlast_int_s >> m_axis_counter;
 
       // FIFO level behavior relies on the TKEEP_EN parameter
-      //    When TKEEP_EN == 0, the FIFO has the same level as
-      //    the last atomic instance multiplied by RATIO. The
-      //    value of the level is only updated every RATIO reads.
-      //    m_axis_level == {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}}
-      //
-      //    When TKEEP_EN == 1, it is using a counter whose increment
-      //    relies on the tkeep.
-      //    m_axis_level == m_output_level
-      assign m_axis_level = (TKEEP_EN) ? m_output_level : {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}};
+      //    When TKEEP_EN == 0, the FIFO reports the level of the last atomic
+      //    instance multiplied by RATIO; it is only updated every RATIO reads
+      //    and is not the exact level value.
+      //    When TKEEP_EN == 1, m_axis_level is the output word count from
+      //    m_axis_level_reg. It lags the write side by one sync_data round
+      //    trip and only ever reads low (see gen_accurate_level).
+      assign m_axis_level = (TKEEP_EN) ? m_axis_level_reg : {m_axis_level_int_s[A_ADDRESS-1:0], {$clog2(RATIO){1'b0}}};
       assign m_axis_almost_empty = m_axis_almost_empty_int_s[RATIO-1];
       assign m_axis_empty = m_axis_empty_int_s[RATIO-1];
-
-      sync_data #(
-        .NUM_OF_BITS  (ADDRESS_WIDTH),
-        .ASYNC_CLK    (ASYNC_CLK)
-      ) i_sdi_level_sync (
-        .in_clk   (s_axis_aclk),
-        .in_data  (s_input_level),
-        .out_clk  (m_axis_aclk),
-        .out_data (m_output_level));
 
     end else begin : big_master
 
@@ -445,21 +559,12 @@ module util_axis_fifo_asym #(
       assign m_axis_empty = |m_axis_empty_int_s;
       assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
 
-      // the FIFO has the same room as the atomic FIFO
+      // master is the wide side: the FIFO has the same level as the atomic FIFO
       assign m_axis_level = m_axis_level_int_s[A_ADDRESS-1:0];
 
       assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
 
     end
-
-    sync_event #(
-      .NUM_OF_EVENTS (1),
-      .ASYNC_CLK (ASYNC_CLK)
-    ) i_sdi_output_read_sync (
-      .in_clk    (m_axis_aclk),
-      .in_event  (m_axis_ready & m_axis_valid),
-      .out_clk   (s_axis_aclk),
-      .out_event (sdi_output_read_sync));
 
   endgenerate
 
