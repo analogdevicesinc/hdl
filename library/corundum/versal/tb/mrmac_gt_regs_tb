@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SOURCE="mrmac_gt_regs_tb.v ../mrmac_gt_regs.v ../../../util_cdc/sync_bits.v ../../../util_cdc/sync_event.v ../../../util_cdc/sync_data.v"
+
+cd `dirname $0`
+source ../../../common/tb/run_tb.sh

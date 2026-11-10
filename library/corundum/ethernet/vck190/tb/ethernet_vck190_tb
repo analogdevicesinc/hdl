@@ -1,0 +1,15 @@
+#!/bin/bash
+
+C=../../../../../../corundum/fpga
+V=../../../versal
+SOURCE="ethernet_vck190_tb.v ../ethernet_vck190.v"
+SOURCE+=" $C/common/rtl/mqnic_port_map_mac_axis.v $C/common/rtl/rb_drp.v"
+SOURCE+=" $V/mrmac_gty_wrapper.v $V/mrmac_tx_adapt.v $V/mrmac_rx_adapt.v"
+SOURCE+=" $V/mrmac_ptp_ts_cvt.v $V/mrmac_ptp_sync.v"
+SOURCE+=" $C/common/rtl/cmac_pad.v $C/common/rtl/mac_ts_insert.v"
+SOURCE+=" $C/lib/axis/rtl/axis_adapter.v $C/lib/axis/rtl/axis_fifo.v"
+SOURCE+=" $C/lib/eth/lib/axis/rtl/sync_reset.v"
+SOURCE+=" -i $V/tb"
+
+cd `dirname $0`
+source ../../../../common/tb/run_tb.sh
