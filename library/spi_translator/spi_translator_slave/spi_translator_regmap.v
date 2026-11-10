@@ -56,14 +56,17 @@
  *
  *  0x0d GPIO_NUM_L  R    number of GPIOs, low byte; 0 = none
  *  0x0e GPIO_NUM_H  R    number of GPIOs, high byte
+ *  0x0f CS_NUM      R    number of downstream chip selects (NUM_OF_CS),
+ *                        spread over ceil(CS_NUM / 8) engines
  *
- * 0x0f is free and reads 0. The GPIOs themselves are not in the register map:
+ * The GPIOs themselves are not in the register map:
  * they are written and read one pin at a time by the GPIO instruction, see
  * spi_translator_gpio.v.
  */
 
 module spi_translator_regmap #(
   parameter [7:0] PERIPHERAL_ID = 8'h00,
+  parameter NUM_OF_CS = 4,
   parameter NUM_OF_GPIO = 8
 ) (
   input                       clk,
@@ -87,6 +90,7 @@ module spi_translator_regmap #(
   localparam [7:0] VERSION_PATCH = 8'h00;
 
   localparam [15:0] GPIO_NUM = NUM_OF_GPIO;
+  localparam [7:0]  CS_NUM = NUM_OF_CS;
 
   reg   [7:0]                 scratch = 8'h00;
 
@@ -115,6 +119,7 @@ module spi_translator_regmap #(
       8'h0c:   rd_data = sdi_level[15:8];
       8'h0d:   rd_data = GPIO_NUM[7:0];
       8'h0e:   rd_data = GPIO_NUM[15:8];
+      8'h0f:   rd_data = CS_NUM;
       default: rd_data = 8'h00;
     endcase
   end

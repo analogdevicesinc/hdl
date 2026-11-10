@@ -36,9 +36,10 @@
 `timescale 1ns/100ps
 
 /*
- * spi_translator driven by an upstream mode 0 SPI master that sends serialized
- * SPI Engine instruction streams, in front of a stock spi_engine_execution with
- * four behavioural targets in modes 0, 3, 1 and 2. Covers posted writes per
+ * spi_translator_slave driven by an upstream mode 0 SPI master that sends serialized
+ * SPI Engine instruction streams, in front of spi_translator_interconnect and
+ * one stock spi_engine_execution with four behavioural targets in modes 0, 3,
+ * 1 and 2. Covers posted writes per
  * target, full-duplex and read-only transfers, a transfer split over two
  * frames with the target held selected, frame rejection (bad instruction, two
  * targets selected, truncated, no room in the FIFOs), frames queuing behind a
@@ -74,7 +75,7 @@ module spi_translator_tb;
   `define BR_CTRL_R(a)    (16'hA000 | (((a) & 16'h000f) << 8))
   `define BR_GPIO_W(s, v, i) (16'hB000 | ((s) << 10) | ((v) << 9) | (i))
   `define BR_GPIO_R(i)    (16'hB800 | (i))
-  `define BR_SELECT(e)    (16'hC000 | (((e) & 16'h000f) << 8))
+  `define BR_SELECT(e)    (16'hC000 | ((e) & 16'h00ff))
   `define BR_FETCH(n)     (16'hD000 | ((n) - 1))
   `define BR_FLUSH        16'hE000
   `define BR_CHECK        16'hF000
@@ -107,6 +108,20 @@ module spi_translator_tb;
   wire  [7:0]   sync_data;
   wire          spi_resetn;
 
+  // translator side of the interconnect
+  wire          t_cmd_ready;
+  wire          t_cmd_valid;
+  wire  [15:0]  t_cmd;
+  wire          t_sdo_ready;
+  wire          t_sdo_valid;
+  wire  [7:0]   t_sdo_data;
+  wire          t_sdi_ready;
+  wire          t_sdi_valid;
+  wire  [7:0]   t_sdi_data;
+  wire          t_sync_ready;
+  wire          t_sync_valid;
+  wire  [7:0]   t_sync_data;
+
   // GPIO pins: driven by the bridge when an output, by gpio_ext otherwise
   localparam    NG = 12;
   reg   [NG-1:0] gpio_ext = 12'ha5c;
@@ -128,7 +143,7 @@ module spi_translator_tb;
 
   // reset state like regulator controls: pin 1 an active-low enable held off
   // (high), pin 11 a power-good input, all others enables driven low (off)
-  spi_translator #(
+  spi_translator_slave #(
     .UP_EARLY_LAUNCH (EARLY_LAUNCH),
     .NUM_OF_GPIO (NG),
     .GPIO_DEFAULT_DIR (12'h800),
@@ -143,22 +158,52 @@ module spi_translator_tb;
     .sdo (up_miso),
     .sdi_t (up_miso_t),
     .cs (up_cs),
-    .cmd_ready (cmd_ready),
-    .cmd_valid (cmd_valid),
-    .cmd (cmd),
-    .sdo_data_ready (sdo_ready),
-    .sdo_data_valid (sdo_valid),
-    .sdo_data (sdo_data),
-    .sdi_data_ready (sdi_ready),
-    .sdi_data_valid (sdi_valid),
-    .sdi_data (sdi_data),
-    .sync_ready (sync_ready),
-    .sync_valid (sync_valid),
-    .sync_data (sync_data),
+    .cmd_ready (t_cmd_ready),
+    .cmd_valid (t_cmd_valid),
+    .cmd (t_cmd),
+    .sdo_data_ready (t_sdo_ready),
+    .sdo_data_valid (t_sdo_valid),
+    .sdo_data (t_sdo_data),
+    .sdi_data_ready (t_sdi_ready),
+    .sdi_data_valid (t_sdi_valid),
+    .sdi_data (t_sdi_data),
+    .sync_ready (t_sync_ready),
+    .sync_valid (t_sync_valid),
+    .sync_data (t_sync_data),
     .spi_resetn (spi_resetn),
     .gpio_i (gpio_pin),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t));
+
+  spi_translator_interconnect #(
+    .NUM_OF_ENGINES (1)
+  ) i_interconnect (
+    .clk (clk),
+    .resetn (spi_resetn),
+    .s_cmd_ready (t_cmd_ready),
+    .s_cmd_valid (t_cmd_valid),
+    .s_cmd_data (t_cmd),
+    .s_sdo_ready (t_sdo_ready),
+    .s_sdo_valid (t_sdo_valid),
+    .s_sdo_data (t_sdo_data),
+    .s_sdi_ready (t_sdi_ready),
+    .s_sdi_valid (t_sdi_valid),
+    .s_sdi_data (t_sdi_data),
+    .s_sync_ready (t_sync_ready),
+    .s_sync_valid (t_sync_valid),
+    .s_sync_data (t_sync_data),
+    .m0_cmd_ready (cmd_ready),
+    .m0_cmd_valid (cmd_valid),
+    .m0_cmd_data (cmd),
+    .m0_sdo_ready (sdo_ready),
+    .m0_sdo_valid (sdo_valid),
+    .m0_sdo_data (sdo_data),
+    .m0_sdi_ready (sdi_ready),
+    .m0_sdi_valid (sdi_valid),
+    .m0_sdi_data (sdi_data),
+    .m0_sync_ready (sync_ready),
+    .m0_sync_valid (sync_valid),
+    .m0_sync_data (sync_data));
 
   spi_engine_execution #(
     .NUM_OF_CS (4),
@@ -376,7 +421,7 @@ module spi_translator_tb;
 
     // posted writes, one frame per target, each in that target's own mode
 
-    test_count = 0;
+    test_count = 1;
     write_target(2'd0, 2'd0, 8'h02, 3, 8'h10);
     write_target(2'd1, 2'd3, 8'h03, 3, 8'h11);
     write_target(2'd2, 2'd1, 8'h02, 3, 8'h12);
@@ -391,27 +436,28 @@ module spi_translator_tb;
 
     // posted writes leave only their SYNC id, nothing to FETCH
 
-    test_count = test_count+1;
+    test_count = 2;
     ctrl_r(8'h06, v); check("SYNC_ID after writes", v, 8'h13);
     ctrl_r(8'h0b, v); check("SDI_LEVEL after writes", v, 8'h00);
     ctrl_r(8'h05, s); check("no RESP_RDY without SDI data", s[6], 1'b0);
 
     // register reads
 
-    test_count = test_count+1;
+    test_count = 3;
     ctrl_r(8'h05, s);
     check("idle status", s, 8'h07);       // all FIFOs empty: credit 7
     ctrl_r(8'h00, v); check("VERSION_MAJOR", v, 8'h01);
     ctrl_r(8'h01, v); check("VERSION_MINOR", v, 8'h00);
     ctrl_r(8'h02, v); check("VERSION_PATCH", v, 8'h00);
     ctrl_r(8'h03, v); check("PERIPHERAL_ID", v, 8'h00);
+    ctrl_r(8'h0f, v); check("CS_NUM", v, 8'd4);
     ctrl_w(8'h04, 8'h3c);
     ctrl_r(8'h04, v); check("SCRATCH", v, 8'h3c);
     ctrl_w(8'h02, 8'hc3);                 // read-only, must not reach SCRATCH
     ctrl_r(8'h04, v); check("SCRATCH after RO write", v, 8'h3c);
     ctrl_r(8'h09, v); check("SDO_ROOM_L", v, 8'd32);
 
-    test_count = test_count+1;
+    test_count = 4;
     begin_frame();                        // chained reads, one per 2 bytes
     put16(`BR_CTRL_R(8'h00)); put16(`BR_CTRL_R(8'h04)); put16(`BR_CTRL_R(8'h0e));
     put16(`BR_NOP);
@@ -420,7 +466,7 @@ module spi_translator_tb;
     check("chained SCRATCH", rxb[4], 8'h3c);
     check("chained unused address", rxb[6], 8'h00);
 
-    test_count = test_count+1;
+    test_count = 5;
     c3 = d3.count;
     begin_frame();                        // an error shows in the status
     put16(`CS(8'hf7)); put16(`WR(2)); put8(8'haa);
@@ -434,7 +480,7 @@ module spi_translator_tb;
     // a transfer split over two frames: the first ends with target 3 still
     // selected, the second continues and releases it
 
-    test_count = test_count+1;
+    test_count = 6;
     c3 = d3.count;
     cs3_releases = 0;
     begin_frame();
@@ -457,7 +503,7 @@ module spi_translator_tb;
     // CTRL_W acts at once: several per frame, and a CTRL_R after one reads
     // the new value; replies land at rxb[4] and rxb[8]
 
-    test_count = test_count+1;
+    test_count = 7;
     begin_frame();
     put16(`BR_CTRL_W(8'h04, 8'h11)); put16(`BR_CTRL_R(8'h04));
     put16(`BR_CTRL_W(8'h04, 8'h22)); put16(`BR_CTRL_R(8'h04)); put16(`BR_NOP);
@@ -468,7 +514,7 @@ module spi_translator_tb;
 
     // a CTRL_W stays applied when the rest of its frame is rejected
 
-    test_count = test_count+1;
+    test_count = 8;
     c3 = d3.count;
     begin_frame();
     put16(`BR_CTRL_W(8'h04, 8'h77));
@@ -481,7 +527,7 @@ module spi_translator_tb;
     // FLUSH in the middle of a frame drops what came before it, keeps what
     // follows, and clears err; the engine restarts from its reset settings
 
-    test_count = test_count+1;
+    test_count = 9;
     c3 = d3.count;
     cs3_releases = 0;
     begin_frame();
@@ -502,7 +548,7 @@ module spi_translator_tb;
 
     // DIR: 0 = output, 1 = input; replies are {DIR, OUT, IN}
 
-    test_count = test_count+1;
+    test_count = 10;
     check("reset gpio_t from GPIO_DEFAULT_DIR", gpio_t, 12'h800);
     check("reset gpio_o from GPIO_DEFAULT_OUT", gpio_o, 12'h002);
     ctrl_r(8'h0d, v); check("GPIO_NUM_L", v, NG);
@@ -515,7 +561,7 @@ module spi_translator_tb;
     check("GPIO 1 enable held high", rxb[5], 8'h03);
     check("GPIO 2 enable held low", rxb[7], 8'h00);
 
-    test_count = test_count+1;
+    test_count = 11;
     begin_frame();                        // GPIO 2 to input, 0 high, 1 low
     put16(`BR_GPIO_W(1, 1, 8'd2)); put16(`BR_GPIO_W(0, 1, 8'd0));
     put16(`BR_GPIO_W(0, 0, 8'd1));
@@ -524,7 +570,7 @@ module spi_translator_tb;
     check("gpio_o", gpio_o, 12'h001);
     check("GPIO writes accepted", err, 3'h0);
 
-    test_count = test_count+1;
+    test_count = 12;
     begin_frame();                        // chained reads: 0, 11, 2
     put16(`BR_GPIO_R(8'd0)); put16(`BR_GPIO_R(8'd11)); put16(`BR_GPIO_R(8'd2));
     put16(`BR_NOP);
@@ -533,14 +579,14 @@ module spi_translator_tb;
     check("GPIO 11 {DIR, OUT, IN}", rxb[5], 8'h05);
     check("GPIO 2 {DIR, OUT, IN}", rxb[7], 8'h05);    // now input, ext bit 2 is 1
 
-    test_count = test_count+1;
+    test_count = 13;
     begin_frame();                        // beyond NUM_OF_GPIO: ignored, reads 0
     put16(`BR_GPIO_W(1, 1, 8'd20)); put16(`BR_GPIO_R(8'd20)); put16(`BR_NOP);
     send_frame();
     check("out of range reads 0", rxb[5], 8'h00);
     check("out of range write ignored", gpio_t, 12'h804);
 
-    test_count = test_count+1;
+    test_count = 14;
     begin_frame();                        // reserved GPIO write bit: bad instruction
     put16(16'hB301);                      // would set GPIO 1 high
     send_frame();
@@ -548,18 +594,24 @@ module spi_translator_tb;
     check("rejected GPIO write not applied", gpio_o, 12'h001);
     begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
-    test_count = test_count+1;
+    test_count = 15;
     begin_frame();                        // reserved GPIO read bits: bad instruction
     put16(16'hB901); put16(`BR_NOP);
     send_frame();
     check("reserved GPIO read bits", err, 3'h1);
     begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
-    // SELECT and CHECK are not implemented yet: rejected as bad instructions
+    // one engine: SELECT 0 is accepted and changes nothing, SELECT 1 names a
+    // missing engine; CHECK is not implemented yet
 
-    test_count = test_count+1;
+    test_count = 16;
+    begin_frame(); put16(`BR_SELECT(0)); send_frame(); wait_idle();
+    check("SELECT 0 accepted", err, 3'h0);
     begin_frame(); put16(`BR_SELECT(1)); send_frame();
-    check("SELECT rejected", err, 3'h1);
+    check("SELECT missing engine rejected", err, 3'h1);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+    begin_frame(); put16(16'hC100); send_frame();
+    check("SELECT reserved high nibble", err, 3'h1);
     begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
     begin_frame(); put16(`BR_CHECK); send_frame();
     check("CHECK rejected", err, 3'h1);
@@ -567,7 +619,7 @@ module spi_translator_tb;
 
     // FETCH: a rejected FETCH frame returns the data but leaves it queued
 
-    test_count = test_count+1;
+    test_count = 17;
     c3 = d3.count;
     begin_frame();
     put16(`CFG(2'd2)); put16(`PRESCALE(8'h04));   // engine reset by the FLUSH above
@@ -585,13 +637,13 @@ module spi_translator_tb;
     ctrl_r(8'h0b, v); check("SDI_LEVEL released", v, 8'd0);
     begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
-    test_count = test_count+1;
+    test_count = 18;
     fetch(2, 1'b0);                       // empty FIFO pads with zeros
     check("empty FETCH", {rep[0], rep[1]}, 16'h0000);
 
     // full-duplex read on target 1 (mode 3): wait for the SYNC id, then FETCH
 
-    test_count = test_count+1;
+    test_count = 19;
     begin_frame();
     put16(`CFG(2'd3));
     put16(`PRESCALE(8'h03));
@@ -609,7 +661,7 @@ module spi_translator_tb;
 
     // read-only transfer on target 0: no SDO bytes follow the instruction
 
-    test_count = test_count+1;
+    test_count = 20;
     begin_frame();
     put16(`CFG(2'd0));
     put16(`PRESCALE(8'h02));
@@ -629,7 +681,7 @@ module spi_translator_tb;
 
     // rejected frames: nothing reaches target 2, sticky err bit set
 
-    test_count = test_count+1;
+    test_count = 21;
     c2 = d2.count;
 
     begin_frame();                        // reserved instruction class 101
@@ -652,6 +704,13 @@ module spi_translator_tb;
     check("err after two targets", err, 3'h1);
     begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
+    begin_frame();                        // target 4: the engine has 4 CS
+    put16(`CS(8'hef)); put16(`WR(1)); put8(8'hee); put16(`CS(8'hff));
+    send_frame();
+    wait_idle();
+    check("missing target rejected", err, 3'h1);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+
     begin_frame();                        // 2 of 3 SDO bytes
     put16(`CS(8'hfb)); put16(`WR(3)); put8(8'h01); put8(8'h02);
     send_frame();
@@ -671,7 +730,7 @@ module spi_translator_tb;
     // queuing: frames are committed behind a slow one while it executes;
     // a frame that no longer fits in the 32-byte SDO FIFO is rejected whole
 
-    test_count = test_count+1;
+    test_count = 22;
     begin_frame();
     put16(`CFG(2'd0)); put16(`PRESCALE(8'hff));
     put16(`CS(8'hfe)); put16(`WR(12)); put_data(12, 8'h77, 8'h00); put16(`CS(8'hff));
@@ -692,7 +751,7 @@ module spi_translator_tb;
 
     // FLUSH in the middle of a slow write releases the target
 
-    test_count = test_count+1;
+    test_count = 23;
     begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
     begin_frame();
     put16(`PRESCALE(8'hff));
