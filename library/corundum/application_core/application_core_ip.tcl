@@ -36,6 +36,7 @@ adi_ip_files application_core [list \
   "$ad_hdl_dir/../corundum/fpga/lib/eth/rtl/ptp_td_leaf.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
+  "application_core_async_reg.xdc" \
   "application_core_constr.ttcl" \
   "$ad_hdl_dir/library/common/ad_mem.v" \
   "$ad_hdl_dir/library/util_cdc/sync_gray.v" \

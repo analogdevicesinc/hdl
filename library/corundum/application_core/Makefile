@@ -34,6 +34,7 @@ GENERIC_DEPS += ../../common/up_axi.v
 EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/ptp_td_leaf.v
 
 XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc
+XILINX_DEPS += application_core_async_reg.xdc
 XILINX_DEPS += application_core_constr.ttcl
 
 XILINX_DEPS += ../interfaces/if_ptp.xml

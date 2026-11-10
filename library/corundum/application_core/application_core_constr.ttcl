@@ -8,10 +8,7 @@
 <: setFileName [ttcl_add $ComponentName "_constr"] :>
 <: setFileExtension ".xdc" :>
 <: setFileProcessingOrder late :>
-
-set_property ASYNC_REG TRUE \
-  [get_cells -hier {*cdc_sync_stage1_reg*}] \
-  [get_cells -hier {*cdc_sync_stage2_reg*}]
+<: setFileUsedIn { implementation } :>
 
 # get the base clocks into groups
 set corundum_clk_ports_base {clk}
