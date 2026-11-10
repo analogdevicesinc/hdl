@@ -226,12 +226,12 @@ module jesd204_rx #(
     end
   end
 
-  assign all_buffer_ready_n = |(buffer_ready_n & ~cfg_lanes_disable);
+  assign all_buffer_ready_n = |(buffer_ready_n);
 
-  assign all_buffer_ready_n_1 = |(buffer_ready_n[QUARTER_NO_OF_LANES-1:0] & ~cfg_lanes_disable[QUARTER_NO_OF_LANES-1:0]);
-  assign all_buffer_ready_n_2 = |(buffer_ready_n[HALF_NO_OF_LANES-1:QUARTER_NO_OF_LANES] & ~cfg_lanes_disable[HALF_NO_OF_LANES-1:QUARTER_NO_OF_LANES]);
-  assign all_buffer_ready_n_3 = |(buffer_ready_n[HALF_NO_OF_LANES+QUARTER_NO_OF_LANES-1:HALF_NO_OF_LANES] & ~cfg_lanes_disable[HALF_NO_OF_LANES+QUARTER_NO_OF_LANES-1:HALF_NO_OF_LANES]);
-  assign all_buffer_ready_n_4 = |(buffer_ready_n[NUM_LANES-1:HALF_NO_OF_LANES+QUARTER_NO_OF_LANES] & ~cfg_lanes_disable[NUM_LANES-1:HALF_NO_OF_LANES+QUARTER_NO_OF_LANES]);
+  assign all_buffer_ready_n_1 = |(buffer_ready_n[QUARTER_NO_OF_LANES-1:0]);
+  assign all_buffer_ready_n_2 = |(buffer_ready_n[HALF_NO_OF_LANES-1:QUARTER_NO_OF_LANES]);
+  assign all_buffer_ready_n_3 = |(buffer_ready_n[HALF_NO_OF_LANES+QUARTER_NO_OF_LANES-1:HALF_NO_OF_LANES]);
+  assign all_buffer_ready_n_4 = |(buffer_ready_n[NUM_LANES-1:HALF_NO_OF_LANES+QUARTER_NO_OF_LANES]);
 
   sync_bits #(
     .NUM_OF_BITS (1),
@@ -428,7 +428,9 @@ module jesd204_rx #(
           .status_ifs_ready(ifs_ready[i]),
           .status_frame_align(frame_align[3*i+2:3*i]),
 
-          .status_frame_align_err_cnt(status_lane_frame_align_err_cnt[8*i+7:8*i]));
+          .status_frame_align_err_cnt(status_lane_frame_align_err_cnt[8*i+7:8*i]),
+
+          .cfg_lane_disable(cfg_lanes_disable[i]));
 
         // Channel 0 output pipeline also registers the eof_reset and rx_valid_s signals.
         // Since there is only one instance of them to be used on the module output, there
@@ -703,7 +705,9 @@ module jesd204_rx #(
           .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
 
           .status_lane_emb_state(status_lane_emb_state[3*i+2:3*i]),
-          .status_lane_skew(status_lane_skew));
+          .status_lane_skew(status_lane_skew),
+
+          .cfg_lane_disable(cfg_lanes_disable[i]));
 
         // Channel 0 output pipeline also registers the eof_reset and rx_valid_s signals.
         // Since there is only one instance of them to be used on the module output, there

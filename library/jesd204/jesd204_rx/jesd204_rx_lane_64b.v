@@ -87,7 +87,8 @@ module jesd204_rx_lane_64b #(
   output     [31:0]                      status_err_statistics_cnt,
 
   output     [2:0]                       status_lane_emb_state,
-  output reg [7:0]                       status_lane_skew
+  output reg [7:0]                       status_lane_skew,
+  input                                  cfg_lane_disable
 );
 
   reg  [11:0] crc12_calculated_prev;
@@ -335,21 +336,25 @@ module jesd204_rx_lane_64b #(
   end
 
   always @(posedge clk) begin
-    if (reset | ~emb_lock_r | (fec_en & ~fec_data_out_valid)) begin
-      buffer_ready_n <= 1'b1;
+    if (cfg_lane_disable == 1'b1) begin
+      buffer_ready_n <= 1'b0;
     end else begin
-      // FEC data is delayed by 2 cycles
-      if(fec_en) begin
-        if(buffer_not_ready_r[2]) begin
-          buffer_ready_n <= 1'b1;
-        end else if(buffer_ready_r[2]) begin
-          buffer_ready_n <= 1'b0;
-        end
+      if (reset | ~emb_lock_r | (fec_en & ~fec_data_out_valid)) begin
+        buffer_ready_n <= 1'b1;
       end else begin
-        if(buffer_not_ready_next) begin
-          buffer_ready_n <= 1'b1;
-        end else if(buffer_ready_next) begin
-          buffer_ready_n <= 1'b0;
+        // FEC data is delayed by 2 cycles
+        if(fec_en) begin
+          if(buffer_not_ready_r[2]) begin
+            buffer_ready_n <= 1'b1;
+          end else if(buffer_ready_r[2]) begin
+            buffer_ready_n <= 1'b0;
+          end
+        end else begin
+          if(buffer_not_ready_next) begin
+            buffer_ready_n <= 1'b1;
+          end else if(buffer_ready_next) begin
+            buffer_ready_n <= 1'b0;
+          end
         end
       end
     end

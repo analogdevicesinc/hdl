@@ -59,62 +59,71 @@ module jesd204_rx_lane #(
   parameter ENABLE_CHAR_REPLACE = 0,
   parameter ASYNC_CLK = 0
 ) (
-  input clk,
-  input reset,
+  input                                  clk,
+  input                                  reset,
 
-  input device_clk,
-  input device_reset,
+  input                                  device_clk,
+  input                                  device_reset,
 
-  input [DATA_PATH_WIDTH*8-1:0] phy_data,
-  input [DATA_PATH_WIDTH-1:0] phy_charisk,
-  input [DATA_PATH_WIDTH-1:0] phy_notintable,
-  input [DATA_PATH_WIDTH-1:0] phy_disperr,
+  input      [DATA_PATH_WIDTH*8-1:0]     phy_data,
+  input      [DATA_PATH_WIDTH-1:0]       phy_charisk,
+  input      [DATA_PATH_WIDTH-1:0]       phy_notintable,
+  input      [DATA_PATH_WIDTH-1:0]       phy_disperr,
 
-  input cgs_reset,
-  output cgs_ready,
+  input                                  cgs_reset,
+  output                                 cgs_ready,
 
-  input ifs_reset,
+  input                                  ifs_reset,
 
-  output [TPL_DATA_PATH_WIDTH*8-1:0] rx_data,
+  output     [TPL_DATA_PATH_WIDTH*8-1:0] rx_data,
 
-  output buffer_ready_n,
-  input buffer_release_n,
+  output                                 buffer_ready_n,
+  input                                  buffer_release_n,
 
-  input [9:0] cfg_octets_per_multiframe,
-  input [7:0] cfg_octets_per_frame,
-  input cfg_disable_char_replacement,
-  input cfg_disable_scrambler,
+  input      [9:0]                       cfg_octets_per_multiframe,
+  input      [7:0]                       cfg_octets_per_frame,
+  input                                  cfg_disable_char_replacement,
+  input                                  cfg_disable_scrambler,
 
-  output ilas_config_valid,
-  output [1:0] ilas_config_addr,
-  output [DATA_PATH_WIDTH*8-1:0] ilas_config_data,
+  output                                 ilas_config_valid,
+  output     [1:0]                       ilas_config_addr,
+  output     [DATA_PATH_WIDTH*8-1:0]     ilas_config_data,
 
-  input err_statistics_reset,
-  input [2:0] ctrl_err_statistics_mask,
-  output reg [31:0] status_err_statistics_cnt,
+  input                                  err_statistics_reset,
+  input      [2:0]                       ctrl_err_statistics_mask,
+  output reg [31:0]                      status_err_statistics_cnt,
 
-  output [1:0] status_cgs_state,
-  output status_ifs_ready,
-  output [2:0] status_frame_align,
-  output [7:0] status_frame_align_err_cnt
+  output     [1:0]                       status_cgs_state,
+  output                                 status_ifs_ready,
+  output     [2:0]                       status_frame_align,
+  output     [7:0]                       status_frame_align_err_cnt,
+
+  input                                  cfg_lane_disable
 );
 
   localparam MAX_DATA_PATH_WIDTH = 8;
   localparam DPW_LOG2 = DATA_PATH_WIDTH == 8 ? 3 : DATA_PATH_WIDTH == 4 ? 2 : 1;
 
-  wire [7:0] char[0:DATA_PATH_WIDTH-1];
-  wire [DATA_PATH_WIDTH-1:0] char_is_valid;
   reg [DATA_PATH_WIDTH-1:0] char_is_cgs = 1'b0;        // K28.5 /K/
 
   reg [DATA_PATH_WIDTH-1:0] char_is_error = 1'b0;
   reg [DATA_PATH_WIDTH-1:0] charisk28 = 4'b0000;
 
-  wire cgs_beat_is_cgs = &char_is_cgs;
-  wire cgs_beat_has_error = |char_is_error;
-
   reg ifs_ready = 1'b0;
   reg [2:0] frame_align = 'h00;
   reg [2:0] frame_align_int;
+
+  reg  [DATA_PATH_WIDTH-1:0] unexpected_char;
+  reg  [DATA_PATH_WIDTH-1:0] phy_char_err;
+
+  reg  [DPW_LOG2:0] jj;
+  reg  align_found;
+
+  wire [7:0] char[0:DATA_PATH_WIDTH-1];
+  wire [DATA_PATH_WIDTH-1:0] char_is_valid;
+
+  wire cgs_beat_is_cgs = &char_is_cgs;
+  wire cgs_beat_has_error = |char_is_error;
 
   wire [DATA_PATH_WIDTH*8-1:0] phy_data_s;
   wire [DATA_PATH_WIDTH-1:0] charisk28_aligned_s;
@@ -125,14 +134,10 @@ module jesd204_rx_lane #(
   wire [DATA_PATH_WIDTH*8-1:0] data_scrambled_s;
   wire [DATA_PATH_WIDTH*8-1:0] data_scrambled;
 
-  reg  [DATA_PATH_WIDTH-1:0] unexpected_char;
-  reg  [DATA_PATH_WIDTH-1:0] phy_char_err;
-
   wire ilas_monitor_reset_s;
   wire ilas_monitor_reset;
-  wire buffer_ready_n_s;
-  reg  [DPW_LOG2:0] jj;
-  reg  align_found;
+  wire buffer_ready_ungated_n_s;
+  wire buffer_ready_ungated_n;
 
   assign status_ifs_ready = ifs_ready;
   assign status_frame_align = frame_align;
@@ -266,7 +271,7 @@ module jesd204_rx_lane #(
     .ENABLE_CHAR_REPLACE (ENABLE_CHAR_REPLACE)
   ) i_frame_align (
     .clk                          (clk),
-    .reset                        (buffer_ready_n_s),
+    .reset                        (buffer_ready_ungated_n_s),
     .cfg_octets_per_multiframe    (cfg_octets_per_multiframe),
     .cfg_octets_per_frame         (cfg_octets_per_frame),
     .cfg_disable_char_replacement (cfg_disable_char_replacement),
@@ -287,7 +292,7 @@ module jesd204_rx_lane #(
     .DESCRAMBLE(1)
   ) i_descrambler (
     .clk(clk),
-    .reset(buffer_ready_n_s),
+    .reset(buffer_ready_ungated_n_s),
     .enable(~cfg_disable_scrambler),
     .data_in(data_replaced),
     .data_out(data_scrambled_s));
@@ -298,13 +303,15 @@ module jesd204_rx_lane #(
   ) i_pipeline_stage2 (
     .clk(clk),
     .in({
-        buffer_ready_n_s,
+        buffer_ready_ungated_n_s,
         data_scrambled_s
       }),
     .out({
-        buffer_ready_n,
+        (buffer_ready_ungated_n),
         data_scrambled
       }));
+
+  assign buffer_ready_n = buffer_ready_ungated_n & ~cfg_lane_disable;
 
   elastic_buffer #(
     .IWIDTH(DATA_PATH_WIDTH*8),
@@ -321,7 +328,7 @@ module jesd204_rx_lane #(
     .wr_data(data_scrambled),
     .rd_data(rx_data),
 
-    .ready_n(buffer_ready_n),
+    .ready_n(buffer_ready_ungated_n),
     .do_release_n(buffer_release_n));
 
   jesd204_ilas_monitor #(
@@ -333,7 +340,7 @@ module jesd204_rx_lane #(
     .data(data_aligned),
     .charisk28(charisk28_aligned),
 
-    .data_ready_n(buffer_ready_n_s),
+    .data_ready_n(buffer_ready_ungated_n_s),
 
     .ilas_config_valid(ilas_config_valid),
     .ilas_config_addr(ilas_config_addr),
