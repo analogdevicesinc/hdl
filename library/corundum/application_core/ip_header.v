@@ -99,7 +99,8 @@ module ip_header (
 
       header_checksum_reg1 <= header_checksum_reg0[31:16] + header_checksum_reg0[15:0];
 
-      ip_header_checksum <= ~header_checksum_reg1;
+      // the first fold can carry out once more
+      ip_header_checksum <= ~(header_checksum_reg1[15:0] + header_checksum_reg1[31:16]);
     end
   end
 

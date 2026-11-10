@@ -68,6 +68,6 @@ module ip_header_mask (
     htond_16({{3{ip_flags}}, {13{ip_fragment_offset}}}),
     htond_16({16{ip_identification}}),
     htond_16({16{ip_total_length}}),
-    htond_16({{4{ip_version}}, {4{ip_header_length}}, {16{ip_type_of_service}}})};
+    htond_16({{4{ip_version}}, {4{ip_header_length}}, {8{ip_type_of_service}}})};
 
 endmodule
