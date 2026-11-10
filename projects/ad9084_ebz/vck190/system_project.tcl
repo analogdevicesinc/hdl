@@ -76,6 +76,9 @@ source ../../../projects/scripts/adi_board.tcl
 #                 not read
 #   FSRC_ACCUM_WIDTH : Width of the FSRC rate accumulator, which sets the
 #                 granularity of the achievable ratio
+#   CORUNDUM : When set, adds the Corundum NIC on the QSFP28 cage (MRMAC, 1x100GE)
+#   APP_ENABLE : When set, adds the Corundum application core, which streams the
+#                A-side ADC samples over UDP; needs CORUNDUM=1
 #
 
 adi_project ad9084_ebz_vck190 0 [list \
@@ -113,6 +116,8 @@ adi_project ad9084_ebz_vck190 0 [list \
   TX_B_KS_PER_CHANNEL [get_env_param TX_B_KS_PER_CHANNEL 64 ] \
   FSRC_ENABLE         [get_env_param FSRC_ENABLE          0 ] \
   FSRC_ACCUM_WIDTH    [get_env_param FSRC_ACCUM_WIDTH    56 ] \
+  CORUNDUM            [get_env_param CORUNDUM             0 ] \
+  APP_ENABLE          [get_env_param APP_ENABLE           0 ] \
 ]
 
 adi_project_files ad9084_ebz_vck190 [list \
@@ -123,6 +128,26 @@ adi_project_files ad9084_ebz_vck190 [list \
   "$ad_hdl_dir/library/common/ad_3w_spi.v" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vck190/vck190_system_constr.xdc" ]
+
+# The Corundum and MRMAC crossings are constrained in cell-scoped Tcl files
+# that are not packaged with the IPs.
+if {[get_env_param CORUNDUM 0] == 1} {
+  adi_project_files ad9084_ebz_vck190 [list \
+    "system_constr_corundum.xdc" \
+  ]
+
+  add_files -fileset constrs_1 -norecurse [list \
+    "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/rb_drp.tcl" \
+    "$ad_hdl_dir/library/corundum/scripts/sync_reset.tcl" \
+    "$ad_hdl_dir/library/corundum/scripts/mrmac_gty_wrapper.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_port.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl" \
+    "$ad_hdl_dir/../corundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl" \
+  ]
+}
 
 # Avoid critical warning in OOC mode from the clock definitions
 # since at that stage the submodules are not stiched together yet

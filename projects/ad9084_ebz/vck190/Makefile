@@ -53,4 +53,41 @@ LIB_DEPS += util_tdd_sync
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/util_adxcvr
 
+CORUNDUM ?= 0
+APP_ENABLE ?= 0
+
+ifeq ($(CORUNDUM), 1)
+	# Read by library/corundum/scripts/corundum.tcl
+	export BOARD := VCK190
+	export CPU := versal
+
+	M_DEPS += system_top_corundum.v
+	M_DEPS += system_constr_corundum.xdc
+	M_DEPS += ../../../library/corundum/scripts/corundum_common_cfg.tcl
+	M_DEPS += ../../../library/corundum/scripts/corundum_vck190_cfg.tcl
+	M_DEPS += ../../../library/corundum/scripts/corundum.tcl
+	M_DEPS += ../../../library/corundum/scripts/corundum_vck190_mac.tcl
+	M_DEPS += ../../../library/corundum/scripts/sync_reset.tcl
+	M_DEPS += ../../../library/corundum/scripts/mrmac_gty_wrapper.tcl
+
+	EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/rb_drp.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/mqnic_port.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl
+	EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl
+
+	LIB_DEPS += corundum/corundum_core
+	LIB_DEPS += corundum/ethernet/vck190
+endif
+
+ifeq ($(APP_ENABLE), 1)
+	M_DEPS += ../common/corundum_dac_load.v
+	M_DEPS += ../common/corundum_pause_merge.v
+	M_DEPS += ../../../library/common/up_axi.v
+
+	LIB_DEPS += corundum/application_core
+endif
+
 include ../../scripts/project-xilinx.mk
