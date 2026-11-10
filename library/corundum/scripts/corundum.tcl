@@ -67,6 +67,10 @@ if [info exists ::env(BOARD)] {
   error "Missing BOARD environment variable definition from makefile!"
 }
 
+if {![info exists MRMAC_MODE]} {
+  set MRMAC_MODE 1x100G
+}
+
 switch $board {
   ADRV9009ZU11EG {
     create_bd_pin -dir O -type rst qsfp_rst
@@ -117,6 +121,33 @@ switch $board {
 
     create_bd_pin -dir I -type clk clk_125mhz
     create_bd_pin -dir I -type rst rst_125mhz
+  }
+  VCK190 {
+    create_bd_pin -dir I gt_ref_clk_p
+    create_bd_pin -dir I gt_ref_clk_n
+    create_bd_pin -dir I -type clk gt_freerun_clk
+
+    create_bd_pin -dir I -type clk mrmac_axis_clk
+    create_bd_pin -dir I -type clk mrmac_ts_clk
+    if {$MRMAC_MODE eq "4x25G"} {
+      create_bd_pin -dir O -from 3 -to 0 mrmac_link_ready
+    } else {
+      create_bd_pin -dir O mrmac_link_ready
+    }
+    create_bd_pin -dir I mrmac_loopback_en
+    create_bd_pin -dir I mrmac_loopback_mac_swap
+
+    create_bd_pin -dir I -type rst mac_resetn
+
+    create_bd_pin -dir I -type clk ptp_clk
+    create_bd_pin -dir I -type clk ptp_sample_clk
+    create_bd_pin -dir I -type rst ptp_rst
+    create_bd_pin -dir O -type clk ptp_refclk_bufg
+
+    create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:gt_rtl:1.0 qsfp_serial
+
+    create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axi_mac
+    create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axi_gt
   }
 }
 
@@ -367,6 +398,34 @@ switch $board {
       AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
     ]
   }
+  VCK190 {
+    ad_ip_instance ethernet_vck190 ethernet_core [list \
+      MODE $MRMAC_MODE \
+      TDMA_BER_ENABLE $TDMA_BER_ENABLE \
+      QSFP_CNT $QSFP_CNT \
+      IF_COUNT $IF_COUNT \
+      PORTS_PER_IF $PORTS_PER_IF \
+      SCHED_PER_IF $SCHED_PER_IF \
+      PORT_COUNT $PORT_COUNT \
+      PORT_MASK $PORT_MASK \
+      PTP_TS_WIDTH $PTP_TS_WIDTH \
+      TX_TAG_WIDTH $TX_TAG_WIDTH \
+      TDMA_INDEX_WIDTH $TDMA_INDEX_WIDTH \
+      PTP_TS_ENABLE $PTP_TS_ENABLE \
+      PTP_TS_FMT_TOD $PTP_TS_FMT_TOD \
+      AXIL_CTRL_DATA_WIDTH $AXIL_CTRL_DATA_WIDTH \
+      AXIL_CTRL_ADDR_WIDTH $AXIL_CTRL_ADDR_WIDTH \
+      AXIL_CTRL_STRB_WIDTH $AXIL_CTRL_STRB_WIDTH \
+      AXIL_CSR_ADDR_WIDTH $AXIL_CSR_ADDR_WIDTH \
+      AXIL_IF_CTRL_ADDR_WIDTH $AXIL_IF_CTRL_ADDR_WIDTH \
+      ETH_RX_CLK_FROM_TX $ETH_RX_CLK_FROM_TX \
+      ETH_RS_FEC_ENABLE $ETH_RS_FEC_ENABLE \
+      AXIS_DATA_WIDTH $AXIS_DATA_WIDTH \
+      AXIS_KEEP_WIDTH $AXIS_KEEP_WIDTH \
+      AXIS_TX_USER_WIDTH $AXIS_TX_USER_WIDTH \
+      AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
+    ]
+  }
 }
 
 ad_connect corundum_core/s_axil_ctrl s_axil_corundum
@@ -462,6 +521,24 @@ switch $board {
     }
 
     ad_connect corundum_core/s_axis_stat_tvalid GND
+  }
+  VCK190 {
+    ad_connect corundum_core/ptp_clk ptp_clk
+    ad_connect corundum_core/ptp_rst ptp_rst
+    ad_connect corundum_core/ptp_sample_clk ptp_sample_clk
+
+    ad_connect corundum_core/s_axis_stat_tvalid GND
+
+    source $ad_hdl_dir/library/corundum/scripts/corundum_vck190_mac.tcl
+    corundum_vck190_build_mac $ETH_RS_FEC_ENABLE \
+      [expr {[info exists ETH_LOOPBACK_ENABLE] ? $ETH_LOOPBACK_ENABLE : 0}] \
+      [expr {[info exists MRMAC_GT_TYPE] ? $MRMAC_GT_TYPE : "GTY"}] \
+      [expr {[info exists MRMAC_TX_POLARITY] ? $MRMAC_TX_POLARITY : 0}] \
+      [expr {[info exists MRMAC_RX_POLARITY] ? $MRMAC_RX_POLARITY : 0}] \
+      $MRMAC_MODE \
+      [expr {[info exists MRMAC_TX_CH_MAP] ? $MRMAC_TX_CH_MAP : 0xE4}] \
+      [expr {[info exists MRMAC_RX_CH_MAP] ? $MRMAC_RX_CH_MAP : 0xE4}] \
+      [expr {[info exists MRMAC_TX_DRIVE] ? $MRMAC_TX_DRIVE : ""}]
   }
 }
 
