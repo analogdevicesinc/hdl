@@ -64,19 +64,37 @@ module ad_xcvr_rx_if #(
   // this means the octet placed in the lowest 8 bits was received first,
   // the octet placed in the highest 8 bits was received last.
 
+  localparam HALF_OCTETS_PER_BEAT = OCTETS_PER_BEAT/2;
+
   // internal registers
 
-  reg     [DW-1:0]  rx_ip_data_d = 'd0;
-  reg     [OCTETS_PER_BEAT-1:0]  rx_ip_sof_hold = 'd0;
+  reg     [DW-1:0]               rx_ip_data_d = 'd0;
+  reg     [OCTETS_PER_BEAT-1:0]  rx_ip_sof_hold_dly = 'd0;
+  reg     [OCTETS_PER_BEAT-1:0]  rx_ip_sof_hold;
   reg     [OCTETS_PER_BEAT-1:0]  rx_ip_sof_d = 'd0;
+  reg                            rx_ip_sof_hold_low = 1'b0;
+  reg                            rx_ip_sof_hold_high = 1'b0;
 
   always @(posedge rx_clk) begin
     rx_ip_data_d <= rx_ip_data;
     rx_ip_sof_d <= rx_ip_sof;
-    if (|rx_ip_sof) begin
-      rx_ip_sof_hold <= rx_ip_sof;
+    if (|rx_ip_sof_d) begin
+      rx_ip_sof_hold_dly <= rx_ip_sof_d;
     end
     rx_sof <= |rx_ip_sof_d;
+  end
+
+  // rx_ip_sof_hold will always have a value greater than 1, except for immediately
+  // after startup.
+  // If rx_ip_sof_d is 0, then rx_ip_sof_hold will keep its older value,
+  // stored in the rx_ip_sof_hold_dly register since rx_ip_sof_hold is
+  // combinational.
+  always @(*) begin
+    if (|rx_ip_sof_d) begin
+      rx_ip_sof_hold = rx_ip_sof_d;
+    end else begin
+      rx_ip_sof_hold = rx_ip_sof_hold_dly;
+    end
   end
 
   wire [OCTETS_PER_BEAT*DW-1:0] rx_data_s;
@@ -88,11 +106,48 @@ module ad_xcvr_rx_if #(
     end
   endgenerate
 
+  // The logic to detect the first start-of-frame is split into two parts:
+  // this next process is for the lower half of rx_data_s, while the
+  // process after it is for the higher part of rx_data_s.
+  // This was done to shorten the combinatorial paths going to rx_data_low
+  // and rx_data_high.
+  reg [DW-1:0] rx_data_low;
   integer j;
   always @(posedge rx_clk) begin
-    for (j = OCTETS_PER_BEAT-1; j >= 0; j = j - 1) begin
+    rx_ip_sof_hold_low <= 1'b0;
+    for (j = HALF_OCTETS_PER_BEAT-1; j >= 0; j = j - 1) begin
       if (rx_ip_sof_hold[j] == 1'b1) begin
-        rx_data <= rx_data_s[j*DW +: DW];
+        rx_data_low <= rx_data_s[j*DW +: DW];
+        rx_ip_sof_hold_low <= 1'b1;
+      end
+    end
+  end
+
+  reg [DW-1:0] rx_data_high;
+  always @(posedge rx_clk) begin
+    rx_ip_sof_hold_high <= 1'b0;
+    for (j = OCTETS_PER_BEAT-1; j >= HALF_OCTETS_PER_BEAT; j = j - 1) begin
+      if (rx_ip_sof_hold[j] == 1'b1) begin
+        rx_data_high <= rx_data_s[j*DW +: DW];
+        rx_ip_sof_hold_high <= 1'b1;
+      end
+    end
+  end
+
+  // We then establish the correct data, based on which of the two halves
+  // had a start-of-frame. If both had a start-of-frame, the low half has
+  // priority, since it has older data.
+  always @(*) begin
+    if (rx_ip_sof_hold_low == 1'b1) begin
+      rx_data = rx_data_low;
+    end else begin
+      if (rx_ip_sof_hold_high == 1'b1) begin
+        rx_data = rx_data_high;
+      end else begin
+        // We should not ever reach this branch since there should be a
+        // start-of-frame at least on one side.
+        // But it was added to prevent the creation of latches on rx_data.
+        rx_data = rx_data_low;
       end
     end
   end
