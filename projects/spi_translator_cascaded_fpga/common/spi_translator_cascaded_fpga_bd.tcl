@@ -32,36 +32,16 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-# SPI Connections
-create_bd_port -dir O spi_eng_sclk
-create_bd_port -dir O spi_eng_sdo
-create_bd_port -dir O spi_eng_sdo_t
-create_bd_port -dir I spi_eng_sdi
-create_bd_port -dir O -from 5 -to 0 spi_eng_cs
-create_bd_port -dir O spi_eng_three_wire
+# SPI Connections: one downstream bus per engine; engine 0 drives subnodes
+# 1 to 8 (CS 0 to 7), engine 1 subnodes 9 to 12 (CS 0 to 3)
+create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 spi_eng_0
+create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 spi_eng_1
 
 for {set i 1} {$i <= 12} {incr i} {
   create_bd_port -dir I spi_sn${i}_clk_i
   create_bd_port -dir I spi_sn${i}_sdo_i
   create_bd_port -dir O spi_sn${i}_sdi_o
   create_bd_port -dir I spi_sn${i}_csn_i
-}
-
-# cascaded translators, their upstream side is driven by spi_execution
-# (CS 4 and 5) through system_top
-
-for {set i 1} {$i <= 2} {incr i} {
-  create_bd_port -dir I spi_slave_${i}_sclk
-  create_bd_port -dir I spi_slave_${i}_sdi
-  create_bd_port -dir O spi_slave_${i}_sdo
-  create_bd_port -dir I spi_slave_${i}_cs
-
-  create_bd_port -dir O spi_eng_${i}_sclk
-  create_bd_port -dir O spi_eng_${i}_sdo
-  create_bd_port -dir O spi_eng_${i}_sdo_t
-  create_bd_port -dir I spi_eng_${i}_sdi
-  create_bd_port -dir O -from 3 -to 0 spi_eng_${i}_cs
-  create_bd_port -dir O spi_eng_${i}_three_wire
 }
 
 # SPI at 100/8 = 12.5 MHz
@@ -146,14 +126,11 @@ ad_ip_parameter axi_spi_subnode_12 CONFIG.C_SCK_RATIO 16
 ad_ip_parameter axi_spi_subnode_12 CONFIG.Multiples16 2
 ad_ip_parameter axi_spi_subnode_12 CONFIG.C_FIFO_DEPTH 256
 
-# SPI translator
-ad_ip_instance spi_translator spi_slave
-ad_ip_parameter spi_slave CONFIG.NUM_OF_CS 6
+# SPI translator: 12 chip selects, engine 0 with the first 8, engine 1 with
+# the last 4; no GPIOs
+source $ad_hdl_dir/library/spi_translator/scripts/spi_translator.tcl
 
-ad_ip_instance spi_engine_execution spi_execution
-ad_ip_parameter spi_execution CONFIG.NUM_OF_CS 6
-ad_ip_parameter spi_execution CONFIG.DATA_WIDTH 8
-ad_ip_parameter spi_execution CONFIG.NUM_OF_SDIO 1
+spi_translator_create spi_slave 12 0
 
 ad_connect axi_spi_host/sck_o spi_slave/sclk
 ad_connect axi_spi_host/sck_i axi_spi_host/sck_o
@@ -163,15 +140,8 @@ ad_connect axi_spi_host/io1_i spi_slave/sdo
 ad_connect axi_spi_host/ss_o  spi_slave/cs
 ad_connect axi_spi_host/ss_i  axi_spi_host/ss_o
 
-ad_connect spi_slave/spi_engine_ctrl spi_execution/ctrl
-ad_connect spi_slave/gpio_i GND
-
-ad_connect spi_execution/sclk spi_eng_sclk
-ad_connect spi_execution/sdo spi_eng_sdo
-ad_connect spi_execution/sdo_t spi_eng_sdo_t
-ad_connect spi_execution/sdi spi_eng_sdi
-ad_connect spi_execution/cs spi_eng_cs
-ad_connect spi_execution/three_wire spi_eng_three_wire
+ad_connect spi_slave/m_spi_0 spi_eng_0
+ad_connect spi_slave/m_spi_1 spi_eng_1
 
 for {set i 1} {$i <= 12} {incr i} {
   ad_connect axi_spi_subnode_${i}/sck_i  spi_sn${i}_clk_i
@@ -184,41 +154,7 @@ for {set i 1} {$i <= 12} {incr i} {
 
 ad_connect $sys_cpu_clk axi_spi_host/ext_spi_clk
 ad_connect $sys_cpu_clk spi_slave/clk
-ad_connect $sys_cpu_clk spi_execution/clk
 ad_connect $sys_cpu_resetn spi_slave/resetn
-ad_connect spi_slave/spi_resetn spi_execution/resetn
-
-# cascaded SPI translators
-
-for {set i 1} {$i <= 2} {incr i} {
-  ad_ip_instance spi_translator spi_slave_${i}
-  ad_ip_parameter spi_slave_${i} CONFIG.NUM_OF_CS 4
-
-  ad_ip_instance spi_engine_execution spi_execution_${i}
-  ad_ip_parameter spi_execution_${i} CONFIG.NUM_OF_CS 4
-  ad_ip_parameter spi_execution_${i} CONFIG.DATA_WIDTH 8
-  ad_ip_parameter spi_execution_${i} CONFIG.NUM_OF_SDIO 1
-
-  ad_connect spi_slave_${i}_sclk spi_slave_${i}/sclk
-  ad_connect spi_slave_${i}_sdi spi_slave_${i}/sdi
-  ad_connect spi_slave_${i}_sdo spi_slave_${i}/sdo
-  ad_connect spi_slave_${i}_cs spi_slave_${i}/cs
-
-  ad_connect spi_slave_${i}/spi_engine_ctrl spi_execution_${i}/ctrl
-  ad_connect spi_slave_${i}/gpio_i GND
-
-  ad_connect spi_eng_${i}_sclk spi_execution_${i}/sclk
-  ad_connect spi_eng_${i}_sdo spi_execution_${i}/sdo
-  ad_connect spi_eng_${i}_sdo_t spi_execution_${i}/sdo_t
-  ad_connect spi_eng_${i}_sdi spi_execution_${i}/sdi
-  ad_connect spi_eng_${i}_cs spi_execution_${i}/cs
-  ad_connect spi_eng_${i}_three_wire spi_execution_${i}/three_wire
-
-  ad_connect $sys_cpu_clk spi_slave_${i}/clk
-  ad_connect $sys_cpu_clk spi_execution_${i}/clk
-  ad_connect $sys_cpu_resetn spi_slave_${i}/resetn
-  ad_connect spi_slave_${i}/spi_resetn spi_execution_${i}/resetn
-}
 
 # interconnects
 

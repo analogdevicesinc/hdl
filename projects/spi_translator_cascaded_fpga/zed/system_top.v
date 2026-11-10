@@ -96,18 +96,15 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-  wire            spi_eng_sclk;
-  wire            spi_eng_sdo;
-  wire            spi_eng_sdi;
-  wire    [ 5:0]  spi_eng_cs;
+  // engine 0: subnodes 1 to 8, engine 1: subnodes 9 to 12
+  wire            spi_eng_0_sclk;
+  wire            spi_eng_0_sdo;
+  wire            spi_eng_0_sdi;
+  wire    [ 7:0]  spi_eng_0_cs;
   wire            spi_eng_1_sclk;
   wire            spi_eng_1_sdo;
   wire            spi_eng_1_sdi;
   wire    [ 3:0]  spi_eng_1_cs;
-  wire            spi_eng_2_sclk;
-  wire            spi_eng_2_sdo;
-  wire            spi_eng_2_sdi;
-  wire    [ 3:0]  spi_eng_2_cs;
   wire            spi_sn1_sdo;
   wire            spi_sn2_sdo;
   wire            spi_sn3_sdo;
@@ -120,27 +117,22 @@ module system_top (
   wire            spi_sn10_sdo;
   wire            spi_sn11_sdo;
   wire            spi_sn12_sdo;
-  wire            spi_slave_1_sdo;
-  wire            spi_slave_2_sdo;
 
   // instantiations
 
-  assign spi_eng_sdi = ~spi_eng_cs[0] ? spi_sn1_sdo :
-                       ~spi_eng_cs[1] ? spi_sn2_sdo :
-                       ~spi_eng_cs[2] ? spi_sn3_sdo :
-                       ~spi_eng_cs[3] ? spi_sn4_sdo :
-                       ~spi_eng_cs[4] ? spi_slave_1_sdo :
-                       ~spi_eng_cs[5] ? spi_slave_2_sdo : 1'b0;
+  assign spi_eng_0_sdi = ~spi_eng_0_cs[0] ? spi_sn1_sdo :
+                         ~spi_eng_0_cs[1] ? spi_sn2_sdo :
+                         ~spi_eng_0_cs[2] ? spi_sn3_sdo :
+                         ~spi_eng_0_cs[3] ? spi_sn4_sdo :
+                         ~spi_eng_0_cs[4] ? spi_sn5_sdo :
+                         ~spi_eng_0_cs[5] ? spi_sn6_sdo :
+                         ~spi_eng_0_cs[6] ? spi_sn7_sdo :
+                         ~spi_eng_0_cs[7] ? spi_sn8_sdo : 1'b0;
 
-  assign spi_eng_1_sdi = ~spi_eng_1_cs[0] ? spi_sn5_sdo :
-                         ~spi_eng_1_cs[1] ? spi_sn6_sdo :
-                         ~spi_eng_1_cs[2] ? spi_sn7_sdo :
-                         ~spi_eng_1_cs[3] ? spi_sn8_sdo : 1'b0;
-
-  assign spi_eng_2_sdi = ~spi_eng_2_cs[0] ? spi_sn9_sdo :
-                         ~spi_eng_2_cs[1] ? spi_sn10_sdo :
-                         ~spi_eng_2_cs[2] ? spi_sn11_sdo :
-                         ~spi_eng_2_cs[3] ? spi_sn12_sdo : 1'b0;
+  assign spi_eng_1_sdi = ~spi_eng_1_cs[0] ? spi_sn9_sdo :
+                         ~spi_eng_1_cs[1] ? spi_sn10_sdo :
+                         ~spi_eng_1_cs[2] ? spi_sn11_sdo :
+                         ~spi_eng_1_cs[3] ? spi_sn12_sdo : 1'b0;
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -231,79 +223,65 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .spi_eng_sclk (spi_eng_sclk),
-    .spi_eng_sdo (spi_eng_sdo),
-    .spi_eng_sdo_t (),
-    .spi_eng_sdi (spi_eng_sdi),
-    .spi_eng_cs (spi_eng_cs),
-    .spi_eng_three_wire (),
-    .spi_sn1_clk_i (spi_eng_sclk),
-    .spi_sn1_sdo_i (spi_eng_sdo),
-    .spi_sn1_sdi_o (spi_sn1_sdo),
-    .spi_sn1_csn_i (spi_eng_cs[0]),
-    .spi_sn2_clk_i (spi_eng_sclk),
-    .spi_sn2_sdo_i (spi_eng_sdo),
-    .spi_sn2_sdi_o (spi_sn2_sdo),
-    .spi_sn2_csn_i (spi_eng_cs[1]),
-    .spi_sn3_clk_i (spi_eng_sclk),
-    .spi_sn3_sdo_i (spi_eng_sdo),
-    .spi_sn3_sdi_o (spi_sn3_sdo),
-    .spi_sn3_csn_i (spi_eng_cs[2]),
-    .spi_sn4_clk_i (spi_eng_sclk),
-    .spi_sn4_sdo_i (spi_eng_sdo),
-    .spi_sn4_sdi_o (spi_sn4_sdo),
-    .spi_sn4_csn_i (spi_eng_cs[3]),
-    .spi_sn5_clk_i (spi_eng_1_sclk),
-    .spi_sn5_sdo_i (spi_eng_1_sdo),
-    .spi_sn5_sdi_o (spi_sn5_sdo),
-    .spi_sn5_csn_i (spi_eng_1_cs[0]),
-    .spi_sn6_clk_i (spi_eng_1_sclk),
-    .spi_sn6_sdo_i (spi_eng_1_sdo),
-    .spi_sn6_sdi_o (spi_sn6_sdo),
-    .spi_sn6_csn_i (spi_eng_1_cs[1]),
-    .spi_sn7_clk_i (spi_eng_1_sclk),
-    .spi_sn7_sdo_i (spi_eng_1_sdo),
-    .spi_sn7_sdi_o (spi_sn7_sdo),
-    .spi_sn7_csn_i (spi_eng_1_cs[2]),
-    .spi_sn8_clk_i (spi_eng_1_sclk),
-    .spi_sn8_sdo_i (spi_eng_1_sdo),
-    .spi_sn8_sdi_o (spi_sn8_sdo),
-    .spi_sn8_csn_i (spi_eng_1_cs[3]),
-    .spi_sn9_clk_i (spi_eng_2_sclk),
-    .spi_sn9_sdo_i (spi_eng_2_sdo),
-    .spi_sn9_sdi_o (spi_sn9_sdo),
-    .spi_sn9_csn_i (spi_eng_2_cs[0]),
-    .spi_sn10_clk_i (spi_eng_2_sclk),
-    .spi_sn10_sdo_i (spi_eng_2_sdo),
-    .spi_sn10_sdi_o (spi_sn10_sdo),
-    .spi_sn10_csn_i (spi_eng_2_cs[1]),
-    .spi_sn11_clk_i (spi_eng_2_sclk),
-    .spi_sn11_sdo_i (spi_eng_2_sdo),
-    .spi_sn11_sdi_o (spi_sn11_sdo),
-    .spi_sn11_csn_i (spi_eng_2_cs[2]),
-    .spi_sn12_clk_i (spi_eng_2_sclk),
-    .spi_sn12_sdo_i (spi_eng_2_sdo),
-    .spi_sn12_sdi_o (spi_sn12_sdo),
-    .spi_sn12_csn_i (spi_eng_2_cs[3]),
+    .spi_eng_0_sclk (spi_eng_0_sclk),
+    .spi_eng_0_sdo (spi_eng_0_sdo),
+    .spi_eng_0_sdo_t (),
+    .spi_eng_0_sdi (spi_eng_0_sdi),
+    .spi_eng_0_cs (spi_eng_0_cs),
+    .spi_eng_0_three_wire (),
     .spi_eng_1_sclk (spi_eng_1_sclk),
     .spi_eng_1_sdo (spi_eng_1_sdo),
     .spi_eng_1_sdo_t (),
     .spi_eng_1_sdi (spi_eng_1_sdi),
     .spi_eng_1_cs (spi_eng_1_cs),
     .spi_eng_1_three_wire (),
-    .spi_eng_2_sclk (spi_eng_2_sclk),
-    .spi_eng_2_sdo (spi_eng_2_sdo),
-    .spi_eng_2_sdo_t (),
-    .spi_eng_2_sdi (spi_eng_2_sdi),
-    .spi_eng_2_cs (spi_eng_2_cs),
-    .spi_eng_2_three_wire (),
-    .spi_slave_1_sclk (spi_eng_sclk),
-    .spi_slave_1_sdi (spi_eng_sdo),
-    .spi_slave_1_sdo (spi_slave_1_sdo),
-    .spi_slave_1_cs (spi_eng_cs[4]),
-    .spi_slave_2_sclk (spi_eng_sclk),
-    .spi_slave_2_sdi (spi_eng_sdo),
-    .spi_slave_2_sdo (spi_slave_2_sdo),
-    .spi_slave_2_cs (spi_eng_cs[5]));
+    .spi_sn1_clk_i (spi_eng_0_sclk),
+    .spi_sn1_sdo_i (spi_eng_0_sdo),
+    .spi_sn1_sdi_o (spi_sn1_sdo),
+    .spi_sn1_csn_i (spi_eng_0_cs[0]),
+    .spi_sn2_clk_i (spi_eng_0_sclk),
+    .spi_sn2_sdo_i (spi_eng_0_sdo),
+    .spi_sn2_sdi_o (spi_sn2_sdo),
+    .spi_sn2_csn_i (spi_eng_0_cs[1]),
+    .spi_sn3_clk_i (spi_eng_0_sclk),
+    .spi_sn3_sdo_i (spi_eng_0_sdo),
+    .spi_sn3_sdi_o (spi_sn3_sdo),
+    .spi_sn3_csn_i (spi_eng_0_cs[2]),
+    .spi_sn4_clk_i (spi_eng_0_sclk),
+    .spi_sn4_sdo_i (spi_eng_0_sdo),
+    .spi_sn4_sdi_o (spi_sn4_sdo),
+    .spi_sn4_csn_i (spi_eng_0_cs[3]),
+    .spi_sn5_clk_i (spi_eng_0_sclk),
+    .spi_sn5_sdo_i (spi_eng_0_sdo),
+    .spi_sn5_sdi_o (spi_sn5_sdo),
+    .spi_sn5_csn_i (spi_eng_0_cs[4]),
+    .spi_sn6_clk_i (spi_eng_0_sclk),
+    .spi_sn6_sdo_i (spi_eng_0_sdo),
+    .spi_sn6_sdi_o (spi_sn6_sdo),
+    .spi_sn6_csn_i (spi_eng_0_cs[5]),
+    .spi_sn7_clk_i (spi_eng_0_sclk),
+    .spi_sn7_sdo_i (spi_eng_0_sdo),
+    .spi_sn7_sdi_o (spi_sn7_sdo),
+    .spi_sn7_csn_i (spi_eng_0_cs[6]),
+    .spi_sn8_clk_i (spi_eng_0_sclk),
+    .spi_sn8_sdo_i (spi_eng_0_sdo),
+    .spi_sn8_sdi_o (spi_sn8_sdo),
+    .spi_sn8_csn_i (spi_eng_0_cs[7]),
+    .spi_sn9_clk_i (spi_eng_1_sclk),
+    .spi_sn9_sdo_i (spi_eng_1_sdo),
+    .spi_sn9_sdi_o (spi_sn9_sdo),
+    .spi_sn9_csn_i (spi_eng_1_cs[0]),
+    .spi_sn10_clk_i (spi_eng_1_sclk),
+    .spi_sn10_sdo_i (spi_eng_1_sdo),
+    .spi_sn10_sdi_o (spi_sn10_sdo),
+    .spi_sn10_csn_i (spi_eng_1_cs[1]),
+    .spi_sn11_clk_i (spi_eng_1_sclk),
+    .spi_sn11_sdo_i (spi_eng_1_sdo),
+    .spi_sn11_sdi_o (spi_sn11_sdo),
+    .spi_sn11_csn_i (spi_eng_1_cs[2]),
+    .spi_sn12_clk_i (spi_eng_1_sclk),
+    .spi_sn12_sdo_i (spi_eng_1_sdo),
+    .spi_sn12_sdi_o (spi_sn12_sdo),
+    .spi_sn12_csn_i (spi_eng_1_cs[3]));
 
 endmodule
