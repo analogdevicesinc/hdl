@@ -7,6 +7,7 @@
 PROJECT_NAME := spi_translator_fpga_zed
 
 M_DEPS += ../common/spi_translator_fpga_bd.tcl
+M_DEPS += ../../../library/spi_translator/scripts/spi_translator.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
@@ -19,7 +20,8 @@ LIB_DEPS += axi_i2s_adi
 LIB_DEPS += axi_spdif_tx
 LIB_DEPS += axi_sysid
 LIB_DEPS += spi_engine/spi_engine_execution
-LIB_DEPS += spi_translator
+LIB_DEPS += spi_translator/spi_translator_slave
+LIB_DEPS += spi_translator/spi_translator_interconnect
 LIB_DEPS += sysid_rom
 LIB_DEPS += util_i2c_mixer
 

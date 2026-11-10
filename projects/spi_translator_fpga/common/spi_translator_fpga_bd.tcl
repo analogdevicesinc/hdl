@@ -53,12 +53,7 @@ create_bd_port -dir I spi_sn4_sdo_i
 create_bd_port -dir O spi_sn4_sdi_o
 create_bd_port -dir I spi_sn4_csn_i
 
-create_bd_port -dir O spi_eng_sclk
-create_bd_port -dir O spi_eng_sdo
-create_bd_port -dir O spi_eng_sdo_t
-create_bd_port -dir I spi_eng_sdi
-create_bd_port -dir O -from 3 -to 0 spi_eng_cs
-create_bd_port -dir O spi_eng_three_wire
+create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 spi_eng
 
 # SPI at 100/8 = 12.5 MHz
 ad_ip_instance axi_quad_spi axi_spi_host
@@ -92,16 +87,10 @@ ad_ip_parameter axi_spi_subnode_4 CONFIG.C_SCK_RATIO 16
 ad_ip_parameter axi_spi_subnode_4 CONFIG.Multiples16 2
 ad_ip_parameter axi_spi_subnode_4 CONFIG.C_FIFO_DEPTH 256
 
-# SPI translator
-ad_ip_instance spi_translator spi_slave
-ad_ip_parameter spi_slave CONFIG.NUM_OF_GPIO 4
-ad_ip_parameter spi_slave CONFIG.GPIO_DEFAULT_DIR 0x0
-ad_ip_parameter spi_slave CONFIG.GPIO_DEFAULT_OUT 0xA
+# SPI translator: 4 chip selects (one engine), 4 GPIOs
+source $ad_hdl_dir/library/spi_translator/scripts/spi_translator.tcl
 
-ad_ip_instance spi_engine_execution spi_execution
-ad_ip_parameter spi_execution CONFIG.NUM_OF_CS 4
-ad_ip_parameter spi_execution CONFIG.DATA_WIDTH 8
-ad_ip_parameter spi_execution CONFIG.NUM_OF_SDIO 1
+spi_translator_create spi_slave 4 4 0x0 0xA
 
 ad_connect axi_spi_host/sck_o spi_slave/sclk
 ad_connect axi_spi_host/sck_i axi_spi_host/sck_o
@@ -111,15 +100,9 @@ ad_connect axi_spi_host/io1_i spi_slave/sdo
 ad_connect axi_spi_host/ss_o  spi_slave/cs
 ad_connect axi_spi_host/ss_i  axi_spi_host/ss_o
 
-ad_connect spi_slave/spi_engine_ctrl spi_execution/ctrl
 ad_connect spi_slave/gpio_i GND
 
-ad_connect spi_execution/sclk spi_eng_sclk
-ad_connect spi_execution/sdo spi_eng_sdo
-ad_connect spi_execution/sdo_t spi_eng_sdo_t
-ad_connect spi_execution/sdi spi_eng_sdi
-ad_connect spi_execution/cs spi_eng_cs
-ad_connect spi_execution/three_wire spi_eng_three_wire
+ad_connect spi_slave/m_spi_0 spi_eng
 
 ad_connect axi_spi_subnode_1/sck_i  spi_sn1_clk_i
 ad_connect axi_spi_subnode_1/io0_i  spi_sn1_sdo_i
@@ -151,9 +134,7 @@ ad_connect $sys_cpu_clk axi_spi_subnode_2/ext_spi_clk
 ad_connect $sys_cpu_clk axi_spi_subnode_3/ext_spi_clk
 ad_connect $sys_cpu_clk axi_spi_subnode_4/ext_spi_clk
 ad_connect $sys_cpu_clk spi_slave/clk
-ad_connect $sys_cpu_clk spi_execution/clk
 ad_connect $sys_cpu_resetn spi_slave/resetn
-ad_connect spi_slave/spi_resetn spi_execution/resetn
 
 # interconnects
 
