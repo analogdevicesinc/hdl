@@ -100,6 +100,11 @@
 <li><a class="reference internal" href="#command-descriptors">Command Descriptors</a><ul>
 <li><a class="reference internal" href="#ccc-instruction">CCC Instruction</a></li>
 <li><a class="reference internal" href="#private-transfer">Private Transfer</a></li>
+<li><a class="reference internal" href="#bus-patterns">Bus Patterns</a><ul>
+<li><a class="reference internal" href="#target-reset-pattern-type-0">Target Reset Pattern (type 0)</a></li>
+<li><a class="reference internal" href="#hdr-exit-pattern-type-1">HDR Exit Pattern (type 1)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#command-receipts">Command Receipts</a><ul>
@@ -471,36 +476,40 @@ Content on this topic
 </thead>
 <tbody>
 <tr class="row-odd"><td></td>
-<td><p>31:23</p></td>
+<td><p>31:24</p></td>
 <td><p>Reserved.</p></td>
 </tr>
-<tr class="row-even"><td><p>Is CCC</p></td>
+<tr class="row-even"><td><p>Pattern</p></td>
+<td><p>23</p></td>
+<td><p>Bus pattern instruction (1).</p></td>
+</tr>
+<tr class="row-odd"><td><p>Is CCC</p></td>
 <td><p>22</p></td>
 <td><p>Indicate if it is a CCC transfer (1) or not (0).</p></td>
 </tr>
-<tr class="row-odd"><td><p>Bcast.
+<tr class="row-even"><td><p>Bcast.
 header</p></td>
 <td><p>21</p></td>
 <td><p>Include broadcast header in private transfer (1)
 or not (0).</p></td>
 </tr>
-<tr class="row-even"><td><p>Sr</p></td>
+<tr class="row-odd"><td><p>Sr</p></td>
 <td><p>20</p></td>
 <td><p>Repeated start flag, yield a Sr (1) or P (0)
 at the end of the transfer.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Buffer
+<tr class="row-even"><td><p>Buffer
 lenght</p></td>
 <td><p>19:8</p></td>
 <td><p>Unsigned 12-bits payload length, direction
 depends on RNW value.</p></td>
 </tr>
-<tr class="row-even"><td><p>DA</p></td>
+<tr class="row-odd"><td><p>DA</p></td>
 <td><p>7:1</p></td>
 <td><p>7-bit device address (don’t care in broadcast
 mode).</p></td>
 </tr>
-<tr class="row-odd"><td><p>RNW</p></td>
+<tr class="row-even"><td><p>RNW</p></td>
 <td><p>0:0</p></td>
 <td><p>If should retrieve data from device (1) or not
 (0).</p></td>
@@ -512,7 +521,8 @@ mode).</p></td>
 correct clock cycle.
 Also, the software must ensure the next Command Descriptor is from the same branch
 of the state machine, for example, cannot jump from a Private Transfer to a
-Broadcast CCC, must always return to Start (Sr=0).
+Broadcast CCC, must always return to Start (Sr=0); Except
+<a class="reference internal" href="#i3c-controller-bus-patterns"><span class="std std-ref">bus pattern</span></a> instructions.
 For a flowchart of the those paths, see Fig. 168, p.387 from MIPI I3C
 specification<a class="footnote-reference brackets" href="#f1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
 <p>The structure of command 1 depends on command 0 first bits and are defined in
@@ -691,6 +701,69 @@ mode).</p></td>
 </tbody>
 </table>
 </div>
+</section>
+<section id="bus-patterns">
+<span id="i3c-controller-bus-patterns"></span><h4>Bus Patterns<a class="headerlink" href="#bus-patterns" title="Link to this heading"></a></h4>
+<p>Bus pattern instructions modulate the I3C bus with a predefined sequence.
+The pattern type is selected by command 1.</p>
+<p>Bits not presented in the tables are assumed 0.
+When Value is filled, it means it is the required constant value for this
+transfer.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="4"><p>Command 0, bus pattern instruction</p></th>
+</tr>
+<tr class="row-even"><th class="head"><p>Name</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>Pattern</p></td>
+<td><p>23</p></td>
+<td><p>1</p></td>
+<td><p>Bus pattern instruction.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="4"><p>Command 1, bus pattern instruction</p></th>
+</tr>
+<tr class="row-even"><th class="head"><p>Name</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>Type</p></td>
+<td><p>6:0</p></td>
+<td></td>
+<td><p>Pattern type (0 = TRP, 1 = HDR Exit).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="target-reset-pattern-type-0">
+<span id="i3c-controller-trp"></span><h5>Target Reset Pattern (type 0)<a class="headerlink" href="#target-reset-pattern-type-0" title="Link to this heading"></a></h5>
+<p>Yields the Target Reset Pattern to reset target devices. The targets apply the
+reset action configured by the previous RSTACT CCCs (broadcast or direct to one
+or more targets).</p>
+<p>Fourteen SDA transitions while SCL is kept Low, followed by a Repeated START
+and a STOP.</p>
+<p>It is recommended to set Sr (1) of the preceding RSTACT CCC, otherwise a
+target could pull SDA low before the pattern.</p>
+</section>
+<section id="hdr-exit-pattern-type-1">
+<span id="i3c-controller-hdr-exit"></span><h5>HDR Exit Pattern (type 1)<a class="headerlink" href="#hdr-exit-pattern-type-1" title="Link to this heading"></a></h5>
+<p>Exits HDR mode by sending four SDA falling edges while SCL is kept Low,
+followed by a STOP.</p>
+</section>
 </section>
 </section>
 <section id="command-receipts">
