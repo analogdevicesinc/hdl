@@ -1857,12 +1857,6 @@ clone the <code class="docutils literal notranslate"><span class="pre">u-boot-so
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/altera-opensource/u-boot-socfpga.git
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>socfpga_v2021.10
-</pre></div>
-</div>
 <div class="clear-left"></div></div></div><p>Then run the qts filter and build the preloader and bootloader images:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
@@ -1885,7 +1879,7 @@ clone the <code class="docutils literal notranslate"><span class="pre">u-boot-so
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./arch/arm/mach-socfpga/qts-filter.sh<span class="w"> </span>cyclone5<span class="w"> </span>../../../../../board/altera/cyclone5-socdk/qts/
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python2<span class="w"> </span>./tools/cv_bsp_generator/cv_bsp_generator.py<span class="w"> </span>-i<span class="w"> </span>./../../../hps_isw_handoff/system_bd_sys_hps<span class="w"> </span>-o<span class="w"> </span>./board/altera/cyclone5-socdk/qts
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
