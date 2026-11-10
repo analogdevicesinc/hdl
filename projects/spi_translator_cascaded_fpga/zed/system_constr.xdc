@@ -48,17 +48,3 @@ create_generated_clock -name spi_up_sclk \
 
 set_multicycle_path -setup -start 4 -from [get_clocks clk_fpga_0] -to [get_clocks spi_up_sclk]
 set_multicycle_path -hold  -start 3 -from [get_clocks clk_fpga_0] -to [get_clocks spi_up_sclk]
-
-# cascaded SCLK: the spi_execution sclk flop driving spi_slave_1/sclk and
-# spi_slave_2/sclk, clk_fpga_0 / 2 is the fastest rate (clk_div = 0, the
-# default; the host may slow it down with a CLK_DIV write)
-# mode 0: SDO changes on the SCLK falling edge, i.e. one clk_fpga_0 cycle
-# before the capturing rising edge, which is the default setup relation
-
-set dn_sclk_src [get_pins -leaf -filter {DIRECTION == OUT} \
-  -of [get_nets -segments -of [get_pins -hier -filter {NAME =~ */spi_slave_1/sclk}]]]
-
-create_generated_clock -name spi_dn_sclk \
-  -source [get_pins -of [get_cells -of $dn_sclk_src] -filter {REF_PIN_NAME == C}] \
-  -divide_by 2 \
-  $dn_sclk_src
