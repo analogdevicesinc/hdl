@@ -36,7 +36,7 @@
 `timescale 1ns/100ps
 
 /*
- * Upstream SPI slave, clocked by SCLK.
+ * Upstream SPI slave physical layer of spi_translator_slave, clocked by SCLK.
  *
  * Receive: MOSI is shifted in on the sample edge (rising for modes 0/3,
  * falling for 1/2). On the edge completing a byte, the byte is copied to a
@@ -64,7 +64,7 @@
  * (about 6 clk).
  */
 
-module spi_translator_slave #(
+module spi_translator_phy #(
   parameter DATA_WIDTH = 8,
   parameter CPOL = 1,
   parameter CPHA = 1,

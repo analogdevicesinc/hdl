@@ -3,27 +3,27 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-source ../../scripts/adi_env.tcl
+source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 global VIVADO_IP_LIBRARY
 
-adi_ip_create spi_translator
-adi_ip_files spi_translator [list \
+adi_ip_create spi_translator_slave
+adi_ip_files spi_translator_slave [list \
   "$ad_hdl_dir/library/common/ad_mem.v" \
-  "spi_translator_slave.v" \
+  "spi_translator_phy.v" \
   "spi_translator_decoder.v" \
   "spi_translator_execution.v" \
   "spi_translator_fifo.v" \
   "spi_translator_gpio.v" \
   "spi_translator_regmap.v" \
-  "spi_translator.v" \
+  "spi_translator_slave.v" \
   "spi_translator_constr.xdc" \
 ]
 
-adi_ip_properties_lite spi_translator
+adi_ip_properties_lite spi_translator_slave
 
-set_property display_name "ADI SPI Translator" [ipx::current_core]
+set_property display_name "ADI SPI Translator Slave" [ipx::current_core]
 set_property description  "Store-and-forward SPI bridge" [ipx::current_core]
 
 # Remove all inferred interfaces
@@ -80,7 +80,7 @@ foreach {param} {UP_CPOL UP_CPHA UP_EARLY_LAUNCH HEADER_CRC_EN} {
 set_property -dict [list \
   "value_validation_type" "range_long" \
   "value_validation_range_minimum" "1" \
-  "value_validation_range_maximum" "8" \
+  "value_validation_range_maximum" "128" \
  ] \
  [ipx::get_user_parameters NUM_OF_CS -of_objects $cc]
 

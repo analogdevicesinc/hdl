@@ -36,17 +36,19 @@
 `timescale 1ns/100ps
 
 /*
- * SPI translator: a store-and-forward bridge that lets one upstream chip
- * select reach multiple downstream SPI targets. The upstream side is a SPI
- * slave receiving a serialized SPI Engine instruction stream, see
- * spi_translator_decoder.v for the format; the downstream side replays it into
- * spi_engine_execution (DATA_WIDTH = 8, NUM_OF_SDIO = 1, NUM_OF_CS matching
- * this core's NUM_OF_CS).
+ * SPI translator slave module: the core of a store-and-forward bridge that
+ * lets one upstream chip select reach multiple downstream SPI targets. The
+ * upstream side is a SPI slave (spi_translator_phy) receiving a serialized SPI Engine instruction stream, see
+ * spi_translator_decoder.v for the format; the downstream side replays it,
+ * through spi_translator_interconnect, into ceil(NUM_OF_CS / 8)
+ * spi_engine_execution instances (DATA_WIDTH = 8, NUM_OF_SDIO = 1, NUM_OF_CS
+ * 8 each, the last one the remainder). ../scripts/spi_translator.tcl builds that
+ * hierarchy.
  *
  * HEADER_CRC_EN is not used by this version.
  */
 
-module spi_translator #(
+module spi_translator_slave #(
   parameter PERIPHERAL_ID = 0,
   parameter UP_CPOL = 0,
   parameter UP_CPHA = 0,
@@ -144,7 +146,7 @@ module spi_translator #(
 
   wire                        flush;
 
-  spi_translator_slave #(
+  spi_translator_phy #(
     .DATA_WIDTH (8),
     .CPOL (UP_CPOL),
     .CPHA (UP_CPHA),
@@ -242,6 +244,7 @@ module spi_translator #(
 
   spi_translator_regmap #(
     .PERIPHERAL_ID (PERIPHERAL_ID),
+    .NUM_OF_CS (NUM_OF_CS),
     .NUM_OF_GPIO (NUM_OF_GPIO)
   ) i_regmap (
     .clk (clk),

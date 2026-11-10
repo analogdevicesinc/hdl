@@ -55,15 +55,27 @@
  *   op 3  0xB?ii  GPIO of pin ii; high byte {4'hb, rd, sel, value, 1'b0}:
  *                 rd 0 writes value to OUT (sel 0) or DIR (sel 1, 0 = output,
  *                 1 = input); rd 1 (0xB8) replies {5'b0, DIR, OUT, IN}
- *   op 4  0xCe00  SELECT engine e, up to 16; a slave is numbered {e, cs[2:0]}
- *                 and the CHIPSELECT mask picks the cs; low byte reserved
- *                 (not implemented yet)
+ *   op 4  0xC0ee  SELECT engine ee for the instructions that follow
  *   op 5  0xD0nn  FETCH n + 1 response bytes, followed by n + 2 filler bytes
  *   op 6  0xE0xx  FLUSH
  *   op 7  0xF0..  CHECK (reserved, not implemented yet)
  *
- * SELECT and CHECK are rejected as bad instructions until implemented; so is
- * GPIO without GPIOs (GPIO_EN = 0).
+ * CHECK is rejected as a bad instruction until implemented; so is GPIO
+ * without GPIOs (GPIO_EN = 0).
+ *
+ * Engines: the NUM_OF_CS downstream chip selects are spread over
+ * NUM_OF_ENGINES = ceil(NUM_OF_CS / 8) engines, 8 each except the last. A
+ * slave is numbered {ee, cs[2:0]}: SELECT picks engine ee, and the CHIPSELECT
+ * masks that follow pick one of its chip selects. SELECT is queued in the CMD
+ * FIFO like an engine instruction, so it takes effect in order with the
+ * stream; the interconnect consumes it. After reset and FLUSH, engine 0 is
+ * selected. A SELECT is rejected when ee is out of range, or when it names
+ * another engine while the selected one still holds a chip select asserted,
+ * so at most one slave is active at a time.
+ *
+ * The decoder tracks the selected engine and whether it holds a chip select
+ * as the engines will see them: updated by each instruction stored, kept by
+ * the commit and restored by a rollback, and reset by FLUSH.
  *
  * A reply byte is ready two bytes after the byte that completes its request:
  *
@@ -110,10 +122,11 @@
  * during the frame.
  *
  * A frame is rejected, and the matching sticky err bit set, when it:
- *   [0] uses a reserved encoding (engine class 101 to 111, SELECT, CHECK,
- *       GPIO without GPIOs, reserved TRANSFER, WRITE or bridge fields),
- *       selects more than one target in a CHIPSELECT, or sets a word length
- *       outside 1..8
+ *   [0] uses a reserved encoding (engine class 101 to 111, CHECK, GPIO
+ *       without GPIOs, reserved TRANSFER, WRITE or bridge fields), selects
+ *       more than one target or a missing one in a CHIPSELECT, SELECTs a
+ *       missing engine or another engine while a chip select is asserted, or
+ *       sets a word length outside 1..8
  *   [1] does not fit in the room left in the CMD or SDO FIFO
  *   [2] ends inside an instruction, its SDO data or a FETCH's filler bytes
  * FLUSH clears err.
@@ -209,6 +222,10 @@ module spi_translator_decoder #(
   localparam [2:0] BR_FLUSH  = 3'd6;
   localparam [2:0] BR_CHECK  = 3'd7;
 
+  localparam NUM_OF_ENGINES = (NUM_OF_CS + 7) / 8;
+  localparam LAST_CS = NUM_OF_CS - 8 * (NUM_OF_ENGINES - 1);
+  localparam [8:0] LAST_MASK = (9'd1 << LAST_CS) - 9'd1;
+
   localparam ERR_INSTR = 0;
   localparam ERR_OVF   = 1;
 
@@ -220,6 +237,13 @@ module spi_translator_decoder #(
   reg   [1:0]                 frame_err = 2'b00;
   reg   [1:0]                 frame_end_d = 2'b00;
 
+  // selected engine and chip select state, as of the instructions stored so
+  // far (eng, cs_open) and as of the last commit (eng_q, cs_open_q)
+  reg   [3:0]                 eng = 4'h0;
+  reg                         cs_open = 1'b0;
+  reg   [3:0]                 eng_q = 4'h0;
+  reg                         cs_open_q = 1'b0;
+
   // reply in progress: data bytes still to send
   reg                         rep_fetch = 1'b0;
   reg   [8:0]                 rep_idx = 9'h000;
@@ -228,8 +252,10 @@ module spi_translator_decoder #(
   wire                        byte_in;
   wire  [2:0]                 inst;
   wire  [2:0]                 op;
-  wire  [NUM_OF_CS-1:0]       sel;
+  wire  [7:0]                 cs_mask;
+  wire  [7:0]                 sel;
   wire                        sel_ok;
+  wire                        select_ok;
   wire                        is_bridge;
   wire                        cmd_ok;
   wire                        store_cmd;
@@ -249,10 +275,15 @@ module spi_translator_decoder #(
   assign inst    = hi[6:4];
   assign op      = hi[6:4];
 
-  // targets a CHIPSELECT pulls low; at most one of the NUM_OF_CS is allowed,
-  // bits above NUM_OF_CS are not checked
-  assign sel    = ~rx_data[NUM_OF_CS-1:0];
-  assign sel_ok = (sel & (sel - 1'b1)) == {NUM_OF_CS{1'b0}};
+  // targets a CHIPSELECT pulls low; at most one, and only one the selected
+  // engine has
+  assign cs_mask = (eng == NUM_OF_ENGINES - 1) ? LAST_MASK[7:0] : 8'hff;
+  assign sel     = ~rx_data;
+  assign sel_ok  = (sel & (sel - 1'b1)) == 8'h00 && (sel & ~cs_mask) == 8'h00;
+
+  // SELECT: an existing engine, and no chip select left asserted elsewhere
+  assign select_ok = hi[3:0] == 4'h0 && rx_data < NUM_OF_ENGINES &&
+                     (rx_data[3:0] == eng || ~cs_open);
 
   // checks on the instruction {hi, rx_data}, evaluated on its second byte
   assign is_bridge = hi[7];
@@ -260,6 +291,7 @@ module spi_translator_decoder #(
     (op == BR_CTRL_W) ||
     (op == BR_CTRL_R && rx_data == 8'h00) ||
     (op == BR_GPIO && GPIO_EN != 0 && (hi[3] ? hi[2:0] == 3'b000 : hi[0] == 1'b0)) ||
+    (op == BR_SELECT && select_ok) ||
     ((op == BR_NOP || op == BR_FETCH || op == BR_FLUSH) && hi[3:0] == 4'h0)) : (
     (inst == CMD_TRANSFER   && hi[3:2] == 2'b00) ||
     (inst == CMD_CHIPSELECT && sel_ok) ||
@@ -267,9 +299,10 @@ module spi_translator_decoder #(
     (inst == CMD_MISC) ||
     (inst == CMD_CS_INV));
 
-  // engine instructions go to the CMD FIFO, their SDO bytes to the SDO FIFO;
-  // nothing more is written once the frame has failed
-  assign store_cmd = byte_in && frame_err == 2'b00 && state == S_LO && cmd_ok && ~is_bridge;
+  // engine instructions and SELECT go to the CMD FIFO, SDO bytes to the SDO
+  // FIFO; nothing more is written once the frame has failed
+  assign store_cmd = byte_in && frame_err == 2'b00 && state == S_LO && cmd_ok &&
+                     (~is_bridge || op == BR_SELECT);
   assign store_sdo = byte_in && frame_err == 2'b00 && state == S_SDO;
   assign no_room   = (store_cmd & cmd_full) | (store_sdo & sdo_full);
 
@@ -413,6 +446,33 @@ module spi_translator_decoder #(
         gpio_wr_index <= rx_data;
         gpio_wr_sel <= hi[2];
         gpio_wr_value <= hi[1];
+      end
+    end
+  end
+
+  // engine and chip select tracking; FLUSH resets the engines, which
+  // releases every chip select and returns to engine 0
+
+  always @(posedge clk) begin
+    if (resetn == 1'b0 || flush_req == 1'b1) begin
+      eng <= 4'h0;
+      cs_open <= 1'b0;
+      eng_q <= 4'h0;
+      cs_open_q <= 1'b0;
+    end else begin
+      if (cmd_we) begin
+        if (is_bridge) begin
+          eng <= rx_data[3:0];
+        end else if (inst == CMD_CHIPSELECT) begin
+          cs_open <= sel != 8'h00;
+        end
+      end
+      if (commit) begin
+        eng_q <= eng;
+        cs_open_q <= cs_open;
+      end else if (rollback) begin
+        eng <= eng_q;
+        cs_open <= cs_open_q;
       end
     end
   end

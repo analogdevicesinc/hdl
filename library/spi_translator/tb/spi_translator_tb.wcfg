@@ -10,15 +10,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="90.0450 us"></ZoomStartTime>
-      <ZoomEndTime time="149.6850 us"></ZoomEndTime>
-      <Cursor1Time time="107.6550 us"></Cursor1Time>
+      <ZoomStartTime time="24,784.2 ns"></ZoomStartTime>
+      <ZoomEndTime time="29,529.3 ns"></ZoomEndTime>
+      <Cursor1Time time="25,575.0 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="178"></NameColumnWidth>
-      <ValueColumnWidth column_width="89"></ValueColumnWidth>
+      <ValueColumnWidth column_width="81"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="106" />
+   <WVObjectSize size="114" />
    <wvobject fp_name="divider25" type="divider">
       <obj_property name="label">SPI TRANSLATOR</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -281,12 +281,6 @@
       <obj_property name="ElementShortName">sdo_wdata[7:0]</obj_property>
       <obj_property name="ObjectShortName">sdo_wdata[7:0]</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/commit">
-      <obj_property name="ElementShortName">commit</obj_property>
-      <obj_property name="ObjectShortName">commit</obj_property>
-      <obj_property name="CustomSignalColor">#FF0000</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
-   </wvobject>
    <wvobject fp_name="divider79" type="divider">
    </wvobject>
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/clk">
@@ -305,6 +299,28 @@
    </wvobject>
    <wvobject fp_name="divider41" type="divider">
    </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/done">
+      <obj_property name="ElementShortName">done</obj_property>
+      <obj_property name="ObjectShortName">done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/seen">
+      <obj_property name="ElementShortName">seen</obj_property>
+      <obj_property name="ObjectShortName">seen</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider53" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/commit">
+      <obj_property name="ElementShortName">commit</obj_property>
+      <obj_property name="ObjectShortName">commit</obj_property>
+      <obj_property name="CustomSignalColor">#FF0000</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/rollback">
+      <obj_property name="ElementShortName">rollback</obj_property>
+      <obj_property name="ObjectShortName">rollback</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider61" type="divider">
+   </wvobject>
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/rep_start">
       <obj_property name="ElementShortName">rep_start</obj_property>
       <obj_property name="ObjectShortName">rep_start</obj_property>
@@ -321,9 +337,9 @@
       <obj_property name="ElementShortName">rep_start_g</obj_property>
       <obj_property name="ObjectShortName">rep_start_g</obj_property>
    </wvobject>
-   <wvobject fp_name="divider53" type="divider">
-   </wvobject>
-   <wvobject fp_name="divider61" type="divider">
+   <wvobject fp_name="divider85" type="divider">
+      <obj_property name="label">New Divider 13</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/rep_data">
       <obj_property name="ElementShortName">rep_data</obj_property>
@@ -335,8 +351,8 @@
       <obj_property name="ElementShortName">rep_byte[7:0]</obj_property>
       <obj_property name="ObjectShortName">rep_byte[7:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="divider85" type="divider">
-      <obj_property name="label">New Divider 13</obj_property>
+   <wvobject fp_name="divider48" type="divider">
+      <obj_property name="label">New Divider 14</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_decoder/resp_ready">
@@ -351,14 +367,34 @@
       <obj_property name="ElementShortName">resp_data[7:0]</obj_property>
       <obj_property name="ObjectShortName">resp_data[7:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="divider48" type="divider">
-      <obj_property name="label">New Divider 14</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
+   <wvobject fp_name="divider127" type="divider">
    </wvobject>
    <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_decoder/tx_data">
       <obj_property name="ElementShortName">tx_data[7:0]</obj_property>
       <obj_property name="ObjectShortName">tx_data[7:0]</obj_property>
       <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider110" type="divider">
+      <obj_property name="label">SPI EXECUTION</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/cmd_valid">
+      <obj_property name="ElementShortName">cmd_valid</obj_property>
+      <obj_property name="ObjectShortName">cmd_valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/sdo_data_valid">
+      <obj_property name="ElementShortName">sdo_data_valid</obj_property>
+      <obj_property name="ObjectShortName">sdo_data_valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/cmd_ready">
+      <obj_property name="ElementShortName">cmd_ready</obj_property>
+      <obj_property name="ObjectShortName">cmd_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/spi_translator_tb/i_dut/i_exec/busy">
+      <obj_property name="ElementShortName">busy</obj_property>
+      <obj_property name="ObjectShortName">busy</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
       <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject fp_name="divider88" type="divider">
@@ -462,7 +498,5 @@
    <wvobject type="array" fp_name="/spi_translator_tb/i_dut/i_exec/last_sync">
       <obj_property name="ElementShortName">last_sync[7:0]</obj_property>
       <obj_property name="ObjectShortName">last_sync[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="divider127" type="divider">
    </wvobject>
 </wave_config>
