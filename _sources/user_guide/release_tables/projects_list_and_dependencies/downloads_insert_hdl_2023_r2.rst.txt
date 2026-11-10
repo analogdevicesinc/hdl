@@ -2005,7 +2005,7 @@ PULSAR_ADC
    * - :adi:`PULSAR-ADC-PMDZ <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/PulsarPMODs.html>`
      - :git-hdl:`pulsar_adc <hdl_2023_r2:projects/pulsar_adc>`
      - :git-hdl:`coraz7s <hdl_2023_r2:projects/pulsar_adc/coraz7s>`
-       :git-hdl:`zed <hdl_2022_r2:projects/pulsar_adc/zed>`
+       :git-hdl:`zed <hdl_2023_r2:projects/pulsar_adc/zed>`
      - :ref:`pulsar_adc_coraz7s <util_hdl_2023_r2_pulsar_adc_coraz7s>`
        :ref:`pulsar_adc_zed <util_hdl_2023_r2_pulsar_adc_zed>`
      - :git-hdl:`axi_clkgen <hdl_2023_r2:library/axi_clkgen>`
