@@ -621,8 +621,6 @@ if {$APP_ENABLE == 1} {
   set INPUT_WIDTH [expr $INPUT_CHANNELS*$INPUT_SAMPLES_PER_CHANNEL*$INPUT_SAMPLE_DATA_WIDTH]
   set OUTPUT_WIDTH [expr $OUTPUT_CHANNELS*$OUTPUT_SAMPLES_PER_CHANNEL*$OUTPUT_SAMPLE_DATA_WIDTH]
 
-  create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axil_application
-
   create_bd_pin -dir I -type clk input_clk
   create_bd_pin -dir I -type rst input_rstn
 
