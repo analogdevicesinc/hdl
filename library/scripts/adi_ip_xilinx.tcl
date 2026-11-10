@@ -385,7 +385,8 @@ proc adi_ip_properties_lite {ip_name} {
   ipx::save_core [ipx::current_core]
 }
 
-## Set AXI interface IP proprieties.
+## Set AXI interface IP proprieties, and the APB slave interface (s_apb) if the
+#  core has its ports.
 #
 # \param[ip_name] - The ip name
 #
@@ -439,6 +440,39 @@ proc adi_ip_properties {ip_name} {
   set_property range $range [ipx::get_address_blocks axi_lite \
     -of_objects [ipx::get_memory_maps s_axi -of_objects [ipx::current_core]]]
   ipx::associate_bus_interfaces -clock s_axi_aclk -reset s_axi_aresetn [ipx::current_core]
+
+  # APB slave register map interface, if the core has one (s_apb_*, e.g. with
+  # REGMAP_INTERFACE = 1); its enablement is set by the core
+  if {[llength [ipx::get_ports -quiet s_apb_paddr -of_objects [ipx::current_core]]] != 0} {
+    adi_add_bus "s_apb" "slave" \
+      "xilinx.com:interface:apb_rtl:1.0" \
+      "xilinx.com:interface:apb:1.0" \
+      [list {"s_apb_paddr" "PADDR"} \
+            {"s_apb_psel" "PSEL"} \
+            {"s_apb_penable" "PENABLE"} \
+            {"s_apb_pwrite" "PWRITE"} \
+            {"s_apb_pwdata" "PWDATA"} \
+            {"s_apb_prdata" "PRDATA"} \
+            {"s_apb_pready" "PREADY"} \
+            {"s_apb_pslverr" "PSLVERR"}]
+
+    ipx::infer_bus_interface s_apb_pclk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+    ipx::infer_bus_interface s_apb_presetn xilinx.com:signal:reset_rtl:1.0 [ipx::current_core]
+
+    set paddr_width [expr [get_property SIZE_LEFT [ipx::get_ports -nocase true s_apb_paddr -of_objects [ipx::current_core]]] + 1]
+    if {$paddr_width >= 16} {
+      set range 65536
+    } else {
+      set range [expr 1 << $paddr_width]
+    }
+
+    ipx::add_memory_map {s_apb} [ipx::current_core]
+    set_property slave_memory_map_ref {s_apb} [ipx::get_bus_interfaces s_apb -of_objects [ipx::current_core]]
+    ipx::add_address_block {apb} [ipx::get_memory_maps s_apb -of_objects [ipx::current_core]]
+    set_property range $range [ipx::get_address_blocks apb \
+      -of_objects [ipx::get_memory_maps s_apb -of_objects [ipx::current_core]]]
+    ipx::associate_bus_interfaces -busif s_apb -clock s_apb_pclk -reset s_apb_presetn [ipx::current_core]
+  }
   ipx::save_core
 }
 
