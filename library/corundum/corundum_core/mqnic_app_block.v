@@ -1177,6 +1177,25 @@ module mqnic_app_block #(
       assign m_axis_stat_tvalid = 1'b0;
     end
 
+    /*
+    * PTP clock
+    */
+    `ifdef APP_CUSTOM_PORTS_ENABLE
+      assign ptp_td_sd_app = ptp_td_sd;
+      assign ptp_pps_app = ptp_pps;
+      assign ptp_pps_str_app = ptp_pps_str;
+      assign ptp_sync_locked_app = ptp_sync_locked;
+      assign ptp_sync_ts_rel_app = ptp_sync_ts_rel;
+      assign ptp_sync_ts_rel_step_app = ptp_sync_ts_rel_step;
+      assign ptp_sync_ts_tod_app = ptp_sync_ts_tod;
+      assign ptp_sync_ts_tod_step_app = ptp_sync_ts_tod_step;
+      assign ptp_sync_pps_app = ptp_sync_pps;
+      assign ptp_sync_pps_str_app = ptp_sync_pps_str;
+      assign ptp_perout_locked_app = ptp_perout_locked;
+      assign ptp_perout_error_app = ptp_perout_error;
+      assign ptp_perout_pulse_app = ptp_perout_pulse;
+    `endif
+
   endgenerate
 
   /*
