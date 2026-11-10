@@ -41,6 +41,35 @@ ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
+# The ILA probes the engine buses. A probe on a member of an interface
+# connection takes it out of the interface (BD 41-1306), so replace the
+# interface connection by plain ports wired to the engine pins; the port names
+# stay those of the interface port, so system_top is unchanged. One engine: the
+# port is spi_eng.
+
+foreach {k cs_width} {0 4} {
+  set execution spi_slave/spi_slave_execution_$k
+  set port spi_eng
+
+  delete_bd_objs [get_bd_intf_nets -of_objects [get_bd_intf_ports $port]]
+  delete_bd_objs [get_bd_intf_nets -of_objects [get_bd_intf_pins $execution/spi]]
+  delete_bd_objs [get_bd_intf_ports $port] [get_bd_intf_pins spi_slave/m_spi_$k]
+
+  create_bd_port -dir O ${port}_sclk
+  create_bd_port -dir O ${port}_sdo
+  create_bd_port -dir O ${port}_sdo_t
+  create_bd_port -dir I ${port}_sdi
+  create_bd_port -dir O -from [expr {$cs_width - 1}] -to 0 ${port}_cs
+  create_bd_port -dir O ${port}_three_wire
+
+  ad_connect $execution/sclk ${port}_sclk
+  ad_connect $execution/sdo ${port}_sdo
+  ad_connect $execution/sdo_t ${port}_sdo_t
+  ad_connect $execution/sdi ${port}_sdi
+  ad_connect $execution/cs ${port}_cs
+  ad_connect $execution/three_wire ${port}_three_wire
+}
+
 # ILA
 create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_spi_translator
 set_property -dict [list \
@@ -65,10 +94,10 @@ ad_connect ila_spi_translator/probe0  axi_spi_host/sck_o
 ad_connect ila_spi_translator/probe1  axi_spi_host/io0_o
 ad_connect ila_spi_translator/probe2  spi_slave/sdo
 ad_connect ila_spi_translator/probe3  axi_spi_host/ss_o
-ad_connect ila_spi_translator/probe4  spi_execution/sclk
-ad_connect ila_spi_translator/probe5  spi_execution/sdo
+ad_connect ila_spi_translator/probe4  spi_eng_sclk
+ad_connect ila_spi_translator/probe5  spi_eng_sdo
 ad_connect ila_spi_translator/probe6  spi_eng_sdi
-ad_connect ila_spi_translator/probe7  spi_execution/cs
+ad_connect ila_spi_translator/probe7  spi_eng_cs
 ad_connect ila_spi_translator/probe8  spi_slave/gpio_o
 ad_connect ila_spi_translator/probe9  spi_slave/gpio_t
 
