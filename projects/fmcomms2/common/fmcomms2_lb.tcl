@@ -221,7 +221,7 @@ sd_instantiate_component -sd_name $sd_name -component_name $apb_dma_interconnect
 sd_instantiate_component -sd_name $sd_name -component_name $axi_mem_interconnect0_component -instance_name {fmcomms2_fic0_mem_interconnect_0}
 sd_instantiate_component -sd_name $sd_name -component_name $axi_mem_interconnect1_component -instance_name {fmcomms2_fic1_mem_interconnect_0}
 sd_instantiate_macro -sd_name $sd_name -macro_name {INV} -instance_name {fmcomms2_reset_inv}
-sd_instantiate_macro -sd_name $sd_name -macro_name {OR2} -instance_name {util_ad9361_divclk_sel_or}
+sd_instantiate_macro -sd_name $sd_name -macro_name {AND2} -instance_name {util_ad9361_divclk_sel}
 
 # The cores use their APB register map interface (REGMAP_INTERFACE = 1), on
 # s_apb_pclk and s_apb_presetn; their AXI slave ports are no AXI interface here
@@ -392,9 +392,9 @@ sd_connect_pins -sd_name $sd_name -pin_names {tdd_sync_i util_ad9361_tdd_sync_0:
 puts {TRACE: starting clock and reset connects}
 sd_connect_pins -sd_name $sd_name -pin_names [list $sys_resetn_pin fmcomms2_reset_inv:A]
 sd_disconnect_pins -sd_name $sd_name -pin_names {MSS:FIC_0_ACLK MSS:FIC_1_ACLK}
-sd_connect_pins -sd_name $sd_name -pin_names {axi_ad9361_0:adc_r1_mode util_ad9361_divclk_sel_or:A}
-sd_connect_pins -sd_name $sd_name -pin_names {axi_ad9361_0:dac_r1_mode util_ad9361_divclk_sel_or:B}
-sd_connect_pins -sd_name $sd_name -pin_names {util_ad9361_divclk_sel_or:Y util_ad9361_divclk_0:clk_sel}
+sd_connect_pins -sd_name $sd_name -pin_names {axi_ad9361_0:adc_r1_mode util_ad9361_divclk_sel:A}
+sd_connect_pins -sd_name $sd_name -pin_names {axi_ad9361_0:dac_r1_mode util_ad9361_divclk_sel:B}
+sd_connect_pins -sd_name $sd_name -pin_names {util_ad9361_divclk_sel:Y util_ad9361_divclk_0:clk_sel}
 sd_connect_pins -sd_name $sd_name -pin_names {axi_ad9361_0:l_clk axi_ad9361_0:clk util_ad9361_divclk_0:clk util_ad9361_adc_fifo_0:din_clk util_ad9361_dac_fifo_0:dout_clk}
 sd_connect_pins -sd_name $sd_name -pin_names {util_ad9361_divclk_0:clk_out util_ad9361_divclk_reset_0:clk util_ad9361_adc_fifo_0:dout_clk util_ad9361_adc_pack_0:clk axi_ad9361_adc_dma_0:fifo_wr_clk util_ad9361_dac_fifo_0:din_clk util_ad9361_dac_upack_0:clk axi_ad9361_dac_dma_0:m_axis_aclk}
 sd_connect_pins -sd_name $sd_name -pin_names {fmcomms2_reset_inv:Y util_ad9361_divclk_reset_0:rst_async}
