@@ -987,6 +987,42 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 
 }
 
+## Set the NoC connection of a memory mapped master connected to the NoC by an
+#  ad_mem_hp[0|1|2|3]_interconnect call. If the LPDDR4 NoC axi_noc_mc exists,
+#  the master is connected to its memory controller port instead of the DDR4
+#  one. Does nothing on non-Versal devices.
+#
+#  \param[p_name] - name of the master interface
+#  \param[p_mc] - memory controller port, MC_0, MC_1, MC_2 or MC_3
+#  \param[p_rd_bw] - requested read bandwidth in MB/s
+#  \param[p_wr_bw] - requested write bandwidth in MB/s
+#
+proc ad_mem_noc_connection {p_name p_mc p_rd_bw p_wr_bw} {
+
+  global sys_zynq
+
+  if {$sys_zynq != 3} {return}
+
+  set noc_si [find_bd_objs -relation connected_to [get_bd_intf_pins $p_name]]
+  set noc_seg_pin $noc_si
+  regsub {MC_} $p_mc {C} noc_seg
+
+  foreach noc_ini [get_bd_intf_pins -quiet axi_noc_0/M*_INI] {
+    set mc_ini [find_bd_objs -relation connected_to $noc_ini]
+    if {[get_bd_cells -of_objects $mc_ini] eq "/axi_noc_mc" && \
+        [lindex [get_property CONFIG.CONNECTIONS $mc_ini] 0] eq $p_mc} {
+      set p_mc [get_property NAME $noc_ini]
+      set noc_seg_pin $mc_ini
+    }
+  }
+
+  set_property CONFIG.CONNECTIONS "$p_mc {read_bw {$p_rd_bw} write_bw {$p_wr_bw} read_avg_burst {64} write_avg_burst {64}}" $noc_si
+
+  foreach seg [get_bd_addr_segs [string trimleft $noc_seg_pin /]/${noc_seg}_DDR_*] {
+    assign_bd_address $seg
+  }
+}
+
 ## Create an AXI4 Lite memory mapped interface connection for register maps,
 #  instantiates an interconnect and reconfigure it at every process call.
 #
