@@ -1406,6 +1406,8 @@ ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_dma_clk axi_apollo_rx_dma/m_dest_axi
 ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect $sys_dma_clk axi_apollo_tx_dma/m_src_axi
+ad_mem_noc_connection axi_apollo_rx_dma/m_dest_axi MC_1 0 15000
+ad_mem_noc_connection axi_apollo_tx_dma/m_src_axi MC_2 15000 0
 
 if {$ASYMMETRIC_A_B_MODE} {
   if ${ADI_PHY_SEL} {
@@ -1415,6 +1417,8 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_mem_hp1_interconnect $sys_dma_clk axi_apollo_rx_b_dma/m_dest_axi
   ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
   ad_mem_hp2_interconnect $sys_dma_clk axi_apollo_tx_b_dma/m_src_axi
+  ad_mem_noc_connection axi_apollo_rx_b_dma/m_dest_axi MC_3 0 15000
+  ad_mem_noc_connection axi_apollo_tx_b_dma/m_src_axi MC_0 15000 0
 }
 
 # interrupts
