@@ -29,7 +29,13 @@ This specific command is equivalent to running "make" only:
 make LVDS_CMOS_N=0
 ```
 
-Corresponding device tree: [zynq-zed-adum7701.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adum7701.dts)
+Corresponding device trees:
+
+- [zynq-zed-adum7701.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adum7701.dts)
+- [zynq-zed-adum7801.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adum7801.dts)
+- [zynq-zed-adum7802.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adum7802.dts)
+- [zynq-zed-adum7811.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adum7811.dts)
+- [zynq-zed-adum7812.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adum7812.dts)
 
 #### Configuration using LVDS interface
 
