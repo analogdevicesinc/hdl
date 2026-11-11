@@ -26,9 +26,15 @@ of information:
 
 * `AMD Xilinx support`_
 * `Intel support`_
+* `Lattice support`_
+* `Microchip support`_
 
 .. _Analog Devices, Inc.: https://www.analog.com/en/index.html
 
 .. _AMD Xilinx support: https://www.xilinx.com/support.html
 
 .. _Intel support: https://www.intel.com/content/www/us/en/programmable/support/support-resources.html
+
+.. _Lattice support: https://www.latticesemi.com/Support
+
+.. _Microchip support: https://www.microchip.com/en-us/support
