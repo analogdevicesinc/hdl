@@ -101,6 +101,7 @@
 <li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
 <li><a class="reference internal" href="#interface">Interface</a><ul>
 <li><a class="reference internal" href="#internal-interface-description">Internal Interface Description</a></li>
+<li><a class="reference internal" href="#reset-of-the-receive-path">Reset of the receive path</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#register-map">Register Map</a></li>
@@ -400,7 +401,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/m2k/">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/max96724/">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pluto/">PLUTO</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/quad_adaq77681/">QUAD_ADAQ7768-1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/quad_ada4356/">QUAD-ADA4356</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/quad_adaq77681/">QUAD-ADAQ7768-1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/quad_quad_mxfe/">QUAD-QUAD-MXFE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds_adc/">PULSAR-LVDS-ADC</a></li>
@@ -462,13 +464,16 @@ with the device, for a complete and better understanding.</p>
 <tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ada4355/axi_ada4355_if.v" target="_blank">library/axi_ada4355/axi_ada4355_if.v</a></p></td>
 <td><p>Verilog source for the AXI ADA4355 interface.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ada4355/axi_ada4355_ip.tcl" target="_blank">library/axi_ada4355/axi_ada4355_ip.tcl</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ada4355/axi_ada4355_regmap.v" target="_blank">library/axi_ada4355/axi_ada4355_regmap.v</a></p></td>
+<td><p>Verilog source for the AXI ADA4355 custom registers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ada4355/axi_ada4355_ip.tcl" target="_blank">library/axi_ada4355/axi_ada4355_ip.tcl</a></p></td>
 <td><p>IP definition file (AMD tools)</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v" target="_blank">library/common/up_adc_common.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v" target="_blank">library/common/up_adc_common.v</a></p></td>
 <td><p>Verilog source for the ADC Common regmap.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v" target="_blank">library/common/up_adc_channel.v</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v" target="_blank">library/common/up_adc_channel.v</a></p></td>
 <td><p>Verilog source for the ADC Channel regmap.</p></td>
 </tr>
 </tbody>
@@ -507,6 +512,22 @@ with the device, for a complete and better understanding.</p>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td class="range"><p>Unknown (0), 7series (1), ultrascale (2), ultrascale+ (3), versal (4)</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">IO_DELAY_GROUP</span></code></td>
+<td class="description"><section>
+<p>IODELAY group of the core’s IDELAY elements. Cores whose pins are in the same IO bank must use the same group.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">adc_if_delay_group</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">IODELAY_CTRL</span></code></td>
+<td class="description"><section>
+<p>Instantiate an IDELAYCTRL in this core (1) or not (0). Set it to 1 on exactly one core of each IODELAY group.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">BUFMRCE_EN</span></code></td>
 <td class="description"><section>
@@ -829,7 +850,7 @@ with the device, for a complete and better understanding.</p>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>Signals when the clock is disabled and the design should be in reset</p>
+<p>Active low. Restarts the receive path: holds the SERDES in reset and, with BUFMRCE_EN=0, the /4 clock divider. Tie it to 1 if unused.</p>
 </section>
 </td>
 </tr>
@@ -883,6 +904,32 @@ a 1:8 ratio.</p></li>
 a 1:8 ratio.</p></li>
 <li><p>After deserialization, data is aligned using data_frame and a fixed pattern.</p></li>
 </ul>
+</section>
+<section id="reset-of-the-receive-path">
+<h3>Reset of the receive path<a class="headerlink" href="#reset-of-the-receive-path" title="Link to this heading"></a></h3>
+<p>The /4 clock divider (BUFR) picks its phase, and so the ISERDES word
+boundary, from the first DCO edges it sees. If that happens before the
+device clock is stable, for example on a cold boot before the clock
+generator is programmed, the word boundary is arbitrary and no IDELAY
+setting recovers it.</p>
+<p>To prevent this, the core holds the receive path in reset from FPGA
+configuration until software sets bit 1 (<code class="docutils literal notranslate"><span class="pre">MMCM_RSTN</span></code>) of the <code class="docutils literal notranslate"><span class="pre">RSTN</span></code>
+register of the ADC common register map, and the core outputs no data until
+then. Either reset source restarts the receive path:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MMCM_RSTN</span></code> = 0 (the reset value);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sync_n</span></code> = 0.</p></li>
+</ul>
+<p>With BUFMRCE_EN=0 both sources hold the BUFR divider and the SERDES, so
+<code class="docutils literal notranslate"><span class="pre">adc_clk</span></code> does not run while either is asserted. With BUFMRCE_EN=1 they hold
+only the SERDES; the BUFR dividers are then released by the core’s own
+BUFMRCE sequencer, and <code class="docutils literal notranslate"><span class="pre">adc_clk</span></code> runs.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Software must write <code class="docutils literal notranslate"><span class="pre">RSTN</span></code> = 0x3 (<code class="docutils literal notranslate"><span class="pre">RSTN</span></code> and <code class="docutils literal notranslate"><span class="pre">MMCM_RSTN</span></code>) once the
+device clock is stable, and must not clear <code class="docutils literal notranslate"><span class="pre">MMCM_RSTN</span></code> afterwards. The
+generic Linux AXI ADC driver probe does this.</p>
+</div>
 </section>
 </section>
 <section id="register-map">
@@ -2662,6 +2709,8 @@ the interface module.</p>
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ada4355" target="_blank">library/axi_ada4355</a></p></li>
 <li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ada4355_fmc" target="_blank">projects/ada4355_fmc</a></p></li>
 <li><p>HDL project documentation at <a class="reference internal" href="../../projects/ada4355_fmc/#ada4355-fmc"><span class="std std-ref">ADA4355-FMC HDL project</span></a></p></li>
+<li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/quad_ada4356" target="_blank">projects/quad_ada4356</a></p></li>
+<li><p>HDL project documentation at <a class="reference internal" href="../../projects/quad_ada4356/#quad-ada4356"><span class="std std-ref">QUAD-ADA4356 HDL project</span></a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4355" target="_blank">ADA4355</a></p></li>
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf" target="_blank">Zynq-7000 SoC Overview</a></p></li>
 <li><p><a class="icon link reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf" target="_blank">Zynq-7000 SoC Packaging and Pinout</a></p></li>

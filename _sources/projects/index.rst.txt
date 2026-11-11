@@ -107,13 +107,14 @@ Contents
    M2K <m2k/index>
    MAX96724 <max96724/index>
    PLUTO <pluto/index>
-   QUAD_ADAQ7768-1 <quad_adaq77681/index>
+   QUAD-ADA4356 <quad_ada4356/index>
+   QUAD-ADAQ7768-1 <quad_adaq77681/index>
    QUAD-QUAD-MXFE <quad_quad_mxfe/index>
    PULSAR-ADC <pulsar_adc/index>
    PULSAR-LVDS-ADC <pulsar_lvds_adc/index>
    ADMX6020M <admx6020m/index>
    TEST-CAPI-SELFTEST <test_capi_selftest/index>
-   
+
 Obsolete projects
 -------------------------------------------------------------------------------
 .. toctree::
