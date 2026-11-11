@@ -155,7 +155,7 @@ set_property -dict [list \
 
 set_property -dict [list \
   CONFIG.MC_CHANNEL_INTERLEAVING {true} \
-  CONFIG.MC_CH_INTERLEAVING_SIZE {256_Bytes} \
+  CONFIG.MC_CH_INTERLEAVING_SIZE {4K_Bytes} \
 ] [get_bd_cells axi_noc_0]
 
 ad_ip_instance proc_sys_reset sys_rstgen
