@@ -255,10 +255,12 @@ differences:
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: fmcomms2_mpfs_video_kit_block_diagram.svg
-   :width: 1000
+.. figure:: fmcomms2_mpfs_video_kit_block_diagram.svg
+   :width: 400
    :align: center
    :alt: FMCOMMS2/3/4 on the PolarFire SoC Video Kit block diagram
+
+   Click to enlarge
 
 Clocks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -269,7 +271,7 @@ Clocks
 - **divclk**: the ``util_clkdiv`` output, l_clk divided by 4 (2R2T) or 2
   (1R1T), the sample rate. It clocks the sample side of the FIFOs,
   ``util_cpack2``, ``util_upack2`` and the stream side of the DMAs. The
-  divider is selected by the ``adc_r1_mode`` or ``dac_r1_mode`` of the core.
+  divider is selected by the ``adc_r1_mode`` and ``dac_r1_mode`` of the core.
 - **sys_clk**: 100 MHz from the fabric PLL (PF_CCC), from the 148.5 MHz board
   oscillator. It clocks the FIC0 to FIC3 interfaces, the APB, the memory side
   of the DMAs and the IOD delay control.
