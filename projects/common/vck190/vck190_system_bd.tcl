@@ -32,4 +32,6 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
+set LPDDR4_ENABLE 1
+
 source $ad_hdl_dir/projects/common/vmk180/vmk180_system_bd.tcl

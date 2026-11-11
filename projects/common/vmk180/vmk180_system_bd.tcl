@@ -34,6 +34,10 @@
 
 set CACHE_COHERENCY false
 
+if {![info exists LPDDR4_ENABLE]} {
+  set LPDDR4_ENABLE 0
+}
+
 # create board design
 # default ports
 
@@ -60,17 +64,38 @@ create_bd_port -dir O -from 31 -to 0 gpio2_t
 # instance: versal_cips and NoC
 ad_ip_instance versal_cips sys_cips
 
-apply_bd_automation -rule xilinx.com:bd_rule:cips -config { \
-  board_preset {Yes} \
-  boot_config {Custom} \
-  configure_noc {Add new AXI NoC} \
-  debug_config {JTAG} \
-  design_flow {Full System} \
-  mc_type {DDR} \
-  num_mc {1} \
-  pl_clocks {2} \
-  pl_resets {1} \
-}  [get_bd_cells sys_cips]
+if {$LPDDR4_ENABLE} {
+  apply_bd_automation -rule xilinx.com:bd_rule:cips -config { \
+    board_preset {Yes} \
+    boot_config {Custom} \
+    configure_noc {Add new AXI NoC} \
+    debug_config {JTAG} \
+    design_flow {Full System} \
+    mc_type {Both} \
+    num_mc_ddr {1} \
+    num_mc_lpddr {2} \
+    pl_clocks {2} \
+    pl_resets {1} \
+  }  [get_bd_cells sys_cips]
+
+  set_property -dict [list \
+    CONFIG.MC_CHANNEL_INTERLEAVING {true} \
+    CONFIG.MC_CH_INTERLEAVING_SIZE {4K_Bytes} \
+    CONFIG.MC_INTERLEAVE_SIZE {4096} \
+  ] [get_bd_cells axi_noc_mc]
+} else {
+  apply_bd_automation -rule xilinx.com:bd_rule:cips -config { \
+    board_preset {Yes} \
+    boot_config {Custom} \
+    configure_noc {Add new AXI NoC} \
+    debug_config {JTAG} \
+    design_flow {Full System} \
+    mc_type {DDR} \
+    num_mc {1} \
+    pl_clocks {2} \
+    pl_resets {1} \
+  }  [get_bd_cells sys_cips]
+}
 
 set_property -dict [list \
   CONFIG.PS_PMC_CONFIG { \

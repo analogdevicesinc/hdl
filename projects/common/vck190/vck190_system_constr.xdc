@@ -38,6 +38,14 @@ create_clock -period 5.000 -name sys_clk_p [get_ports sys_clk_p]
 set_property	PACKAGE_PIN	AF43 	[get_ports sys_clk_n]
 set_property	PACKAGE_PIN	AE42	[get_ports sys_clk_p]
 
+create_clock -period 4.992 -name lpddr4_sma_clk1_p [get_ports lpddr4_sma_clk1_p]
+create_clock -period 4.992 -name lpddr4_sma_clk2_p [get_ports lpddr4_sma_clk2_p]
+
+set_property	PACKAGE_PIN	AK7	[get_ports lpddr4_sma_clk1_n]
+set_property	PACKAGE_PIN	AK8	[get_ports lpddr4_sma_clk1_p]
+set_property	PACKAGE_PIN	AY27	[get_ports lpddr4_sma_clk2_n]
+set_property	PACKAGE_PIN	AW27	[get_ports lpddr4_sma_clk2_p]
+
 # Define SPI clock
 create_clock -name spi0_clk      -period 40   [get_pins -hier */EMIOSPI0SCLKO*]
 create_clock -name spi1_clk      -period 40   [get_pins -hier */EMIOSPI1SCLKO*]
