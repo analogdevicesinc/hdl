@@ -538,6 +538,7 @@ if {$INTF_CFG != "TX"} {
     ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
     ad_mem_hp1_interconnect $sys_dma_clk axi_mxfe_rx_dma/m_dest_axi
   }
+  ad_mem_noc_connection axi_mxfe_rx_dma/m_dest_axi MC_1 0 15000
 
   # Interrupts
   ad_cpu_interrupt ps-13 mb-12 axi_mxfe_rx_dma/irq
@@ -594,6 +595,7 @@ if {$INTF_CFG != "RX"} {
     ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
     ad_mem_hp2_interconnect $sys_dma_clk axi_mxfe_tx_dma/m_src_axi
   }
+  ad_mem_noc_connection axi_mxfe_tx_dma/m_src_axi MC_2 15000 0
 
   # Interrupts
   ad_cpu_interrupt ps-12 mb-13 axi_mxfe_tx_dma/irq
