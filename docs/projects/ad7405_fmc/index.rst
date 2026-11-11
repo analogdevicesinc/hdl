@@ -248,6 +248,10 @@ Software related
 * Linux driver at :git-linux:`drivers/iio/adc/ad7405.c`
 * AD7405 ZED Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-ad7405.dts`
 * ADuM7701 ZED Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adum7701.dts`
+* ADuM7801 ZED Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adum7801.dts`
+* ADuM7802 ZED Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adum7802.dts`
+* ADuM7811 ZED Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adum7811.dts`
+* ADuM7812 ZED Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adum7812.dts`
 
 .. include:: ../common/more_information.rst
 
