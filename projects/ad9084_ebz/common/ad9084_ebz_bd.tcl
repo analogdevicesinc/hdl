@@ -1345,7 +1345,7 @@ if {$ADI_PHY_SEL} {
   ad_cpu_interconnect 0x44a60000 axi_apollo_rx_xcvr
   ad_cpu_interconnect 0x44b60000 axi_apollo_tx_xcvr
 } else {
-  for {set i 0} {$i < $num_quads} {incr i} {
+  for {set i 0} {$i < $num_quads_a} {incr i} {
     set addr [expr 0x44040000 + $i * 0x40000]
     ad_cpu_interconnect $addr jesd204_phy s_axi_${i}
   }
@@ -1377,7 +1377,7 @@ if {$ASYMMETRIC_A_B_MODE} {
     ad_cpu_interconnect 0x44aa0000 axi_apollo_rx_b_xcvr
     ad_cpu_interconnect 0x44ba0000 axi_apollo_tx_b_xcvr
   } else {
-    for {set i 0} {$i < $num_quads} {incr i} {
+    for {set i 0} {$i < $num_quads_b} {incr i} {
       set addr [expr 0x44140000 + $i * 0x40000]
       ad_cpu_interconnect $addr jesd204_phy_b s_axi_${i}
     }
