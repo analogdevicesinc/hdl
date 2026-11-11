@@ -32,5 +32,8 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-set_false_path \
-  -to [get_cells -quiet -hier *sync_reg_reg*]
+foreach inst [get_cells -quiet -hier -filter {ORIG_REF_NAME == sync_reset || REF_NAME == sync_reset}] {
+  set sync_reset_ffs [get_cells -quiet -hier -regexp ".*/sync_reg_reg\\\[\\d+\\\]" -filter "PARENT == $inst"]
+  set_property ASYNC_REG TRUE $sync_reset_ffs
+  set_false_path -to [get_pins -of_objects $sync_reset_ffs -filter {IS_PRESET || IS_RESET}]
+}
