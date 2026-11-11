@@ -105,9 +105,8 @@ module jesd204_up_sysref (
         /*    00 */ up_cfg_sysref_disable
       };
       12'h041: up_rdata = {
-        /* 10-31 */ 22'h00, /* Reserved for future use */
-        /* 02-09 */ up_cfg_lmfc_offset,
-        /* 00-01 */ 2'b00 /* data path alignment for cfg_lmfc_offset */
+        /* 08-31 */ 24'h00, /* Reserved for future use */
+        /* 00-07 */ up_cfg_lmfc_offset /* In device clock cycles */
       };
       12'h042: up_rdata = {
         /* 02-31 */ 30'h00,
@@ -130,8 +129,7 @@ module jesd204_up_sysref (
           up_cfg_sysref_disable <= up_wdata[0];
         end
         12'h041: begin
-          /* Must be aligned to data path width */
-          up_cfg_lmfc_offset <= up_wdata;
+          up_cfg_lmfc_offset <= up_wdata[7:0];
         end
       endcase
     end
