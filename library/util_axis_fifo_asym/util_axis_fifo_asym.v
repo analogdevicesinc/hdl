@@ -280,9 +280,12 @@ module util_axis_fifo_asym #(
     reg                    s_axis_valid_d;
     reg  [CNT_WIDTH-1:0]   s_words_wr;
     reg  [CNT_WIDTH-1:0]   m_words_rd;
-    wire [CNT_WIDTH-1:0]   m_words_rd_next;
+    wire                   m_xfer;
     wire [CNT_WIDTH-1:0]   s_words_wr_m;
-    wire [CNT_WIDTH-1:0]   level_raw;
+    wire [CNT_WIDTH-1:0]   level_0;
+    wire [CNT_WIDTH-1:0]   level_1;
+    wire [ADDRESS_WIDTH-1:0] level_0_sat;
+    wire [ADDRESS_WIDTH-1:0] level_1_sat;
     integer j;
 
     // words this wide beat will produce on the narrow side: one per lane with
@@ -318,13 +321,13 @@ module util_axis_fifo_asym #(
       end
     end
 
-    assign m_words_rd_next = m_words_rd + (m_axis_ready && m_axis_valid);
+    assign m_xfer = m_axis_ready && m_axis_valid;
 
     always @(posedge m_axis_aclk) begin
       if (!m_axis_aresetn) begin
         m_words_rd <= {CNT_WIDTH{1'b0}};
-      end else begin
-        m_words_rd <= m_words_rd_next;
+      end else if (m_xfer) begin
+        m_words_rd <= m_words_rd + 1'b1;
       end
     end
 
@@ -337,19 +340,24 @@ module util_axis_fifo_asym #(
       .out_clk  (m_axis_aclk),
       .out_data (s_words_wr_m));
 
-    // Uses the read count including this cycle's handshake, so the registered
-    // level never counts a word that has already left. Signed: below 0 while
-    // the reader has consumed words that the synchronized write count does not
-    // include yet.
-    assign level_raw = s_words_wr_m - m_words_rd_next;
+    // The registered level must not count a word that leaves in this cycle.
+    // Both candidates, without and with this cycle's read, come from registers
+    // only; the handshake just selects one, so it does not pass through the
+    // subtract and the saturation. Signed: below 0 while the reader has
+    // consumed words that the synchronized write count does not include yet.
+    assign level_0 = s_words_wr_m - m_words_rd;
+    assign level_1 = s_words_wr_m + ~m_words_rd;  // s_words_wr_m - m_words_rd - 1
+
+    assign level_0_sat = level_0[CNT_WIDTH-1] ? {ADDRESS_WIDTH{1'b0}} :
+                         (level_0 > OUT_MAX)  ? OUT_MAX : level_0;
+    assign level_1_sat = level_1[CNT_WIDTH-1] ? {ADDRESS_WIDTH{1'b0}} :
+                         (level_1 > OUT_MAX)  ? OUT_MAX : level_1;
 
     always @(posedge m_axis_aclk) begin
       if (!m_axis_aresetn) begin
         m_axis_level_reg <= {ADDRESS_WIDTH{1'b0}};
       end else begin
-        m_axis_level_reg <= level_raw[CNT_WIDTH-1] ? {ADDRESS_WIDTH{1'b0}} :
-                            (level_raw > OUT_MAX)  ? OUT_MAX :
-                                                     level_raw;
+        m_axis_level_reg <= m_xfer ? level_1_sat : level_0_sat;
       end
     end
 
@@ -358,20 +366,26 @@ module util_axis_fifo_asym #(
     localparam BEAT_WIDTH = CNT_WIDTH - $clog2(RATIO);
 
     reg  [CNT_WIDTH-1:0]  s_slots_wr;
-    wire [CNT_WIDTH-1:0]  s_slots_wr_next;
+    wire                  s_xfer;
+    wire [CNT_WIDTH-1:0]  s_tlast_slots;
     reg  [BEAT_WIDTH-1:0] m_beats_rd;
     wire [BEAT_WIDTH-1:0] m_beats_rd_s;
-    wire [CNT_WIDTH-1:0]  room_raw;
+    wire [CNT_WIDTH-1:0]  room_0;
+    wire [CNT_WIDTH-1:0]  room_1;
+    wire [CNT_WIDTH-1:0]  room_t;
+    wire [ADDRESS_WIDTH-1:0] room_0_sat;
+    wire [ADDRESS_WIDTH-1:0] room_1_sat;
+    wire [ADDRESS_WIDTH-1:0] room_t_sat;
 
-    assign s_slots_wr_next = (s_axis_ready && s_axis_valid) ?
-                               s_slots_wr + (s_axis_tlast ? (RATIO - s_axis_counter) : 1) :
-                               s_slots_wr;
+    assign s_xfer = s_axis_ready && s_axis_valid;
+    // slots a TLAST beat takes, padding up to the RATIO boundary
+    assign s_tlast_slots = RATIO - s_axis_counter;
 
     always @(posedge s_axis_aclk) begin
       if (!s_axis_aresetn) begin
         s_slots_wr <= {CNT_WIDTH{1'b0}};
-      end else begin
-        s_slots_wr <= s_slots_wr_next;
+      end else if (s_xfer) begin
+        s_slots_wr <= s_axis_tlast ? s_slots_wr + s_tlast_slots : s_slots_wr + 1'b1;
       end
     end
 
@@ -394,19 +408,30 @@ module util_axis_fifo_asym #(
       .out_clk    (s_axis_aclk),
       .out_count  (m_beats_rd_s));
 
-    // Uses the write count including this cycle's handshake, so the registered
-    // room never offers a slot that has just been taken. Signed: slightly below
-    // 0 while the atomic output registers hold entries whose slots the read
-    // pointers have already released.
-    assign room_raw = FIFO_CAP + {m_beats_rd_s, {$clog2(RATIO){1'b0}}} - s_slots_wr_next;
+    // The registered room must not offer a slot taken in this cycle. The
+    // candidates (no write, a plain write, a TLAST write) come from registers
+    // only; the handshake and TLAST just select one, so they do not pass
+    // through the subtract and the saturation. Signed: slightly below 0 while
+    // the atomic output registers hold entries whose slots the read pointers
+    // have already released.
+    assign room_0 = FIFO_CAP + {m_beats_rd_s, {$clog2(RATIO){1'b0}}} - s_slots_wr;
+    assign room_1 = room_0 - 1'b1;
+    assign room_t = room_0 - s_tlast_slots;
+
+    assign room_0_sat = room_0[CNT_WIDTH-1] ? {ADDRESS_WIDTH{1'b0}} :
+                        (room_0 > OUT_MAX)  ? OUT_MAX : room_0;
+    assign room_1_sat = room_1[CNT_WIDTH-1] ? {ADDRESS_WIDTH{1'b0}} :
+                        (room_1 > OUT_MAX)  ? OUT_MAX : room_1;
+    assign room_t_sat = room_t[CNT_WIDTH-1] ? {ADDRESS_WIDTH{1'b0}} :
+                        (room_t > OUT_MAX)  ? OUT_MAX : room_t;
 
     always @(posedge s_axis_aclk) begin
       if (!s_axis_aresetn) begin
         s_axis_room_reg <= OUT_MAX;
       end else begin
-        s_axis_room_reg <= room_raw[CNT_WIDTH-1] ? {ADDRESS_WIDTH{1'b0}} :
-                           (room_raw > OUT_MAX)  ? OUT_MAX :
-                                                   room_raw;
+        s_axis_room_reg <= !s_xfer      ? room_0_sat :
+                           s_axis_tlast ? room_t_sat :
+                                          room_1_sat;
       end
     end
 
