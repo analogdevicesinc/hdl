@@ -94,7 +94,8 @@ scripts are first loaded (:git-hdl:`scripts/adi_env.tcl`) then the project is
 created (
 :git-hdl:`adi_project_xilinx <projects/scripts/adi_project_xilinx.tcl#L51>`,
 or :git-hdl:`adi_project_intel <projects/scripts/adi_project_intel.tcl#L18>`
-or :git-hdl:`adi_project_lattice <projects/scripts/adi_project_lattice.tcl#L43>`).
+or :git-hdl:`adi_project_lattice <projects/scripts/adi_project_lattice.tcl#L43>`
+or :git-hdl:`adi_project_microchip <projects/scripts/adi_project_microchip.tcl#L281>`).
 
 Based on the suffix of the project name, the FPGA carrier board is automatically
 detected, based on the ``adi_project`` procedures mentioned above.

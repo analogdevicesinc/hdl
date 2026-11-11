@@ -1210,7 +1210,8 @@ Simulation flow for the hdl/projects/ad738x_fmc/lfcpnx project:
 
 The Microchip flow builds PolarFire SoC projects with **Libero SoC**. The
 required Libero version is in :git-hdl:`scripts/adi_env.tcl`
-(``required_libero_version``). The flow is tested on Windows with Cygwin.
+(``required_libero_version``). The flow is tested on Windows with Cygwin and
+on Linux.
 
 .. note::
 
@@ -1402,7 +1403,7 @@ Tools and their versions
 Tools
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ADI provides reference designs for Intel, AMD and soon Lattice.
+ADI provides reference designs for Intel, AMD, Lattice and Microchip.
 
 Please note that this is NOT a comparison (generic or otherwise).
 This is what you should expect and understand when using ADI HDL repository
@@ -1410,7 +1411,7 @@ on these tools.
 
 **A red text indicates that you must pay extra attention.**
 
-.. collapsible:: Click here to see the tools from Intel, AMD and Lattice
+.. collapsible:: Click here to see the tools from Intel, AMD, Lattice and Microchip
 
    .. list-table:: Tools from Intel and AMD
       :widths: auto
@@ -1505,15 +1506,43 @@ on these tools.
           in GUI first, copy the vlnv and configuration section from the tcl shell window
           to replace the -vlnv and -cfg_value section in the tcl scripts.`
 
+   .. list-table:: Tools from Microchip
+      :widths: auto
+      :header-rows: 1
+
+      * - Notes
+        - Microchip
+      * - Main tools
+        - Libero SoC
+      * - EDK tools
+        - SmartDesign (in Libero SoC), PolarFire SoC MSS Configurator
+      * - SDK tools
+        - SoftConsole (the Hart Software Services boot loader)
+      * - Building library
+        - :green:`No separate library build. The project imports the ADI cores
+          as Libero HDL+ cores.`
+      * - Building the project
+        - Run make in the project folder: it generates the MSS from
+          mss_base.cfg, then runs the system_project.tcl file in Libero SoC.
+      * - Timing analysis
+        - The make build fails if the timing is not met; the programming job
+          is exported as system_top_bad_timing.job.
+      * - Upgrading/Version changes (non-ADI cores)
+        - :red:`The versions and the parameters of the Libero cores are fixed
+          in the project scripts. To upgrade a core, try the new version once
+          in the Libero SoC GUI, export it (right-click on the component,
+          Export Component Description(Tcl)), then update the version and the
+          parameters in the scripts accordingly.`
+
 .. _build_hdl tool-versions:
 
 Tool versions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Though the ADI libraries work across different versions of the tools,
-the projects we provide **may not**. The AMD, Intel and Lattice IPs may or may
-not work across versions. We can only assure you that they are tested and
-**work only for the versions we specify**.
+the projects we provide **may not**. The AMD, Intel, Lattice and Microchip IPs
+may or may not work across versions. We can only assure you that they are
+tested and **work only for the versions we specify**.
 
 The projects are usually upgraded to the latest tools after they are
 publicly released. The used tool versions can be found in the
