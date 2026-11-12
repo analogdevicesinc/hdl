@@ -111,6 +111,12 @@ set_parameter_property HAS_BYPASS DISPLAY_HINT boolean
 set_parameter_property HAS_BYPASS HDL_PARAMETER true
 set_parameter_property HAS_BYPASS GROUP $group
 
+add_parameter DRAIN_IN_BYPASS INTEGER 0
+set_parameter_property DRAIN_IN_BYPASS DISPLAY_NAME "Discard Bypass Data While Idle (RX)"
+set_parameter_property DRAIN_IN_BYPASS DISPLAY_HINT boolean
+set_parameter_property DRAIN_IN_BYPASS HDL_PARAMETER true
+set_parameter_property DRAIN_IN_BYPASS GROUP $group
+
 add_parameter AUTO_BRINGUP INTEGER 1
 set_parameter_property AUTO_BRINGUP DISPLAY_NAME "Run Automatically after Bootup"
 set_parameter_property AUTO_BRINGUP DISPLAY_HINT boolean
@@ -149,6 +155,7 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 16
 
 ad_interface signal init_req input 1 xfer_req
 ad_interface signal sync_ext input 1
+ad_interface signal overflow output 1
 ad_interface signal ddr_calib_done input 1 local_cal_success
 
 proc data_offload_validate {} {

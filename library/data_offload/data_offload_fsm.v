@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -81,6 +81,10 @@ module data_offload_fsm #(
 
   input                               sync_external,
   input                               sync_internal,
+
+  // init_req on wr_clk and rd_clk
+  output                              wr_init_req,
+  output                              rd_init_req,
 
   // FSM debug
   output      [ 4:0]                  wr_fsm_state_out,
@@ -296,6 +300,9 @@ module data_offload_fsm #(
     .out_clk (wr_clk),
     .out_resetn (1'b1),
     .out_bits (wr_init_req_s));
+
+  assign wr_init_req = wr_init_req_s;
+  assign rd_init_req = rd_init_req_s;
 
   // When SYNC_EXT_ADD_INTERNAL_CDC is deasserted, one of these signals will end
   // up being synchronized to the "wrong" clock domain. This shouldn't matter

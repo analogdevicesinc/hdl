@@ -215,6 +215,7 @@ set_property -dict [list \
 ## Boolean parameters
 foreach {k v} { \
     "HAS_BYPASS" "true" \
+    "DRAIN_IN_BYPASS" "false" \
     "DST_CYCLIC_EN" "true" \
     "SYNC_EXT_ADD_INTERNAL_CDC" "true" \
     "ASYNC_CLK" "true" \
@@ -298,6 +299,11 @@ ipgui::add_param -name "HAS_BYPASS" -component $cc -parent $features_group
 set_property -dict [list \
   "display_name" "Internal Bypass Data Path Enabled" \
 ] [ipgui::get_guiparamspec -name "HAS_BYPASS" -component $cc]
+
+ipgui::add_param -name "DRAIN_IN_BYPASS" -component $cc -parent $features_group
+set_property -dict [list \
+  "display_name" "Discard Bypass Data While Idle (RX)" \
+] [ipgui::get_guiparamspec -name "DRAIN_IN_BYPASS" -component $cc]
 
 ipgui::add_param -name "DST_CYCLIC_EN" -component $cc -parent $features_group
 set_property -dict [list \
