@@ -575,6 +575,7 @@ ad_data_offload_create $adc_data_offload_name \
                        $SHARED_DEVCLK
 
 ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
+ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.DRAIN_IN_BYPASS 1
 
 ad_ip_instance axi_dmac axi_apollo_rx_dma
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_TYPE_SRC 1
@@ -626,6 +627,7 @@ if {$ASYMMETRIC_A_B_MODE} {
                          $SHARED_DEVCLK
 
   ad_ip_parameter $adc_b_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
+  ad_ip_parameter $adc_b_data_offload_name/i_data_offload CONFIG.DRAIN_IN_BYPASS 1
 
   ad_ip_instance axi_dmac axi_apollo_rx_b_dma
   ad_ip_parameter axi_apollo_rx_b_dma CONFIG.DMA_TYPE_SRC 1
@@ -1131,7 +1133,7 @@ for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  ${rx_data_src}_$i util_apollo_cpack/fifo_wr_data_$i
 }
 ad_connect $rx_valid_src util_apollo_cpack/fifo_wr_en
-ad_connect rx_apollo_tpl_core/adc_dovf util_apollo_cpack/fifo_wr_overflow
+ad_connect $adc_data_offload_name/overflow rx_apollo_tpl_core/adc_dovf
 
 ad_connect  util_apollo_cpack/packed_fifo_wr_data $adc_data_offload_name/s_axis_tdata
 ad_connect  util_apollo_cpack/packed_fifo_wr_en $adc_data_offload_name/s_axis_tvalid
@@ -1175,7 +1177,7 @@ if {$ASYMMETRIC_A_B_MODE} {
     ad_connect  ${rx_b_data_src}_$i util_apollo_cpack_b/fifo_wr_data_$i
   }
   ad_connect $rx_b_valid_src util_apollo_cpack_b/fifo_wr_en
-  ad_connect rx_b_apollo_tpl_core/adc_dovf util_apollo_cpack_b/fifo_wr_overflow
+  ad_connect $adc_b_data_offload_name/overflow rx_b_apollo_tpl_core/adc_dovf
 
   ad_connect  util_apollo_cpack_b/packed_fifo_wr_data $adc_b_data_offload_name/s_axis_tdata
   ad_connect  util_apollo_cpack_b/packed_fifo_wr_en $adc_b_data_offload_name/s_axis_tvalid
