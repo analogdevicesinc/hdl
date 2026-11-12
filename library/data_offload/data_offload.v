@@ -50,6 +50,7 @@ module data_offload #(
   parameter          AUTO_BRINGUP = 1,
   parameter          SYNC_EXT_ADD_INTERNAL_CDC = 1,
   parameter          HAS_BYPASS = 1,
+  parameter          DRAIN_IN_BYPASS = 0,        // RX only, discard data in bypass mode while init_req is low
   parameter          ASYNC_CLK = 1
 ) (
 
@@ -105,6 +106,10 @@ module data_offload #(
   input                                       init_req,
 
   input                                       sync_ext,
+
+  // in bypass mode, data not accepted while init_req is high, on s_axis_aclk
+
+  output  reg                                 overflow = 1'b0,
 
   // AXIS - Memory UI to storage
 
@@ -175,6 +180,9 @@ module data_offload #(
   wire                                        dst_rstn;
 
   wire                                        src_bypass_s;
+  wire                                        wr_init_req_s;
+  wire                                        rd_init_req_s;
+  wire                                        drain_s;
   wire                                        dst_bypass_s;
   wire                                        oneshot_s;
   wire  [ 1:0]                                sync_config_s;
@@ -226,8 +234,16 @@ module data_offload #(
     .sync_config (sync_config_s),
     .sync_external (sync_ext),
     .sync_internal (sync_int_s),
+    .wr_init_req (wr_init_req_s),
+    .rd_init_req (rd_init_req_s),
     .wr_fsm_state_out (src_fsm_status_s),
     .rd_fsm_state_out (dst_fsm_status_s));
+
+  always @(posedge s_axis_aclk) begin
+    overflow <= src_bypass_s & wr_init_req_s & ~s_axis_ready;
+  end
+
+  assign drain_s = (DRAIN_IN_BYPASS != 0 && TX_OR_RXN_PATH == 0) & dst_bypass_s & ~rd_init_req_s;
 
   assign m_axis_valid = dst_bypass_s ? valid_bypass_s : (rd_ready & s_storage_axis_valid);
   // For DAC paths set zero as IDLE data on the axis bus, avoid repeating last
@@ -257,7 +273,7 @@ module data_offload #(
     ) i_bypass_fifo (
       .m_axis_aclk (m_axis_aclk),
       .m_axis_aresetn (dst_rstn),
-      .m_axis_ready (m_axis_ready),
+      .m_axis_ready (m_axis_ready | drain_s),
       .m_axis_valid (valid_bypass_s),
       .m_axis_data  (data_bypass_s),
       .m_axis_tlast (),

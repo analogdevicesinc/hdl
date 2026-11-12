@@ -90,6 +90,9 @@ Configuration Parameters
      - If enabled the CDC circuitry for the external sync signal is added.
    * - HAS_BYPASS
      - If enabled the bypass circuitry is added.
+   * - DRAIN_IN_BYPASS
+     - RX path only. If enabled, in bypass mode the data is discarded while
+       init_req is low, so a transfer never starts with old samples.
    * - ASYNC_CLK
      - If enabled, the source and destination clocks are asynchronous.
 
@@ -110,6 +113,9 @@ Interface
      - External synchronization signal, with or without internal clock-domain
        crossing logic. Can be used to couple certain state machine transitions to
        external processes.
+   * - overflow
+     - In bypass mode, high when s_axis data was not accepted during a transfer
+       (init_req high), on the s_axis_aclk domain.
    * - ddr_calib_done
      - Allows the user to read back status information about the DDR calibration
        status from software.

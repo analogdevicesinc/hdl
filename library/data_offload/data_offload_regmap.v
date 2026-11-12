@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -92,7 +92,7 @@ module data_offload_regmap #(
 
   // local parameters
 
-  localparam [31:0] CORE_VERSION = 32'h00010061;  // 1.00.a
+  localparam [31:0] CORE_VERSION = 32'h00010161;  // 1.01.a
   localparam [31:0] CORE_MAGIC = 32'h44414F46;    // DAOF
 
   localparam [33:0] MEM_SIZE = 1 << MEM_SIZE_LOG2;
