@@ -340,6 +340,8 @@ if {$INTF_CFG != "TX"} {
                         $do_axi_data_width \
                         $SHARED_DEVCLK
 
+  ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.DRAIN_IN_BYPASS 1
+
   ad_ip_instance axi_dmac axi_mxfe_rx_dma
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_TYPE_SRC 1
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_TYPE_DEST 0
@@ -508,7 +510,7 @@ if {$INTF_CFG != "TX"} {
     ad_connect  rx_mxfe_tpl_core/adc_data_$i util_mxfe_cpack/fifo_wr_data_$i
   }
 
-  ad_connect  util_mxfe_cpack/fifo_wr_overflow rx_mxfe_tpl_core/adc_dovf
+  ad_connect  $adc_data_offload_name/overflow rx_mxfe_tpl_core/adc_dovf
   ad_connect  util_mxfe_cpack/packed_fifo_wr_data $adc_data_offload_name/s_axis_tdata
   ad_connect  util_mxfe_cpack/packed_fifo_wr_en $adc_data_offload_name/s_axis_tvalid
   ad_connect  $adc_data_offload_name/s_axis_tlast GND
