@@ -4,12 +4,10 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-LIBRARY_NAME := util_pack_cdc
+LIBRARY_NAME := util_axis_gearbox
 
-GENERIC_DEPS += ../util_cdc/sync_bits.v
-GENERIC_DEPS += util_pack_cdc.v
+GENERIC_DEPS += util_axis_gearbox.v
 
-XILINX_DEPS += util_pack_cdc_constr.xdc
-XILINX_DEPS += util_pack_cdc_ip.tcl
+XILINX_DEPS += util_axis_gearbox_ip.tcl
 
 include ../scripts/library.mk
