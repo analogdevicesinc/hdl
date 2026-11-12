@@ -44,6 +44,10 @@ set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS18} [get_ports emg_spi_cs[0
 set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS18} [get_ports emg_spi_cs[1]];       ## D12 FMC_LPC_LA05_N    IO_L7N_T1_34          CS_ADC2
 
 # ad4134 data interface
+#
+# All eight DOUT pins are constrained in both build modes.  With DAISY_CHAIN=1 only
+# emg_din[0] (DOUT0_1) is read; the rest stay undriven inputs, as required on the
+# DOUT2_1 / DOUT0_2 net that R58 joins for the daisy chain.
 
 set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_dclk];   ## H4  FMC_LPC_CLK0_M2C_P IO_L12P_T1_MRCC_34   DCLK
 set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS18 IOB TRUE} [get_ports emg_din[0]]; ## G7  FMC_LPC_LA00_N_CC  IO_L13N_T2_MRCC_34   DOUT0_1

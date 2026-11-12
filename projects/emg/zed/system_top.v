@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
+  parameter DAISY_CHAIN = 0
+) (
 
   inout  [14:0] ddr_addr,
   inout  [ 2:0] ddr_ba,
@@ -136,7 +138,14 @@ module system_top (
   input         emg_aux1_sdo
 );
 
+  // DAISY_CHAIN = 1: ADC1 DOUT0 (emg_din[0]) carries all 8 channels.  The other
+  // DOUT pins stay inputs and are never driven - DOUT2_1 and DOUT0_2 are joined
+  // on the board by R58 and form the chain between the two ADCs.
+  localparam NUM_OF_SDI = (DAISY_CHAIN == 1) ? 1 : 8;
+
   // internal signals
+
+  wire [NUM_OF_SDI-1:0] emg_di_sdi_s;
 
   wire [63:0] gpio_i;
   wire [63:0] gpio_o;
@@ -152,6 +161,8 @@ module system_top (
   wire        resetn;
 
   // instantiations
+  assign emg_di_sdi_s = emg_din[NUM_OF_SDI-1:0];
+
   assign emg_spi_cs = gpio_o[50] ? {cs[0], cs[0]} : cs;
   assign emg_amp_cs = gpio_o[58:51];
 
@@ -275,7 +286,7 @@ module system_top (
     .spi0_sdo_o (emg_spi_sdi),
     .emg_di_sdo (),
     .emg_di_sdo_t (),
-    .emg_di_sdi (emg_din),
+    .emg_di_sdi (emg_di_sdi_s),
     .emg_di_cs (),
     .emg_di_sclk (emg_dclk),
     .emg_odr (emg_odr),

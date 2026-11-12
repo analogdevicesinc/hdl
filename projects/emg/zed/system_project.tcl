@@ -36,7 +36,13 @@ source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project emg_zed
+# DAISY_CHAIN - AD4134 data interface format
+#   0 = quad-channel parallel, 4 DOUT lines per ADC, 8 lines in total (default)
+#   1 = single-channel daisy chain, ADC2 DOUT0 -> R58 -> ADC1 DOUT2, all 8
+#       channels on ADC1 DOUT0 (AD4134 data sheet Figure 120, needs R58 fitted)
+
+adi_project emg_zed 0 [list \
+  DAISY_CHAIN [get_env_param DAISY_CHAIN 0] ]
 
 adi_project_files emg_zed [list \
     "$ad_hdl_dir/library/common/ad_iobuf.v" \

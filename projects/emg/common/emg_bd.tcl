@@ -36,7 +36,23 @@ create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 e
 create_bd_port -dir O emg_odr
 create_bd_port -dir O emg_sdpclk
 
-# create a SPI Engine architecture for the parallel data interface of AD4134
+# DAISY_CHAIN = 0 : quad-channel parallel, 8 DOUT lines (2 x AD4134 x 4)
+# DAISY_CHAIN = 1 : single-channel daisy chain, all 8 channels on ADC1 DOUT0
+#                   (8 x 32 bit per ODR on one line, so the ODR period grows)
+
+set DAISY_CHAIN $ad_project_params(DAISY_CHAIN)
+
+if {$DAISY_CHAIN == 1} {
+  set num_sdi        1
+  set dma_dest_width 64
+  set odr_period     1200
+} else {
+  set num_sdi        8
+  set dma_dest_width 128
+  set odr_period     85
+}
+
+# create a SPI Engine architecture for the data interface of AD4134
 # this design supports AD7132/AD7134/AD7136/AD4134
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
@@ -46,7 +62,6 @@ set data_width       32
 set async_spi_clk    1
 set offload_en       1
 set num_cs           1
-set num_sdi          8
 set num_sdo          0
 set sdi_delay        0
 set echo_sclk        0
@@ -70,17 +85,17 @@ ad_ip_parameter axi_ad7134_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad7134_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad7134_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad7134_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC 256
-ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_SRC [expr {$num_sdi * $data_width}]
+ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_DEST $dma_dest_width
 
 # odr generator
 
 ad_ip_instance axi_pwm_gen odr_generator
 ad_ip_parameter odr_generator CONFIG.N_PWMS 2
-ad_ip_parameter odr_generator CONFIG.PULSE_0_PERIOD 85
+ad_ip_parameter odr_generator CONFIG.PULSE_0_PERIOD $odr_period
 ad_ip_parameter odr_generator CONFIG.PULSE_0_WIDTH 1
 ad_ip_parameter odr_generator CONFIG.PULSE_0_OFFSET 3
-ad_ip_parameter odr_generator CONFIG.PULSE_1_PERIOD 85
+ad_ip_parameter odr_generator CONFIG.PULSE_1_PERIOD $odr_period
 ad_ip_parameter odr_generator CONFIG.PULSE_1_WIDTH 13
 
 ad_connect odr_generator/ext_clk axi_ad7134_clkgen/clk_0
