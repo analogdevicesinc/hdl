@@ -66,6 +66,7 @@ proc ad_data_offload_create {instance_name
 
     create_bd_pin -dir I init_req
     create_bd_pin -dir I sync_ext
+    create_bd_pin -dir O overflow
 
     set source_addresses [expr ($mem_size * 8) / $source_dwidth]
     set source_awidth [log2 $source_addresses]
@@ -152,6 +153,7 @@ proc ad_data_offload_create {instance_name
 
     ad_connect init_req i_data_offload/init_req
     ad_connect sync_ext i_data_offload/sync_ext
+    ad_connect overflow i_data_offload/overflow
 
   current_bd_instance /
 
