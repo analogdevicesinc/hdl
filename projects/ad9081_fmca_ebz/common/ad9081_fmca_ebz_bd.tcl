@@ -338,6 +338,7 @@ if {$INTF_CFG != "TX"} {
                         $adc_data_width \
                         $adc_data_width \
                         $do_axi_data_width \
+                        32 \
                         $SHARED_DEVCLK
 
   ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.DRAIN_IN_BYPASS 1
@@ -409,6 +410,7 @@ if {$INTF_CFG != "RX"} {
                         $dac_data_width \
                         $dac_data_width \
                         $do_axi_data_width \
+                        32 \
                         $SHARED_DEVCLK
 
   ad_ip_instance axi_dmac axi_mxfe_tx_dma
