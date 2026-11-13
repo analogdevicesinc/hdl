@@ -5,4 +5,4 @@ SOURCE+=" ../tx_fsrc_sample_en_gen.sv"
 SOURCE+=" ../accum_set.sv"
 
 cd `dirname $0`
-source ../../../common/tb/run_tb.sh -g2005-sv
+source ../../../common/tb/run_tb.sh
