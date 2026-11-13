@@ -566,6 +566,9 @@ ad_ip_instance util_cpack2 util_apollo_cpack [list \
 ]
 
 set adc_data_offload_size [expr $adc_data_width / 8 * 2**$adc_fifo_address_width]
+if {$adc_do_mem_type != 0 && [info exists do_ext_mem_size]} {
+  set adc_data_offload_size $do_ext_mem_size
+}
 ad_data_offload_create $adc_data_offload_name \
                        0 \
                        $adc_do_mem_type \
@@ -619,6 +622,9 @@ if {$ASYMMETRIC_A_B_MODE} {
   ]
 
   set adc_b_data_offload_size [expr $adc_b_data_width / 8 * 2**$adc_b_fifo_address_width]
+  if {$adc_do_mem_type != 0 && [info exists do_ext_mem_size]} {
+    set adc_b_data_offload_size $do_ext_mem_size
+  }
   ad_data_offload_create $adc_b_data_offload_name \
                          0 \
                          $adc_do_mem_type \
@@ -676,6 +682,9 @@ ad_ip_instance util_upack2 util_apollo_upack [list \
 ]
 
 set dac_data_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
+if {$dac_do_mem_type != 0 && [info exists do_ext_mem_size]} {
+  set dac_data_offload_size $do_ext_mem_size
+}
 ad_data_offload_create $dac_data_offload_name \
                        1 \
                        $dac_do_mem_type \
@@ -730,6 +739,9 @@ if {$ASYMMETRIC_A_B_MODE} {
   ]
 
   set dac_b_data_offload_size [expr $dac_b_data_width / 8 * 2**$dac_b_fifo_address_width]
+  if {$dac_do_mem_type != 0 && [info exists do_ext_mem_size]} {
+    set dac_b_data_offload_size $do_ext_mem_size
+  }
   ad_data_offload_create $dac_b_data_offload_name \
                          1 \
                          $dac_do_mem_type \
