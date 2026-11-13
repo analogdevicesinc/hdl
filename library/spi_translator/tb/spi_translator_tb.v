@@ -36,16 +36,21 @@
 `timescale 1ns/100ps
 
 /*
- * spi_translator_slave driven by an upstream mode 0 SPI master that sends serialized
- * SPI Engine instruction streams, in front of spi_translator_interconnect and
- * one stock spi_engine_execution with four behavioural targets in modes 0, 3,
- * 1 and 2. Covers posted writes per
- * target, full-duplex and read-only transfers, a transfer split over two
- * frames with the target held selected, frame rejection (bad instruction, two
- * targets selected, truncated, no room in the FIFOs), frames queuing behind a
- * slow one, register reads and writes, and FLUSH. The master captures
- * MISO for CTRL_R and FETCH, including a FETCH retried after its frame was
- * rejected. The CMD and SDO FIFOs are built small so they can be filled.
+ * spi_translator_slave driven by an upstream mode 0 SPI master that sends
+ * serialized SPI Engine instruction streams, in front of
+ * spi_translator_interconnect and one stock spi_engine_execution with four
+ * behavioural targets in modes 0, 3, 1 and 2. Covers posted writes per target,
+ * full-duplex and read-only transfers, a transfer split over two frames with
+ * the target held selected, frame rejection (bad instruction, two targets
+ * selected, truncated, no room in the FIFOs), frames queuing behind a slow
+ * one, register reads and writes, bridge writes acting at the commit, FLUSH,
+ * the frame header, go-back-N with its resume, and FETCH acknowledge and
+ * retry. The CMD and SDO FIFOs are built small so they can be filled.
+ *
+ * With CRC_EN, send_frame ends every frame with a CHECK and verifies the MISO
+ * CRC; a block of CRC tests sends damaged frames on purpose. Every frame's
+ * header (MISO bytes 0 and 1) is checked against the decoder's STATUS
+ * snapshot and SYNC_ID.
  */
 
 module spi_translator_tb;
@@ -55,6 +60,9 @@ module spi_translator_tb;
   // upstream MISO timing: 0 = standard (drive edge), 1 = early launch; the
   // master samples MISO just before each sample edge, so both must pass
   parameter EARLY_LAUNCH = 0;
+
+  // CRC-16 frame check
+  parameter CRC_EN = 0;
 
   localparam T = 200;   // upstream SCLK period: 5 MHz, clk/20
 
@@ -77,6 +85,9 @@ module spi_translator_tb;
   `define BR_GPIO_R(i)    (16'hB800 | (i))
   `define BR_SELECT(e)    (16'hC000 | ((e) & 16'h00ff))
   `define BR_FETCH(n)     (16'hD000 | ((n) - 1))
+  `define BR_RETRY(n)     (16'hD200 | ((n) - 1))
+  `define BR_ACK          16'hD100
+  `define BR_W1C(b)       `BR_CTRL_W(8'h05, (b))
   `define BR_FLUSH        16'hE000
   `define BR_CHECK        16'hF000
 
@@ -145,6 +156,7 @@ module spi_translator_tb;
   // (high), pin 11 a power-good input, all others enables driven low (off)
   spi_translator_slave #(
     .UP_EARLY_LAUNCH (EARLY_LAUNCH),
+    .CRC_EN (CRC_EN),
     .NUM_OF_GPIO (NG),
     .GPIO_DEFAULT_DIR (12'h800),
     .GPIO_DEFAULT_OUT (12'h002),
@@ -259,6 +271,38 @@ module spi_translator_tb;
   reg   [7:0]   rep [0:255];
   integer       len;
 
+  // raw_frame: send txb as it is, no CHECK appended and no MISO CRC check;
+  // hdr_status: MISO byte 0 of the last frame
+  reg           raw_frame = 1'b0;
+
+  // malformed: the frame is cut short or misaligned on purpose, so its CHECK
+  // is not recognized and returns no MISO CRC; cleared after the frame
+  reg           malformed = 1'b0;
+  reg   [7:0]   hdr_status;
+
+  // CRC-16/CCITT-FALSE, as the host computes it
+  function [15:0] crc16_byte;
+    input [15:0] c;
+    input [7:0]  d;
+    integer i;
+    reg [15:0] r;
+    begin
+      r = c;
+      for (i = 7; i >= 0; i = i - 1) begin
+        r = (r[15] ^ d[i]) ? {r[14:0], 1'b0} ^ 16'h1021 : {r[14:0], 1'b0};
+      end
+      crc16_byte = r;
+    end
+  endfunction
+
+  task wait_idle;
+    begin
+      @(posedge clk);
+      while (busy) @(posedge clk);
+      repeat (20) @(posedge clk);
+    end
+  endtask
+
   task check;
     input [8*32-1:0] what;
     input [31:0] got;
@@ -269,6 +313,19 @@ module spi_translator_tb;
         $display("FAIL %0s: got %0h, expected %0h", what, got, exp);
       end else begin
         $display("ok   %0s = %0h", what, got);
+      end
+    end
+  endtask
+
+  // silent on success
+  task check_q;
+    input [8*32-1:0] what;
+    input [31:0] got;
+    input [31:0] exp;
+    begin
+      if (got !== exp) begin
+        failed = 1'b1;
+        $display("FAIL %0s: got %0h, expected %0h", what, got, exp);
       end
     end
   endtask
@@ -308,13 +365,39 @@ module spi_translator_tb;
     end
   endtask
 
-  // one CS-framed transfer of txb[0..len-1]; MISO is sampled just before
-  // each rising (sample) edge
-  task send_frame;
-    integer i, b;
+  // CHECK over txb[0..len-1], its CRC XORed with corrupt
+  task put_check;
+    input [15:0] corrupt;
+    integer i;
+    reg [15:0] c;
     begin
+      put16(`BR_CHECK);
+      c = 16'hffff;
+      for (i = 0; i < len; i = i + 1) begin
+        c = crc16_byte(c, txb[i]);
+      end
+      put16(c ^ corrupt);
+    end
+  endtask
+
+  // one CS-framed transfer of txb[0..len-1], with a CHECK appended when
+  // CRC_EN; MISO is sampled just before each rising (sample) edge. The header
+  // and the MISO CRC are checked against the decoder.
+  task send_frame;
+    integer i, b, n0;
+    reg [15:0] c;
+    reg [7:0] exp_first;
+    reg [7:0] exp_sync;
+    begin
+      n0 = len;
+      if (CRC_EN != 0 && ~raw_frame) begin
+        put_check(16'h0000);
+      end
       up_cs = 1'b0;
-      #(T);
+      exp_first = i_dut.i_decoder.tx_first;
+      #(T/2);
+      exp_sync = i_dut.last_sync;
+      #(T/2);
       for (i = 0; i < len; i = i + 1) begin
         for (b = 7; b >= 0; b = b - 1) begin
           up_mosi = txb[i][b];
@@ -327,7 +410,25 @@ module spi_translator_tb;
       end
       #(T);
       up_cs = 1'b1;
+      hdr_status = rxb[0];
+      check_q("header STATUS", rxb[0], exp_first);
+      check_q("header SYNC_ID", rxb[1], exp_sync);
+      if (CRC_EN != 0 && ~raw_frame && ~malformed) begin
+        c = 16'hffff;
+        for (i = 0; i <= n0 + 1; i = i + 1) begin
+          c = crc16_byte(c, rxb[i]);
+        end
+        check_q("MISO CRC", {rxb[n0+2], rxb[n0+3]}, c);
+      end
+      malformed = 1'b0;
       #(2*T);
+    end
+  endtask
+
+  // a frame that only clears err, lifting the go-back-N block
+  task resume;
+    begin
+      begin_frame(); put16(`BR_W1C(8'h38)); send_frame(); wait_idle();
     end
   endtask
 
@@ -361,6 +462,7 @@ module spi_translator_tb;
       begin_frame(); put16(`BR_FETCH(n)); put_data(n + 1, 8'h00, 8'h00);
       if (reject) begin
         put8(8'h00);
+        malformed = 1'b1;
       end
       send_frame();
       for (i = 0; i < n; i = i + 1) begin
@@ -379,13 +481,6 @@ module spi_translator_tb;
     end
   endtask
 
-  task wait_idle;
-    begin
-      @(posedge clk);
-      while (busy) @(posedge clk);
-      repeat (20) @(posedge clk);
-    end
-  endtask
 
   // a complete posted write to one target
   task write_target;
@@ -469,7 +564,7 @@ module spi_translator_tb;
     test_count = 5;
     c3 = d3.count;
     begin_frame();                        // an error shows in the status
-    put16(`CS(8'hf7)); put16(`WR(2)); put8(8'haa);
+    put16(`CS(8'hf7)); put16(`WR(2)); put8(8'haa); malformed = 1'b1;
     send_frame();
     ctrl_r(8'h05, s); check("status ERR truncated", s[5:3], 3'b100);
     check("truncated not forwarded", d3.count, c3);
@@ -500,48 +595,55 @@ module spi_translator_tb;
     check("whole transfer sent", d3.count, c3 + 4);
     check("last byte", d3.mem[c3+3], 8'h64);
 
-    // CTRL_W acts at once: several per frame, and a CTRL_R after one reads
-    // the new value; replies land at rxb[4] and rxb[8]
+    // CTRL_W acts at the commit: a CTRL_R in the same frame still reads the
+    // old value (reply at rxb[4]), the next frame the last one written
 
     test_count = 7;
     begin_frame();
     put16(`BR_CTRL_W(8'h04, 8'h11)); put16(`BR_CTRL_R(8'h04));
-    put16(`BR_CTRL_W(8'h04, 8'h22)); put16(`BR_CTRL_R(8'h04)); put16(`BR_NOP);
+    put16(`BR_CTRL_W(8'h04, 8'h22)); put16(`BR_NOP);
     send_frame();
-    check("read after first CTRL_W", rxb[4], 8'h11);
-    check("read after second CTRL_W", rxb[8], 8'h22);
+    check("same-frame read sees old value", rxb[4], 8'h3c);
     check("two CTRL_W accepted", err, 3'h0);
+    ctrl_r(8'h04, v); check("last CTRL_W applied", v, 8'h22);
 
-    // a CTRL_W stays applied when the rest of its frame is rejected
+    // a rejected frame applies none of its bridge writes
 
     test_count = 8;
     c3 = d3.count;
     begin_frame();
     put16(`BR_CTRL_W(8'h04, 8'h77));
-    put16(`CS(8'hf7)); put16(`WR(2)); put8(8'haa);
+    put16(`CS(8'hf7)); put16(`WR(2)); put8(8'haa); malformed = 1'b1;
     send_frame();
     check("truncated after CTRL_W", err, 3'h4);
     check("truncated write not sent", d3.count, c3);
-    ctrl_r(8'h04, v); check("CTRL_W kept", v, 8'h77);
+    ctrl_r(8'h04, v); check("CTRL_W not applied", v, 8'h22);
 
-    // FLUSH in the middle of a frame drops what came before it, keeps what
-    // follows, and clears err; the engine restarts from its reset settings
+    // FLUSH only as the first instruction: there it drops what earlier frames
+    // queued, keeps the rest of its frame, clears err and lifts the block
+    // left by test 8; the engine restarts from its reset settings
 
     test_count = 9;
     c3 = d3.count;
     cs3_releases = 0;
     begin_frame();
-    put16(`CS(8'hf7)); put16(`WR(1)); put8(8'hee);
     put16(`BR_FLUSH);
     put16(`CFG(2'd2)); put16(`PRESCALE(8'h04));
     put16(`CS(8'hf7)); put16(`WR(1)); put8(8'h5a); put16(`CS(8'hff));
     send_frame();
     wait_idle();
-    check("err cleared by mid-frame FLUSH", err, 3'h0);
-    check("only the part after FLUSH sent", d3.count, c3 + 1);
+    check("err cleared by FLUSH", err, 3'h0);
+    check("frame after FLUSH sent", d3.count, c3 + 1);
     check("byte after FLUSH", d3.mem[c3], 8'h5a);
     check("one transaction after FLUSH", cs3_releases, 1);
     check("SCLK idle vs CPOL after FLUSH", d3.mode_err, 1'b0);
+    begin_frame();
+    put16(`CS(8'hf7)); put16(`WR(1)); put8(8'hee); put16(`BR_FLUSH);
+    send_frame();
+    wait_idle();
+    check("FLUSH not first rejected", err, 3'h1);
+    check("frame with late FLUSH not sent", d3.count, c3 + 1);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
     // GPIOs, one pin per instruction; a GPIO read reply lands two bytes after
     // its index byte, in the low byte of the next instruction
@@ -602,7 +704,7 @@ module spi_translator_tb;
     begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
     // one engine: SELECT 0 is accepted and changes nothing, SELECT 1 names a
-    // missing engine; CHECK is not implemented yet
+    // missing engine; CHECK is a bad instruction without CRC_EN
 
     test_count = 16;
     begin_frame(); put16(`BR_SELECT(0)); send_frame(); wait_idle();
@@ -613,11 +715,14 @@ module spi_translator_tb;
     begin_frame(); put16(16'hC100); send_frame();
     check("SELECT reserved high nibble", err, 3'h1);
     begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
-    begin_frame(); put16(`BR_CHECK); send_frame();
-    check("CHECK rejected", err, 3'h1);
-    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+    if (CRC_EN == 0) begin
+      begin_frame(); put16(`BR_CHECK); send_frame();
+      check("CHECK rejected", err, 3'h1);
+      begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+    end
 
-    // FETCH: a rejected FETCH frame returns the data but leaves it queued
+    // FETCH: a rejected FETCH frame returns the data but leaves it queued;
+    // the block it leaves is lifted before the FETCH is sent again
 
     test_count = 17;
     c3 = d3.count;
@@ -632,6 +737,7 @@ module spi_translator_tb;
     check("rejected FETCH data", rep[0], 8'hd0 + c3);
     check("err after rejected FETCH", err, 3'h4);
     ctrl_r(8'h0b, v); check("SDI_LEVEL kept", v, 8'd1);
+    resume();
     fetch(1, 1'b0);
     check("retried FETCH data", rep[0], 8'hd0 + c3);
     ctrl_r(8'h0b, v); check("SDI_LEVEL released", v, 8'd0);
@@ -712,7 +818,7 @@ module spi_translator_tb;
     begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
 
     begin_frame();                        // 2 of 3 SDO bytes
-    put16(`CS(8'hfb)); put16(`WR(3)); put8(8'h01); put8(8'h02);
+    put16(`CS(8'hfb)); put16(`WR(3)); put8(8'h01); put8(8'h02); malformed = 1'b1;
     send_frame();
     wait_idle();
     check("truncated not forwarded", d2.count, c2);
@@ -721,6 +827,7 @@ module spi_translator_tb;
 
     begin_frame();                        // half an instruction
     put16(`CS(8'hfb)); put16(`WR(1)); put8(8'h01); put16(`CS(8'hff)); put8(8'h30);
+    malformed = 1'b1;
     send_frame();
     wait_idle();
     check("half instr not forwarded", d2.count, c2);
@@ -762,6 +869,170 @@ module spi_translator_tb;
     begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
     check("CS released by FLUSH", cs, 4'hf);
     check("write cut short", d0.count < 29 + 8, 1);
+
+    // header: byte 0 is STATUS after the previous frame, byte 1 SYNC_ID
+
+    test_count = 24;
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+    begin_frame();
+    put16(`CFG(2'd0)); put16(`PRESCALE(8'h02));
+    put16(`CS(8'hfe)); put16(`WR(1)); put8(8'h42); put16(`CS(8'hff));
+    put16(`SYNC(8'h41));
+    send_frame();
+    wait_idle();
+    begin_frame(); put16(`BR_NOP); send_frame();
+    check("header SYNC_ID", rxb[1], 8'h41);
+    check("header ERR after a good frame", hdr_status[5:3], 3'b000);
+
+    // go-back-N: after a rejected frame, frames are rejected until one starts
+    // with a resume; the header shows err meanwhile
+
+    test_count = 25;
+    c2 = d0.count;
+    begin_frame(); put16(16'h5000); send_frame(); wait_idle();
+    check("bad instruction", err, 3'h1);
+    begin_frame();                        // good, but blocked
+    put16(`CS(8'hfe)); put16(`WR(1)); put8(8'h43); put16(`CS(8'hff));
+    send_frame();
+    wait_idle();
+    check("header shows err", hdr_status[5:3], 3'b001);
+    check("blocked frame not sent", d0.count, c2);
+    check("blocked frame adds no err", err, 3'h1);
+    begin_frame();                        // clears the wrong bit: still blocked
+    put16(`BR_W1C(8'h10));
+    put16(`CS(8'hfe)); put16(`WR(1)); put8(8'h44); put16(`CS(8'hff));
+    send_frame();
+    wait_idle();
+    check("partial clear stays blocked", d0.count, c2);
+    check("err kept", err, 3'h1);
+    begin_frame();                        // clears it: resumes, frame runs
+    put16(`BR_W1C(8'h08));
+    put16(`CS(8'hfe)); put16(`WR(1)); put8(8'h45); put16(`CS(8'hff));
+    send_frame();
+    wait_idle();
+    check("resumed frame sent", d0.count, c2 + 1);
+    check("resumed frame data", d0.mem[c2], 8'h45);
+    check("err cleared by W1C", err, 3'h0);
+
+    // a transfer split over frames survives a rejected piece: the host
+    // resumes and resends from the rejected frame on
+
+    test_count = 26;
+    c3 = d3.count;
+    cs3_releases = 0;
+    begin_frame();
+    put16(`CFG(2'd2)); put16(`PRESCALE(8'h04));
+    put16(`CS(8'hf7)); put16(`WR(2)); put8(8'h71); put8(8'h72);
+    send_frame();
+    wait_idle();
+    begin_frame();                        // second piece cut short
+    put16(`WR(2)); put8(8'h73); malformed = 1'b1;
+    send_frame();
+    wait_idle();
+    check("second piece rejected", err, 3'h4);
+    begin_frame();                        // sent before the host noticed
+    put16(`WR(1)); put8(8'h75); put16(`CS(8'hff));
+    send_frame();
+    wait_idle();
+    check("frame after it blocked", d3.count, c3 + 2);
+    check("target still held", cs[3], 1'b0);
+    begin_frame();                        // resume and resend from the second piece
+    put16(`BR_W1C(8'h20));
+    put16(`WR(2)); put8(8'h73); put8(8'h74);
+    put16(`WR(1)); put8(8'h75); put16(`CS(8'hff));
+    send_frame();
+    wait_idle();
+    check("whole transfer after resume", d3.count, c3 + 5);
+    check("resent bytes in order", {d3.mem[c3+2], d3.mem[c3+3], d3.mem[c3+4]}, 24'h737475);
+    check("one CS-held transaction", cs3_releases, 1);
+    check("err cleared", err, 3'h0);
+
+    // FETCH acknowledge and retry: a fetched batch keeps its room until a
+    // later FETCH or an acknowledge, and a retry reads it again
+
+    test_count = 27;
+    begin_frame();
+    put16(`CFG(2'd0)); put16(`PRESCALE(8'h02));
+    put16(`CS(8'hfe)); put16(`RD(2)); put16(`CS(8'hff)); put16(`SYNC(8'h51));
+    send_frame();
+    wait_sync(8'h51);
+    c2 = d0.count;
+    fetch(2, 1'b0);
+    ctrl_r(8'h0b, v); check("SDI_LEVEL after FETCH", v, 8'd0);
+    check("batch keeps its room", i_dut.i_exec.resp_s_room, 254);
+    v = rep[0]; s = rep[1];
+    begin_frame(); put16(`BR_RETRY(2)); put_data(3, 8'h00, 8'h00); send_frame();
+    check("retry first byte", rxb[3], v);
+    check("retry second byte", rxb[4], s);
+    check("retry accepted", err, 3'h0);
+    begin_frame(); put16(`BR_RETRY(2)); put_data(3, 8'h00, 8'h00); put8(8'h00);
+    malformed = 1'b1;
+    send_frame();                         // rejected retry changes nothing
+    check("rejected retry", err, 3'h4);
+    resume();
+    begin_frame(); put16(`BR_RETRY(2)); put_data(3, 8'h00, 8'h00); send_frame();
+    check("batch intact after rejected retry", {rxb[3], rxb[4]}, {v, s});
+    check("still unacknowledged", i_dut.i_exec.resp_s_room, 254);
+    begin_frame(); put16(`BR_ACK); send_frame();
+    check("acknowledge accepted", err, 3'h0);
+    check("acknowledge frees the room", i_dut.i_exec.resp_s_room, 256);
+    begin_frame(); put16(16'hD300); send_frame();
+    check("retry with ack only rejected", err, 3'h1);
+    begin_frame(); put16(`BR_FLUSH); send_frame(); wait_idle();
+
+    // CRC: damaged frames are rejected as a whole with ERR[2] only
+
+    if (CRC_EN != 0) begin
+      test_count = 28;
+      c2 = 16'hffff;
+      for (c3 = 0; c3 < 9; c3 = c3 + 1) begin
+        c2 = crc16_byte(c2, "1" + c3);
+      end
+      check("CRC check value", c2, 16'h29b1);
+
+      begin_frame();                      // reply of a final CTRL_R during CHECK
+      put16(`BR_CTRL_R(8'h00));
+      send_frame();
+      check("CTRL_R before CHECK", rxb[2], 8'h01);
+
+      c2 = d0.count;
+      raw_frame = 1'b1;
+      begin_frame();                      // wrong CRC
+      put16(`BR_CTRL_W(8'h04, 8'h99)); put16(`BR_GPIO_W(0, 0, 8'd0));
+      put16(`CS(8'hfe)); put16(`WR(1)); put8(8'h46); put16(`CS(8'hff));
+      put_check(16'h0001);
+      send_frame();
+      wait_idle();
+      check("bad CRC", err, 3'h4);
+      check("bad CRC not sent", d0.count, c2);
+      check("bad CRC GPIO not applied", gpio_o[0], 1'b1);
+      raw_frame = 1'b0; resume();
+      ctrl_r(8'h04, v); check("bad CRC CTRL_W not applied", v, 8'h22);
+      raw_frame = 1'b1;
+
+      begin_frame();                      // no CHECK
+      put16(`CS(8'hfe)); put16(`WR(1)); put8(8'h47); put16(`CS(8'hff));
+      send_frame();
+      wait_idle();
+      check("missing CHECK", err, 3'h4);
+      raw_frame = 1'b0; resume(); raw_frame = 1'b1;
+
+      begin_frame();                      // bytes after CHECK
+      put16(`CS(8'hfe)); put16(`WR(1)); put8(8'h48); put16(`CS(8'hff));
+      put_check(16'h0000); put16(`BR_NOP);
+      send_frame();
+      wait_idle();
+      check("bytes after CHECK", err, 3'h4);
+      raw_frame = 1'b0; resume(); raw_frame = 1'b1;
+
+      begin_frame();                      // bad instruction and bad CRC
+      put16(16'h5000); put_check(16'h8000);
+      send_frame();
+      wait_idle();
+      check("integrity hides bad instruction", err, 3'h4);
+      raw_frame = 1'b0; resume();
+      check("none of them sent", d0.count, c2);
+    end
 
     if (failed == 1'b0)
       $display("SUCCESS");

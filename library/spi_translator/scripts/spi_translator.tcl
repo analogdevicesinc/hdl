@@ -34,13 +34,14 @@
 ## \param[resp_fifo_addr_width] - response (SDI) FIFO depth, log2
 ## \param[sdi_delay] - SDI_DELAY of every engine
 ## \param[echo_sclk] - ECHO_SCLK of every engine
+## \param[crc_en] - CRC-16 CHECK on every frame, see the slave module
 
 proc spi_translator_create {name num_cs {num_gpio 0} \
                             {gpio_default_dir 0x0} {gpio_default_out 0x0} \
                             {up_cpol 0} {up_cpha 0} {up_early_launch 0} \
                             {cmd_fifo_addr_width 8} {sdo_fifo_addr_width 8} \
                             {resp_fifo_addr_width 8} \
-                            {sdi_delay 0} {echo_sclk 0}} {
+                            {sdi_delay 0} {echo_sclk 0} {crc_en 1}} {
 
   if {$num_cs < 1 || $num_cs > 128} {
     error "ERROR: spi_translator_create: num_cs must be 1 to 128, got $num_cs"
@@ -84,6 +85,7 @@ proc spi_translator_create {name num_cs {num_gpio 0} \
   ad_ip_parameter $slave CONFIG.UP_CPOL [expr {$up_cpol ? "true" : "false"}]
   ad_ip_parameter $slave CONFIG.UP_CPHA [expr {$up_cpha ? "true" : "false"}]
   ad_ip_parameter $slave CONFIG.UP_EARLY_LAUNCH [expr {$up_early_launch ? "true" : "false"}]
+  ad_ip_parameter $slave CONFIG.CRC_EN [expr {$crc_en ? "true" : "false"}]
   ad_ip_parameter $slave CONFIG.CMD_FIFO_ADDRESS_WIDTH $cmd_fifo_addr_width
   ad_ip_parameter $slave CONFIG.SDO_FIFO_ADDRESS_WIDTH $sdo_fifo_addr_width
   ad_ip_parameter $slave CONFIG.RESP_FIFO_ADDRESS_WIDTH $resp_fifo_addr_width

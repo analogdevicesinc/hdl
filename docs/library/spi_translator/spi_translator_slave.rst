@@ -78,9 +78,9 @@ The control interface on the right goes to the
 :ref:`spi_translator interconnect`, which passes it to the selected engine, see
 the :ref:`Engines <spi_translator engines>`; ``spi_resetn`` resets the
 interconnect and all engines. Everything right of ``spi_translator_phy`` runs
-on ``clk``. All three FIFOs are transactional: the CMD and SDO FIFOs only show
-a frame to the engines once the decoder commits it, and the response FIFO only
-releases what a FETCH read once the FETCH frame commits.
+on ``clk``. All FIFOs are transactional: the CMD, SDO and bridge-write FIFOs
+only release a frame once the decoder commits it, and the response FIFO only
+frees what a FETCH read once a later frame acknowledges it.
 
 Configuration Parameters
 --------------------------------------------------------------------------------
@@ -117,9 +117,11 @@ Configuration Parameters
      - 0
      - Output value of each GPIO after reset, bit *g* for GPIO *g*. 256 bits;
        bits from ``NUM_OF_GPIO`` up are ignored.
-   * - ``HEADER_CRC_EN``
+   * - ``CRC_EN``
      - 1
-     - Not used by this version.
+     - 1: every frame must end with a CRC-16 CHECK, which also returns a CRC-16
+       of the frame's MISO bytes, see `Frame check (CRC)`_. 0: CHECK is a bad
+       instruction.
    * - ``CMD_FIFO_ADDRESS_WIDTH``
      - 8
      - CMD FIFO depth, ``2**N`` instructions. 3 to 15.
@@ -129,6 +131,10 @@ Configuration Parameters
    * - ``RESP_FIFO_ADDRESS_WIDTH``
      - 8
      - Response FIFO depth, ``2**N`` bytes. Up to 15.
+   * - ``BRIDGE_FIFO_ADDRESS_WIDTH``
+     - 4
+     - Bridge-write FIFO depth, ``2**N`` CTRL_W and GPIO writes per frame.
+       2 to 8.
 
 The defaults are the minimum sizes for correct operation with the usual host
 rules below; a project can size the FIFOs up as far as it needs. The lower
@@ -139,8 +145,9 @@ FIFO sizing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A frame is only accepted if its instructions fit in the room left in the CMD
-FIFO and its SDO bytes in the room left in the SDO FIFO. Bridge instructions
-and filler bytes take no room.
+FIFO, its SDO bytes in the room left in the SDO FIFO, and its CTRL_W and GPIO
+writes in the bridge-write FIFO. Other bridge instructions and filler bytes
+take no room.
 
 .. list-table::
    :header-rows: 1
@@ -156,10 +163,12 @@ and filler bytes take no room.
        several frames, see `Split transfers`_.
    * - Response
      - 256 bytes
-     - It must hold all SDI bytes of one message: when it is full the engine
+     - It must hold all SDI bytes of one message, plus the last fetched batch
+       until it is acknowledged (see `Reads`_): when it is full the engine
        stalls, so neither RESP_RDY nor SYNC_ID can show the message complete
        and the host never fetches. The host splits larger reads into several
-       messages, or fetches by SDI_LEVEL while the engine runs.
+       messages, fetches by SDI_LEVEL while the engine runs, or acknowledges
+       the previous batch first.
    * - CMD
      - about 16 instructions
      - It must hold the instructions of one frame. A typical message (CFG,
@@ -243,11 +252,11 @@ CTRL_R.
    * - ``0x4``
      - SCRATCH
      - RW
-     - Scratch register.
+     - Scratch register. Written when the frame commits.
    * - ``0x5``
      - STATUS
-     - R
-     - See `STATUS`_.
+     - R/W1C
+     - See `STATUS`_. Writing 1 to an ERR bit clears it, at the commit.
    * - ``0x6``
      - SYNC_ID
      - R
@@ -285,14 +294,16 @@ STATUS
      - Description
    * - 7
      - BUSY
-     - Committed work pending, or the engine not idle.
+     - Committed work pending, the engine not idle, or in reset.
    * - 6
      - RESP_RDY
      - Nothing left to execute and SDI bytes waiting: everything sent so far
        has run and its SDI bytes can be fetched.
    * - 5:3
      - ERR
-     - Sticky frame errors, see `Validation and errors`_. Cleared by FLUSH.
+     - Sticky frame errors, see `Validation and errors`_: bit 5 integrity,
+       4 overflow, 3 bad instruction. While any is set, frames are rejected,
+       see `Error recovery`_. Cleared by FLUSH, or by CTRL_W writing 1s.
    * - 2:0
      - CREDIT
      - Free space in eighths of the fuller of the CMD and SDO FIFOs,
@@ -315,19 +326,22 @@ a serialized SPI Engine instruction stream:
   bytes, ``n = cmd[7:0]``. A read-only TRANSFER is followed by nothing.
 - Engine instructions use exactly the encodings of the
   :ref:`SPI Engine instruction set <spi_engine instruction-format>`.
-- Apart from `Replies`_, all MISO bytes are ``0x00``.
+- MISO bytes 0 and 1 are the `Frame header`_. Apart from it, `Replies`_ and
+  the MISO CRC, all MISO bytes are ``0x00``.
+- With ``CRC_EN = 1`` the frame ends with a CHECK, see `Frame check (CRC)`_.
 - A frame with no bytes at all is ignored.
 
-Engine instructions are written into the CMD FIFO and their SDO bytes into the
-SDO FIFO as they arrive. At CS deassert the decoder either commits the frame to
-both FIFOs in the same cycle, or rolls both back. Frame *k* executes while
-frame *k + 1* is being received.
+**A frame takes effect as a whole when it commits, or not at all.** Engine
+instructions are written into the CMD FIFO and their SDO bytes into the SDO
+FIFO as they arrive, CTRL_W and GPIO writes into the bridge-write FIFO. At CS
+deassert the decoder either commits the frame to all of them in the same
+cycle, or rolls them back. Committed bridge writes are then applied, one per
+``clk``; a FLUSH and an ERR clear act at the commit itself. Frame *k* executes
+while frame *k + 1* is being received.
 
-Bridge instructions act during the frame instead: CTRL_R, GPIO reads and FETCH
-reply on MISO, CTRL_W, GPIO writes and FLUSH take effect as soon as they are
-decoded, and only the bytes a FETCH reads wait for the commit to be released.
-SELECT is the exception: it is queued with the engine instructions, see
-the :ref:`Engines <spi_translator engines>`.
+Only replies happen during the frame: CTRL_R, GPIO reads and FETCH answer on
+MISO. A read therefore sees the writes of earlier frames, not those of its own
+frame.
 
 .. _spi_translator bridge-instructions:
 
@@ -353,7 +367,7 @@ the engine side (routing, responses, reset, commit).
    * - ``0x9add``
      - 1
      - CTRL_W
-     - Write ``dd`` to register ``a``, immediately.
+     - Write ``dd`` to register ``a``, at the commit.
    * - ``0xAa00``
      - 2
      - CTRL_R
@@ -362,8 +376,8 @@ the engine side (routing, responses, reset, commit).
      - 3
      - GPIO
      - Access GPIO ``ii``. High byte ``{4'hB, rd, sel, value, 1'b0}``.
-       With rd = 0 (``0xB0`` to ``0xB6``), write ``value`` immediately, to OUT
-       for sel 0 or to DIR for sel 1 (0 = output, 1 = input). With rd = 1
+       With rd = 0 (``0xB0`` to ``0xB6``), write ``value`` at the commit, to
+       OUT for sel 0 or to DIR for sel 1 (0 = output, 1 = input). With rd = 1
        (``0xB8``, sel and value 0), reply with ``{5'b0, DIR, OUT, IN}``.
    * - ``0xC0ee``
      - 4
@@ -374,37 +388,48 @@ the engine side (routing, responses, reset, commit).
      - 5
      - FETCH
      - Reply with the next ``n + 1`` bytes of the response FIFO (1 to 256,
-       counted like a TRANSFER).
+       counted like a TRANSFER). At the commit, acknowledges the previous
+       batch, see `Reads`_.
+   * - ``0xD2nn`` + ``n + 2`` filler bytes
+     - 5
+     - FETCH retry
+     - Reply again with the unacknowledged batch; acknowledges nothing.
+   * - ``0xD100``
+     - 5
+     - FETCH ack
+     - Acknowledge the previous batch at the commit; no read, no filler.
    * - ``0xE0xx``
      - 6
      - FLUSH
-     - Immediately drop all queued work and SDI data, including the earlier
-       part of its own frame, reset the engine (deasserting every downstream
-       CS) and clear the ERR bits.
-   * - ``0xF0..``
+     - Only as the first instruction of a frame. At the commit, drop all work
+       queued by earlier frames and all SDI data, reset the engines
+       (deasserting every downstream CS) and clear the ERR bits. The rest of
+       its frame is kept.
+   * - ``0xF000`` + ``crc_hi``, ``crc_lo``
      - 7
      - CHECK
-     - Reserved for the frame integrity check; not implemented yet.
+     - With ``CRC_EN = 1``, the last instruction of every frame, see
+       `Frame check (CRC)`_.
 
-CHECK is rejected as a bad instruction until it is implemented, and so is GPIO
-in a translator built without GPIOs. ``field`` must be 0 for NOP, SELECT,
-FETCH and FLUSH, the low bit of a GPIO write high byte and the three low bits
-of a GPIO read high byte must be 0, and the low byte of CTRL_R must be
-``0x00``. FETCH filler bytes are ignored. Bridge and engine instructions can
-be mixed in one frame.
+CHECK without ``CRC_EN`` is a bad instruction, and so is GPIO in a translator
+built without GPIOs, a FLUSH that is not the first instruction, and FETCH with
+bits 9:8 = ``11``. ``field`` must be 0 for NOP, SELECT, FLUSH and CHECK,
+bits 11:10 of FETCH must be 0, the low bit of a GPIO write high byte and the
+three low bits of a GPIO read high byte must be 0, and the low byte of CTRL_R,
+CHECK and a FETCH ack must be ``0x00``. FETCH filler bytes are ignored. Bridge
+and engine instructions can be mixed in one frame. FETCH's flags sit in bits
+9:8 like R and W of a TRANSFER, but only one may be set.
 
-CTRL_W, GPIO writes and FLUSH take effect about four ``clk`` cycles after their low byte,
-as long as nothing earlier in the frame has failed: an instruction after an
-error may be misaligned data, so it is ignored. They are not undone if the
-frame is rejected later; register writes are absolute and FLUSH is idempotent,
-so resending the frame is harmless. Consequently:
+Because a frame acts as a whole:
 
-- several CTRL_W or GPIO writes can be sent in one frame, and a CTRL_R or
-  GPIO read after a write reads the new value;
-- the instructions after a FLUSH are kept and committed normally, so a frame
-  such as ``FLUSH, CFG, PRESCALE, CS, ...`` recovers and starts again. The
-  engine restarts from its reset configuration, so the frame sets the mode and
-  clock again.
+- several CTRL_W or GPIO writes can be sent in one frame; they are applied in
+  order after the commit, and a CTRL_R or GPIO read sees them from the next
+  frame on;
+- a rejected frame applies none of its writes, so resending it is harmless;
+- a frame such as ``FLUSH, CFG, PRESCALE, CS, ...`` recovers and starts again:
+  the FLUSH drops what earlier frames queued and resets the engines, and the
+  rest of the frame runs once the reset is over. The engines restart from
+  their reset configuration, so the frame sets the mode and clock again.
 
 Replies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -426,8 +451,8 @@ after the byte that completes its request:
 
 CTRL_R needs no filler: its data goes out during the first byte of whatever
 instruction follows it. Register reads can therefore be chained at one per two
-bytes, and a CTRL_R that ends a frame is followed by a NOP to clock its data
-out:
+bytes, and a CTRL_R that ends a frame is followed by a NOP, or by the CHECK,
+to clock its data out:
 
 .. code-block:: text
 
@@ -436,6 +461,83 @@ out:
 
 GPIO reads chain the same way, its reply landing in the low byte of the following
 instruction.
+
+Frame header
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The first two MISO bytes of every frame carry the bridge state, at no cost on
+the wire:
+
+.. code-block:: text
+
+   MOSI  [ i0 ][ i1  ][ ... ]
+   MISO  [STAT][SYNC ][ ... ]
+
+- **Byte 0** is STATUS as it was a few ``clk`` after the previous frame ended,
+  so its ERR bits tell the host whether that frame was committed, and CREDIT
+  how much it may send. BUSY and RESP_RDY are as of that moment too; a CTRL_R
+  of STATUS gives the live value.
+- **Byte 1** is SYNC_ID at the start of the frame, so a host waiting for a
+  SYNC needs no CTRL_R.
+
+Byte 0 comes from a register in the ``clk`` domain that only changes between
+frames; the slave drives its bit 7 from CS fall. See `Timing requirements`_.
+
+Frame check (CRC)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+With ``CRC_EN = 1`` every frame ends with a CHECK, and both directions are
+protected by CRC-16/CCITT-FALSE (polynomial ``0x1021``, MSB first, initial
+value ``0xFFFF``, no final XOR; in Linux ``crc_itu_t(0xffff, buf, len)``,
+check value ``0x29B1`` for ``"123456789"``):
+
+.. code-block:: text
+
+   MOSI  [ i0 ][ i1 ] ... [0xF0][0x00][crc_hi ][crc_lo ]
+   MISO  [STAT][SYNC] ... [ r  ][ r  ][mcrc_hi][mcrc_lo]
+
+- ``crc`` covers the MOSI bytes from byte 0 through CHECK's ``0x00``. The frame
+  only passes if CHECK is its last instruction, complete, and ``crc`` matches.
+- ``mcrc`` covers the MISO bytes from byte 0 through the one sent during
+  CHECK's ``0x00``: the header, every reply, and the replies of the
+  instructions just before CHECK (``r``). CHECK is recognized on its high
+  byte, like CTRL_R, so ``mcrc`` goes out during its own CRC bytes and CHECK
+  needs no filler. The host checks ``mcrc`` before using any reply; for FETCH
+  data it then acknowledges or retries, see `Reads`_.
+- CHECK adds 4 bytes to every frame. The verdict of a frame is not returned
+  in the frame itself but in the header of the next one.
+
+A frame that fails the check is rejected as a whole, with ERR bit 5 only.
+
+Error recovery
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Frames are pipelined: frame *k + 1* is usually sent before the host has seen
+the verdict of frame *k*. To keep the order, a rejected frame blocks the ones
+after it (go-back-N):
+
+- A frame that starts while any ERR bit is set is rejected as a whole and adds
+  no ERR bits, unless its first instruction **resumes**: a CTRL_W to STATUS
+  (``0x95dd``) writing 1 to every set ERR bit, or FLUSH.
+- Reads in a blocked frame still reply, but nothing of it takes effect.
+
+When the header shows ERR, the host resends everything from the rejected
+frame on, starting with the resume:
+
+.. code-block:: text
+
+   frame k     damaged                               -> rejected, ERR[5] set
+   frame k+1   header shows ERR = 100                -> rejected, blocked
+   frame k+2   CTRL_W(STATUS, 0x20)  <frame k>  <frame k+1>  CHECK
+                                                     -> accepted, ERR cleared
+
+Nothing after the rejected frame has run, so the engines, the queued work, the
+response FIFO and any target held selected are exactly as frame *k - 1* left
+them: a transfer split over frames simply continues. The host only writes 1s
+for the bits it has seen, so an error it has not seen yet keeps blocking.
+FLUSH is the coarse recovery, for when the state is unknown: it drops all
+queued work and resets the engines, and the host resends the messages whose
+SYNC id it has not seen and fetches their reads again.
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -501,10 +603,10 @@ time: a ``gpio_chip`` in the shim sends one small frame per call, and drivers
 such as ``one-bit-adc-dac`` bind to the lines unmodified. Writing one pin never
 touches the others, so no read-modify-write is needed.
 
-A GPIO write acts immediately, like CTRL_W, so it is not ordered with the frame's
-engine instructions, which only run after the commit. A pin that must change
-after some SPI traffic, such as a load or reset line, is written in a later
-frame once BUSY has cleared. Minimum hold times are kept by the host waiting
+A GPIO write is applied right after its frame commits, like CTRL_W, while the
+frame's engine instructions run later, as the engine reaches them; the two are
+not ordered. A pin that must change after some SPI traffic, such as a load or
+reset line, is written in a later frame once BUSY has cleared. Minimum hold times are kept by the host waiting
 between frames; exact timing relative to SPI traffic would need the GPIO change
 to travel in the instruction stream itself.
 
@@ -533,9 +635,23 @@ The host knows a read is complete in one of two ways:
 
 A FETCH with ``n = k - 1`` then returns that message's ``k`` SDI bytes, padded
 with ``0x00`` if the FIFO runs out; one FETCH covers a full-length read
-TRANSFER. **The bytes a FETCH reads are only released when its
-frame commits.** If the frame is rejected, the read is rewound and a retried
-FETCH returns the same bytes.
+TRANSFER. If the FETCH frame is rejected, the read is rewound and the same
+FETCH, resent, returns the same bytes.
+
+**The bytes a committed FETCH frame read stay in the response FIFO as an
+unacknowledged batch**, so the host can read them again when they arrived
+damaged (bad ``mcrc``, or simply not received):
+
+- The next FETCH (``0xD0nn``) acknowledges the batch: when its frame commits,
+  the batch is released and its room freed. A host that is happy with the
+  data just carries on.
+- A FETCH retry (``0xD2nn``) returns the unacknowledged batch again and
+  acknowledges nothing.
+- A FETCH ack (``0xD100``) only releases the batch. It is needed when the
+  batch and the next response would not fit in the response FIFO together.
+
+SDI_LEVEL and RESP_RDY count the bytes not fetched yet; the room taken by the
+unacknowledged batch shows in neither.
 
 Writes need no FETCH: a posted write has nothing to return. A write that must
 be confirmed ends with a SYNC, and the host checks SYNC_ID. For a fence over
@@ -545,9 +661,9 @@ Validation and errors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A frame that fails any check is rolled back as a unit: nothing from it reaches
-a downstream device, its FETCH reads are rewound, and the matching ERR bit in
-STATUS is set. CTRL_W and FLUSH decoded before the failure stay applied;
-those after it are ignored.
+a downstream device, none of its bridge writes is applied, its FETCH reads are
+rewound, and the matching ERR bit in STATUS is set. The frames after it are
+rejected until the host resumes, see `Error recovery`_.
 
 .. list-table::
    :header-rows: 1
@@ -555,16 +671,25 @@ those after it are ignored.
    * - STATUS bit
      - Condition
    * - 3
-     - Bad instruction: engine class ``101`` to ``111``, CHECK, GPIO without
-       GPIOs, reserved TRANSFER, WRITE or bridge fields, a CHIPSELECT selecting
-       more than one target or one the selected engine does not have, a SELECT
-       of a missing engine or of another engine while a target is selected, or
-       a word length outside 1..8.
+     - Bad instruction: engine class ``101`` to ``111``, CHECK without
+       ``CRC_EN``, GPIO without GPIOs, FLUSH not first, reserved TRANSFER,
+       WRITE or bridge fields, a CHIPSELECT selecting more than one target or
+       one the selected engine does not have, a SELECT of a missing engine or
+       of another engine while a target is selected, or a word length outside
+       1..8.
    * - 4
-     - The frame does not fit in the room left in the CMD or SDO FIFO.
+     - The frame does not fit in the room left in the CMD, SDO or
+       bridge-write FIFO.
    * - 5
-     - The frame ends inside an instruction, its SDO data or a FETCH's
-       filler bytes.
+     - Integrity. With ``CRC_EN = 1``: the frame does not end with a complete,
+       matching CHECK (CRC mismatch, no CHECK, cut short, bytes after it).
+       Without: the frame ends inside an instruction, its SDO data or a
+       FETCH's filler bytes.
+
+When bit 5 is set, bits 4 and 3 are not reported for that frame: a damaged
+frame can look malformed, and the host's answer is the same, resending it.
+Bits 4 and 3 therefore only mean a host-side problem in a frame that arrived
+intact.
 
 .. _spi_translator split-transfers:
 
@@ -580,13 +705,15 @@ select asserted, and the next frame continues the same downstream transaction:
    frame 2                 WR(m)  data ...  CS(release)
 
 The target sees one CS-held transfer of ``k + m`` words. This lets a transfer
-longer than the FIFOs be sent in pieces, and lets translators be cascaded,
-where the first stage forwards portions of a transfer for the next one.
+longer than the FIFOs be sent in pieces.
 
 Each frame is still checked as a unit, so a bad piece never reaches the
 target, but the pieces before it already have. If a later piece is rejected,
-the target stays selected until the host sends a CHIPSELECT releasing it, or
-FLUSH. While it is selected, a SELECT of another engine is rejected.
+the target stays selected and the frames after it are blocked; the host
+resumes with a CTRL_W to STATUS and resends from the rejected piece, and the
+target still sees one transfer, see `Error recovery`_. A FLUSH instead resets
+the engines and so ends the transfer. While a target is selected, a SELECT of
+another engine is rejected.
 
 The upstream slave
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -609,8 +736,10 @@ The upstream SPI slave is ``spi_translator_phy``:
   of 25 to 40 MHz on Artix-7. Use it only when the master samples at its edge
   and the link has been verified by timing analysis; a master that samples
   later reads the next bit.
-- The first MISO byte of a frame is undefined in both modes; replies start
-  later.
+- MISO byte 0 is the STATUS byte of the `Frame header`_, from a register
+  that only changes between frames. Its bit 7 is driven from CS fall; the
+  following bits change on the same edge as all other MISO bits, so byte 0
+  needs no SCLK edge before the first sample edge, also in modes 1 and 3.
 - CS asynchronously resets the bit counter, since SCLK does not run while CS
   is high.
 - **Receive crossing.** A completed byte is copied to a holding register and a
@@ -628,7 +757,9 @@ Timing requirements
 - One upstream byte (8 SCLK periods) must last more than about 6 ``clk``
   cycles, so each byte crosses between SCLK and ``clk`` before the next byte
   boundary.
-- CS must stay high for at least about 4 ``clk`` cycles between frames.
+- CS must stay high for at least about 12 ``clk`` cycles between frames: the
+  frame is committed a few cycles after CS rises, and the header of the next
+  frame is taken about 6 cycles after that.
 - SCLK should enter on a clock-capable pin.
 
 Design decisions
@@ -719,25 +850,32 @@ Register map in the bridge
 
 Placing bridge registers inside ``spi_engine_execution`` was rejected: it forks
 a stock core, the engine has three free WRITE addresses and no read-back, and
-registers such as ERR clear or FLUSH must act immediately, not when the engine
-reaches them behind queued frames.
+registers such as ERR clear or FLUSH must act at the frame's commit, not when
+the engine reaches them behind queued frames.
 
-Immediate CTRL_W and FLUSH
+Bridge writes at the commit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-CTRL_W and FLUSH act as soon as they are decoded rather than at the commit.
-This allows several register writes per frame, read-after-write within a frame,
-and a FLUSH that recovers and restarts in one frame. The cost is that they are
-not part of the frame's all-or-nothing: if the frame is rejected later, they
-stay applied. Without a CRC that loses nothing, since a corrupted CTRL_W would
-be applied at the commit just the same. When CRC checkpoints are added, they
-become the point at which CTRL_W and FLUSH take effect, keeping them protected
-without returning to commit-time writes.
+CTRL_W, GPIO writes and FLUSH act when their frame commits, with or without
+CRC, rather than when they are decoded. Every frame is then all-or-nothing:
+a rejected frame changes nothing, so resending it never applies a write twice,
+and with CRC a damaged byte that happens to decode as a write or FLUSH can
+never act. The cost is read-after-write within a frame, which only register
+tests used. FLUSH must be first in its frame, the only place it is useful, so
+at the commit it simply drops everything queued before the frame.
 
-Immediate does not mean ordered with SPI traffic: the frame's engine
-instructions only run after the commit, so a register written by CTRL_W changes
-before them. Anything that must happen after some SPI traffic, such as a GPIO
-sequence, is sent in a later frame once BUSY has cleared, see `GPIOs`_.
+Frame check, header and go-back-N
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The CRC is a single trailer per frame rather than per-instruction checks or
+checkpoints: one CRC per frame is enough when the frame acts as a whole.
+Returning the frame verdict in the frame itself would need filler bytes after
+the CRC, 4 more bytes on every frame; instead the verdict rides in MISO byte
+0 of the next frame, which was unused. Because the host learns about a failure
+one frame late, frames after a failure are blocked until the host resumes:
+otherwise a resent frame would run after frames sent later. The resume is a
+CTRL_W to STATUS rather than FLUSH so that queued work and held chip selects
+survive a CRC error.
 
 Framing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -753,14 +891,8 @@ link does not work.
 Current limitations
 --------------------------------------------------------------------------------
 
-- **No CRC.** A corrupted frame that still parses is executed, and corrupted
-  MISO data is not detected. A checkpoint instruction carrying a CRC over
-  everything since the previous one is planned; CTRL_W and FLUSH will then take
-  effect when the next checkpoint passes, so their meaning for the host stays
-  the same.
-- **No status byte on MISO.** Status is read through CTRL_R of STATUS; sending
-  it in the first MISO byte of every frame, with the last SYNC id in the
-  second, is planned.
+- **Without CRC_EN** a corrupted frame that still parses is executed, and
+  corrupted MISO data is not detected.
 - **Partial bytes** cut short by CS are dropped silently by the slave.
 - **8-bit SDO words only** (engine ``DATA_WIDTH = 8``).
 - **No downstream watchdog**; a hung engine is recovered with FLUSH.

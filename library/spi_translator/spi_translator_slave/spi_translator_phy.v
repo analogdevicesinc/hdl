@@ -58,7 +58,11 @@
  *     reach the master instead of half. Only for links whose master samples
  *     at its edge, verified by timing analysis.
  *
- * Either way the first MISO byte of a frame is undefined; replies start later.
+ * The first MISO byte of a frame is tx_first instead, driven from CS fall:
+ * bit 7 is on MISO before the first SCLK edge, and each later bit follows the
+ * same launch edge as above. tx_first belongs to clk and must not change while
+ * CS is low or shortly before CS falls; the decoder only updates it a few clk
+ * after a frame has ended.
  *
  * Timing: one SCLK byte must exceed the rx_valid latency plus one clk
  * (about 6 clk).
@@ -87,6 +91,7 @@ module spi_translator_phy #(
   // transmitted words
 
   input   [DATA_WIDTH-1:0]    tx_data,
+  input   [DATA_WIDTH-1:0]    tx_first,
 
   // external SPI slave interface
 
@@ -118,6 +123,12 @@ module spi_translator_phy #(
   reg                          cs_d = 1'b0;
   reg                          tog_d = 1'b0;
   reg  [DATA_WIDTH-1:0]        tx_shift = {DATA_WIDTH{1'b0}};
+  reg                          byte0_done = 1'b0;
+
+  // byte 0 of the frame comes from tx_first, bit index tx_idx, until
+  // tx_from_shift switches MISO to the shift register
+  wire [BIT_COUNTER_WIDTH-1:0] tx_idx;
+  wire                         tx_from_shift;
 
   // sample edge: rising for modes 0/3, falling for 1/2
   // (a constant inversion, absorbed into the FF clock input)
@@ -132,16 +143,21 @@ module spi_translator_phy #(
   assign rx_valid      = rx_valid_reg;
   assign rx_data       = rx_data_reg;
 
-  assign spi_miso   = tx_shift[DATA_WIDTH-1];
+  assign spi_miso   = tx_from_shift ? tx_shift[DATA_WIDTH-1] :
+                                      tx_first[DATA_WIDTH-1-tx_idx];
   assign spi_miso_t = spi_cs;
 
   always @(posedge sclk_s or posedge spi_cs) begin
     if (spi_cs) begin
       bit_cnt <= {BIT_COUNTER_WIDTH{1'b0}};
       sdi_shift <= {DATA_WIDTH{1'b0}};
+      byte0_done <= 1'b0;
     end else begin
       bit_cnt <= bit_cnt + 1'b1;
       sdi_shift <= {sdi_shift[DATA_WIDTH-2:0], spi_mosi};
+      if (bit_cnt == DATA_WIDTH-1) begin
+        byte0_done <= 1'b1;
+      end
     end
   end
 
@@ -157,6 +173,11 @@ module spi_translator_phy #(
   generate
     if (EARLY_LAUNCH != 0) begin : g_early_launch
 
+      // byte 0 bits change on the sample edge, like the shift register; the
+      // edge completing byte 0 loads byte 1 and switches to it
+      assign tx_idx = bit_cnt;
+      assign tx_from_shift = byte0_done;
+
       // load and shift on the sample edge
       always @(posedge sclk_s) begin
         if (bit_cnt == DATA_WIDTH-1) begin
@@ -169,6 +190,26 @@ module spi_translator_phy #(
     end else begin : g_standard_launch
 
       reg [DATA_WIDTH-1:0] tx_hold = {DATA_WIDTH{1'b0}};
+      reg [BIT_COUNTER_WIDTH-1:0] tx_idx_reg = {BIT_COUNTER_WIDTH{1'b0}};
+      reg                  tx_from_reg = 1'b0;
+
+      // byte 0 bits change on the drive edge; bit 7 holds from CS fall through
+      // the leading drive edge of CPHA = 1, and the drive edge loading byte 1
+      // switches to the shift register
+      assign tx_idx = tx_idx_reg;
+      assign tx_from_shift = tx_from_reg;
+
+      always @(negedge sclk_s or posedge spi_cs) begin
+        if (spi_cs) begin
+          tx_idx_reg <= {BIT_COUNTER_WIDTH{1'b0}};
+          tx_from_reg <= 1'b0;
+        end else begin
+          tx_idx_reg <= bit_cnt;
+          if (byte0_done) begin
+            tx_from_reg <= 1'b1;
+          end
+        end
+      end
 
       // capture tx_data at the byte boundary, as in early launch, so the
       // crossing from clk is the same at any SCLK rate

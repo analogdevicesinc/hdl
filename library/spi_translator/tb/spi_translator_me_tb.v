@@ -64,6 +64,7 @@ module spi_translator_me_tb;
   `define BR_SELECT(e)    (16'hC000 | ((e) & 16'h00ff))
   `define BR_FETCH(n)     (16'hD000 | ((n) - 1))
   `define BR_FLUSH        16'hE000
+  `define BR_W1C(b)       (16'h9500 | (b))
 
   reg           clk = 1'b0;
   reg           resetn = 1'b0;
@@ -121,7 +122,9 @@ module spi_translator_me_tb;
   wire  [2:0]   err = i_dut.err;
   wire  [3:0]   eng = i_dut.i_decoder.eng;
 
+  // frames carry no CHECK here, the CRC is covered by spi_translator_crc_tb
   spi_translator_slave #(
+    .CRC_EN (0),
     .NUM_OF_CS (12),
     .NUM_OF_GPIO (0),
     .CMD_FIFO_ADDRESS_WIDTH (5),
@@ -497,7 +500,8 @@ module spi_translator_me_tb;
     check("rejected frame not forwarded", s8.count, n8);
     check("slave 0 still held", cs_0[0], 1'b0);
 
-    begin_frame();                        // same engine: accepted, releases
+    begin_frame();                        // resume; same engine: accepted, releases
+    put16(`BR_W1C(8'h08));
     put16(`BR_SELECT(0)); put16(`WR(1)); put8(8'h02); put16(`CS(8'hff));
     send_frame();
     wait_idle();
@@ -559,7 +563,8 @@ module spi_translator_me_tb;
     wait_idle();
     check("truncated SELECT frame", err, 3'h4);
     check("selection restored", eng, 4'd0);
-    begin_frame();
+    begin_frame();                        // resume, then engine 0 as before
+    put16(`BR_W1C(8'h20));
     put16(`CFG(2'd0)); put16(`PRESCALE(8'h02)); put_write(3'd0, 8'h67);
     send_frame();
     wait_idle();

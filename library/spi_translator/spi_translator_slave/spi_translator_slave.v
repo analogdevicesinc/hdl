@@ -38,14 +38,16 @@
 /*
  * SPI translator slave module: the core of a store-and-forward bridge that
  * lets one upstream chip select reach multiple downstream SPI targets. The
- * upstream side is a SPI slave (spi_translator_phy) receiving a serialized SPI Engine instruction stream, see
- * spi_translator_decoder.v for the format; the downstream side replays it,
- * through spi_translator_interconnect, into ceil(NUM_OF_CS / 8)
- * spi_engine_execution instances (DATA_WIDTH = 8, NUM_OF_SDIO = 1, NUM_OF_CS
- * 8 each, the last one the remainder). ../scripts/spi_translator.tcl builds that
- * hierarchy.
+ * upstream side is a SPI slave (spi_translator_phy) receiving a serialized
+ * SPI Engine instruction stream, see spi_translator_decoder.v for the format;
+ * the downstream side replays it, through spi_translator_interconnect, into
+ * ceil(NUM_OF_CS / 8) spi_engine_execution instances (DATA_WIDTH = 8,
+ * NUM_OF_SDIO = 1, NUM_OF_CS 8 each, the last one the remainder).
+ * ../scripts/spi_translator.tcl builds that hierarchy.
  *
- * HEADER_CRC_EN is not used by this version.
+ * CRC_EN makes every frame end with a CRC-16 CHECK, which also returns a
+ * CRC-16 of the frame's MISO bytes. BRIDGE_FIFO_ADDRESS_WIDTH sizes the queue
+ * of CTRL_W and GPIO writes, which act when their frame commits.
  */
 
 module spi_translator_slave #(
@@ -53,14 +55,15 @@ module spi_translator_slave #(
   parameter UP_CPOL = 0,
   parameter UP_CPHA = 0,
   parameter UP_EARLY_LAUNCH = 0,
-  parameter HEADER_CRC_EN = 1,
+  parameter CRC_EN = 1,
   parameter NUM_OF_CS = 4,
   parameter NUM_OF_GPIO = 8,
   parameter [255:0] GPIO_DEFAULT_DIR = 256'h0,
   parameter [255:0] GPIO_DEFAULT_OUT = 256'h0,
   parameter CMD_FIFO_ADDRESS_WIDTH = 8,
   parameter SDO_FIFO_ADDRESS_WIDTH = 8,
-  parameter RESP_FIFO_ADDRESS_WIDTH = 8
+  parameter RESP_FIFO_ADDRESS_WIDTH = 8,
+  parameter BRIDGE_FIFO_ADDRESS_WIDTH = 4
 ) (
   input                       clk,
   input                       resetn,
@@ -112,6 +115,7 @@ module spi_translator_slave #(
   wire                        frame_end;
   wire                        frame_active;
   wire  [7:0]                 tx_data;
+  wire  [7:0]                 tx_first;
   wire  [7:0]                 status;
 
   wire                        reg_wr_en;
@@ -141,6 +145,8 @@ module spi_translator_slave #(
   wire                        resp_valid;
   wire  [7:0]                 resp_data;
   wire                        resp_ready;
+  wire                        resp_ack;
+  wire                        resp_retry;
   wire  [RESP_FIFO_ADDRESS_WIDTH:0] resp_level;
   wire  [7:0]                 last_sync;
 
@@ -160,6 +166,7 @@ module spi_translator_slave #(
     .frame_end (frame_end),
     .frame_active (frame_active),
     .tx_data (tx_data),
+    .tx_first (tx_first),
     .spi_sclk (sclk),
     .spi_mosi (sdi),
     .spi_miso (sdo),
@@ -168,7 +175,9 @@ module spi_translator_slave #(
 
   spi_translator_decoder #(
     .NUM_OF_CS (NUM_OF_CS),
-    .GPIO_EN (NUM_OF_GPIO > 0)
+    .GPIO_EN (NUM_OF_GPIO > 0),
+    .CRC_EN (CRC_EN),
+    .BRIDGE_FIFO_ADDRESS_WIDTH (BRIDGE_FIFO_ADDRESS_WIDTH)
   ) i_decoder (
     .clk (clk),
     .resetn (resetn),
@@ -186,9 +195,14 @@ module spi_translator_slave #(
     .commit (commit),
     .rollback (rollback),
     .tx_data (tx_data),
+    .tx_first (tx_first),
+    .status (status),
+    .last_sync (last_sync),
     .resp_valid (resp_valid),
     .resp_data (resp_data),
     .resp_ready (resp_ready),
+    .resp_ack (resp_ack),
+    .resp_retry (resp_retry),
     .reg_rd_addr (reg_rd_addr),
     .reg_rd_data (reg_rd_data),
     .reg_wr_en (reg_wr_en),
@@ -226,6 +240,8 @@ module spi_translator_slave #(
     .resp_valid (resp_valid),
     .resp_data (resp_data),
     .resp_ready (resp_ready),
+    .resp_ack (resp_ack),
+    .resp_retry (resp_retry),
     .resp_level (resp_level),
     .last_sync (last_sync),
     .cmd_ready (cmd_ready),

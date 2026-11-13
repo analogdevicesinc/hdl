@@ -46,26 +46,32 @@
  * Further frames queue behind the one executing, as long as there is room.
  *
  * SDI bytes from the engine are queued in the response FIFO; the engine is
- * back-pressured when it is full. The decoder reads it for FETCH; the reads
- * are speculative and only released by the commit of the FETCH frame, so a
- * FETCH in a rejected frame returns the same bytes when retried.
+ * back-pressured when it is full. The decoder reads it for FETCH. The reads
+ * are speculative: a rejected frame rewinds them (rollback), and the bytes of
+ * a committed FETCH frame stay as an unacknowledged batch until a later
+ * frame acknowledges them (resp_ack, with its commit) or reads them again
+ * (resp_retry), so a FETCH whose MISO data arrived corrupted can be repeated.
  *
  * SYNC ids are not queued: last_sync holds the id of the last SYNC the engine
  * executed, as in axi_spi_engine. The engine only reaches a SYNC once the
  * transfers before it are done and their SDI bytes are in the response FIFO,
  * so when last_sync shows a message's id, its whole response can be fetched.
- * resp_level counts the SDI bytes queued and not yet released.
+ * resp_level counts the SDI bytes queued and not yet fetched.
  *
- * FLUSH empties all three FIFOs and resets the engine, which deasserts every
- * downstream chip select. last_sync is kept, so the host can tell which
- * messages ran before the flush.
+ * FLUSH comes with the commit of the frame it starts. It resets the engine,
+ * which deasserts every downstream chip select, empties the response FIFO,
+ * and drops what earlier frames queued in the CMD and SDO FIFOs, keeping the
+ * frame being committed; its instructions are held back until the engine
+ * reset is over. last_sync is kept, so the host can tell which messages ran
+ * before the flush.
  *
  * status, readable in the STATUS register:
- *   [7]   BUSY      committed work pending, or the engine not idle
+ *   [7]   BUSY      committed work pending, the engine not idle, or in reset
  *   [6]   RESP_RDY  nothing left to execute and SDI bytes waiting: the
  *                   response of everything sent so far can be fetched
- *   [5:3] ERR       sticky frame errors from the decoder, cleared by FLUSH:
- *                   [5] truncated, [4] overflow, [3] bad instruction
+ *   [5:3] ERR       sticky frame errors from the decoder, cleared by FLUSH or
+ *                   written as 1 through CTRL_W: [5] integrity, [4] overflow,
+ *                   [3] bad instruction
  *   [2:0] CREDIT    free space, in eighths of the fuller of the CMD and SDO
  *                   FIFOs, saturated at 7
  */
@@ -105,6 +111,8 @@ module spi_translator_execution #(
   output                              resp_valid,
   output      [7:0]                   resp_data,
   input                               resp_ready,
+  input                               resp_ack,
+  input                               resp_retry,
   output      [RESP_FIFO_ADDRESS_WIDTH:0] resp_level,
   output      [7:0]                   last_sync,
 
@@ -134,6 +142,9 @@ module spi_translator_execution #(
 
   wire                        resp_s_full;
   wire  [RESP_FIFO_ADDRESS_WIDTH:0] resp_s_room;
+  wire                        run;
+  wire                        cmd_fifo_valid;
+  wire                        sdo_fifo_valid;
 
   reg   [7:0]                 last_sync_reg = 8'h00;
 
@@ -144,8 +155,13 @@ module spi_translator_execution #(
   wire  [3:0]                 eighths;
   wire  [2:0]                 credit;
 
+  // instructions only go out once the engine is out of reset
+  assign run            = (rst_count == 4'h0);
+  assign cmd_valid      = cmd_fifo_valid & run;
+  assign sdo_data_valid = sdo_fifo_valid & run;
+
   // pending work: committed entries not yet taken, or the engine not idle
-  assign busy = cmd_valid | sdo_data_valid | ~cmd_ready;
+  assign busy = cmd_fifo_valid | sdo_fifo_valid | ~cmd_ready | ~run;
 
   assign sdi_rdy = (resp_level != 'h0);
 
@@ -180,16 +196,20 @@ module spi_translator_execution #(
   ) i_cmd_fifo (
     .clk (clk),
     .resetn (resetn),
-    .clear (abort),
+    .clear (1'b0),
     .s_valid (cmd_we),
     .s_data (cmd_wdata),
     .s_full (cmd_full),
     .s_room (cmd_room),
     .commit (commit),
     .rollback (rollback),
-    .m_valid (cmd_valid),
+    .drop (flush),
+    .m_valid (cmd_fifo_valid),
     .m_data (cmd),
-    .m_ready (cmd_ready));
+    .m_ready (cmd_ready & run),
+    .m_level (),
+    .rd_ack (1'b0),
+    .rd_retry (1'b0));
 
   spi_translator_fifo #(
     .DATA_WIDTH (8),
@@ -197,23 +217,26 @@ module spi_translator_execution #(
   ) i_sdo_fifo (
     .clk (clk),
     .resetn (resetn),
-    .clear (abort),
+    .clear (1'b0),
     .s_valid (sdo_we),
     .s_data (sdo_wdata),
     .s_full (sdo_full),
     .s_room (sdo_room),
     .commit (commit),
     .rollback (rollback),
-    .m_valid (sdo_data_valid),
+    .drop (flush),
+    .m_valid (sdo_fifo_valid),
     .m_data (sdo_data),
-    .m_ready (sdo_data_ready));
+    .m_ready (sdo_data_ready & run),
+    .m_level (),
+    .rd_ack (1'b0),
+    .rd_retry (1'b0));
 
   // responses: SDI bytes only; SYNC ids update last_sync and never wait
 
   assign sdi_data_ready = ~resp_s_full;
   assign sync_ready     = 1'b1;
 
-  assign resp_level = (2**RESP_FIFO_ADDRESS_WIDTH) - resp_s_room;
   assign last_sync  = last_sync_reg;
 
   spi_translator_fifo #(
@@ -230,9 +253,13 @@ module spi_translator_execution #(
     .s_room (resp_s_room),
     .commit (commit),
     .rollback (rollback),
+    .drop (1'b0),
     .m_valid (resp_valid),
     .m_data (resp_data),
-    .m_ready (resp_ready));
+    .m_ready (resp_ready),
+    .m_level (resp_level),
+    .rd_ack (resp_ack),
+    .rd_retry (resp_retry));
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin

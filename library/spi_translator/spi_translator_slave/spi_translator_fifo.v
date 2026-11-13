@@ -42,15 +42,23 @@
  * the reader until commit publishes them. rollback discards everything
  * written since the last commit. Tie commit high for a plain write side.
  *
- * Read side, READ_TXN = 1: reads advance a speculative read pointer, and the
- * entries read stay in the FIFO until rd_commit releases them. rd_rollback
- * rewinds the reader to the last rd_commit, so the same entries are read
- * again. With READ_TXN = 0 every read is final and rd_commit/rd_rollback are
- * ignored.
+ * drop, given together with commit, discards everything committed before:
+ * the reader skips to the start of the entries being committed. Used for a
+ * FLUSH that takes effect at the commit of the frame it starts.
  *
- * clear empties the FIFO. A rollback or clear in the same cycle as a write or
- * read wins over it. s_full and s_room account for uncommitted entries on both
- * sides, so a writer that respects them never overwrites data still needed.
+ * Read side, READ_TXN = 1: reads advance a speculative read pointer. At
+ * commit the entries read become an unacknowledged batch: they stay in the
+ * FIFO, and still take room, until a later commit with rd_ack releases them.
+ * rollback rewinds the reader to the end of the unacknowledged batch, undoing
+ * the reads since the last commit; rd_retry rewinds it to the oldest entry
+ * not yet released, so the unacknowledged batch is read again. m_level
+ * counts the entries after the unacknowledged batch. With READ_TXN = 0 every
+ * read is final and the read-side controls are ignored.
+ *
+ * clear empties the FIFO. A rollback, retry, drop or clear in the same cycle
+ * as a read wins over it, and rollback or clear over a write. s_full and
+ * s_room account for uncommitted and unreleased entries, so a writer that
+ * respects them never overwrites data still needed.
  */
 
 module spi_translator_fifo #(
@@ -70,12 +78,16 @@ module spi_translator_fifo #(
   output  [ADDRESS_WIDTH:0]   s_room,
   input                       commit,
   input                       rollback,
+  input                       drop,
 
   // read side
 
   output                      m_valid,
   output  [DATA_WIDTH-1:0]    m_data,
-  input                       m_ready
+  input                       m_ready,
+  output  [ADDRESS_WIDTH:0]   m_level,
+  input                       rd_ack,
+  input                       rd_retry
 );
 
   localparam [ADDRESS_WIDTH:0] DEPTH = 2**ADDRESS_WIDTH;
@@ -83,7 +95,8 @@ module spi_translator_fifo #(
   reg   [ADDRESS_WIDTH:0]     wr_ptr = 'h0;
   reg   [ADDRESS_WIDTH:0]     commit_ptr = 'h0;
   reg   [ADDRESS_WIDTH:0]     rd_ptr = 'h0;
-  reg   [ADDRESS_WIDTH:0]     rd_base = 'h0;
+  reg   [ADDRESS_WIDTH:0]     rd_rel = 'h0;
+  reg   [ADDRESS_WIDTH:0]     rd_pend = 'h0;
   reg                         q_valid = 1'b0;
 
   wire  [ADDRESS_WIDTH:0]     free_ptr;
@@ -92,6 +105,9 @@ module spi_translator_fifo #(
   wire                        wr_rollback;
   wire                        rd_commit;
   wire                        rd_rollback;
+  wire                        rd_rewind;
+  wire                        rd_drop;
+  wire  [ADDRESS_WIDTH:0]     handed;
   wire                        wr;
   wire                        rd;
 
@@ -101,14 +117,22 @@ module spi_translator_fifo #(
   assign s_full   = (used == DEPTH);
   assign s_room   = DEPTH - used;
 
-  assign free_ptr = (READ_TXN != 0) ? rd_base : rd_ptr;
+  assign free_ptr = (READ_TXN != 0) ? rd_rel : rd_ptr;
   assign wr_commit = (READ_TXN != 0) || commit;
   assign wr_rollback = (READ_TXN == 0) && rollback;
   assign rd_commit = (READ_TXN != 0) && commit;
   assign rd_rollback = (READ_TXN != 0) && rollback;
+  assign rd_rewind = (READ_TXN != 0) && rd_retry;
+  assign rd_drop = (READ_TXN == 0) && drop && commit;
+
+  // everything handed out so far; an entry still waiting in the output
+  // register has not been taken
+  assign handed  = rd_ptr - (q_valid & ~m_ready);
+  assign m_level = commit_ptr - ((READ_TXN != 0) ? rd_pend : rd_ptr);
 
   assign wr = s_valid & ~s_full & ~wr_rollback & ~clear;
-  assign rd = (rd_ptr != commit_ptr) && (~q_valid || m_ready) && ~rd_rollback;
+  assign rd = (rd_ptr != commit_ptr) && (~q_valid || m_ready) &&
+              ~rd_rollback && ~rd_rewind && ~rd_drop;
 
   assign m_valid = q_valid;
 
@@ -131,10 +155,18 @@ module spi_translator_fifo #(
   always @(posedge clk) begin
     if (resetn == 1'b0 || clear == 1'b1) begin
       rd_ptr <= 'h0;
-      rd_base <= 'h0;
+      rd_rel <= 'h0;
+      rd_pend <= 'h0;
       q_valid <= 1'b0;
     end else if (rd_rollback) begin
-      rd_ptr <= rd_base;
+      rd_ptr <= rd_pend;
+      q_valid <= 1'b0;
+    end else if (rd_rewind) begin
+      rd_ptr <= rd_rel;
+      q_valid <= 1'b0;
+    end else if (rd_drop) begin
+      // commit_ptr still points at the start of the entries being committed
+      rd_ptr <= commit_ptr;
       q_valid <= 1'b0;
     end else begin
       if (rd) begin
@@ -143,10 +175,13 @@ module spi_translator_fifo #(
       end else if (m_ready) begin
         q_valid <= 1'b0;
       end
-      // everything handed out so far; an entry still waiting in the output
-      // register has not been taken
+      // the reads since the last commit become the unacknowledged batch; an
+      // ack releases the batch before it
       if (rd_commit) begin
-        rd_base <= rd_ptr - (q_valid & ~m_ready);
+        rd_pend <= handed;
+        if (rd_ack) begin
+          rd_rel <= rd_pend;
+        end
       end
     end
   end

@@ -30,6 +30,9 @@ set_false_path \
 
 set_false_path -to [get_pins -hier -filter {NAME =~ *i_spi_slave/bit_cnt_reg[*]/CLR}]
 set_false_path -to [get_pins -hier -filter {NAME =~ *i_spi_slave/sdi_shift_reg[*]/CLR}]
+set_false_path -to [get_pins -hier -filter {NAME =~ *i_spi_slave/byte0_done_reg/CLR}]
+set_false_path -quiet -to [get_pins -quiet -hier -filter {NAME =~ *i_spi_slave/*tx_idx_reg_reg[*]/CLR}]
+set_false_path -quiet -to [get_pins -quiet -hier -filter {NAME =~ *i_spi_slave/*tx_from_reg_reg/CLR}]
 
 # clk -> sclk: tx_data only changes in the cycle after a byte has been
 # received, so it is stable whenever the sclk domain loads it; it is loaded
@@ -43,6 +46,12 @@ set_false_path -quiet \
 set_false_path -quiet \
   -from [get_cells -hier -filter {NAME =~ *i_decoder/tx_data_reg[*] && IS_SEQUENTIAL}] \
   -to   [get_cells -quiet -hier -filter {NAME =~ *i_spi_slave/tx_shift_reg[*] && IS_SEQUENTIAL}]
+
+# clk -> MISO: tx_first, byte 0 of each frame, only changes a few clk after
+# a frame has ended and is stable while CS is low
+
+set_false_path \
+  -from [get_cells -hier -filter {NAME =~ *i_decoder/tx_first_reg[*] && IS_SEQUENTIAL}]
 
 # GPIO inputs are asynchronous to clk; -quiet as there are none with
 # NUM_OF_GPIO = 0

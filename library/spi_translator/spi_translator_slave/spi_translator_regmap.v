@@ -44,8 +44,9 @@
  *  0x02 VERSION_PATCH R
  *  0x03 PERIPHERAL_ID R  PERIPHERAL_ID parameter
  *  0x04 SCRATCH     RW
- *  0x05 STATUS      R    status byte, see spi_translator_execution.v; its
- *                        ERR bits are sticky and cleared by FLUSH
+ *  0x05 STATUS      R/W1C status byte, see spi_translator_execution.v; its
+ *                        ERR bits are sticky, cleared by FLUSH or by
+ *                        writing 1 to them (handled in the decoder)
  *  0x06 SYNC_ID     R    id of the last SYNC executed by the engine
  *  0x07 CMD_ROOM_L  R    free CMD FIFO entries, low byte
  *  0x08 CMD_ROOM_H  R    free CMD FIFO entries, high byte

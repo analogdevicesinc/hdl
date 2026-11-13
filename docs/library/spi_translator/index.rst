@@ -42,6 +42,9 @@ Features
   synthesis)
 - Upstream stream format is the SPI Engine instruction set, plus bridge
   instructions
+- Optional CRC-16 on every frame, both directions, with in-order recovery
+  (go-back-N) after a damaged frame
+- Every frame returns STATUS and the last SYNC id in its first two MISO bytes
 - Whole frames are checked before anything reaches a downstream device; a bad
   frame is dropped as a unit
 - Up to 128 downstream targets on up to 16 stock ``spi_engine_execution``
@@ -50,7 +53,8 @@ Features
 - A Tcl script builds the translator, interconnect and engines as one block
   design hierarchy
 - Transactional CMD, SDO and response FIFOs, sized independently
-- Two-frame reads (request, then FETCH), retryable
+- Two-frame reads (request, then FETCH); a FETCH can be repeated until it is
+  acknowledged
 - A downstream transfer can be split over several frames
 - Register file with status, FIFO levels and last SYNC id
 - Up to 256 GPIOs, written and read one pin per instruction
@@ -72,6 +76,8 @@ Files
        `Block design script`_.
    * - :git-hdl:`library/spi_translator/tb/spi_translator_tb.v`
      - Self-checking testbench, one engine.
+   * - :git-hdl:`library/spi_translator/tb/spi_translator_crc_tb.v`
+     - The same testbench with ``CRC_EN = 1``.
    * - :git-hdl:`library/spi_translator/tb/spi_translator_me_tb.v`
      - Self-checking testbench, two engines.
 
@@ -171,8 +177,8 @@ and the engines, and connects the control buses and resets:
 
 Further optional arguments, in order: ``up_cpol``, ``up_cpha``,
 ``up_early_launch``, ``cmd_fifo_addr_width``, ``sdo_fifo_addr_width``,
-``resp_fifo_addr_width``, ``sdi_delay`` and ``echo_sclk`` (the last two apply
-to every engine). The hierarchy pins are ``clk``, ``resetn``, the upstream
+``resp_fifo_addr_width``, ``sdi_delay``, ``echo_sclk`` (these two apply to
+every engine) and ``crc_en`` (default 1). The hierarchy pins are ``clk``, ``resetn``, the upstream
 ``sclk``, ``sdi``, ``sdo``, ``sdi_t`` and ``cs``, ``gpio_i/o/t`` when there
 are GPIOs, one ``m_spi_<k>`` interface per engine, and ``echo_sclk_<k>`` with
 ``echo_sclk = 1``. Inside, the slave module is ``<name>_slave``, the
@@ -200,8 +206,12 @@ also captures MISO:
 
 - ``spi_translator_tb``: one engine behind the interconnect, four behavioural
   targets in modes 0 to 3. The FIFOs are built small (16 instructions, 32 SDO
-  bytes) so they can be filled. ``spi_translator_el_tb`` runs the same tests
-  with ``UP_EARLY_LAUNCH = 1``.
+  bytes) so they can be filled. Also covers the frame header, go-back-N and
+  its resume, a split transfer recovered after a rejected piece, and FETCH
+  retry and acknowledge. ``spi_translator_el_tb`` runs the same tests with
+  ``UP_EARLY_LAUNCH = 1``, ``spi_translator_crc_tb`` with ``CRC_EN = 1``: every
+  frame then ends with a CHECK and its MISO CRC is verified, and damaged frames
+  (bad CRC, no CHECK, bytes after it) are rejected.
 - ``spi_translator_me_tb``: ``NUM_OF_CS = 12`` over two engines (8 + 4), the
   second with ``SDI_DELAY = 1``. Covers SELECT routing, reads from both engines
   in one message, SYNC_ID against the delayed last SDI byte, the SELECT and
@@ -215,6 +225,7 @@ They run with Vivado xsim:
    $cd library/spi_translator/tb
    $SIMULATOR=xsim MODE=batch ./spi_translator_tb
    $SIMULATOR=xsim MODE=batch ./spi_translator_el_tb
+   $SIMULATOR=xsim MODE=batch ./spi_translator_crc_tb
    $SIMULATOR=xsim MODE=batch ./spi_translator_me_tb
 
 References

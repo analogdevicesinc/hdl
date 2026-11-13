@@ -66,14 +66,14 @@ set_property value "ACTIVE_LOW" [ipx::add_bus_parameter "POLARITY" $reset_inf]
 
 ## Parameter validations
 
-foreach {param} {UP_CPOL UP_CPHA UP_EARLY_LAUNCH HEADER_CRC_EN} {
+foreach {param} {UP_CPOL UP_CPHA UP_EARLY_LAUNCH CRC_EN} {
   set_property -dict [list \
     "value_format" "bool" \
-    "value" [expr {$param == "HEADER_CRC_EN" ? "true" : "false"}] \
+    "value" [expr {$param == "CRC_EN" ? "true" : "false"}] \
   ] [ipx::get_user_parameters $param -of_objects $cc]
   set_property -dict [list \
     "value_format" "bool" \
-    "value" [expr {$param == "HEADER_CRC_EN" ? "true" : "false"}] \
+    "value" [expr {$param == "CRC_EN" ? "true" : "false"}] \
   ] [ipx::get_hdl_parameters $param -of_objects $cc]
 }
 
@@ -90,6 +90,13 @@ set_property -dict [list \
   "value_validation_range_maximum" "256" \
  ] \
  [ipx::get_user_parameters NUM_OF_GPIO -of_objects $cc]
+
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "2" \
+  "value_validation_range_maximum" "8" \
+ ] \
+ [ipx::get_user_parameters BRIDGE_FIFO_ADDRESS_WIDTH -of_objects $cc]
 
 ## GPIO reset state: 256-bit strings, bit g for GPIO g
 foreach {param} {GPIO_DEFAULT_DIR GPIO_DEFAULT_OUT} {
