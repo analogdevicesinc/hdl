@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cd `dirname $0`
+# SystemVerilog: axi_ad9361_lvds_if.v is (Libero compiles .v as SystemVerilog)
+exec bash ../../../common/tb/run_tb_microchip.sh --top axi_ad9361_lvds_if_tb --dir run/axi_ad9361_lvds_if_tb \
+	--vlog -sv \
+	axi_ad9361_lvds_if_tb.v \
+	../axi_ad9361_lvds_if.v \
+	../../../microchip/common/ad_data_clk.v \
+	../../../microchip/common/ad_data_in.v \
+	../../../microchip/common/ad_data_out.v \
+	../../../microchip/common/ad_iod_delay_ctrl.v \
+	../../../util_cdc/sync_bits.v \
+	../../../util_cdc/sync_data.v \
+	"$@"

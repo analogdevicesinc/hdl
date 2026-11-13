@@ -46,6 +46,9 @@ AXI System ID
      - ROM width.
    * - ROM_ADDR_BITS
      - Number of address bits.
+   * - REGMAP_INTERFACE
+     - Register map interface: 0 (default) AXI4-Lite ``s_axi``, 1 APB
+       ``s_apb_*``. The ports of the other interface are not used.
 
 System ID ROM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,7 +78,14 @@ AXI System ID
    * - rom_addr
      - ROM address output.
    * - s_axi
-     - AXI Slave Memory Map interface.
+     - AXI Slave Memory Map interface (``REGMAP_INTERFACE`` = 0).
+   * - s_apb_pclk
+     - Clock of the APB interface (``REGMAP_INTERFACE`` = 1).
+   * - s_apb_presetn
+     - Reset of the APB interface, active low (``REGMAP_INTERFACE`` = 1).
+   * - s_apb
+     - APB slave interface that provides access to the register map
+       (``REGMAP_INTERFACE`` = 1).
 
 System ID ROM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,7 +103,9 @@ System ID ROM
 Clocking
 --------------------------------------------------------------------------------
 
-The IP core runs on the AXI clock and requires a frequency of 100MHz.
+The IP core runs on the clock of its register map interface, ``s_axi_aclk``
+or ``s_apb_pclk`` (``REGMAP_INTERFACE`` = 1), and requires a frequency of
+100MHz.
 
 Register Map
 --------------------------------------------------------------------------------

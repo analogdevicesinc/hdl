@@ -1,0 +1,529 @@
+###############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+## SPDX short identifier: ADIBSD
+###############################################################################
+
+# Project-specific PDC for fmcomms2 on MPFS Video Kit.
+#
+# Self-contained: the common mpfs_video_kit board PDC is not used.
+#
+# AD9361 FMC mapping follows projects/fmcomms2/common/fmcomms2_fmc.txt,
+# checked against the AD-FMCOMMS2-EBZ and the PolarFire SoC Video Kit Rev2
+# (MPFS250) schematics. VADJ = 2.5V (J40 = 7-8, J46 = 7-8).
+#
+# Bank voltages follow the Microchip fmcomms2 reference design (IO_BANKS.pdc).
+# Bank1 and Bank9 must be equal when an FMC card is used.
+
+# Fabric DDR4 interface
+set_iobank -bank_name Bank0  \
+	-vcci 1.20               \
+	-vref 0.60               \
+	-fixed true              \
+	-update_iostd true
+
+set_iobank -bank_name Bank1  \
+	-vcci 2.50               \
+	-fixed true
+
+set_iobank -bank_name Bank2  \
+	-vcci 3.30               \
+	-fixed true              \
+	-update_iostd true
+
+set_iobank -bank_name Bank3  \
+	-vcci 3.30               \
+	-fixed true              \
+	-update_iostd true
+
+# MSS SD interface
+set_iobank -bank_name Bank4  \
+	-vcci 1.80               \
+	-fixed true
+
+set_iobank -bank_name Bank5  \
+	-vcci 3.30               \
+	-fixed true
+
+# MSS DDR4
+set_iobank -bank_name Bank6  \
+	-vcci 1.10               \
+	-vref 0.55               \
+	-fixed true
+
+set_iobank -bank_name Bank7  \
+	-vcci 2.50               \
+	-fixed true
+
+# Fabric DDR4 interface
+set_iobank -bank_name Bank8  \
+	-vcci 1.20               \
+	-vref 0.60               \
+	-fixed true              \
+	-update_iostd true
+
+# FMC VADJ
+set_iobank -bank_name Bank9  \
+	-vcci 2.50               \
+	-fixed true
+
+# Board pins
+
+# fabric reference clock: XCVR_2B_REFCLK, 148.5 MHz LVDS oscillator
+
+set_io -port_name REF_CLK_PAD_N  \
+	-pin_name AF30                \
+	-DIRECTION INPUT
+
+set_io -port_name REF_CLK_PAD_P  \
+	-pin_name AF29                \
+	-DIRECTION INPUT
+
+set_io -port_name MMUART_0_RXD_F2M  \
+	-pin_name C7                    \
+	-fixed true                     \
+	-io_std LVCMOS25                \
+	-DIRECTION INPUT
+
+set_io -port_name MMUART_0_TXD_M2F  \
+	-pin_name B7                    \
+	-fixed true                     \
+	-io_std LVCMOS25                \
+	-DIRECTION OUTPUT
+
+set_io -port_name MMUART_1_RXD_F2M  \
+	-pin_name D4                    \
+	-fixed true                     \
+	-io_std LVCMOS25                \
+	-DIRECTION INPUT
+
+set_io -port_name MMUART_1_TXD_M2F  \
+	-pin_name C4                    \
+	-fixed true                     \
+	-io_std LVCMOS25                \
+	-DIRECTION OUTPUT
+
+# FMC1 default EEPROM I2C after onboard level shifter
+set_io -port_name i2c0_scl_io  \
+	-pin_name A18               \
+	-fixed true                 \
+	-io_std LVCMOS25            \
+	-DIRECTION INOUT
+
+set_io -port_name i2c0_sda_io  \
+	-pin_name A19               \
+	-fixed true                 \
+	-io_std LVCMOS25            \
+	-DIRECTION INOUT
+
+set_io -port_name VSC_8662_CMODE3  \
+	-pin_name H12                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_CMODE4  \
+	-pin_name G12                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_CMODE5  \
+	-pin_name F12                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_CMODE6  \
+	-pin_name E12                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_CMODE7  \
+	-pin_name G14                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_RESETN  \
+	-pin_name A8                   \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_SRESET  \
+	-pin_name A7                   \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+# G6  FMC_LA00_CC_P
+set_io -port_name RX_CLK_P  \
+	-pin_name A30             \
+	-fixed true               \
+	-io_std LVDS25            \
+	-DIRECTION INPUT
+
+# G7  FMC_LA00_CC_N
+set_io -port_name RX_CLK_N  \
+	-pin_name A31             \
+	-fixed true               \
+	-io_std LVDS25            \
+	-DIRECTION INPUT
+
+# D8  FMC_LA01_CC_P  (RX frame P)
+set_io -port_name {RXD[6]}  \
+	-pin_name A29               \
+	-fixed true                 \
+	-io_std LVDS25              \
+	-DIRECTION INPUT
+
+# D9  FMC_LA01_CC_N  (RX frame N)
+set_io -port_name {RXD_N[6]}  \
+	-pin_name B29               \
+	-fixed true                 \
+	-io_std LVDS25              \
+	-DIRECTION INPUT
+
+# H7  FMC_LA02_P
+set_io -port_name {RXD[0]}  \
+	-pin_name E26                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# H8  FMC_LA02_N
+set_io -port_name {RXD_N[0]}  \
+	-pin_name E27                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# G9  FMC_LA03_P
+set_io -port_name {RXD[1]}  \
+	-pin_name E25                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# G10 FMC_LA03_N
+set_io -port_name {RXD_N[1]}  \
+	-pin_name F25                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# H10 FMC_LA04_P
+set_io -port_name {RXD[2]}  \
+	-pin_name A28                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# H11 FMC_LA04_N
+set_io -port_name {RXD_N[2]}  \
+	-pin_name B28                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# D11 FMC_LA05_P
+set_io -port_name {RXD[3]}  \
+	-pin_name D26                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# D12 FMC_LA05_N
+set_io -port_name {RXD_N[3]}  \
+	-pin_name C27                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# C10 FMC_LA06_P
+set_io -port_name {RXD[4]}  \
+	-pin_name A27                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# C11 FMC_LA06_N
+set_io -port_name {RXD_N[4]}  \
+	-pin_name B27                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# H13 FMC_LA07_P
+set_io -port_name {RXD[5]}  \
+	-pin_name F24                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# H14 FMC_LA07_N
+set_io -port_name {RXD_N[5]}  \
+	-pin_name G24                  \
+	-fixed true                    \
+	-io_std LVDS25                 \
+	-DIRECTION INPUT
+
+# G12 FMC_LA08_P
+set_io -port_name TX_CLK  \
+	-pin_name E23               \
+	-fixed true                 \
+	-io_std LVDS25              \
+	-DIRECTION OUTPUT
+
+# G13 FMC_LA08_N
+set_io -port_name TX_CLK_N  \
+	-pin_name D23               \
+	-fixed true                 \
+	-io_std LVDS25              \
+	-DIRECTION OUTPUT
+
+# D14 FMC_LA09_P  (TX frame P)
+set_io -port_name {TXD[6]}  \
+	-pin_name A25                 \
+	-fixed true                   \
+	-io_std LVDS25                \
+	-DIRECTION OUTPUT
+
+# D15 FMC_LA09_N  (TX frame N)
+set_io -port_name {TXD_N[6]}  \
+	-pin_name B25                 \
+	-fixed true                   \
+	-io_std LVDS25                \
+	-DIRECTION OUTPUT
+
+# H16 FMC_LA11_P
+set_io -port_name {TXD[0]}  \
+	-pin_name B26                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# H17 FMC_LA11_N
+set_io -port_name {TXD_N[0]}  \
+	-pin_name C26                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# G15 FMC_LA12_P
+set_io -port_name {TXD[1]}  \
+	-pin_name D24                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# G16 FMC_LA12_N
+set_io -port_name {TXD_N[1]}  \
+	-pin_name D25                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# D17 FMC_LA13_P
+set_io -port_name {TXD[2]}  \
+	-pin_name C23                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# D18 FMC_LA13_N
+set_io -port_name {TXD_N[2]}  \
+	-pin_name C24                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# C14 FMC_LA10_P
+set_io -port_name {TXD[3]}  \
+	-pin_name B24                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# C15 FMC_LA10_N
+set_io -port_name {TXD_N[3]}  \
+	-pin_name A24                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# C18 FMC_LA14_P
+set_io -port_name {TXD[4]}  \
+	-pin_name G22                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# C19 FMC_LA14_N
+set_io -port_name {TXD_N[4]}  \
+	-pin_name F23                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# H19 FMC_LA15_P
+set_io -port_name {TXD[5]}  \
+	-pin_name A22                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# H20 FMC_LA15_N
+set_io -port_name {TXD_N[5]}  \
+	-pin_name A23                   \
+	-fixed true                     \
+	-io_std LVDS25                  \
+	-DIRECTION OUTPUT
+
+# G18 FMC_LA16_P
+set_io -port_name enable  \
+	-pin_name C22         \
+	-fixed true           \
+	-io_std LVCMOS25      \
+	-DIRECTION OUTPUT
+
+# G19 FMC_LA16_N
+set_io -port_name txnrx  \
+	-pin_name B22        \
+	-fixed true          \
+	-io_std LVCMOS25     \
+	-DIRECTION OUTPUT
+
+# H22 FMC_LA19_P
+set_io -port_name gpio_en_agc  \
+	-pin_name F22            \
+	-fixed true              \
+	-io_std LVCMOS25         \
+	-DIRECTION INOUT
+
+# H23 FMC_LA19_N
+set_io -port_name gpio_sync  \
+	-pin_name E22            \
+	-fixed true              \
+	-io_std LVCMOS25         \
+	-DIRECTION INOUT
+
+# G21 FMC_LA20_P
+set_io -port_name {gpio_status[0]}  \
+	-pin_name H18                     \
+	-fixed true                       \
+	-io_std LVCMOS25                  \
+	-DIRECTION INOUT
+
+# G22 FMC_LA20_N
+set_io -port_name {gpio_status[1]}  \
+	-pin_name J18                     \
+	-fixed true                       \
+	-io_std LVCMOS25                  \
+	-DIRECTION INOUT
+
+# H25 FMC_LA21_P
+set_io -port_name {gpio_status[2]}  \
+	-pin_name E21                     \
+	-fixed true                       \
+	-io_std LVCMOS25                  \
+	-DIRECTION INOUT
+
+# H26 FMC_LA21_N
+set_io -port_name {gpio_status[3]}  \
+	-pin_name D21                     \
+	-fixed true                       \
+	-io_std LVCMOS25                  \
+	-DIRECTION INOUT
+
+# G24 FMC_LA22_P
+set_io -port_name {gpio_status[4]}  \
+	-pin_name C21                     \
+	-fixed true                       \
+	-io_std LVCMOS25                  \
+	-DIRECTION INOUT
+
+# G25 FMC_LA22_N
+set_io -port_name {gpio_status[5]}  \
+	-pin_name B21                     \
+	-fixed true                       \
+	-io_std LVCMOS25                  \
+	-DIRECTION INOUT
+
+# D23 FMC_LA23_P
+set_io -port_name {gpio_status[6]}  \
+	-pin_name J26                     \
+	-fixed true                       \
+	-io_std LVCMOS25                  \
+	-DIRECTION INOUT
+
+# D24 FMC_LA23_N
+set_io -port_name {gpio_status[7]}  \
+	-pin_name H26                     \
+	-fixed true                       \
+	-io_std LVCMOS25                  \
+	-DIRECTION INOUT
+
+# H28 FMC_LA24_P
+set_io -port_name {gpio_ctl[0]}  \
+	-pin_name E16                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION INOUT
+
+# H29 FMC_LA24_N
+set_io -port_name {gpio_ctl[1]}  \
+	-pin_name E15                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION INOUT
+
+# G27 FMC_LA25_P
+set_io -port_name {gpio_ctl[2]}  \
+	-pin_name H16                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION INOUT
+
+# G28 FMC_LA25_N
+set_io -port_name {gpio_ctl[3]}  \
+	-pin_name G16                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION INOUT
+
+# D26 FMC_LA26_P (AD9361 SPI_ENB)
+set_io -port_name spi0_csn  \
+	-pin_name G17            \
+	-fixed true              \
+	-io_std LVCMOS25         \
+	-DIRECTION OUTPUT
+
+# D27 FMC_LA26_N (AD9361 SPI_CLK)
+set_io -port_name spi0_clk  \
+	-pin_name H17            \
+	-fixed true              \
+	-io_std LVCMOS25         \
+	-DIRECTION OUTPUT
+
+# C26 FMC_LA27_P (AD9361 SPI_DI / MOSI)
+set_io -port_name spi0_mosi  \
+	-pin_name A20             \
+	-fixed true               \
+	-io_std LVCMOS25          \
+	-DIRECTION OUTPUT
+
+# C27 FMC_LA27_N (AD9361 SPI_DO / MISO)
+set_io -port_name spi0_miso  \
+	-pin_name B20             \
+	-fixed true               \
+	-io_std LVCMOS25          \
+	-DIRECTION INPUT
+
+# H31 FMC_LA28_P
+set_io -port_name gpio_resetb  \
+	-pin_name D13               \
+	-fixed true                 \
+	-io_std LVCMOS25            \
+	-DIRECTION INOUT

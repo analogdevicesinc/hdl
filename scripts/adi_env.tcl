@@ -98,6 +98,14 @@ if {[info exists ::env(REQUIRED_LATTICE_VERSION)]} {
   set required_lattice_version $REQUIRED_LATTICE_VERSION
 }
 
+# Define the supported tool version
+set required_libero_version "2026.1"
+if {[info exists ::env(REQUIRED_LIBERO_VERSION)]} {
+  set required_libero_version $::env(REQUIRED_LIBERO_VERSION)
+} elseif {[info exists REQUIRED_LIBERO_VERSION]} {
+  set required_libero_version $REQUIRED_LIBERO_VERSION
+}
+
 # This helper pocedure retrieves the value of varible from environment if exists,
 # other case returns the provided default value
 #  name - name of the environment variable

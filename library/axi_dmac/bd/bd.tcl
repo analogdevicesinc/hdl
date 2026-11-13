@@ -175,7 +175,11 @@ proc propagate {cellpath otherinfo} {
 	set dest_type [get_property CONFIG.DMA_TYPE_DEST $ip]
 	set sg_enabled [get_property CONFIG.DMA_SG_TRANSFER $ip]
 
-	set req_clk [get_bd_pins "$ip/s_axi_aclk"]
+	if {[get_property CONFIG.REGMAP_INTERFACE $ip] == 1} {
+		set req_clk [get_bd_pins "$ip/s_apb_pclk"]
+	} else {
+		set req_clk [get_bd_pins "$ip/s_axi_aclk"]
+	}
 
 	if {$src_type == 2} {
 		set src_clk [get_bd_pins "$ip/fifo_wr_clk"]

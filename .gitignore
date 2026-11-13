@@ -79,6 +79,7 @@ reconfig_mif
 *.hw
 gui
 .timestamp_intel
+.timestamp_microchip
 temporary_case_dependencies.mk
 *.zip
 *.str
@@ -118,6 +119,8 @@ share/
 .setting.ini
 ipcfg
 _bld
+_bld_sim
+_bld_tb
 radiantc.*
 ltt
 dni/

@@ -142,6 +142,9 @@ Configuration Parameters
    * - ENABLE_DIAGNOSTICS_IF
      - Add insight into internal operation of the core, for debug purposes
        only.
+   * - REGMAP_INTERFACE
+     - Register map interface: 0 (default) AXI4-Lite ``s_axi``, 1 APB
+       ``s_apb_*``. The ports of the other interface are not used.
 
 Interface
 --------------------------------------------------------------------------------
@@ -149,11 +152,21 @@ Interface
 .. hdl-interfaces::
 
    * - s_axi_aclk
-     - All ``s_axi`` signals and ``irq`` are synchronous to this clock.
+     - All ``s_axi`` signals and ``irq`` are synchronous to this clock
+       (``REGMAP_INTERFACE`` = 0).
    * - s_axi_aresetn
      - Resets the internal state of the peripheral.
    * - s_axi
-     - Memory mapped AXI-lite bus that provides access to modules register map.
+     - Memory mapped AXI-lite bus that provides access to modules register map
+       (``REGMAP_INTERFACE`` = 0).
+   * - s_apb_pclk
+     - All ``s_apb`` signals and ``irq`` are synchronous to this clock
+       (``REGMAP_INTERFACE`` = 1).
+   * - s_apb_presetn
+     - Reset of the APB interface, active low (``REGMAP_INTERFACE`` = 1).
+   * - s_apb
+     - APB slave interface that provides access to the register map
+       (``REGMAP_INTERFACE`` = 1).
    * - irq
      - Interrupt output of the module. Is asserted when at least one of the
        modules interrupt is pending and enabled.
@@ -252,10 +265,12 @@ Register Map Configuration Interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The register map configuration interface can be accessed through the AXI4-Lite
-``S_AXI`` interface. The interface is synchronous to the ``s_axi_aclk``. The
-``s_axi_aresetn`` signal is used to reset the peripheral and should be asserted
-during system startup until the ``s_axi_aclk`` is active and stable.
-De-assertion of the reset signal should by synchronous to ``s_axi_aclk``.
+``S_AXI`` interface (``REGMAP_INTERFACE`` = 0) or the APB ``s_apb_*`` ports
+(``REGMAP_INTERFACE`` = 1). The interface is synchronous to the ``s_axi_aclk``
+(``s_apb_pclk``). The ``s_axi_aresetn`` (``s_apb_presetn``) signal is used to
+reset the peripheral and should be asserted during system startup until the
+clock is active and stable. De-assertion of the reset signal should by
+synchronous to the clock.
 
 Data Interfaces
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

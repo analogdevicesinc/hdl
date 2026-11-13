@@ -95,6 +95,9 @@ Configuration Parameters
      - Disable the IQ Correction module in transmit path.
    * - IO_DELAY_GROUP
      - The delay group name which is set for the delay controller
+   * - REGMAP_INTERFACE
+     - Register map interface: 0 (default) AXI4-Lite ``s_axi``, 1 APB
+       ``s_apb_*``. The ports of the other interface are not used.
 
 Interface
 --------------------------------------------------------------------------------
@@ -207,7 +210,14 @@ Interface
    * - up_adc_gpio_out
      - GPO ports connected to the AXI memory map for custom use
    * - s_axi
-     - Standard AXI Slave Memory Map interface
+     - Standard AXI Slave Memory Map interface (``REGMAP_INTERFACE`` = 0)
+   * - s_apb_pclk
+     - Clock of the APB interface (``REGMAP_INTERFACE`` = 1)
+   * - s_apb_presetn
+     - Reset of the APB interface, active low (``REGMAP_INTERFACE`` = 1)
+   * - s_apb
+     - APB slave interface that provides access to the register map
+       (``REGMAP_INTERFACE`` = 1)
 
 Detailed Description
 --------------------------------------------------------------------------------

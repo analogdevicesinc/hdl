@@ -3,6 +3,7 @@
 *.c text
 *.h text
 *.prj
+*.sh text eol=lf
 *.tcl text
 *.txt text
 *.ucf text

@@ -41,6 +41,7 @@ global VIVADO_IP_LIBRARY
 adi_ip_create axi_dmac
 adi_ip_files axi_dmac [list \
   "$ad_hdl_dir/library/common/ad_mem_asym.v" \
+  "$ad_hdl_dir/library/common/up_apb.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "inc_id.vh" \
   "resp.vh" \
@@ -304,6 +305,30 @@ adi_set_ports_dependency "dest_ext_sync" \
 
 set cc [ipx::current_core]
 
+# register map interface: AXI (REGMAP_INTERFACE = 0) or APB (1)
+
+set_property ENABLEMENT_DEPENDENCY \
+  "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 0)" \
+  [ipx::get_bus_interfaces s_axi -of_objects $cc]
+foreach intf {s_axi_aclk s_axi_aresetn} {
+  set_property ENABLEMENT_DEPENDENCY \
+    "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 0)" \
+    [ipx::get_bus_interfaces $intf -of_objects $cc]
+}
+foreach port {aclk aresetn awvalid awaddr awprot awready wvalid wdata wstrb \
+              wready bvalid bresp bready arvalid araddr arprot arready rvalid \
+              rresp rdata rready} {
+  adi_set_ports_dependency "s_axi_$port" \
+    "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 0)" 0
+}
+foreach intf {s_apb_pclk s_apb_presetn} {
+  set_property ENABLEMENT_DEPENDENCY \
+    "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 1)" \
+    [ipx::get_bus_interfaces $intf -of_objects $cc]
+}
+adi_set_bus_dependency "s_apb" "s_apb" \
+  "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 1)"
+
 # The core does not issue narrow bursts
 foreach intf [ipx::get_bus_interfaces m_*_axi -of_objects $cc] {
   set para [ipx::add_bus_parameter SUPPORTS_NARROW_BURST $intf]
@@ -481,6 +506,20 @@ set_property -dict [list \
   "value_validation_type" "list" \
   "value_validation_list" "64" \
 ] [ipx::get_user_parameters DMA_DATA_WIDTH_SG -of_objects $cc]
+
+set regmap_group [ipgui::add_group -name {Register Control} -component $cc \
+  -parent $page0 -display_name {Register Control}]
+
+set p [ipgui::get_guiparamspec -name "REGMAP_INTERFACE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $regmap_group
+set_property -dict [list \
+  "widget" "comboBox" \
+  "display_name" "Register Map Interface" \
+] $p
+set_property -dict [list \
+  "value_validation_type" "pairs" \
+  "value_validation_pairs" {"AXI" "0" "APB" "1"} \
+] [ipx::get_user_parameters REGMAP_INTERFACE -of_objects $cc]
 
 set general_group [ipgui::add_group -name "General Configuration" -component $cc \
   -parent $page0 -display_name "General Configuration"]

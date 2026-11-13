@@ -50,6 +50,7 @@ ad_ip_files axi_dmac [list \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/util_cdc/sync_event.v \
   $ad_hdl_dir/library/util_cdc/sync_gray.v \
+  $ad_hdl_dir/library/common/up_apb.v \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v \
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo_address_generator.v \
@@ -293,6 +294,12 @@ set_parameter_property USE_EXT_SYNC DISPLAY_HINT boolean
 set_parameter_property USE_EXT_SYNC HDL_PARAMETER true
 set_parameter_property USE_EXT_SYNC GROUP $group
 
+add_parameter REGMAP_INTERFACE INTEGER 0
+set_parameter_property REGMAP_INTERFACE DISPLAY_NAME "Register Map Interface"
+set_parameter_property REGMAP_INTERFACE ALLOWED_RANGES {"0:AXI" "1:APB"}
+set_parameter_property REGMAP_INTERFACE HDL_PARAMETER true
+set_parameter_property REGMAP_INTERFACE GROUP "Register Control"
+
 set group "Clock Domain Configuration"
 add_display_item $tab_ip $group "group"
 
@@ -331,6 +338,12 @@ set_parameter_property CLK_DOMAIN_REQ SYSTEM_INFO {CLOCK_DOMAIN s_axi_clock}
 set_parameter_property CLK_DOMAIN_REQ VISIBLE false
 set_parameter_property CLK_DOMAIN_REQ GROUP $group
 
+add_parameter CLK_DOMAIN_REQ_APB INTEGER
+set_parameter_property CLK_DOMAIN_REQ_APB HDL_PARAMETER false
+set_parameter_property CLK_DOMAIN_REQ_APB SYSTEM_INFO {CLOCK_DOMAIN if_s_apb_pclk}
+set_parameter_property CLK_DOMAIN_REQ_APB VISIBLE false
+set_parameter_property CLK_DOMAIN_REQ_APB GROUP $group
+
 set src_clks { \
   {CLK_DOMAIN_SRC_AXI m_src_axi_clock} \
   {CLK_DOMAIN_SRC_SAXI if_s_axis_aclk} \
@@ -363,9 +376,6 @@ set_parameter_property CLK_DOMAIN_SG GROUP $group
 ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 11
 
 add_interface interrupt_sender interrupt end
-set_interface_property interrupt_sender associatedAddressablePoint s_axi
-set_interface_property interrupt_sender associatedClock s_axi_clock
-set_interface_property interrupt_sender associatedReset s_axi_reset
 set_interface_property interrupt_sender ENABLED true
 set_interface_property interrupt_sender EXPORT_OF ""
 set_interface_property interrupt_sender PORT_NAME_MAP ""
@@ -385,7 +395,11 @@ proc axi_dmac_validate {} {
   if {$auto_clk == true} {
     global src_clks dest_clks
 
-    set req_domain [get_parameter_value CLK_DOMAIN_REQ]
+    if {[get_parameter_value REGMAP_INTERFACE] == 1} {
+      set req_domain [get_parameter_value CLK_DOMAIN_REQ_APB]
+    } else {
+      set req_domain [get_parameter_value CLK_DOMAIN_REQ]
+    }
     set src_domain [get_parameter_value [lindex $src_clks $type_src 0]]
     set dest_domain [get_parameter_value [lindex $dest_clks $type_dest 0]]
     set sg_domain [get_parameter_value CLK_DOMAIN_SG]
@@ -751,6 +765,49 @@ proc axi_dmac_elaborate {} {
   if {[get_parameter_value USE_EXT_SYNC] != 1} {
     lappend disabled_intfs \
       if_src_ext_sync if_dest_ext_sync
+  }
+
+  # register map interface: AXI (REGMAP_INTERFACE = 0) or APB (1)
+
+  ad_interface clock   s_apb_pclk    input  1
+  ad_interface reset-n s_apb_presetn input  1  if_s_apb_pclk
+  add_interface s_apb apb end
+  set_interface_property s_apb associatedClock if_s_apb_pclk
+  set_interface_property s_apb associatedReset if_s_apb_presetn
+  add_interface_port s_apb s_apb_paddr   paddr   Input  11
+  add_interface_port s_apb s_apb_psel    psel    Input  1
+  add_interface_port s_apb s_apb_penable penable Input  1
+  add_interface_port s_apb s_apb_pwrite  pwrite  Input  1
+  add_interface_port s_apb s_apb_pwdata  pwdata  Input  32
+  add_interface_port s_apb s_apb_prdata  prdata  Output 32
+  add_interface_port s_apb s_apb_pready  pready  Output 1
+  add_interface_port s_apb s_apb_pslverr pslverr Output 1
+
+  if {[get_parameter_value REGMAP_INTERFACE] == 1} {
+    lappend disabled_intfs s_axi
+    foreach port {s_axi_awvalid s_axi_awaddr s_axi_awprot s_axi_wvalid \
+                  s_axi_wdata s_axi_wstrb s_axi_bready s_axi_arvalid \
+                  s_axi_araddr s_axi_arprot s_axi_rready} {
+      set_port_property $port termination true
+    }
+    set_port_property s_axi_aclk termination true
+    set_port_property s_axi_aresetn termination true
+    set_port_property s_axi_aresetn termination_value 1
+    set_interface_property interrupt_sender associatedAddressablePoint s_apb
+    set_interface_property interrupt_sender associatedClock if_s_apb_pclk
+    set_interface_property interrupt_sender associatedReset if_s_apb_presetn
+  } else {
+    set_interface_property interrupt_sender associatedAddressablePoint s_axi
+    set_interface_property interrupt_sender associatedClock s_axi_clock
+    set_interface_property interrupt_sender associatedReset s_axi_reset
+    lappend disabled_intfs s_apb
+    foreach port {paddr penable psel pwdata pwrite} {
+      set_port_property s_apb_$port termination true
+    }
+    lappend disabled_intfs if_s_apb_pclk if_s_apb_presetn
+    set_port_property s_apb_pclk termination true
+    set_port_property s_apb_presetn termination true
+    set_port_property s_apb_presetn termination_value 1
   }
 
   foreach intf $disabled_intfs {

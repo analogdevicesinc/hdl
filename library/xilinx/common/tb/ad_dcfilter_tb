@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# the DSP48E1 needs the unisims of Vivado: xsim, unless SIMULATOR is set
+export SIMULATOR=${SIMULATOR:-xsim}
+
+# glbl.v of the Vivado in PATH, unless XILINX_VIVADO is set (settings64.sh)
+if [ -z "$XILINX_VIVADO" ]; then
+	vivado=$(command -v vivado) || { echo "ERROR: vivado is not in PATH"; exit 2; }
+	XILINX_VIVADO=${vivado%/bin/*}
+fi
+
+SOURCE="ad_dcfilter_tb.v"
+SOURCE+=" ../ad_dcfilter.v"
+SOURCE+=" ${XILINX_VIVADO}/data/verilog/src/glbl.v"
+
+XELAB_OPTS="-L unisims_ver work.glbl -s work.ad_dcfilter_tb"
+
+cd `dirname $0`
+source ../../../common/tb/run_tb.sh

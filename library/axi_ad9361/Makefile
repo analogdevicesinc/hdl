@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2023, 2026 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -21,6 +21,7 @@ GENERIC_DEPS += ../common/ad_rst.v
 GENERIC_DEPS += ../common/ad_tdd_control.v
 GENERIC_DEPS += ../common/up_adc_channel.v
 GENERIC_DEPS += ../common/up_adc_common.v
+GENERIC_DEPS += ../common/up_apb.v
 GENERIC_DEPS += ../common/up_axi.v
 GENERIC_DEPS += ../common/up_clock_mon.v
 GENERIC_DEPS += ../common/up_dac_channel.v
@@ -65,5 +66,17 @@ INTEL_DEPS += intel/axi_ad9361_cmos_if.v
 INTEL_DEPS += intel/axi_ad9361_lvds_if.v
 INTEL_DEPS += intel/axi_ad9361_lvds_if_10.v
 INTEL_DEPS += intel/axi_ad9361_lvds_if_c5.v
+
+MICROCHIP_DEPS += ../microchip/common/ad_data_clk.v
+MICROCHIP_DEPS += ../microchip/common/ad_data_in.v
+MICROCHIP_DEPS += ../microchip/common/ad_data_out.v
+MICROCHIP_DEPS += ../microchip/common/ad_dcfilter.v
+MICROCHIP_DEPS += ../microchip/common/ad_iod_delay_ctrl.v
+MICROCHIP_DEPS += ../microchip/common/ad_mul.v
+MICROCHIP_DEPS += ../util_cdc/sync_bits.v
+MICROCHIP_DEPS += ../util_cdc/sync_data.v
+MICROCHIP_DEPS += axi_ad9361_mc.tcl
+MICROCHIP_DEPS += microchip/axi_ad9361_cmos_if.v
+MICROCHIP_DEPS += microchip/axi_ad9361_lvds_if.v
 
 include ../scripts/library.mk

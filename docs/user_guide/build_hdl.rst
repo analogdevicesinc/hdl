@@ -52,14 +52,16 @@ be described:
 1. Needed tools
 -------------------------------------------------------------------------------
 
-We offer reference designs for our evaluation boards, on three FPGA platforms:
-from AMD Xilinx, from Intel and from Lattice.
+We offer reference designs for our evaluation boards, on four FPGA platforms:
+from AMD Xilinx, from Intel, from Lattice and from Microchip.
 
 Each one of these platforms has their own FPGA design suites:
 
 - AMD Xilinx with `AMD Xilinx Vivado and Vitis`_ (HDL and software)
 - Intel with `Intel Quartus Prime Pro and Standard`_
 - Lattice with `Lattice Radiant`_ and `Lattice Propel`_
+- Microchip with `Microchip Libero SoC`_ (and `Microchip SoftConsole`_ for the
+  PolarFire SoC boot loader)
 
 .. warning::
 
@@ -80,6 +82,7 @@ Each one of these platforms has their own FPGA design suites:
       and installs **both Vivado and Vitis** at the same time)
    -  :intel:`Intel tools <content/www/us/en/programmable/downloads/download-center.html>`
    -  `Lattice tools <https://www.latticesemi.com/en/Products/DesignSoftwareAndIP>`__
+   -  `Microchip tools <https://www.microchip.com/en-us/products/fpgas-and-plds/fpga-and-soc-design-tools>`__
 
 #. After you have installed the above-mentioned tools, you will need the
    paths to those directories in the following steps, so have them in a
@@ -226,6 +229,16 @@ For Lattice:
    $export PATH=$PATH:/opt/lscc/propel/202x.y/builder/rtf/bin/lin64
    $export PATH=$PATH:/opt/lscc/radiant/202x.y/bin/lin64
    $export PATH=$PATH:/opt/lscc/propel/202x.y/questasim/linux_x86_64
+
+For Microchip Libero SoC:
+
+.. shell:: bash
+
+   ~/hdl
+   $export PATH=$PATH:/usr/local/microchip/Libero_SoC_202x.y/Libero_SoC/Designer/bin64
+   $export PATH=$PATH:/usr/local/microchip/Libero_SoC_202x.y/Libero_SoC/Designer/bin
+   $export PATH=$PATH:/usr/local/microchip/SoftConsole-v202x.y-RISC-V
+   $export LM_LICENSE_FILE=<path_to_license_file_or_server>
 
 3b. Windows environment setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -436,6 +449,16 @@ the Vivado Tcl console building mode to build the BOOT.BIN (see
       $export PATH=$PATH:/cygdrive/c/lscc/propel/202x.y/builder/rtf/bin/nt64
       $export PATH=$PATH:/cygdrive/c/lscc/radiant/202x.y/bin/nt64
       $export PATH=$PATH:/cygdrive/c/lscc/propel/202x.y/questasim/win64
+
+   For Microchip Libero SoC:
+
+   .. shell:: bash
+
+      ~/hdl
+      $export PATH=$PATH:/cygdrive/c/Microchip/Libero_SoC_202x.y/Libero_SoC/Designer/bin
+      $export PATH=$PATH:/cygdrive/c/Microchip/Libero_SoC_202x.y/Libero_SoC/Designer/bin64
+      $export PATH=$PATH:/cygdrive/c/Microchip/SoftConsole-v202x.y-RISC-V
+      $export LM_LICENSE_FILE=<path_to_license_file_or_server>
 
 .. collapsible::  Building the libraries and the project in Vivado GUI
 
@@ -1180,6 +1203,98 @@ Simulation flow for the hdl/projects/ad738x_fmc/lfcpnx project:
       $cd hdl/projects/ad738x_fmc/lfcpnx
       $make sim SYSMEM_INIT_FILE=<path_to>/<no_os_project>.mem
 
+.. _build_hdl build-microchip-project:
+
+4d. Building a Microchip project
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Microchip flow builds PolarFire SoC projects with **Libero SoC**. The
+required Libero version is in :git-hdl:`scripts/adi_env.tcl`
+(``required_libero_version``). The flow is tested on Windows with Cygwin and
+on Linux.
+
+.. note::
+
+   Currently, we are supporting the
+   :ref:`fmcomms2 <fmcomms2>` project for the **PolarFire SoC Video Kit**
+   carrier, in the :git-hdl:`projects/fmcomms2/mpfs_video_kit` folder. The
+   carrier base design, which the projects build on, is in
+   :git-hdl:`projects/common/mpfs_video_kit`; it builds on its own too.
+
+To build a project, go to the carrier folder and run ``make``:
+
+.. shell:: bash
+
+   ~/hdl
+   $cd projects/fmcomms2/mpfs_video_kit
+   $make
+
+The make script for Microchip projects is
+:git-hdl:`projects/scripts/project-microchip.mk`, included in the project
+**Makefile** after the project dependencies. ``make`` runs two steps:
+
+- **MSS**: ``pfsoc_mss`` generates the Microcontroller Subsystem from the
+  project's **mss_base.cfg** into ``_bld/mss``; log:
+  **$(PROJECT_NAME)_mss.log**.
+- **Libero**: ``libero`` runs **system_project.tcl**, which creates the
+  project in ``_bld/prj``, builds the SmartDesign block design
+  (**system_lb.tcl**, which sources the carrier base design and the project
+  block design), adds **system_top.v** and the PDC/SDC constraints, then runs
+  synthesis, place and route, the timing verification and exports the FlashPro
+  job; log: **$(PROJECT_NAME)_libero.log**.
+
+The ADI library cores are added to the block design as Libero **HDL+ cores**:
+the project calls ``ipm::instantiate_hdl_core <core> <instance>``, which
+imports the core sources with the core's ``<core>_mc.tcl`` script and packages
+the core with its AXI and APB bus interfaces (see :ref:`creating_new_ip`).
+There is no separate library build step: ``make lib`` only refreshes the
+``.timestamp_microchip`` dependency stamps of the libraries in ``LIB_DEPS``.
+
+The outputs, in ``_bld/prj/designer/system_top``:
+
+- **system_top.ppd**: the bitstream;
+- **export/system_top.job**: the FlashPro Express programming job;
+- **export/$(PROJECT_NAME).zip**: the job, the bitstream, the MSS configuration
+  XML (for the boot loader and bare-metal software) and **build_info.txt**.
+
+If the timing is not met, the job is exported as **system_top_bad_timing.job**
+and the build fails.
+
+The PolarFire SoC boot loader, the
+`Hart Software Services <https://github.com/polarfire-soc/hart-software-services>`__
+(HSS), is built with the MSS configuration of the project by ``make hss``, into
+``_bld/hss``.
+``make hss-job`` also exports the programming job with the HSS in the eNVM
+(**_bld/hss/system_top_hss.job**). These need **SoftConsole** in ``PATH``
+(see :git-hdl:`projects/scripts/adi_make_hss.sh`).
+
+Other targets of the Microchip flow:
+
+- ``make PARAM1=val1 PARAM2=val2``: builds with project parameters, in the
+  ``PARAM1val1_PARAM2val2`` directory, as the AMD flow does;
+- ``make open``: opens the Libero project in the GUI;
+- ``make info``: prints the build directories, the parameters and the outputs;
+- ``make sim`` / ``make sim-cli``: system simulation of the simulation project
+  (**system_project_sim.tcl**, system_top with a testbench and the MSS bus
+  functional model), in the GUI or in batch mode, in ``_bld_sim``. The files
+  the simulation reads at run time (``SIM_RUN_FILES``, by default the
+  ``verification/*.bfm`` and ``*.mem`` files) are copied before every run, so
+  a change of them does not rebuild the simulation project;
+- ``make tb`` / ``make tb-cli``: a testbench without a Libero project, with
+  the QuestaSim of Libero and
+  :git-hdl:`library/common/tb/run_tb_microchip.sh`, in ``_bld_tb``;
+- ``make clean`` / ``make clean-all``.
+
+All targets are described in the header of
+:git-hdl:`projects/scripts/project-microchip.mk`.
+
+.. warning::
+
+   Libero generates its core files with long names below the project
+   directory and skips the ones whose Windows path does not fit in
+   ``MAX_PATH``. Keep the repository on a short path (e.g. ``C:/hdl``); the
+   build stops before Libero runs if the path is too long.
+
 Supported targets of ``make`` command
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1288,7 +1403,7 @@ Tools and their versions
 Tools
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ADI provides reference designs for Intel, AMD and soon Lattice.
+ADI provides reference designs for Intel, AMD, Lattice and Microchip.
 
 Please note that this is NOT a comparison (generic or otherwise).
 This is what you should expect and understand when using ADI HDL repository
@@ -1296,7 +1411,7 @@ on these tools.
 
 **A red text indicates that you must pay extra attention.**
 
-.. collapsible:: Click here to see the tools from Intel, AMD and Lattice
+.. collapsible:: Click here to see the tools from Intel, AMD, Lattice and Microchip
 
    .. list-table:: Tools from Intel and AMD
       :widths: auto
@@ -1391,15 +1506,43 @@ on these tools.
           in GUI first, copy the vlnv and configuration section from the tcl shell window
           to replace the -vlnv and -cfg_value section in the tcl scripts.`
 
+   .. list-table:: Tools from Microchip
+      :widths: auto
+      :header-rows: 1
+
+      * - Notes
+        - Microchip
+      * - Main tools
+        - Libero SoC
+      * - EDK tools
+        - SmartDesign (in Libero SoC), PolarFire SoC MSS Configurator
+      * - SDK tools
+        - SoftConsole (the Hart Software Services boot loader)
+      * - Building library
+        - :green:`No separate library build. The project imports the ADI cores
+          as Libero HDL+ cores.`
+      * - Building the project
+        - Run make in the project folder: it generates the MSS from
+          mss_base.cfg, then runs the system_project.tcl file in Libero SoC.
+      * - Timing analysis
+        - The make build fails if the timing is not met; the programming job
+          is exported as system_top_bad_timing.job.
+      * - Upgrading/Version changes (non-ADI cores)
+        - :red:`The versions and the parameters of the Libero cores are fixed
+          in the project scripts. To upgrade a core, try the new version once
+          in the Libero SoC GUI, export it (right-click on the component,
+          Export Component Description(Tcl)), then update the version and the
+          parameters in the scripts accordingly.`
+
 .. _build_hdl tool-versions:
 
 Tool versions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Though the ADI libraries work across different versions of the tools,
-the projects we provide **may not**. The AMD, Intel and Lattice IPs may or may
-not work across versions. We can only assure you that they are tested and
-**work only for the versions we specify**.
+the projects we provide **may not**. The AMD, Intel, Lattice and Microchip IPs
+may or may not work across versions. We can only assure you that they are
+tested and **work only for the versions we specify**.
 
 The projects are usually upgraded to the latest tools after they are
 publicly released. The used tool versions can be found in the
@@ -1475,3 +1618,7 @@ that it does copy these files to the project area, but ignores them.
 .. _Lattice Propel: https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/LatticePropel
 
 .. _Lattice Radiant: https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant
+
+.. _Microchip Libero SoC: https://www.microchip.com/en-us/products/fpgas-and-plds/fpga-and-soc-design-tools/fpga/libero-software-later-versions
+
+.. _Microchip SoftConsole: https://www.microchip.com/en-us/products/fpgas-and-plds/fpga-and-soc-design-tools/soc-fpga/softconsole

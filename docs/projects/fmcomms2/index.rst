@@ -77,6 +77,9 @@ Supported carriers
    * -
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC LPC
+   * -
+     - `PolarFire SoC Video Kit <https://www.microchip.com/en-us/development-tool/MPFS250-VIDEO-KIT>`__
+     - FMC HPC (FMC1)
 
 .. admonition:: Legend
    :class: note
@@ -225,6 +228,103 @@ axi_ad9361_adc_dma  13  57         89          109          141
 axi_ad9361_dac_dma  12  56         88          108          140
 =================== === ========== =========== ============ =============
 
+PolarFire SoC Video Kit (Microchip)
+-------------------------------------------------------------------------------
+
+On the PolarFire SoC Video Kit the design is the same data path, with these
+differences:
+
+- The register access is over the **FIC3 APB** bus of the MSS (the hard RISC-V
+  processor subsystem), through two cascaded CoreAPB3, with a
+  ``util_apb_pipe`` register stage at FIC3 and one between the two CoreAPB3.
+  The MSS samples the FIC3 APB response on the falling edge of the APB clock,
+  so no combinational CoreAPB3 path is in that half cycle. ``axi_ad9361``,
+  ``axi_dmac`` and ``axi_sysid`` use their APB register map interface
+  (``REGMAP_INTERFACE`` = 1).
+- The DMAs write and read the DDR memory through **FIC0** (receive) and
+  **FIC1** (transmit), each with an AXI4 interconnect.
+- The LVDS interface of the AD9361 core uses the PolarFire IOD based modules
+  of :git-hdl:`library/microchip/common`: ``ad_data_clk`` for the data clock,
+  ``ad_data_in`` and ``ad_data_out`` with the IOD DDR registers and the IOD
+  delay control.
+- SPI, GPIO and I2C are the MSS peripherals (SPI0, GPIO2, I2C0), routed to the
+  FMC through the fabric.
+- The carrier part (MSS, fabric PLL, reset) is the base design of
+  :git-hdl:`projects/common/mpfs_video_kit`.
+
+Block diagram
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. figure:: fmcomms2_mpfs_video_kit_block_diagram.svg
+   :width: 400
+   :align: center
+   :alt: FMCOMMS2/3/4 on the PolarFire SoC Video Kit block diagram
+
+   Click to enlarge
+
+Clocks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- **l_clk**: the AD9361 DATA_CLK through ``ad_data_clk``, 245.76 MHz in 2R2T
+  and 122.88 MHz in 1R1T mode at 61.44 MSPS. It clocks ``axi_ad9361`` and the
+  core side of ``util_wfifo`` and ``util_rfifo``.
+- **divclk**: the ``util_clkdiv`` output, l_clk divided by 4 (2R2T) or 2
+  (1R1T), the sample rate. It clocks the sample side of the FIFOs,
+  ``util_cpack2``, ``util_upack2`` and the stream side of the DMAs. The
+  divider is selected by the ``adc_r1_mode`` and ``dac_r1_mode`` of the core.
+- **sys_clk**: 100 MHz from the fabric PLL (PF_CCC), from the 148.5 MHz board
+  oscillator. It clocks the FIC0 to FIC3 interfaces, the APB, the memory side
+  of the DMAs and the IOD delay control.
+
+The MSS has its own 125 MHz reference clock on dedicated pins.
+
+CPU/Memory interconnects addresses
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+==================== ===========
+Instance             Address
+==================== ===========
+axi_ad9361_0         0x4402_0000
+axi_ad9361_adc_dma_0 0x4440_0000
+axi_ad9361_dac_dma_0 0x4442_0000
+axi_sysid_0          0x44A3_0000
+==================== ===========
+
+Interrupts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+==================== =============== ==========
+Instance             MSS_INT_F2M     PLIC
+==================== =============== ==========
+axi_ad9361_dac_dma_0 0               118
+axi_ad9361_adc_dma_0 1               119
+==================== =============== ==========
+
+GPIOs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The GPIOs are on the MSS GPIO2 controller:
+
+=================== ========= ==========
+GPIO signal         Direction GPIO2 bit
+=================== ========= ==========
+gpio_status[7:0]    IN        7:0
+gpio_ctl[3:0]       OUT       11:8
+gpio_en_agc         OUT       13
+gpio_sync           OUT       14
+gpio_resetb         OUT       15
+up_enable           OUT       16
+up_txnrx            OUT       17
+=================== ========= ==========
+
+``up_enable`` and ``up_txnrx`` go to the AD9361 core (ENABLE and TXNRX
+control from software).
+
+SPI and I2C
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The AD9361 SPI is the MSS SPI0, the FMC EEPROM is on the MSS I2C0.
+
 Building the HDL project
 -------------------------------------------------------------------------------
 
@@ -247,6 +347,18 @@ command.
 
    $cd hdl/projects/fmcomms2/zcu102
    $make
+
+For the PolarFire SoC Video Kit (with Libero SoC, see
+:ref:`build_hdl build-microchip-project`):
+
+.. shell::
+
+   $cd hdl/projects/fmcomms2/mpfs_video_kit
+   $make
+   $make hss-job
+
+``make`` builds the FlashPro job, ``make hss-job`` the job with the HSS boot
+loader in the eNVM.
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
