@@ -33,6 +33,12 @@
 ###############################################################################
 
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
+
+# RTL instantiated in the block design
+adi_project_files ad4880_fmc_evb_zed [list \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "../common/ad4880_valid_gate.v" ]
+
 source ../common/ad4880_fmc_evb_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
