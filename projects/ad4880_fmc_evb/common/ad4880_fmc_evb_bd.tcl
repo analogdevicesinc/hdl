@@ -41,6 +41,16 @@ set ENABLE_14BIT $ad_project_params(ENABLE_14BIT)
 # lanes for the 14 bit depth, 16 bits otherwise
 set SAMPLE_DATA_WIDTH [expr {($ENABLE_20BIT || ($ENABLE_14BIT && $NUM_LANES == 2)) ? 32 : 16}]
 set DMA_DATA_WIDTH_SRC [expr {2 * $SAMPLE_DATA_WIDTH}]
+
+# util_cpack2 takes one sample width per build: the 20 bit depth alone, or
+# the 16 and 14 bit depths without it, both in 16 bit slots.
+if {$ENABLE_20BIT && ($ENABLE_16BIT || $ENABLE_14BIT)} {
+  error "ad4880_fmc_evb: ENABLE_20BIT can not be built together with ENABLE_16BIT or ENABLE_14BIT"
+}
+# 16 or 14 bit samples on the 32 bit adc_data (14 bit on two lanes): two
+# samples per word, packed per 16 bit slot so the DMA words alternate the
+# channels, A0 B0 A1 B1
+set SLOT_SPLIT [expr {!$ENABLE_20BIT && $SAMPLE_DATA_WIDTH == 32}]
 # ad4880 interface
 
 create_bd_port -dir I adca_dco_p
@@ -140,8 +150,13 @@ ad_connect adcb_filter_data_ready_n  axi_ad4080_adc_b/filter_rdy_n
 ad_connect $sys_iodelay_clk          axi_ad4080_adc_b/delay_clk
 
 ad_ip_instance util_cpack2 util_ad4880_adc_pack
-ad_ip_parameter util_ad4880_adc_pack CONFIG.NUM_OF_CHANNELS 2
-ad_ip_parameter util_ad4880_adc_pack CONFIG.SAMPLE_DATA_WIDTH $SAMPLE_DATA_WIDTH
+if {$SLOT_SPLIT} {
+  ad_ip_parameter util_ad4880_adc_pack CONFIG.NUM_OF_CHANNELS 4
+  ad_ip_parameter util_ad4880_adc_pack CONFIG.SAMPLE_DATA_WIDTH 16
+} else {
+  ad_ip_parameter util_ad4880_adc_pack CONFIG.NUM_OF_CHANNELS 2
+  ad_ip_parameter util_ad4880_adc_pack CONFIG.SAMPLE_DATA_WIDTH $SAMPLE_DATA_WIDTH
+}
 
 # Cross-channel alignment: absorb the phase difference between adca_dco and
 # adcb_dco (same source chip, same nominal freq, unknown FPGA phase) with a
@@ -206,10 +221,27 @@ ad_connect align_both_valid/Res        chb_align_fifo/m_axis_ready
 ad_connect axi_ad4080_adc_a/adc_clk    util_ad4880_adc_pack/clk
 ad_connect axi_ad4080_adc_a/adc_rst    util_ad4880_adc_pack/reset
 ad_connect align_both_valid/Res        util_ad4880_adc_pack/fifo_wr_en
-ad_connect cha_align_fifo/m_axis_data  util_ad4880_adc_pack/fifo_wr_data_0
-ad_connect chb_align_fifo/m_axis_data  util_ad4880_adc_pack/fifo_wr_data_1
-ad_connect axi_ad4080_adc_a/adc_enable util_ad4880_adc_pack/enable_0
-ad_connect axi_ad4080_adc_b/adc_enable util_ad4880_adc_pack/enable_1
+if {$SLOT_SPLIT} {
+  # channel 0: A [15:0], 1: B [15:0], 2: A [31:16], 3: B [31:16]
+  foreach {ch fifo from to} {0 cha 15 0 1 chb 15 0 2 cha 31 16 3 chb 31 16} {
+    ad_ip_instance ilslice ad4880_slot_$ch [list \
+      DIN_WIDTH 32 \
+      DIN_FROM  $from \
+      DIN_TO    $to \
+    ]
+    ad_connect ${fifo}_align_fifo/m_axis_data ad4880_slot_$ch/Din
+    ad_connect ad4880_slot_$ch/Dout util_ad4880_adc_pack/fifo_wr_data_$ch
+  }
+  ad_connect axi_ad4080_adc_a/adc_enable util_ad4880_adc_pack/enable_0
+  ad_connect axi_ad4080_adc_b/adc_enable util_ad4880_adc_pack/enable_1
+  ad_connect axi_ad4080_adc_a/adc_enable util_ad4880_adc_pack/enable_2
+  ad_connect axi_ad4080_adc_b/adc_enable util_ad4880_adc_pack/enable_3
+} else {
+  ad_connect cha_align_fifo/m_axis_data  util_ad4880_adc_pack/fifo_wr_data_0
+  ad_connect chb_align_fifo/m_axis_data  util_ad4880_adc_pack/fifo_wr_data_1
+  ad_connect axi_ad4080_adc_a/adc_enable util_ad4880_adc_pack/enable_0
+  ad_connect axi_ad4080_adc_b/adc_enable util_ad4880_adc_pack/enable_1
+}
 ad_connect axi_ad4080_adc_a/adc_dovf   util_ad4880_adc_pack/fifo_wr_overflow
 ad_connect axi_ad4080_adc_b/adc_dovf   util_ad4880_adc_pack/fifo_wr_overflow
 

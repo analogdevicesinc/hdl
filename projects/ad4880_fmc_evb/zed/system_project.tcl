@@ -37,9 +37,10 @@ source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 set NUM_LANES    [get_env_param NUM_LANES    2]
+# 20 bit alone (default), or 16 and/or 14 bit without 20 bit
 set ENABLE_20BIT [get_env_param ENABLE_20BIT 1]
-set ENABLE_16BIT [get_env_param ENABLE_16BIT 1]
-set ENABLE_14BIT [get_env_param ENABLE_14BIT 1]
+set ENABLE_16BIT [get_env_param ENABLE_16BIT 0]
+set ENABLE_14BIT [get_env_param ENABLE_14BIT 0]
 
 adi_project ad4880_fmc_evb_zed 0 [list \
   NUM_LANES $NUM_LANES \
