@@ -166,7 +166,8 @@ set TX_XCVR_NUM_OF_LANES   [expr ($TX_NUM_LINKS - 1) * $TX_XCVR_LANES_PER_LINK +
 
 set adc_data_offload_name apollo_rx_data_offload
 set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
-set adc_dma_data_width $adc_data_width
+# At least 512 bits towards the DMA, so a narrow side still streams at full rate
+set adc_dma_data_width [expr max(512, $adc_data_width)]
 set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
 
 set dac_data_offload_name apollo_tx_data_offload
@@ -220,7 +221,7 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   set adc_b_data_offload_name apollo_rx_b_data_offload
   set adc_b_data_width [expr $RX_B_DMA_SAMPLE_WIDTH*$RX_B_NUM_OF_CONVERTERS*$RX_B_SAMPLES_PER_CHANNEL]
-  set adc_b_dma_data_width $adc_b_data_width
+  set adc_b_dma_data_width [expr max(512, $adc_b_data_width)]
   set adc_b_fifo_address_width [expr int(ceil(log(($adc_b_fifo_samples_per_converter*$RX_B_NUM_OF_CONVERTERS) / ($adc_b_data_width/$RX_B_DMA_SAMPLE_WIDTH))/log(2)))]
 
   set dac_b_data_offload_name apollo_tx_b_data_offload
@@ -570,7 +571,7 @@ ad_data_offload_create $adc_data_offload_name \
                        $adc_do_mem_type \
                        $adc_data_offload_size \
                        $adc_data_width \
-                       $adc_data_width \
+                       $adc_dma_data_width \
                        $do_axi_data_width \
                        32 \
                        $SHARED_DEVCLK
@@ -589,12 +590,12 @@ ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_LENGTH_WIDTH 24
 ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_apollo_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_apollo_rx_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_data_width
+ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 if {$ADI_PHY_SEL} {
-  ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(1024, $adc_data_width)]
+  ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(1024, $adc_dma_data_width)]
 } else {
   # Versal limitation
-  ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_data_width)]
+  ad_ip_parameter axi_apollo_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_dma_data_width)]
 }
 
 if {$ASYMMETRIC_A_B_MODE} {
@@ -623,7 +624,7 @@ if {$ASYMMETRIC_A_B_MODE} {
                          $adc_do_mem_type \
                          $adc_b_data_offload_size \
                          $adc_b_data_width \
-                         $adc_b_data_width \
+                         $adc_b_dma_data_width \
                          $do_axi_data_width \
                          32 \
                          $SHARED_DEVCLK
@@ -642,12 +643,12 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_ip_parameter axi_apollo_rx_b_dma CONFIG.DMA_2D_TRANSFER 0
   ad_ip_parameter axi_apollo_rx_b_dma CONFIG.MAX_BYTES_PER_BURST 4096
   ad_ip_parameter axi_apollo_rx_b_dma CONFIG.CYCLIC 0
-  ad_ip_parameter axi_apollo_rx_b_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_b_data_width
+  ad_ip_parameter axi_apollo_rx_b_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_b_dma_data_width
   if {$ADI_PHY_SEL} {
-    ad_ip_parameter axi_apollo_rx_b_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_b_data_width
+    ad_ip_parameter axi_apollo_rx_b_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(1024, $adc_b_dma_data_width)]
   } else {
   # Versal limitation
-    ad_ip_parameter axi_apollo_rx_b_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_b_data_width)]
+    ad_ip_parameter axi_apollo_rx_b_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_b_dma_data_width)]
   }
 }
 
