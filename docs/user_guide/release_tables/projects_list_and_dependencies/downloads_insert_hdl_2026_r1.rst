@@ -192,13 +192,11 @@ AD9081FMCAEBZ
        :git-hdl:`vpk180 <hdl_2026_r1:projects/ad9081_fmca_ebz/vpk180>`
        :git-hdl:`zcu102 <hdl_2026_r1:projects/ad9081_fmca_ebz/zcu102>`
        :git-hdl:`zc706 <hdl_2026_r1:projects/ad9081_fmca_ebz/zc706>`
-       :git-hdl:`zcu102 <hdl_2026_r1:projects/ad9081_fmca_ebz/zcu102>`
      - :ref:`ad9081_fmca_ebz_vck190 <util_hdl_2026_r1_ad9081_fmca_ebz_vck190>`
        :ref:`ad9081_fmca_ebz_vcu118 <util_hdl_2026_r1_ad9081_fmca_ebz_vcu118>`
        :ref:`ad9081_fmca_ebz_vpk180 <util_hdl_2026_r1_ad9081_fmca_ebz_vpk180>`
        :ref:`ad9081_fmca_ebz_zcu102 <util_hdl_2026_r1_ad9081_fmca_ebz_zcu102>`
        :ref:`ad9081_fmca_ebz_zc706 <util_hdl_2026_r1_ad9081_fmca_ebz_zc706>`
-       :ref:`ad9081_fmca_ebz_zcu102 <util_hdl_2026_r1_ad9081_fmca_ebz_zcu102>`
      - :git-hdl:`ad_ip_jesd204_tpl_adc <hdl_2026_r1:library/jesd204/ad_ip_jesd204_tpl_adc>`
        :git-hdl:`ad_ip_jesd204_tpl_dac <hdl_2026_r1:library/jesd204/ad_ip_jesd204_tpl_dac>`
        :git-hdl:`axi_adxcvr <hdl_2026_r1:library/xilinx/axi_adxcvr>`
@@ -624,11 +622,9 @@ ADRV9001
      - :git-hdl:`adrv9001 <hdl_2026_r1:projects/adrv9001>`
      - :git-hdl:`zcu102 <hdl_2026_r1:projects/adrv9001/zcu102>`
        :git-hdl:`zc706 <hdl_2026_r1:projects/adrv9001/zc706>`
-       :git-hdl:`zcu102 <hdl_2026_r1:projects/adrv9001/zcu102>`
        :git-hdl:`zed <hdl_2026_r1:projects/adrv9001/zed>`
      - :ref:`adrv9001_zcu102 <util_hdl_2026_r1_adrv9001_zcu102>`
        :ref:`adrv9001_zc706 <util_hdl_2026_r1_adrv9001_zc706>`
-       :ref:`adrv9001_zcu102 <util_hdl_2026_r1_adrv9001_zcu102>`
        :ref:`adrv9001_zed <util_hdl_2026_r1_adrv9001_zed>`
      - :git-hdl:`axi_adrv9001 <hdl_2026_r1:library/axi_adrv9001>`
        :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
