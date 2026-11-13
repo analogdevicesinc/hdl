@@ -205,12 +205,11 @@ module system_top (
   assign gpio_i[34]     = adca_gpio3_fmc;
   assign gpio_i[39]     = adcb_gpio3_fmc;
 
+  assign adcb_ad4080_sclk = adca_ad4080_sclk;
+  assign adcb_ad4080_mosi = adca_ad4080_mosi;
 
-assign adcb_ad4080_sclk = adca_ad4080_sclk;
-assign adcb_ad4080_mosi = adca_ad4080_mosi;
-
- assign spi0_ad4080_miso = (adca_ad4080_csn == 1'b0) ? adca_ad4080_miso :
-                           (adcb_ad4080_csn == 1'b0) ? adcb_ad4080_miso : 1'b0;
+  assign spi0_ad4080_miso = (adca_ad4080_csn == 1'b0) ? adca_ad4080_miso :
+                            (adcb_ad4080_csn == 1'b0) ? adcb_ad4080_miso : 1'b0;
 
   assign en_psu         = 1'b1;
   assign osc_en         = pwrgd;
