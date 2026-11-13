@@ -43,6 +43,10 @@ proc init {cellpath otherInfo} {
 proc post_config_ip {cellpath otherinfo} {
   set ip [get_bd_cells $cellpath]
 
+  # The address space must cover the storage before the address assignment,
+  # which runs ahead of the validation
+  update_addr_width $cellpath
+
   # Update AXI interface properties according to configuration
   set axi_protocol [get_property "CONFIG.AXI_PROTOCOL" $ip]
   set data_width [get_property "CONFIG.AXI_DATA_WIDTH" $ip]
@@ -99,7 +103,11 @@ proc propagate {cellpath otherinfo} {
 }
 
 proc post_propagate {cellpath otherinfo} {
-	set ip [get_bd_cells $cellpath]
+  update_addr_width $cellpath
+}
+
+proc update_addr_width {cellpath} {
+  set ip [get_bd_cells $cellpath]
 
   #Check address space
   set length_width [get_property "CONFIG.LENGTH_WIDTH" $ip]

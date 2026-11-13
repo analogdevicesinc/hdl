@@ -75,7 +75,7 @@ module util_hbm #(
   parameter HBM_SEGMENT_INDEX = 0,
 
   // DDR parameters
-  parameter DDR_BASE_ADDDRESS = 0,
+  parameter [63:0] DDR_BASE_ADDDRESS = 64'h0,
 
   // Number of AXI masters
   parameter NUM_M = 2,
@@ -265,7 +265,7 @@ module util_hbm #(
     reg rd_needs_reset_d = 1'b0;
 
     // 2Gb (256MB) per segment
-    localparam ADDR_OFFSET = (MEM_TYPE == 1) ? DDR_BASE_ADDDRESS :
+    localparam [63:0] ADDR_OFFSET = (MEM_TYPE == 1) ? DDR_BASE_ADDDRESS :
        (HBM_SEGMENT_INDEX+i) * HBM_SEGMENTS_PER_MASTER * 256 * 1024 * 1024 ;
 
     always @(posedge s_axis_aclk) begin
