@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1698.8" height="554" viewBox="0 0 1698.8 554">
+<defs><marker id="arrow" orient="auto" refX="0" refY="0" style="overflow:visible"><path d="M 5.77,0 -8.65,5 V -5 Z" style="fill:#000000;stroke:none" transform="scale(0.8)"/></marker></defs>
+<rect x="0" y="0" width="1698.8" height="554" style="fill:#ffffff"/>
+<rect x="20" y="110" width="110" height="56" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="75.0" y="134.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">ad_serdes_in</text>
+<text x="75.0" y="151.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">1:8</text>
+<line x1="130" y1="138.0" x2="159" y2="138.0" style="stroke:#000000;stroke-width:2"/>
+<polygon points="168,138.0 159,142.0 159,134.0" style="fill:#000000;stroke:none"/>
+<text x="149" y="130.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">words</text>
+<rect x="168" y="110" width="90" height="56" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="213.0" y="134.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">lane</text>
+<text x="213.0" y="151.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">join</text>
+<rect x="177.2" y="101" width="71.6" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="213" y="114" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">num_lanes</text>
+<line x1="258" y1="138.0" x2="287" y2="138.0" style="stroke:#000000;stroke-width:2"/>
+<polygon points="296,138.0 287,142.0 287,134.0" style="fill:#000000;stroke:none"/>
+<rect x="296" y="110" width="130" height="56" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="361.0" y="143.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">ad_bitslip_align</text>
+<line x1="426" y1="138.0" x2="446" y2="138.0" style="stroke:#000000;stroke-width:2"/>
+<line x1="446" y1="83.0" x2="446" y2="193.0" style="stroke:#000000;stroke-width:2"/>
+<rect x="466" y="66" width="110" height="34" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="521.0" y="88.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">ad_pack 20</text>
+<line x1="446" y1="83.0" x2="457" y2="83.0" style="stroke:#000000;stroke-width:2"/>
+<polygon points="466,83.0 457,87.0 457,79.0" style="fill:#000000;stroke:none"/>
+<line x1="576" y1="83.0" x2="594" y2="83.0" style="stroke:#000000;stroke-width:2"/>
+<rect x="466" y="121.0" width="110" height="34" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="521.0" y="143.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">ad_pack 16</text>
+<line x1="446" y1="138.0" x2="457" y2="138.0" style="stroke:#000000;stroke-width:2"/>
+<polygon points="466,138.0 457,142.0 457,134.0" style="fill:#000000;stroke:none"/>
+<line x1="576" y1="138.0" x2="594" y2="138.0" style="stroke:#000000;stroke-width:2"/>
+<rect x="466" y="176" width="110" height="34" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="521.0" y="198.0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">ad_pack 14</text>
+<line x1="446" y1="193.0" x2="457" y2="193.0" style="stroke:#000000;stroke-width:2"/>
+<polygon points="466,193.0 457,197.0 457,189.0" style="fill:#000000;stroke:none"/>
+<line x1="576" y1="193.0" x2="594" y2="193.0" style="stroke:#000000;stroke-width:2"/>
+<line x1="594" y1="83.0" x2="594" y2="193.0" style="stroke:#000000;stroke-width:2"/>
+<rect x="616" y="110" width="110" height="56" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="671.0" y="134.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">depth</text>
+<text x="671.0" y="151.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">select</text>
+<line x1="594" y1="138.0" x2="607" y2="138.0" style="stroke:#000000;stroke-width:2"/>
+<polygon points="616,138.0 607,142.0 607,134.0" style="fill:#000000;stroke:none"/>
+<rect x="617.8" y="101" width="84.4" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="660" y="114" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">device_code</text>
+<line x1="726" y1="138.0" x2="847" y2="138.0" style="stroke:#0066cc;stroke-width:1.5;stroke-dasharray:5,3"/>
+<polygon points="856,138.0 847,142.0 847,134.0" style="fill:#0066cc;stroke:none"/>
+<text x="798.0" y="116.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">present[1:0],</text>
+<text x="798.0" y="130.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">filter_rdy_n[1:0]</text>
+<rect x="856" y="110" width="140" height="56" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="926.0" y="134.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">edge</text>
+<text x="926.0" y="151.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">select</text>
+<line x1="996" y1="138.0" x2="1097" y2="138.0" style="stroke:#0066cc;stroke-width:1.5;stroke-dasharray:5,3"/>
+<polygon points="1106,138.0 1097,142.0 1097,134.0" style="fill:#0066cc;stroke:none"/>
+<text x="1051" y="130.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">edge_keep[1:0]</text>
+<rect x="1106" y="110" width="100" height="56" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="1156.0" y="134.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">filter</text>
+<text x="1156.0" y="151.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">select</text>
+<rect x="1107.4" y="101" width="97.2" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="1156.0" y="114" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">filter_enable</text>
+<line x1="740" y1="138.0" x2="740" y2="194" style="stroke:#0066cc;stroke-width:1.5;stroke-dasharray:5,3"/>
+<line x1="740" y1="194" x2="1156.0" y2="194" style="stroke:#0066cc;stroke-width:1.5;stroke-dasharray:5,3"/>
+<line x1="1156.0" y1="194" x2="1156.0" y2="175" style="stroke:#0066cc;stroke-width:1.5;stroke-dasharray:5,3"/>
+<polygon points="1156.0,166 1160.0,175 1152.0,175" style="fill:#0066cc;stroke:none"/>
+<text x="926" y="188" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">present[1:0]</text>
+<line x1="1206" y1="138.0" x2="1281" y2="138.0" style="stroke:#0066cc;stroke-width:1.5;stroke-dasharray:5,3"/>
+<polygon points="1290,138.0 1281,142.0 1281,134.0" style="fill:#0066cc;stroke:none"/>
+<text x="1248" y="130.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">keep[1:0]</text>
+<rect x="1290" y="110" width="90" height="56" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="1335.0" y="134.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">slot</text>
+<text x="1335.0" y="151.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">keep</text>
+<rect x="1292.8" y="101" width="84.4" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="1335.0" y="114" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">device_code</text>
+<line x1="1380" y1="138.0" x2="1471" y2="138.0" style="stroke:#0066cc;stroke-width:1.5;stroke-dasharray:5,3"/>
+<polygon points="1480,138.0 1471,142.0 1471,134.0" style="fill:#0066cc;stroke:none"/>
+<text x="1430" y="130.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">slot_keep[1:0]</text>
+<rect x="1480" y="110" width="150" height="56" style="fill:#ffffff;stroke:#000000;stroke-width:2"/>
+<text x="1555.0" y="134.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">ad_sample</text>
+<text x="1555.0" y="151.5" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">compact</text>
+<text x="1555.0" y="184" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">packs the kept slots</text>
+<line x1="708" y1="110" x2="708" y2="38" style="stroke:#000000;stroke-width:2"/>
+<line x1="708" y1="38" x2="1598" y2="38" style="stroke:#000000;stroke-width:2"/>
+<line x1="1598" y1="38" x2="1598" y2="101" style="stroke:#000000;stroke-width:2"/>
+<polygon points="1598,110 1594,101 1602,101" style="fill:#000000;stroke:none"/>
+<text x="1153.0" y="31" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">slots[31:0]: two 16-bit slots</text>
+<line x1="1630" y1="138.0" x2="1671" y2="138.0" style="stroke:#000000;stroke-width:2"/>
+<polygon points="1680,138.0 1671,142.0 1671,134.0" style="fill:#000000;stroke:none"/>
+<line x1="856" y1="204" x2="856" y2="210" style="stroke:#0066cc;stroke-width:1"/>
+<line x1="856" y1="210" x2="1380" y2="210" style="stroke:#0066cc;stroke-width:1"/>
+<line x1="1380" y1="204" x2="1380" y2="210" style="stroke:#0066cc;stroke-width:1"/>
+<text x="1118.0" y="225" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">combinational: the keep meets its slots at the compact in the same clock cycle</text>
+<text x="1636" y="158.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">adc_data</text>
+<rect x="596" y="254" width="400" height="92" style="fill:#ffffff;stroke:#2e7d32;stroke-width:2"/>
+<text x="796.0" y="280" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;fill:#000000;text-anchor:middle">pattern search</text>
+<text x="796.0" y="298" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">Looks for the test pattern in the samples.</text>
+<text x="796.0" y="311" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">If not found: tries the next bit offset, then waits</text>
+<text x="796.0" y="324" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">until the samples of the new offset arrive.</text>
+<text x="796.0" y="337" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">When found: keeps the offset and reports it as locked.</text>
+<rect x="743.8" y="245" width="84.4" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="786" y="258" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">device_code</text>
+<rect x="864.2" y="245" width="103.60000000000001" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="916" y="258" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">bitslip_enable</text>
+<line x1="661" y1="166" x2="661" y2="245" style="stroke:#2e7d32;stroke-width:1.5;stroke-dasharray:2,3"/>
+<polygon points="661,254 657,245 665,245" style="fill:#2e7d32;stroke:none"/>
+<text x="668" y="238" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#2e7d32;text-anchor:start">pattern found</text>
+<line x1="596" y1="300.0" x2="361" y2="300.0" style="stroke:#2e7d32;stroke-width:1.5;stroke-dasharray:2,3"/>
+<line x1="361" y1="300.0" x2="361" y2="175" style="stroke:#2e7d32;stroke-width:1.5;stroke-dasharray:2,3"/>
+<polygon points="361,166 365,175 357,175" style="fill:#2e7d32;stroke:none"/>
+<text x="369" y="280.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#2e7d32;text-anchor:start">bit offset</text>
+<text x="369" y="294.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#2e7d32;text-anchor:start">(shift_cnt)</text>
+<line x1="996" y1="300.0" x2="1077" y2="300.0" style="stroke:#707070;stroke-width:1.5"/>
+<polygon points="1086,300.0 1077,304.0 1077,296.0" style="fill:#707070;stroke:none"/>
+<rect x="1098.8" y="291.0" width="84.4" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="1141" y="304.0" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">sync_status</text>
+<text x="1041" y="292.0" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#707070;text-anchor:middle">locked</text>
+<line x1="20" y1="386" x2="60" y2="386" style="stroke:#000000;stroke-width:2"/>
+<text x="68" y="390" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">samples</text>
+<line x1="190" y1="386" x2="230" y2="386" style="stroke:#0066cc;stroke-width:1.5;stroke-dasharray:5,3"/>
+<text x="238" y="390" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:start">per-slot flags</text>
+<line x1="360" y1="386" x2="400" y2="386" style="stroke:#2e7d32;stroke-width:1.5;stroke-dasharray:2,3"/>
+<text x="408" y="390" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#2e7d32;text-anchor:start">alignment loop</text>
+<rect x="530.6" y="377" width="58.800000000000004" height="18" rx="9" style="fill:#eeeeee;stroke:#909090;stroke-width:1"/>
+<text x="560" y="390" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:normal;fill:#505050;text-anchor:middle">setting</text>
+<text x="600" y="390" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#505050;text-anchor:start">register setting or status of the block it sits on</text>
+<text x="20" y="416" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">The data path of ad408x_phy. The filter_rdy_n bits travel with the data bits</text>
+<text x="20" y="434" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">through the alignment and the packers. device_code selects the bit depth: the</text>
+<text x="20" y="452" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">packer, the offset limit of the search and, for 20 bits, keep[0] for both slots.</text>
+<text x="20" y="470" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">Without the filter (filter_enable = 0 or EN_FILTER_RDY = 0) every present</text>
+<text x="20" y="488" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">sample is kept. The lane join is only built with two lanes; with one sample per</text>
+<text x="20" y="506" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:normal;fill:#000000;text-anchor:start">adc_data word the slot keep and the compact stage are left out.</text>
+<rect x="760" y="404" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="820.0" y="418" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;fill:#000000;text-anchor:middle"></text>
+<rect x="880" y="404" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="940.0" y="418" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;fill:#000000;text-anchor:middle">slot 1</text>
+<rect x="1000" y="404" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="1060.0" y="418" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;fill:#000000;text-anchor:middle">slot 0</text>
+<rect x="760" y="424" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="820.0" y="438" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;fill:#000000;text-anchor:middle">slots</text>
+<rect x="880" y="424" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="940.0" y="438" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">[31:16]</text>
+<rect x="1000" y="424" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="1060.0" y="438" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:middle">[15:0]</text>
+<rect x="760" y="444" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="820.0" y="458" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;fill:#0066cc;text-anchor:middle">present</text>
+<rect x="880" y="444" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="940.0" y="458" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">present[1]</text>
+<rect x="1000" y="444" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="1060.0" y="458" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">present[0]</text>
+<rect x="760" y="464" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="820.0" y="478" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;fill:#0066cc;text-anchor:middle">filter_rdy_n</text>
+<rect x="880" y="464" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="940.0" y="478" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">filter_rdy_n[1]</text>
+<rect x="1000" y="464" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="1060.0" y="478" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">filter_rdy_n[0]</text>
+<rect x="760" y="484" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="820.0" y="498" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;fill:#0066cc;text-anchor:middle">keep</text>
+<rect x="880" y="484" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="940.0" y="498" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">keep[1]</text>
+<rect x="1000" y="484" width="120" height="20" style="fill:#ffffff;stroke:#b0b0b0;stroke-width:1"/>
+<text x="1060.0" y="498" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#0066cc;text-anchor:middle">keep[0]</text>
+<text x="760" y="522" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">bit i belongs to slot i; a 20-bit sample takes both slots,</text>
+<text x="760" y="538" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:normal;fill:#000000;text-anchor:start">its keep[0] is used for both</text>
+</svg>
