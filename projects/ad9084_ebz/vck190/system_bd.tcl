@@ -72,8 +72,59 @@ set HSCI_BANKS 2
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]
 
+# External data offload storage: one 1 GB slot per offload in the upper half
+# of the LPDDR4, which Linux keeps out of the CMA pool
+set do_axi_data_width 512
+set do_ext_mem_size [expr 1024*1024*1024]
+set do_ext_mem_base 0x50100000000
+
 source $ad_hdl_dir/projects/ad9084_ebz/common/ad9084_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
+
+set link_eff [expr {$JESD_MODE == "8B10B" ? 0.8 : 64.0/66}]
+set rx_mbps [expr int(ceil($ad_project_params(RX_LANE_RATE) * 1000 * $RX_NUM_OF_LANES * $link_eff / 8))]
+set tx_mbps [expr int(ceil($ad_project_params(TX_LANE_RATE) * 1000 * $TX_NUM_OF_LANES * $link_eff / 8))]
+
+# {offload slot MC read_bw write_bw}: the capture or playback direction gets
+# the link rate, the DMA side of the offload only a token reservation; each
+# offload shares the MC port of the DMA running the opposite direction
+set ext_offloads {}
+if {$adc_do_mem_type != 0} {
+  lappend ext_offloads [list $adc_data_offload_name 0 MC_2 1000 $rx_mbps]
+}
+if {$dac_do_mem_type != 0} {
+  lappend ext_offloads [list $dac_data_offload_name 1 MC_1 $tx_mbps 1000]
+}
+if {$ASYMMETRIC_A_B_MODE} {
+  set rx_b_mbps [expr int(ceil($ad_project_params(RX_B_LANE_RATE) * 1000 * $RX_B_NUM_OF_LANES * $link_eff / 8))]
+  set tx_b_mbps [expr int(ceil($ad_project_params(TX_B_LANE_RATE) * 1000 * $TX_B_NUM_OF_LANES * $link_eff / 8))]
+  if {$adc_do_mem_type != 0} {
+    lappend ext_offloads [list $adc_b_data_offload_name 2 MC_0 1000 $rx_b_mbps]
+  }
+  if {$dac_do_mem_type != 0} {
+    lappend ext_offloads [list $dac_b_data_offload_name 3 MC_3 $tx_b_mbps 1000]
+  }
+}
+
+foreach ext_offload $ext_offloads {
+  lassign $ext_offload do_name slot p_mc p_rd_bw p_wr_bw
+
+  set base [expr $do_ext_mem_base + $slot * $do_ext_mem_size]
+  ad_ip_parameter $do_name/storage_unit CONFIG.DDR_BASE_ADDDRESS [format "0x%016X" $base]
+
+  # The PLM calibrates the DDRMC before the PL is released
+  ad_connect VCC $do_name/i_data_offload/ddr_calib_done
+
+  # A top level net cannot be connected to a pin inside the hierarchy
+  ad_connect [get_bd_pins -of_objects $sys_dma_clk -filter {DIR == O}] \
+    $do_name/storage_unit/m_axi_aclk
+  ad_connect [get_bd_pins -of_objects $sys_dma_resetn -filter {DIR == O}] \
+    $do_name/storage_unit/m_axi_aresetn
+  ad_mem_hp3_interconnect $sys_dma_clk $do_name/storage_unit/MAXI_0
+  # The NoC sees the hierarchy pin, not the storage unit's own
+  ad_mem_noc_connection $do_name/MAXI_0 $p_mc \
+    [expr min(15000, $p_rd_bw)] [expr min(15000, $p_wr_bw)]
+}
 
 ad_ip_parameter axi_apollo_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 2
 ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1

@@ -70,6 +70,8 @@ source ../../../projects/scripts/adi_board.tcl
 #   [RX/TX]_B_JESD_L : Number of lanes per link for B side
 #   [RX/TX]_B_JESD_NP : Number of bits per sample for B side
 #   [RX/TX]_B_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M) for B side
+#   ADC_DO_MEM_TYPE : RX data offload storage, 0 - BRAM, 1 - 1 GB per side in LPDDR4
+#   DAC_DO_MEM_TYPE : TX data offload storage, 0 - BRAM, 1 - 1 GB per side in LPDDR4
 #   FSRC_ENABLE : When set, fractional sample rate conversion is inserted in
 #                 both directions: RX deletes the samples Apollo marked invalid
 #                 and compacts what is left, TX leaves holes where Apollo will
@@ -111,6 +113,8 @@ adi_project ad9084_ebz_vck190 0 [list \
   TX_B_JESD_NP        [get_env_param TX_B_JESD_NP        16 ] \
   RX_B_KS_PER_CHANNEL [get_env_param RX_B_KS_PER_CHANNEL 64 ] \
   TX_B_KS_PER_CHANNEL [get_env_param TX_B_KS_PER_CHANNEL 64 ] \
+  ADC_DO_MEM_TYPE     [get_env_param ADC_DO_MEM_TYPE      0 ] \
+  DAC_DO_MEM_TYPE     [get_env_param DAC_DO_MEM_TYPE      0 ] \
   FSRC_ENABLE         [get_env_param FSRC_ENABLE          0 ] \
   FSRC_ACCUM_WIDTH    [get_env_param FSRC_ACCUM_WIDTH    56 ] \
 ]
