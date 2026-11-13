@@ -88,8 +88,7 @@ Instance             Zynq/Microblaze
 axi_ad4080_adc_a     0x44A0_0000
 axi_ad4080_adc_b     0x44A1_0000
 axi_ad4880_dma       0x44A3_0000
-ad4080_b_spi         0x44A7_0000
-ad408x_clock_monitor 0x44A8_0000
+ad4880_clock_monitor 0x44A8_0000
 ==================== ===============
 
 SPI connections
@@ -107,10 +106,10 @@ SPI connections
      - SPI 0
      - AD4880_A
      - 0
-   * - PL
-     - ad4080_b_spi
+   * - PS
+     - SPI 0
      - AD4880_B
-     - 0
+     - 1
    * - PS
      - SPI 1
      - AD9508
@@ -155,7 +154,6 @@ Below are the Programmable Logic interrupts used in this project.
 Instance name    HDL Linux Zynq Actual Zynq
 ================ === ========== ===========
 axi_ad4880_dma   13  57         89
-ad4080_b_spi     10  54         86
 ================ === ========== ===========
 
 Building the HDL project
