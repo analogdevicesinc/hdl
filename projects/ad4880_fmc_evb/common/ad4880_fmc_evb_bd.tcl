@@ -32,14 +32,15 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-set ADC_N_BITS $ad_project_params(ADC_N_BITS)
-if {$ADC_N_BITS <=16} {
-   set SAMPLE_DATA_WIDTH 16
-   set DMA_DATA_WIDTH_SRC 32
-} else {
-   set SAMPLE_DATA_WIDTH 32
-   set DMA_DATA_WIDTH_SRC 64
-}
+set NUM_LANES    $ad_project_params(NUM_LANES)
+set ENABLE_20BIT $ad_project_params(ENABLE_20BIT)
+set ENABLE_16BIT $ad_project_params(ENABLE_16BIT)
+set ENABLE_14BIT $ad_project_params(ENABLE_14BIT)
+
+# the adc_data width of axi_ad408x: 32 bits for the 20 bit depth, and on two
+# lanes for the 14 bit depth, 16 bits otherwise
+set SAMPLE_DATA_WIDTH [expr {($ENABLE_20BIT || ($ENABLE_14BIT && $NUM_LANES == 2)) ? 32 : 16}]
+set DMA_DATA_WIDTH_SRC [expr {2 * $SAMPLE_DATA_WIDTH}]
 # ad4880 interface
 
 create_bd_port -dir I adca_dco_p
@@ -80,12 +81,20 @@ ad_connect fpga_b_ref_clk  ad4880_clock_monitor/clock_1
 
 # axi_ad4080_adc_a
 ad_ip_instance axi_ad408x axi_ad4080_adc_a
-ad_ip_parameter axi_ad4080_adc_a CONFIG.ADC_N_BITS $ADC_N_BITS
+ad_ip_parameter axi_ad4080_adc_a CONFIG.NUM_LANES $NUM_LANES
+ad_ip_parameter axi_ad4080_adc_a CONFIG.ENABLE_20BIT $ENABLE_20BIT
+ad_ip_parameter axi_ad4080_adc_a CONFIG.ENABLE_16BIT $ENABLE_16BIT
+ad_ip_parameter axi_ad4080_adc_a CONFIG.ENABLE_14BIT $ENABLE_14BIT
+ad_ip_parameter axi_ad4080_adc_a CONFIG.GLOBAL_DIV_CLK 1
 
 # axi_ad4080_adc_b
 ad_ip_instance axi_ad408x axi_ad4080_adc_b
 ad_ip_parameter axi_ad4080_adc_b CONFIG.IO_DELAY_GROUP adc_if_delay_group2
-ad_ip_parameter axi_ad4080_adc_b CONFIG.ADC_N_BITS $ADC_N_BITS
+ad_ip_parameter axi_ad4080_adc_b CONFIG.NUM_LANES $NUM_LANES
+ad_ip_parameter axi_ad4080_adc_b CONFIG.ENABLE_20BIT $ENABLE_20BIT
+ad_ip_parameter axi_ad4080_adc_b CONFIG.ENABLE_16BIT $ENABLE_16BIT
+ad_ip_parameter axi_ad4080_adc_b CONFIG.ENABLE_14BIT $ENABLE_14BIT
+ad_ip_parameter axi_ad4080_adc_b CONFIG.GLOBAL_DIV_CLK 1
 
 
 
@@ -113,7 +122,7 @@ ad_connect adca_db_n                 axi_ad4080_adc_a/data_b_in_n
 ad_connect adca_sync_n               axi_ad4080_adc_a/sync_n
 ad_connect adca_cnv_in_p             axi_ad4080_adc_a/cnv_in_p
 ad_connect adca_cnv_in_n             axi_ad4080_adc_a/cnv_in_n
-ad_connect adca_filter_data_ready_n  axi_ad4080_adc_a/filter_data_ready_n
+ad_connect adca_filter_data_ready_n  axi_ad4080_adc_a/filter_rdy_n
 ad_connect $sys_iodelay_clk          axi_ad4080_adc_a/delay_clk
 
 # connect interface to axi_ad4080_adc_b
@@ -127,7 +136,7 @@ ad_connect adcb_db_n                 axi_ad4080_adc_b/data_b_in_n
 ad_connect adcb_sync_n               axi_ad4080_adc_b/sync_n
 ad_connect adcb_cnv_in_p             axi_ad4080_adc_b/cnv_in_p
 ad_connect adcb_cnv_in_n             axi_ad4080_adc_b/cnv_in_n
-ad_connect adcb_filter_data_ready_n  axi_ad4080_adc_b/filter_data_ready_n
+ad_connect adcb_filter_data_ready_n  axi_ad4080_adc_b/filter_rdy_n
 ad_connect $sys_iodelay_clk          axi_ad4080_adc_b/delay_clk
 
 ad_ip_instance util_cpack2 util_ad4880_adc_pack

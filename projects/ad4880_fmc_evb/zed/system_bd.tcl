@@ -43,6 +43,9 @@ ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
-set sys_cstring "ADC_N_BITS=$ad_project_params(ADC_N_BITS)"
+set sys_cstring "NUM_LANES=$ad_project_params(NUM_LANES)\
+  ENABLE_20BIT=$ad_project_params(ENABLE_20BIT)\
+  ENABLE_16BIT=$ad_project_params(ENABLE_16BIT)\
+  ENABLE_14BIT=$ad_project_params(ENABLE_14BIT)"
 
 sysid_gen_sys_init_file $sys_cstring
