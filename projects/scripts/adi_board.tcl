@@ -996,8 +996,10 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 #  \param[p_mc] - memory controller port, MC_0, MC_1, MC_2 or MC_3
 #  \param[p_rd_bw] - requested read bandwidth in MB/s
 #  \param[p_wr_bw] - requested write bandwidth in MB/s
+#  \param[p_rd_class] - read traffic class, BEST_EFFORT, LOW_LATENCY or ISOCHRONOUS
+#  \param[p_wr_class] - write traffic class, BEST_EFFORT or ISOCHRONOUS
 #
-proc ad_mem_noc_connection {p_name p_mc p_rd_bw p_wr_bw} {
+proc ad_mem_noc_connection {p_name p_mc p_rd_bw p_wr_bw {p_rd_class BEST_EFFORT} {p_wr_class BEST_EFFORT}} {
 
   global sys_zynq
 
@@ -1016,6 +1018,10 @@ proc ad_mem_noc_connection {p_name p_mc p_rd_bw p_wr_bw} {
     }
   }
 
+  set_property -dict [list \
+    CONFIG.R_TRAFFIC_CLASS $p_rd_class \
+    CONFIG.W_TRAFFIC_CLASS $p_wr_class \
+  ] $noc_si
   set_property CONFIG.CONNECTIONS "$p_mc {read_bw {$p_rd_bw} write_bw {$p_wr_bw} read_avg_burst {64} write_avg_burst {64}}" $noc_si
 
   foreach seg [get_bd_addr_segs [string trimleft $noc_seg_pin /]/${noc_seg}_DDR_*] {
