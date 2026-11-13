@@ -99,6 +99,8 @@ module axi_ad408x #(
   output                                      adc_valid,
   // log2 of the 16 bit slots per sample: 1 (two slots) with the 20 bit depth selected, 0 otherwise
   output                                      adc_sample_slots_select,
+  // FILTER_ENABLE of the register map, on adc_clk
+  output                                      adc_filter_enable,
   input                                       adc_dovf,
 
   // delay interface
@@ -182,6 +184,7 @@ module axi_ad408x #(
                                     (adc_device_code == 2'h0));
   assign self_sync       = adc_custom_control_s[1];
   assign filter_enable   = adc_custom_control_s[0];
+  assign adc_filter_enable = filter_enable;
 
   always @(*) begin
     up_rdata_r = 'h00;

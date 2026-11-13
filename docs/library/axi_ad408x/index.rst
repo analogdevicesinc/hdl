@@ -222,6 +222,8 @@ Interface
      - Received data output
    * - adc_dovf
      - Data overflow. Must be connected to the DMA
+   * - adc_filter_enable
+     - FILTER_ENABLE of the register map, on adc_clk
    * - s_axi
      - Standard AXI Slave Memory Map interface
 
