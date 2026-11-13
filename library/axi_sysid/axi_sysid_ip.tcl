@@ -47,4 +47,6 @@ set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_sysid}
 
 set cc [ipx::current_core]
 
+set_property driver_value 0 [ipx::get_ports pr_rom_data -of_objects $cc]
+
 ipx::save_core $cc
