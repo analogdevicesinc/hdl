@@ -178,7 +178,7 @@ ad_ip_instance util_upack2 util_adrv903x_tx_upack [list \
                         $dac_data_width \
                         $dac_data_width \
                         $do_axi_data_width \
-                        {}
+                        {} \
                         1
 
 adi_tpl_jesd204_tx_create tx_adrv903x_tpl_core $TX_NUM_OF_LANES \
@@ -237,7 +237,7 @@ set adc_data_offload_size [expr $adc_data_width / 8 * 2**$adc_fifo_address_width
                         $adc_data_width \
                         $adc_data_width \
                         $do_axi_data_width \
-                        {}
+                        {} \
                         1
 
 adi_tpl_jesd204_rx_create rx_adrv903x_tpl_core $RX_NUM_OF_LANES \
