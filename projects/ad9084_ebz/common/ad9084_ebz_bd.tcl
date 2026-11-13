@@ -572,6 +572,7 @@ ad_data_offload_create $adc_data_offload_name \
                        $adc_data_width \
                        $adc_data_width \
                        $do_axi_data_width \
+                       32 \
                        $SHARED_DEVCLK
 
 ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
@@ -624,6 +625,7 @@ if {$ASYMMETRIC_A_B_MODE} {
                          $adc_b_data_width \
                          $adc_b_data_width \
                          $do_axi_data_width \
+                         32 \
                          $SHARED_DEVCLK
 
   ad_ip_parameter $adc_b_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
@@ -680,6 +682,7 @@ ad_data_offload_create $dac_data_offload_name \
                        $dac_data_width \
                        $dac_data_width \
                        $do_axi_data_width \
+                       32 \
                        $SHARED_DEVCLK
 
 ad_ip_parameter $dac_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
@@ -733,6 +736,7 @@ if {$ASYMMETRIC_A_B_MODE} {
                          $dac_b_data_width \
                          $dac_b_data_width \
                          $do_axi_data_width \
+                         32 \
                          $SHARED_DEVCLK
 
   ad_ip_parameter $dac_b_data_offload_name/i_data_offload CONFIG.HAS_BYPASS $DO_HAS_BYPASS
