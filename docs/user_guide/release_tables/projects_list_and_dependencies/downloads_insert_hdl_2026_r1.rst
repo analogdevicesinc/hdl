@@ -458,34 +458,6 @@ AD9209
        :git-hdl:`util_do_ram <hdl_2026_r1:library/util_do_ram>`
        :git-hdl:`util_hbm <hdl_2026_r1:library/util_hbm>`
 
-AD9213EVB
----------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`AD9213EVB <EVAL-AD9213>`
-     - :git-hdl:`ad9213_evb <hdl_2026_r1:projects/ad9213_evb>`
-     - :git-hdl:`vcu118 <hdl_2026_r1:projects/ad9213_evb/vcu118>`
-     - ad9213_evb_vcu118
-     - :git-hdl:`axi_adxcvr <hdl_2026_r1:library/xilinx/axi_adxcvr>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_jesd204_rx <hdl_2026_r1:library/jesd204/axi_jesd204_rx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`data_offload <hdl_2026_r1:library/data_offload>`
-       :git-hdl:`jesd204_rx <hdl_2026_r1:library/jesd204/jesd204_rx>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-       :git-hdl:`util_adxcvr <hdl_2026_r1:library/xilinx/util_adxcvr>`
-       :git-hdl:`util_axis_fifo <hdl_2026_r1:library/util_axis_fifo>`
-       :git-hdl:`util_cdc <hdl_2026_r1:library/util_cdc>`
-       :git-hdl:`util_do_ram <hdl_2026_r1:library/util_do_ram>`
-
 AD9265FMC
 ---------
 
@@ -500,10 +472,8 @@ AD9265FMC
      - Library Cores
    * - :adi:`AD9265-FMC-125EBZ <eval-ad9265>`
      - :git-hdl:`ad9265_fmc <hdl_2026_r1:projects/ad9265_fmc>`
-     - :git-hdl:`zc706 <hdl_2026_r1:projects/ad9265_fmc/zc706>`
-       :git-hdl:`zed <hdl_2026_r1:projects/ad9265_fmc/zed>`
-     - ad9265_fmc_zc706
-       :ref:`ad9265_fmc_zed <util_hdl_2026_r1_ad9265_fmc_zed>`
+     - :git-hdl:`zed <hdl_2026_r1:projects/ad9265_fmc/zed>`
+     - :ref:`ad9265_fmc_zed <util_hdl_2026_r1_ad9265_fmc_zed>`
      - :git-hdl:`axi_ad9265 <hdl_2026_r1:library/axi_ad9265>`
        :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
        :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
@@ -567,54 +537,6 @@ AD9467FMC
        :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
        :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
 
-AD9656FMC
----------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`AD9656FMC <eval-ad9656>`
-     - :git-hdl:`ad9656_fmc <hdl_2026_r1:projects/ad9656_fmc>`
-     - :git-hdl:`zcu102 <hdl_2026_r1:projects/ad9656_fmc/zcu102>`
-     - :ref:`ad9656_fmc_zcu102 <util_hdl_2026_r1_ad9656_fmc_zcu102>`
-     - :git-hdl:`axi_adxcvr <hdl_2026_r1:library/xilinx/axi_adxcvr>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_jesd204_rx <hdl_2026_r1:library/jesd204/axi_jesd204_rx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`jesd204_rx <hdl_2026_r1:library/jesd204/jesd204_rx>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-       :git-hdl:`util_adxcvr <hdl_2026_r1:library/xilinx/util_adxcvr>`
-
-AD9694FMC
----------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`AD9694FMC <eval-ad9694>`
-     - :git-hdl:`ad9694_fmc <hdl_2026_r1:projects/ad9694_fmc>`
-     - :git-hdl:`zcu102 <hdl_2026_r1:projects/ad9694_fmc/zcu102>`
-     - ad9694_fmc_zcu102
-     - :git-hdl:`axi_adxcvr <hdl_2026_r1:library/xilinx/axi_adxcvr>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_jesd204_rx <hdl_2026_r1:library/jesd204/axi_jesd204_rx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`jesd204_rx <hdl_2026_r1:library/jesd204/jesd204_rx>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-       :git-hdl:`util_adxcvr <hdl_2026_r1:library/xilinx/util_adxcvr>`
-
 AD9695FMC
 ---------
 
@@ -660,127 +582,6 @@ AD9783EBZ
        :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
        :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
 
-ADQUADMXFE1EBZ
---------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`ADQUADMXFE1EBZ`
-     - :git-hdl:`ad_quadmxfe1_ebz <hdl_2026_r1:projects/ad_quadmxfe1_ebz>`
-     - :git-hdl:`vcu118 <hdl_2026_r1:projects/ad_quadmxfe1_ebz/vcu118>`
-     - ad_quadmxfe1_ebz_vcu118
-     - :git-hdl:`axi_adxcvr <hdl_2026_r1:library/xilinx/axi_adxcvr>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_jesd204_rx <hdl_2026_r1:library/jesd204/axi_jesd204_rx>`
-       :git-hdl:`axi_jesd204_tx <hdl_2026_r1:library/jesd204/axi_jesd204_tx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`data_offload <hdl_2026_r1:library/data_offload>`
-       :git-hdl:`jesd204_rx <hdl_2026_r1:library/jesd204/jesd204_rx>`
-       :git-hdl:`jesd204_tx <hdl_2026_r1:library/jesd204/jesd204_tx>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-       :git-hdl:`util_adxcvr <hdl_2026_r1:library/xilinx/util_adxcvr>`
-       :git-hdl:`util_axis_fifo <hdl_2026_r1:library/util_axis_fifo>`
-       :git-hdl:`util_cdc <hdl_2026_r1:library/util_cdc>`
-       :git-hdl:`util_cpack2 <hdl_2026_r1:library/util_pack/util_cpack2>`
-       :git-hdl:`util_do_ram <hdl_2026_r1:library/util_do_ram>`
-       :git-hdl:`util_hbm <hdl_2026_r1:library/util_hbm>`
-       :git-hdl:`util_pad <hdl_2026_r1:library/util_pad>`
-
-EVAL-ADA4355-FMC
-----------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`EVAL-ADA4355`
-     - :git-hdl:`ada4355_fmc <hdl_2026_r1:projects/ada4355_fmc>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/ada4355_fmc/zed>`
-     - ada4355_fmc_zed
-     - :git-hdl:`axi_ada4355 <hdl_2026_r1:library/axi_ada4355>`
-       :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
-       :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-
-EVAL-ADAQ23875
---------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`EVAL-ADAQ23878`
-     - :git-hdl:`adaq23875 <hdl_2026_r1:projects/adaq23875>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/adaq23875/zed>`
-     - adaq23875_zed
-     - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-   * - :adi:`EVAL-ADAQ23876`
-     - 
-     - 
-     - 
-     - :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-   * - :adi:`EVAL-ADAQ23875`
-     - 
-     - 
-     - 
-     - :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
-       :git-hdl:`axi_ltc2387 <hdl_2026_r1:library/axi_ltc2387>`
-       :git-hdl:`axi_pwm_gen <hdl_2026_r1:library/axi_pwm_gen>`
-       :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-
-ADAQ7980SDZ
------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`ADAQ7980-SDZ <eval-adaq7980>`
-     - :git-hdl:`adaq7980_sdz <hdl_2026_r1:projects/adaq7980_sdz>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/adaq7980_sdz/zed>`
-     - :ref:`adaq7980_sdz_zed <util_hdl_2026_r1_adaq7980_sdz_zed>`
-     - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
-       :git-hdl:`axi_pwm_gen <hdl_2026_r1:library/axi_pwm_gen>`
-       :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
-       :git-hdl:`axi_spi_engine <hdl_2026_r1:library/spi_engine/axi_spi_engine>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`spi_engine_execution <hdl_2026_r1:library/spi_engine/spi_engine_execution>`
-       :git-hdl:`spi_engine_interconnect <hdl_2026_r1:library/spi_engine/spi_engine_interconnect>`
-       :git-hdl:`spi_engine_offload <hdl_2026_r1:library/spi_engine/spi_engine_offload>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-
 ADAQ8092FMC
 -----------
 
@@ -807,34 +608,6 @@ ADAQ8092FMC
        :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
        :git-hdl:`util_cpack2 <hdl_2026_r1:library/util_pack/util_cpack2>`
 
-EVAL-ADMX100X-EVB
------------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`EVAL-ADMX1001`
-     - :git-hdl:`admx100x_evb <hdl_2026_r1:projects/admx100x_evb>`
-     - :git-hdl:`zed <hdl_2026_r1:projects/admx100x_evb/zed>`
-     - admx100x_evb_zed
-     - :git-hdl:`axi_clkgen <hdl_2026_r1:library/axi_clkgen>`
-   * - :adi:`EVAL-ADMX1002`
-     - 
-     - 
-     - 
-     - :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_hdmi_tx <hdl_2026_r1:library/axi_hdmi_tx>`
-       :git-hdl:`axi_i2s_adi <hdl_2026_r1:library/axi_i2s_adi>`
-       :git-hdl:`axi_spdif_tx <hdl_2026_r1:library/axi_spdif_tx>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-
 ADRV9001
 --------
 
@@ -849,13 +622,11 @@ ADRV9001
      - Library Cores
    * - :adi:`ADRV9001`
      - :git-hdl:`adrv9001 <hdl_2026_r1:projects/adrv9001>`
-     - :git-hdl:`a10soc <hdl_2026_r1:projects/adrv9001/a10soc>`
-       :git-hdl:`zcu102 <hdl_2026_r1:projects/adrv9001/zcu102>`
+     - :git-hdl:`zcu102 <hdl_2026_r1:projects/adrv9001/zcu102>`
        :git-hdl:`zc706 <hdl_2026_r1:projects/adrv9001/zc706>`
        :git-hdl:`zcu102 <hdl_2026_r1:projects/adrv9001/zcu102>`
        :git-hdl:`zed <hdl_2026_r1:projects/adrv9001/zed>`
-     - NA
-       :ref:`adrv9001_zcu102 <util_hdl_2026_r1_adrv9001_zcu102>`
+     - :ref:`adrv9001_zcu102 <util_hdl_2026_r1_adrv9001_zcu102>`
        :ref:`adrv9001_zc706 <util_hdl_2026_r1_adrv9001_zc706>`
        :ref:`adrv9001_zcu102 <util_hdl_2026_r1_adrv9001_zcu102>`
        :ref:`adrv9001_zed <util_hdl_2026_r1_adrv9001_zed>`
@@ -872,28 +643,6 @@ ADRV9001
        :git-hdl:`util_rfifo <hdl_2026_r1:library/util_rfifo>`
        :git-hdl:`util_upack2 <hdl_2026_r1:library/util_pack/util_upack2>`
 
-ADRV9001DUAL
-------------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 18 12 25 25
-
-   * - Hardware
-     - Project
-     - Carriers
-     - Resource Utilization
-     - Library Cores
-   * - :adi:`AD-ADRV9001-DUAL <ADRV9002>`
-     - :git-hdl:`adrv9001_dual <hdl_2026_r1:projects/adrv9001_dual>`
-     - :git-hdl:`zcu102 <hdl_2026_r1:projects/adrv9001_dual/zcu102>`
-     - adrv9001_dual_zcu102
-     - :git-hdl:`axi_adrv9001 <hdl_2026_r1:library/axi_adrv9001>`
-       :git-hdl:`axi_dmac <hdl_2026_r1:library/axi_dmac>`
-       :git-hdl:`axi_sysid <hdl_2026_r1:library/axi_sysid>`
-       :git-hdl:`sysid_rom <hdl_2026_r1:library/sysid_rom>`
-       :git-hdl:`util_cpack2 <hdl_2026_r1:library/util_pack/util_cpack2>`
-
 ADRV9008/9
 ----------
 
@@ -908,15 +657,9 @@ ADRV9008/9
      - Library Cores
    * - :adi:`AD-ADRV9008/9 <eval-adrv9008-9009>`
      - :git-hdl:`adrv9009 <hdl_2026_r1:projects/adrv9009>`
-     - :git-hdl:`a10soc <hdl_2026_r1:projects/adrv9009/a10soc>`
-       :git-hdl:`kcu105 <hdl_2026_r1:projects/adrv9009/kcu105>`
-       :git-hdl:`s10soc <hdl_2026_r1:projects/adrv9009/s10soc>`
-       :git-hdl:`zc706 <hdl_2026_r1:projects/adrv9009/zc706>`
+     - :git-hdl:`zc706 <hdl_2026_r1:projects/adrv9009/zc706>`
        :git-hdl:`zcu102 <hdl_2026_r1:projects/adrv9009/zcu102>`
-     - NA
-       adrv9009_kcu105
-       NA
-       :ref:`adrv9009_zc706 <util_hdl_2026_r1_adrv9009_zc706>`
+     - :ref:`adrv9009_zc706 <util_hdl_2026_r1_adrv9009_zc706>`
        :ref:`adrv9009_zcu102 <util_hdl_2026_r1_adrv9009_zcu102>`
      - :git-hdl:`ad_ip_jesd204_tpl_adc <hdl_2026_r1:library/jesd204/ad_ip_jesd204_tpl_adc>`
        :git-hdl:`ad_ip_jesd204_tpl_dac <hdl_2026_r1:library/jesd204/ad_ip_jesd204_tpl_dac>`
