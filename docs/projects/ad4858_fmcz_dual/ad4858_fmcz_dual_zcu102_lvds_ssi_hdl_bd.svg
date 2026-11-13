@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="823" height="720" viewBox="0 0 823 720" font-family="Arial"><title>block diagram</title><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs><rect x="1" y="1" width="821" height="718" fill="#fff" stroke="#000" stroke-width="2"/>
+<text x="777" y="24" text-anchor="end" font-size="20" fill="#000" font-weight="bold">2 x EVAL-AD4858</text>
+<rect x="19.2" y="10" width="14.85" height="15.9" fill="#ffcccc" stroke="#a01414" stroke-width="2"/>
+<text x="38.7" y="22" text-anchor="start" font-size="12" fill="#000">Receive path</text>
+<line x1="131.8" y1="18" x2="158" y2="18" stroke="#754d00" stroke-width="1.3" stroke-dasharray="5.2,5.2"/>
+<text x="162.5" y="22" text-anchor="start" font-size="12" fill="#000">Clock domain</text>
+<g transform="translate(0,-54)">
+<rect x="20" y="90" width="760" height="666" fill="none" stroke="#000" stroke-width="2"/>
+<text x="633.653" y="149.4" text-anchor="middle" font-size="20" fill="#000" font-weight="bold">ZCU102</text>
+<rect x="45" y="105" width="442.306" height="74.897" fill="#ebebeb" stroke="#000" stroke-width="1.94"/>
+<text x="176.44799999999998" y="147.4485" text-anchor="middle" font-size="15" fill="#000" font-weight="bold">ARM (ZynqMP)</text>
+<text transform="translate(324.71099999999996,142.4485) rotate(-90)" text-anchor="middle" font-size="11.25" font-weight="bold">Timer</text>
+<line x1="333.52599999999995" y1="105" x2="333.52599999999995" y2="179.897" stroke="#000" stroke-width="2"/>
+<text transform="translate(350.34099999999995,142.4485) rotate(-90)" text-anchor="middle" font-size="11.25" font-weight="bold">Interrupts</text>
+<line x1="359.15599999999995" y1="105" x2="359.15599999999995" y2="179.897" stroke="#000" stroke-width="2"/>
+<text transform="translate(375.97099999999995,142.4485) rotate(-90)" text-anchor="middle" font-size="11.25" font-weight="bold">DDRx</text>
+<line x1="384.78599999999994" y1="105" x2="384.78599999999994" y2="179.897" stroke="#000" stroke-width="2"/>
+<text transform="translate(401.60099999999994,142.4485) rotate(-90)" text-anchor="middle" font-size="11.25" font-weight="bold">Ethernet</text>
+<line x1="410.41599999999994" y1="105" x2="410.41599999999994" y2="179.897" stroke="#000" stroke-width="2"/>
+<text transform="translate(427.23099999999994,142.4485) rotate(-90)" text-anchor="middle" font-size="11.25" font-weight="bold">UART</text>
+<line x1="436.04599999999994" y1="105" x2="436.04599999999994" y2="179.897" stroke="#000" stroke-width="2"/>
+<text transform="translate(452.86099999999993,142.4485) rotate(-90)" text-anchor="middle" font-size="11.25" font-weight="bold">I2C</text>
+<line x1="461.67599999999993" y1="105" x2="461.67599999999993" y2="179.897" stroke="#000" stroke-width="2"/>
+<text transform="translate(478.49099999999993,142.4485) rotate(-90)" text-anchor="middle" font-size="11.25" font-weight="bold">SPI</text>
+<line x1="307.89599999999996" y1="105" x2="307.89599999999996" y2="179.897" stroke="#000" stroke-width="2"/>
+<rect x="65" y="190" width="77" height="490" fill="none" stroke="#754d00" stroke-width="2" stroke-dasharray="8,8"/>
+<text x="103.5" y="656.7" text-anchor="middle" font-size="10.67" fill="#754d00">sys_dma_clk</text>
+<text x="103.5" y="670.0" text-anchor="middle" font-size="10.67" fill="#754d00">=200MHz</text>
+<rect x="45" y="218" width="40" height="420" fill="#e8e8e8" stroke="#000" stroke-width="2"/>
+<text transform="translate(71.22233333333334,428.0) rotate(-90)" text-anchor="middle" font-size="18.667" font-weight="bold">MEMORY INTERCONNECT</text>
+<rect x="150" y="190" width="622.2" height="490" fill="none" stroke="#754d00" stroke-width="2" stroke-dasharray="8,8"/>
+<text x="300" y="670.0" text-anchor="middle" font-size="10.67" fill="#754d00">adc_clk=200MHz</text>
+<rect x="760" y="218" width="40" height="190" fill="#e8e8e8" stroke="#000" stroke-width="2"/>
+<text transform="translate(786.2223333333334,313.0) rotate(-90)" text-anchor="middle" font-size="18.667" font-weight="bold">FMC HPC0</text>
+<rect x="118" y="218" width="50" height="190" fill="#ffcccc" stroke="#a01414" stroke-width="2"/>
+<text transform="translate(149.22233333333332,313.0) rotate(-90)" text-anchor="middle" font-size="18.667" font-weight="bold">AXI DMAC (0)</text>
+<rect x="205" y="218" width="50" height="190" fill="#ffcccc" stroke="#a01414" stroke-width="2"/>
+<text transform="translate(236.22233333333332,313.0) rotate(-90)" text-anchor="middle" font-size="18.667" font-weight="bold">UTIL CPACK2 (0)</text>
+<rect x="290" y="218" width="150" height="190" fill="#ffcccc" stroke="#a01414" stroke-width="2"/>
+<text x="365.0" y="319.2223333333333" text-anchor="middle" font-size="18.667" font-weight="bold">AXI AD485X (0)</text>
+<polygon points="118,307.0 93,307.0 93,304.0 85,313.0 93,322.0 93,319.0 118,319.0" fill="#a01414"/>
+<text x="104.5" y="317.0" text-anchor="middle" font-size="12" fill="#fff">64b</text>
+<polygon points="205,307.0 176,307.0 176,304.0 168,313.0 176,322.0 176,319.0 205,319.0" fill="#a01414"/>
+<text x="189.5" y="317.0" text-anchor="middle" font-size="12" fill="#fff">256b</text>
+<polygon points="290,228.0 263,228.0 263,225.0 255,234.0 263,243.0 263,240.0 290,240.0" fill="#a01414"/>
+<text x="275.5" y="238.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,250.0 263,250.0 263,247.0 255,256.0 263,265.0 263,262.0 290,262.0" fill="#a01414"/>
+<text x="275.5" y="260.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,272.0 263,272.0 263,269.0 255,278.0 263,287.0 263,284.0 290,284.0" fill="#a01414"/>
+<text x="275.5" y="282.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,294.0 263,294.0 263,291.0 255,300.0 263,309.0 263,306.0 290,306.0" fill="#a01414"/>
+<text x="275.5" y="304.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,316.0 263,316.0 263,313.0 255,322.0 263,331.0 263,328.0 290,328.0" fill="#a01414"/>
+<text x="275.5" y="326.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,338.0 263,338.0 263,335.0 255,344.0 263,353.0 263,350.0 290,350.0" fill="#a01414"/>
+<text x="275.5" y="348.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,360.0 263,360.0 263,357.0 255,366.0 263,375.0 263,372.0 290,372.0" fill="#a01414"/>
+<text x="275.5" y="370.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,382.0 263,382.0 263,379.0 255,388.0 263,397.0 263,394.0 290,394.0" fill="#a01414"/>
+<text x="275.5" y="392.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polyline points="440,232 760,232" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="226" text-anchor="middle" font-size="16" fill="#000">adc_0_scki_p</text>
+<polyline points="440,252 760,252" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="246" text-anchor="middle" font-size="16" fill="#000">adc_0_scki_n</text>
+<polyline points="760,272 440,272" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="266" text-anchor="middle" font-size="16" fill="#000">adc_0_scko_p</text>
+<polyline points="760,292 440,292" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="286" text-anchor="middle" font-size="16" fill="#000">adc_0_scko_n</text>
+<polyline points="760,312 440,312" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="306" text-anchor="middle" font-size="16" fill="#000">adc_0_sdo_p</text>
+<polyline points="760,332 440,332" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="326" text-anchor="middle" font-size="16" fill="#000">adc_0_sdo_n</text>
+<polyline points="760,352 440,352" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="346" text-anchor="middle" font-size="16" fill="#000">adc_0_busy</text>
+<rect x="495" y="359" width="176" height="36" fill="#e8e8e8" stroke="#000" stroke-width="2"/>
+<text x="583.0" y="383.2223333333333" text-anchor="middle" font-size="18.667" font-weight="bold">AXI PWM GEN (0)</text>
+<polyline points="495,377 440,377" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="467.5" y="371" text-anchor="middle" font-size="16" fill="#000">cnvs</text>
+<polyline points="671,377 760,377" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="715.5" y="371" text-anchor="middle" font-size="16" fill="#000">adc_0_cnv</text>
+<rect x="760" y="448" width="40" height="190" fill="#e8e8e8" stroke="#000" stroke-width="2"/>
+<text transform="translate(786.2223333333334,543.0) rotate(-90)" text-anchor="middle" font-size="18.667" font-weight="bold">FMC HPC1</text>
+<rect x="118" y="448" width="50" height="190" fill="#ffcccc" stroke="#a01414" stroke-width="2"/>
+<text transform="translate(149.22233333333332,543.0) rotate(-90)" text-anchor="middle" font-size="18.667" font-weight="bold">AXI DMAC (1)</text>
+<rect x="205" y="448" width="50" height="190" fill="#ffcccc" stroke="#a01414" stroke-width="2"/>
+<text transform="translate(236.22233333333332,543.0) rotate(-90)" text-anchor="middle" font-size="18.667" font-weight="bold">UTIL CPACK2 (1)</text>
+<rect x="290" y="448" width="150" height="190" fill="#ffcccc" stroke="#a01414" stroke-width="2"/>
+<text x="365.0" y="549.2223333333334" text-anchor="middle" font-size="18.667" font-weight="bold">AXI AD485X (1)</text>
+<polygon points="118,537.0 93,537.0 93,534.0 85,543.0 93,552.0 93,549.0 118,549.0" fill="#a01414"/>
+<text x="104.5" y="547.0" text-anchor="middle" font-size="12" fill="#fff">64b</text>
+<polygon points="205,537.0 176,537.0 176,534.0 168,543.0 176,552.0 176,549.0 205,549.0" fill="#a01414"/>
+<text x="189.5" y="547.0" text-anchor="middle" font-size="12" fill="#fff">256b</text>
+<polygon points="290,458.0 263,458.0 263,455.0 255,464.0 263,473.0 263,470.0 290,470.0" fill="#a01414"/>
+<text x="275.5" y="468.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,480.0 263,480.0 263,477.0 255,486.0 263,495.0 263,492.0 290,492.0" fill="#a01414"/>
+<text x="275.5" y="490.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,502.0 263,502.0 263,499.0 255,508.0 263,517.0 263,514.0 290,514.0" fill="#a01414"/>
+<text x="275.5" y="512.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,524.0 263,524.0 263,521.0 255,530.0 263,539.0 263,536.0 290,536.0" fill="#a01414"/>
+<text x="275.5" y="534.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,546.0 263,546.0 263,543.0 255,552.0 263,561.0 263,558.0 290,558.0" fill="#a01414"/>
+<text x="275.5" y="556.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,568.0 263,568.0 263,565.0 255,574.0 263,583.0 263,580.0 290,580.0" fill="#a01414"/>
+<text x="275.5" y="578.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,590.0 263,590.0 263,587.0 255,596.0 263,605.0 263,602.0 290,602.0" fill="#a01414"/>
+<text x="275.5" y="600.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polygon points="290,612.0 263,612.0 263,609.0 255,618.0 263,627.0 263,624.0 290,624.0" fill="#a01414"/>
+<text x="275.5" y="622.0" text-anchor="middle" font-size="12" fill="#fff">32b</text>
+<polyline points="440,462 760,462" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="456" text-anchor="middle" font-size="16" fill="#000">adc_1_scki_p</text>
+<polyline points="440,482 760,482" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="476" text-anchor="middle" font-size="16" fill="#000">adc_1_scki_n</text>
+<polyline points="760,502 440,502" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="496" text-anchor="middle" font-size="16" fill="#000">adc_1_scko_p</text>
+<polyline points="760,522 440,522" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="516" text-anchor="middle" font-size="16" fill="#000">adc_1_scko_n</text>
+<polyline points="760,542 440,542" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="536" text-anchor="middle" font-size="16" fill="#000">adc_1_sdo_p</text>
+<polyline points="760,562 440,562" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="556" text-anchor="middle" font-size="16" fill="#000">adc_1_sdo_n</text>
+<polyline points="760,582 440,582" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="600.0" y="576" text-anchor="middle" font-size="16" fill="#000">adc_1_busy</text>
+<rect x="495" y="589" width="176" height="36" fill="#e8e8e8" stroke="#000" stroke-width="2"/>
+<text x="583.0" y="613.2223333333334" text-anchor="middle" font-size="18.667" font-weight="bold">AXI PWM GEN (1)</text>
+<polyline points="495,607 440,607" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="467.5" y="601" text-anchor="middle" font-size="16" fill="#000">cnvs</text>
+<polyline points="671,607 760,607" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#ah)"/>
+<text x="715.5" y="601" text-anchor="middle" font-size="16" fill="#000">adc_1_cnv</text>
+<rect x="150" y="700" width="130" height="36" fill="#e8e8e8" stroke="#000" stroke-width="2"/>
+<text x="215.0" y="724.2223333333334" text-anchor="middle" font-size="18.667" font-weight="bold">AXI CLKGEN</text>
+<polyline points="103,680 103,718 141,718" stroke="#754d00" stroke-width="1.5" fill="none"/>
+<polygon points="150,718 140,713 140,723" fill="#754d00"/>
+<polyline points="280,710 300,710 300,689" stroke="#754d00" stroke-width="1.5" fill="none"/>
+<polygon points="300,680 295,690 305,690" fill="#754d00"/>
+<polyline points="280,726 489,726 489,401" stroke="#754d00" stroke-width="1.5" fill="none"/>
+<polyline points="489,401 449,401" stroke="#754d00" stroke-width="1.5" fill="none"/>
+<polygon points="440,401 450,396 450,406" fill="#754d00"/>
+<polyline points="489,631 449,631" stroke="#754d00" stroke-width="1.5" fill="none"/>
+<polygon points="440,631 450,626 450,636" fill="#754d00"/>
+<circle cx="489" cy="631" r="3" fill="#754d00"/>
+<text x="384.5" y="721" text-anchor="middle" font-size="10.67" fill="#754d00">adc_fast_clk=400MHz</text>
+</g>
+</svg>
