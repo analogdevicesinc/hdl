@@ -41,9 +41,13 @@ adi_ip_files spi_engine_execution [list \
   "spi_engine_execution.v" \
   "spi_engine_execution_shiftreg.v" \
   "spi_engine_execution_shiftreg_data_assemble.v" \
+  "$ad_hdl_dir/library/common/ad_iddr.v" \
 ]
 
 adi_ip_properties_lite spi_engine_execution
+adi_init_bd_tcl
+adi_ip_bd spi_engine_execution "bd/bd.tcl"
+adi_add_auto_fpga_spec_params
 adi_ip_ttcl spi_engine_execution "spi_engine_execution_constr.ttcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/spi_engine/engine} [ipx::current_core]
@@ -167,6 +171,18 @@ set_property -dict [list \
  ] \
  [ipx::get_hdl_parameters ECHO_SCLK -of_objects $cc]
 
+## DDR_EN
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_user_parameters DDR_EN -of_objects $cc]
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_hdl_parameters DDR_EN -of_objects $cc]
+
 ## echo_sclk should be active only when ECHO_SCLK is set
 adi_set_ports_dependency echo_sclk ECHO_SCLK 0
 
@@ -247,6 +263,12 @@ set_property -dict [list \
   "display_name" "Echoed SCLK" \
   "tooltip" "\[ECHO_SCLK\] Activate echo SCLK option (hardware support required)"
 ] [ipgui::get_guiparamspec -name "ECHO_SCLK" -component $cc]
+
+ipgui::add_param -name "DDR_EN" -component $cc -parent $custom_clocking_group
+set_property -dict [list \
+  "display_name" "DDR mode" \
+  "tooltip" "\[DDR_EN\] Enable Dual Data Rate mode (data changes on both SCLK edges)"
+] [ipgui::get_guiparamspec -name "DDR_EN" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
