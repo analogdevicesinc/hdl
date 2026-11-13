@@ -6,11 +6,13 @@
 
 PROJECT_NAME := ad4880_fmc_evb_zed
 
+M_DEPS += ../common/ad4880_valid_gate.v
 M_DEPS += ../common/ad4880_fmc_evb_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/util_cdc/sync_bits.v
 
 LIB_DEPS += axi_ad408x
 LIB_DEPS += axi_clkgen

@@ -119,3 +119,7 @@ set_multicycle_path -setup -from \
   [get_cells -hier -filter {NAME =~ "*ad408x_interface/shift_cnt_reg*"}] 2
 set_multicycle_path -hold  -from \
   [get_cells -hier -filter {NAME =~ "*ad408x_interface/shift_cnt_reg*"}] 1
+
+# ad4880_valid_gate: the started flags cross between the two adc clocks
+set_false_path -to [get_cells -hier -filter \
+  {NAME =~ "*align_valid_gate*cdc_sync_stage1_reg*" && IS_SEQUENTIAL}]

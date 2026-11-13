@@ -182,34 +182,46 @@ ad_ip_parameter chb_align_fifo CONFIG.TKEEP_EN 0
 ad_ip_parameter chb_align_fifo CONFIG.M_AXIS_REGISTERED 1
 
 # Pop from both FIFOs only when both have data -> paired sample delivery.
-# Per-channel valid is already gated by sync_status inside ad408x_phy so
-# pre-lock samples never enter the FIFO -> paired-pop stays aligned by
-# construction after both channels lock.
 ad_ip_instance util_vector_logic align_both_valid
 ad_ip_parameter align_both_valid CONFIG.C_OPERATION and
 ad_ip_parameter align_both_valid CONFIG.C_SIZE 1
 
+# The channels lock one after the other, so the first one would fill its FIFO
+# ahead and stay that many samples ahead. Both FIFOs stay in reset until the
+# first valid of both channels, and restart together when the filter enables
+# of both channels become the same again.
+create_bd_cell -type module -reference ad4880_valid_gate align_valid_gate
+set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins align_valid_gate/a_rst]
+set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins align_valid_gate/b_rst]
 
 # connect datapath
 
 # ADC-A write side: native adc_clk -> fifo write (adc_valid is already
 # gated by sync_status inside the PHY, so no pre-lock garbage enters).
 ad_connect axi_ad4080_adc_a/adc_clk    cha_align_fifo/s_axis_aclk
-ad_connect sys_cpu_resetn              cha_align_fifo/s_axis_aresetn
-ad_connect axi_ad4080_adc_a/adc_valid  cha_align_fifo/s_axis_valid
+ad_connect align_valid_gate/a_fifo_resetn cha_align_fifo/s_axis_aresetn
+ad_connect axi_ad4080_adc_a/adc_clk    align_valid_gate/a_clk
+ad_connect axi_ad4080_adc_a/adc_rst    align_valid_gate/a_rst
+ad_connect axi_ad4080_adc_a/adc_valid  align_valid_gate/a_valid_in
+ad_connect axi_ad4080_adc_a/adc_filter_enable align_valid_gate/a_filter_en
+ad_connect align_valid_gate/a_valid_out cha_align_fifo/s_axis_valid
 ad_connect axi_ad4080_adc_a/adc_data   cha_align_fifo/s_axis_data
 
 # ADC-B write side: native adc_clk -> fifo write
 ad_connect axi_ad4080_adc_b/adc_clk    chb_align_fifo/s_axis_aclk
-ad_connect sys_cpu_resetn              chb_align_fifo/s_axis_aresetn
-ad_connect axi_ad4080_adc_b/adc_valid  chb_align_fifo/s_axis_valid
+ad_connect align_valid_gate/b_fifo_resetn chb_align_fifo/s_axis_aresetn
+ad_connect axi_ad4080_adc_b/adc_clk    align_valid_gate/b_clk
+ad_connect axi_ad4080_adc_b/adc_rst    align_valid_gate/b_rst
+ad_connect axi_ad4080_adc_b/adc_valid  align_valid_gate/b_valid_in
+ad_connect axi_ad4080_adc_b/adc_filter_enable align_valid_gate/b_filter_en
+ad_connect align_valid_gate/b_valid_out chb_align_fifo/s_axis_valid
 ad_connect axi_ad4080_adc_b/adc_data   chb_align_fifo/s_axis_data
 
 # Common read side: ADC-A's adc_clk drains both fifos
 ad_connect axi_ad4080_adc_a/adc_clk    cha_align_fifo/m_axis_aclk
-ad_connect sys_cpu_resetn              cha_align_fifo/m_axis_aresetn
+ad_connect align_valid_gate/a_fifo_resetn cha_align_fifo/m_axis_aresetn
 ad_connect axi_ad4080_adc_a/adc_clk    chb_align_fifo/m_axis_aclk
-ad_connect sys_cpu_resetn              chb_align_fifo/m_axis_aresetn
+ad_connect align_valid_gate/a_fifo_resetn chb_align_fifo/m_axis_aresetn
 
 # both_valid = m_axis_valid_a & m_axis_valid_b : gates the paired pop
 ad_connect cha_align_fifo/m_axis_valid align_both_valid/Op1
