@@ -172,19 +172,48 @@ the HDL repository, and then build the project as follows:
 **Linux/Cygwin/WSL**
 
 Example of running the ``make`` command without parameters (using the default
-configuration (ADC_N_BITS=20):
+configuration, the 20-bit datapath on two lanes):
 
 .. shell::
 
    $cd hdl/projects/ad4880_fmc_evb/zed
    $make
 
-Example of running the ``make`` command with parameters:
+Example of running the ``make`` command with parameters, the 16-bit and
+14-bit datapaths:
 
 .. shell::
 
    $cd hdl/projects/ad4880_fmc_evb/zed
-   $make ADC_N_BITS=16
+   $make ENABLE_20BIT=0 ENABLE_16BIT=1 ENABLE_14BIT=1
+
+The make parameters:
+
+* NUM_LANES: number of LVDS data lanes per converter, 1 or 2 (default: 2).
+* ENABLE_20BIT, ENABLE_16BIT, ENABLE_14BIT: build the 20-bit, 16-bit and
+  14-bit datapaths (default: 1, 0, 0). The 20-bit datapath can not be built
+  together with the 16-bit or 14-bit one.
+
+The adc_data width of each converter and the order of the samples in the DMA
+words depend on the build:
+
+.. list-table::
+   :widths: 40 20 40
+   :header-rows: 1
+
+   * - Build
+     - adc_data
+     - DMA words
+   * - ENABLE_20BIT
+     - 32 bits
+     - 64 bits: A B, each sample sign extended to 32 bits
+   * - ENABLE_16BIT and/or ENABLE_14BIT on NUM_LANES=1, or ENABLE_16BIT
+       only on NUM_LANES=2
+     - 16 bits
+     - 32 bits: A B
+   * - ENABLE_14BIT on NUM_LANES=2, with or without ENABLE_16BIT
+     - 32 bits, two samples
+     - 64 bits: A0 B0 A1 B1, each sample sign extended to 16 bits
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
