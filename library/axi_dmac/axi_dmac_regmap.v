@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -249,7 +249,7 @@ module axi_dmac_regmap #(
       9'h001: up_rdata <= ID;
       9'h002: up_rdata <= up_scratch;
       9'h003: up_rdata <= 32'h444d4143; // "DMAC"
-      9'h004: up_rdata <= {MAX_NUM_FRAMES[4:0]-1, DMA_2D_TLAST_MODE[0], USE_EXT_SYNC[0], AUTORUN[0],
+      9'h004: up_rdata <= {MAX_NUM_FRAMES[4:0]-5'd1, DMA_2D_TLAST_MODE[0], USE_EXT_SYNC[0], AUTORUN[0],
                            4'b0,BYTES_PER_BURST_WIDTH[3:0],
                            2'b0,DMA_TYPE_SRC[1:0],BYTES_PER_BEAT_WIDTH_SRC[3:0],
                            2'b0,DMA_TYPE_DEST[1:0],BYTES_PER_BEAT_WIDTH_DEST[3:0]};

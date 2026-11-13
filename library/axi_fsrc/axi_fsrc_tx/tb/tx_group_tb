@@ -13,4 +13,4 @@ SOURCE+=" ../../../util_cdc/sync_bits.v"
 SOURCE+=" ../../../util_cdc/sync_event.v"
 
 cd `dirname $0`
-source ../../../common/tb/run_tb.sh -g2005-sv
+source ../../../common/tb/run_tb.sh

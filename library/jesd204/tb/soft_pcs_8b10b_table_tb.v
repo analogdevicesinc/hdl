@@ -57,25 +57,37 @@ module soft_pcs_8b10b_table_tb;
   // for every possible 10-bit value that the decoder correctly reports the
   // not-in-table flag
 
-  reg [1023:0] valid_table = 'h00;
+  reg [1023:0] valid_table;
 
-  reg [8:0] counter = 10'h00;
+  reg [8:0] counter;
 
-  reg [7:0] encoder_char = 8'h00;
-  reg encoder_charisk = 1'b0;
-  reg encoder_disparity = 1'b0;
+  reg [7:0] encoder_char;
+  reg encoder_charisk;
+  reg encoder_disparity;
   wire [9:0] encoder_raw;
 
   wire [7:0] decoder_char;
   wire decoder_notintable;
   wire decoder_charisk;
-  reg [9:0] decoder_raw = 10'h00;
+  reg [9:0] decoder_raw;
 
-  reg build_k28 = 1'b0;
-  reg build_table = 1'b1;
+  reg build_k28;
+  reg build_table;
 
-  reg decoder_disparity = 1'b0;
+  reg decoder_disparity;
   wire decoder_disparity_s;
+
+  initial begin
+    valid_table = 'h00;
+    counter = 10'h00;
+    encoder_char = 8'h00;
+    encoder_charisk = 1'b0;
+    encoder_disparity = 1'b0;
+    decoder_raw = 10'h00;
+    build_k28 = 1'b0;
+    build_table = 1'b1;
+    decoder_disparity = 1'b0;
+  end
 
   always @(posedge clk) begin
     counter <= counter + 1'b1;

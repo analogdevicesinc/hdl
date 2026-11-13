@@ -57,7 +57,7 @@ module axi_jesd204_rx_regmap_tb;
   `include "tb_base.v"
 
   reg core_clk = 1'b0;
-  always @(*) #4 core_clk <= ~core_clk;
+  always #4 core_clk <= ~core_clk;
 
   wire s_axi_aclk = clk;
   wire s_axi_aresetn = ~reset;

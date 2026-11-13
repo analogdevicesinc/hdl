@@ -55,10 +55,10 @@ module soft_pcs_loopback_tb;
 
   `include "tb_base.v"
 
-  reg [7:0] tx_char = {3'd5,5'd28};
-  reg tx_charisk = 1'b1;
-  reg [8*DATA_PATH_WIDTH-1:0] tx_char_pcs = 'h00;
-  reg [DATA_PATH_WIDTH-1:0] tx_charisk_pcs = 'h00;
+  reg [7:0] tx_char;
+  reg tx_charisk;
+  reg [8*DATA_PATH_WIDTH-1:0] tx_char_pcs;
+  reg [DATA_PATH_WIDTH-1:0] tx_charisk_pcs;
 
   wire [7:0] rx_char;
   wire rx_charisk;
@@ -68,17 +68,31 @@ module soft_pcs_loopback_tb;
   wire [DATA_PATH_WIDTH-1:0] rx_charisk_pcs;
   wire [DATA_PATH_WIDTH-1:0] rx_notintable_pcs;
   wire [DATA_PATH_WIDTH-1:0] rx_disperr_pcs;
-  reg rx_pattern_align_en = 1'b1;
+  reg rx_pattern_align_en;
 
   wire [10*DATA_PATH_WIDTH-1:0] data_aligned;
   wire [10*DATA_PATH_WIDTH+9:0] data_aligned_full;
-  reg [8:0] data_aligned_d1 = 'h00;
-  reg [10*DATA_PATH_WIDTH-1:0] data_unaligned = 'h00;
-  reg [3:0] bitshift = 'h00;
+  reg [8:0] data_aligned_d1;
+  reg [10*DATA_PATH_WIDTH-1:0] data_unaligned;
+  reg [3:0] bitshift;
 
-  integer clk_div = 0;
-  wire pcs_clk = clk_div < DATA_PATH_WIDTH / 2 ? 1'b1 : 1'b0;
-  reg pcs_reset = 1'b1;
+  integer clk_div;
+  reg pcs_clk;
+  reg pcs_reset;
+
+  initial begin
+    tx_char = {3'd5,5'd28};
+    tx_charisk = 1'b1;
+    tx_char_pcs = 'h00;
+    tx_charisk_pcs = 'h00;
+    rx_pattern_align_en = 1'b1;
+    data_aligned_d1 = 'h00;
+    data_unaligned = 'h00;
+    bitshift = 'h00;
+    clk_div = 0;
+    pcs_clk = clk_div < DATA_PATH_WIDTH / 2 ? 1'b1 : 1'b0;
+    pcs_reset = 1'b1;
+  end
 
   always @(posedge pcs_clk) begin
     pcs_reset <= 1'b0;

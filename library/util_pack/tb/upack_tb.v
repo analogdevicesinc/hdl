@@ -61,9 +61,8 @@ module upack_tb;
   reg [NUM_OF_PORTS*SAMPLE_DATA_WIDTH-1:0] s_axis_data = 'h00;
 
   reg [NUM_OF_CHANNELS-1:0] enable = 'h1;
-  reg [NUM_OF_CHANNELS-1:0] next_enable = 'h1;
 
-  integer counter;
+  integer counter = 'd0;
 
   always @(*) begin
     if (counter == DATA_PHASES_PER_ENABLE_SETTING) do_trigger_reset();

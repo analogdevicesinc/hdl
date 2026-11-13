@@ -55,9 +55,8 @@ module cpack_tb;
   reg [NUM_OF_PORTS*8-1:0] expected_packed_fifo_wr_data;
 
   reg [NUM_OF_CHANNELS-1:0] enable = 'h1;
-  reg [NUM_OF_CHANNELS-1:0] next_enable = 'h1;
 
-  integer counter;
+  integer counter = 'd0;
 
   always @(*) begin
     if (counter == 15) do_trigger_reset();

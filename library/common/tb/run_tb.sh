@@ -1,5 +1,5 @@
 ##############################################################################
-## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: BSD-1-Clause
 ##############################################################################
 
@@ -10,7 +10,7 @@ if [[ -z ${MODE+x} ]] || [[ ! "$MODE" =~ "batch" ]]; then MODE="gui";fi
 MODE="-"${MODE##*-} #remove any eventual extra dashes
 
 case "$SIMULATOR" in
-	modelsim)
+	modelsim|questasim)
   		# ModelSim flow
   		vlib work
   		vlog ${SOURCE} || exit 1
@@ -19,7 +19,7 @@ case "$SIMULATOR" in
 
 	xsim)
 		# XSim flow
-		xvlog -log ${NAME}_xvlog.log --sourcelibdir . ${SOURCE} || exit 1
+		xvlog -sv -log ${NAME}_xvlog.log --sourcelibdir . ${SOURCE} || exit 1
 		xelab -log ${NAME}_xelab.log -debug all ${NAME} || exit 1
 		if [[ "$MODE" == "-gui" ]]; then
 			echo "log_wave -r *" > xsim_gui_cmd.tcl
@@ -37,13 +37,10 @@ case "$SIMULATOR" in
 		xmsim ${NAME} -gui || exit 1
 		;;
 
-	*)
+	icarus)
 		#Icarus flow is the default
-		mkdir -p run
-		mkdir -p vcd
-		iverilog -o run/run_${NAME} -I.. ${SOURCE} $1 || exit 1
-		cd vcd
-		../run/run_${NAME}
+		iverilog -g2005-sv -o run_${NAME} -I.. ${SOURCE} || exit 1
+		./run_${NAME}
 		;;
 esac
 
