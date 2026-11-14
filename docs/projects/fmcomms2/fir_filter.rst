@@ -13,7 +13,7 @@ decimate and interpolate the incoming and outcoming data stream.
 
    This example was built using the HDL main branch, using Vivado and
    Vitis 2025.1. For the hdl_2023_r2 branch with Vivado 2023.2, use the
-   :git-hdl:`fir_filter_2023.tcl <hdl_2023_r2:projects/fmcomms2/zc706/fir_filter_2023.tcl>`
+   :git-hdl:`fir_filter_2023.tcl <hdl_2023_fir_filter:projects/fmcomms2/fir_filter_2023.tcl>`
    script which replaces ``inline_hdl`` IP types
    (``ilslice``, ``ilconcat``) with their standard equivalents
    (``xlslice``, ``xlconcat``).
@@ -560,7 +560,7 @@ Older sources
 -------------------------------------------------------------------------------
 
 - For the hdl_2023_r2 branch with Vivado 2023.2, use the
-  :git-hdl:`fir_filter_2023.tcl <hdl_2023_r2:projects/fmcomms2/zc706/fir_filter_2023.tcl>`
+  :git-hdl:`fir_filter_2023.tcl <hdl_2023_fir_filter:projects/fmcomms2/fir_filter_2023.tcl>`
   script, which replaces ``inline_hdl`` IP types with standard equivalents.
 - Sources from older examples can be found under the tag
   `eg_fmcomms2_fir_filter`_ using Vivado 16.2 and 16.4 versions, and

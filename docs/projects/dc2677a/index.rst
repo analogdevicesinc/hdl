@@ -38,7 +38,7 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-- :intel:`C5SoC <content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html>` (Cyclone V SoC)
+- `C5SoC <https://www.altera.com/products/devkit/po-3010/cyclone-v-sx-soc-development-kit>`__ (Cyclone V SoC)
   HSMC
 
 Block design

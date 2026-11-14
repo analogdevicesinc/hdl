@@ -58,8 +58,8 @@ Supported devices
 - :adi:`AD7961`
 - :adi:`ADR3412`
 - :adi:`ADR4520`
-- :adi:`AD74540`
-- :adi:`AD4550`
+- :adi:`ADR4540 <en/products/adr4540.html>`
+- :adi:`ADR4550 <en/products/adr4550.html>`
 - :adi:`AD8031`
 - :adi:`ADA4899-1`
 - :adi:`ADA4897-1`

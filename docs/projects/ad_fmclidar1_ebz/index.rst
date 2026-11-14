@@ -28,7 +28,7 @@ Supported carriers
 
 - :xilinx:`ZC706` on FMC HPC
 - :xilinx:`ZCU102` on on FMC HPC0
-- :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>` on FMC HPC
+- `A10SoC <https://www.altera.com/products/devkit/po-3006/arria-10-sx-soc-development-kit>`__ on FMC HPC
 
 .. important::
 
