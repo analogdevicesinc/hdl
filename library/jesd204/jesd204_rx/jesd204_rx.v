@@ -573,7 +573,7 @@ module jesd204_rx #(
         // channels. Keeping one instance per channel would help with timing.
         (* dont_touch = "yes" *) reg err_statistics_reset_64b;
         (* dont_touch = "yes" *) reg event_data_phase_int = 1'b0;
-        (* dont_touch = "yes" *) reg cfg_beats_per_multiframe_r;
+        (* dont_touch = "yes" *) reg [7:0] cfg_beats_per_multiframe_r;
 
         wire [7:0] status_lane_skew;
         wire all_buffer_ready_n_d;
