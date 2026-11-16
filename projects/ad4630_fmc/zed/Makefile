@@ -13,6 +13,7 @@ M_DEPS += system_constr_2sdi_2ch.xdc
 M_DEPS += system_constr_4sdi_1ch.xdc
 M_DEPS += system_constr_4sdi_2ch.xdc
 M_DEPS += system_constr_8sdi_2ch.xdc
+M_DEPS += system_constr_busy_clk.xdc
 
 M_DEPS += ../common/ad463x_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
@@ -24,7 +25,6 @@ M_DEPS += ../../../library/spi_engine/scripts/spi_engine.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_edge_detect.v
 
-LIB_DEPS += ad463x_data_capture
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx

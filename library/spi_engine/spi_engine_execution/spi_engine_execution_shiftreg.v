@@ -41,7 +41,9 @@ module spi_engine_execution_shiftreg #(
   parameter DATA_WIDTH = 8,
   parameter NUM_OF_SDIO = 1,
   parameter [1:0] SDI_DELAY = 2'b00,
-  parameter ECHO_SCLK = 0
+  parameter ECHO_SCLK = 0,
+  parameter DDR_EN = 0,
+  parameter FPGA_TECHNOLOGY = 0
 ) (
   input   clk,
   input   resetn,
@@ -71,10 +73,12 @@ module spi_engine_execution_shiftreg #(
   input           exec_sdo_lane_cmd,
   input           sdo_idle_state,
   input   [ 7:0]  left_aligned,
-  input   [ 7:0]  word_length,
   input   [ 7:0]  last_bit_count,
-  input   [ 7:0]  latch_last_bit_count,
+  input   [ 7:0]  ddr_last_bit_count,
   input   [ 7:0]  sdo_lane_mask,
+
+  input           ddr_en,
+  input           sdi_negedge,
 
   // timing from main fsm
   output      sdo_io_ready,
@@ -88,10 +92,14 @@ module spi_engine_execution_shiftreg #(
 
   reg [             7:0] sdi_counter    = 8'b0;
   reg [   SDI_DELAY+1:0] trigger_rx_d   = {(SDI_DELAY+2){1'b0}};
-  wire  data_sdo_v; //data_sdo_v == existence of valid data
+  reg [   SDI_DELAY+1:0] trigger_tx_d   = {(SDI_DELAY+2){1'b0}};
+  wire data_sdo_v; //data_sdo_v == existence of valid data
   wire sdo_toshiftreg; //it is using the valid data for shifting in this cycle
   wire last_sdi_bit;
   wire trigger_rx_s;
+  wire trigger_tx_s;
+  wire trigger_sdi;
+  wire trigger_sdo;
   wire index_ready;
   wire sdo_data_ready_int;
   wire data_ready_out;
@@ -130,7 +138,7 @@ module spi_engine_execution_shiftreg #(
     .word_ready       (data_ready_out),
     .word_ready_aligned (data_sdo_v));
 
-  genvar i;
+  genvar i, j;
   generate
     for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin: g_sdo_shift_reg
       // Load the SDO parallel data into the SDO shift register.
@@ -138,8 +146,8 @@ module spi_engine_execution_shiftreg #(
       always @(posedge clk) begin
         if (!sdo_enabled || !exec_cmd) begin
           data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
-        end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
-          if (first_bit == 1'b1) begin
+        end else if (transfer_active == 1'b1 && trigger_sdo == 1'b1) begin
+          if (first_bit == 1'b1 && trigger_tx == 1'b1) begin
             data_sdo_shift <= sdo_lane_mask[i] ? aligned_sdo_data[i * DATA_WIDTH+:DATA_WIDTH] : {DATA_WIDTH{sdo_idle_state}};
           end else begin
             data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
@@ -163,6 +171,13 @@ module spi_engine_execution_shiftreg #(
   end
   assign trigger_rx_s = trigger_rx_d[SDI_DELAY+1];
 
+  always @(posedge clk) begin
+    trigger_tx_d <= {trigger_tx_d, trigger_tx};
+  end
+  assign trigger_tx_s = trigger_tx_d[SDI_DELAY+1];
+  assign trigger_sdi = trigger_rx_s || (ddr_en && trigger_tx_s);
+  assign trigger_sdo = trigger_tx || (ddr_en && trigger_rx);
+
   // Load the serial data into SDI shift register(s), then link it to the output
   // register of the module
   // NOTE: ECHO_SCLK mode can be used when the SCLK line is looped back to the FPGA
@@ -172,84 +187,109 @@ module spi_engine_execution_shiftreg #(
   // used to latch the MISO lines, improving the overall timing margin of the
   // interface.
 
-  // NOTE: SPI configuration (CPOL/PHA) is only hardware configurable at this point, unless ECHO_SCLK=0
   generate
   if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
 
-    reg last_sdi_bit_r;
-    reg latch_sdi;
-    reg [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_latch = {(NUM_OF_SDIO * DATA_WIDTH){1'b0}};
+    wire last_sdi_bit_r;
+    wire [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_data_latch;
 
-    if ((DEFAULT_SPI_CFG[1:0] == 2'b01) || (DEFAULT_SPI_CFG[1:0] == 2'b10)) begin : g_echo_miso_nshift_reg
+    wire [7:0] last_target = ddr_en ? ddr_last_bit_count : last_bit_count;
 
-      // MISO shift register runs on negative echo_sclk
-      for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
-        reg [DATA_WIDTH-1:0] data_sdi_shift;
+    reg last_sdi_bit_p;
+    reg [7:0] sdi_counter_p = 8'b0;
 
-        always @(negedge echo_sclk or posedge cs_activate) begin
-          if (cs_activate) begin
-            data_sdi_shift <= 0;
-          end else begin
-            data_sdi_shift <= {data_sdi_shift, sdi[i]};
-          end
-        end
+    always @(posedge echo_sclk or posedge cs_activate) begin
+      if (cs_activate) begin
+        sdi_counter_p  <= 8'b0;
+        last_sdi_bit_p <= 1'b0;
+      end else begin
+        last_sdi_bit_p <= (sdi_counter_p == last_target);
+        sdi_counter_p  <= (sdi_counter_p == last_target) ? 8'b0 : sdi_counter_p + 1'b1;
+      end
+    end
 
-        // intended LATCH
-        always @(negedge echo_sclk) begin
-          if (latch_sdi)
-            sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
-        end
+    reg last_sdi_bit_n;
+    reg [7:0] sdi_counter_n = 8'b0;
+
+    always @(negedge echo_sclk or posedge cs_activate) begin
+      if (cs_activate) begin
+        sdi_counter_n  <= 8'b0;
+        last_sdi_bit_n <= 1'b0;
+      end else begin
+        last_sdi_bit_n <= (sdi_counter_n == last_target);
+        sdi_counter_n  <= (sdi_counter_n == last_target) ? 8'b0 : sdi_counter_n + 1'b1;
+      end
+    end
+
+    wire last_sdi_leading  = sdi_negedge ? last_sdi_bit_n : last_sdi_bit_p;
+    wire last_sdi_trailing = sdi_negedge ? last_sdi_bit_p : last_sdi_bit_n;
+    assign last_sdi_bit_r = ddr_en ? last_sdi_trailing : last_sdi_leading;
+
+    for (i = 0; i < NUM_OF_SDIO; i = i + 1) begin : g_sdi_shift_reg
+
+      // IDDR captures DDR input at the IOB (OPPOSITE_EDGE mode).
+      // When DDR_EN=0, pass raw sdi through.
+      wire sdi_cap_p, sdi_cap_n;
+      if (DDR_EN) begin : g_iddr
+        ad_iddr #(
+          .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)
+        ) i_iddr (
+          .clk     (echo_sclk),
+          .rst     (cs_activate),
+          .data_in (sdi[i]),
+          .data_p  (sdi_cap_p),
+          .data_n  (sdi_cap_n));
+      end else begin : g_no_iddr
+        assign sdi_cap_p = sdi[i];
+        assign sdi_cap_n = sdi[i];
       end
 
-      always @(negedge echo_sclk or posedge cs_activate) begin
-        if (cs_activate) begin
-          sdi_counter     <= 8'b0;
-          last_sdi_bit_r  <= 1'b0;
-          latch_sdi       <= 1'b0;
-        end else begin
-          // these paths would be unsafe it there wasn't a guarantee of some settling time between word_length changing and a transfer starting
-          latch_sdi       <= (sdi_counter == latch_last_bit_count);
-          last_sdi_bit_r  <= (sdi_counter == last_bit_count);
-          sdi_counter     <= (sdi_counter == last_bit_count) ? 8'b0 : sdi_counter + 1'b1;
-        end
-      end
-
-    end else begin : g_echo_miso_pshift_reg
-
-      // MISO shift register runs on positive echo_sclk
-      for (i=0; i<NUM_OF_SDIO; i=i+1) begin: g_sdi_shift_reg
-        reg [DATA_WIDTH-1:0] data_sdi_shift;
-        always @(posedge echo_sclk or posedge cs_activate) begin
-          if (cs_activate) begin
-            data_sdi_shift <= 0;
-          end else begin
-            data_sdi_shift <= {data_sdi_shift, sdi[i]};
-          end
-        end
-        // intended LATCH
-        always @(posedge echo_sclk) begin
-          if (latch_sdi)
-            sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
-        end
-      end
-
+      reg [DATA_WIDTH-1:0] data_shift_sdr_p;
+      reg [DATA_WIDTH-1:0] data_shift_ddr_p;
       always @(posedge echo_sclk or posedge cs_activate) begin
         if (cs_activate) begin
-          sdi_counter     <= 8'b0;
-          last_sdi_bit_r  <= 1'b0;
-          latch_sdi       <= 1'b0;
+          data_shift_sdr_p <= 0;
+          data_shift_ddr_p <= 0;
         end else begin
-          // these paths would be unsafe it there wasn't a guarantee of some settling time between word_length changing and a transfer starting
-          latch_sdi       <= (sdi_counter == latch_last_bit_count);
-          last_sdi_bit_r  <= (sdi_counter == last_bit_count);
-          sdi_counter     <= (sdi_counter == last_bit_count) ? 8'b0 : sdi_counter + 1'b1;
+          data_shift_sdr_p <= {data_shift_sdr_p, sdi[i]};
+          data_shift_ddr_p <= {data_shift_ddr_p, sdi_cap_p};
         end
+      end
+
+      reg [DATA_WIDTH-1:0] data_shift_sdr_n;
+      reg [DATA_WIDTH-1:0] data_shift_ddr_n;
+      always @(negedge echo_sclk or posedge cs_activate) begin
+        if (cs_activate) begin
+          data_shift_sdr_n <= 0;
+          data_shift_ddr_n <= 0;
+        end else begin
+          data_shift_sdr_n <= {data_shift_sdr_n, sdi[i]};
+          data_shift_ddr_n <= {data_shift_ddr_n, sdi_cap_n};
+        end
+      end
+
+      wire [DATA_WIDTH-1:0] sdr_data = sdi_negedge ? data_shift_sdr_n : data_shift_sdr_p;
+
+      if (DDR_EN) begin : g_ddr_il
+        wire [DATA_WIDTH/2-1:0] extended_p = {data_shift_ddr_p[DATA_WIDTH/2-2:0], sdi_cap_p};
+        wire [DATA_WIDTH/2-1:0] extended_n = {data_shift_ddr_n[DATA_WIDTH/2-2:0], sdi_cap_n};
+
+        wire [DATA_WIDTH/2-1:0] leading  = sdi_negedge ? extended_p : extended_n;
+        wire [DATA_WIDTH/2-1:0] trailing = sdi_negedge ? extended_n : extended_p;
+
+        wire [DATA_WIDTH-1:0] interleaved;
+        for (j = 0; j < DATA_WIDTH/2; j = j + 1) begin : g_interleave
+          assign interleaved[j*2]   = leading[j];
+          assign interleaved[j*2+1] = trailing[j];
+        end
+        assign sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] = ddr_en ? interleaved : sdr_data;
+      end else begin : g_sdr_il
+        assign sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] = sdr_data;
       end
 
     end
 
-    // sdi_data_valid is synchronous to SPI clock, so synchronize the
-    // last_sdi_bit to SPI clock
+    // Synchronize last_sdi_bit to SPI clock domain
 
     reg [3:0] last_sdi_bit_m = 4'b0;
     always @(posedge clk) begin
@@ -262,7 +302,7 @@ module spi_engine_execution_shiftreg #(
 
     assign sdi_data = sdi_data_latch;
     assign last_sdi_bit = last_sdi_bit_r;
-    assign echo_last_bit =  !last_sdi_bit_m[3] && last_sdi_bit_m[2];
+    assign echo_last_bit = !last_sdi_bit_m[3] && last_sdi_bit_m[2];
 
     always @(posedge clk) begin
       if (sdi_enabled == 1'b1 && echo_last_bit) begin
@@ -284,7 +324,7 @@ module spi_engine_execution_shiftreg #(
         if (cs_activate) begin
           data_sdi_shift <= 0;
         end else begin
-          if (trigger_rx_s == 1'b1) begin
+          if (trigger_sdi == 1'b1) begin
             data_sdi_shift <= {data_sdi_shift, sdi[i]};
           end
         end
@@ -299,7 +339,7 @@ module spi_engine_execution_shiftreg #(
       if (resetn == 1'b0) begin
         sdi_counter <= 8'b0;
       end else begin
-        if (trigger_rx_s == 1'b1) begin
+        if (trigger_sdi == 1'b1) begin
           sdi_counter <= last_sdi_bit ? 8'b0 : sdi_counter + 1'b1;
         end
       end
@@ -308,7 +348,7 @@ module spi_engine_execution_shiftreg #(
     always @(posedge clk) begin
       if (resetn == 1'b0)
         sdi_data_valid <= 1'b0;
-      else if (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_rx_s == 1'b1)
+      else if (sdi_enabled == 1'b1 && last_sdi_bit == 1'b1 && trigger_sdi == 1'b1)
         sdi_data_valid <= 1'b1;
       else if (sdi_data_ready == 1'b1)
         sdi_data_valid <= 1'b0;
