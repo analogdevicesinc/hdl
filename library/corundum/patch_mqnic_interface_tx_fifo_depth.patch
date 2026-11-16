@@ -1,0 +1,13 @@
+diff --git a/fpga/common/rtl/mqnic_interface.v b/fpga/common/rtl/mqnic_interface.v
+index 5426cfd4..3bd43706 100644
+--- a/fpga/common/rtl/mqnic_interface.v
++++ b/fpga/common/rtl/mqnic_interface.v
+@@ -3064,7 +3064,7 @@ wire [PORTS-1:0] axis_if_tx_fifo_tlast;
+ wire [PORTS*AXIS_IF_TX_ID_WIDTH-1:0] axis_if_tx_fifo_tid;
+ wire [PORTS*AXIS_IF_TX_USER_WIDTH-1:0] axis_if_tx_fifo_tuser;
+ 
+-wire [RX_FIFO_DEPTH_WIDTH*PORTS-1:0]  tx_fifo_status_depth;
++wire [TX_FIFO_DEPTH_WIDTH*PORTS-1:0]  tx_fifo_status_depth;
+ 
+ if (APP_AXIS_IF_ENABLE) begin
+ 

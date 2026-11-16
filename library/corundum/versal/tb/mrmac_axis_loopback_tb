@@ -1,0 +1,10 @@
+#!/bin/bash
+
+C=../../../../../corundum/fpga
+SOURCE="mrmac_axis_loopback_tb.v ../mrmac_axis_loopback.v $C/lib/axis/rtl/axis_fifo.v $C/lib/axis/rtl/axis_register.v"
+
+if [[ -n "$TB_4X25G" ]]; then SOURCE+=" -d MODE_4X25G"; fi
+if [[ -n "$TB_1X40G" ]]; then SOURCE+=" -d MODE_1X40G"; fi
+
+cd `dirname $0`
+source ../../../common/tb/run_tb.sh

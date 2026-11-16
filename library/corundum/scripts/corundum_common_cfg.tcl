@@ -205,11 +205,11 @@ if { ![info exists STAT_ID_WIDTH] } { set STAT_ID_WIDTH 12 }
 
 # Application-Corundum core interfacing configuration
 if { ![info exists DMA_ADDR_WIDTH] } { set DMA_ADDR_WIDTH $AXI_ADDR_WIDTH }
-if { ![info exists RAM_SEL_WIDTH] } { set RAM_SEL_WIDTH [expr int(ceil(log($IF_COUNT + ( $APP_ENABLE && $APP_DMA_ENABLE ? 1 : 0 )))) + 2] }
+if { ![info exists RAM_SEL_WIDTH] } { set RAM_SEL_WIDTH [expr int(ceil(log($IF_COUNT + ( $APP_ENABLE && $APP_DMA_ENABLE ? 1 : 0 )) / log(2))) + 2] }
 if { ![info exists RAM_SEG_COUNT] } { set RAM_SEG_COUNT 2 }
 if { ![info exists RAM_SEG_DATA_WIDTH] } { set RAM_SEG_DATA_WIDTH $AXI_DATA_WIDTH }
 if { ![info exists RAM_SEG_BE_WIDTH] } { set RAM_SEG_BE_WIDTH [expr $RAM_SEG_DATA_WIDTH / 8] }
-if { ![info exists RAM_SEG_ADDR_WIDTH] } { set RAM_SEG_ADDR_WIDTH [expr $RAM_ADDR_WIDTH - int(ceil(log(2 * $RAM_SEG_BE_WIDTH)))] }
+if { ![info exists RAM_SEG_ADDR_WIDTH] } { set RAM_SEG_ADDR_WIDTH [expr $RAM_ADDR_WIDTH - int(ceil(log(2 * $RAM_SEG_BE_WIDTH) / log(2)))] }
 if { ![info exists AXIS_SYNC_KEEP_WIDTH] } { set AXIS_SYNC_KEEP_WIDTH [expr $AXIS_SYNC_DATA_WIDTH / ($AXIS_DATA_WIDTH / $AXIS_KEEP_WIDTH)] }
 if { ![info exists AXIS_SYNC_TX_USER_WIDTH] } { set AXIS_SYNC_TX_USER_WIDTH $AXIS_TX_USER_WIDTH }
 if { ![info exists AXIS_SYNC_RX_USER_WIDTH] } { set AXIS_SYNC_RX_USER_WIDTH $AXIS_RX_USER_WIDTH }
