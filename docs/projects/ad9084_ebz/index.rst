@@ -57,7 +57,7 @@ Supported carriers
      - FMC slot
      - Maximum number of lanes
    * - :adi:`AD9084-EBZ <EVAL-AD9084>`
-     - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
+     - `FM87 <https://www.altera.com/products/devkit/po-3248/agilex-7-fpga-i-series-transceiver-soc-development-kit-4x-f-tile>`__
      - FMCB
      - 16 (8 per Apollo side)
    * -

@@ -48,7 +48,7 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-- :intel:`S10SoC <content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`
+- `S10SoC <https://www.altera.com/products/devkit/po-3031/stratix-10-sx-soc-development-kit>`__
 
 Block design
 -------------------------------------------------------------------------------

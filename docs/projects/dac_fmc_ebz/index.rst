@@ -566,4 +566,4 @@ Software related
 
 .. include:: ../common/support.rst
 
-.. _A10SoC: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html
+.. _A10SoC: https://www.altera.com/products/devkit/po-3006/arria-10-sx-soc-development-kit
