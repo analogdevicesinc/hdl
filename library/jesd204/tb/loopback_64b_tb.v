@@ -164,6 +164,7 @@ module loopback_64b_tb;
   wire tx_cfg_skip_ilas;
   wire [7:0] tx_cfg_mframes_per_ilas;
   wire tx_cfg_disable_char_replacement;
+  wire [1:0] tx_cfg_header_mode;
   wire tx_cfg_disable_scrambler;
 
   wire tx_ilas_config_rd;
@@ -191,6 +192,7 @@ module loopback_64b_tb;
     .cfg_skip_ilas(tx_cfg_skip_ilas),
     .cfg_mframes_per_ilas(tx_cfg_mframes_per_ilas),
     .cfg_disable_char_replacement(tx_cfg_disable_char_replacement),
+    .cfg_header_mode(tx_cfg_header_mode),
     .cfg_disable_scrambler(tx_cfg_disable_scrambler),
 
     .device_cfg_octets_per_multiframe(tx_device_cfg_octets_per_multiframe),
@@ -246,6 +248,7 @@ module loopback_64b_tb;
     .cfg_skip_ilas(tx_cfg_skip_ilas),
     .cfg_mframes_per_ilas(tx_cfg_mframes_per_ilas),
     .cfg_disable_char_replacement(tx_cfg_disable_char_replacement),
+    .cfg_header_mode(tx_cfg_header_mode),
     .cfg_disable_scrambler(tx_cfg_disable_scrambler),
 
     .device_cfg_octets_per_multiframe(tx_device_cfg_octets_per_multiframe),
