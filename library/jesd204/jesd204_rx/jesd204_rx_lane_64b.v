@@ -99,6 +99,8 @@ module jesd204_rx_lane_64b #(
 
   reg         emb_lock_r = 1'b0;
 
+  (* dont_touch = "yes" *) reg [7:0] cfg_beats_per_multiframe_r;
+
   wire [63:0] phy_data_r;
   wire [11:0] crc12_received_r;
   wire [63:0] data_descrambled_s;
@@ -133,6 +135,10 @@ module jesd204_rx_lane_64b #(
 
   wire [7:0]  sh_count;
 
+  always @(posedge clk) begin
+    cfg_beats_per_multiframe_r <= cfg_beats_per_multiframe;
+  end
+
   jesd204_rx_header #(
     .ENABLE_FEC (ENABLE_FEC)
   ) i_rx_header (
@@ -144,7 +150,7 @@ module jesd204_rx_lane_64b #(
 
     .cfg_header_mode(cfg_header_mode),
     .cfg_rx_thresh_emb_err(cfg_rx_thresh_emb_err),
-    .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
+    .cfg_beats_per_multiframe(cfg_beats_per_multiframe_r),
 
     .emb_lock(emb_lock),
 
@@ -305,10 +311,10 @@ module jesd204_rx_lane_64b #(
   // Beat on which the aggregated ready status of all the lanes is evaluated.
   // ALL_BUFFER_READY_DELAY compensates for the pipeline stages on the
   // all_buffer_ready_n input, keeping the evaluated value the one from the half
-  // multiblock beat. sh_count wraps at cfg_beats_per_multiframe (= E*32-1) and
+  // multiblock beat. sh_count wraps at cfg_beats_per_multiframe_r (= E*32-1) and
   // eoemb is expected on sh_count 0, so as long as the delay stays well below
   // half a multiblock this cannot collide with either boundary.
-  wire [7:0] buffer_abort_beat = {1'b0,cfg_beats_per_multiframe[7:1]} +
+  wire [7:0] buffer_abort_beat = {1'b0,cfg_beats_per_multiframe_r[7:1]} +
                                  ALL_BUFFER_READY_DELAY;
 
   // Control when data is written to the elastic buffer
