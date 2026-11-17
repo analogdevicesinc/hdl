@@ -156,7 +156,6 @@ module axi_spi_engine #(
   wire sdo_fifo_in_ready;
   wire sdo_fifo_in_valid;
 
-  wire [31:0] sdi_fifo_level;
   reg  [NUM_OF_SDIO*DATA_WIDTH/8-1:0] sdi_fifo_tkeep_int;
   wire [NUM_OF_SDIO*DATA_WIDTH/8-1:0] sdi_fifo_tkeep;
   wire sdi_fifo_almost_full;
@@ -500,13 +499,40 @@ module axi_spi_engine #(
     end
   end
 
+  wire                                  sdi_slice_data_ready;
+  wire                                  sdi_slice_data_valid;
+  wire [(NUM_OF_SDIO * DATA_WIDTH)-1:0] sdi_slice_data;
+  wire [NUM_OF_SDIO*DATA_WIDTH/8-1:0]   sdi_slice_fifo_tkeep;
+
+  util_axis_fifo #(
+    .DATA_WIDTH(NUM_OF_SDIO * DATA_WIDTH),
+    .ADDRESS_WIDTH(1),
+    .ASYNC_CLK(0),
+    .M_AXIS_REGISTERED(1),
+    .TLAST_EN(0),
+    .TKEEP_EN(1)
+  ) i_sdi_fifo_slice_reg (
+    .s_axis_aclk(spi_clk),
+    .s_axis_aresetn(spi_resetn),
+    .s_axis_ready(sdi_data_ready),
+    .s_axis_valid(sdi_data_valid),
+    .s_axis_data(sdi_data),
+    .s_axis_tkeep(sdi_fifo_tkeep),
+
+    .m_axis_aclk(spi_clk),
+    .m_axis_aresetn(spi_resetn),
+    .m_axis_ready(sdi_slice_data_ready),
+    .m_axis_valid(sdi_slice_data_valid),
+    .m_axis_data(sdi_slice_data),
+    .m_axis_tkeep(sdi_slice_fifo_tkeep));
+
   util_axis_fifo_asym #(
     .ASYNC_CLK(ASYNC_SPI_CLK),
     .S_DATA_WIDTH(NUM_OF_SDIO * DATA_WIDTH),
     .M_DATA_WIDTH(DATA_WIDTH),
     .ADDRESS_WIDTH(SDI_FIFO_ADDRESS_WIDTH),
     .M_AXIS_REGISTERED(0),
-    .ALMOST_EMPTY_THRESHOLD(1),
+    .ALMOST_EMPTY_THRESHOLD(2),
     .ALMOST_FULL_THRESHOLD(31),
     .TLAST_EN(0),
     .TKEEP_EN(1),
@@ -514,12 +540,12 @@ module axi_spi_engine #(
   ) i_sdi_fifo(
     .s_axis_aclk(spi_clk),
     .s_axis_aresetn(spi_resetn),
-    .s_axis_ready(sdi_data_ready),
-    .s_axis_valid(sdi_data_valid),
-    .s_axis_data(sdi_data),
+    .s_axis_ready(sdi_slice_data_ready),
+    .s_axis_valid(sdi_slice_data_valid),
+    .s_axis_data(sdi_slice_data),
     .s_axis_room(),
     .s_axis_tlast(),
-    .s_axis_tkeep(sdi_fifo_tkeep),
+    .s_axis_tkeep(sdi_slice_fifo_tkeep),
     .s_axis_full(),
     .s_axis_almost_full(sdi_fifo_almost_full),
     .m_axis_aclk(clk),
@@ -529,7 +555,7 @@ module axi_spi_engine #(
     .m_axis_data(sdi_fifo_out_data),
     .m_axis_tlast(),
     .m_axis_tkeep(),
-    .m_axis_level(sdi_fifo_level),
+    .m_axis_level(),
     .m_axis_empty(),
     .m_axis_almost_empty());
 
