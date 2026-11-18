@@ -196,10 +196,6 @@ module jesd204_rx #(
 
   wire [NUM_LANES-1:0]   buffer_ready_n;
   wire                   all_buffer_ready_n;
-  wire                   all_buffer_ready_n_1;
-  wire                   all_buffer_ready_n_2;
-  wire                   all_buffer_ready_n_3;
-  wire                   all_buffer_ready_n_4;
   wire                   dev_all_buffer_ready_n;
 
   wire [NUM_LANES-1:0]   phy_block_sync_r;
@@ -228,10 +224,19 @@ module jesd204_rx #(
 
   assign all_buffer_ready_n = |(buffer_ready_n);
 
-  assign all_buffer_ready_n_1 = |(buffer_ready_n[QUARTER_NO_OF_LANES-1:0]);
-  assign all_buffer_ready_n_2 = |(buffer_ready_n[HALF_NO_OF_LANES-1:QUARTER_NO_OF_LANES]);
-  assign all_buffer_ready_n_3 = |(buffer_ready_n[HALF_NO_OF_LANES+QUARTER_NO_OF_LANES-1:HALF_NO_OF_LANES]);
-  assign all_buffer_ready_n_4 = |(buffer_ready_n[NUM_LANES-1:HALF_NO_OF_LANES+QUARTER_NO_OF_LANES]);
+  generate
+    if (NUM_LANES >= 4) begin
+      wire all_buffer_ready_n_1;
+      wire all_buffer_ready_n_2;
+      wire all_buffer_ready_n_3;
+      wire all_buffer_ready_n_4;
+
+      assign all_buffer_ready_n_1 = |(buffer_ready_n[QUARTER_NO_OF_LANES-1:0]);
+      assign all_buffer_ready_n_2 = |(buffer_ready_n[HALF_NO_OF_LANES-1:QUARTER_NO_OF_LANES]);
+      assign all_buffer_ready_n_3 = |(buffer_ready_n[HALF_NO_OF_LANES+QUARTER_NO_OF_LANES-1:HALF_NO_OF_LANES]);
+      assign all_buffer_ready_n_4 = |(buffer_ready_n[NUM_LANES-1:HALF_NO_OF_LANES+QUARTER_NO_OF_LANES]);
+    end
+  endgenerate
 
   sync_bits #(
     .NUM_OF_BITS (1),
@@ -533,7 +538,12 @@ module jesd204_rx #(
       wire [NUM_LANES-1:0] emb_lock;
       wire link_buffer_release_n;
 
-      wire [1:0] all_buffer_ready_n_d;
+      // If we have 4 or more lanes in the design, we will use the 2 lsbits of
+      // all_buffer_ready_n_d for all the lanes (i.e. one bit for half of the lanes), to
+      // reduce upstream fanout and thus improve timing.
+      // Otherwise, if we have less than 4 lanes in the design, each lane will have its
+      // own bit of all_buffer_ready_n_d.
+      wire [NUM_LANES-1:0] all_buffer_ready_n_d;
 
       sync_bits #(
         .NUM_OF_BITS (1),
@@ -582,6 +592,10 @@ module jesd204_rx #(
         wire [HW-1:0] phy_header_r;
         wire [ODW-1:0] rx_data_s;
 
+        // This is used just to connect the correct all_buffer_ready_n_d bit to
+        // the current lane.
+        wire all_buffer_ready_n_d_lane;
+
         (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
           .WIDTH(1 + HW + DW),
           .REGISTERED(NUM_INPUT_PIPELINE)
@@ -598,45 +612,66 @@ module jesd204_rx #(
             phy_block_sync_r[i]
           }));
 
-        if ((i == 0) || (i == HALF_NO_OF_LANES)) begin
-          wire all_buffer_ready_n_d_1;
-          wire all_buffer_ready_n_d_2;
-          wire all_buffer_ready_n_d_3;
-          wire all_buffer_ready_n_d_4;
+        if (NUM_LANES >= 4) begin
+          if ((i == 0) || (i == HALF_NO_OF_LANES)) begin
+            wire all_buffer_ready_n_d_1;
+            wire all_buffer_ready_n_d_2;
+            wire all_buffer_ready_n_d_3;
+            wire all_buffer_ready_n_d_4;
 
+            // Pipeline the aggregated ready status at the lane. The lane moves its
+            // evaluation point by the same number of stages, see
+            // ALL_BUFFER_READY_DELAY.
+            (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+              .WIDTH(1),
+              .REGISTERED(NUM_BUFFER_READY_PIPELINE)
+            ) i_all_buffer_ready_pipeline_stage_1 (
+              .clk(clk),
+              .in(all_buffer_ready_n_1),
+              .out(all_buffer_ready_n_d_1));
+            (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+              .WIDTH(1),
+              .REGISTERED(NUM_BUFFER_READY_PIPELINE)
+            ) i_all_buffer_ready_pipeline_stage_2 (
+              .clk(clk),
+              .in(all_buffer_ready_n_2),
+              .out(all_buffer_ready_n_d_2));
+            (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+              .WIDTH(1),
+              .REGISTERED(NUM_BUFFER_READY_PIPELINE)
+            ) i_all_buffer_ready_pipeline_stage_3 (
+              .clk(clk),
+              .in(all_buffer_ready_n_3),
+              .out(all_buffer_ready_n_d_3));
+            (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
+              .WIDTH(1),
+              .REGISTERED(NUM_BUFFER_READY_PIPELINE)
+            ) i_all_buffer_ready_pipeline_stage_4 (
+              .clk(clk),
+              .in(all_buffer_ready_n_4),
+              .out(all_buffer_ready_n_d_4));
+
+            assign all_buffer_ready_n_d[i / HALF_NO_OF_LANES] = all_buffer_ready_n_d_1 | all_buffer_ready_n_d_2 | all_buffer_ready_n_d_3 | all_buffer_ready_n_d_4;
+          end
+
+          // The current lane in the for loop gets the value of the all_buffer_ready_n_d
+          // bit for its half of the lanes.
+          assign all_buffer_ready_n_d_lane = all_buffer_ready_n_d[i / HALF_NO_OF_LANES];
+        end else begin
           // Pipeline the aggregated ready status at the lane. The lane moves its
           // evaluation point by the same number of stages, see
           // ALL_BUFFER_READY_DELAY.
           (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
             .WIDTH(1),
             .REGISTERED(NUM_BUFFER_READY_PIPELINE)
-          ) i_all_buffer_ready_pipeline_stage_1 (
+          ) i_all_buffer_ready_pipeline_stage (
             .clk(clk),
-            .in(all_buffer_ready_n_1),
-            .out(all_buffer_ready_n_d_1));
-          (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
-            .WIDTH(1),
-            .REGISTERED(NUM_BUFFER_READY_PIPELINE)
-          ) i_all_buffer_ready_pipeline_stage_2 (
-            .clk(clk),
-            .in(all_buffer_ready_n_2),
-            .out(all_buffer_ready_n_d_2));
-          (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
-            .WIDTH(1),
-            .REGISTERED(NUM_BUFFER_READY_PIPELINE)
-          ) i_all_buffer_ready_pipeline_stage_3 (
-            .clk(clk),
-            .in(all_buffer_ready_n_3),
-            .out(all_buffer_ready_n_d_3));
-          (* DONT_TOUCH = "yes" *) util_pipeline_stage #(
-            .WIDTH(1),
-            .REGISTERED(NUM_BUFFER_READY_PIPELINE)
-          ) i_all_buffer_ready_pipeline_stage_4 (
-            .clk(clk),
-            .in(all_buffer_ready_n_4),
-            .out(all_buffer_ready_n_d_4));
+            .in(all_buffer_ready_n),
+            .out(all_buffer_ready_n_d[i]));
 
-          assign all_buffer_ready_n_d[i / HALF_NO_OF_LANES] = all_buffer_ready_n_d_1 | all_buffer_ready_n_d_2 | all_buffer_ready_n_d_3 | all_buffer_ready_n_d_4;
+          // Since we have less than 4 lanes in the design, each lane receives the value
+          // of its dedicated all_buffer_ready_n_d bit.
+          assign all_buffer_ready_n_d_lane = all_buffer_ready_n_d[i];
         end
 
         // Register event_data_phase signal to break the combinational path coming
@@ -693,7 +728,7 @@ module jesd204_rx #(
 
           .buffer_release_n(buffer_release_n),
           .buffer_ready_n(buffer_ready_n[i]),
-          .all_buffer_ready_n(all_buffer_ready_n_d[i / HALF_NO_OF_LANES]),
+          .all_buffer_ready_n(all_buffer_ready_n_d_lane),
 
           .lmfc_edge(lmfc_edge_synced),
           .emb_lock(emb_lock[i]),
