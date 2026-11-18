@@ -41,6 +41,10 @@ add_interface adrv9001_if conduit end
 set_interface_property adrv9001_if EXPORT_OF axi_adrv9001.device_if
 add_interface adrv9001_tdd_if conduit end
 set_interface_property adrv9001_tdd_if EXPORT_OF axi_adrv9001.tdd_if
+add_interface adrv9001_mcs_if conduit end
+set_interface_property adrv9001_mcs_if EXPORT_OF axi_adrv9001.mcs_if
+add_interface adrv9001_ref_clk clock sink
+set_interface_property adrv9001_ref_clk EXPORT_OF axi_adrv9001.if_ref_clk
 add_connection sys_clk.clk axi_adrv9001.s_axi_clock
 add_connection sys_clk.clk_reset axi_adrv9001.s_axi_reset
 

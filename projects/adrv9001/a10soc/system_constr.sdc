@@ -39,6 +39,7 @@ create_clock -period "12.500 ns"  -name rx1_clk             [get_ports {rx1_dclk
 create_clock -period "12.500 ns"  -name rx2_clk             [get_ports {rx2_dclk_out_p}]
 create_clock -period "12.500 ns"  -name tx1_clk             [get_ports {tx1_dclk_out_p}]
 create_clock -period "12.500 ns"  -name tx2_clk             [get_ports {tx2_dclk_out_p}]
+create_clock -period "8.000 ns"   -name ref_clk             [get_ports {fpga_ref_clk}]
 
 derive_pll_clocks
 derive_clock_uncertainty
