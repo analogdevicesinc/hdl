@@ -29,4 +29,6 @@ XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += axi_ad9910_constr.ttcl
 XILINX_DEPS += axi_ad9910_ip.tcl
 
+XILINX_LIB_DEPS += util_cdc
+
 include ../scripts/library.mk
