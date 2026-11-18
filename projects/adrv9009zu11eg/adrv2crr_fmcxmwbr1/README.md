@@ -8,7 +8,7 @@ Aside from the [ADRV9009ZU11EG](https://www.analog.com/adrv9009-zu11eg) SoM atta
 
 ## Building the project
 
-This project is not parameterizable, it has a fixed configuration.
+The project supports two interface variants of the FMCXMWBR1 board, selected with the `ADI_PRODUCTION` parameter. Without it, the FMCXMWBR1 variant is built.
 
 ```
 cd projects/adrv9009zu11eg/adrv2crr_fmcxmwbr1
@@ -19,6 +19,9 @@ All of the RX/TX link modes can be found in the [ADRV9009 data sheet](https://ww
 
 The overwritable parameters from the environment are:
 
+- ADI_PRODUCTION: interface variant
+  - 0 (default): FMCXMWBR1, used for production testing
+  - 1: XMICROWAVE, uses all the SPI lines and GPIOs
 - [RX/TX/RX_OS]_JESD_M: [RX/TX/RX_OS] number of converters per link
 - [RX/TX/RX_OS]_JESD_L: [RX/TX/RX_OS] number of lanes per link
 - [RX/TX/RX_OS]_JESD_S: [RX/TX/RX_OS] number of samples per converter per frame
@@ -39,6 +42,16 @@ TX_JESD_S=1 \
 RX_OS_JESD_M=4 \
 RX_OS_JESD_L=4 \
 RX_OS_JESD_S=1
+```
+
+Corresponding device tree: [zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-fmcbridge.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-fmcbridge.dts)
+
+#### XMICROWAVE configuration
+
+Same JESD configuration as the default one, with the XMICROWAVE interface:
+
+```
+make ADI_PRODUCTION=1
 ```
 
 Corresponding device tree: [zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-xmicrowave.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-jesd204-fsm-xmicrowave.dts)
