@@ -38,6 +38,7 @@ adi_add_bus "s_axis" "slave" \
   "xilinx.com:interface:axis:1.0" \
   [list {"s_axis_tready" "TREADY"} \
     {"s_axis_tvalid" "TVALID"} \
+    {"s_axis_tlast" "TLAST"} \
     {"s_axis_tdata" "TDATA"} \
   ]
 adi_add_bus_clock "s_axis_aclk" "s_axis" "s_axis_aresetn"
