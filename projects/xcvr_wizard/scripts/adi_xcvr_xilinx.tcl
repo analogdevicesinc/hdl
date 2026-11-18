@@ -129,12 +129,20 @@ proc adi_xcvr_project {parameters_for_make {carrier_name ""}} {
     set file_local_param [string tolower $config_parser_dir_name]
     append file_local_param "_common.v"
   }
-  # Drop inherited MAKEFLAGS: if the outer build used -jN, GNU Make exports a
+  # Drop inherited -jN MAKEFLAGS: if the outer build used -jN, GNU Make exports a
   # jobserver handle that this nested make can never actually reach through
   # the intervening vivado exec, so it warns "jobserver unavailable" on
   # stderr. Tcl's exec treats any stderr output as an error regardless of
   # exit code, which aborts this script even though the sub-build succeeds.
-  eval exec env -u MAKEFLAGS $make_command
+  # Keep the other MAKEFLAGS.
+  set nested_makeflags ""
+  if {[info exists ::env(MAKEFLAGS)]} {
+    set idx [string first " -- " " $::env(MAKEFLAGS)"]
+    if {$idx >= 0} {
+      set nested_makeflags [string range " $::env(MAKEFLAGS)" $idx end]
+    }
+  }
+  eval exec env [list MAKEFLAGS=$nested_makeflags] $make_command
   cd $current_dir
 
   if {$adi_dir_env ne ""} {
