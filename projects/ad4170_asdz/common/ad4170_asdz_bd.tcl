@@ -47,8 +47,13 @@ set num_sdi          1
 set num_sdo          1
 set sdi_delay        0
 set echo_sclk        0
+set sdo_streaming    0
+# Offload memories sized for 16 channels read from per-channel data registers
+set cmd_mem_addr_width  7
+set data_mem_addr_width 6
 
-spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
+spi_engine_create $hier_spi_engine $data_width $async_spi_clk $offload_en $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk \
+  $sdo_streaming $cmd_mem_addr_width $data_mem_addr_width
 
 # Generate a 80MHz spi_clk for the SPI Engine (targeted SCLK is 20MHz)
 
