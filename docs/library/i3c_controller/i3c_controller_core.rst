@@ -33,6 +33,8 @@ Configuration Parameters
 
 .. hdl-parameters::
 
+   * - OUT_REG
+     - Register the SCL, SDO and T outputs,.
    * - I2C_MOD
      - Further divide open drain speed by power of two,
        to support slow I2C devices.

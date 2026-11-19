@@ -52,6 +52,7 @@ ad_ip_files i3c_controller_core [list \
 
 ad_ip_parameter MAX_DEVS STRING "MAX_DEVS"
 ad_ip_parameter I2C_MOD INTEGER 0
+ad_ip_parameter OUT_REG INTEGER 0
 
 proc p_elaboration {} {
 
