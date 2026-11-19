@@ -5,15 +5,29 @@
 
 export NAME=`basename $0`
 
-# MODE not defined or defined to something else than 'batch'
-if [[ -z ${MODE+x} ]] || [[ ! "$MODE" =~ "batch" ]]; then MODE="gui";fi
+if [[ -z ${MODE+x} ]]; then
+	MODE="batch"
+	echo "INFO: MODE environment variable is not set. Defaulting to batch simulation mode."
+else
+	case "$MODE" in
+		batch|gui)
+			;;
+		*)
+			echo "ERROR: Invalid mode option."
+			echo "Please export or re-export the MODE environment variable."
+			echo "Valid simulator options:"
+			echo "* batch - Command line"
+			echo "* gui - Graphical User Interface"
+			;;
+	esac
+fi
 MODE="-"${MODE##*-} #remove any eventual extra dashes
 
 case "$SIMULATOR" in
 	modelsim|questasim)
-  		# ModelSim flow
-  		vlib work
-  		vlog ${SOURCE} || exit 1
+  	# ModelSim / QuestaSim flow
+  	vlib work
+  	vlog ${SOURCE} || exit 1
 		vsim ${NAME} -do "add log /* -r; run -a" $MODE -logfile ${NAME}_modelsim.log || exit 1
 		;;
 
@@ -34,13 +48,25 @@ case "$SIMULATOR" in
 		# Xcelium flow
 		xmvlog -NOWARN NONPRT ${SOURCE} || exit 1
 		xmelab -access +rc ${NAME}
-		xmsim ${NAME} -gui || exit 1
+		if [[ "$MODE" == "-gui" ]]; then
+			xmsim ${NAME} -gui || exit 1
+		else
+			xmsim ${NAME} || exit 1
+		fi
 		;;
 
 	icarus)
-		#Icarus flow is the default
+		#Icarus flow
 		iverilog -g2005-sv -o run_${NAME} -I.. ${SOURCE} || exit 1
 		./run_${NAME}
 		;;
-esac
 
+	*)
+		echo "ERROR: Invalid simulator option."
+		echo "Please export or re-export the SIMULATOR environment variable."
+		echo "Valid simulator options:"
+		echo "* modelsim / questasim -> Mentor / Siemens"
+		echo "* xsim -> Vivado"
+		echo "* xcelium -> Cadence"
+		echo "* icarus -> Icarus Verilog"
+esac
