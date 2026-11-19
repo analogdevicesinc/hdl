@@ -6,18 +6,26 @@
 ##############################################################################
 
 # Depending on simulator, search for errors or 'SUCCESS' keyword in specific log
-if [[ "$SIMULATOR" == "modelsim" ]]; then
-	ERRS=`grep -i -e '# Error ' -e '# Fatal' -e '# Failed' -C 10 ${NAME}_modelsim.log`
-	SUCCESS=`grep 'SUCCESS' ${NAME}_${SIMULATOR}.log`
-elif [[ "$SIMULATOR" == "xsim" ]]; then
-	ERRS=`grep -v ^# ${NAME}_xvlog.log | grep -w -i -e error -e fatal -e fatal_error -e failed -C 10`
-	ERRS=$ERRS`grep -v ^# ${NAME}_xelab.log | grep -w -i -e error -e fatal -e fatal_error -e failed -C 10`
-	ERRS=$ERRS`grep -v ^# ${NAME}_xsim.log | grep -w -i -e error -e fatal -e fatal_error -e failed -C 10`
-	SUCCESS=`grep 'SUCCESS' ${NAME}_xsim.log`
-else
-	echo "XML file is generated only for 'modelsim' and 'xsim' simulators."
-	echo "Check that variable SIMULATOR is exported and is set to one of those."
-fi
+case "$SIMULATOR" in
+	modelsim|questasim)
+		ERRS=`grep -i -e '# Error ' -e '# Fatal' -e '# Failed' -C 10 ${NAME}_modelsim.log`
+		SUCCESS=`grep 'SUCCESS' ${NAME}_${SIMULATOR}.log`
+		;;
+	xsim)
+		ERRS=`grep -v ^# ${NAME}_xvlog.log | grep -w -i -e error -e fatal -e fatal_error -e failed -C 10`
+		ERRS=$ERRS`grep -v ^# ${NAME}_xelab.log | grep -w -i -e error -e fatal -e fatal_error -e failed -C 10`
+		ERRS=$ERRS`grep -v ^# ${NAME}_xsim.log | grep -w -i -e error -e fatal -e fatal_error -e failed -C 10`
+		SUCCESS=`grep 'SUCCESS' ${NAME}_xsim.log`
+		;;
+	icarus)
+		ERRS=`grep -i -e '# Error ' -e '# Fatal' -e '# Failed' -C 10 ${NAME}_icarus.log`
+		SUCCESS=`grep 'SUCCESS' ${NAME}_${SIMULATOR}.log`
+		;;
+	*)
+		echo "XML file is generated only for 'modelsim/questasim', 'xsim' and 'icarus' simulators."
+		echo "Check if variable SIMULATOR is exported and is set to one of those for XML generation."
+		;;
+esac
 
 # If DURATION is not defined, try to extract it from log file. If it's not found, just use 0
 if [[ -z ${DURATION+x} ]]; then

@@ -58,7 +58,7 @@ case "$SIMULATOR" in
 	icarus)
 		#Icarus flow
 		iverilog -g2005-sv -o run_${NAME} -I.. ${SOURCE} || exit 1
-		./run_${NAME}
+		./run_${NAME} > ${NAME}_icarus.log
 		;;
 
 	*)
