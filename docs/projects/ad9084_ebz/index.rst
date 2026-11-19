@@ -320,6 +320,15 @@ The following are the parameters of this project that can be configured:
 - [RX/TX]_B_NUM_LINKS: number of links (B link)
 - [RX/TX]_B_KS_PER_CHANNEL: Number of samples stored in internal buffers in
   kilosamples per converter (M) (B link)
+- PNMON_ENABLE: when 0, removes the RX transport layer PN monitors (VCU118 only)
+
+Modes whose samples per channel per beat is not a power of two - for example
+mode 77, M=2 L=12 S=3 NP=16 at 27.5 Gbps, which carries 24 - are supported
+through a ``util_axis_gearbox`` in front of the pack cores. The gearbox converts
+the rate rather than the width, and the pack chain then runs on its own clock at
+the same fraction of the device clock, so the data offload and the DMA still see
+a power of two width with no padding and no bandwidth lost. Modes that are
+already a power of two build without the gearbox and the extra clock.
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -640,6 +649,8 @@ for that project (ad9084_ebz/$carrier).
    | RX_B_KS_PER_CHANNEL |:red:`-`|     32 |     64 |     64 |
    +---------------------+--------+--------+--------+--------+
    | TX_B_KS_PER_CHANNEL |:red:`-`|     32 |     64 |     64 |
+   +---------------------+--------+--------+--------+--------+
+   | PNMON_ENABLE        |    --- |      1 |    --- |    --- |
    +---------------------+--------+--------+--------+--------+
    | ADC_DO_MEM_TYPE     |    --- |    --- |    --- |    --- |
    +---------------------+--------+--------+--------+--------+

@@ -72,6 +72,7 @@ adi_ip_files axi_adrv9001 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+  "$ad_hdl_dir/library/xilinx/common/util_ext_sync_constr.xdc" \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "$ad_hdl_dir/library/util_cdc/sync_event.v" \
   "adrv9001_rx.v" \
